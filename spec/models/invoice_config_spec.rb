@@ -61,4 +61,12 @@ describe InvoiceConfig do
 
     expect(invoice_config).to be_valid
   end
+
+  it 'nullifies participant_number_internal unless payment_slip is ch_besr' do
+    invoice_config.update(participant_number_internal: 1, payment_slip: 'ch_esr')
+    expect(invoice_config.participant_number_internal).to be_nil
+
+    invoice_config.update(participant_number_internal: 1, payment_slip: 'ch_besr')
+    expect(invoice_config.participant_number_internal).to be_present
+  end
 end

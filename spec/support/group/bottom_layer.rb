@@ -29,5 +29,6 @@ class Group::BottomLayer < Group
   end
 
   roles Leader, LocalGuide, Member
+  self.default_role = Leader
 
 end

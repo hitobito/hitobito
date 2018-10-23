@@ -3,10 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-#main.row-fluid
-  %article.span5
+#main.row
+  %article.col-lg-6
     = render 'contact_data', person: entry, only_public: cannot?(:show_details, entry)
-
     - if can?(:show_details, entry)
       %h2= t('.additional_data')
       %div
@@ -28,7 +27,7 @@
       = render 'notes/section', create_path: group_person_notes_path(@group, entry)
 
   - if can?(:show_full, entry)
-    %aside.span6.offset1
+    %aside.col-lg-5.offset-lg-1
       = render 'tags'
       = render 'roles'
       = render 'add_requests'

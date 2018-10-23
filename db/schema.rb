@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702093715) do
+ActiveRecord::Schema.define(version: 20181010135951) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -251,17 +251,19 @@ ActiveRecord::Schema.define(version: 20180702093715) do
   add_index "invoice_articles", ["number"], name: "index_invoice_articles_on_number", unique: true, using: :btree
 
   create_table "invoice_configs", force: :cascade do |t|
-    t.integer "sequence_number",     limit: 4,     default: 1,       null: false
-    t.integer "due_days",            limit: 4,     default: 30,      null: false
-    t.integer "group_id",            limit: 4,                       null: false
-    t.text    "address",             limit: 65535
-    t.text    "payment_information", limit: 65535
-    t.string  "account_number",      limit: 255
-    t.string  "iban",                limit: 255
-    t.string  "payment_slip",        limit: 255,   default: "ch_es", null: false
-    t.text    "beneficiary",         limit: 65535
-    t.text    "payee",               limit: 65535
-    t.string  "participant_number",  limit: 255
+    t.integer "sequence_number",             limit: 4,     default: 1,       null: false
+    t.integer "due_days",                    limit: 4,     default: 30,      null: false
+    t.integer "group_id",                    limit: 4,                       null: false
+    t.text    "address",                     limit: 65535
+    t.text    "payment_information",         limit: 65535
+    t.string  "account_number",              limit: 255
+    t.string  "iban",                        limit: 255
+    t.string  "payment_slip",                limit: 255,   default: "ch_es", null: false
+    t.text    "beneficiary",                 limit: 65535
+    t.text    "payee",                       limit: 65535
+    t.string  "participant_number",          limit: 255
+    t.string  "email",                       limit: 255
+    t.string  "participant_number_internal", limit: 255
   end
 
   add_index "invoice_configs", ["group_id"], name: "index_invoice_configs_on_group_id", using: :btree
@@ -278,31 +280,32 @@ ActiveRecord::Schema.define(version: 20180702093715) do
   add_index "invoice_items", ["invoice_id"], name: "index_invoice_items_on_invoice_id", using: :btree
 
   create_table "invoices", force: :cascade do |t|
-    t.string   "title",               limit: 255,                                              null: false
-    t.string   "sequence_number",     limit: 255,                                              null: false
-    t.string   "state",               limit: 255,                            default: "draft", null: false
-    t.string   "esr_number",          limit: 255,                                              null: false
-    t.text     "description",         limit: 65535
-    t.string   "recipient_email",     limit: 255
-    t.text     "recipient_address",   limit: 65535
+    t.string   "title",                       limit: 255,                                              null: false
+    t.string   "sequence_number",             limit: 255,                                              null: false
+    t.string   "state",                       limit: 255,                            default: "draft", null: false
+    t.string   "esr_number",                  limit: 255,                                              null: false
+    t.text     "description",                 limit: 65535
+    t.string   "recipient_email",             limit: 255
+    t.text     "recipient_address",           limit: 65535
     t.date     "sent_at"
     t.date     "due_at"
-    t.integer  "group_id",            limit: 4,                                                null: false
-    t.integer  "recipient_id",        limit: 4
-    t.decimal  "total",                             precision: 12, scale: 2
-    t.datetime "created_at",                                                                   null: false
-    t.datetime "updated_at",                                                                   null: false
-    t.string   "account_number",      limit: 255
-    t.text     "address",             limit: 65535
+    t.integer  "group_id",                    limit: 4,                                                null: false
+    t.integer  "recipient_id",                limit: 4
+    t.decimal  "total",                                     precision: 12, scale: 2
+    t.datetime "created_at",                                                                           null: false
+    t.datetime "updated_at",                                                                           null: false
+    t.string   "account_number",              limit: 255
+    t.text     "address",                     limit: 65535
     t.date     "issued_at"
-    t.string   "iban",                limit: 255
-    t.text     "payment_purpose",     limit: 65535
-    t.text     "payment_information", limit: 65535
-    t.string   "payment_slip",        limit: 255,                            default: "ch_es", null: false
-    t.text     "beneficiary",         limit: 65535
-    t.text     "payee",               limit: 65535
-    t.string   "participant_number",  limit: 255
-    t.integer  "creator_id",          limit: 4
+    t.string   "iban",                        limit: 255
+    t.text     "payment_purpose",             limit: 65535
+    t.text     "payment_information",         limit: 65535
+    t.string   "payment_slip",                limit: 255,                            default: "ch_es", null: false
+    t.text     "beneficiary",                 limit: 65535
+    t.text     "payee",                       limit: 65535
+    t.string   "participant_number",          limit: 255
+    t.integer  "creator_id",                  limit: 4
+    t.string   "participant_number_internal", limit: 255
   end
 
   add_index "invoices", ["esr_number"], name: "index_invoices_on_esr_number", using: :btree

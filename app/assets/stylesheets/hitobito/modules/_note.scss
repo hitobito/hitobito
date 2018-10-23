@@ -70,3 +70,19 @@
     opacity: 1;
   }
 }
+
+.person-note-item {
+  margin-top: 2em;
+  &:first-child {
+    margin-top: 0;
+  }
+}
+.person-note-text {
+  padding-top: 11px;
+}
+#person-notes-new-button {
+  margin-bottom: 20px;
+}
+#person-notes-form textarea {
+  width: 100%;
+}

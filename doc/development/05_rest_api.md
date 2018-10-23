@@ -25,7 +25,7 @@ With `curl` it looks like this:
 
     curl -d "person[email]=mitglied@hitobito.ch" \
          -d "person[password]=demo" \
-         http://demo.hitobito.ch/users/sign_in.json
+         https://demo.hitobito.ch/users/sign_in.json
 
 To use the rest of the API there are two possibilities:
 
@@ -49,7 +49,7 @@ Currently the following endpoints are provided:
     {
       people: [ {
         id: 446,
-        href: http://demo.hitobito.ch/groups/1/people/446.json,
+        href: https://demo.hitobito.ch/groups/1/people/446.json,
         first_name: "Pascal",
         last_name: "Zumkehr",
         nickname: null,
@@ -73,11 +73,11 @@ Currently the following endpoints are provided:
       }
       links: {
           token.regenerate: {
-            href: http://demo.hitobito.ch/users/token.json,
+            href: https://demo.hitobito.ch/users/token.json,
             method: "POST"
           }
           token.delete: {
-            href: http://demo.hitobito.ch/users/token.json,
+            href: https://demo.hitobito.ch/users/token.json,
             method: "DELETE"
           }
         }

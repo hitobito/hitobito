@@ -627,11 +627,13 @@ de:
         success: Rechnungseinstellungen wurden erfolgreich aktualisiert
     general_fields:
       payment_slip: 'Einzahlungsschein'
-      payment_information_help: 'Wird in jeder Rechnung aufgeführt, kann pro Rechnung angepasst werden.'
+      payment_information_help: 'Wird in jeder Rechnung aufgeführt, kann pro Rechnung angepasst werden'
       address_help: 'Erscheint auf dem Brief als Absenderadresse'
+      email_help: 'Wird als E-Mail Absender anstelle des aktuellen Benutzers verwendet'
       payee_help: 'Erscheint auf dem Einzahlungsschein'
       beneficiary_help: 'Erscheint auf dem Einzahlungsschein'
       account_number_example: 'Beispiel: 01-162-5'
+      participant_number_internal_example: 'Beispiel: 999999'
       iban_example: 'Beispiel: CH93 0076 2011 6238 5295 7'
     reminder_fields:
       third_level: 'Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt.'
@@ -706,7 +708,8 @@ de:
         one: Es wurde eine ungültige Zahlung erkannt.
         other: Es wurden %{count} ungültige Zahlungen erkannt.
     show:
-      payments_with_invoice: Zuordenbare Zahlungen vom %{from} bis %{to}.
+      payments_with_invoice: Zuordenbare Zahlungen
+      payments_with_invoice_and_dates: Zuordenbare Zahlungen vom %{from} bis %{to}
       payments_without_invoice: Nicht Zuordenbar
       amount_open: Offen
       create:

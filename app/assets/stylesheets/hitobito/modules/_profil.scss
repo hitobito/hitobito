@@ -1,0 +1,20 @@
+// Profil
+.profil, .profil-big {
+  background: $white;
+  border: 1px solid $grayLight;
+  overflow: hidden;
+  @include border-radius(3px);
+}
+.profil {
+  width: 32px;
+  height: 32px;
+  padding: 1px;
+  .table-striped & {
+    margin-left: -8px;
+  }
+}
+.profil-big {
+  width: 72px;
+  height: 72px;
+  padding: 2px;
+}

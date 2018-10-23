@@ -24,7 +24,7 @@ class AsyncDownloadFile
 
   def write(data)
     FileUtils.mkdir_p(DIRECTORY) unless File.directory?(DIRECTORY)
-    File.write(full_path, data)
+    filetype == :csv ? write_csv(data) : File.write(full_path, data)
   end
 
   def downloadable?(person)
@@ -35,6 +35,14 @@ class AsyncDownloadFile
 
   def full_path
     DIRECTORY.join("#{filename}.#{filetype}")
+  end
+
+  private
+
+  def write_csv(data)
+    File.open(full_path, "w:#{Settings.csv.encoding}") do |f|
+      f.write(data)
+    end
   end
 
 end

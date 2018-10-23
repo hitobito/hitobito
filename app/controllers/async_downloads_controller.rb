@@ -11,8 +11,13 @@ class AsyncDownloadsController < ApplicationController
 
   def show
     if async_download_file.downloadable?(current_person)
-      AsyncDownloadCookie.new(cookies).remove(params[:id], params[:file_type])
-      send_file async_download_file.full_path, x_sendfile: true
+      file_type = params[:file_type]
+      AsyncDownloadCookie.new(cookies).remove(params[:id], file_type)
+
+      data = File.read(async_download_file.full_path)
+      data = css_encoding(data) if file_type == 'csv'
+
+      send_data data, filename: filename(file_type)
     else
       render 'errors/404', status: 404
     end
@@ -30,6 +35,14 @@ class AsyncDownloadsController < ApplicationController
 
   def async_download_file
     AsyncDownloadFile.new(params[:id], params[:file_type])
+  end
+
+  def filename(type)
+    "#{async_download_file.filename}.#{type}"
+  end
+
+  def css_encoding(data)
+    data.force_encoding(Settings.csv.encoding)
   end
 
 end

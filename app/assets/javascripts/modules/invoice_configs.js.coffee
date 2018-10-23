@@ -12,6 +12,7 @@ class app.InvoiceConfigs
     payment_slip =
     beneficiary = $('#invoice_config_beneficiary').closest('.control-group')
     participant_number = $('#invoice_config_participant_number').closest('.control-group')
+    participant_number_internal = $('#invoice_config_participant_number_internal').closest('.control-group')
 
     if @isBank()
       beneficiary.slideDown()
@@ -23,6 +24,10 @@ class app.InvoiceConfigs
     else
       participant_number.hide()
 
+    if @isBank() and @withReference()
+      participant_number_internal.slideDown()
+    else
+      participant_number_internal.hide()
 
   bind: ->
     self = this

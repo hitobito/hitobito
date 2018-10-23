@@ -23,6 +23,17 @@ describe Invoice::PaymentSlip do
     expect(subject.esr_number).to eq '00 00376 80338 90000 00000 00021'
   end
 
+  it '#padded_number is 13 chars length zero padded group_id' do
+    expect(subject.padded_number.size).to eq 13
+    expect(subject.padded_number).to eq '0000376803389'
+  end
+
+  it '#padded_number cuts group id and prefixes participant_number_internal if set' do
+    invoice.update(participant_number_internal: 999999)
+    expect(subject.padded_number.size).to eq 13
+    expect(subject.padded_number).to eq '9999993768033'
+  end
+
   it '#esr_number calculates check digit based on padded group_id and index' do
     padded_group_id = subject.send(:zero_padded, invoice.group_id.to_s, 13)
     padded_index = subject.send(:zero_padded, '2', 13)

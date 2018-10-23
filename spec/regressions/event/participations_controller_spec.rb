@@ -139,6 +139,10 @@ describe Event::ParticipationsController, type: :controller do
       Fabricate(Event::Role::Participant.name.to_sym, participation: parti1, label: 'Foolabel')
       Fabricate(Event::Role::Participant.name.to_sym, participation: parti2, label: 'Foolabel')
       Fabricate(Event::Role::Participant.name.to_sym, participation: parti3, label: 'Just label')
+      Event::Participation.page.limit_value.times do
+        parti = Fabricate(:event_participation, event: event)
+        Fabricate(Event::Role::Participant.name.to_sym, participation: parti)
+      end
     end
 
     it 'filters by event role label' do
@@ -151,6 +155,11 @@ describe Event::ParticipationsController, type: :controller do
       expect(dom).to have_selector('a', text: parti1.person.to_s(:list))
       expect(dom).to have_selector('a', text: parti2.person.to_s(:list))
       expect(dom).to have_no_selector('a', text: parti3.person.to_s(:list))
+    end
+
+    it 'exports all pages for emails' do
+      get :index, group_id: event.groups.first.id, event_id: event.id, format: 'email'
+      expect(dom.text.count('@')).to eq(53)
     end
 
   end

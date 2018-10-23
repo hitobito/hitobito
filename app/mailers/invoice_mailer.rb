@@ -18,7 +18,7 @@ class InvoiceMailer < ApplicationMailer
 
     custom_content_mail(@invoice.recipient_email, CONTENT_INVOICE_NOTIFICATION,
                         values_for_placeholders(CONTENT_INVOICE_NOTIFICATION),
-                        with_personal_sender(@sender))
+                        mail_headers(@sender, @invoice.invoice_config.email))
   end
 
   private
@@ -82,4 +82,10 @@ class InvoiceMailer < ApplicationMailer
   def pdf_options
     { articles: true, payment_slip: true }
   end
+
+  def mail_headers(person, email)
+    return with_personal_sender(person) if email.blank?
+    { return_path: email, sender: email, reply_to: email, from: email }
+  end
+
 end

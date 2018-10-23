@@ -83,6 +83,7 @@ additional_email:
 
 # Presets for PDF labels
 pdf:
+  font_size: 9
   labels:
     # Minimum border on the right and bottom of each label
     min_border: 4 #mm

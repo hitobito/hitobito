@@ -22,7 +22,7 @@
 		line-height: 95%;
 		padding-top: 0.2rem;
 		padding-bottom: 0.2rem;
-		position: relative;
+		border-left: 3px solid transparent;
 	}
 
 	a.inline {
@@ -32,15 +32,7 @@
 
 	a.is-active, li.is-active > a {
 		background-color: desaturate(lighten($linkColor, 50%), 20%);
-		&:before {
-			content: '';
-			position: absolute;
-			width: 3px;
-			background-color: $linkColor;
-			top: 0;
-			bottom: 0;
-			left: 0
-		}
+		border-left: 3px solid $linkColor;
 	}
 
 	
@@ -89,6 +81,7 @@
 		font-size: 0.7rem;
 		padding-left: $navLeftPaddingFull;
 		margin-top: 1rem;
+		border-left: 3px solid transparent;
 	}
 
 	.nav-left-section-link ~ .divider,

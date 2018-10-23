@@ -18,8 +18,8 @@ module PeopleHelper
                                                            households: households).to_s
   end
 
-  def invoice_button(people, *groups)
-    finance_groups = groups.collect(&:layer_group) & current_user.finance_groups
+  def invoice_button(people)
+    finance_groups = current_user.finance_groups
     if finance_groups.size == 1
       invoice_button_single(people, finance_groups.first)
     elsif finance_groups.size > 1

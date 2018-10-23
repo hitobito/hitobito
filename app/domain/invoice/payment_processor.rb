@@ -18,11 +18,13 @@ class Invoice::PaymentProcessor
   end
 
   def from
-    to_datetime(fetch('Ntfctn', 'FrToDt', 'FrDtTm')).to_date
+    value = fetch_date('FrDtTm')
+    to_datetime(value).to_date if value
   end
 
   def to
-    to_datetime(fetch('Ntfctn', 'FrToDt', 'ToDtTm')).to_date
+    value = fetch_date('ToDtTm')
+    to_datetime(value).to_date if value
   end
 
   def process
@@ -110,4 +112,7 @@ class Invoice::PaymentProcessor
     Time.zone.parse(string)
   end
 
+  def fetch_date(key)
+    fetch('Ntfctn').fetch('FrToDt', {})[key]
+  end
 end

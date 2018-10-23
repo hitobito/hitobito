@@ -116,6 +116,11 @@ class Person < ActiveRecord::Base
                          source: :roles
   has_many :events, through: :event_participations
 
+  has_many :event_responsibilities, class_name: 'Event',
+                                    foreign_key: :contact_id,
+                                    inverse_of: :contact,
+                                    dependent: :nullify
+
   has_many :qualifications, dependent: :destroy
 
   has_many :subscriptions, as: :subscriber, dependent: :destroy

@@ -1,4 +1,4 @@
-.modal
+#role-lists-available.modal.fade
   .modal-dialog
     .modal-content
       .modal-header
@@ -21,4 +21,4 @@
           = submit_button(f, submit_label)
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
-            onclick: "event.preventDefault(); $('#multiselect-modal').html('')")
+            onclick: "event.preventDefault(); $('#role-lists-available').modal('hide')")

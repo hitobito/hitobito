@@ -1,1 +1,3 @@
-$('#multiselect-modal').html("#{escape_javascript(render(partial: 'role_lists/movable'))}")
+$('#modal-placeholder').html("#{escape_javascript(render(partial: 'role_lists/movable'))}")
+$('#role-lists-available').modal('show')
+$('.modal-backdrop:first').fadeOut(function(){ $('.modal-backdrop:first').remove() })

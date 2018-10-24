@@ -30,6 +30,7 @@
 #= require bootstrap-popover
 #= require bootstrap-typeahead
 #= require bootstrap-tab
+#= require bootstrap-modal
 #= require jquery_nested_form
 #= require chosen-jquery
 #= require jquery.remotipart

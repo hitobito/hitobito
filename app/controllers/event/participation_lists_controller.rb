@@ -39,6 +39,7 @@ class Event::ParticipationListsController < SimpleCrudController
 
   def flash_message(type, attrs = {})
     attrs[:event] = parent.name
+    attrs[:event_type] = parent.class.label
     I18n.t("event.participation_lists.#{action_name}.#{type}", attrs)
   end
 

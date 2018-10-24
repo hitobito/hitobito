@@ -368,10 +368,10 @@ de:
     participation_lists:
       create:
         success:
-          one: "Eine Person wurde erfolgreich zum Anlass '%{event}' hinzugefügt"
-          other: "%{count} Personen wurden erfolgreich zum Anlass '%{event}' hinzugefügt"
+          one: "Eine Person wurde erfolgreich zum %{event_type} '%{event}' hinzugefügt"
+          other: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' hinzugefügt"
       new:
-        title: Personen einem Anlass zuweisen
+        title: Personen einem %{event_label} zuweisen
         event_search: Anlass Suchen...
         submit: Hinzufügen
 
@@ -1066,7 +1066,7 @@ de:
       remove_role: Rollen entfernen
       move_role: Rollen verschieben
       add_role: Rolle hinzufügen
-      add_participation: Zu Anlass hinzufügen
+      add_participation: Zu Veranstaltung hinzufügen
 
   participations:
     destroy:

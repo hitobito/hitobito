@@ -21,10 +21,6 @@
         data: { checkable: true, method: :get },
         remote: true)
 
-      = action_button(translate('.add_participation'),
-        group_events_path(@group),
-        :plus,
-        data: { checkable: true, method: :get },
-        remote: true)
+      = Dropdown::ParticipationLists.new(self, @group, translate('.add_participation'))
 
 #multiselect-modal

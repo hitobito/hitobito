@@ -141,7 +141,8 @@ class EventsController < CrudController
 
   def render_js
     @people_ids = params[:ids]
-    @events = entries
+    @event_type = params[:type]
+    @event_label = params[:label]
     render 'event/participation_lists/new'
   end
 

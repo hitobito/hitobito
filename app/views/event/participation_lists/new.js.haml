@@ -1,2 +1,3 @@
-$('#multiselect-modal').html("#{escape_javascript(render(partial: 'event/participation_lists/new'))}")
+$('#modal-placeholder').html("#{escape_javascript(render(partial: 'event/participation_lists/new'))}")
 $('[data-provide=entity]').each(window.App.setupEntityTypeahead)
+$('#participation-lists-new').modal('show')

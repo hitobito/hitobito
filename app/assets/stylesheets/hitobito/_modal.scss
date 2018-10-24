@@ -8,26 +8,25 @@
     margin-bottom: 0;
   }
 
-  .modal-body {
-    overflow: unset;
-    max-height: 450px;
+  .checkboxes {
+    .filter-toggle {
+      cursor: pointer;
+    }
+    .available-role-type {
+      margin-left: 10px;
+
+      .role-count {
+        display: inline;
+        padding: 0px 5px;
+        background-color: #eee;
+        border-radius: 2px;
+        border: 1px solid gray;
+        margin-left: 5px;
+      }
+    }
   }
 }
 
-.checkboxes {
-  .filter-toggle {
-    cursor: pointer;
-  }
-  .available-role-type {
-    margin-left: 10px;
-
-    .role-count {
-      display: inline;
-      padding: 0px 5px;
-      background-color: #eee;
-      border-radius: 2px;
-      border: 1px solid gray;
-      margin-left: 5px;
-    }
-  }
+#participation-lists-new .modal-body{
+  overflow: unset
 }

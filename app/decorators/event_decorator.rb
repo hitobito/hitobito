@@ -64,7 +64,7 @@ class EventDecorator < ApplicationDecorator
 
   def external_application_link(group)
     if external_applications?
-      url = h.register_group_event_url(group, id)
+      url = h.group_public_event_url(group, id)
       h.link_to(url, url)
     else
       translate(:not_possible)

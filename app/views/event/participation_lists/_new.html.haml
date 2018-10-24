@@ -6,7 +6,7 @@
           %b= t('.title', event_label: @event_label)
 
       = standard_form(path_args(Event::Participation.new),
-        url: group_event_participation_lists_path(parent, -1), method: :post) do |f|
+        url: group_event_participation_lists_path(group, -1), method: :post) do |f|
         .modal-body
           .row-fluid
             = hidden_field_tag('ids', @people_ids)
@@ -14,7 +14,7 @@
               placeholder: t('.event_search'),
               data: { provide: 'entity',
               updater: 'ParticipationLists.updatePath',
-              url: group_events_path(@group, format: :json, type: @event_type) })
+              url: group_events_path(group, format: :json, type: @event_type) })
 
             = select(:role, :type, [], {}, style: 'display: none')
         .modal-footer

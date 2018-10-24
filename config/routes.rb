@@ -107,6 +107,7 @@ Hitobito::Application.routes.draw do
           as: 'person_add_request_ignored_approvers'
 
       get 'public_events/:id' => 'public_events#show', as: :public_event
+      get 'events/participation_lists/new' => 'event/participation_lists#new'
 
       resources :events do
         collection do
@@ -140,7 +141,7 @@ Hitobito::Application.routes.draw do
 
           resources :attachments, only: [:create, :destroy]
 
-          resource :participation_lists, only: [:create]
+          resource :participation_lists, only: :create
           resources :participations do
             collection do
               get 'contact_data', controller: 'participation_contact_datas', action: 'edit'

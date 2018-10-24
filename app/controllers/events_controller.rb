@@ -53,7 +53,6 @@ class EventsController < CrudController
       format.csv  { render_tabular_in_background(:csv) && redirect_to(action: :index) }
       format.xlsx { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
       format.ics  { render_ical(entries) }
-      format.js   { render_js }
       format.json { render json: for_typeahead(entries.where(search_conditions)) }
     end
   end
@@ -137,13 +136,6 @@ class EventsController < CrudController
 
   def render_ical(entries)
     send_data ::Export::Ics::Events.new.generate(entries), type: :ics, disposition: :inline
-  end
-
-  def render_js
-    @people_ids = params[:ids]
-    @event_type = params[:type]
-    @event_label = params[:label]
-    render 'event/participation_lists/new'
   end
 
   def for_typeahead(entries)

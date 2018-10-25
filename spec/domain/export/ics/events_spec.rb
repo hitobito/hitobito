@@ -15,6 +15,7 @@ describe Export::Ics::Events do
   let(:ical_datetime_klass) { Icalendar::Values::DateTime }
 
   before do
+    allow(ENV).to receive(:[]).with("RAILS_HOST_NAME").and_call_original
     allow(ENV).to receive(:[]).with("RAILS_HOST_NAME").and_return("hitobito.example.com")
   end
 

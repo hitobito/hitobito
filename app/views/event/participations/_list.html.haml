@@ -4,8 +4,15 @@
 -#  https://github.com/hitobito/hitobito.
 
 - title @event.to_s
+= content_for(:filter) do
+  .control-group
+    = form_tag('', { method: :get, class: 'form form-search form-inline', style: 'display: inline-block; float: left; margin-right: 10px;', role: 'search', remote: true, data: { spin: true } }) do
+      = search_field_tag :q, params[:q], class: 'form-control search-query', placeholder: t('global.search.placeholder_person'), data: { submit: true }
+      = hidden_field_tag :returning, true
+      = hidden_field_tag :page, 1
+    = FilterNavigation::Event::Participations.new(self, @group, @event, params[:filter], params[:q]).to_s
 
-- content_for(:filter, FilterNavigation::Event::Participations.new(self, @group, @event, params[:filter]).to_s)
+- params[:q] = nil # Reset param so quicksearch filter does not get populated
 
 .pagination-bar
   = paginate entries

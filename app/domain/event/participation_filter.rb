@@ -8,6 +8,7 @@
 class Event::ParticipationFilter
 
   PREDEFINED_FILTERS = %w(all teamers participants)
+  SEARCH_COLUMNS = %w(people.first_name people.last_name people.nickname).freeze
 
   class_attribute :load_entries_includes
   self.load_entries_includes = [:roles, :event,
@@ -25,7 +26,7 @@ class Event::ParticipationFilter
   end
 
   def list_entries
-    records = load_entries
+    records = params[:q].present? ? load_entries.where(search_condition) : load_entries
     @counts = populate_counts(records)
     apply_default_sort(apply_filter_scope(records))
   end
@@ -44,6 +45,10 @@ class Event::ParticipationFilter
 
   private
 
+  def search_condition
+    SearchStrategies::SqlConditionBuilder.new(params[:q], SEARCH_COLUMNS).search_conditions
+  end
+
   def apply_default_sort(records)
     records = records.order_by_role(event) if Settings.people.default_sort == 'role'
     records.merge(Person.order_by_name)
@@ -58,6 +63,7 @@ class Event::ParticipationFilter
   def load_entries
     event.active_participations_without_affiliate_types.
       includes(load_entries_includes).
+      references(:people).
       uniq
   end
 

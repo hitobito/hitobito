@@ -58,7 +58,7 @@ body {
 
 /* Content */
 #page {
-  padding: 20px 10px 90px;
+  padding: 20px 1rem 90px;
   margin: 0;
   width: 100%;
   background: $pageBackground;
@@ -80,11 +80,11 @@ body {
     max-width: 25rem;
     z-index: 1;
     margin-top: $logoHeight + 40px;
+    margin-right: -1.5rem;
   }
 
   .container-fluid {
     z-index: 2;
-    margin-left: -1.5rem;
     width: 100%;
     max-width: 100%;
     overflow-x: visible;

@@ -9,6 +9,10 @@ class MailingListDecorator < ApplicationDecorator
 
   decorates :mailing_list
 
+  def mail_address_link
+    h.mail_to(mail_address)
+  end
+
   def subscribable_info
     html = ''.html_safe
     if !subscribable

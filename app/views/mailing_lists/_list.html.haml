@@ -11,4 +11,6 @@
       = link_to(list.name, group_mailing_list_path(@group, list.id))
   - t.col(MailingList.human_attribute_name(:description)) do |list|
     = list.description.to_s.truncate(60)
-  - t.attrs(:publisher, :mail_address)
+  - t.attrs(:publisher)
+  - t.col(MailingList.human_attribute_name(:mail_address)) do |list|
+    = mail_to list.mail_address

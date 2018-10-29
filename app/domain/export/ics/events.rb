@@ -7,6 +7,7 @@
 
 module Export::Ics
   class Events
+    include Rails.application.routes.url_helpers
 
     def generate(events)
       ical = Icalendar::Calendar.new
@@ -21,13 +22,25 @@ module Export::Ics
       end
     end
 
+    def event_description(event)
+      return event.description unless event.contact
+
+      [
+        event.description, '',
+        event.contact.person_name,
+        event.contact.phone_numbers.map { |pn| "#{pn.label}: #{pn.number}" if pn.public },
+        event.contact.email, '',
+        event_url(event, host: ENV['RAILS_HOST_NAME']),
+      ].flatten.compact.join("\n")
+    end
+
     def generate_ical_from_event_date(event_date, event)
       Icalendar::Event.new.tap do |ical_event|
         ical_event.dtstart = datetime_to_ical(event_date.start_at)
         ical_event.dtend = datetime_to_ical(event_date.finish_at)
         ical_event.summary = "#{event.name}: #{event_date.label}"
         ical_event.location = event_date.location || event.location
-        ical_event.description = event.description
+        ical_event.description = event_description(event)
         ical_event.contact = event.contact && event.contact.to_s
       end
     end

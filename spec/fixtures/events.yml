@@ -55,3 +55,4 @@ top_course:
   priorization: true
   requires_approval: true
   external_applications: true
+  description: Some kind of course, it seems

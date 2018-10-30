@@ -69,6 +69,7 @@ describe 'export import person' do
 
     data = parser.map_data(header_mapping)
     importer = Import::PersonImporter.new(data, group, role_type)
+    importer.user_ability = Ability.new(people(:top_leader))
     importer.import
   end
 

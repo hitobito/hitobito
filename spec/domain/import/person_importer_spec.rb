@@ -12,7 +12,9 @@ describe Import::PersonImporter do
   let(:group) { groups(:top_group) }
   let(:role_type) { Group::TopGroup::Leader }
   let(:importer) do
-    Import::PersonImporter.new(data, group, role_type, can_manage_tags: can_manage_tags)
+    importer = Import::PersonImporter.new(data, group, role_type, can_manage_tags: can_manage_tags)
+    importer.user_ability = Ability.new(people(:top_leader))
+    importer
   end
   let(:can_manage_tags) { true }
 

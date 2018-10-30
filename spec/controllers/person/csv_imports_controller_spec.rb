@@ -125,6 +125,35 @@ describe Person::CsvImportsController do
       end
     end
 
+    context 'trying to update email of user with superior permissions' do
+      let(:role_type) { Group::BottomLayer::Member }
+      let(:mapping) { { Nachname: 'last_name',
+                        Geburtsdatum: 'birthday',
+                        Email: 'email'} }
+
+      let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
+      let(:group) { groups(:bottom_layer_one) }
+
+      let(:data) { generate_csv(%w{Nachname Email Geburtsdatum},
+                                [person.last_name, "abusive_email@example.com", person.birthday],
+                                ['new_user', "new_user@example.com", Time.now]) }
+
+      let(:required_params) { { group_id: group.id,
+                                data: data,
+                                role_type: role_type.sti_name,
+                                field_mappings: mapping,
+                                update_behaviour: 'override'} }
+
+      before { sign_in(user) }
+
+      it 'does not update persisted user' do
+        post :create, required_params
+
+        expect(person.reload.email).to eq('top_leader@example.com')
+        expect(Person.find_by(last_name: 'new_user').email).to eq('new_user@example.com')
+      end
+    end
+
     context 'invalid phone number value' do
       let(:mapping) { { Vorname: 'first_name', Telefon: 'phone_number_vater', role: role_type.sti_name } }
       let(:data) { generate_csv(%w{Vorname Telefon}, %w{foo }) }

@@ -161,7 +161,7 @@ describe EventDecorator, :draper_with_helpers do
     context 'event supports external applications' do
       before { event.update_column(:external_applications, true) }
 
-      it { is_expected.to match(/register/) }
+      it { is_expected.to match(/public_event/) }
     end
 
   end

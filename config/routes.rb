@@ -100,6 +100,8 @@ Hitobito::Application.routes.draw do
             'group/person_add_request_ignored_approvers#update',
           as: 'person_add_request_ignored_approvers'
 
+      get 'public_events/:id' => 'public_events#show', as: :public_event
+
       resources :events do
         collection do
           get 'simple' => 'events#index'

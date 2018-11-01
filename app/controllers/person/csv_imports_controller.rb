@@ -18,8 +18,7 @@ class Person::CsvImportsController < ApplicationController
 
   decorates :group
 
-  def new
-  end
+  def new; end
 
   def define_mapping
     @role_type = params[:role_type] || group.default_role
@@ -174,10 +173,8 @@ class Person::CsvImportsController < ApplicationController
 
   def map_headers_and_import
     data = parser.map_data(field_mappings)
-    @importer = Import::PersonImporter.new(data, group, role_type, {
-      override: override_behaviour,
-      can_manage_tags: can_manage_tags
-    })
+    @importer = Import::PersonImporter.new(data, group, role_type, override: override_behaviour,
+                                                                   can_manage_tags: can_manage_tags)
     @importer.user_ability = current_ability
   end
 

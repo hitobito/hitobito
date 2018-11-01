@@ -60,9 +60,7 @@ class GroupsController < CrudController
     send_data csv, type: :csv
   end
 
-  def person_notes
-
-  end
+  def person_notes; end
 
   private
 
@@ -109,7 +107,6 @@ class GroupsController < CrudController
     children = @sub_groups.delete(sub_groups_label)
     @sub_groups[sub_groups_label] = children if children
   end
-
 
   def sub_groups_label
     @sub_groups_label ||= translate(:subgroups)

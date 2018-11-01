@@ -23,7 +23,7 @@ module Subscriber
 
     private
 
-    alias_method :mailing_list, :parent
+    alias mailing_list parent
 
     def assign_attributes
       if subscriber_id

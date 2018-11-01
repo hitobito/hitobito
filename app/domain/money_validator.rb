@@ -5,4 +5,3 @@ class MoneyValidator < ActiveModel::EachValidator
     end
   end
 end
-

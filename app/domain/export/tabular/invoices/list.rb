@@ -16,7 +16,7 @@ module Export::Tabular::Invoices
     self.row_class = Export::Tabular::Invoices::Row
 
     def attributes
-      (INCLUDED_ATTRS).collect(&:to_sym)
+      INCLUDED_ATTRS.collect(&:to_sym)
     end
   end
 end

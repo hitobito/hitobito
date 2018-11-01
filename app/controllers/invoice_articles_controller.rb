@@ -11,9 +11,8 @@ class InvoiceArticlesController < CrudController
 
   self.nesting = Group
 
-  self.permitted_attrs = %i[
-    number name description category unit_cost vat_rate cost_center account
-  ]
+  self.permitted_attrs =
+    [:number, :name, :description, :category, :unit_cost, :vat_rate, :cost_center, :account]
 
   private
 

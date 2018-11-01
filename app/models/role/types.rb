@@ -103,8 +103,7 @@ module Role::Types
       [label,
        I18n.translate("#{group_key}.long",
                       count: 1,
-                      default: I18n.translate("#{group_key}"))
-      ].join(' ')
+                      default: I18n.translate(group_key.to_s))].join(' ')
     end
 
     def description

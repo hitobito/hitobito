@@ -96,11 +96,10 @@ class Event::Participation < ActiveRecord::Base
   def init_answers
     answers.tap do |list|
       event.questions.each do |q|
-        unless list.find { |a| a.question_id == q.id }
-          a = q.answers.new
-          a.question = q # without this, only the id is set
-          list << a
-        end
+        next if list.find { |a| a.question_id == q.id }
+        a = q.answers.new
+        a.question = q # without this, only the id is set
+        list << a
       end
     end
   end
@@ -139,7 +138,6 @@ class Event::Participation < ActiveRecord::Base
     init_application
     true
   end
-
 
   def update_participant_count
     event.refresh_participant_counts!

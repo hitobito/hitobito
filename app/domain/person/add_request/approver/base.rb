@@ -58,7 +58,7 @@ module Person::AddRequest::Approver
     end
 
     def build_entity
-      fail(NotImplementedError)
+      raise(NotImplementedError)
     end
 
     def email

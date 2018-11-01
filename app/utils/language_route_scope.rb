@@ -14,7 +14,7 @@ module LanguageRouteScope
     if languages.size > 1
       scope '(:locale)', locale: /#{languages.join('|')}/, &block
     else
-      block.call
+      yield
     end
   end
 

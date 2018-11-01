@@ -57,7 +57,8 @@ module Export::Pdf::Participation
         lambda do
           move_down_line
           label_with_dots(I18n.t(key))
-        end)
+        end
+      )
     end
 
     def signature_confirmation?

@@ -18,7 +18,7 @@ class Person::AddRequestDecorator < ApplicationDecorator
     when Person::AddRequest::MailingList
       h.group_mailing_list_path(body.group_id, body_id)
     else
-      fail NotImplementedError
+      raise NotImplementedError
     end
   end
 
@@ -31,7 +31,7 @@ class Person::AddRequestDecorator < ApplicationDecorator
     when Person::AddRequest::MailingList
       body.group.to_s
     else
-      fail NotImplementedError
+      raise NotImplementedError
     end
   end
 

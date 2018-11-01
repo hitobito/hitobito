@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 #
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -61,7 +62,6 @@ class LabelFormat < ActiveRecord::Base
       where(person_id: person.id)
     end
   end
-
 
   def to_s(_format = :default)
     "#{name} (#{page_size}, #{dimensions})"

@@ -41,8 +41,8 @@ class Event::Application < ActiveRecord::Base
   class << self
     def pending
       joins(:participation).
-      where(event_participations: { active: false },
-            rejected: false)
+        where(event_participations: { active: false },
+              rejected: false)
     end
 
     def label(args = {})

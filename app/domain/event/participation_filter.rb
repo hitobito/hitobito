@@ -14,8 +14,7 @@ class Event::ParticipationFilter
   self.load_entries_includes = [:roles, :event,
                                 answers: [:question],
                                 person: [:additional_emails, :phone_numbers,
-                                         :primary_group]
-                               ]
+                                         :primary_group]]
 
   attr_reader :params, :counts
 

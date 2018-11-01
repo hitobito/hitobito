@@ -47,7 +47,6 @@ module Subscriber
                uniq
     end
 
-
     def model_label
       Event.model_name.human
     end

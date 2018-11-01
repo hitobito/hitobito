@@ -36,7 +36,7 @@ module I18nHelper
     t(defaults.shift, variables)
   end
 
-  alias_method :ti, :translate_inheritable
+  alias ti translate_inheritable
 
   # Translates the passed key for an active record association. This helper is used
   # for rendering association dependent keys in forms like :no_entry, :none_available or
@@ -59,7 +59,7 @@ module I18nHelper
     t(primary, variables)
   end
 
-  alias_method :ta, :translate_association
+  alias ta translate_association
 
 
 end

@@ -48,7 +48,7 @@ class Person::Household
   end
 
   def save
-    fail 'invalid' unless valid?
+    raise 'invalid' unless valid?
     if any_change?
       household_log(person, people, person.household_key?)
       person.update(household_key: key)
@@ -65,7 +65,7 @@ class Person::Household
       housemates.first.update(household_key: nil)
     end
     housemates.each do |housemate|
-      household_log_entry(housemate, people, :remove_from_household, {item: person})
+      household_log_entry(housemate, people, :remove_from_household, item: person)
     end
     person.update(household_key: nil)
   end
@@ -97,7 +97,7 @@ class Person::Household
   end
 
   def new_household?
-    people.all?{ |p| p.household_key.nil? }
+    people.all? { |p| p.household_key.nil? }
   end
 
   def any_change?
@@ -153,10 +153,10 @@ class Person::Household
     people.delete(housemate)
     existing_household_key = housemate.household_key?
     housemate.update(address_attrs(person).merge(household_key: key))
-    household_log(housemate, people, existing_household_key) 
+    household_log(housemate, people, existing_household_key)
   end
 
-  def household_log(housemate, household, existing_household_key, options = {})
+  def household_log(housemate, _household, existing_household_key, options = {})
     item = options[:item] ? options[:item] : housemate
     if existing_household_key
       household_log_entry(housemate, people, :household_updated, item: item)

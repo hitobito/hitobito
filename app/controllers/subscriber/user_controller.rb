@@ -30,7 +30,7 @@ module Subscriber
     private
 
     def authorize
-      fail CanCan::AccessDenied unless mailing_list.subscribable?
+      raise CanCan::AccessDenied unless mailing_list.subscribable?
       authorize!(:update, subscription)
     end
 

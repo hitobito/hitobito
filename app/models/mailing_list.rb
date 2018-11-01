@@ -53,7 +53,7 @@ class MailingList < ActiveRecord::Base
   end
 
   def labels
-    main_email ? preferred_labels + [DEFAULT_LABEL]: preferred_labels
+    main_email ? preferred_labels + [DEFAULT_LABEL] : preferred_labels
   end
 
   def preferred_labels=(labels)

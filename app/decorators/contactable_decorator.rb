@@ -53,7 +53,7 @@ module ContactableDecorator
 
   def all_phone_numbers(only_public = true)
     nested_values(phone_numbers, only_public) do |number|
-        h.link_to(number,"tel:#{number}")
+      h.link_to(number, "tel:#{number}")
     end
   end
 
@@ -90,7 +90,6 @@ module ContactableDecorator
     html
   end
 
-  def prepend_complete_address(_html)
-  end
+  def prepend_complete_address(_html); end
 
 end

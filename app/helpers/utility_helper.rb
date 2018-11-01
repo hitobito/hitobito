@@ -13,7 +13,6 @@ module UtilityHelper
     super(block_given? ? array.collect(&block).compact : array, sep)
   end
 
-
   # Returns the css class for the given flash level.
   def flash_class(level)
     case level

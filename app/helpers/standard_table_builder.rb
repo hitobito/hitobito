@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 # rubocop:disable Attr
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -165,7 +166,6 @@ class StandardTableBuilder
         ''
       end
     end
-
 
     # Returns true if the given attribute is the current sort column.
     def current_sort?(attr)

@@ -40,7 +40,7 @@ class Event::RegisterController < ApplicationController
   private
 
   def check_email(email)
-    user = Person.find_by_email(email)
+    user = Person.find_by(email: email)
     if user
       send_login_and_render_index(user)
     else

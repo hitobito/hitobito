@@ -39,7 +39,7 @@ class AppStatus::Mail < AppStatus
   def update_seen_mails
     reject_processed_mails
     add_new_mails
-    Rails.cache.write(:app_status, { seen_mails: seen_mails })
+    Rails.cache.write(:app_status, seen_mails: seen_mails)
   end
 
   def add_new_mails

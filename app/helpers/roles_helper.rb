@@ -26,7 +26,6 @@ module RolesHelper
     field_set_tag(title, class: 'person-fields', style: element_visible(visible)) { yield }
   end
 
-
   def format_role_created_at(role)
     f(role.created_at.to_date)
   end
@@ -59,8 +58,7 @@ module RolesHelper
   def roles_type_select_options(group, role)
     options = { include_blank: true }
     selected = existing_role(role) || default_role(group)
-    # binding.pry
-    options.merge({selected: selected})
+    options.merge(selected: selected)
   end
 
   private

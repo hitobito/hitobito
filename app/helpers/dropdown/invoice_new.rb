@@ -11,7 +11,7 @@ module Dropdown
 
     # attr_reader :params
 
-    def initialize(template, label, finance_groups, people, icon )
+    def initialize(template, label, finance_groups, people, icon)
       super(template, label, icon)
       @finance_groups = finance_groups
       @people = people

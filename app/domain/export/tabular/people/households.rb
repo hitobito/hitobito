@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 #  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -54,9 +55,9 @@ module Export::Tabular::People
     end
 
     def build_memo(list)
-      list.inject(Hash.new { |h,k| h[k] = [] }) do |memo, person|
+      list.each_with_object(Hash.new { |h, k| h[k] = [] }) do |person, memo|
         memo[person.household_key] << person
-        memo
+
       end
     end
 

@@ -72,9 +72,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] ||= 'span2'
     text_field(attr, html_options)
   end
-  alias_method :integer_field, :number_field
-  alias_method :float_field,   :number_field
-  alias_method :decimal_field, :number_field
+  alias integer_field number_field
+  alias float_field number_field
+  alias decimal_field number_field
 
   # Render a standard string field with column contraints.
   def string_field(attr, html_options = {})
@@ -281,7 +281,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     add_css_class(html_options, 'controls')
     css_classes = { 'control-group' => true, error: errors_on?(attr), required: required?(attr) }
 
-    content_tag(:div, class: css_classes.select { |css, show| show }.keys.join(" ")) do
+    content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(' ')) do
       label(attr, caption_or_content, class: 'control-label') +
       content_tag(:div, content, html_options)
     end
@@ -329,8 +329,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   # Overriden to fullfill contract with method_missing 'labeled_' methods.
-  def respond_to?(name)
-    labeled_field_method?(name).present? || super(name)
+  def respond_to?(name, include_all = false)
+    labeled_field_method?(name).present? || super(name, include_all)
   end
 
   # Generates a help inline for fields
@@ -351,9 +351,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     unless list
       assoc = association(@object, attr)
       list = @template.send(:instance_variable_get, :"@#{assoc.name.to_s.pluralize}")
-      unless list
-        list = assoc.klass.where(assoc.options[:conditions]).order(assoc.options[:order])
-      end
+      list ||= assoc.klass.where(assoc.options[:conditions]).order(assoc.options[:order])
     end
     list
   end
@@ -389,10 +387,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def errors_on?(attr)
     attr_plain, attr_id = assoc_and_id_attr(attr)
-    # rubocop:disable DeprecatedHashMethods
-    @object.errors.has_key?(attr_plain.to_sym) ||
-    @object.errors.has_key?(attr_id.to_sym)
-    # rubocop:enable DeprecatedHashMethods
+    @object.errors.key?(attr_plain.to_sym) ||
+    @object.errors.key?(attr_id.to_sym)
   end
 
   # Returns true if the given attribute must be present.

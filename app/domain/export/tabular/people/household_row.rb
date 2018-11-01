@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 #  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -26,11 +27,11 @@ module Export::Tabular::People
     end
 
     def names_hash
-      @names_hash ||= first_names.zip(last_names).inject({}) do |memo, (first, last)|
+      @names_hash ||= first_names.zip(last_names).each_with_object({}) do |(first, last), memo|
         last = first_present_last_name if last.blank?
         memo[last] ||= []
         memo[last] << first
-        memo
+
       end
     end
 

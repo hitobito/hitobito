@@ -31,8 +31,7 @@ module Export::Pdf::Participation
       event.dates.map(&:start_at).map(&:year).min
     end
 
-    def render_image
-    end
+    def render_image; end
 
   end
 end

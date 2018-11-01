@@ -9,7 +9,7 @@ module Group::Types
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :layer, 
+    class_attribute :layer,
                     :role_types,
                     :possible_children,
                     :default_children,
@@ -38,7 +38,7 @@ module Group::Types
   private
 
   def create_default_children
-    # hack to have after_save ordering for this semantical after_create callback
+    # HACK: to have after_save ordering for this semantical after_create callback
     return if created_at < Time.zone.now - 10.seconds
 
     default_children.each do |group_type|
@@ -117,20 +117,20 @@ module Group::Types
     # All groups that may offer courses
     def course_offerers
       where(type: course_types.map(&:sti_name)).
-      order(:parent_id, :name)
+        order(:parent_id, :name)
     end
 
     # Return the group type with the given sti_name or raise an exception if not found
     def find_group_type!(sti_name)
       type = all_types.detect { |t| t.sti_name == sti_name }
-      fail ActiveRecord::RecordNotFound, "No group '#{sti_name}' found" if type.nil?
+      raise ActiveRecord::RecordNotFound, "No group '#{sti_name}' found" if type.nil?
       type
     end
 
     # Return the role type with the given sti_name or raise an exception if not found
     def find_role_type!(sti_name)
       type = role_types.detect { |t| t.sti_name == sti_name }
-      fail ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
+      raise ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
       type
     end
 

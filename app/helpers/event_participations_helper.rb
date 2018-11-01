@@ -56,6 +56,7 @@ module EventParticipationsHelper
       data: {
         confirm: t('event.participations.cancel_application.confirmation'),
         method: :delete
-      })
+      }
+    )
   end
 end

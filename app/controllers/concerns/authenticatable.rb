@@ -48,7 +48,7 @@ module Concerns
     def authenticate_person!(*args)
       normalize_user_params
 
-      user = params[:user_email] && Person.find_by_email(params[:user_email])
+      user = params[:user_email] && Person.find_by(email: params[:user_email])
 
       # Notice how we use Devise.secure_compare to compare the token
       # in the database with the token given in the params, mitigating

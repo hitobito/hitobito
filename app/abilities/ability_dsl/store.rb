@@ -22,7 +22,7 @@ module AbilityDsl
     def general_constraints(subject_class, action)
       [config(Recorder::General::PERMISSION, subject_class, action),
        config(Recorder::General::PERMISSION, subject_class, Recorder::General::ALL_ACTION)].
-      compact
+        compact
     end
 
     def class_side_constraints

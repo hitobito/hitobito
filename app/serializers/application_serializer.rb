@@ -102,12 +102,11 @@ class ApplicationSerializer < Oat::Serializer
       objects.each do |attrs|
         type = attrs.delete(:type)
         # do not add attrs consisting only of an :id
-        unless attrs.keys.collect(&:to_s) == %w(id)
-          # combine linked entries by type
-          list = hash[:linked][type || link]
-          unless list.include?(attrs)
-            list << attrs
-          end
+        next if attrs.keys.collect(&:to_s) == %w(id)
+        # combine linked entries by type
+        list = hash[:linked][type || link]
+        unless list.include?(attrs)
+          list << attrs
         end
       end
     end

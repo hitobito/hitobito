@@ -45,6 +45,9 @@ class MailingList < ActiveRecord::Base
                         allow_blank: true
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_mail_name_is_not_protected
+  validates :additional_sender,
+      allow_blank: true,
+      format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
 
   DEFAULT_LABEL = '_main'.freeze
 

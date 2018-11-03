@@ -26,6 +26,7 @@ class Ability
                  Person::AddRequestAbility,
                  QualificationAbility,
                  RoleAbility,
+                 ServiceTokenAbility,
                  SubscriptionAbility,
                  VariousAbility
 

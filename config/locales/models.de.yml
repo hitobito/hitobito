@@ -235,6 +235,9 @@ de:
       role:
         one: Rolle
         other: Rollen
+      service_token:
+        one: API-Key
+        other: API-Keys
       social_account:
         one: Social Media Adresse
         other: Social Media Adressen
@@ -726,6 +729,18 @@ de:
         title: Titel der Mahnung
         text: Text der Mahnung
         due_days: Fälligkeitszeitraum der Mahnung
+      
+      service_token:
+        name: Name
+        description: Beschreibung
+        key: Key
+        abilities: Rechte
+        last_access: Letzter Zugriff
+        people: Personen dieser Gruppe
+        people_below: Personen von Untergruppen
+        groups: Gruppen dieser Gruppe
+        events: Events dieser Gruppe
+
 
   errors:
     messages:

@@ -202,6 +202,8 @@ Hitobito::Application.routes.draw do
         end
       end
 
+      resources :service_tokens
+
     end # resources :group
 
     get 'list_courses' => 'event/lists#courses', as: :list_courses

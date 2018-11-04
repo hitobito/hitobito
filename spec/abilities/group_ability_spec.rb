@@ -52,6 +52,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
+      it 'may show service_tokens' do
+        is_expected.to be_able_to(:index_service_tokens, group)
+      end
+
       it 'may manage person tags' do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
@@ -86,6 +90,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
+      it 'may show service tokens' do
+        is_expected.to be_able_to(:index_service_tokens, group)
+      end
+
       it 'may manage person tags' do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
@@ -110,6 +118,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
+      it 'may show service tokens' do
+        is_expected.to be_able_to(:index_service_tokens, group)
+      end
+
       it 'may manage person tags' do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
@@ -120,6 +132,10 @@ describe GroupAbility do
 
       it 'may not show person notes' do
         is_expected.not_to be_able_to(:index_notes, group)
+      end
+
+      it 'may not show service tokens' do
+        is_expected.not_to be_able_to(:index_service_tokens, group)
       end
 
       it 'may not manage person tags' do
@@ -164,6 +180,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
+      it 'may show service tokens' do
+        is_expected.to be_able_to(:index_service_tokens, group)
+      end
+
       it 'may manage person tags' do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
@@ -188,6 +208,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
+      it 'may show service tokens' do
+        is_expected.to be_able_to(:index_service_tokens, group)
+      end
+
       it 'may manage person tags' do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
@@ -210,6 +234,10 @@ describe GroupAbility do
 
       it 'may not show person notes' do
         is_expected.not_to be_able_to(:index_notes, group)
+      end
+
+      it 'may not show service tokens' do
+        is_expected.not_to be_able_to(:index_service_tokens, group)
       end
 
       it 'may not manage person tags' do
@@ -263,6 +291,10 @@ describe GroupAbility do
         is_expected.not_to be_able_to(:index_notes, group)
       end
 
+      it 'mayi not show service tokens' do
+        is_expected.not_to be_able_to(:index_service_tokens, group)
+      end
+
       it 'may not manage person tags' do
         is_expected.not_to be_able_to(:manage_person_tags, group)
       end
@@ -312,6 +344,10 @@ describe GroupAbility do
 
       it 'may not show person notes' do
         is_expected.not_to be_able_to(:index_notes, group)
+      end
+
+      it 'may not show service tokens' do
+        is_expected.not_to be_able_to(:index_service_tokens, group)
       end
 
       it 'may not manage person tags' do

@@ -1207,6 +1207,18 @@ de:
         one: Eine Rolle erstellen
         other: '%{count} Rollen erstellen'
 
+  service_tokens:
+    global:
+      link:
+        add: API-Key hinzufügen
+    list:
+      ability:
+        read: Lesen
+        people_below: Personen von Untergruppen
+        people: Personen dieser Gruppe
+        events: Events dieser Gruppe
+        groups: Gruppen dieser Gruppe
+
   subscriber:
     group:
       form:

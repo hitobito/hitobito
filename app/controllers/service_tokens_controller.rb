@@ -4,6 +4,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class ServiceTokensController < CrudController
+  decorates :service_tokens
+
   self.nesting = Group
   self.permitted_attrs = [:name, :description, :people, :people_below, :groups, :events]
 

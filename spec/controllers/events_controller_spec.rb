@@ -304,5 +304,35 @@ describe EventsController do
     end
   end
 
+  describe 'token authenticated' do
+    let(:event) { events(:top_event) }
+    let(:group) { groups(:top_layer) }
+
+    describe 'GET index' do
+      it 'indexes page when token is valid' do
+        get :index, group_id: group.id, token: 'PermittedToken'
+        is_expected.to render_template('index')
+      end
+
+      it 'does not show page for unpermitted token' do
+        expect do
+          get :index, group_id: group.id, token: 'RejectedToken'
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe 'GET show' do
+      it 'shows page when token is valid' do
+        get :show, group_id: group.id, id: event, token: 'PermittedToken'
+        is_expected.to render_template('show')
+      end
+
+      it 'does not show page for unpermitted token' do
+        expect do
+          get :show, group_id: group.id, id: event, token: 'RejectedToken'
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+  end
 
 end

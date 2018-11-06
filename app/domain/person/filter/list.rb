@@ -23,6 +23,7 @@ class Person::Filter::List
   end
 
   def filtered_accessibles
+    return filter unless user
     filter.where(id: accessibles.unscope(:select).pluck(:id).keep_if do |id|
       next true if @ids.blank?
       @ids.include? id.to_s

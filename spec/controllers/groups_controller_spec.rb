@@ -152,4 +152,21 @@ describe GroupsController do
     end
 
   end
+
+  describe 'token authenticated' do
+    let(:group) { groups(:top_layer) }
+
+    describe 'GET index' do
+      it 'shows page when token is valid' do
+        get :show, id: group.id, token: 'PermittedToken'
+        is_expected.to render_template('show')
+      end
+
+      it 'does not show page for unpermitted token' do
+        expect do
+          get :show, id: group.id, token: 'RejectedToken'
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+  end
 end

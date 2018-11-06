@@ -42,7 +42,6 @@ gem 'paranoia', '< 2.1.2' # uses 2.0 for testing (no explicit requirement, yet)
 gem 'prawn', '< 2.0' # 2.0 requires ruby 2.0
 gem 'prawn-table'
 gem 'protective'
-gem 'rack'
 gem 'rails-i18n'
 gem 'rails_autolink'
 gem 'rubyzip', '~> 1.2.2'
@@ -78,7 +77,9 @@ gem 'uglifier'
 
 # security updates, can be deleted or changed if they get in the way of updates or so
 gem 'loofah', '~> 2.2.3'
+gem 'rack', '~> 1.6.11'
 gem 'sprockets', '~> 3.7.2'
+
 
 group :development, :test do
   gem 'binding_of_caller'

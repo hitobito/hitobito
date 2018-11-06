@@ -76,7 +76,8 @@ gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier'
 
-# security updates, can be deleted if they get in the way of updates or so
+# security updates, can be deleted or changed if they get in the way of updates or so
+gem 'loofah', '~> 2.2.3'
 gem 'sprockets', '~> 3.7.2'
 
 group :development, :test do

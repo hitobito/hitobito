@@ -173,46 +173,4 @@ describe RoleListsController do
     end
   end
 
-  context 'available role types' do
-    before do
-      Fabricate(Group::TopGroup::Member.name.to_sym, group: group)
-      Fabricate(Group::GlobalGroup::Member.name.to_sym, group: groups(:toppers))
-    end
-
-    it 'builds correct hash for one group' do
-      allow(controller).to receive(:roles).and_return(group.roles)
-
-      available_role_types = controller.send(:collect_available_role_types)
-
-      group = available_role_types['TopGroup']
-      expect(group['Group::TopGroup::Leader']).to eq(1)
-      expect(group['Group::TopGroup::Member']).to eq(2)
-    end
-
-    it 'builds correct hash for multiple groups' do
-      allow(controller).to receive(:roles).
-        and_return(group.roles + groups(:toppers).roles)
-
-      available_role_types = controller.send(:collect_available_role_types)
-
-      group1 = available_role_types['TopGroup']
-      expect(group1['Group::TopGroup::Leader']).to eq(1)
-      expect(group1['Group::TopGroup::Member']).to eq(2)
-
-      group2 = available_role_types['Toppers']
-      expect(group2['Group::GlobalGroup::Member']).to eq(1)
-    end
-
-    it 'does not add role to hash if no access' do
-      allow(controller).to receive(:roles).and_return(group.roles)
-      allow(controller).to receive(:can?).and_call_original
-      allow(controller).to receive(:can?).with(:destroy, role2).and_return(false)
-
-      available_role_types = controller.send(:collect_available_role_types)
-
-      group = available_role_types['TopGroup']
-      expect(group['Group::TopGroup::Leader']).to be_nil
-      expect(group['Group::TopGroup::Member']).to eq(2)
-    end
-  end
 end

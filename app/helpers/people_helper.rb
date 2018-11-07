@@ -92,4 +92,25 @@ module PeopleHelper
       group.people.exists?(id: user.id)
   end
 
+  def link_to_address(person)
+    if [person.address, person.zip_code, person.town].all?(&:present?)
+      link_to(icon('map-marker', class: 'fa-2x'), person_address_url(person), target: '_blank')
+    end
+  end
+
+  def person_address_url(person)
+    query_params = { street: person.address,
+                     postalcode: person.zip_code,
+                     city: person.town,
+                     country_codes: person.country }.to_query
+
+    openstreetmap_url(query_params)
+  end
+
+  def openstreetmap_url(query_params)
+    URI::HTTP.build(host: 'nominatim.openstreetmap.org',
+                    path: '/search.php',
+                    query: query_params).to_s
+  end
+
 end

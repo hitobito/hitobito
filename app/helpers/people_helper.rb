@@ -93,20 +93,24 @@ module PeopleHelper
   end
 
   def link_to_address(person)
-    unless person.address.nil? || person.zip_code.nil? || person.town.nil?
-      link_to(icon('map-marker', class: 'fa-2x'), openstreetmap_url(person), target: '_blank')
+    if [person.address, person.zip_code, person.town].all?(&:present?)
+      link_to(icon('map-marker', class: 'fa-2x'), person_address_url(person), target: '_blank')
     end
   end
 
-  def openstreetmap_url(person)
-    osm_url = 'https://nominatim.openstreetmap.org/search.php?polygon_geojson=1&viewbox='
-    osm_url += '&street=' + person.address
-    osm_url += '&postalcode=' + person.zip_code
-    osm_url += '&city=' + person.town
-    if person.country.present?
-      osm_url += '&countrycodes=' + person.country
-    end
-    osm_url
+  def person_address_url(person)
+    query_params = { street: person.address,
+                     postalcode: person.zip_code,
+                     city: person.town,
+                     country_codes: person.country }.to_query
+
+    openstreetmap_url(query_params)
+  end
+
+  def openstreetmap_url(query_params)
+    URI::HTTP.build(host: 'nominatim.openstreetmap.org',
+                    path: '/search.php',
+                    query: query_params).to_s
   end
 
 end

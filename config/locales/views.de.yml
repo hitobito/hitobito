@@ -1171,7 +1171,7 @@ de:
     access_denied: Zugriff auf %{person} verweigert
     destroy:
       success:
-        zero: Es wurde keine rolle entfernt
+        zero: Es wurde keine Rolle entfernt
         one: Eine Rolle wurde entfernt
         other: '%{count} Rollen wurden entfernt'
     create:

@@ -13,7 +13,9 @@ describe Export::EventParticipationsExportJob do
 
   let(:participation)              { event_participations(:top) }
   let(:user)                       { participation.person }
+  let(:other_user)                 { Fabricate(:person, first_name: 'Other', last_name: 'Member', household_key: 1) }
   let(:event)                      { participation.event }
+
   let(:params)                     { { filter: 'all' } }
   let(:event_participation_filter) { Event::ParticipationFilter.new(event, user, params) }
   let(:filepath)      { AsyncDownloadFile::DIRECTORY.join('event_participation_export') }
@@ -21,6 +23,9 @@ describe Export::EventParticipationsExportJob do
   before do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join('db', 'seeds')]
+
+    other_participation = Event::Participation.create(event: event, active: true, person: other_user)
+    Event::Role::Participant.create(participation: other_participation)
   end
 
   context 'creates a CSV-Export' do
@@ -30,7 +35,7 @@ describe Export::EventParticipationsExportJob do
       subject.perform
 
       lines = File.readlines("#{filepath}.#{format}")
-      expect(lines.size).to eq(2)
+      expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0].split(';').count).to match(14)
     end
@@ -44,10 +49,27 @@ describe Export::EventParticipationsExportJob do
       subject.perform
 
       lines = File.readlines("#{filepath}.#{format}")
-      expect(lines.size).to eq(2)
+      expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Firmenname;Übername.*/)
       expect(lines[0]).to match(/;Bemerkungen \(Allgemeines.*/)
-      expect(lines[0].split(';').count).to match(17)
+      expect(lines[0].split(';').count).to match(20)
+    end
+  end
+
+  context 'creates a household export' do
+    let(:format) { :csv }
+    let(:params) { { household: true } }
+
+    it 'and saves it' do
+      user.update(household_key: 1)
+      other_user.update(household_key: 1)
+
+      subject.perform
+
+      lines = File.readlines("#{filepath}.#{format}")
+      expect(lines.size).to eq(2)
+      expect(lines[0]).to match(/Name;Adresse;PLZ;.*/)
+      expect(lines[1]).to match(/Bottom und Other Member.*/)
     end
   end
 

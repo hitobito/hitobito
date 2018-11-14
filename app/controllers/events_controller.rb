@@ -65,8 +65,9 @@ class EventsController < CrudController
 
   def show
     respond_to do |format|
-      format.html  { entry }
-      format.ics { render_ical([entry]) }
+      format.html { entry }
+      format.ics  { render_ical([entry]) }
+      format.json { render_entry_json }
     end
   end
 
@@ -158,6 +159,10 @@ class EventsController < CrudController
                                      page: params[:page],
                                      serializer: EventSerializer,
                                      controller: self)
+  end
+
+  def render_entry_json
+    render json: EventSerializer.new(entry.decorate, group: @group, controller: self)
   end
 
   def typed_group_events_path(group, event_type, options = {})

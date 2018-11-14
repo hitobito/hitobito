@@ -84,6 +84,17 @@ describe EventsController do
         expect(assigns(:user_participation)).to eq(p)
       end
 
+      it 'renders json' do
+        sign_in(people(:top_leader))
+
+        get :show, group_id: groups(:top_layer), id: events(:top_event), format: :json
+        json = JSON.parse(@response.body)
+
+        event = json['events'].find { |e| e['id'] == events(:top_event).id.to_s }
+        expect(event['name']).to eq('Top Event')
+        expect(event['links']['dates'].size).to eq(1)
+      end
+
     end
 
     context 'GET new' do

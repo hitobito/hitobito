@@ -8,6 +8,7 @@
 class EventsController < CrudController
   include YearBasedPaging
   include Concerns::AsyncDownload
+  include Api::JsonPaging
 
   self.nesting = Group
 
@@ -154,11 +155,12 @@ class EventsController < CrudController
 
   def render_entries_json(entries)
     paged_entries = entries.page(params[:page])
-    render json: ListSerializer.new(paged_entries.decorate,
+    render json: [paging_properties(paged_entries),
+                  ListSerializer.new(paged_entries.decorate,
                                      group: group,
                                      page: params[:page],
                                      serializer: EventSerializer,
-                                     controller: self)
+                                     controller: self)].inject(&:merge)
   end
 
   def render_entry_json

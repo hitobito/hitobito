@@ -62,6 +62,46 @@ describe EventsController do
         expect(event['name']).to eq('Eventus')
         expect(event['links']['dates'].size).to eq(2)
         expect(event['links']['groups'].size).to eq(1)
+
+        expect(json['current_page']).to eq(1)
+        expect(json['total_pages']).to eq(1)
+        expect(json['prev_page_link']).to be_nil
+        expect(json['next_page_link']).to be_nil
+      end
+
+      it 'renders json pagination first page' do
+        5.times { Fabricate(:event_date, event: Fabricate(:event, groups: [@g1])) }
+
+        allow_any_instance_of(Event::ActiveRecord_Relation)
+          .to receive(:page).with(nil).and_return(Event.with_group_id([@g1]).page(1).per(3))
+
+        get :index, group_id: @g1, format: :json
+        json = JSON.parse(@response.body)
+
+        expect(json['events'].count).to eq(3)
+
+        expect(json['current_page']).to eq(1)
+        expect(json['total_pages']).to eq(2)
+        expect(json['prev_page_link']).to be_nil
+        expect(json['next_page_link']).to eq controller.url_for(request.params.merge(page: 2))
+      end
+
+      it 'renders json pagination second page' do
+        5.times { Fabricate(:event_date, event: Fabricate(:event, groups: [@g1])) }
+
+        allow_any_instance_of(Event::ActiveRecord_Relation)
+          .to receive(:page).with(2).and_return(Event.with_group_id([@g1]).page(2).per(3))
+
+
+        get :index, group_id: @g1, format: :json, page: 2
+        json = JSON.parse(@response.body)
+
+        expect(json['events'].count).to eq(3)
+
+        expect(json['current_page']).to eq(2)
+        expect(json['total_pages']).to eq(2)
+        expect(json['prev_page_link']).to eq controller.url_for(request.params.merge(page: 1))
+        expect(json['next_page_link']).to be_nil
       end
     end
 

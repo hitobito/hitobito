@@ -53,6 +53,7 @@ class EventsController < CrudController
       format.csv  { render_tabular_in_background(:csv) && redirect_to(action: :index) }
       format.xlsx { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
       format.ics  { render_ical(entries) }
+      format.json { render_entries_json(entries) }
     end
   end
 
@@ -150,6 +151,15 @@ class EventsController < CrudController
     end
   end
 
+  def render_entries_json(entries)
+    paged_entries = entries.page(params[:page])
+    render json: ListSerializer.new(paged_entries.decorate,
+                                     group: group,
+                                     page: params[:page],
+                                     serializer: EventSerializer,
+                                     controller: self)
+  end
+
   def typed_group_events_path(group, event_type, options = {})
     path = "#{event_type.type_name}_group_events_path"
     send(path, group, options)
@@ -192,8 +202,12 @@ class EventsController < CrudController
   end
 
   def event_filter
-    expression = sort_expression if sorting?
-    Event::Filter.new(params[:type], params['filter'], group, year, expression)
+    if request.format.json?
+      Event::ApiFilter.new(group, params)
+    else
+      expression = sort_expression if sorting?
+      Event::Filter.new(params[:type], params[:filter], group, year, expression)
+    end
   end
 
 end

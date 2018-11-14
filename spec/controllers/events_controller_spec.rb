@@ -25,7 +25,7 @@ describe EventsController do
       before do
         sign_in(top_leader)
         @g1 = Fabricate(Group::TopGroup.name.to_sym, name: 'g1', parent: groups(:top_group))
-        Fabricate(:event, groups: [@g1])
+        @e1 = Fabricate(:event, groups: [@g1])
         Fabricate(:event, groups: [groups(:bottom_group_one_one)])
       end
 
@@ -51,6 +51,17 @@ describe EventsController do
 
         expect(cookie[0]['name']).to match(/^(events_export)+\S*(#{top_leader.id})+$/)
         expect(cookie[0]['type']).to match(/^csv$/)
+      end
+
+      it 'renders json with dates' do
+        Fabricate(:event_date, event: @e1)
+        get :index, group_id: @g1, format: :json
+        json = JSON.parse(@response.body)
+
+        event = json['events'].find { |e| e['id'] == @e1.id.to_s }
+        expect(event['name']).to eq('Eventus')
+        expect(event['links']['dates'].size).to eq(2)
+        expect(event['links']['groups'].size).to eq(1)
       end
     end
 

@@ -113,6 +113,7 @@ Hitobito::Application.routes.draw do
         collection do
           get 'simple' => 'events#index'
           get 'course' => 'events#index', type: 'Event::Course'
+          get 'typeahead' => 'events#typeahead'
         end
 
         scope module: 'event' do

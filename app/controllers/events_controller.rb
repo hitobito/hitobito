@@ -53,6 +53,11 @@ class EventsController < CrudController
       format.csv  { render_tabular_in_background(:csv) && redirect_to(action: :index) }
       format.xlsx { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
       format.ics  { render_ical(entries) }
+    end
+  end
+
+  def typeahead
+    respond_to do |format|
       format.json { render json: for_typeahead(entries.where(search_conditions)) }
     end
   end

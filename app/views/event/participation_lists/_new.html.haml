@@ -14,7 +14,7 @@
               placeholder: t('.event_search'),
               data: { provide: 'entity',
               updater: 'ParticipationLists.updatePath',
-              url: group_events_path(group, format: :json, type: @event_type) })
+              url: typeahead_group_events_path(group, format: :json, type: @event_type) })
 
             = select(:role, :type, [], {}, style: 'display: none')
         .modal-footer

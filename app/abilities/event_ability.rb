@@ -10,7 +10,7 @@ class EventAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event
 
   on(Event) do
-    class_side(:list_available).everybody
+    class_side(:list_available, :typeahead).everybody
 
     permission(:any).may(:show).all
     permission(:any).may(:index_participations).for_participations_read_events

@@ -108,7 +108,7 @@ describe EventsController, type: :controller do
       it 'sets cookie on export' do
         get :index, group_id: group.id, format: :csv, year: 2012
 
-        cookie = JSON.parse(cookies[AsyncDownloadCookie::NAME])
+        cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
 
         expect(cookie[0]['name']).to match(/^(events_export)+\S*(#{people(:top_leader).id})+$/)
         expect(cookie[0]['type']).to match(/^csv$/)

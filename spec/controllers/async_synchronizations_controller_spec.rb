@@ -25,11 +25,11 @@ describe AsyncSynchronizationsController do
       json = JSON.parse(response.body)
 
       expect(json['status']).to match(200)
-      expect(cookies[AsyncSynchronizationCookie::NAME]).to be_nil
+      expect(cookies[Cookies::AsyncSynchronization::NAME]).to be_nil
     end
 
     it 'returns 404 if sync is not ready yet' do
-      AsyncSynchronizationCookie.new(cookies).set(mailing_list_id: mailing_list.id)
+      Cookies::AsyncSynchronization.new(cookies).set(mailing_list_id: mailing_list.id)
       mailing_list.update(mailchimp_syncing: true)
       allow_any_instance_of(Delayed::Job)
         .to receive(:last_error).and_return(nil)
@@ -38,11 +38,11 @@ describe AsyncSynchronizationsController do
       json = JSON.parse(response.body)
 
       expect(json['status']).to match(404)
-      expect(cookies[AsyncSynchronizationCookie::NAME]).to be_present
+      expect(cookies[Cookies::AsyncSynchronization::NAME]).to be_present
     end
 
     it 'returns 422 if sync failed' do
-      AsyncSynchronizationCookie.new(cookies).set(mailing_list_id: mailing_list.id)
+      Cookies::AsyncSynchronization.new(cookies).set(mailing_list_id: mailing_list.id)
       mailing_list.update(mailchimp_syncing: true)
       allow_any_instance_of(Delayed::Job)
         .to receive(:last_error).and_return('error_message')
@@ -51,7 +51,7 @@ describe AsyncSynchronizationsController do
       json = JSON.parse(response.body)
 
       expect(json['status']).to match(422)
-      expect(cookies[AsyncSynchronizationCookie::NAME]).to be_nil
+      expect(cookies[Cookies::AsyncSynchronization::NAME]).to be_nil
       expect(flash[:alert])
         .to eq('Beim Senden der Daten an MailChimp ist ein Fehler aufgetreten (error_message).')
     end

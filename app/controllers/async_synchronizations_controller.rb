@@ -15,7 +15,7 @@ class AsyncSynchronizationsController < ApplicationController
       return synchronization_failed if job.last_error.present?
       render json: { status: 404 }
     else
-      AsyncSynchronizationCookie.new(cookies).remove(params[:id].to_i)
+      Cookies::AsyncSynchronization.new(cookies).remove(mailing_list_id: params[:id].to_i)
       render json: { status: 200 }
     end
   end
@@ -23,7 +23,7 @@ class AsyncSynchronizationsController < ApplicationController
   private
 
   def synchronization_failed
-    AsyncSynchronizationCookie.new(cookies).remove(params[:id].to_i)
+    Cookies::AsyncSynchronization.new(cookies).remove(mailing_list_id: params[:id].to_i)
     flash[:alert] = I18n.t('layouts.synchronization.synchronization_failed',
                            error: job.last_error.lines.first.strip)
     job.destroy

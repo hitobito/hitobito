@@ -1,4 +1,4 @@
-module SubsciptionsHelper
+module SubscriptionsHelper
 
   def dropdown_subscriptions_export
     path = if @mailing_list.mailchimp?
@@ -6,7 +6,8 @@ module SubsciptionsHelper
                                                                 mailing_list_id: @mailing_list.id)
            end
 
-    Dropdown::PeopleExport.new(self, current_user, params, details: false,
+    Dropdown::PeopleExport.new(self, current_user, params,
+                               details: false,
                                emails: true,
                                labels: true,
                                households: true,

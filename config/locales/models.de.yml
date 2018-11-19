@@ -635,7 +635,7 @@ de:
         states:
           draft: Entwurf
           issued: Gestellt
-          sent: Versendet
+          sent: per Mail versendet
           payed: Bezahlt
           reminded: Gemahnt
           cancelled: Storniert

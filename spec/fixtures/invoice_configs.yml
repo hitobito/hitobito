@@ -28,6 +28,7 @@ top_layer:
   account_number: '10-5318-5'
   payment_slip: 'ch_esr'
   participant_number: '10-5318-6'
+  vat_number: 'CH 1234'
 
 bottom_layer_one:
   group: bottom_layer_one

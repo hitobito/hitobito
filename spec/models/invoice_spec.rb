@@ -149,6 +149,7 @@ describe Invoice do
     expect(invoice.payment_slip).to eq invoice_config.payment_slip
     expect(invoice.beneficiary).to eq invoice_config.beneficiary
     expect(invoice.participant_number).to eq invoice_config.participant_number
+    expect(invoice.vat_number).to eq invoice_config.vat_number
   end
 
 

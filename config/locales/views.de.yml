@@ -631,6 +631,7 @@ de:
       invoice_date: Rechnungsdatum
       due_at: Fällig bis
       creator: Rechnungssteller
+      vat_number: MwSt. Nummer
 
   invoice_configs:
     form_tabs:

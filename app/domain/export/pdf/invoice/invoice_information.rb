@@ -16,18 +16,25 @@ module Export::Pdf::Invoice
 
     private
 
-    # rubocop:disable Metrics/AbcSize
     def information
-      [
-        [I18n.t('invoices.pdf.invoice_number') + ':',
-         invoice.sequence_number],
-        [I18n.t('invoices.pdf.invoice_date') + ':',
-         (I18n.l(invoice.issued_at) if invoice.issued_at)],
-        [I18n.t('invoices.pdf.due_at') + ':',
-         (I18n.l(invoice.due_at) if invoice.due_at)],
-        [I18n.t('invoices.pdf.creator') + ':',
-         (invoice.creator.full_name if invoice.creator)]
-      ]
+      information_hash.map do |k, v|
+        labeled_information(k, v)
+      end.compact
+    end
+
+    def information_hash
+      {
+        invoice_number: invoice.sequence_number,
+        invoice_date: (I18n.l(invoice.issued_at) if invoice.issued_at),
+        due_at: (I18n.l(invoice.due_at) if invoice.due_at),
+        creator: invoice.creator.try(:full_name),
+        vat_number: invoice.vat_number
+      }
+    end
+
+    def labeled_information(attr, value)
+      return if value.blank?
+      [I18n.t("invoices.pdf.#{attr}") + ':', value]
     end
   end
 end

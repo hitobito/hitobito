@@ -20,7 +20,6 @@ gem 'carrierwave', '< 0.11.1' # uses 2.0 for testing (no explicit requirement, y
 gem 'cmess'
 gem 'config', '< 1.1.0' # requires ruby 2
 gem 'country_select'
-gem 'customized_piwik_analytics', '~> 1.0.0'
 gem 'daemons'
 gem 'dalli'
 gem 'delayed_job_active_record'

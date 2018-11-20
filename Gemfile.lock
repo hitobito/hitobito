@@ -157,10 +157,6 @@ GEM
       safe_yaml (~> 1.0.0)
     crass (1.0.4)
     currencies (0.4.2)
-    customized_piwik_analytics (1.0.4)
-      actionpack
-      activesupport
-      rails (>= 3.0.0)
     daemons (1.2.4)
     dalli (2.7.6)
     database_cleaner (1.5.3)
@@ -548,7 +544,6 @@ DEPENDENCIES
   compass-rails
   config (< 1.1.0)
   country_select
-  customized_piwik_analytics (~> 1.0.0)
   daemons
   dalli
   database_cleaner

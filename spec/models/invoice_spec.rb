@@ -1,7 +1,7 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,10 +14,13 @@ describe Invoice do
   let(:other_person)   { people(:bottom_member) }
   let(:invoice_config) { invoice_configs(:top_layer) }
 
-  it 'sorts by sequence_number and it''s length' do
-    invoices(:invoice).update_columns(sequence_number: '1-10')
-    invoices(:sent).update_columns(sequence_number: '1-2')
-    expect(Invoice.list).to eq [invoices(:sent), invoices(:invoice)]
+  it 'sorts by sequence_number on list' do
+    Invoice.destroy_all
+    i1 = create_invoice(sequence_number: '1-10')
+    i2 = create_invoice(sequence_number: '2-1')
+    i3 = create_invoice(sequence_number: '1-2')
+
+    expect(Invoice.list.map(&:to_s)).to eq [i3, i1, i2].map(&:to_s)
   end
 
   it 'saving requires group, title and recipient' do
@@ -247,6 +250,18 @@ describe Invoice do
     expect(invoice.recipient_name).to eq 'Top Leader'
   end
 
+  it '#order_by_sequence_number orders invoices correctly by sequence number' do
+    Invoice.destroy_all
+    i1 = create_invoice(sequence_number: '20-1')
+    i2 = create_invoice(sequence_number: '1-3')
+    i3 = create_invoice(sequence_number: '3-4')
+    i4 = create_invoice(sequence_number: '1-1')
+    i5 = create_invoice(sequence_number: '1-2')
+    i6 = create_invoice(sequence_number: '19-20')
+
+    expect(Invoice.order_by_sequence_number).to eq [i4, i5, i2, i3, i6, i1]
+  end
+
   private
 
   def contactables(*args)
@@ -255,7 +270,9 @@ describe Invoice do
   end
 
   def create_invoice(attrs = {})
-    Invoice.create!(attrs.reverse_merge(title: 'invoice', group: group, recipient: person))
+    invoice = Invoice.create!(attrs.reverse_merge(title: 'invoice', group: group, recipient: person))
+    invoice.update_attribute(:sequence_number, attrs[:sequence_number]) if attrs[:sequence_number]
+    invoice
   end
 
 end

@@ -158,7 +158,7 @@ module MailRelay
     def receiver_from_received_header
       if (received = message.received)
         received = received.first if received.respond_to?(:first)
-        received.info[/ for .*?([^\s<>]+)@[^\s<>]+/, 1]
+        received.info[/\tfor .*?([^\s<>]+)@[^\s<>]+/, 1]
       end
     end
 

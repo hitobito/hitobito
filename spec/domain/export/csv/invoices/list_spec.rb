@@ -20,7 +20,7 @@ describe Export::Tabular::Invoices::List do
 
    its(:headers) do
      should == [
-       'Titel', 'Nummer', 'Status', 'Referenz Nummer', 'Beschreibung', 'Empfänger E-Mail',
+       'Titel', 'Nummer', 'Status', 'Referenz Nummer', 'Text', 'Empfänger E-Mail',
        'Empfänger Adresse', 'Verschickt am', 'Fällig am', 'Betrag',
        'MwSt.', 'Total inkl. MwSt.', 'Total bezahlt'
      ]

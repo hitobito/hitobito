@@ -619,7 +619,7 @@ de:
 
       invoice:
         title: Titel
-        description: Beschreibung
+        description: Text
         invoice_items: Rechnungsposten
         invoice_item_article: Rechnungsartikel
         invoice_config: Rechnungseinstellung

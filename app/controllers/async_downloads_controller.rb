@@ -12,7 +12,7 @@ class AsyncDownloadsController < ApplicationController
   def show
     if async_download_file.downloadable?(current_person)
       file_type = params[:file_type]
-      AsyncDownloadCookie.new(cookies).remove(params[:id], file_type)
+      Cookies::AsyncDownload.new(cookies).remove(name: params[:id], type: file_type)
 
       data = File.read(async_download_file.full_path)
       data = css_encoding(data) if file_type == 'csv'

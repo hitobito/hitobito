@@ -493,6 +493,19 @@ describe MailingList do
     end
   end
 
+  context 'mailchimp' do
+    let(:leaders) { mailing_lists(:leaders) }
+
+    it 'does not enqueue destroy job if list is not connected' do
+      expect { list.destroy }.not_to change { Delayed::Job.count }
+    end
+
+    it 'does enqueue destroy job if list is connected' do
+      list.update!(mailchimp_api_key: 1, mailchimp_list_id: 1)
+      expect { list.destroy }.to change { Delayed::Job.count }.by(1)
+    end
+  end
+
   def create_subscription(subscriber, excluded = false, *role_types)
     sub = list.subscriptions.new
     sub.subscriber = subscriber

@@ -39,6 +39,10 @@
         = f.boolean_field(:main_email, caption: t('.caption_main_email').html_safe)
 
   %fieldset
+    = f.labeled_input_fields(:mailchimp_list_id, help: t('.help_mailchimp_sync'))
+    = f.labeled_input_fields(:mailchimp_api_key)
+
+  %fieldset
     = f.indented do
       = f.boolean_field(:subscribable, caption: t('.caption_subscribable'))
     = f.indented do

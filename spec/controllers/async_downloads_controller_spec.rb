@@ -18,25 +18,25 @@ describe AsyncDownloadsController do
   context 'show' do
     it 'sends file deletes cookies if current_person has access and last download' do
       filename = AsyncDownloadFile.create_name('test', person.id)
-      AsyncDownloadCookie.new(cookies).set(filename, 'txt')
+      Cookies::AsyncDownload.new(cookies).set(name: filename, type: 'txt')
       generate_test_file(filename)
 
       get :show, id: filename, file_type: 'txt'
 
       expect(response.body).to match('this is a testfile')
       expect(response.status).to match(200)
-      expect(cookies[AsyncDownloadCookie::NAME]).to be_nil
+      expect(cookies[Cookies::AsyncDownload::NAME]).to be_nil
     end
 
     it 'sends file removes cookie entry if current_person has access and not last download' do
       filename = AsyncDownloadFile.create_name('test', person.id)
-      AsyncDownloadCookie.new(cookies).set(filename, 'txt')
-      AsyncDownloadCookie.new(cookies).set('second_download', 'txt')
+      Cookies::AsyncDownload.new(cookies).set(name: filename, type: 'txt')
+      Cookies::AsyncDownload.new(cookies).set(name: 'second_download', type: 'txt')
       generate_test_file(filename)
 
       get :show, id: filename, file_type: 'txt'
 
-      cookie = JSON.parse(cookies[AsyncDownloadCookie::NAME])
+      cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
 
       expect(response.body).to match('this is a testfile')
       expect(response.status).to match(200)
@@ -68,7 +68,7 @@ describe AsyncDownloadsController do
     it 'sends file with specific encoding' do
       allow(Settings.csv).to receive_messages(encoding: 'ISO-8859-1')
       filename = AsyncDownloadFile.create_name('test', person.id)
-      AsyncDownloadCookie.new(cookies).set(filename, 'csv')
+      Cookies::AsyncDownload.new(cookies).set(name: filename, type: 'csv')
       generate_test_file(filename, :csv)
 
       get :show, id: filename, file_type: 'csv'

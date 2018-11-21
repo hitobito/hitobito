@@ -51,7 +51,7 @@ describe SubscriptionsController do
     it 'sets cookie on export' do
       get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :csv
 
-      cookie = JSON.parse(cookies[AsyncDownloadCookie::NAME])
+      cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
 
       expect(cookie[0]['name']).to match(/^(subscriptions)+\S*(#{people(:top_leader).id})+$/)
       expect(cookie[0]['type']).to match(/^csv$/)

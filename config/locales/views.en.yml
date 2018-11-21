@@ -449,6 +449,12 @@ en:
       available_under_license: 'licensed under the'
       developed_by: 'Developed by'
       source_code: 'Source code'
+
+    synchronization:
+      wait_for_synchronization: 'Your data is currently being sent to MailChimp. This can take a moment. Then the selected list will be updated with the contacts from hitobito.'
+      synchronization_failed: 'An error occurred while sending data to MailChimp (%{error})'
+      cancel_synchronization: 'Cancel export'
+
   mailing_lists:
     global:
       link:
@@ -458,6 +464,7 @@ en:
       caption_subscribable: 'Subscribers may subscribe/unsubscribe themselves'
       caption_subscribers_may_post: 'Subscribers may write to the mailing list'
       caption_anyone_may_post: 'Anyone may write to the mailing list'
+      help_mailchimp_sync: 'Subscribers can be exported to the MailChimp list, but this does not happen automatically. This action overwrites the MailChimp list and deletes existing contacts.'
   mailing_list_decorator:
     may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
     may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'

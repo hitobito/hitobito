@@ -362,18 +362,22 @@ ActiveRecord::Schema.define(version: 20181108131258) do
   add_index "mail_logs", ["mailing_list_id"], name: "index_mail_logs_on_mailing_list_id", using: :btree
 
   create_table "mailing_lists", force: :cascade do |t|
-    t.string  "name",                 limit: 255,                   null: false
-    t.integer "group_id",             limit: 4,                     null: false
-    t.text    "description",          limit: 65535
-    t.string  "publisher",            limit: 255
-    t.string  "mail_name",            limit: 255
-    t.string  "additional_sender",    limit: 255
-    t.boolean "subscribable",                       default: false, null: false
-    t.boolean "subscribers_may_post",               default: false, null: false
-    t.boolean "anyone_may_post",                    default: false, null: false
-    t.string  "preferred_labels",     limit: 255
-    t.boolean "main_email",                         default: false
-    t.boolean "delivery_report",                    default: false, null: false
+    t.string   "name",                     limit: 255,                   null: false
+    t.integer  "group_id",                 limit: 4,                     null: false
+    t.text     "description",              limit: 65535
+    t.string   "publisher",                limit: 255
+    t.string   "mail_name",                limit: 255
+    t.string   "additional_sender",        limit: 255
+    t.boolean  "subscribable",                           default: false, null: false
+    t.boolean  "subscribers_may_post",                   default: false, null: false
+    t.boolean  "anyone_may_post",                        default: false, null: false
+    t.string   "preferred_labels",         limit: 255
+    t.boolean  "delivery_report",                        default: false, null: false
+    t.boolean  "main_email",                             default: false
+    t.string   "mailchimp_api_key",        limit: 255
+    t.string   "mailchimp_list_id",        limit: 255
+    t.boolean  "mailchimp_syncing",                      default: false
+    t.datetime "mailchimp_last_synced_at"
   end
 
   add_index "mailing_lists", ["group_id"], name: "index_mailing_lists_on_group_id", using: :btree

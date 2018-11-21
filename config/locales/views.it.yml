@@ -498,6 +498,12 @@ it:
     user_impersonation:
       info: "Sei ora registrato come %{user}"
       end: "Finire l'imitazione"
+
+    synchronization:
+      wait_for_synchronization: "I tuoi dati sono attualmente inviati a MailChimp. Questo potrebbe richiedere un momento. Quindi l'elenco selezionato verrà aggiornato con i contatti di hitobito."
+      synchronization_failed: "Si è verificato un errore durante l'invio di dati a MailChimp (%{error})."
+      cancel_synchronization: 'Annulla esportazione'
+
   mailing_lists:
     global:
       link:
@@ -511,6 +517,7 @@ it:
       caption_anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
       caption_delivery_report: 'Spedire l''e-mail con conferma al mittente'
       help_preferred_labels: 'Se ci sono e-mails questi verranno spediti solo ad indirizzi e-mail con questa denominazione. Nel far questo verranno utilizzati anche indirizzi e-mail che non sono marcati come indirizzo di spedizione. '
+      help_mailchimp_sync: 'Gli abbonati possono essere esportati nell''elenco MailChimp, ma ciò non avviene automaticamente. Questa azione sovrascrive l''elenco MailChimp e i contatti esistenti vengono eliminati.'
   mailing_list_decorator:
     may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
     may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'

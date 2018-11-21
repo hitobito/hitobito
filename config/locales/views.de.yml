@@ -770,6 +770,11 @@ de:
       wait_for_downloads: 'Die Downloads werden vorbereitet, bitte warten.'
       cancel_downloads: 'Downloads abbrechen'
 
+    synchronization:
+      wait_for_synchronization: 'Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein.'
+      synchronization_failed: 'Beim Senden der Daten an MailChimp ist ein Fehler aufgetreten (%{error}).'
+      cancel_synchronization: 'Export abbrechen'
+
   mailing_lists:
     global:
       link:
@@ -783,6 +788,7 @@ de:
       caption_anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
       caption_delivery_report: 'E-Mail mit Bestätigung an Absender schicken'
       help_preferred_labels: 'E-Mails werden falls vorhanden, nur an E-Mailadressen mit dieser Bezeichnung verschickt. Dabei werden auch E-Mail Adressen verwendet, die nicht als Versand-Adresse markiert sind.'
+      help_mailchimp_sync: 'Abonnenten können an die MailChimp-Liste exportiert werden, dies geschieht jedoch nicht automatisch. Diese Aktion überschreibt die MailChimp-Liste und bestehende Kontakte werden gelöscht.'
 
   mailing_list_decorator:
     may_subscribe: 'Abonnenten dürfen sich selbst an/abmelden'

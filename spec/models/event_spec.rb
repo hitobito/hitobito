@@ -277,6 +277,58 @@ describe Event do
         is_expected.to eq [event]
       end
     end
+
+    context 'between' do
+
+      it 'finds nothing if params nil' do
+        event.dates.create(start_at: 1.year.ago, finish_at: 1.year.from_now)
+        expect(Event.between(nil, nil)).to be_blank
+        expect(Event.between(nil, Time.zone.now)).to be_blank
+        expect(Event.between(Time.zone.now, nil)).to be_blank
+      end
+
+      context 'event with end and start date' do
+        before do
+          event.dates.create(start_at: 1.day.from_now, finish_at: 10.days.from_now)
+        end
+
+        it 'finds event with start_at overlay' do
+          expect(Event.between(Time.zone.now, 2.days.from_now)).to eq [event]
+        end
+
+        it 'finds event with finish_at overlay' do
+          expect(Event.between(9.days.from_now, 11.days.from_now)).to eq [event]
+        end
+
+        it 'finds event where start and finish_at is between dates' do
+          expect(Event.between(Time.zone.now, 11.days.from_now)).to eq [event]
+        end
+
+        it 'finds event if the overlap is between start and finish_at' do
+          expect(Event.between(2.days.from_now, 9.days.from_now)).to eq [event]
+        end
+
+        it 'does not find event if finish_at before start date' do
+          expect(Event.between(11.days.from_now, 20.days.from_now)).to be_blank
+        end
+
+        it 'does not find event if start_at after end date' do
+          expect(Event.between(1.day.ago, Time.zone.now)).to be_blank
+        end
+      end
+
+      context 'event with only start date' do
+        before do
+          event.dates.create(start_at: 1.day.from_now)
+        end
+
+        it 'finds event with start_at overlay' do
+          expect(Event.between(Time.zone.now, 2.days.from_now)).to eq [event]
+        end
+
+      end
+
+    end
   end
 
   context 'validations' do

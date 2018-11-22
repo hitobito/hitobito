@@ -36,15 +36,31 @@ To use the rest of the API there are two possibilities:
 
 Currently the following endpoints are provided:
 
-| Method | Path                         | Function |
-| --- | --- | --- |
-| GET     | /groups                      | Root group           |
-| GET     | /groups/:id                  | Group Details        |
-| GET     | /groups/:id/people           | People of a certain group |
-| GET     | /groups/:group_id/people/:id | Person details      |
+| Method | Path                            | Function                   |
+| ---    | ---                             | ---                        |
+| GET    | /groups                         | Root group                 |
+| GET    | /groups/:id                     | Group Details              |
+| GET    | /groups/:id/people              | People of a certain group  |
+| GET    | /groups/:group_id/people/:id    | Person details             |
+| GET    | /groups/:group_id/events        | Events of a certain group  |
+| GET    | /groups/:group_id/events/course | Courses of a certain group |
+| GET    | /groups/:group_id/events/:id    | Event details              |
 
 
-### Example Response of a Sign In Request
+### Parameters
+
+    /groups/:group_id/events
+
+| Name       | Type     | Description                    | Default               | Available Values                           | Example                 |
+| ---        | ---      | ---                            | ---                   | ---                                        | ---                     |
+| type       | `string` | Specifiy class type            | Nil (Normal Event)    | `Event::Course` and wagon specific classes | `type=Event::Course`    |
+| filter     | `string` | Specifiy filter type           | `all`                 | `all`, `layer`                             | `filter=layer`          |
+| start_date | `date`   | Filter Events after start_date | Today                 | Any date                                   | `start_date=31-10-2018` |
+| end_date   | `date`   | Filter Events before end_date  | Nil (Upcoming Events) | Any date                                   | `end_date=28-02-2019`   |
+
+### Example Response
+
+#### Sign In Request
 
     {
       people: [ {
@@ -82,4 +98,165 @@ Currently the following endpoints are provided:
           }
         }
       } ]
+    }
+
+#### GET /groups/:group_id/events
+
+    {
+      "events": [
+        {
+          "id": "1",
+          "type": "events",
+          "name": "LK 102",
+          "description": "Aut exercitationem quia. Sed vel optio. Veritatis deserunt in consequuntur excepturi. Tenetur in dolores veniam vero quas dolor.",
+          "motto": "Laboriosam amet id hic quo saepe et corrupti repellendus.",
+          "cost": "",
+          "maximum_participants": 38,
+          "participant_count": 0,
+          "location": "Ankerweg 7\r\n84377\r\nHannahscheid",
+          "application_opening_at": "2017-10-28",
+          "application_closing_at": "2019-02-03",
+          "application_conditions": "",
+          "state": "",
+          "teamer_count": 6,
+          "external_application_link": "http://demo.hitobito.ch/de/groups/1/public_events/1",
+          "links": {
+            "kind": "1",
+            "dates": [
+              "1"
+            ],
+            "groups": [
+              "1"
+            ]
+          }
+        }
+      ],
+      "linked": {
+        "event_kinds": [
+          {
+            "id": "1",
+            "label": "Leitungskurs",
+            "short_name": "LK",
+            "minimum_age": null,
+            "general_information": null,
+            "application_conditions": null
+          }
+        ],
+        "event_dates": [
+          {
+            "id": "1",
+            "label": "Kurs",
+            "start_at": "2018-02-02T00:00:00.000+01:00",
+            "finish_at": "2018-02-10T00:00:00.000+01:00",
+            "location": ""
+          }
+        ],
+        "groups": [
+          {
+            "id": "1",
+            "href": "http://demo.hitobito.ch/de/groups/1.json",
+            "group_type": "Hauptebene",
+            "layer": true,
+            "name": "Dachverband",
+            "short_name": "Dachverband",
+            "email": "alta.haley@example.org",
+            "address": "Schellingstr. 8",
+            "zip_code": 5692,
+            "town": "Damianburg",
+            "country": null,
+            "created_at": "2018-11-08T14:39:36.000+01:00",
+            "updated_at": "2018-11-08T14:39:36.000+01:00",
+            "deleted_at": null,
+            "links": {
+              "layer_group": "1",
+              "hierarchies": [
+                "1"
+              ],
+              "children": [
+                "3",
+                "4",
+                "5",
+                "6",
+                "16",
+                "11",
+                "2"
+              ]
+            }
+          },
+          {
+            "id": "1",
+            "name": "Dachverband",
+            "group_type": "Hauptebene"
+          },
+          {
+            "id": "3",
+            "name": "Geschäftsstelle",
+            "group_type": "Geschäftsstelle"
+          },
+          {
+            "id": "4",
+            "name": "Kontakte",
+            "group_type": "Kontakte"
+          },
+          {
+            "id": "5",
+            "name": "Mitglieder",
+            "group_type": "Mitglieder"
+          },
+          {
+            "id": "6",
+            "name": "Region Bern",
+            "group_type": "Region/Kanton"
+          },
+          {
+            "id": "16",
+            "name": "Region Nordost",
+            "group_type": "Region/Kanton"
+          },
+          {
+            "id": "11",
+            "name": "Region Zürich",
+            "group_type": "Region/Kanton"
+          },
+          {
+            "id": "2",
+            "name": "Vorstand",
+            "group_type": "Vorstand"
+          }
+        ]
+      },
+      "links": {
+        "groups.creator": {
+          "href": "http://demo.hitobito.ch/de/people/{groups.creator}.json",
+          "type": "people"
+        },
+        "groups.updater": {
+          "href": "http://demo.hitobito.ch/de/people/{groups.updater}.json",
+          "type": "people"
+        },
+        "groups.deleter": {
+          "href": "http://demo.hitobito.ch/de/people/{groups.deleter}.json",
+          "type": "people"
+        },
+        "groups.parent": {
+          "href": "http://demo.hitobito.ch/de/groups/{groups.parent}.json",
+          "type": "groups"
+        },
+        "groups.layer_group": {
+          "href": "http://demo.hitobito.ch/de/groups/{groups.layer_group}.json",
+          "type": "groups"
+        },
+        "groups.hierarchy": {
+          "href": "http://demo.hitobito.ch/de/groups/{groups.hierarchy}.json",
+          "type": "groups"
+        },
+        "groups.children": {
+          "href": "http://demo.hitobito.ch/de/groups/{groups.children}.json",
+          "type": "groups"
+        },
+        "groups.people": {
+          "href": "http://demo.hitobito.ch/de/groups/{groups.id}/people.json",
+          "type": "people"
+        }
+      }
     }

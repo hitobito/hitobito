@@ -174,6 +174,14 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       joins(:dates).where(event_dates: { start_at: [start_at...finish_at] })
     end
 
+    # Event with start and end-date overlay
+    def between(start_date, end_date)
+      joins(:dates).
+        where('event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date
+              OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date',
+              start_date: start_date, end_date: end_date).uniq
+    end
+
     # Events from groups in the hierarchy of the given user.
     def in_hierarchy(user)
       with_group_id(user.groups_hierarchy_ids)
@@ -185,8 +193,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     # Events running now or in the future.
-    def upcoming
-      midnight = Time.zone.now.midnight
+    def upcoming(midnight = Time.zone.now.midnight)
       joins(:dates).
         where('event_dates.start_at >= ? OR event_dates.finish_at >= ?', midnight, midnight)
     end

@@ -25,7 +25,7 @@ describe EventsController do
       before do
         sign_in(top_leader)
         @g1 = Fabricate(Group::TopGroup.name.to_sym, name: 'g1', parent: groups(:top_group))
-        Fabricate(:event, groups: [@g1])
+        @e1 = Fabricate(:event, groups: [@g1])
         Fabricate(:event, groups: [groups(:bottom_group_one_one)])
       end
 
@@ -52,6 +52,57 @@ describe EventsController do
         expect(cookie[0]['name']).to match(/^(events_export)+\S*(#{top_leader.id})+$/)
         expect(cookie[0]['type']).to match(/^csv$/)
       end
+
+      it 'renders json with dates' do
+        Fabricate(:event_date, event: @e1)
+        get :index, group_id: @g1, format: :json
+        json = JSON.parse(@response.body)
+
+        event = json['events'].find { |e| e['id'] == @e1.id.to_s }
+        expect(event['name']).to eq('Eventus')
+        expect(event['links']['dates'].size).to eq(2)
+        expect(event['links']['groups'].size).to eq(1)
+
+        expect(json['current_page']).to eq(1)
+        expect(json['total_pages']).to eq(1)
+        expect(json['prev_page_link']).to be_nil
+        expect(json['next_page_link']).to be_nil
+      end
+
+      it 'renders json pagination first page' do
+        5.times { Fabricate(:event_date, event: Fabricate(:event, groups: [@g1])) }
+
+        allow_any_instance_of(Event::ActiveRecord_Relation)
+          .to receive(:page).with(nil).and_return(Event.with_group_id([@g1]).page(1).per(3))
+
+        get :index, group_id: @g1, format: :json
+        json = JSON.parse(@response.body)
+
+        expect(json['events'].count).to eq(3)
+
+        expect(json['current_page']).to eq(1)
+        expect(json['total_pages']).to eq(2)
+        expect(json['prev_page_link']).to be_nil
+        expect(json['next_page_link']).to eq controller.url_for(request.params.merge(page: 2))
+      end
+
+      it 'renders json pagination second page' do
+        5.times { Fabricate(:event_date, event: Fabricate(:event, groups: [@g1])) }
+
+        allow_any_instance_of(Event::ActiveRecord_Relation)
+          .to receive(:page).with(2).and_return(Event.with_group_id([@g1]).page(2).per(3))
+
+
+        get :index, group_id: @g1, format: :json, page: 2
+        json = JSON.parse(@response.body)
+
+        expect(json['events'].count).to eq(3)
+
+        expect(json['current_page']).to eq(2)
+        expect(json['total_pages']).to eq(2)
+        expect(json['prev_page_link']).to eq controller.url_for(request.params.merge(page: 1))
+        expect(json['next_page_link']).to be_nil
+      end
     end
 
     context 'GET show' do
@@ -71,6 +122,17 @@ describe EventsController do
         get :show, group_id: groups(:top_layer).id, id: events(:top_event)
 
         expect(assigns(:user_participation)).to eq(p)
+      end
+
+      it 'renders json' do
+        sign_in(people(:top_leader))
+
+        get :show, group_id: groups(:top_layer), id: events(:top_event), format: :json
+        json = JSON.parse(@response.body)
+
+        event = json['events'].find { |e| e['id'] == events(:top_event).id.to_s }
+        expect(event['name']).to eq('Top Event')
+        expect(event['links']['dates'].size).to eq(1)
       end
 
     end

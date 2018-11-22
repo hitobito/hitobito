@@ -3,6 +3,9 @@
 ## Version 1.19
 
 *   Neue Navigation, mit Menü für Mobile
+*   Mehrfachaktionen auf Personen
+*   API Schnittstelle für Events
+*   Service Accounts für API
 
 ## Version 1.18
 

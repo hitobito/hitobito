@@ -8,6 +8,7 @@
 class EventsController < CrudController
   include YearBasedPaging
   include Concerns::AsyncDownload
+  include Api::JsonPaging
 
   self.nesting = Group
 
@@ -53,14 +54,21 @@ class EventsController < CrudController
       format.csv  { render_tabular_in_background(:csv) && redirect_to(action: :index) }
       format.xlsx { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
       format.ics  { render_ical(entries) }
+      format.json { render_entries_json(entries) }
+    end
+  end
+
+  def typeahead
+    respond_to do |format|
       format.json { render json: for_typeahead(entries.where(search_conditions)) }
     end
   end
 
   def show
     respond_to do |format|
-      format.html  { entry }
-      format.ics { render_ical([entry]) }
+      format.html { entry }
+      format.ics  { render_ical([entry]) }
+      format.json { render_entry_json }
     end
   end
 
@@ -145,6 +153,20 @@ class EventsController < CrudController
     end
   end
 
+  def render_entries_json(entries)
+    paged_entries = entries.page(params[:page])
+    render json: [paging_properties(paged_entries),
+                  ListSerializer.new(paged_entries.decorate,
+                                     group: group,
+                                     page: params[:page],
+                                     serializer: EventSerializer,
+                                     controller: self)].inject(&:merge)
+  end
+
+  def render_entry_json
+    render json: EventSerializer.new(entry.decorate, group: @group, controller: self)
+  end
+
   def typed_group_events_path(group, event_type, options = {})
     path = "#{event_type.type_name}_group_events_path"
     send(path, group, options)
@@ -187,8 +209,12 @@ class EventsController < CrudController
   end
 
   def event_filter
-    expression = sort_expression if sorting?
-    Event::Filter.new(params[:type], params['filter'], group, year, expression)
+    if request.format.json?
+      Event::ApiFilter.new(group, params)
+    else
+      expression = sort_expression if sorting?
+      Event::Filter.new(params[:type], params[:filter], group, year, expression)
+    end
   end
 
 end

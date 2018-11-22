@@ -28,7 +28,7 @@ class Event::ApiFilter < Event::Filter
   private
 
   def start_date
-    @start_date.try(:midnight) || Time.zone.now.midnight
+    @start_date.try(:beginning_of_day) || Time.zone.now.beginning_of_day
   end
 
   def end_date

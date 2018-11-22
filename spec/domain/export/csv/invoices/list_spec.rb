@@ -20,7 +20,7 @@ describe Export::Tabular::Invoices::List do
 
    its(:headers) do
      should == [
-       'Titel', 'Nummer', 'Status', 'Referenz Nummer', 'Beschreibung', 'Empfänger E-Mail',
+       'Titel', 'Nummer', 'Status', 'Referenz Nummer', 'Text', 'Empfänger E-Mail',
        'Empfänger Adresse', 'Verschickt am', 'Fällig am', 'Betrag',
        'MwSt.', 'Total inkl. MwSt.', 'Total bezahlt'
      ]
@@ -56,7 +56,7 @@ describe Export::Tabular::Invoices::List do
 
      its(['Titel']) { should == 'Sent' }
      its(['Nummer']) { should == invoice.sequence_number }
-     its(['Status']) { should == 'Versendet' }
+     its(['Status']) { should == 'per Mail versendet' }
      its(['Referenz Nummer']) { should == invoice.esr_number }
      its(['Verschickt am']) { should == I18n.l(invoice.sent_at) }
      its(['Fällig am']) { should == I18n.l(invoice.due_at) }

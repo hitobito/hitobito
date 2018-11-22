@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,7 +9,9 @@ class InvoicesController < CrudController
   decorates :invoice
 
   self.nesting = Group
-  self.sort_mappings = { recipient: Person.order_by_name_statement }
+  self.sort_mappings = { recipient: Person.order_by_name_statement,
+                         sequence_number: Invoice.order_by_sequence_number_statement }
+
   self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
   self.permitted_attrs = [:title, :description, :state, :due_at,
                           :recipient_id, :recipient_email, :recipient_address,

@@ -20,4 +20,5 @@
       = labeled_attr(entry, :iban) if entry.iban.present?
       = labeled_attr(entry, :esr_number) if entry.with_reference?
       = labeled_attr(entry, :creator)
+      = labeled_attr(entry, :vat_number) if entry.vat_number?
 

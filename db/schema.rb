@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181101101107) do
+ActiveRecord::Schema.define(version: 20181119094017) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -248,7 +248,7 @@ ActiveRecord::Schema.define(version: 20181101101107) do
     t.integer  "group_id",    limit: 4,                              null: false
   end
 
-  add_index "invoice_articles", ["number"], name: "index_invoice_articles_on_number", unique: true, using: :btree
+  add_index "invoice_articles", ["number", "group_id"], name: "index_invoice_articles_on_number_and_group_id", unique: true, using: :btree
 
   create_table "invoice_configs", force: :cascade do |t|
     t.integer "sequence_number",             limit: 4,     default: 1,       null: false
@@ -264,6 +264,7 @@ ActiveRecord::Schema.define(version: 20181101101107) do
     t.string  "participant_number",          limit: 255
     t.string  "email",                       limit: 255
     t.string  "participant_number_internal", limit: 255
+    t.string  "vat_number",                  limit: 255
   end
 
   add_index "invoice_configs", ["group_id"], name: "index_invoice_configs_on_group_id", using: :btree
@@ -306,6 +307,7 @@ ActiveRecord::Schema.define(version: 20181101101107) do
     t.string   "participant_number",          limit: 255
     t.integer  "creator_id",                  limit: 4
     t.string   "participant_number_internal", limit: 255
+    t.string   "vat_number",                  limit: 255
   end
 
   add_index "invoices", ["esr_number"], name: "index_invoices_on_esr_number", using: :btree

@@ -619,7 +619,7 @@ de:
 
       invoice:
         title: Titel
-        description: Beschreibung
+        description: Text
         invoice_items: Rechnungsposten
         invoice_item_article: Rechnungsartikel
         invoice_config: Rechnungseinstellung
@@ -635,7 +635,7 @@ de:
         states:
           draft: Entwurf
           issued: Gestellt
-          sent: Versendet
+          sent: per Mail versendet
           payed: Bezahlt
           reminded: Gemahnt
           cancelled: Storniert
@@ -650,6 +650,7 @@ de:
         total_inkl_vat: Total inkl. MwSt.
         total: Total inkl. MwSt.
         vat: MwSt.
+        vat_number: MwSt. Nummer
         payment_information: Zahlungsinformation
         payment_purpose: Zahlungszweck
         address: Absender Adresse
@@ -691,6 +692,7 @@ de:
         participant_number: Teilnehmernummer
         participant_number_internal: Teilnehmernummer intern
         payment_reminder_configs: Mahnungen
+        vat_number: MwSt. Nummer
 
       invoice_item:
         name: Name

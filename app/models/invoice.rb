@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -83,18 +83,31 @@ class Invoice < ActiveRecord::Base
 
   validates_by_schema
 
-  scope :list,           -> { order('LENGTH(sequence_number), sequence_number') }
+  scope :list,           -> { order_by_sequence_number }
   scope :one_day,        -> { where('invoices.due_at < ?', 1.day.ago.to_date) }
   scope :one_week,       -> { where('invoices.due_at < ?', 1.week.ago.to_date) }
   scope :one_month,      -> { where('invoices.due_at < ?', 1.month.ago.to_date) }
   scope :visible,        -> { where.not(state: :cancelled) }
   scope :remindable,     -> { where(state: STATES_REMINDABLE) }
 
-  def self.to_contactables(invoices)
-    invoices.collect do |invoice|
-      next if invoice.recipient_address.blank?
-      Person.new(address: invoice.recipient_address)
-    end.compact
+  class << self
+    def to_contactables(invoices)
+      invoices.collect do |invoice|
+        next if invoice.recipient_address.blank?
+        Person.new(address: invoice.recipient_address)
+      end.compact
+    end
+
+    def order_by_sequence_number
+      order(order_by_sequence_number_statement)
+    end
+
+    # Orders by first integer, second integer
+    def order_by_sequence_number_statement
+      %w(sequence_number).product(%w(1 -1)).map do |field, index|
+        "CAST(SUBSTRING_INDEX(#{field}, '-', #{index}) AS UNSIGNED)"
+      end
+    end
   end
 
   def multi_create
@@ -186,9 +199,9 @@ class Invoice < ActiveRecord::Base
   end
 
   def set_payment_attributes
-    [:address, :account_number, :iban,
-     :payment_slip, :beneficiary, :payee,
-     :participant_number, :participant_number_internal].each do |at|
+    [:address, :account_number, :iban, :payment_slip,
+     :beneficiary, :payee, :participant_number,
+     :participant_number_internal, :vat_number].each do |at|
       assign_attributes(at => invoice_config.send(at))
     end
   end

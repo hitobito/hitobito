@@ -617,8 +617,8 @@ de:
     add: Externe Rechnung erstellen
     add_payments: Zahlungen erfassen
     issued: Rechnung gestellt
-    sent: Rechnung versendet
-    reminder_sent: Mahnung versendet, fällig am %{date} (%{title})
+    sent: Rechnung per Mail versendet
+    reminder_sent: Mahnung gestellt, fällig am %{date} (%{title})
     payed: bezahlt
     destroy:
       flash:
@@ -631,6 +631,7 @@ de:
       invoice_date: Rechnungsdatum
       due_at: Fällig bis
       creator: Rechnungssteller
+      vat_number: MwSt. Nummer
 
   invoice_configs:
     form_tabs:

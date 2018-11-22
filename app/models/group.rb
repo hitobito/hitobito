@@ -95,6 +95,10 @@ class Group < ActiveRecord::Base
   has_many :invoice_articles, dependent: :destroy
   has_many :invoice_items, through: :invoices
 
+  has_many :service_tokens,
+           foreign_key: :layer_group_id,
+           dependent: :destroy
+
   ### VALIDATIONS
 
   validates_by_schema

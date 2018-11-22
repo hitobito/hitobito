@@ -1,0 +1,9 @@
+= crud_table do |t|
+  - t.col(ServiceToken.human_attribute_name(:key)) do |service_token|
+    - service_token.full_title
+  - t.col(ServiceToken.human_attribute_name(:abilities)) do |service_token|
+    - service_token.abilities
+  - t.attr(:last_access)
+
+  - add_table_actions(t)
+

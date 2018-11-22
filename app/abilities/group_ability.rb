@@ -43,7 +43,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_full).
       may(:update, :reactivate, :index_person_add_requests, :index_notes,
           :manage_person_tags, :activate_person_add_requests, :deactivate_person_add_requests,
-          :index_deleted_people).
+          :index_deleted_people, :index_service_tokens).
       in_same_layer
 
     permission(:layer_and_below_read).
@@ -56,7 +56,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:destroy).in_same_layer_or_below_except_permission_giving
     permission(:layer_and_below_full).
       may(:update, :reactivate, :index_person_add_requests, :index_notes,
-          :manage_person_tags, :index_deleted_people).
+          :manage_person_tags, :index_deleted_people, :index_service_tokens).
       in_same_layer_or_below
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers
     permission(:layer_and_below_full).

@@ -803,4 +803,28 @@ describe PeopleController do
       expect(top_leader.reload.household_key).to be_nil
     end
   end
+
+  context 'as token user' do
+    it 'shows page when token is valid' do
+      get :show, group_id: group.id, id: top_leader.id, token: 'PermittedToken'
+      is_expected.to render_template('show')
+    end
+
+    it 'does not show page for unpermitted token' do
+      expect do
+        get :show, group_id: group.id, id: top_leader.id, token: 'RejectedToken'
+      end.to raise_error(CanCan::AccessDenied)
+    end
+
+    it 'indexes page when token is valid' do
+      get :index, group_id: group.id, token: 'PermittedToken'
+      is_expected.to render_template('index')
+    end
+
+    it 'does not index page for unpermitted token' do
+      expect do
+        get :index, group_id: group.id, token: 'RejectedToken'
+      end.to raise_error(CanCan::AccessDenied)
+    end
+  end
 end

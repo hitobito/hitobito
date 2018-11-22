@@ -48,30 +48,44 @@ module Concerns
     def authenticate_person!(*args)
       normalize_user_params
 
+      user_sign_in || service_token_sign_in || super(*args)
+    end
+
+    def user_sign_in
       user = params[:user_email] && Person.find_by(email: params[:user_email])
 
       # Notice how we use Devise.secure_compare to compare the token
       # in the database with the token given in the params, mitigating
-      # timing attacks.
-      if user && Devise.secure_compare(user.authentication_token, params[:user_token])
-        # Sign in using token should not be tracked by Devise trackable
-        # See https://github.com/plataformatec/devise/issues/953
-        request.env['devise.skip_trackable'] = true
+      # timing attacks
+      return unless user && Devise.secure_compare(user.authentication_token, params[:user_token])
 
-        # Notice the store option defaults to false, so the entity
-        # is not actually stored in the session and a token is needed
-        # for every request. That behaviour can be configured through
-        # the sign_in_token option.
-        sign_in user, store: false
-      else
-        super(*args)
-      end
+      # Sign in using token should not be tracked by Devise trackable
+      # See https://github.com/plataformatec/devise/issues/953
+      request.env['devise.skip_trackable'] = true
+
+      # Notice the store option defaults to false, so the entity
+      # is not actually stored in the session and a token is needed
+      # for every request. That behaviour can be configured through
+      # the sign_in_token option.
+      sign_in user, store: false
+    end
+
+    def service_token_sign_in
+      service_token = params[:token] && ServiceToken.find_by(token: params[:token])
+      return unless service_token
+
+      request.env['devise.skip_trackable'] = true
+      service_token.update(last_access: Time.zone.now)
+      sign_in service_token, store: false
     end
 
     def normalize_user_params
       # Set the authentication token params if not already present,
-      params[:user_token] = params[:user_token].presence || request.headers['X-User-Token'].presence
-      params[:user_email] = params[:user_email].presence || request.headers['X-User-Email'].presence
+      authentication_token_params = [:user_token, :user_email, :token]
+      authentication_token_params.each do |param|
+        x_param = param.to_s.split('_').map(&:camelize).join('-')
+        params[param] = params[param].presence || request.headers["X-#{x_param}"].presence
+      end
     end
   end
 end

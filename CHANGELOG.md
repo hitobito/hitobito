@@ -6,6 +6,8 @@
 *   Mehrfachaktionen auf Personen
 *   API Schnittstelle für Events
 *   Service Accounts für API
+*   Rechnungen erstellen mit `:finance` Berechtigung
+*   Integration mit Mailchimp API
 
 ## Version 1.18
 

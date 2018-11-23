@@ -15,11 +15,13 @@ module Paranoia
       acts_as_paranoid
       extend Paranoia::RegularScope
 
-      alias_method_chain :really_destroy!, :translations
+      prepend Paranoia::Globalized::Translation
     end
 
-    def really_destroy_with_translations!
-      really_destroy_without_translations! && translations.destroy_all
+    module Translation
+      def really_destroy!
+        super && translations.destroy_all
+      end
     end
 
     module ClassMethods

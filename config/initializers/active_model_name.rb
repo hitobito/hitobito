@@ -8,24 +8,26 @@
 module ActiveModel
   class Name
 
-    # For STI models, use the base class a route key
-    # So only one controller/route for all STI classes is used.
-    def initialize_with_sti(*args)
-      initialize_without_sti(*args)
+    module Sti
+      # For STI models, use the base class a route key
+      # So only one controller/route for all STI classes is used.
+      def initialize(*args)
+        super(*args)
       return if @klass == Oauth::Application
 
-      if @klass != @klass.base_class
-        base_name = @klass.base_class.model_name
-        @param_key = base_name.param_key
-        @route_key = base_name.route_key
-        @singular_route_key = base_name.singular_route_key
-      elsif @klass.demodulized_route_keys
-        @route_key = ActiveSupport::Inflector.pluralize(name.demodulize.underscore).freeze
-        @singular_route_key = ActiveSupport::Inflector.singularize(@route_key).freeze
+        if @klass != @klass.base_class
+          base_name = @klass.base_class.model_name
+          @param_key = base_name.param_key
+          @route_key = base_name.route_key
+          @singular_route_key = base_name.singular_route_key
+        elsif @klass.demodulized_route_keys
+          @route_key = ActiveSupport::Inflector.pluralize(name.demodulize.underscore).freeze
+          @singular_route_key = ActiveSupport::Inflector.singularize(@route_key).freeze
+        end
       end
     end
 
-    alias_method_chain :initialize, :sti
+    prepend ActiveModel::Name::Sti
   end
 end
 

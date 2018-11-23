@@ -18,6 +18,24 @@ module Nestable
     klass.class_attribute :optional_nesting
 
     klass.helper_method :parent, :parents
+
+    klass.prepend Nesting
+  end
+
+  module Nesting
+    # An array of objects used in url_for and related functions.
+    def path_args(last)
+      parents + [last]
+    end
+
+    # Uses the parent entry (if any) to constrain the model scope.
+    def model_scope
+      if parent.present?
+        parent_scope
+      else
+        super
+      end
+    end
   end
 
   private
@@ -75,19 +93,6 @@ module Nestable
     clazz.name.demodulize.underscore
   end
 
-  # An array of objects used in url_for and related functions.
-  def path_args(last)
-    parents + [last]
-  end
-
-  # Uses the parent entry (if any) to constrain the model scope.
-  def model_scope
-    if parent.present?
-      parent_scope
-    else
-      super
-    end
-  end
 
   # The model scope for the current parent resource.
   def parent_scope

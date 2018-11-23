@@ -11,19 +11,21 @@ module RenderCallbacks
   def self.included(controller)
     controller.extend ActiveModel::Callbacks
     controller.extend ClassMethods
-    controller.alias_method_chain :render, :callbacks
+    prepend Callback
 
     controller.define_render_callbacks :index
   end
 
-  # Helper method to run before_render callbacks and render the action.
-  # If a callback renders or redirects, the action is not rendered.
-  def render_with_callbacks(*args, &block)
-    options = _normalize_render(*args, &block)
-    callback = "render_#{options[:template]}"
-    run_callbacks(callback) if respond_to?(:"_#{callback}_callbacks", true)
+  module Callback
+    # Helper method to run before_render callbacks and render the action.
+    # If a callback renders or redirects, the action is not rendered.
+    def render(*args, &block)
+      options = _normalize_render(*args, &block)
+      callback = "render_#{options[:template]}"
+      run_callbacks(callback) if respond_to?(:"_#{callback}_callbacks", true)
 
-    render_without_callbacks(*args, &block) unless performed?
+      super(*args, &block) unless performed?
+    end
   end
 
   private

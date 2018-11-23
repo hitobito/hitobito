@@ -217,10 +217,13 @@ class Group < ActiveRecord::Base
     children.without_deleted
   end
 
-  def destroy_descendants_with_paranoia
-    # do not destroy descendants on soft delete
+  module Paranoia
+    def destroy_descendants
+      # do not destroy descendants on soft delete
+    end
   end
-  alias_method_chain :destroy_descendants, :paranoia
+  
+  prepend Group::Paranoia
 
   def create_invoice_config
     create_invoice_config!

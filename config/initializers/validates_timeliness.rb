@@ -12,18 +12,18 @@ require 'validates_timeliness/validator'
 module ValidatesTimeliness
   class Validator < ActiveModel::EachValidator
 
-    def initialize_with_setup(options)
-      initialize_without_setup(options)
-      model = options[:class]
-      if model.respond_to?(:timeliness_validated_attributes)
-        model.timeliness_validated_attributes ||= []
-        model.timeliness_validated_attributes |= @attributes
+    module Setup
+      def initialize(options)
+        super(options)
+        model = options[:class]
+        if model.respond_to?(:timeliness_validated_attributes)
+          model.timeliness_validated_attributes ||= []
+          model.timeliness_validated_attributes |= @attributes
+        end
       end
     end
 
-    alias_method_chain :initialize, :setup
-
-    remove_method :setup
+    prepend ValidatesTimeliness::Validator::Setup
   end
 end
 

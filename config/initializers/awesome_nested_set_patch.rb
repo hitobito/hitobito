@@ -5,16 +5,19 @@ module CollectiveIdea #:nodoc:
     module NestedSet #:nodoc:
       class Move
 
-        private
-
-        def conditions_with_timestamper(a, b, c, d)
-          conditions_without_timestamper(a, b, c, d).tap do |conditions|
-            if @instance.respond_to?(:no_touch_on_move) && @instance.no_touch_on_move
-              conditions.first.gsub!(', updated_at = :timestamp', '')
+        module Timestamp
+          def conditions(a, b, c, d)
+            super(a, b, c, d).tap do |conditions|
+              if @instance.respond_to?(:no_touch_on_move) && @instance.no_touch_on_move
+                conditions.first.gsub!(', updated_at = :timestamp', '')
+              end
             end
           end
         end
-        alias_method_chain :conditions, :timestamper
+
+        private
+
+        prepend CollectiveIdea::Acts::NestedSet::Move::Timestamp
 
       end
     end

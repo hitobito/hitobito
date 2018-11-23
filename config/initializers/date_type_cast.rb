@@ -7,7 +7,7 @@
 
 module ActiveRecord
   module Type
-    class Date < Value
+    class Date
 
       def date_string_to_long_year(string)
         return string unless string.is_a?(::String)
@@ -22,14 +22,13 @@ module ActiveRecord
         string
       end
 
-      private
-
-      def fallback_string_to_date_with_long_year(string)
-        fallback_string_to_date_without_long_year(date_string_to_long_year(string))
+      module LongYear
+        def fallback_string_to_date(string)
+          super(date_string_to_long_year(string))
+        end
       end
 
-      alias_method_chain :fallback_string_to_date, :long_year
-
+      prepend ActiveRecord::Type::Date::LongYear
     end
   end
 end

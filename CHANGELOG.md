@@ -8,6 +8,7 @@
 *   Service Accounts für API
 *   Rechnungen erstellen mit `:finance` Berechtigung
 *   Integration mit Mailchimp API
+*   Seite für Events mit externer Anmeldung ohne Login
 
 ## Version 1.18
 

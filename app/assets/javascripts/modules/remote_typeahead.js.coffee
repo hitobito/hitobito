@@ -94,8 +94,9 @@ isModifyingKey = (k) ->
 # set insertFields function for nested-form gem
 window.nestedFormEvents.insertFields = (content, assoc, link) ->
   el = $(link).closest('form').find("##{assoc}_fields")
-  el.append($(content))
-    .find('[data-provide=entity]').each(app.setupEntityTypeahead)
+  nel = el.append($(content))
+  nel.find('[data-provide=entity]').each(app.setupEntityTypeahead)
+  return nel
 
 
 # make clicking on typeahead item always select it (https://github.com/twitter/bootstrap/issues/4018)

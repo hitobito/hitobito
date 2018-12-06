@@ -80,7 +80,7 @@
               = link_to image_tag(footer.logo_image), footer.logo_url, target: '_blank'
           .footer_content.span9
             %p
-              -footer.links.to_hash.each do |label, url|
+              - footer.links.to_hash.fetch(I18n.locale, footer.links.to_hash).each do |label, url|
                 = link_to label, url, target: '_blank'
                 %br/
             %p

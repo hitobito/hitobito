@@ -17,7 +17,7 @@
 # Teilnehmer
 class Event::Role::Participant < Event::Role
 
-  self.permissions = [:participations_read]
+  self.permissions = []
 
   self.kind = :participant
 

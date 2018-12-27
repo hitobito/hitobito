@@ -16,6 +16,9 @@ if [[ "x${OPENSHIFT_BUILD_REFERENCE}" = "xdevel" ]]; then
   git submodule update --remote
 fi
 
+# record the deployed versions from git before nuking the repo
+git submodule status | tee WAGON_VERSIONS
+
 # move core
 rm -r hitobito/.git
 mv hitobito/* .

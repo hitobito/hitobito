@@ -14,7 +14,7 @@ gem 'acts-as-taggable-on', '~> 3.5.0'
 gem 'airbrake', '< 5.0' # requires newer errbit
 gem 'awesome_nested_set', '< 3.1.0' # requires ruby 2.0
 gem 'axlsx', '>= 3.0.0.pre'
-gem 'bcrypt-ruby'
+gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
 gem 'cancancan', '< 1.13.0' # requires ruby 2.0
 gem 'carrierwave', '< 0.11.1' # uses 2.0 for testing (no explicit requirement, yet)
@@ -24,7 +24,7 @@ gem 'country_select'
 gem 'daemons'
 gem 'dalli'
 gem 'delayed_job_active_record'
-gem 'devise', '>= 4.7.1'
+gem 'devise'
 gem 'doorkeeper'
 gem 'doorkeeper-i18n'
 gem 'draper'

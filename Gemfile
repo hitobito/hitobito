@@ -12,14 +12,14 @@ gem 'rails', '4.2.11.1'
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on', '~> 3.5.0'
 gem 'airbrake', '< 5.0' # requires newer errbit
-gem 'awesome_nested_set', '< 3.1.0' # requires ruby 2.0
+gem 'awesome_nested_set'
 gem 'axlsx', '>= 3.0.0.pre'
 gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
-gem 'cancancan', '< 1.13.0' # requires ruby 2.0
-gem 'carrierwave', '< 0.11.1' # uses 2.0 for testing (no explicit requirement, yet)
+gem 'cancancan'
+gem 'carrierwave'
 gem 'cmess'
-gem 'config', '< 1.1.0' # requires ruby 2
+gem 'config'
 gem 'country_select'
 gem 'daemons'
 gem 'dalli'
@@ -28,7 +28,7 @@ gem 'devise'
 gem 'doorkeeper'
 gem 'doorkeeper-i18n'
 gem 'draper'
-gem 'faker', '< 1.6.4' # uses 2.0 for testing (no explicit requirement, yet)
+gem 'faker'
 gem 'gibbon', '~> 3.2'
 gem 'globalize'
 gem 'haml'
@@ -36,15 +36,15 @@ gem 'http_accept_language'
 gem 'icalendar'
 gem 'lograge'
 gem 'magiclabs-userstamp', require: 'userstamp'
-gem 'mime-types', '~> 2.6.2' # newer requires ruby 2.0
+gem 'mime-types'
 gem 'mini_magick'
 gem 'mysql2', '0.4.9'
 gem 'nested_form'
 gem 'nokogiri', '~> 1.8.2'
 gem 'oat'
 gem 'paper_trail'
-gem 'paranoia', '< 2.1.2' # uses 2.0 for testing (no explicit requirement, yet)
-gem 'prawn', '< 2.0' # 2.0 requires ruby 2.0
+gem 'paranoia'
+gem 'prawn'
 gem 'prawn-table'
 gem 'protective'
 gem 'puma'
@@ -62,7 +62,7 @@ gem 'vcard'
 gem 'wagons'
 
 # load after others because of active record inherited alias chain.
-gem 'kaminari', '< 1.0.0' # requires ruby 2.0
+gem 'kaminari'
 
 # Gems used only for assets
 gem 'bootstrap-sass', '~> 2.3'

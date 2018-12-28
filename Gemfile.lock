@@ -75,8 +75,6 @@ GEM
       nokogiri (~> 1.8, >= 1.8.2)
       rubyzip (~> 1.2, >= 1.2.1)
     bcrypt (3.1.12)
-    bcrypt-ruby (3.1.5)
-      bcrypt (>= 3.1.3)
     better_errors (2.5.1)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
@@ -552,7 +550,7 @@ DEPENDENCIES
   awesome_nested_set (< 3.1.0)
   awesome_print
   axlsx (>= 3.0.0.pre)
-  bcrypt-ruby
+  bcrypt
   better_errors
   binding_of_caller
   bleib (~> 0.0.10)

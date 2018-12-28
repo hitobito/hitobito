@@ -275,7 +275,9 @@ GEM
       thin (~> 1.5.0)
     method_source (0.8.2)
     middleware (0.1.0)
-    mime-types (2.6.2)
+    mime-types (3.2.2)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2018.0812)
     mimemagic (0.3.2)
     mini_magick (4.9.5)
     mini_mime (1.0.1)
@@ -543,6 +545,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activejob (>= 4.2.11)
   activerecord-session_store
   acts-as-taggable-on (~> 3.5.0)
   airbrake (< 5.0)

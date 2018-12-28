@@ -547,7 +547,7 @@ DEPENDENCIES
   acts-as-taggable-on (~> 3.5.0)
   airbrake (< 5.0)
   annotate
-  awesome_nested_set (< 3.1.0)
+  awesome_nested_set
   awesome_print
   axlsx (>= 3.0.0.pre)
   bcrypt
@@ -558,10 +558,10 @@ DEPENDENCIES
   bootstrap-wysihtml5-rails
   brakeman
   bullet
-  cancancan (< 1.13.0)
+  cancancan
   capybara
   capybara-screenshot
-  carrierwave (< 0.11.1)
+  carrierwave
   chosen-rails
   ci_reporter_rspec
   cmess
@@ -569,7 +569,7 @@ DEPENDENCIES
   coffee-rails
   compass
   compass-rails
-  config (< 1.1.0)
+  config
   country_select
   daemons
   dalli
@@ -580,7 +580,7 @@ DEPENDENCIES
   doorkeeper-i18n
   draper
   fabrication
-  faker (< 1.6.4)
+  faker
   font-awesome-rails (~> 4.7, >= 4.7.0.1)
   gibbon (~> 3.2)
   globalize
@@ -595,13 +595,13 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks
   jquery-ui-rails
-  kaminari (< 1.0.0)
+  kaminari
   launchy
   lograge
   loofah (~> 2.2.3)
   magiclabs-userstamp
   mailcatcher
-  mime-types (~> 2.6.2)
+  mime-types
   mini_magick
   mysql2 (= 0.4.9)
   nested_form
@@ -609,9 +609,9 @@ DEPENDENCIES
   oat
   paper_trail
   parallel_tests
-  paranoia (< 2.1.2)
+  paranoia
   pdf-inspector
-  prawn (< 2.0)
+  prawn
   prawn-table
   protective
   pry-debugger

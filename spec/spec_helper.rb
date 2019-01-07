@@ -5,15 +5,6 @@
 
 DB_CLEANER_STRATEGY = :truncation
 
-if ENV['CI']
-  require 'simplecov'
-  require 'simplecov-rcov'
-  SimpleCov.start 'rails'
-  SimpleCov.coverage_dir 'spec/coverage'
-  # use this formatter for jenkins compatibility
-  SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
-end
-
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_GROUPS'] = 'assets'
 require File.expand_path('../../config/environment', __FILE__)

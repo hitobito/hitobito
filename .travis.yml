@@ -17,6 +17,11 @@ before_install:
   - sudo apt-get install sphinxsearch
   - echo '[mysqld]'              | sudo tee    /etc/mysql/conf.d/sort_buffer_size.cnf > /dev/null
   - echo 'sort_buffer_size = 2M' | sudo tee -a /etc/mysql/conf.d/sort_buffer_size.cnf > /dev/null
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install sphinxsearch
+  - echo '[mysqld]'              | sudo tee    /etc/mysql/conf.d/sort_buffer_size.cnf > /dev/null
+  - echo 'sort_buffer_size = 2M' | sudo tee -a /etc/mysql/conf.d/sort_buffer_size.cnf > /dev/null
   - sudo service mysql restart
 install:
   - bundle install --path vendor/bundle

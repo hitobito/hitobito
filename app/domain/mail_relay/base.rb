@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,7 +38,7 @@ module MailRelay
         end
       end
 
-      def relay_batch # rubocop:disable Metrics/MethodLength
+      def relay_batch # rubocop:disable Metrics/MethodLength hopefully temporary, this needs refactoring to handle already processed mails better
         last_exception = nil
         logger = Delayed::Worker.logger || Rails.logger
 
@@ -111,7 +111,7 @@ module MailRelay
     end
 
     # Process the given email.
-    def relay
+    def relay # rubocop:disable Metrics/MethodLength
       if relay_address?
         if sender_allowed?
           @mail_log.update(status: :bulk_delivering)

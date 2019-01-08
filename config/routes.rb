@@ -247,6 +247,8 @@ Hitobito::Application.routes.draw do
 
     get 'synchronizations/:id' => 'async_synchronizations#show'
 
+    resources :table_displays, only: [:create]
+
   end # scope locale
 
   # The priority is based upon order of creation:

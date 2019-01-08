@@ -141,6 +141,7 @@ class Person < ActiveRecord::Base
   belongs_to :last_label_format, class_name: 'LabelFormat'
 
   has_many :label_formats, dependent: :destroy
+  has_many :table_displays, dependent: :destroy
 
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
 

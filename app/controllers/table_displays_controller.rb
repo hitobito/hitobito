@@ -3,13 +3,8 @@ class TableDisplaysController < ApplicationController
   skip_authorization_check only: [:create]
 
   def create
-    model = find_or_initialize
-    model.update!(model_params.slice(:selected))
-  end
-
-  def find_or_initialize
-    current_person.table_displays
-      .find_or_initialize_by(model_params.slice(:parent_id, :parent_type))
+    model = current_person.table_display_for(parent)
+    model.update!(selected: model_params.fetch(:selected, []))
   end
 
   private
@@ -17,4 +12,9 @@ class TableDisplaysController < ApplicationController
   def model_params
     @model_params ||= params.permit(:parent_id, :parent_type, selected: [])
   end
+
+  def parent
+    model_params[:parent_type].constantize.find(model_params[:parent_id])
+  end
+
 end

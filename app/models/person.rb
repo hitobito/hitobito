@@ -299,6 +299,10 @@ class Person < ActiveRecord::Base
       flat_map(&:layer_group)
   end
 
+  def table_display_for(parent)
+    @table_display ||= TableDisplay.for(self, parent)
+  end
+
   private
 
   def override_blank_email

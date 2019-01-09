@@ -7,14 +7,12 @@
 
 module TableDisplays
   class Dropdown < Dropdown::Base
-    attr_reader :columns
 
     delegate :form_tag, :hidden_field_tag, :label_tag, :check_box_tag, :content_tag,
              :content_tag_nested, :table_displays_path, :parent, :current_person, :t, to: :template
 
-    def initialize(template, columns)
+    def initialize(template)
       super(template, template.t('global.columns'), :bars)
-      @columns = columns
     end
 
     def to_s
@@ -35,7 +33,7 @@ module TableDisplays
     def render_items
       options = { class: 'dropdown-menu pull-right', data: { persistent: true }, role: 'menu' }
 
-      content_tag_nested(:ul, columns, options) do |column|
+      content_tag_nested(:ul, table_display.available, options) do |column|
         content_tag(:li) do
           render_item("selected[]", column)
         end
@@ -52,8 +50,7 @@ module TableDisplays
     end
 
     def table_display
-      @table_display ||= current_person.table_displays.
-        find_or_initialize_by(parent_id: template.parent.id, parent_type: template.parent.class.base_class)
+      @table_display ||= current_person.table_display_for(parent)
     end
 
   end

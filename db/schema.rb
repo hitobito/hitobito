@@ -618,6 +618,7 @@ ActiveRecord::Schema.define(version: 20190124125454) do
   add_index "subscriptions", ["subscriber_id", "subscriber_type"], name: "index_subscriptions_on_subscriber_id_and_subscriber_type", using: :btree
 
   create_table "table_displays", force: :cascade do |t|
+    t.string  "type",        limit: 255,   null: false
     t.integer "person_id",   limit: 4,     null: false
     t.integer "parent_id",   limit: 4,     null: false
     t.string  "parent_type", limit: 255,   null: false

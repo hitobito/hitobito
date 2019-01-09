@@ -23,8 +23,7 @@ module TableDisplays
     end
 
     def table_display
-      @table_display ||= template.current_person.table_displays.
-        find_or_initialize_by(parent_id: template.parent.id, parent_type: template.parent.class.base_class)
+      @table_display ||= template.current_person.table_display_for(parent)
     end
   end
 end

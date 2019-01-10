@@ -3,10 +3,9 @@ class AddTableDisplays < ActiveRecord::Migration
     create_table :table_displays do |t|
       t.string :type, null: false
       t.belongs_to :person, null: false
-      t.belongs_to :parent, polymorphic: true, null: false
       t.text :selected
     end
 
-    add_index :table_displays, [:person_id, :parent_id, :parent_type], unique: true
+    add_index :table_displays, [:person_id, :type], unique: true
   end
 end

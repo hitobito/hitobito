@@ -44,7 +44,7 @@
       = p.all_phone_numbers(!index_full_ability?)
     - sortable_grouped_person_attr(t, address: false, zip_code: true, town: true) do |p|
       = p.complete_address
-    - TableDisplays::Columns.new(t, self).to_s
+    - render_table_display_columns(t)
 
 = paginate @people
 = render 'multiselect_actions'

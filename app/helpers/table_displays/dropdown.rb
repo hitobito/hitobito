@@ -35,14 +35,14 @@ module TableDisplays
 
       content_tag_nested(:ul, table_display.available, options) do |column|
         content_tag(:li) do
-          render_item("selected[]", column)
+          render_item('selected[]', column)
         end
       end
     end
 
     def render_item(name, column)
       check_box_tag(name, column, selected?(column), id: column, data: { submit: true }) +
-        label_tag(column, Person.human_attribute_name(column))
+        label_tag(column, render_label(column))
     end
 
     def selected?(column)
@@ -53,5 +53,8 @@ module TableDisplays
       @table_display ||= current_person.table_display_for(parent)
     end
 
+    def render_label(column)
+      TableDisplays::Column.new(self, name: column).label
+    end
   end
 end

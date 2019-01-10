@@ -15,15 +15,9 @@ describe TableDisplay do
     expect(subject).to be_instance_of(TableDisplay::Participations)
   end
 
-  skip 'initializes selected to defaults' do
-    subject = TableDisplay.for(person, group)
-    expect(subject.selected).not_to be_empty
-    expect(subject.selected).to eq subject.defaults
-  end
-
   it 'allows resetting selected columns' do
     subject = TableDisplay.for(person, event)
-    subject.save!
+    subject.update(selected: %w(gender))
     subject.update(selected: [])
     expect(subject.selected).not_to be_present
   end

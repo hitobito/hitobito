@@ -1,7 +1,7 @@
 module Export::Tabular::People
   class TableDisplays < PeopleAddress
     self.model_class = ::Person
-    self.row_class = PersonRow
+    self.row_class = TableDisplayRow
 
     attr_reader :table_display
 
@@ -11,8 +11,21 @@ module Export::Tabular::People
     end
 
     def person_attributes
-      [:first_name, :last_name, :nickname, :roles, :address, :zip_code, :town, :country] +
-        table_display.selected
+      [:first_name, :last_name, :nickname, :roles, :address, :zip_code, :town, :country]
+    end
+
+    def build_attribute_labels
+      person_attribute_labels.merge(association_attributes).merge(selected_labels)
+    end
+
+    def selected_labels
+      table_display.selected.each_with_object({}) do |attr, hash|
+        hash[attr] = attribute_label(attr)
+      end
+    end
+
+    def row_for(entry, format = nil)
+      row_class.new(entry, table_display, format)
     end
 
   end

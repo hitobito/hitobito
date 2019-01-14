@@ -15,15 +15,21 @@ module TableDisplays
       @name = name
     end
 
+    def table_display
+      @table_display ||= template.current_person.table_display_for(template.parent)
+    end
+
     def label
-      case template.parent
-      when Group then Person.human_attribute_name(name)
-      when Event then Event::Qualification.human_attribute_name(name)
-      end
+      Person.human_attribute_name(name)
     end
 
     def render
-      table.sortable_attr(name)
+      header = table.sort_header(name, Person.human_attribute_name(name))
+      table.col(header) do |person|
+        table_display.with_permission_check(name, person) do
+          template.format_attr(person, name)
+        end
+      end
     end
 
     def name

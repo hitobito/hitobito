@@ -5,6 +5,9 @@ class TableDisplay < ActiveRecord::Base
 
   serialize :selected, Array
 
+  class_attribute :permissions
+  self.permissions = {}
+
   def self.for(person, parent)
     case parent
     when Group then TableDisplay::People
@@ -14,6 +17,15 @@ class TableDisplay < ActiveRecord::Base
 
   def defaults
     %w()
+  end
+
+  def with_permission_check(attr, object)
+    permission = permissions[attr.to_s]
+    yield if permission.blank? || ability.can?(permission.to_sym, object)
+  end
+
+  def ability
+    @ability ||= Ability.new(person)
   end
 
 end

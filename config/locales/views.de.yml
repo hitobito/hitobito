@@ -148,9 +148,11 @@ de:
     pdf: 'PDF'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
+    addresses: 'Adressliste'
     households: 'Haushaltsliste'
     everything: 'Alle Angaben'
     household_option: 'Haushalte zusammenfassen'
+    selection: 'Spaltenauswahl'
 
   dropdown/invoices:
     download: 'Export'
@@ -1188,7 +1190,7 @@ de:
         one: Eine Rolle wurde erstellt
         other: '%{count} Rollen wurden erstellt'
       failure: Bitte geben Sie eine valide Rolle an
-    update: 
+    update:
       success:
         zero: Es wurde keine Rolle verschoben
         one: Eine Rolle wurde verschoben

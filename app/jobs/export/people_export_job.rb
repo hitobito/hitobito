@@ -34,8 +34,15 @@ class Export::PeopleExportJob < Export::ExportBaseJob
       .includes(:primary_group)
   end
 
+  def data
+    return super unless @options[:selection]
+    table_display = TableDisplay::People.find_or_initialize_by(person_id: @user_id)
+    Export::Tabular::People::TableDisplays.export(@format, entries, table_display)
+  end
+
   def exporter
     return Export::Tabular::People::Households if @options[:household]
+    return Export::Tabular::People::TableDisplays if @options[:selection]
     full? ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
   end
 

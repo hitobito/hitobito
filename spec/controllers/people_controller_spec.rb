@@ -837,4 +837,41 @@ describe PeopleController do
       end.to raise_error(CanCan::AccessDenied)
     end
   end
+
+  context 'table_displays'do
+    render_views
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    before { sign_in(top_leader) }
+
+    it 'GET#index lists extra column' do
+      top_leader.table_display_for(group).update(selected: %w(gender))
+
+      get :index, group_id: group.id
+      expect(dom).to have_checked_field 'Geschlecht'
+      expect(dom.find('table tbody tr')).to have_content 'unbekannt'
+    end
+
+    it 'GET#index lists extra column without content if permission check fails' do
+      expect(TableDisplay::People).to receive(:permissions).and_return( 'gender' => 'missing' )
+      top_leader.table_display_for(group).update(selected: %w(gender))
+
+      get :index, group_id: group.id
+      expect(dom).to have_checked_field 'Geschlecht'
+      expect(dom.find('table tbody tr')).not_to have_content 'unbekannt'
+    end
+
+    it 'GET#index sorts by extra column' do
+      top_leader.table_display_for(group).update(selected: %w(gender))
+      Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person.update(gender: 'm')
+      get :index, group_id: group.id, sort: :gender, sort_dir: :desc
+      expect(assigns(:people).first).to eq top_leader
+    end
+
+    it 'GET#index exports to csv using TableDisplay' do
+      get :index, group_id: group, format: :csv, selection: true
+      expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+      expect(Delayed::Job.last.payload_object.send(:exporter)).to eq Export::Tabular::People::TableDisplays
+    end
+  end
 end

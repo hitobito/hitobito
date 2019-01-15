@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2014 Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2014, 2019 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -41,16 +41,16 @@ module Group::NestedSet
   end
 
   def self_and_sister_groups
-    Group.without_deleted.
-          where(parent_id: parent_id, type: type)
+    Group.without_deleted
+         .where(parent_id: parent_id, type: type)
   end
 
   # siblings with the same type and all their descendant groups, including self
   def sister_groups_with_descendants
-    Group.without_deleted.
-          joins('LEFT JOIN groups AS sister_groups ' \
-                'ON groups.lft >= sister_groups.lft AND groups.lft < sister_groups.rgt').
-          where(sister_groups: { type: type, parent_id: parent_id })
+    Group.without_deleted
+         .joins('LEFT JOIN groups AS sister_groups ' \
+                'ON groups.lft >= sister_groups.lft AND groups.lft < sister_groups.rgt')
+         .where(sister_groups: { type: type, parent_id: parent_id })
   end
 
   # The layer hierarchy without the layer of this group.
@@ -73,12 +73,12 @@ module Group::NestedSet
   end
 
   def groups_in_same_layer
-    Group.where(layer_group_id: layer_group_id).
-          without_deleted.
-          order(:lft)
+    Group.where(layer_group_id: layer_group_id)
+         .without_deleted
+         .order(:lft)
   end
 
-  def has_sublayers?
+  def has_sublayers? # rubocop:disable Naming/PredicateName
     children.any? { |child| child.layer? }
   end
 
@@ -111,7 +111,7 @@ module Group::NestedSet
   end
 
   def move_to_right_of_if_change(node)
-    if node.display_name.downcase != display_name.downcase && node.rgt != lft - 1
+    if node.display_name.downcase != display_name.downcase && node.rgt != lft - 1 # rubocop:disable Performance/Casecmp
       move_to_right_of(node)
     end
   end

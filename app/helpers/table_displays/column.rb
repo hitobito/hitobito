@@ -25,11 +25,17 @@ module TableDisplays
 
     def render
       header = table.sort_header(name, Person.human_attribute_name(name))
-      table.col(header) do |person|
-        table_display.with_permission_check(name, person) do
-          template.format_attr(person, name)
+
+      table.col(header) do |object|
+        object, attr = navigate(object, name.split('.'))
+        table_display.with_permission_check(attr, object) do
+          template.format_attr(object, attr)
         end
       end
+    end
+
+    def navigate(object, parts)
+      [parts[0...-1].inject(object) { |obj, msg| obj.send(msg) }, parts.last]
     end
 
     def name

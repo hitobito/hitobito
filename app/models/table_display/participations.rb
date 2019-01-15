@@ -1,13 +1,40 @@
 class TableDisplay::Participations < TableDisplay
+
+  QUESTION_REGEX = /^event_question_(\d+)$/
+
   def available
-    default_columns + Person.column_names - excluded_columns
+    people_columns
   end
 
-  def defaults
-    %w()
+  def people_columns
+    People.new.available.collect do |column|
+      "person.#{column}"
+    end
   end
 
-  def excluded
-    %w(first_name last_name nickname address zip_code town) + Person::INTERNAL_ATTRS.collect(&:to_s)
+  def sort_statements(parent)
+    question_sort_statements(parent).merge(person_sort_statements.to_h)
+  end
+
+  def selected_questions(question_ids)
+    selected.collect do |column|
+      next unless column =~ QUESTION_REGEX
+      id = Regexp.last_match(1).to_i
+      [column, id] if question_ids.include?(id)
+    end.compact
+  end
+
+  private
+
+  def person_sort_statements
+    selected.grep(/person/).collect do |key|
+      [key, key.gsub('person', 'people')]
+    end.to_h
+  end
+
+  def question_sort_statements(question_ids)
+    selected_questions(question_ids).collect do |column, id|
+      [column, "CASE event_questions.id WHEN #{id} THEN 0 ELSE 1 END, event_answers.answer"]
+    end.to_h
   end
 end

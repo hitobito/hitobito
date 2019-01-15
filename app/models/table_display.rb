@@ -15,10 +15,6 @@ class TableDisplay < ActiveRecord::Base
     end.find_or_initialize_by(person: person)
   end
 
-  def defaults
-    %w()
-  end
-
   def with_permission_check(attr, object)
     permission = permissions[attr.to_s]
     yield if permission.blank? || ability.can?(permission.to_sym, object)

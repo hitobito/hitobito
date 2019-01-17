@@ -22,6 +22,11 @@ describe Export::Tabular::People::TableDisplays do
       expect(people_list.attributes.last).to eq 'gender'
       expect(people_list.data_rows.first.last).to eq 'unbekannt'
     end
+
+    it 'does not include the same attriubte twice' do
+      table_display.selected = %w(first_name)
+      expect(people_list.attributes.grep(/first_name/).count).to eq 1
+    end
   end
 
 

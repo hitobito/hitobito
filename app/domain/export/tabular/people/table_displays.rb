@@ -44,7 +44,8 @@ module Export::Tabular::People
     end
 
     def filtered_selection
-      participations? ? with_selected_questions : selected
+      keys = participations? ? with_selected_questions : selected
+      keys.collect(&:to_sym) - person_attributes
     end
 
     def selected

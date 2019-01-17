@@ -1,12 +1,5 @@
-# encoding: utf-8
-
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
-module TableDisplays
-  class Dropdown < Dropdown::Base
+module Dropdown
+  class TableDisplays < Base
 
     delegate :form_tag, :hidden_field_tag, :label_tag, :check_box_tag, :content_tag,
              :content_tag_nested, :table_displays_path, :parent, :current_person, :t,
@@ -39,7 +32,7 @@ module TableDisplays
           render_item('selected[]', column)
         end
 
-        items += event_specific_items if parent.is_a?(Event)
+        items += event_specific_items if parent.is_a?(::Event)
         safe_join(items)
       end
     end
@@ -59,8 +52,8 @@ module TableDisplays
       questions = parent.questions.send(kind)
       return [] if questions.empty?
 
-      divider = ::Dropdown::Divider.new.render(template)
-      title   = ::Dropdown::Title.new(t("event.participations.#{kind}_answers")).render(template)
+      divider = Divider.new.render(template)
+      title   = Title.new(t("event.participations.#{kind}_answers")).render(template)
 
       questions.collect do |question|
         render_item('selected[]', question.question, dom_id(question), question.question)
@@ -84,7 +77,7 @@ module TableDisplays
     end
 
     def render_label(column)
-      TableDisplays::Column.new(self, name: column).label
+      ::TableDisplays::Column.new(self, name: column).label
     end
 
     def html_options

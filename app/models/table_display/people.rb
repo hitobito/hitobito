@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: table_displays
+#
+#  id        :integer          not null, primary key
+#  type      :string(255)      not null
+#  person_id :integer          not null
+#  selected  :text(65535)
+#
+
 class TableDisplay::People < TableDisplay
   def available
     Person.column_names - excluded

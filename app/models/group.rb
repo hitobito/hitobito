@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -118,6 +118,10 @@ class Group < ActiveRecord::Base
     # as they appear in possible_children, otherwise order them
     # hierarchically over all group types.
     def order_by_type(parent_group = nil)
+      reorder(order_by_type_stmt(parent_group)) # acts_as_nested_set default to new order
+    end
+
+    def order_by_type_stmt(parent_group = nil)
       types = with_child_types(parent_group)
       if types.present?
         statement = 'CASE groups.type '
@@ -126,7 +130,8 @@ class Group < ActiveRecord::Base
         end
         statement << 'END, '
       end
-      reorder("#{statement} lft") # acts_as_nested_set default to new order
+
+      "#{statement} lft"
     end
 
     private

@@ -25,8 +25,9 @@ class TableDisplay < ActiveRecord::Base
     end.find_or_initialize_by(person: person)
   end
 
-  def with_permission_check(attr, object)
-    permission = permissions[attr.to_s]
+  def with_permission_check(path, object)
+    path = path.to_s.split('.').last
+    permission = permissions[path]
     yield if permission.blank? || ability.can?(permission.to_sym, object)
   end
 

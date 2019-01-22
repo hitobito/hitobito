@@ -135,3 +135,6 @@ event:
 
 downloads:
   folder: <%= Rails.root.join('tmp', 'downloads') %>
+
+impersonate:
+  notify: true

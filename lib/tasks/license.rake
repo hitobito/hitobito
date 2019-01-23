@@ -39,9 +39,10 @@ class Licenser
     @copyright_source = copyright_source
   end
 
+  # rubocop:disable Rails/TimeZone
   def preamble_text
     @preamble_text ||= <<-COPYRIGHT.strip_heredoc
-      Copyright (c) 2012-#{Time.zone.now.year}, #{@copyright_holder}. This file is part of
+      Copyright (c) 2012-#{Time.now.year}, #{@copyright_holder}. This file is part of
       #{@project_name} and licensed under the Affero General Public License version 3
       or later. See the COPYING file at the top-level directory or at
       #{@copyright_source}.

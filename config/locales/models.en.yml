@@ -57,20 +57,16 @@ en:
           attributes:
             person_id:
               taken: is already registered
-        mailing_list:
-          attributes:
-            mail_name:
-              not_allowed: "'%{mail_name}' is not allowed"
         person:
           name_missing: 'Please enter a name'
           emoji_suspected: 'Please don''t use any special characters (especially emojis).'
           attributes:
             email:
               taken: >
-                is already taken. This address must be unique for every person, because
-                it is used when logging in. Under 'Further e-mail" you may specify
-                addresses, which are assigned to other people as main e-mail (the
-                main e-mail can be left blank).
+                  is already taken. This address must be unique for every person,
+                  because it is used when logging in. Under 'Further e-mail" you may
+                  specify addresses, which are assigned to other people as main e-mail
+                  (the main e-mail can be left blank).
         person/add_request:
           attributes:
             person_id:
@@ -83,10 +79,6 @@ en:
           attributes:
             qualification_kind_id:
               exists_for_timeframe: 'already exists in this period'
-        qualification_kind:
-          attributes:
-            validity:
-              not_a_positive_number: 'must be a positive number in order to reactivate the %{model}.'
         subscription:
           attributes:
             subscriber_id:
@@ -151,6 +143,15 @@ en:
       group:
         one: Group
         other: Groups
+      invoice:
+        one: Invoice
+        other: Invoices
+      invoice_article:
+        one: Invoice item
+        other: Invoice items
+      invoice_config:
+        one: Invoice setting
+        other: Invoice settings
       label_format:
         one: Label format
         other: Label formats
@@ -190,9 +191,6 @@ en:
       subscription:
         one: Subscriber
         other: Subscribers
-      tag:
-        one: tag
-        other: tags
     attributes:
       acts_as_taggable_on/tag:
         name: name
@@ -510,9 +508,6 @@ en:
         dimensions: Number
         nickname: Nickname on label
         pp_post: PP-Line
-      tag:
-        name: name
-        taggable_id: taggable
   errors:
     messages:
       invalid_date: "is not a valid date"

@@ -4,12 +4,14 @@ en:
     'no': "no"
     unknown: unknown
     nobody: nobody
+    all: all
     from: from
     until: to
     no_list_entries: No entries found.
     confirm_delete: Do you really want to delete this entry?
     do_not_fill: Please do not fill in this field
     chosen_no_results: No entries found with
+    selected: selected
     gender:
       male: male
       female: female
@@ -24,6 +26,7 @@ en:
     button:
       save: Save
       cancel: Cancel
+      close: close
       search: Search
       back: Back
       refresh: Update
@@ -45,6 +48,7 @@ en:
       placeholder_person: 'Search person...'
       placeholder_group: 'Search group...'
       placeholder_event: 'Search event...'
+      placeholder_company_name: 'search company name...'
   list:
     index:
       title: 'Listing %{models}'
@@ -78,9 +82,13 @@ en:
       placeholder_value: E-Mail
       placeholder_type: Designation (Home, Work, ...)
       tooltip_mailings: Shipments of subscriptions, confirmations via e-mail, etc. will be sent in addition to all addresses selected here.
+    address_fields:
+      updates_household_address: address will be updated for the household
   custom_content_decorator:
     available_placeholders: "Available placeholders: %{placeholders}"
     available_placeholders_empty: 'No placeholders available'
+  dropdown:
+    last_used: 'last used'
   dropdown/event/group_filter:
     all_groups: 'All groups'
   dropdown/event/events_export:
@@ -98,10 +106,18 @@ en:
     button: 'Export'
     csv: 'CSV'
     xlsx: 'Excel'
+    vcard: 'vCard'
     labels: 'Labels'
+    pdf: 'PDF'
     emails: 'E-Mail addresses'
     addresses: 'Address list'
     everything: 'All information'
+  dropdown/invoices:
+    download: 'export'
+    print: 'print'
+    labels: 'labels'
+    csv: 'CSV'
+    pdf: 'PSD'
   devise:
     failure:
       already_authenticated: 'You are already registered.'
@@ -183,13 +199,16 @@ en:
         title: 'Available courses'
         explanation: 'Courses of your group and their top groups are shown here. Other courses you''ll find in the organizing group.'
         csv_export_button: 'CSV export'
+        ical_export_button: 'calendar export'
       events:
         title: 'Next events'
         explanation: 'Events of your groups and their top groups are shown here. Other events you''ll find in the organizing group.'
+      apply_until: 'until %{date}'
     application_market:
       already_assigned: 'This person was already assigned or registered for a different event.'
       participation:
         registered_at: 'Registration on %{date}'
+        town: town
       prio_buttons:
         national_waitinglist: 'national waiting list'
       index:
@@ -213,6 +232,12 @@ en:
         qualifications:
           for_participants: 'Qualifications for participants'
           for_leaders: 'Qualifications for leaders'
+      precondition_fields:
+        add_precondition_grouping: '+ add precondition'
+        add_precondition: 'add'
+      qualifications:
+        or: or
+        and: and
     participations:
       approvals:
         title: Approval
@@ -344,6 +369,9 @@ en:
     custom_filter: 'Own filter'
     entire_layer: 'Whole level'
     entire_group: 'Whole group'
+  filter_navigation/events:
+    all: 'all'
+    layer: 'only %{layer}'
   filter_navigation/event/participations:
     predefined_filters:
       all: All people
@@ -351,6 +379,7 @@ en:
       participants: Participants
   full_text:
     index:
+      title: 'results'
       incomplete_search_request: 'Please enter at least two characters.'
   group:
     merge:
@@ -428,6 +457,17 @@ en:
     row_with_error: "row %{row}: %{errors}"
   import/person_doublette_finder:
     duplicates: "%{count} results in duplicate detection."
+  invoices:
+    filter:
+      due_since: due since
+      due_since_list:
+        one_day: yesterday
+        one_week: one week
+        one_month: one month
+    payed: paid
+  invoice_configs:
+    form_tabs:
+      general: general
   label_formats:
     global_labels: "Global label formats"
     own_labels: My label formats
@@ -449,12 +489,6 @@ en:
       available_under_license: 'licensed under the'
       developed_by: 'Developed by'
       source_code: 'Source code'
-
-    synchronization:
-      wait_for_synchronization: 'Your data is currently being sent to MailChimp. This can take a moment. Then the selected list will be updated with the contacts from hitobito.'
-      synchronization_failed: 'An error occurred while sending data to MailChimp (%{error})'
-      cancel_synchronization: 'Cancel export'
-
   mailing_lists:
     global:
       link:
@@ -464,7 +498,6 @@ en:
       caption_subscribable: 'Subscribers may subscribe/unsubscribe themselves'
       caption_subscribers_may_post: 'Subscribers may write to the mailing list'
       caption_anyone_may_post: 'Anyone may write to the mailing list'
-      help_mailchimp_sync: 'Subscribers can be exported to the MailChimp list, but this does not happen automatically. This action overwrites the MailChimp list and deletes existing contacts.'
   mailing_list_decorator:
     may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
     may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'

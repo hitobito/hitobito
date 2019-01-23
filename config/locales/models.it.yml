@@ -57,10 +57,6 @@ it:
           attributes:
             person_id:
               taken: è già iscritto
-        mailing_list:
-          attributes:
-            mail_name:
-              not_allowed: "'%{mail_name}' non può essere utilizzato"
         person:
           name_missing: 'Inserire un nome'
           emoji_suspected: 'Non utilizzare simboli speciali (in particolare Emoji)'
@@ -88,7 +84,7 @@ it:
         qualification_kind:
           attributes:
             validity:
-              not_a_positive_number: 'deve essere un numero positivo per riattivare %{model} '
+              not_a_valid_number: 'deve essere un numero maggiore o uguale a 0 affinché 1 %{model} sia reso riattivabile'
         subscription:
           attributes:
             subscriber_id:
@@ -98,6 +94,20 @@ it:
           attributes:
             name:
               must_be_unique: 'già existe'
+        invoice:
+          recipient_address_or_email_required: 'L''indirizzo del destinatario oppure l''email deve essere compilato'
+          attributes:
+            invoice_config:
+              invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'
+        invoice_config:
+          attributes:
+            iban:
+              required: 'deve essere compilato'
+            account_number:
+              required: 'deve essere compilato'
+              invalid_check_digit: 'non valido; cifra di controllo non corretta'
+            payee:
+              to_long: 'può contenere al massimo 2 righe'
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -153,6 +163,18 @@ it:
       group:
         one: gruppo
         other: Gruppi
+      invoice:
+        one: Fattura
+        other: Fatture
+      invoice_article:
+        one: L'articolo della fattura
+        other: Gli articoli della fattura
+      invoice_config:
+        one: Le impostazioni per la fattura
+        other: Le impostazioni per la fattura
+      invoice_item:
+        one: Voce contabile
+        other: Voci contabili
       label_format:
         one: formato delle etichette
         other: Formati delle etichette
@@ -162,6 +184,12 @@ it:
       note:
         one: Nota
         other: Note
+      payment:
+        one: Pagamento
+        other: Pagamenti
+      payment_reminder:
+        one: Sollecito
+        other: Solleciti
       person:
         one: persona
         other: Persone
@@ -280,12 +308,15 @@ it:
         phone_numbers: Numeri di telefono
         social_accounts: Social media
         additional_emails: Altre email
+        layer_group: Livello
         parent_id: Gruppo genitori
         layer_group_id: Livello
         type: Tipo di gruppo
         type_name: Tipo di gruppi
       event:
         group_ids: Gruppi
+        groups: Gruppi
+        state: Stato
         name: Nome
         number: Numero
         motto: Motto
@@ -302,8 +333,8 @@ it:
         signature: Firma obbligatoria
         signature_confirmation: Seconda firma necessaria
         signature_confirmation_text: Seconda firma di
-        dates: Dati
-        dates_full: Dati
+        dates: Date
+        dates_full: Date
         booking_info: Iscrizioni
         questions: Domande
         kind_id: Tipo
@@ -438,6 +469,7 @@ it:
               contact_data: Leggere i dati di contatto di tutte le altre persone con diritto di accesso ai dati di contatto.
               qualify: Creare le qualifiche per le persone su questo livello e su quelli inferiori.
               approve_applications: Confermare le iscrizioni ai corse per le persone su questo livello.
+              finance: Emettere e amministrare fatture
               impersonation: Utilizza Hitobito come altra persona.
           kind:
             member:
@@ -453,7 +485,7 @@ it:
         predefined_labels:
           privat: Privato
           mobil: Cellulare
-          arbeit: Professione
+          arbeit: Ufficio
           vater: Padre
           mutter: Madre
           fax: Fax
@@ -512,8 +544,101 @@ it:
         dimensions: Numero
         nickname: Soprannome sull'etichetta
         pp_post: Riga PP
+      invoice:
+        title: Titolo
+        invoice_items: Voci contabili
+        invoice_item_article: L'articolo della fattura
+        invoice_config: L'impostazione della fattura
+        state: Stato
+        sequence_number: Numero
+        esr_number: Numero di referenza
+        amount_paid: Totale pagato
+        payment_slips:
+          ch_es: Polizza di versamento postale rossa (CH)
+          ch_bes: Polizza di versamento bancaria rossa (CH)
+          ch_esr: Polizza di versamento postale arancione (CH)
+          ch_besr: Polizza di versamento bancaria arancione (CH)
+        states:
+          draft: Bozza
+          issued: Emesso
+          payed: Pagato
+          reminded: Sollecitato
+          cancelled: Cancellato
+        recipient: Destinatario
+        recipient_email: Email del destinatario
+        recipient_address: Indirizzo del destinatario
+        due_at: Scade il
+        issued_at: Emesso il
+        sent_at: 'Spedito il '
+        cost: Importo
+        payment_information: Informazioni sul pagamento
+        payment_purpose: Motivo del pagamento
+        address: Indirizzo del mittente
+        beneficiary: A favore di
+        payee: Versamento per
+        account_number: Numero di conto
+        iban: IBAN
+        payment_slip: Polizza di versamento
+        participant_number: Numero di partecipante
+        creator: Emittente della fattura
+      invoice_article:
+        number: Numero dell'articolo
+        name: Denominazione
+        description: Descrizione
+        category: Categoria
+        unit_cost: Prezzo
+        cost_center: Centro di costo
+        account: Conto
+      invoice_config:
+        payment_information: Informazioni sul pagamento
+        address: Indirizzo del mittente
+        account_number: Numero di conto
+        iban: IBAN
+        due_days: Giorni fino alla scadenza
+        contact: Persona di contatto
+        contact_id: Persona di contatto
+        beneficiary: A favore di
+        payee: Versamento per
+        payment_slip: Polizza di versamento
+        payment_slips:
+          ch_es: Polizza di versamento postale rossa (CH)
+          ch_bes: Polizza di versamento bancaria rossa (CH)
+          ch_esr: Polizza di versamento postale arancione (CH)
+          ch_besr: Polizza di versamento bancaria arancione (CH)
+        participant_number: Numero di partecipante
+        payment_reminder_configs: Solleciti
+      invoice_item:
+        name: Nome
+        description: Descrizione
+        unit_cost: Prezzo
+        count: Numero
+        cost: Importo
+      invoice_items:
+        name: Nome
+        description: Descrizione
+        unit_cost: Prezzo
+        count: Numero
+        cost: Importo
+      payment:
+        invoice: Fattura
+        amount: Importo
+        received_at: Data di ricevimento
+        reference: Referenza di pagamento
+      payment_reminder:
+        invoice: Fattura
+        message: Notizia/Messaggio
+        due_at: 'Scade il '
+      payment_reminder_config:
+        title: Titolo
+        text: Testo
+        due_days: Giorni fino alla scadenza
+      payment_reminder_configs:
+        title: Titolo del sollecito
+        text: Testo del sollecito
+        due_days: Data di scadenza del sollecito
   errors:
     messages:
+      invalid_money: "Deve essere arrotondato ai 5 centesimi"
       invalid_date: "non è una data valida"
       invalid_time: "non è un orario valido"
       invalid_datetime: "non è una data valida"

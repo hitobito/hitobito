@@ -57,10 +57,6 @@ fr:
           attributes:
             person_id:
               taken: est déjà annoncé
-        mailing_list:
-          attributes:
-            mail_name:
-              not_allowed: "'%{mail_name}' ne peut pas être utilisé"
         person:
           name_missing: 'Veuillez entrer votre nom'
           emoji_suspected: 'Prière de ne pas utiliser de caractères spéciaux (en particulier, des emoji)'
@@ -89,7 +85,7 @@ fr:
         qualification_kind:
           attributes:
             validity:
-              not_a_positive_number: 'doit être un nombre positif afin de pouvoir réactiver le %{model}'
+              not_a_valid_number: 'doit être supérieur ou égal à zéro pour pouvoir être réactivé'
         subscription:
           attributes:
             subscriber_id:
@@ -99,6 +95,24 @@ fr:
           attributes:
             name:
               must_be_unique: 'existe déjà'
+        invoice:
+          recipient_address_or_email_required: 'l''adresse ou l''e-mail du destinataire doit être remplie'
+          attributes:
+            invoice_config:
+              invalid: 'n''est pas valable ; adaptez les réglages avant de faire le calcul'
+        invoice_config:
+          attributes:
+            iban:
+              required: 'doit être rempli'
+            account_number:
+              required: 'doit être rempli'
+              invalid_check_digit: 'n''est pas valable ; code de vérification incorrect'
+            payee:
+              to_long: 'doit contenir 2 lignes au maximum'
+        mailing_list:
+          attributes:
+            additional_sender:
+              invalid: "doit contenir des adresses e-mail au format abcd@ee.ch ou *@ee.ch. Multiples adresses doivent être séparées par ',' ou ';'."
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -154,6 +168,18 @@ fr:
       group:
         one: groupe
         other: Groupes
+      invoice:
+        one: factures
+        other: factures
+      invoice_article:
+        one: articles de factures
+        other: articles de factures
+      invoice_config:
+        one: règlages de factures
+        other: règlages de factures
+      invoice_item:
+        one: postes de factures
+        other: articles de comptes
       label_format:
         one: format d'étiquette
         other: Formats d'étiquettes
@@ -163,6 +189,12 @@ fr:
       note:
         one: Note
         other: Notes
+      payment:
+        one: paiements
+        other: paiements
+      payment_reminder:
+        one: rappel
+        other: rappels
       person:
         one: Personne
         other: Personnes
@@ -187,6 +219,9 @@ fr:
       role:
         one: Rôle
         other: Rôles
+      service_token:
+        one: API-Key
+        other: API-Keys
       social_account:
         one: Adresse d'un média social
         other: Adresses de réseaux sociaux
@@ -442,6 +477,7 @@ fr:
               contact_data: Lecture des données de contact de toutes les autres personnes avec des droits de données de contact.
               qualify: Saisie de qualifications pour les personnes à ce niveau et aux niveaux inférieurs.
               approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
+              finance: création et gestion de factures
               impersonation: Se servir de hitobito comme autre personne.
           kind:
             member:
@@ -490,10 +526,13 @@ fr:
         subscribable: Les abonnés peuvent s'inscrire / se désinscrire eux-même
         mail_name: Adresse de la liste de diffusion
         mail_address: Liste de diffusion
+        mail_address_link: Liste de diffusion
         subscribers_may_post: les abonnés peuvent éditer la liste de diffusion
         additional_sender: Expéditeur supplémentaire
         preferred_labels: Labels d'e-mail privilégiés
         main_email: Envoi à l'adresse e-mail principale
+        mailchimp_api_key: 'MailChimp API-Key'
+        mailchimp_list_id: 'MailChimp List-ID'
       subscription:
         related_role_types: Rôles
       people_filter:
@@ -516,8 +555,123 @@ fr:
         dimensions: Nombre
         nickname: Surnom sur l'étiquette
         pp_post: Espace PP
+      invoice:
+        title: titre
+        description: Texte
+        invoice_items: articles de comptes
+        invoice_item_article: article de facture
+        invoice_config: réglage de facture
+        state: statut
+        sequence_number: numéro
+        esr_number: numéro de référence
+        amount_paid: total payé
+        payment_slips:
+          ch_es: bulletin de versement postal rouge (CH)
+          ch_bes: bulletin de versement rouge bancaire (CH)
+          ch_esr: bulletin de versement orange postal (CH)
+          ch_besr: bulletin de versement orange bancaire (CH)
+        states:
+          draft: projet
+          issued: placé
+          sent: Envoyé par courriel
+          payed: payé
+          reminded: rappel envoyé
+          cancelled: annulé
+        recipient: destinataire
+        recipient_email: e-mail du destinataire
+        recipient_address: adresse du destinataire
+        due_at: due au
+        issued_at: établie le
+        sent_at: envoyée le
+        cost: montant
+        total_inkl_vat: Totale incl. TVA
+        total: Totale incl. TVA
+        vat: Totale incl. TVA
+        vat_number: No TVA
+        payment_information: information du paiement
+        payment_purpose: motif du paiement
+        address: adresse de l'expéditeur
+        beneficiary: en faveur de
+        payee: paiement pour
+        account_number: numéro de compte
+        iban: IBAN
+        payment_slip: bulletin de versement
+        participant_number: numéro du participant
+        creator: émetteur de la facture
+      invoice_article:
+        number: numéro d'article
+        name: désignation
+        description: description
+        category: catégorie
+        unit_cost: prix
+        vat_rate: TVA
+        cost_center: centre de coûts
+        account: compte
+      invoice_config:
+        payment_information: information du paiement
+        address: adresse de l'expéditeur
+        account_number: numéro de compte
+        iban: IBAN
+        due_days: jours jusqu'à l'échéance
+        contact: personne de contact
+        contact_id: ' personne de contact '
+        beneficiary: en faveur de
+        email: Expéditeur e-mail
+        payee: paiement pour
+        payment_slip: bulletin de versement
+        payment_slips:
+          ch_es: bulletin de versement postal rouge (CH)
+          ch_bes: bulletin de versement rouge bancaire (CH)
+          ch_esr: bulletin de versement orange postal (CH)
+          ch_besr: bulletin de versement orange bancaire (CH)
+        participant_number: numéro du participant
+        participant_number_internal: Numéro du participant interne
+        payment_reminder_configs: rappels
+        vat_number: No TVA
+      invoice_item:
+        name: Nom
+        description: description
+        vat_rate: TVA
+        unit_cost: prix
+        count: Nombre
+        cost: montant
+      invoice_items:
+        name: Nom
+        description: description
+        vat_rate: TVA
+        unit_cost: prix
+        count: nombre
+        cost: montant
+      payment:
+        invoice: facture
+        amount: montant
+        received_at: date de réception
+        reference: référence de paiement
+      payment_reminder:
+        invoice: facture
+        message: information
+        due_at: due au
+      payment_reminder_config:
+        title: titre
+        text: texte
+        due_days: jours jusqu'à l'échéance
+      payment_reminder_configs:
+        title: titre du rappel
+        text: texte du rappel
+        due_days: durée d'échéance du rappel
+      service_token:
+        name: Nom
+        description: Description
+        key: Clé
+        abilities: Droits
+        last_access: Dernier accès
+        people: Personnes de cette groupe
+        people_below: Personnes des sous-groupes
+        groups: Groupes de cette groupe
+        events: Evénements de cette groupe
   errors:
     messages:
+      invalid_money: "doit être arrondi à 5 centimes"
       invalid_date: "n'est pas une date valable"
       invalid_time: "n'est pas une heure valable"
       invalid_datetime: "n'est pas une date valable"

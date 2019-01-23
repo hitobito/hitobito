@@ -7,13 +7,6 @@
 
 module FeatureHelpers
 
-  extend ActiveSupport::Concern
-
-  included do
-    before { WebMock.allow_net_connect! }
-    after  { WebMock.disable_net_connect! }
-  end
-
   def sign_in(user = nil)
     user ||= people(:top_leader)
     login_as(user, :scope => :person)

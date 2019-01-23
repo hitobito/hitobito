@@ -169,7 +169,7 @@ fr:
         one: groupe
         other: Groupes
       invoice:
-        one: factures
+        one: facture
         other: factures
       invoice_article:
         one: articles de factures

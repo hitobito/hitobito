@@ -56,7 +56,7 @@ fr:
     show:
       title: "%{model}"
     new:
-      title: "Créer un %{model}"
+      title: "Créer %{model}"
     edit:
       title: "Modifier %{model}"
     create:
@@ -558,11 +558,11 @@ fr:
   invoice_lists:
     form:
       recipient_info:
-        one: "la facture est établie pour  %{count} personnes"
-        other: "la facture est établie pour personnes"
+        one: "La facture est établie pour und personne"
+        other: "La facture est établie pour %{count} personnes"
     create:
-      one: "la facture a été établie pour destinataires"
-      other: "la facture %{title} a été établie pour %{count} destinataires."
+      one: "La facture a été établie pour un destinataire"
+      other: "La facture <i>%{title}</i> a été établie pour%{count}  destinataires."
     update:
       zero: 'Choisir au moins une facture.'
       model_error: "la facture %{number} n'est pas valable - %{error}."

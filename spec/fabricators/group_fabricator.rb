@@ -24,6 +24,7 @@
 #  updater_id                  :integer
 #  deleter_id                  :integer
 #  require_person_add_requests :boolean          default(FALSE), not null
+#  description                 :text(65535)
 #
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of

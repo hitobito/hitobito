@@ -344,6 +344,7 @@ de:
         layer_group_id: Ebene
         type: Gruppentyp
         type_name: Gruppentyp
+        description: Beschreibung
 
       event:
         group_ids: Gruppen

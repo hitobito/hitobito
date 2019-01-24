@@ -19,7 +19,7 @@ describe Export::Tabular::Groups::List do
   subject { csv }
 
    its(:headers) do
-     should == %w(Id Elterngruppe Name Kurzname Gruppentyp Haupt-E-Mail Adresse PLZ Ort Land Ebene)
+     should == %w(Id Elterngruppe Name Kurzname Gruppentyp Haupt-E-Mail Adresse PLZ Ort Land Ebene Beschreibung)
    end
 
    it 'has 4 items' do

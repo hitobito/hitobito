@@ -29,6 +29,7 @@
 #  updater_id                  :integer
 #  deleter_id                  :integer
 #  require_person_add_requests :boolean          default(FALSE), not null
+#  description                 :text(65535)
 #
 
 class Group < ActiveRecord::Base
@@ -49,7 +50,7 @@ class Group < ActiveRecord::Base
   # This must contain the superior attributes as well.
   class_attribute :used_attributes
   self.used_attributes = [:name, :short_name, :email, :contact_id,
-                          :email, :address, :zip_code, :town, :country]
+                          :email, :address, :zip_code, :town, :country, :description]
 
   # Attributes that may only be modified by people from superior layers.
   class_attribute :superior_attributes
@@ -103,7 +104,7 @@ class Group < ActiveRecord::Base
 
   validates_by_schema
   validates :email, format: Devise.email_regexp, allow_blank: true
-
+  validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
 
   ### CLASS METHODS
 

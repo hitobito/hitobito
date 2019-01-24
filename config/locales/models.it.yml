@@ -313,6 +313,7 @@ it:
         layer_group_id: Livello
         type: Tipo di gruppo
         type_name: Tipo di gruppi
+        description: Descrizione
       event:
         group_ids: Gruppi
         groups: Gruppi

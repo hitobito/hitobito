@@ -321,6 +321,7 @@ fr:
         layer_group_id: Niveau
         type: Type de groupe
         type_name: Type de groupe
+        description: Description
       event:
         group_ids: Groupes
         groups: Groupes

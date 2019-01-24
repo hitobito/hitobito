@@ -10,6 +10,8 @@
 
   = field_set_tag do
     = f.labeled_input_fields(:name, :short_name)
+    - entry.modifiable_attributes(:description).each do |attr|
+      = f.labeled_input_field attr
 
     = f.labeled(:contact_id) do
       - if @contacts.present?

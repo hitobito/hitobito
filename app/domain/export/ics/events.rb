@@ -30,8 +30,12 @@ module Export::Ics
         event.contact.person_name,
         event.contact.phone_numbers.map { |pn| "#{pn.label}: #{pn.number}" if pn.public },
         event.contact.email, '',
-        event_url(event, host: ENV['RAILS_HOST_NAME']),
+        url(event)
       ].flatten.compact.join("\n")
+    end
+
+    def url(event)
+      group_event_url(event.groups.first, event, host: ENV['RAILS_HOST_NAME'])
     end
 
     def generate_ical_from_event_date(event_date, event)

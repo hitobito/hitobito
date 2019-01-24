@@ -643,6 +643,14 @@ describe PeopleController do
         expect(top_leader.reload.primary_group_id).to eq(group.id)
         is_expected.to render_template('primary_group')
       end
+
+      it 'does not set primary group if person has invalid data' do
+        top_leader.update_columns(first_name: nil, last_name: nil) # produce invalid person model
+        put :primary_group, group_id: group, id: top_leader.id, primary_group_id: group.id, format: :js
+
+        expect(top_leader.reload.primary_group_id).to eq(group.id)
+        is_expected.to render_template('shared/update_flash')
+      end
     end
 
   end

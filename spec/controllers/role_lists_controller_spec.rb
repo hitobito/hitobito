@@ -21,6 +21,15 @@ describe RoleListsController do
       sign_in(people(:bottom_member))
     end
 
+
+    context 'GET move' do
+      it 'initializes entry so form extensions can rely on it' do
+        xhr :get, :move, group_id: group.id, ids: [roles(:bottom_member).id], format: :js
+        expect(assigns(:role)).to be_present
+      end
+    end
+
+
     it 'PUT update' do
       expect do
         put :update, group_id: group,

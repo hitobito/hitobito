@@ -41,6 +41,8 @@ class RoleListsController < CrudController
   end
 
   def move
+    entry # initialize entry so form extensions work without modifications
+
     @group_selection = group.groups_in_same_layer.to_a
     @people_ids = params[:ids]
   end

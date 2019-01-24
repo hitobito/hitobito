@@ -78,9 +78,32 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
 
     context 'with association changes' do
-      before { Fabricate(:social_account, contactable: person, label: 'Foo', name: 'Bar') }
 
-      it { is_expected.to match(/<div>Social Media/) }
+      context 'social account' do
+        before { Fabricate(:social_account, contactable: person, label: 'Foo', name: 'Bar') }
+
+        it { is_expected.to match(/<div>Social Media/) }
+      end
+
+      context 'mailing list' do
+        let(:list) { mailing_lists(:leaders) }
+
+        it 'new add request' do
+          Person::AddRequest::MailingList.create!(person: person, body: list, requester: people(:top_leader))
+          expect(subject).to eq "<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde gestellt.</div>"
+        end
+
+        it 'destroyed add request' do
+          Person::AddRequest::MailingList.create!(person: person, body: list, requester: people(:top_leader)).destroy!
+          expect(subject).to eq "<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde beantwortet.</div>"
+        end
+
+        it 'destroyed mailing list' do
+          Person::AddRequest::MailingList.create!(person: person, body: list, requester: people(:top_leader))
+          list.destroy
+          expect(subject).to eq "<div>Zugriffsanfrage für <i>unbekannt</i> wurde beantwortet.</div>"
+        end
+      end
     end
   end
 

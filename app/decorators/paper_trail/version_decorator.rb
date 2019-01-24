@@ -40,10 +40,10 @@ module PaperTrail
     end
 
     def custom_event_changes
-      content_tag(:div, 
-                  I18n.t("version.#{event}", 
-                  user: whodunnit, 
-                  item: item, 
+      content_tag(:div,
+                  I18n.t("version.#{event}",
+                  user: whodunnit,
+                  item: item,
                   object_changes: object_changes))
     end
 
@@ -77,11 +77,17 @@ module PaperTrail
       I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}",
              default: :"version.association_change.#{model.event}",
              model: item_class.model_name.human,
-             label: item ? item.to_s(:long) : '',
+             label: item ? label_with_fallback(item) : '',
              changeset: changeset).html_safe
     end
 
     private
+
+    def label_with_fallback(item)
+      item.to_s(:long)
+    rescue
+      I18n.t('global.unknown')
+    end
 
     def item_class
       @item_class ||= model.item_type.constantize

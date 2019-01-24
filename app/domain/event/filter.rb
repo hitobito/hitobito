@@ -18,16 +18,16 @@ class Event::Filter
   end
 
   def list_entries
-    scope = Event. # nesting restricts to parent, we want more
+    sort_expression ? scope.uniq.reorder(sort_expression) : scope.uniq
+  end
+
+  def scope
+    Event. # nesting restricts to parent, we want more
       where(type: type).
       includes(:groups).
       with_group_id(relevant_group_ids).
       in_year(year).
-      order_by_date.
-      preload_all_dates.
-      uniq
-
-    sort_expression ? scope.reorder(sort_expression) : scope
+      preload_all_dates
   end
 
   private

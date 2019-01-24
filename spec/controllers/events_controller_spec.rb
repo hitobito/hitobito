@@ -29,6 +29,13 @@ describe EventsController do
         Fabricate(:event, groups: [groups(:bottom_group_one_one)])
       end
 
+      it 'does page correctly even if event have multiple dates' do
+        expect(Kaminari.config).to receive(:default_per_page).and_return(2).at_least(:once)
+        events(:top_event).dates.create!(start_at: '2012-3-02')
+        get :index, group_id: group.id, year: 2012, filter: 'all'
+        expect(assigns(:events)).to have(2).entries
+      end
+
       it 'lists events of descendant groups by default' do
         get :index, group_id: group.id, year: 2012
         expect(assigns(:events)).to have(3).entries

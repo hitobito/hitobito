@@ -1,7 +1,8 @@
 // higher z-index than popover (1010)
 
 .ui-datepicker {
-  z-index: 1011 !important;
+  // must be higher than modal at #1040
+  z-index: 1050 !important;
 }
 
 .ui-datepicker td .ui-state-default:hover {

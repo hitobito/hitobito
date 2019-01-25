@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181119094017) do
+ActiveRecord::Schema.define(version: 20190124125454) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -227,7 +227,8 @@ ActiveRecord::Schema.define(version: 20181119094017) do
     t.integer  "creator_id",                  limit: 4
     t.integer  "updater_id",                  limit: 4
     t.integer  "deleter_id",                  limit: 4
-    t.boolean  "require_person_add_requests",              default: false, null: false
+    t.boolean  "require_person_add_requests",               default: false, null: false
+    t.text     "description",                 limit: 65535
   end
 
   add_index "groups", ["layer_group_id"], name: "index_groups_on_layer_group_id", using: :btree

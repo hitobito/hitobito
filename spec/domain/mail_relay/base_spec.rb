@@ -164,6 +164,27 @@ describe MailRelay::Base do
       MailRelay::Base.relay_current
     end
 
+    it 'skips already processed mail, does not sends airbrake notification if mail_log is completed' do
+      log = MailLog.build(simple)
+      log.update(status: 2)
+      log.save!
+
+      expect(Mail).to receive(:find_and_delete) do |options, &block|
+        block.call(simple)
+        [simple]
+      end
+
+      expect(Airbrake).not_to receive(:notify) do |exception|
+        expect(exception.message).to match(
+          /Mail with subject 'Re: Jubla Gruppen' has already been processed before and is skipped/)
+        expect(exception.message).to match(
+          /1b498b5a776254310c3699688680b37a$/)
+      end
+
+      MailRelay::Base.relay_current
+    end
+
+
     it 'creates mail log entry for sent bulk mail' do
       expect(Mail).to receive(:find_and_delete) do |options, &block|
         block.call(simple)

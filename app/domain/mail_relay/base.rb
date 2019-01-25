@@ -50,8 +50,14 @@ module MailRelay
           begin
             new(message).relay
           rescue MailProcessedBeforeError => e
-            message.mark_for_delete = false
-            Airbrake.notify(e)
+            mail_log = MailLog.find_by(mail_hash: MailLog.build(message).mail_hash)
+            if mail_log && mail_log.completed?
+              logger = Delayed::Worker.logger || Rails.logger
+              logger.info "Deleting previously processed email from #{message.from}"
+            else
+              message.mark_for_delete = false
+              Airbrake.notify(e)
+            end
           rescue Exception => e # rubocop:disable Lint/RescueException
             message.mark_for_delete = false
             last_exception = MailRelay::Error.new(message, e)

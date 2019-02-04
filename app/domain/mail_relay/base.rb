@@ -43,7 +43,7 @@ module MailRelay
         end
       end
 
-      def relay_batch
+      def relay_batch # rubocop:disable Metrics/MethodLength
         last_exception = nil
 
         mails = Mail.find_and_delete(count: retrieve_count) do |message|

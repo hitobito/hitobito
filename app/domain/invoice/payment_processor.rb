@@ -55,7 +55,7 @@ class Invoice::PaymentProcessor
   end
 
   def payments
-    @payments ||= debit_statements.collect do |s|
+    @payments ||= credit_statements.collect do |s|
       Payment.new(amount: fetch('Amt', s),
                   esr_number: esr_number(s),
                   received_at: to_datetime(fetch('RltdDts', 'AccptncDtTm', s)),
@@ -72,12 +72,12 @@ class Invoice::PaymentProcessor
   end
 
   def esr_numbers
-    debit_statements.collect { |s| esr_number(s) }
+    credit_statements.collect { |s| esr_number(s) }
   end
 
-  def debit_statements
+  def credit_statements
     transaction_details
-      .select  { |s| fetch('CdtDbtInd', s) == 'DBIT' }
+      .select  { |s| fetch('CdtDbtInd', s) == 'CRDT' }
       .reject  { |s| fetch('RmtInf', s)['AddtlRmtInf'] =~ /REJECT/i }
   end
 

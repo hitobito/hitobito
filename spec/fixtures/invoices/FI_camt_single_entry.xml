@@ -27,7 +27,7 @@
          <Ntry>
             <NtryRef>012345679</NtryRef>
             <Amt Ccy="CHF">100</Amt>
-            <CdtDbtInd>CRDT</CdtDbtInd>
+            <CdtDbtInd>DBIT</CdtDbtInd>
             <RvslInd>false</RvslInd>
             <Sts>BOOK</Sts>
             <BookgDt>
@@ -61,7 +61,7 @@
                      </Prtry>
                   </Refs>
                   <Amt Ccy="CHF">100</Amt>
-                  <CdtDbtInd>CRDT</CdtDbtInd>
+                  <CdtDbtInd>DBIT</CdtDbtInd>
                   <BkTxCd>
                      <Domn>
                         <Cd>PMNT</Cd>

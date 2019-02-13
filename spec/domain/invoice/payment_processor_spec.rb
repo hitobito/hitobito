@@ -5,11 +5,11 @@ describe Invoice::PaymentProcessor do
   let(:invoice)        { invoices(:sent) }
   let(:invoice_config) { invoice.invoice_config }
 
-  it 'parses 5 debit statements' do
-    expect(parser.debit_statements).to have(5).items
+  it 'parses 5 credit statements' do
+    expect(parser.credit_statements).to have(5).items
   end
 
-  it 'builds payments for each debit statement' do
+  it 'builds payments for each credit statement' do
     expect(parser.payments).to have(5).items
     parser.payments.each do |payment|
       expect(payment).not_to be_valid

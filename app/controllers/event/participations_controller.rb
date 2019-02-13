@@ -69,9 +69,9 @@ class Event::ParticipationsController < CrudController
         @person_add_requests = fetch_person_add_requests
       end
       format.pdf   { render_pdf(filter_entries.collect(&:person), group) }
-      format.csv   { render_tabular_in_background(:csv) && redirect_to(action: :index) }
+      format.csv   { render_tabular_in_background(:csv) }
       format.vcf   { render_vcf(filter_entries.includes(person: :phone_numbers).collect(&:person)) }
-      format.xlsx  { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
+      format.xlsx  { render_tabular_in_background(:xlsx) }
       format.email { render_emails(filter_entries.collect(&:person)) }
     end
   end

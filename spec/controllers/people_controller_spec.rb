@@ -131,6 +131,7 @@ describe PeopleController do
             expect do
               get :index, group_id: group, format: :csv
               expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+              expect(response).to redirect_to(returning: true)
             end.to change(Delayed::Job, :count).by(1)
           end
 
@@ -138,6 +139,7 @@ describe PeopleController do
             expect do
               get :index, group_id: group, format: :xlsx
               expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+              expect(response).to redirect_to(returning: true)
             end.to change(Delayed::Job, :count).by(1)
           end
 

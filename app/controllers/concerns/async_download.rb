@@ -5,11 +5,12 @@
 
 module Concerns
   module AsyncDownload
-    def with_async_download_cookie(format, name)
+    def with_async_download_cookie(format, name, redirection_target: { returning: true })
       filename = AsyncDownloadFile.create_name(name, current_person.id)
       Cookies::AsyncDownload.new(cookies).set(name: filename, type: format)
       yield filename
       flash[:notice] = translate(:export_enqueued)
+      redirect_to redirection_target
     end
   end
 end

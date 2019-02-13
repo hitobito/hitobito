@@ -38,6 +38,7 @@ describe SubscriptionsController do
       expect do
         get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :csv
         expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+        expect(response).to redirect_to(returning: true)
       end.to change(Delayed::Job, :count).by(1)
     end
 
@@ -45,6 +46,7 @@ describe SubscriptionsController do
       expect do
         get :index, group_id: group.id, mailing_list_id: mailing_list.id, format: :xlsx
         expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+        expect(response).to redirect_to(returning: true)
       end.to change(Delayed::Job, :count).by(1)
     end
 

@@ -51,8 +51,8 @@ class EventsController < CrudController
   def index
     respond_to do |format|
       format.html { @events = entries.page(params[:page]) }
-      format.csv  { render_tabular_in_background(:csv) && redirect_to(action: :index) }
-      format.xlsx { render_tabular_in_background(:xlsx) && redirect_to(action: :index) }
+      format.csv  { render_tabular_in_background(:csv) }
+      format.xlsx { render_tabular_in_background(:xlsx) }
       format.ics  { render_ical(entries) }
       format.json { render_entries_json(entries) }
     end

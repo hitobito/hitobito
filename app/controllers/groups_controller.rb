@@ -54,11 +54,9 @@ class GroupsController < CrudController
   end
 
   def export_subgroups
-    with_async_download_cookie(:csv, :subgroups_export) do |filename|
+    with_async_download_cookie(:csv, :subgroups_export, redirection_target: entry) do |filename|
       Export::SubgroupsExportJob.new(current_person.id, entry, filename: filename).enqueue!
     end
-
-    redirect_to entry
   end
 
   def person_notes; end

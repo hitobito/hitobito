@@ -58,6 +58,7 @@ describe EventsController do
 
         expect(cookie[0]['name']).to match(/^(events_export)+\S*(#{top_leader.id})+$/)
         expect(cookie[0]['type']).to match(/^csv$/)
+        expect(response).to redirect_to(returning: true)
       end
 
       it 'renders json with dates' do

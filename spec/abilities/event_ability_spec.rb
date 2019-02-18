@@ -497,8 +497,9 @@ describe EventAbility do
     let(:role)   { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
     let(:event)  { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
     let(:participation) { Fabricate(:event_participation, event: event, person: user) }
+    let(:event_role)    { Event::Role::Cook}
 
-    before { Fabricate(Event::Role::Cook.name.to_sym, participation: participation) }
+    before { Fabricate(event_role.name.to_sym, participation: participation) }
 
     context Event do
       it 'may show his event' do
@@ -535,7 +536,26 @@ describe EventAbility do
         other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
         is_expected.not_to be_able_to(:index_participations, other)
       end
+    end
 
+    context Event::Role::Participant do
+      let(:event_role)    { Event::Role::Participant }
+
+      before { participation.update(active: true) }
+
+      context Event do
+        it 'may not index people for his event' do
+          is_expected.not_to be_able_to(:index_participations, event)
+        end
+      end
+
+      context Event::Course do
+        let(:event)      { Fabricate(:course) }
+
+        it 'may index people for his event' do
+          is_expected.to be_able_to(:index_participations, event)
+        end
+      end
     end
 
     context Event::Participation do

@@ -147,11 +147,9 @@ describe Event::ParticipationsController do
       end
     end
 
-    it 'participant can not index other participants' do
+    it 'participant can index other participants' do
       sign_in(@participant.person)
-      expect do
-        get :index, group_id: groups(:bottom_layer_one), event_id: course.id
-      end.to raise_error(CanCan::AccessDenied)
+      get :index, group_id: groups(:bottom_layer_one), event_id: course.id
     end
 
     def create(*roles)

@@ -34,8 +34,6 @@ class TableDisplay::Participations < TableDisplay
     end.compact
   end
 
-  private
-
   def person_sort_statements
     selected.grep(/person/).collect do |key|
       [key, key.gsub('person', 'people')]
@@ -44,7 +42,7 @@ class TableDisplay::Participations < TableDisplay
 
   def question_sort_statements(question_ids)
     selected_questions(question_ids).collect do |column, id|
-      [column, "CASE event_questions.id WHEN #{id} THEN 0 ELSE 1 END, event_answers.answer"]
+      [column, "CASE event_questions.id WHEN #{id} THEN 0 ELSE 1 END, TRIM(event_answers.answer)"]
     end.to_h
   end
 end

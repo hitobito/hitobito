@@ -14,7 +14,7 @@ describe TableDisplay::Participations do
     statements = subject.question_sort_statements(top_course.question_ids)
     expect(statements).to have(1).item
     expect(statements["event_question_#{question.id}"]).to eq 'CASE event_questions.id ' \
-      "WHEN #{question.id} THEN 0 ELSE 1 END, event_answers.answer"
+      "WHEN #{question.id} THEN 0 ELSE 1 END, TRIM(event_answers.answer)"
   end
 
 end

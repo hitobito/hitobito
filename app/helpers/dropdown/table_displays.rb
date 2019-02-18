@@ -49,7 +49,7 @@ module Dropdown
     end
 
     def render_questions(kind)
-      questions = parent.questions.send(kind)
+      questions = present_questions(kind)
       return [] if questions.empty?
 
       divider = Divider.new.render(template)
@@ -58,6 +58,10 @@ module Dropdown
       questions.collect do |question|
         render_item('selected[]', question.question, dom_id(question), question.question)
       end.prepend(divider, title)
+    end
+
+    def present_questions(kind)
+      parent.questions.send(kind).select { |q| q.question.present? }
     end
 
     def unrelated_hidden_questions

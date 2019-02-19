@@ -11,3 +11,5 @@
   = action_button(t('.export_subgroups'), export_subgroups_group_path(@group, format: :csv), :download)
 - if entry.deleted? && can?(:reactivate, entry)
   = action_button(t('.reactivate'), reactivate_group_path(@group), :retweet, method: :post)
+
+= render_extensions(:actions_show)

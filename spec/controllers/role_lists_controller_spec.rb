@@ -22,18 +22,22 @@ describe RoleListsController do
     end
 
 
-    context 'GET move' do
-      it 'initializes entry so form extensions can rely on it' do
-        xhr :get, :move, group_id: group.id, ids: [roles(:bottom_member).id], format: :js
-        expect(assigns(:role)).to be_present
-      end
+    it 'GET#move initializes entry so form extensions can rely on it' do
+      xhr :get, :move, group_id: group.id, ids: [roles(:bottom_member).id], format: :js
+      expect(assigns(:role)).to be_present
     end
 
+    it 'GET#moveable initializes entry' do
+      role_params = { group_id: group.id, type:  'Group::BottomLayer::Member', label: 'dummy' }
+      xhr :get, :movable, group_id: group.id, ids: [roles(:bottom_member).id], role: role_params, format: :js
+      expect(assigns(:role)).to be_present
+      expect(assigns(:role).label).to eq 'dummy'
+    end
 
     it 'PUT update' do
       expect do
         put :update, group_id: group,
-          ids: person1.id, 
+          ids: person1.id,
           moving_role_type: Group::TopGroup::Member,
           role: { type: Group::TopGroup::Leader,
                   group_id: group }
@@ -45,7 +49,7 @@ describe RoleListsController do
     it 'DELETE destroy' do
       expect do
         delete :destroy, group_id: group,
-          ids: person1.id, 
+          ids: person1.id,
           role: { types: { Group::TopGroup::Member => 1 } }
       end.not_to change(Role, :count)
 
@@ -55,7 +59,7 @@ describe RoleListsController do
     it 'POST create' do
       expect do
         post :create, group_id: group,
-          ids: person1.id, 
+          ids: person1.id,
           role: { type: Group::TopGroup::Member,
                   group_id: group }
       end.not_to change(Role, :count)
@@ -68,10 +72,10 @@ describe RoleListsController do
     it 'only removes one role' do
       expect do
         delete :destroy, group_id: group,
-          ids: person1.id, 
+          ids: person1.id,
           role: { types: { Group::TopGroup::Member => 1 } }
       end.to change(Role, :count).by(-1)
-      
+
       expect(flash[:notice]).to include 'Eine Rolle wurde entfernt'
     end
 
@@ -82,7 +86,7 @@ describe RoleListsController do
           role: { types: { Group::TopGroup::Member => 1,
                           Group::TopGroup::Leader => 1 } }
       end.to change(Role, :count).by(-2)
-      
+
       expect(flash[:notice]).to include '2 Rollen wurden entfernt'
     end
   end
@@ -91,7 +95,7 @@ describe RoleListsController do
     it 'creates only one role for one person' do
       expect do
         post :create, group_id: group,
-          ids: person1.id, 
+          ids: person1.id,
           role: { type: Group::TopGroup::Member,
                   group_id: group }
       end.to change(Role, :count).by(1)
@@ -102,7 +106,7 @@ describe RoleListsController do
     it 'may create multiple roles' do
       expect do
         post :create, group_id: group,
-          ids: [person2.id, person1.id].join(','), 
+          ids: [person2.id, person1.id].join(','),
           role: { type: Group::TopGroup::Member,
                   group_id: group }
       end.to change(Role, :count).by(2)
@@ -127,7 +131,7 @@ describe RoleListsController do
   context 'PUT update' do
     it 'fails on invalid role type' do
       put :update, group_id: group,
-        ids: person1.id, 
+        ids: person1.id,
         moving_role_type: Group::TopGroup::Member,
         role: { type: 'invalid',
                 group_id: group }
@@ -137,7 +141,7 @@ describe RoleListsController do
 
     it 'change role type of one role' do
       put :update, group_id: group,
-        ids: person1.id, 
+        ids: person1.id,
         role: { types: { Group::TopGroup::Member => 1 },
                 type: Group::TopGroup::Leader,
                 group_id: group }
@@ -149,7 +153,7 @@ describe RoleListsController do
 
     it 'may change multiple role types' do
       put :update, group_id: group,
-        ids: [person1.id, person2.id].join(','), 
+        ids: [person1.id, person2.id].join(','),
         role: { types: { Group::TopGroup::Member => 1,
                          Group::TopGroup::Leader => 1 },
                 type: Group::TopGroup::Leader,
@@ -166,7 +170,7 @@ describe RoleListsController do
 
     it 'may move multiple roles into another group and changes type' do
       put :update, group_id: group,
-        ids: [person1.id, person2.id].join(','), 
+        ids: [person1.id, person2.id].join(','),
         role: { types: { Group::TopGroup::Member => 1,
                          Group::TopGroup::Leader => 1 },
                 type: Group::TopLayer::TopAdmin,

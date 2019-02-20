@@ -5,5 +5,10 @@
                               role_types: @role_types,
                               submit_label: t('.submit') } do
 
-    = hidden_field_tag('role[group_id]', @new_group_id)
-    = hidden_field_tag('role[type]', @new_role_type)
+
+  = fields_for(:role, entry) do |f|
+    = f.hidden_field :group_id
+    = f.hidden_field :type
+
+    - entry.class.used_attributes.each do |attr|
+      = f.hidden_field attr

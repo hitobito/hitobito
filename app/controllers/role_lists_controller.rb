@@ -1,7 +1,7 @@
 class RoleListsController < CrudController
   self.nesting = Group
 
-  self.permitted_attrs = [:type, :group_id, :label]
+  self.permitted_attrs = [:type, :group_id] + Role.used_attributes
 
   skip_authorization_check
   skip_authorize_resource
@@ -48,8 +48,7 @@ class RoleListsController < CrudController
   end
 
   def movable
-    @new_group_id = model_params[:group_id]
-    @new_role_type = role_type
+    assign_attributes
     @role_types = role_list.collect_available_role_types
     @people_ids = params[:ids]
   end

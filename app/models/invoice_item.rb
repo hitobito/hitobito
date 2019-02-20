@@ -39,7 +39,7 @@ class InvoiceItem < ActiveRecord::Base
   end
 
   def cost
-    unit_cost ? unit_cost * count : 0
+    unit_cost && count ? unit_cost * count : 0
   end
 
   def vat

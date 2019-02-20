@@ -35,10 +35,29 @@ describe InvoiceItem do
     expect(item.vat).to eq 0
   end
 
-  it 'calculates to 0 if unit_cost is missing' do
+  it 'calculates to 0 if unit_cost is 0' do
     item = InvoiceItem.new(invoice: invoice,
                            name: :pens,
                            unit_cost: 0)
+    expect(item.total).to eq 0
+    expect(item.cost).to eq 0
+    expect(item.vat).to eq 0
+  end
+
+  it 'calculates to 0 if unit_cost is nil' do
+    item = InvoiceItem.new(invoice: invoice,
+                           name: :pens,
+                           unit_cost: nil)
+    expect(item.total).to eq 0
+    expect(item.cost).to eq 0
+    expect(item.vat).to eq 0
+  end
+
+  it 'calculates to 0 if count is nil' do
+    item = InvoiceItem.new(invoice: invoice,
+                           name: :pens,
+                           unit_cost: 1,
+                           count: nil)
     expect(item.total).to eq 0
     expect(item.cost).to eq 0
     expect(item.vat).to eq 0

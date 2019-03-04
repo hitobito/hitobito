@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -eo pipefail
+
+cd /tmp/src
+
+echo 'Integration build: Updating composition wagons to their HEADs.'
+git submodule update --remote

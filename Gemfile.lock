@@ -1,14 +1,3 @@
-PATH
-  remote: ../hitobito_pbs
-  specs:
-    hitobito_pbs (0.0.1)
-      hitobito_youth
-
-PATH
-  remote: ../hitobito_youth
-  specs:
-    hitobito_youth (0.0.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -79,6 +68,7 @@ GEM
       bcrypt (>= 3.1.3)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bleib (0.0.9)
     bootstrap-sass (2.3.2.2)
       sass (~> 3.2)
     bootstrap-wysihtml5-rails (0.3.1.24)
@@ -328,6 +318,7 @@ GEM
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
     public_suffix (3.0.3)
+    puma (3.12.1)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.11)
@@ -536,6 +527,7 @@ DEPENDENCIES
   axlsx (>= 3.0.0.pre)
   bcrypt-ruby
   binding_of_caller
+  bleib (= 0.0.9)
   bootstrap-sass (~> 2.3)
   bootstrap-wysihtml5-rails (~> 0.3.1.24)
   brakeman
@@ -569,8 +561,6 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_pbs!
-  hitobito_youth!
   http_accept_language
   icalendar
   jquery-cookie-rails
@@ -600,6 +590,7 @@ DEPENDENCIES
   pry-rails
   pry-remote
   pry-stack_explorer
+  puma
   quiet_assets
   rack (~> 1.6.11)
   rails (= 4.2.11.1)

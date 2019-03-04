@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -eo pipefail
+
+scripts="$(dirname $0)"
+
+export RAILS_HOST_NAME=build.hitobito.com
+
+if [ -d /tmp/artifacts/bundle ]; then
+    echo "Restoring bundle from artifacts"
+    mv /tmp/artifacts/bundle /tmp/src/bundle
+fi
+
+if (( $INTEGRATION_BUILD == 1 )); then
+    "$scripts/pull-composition-heads"
+fi
+
+"$scripts/prepare-source"
+
+# Call original builder script
+"$scripts/assemble-base"
+
+if (( $INTEGRATION_BUILD == 1 )); then
+    "$scripts/pull-transifex-translations"
+fi
+
+if (( $DEMO_BUILD == 1 )); then
+    "$scripts/enable-demo-seeds"
+fi
+
+BUILD_DATE=$(date '+%Y-%m-%d %H:%M:%S')
+echo "(built at: $BUILD_DATE)" > /opt/app-root/src/BUILD_INFO

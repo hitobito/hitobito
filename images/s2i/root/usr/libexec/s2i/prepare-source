@@ -1,20 +1,12 @@
 #!/bin/bash
 
-set -ex
+set -eo pipefail
 
-source_dir=$(dirname $0)/..
+cd /tmp/src
 
 # this script places the core and wagon files in the right folders and creates the Wagonfile.
 # after this, we are able to use our rails images default assemble script to do the execute default
 # tasks like assets precompilation
-
-pushd $source_dir
-
-# update the composition-repo to newest versions of configured .gitmodules-branch
-# devel is our indicator for the integration-environment
-if [[ "x${OPENSHIFT_BUILD_REFERENCE}" = "xdevel" ]]; then
-  git submodule update --remote
-fi
 
 # record the deployed versions from git before nuking the repo
 git submodule status | tee WAGON_VERSIONS
@@ -33,12 +25,10 @@ for dir in hitobito_*; do
 done
 
 # move hidden core dirs
-rm -f .s2i/pre_assemble
-cp -rf hitobito/.s2i .  # cannot be moved since it is in use during this script's execution
 mv hitobito/.tx .
 
 # place Wagonfile
-mv -f .s2i/Wagonfile .
+cp /opt/shared/Wagonfile .
 
 # finally remove core source directory
 rm -rf hitobito
@@ -61,5 +51,3 @@ rm -r .git
 bundle install --no-deployment --path vendor/bundle
 # Speed up the second `bundle install` run
 bundle package --all
-
-popd

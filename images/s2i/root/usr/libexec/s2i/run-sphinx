@@ -1,0 +1,43 @@
+#!/bin/bash
+
+set -e
+
+if [ -z $SPHINX_INTERVAL_TIME ]; then
+  SPHINX_INTERVAL_TIME=3600 # 10 mins
+fi
+
+if [ -z $SPHINX_CONFIG_PATH ]; then
+    SPHINX_CONFIG_PATH=config/production.sphinx.conf
+fi
+
+function formatted_date {
+    date +"%Y-%m-%dT%H:%M:%S"
+}
+
+function scheduled_indexing {
+  while :
+  do
+    # We sleep first before starting the indexer because
+    # rake ts:index below will already start an index run.
+    sleep $SPHINX_INTERVAL_TIME
+    echo "$(formatted_date): Starting indexer ..."
+    /usr/bin/indexer --config $SPHINX_CONFIG_PATH --all --rotate
+    echo "$(formatted_date): ... indexing done"
+  done
+}
+
+# create sphinx daemon config
+bundle exec rake ts:configure
+
+if [ "x$SPHINX_SKIP_INITIAL_INDEX" != "x1" ]; then
+    # create initial index
+    bundle exec rake ts:index
+fi
+
+# make sure binlog directory exists
+binlog_path=$(grep binlog_path $SPHINX_CONFIG_PATH | cut -d'=' -f2-)
+mkdir -p $binlog_path
+
+# start indexer and sphinx daemon
+scheduled_indexing & \
+/usr/bin/searchd --config $SPHINX_CONFIG_PATH --nodetach

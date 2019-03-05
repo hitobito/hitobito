@@ -25,28 +25,36 @@ describe TableDisplay do
   context :with_permission_check do
     let(:member) { people(:bottom_member) }
 
-    it 'yields if user has configured permission for attr on object' do
-      subject = TableDisplay.for(leader, group)
-      subject.permissions = { 'attr' => 'update' }
-      expect { subject.with_permission_check('attr', leader) }.to raise_error(LocalJumpError)
+    subject { TableDisplay.for(member, group) }
+    before  { TableDisplay.register_permission(Person, :update, :attr) }
+
+    context :on_leader do
+      it 'yields if accessing unprotected attr' do
+        expect { subject.with_permission_check('other_attr', leader) }.to raise_error(LocalJumpError)
+      end
+
+      it 'noops if accessing protected attr' do
+        expect { subject.with_permission_check('attr', leader) }.not_to raise_error(LocalJumpError)
+      end
     end
 
-    it 'it handles object.field like syntax' do
-      subject = TableDisplay.for(leader, group)
-      subject.permissions = { 'attr' => 'update' }
-      expect { subject.with_permission_check('obj.attr', leader) }.to raise_error(LocalJumpError)
+    context :on_member do
+      it 'yields if accessing unprotected attr' do
+        expect { subject.with_permission_check('other_attr', member) }.to raise_error(LocalJumpError)
+      end
+
+      it 'yields if accessing protected attr' do
+        expect { subject.with_permission_check('attr', members) }.not_to raise_error(LocalJumpError)
+      end
     end
 
-    it 'yields if no permission is configured for attr on object' do
-      subject = TableDisplay.for(member, group)
-      expect { subject.with_permission_check('attr', leader) }.to raise_error(LocalJumpError)
-    end
+    context :with_navigation do
+      subject { TableDisplay.for(member, group) }
 
-    it 'does not yield if user does not have permission for attr on object' do
-      subject = TableDisplay.for(member, group)
-      subject.permissions = { 'attr' => 'update' }
-      expect { subject.with_permission_check('attr', person) }.not_to raise_error(LocalJumpError)
+      it 'noops if accessing protected attr' do
+        participation = Event::Participation.new(person: leader)
+        expect { subject.with_permission_check('person.attr', participation) }.not_to raise_error(LocalJumpError)
+      end
     end
-
   end
 end

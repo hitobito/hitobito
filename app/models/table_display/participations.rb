@@ -22,6 +22,12 @@ class TableDisplay::Participations < TableDisplay
     end
   end
 
+  def with_permission_check(path, object)
+    return super unless path =~ /question_\d+/
+
+    yield if ability.can?(:update, object.event) || ability.can?(:show_full, object.person)
+  end
+
   def sort_statements(parent)
     question_sort_statements(parent).merge(person_sort_statements.to_h)
   end

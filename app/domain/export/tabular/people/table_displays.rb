@@ -45,7 +45,11 @@ module Export::Tabular::People
 
     def filtered_selection
       keys = participations? ? with_selected_questions : selected
-      keys.collect(&:to_sym) - person_attributes
+      keys.reject { |attr| person_attr?(attr) }.collect(&:to_sym)
+    end
+
+    def person_attr?(attr)
+      person_attributes.include?(attr.gsub('person.', '').to_sym)
     end
 
     def selected

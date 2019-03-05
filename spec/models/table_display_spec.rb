@@ -27,6 +27,7 @@ describe TableDisplay do
 
     subject { TableDisplay.for(member, group) }
     before  { TableDisplay.register_permission(Person, :update, :attr) }
+    after   { TableDisplay.class_variable_set('@@permissions', {}) }
 
     context :on_leader do
       it 'yields if accessing unprotected attr' do

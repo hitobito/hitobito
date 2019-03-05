@@ -10,7 +10,7 @@ module Export::Tabular::People
     private
 
     def value_for(attr)
-      table_display.with_permission_check(attr, entry) do
+      table_display.with_permission_check(attr, participation) do
         super(translate(attr))
       end
     end

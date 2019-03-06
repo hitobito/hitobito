@@ -56,23 +56,15 @@ describe Export::PeopleExportJob do
 
       it 'renders standard columns' do
         subject.perform
-        expect(csv.headers.last).not_to eq 'Geschlecht'
+        expect(csv.headers.last).not_to eq 'Zusätzliche Angaben'
       end
 
       it 'appends selected column and renders value' do
-        user.table_display_for(group).update(selected: %w(gender))
+        user.table_display_for(group).update(selected: %w(additional_information))
+        Person.update_all(additional_information: 'bla bla')
         subject.perform
-        expect(csv.headers.last).to eq 'Geschlecht'
-        expect(csv.first['Geschlecht']).to eq 'unbekannt'
-      end
-
-      it 'appends selected column and hides value if denied' do
-        user.table_display_for(group).update(selected: %w(gender))
-        expect(TableDisplay::People).to receive(:permissions).and_return('gender' => 'missing').at_least(:once)
-
-        subject.perform
-        expect(csv.headers.last).to eq 'Geschlecht'
-        expect(csv.first['Geschlecht']).to be_blank
+        expect(csv.headers.last).to eq 'Zusätzliche Angaben'
+        expect(csv.first['Zusätzliche Angaben']).to eq 'bla bla'
       end
     end
   end

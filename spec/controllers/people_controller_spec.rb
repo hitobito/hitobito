@@ -843,6 +843,7 @@ describe PeopleController do
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
     before { sign_in(top_leader) }
+    after  { TableDisplay.class_variable_set('@@permissions', {}) }
 
     it 'GET#index lists extra column' do
       top_leader.table_display_for(group).update(selected: %w(gender))
@@ -853,7 +854,7 @@ describe PeopleController do
     end
 
     it 'GET#index lists extra column without content if permission check fails' do
-      expect(TableDisplay::People).to receive(:permissions).and_return( 'gender' => 'missing' )
+      TableDisplay.register_permission(Person, :missing_permission, :gender)
       top_leader.table_display_for(group).update(selected: %w(gender))
 
       get :index, group_id: group.id

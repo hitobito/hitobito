@@ -28,7 +28,7 @@ module Export::Tabular::People
     end
 
     def question_attribute(attr)
-      _, id = attr.to_s.split('_', 2)
+      id = attr.to_s.split('_').last
       answer = participation.answers.find { |e| e.question_id == id.to_i }
       answer.try(:answer)
     end

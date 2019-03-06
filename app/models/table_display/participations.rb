@@ -22,10 +22,12 @@ class TableDisplay::Participations < TableDisplay
     end
   end
 
-  def with_permission_check(path, object)
-    return super unless path =~ /question_\d+/
+  def with_permission_check(object, path)
+    return super unless path =~ QUESTION_REGEX
 
-    yield if ability.can?(:update, object.event) || ability.can?(:show_full, object.person)
+    if ability.can?(:update, object.event) || ability.can?(:show_full, object.person)
+      yield(*resolve(object, path))
+    end
   end
 
   def sort_statements(parent)

@@ -31,30 +31,21 @@ describe TableDisplay do
 
     context :on_leader do
       it 'yields if accessing unprotected attr' do
-        expect { subject.with_permission_check('other_attr', leader) }.to raise_error(LocalJumpError)
+        expect { |b| subject.with_permission_check(leader, 'other_attr', &b) }.to yield_with_args(leader, 'other_attr')
       end
 
       it 'noops if accessing protected attr' do
-        expect { subject.with_permission_check('attr', leader) }.not_to raise_error(LocalJumpError)
+        expect { |b| subject.with_permission_check(leader, 'attr', &b) }.not_to yield_control
       end
     end
 
     context :on_member do
       it 'yields if accessing unprotected attr' do
-        expect { subject.with_permission_check('other_attr', member) }.to raise_error(LocalJumpError)
+        expect { |b| subject.with_permission_check(member, 'other_attr', &b) }.to yield_with_args(member, 'other_attr')
       end
 
       it 'yields if accessing protected attr' do
-        expect { subject.with_permission_check('attr', members) }.not_to raise_error(LocalJumpError)
-      end
-    end
-
-    context :with_navigation do
-      subject { TableDisplay.for(member, group) }
-
-      it 'noops if accessing protected attr' do
-        participation = Event::Participation.new(person: leader)
-        expect { subject.with_permission_check('person.attr', participation) }.not_to raise_error(LocalJumpError)
+        expect { |b| subject.with_permission_check(member, 'attr', &b) }.to yield_with_args(member, 'attr')
       end
     end
   end

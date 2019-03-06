@@ -32,15 +32,15 @@ class TableDisplay < ActiveRecord::Base
     end.find_or_initialize_by(person: person)
   end
 
-  def with_permission_check(path, object)
-    name, target = resolve(path, object)
+  def with_permission_check(object, path)
+    target, name = resolve(object, path)
     permission = lookup_permission(target, name)
-    yield if permission.blank? || ability.can?(permission.to_sym, target)
+    yield target, name if permission.blank? || ability.can?(permission.to_sym, target)
   end
 
-  def resolve(path, object)
+  def resolve(object, path)
     *parts, attr = *path.to_s.split('.')
-    parts.empty? ? [attr, object] : [attr, parts.inject(object) { |obj, name| obj.send(name) }]
+    parts.empty? ? [object, attr] : [parts.inject(object) { |obj, name| obj.send(name) }, attr]
   end
 
   def ability

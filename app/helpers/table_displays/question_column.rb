@@ -8,19 +8,29 @@ module TableDisplays
 
     delegate :content_tag, :check_box_tag, :label_tag, to: :template
 
-    def label
-      question.question
+    def render
+      super if question
     end
 
-    def render
-      header = table.sort_header(template.dom_id(question), question.question)
-      table.col(header) do |participation|
-        participation.answers.find { |answer| answer.question == question }.try(:answer)
-      end
+    def label
+      @question.question
+    end
+
+    def format_attr(target, _)
+      target.answers.find { |answer| answer.question == @question }.try(:answer)
+    end
+
+    def header
+      table.sort_header(template.dom_id(@question), @question.question)
     end
 
     def question
-      name
+      @question ||= template.parent.questions.find { |q| q.id == question_id.to_i }
     end
+
+    def question_id
+      @question_id ||= name[TableDisplay::Participations::QUESTION_REGEX, 1]
+    end
+
   end
 end

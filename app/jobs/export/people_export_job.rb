@@ -7,17 +7,18 @@
 
 class Export::PeopleExportJob < Export::ExportBaseJob
 
-  self.parameters = PARAMETERS + [:filter]
+  self.parameters = PARAMETERS + [:group_id, :list_filter_args]
 
-  def initialize(format, user_id, filter, options)
+  def initialize(format, user_id, group_id, list_filter_args, options)
     super(format, user_id, options)
-    @filter = filter
+    @group_id = group_id
+    @list_filter_args = list_filter_args
   end
 
   private
 
   def entries
-    entries = @filter.entries
+    entries = filter.entries
     if full?
       full_entries(entries)
     else
@@ -40,5 +41,9 @@ class Export::PeopleExportJob < Export::ExportBaseJob
 
   def full?
     @options[:full]
+  end
+
+  def filter
+    @filter ||= Person::Filter::List.new(Group.find(@group_id), user, @list_filter_args)
   end
 end

@@ -9,10 +9,9 @@ require 'spec_helper'
 
 describe Export::PeopleExportJob do
 
-  subject { Export::PeopleExportJob.new(format, user.id, filter, { household: household, full: full, filename: 'people_export' }) }
+  subject { Export::PeopleExportJob.new(format, user.id, group.id, {}, { household: household, full: full, filename: 'people_export' }) }
 
   let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
-  let(:filter)    { Person::Filter::List.new(group, user) }
   let(:group)     { groups(:bottom_layer_one) }
   let(:household) { false }
   let(:filepath)      { AsyncDownloadFile::DIRECTORY.join('people_export') }

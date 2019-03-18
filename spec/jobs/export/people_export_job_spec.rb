@@ -9,12 +9,13 @@ require 'spec_helper'
 
 describe Export::PeopleExportJob do
 
-  subject { Export::PeopleExportJob.new(format, user.id, group.id, {}, { household: household, full: full, filename: 'people_export' }) }
+  subject { Export::PeopleExportJob.new(format, user.id, group.id, {}, { household: household, full: full, selection: selection, filename: 'people_export' }) }
 
   let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
   let(:group)     { groups(:bottom_layer_one) }
   let(:household) { false }
-  let(:filepath)      { AsyncDownloadFile::DIRECTORY.join('people_export') }
+  let(:selection) { false }
+  let(:filepath)  { AsyncDownloadFile::DIRECTORY.join('people_export') }
 
   before do
     SeedFu.quiet = true
@@ -46,6 +47,24 @@ describe Export::PeopleExportJob do
         subject.perform
         lines = File.readlines("#{filepath}.#{format}")
         expect(lines.size).to eq(2)
+      end
+    end
+
+    context 'table_display' do
+      let(:selection) { true }
+      let(:csv) { CSV.read("#{filepath}.#{format}", col_sep: Settings.csv.separator.strip, headers: true) }
+
+      it 'renders standard columns' do
+        subject.perform
+        expect(csv.headers.last).not_to eq 'Zusätzliche Angaben'
+      end
+
+      it 'appends selected column and renders value' do
+        user.table_display_for(group).update(selected: %w(additional_information))
+        Person.update_all(additional_information: 'bla bla')
+        subject.perform
+        expect(csv.headers.last).to eq 'Zusätzliche Angaben'
+        expect(csv.first['Zusätzliche Angaben']).to eq 'bla bla'
       end
     end
   end

@@ -72,6 +72,16 @@
   border-color: $purpleDark;
 }
 
+.table-display-dropdown li {
+  display: flex;
+  padding-left: 5px;
+}
+
+.table-display-dropdown label {
+  padding-left: 5px;
+  padding-right: 10px;
+}
+
 .dropdown-menu .dropdown-menu-subtitle {
   padding: 0px 20px;
 }

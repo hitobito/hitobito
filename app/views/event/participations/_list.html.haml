@@ -17,6 +17,9 @@
 .pagination-bar
   = paginate entries
 
+  .pagination-info
+
+  = Dropdown::TableDisplays.new(self).to_s
 - if @person_add_requests.present?
   = render 'person/add_requests/body_list'
 
@@ -38,5 +41,6 @@
   - t.col(Person.human_attribute_name(:layer_group)) 		 { |p| p.layer_group_label }
 
   = render_extensions :list, locals: { table: t }
+  - render_table_display_columns(t)
 
 = paginate entries

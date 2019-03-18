@@ -103,7 +103,8 @@
 }
 
 .pagination-bar {
-  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
 
   .pagination {
     margin-right: 20px;
@@ -114,6 +115,11 @@
     line-height: 20px;
     padding: 5px 0px;
   }
+
+  .table-display-dropdown {
+    margin-left: auto;
+  }
+
 }
 
 // Pills

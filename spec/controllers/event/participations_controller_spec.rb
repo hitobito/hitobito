@@ -677,4 +677,52 @@ describe Event::ParticipationsController do
       end
     end
   end
+
+  context 'table_displays' do
+
+    render_views
+    let(:dom)           { Capybara::Node::Simple.new(response.body) }
+    let(:top_leader)    { people(:top_leader) }
+    let(:course)        { events(:top_course) }
+    let(:participation) { event_participations(:top) }
+    let(:question)      { event_questions(:top_ov) }
+
+    before { sign_in(top_leader) }
+
+    it 'GET#index lists extra person column' do
+      top_leader.table_display_for(course).update(selected: %w(person.gender))
+
+      get :index, group_id: group.id, event_id: course.id
+      expect(dom).to have_checked_field 'Geschlecht'
+      expect(dom.find('table tbody tr')).to have_content 'unbekannt'
+    end
+
+    it 'GET#index lists extra event application question' do
+      top_leader.table_display_for(course).update!(selected: %W(event_question_#{question.id}))
+      participation.answers.create!(question: question, answer: 'GA')
+
+      get :index, group_id: group.id, event_id: course.id
+      expect(dom).to have_checked_field 'GA oder Halbtax?'
+      expect(dom.find('table tbody tr')).to have_content 'GA'
+    end
+
+    it 'GET#index sorts by extra event application question' do
+      top_leader.table_display_for(course).update!(selected: %W(event_question_#{question.id}))
+      role = Fabricate(:event_role, type: participation.roles.first.type)
+      other = Fabricate(:event_participation, event: course, roles: [role], active: true)
+
+      participation.answers.create!(question: question, answer: 'GA')
+      other.answers.find { |a| a.question == question }.update(answer: 'Halbtax')
+
+      get :index, group_id: group.id, event_id: course.id, sort: "event_question_#{question.id}", sort_dir: :desc
+      expect(assigns(:participations).first).to eq other
+    end
+
+    it 'GET#index exports to csv using TableDisplay' do
+      get :index, group_id: group.id, event_id: course.id, format: :csv, selection: true
+      expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+      expect(Delayed::Job.last.payload_object.send(:exporter)).to eq Export::Tabular::People::TableDisplays
+    end
+
+  end
 end

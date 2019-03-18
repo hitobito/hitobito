@@ -21,6 +21,8 @@
     - if @person_add_requests.present?
       = render 'person/add_requests/body_list'
 
+  = Dropdown::TableDisplays.new(self).to_s
+
 - if @people.total_count > 0
   = crud_table(data: { checkable: true }) do |t|
     - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
@@ -42,6 +44,7 @@
       = p.all_phone_numbers(!index_full_ability?)
     - sortable_grouped_person_attr(t, address: false, zip_code: true, town: true) do |p|
       = p.complete_address
+    - render_table_display_columns(t)
 
 = paginate @people
 = render 'multiselect_actions'

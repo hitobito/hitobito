@@ -617,6 +617,14 @@ ActiveRecord::Schema.define(version: 20190124125454) do
   add_index "subscriptions", ["mailing_list_id"], name: "index_subscriptions_on_mailing_list_id", using: :btree
   add_index "subscriptions", ["subscriber_id", "subscriber_type"], name: "index_subscriptions_on_subscriber_id_and_subscriber_type", using: :btree
 
+  create_table "table_displays", force: :cascade do |t|
+    t.string  "type",      limit: 255,   null: false
+    t.integer "person_id", limit: 4,     null: false
+    t.text    "selected",  limit: 65535
+  end
+
+  add_index "table_displays", ["person_id", "type"], name: "index_table_displays_on_person_id_and_type", unique: true, using: :btree
+
   create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id",        limit: 4
     t.integer  "taggable_id",   limit: 4

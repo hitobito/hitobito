@@ -141,6 +141,7 @@ class Person < ActiveRecord::Base
   belongs_to :last_label_format, class_name: 'LabelFormat'
 
   has_many :label_formats, dependent: :destroy
+  has_many :table_displays, dependent: :destroy
 
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
 
@@ -296,6 +297,10 @@ class Person < ActiveRecord::Base
   def finance_groups
     groups_with_permission(:finance).
       flat_map(&:layer_group)
+  end
+
+  def table_display_for(parent)
+    @table_display ||= TableDisplay.for(self, parent)
   end
 
   private

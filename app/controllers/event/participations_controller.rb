@@ -99,6 +99,10 @@ class Event::ParticipationsController < CrudController
 
   private
 
+  def sort_mappings_with_indifferent_access
+    super.merge(current_person.table_display_for(parent).sort_statements(parent.question_ids))
+  end
+
   def with_person_add_request(&block)
     creator = Person::AddRequest::Creator::Event.new(entry.roles.first, current_ability)
     msg = creator.handle(&block)

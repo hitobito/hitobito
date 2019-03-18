@@ -29,6 +29,7 @@ describe 'event/participations/_list.html.haml' do
     allow(view).to receive_messages(parent: event)
     allow(view).to receive_messages(entries: participations)
     allow(view).to receive_messages(params: params)
+    allow(view).to receive_messages(current_person: people(:top_leader))
     Fabricate(event.participant_types.first.name, participation: participation)
     participation.reload
   end

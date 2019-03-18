@@ -11,6 +11,10 @@ module PeopleHelper
     person.gender_label
   end
 
+  def format_person_email(person)
+    mail_to(person.email)
+  end
+
   def dropdown_people_export(details = false, emails = true, labels = true, households = true)
     Dropdown::PeopleExport.new(self, current_user, params, details: details,
                                                            emails: emails,

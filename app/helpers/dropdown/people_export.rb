@@ -39,7 +39,9 @@ module Dropdown
     def tabular_links(format)
       path = params.merge(format: format)
       item = add_item(translate(format), '#')
-      item.sub_items << Item.new(translate(:selection), path.merge(selection: true), data: { checkable: true })
+      item.sub_items << Item.new(translate(:selection),
+                                 path.merge(selection: true),
+                                 data: { checkable: true })
       item.sub_items << Item.new(translate(:addresses), path, data: { checkable: true })
       item.sub_items << Item.new(translate(:households),
                                  path.merge(household: true),

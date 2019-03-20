@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,7 +24,7 @@ class AsyncDownloadFile
 
   def write(data)
     FileUtils.mkdir_p(DIRECTORY) unless File.directory?(DIRECTORY)
-    filetype == :csv ? write_csv(data) : File.write(full_path, data)
+    filetype.to_sym == :csv ? write_csv(data) : File.write(full_path, data)
   end
 
   def downloadable?(person)

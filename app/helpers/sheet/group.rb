@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -62,7 +62,7 @@ module Sheet
     delegate :group_path, to: :view
 
     def render_breadcrumbs
-      return ''.html_safe unless breadcrumbs?
+      return FormatHelper::EMPTY_STRING unless breadcrumbs?
 
       content_tag(:div, class: 'breadcrumb') do
         content_tag(:ul) do
@@ -108,7 +108,7 @@ module Sheet
     end
 
     def belongs_to
-      translate(:belongs_to).html_safe +
+      translate(:belongs_to).html_safe + # rubocop:disable Rails/OutputSafety
         FormatHelper::EMPTY_STRING +
         FormatHelper::EMPTY_STRING
     end

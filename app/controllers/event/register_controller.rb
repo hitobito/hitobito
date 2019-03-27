@@ -37,8 +37,8 @@ class Event::RegisterController < ApplicationController
   end
 
   def register
-    if create_person
-      sign_in(:person, person)
+    if entry.save
+      sign_in(:person, entry.person)
       flash[:notice] = translate(:registered)
       redirect_to new_group_event_participation_path(group, event)
     else
@@ -62,22 +62,29 @@ class Event::RegisterController < ApplicationController
   end
 
   def assert_honeypot_is_empty
-    if params[:person].delete(:name).present?
-      application_not_possible
+    if (params[:person] || params[:event_participation_contact_data]).delete(:name).present?
+      redirect_to event_or_login_page
     end
-  end
-
-  def create_person
-    person.attributes = params.require(:person).permit(PeopleController.permitted_attrs)
-    person.save
   end
 
   def person
     @person ||= Person.new
   end
 
-  alias entry person
-  alias resource person
+  def entry
+    @participation_contact_data ||=
+      if params[:event_participation_contact_data]
+        Event::ParticipationContactData.new(event, person, model_params)
+      else
+        Event::ParticipationContactData.new(event, person)
+      end
+  end
+
+  def model_params
+    params.require('event_participation_contact_data').permit(PeopleController.permitted_attrs)
+  end
+
+  alias resource person # used by devise-form
 
   def event
     @event ||= group.events.find(params[:id])

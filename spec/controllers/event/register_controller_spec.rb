@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -124,8 +124,10 @@ describe Event::RegisterController do
   context 'PUT register' do
     context 'with valid data' do
       it 'creates person' do
+        event.update!(required_contact_attrs: [])
+
         expect do
-          put :register, group_id: group.id, id: event.id, person: { last_name: 'foo', email: 'not-existing@example.com' }
+          put :register, group_id: group.id, id: event.id, event_participation_contact_data: { first_name: 'barney', last_name: 'foo', email: 'not-existing@example.com' }
         end.to change { Person.count }.by(1)
 
         is_expected.to redirect_to(new_group_event_participation_path(group, event))
@@ -135,15 +137,19 @@ describe Event::RegisterController do
 
     context 'with honeypot filled' do
       it 'redirects to login' do
-        put :register, group_id: group.id, id: event.id, person: { last_name: 'foo', email: 'foo@example.com', name: 'Foo' }
+        event.update!(required_contact_attrs: [])
+
+        put :register, group_id: group.id, id: event.id, event_participation_contact_data: { first_name: 'barney', last_name: 'foo', email: 'foo@example.com', name: 'Foo' }
         is_expected.to redirect_to(new_person_session_path)
       end
     end
 
     context 'with invalid data' do
       it 'does not create person' do
+        event.update!(required_contact_attrs: [])
+
         expect do
-          put :register, group_id: group.id, id: event.id, person: { email: 'not-existing@example.com' }
+          put :register, group_id: group.id, id: event.id, event_participation_contact_data: { email: 'not-existing@example.com' }
         end.not_to change { Person.count }
 
         is_expected.to render_template('register')

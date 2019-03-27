@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -17,10 +15,21 @@ class Event::RegisterController < ApplicationController
     flash.now[:notice] = translate(:not_logged_in, event: event)
   end
 
-  def check
+  def check # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     email = params[:person][:email].to_s
     if email.present?
-      check_email(email)
+      # check_mail
+      if (user = Person.find_by(email: email))
+        # send_login_and_render_index
+        Event::SendRegisterLoginJob.new(user, group, event).enqueue!
+        flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
+        render 'index'
+      else
+        # register_new_person
+        @person = Person.new(email: email)
+        flash.now[:notice] = translate(:form_data_missing)
+        render 'register'
+      end
     else
       flash.now[:alert] = translate(:email_missing)
       render 'index'
@@ -28,8 +37,8 @@ class Event::RegisterController < ApplicationController
   end
 
   def register
-    if create_person
-      sign_in(:person, person)
+    if entry.save
+      sign_in(:person, entry.person)
       flash[:notice] = translate(:registered)
       redirect_to new_group_event_participation_path(group, event)
     else
@@ -39,65 +48,43 @@ class Event::RegisterController < ApplicationController
 
   private
 
-  def check_email(email)
-    user = Person.find_by(email: email)
-    if user
-      send_login_and_render_index(user)
-    else
-      register_new_person(email)
-    end
-  end
-
-  def send_login_and_render_index(user)
-    Event::SendRegisterLoginJob.new(user, group, event).enqueue!
-    flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
-    render 'index'
-  end
-
-  def register_new_person(email)
-    @person = Person.new(email: email)
-    flash.now[:notice] = translate(:form_data_missing)
-    render 'register'
-  end
-
   def assert_external_application_possible
     if event.external_applications?
       if event.application_possible?
         redirect_to show_event_path if current_user
       else
         flash[:alert] = translate(:application_window_closed)
-        application_not_possible
+        redirect_to event_or_login_page
       end
     else
-      application_not_possible
-    end
-  end
-
-  def application_not_possible
-    if current_user
-      redirect_to show_event_path
-    else
-      redirect_to new_person_session_path
+      redirect_to event_or_login_page
     end
   end
 
   def assert_honeypot_is_empty
-    if params[:person].delete(:name).present?
-      application_not_possible
+    if (params[:person] || params[:event_participation_contact_data]).delete(:name).present?
+      redirect_to event_or_login_page
     end
-  end
-
-  def create_person
-    person.attributes = params.require(:person).permit(PeopleController.permitted_attrs)
-    person.save
   end
 
   def person
     @person ||= Person.new
   end
 
-  alias entry person
-  alias resource person
+  def entry
+    @participation_contact_data ||=
+      if params[:event_participation_contact_data]
+        Event::ParticipationContactData.new(event, person, model_params)
+      else
+        Event::ParticipationContactData.new(event, person)
+      end
+  end
+
+  def model_params
+    params.require('event_participation_contact_data').permit(PeopleController.permitted_attrs)
+  end
+
+  alias resource person # used by devise-form
 
   def event
     @event ||= group.events.find(params[:id])
@@ -105,6 +92,14 @@ class Event::RegisterController < ApplicationController
 
   def group
     @group ||= Group.find(params[:group_id])
+  end
+
+  def event_or_login_page
+    if current_user
+      show_event_path
+    else
+      new_person_session_path
+    end
   end
 
   def show_event_path

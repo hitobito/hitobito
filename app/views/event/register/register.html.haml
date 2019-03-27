@@ -5,11 +5,14 @@
 
 - title t('.title')
 
+= render 'event/participations/step_wizard', step: 1
+
 = crud_form(entry,
             url: register_group_event_path(group, event),
             method: :put,
             cancel_url: register_group_event_path(group, event),
             buttons_bottom: true) do |f|
-  = render 'people/fields', f: f, without_relations: true
+
+  = render 'event/participation_contact_datas/form', f: f
 
   = f.honeypot

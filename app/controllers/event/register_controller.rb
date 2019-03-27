@@ -54,18 +54,10 @@ class Event::RegisterController < ApplicationController
         redirect_to show_event_path if current_user
       else
         flash[:alert] = translate(:application_window_closed)
-        application_not_possible
+        redirect_to event_or_login_page
       end
     else
-      application_not_possible
-    end
-  end
-
-  def application_not_possible
-    if current_user
-      redirect_to show_event_path
-    else
-      redirect_to new_person_session_path
+      redirect_to event_or_login_page
     end
   end
 
@@ -93,6 +85,14 @@ class Event::RegisterController < ApplicationController
 
   def group
     @group ||= Group.find(params[:group_id])
+  end
+
+  def event_or_login_page
+    if current_user
+      show_event_path
+    else
+      new_person_session_path
+    end
   end
 
   def show_event_path

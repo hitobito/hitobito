@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -17,10 +15,21 @@ class Event::RegisterController < ApplicationController
     flash.now[:notice] = translate(:not_logged_in, event: event)
   end
 
-  def check
+  def check # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     email = params[:person][:email].to_s
     if email.present?
-      check_email(email)
+      # check_mail
+      if (user = Person.find_by(email: email))
+        # send_login_and_render_index
+        Event::SendRegisterLoginJob.new(user, group, event).enqueue!
+        flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
+        render 'index'
+      else
+        # register_new_person
+        @person = Person.new(email: email)
+        flash.now[:notice] = translate(:form_data_missing)
+        render 'register'
+      end
     else
       flash.now[:alert] = translate(:email_missing)
       render 'index'
@@ -38,27 +47,6 @@ class Event::RegisterController < ApplicationController
   end
 
   private
-
-  def check_email(email)
-    user = Person.find_by(email: email)
-    if user
-      send_login_and_render_index(user)
-    else
-      register_new_person(email)
-    end
-  end
-
-  def send_login_and_render_index(user)
-    Event::SendRegisterLoginJob.new(user, group, event).enqueue!
-    flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
-    render 'index'
-  end
-
-  def register_new_person(email)
-    @person = Person.new(email: email)
-    flash.now[:notice] = translate(:form_data_missing)
-    render 'register'
-  end
 
   def assert_external_application_possible
     if event.external_applications?

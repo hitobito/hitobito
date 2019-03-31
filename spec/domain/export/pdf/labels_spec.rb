@@ -30,4 +30,25 @@ describe Export::Pdf::Labels do
       expect(subject.strings.join(' ')).not_to include("Post CH AG")
     end
   end
+
+  context 'when company_name is given' do
+    let(:company_name) { 'Sample Inc.' }
+    let(:contactables) { [people(:top_leader).tap{ |u| u.update(company_name: company_name, company: company) }] }
+
+    context 'when marked as a company' do
+      let(:company) { true }
+
+      it 'renders company_name' do
+        expect(subject.strings).to include(company_name)
+      end
+    end
+
+    context 'when not marked as a company' do
+      let(:company) { false }
+
+      it 'does not render company_name' do
+        expect(subject.strings).not_to include(company_name)
+      end
+    end
+  end
 end

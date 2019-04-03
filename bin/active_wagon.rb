@@ -32,9 +32,10 @@ class Setup
 
   def gemfile
     <<-EOF
+    # vim:ft=ruby
+
     group :development do
       ENV.fetch('WAGONS').split.each do |wagon|
-        puts File.expand_path("../../hitobito_\#{wagon}/hitobito_\#{wagon}.gemspec", __FILE__)
         Dir[File.expand_path("../../hitobito_\#{wagon}/hitobito_\#{wagon}.gemspec", __FILE__)].each do |spec|
           gem File.basename(spec, '.gemspec'), :path => File.expand_path('..', spec)
         end

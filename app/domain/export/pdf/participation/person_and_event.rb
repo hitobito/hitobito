@@ -40,7 +40,7 @@ module Export::Pdf::Participation
       end
 
       def phone_numbers
-        person.phone_numbers.where(label: %w(Privat Mobil))
+        person.phone_numbers.where(label: %w(Privat Mobil))[0..2]
       end
     end
 

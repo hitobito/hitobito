@@ -9,9 +9,10 @@ require 'spec_helper'
 
 describe MailRelay::Base do
 
-  let(:simple)  { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'simple.eml'))) }
-  let(:regular) { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml'))) }
-  let(:list)    { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list.eml'))) }
+  let(:simple)   { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'simple.eml'))) }
+  let(:regular)  { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml'))) }
+  let(:list)     { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list.eml'))) }
+  let(:multiple) { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'multiple.eml'))) }
 
   let(:relay) { MailRelay::Base.new(message) }
 
@@ -48,6 +49,13 @@ describe MailRelay::Base do
   end
 
   describe '#envelope_receiver_name' do
+    context 'multiple' do
+      let(:message) { multiple }
+
+      it 'returns single receiver' do
+        expect(relay.envelope_receiver_name).to eq('kalei.kontakt')
+      end
+    end
     context 'regular' do
       let(:message) { regular }
 

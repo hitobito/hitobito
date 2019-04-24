@@ -143,6 +143,14 @@ class Person < ActiveRecord::Base
   has_many :label_formats, dependent: :destroy
   has_many :table_displays, dependent: :destroy
 
+  has_many :access_grants, class_name: 'Doorkeeper::AccessGrant',
+                           foreign_key: :resource_owner_id,
+                           dependent: :delete_all
+
+  has_many :access_tokens, class_name: 'Doorkeeper::AccessToken',
+                           foreign_key: :resource_owner_id,
+                           dependent: :delete_all
+
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
 
   attr_accessor :household_people_ids

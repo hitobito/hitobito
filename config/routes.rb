@@ -7,6 +7,7 @@
 
 Hitobito::Application.routes.draw do
 
+  use_doorkeeper
   extend LanguageRouteScope
 
   root to: 'dashboard#index'

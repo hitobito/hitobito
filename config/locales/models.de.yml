@@ -208,6 +208,9 @@ de:
       payment:
         one: Zahlung
         other: Zahlungen
+      oauth/application:
+        one: OAuth Client
+        other: OAuth Clients
       payment_reminder:
         one: Mahnung
         other: Mahnungen
@@ -732,7 +735,7 @@ de:
         title: Titel der Mahnung
         text: Text der Mahnung
         due_days: Fälligkeitszeitraum der Mahnung
-      
+
       service_token:
         name: Name
         description: Beschreibung

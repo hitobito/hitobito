@@ -1,1 +1,7 @@
-= crud_table :name, :uid, :secret, :scopes, :confidential
+= crud_table do |t|
+  - t.col(t.sort_header(:name)) do |a|
+    %strong= link_to(a, a)
+  - t.sortable_attrs(:uid, :secret)
+  - add_table_actions(t)
+
+

@@ -12,19 +12,10 @@ module Concerns
     included do
       helper_method :current_user, :origin_user
 
-      before_action :authenticate_person!, unless: :doorkeeper_token
-      before_action :doorkeeper_authorize!, if: :doorkeeper_token
-
-      check_authorization unless: -> { devise_controller? || doorkeeper_token }
+      before_action :authenticate_person!
     end
 
     private
-
-    def valid_doorkeeper_token?
-      super.tap do |success|
-        sign_in Person.find(doorkeeper_token.resource_owner_id) if success
-      end
-    end
 
     def current_person
       @current_person ||= super.tap do |user|

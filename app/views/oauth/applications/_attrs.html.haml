@@ -1,0 +1,43 @@
+= render_attrs(entry, :name, :uid, :secret, :redirect_uri)
+
+- entry.redirect_uri.to_s.split.each do |uri|
+  %section
+    %h3= oauth_callback_title(entry, uri)
+    = table(entry.access_grants.for(uri).list, :token, :person, :created_at, :revoked_at, class: 'table table-striped table-hover')
+
+
+    -# %dl.dl-horizontal
+    -#   %dt.muted
+
+-#
+
+    -# = simple_list(oauth_redirect_uris(entry), class: :unstyled)
+
+-# =
+-#   %aside.col-lg-6.offset-lg-1
+-#       - authorize_path = oauth_authorization_path(client_id: entry.uid,
+-#                                                   redirect_uri: uri,
+-#                                                   response_type: :code,
+-#                                                   scope: entry.scopes)
+-#
+-#       = section_table(uri, entry.grants_for(uri), authorize_path, title: 'Authorize', target: :_blank) do |grant|
+-#         %td=link_to(grant.person, grant.person)
+-#         %td=l(grant.expires_at, format: :date_time)
+-#         %td=grant.token
+
+
+-# %article.span6
+-#   - entry.redirect_uri.split.each do |uri|
+-#     - title = t('doorkeeper.applications.buttons.authorize')
+-#     - path = oauth_authorization_path(client_id: entry.uid,
+-#                                       redirect_uri: uri,
+-#                                       response_type: 'code',
+-#                                       scope: entry.scopes)
+-#     = link_to(path, target: '_blank', title: title) { uri }
+-#
+-# #main.row-fluid
+-# - entry.active_uris.each do |uri|
+-#   %h3= "Grants for #{uri}"
+-#   = table(entry.grants_for(uri), :token, :person, class: 'table table-striped table-hover')
+-#   %h3= "Tokens for #{uri}"
+-#   = table(entry.tokens_for(uri), :token, :person, class: 'table table-striped table-hover')

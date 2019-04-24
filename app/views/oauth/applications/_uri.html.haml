@@ -1,0 +1,9 @@
+%h2= uri
+
+%dl.dl-horizontal
+  %dt.muted Link
+  %dd= oauth_authorization_url(oauth_authorization_params(entry, uri))
+
+
+%h3 Authorisierungen
+= table(entry.access_grants.for(uri).list, :person, :token, :created_at, :revoked_at, class: 'table table-striped table-hover')

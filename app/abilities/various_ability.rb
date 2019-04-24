@@ -19,6 +19,11 @@ class VariousAbility < AbilityDsl::Base
     permission(:any).may(:create, :update, :destroy, :read).own
   end
 
+  on(Doorkeeper::Application) do
+    class_side(:index).if_admin
+    permission(:admin).may(:manage).all
+  end
+
   if Group.course_types.present?
     on(Event::Kind) do
       class_side(:index).if_admin

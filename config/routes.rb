@@ -7,7 +7,6 @@
 
 Hitobito::Application.routes.draw do
 
-  use_doorkeeper
   extend LanguageRouteScope
 
   root to: 'dashboard#index'
@@ -16,6 +15,12 @@ Hitobito::Application.routes.draw do
   get '/healthz/mail', to: 'healthz/mail#show'
 
   language_scope do
+    scope module: :oauth do
+      use_doorkeeper do
+        skip_controllers :authorized_applications, :authorizations, :tokens, :token_info
+        controllers applications: :applications, as: 'doorkeeper/applications'
+      end
+    end
 
     get '/404', to: 'errors#404'
     get '/500', to: 'errors#500'

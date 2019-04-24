@@ -12,6 +12,7 @@ module ActiveModel
     # So only one controller/route for all STI classes is used.
     def initialize_with_sti(*args)
       initialize_without_sti(*args)
+      return if @klass == Oauth::Application
 
       if @klass != @klass.base_class
         base_name = @klass.base_class.model_name

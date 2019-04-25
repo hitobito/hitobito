@@ -10,17 +10,20 @@
 %dl.dl-horizontal
   %dt.muted Token Endpoint
   %dd
-    %p= oauth_token_url(locale: nil)
+    %div= oauth_token_url(locale: nil)
     %div= oauth_spec_link('section-3.2')
     %div= oauth_spec_link('section-4.1.3')
 
 %dl.dl-horizontal
   %dt.muted Profile Endpoint
   %dd
-    %p= oauth_profile_url
+    %div= oauth_profile_url
+    .well
+      %p= t('.profile_endpoint_help')
+      %code= t('.profile_endpoint_example', url: oauth_profile_url)
 
 
-= render 'access_tokens', list: entry.access_tokens.includes(:person).list
+= render 'access_tokens', list: entry.access_tokens.includes(person: :groups).list
 
 - entry.redirect_uri.to_s.split.each do |uri|
-  = render 'access_grants', uri: uri, list: entry.access_grants.includes(:person).for(uri).active.list
+  = render 'access_grants', uri: uri, list: entry.access_grants.includes(person: :groups).for(uri).active.list

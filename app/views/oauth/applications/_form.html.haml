@@ -12,5 +12,5 @@
                         scope,
                         entry.scopes.include?(scope),
                         { id: "oauth_application_scope_#{scope}" })
-        = scope.titleize
+        = Oauth::Application.human_scope(scope)
 

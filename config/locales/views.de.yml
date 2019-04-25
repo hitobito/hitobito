@@ -826,6 +826,11 @@ de:
 
   oauth:
     applications:
+      attrs:
+        profile_endpoint_help: Profile Informationen des Benutzers können über diesen Endpoint
+          bezogen werden. Dabei muss das Access Token im Authorization Header übergeben werden.
+          Der gewünschte Scope kann als X-Scope Header übergeben werden.
+        profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
       access_grants:
         title: Aktive %{model_name} für %{uri}
 

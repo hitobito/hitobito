@@ -11,7 +11,7 @@ module Oauth
     end
 
     def person_attributes
-      {}
+      { foo: :bar }
     end
   end
 end

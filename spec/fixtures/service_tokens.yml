@@ -7,15 +7,15 @@
 # Table name: service_tokens
 #
 #  id             :integer          not null, primary key
-#  layer_group_id :integer
-#  name           :string(255)
+#  layer_group_id :integer          not null
+#  name           :string(255)      not null
 #  description    :text(65535)
-#  token          :string(255)
+#  token          :string(255)      not null
 #  last_access    :datetime
-#  people         :boolean
-#  people_below   :boolean
-#  groups         :boolean
-#  events         :boolean
+#  people         :boolean          default(FALSE)
+#  people_below   :boolean          default(FALSE)
+#  groups         :boolean          default(FALSE)
+#  events         :boolean          default(FALSE)
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #

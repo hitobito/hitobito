@@ -10,8 +10,8 @@
 #  event_id         :integer
 #  question         :string(255)
 #  choices          :string(255)
-#  multiple_choices :boolean          default(FALSE)
-#  required         :boolean
+#  multiple_choices :boolean          default(FALSE), not null
+#  required         :boolean          default(FALSE), not null
 #  admin            :boolean          default(FALSE), not null
 #
 

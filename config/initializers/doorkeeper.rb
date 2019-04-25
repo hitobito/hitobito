@@ -4,7 +4,8 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    current_person || redirect_to(new_user_session_url)
+    break redirect_to(new_user_session_url) unless current_person
+    current_person.tap { authorize!(:show, current_person) }
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb

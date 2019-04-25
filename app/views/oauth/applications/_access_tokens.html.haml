@@ -2,5 +2,5 @@
   %h3= Oauth::AccessToken.model_name.human(count: 2)
 
   = table(list, :token, :person, :created_at, class: 'table table-striped table-hover') do |t|
-    - action_col_destroy(t) { |e| access_token_path(e) }
+    - action_col_destroy(t) { |e| oauth_access_token_path(e) }
 

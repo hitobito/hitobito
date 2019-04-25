@@ -1,7 +1,16 @@
 = entry_form do |f|
   = f.labeled_input_field :name
-  = f.labeled_inline_checkbox :scopes 
+
   = f.labeled_text_area :redirect_uri, rows: 5,
     help: raw(t('doorkeeper.applications.help.native_redirect_uri',
       native_redirect_uri: content_tag(:code, class: 'bg-light') { Doorkeeper.configuration.native_redirect_uri }))
+
+  = f.labeled :scopes do
+    - Doorkeeper.configuration.scopes.each do |scope|
+      = f.label("scope_#{scope}", class: 'checkbox') do
+        = check_box_tag("oauth_application[scopes][]",
+                        scope,
+                        entry.scopes.include?(scope),
+                        { id: "oauth_application_scope_#{scope}" })
+        = scope.titleize
 

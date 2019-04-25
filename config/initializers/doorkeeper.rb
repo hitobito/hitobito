@@ -87,7 +87,7 @@ Doorkeeper.configure do
   # (disabled by default)
   #
   default_scopes :email
-  optional_scopes :name, :rollen, :json_api
+  optional_scopes :name, :with_roles, :api_access
 
   enforce_configured_scopes
 

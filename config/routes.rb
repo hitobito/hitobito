@@ -14,19 +14,16 @@ Hitobito::Application.routes.draw do
   get '/healthz', to: 'healthz#show'
   get '/healthz/mail', to: 'healthz/mail#show'
 
-  use_doorkeeper do
-    skip_controllers :applications, :authorization
+  use_doorkeeper do # we only use tokens and authorizations
+    skip_controllers :applications, :token_info, :authorized_applications
   end
 
   language_scope do
-    scope module: :oauth do
+    namespace :oauth do
+      resource :profile, only: :show
+      resources :applications
       resources :access_grants, only: :destroy
       resources :access_tokens, only: :destroy
-
-      use_doorkeeper do
-        skip_controllers :tokens, :token_info, :authorized_applications
-        controllers applications: :applications
-      end
     end
 
     get '/404', to: 'errors#404'

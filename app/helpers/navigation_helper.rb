@@ -35,7 +35,11 @@ module NavigationHelper
     { label: :admin,
       url: :label_formats_path,
       icon_name: 'cog',
-      active_for: %w(label_formats custom_contents event_kinds qualification_kinds),
+      active_for: %w(label_formats
+                     custom_contents
+                     event_kinds
+                     qualification_kinds
+                     oauth/applications),
       if: ->(_) { can?(:index, LabelFormat) } }
   ]
 

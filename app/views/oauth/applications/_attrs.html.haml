@@ -1,0 +1,29 @@
+= render_attrs(entry, :name, :uid, :secret, :redirect_uri, :scopes)
+
+%dl.dl-horizontal
+  %dt.muted Authorization Endpoint
+  %dd
+    %div= oauth_authorization_url(locale: nil)
+    %div= oauth_spec_link('section-3.1')
+    %div= oauth_spec_link('section-4.1.1')
+
+%dl.dl-horizontal
+  %dt.muted Token Endpoint
+  %dd
+    %div= oauth_token_url(locale: nil)
+    %div= oauth_spec_link('section-3.2')
+    %div= oauth_spec_link('section-4.1.3')
+
+%dl.dl-horizontal
+  %dt.muted Profile Endpoint
+  %dd
+    %div= oauth_profile_url
+    .well
+      %p= t('.profile_endpoint_help')
+      %code= t('.profile_endpoint_example', url: oauth_profile_url)
+
+
+= render 'access_tokens', list: entry.access_tokens.includes(person: :groups).list
+
+- entry.redirect_uri.to_s.split.each do |uri|
+  = render 'access_grants', uri: uri, list: entry.access_grants.includes(person: :groups).for(uri).active.list

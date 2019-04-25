@@ -22,6 +22,7 @@
 #  participant_number          :string(255)
 #  email                       :string(255)
 #  participant_number_internal :string(255)
+#  vat_number                  :string(255)
 #
 
 class InvoiceConfig < ActiveRecord::Base

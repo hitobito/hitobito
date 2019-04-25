@@ -47,6 +47,7 @@ de:
       back: Zurück
       refresh: Aktualisieren
       print: Drucken
+      copy: Kopieren
 
     link:
       show: Anzeigen
@@ -823,6 +824,16 @@ de:
       newer_notes: Neuere Beiträge
       older_notes: Altere Beiträge
 
+  oauth:
+    applications:
+      attrs:
+        profile_endpoint_help: Profile Informationen des Benutzers können über diesen Endpoint
+          bezogen werden. Dabei muss das Access Token im Authorization Header übergeben werden.
+          Der gewünschte Scope kann als X-Scope Header übergeben werden.
+        profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
+      access_grants:
+        title: Aktive %{model_name} für %{uri}
+
   qualifications:
     in_years: '%{years} Jahre'
     valid_until: 'bis %{date}'
@@ -840,7 +851,6 @@ de:
 
   paper_trail/version_decorator:
     by: 'von %{author}'
-
 
   person:
     confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."

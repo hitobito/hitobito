@@ -30,6 +30,7 @@
 #  participant_number          :string(255)
 #  creator_id                  :integer
 #  participant_number_internal :string(255)
+#  vat_number                  :string(255)
 #
 
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of

@@ -72,6 +72,10 @@ de:
             mail_name:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
             mail_name_not_allowed:
+        oauth/application:
+          attributes:
+            scopes:
+              not_match_configured: "stimmen nicht mit denen am server hinterlegten überein."
         person:
           name_missing: 'Bitte geben Sie einen Namen ein'
           emoji_suspected: 'Bitte keine Sonderzeichen (insbesondere Emoji) verwenden'
@@ -208,6 +212,15 @@ de:
       payment:
         one: Zahlung
         other: Zahlungen
+      oauth/application:
+        one: OAuth Applikation
+        other: OAuth Applikationen
+      oauth/access_token:
+        one: OAuth Zugangstoken
+        other: OAuth Zugangstokens
+      oauth/access_grant:
+        one: OAuth Autorisierung
+        other: OAuth Autorisierungen
       payment_reminder:
         one: Mahnung
         other: Mahnungen
@@ -732,7 +745,7 @@ de:
         title: Titel der Mahnung
         text: Text der Mahnung
         due_days: Fälligkeitszeitraum der Mahnung
-      
+
       service_token:
         name: Name
         description: Beschreibung
@@ -744,6 +757,12 @@ de:
         groups: Gruppen dieser Gruppe
         events: Events dieser Gruppe
 
+  doorkeeper:
+    scopes:
+      email: Lesen deiner E-Mail Adresse
+      name: Lesen deiner E-Mail Adresse und Name
+      with_roles: Lesen deiner Stammdaten und Rollen
+      api_access: Lesen deiner Stammdaten, Rollen und Api Tokens
 
   errors:
     messages:

@@ -25,6 +25,8 @@ gem 'daemons'
 gem 'dalli'
 gem 'delayed_job_active_record'
 gem 'devise', '< 4.0.0' # requires ruby 2.1
+gem 'doorkeeper'
+gem 'doorkeeper-i18n'
 gem 'draper'
 gem 'faker', '< 1.6.4' # uses 2.0 for testing (no explicit requirement, yet)
 gem 'globalize'

@@ -47,6 +47,7 @@ de:
       back: Zurück
       refresh: Aktualisieren
       print: Drucken
+      copy: Kopieren
 
     link:
       show: Anzeigen
@@ -823,6 +824,11 @@ de:
       newer_notes: Neuere Beiträge
       older_notes: Altere Beiträge
 
+  oauth:
+    applications:
+      access_grants:
+        title: Aktive %{model_name} für %{uri}
+
   qualifications:
     in_years: '%{years} Jahre'
     valid_until: 'bis %{date}'
@@ -840,7 +846,6 @@ de:
 
   paper_trail/version_decorator:
     by: 'von %{author}'
-
 
   person:
     confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."

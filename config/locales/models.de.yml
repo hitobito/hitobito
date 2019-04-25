@@ -211,6 +211,12 @@ de:
       oauth/application:
         one: OAuth Client
         other: OAuth Clients
+      oauth/access_token:
+        one: OAuth Zugangstoken
+        other: OAuth Zugangstokens
+      oauth/access_grant:
+        one: OAuth Autorisierung
+        other: OAuth Autorisierungen
       payment_reminder:
         one: Mahnung
         other: Mahnungen

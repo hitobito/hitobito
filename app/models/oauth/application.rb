@@ -6,5 +6,9 @@ module Oauth
     def to_s
       name
     end
+
+    def path_params(uri)
+      { client_id: uid, redirect_uri: uri, response_type: 'code', scope: scopes }
+    end
   end
 end

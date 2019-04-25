@@ -19,7 +19,17 @@ class VariousAbility < AbilityDsl::Base
     permission(:any).may(:create, :update, :destroy, :read).own
   end
 
-  on(Doorkeeper::Application) do
+  on(Oauth::Application) do
+    class_side(:index).if_admin
+    permission(:admin).may(:manage).all
+  end
+
+  on(Oauth::AccessGrant) do
+    class_side(:index).if_admin
+    permission(:admin).may(:manage).all
+  end
+
+  on(Oauth::AccessToken) do
     class_side(:index).if_admin
     permission(:admin).may(:manage).all
   end

@@ -19,8 +19,10 @@ Hitobito::Application.routes.draw do
   end
 
   language_scope do
-
     scope module: :oauth do
+      resources :access_grants, only: :destroy
+      resources :access_tokens, only: :destroy
+
       use_doorkeeper do
         skip_controllers :tokens, :token_info, :authorized_applications
         controllers applications: :applications

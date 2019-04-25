@@ -8,11 +8,6 @@ module Oauth
       Oauth::Application
     end
 
-    private
-
-    # def find_entry
-    #   model_scope.includes(access_grants: :person, access_tokens: :person).find(params[:id])
-    # end
   end
 
 end

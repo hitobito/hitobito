@@ -1,0 +1,16 @@
+%section
+  %h3
+    %span=t('.title', model_name: Oauth::AccessGrant.model_name.human(count: 2), uri: uri)
+    %span.pull-right
+      = action_button(t('doorkeeper.applications.buttons.authorize'), oauth_authorization_path(entry.path_params(uri)), :plus, class: 'btn-small', target: :_blank)
+      = action_button(t('global.button.copy'), '#', :copy, class: 'btn-small', data: { copy_to_clipboard: oauth_authorization_url(entry.path_params(uri)) })
+
+  - if list.exists?
+    .well
+      %p=t('.help_token_create')
+      %code
+        curl -H 'Accept: application/json' -X POST -d 'client_id=#{entry.uid}' -d 'client_secret=#{entry.secret}' -d 'redirect_uri=#{uri}' -d 'grant_type=authorization_code' -d 'code=#{list.first.token}'  #{oauth_token_url(locale: nil)}
+
+  = table(list, :token, :person, :created_at, class: 'table table-striped table-hover') do |t|
+    - action_col_destroy(t) { |e| access_grant_path(e) }
+

@@ -4,9 +4,11 @@ module Oauth
 
     scope :list, -> { order(created_at: :desc) }
     scope :for,  ->(uri) { where(redirect_uri: uri) }
+    scope :active, -> { where(revoked_at: nil) }
 
-    def expires_at
-      created_at + expires_in
+    def to_s
+      token
     end
+
   end
 end

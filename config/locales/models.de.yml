@@ -72,6 +72,10 @@ de:
             mail_name:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
             mail_name_not_allowed:
+        oauth/application:
+          attributes:
+            scopes:
+              not_match_configured: "stimmen nicht mit denen am server hinterlegten überein."
         person:
           name_missing: 'Bitte geben Sie einen Namen ein'
           emoji_suspected: 'Bitte keine Sonderzeichen (insbesondere Emoji) verwenden'

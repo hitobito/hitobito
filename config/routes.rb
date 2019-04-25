@@ -20,6 +20,7 @@ Hitobito::Application.routes.draw do
 
   language_scope do
     namespace :oauth do
+      resource :profile, only: :show
       resources :applications
       resources :access_grants, only: :destroy
       resources :access_tokens, only: :destroy

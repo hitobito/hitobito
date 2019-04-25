@@ -1,9 +1,5 @@
 - if list.exists?
   %h3= Oauth::AccessToken.model_name.human(count: 2)
-  .well
-    %p=t('.help_token_info')
-    %code
-      curl -H 'Accept: application/json' -H 'Authorization: Bearer #{list.first.token}' #{oauth_token_info_url(locale: nil)}
 
   = table(list, :token, :person, :created_at, class: 'table table-striped table-hover') do |t|
     - action_col_destroy(t) { |e| access_token_path(e) }

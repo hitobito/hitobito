@@ -38,7 +38,7 @@ Doorkeeper.configure do
   # Access token expiration time (default 2 hours).
   # If you want to disable expiration, set this to nil.
   #
-  # access_token_expires_in 2.hours
+  access_token_expires_in nil
 
   # Assign custom TTL for access tokens. Will be used instead of access_token_expires_in
   # option if defined. `context` has the following properties available
@@ -86,7 +86,7 @@ Doorkeeper.configure do
   # not in configuration, i.e. `default_scopes` or `optional_scopes`.
   # (disabled by default)
   #
-  # enforce_configured_scopes
+  enforce_configured_scopes
 
   # Provide support for an owner to be assigned to each registered application (disabled by default)
   # Optional parameter confirmation: true (default false) if you want to enforce ownership of

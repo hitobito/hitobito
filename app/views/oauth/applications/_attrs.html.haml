@@ -1,10 +1,19 @@
-= render_attrs(entry, :name, :uid, :secret, :redirect_uri)
+= render_attrs(entry, :name, :uid, :secret, :redirect_uri, :scopes)
 
 %dl.dl-horizontal
-  %dt.muted Authorization URI
-  %dd= oauth_authorization_url(locale: nil)
-  %dt.muted Obtain Token URI
-  %dd= oauth_token_url(locale: nil)
+  %dt.muted Authorization Endpoint
+  %dd
+    %div= oauth_authorization_url(locale: nil)
+    %div= oauth_spec_link('section-3.1')
+    %div= oauth_spec_link('section-4.1.1')
+
+%dl.dl-horizontal
+  %dt.muted Token Endpoint
+  %dd
+    %p= oauth_token_url(locale: nil)
+    %div= oauth_spec_link('section-3.2')
+    %div= oauth_spec_link('section-4.1.3')
+%dl.dl-horizontal
   %dt.muted Token Info URI
   %dd= oauth_token_info_url(locale: nil)
 

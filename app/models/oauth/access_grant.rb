@@ -10,5 +10,9 @@ module Oauth
       token
     end
 
+    def expired?
+      (created_at + expires_in) < Time.zone.now
+    end
+
   end
 end

@@ -209,8 +209,8 @@ de:
         one: Zahlung
         other: Zahlungen
       oauth/application:
-        one: OAuth Client
-        other: OAuth Clients
+        one: OAuth Applikation
+        other: OAuth Applikationen
       oauth/access_token:
         one: OAuth Zugangstoken
         other: OAuth Zugangstokens

@@ -757,6 +757,12 @@ de:
         groups: Gruppen dieser Gruppe
         events: Events dieser Gruppe
 
+  doorkeeper:
+    scopes:
+      email: Lesen deiner E-Mail Addresse
+      name: Lesen deiner E-Mail Addresse und Name
+      with_roles: Lesen deiner Stammdaten und Rollen
+      api_access: Lesen deiner Stammdaten, Rollen und Api Tokens
 
   errors:
     messages:
@@ -788,3 +794,5 @@ de:
       date: "%d.%m.%Y"
       time: '%H:%M'
       datetime: "%d.%m.%Y %H:%M"
+
+

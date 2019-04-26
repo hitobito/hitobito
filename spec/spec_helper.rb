@@ -24,6 +24,10 @@ require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 
+# Needed for feature specs
+WebMock.disable_net_connect!(allow_localhost: true)
+
+
 ActiveRecord::Migration.maintain_test_schema!
 
 # Requires supporting ruby files with custom matchers and macros, etc,

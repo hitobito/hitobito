@@ -37,7 +37,7 @@ class Event::RegisterController < ApplicationController
   end
 
   def register
-    if entry.save
+    if save_entry
       sign_in(:person, entry.person)
       flash[:notice] = translate(:registered)
       redirect_to new_group_event_participation_path(group, event)
@@ -47,6 +47,11 @@ class Event::RegisterController < ApplicationController
   end
 
   private
+
+  # NOTE: Wagon Hook - insieme
+  def save_entry
+    entry.save
+  end
 
   def assert_external_application_possible
     if event.external_applications?
@@ -72,16 +77,15 @@ class Event::RegisterController < ApplicationController
   end
 
   def entry
-    @participation_contact_data ||=
-      if params[:event_participation_contact_data]
-        Event::ParticipationContactData.new(event, person, model_params)
-      else
-        Event::ParticipationContactData.new(event, person)
-      end
+    @participation_contact_data ||= Event::ParticipationContactData.new(event, person, model_params)
   end
 
   def model_params
-    params.require('event_participation_contact_data').permit(PeopleController.permitted_attrs)
+    params_key ? params.require(params_key).permit(PeopleController.permitted_attrs) : {}
+  end
+
+  def params_key
+    %w(event_participation_contact_data person).find { |key| params.key?(key) }
   end
 
   alias resource person # used by devise-form

@@ -7,10 +7,10 @@
 
 .people_filter_attribute_form_template.hidden
   = people_filter_attribute_form_template
-.countrol_group
+.control_group{data: { types: people_filter_types_for_data_attribute } }
   #people_filter_attribute_forms
     = people_filter_attribute_forms(filter)
 
-  = select(:attribute, :filter, Person.filter_attrs_list, include_blank: true)
+  = select(:attribute, :filter, people_filter_attributes_for_select, include_blank: true)
 
 

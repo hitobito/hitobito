@@ -104,7 +104,7 @@ describe Person::Filter::Attributes do
           let(:constraint) { 'match' }
           let(:value) { 'test' }
 
-          it 'returns people with matching atttribute' do
+          it 'returns people with matching attribute' do
             expect(entries.size).to eq(3)
             expect(entries).to include(@tg_member1)
             expect(entries).to include(@tg_member2)
@@ -117,7 +117,7 @@ describe Person::Filter::Attributes do
         let(:key) { 'id' }
 
         before do
-          expect(Person).to receive(:filter_attrs_list).and_return([['Id', :id]])
+          expect(Person).to receive(:filter_attrs).and_return(id: { type: :integer })
         end
 
         context do
@@ -136,6 +136,24 @@ describe Person::Filter::Attributes do
             expect(entries.size).to be_zero
           end
         end
+
+        context 'smaller'  do
+          let(:constraint) { 'smaller' }
+          let(:value) { people(:bottom_member).id }
+
+          it 'returns people with matching attribute' do
+            expect(entries).not_to include(user)
+          end
+        end
+
+        context 'greater'  do
+          let(:constraint) { 'greater' }
+          let(:value) { people(:bottom_member).id }
+
+          it 'returns people with matching attribute' do
+            expect(entries).to include(user)
+          end
+        end
       end
     end
 
@@ -143,7 +161,7 @@ describe Person::Filter::Attributes do
       let(:key) { 'years' }
 
       before do
-        expect(Person).to receive(:filter_attrs_list).and_return([['Jahre', :years]])
+        expect(Person).to receive(:filter_attrs).and_return(years: { type: :integer })
         allow_any_instance_of(Person).to receive(:years) do |person|
           case person.first_name
           when 'test1' then 27
@@ -178,12 +196,33 @@ describe Person::Filter::Attributes do
         let(:constraint) { 'match' }
         let(:value) { '7' }
 
-        it 'returns people with matching atttribute' do
+        it 'returns people with matching attribute' do
           expect(entries.size).to eq(2)
           expect(entries).to include(@tg_member1)
           expect(entries).to include(@tg_member3)
         end
       end
+
+        context 'smaller'  do
+          let(:constraint) { 'smaller' }
+          let(:value) { 32 }
+
+          it 'returns people with matching attribute' do
+            expect(entries.size).to eq(2)
+            expect(entries).to include(@tg_member1)
+            expect(entries).to include(@tg_member2)
+          end
+        end
+
+        context 'greater'  do
+          let(:constraint) { 'greater' }
+          let(:value) { 32 }
+
+          it 'returns people with matching attribute' do
+            expect(entries.size).to eq(1)
+            expect(entries).to include(@tg_member3)
+          end
+        end
     end
 
     context 'multiple attributes' do

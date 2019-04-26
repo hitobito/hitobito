@@ -4,14 +4,13 @@
 -#  https://github.com/hitobito/hitobito_sbv.
 
 - filter = entry.filter_chain[:attributes]
-- types  = people_filter_attribute_types
 
 .people_filter_attribute_form_template.hidden
   = people_filter_attribute_form_template
-.control_group{data: { types: types.to_json } }
+.control_group{data: { types: people_filter_types_for_data_attribute } }
   #people_filter_attribute_forms
-    = people_filter_attribute_forms(filter, types)
+    = people_filter_attribute_forms(filter)
 
-  = select(:attribute, :filter, Person.filter_attrs_list, include_blank: true)
+  = select(:attribute, :filter, people_filter_attributes_for_select, include_blank: true)
 
 

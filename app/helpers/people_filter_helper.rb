@@ -5,17 +5,20 @@
 
 module PeopleFilterHelper
 
-  def people_filter_attribute_forms(filter, types)
+  def people_filter_attributes_for_select
+    Person.filter_attrs.transform_values { |v| v[:label] }.invert.sort
+  end
+
+  def people_filter_types_for_data_attribute
+    Person.filter_attrs.transform_values { |v| v[:type] }.to_h.to_json
+  end
+
+  def people_filter_attribute_forms(filter)
     return unless filter
 
     filter.args.each_with_index.map do |(_k, attr), i|
       people_filter_attribute_form(attr, i)
     end.join.html_safe
-  end
-
-  def people_filter_attribute_types
-    attributes = Person.filter_attrs_list.collect(&:second).collect(&:to_s)
-    Person.columns_hash.slice(*attributes).transform_values { |v| v.type }
   end
 
   def people_filter_attribute_form_template
@@ -25,7 +28,7 @@ module PeopleFilterHelper
   # rubocop:disable AbcSize, MethodLength
   def people_filter_attribute_form(attr, count, html_options = {})
     key, constraint, value = attr.to_h.symbolize_keys.slice(:key, :constraint, :value).values
-    type = people_filter_attribute_types[key]
+    type = Person.filter_attrs[key.to_sym][:type] if key
     time = (Time.zone.now.to_f * 1000).to_i + count
 
     filters = [[t('.match'), :match], [t('.equal'), :equal]]
@@ -40,7 +43,7 @@ module PeopleFilterHelper
                                  class: 'attribute_key_hidden_field')
 
       content << select(:filters, "attributes[#{time}][key]",
-                        Person.filter_attrs_list,
+                        people_filter_attributes_for_select,
                         { selected: key },
                         html_options.merge(disabled: true, class: 'span attribute_key_dropdown'))
 

@@ -207,10 +207,11 @@ class Person < ActiveRecord::Base
       MailRelay::AddressList.new(people, labels).entries
     end
 
-    def filter_attrs_list
-      Person::FILTER_ATTRS.collect do |attr|
-        [Person.human_attribute_name(attr), attr]
-      end.sort
+    def filter_attrs
+      Person::FILTER_ATTRS.collect do |key, type|
+        type ||= Person.columns_hash.fetch(key.to_s).type
+        [key.to_sym, { label: Person.human_attribute_name(key), type: type }]
+      end.to_h
     end
 
     private

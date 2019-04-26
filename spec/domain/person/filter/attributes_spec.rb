@@ -117,7 +117,7 @@ describe Person::Filter::Attributes do
         let(:key) { 'id' }
 
         before do
-          expect(Person).to receive(:filter_attrs_list).and_return([['Id', :id]])
+          expect(Person).to receive(:filter_attrs).and_return(id: { type: :integer })
         end
 
         context do
@@ -161,7 +161,7 @@ describe Person::Filter::Attributes do
       let(:key) { 'years' }
 
       before do
-        expect(Person).to receive(:filter_attrs_list).and_return([['Jahre', :years]])
+        expect(Person).to receive(:filter_attrs).and_return(years: { type: :integer })
         allow_any_instance_of(Person).to receive(:years) do |person|
           case person.first_name
           when 'test1' then 27

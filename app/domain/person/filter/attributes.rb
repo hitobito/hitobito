@@ -18,10 +18,11 @@ class Person::Filter::Attributes < Person::Filter::Base
 
   def attributes_condition(scope)
     args.values.map do |v|
-      next unless v[:value] && v[:key]
-      next unless Person.filter_attrs_list.map(&:second).map(&:to_s).include?(v[:key])
+      key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
+      next unless key && value
+      next unless Person.filter_attrs.key?(key.to_sym)
 
-      attribute_condition_sql(v[:key], v[:value], v[:constraint], scope)
+      attribute_condition_sql(key, value, constraint, scope)
     end.compact.join(' AND ')
   end
 

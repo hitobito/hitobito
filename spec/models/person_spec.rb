@@ -487,18 +487,26 @@ describe Person do
     expect(people(:bottom_member).finance_groups).to eq [groups(:bottom_layer_one)]
   end
 
-  it '#filter_attrs_list returns list of filterable attributes' do
-    expect(Person.filter_attrs_list).to include(['Vorname', :first_name])
-    expect(Person.filter_attrs_list).to include(['Nachname', :last_name])
-    expect(Person.filter_attrs_list).to include(['Übername', :nickname])
-    expect(Person.filter_attrs_list).to include(['Firmenname', :company_name])
-    expect(Person.filter_attrs_list).to include(['Haupt-E-Mail', :email])
-    expect(Person.filter_attrs_list).to include(['Adresse', :address])
-    expect(Person.filter_attrs_list).to include(['PLZ', :zip_code])
-    expect(Person.filter_attrs_list).to include(['Ort', :town])
-    expect(Person.filter_attrs_list).to include(['Land', :country])
+  it '#filter_attrs returns list of filterable attributes' do
+    attrs = Person.filter_attrs
+    expect(attrs[:first_name]).to eq(label: 'Vorname', type: :string)
+    expect(attrs[:last_name]).to eq(label: 'Nachname', type: :string)
+    expect(attrs[:nickname]).to eq(label: 'Übername', type: :string)
+    expect(attrs[:company_name]).to eq(label: 'Firmenname', type: :string)
+    expect(attrs[:email]).to eq(label: 'Haupt-E-Mail', type: :string)
+    expect(attrs[:address]).to eq(label: 'Adresse', type: :string)
+    expect(attrs[:zip_code]).to eq(label: 'PLZ', type: :string)
+    expect(attrs[:town]).to eq(label: 'Ort', type: :string)
+    expect(attrs[:country]).to eq(label: 'Land', type: :string)
 
-    expect(Person.filter_attrs_list.count).to eq(Person::FILTER_ATTRS.count)
+    expect(Person.filter_attrs.count).to eq(Person::FILTER_ATTRS.count)
+  end
+
+  it '#filter_attrs is controlled by attributes define in Person::FILTER_ATTRS' do
+    stub_const("Person::FILTER_ATTRS", [:first_name, [:active_years, :custom_type]])
+    attrs = Person.filter_attrs
+    expect(attrs[:first_name]).to eq(label: 'Vorname', type: :string)
+    expect(attrs[:active_years]).to eq(label: 'Active years', type: :custom_type)
   end
 
 end

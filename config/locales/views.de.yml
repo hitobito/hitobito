@@ -1116,6 +1116,8 @@ de:
       title: Felder
       match: enthält
       equal: ist genau
+      greater: grösser als
+      smaller: kleiner als
 
     new:
       title: Personen filtern

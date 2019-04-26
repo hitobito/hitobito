@@ -5,8 +5,6 @@
 
 class Person::Filter::Attributes < Person::Filter::Base
 
-  MATCH = 'match'.freeze
-
   def initialize(attr, args)
     @attr = attr
     @args = args
@@ -19,38 +17,37 @@ class Person::Filter::Attributes < Person::Filter::Base
   private
 
   def attributes_condition(scope)
-    args.map do |_k, v|
+    args.values.map do |v|
       next unless v[:value] && v[:key]
       next unless Person.filter_attrs_list.map(&:second).map(&:to_s).include?(v[:key])
 
       attribute_condition_sql(v[:key], v[:value], v[:constraint], scope)
-    end.join(' AND ')
+    end.compact.join(' AND ')
   end
 
   def attribute_condition_sql(key, value, constraint, scope)
-    match = constraint == MATCH
-
     if Person.column_names.include?(key)
-      persisted_attribute_condition_sql(key, value, match)
+      persisted_attribute_condition_sql(key, value, constraint)
     else
-      unpersisted_attribute_condition_sql(key, value, match, scope)
+      unpersisted_attribute_condition_sql(key, value, constraint, scope)
     end
   end
 
-  def persisted_attribute_condition_sql(key, value, match)
-    sql_array = if match
+  def persisted_attribute_condition_sql(key, value, constraint)
+    sql_array = case constraint
+                when /match/
                   escaped_value = ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)
                   ["people.#{key} LIKE ?", "%#{escaped_value}%"]
-                else
-                  ["people.#{key} = ?", value]
+                when /greater/ then ["people.#{key} > ?", value]
+                when /smaller/ then ["people.#{key} < ?", value]
+                else ["people.#{key} = ?", value]
                 end
-
     ActiveRecord::Base.send(:sanitize_sql_array, sql_array)
   end
 
-  def unpersisted_attribute_condition_sql(key, value, match, scope)
+  def unpersisted_attribute_condition_sql(key, value, constraint, scope)
     people_ids = scope.map do |p|
-      p.id if matching_attribute?(p.send(key), value, match)
+      p.id if matching_attribute?(p.send(key), value, constraint)
     end.compact.join(',')
 
     people_ids = -1 if people_ids.blank?
@@ -60,12 +57,12 @@ class Person::Filter::Attributes < Person::Filter::Base
     SQL
   end
 
-  def matching_attribute?(attribute, value, match)
-    if match
-      attribute.to_s =~ /#{value}/
-    else
-      attribute.to_s == value
+  def matching_attribute?(attribute, value, constraint)
+    case constraint
+    when /match/ then attribute.to_s =~ /#{value}/
+    when /greater/ then attribute && attribute.to_i > value.to_i
+    when /smaller/ then attribute && attribute.to_i < value.to_i
+    else attribute.to_s == value
     end
   end
-
 end

@@ -95,7 +95,7 @@ module Export::Pdf
     end
 
     def print_company?(contactable)
-      contactable.respond_to?(:company) && contactable.company_name?
+      contactable.try(:company) && contactable.company_name?
     end
 
     def print_nickname?(contactable)

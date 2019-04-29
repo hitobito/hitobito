@@ -21,7 +21,7 @@ class Person::HistoryController < ApplicationController
   def fetch_roles
     Person::PreloadGroups.for([entry]).first.roles.
       with_deleted.
-      includes(:group).
+      includes(group: :parent).
       sort_by { |r| GroupDecorator.new(r.group).name_with_layer }
   end
 

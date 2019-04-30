@@ -113,7 +113,7 @@ module Export::Pdf::Invoice
     def code_line
       bounding_box([130, -4], width: 395, height: 10.2) do
         pdf.font('ocrb', size: 10.2) do
-          text Invoice::PaymentSlip.new(invoice).code_line
+          text Invoice::PaymentSlip.new(invoice).code_line, align: :right
         end
       end
     end

@@ -84,6 +84,12 @@ Hitobito::Application.configure do
       locale: nil
     }
 
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  end
+
   # Enable threaded mode
   # Unless for rake tasks (especially for db:seed)
   #config.threadsafe! unless $rails_rake_task

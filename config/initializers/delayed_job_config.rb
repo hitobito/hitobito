@@ -6,4 +6,3 @@
 #  https://github.com/hitobito/hitobito.
 
 Delayed::Worker.max_attempts = 10
-Delayed::Worker.logger = Logger.new(File.join(Rails.root, 'log', 'delayed_job.log'))

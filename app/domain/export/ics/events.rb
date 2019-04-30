@@ -35,7 +35,7 @@ module Export::Ics
     end
 
     def url(event)
-      group_event_url(event.groups.first, event, host: ENV['RAILS_HOST_NAME'])
+      group_event_url(group_id: event.groups.first.id, id: event.id, host: ENV['RAILS_HOST_NAME'])
     end
 
     def generate_ical_from_event_date(event_date, event)

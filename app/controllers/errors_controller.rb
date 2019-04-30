@@ -13,6 +13,11 @@ class ErrorsController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  def show
+    status_code = params[:code] || 500
+    render status_code.to_s, status: status_code
+  end
+
   private
 
   def current_user

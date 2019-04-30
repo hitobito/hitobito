@@ -26,9 +26,9 @@ Hitobito::Application.routes.draw do
       resources :access_tokens, only: :destroy
     end
 
-    get '/404', to: 'errors#404'
-    get '/500', to: 'errors#500'
-    get '/503', to: 'errors#503'
+    %w(404 500 503).each do |code|
+      get code, to: 'errors#show', code: code
+    end
 
     get '/people/query' => 'person/query#index', as: :query_people
     get '/people/company_name' => 'person/company_name#index', as: :query_company_name

@@ -5,12 +5,17 @@
 
 class Event::ApiFilter < Event::Filter
 
-  def initialize(group, params)
+  def initialize(group, params, year)
     @group = group
     @type = params[:type]
     @filter = params[:filter]
     @start_date = parse_date(params[:start_date])
     @end_date = parse_date(params[:end_date])
+
+    if @start_date.blank? && @end_date.blank?
+      @start_date = Date.new(year, 1, 1)
+      @end_date   = Date.new(year, 12, 31)
+    end
   end
 
   def list_entries
@@ -25,8 +30,6 @@ class Event::ApiFilter < Event::Filter
     end_date ? scope.between(start_date, end_date) : scope.upcoming(start_date)
   end
 
-  private
-
   def start_date
     @start_date.try(:beginning_of_day) || Time.zone.now.beginning_of_day
   end
@@ -34,6 +37,8 @@ class Event::ApiFilter < Event::Filter
   def end_date
     @end_date.try(:end_of_day)
   end
+
+  private
 
   def parse_date(date_string)
     date_string.try(:to_date)

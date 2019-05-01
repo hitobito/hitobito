@@ -405,4 +405,35 @@ describe EventsController do
     end
   end
 
+  describe 'default scope' do
+    let(:top_layer) { groups(:top_layer) }
+
+    context 'token' do
+
+      it 'in current year' do
+        get :index, group_id: top_layer.id, token: 'PermittedToken'
+        expect(assigns(:events)).to be_empty
+      end
+
+      it 'in 2012' do
+        get :index, group_id: top_layer.id, year: 2012, token: 'PermittedToken'
+        expect(assigns(:events)).to have(1).entries
+      end
+    end
+
+    context 'html' do
+      before { sign_in(people(:top_leader)) }
+
+      it 'in current year' do
+        get :index, group_id: top_layer.id
+        expect(assigns(:events)).to be_empty
+      end
+
+      it 'in 2012' do
+        get :index, group_id: top_layer.id, year: 2012
+        expect(assigns(:events)).to have(1).entries
+      end
+    end
+  end
+
 end

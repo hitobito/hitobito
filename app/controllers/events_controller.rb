@@ -210,7 +210,7 @@ class EventsController < CrudController
 
   def event_filter
     if request.format.json?
-      Event::ApiFilter.new(group, params)
+      Event::ApiFilter.new(group, params, year)
     else
       expression = sort_expression if sorting?
       Event::Filter.new(params[:type], params[:filter], group, year, expression)

@@ -45,6 +45,10 @@ class TokenAbility
     can :index_events, Group do |g|
       token_layer_and_below.include?(g)
     end
+
+    can :'index_event/courses', Group do |g|
+      token_layer_and_below.include?(g)
+    end
   end
 
   def define_group_abilities

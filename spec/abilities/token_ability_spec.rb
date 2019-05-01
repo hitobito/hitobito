@@ -119,10 +119,12 @@ describe TokenAbility do
 
       it 'may index on group' do
         is_expected.to be_able_to(:index_events, token.layer)
+        is_expected.to be_able_to(:'index_event/courses', token.layer)
       end
 
       it 'may index on subgroup' do
         is_expected.to be_able_to(:index_events,  groups(:top_group))
+        is_expected.to be_able_to(:'index_event/courses',  groups(:top_group))
       end
 
       it 'may show on group' do
@@ -146,6 +148,7 @@ describe TokenAbility do
       it 'may not index if disabled' do
         token.update(events: false)
         is_expected.not_to be_able_to(:index_events, token.layer)
+        is_expected.not_to be_able_to(:'index_event/courses', token.layer)
       end
 
       it 'may not show if disabled' do

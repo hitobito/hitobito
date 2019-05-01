@@ -88,7 +88,7 @@ describe TokenAbility do
       end
 
       it 'may restrict visibility for indirect descendants of Group::TopLayer' do
-        allow(TokenAbility).to receive(:restrict_descendants).and_return([Group::TopLayer])
+        allow(TokenAbility).to receive(:layers_with_restricted_descendants).and_return([Group::TopLayer])
         is_expected.to be_able_to(:index_people, groups(:top_group))
         is_expected.not_to be_able_to(:index_people, groups(:bottom_group_one_one))
       end

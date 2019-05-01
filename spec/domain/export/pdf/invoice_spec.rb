@@ -82,8 +82,11 @@ describe Export::Pdf::Invoice do
       let(:invoice) { invoices(:invoice) }
 
       it 'has code_line' do
-        expect(subject.positions.uniq).to eq [[323.5819133858268, 44.532913385826845]]
-        expect(subject.show_text.first).to eq '0100000005353>000037680338900000000000021+'
+        expect(subject.positions).to eq [[271.95971338582683, 44.532913385826845],
+                                         [463.69931338582677, 44.532913385826845]]
+
+        expect(subject.show_text.compact).to eq ['0100000005353>000037680338900000000000021+',
+                                                 '376803389000004>']
       end
     end
   end

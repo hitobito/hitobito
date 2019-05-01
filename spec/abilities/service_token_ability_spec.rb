@@ -20,7 +20,6 @@ describe ServiceTokenAbility do
 
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
-
     it 'may create service token in his group' do
       is_expected.to be_able_to(:create, group.service_tokens.new)
     end
@@ -36,9 +35,9 @@ describe ServiceTokenAbility do
     end
 
     %i(update show edit destroy).each do |action|
-      it "may #{action} service_account in layer below" do
+      it "may not #{action} service_account in layer below" do
         other = Fabricate(:service_token, layer: groups(:bottom_layer_one))
-        is_expected.to be_able_to(action, other)
+        is_expected.not_to be_able_to(action, other)
       end
     end
   end

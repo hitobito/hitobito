@@ -90,8 +90,8 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
-      it 'may show service tokens' do
-        is_expected.to be_able_to(:index_service_tokens, group)
+      it 'may not index service tokens' do
+        is_expected.not_to be_able_to(:index_service_tokens, group)
       end
 
       it 'may manage person tags' do

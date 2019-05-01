@@ -1,3 +1,10 @@
 = entry_form(data: { group: group_path(parent) }) do |f|
   = field_set_tag do
-    = f.labeled_input_fields :name, :description, :people, :people_below, :groups, :events
+    = f.labeled_input_fields :name, :description
+
+  %fieldset
+    = f.labeled(ServiceToken.human_attribute_name(:abilities)) do
+      = f.boolean_field(:people, caption: t('service_tokens.abilities.people'))
+      = f.boolean_field(:people_below, caption: t('service_tokens.abilities.people_below'))
+      = f.boolean_field(:groups, caption: t('service_tokens.abilities.groups'))
+      = f.boolean_field(:events, caption: t('service_tokens.abilities.events'))

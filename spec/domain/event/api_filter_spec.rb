@@ -10,6 +10,7 @@ describe Event::ApiFilter do
   let(:group)  { groups(:top_layer) }
   let!(:event) { Fabricate(:event, groups: [groups(:bottom_group_one_one)]) }
   let(:event2) { Fabricate(:event, groups: [groups(:bottom_group_one_one)]) }
+  let(:today)  { Date.today }
 
   before do
     @g1 = Fabricate(Group::TopGroup.name.to_sym, name: 'g1', parent: groups(:top_group))
@@ -17,12 +18,17 @@ describe Event::ApiFilter do
   end
 
   def filter(params = {})
-    Event::ApiFilter.new(group, params)
+    Event::ApiFilter.new(group, params, today.year)
   end
 
   context 'filter param' do
     before do
       Fabricate(:event_date, event: event)
+    end
+
+    it 'sets start and end date from passed year' do
+      expect(filter.start_date).to eq today.beginning_of_year.beginning_of_day
+      expect(filter.end_date).to eq today.end_of_year.end_of_day
     end
 
     it 'lists events of descendant groups by default' do
@@ -45,7 +51,7 @@ describe Event::ApiFilter do
     end
 
     it 'lists upcoming events from now by default' do
-      expect(filter.list_entries).to have(2).entries
+      expect(filter.list_entries).to have(3).entries
     end
 
     it 'lists upcoming events for given start_date' do

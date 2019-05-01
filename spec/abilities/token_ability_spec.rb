@@ -86,6 +86,12 @@ describe TokenAbility do
         person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
         is_expected.to be_able_to(:show, person)
       end
+
+      it 'may restrict visibility for indirect descendants of Group::TopLayer' do
+        allow(TokenAbility).to receive(:restrict_descendants).and_return([Group::TopLayer])
+        is_expected.to be_able_to(:index_people, groups(:top_group))
+        is_expected.not_to be_able_to(:index_people, groups(:bottom_group_one_one))
+      end
     end
 
     context 'unauthorized' do
@@ -119,10 +125,12 @@ describe TokenAbility do
 
       it 'may index on group' do
         is_expected.to be_able_to(:index_events, token.layer)
+        is_expected.to be_able_to(:'index_event/courses', token.layer)
       end
 
       it 'may index on subgroup' do
         is_expected.to be_able_to(:index_events,  groups(:top_group))
+        is_expected.to be_able_to(:'index_event/courses',  groups(:top_group))
       end
 
       it 'may show on group' do
@@ -146,6 +154,7 @@ describe TokenAbility do
       it 'may not index if disabled' do
         token.update(events: false)
         is_expected.not_to be_able_to(:index_events, token.layer)
+        is_expected.not_to be_able_to(:'index_event/courses', token.layer)
       end
 
       it 'may not show if disabled' do

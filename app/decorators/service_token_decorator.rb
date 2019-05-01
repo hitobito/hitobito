@@ -27,7 +27,8 @@ class ServiceTokenDecorator < ApplicationDecorator
   private
 
   def ability_description(ability, action)
-    safe_join([h.t(".ability.#{ability}"), h.muted(h.t(".ability.#{action}"))], ' ')
+    prefix = 'service_tokens.abilities.'
+    safe_join([h.t("#{prefix}.#{ability}"), h.muted(h.t("#{prefix}.#{action}"))], ' ')
   end
 
 end

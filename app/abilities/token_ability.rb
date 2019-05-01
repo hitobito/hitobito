@@ -10,6 +10,8 @@ class TokenAbility
   include CanCan::Ability
 
   attr_reader :token
+  class_attribute :layers_with_restricted_descendants
+  self.layers_with_restricted_descendants = []
 
   def initialize(token)
     return if token.nil?
@@ -45,6 +47,10 @@ class TokenAbility
     can :index_events, Group do |g|
       token_layer_and_below.include?(g)
     end
+
+    can :'index_event/courses', Group do |g|
+      token_layer_and_below.include?(g)
+    end
   end
 
   def define_group_abilities
@@ -54,7 +60,18 @@ class TokenAbility
   end
 
   def token_layer_and_below
-    token.layer.self_and_descendants
+    groups = token.layer.self_and_descendants
+    restrict?(token) ? restrict_groups(groups) : groups
+  end
+
+  def restrict?(token)
+    layers_with_restricted_descendants.include?(token.layer.class)
+  end
+
+  def restrict_groups(groups)
+    groups.select do |group|
+      group.parent.nil? || layers_with_restricted_descendants.include?(group.parent.class)
+    end
   end
 
 end

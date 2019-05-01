@@ -752,10 +752,6 @@ de:
         key: Key
         abilities: Rechte
         last_access: Letzter Zugriff
-        people: Personen dieser Gruppe
-        people_below: Personen von Untergruppen
-        groups: Gruppen dieser Gruppe
-        events: Events dieser Gruppe
 
   doorkeeper:
     scopes:

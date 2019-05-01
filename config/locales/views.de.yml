@@ -1224,16 +1224,16 @@ de:
         other: '%{count} Rollen erstellen'
 
   service_tokens:
+    abilities:
+      read: Lesen
+      people: Personen dieser Ebene
+      people_below: Personen dieser und der darunterliegenden Ebenen
+      groups: Gruppen dieser und der darunterliegenden Ebenen
+      events: Events dieser und der darunterliegenden Ebenen
+
     global:
       link:
         add: API-Key hinzufügen
-    list:
-      ability:
-        read: Lesen
-        people_below: Personen von Untergruppen
-        people: Personen dieser Gruppe
-        events: Events dieser Gruppe
-        groups: Gruppen dieser Gruppe
 
   subscriber:
     group:

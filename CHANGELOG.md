@@ -9,6 +9,7 @@
 *   Rechnungen erstellen mit `:finance` Berechtigung
 *   Integration mit Mailchimp API
 *   Seite für Events mit externer Anmeldung ohne Login
+*   Dynamische Spaltenauswahl auf Personen und Teilnehmern
 
 ## Version 1.18
 

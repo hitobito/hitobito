@@ -23,7 +23,7 @@ gem 'country_select'
 gem 'daemons'
 gem 'dalli'
 gem 'delayed_job_active_record'
-gem 'devise', '< 4.0.0' # requires ruby 2.1
+gem 'devise'
 gem 'doorkeeper'
 gem 'doorkeeper-i18n'
 gem 'draper'
@@ -37,6 +37,7 @@ gem 'mime-types', '~> 2.6.2' # newer requires ruby 2.0
 gem 'mini_magick'
 gem 'mysql2', '0.4.9'
 gem 'nested_form'
+gem 'nokogiri', '~> 1.8.2'
 gem 'oat'
 gem 'paper_trail'
 gem 'paranoia', '< 2.1.2' # uses 2.0 for testing (no explicit requirement, yet)

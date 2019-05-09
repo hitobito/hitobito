@@ -9,17 +9,12 @@ require 'spec_helper'
 
 describe Export::SubgroupsExportJob do
 
-  subject { Export::SubgroupsExportJob.new(user.id, group, filename: 'subgroups_export') }
+  subject { Export::SubgroupsExportJob.new(user.id, group.id, filename: 'subgroups_export') }
 
   let(:user)     { people(:top_leader) }
   let(:group)    { groups(:top_layer) }
   let(:year)     { 2012 }
   let(:filepath) { AsyncDownloadFile::DIRECTORY.join('subgroups_export') }
-
-  before do
-    SeedFu.quiet = true
-    SeedFu.seed [Rails.root.join('db', 'seeds')]
-  end
 
   context 'creates a CSV-Export' do
 

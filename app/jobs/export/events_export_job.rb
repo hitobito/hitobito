@@ -7,17 +7,30 @@
 
 class Export::EventsExportJob < Export::ExportBaseJob
 
-  self.parameters = PARAMETERS + [:filter]
+  self.parameters = PARAMETERS + [:group_id, :filter_args]
 
-  def initialize(format, user_id, filter, options)
+  def initialize(format, user_id, group_id, filter_args, options)
     super(format, user_id, options)
+    @group_id = group_id
+    @filter_args = filter_args
     @exporter = Export::Tabular::Events::List
-    @filter = filter
   end
 
   private
 
+  def filter
+    Event::Filter.new(group,
+                      @filter_args[:type],
+                      @filter_args[:filter],
+                      @filter_args[:year],
+                      @filter_args[:sort_expression])
+  end
+
+  def group
+    @group ||= Group.find(@group_id)
+  end
+
   def entries
-    @filter.list_entries
+    filter.list_entries
   end
 end

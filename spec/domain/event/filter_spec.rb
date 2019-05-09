@@ -20,7 +20,7 @@ describe Event::Filter do
   end
 
   def filter(filter = nil, sort_expression = nil)
-    Event::Filter.new(type, filter, group, year, sort_expression)
+    Event::Filter.new(group, type, filter, year, sort_expression)
   end
 
   it 'lists events of descendant groups by default' do

@@ -137,7 +137,8 @@ class EventsController < CrudController
     with_async_download_cookie(format, :events_export) do |filename|
       Export::EventsExportJob.new(format,
                                   current_person.id,
-                                  event_filter,
+                                  group.id,
+                                  event_filter.to_h,
                                   filename: filename).enqueue!
     end
   end
@@ -213,7 +214,7 @@ class EventsController < CrudController
       Event::ApiFilter.new(group, params, year)
     else
       expression = sort_expression if sorting?
-      Event::Filter.new(params[:type], params[:filter], group, year, expression)
+      Event::Filter.new(group, params[:type], params[:filter], year, expression)
     end
   end
 

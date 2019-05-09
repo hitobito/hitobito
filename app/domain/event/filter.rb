@@ -9,10 +9,10 @@ class Event::Filter
 
   attr_reader :type, :filter, :group, :year, :sort_expression
 
-  def initialize(type, filter, group, year, sort_expression)
+  def initialize(group, type, filter, year, sort_expression)
+    @group = group
     @type = type
     @filter = filter
-    @group = group
     @year = year
     @sort_expression = sort_expression
   end
@@ -28,6 +28,13 @@ class Event::Filter
       with_group_id(relevant_group_ids).
       in_year(year).
       preload_all_dates
+  end
+
+  def to_h
+    { year: year,
+      type: type,
+      filter: filter,
+      sort_expression: sort_expression }
   end
 
   private

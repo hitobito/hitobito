@@ -37,7 +37,6 @@ gem 'mime-types', '~> 2.6.2' # newer requires ruby 2.0
 gem 'mini_magick'
 gem 'mysql2', '0.4.9'
 gem 'nested_form'
-gem 'nokogiri', '~> 1.8.2', platform: :ruby_22
 gem 'oat'
 gem 'paper_trail'
 gem 'paranoia', '< 2.1.2' # uses 2.0 for testing (no explicit requirement, yet)

@@ -586,7 +586,6 @@ DEPENDENCIES
   mini_magick
   mysql2 (= 0.4.9)
   nested_form
-  nokogiri (~> 1.8.2)
   oat
   paper_trail
   parallel_tests

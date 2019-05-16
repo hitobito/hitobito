@@ -11,6 +11,7 @@ it:
     confirm_delete: Vuoi veramente cancellare questa voce?
     do_not_fill: Per favore lasciare libero questo campo
     chosen_no_results: Nessun risultato con
+    selected: Selezionato
     gender:
       male: maschile
       female: femminile
@@ -25,6 +26,7 @@ it:
     button:
       save: Salvare
       cancel: Interrompere
+      close: Chiudere
       search: Cercare
       back: Indietro
       refresh: Aggiornare
@@ -142,9 +144,9 @@ it:
     sessions:
       signed_out: 'ora sei registrato.'
       new:
-        sign_in: iscriversi
+        sign_in: login
       form:
-        sign_in: 'iscriversi'
+        sign_in: 'login'
     passwords:
       send_instructions: 'riceverai nei prossimi minuti un''e-mail con le istruzioni su come reimpostare la tua password.'
       updated: 'la tua passwort è stata cambiata. Sei ora registrato.'
@@ -305,6 +307,15 @@ it:
       email_check:
         next: avanti
         enter_email: Inserisci per favore il tuo indirizzo email, affinché tu possa iscriverti all'evento.
+    participation_lists:
+      create:
+        success:
+          one: "persone sono state aggiunte con successo a"
+          other: "1%{count} persone sono state aggiunte con successo a 2%{event}'"
+      new:
+        title: Assegnare le persone a
+        event_search: Cercare evento
+        submit: Aggiungere
   events:
     application_fields:
       caption_signature: I partecipanti devono firmare l'iscrizione
@@ -472,6 +483,7 @@ it:
     subgroups: 'Sottogruppi'
     tabs:
       deleted: 'Cancellato'
+    export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
   group/person_add_requests:
     deactivated: Autorizzazione manuale disattivata
     activated: Autorizzazione manuale attivata
@@ -509,16 +521,21 @@ it:
     add: Redigere una fattura esterna
     add_payments: Inserire un pagamento
     issued: Fattura emessa
+    sent: Fattura inviata per e-mail.
+    reminder_sent: Promemoria impostato, scadenza il
     payed: Pagato
     destroy:
       flash:
         success: La fattura è stata annullata
     pdf:
       total: Importo totale
+      total_vat: IVA
+      cost: Subtotale
       invoice_number: Numero di fattura
       invoice_date: Data della fattura
       due_at: Scade il
       creator: Emittente della fattura
+      vat_number: Numero IVA
   invoice_configs:
     form_tabs:
       general: In generale
@@ -527,10 +544,13 @@ it:
         success: Le impostazioni per le fatture sono state aggiornate con successo
     general_fields:
       payment_slip: 'Polizza di versamento'
+      payment_information_help: 'Viene indicato su ogni fattura, può essere modificato in ogni fattura'
       address_help: 'Compare sulla lettera come indirizzo del mittente'
+      email_help: 'Viene utilizzato come mittente dell''e-mail al posto dell''utente corrente'
       payee_help: 'Compare sulla polizza di versamento'
       beneficiary_help: 'Compare sulla polizza di versamento'
       account_number_example: 'Esempio: 01-162-5'
+      participant_number_internal_example: 'Esempio: 999999'
       iban_example: 'Esempio: CH93 0076 2011 6238 5295 7'
     reminder_fields:
       third_level: 'Per tutti i prossimi solleciti, verrà ripetuto il terzo livello di sollecito'
@@ -598,6 +618,8 @@ it:
         one: È stato individuato un pagamento non valido
         other: Sono stati individuati %{count} pagamenti non validi
     show:
+      payments_with_invoice: Pagamenti imputabili
+      payments_with_invoice_and_dates: Pagamenti imputabili da... a...
       payments_without_invoice: Non assegnabile
       amount_open: Aperto
       create:
@@ -638,6 +660,10 @@ it:
     file_download:
       wait_for_downloads: 'Il download viene preparato, prego attendere'
       cancel_downloads: 'Interrompere il download'
+    synchronization:
+      wait_for_synchronization: 'I vostri dati vengono ora inviati a MailChimp. Potrebbe volerci un attimo. Dopo di che l''elenco selezionato con i contatti di hitobito verrà aggiornato. '
+      synchronization_failed: 'Durante l''invio dei dati a MailChimp si è verificato un errore'
+      cancel_synchronization: 'Interrompere l''esportazione'
   mailing_lists:
     global:
       link:
@@ -651,6 +677,7 @@ it:
       caption_anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
       caption_delivery_report: 'Spedire l''e-mail con conferma al mittente'
       help_preferred_labels: 'Se ci sono e-mails questi verranno spediti solo ad indirizzi e-mail con questa denominazione. Nel far questo verranno utilizzati anche indirizzi e-mail che non sono marcati come indirizzo di spedizione. '
+      help_mailchimp_sync: 'Gli abbonati possono essere esportati nella lista MailChimp, ma questo non avviene automaticamente. Questa azione sovrascrive l''elenco MailChimp e i contatti esistenti vengono eliminati. '
   mailing_list_decorator:
     may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
     may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'
@@ -660,9 +687,10 @@ it:
     anyone_may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
     delivery_report: 'I mittenti ricevono un e-mail a conferma dell''invio.'
     no_delivery_report: 'I mittenti non ricevono nessun e-mail a conferma dell''invio.'
-    subscribe: 'collegarsi'
+    subscribe: 'iscriversi'
     unsubscribe: 'scollegarsi'
   navigation:
+    menu: 'Menu'
     groups: 'gruppi'
     events: 'eventi'
     courses: 'corsi'
@@ -906,6 +934,10 @@ it:
         active: il ruolo era attivo.
         created: il ruolo è stato creato.
         deleted: il ruolo è stato cancellato.
+    attributes:
+      title: Campi
+      match: contiene
+      equal: è esattamente
     new:
       title: Filtro per le persone
     range:
@@ -963,8 +995,41 @@ it:
           (gruppi, eventi e abbonamenti; nessuna altra persona ).
       only_visible_from_above: Questo ruolo è visibile solo alle persone di questo livello, non per quelle ad un livello superiore.
   role_lists:
+    available:
+      no_entries: 'Nessun ruolo disponibile da eliminare '
+    access_denied: 'Accesso negato a '
+    destroy:
+      success:
+        zero: Non è stato rimosso nessun ruolo
+        one: Un ruolo è stato rimosso
+        other: 'Sono stati rimossi ... ruoli'
+    create:
+      success:
+        zero: Non è stato creato nessun ruolo
+        one: È stato creato un ruolo
+        other: 'Sono stati creati... ruoli.'
+      failure: P.f. assegnare un ruolo valido
+    update:
+      success:
+        zero: Nessun ruolo è stato modificato
+        one: Un ruolo è stato modificato
+        other: '... ruoli sono stati modificati'
+      failure: P.f. assegnare un ruolo valido
+    move:
+      title: Dove dovrebbero essere trasferite le persone?
+      submit: Avanti
     movable:
+      title: Quali ruoli dovrebbero essere cancellati?
       submit: Spostare ruoli
+    deletable:
+      title: Quali ruoli dovrebbero essere cancellati?
+      submit: Rimuovere
+    new:
+      title: Dove dovrebbero essere creati i nuovi ruoli?
+  service_tokens:
+    global:
+      link:
+        add: Aggiungere API Key
   subscriber:
     group:
       form:
@@ -1022,7 +1087,9 @@ it:
         destroy: "La richiesta d'accesso per <i>%{label}</i> è stata evasa."
     impersonate: "L'account è stato rilevato da %{user}"
     impersonation_done: "L'account non è più utilizzato da %{user}"
+    append_to_household: "è stato aggiunto all'economia domestica"
     household_updated: "L'economia domestica (%{object_changes}) è stata aggiornata"
+    remove_from_household: "è stato rimosso dall'economia domestica"
   views:
     pagination:
       next: '>>'

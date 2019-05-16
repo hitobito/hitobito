@@ -12,6 +12,7 @@ fr:
     do_not_fill: Ne pas remplir cette case SVP.
     chosen_no_results: Aucun résultat avec
     selected: Sélectionné
+    columns: Colonnes
     gender:
       male: Masculin
       female: féminin
@@ -21,7 +22,7 @@ fr:
       no_entry: (aucun)
       none_available: (aucun disponible)
       please_select: sélectionner s.v.p.
-      add: Ajouter une entrée
+      add: Article supplémentaire
       remove: Supprimer
     button:
       save: Enregistrer
@@ -34,7 +35,7 @@ fr:
     link:
       show: Afficher
       edit: Modifier
-      add: Créer
+      add: Établir
       delete: Effacer
       list: Liste
     errors:
@@ -114,19 +115,20 @@ fr:
     households: 'Liste des foyers'
     everything: 'Toutes les informations'
     household_option: 'Rassembler les foyers'
+    selection: 'Colonnes choisies'
   dropdown/invoices:
     download: 'Exporter'
     print: 'Imprimer'
     labels: 'Etiquettes'
-    full: 'facture incl. bulletin de versement'
+    full: 'Facture avec bulletin de versement'
     esr_only: 'bulletin de versement séparé'
     articles_only: 'facture séparée'
     csv: 'CSV'
     pdf: 'PDF'
   dropdown/invoice_sending:
-    button: 'établir la facture / établir un rappel'
-    set_state: 'établir le statut (établi/rappel)'
-    send_mail: 'établir le statut (établi/rappel) et envoyer par e-mail'
+    button: 'Établir une facture / un rappel'
+    set_state: 'Saisir le statut (facture/rappel)'
+    send_mail: 'Saisir le statut (facture/rappel) et envoyer par mail'
   devise:
     failure:
       already_authenticated: 'Tu es déjà inscrit(e).'
@@ -514,16 +516,16 @@ fr:
     duplicates: "%{count} emplacements trouvés lors de la recherche de doublons."
   invoices:
     filter:
-      due_since: échue depuis
+      due_since: Échu(e) dès
       due_since_list:
         one_day: hier
         one_week: une semaine
         one_month: un mois
-    add: établir une facture externe
-    add_payments: saisir les paiements
+    add: Établir une facture externe
+    add_payments: Saisir un paiement
     issued: facture établie
     sent: Facture envoyé par courriel
-    reminder_sent: rappel envoyé, échu le %{date} (%{title})
+    reminder_sent: rappel établi, échu le %{date} (%{title})
     payed: payé
     destroy:
       flash:
@@ -531,11 +533,11 @@ fr:
     pdf:
       total: montant total
       total_vat: TVA
-      cost: Montant provisoire
-      invoice_number: numéro de facture
-      invoice_date: date de facture
-      due_at: valable jusqu'au
-      creator: émetteur de la facture
+      cost: 'Montant '
+      invoice_number: No. de facture
+      invoice_date: Date de la facture
+      due_at: Échue le
+      creator: Auteur de la facture
       vat_number: No TVA
   invoice_configs:
     form_tabs:
@@ -545,16 +547,16 @@ fr:
         success: les réglages de la factures mis à jour avec succès
     general_fields:
       payment_slip: 'bulletin de versement'
-      payment_information_help: 'Énuméré dans chaque facture, peut être ajusté par facture'
-      address_help: 'apparaît sur la lettre comme adresse d''expéditeur'
-      email_help: 'Utilisé comme expéditeur d''e-mail au lieu de l''utilisateur actuel'
+      payment_information_help: 'Apparaît sur chaque facture, mais peut être adapté pour une facture'
+      address_help: 'Adresse de l''expéditeur qui apparaît sur la lettre'
+      email_help: 'Est utilisé comme mail de l''expéditeur au lieu de celui de l''utilisateur actuel'
       payee_help: 'apparaît sur le bulletin de versement'
       beneficiary_help: 'apparaît sur le bulletin de versement'
       account_number_example: 'exemple : 01-162-5'
       participant_number_internal_example: 'Exemple: 999999'
       iban_example: 'exemple : CH93 2011 0076 6238 5295 7'
     reminder_fields:
-      third_level: 'Pour tous les rappels supplémentaires, le troisième niveau de rappel est répété'
+      third_level: 'Pour tous les rappels suivants, les données du troisième rappel sont reprises.'
   invoice_lists:
     form:
       recipient_info:
@@ -606,7 +608,7 @@ fr:
         success: La facture supérieur à %{amount} saisie.
   payment_processes:
     description:
-      header: donnée camt.054 XML
+      header: Fichier camt.054 XML
       explain_xml_format: 'Une donnée camt.054 XML est la dissolution de l''écriture récapitulative et l''avis de débit et de note de crédit. Celle-ci contient une série de différentes écritures comptables qui sont classées automatiquement sur la base des factures dépendant du numéro ESR.'
     invalid_file: La donnée téléchargée n'est pas valable.
     parsing_error: La donnée téléchargée ne peut pas être retravaillée (%{error}).
@@ -633,7 +635,7 @@ fr:
       icon_tooltip_undercuts: est en-dessous de la facture ouverte de %{difference}
     new:
       upload_button: 'télécharger'
-      xml_file: 'donnée XML'
+      xml_file: 'Fichier XML'
   label_formats:
     global_labels: "Formats globaux d'étiquettes"
     own_labels: Mes formats d'étiquettes
@@ -695,7 +697,7 @@ fr:
     groups: 'Groupes'
     events: 'Activités'
     courses: 'Cours'
-    admin: 'Administrateur'
+    admin: 'Paramétrage'
     invoices: 'factures'
   notes:
     new_note: Ajouter une note
@@ -1032,13 +1034,6 @@ fr:
     global:
       link:
         add: Ajouter API-Key
-    list:
-      ability:
-        read: Lire
-        people_below: Personnes de sous-groupes
-        people: Personnes de cette groupes
-        events: Evénements de cette groupe
-        groups: Groupes de cette groupe
   subscriber:
     group:
       form:
@@ -1064,11 +1059,11 @@ fr:
   sheet/person/csv_import:
     title: 'Importer les personnes par CSV'
   sheet/group:
-    belongs_to: 'appartient à'
+    belongs_to: 'Fait partie de'
     deleted: '(effacé)'
     layer_upwards: '< vers le niveau supérieur'
   sheet/payment_process:
-    title: Importer les paiements en XML
+    title: Importer des paiements par XML
   subscriptions:
     actions_index:
       add_person: Ajouter une personne

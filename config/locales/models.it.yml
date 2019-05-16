@@ -108,6 +108,10 @@ it:
               invalid_check_digit: 'non valido; cifra di controllo non corretta'
             payee:
               to_long: 'può contenere al massimo 2 righe'
+        mailing_list:
+          attributes:
+            additional_sender:
+              invalid: "deve contenere indirizzi e-mail nel formato abcd@ee.ch o *@ee.ch. In caso di più indirizzi, questi vanno separati con ',' o ';'"
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -313,7 +317,6 @@ it:
         layer_group_id: Livello
         type: Tipo di gruppo
         type_name: Tipo di gruppi
-        description: Descrizione
       event:
         group_ids: Gruppi
         groups: Gruppi
@@ -519,10 +522,13 @@ it:
         subscribable: Gli abbonati possono iscriversi/disiscriversi personalmente.
         mail_name: Indirizzo delle mailing list
         mail_address: Mailing list
+        mail_address_link: Mailinglist
         subscribers_may_post: Gli abbonati possono scrivere sulla mailing list.
         additional_sender: Mittente supplementare
         preferred_labels: Etichetta e-mail preferita
         main_email: Spedizione all'e-mail principale
+        mailchimp_api_key: 'MailChimp chiave API'
+        mailchimp_list_id: 'MailChimp Lista ID'
       subscription:
         related_role_types: Ruoli
       people_filter:
@@ -547,6 +553,7 @@ it:
         pp_post: Riga PP
       invoice:
         title: Titolo
+        description: Testo
         invoice_items: Voci contabili
         invoice_item_article: L'articolo della fattura
         invoice_config: L'impostazione della fattura
@@ -562,6 +569,7 @@ it:
         states:
           draft: Bozza
           issued: Emesso
+          sent: inviato per e-mail
           payed: Pagato
           reminded: Sollecitato
           cancelled: Cancellato
@@ -572,6 +580,10 @@ it:
         issued_at: Emesso il
         sent_at: 'Spedito il '
         cost: Importo
+        total_inkl_vat: Totale IVA incl.
+        total: Totale IVA incl.
+        vat: IVA
+        vat_number: Numero IVA
         payment_information: Informazioni sul pagamento
         payment_purpose: Motivo del pagamento
         address: Indirizzo del mittente
@@ -588,6 +600,7 @@ it:
         description: Descrizione
         category: Categoria
         unit_cost: Prezzo
+        vat_rate: IVA
         cost_center: Centro di costo
         account: Conto
       invoice_config:
@@ -599,6 +612,7 @@ it:
         contact: Persona di contatto
         contact_id: Persona di contatto
         beneficiary: A favore di
+        email: E-mail del mittente
         payee: Versamento per
         payment_slip: Polizza di versamento
         payment_slips:
@@ -607,16 +621,20 @@ it:
           ch_esr: Polizza di versamento postale arancione (CH)
           ch_besr: Polizza di versamento bancaria arancione (CH)
         participant_number: Numero di partecipante
+        participant_number_internal: Numero interno del partecipante
         payment_reminder_configs: Solleciti
+        vat_number: Numero IVA
       invoice_item:
         name: Nome
         description: Descrizione
+        vat_rate: IVA
         unit_cost: Prezzo
         count: Numero
         cost: Importo
       invoice_items:
         name: Nome
         description: Descrizione
+        vat_rate: IVA
         unit_cost: Prezzo
         count: Numero
         cost: Importo
@@ -637,6 +655,16 @@ it:
         title: Titolo del sollecito
         text: Testo del sollecito
         due_days: Data di scadenza del sollecito
+      service_token:
+        name: Cognome
+        description: Descrizione
+        key: Codice
+        abilities: Diritti
+        last_access: Ultimo Accesso
+        people: Persone di questo gruppo
+        people_below: Persone dei sottogruppi
+        groups: Gruppi di questo gruppo
+        events: Eventi di questo gruppo
   errors:
     messages:
       invalid_money: "Deve essere arrotondato ai 5 centesimi"

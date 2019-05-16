@@ -12,6 +12,7 @@ en:
     do_not_fill: Please do not fill in this field
     chosen_no_results: No entries found with
     selected: selected
+    columns: Columns
     gender:
       male: male
       female: female
@@ -112,6 +113,7 @@ en:
     emails: 'E-Mail addresses'
     addresses: 'Address list'
     everything: 'All information'
+    selection: 'Column selection'
   dropdown/invoices:
     download: 'export'
     print: 'print'

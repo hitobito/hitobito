@@ -170,16 +170,16 @@ fr:
         other: Groupes
       invoice:
         one: facture
-        other: factures
+        other: Factures
       invoice_article:
         one: articles de factures
-        other: articles de factures
+        other: Articles à facturer
       invoice_config:
         one: règlages de factures
-        other: règlages de factures
+        other: Paramétrage
       invoice_item:
         one: postes de factures
-        other: articles de comptes
+        other: Détails de la facture
       label_format:
         one: format d'étiquette
         other: Formats d'étiquettes
@@ -280,7 +280,7 @@ fr:
           m: Masculin
           w: Féminin
           _nil: Inconnu
-        birthday: Anniversaire
+        birthday: Date de naissance
         additional_information: Données supplémentaires
         remember_me: Se souvenir de moi
         relations_to_tails: relations
@@ -321,7 +321,6 @@ fr:
         layer_group_id: Niveau
         type: Type de groupe
         type_name: Type de groupe
-        description: Description
       event:
         group_ids: Groupes
         groups: Groupes
@@ -559,46 +558,46 @@ fr:
       invoice:
         title: titre
         description: Texte
-        invoice_items: articles de comptes
-        invoice_item_article: article de facture
+        invoice_items: Détails de la facture
+        invoice_item_article: Article à facturer
         invoice_config: réglage de facture
         state: statut
         sequence_number: numéro
         esr_number: numéro de référence
         amount_paid: total payé
         payment_slips:
-          ch_es: bulletin de versement postal rouge (CH)
-          ch_bes: bulletin de versement rouge bancaire (CH)
-          ch_esr: bulletin de versement orange postal (CH)
-          ch_besr: bulletin de versement orange bancaire (CH)
+          ch_es: Bulletin de versement postal rouge (CH)
+          ch_bes: Bulletin de versement bancaire rouge (CH)
+          ch_esr: Bulletin de versement postal orange (CH)
+          ch_besr: Bulletin de versement bancaire orange (CH)
         states:
           draft: projet
-          issued: placé
+          issued: Établie
           sent: Envoyé par courriel
           payed: payé
-          reminded: rappel envoyé
+          reminded: Rappel envoyé
           cancelled: annulé
         recipient: destinataire
         recipient_email: e-mail du destinataire
         recipient_address: adresse du destinataire
-        due_at: due au
-        issued_at: établie le
-        sent_at: envoyée le
+        due_at: Échu(e) le
+        issued_at: Établi(e) le
+        sent_at: Envoyé(e) le
         cost: montant
-        total_inkl_vat: Totale incl. TVA
-        total: Totale incl. TVA
-        vat: Totale incl. TVA
+        total_inkl_vat: Total (TVA incl.)
+        total: Total (TVA incl.)
+        vat: TVA
         vat_number: No TVA
-        payment_information: information du paiement
+        payment_information: Information sur le paiement
         payment_purpose: motif du paiement
         address: adresse de l'expéditeur
         beneficiary: en faveur de
-        payee: paiement pour
+        payee: Paiement à
         account_number: numéro de compte
         iban: IBAN
         payment_slip: bulletin de versement
         participant_number: numéro du participant
-        creator: émetteur de la facture
+        creator: Auteur de la facture
       invoice_article:
         number: numéro d'article
         name: désignation
@@ -607,24 +606,24 @@ fr:
         unit_cost: prix
         vat_rate: TVA
         cost_center: centre de coûts
-        account: compte
+        account: Compte
       invoice_config:
-        payment_information: information du paiement
+        payment_information: Information sur le paiement
         address: adresse de l'expéditeur
         account_number: numéro de compte
         iban: IBAN
-        due_days: jours jusqu'à l'échéance
+        due_days: Payable à (jours)
         contact: personne de contact
         contact_id: ' personne de contact '
         beneficiary: en faveur de
-        email: Expéditeur e-mail
-        payee: paiement pour
+        email: E-mail de l'expéditeur
+        payee: Paiement à
         payment_slip: bulletin de versement
         payment_slips:
-          ch_es: bulletin de versement postal rouge (CH)
-          ch_bes: bulletin de versement rouge bancaire (CH)
-          ch_esr: bulletin de versement orange postal (CH)
-          ch_besr: bulletin de versement orange bancaire (CH)
+          ch_es: Bulletin de versement postal rouge (CH)
+          ch_bes: Bulletin de versement bancaire rouge (CH)
+          ch_esr: Bulletin de versement postal orange (CH)
+          ch_besr: Bulletin de versement bancaire orange (CH)
         participant_number: numéro du participant
         participant_number_internal: Numéro du participant interne
         payment_reminder_configs: rappels
@@ -651,11 +650,11 @@ fr:
       payment_reminder:
         invoice: facture
         message: information
-        due_at: due au
+        due_at: Échu(e) le
       payment_reminder_config:
         title: titre
         text: texte
-        due_days: jours jusqu'à l'échéance
+        due_days: Payable à (jours)
       payment_reminder_configs:
         title: titre du rappel
         text: texte du rappel

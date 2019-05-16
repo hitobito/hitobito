@@ -133,8 +133,8 @@ class EventsController < CrudController
     end
   end
 
-  def render_tabular_in_background(format)
-    with_async_download_cookie(format, :events_export) do |filename|
+  def render_tabular_in_background(format, name = :events_export)
+    with_async_download_cookie(format, name) do |filename|
       Export::EventsExportJob.new(format,
                                   current_person.id,
                                   group.id,

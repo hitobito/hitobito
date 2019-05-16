@@ -12,17 +12,4 @@
     = render 'shared/page_per_year'
 
 = paginate @events
-
-= crud_table do |t|
-  - t.col(t.sort_header(:name)) do |e|
-    %strong= link_to e.name, group_event_path(e.groups.first, e)
-  - t.sortable_attr(:dates_full)
-  - t.attr(:description_short, t.attr_header(:description))
-  - t.attr(:booking_info)
-  - t.sortable_attr(:state)
-  - t.sortable_attr(:group_ids)
-
-  = render_extensions(:list_columns, locals: { t: t })
-
-  - t.col(nil, class: 'center') { |e| button_action_event_apply(e, @group) }
-
+= render "list_table"

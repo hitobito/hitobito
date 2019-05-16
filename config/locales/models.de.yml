@@ -477,6 +477,19 @@ de:
       note:
         text: Text
 
+      oauth/application:
+        redirect_uri: Redirect URIs
+
+      people_relation:
+        head_id: Person
+        tail_id: Andere Person
+        kind: Art
+
+      phone_number:
+        number: Nummer
+        label: Typ
+        public: Öffentlich
+
       qualification:
         qualification_kind: Qualifikation
         qualification_kind_id: Qualifikation
@@ -496,19 +509,9 @@ de:
         deleted_at: Gelöscht
         reactivateable: Reaktivierbar
 
-      people_relation:
-        head_id: Person
-        tail_id: Andere Person
-        kind: Art
-
       relations_to_tails:
         tail_id: Beziehung
         kind: Art
-
-      phone_number:
-        number: Nummer
-        label: Typ
-        public: Öffentlich
 
       # used for nested phone_numbers
       phone_numbers:

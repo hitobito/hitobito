@@ -22,10 +22,6 @@ module Oauth
       I18n.t("doorkeeper.scopes.#{key}")
     end
 
-    def human_scopes
-      scopes.collect { |key| self.class.human_scope(key) }
-    end
-
     def to_s
       name
     end

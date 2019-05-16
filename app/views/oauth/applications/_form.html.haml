@@ -2,7 +2,7 @@
   = f.labeled_input_field :name
 
   = f.labeled_text_area :redirect_uri, rows: 5,
-    help: raw(t('doorkeeper.applications.help.native_redirect_uri',
+    help: raw(t('.help_native_redirect_uris',
       native_redirect_uri: content_tag(:code, class: 'bg-light') { Doorkeeper.configuration.native_redirect_uri }))
 
   = f.labeled :scopes do
@@ -12,5 +12,5 @@
                         scope,
                         entry.scopes.include?(scope),
                         { id: "oauth_application_scope_#{scope}" })
-        = Oauth::Application.human_scope(scope)
+        = format_doorkeeper_application_scope(scope).html_safe
 

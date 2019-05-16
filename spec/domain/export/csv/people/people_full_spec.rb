@@ -61,7 +61,7 @@ describe Export::Tabular::People::PeopleFull do
       expect(csv.headers).to eq(
         ["Prénom", "Nom", "Nom de l'entreprise", "Surnom", "Entreprise",
          "Adresse e-mail principale", "Adresse", "Code postal", "Lieu", "Pays", "Sexe",
-         "Anniversaire", "Données supplémentaires", "Niveau", "Rôles",
+         "Date de naissance", "Données supplémentaires", "Niveau", "Rôles",
          "Adresse e-mail supplémentaire Père", "Numéro de téléphone Père",
          "Adresse d'un média social Skype", "Parent"]
       )

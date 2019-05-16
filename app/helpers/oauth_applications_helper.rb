@@ -14,7 +14,15 @@ module OauthApplicationsHelper
   end
 
   def format_doorkeeper_application_scopes(application)
-    simple_list(application.human_scopes, class: 'unstyled')
+    human_scopes = application.scopes.collect do |key|
+      format_doorkeeper_application_scope(key)
+    end.collect(&:html_safe)
+
+    simple_list(human_scopes, class: 'unstyled')
+  end
+
+  def format_doorkeeper_application_scope(key)
+    Oauth::Application.human_scope(key) << " " << muted("(#{key})")
   end
 
 end

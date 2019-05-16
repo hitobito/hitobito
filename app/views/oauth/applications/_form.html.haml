@@ -12,5 +12,5 @@
                         scope,
                         entry.scopes.include?(scope),
                         { id: "oauth_application_scope_#{scope}" })
-        = Oauth::Application.human_scope(scope)
+        = format_doorkeeper_application_scope(scope).html_safe
 

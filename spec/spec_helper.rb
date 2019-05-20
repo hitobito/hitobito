@@ -64,7 +64,7 @@ RSpec.configure do |config|
 
   config.include(MailerMacros)
   config.include(EventMacros)
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include FeatureHelpers, type: :feature
   config.include Warden::Test::Helpers, type: :feature
 

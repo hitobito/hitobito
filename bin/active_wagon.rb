@@ -65,7 +65,7 @@ class Setup
   end
 
   def dependencies
-    %w(pbs cevi).product([%w(youth)]).to_h.merge('jubla' => %w(youth jubla_ci))
+    %w(pbs cevi pro_natura).product([%w(youth)]).to_h.merge('jubla' => %w(youth jubla_ci))
   end
 
   def available(excluded = %w(youth jubla_ci site))

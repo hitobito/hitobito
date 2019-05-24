@@ -35,7 +35,7 @@ gem 'icalendar'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mime-types', '~> 2.6.2' # newer requires ruby 2.0
 gem 'mini_magick'
-gem 'mysql2', '0.4.9'
+gem 'mysql2', '0.4.10'
 gem 'nested_form'
 gem 'nokogiri', '~> 1.8.2'
 gem 'oat'
@@ -74,7 +74,7 @@ gem 'jquery-turbolinks'
 gem 'jquery-ui-rails'
 gem 'remotipart'
 gem 'sass-rails'
-gem 'therubyracer', platforms: :ruby
+#gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier'
 

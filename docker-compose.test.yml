@@ -1,0 +1,37 @@
+version: '3.5'
+services:
+
+  tests:
+    build: .
+    entrypoint: bin/docker-entrypoints/development/app.sh
+    command: bin/rspec
+    volumes:
+      - .:/app:cached
+      - node_modules:/app/node_modules
+      - bundle:/usr/local/bundle/
+
+      # mount wagons
+      - ../hitobito_youth:/hitobito_youth:ro
+      - ../hitobito_pbs:/hitobito_pbs:ro
+    environment:
+      RAILS_DB_ADAPTER: mysql2
+      RAILS_DB_HOST: db
+      RAILS_DB_USER: root
+      RAILS_DB_PASSWORD:
+      RAILS_DB_NAME: hitobito_test
+      RAILS_ENV: test
+    depends_on:
+      - db
+
+  db:
+    image: mariadb
+    volumes:
+      - /var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    restart: always
+
+volumes:
+  bundle:
+  node_modules:
+

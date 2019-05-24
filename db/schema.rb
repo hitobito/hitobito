@@ -211,9 +211,9 @@ ActiveRecord::Schema.define(version: 20190423122721) do
     t.integer  "parent_id",                   limit: 4
     t.integer  "lft",                         limit: 4
     t.integer  "rgt",                         limit: 4
-    t.string   "name",                        limit: 255,                  null: false
+    t.string   "name",                        limit: 255,                   null: false
     t.string   "short_name",                  limit: 31
-    t.string   "type",                        limit: 255,                  null: false
+    t.string   "type",                        limit: 255,                   null: false
     t.string   "email",                       limit: 255
     t.string   "address",                     limit: 1024
     t.integer  "zip_code",                    limit: 4

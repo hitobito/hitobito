@@ -247,7 +247,6 @@ GEM
       activesupport (>= 3.0.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    libv8 (3.16.14.17)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -274,7 +273,7 @@ GEM
     minitest (5.11.3)
     multi_json (1.13.1)
     multipart-post (2.0.0)
-    mysql2 (0.4.9)
+    mysql2 (0.4.10)
     nested_form (0.3.2)
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
@@ -379,7 +378,6 @@ GEM
     rdoc-tags (1.3)
       rdoc (~> 4)
     redcarpet (3.4.0)
-    ref (2.0.0)
     remotipart (1.3.1)
     request_profiler (0.0.4)
       ruby-prof
@@ -474,9 +472,6 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.3.13)
-    therubyracer (0.12.3)
-      libv8 (~> 3.16.14.15)
-      ref
     thin (1.5.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -584,7 +579,7 @@ DEPENDENCIES
   mailcatcher
   mime-types (~> 2.6.2)
   mini_magick
-  mysql2 (= 0.4.9)
+  mysql2 (= 0.4.10)
   nested_form
   nokogiri (~> 1.8.2)
   oat
@@ -625,7 +620,6 @@ DEPENDENCIES
   spring-commands-rspec
   sprockets (~> 3.7.2)
   sqlite3
-  therubyracer
   thinking-sphinx
   turbolinks
   uglifier

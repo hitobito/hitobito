@@ -1,3 +1,8 @@
+#  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
   orm :active_record
@@ -137,6 +142,16 @@ Doorkeeper.configure do
   # force_ssl_in_redirect_uri !Rails.env.development?
   #
   # force_ssl_in_redirect_uri { |uri| uri.host != 'localhost' }
+  force_ssl_in_redirect_uri do |uri|
+    integration_stage      = (ENV.fetch('RAILS_STAGE', 'production') == 'integration')
+    request_from_localhost = (uri.host == 'localhost')
+
+    if integration_stage and request_from_localhost
+      false # do not force SSL in redirect_uri
+    else
+      true
+    end
+  end
 
   # Specify what redirect URI's you want to block during Application creation.
   # Any redirect URI is whitelisted by default.

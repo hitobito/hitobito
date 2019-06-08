@@ -1,27 +1,32 @@
 version: '3.5'
 services:
 
-  tests:
+  app:
     build: .
-    entrypoint: bin/docker-entrypoints/development/app.sh
-    command: bin/rspec
+    entrypoint: bin/docker-entrypoints/app_test.sh
+    command: sh -c "rake test && rake wagon:test WAGON=ALL"
     volumes:
       - .:/app:cached
       - node_modules:/app/node_modules
       - bundle:/usr/local/bundle/
 
       # mount wagons
-      - ../hitobito_youth:/hitobito_youth:ro
-      - ../hitobito_pbs:/hitobito_pbs:ro
+      - ../hitobito_youth:/app/vendor/wagons/hitobito_youth
+      - ../hitobito_pbs:/app/vendor/wagons/hitobito_pbs
+      - ./Gemfile.lock:/app/vendor/wagons/hitobito_youth/Gemfile.lock
+      - ./Gemfile.lock:/app/vendor/wagons/hitobito_pbs/Gemfile.lock
     environment:
       RAILS_DB_ADAPTER: mysql2
       RAILS_DB_HOST: db
       RAILS_DB_USER: root
       RAILS_DB_PASSWORD:
       RAILS_DB_NAME: hitobito_test
-      RAILS_ENV: test
+      RAILS_ENV: development
+      APP_ROOT: /app
     depends_on:
       - db
+    tty: true
+    stdin_open: true
 
   db:
     image: mariadb

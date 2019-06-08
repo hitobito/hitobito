@@ -6,6 +6,7 @@ RUN apk add --no-cache --update build-base \
   nodejs \
   mariadb-dev \
   sqlite-dev \
+  less \
   tzdata
 # RUN apt-get update -qq && apt-get install -y build-essential \
 # libxml2-dev libxslt1-dev libqt4-webkit libqt4-dev xvfb nodejs

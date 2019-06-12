@@ -8,7 +8,9 @@
 
 module Oauth
   class ProfilesController < ActionController::Base
-    before_action :doorkeeper_authorize!
+    before_action do
+      doorkeeper_authorize! :with_roles, :email, :name, :api_access
+    end
 
     def show
       if scope.blank? || doorkeeper_token.acceptable?(scope)

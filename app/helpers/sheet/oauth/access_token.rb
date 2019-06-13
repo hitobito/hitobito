@@ -4,9 +4,11 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class Oauth::AccessToken < Base
+  module Oauth
+    class AccessToken < Sheet::Admin
 
-    self.parent_sheet = Sheet::Oauth::Application
+      self.parent_sheet = Sheet::Oauth::Application
 
+    end
   end
 end

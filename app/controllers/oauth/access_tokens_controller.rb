@@ -8,6 +8,8 @@
 
 module Oauth
   class AccessTokensController < CrudController
+    self.optional_nesting = Oauth::Application
+
     def destroy
       super(location: oauth_application_path(entry.application))
     end

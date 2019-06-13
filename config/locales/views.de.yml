@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -833,8 +833,13 @@ de:
           bezogen werden. Dabei muss das Access Token im Authorization Header übergeben werden.
           Der gewünschte Scope kann als X-Scope Header übergeben werden.
         profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
-      access_grants:
+    access_grants:
+      list:
         title: Aktive %{model_name} für %{uri}
+    tabs:
+      grants: Autorisierungen
+      tokens: Zugangstoken
+
 
   qualifications:
     in_years: '%{years} Jahre'

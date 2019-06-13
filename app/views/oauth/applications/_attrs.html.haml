@@ -21,9 +21,3 @@
     .well
       %p= t('.profile_endpoint_help')
       %code= t('.profile_endpoint_example', url: oauth_profile_url)
-
-
-= render 'access_tokens', list: entry.access_tokens.includes(person: :groups).list
-
-- entry.redirect_uri.to_s.split.each do |uri|
-  = render 'access_grants', uri: uri, list: entry.access_grants.includes(person: :groups).for(uri).active.list

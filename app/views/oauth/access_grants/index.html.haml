@@ -1,0 +1,2 @@
+- parent.redirect_uri.to_s.split.each do |uri|
+  = render 'list', uri: uri, list: entries.includes(person: :groups).for(uri).active.list, entry: parent

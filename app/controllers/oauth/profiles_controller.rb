@@ -9,7 +9,7 @@
 module Oauth
   class ProfilesController < ActionController::Base
     before_action do
-      doorkeeper_authorize! :with_roles, :email, :name, :api_access
+      doorkeeper_authorize! :with_roles, :email, :name
     end
 
     def show
@@ -28,8 +28,6 @@ module Oauth
         person.attributes.slice('first_name', 'last_name', 'nickname')
       when /with_roles/ then
         public_attrs_with_roles
-      when /api_access/
-        person.attributes.slice('authentication_token').merge(public_attrs_with_roles)
       end
     end
 

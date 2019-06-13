@@ -85,6 +85,7 @@ gem 'sprockets', '~> 3.7.2'
 
 
 group :development, :test do
+  gem 'better_errors'
   gem 'binding_of_caller'
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'parallel_tests'

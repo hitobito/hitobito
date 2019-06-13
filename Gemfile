@@ -28,6 +28,7 @@ gem 'doorkeeper'
 gem 'doorkeeper-i18n'
 gem 'draper'
 gem 'faker', '< 1.6.4' # uses 2.0 for testing (no explicit requirement, yet)
+gem 'gibbon', '~> 3.2'
 gem 'globalize'
 gem 'haml'
 gem 'http_accept_language'
@@ -55,7 +56,6 @@ gem 'validates_by_schema'
 gem 'validates_timeliness', '< 4.0'
 gem 'vcard'
 gem 'wagons'
-gem 'gibbon', '~> 3.2'
 
 # load after others because of active record inherited alias chain.
 gem 'kaminari', '< 1.0.0' # requires ruby 2.0

@@ -17,5 +17,9 @@ module Oauth
     def self.model_class
       Oauth::AccessToken
     end
+
+    def list_entries
+      super.page(params[:page]).per(50)
+    end
   end
 end

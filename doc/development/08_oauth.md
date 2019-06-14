@@ -10,11 +10,11 @@ Applications can be limited to a URL and scope. The OAuth application is defined
 
 | Name | Available user data |
 | --- | --- |
-| email | Id, Email |
-| name | Name |
-| with_roles | All the profile data, Roles within groups |
+| email | id, email |
+| name | id, email, firstname, lastname, nickname |
+| with_roles | All the profile data, roles within groups |
 
-Multiple scopes can be combined in a single authorization request.
+The scope "with_roles" contains most of the profile information, including the fields of the name scope. Multiple scopes can be combined in a single authorization request. 
 
 ## OAuth Flow
 

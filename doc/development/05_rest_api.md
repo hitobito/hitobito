@@ -9,7 +9,7 @@ Hitobito offers a read-only JSON REST API that gives access to the basic data st
 * Tokens have no expiration date, but can be actively deleted by the user.
 * There are also impersonal tokens ([service accounts](07_service_accounts.md)), that are meant to represent external applications.
 
-> If you have an application that needs to read data from hitobito, you'll probably want to use [service accounts](07_service_accounts.md).
+> :bangbang: If you have an application that needs to read data from hitobito, you'll probably want to use [service accounts](07_service_accounts.md).
 
 If you still want to use personal tokens, they can be managed using the following HTTP endpoints:
 

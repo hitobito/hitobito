@@ -1,34 +1,35 @@
 ## Service Accounts
 
-Service accounts allow impersonal access to the [REST API](../05_rest_api.md). API-Keys are created per layer (e.g. per canton or per local group) by an authorized person. They remain in place even if this person leaves the group or is deleted. Keys can be managed by using the tab "API-Keys" with with appropriate permissions. 
+Service accounts allow to create a dedicated account with certain permissions for an external application. Using this account, the external application can then access the [JSON API](05_rest_api.md). Service accounts are created on a layer by an authorized person, and also persist once this person leaves the group or is deleted.
 
 #### Permissions
-Keys can be created by people with :layer_and_below_full and :layer_full permissions on their respective layers.
+Keys can be managed by using the "API-Keys" tab by people with `:layer_and_below_full` and `:layer_full` [permissions](../architecture/08_konzepte.md) on the layer. This usually includes only the main leader roles in each layer, address manager is not enough.
+
 The permissions are not inherited downwards. The API-Keys of the underlying layers are therefore not visible.
 
 #### Creating Service Tokens
-During creation, different access levels can be defined per Service Token. If no level is selected, no information will be accessible using the token.
+During creation, the permissions of a service account / service token can be defined. If no level is selected, no information will be accessible using the token.
 
-| Name (DE)  | Comment (EN) |
-| --- | --- |
-| Personen dieser Ebene | People within the current layer are visible |
-| Personen dieser und der darunterliegenden Ebenen | People on layers below are visible |
-| Events dieser und der darunterliegenden Ebenen | Events within the layer and below are visible |
-| Gruppen dieser und der darunterliegenden Ebenen | Groups within the layer and below are visible |
+| Name (DE)                                        | Comment (EN)                                  |
+| ---                                              | ---                                           |
+| Personen dieser Ebene                            | People within the current layer are visible   |
+| Personen dieser und der darunterliegenden Ebenen | People within the layer and below are visible |
+| Events dieser und der darunterliegenden Ebenen   | Events within the layer and below are visible |
+| Gruppen dieser und der darunterliegenden Ebenen  | Groups within the layer and below are visible |
 
 
 #### Accessing the JSON-API
-##### Params Style
-~~~~ 
-# Notation
-[Base_URL][Endpoint]?token=[Token]
 
-# Example
-https://demo.hitobito.ch/de/groups/1.json?token=ABcdefGaHC
-~~~~ 
+All endpoints except for the root group endpoint (`/groups`) from the [JSON API](05_rest_api.md) are accessible using service accounts. As with personal tokens, there are two possibilities to use the API:
 
-##### Headers Style
-~~~~ 
-# Example
-curl -i -H "X-Token: ABcdefGaHC" -H "Content-Type: application/json" https://demo.puzzle.ch/de/groups/1.json
-~~~~
+* **Query parameter**: Send `token` as query parameter in the URL, and append `.json` to the URL path
+```bash
+curl "https://demo.hitobito.ch/de/groups/1.json?token=DtmPJ1iimjJi2neQQDq8efrqS5gBa7-5b8ZxboBCFdAm4HBBBP"
+```
+
+* **Request headers**: Set the following headers on the HTTP request: `X-Token` and `Accept` (set this to `application/json`)
+```bash
+curl -H "X-Token: DtmPJ1iimjJi2neQQDq8efrqS5gBa7-5b8ZxboBCFdAm4HBBBP" \
+     -H "Accept: application/json" \
+     https://demo.puzzle.ch/de/groups/1
+```

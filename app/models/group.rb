@@ -44,13 +44,16 @@ class Group < ActiveRecord::Base
   acts_as_paranoid
   extend Paranoia::RegularScope
 
+  mount_uploader :logo, Group::LogoUploader
+
   ### ATTRIBUTES
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   # This must contain the superior attributes as well.
   class_attribute :used_attributes
   self.used_attributes = [:name, :short_name, :email, :contact_id,
-                          :email, :address, :zip_code, :town, :country, :description]
+                          :email, :address, :zip_code, :town, :country, :description,
+                          :logo]
 
   # Attributes that may only be modified by people from superior layers.
   class_attribute :superior_attributes
@@ -102,7 +105,7 @@ class Group < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  validates_by_schema
+  validates_by_schema except: [:logo]
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
 

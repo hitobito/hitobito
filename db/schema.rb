@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190423122721) do
+ActiveRecord::Schema.define(version: 20190618144458) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -211,9 +211,9 @@ ActiveRecord::Schema.define(version: 20190423122721) do
     t.integer  "parent_id",                   limit: 4
     t.integer  "lft",                         limit: 4
     t.integer  "rgt",                         limit: 4
-    t.string   "name",                        limit: 255,                  null: false
+    t.string   "name",                        limit: 255,                   null: false
     t.string   "short_name",                  limit: 31
-    t.string   "type",                        limit: 255,                  null: false
+    t.string   "type",                        limit: 255,                   null: false
     t.string   "email",                       limit: 255
     t.string   "address",                     limit: 1024
     t.integer  "zip_code",                    limit: 4
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 20190423122721) do
     t.integer  "deleter_id",                  limit: 4
     t.boolean  "require_person_add_requests",               default: false, null: false
     t.text     "description",                 limit: 65535
+    t.string   "logo",                        limit: 255
   end
 
   add_index "groups", ["layer_group_id"], name: "index_groups_on_layer_group_id", using: :btree

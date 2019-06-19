@@ -107,7 +107,7 @@ Currently the following endpoints are provided:
 
 
 
-### Events endpoint
+#### Events endpoint
 
 The events and the course endpoints have some query parameters, as explained below.
 

@@ -19,9 +19,9 @@ If you still want to use personal tokens, they can be managed using the followin
 | POST    | /users/token.json   | generate a new token |
 | DELETE  | /users/token.json   | delete token         |
 
-You have to pass `person[email]` and `person[password]` in the request body.
+You have to pass `person[email]` and `person[password]` in the request body. Also, you have to set the `Content-Type: application/x-www-form-urlencoded` HTTP header.
 
-With `curl` it looks like this:
+With `curl` it looks like this (it sets the `Content-Type` header automatically):
 ```bash
 curl -d "person[email]=mitglied@hitobito.ch" \
      -d "person[password]=demo" \
@@ -64,16 +64,20 @@ Currently the following endpoints are provided:
 
 ### Events endpoint
 
-The events endpoint has some query parameters, as explained below. They are appended to the URL like this: `/groups/:group_id/events?param=value&param2=value&...`
+The events and the course endpoints have some query parameters, as explained below.
 
-| Name       | Type     | Description                                   | Default               | Available Values                           | Example                 |
-| ---        | ---      | ---                                           | ---                   | ---                                        | ---                     |
-| type       | `string` | Specifiy class type                           | Nil (Normal Event)    | `Event::Course` and wagon specific classes | `type=Event::Course`    |
-| filter     | `string` | Specifiy filter type                          | `all`                 | `all`, `layer`                             | `filter=layer`          |
-| start_date | `date`   | Filter Events ending after or at start_date   | Today                 | Any date                                   | `start_date=31-10-2018` |
-| end_date   | `date`   | Filter Events starting before or at end_date  | Nil (Upcoming Events) | Any date                                   | `end_date=28-02-2019`   |
+| Name       | Type     | Description                                                          | Default               | Available Values                           | Example                 |
+| ---        | ---      | ---                                                                  | ---                   | ---                                        | ---                     |
+| type       | `string` | Specify class type                                                   | Nil (Normal Event)    | `Event::Course` and wagon specific classes | `type=Event::Course`    |
+| filter     | `string` | Specify whether to only display events from the current layer        | `all`                 | `all`, `layer`                             | `filter=layer`          |
+| start_date | `date`   | Filter Events ending after or at start_date (not working right now)  | Today                 | Any date                                   | `start_date=31-10-2018` |
+| end_date   | `date`   | Filter Events starting before or at end_date (not working right now) | Nil (Upcoming Events) | Any date                                   | `end_date=28-02-2019`   |
 
-A response from an example query can be seen below.
+An example query with its response (formatted here for readability) can be seen below.
+
+```bash
+curl "https://demo.hitobito.ch/groups/1/events.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+```
 
 ```json
 {

@@ -3,7 +3,7 @@
 Service accounts allow to create a dedicated account with certain permissions for an external application. Using this account, the external application can then access the [JSON API](05_rest_api.md). Service accounts are created on a layer by an authorized person, and also persist once this person leaves the group or is deleted.
 
 #### Permissions
-Keys can be managed by using the "API-Keys" tab by people with `:layer_and_below_full` and `:layer_full` [permissions](../architecture/08_konzepte.md) on the layer. This usually includes only the main leader roles in each layer, address manager is not enough.
+Keys can be managed by using the "API-Keys" tab by people with `:layer_and_below_full` or `:layer_full` [permissions](../architecture/08_konzepte.md) on the layer. This usually includes only the main leader roles in each layer, address manager is not enough.
 
 The permissions are not inherited downwards. The API-Keys of the underlying layers are therefore not visible.
 

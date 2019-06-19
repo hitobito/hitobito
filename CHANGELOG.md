@@ -10,6 +10,7 @@
 *   Integration mit Mailchimp API
 *   Seite für Events mit externer Anmeldung ohne Login
 *   Dynamische Spaltenauswahl auf Personen und Teilnehmern
+*   Möglichkeit, eigenes Logo pro Gruppe hochzuladen
 
 ## Version 1.18
 

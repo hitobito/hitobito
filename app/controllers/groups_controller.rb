@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,7 +10,7 @@ class GroupsController < CrudController
   include Concerns::AsyncDownload
 
   # Respective group attrs are added in corresponding instance method.
-  self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup
+  self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup + [:logo, :remove_logo]
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]

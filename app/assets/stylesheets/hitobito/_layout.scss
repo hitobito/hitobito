@@ -20,15 +20,12 @@ body {
   margin: 0;
   padding: 0.5rem;
   z-index: 100;
-  // for a box around the logo, 
-  // if the Logo cannot be direclty on the page background:
+  // for a box around the logo, if the Logo cannot be directly on the page background:
   @if ($logoBackgroundColor != none) {
-      padding: 10px;
-      background-color: $logoBackgroundColor;
-      border-radius: 6px;
-      left: 1rem;
+    padding: 10px;
+    background-color: $logoBackgroundColor;
+    border-radius: 6px;
   }
-
 }
 
 .logo-image {
@@ -110,7 +107,7 @@ body {
     text-transform: uppercase;
     i {
       margin-top: 0.2rem;
-      margin-right: 0.5rem; 
+      margin-right: 0.5rem;
     }
     a:hover i {
       text-decoration: none;
@@ -251,7 +248,7 @@ body {
       &.is-visible {
         left: 0;
         width: 90%;
-      } 
+      }
     }
 
     .nav-left-overlay {

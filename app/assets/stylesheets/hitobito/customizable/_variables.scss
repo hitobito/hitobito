@@ -1,4 +1,4 @@
-//  Copyright (c) 2012-2018, hitobito AG. This file is part of
+//  Copyright (c) 2012-2019, hitobito AG. This file is part of
 //  hitobito_generic and licensed under the Affero General Public License version 3
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito_generic.
@@ -7,18 +7,6 @@
 
 // GLOBAL VALUES
 // --------------------------------------------------
-
-// Logo
-//--------------------------
-
-
-$logoUrl:               "logo.png"; // put under app/assets/images
-$logoWidth:             230px;      // has to bet set as the logo is a background image
-$logoHeight:            30px;       // will also set the minimal width of the navigation
-                                    // must be set in pixel
-
-// optional backgroundcolor, creates a box around the logo, if changed from 'none'
-$logoBackgroundColor:   none;
 
 // Grays
 // -------------------------

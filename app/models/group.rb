@@ -44,6 +44,8 @@ class Group < ActiveRecord::Base
   acts_as_paranoid
   extend Paranoia::RegularScope
 
+  mount_uploader :logo, Group::LogoUploader
+
   ### ATTRIBUTES
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
@@ -102,7 +104,7 @@ class Group < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  validates_by_schema
+  validates_by_schema except: [:logo]
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
 

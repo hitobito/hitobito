@@ -1,4 +1,4 @@
-# Entwicklungs Dokumentation
+# Entwicklungs-Dokumentation
 
 > For English version see below
 

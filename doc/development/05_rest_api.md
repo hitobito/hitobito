@@ -28,7 +28,52 @@ curl -d "person[email]=mitglied@hitobito.ch" \
      https://demo.hitobito.ch/users/sign_in.json
 ```
 
-The response will contain the personal token in the JSON response: `"authentication_token":"yhFrXcydFwisXYLEUFyV"`
+The response will contain the personal token (`authentication_token`) in the JSON response (formatted here for readability):
+```json
+{
+    "people": [
+        {
+            "id": "164",
+            "type": "people",
+            "href": "https://demo.hitobito.ch/de/groups/17/people/164.json",
+            "first_name": "Boris",
+            "last_name": "Becker",
+            "nickname": "Eaque",
+            "company_name": "",
+            "company": false,
+            "gender": "w",
+            "email": "mitglied@hitobito.ch",
+            "authentication_token": "yhFrXcydFwisXYLEUFyV",
+            "last_sign_in_at": "2019-06-19T13:24:11.000+02:00",
+            "current_sign_in_at": "2019-01-01T12:00:00.000+02:00",
+            "links": {
+                "primary_group": "17"
+            }
+        }
+    ],
+    "linked": {
+        "groups": [
+            {
+                "id": "17",
+                "name": "Abos Stadt Bern",
+                "group_type": "Lokalgruppe/Sektion"
+            }
+        ]
+    },
+    "links": {
+        "token.regenerate": {
+            "method": "POST",
+            "href": "https://demo.hitobito.ch/de/users/token.json",
+            "type": "tokens"
+        },
+        "token.delete": {
+            "method": "DELETE",
+            "href": "https://demo.hitobito.ch/de/users/token.json",
+            "type": "tokens"
+        }
+    }
+}
+```
 
 To use the API with the personal token, there are two possibilities:
 

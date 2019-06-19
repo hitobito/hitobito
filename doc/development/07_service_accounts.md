@@ -2,12 +2,12 @@
 
 Service accounts allow to create a dedicated account with certain permissions for an external application. Using this account, the external application can then access the [JSON API](05_rest_api.md). Service accounts are created on a layer by an authorized person, and also persist once this person leaves the group or is deleted.
 
-#### Permissions
+### Permissions
 Keys can be managed by using the "API-Keys" tab by people with `:layer_and_below_full` or `:layer_full` [permissions](../architecture/08_konzepte.md) on the layer. This usually includes only the main leader roles in each layer, address manager is not enough.
 
 The permissions are not inherited downwards. The API-Keys of the underlying layers are therefore not visible.
 
-#### Creating Service Tokens
+### Creating Service Tokens
 During creation, the permissions of a service account and its corresponding service token can be defined. If no level is selected, no information will be accessible using the token.
 
 | Name (DE)                                        | Comment (EN)                                     |
@@ -18,7 +18,7 @@ During creation, the permissions of a service account and its corresponding serv
 | Gruppen dieser und der darunterliegenden Ebenen  | Groups within the layer and below are accessible |
 
 
-#### Accessing the JSON-API
+### Accessing the JSON-API
 
 All endpoints except for the root group endpoint (`/groups`) from the [JSON API](05_rest_api.md) can be used with service accounts. As with personal tokens, there are two possibilities to use the API:
 

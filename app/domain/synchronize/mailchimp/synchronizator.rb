@@ -15,8 +15,10 @@ module Synchronize
         @mailing_list = mailing_list
         @gibbon = Gibbon::Request.new(api_key: mailing_list.mailchimp_api_key)
         @people_on_the_list = mailing_list.people
-        @people_on_the_mailchimp_list =
-          gibbon.lists(mailing_list.mailchimp_list_id).members.retrieve.body['members']
+        @people_on_the_mailchimp_list = gibbon.lists(mailing_list.mailchimp_list_id)
+                                              .members
+                                              .retrieve(params: { 'count' => '1000000' })
+                                              .body['members']
       end
 
       def call

@@ -82,7 +82,7 @@ body {
 
   .container-fluid {
     z-index: 2;
-    width: 100%;
+    min-width: 70%;
     max-width: 100%;
     overflow-x: visible;
     overflow-y: visible;

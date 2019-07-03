@@ -765,7 +765,6 @@ de:
       email: Lesen deiner E-Mail Adresse
       name: Lesen deiner E-Mail Adresse und Name
       with_roles: Lesen deiner Stammdaten und Rollen
-      api_access: Lesen deiner Stammdaten, Rollen und Api Tokens
 
   errors:
     messages:

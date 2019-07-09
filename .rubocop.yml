@@ -5,7 +5,6 @@ AllCops:
     - db/**/*
     - config/**/*
     - bin/**/*
-    - spec/**/*
     - vendor/**/*
     - tmp/**/*
     - app/assets/config.rb

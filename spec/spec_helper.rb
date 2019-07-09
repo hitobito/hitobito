@@ -30,11 +30,12 @@ ActiveRecord::Migration.maintain_test_schema!
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
 
 # Add test locales
-Rails.application.config.i18n.load_path += Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
+locales_path = Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
+Rails.application.config.i18n.load_path += locales_path
 Faker::Config.locale = I18n.locale
 
 RSpec.configure do |config|
@@ -58,7 +59,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   config.backtrace_exclusion_patterns = [/lib\/rspec/]
-  config.example_status_persistence_file_path = Rails.root.join('tmp','examples.txt').to_s
+  config.example_status_persistence_file_path = Rails.root.join('tmp', 'examples.txt').to_s
 
   config.include(MailerMacros)
   config.include(EventMacros)
@@ -68,7 +69,7 @@ RSpec.configure do |config|
 
   config.filter_run_excluding type: 'feature', performance: true
 
-  if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
+  if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2' # rubocop:disable Performance/Casecmp
     config.filter_run_excluding :mysql
   end
 

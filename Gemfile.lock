@@ -514,6 +514,10 @@ GEM
       seed-fu-ndo (>= 0.0.2)
     warden (1.2.7)
       rack (>= 1.0)
+    webdrivers (4.1.0)
+      nokogiri (~> 1.6)
+      rubyzip (~> 1.0)
+      selenium-webdriver (>= 3.0, < 4.0)
     webmock (3.4.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -633,8 +637,9 @@ DEPENDENCIES
   validates_timeliness (< 4.0)
   vcard
   wagons
+  webdrivers
   webmock (~> 3.4, >= 3.4.2)
   wirble
 
 BUNDLED WITH
-   1.16.6
+   1.17.3

@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -127,30 +125,34 @@ end
 
 # Use Capybara only if features are not excluded
 unless RSpec.configuration.exclusion_filter[:type] == 'feature'
+  require 'capybara'
+  require 'webdrivers/chromedriver'
+  require 'selenium/webdriver'
+
   Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
   Capybara.default_max_wait_time = 10
+  Capybara.automatic_label_click = true
+  Selenium::WebDriver::Chrome.path = `which chromium-browser`.strip
 
   require 'capybara-screenshot/rspec'
   Capybara::Screenshot.prune_strategy = :keep_last_run
   Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::ProgressFormatter'] =
     CapybaraScreenshotPlainTextReporter
 
-  if ENV['FIREFOX_PATH']
-    Capybara.register_driver :selenium do |app|
-      require 'selenium/webdriver'
-      Selenium::WebDriver::Firefox::Binary.path = ENV['FIREFOX_PATH']
-      Capybara::Selenium::Driver.new(app, browser: :firefox)
-    end
+  Capybara.register_driver :chrome_no_sandbox do |app|
+    options = Selenium::WebDriver::Chrome::Options.new
+    options.args << '--headless' if ENV['HEADLESS'] != 'false'
+    options.args << '--disable-gpu' # required for windows
+    options.args << '--no-sandbox' # required for docker
+    options.args << '--disable-dev-shm-usage' # helps with docker resource limitations
+    options.args << '--window-size=1800,1000'
+    options.args << '--crash-dumps-dir=/tmp'
+    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
   end
+  Capybara.current_driver = :chrome_no_sandbox
 
-  if ENV['HEADLESS'] != 'false'
-    require 'headless'
-
-    headless = Headless.new
-    headless.start
-
-    at_exit do
-      headless.destroy
-    end
-  end
+  # The update would be done automatically, but later. Do it here to output
+  # the current version for debugging.
+  Webdrivers::Chromedriver.update
+  puts "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
 end

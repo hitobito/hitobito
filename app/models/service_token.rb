@@ -34,6 +34,16 @@ class ServiceToken < ActiveRecord::Base
     name
   end
 
+  # Required so PeopleFilter can use PersonFetchables
+  def dynamic_user
+    Person.new do |p|
+      role = Role.new
+      role.group = layer
+      role.permissions = [:layer_and_below_full]
+      p.roles = [role]
+    end
+  end
+
   private
 
   def generate_token!

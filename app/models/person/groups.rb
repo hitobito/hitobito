@@ -33,7 +33,7 @@ module Person::Groups
     @groups_with_permission ||= {}
     @groups_with_permission[permission] ||= begin
       roles_with_groups.to_a.
-        select { |r| r.class.permissions.include?(permission) }.
+        select { |r| r.permissions.include?(permission) }.
         collect(&:group).
         uniq
     end

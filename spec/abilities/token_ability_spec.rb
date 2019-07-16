@@ -86,12 +86,6 @@ describe TokenAbility do
         person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
         is_expected.to be_able_to(:show, person)
       end
-
-      it 'may restrict visibility for indirect descendants of Group::TopLayer' do
-        allow(TokenAbility).to receive(:layers_with_restricted_descendants).and_return([Group::TopLayer])
-        is_expected.to be_able_to(:index_people, groups(:top_group))
-        is_expected.not_to be_able_to(:index_people, groups(:bottom_group_one_one))
-      end
     end
 
     context 'unauthorized' do

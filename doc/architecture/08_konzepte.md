@@ -45,9 +45,9 @@ und Darstellungen angepasst und hinzugefügt werden.
 
 ### Group- and Roletypes
 
-Hitobito has a powerful Metagmodel to describe organizational structures. Groups always hava a specific `group tpye` and are organized in a tree. Every group type can a several defined `role types`.
+Hitobito has a powerful Metamodel to describe organizational structures. Groups always hava a specific `group type` and are organized in a tree. Every group `group type` can a several defined `role types`.
 
-The core of hitobito does not contain any role_or_group_types. You have to define them in a wagon [example for a generic structure](https://github.com/hitobito/hitobito_generic). This describes the organizational structure.
+The core of hitobito does not contain any **Role or Group Types**. You have to define them in a wagon [example for a generic structure](https://github.com/hitobito/hitobito_generic). This describes the organizational structure.
 
 An example of a group type definition:
 
@@ -70,7 +70,7 @@ An example of a group type definition:
         self.visible_from_above = false
         self.kind = :external
       end
-      
+
       self.default_role = Member
       roles Leader, Member
     end
@@ -83,8 +83,8 @@ A group type inherits from the class `Group`.
 
       self.layer = true
 
-It can be declared as a layer, which contains several subgroups that create a defined space for permissions. 
-This includes all subgroups of that group. Unless they are declared as layers themselfes.
+It can be declared as a layer, which contains several subgroups that create a defined space for permissions.
+This includes all subgroups of that group. Unless they are declared as layers themselves.
 
       children Group::Layer, Group::Board, Group::Basic
 

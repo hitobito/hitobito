@@ -6,6 +6,14 @@
 require 'spec_helper'
 
 describe ServiceToken do
+
+  it '#dynamic user returns user model with top_admin role' do
+    token = ServiceToken.new(layer: groups(:top_layer))
+    expect(token.dynamic_user.roles).to have(1).item
+    expect(token.dynamic_user.roles.first.group).to eq groups(:top_layer)
+    expect(token.dynamic_user.roles.first.permissions).to eq [:layer_and_below_full]
+  end
+
   context 'callbacks' do
     it 'generates token on create' do
       token = ServiceToken.create(name: 'Token', layer: groups(:top_group)).token

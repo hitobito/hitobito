@@ -836,6 +836,20 @@ describe PeopleController do
         get :index, group_id: group.id, token: 'RejectedToken'
       end.to raise_error(CanCan::AccessDenied)
     end
+
+    context 'bottom_group' do
+      let(:group)  { groups(:bottom_group_one_one_one) }
+
+      before do
+        @member = Fabricate(Group::BottomGroup::Member.sti_name, group: group).person
+        @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
+      end
+
+      it 'is empty because we cannot read below group' do
+        get :index, group_id: group.id, token: 'PermittedToken'
+        expect(assigns(:people)).not_to be_empty
+      end
+    end
   end
 
   context 'table_displays'do

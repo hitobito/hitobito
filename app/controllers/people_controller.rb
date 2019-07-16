@@ -256,7 +256,9 @@ class PeopleController < CrudController
   end
 
   def person_filter
-    @person_filter ||= Person::Filter::List.new(@group, current_user || service_token_user, list_filter_args)
+    @person_filter ||= Person::Filter::List.new(@group,
+                                                current_user || service_token_user,
+                                                list_filter_args)
   end
 
   def service_token_user

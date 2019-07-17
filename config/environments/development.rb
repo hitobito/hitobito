@@ -40,7 +40,10 @@ Hitobito::Application.configure do
     end
   else
     # mailcatcher
-    config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+    config.action_mailer.smtp_settings = {
+      address: "#{ENV.fetch('MAILCATCHER_HOST', 'localhost')}",
+      port: Integer(ENV.fetch('MAILCATCHER_PORT', 1025))
+    }
   end
 
   # Print deprecation notices to the Rails logger

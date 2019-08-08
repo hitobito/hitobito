@@ -5,7 +5,7 @@
 
 - if can?(:edit, entry)
   = Dropdown::GroupEdit.new(self, entry)
-- if entry.possible_children.present? && can?(:new, entry.children.new)
+- if entry.possible_children.any? { |type| can?(:create, type.new(parent: entry))  }
   = Dropdown::GroupAdd.new(self, entry)
 - if can?(:export_subgroups, entry)
   = action_button(t('.export_subgroups'), export_subgroups_group_path(@group, format: :csv), :download)

@@ -1,0 +1,53 @@
+#!/bin/bash
+
+set -eo pipefail
+
+cd /tmp/src
+
+# this script places the core and wagon files in the right folders and creates the Wagonfile.
+# after this, we are able to use our rails images default assemble script to do the execute default
+# tasks like assets precompilation
+
+# record the deployed versions from git before nuking the repo
+git submodule status | tee WAGON_VERSIONS
+
+# move core
+rm -r hitobito/.git
+mv hitobito/* .
+
+# add wagon sources
+mkdir vendor/wagons
+for dir in hitobito_*; do
+  if [[ ( -d $dir ) ]]; then
+    rm -r $dir/.git
+    mv $dir vendor/wagons/
+  fi
+done
+
+# move hidden core dirs
+mv hitobito/.tx .
+
+# place Wagonfile
+cp /opt/shared/Wagonfile .
+
+# finally remove core source directory
+rm -rf hitobito
+rm -r .git
+
+# TODO: Investigate. This seems ugly and is a hack to prevent assemble from failing with
+#
+#     You are trying to install in deployment mode after changing
+#     your Gemfile. Run `bundle install` elsewhere and add the
+#     updated Gemfile.lock to version control.
+
+#     You have added to the Gemfile:
+#     * source: source at /home/sraez/dev/hitobito_generic_composition_apply/vendor/wagons/hitobito_generic
+#     * hitobito_generic
+
+#     You have deleted from the Gemfile:
+#     * source: source at ../hitobito_insieme
+#     * hitobito_insieme
+# This inludes fixes from https://github.com/bundler/bundler/issues/2854#issuecomment-38991901
+bundle install --no-deployment --path vendor/bundle
+# Speed up the second `bundle install` run
+bundle package --all

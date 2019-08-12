@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+GITHUB_REPO_URL='https://github.com/transifex/transifex-client'.freeze
+DOWNLOAD_BASE_URL='https://github.com/transifex/transifex-client/archive'.freeze
+MINOR_TRANSIFEX_CLIENT_VERSION='0.13'
+
+def github_releases
+  `git ls-remote -t #{GITHUB_REPO_URL}  | sort -V -k2`
+end
+
+def most_recent_build_version
+  github_releases.scan(/#{MINOR_TRANSIFEX_CLIENT_VERSION}\.\d+/).last
+end
+
+def version
+  @version ||= most_recent_build_version
+end
+
+def version_info
+  p "most recent build for transifex client #{MINOR_TRANSIFEX_CLIENT_VERSION} is: #{version}"
+end
+
+def releases_path
+  "#{version}-release"
+end
+
+def file_name
+  "#{version}.tar.gz"
+end
+
+def download_url
+  "#{DOWNLOAD_BASE_URL}/#{file_name}"
+end
+
+def install_transifex_client
+  p "installing transifex client #{version} ..."
+  Dir.chdir('/tmp') do
+    system("wget #{download_url}")
+    system("tar xvfz #{file_name}")
+  end
+  Dir.chdir("/tmp/transifex-client-#{version}") do
+    system("python setup.py install")
+  end
+end
+
+version_info
+install_transifex_client

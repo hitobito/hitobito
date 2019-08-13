@@ -19,10 +19,10 @@ module MailRelay
     self.mail_domain = Settings.email.list_domain
 
     class << self
-      def personal_return_path(list_name, sender_email)
+      def personal_return_path(list_name, sender_email, domain = nil)
         # recipient format (before @) must match regexp in #reject_not_existing
         id_suffix = valid_email?(sender_email) ? '+' + sender_email.tr('@', '=') : ''
-        "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{mail_domain}"
+        "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{domain || mail_domain}"
       end
 
       def app_sender_name

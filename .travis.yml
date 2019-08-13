@@ -27,7 +27,5 @@ script:
   - bundle exec rake db:create ci --trace skip_tasks=spec:features
 matrix:
   allow_failures:
-
-  - rvm: 2.3.1
   - rvm: 2.4.0
   - rvm: 2.5.0

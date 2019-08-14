@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   include Concerns::Localizable
   include Concerns::Authenticatable
   include ERB::Util
+  include Sentry
 
   # protect with null_session only in specific api controllers
   protect_from_forgery with: :exception

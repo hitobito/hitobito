@@ -57,6 +57,7 @@ module MailRelay
             else
               message.mark_for_delete = false
               Airbrake.notify(e)
+              Raven.capture_exception(e, logger: 'mail_relay')
             end
           rescue Exception => e # rubocop:disable Lint/RescueException
             message.mark_for_delete = false

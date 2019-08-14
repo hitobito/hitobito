@@ -845,9 +845,20 @@ describe PeopleController do
         @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
       end
 
-      it 'is empty because we cannot read below group' do
+      it 'shows only leader in list' do
         get :index, group_id: group.id, token: 'PermittedToken'
-        expect(assigns(:people)).not_to be_empty
+        expect(assigns(:people)).to eq [@leader]
+      end
+
+      it 'shows leader' do
+        get :show, group_id: group.id, id: @leader.id, token: 'PermittedToken'
+        expect(response).to be_successful
+      end
+
+      it 'raises when trying to view member' do
+        expect do
+          get :show, group_id: group.id, id: @member.id, token: 'PermittedToken'
+        end.to raise_error CanCan::AccessDenied
       end
     end
   end

@@ -30,7 +30,7 @@ class TokenAbility
     groups = token.people_below? ? token_layer_and_below : [token.layer]
 
     can :show, Person do |p|
-      Role.where(person: p, group: groups).present?
+      Role.where(person: p, group: groups).present? && Ability.new(token.dynamic_user).can?(:show, p)
     end
 
     can :index_people, Group do |g|

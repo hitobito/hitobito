@@ -14,7 +14,7 @@ module Sentry
   end
 
   def set_sentry_request_context
-    Raven.extra_context(params: params.to_unsafe_h, url: request.url)
+    Raven.extra_context(params: params.dup.to_unsafe_h, url: request.url)
   end
 
   def set_sentry_user_context

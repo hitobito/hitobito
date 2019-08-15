@@ -5,16 +5,13 @@ addons:
 branches:
   only:
     - master
-    - stable
 env:
   global:
     - HEADLESS=true
     - RAILS_DB_ADAPTER=mysql2
 rvm:
   - 2.2.3
-  - 2.3.1
-  - 2.4.0
-  - 2.5.0
+  - 2.5.5
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install sphinxsearch
@@ -24,8 +21,7 @@ before_install:
 install:
   - bundle install --path vendor/bundle
 script:
-  - bundle exec rake db:create ci --trace skip_tasks=spec:features
+  - bundle exec rake db:create ci --trace
 matrix:
   allow_failures:
-  - rvm: 2.4.0
-  - rvm: 2.5.0
+  - rvm: 2.5.5

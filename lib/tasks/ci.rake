@@ -13,7 +13,7 @@ task :ci do
            'db:migrate',
            'ci:setup:env',
            'ci:setup:rspec',
-           'spec:features', # run feature specs first to get coverage from spec
+           # 'spec:features', # run feature specs first to get coverage from spec
            'spec'].delete_if { |task| tasks_to_skip.include?(task) }
 
   tasks.each { |task| Rake::Task[task].invoke }
@@ -27,7 +27,7 @@ namespace :ci do
                  'doc:all',
                  'ci:setup:env',
                  'ci:setup:rspec',
-                 'spec:features', # run feature specs first to get coverage from spec
+                 # 'spec:features', # run feature specs first to get coverage from spec
                  'spec',
                  'rubocop:report',
                  'brakeman']

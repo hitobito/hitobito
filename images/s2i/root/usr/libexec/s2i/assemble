@@ -11,7 +11,7 @@ if [ -d /tmp/artifacts/bundle ]; then
     mv /tmp/artifacts/bundle /tmp/src/bundle
 fi
 
-if (( $INTEGRATION_BUILD == 1 )); then
+if (( "$INTEGRATION_BUILD" == 1 )); then
     "$scripts/pull-composition-heads"
 fi
 
@@ -20,11 +20,11 @@ fi
 # Call original builder script
 "$scripts/assemble-base"
 
-if (( $INTEGRATION_BUILD == 1 )); then
+if (( "$INTEGRATION_BUILD" == 1 )); then
     "$scripts/pull-transifex-translations"
 fi
 
-if (( $DEMO_BUILD == 1 )); then
+if (( "$DEMO_BUILD" == 1 )); then
     "$scripts/enable-demo-seeds"
 fi
 

@@ -1,3 +1,18 @@
+# HOW TO DEPLOY CHANGES TO THIS:
+#
+# Changes to this file will eventually get deployed
+# when OpenShift deploys the base image due to
+# security patches to the FROM image given below.
+#
+# If you want to manually deploy them, change into
+# the OpenShift-Project, start the build 'rails-sti',
+# wait for both the builds 'rails-sti' and 'rails'
+# to finish and start the CI job that you'd normally
+# use to deploy.
+#
+# (Using the CLI, you can achieve this by running
+# `oc start-build rails-sti-base`)
+
 FROM centos/ruby-22-centos7
 
 USER root

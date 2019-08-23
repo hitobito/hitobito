@@ -6,20 +6,28 @@
 app = window.App ||= {}
 
 app.FieldHelpTextToggler = {
-  init: ->
-    app.FieldHelpTextToggler.hide()
-  show: ->
-    $('#hideFieldHelpTexts').show()
-    $('#showFieldHelpTexts').hide()
-    $('.additional_help_text').slideDown()
-  hide: ->
-    $('#hideFieldHelpTexts').hide()
-    $('#showFieldHelpTexts').show()
-    $('.additional_help_text').slideUp()
+  currentlyHidden: true
+
+  toggle: ->
+    app.FieldHelpTextToggler.currentlyHidden = !app.FieldHelpTextToggler.currentlyHidden
+    app.FieldHelpTextToggler.applyCurrentState()
+
+  applyCurrentState: ->
+    hideButton = $('#hideFieldHelpTexts')
+    showButton = $('#showFieldHelpTexts')
+    texts = $('.additional_help_text')
+
+    if app.FieldHelpTextToggler.currentlyHidden
+      hideButton.hide()
+      showButton.show()
+      texts.slideUp()
+    else
+      hideButton.show()
+      showButton.hide()
+      texts.slideDown()
 }
 
 handleSilently = (f) -> (e) -> e.preventDefault(); f()
 
-$ -> app.FieldHelpTextToggler.init()
-$(document).on('click', '#showFieldHelpTexts', handleSilently(app.FieldHelpTextToggler.show))
-$(document).on('click', '#hideFieldHelpTexts', handleSilently(app.FieldHelpTextToggler.hide))
+$(document).on('turbolinks:load', app.FieldHelpTextToggler.applyCurrentState)
+$(document).on('click', '#showFieldHelpTexts, #hideFieldHelpTexts', handleSilently(app.FieldHelpTextToggler.toggle))

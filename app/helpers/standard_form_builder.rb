@@ -339,8 +339,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   # Generates a help block for fields
-  def help_block(text = nil, &block)
-    content_tag(:span, text, class: 'help-block', &block)
+  def help_block(text = nil, options = {}, &block)
+    additional_classes = Array(options.delete(:class))
+    content_tag(:span, text, class: "help-block #{additional_classes.join(' ')}", &block)
   end
 
   # Returns the list of association entries, either from options[:list],
@@ -419,7 +420,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def build_labeled_field(field_method, *args)
+  def build_labeled_field(field_method, *args) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     options = args.extract_options!
     help = options.delete(:help)
     help_inline = options.delete(:help_inline)
@@ -432,7 +433,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     text = send(field_method, *(args << options))
     text = with_addon(addon, text) if addon.present?
     text << help_inline(help_inline) if help_inline.present?
-    text << help_block(help) if help.present?
+    if help.present?
+      text << help_block(help)
+    else
+      # args.first #=> "name" = attribute name
+      # text # renders input
+      # field_method #=> "input_field"
+      # raise StandardError, @object_name #=> "event"
+      # raise StandardError, labeled_args[0]
+      help_text = I18n.t("#{@object_name}.help_blocks.#{args.first}_html", default: '').html_safe
+      text << help_block(help_text, {class: 'additional_help_text'}) unless help_text.blank?
+    end
     labeled_args << text
 
     labeled(*labeled_args)

@@ -18,3 +18,11 @@
       %li.divider
       = render 'layouts/languages'
       %li= link_to t('.sign_out'), sign_out_path, method: "delete"
+      %li.divider
+      %li
+        %a#showFieldHelpTexts{href: '#'}
+          %i.fa.fa-info-circle
+          Erweiterte Hilfetexte anzeigen
+        %a#hideFieldHelpTexts{href: '#'}
+          %i.fa.fa-info-circle
+          Erweiterte Hilfetexte ausblenden

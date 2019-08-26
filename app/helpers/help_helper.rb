@@ -8,12 +8,11 @@
 module HelpHelper
 
   def get_help_text(*args)
-    key = args.join('.')
-    help_text_for_key(key)
+    help_text_for_key(get_key(args))
   end
 
   def render_help_text(*args)
-    help_text = get_help_text(args)
+    help_text = get_help_text(*args)
     return if help_text.nil?
 
     # TODO: Assess output security concerns
@@ -24,6 +23,17 @@ module HelpHelper
 
   def help_text_for_key(key)
     (@help_texts || []).find { |ht| ht[:key] == key }
+  end
+
+  def get_key(args)
+    key_parts = if args.length <= 0 || args[0].is_a?(String)
+                  args
+                else
+                  entry = args[0].respond_to?(:model) ? args[0].model : entry # Resolve decorator
+                  class_name_underscore = entry.class.to_s.underscore
+                  [class_name_underscore] + args[1..-1]
+                end
+    key_parts.join('.')
   end
 
 end

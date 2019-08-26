@@ -241,6 +241,8 @@ Hitobito::Application.routes.draw do
     resources :custom_contents, only: [:index, :edit, :update]
     get 'custom_contents/:id' => 'custom_contents#edit'
 
+    resources :help_texts
+
     devise_for :service_tokens, only: [:sessions]
     devise_for :people, skip: [:registrations], path: "users"
     as :person do

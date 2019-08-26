@@ -16,13 +16,13 @@ module HelpHelper
     return if help_text.nil?
 
     # TODO: Assess output security concerns
-    content_tag :div, help_text[:content].html_safe, class: 'help-text alert alert-info'
+    content_tag :div, help_text.body.html_safe, class: 'help-text alert alert-info'
   end
 
   private
 
   def help_text_for_key(key)
-    (@help_texts || []).find { |ht| ht[:key] == key }
+    (@__help_texts || []).find { |ht| ht.key == key }
   end
 
   def get_key(args)

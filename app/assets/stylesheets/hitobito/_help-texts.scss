@@ -1,0 +1,20 @@
+//  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
+//  hitobito and licensed under the Affero General Public License version 3
+//  or later. See the COPYING file at the top-level directory or at
+//  https://github.com/hitobito/hitobito.
+
+.help-text {
+  position: relative;
+  padding-left: 32px;
+
+  &:before {
+    display: block;
+    position: absolute;
+    left: 10px;
+
+    content: '';
+    font-family: 'FontAwesome';
+    font-size: 16px;
+    color: $blue;
+  }
+}

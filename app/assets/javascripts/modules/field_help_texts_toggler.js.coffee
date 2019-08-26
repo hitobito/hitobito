@@ -15,7 +15,7 @@ app.FieldHelpTextToggler = {
   applyCurrentState: ->
     hideButton = $('#hideFieldHelpTexts')
     showButton = $('#showFieldHelpTexts')
-    texts = $('.additional_help_text')
+    texts = $('.help-text')
 
     if app.FieldHelpTextToggler.currentlyHidden
       hideButton.hide()

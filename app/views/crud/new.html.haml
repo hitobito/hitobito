@@ -5,4 +5,6 @@
 
 - title ti(:title, :model => model_class_label(entry))
 
+= render_help_text(entry.model_name.param_key, 'edit')
+
 = render 'form'

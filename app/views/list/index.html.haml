@@ -5,6 +5,8 @@
 
 - title ti(:title, :models => models_label)
 
+= render_help_text(entry.model_name.param_key, 'list')
+
 - content_for(:toolbar, render('actions_index'))
 
 #main

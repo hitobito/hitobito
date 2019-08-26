@@ -436,13 +436,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     if help.present?
       text << help_block(help)
     else
-      # args.first #=> "name" = attribute name
-      # text # renders input
-      # field_method #=> "input_field"
-      # raise StandardError, @object_name #=> "event"
-      # raise StandardError, labeled_args[0]
-      help_text = I18n.t("#{@object_name}.help_blocks.#{args.first}_html", default: '').html_safe
-      text << help_block(help_text, {class: 'additional_help_text'}) unless help_text.blank?
+      help_text = template.get_help_text(@object_name, args.first)
+      text << help_block(help_text[:content].html_safe, class: 'help-text') unless help_text.nil?
     end
     labeled_args << text
 

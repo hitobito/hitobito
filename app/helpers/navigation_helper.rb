@@ -39,7 +39,8 @@ module NavigationHelper
                      custom_contents
                      event_kinds
                      qualification_kinds
-                     oauth/applications),
+                     oauth/applications
+                     help_texts),
       if: ->(_) { can?(:index, LabelFormat) } }
   ]
 

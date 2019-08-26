@@ -437,7 +437,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       text << help_block(help)
     else
       help_text = template.get_help_text(klass.to_s.underscore, args.first)
-      text << help_block(help_text[:content].html_safe, class: 'help-text') unless help_text.nil?
+      text << help_block(help_text.body.html_safe, class: 'help-text') unless help_text.nil?
     end
     labeled_args << text
 

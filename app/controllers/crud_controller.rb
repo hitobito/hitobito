@@ -104,21 +104,8 @@ class CrudController < ListController
   private
 
   def load_help_texts
-    # HelpText.where("key LIKE ?", "#{model_identifier}.%")
-    @help_texts = [
-      {
-        key: 'event/camp.edit',
-        content: '<b>Achtung</b>: Lager können auf verschiedenen Ebenen erstellt werden. Ein Lager kann sowohl auf Ebene Abteilung, wie auch in einer einzelnen Gruppe (z.B: Pfadi, Rover usw.) eröffnet werden. Eine Anmeldung zum Lager ist nur für die Mitglieder der jeweiligen Gruppe möglich.'
-      },
-      {
-        key: 'event/camp.name',
-        content: 'So erscheint das Lager in der <b>Lagerübersicht</b>. Der Name kann frei bestimmt werden. Z. B. „Sommerlager Pfadistufe“ usw.'
-      },
-      {
-        key: 'event/camp.state',
-        content: '<b>Erstellt</b>: Das Lager wurde vom Organisator (meist durch den AL) erfasst.<br /> <b>Bestätigt</b>: Bestätigung, dass das Lager durchgeführt wird. Nur Lager ab diesem Status generieren automatische Erinnungen an den Coach.<br / ><b>Teilnehmende</b> erfasst: Die Teilnehmenden wurden duch den Lagerleiter erfasst und der Coach kann die Daten für die SPORTdb exportieren (nach dem Lager).<br /> <b>Abgesagt</b>: Das Lager wurde abgesagt.<br /> <b>Abgeschlossen</b>: Das Lager ist abgeschlossen'
-      }
-    ]
+    model_key = entry.class.to_s.underscore
+    @__help_texts = HelpText.includes(:translations).where('key LIKE ?', "#{model_key}.%").all
   end
 
   #############  CUSTOMIZABLE HELPER METHODS  ##############################

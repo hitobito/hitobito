@@ -188,6 +188,9 @@ de:
       group:
         one: Gruppe
         other: Gruppen
+      help_text:
+        one: Hilfetext
+        other: Hilfetexte
       invoice:
         one: Rechnung
         other: Rechnungen
@@ -616,6 +619,10 @@ de:
       custom_content:
         label: Text
         subject: Betreff
+        body: Inhalt
+
+      help_text:
+        key: Schlüssel
         body: Inhalt
 
 

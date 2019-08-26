@@ -8,6 +8,8 @@
     = nav LabelFormat.model_name.human(count: 2), label_formats_path, %w(label_formats)
   - if can?(:index, CustomContent)
     = nav CustomContent.model_name.human(count: 2), custom_contents_path, %w(custom_contents)
+  - if can?(:index, HelpText)
+    = nav HelpText.model_name.human(count: 2), help_texts_path, %w(help_texts)
 
   = render_extensions(:admin_nav_main)
 
@@ -19,5 +21,3 @@
     = nav Oauth::Application.model_name.human(count: 2), oauth_applications_path, %w(oauth_applications)
 
   = render_extensions(:admin_nav_kinds)
-
-

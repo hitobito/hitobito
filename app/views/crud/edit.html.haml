@@ -5,7 +5,7 @@
 
 - title ti(:title, :model => h(entry.to_s)).html_safe
 
-= render_help_text(entry.model_name.param_key, 'edit')
+= render_help_text(entry, 'edit')
 
 - content_for(:toolbar, render('actions_edit'))
 

@@ -26,6 +26,11 @@ describe PeopleFiltersController do
       expect(filter.group).to eq(group)
       expect(assigns(:qualification_kinds)).to be_present
     end
+
+    it 'preloads available tags' do
+      get :new, group_id: group.id
+      expect(assigns(:possible_tags)).to eq []
+    end
   end
 
   context 'POST create' do

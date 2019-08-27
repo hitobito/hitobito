@@ -214,6 +214,10 @@ class Person < ActiveRecord::Base
       end.to_h
     end
 
+    def tags
+      Person.tags_on(:tags).order(:name).pluck(:name)
+    end
+
     private
 
     def company_case_column(if_company, otherwise)

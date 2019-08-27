@@ -18,7 +18,7 @@ class PeopleFiltersController < CrudController
   # load group before authorization
   prepend_before_action :parent
 
-  before_render_form :compose_role_lists
+  before_render_form :compose_role_lists, :load_possible_tags
 
   helper_method :people_list_path
 
@@ -81,6 +81,10 @@ class PeopleFiltersController < CrudController
 
   def people_list_path(options = {})
     group_people_path(group, options)
+  end
+
+  def load_possible_tags
+    @possible_tags ||= Person.tags
   end
 
 end

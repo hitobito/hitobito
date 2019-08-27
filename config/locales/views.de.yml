@@ -1126,6 +1126,10 @@ de:
       greater: grösser als
       smaller: kleiner als
 
+    tag:
+      title: Tags
+      prompt_tag_selection: Nur Personen mit einem der untenstehenden Tags
+
     new:
       title: Personen filtern
 

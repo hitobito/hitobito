@@ -53,9 +53,7 @@ module Subscriber
     end
 
     def load_possible_tags
-      @possible_tags ||= Person.tags_on(:tags)
-        .order(:name)
-        .pluck(:name)
+      @possible_tags ||= Person.tags
     end
 
     def subscriber

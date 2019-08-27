@@ -26,7 +26,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:group_full).may(:show_full, :history).in_same_group
     permission(:group_full).
-      may(:update, :primary_group, :send_password_instructions, :log).
+      may(:update, :primary_group, :send_password_instructions, :log, :index_tags, :manage_tags).
       non_restricted_in_same_group
     permission(:group_full).may(:update_email).if_permissions_in_all_capable_groups
     permission(:group_full).may(:create).all # restrictions are on Roles
@@ -37,7 +37,7 @@ class PersonAbility < AbilityDsl::Base
       may(:show_full, :history).
       in_same_group_or_below
     permission(:group_and_below_full).
-      may(:update, :primary_group, :send_password_instructions, :log).
+      may(:update, :primary_group, :send_password_instructions, :log, :index_tags, :manage_tags).
       non_restricted_in_same_group_or_below
     permission(:group_and_below_full).
       may(:update_email).

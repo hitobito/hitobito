@@ -9,7 +9,7 @@ class FullTextController < ApplicationController
 
   skip_authorization_check
 
-  helper_method :entries
+  helper_method :entries, :tab_class
 
   respond_to :html
 
@@ -57,5 +57,16 @@ class FullTextController < ApplicationController
 
   def with_query
     params[:q].to_s.size >= 2 ? yield : []
+  end
+
+  def active_tab
+    return :people if @people.length > 0
+    return :groups if @groups.length > 0
+    return :events if @events.length > 0
+    :people
+  end
+
+  def tab_class(tab)
+    'active' if active_tab == tab
   end
 end

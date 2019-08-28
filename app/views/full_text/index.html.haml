@@ -11,11 +11,11 @@
 
   - else
     %ul.nav.nav-tabs
-      %li.active= link_to(Person.model_name.human(count: 2), '#people', data: { toggle: 'tab' })
-      %li= link_to(Group.model_name.human(count: 2), '#groups', data: { toggle: 'tab' })
-      %li= link_to(Event.model_name.human(count: 2), '#events', data: { toggle: 'tab' })
+      %li{class: tab_class(:people)}= link_to(Person.model_name.human(count: 2), '#people', data: { toggle: 'tab' })
+      %li{class: tab_class(:groups)}= link_to(Group.model_name.human(count: 2), '#groups', data: { toggle: 'tab' })
+      %li{class: tab_class(:events)}= link_to(Event.model_name.human(count: 2), '#events', data: { toggle: 'tab' })
 
     .tab-content
-      #people.tab-pane.active= render 'people'
-      #groups.tab-pane= render 'groups'
-      #events.tab-pane= render 'events'
+      #people.tab-pane{class: tab_class(:people)}= render 'people'
+      #groups.tab-pane{class: tab_class(:groups)}= render 'groups'
+      #events.tab-pane{class: tab_class(:events)}= render 'events'

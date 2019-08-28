@@ -6,5 +6,5 @@
 - include_wysiwyg_assets
 
 = entry_form(buttons_bottom: false) do |f|
-  = f.labeled_input_field :key
+  = f.labeled_collection_select(:key, @available_keys.to_a, :first, :second, {}, class: 'span6')
   = f.labeled_text_area :body, class: 'span8 wysiwyg', rows: 20

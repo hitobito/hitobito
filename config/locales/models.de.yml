@@ -623,7 +623,14 @@ de:
 
       help_text:
         key: Schlüssel
+        key_human: Schlüssel
         body: Inhalt
+
+      help_text/key:
+        index: '%{model}-Übersicht'
+        show: '%{model} ansehen'
+        new: '%{model} erstellen'
+        edit: '%{model} bearbeiten'
 
 
       label_format:

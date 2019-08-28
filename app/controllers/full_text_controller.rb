@@ -17,6 +17,7 @@ class FullTextController < ApplicationController
     @people = with_query { search_strategy.list_people }
     @groups = with_query { search_strategy.query_groups }
     @events = with_query { search_strategy.query_events }
+    @active_tab = active_tab
   end
 
   def query
@@ -67,6 +68,6 @@ class FullTextController < ApplicationController
   end
 
   def tab_class(tab)
-    'active' if active_tab == tab
+    'active' if @active_tab == tab
   end
 end

@@ -3,5 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= crud_table :key, :body do |t|
+= crud_table do |t|
+  - t.col(HelpText.human_attribute_name(:key))  { |help_text| help_text.to_s }
+  - t.col(HelpText.human_attribute_name(:body)) { |help_text| help_text.body }
   - action_col_edit(t)

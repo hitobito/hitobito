@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class HelpText < ActiveRecord::Base
+  VIEW_KEYS = %w(index show new edit).freeze
 
   include Globalized
   translates :body
@@ -14,7 +15,26 @@ class HelpText < ActiveRecord::Base
   validates_by_schema
 
   def to_s(_format = :default)
-    key
+    return super() if key.nil?
+
+    if VIEW_KEYS.include?(field)
+      HelpText.human_attribute_name("key.#{field}", model: model.model_name.human)
+    else
+      "#{model.model_name.human}: #{model.human_attribute_name(field)}"
+    end
   end
 
+  private
+
+  def model
+    @model ||= key_parts.first.classify.constantize
+  end
+
+  def field
+    @field ||= key_parts.second
+  end
+
+  def key_parts
+    @key_parts ||= key.split('.', 2)
+  end
 end

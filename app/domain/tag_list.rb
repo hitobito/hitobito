@@ -22,7 +22,7 @@ class TagList
   #end
 
   def existing_tags_with_count
-    people.flat_map do |person|
+    manageable_people.flat_map do |person|
       person.tags
     end.group_by { |tag| tag }.map { |tag, occurrences| [tag, occurrences.count] }
   end
@@ -31,10 +31,8 @@ class TagList
     (model_params || {}).keys
   end
 
-  def managed_people_ids
-    people.map do |person|
-      authorize!(:manage_tags, person, message: access_denied_flash(person)).id
-    end
+  def manageable_people_ids
+    manageable_people.map(&:id)
   end
 
   private
@@ -67,6 +65,10 @@ class TagList
   #def new_group
   #  @new_group ||= Group.find(model_params[:group_id])
   #end
+
+  def manageable_people
+    people.select { |person| can?(:manage_tags, person) }
+  end
 
   def people
     @people ||= Person.includes(:tags).where(id: people_ids).uniq

@@ -1237,8 +1237,6 @@ de:
         other: '%{count} Rollen erstellen'
 
   tag_lists:
-    available:
-      no_entries: Keine für Sie löschbare Tags vorhanden
     access_denied: Zugriff auf die Tags von %{person} verweigert
     destroy:
       success:
@@ -1253,6 +1251,7 @@ de:
     deletable:
       title: Welche Tags sollen gelöscht werden?
       submit: Entfernen
+      no_entries: Kein für Sie löschbares Tag vorhanden
     new:
       title: Wo sollen die neuen Tags erstellt werden?
       submit:

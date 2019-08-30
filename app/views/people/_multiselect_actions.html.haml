@@ -22,3 +22,8 @@
         remote: true)
 
       = Dropdown::ParticipationLists.new(self, @group, translate('.add_participation'))
+
+      = action_button(translate('.remove_tags'),
+        deletable_group_tag_list_path(@group, range: params[:range]),
+        :trash,
+        remote: true)

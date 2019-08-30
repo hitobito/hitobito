@@ -12,10 +12,10 @@
     .filter-toggle {
       cursor: pointer;
     }
-    .available-role-type {
+    .available-role-type, .available-tag {
       margin-left: 10px;
 
-      .role-count {
+      .role-count, .tag-count {
         display: inline;
         padding: 0px 5px;
         background-color: #eee;

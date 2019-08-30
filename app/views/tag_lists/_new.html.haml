@@ -1,6 +1,25 @@
-= render 'form', url: group_role_list_path(group),
-  method: :post,
-  remote: false,
-  title: t('.title'),
-  people_ids: @people_ids,
-  submit_label: t('.submit', count: @people_count)
+- options = options_from_collection_for_select(@possible_tags, :to_s, :to_s, [])
+
+#tag-lists-new.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.bold.modal-title
+          %b=t('.title')
+
+      = standard_form(:add_tag_list,
+        url: group_tag_list_path(group), method: :post, remote: false) do |f|
+        .modal-body
+          .row-fluid
+            = hidden_field_tag('ids', @people_ids)
+            = select_tag('tags[]',
+                          options,
+                          class: 'chosen-select',
+                          multiple: true,
+                          data: { chosen_no_results: t('global.chosen_no_results'), placeholder: ' ' } )
+
+        .modal-footer
+          = submit_button(f, t('.submit', count: @people_count))
+          = link_to(ti('button.cancel'), '#',
+            class: 'link cancel',
+            onclick: "event.preventDefault(); $('#tag-lists-new').modal('hide')")

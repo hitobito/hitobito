@@ -1,8 +1,6 @@
 class TagListsController < CrudController
   self.nesting = Group
 
-  self.permitted_attrs = [:tag, :group_id]
-
   skip_authorization_check
   skip_authorize_resource
 
@@ -15,12 +13,19 @@ class TagListsController < CrudController
 
   respond_to :js, only: [:new, :deletable]
 
-  # TODO
-  #def create
-  #  new_tags = tag_list.build_new_tags_hash
-  #  count = Role.create(new_tags).count
-  #  redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
-  #end
+  def create
+    new_tags = tag_list.build_new_tags(logger)
+    ActiveRecord::Base.transaction do
+      new_tags.each do |hash|
+        person, tag = hash
+        person.tag_list.add(tag)
+      end
+      new_tags.keys.uniq.each do |person|
+        person.save
+      end
+    end
+    redirect_to(group_people_path(group), notice: flash_message(:success, count: new_tags.count))
+  end
 
   def destroy
     tags = ActsAsTaggableOn::Tagging.where({taggable_type: Person.name,
@@ -30,10 +35,11 @@ class TagListsController < CrudController
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
 
-  #def new
-  #  @people_ids = people_ids
-  #  @people_count = @people_ids.count
-  #end
+  def new
+    @people_ids = people_ids
+    @people_count = @people_ids.count
+    @possible_tags = Person.tags
+  end
 
   def deletable
     @existing_tags = tag_list.existing_tags_with_count
@@ -41,16 +47,20 @@ class TagListsController < CrudController
   end
 
   def self.model_class
-    ActsAsTaggableOn::Tag
+    Tag
   end
+
+  #def model_identifier
+  #  model_class.name.demodulize.pluralize.underscore
+  #end
 
   private
 
+  # TODO is this really necessary? Needed to do this because it was looking for tags in Group instance. Is Group the correct place to nest this controller?
   def entry
     tag_list
   end
 
-  # TODO
   #def validate_tag_type
   #  return
   #  if role_type.blank? || !Object.const_defined?(role_type.camelize)
@@ -79,6 +89,6 @@ class TagListsController < CrudController
   end
 
   def tag_list
-    @tag_list ||= TagList.new(current_ability, params)
+    @tag_list ||= Tag::List.new(current_ability, params)
   end
 end

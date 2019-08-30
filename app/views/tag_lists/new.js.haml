@@ -1,2 +1,3 @@
 $('#modal-placeholder').html("#{escape_javascript(render(partial: 'tag_lists/new'))}")
-$('#tag-lists-form').modal('show')
+$('.chosen-select').each(window.App.activateChosen)
+$('#tag-lists-new').modal('show')

@@ -1,0 +1,6 @@
+= render 'form', url: group_role_list_path(group),
+  method: :post,
+  remote: false,
+  title: t('.title'),
+  people_ids: @people_ids,
+  submit_label: t('.submit', count: @people_count)

@@ -1,0 +1,6 @@
+= render 'available', url: group_tag_list_path(group),
+  title: t('.title'),
+  method: :delete,
+  people_ids: @people_ids,
+  tags: @existing_tags,
+  submit_label: t('.submit')

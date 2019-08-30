@@ -1094,6 +1094,8 @@ de:
       move_role: Rollen verschieben
       add_role: Rolle hinzufügen
       add_participation: Zu Veranstaltung hinzufügen
+      remove_tags: Tags entfernen
+      add_tags: Tags hinzufügen
 
   participations:
     destroy:
@@ -1233,6 +1235,29 @@ de:
       submit:
         one: Eine Rolle erstellen
         other: '%{count} Rollen erstellen'
+
+  tag_lists:
+    available:
+      no_entries: Keine für Sie löschbare Tags vorhanden
+    access_denied: Zugriff auf die Tags von %{person} verweigert
+    destroy:
+      success:
+        zero: Es wurde kein Tag entfernt
+        one: Ein Tag wurde entfernt
+        other: '%{count} Tags wurden entfernt'
+    create:
+      success:
+        zero: Es wurden keine Tags erstellt
+        one: Ein Tag wurde erstellt
+        other: '%{count} Tags wurden erstellt'
+    deletable:
+      title: Welche Tags sollen gelöscht werden?
+      submit: Entfernen
+    new:
+      title: Wo sollen die neuen Tags erstellt werden?
+      submit:
+        one: Ein Tag erstellen
+        other: '%{count} Tags erstellen'
 
   service_tokens:
     abilities:

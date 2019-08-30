@@ -26,4 +26,5 @@
       = action_button(translate('.remove_tags'),
         deletable_group_tag_list_path(@group, range: params[:range]),
         :trash,
+        data: { checkable: true, method: :get },
         remote: true)

@@ -32,7 +32,7 @@ describe Export::PeopleExportJob do
       lines = File.readlines("#{filepath}.#{format}")
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
-      expect(lines[0].split(';').count).to match(14)
+      expect(lines[0].split(';').count).to match(15)
     end
 
     context 'household' do

@@ -18,7 +18,7 @@ describe Export::Tabular::People::TableDisplays do
 
     its(:attributes) do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-                :zip_code, :town, :country, :gender, :birthday, :layer_group, :roles]
+                 :zip_code, :town, :country, :gender, :birthday, :layer_group, :roles, :tags]
     end
 
     it 'includes additional attributes if configured' do
@@ -72,7 +72,7 @@ describe Export::Tabular::People::TableDisplays do
 
     its(:attributes) do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-                :zip_code, :town, :country, :gender, :birthday, :layer_group, :roles]
+                :zip_code, :town, :country, :gender, :birthday, :layer_group, :roles, :tags]
     end
 
     it 'includes additional person attributes if configured' do

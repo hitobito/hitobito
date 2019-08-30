@@ -37,8 +37,8 @@ describe Export::Tabular::People::PeopleFull do
       expect(csv.headers).to eq([
         'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
         'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-        'Zusätzliche Angaben', 'Hauptebene', 'Rollen', 'Weitere E-Mail Vater', 'Telefonnummer Vater',
-        'Social Media Adresse Skype', 'Elternteil'])
+        'Zusätzliche Angaben', 'Hauptebene', 'Rollen',  'Tags', 'Weitere E-Mail Vater',
+        'Telefonnummer Vater', 'Social Media Adresse Skype', 'Elternteil'])
     end
 
     context 'first row' do
@@ -61,7 +61,7 @@ describe Export::Tabular::People::PeopleFull do
       expect(csv.headers).to eq(
         ["Prénom", "Nom", "Nom de l'entreprise", "Surnom", "Entreprise",
          "Adresse e-mail principale", "Adresse", "Code postal", "Lieu", "Pays", "Sexe",
-         "Date de naissance", "Données supplémentaires", "Niveau", "Rôles",
+         "Date de naissance", "Données supplémentaires", "Niveau", "Rôles", "Tags",
          "Adresse e-mail supplémentaire Père", "Numéro de téléphone Père",
          "Adresse d'un média social Skype", "Parent"]
       )

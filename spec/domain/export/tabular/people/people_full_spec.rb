@@ -26,7 +26,7 @@ describe Export::Tabular::People::PeopleFull do
 
   its(:attributes) do should eq [:first_name, :last_name, :company_name, :nickname, :company,
                                  :email, :address, :zip_code, :town, :country, :gender, :birthday,
-                                 :additional_information, :layer_group, :roles] end
+                                 :additional_information, :layer_group, :roles, :tags] end
 
   context '#attribute_labels' do
     subject { people_list.attribute_labels }

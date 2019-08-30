@@ -12,7 +12,7 @@ module Export::Tabular::People
       Person.column_names.collect(&:to_sym) -
         Person::INTERNAL_ATTRS -
         [:picture, :primary_group_id, :id] +
-        [:layer_group, :roles]
+        [:layer_group, :roles, :tags]
     end
 
     def association_attributes

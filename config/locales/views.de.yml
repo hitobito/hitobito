@@ -1253,10 +1253,10 @@ de:
       submit: Entfernen
       no_entries: Kein für Sie löschbares Tag vorhanden
     new:
-      title: Wo sollen die neuen Tags erstellt werden?
+      title: Welche Tags sollen hinzugefügt werden?
       submit:
-        one: Ein Tag erstellen
-        other: '%{count} Tags erstellen'
+        one: Tags auf einer Person erstellen
+        other: 'Tags auf %{count} Personen erstellen'
 
   service_tokens:
     abilities:

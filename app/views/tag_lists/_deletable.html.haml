@@ -1,17 +1,15 @@
-#tag-lists-available.modal.fade
+#tag-lists-deletable.modal.fade
   .modal-dialog
     .modal-content
       .modal-header
         %h5.bold.modal-title
           %b=t('.title')
 
-      = standard_form(:tag_list,
+      = standard_form(:remove_tag_list,
         url: group_tag_list_path(group), method: :delete) do |f|
         .modal-body
           .row-fluid
             = hidden_field_tag('ids', @people_ids)
-            = yield
-
             .checkboxes
               - if @existing_tags.present?
                 = available_tags_checkboxes(@existing_tags)
@@ -21,4 +19,4 @@
           = submit_button(f, t('.submit')) unless @existing_tags.empty?
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
-            onclick: "event.preventDefault(); $('#tag-lists-available').modal('hide')")
+            onclick: "event.preventDefault(); $('#tag-lists-deletable').modal('hide')")

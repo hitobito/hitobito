@@ -26,14 +26,13 @@ class TagListsController < ListController
   end
 
   def new
-    @people_ids = people_ids
+    @people_ids = tag_list.manageable_people_ids
     @people_count = @people_ids.count
-    @possible_tags = Person.tags
   end
 
   def deletable
+    @people_ids = tag_list.manageable_people_ids
     @existing_tags = tag_list.existing_tags_with_count
-    @people_ids = params[:ids]
   end
 
   private
@@ -44,10 +43,6 @@ class TagListsController < ListController
 
   def group
     @group ||= Group.find(params[:group_id])
-  end
-
-  def people_ids
-    params[:ids].to_s.split(',')
   end
 
   def tag_list

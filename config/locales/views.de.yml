@@ -1238,7 +1238,6 @@ de:
         other: '%{count} Rollen erstellen'
 
   tag_lists:
-    access_denied: Zugriff auf die Tags von %{person} verweigert
     destroy:
       success:
         zero: Es wurde kein Tag entfernt

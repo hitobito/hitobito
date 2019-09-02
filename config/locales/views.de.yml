@@ -1094,6 +1094,7 @@ de:
       move_role: Rollen verschieben
       add_role: Rolle hinzufügen
       add_participation: Zu Veranstaltung hinzufügen
+      tag_lists: Tags
       remove_tags: Tags entfernen
       add_tags: Tags hinzufügen
 

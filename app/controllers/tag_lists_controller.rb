@@ -23,9 +23,9 @@ class TagListsController < CrudController
   end
 
   def destroy
-    tags = ActsAsTaggableOn::Tagging.where({taggable_type: Person.name,
+    tags = ActsAsTaggableOn::Tagging.where(taggable_type: Person.name,
                                             taggable_id: tag_list.manageable_people_ids,
-                                            tag_id: tag_list.tag_ids})
+                                            tag_id: tag_list.tag_ids)
     count = tags.destroy_all.count
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
@@ -44,10 +44,6 @@ class TagListsController < CrudController
   def self.model_class
     Tag
   end
-
-  #def model_identifier
-  #  model_class.name.demodulize.pluralize.underscore
-  #end
 
   private
 
@@ -70,10 +66,6 @@ class TagListsController < CrudController
   def flash_message(type, attrs = {})
     I18n.t("#{controller_name}.#{action_name}.#{type}", attrs)
   end
-
-  #def role_type
-  #  model_params[:type]
-  #end
 
   def group
     @group ||= Group.find(params[:group_id])

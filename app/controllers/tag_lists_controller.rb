@@ -12,7 +12,7 @@ class TagListsController < ListController
     new_tags = tag_list.build_new_tags
     new_tags[:hash].each do |person, tags|
       person.tag_list.add(tags)
-      new_tags[:count] -= person.tag_list.count unless person.save
+      new_tags[:count] -= tags.count unless person.save
     end
     redirect_to(group_people_path(group), notice: flash_message(:success, count: new_tags[:count]))
   end

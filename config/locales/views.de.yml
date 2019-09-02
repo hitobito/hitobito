@@ -1255,6 +1255,7 @@ de:
       no_entries: Kein für Sie löschbares Tag vorhanden
     new:
       title: Welche Tags sollen hinzugefügt werden?
+      tag_input_placeholder: Tags suchen oder erstellen...
       submit:
         one: Tags auf einer Person erstellen
         other: 'Tags auf %{count} Personen erstellen'

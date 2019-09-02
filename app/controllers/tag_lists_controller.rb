@@ -14,17 +14,12 @@ class TagListsController < CrudController
   respond_to :js, only: [:new, :deletable]
 
   def create
-    new_tags = tag_list.build_new_tags(logger)
-    ActiveRecord::Base.transaction do
-      new_tags.each do |hash|
-        person, tag = hash
-        person.tag_list.add(tag)
-      end
-      new_tags.keys.uniq.each do |person|
-        person.save
-      end
+    new_tags = tag_list.build_new_tags
+    new_tags[:hash].each do |person, tags|
+      person.tag_list.add(tags)
+      new_tags[:count] -= person.tag_list.count unless person.save
     end
-    redirect_to(group_people_path(group), notice: flash_message(:success, count: new_tags.count))
+    redirect_to(group_people_path(group), notice: flash_message(:success, count: new_tags[:count]))
   end
 
   def destroy

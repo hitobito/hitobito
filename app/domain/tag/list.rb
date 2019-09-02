@@ -20,16 +20,11 @@ class Tag
       end.group_by { |tag| tag }.map { |tag, occurrences| [tag, occurrences.count] }
     end
 
-    def build_new_tags(logger)
-      logger.debug(manageable_people.inspect)
-      all_combinations = manageable_people.product(tags)
-      logger.debug(all_combinations.inspect)
-      hashes = all_combinations.map {|elem| {elem[0] => elem[1]}}
-      logger.debug(hashes.inspect)
-      hashes.select do |hash|
-        person, tag = hash
-        not person.tag_list.include? tag
+    def build_new_tags
+      new_tags = manageable_people.map do |person|
+        [person, tags.select { |tag| person.tag_list.exclude? tag }]
       end
+      { hash: new_tags.to_h, count: new_tags.sum { |e| e[1].count } }
     end
 
     def tag_ids
@@ -51,20 +46,12 @@ class Tag
     #  model_params.permit(role_type.used_attributes + permitted_attrs)
     #end
 
-    #def group
-    #  @group ||= Group.find(params[:group_id])
-    #end
-
-    #def new_group
-    #  @new_group ||= Group.find(model_params[:group_id])
-    #end
-
     def tags
-      model_params || {}
+      @tags ||= model_params || {}
     end
 
     def manageable_people
-      people.select { |person| can?(:manage_tags, person) }
+      @manageable_people ||= people.select { |person| can?(:manage_tags, person) }
     end
 
     def people

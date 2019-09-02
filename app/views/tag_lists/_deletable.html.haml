@@ -11,7 +11,7 @@
           .row-fluid
             = hidden_field_tag('ids', @people_ids.join(','))
             .checkboxes
-              - if @existing_tags.present?
+              - if not @existing_tags.empty?
                 = available_tags_checkboxes(@existing_tags)
               - else
                 = t('.no_entries')

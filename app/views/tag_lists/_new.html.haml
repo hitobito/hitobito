@@ -9,15 +9,20 @@
         url: group_tag_list_path(group), method: :post, remote: false) do |f|
         .modal-body
           .row-fluid
-            = hidden_field_tag('ids', @people_ids.join(','))
-            = f.text_field(:tags,
-                           name: :tags,
-                           placeholder: t('.tag_input_placeholder'),
-                           data: { provide: 'entity',
-                                   url: group_person_tags_query_path(group_id: group.id, person_id: @people_ids.first) })
+
+            - if not @people_ids.empty?
+              = hidden_field_tag('ids', @people_ids.join(','))
+              = f.text_field(:tags,
+                             name: :tags,
+                             class: 'tag-list-add',
+                             data: { provide: 'entity',
+                                     url: group_person_tags_query_path(group_id: group.id, person_id: @people_ids.first) })
+              = f.help_inline t('.separate_multiple_tags_with_comma')
+            - else
+              = t('.no_entries')
 
         .modal-footer
-          = submit_button(f, t('.submit', count: @people_count))
+          = submit_button(f, t('.submit', count: @people_count)) if @people_ids.present?
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
             onclick: "event.preventDefault(); $('#tag-lists-new').modal('hide')")

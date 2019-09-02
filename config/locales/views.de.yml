@@ -1240,7 +1240,7 @@ de:
   tag_lists:
     destroy:
       success:
-        zero: Es wurde kein Tag entfernt
+        zero: Es wurden keine Tags entfernt
         one: Ein Tag wurde entfernt
         other: '%{count} Tags wurden entfernt'
     create:
@@ -1250,11 +1250,12 @@ de:
         other: '%{count} Tags wurden erstellt'
     deletable:
       title: Welche Tags sollen gelöscht werden?
+      no_entries: Von keiner der ausgewählten Personen können Tags entfernt werden
       submit: Entfernen
-      no_entries: Kein für Sie löschbares Tag vorhanden
     new:
       title: Welche Tags sollen hinzugefügt werden?
-      tag_input_placeholder: Tags suchen oder erstellen...
+      no_entries: Auf keiner der ausgewählten Personen können Tags erstellt werden
+      separate_multiple_tags_with_comma: Mehrere Tags können mit Kommas abgetrennt werden
       submit:
         one: Tags auf einer Person erstellen
         other: 'Tags auf %{count} Personen erstellen'

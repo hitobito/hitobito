@@ -1,5 +1,3 @@
-- options = options_from_collection_for_select(@possible_tags, :to_s, :to_s, [])
-
 #tag-lists-new.modal.fade
   .modal-dialog
     .modal-content
@@ -12,11 +10,11 @@
         .modal-body
           .row-fluid
             = hidden_field_tag('ids', @people_ids.join(','))
-            = select_tag('tags[]',
-                          options,
-                          class: 'chosen-select',
-                          multiple: true,
-                          data: { chosen_no_results: t('global.chosen_no_results'), placeholder: ' ' } )
+            = f.text_field(:tags,
+                           name: :tags,
+                           placeholder: t('.tag_input_placeholder'),
+                           data: { provide: 'entity',
+                                   url: group_person_tags_query_path(group_id: group.id, person_id: @people_ids.first) })
 
         .modal-footer
           = submit_button(f, t('.submit', count: @people_count))

@@ -28,7 +28,7 @@ class Tag
     end
 
     def tag_ids
-      tags.keys
+      tags.map(&:id)
     end
 
     def manageable_people_ids
@@ -47,7 +47,7 @@ class Tag
     #end
 
     def tags
-      @tags ||= model_params || {}
+      @tags ||= ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(model_params)
     end
 
     def manageable_people
@@ -63,7 +63,8 @@ class Tag
     end
 
     def model_params
-      params[:tags]
+      return params[:tags].keys if params[:tags].is_a?(Hash)
+      params[:tags].split(',').each(&:strip)
     end
   end
 end

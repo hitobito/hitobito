@@ -24,8 +24,8 @@ class TagListsController < CrudController
 
   def destroy
     tags = ActsAsTaggableOn::Tagging.where(taggable_type: Person.name,
-                                            taggable_id: tag_list.manageable_people_ids,
-                                            tag_id: tag_list.tag_ids)
+                                           taggable_id: tag_list.manageable_people_ids,
+                                           tag_id: tag_list.tag_ids)
     count = tags.destroy_all.count
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end

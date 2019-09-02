@@ -1,3 +1,3 @@
 $('#modal-placeholder').html("#{escape_javascript(render(partial: 'tag_lists/new'))}")
-$('.chosen-select').each(window.App.activateChosen)
+$('[data-provide=entity]').each(window.App.setupEntityTypeahead)
 $('#tag-lists-new').modal('show')

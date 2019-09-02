@@ -1,13 +1,8 @@
-class TagListsController < CrudController
+class TagListsController < ListController
   self.nesting = Group
 
   skip_authorization_check
   skip_authorize_resource
-
-  # TODO is this necessary?
-  #rescue_from CanCan::AccessDenied, with: :handle_access_denied
-
-  #before_action :validate_tag_type, only: :create
 
   helper_method :group
 
@@ -41,27 +36,7 @@ class TagListsController < CrudController
     @people_ids = params[:ids]
   end
 
-  def self.model_class
-    Tag
-  end
-
   private
-
-  # TODO is this really necessary? Needed to do this because it was looking for tags in Group instance. Is Group the correct place to nest this controller?
-  def entry
-    tag_list
-  end
-
-  #def validate_tag_type
-  #  return
-  #  if role_type.blank? || !Object.const_defined?(role_type.camelize)
-  #    redirect_to(group_people_path(group), alert: flash_message(:failure))
-  #  end
-  #end
-
-  #def handle_access_denied(e)
-  #  redirect_to(group_people_path(group), alert: e.message)
-  #end
 
   def flash_message(type, attrs = {})
     I18n.t("#{controller_name}.#{action_name}.#{type}", attrs)

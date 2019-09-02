@@ -41,11 +41,6 @@ class Tag
       I18n.t('tag_lists.access_denied', person: person.full_name)
     end
 
-    #def permitted_params(role_type = Role)
-    #  permitted_attrs = RoleListsController.permitted_attrs
-    #  model_params.permit(role_type.used_attributes + permitted_attrs)
-    #end
-
     def tags
       @tags ||= ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(model_params)
     end

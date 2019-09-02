@@ -54,6 +54,7 @@ class Tag
     end
 
     def model_params
+      return [] if params[:tags].nil?
       return params[:tags].keys if params[:tags].is_a?(Hash)
       params[:tags].split(',').each(&:strip)
     end

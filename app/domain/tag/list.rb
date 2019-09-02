@@ -7,7 +7,7 @@ class Tag
   class List
 
     attr_reader :ability, :params
-    delegate :authorize!, :can?, to: :ability
+    delegate :can?, to: :ability
 
     def initialize(ability, params)
       @ability = ability
@@ -36,10 +36,6 @@ class Tag
     end
 
     private
-
-    def access_denied_flash(person)
-      I18n.t('tag_lists.access_denied', person: person.full_name)
-    end
 
     def tags
       @tags ||= ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(model_params)

@@ -9,30 +9,23 @@ class TagListsController < ListController
   respond_to :js, only: [:new, :deletable]
 
   def create
-    new_tags = tag_list.build_new_tags
-    new_tags[:hash].each do |person, tags|
-      person.tag_list.add(tags)
-      new_tags[:count] -= tags.count unless person.save
-    end
-    redirect_to(group_people_path(group), notice: flash_message(:success, count: new_tags[:count]))
+    count = Tag::List.new(manageable_people, tags).add
+    redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
 
   def destroy
-    tags = ActsAsTaggableOn::Tagging.where(taggable_type: Person.name,
-                                           taggable_id: tag_list.manageable_people_ids,
-                                           tag_id: tag_list.tag_ids)
-    count = tags.destroy_all.count
+    count = Tag::List.new(manageable_people, tags).remove
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
 
   def new
-    @people_ids = tag_list.manageable_people_ids
+    @people_ids = manageable_people_ids
     @people_count = @people_ids.count
   end
 
   def deletable
-    @people_ids = tag_list.manageable_people_ids
-    @existing_tags = tag_list.existing_tags_with_count
+    @people_ids = manageable_people_ids
+    @existing_tags = people.tags_on(:tags).collect { |tag| [tag, tag.taggings_count] }
   end
 
   private
@@ -45,7 +38,30 @@ class TagListsController < ListController
     @group ||= Group.find(params[:group_id])
   end
 
-  def tag_list
-    @tag_list ||= Tag::List.new(current_ability, params)
+  def manageable_people_ids
+    manageable_people.map(&:id)
+  end
+
+  def manageable_people
+    @manageable_people ||= people.select { |person| current_ability.can?(:manage_tags, person) }
+  end
+
+  def people
+    @people ||= Person.includes(:tags).where(id: people_ids).uniq
+  end
+
+  def people_ids
+    return [] if params[:ids].nil?
+    params[:ids].to_s.split(',')
+  end
+
+  def tags
+    @tags ||= ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(tag_id_list)
+  end
+
+  def tag_id_list
+    return [] if params[:tags].nil?
+    return params[:tags].keys if params[:tags].is_a?(Hash)
+    params[:tags].split(',').each(&:strip)
   end
 end

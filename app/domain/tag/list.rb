@@ -15,9 +15,9 @@ class Tag
     end
 
     def existing_tags_with_count
-      manageable_people.flat_map do |person|
-        person.tags
-      end.group_by { |tag| tag }.map { |tag, occurrences| [tag, occurrences.count] }
+      manageable_people.tags_on(:tags).collect do |tag|
+        [tag, tag.taggings_count]
+      end
     end
 
     def build_new_tags

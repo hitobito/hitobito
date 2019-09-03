@@ -9,78 +9,42 @@ module Synchronize
   module Mailchimp
     class Synchronizator
 
-      attr_reader :mailing_list, :gibbon, :people_on_the_list, :people_on_the_mailchimp_list
+      attr_reader :mailing_list
 
       def initialize(mailing_list)
         @mailing_list = mailing_list
-        @gibbon = Gibbon::Request.new(api_key: mailing_list.mailchimp_api_key)
-        @people_on_the_list = mailing_list.people
-        @people_on_the_mailchimp_list = gibbon.lists(mailing_list.mailchimp_list_id)
-                                              .members
-                                              .retrieve(params: { 'count' => '1000000' })
-                                              .body['members']
       end
 
       def call
-        subscribe_people_on_the_list
-        delete_people_not_on_the_list
+        client.subscribe(missing_people)
+        client.delete(obsolete_emails)
       end
 
       private
 
-      def subscribe_people_on_the_list
-        gibbon.batches.create(body: { operations: subscribing_operations })
-      end
-
-      def delete_people_not_on_the_list
-        gibbon.batches.create(body: { operations: deleting_operations })
-      end
-
-      def subscribing_operations
-        people_to_be_subscribed.map do |person|
-          {
-            method: 'POST',
-            path: "lists/#{mailing_list.mailchimp_list_id}/members",
-            body: subscriber_body(person)
-          }
+      def missing_people
+        people.reject do |person|
+          mailchimp_emails.include?(person.email)
         end
       end
 
-      def subscriber_body(person)
-        {
-          email_address: person.email,
-          status: 'subscribed',
-          merge_fields: {
-            FNAME: person.first_name,
-            LNAME: person.last_name
-          }
-        }.to_json
+      def obsolete_emails
+        mailchimp_emails - people.collect(&:email)
       end
 
-      def deleting_operations
-        people_to_be_deleted.map do |person|
-          {
-            method: 'DELETE',
-            path: "lists/#{mailing_list.mailchimp_list_id}/members/"\
-              "#{subscriber_hash person['email_address']}"
-          }
+      def people
+        @people ||= mailing_list.people
+      end
+
+      # We return ALL emails, even when they have unsubscribed
+      def mailchimp_emails
+        @mailchimp_emails ||= client.members.collect do |member|
+          member[:email_address]
         end
       end
 
-      def people_to_be_subscribed
-        people_on_the_list.reject do |person|
-          people_on_the_mailchimp_list.map { |p| p['email_address'] }.include? person.email
-        end
-      end
-
-      def people_to_be_deleted
-        people_on_the_mailchimp_list.reject do |subscriber|
-          people_on_the_list.map(&:email).include? subscriber['email_address']
-        end
-      end
-
-      def subscriber_hash(email)
-        Digest::MD5.hexdigest email.downcase
+      def client
+        @client ||= Client.new(mailing_list)
       end
 
     end

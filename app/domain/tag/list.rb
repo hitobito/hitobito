@@ -6,57 +6,36 @@
 module Tag
   class List
 
-    attr_reader :ability, :params
-    delegate :can?, to: :ability
-
-    def initialize(ability, params)
-      @ability = ability
-      @params = params
+    def initialize(people, tags)
+      @people = people
+      @tags = tags
     end
 
-    def existing_tags_with_count
-      manageable_people.tags_on(:tags).collect do |tag|
-        [tag, tag.taggings_count]
+    def add
+      new_tags = build_new_tags
+      ActiveRecord::Base.transaction do
+        new_tags[:hash].each do |person, tags|
+          person.tag_list.add(tags)
+          new_tags[:count] -= tags.count unless person.save
+        end
       end
+      new_tags[:count]
     end
 
-    def build_new_tags
-      new_tags = manageable_people.map do |person|
-        [person, tags - person.tags]
-      end
-      { hash: new_tags.to_h, count: new_tags.sum { |e| e[1].count } }
-    end
-
-    def tag_ids
-      tags.map(&:id)
-    end
-
-    def manageable_people_ids
-      manageable_people.map(&:id)
+    def remove
+      tags = ActsAsTaggableOn::Tagging.where(taggable_type: Person.name,
+                                             taggable_id: @people.map(&:id),
+                                             tag_id: @tags.map(&:id))
+      tags.destroy_all.count
     end
 
     private
 
-    def tags
-      @tags ||= ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(model_params)
-    end
-
-    def manageable_people
-      @manageable_people ||= people.select { |person| can?(:manage_tags, person) }
-    end
-
-    def people
-      @people ||= Person.includes(:tags).where(id: people_ids).uniq
-    end
-
-    def people_ids
-      params[:ids].to_s.split(',')
-    end
-
-    def model_params
-      return [] if params[:tags].nil?
-      return params[:tags].keys if params[:tags].is_a?(Hash)
-      params[:tags].split(',').each(&:strip)
+    def build_new_tags
+      new_tags = @people.map do |person|
+        [person, @tags - person.tags]
+      end
+      { hash: new_tags.to_h, count: new_tags.sum { |e| e[1].count } }
     end
   end
 end

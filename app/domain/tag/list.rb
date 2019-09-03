@@ -22,7 +22,7 @@ class Tag
 
     def build_new_tags
       new_tags = manageable_people.map do |person|
-        [person, tags.select { |tag| person.tag_list.exclude? tag }]
+        [person, tags - person.tags]
       end
       { hash: new_tags.to_h, count: new_tags.sum { |e| e[1].count } }
     end

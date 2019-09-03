@@ -22,7 +22,7 @@ describe TagListsController do
     it 'refuses to add a tag to a person we cannot manage' do
       person = people(:top_leader)
       xhr :post, :create, group_id: group.id, ids: person.id, tags: 'Tagname', format: :js
-      expect(flash[:success]).to include 'Es wurden keine Tags erstellt'
+      expect(flash[:notice]).to include 'Es wurden keine Tags erstellt'
       expect(person.reload.tags.count).to be 0
     end
 
@@ -32,17 +32,16 @@ describe TagListsController do
       expect(person.save).to be_truthy
       tags_before = person.tags
       xhr :post, :destroy, group_id: group.id, ids: people(:top_leader).id, tags: 'remove?', format: :js
-      expect(flash[:success]).to include 'Es wurden keine Tags entfernt'
+      expect(flash[:notice]).to include 'Es wurden keine Tags entfernt'
       expect(person.reload.tags).to eq tags_before
     end
-
   end
 
   context 'POST create' do
     it 'creates only one tag for one person' do
       expect do
         post :create, group_id: group, ids: person1.id, tags: 'new tag'
-      end.to change(Person.tags, :count).by(1)
+      end.to change { Person.tags.count }.by(1)
 
       expect(flash[:notice]).to include 'Ein Tag wurde erstellt'
     end
@@ -53,7 +52,7 @@ describe TagListsController do
       person.save!
       expect do
         post :create, group_id: group, ids: person.id, tags: 'existing'
-      end.to change(Person.tags, :count).by(0)
+      end.not_to change { Person.tags.count }
 
       expect(flash[:notice]).to include 'Es wurden keine Tags erstellt'
     end
@@ -61,15 +60,18 @@ describe TagListsController do
     it 'may create the same tag on multiple people' do
       expect do
         post :create, group_id: group, ids: [person1.id, person2.id].join(','), tags: 'same tag multiple people'
-      end.to change(Person.tags, :count).by(2)
+      end.to change { Person.tags.count }.by(1)
 
       expect(flash[:notice]).to include '2 Tags wurden erstellt'
+
+      expect(person1.tags.collect(&:name)).to include 'same tag multiple people'
+      expect(person2.tags.collect(&:name)).to include 'same tag multiple people'
     end
 
     it 'may create multiple tags for one person' do
       expect do
         post :create, group_id: group, ids: person1.id, tags: 'new tag 2, another, one more'
-      end.to change(Person.tags, :count).by(3)
+      end.to change { Person.tags.count }.by(3)
 
       expect(flash[:notice]).to include '3 Tags wurden erstellt'
     end
@@ -77,7 +79,7 @@ describe TagListsController do
     it 'may create multiple tags on multiple people' do
       expect do
         post :create, group_id: group, ids: [person1.id, person2.id].join(','), tags: 't3, t4'
-      end.to change(Person.tags, :count).by(4)
+      end.to change { Person.tags.count }.by(2)
 
       expect(flash[:notice]).to include '4 Tags wurden erstellt'
     end
@@ -89,7 +91,7 @@ describe TagListsController do
       person1.save!
       expect do
         delete :destroy, group_id: group, ids: person1.id, tags: {'remove me' => 'on'}
-      end.to change(Person.tags, :count).by(1)
+      end.to change { Person.tags.count }.by(-1)
 
       expect(flash[:notice]).to include 'Ein Tag wurde entfernt'
     end
@@ -97,7 +99,7 @@ describe TagListsController do
     it 'does nothing if the tag does not exist' do
       expect do
         delete :destroy, group_id: group, ids: person1.id, tags: 'existing'
-      end.to change(Person.tags, :count).by(0)
+      end.to change { Person.tags.count }.by(0)
 
       expect(flash[:notice]).to include 'Es wurden keine Tags entfernt'
     end
@@ -110,7 +112,7 @@ describe TagListsController do
       person2.save!
       expect do
         delete :destroy, group_id: group, ids: [person1.id, person2.id].join(','), tags: {tag_name => 'on'}
-      end.to change(Person.tags, :count).by(2)
+      end.to change { Person.tags.count }.by(-1)
 
       expect(flash[:notice]).to include '2 Tags wurden entfernt'
     end
@@ -120,7 +122,7 @@ describe TagListsController do
       person1.save!
       expect do
         delete :destroy, group_id: group, ids: person1.id, tags: {'tag 2' => 'on', 'tag 1' => 'on', 'tag 3' => 'on'}
-      end.to change(Person.tags, :count).by(2)
+      end.to change { Person.tags.count }.by(-3)
 
       expect(flash[:notice]).to include '3 Tags wurden entfernt'
     end
@@ -132,7 +134,7 @@ describe TagListsController do
       person2.save!
       expect do
         delete :destroy, group_id: group, ids: [person1.id, person2.id].join(','), tags: {t3: 'on', t4: 'on'}
-      end.to change(Person.tags, :count).by(2)
+      end.to change { Person.tags.count }.by(-2)
 
       expect(flash[:notice]).to include '4 Tags wurden entfernt'
     end

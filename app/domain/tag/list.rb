@@ -13,9 +13,9 @@ module Tag
 
     def add
       ActiveRecord::Base.transaction do
-        @people.map do |person|
+        @people.sum do |person|
           add_to_person(person)
-        end.sum
+        end
       end
     end
 

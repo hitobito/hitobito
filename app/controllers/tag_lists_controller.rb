@@ -48,7 +48,6 @@ class TagListsController < ListController
   end
 
   def people_ids
-    return [] if params[:ids].nil?
     params[:ids].to_s.split(',')
   end
 
@@ -57,9 +56,8 @@ class TagListsController < ListController
   end
 
   def tag_names
-    return [] if params[:tags].nil?
-    return params[:tags].keys if params[:tags].is_a?(Hash)
-    params[:tags].split(',').each(&:strip)
+    return params[:tags].each(&:strip) if params[:tags].is_a?(Array)
+    params[:tags].to_s.split(',').each(&:strip)
   end
 
   def tag_list

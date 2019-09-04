@@ -8,7 +8,6 @@ require 'spec_helper'
 describe TagListsController do
 
   before { sign_in(people(:top_leader)) }
-  before { allow(controller).to receive(:tag_list).and_return(tag_list_double) }
 
   let(:tag_list_double) { double('tag_list') }
   let(:group) { groups(:top_group) }
@@ -19,24 +18,24 @@ describe TagListsController do
 
     before do
       sign_in(people(:bottom_member))
+      allow(tag_list_double).to receive(:add).and_return 0
+      allow(tag_list_double).to receive(:remove).and_return 0
     end
 
-    it 'refuses to add a tag to a person we cannot manage' do
-      expect(tag_list_double).to receive(:add).and_return(0)
-      person = people(:top_leader)
-      expect do
-        post :create, group_id: group.id, ids: person.id, tags: 'Tagname'
-      end.not_to(change { person.reload.tags })
+    it 'filters out people whose tags we cannot manage from create request' do
+      allow_any_instance_of(Tag::List).to receive(:new) do |people, _|
+        expect(people).to contain_exactly person2
+        tag_list_double
+      end
+      post :create, group_id: group.id, ids: [person1.id, person2.id].join(','), tags: 'Tagname'
     end
 
-    it 'refuses to remove a tag from a person we cannot manage' do
-      expect(tag_list_double).to receive(:remove).and_return(0)
-      person = people(:top_leader)
-      person.tag_list.add('remove?')
-      expect(person.save).to be_truthy
-      expect do
-        post :destroy, group_id: group.id, ids: people(:top_leader).id, tags: 'remove?'
-      end.not_to(change { person.reload.tags })
+    it 'filters out people whose tags we cannot manage from destroy request' do
+      allow_any_instance_of(Tag::List).to receive(:new) do |people, _|
+        expect(people).to contain_exactly person2
+        tag_list_double
+      end
+      post :destroy, group_id: group.id, ids: [person1.id, person2.id].join(','), tags: 'Tagname'
     end
   end
 
@@ -44,27 +43,29 @@ describe TagListsController do
     it 'shows modal' do
       xhr :get, :new, group_id: group.id, ids: [person1.id, person2.id].join(','), format: :js
       expect(response).to have_http_status(:ok)
-      is_expected.to render_template('tag_lists/new')
-      expect(assigns(:people_ids)).to contain_exactly person1.id, person2.id
+      expect(response).to render_template('tag_lists/new')
+      expect(assigns(:manageable_people)).to contain_exactly person1, person2
     end
   end
 
   context 'POST create' do
+    before { allow(controller).to receive(:tag_list).and_return tag_list_double }
+
     it 'creates a tag and displays flash message' do
       expect(tag_list_double).to receive(:add).and_return(1)
-      post :create, group_id: group, ids: person1.id, tags: 'new tag'
+      post :create, group_id: group.id, ids: person1.id, tags: 'new tag'
       expect(flash[:notice]).to include 'Ein Tag wurde erstellt'
     end
 
     it 'creates zero tags and displays flash message' do
       expect(tag_list_double).to receive(:add).and_return(0)
-      post :create, group_id: group, ids: person1.id, tags: 'existing'
+      post :create, group_id: group.id, ids: person1.id, tags: 'new tag'
       expect(flash[:notice]).to include 'Es wurden keine Tags erstellt'
     end
 
     it 'creates many tags and displays flash message' do
       expect(tag_list_double).to receive(:add).and_return(17)
-      post :create, group_id: group, ids: person1.id, tags: 'new tag'
+      post :create, group_id: group.id, ids: person1.id, tags: 'new tag'
       expect(flash[:notice]).to include '17 Tags wurden erstellt'
     end
   end
@@ -73,8 +74,8 @@ describe TagListsController do
     it 'shows modal' do
       xhr :get, :deletable, group_id: group.id, ids: [person1.id, person2.id].join(','), format: :js
       expect(response).to have_http_status(:ok)
-      is_expected.to render_template('tag_lists/deletable')
-      expect(assigns(:people_ids)).to contain_exactly person1.id, person2.id
+      expect(response).to render_template('tag_lists/deletable')
+      expect(assigns(:manageable_people)).to contain_exactly person1, person2
       expect(assigns(:existing_tags)).to be_empty
     end
 
@@ -95,8 +96,8 @@ describe TagListsController do
       xhr :get, :deletable, group_id: group.id, ids: [person.id, another_person.id].join(','),
                             format: :js
       expect(response).to have_http_status(:ok)
-      is_expected.to render_template('tag_lists/deletable')
-      expect(assigns(:people_ids)).to contain_exactly person.id, another_person.id
+      expect(response).to render_template('tag_lists/deletable')
+      expect(assigns(:manageable_people)).to contain_exactly person, another_person
       expect(assigns(:existing_tags)).to contain_exactly([tag_test, 1],
                                                          [tag_once, 1],
                                                          [tag_twice, 2])
@@ -104,21 +105,23 @@ describe TagListsController do
   end
 
   context 'DELETE destroy' do
+    before { allow(controller).to receive(:tag_list).and_return tag_list_double }
+
     it 'removes a tag and displays flash message' do
       expect(tag_list_double).to receive(:remove).and_return(1)
-      post :destroy, group_id: group, ids: person1.id, tags: 'new tag'
+      post :destroy, group_id: group.id, ids: person1.id, tags: 'existing'
       expect(flash[:notice]).to include 'Ein Tag wurde entfernt'
     end
 
     it 'removes zero tags and displays flash message' do
       expect(tag_list_double).to receive(:remove).and_return(0)
-      post :destroy, group_id: group, ids: person1.id, tags: 'existing'
+      post :destroy, group_id: group.id, ids: person1.id, tags: 'existing'
       expect(flash[:notice]).to include 'Es wurden keine Tags entfernt'
     end
 
     it 'removes many tags and displays flash message' do
       expect(tag_list_double).to receive(:remove).and_return(17)
-      post :destroy, group_id: group, ids: person1.id, tags: 'new tag'
+      post :destroy, group_id: group.id, ids: person1.id, tags: 'existing'
       expect(flash[:notice]).to include '17 Tags wurden entfernt'
     end
   end

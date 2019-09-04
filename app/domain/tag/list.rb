@@ -13,13 +13,14 @@ module Tag
 
     def add
       new_tags = build_new_tags
+      count = 0
       ActiveRecord::Base.transaction do
-        new_tags[:hash].each do |person, tags|
+        new_tags.each do |person, tags|
           person.tag_list.add(tags)
-          new_tags[:count] -= tags.count unless person.save
+          count += tags.count if person.save
         end
       end
-      new_tags[:count]
+      count
     end
 
     def remove
@@ -32,10 +33,7 @@ module Tag
     private
 
     def build_new_tags
-      new_tags = @people.map do |person|
-        [person, @tags - person.tags]
-      end
-      { hash: new_tags.to_h, count: new_tags.sum { |e| e[1].count } }
+      @people.map { |person| [person, @tags - person.tags] }.to_h
     end
   end
 end

@@ -21,7 +21,7 @@ describe TagListsController do
 
     it 'refuses to add a tag to a person we cannot manage' do
       person = people(:top_leader)
-      xhr :post, :create, group_id: group.id, ids: person.id, tags: 'Tagname', format: :js
+      post :create, group_id: group.id, ids: person.id, tags: 'Tagname'
       expect(flash[:notice]).to include 'Es wurden keine Tags erstellt'
       expect(person.reload.tags.count).to be 0
     end
@@ -31,9 +31,18 @@ describe TagListsController do
       person.tag_list.add('remove?')
       expect(person.save).to be_truthy
       tags_before = person.tags
-      xhr :post, :destroy, group_id: group.id, ids: people(:top_leader).id, tags: 'remove?', format: :js
+      post :destroy, group_id: group.id, ids: people(:top_leader).id, tags: 'remove?'
       expect(flash[:notice]).to include 'Es wurden keine Tags entfernt'
       expect(person.reload.tags).to eq tags_before
+    end
+  end
+
+  context 'GET modal for bulk creating tags' do
+    it 'shows modal' do
+      xhr :get, :new, group_id: group.id, ids: [person1.id, person2.id].join(','), format: :js
+      expect(response).to have_http_status(:ok)
+      is_expected.to render_template('tag_lists/new')
+      expect(assigns(:people_ids)).to contain_exactly person1.id, person2.id
     end
   end
 
@@ -52,7 +61,7 @@ describe TagListsController do
       person.save!
       expect do
         post :create, group_id: group, ids: person.id, tags: 'existing'
-      end.not_to change { Person.tags.count }
+      end.not_to(change { Person.tags.count })
 
       expect(flash[:notice]).to include 'Es wurden keine Tags erstellt'
     end
@@ -82,6 +91,40 @@ describe TagListsController do
       end.to change { Person.tags.count }.by(2)
 
       expect(flash[:notice]).to include '4 Tags wurden erstellt'
+    end
+  end
+
+  context 'GET modal for bulk deleting tags' do
+    it 'shows modal' do
+      xhr :get, :deletable, group_id: group.id, ids: [person1.id, person2.id].join(','), format: :js
+      expect(response).to have_http_status(:ok)
+      is_expected.to render_template('tag_lists/deletable')
+      expect(assigns(:people_ids)).to contain_exactly person1.id, person2.id
+      expect(assigns(:existing_tags)).to be_empty
+    end
+
+    it 'shows modal with tags and correct count' do
+      sign_in(people(:root))
+      person = people(:top_leader)
+      person.tag_list.add('test', 'once', 'twice')
+      person.save!
+      another_person = people(:root)
+      another_person.tag_list.add('twice')
+      another_person.save!
+      unrelated_person = people(:bottom_member)
+      unrelated_person.tag_list.add('once', 'another')
+      unrelated_person.save!
+      tag_test  = ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name('test')[0]
+      tag_once  = ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name('once')[0]
+      tag_twice = ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name('twice')[0]
+      xhr :get, :deletable, group_id: group.id, ids: [person.id, another_person.id].join(','),
+                            format: :js
+      expect(response).to have_http_status(:ok)
+      is_expected.to render_template('tag_lists/deletable')
+      expect(assigns(:people_ids)).to contain_exactly person.id, another_person.id
+      expect(assigns(:existing_tags)).to contain_exactly([tag_test, 1],
+                                                         [tag_once, 1],
+                                                         [tag_twice, 2])
     end
   end
 

@@ -9,7 +9,7 @@
         url: group_tag_list_path(group), method: :delete) do |f|
         .modal-body
           .row-fluid
-            = hidden_field_tag('ids', @people_ids.join(','))
+            = hidden_field_tag('ids', @manageable_people.map(&:id).join(','))
             .checkboxes
               - unless @existing_tags.empty?
                 = available_tags_checkboxes(@existing_tags)

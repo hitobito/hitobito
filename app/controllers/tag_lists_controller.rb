@@ -4,7 +4,6 @@ class TagListsController < ListController
   skip_authorization_check
   skip_authorize_resource
 
-  before_action :manageable_people_ids, only: [:new, :deletable]
   helper_method :group
 
   respond_to :js, only: [:new, :deletable]
@@ -25,8 +24,9 @@ class TagListsController < ListController
 
   def deletable
     @existing_tags = manageable_people.flat_map(&:tags)
-                                      .group_by { |tag| tag }
-                                      .map { |tag, occurrences| [tag, occurrences.count] }
+                                      .each_with_object(Hash.new(0)) do |tag, tag_counts|
+                                        tag_counts[tag] += 1
+                                      end
   end
 
   private
@@ -37,10 +37,6 @@ class TagListsController < ListController
 
   def group
     @group ||= Group.find(params[:group_id])
-  end
-
-  def manageable_people_ids
-    @people_ids ||= manageable_people.map(&:id)
   end
 
   def manageable_people
@@ -57,10 +53,10 @@ class TagListsController < ListController
   end
 
   def tags
-    @tags ||= ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(tag_id_list)
+    @tags ||= ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(tag_names)
   end
 
-  def tag_id_list
+  def tag_names
     return [] if params[:tags].nil?
     return params[:tags].keys if params[:tags].is_a?(Hash)
     params[:tags].split(',').each(&:strip)

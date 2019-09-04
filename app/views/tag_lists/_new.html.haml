@@ -10,19 +10,19 @@
         .modal-body
           .row-fluid
 
-            - unless @people_ids.empty?
-              = hidden_field_tag('ids', @people_ids.join(','))
+            - unless @people_count.zero?
+              = hidden_field_tag('ids', @manageable_people.map(&:id).join(','))
               = f.text_field(:tags,
                              name: :tags,
                              class: 'tag-list-add',
                              data: { provide: 'entity',
-                                     url: group_person_tags_query_path(group_id: group.id, person_id: @people_ids.first) })
+                                     url: group_person_tags_query_path(group_id: group.id, person_id: @manageable_people.first.id) })
               = f.help_inline t('.separate_multiple_tags_with_comma')
             - else
               = t('.no_entries')
 
         .modal-footer
-          = submit_button(f, t('.submit', count: @people_count)) unless @people_ids.empty?
+          = submit_button(f, t('.submit', count: @people_count)) unless @people_count.zero?
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
             onclick: "event.preventDefault(); $('#tag-lists-new').modal('hide')")

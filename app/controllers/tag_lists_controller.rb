@@ -4,6 +4,7 @@ class TagListsController < ListController
   skip_authorization_check
   skip_authorize_resource
 
+  before_action :manageable_people_ids, only: [:new, :deletable]
   helper_method :group
 
   respond_to :js, only: [:new, :deletable]
@@ -19,13 +20,11 @@ class TagListsController < ListController
   end
 
   def new
-    @people_ids = manageable_people_ids
-    @people_count = @people_ids.count
+    @people_count = manageable_people.count
   end
 
   def deletable
-    @people_ids = manageable_people_ids
-    @existing_tags = people.tags_on(:tags).collect { |tag| [tag, tag.taggings_count] }
+    @existing_tags = manageable_people.tags_on(:tags).collect { |tag| [tag, tag.taggings_count] }
   end
 
   private
@@ -39,7 +38,7 @@ class TagListsController < ListController
   end
 
   def manageable_people_ids
-    manageable_people.map(&:id)
+    @people_ids ||= manageable_people.map(&:id)
   end
 
   def manageable_people

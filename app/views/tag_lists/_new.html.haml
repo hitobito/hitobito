@@ -10,7 +10,7 @@
         .modal-body
           .row-fluid
 
-            - if not @people_ids.empty?
+            - unless @people_ids.empty?
               = hidden_field_tag('ids', @people_ids.join(','))
               = f.text_field(:tags,
                              name: :tags,
@@ -22,7 +22,7 @@
               = t('.no_entries')
 
         .modal-footer
-          = submit_button(f, t('.submit', count: @people_count)) if @people_ids.present?
+          = submit_button(f, t('.submit', count: @people_count)) unless @people_ids.empty?
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
             onclick: "event.preventDefault(); $('#tag-lists-new').modal('hide')")

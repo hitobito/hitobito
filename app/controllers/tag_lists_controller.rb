@@ -10,12 +10,12 @@ class TagListsController < ListController
   respond_to :js, only: [:new, :deletable]
 
   def create
-    count = Tag::List.new(manageable_people, tags).add
+    count = tag_list.add
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
 
   def destroy
-    count = Tag::List.new(manageable_people, tags).remove
+    count = tag_list.remove
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
 
@@ -64,5 +64,9 @@ class TagListsController < ListController
     return [] if params[:tags].nil?
     return params[:tags].keys if params[:tags].is_a?(Hash)
     params[:tags].split(',').each(&:strip)
+  end
+
+  def tag_list
+    @tag_list ||= Tag::List.new(manageable_people, tags)
   end
 end

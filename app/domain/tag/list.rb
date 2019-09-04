@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Tag
+module Tag
   class List
 
     attr_reader :ability, :params

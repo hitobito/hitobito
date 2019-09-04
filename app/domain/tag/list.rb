@@ -12,15 +12,11 @@ module Tag
     end
 
     def add
-      new_tags = build_new_tags
-      count = 0
       ActiveRecord::Base.transaction do
-        new_tags.each do |person, tags|
-          person.tag_list.add(tags)
-          count += tags.count if person.save
-        end
+        @people.map do |person|
+          add_to_person(person)
+        end.sum
       end
-      count
     end
 
     def remove
@@ -32,8 +28,10 @@ module Tag
 
     private
 
-    def build_new_tags
-      @people.map { |person| [person, @tags - person.tags] }.to_h
+    def add_to_person(person)
+      tags = @tags - person.tags
+      person.tag_list.add(tags)
+      person.save ? tags.count : 0
     end
   end
 end

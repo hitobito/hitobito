@@ -24,7 +24,9 @@ class TagListsController < ListController
   end
 
   def deletable
-    @existing_tags = manageable_people.tags_on(:tags).collect { |tag| [tag, tag.taggings_count] }
+    @existing_tags = manageable_people.flat_map(&:tags)
+                                      .group_by { |tag| tag }
+                                      .map { |tag, occurrences| [tag, occurrences.count] }
   end
 
   private

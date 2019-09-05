@@ -432,12 +432,16 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     text = send(field_method, *(args << options))
     text = with_addon(addon, text) if addon.present?
-    text << help_inline(help_inline) if help_inline.present?
     if help.present?
+      text << help_inline(help_inline) if help_inline.present?
       text << help_block(help)
     else
       help_text = template.get_help_text(klass.to_s.underscore, args.first)
-      text << help_block(help_text.body.html_safe, class: 'help-text') unless help_text.nil?
+      unless help_text.nil?
+        text << content_tag(:span, '<i class="fa fa-info-circle"></i>'.html_safe, class: 'help-text-trigger')
+        text << help_block(help_text.body.html_safe, class: 'help-text span6')
+      end
+      text << help_inline(help_inline) if help_inline.present?
     end
     labeled_args << text
 

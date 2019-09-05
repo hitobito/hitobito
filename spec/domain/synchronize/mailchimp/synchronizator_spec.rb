@@ -73,7 +73,7 @@ describe Synchronize::Mailchimp::Synchronizator do
   end
 
   def stub_requests
-    stub_request(:get, "https://us12.api.mailchimp.com/3.0/lists/123456789/members").
+    stub_request(:get, "https://us12.api.mailchimp.com/3.0/lists/123456789/members?count=1000000").
       with(headers: {'Accept'=>'*/*',
                      'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
                      'Authorization'=>'Basic YXBpa2V5OjEyMzQ1Njc4OTBkNjZkMjVjYzVjOTI4NWFiNWE1NTUyLXVzMTI=',

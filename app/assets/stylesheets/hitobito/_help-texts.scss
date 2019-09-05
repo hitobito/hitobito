@@ -3,18 +3,56 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
 
-.help-text {
+.form-horizontal .controls .help-block.help-text {
+  float: none;
+  margin-top: -6px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  background-color: $grayLighter;
+
+  width: 446px;
+  @media screen and (min-width: 1200px) {
+    width: 556px;
+  }
+  @media screen and (max-width: 979px) {
+    width: 338px;
+  }
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.control-group {
   position: relative;
-  padding-left: 32px;
 
-  &:before {
-    display: block;
-    position: absolute;
-    left: 10px;
+  .help-text-trigger {
+    position: relative;
+    top: -3px;
+    margin-left: 4px;
+    padding: 0 4px;
+    border-radius: 4px;
 
-    content: '';
-    font-family: 'FontAwesome';
-    font-size: 16px;
-    color: $blue;
+    cursor: pointer;
+
+    background-color: $grayLighter;
+    color: $gray;
+
+    &:hover {
+      background-color: $grayLight;
+    }
+    &:active {
+      background-color: $gray;
+      color: $white;
+    }
+
+    @media screen and (max-width: 880px) {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+    @media screen and (max-width: 480px) {
+      top: 0px;
+      right: 0px;
+    }
   }
 }

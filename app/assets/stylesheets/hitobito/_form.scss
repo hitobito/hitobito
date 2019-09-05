@@ -348,26 +348,6 @@ textarea {
 .form-horizontal .controls .help-block {
   margin: -8px 0 10px 0;
   font-size: 90%;
-
-  &.help-text {
-    position: relative;
-    margin-top: -6px;
-    padding: 4px 8px 4px 32px;
-    border-radius: 3px;
-    background-color: $grayLighter;
-
-    &:before {
-      display: block;
-      position: absolute;
-      left: 10px;
-      margin-top: 1px;
-
-      content: '';
-      font-family: 'FontAwesome';
-      font-size: 16px;
-      color: $gray;
-    }
-  }
 }
 
 .controls > .text {

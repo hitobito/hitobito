@@ -22,28 +22,35 @@
   }
 }
 
+.help-text-trigger {
+  position: relative;
+  top: -3px;
+  padding: 0 4px;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  background-color: $grayLighter;
+  color: $gray;
+
+  &:hover {
+    background-color: $grayLight;
+  }
+  &:active {
+    background-color: $gray;
+    color: $white;
+  }
+
+  h1 & {
+    font-size: 14px;
+  }
+}
+
 .control-group {
   position: relative;
 
   .help-text-trigger {
-    position: relative;
-    top: -3px;
     margin-left: 4px;
-    padding: 0 4px;
-    border-radius: 4px;
-
-    cursor: pointer;
-
-    background-color: $grayLighter;
-    color: $gray;
-
-    &:hover {
-      background-color: $grayLight;
-    }
-    &:active {
-      background-color: $gray;
-      color: $white;
-    }
 
     @media screen and (max-width: 880px) {
       position: absolute;

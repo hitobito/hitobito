@@ -7,33 +7,56 @@
 
 module HelpHelper
 
-  def get_help_text(*args)
-    help_text_for_key(get_key(args))
+  def help_text_for_field(field)
+    help_texts.find { |ht| ht.key.split('.').last == field.to_s }
   end
 
-  def render_help_text(*args)
-    help_text = get_help_text(*args)
+  def render_help_text
     return if help_text.nil?
 
-    # TODO: Assess output security concerns
-    content_tag :div, help_text.body.html_safe, class: 'help-text alert alert-info'
+    content_tag :div, class: "help-text alert alert-info #{help_text.dom_key}" do
+      help_text.body.html_safe # rubocop:disable Rails/OutputSafety
+    end
+  end
+
+  def render_help_text_trigger
+    return '' if help_text.nil?
+
+    content_tag :span, :class => 'help-text-trigger', 'data-key' => help_text.dom_key do
+      content_tag :i, '', class: 'fa fa-info-circle'
+    end
   end
 
   private
 
-  def help_text_for_key(key)
-    (@__help_texts || []).find { |ht| ht.key == key }
+  def help_text
+    get_help_text(action_name == 'index' ? entries.first : entry, action_name)
   end
 
-  def get_key(args)
-    key_parts = if args.length <= 0 || args[0].is_a?(String)
-                  args
-                else
-                  entry = args[0].respond_to?(:model) ? args[0].model : entry # Resolve decorator
-                  class_name_underscore = entry.class.to_s.underscore
-                  [class_name_underscore] + args[1..-1]
-                end
-    key_parts.join('.')
+  def get_help_text(*args)
+    help_text_for_key(get_key(*args))
+  end
+
+  def help_text_for_key(key)
+    help_texts.find { |ht| ht.key == key }
+  end
+
+  def help_texts
+    @help_texts ||= load_help_texts
+  end
+
+  def load_help_texts
+    model = action_name == 'index' ? entries.first : entry
+    model_key = resolve_decorator(model).class.to_s.underscore
+    HelpText.includes(:translations).where('key LIKE ?', "#{model_key}.%").all
+  end
+
+  def get_key(*args)
+    ([resolve_decorator(args[0]).class.to_s.underscore] + args[1..-1]).join('.')
+  end
+
+  def resolve_decorator(entry)
+    entry.respond_to?(:model) ? entry.model : entry
   end
 
 end

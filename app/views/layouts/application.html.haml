@@ -59,7 +59,11 @@
 
         = render_sheets do
           .content-header
-            %h1= title
+            %h1
+              = title
+              = render_help_text_trigger
+            = render_help_text
+
             = sheet.render_main_tabs
 
           = yield :filter

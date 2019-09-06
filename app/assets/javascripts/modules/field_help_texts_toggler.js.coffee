@@ -7,9 +7,11 @@ app = window.App ||= {}
 
 app.FieldHelpTextToggler = {
   hideAll: ->
-    $('.controls .help-text').hide()
+    $('.help-text').hide()
   toggle: (e) ->
-    $(this).parents('.controls').find('.help-text').slideToggle()
+    key = $(this).data('key')
+    console.log('key:', key)
+    $('.' + key).slideToggle()
 }
 
 $(document).on('turbolinks:load', app.FieldHelpTextToggler.hideAll)

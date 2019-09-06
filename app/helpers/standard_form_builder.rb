@@ -436,10 +436,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       text << help_inline(help_inline) if help_inline.present?
       text << help_block(help)
     else
-      help_text = template.get_help_text(klass.to_s.underscore, args.first)
+      help_text = template.help_text_for_field(args.first)
       unless help_text.nil?
-        text << content_tag(:span, '<i class="fa fa-info-circle"></i>'.html_safe, class: 'help-text-trigger')
-        text << help_block(help_text.body.html_safe, class: 'help-text span6')
+        text << content_tag(:span, '<i class="fa fa-info-circle"></i>'.html_safe, class: 'help-text-trigger', 'data-key': help_text.dom_key)
+        text << help_block(help_text.body.html_safe, class: "help-text span6 #{help_text.dom_key}")
       end
       text << help_inline(help_inline) if help_inline.present?
     end

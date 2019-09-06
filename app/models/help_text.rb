@@ -24,6 +24,10 @@ class HelpText < ActiveRecord::Base
     end
   end
 
+  def dom_key
+    key.gsub('/', '-').gsub('.', '--')
+  end
+
   private
 
   def model

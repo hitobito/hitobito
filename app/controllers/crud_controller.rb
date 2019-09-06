@@ -17,7 +17,6 @@ class CrudController < ListController
   class_attribute :permitted_attrs
 
   prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy]
-  before_action :load_help_texts, only: [:index, :show, :new, :edit]
 
   delegate :model_identifier, to: 'self.class'
 
@@ -102,11 +101,6 @@ class CrudController < ListController
   end
 
   private
-
-  def load_help_texts
-    model_key = entry.class.to_s.underscore
-    @__help_texts = HelpText.includes(:translations).where('key LIKE ?', "#{model_key}.%").all
-  end
 
   #############  CUSTOMIZABLE HELPER METHODS  ##############################
 

@@ -7,39 +7,23 @@
 
 module HelpHelper
 
-  def help_text_for_field(field)
-    help_texts.find { |ht| ht.key.split('.').last == field.to_s }
-  end
+  def render_help_text(field = action_name)
+    return if help_text(field).nil?
 
-  def render_help_text
-    return if help_text.nil?
-
-    content_tag :div, class: "help-text alert alert-info #{help_text.dom_key}" do
-      help_text.body.html_safe # rubocop:disable Rails/OutputSafety
+    content_tag :div, class: "help-text #{help_text(field).dom_key}" do
+      help_text(field).body.html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 
-  def render_help_text_trigger
-    return '' if help_text.nil?
+  def render_help_text_trigger(field = action_name)
+    return '' if help_text(field).nil?
 
-    content_tag :span, :class => 'help-text-trigger', 'data-key' => help_text.dom_key do
+    content_tag :span, :class => 'help-text-trigger', 'data-key' => help_text(field).dom_key do
       content_tag :i, '', class: 'fa fa-info-circle'
     end
   end
 
   private
-
-  def help_text
-    get_help_text(action_name == 'index' ? entries.first : entry, action_name)
-  end
-
-  def get_help_text(*args)
-    help_text_for_key(get_key(*args))
-  end
-
-  def help_text_for_key(key)
-    help_texts.find { |ht| ht.key == key }
-  end
 
   def help_texts
     @help_texts ||= load_help_texts
@@ -49,6 +33,11 @@ module HelpHelper
     model = action_name == 'index' ? entries.first : entry
     model_key = resolve_decorator(model).class.to_s.underscore
     HelpText.includes(:translations).where('key LIKE ?', "#{model_key}.%").all
+  end
+
+  def help_text(field = action_name)
+    key = get_key(action_name == 'index' ? entries.first : entry, field)
+    help_texts.find { |ht| ht.key == key }
   end
 
   def get_key(*args)

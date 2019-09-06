@@ -420,10 +420,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def build_labeled_field(field_method, *args) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def build_labeled_field(field_method, *args)
     options = args.extract_options!
-    help = options.delete(:help)
-    help_inline = options.delete(:help_inline)
     label = options.delete(:label)
     addon = options.delete(:addon)
 
@@ -432,20 +430,24 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     text = send(field_method, *(args << options))
     text = with_addon(addon, text) if addon.present?
-    if help.present?
-      text << help_inline(help_inline) if help_inline.present?
-      text << help_block(help)
-    else
-      help_text = template.help_text_for_field(args.first)
-      unless help_text.nil?
-        text << content_tag(:span, '<i class="fa fa-info-circle"></i>'.html_safe, class: 'help-text-trigger', 'data-key': help_text.dom_key)
-        text << help_block(help_text.body.html_safe, class: "help-text span6 #{help_text.dom_key}")
-      end
-      text << help_inline(help_inline) if help_inline.present?
-    end
-    labeled_args << text
+    with_labeled_field_help(args.first, options) { |help| text << help }
 
+    labeled_args << text
     labeled(*labeled_args)
+  end
+
+  def with_labeled_field_help(field, options)
+    help = options.delete(:help)
+    help_inline = options.delete(:help_inline)
+
+    if help.present?
+      yield help_inline(help_inline) if help_inline.present?
+      yield help_block(help)
+    else
+      yield template.render_help_text_trigger(field)
+      yield template.render_help_text(field)
+      yield help_inline(help_inline) if help_inline.present?
+    end
   end
 
   def klass

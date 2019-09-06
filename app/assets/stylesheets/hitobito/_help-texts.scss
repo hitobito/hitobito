@@ -3,12 +3,18 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
 
-.form-horizontal .controls .help-block.help-text {
-  float: none;
-  margin-top: -6px;
+.help-text {
   padding: 4px 10px;
   border-radius: 3px;
   background-color: $grayLighter;
+}
+h1 + .help-text {
+  margin: 0 -10px;
+}
+
+.form-horizontal .controls .help-text {
+  float: none;
+  margin: -6px 0 4px 0;
 
   width: 446px;
   @media screen and (min-width: 1200px) {

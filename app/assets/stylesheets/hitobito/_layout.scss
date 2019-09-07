@@ -155,9 +155,9 @@ body {
   background: lighten($contentBackground, 3%);
   @include single-box-shadow($shadowColor, 0, 2px, 8px);
   .sheet {
-    margin: 0 -10px -30px 10px;
-    @include responsive(mediaTablet){
     margin: 0 3px 3px;
+    @include responsive(mediaTablet){
+      margin: 0 -10px -30px 10px;
     }
     &.parent {
       background: lighten($contentBackground, 6%);

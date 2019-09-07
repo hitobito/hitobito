@@ -16,7 +16,7 @@ class Person::PictureUploader < Uploader::Base
   # Process files as they are uploaded:
   process :validate_dimensions
   process :fix_exif_rotation
-  process resize_to_fill: [72, 72]
+  process resize_to_fill: [512, 512]
 
   # Create different versions of your uploaded files:
   version :thumb do

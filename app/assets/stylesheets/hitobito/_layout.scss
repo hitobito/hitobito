@@ -55,9 +55,9 @@ body {
 
 /* Content */
 #page {
-  padding: 20px 1rem 90px;
+  padding: 3px 0 60px;
   @include responsive(mediaTablet){
-    padding: 3px 0 60px;
+    padding: 20px 1rem 90px;
   }
   margin: 0;
   width: 100%;

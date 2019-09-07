@@ -108,9 +108,9 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 5px;
   @include responsive(mediaTablet){
-    margin-bottom: 5px;
+    margin-bottom: 1rem;
   }
 
   .toggle-nav {

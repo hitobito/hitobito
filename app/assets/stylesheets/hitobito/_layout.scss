@@ -56,6 +56,9 @@ body {
 /* Content */
 #page {
   padding: 20px 1rem 90px;
+  @include responsive(mediaTablet){
+    padding: 3px 0 60px;
+  }
   margin: 0;
   width: 100%;
   background: $pageBackground;
@@ -86,8 +89,14 @@ body {
     max-width: 100%;
     overflow-x: visible;
     overflow-y: visible;
-    padding-bottom: 60px; // needs these paddings to accomodate further sheets
-    padding-right: 20px;  // needs these paddings to accomodate further sheets
+    padding-bottom: 0px;
+    padding-right: 5px;
+    padding-left: 5px;
+    @include responsive(mediaTablet){
+      padding-bottom: 60px; // needs these paddings to accomodate further sheets
+      padding-right: 20px;  // needs these paddings to accomodate further sheets
+      padding-left: 15px;
+    }
   }
 
   .is-logged-out & {
@@ -100,6 +109,9 @@ body {
   flex-direction: row;
   align-items: center;
   margin-bottom: 1rem;
+  @include responsive(mediaTablet){
+    margin-bottom: 5px;
+  }
 
   .toggle-nav {
     margin: -0.5rem 1rem -0.5rem 0rem;
@@ -144,6 +156,9 @@ body {
   @include single-box-shadow($shadowColor, 0, 2px, 8px);
   .sheet {
     margin: 0 -10px -30px 10px;
+    @include responsive(mediaTablet){
+    margin: 0 3px 3px;
+    }
     &.parent {
       background: lighten($contentBackground, 6%);
     }
@@ -154,7 +169,10 @@ body {
 #content {
   @include single-box-shadow($shadowColor, 0, 2px, 8px);
   background: white;
-  padding: 16px 20px 20px;
+  padding: 10px 10px 20px;
+  @include responsive(mediaTablet){
+    padding: 16px 20px 20px;
+  }
 
   aside {
     @include responsive(phone, $mediaDesktop) {

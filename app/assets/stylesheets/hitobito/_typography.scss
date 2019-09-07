@@ -35,7 +35,10 @@ h5, .h5 {
 }
 
 .content-header {
+  margin-bottom: 0px;
+  @include responsive(mediaTablet){
   margin-bottom: $vSpace;
+  }
   h1 { margin-bottom: 0px; }
 }
 

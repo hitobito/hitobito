@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 #main.row
-  %article.col-lg-6
+  %article.col-lg
     = render 'contact_data', person: entry, only_public: cannot?(:show_details, entry)
     - if can?(:show_details, entry)
       %h2= t('.additional_data')

@@ -38,8 +38,12 @@ module LayoutHelper
     end
   end
 
-  def icon(name, options = {})
-    add_css_class(options, "fa fa-#{name}")
+  def icon(name, options = { outline: false })
+    if options[:outline]
+      add_css_class(options, "far fa-#{name}")
+    else
+      add_css_class(options, "fa fa-#{name}")
+    end
     content_tag(:i, '', options)
   end
 

@@ -3,7 +3,7 @@
 #  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_pbs.
+#  https://github.com/hitobito/hitobito.
 
 class HelpTextsController < SimpleCrudController
   self.permitted_attrs = [:context, :key, :body]
@@ -20,7 +20,8 @@ class HelpTextsController < SimpleCrudController
   end
 
   def load_select_items
-    @contexts ||= HelpText::Contexts.list
-    @keys ||= HelpText::Keys.list(@contexts)
+    form = HelpText::Form.new
+    @contexts = form.list_contexts
+    @keys = form.list_keys
   end
 end

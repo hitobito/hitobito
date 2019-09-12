@@ -38,7 +38,7 @@ module HelpTextsHelper
     entry.model.class.to_s.underscore
   rescue NoMethodError
     entry.class.to_s.underscore
-  rescue NameErsror
+  rescue NameError
     nil
   end
 

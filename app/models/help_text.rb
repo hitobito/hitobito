@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class HelpText < ActiveRecord::Base
-  VIEW_KEYS = %w(index show new edit).freeze
+  COLUMN_BLACKLIST = %w(id created_at updated_at deleted_at).freeze
 
   include Globalized
   translates :body
@@ -16,11 +16,15 @@ class HelpText < ActiveRecord::Base
   def to_s(_format = :default)
     return super() if key.nil?
 
-    "#{human_entry_class}: #{key_human}"
+    "#{model_human}: #{key_human}"
   end
 
   def dom_key
     key.gsub('/', '-').gsub('.', '--')
+  end
+
+  def field_keys
+    (model.column_names - COLUMN_BLACKLIST).map { |column_name| "field.#{column_name}" }
   end
 
   def context
@@ -34,30 +38,37 @@ class HelpText < ActiveRecord::Base
   end
 
   def context_human
-    controller = controller_name.classify.constantize.model_name.human
-    entry = entry_class.classify.constantize.model_name.human
-    controller == entry ? controller : "#{controller} (#{entry})"
+    controller_human == model_human ? controller_human : "#{controller_human} (#{model_human})"
   end
 
   def key_human
-    if key.starts_with?('action.')
-      HelpText.human_attribute_name("key.#{key_identifier}", model: entry_class)
+    action_or_attribute = key.split('.').second
+    if action_specific_help_text?
+      HelpText.human_attribute_name("key.#{action_or_attribute}", model: entry_class)
     else
-      "Feld «#{entry_klass.human_attribute_name(key_identifier)}»"
+      "Feld «#{model.human_attribute_name(action_or_attribute)}»"
     end
   end
 
   private
 
-  def entry_klass
-    entry_class.classify.constantize
+  def controller
+    @controller ||= controller_name.classify.constantize
   end
 
-  def human_entry_class
-    entry_klass.model_name.human
+  def controller_human
+    controller.model_name.human
   end
 
-  def key_identifier
-    key.split('.').second
+  def model
+    @model ||= entry_class.classify.constantize
+  end
+
+  def model_human
+    model.model_name.human
+  end
+
+  def action_specific_help_text?
+    key.starts_with?('action.')
   end
 end

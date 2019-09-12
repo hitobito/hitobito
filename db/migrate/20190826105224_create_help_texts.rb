@@ -1,6 +1,8 @@
 class CreateHelpTexts < ActiveRecord::Migration
   def up
     create_table :help_texts do |t|
+      t.string :controller_name, null: false
+      t.string :entry_class, null: true
       t.string :key, null: false
 
       t.timestamps

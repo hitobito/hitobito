@@ -4,6 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 = crud_table do |t|
-  - t.col(HelpText.human_attribute_name(:key))  { |help_text| help_text.to_s }
+  - t.col(HelpText.human_attribute_name(:context))  { |help_text| help_text.context_human }
+  - t.col(HelpText.human_attribute_name(:key))  { |help_text| help_text.key_human }
   - t.col(HelpText.human_attribute_name(:body)) { |help_text| help_text.body }
-  - action_col_edit(t)
+  - add_table_actions(t)

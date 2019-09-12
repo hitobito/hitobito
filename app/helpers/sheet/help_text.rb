@@ -4,7 +4,5 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class HelpText < Sheet::Admin
-
-  end
+  class HelpText < Sheet::Admin; end
 end

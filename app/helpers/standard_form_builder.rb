@@ -410,8 +410,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     @object.required_attributes.include?(attr.to_s)
   end
 
-  private
-
   def labeled_field_method?(name)
     prefix = 'labeled_'
     if name.to_s.start_with?(prefix)
@@ -444,8 +442,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       yield help_inline(help_inline) if help_inline.present?
       yield help_block(help)
     else
-      yield template.render_help_text_trigger(field)
-      yield template.render_help_text(field)
+      yield template.render_help_text_trigger("field.#{field}")
+      yield template.render_help_text("field.#{field}")
       yield help_inline(help_inline) if help_inline.present?
     end
   end

@@ -622,15 +622,15 @@ de:
         body: Inhalt
 
       help_text:
+        context: Kontext
         key: Schlüssel
-        key_human: Schlüssel
         body: Inhalt
 
       help_text/key:
-        index: '%{model}-Übersicht'
-        show: '%{model} ansehen'
-        new: '%{model} erstellen'
-        edit: '%{model} bearbeiten'
+        index: 'Seite «Übersicht»'
+        show: 'Seite «Ansehen»'
+        new: 'Seite «Erstellen»'
+        edit: 'Seite «Bearbeiten»'
 
 
       label_format:

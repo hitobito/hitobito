@@ -38,8 +38,8 @@ module LayoutHelper
     end
   end
 
-  def icon(name, options = { filled: true })
-    if options[:filled]
+  def icon(name, options = {})
+    if { filled: true }.merge(options)[:filled]
       add_css_class(options, "fa fa-#{name}")
     else
       add_css_class(options, "far fa-#{name}")

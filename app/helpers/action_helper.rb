@@ -65,7 +65,7 @@ module ActionHelper
 
   # Standard link action to the destroy action of a given record.
   # Uses the current record if none is given.
-  def link_action_destroy(path = nil, label = icon(:trash-alt, filled: false))
+  def link_action_destroy(path = nil, label = icon(:'trash-alt', filled: false))
     path ||= path_args(entry)
     link_to label,
             path,

@@ -15,7 +15,7 @@
       - t.attr(:created_at)
       - t.col('', class: 'center') do |r|
         - if can?(:reject, r)
-          - link_to(icon(:remove),
+          - link_to(icon(:times),
                     person_add_request_path(r, cancel: true),
                     title: t('.cancel'),
                     data: { method: :delete })

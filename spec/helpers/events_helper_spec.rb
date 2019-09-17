@@ -15,7 +15,7 @@ describe EventsHelper, type: :helper do
       expect(helper).to receive_messages(can?: true)
       expect(I18n).to receive_messages(t: button_label)
       expect(helper).to receive(:action_button)
-        .with(button_label, hash_including(format: :ics), :calendar)
+        .with(button_label, hash_including(format: :ics), :'calendar-alt')
         .and_return(button_label)
       expect(helper.export_events_ical_button).to eq(button_label)
     end

@@ -5,10 +5,10 @@
 
 %li{id: dom_id(attachment)}
   = link_to(attachment.file_identifier, attachment.file_url, target: :blank)
-  
+
   - if can?(:update, @event)
     &nbsp;
-    = link_to icon(:trash),
+    = link_to icon(:'trash-alt', filled: false),
               group_event_attachment_path(@group, @event, attachment),
               class: 'action',
               title: ti(:"link.delete"),

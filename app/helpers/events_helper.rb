@@ -24,7 +24,7 @@ module EventsHelper
     type = params[:type].presence || 'Event'
     if can?(:"export_#{type.underscore.pluralize}", @group)
       action_button(I18n.t('event.lists.courses.ical_export_button'),
-        params.merge(format: :ics), :calendar)
+        params.merge(format: :ics), :'calendar-alt')
     end
   end
 

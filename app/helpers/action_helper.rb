@@ -30,7 +30,7 @@ module ActionHelper
     path ||= path_args(entry)
     options[:data] ||= {}
     options[:data].reverse_merge!(confirm: ti(:confirm_delete), method: :delete)
-    action_button ti(:"link.delete"), path, 'trash', options
+    action_button ti(:"link.delete"), path, 'trash-alt', options
   end
 
   # Standard button action to the list page.
@@ -65,7 +65,7 @@ module ActionHelper
 
   # Standard link action to the destroy action of a given record.
   # Uses the current record if none is given.
-  def link_action_destroy(path = nil, label = icon(:trash))
+  def link_action_destroy(path = nil, label = icon(:trash-alt, filled: false))
     path ||= path_args(entry)
     link_to label,
             path,

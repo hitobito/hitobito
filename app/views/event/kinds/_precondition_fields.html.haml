@@ -12,7 +12,7 @@
         - if index > 0
           %span.muted= t('event.kinds.qualifications.or')
         = ids.collect { |id| kinds[id].first.to_s }.sort.to_sentence
-        = link_to(icon(:trash), '#', class: 'remove-precondition-grouping')
+        = link_to(icon(:'trash-alt', filled: false), '#', class: 'remove-precondition-grouping')
 
 
     = link_to(t('.add_precondition_grouping'), '#', id: 'add_precondition_grouping')

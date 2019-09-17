@@ -38,11 +38,11 @@ module LayoutHelper
     end
   end
 
-  def icon(name, options = { outline: false })
-    if options[:outline]
-      add_css_class(options, "far fa-#{name}")
-    else
+  def icon(name, options = { filled: true })
+    if options[:filled]
       add_css_class(options, "fa fa-#{name}")
+    else
+      add_css_class(options, "far fa-#{name}")
     end
     content_tag(:i, '', options)
   end

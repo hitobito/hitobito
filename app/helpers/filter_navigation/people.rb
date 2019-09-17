@@ -136,7 +136,7 @@ module FilterNavigation
 
     def delete_filter_item(filter)
       ::Dropdown::Item.new(
-        filter_label(:trash, :delete),
+        filter_label(:'trash-alt', :delete),
         delete_group_people_filter_path(filter),
         data: { confirm: template.ti(:confirm_delete), method: :delete }
       )

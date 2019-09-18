@@ -15,7 +15,7 @@ class HelpTextsController < SimpleCrudController
   private
 
   def load_select_items
-    form = HelpText::Form.new
+    form = HelpTexts::Form.new
     @contexts = form.list_contexts
     @keys = form.list_keys
   end

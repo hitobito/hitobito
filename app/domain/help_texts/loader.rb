@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
 
-class HelpText::Loader
+class HelpTexts::Loader
   attr_reader :controller_name, :action_name, :entry_class
 
   def initialize(controller_name, action_name, entry_class)

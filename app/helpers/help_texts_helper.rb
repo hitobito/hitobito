@@ -28,7 +28,7 @@ module HelpTextsHelper
   private
 
   def help_text_loader
-    @help_text_loader ||= HelpText::Loader.new(controller_name, action_name, entry_class)
+    @help_text_loader ||= HelpTexts::Loader.new(controller_name, action_name, entry_class)
   end
 
   def entry_class

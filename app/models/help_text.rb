@@ -8,6 +8,10 @@
 class HelpText < ActiveRecord::Base
   COLUMN_BLACKLIST = %w(id created_at updated_at deleted_at).freeze
 
+  validates :key, uniqueness: { scope: :controller_name }
+  validates :body, presence: true
+  validates_by_schema
+
   include Globalized
   translates :body
 

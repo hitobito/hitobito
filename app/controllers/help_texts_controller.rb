@@ -12,12 +12,7 @@ class HelpTextsController < SimpleCrudController
 
   before_render_form :load_select_items
 
-
   private
-
-  def list_entries
-    super.list.sort_by(&:to_s)
-  end
 
   def load_select_items
     form = HelpText::Form.new

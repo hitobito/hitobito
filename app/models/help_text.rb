@@ -1,4 +1,16 @@
 # frozen_string_literal: true
+# == Schema Information
+#
+# Table name: help_texts
+#
+#  id              :integer          not null, primary key
+#  controller_name :string(255)      not null
+#  entry_class     :string(255)
+#  key             :string(255)      not null
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+
 
 #  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -14,6 +26,8 @@ class HelpText < ActiveRecord::Base
 
   include Globalized
   translates :body
+
+  scope :list, -> { order(:controller_name) }
 
   validates_by_schema
 

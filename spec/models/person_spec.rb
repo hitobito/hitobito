@@ -501,4 +501,25 @@ describe Person do
     expect(Person.filter_attrs_list.count).to eq(Person::FILTER_ATTRS.count)
   end
 
+  describe '#picture' do
+    include CarrierWave::Test::Matchers
+    let(:person) { Fabricate(:person) }
+
+    before do
+      person.picture.store!(File.open('spec/fixtures/person/test_picture.jpg'))
+    end
+
+    describe 'default' do
+      it "scales down an image to be exactly 32 by 32 pixels" do
+        expect(person.picture.thumb).to be_no_larger_than(32, 32)
+      end
+    end
+
+    describe '#thumb' do
+      it "scales down an image to be no wider than 512 pixels" do
+        expect(person.picture).to have_dimensions(512, 512)
+      end
+    end
+  end
+
 end

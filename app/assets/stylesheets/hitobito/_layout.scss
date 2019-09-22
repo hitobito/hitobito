@@ -218,6 +218,7 @@ body {
   flex-wrap: nowrap;
   .quicksearch-input {
     flex: 1 0 auto;
+    -webkit-appearance: none;
   }
 }
 

@@ -9,6 +9,9 @@ $logoUrl: "<%= Settings.application.logo.image %>" !default;
 $logoWidth: <%= Settings.application.logo.width %>px !default;
 $logoHeight: <%= Settings.application.logo.height %>px !default;
 $logoBackgroundColor: <%= Settings.application.logo.background_color %> !default;
+<% if Settings.application.page_background.send(ENV['RAILS_ENV']) != "none" %>
+  $pageBackground: <%= Settings.application.page_background.send(ENV['RAILS_ENV']) %>;
+<% end %>
 
 // Funny trick using an absolute path to be able to override the
 // referenced partial in a wagon.

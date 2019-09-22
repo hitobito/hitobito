@@ -157,6 +157,8 @@ GEM
       safe_yaml (~> 1.0.0)
     crass (1.0.4)
     currencies (0.4.2)
+    cypress-on-rails (1.4.2)
+      rack
     daemons (1.2.4)
     dalli (2.7.6)
     database_cleaner (1.5.3)

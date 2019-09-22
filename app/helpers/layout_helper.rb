@@ -101,7 +101,7 @@ module LayoutHelper
   def header_logo_css
     return unless @group
 
-    logo_group = @group.self_and_ancestors.find do |group|
+    logo_group = @group.self_and_ancestors.reverse.find do |group|
       group.logo.present?
     end
 

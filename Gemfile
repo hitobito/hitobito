@@ -15,7 +15,7 @@ gem 'airbrake', '< 5.0' # requires newer errbit
 gem 'awesome_nested_set', '< 3.1.0' # requires ruby 2.0
 gem 'axlsx', '>= 3.0.0.pre'
 gem 'bcrypt-ruby'
-gem 'bleib', '0.0.9'
+gem 'bleib', '~> 0.0.10'
 gem 'cancancan', '< 1.13.0' # requires ruby 2.0
 gem 'carrierwave', '< 0.11.1' # uses 2.0 for testing (no explicit requirement, yet)
 gem 'cmess'

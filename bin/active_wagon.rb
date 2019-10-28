@@ -46,7 +46,7 @@ class Setup
 
   def environment
     <<-EOF
-    echo PATH_add bin
+    PATH_add bin
     export RAILS_DB_ADAPTER=mysql2
     export RAILS_DB_NAME=hit_#{wagon}_development
     export RAILS_TEST_DB_NAME=hit_#{wagon}_test

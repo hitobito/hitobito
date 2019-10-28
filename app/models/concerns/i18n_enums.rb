@@ -1,15 +1,14 @@
 # encoding: utf-8
 
-#  Copyright (c) 2014, Insieme Schweiz. This file is part of
+#  Copyright (c) 2014, 2019, Insieme Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module I18nEnums
-
-  NIL_KEY = '_nil'
-
   extend ActiveSupport::Concern
+
+  NIL_KEY = '_nil'.freeze
 
   module ClassMethods
 
@@ -33,5 +32,6 @@ module I18nEnums
         define_method("#{value}?") { self[attr] == value } if queries
       end
     end
+
   end
 end

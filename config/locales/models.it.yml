@@ -57,6 +57,10 @@ it:
           attributes:
             person_id:
               taken: è già iscritto
+        oauth/application:
+          attributes:
+            scopes:
+              not_match_configured: "non coincidono con quelle depositate sul server."
         person:
           name_missing: 'Inserire un nome'
           emoji_suspected: 'Non utilizzare simboli speciali (in particolare Emoji)'
@@ -317,6 +321,7 @@ it:
         layer_group_id: Livello
         type: Tipo di gruppo
         type_name: Tipo di gruppi
+        description: Descrizione
       event:
         group_ids: Gruppi
         groups: Gruppi
@@ -419,6 +424,14 @@ it:
         participation: Persona
       note:
         text: Testo
+      people_relation:
+        head_id: Persona
+        tail_id: Altra persona
+        kind: Tipo
+      phone_number:
+        number: Numero
+        label: Tipo
+        public: Pubblico
       qualification:
         qualification_kind: Qualifiche
         qualification_kind_id: Qualifica
@@ -436,17 +449,9 @@ it:
         updated_at: Modificato
         deleted_at: Cancellato
         reactivateable: Riattivabile
-      people_relation:
-        head_id: Persona
-        tail_id: Altra persona
-        kind: Tipo
       relations_to_tails:
         tail_id: Relazione
         kind: Tipo
-      phone_number:
-        number: Numero
-        label: Tipo
-        public: Pubblico
       phone_numbers:
         number: Numero di telefono
         label: Tipo di numero di telefono
@@ -665,6 +670,11 @@ it:
         people_below: Persone dei sottogruppi
         groups: Gruppi di questo gruppo
         events: Eventi di questo gruppo
+  doorkeeper:
+    scopes:
+      email: Leggono il tuo indirizzo e-mail
+      name: Leggono il tuo indirizzo e-mail e il tuo nome
+      with_roles: Leggono i tuoi dati del gruppo ed i tuoi ruoli
   errors:
     messages:
       invalid_money: "Deve essere arrotondato ai 5 centesimi"

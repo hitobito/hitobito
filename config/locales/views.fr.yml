@@ -32,6 +32,7 @@ fr:
       back: Retour
       refresh: Mettre à jour
       print: Imprimer
+      copy: Copier
     link:
       show: Afficher
       edit: Modifier
@@ -207,7 +208,7 @@ fr:
     priorities: 'Priorité d''inscription'
     lists:
       courses:
-        title: 'Cours disponibles'
+        title: 'Cours enregistrés'
         explanation: 'Les cours de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres cours auprès des groupes qui les organisent.'
         csv_export_button: 'Export CSV'
         ical_export_button: 'Export du calendrier'
@@ -346,7 +347,7 @@ fr:
       link:
         add_event: Créer un événement
         add_event/course: Créer un cours
-        duplicate: Dupliquer
+        duplicate: Copier
     minimum_age_with_years: 'au moins %{minimum_age}  ans (année de naissance)'
     new:
       title_event: Créer un événement
@@ -697,8 +698,8 @@ fr:
     groups: 'Groupes'
     events: 'Activités'
     courses: 'Cours'
-    admin: 'Paramétrage'
-    invoices: 'factures'
+    admin: 'Paramètres'
+    invoices: 'Factures'
   notes:
     new_note: Ajouter une note
     note:
@@ -706,6 +707,19 @@ fr:
     paginator:
       newer_notes: Nouvelles contributions
       older_notes: Anciennes contributions
+  oauth:
+    applications:
+      form:
+        help_native_redirect_uris: Une entrée par ligne. Pour les tests locaux, utiliser %{native_redirect_uri}.
+      attrs:
+        profile_endpoint_help: Les informations profil de l'utilisateur peuvent être prises au-delà ce Endpoint. Pour ce faire, il faut rendre le Access Token dans le Authorization Header. Le Scope souhaité peut être rendu en tant que X-Scope.
+        profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
+    access_grants:
+      list:
+        title: '%{model_name} acrifs pour %{uri}'
+    tabs:
+      grants: Autorisations
+      tokens: Token d'accès
   qualifications:
     in_years: '%{years} ans'
     valid_until: 'à %{date}'
@@ -853,7 +867,7 @@ fr:
       history: Historique
       log: Journal
       colleagues: Collaborateurs/collaboratrices
-      invoices: factures
+      invoices: Factures
     actions_show:
       send_login: Envoyer les données d'identification
       send_login_tooltip:
@@ -939,6 +953,8 @@ fr:
       title: Champ
       match: contient
       equal: est précis
+      greater: plus grand que
+      smaller: plus petit que
     new:
       title: Filtrer les personnes
     range:
@@ -1031,6 +1047,12 @@ fr:
         one: 'Créer un rôle'
         other: 'Créer %{count} rôles'
   service_tokens:
+    abilities:
+      read: Lecture
+      people: Personnes de ce niveau
+      people_below: Personnes de ce niveau du niveau inférieur
+      groups: Groupes de ce niveau et du niveau inférieur
+      events: Événements de ce niveau et du niveau inférieur
     global:
       link:
         add: Ajouter API-Key

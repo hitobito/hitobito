@@ -7,37 +7,34 @@
 
 class HelpTexts::List
   COLUMN_BLACKLIST = %w(id created_at updated_at deleted_at).freeze
-  CONTROLLER_BLACKLIST = %w(healthz async_downloads async_synchronizations)
+  ACTION_BLACKLIST = %w(create update destroy).freeze
+  CONTROLLER_BLACKLIST = %w[
+    async_downloads async_synchronizations errors healthz
+    devise/passwords devise/registrations devise/sessions devise/tokens
+    doorkeeper/authorizations doorkeeper/tokens
+  ]
 
-  include Enumerable
-
-  def to_a
-    @list ||= build_list
-  end
-
-  def texts
-    list.collect do |controller_name, key, model_class|
-      HelpText.new(controller_name: controller_name, key: key, entry_class: model_class)
-    end
-  end
-
-  def build_list
-    prepared_infos.each_with_object([]) do |(controller_name, action_name, model_name), list|
-      list << [controller_name, "action.#{action_name}", model_name]
-
-      fields_for(model_name).each do |field|
-        list << [controller_name, "field.#{field}", model_name]
+  def entries
+    prepared_infos.each_with_object({}) do |(controller_name, action_name, model_name), memo|
+      key   = HelpTexts::Entry.key(controller_name, model_name)
+      entry = memo.fetch(key) do
+        memo[key] = HelpTexts::Entry.new(controller_name, model_name)
       end
 
-    end.compact.uniq
+      entry.actions << action_name
+      fields_for(model_name).each do |field|
+        entry.fields << field
+      end
+    end.values
   end
 
   def prepared_infos
     Rails.application.routes.routes.collect(&:defaults).compact.collect do |info|
       controller_name = info[:controller]
-      next if CONTROLLER_BLACKLIST.include?(controller_name) || controller_name.blank?
-
       action_name     = info[:action]
+      next if CONTROLLER_BLACKLIST.include?(controller_name) || controller_name.blank?
+      next if ACTION_BLACKLIST.include?(action_name)
+
       model_name      = info[:type] || controller_name.classify
 
       [controller_name, action_name,  model_for(model_name) ? model_name : nil]

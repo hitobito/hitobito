@@ -15,8 +15,14 @@ class HelpTextsController < SimpleCrudController
   private
 
   def load_select_items
-    form = HelpTexts::Form.new
-    @contexts = form.list_contexts
-    @keys = form.list_keys
+    entries = HelpTexts::List.new.entries.select(&:model?)
+
+    @contexts = entries.collect do |entry|
+      [entry.key, entry.to_s]
+    end.sort_by(&:second)
+
+    @keys = entries.each_with_object({}) do |entry, memo|
+      memo[entry.key] = entry.actions_with_labels + entry.fields_with_labels
+    end
   end
 end

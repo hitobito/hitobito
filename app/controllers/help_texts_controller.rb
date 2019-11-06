@@ -14,6 +14,10 @@ class HelpTextsController < SimpleCrudController
 
   private
 
+  def entries
+    super.includes(:translations).page(params[:page])
+  end
+
   def load_select_items
     entries = HelpTexts::List.new.entries.select(&:present?)
 

@@ -15,7 +15,7 @@ class HelpTextsController < SimpleCrudController
   private
 
   def load_select_items
-    entries = HelpTexts::List.new.entries
+    entries = HelpTexts::List.new.entries.select(&:present?)
 
     @contexts = entries.collect do |entry|
       [entry.key, entry.to_s]

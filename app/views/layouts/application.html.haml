@@ -61,8 +61,8 @@
           .content-header
             %h1
               = title
-              = render_help_text_trigger
-            = render_help_text
+              = help_text_renderer.action_trigger
+            = help_text_renderer.action_text
 
             = sheet.render_main_tabs
 

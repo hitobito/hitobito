@@ -248,12 +248,13 @@ ActiveRecord::Schema.define(version: 20190826105224) do
   add_index "help_text_translations", ["locale"], name: "index_help_text_translations_on_locale", using: :btree
 
   create_table "help_texts", force: :cascade do |t|
-    t.string "controller_name", limit: 255, null: false
-    t.string "entry_class",     limit: 255
-    t.string "key",             limit: 255, null: false
+    t.string "controller", limit: 255, null: false
+    t.string "model",      limit: 255
+    t.string "kind",       limit: 255, null: false
+    t.string "name",       limit: 255, null: false
   end
 
-  add_index "help_texts", ["controller_name", "key"], name: "index_help_texts_on_controller_name_and_key", unique: true, using: :btree
+  add_index "help_texts", ["controller", "model", "kind", "name"], name: "index_help_texts_fields", unique: true, using: :btree
 
   create_table "invoice_articles", force: :cascade do |t|
     t.string   "number",      limit: 255

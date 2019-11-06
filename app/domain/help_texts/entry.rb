@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class HelpTexts::Entry
-  attr_reader :key, :actions, :model_class
+  attr_reader :key, :actions, :controller_name, :model_class
 
   def self.key(controller_name, model_class)
     [controller_name, model_class.to_s.underscore].compact.join('--')
@@ -50,12 +50,20 @@ class HelpTexts::Entry
   end
 
   def fields
+    used_attributes + permitted_attributes
+  end
+
+  private
+
+  def used_attributes
+    model_class.try(:used_attributes) || []
+  end
+
+  def permitted_attributes
     Array.wrap(controller_class.try(:permitted_attrs)).collect do |key|
       key.is_a?(Hash) ? key.keys.first : key
     end
   end
-
-  private
 
   def with_labels(list, whitelist = nil)
     list.collect do |key, _|

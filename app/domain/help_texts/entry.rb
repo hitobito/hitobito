@@ -6,53 +6,71 @@
 #  https://github.com/hitobito/hitobito.
 
 class HelpTexts::Entry
-  attr_reader :key, :fields, :actions, :model_class
+  attr_reader :key, :actions, :model_class
 
-  def self.key(controller_name, model_name)
-    [controller_name, model_name.try(:underscore)].compact.join('--')
+  def self.key(controller_name, model_class)
+    [controller_name, model_class.to_s.underscore].compact.join('--')
   end
 
-  def initialize(controller_name, model_name)
+  def initialize(controller_name, model_class)
     @controller_name = controller_name
-    @model_class     = model_name.classify.constantize if model_name
-    @key             = self.class.key(controller_name, model_name)
+    @model_class     = model_class
+    @key             = self.class.key(controller_name, model_class)
 
     @actions = []
-    @fields  = []
   end
 
   def to_s
     model_class.model_name.human
   end
 
-  def permitted_attrs
-    @permitted_attrs ||= (@controller_name + '_controller').classify.constantize.permitted_attrs
-  end
-
   def grouped
     %w(actions fields).collect do |key|
-      label = HelpText.human_attribute_name("#{key}_label")
       list  = send("#{key}_with_labels")
+      label = HelpText.human_attribute_name("#{key}_label")
 
       OpenStruct.new(label: label, list: list)
     end
   end
 
   def actions_with_labels
-    actions.collect do |action|
+    @actions_with_labels ||= with_labels(actions, %w(index edit new)) do |action|
       ["action.#{action}", translate_action(action)]
-    end.sort_by(&:second)
+    end
   end
 
   def fields_with_labels
-    fields.collect do |field|
+    @fields_with_labels ||= with_labels(fields) do |field|
       ["field.#{field}", model_class.human_attribute_name(field)]
-    end.sort_by(&:second)
+    end
+  end
+
+  def present?
+    [actions_with_labels, fields_with_labels].any?(&:present?)
+  end
+
+  def fields
+    Array.wrap(controller_class.try(:permitted_attrs)).collect do |key|
+      key.is_a?(Hash) ? key.keys.first : key
+    end
+  end
+
+  private
+
+  def with_labels(list, whitelist = nil)
+    list.collect do |key, _|
+      yield key unless whitelist.present? && !whitelist.include?(key)
+    end.compact.sort_by(&:second)
   end
 
   def translate_action(action, mapping = { index: :list, new: :add })
     I18n.t("global.link.#{mapping.fetch(action.to_sym, action)}")
   end
 
+  def controller_class
+    @controller_class ||= "#{@controller_name}_controller".classify.constantize
+  end
+
 end
+
 

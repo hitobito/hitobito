@@ -6,8 +6,11 @@
 - include_wysiwyg_assets
 
 = entry_form(buttons_bottom: false) do |f|
-  = f.labeled_collection_select(:context, @contexts, :first, :second, {}, class: 'span6')
-  - @keys.each do |context, options|
-    %div.help_text_context_keys.hidden{ id: context }
-      = f.labeled_collection_select(:key, options, :first, :second, {}, class: 'span6', disabled: "disabled")
+  - if entry.new_record?
+    = f.labeled_collection_select(:context, @contexts, :first, :second, {}, class: 'span6')
+
+    - @keys.each do |context, group|
+      %div.help_text_context_keys.hidden{ id: context }
+        = f.labeled_grouped_collection_select(:key, group, :list, :label, :first, :second)
+
   = f.labeled_text_area :body, class: 'span8 wysiwyg', rows: 20

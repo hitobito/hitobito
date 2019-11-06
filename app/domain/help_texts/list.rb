@@ -7,7 +7,7 @@
 
 class HelpTexts::List
   COLUMN_BLACKLIST = %w(id created_at updated_at deleted_at).freeze
-  ACTION_BLACKLIST = %w(create update destroy).freeze
+  ACTION_WHITELIST = %w(index edit new).freeze
   CONTROLLER_BLACKLIST = %w[
     async_downloads async_synchronizations errors healthz
     devise/passwords devise/registrations devise/sessions devise/tokens
@@ -15,14 +15,16 @@ class HelpTexts::List
   ]
 
   def entries
-    prepared_infos.each_with_object({}) do |(controller_name, action_name, model_name), memo|
-      key   = HelpTexts::Entry.key(controller_name, model_name)
+    prepared_infos.each_with_object({}) do |(controller_name, action_name, model_class), memo|
+      next unless model_class
+
+      key   = HelpTexts::Entry.key(controller_name, model_class)
       entry = memo.fetch(key) do
-        memo[key] = HelpTexts::Entry.new(controller_name, model_name)
+        memo[key] = HelpTexts::Entry.new(controller_name, model_class)
       end
 
       entry.actions << action_name
-      fields_for(model_name).each do |field|
+      fields_for(model_name, entry.permitted_attrs).each do |field|
         entry.fields << field
       end
     end.values
@@ -33,19 +35,20 @@ class HelpTexts::List
       controller_name = info[:controller]
       action_name     = info[:action]
       next if CONTROLLER_BLACKLIST.include?(controller_name) || controller_name.blank?
-      next if ACTION_BLACKLIST.include?(action_name)
+      next unless ACTION_WHITELIST.include?(action_name)
 
       model_name      = info[:type] || controller_name.classify
 
-      [controller_name, action_name,  model_for(model_name) ? model_name : nil]
+      [controller_name, action_name,  model_for(model_name)]
     end.compact.uniq.sort_by(&:first)
   end
 
-  def fields_for(model_name)
+  def fields_for(model_name, permitted_attrs)
     @seen ||= []
 
     return [] unless model_name
     return [] if @seen.include?(model_name)
+
 
     (model_for(model_name).column_names.sort - COLUMN_BLACKLIST).tap do
       @seen << model_name

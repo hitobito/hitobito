@@ -22,23 +22,36 @@ class HelpTexts::Entry
   end
 
   def to_s
-    model? ? model_class.model_name.human : @controller_name
+    model_class.model_name.human
   end
 
-  def model?
-    model_class.present?
+  def permitted_attrs
+    @permitted_attrs ||= (@controller_name + '_controller').classify.constantize.permitted_attrs
+  end
+
+  def grouped
+    %w(actions fields).collect do |key|
+      label = HelpText.human_attribute_name("#{key}_label")
+      list  = send("#{key}_with_labels")
+
+      OpenStruct.new(label: label, list: list)
+    end
   end
 
   def actions_with_labels
     actions.collect do |action|
-      ["action.#{action}", HelpText.human_attribute_name("key.#{action}")]
-    end
+      ["action.#{action}", translate_action(action)]
+    end.sort_by(&:second)
   end
 
   def fields_with_labels
     fields.collect do |field|
       ["field.#{field}", model_class.human_attribute_name(field)]
-    end
+    end.sort_by(&:second)
+  end
+
+  def translate_action(action, mapping = { index: :list, new: :add })
+    I18n.t("global.link.#{mapping.fetch(action.to_sym, action)}")
   end
 
 end

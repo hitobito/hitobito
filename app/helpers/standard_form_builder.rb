@@ -442,10 +442,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       yield help_inline(help_inline) if help_inline.present?
       yield help_block(help)
     else
-      yield template.render_help_text_trigger("field.#{field}")
-      yield template.render_help_text("field.#{field}")
+      yield help_texts.render_field(field)
       yield help_inline(help_inline) if help_inline.present?
     end
+  end
+
+  def help_texts
+    @help_texts ||= HelpTexts::Renderer.new(template)
   end
 
   def klass

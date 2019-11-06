@@ -7,39 +7,8 @@
 
 module HelpTextsHelper
 
-  def render_help_text(field = false)
-    help_text = help_text_loader.find(field)
-    return if help_text.nil?
-
-    content_tag :div, class: "help-text #{help_text.dom_key}" do
-      help_text.body && help_text.body.html_safe # rubocop:disable Rails/OutputSafety
-    end
-  end
-
-  def render_help_text_trigger(field = false)
-    help_text = help_text_loader.find(field)
-    return '' if help_text.nil?
-
-    content_tag :span, :class => 'help-text-trigger', 'data-key' => help_text.dom_key do
-      content_tag :i, '', class: 'fa fa-info-circle'
-    end
-  end
-
-  private
-
-  def help_text_loader
-    @help_text_loader ||= HelpTexts::Loader.new(controller_name, action_name, entry_class)
-  end
-
-  def entry_class
-    suppress(NoMethodError) do
-      return entries.first.model.class.to_s.underscore if action_name == 'index'
-    end
-    entry.model.class.to_s.underscore
-  rescue NoMethodError
-    entry.class.to_s.underscore
-  rescue NameError
-    nil
+  def help_text_renderer
+    @help_text_renderer ||= HelpTexts::Renderer.new(self)
   end
 
 end

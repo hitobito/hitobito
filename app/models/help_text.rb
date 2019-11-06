@@ -3,14 +3,12 @@
 #
 # Table name: help_texts
 #
-#  id              :integer          not null, primary key
-#  controller_name :string(255)      not null
-#  entry_class     :string(255)
-#  key             :string(255)      not null
-#  created_at      :datetime
-#  updated_at      :datetime
+#  id         :integer          not null, primary key
+#  controller :string(255)      not null
+#  model      :string(255)
+#  kind       :string(255)      not null
+#  name       :string(255)      not null
 #
-
 
 #  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -20,8 +18,10 @@
 class HelpText < ActiveRecord::Base
   COLUMN_BLACKLIST = %w(id created_at updated_at deleted_at).freeze
 
-  validates :key, uniqueness: { scope: :controller_name }
+  validates :name, uniqueness: { scope: [:controller, :model, :kind] }
   validates :body, presence: true
+  before_validation :assign_combined_fields, if: :new_record?
+
   validates_by_schema
 
   include Globalized
@@ -31,62 +31,29 @@ class HelpText < ActiveRecord::Base
 
   validates_by_schema
 
-  def to_s(_format = :default)
-    return super() if key.nil?
+  attr_accessor :context, :key
 
-    "#{model_human}: #{key_human}"
+  def to_s
+    [entry.to_s, entry.translate(kind, name)].join(' - ') if persisted?
   end
 
-  def dom_key
-    key.gsub('/', '-').gsub('.', '--')
+  def entry
+    @entry ||= HelpTexts::Entry.new(controller, model.classify.constantize)
   end
 
-  def field_keys
-    (model.column_names - COLUMN_BLACKLIST).map { |column_name| "field.#{column_name}" }
-  end
-
-  def context
-    "#{controller_name}--#{entry_class}"
-  end
-
-  def context=(new_context)
-    c, e = new_context.split('--')
-    self.controller_name = c
-    self.entry_class = e
-  end
-
-  def context_human
-    controller_human == model_human ? controller_human : "#{controller_human} (#{model_human})"
-  end
-
-  def key_human
-    action_or_attribute = key.split('.').second
-    if action_specific_help_text?
-      HelpText.human_attribute_name("key.#{action_or_attribute}", model: entry_class)
-    else
-      "Feld «#{model.human_attribute_name(action_or_attribute)}»"
-    end
+  def assign_combined_fields
+    assign_and_validate(:context, '--', :controller, :model)
+    assign_and_validate(:key, '.', :kind, :name)
   end
 
   private
 
-  def controller
-    @controller ||= controller_name.classify.constantize
+  def assign_and_validate(attr, separator, *fields)
+    values = send(attr).to_s.split(separator)
+    values.zip(fields).each do |value, field|
+      send("#{field}=", value)
+    end
+    errors.add(attr, :invalid) if fields.any? { |field| send(field).blank? }
   end
 
-  def controller_human
-    controller.model_name.human
-  end
-
-  def model
-    @model ||= entry_class.classify.constantize
-  end
-
-  def model_human
-    model.model_name.human
-  end
-
-  def action_specific_help_text?
-    key.starts_with?('action.')
-  end
 end

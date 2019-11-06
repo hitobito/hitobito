@@ -19,7 +19,8 @@ app.setupEntityTypeahead = (index, field) ->
     updateFunction = updateFunction[prop] for prop in input.data('updater').split('.')
 
 
-  setupRemoteTypeahead(input, 10, updateFunction)
+  max_items = input.data('max-items') || 10
+  setupRemoteTypeahead(input, max_items, updateFunction)
   if input.data('id-field')
     input.keydown((event) ->
       if isModifyingKey(event.which)

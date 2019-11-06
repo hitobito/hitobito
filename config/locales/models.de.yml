@@ -161,6 +161,9 @@ de:
       event/kind:
         one: Kursart
         other: Kursarten
+      event/role:
+        one: Anlass Rolle
+        other: Anlass Rollen
       event/role/assistant_leader:
         one: Leitung
         other: Leitung
@@ -625,13 +628,8 @@ de:
         context: Kontext
         key: Schlüssel
         body: Inhalt
-
-      help_text/key:
-        index: 'Seite «Übersicht»'
-        show: 'Seite «Ansehen»'
-        new: 'Seite «Erstellen»'
-        edit: 'Seite «Bearbeiten»'
-
+        fields_label: Felder
+        actions_label: Seiten
 
       label_format:
         name: Bezeichnung

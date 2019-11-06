@@ -15,14 +15,14 @@ class HelpTextsController < SimpleCrudController
   private
 
   def load_select_items
-    entries = HelpTexts::List.new.entries.select(&:model?)
+    entries = HelpTexts::List.new.entries
 
     @contexts = entries.collect do |entry|
       [entry.key, entry.to_s]
     end.sort_by(&:second)
 
     @keys = entries.each_with_object({}) do |entry, memo|
-      memo[entry.key] = entry.actions_with_labels + entry.fields_with_labels
+      memo[entry.key] = entry.grouped
     end
   end
 end

@@ -39,7 +39,7 @@ class HelpTexts::Entry
   end
 
   def fields
-    (used_attributes + permitted_attributes).collect(&:to_s) - existing[:field]
+    (used_attributes + permitted_attributes).uniq.collect(&:to_s) - existing[:field]
   end
 
   def actions

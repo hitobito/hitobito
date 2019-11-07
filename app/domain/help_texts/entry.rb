@@ -25,9 +25,9 @@ class HelpTexts::Entry
   end
 
   def grouped
-    %w(actions fields).collect do |key|
-      list  = send("#{key}_with_labels")
-      label = HelpText.human_attribute_name("#{key}_label")
+    %w(action field).collect do |kind|
+      list  = send("#{kind}s_with_labels")
+      label = HelpText.human_attribute_name("#{kind}", count: 2)
 
       OpenStruct.new(label: label, list: list)
     end
@@ -41,8 +41,12 @@ class HelpTexts::Entry
 
   def fields_with_labels
     @fields_with_labels ||= with_labels(fields) do |field|
-      ["field.#{field}", model_class.human_attribute_name(field)]
+      ["field.#{field}", translate_field(field)]
     end
+  end
+
+  def translate(kind, name)
+    [HelpText.human_attribute_name("#{kind}"), send("translate_#{kind}", name)].join(' ')
   end
 
   def present?
@@ -73,6 +77,10 @@ class HelpTexts::Entry
 
   def translate_action(action, mapping = { index: :list, new: :add })
     I18n.t("global.link.#{mapping.fetch(action.to_sym, action)}")
+  end
+
+  def translate_field(field)
+    model_class.human_attribute_name(field)
   end
 
   def controller_class

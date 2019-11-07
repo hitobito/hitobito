@@ -20,38 +20,56 @@ describe HelpTexts::Entry do
       expect(subject.fields).to have(PeopleController.permitted_attrs.size).items
     end
 
-    it '#actions are added from outside' do
-      expect(subject.actions).to be_empty
-      expect { subject.actions << :foo }.to change { subject.actions }.by([:foo])
+    it '#action_names are added from outside' do
+      expect(subject.action_names).to be_empty
+      expect { subject.action_names << :foo }.to change { subject.action_names }.by([:foo])
     end
 
-    it '#fields_with_labels holds namespaced field name and translation' do
-      field, label = subject.fields_with_labels.first
+    it '#fields with label holds namespaced field name and translation' do
+      field, label = subject.labeled_list(:field).first
       expect(field).to eq 'field.address'
       expect(label).to eq 'Adresse'
     end
 
-    it '#actions_with_labels holds namespaced action name and translation' do
-      subject.actions << 'index'
-      field, label = subject.actions_with_labels.first
+    it '#fields with label holds namespaced field name and translation' do
+      field, label = subject.labeled_list(:field).first
+      expect(field).to eq 'field.address'
+      expect(label).to eq 'Adresse'
+    end
+
+    it '#fields with label filters based on existing fields' do
+      field_count = subject.labeled_list(:field).size
+      subject = HelpTexts::Entry.new(controller, model_class, { action: [], field: %w(address) })
+      expect(subject.labeled_list(:field)).to have(field_count - 1).items
+    end
+
+    it '#actions with label holds namespaced action name and translation' do
+      subject.action_names << 'index'
+      field, label = subject.labeled_list(:action).first
       expect(field).to eq 'action.index'
       expect(label).to eq 'Liste'
     end
 
-    it '#actions_with_labels only returns whitelisted actions' do
-      subject.actions << 'foo'
-      expect(subject.actions_with_labels).to be_empty
+    it '#actions with label filters based on existing actions' do
+      subject = HelpTexts::Entry.new(controller, model_class, { action: %w(index), field: [] })
+      subject.action_names << 'index'
+      expect(subject.labeled_list(:action)).to be_empty
+    end
+
+    it '#actions with label only returns whitelisted action_names' do
+      subject.action_names << 'foo'
+      expect(subject.labeled_list(:action)).to be_empty
     end
 
     it '#grouped returns structure used for grouped_collection_select' do
-      subject.actions << 'new'
+      subject.action_names << 'new'
       expect(subject.grouped).to have(2).items
 
-      actions, fields = subject.grouped
-      expect(actions.label).to eq 'Seiten'
-      expect(actions.list).to have(1).item
-      expect(actions.list.first[0]).to eq 'action.new'
-      expect(actions.list.first[1]).to eq 'Erstellen'
+      action_names, fields = subject.grouped
+      expect(action_names.label).to eq 'Seiten'
+      expect(action_names.list).to have(1).item
+      expect(action_names.list.first[0]).to eq 'action.new'
+      expect(action_names.list.first[1]).to eq 'Erstellen'
 
       expect(fields.label).to eq 'Felder'
       expect(fields.list).to have_at_least(10).items

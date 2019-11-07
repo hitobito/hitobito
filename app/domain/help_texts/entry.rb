@@ -6,18 +6,19 @@
 #  https://github.com/hitobito/hitobito.
 
 class HelpTexts::Entry
-  attr_reader :key, :actions, :controller_name, :model_class
+  attr_reader :key, :action_names, :existing, :controller_name, :model_class
 
   def self.key(controller_name, model_class)
     [controller_name, model_class.to_s.underscore].compact.join('--')
   end
 
-  def initialize(controller_name, model_class)
+  def initialize(controller_name, model_class, existing = { action: [], field: [] })
     @controller_name = controller_name
     @model_class     = model_class
+    @existing        = existing
     @key             = self.class.key(controller_name, model_class)
 
-    @actions = []
+    @action_names = []
   end
 
   def to_s
@@ -26,22 +27,10 @@ class HelpTexts::Entry
 
   def grouped
     %w(action field).collect do |kind|
-      list  = send("#{kind}s_with_labels")
       label = HelpText.human_attribute_name("#{kind}", count: 2)
+      list  = labeled_list(kind)
 
       OpenStruct.new(label: label, list: list)
-    end
-  end
-
-  def actions_with_labels
-    @actions_with_labels ||= with_labels(actions, %w(index edit new)) do |action|
-      ["action.#{action}", translate_action(action)]
-    end
-  end
-
-  def fields_with_labels
-    @fields_with_labels ||= with_labels(fields) do |field|
-      ["field.#{field}", translate_field(field)]
     end
   end
 
@@ -49,12 +38,18 @@ class HelpTexts::Entry
     [HelpText.human_attribute_name("#{kind}"), send("translate_#{kind}", name)].join(' ')
   end
 
-  def present?
-    [actions_with_labels, fields_with_labels].any?(&:present?)
+  def fields
+    (used_attributes + permitted_attributes).collect(&:to_s) - existing[:field]
   end
 
-  def fields
-    used_attributes + permitted_attributes
+  def actions
+    (action_names & %w(index new edit show)) - existing[:action]
+  end
+
+  def labeled_list(kind)
+    send(kind.to_s.pluralize).collect do |name, _|
+      ["#{kind}.#{name}", send("translate_#{kind}", name)]
+    end.compact.sort_by(&:second)
   end
 
   private
@@ -69,12 +64,6 @@ class HelpTexts::Entry
     end
   end
 
-  def with_labels(list, whitelist = nil)
-    list.collect do |key, _|
-      yield key unless whitelist.present? && !whitelist.include?(key)
-    end.compact.sort_by(&:second)
-  end
-
   def translate_action(action, mapping = { index: :list, new: :add })
     I18n.t("global.link.#{mapping.fetch(action.to_sym, action)}")
   end
@@ -86,7 +75,6 @@ class HelpTexts::Entry
   def controller_class
     @controller_class ||= "#{@controller_name}_controller".classify.constantize
   end
-
 end
 
 

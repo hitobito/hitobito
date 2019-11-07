@@ -3,6 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- title t("crud.#{action_name}.title", model: entry.new_record? ? model_class_label(entry): h(entry.to_s)).html_safe
+
 - include_wysiwyg_assets
 
 = entry_form(buttons_bottom: false) do |f|

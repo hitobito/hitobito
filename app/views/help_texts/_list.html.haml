@@ -3,6 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- title t('list.index.title', models: models_label)
+
 = paginate entries
 = crud_table do |t|
   - t.col(HelpText.human_attribute_name(:context))  { |ht| ht.to_s }

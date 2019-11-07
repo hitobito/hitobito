@@ -12,6 +12,11 @@ h1 + .help-text {
   margin: 0 -10px;
 }
 
+.checkbox + .help-text-trigger {
+  top: 0x;
+}
+
+
 .form-horizontal .controls .help-text {
   float: none;
   margin: -6px 0 4px 0;
@@ -54,6 +59,10 @@ h1 + .help-text {
 
 .control-group {
   position: relative;
+
+  label.checkbox {
+    display: inline-block;
+  }
 
   .help-text-trigger {
     margin-left: 4px;

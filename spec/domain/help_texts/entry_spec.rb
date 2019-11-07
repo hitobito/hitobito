@@ -20,6 +20,11 @@ describe HelpTexts::Entry do
       expect(subject.fields).to have(PeopleController.permitted_attrs.size).items
     end
 
+    it '#fields is returned without duplicates' do
+      subject = HelpTexts::Entry.new('events', Event::Course)
+      expect(subject.fields.uniq.size).to eq (subject.fields.size)
+    end
+
     it '#action_names are added from outside' do
       expect(subject.action_names).to be_empty
       expect { subject.action_names << :foo }.to change { subject.action_names }.by([:foo])

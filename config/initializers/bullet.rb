@@ -39,4 +39,8 @@ if defined? Bullet
   Bullet.add_whitelist type: :unused_eager_loading,
                        class_name: 'Event::Answer',
                        association: :question
+
+  Bullet.add_whitelist type: :unused_eager_loading,
+    class_name: 'HelpText',
+    association: :translations
 end

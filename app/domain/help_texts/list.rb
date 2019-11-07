@@ -23,10 +23,11 @@ class HelpTexts::List
   end
 
   def help_texts(key)
-    @help_texts ||= HelpText.all.each_with_object(Hash.new { |h, k| h[k] = { field: [], action: [] } }) do |help_text, memo|
+    @help_texts ||= HelpText.all.each_with_object({}) do |help_text, memo|
       entry_key = HelpTexts::Entry.key(help_text.controller, help_text.model)
       kind_key  = help_text.kind.to_sym
 
+      memo[entry_key] ||= { field: [], action: [] }
       memo[entry_key][kind_key] << help_text.name
     end
     @help_texts[key]

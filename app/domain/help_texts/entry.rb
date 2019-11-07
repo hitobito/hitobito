@@ -12,10 +12,10 @@ class HelpTexts::Entry
     [controller_name, model_class.to_s.underscore].compact.join('--')
   end
 
-  def initialize(controller_name, model_class, existing = { action: [], field: [] })
+  def initialize(controller_name, model_class, existing = nil)
     @controller_name = controller_name
     @model_class     = model_class
-    @existing        = existing
+    @existing        = existing || { action: [], field: [] }
     @key             = self.class.key(controller_name, model_class)
 
     @action_names = []

@@ -9,7 +9,7 @@ class HelpTexts::Renderer
 
   attr_reader :template
 
-  delegate :dom_id, :content_tag, :icon, :controller_name, :action_name, to: :template
+  delegate :dom_id, :content_tag, :icon, :action_name, to: :template
 
   def initialize(template)
     @template = template
@@ -55,6 +55,10 @@ class HelpTexts::Renderer
              texts.values.first
            end
     yield text if text
+  end
+
+  def controller_name
+    template.controller.class.to_s.underscore.gsub('_controller', '')
   end
 
   def help_texts

@@ -70,4 +70,24 @@ describe HelpTexts::Renderer do
     end
 
   end
+
+  context 'namespaced controller' do
+    let(:controller) { Event::ParticipationsController.new }
+
+    before do
+      HelpText.create!({
+        controller: 'event/participations',
+        model: 'event/participation',
+        kind: 'action',
+        name: 'index',
+        body: 'test'
+      })
+    end
+
+    it 'action trigger and text are present if help_text is present' do
+      controller.action_name = 'index'
+      expect(subject.action_trigger).to be_present
+      expect(subject.action_text).to be_present
+    end
+  end
 end

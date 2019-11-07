@@ -626,8 +626,13 @@ de:
         context: Kontext
         key: Schlüssel
         body: Inhalt
-        fields_label: Felder
-        actions_label: Seiten
+        field:
+          one: Feld
+          other: Felder
+
+        action:
+          one: Seite
+          other: Seiten
 
       label_format:
         name: Bezeichnung

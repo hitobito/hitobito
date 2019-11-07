@@ -10,6 +10,8 @@ class HelpTextsController < SimpleCrudController
 
   self.sort_mappings = { body: 'help_text_translations.body' }
 
+  self.skip_translate_inheritable = true
+
   before_render_form :load_select_items
 
   private

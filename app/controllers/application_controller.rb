@@ -25,6 +25,8 @@ class ApplicationController < ActionController::Base
   before_action :set_no_cache
   before_action :set_paper_trail_whodunnit
 
+  class_attribute :skip_translate_inheritable
+
   alias decorate __decorator_for__
 
   if Rails.env.production?

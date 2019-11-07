@@ -16,10 +16,20 @@ class HelpTexts::List
     prepared_infos.each_with_object({}) do |(controller_name, action_name, model_class), memo|
       key   = HelpTexts::Entry.key(controller_name, model_class)
       entry = memo.fetch(key) do
-        memo[key] = HelpTexts::Entry.new(controller_name, model_class)
+        memo[key] = HelpTexts::Entry.new(controller_name, model_class, help_texts(key))
       end
-      entry.actions << action_name
+      entry.action_names << action_name
     end.values
+  end
+
+  def help_texts(key)
+    @help_texts ||= HelpText.all.each_with_object(Hash.new { |h, k| h[k] = { field: [], action: [] } }) do |help_text, memo|
+      entry_key = HelpTexts::Entry.key(help_text.controller, help_text.model)
+      kind_key  = help_text.kind.to_sym
+
+      memo[entry_key][kind_key] << help_text.name
+    end
+    @help_texts[key]
   end
 
   def prepared_infos

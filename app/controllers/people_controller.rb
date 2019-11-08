@@ -64,6 +64,7 @@ class PeopleController < CrudController
       format.xlsx { render_tabular_entry(:xlsx) }
       format.vcf  { render_vcf([entry]) }
       format.json { render_entry_json }
+      format.ics  { render_events_as_ical }
     end
   end
 
@@ -227,6 +228,12 @@ class PeopleController < CrudController
 
   def render_entry_json
     render json: PersonSerializer.new(entry.decorate, group: @group, controller: self)
+  end
+
+  def render_events_as_ical
+    # TODO check authorization using token
+    events = entry.decorate.upcoming_events
+    send_data ::Export::Ics::Events.new.generate(events), type: :ics, disposition: :inline
   end
 
   def index_full_ability?

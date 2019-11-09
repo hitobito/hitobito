@@ -21,4 +21,4 @@
     - @candidates.each do |group|
       = f.inline_radio_button(:merge_group_id, group.id, group.to_s, false)
 
-  = save_form_buttons(f, t('.merge_button'), group_path(@group))
+  = form_buttons(f, submit_label: t('.merge_button'), cancel_url: group_path(@group))

@@ -33,8 +33,8 @@
                     class: 'span4',
                     help: t('roles.fields.help_optional_label'),
                     data: { provide: :typeahead, source: entry.klass.available_labels })
-  
+
   - if @person_id
     = f.hidden_field :person_id, value: @person_id
 
-  = save_form_buttons(f, ti(:"button.save"), '#')
+  = form_buttons(f, submit_label: ti(:"button.save"), cancel_url: '#')

@@ -26,6 +26,7 @@ en:
       remove: Remove
     button:
       save: Save
+      add_another: Save and add another
       cancel: Cancel
       close: close
       search: Search

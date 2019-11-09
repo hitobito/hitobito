@@ -46,7 +46,7 @@ describe RolesController do
                                           last_name: 'Beispiel' } }
 
       role = assigns(:role)
-      is_expected.to redirect_to(group_person_path(group, role.person))
+      is_expected.to redirect_to(group_person_path(group, role.person), :edit)
 
       expect(role.group_id).to eq(group.id)
       expect(flash[:notice]).to eq('Rolle <i>Member</i> für <i>Hans Beispiel</i> in <i>TopGroup</i> wurde erfolgreich erstellt.')

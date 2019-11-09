@@ -228,4 +228,8 @@ Doorkeeper.configure do
   # WWW-Authenticate Realm (default "Doorkeeper").
   #
   # realm "Doorkeeper"
+
 end
+
+# Set layout
+Doorkeeper::AuthorizationsController.layout 'application'

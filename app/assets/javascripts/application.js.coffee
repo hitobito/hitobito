@@ -37,8 +37,6 @@
 #= require modernizr.custom.min
 #= require moment.min
 #= require_tree ./modules
+#= require wysiwyg
 #= require wagon
 #= require turbolinks
-#
-
-

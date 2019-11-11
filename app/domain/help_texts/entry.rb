@@ -34,6 +34,10 @@ class HelpTexts::Entry
     end
   end
 
+  def present?
+    actions.present?
+  end
+
   def translate(kind, name)
     [HelpText.human_attribute_name("#{kind}"), send("translate_#{kind}", name)].join(' ')
   end

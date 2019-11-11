@@ -5,8 +5,6 @@
 
 - title t("crud.#{action_name}.title", model: entry.new_record? ? model_class_label(entry): h(entry.to_s)).html_safe
 
-- include_wysiwyg_assets
-
 = entry_form(buttons_bottom: false) do |f|
   - if entry.new_record?
     = f.labeled_collection_select(:context, @contexts, :first, :second, {}, class: 'span6')

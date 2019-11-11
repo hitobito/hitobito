@@ -32,6 +32,20 @@ describe HelpTexts::Renderer do
       expect(subject.action_text).to have_text 'test'
       expect(subject.action_text).to have_selector("div.help-text.#{dom_id}")
     end
+
+    it 'allows only some but not all tags' do
+      %w(h1 h2 h3 h4 h5 h6 b i u blockquote ul ol li).each do |tag|
+        help_text = HelpText.new(body: "<#{tag}>test</#{tag}>")
+        expect(subject).to receive(:with_help_text).and_yield(help_text)
+        expect(subject.action_text).to have_selector(tag)
+      end
+
+      %w(a img em).each do |tag|
+        help_text = HelpText.new(body: "<#{tag}>test</#{tag}>")
+        expect(subject).to receive(:with_help_text).and_yield(help_text)
+        expect(subject.action_text).not_to have_selector(tag)
+      end
+    end
   end
 
   context 'field' do

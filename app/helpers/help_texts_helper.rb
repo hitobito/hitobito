@@ -11,4 +11,7 @@ module HelpTextsHelper
     @help_text_renderer ||= HelpTexts::Renderer.new(self)
   end
 
+  def format_help_text_body(help_text)
+    strip_tags(help_text.body).to_s.truncate(100)
+  end
 end

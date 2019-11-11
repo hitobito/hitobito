@@ -13,7 +13,7 @@ module TableDisplays
     end
 
     def label
-      @question.question
+      @question.question.truncate(30)
     end
 
     def format_attr(target, _)

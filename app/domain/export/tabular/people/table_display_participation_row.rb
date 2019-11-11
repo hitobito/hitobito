@@ -17,7 +17,7 @@ module Export::Tabular::People
 
     def value_for(attr)
       table_display.with_permission_check(participation, attr) do
-        super(attr.to_s.gsub('person.', ''))
+        super(attr.to_s.gsub('person.', '').to_sym)
       end
     end
 

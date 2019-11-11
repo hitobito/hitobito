@@ -39,21 +39,24 @@ describe TableDisplay::Participations do
     end
 
     context :person_attributes  do
-      after   { TableDisplay.class_variable_set('@@permissions', {}) }
+      after  { TableDisplay.class_variable_set('@@permissions', { }) }
 
       it 'yields if person and attr' do
         subject = TableDisplay.for(participation.person, participation.event)
+        subject.selected = %w(person.gender)
         expect { |b| subject.with_permission_check(participation, 'person.gender', &b) }.to yield_with_args(participation.person,  'gender')
       end
 
       it 'yields if person if attr is protected and person has access' do
         subject = TableDisplay.for(participation.person, participation.event)
+        subject.selected = %w(person.gender)
         TableDisplay.register_permission(Person, :update, :gender)
         expect { |b| subject.with_permission_check(participation, 'person.gender', &b) }.to yield_with_args(participation.person,  'gender')
       end
 
       it 'does not yield if person if attr is protected and person has no access' do
         subject = TableDisplay.for(participation.person, participation.event)
+        subject.selected = %w(person.gender)
         TableDisplay.register_permission(Person, :missing, :gender)
         expect { |b| subject.with_permission_check(participation, 'person.gender', &b) }.not_to yield_control
       end

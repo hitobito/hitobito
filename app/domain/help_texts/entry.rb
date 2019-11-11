@@ -39,7 +39,7 @@ class HelpTexts::Entry
   end
 
   def translate(kind, name)
-    [HelpText.human_attribute_name("#{kind}"), send("translate_#{kind}", name)].join(' ')
+    format('%s "%s"', HelpText.human_attribute_name("#{kind}"), send("translate_#{kind}", name))
   end
 
   def fields

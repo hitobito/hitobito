@@ -7,7 +7,7 @@
 
 = paginate entries
 = crud_table do |t|
-  - t.col(HelpText.human_attribute_name(:context))  { |ht| ht.to_s }
+  - t.col(HelpText.human_attribute_name(:context))  { |ht| ht.entry.to_s }
   - t.col(HelpText.human_attribute_name(:key))      { |ht| ht.entry.translate(ht.kind, ht.name) }
   - t.attr(:body)
   - add_table_actions(t)

@@ -89,6 +89,17 @@ describe HelpTexts::Entry do
       expect(fields.list.first[1]).to eq 'Adresse'
     end
 
+    context '#present?' do
+      it 'is true if action_names are present' do
+        subject.action_names << 'index'
+        expect(subject.actions).to be_present
+        expect(subject).to be_present
+      end
+
+      it 'is false if action_names is empty' do
+        expect(subject.actions).to be_empty
+        expect(subject).not_to be_present
+      end
+    end
   end
 end
-

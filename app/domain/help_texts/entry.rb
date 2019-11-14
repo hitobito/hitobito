@@ -43,7 +43,7 @@ class HelpTexts::Entry
   end
 
   def fields
-    (used_attributes + permitted_attributes).uniq.collect(&:to_s) - existing[:field]
+    (used_attributes + permitted_attributes).uniq.collect(&:to_s) - existing[:field] - blacklist
   end
 
   def actions
@@ -57,6 +57,10 @@ class HelpTexts::Entry
   end
 
   private
+
+  def blacklist
+    Settings.help_text_blacklist.to_h.fetch(model_class.base_class.to_s.underscore.to_sym, [])
+  end
 
   def used_attributes
     model_class.try(:used_attributes) || []

@@ -24,7 +24,9 @@ describe HelpTexts::Entry do
     end
 
     it '#fields is derived from permitted_attrs' do
-      expect(subject.fields).to have(PeopleController.permitted_attrs.size).items
+      blacklist = Settings.help_text_blacklist.to_h.fetch(:person)
+      expect(blacklist).to have_at_least(3).items
+      expect(subject.fields).to have(PeopleController.permitted_attrs.size - blacklist.size).items
     end
 
     it '#fields is returned without duplicates' do

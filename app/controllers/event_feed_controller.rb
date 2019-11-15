@@ -12,32 +12,30 @@ class EventFeedController < ApplicationController
   skip_before_action :authenticate_person!, only: :feed
   respond_to :ics, only: :feed
 
-  class_attribute :permitted_attrs
-  self.permitted_attrs = [:token]
-
   def feed
-    # TODO check authorization using token
-    events = person.decorate.upcoming_events
+    return render nothing: true, status: :unauthorized unless token_valid?
+    events = current_user.decorate.upcoming_events
     send_data ::Export::Ics::Events.new.generate(events), type: :ics, disposition: :inline
   end
 
   def index
-    person
   end
 
   def reset
-    person.update_attribute(:event_feed_token, SecureRandom.urlsafe_base64)
+    current_user.update_attribute(:event_feed_token, SecureRandom.urlsafe_base64)
     redirect_to action: :index
   end
 
   private
 
-  def permitted_params
-    params.require(model_identifier).permit(permitted_attrs)
+  def token_valid?
+    params.require(:token)
+    params.require(:person_id)
+    expected_token.present? && (params[:token] == expected_token)
   end
 
-  def person
-    @person ||= Person.find(params[:person_id])
+  def expected_token
+    @expected_token ||= Person.find(params[:person_id]).event_feed_token
   end
 
 end

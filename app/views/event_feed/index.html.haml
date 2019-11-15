@@ -8,8 +8,8 @@
 #main
   %p
     = t('event_feed.url')
-    = link_to nil, action: :feed, format: :ics, only_path: false
+    = link_to nil, action: :feed, token: @person.event_feed_token, format: :ics, only_path: false
   %p= t('event_feed.url_description')
 
   %p= t('event_feed.reset_url_description')
-  -#=action_button t('event_feed.reset_url'), { action: :reset }, :recycle
+  =action_button t('event_feed.reset_url'), { action: :reset }, :recycle, method: :post

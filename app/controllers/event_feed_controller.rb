@@ -12,9 +12,11 @@ class EventFeedController < ApplicationController
   skip_before_action :authenticate_person!, only: :feed
   respond_to :ics, only: :feed
 
+  helper_method :feed_url
+
   def feed
     return render nothing: true, status: :unauthorized unless token_valid?
-    events = current_user.decorate.upcoming_events
+    events = person.decorate.upcoming_events
     send_data ::Export::Ics::Events.new.generate(events), type: :ics, disposition: :inline
   end
 
@@ -28,14 +30,25 @@ class EventFeedController < ApplicationController
 
   private
 
+  def feed_url
+    url_for action: :feed,
+            person_id: current_user.id,
+            token: current_user.event_feed_token,
+            format: :ics, only_path: false
+  end
+
   def token_valid?
     params.require(:token)
-    params.require(:person_id)
     expected_token.present? && (params[:token] == expected_token)
   end
 
   def expected_token
-    @expected_token ||= Person.find(params[:person_id]).event_feed_token
+    @expected_token ||= person.event_feed_token
+  end
+
+  def person
+    params.require(:person_id)
+    @person ||= Person.find(params[:person_id])
   end
 
 end

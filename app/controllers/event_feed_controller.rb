@@ -25,6 +25,11 @@ class EventFeedController < ApplicationController
     person
   end
 
+  def reset
+    person.update_attribute(:event_feed_token, SecureRandom.urlsafe_base64)
+    redirect_to action: :index
+  end
+
   private
 
   def permitted_params

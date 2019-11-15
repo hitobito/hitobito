@@ -245,6 +245,7 @@ Hitobito::Application.routes.draw do
     get 'event_feed/:person_id' => 'event_feed#feed',
         constraints: lambda { |req| req.format == :ics }
     get 'event_feed/:person_id' => 'event_feed#index', as: 'event_feed'
+    post 'event_feed/:person_id' => 'event_feed#reset'
 
     resources :help_texts, except: [:show]
 

@@ -16,8 +16,7 @@ class EventFeedController < ApplicationController
 
   def feed
     return render nothing: true, status: :unauthorized unless token_valid?
-    events = person.decorate.upcoming_events
-    send_data ::Export::Ics::Events.new.generate(events), type: :ics, disposition: :inline
+    send_data ::Export::Ics::Events.new.generate(person.events), type: :ics, disposition: :inline
   end
 
   def index

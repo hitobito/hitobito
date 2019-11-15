@@ -71,6 +71,11 @@ Hitobito::Application.routes.draw do
           get 'log' => 'person/log#index'
           get 'colleagues' => 'person/colleagues#index'
           get 'invoices' => 'person/invoices#index'
+
+          get 'event_feed', to: 'person/ical_feed#feed',
+              constraints: lambda { |req| req.format == :ics }
+          #get 'event_feed', to: 'person/ical_feed#index'
+
         end
 
         resources :notes, only: [:create, :destroy]

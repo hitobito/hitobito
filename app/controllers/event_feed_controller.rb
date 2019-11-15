@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Person::IcalFeedController < ApplicationController
+class EventFeedController < ApplicationController
 
   authorize_resource :person, except: :feed
   skip_authorization_check only: :feed
@@ -21,6 +21,10 @@ class Person::IcalFeedController < ApplicationController
     send_data ::Export::Ics::Events.new.generate(events), type: :ics, disposition: :inline
   end
 
+  def index
+    person
+  end
+
   private
 
   def permitted_params
@@ -28,7 +32,7 @@ class Person::IcalFeedController < ApplicationController
   end
 
   def person
-    Person.find(params[:id])
+    @person ||= Person.find(params[:person_id])
   end
 
 end

@@ -491,6 +491,13 @@ de:
       other: 'Verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
     issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
 
+  event_feed:
+    index:
+      title: Meine Anlässe in Kalender integrieren
+    url: 'URL:'
+    url_description: 'Mit dieser Adresse kannst du von anderen Anwendungen aus auf deine Anlässe zugreifen. Achtung: gib diese Adresse nur an Personen weiter, die alle deine Termindetails sehen dürfen.'
+    reset_url: URL zurücksetzen
+    reset_url_description: 'Wenn du Missbrauch vermutest, kannst du die Adresse zurücksetzen und dadurch die aktuelle ungültig machen. Alle Kalender die noch die alte Adresse kennen, können danach nicht mehr deine Anlässe sehen.'
 
   filter_navigation/dropdown:
     additional_views: 'Weitere Ansichten'
@@ -814,6 +821,7 @@ de:
     events: 'Anlässe'
     courses: 'Kurse'
     admin: 'Einstellungen'
+    admin/event_feed: 'Kalender integrieren'
     invoices: 'Rechnungen'
 
   notes:

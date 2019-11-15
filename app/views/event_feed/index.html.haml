@@ -1,0 +1,15 @@
+-#  Copyright (c) 2019, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title t('.title')
+
+#main
+  %p
+    = t('event_feed.url')
+    = link_to nil, action: :feed, format: :ics, only_path: false
+  %p= t('event_feed.url_description')
+
+  %p= t('event_feed.reset_url_description')
+  -#=action_button t('event_feed.reset_url'), { action: :reset }, :recycle

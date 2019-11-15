@@ -72,10 +72,6 @@ Hitobito::Application.routes.draw do
           get 'colleagues' => 'person/colleagues#index'
           get 'invoices' => 'person/invoices#index'
 
-          get 'event_feed', to: 'person/ical_feed#feed',
-              constraints: lambda { |req| req.format == :ics }
-          #get 'event_feed', to: 'person/ical_feed#index'
-
         end
 
         resources :notes, only: [:create, :destroy]
@@ -245,6 +241,10 @@ Hitobito::Application.routes.draw do
 
     resources :custom_contents, only: [:index, :edit, :update]
     get 'custom_contents/:id' => 'custom_contents#edit'
+
+    get 'event_feed/:person_id' => 'event_feed#feed',
+        constraints: lambda { |req| req.format == :ics }
+    get 'event_feed/:person_id' => 'event_feed#index', as: 'event_feed'
 
     resources :help_texts, except: [:show]
 

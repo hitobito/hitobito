@@ -117,4 +117,12 @@ module PeopleHelper
                     query: query_params).to_s
   end
 
+  def upcoming_events_title
+    title = [t('.events')]
+    if entry.id == current_user.id
+      title << link_to(icon(:calendar), event_feed_path, title: t('event_feed.integrate'))
+    end
+    safe_join(title, ' ')
+  end
+
 end

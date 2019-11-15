@@ -32,7 +32,7 @@
       = render 'roles'
       = render 'add_requests'
       = render 'event_aside', title: Event::Application.model_name.human(count: 2), collection: entry.pending_applications
-      = render 'event_aside', title: t('.events'), collection: entry.upcoming_events
+      = render 'event_aside', title: upcoming_events_title, collection: entry.upcoming_events
 
       = render_extensions :show_event
 

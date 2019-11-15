@@ -230,12 +230,6 @@ class PeopleController < CrudController
     render json: PersonSerializer.new(entry.decorate, group: @group, controller: self)
   end
 
-  def render_events_as_ical
-    # TODO check authorization using token
-    events = entry.decorate.upcoming_events
-    send_data ::Export::Ics::Events.new.generate(events), type: :ics, disposition: :inline
-  end
-
   def index_full_ability?
     if params[:range].blank? || params[:range] == 'group'
       can?(:index_full_people, @group)

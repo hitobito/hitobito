@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190826105224) do
+ActiveRecord::Schema.define(version: 20191115160000) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -528,6 +528,7 @@ ActiveRecord::Schema.define(version: 20190826105224) do
     t.string   "authentication_token",      limit: 255
     t.boolean  "show_global_label_formats",               default: true,  null: false
     t.string   "household_key",             limit: 255
+    t.string   "event_feed_token",          limit: 255
   end
 
   add_index "people", ["authentication_token"], name: "index_people_on_authentication_token", using: :btree

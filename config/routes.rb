@@ -242,10 +242,10 @@ Hitobito::Application.routes.draw do
     resources :custom_contents, only: [:index, :edit, :update]
     get 'custom_contents/:id' => 'custom_contents#edit'
 
-    get 'event_feed/:person_id' => 'event_feed#feed',
+    get 'event_feed' => 'event_feed#feed',
         constraints: lambda { |req| req.format == :ics }
-    get 'event_feed/:person_id' => 'event_feed#index', as: 'event_feed'
-    post 'event_feed/:person_id' => 'event_feed#reset'
+    get 'event_feed' => 'event_feed#index'
+    post 'event_feed' => 'event_feed#reset'
 
     resources :help_texts, except: [:show]
 

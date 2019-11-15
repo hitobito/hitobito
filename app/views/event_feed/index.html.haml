@@ -6,10 +6,17 @@
 - title t('.title')
 
 #main
-  %p
-    = t('event_feed.url')
-    = link_to nil, action: :feed, person_id: current_user.id, token: current_user.event_feed_token, format: :ics, only_path: false
-  %p= t('event_feed.url_description')
 
-  %p= t('event_feed.reset_url_description')
-  =action_button t('event_feed.reset_url'), { action: :reset }, :recycle, method: :post
+  - if current_user.event_feed_token
+    %p
+      = t('event_feed.url')
+      = link_to nil, feed_url
+      = action_button(t('global.button.copy'), '#', :copy, class: 'btn-small', data: { copy_to_clipboard: feed_url }, in_button_group: true)
+    %p= t('event_feed.url_description')
+
+    %p= t('event_feed.reset_url_description')
+    = action_button t('event_feed.reset_url'), { action: :reset }, :recycle, method: :post
+
+  - else
+    = action_button t('event_feed.create_url'), { action: :reset }, :calendar, method: :post
+    %p= t('event_feed.url_description')

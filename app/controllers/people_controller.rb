@@ -64,7 +64,6 @@ class PeopleController < CrudController
       format.xlsx { render_tabular_entry(:xlsx) }
       format.vcf  { render_vcf([entry]) }
       format.json { render_entry_json }
-      format.ics  { render_events_as_ical }
     end
   end
 

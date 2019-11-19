@@ -533,6 +533,7 @@ ActiveRecord::Schema.define(version: 20191115160000) do
 
   add_index "people", ["authentication_token"], name: "index_people_on_authentication_token", using: :btree
   add_index "people", ["email"], name: "index_people_on_email", unique: true, using: :btree
+  add_index "people", ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true, using: :btree
   add_index "people", ["household_key"], name: "index_people_on_household_key", using: :btree
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true, using: :btree
 

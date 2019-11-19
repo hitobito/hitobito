@@ -120,9 +120,13 @@ module PeopleHelper
   def upcoming_events_title
     title = [t('.events')]
     if entry.id == current_user.id
-      title << link_to(icon(:calendar), event_feed_path, title: t('event_feed.integrate'))
+      title << link_to(icon(:calendar), event_feed_path, title: t('event_feeds.integrate'))
     end
     safe_join(title, ' ')
+  end
+
+  def person_event_feed_url
+    event_feed_url(token: current_user.event_feed_token, format: :ics)
   end
 
 end

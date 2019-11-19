@@ -7,26 +7,34 @@
 
 require 'spec_helper'
 
-describe EventFeedController do
+describe EventFeedsController do
 
   let(:person)   { people(:bottom_member) }
   let(:token)    { 'test-token-IXSvkeJEHeo' }
 
-  before { sign_in(person) }
 
   describe 'while logged in' do
+
+    before { sign_in(person) }
 
     context 'before token is set' do
 
       before { person.update_attribute(:event_feed_token, nil) }
 
-      it 'read calendar integration page' do
-        get :index
-        expect(response).to have_http_status(:ok)
+      it 'GET#show renders page' do
+        get :show
+        expect(response).to be_successful
       end
 
-      it 'create token' do
-        expect { post :reset }.to change { person.reload.event_feed_token }
+      it 'GET#show.ics returns 404 without token' do
+        get :show, format: :ics
+        expect(response.status).to eq 404
+      end
+
+      it 'PATCH#update creates token' do
+        expect { patch :update }.to change { person.reload.event_feed_token }
+        expect(flash[:notice]).to eq 'Adresse wurde erstellt.'
+        expect(response).to redirect_to(event_feed_path)
       end
     end
 
@@ -34,24 +42,28 @@ describe EventFeedController do
 
       before { person.update_attribute(:event_feed_token, token) }
 
-      it 'read calendar integration page' do
-        get :index
+      it 'GET#show renders page' do
+        get :show
+        expect(response).to be_successful
+      end
+
+      it 'GET#show.ics returns feed' do
+        get :show, token: token, format: :ics
         expect(response).to have_http_status(:ok)
+        expect(response.body.scan('BEGIN:VEVENT')).to have(1).item
       end
 
-      it 'reset token' do
-        expect { post :reset }.to change { person.reload.event_feed_token }
+      it 'GET#show.ics returns 404 for bad token' do
+        get :show, token: 'wrong-token-IXSvkeJEHe', format: :ics
+        expect(response.status).to eq 404
       end
 
-      it 'can access token using url' do
-        get :feed, person_id: person.id, token: person.event_feed_token
-        expect(response).to have_http_status(:ok)
+      it 'PATCH#update resets token' do
+        expect { post :update }.to change { person.reload.event_feed_token }
+        expect(flash[:notice]).to eq 'Adresse wurde aktualisiert.'
+        expect(response).to redirect_to(event_feed_path)
       end
 
-      it 'access denied when using wrong token' do
-        get :feed, person_id: person.id, token: 'wrong-token-IXSvkeJEHe'
-        expect(response).to have_http_status(401)
-      end
     end
   end
 
@@ -59,17 +71,16 @@ describe EventFeedController do
 
     before do
       person.update_attribute(:event_feed_token, token)
-      sign_out(person)
     end
 
     it 'can access token using url' do
-      get :feed, person_id: person.id, token: person.event_feed_token
+      get :show, token: person.event_feed_token, format: :ics
       expect(response).to have_http_status(:ok)
     end
 
     it 'access denied when using wrong token' do
-      get :feed, person_id: person.id, token: 'wrong-token-IXSvkeJEHe'
-      expect(response).to have_http_status(401)
+      get :show, token: 'wrong-token-IXSvkeJEHe', format: :ics
+      expect(response).to have_http_status(404)
     end
 
     context 'with event participations' do
@@ -82,12 +93,12 @@ describe EventFeedController do
       let!(:future_event_participation) { Fabricate(:event_participation, event: future_event, person: person) }
 
       it 'includes past event' do
-        get :feed, person_id: person.id, token: person.event_feed_token
+        get :show, token: person.event_feed_token, format: :ics
         expect(response.body).to include(past_event.name)
       end
 
       it 'includes future event' do
-        get :feed, person_id: person.id, token: person.event_feed_token
+        get :show, token: person.event_feed_token, format: :ics
         expect(response.body).to include(future_event.name)
       end
 

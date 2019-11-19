@@ -242,11 +242,7 @@ Hitobito::Application.routes.draw do
     resources :custom_contents, only: [:index, :edit, :update]
     get 'custom_contents/:id' => 'custom_contents#edit'
 
-    get 'event_feed' => 'event_feed#feed',
-        constraints: lambda { |req| req.format == :ics }
-    get 'event_feed' => 'event_feed#index'
-    post 'event_feed' => 'event_feed#reset'
-
+    resource :event_feed, only: [:show, :update]
     resources :help_texts, except: [:show]
 
     devise_for :service_tokens, only: [:sessions]

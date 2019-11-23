@@ -14,7 +14,7 @@
     %br
     %p= t('.url_description')
     %p= t('.reset_url_description')
-    = action_button t('.reset_url'), { action: :update }, :recycle, method: :patch
+    = action_button t('.reset_url'), { action: :update }, :'redo-alt', method: :patch
   - else
-    = action_button t('.create_url'), { action: :update }, :calendar, method: :patch
+    = action_button t('.create_url'), { action: :update }, :'calendar-alt', method: :patch
     %p= t('.url_description')

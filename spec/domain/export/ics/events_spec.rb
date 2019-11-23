@@ -102,6 +102,20 @@ describe Export::Ics::Events do
         expect(ical_event.dtend).to eq(event_date.finish_at.strftime(ical_datetime_klass::FORMAT))
       end
     end
+
+    context 'with an all-day event' do
+      let(:event_date) do
+        Event::Date.new(
+          event: event,
+          start_at: Time.zone.local(2018, 5, 19, 0, 0),
+          finish_at: Time.zone.local(2018, 5, 21, 0, 0)
+        )
+      end
+
+      it 'should export the exclusive end date' do
+        expect(ical_event.dtend).to eq((event_date.finish_at + 1.day).strftime(ical_datetime_klass::FORMAT))
+      end
+    end
   end
 
   describe '#datetime_to_ical' do

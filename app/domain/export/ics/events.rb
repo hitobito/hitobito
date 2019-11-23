@@ -41,12 +41,22 @@ module Export::Ics
     def generate_ical_from_event_date(event_date, event)
       Icalendar::Event.new.tap do |ical_event|
         ical_event.dtstart = datetime_to_ical(event_date.start_at)
-        ical_event.dtend = datetime_to_ical(event_date.finish_at)
+        ical_event.dtend = finish_at_to_ical(event_date.finish_at)
         ical_event.summary = event.name
         ical_event.summary += ": #{event_date.label}" unless event_date.label.blank?
         ical_event.location = event_date.location || event.location
         ical_event.description = event_description(event)
         ical_event.contact = event.contact && event.contact.to_s
+      end
+    end
+
+    def finish_at_to_ical(finish_at)
+      if Duration.date_only?(finish_at)
+        # For all-day events, the iCalendar standard requires exclusive end dates.
+        # Since we interpret 0:00 as all-day, we need to add 1 day to get the real end date.
+        datetime_to_ical(finish_at + 1.day)
+      else
+        datetime_to_ical(finish_at)
       end
     end
 

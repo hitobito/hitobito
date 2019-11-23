@@ -7,7 +7,7 @@
   = section_table(Person::AddRequest.model_name.human(count: 2), @add_requests) do |request|
     %td
       - if can?(:approve, request)
-        = link_to(icon(:ok),
+        = link_to(icon(:check),
                   person_add_request_path(request),
                   method: :post,
                   title: t('people.add_requests.approve_title'))

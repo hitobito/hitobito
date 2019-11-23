@@ -42,7 +42,8 @@ module Export::Ics
       Icalendar::Event.new.tap do |ical_event|
         ical_event.dtstart = datetime_to_ical(event_date.start_at)
         ical_event.dtend = datetime_to_ical(event_date.finish_at)
-        ical_event.summary = "#{event.name}: #{event_date.label}"
+        ical_event.summary = event.name
+        ical_event.summary += ": #{event_date.label}" unless event_date.label.blank?
         ical_event.location = event_date.location || event.location
         ical_event.description = event_description(event)
         ical_event.contact = event.contact && event.contact.to_s

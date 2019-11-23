@@ -1,5 +1,3 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
@@ -161,6 +159,9 @@ de:
       event/kind:
         one: Kursart
         other: Kursarten
+      event/role:
+        one: Anlass Rolle
+        other: Anlass Rollen
       event/role/assistant_leader:
         one: Leitung
         other: Leitung
@@ -188,6 +189,9 @@ de:
       group:
         one: Gruppe
         other: Gruppen
+      help_text:
+        one: Hilfetext
+        other: Hilfetexte
       invoice:
         one: Rechnung
         other: Rechnungen
@@ -618,6 +622,17 @@ de:
         subject: Betreff
         body: Inhalt
 
+      help_text:
+        context: Kontext
+        key: Schlüssel
+        body: Inhalt
+        field:
+          one: Feld
+          other: Felder
+
+        action:
+          one: Seite
+          other: Seiten
 
       label_format:
         name: Bezeichnung

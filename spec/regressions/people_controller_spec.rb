@@ -157,7 +157,7 @@ describe PeopleController, type: :controller do
 
   describe 'event sections' do
     let(:params) { { group_id: top_group.id, id: top_leader.id } }
-    let(:header) { section.find('h2').text }
+    let(:header) { section.find('h2').text.strip }
     let(:dates) { section.find('tr:eq(1) td:eq(2)').text.strip }
     let(:label) { section.find('tr:eq(1) td:eq(1)') }
     let(:label_link) { label.find('a') }

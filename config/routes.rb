@@ -71,6 +71,7 @@ Hitobito::Application.routes.draw do
           get 'log' => 'person/log#index'
           get 'colleagues' => 'person/colleagues#index'
           get 'invoices' => 'person/invoices#index'
+
         end
 
         resources :notes, only: [:create, :destroy]
@@ -240,6 +241,9 @@ Hitobito::Application.routes.draw do
 
     resources :custom_contents, only: [:index, :edit, :update]
     get 'custom_contents/:id' => 'custom_contents#edit'
+
+    resource :event_feed, only: [:show, :update]
+    resources :help_texts, except: [:show]
 
     devise_for :service_tokens, only: [:sessions]
     devise_for :people, skip: [:registrations], path: "users"

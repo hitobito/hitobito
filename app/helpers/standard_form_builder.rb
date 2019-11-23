@@ -339,8 +339,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   # Generates a help block for fields
-  def help_block(text = nil, &block)
-    content_tag(:span, text, class: 'help-block', &block)
+  def help_block(text = nil, options = {}, &block)
+    additional_classes = Array(options.delete(:class))
+    content_tag(:span, text, class: "help-block #{additional_classes.join(' ')}", &block)
   end
 
   # Returns the list of association entries, either from options[:list],
@@ -409,8 +410,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     @object.required_attributes.include?(attr.to_s)
   end
 
-  private
-
   def labeled_field_method?(name)
     prefix = 'labeled_'
     if name.to_s.start_with?(prefix)
@@ -421,8 +420,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def build_labeled_field(field_method, *args)
     options = args.extract_options!
-    help = options.delete(:help)
-    help_inline = options.delete(:help_inline)
     label = options.delete(:label)
     addon = options.delete(:addon)
 
@@ -431,11 +428,27 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     text = send(field_method, *(args << options))
     text = with_addon(addon, text) if addon.present?
-    text << help_inline(help_inline) if help_inline.present?
-    text << help_block(help) if help.present?
-    labeled_args << text
+    with_labeled_field_help(args.first, options) { |help| text << help }
 
+    labeled_args << text
     labeled(*labeled_args)
+  end
+
+  def with_labeled_field_help(field, options)
+    help = options.delete(:help)
+    help_inline = options.delete(:help_inline)
+
+    if help.present?
+      yield help_inline(help_inline) if help_inline.present?
+      yield help_block(help)
+    else
+      yield help_texts.render_field(field)
+      yield help_inline(help_inline) if help_inline.present?
+    end
+  end
+
+  def help_texts
+    @help_texts ||= HelpTexts::Renderer.new(template)
   end
 
   def klass

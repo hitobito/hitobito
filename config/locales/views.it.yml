@@ -12,6 +12,7 @@ it:
     do_not_fill: Per favore lasciare libero questo campo
     chosen_no_results: Nessun risultato con
     selected: Selezionato
+    columns: Colonna
     gender:
       male: maschile
       female: femminile
@@ -31,6 +32,7 @@ it:
       back: Indietro
       refresh: Aggiornare
       print: Stampare
+      copy: Copiare
     link:
       show: Visualizzare
       edit: Modificare
@@ -114,6 +116,7 @@ it:
     households: 'Lista dei nuclei famigliari'
     everything: 'tutti i dati'
     household_option: 'Riassumere i nuclei famigliari'
+    selection: 'Scelta della colonna'
   dropdown/invoices:
     download: 'Esportare'
     print: 'Stampare'
@@ -703,6 +706,11 @@ it:
     paginator:
       newer_notes: Contributi più recenti
       older_notes: Contributi più vecchi
+  oauth:
+    applications:
+      attrs:
+        profile_endpoint_help: Si può fare riferimento alle informazioni di profilo dell'utilizzatore  tramite questo endpoint. Nel far questo deve venir consegnato l'access token nell'authorization header. Lo scope desiderato può venir consegnato quale x-scope header.
+        profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
   qualifications:
     in_years: '%{years} anni'
     valid_until: 'fino a %{date}'
@@ -938,6 +946,8 @@ it:
       title: Campi
       match: contiene
       equal: è esattamente
+      greater: più grande di
+      smaller: più piccolo di
     new:
       title: Filtro per le persone
     range:
@@ -1027,6 +1037,12 @@ it:
     new:
       title: Dove dovrebbero essere creati i nuovi ruoli?
   service_tokens:
+    abilities:
+      read: Leggere
+      people: Persone di questo livello
+      people_below: Persone di questo livello e dei livelli sottostanti
+      groups: Gruppi di questo livello e dei livelli sottostanti
+      events: Eventi di questo livello e dei livelli sottostanti
     global:
       link:
         add: Aggiungere API Key

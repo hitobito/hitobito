@@ -12,6 +12,11 @@ class VariousAbility < AbilityDsl::Base
     permission(:admin).may(:update).all
   end
 
+  on(HelpText) do
+    class_side(:index).if_admin
+    permission(:admin).may(:manage).all
+  end
+
   on(LabelFormat) do
     class_side(:index).everybody
     class_side(:manage_global).if_admin

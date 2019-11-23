@@ -10,7 +10,7 @@ class Person::Filter::Tag < Person::Filter::Base
   self.permitted_args = [:names]
 
   def apply(scope)
-    scope.joins(:tags).where(tags_condition(scope)).distinct
+    scope.joins(:tags).where(tags_condition).distinct
   end
 
   def blank?
@@ -27,13 +27,12 @@ class Person::Filter::Tag < Person::Filter::Base
 
   private
 
-  def tags_condition(scope)
+  def tags_condition
     { tags: { name: names } }
   end
 
   def names
-    @names = Array(args[:names]).compact.reject(&:blank?).compact
+    @names ||= Array(args[:names]).reject(&:blank?).compact
   end
 
 end
-

@@ -10,6 +10,7 @@ describe 'StandardFormBuilder' do
   include UtilityHelper
   include CrudTestHelper
   include LayoutHelper
+  include HelpTextsHelper
 
   before(:all) do
     reset_db

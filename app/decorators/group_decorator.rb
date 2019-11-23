@@ -64,6 +64,10 @@ class GroupDecorator < ApplicationDecorator
     attributes
   end
 
+  def modifiable?(attribute)
+    modifiable_attributes(attribute).each { |_| yield }
+  end
+
   def type_name
     klass.label
   end

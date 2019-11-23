@@ -24,10 +24,11 @@ class Person::Filter::List
 
   def filtered_accessibles
     return filter unless user
-    filter.where(id: accessibles.unscope(:select).pluck(:id).keep_if do |id|
-      next true if @ids.blank?
-      @ids.include? id.to_s
-    end).uniq
+
+    filtered = filter.unscope(:select).select(:id).uniq
+    filtered = filtered.where(id: @ids) if @ids.present?
+
+    accessibles.unscope(:select).where(id: filtered)
   end
 
   def all_count
@@ -40,6 +41,7 @@ class Person::Filter::List
     chain.present? ? chain.filter(list_range) : list_range
   end
 
+  # TODO ama rework and remove obsolete code
   def accessibles
     ability = accessibles_class.new(user, nil)
     Person.accessible_by(ability)

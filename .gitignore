@@ -77,3 +77,6 @@ TAGS
 /node_modules
 yarn-debug.log*
 .yarn-integrity
+
+# for those who want to reduce errors in the rails-log
+public/favicon.ico

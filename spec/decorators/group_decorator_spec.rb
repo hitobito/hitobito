@@ -52,6 +52,17 @@ describe GroupDecorator, :draper_with_helpers do
       expect(context).to receive(:can?).with(:modify_superior, subject).and_return(false)
       expect(subject.modifiable_attributes(:foo, :bar)).to eq %w(bar)
     end
+
+    it '#modifiable? we can :modify_superior' do
+      expect(context).to receive(:can?).with(:modify_superior, subject).and_return(true)
+      expect(subject.modifiable?(:foo) { |val| val }).to eq %w(foo)
+    end
+
+    it '#modifiable? filters attributes if we cannot :modify_superior' do
+      allow(model.class).to receive_messages(superior_attributes: [:foo])
+      expect(context).to receive(:can?).with(:modify_superior, subject).and_return(false)
+      expect(subject.modifiable_attributes(:foo) { |val| val }).to eq %w()
+    end
   end
 
 end

@@ -28,9 +28,21 @@ describe Export::Tabular::People::TableDisplays do
       expect(people_list.data_rows.first.last).to eq 'bla bla'
     end
 
-    it 'does not include the same attriubte twice' do
+    it 'does not include the same attribute twice' do
       table_display.selected = %w(first_name)
       expect(people_list.attributes.grep(/first_name/).count).to eq 1
+    end
+
+    it 'does include dynamic attributes' do
+      person.phone_numbers << PhoneNumber.new(label: 'foobar', number: 321)
+      expect(people_list.labels.last).to eq 'Telefonnummer foobar'
+      expect(people_list.data_rows.first.last).to eq '321'
+    end
+
+    it 'does not fail when dynamic attributes include a .' do
+      person.phone_numbers << PhoneNumber.new(label: 'foo.bar', number: 321)
+      expect(people_list.labels.last).to eq 'Telefonnummer foo.bar'
+      expect(people_list.data_rows.first.last).to eq '321'
     end
 
     context :with_permission_check do
@@ -94,6 +106,18 @@ describe Export::Tabular::People::TableDisplays do
     it 'does not include the same attribute twice' do
       table_display.selected = %W(person.gender)
       expect(people_list.attributes.grep(/gender/).count).to eq 1
+    end
+
+    it 'does include dynamic attributes' do
+      person.phone_numbers << PhoneNumber.new(label: 'foobar', number: 321)
+      expect(people_list.labels.last).to eq 'Telefonnummer foobar'
+      expect(people_list.data_rows.first.last).to eq '321'
+    end
+
+    it 'does not fail when dynamic attributes include a .' do
+      person.phone_numbers << PhoneNumber.new(label: 'foo.bar', number: 321)
+      expect(people_list.labels.last).to eq 'Telefonnummer foo.bar'
+      expect(people_list.data_rows.first.last).to eq '321'
     end
 
     context :with_permission_check do

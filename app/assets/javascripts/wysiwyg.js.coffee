@@ -12,25 +12,29 @@
 #= require bootstrap-wysihtml5/locales/fr-FR
 #= require bootstrap-wysihtml5/locales/it-IT
 
-wysi_languages =
-  "de-DE": "Überschrift"
-  "fr-FR": "Titre"
-  "it-IT": "Titolo"
+app = window.Wysiwyg ||= {}
 
-# Add missing translation keys
-for lang, title of wysi_languages
-  for num in [1..6]
-    $.fn.wysihtml5.locale[lang].font_styles["h#{num}"] = "#{title} #{num}"
+app.Wysiwyg = {
+  setup: ->
+    wysi_languages =
+      "de-DE": "Überschrift"
+      "fr-FR": "Titre"
+      "it-IT": "Titolo"
 
+    # Add missing translation keys
+    for lang, title of wysi_languages
+      for num in [1..6]
+        $.fn.wysihtml5.locale[lang].font_styles["h#{num}"] = "#{title} #{num}"
 
-$(document).on('turbolinks:load', ->
-  wysilocale = do ->
-    lang = $('html').attr('lang')
-    lang + '-' + lang.toUpperCase()
+    wysilocale = do ->
+      lang = $('html').attr('lang')
+      lang + '-' + lang.toUpperCase()
 
-  # wire up wysiwyg text areas
-  $('textarea.wysiwyg').wysihtml5({
-    locale: wysilocale
-  })
-)
+    $('textarea.wysiwyg').wysihtml5({
+      locale: wysilocale
+    })
+}
 
+# See https://sevos.io/2017/02/27/turbolinks-lifecycle-explained.html
+$(document).one('turbolinks:load', -> console.log('setup'); app.Wysiwyg.setup());
+$(document).on('turbolinks:render', -> console.log('render'); app.Wysiwyg.setup());

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190618144458) do
+ActiveRecord::Schema.define(version: 20191115160000) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -235,6 +235,26 @@ ActiveRecord::Schema.define(version: 20190618144458) do
   add_index "groups", ["layer_group_id"], name: "index_groups_on_layer_group_id", using: :btree
   add_index "groups", ["lft", "rgt"], name: "index_groups_on_lft_and_rgt", using: :btree
   add_index "groups", ["parent_id"], name: "index_groups_on_parent_id", using: :btree
+
+  create_table "help_text_translations", force: :cascade do |t|
+    t.integer  "help_text_id", limit: 4,     null: false
+    t.string   "locale",       limit: 255,   null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.text     "body",         limit: 65535
+  end
+
+  add_index "help_text_translations", ["help_text_id"], name: "index_help_text_translations_on_help_text_id", using: :btree
+  add_index "help_text_translations", ["locale"], name: "index_help_text_translations_on_locale", using: :btree
+
+  create_table "help_texts", force: :cascade do |t|
+    t.string "controller", limit: 255, null: false
+    t.string "model",      limit: 255
+    t.string "kind",       limit: 255, null: false
+    t.string "name",       limit: 255, null: false
+  end
+
+  add_index "help_texts", ["controller", "model", "kind", "name"], name: "index_help_texts_fields", unique: true, using: :btree
 
   create_table "invoice_articles", force: :cascade do |t|
     t.string   "number",      limit: 255
@@ -508,10 +528,12 @@ ActiveRecord::Schema.define(version: 20190618144458) do
     t.string   "authentication_token",      limit: 255
     t.boolean  "show_global_label_formats",               default: true,  null: false
     t.string   "household_key",             limit: 255
+    t.string   "event_feed_token",          limit: 255
   end
 
   add_index "people", ["authentication_token"], name: "index_people_on_authentication_token", using: :btree
   add_index "people", ["email"], name: "index_people_on_email", unique: true, using: :btree
+  add_index "people", ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true, using: :btree
   add_index "people", ["household_key"], name: "index_people_on_household_key", using: :btree
   add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true, using: :btree
 

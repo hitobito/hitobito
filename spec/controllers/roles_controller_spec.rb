@@ -306,6 +306,19 @@ describe RolesController do
     end
   end
 
+  describe 'XHR PATCH inline update' do
+
+    before { role } # create it
+    render_views
+
+    it 'displays only roles in group after updating' do
+      xhr :patch, :update, group_id: group.id, id: role.id,
+                   role: { type: role.type, group_id: group.id, label: 'label' }
+      expect(response.body).not_to include('muted')
+    end
+
+  end
+
   describe 'DELETE destroy' do
     let(:notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
 

@@ -35,13 +35,6 @@ module UtilityHelper
     object_class(entry).model_name.human
   end
 
-  def include_wysiwyg_assets
-    content_for(:head) do
-      stylesheet_link_tag('wysiwyg.css', media: 'all', 'data-turbolinks-track' => true) +
-      javascript_include_tag('wysiwyg', 'data-turbolinks-track' => true)
-    end
-  end
-
   # Returns the ActiveRecord column type or nil.
   def column_type(obj, attr)
     column_property(obj, attr, :type)

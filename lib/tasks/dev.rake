@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_pbs.
+
 namespace :dev do
   namespace :oauth do
 
@@ -36,6 +43,32 @@ namespace :dev do
       http://localhost:3000/oauth/profile
       BASH
       sh curl.strip_heredoc
+    end
+  end
+
+  namespace :help_texts do
+    desc "Create all helptexsts"
+    task :create => [:environment] do
+      HelpText.destroy_all
+
+      HelpTexts::List.new.entries.each do |entry|
+        entry.labeled_list('action').each do |key, value|
+          p [entry.controller_name, entry.model_class.to_s.underscore, :action, key]
+          HelpText.create!(controller: entry.controller_name,
+                           model: entry.model_class.to_s.underscore,
+                           kind: :action,
+                           name: key.split('.').last,
+                           body: [key, entry.to_s, value].join(' '))
+        end
+        entry.labeled_list('field').each do |key, value|
+          p [entry.controller_name, entry.model_class.to_s.underscore, :field, key]
+          HelpText.create!(controller: entry.controller_name,
+                           model: entry.model_class.to_s.underscore,
+                           kind: :field,
+                           name: key.split('.').last,
+                           body: [key, entry.to_s, value].join(' '))
+        end
+      end
     end
   end
 end

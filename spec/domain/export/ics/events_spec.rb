@@ -64,7 +64,7 @@ describe Export::Ics::Events do
 
     context 'with only a start date' do
       let(:event_date) do
-        Event::Date.new(event: event, start_at: Time.zone.local(2018, 5, 19), location: 'testlocation')
+        Event::Date.new(event: event, label: 'Main part', start_at: Time.zone.local(2018, 5, 19), location: 'testlocation')
       end
 
       it do
@@ -73,6 +73,16 @@ describe Export::Ics::Events do
         expect(ical_event.dtend).to be nil
         expect(ical_event.summary.to_s).to eq("#{event.name}: #{event_date.label}")
         expect(ical_event.location.to_s).to eq(event_date.location)
+      end
+    end
+
+    context 'with a date with empty label' do
+      let(:event_date) do
+        Event::Date.new(event: event, start_at: Time.zone.local(2018, 5, 19), location: 'testlocation')
+      end
+
+      it 'omits the empty date label and colon' do
+        expect(ical_event.summary.to_s).to eq("#{event.name}")
       end
     end
 

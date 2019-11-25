@@ -30,8 +30,14 @@ app.Wysiwyg = {
       lang = $('html').attr('lang')
       lang + '-' + lang.toUpperCase()
 
+
     $('textarea.wysiwyg').wysihtml5({
-      locale: wysilocale
+      locale: wysilocale,
+      toolbar: {
+        'fa': true,
+        'image': false,
+        'smallmodals': true
+      }
     })
 }
 

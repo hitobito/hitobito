@@ -75,31 +75,56 @@ describe HelpTexts::Entry do
       expect(subject.labeled_list(:action)).to be_empty
     end
 
-    it '#grouped returns structure used for grouped_collection_select' do
-      subject.action_names << 'new'
-      expect(subject.grouped).to have(2).items
 
-      action_names, fields = subject.grouped
-      expect(action_names.label).to eq 'Seiten'
-      expect(action_names.list).to have(1).item
-      expect(action_names.list.first[0]).to eq 'action.new'
-      expect(action_names.list.first[1]).to eq 'Erstellen'
+    context '#grouped' do
+      it 'returns two arrays if action and fields are present' do
+        subject.action_names << 'new'
+        expect(subject.grouped).to have(2).items
+      end
 
-      expect(fields.label).to eq 'Felder'
-      expect(fields.list).to have_at_least(10).items
-      expect(fields.list.first[0]).to eq 'field.address'
-      expect(fields.list.first[1]).to eq 'Adresse'
+      it 'only includes fields if actions are not present' do
+        expect(subject.grouped).to have(1).item
+      end
+
+      it 'returns structure used for grouped_collection_select' do
+        subject.action_names << 'new'
+        expect(subject.grouped).to have(2).items
+
+        action_names, fields = subject.grouped
+        expect(action_names.label).to eq 'Seiten'
+        expect(action_names.list).to have(1).item
+        expect(action_names.list.first[0]).to eq 'action.new'
+        expect(action_names.list.first[1]).to eq 'Erstellen'
+
+        expect(fields.label).to eq 'Felder'
+        expect(fields.list).to have_at_least(10).items
+        expect(fields.list.first[0]).to eq 'field.address'
+        expect(fields.list.first[1]).to eq 'Adresse'
+      end
     end
 
     context '#present?' do
-      it 'is true if action_names are present' do
-        subject.action_names << 'index'
-        expect(subject.actions).to be_present
+      it 'is true if fields are present' do
+        expect(subject.actions).to be_empty
+        expect(subject.fields).to be_present
         expect(subject).to be_present
       end
 
-      it 'is false if action_names is empty' do
+      it 'is true if actions are present' do
+        existing_fields = PeopleController.permitted_attrs.collect(&:to_s)
+        subject = HelpTexts::Entry.new(controller, model_class, { action: [], field: existing_fields })
+        subject.action_names << 'index'
+        expect(subject.actions).to be_present
+        expect(subject.fields).to be_empty
+        expect(subject).to be_present
+      end
+
+      it 'is false if both are empty' do
+        existing_fields = PeopleController.permitted_attrs.collect(&:to_s)
+        subject = HelpTexts::Entry.new(controller, model_class, { action: %w(index), field: existing_fields })
+        subject.action_names << 'index'
         expect(subject.actions).to be_empty
+        expect(subject.fields).to be_empty
         expect(subject).not_to be_present
       end
     end

@@ -9,10 +9,11 @@ class HelpTexts::Renderer
 
   attr_reader :template
 
-  delegate :dom_id, :content_tag, :icon, :action_name, to: :template
+  delegate :dom_id, :content_tag, :icon, :action_name, :params, :model_class, :controller, to: :template
 
-  def initialize(template)
+  def initialize(template, entry = nil)
     @template = template
+    @entry = entry
   end
 
   def action_trigger
@@ -27,10 +28,14 @@ class HelpTexts::Renderer
     end
   end
 
-  def render_field(key, entry = nil)
-    with_help_text(key, :field, entry) do |help_text|
+  def render_field(key)
+    with_help_text(key, :field) do |help_text|
       render_trigger(help_text) + render_text(help_text)
     end
+  end
+
+  def entry
+    @entry ||= derive_entry
   end
 
   private
@@ -51,19 +56,27 @@ class HelpTexts::Renderer
     template.sanitize(text, tags: tags)
   end
 
-  def with_help_text(key, kind, entry = nil)
+  def with_help_text(key, kind)
     texts = help_texts.select { |ht| ht.name == key.to_s && ht.kind == kind.to_s }.index_by(&:model)
-    text = if entry
-             texts[entry.class.to_s.underscore] || texts[entry.class.base_class.to_s.underscore]
-           else
-             texts.values.first
-           end
+    text = texts[entry.class.to_s.underscore] || texts[entry.class.base_class.to_s.underscore]
     yield text if text
   end
 
   def controller_name
     template.controller.class.to_s.underscore.gsub('_controller', '')
   end
+
+  def derive_entry
+    if params[:type]
+      params[:type].constantize.new
+    elsif action_name == 'index'
+      model_class.new
+    else
+      entry = controller.send(:entry)
+      entry.try(:model) || entry
+    end
+  end
+
 
   def help_texts
     @help_texts ||= HelpText.includes(:translations).where(controller: controller_name)

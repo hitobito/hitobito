@@ -65,7 +65,7 @@ gem 'kaminari', '< 1.0.0' # requires ruby 2.0
 
 # Gems used only for assets
 gem 'bootstrap-sass', '~> 2.3'
-gem 'bootstrap-wysihtml5-rails', '~> 0.3.1.24'
+gem 'bootstrap-wysihtml5-rails'
 gem 'chosen-rails'
 gem 'coffee-rails'
 gem 'compass'

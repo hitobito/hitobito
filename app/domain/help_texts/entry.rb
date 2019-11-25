@@ -29,9 +29,10 @@ class HelpTexts::Entry
     %w(action field).collect do |kind|
       label = HelpText.human_attribute_name("#{kind}", count: 2)
       list  = labeled_list(kind)
+      next if list.empty?
 
       OpenStruct.new(label: label, list: list)
-    end
+    end.compact
   end
 
   def present?

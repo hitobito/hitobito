@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class HelpTexts::Entry
-  attr_reader :key, :action_names, :existing, :controller_name, :model_class
+  attr_reader :key, :action_names,  :controller_name, :model_class
 
   def self.key(controller_name, model_class)
     [controller_name, model_class.to_s.underscore].compact.join('--')
@@ -15,7 +15,7 @@ class HelpTexts::Entry
   def initialize(controller_name, model_class, existing = nil)
     @controller_name = controller_name
     @model_class     = model_class
-    @existing        = existing || { action: [], field: [] }
+    @existing        = existing || {}
     @key             = self.class.key(controller_name, model_class)
 
     @action_names = []
@@ -35,7 +35,7 @@ class HelpTexts::Entry
   end
 
   def present?
-    actions.present?
+    actions.present? || fields.present?
   end
 
   def translate(kind, name)
@@ -43,11 +43,11 @@ class HelpTexts::Entry
   end
 
   def fields
-    (used_attributes + permitted_attributes).uniq.collect(&:to_s) - existing[:field] - blacklist
+    ((used_attributes + permitted_attributes).collect(&:to_s) - existing(:field) - blacklist).uniq
   end
 
-  def actions
-    (action_names & %w(index new edit show)) - existing[:action]
+  def actions(supported_actions = %w(index new edit show))
+    (action_names & supported_actions) - existing(:action)
   end
 
   def labeled_list(kind)
@@ -57,6 +57,10 @@ class HelpTexts::Entry
   end
 
   private
+
+  def existing(key)
+    @existing.fetch(key, []).collect(&:to_s)
+  end
 
   def blacklist
     Settings.help_text_blacklist.to_h.fetch(model_class.base_class.to_s.underscore.to_sym, [])

@@ -92,14 +92,27 @@ describe HelpTexts::Entry do
     end
 
     context '#present?' do
-      it 'is true if action_names are present' do
-        subject.action_names << 'index'
-        expect(subject.actions).to be_present
+      it 'is true if fields are present' do
+        expect(subject.actions).to be_empty
+        expect(subject.fields).to be_present
         expect(subject).to be_present
       end
 
-      it 'is false if action_names is empty' do
+      it 'is true if actions are present' do
+        existing_fields = PeopleController.permitted_attrs.collect(&:to_s)
+        subject = HelpTexts::Entry.new(controller, model_class, { action: [], field: existing_fields })
+        subject.action_names << 'index'
+        expect(subject.actions).to be_present
+        expect(subject.fields).to be_empty
+        expect(subject).to be_present
+      end
+
+      it 'is false if both are empty' do
+        existing_fields = PeopleController.permitted_attrs.collect(&:to_s)
+        subject = HelpTexts::Entry.new(controller, model_class, { action: %w(index), field: existing_fields })
+        subject.action_names << 'index'
         expect(subject.actions).to be_empty
+        expect(subject.fields).to be_empty
         expect(subject).not_to be_present
       end
     end

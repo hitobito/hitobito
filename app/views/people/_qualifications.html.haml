@@ -9,5 +9,8 @@
     %strong= item.qualification_kind
   %td= f(item.origin)
   %td= format_attr(item, :finish_at)
-  - if show_buttons && can?(:destroy, item)
-    %td= link_action_destroy(group_person_qualification_path(parent, entry, item))
+
+  - if show_buttons
+    = render_extensions :qualification_buttons, locals: { item: item }, folder: 'people'
+    - if can?(:destroy, item)
+      %td= link_action_destroy(group_person_qualification_path(parent, entry, item))

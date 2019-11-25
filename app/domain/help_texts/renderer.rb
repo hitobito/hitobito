@@ -58,8 +58,11 @@ class HelpTexts::Renderer
 
   def with_help_text(key, kind)
     texts = help_texts.select { |ht| ht.name == key.to_s && ht.kind == kind.to_s }.index_by(&:model)
-    text = texts[entry.class.to_s.underscore] || texts[entry.class.base_class.to_s.underscore]
-    yield text if text
+
+    if texts.present?
+      text = texts[entry.class.to_s.underscore] || texts[entry.class.base_class.to_s.underscore]
+      yield text if text
+    end
   end
 
   def controller_name
@@ -73,10 +76,9 @@ class HelpTexts::Renderer
       model_class.new
     else
       entry = controller.send(:entry)
-      entry.try(:model) || entry
+      entry.try(:decorated?) ? entry.model : enty
     end
   end
-
 
   def help_texts
     @help_texts ||= HelpText.includes(:translations).where(controller: controller_name)

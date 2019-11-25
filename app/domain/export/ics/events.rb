@@ -7,6 +7,7 @@
 
 module Export::Ics
   class Events
+
     include Rails.application.routes.url_helpers
 
     def generate(events)

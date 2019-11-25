@@ -112,8 +112,8 @@ describe Export::Ics::Events do
         )
       end
 
-      it 'should export the exclusive end date' do
-        expect(ical_event.dtend).to eq((event_date.finish_at + 1.day).strftime(ical_datetime_klass::FORMAT))
+      it 'should export the non-inclusive end date' do
+        expect(ical_event.dtend.value_ical).to eq((event_date.finish_at + 1.day).strftime(ical_date_klass::FORMAT))
       end
     end
   end

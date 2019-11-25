@@ -76,7 +76,7 @@ class HelpTexts::Renderer
       model_class.new
     else
       entry = controller.send(:entry)
-      entry.try(:decorated?) ? entry.model : enty
+      entry.try(:decorated?) ? entry.model : entry
     end
   end
 

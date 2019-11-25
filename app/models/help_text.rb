@@ -27,7 +27,7 @@ class HelpText < ActiveRecord::Base
   include Globalized
   translates :body
 
-  scope :list, -> { order(:controller_name) }
+  scope :list, -> { order(HelpTexts::List.new.order_statement).order(:kind) }
 
   validates_by_schema
 

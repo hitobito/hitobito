@@ -12,6 +12,14 @@ class HelpTexts::List
     doorkeeper/authorizations doorkeeper/tokens
   ]
 
+  def order_statement
+    prepared_infos.collect(&:last).uniq.sort_by do |model_class|
+      model_class.model_name.human
+    end.each_with_index.inject('CASE model') do |sql, (model_class, index)|
+      sql << " WHEN '#{model_class.to_s.underscore}' THEN #{index}"
+    end << ' END'
+  end
+
   def entries
     prepared_infos.each_with_object({}) do |(controller_name, action_name, model_class), memo|
       key   = HelpTexts::Entry.key(controller_name, model_class)

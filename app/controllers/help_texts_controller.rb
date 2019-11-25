@@ -17,7 +17,7 @@ class HelpTextsController < SimpleCrudController
   private
 
   def entries
-    super.includes(:translations).page(params[:page])
+    super.list.includes(:translations).page(params[:page])
   end
 
   def load_select_items

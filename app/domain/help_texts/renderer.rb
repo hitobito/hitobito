@@ -9,7 +9,7 @@ class HelpTexts::Renderer
 
   attr_reader :template
 
-  delegate :dom_id, :content_tag, :icon, :action_name, :params, :model_class, :controller, to: :template
+  delegate :dom_id, :content_tag, :icon, :action_name, :params, :model_class, to: :template
 
   def initialize(template, entry = nil)
     @template = template
@@ -75,7 +75,7 @@ class HelpTexts::Renderer
     elsif action_name == 'index'
       model_class.new
     else
-      entry = controller.send(:entry)
+      entry = template.controller.send(:entry)
       entry.try(:decorated?) ? entry.model : entry
     end
   end

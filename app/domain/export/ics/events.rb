@@ -51,6 +51,7 @@ module Export::Ics
     end
 
     def finish_at_to_ical(finish_at)
+      return unless finish_at.respond_to?(:strftime)
       if Duration.date_only?(finish_at)
         # For all-day events, the iCalendar standard requires exclusive end dates.
         # Since we interpret 0:00 as all-day, we need to add 1 day to get the real end date.

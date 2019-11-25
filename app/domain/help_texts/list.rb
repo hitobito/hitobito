@@ -27,6 +27,9 @@ class HelpTexts::List
         memo[key] = HelpTexts::Entry.new(controller_name, model_class, help_texts(key))
       end
       entry.action_names << action_name
+      if entry.controller_name == 'events' && entry.model_class != Event
+        entry.action_names << 'new' << 'show' << 'edit'
+      end
     end.values
   end
 

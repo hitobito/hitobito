@@ -61,7 +61,7 @@ module MailRelay
             end
           rescue Exception => e # rubocop:disable Lint/RescueException
             message.mark_for_delete = false
-            last_exception = MailRelay::Error.new(message, e)
+            last_exception = MailRelay::Error.new(e.message, message, e)
           end
         end
 
@@ -252,7 +252,8 @@ module MailRelay
     attr_reader :original
     attr_reader :mail
 
-    def initialize(mail, original = nil)
+    def initialize(message, mail, original = nil)
+      super(message)
       @mail = mail
       @original = original
     end

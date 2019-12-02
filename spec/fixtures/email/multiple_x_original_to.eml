@@ -1,0 +1,10 @@
+Return-Path: <root@cloud.puzzle.ch>
+X-Original-To: amatest@pbs.puzzle.ch
+Delivered-To: pbsc-vbl.integration+amatest@puzzle.ch
+Received: by mailstore01.cloud.puzzle.ch (Postfix, from userid 0)
+	id 4E68AAB4; Fri, 29 Nov 2019 07:31:54 +0100 (CET)
+To: amatest@pbs.puzzle.ch, amatest2@pbs.puzzle.ch
+From: pbsc-vbl.integration@puzzle.ch
+Subject: Test
+Message-Id: <20191129063154.4E68AAB4@mailstore01.cloud.puzzle.ch>
+Date: Fri, 29 Nov 2019 07:31:54 +0100 (CET)

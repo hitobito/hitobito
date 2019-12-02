@@ -34,6 +34,7 @@ gem 'globalize'
 gem 'haml'
 gem 'http_accept_language'
 gem 'icalendar'
+gem 'lograge'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mime-types', '~> 2.6.2' # newer requires ruby 2.0
 gem 'mini_magick'

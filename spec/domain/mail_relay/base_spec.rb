@@ -113,7 +113,6 @@ describe MailRelay::Base do
       end
 
     end
-
   end
 
   describe '.relay_current' do
@@ -268,6 +267,19 @@ describe MailRelay::Base do
       expect(MailRelay::Base).to receive(:new).exactly(5).times
 
       expect { MailRelay::Base.relay_current }.to raise_error(MailRelay::Error)
+    end
+
+    it 'logs EOF Error without creating MailLog' do
+      expect(Mail).to receive(:find_and_delete) do |options, &block|
+        fail EOFError.new('ouch')
+      end
+
+      expect do
+        MailRelay::Base.relay_current
+      end.not_to change { MailLog.count }
+
+      mail_log = MailLog.find_by(mail_hash: '1b498b5a776254310c3699688680b37a')
+      expect(mail_log).not_to be_present
     end
   end
 end

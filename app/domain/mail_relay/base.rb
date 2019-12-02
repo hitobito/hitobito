@@ -40,6 +40,7 @@ module MailRelay
 
       def relay_batch # rubocop:disable Metrics/MethodLength
         last_exception = nil
+        logger = Delayed::Worker.logger || Rails.logger
 
         mails = Mail.find_and_delete(count: retrieve_count) do |message|
           begin
@@ -47,7 +48,6 @@ module MailRelay
           rescue MailProcessedBeforeError => e
             mail_log = MailLog.find_by(mail_hash: MailLog.build(message).mail_hash)
             if mail_log && mail_log.completed?
-              logger = Delayed::Worker.logger || Rails.logger
               logger.info "Deleting previously processed email from #{message.from}"
             else
               message.mark_for_delete = false
@@ -61,6 +61,9 @@ module MailRelay
         end
 
         [mails || [], last_exception]
+      rescue EOFError => e
+        logger.warn(e)
+        [[], nil]
       end
 
       # rubocop:disable Rails/Output

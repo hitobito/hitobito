@@ -254,6 +254,11 @@ GEM
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.17)
+    lograge (0.11.2)
+      actionpack (>= 4)
+      activesupport (>= 4)
+      railties (>= 4)
+      request_store (~> 1.0)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -594,6 +599,7 @@ DEPENDENCIES
   jquery-ui-rails
   kaminari (< 1.0.0)
   launchy
+  lograge
   loofah (~> 2.2.3)
   magiclabs-userstamp
   mailcatcher

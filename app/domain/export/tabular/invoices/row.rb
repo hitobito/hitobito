@@ -7,15 +7,31 @@
 
 module Export::Tabular::Invoices
   class Row < Export::Tabular::Row
-
-    def initialize(entry, format = nil)
-      @entry = InvoiceDecorator.decorate(entry)
-      @format = format
-    end
+    include ActionView::Helpers::NumberHelper
 
     def state
       entry.state_label
     end
 
+    def cost
+      with_precision(entry.calculated[:cost])
+    end
+
+    def vat
+      with_precision(entry.calculated[:vat])
+    end
+
+    def amount_paid
+      with_precision(entry.amount_paid)
+    end
+
+    def total
+      with_precision(entry.total)
+    end
+
+    def with_precision(number)
+      number_with_precision(number, precision: 2)
+    end
   end
+
 end

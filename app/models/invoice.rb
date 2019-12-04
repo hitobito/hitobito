@@ -92,6 +92,14 @@ class Invoice < ActiveRecord::Base
   scope :remindable,     -> { where(state: STATES_REMINDABLE) }
 
   class << self
+    def draft_or_issued_in(year)
+      return all unless year.to_s =~ /\d+/
+      condition = OrCondition.new
+      condition.or('EXTRACT(YEAR FROM invoices.issued_at) = ?', year)
+      condition.or('issued_at IS NULL')
+      where(condition.to_a)
+    end
+
     def to_contactables(invoices)
       invoices.collect do |invoice|
         next if invoice.recipient_address.blank?

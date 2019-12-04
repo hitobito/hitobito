@@ -6,11 +6,13 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoicesController < CrudController
+  include YearBasedPaging
   decorates :invoice
 
   self.nesting = Group
   self.sort_mappings = { recipient: Person.order_by_name_statement,
                          sequence_number: Invoice.order_by_sequence_number_statement }
+  self.remember_params += [:year]
 
   self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
   self.permitted_attrs = [:title, :description, :state, :due_at,
@@ -25,6 +27,8 @@ class InvoicesController < CrudController
                             :count,
                             :_destroy
                           ]]
+
+  before_render_index :year  # sets ivar used in view
 
   def new
     entry.attributes = { payment_information: entry.invoice_config.payment_information }

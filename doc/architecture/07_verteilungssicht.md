@@ -35,7 +35,7 @@ welches auf dem Hauptserver läuft.
 Domain über Pop3 oder IMAP abrufbar macht. Wird für die Mailing Listen verwendet, welche die E-Mails 
 regelmässig von den Workers aus abrufen und weiterleiten. Der ursprüngliche E-Mail Empfänger Name 
 (z.B. *my_list* bei my_list@mydomain.example.com) wird vorteilhafterweise in einen speziellen Header 
-(z.B. `X-Envelope-To`) gesetzt, damit ein E-Mail korrekt einer Mailing Liste zugeordnet werden kann. 
+(z.B. `X-Original-To`) gesetzt, damit ein E-Mail korrekt einer Mailing Liste zugeordnet werden kann. 
 Läuft in der Regel auf einem separaten Server.
 
 **Airbrake**: Externer Service, welcher in einem Fehlerfall mit allen wichtigen Informationen 

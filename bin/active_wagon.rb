@@ -53,6 +53,7 @@ class Setup
     export RAILS_PRODUCTION_DB_NAME=hit_#{wagon}_production
     export RUBYOPT=-W0
     export WAGONS="#{wagons.join(' ')}"
+    echo "hitobito now uses: #{wagons.join(', ')}"
     EOF
   end
 

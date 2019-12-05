@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191115160000) do
+ActiveRecord::Schema.define(version: 20191204094432) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -298,6 +298,8 @@ ActiveRecord::Schema.define(version: 20191115160000) do
     t.decimal "vat_rate",                  precision: 5,  scale: 2
     t.decimal "unit_cost",                 precision: 12, scale: 2,             null: false
     t.integer "count",       limit: 4,                              default: 1, null: false
+    t.string  "cost_center", limit: 255
+    t.string  "account",     limit: 255
   end
 
   add_index "invoice_items", ["invoice_id"], name: "index_invoice_items_on_invoice_id", using: :btree

@@ -99,6 +99,27 @@ describe InvoicesController do
       expect(response.header['Content-Disposition']).to match(/rechnungen.csv/)
       expect(response.content_type).to eq('text/csv')
     end
+
+    it 'renders json' do
+      get :index, group_id: group.id, format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:current_page]).to eq 1
+      expect(json[:total_pages]).to eq 1
+      expect(json[:next_page_link]).to be_nil
+      expect(json[:prev_page_link]).to be_nil
+      expect(json[:invoices]).to have(2).items
+
+      expect(json[:invoices].first[:links][:invoice_items]).to have(2).items
+      expect(json[:invoices].last[:links][:invoice_items]).to have(1).items
+
+      expect(json[:linked][:groups]).to have(1).item
+      expect(json[:linked][:groups].first[:id].to_i).to eq groups(:bottom_layer_one).id
+
+      expect(json[:linked][:invoice_items]).to have(3).items
+
+      expect(json[:links][:'invoices.creator'][:href]).to eq 'http://test.host/people/{invoices.creator}.json'
+      expect(json[:links][:'invoices.recipient'][:href]).to eq 'http://test.host/people/{invoices.recipient}.json'
+    end
   end
 
   context 'show' do
@@ -139,6 +160,21 @@ describe InvoicesController do
 
       expect(response.header['Content-Disposition']).to match(/Rechnung-#{invoice.sequence_number}.csv/)
       expect(response.content_type).to eq('text/csv')
+    end
+
+    it 'renders json' do
+      get :show, group_id: group.id, id: invoice.id, format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:invoices]).to have(1).items
+      expect(json[:invoices].first[:links][:invoice_items]).to have(2).items
+
+      expect(json[:linked][:groups]).to have(1).item
+      expect(json[:linked][:groups].first[:id].to_i).to eq groups(:bottom_layer_one).id
+
+      expect(json[:linked][:invoice_items]).to have(2).items
+
+      expect(json[:links][:'invoices.creator'][:href]).to eq 'http://test.host/people/{invoices.creator}.json'
+      expect(json[:links][:'invoices.recipient'][:href]).to eq 'http://test.host/people/{invoices.recipient}.json'
     end
   end
 

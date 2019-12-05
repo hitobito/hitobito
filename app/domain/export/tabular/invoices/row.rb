@@ -29,9 +29,31 @@ module Export::Tabular::Invoices
       with_precision(entry.total)
     end
 
-    def with_precision(number)
-      number_with_precision(number, precision: 2)
+    def accounts
+      aggregated(entry.invoice_items, :account)
     end
-  end
 
+    def cost_centers
+      aggregated(entry.invoice_items, :cost_center)
+    end
+
+    def payments
+      aggregated(entry.payments) do |payment|
+        "#{with_precision(payment.amount)} #{I18n.l(payment.received_at)}"
+      end
+    end
+
+    private
+
+    def with_precision(number)
+      number_with_precision(number)
+    end
+
+    def aggregated(list, field = nil)
+      list.collect do |item|
+        field ? item.send(field) : yield(item)
+      end.reject(&:blank?).join(', ')
+    end
+
+  end
 end

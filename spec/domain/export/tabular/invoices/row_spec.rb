@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,8 +12,23 @@ describe Export::Tabular::Invoices::Row do
   let(:invoice) { invoices(:invoice) }
   subject { described_class.new(invoice) }
 
+  it 'reads cost_centers and accounts from invoice items' do
+    invoice.invoice_items.build(cost_center: 'staff', account: 'travel')
+    invoice.invoice_items.build(cost_center: 'staff', account: 'food')
+    invoice.invoice_items.build(cost_center: 'external', account: 'invoices')
 
-  it 'matche values' do
+    expect(subject.cost_centers).to eq 'staff, staff, external'
+    expect(subject.accounts).to eq 'travel, food, invoices'
+  end
+
+  it 'reads amount and received_at from payments' do
+    invoice.payments.build(amount: 1, received_at: '2019-12-04')
+    invoice.payments.build(amount: 10, received_at: '2019-12-05')
+
+    expect(subject.payments).to eq "1.00 04.12.2019, 10.00 05.12.2019"
+  end
+
+  it 'reads a set of attributes from invoice' do
     values = Export::Tabular::Invoices::List::INCLUDED_ATTRS.collect { |x| [x, subject.fetch(x)]   }.to_h
     expect(values).to match(
       {"title"=>"Invoice",
@@ -41,6 +56,5 @@ describe Export::Tabular::Invoices::Row do
     invoice.total = 10
     expect(subject.total).to eq '10.00'
   end
-
 end
 

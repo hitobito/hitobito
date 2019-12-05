@@ -25,6 +25,8 @@ class InvoicesController < CrudController
                             :unit_cost,
                             :vat_rate,
                             :count,
+                            :cost_center,
+                            :account,
                             :_destroy
                           ]]
 

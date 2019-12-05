@@ -556,3 +556,7 @@ input.switcher {
     [data-clear] { display: none; }
   }
 }
+
+.controls-row [class*="span"] + ul.typeahead + [class*="span"] {
+  margin-left: 30px;
+}

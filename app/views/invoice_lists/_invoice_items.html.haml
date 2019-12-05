@@ -5,6 +5,8 @@
 
 = f.input_field(:name, class: 'span2', placeholder: InvoiceItem.human_attribute_name(:name))
 = f.input_field(:description, class: 'span2', rows: 1, placeholder: InvoiceItem.human_attribute_name(:description))
+= f.input_field(:cost_center, class: 'span2', data: { provide: :typeahead, source: InvoiceArticle.cost_centers }, placeholder: InvoiceItem.human_attribute_name(:cost_center) )
+= f.input_field(:account,  class: 'span2',  data: { provide: :typeahead, source: InvoiceArticle.accounts }, placeholder: InvoiceItem.human_attribute_name(:account) )
 = f.input_field(:vat_rate, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:vat_rate))
 = f.input_field(:unit_cost, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:unit_cost))
 = f.input_field(:count, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:count))

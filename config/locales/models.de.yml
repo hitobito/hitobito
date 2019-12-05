@@ -693,6 +693,9 @@ de:
         payment_slip: Einzahlungsschein
         participant_number: Teilnehmernummer
         creator: Rechnungssteller
+        cost_centers: Kostenstellen
+        accounts: Konten
+        payments: Zahlungseingänge
 
       invoice_article:
         number: Artikelnummer
@@ -733,6 +736,8 @@ de:
         unit_cost: Preis
         count: Anzahl
         cost: Betrag
+        cost_center: Kostenstelle
+        account: Konto
 
       # used for nested attributes
       invoice_items:
@@ -742,6 +747,8 @@ de:
         unit_cost: Preis
         count: Anzahl
         cost: Betrag
+        cost_center: Kostenstelle
+        account: Konto
 
       payment:
         invoice: Rechnung

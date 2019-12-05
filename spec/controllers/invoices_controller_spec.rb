@@ -151,12 +151,42 @@ describe InvoicesController do
     expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
   end
 
-  it 'POST#create sets creator_id to current_user' do
-    expect do
-      post :create, { group_id: group.id, invoice: { title: 'current_user', recipient_id: person.id } }
-    end.to change { Invoice.count }.by(1)
+  context 'post' do
+    it 'POST#create sets creator_id to current_user' do
+      expect do
+        post :create, { group_id: group.id, invoice: { title: 'current_user', recipient_id: person.id } }
+      end.to change { Invoice.count }.by(1)
 
-    expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
+      expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
+    end
+
+    it 'POST#create accepts nested attributes for invoice_items' do
+      expect do
+        post :create, {
+          group_id: group.id,
+          invoice: {
+            title: 'current_user',
+            recipient_id: person.id,
+            invoice_items_attributes: {
+              '1': {
+                name: 'pen',
+                description: 'simple pen',
+                cost_center: 'board',
+                account: 'advertisment',
+                vat_rate: 0.0,
+                unit_cost: 22.0,
+                count: 1,
+                _destroy: false
+              }
+
+            }
+          }
+        }
+      end.to change { Invoice.count }.by(1)
+      expect(assigns(:invoice).invoice_items).to have(1).entry
+      expect(assigns(:invoice).invoice_items.first.cost_center).to eq 'board'
+      expect(assigns(:invoice).invoice_items.first.account).to eq 'advertisment'
+    end
   end
 
 end

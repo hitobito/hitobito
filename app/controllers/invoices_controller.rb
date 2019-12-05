@@ -69,7 +69,7 @@ class InvoicesController < CrudController
   def render_entries_json(entries)
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
-                  ListSerializer.new(paged_entries.decorate,
+                  ListSerializer.new(paged_entries,
                                      group: parent,
                                      page: params[:page],
                                      serializer: InvoiceSerializer,
@@ -77,7 +77,7 @@ class InvoicesController < CrudController
   end
 
   def render_entry_json
-    render json: InvoiceSerializer.new(entry.decorate, group: parent, controller: self)
+    render json: InvoiceSerializer.new(entry, group: parent, controller: self)
   end
 
   def build_payment

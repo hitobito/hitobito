@@ -166,6 +166,7 @@ describe InvoicesController do
       get :show, group_id: group.id, id: invoice.id, format: :json
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:invoices]).to have(1).items
+      expect(json[:invoices].first[:total]).to eq '5.35'
       expect(json[:invoices].first[:links][:invoice_items]).to have(2).items
 
       expect(json[:linked][:groups]).to have(1).item

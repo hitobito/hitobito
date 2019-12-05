@@ -69,7 +69,7 @@ class Setup
     %w(pbs cevi pro_natura).product([%w(youth)]).to_h.merge('jubla' => %w(youth jubla_ci))
   end
 
-  def available(excluded = %w(youth jubla_ci site))
+  def available(excluded = %w(youth jubla_ci site tenants))
     @available ||= root.parent.entries
       .collect { |x| x.to_s[/hitobito_(.*)/, 1]  }
       .compact.reject(&:empty?) - excluded

@@ -1,6 +1,7 @@
+
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,32 +20,18 @@
 #  account     :string(255)
 #
 
-class InvoiceItem < ActiveRecord::Base
+class InvoiceItemSerializer < ApplicationSerializer
 
-  after_destroy :recalculate!
+  schema do
+    json_api_properties
 
-  belongs_to :invoice
-
-  scope :list, -> { order(:name) }
-
-  validates :unit_cost, money: true, allow_nil: true
-  delegate :recalculate!, to: :invoice
-
-  validates_by_schema
-
-  def to_s
-    "#{name}: #{total} (#{amount} / #{vat})"
-  end
-
-  def total
-    cost + vat
-  end
-
-  def cost
-    unit_cost && count ? unit_cost * count : 0
-  end
-
-  def vat
-    vat_rate ? cost * (vat_rate / 100) : 0
+    map_properties :name,
+                   :description,
+                   :vat_rate,
+                   :unit_cost,
+                   :count,
+                   :cost_center,
+                   :account
   end
 end
+

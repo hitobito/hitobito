@@ -80,6 +80,7 @@ class Setup
     indent = val ? val.size : 0
     string.gsub(/^[ \t]{#{indent}}/, '')
   end
+
 end
 
 Setup.new.run

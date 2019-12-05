@@ -7,6 +7,7 @@
 
 class InvoicesController < CrudController
   include YearBasedPaging
+  include Api::JsonPaging
   decorates :invoice
 
   self.nesting = Group
@@ -41,6 +42,9 @@ class InvoicesController < CrudController
       format.html { super }
       format.pdf  { generate_pdf(list_entries.includes(:invoice_items)) }
       format.csv  { render_invoices_csv(list_entries.includes(:invoice_items)) }
+      format.json { render_entries_json(list_entries.includes(:invoice_items,
+                                                              :payments,
+                                                              :payment_reminders)) }
     end
   end
 
@@ -50,6 +54,7 @@ class InvoicesController < CrudController
       format.html { build_payment }
       format.pdf  { generate_pdf([entry]) }
       format.csv  { render_invoices_csv([entry]) }
+      format.json { render_entry_json }
     end
   end
 
@@ -60,6 +65,20 @@ class InvoicesController < CrudController
   end
 
   private
+
+  def render_entries_json(entries)
+    paged_entries = entries.page(params[:page])
+    render json: [paging_properties(paged_entries),
+                  ListSerializer.new(paged_entries,
+                                     group: parent,
+                                     page: params[:page],
+                                     serializer: InvoiceSerializer,
+                                     controller: self)].inject(&:merge)
+  end
+
+  def render_entry_json
+    render json: InvoiceSerializer.new(entry, group: parent, controller: self)
+  end
 
   def build_payment
     @payment = entry.payments.build(payment_attrs)

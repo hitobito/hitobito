@@ -79,7 +79,9 @@ module EventsHelper
 
   def format_event_group_ids(event)
     groups = event.groups
-    linker = ->(group) { link_to_if(assoc_link?(group), group.with_layer.join(' / '), group) }
+    linker = lambda do |group|
+      link_to_if(assoc_link?(group), group.with_layer.map(&:display_name).join(' / '), group)
+    end
 
     if groups.one?
       linker[groups.first]

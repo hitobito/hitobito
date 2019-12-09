@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,7 +22,7 @@ module EventsHelper
     type = params[:type].presence || 'Event'
     if can?(:"export_#{type.underscore.pluralize}", @group)
       action_button(I18n.t('event.lists.courses.ical_export_button'),
-        params.merge(format: :ics), :calendar)
+                    params.merge(format: :ics), :calendar)
     end
   end
 
@@ -48,9 +46,8 @@ module EventsHelper
 
       button = Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
       if event.application_closing_at.present?
-        button += content_tag(:div,
-                              t('event.lists.apply_until',
-                                date: f(event.application_closing_at)))
+        button += content_tag(:div, t('event.lists.apply_until',
+                                      date: f(event.application_closing_at)))
       end
       button
     end
@@ -84,7 +81,7 @@ module EventsHelper
     linker = ->(group) { link_to_if(assoc_link?(group), group.with_layer.join(' / '), group) }
 
     if groups.one?
-      linker[event.groups.first]
+      linker[groups.first]
     elsif groups.present?
       simple_list(groups) { |group| linker[group] }
     end

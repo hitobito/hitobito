@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -16,7 +14,7 @@ module FormatHelper
 
   # Formats a single value
   # (integers are not formatted, since years etc. should not contain delimiters)
-  def f(value)
+  def f(value) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
     case value
     when Float, BigDecimal then
       number_with_precision(value,
@@ -48,16 +46,16 @@ module FormatHelper
   # formats the value as follows:
   # If the value is an associated model, renders the label of this object.
   # Otherwise, calls format_type.
-  def format_attr(obj, attr)
+  def format_attr(obj, attr) # rubocop:disable Metrics/MethodLength
     format_type_attr_method = format_type_attr_method(obj, attr)
     format_attr_method = :"format_#{attr.to_s}"
     if respond_to?(format_type_attr_method)
       send(format_type_attr_method, obj)
     elsif respond_to?(format_attr_method)
       send(format_attr_method, obj)
-    elsif assoc = association(obj, attr, :belongs_to)
+    elsif (assoc = association(obj, attr, :belongs_to))
       format_assoc(obj, assoc)
-    elsif assoc = association(obj, attr, :has_many, :has_and_belongs_to_many)
+    elsif (assoc = association(obj, attr, :has_many, :has_and_belongs_to_many))
       format_many_assoc(obj, assoc)
     else
       format_type(obj, attr)
@@ -113,7 +111,7 @@ module FormatHelper
     labeled(captionize(attr, object_class(obj)), format_attr(obj, attr))
   end
 
-  def format_column(type, val)
+  def format_column(type, val) # rubocop:disable Metrics/CyclomaticComplexity
     return EMPTY_STRING if val.nil?
     case type
     when :time    then f(val.to_time)

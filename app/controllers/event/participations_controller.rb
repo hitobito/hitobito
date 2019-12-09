@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Event::ParticipationsController < CrudController
+class Event::ParticipationsController < CrudController # rubocop:disable Metrics/ClassLength
 
   include Concerns::RenderPeopleExports
   include Concerns::AsyncDownload
@@ -109,7 +109,11 @@ class Event::ParticipationsController < CrudController
   private
 
   def render_entry_json
-    render json: EventParticipationSerializer.new(entry, group: parents.first, event: parents.last, controller: self)
+    render json: EventParticipationSerializer.new(entry, {
+      group: parents.first,
+      event: parents.last,
+      controller: self
+    })
   end
 
   def render_entries_json(entries)

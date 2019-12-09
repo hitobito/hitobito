@@ -263,6 +263,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     groups.join(', ')
   end
 
+  def supports_application_details?
+    participant_types.present?
+  end
+
   def application_duration
     Duration.new(application_opening_at, application_closing_at)
   end

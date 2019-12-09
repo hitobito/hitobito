@@ -6,7 +6,7 @@
 %ul.nav.nav-tabs
   %li.active= link_to(t('events.form_tabs.general'), '#general', data: { toggle: 'tab' })
   %li= link_to(Event.human_attribute_name(:dates), '#dates', data: { toggle: 'tab' })
-  - if entry.participant_types.present?
+  - if entry.supports_application_details?
     %li= link_to(Event::Application.model_name.human, '#application', data: { toggle: 'tab' })
 
   = render_extensions :form_tabs

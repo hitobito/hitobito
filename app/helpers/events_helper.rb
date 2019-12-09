@@ -46,6 +46,7 @@ module EventsHelper
 
       button = Dropdown::Event::ParticipantAdd.for_user(self, group, event, current_user)
       if event.application_closing_at.present?
+        button ||= t('event_decorator.apply')
         button += content_tag(:div, t('event.lists.apply_until',
                                       date: f(event.application_closing_at)))
       end

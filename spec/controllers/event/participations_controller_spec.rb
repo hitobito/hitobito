@@ -132,6 +132,15 @@ describe Event::ParticipationsController do
       expect(assigns(:person_add_requests)).to eq([r1])
     end
 
+    it 'renders json' do
+      get :index, group_id: group.id, event_id: course.id, format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:current_page]).to eq 1
+      expect(json[:total_pages]).to eq 1
+      expect(json[:next_page_link]).to be_nil
+      expect(json[:prev_page_link]).to be_nil
+      expect(json[:event_participations]).to have(2).items
+    end
 
     context 'sorting' do
       %w(first_name last_name nickname zip_code town birthday).each do |attr|
@@ -166,6 +175,12 @@ describe Event::ParticipationsController do
 
 
   context 'GET show' do
+
+    it 'renders json' do
+      get :show, group_id: group.id, event_id: course.id, id: participation.id, format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:event_participations]).to have(1).items
+    end
 
     context 'for same event' do
       before { get :show, group_id: group.id, event_id: course.id, id: participation.id }

@@ -18,6 +18,8 @@ describe Person::ImpersonationController do
   let(:group) { groups(:top_layer) }
   let(:user) { people(:top_leader) }
 
+  include ActiveJob::TestHelper
+
   context 'POST' do
     before { sign_in(user) }
 
@@ -33,8 +35,10 @@ describe Person::ImpersonationController do
     end
 
     it 'impersonates user and sends mail' do
-      expect { post :create, group_id: group.id, person_id: people(:bottom_member).id }.
-        to change { ActionMailer::Base.deliveries.size }.by 1
+      perform_enqueued_jobs do
+        expect { post :create, group_id: group.id, person_id: people(:bottom_member).id }.
+          to change { ActionMailer::Base.deliveries.size }.by 1
+      end
     end
 
     it 'cannot impersonate user if current_user' do

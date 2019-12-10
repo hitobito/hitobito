@@ -75,7 +75,7 @@ module FormHelper
       content << add_another_button(form, add_another_label) if add_another.present?
       content << cancel_link(cancel_url) if cancel_url.present?
 
-      content.html_safe
+      content
     end
   end
 

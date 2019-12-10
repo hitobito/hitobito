@@ -21,7 +21,7 @@ fi
 "$scripts/assemble-base"
 
 if [[ "$INTEGRATION_BUILD" == 1 ]]; then
-    "$scripts/pull-transifex-translations"
+    "$scripts/pull-push-transifex-translations"
 fi
 
 if [[ "$DEMO_BUILD" == 1 ]]; then

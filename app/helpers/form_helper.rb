@@ -63,7 +63,7 @@ module FormHelper
   end
 
   def button_toolbar(form, toolbar_class:, &block)
-    content_tag(:div, toolbar_class: "btn-toolbar #{toolbar_class}") do
+    content_tag(:div, class: "btn-toolbar #{toolbar_class}") do
       capture(form, &block)
     end
   end

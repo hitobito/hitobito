@@ -95,17 +95,19 @@ curl -H "X-User-Email: mitglied@hitobito.ch" \
 
 Currently the following endpoints are provided:
 
-| Method | Path                            | Function                                                                        |
-| ---    | ---                             | ---                                                                             |
-| GET    | /groups                         | Redirects to root group (only works using personal token, not service accounts) |
-| GET    | /groups/:id                     | Group details                                                                   |
-| GET    | /groups/:id/people              | People of a certain group                                                       |
-| GET    | /groups/:group_id/people/:id    | Person details                                                                  |
-| GET    | /groups/:group_id/events        | Events of a certain group                                                       |
-| GET    | /groups/:group_id/events/:id    | Event details                                                                   |
-| GET    | /groups/:group_id/events/course | Courses of a certain group                                                      |
-| GET    | /groups/:group_id/invoices      | Invoices of a certain group                                                     |
-| GET    | /groups/:group_id/invoices/:id  | Invoice details                                                                 |
+| Method | Path                                            | Function                                                                        |
+| ---    | ---                                             | ---                                                                             |
+| GET    | /groups                                         | Redirects to root group (only works using personal token, not service accounts) |
+| GET    | /groups/:id                                     | Group details                                                                   |
+| GET    | /groups/:id/people                              | People of a certain group                                                       |
+| GET    | /groups/:group_id/people/:id                    | Person details                                                                  |
+| GET    | /groups/:group_id/events                        | Events of a certain group                                                       |
+| GET    | /groups/:group_id/events/:id                    | Event details                                                                   |
+| GET    | /groups/:group_id/events/:id/participations     | Participations of certain event                                                 |
+| GET    | /groups/:group_id/events/:id/participations/:id | Participation details                                                           |
+| GET    | /groups/:group_id/events/course                 | Courses of a certain group                                                      |
+| GET    | /groups/:group_id/invoices                      | Invoices of a certain group                                                     |
+| GET    | /groups/:group_id/invoices/:id                  | Invoice details                                                                 |
 
 
 
@@ -281,6 +283,87 @@ curl "https://demo.hitobito.ch/groups/1/events.json?user_email=mitglied@hitobito
     },
     "groups.people": {
       "href": "http://demo.hitobito.ch/de/groups/{groups.id}/people.json",
+      "type": "people"
+    }
+  }
+}
+```
+
+
+#### Event Participations endpoint
+
+The participations associated with a single evnt
+
+
+An example query with its response (formatted here for readability) can be seen below.
+
+```bash
+curl "https://demo.hitobito.ch/groups/1/events/1/participations.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+```
+
+```json
+{
+  "current_page": 1,
+  "total_pages": 1,
+  "next_page_link": null,
+  "prev_page_link": null,
+  "event_participations": [
+    {
+      "id": "127527",
+      "type": "event_participations",
+      "first_name": "Thomas",
+      "last_name": "Schüpbach",
+      "email": "schuepbach.thomas@hotmail.com",
+      "roles": [
+        "Hauptleitung"
+      ],
+      "links": {
+        "person": "3086"
+      },
+      "additional_information": "",
+      "active": true,
+      "qualified": null,
+      "payed": true
+    },
+    {
+      "id": "127525",
+      "type": "event_participations",
+      "first_name": "Thomas",
+      "last_name": "Test II",
+      "email": "thomas2@mail.com",
+      "roles": [
+        "Leitung"
+      ],
+      "links": {
+        "person": "3103"
+      },
+      "additional_information": "",
+      "active": true,
+      "qualified": null,
+      "payed": true
+    },
+    {
+      "id": "127524",
+      "type": "event_participations",
+      "first_name": "Thomas",
+      "last_name": "Test III",
+      "email": "thomas3@mail.ch",
+      "roles": [
+        "Teilnehmer/-in"
+      ],
+      "links": {
+        "person": "3105"
+      },
+      "additional_information": "",
+      "active": true,
+      "qualified": null,
+      "payed": false
+    }
+  ],
+  "linked": {},
+  "links": {
+    "event_participations.person": {
+      "href": "https://cevi.puzzle.ch/people/{event_participations.person}.json",
       "type": "people"
     }
   }

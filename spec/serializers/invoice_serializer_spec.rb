@@ -86,6 +86,7 @@ describe InvoiceSerializer do
     it 'includes group link' do
       expect(hash[:linked][:groups]).to have(1).item
       expect(hash[:linked][:groups].first[:id]).to eq invoice.group_id.to_s
+      expect(hash[:links]).to have_key('invoices.group')
     end
 
     it 'includes recipient and creator id and links' do

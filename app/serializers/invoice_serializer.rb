@@ -73,6 +73,7 @@ class InvoiceSerializer < ApplicationSerializer
 
     person_template_link "#{type_name}.creator"
     person_template_link "#{type_name}.recipient"
+    group_template_link  "#{type_name}.group"
 
     entity :group, item.group, GroupLinkSerializer
 

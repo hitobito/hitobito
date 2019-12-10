@@ -14,6 +14,7 @@
     - if params[:state].blank? || params[:state] == 'reminded'
       = direct_filter_select(:due_since, invoice_due_since_options, t('.due_since'))
 
-  .pull-right
-    = render 'shared/page_per_year'
+  - if @year
+    .pull-right
+      = render 'shared/page_per_year', paging_params: { returning: true }
 - params[:q] = nil # Reset param so quicksearch filter does not get populated

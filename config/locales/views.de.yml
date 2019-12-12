@@ -1278,10 +1278,6 @@ de:
   service_tokens:
     abilities:
       read: Lesen
-      people: Personen dieser Ebene
-      people_below: Personen dieser und der darunterliegenden Ebenen
-      groups: Gruppen dieser und der darunterliegenden Ebenen
-      events: Events dieser und der darunterliegenden Ebenen
 
     global:
       link:

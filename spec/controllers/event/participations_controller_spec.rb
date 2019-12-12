@@ -142,6 +142,16 @@ describe Event::ParticipationsController do
       expect(json[:event_participations]).to have(2).items
     end
 
+    it 'renders json for service token user' do
+      token = service_tokens(:permitted_top_group_token)
+      allow(controller).to receive_messages(current_user: nil, service_token_user: token.dynamic_user)
+      allow(view).to receive_messages(current_user: nil, service_token_user: token.dynamic_user)
+
+      get :index, group_id: group.id, event_id: course.id, format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:current_page]).to eq 1
+    end
+
     context 'sorting' do
       %w(first_name last_name nickname zip_code town birthday).each do |attr|
         it "sorts based on #{attr}" do

@@ -1,13 +1,7 @@
 PATH
-  remote: ../hitobito_pbs
+  remote: ../hitobito_generic
   specs:
-    hitobito_pbs (0.0.1)
-      hitobito_youth
-
-PATH
-  remote: ../hitobito_youth
-  specs:
-    hitobito_youth (0.0.1)
+    hitobito_generic (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -570,7 +564,7 @@ DEPENDENCIES
   dalli
   database_cleaner
   delayed_job_active_record
-  devise (>= 4.7.1)
+  devise
   doorkeeper
   doorkeeper-i18n
   draper
@@ -582,8 +576,7 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_pbs!
-  hitobito_youth!
+  hitobito_generic!
   http_accept_language
   icalendar
   jquery-cookie-rails
@@ -600,7 +593,7 @@ DEPENDENCIES
   mini_magick
   mysql2 (= 0.4.9)
   nested_form
-  nokogiri (~> 1.8.2)
+  nokogiri (~> 1.9.1)
   oat
   paper_trail
   parallel_tests

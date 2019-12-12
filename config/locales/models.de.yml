@@ -777,10 +777,12 @@ de:
         key: Key
         abilities: Rechte
         last_access: Letzter Zugriff
-        people: Personen dieser Gruppe
-        people_below: Personen von Untergruppen
-        groups: Gruppen dieser Gruppe
-        events: Events dieser Gruppe
+        people: Personen dieser Ebene
+        people_below: Personen dieser und der darunterliegenden Ebenen
+        groups: Gruppen dieser und der darunterliegenden Ebenen
+        events: Anlässe dieser und der darunterliegenden Ebenen
+        invoices: Rechnungen dieser und darunterliegenden Ebenen
+        event_participations: Teilnehmer und darunter darunterliegenden Ebenen
 
   doorkeeper:
     scopes:

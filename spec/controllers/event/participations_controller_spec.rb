@@ -145,7 +145,6 @@ describe Event::ParticipationsController do
     it 'renders json for service token user' do
       token = service_tokens(:permitted_top_group_token)
       allow(controller).to receive_messages(current_user: nil, service_token_user: token.dynamic_user)
-      allow(view).to receive_messages(current_user: nil, service_token_user: token.dynamic_user)
 
       get :index, group_id: group.id, event_id: course.id, format: :json
       json = JSON.parse(response.body).deep_symbolize_keys

@@ -160,13 +160,8 @@ describe TokenAbility do
   end
 
   describe :groups do
-    let(:token) { service_tokens(:rejected_top_group_token) }
-
-    before do
-      token.update(groups: true)
-    end
-
     context 'authorized' do
+      let(:token) { service_tokens(:permitted_top_group_token) }
 
       it 'may show layer' do
         is_expected.to be_able_to(:show, token.layer)
@@ -175,19 +170,115 @@ describe TokenAbility do
       it 'may show subgroup' do
         is_expected.to be_able_to(:show, groups(:top_group))
       end
+
+      it 'may show subgroup from other layer' do
+        is_expected.to be_able_to(:show, groups(:bottom_layer_one))
+      end
     end
 
     context 'unauthorized' do
+      let(:token) { service_tokens(:rejected_top_group_token) }
+
       it 'may not permit any write actions' do
         is_expected.not_to be_able_to(:create, token.layer)
         is_expected.not_to be_able_to(:update, token.layer)
       end
 
       it 'may not show if disabled' do
-        token.update(groups: false)
         is_expected.not_to be_able_to(:show, token.layer)
       end
     end
   end
 
+  describe :invoices do
+    context 'authorized' do
+      let(:token) { service_tokens(:permitted_top_group_token) }
+
+      it 'may show' do
+        is_expected.to be_able_to(:show, token.layer.invoices.build)
+      end
+
+      it 'may show idenpently if group access' do
+        token.update!(groups: false)
+        is_expected.to be_able_to(:show, token.layer.invoices.build)
+      end
+
+      it 'may index_invoices' do
+        is_expected.to be_able_to(:index_invoices, token.layer)
+      end
+
+      it 'may index_invoices indepently of group access' do
+        token.update!(groups: false)
+        is_expected.to be_able_to(:index_invoices, token.layer)
+      end
+
+      it 'may index_invoices of sub layer' do
+        is_expected.to be_able_to(:index_invoices, groups(:bottom_layer_one))
+      end
+    end
+
+    context 'unauthorized' do
+      let(:token) { service_tokens(:rejected_top_group_token) }
+
+      it 'may not show' do
+        is_expected.not_to be_able_to(:show, token.layer.invoices.build)
+      end
+
+      it 'may not index_invoices' do
+        is_expected.not_to be_able_to(:index_invoices, token.layer)
+      end
+
+      it 'may not index_invoices of sub layer' do
+        is_expected.not_to be_able_to(:index_invoices, groups(:bottom_layer_one))
+      end
+    end
+  end
+
+  describe :event_participations do
+    let(:event_participation) { event_participations(:top) }
+
+    context 'authorized' do
+      let(:token) { service_tokens(:permitted_top_group_token) }
+
+      it 'may show' do
+        is_expected.to be_able_to(:show, event_participation)
+      end
+
+      it 'may show indepently of event and group' do
+        token.update(groups: false, events: false)
+        is_expected.to be_able_to(:show, event_participation)
+      end
+
+      it 'may index_participations' do
+        is_expected.to be_able_to(:index_participations, event_participation.event)
+      end
+
+      it 'may index_participations idenpently of event and group' do
+        token.update(groups: false, events: false)
+        is_expected.to be_able_to(:index_participations, event_participation.event)
+      end
+
+      it 'may index_participations of sub layer' do
+        event = Event.new(groups: [groups(:bottom_layer_one)])
+        is_expected.to be_able_to(:index_participations, event)
+      end
+    end
+
+    context 'unauthorized' do
+      let(:token) { service_tokens(:rejected_top_group_token) }
+
+      it 'may not show' do
+        is_expected.not_to be_able_to(:show, event_participation)
+      end
+
+      it 'may not index_participations' do
+        is_expected.not_to be_able_to(:index_participations, event_participation.event)
+      end
+
+      it 'may not index_participations of sub layer' do
+        event = Event.new(groups: [groups(:bottom_layer_one)])
+        is_expected.not_to be_able_to(:index_participations, event)
+      end
+    end
+  end
 end

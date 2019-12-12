@@ -24,6 +24,8 @@ class TokenAbility
     define_person_abilities if token.people? || token.people_below?
     define_event_abilities if token.events?
     define_group_abilities if token.groups?
+    define_invoice_abilities if token.invoices?
+    define_event_participation_abilities if token.event_participations?
   end
 
   def define_person_abilities
@@ -53,9 +55,29 @@ class TokenAbility
     end
   end
 
+  def define_event_participation_abilities
+    can :show, Event::Participation do |p|
+      p.event.groups.any? { |g| token_layer_and_below.include?(g) }
+    end
+
+    can :index_participations, Event do |event|
+      event.groups.any? { |g| token_layer_and_below.include?(g) }
+    end
+  end
+
   def define_group_abilities
     can :show, Group do |g|
       token_layer_and_below.include?(g)
+    end
+  end
+
+  def define_invoice_abilities
+    can :index_invoices, Group do |group|
+      token_layer_and_below.include?(group)
+    end
+
+    can :show, Invoice do |invoice|
+      token_layer_and_below.include?(invoice.group)
     end
   end
 

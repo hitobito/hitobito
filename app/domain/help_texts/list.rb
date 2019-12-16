@@ -16,8 +16,8 @@ class HelpTexts::List
     prepared_infos.collect(&:last).uniq.sort_by do |model_class|
       model_class.model_name.human
     end.each_with_index.inject('CASE model') do |sql, (model_class, index)|
-      sql << " WHEN '#{model_class.to_s.underscore}' THEN #{index}"
-    end << ' END'
+      sql += " WHEN '#{model_class.to_s.underscore}' THEN #{index}"
+    end + ' END'
   end
 
   def entries

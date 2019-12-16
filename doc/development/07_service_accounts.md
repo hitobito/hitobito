@@ -16,7 +16,7 @@ During creation, the permissions of a service account and its corresponding serv
 | Personen dieser und der darunterliegenden Ebenen     | People within the layer and below are accessible       |
 | Events dieser und der darunterliegenden Ebenen       | Events within the layer and below are accessible       |
 | Gruppen dieser und der darunterliegenden Ebenen      | Groups within the layer and below are accessible       |
-| Rechnungen dieser und der darunterliegenden Ebenen   | Invoices within the layer and below are accessible     |
+| Rechnungen dieser Ebenen                             | Invoices within the layer are accessible               |
 | Teilnehmener dieser und der darunterliegenden Ebenen | Participants within the layer and below are accessible |
 
 

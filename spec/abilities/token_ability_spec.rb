@@ -198,7 +198,7 @@ describe TokenAbility do
         is_expected.to be_able_to(:show, token.layer.invoices.build)
       end
 
-      it 'may show idenpently if group access' do
+      it 'may show independently if group access' do
         token.update!(groups: false)
         is_expected.to be_able_to(:show, token.layer.invoices.build)
       end
@@ -207,13 +207,17 @@ describe TokenAbility do
         is_expected.to be_able_to(:index_invoices, token.layer)
       end
 
-      it 'may index_invoices indepently of group access' do
+      it 'may index_invoices independently of group access' do
         token.update!(groups: false)
         is_expected.to be_able_to(:index_invoices, token.layer)
       end
 
-      it 'may index_invoices of sub layer' do
-        is_expected.to be_able_to(:index_invoices, groups(:bottom_layer_one))
+      it 'may not index_invoices of sub layer' do
+        is_expected.not_to be_able_to(:index_invoices, groups(:bottom_layer_one))
+      end
+
+      it 'may not show invoice of sub layer' do
+        is_expected.not_to be_able_to(:show, groups(:bottom_layer_one).invoices.build)
       end
     end
 

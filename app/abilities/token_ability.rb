@@ -73,11 +73,11 @@ class TokenAbility
 
   def define_invoice_abilities
     can :index_invoices, Group do |group|
-      token_layer_and_below.include?(group)
+      token.layer == group
     end
 
     can :show, Invoice do |invoice|
-      token_layer_and_below.include?(invoice.group)
+      token.layer == invoice.group
     end
   end
 

@@ -53,4 +53,22 @@ describe EventParticipationSerializer do
   it 'includes person template link' do
     expect(hash['links']['event_participations.person']).to have_key('href')
   end
+
+  context 'answers' do
+    before do
+      participation.answers.create!(question: event_questions(:top_ov), answer: 'GA')
+      participation.answers.create!(question: event_questions(:top_vegi), answer: 'ja')
+    end
+
+    it 'includes ids in invoice' do
+      expect(subject[:links][:event_answers]).to have(2).items
+    end
+
+    it 'invoices keys in links' do
+      keys = [:question, :answer]
+      keys.each do |key|
+        expect(hash[:linked][:event_answers].first).to have_key(key)
+      end
+    end
+  end
 end

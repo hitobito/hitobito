@@ -95,8 +95,8 @@ class Invoice < ActiveRecord::Base
     def draft_or_issued_in(year)
       return all unless year.to_s =~ /\d+/
       condition = OrCondition.new
-      condition.or('EXTRACT(YEAR FROM invoices.issued_at) = ?', year)
-      condition.or('issued_at IS NULL')
+      condition.or('EXTRACT(YEAR FROM issued_at) = ?', year)
+      condition.or('issued_at IS NULL AND EXTRACT(YEAR FROM invoices.created_at) = ?', year)
       where(condition.to_a)
     end
 

@@ -263,25 +263,40 @@ describe Invoice do
   end
 
   context '.draft_or_issued_in' do
-    let(:year)    { Date.today.year }
-    let(:invoice) { invoices(:invoice) }
-    let(:sent)    { invoices(:sent) }
+    include ActiveSupport::Testing::TimeHelpers
 
-    it 'all invoices are in current year' do
-      expect(Invoice.draft_or_issued_in(year).count).to eq 2
+    let(:today)   { Time.zone.parse('2019-12-16 10:00:00') }
+    let(:invoice) { invoices(:invoice) }
+    let(:issued)  { invoices(:sent) }
+
+    around do |example|
+      travel_to(today) do
+        issued.update(issued_at: 1.month.ago, sent_at: 1.week.ago)
+        example.call
+      end
+    end
+
+    it 'lists invoices sent or drafted in 2019' do
+      expect(Invoice.draft_or_issued_in(2019)).to have(2).items
+    end
+
+    it 'lists no invoices sent or drafted in other years' do
+      expect(Invoice.draft_or_issued_in(2018)).to be_empty
+      expect(Invoice.draft_or_issued_in(2020)).to be_empty
+    end
+
+    it 'excludes invoice if issued in previous year' do
+      issued.update(issued_at: 1.year.ago)
+      expect(Invoice.draft_or_issued_in(2019)).to eq([invoice])
+    end
+
+    it 'excludes invoice if created in previous year' do
+      invoice.update(created_at: 1.year.ago)
+      expect(Invoice.draft_or_issued_in(2019)).to eq([issued])
     end
 
     it 'keeps scoping for invalid year' do
-      expect(Invoice.draft_or_issued_in('invalid').count).to eq 2
-    end
-
-    it 'excludes invoice if issued in another year' do
-      sent.update(issued_at: 1.year.ago)
-      expect(Invoice.draft_or_issued_in(year)).to eq([invoice])
-    end
-
-    it 'always includes invoices not yet issued' do
-      expect(Invoice.draft_or_issued_in(2020).count).to eq 2
+      expect(Invoice.draft_or_issued_in('invalid')).to have(2).items
     end
   end
 

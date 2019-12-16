@@ -1,7 +1,13 @@
 PATH
-  remote: ../hitobito_generic
+  remote: ../hitobito_pbs
   specs:
-    hitobito_generic (0.0.1)
+    hitobito_pbs (0.0.1)
+      hitobito_youth
+
+PATH
+  remote: ../hitobito_youth
+  specs:
+    hitobito_youth (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -73,7 +79,7 @@ GEM
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
-    binding_of_caller (0.7.2)
+    binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
     bleib (0.0.10)
     bootstrap-sass (2.3.2.2)
@@ -163,7 +169,7 @@ GEM
     daemons (1.2.4)
     dalli (2.7.6)
     database_cleaner (1.5.3)
-    debug_inspector (0.0.2)
+    debug_inspector (0.0.3)
     debugger (1.6.8)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -576,7 +582,8 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_generic!
+  hitobito_pbs!
+  hitobito_youth!
   http_accept_language
   icalendar
   jquery-cookie-rails

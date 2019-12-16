@@ -782,7 +782,7 @@ de:
         groups: Gruppen dieser und der darunterliegenden Ebenen
         events: Anlässe dieser und der darunterliegenden Ebenen
         invoices: Rechnungen dieser Ebene
-        event_participations: Teilnehmer und darunter darunterliegenden Ebenen
+        event_participations: Teilnehmende von Anlässen dieser Ebene
 
   doorkeeper:
     scopes:

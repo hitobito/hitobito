@@ -262,9 +262,14 @@ describe TokenAbility do
         is_expected.to be_able_to(:index_participations, event_participation.event)
       end
 
-      it 'may index_participations of sub layer' do
+      it 'may not index_participations of sub layer' do
         event = Event.new(groups: [groups(:bottom_layer_one)])
-        is_expected.to be_able_to(:index_participations, event)
+        is_expected.not_to be_able_to(:index_participations, event)
+      end
+
+      it 'may not show participation of sub layer' do
+        event = Event.new(groups: [groups(:bottom_layer_one)])
+        is_expected.not_to be_able_to(:index_participations, event.participations.build)
       end
     end
 

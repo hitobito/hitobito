@@ -57,11 +57,11 @@ class TokenAbility
 
   def define_event_participation_abilities
     can :show, Event::Participation do |p|
-      p.event.groups.any? { |g| token_layer_and_below.include?(g) }
+      p.event.groups.collect(&:layer_group).any? { |g| token.layer == g }
     end
 
     can :index_participations, Event do |event|
-      event.groups.any? { |g| token_layer_and_below.include?(g) }
+      event.groups.collect(&:layer_group).any? { |g| token.layer == g }
     end
   end
 

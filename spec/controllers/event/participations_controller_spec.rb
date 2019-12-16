@@ -150,6 +150,13 @@ describe Event::ParticipationsController do
       expect(json[:current_page]).to eq 1
     end
 
+    it 'redirects for service token csv request' do
+      allow(controller).to receive_messages(current_user: nil)
+
+      get :index, group_id: group.id, event_id: course.id, token: 'PermittedToken', format: :csv
+      expect(response).to redirect_to group_event_participations_path(group, course, returning: true)
+    end
+
     context 'sorting' do
       %w(first_name last_name nickname zip_code town birthday).each do |attr|
         it "sorts based on #{attr}" do

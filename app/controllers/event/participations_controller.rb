@@ -311,7 +311,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def event_participation_filter
-    Event::ParticipationFilter.new(event.id, current_user.try(:id), params)
+    Event::ParticipationFilter.new(event.id, current_user.try(:id) || service_token_user.try(:id), params)
   end
 
 end

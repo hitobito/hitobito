@@ -17,6 +17,15 @@ fi
 
 "$scripts/prepare-source"
 
+
+# After moving to ruby-25-centos7 we end up with a .bundle directory in pwd
+# which we need to remove for the original builder script to execute correctly
+if [[ -d '.bundle' ]]; then
+  echo "Removing .bundle directory from `pwd`"
+  rm -rf .bundle
+fi
+
+
 # Call original builder script
 "$scripts/assemble-base"
 

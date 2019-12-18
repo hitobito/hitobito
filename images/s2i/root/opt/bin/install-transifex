@@ -35,12 +35,16 @@ end
 def install_transifex_client
   p "installing transifex client #{version} ..."
   Dir.chdir('/tmp') do
-    system("wget #{download_url}")
-    system("tar xvfz #{file_name}")
+    system!("wget #{download_url}")
+    system!("tar xvfz #{file_name}")
   end
   Dir.chdir("/tmp/transifex-client-#{version}") do
-    system("python setup.py install")
+    `python setup.py install`
   end
+end
+
+def system!(cmd)
+ fail "Error executing: #{cmd}" unless system(cmd)
 end
 
 version_info

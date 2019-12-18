@@ -83,6 +83,23 @@ RSpec.configure do |config|
     Draper::ViewContext.current = c.view_context
   end
 
+  config.before(:each,  file_path: %r{\bspec/views/}) do
+    view.extend(FormHelper,
+                TableHelper,
+                UtilityHelper,
+                I18nHelper,
+                FormatHelper,
+                LayoutHelper,
+                SheetHelper,
+                PeopleHelper,
+                EventParticipationsHelper,
+                TableDisplaysHelper,
+                EventKindsHelper,
+                ActionHelper,
+                InvoicesHelper,
+                ContactableHelper)
+  end
+
   config.around(:each, js: true) do |example|
     keeping_stdout do
       example.run

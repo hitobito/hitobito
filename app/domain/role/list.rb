@@ -81,7 +81,7 @@ class Role
     end
 
     def people
-      @people ||= Person.where(id: people_ids).uniq
+      @people ||= Person.where(id: people_ids).distinct
     end
 
     def layer_group_ids

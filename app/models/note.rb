@@ -41,7 +41,7 @@ class Note < ActiveRecord::Base
         where(roles: { deleted_at: nil },
               groups: { deleted_at: nil, layer_group_id: group.layer_group_id }).
         where('groups.lft >= :lft AND groups.rgt <= :rgt', lft: group.lft, rgt: group.rgt).
-        uniq
+        distinct
     end
   end
 

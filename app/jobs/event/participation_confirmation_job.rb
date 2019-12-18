@@ -47,7 +47,7 @@ class Event::ParticipationConfirmationJob < BaseJob
            joins(roles: :group).
            where(roles: { type: approver_types, deleted_at: nil },
                  groups: { layer_group_id: layer_ids }).
-           uniq
+           distinct
   end
 
   def participation

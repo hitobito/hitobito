@@ -106,7 +106,7 @@ class MailingList < ActiveRecord::Base
       where(subscriptions: { mailing_list_id: id }).
       where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
       where(suscriber_conditions).
-      uniq
+      distinct
   end
 
   private

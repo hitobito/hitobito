@@ -57,7 +57,7 @@ class PersonReadables < PersonFetchables
             .joins(@roles_join)
             .where(groups: { deleted_at: nil })
             .where(accessible_conditions.to_a)
-            .uniq
+            .distinct
     end
   end
 

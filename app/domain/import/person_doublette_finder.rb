@@ -93,7 +93,7 @@ module Import
     def parse_date(date_string)
       if date_string.present?
         begin
-          ActiveRecord::Type::Date.new.type_cast_from_user(date_string)
+          ActiveRecord::Type::Date.new.cast(date_string)
         rescue ArgumentError
           nil
         end

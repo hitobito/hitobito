@@ -85,7 +85,7 @@ class Event::Participation < ActiveRecord::Base
     end
 
     def upcoming
-      joins(event: :dates).where('event_dates.start_at >= ?', ::Time.zone.today).uniq
+      joins(event: :dates).where('event_dates.start_at >= ?', ::Time.zone.today).distinct
     end
 
   end

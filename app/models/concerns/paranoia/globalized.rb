@@ -28,7 +28,7 @@ module Paranoia
       def list
         with_translations.
           order(:deleted_at, translated_label_column).
-          uniq
+          distinct
       end
     end
   end

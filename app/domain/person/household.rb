@@ -105,7 +105,7 @@ class Person::Household
   end
 
   def people
-    housemates << person
+    housemates + [person]
   end
 
   def housemates

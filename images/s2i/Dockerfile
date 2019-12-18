@@ -27,6 +27,7 @@ RUN \
     yum localinstall -y \
       "https://github.com/sphinxsearch/sphinx/releases/download/2.2.11-release/sphinx-2.2.11-1.rhel7.x86_64.rpm" && \
     scl enable rh-ruby25 /opt/bin/install-nodejs && \
+    yum install -y python-setuptools && \
     scl enable rh-ruby25 /opt/bin/install-transifex && \
     chmod ugo+x $STI_SCRIPTS_PATH/* && \
     # TODO Why do we do this?

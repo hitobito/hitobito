@@ -123,7 +123,6 @@ end
 group :console do
   gem 'awesome_print'
   gem 'hirb'
-  gem 'mailcatcher'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
   gem 'rdoc-tags'

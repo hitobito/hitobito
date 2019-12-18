@@ -237,7 +237,6 @@ class PeopleController < CrudController
     end
   end
   public :index_full_ability? # for serializer
-  hide_action :index_full_ability?
 
   def authorize_class
     authorize!(:index_people, group)

@@ -27,8 +27,6 @@ class RolesController < CrudController
   before_action :remember_primary_group, only: [:destroy]
   after_destroy :last_primary_group_role_deleted
 
-  hide_action :index, :show
-
   def create
     assign_attributes
     with_person_add_request do

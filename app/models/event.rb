@@ -154,7 +154,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       order_by_date.
         order(:name).
         preload_all_dates.
-        uniq
+        distinct
     end
 
     def preload_all_dates
@@ -178,7 +178,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       joins(:dates).
         where('event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date
               OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date',
-              start_date: start_date, end_date: end_date).uniq
+              start_date: start_date, end_date: end_date).distinct
     end
 
     # Events from groups in the hierarchy of the given user.

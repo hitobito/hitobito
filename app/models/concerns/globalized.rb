@@ -21,7 +21,7 @@ module Globalized
     def list
       with_translations.
         order(translated_label_column).
-        uniq
+        distinct
     end
 
     private

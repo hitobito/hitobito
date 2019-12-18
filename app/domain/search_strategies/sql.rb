@@ -74,7 +74,7 @@ module SearchStrategies
       fields = SEARCH_FIELDS[scope.model.sti_name]
       scope.joins(fields[:joins])
            .where(SqlConditionBuilder.new(@term, fields[:attrs]).search_conditions)
-           .uniq
+           .distinct
     end
 
     def term_present?

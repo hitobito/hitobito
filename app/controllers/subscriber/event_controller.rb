@@ -44,7 +44,7 @@ module Subscriber
                      'ON event_kinds.id  = event_kind_translations.event_kind_id').
                where(search_condition(*SEARCH_COLUMNS)).
                order_by_date.
-               uniq
+               distinct
     end
 
     def model_label

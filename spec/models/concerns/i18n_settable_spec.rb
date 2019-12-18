@@ -72,9 +72,9 @@ describe I18nSettable do
     I18n.locale = :de
   end
 
-  it 'sets invalid i18n boolean attribute' do
-    person.company = 'oui'
-    expect(person.company).to eq false
+  it 'sets invalid i18n boolean attribute to true' do
+    person.company = 'any'
+    expect(person.company).to eq true
   end
 
   it 'sets i18n boolean attribute as boolean' do

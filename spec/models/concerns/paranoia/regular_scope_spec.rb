@@ -13,7 +13,7 @@ describe Paranoia::RegularScope do
   let(:course) { Fabricate(:course, kind: kind) }
   before do
     course
-    kind.events(true)
+    kind.events.reload
     kind.destroy # explicitly destroy kind in spec to test interaction with translations
   end
 

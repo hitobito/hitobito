@@ -125,7 +125,7 @@ class Event::Role < ActiveRecord::Base
     @_destroying = true
 
     update_participant_count
-    participation.destroy unless participation.roles(true).exists?
+    participation.destroy unless participation.roles.reload.exists?
   end
 
   def protect_applying_participant

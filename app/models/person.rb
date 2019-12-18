@@ -298,7 +298,7 @@ class Person < ActiveRecord::Base
     errors.add(:email, :taken)
     false
   rescue ActiveRecord::StatementInvalid => e
-    raise e unless e.original_exception.message =~ /Incorrect string value/
+    raise e unless e.cause.message =~ /Incorrect string value/
     errors.add(:base, :emoji_suspected)
     false
   end

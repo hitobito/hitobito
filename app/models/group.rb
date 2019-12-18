@@ -182,7 +182,7 @@ class Group < ActiveRecord::Base
   alias hard_destroy really_destroy!
   def really_destroy!
     # run nested_set callback on hard destroy
-    destroy_descendants_without_paranoia
+    # destroy_descendants_without_paranoia
 
     # load events to destroy orphaned later
     event_list = events.to_a

@@ -115,7 +115,7 @@ class Role < ActiveRecord::Base
 
   def reset_primary_group
     if person.primary_group_id == group_id && person.roles.where(group_id: group_id).count == 0
-      person.update_column :primary_group_id, alternative_primary_group
+      person.update_column :primary_group_id, alternative_primary_group.try(:id)
     end
   end
 

@@ -53,9 +53,7 @@ module I18nSettable
     elsif value.blank? || I18n.t('global.no').downcase == normalized
       false
     else
-      # sorry about the occasional deprecation warning, not possible to avoid this one.
-      # wait it out till rails 5.
-      value
+      normalized
     end
   end
 

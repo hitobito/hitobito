@@ -20,7 +20,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :person_home_path
-  hide_action :person_home_path
 
   before_action :set_no_cache
   before_action :set_paper_trail_whodunnit

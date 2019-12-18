@@ -32,8 +32,6 @@ class CrudController < ListController
 
   helper_method :entry, :full_entry_label
 
-  hide_action :model_identifier, :run_callbacks
-
   # Simple helper object to give access to required view helper methods.
   @@helper = Object.new
                    .extend(ActionView::Helpers::TranslationHelper)

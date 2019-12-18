@@ -114,6 +114,7 @@ group :test do
   gem 'headless'
   gem 'launchy'
   gem 'pdf-inspector', require: 'pdf/inspector'
+  gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'rspec-its'
   gem 'selenium-webdriver'

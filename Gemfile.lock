@@ -292,8 +292,8 @@ GEM
     parallel (1.12.0)
     parallel_tests (2.19.0)
       parallel
-    paranoia (2.1.1)
-      activerecord (~> 4.0)
+    paranoia (2.4.2)
+      activerecord (>= 4.0, < 6.1)
     parser (2.4.0.2)
       ast (~> 2.3)
     pdf-core (0.4.0)
@@ -532,7 +532,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activejob (>= 4.2.11)
   activerecord-session_store
   acts-as-taggable-on (~> 3.5.0)
   airbrake (< 5.0)
@@ -587,7 +586,6 @@ DEPENDENCIES
   kaminari
   launchy
   lograge
-  loofah (~> 2.2.3)
   magiclabs-userstamp
   mailcatcher
   mime-types
@@ -611,7 +609,6 @@ DEPENDENCIES
   pry-stack_explorer
   puma
   quiet_assets
-  rack (~> 1.6.11)
   rails (= 4.2.11.1)
   rails-erd
   rails-i18n
@@ -633,7 +630,6 @@ DEPENDENCIES
   sentry-raven
   simpleidn
   spring-commands-rspec
-  sprockets (~> 3.7.2)
   sqlite3
   therubyracer
   thinking-sphinx

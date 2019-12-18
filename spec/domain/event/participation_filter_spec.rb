@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe Event::ParticipationFilter, type: :domain do
-  subject { Event::ParticipationFilter.new(event, people(:bottom_member), params) }
+  subject { Event::ParticipationFilter.new(event.id, people(:bottom_member), params) }
 
   let(:participation)              { event_participations(:top) }
   let(:person)                     { Fabricate(:person, first_name: 'Max', last_name: 'muster', nickname: 'bambi') }

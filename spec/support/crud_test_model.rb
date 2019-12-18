@@ -261,7 +261,7 @@ module CrudTestHelper
   def reset_db
     c = ActiveRecord::Base.connection
     [:crud_test_models, :other_crud_test_models, :crud_test_models_other_crud_test_models].each do |table|
-      if c.table_exists?(table)
+      if c.data_source_exists?(table)
         c.drop_table(table) rescue nil
       end
     end

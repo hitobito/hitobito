@@ -77,7 +77,6 @@ gem 'coffee-rails'
 gem 'compass'
 gem 'compass-rails'
 gem 'font_awesome5_rails'
-gem 'jquery-cookie-rails'
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'jquery-ui-rails'
@@ -102,7 +101,6 @@ end
 
 group :development do
   gem 'bullet'
-  gem 'quiet_assets'
   gem 'redcarpet'
   gem 'request_profiler'
 end

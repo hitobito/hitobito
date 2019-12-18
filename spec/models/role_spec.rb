@@ -97,7 +97,7 @@ describe Role do
         subject.save
         Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
         expect(subject.destroy).to be_truthy
-        expect(person.primary_group_id).to eq groups(:top_group)
+        expect(person.primary_group).to eq groups(:top_group)
       end
 
       it 'is reset to newest remaining role if role is destroyed' do
@@ -106,7 +106,7 @@ describe Role do
         role3 = Fabricate(Group::TopGroup::Leader.name.to_s, person: person, group: groups(:top_group))
         role3.update_attribute(:updated_at, Date.today - 10.days)
         expect(subject.destroy).to be_truthy
-        expect(person.primary_group_id).to eq role2.group
+        expect(person.primary_group).to eq role2.group
       end
 
       it 'is not reset if role is destroyed and other roles in the same group exist' do

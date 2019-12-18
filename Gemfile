@@ -7,7 +7,11 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.11.1'
+if ENV['T']
+  gem 'rails', '= 5.0.0'
+else
+  gem 'rails', '4.2.11.1'
+end
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on', '~> 3.5.0'
@@ -40,7 +44,7 @@ gem 'mime-types'
 gem 'mini_magick'
 gem 'mysql2', '0.4.9'
 gem 'nested_form'
-gem 'nokogiri', '~> 1.9.1'
+gem 'nokogiri'
 gem 'oat'
 gem 'paper_trail'
 gem 'paranoia'
@@ -60,7 +64,7 @@ gem 'thinking-sphinx'
 gem 'validates_by_schema'
 gem 'validates_timeliness', '< 4.0'
 gem 'vcard'
-gem 'wagons'
+gem 'wagons', '0.5.0'
 
 # load after others because of active record inherited alias chain.
 gem 'kaminari'

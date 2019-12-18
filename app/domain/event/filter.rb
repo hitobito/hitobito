@@ -18,7 +18,7 @@ class Event::Filter
   end
 
   def list_entries
-    sort_expression ? scope.uniq.reorder(sort_expression) : scope.uniq
+    sort_expression ? scope.distinct.reorder(sort_expression) : scope.distinct
   end
 
   def scope

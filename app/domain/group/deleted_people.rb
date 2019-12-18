@@ -17,7 +17,7 @@ class Group::DeletedPeople
         where("NOT EXISTS (#{undeleted_roles})").
         where("roles.deleted_at = (#{last_role_deleted})").
         where('groups.layer_group_id = ?', layer_group.id).
-        uniq
+        distinct
     end
 
     private

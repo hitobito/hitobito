@@ -63,7 +63,7 @@ class Event::ParticipationFilter
     event.active_participations_without_affiliate_types.
       includes(load_entries_includes).
       references(:people).
-      uniq
+      distinct
   end
 
   def apply_filter_scope(records, kind = params[:filter])

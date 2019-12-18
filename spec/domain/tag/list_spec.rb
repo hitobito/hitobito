@@ -26,7 +26,7 @@ describe Tag::List do
       tag_list = Tag::List.new([leader], [tag1])
       expect do
         expect(tag_list.add).to be 0
-      end.not_to(change { leader.reload.tags })
+      end.not_to(change { leader.reload.tags.count })
     end
 
     it 'may create the same tag on multiple people' do
@@ -75,7 +75,7 @@ describe Tag::List do
       tag_list = Tag::List.new([leader], [tag1])
       expect do
         expect(tag_list.remove).to be 0
-      end.not_to(change { leader.reload.tags })
+      end.not_to(change { leader.reload.tags.count })
     end
 
     it 'may delete the same tag from multiple people' do

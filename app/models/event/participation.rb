@@ -121,7 +121,7 @@ class Event::Participation < ActiveRecord::Base
   def save(*args)
     super
   rescue ActiveRecord::StatementInvalid => e
-    raise e unless e.original_exception.message =~ /Incorrect string value/
+    raise e unless e.cause.message =~ /Incorrect string value/
     errors.add(:base, :emoji_suspected)
     false
   end

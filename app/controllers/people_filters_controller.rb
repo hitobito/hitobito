@@ -11,8 +11,6 @@ class PeopleFiltersController < CrudController
 
   decorates :group
 
-  hide_action :index, :show
-
   skip_authorize_resource only: [:create]
 
   # load group before authorization

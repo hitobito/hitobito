@@ -26,7 +26,7 @@ class Person::Filter::List
     return filter unless user
 
     if group_range?
-      filtered = filter.unscope(:select).select(:id).uniq
+      filtered = filter.unscope(:select).select(:id).distinct
       filtered = filtered.where(id: @ids) if @ids.present?
       accessibles.unscope(:select).where(id: filtered)
     else
@@ -35,7 +35,7 @@ class Person::Filter::List
   end
 
   def all_count
-    @all_count ||= filter.uniq.count
+    @all_count ||= filter.distinct.count
   end
 
   private

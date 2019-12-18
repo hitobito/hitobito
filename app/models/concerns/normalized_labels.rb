@@ -44,7 +44,7 @@ module NormalizedLabels
 
     def load_available_labels
       predefined_labels |
-      base_class.order(:label).uniq.pluck(:label).compact
+      base_class.order(:label).distinct.pluck(:label).compact
     end
 
     def predefined_labels

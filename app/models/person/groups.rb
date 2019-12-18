@@ -91,7 +91,7 @@ module Person::Groups
       joins(groups.extract_options![:join] || { roles: :group }).
         where(groups: { layer_group_id: groups.collect(&:layer_group_id),
                         deleted_at: nil }).
-        uniq
+        distinct
     end
 
     # Scope listing all people with a role in or below the given group.
@@ -99,7 +99,7 @@ module Person::Groups
       joins(join).
         where(groups: { deleted_at: nil }).
         where('groups.lft >= :lft AND groups.rgt <= :rgt', lft: group.lft, rgt: group.rgt).
-        uniq
+        distinct
     end
 
     # Load people with member roles.

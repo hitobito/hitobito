@@ -38,7 +38,7 @@ class MailingListsController < CrudController
   end
 
   def load_labels
-    @labels = AdditionalEmail.uniq.pluck(:label)
+    @labels = AdditionalEmail.distinct.pluck(:label)
     @preferred_labels = entry.preferred_labels.sort
   end
 

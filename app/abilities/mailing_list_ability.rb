@@ -92,7 +92,7 @@ class MailingListAbility < AbilityDsl::Base
       joins('INNER JOIN events ON subscriptions.subscriber_id = events.id').
       joins('INNER JOIN events_groups ON events_groups.event_id = events.id').
       where(events_groups: { group_id: local_group_ids }).
-      uniq.
+      distinct.
       count
   end
 

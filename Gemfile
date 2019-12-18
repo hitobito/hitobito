@@ -86,13 +86,6 @@ gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier'
 
-# security updates, can be deleted or changed if they get in the way of updates or so
-gem 'activejob', '>= 4.2.11'
-gem 'loofah', '~> 2.2.3'
-gem 'rack', '~> 1.6.11'
-gem 'sprockets', '~> 3.7.2'
-
-
 group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'

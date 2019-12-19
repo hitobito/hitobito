@@ -1,32 +1,13 @@
-# encoding: utf-8
+require_relative 'boot'
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+require 'rails/all'
 
-require File.expand_path('../boot', __FILE__)
-
-def with_benchmark(tag, &block)
-  if ENV['RAILS_ENV'] == 'production'
-    yield
-  else
-    require 'benchmark'
-    puts "require #{tag}: #{Benchmark.measure(&block)}"
-  end
-end
-
-with_benchmark('rails') do
-  require 'rails/all'
-end
-with_benchmark('gems') do
-  require 'jquery/rails'
-  Bundler.require(:default, Rails.env)
-end
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
 module Hitobito
   class Application < Rails::Application
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

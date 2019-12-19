@@ -13,7 +13,7 @@ describe 'Sheet::Group::NavLeft' do
   let(:sheet) { Sheet::Group.new(self, nil, group) }
   let(:nav)   { Sheet::Group::NavLeft.new(sheet) }
 
-  let(:request) { ActionController::TestRequest.new({}) }
+  let(:request) { ActionController::TestRequest.create }
 
   let(:html) { nav.render }
   subject { Capybara::Node::Simple.new(html) }

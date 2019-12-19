@@ -31,7 +31,7 @@ describe Concerns::Localizable do
     get :index, locale: 'fr'
 
     expect(I18n.locale).to eq(:fr)
-    expect(cookies[:locale]).to eq(:fr)
+    expect(cookies[:locale].to_sym).to eq(:fr)
   end
 
   it 'uses locale from cookie if param empty' do
@@ -39,7 +39,7 @@ describe Concerns::Localizable do
     get :index, locale: ' '
 
     expect(I18n.locale).to eq(:fr)
-    expect(cookies[:locale]).to eq(:fr)
+    expect(cookies[:locale].to_sym).to eq(:fr)
   end
 
   it 'uses locale from cookie if param invalid' do
@@ -47,13 +47,13 @@ describe Concerns::Localizable do
     get :index, locale: 'et'
 
     expect(I18n.locale).to eq(:fr)
-    expect(cookies[:locale]).to eq(:fr)
+    expect(cookies[:locale].to_sym).to eq(:fr)
   end
 
   it 'uses default locale if nothing else found' do
     get :index
 
     expect(I18n.locale).to eq(:de)
-    expect(cookies[:locale]).to eq(:de)
+    expect(cookies[:locale].to_sym).to eq(:de)
   end
 end

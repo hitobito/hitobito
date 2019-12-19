@@ -35,7 +35,7 @@ module FilterNavigation
     end
 
     def filter_path(name)
-      template.url_for(template.params.merge(filter: name))
+      template.url_for(template.params.to_unsafe_h.merge(filter: name, only_path: true))
     end
 
   end

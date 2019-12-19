@@ -217,7 +217,7 @@ module CrudTestHelper
   # Look at the source to view the column definition.
   def setup_db
     without_transaction do
-      silence_stream(STDOUT) do
+      silence_warnings do
         create_crud_test_models_table
         create_other_crud_test_models_table
         create_crud_test_models_other_crud_test_models
@@ -254,8 +254,8 @@ module CrudTestHelper
 
   def create_crud_test_models_other_crud_test_models
     ActiveRecord::Base.connection.create_table :crud_test_models_other_crud_test_models, force: true do |t|
-      t.belongs_to :crud_test_model
-      t.belongs_to :other_crud_test_model
+      t.belongs_to :crud_test_model, index: { name: 'one' }
+      t.belongs_to :other_crud_test_model, index: { name: 'other' }
     end
   end
 

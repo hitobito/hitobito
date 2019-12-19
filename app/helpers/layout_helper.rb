@@ -126,6 +126,8 @@ module LayoutHelper
 
   def button(label, url, icon_name = nil, options = {})
     add_css_class options, 'btn'
+    url = url.is_a?(ActionController::Parameters) ? url.to_unsafe_h.merge(only_path: true) : url
+
     link_to(url, options) do
       html = [label]
       html.unshift icon(icon_name) if icon_name

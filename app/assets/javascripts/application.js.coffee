@@ -16,7 +16,7 @@
 # BLANK LINE SHOULD GO AFTER THE REQUIRES BELOW.
 #
 #= require jquery
-#= require jquery.cookie
+#= require js.cookie
 #= require jquery_ujs
 #= require jquery-ui/widgets/datepicker
 #= require jquery-ui-datepicker-i18n

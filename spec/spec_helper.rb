@@ -23,10 +23,7 @@ ActiveRecord::Migration.maintain_test_schema!
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
-
 # Add test locales
-locales_path = Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
-Rails.application.config.i18n.load_path += locales_path
 Faker::Config.locale = I18n.locale
 
 RSpec.configure do |config|

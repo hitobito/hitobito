@@ -17,7 +17,7 @@ describe Person::HouseholdsController do
     before { sign_in(leader) }
 
     it 'adds person to new household' do
-      xhr :get, :new, parameters(person: leader, other: member)
+      get :new, xhr: true, params: parameters(person: leader, other: member)
 
       expect(person.household_people_ids).to eq [member.id]
       expect(person.town).to eq 'Greattown'
@@ -27,7 +27,7 @@ describe Person::HouseholdsController do
 
     it 'adds person to existing household' do
       leader.update(household_key: 1)
-      xhr :get, :new, parameters(person: leader, other: member)
+      get :new, xhr: true, params: parameters(person: leader, other: member)
 
       expect(person.household_people_ids).to eq [member.id]
       expect(person.town).to eq 'Greattown'
@@ -37,7 +37,7 @@ describe Person::HouseholdsController do
 
     it 'adds person from existing household' do
       member.update(household_key: 1)
-      xhr :get, :new, parameters(person: leader, other: member)
+      get :new, xhr: true, params: parameters(person: leader, other: member)
 
       expect(person.household_people_ids).to eq [member.id]
       expect(person.town).to eq 'Greattown'
@@ -48,7 +48,7 @@ describe Person::HouseholdsController do
     it 'adds person from existing household to existing household' do
       member.update(household_key: 1)
       leader.update(household_key: 2)
-      xhr :get, :new, parameters(person: leader, other: member)
+      get :new, xhr: true, params: parameters(person: leader, other: member)
 
       expect(person.household_people_ids).to eq [member.id]
       expect(person.town).to eq 'Greattown'
@@ -61,7 +61,7 @@ describe Person::HouseholdsController do
       other.update(household_key: 1)
       member.update(household_key: 1)
 
-      xhr :get, :new, parameters(person: leader, other: member)
+      get :new, xhr: true, params: parameters(person: leader, other: member)
       expect(person.household_people_ids).to match_array [other.id, member.id]
       expect(person.town).to eq 'Greattown'
       expect(assigns(:household)).to be_address_changed
@@ -73,7 +73,7 @@ describe Person::HouseholdsController do
       other.update(household_key: 1)
       member.update(household_key: 2)
 
-      xhr :get, :new, parameters(person: leader, other: member, ids: [other.id])
+      get :new, xhr: true, params: parameters(person: leader, other: member, ids: [other.id])
       expect(person.household_people_ids).to match_array [other.id.to_s, member.id]
       expect(person.changes).to include 'address'
     end
@@ -84,7 +84,7 @@ describe Person::HouseholdsController do
     before { sign_in(member) }
 
     it 'adds person to new household' do
-      xhr :get, :new, parameters(person: member, other: leader)
+      get :new, xhr: true, params: parameters(person: member, other: leader)
 
       expect(person.household_people_ids).to eq [leader.id]
       expect(person.changes).to include 'address'
@@ -92,7 +92,7 @@ describe Person::HouseholdsController do
 
     it 'adds person to existing household' do
       member.update(household_key: 1)
-      xhr :get, :new, parameters(person: member, other: leader)
+      get :new, xhr: true, params: parameters(person: member, other: leader)
 
       expect(person.household_people_ids).to eq [leader.id]
       expect(person.changes).to include 'address'
@@ -100,7 +100,7 @@ describe Person::HouseholdsController do
 
     it 'adds person from existing household' do
       member.update(household_key: 1)
-      xhr :get, :new, parameters(person: member, other: leader)
+      get :new, xhr: true, params: parameters(person: member, other: leader)
 
       expect(person.household_people_ids).to eq [leader.id]
       expect(person.changes).to include 'address'
@@ -109,7 +109,7 @@ describe Person::HouseholdsController do
     it 'adds person from existing household to existing household' do
       member.update(household_key: 1)
       leader.update(household_key: 2)
-      xhr :get, :new, parameters(person: member, other: leader)
+      get :new, xhr: true, params: parameters(person: member, other: leader)
 
       expect(person.household_people_ids).to eq [leader.id]
       expect(person.changes).to include 'address'
@@ -120,7 +120,7 @@ describe Person::HouseholdsController do
       other.update(household_key: 1)
       leader.update(household_key: 2)
 
-      xhr :get, :new, parameters(person: member, other: leader)
+      get :new, xhr: true, params: parameters(person: member, other: leader)
       expect(person.household_people_ids).to match_array [leader.id]
     end
   end

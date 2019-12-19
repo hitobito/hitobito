@@ -184,7 +184,7 @@ describe CrudTestModelsController, type: :controller do
           session[:list_params] = {}
           session[:list_params]['/crud_test_models'] = { q: 'DDD', sort: 'chatty', sort_dir: 'desc' }
           sign_in(user)
-          get :index, returning: true
+          get :index, params: { returning: true }
         end
 
         it_should_respond

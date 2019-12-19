@@ -20,7 +20,7 @@ describe PeopleFiltersController do
 
   context 'GET new' do
     it 'builds entry with group and existing params' do
-      get :new, group_id: group.id, filters: { role: { role_type_ids: role_type_ids_string } }
+      get :new, params: { group_id: group.id, filters: { role: { role_type_ids: role_type_ids_string } } }
 
       filter = assigns(:people_filter)
       expect(filter.group).to eq(group)
@@ -28,7 +28,7 @@ describe PeopleFiltersController do
     end
 
     it 'preloads available tags' do
-      get :new, group_id: group.id
+      get :new, params: { group_id: group.id }
       expect(assigns(:possible_tags)).to eq []
     end
   end
@@ -36,7 +36,7 @@ describe PeopleFiltersController do
   context 'POST create' do
     it 'redirects to show for search' do
       expect do
-        post :create, group_id: group.id, filters: { role: { role_type_ids: role_type_ids } }, button: 'search'
+        post :create, params: { group_id: group.id, filters: { role: { role_type_ids: role_type_ids } }, button: 'search' }
       end.not_to change { PeopleFilter.count }
 
       is_expected.to redirect_to(group_people_path(group, filters: { role: { role_type_ids: role_type_ids_string} }, range: 'deep'))
@@ -44,7 +44,7 @@ describe PeopleFiltersController do
 
     it 'redirects to show for empty search' do
       expect do
-        post :create, group_id: group.id, button: 'search', people_filter: {}, filters: { qualification: { validity: 'active' }}
+        post :create, params: {group_id: group.id, button: 'search', people_filter: {}, filters: { qualification: { validity: 'active' }}}
       end.not_to change { PeopleFilter.count }
 
       is_expected.to redirect_to(group_people_path(group))
@@ -52,7 +52,7 @@ describe PeopleFiltersController do
 
     it 'saves filter and redirects to show with save' do
       expect do
-        post :create, group_id: group.id, filters: { role: { role_type_ids: role_type_ids } }, range: 'deep', name: 'Test Filter', button: 'save'
+        post :create, params: { group_id: group.id, filters: { role: { role_type_ids: role_type_ids } }, range: 'deep', name: 'Test Filter', button: 'save' }
         expect(assigns(:people_filter)).to be_valid
         is_expected.to redirect_to(group_people_path(group, filter_id: assigns(:people_filter).id))
       end.to change { PeopleFilter.count }.by(1)
@@ -69,7 +69,7 @@ describe PeopleFiltersController do
 
       it 'redirects to show with search' do
         expect do
-          post :create, group_id: group.id, filters: { role: { role_type_ids: role_type_ids } }, button: 'search'
+          post :create, params: { group_id: group.id, filters: { role: { role_type_ids: role_type_ids } }, button: 'search' }
         end.not_to change { PeopleFilter.count }
 
         is_expected.to redirect_to(group_people_path(group, filters: { role: { role_type_ids: role_type_ids_string } }, range: 'deep'))
@@ -77,7 +77,7 @@ describe PeopleFiltersController do
 
       it 'is not authorized with save' do
         expect do
-          post :create, group_id: group.id, filters: { role: { role_type_ids: role_type_ids } }, name: 'Test Filter' , button: 'save'
+          post :create, params: { group_id: group.id, filters: { role: { role_type_ids: role_type_ids } }, name: 'Test Filter', button: 'save' }
         end.to raise_error(CanCan::AccessDenied)
       end
     end

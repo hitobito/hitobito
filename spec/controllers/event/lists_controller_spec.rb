@@ -53,13 +53,13 @@ describe Event::ListsController do
       end
 
       it 'reads year from params, populates vars'do
-        get :courses, year: 2010
+        get :courses, params: { year: 2010 }
         expect(assigns(:year)).to eq 2010
         expect(controller.send(:year_range)).to eq 2008..2011
       end
 
       it 'groups by course kind' do
-        get :courses, year: 2012
+        get :courses, params: { year: 2012 }
         expect(assigns(:grouped_events).keys).to eq ['Scharleiterkurs']
       end
     end
@@ -73,7 +73,7 @@ describe Event::ListsController do
       end
 
       it 'can be set via param, only if year is present' do
-        get :courses, year: 2010, group_id: groups(:top_layer).id
+        get :courses, params: { year: 2010, group_id: groups(:top_layer).id }
         expect(assigns(:group_id)).to eq groups(:top_layer).id
       end
     end
@@ -112,7 +112,7 @@ describe Event::ListsController do
       before { Event::Course.used_attributes -= [:kind_id] }
 
       it 'groups by month' do
-        get :courses, year: 2012
+        get :courses, params: { year: 2012 }
         expect(assigns(:grouped_events).keys).to eq(['März 2012'])
       end
 
@@ -127,7 +127,7 @@ describe Event::ListsController do
 
       it 'is visible for manager' do
         sign_in(people(:top_leader))
-        get :courses, year: 2012
+        get :courses, params: { year: 2012 }
         expect(response.body).to have_selector('tbody tr', count: 2)
         expect(response.body).to have_selector('tbody tr:nth-child(1) td:nth-child(3)',
                                                text: '0 Anmeldungen')
@@ -137,7 +137,7 @@ describe Event::ListsController do
 
       it 'is only visible for member where allowed by course' do
         sign_in(people(:bottom_member))
-        get :courses, year: 2012
+        get :courses, params: { year: 2012 }
         expect(response.body).to have_selector('tbody tr', count: 2)
         expect(response.body).not_to have_selector('tbody tr:nth-child(1) td:nth-child(3)',
                                                    text: '0 Anmeldungen')

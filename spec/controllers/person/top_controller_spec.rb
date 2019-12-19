@@ -17,14 +17,14 @@ describe Person::TopController do
 
     context 'html' do
       it 'keeps flash' do
-        get :show, id: top_leader.id
+        get :show, params: { id: top_leader.id }
         is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :html))
       end
     end
 
     context 'json' do
       it 'redirects to json' do
-        get :show, id: top_leader.id, format: :json, user_email: 'hans@example.com', user_token: '123'
+        get :show, params: { id: top_leader.id, user_email: 'hans@example.com', user_token: '123' }, format: :json
         is_expected.to redirect_to(group_person_path(top_leader.primary_group_id,
                                                      top_leader.id,
                                                      format: :json,

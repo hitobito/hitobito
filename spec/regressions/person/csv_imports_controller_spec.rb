@@ -20,7 +20,7 @@ describe Person::CsvImportsController, type: :controller do
 
   describe 'GET :new' do
     it 'renders template' do
-      get :new, group_id: group.id
+      get :new, params: { group_id: group.id }
       is_expected.to render_template(:new)
       is_expected.to have_content 'Personen über CSV importieren'
     end
@@ -30,7 +30,7 @@ describe Person::CsvImportsController, type: :controller do
   describe 'POST :define_mapping' do
     it 'renders template and flash' do
       file = Rack::Test::UploadedFile.new(path(:utf8), 'text/csv')
-      post :define_mapping, group_id: group.id, csv_import: { file: file }
+      post :define_mapping, params: { group_id: group.id, csv_import: { file: file } }
       is_expected.to render_template(:define_mapping)
       is_expected.to have_content '1 Datensatz erfolgreich gelesen.'
       is_expected.to have_content 'Rolle auswählen'
@@ -45,7 +45,7 @@ describe Person::CsvImportsController, type: :controller do
     let(:mapping) { headers_mapping(CSV.parse(data, headers: true))  }
 
     it 'imports single person only' do
-      expect { post :create, group_id: group.id, data: data, role_type: role_type.sti_name, field_mappings: mapping }.to change(Person, :count).by(1)
+      expect { post :create, params: { group_id: group.id, data: data, role_type: role_type.sti_name, field_mappings: mapping } }.to change(Person, :count).by(1)
       is_expected.to redirect_to group_people_path(group, name: 'Leader', filters: { role: { role_type_ids: [role_type.id] } })
     end
   end
@@ -56,7 +56,7 @@ describe Person::CsvImportsController, type: :controller do
     let(:mapping) { headers_mapping(CSV.parse(data, headers: true)).merge(role: role_type)  }
 
     it 'imports single person only' do
-      expect { post :preview, group_id: group.id, data: data, role_type: role_type, field_mappings: mapping }.not_to change(Person, :count)
+      expect { post :preview, params: { group_id: group.id, data: data, role_type: role_type, field_mappings: mapping } }.not_to change(Person, :count)
       is_expected.to have_css 'table'
       is_expected.to have_button 'Personen jetzt importieren'
       is_expected.to have_button 'Zurück'

@@ -36,31 +36,31 @@ describe PeopleController, type: :controller do
     it 'cannot view person in uppper group' do
       sign_in(Fabricate(Group::BottomGroup::Leader.name.to_sym, group: bottom_group).person)
       expect do
-        get :show, group_id: top_group.id, id: top_leader.id
+        get :show, params: { group_id: top_group.id, id: top_leader.id }
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it 'renders my own page' do
-      get :show, group_id: top_group.id, id: top_leader.id
+      get :show, params: { group_id: top_group.id, id: top_leader.id }
       page_content.each { |text|  expect(response.body).to match(/#{text}/) }
     end
 
     it 'renders page of other group member' do
       sign_in(Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group).person)
-      get :show, group_id: top_group.id, id: other.id
+      get :show, params: { group_id: top_group.id, id: other.id }
       page_content.grep(/Info/).each { |text|  expect(response.body).to match(/#{text}/) }
       page_content.grep(/[^Info]/).each { |text|  expect(response.body).not_to match(/#{text}/) }
       expect(dom).not_to have_selector('a[data-method="delete"] i.fa-trash')
     end
 
     it 'leader can see link to remove role' do
-      get :show, group_id: top_group.id, id: other.id
+      get :show, params: { group_id: top_group.id, id: other.id }
       expect(dom).to have_selector('a[data-method="delete"] i.fa-trash')
     end
 
     it 'leader can see created and updated info' do
       sign_in(top_leader)
-      get :show, group_id: top_group.id, id: other.id
+      get :show, params: { group_id: top_group.id, id: other.id }
       expect(dom).to have_selector('dt', text: 'Erstellt')
       expect(dom).to have_selector('dt', text: 'Geändert')
     end
@@ -69,7 +69,7 @@ describe PeopleController, type: :controller do
       person1 = (Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person)
       person2 = (Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)).person)
       sign_in(person1)
-      get :show, group_id: person2.primary_group_id, id: person2
+      get :show, params: { group_id: person2.primary_group_id, id: person2 }
       expect(dom).not_to have_selector('dt', text: 'Erstellt')
       expect(dom).not_to have_selector('dt', text: 'Geändert')
     end
@@ -82,20 +82,20 @@ describe PeopleController, type: :controller do
       end
 
       it 'should hint for persons without login and token' do
-        get :show, group_id: top_group.id, id: other.id
+        get :show, params: { group_id: top_group.id, id: other.id }
         tooltip_includes('sendet ihr einen Link')
       end
 
       it 'should hint for persons without login but with token' do
         other.generate_reset_password_token!
-        get :show, group_id: top_group.id, id: other.id
+        get :show, params: { group_id: top_group.id, id: other.id }
         tooltip_includes('sendet ihr den Link erneut')
       end
 
       it 'should hint for persons with login' do
         other.password = '123456'
         other.save!
-        get :show, group_id: top_group.id, id: other.id
+        get :show, params: { group_id: top_group.id, id: other.id }
         tooltip_includes('sendet ihr einen Link, damit sie ihr Passwort neu setzen kann')
       end
     end
@@ -107,7 +107,7 @@ describe PeopleController, type: :controller do
     let(:section) { dom.all('aside section')[1] }
 
     it 'contains roles' do
-      get :show, params
+      get :show, params: params
       expect(section.find('h2').text).to eq 'Aktive Rollen'
       expect(section.all('tr').first.text).to include('TopGroup')
       expect(section).to have_css('.btn-small')
@@ -135,7 +135,7 @@ describe PeopleController, type: :controller do
         person: top_leader,
         requester: Fabricate(:person),
         body: mailing_lists(:leaders))
-      get :show, group_id: top_group.id, id: top_leader.id
+      get :show, params: { group_id: top_group.id, id: top_leader.id }
 
       expect(section.find('h2').text).to eq 'Anfragen'
       expect(section.all('tr')[0].text).to include('Bottom Layer Bottom One')
@@ -149,7 +149,7 @@ describe PeopleController, type: :controller do
         requester: Fabricate(:person),
         body: groups(:bottom_layer_one),
         role_type: Group::BottomLayer::Member.sti_name)
-      get :show, group_id: top_group.id, id: top_leader.id
+      get :show, params: { group_id: top_group.id, id: top_leader.id }
 
       expect(section.find('h2').text).to eq 'Qualifikationen Erstellen'
     end
@@ -168,13 +168,13 @@ describe PeopleController, type: :controller do
       let(:date) { Time.zone.parse('02-01-2010') }
 
       it 'is missing if we have no applications' do
-        get :show, params
+        get :show, params: params
         expect(dom).to have_css('aside section', count: 3) # only tags, roles and qualification
       end
 
       it 'lists application' do
         appl = create_application(date)
-        get :show, params
+        get :show, params: params
         expect(header).to eq 'Anmeldungen'
         expect(label_link[:href]).to eq "/groups/#{course.group_ids.first}/events/#{course.id}/participations/#{appl.participation.id}"
         expect(label_link.text).to match(/Eventus/)
@@ -189,19 +189,19 @@ describe PeopleController, type: :controller do
       let(:pretty_date) { date.strftime('%d.%m.%Y %H:%M') + ' - ' + (date + 5.days).strftime('%d.%m.%Y %H:%M') }
 
       it 'is missing if we have no events' do
-        get :show, params
+        get :show, params: params
         expect(dom).to have_css('aside section', count: 3) # only tags, roles and qualification
       end
 
       it 'is missing if we have no upcoming events' do
         create_participation(10.days.ago, true)
-        get :show, params
+        get :show, params: params
         expect(dom).to have_css('aside section', count: 3) # only tags, roles and qualification
       end
 
       it 'lists event label, link and dates' do
         create_participation(date, true)
-        get :show, params
+        get :show, params: params
         expect(header).to eq 'Meine nächsten Anlässe'
         expect(label_link[:href]).to eq group_event_path(course.groups.first, course)
         expect(label_link.text).to eq 'Eventus'
@@ -232,9 +232,11 @@ describe PeopleController, type: :controller do
 
   describe 'redirect_url' do
     it 'should adjust url if param redirect_url is given' do
-      get :edit, group_id: top_group.id,
-                 id: top_leader.id,
-                 return_url: 'foo'
+      get :edit, params: {
+                   group_id: top_group.id,
+                   id: top_leader.id,
+                   return_url: 'foo'
+                 }
 
       expect(dom.all('a', text: 'Abbrechen').first[:href]).to eq 'foo'
       expect(dom.find('input#return_url', visible: false).value).to eq 'foo'

@@ -33,7 +33,7 @@ describe Subscriber::EventController, type: :controller do
 
   it 'does not duplicate subscription' do
     expect do
-      2.times { post :create, scope_params.merge(subscription: test_entry_attrs) }
+      2.times { post :create, params: scope_params.merge(subscription: test_entry_attrs) }
     end.to change(Subscription, :count).by(1)
   end
 

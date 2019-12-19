@@ -27,7 +27,7 @@ describe Event::KindsController, type: :controller do
   include_examples 'crud controller', skip: [%w(show), %w(destroy)]
 
   it 'soft deletes' do
-    expect { post :destroy, id: test_entry.id }.to change { Event::Kind.without_deleted.count }.by(-1)
+    expect { post :destroy, params: { id: test_entry.id } }.to change { Event::Kind.without_deleted.count }.by(-1)
   end
 
 end

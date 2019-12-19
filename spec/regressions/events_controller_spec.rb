@@ -46,24 +46,24 @@ describe EventsController, type: :controller do
       let(:last_year) { 1.year.ago }
 
       it 'renders button to add new events' do
-        get :index, group_id: group.id, year: 2012
+        get :index, params: { group_id: group.id, year: 2012 }
         expect(dom.all('.btn-toolbar .btn')[0].text).to include 'Anlass erstellen'
       end
 
       it 'renders button to add new courses' do
-        get :index, group_id: group.id, type: 'Event::Course', year: 2012
+        get :index, params: { group_id: group.id, type: 'Event::Course', year: 2012 }
         expect(dom.all('.btn-toolbar .btn')[0].text).to include 'Kurs erstellen'
       end
 
       it 'renders button to export courses' do
-        get :index, group_id: group.id, type: 'Event::Course', year: 2012
+        get :index, params: { group_id: group.id, type: 'Event::Course', year: 2012 }
         expect(dom.all('.btn-toolbar .btn')[1].text).to include 'Export'
       end
 
       it 'lists entries for current year' do
         ev = event_with_date(start_at: today)
         event_with_date(start_at: last_year)
-        get :index, group_id: group.id
+        get :index, params: { group_id: group.id }
         expect(dom.all('#main table tbody tr').count).to eq 1
         expect(dom.find('#main table tbody tr').text).to include ev.name
         expect(dom.find_link(today.year.to_s).native.parent[:class]).to eq 'active'
@@ -72,7 +72,7 @@ describe EventsController, type: :controller do
       it 'pages per year' do
         event_with_date(start_at: today)
         ev = event_with_date(start_at: last_year)
-        get :index, group_id: group.id, year: last_year.year
+        get :index, params: { group_id: group.id, year: last_year.year }
         expect(dom.all('.pagination li').count).to eq 6
         expect(dom.all('#main table tbody tr').count).to eq 1
         expect(dom.find('#main table tbody tr').text).to include ev.name
@@ -93,20 +93,20 @@ describe EventsController, type: :controller do
 
       it 'renders events csv' do
         expect do
-          get :index, group_id: group.id, format: :csv, year: 2012
+          get :index, params: { group_id: group.id, year: 2012 }, format: :csv
           expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
         end.to change(Delayed::Job, :count).by(1)
       end
 
       it 'renders courses csv' do
         expect do
-          get :index, group_id: group.id, format: :csv, year: 2012, type: Event::Course.sti_name
+          get :index, params: { group_id: group.id, year: 2012, type: Event::Course.sti_name }, format: :csv
           expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
         end.to change(Delayed::Job, :count).by(1)
       end
 
       it 'sets cookie on export' do
-        get :index, group_id: group.id, format: :csv, year: 2012
+        get :index, params: { group_id: group.id, year: 2012 }, format: :csv
 
         cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
 
@@ -120,12 +120,12 @@ describe EventsController, type: :controller do
       let(:group) { groups(:top_layer) }
 
       it 'renders events ics' do
-        get :index, group_id: group.id, format: :ics, year: 2012
+        get :index, params: { group_id: group.id, year: 2012 }, format: :ics
         expect(response.content_type).to eq('text/calendar')
       end
 
       it 'renders courses csv' do
-        get :index, group_id: group.id, format: :ics, year: 2012, type: Event::Course.sti_name
+        get :index, params: { group_id: group.id, year: 2012, type: Event::Course.sti_name }, format: :ics
         expect(response.content_type).to eq('text/calendar')
       end
 
@@ -139,7 +139,7 @@ describe EventsController, type: :controller do
       let(:group) { groups(:top_layer) }
 
       it 'renders event ics' do
-        get :show, group_id: group.id, id: test_entry.to_param, format: :ics
+        get :show, params: { group_id: group.id, id: test_entry.to_param }, format: :ics
         expect(response.content_type).to eq('text/calendar')
       end
     end
@@ -150,7 +150,7 @@ describe EventsController, type: :controller do
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
     it 'renders new form' do
-      get :new, group_id: group.id, event: { type: 'Event::Course' }
+      get :new, params: { group_id: group.id, event: { type: 'Event::Course' } }
       expect(dom.find('input#event_type', visible: false)[:type]).to eq 'hidden'
       expect(dom.all('#application_questions_fields .fields').count).to eq 3
       expect(dom.all('#dates_fields').count).to eq 1

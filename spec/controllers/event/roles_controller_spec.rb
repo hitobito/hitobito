@@ -23,7 +23,7 @@ describe Event::RolesController do
   before { sign_in(user) }
 
   context 'GET new' do
-    before { get :new, group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name } }
+    before { get :new, params: { group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name } } }
 
     it 'builds participation without answers' do
       role = assigns(:role)
@@ -39,7 +39,7 @@ describe Event::RolesController do
     context 'without participation' do
 
       it 'creates role and participation' do
-        post :create, group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id }
+        post :create, params: { group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id } }
 
         role = assigns(:role)
         expect(role).to be_persisted
@@ -63,9 +63,11 @@ describe Event::RolesController do
         person = Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person
 
         post :create,
-             group_id: group.id,
-             event_id: course.id,
-             event_role: { type: Event::Role::Speaker.sti_name, person_id: person.id }
+             params: {
+               group_id: group.id,
+               event_id: course.id,
+               event_role: { type: Event::Role::Speaker.sti_name, person_id: person.id }
+             }
 
         is_expected.to redirect_to(group_event_participations_path(group, course))
         expect(flash[:alert]).to match(/versendet/)
@@ -77,9 +79,11 @@ describe Event::RolesController do
         groups(:top_layer).update_column(:require_person_add_requests, true)
 
         post :create,
-             group_id: group.id,
-             event_id: course.id,
-             event_role: { type: Event::Role::Speaker.sti_name, person_id: user.id }
+             params: {
+               group_id: group.id,
+               event_id: course.id,
+               event_role: { type: Event::Role::Speaker.sti_name, person_id: user.id }
+             }
 
         role = assigns(:role)
         expect(role).to be_persisted
@@ -95,7 +99,7 @@ describe Event::RolesController do
         participation = Fabricate(:event_participation, event: course, person: user)
         Fabricate(Event::Role::Cook.name, participation: participation)
         expect do
-          post :create, group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id }
+          post :create, params: { group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id } }
         end.to change { Event::Participation.count }.by(0)
 
         role = assigns(:role)
@@ -115,9 +119,11 @@ describe Event::RolesController do
         Fabricate(Event::Role::Cook.name, participation: Fabricate(:event_participation, event: course, person: person))
 
         post :create,
-             group_id: group.id,
-             event_id: course.id,
-             event_role: { type: Event::Role::Speaker.sti_name, person_id: person.id }
+             params: {
+               group_id: group.id,
+               event_id: course.id,
+               event_role: { type: Event::Role::Speaker.sti_name, person_id: person.id }
+             }
 
         is_expected.to redirect_to(group_event_participations_path(group, course))
         expect(flash[:notice]).to match(/erstellt/)
@@ -132,10 +138,12 @@ describe Event::RolesController do
     it 'keeps type if not given' do
       role = event_roles(:top_leader)
       put :update,
-          group_id: group.id,
-          event_id: course.id,
-          id: role.id,
-          event_role: { label: 'Foo' }
+          params: {
+            group_id: group.id,
+            event_id: course.id,
+            id: role.id,
+            event_role: { label: 'Foo' }
+          }
 
       role = Event::Role.find(role.id)
       expect(role).to be_kind_of(Event::Role::Leader)
@@ -146,10 +154,12 @@ describe Event::RolesController do
     it 'may change type for teamers' do
       role = event_roles(:top_leader)
       put :update,
-          group_id: group.id,
-          event_id: course.id,
-          id: role.id,
-          event_role: { type: Event::Role::Cook.sti_name }
+          params: {
+            group_id: group.id,
+            event_id: course.id,
+            id: role.id,
+            event_role: { type: Event::Role::Cook.sti_name }
+          }
 
       role = Event::Role.find(role.id)
       expect(role).to be_kind_of(Event::Role::Cook)
@@ -159,10 +169,12 @@ describe Event::RolesController do
     it 'may not change type for teamers to participant' do
       role = event_roles(:top_leader)
       put :update,
-          group_id: group.id,
-          event_id: course.id,
-          id: role.id,
-          event_role: { type: Event::Course::Role::Participant.sti_name }
+          params: {
+            group_id: group.id,
+            event_id: course.id,
+            id: role.id,
+            event_role: { type: Event::Course::Role::Participant.sti_name }
+          }
 
       role = Event::Role.find(role.id)
       expect(role).to be_kind_of(Event::Role::Leader)
@@ -174,10 +186,12 @@ describe Event::RolesController do
       role = Fabricate(Event::Course::Role::Participant.name.to_sym,
                        participation: Fabricate(:event_participation, event: course))
       put :update,
-          group_id: group.id,
-          event_id: course.id,
-          id: role.id,
-          event_role: { type: Event::Role::Cook.sti_name }
+          params: {
+            group_id: group.id,
+            event_id: course.id,
+            id: role.id,
+            event_role: { type: Event::Role::Cook.sti_name }
+          }
 
       role = Event::Role.find(role.id)
       expect(role).to be_kind_of(Event::Course::Role::Participant)

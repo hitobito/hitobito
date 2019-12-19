@@ -23,8 +23,7 @@ describe Subscriber::ExcludePersonController do
         Fabricate(:subscription, mailing_list: list, subscriber: person)
 
         expect do
-          post :create, group_id: group.id, mailing_list_id: list.id,
-                        subscription: { subscriber_id: person.id }
+          post :create, params: { group_id: group.id, mailing_list_id: list.id, subscription: { subscriber_id: person.id } }
         end.to change(Subscription, :count).by(-1)
         expect(flash[:notice]).to eq "#{person} wurde erfolgreich ausgeschlossen"
       end
@@ -36,8 +35,7 @@ describe Subscriber::ExcludePersonController do
         Fabricate(:subscription, mailing_list: list, subscriber: event)
 
         expect do
-          post :create, group_id: group.id, mailing_list_id: list.id,
-                        subscription: { subscriber_id: person.id }
+          post :create, params: { group_id: group.id, mailing_list_id: list.id, subscription: { subscriber_id: person.id } }
         end.to change(Subscription, :count).by(1)
         expect(flash[:notice]).to eq "#{person} wurde erfolgreich ausgeschlossen"
       end
@@ -57,8 +55,7 @@ describe Subscriber::ExcludePersonController do
         Fabricate(:subscription, mailing_list: list, subscriber: event)
 
         expect do
-          post :create, group_id: group.id, mailing_list_id: list.id,
-               subscription: { subscriber_id: person.id }
+          post :create, params: { group_id: group.id, mailing_list_id: list.id, subscription: { subscriber_id: person.id } }
         end.to change(Subscription, :count).by(1)
         expect(flash[:notice]).to eq "#{person} wurde erfolgreich ausgeschlossen"
       end
@@ -70,7 +67,7 @@ describe Subscriber::ExcludePersonController do
 
 
     it 'without subscriber_id replaces error' do
-      post :create, group_id: group.id, mailing_list_id: list.id
+      post :create, params: { group_id: group.id, mailing_list_id: list.id }
 
       is_expected.to render_template('crud/new')
       expect(assigns(:subscription).errors.size).to eq(1)
@@ -79,8 +76,7 @@ describe Subscriber::ExcludePersonController do
 
     it 'without valid subscriber_id replaces error' do
       other = Fabricate(:person)
-      post :create, group_id: group.id, mailing_list_id: list.id,
-                    subscription: { subscriber_id: other.id }
+      post :create, params: { group_id: group.id, mailing_list_id: list.id, subscription: { subscriber_id: other.id } }
 
       is_expected.to render_template('crud/new')
       expect(assigns(:subscription).errors.size).to eq(1)
@@ -94,9 +90,11 @@ describe Subscriber::ExcludePersonController do
 
       expect do
         post :create,
-             group_id: group.id,
-             mailing_list_id: list.id,
-             subscription: { subscriber_id: person.id }
+             params: {
+               group_id: group.id,
+               mailing_list_id: list.id,
+               subscription: { subscriber_id: person.id }
+             }
       end.not_to change(Subscription, :count)
 
       is_expected.to render_template('crud/new')

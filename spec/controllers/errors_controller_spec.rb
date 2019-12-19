@@ -11,7 +11,7 @@ describe ErrorsController do
 
   %w(404 500 503).each do |code|
     it "renders #{code} with correct view and status code" do
-      get :show, code: code
+      get :show, params: { code: code }
       expect(response).to render_template(code)
       expect(response.status).to eq code.to_i
     end

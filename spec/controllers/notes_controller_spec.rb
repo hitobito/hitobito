@@ -22,7 +22,7 @@ describe NotesController do
     it 'assignes all notes of layer' do
       n1 = Note.create!(author: top_leader, subject: top_leader, text: 'lorem')
       _n2 = Note.create!(author: top_leader, subject: bottom_member, text: 'ipsum')
-      get :index, group_id: group.id
+      get :index, params: { group_id: group.id }
 
       expect(assigns(:notes)).to eq([n1])
     end
@@ -31,9 +31,11 @@ describe NotesController do
   describe 'POST #create' do
     it 'creates person notes' do
       expect do
-        post :create, group_id: bottom_member.groups.first.id,
-                      person_id: bottom_member.id,
-                      note: { text: 'Lorem ipsum' },
+        post :create, params: {
+                        group_id: bottom_member.groups.first.id,
+                        person_id: bottom_member.id,
+                        note: { text: 'Lorem ipsum' }
+                      },
                       format: :js
       end.to change { Note.count }.by(1)
 
@@ -45,8 +47,10 @@ describe NotesController do
     it 'creates group notes' do
       group = bottom_member.groups.first
       expect do
-        post :create, group_id: group.id,
-                      note: { text: 'Lorem ipsum' },
+        post :create, params: {
+                        group_id: group.id,
+                        note: { text: 'Lorem ipsum' }
+                      },
                       format: :js
       end.to change { Note.count }.by(1)
 
@@ -59,8 +63,10 @@ describe NotesController do
     it 'redirects for html requests' do
       group = bottom_member.groups.first
       expect do
-        post :create, group_id: group.id,
-             note: { text: 'Lorem ipsum' }
+        post :create, params: {
+               group_id: group.id,
+               note: { text: 'Lorem ipsum' }
+             }
       end.to change { Note.count }.by(1)
       is_expected.to redirect_to(group_path(group))
     end
@@ -70,9 +76,11 @@ describe NotesController do
 
       expect do
         expect do
-          post :create, group_id: bottom_member.groups.first.id,
-                        person_id: bottom_member.id,
-                        note: { text: 'Lorem ipsum' },
+          post :create, params: {
+                          group_id: bottom_member.groups.first.id,
+                          person_id: bottom_member.id,
+                          note: { text: 'Lorem ipsum' }
+                        },
                         format: :js
         end.to raise_error(CanCan::AccessDenied)
       end.not_to change { Note.count }
@@ -83,9 +91,11 @@ describe NotesController do
     it 'destroys person note' do
       n = Note.create!(author: top_leader, subject: top_leader, text: 'lorem')
       expect do
-        post :destroy, group_id: n.subject.groups.first.id,
-                       person_id: n.subject_id,
-                       id: n.id,
+        post :destroy, params: {
+                         group_id: n.subject.groups.first.id,
+                         person_id: n.subject_id,
+                         id: n.id
+                       },
                        format: :js
       end.to change { Note.count }.by(-1)
       is_expected.to render_template('destroy')
@@ -95,9 +105,11 @@ describe NotesController do
       group = top_leader.groups.first
       n = Note.create!(author: top_leader, subject: top_leader, text: 'lorem')
       expect do
-        post :destroy, group_id: group.id,
-                       person_id: n.subject_id,
-                       id: n.id
+        post :destroy, params: {
+                         group_id: group.id,
+                         person_id: n.subject_id,
+                         id: n.id
+                       }
       end.to change { Note.count }.by(-1)
       is_expected.to redirect_to(group_person_path(group, top_leader))
     end

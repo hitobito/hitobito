@@ -22,7 +22,7 @@ describe Person::CsvImportsController do
 
     it 'populates flash, data and columns' do
       file = Rack::Test::UploadedFile.new(path(:utf8), 'text/csv')
-      post :define_mapping, group_id: group.id, csv_import: { file: file }
+      post :define_mapping, params: { group_id: group.id, csv_import: { file: file } }
       parser = assigns(:parser)
       expect(parser.to_csv).to be_present
       expect(parser.headers).to be_present
@@ -31,14 +31,14 @@ describe Person::CsvImportsController do
 
     it 'redisplays form if failed to parse csv' do
       file = Rack::Test::UploadedFile.new(path(:utf8, :ods), 'text/csv')
-      post :define_mapping, group_id: group.id, csv_import: { file: file }
+      post :define_mapping, params: { group_id: group.id, csv_import: { file: file } }
       expect(flash[:data]).not_to be_present
       expect(flash[:alert]).to match(/Fehler beim Lesen von utf8.ods/)
       is_expected.to redirect_to new_group_csv_imports_path(group)
     end
 
     it 'renders form when submitted without file' do
-      post :define_mapping, group_id: group.id
+      post :define_mapping, params: { group_id: group.id }
       expect(flash[:alert]).to eq 'Bitte wählen Sie eine gültige CSV Datei aus.'
       is_expected.to redirect_to new_group_csv_imports_path(group)
     end
@@ -52,26 +52,26 @@ describe Person::CsvImportsController do
     let(:required_params) { { group_id: group.id, data: data, role_type: role_type } }
 
     it 'informs about newly imported person' do
-      post :preview, required_params.merge(field_mappings: { Vorname: 'first_name', Nachname: 'last_name' })
+      post :preview, params: required_params.merge(field_mappings: { Vorname: 'first_name', Nachname: 'last_name' })
       expect(flash[:notice]).to eq ['1 Person (Leader) wird neu importiert.']
       is_expected.to render_template(:preview)
     end
 
     it 'renders preview even when field_mapping is missing' do
-      post :preview, required_params
+      post :preview, params: required_params
       expect(flash[:alert]).to eq ['1 Person (Leader) wird nicht importiert.',
                                'Zeile 1: Bitte geben Sie einen Namen ein']
       is_expected.to render_template(:preview)
     end
 
     it 'informs about duplicates in assignment' do
-      post :preview, required_params.merge(field_mappings: { Vorname: 'first_name', Nachname: 'first_name' })
+      post :preview, params: required_params.merge(field_mappings: { Vorname: 'first_name', Nachname: 'first_name' })
       expect(flash[:alert]).to eq 'Vorname wurde mehrfach zugewiesen.'
       is_expected.to render_template(:define_mapping)
     end
 
     it 'rerenders form when role_type is missing' do
-      post :preview, { group_id: group.id, data: data }
+      post :preview, params: { group_id: group.id, data: data }
       expect(flash.now[:alert]).to eq 'Role muss ausgefüllt werden.'
       is_expected.to render_template(:define_mapping)
     end
@@ -82,7 +82,7 @@ describe Person::CsvImportsController do
       it 'reports error if multiple candidates for doublettes are found' do
         Fabricate(:person, first_name: 'bar', email: 'foo@bar.net')
         Fabricate(:person, first_name: 'foo', email: 'bar@bar.net')
-        post :preview, required_params.merge(field_mappings: { Vorname: 'first_name', Email: 'email' })
+        post :preview, params: required_params.merge(field_mappings: { Vorname: 'first_name', Email: 'email' })
         expect(flash[:alert]).to eq ['1 Person (Leader) wird nicht importiert.',
                                  'Zeile 1: 2 Treffer in Duplikatserkennung.']
       end
@@ -98,17 +98,17 @@ describe Person::CsvImportsController do
 
     it 'fails if role_type is missing' do
       expect do
-        post :create, group_id: group.id, data: data, field_mappings: { first_name: 'first_name' }
+        post :create, params: { group_id: group.id, data: data, field_mappings: { first_name: 'first_name' } }
       end.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'renders define_mapping if button is pressed' do
-      post :create, required_params.merge(button: 'back')
+      post :create, params: required_params.merge(button: 'back')
       is_expected.to render_template(:define_mapping)
     end
 
     it 'populates flash and redirects to group role list' do
-      expect { post :create, required_params }.to change(Person, :count).by(1)
+      expect { post :create, params: required_params }.to change(Person, :count).by(1)
       expect(flash[:notice]).to eq ['1 Person (Leader) wurde erfolgreich importiert.']
       expect(flash[:alert]).not_to be_present
       is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: 'Leader')
@@ -119,7 +119,7 @@ describe Person::CsvImportsController do
       let(:data) { generate_csv(%w{name email}, %w{foo foo@bar.net}) }
 
       it 'imports first person and displays errors for second person' do
-        expect { post :create, required_params }.to change(Person, :count).by(0)
+        expect { post :create, params: required_params }.to change(Person, :count).by(0)
         expect(flash[:alert]).to eq ['1 Person (Leader) wurde nicht importiert.']
         is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: 'Leader')
       end
@@ -147,7 +147,7 @@ describe Person::CsvImportsController do
       before { sign_in(user) }
 
       it 'does not update persisted user' do
-        post :create, required_params
+        post :create, params: required_params
 
         expect(person.reload.email).to eq('top_leader@example.com')
         expect(Person.find_by(last_name: 'new_user').email).to eq('new_user@example.com')
@@ -159,7 +159,7 @@ describe Person::CsvImportsController do
       let(:data) { generate_csv(%w{Vorname Telefon}, %w{foo }) }
 
       it 'is ignored' do
-        expect { post :create, required_params }.to change(Person, :count).by(1)
+        expect { post :create, params: required_params }.to change(Person, :count).by(1)
         expect(flash[:alert]).to be_blank
         is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: 'Leader')
       end
@@ -173,7 +173,7 @@ describe Person::CsvImportsController do
         let(:mapping) { { first_name: 'first_name' } }
 
         it 'imports first name of all 4 people' do
-          expect { post :create, required_params }.to change(Person, :count).by(4)
+          expect { post :create, params: required_params }.to change(Person, :count).by(4)
           expect(flash[:alert]).to be_blank
           expect(last_person.last_name).to be_blank
           expect(last_person.first_name).to be_present
@@ -184,7 +184,7 @@ describe Person::CsvImportsController do
         let(:mapping) { headers_mapping(CSV.parse(data, headers: true)) }
 
         it 'imports single person' do
-          expect { post :create, required_params }.to change(Person, :count).by(1)
+          expect { post :create, params: required_params }.to change(Person, :count).by(1)
           expect(last_person.last_name).to be_present
           expect(last_person.phone_numbers.size).to eq(4)
           expect(last_person.social_accounts.size).to eq(3)
@@ -208,7 +208,7 @@ describe Person::CsvImportsController do
 
         it 'creates request' do
           person # create
-          post :create, required_params.merge(update_behaviour: 'override')
+          post :create, params: required_params.merge(update_behaviour: 'override')
           is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: 'Member')
 
           expect(person.reload.roles.count).to eq(1)
@@ -223,7 +223,7 @@ describe Person::CsvImportsController do
           person # create
           Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: user)
 
-          post :create, required_params.merge(update_behaviour: 'override')
+          post :create, params: required_params.merge(update_behaviour: 'override')
           is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: 'Member')
 
           expect(person.reload.roles.count).to eq(2)
@@ -240,7 +240,7 @@ describe Person::CsvImportsController do
             body: group,
             role_type: Group::BottomGroup::Leader.sti_name)
 
-          post :create, required_params
+          post :create, params: required_params
 
           is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: 'Member')
           expect(person.reload.roles.count).to eq(1)
@@ -262,7 +262,7 @@ describe Person::CsvImportsController do
         it 'last update wins' do
           expect do
             expect do
-              post :create, required_params
+              post :create, params: required_params
             end.to change { Role.count }.by(1)
           end.not_to change { Person.count }
 
@@ -278,7 +278,7 @@ describe Person::CsvImportsController do
         it 'reports error if multiple candidates for doublettes are found' do
           Fabricate(:person, first_name: 'bar', email: 'foo@bar.net')
           Fabricate(:person, first_name: 'foo', email: 'bar@bar.net')
-          post :create, required_params
+          post :create, params: required_params
           expect(flash[:alert]).to eq ['1 Person (Leader) wurde nicht importiert.']
         end
       end

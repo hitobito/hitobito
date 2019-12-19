@@ -27,7 +27,7 @@ describe Event::ApplicationsController do
     before { sign_in(group_leader) }
 
     describe 'PUT approve' do
-      before { put :approve, group_id: group.id, event_id: event.id, id: application.id }
+      before { put :approve, params: { group_id: group.id, event_id: event.id, id: application.id } }
 
       it { is_expected.to redirect_to(group_event_participation_path(group, event, participation)) }
 
@@ -42,7 +42,7 @@ describe Event::ApplicationsController do
     end
 
     describe 'DELETE reject' do
-      before { delete :reject, group_id: group.id, event_id: event.id, id: application.id }
+      before { delete :reject, params: { group_id: group.id, event_id: event.id, id: application.id } }
 
       it { is_expected.to redirect_to(group_event_participation_path(group, event, participation)) }
 
@@ -65,13 +65,13 @@ describe Event::ApplicationsController do
 
     it 'PUT approve is not allowed' do
       expect do
-        put :approve, group_id: group.id, event_id: event.id, id: application.id
+        put :approve, params: { group_id: group.id, event_id: event.id, id: application.id }
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it 'DELETE reject is not allowed' do
       expect do
-        delete :reject, group_id: group.id, event_id: event.id, id: application.id
+        delete :reject, params: { group_id: group.id, event_id: event.id, id: application.id }
       end.to raise_error(CanCan::AccessDenied)
     end
   end

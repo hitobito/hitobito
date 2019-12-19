@@ -19,7 +19,7 @@ describe Subscriber::GroupController do
 
     context 'top group' do
       before do
-        get :query, q: 'bot', group_id: group.id, mailing_list_id: list.id
+        get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
       end
 
       it { is_expected.to match(/Top \\u0026gt; Bottom One/) }
@@ -36,7 +36,7 @@ describe Subscriber::GroupController do
 
       before do
         Group::BottomLayer::Leader.create!(group: group, person: people(:top_leader))
-        get :query, q: 'bot', group_id: group.id, mailing_list_id: list.id
+        get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
       end
 
       it 'does not include sister group or their descendants' do
@@ -50,18 +50,18 @@ describe Subscriber::GroupController do
 
   context 'GET roles.js' do
     it 'load role types' do
-      xhr :get, :roles, group_id: group.id,
-                        mailing_list_id: list.id,
-                        subscription: { subscriber_id: groups(:bottom_layer_one) },
-                        format: :js
+      get :roles, xhr: true, params: { group_id: group.id,
+                                       mailing_list_id: list.id,
+                                       subscription: { subscriber_id: groups(:bottom_layer_one) } },
+      format: :js
 
       expect(assigns(:role_types).root).to eq(Group::BottomLayer)
     end
 
     it 'does not load role types for nil group' do
-      xhr :get, :roles, group_id: group.id,
-                        mailing_list_id: list.id,
-                        format: :js
+      get :roles, xhr: true, params: { group_id: group.id,
+                                       mailing_list_id: list.id },
+                                       format: :js
 
       expect(assigns(:role_types)).to be_nil
     end
@@ -70,8 +70,10 @@ describe Subscriber::GroupController do
 
   context 'POST create' do
     it 'without subscriber_id replaces error' do
-      post :create, group_id: group.id,
-                    mailing_list_id: list.id
+      post :create, params: {
+                      group_id: group.id,
+                      mailing_list_id: list.id
+                    }
 
       is_expected.to render_template('crud/new')
       expect(assigns(:subscription).errors[:subscriber_id]).to be_blank
@@ -82,10 +84,12 @@ describe Subscriber::GroupController do
     it 'create subscription with role types' do
       expect do
         expect do
-          post :create, group_id: group.id,
-                        mailing_list_id: list.id,
-                        subscription: { subscriber_id: groups(:bottom_layer_one),
-                                        role_types: [Group::BottomLayer::Leader, Group::BottomGroup::Leader] }
+          post :create, params: {
+                          group_id: group.id,
+                          mailing_list_id: list.id,
+                          subscription: { subscriber_id: groups(:bottom_layer_one),
+                                          role_types: [Group::BottomLayer::Leader, Group::BottomGroup::Leader] }
+                        }
         end.to change { Subscription.count }.by(1)
       end.to change { RelatedRoleType.count }.by(2)
 

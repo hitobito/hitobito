@@ -23,7 +23,7 @@ describe Subscriber::EventController do
       before do
         create_event('event', now)
 
-        get :query, q: 'event', group_id: group.id, mailing_list_id: list.id
+        get :query, params: { q: 'event', group_id: group.id, mailing_list_id: list.id }
       end
 
       it { is_expected.to match(/event \(TopGroup\)/) }
@@ -36,7 +36,7 @@ describe Subscriber::EventController do
         create_event('event last_year', now - 1.year)
         create_event('event two_years_ago', now - 5.years)
 
-        get :query, q: 'event', group_id: group.id, mailing_list_id: list.id
+        get :query, params: { q: 'event', group_id: group.id, mailing_list_id: list.id }
       end
 
       it { is_expected.to match(/now/) }
@@ -56,7 +56,7 @@ describe Subscriber::EventController do
         create_event('event', now, groups(:bottom_layer_two))
         create_event('event', now, groups(:top_group))
 
-        get :query, q: 'event', group_id: group.id, mailing_list_id: list.id
+        get :query, params: { q: 'event', group_id: group.id, mailing_list_id: list.id }
       end
 
       it { is_expected.to match(%r{#{groups(:bottom_group_one_one).name}}) }
@@ -69,7 +69,7 @@ describe Subscriber::EventController do
       before do
         create_event('foobar', now)
 
-        get :query, q: 'Top Group', group_id: group.id, mailing_list_id: list.id
+        get :query, params: { q: 'Top Group', group_id: group.id, mailing_list_id: list.id }
       end
 
       it { is_expected.to match(/foobar/) }
@@ -80,7 +80,7 @@ describe Subscriber::EventController do
         course = Fabricate(:course, name: 'foobar', groups: [group])
         Fabricate(:event_date, event: course, start_at: now)
 
-        get :query, q: 'Scharleiter', group_id: group.id, mailing_list_id: list.id
+        get :query, params: { q: 'Scharleiter', group_id: group.id, mailing_list_id: list.id }
       end
 
       it { is_expected.to match(/foobar/) }
@@ -93,17 +93,21 @@ describe Subscriber::EventController do
 
     it 'adds subscription' do
       expect do
-        post :create, group_id: group.id,
-                      mailing_list_id: list.id,
-                      subscription: { subscriber_id: event.id }
+        post :create, params: {
+                        group_id: group.id,
+                        mailing_list_id: list.id,
+                        subscription: { subscriber_id: event.id }
+                      }
       end.to change(Subscription, :count).by(1)
 
       is_expected.to redirect_to(group_mailing_list_subscriptions_path(list.group_id, list.id))
     end
 
     it 'without subscriber_id replaces error' do
-      post :create, group_id: group.id,
-                    mailing_list_id: list.id
+      post :create, params: {
+                      group_id: group.id,
+                      mailing_list_id: list.id
+                    }
 
       is_expected.to render_template('crud/new')
       expect(assigns(:subscription).errors.size).to eq(1)
@@ -115,9 +119,11 @@ describe Subscriber::EventController do
       subscription.update_attribute(:subscriber, event)
 
       expect do
-        post :create, group_id: group.id,
-                      mailing_list_id: list.id,
-                      subscription: { subscriber_id: event.id }
+        post :create, params: {
+                        group_id: group.id,
+                        mailing_list_id: list.id,
+                        subscription: { subscriber_id: event.id }
+                      }
       end.not_to change(Subscription, :count)
 
       is_expected.to render_template('crud/new')

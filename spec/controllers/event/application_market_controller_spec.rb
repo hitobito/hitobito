@@ -97,7 +97,7 @@ describe Event::ApplicationMarketController do
   describe 'GET index' do
 
     context 'with standard filter' do
-      before { get :index, group_id: group.id, event_id: event.id }
+      before { get :index, params: { group_id: group.id, event_id: event.id } }
 
       context 'participants' do
         subject { assigns(:participants) }
@@ -138,7 +138,7 @@ describe Event::ApplicationMarketController do
     end
 
     context 'with mixed prio filter' do
-      before { get :index, group_id: group.id, event_id: event.id, prio: %w(1 3) }
+      before { get :index, params: { group_id: group.id, event_id: event.id, prio: %w(1 3) } }
 
       subject { assigns(:applications) }
 
@@ -153,7 +153,7 @@ describe Event::ApplicationMarketController do
     end
 
     context 'with prio and waiting list filter' do
-      before { get :index, group_id: group.id, event_id: event.id, prio: %w(2), waiting_list: true }
+      before { get :index, params: { group_id: group.id, event_id: event.id, prio: %w(2), waiting_list: true } }
 
       subject { assigns(:applications) }
 
@@ -168,7 +168,7 @@ describe Event::ApplicationMarketController do
     end
 
     context 'with waiting list filter' do
-      before { get :index, group_id: group.id, event_id: event.id, waiting_list: true }
+      before { get :index, params: { group_id: group.id, event_id: event.id, waiting_list: true } }
 
       subject { assigns(:applications) }
 
@@ -197,7 +197,7 @@ describe Event::ApplicationMarketController do
 
       it 'is not possible' do
         expect do
-          get :index, group_id: group.id, event_id: event.id
+          get :index, params: { group_id: group.id, event_id: event.id }
         end.to raise_error(ActionController::RoutingError)
       end
     end
@@ -207,7 +207,7 @@ describe Event::ApplicationMarketController do
   describe 'PUT participant' do
 
     it 'creates role' do
-      put :add_participant, group_id: group.id, event_id: event.id, id: appl_prio_1.id, format: :js
+      put :add_participant, params: { group_id: group.id, event_id: event.id, id: appl_prio_1.id }, format: :js
 
       expect(appl_prio_1.reload.roles.collect(&:type)).to eq([event.participant_types.first.sti_name])
       expect(appl_prio_1).to be_active
@@ -217,7 +217,7 @@ describe Event::ApplicationMarketController do
       other = Fabricate(:course, groups: [groups(:top_layer)])
       create_participant_role(other)
 
-      put :add_participant, group_id: group.id, event_id: other.id, id: appl_prio_1.id, format: :js
+      put :add_participant, params: { group_id: group.id, event_id: other.id, id: appl_prio_1.id }, format: :js
 
       is_expected.to render_template('participation_exists_error')
     end
@@ -235,7 +235,7 @@ describe Event::ApplicationMarketController do
   end
 
   describe 'DELETE participant' do
-    before { delete :remove_participant, group_id: group.id, event_id: event.id, id: appl_participant.id, format: :js }
+    before { delete :remove_participant, params: { group_id: group.id, event_id: event.id, id: appl_participant.id }, format: :js }
 
     it 'deactivates participation' do
       expect(appl_participant.reload).not_to be_active
@@ -245,11 +245,13 @@ describe Event::ApplicationMarketController do
   describe 'PUT waiting_list' do
     before do
       put :put_on_waiting_list,
-          group_id: group.id,
-          event_id: event.id,
-          id: appl_prio_1.id,
-          format: :js,
-          event_application: { waiting_list_comment: 'foo bar' }
+          params: {
+            group_id: group.id,
+            event_id: event.id,
+            id: appl_prio_1.id,
+            event_application: { waiting_list_comment: 'foo bar' }
+          },
+          format: :js
     end
 
     it 'sets waiting list flag' do
@@ -259,7 +261,7 @@ describe Event::ApplicationMarketController do
   end
 
   describe 'DELETE waiting_list' do
-    before { delete :remove_from_waiting_list, group_id: group.id, event_id: event.id, id: appl_waiting.id, format: :js }
+    before { delete :remove_from_waiting_list, params: { group_id: group.id, event_id: event.id, id: appl_waiting.id }, format: :js }
 
     it 'sets waiting list flag' do
       expect(appl_waiting.reload.application).not_to be_waiting_list

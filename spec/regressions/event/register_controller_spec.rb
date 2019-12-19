@@ -27,7 +27,7 @@ describe Event::RegisterController, type: :controller do
 
       context 'as external user' do
         it 'displays external login forms' do
-          get :index, group_id: group.id, id: event.id
+          get :index, params: { group_id: group.id, id: event.id }
           is_expected.to render_template('index')
           expect(flash[:notice]).to eq "Du musst dich einloggen um dich für den Anlass 'Top Event' anzumelden."
         end
@@ -39,7 +39,7 @@ describe Event::RegisterController, type: :controller do
     context 'for existing person' do
       it 'generates one time login token' do
         expect do
-          post :check, group_id: group.id, id: event.id, person: { email: people(:top_leader).email }
+          post :check, params: { group_id: group.id, id: event.id, person: { email: people(:top_leader).email } }
         end.to change { Delayed::Job.count }.by(1)
         is_expected.to render_template('index')
         expect(flash[:notice]).to include 'Wir haben dich in unserer Datenbank gefunden.'
@@ -49,7 +49,7 @@ describe Event::RegisterController, type: :controller do
 
     context 'for non-existing person' do
       it 'displays person form' do
-        post :check, group_id: group.id, id: event.id, person: { email: 'not-existing@example.com' }
+        post :check, params: { group_id: group.id, id: event.id, person: { email: 'not-existing@example.com' } }
         is_expected.to render_template('register')
         expect(flash[:notice]).to eq 'Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest.'
       end

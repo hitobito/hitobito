@@ -17,7 +17,7 @@ describe QualificationsController do
 
   context 'GET new' do
     it 'builds entry for person' do
-      get :new, params
+      get :new, params: params
       qualification = assigns(:qualification)
       expect(qualification.person).to eq person
     end
@@ -28,7 +28,7 @@ describe QualificationsController do
     let(:kind) { qualification_kinds(:gl) }
     it 'redirects to show for person' do
       expect do
-        post :create, params.merge(qualification: { qualification_kind_id: kind.id, start_at: Time.zone.now })
+        post :create, params: params.merge(qualification: { qualification_kind_id: kind.id, start_at: Time.zone.now })
         is_expected.to redirect_to group_person_path(group, person)
       end.to change { Qualification.count }.by (1)
     end
@@ -36,7 +36,7 @@ describe QualificationsController do
     it 'fails without permission' do
       sign_in(people(:bottom_member))
       expect do
-        post :create, params.merge(qualification: { qualification_kind_id: kind.id, start_at: Time.zone.now })
+        post :create, params: params.merge(qualification: { qualification_kind_id: kind.id, start_at: Time.zone.now })
       end.to raise_error(CanCan::AccessDenied)
     end
   end
@@ -46,14 +46,14 @@ describe QualificationsController do
     before { @qualification = Fabricate(:qualification, person: person) }
     it 'redirects to show for person' do
       expect do
-        post :destroy, params.merge(id: id)
+        post :destroy, params: params.merge(id: id)
         is_expected.to redirect_to group_person_path(group, person)
       end.to change { Qualification.count }.by (-1)
     end
 
     it 'fails without permission' do
       sign_in(people(:bottom_member))
-      expect { post :destroy, params.merge(id: id) }.to raise_error(CanCan::AccessDenied)
+      expect { post :destroy, params: params.merge(id: id) }.to raise_error(CanCan::AccessDenied)
     end
   end
 

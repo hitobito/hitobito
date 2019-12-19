@@ -43,4 +43,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  #
+  locales_path = Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
+  config.i18n.load_path += locales_path
 end

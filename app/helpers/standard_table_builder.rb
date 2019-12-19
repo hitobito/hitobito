@@ -133,7 +133,7 @@ class StandardTableBuilder
     # Create a header with sort links and a mark for the current sort direction.
     def sort_header(attr, label = nil)
       label ||= attr_header(attr)
-      template.link_to(label, sort_params(attr).permit!) + current_mark(attr)
+      template.link_to(label, sort_params(attr)) + current_mark(attr)
     end
 
     # Same as :attrs, except that it renders a sort link in the header
@@ -153,7 +153,8 @@ class StandardTableBuilder
 
     # Request params for the sort link.
     def sort_params(attr)
-      params.merge(sort: attr, sort_dir: sort_dir(attr), page: 1)
+      result = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params
+      result.merge(sort: attr, sort_dir: sort_dir(attr), only_path: true)
     end
 
     # The sort mark, if any, for the given attribute.

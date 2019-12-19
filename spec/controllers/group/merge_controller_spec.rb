@@ -16,7 +16,7 @@ describe Group::MergeController do
 
       sign_in(people(:top_leader))
 
-      get :select, id: group.id
+      get :select, params: { id: group.id }
 
       expect(flash[:alert]).to match(/Es sind keine gleichen Gruppen zum Fusionieren vorhanden/)
       is_expected.to redirect_to(group_path(group))
@@ -31,12 +31,12 @@ describe Group::MergeController do
 
       sign_in(people(:top_leader))
 
-      post :perform, id: group.id, merger: { new_group_name: 'foo' }
+      post :perform, params: { id: group.id, merger: { new_group_name: 'foo' } }
 
       expect(flash[:alert]).to match(/Bitte wähle eine Gruppe mit der fusioniert werden soll/)
       is_expected.to redirect_to(merge_group_path(group))
 
-      post :perform, id: group.id, merger: { merge_group_id: '33' }
+      post :perform, params: { id: group.id, merger: { merge_group_id: '33' } }
 
       expect(flash[:alert]).to match(/Name für neue Gruppe muss definiert werden/)
       is_expected.to redirect_to(merge_group_path(group))
@@ -52,7 +52,7 @@ describe Group::MergeController do
 
       sign_in(user)
 
-      post :perform, id: group1.id, merger: { new_group_name: 'foo', merge_group_id: group2.id }
+      post :perform, params: { id: group1.id, merger: { new_group_name: 'foo', merge_group_id: group2.id } }
 
       expect(flash[:alert]).to match(/Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren/)
       is_expected.to redirect_to(merge_group_path(group1))

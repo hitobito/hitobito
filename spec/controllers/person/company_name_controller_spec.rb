@@ -18,7 +18,7 @@ describe Person::CompanyNameController do
       Fabricate(:person, company_name: 'Puzzle ITC')
       Fabricate(:person, company_name: 'PuzzleWorks Ltd')
       Fabricate(:person, company_name: 'Swisscom')
-      get :index, q: 'puz'
+      get :index, params: { q: 'puz' }
 
       expect(response.body).to match(/Puzzle ITC/)
       expect(response.body).to match(/PuzzleWorks Ltd/)

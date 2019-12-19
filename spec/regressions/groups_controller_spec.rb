@@ -33,14 +33,14 @@ describe GroupsController, type: :controller do
     describe '#show' do
 
       it 'has a set of links'  do
-        get :show, id: groups(:bottom_layer_one).id
+        get :show, params: { id: groups(:bottom_layer_one).id }
         expect(response.body).to match(/Bearbeiten/)
         expect(response.body).not_to match(/Löschen/)
         expect(response.body).to match(/Gruppe erstellen/)
       end
 
       it 'has no remove link for current layer group' do
-        get :show, id: groups(:top_layer).id
+        get :show, params: { id: groups(:top_layer).id }
         expect(response.body).not_to match(/Löschen/)
       end
     end
@@ -56,21 +56,21 @@ describe GroupsController, type: :controller do
                    'layouts/_flash',
                    'layouts/application']
 
-      get :new, group: { parent_id: group.id, type: 'Group::TopGroup' }
+      get :new, params: { group: { parent_id: group.id, type: 'Group::TopGroup' } }
       templates.each { |template| is_expected.to render_template(template) }
     end
   end
 
   context 'created/updated info' do
     it 'user can see created or updated info' do
-      get :show, id: groups(:bottom_layer_one).id
+      get :show, params: { id: groups(:bottom_layer_one).id }
         expect(dom).to have_selector('dt', text: 'Erstellt')
         expect(dom).to have_selector('dt', text: 'Geändert')
     end
 
     it 'user cannot see created or updated info' do
       sign_in(people(:bottom_member))
-      get :show, id: groups(:top_group).id
+      get :show, params: { id: groups(:top_group).id }
         expect(dom).not_to have_selector('dt', text: 'Erstellt')
         expect(dom).not_to have_selector('dt', text: 'Geändert')
     end
@@ -80,7 +80,7 @@ describe GroupsController, type: :controller do
     before { groups(:bottom_group_one_one_one).destroy }
 
     it 'renders delete subgroups with link' do
-      get :deleted_subgroups, id: groups(:bottom_group_one_one).id
+      get :deleted_subgroups, params: { id: groups(:bottom_group_one_one).id }
       expect(dom).to have_link 'Group 111'
     end
   end

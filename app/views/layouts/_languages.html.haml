@@ -4,6 +4,6 @@
   .lang{'data-no-turbolink' => true}
     - languages.each do |lang, label|
       = link_to lang.upcase,
-                url_for(params.merge(locale: lang)),
+                url_for(params.to_unsafe_h.merge(locale: lang, only_path: true)),
                 title: label,
                 class: (lang == I18n.locale ? 'active' : nil)

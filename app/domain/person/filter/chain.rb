@@ -78,6 +78,7 @@ class Person::Filter::Chain
   end
 
   def parse(params)
+    params = params.to_unsafe_h if params.is_a?(ActionController::Parameters)
     (params || {}).map { |attr, args| build_filter(attr, args) }.compact
   end
 

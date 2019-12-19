@@ -21,7 +21,7 @@ describe AsyncSynchronizationsController do
     it 'deletes cookie and returns Status 200 if done' do
       allow(mailing_list).to receive(:mailchimp_syncing).and_return(false)
 
-      get :show, group: group, id: mailing_list
+      get :show, params: { group: group, id: mailing_list }
       json = JSON.parse(response.body)
 
       expect(json['status']).to match(200)
@@ -34,7 +34,7 @@ describe AsyncSynchronizationsController do
       allow_any_instance_of(Delayed::Job)
         .to receive(:last_error).and_return(nil)
 
-      get :show, group: group, id: mailing_list
+      get :show, params: { group: group, id: mailing_list }
       json = JSON.parse(response.body)
 
       expect(json['status']).to match(404)
@@ -47,7 +47,7 @@ describe AsyncSynchronizationsController do
       allow_any_instance_of(Delayed::Job)
         .to receive(:last_error).and_return('error_message')
 
-      get :show, group: group, id: mailing_list
+      get :show, params: { group: group, id: mailing_list }
       json = JSON.parse(response.body)
 
       expect(json['status']).to match(422)

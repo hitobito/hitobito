@@ -44,7 +44,7 @@ describe Event::QualificationsController do
 
     context 'entries' do
       before do
-        get :index, group_id: group.id, event_id: event.id
+        get :index, params: { group_id: group.id, event_id: event.id }
       end
 
       it { expect(assigns(:participants).size).to eq(2) }
@@ -56,7 +56,7 @@ describe Event::QualificationsController do
 
       it 'is not possible' do
         expect do
-          get :index, group_id: group.id, event_id: event.id
+          get :index, params: { group_id: group.id, event_id: event.id }
         end.to raise_error(ActionController::RoutingError)
       end
     end
@@ -78,7 +78,7 @@ describe Event::QualificationsController do
 
           it 'issues qualification' do
             expect do
-              put :update, group_id: group.id, event_id: event.id, participation_ids: [participant_1.id.to_s]
+              put :update, params: { group_id: group.id, event_id: event.id, participation_ids: [participant_1.id.to_s] }
             end.to change { Qualification.count }.by(1)
             expect(subject.size).to eq(1)
           end
@@ -89,7 +89,7 @@ describe Event::QualificationsController do
 
           it 'keeps existing qualification' do
             expect do
-              put :update, group_id: group.id, event_id: event.id, participation_ids: [participant_1.id]
+              put :update, params: { group_id: group.id, event_id: event.id, participation_ids: [participant_1.id] }
             end.not_to change { Qualification.count }
             expect(subject.size).to eq(1)
           end
@@ -98,7 +98,7 @@ describe Event::QualificationsController do
       end
 
       context 'without existing qualifications for participant' do
-        before { put :update, group_id: group.id, event_id: event.id, participation_ids: [participant_1.id] }
+        before { put :update, params: { group_id: group.id, event_id: event.id, participation_ids: [participant_1.id] } }
 
         it 'has 1 item' do
           expect(subject.size).to eq(1)
@@ -106,7 +106,7 @@ describe Event::QualificationsController do
       end
 
       context 'without existing qualifications for leader' do
-        before { put :update, group_id: group.id, event_id: event.id, participation_ids: [leader_1.id] }
+        before { put :update, params: { group_id: group.id, event_id: event.id, participation_ids: [leader_1.id] } }
 
         it 'should obtain a qualification' do
           obtained = obtained_qualifications(leader_1)
@@ -120,7 +120,7 @@ describe Event::QualificationsController do
 
       context 'without existing qualifications' do
         before do
-          put :update, group_id: group.id, event_id: event.id
+          put :update, params: { group_id: group.id, event_id: event.id }
         end
 
         it 'has no items' do
@@ -133,7 +133,7 @@ describe Event::QualificationsController do
           qualification_kind_id = event.kind.qualification_kinds('qualification', 'participant').first.id
           participant_1.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
                                                       start_at: event.qualification_date)
-          put :update, group_id: group.id, event_id: event.id, participation_ids: []
+          put :update, params: { group_id: group.id, event_id: event.id, participation_ids: [] }
         end
 
         it 'has no items' do

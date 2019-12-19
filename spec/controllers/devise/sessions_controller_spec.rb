@@ -28,13 +28,13 @@ describe Devise::SessionsController do
 
     context '.html' do
       it 'sets flash for invalid login data' do
-        post :create , person: { email: person.email, password: 'foobar' }
+        post :create , params: { person: { email: person.email, password: 'foobar' } }
         expect(flash[:alert]).to eq 'Ungültige Anmeldedaten.'
         expect(controller.send(:current_person)).not_to be_present
       end
 
       it 'logs in person even when they have no login permission' do
-        post :create, person: { email: person.email, password: 'password' }
+        post :create, params: { person: { email: person.email, password: 'password' } }
         expect(flash[:alert]).not_to be_present
         expect(controller.send(:current_person)).to be_present
         expect(controller.send(:current_person).authentication_token).to be_blank
@@ -46,20 +46,20 @@ describe Devise::SessionsController do
       render_views
 
       it 'responds with unauthorized for wrong password' do
-        post :create, person: { email: person.email, password: 'foobar' }, format: :json
+        post :create, params: { person: { email: person.email, password: 'foobar' } }, format: :json
         expect(response.status).to be(401)
         expect(person.reload.authentication_token).to be_blank
       end
 
       it 'responds with user and new token' do
-        post :create, person: { email: person.email, password: 'password' }, format: :json
+        post :create, params: { person: { email: person.email, password: 'password' } }, format: :json
         expect(response.body).to match(/^\{.*"authentication_token":".+"/)
         expect(assigns(:person).authentication_token).to be_present
       end
 
       it 'responds with user and existing token' do
         person.generate_authentication_token!
-        post :create, person: { email: person.email, password: 'password' }, format: :json
+        post :create, params: { person: { email: person.email, password: 'password' } }, format: :json
         expect(response.body).to match(/^\{.*"authentication_token":"#{person.authentication_token}"/)
         expect(assigns(:person).authentication_token).to eq(person.authentication_token)
       end

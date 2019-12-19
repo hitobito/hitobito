@@ -16,13 +16,13 @@ describe Person::InvoicesController do
   it 'may not index person invoices if we have no finance permission in layer' do
     sign_in(bottom_member)
     expect do
-      get :index, group_id: groups(:top_group).id, id: top_leader.id
+      get :index, params: { group_id: groups(:top_group).id, id: top_leader.id }
     end.to raise_error(CanCan::AccessDenied)
   end
 
   it 'may index my own invoices' do
     sign_in(top_leader)
-    get :index, group_id: groups(:top_group).id, id: top_leader.id
+    get :index, params: { group_id: groups(:top_group).id, id: top_leader.id }
     expect(assigns(:invoices)).to have(2).items
   end
 

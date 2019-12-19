@@ -18,7 +18,7 @@ describe Oauth::AccessTokensController do
     application = Oauth::Application.create!(name: 'MyApp', redirect_uri: redirect_uri)
     token = application.access_tokens.create!(resource_owner_id: top_leader.id)
     expect do
-      delete :destroy, id: token.id
+      delete :destroy, params: { id: token.id }
     end.to change { application.access_tokens.count }.by(-1)
     expect(response).to redirect_to oauth_application_path(application)
   end

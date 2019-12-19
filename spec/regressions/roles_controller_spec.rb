@@ -96,11 +96,11 @@ describe RolesController, type: :controller do
     let(:person) { Fabricate(:person) }
 
     it 'new role for existing person returns new role' do
-      xhr :post, :create,
-          group_id: group.id,
-          role: { group_id: group.id,
-                  person_id: person.id,
-                  type: Group::BottomLayer::Member.sti_name }
+      post :create, xhr: true, params: {
+        group_id: group.id,
+        role: { group_id: group.id,
+                person_id: person.id,
+                type: Group::BottomLayer::Member.sti_name } }
 
       expect(response).to have_http_status(:ok)
       is_expected.to render_template('create')
@@ -108,9 +108,10 @@ describe RolesController, type: :controller do
     end
 
     it 'creation of role without type returns error' do
-      xhr :post, :create,
-          group_id: group.id,
-          role: { group_id: group.id, person_id: person.id }
+      post :create, xhr: true, params: {
+        group_id: group.id,
+        role: { group_id: group.id, person_id: person.id }
+      }
 
       expect(response).to have_http_status(:ok)
       is_expected.to render_template('create')

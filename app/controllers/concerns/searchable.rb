@@ -18,18 +18,15 @@ module Searchable
 
     helper_method :search_support?
 
-    prepend Search
-  end
-
-
-  module Search
-    # Enhance the list entries with an optional search criteria
-    def list_entries
-      super.where(search_conditions)
-    end
+    alias_method_chain :list_entries, :search
   end
 
   private
+
+  # Enhance the list entries with an optional search criteria
+  def list_entries_with_search
+    list_entries_without_search.where(search_conditions)
+  end
 
   # Concat the word clauses with AND.
   def search_conditions

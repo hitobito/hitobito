@@ -22,6 +22,9 @@ class ListController < ApplicationController
   hide_action :model_class, :models_label, :inheritable_root_controller
 
   respond_to :html
+  include DryCrud::RenderCallbacks
+
+  define_render_callbacks :index
 
   ##############  ACTIONS  ############################################
 
@@ -106,7 +109,6 @@ class ListController < ApplicationController
 
   end
 
-  include RenderCallbacks
   include Searchable
   include Sortable
   include Rememberable

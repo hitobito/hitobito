@@ -98,7 +98,7 @@ describe EventsController do
         5.times { Fabricate(:event_date, event: Fabricate(:event, groups: [@g1])) }
 
         allow_any_instance_of(Event::ActiveRecord_Relation)
-          .to receive(:page).with(2).and_return(Event.with_group_id([@g1]).page(2).per(3))
+          .to receive(:page).with('2').and_return(Event.with_group_id([@g1]).page(2).per(3))
 
 
         get :index, group_id: @g1, format: :json, page: 2

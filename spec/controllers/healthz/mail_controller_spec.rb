@@ -32,7 +32,7 @@ describe Healthz::MailController do
 
         expect(Mail).to receive(:all).and_return([mail])
 
-        get :show, { token: token }
+        get :show, params: { token: token }
 
         expect(response.status).to eq(200)
 
@@ -54,7 +54,7 @@ describe Healthz::MailController do
 
         expect(Mail).to receive(:all).and_return([mail])
 
-        get :show, { token: token }
+        get :show, params: { token: token }
 
         expect(response.status).to eq(503)
 
@@ -77,7 +77,7 @@ describe Healthz::MailController do
 
       it 'denies access if wrong auth token given' do
 
-        get :show, { token: 'wrong token' }
+        get :show, params: { token: 'wrong token' }
 
         expect(response.status).to eq(401)
 

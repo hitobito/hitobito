@@ -18,7 +18,7 @@ describe Person::QueryController do
       Fabricate(:person, first_name: 'Pascal')
       Fabricate(:person, last_name: 'Opassum')
       Fabricate(:person, last_name: 'Anything')
-      get :index, q: 'pas'
+      get :index, params: { q: 'pas' }
 
       expect(response.body).to match(/Pascal/)
       expect(response.body).to match(/Opassum/)

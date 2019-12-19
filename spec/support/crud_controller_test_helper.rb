@@ -22,7 +22,7 @@ module CrudControllerTestHelper
 
     sign_in(user)
     if m[:method] == :get && m[:format] == :js
-      xhr(:get, m[:action], params: params)
+      get m[:action], xhr: true, params: params
     else
       send(m[:method], m[:action], params: params)
     end

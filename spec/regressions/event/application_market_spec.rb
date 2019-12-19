@@ -37,7 +37,7 @@ describe Event::ApplicationMarketController, type: :controller do
 
   describe 'GET index' do
 
-    before { get :index, event_id: course.id, group_id: group.id }
+    before { get :index, params: { event_id: course.id, group_id: group.id } }
 
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
@@ -68,7 +68,7 @@ describe Event::ApplicationMarketController, type: :controller do
       before { course.kind.update(minimum_age: 21) }
 
       it 'displays warning badge' do
-        get :index, group_id: group.id, event_id: course.id
+        get :index, params: { group_id: group.id, event_id: course.id }
 
         expect(dom).to have_selector('.badge.badge-warning', text: '!')
         badge = dom.all('.badge.badge-warning', text: '!')[0]

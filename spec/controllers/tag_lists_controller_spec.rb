@@ -28,7 +28,7 @@ describe TagListsController do
         expect(people).to contain_exactly bottom_member
         tag_list_double
       end
-      post :create, group_id: group.id, ids: [leader.id, bottom_member.id].join(','), tags: 'Tagname'
+      post :create, params: { group_id: group.id, ids: [leader.id, bottom_member.id].join(','), tags: 'Tagname' }
     end
 
     it 'filters out people whose tags we cannot manage from destroy request' do
@@ -36,13 +36,13 @@ describe TagListsController do
         expect(people).to contain_exactly bottom_member
         tag_list_double
       end
-      post :destroy, group_id: group.id, ids: [leader.id, bottom_member.id].join(','), tags: 'Tagname'
+      post :destroy, params: { group_id: group.id, ids: [leader.id, bottom_member.id].join(','), tags: 'Tagname' }
     end
   end
 
   context 'GET modal for bulk creating tags' do
     it 'shows modal' do
-      xhr :get, :new, group_id: group.id, ids: [leader.id, bottom_member.id].join(','), format: :js
+      get :new, xhr: true, params: { group_id: group.id, ids: [leader.id, bottom_member.id].join(',') }, format: :js
       expect(response).to have_http_status(:ok)
       expect(response).to render_template('tag_lists/new')
       expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member
@@ -54,26 +54,26 @@ describe TagListsController do
 
     it 'creates a tag and displays flash message' do
       expect(tag_list_double).to receive(:add).and_return(1)
-      post :create, group_id: group.id, ids: leader.id, tags: 'new tag'
+      post :create, params: { group_id: group.id, ids: leader.id, tags: 'new tag' }
       expect(flash[:notice]).to include 'Ein Tag wurde erstellt'
     end
 
     it 'creates zero tags and displays flash message' do
       expect(tag_list_double).to receive(:add).and_return(0)
-      post :create, group_id: group.id, ids: leader.id, tags: 'new tag'
+      post :create, params: { group_id: group.id, ids: leader.id, tags: 'new tag' }
       expect(flash[:notice]).to include 'Es wurden keine Tags erstellt'
     end
 
     it 'creates many tags and displays flash message' do
       expect(tag_list_double).to receive(:add).and_return(17)
-      post :create, group_id: group.id, ids: leader.id, tags: 'new tag'
+      post :create, params: { group_id: group.id, ids: leader.id, tags: 'new tag' }
       expect(flash[:notice]).to include '17 Tags wurden erstellt'
     end
   end
 
   context 'GET modal for bulk deleting tags' do
     it 'shows modal' do
-      xhr :get, :deletable, group_id: group.id, ids: [leader.id, bottom_member.id].join(','), format: :js
+      get :deletable, xhr: true, params: { group_id: group.id, ids: [leader.id, bottom_member.id].join(',') }, format: :js
       expect(response).to have_http_status(:ok)
       expect(response).to render_template('tag_lists/deletable')
       expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member
@@ -91,7 +91,7 @@ describe TagListsController do
       root.save!
       bottom_member.tag_list.add(tag_once, 'another')
       bottom_member.save!
-      xhr :get, :deletable, group_id: group.id, ids: [leader.id, root.id].join(','),
+      get :deletable, xhr: true, params: { group_id: group.id, ids: [leader.id, root.id].join(',') },
                             format: :js
       expect(response).to have_http_status(:ok)
       expect(response).to render_template('tag_lists/deletable')
@@ -107,19 +107,19 @@ describe TagListsController do
 
     it 'removes a tag and displays flash message' do
       expect(tag_list_double).to receive(:remove).and_return(1)
-      post :destroy, group_id: group.id, ids: leader.id, tags: 'existing'
+      post :destroy, params: { group_id: group.id, ids: leader.id, tags: 'existing' }
       expect(flash[:notice]).to include 'Ein Tag wurde entfernt'
     end
 
     it 'removes zero tags and displays flash message' do
       expect(tag_list_double).to receive(:remove).and_return(0)
-      post :destroy, group_id: group.id, ids: leader.id, tags: 'existing'
+      post :destroy, params: { group_id: group.id, ids: leader.id, tags: 'existing' }
       expect(flash[:notice]).to include 'Es wurden keine Tags entfernt'
     end
 
     it 'removes many tags and displays flash message' do
       expect(tag_list_double).to receive(:remove).and_return(17)
-      post :destroy, group_id: group.id, ids: leader.id, tags: 'existing'
+      post :destroy, params: { group_id: group.id, ids: leader.id, tags: 'existing' }
       expect(flash[:notice]).to include '17 Tags wurden entfernt'
     end
   end

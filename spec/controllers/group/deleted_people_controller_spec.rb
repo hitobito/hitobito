@@ -18,7 +18,7 @@ describe Group::DeletedPeopleController do
     before { sign_in(person1) }
 
     it 'renders index view if permitted' do
-      get :index, group_id: group.id
+      get :index, params: { group_id: group.id }
       is_expected.to render_template('group/deleted_people/index')
     end
   end
@@ -28,7 +28,7 @@ describe Group::DeletedPeopleController do
     
     it 'fails if not permitted' do
       expect do
-        get :index, group_id: group.id
+        get :index, params: { group_id: group.id }
       end.to raise_error(CanCan::AccessDenied)
     end
   end

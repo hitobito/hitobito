@@ -21,7 +21,7 @@ module Sortable
 
     helper_method :sortable?
 
-    prepend Sort
+    alias_method_chain :list_entries, :sort
   end
 
   module ClassMethods
@@ -40,22 +40,20 @@ module Sortable
     end
   end
 
-  module Sort
-    # Enhance the list entries with an optional sort order.
-    def list_entries
-      if sorting?
-        super.reorder(sort_expression)
-      else
-        super
-      end
-    end
+  private
 
-    def sorting?
-      params[:sort].present? && sortable?(params[:sort])
+  # Enhance the list entries with an optional sort order.
+  def list_entries_with_sort
+    if sorting?
+      list_entries_without_sort.reorder(sort_expression)
+    else
+      list_entries_without_sort
     end
   end
 
-  private
+  def sorting?
+    params[:sort].present? && sortable?(params[:sort])
+  end
 
   # Return sort columns from defined mappings or as null_safe_sort from parameter.
   def sort_columns

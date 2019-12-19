@@ -49,8 +49,8 @@ class Event::KindsController < SimpleCrudController
 
   def permitted_params
     attrs = super
-    kinds_attrs = attrs.delete(:qualification_kinds) || {}
-    precondition_attrs = attrs.delete(:precondition_qualification_kinds) || {}
+    kinds_attrs = attrs.delete(:qualification_kinds).try(:to_unsafe_h) || {}
+    precondition_attrs = attrs.delete(:precondition_qualification_kinds).try(:to_unsafe_h) || {}
 
     existing_kinds = entry.event_kind_qualification_kinds.to_a
 

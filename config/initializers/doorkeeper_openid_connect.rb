@@ -63,6 +63,6 @@ Doorkeeper::OpenidConnect.configure do
 end
 
 Doorkeeper::OpenidConnect::UserinfoController.send(:skip_authorization_check)
-# Doorkeeper::OpenidConnect::UserinfoController.send(:skip_before_action, :authorization_check!)
+Doorkeeper::OpenidConnect::UserinfoController.send(:skip_before_action, :authorization_check!)
 Doorkeeper::OpenidConnect::DiscoveryController.send(:skip_authorization_check)
 Doorkeeper::OpenidConnect::DiscoveryController.send(:skip_before_action, :authorization_check!)

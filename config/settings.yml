@@ -174,4 +174,5 @@ help_text_blacklist:
 
 oidc:
   issuer: <%= ENV['APP_HOST'].presence || 'http://localhost:3000' %>
-  signing_key: <%= ENV['JWT_SIGNING_KEY'].presence || File.read(Rails.root.join('config/test.key.pem')) %>
+  signing_key: "<%= ENV['JWT_SIGNING_KEY'].presence || File.read(Rails.root.join('config/test.key.pem')) || '' %>"
+

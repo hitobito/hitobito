@@ -71,6 +71,7 @@ GEM
       activerecord (>= 5.0, < 6.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
+    aes_key_wrap (1.0.1)
     afm (0.2.2)
     airbrake (9.5.5)
       airbrake-ruby (~> 4.8)
@@ -93,6 +94,7 @@ GEM
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
+    bindata (2.4.4)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
     bleib (0.0.10)
@@ -203,6 +205,9 @@ GEM
     doorkeeper (5.2.3)
       railties (>= 5)
     doorkeeper-i18n (5.0.2)
+    doorkeeper-openid_connect (1.7.1)
+      doorkeeper (>= 5.2, < 5.4)
+      json-jwt (>= 1.11.0)
     draper (3.1.0)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -295,6 +300,10 @@ GEM
       railties (>= 3.2.16)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
+    json-jwt (1.11.0)
+      activesupport (>= 4.2)
+      aes_key_wrap
+      bindata
     kaminari (0.17.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -635,6 +644,7 @@ DEPENDENCIES
   devise
   doorkeeper
   doorkeeper-i18n
+  doorkeeper-openid_connect
   draper
   draper-cancancan
   fabrication

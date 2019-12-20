@@ -440,6 +440,12 @@ ActiveRecord::Schema.define(version: 2020_02_18_140057) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "oauth_openid_requests", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "access_grant_id", null: false
+    t.string "nonce", null: false
+    t.index ["access_grant_id"], name: "fk_rails_77114b3b09"
+  end
+
   create_table "payment_reminder_configs", force: :cascade do |t|
     t.integer "invoice_config_id", null: false
     t.string "title", null: false
@@ -690,4 +696,5 @@ ActiveRecord::Schema.define(version: 2020_02_18_140057) do
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id"
 end

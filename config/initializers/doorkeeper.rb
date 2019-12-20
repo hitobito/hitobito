@@ -89,7 +89,7 @@ Doorkeeper.configure do
   # (disabled by default)
   #
   default_scopes :email
-  optional_scopes :name, :with_roles
+  optional_scopes :name, :with_roles, :openid
 
   enforce_configured_scopes
 
@@ -191,6 +191,7 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
   # grant_flows %w[authorization_code client_credentials]
+  grant_flows %w(authorization_code implicit_oidc)
 
   # Hook into the strategies' request & response life-cycle in case your
   # application needs advanced customization or logging:

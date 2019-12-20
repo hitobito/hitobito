@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191212094521) do
+ActiveRecord::Schema.define(version: 20191219154545) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -463,6 +463,13 @@ ActiveRecord::Schema.define(version: 20191212094521) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
+  create_table "oauth_openid_requests", force: :cascade do |t|
+    t.integer "access_grant_id", limit: 4,   null: false
+    t.string  "nonce",           limit: 255, null: false
+  end
+
+  add_index "oauth_openid_requests", ["access_grant_id"], name: "fk_rails_77114b3b09", using: :btree
+
   create_table "payment_reminder_configs", force: :cascade do |t|
     t.integer "invoice_config_id", limit: 4,   null: false
     t.string  "title",             limit: 255, null: false
@@ -733,4 +740,5 @@ ActiveRecord::Schema.define(version: 20191212094521) do
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id"
 end

@@ -171,3 +171,7 @@ help_text_blacklist:
     - household_people_ids
     - relations_to_tails_attributes
     - phone_numbers_attributes
+
+oidc:
+  issuer: <%= ENV['APP_HOST'].presence || 'http://localhost:3000' %>
+  signing_key: <%= ENV['JWT_SIGNING_KEY'].presence || File.read(Rails.root.join('config/test.key.pem')) %>

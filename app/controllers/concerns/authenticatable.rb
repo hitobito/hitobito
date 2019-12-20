@@ -50,6 +50,12 @@ module Authenticatable
     end
   end
 
+  def doorkeeper_sign_in
+    return unless doorkeeper_token.present?
+    user = Person.find(doorkeeper_token.resource_owner_id)
+    sign_in user, store: false
+  end
+
   def authenticate_person!(*args)
     normalize_user_params
 

@@ -176,3 +176,8 @@ worker_heartbeats:
   check_job:
     # Interval in seconds between detection and unlocking of hanging jobs
     interval: 60
+
+oidc:
+  issuer: <%= ENV['APP_HOST'].presence || 'http://localhost:3000' %>
+  signing_key: "<%= ENV['JWT_SIGNING_KEY'].presence %>"
+

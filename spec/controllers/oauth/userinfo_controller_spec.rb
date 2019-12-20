@@ -1,0 +1,25 @@
+# encoding: utf-8
+
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
+require 'spec_helper'
+
+describe Doorkeeper::OpenidConnect::UserinfoController do
+  let(:user) { people(:top_leader) }
+  let(:app) { Oauth::Application.create!(name: 'MyApp', redirect_uri: redirect_uri) }
+  let(:redirect_uri) { 'urn:ietf:wg:oauth:2.0:oob' }
+
+  describe 'GET#show' do
+    let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: 'openid', expires_in: 2.hours) }
+
+    it 'shows the userinfo' do
+      get :show, { access_token: token.token }
+      expect(response.status).to eq 200
+      expect(JSON.parse(response.body)).to eq({ 'sub' => user.id.to_s })
+    end
+  end
+end

@@ -9,7 +9,7 @@
 #
 # Example Usage:
 #   StandardTableBuilder.table(entries, template) do |t|
-#     t.col('My Header', :class => 'css') {|e| link_to 'Show', e }
+#     t.col('My Header', :class => 'css') { |e| link_to 'Show', e }
 #     t.attrs :name, :city
 #   end
 class StandardTableBuilder
@@ -159,7 +159,7 @@ class StandardTableBuilder
     # The sort mark, if any, for the given attribute.
     def current_mark(attr)
       if current_sort?(attr)
-        (sort_dir(attr) == 'asc' ? ' &uarr;' : ' &darr;').html_safe
+        (sort_dir(attr) == 'asc' ? ' &uarr;' : ' &darr;').html_safe # rubocop:disable Rails/OutputSafety
       else
         ''
       end

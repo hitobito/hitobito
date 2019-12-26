@@ -15,7 +15,7 @@
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
   include NestedForm::BuilderMixin
 
-  REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
+  REQUIRED_MARK = ' <span class="required">*</span>'.html_safe # rubocop:disable Rails/OutputSafety
 
   attr_reader :template
 
@@ -33,7 +33,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a corresponding input field for the given attribute.
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
-  def input_field(attr, html_options = {}) # rubocop:disable Metrics/PerceivedComplexity
+  def input_field(attr, html_options = {}) # rubocop:disable Metrics/PerceivedComplexity,Metrics/MethodLength,Metrics/CyclomaticComplexity
     type = column_type(@object, attr)
     custom_field_method = :"#{type}_field"
     if type == :text

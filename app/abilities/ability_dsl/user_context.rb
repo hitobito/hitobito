@@ -10,7 +10,7 @@ module AbilityDsl
 
     GROUP_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
                          :group_and_below_full, :group_and_below_read, :group_full, :group_read,
-                         :finance ]
+                         :finance]
 
     LAYER_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
                          :finance]

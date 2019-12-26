@@ -35,7 +35,7 @@ module FormHelper
   # given attribute array, using the StandardFormBuilder. An options hash
   # may be given as the last argument.
   # If a block is given, a custom form may be rendered and attrs is ignored.
-  def crud_form(object, *attrs, &block)
+  def crud_form(object, *attrs, &block) # rubocop:disable Metrics/MethodLength
     options = attrs.extract_options!
 
     buttons_bottom = options.delete(:buttons_bottom)

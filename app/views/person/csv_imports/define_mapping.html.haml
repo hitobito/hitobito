@@ -45,4 +45,4 @@
                               { include_blank: true, selected: guess(column_name) },
                               { class: 'span4' })
 
-  = save_form_buttons(f, t('.preview'), group_people_path(group))
+  = form_buttons(f, submit_label: t('.preview'), cancel_url: group_people_path(group))

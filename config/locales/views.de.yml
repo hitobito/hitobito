@@ -41,6 +41,7 @@ de:
 
     button:
       save: Speichern
+      add_another: Speichern und weitere erfassen
       cancel: Abbrechen
       close: Schliessen
       search: Suchen

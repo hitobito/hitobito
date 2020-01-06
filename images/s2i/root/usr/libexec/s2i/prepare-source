@@ -11,6 +11,10 @@ cd /tmp/src
 # record the deployed versions from git before nuking the repo
 git submodule status | tee WAGON_VERSIONS
 
+# record versions of submodules
+revision=/tmp/src/REVISIONS.yaml
+git submodule foreach 'echo $path: `git rev-parse HEAD | sed "s/^[+|-| ]//"` >> ../REVISIONS.yaml'
+
 # move core
 rm -r hitobito/.git
 mv hitobito/* .

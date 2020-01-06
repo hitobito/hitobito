@@ -8,13 +8,21 @@
 require 'spec_helper'
 
 describe Invoice::Filter do
-  let(:invoice) { invoices(:invoice) }
-  let(:year)    { Date.today.year }
+  include ActiveSupport::Testing::TimeHelpers
 
+  let(:invoice) { invoices(:invoice) }
+  let(:today)   { Time.zone.parse('2019-12-16 10:00:00') }
+
+  around do |example|
+    travel_to(today) do
+      Invoice.update_all(created_at: 2.months.ago)
+      example.call
+    end
+  end
 
   it 'filters by year' do
     invoice.update(issued_at: 1.year.ago)
-    filtered = Invoice::Filter.new(year: year).apply(Invoice)
+    filtered = Invoice::Filter.new(year: today.year).apply(Invoice)
     expect(filtered.count).to eq 1
   end
 end

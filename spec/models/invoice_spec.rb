@@ -271,7 +271,11 @@ describe Invoice do
 
     around do |example|
       travel_to(today) do
-        issued.update(issued_at: 1.month.ago, sent_at: 1.week.ago)
+        Invoice.update_all(created_at: 2.months.ago)
+        issued.update(
+          issued_at: 1.month.ago,
+          sent_at: 1.week.ago
+        )
         example.call
       end
     end

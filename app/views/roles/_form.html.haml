@@ -5,7 +5,7 @@
 
 #main.row-fluid
   .span7
-    = entry_form(cancel_url: role_cancel_url, add_another: entry.new_record?,
+    = entry_form(cancel_url: role_cancel_url, add_another: !entry.person.persisted?,
                                               add_another_url: new_group_role_path(entry.group)) do |f|
       = hidden_field_tag('return_url', params[:return_url])
 

@@ -59,9 +59,10 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     afm (0.2.2)
-    airbrake (4.3.4)
-      builder
-      multi_json
+    airbrake (9.5.5)
+      airbrake-ruby (~> 4.8)
+    airbrake-ruby (4.12.0)
+      rbtree3 (~> 0.5)
     annotate (3.0.3)
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 14.0)
@@ -277,7 +278,7 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.13.0)
-    multi_json (1.13.1)
+    multi_json (1.14.1)
     multipart-post (2.0.0)
     mysql2 (0.4.9)
     nested_form (0.3.2)
@@ -380,6 +381,7 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
+    rbtree3 (0.5.0)
     rdoc (4.3.0)
     rdoc-tags (1.3)
       rdoc (~> 4)
@@ -526,7 +528,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-session_store
   acts-as-taggable-on
-  airbrake (< 5.0)
+  airbrake
   annotate
   awesome_nested_set
   awesome_print

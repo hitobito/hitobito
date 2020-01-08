@@ -12,37 +12,44 @@ module Searchable
   extend ActiveSupport::Concern
 
   included do
-    # Define an array of searchable columns in your subclassing controllers.
     class_attribute :search_columns
     self.search_columns = []
 
     helper_method :search_support?
 
-    alias_method_chain :list_entries, :search
+    prepend Prepends
+  end
+
+  # Prepended methods for searching.
+  module Prepends
+
+    private
+
+    # Enhance the list entries with an optional search criteria
+    def list_entries
+      super.where(search_conditions)
+    end
+
+    # Concat the word clauses with AND.
+    def search_conditions
+      if search_support? && params[:q].present?
+        search_condition(*self.class.search_tables_and_fields)
+      end
+    end
+
+    def search_condition(*fields)
+      SearchStrategies::SqlConditionBuilder.new(params[:q], fields).search_conditions
+    end
+
+
+    # Returns true if this controller has searchable columns.
+    def search_support?
+      search_columns.present?
+    end
+
   end
 
   private
-
-  # Enhance the list entries with an optional search criteria
-  def list_entries_with_search
-    list_entries_without_search.where(search_conditions)
-  end
-
-  # Concat the word clauses with AND.
-  def search_conditions
-    if search_support? && params[:q].present?
-      search_condition(*self.class.search_tables_and_fields)
-    end
-  end
-
-  # Returns true if this controller has searchable columns.
-  def search_support?
-    search_columns.present?
-  end
-
-  def search_condition(*fields)
-    SearchStrategies::SqlConditionBuilder.new(params[:q], fields).search_conditions
-  end
 
   # Class methods for Searchable.
   module ClassMethods

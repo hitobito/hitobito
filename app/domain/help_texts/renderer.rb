@@ -38,6 +38,10 @@ class HelpTexts::Renderer
     @entry ||= derive_entry
   end
 
+  def safe_html(text, tags: %w(h1 h2 h3 h4 h5 h6 b i u blockquote ul ol li a))
+    template.sanitize(text, tags: tags)
+  end
+
   private
 
   def render_text(help_text)
@@ -50,10 +54,6 @@ class HelpTexts::Renderer
     content_tag(:span, class: 'help-text-trigger', data: { key: dom_id(help_text) }) do
       icon('info-circle')
     end
-  end
-
-  def safe_html(text, tags: %w(h1 h2 h3 h4 h5 h6 b i u blockquote ul ol li))
-    template.sanitize(text, tags: tags)
   end
 
   def with_help_text(key, kind)

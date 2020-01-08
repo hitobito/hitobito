@@ -13,7 +13,8 @@ module Concerns
       pdf = generate_pdf(people, group)
       send_data pdf, type: :pdf, disposition: 'inline'
     rescue Prawn::Errors::CannotFit
-      redirect_to :back, alert: t('people.pdf.cannot_fit')
+      redirect_back(fallback_location: group_people_path(group, returning: true),
+                    alert: t('people.pdf.cannot_fit'))
     end
 
     def render_emails(people)

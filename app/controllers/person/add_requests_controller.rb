@@ -14,20 +14,22 @@ class Person::AddRequestsController < ApplicationController
   def approve
     approver = Person::AddRequest::Approver.for(entry, current_user)
     if approver.approve
-      redirect_back notice: t('person.add_requests.approve.success_notice',
-                              person: entry.person.full_name)
+      redirect_back fallback_location: person_path(entry.person),
+        notice: t('person.add_requests.approve.success_notice', person: entry.person.full_name)
     else
-      redirect_back alert: t('person.add_requests.approve.failure_notice',
-                             person: entry.person.full_name,
-                             errors: approver.error_message)
+      redirect_back fallback_location: person_path(entry.person),
+        alert: t('person.add_requests.approve.failure_notice',
+                 person: entry.person.full_name,
+                 errors: approver.error_message)
     end
   end
 
   def reject
     Person::AddRequest::Approver.for(entry, current_user).reject
     action = params[:cancel] ? 'cancel' : 'reject'
-    redirect_back notice: t("person.add_requests.#{action}.success_notice",
-                            person: entry.person.full_name)
+    redirect_back fallback_location: person_path(entry.person),
+      notice: t("person.add_requests.#{action}.success_notice",
+                person: entry.person.full_name)
   end
 
   private
@@ -35,13 +37,4 @@ class Person::AddRequestsController < ApplicationController
   def entry
     @entry ||= Person::AddRequest.find(params[:id])
   end
-
-  def redirect_back(options = {})
-    if request.env['HTTP_REFERER'].present?
-      redirect_to :back, options
-    else
-      redirect_to person_path(entry.person), options
-    end
-  end
-
 end

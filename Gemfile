@@ -99,6 +99,7 @@ end
 
 group :development do
   gem 'bullet'
+  gem 'listen'
   gem 'redcarpet'
   gem 'request_profiler'
 end

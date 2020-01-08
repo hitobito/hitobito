@@ -18,7 +18,7 @@ module Concerns
 
     def render_emails(people)
       emails = Person.mailing_emails_for(people)
-      render text: emails.join(',')
+      render plain: emails.join(',')
     end
 
     def render_vcf(people)

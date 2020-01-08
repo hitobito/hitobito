@@ -120,7 +120,7 @@ class InvoicesController < CrudController
     pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)
     send_data pdf, type: :pdf, disposition: 'inline'
   rescue Prawn::Errors::CannotFit
-    redirect_to :back, alert: t('people.pdf.cannot_fit')
+    redirect_back(fallback_location: group_ionvoices_path(group), alert: t('people.pdf.cannot_fit'))
   end
 
   def list_entries

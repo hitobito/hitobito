@@ -8,6 +8,9 @@ Bundler.require(*Rails.groups)
 
 module Hitobito
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 5.1
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -19,8 +22,6 @@ module Hitobito
                                  #{config.root}/app/serializers
                                  #{config.root}/app/utils
                              )
-
-    config.action_controller.action_on_unpermitted_parameters = :log
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
@@ -45,9 +46,6 @@ module Hitobito
     # Route errors over the Rails application.
     config.exceptions_app = self.routes
 
-    # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = 'utf-8'
-
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :user_token]
 
@@ -55,6 +53,9 @@ module Hitobito
     config.active_support.escape_html_entities_in_json = true
 
     config.active_record.time_zone_aware_types = [:datetime, :time]
+
+    # Deviate from default here for now, revisit later
+    config.active_record.belongs_to_required_by_default = false
 
     config.active_job.queue_adapter = :delayed_job
 
@@ -65,15 +66,6 @@ module Hitobito
 
     config.cache_store = :dalli_store, { compress: true,
                                          namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
-
-    # Enable the asset pipeline
-    config.assets.enabled = true
-
-    # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.0'
-
-    config.assets.precompile += %w(print.css ie.css ie7.css wysiwyg.css wysiwyg.js
-                                   *.png *.gif *.jpg favicon.ico)
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true

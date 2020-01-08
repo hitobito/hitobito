@@ -8,6 +8,7 @@
 class Ability
 
   include CanCan::Ability
+  prepend Draper::CanCanCan
 
   cattr_reader :store
   @@store = AbilityDsl::Store.new

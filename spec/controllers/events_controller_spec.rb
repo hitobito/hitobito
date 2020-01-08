@@ -80,7 +80,8 @@ describe EventsController do
       it 'renders json pagination first page' do
         5.times { Fabricate(:event_date, event: Fabricate(:event, groups: [@g1])) }
 
-        allow_any_instance_of(Event::ActiveRecord_Relation)
+        relation = Event.const_get(:ActiveRecord_Relation)
+        allow_any_instance_of(relation)
           .to receive(:page).with(nil).and_return(Event.with_group_id([@g1]).page(1).per(3))
 
         get :index, params: { group_id: @g1 }, format: :json
@@ -97,7 +98,8 @@ describe EventsController do
       it 'renders json pagination second page' do
         5.times { Fabricate(:event_date, event: Fabricate(:event, groups: [@g1])) }
 
-        allow_any_instance_of(Event::ActiveRecord_Relation)
+        relation = Event.const_get(:ActiveRecord_Relation)
+        allow_any_instance_of(relation)
           .to receive(:page).with('2').and_return(Event.with_group_id([@g1]).page(2).per(3))
 
 

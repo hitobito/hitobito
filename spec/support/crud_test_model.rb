@@ -91,13 +91,13 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   def index
     super do |format|
-      format.js { render text: 'index js' }
+      format.js { render plain: 'index js' }
     end
   end
 
   def show
     super do |format|
-      format.html { render text: 'custom html' } if entry.name == 'BBBBB'
+      format.html { render plain: 'custom html' } if entry.name == 'BBBBB'
     end
   end
 

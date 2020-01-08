@@ -12,7 +12,7 @@ class EventFeedsController < ApplicationController
       format.html { authorize!(:show, current_user) }
       format.ics do
         person = Person.find_by(event_feed_token: params[:token]) if params[:token].present?
-        return render nothing: true, status: :not_found unless person
+        return head :not_found unless person
         send_data Export::Ics::Events.new.generate(person.events), type: :ics, disposition: :inline
       end
     end

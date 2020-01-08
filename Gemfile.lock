@@ -1,7 +1,13 @@
 PATH
-  remote: ../hitobito_generic
+  remote: ../hitobito_cevi
   specs:
-    hitobito_generic (0.0.1)
+    hitobito_cevi (0.0.1)
+      hitobito_youth
+
+PATH
+  remote: ../hitobito_youth
+  specs:
+    hitobito_youth (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -90,9 +96,9 @@ GEM
       railties (>= 3.0)
     brakeman (3.5.0)
     builder (3.2.4)
-    bullet (5.5.1)
+    bullet (6.1.0)
       activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.10.0)
+      uniform_notifier (~> 1.11)
     cancancan (3.0.1)
     capybara (2.18.0)
       addressable
@@ -536,7 +542,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.6.0)
     unicode_utils (1.4.0)
-    uniform_notifier (1.10.0)
+    uniform_notifier (1.13.0)
     validates_by_schema (0.3.0)
       activerecord (>= 3.1.0)
     validates_timeliness (3.0.15)
@@ -613,7 +619,8 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_generic!
+  hitobito_cevi!
+  hitobito_youth!
   http_accept_language
   icalendar
   jquery-rails

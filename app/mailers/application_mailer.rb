@@ -31,7 +31,7 @@ class ApplicationMailer < ActionMailer::Base
     headers[:to] = use_mailing_emails(recipients)
     headers[:subject] ||= content.subject_with_values(values)
     mail(headers) do |format|
-      format.html { render text: content.body_with_values(values) }
+      format.html { render plain: content.body_with_values(values) }
     end
   end
 

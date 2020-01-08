@@ -47,7 +47,7 @@ describe Event::RolesController do
         participation = role.participation
         expect(participation.event_id).to eq(course.id)
         expect(participation.person_id).to eq(user.id)
-        expect(participation.answers.size).to eq(2)
+        expect(participation.reload.answers.size).to eq(2)
         expect(course.reload.applicant_count).to eq 0
         expect(course.teamer_count).to eq 1
         expect(course.participant_count).to eq 0

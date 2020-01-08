@@ -104,8 +104,12 @@ module Dropdown
     end
 
     def link(template, label, url, options)
-      url = url.to_h if url.is_a?(ActionController::Parameters)
-      template.link_to(label, url, options)
+      new_url = case url
+      when ActionController::Parameters then url.to_unsafe_h.merge(only_path: true)
+      when Hash then url.merge(only_path: true)
+      else url
+      end
+      template.link_to(label, new_url, options)
     end
 
     def css_class

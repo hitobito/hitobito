@@ -8,6 +8,8 @@
 require 'spec_helper'
 
 describe 'Dropdown::PeopleExport' do
+  include Rails.application.routes.url_helpers
+
 
   include FormatHelper
   include LayoutHelper

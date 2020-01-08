@@ -15,7 +15,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
   let(:version)   { PaperTrail::Version.where(main_id: person.id).order(:created_at, :id).last }
   let(:decorator) { PaperTrail::VersionDecorator.new(version) }
 
-  before { PaperTrail.whodunnit = nil }
+  before { PaperTrail.request.whodunnit = nil }
 
   context '#header' do
     subject { decorator.header }
@@ -27,7 +27,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     context 'with current user' do
       before do
-        PaperTrail.whodunnit = person.id.to_s
+        PaperTrail.request.whodunnit = person.id.to_s
         update_attributes
       end
 
@@ -45,7 +45,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     context 'with current user' do
       before do
-        PaperTrail.whodunnit = person.id.to_s
+        PaperTrail.request.whodunnit = person.id.to_s
         update_attributes
       end
 

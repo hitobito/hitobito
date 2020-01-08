@@ -11,7 +11,7 @@ class Person::ImpersonationController < ApplicationController
 
   def create
     person = Person.find(params[:person_id])
-    return redirect_to :back if person == current_user || origin_user
+    return redirect_back(fallback_location: root_path) if person == current_user || origin_user
     taker = current_user
     session[:origin_user] = taker.id
     sign_in(person)
@@ -26,7 +26,7 @@ class Person::ImpersonationController < ApplicationController
   end
 
   def destroy
-    return redirect_to :back unless origin_user
+    return redirect_back(fallback_location: root_path) unless origin_user
     previous_user = current_user
     sign_in(origin_user)
     PaperTrail::Version.create(main: previous_user,

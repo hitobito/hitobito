@@ -23,7 +23,7 @@ module Subscriber
       if subscriber_id
         unless mailing_list.subscribed?(subscriber)
           entry.errors.add(:base, translate(:failure, subscriber: subscriber))
-          false
+          throw :abort
         end
       end
     end

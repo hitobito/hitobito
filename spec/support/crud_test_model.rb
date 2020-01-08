@@ -40,7 +40,7 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
   def protect_if_companion
     if companion.present?
       errors.add(:base, 'Cannot destroy model with companion')
-      false
+      throw :abort
     end
   end
 
@@ -123,7 +123,7 @@ class CrudTestModelsController < CrudController #:nodoc:
   def handle_name
     if entry.name == 'illegal'
       flash[:alert] = 'illegal name'
-      false
+      throw(:abort)
     end
   end
 
@@ -149,7 +149,7 @@ class CrudTestModelsController < CrudController #:nodoc:
   # callback to redirect if @should_redirect is set
   def possibly_redirect
     redirect_to action: 'index' if should_redirect && !performed?
-    !should_redirect
+    throw :abort if should_redirect
   end
 
   def set_companions

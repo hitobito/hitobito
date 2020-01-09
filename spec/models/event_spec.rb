@@ -395,7 +395,7 @@ describe Event do
       d = Time.zone.local(2012, 12, 12).to_date
       e.dates.create(label: 'foo', start_at: d, finish_at: d)
       ed = e.dates.first
-      e.update_attributes(dates_attributes: { '0' => { start_at_date: d, start_at_hour: 18, start_at_min: 10, id: ed.id } })
+      e.update(dates_attributes: { '0' => { start_at_date: d, start_at_hour: 18, start_at_min: 10, id: ed.id } })
       expect(e.dates.first.start_at).to eq(Time.zone.local(2012, 12, 12, 18, 10))
     end
 
@@ -404,7 +404,7 @@ describe Event do
       d2 = Time.zone.local(2012, 12, 13).to_date
       e.dates.create(label: 'foo', start_at: d1, finish_at: d1)
       ed = e.dates.first
-      e.update_attributes(dates_attributes: { '0' => { finish_at_date: d2, id: ed.id } })
+      e.update(dates_attributes: { '0' => { finish_at_date: d2, id: ed.id } })
       expect(e.dates.first.finish_at).to eq(Time.zone.local(2012, 12, 13, 00, 00))
     end
 

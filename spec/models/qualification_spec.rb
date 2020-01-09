@@ -232,7 +232,7 @@ describe Qualification do
                                             origin: 'Bar',
                                             start_at: Time.zone.today)
       expect do
-        quali.update_attributes!(origin: 'Bur')
+        quali.update!(origin: 'Bur')
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last

@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '= 5.2.4.1'
+gem 'rails', '= 6.0.2.1'
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on'
@@ -61,7 +61,7 @@ gem 'thinking-sphinx'
 gem 'validates_by_schema'
 gem 'validates_timeliness', '< 4.0'
 gem 'vcard'
-gem 'wagons', '0.5.0'
+gem 'wagons'
 
 # load after others because of active record inherited alias chain.
 gem 'kaminari'
@@ -90,8 +90,7 @@ group :development, :test do
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'parallel_tests'
   gem 'pry-rails'
-  gem 'rspec-rails'
-
+  gem 'rspec-rails', '4.0.0.beta3' # see https://github.com/rspec/rspec-rails/issues/2177
   gem 'pry-debugger', platforms: :ruby_19
   gem 'pry-doc'
   # gem 'pry-byebug', platforms: [:ruby_20, :ruby_21]

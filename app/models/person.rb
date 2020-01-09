@@ -182,7 +182,7 @@ class Person < ActiveRecord::Base
 
   class << self
     def order_by_name
-      order(order_by_name_statement)
+      order(Arel.sql(order_by_name_statement.join(', ')))
     end
 
     def order_by_name_statement

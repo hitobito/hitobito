@@ -7,8 +7,8 @@
 
 class Event::ParticipationsController < CrudController # rubocop:disable Metrics/ClassLength
 
-  include Concerns::RenderPeopleExports
-  include Concerns::AsyncDownload
+  include RenderPeopleExports
+  include AsyncDownload
   include Api::JsonPaging
 
   self.nesting = Group, Event

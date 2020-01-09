@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Concerns::Localizable do
+describe Localizable do
 
   controller(ApplicationController) do
     def index; end

@@ -7,8 +7,8 @@
 
 class SubscriptionsController < CrudController
 
-  include Concerns::RenderPeopleExports
-  include Concerns::AsyncDownload
+  include RenderPeopleExports
+  include AsyncDownload
 
   self.nesting = Group, MailingList
 

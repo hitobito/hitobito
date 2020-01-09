@@ -7,7 +7,7 @@
 
 class EventsController < CrudController
   include YearBasedPaging
-  include Concerns::AsyncDownload
+  include AsyncDownload
   include Api::JsonPaging
 
   self.nesting = Group

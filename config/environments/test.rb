@@ -1,10 +1,11 @@
+# The test environment is used exclusively to run your application's
+# test suite. You never need to work with it otherwise. Remember that
+# your test database is "scratch space" for the test suite and is wiped
+# and recreated between test runs. Don't rely on the data there!
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is "scratch space" for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
   config.cache_classes = true
 
   # Do not eager load code on boot. This avoids loading your whole application
@@ -31,7 +32,7 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
-  # Store uploaded files on the local file system in a temporary directory
+  # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 
   config.action_mailer.perform_caching = false

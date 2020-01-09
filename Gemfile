@@ -16,6 +16,7 @@ gem 'awesome_nested_set'
 gem 'axlsx', '>= 3.0.0.pre'
 gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
+gem 'bootsnap', require: false
 gem 'cancancan'
 gem 'carrierwave'
 gem 'cmess'

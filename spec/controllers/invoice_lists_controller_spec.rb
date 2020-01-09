@@ -16,7 +16,7 @@ describe InvoiceListsController do
 
     it "may index when person has finance permission on layer group" do
       get :new, params: { group_id: group.id, invoice: { recipient_ids: [person.id] } }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "may update when person has finance permission on layer group" do

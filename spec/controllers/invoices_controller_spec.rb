@@ -17,13 +17,13 @@ describe InvoicesController do
   context 'authorization' do
     it "may index when person has finance permission on layer group" do
       get :index, params: { group_id: group.id }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "may edit when person has finance permission on layer group" do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       get :edit, params: { group_id: group.id, id: invoice.id }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "may not index when person has no finance permission on layer group" do

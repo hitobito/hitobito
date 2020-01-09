@@ -81,7 +81,7 @@ describe Event::Course do
     end
 
     it 'renders label_detail' do
-      events(:top_course).update_attributes(kind_id: nil, number: 123)
+      events(:top_course).update(kind_id: nil, number: 123)
       expect(events(:top_course).label_detail).to eq '123 Top'
     end
 

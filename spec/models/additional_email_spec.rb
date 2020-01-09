@@ -149,7 +149,7 @@ describe AdditionalEmail do
     it 'sets main on update' do
       account = person.additional_emails.create(label: 'Foo', email: 'bar@bar.com')
       expect do
-        account.update_attributes!(email: 'bur@bur.com')
+        account.update!(email: 'bur@bur.com')
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last

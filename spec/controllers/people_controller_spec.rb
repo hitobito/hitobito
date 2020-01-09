@@ -121,7 +121,7 @@ describe PeopleController do
           it 'generates pdf labels' do
             get :index, params: { group_id: group, label_format_id: label_formats(:standard).id }, format: :pdf
 
-            expect(@response.content_type).to eq('application/pdf')
+            expect(@response.media_type).to eq('application/pdf')
             expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
           end
         end
@@ -161,7 +161,7 @@ describe PeopleController do
 
             get :index, params: { group_id: group }, format: :vcf
 
-            expect(@response.content_type).to eq('text/vcard')
+            expect(@response.media_type).to eq('text/vcard')
             cards = @response.body.split("END:VCARD\n")
             expect(cards.length).to equal(2);
 
@@ -196,7 +196,7 @@ describe PeopleController do
         context '.email' do
           it 'renders email addresses' do
             get :index, params: { group_id: group }, format: :email
-            expect(@response.content_type).to eq('text/plain')
+            expect(@response.media_type).to eq('text/plain')
             expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email}")
           end
 
@@ -581,14 +581,14 @@ describe PeopleController do
       it 'generates pdf labels' do
         get :show, params: { group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id }, format: :pdf
 
-        expect(@response.content_type).to eq('application/pdf')
+        expect(@response.media_type).to eq('application/pdf')
         expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
       end
 
       it 'exports csv file' do
         get :show, params: { group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id }, format: :csv
 
-        expect(@response.content_type).to eq('text/csv')
+        expect(@response.media_type).to eq('text/csv')
         expect(@response.body).to match(/^Vorname;Nachname/)
         expect(@response.body).to match(/^Top;Leader/)
       end

@@ -121,12 +121,12 @@ describe EventsController, type: :controller do
 
       it 'renders events ics' do
         get :index, params: { group_id: group.id, year: 2012 }, format: :ics
-        expect(response.content_type).to eq('text/calendar')
+        expect(response.media_type).to eq('text/calendar')
       end
 
       it 'renders courses csv' do
         get :index, params: { group_id: group.id, year: 2012, type: Event::Course.sti_name }, format: :ics
-        expect(response.content_type).to eq('text/calendar')
+        expect(response.media_type).to eq('text/calendar')
       end
 
     end
@@ -140,7 +140,7 @@ describe EventsController, type: :controller do
 
       it 'renders event ics' do
         get :show, params: { group_id: group.id, id: test_entry.to_param }, format: :ics
-        expect(response.content_type).to eq('text/calendar')
+        expect(response.media_type).to eq('text/calendar')
       end
     end
   end

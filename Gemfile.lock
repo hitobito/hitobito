@@ -1,13 +1,7 @@
 PATH
-  remote: ../hitobito_cevi
+  remote: ../hitobito_generic
   specs:
-    hitobito_cevi (0.0.1)
-      hitobito_youth
-
-PATH
-  remote: ../hitobito_youth
-  specs:
-    hitobito_youth (0.0.1)
+    hitobito_generic (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -655,8 +649,7 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_cevi!
-  hitobito_youth!
+  hitobito_generic!
   http_accept_language
   icalendar
   jquery-rails

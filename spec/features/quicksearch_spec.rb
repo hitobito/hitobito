@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe 'Quicksearch', :mysql do
+describe 'Quicksearch', sphinx: true do
 
   sphinx_environment(:people, :groups, :events) do
     it 'finds people and groups', js: true do

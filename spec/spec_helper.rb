@@ -59,6 +59,7 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :feature
 
   config.filter_run_excluding type: 'feature', performance: true
+  config.filter_run_excluding type: 'sphinx', sphinx: true
 
   if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2' # rubocop:disable Performance/Casecmp
     config.filter_run_excluding :mysql

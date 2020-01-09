@@ -61,7 +61,6 @@ module Hitobito
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
-
     config.log_tags = [:uuid]
 
     config.cache_store = :dalli_store, { compress: true,

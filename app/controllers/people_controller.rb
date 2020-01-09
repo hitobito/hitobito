@@ -159,7 +159,7 @@ class PeopleController < CrudController
 
   def filter_entries
     entries = person_filter.entries
-    entries = entries.reorder(sort_expression) if sorting?
+    entries = entries.reorder(Arel.sql(sort_expression)) if sorting?
     entries
   end
 

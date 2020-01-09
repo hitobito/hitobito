@@ -7,12 +7,12 @@
 
 class ApplicationController < ActionController::Base
 
-  include Concerns::DecoratesBeforeRendering
+  include DecoratesBeforeRendering
   include Userstamp
   include Translatable
-  include Concerns::Stampable
-  include Concerns::Localizable
-  include Concerns::Authenticatable
+  include Stampable
+  include Localizable
+  include Authenticatable
   include ERB::Util
   include Sentry
 

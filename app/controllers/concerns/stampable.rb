@@ -5,16 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Concerns
-  module Stampable
-    private
+module Stampable
+  private
 
-    def set_stamper
-      Person.stamper = current_user
-    end
+  def set_stamper
+    Person.stamper = current_user
+  end
 
-    def reset_stamper
-      Person.reset_stamper
-    end
+  def reset_stamper
+    Person.reset_stamper
   end
 end

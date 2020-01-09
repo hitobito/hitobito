@@ -94,6 +94,8 @@ GEM
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
     bleib (0.0.10)
+    bootsnap (1.4.5)
+      msgpack (~> 1.0)
     bootstrap-sass (2.3.2.2)
       sass (~> 3.2)
     bootstrap-wysihtml5-rails (0.3.3.8)
@@ -330,6 +332,7 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.13.0)
+    msgpack (1.3.1)
     multi_json (1.14.1)
     multipart-post (2.0.0)
     mysql2 (0.4.9)
@@ -593,6 +596,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bleib (~> 0.0.10)
+  bootsnap
   bootstrap-sass (~> 2.3)
   bootstrap-wysihtml5-rails
   brakeman

@@ -46,7 +46,7 @@ module Sortable
     # Enhance the list entries with an optional sort order.
     def list_entries
       if sorting?
-        super.reorder(sort_expression)
+        super.reorder(Arel.sql(sort_expression))
       else
         super
       end

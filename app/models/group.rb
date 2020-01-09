@@ -121,7 +121,7 @@ class Group < ActiveRecord::Base
     # as they appear in possible_children, otherwise order them
     # hierarchically over all group types.
     def order_by_type(parent_group = nil)
-      reorder(order_by_type_stmt(parent_group)) # acts_as_nested_set default to new order
+      reorder(Arel.sql(order_by_type_stmt(parent_group))) # acts_as_nested_set default to new order
     end
 
     def order_by_type_stmt(parent_group = nil)
@@ -222,7 +222,7 @@ class Group < ActiveRecord::Base
       # do not destroy descendants on soft delete
     end
   end
-  
+
   prepend Group::Paranoia
 
   def create_invoice_config

@@ -15,7 +15,7 @@ describe PaymentProcessesController do
 
   it 'GET#new renders fileupload prompt' do
     get :new, params: { group_id: group.id }
-    expect(response).to be_success
+    expect(response).to be_successful
   end
 
   it 'POST#create redirects if file has wrong content_type' do
@@ -32,7 +32,7 @@ describe PaymentProcessesController do
 
   it 'POST#create handles files with only one entry' do
     post :create, params: { group_id: group.id, payment_process: { file: file(path: xmlfile('FI_camt_single_entry')) } }
-    expect(response).to be_success
+    expect(response).to be_successful
     expect(flash[:alert]).to be_blank
     expect(flash[:notice]).to be_blank
   end
@@ -40,7 +40,7 @@ describe PaymentProcessesController do
   it 'POST#create with file informs about valid and invalid payments' do
     invoice.update_columns(esr_number: '00 00000 00000 10000 00000 00905')
     post :create, params: { group_id: group.id, payment_process: { file: file } }
-    expect(response).to be_success
+    expect(response).to be_successful
     expect(flash[:alert]).to be_present
     expect(flash[:notice]).to be_present
   end

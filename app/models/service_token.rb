@@ -26,8 +26,8 @@ class ServiceToken < ActiveRecord::Base
 
   before_validation :generate_token!, on: :create
 
-  validates :token, uniqueness: true, presence: true
-  validates :name, uniqueness: { scope: :layer_group_id }, presence: true
+  validates :token, uniqueness: { case_sensitive: false }, presence: true
+  validates :name, uniqueness: { scope: :layer_group_id, case_sensitive: false }, presence: true
   validates_by_schema
 
   def to_s

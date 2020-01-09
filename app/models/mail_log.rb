@@ -29,7 +29,7 @@ class MailLog < ActiveRecord::Base
 
   validates_by_schema
 
-  validates :mail_hash, uniqueness: true
+  validates :mail_hash, uniqueness: { case_sensitive: false }
 
   def self.build(mail)
     mail_log = new

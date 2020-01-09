@@ -111,7 +111,7 @@ module Person::Groups
 
     # Order people by the order role types are listed in their group types.
     def order_by_role
-      order(order_by_role_statement)
+      order(Arel.sql(order_by_role_statement))
     end
 
     def order_by_role_statement

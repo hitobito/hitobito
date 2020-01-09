@@ -18,8 +18,8 @@ describe PaymentProcessesController do
     expect(response).to be_successful
   end
 
-  it 'POST#create redirects if file has wrong content_type' do
-    post :create, params: { group_id: group.id, payment_process: { file: file(content_type: 'text/plain') } }
+  it 'POST#create redirects if file has wrong media_type' do
+    post :create, params: { group_id: group.id, payment_process: { file: file(media_type: 'text/plain') } }
     expect(response).to redirect_to new_group_payment_process_path(group)
     expect(flash[:alert]).to be_present
   end
@@ -56,8 +56,8 @@ describe PaymentProcessesController do
 
   private
 
-  def file(path: xmlfile, content_type:  'text/xml')
-    Rack::Test::UploadedFile.new(path, content_type)
+  def file(path: xmlfile, media_type:  'text/xml')
+    Rack::Test::UploadedFile.new(path, media_type)
   end
 
   def xmlfile(name = 'camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923')

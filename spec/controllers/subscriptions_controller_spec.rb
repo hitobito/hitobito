@@ -61,7 +61,7 @@ describe SubscriptionsController do
 
     it 'exports vcf files' do
       get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :vcf
-      expect(@response.content_type).to eq('text/vcard')
+      expect(@response.media_type).to eq('text/vcard')
 
       cards = @response.body.split("END:VCARD\n")
       expect(cards.length).to equal(2);

@@ -86,18 +86,18 @@ describe InvoicesController do
     it 'exports pdf' do
       get :index, params: { group_id: group.id }, format: :pdf
       expect(response.header['Content-Disposition']).to match(/rechnungen.pdf/)
-      expect(response.content_type).to eq('application/pdf')
+      expect(response.media_type).to eq('application/pdf')
     end
 
     it 'exports labels pdf' do
       get :index, params: { group_id: group.id, label_format_id: label_formats(:standard).id }, format: :pdf
-      expect(response.content_type).to eq('application/pdf')
+      expect(response.media_type).to eq('application/pdf')
     end
 
     it 'exports pdf' do
       get :index, params: { group_id: group.id }, format: :csv
       expect(response.header['Content-Disposition']).to match(/rechnungen.csv/)
-      expect(response.content_type).to eq('text/csv')
+      expect(response.media_type).to eq('text/csv')
     end
 
     it 'renders json' do
@@ -152,14 +152,14 @@ describe InvoicesController do
       get :show, params: { group_id: group.id, id: invoice.id }, format: :pdf
 
       expect(response.header['Content-Disposition']).to match(/Rechnung-#{invoice.sequence_number}.pdf/)
-      expect(response.content_type).to eq('application/pdf')
+      expect(response.media_type).to eq('application/pdf')
     end
 
     it 'exports csv' do
       get :show, params: { group_id: group.id, id: invoice.id }, format: :csv
 
       expect(response.header['Content-Disposition']).to match(/Rechnung-#{invoice.sequence_number}.csv/)
-      expect(response.content_type).to eq('text/csv')
+      expect(response.media_type).to eq('text/csv')
     end
 
     it 'renders json' do

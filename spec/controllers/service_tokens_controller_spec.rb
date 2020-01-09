@@ -15,7 +15,7 @@ describe ServiceTokensController do
 
     it 'may index when person has permission' do
       get :index, params: { group_id: role.group }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "may not index when person has no permission on top group" do

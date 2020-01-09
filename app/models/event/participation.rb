@@ -64,7 +64,7 @@ class Event::Participation < ActiveRecord::Base
   class << self
     # Order people by the order participation types are listed in their event types.
     def order_by_role(event_type)
-      joins(:roles).order(order_by_role_statement(event_type))
+      joins(:roles).order(Arel.sql(order_by_role_statement(event_type)))
     end
 
     def order_by_role_statement(event_type)

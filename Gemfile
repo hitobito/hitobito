@@ -50,6 +50,7 @@ gem 'phonelib'
 gem 'prawn'
 gem 'prawn-table'
 gem 'protective'
+gem 'pry-rails'
 gem 'puma'
 gem 'rails-i18n'
 gem 'rails_autolink'
@@ -90,7 +91,6 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'parallel_tests'
-  gem 'pry-rails'
   gem 'rspec-rails', '4.0.0.beta3' # see https://github.com/rspec/rspec-rails/issues/2177
   gem 'pry-debugger', platforms: :ruby_19
   gem 'pry-doc'

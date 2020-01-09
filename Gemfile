@@ -91,9 +91,7 @@ group :development, :test do
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'parallel_tests'
   gem 'rspec-rails', '4.0.0.beta3' # see https://github.com/rspec/rspec-rails/issues/2177
-  gem 'pry-debugger', platforms: :ruby_19
   gem 'pry-doc'
-  # gem 'pry-byebug', platforms: [:ruby_20, :ruby_21]
 end
 
 group :development do

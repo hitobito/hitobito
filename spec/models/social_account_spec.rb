@@ -62,7 +62,7 @@ describe SocialAccount do
     it 'sets main on update' do
       account = person.social_accounts.create(label: 'Foo', name: 'Bar')
       expect do
-        account.update_attributes!(name: 'Bur')
+        account.update!(name: 'Bur')
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last

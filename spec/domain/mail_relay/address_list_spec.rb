@@ -24,7 +24,7 @@ describe MailRelay::AddressList do
   end
 
   it 'does not contain blank emails' do
-    people(:bottom_member).update_attributes!(email: ' ')
+    people(:bottom_member).update!(email: ' ')
     expect(entries).to match_array([
       'hitobito@puzzle.ch',
       'top_leader@example.com'

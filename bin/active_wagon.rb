@@ -54,6 +54,7 @@ class Setup
     export RUBYOPT=-W0
     export WAGONS="#{wagons.join(' ')}"
     log_status "hitobito now uses: #{wagons.join(', ')}"
+    source_up
     EOF
   end
 

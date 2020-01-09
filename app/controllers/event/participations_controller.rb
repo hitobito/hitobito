@@ -142,7 +142,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     records = filter.list_entries.page(params[:page])
     @counts = filter.counts
 
-    records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
+    records = records.reorder(Arel.sql(sort_expression)) if params[:sort] && sortable?(params[:sort])
     Person::PreloadPublicAccounts.for(records.collect(&:person))
     records
   end

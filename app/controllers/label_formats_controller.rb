@@ -35,7 +35,7 @@ class LabelFormatsController < SimpleCrudController
   def global_entries
     @global_entries = LabelFormat.list.where(person_id: nil)
     if sorting?
-      @global_entries = @global_entries.reorder(sort_expression)
+      @global_entries = @global_entries.reorder(Arel.sql(sort_expression))
     end
   end
 

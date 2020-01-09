@@ -10,7 +10,7 @@ require 'thinking_sphinx/test'
 # Use this block to run a set of examples inside sphinx.
 # Call #index_sphinx once your test data is set up.
 def sphinx_environment(*tables, &block)
-  transactional = use_transactional_fixtures
+  transactional = use_transactional_tests
   begin
     init_sphinx_before_all(tables)
     run_sphinx_around_example
@@ -30,7 +30,7 @@ end
 def init_sphinx_before_all(tables)
   obj = self
   before(:all) do
-    obj.use_transactional_fixtures = false
+    obj.use_transactional_tests = false
     DatabaseCleaner.strategy = :truncation, { only: tables }
     ThinkingSphinx::Test.init
   end
@@ -54,7 +54,7 @@ def reset_configuration_after_all(transactional)
   obj = self
   after(:all) do
     DatabaseCleaner.strategy = defined?(DB_CLEANER_STRATEGY) ? DB_CLEANER_STRATEGY : :transaction
-    obj.use_transactional_fixtures = transactional
+    obj.use_transactional_tests = transactional
   end
 end
 

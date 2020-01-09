@@ -237,7 +237,7 @@ describe Role do
     it 'sets main on update' do
       role = person.roles.first
       expect do
-        role.update_attributes!(label: 'Foo')
+        role.update!(label: 'Foo')
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last

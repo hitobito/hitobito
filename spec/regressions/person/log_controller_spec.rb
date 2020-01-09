@@ -28,7 +28,7 @@ describe Person::LogController, type: :controller do
 
     it 'renders log in correct order' do
       Fabricate(:social_account, contactable: test_entry, label: 'Foo', name: 'Bar')
-      test_entry.update_attributes!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
+      test_entry.update!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
       Fabricate(:phone_number, contactable: test_entry, label: 'Foo', number: '23425 1341 12')
       Person::AddRequest::Group.create!(
         person: test_entry,

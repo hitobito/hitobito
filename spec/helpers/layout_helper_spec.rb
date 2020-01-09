@@ -18,19 +18,19 @@ describe LayoutHelper do
     before { assign(:group, group) }
 
     it 'should find the logo directly on the visible group' do
-      group.update_attributes(logo: File.open('spec/fixtures/person/test_picture.jpg'))
+      group.update(logo: File.open('spec/fixtures/person/test_picture.jpg'))
 
       expect(helper.header_logo_css).to eql("<style>header.logo a.logo-image { background-image: url(#{asset_path(group.logo)}); }</style>")
     end
 
     it 'should find the logo on a parent group' do
-      parent.update_attributes(logo: File.open('spec/fixtures/person/test_picture2.jpg'))
+      parent.update(logo: File.open('spec/fixtures/person/test_picture2.jpg'))
       expect(helper.header_logo_css).to eql("<style>header.logo a.logo-image { background-image: url(#{asset_path(parent.logo)}); }</style>")
     end
 
     it 'should return the correct logo, when multiple are available.' do
-      grandparent.update_attributes(logo: File.open('spec/fixtures/person/test_picture2.jpg'))
-      parent.update_attributes(logo: File.open('spec/fixtures/person/test_picture.jpg'))
+      grandparent.update(logo: File.open('spec/fixtures/person/test_picture2.jpg'))
+      parent.update(logo: File.open('spec/fixtures/person/test_picture.jpg'))
 
       expect(helper.header_logo_css).to eql("<style>header.logo a.logo-image { background-image: url(#{asset_path(parent.logo)}); }</style>")
     end

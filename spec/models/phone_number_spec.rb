@@ -89,7 +89,7 @@ describe PhoneNumber do
     it 'sets main on update' do
       account = person.phone_numbers.create(label: 'Foo', number: '+41 44 123 45 67')
       expect do
-        account.update_attributes!(number: '021 987 65 43')
+        account.update!(number: '021 987 65 43')
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last

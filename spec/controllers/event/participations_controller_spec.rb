@@ -81,7 +81,7 @@ describe Event::ParticipationsController do
     it 'generates pdf labels' do
       get :index, params: { group_id: group, event_id: course.id, label_format_id: label_formats(:standard).id }, format: :pdf
 
-      expect(@response.content_type).to eq('application/pdf')
+      expect(@response.media_type).to eq('application/pdf')
       expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
     end
 

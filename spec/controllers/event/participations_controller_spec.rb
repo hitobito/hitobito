@@ -183,7 +183,7 @@ describe Event::ParticipationsController do
     end
 
     def update_person(participation, attrs)
-      participation.person.update_attributes!(attrs)
+      participation.person.update!(attrs)
     end
   end
 

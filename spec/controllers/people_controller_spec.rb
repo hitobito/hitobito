@@ -42,13 +42,13 @@ describe PeopleController do
 
         @bg_leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         @bg_member = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
-        @tg_member.update_attributes(first_name: 'Al', last_name: 'Zoe', nickname: 'al', town: 'Eye', zip_code: '8000')
+        @tg_member.update(first_name: 'Al', last_name: 'Zoe', nickname: 'al', town: 'Eye', zip_code: '8000')
       end
 
       context 'sorting' do
         before do
-          top_leader.update_attributes(first_name: 'Joe', last_name: 'Smith', nickname: 'js', town: 'Stoke', address: 'Howard Street', zip_code: '9000')
-          @tg_extern.update_attributes(first_name: '', last_name: 'Bundy', nickname: '', town: '', address: '', zip_code: '')
+          top_leader.update(first_name: 'Joe', last_name: 'Smith', nickname: 'js', town: 'Stoke', address: 'Howard Street', zip_code: '9000')
+          @tg_extern.update(first_name: '', last_name: 'Bundy', nickname: '', town: '', address: '', zip_code: '')
         end
 
         let(:role_type_ids) { [Role::External.id, Group::TopGroup::Leader.id, Group::TopGroup::Member.id].join('-') }
@@ -157,7 +157,7 @@ describe PeopleController do
           it 'exports vcf files' do
             e1 = Fabricate(:additional_email, contactable: @tg_member, public: true)
             e2 = Fabricate(:additional_email, contactable: @tg_member, public: false)
-            @tg_member.update_attributes(birthday: '09.10.1978')
+            @tg_member.update(birthday: '09.10.1978')
 
             get :index, params: { group_id: group }, format: :vcf
 

@@ -93,7 +93,7 @@ describe Event::ParticipationMailer do
     end
 
     it 'sends to all email addresses of participant' do
-      person.update_attributes!(email: nil)
+      person.update!(email: nil)
       e1 = Fabricate(:additional_email, contactable: person, mailings: true, public: true)
       participation.person.reload
       expect(mail.to).to eq [e1.email]

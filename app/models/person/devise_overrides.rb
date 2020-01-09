@@ -71,7 +71,7 @@ module Person::DeviseOverrides
 
   def update_password_if_valid(params, current_password, *options)
     if encrypted_password.nil? || valid_password?(current_password)
-      update_attributes(params, *options)
+      update(params, *options)
     else
       assign_attributes(params, *options)
       valid?

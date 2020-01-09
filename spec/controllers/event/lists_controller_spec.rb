@@ -102,7 +102,7 @@ describe Event::ListsController do
       it 'renders csv headers' do
         allow(controller).to receive_messages(current_user: people(:root))
         get :courses, format: :csv
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(rows.first).to match(/^Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$/)
         expect(rows.size).to eq(2)
       end

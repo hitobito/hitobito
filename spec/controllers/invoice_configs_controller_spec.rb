@@ -18,12 +18,12 @@ describe InvoiceConfigsController  do
 
     it "may show when person has finance permission on layer group" do
       get :show, params: { group_id: group.id, id: entry.id }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "may edit when person has finance permission on layer group" do
       get :edit, params: { group_id: group.id, id: entry.id }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "may not show when person has finance permission on layer group" do

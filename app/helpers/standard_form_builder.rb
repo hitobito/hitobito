@@ -90,9 +90,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a boolean field.
   def boolean_field(attr, html_options = {})
-    caption = ' ' + html_options.delete(:caption).to_s
+    caption   = ' ' + html_options.delete(:caption).to_s
+    checked   = html_options.delete(:checked_value) { '1' }
+    unchecked = html_options.delete(:unchecked_value) { '0' }
+
     label(attr, class: 'checkbox') do
-      check_box(attr, html_options) + caption
+      check_box(attr, html_options, checked, unchecked) + caption.html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 

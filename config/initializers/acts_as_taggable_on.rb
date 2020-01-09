@@ -8,3 +8,10 @@
 ActsAsTaggableOn.remove_unused_tags = true
 ActsAsTaggableOn.default_parser = TagCategoryParser
 ActsAsTaggableOn::Tag.send(:include, CategorizedTags)
+
+# https://github.com/rails/rails/commit/9def05385f1cfa41924bb93daa187615e88c95b9
+ActsAsTaggableOn::Tag._validators[:name].each do |v|
+  next unless v.is_a?(ActiveRecord::Validations::UniquenessValidator)
+  v.instance_variable_set('@options', v.options.merge(case_sensitive: false).freeze)
+end
+

@@ -312,6 +312,13 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
+    lograge-sql (1.1.0)
+      activerecord (>= 4, < 7.0)
+      lograge (~> 0.4)
+    lograge_activejob (0.3.2)
+      activesupport (>= 4)
+      lograge (< 1.0)
+      railties (>= 4)
     loofah (2.4.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -649,6 +656,8 @@ DEPENDENCIES
   launchy
   listen
   lograge
+  lograge-sql
+  lograge_activejob
   magiclabs-userstamp
   mime-types
   mini_magick

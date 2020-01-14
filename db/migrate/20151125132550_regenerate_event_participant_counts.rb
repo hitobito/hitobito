@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class RegenerateEventParticipantCounts < ActiveRecord::Migration
+class RegenerateEventParticipantCounts < ActiveRecord::Migration[4.2]
   def up
     # Recalculate the counts of all events as teamers got omitted in certain cases
     Event.find_each { |e| e.refresh_participant_counts! }

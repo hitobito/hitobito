@@ -1,4 +1,4 @@
-class MadeRequiredInvoiceNotificationPlaceholdersOptional < ActiveRecord::Migration
+class MadeRequiredInvoiceNotificationPlaceholdersOptional < ActiveRecord::Migration[4.2]
 
   PLACEHOLDERS_REQUIRED = 'invoice-items, invoice-total, payment-information'
   PLACEHOLDERS_OPTIONAL = 'recipient-name, group-name, group-address, invoice-number'

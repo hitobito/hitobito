@@ -4,8 +4,8 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-      
-class AllowNullRecipientInInvoice < ActiveRecord::Migration
+
+class AllowNullRecipientInInvoice < ActiveRecord::Migration[4.2]
   def change
     change_column_null :invoices, :recipient_id, true
   end

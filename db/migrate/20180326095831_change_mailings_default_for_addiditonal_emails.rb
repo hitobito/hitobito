@@ -1,4 +1,4 @@
-class ChangeMailingsDefaultForAddiditonalEmails < ActiveRecord::Migration
+class ChangeMailingsDefaultForAddiditonalEmails < ActiveRecord::Migration[4.2]
   def up
     change_column_default :additional_emails, :mailings, false
   end

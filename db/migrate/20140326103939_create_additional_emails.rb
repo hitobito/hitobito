@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class CreateAdditionalEmails < ActiveRecord::Migration
+class CreateAdditionalEmails < ActiveRecord::Migration[4.2]
   def change
     create_table :additional_emails do |t|
       t.belongs_to :contactable, polymorphic: true, null: false

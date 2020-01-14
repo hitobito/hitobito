@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddLayerIdToGroup < ActiveRecord::Migration
+class AddLayerIdToGroup < ActiveRecord::Migration[4.2]
   def up
     add_column :groups, :layer_group_id, :integer
     Group.find_each do |g|

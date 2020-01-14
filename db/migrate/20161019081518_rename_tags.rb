@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class RenameTags < ActiveRecord::Migration
+class RenameTags < ActiveRecord::Migration[4.2]
   def change
     rename_table :tags, :old_tags
   end

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class UpdatePeoplesPrimaryGroup < ActiveRecord::Migration
+class UpdatePeoplesPrimaryGroup < ActiveRecord::Migration[4.2]
   def up
     # people with no primary group and only one active role
     people = Person.joins(:roles).where(primary_group_id: nil).group('people.id').having('count(distinct roles.group_id) = 1')

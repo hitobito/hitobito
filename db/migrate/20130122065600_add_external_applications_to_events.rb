@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddExternalApplicationsToEvents < ActiveRecord::Migration
+class AddExternalApplicationsToEvents < ActiveRecord::Migration[4.2]
   def change
     add_column :events, :external_applications, :boolean, :default => false
   end

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddQualificationKindsForLeaders < ActiveRecord::Migration
+class AddQualificationKindsForLeaders < ActiveRecord::Migration[4.2]
 
   class Updater < Struct.new(:postfix, :category, :migration)
     QUALIFICATION_KIND_IDS = QualificationKind.pluck(:id)

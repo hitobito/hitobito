@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class ConvertPersonZipToString < ActiveRecord::Migration
+class ConvertPersonZipToString < ActiveRecord::Migration[4.2]
   def change
     change_column :people, :zip_code, :string
   end

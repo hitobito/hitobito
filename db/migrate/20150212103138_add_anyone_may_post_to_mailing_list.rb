@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddAnyoneMayPostToMailingList < ActiveRecord::Migration
+class AddAnyoneMayPostToMailingList < ActiveRecord::Migration[4.2]
   def change
     add_column :mailing_lists, :anyone_may_post, :boolean, default: false, null: false
   end

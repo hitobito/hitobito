@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class SetupModels < ActiveRecord::Migration
+class SetupModels < ActiveRecord::Migration[4.2]
   def change
     create_table :people do |t|
       t.string :first_name

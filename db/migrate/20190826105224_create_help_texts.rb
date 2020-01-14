@@ -1,4 +1,4 @@
-class CreateHelpTexts < ActiveRecord::Migration
+class CreateHelpTexts < ActiveRecord::Migration[4.2]
   def change
     create_table :help_texts do |t|
       t.string :controller, null: false

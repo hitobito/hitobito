@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class CreateLabelFormats < ActiveRecord::Migration
+class CreateLabelFormats < ActiveRecord::Migration[4.2]
   def change
     create_table :label_formats do |t|
       t.string :name, null: false, unique: true
@@ -19,9 +19,9 @@ class CreateLabelFormats < ActiveRecord::Migration
       t.float :padding_top, null: false
       t.float :padding_left, null: false
     end
-    
+
     add_column :people, :last_label_format_id, :integer
-    
+
     add_index :roles, :type
   end
 end

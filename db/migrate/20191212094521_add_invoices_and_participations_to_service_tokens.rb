@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddInvoicesAndParticipationsToServiceTokens < ActiveRecord::Migration
+class AddInvoicesAndParticipationsToServiceTokens < ActiveRecord::Migration[4.2]
   def change
     add_column(:service_tokens, :invoices, :boolean, default: false, null: false)
     add_column(:service_tokens, :event_participations, :boolean, default: false, null: false)

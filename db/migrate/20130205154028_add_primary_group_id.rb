@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddPrimaryGroupId < ActiveRecord::Migration
+class AddPrimaryGroupId < ActiveRecord::Migration[4.2]
   def up
     add_column :people, :primary_group_id, :integer
     remove_column :people_filters, :kind

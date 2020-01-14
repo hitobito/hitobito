@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddRepresentativeEventParticipantCount < ActiveRecord::Migration
+class AddRepresentativeEventParticipantCount < ActiveRecord::Migration[4.2]
   def change
     add_column :events, :representative_participant_count, :integer, default: 0
   end

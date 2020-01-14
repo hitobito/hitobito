@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_youth.
 
-class MapCountriesToTwoLetterCodes < ActiveRecord::Migration
+class MapCountriesToTwoLetterCodes < ActiveRecord::Migration[4.2]
   def up
     return if test_data?
     say_with_time('updating groups') do

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddIndexesToEventDates < ActiveRecord::Migration
+class AddIndexesToEventDates < ActiveRecord::Migration[4.2]
   def change
     add_index(:event_dates, [:event_id, :start_at])
   end

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddQualifiedToParticipation < ActiveRecord::Migration
+class AddQualifiedToParticipation < ActiveRecord::Migration[4.2]
 
   def up
     add_column :event_participations, :qualified, :boolean

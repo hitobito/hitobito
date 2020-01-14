@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddCancelParticipationEnabledToEvent < ActiveRecord::Migration
+class AddCancelParticipationEnabledToEvent < ActiveRecord::Migration[4.2]
   def change
     add_column :events, :applications_cancelable, :boolean, default: false, null: false
   end

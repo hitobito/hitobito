@@ -1,4 +1,4 @@
-class ChangeInvoiceArticles < ActiveRecord::Migration
+class ChangeInvoiceArticles < ActiveRecord::Migration[4.2]
   def change
     # Workaround because SQLite cannot add new column with null false
     add_column(:invoice_articles, :group_id, :integer, index: true)

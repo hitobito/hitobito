@@ -1,4 +1,4 @@
-class AddTableDisplays < ActiveRecord::Migration
+class AddTableDisplays < ActiveRecord::Migration[4.2]
   def change
     create_table :table_displays do |t|
       t.string :type, null: false

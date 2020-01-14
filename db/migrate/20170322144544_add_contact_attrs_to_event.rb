@@ -1,4 +1,4 @@
-class AddContactAttrsToEvent < ActiveRecord::Migration
+class AddContactAttrsToEvent < ActiveRecord::Migration[4.2]
 
   def change
     add_column :events, :required_contact_attrs, :string

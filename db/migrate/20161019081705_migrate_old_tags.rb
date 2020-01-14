@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class MigrateOldTags < ActiveRecord::Migration
+class MigrateOldTags < ActiveRecord::Migration[4.2]
   def change
     migrate_tags
     drop_table :old_tags

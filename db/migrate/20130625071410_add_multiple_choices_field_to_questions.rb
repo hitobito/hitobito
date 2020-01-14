@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddMultipleChoicesFieldToQuestions < ActiveRecord::Migration
+class AddMultipleChoicesFieldToQuestions < ActiveRecord::Migration[4.2]
   def change
     add_column(:event_questions, :multiple_choices, :boolean, default: false, null: false)
   end

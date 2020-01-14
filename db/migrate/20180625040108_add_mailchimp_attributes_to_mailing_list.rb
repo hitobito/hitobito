@@ -1,4 +1,4 @@
-class AddMailchimpAttributesToMailingList < ActiveRecord::Migration
+class AddMailchimpAttributesToMailingList < ActiveRecord::Migration[4.2]
   def change
     add_column :mailing_lists, :mailchimp_api_key, :string
     add_column :mailing_lists, :mailchimp_list_id, :string

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class CreateInvoiceArticles < ActiveRecord::Migration
+class CreateInvoiceArticles < ActiveRecord::Migration[4.2]
   def change
     create_table :invoice_articles do |t|
       t.string  :number

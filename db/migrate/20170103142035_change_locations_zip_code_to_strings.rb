@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class ChangeLocationsZipCodeToStrings < ActiveRecord::Migration
+class ChangeLocationsZipCodeToStrings < ActiveRecord::Migration[4.2]
   def change
     change_column :locations, :zip_code, :string, null: false
   end

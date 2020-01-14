@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class CreateNotes < ActiveRecord::Migration
+class CreateNotes < ActiveRecord::Migration[4.2]
   def change
     rename_table :person_notes, :notes
     add_column :notes, :subject_type, :string

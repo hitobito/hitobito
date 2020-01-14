@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddDeviseToPeople < ActiveRecord::Migration
+class AddDeviseToPeople < ActiveRecord::Migration[4.2]
   def self.up
     change_table(:people) do |t|
       ## Database authenticatable

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddEventUserstamps < ActiveRecord::Migration
+class AddEventUserstamps < ActiveRecord::Migration[4.2]
   def change
     change_table :events do |t|
       t.integer :creator_id

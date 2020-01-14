@@ -5,11 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class ModifyInvoice < ActiveRecord::Migration
+class ModifyInvoice < ActiveRecord::Migration[4.2]
   def change
     add_column :invoice_configs, :iban, :string
     remove_column :invoice_configs, :page_size, :integer
- 
+
     add_column :invoices, :iban, :string
     add_column :invoices, :payment_purpose, :text
     add_column :invoices, :payment_information, :text

@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class CreateServiceTokens < ActiveRecord::Migration
+class CreateServiceTokens < ActiveRecord::Migration[4.2]
   def change
     create_table :service_tokens do |t|
       t.belongs_to :layer_group, null: false

@@ -1,4 +1,4 @@
-class AddInvoiceModels < ActiveRecord::Migration
+class AddInvoiceModels < ActiveRecord::Migration[4.2]
 
   def change
     create_table :invoice_configs do |t|

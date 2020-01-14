@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class FixEventKindGlobalizedFields < ActiveRecord::Migration
+class FixEventKindGlobalizedFields < ActiveRecord::Migration[4.2]
   def up
     Event::Kind.add_translation_fields!({ general_information: :text }, migrate_data: true)
     remove_column :event_kinds, :general_information

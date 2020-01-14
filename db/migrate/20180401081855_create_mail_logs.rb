@@ -1,4 +1,4 @@
-class CreateMailLogs < ActiveRecord::Migration
+class CreateMailLogs < ActiveRecord::Migration[4.2]
 
   def change
 

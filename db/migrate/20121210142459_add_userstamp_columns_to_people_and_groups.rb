@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddUserstampColumnsToPeopleAndGroups < ActiveRecord::Migration
+class AddUserstampColumnsToPeopleAndGroups < ActiveRecord::Migration[4.2]
   def change
 
     change_table :groups do |t|

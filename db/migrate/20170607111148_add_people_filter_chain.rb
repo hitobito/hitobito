@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddPeopleFilterChain < ActiveRecord::Migration
+class AddPeopleFilterChain < ActiveRecord::Migration[4.2]
   def change
     add_column :people_filters, :filter_chain, :text
     add_column :people_filters, :range, :string, default: 'deep'

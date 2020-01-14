@@ -1,4 +1,4 @@
-class AddAttributesToInvoice < ActiveRecord::Migration
+class AddAttributesToInvoice < ActiveRecord::Migration[4.2]
   def change
     add_column :invoice_configs, :account_number, :string
 

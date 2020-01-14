@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class RemoveExportCustomContent < ActiveRecord::Migration
+class RemoveExportCustomContent < ActiveRecord::Migration[4.2]
 
   CONTENTS_TO_REMOVE = %w(content_subscriptions_export
                           content_events_export

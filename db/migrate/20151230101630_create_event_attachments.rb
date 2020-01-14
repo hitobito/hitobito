@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class CreateEventAttachments < ActiveRecord::Migration
+class CreateEventAttachments < ActiveRecord::Migration[4.2]
   def change
     create_table :event_attachments do |t|
       t.belongs_to :event, null: false

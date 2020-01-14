@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddLockableFields < ActiveRecord::Migration
+class AddLockableFields < ActiveRecord::Migration[4.2]
   def change
     add_column :people, :failed_attempts, :integer, default: 0
     add_column :people, :locked_at, :datetime

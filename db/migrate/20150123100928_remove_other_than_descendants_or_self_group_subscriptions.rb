@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class RemoveOtherThanDescendantsOrSelfGroupSubscriptions < ActiveRecord::Migration
+class RemoveOtherThanDescendantsOrSelfGroupSubscriptions < ActiveRecord::Migration[4.2]
 
   def up
     return if Wagons.find('jubla')

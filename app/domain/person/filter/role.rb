@@ -89,8 +89,8 @@ class Person::Filter::Role < Person::Filter::Base
 
   def active_role_condition
     <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
-    roles.created_at <= :max AND
-    (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
+      roles.created_at <= :max AND
+      (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
     SQL
   end
 

@@ -6,6 +6,7 @@
 class AsyncDownloadFile
 
   DIRECTORY = Pathname.new(Settings.downloads.folder)
+  PERSON_ID = /-(\w+?)\./
 
   attr_accessor :filename, :filetype
 
@@ -26,9 +27,9 @@ class AsyncDownloadFile
   end
 
   def downloadable?(person)
-    return false unless full_path.to_s =~ /-(\w+?)\./
+    return false unless full_path.to_s =~ PERSON_ID
     File.exist?(full_path) &&
-      full_path.to_s.match(/-(\w+?)\./)[1] == person.id.to_s
+      full_path.to_s.match(PERSON_ID)[1] == person.id.to_s
   end
 
   def full_path

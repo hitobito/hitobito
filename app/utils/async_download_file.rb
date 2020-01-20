@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2012-2019, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -18,7 +16,7 @@ class AsyncDownloadFile
 
   class << self
     def create_name(filename, person_id)
-      "#{filename}_#{Time.now.to_i}-#{person_id}"
+      "#{filename.parameterize}_#{Time.now.to_i}-#{person_id}"
     end
   end
 

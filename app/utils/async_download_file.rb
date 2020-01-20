@@ -17,7 +17,7 @@ class AsyncDownloadFile
 
   class << self
     def create_name(filename, person_id)
-      "#{filename.parameterize}_#{Time.now.to_i}-#{person_id}"
+      "#{filename.to_s.parameterize}_#{Time.now.to_i}-#{person_id}"
     end
   end
 

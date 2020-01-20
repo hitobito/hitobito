@@ -38,6 +38,10 @@ class Event::Question < ActiveRecord::Base
     choices.to_s.split(',').collect(&:strip)
   end
 
+  def label
+    question.truncate(30)
+  end
+
   private
 
   def assert_zero_or_more_than_one_choice

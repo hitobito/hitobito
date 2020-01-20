@@ -60,4 +60,7 @@ Hitobito::Application.configure do
   # do not assume interleaved requests in development
   config.log_tags = []
 
+  # Allow using better_errors in Docker
+  BetterErrors::Middleware.allow_ip! ENV['DOCKER_HOST_IP'] if ENV['DOCKER_HOST_IP'].present?
+
 end

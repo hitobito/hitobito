@@ -3,4 +3,4 @@
 set -eo pipefail
 
 echo 'Integration build: Pulling transifex translations.'
-bundle exec rake tx:pull tx:wagon:pull -t
+bundle exec rake tx:pull tx:wagon:pull tx:push tx:wagon:push -t

@@ -143,3 +143,31 @@ downloads:
 
 impersonate:
   notify: true
+
+help_text_blacklist:
+  event/kind:
+    - precondition_qualification_kinds
+  event/participation:
+    - answers_attributes
+  event:
+    - hidden_contact_attrs
+    - required_contact_attrs
+  group:
+    - phone_numbers_attributes
+    - remove_logo
+  invoice_config:
+    - payment_reminder_configs_attributes
+  invoice:
+    - invoice_items_attributes
+    - recipient_id
+  mailing_list:
+    - anyone_may_post
+    - delivery_report
+  oauth_application:
+    - confidential
+    - redirect_uris
+    - scopes
+  person:
+    - household_people_ids
+    - relations_to_tails_attributes
+    - phone_numbers_attributes

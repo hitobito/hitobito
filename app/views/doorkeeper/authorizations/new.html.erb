@@ -1,26 +1,13 @@
-<header class="page-header" role="banner">
-  <h1><%= t('.title') %></h1>
-</header>
+<% title t('.title') %>
 
-<main role="main">
-  <p class="h4">
-    <%= raw t('.prompt', client_name: content_tag(:strong, class: 'text-info') { @pre_auth.client.name }) %>
+<div class="row-fluid" role="main">
+  <div class="span7">
+  <p style="margin-bottom: 2rem;">
+    <%= raw t('.prompt', client_name: content_tag(:strong) { @pre_auth.client.name }) %>
   </p>
 
-  <% if @pre_auth.scopes.count > 0 %>
-    <div id="oauth-permissions" style="width: 100%">
-      <p><%= t('.able_to') %>:</p>
-
-      <ul class="text-info">
-        <% @pre_auth.scopes.each do |scope| %>
-          <li><%= t scope, scope: [:doorkeeper, :scopes] %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= form_tag oauth_authorization_path, method: :post do %>
+  <div class="actions row-fluid">
+    <%= form_tag oauth_authorization_path, method: :post, class: 'span6' do %>
       <%= hidden_field_tag :client_id, @pre_auth.client.uid %>
       <%= hidden_field_tag :redirect_uri, @pre_auth.redirect_uri %>
       <%= hidden_field_tag :state, @pre_auth.state %>
@@ -30,7 +17,7 @@
       <%= hidden_field_tag :code_challenge_method, @pre_auth.code_challenge_method %>
       <%= submit_tag t('doorkeeper.authorizations.buttons.authorize'), class: "btn btn-success btn-lg btn-block" %>
     <% end %>
-    <%= form_tag oauth_authorization_path, method: :delete do %>
+    <%= form_tag oauth_authorization_path, method: :delete, class: 'span6' do %>
       <%= hidden_field_tag :client_id, @pre_auth.client.uid %>
       <%= hidden_field_tag :redirect_uri, @pre_auth.redirect_uri %>
       <%= hidden_field_tag :state, @pre_auth.state %>
@@ -41,4 +28,20 @@
       <%= submit_tag t('doorkeeper.authorizations.buttons.deny'), class: "btn btn-danger btn-lg btn-block" %>
     <% end %>
   </div>
-</main>
+</div>
+  <div class="span5">
+  <% if @pre_auth.scopes.count > 0 %>
+    <div id="oauth-permissions">
+      <div class="well help">
+      <p><%= t('.able_to') %>:</p>
+
+      <ul>
+        <% @pre_auth.scopes.each do |scope| %>
+          <li><%= t scope, scope: [:doorkeeper, :scopes] %></li>
+        <% end %>
+      </ul>
+    </div>
+    </div>
+  <% end %>
+</div>
+</div>

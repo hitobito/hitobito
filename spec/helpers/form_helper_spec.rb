@@ -18,6 +18,7 @@ describe FormHelper do
   include FormatHelper
   include CrudTestHelper
   include NestedForm::ViewHelper
+  include HelpTextsHelper
 
   before(:all) do
     reset_db

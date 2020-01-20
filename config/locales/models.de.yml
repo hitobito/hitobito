@@ -1,5 +1,3 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
@@ -161,6 +159,9 @@ de:
       event/kind:
         one: Kursart
         other: Kursarten
+      event/role:
+        one: Anlass Rolle
+        other: Anlass Rollen
       event/role/assistant_leader:
         one: Leitung
         other: Leitung
@@ -188,6 +189,9 @@ de:
       group:
         one: Gruppe
         other: Gruppen
+      help_text:
+        one: Hilfetext
+        other: Hilfetexte
       invoice:
         one: Rechnung
         other: Rechnungen
@@ -618,6 +622,17 @@ de:
         subject: Betreff
         body: Inhalt
 
+      help_text:
+        context: Kontext
+        key: Schlüssel
+        body: Inhalt
+        field:
+          one: Feld
+          other: Felder
+
+        action:
+          one: Seite
+          other: Seiten
 
       label_format:
         name: Bezeichnung
@@ -678,6 +693,9 @@ de:
         payment_slip: Einzahlungsschein
         participant_number: Teilnehmernummer
         creator: Rechnungssteller
+        cost_centers: Kostenstellen
+        accounts: Konten
+        payments: Zahlungseingänge
 
       invoice_article:
         number: Artikelnummer
@@ -718,6 +736,8 @@ de:
         unit_cost: Preis
         count: Anzahl
         cost: Betrag
+        cost_center: Kostenstelle
+        account: Konto
 
       # used for nested attributes
       invoice_items:
@@ -727,6 +747,8 @@ de:
         unit_cost: Preis
         count: Anzahl
         cost: Betrag
+        cost_center: Kostenstelle
+        account: Konto
 
       payment:
         invoice: Rechnung
@@ -755,10 +777,12 @@ de:
         key: Key
         abilities: Rechte
         last_access: Letzter Zugriff
-        people: Personen dieser Gruppe
-        people_below: Personen von Untergruppen
-        groups: Gruppen dieser Gruppe
-        events: Events dieser Gruppe
+        people: Personen dieser Ebene
+        people_below: Personen dieser und der darunterliegenden Ebenen
+        groups: Gruppen dieser und der darunterliegenden Ebenen
+        events: Anlässe dieser und der darunterliegenden Ebenen
+        invoices: Rechnungen dieser Ebene
+        event_participations: Teilnehmende von Anlässen dieser Ebene
 
   doorkeeper:
     scopes:

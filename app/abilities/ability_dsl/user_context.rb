@@ -8,12 +8,14 @@
 module AbilityDsl
   class UserContext
 
+    # rubocop:disable Style/MutableConstant These constants are meant to be extended
     GROUP_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
                          :group_and_below_full, :group_and_below_read, :group_full, :group_read,
-                         :finance ]
+                         :finance]
 
     LAYER_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
                          :finance]
+    # rubocop:enable Style/MutableConstant
 
     attr_reader :user, :admin
 
@@ -89,7 +91,7 @@ module AbilityDsl
     end
 
     def collect_group_ids!
-      @permission_group_ids.values.each { |groups| groups.collect!(&:id) }
+      @permission_group_ids.each_value { |groups| groups.collect!(&:id) }
     end
 
     def group_ids_with_permission(source, permission)
@@ -101,9 +103,8 @@ module AbilityDsl
     end
 
     def find_events_with_permission(permission)
-      participations.select { |p| p.roles.any? { |r| r.class.permissions.include?(permission) } }.
-                     collect(&:event_id)
+      participations.select { |p| p.roles.any? { |r| r.class.permissions.include?(permission) } }
+                    .collect(&:event_id)
     end
-
   end
 end

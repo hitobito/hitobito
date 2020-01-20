@@ -13,4 +13,4 @@
       - values.each do |candidate|
         = f.inline_radio_button(:target_group_id, candidate.id, candidate.to_s, false)
 
-  = save_form_buttons(f, t('.title'), group_path(@group))
+  = form_buttons(f, submit_label: t('.title'), cancel_url: group_path(@group))

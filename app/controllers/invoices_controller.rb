@@ -6,11 +6,14 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoicesController < CrudController
+  include YearBasedPaging
+  include Api::JsonPaging
   decorates :invoice
 
   self.nesting = Group
   self.sort_mappings = { recipient: Person.order_by_name_statement,
                          sequence_number: Invoice.order_by_sequence_number_statement }
+  self.remember_params += [:year, :state, :due_since]
 
   self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
   self.permitted_attrs = [:title, :description, :state, :due_at,
@@ -23,8 +26,12 @@ class InvoicesController < CrudController
                             :unit_cost,
                             :vat_rate,
                             :count,
+                            :cost_center,
+                            :account,
                             :_destroy
                           ]]
+
+  before_render_index :year  # sets ivar used in view
 
   def new
     entry.attributes = { payment_information: entry.invoice_config.payment_information }
@@ -35,6 +42,9 @@ class InvoicesController < CrudController
       format.html { super }
       format.pdf  { generate_pdf(list_entries.includes(:invoice_items)) }
       format.csv  { render_invoices_csv(list_entries.includes(:invoice_items)) }
+      format.json { render_entries_json(list_entries.includes(:invoice_items,
+                                                              :payments,
+                                                              :payment_reminders)) }
     end
   end
 
@@ -44,6 +54,7 @@ class InvoicesController < CrudController
       format.html { build_payment }
       format.pdf  { generate_pdf([entry]) }
       format.csv  { render_invoices_csv([entry]) }
+      format.json { render_entry_json }
     end
   end
 
@@ -54,6 +65,20 @@ class InvoicesController < CrudController
   end
 
   private
+
+  def render_entries_json(entries)
+    paged_entries = entries.page(params[:page])
+    render json: [paging_properties(paged_entries),
+                  ListSerializer.new(paged_entries,
+                                     group: parent,
+                                     page: params[:page],
+                                     serializer: InvoiceSerializer,
+                                     controller: self)].inject(&:merge)
+  end
+
+  def render_entry_json
+    render json: InvoiceSerializer.new(entry, group: parent, controller: self)
+  end
 
   def build_payment
     @payment = entry.payments.build(payment_attrs)

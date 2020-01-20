@@ -19,16 +19,18 @@ module I18nHelper
   #  - global.{key}
   def translate_inheritable(key, variables = {})
     defaults = []
-    partial = @virtual_path ? @virtual_path.gsub(/.*\/_?/, '') : nil
-    current = controller.class
-    while current < ActionController::Base
-      folder = current.controller_path
-      if folder.present?
-        defaults << :"#{folder}.#{partial}.#{key}" if partial
-        defaults << :"#{folder}.#{action_name}.#{key}"
-        defaults << :"#{folder}.global.#{key}"
+    unless controller.try(:skip_translate_inheritable)
+      partial = @virtual_path ? @virtual_path.gsub(/.*\/_?/, '') : nil
+      current = controller.class
+      while current < ActionController::Base
+        folder = current.controller_path
+        if folder.present?
+          defaults << :"#{folder}.#{partial}.#{key}" if partial
+          defaults << :"#{folder}.#{action_name}.#{key}"
+          defaults << :"#{folder}.global.#{key}"
+        end
+        current = current.superclass
       end
-      current = current.superclass
     end
     defaults << :"global.#{key}"
 

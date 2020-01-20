@@ -30,7 +30,7 @@ module TableDisplays
     end
 
     def format_attr(target, attr)
-      template.format_attr(target, attr)
+      template.format_attr(target, attr) if target.respond_to?(attr)
     end
 
     def header

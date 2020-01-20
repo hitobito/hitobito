@@ -1,5 +1,11 @@
 # Hitobito Changelog
 
+## unreleased
+
+## Version 1.20
+
+*   Für Seiten und Formulare können Hilfetexte hinterlegt werden
+
 ## Version 1.19
 
 *   Neue Navigation, mit Menü für Mobile

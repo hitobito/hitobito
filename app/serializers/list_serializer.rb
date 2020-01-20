@@ -7,7 +7,9 @@
 
 class ListSerializer < ApplicationSerializer
   schema do
-    t = item.send(:object).klass.model_name.plural
+    real_item = item.try(:decorated?) ? item.send(:object) : item
+
+    t = real_item.klass.model_name.plural
     type t
     collection t, item, context[:serializer]
   end

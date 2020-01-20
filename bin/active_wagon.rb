@@ -46,13 +46,15 @@ class Setup
 
   def environment
     <<-EOF
-    echo PATH_add bin
+    PATH_add bin
     export RAILS_DB_ADAPTER=mysql2
     export RAILS_DB_NAME=hit_#{wagon}_development
     export RAILS_TEST_DB_NAME=hit_#{wagon}_test
     export RAILS_PRODUCTION_DB_NAME=hit_#{wagon}_production
     export RUBYOPT=-W0
     export WAGONS="#{wagons.join(' ')}"
+    log_status "hitobito now uses: #{wagons.join(', ')}"
+    source_up
     EOF
   end
 
@@ -68,7 +70,7 @@ class Setup
     %w(pbs cevi pro_natura).product([%w(youth)]).to_h.merge('jubla' => %w(youth jubla_ci))
   end
 
-  def available(excluded = %w(youth jubla_ci site))
+  def available(excluded = %w(youth jubla_ci site tenants))
     @available ||= root.parent.entries
       .collect { |x| x.to_s[/hitobito_(.*)/, 1]  }
       .compact.reject(&:empty?) - excluded
@@ -79,6 +81,7 @@ class Setup
     indent = val ? val.size : 0
     string.gsub(/^[ \t]{#{indent}}/, '')
   end
+
 end
 
 Setup.new.run

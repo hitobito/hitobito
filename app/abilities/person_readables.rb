@@ -19,8 +19,10 @@ class PersonReadables < PersonFetchables
 
   delegate :permission_group_ids, :permission_layer_ids, to: :user_context
 
-  def initialize(user, group = nil)
+  def initialize(user, group = nil, roles_join = nil)
     super(user)
+
+    @roles_join = roles_join || { roles: :group }
     @group = group
 
     if @group.nil?
@@ -52,8 +54,8 @@ class PersonReadables < PersonFetchables
       Person.only_public_data
     else
       Person.only_public_data
-            .joins(roles: :group)
-            .where(roles: { deleted_at: nil }, groups: { deleted_at: nil })
+            .joins(@roles_join)
+            .where(groups: { deleted_at: nil })
             .where(accessible_conditions.to_a)
             .uniq
     end

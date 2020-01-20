@@ -129,6 +129,10 @@ module Hitobito
       host.blank? || host == '127.0.0.1' || host == 'localhost'
     end
 
+    def self.versions(file = Rails.root.join('WAGON_VERSIONS'))
+      @versions ||= file.exist? ? file.read.lines.reject(&:blank?) : []
+    end
+
     def self.build_info
       @build_info ||= File.read("#{Rails.root}/BUILD_INFO").strip rescue ''
     end

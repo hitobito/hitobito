@@ -203,12 +203,12 @@ class RolesController < CrudController
   end
 
   def after_create_location(new_person)
-    return_path ||
-      if new_person && entry.person && entry.person.persisted?
-        group_person_path(entry.group_id, entry.person_id)
-      else
-        group_people_path(entry.group_id)
-      end
+    return return_path if return_path.present?
+    return new_group_role_path(entry.group_id) if params.key?(:add_another)
+    return edit_group_person_path(entry.group_id, entry.person_id) if new_person &&
+      entry.person.try(:persisted?)
+
+    group_people_path(entry.group_id)
   end
 
   def after_update_location

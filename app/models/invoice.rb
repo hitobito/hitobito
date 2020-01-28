@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2017-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -93,7 +91,7 @@ class Invoice < ActiveRecord::Base
 
   class << self
     def draft_or_issued_in(year)
-      return all unless year.to_s =~ /\d+/
+      return all unless year.to_s =~ /\A\d+\z/
       condition = OrCondition.new
       condition.or('EXTRACT(YEAR FROM issued_at) = ?', year)
       condition.or('issued_at IS NULL AND EXTRACT(YEAR FROM invoices.created_at) = ?', year)

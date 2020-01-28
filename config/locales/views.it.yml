@@ -415,6 +415,19 @@ it:
       one: 'prolunga la qualifica esistente %{prolonged} fino al  %{until} (ultima data del corso).'
       other: 'prolunga le qualifiche esistenti %{prolonged} fino al  %{until} (ultima data del corso).'
     issue_and_prolong: 'assegna %{model} %{issued} e prolunga le qualifiche esistenti %{prolonged} al %{until} (ultima data del corso).'
+  event_feeds:
+    integrate: Integrare nel calendario
+    show:
+      title: Integrare i miei impegni nel calendario
+      url: 'URL: %{url}'
+      create_url: Creare l'indirizzo
+      url_description: 'Con questo indirizzo puoi accedere da altre applicazioni ai tuoi impegni. Attenzione: rendi noto questo indirizzo solo a persone che possono vedere i tuoi impegni.'
+      reset_url: Rimettere l'URL originale
+      reset_url_description: 'Se presumi che ci sia un abuso puoi tornare all''indirizzo originale ed in questo modo rendere non valevole l''indirizzo attuale. Tutti i calendari che che usano il vecchio indirizzo non potranno più vedere i tuoi impegni.'
+    update:
+      flash:
+        create: È stato creato l'indirizzo.
+        reset: L'indirizzo è stato attualizzato.
   filter_navigation/dropdown:
     additional_views: 'altre opinioni'
   filter_navigation/people:
@@ -698,6 +711,7 @@ it:
     events: 'eventi'
     courses: 'corsi'
     admin: 'admin'
+    admin/event_feed: 'Integrare il calendario.'
     invoices: 'Fatture'
   notes:
     new_note: Nuova nota
@@ -708,9 +722,17 @@ it:
       older_notes: Contributi più vecchi
   oauth:
     applications:
+      form:
+        help_native_redirect_uris: Una registrazione per rica. Per i test locali utilizzare %{native_redirect_uri} .
       attrs:
         profile_endpoint_help: Si può fare riferimento alle informazioni di profilo dell'utilizzatore  tramite questo endpoint. Nel far questo deve venir consegnato l'access token nell'authorization header. Lo scope desiderato può venir consegnato quale x-scope header.
         profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
+    access_grants:
+      list:
+        title: Attiva %{model_name} per %{uri}
+    tabs:
+      grants: Autorizzazioni
+      tokens: Token di accesso
   qualifications:
     in_years: '%{years} anni'
     valid_until: 'fino a %{date}'
@@ -920,6 +942,9 @@ it:
       move_role: Spostare ruoli
       add_role: Aggiungi ruolo
       add_participation: Aggiungi all'evento
+      tag_lists: Tags
+      remove_tags: Eliminare tags
+      add_tags: Aggiungere tags
   participations:
     destroy:
       flash:
@@ -948,6 +973,9 @@ it:
       equal: è esattamente
       greater: più grande di
       smaller: più piccolo di
+    tag:
+      title: Tags
+      prompt_tag_selection: Solo persone con uno dei tags seguenti
     new:
       title: Filtro per le persone
     range:
@@ -1036,13 +1064,34 @@ it:
       submit: Rimuovere
     new:
       title: Dove dovrebbero essere creati i nuovi ruoli?
+      submit:
+        one: 'Creare %{count} ruoli'
+        other: 'Creare %{count} ruoli '
+  tag_lists:
+    destroy:
+      success:
+        zero: Non sono stati eliminati tags
+        one: È stato eliminato un tag
+        other: 'Sono stati elimintati  %{count} tags'
+    create:
+      success:
+        zero: Non sono stati creati tags
+        one: È stato creato un tag
+        other: 'Sono stati creati %{count} tags'
+    deletable:
+      title: Quali tags devono venir cancellati?
+      no_entries: Da nessuna delle persone scelte possono venir cancellati tags.
+      submit: Eliminare
+    new:
+      title: Quali tags devono venir aggiunti?
+      no_entries: Non possono essere creati tags per nessuna delle persone scelte
+      separate_multiple_tags_with_comma: Più tags possono venir separati da virgole
+      submit:
+        one: 'Creare tags per %{count} persone'
+        other: 'Creare tags per %{count} persone'
   service_tokens:
     abilities:
       read: Leggere
-      people: Persone di questo livello
-      people_below: Persone di questo livello e dei livelli sottostanti
-      groups: Gruppi di questo livello e dei livelli sottostanti
-      events: Eventi di questo livello e dei livelli sottostanti
     global:
       link:
         add: Aggiungere API Key

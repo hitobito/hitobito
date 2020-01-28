@@ -26,13 +26,13 @@ en:
       remove: Remove
     button:
       save: Save
-      add_another: Save and add another
       cancel: Cancel
       close: close
       search: Search
       back: Back
       refresh: Update
       print: Print
+      copy: Copy
     link:
       show: Show
       edit: Edit
@@ -241,6 +241,9 @@ en:
       qualifications:
         or: or
         and: and
+    participation_contact_datas:
+      edit:
+        save: Next
     participations:
       approvals:
         title: Approval

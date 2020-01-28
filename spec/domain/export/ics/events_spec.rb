@@ -97,9 +97,9 @@ describe Export::Ics::Events do
 
       it do
         expect(ical_event.dtstart).to be_a(ical_datetime_klass)
-        expect(ical_event.dtstart.value_ical).to eq(event_date.start_at.strftime(ical_datetime_klass::FORMAT))
+        expect(ical_event.dtstart.value_ical).to eq('20180519T100000Z')
         expect(ical_event.dtend).to be_a(ical_datetime_klass)
-        expect(ical_event.dtend).to eq(event_date.finish_at.strftime(ical_datetime_klass::FORMAT))
+        expect(ical_event.dtend.value_ical).to eq('20180519T140000Z')
       end
     end
 

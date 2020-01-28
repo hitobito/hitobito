@@ -99,7 +99,7 @@ describe Export::Ics::Events do
         expect(ical_event.dtstart).to be_a(ical_datetime_klass)
         expect(ical_event.dtstart.value_ical).to eq('20180519T100000Z')
         expect(ical_event.dtend).to be_a(ical_datetime_klass)
-        expect(ical_event.dtend.value_ical).to eq('20180519T140000Z')
+        expect(ical_event.dtend.value_ical).to eq('20180521T140000Z')
       end
     end
 

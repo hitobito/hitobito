@@ -1,735 +1,686 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191212094521) do
+ActiveRecord::Schema.define(version: 2019_12_12_094521) do
 
-  create_table "additional_emails", force: :cascade do |t|
-    t.integer "contactable_id",   limit: 4,                   null: false
-    t.string  "contactable_type", limit: 255,                 null: false
-    t.string  "email",            limit: 255,                 null: false
-    t.string  "label",            limit: 255
-    t.boolean "public",                       default: true,  null: false
-    t.boolean "mailings",                     default: false, null: false
+  create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "contactable_type", null: false
+    t.integer "contactable_id", null: false
+    t.string "email", null: false
+    t.string "label"
+    t.boolean "public", default: true, null: false
+    t.boolean "mailings", default: false, null: false
+    t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
   end
 
-  add_index "additional_emails", ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type", using: :btree
-
-  create_table "custom_content_translations", force: :cascade do |t|
-    t.integer  "custom_content_id", limit: 4,     null: false
-    t.string   "locale",            limit: 255,   null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.string   "label",             limit: 255,   null: false
-    t.string   "subject",           limit: 255
-    t.text     "body",              limit: 65535
+  create_table "custom_content_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "custom_content_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "label", null: false
+    t.string "subject"
+    t.text "body"
+    t.index ["custom_content_id"], name: "index_custom_content_translations_on_custom_content_id"
+    t.index ["locale"], name: "index_custom_content_translations_on_locale"
   end
 
-  add_index "custom_content_translations", ["custom_content_id"], name: "index_custom_content_translations_on_custom_content_id", using: :btree
-  add_index "custom_content_translations", ["locale"], name: "index_custom_content_translations_on_locale", using: :btree
-
-  create_table "custom_contents", force: :cascade do |t|
-    t.string "key",                   limit: 255, null: false
-    t.string "placeholders_required", limit: 255
-    t.string "placeholders_optional", limit: 255
+  create_table "custom_contents", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "placeholders_required"
+    t.string "placeholders_optional"
   end
 
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   limit: 4,     default: 0
-    t.integer  "attempts",   limit: 4,     default: 0
-    t.text     "handler",    limit: 65535
-    t.text     "last_error", limit: 65535
+  create_table "delayed_jobs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "priority", default: 0
+    t.integer "attempts", default: 0
+    t.text "handler"
+    t.text "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
-    t.string   "locked_by",  limit: 255
-    t.string   "queue",      limit: 255
+    t.string "locked_by"
+    t.string "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
-
-  create_table "event_answers", force: :cascade do |t|
-    t.integer "participation_id", limit: 4,   null: false
-    t.integer "question_id",      limit: 4,   null: false
-    t.string  "answer",           limit: 255
+  create_table "event_answers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "participation_id", null: false
+    t.integer "question_id", null: false
+    t.string "answer"
+    t.index ["participation_id", "question_id"], name: "index_event_answers_on_participation_id_and_question_id", unique: true
   end
 
-  add_index "event_answers", ["participation_id", "question_id"], name: "index_event_answers_on_participation_id_and_question_id", unique: true, using: :btree
-
-  create_table "event_applications", force: :cascade do |t|
-    t.integer "priority_1_id",        limit: 4,                     null: false
-    t.integer "priority_2_id",        limit: 4
-    t.integer "priority_3_id",        limit: 4
-    t.boolean "approved",                           default: false, null: false
-    t.boolean "rejected",                           default: false, null: false
-    t.boolean "waiting_list",                       default: false, null: false
-    t.text    "waiting_list_comment", limit: 65535
+  create_table "event_applications", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "priority_1_id", null: false
+    t.integer "priority_2_id"
+    t.integer "priority_3_id"
+    t.boolean "approved", default: false, null: false
+    t.boolean "rejected", default: false, null: false
+    t.boolean "waiting_list", default: false, null: false
+    t.text "waiting_list_comment"
   end
 
-  create_table "event_attachments", force: :cascade do |t|
-    t.integer "event_id", limit: 4,   null: false
-    t.string  "file",     limit: 255, null: false
+  create_table "event_attachments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.string "file", null: false
+    t.index ["event_id"], name: "index_event_attachments_on_event_id"
   end
 
-  add_index "event_attachments", ["event_id"], name: "index_event_attachments_on_event_id", using: :btree
-
-  create_table "event_dates", force: :cascade do |t|
-    t.integer  "event_id",  limit: 4,   null: false
-    t.string   "label",     limit: 255
+  create_table "event_dates", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.string "label"
     t.datetime "start_at"
     t.datetime "finish_at"
-    t.string   "location",  limit: 255
+    t.string "location"
+    t.index ["event_id", "start_at"], name: "index_event_dates_on_event_id_and_start_at"
+    t.index ["event_id"], name: "index_event_dates_on_event_id"
   end
 
-  add_index "event_dates", ["event_id", "start_at"], name: "index_event_dates_on_event_id_and_start_at", using: :btree
-  add_index "event_dates", ["event_id"], name: "index_event_dates_on_event_id", using: :btree
-
-  create_table "event_kind_qualification_kinds", force: :cascade do |t|
-    t.integer "event_kind_id",         limit: 4,   null: false
-    t.integer "qualification_kind_id", limit: 4,   null: false
-    t.string  "category",              limit: 255, null: false
-    t.string  "role",                  limit: 255, null: false
-    t.integer "grouping",              limit: 4
+  create_table "event_kind_qualification_kinds", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "event_kind_id", null: false
+    t.integer "qualification_kind_id", null: false
+    t.string "category", null: false
+    t.string "role", null: false
+    t.integer "grouping"
+    t.index ["category"], name: "index_event_kind_qualification_kinds_on_category"
+    t.index ["role"], name: "index_event_kind_qualification_kinds_on_role"
   end
 
-  add_index "event_kind_qualification_kinds", ["category"], name: "index_event_kind_qualification_kinds_on_category", using: :btree
-  add_index "event_kind_qualification_kinds", ["role"], name: "index_event_kind_qualification_kinds_on_role", using: :btree
-
-  create_table "event_kind_translations", force: :cascade do |t|
-    t.integer  "event_kind_id",          limit: 4,     null: false
-    t.string   "locale",                 limit: 255,   null: false
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.string   "label",                  limit: 255,   null: false
-    t.string   "short_name",             limit: 255
-    t.text     "general_information",    limit: 65535
-    t.text     "application_conditions", limit: 65535
+  create_table "event_kind_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "event_kind_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "label", null: false
+    t.string "short_name"
+    t.text "general_information"
+    t.text "application_conditions"
+    t.index ["event_kind_id"], name: "index_event_kind_translations_on_event_kind_id"
+    t.index ["locale"], name: "index_event_kind_translations_on_locale"
   end
 
-  add_index "event_kind_translations", ["event_kind_id"], name: "index_event_kind_translations_on_event_kind_id", using: :btree
-  add_index "event_kind_translations", ["locale"], name: "index_event_kind_translations_on_locale", using: :btree
-
-  create_table "event_kinds", force: :cascade do |t|
+  create_table "event_kinds", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
-    t.integer  "minimum_age", limit: 4
+    t.integer "minimum_age"
   end
 
-  create_table "event_participations", force: :cascade do |t|
-    t.integer  "event_id",               limit: 4,                     null: false
-    t.integer  "person_id",              limit: 4,                     null: false
-    t.text     "additional_information", limit: 65535
+  create_table "event_participations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.integer "person_id", null: false
+    t.text "additional_information"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "active",                               default: false, null: false
-    t.integer  "application_id",         limit: 4
-    t.boolean  "qualified"
+    t.boolean "active", default: false, null: false
+    t.integer "application_id"
+    t.boolean "qualified"
+    t.index ["application_id"], name: "index_event_participations_on_application_id"
+    t.index ["event_id", "person_id"], name: "index_event_participations_on_event_id_and_person_id", unique: true
+    t.index ["event_id"], name: "index_event_participations_on_event_id"
+    t.index ["person_id"], name: "index_event_participations_on_person_id"
   end
 
-  add_index "event_participations", ["application_id"], name: "index_event_participations_on_application_id", using: :btree
-  add_index "event_participations", ["event_id", "person_id"], name: "index_event_participations_on_event_id_and_person_id", unique: true, using: :btree
-  add_index "event_participations", ["event_id"], name: "index_event_participations_on_event_id", using: :btree
-  add_index "event_participations", ["person_id"], name: "index_event_participations_on_person_id", using: :btree
-
-  create_table "event_questions", force: :cascade do |t|
-    t.integer "event_id",         limit: 4
-    t.string  "question",         limit: 255
-    t.string  "choices",          limit: 255
-    t.boolean "multiple_choices",             default: false, null: false
-    t.boolean "required",                     default: false, null: false
-    t.boolean "admin",                        default: false, null: false
+  create_table "event_questions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "event_id"
+    t.string "question"
+    t.string "choices"
+    t.boolean "multiple_choices", default: false, null: false
+    t.boolean "required", default: false, null: false
+    t.boolean "admin", default: false, null: false
+    t.index ["event_id"], name: "index_event_questions_on_event_id"
   end
 
-  add_index "event_questions", ["event_id"], name: "index_event_questions_on_event_id", using: :btree
-
-  create_table "event_roles", force: :cascade do |t|
-    t.string  "type",             limit: 255, null: false
-    t.integer "participation_id", limit: 4,   null: false
-    t.string  "label",            limit: 255
+  create_table "event_roles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "type", null: false
+    t.integer "participation_id", null: false
+    t.string "label"
+    t.index ["participation_id"], name: "index_event_roles_on_participation_id"
+    t.index ["type"], name: "index_event_roles_on_type"
   end
 
-  add_index "event_roles", ["participation_id"], name: "index_event_roles_on_participation_id", using: :btree
-  add_index "event_roles", ["type"], name: "index_event_roles_on_type", using: :btree
-
-  create_table "events", force: :cascade do |t|
-    t.string   "type",                        limit: 255
-    t.string   "name",                        limit: 255,                   null: false
-    t.string   "number",                      limit: 255
-    t.string   "motto",                       limit: 255
-    t.string   "cost",                        limit: 255
-    t.integer  "maximum_participants",        limit: 4
-    t.integer  "contact_id",                  limit: 4
-    t.text     "description",                 limit: 65535
-    t.text     "location",                    limit: 65535
-    t.date     "application_opening_at"
-    t.date     "application_closing_at"
-    t.text     "application_conditions",      limit: 65535
-    t.integer  "kind_id",                     limit: 4
-    t.string   "state",                       limit: 60
-    t.boolean  "priorization",                              default: false, null: false
-    t.boolean  "requires_approval",                         default: false, null: false
+  create_table "events", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "type"
+    t.string "name", null: false
+    t.string "number"
+    t.string "motto"
+    t.string "cost"
+    t.integer "maximum_participants"
+    t.integer "contact_id"
+    t.text "description"
+    t.text "location"
+    t.date "application_opening_at"
+    t.date "application_closing_at"
+    t.text "application_conditions"
+    t.integer "kind_id"
+    t.string "state", limit: 60
+    t.boolean "priorization", default: false, null: false
+    t.boolean "requires_approval", default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "participant_count",           limit: 4,     default: 0
-    t.integer  "application_contact_id",      limit: 4
-    t.boolean  "external_applications",                     default: false
-    t.integer  "applicant_count",             limit: 4,     default: 0
-    t.integer  "teamer_count",                limit: 4,     default: 0
-    t.boolean  "signature"
-    t.boolean  "signature_confirmation"
-    t.string   "signature_confirmation_text", limit: 255
-    t.integer  "creator_id",                  limit: 4
-    t.integer  "updater_id",                  limit: 4
-    t.boolean  "applications_cancelable",                   default: false, null: false
-    t.text     "required_contact_attrs",      limit: 65535
-    t.text     "hidden_contact_attrs",        limit: 65535
-    t.boolean  "display_booking_info",                      default: true,  null: false
+    t.integer "participant_count", default: 0
+    t.integer "application_contact_id"
+    t.boolean "external_applications", default: false
+    t.integer "applicant_count", default: 0
+    t.integer "teamer_count", default: 0
+    t.boolean "signature"
+    t.boolean "signature_confirmation"
+    t.string "signature_confirmation_text"
+    t.integer "creator_id"
+    t.integer "updater_id"
+    t.boolean "applications_cancelable", default: false, null: false
+    t.text "required_contact_attrs"
+    t.text "hidden_contact_attrs"
+    t.boolean "display_booking_info", default: true, null: false
+    t.index ["kind_id"], name: "index_events_on_kind_id"
   end
 
-  add_index "events", ["kind_id"], name: "index_events_on_kind_id", using: :btree
-
-  create_table "events_groups", id: false, force: :cascade do |t|
-    t.integer "event_id", limit: 4
-    t.integer "group_id", limit: 4
+  create_table "events_groups", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "event_id"
+    t.integer "group_id"
+    t.index ["event_id", "group_id"], name: "index_events_groups_on_event_id_and_group_id", unique: true
   end
 
-  add_index "events_groups", ["event_id", "group_id"], name: "index_events_groups_on_event_id_and_group_id", unique: true, using: :btree
-
-  create_table "groups", force: :cascade do |t|
-    t.integer  "parent_id",                   limit: 4
-    t.integer  "lft",                         limit: 4
-    t.integer  "rgt",                         limit: 4
-    t.string   "name",                        limit: 255,                   null: false
-    t.string   "short_name",                  limit: 31
-    t.string   "type",                        limit: 255,                   null: false
-    t.string   "email",                       limit: 255
-    t.string   "address",                     limit: 1024
-    t.integer  "zip_code",                    limit: 4
-    t.string   "town",                        limit: 255
-    t.string   "country",                     limit: 255
-    t.integer  "contact_id",                  limit: 4
+  create_table "groups", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "lft"
+    t.integer "rgt"
+    t.string "name", null: false
+    t.string "short_name", limit: 31
+    t.string "type", null: false
+    t.string "email"
+    t.string "address", limit: 1024
+    t.integer "zip_code"
+    t.string "town"
+    t.string "country"
+    t.integer "contact_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
-    t.integer  "layer_group_id",              limit: 4
-    t.integer  "creator_id",                  limit: 4
-    t.integer  "updater_id",                  limit: 4
-    t.integer  "deleter_id",                  limit: 4
-    t.boolean  "require_person_add_requests",               default: false, null: false
-    t.text     "description",                 limit: 65535
-    t.string   "logo",                        limit: 255
+    t.integer "layer_group_id"
+    t.integer "creator_id"
+    t.integer "updater_id"
+    t.integer "deleter_id"
+    t.boolean "require_person_add_requests", default: false, null: false
+    t.text "description"
+    t.string "logo"
+    t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
+    t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
+    t.index ["parent_id"], name: "index_groups_on_parent_id"
   end
 
-  add_index "groups", ["layer_group_id"], name: "index_groups_on_layer_group_id", using: :btree
-  add_index "groups", ["lft", "rgt"], name: "index_groups_on_lft_and_rgt", using: :btree
-  add_index "groups", ["parent_id"], name: "index_groups_on_parent_id", using: :btree
-
-  create_table "help_text_translations", force: :cascade do |t|
-    t.integer  "help_text_id", limit: 4,     null: false
-    t.string   "locale",       limit: 255,   null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.text     "body",         limit: 65535
+  create_table "help_text_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "help_text_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "body"
+    t.index ["help_text_id"], name: "index_help_text_translations_on_help_text_id"
+    t.index ["locale"], name: "index_help_text_translations_on_locale"
   end
 
-  add_index "help_text_translations", ["help_text_id"], name: "index_help_text_translations_on_help_text_id", using: :btree
-  add_index "help_text_translations", ["locale"], name: "index_help_text_translations_on_locale", using: :btree
-
-  create_table "help_texts", force: :cascade do |t|
-    t.string "controller", limit: 255, null: false
-    t.string "model",      limit: 255
-    t.string "kind",       limit: 255, null: false
-    t.string "name",       limit: 255, null: false
+  create_table "help_texts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "controller", null: false
+    t.string "model"
+    t.string "kind", null: false
+    t.string "name", null: false
+    t.index ["controller", "model", "kind", "name"], name: "index_help_texts_fields", unique: true
   end
 
-  add_index "help_texts", ["controller", "model", "kind", "name"], name: "index_help_texts_fields", unique: true, using: :btree
-
-  create_table "invoice_articles", force: :cascade do |t|
-    t.string   "number",      limit: 255
-    t.string   "name",        limit: 255,                            null: false
-    t.text     "description", limit: 65535
-    t.string   "category",    limit: 255
-    t.decimal  "unit_cost",                 precision: 12, scale: 2
-    t.decimal  "vat_rate",                  precision: 5,  scale: 2
-    t.string   "cost_center", limit: 255
-    t.string   "account",     limit: 255
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
-    t.integer  "group_id",    limit: 4,                              null: false
+  create_table "invoice_articles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "number"
+    t.string "name", null: false
+    t.text "description"
+    t.string "category"
+    t.decimal "unit_cost", precision: 12, scale: 2
+    t.decimal "vat_rate", precision: 5, scale: 2
+    t.string "cost_center"
+    t.string "account"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "group_id", null: false
+    t.index ["number", "group_id"], name: "index_invoice_articles_on_number_and_group_id", unique: true
   end
 
-  add_index "invoice_articles", ["number", "group_id"], name: "index_invoice_articles_on_number_and_group_id", unique: true, using: :btree
-
-  create_table "invoice_configs", force: :cascade do |t|
-    t.integer "sequence_number",             limit: 4,     default: 1,       null: false
-    t.integer "due_days",                    limit: 4,     default: 30,      null: false
-    t.integer "group_id",                    limit: 4,                       null: false
-    t.text    "address",                     limit: 65535
-    t.text    "payment_information",         limit: 65535
-    t.string  "account_number",              limit: 255
-    t.string  "iban",                        limit: 255
-    t.string  "payment_slip",                limit: 255,   default: "ch_es", null: false
-    t.text    "beneficiary",                 limit: 65535
-    t.text    "payee",                       limit: 65535
-    t.string  "participant_number",          limit: 255
-    t.string  "email",                       limit: 255
-    t.string  "participant_number_internal", limit: 255
-    t.string  "vat_number",                  limit: 255
+  create_table "invoice_configs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "sequence_number", default: 1, null: false
+    t.integer "due_days", default: 30, null: false
+    t.integer "group_id", null: false
+    t.text "address"
+    t.text "payment_information"
+    t.string "account_number"
+    t.string "iban"
+    t.string "payment_slip", default: "ch_es", null: false
+    t.text "beneficiary"
+    t.text "payee"
+    t.string "participant_number"
+    t.string "email"
+    t.string "participant_number_internal"
+    t.string "vat_number"
+    t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 
-  add_index "invoice_configs", ["group_id"], name: "index_invoice_configs_on_group_id", using: :btree
-
-  create_table "invoice_items", force: :cascade do |t|
-    t.integer "invoice_id",  limit: 4,                                          null: false
-    t.string  "name",        limit: 255,                                        null: false
-    t.text    "description", limit: 65535
-    t.decimal "vat_rate",                  precision: 5,  scale: 2
-    t.decimal "unit_cost",                 precision: 12, scale: 2,             null: false
-    t.integer "count",       limit: 4,                              default: 1, null: false
-    t.string  "cost_center", limit: 255
-    t.string  "account",     limit: 255
+  create_table "invoice_items", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "invoice_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.decimal "vat_rate", precision: 5, scale: 2
+    t.decimal "unit_cost", precision: 12, scale: 2, null: false
+    t.integer "count", default: 1, null: false
+    t.string "cost_center"
+    t.string "account"
+    t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
   end
 
-  add_index "invoice_items", ["invoice_id"], name: "index_invoice_items_on_invoice_id", using: :btree
-
-  create_table "invoices", force: :cascade do |t|
-    t.string   "title",                       limit: 255,                                              null: false
-    t.string   "sequence_number",             limit: 255,                                              null: false
-    t.string   "state",                       limit: 255,                            default: "draft", null: false
-    t.string   "esr_number",                  limit: 255,                                              null: false
-    t.text     "description",                 limit: 65535
-    t.string   "recipient_email",             limit: 255
-    t.text     "recipient_address",           limit: 65535
-    t.date     "sent_at"
-    t.date     "due_at"
-    t.integer  "group_id",                    limit: 4,                                                null: false
-    t.integer  "recipient_id",                limit: 4
-    t.decimal  "total",                                     precision: 12, scale: 2
-    t.datetime "created_at",                                                                           null: false
-    t.datetime "updated_at",                                                                           null: false
-    t.string   "account_number",              limit: 255
-    t.text     "address",                     limit: 65535
-    t.date     "issued_at"
-    t.string   "iban",                        limit: 255
-    t.text     "payment_purpose",             limit: 65535
-    t.text     "payment_information",         limit: 65535
-    t.string   "payment_slip",                limit: 255,                            default: "ch_es", null: false
-    t.text     "beneficiary",                 limit: 65535
-    t.text     "payee",                       limit: 65535
-    t.string   "participant_number",          limit: 255
-    t.integer  "creator_id",                  limit: 4
-    t.string   "participant_number_internal", limit: 255
-    t.string   "vat_number",                  limit: 255
+  create_table "invoices", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "sequence_number", null: false
+    t.string "state", default: "draft", null: false
+    t.string "esr_number", null: false
+    t.text "description"
+    t.string "recipient_email"
+    t.text "recipient_address"
+    t.date "sent_at"
+    t.date "due_at"
+    t.integer "group_id", null: false
+    t.integer "recipient_id"
+    t.decimal "total", precision: 12, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "account_number"
+    t.text "address"
+    t.date "issued_at"
+    t.string "iban"
+    t.text "payment_purpose"
+    t.text "payment_information"
+    t.string "payment_slip", default: "ch_es", null: false
+    t.text "beneficiary"
+    t.text "payee"
+    t.string "participant_number"
+    t.integer "creator_id"
+    t.string "participant_number_internal"
+    t.string "vat_number"
+    t.index ["esr_number"], name: "index_invoices_on_esr_number"
+    t.index ["group_id"], name: "index_invoices_on_group_id"
+    t.index ["recipient_id"], name: "index_invoices_on_recipient_id"
+    t.index ["sequence_number"], name: "index_invoices_on_sequence_number"
   end
 
-  add_index "invoices", ["esr_number"], name: "index_invoices_on_esr_number", using: :btree
-  add_index "invoices", ["group_id"], name: "index_invoices_on_group_id", using: :btree
-  add_index "invoices", ["recipient_id"], name: "index_invoices_on_recipient_id", using: :btree
-  add_index "invoices", ["sequence_number"], name: "index_invoices_on_sequence_number", using: :btree
-
-  create_table "label_format_translations", force: :cascade do |t|
-    t.integer  "label_format_id", limit: 4,   null: false
-    t.string   "locale",          limit: 255, null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.string   "name",            limit: 255, null: false
+  create_table "label_format_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "label_format_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "name", null: false
+    t.index ["label_format_id"], name: "index_label_format_translations_on_label_format_id"
+    t.index ["locale"], name: "index_label_format_translations_on_locale"
   end
 
-  add_index "label_format_translations", ["label_format_id"], name: "index_label_format_translations_on_label_format_id", using: :btree
-  add_index "label_format_translations", ["locale"], name: "index_label_format_translations_on_locale", using: :btree
-
-  create_table "label_formats", force: :cascade do |t|
-    t.string  "page_size",        limit: 255, default: "A4",  null: false
-    t.boolean "landscape",                    default: false, null: false
-    t.float   "font_size",        limit: 24,  default: 11.0,  null: false
-    t.float   "width",            limit: 24,                  null: false
-    t.float   "height",           limit: 24,                  null: false
-    t.integer "count_horizontal", limit: 4,                   null: false
-    t.integer "count_vertical",   limit: 4,                   null: false
-    t.float   "padding_top",      limit: 24,                  null: false
-    t.float   "padding_left",     limit: 24,                  null: false
-    t.integer "person_id",        limit: 4
-    t.boolean "nickname",                     default: false, null: false
-    t.string  "pp_post",          limit: 23
+  create_table "label_formats", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "page_size", default: "A4", null: false
+    t.boolean "landscape", default: false, null: false
+    t.float "font_size", default: 11.0, null: false
+    t.float "width", null: false
+    t.float "height", null: false
+    t.integer "count_horizontal", null: false
+    t.integer "count_vertical", null: false
+    t.float "padding_top", null: false
+    t.float "padding_left", null: false
+    t.integer "person_id"
+    t.boolean "nickname", default: false, null: false
+    t.string "pp_post", limit: 23
   end
 
-  create_table "locations", force: :cascade do |t|
-    t.string "name",     limit: 255, null: false
-    t.string "canton",   limit: 2,   null: false
-    t.string "zip_code", limit: 255, null: false
+  create_table "locations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "canton", limit: 2, null: false
+    t.string "zip_code", null: false
+    t.index ["zip_code", "canton", "name"], name: "index_locations_on_zip_code_and_canton_and_name", unique: true
   end
 
-  add_index "locations", ["zip_code", "canton", "name"], name: "index_locations_on_zip_code_and_canton_and_name", unique: true, using: :btree
-
-  create_table "mail_logs", force: :cascade do |t|
-    t.string   "mail_from",         limit: 255
-    t.string   "mail_subject",      limit: 255
-    t.string   "mail_hash",         limit: 255
-    t.integer  "status",            limit: 4,   default: 0
-    t.string   "mailing_list_name", limit: 255
-    t.integer  "mailing_list_id",   limit: 4
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+  create_table "mail_logs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "mail_from"
+    t.string "mail_subject"
+    t.string "mail_hash"
+    t.integer "status", default: 0
+    t.string "mailing_list_name"
+    t.integer "mailing_list_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["mail_hash"], name: "index_mail_logs_on_mail_hash"
+    t.index ["mailing_list_id"], name: "index_mail_logs_on_mailing_list_id"
   end
 
-  add_index "mail_logs", ["mail_hash"], name: "index_mail_logs_on_mail_hash", using: :btree
-  add_index "mail_logs", ["mailing_list_id"], name: "index_mail_logs_on_mailing_list_id", using: :btree
-
-  create_table "mailing_lists", force: :cascade do |t|
-    t.string   "name",                     limit: 255,                   null: false
-    t.integer  "group_id",                 limit: 4,                     null: false
-    t.text     "description",              limit: 65535
-    t.string   "publisher",                limit: 255
-    t.string   "mail_name",                limit: 255
-    t.string   "additional_sender",        limit: 255
-    t.boolean  "subscribable",                           default: false, null: false
-    t.boolean  "subscribers_may_post",                   default: false, null: false
-    t.boolean  "anyone_may_post",                        default: false, null: false
-    t.string   "preferred_labels",         limit: 255
-    t.boolean  "delivery_report",                        default: false, null: false
-    t.boolean  "main_email",                             default: false
-    t.string   "mailchimp_api_key",        limit: 255
-    t.string   "mailchimp_list_id",        limit: 255
-    t.boolean  "mailchimp_syncing",                      default: false
+  create_table "mailing_lists", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "group_id", null: false
+    t.text "description"
+    t.string "publisher"
+    t.string "mail_name"
+    t.string "additional_sender"
+    t.boolean "subscribable", default: false, null: false
+    t.boolean "subscribers_may_post", default: false, null: false
+    t.boolean "anyone_may_post", default: false, null: false
+    t.string "preferred_labels"
+    t.boolean "delivery_report", default: false, null: false
+    t.boolean "main_email", default: false
+    t.string "mailchimp_api_key"
+    t.string "mailchimp_list_id"
+    t.boolean "mailchimp_syncing", default: false
     t.datetime "mailchimp_last_synced_at"
+    t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
 
-  add_index "mailing_lists", ["group_id"], name: "index_mailing_lists_on_group_id", using: :btree
-
-  create_table "notes", force: :cascade do |t|
-    t.integer  "subject_id",   limit: 4,     null: false
-    t.integer  "author_id",    limit: 4,     null: false
-    t.text     "text",         limit: 65535
+  create_table "notes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "subject_id", null: false
+    t.integer "author_id", null: false
+    t.text "text"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "subject_type", limit: 255
+    t.string "subject_type"
+    t.index ["subject_id"], name: "index_notes_on_subject_id"
   end
 
-  add_index "notes", ["subject_id"], name: "index_notes_on_subject_id", using: :btree
-
-  create_table "oauth_access_grants", force: :cascade do |t|
-    t.integer  "resource_owner_id", limit: 4,     null: false
-    t.integer  "application_id",    limit: 4,     null: false
-    t.string   "token",             limit: 255,   null: false
-    t.integer  "expires_in",        limit: 4,     null: false
-    t.text     "redirect_uri",      limit: 65535, null: false
-    t.datetime "created_at",                      null: false
+  create_table "oauth_access_grants", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "resource_owner_id", null: false
+    t.integer "application_id", null: false
+    t.string "token", null: false
+    t.integer "expires_in", null: false
+    t.text "redirect_uri", null: false
+    t.datetime "created_at", null: false
     t.datetime "revoked_at"
-    t.string   "scopes",            limit: 255
+    t.string "scopes"
+    t.index ["application_id"], name: "fk_rails_b4b53e07b8"
+    t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
 
-  add_index "oauth_access_grants", ["application_id"], name: "fk_rails_b4b53e07b8", using: :btree
-  add_index "oauth_access_grants", ["token"], name: "index_oauth_access_grants_on_token", unique: true, using: :btree
-
-  create_table "oauth_access_tokens", force: :cascade do |t|
-    t.integer  "resource_owner_id",      limit: 4
-    t.integer  "application_id",         limit: 4
-    t.string   "token",                  limit: 255,              null: false
-    t.string   "refresh_token",          limit: 255
-    t.integer  "expires_in",             limit: 4
+  create_table "oauth_access_tokens", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "resource_owner_id"
+    t.integer "application_id"
+    t.string "token", null: false
+    t.string "refresh_token"
+    t.integer "expires_in"
     t.datetime "revoked_at"
-    t.datetime "created_at",                                      null: false
-    t.string   "scopes",                 limit: 255
-    t.string   "previous_refresh_token", limit: 255, default: "", null: false
+    t.datetime "created_at", null: false
+    t.string "scopes"
+    t.string "previous_refresh_token", default: "", null: false
+    t.index ["application_id"], name: "fk_rails_732cb83ab7"
+    t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
+    t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
+    t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
   end
 
-  add_index "oauth_access_tokens", ["application_id"], name: "fk_rails_732cb83ab7", using: :btree
-  add_index "oauth_access_tokens", ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true, using: :btree
-  add_index "oauth_access_tokens", ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id", using: :btree
-  add_index "oauth_access_tokens", ["token"], name: "index_oauth_access_tokens_on_token", unique: true, using: :btree
-
-  create_table "oauth_applications", force: :cascade do |t|
-    t.string   "name",         limit: 255,                  null: false
-    t.string   "uid",          limit: 255,                  null: false
-    t.string   "secret",       limit: 255,                  null: false
-    t.text     "redirect_uri", limit: 65535,                null: false
-    t.string   "scopes",       limit: 255,   default: "",   null: false
-    t.boolean  "confidential",               default: true, null: false
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+  create_table "oauth_applications", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "uid", null: false
+    t.string "secret", null: false
+    t.text "redirect_uri", null: false
+    t.string "scopes", default: "", null: false
+    t.boolean "confidential", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
-  add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
-
-  create_table "payment_reminder_configs", force: :cascade do |t|
-    t.integer "invoice_config_id", limit: 4,   null: false
-    t.string  "title",             limit: 255, null: false
-    t.string  "text",              limit: 255, null: false
-    t.integer "due_days",          limit: 4,   null: false
-    t.integer "level",             limit: 4,   null: false
+  create_table "payment_reminder_configs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "invoice_config_id", null: false
+    t.string "title", null: false
+    t.string "text", null: false
+    t.integer "due_days", null: false
+    t.integer "level", null: false
+    t.index ["invoice_config_id"], name: "index_payment_reminder_configs_on_invoice_config_id"
   end
 
-  add_index "payment_reminder_configs", ["invoice_config_id"], name: "index_payment_reminder_configs_on_invoice_config_id", using: :btree
-
-  create_table "payment_reminders", force: :cascade do |t|
-    t.integer  "invoice_id", limit: 4,   null: false
-    t.date     "due_at",                 null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.string   "title",      limit: 255
-    t.string   "text",       limit: 255
-    t.integer  "level",      limit: 4
+  create_table "payment_reminders", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "invoice_id", null: false
+    t.date "due_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "title"
+    t.string "text"
+    t.integer "level"
+    t.index ["invoice_id"], name: "index_payment_reminders_on_invoice_id"
   end
 
-  add_index "payment_reminders", ["invoice_id"], name: "index_payment_reminders_on_invoice_id", using: :btree
-
-  create_table "payments", force: :cascade do |t|
-    t.integer "invoice_id",  limit: 4,                            null: false
-    t.decimal "amount",                  precision: 12, scale: 2, null: false
-    t.date    "received_at",                                      null: false
-    t.string  "reference",   limit: 255
+  create_table "payments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "invoice_id", null: false
+    t.decimal "amount", precision: 12, scale: 2, null: false
+    t.date "received_at", null: false
+    t.string "reference"
+    t.index ["invoice_id"], name: "index_payments_on_invoice_id"
   end
 
-  add_index "payments", ["invoice_id"], name: "index_payments_on_invoice_id", using: :btree
-
-  create_table "people", force: :cascade do |t|
-    t.string   "first_name",                limit: 255
-    t.string   "last_name",                 limit: 255
-    t.string   "company_name",              limit: 255
-    t.string   "nickname",                  limit: 255
-    t.boolean  "company",                                 default: false, null: false
-    t.string   "email",                     limit: 255
-    t.string   "address",                   limit: 1024
-    t.string   "zip_code",                  limit: 255
-    t.string   "town",                      limit: 255
-    t.string   "country",                   limit: 255
-    t.string   "gender",                    limit: 1
-    t.date     "birthday"
-    t.text     "additional_information",    limit: 65535
-    t.boolean  "contact_data_visible",                    default: false, null: false
+  create_table "people", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "company_name"
+    t.string "nickname"
+    t.boolean "company", default: false, null: false
+    t.string "email"
+    t.string "address", limit: 1024
+    t.string "zip_code"
+    t.string "town"
+    t.string "country"
+    t.string "gender", limit: 1
+    t.date "birthday"
+    t.text "additional_information"
+    t.boolean "contact_data_visible", default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "encrypted_password",        limit: 255
-    t.string   "reset_password_token",      limit: 255
+    t.string "encrypted_password"
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",             limit: 4,     default: 0
+    t.integer "sign_in_count", default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",        limit: 255
-    t.string   "last_sign_in_ip",           limit: 255
-    t.string   "picture",                   limit: 255
-    t.integer  "last_label_format_id",      limit: 4
-    t.integer  "creator_id",                limit: 4
-    t.integer  "updater_id",                limit: 4
-    t.integer  "primary_group_id",          limit: 4
-    t.integer  "failed_attempts",           limit: 4,     default: 0
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "picture"
+    t.integer "last_label_format_id"
+    t.integer "creator_id"
+    t.integer "updater_id"
+    t.integer "primary_group_id"
+    t.integer "failed_attempts", default: 0
     t.datetime "locked_at"
-    t.string   "authentication_token",      limit: 255
-    t.boolean  "show_global_label_formats",               default: true,  null: false
-    t.string   "household_key",             limit: 255
-    t.string   "event_feed_token",          limit: 255
+    t.string "authentication_token"
+    t.boolean "show_global_label_formats", default: true, null: false
+    t.string "household_key"
+    t.string "event_feed_token"
+    t.index ["authentication_token"], name: "index_people_on_authentication_token"
+    t.index ["email"], name: "index_people_on_email", unique: true
+    t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true
+    t.index ["household_key"], name: "index_people_on_household_key"
+    t.index ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
   end
 
-  add_index "people", ["authentication_token"], name: "index_people_on_authentication_token", using: :btree
-  add_index "people", ["email"], name: "index_people_on_email", unique: true, using: :btree
-  add_index "people", ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true, using: :btree
-  add_index "people", ["household_key"], name: "index_people_on_household_key", using: :btree
-  add_index "people", ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true, using: :btree
-
-  create_table "people_filters", force: :cascade do |t|
-    t.string   "name",         limit: 255,                    null: false
-    t.integer  "group_id",     limit: 4
-    t.string   "group_type",   limit: 255
-    t.text     "filter_chain", limit: 65535
-    t.string   "range",        limit: 255,   default: "deep"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "people_filters", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "group_id"
+    t.string "group_type"
+    t.text "filter_chain"
+    t.string "range", default: "deep"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.index ["group_id", "group_type"], name: "index_people_filters_on_group_id_and_group_type"
   end
 
-  add_index "people_filters", ["group_id", "group_type"], name: "index_people_filters_on_group_id_and_group_type", using: :btree
-
-  create_table "people_relations", force: :cascade do |t|
-    t.integer "head_id", limit: 4,   null: false
-    t.integer "tail_id", limit: 4,   null: false
-    t.string  "kind",    limit: 255, null: false
+  create_table "people_relations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "head_id", null: false
+    t.integer "tail_id", null: false
+    t.string "kind", null: false
+    t.index ["head_id"], name: "index_people_relations_on_head_id"
+    t.index ["tail_id"], name: "index_people_relations_on_tail_id"
   end
 
-  add_index "people_relations", ["head_id"], name: "index_people_relations_on_head_id", using: :btree
-  add_index "people_relations", ["tail_id"], name: "index_people_relations_on_tail_id", using: :btree
-
-  create_table "person_add_request_ignored_approvers", force: :cascade do |t|
-    t.integer "group_id",  limit: 4, null: false
-    t.integer "person_id", limit: 4, null: false
+  create_table "person_add_request_ignored_approvers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "person_id", null: false
+    t.index ["group_id", "person_id"], name: "person_add_request_ignored_approvers_index", unique: true
   end
 
-  add_index "person_add_request_ignored_approvers", ["group_id", "person_id"], name: "person_add_request_ignored_approvers_index", unique: true, using: :btree
-
-  create_table "person_add_requests", force: :cascade do |t|
-    t.integer  "person_id",    limit: 4,   null: false
-    t.integer  "requester_id", limit: 4,   null: false
-    t.string   "type",         limit: 255, null: false
-    t.integer  "body_id",      limit: 4,   null: false
-    t.string   "role_type",    limit: 255
-    t.datetime "created_at",               null: false
+  create_table "person_add_requests", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "person_id", null: false
+    t.integer "requester_id", null: false
+    t.string "type", null: false
+    t.integer "body_id", null: false
+    t.string "role_type"
+    t.timestamp "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.index ["person_id"], name: "index_person_add_requests_on_person_id"
+    t.index ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
   end
 
-  add_index "person_add_requests", ["person_id"], name: "index_person_add_requests_on_person_id", using: :btree
-  add_index "person_add_requests", ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id", using: :btree
-
-  create_table "phone_numbers", force: :cascade do |t|
-    t.integer "contactable_id",   limit: 4,                  null: false
-    t.string  "contactable_type", limit: 255,                null: false
-    t.string  "number",           limit: 255,                null: false
-    t.string  "label",            limit: 255
-    t.boolean "public",                       default: true, null: false
+  create_table "phone_numbers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "contactable_type", null: false
+    t.integer "contactable_id", null: false
+    t.string "number", null: false
+    t.string "label"
+    t.boolean "public", default: true, null: false
+    t.index ["contactable_id", "contactable_type"], name: "index_phone_numbers_on_contactable_id_and_contactable_type"
   end
 
-  add_index "phone_numbers", ["contactable_id", "contactable_type"], name: "index_phone_numbers_on_contactable_id_and_contactable_type", using: :btree
-
-  create_table "qualification_kind_translations", force: :cascade do |t|
-    t.integer  "qualification_kind_id", limit: 4,    null: false
-    t.string   "locale",                limit: 255,  null: false
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.string   "label",                 limit: 255,  null: false
-    t.string   "description",           limit: 1023
+  create_table "qualification_kind_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "qualification_kind_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "label", null: false
+    t.string "description", limit: 1023
+    t.index ["locale"], name: "index_qualification_kind_translations_on_locale"
+    t.index ["qualification_kind_id"], name: "index_qualification_kind_translations_on_qualification_kind_id"
   end
 
-  add_index "qualification_kind_translations", ["locale"], name: "index_qualification_kind_translations_on_locale", using: :btree
-  add_index "qualification_kind_translations", ["qualification_kind_id"], name: "index_qualification_kind_translations_on_qualification_kind_id", using: :btree
-
-  create_table "qualification_kinds", force: :cascade do |t|
-    t.integer  "validity",       limit: 4
+  create_table "qualification_kinds", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "validity"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
-    t.integer  "reactivateable", limit: 4
+    t.integer "reactivateable"
   end
 
-  create_table "qualifications", force: :cascade do |t|
-    t.integer "person_id",             limit: 4,   null: false
-    t.integer "qualification_kind_id", limit: 4,   null: false
-    t.date    "start_at",                          null: false
-    t.date    "finish_at"
-    t.string  "origin",                limit: 255
+  create_table "qualifications", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "person_id", null: false
+    t.integer "qualification_kind_id", null: false
+    t.date "start_at", null: false
+    t.date "finish_at"
+    t.string "origin"
+    t.index ["person_id"], name: "index_qualifications_on_person_id"
+    t.index ["qualification_kind_id"], name: "index_qualifications_on_qualification_kind_id"
   end
 
-  add_index "qualifications", ["person_id"], name: "index_qualifications_on_person_id", using: :btree
-  add_index "qualifications", ["qualification_kind_id"], name: "index_qualifications_on_qualification_kind_id", using: :btree
-
-  create_table "related_role_types", force: :cascade do |t|
-    t.integer "relation_id",   limit: 4
-    t.string  "role_type",     limit: 255, null: false
-    t.string  "relation_type", limit: 255
+  create_table "related_role_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "relation_id"
+    t.string "role_type", null: false
+    t.string "relation_type"
+    t.index ["relation_id", "relation_type"], name: "index_related_role_types_on_relation_id_and_relation_type"
+    t.index ["role_type"], name: "index_related_role_types_on_role_type"
   end
 
-  add_index "related_role_types", ["relation_id", "relation_type"], name: "index_related_role_types_on_relation_id_and_relation_type", using: :btree
-  add_index "related_role_types", ["role_type"], name: "index_related_role_types_on_role_type", using: :btree
-
-  create_table "roles", force: :cascade do |t|
-    t.integer  "person_id",  limit: 4,   null: false
-    t.integer  "group_id",   limit: 4,   null: false
-    t.string   "type",       limit: 255, null: false
-    t.string   "label",      limit: 255
+  create_table "roles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "person_id", null: false
+    t.integer "group_id", null: false
+    t.string "type", null: false
+    t.string "label"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
+    t.index ["type"], name: "index_roles_on_type"
   end
 
-  add_index "roles", ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id", using: :btree
-  add_index "roles", ["type"], name: "index_roles_on_type", using: :btree
-
-  create_table "service_tokens", force: :cascade do |t|
-    t.integer  "layer_group_id",       limit: 4,                     null: false
-    t.string   "name",                 limit: 255,                   null: false
-    t.text     "description",          limit: 65535
-    t.string   "token",                limit: 255,                   null: false
+  create_table "service_tokens", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "layer_group_id", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.string "token", null: false
     t.datetime "last_access"
-    t.boolean  "people",                             default: false
-    t.boolean  "people_below",                       default: false
-    t.boolean  "groups",                             default: false
-    t.boolean  "events",                             default: false
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
-    t.boolean  "invoices",                           default: false, null: false
-    t.boolean  "event_participations",               default: false, null: false
+    t.boolean "people", default: false
+    t.boolean "people_below", default: false
+    t.boolean "groups", default: false
+    t.boolean "events", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "invoices", default: false, null: false
+    t.boolean "event_participations", default: false, null: false
   end
 
-  create_table "sessions", force: :cascade do |t|
-    t.string   "session_id", limit: 255,   null: false
-    t.text     "data",       limit: 65535
+  create_table "sessions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.text "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["session_id"], name: "index_sessions_on_session_id"
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
-  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", using: :btree
-  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
-
-  create_table "social_accounts", force: :cascade do |t|
-    t.integer "contactable_id",   limit: 4,                  null: false
-    t.string  "contactable_type", limit: 255,                null: false
-    t.string  "name",             limit: 255,                null: false
-    t.string  "label",            limit: 255
-    t.boolean "public",                       default: true, null: false
+  create_table "social_accounts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "contactable_type", null: false
+    t.integer "contactable_id", null: false
+    t.string "name", null: false
+    t.string "label"
+    t.boolean "public", default: true, null: false
+    t.index ["contactable_id", "contactable_type"], name: "index_social_accounts_on_contactable_id_and_contactable_type"
   end
 
-  add_index "social_accounts", ["contactable_id", "contactable_type"], name: "index_social_accounts_on_contactable_id_and_contactable_type", using: :btree
-
-  create_table "subscriptions", force: :cascade do |t|
-    t.integer "mailing_list_id", limit: 4,                   null: false
-    t.integer "subscriber_id",   limit: 4,                   null: false
-    t.string  "subscriber_type", limit: 255,                 null: false
-    t.boolean "excluded",                    default: false, null: false
+  create_table "subscriptions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "mailing_list_id", null: false
+    t.string "subscriber_type", null: false
+    t.integer "subscriber_id", null: false
+    t.boolean "excluded", default: false, null: false
+    t.index ["mailing_list_id"], name: "index_subscriptions_on_mailing_list_id"
+    t.index ["subscriber_id", "subscriber_type"], name: "index_subscriptions_on_subscriber_id_and_subscriber_type"
   end
 
-  add_index "subscriptions", ["mailing_list_id"], name: "index_subscriptions_on_mailing_list_id", using: :btree
-  add_index "subscriptions", ["subscriber_id", "subscriber_type"], name: "index_subscriptions_on_subscriber_id_and_subscriber_type", using: :btree
-
-  create_table "table_displays", force: :cascade do |t|
-    t.string  "type",      limit: 255,   null: false
-    t.integer "person_id", limit: 4,     null: false
-    t.text    "selected",  limit: 65535
+  create_table "table_displays", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "type", null: false
+    t.integer "person_id", null: false
+    t.text "selected"
+    t.index ["person_id", "type"], name: "index_table_displays_on_person_id_and_type", unique: true
   end
 
-  add_index "table_displays", ["person_id", "type"], name: "index_table_displays_on_person_id_and_type", unique: true, using: :btree
-
-  create_table "taggings", force: :cascade do |t|
-    t.integer  "tag_id",        limit: 4
-    t.integer  "taggable_id",   limit: 4
-    t.string   "taggable_type", limit: 255
-    t.integer  "tagger_id",     limit: 4
-    t.string   "tagger_type",   limit: 255
-    t.string   "context",       limit: 128
+  create_table "taggings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "tag_id"
+    t.string "taggable_type"
+    t.integer "taggable_id"
+    t.string "tagger_type"
+    t.integer "tagger_id"
+    t.string "context", limit: 128
     t.datetime "created_at"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
   end
 
-  add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
-  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
-
-  create_table "tags", force: :cascade do |t|
-    t.string  "name",           limit: 255
-    t.integer "taggings_count", limit: 4,   default: 0
+  create_table "tags", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", collation: "utf8_bin"
+    t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
-
-  create_table "versions", force: :cascade do |t|
-    t.string   "item_type",      limit: 255,   null: false
-    t.integer  "item_id",        limit: 4,     null: false
-    t.string   "event",          limit: 255,   null: false
-    t.string   "whodunnit",      limit: 255
-    t.text     "object",         limit: 65535
-    t.text     "object_changes", limit: 65535
-    t.string   "main_type",      limit: 255
-    t.integer  "main_id",        limit: 4
+  create_table "versions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.integer "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.text "object_changes"
+    t.string "main_type"
+    t.integer "main_id"
     t.datetime "created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+    t.index ["main_id", "main_type"], name: "index_versions_on_main_id_and_main_type"
   end
-
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
-  add_index "versions", ["main_id", "main_type"], name: "index_versions_on_main_id_and_main_type", using: :btree
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"

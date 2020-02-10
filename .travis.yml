@@ -10,7 +10,6 @@ env:
     - HEADLESS=true
     - RAILS_DB_ADAPTER=mysql2
 rvm:
-  - 2.2.3
   - 2.5.5
 matrix:
   allow_failures:
@@ -25,3 +24,6 @@ install:
   - bundle install --path vendor/bundle
 script:
   - bundle exec rake db:create ci --trace
+matrix:
+  allow_failures:
+  - rvm: 2.5.3

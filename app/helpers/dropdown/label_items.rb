@@ -45,7 +45,7 @@ module Dropdown
     end
 
     def last_label_format?
-      user.last_label_format_id? && LabelFormat.list.for_person(user).length > 1
+      user.last_label_format_id? && LabelFormat.for_person(user).exists?
     end
 
     def add_label_format_items(parent)

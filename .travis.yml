@@ -5,7 +5,6 @@ addons:
 branches:
   only:
     - master
-    - rails-5
 env:
   global:
     - HEADLESS=true

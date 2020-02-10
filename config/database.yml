@@ -13,6 +13,10 @@ base: &generic
   <%= "#{option}: #{value}" if value.present? %>
 <% end %>
 
+  # see https://github.com/rails/rails/issues/25924
+  variables:
+    sql_mode: TRADITIONAL
+
 
 development:
   <<: *generic

@@ -64,7 +64,7 @@ gem 'thinking-sphinx'
 gem 'validates_by_schema'
 gem 'validates_timeliness', '< 4.0'
 gem 'vcard'
-gem 'wagons'
+gem 'wagons', '0.6.1'
 
 # load after others because of active record inherited alias chain.
 gem 'kaminari'

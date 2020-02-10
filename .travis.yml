@@ -9,6 +9,7 @@ env:
   global:
     - HEADLESS=true
     - RAILS_DB_ADAPTER=mysql2
+    - RAILS_TEST_DB_NAME=hitobito_test
 rvm:
   - 2.5.5
 matrix:

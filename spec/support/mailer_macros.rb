@@ -17,12 +17,12 @@ module MailerMacros
   def expect_no_enqueued_mail_jobs
     expect do
       yield
-    end.not_to change { Delayed::Job.where('handler like "%ActionMailer::DeliveryJob%"').count }
+    end.not_to change { Delayed::Job.where('handler like "%ActionMailer::MailDeliveryJob%"').count }
   end
 
   def expect_enqueued_mail_jobs(count: )
     expect do
       yield
-    end.to change { Delayed::Job.where('handler like "%ActionMailer::DeliveryJob%"').count }.by(count)
+    end.to change { Delayed::Job.where('handler like "%ActionMailer::MailDeliveryJob%"').count }.by(count)
   end
 end

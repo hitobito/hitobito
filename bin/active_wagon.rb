@@ -8,7 +8,13 @@ class Setup
 
   def run
     write_and_copy('.envrc', environment)
-    write_and_copy('.tool-versions', 'ruby 2.2.7')
+
+    if `git rev-parse --abbrev-ref HEAD`.strip == 'rails-5'
+      write_and_copy('.tool-versions', 'ruby 2.5.5')
+    else
+      write_and_copy('.tool-versions', 'ruby 2.2.7')
+    end
+
     write('Wagonfile', gemfile)
     FileUtils.rm_rf(root.join('tmp'))
   end

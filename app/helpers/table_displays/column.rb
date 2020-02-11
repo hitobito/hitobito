@@ -30,7 +30,8 @@ module TableDisplays
     end
 
     def format_attr(target, attr)
-      template.format_attr(target, attr) if target.respond_to?(attr)
+      model = target.is_a?(ApplicationDecorator) ? target.model : target
+      template.format_attr(target, attr) if model.respond_to?(attr)
     end
 
     def header

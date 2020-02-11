@@ -4,7 +4,7 @@ addons:
   firefox: 60.0
 branches:
   only:
-    - master
+    - rails-5
 env:
   global:
     - HEADLESS=true
@@ -21,6 +21,7 @@ before_install:
   - echo '[mysqld]'              | sudo tee    /etc/mysql/conf.d/sort_buffer_size.cnf > /dev/null
   - echo 'sort_buffer_size = 2M' | sudo tee -a /etc/mysql/conf.d/sort_buffer_size.cnf > /dev/null
   - sudo service mysql restart
+  - mysql -e 'CREATE DATABASE hitobito_test;'
 install:
   - bundle install --path vendor/bundle
 script:

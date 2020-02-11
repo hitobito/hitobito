@@ -45,7 +45,7 @@ module SearchStrategies
                     page: @page,
                     order: 'last_name asc, ' \
                            'first_name asc, ' \
-                           "#{ThinkingSphinx::SphinxQL.weight[:select]} desc",
+                           'weight() desc',
                     star: star_supported?,
                     with: { sphinx_internal_id: ids })
     end

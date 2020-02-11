@@ -69,6 +69,7 @@ TAGS
 .idea
 .tool-versions
 .pry_history
+.project
 
 # for experiments with webpack
 

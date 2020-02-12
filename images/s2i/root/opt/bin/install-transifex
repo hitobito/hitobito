@@ -12,8 +12,11 @@ def most_recent_build_version
   github_releases.scan(/#{MINOR_TRANSIFEX_CLIENT_VERSION}\.\d+/).last
 end
 
+# 0.13.7 no longer works with python 2.7
+# errror: pkg_resources.DistributionNotFound: urllib3>=1.24.2,<2.0.0
+# maybe related https://github.com/transifex/transifex-client/issues/211
 def version
-  @version ||= most_recent_build_version
+  @version ||= '0.13.6'
 end
 
 def version_info

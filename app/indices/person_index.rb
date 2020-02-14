@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+module PersonIndex; end
+
 ThinkingSphinx::Index.define_partial :person do
   indexes first_name, last_name, company_name, nickname, company, email, sortable: true
   indexes address, zip_code, town, country, birthday, additional_information

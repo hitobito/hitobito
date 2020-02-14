@@ -2,6 +2,8 @@ language: ruby
 cache: bundler
 addons:
   firefox: 60.0
+services:
+  - memcached
 branches:
   only:
     - rails-5

@@ -45,6 +45,16 @@ describe Export::Tabular::People::TableDisplays do
       expect(people_list.data_rows.first.last).to eq '321'
     end
 
+    context :with_limited_select do
+      let(:list) { Person.where(id: person.id).select('email') }
+
+      it 'does not fail' do
+        table_display.selected = %w(first_name)
+        expect {  people_list.data_rows }.not_to raise_error ActiveModel::MissingAttributeError
+        expect(people_list.data_rows.collect(&:presence).compact.size).to eq 1
+      end
+    end
+
     context :with_permission_check do
       before  { TableDisplay.register_permission(Person, :show_full, :additional_information) }
       after   { TableDisplay.class_variable_set('@@permissions', {}) }

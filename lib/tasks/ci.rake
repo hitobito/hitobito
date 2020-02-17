@@ -35,8 +35,11 @@ namespace :ci do
 
   desc 'Run the tasks for a wagon commit build'
   task :wagon do
+
     Rake::Task['log:clear'].invoke
-    wagon_exec('bundle exec rake app:rubocop app:ci:setup:rspec spec:all')
+
+    wagon_exec('DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ' \
+               'bundle exec rake app:rubocop app:ci:setup:rspec spec:all')
   end
 
   namespace :setup do
@@ -50,7 +53,8 @@ namespace :ci do
     desc 'Run the tasks for a wagon nightly build'
     task :nightly do
       Rake::Task['log:clear'].invoke
-      wagon_exec('bundle exec rake app:ci:setup:env ' \
+      wagon_exec('DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ' \
+                 'bundle exec rake app:ci:setup:env ' \
                  'app:ci:setup:rspec spec:all app:rubocop:report app:brakeman')
       Rake::Task['erd'].invoke
     end

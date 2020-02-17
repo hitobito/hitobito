@@ -56,6 +56,7 @@ module Hitobito
 
     # Deviate from default here for now, revisit later
     config.active_record.belongs_to_required_by_default = false
+    config.action_controller.per_form_csrf_tokens = true
 
     config.active_job.queue_adapter = :delayed_job
 

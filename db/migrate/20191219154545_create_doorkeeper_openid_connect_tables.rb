@@ -8,7 +8,8 @@ class CreateDoorkeeperOpenidConnectTables < ActiveRecord::Migration[4.2]
     add_foreign_key(
       :oauth_openid_requests,
       :oauth_access_grants,
-      column: :access_grant_id
+      column: :access_grant_id,
+      on_delete: :cascade
     )
   end
 end

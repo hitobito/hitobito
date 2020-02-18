@@ -17,8 +17,7 @@ module Person::PreloadGroups
     preload_association(records, :roles)
 
     roles = records.collect(&:roles).flatten
-    preload_association(roles, :group, Group.select(Group::MINIMAL_SELECT))
-
+    preload_association(roles, :group)
     preload_groups_manually(records)
 
     records

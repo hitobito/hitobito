@@ -104,6 +104,7 @@ module Hitobito
         MailRelayJob.new.schedule if Settings.email.retriever.config.present?
         SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
         DownloadCleanerJob.new.schedule
+        SessionsCleanerJob.new.schedule
       end
     end
 

@@ -33,10 +33,6 @@
 #
 
 class Group < ActiveRecord::Base
-
-  MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).
-                   collect { |a| "groups.#{a}" }
-
   include Group::NestedSet
   include Group::Types
   include Contactable

@@ -80,6 +80,7 @@ module Hitobito
         SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
         DownloadCleanerJob.new.schedule
         SessionsCleanerJob.new.schedule
+        WorkerHeartbeatCheckJob.new.schedule
       end
     end
 

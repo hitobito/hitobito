@@ -171,3 +171,8 @@ help_text_blacklist:
     - household_people_ids
     - relations_to_tails_attributes
     - phone_numbers_attributes
+
+worker_heartbeats:
+  check_job:
+    # Interval in seconds between detection and unlocking of hanging jobs
+    interval: 60

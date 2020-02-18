@@ -46,7 +46,7 @@ describe Export::Tabular::People::TableDisplays do
     end
 
     context :with_limited_select do
-      let(:list) { Person.where(id: person.id).select('email') }
+      let(:list) { Person.where(id: person.id).select('email', 'primary_group_id') }
 
       it 'does not fail' do
         table_display.selected = %w(first_name)

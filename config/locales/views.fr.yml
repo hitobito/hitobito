@@ -724,6 +724,8 @@ fr:
       older_notes: Anciennes contributions
   oauth:
     applications:
+      form:
+        help_native_redirect_uris: Une entrée par ligne. Pour les tests locaux, utiliser <code class='bg-light'>%{native_redirect_uri}</code>.
       attrs:
         profile_endpoint_help: Les informations profil de l'utilisateur peuvent être prises au-delà ce Endpoint. Pour ce faire, il faut rendre le Access Token dans le Authorization Header. Le Scope souhaité peut être rendu en tant que X-Scope.
         profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"

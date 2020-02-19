@@ -11,8 +11,8 @@ module Authenticatable
   included do
     helper_method :current_user, :origin_user
 
-    before_action :authenticate_person!
-    check_authorization unless: :devise_controller?
+    before_action :authenticate_person!, if: :authenticate?
+    check_authorization if: :authorize?
   end
 
 
@@ -97,5 +97,17 @@ module Authenticatable
       x_param = param.to_s.split('_').map(&:camelize).join('-')
       params[param] = params[param].presence || request.headers["X-#{x_param}"].presence
     end
+  end
+
+  def authorize?
+    !devise_controller? && !doorkeeper_controller?
+  end
+
+  def authenticate?
+    !doorkeeper_controller?
+  end
+
+  def doorkeeper_controller?
+    is_a?(Doorkeeper::ApplicationController)
   end
 end

@@ -61,8 +61,3 @@ Doorkeeper::OpenidConnect.configure do
     # This should be definable by each wagon
   # end
 end
-
-Doorkeeper::OpenidConnect::UserinfoController.send(:skip_authorization_check)
-Doorkeeper::OpenidConnect::UserinfoController.send(:skip_before_action, :authorization_check!)
-Doorkeeper::OpenidConnect::DiscoveryController.send(:skip_authorization_check)
-Doorkeeper::OpenidConnect::DiscoveryController.send(:skip_before_action, :authorization_check!)

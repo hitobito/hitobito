@@ -17,7 +17,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
     let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: 'openid', expires_in: 2.hours) }
 
     it 'shows the userinfo' do
-      get :show, { access_token: token.token }
+      get :show, params: { access_token: token.token }
       expect(response.status).to eq 200
       expect(JSON.parse(response.body)).to eq({ 'sub' => user.id.to_s })
     end

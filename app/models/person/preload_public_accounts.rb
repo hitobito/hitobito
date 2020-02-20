@@ -15,11 +15,8 @@ module Person::PreloadPublicAccounts
     records = Array(records)
 
     # preload accounts
-    ActiveRecord::Associations::Preloader.new.
-      preload(records, :phone_numbers, PhoneNumber.where(public: true))
-
-    ActiveRecord::Associations::Preloader.new.
-      preload(records, :additional_emails, AdditionalEmail.where(public: true))
+    ActiveRecord::Associations::Preloader.new.preload(records, :phone_numbers)
+    ActiveRecord::Associations::Preloader.new.preload(records, :additional_emails)
 
     records
   end

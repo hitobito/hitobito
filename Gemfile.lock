@@ -1,7 +1,13 @@
 PATH
-  remote: ../hitobito_generic
+  remote: ../hitobito_pbs
   specs:
-    hitobito_generic (0.0.1)
+    hitobito_pbs (0.0.1)
+      hitobito_youth
+
+PATH
+  remote: ../hitobito_youth
+  specs:
+    hitobito_youth (0.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -74,8 +80,8 @@ GEM
       zeitwerk (~> 2.2)
     acts-as-taggable-on (6.5.0)
       activerecord (>= 5.0, < 6.1)
-    addressable (2.5.2)
-      public_suffix (>= 2.0.2, < 4.0)
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
     aes_key_wrap (1.0.1)
     afm (0.2.2)
     airbrake (9.5.5)
@@ -115,22 +121,22 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     cancancan (3.0.1)
-    capybara (2.18.0)
+    capybara (3.31.0)
       addressable
       mini_mime (>= 0.1.3)
-      nokogiri (>= 1.3.3)
-      rack (>= 1.0.0)
-      rack-test (>= 0.5.4)
-      xpath (>= 2.0, < 4.0)
-    capybara-screenshot (1.0.14)
-      capybara (>= 1.0, < 3)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (~> 1.5)
+      xpath (~> 3.2)
+    capybara-screenshot (1.0.24)
+      capybara (>= 1.0, < 4)
       launchy
     carrierwave (1.3.1)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
-    childprocess (0.9.0)
-      ffi (~> 1.0, >= 1.0.11)
+    childprocess (3.0.0)
     choice (0.2.0)
     chosen-rails (1.9.0)
       coffee-rails (>= 3.2)
@@ -264,7 +270,7 @@ GEM
       i18n (~> 0.5)
     faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.25)
+    ffi (1.12.2)
     font-awesome-rails (4.7.0.5)
       railties (>= 3.2, < 6.1)
     gibbon (3.2.0)
@@ -279,7 +285,7 @@ GEM
     haml (5.1.2)
       temple (>= 0.8.0)
       tilt
-    hashdiff (0.3.7)
+    hashdiff (1.0.0)
     hashery (2.1.2)
     headless (2.3.1)
     hirb (0.7.3)
@@ -357,7 +363,7 @@ GEM
     mysql2 (0.4.9)
     nested_form (0.3.2)
     nio4r (2.5.2)
-    nokogiri (1.10.7)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     nuggets (1.5.0)
     oat (0.5.0)
@@ -404,9 +410,9 @@ GEM
     pry-stack_explorer (0.4.9.2)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
-    public_suffix (3.0.3)
+    public_suffix (4.0.3)
     puma (3.12.1)
-    rack (2.2.1)
+    rack (2.2.2)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.0.2.1)
@@ -460,6 +466,7 @@ GEM
       rdoc (~> 4)
     redcarpet (3.4.0)
     ref (2.0.0)
+    regexp_parser (1.6.0)
     remotipart (1.3.1)
     request_profiler (0.0.4)
       ruby-prof
@@ -510,7 +517,7 @@ GEM
     ruby-rc4 (0.1.5)
     ruby_dep (1.5.0)
     rubyzip (1.3.0)
-    safe_yaml (1.0.4)
+    safe_yaml (1.0.5)
     sass (3.4.25)
     sass-rails (5.0.8)
       railties (>= 5.2.0)
@@ -531,9 +538,9 @@ GEM
       activesupport (>= 3.1)
     seed-fu-ndo (0.0.3)
       seed-fu (>= 2.2.0)
-    selenium-webdriver (3.14.0)
-      childprocess (~> 0.5)
-      rubyzip (~> 1.2)
+    selenium-webdriver (3.142.7)
+      childprocess (>= 0.5, < 4.0)
+      rubyzip (>= 1.2.2)
     sentry-raven (2.11.0)
       faraday (>= 0.7.6, < 1.0)
     simpleidn (0.0.7)
@@ -590,19 +597,19 @@ GEM
       seed-fu-ndo (>= 0.0.3)
     warden (1.2.8)
       rack (>= 2.0.6)
-    webdrivers (3.9.4)
+    webdrivers (4.2.0)
       nokogiri (~> 1.6)
-      rubyzip (~> 1.0)
-      selenium-webdriver (~> 3.0)
-    webmock (3.4.2)
+      rubyzip (>= 1.3.0)
+      selenium-webdriver (>= 3.0, < 4.0)
+    webmock (3.8.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-      hashdiff
+      hashdiff (>= 0.4.0, < 2.0.0)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
     wirble (0.1.3)
-    xpath (3.1.0)
+    xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.20)
     zeitwerk (2.2.2)
@@ -659,7 +666,8 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_generic!
+  hitobito_pbs!
+  hitobito_youth!
   http_accept_language
   icalendar
   jquery-rails
@@ -723,8 +731,8 @@ DEPENDENCIES
   validates_timeliness (< 4.0)
   vcard
   wagons (= 0.6.1)
-  webdrivers (= 3.9.4)
-  webmock (~> 3.4, >= 3.4.2)
+  webdrivers
+  webmock
   wirble
 
 BUNDLED WITH

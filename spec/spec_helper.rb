@@ -14,7 +14,7 @@ require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 
 # Needed for feature specs
-WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(allow_localhost: true, allow: %w(chromedriver.storage.googleapis.com))
 
 
 ActiveRecord::Migration.maintain_test_schema!
@@ -134,19 +134,18 @@ end
 unless RSpec.configuration.exclusion_filter[:type] == 'feature'
   require 'capybara'
   require 'webdrivers/chromedriver'
-  require 'selenium/webdriver'
 
   Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
-  Capybara.default_max_wait_time = 10
+  Capybara.default_max_wait_time = 3
   Capybara.automatic_label_click = true
-  Selenium::WebDriver::Chrome.path = `which chromium-browser`.strip
 
   require 'capybara-screenshot/rspec'
   Capybara::Screenshot.prune_strategy = :keep_last_run
   Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::ProgressFormatter'] =
     CapybaraScreenshotPlainTextReporter
 
-  Capybara.register_driver :chrome_no_sandbox do |app|
+
+  Capybara.register_driver :chrome do |app|
     options = Selenium::WebDriver::Chrome::Options.new
     options.args << '--headless' if ENV['HEADLESS'] != 'false'
     options.args << '--disable-gpu' # required for windows
@@ -156,10 +155,9 @@ unless RSpec.configuration.exclusion_filter[:type] == 'feature'
     options.args << '--crash-dumps-dir=/tmp'
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
   end
-  Capybara.current_driver = :chrome_no_sandbox
 
-  # The update would be done automatically, but later. Do it here to output
-  # the current version for debugging.
-  Webdrivers::Chromedriver.update
+  Capybara.current_driver = :chrome
+  Capybara.javascript_driver = :chrome
+
   puts "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
 end

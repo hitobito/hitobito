@@ -186,18 +186,6 @@ class PeopleController < CrudController
     end
   end
 
-  def prepare_tabular_entries(entries, full)
-    if full
-      entries
-        .select('people.*')
-        .preload_accounts
-        .includes(relations_to_tails: :tail, qualifications: { qualification_kind: :translations })
-        .includes(:primary_group)
-    else
-      entries.preload_public_accounts.includes(:primary_group)
-    end
-  end
-
   def render_tabular_entry(format)
     render_tabular(format, [entry], params[:details].present? && can?(:show_full, entry))
   end

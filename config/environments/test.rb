@@ -52,4 +52,6 @@ Rails.application.configure do
   #
   locales_path = Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
   config.i18n.load_path += locales_path
+
+  config.assets.compile = true
 end

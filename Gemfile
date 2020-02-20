@@ -118,8 +118,8 @@ group :test do
   gem 'rspec-collection_matchers'
   gem 'rspec-its'
   gem 'selenium-webdriver'
-  gem 'webdrivers', '3.9.4'
-  gem 'webmock', '~> 3.4', '>= 3.4.2'
+  gem 'webdrivers'
+  gem 'webmock'
 end
 
 group :console do

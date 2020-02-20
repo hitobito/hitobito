@@ -60,10 +60,6 @@ class SubscriptionsController < CrudController
     end
   end
 
-  def prepare_tabular_entries(people)
-    people.preload_public_accounts.includes(roles: :group)
-  end
-
   def group_subscriptions
     subscriptions_for_type(Group).
       includes(:related_role_types).

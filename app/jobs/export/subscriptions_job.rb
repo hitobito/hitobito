@@ -21,7 +21,7 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
   end
 
   def entries
-    mailing_list.people.includes(:primary_group).order_by_name
+    mailing_list.people.preload_public_accounts.includes(:primary_group).order_by_name
   end
 
   def exporter

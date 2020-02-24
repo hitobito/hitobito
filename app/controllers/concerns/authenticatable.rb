@@ -75,7 +75,7 @@ module Authenticatable
     request.env['devise.skip_trackable'] = true
 
     # Notice the store option defaults to false, so the entity
-    # is not actually stored in the session and a token is needed
+    # is not actually stoeed in the session and a token is needed
     # for every request. That behaviour can be configured through
     # the sign_in_token option.
     sign_in user, store: false

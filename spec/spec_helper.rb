@@ -121,12 +121,7 @@ RSpec.configure do |config|
     config.include Warden::Test::Helpers
     Warden.test_mode!
 
-    config.use_transactional_fixtures = false
-
-    config.before(:suite) { DatabaseCleaner.strategy = DB_CLEANER_STRATEGY }
-    config.before(:each) { DatabaseCleaner.start }
-    config.after(:each) { DatabaseCleaner.clean }
-    config.after(:each) { Warden.test_reset! }
+    config.use_transactional_fixtures = true
   end
 end
 
@@ -136,7 +131,7 @@ unless RSpec.configuration.exclusion_filter[:type] == 'feature'
   require 'webdrivers/chromedriver'
 
   Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
-  Capybara.default_max_wait_time = 3
+  Capybara.default_max_wait_time = 6
   Capybara.automatic_label_click = true
 
   require 'capybara-screenshot/rspec'

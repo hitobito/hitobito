@@ -89,6 +89,7 @@ describe PeopleController, js: true do
 
         click_link 'Weitere Ansichten'
         click_link 'Neuer Filter...'
+        expect(page).to have_content 'Personen filtern'
         click_link 'Rollen'
 
         expect(page).to have_no_selector('h4', text: 'Bottom Layer')

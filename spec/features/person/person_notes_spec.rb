@@ -31,19 +31,11 @@ describe 'Person Notes', js: true do
       # open form
       find('#notes-new-button').click
       expect(page).to have_selector('#note_text')
-      fill_in('note_text', with: 'ladida')
-
-      # cancel
-      find('#new_note .cancel').click
-      expect(page).to have_no_selector('#note_text')
-
-      # open again
-      find('#notes-new-button').click
-      expect(page).to have_selector('#note_text', text: '')
 
       # submit without input
       find('#new_note button').click
       expect(page).to have_selector('#notes-error', text: 'Text muss ausgefüllt werden')
+
 
       # submit with input
       expect do

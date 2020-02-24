@@ -1,6 +1,6 @@
 - id ||= nil
 :plain
-  var el = #{id ? "'##{id}'" : "$('body').data('popover')"};
+  var el = #{id ? "'##{id}'".html_safe : "$('body').data('popover')"};
   $($('body').data('popover')).popover('destroy');
   $(el).popover({content: '#{j(render('popover.html', group: entry.group))}',
                  title: "#{t(title_key, person: entry.person)}",

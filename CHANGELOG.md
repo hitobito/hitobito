@@ -5,6 +5,7 @@
 ## Version 1.21
 
 *  Stackupgrade ruby-2.5, rails-6
+*  OIDC für Oauth
 
 ## Version 1.20
 

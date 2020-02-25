@@ -6,7 +6,8 @@ Doorkeeper::OpenidConnect.configure do
   # ....
   # -----END RSA PRIVATE KEY-----
   # EOL
-  signing_key Settings.oidc.signing_key
+
+  signing_key Settings.oidc.signing_key.join.presence
 
   subject_types_supported [:public]
 

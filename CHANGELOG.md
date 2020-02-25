@@ -2,6 +2,10 @@
 
 ## unreleased
 
+## Version 1.21
+
+*  Stackupgrade ruby-2.5, rails-6
+
 ## Version 1.20
 
 *   Für Seiten und Formulare können Hilfetexte hinterlegt werden

@@ -132,7 +132,7 @@ class Event::ParticipationContactData
 
   def assert_phone_number_present
     phone_changes = { add: [], sub: [] }
-    changed_attrs = model_params.fetch('phone_numbers_attributes', {})
+    changed_attrs = model_params.to_h.fetch('phone_numbers_attributes', {})
 
     phone_changes = changed_attrs.each_with_object(phone_changes) do |(_key, entry), memo|
       key = entry['_destroy'] == 'false' ? :add : :sub

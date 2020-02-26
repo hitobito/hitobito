@@ -58,7 +58,17 @@ Doorkeeper::OpenidConnect.configure do
   #   end
   # end
 
-  # claims do
-    # This should be definable by each wagon
-  # end
+  claims do
+    claim :email, scope: :email do |resource_owner|
+      resource_owner.email
+    end
+    
+    claim :first_name, scope: :name do |resource_owner|
+      resource_owner.first_name
+    end
+
+    claim :last_name, scope: :name do |resource_owner|
+      resource_owner.last_name
+    end
+  end
 end

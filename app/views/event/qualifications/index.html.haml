@@ -5,7 +5,7 @@
 
 - title event.to_s
 
-= form_tag(nil, method: :put) do
+= form_tag(group_event_qualifications_path(@group, @event), method: :put) do
 
   = render 'people'
 

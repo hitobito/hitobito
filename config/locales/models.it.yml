@@ -714,6 +714,7 @@ it:
       email: Leggono il tuo indirizzo e-mail
       name: Leggono il tuo indirizzo e-mail e il tuo nome
       with_roles: Leggono i tuoi dati del gruppo ed i tuoi ruoli
+      openid: Leggono il tuo token di identità openid
   errors:
     messages:
       invalid_money: "Deve essere arrotondato ai 5 centesimi"

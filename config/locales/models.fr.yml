@@ -715,6 +715,7 @@ fr:
       email: Lecture de ton adresse e-mail
       name: Lecture de ton adresse e-mail et de ton nom
       with_roles: Lecture de tes données de base et rôles
+      openid: Lecture de ton jeton d'identité openid
   errors:
     messages:
       invalid_money: "doit être arrondi à 5 centimes"

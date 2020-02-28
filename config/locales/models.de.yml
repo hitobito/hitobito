@@ -789,7 +789,7 @@ de:
       email: Lesen deiner E-Mail Adresse
       name: Lesen deiner E-Mail Adresse und Name
       with_roles: Lesen deiner Stammdaten und Rollen
-
+      openid: Lesen deines OIDC Identity Tokens
   errors:
     messages:
       invalid_money: "muss auf 5 Rappen gerundet werden"

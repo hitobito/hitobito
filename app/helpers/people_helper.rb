@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -115,6 +115,18 @@ module PeopleHelper
     URI::HTTP.build(host: 'nominatim.openstreetmap.org',
                     path: '/search.php',
                     query: query_params).to_s
+  end
+
+  def upcoming_events_title
+    title = [t('.events')]
+    if entry.id == current_user.id
+      title << link_to(icon(:calendar), event_feed_path, title: t('event_feeds.integrate'))
+    end
+    safe_join(title, ' ')
+  end
+
+  def person_event_feed_url
+    event_feed_url(token: current_user.event_feed_token, format: :ics)
   end
 
 end

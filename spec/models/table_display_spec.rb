@@ -26,7 +26,10 @@ describe TableDisplay do
     let(:member) { people(:bottom_member) }
 
     subject { TableDisplay.for(member, group) }
-    before  { TableDisplay.register_permission(Person, :update, :attr) }
+    before  do
+      TableDisplay.register_permission(Person, :update, :attr)
+      subject.selected = %w(other_attr attr)
+    end
     after   { TableDisplay.class_variable_set('@@permissions', {}) }
 
     context :on_leader do

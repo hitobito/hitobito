@@ -5,10 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Event::ParticipationsController < CrudController
+class Event::ParticipationsController < CrudController # rubocop:disable Metrics/ClassLength
 
   include Concerns::RenderPeopleExports
   include Concerns::AsyncDownload
+  include Api::JsonPaging
 
   self.nesting = Group, Event
 
@@ -73,6 +74,14 @@ class Event::ParticipationsController < CrudController
       format.vcf   { render_vcf(filter_entries.includes(person: :phone_numbers).collect(&:person)) }
       format.xlsx  { render_tabular_in_background(:xlsx) }
       format.email { render_emails(filter_entries.collect(&:person)) }
+      format.json  { render_entries_json(filter_entries) }
+    end
+  end
+
+  def show
+    respond_to do |format|
+      format.html
+      format.json { render_entry_json }
     end
   end
 
@@ -98,6 +107,25 @@ class Event::ParticipationsController < CrudController
   end
 
   private
+
+  def render_entry_json
+    render json: EventParticipationSerializer.new(entry, {
+      group: parents.first,
+      event: parents.last,
+      controller: self
+    })
+  end
+
+  def render_entries_json(entries)
+    paged_entries = entries.page(params[:page])
+    render json: [paging_properties(paged_entries),
+                  ListSerializer.new(paged_entries.decorate,
+                                     group: group,
+                                     event: event,
+                                     page: params[:page],
+                                     serializer: EventParticipationSerializer,
+                                     controller: self)].inject(&:merge)
+  end
 
   def sort_mappings_with_indifferent_access
     super.merge(current_person.table_display_for(parent).sort_statements(parent.question_ids))
@@ -283,7 +311,8 @@ class Event::ParticipationsController < CrudController
   end
 
   def event_participation_filter
-    Event::ParticipationFilter.new(event.id, current_user.id, params)
+    user_id = current_user.try(:id) || service_token_user.try(:id)
+    Event::ParticipationFilter.new(event.id, user_id, params)
   end
 
 end

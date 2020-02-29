@@ -37,7 +37,7 @@ describe RolesController do
       expect(role).to be_kind_of(Group::TopGroup::Member)
     end
 
-    it 'new role for new person redirects to person show' do
+    it 'new role for new person redirects to person edit' do
       post :create, group_id: group.id,
                     role: { group_id: group.id,
                             person_id: nil,
@@ -46,7 +46,7 @@ describe RolesController do
                                           last_name: 'Beispiel' } }
 
       role = assigns(:role)
-      is_expected.to redirect_to(group_person_path(group, role.person))
+      is_expected.to redirect_to(edit_group_person_path(group, role.person))
 
       expect(role.group_id).to eq(group.id)
       expect(flash[:notice]).to eq('Rolle <i>Member</i> für <i>Hans Beispiel</i> in <i>TopGroup</i> wurde erfolgreich erstellt.')
@@ -304,6 +304,19 @@ describe RolesController do
         expect(Role.with_deleted.where(id: role.id)).to be_exists
       end
     end
+  end
+
+  describe 'XHR PATCH inline update' do
+
+    before { role } # create it
+    render_views
+
+    it 'displays only roles in group after updating' do
+      xhr :patch, :update, group_id: group.id, id: role.id,
+                   role: { type: role.type, group_id: group.id, label: 'label' }
+      expect(response.body).not_to include('muted')
+    end
+
   end
 
   describe 'DELETE destroy' do

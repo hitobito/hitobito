@@ -5,15 +5,6 @@
 
 DB_CLEANER_STRATEGY = :truncation
 
-if ENV['CI']
-  require 'simplecov'
-  require 'simplecov-rcov'
-  SimpleCov.start 'rails'
-  SimpleCov.coverage_dir 'spec/coverage'
-  # use this formatter for jenkins compatibility
-  SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
-end
-
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_GROUPS'] = 'assets'
 require File.expand_path('../../config/environment', __FILE__)
@@ -68,6 +59,7 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :feature
 
   config.filter_run_excluding type: 'feature', performance: true
+  config.filter_run_excluding type: 'sphinx', sphinx: true
 
   if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2' # rubocop:disable Performance/Casecmp
     config.filter_run_excluding :mysql

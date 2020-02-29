@@ -41,6 +41,7 @@ de:
 
     button:
       save: Speichern
+      add_another: Speichern und weitere erfassen
       cancel: Abbrechen
       close: Schliessen
       search: Suchen
@@ -491,6 +492,20 @@ de:
       other: 'Verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
     issue_and_prolong: 'Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum).'
 
+  event_feeds:
+    integrate: In Kalender integrieren
+    show:
+      title: Meine Anlässe in Kalender integrieren
+      url: 'URL: %{url}'
+      create_url: Adresse erstellen
+      url_description: 'Mit dieser Adresse kannst du von anderen Anwendungen aus auf deine Anlässe zugreifen. Achtung: Gib diese Adresse nur an Personen weiter, die alle deine Termindetails sehen dürfen.'
+      reset_url: URL zurücksetzen
+      reset_url_description: 'Wenn du Missbrauch vermutest, kannst du die Adresse zurücksetzen und dadurch die aktuelle ungültig machen. Alle Kalender die noch die alte Adresse kennen, können danach nicht mehr deine Anlässe sehen.'
+    update:
+      flash:
+        create: Adresse wurde erstellt.
+        reset: Adresse wurde aktualisiert.
+
 
   filter_navigation/dropdown:
     additional_views: 'Weitere Ansichten'
@@ -814,6 +829,7 @@ de:
     events: 'Anlässe'
     courses: 'Kurse'
     admin: 'Einstellungen'
+    admin/event_feed: 'Kalender integrieren'
     invoices: 'Rechnungen'
 
   notes:
@@ -1263,10 +1279,6 @@ de:
   service_tokens:
     abilities:
       read: Lesen
-      people: Personen dieser Ebene
-      people_below: Personen dieser und der darunterliegenden Ebenen
-      groups: Gruppen dieser und der darunterliegenden Ebenen
-      events: Events dieser und der darunterliegenden Ebenen
 
     global:
       link:

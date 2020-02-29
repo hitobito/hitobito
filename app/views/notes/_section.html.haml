@@ -21,7 +21,7 @@
 
     = form_for(Note.new, url: create_path, remote: true) do |f|
       = f.text_area(:text, rows: 5, class: 'input-block-level')
-      = save_form_buttons(f, nil, '')
+      = form_buttons(f)
 
   = render 'notes/list',
            notes: entry.notes.includes(:author, :subject).list.page(params[:notes_page]).per(10),

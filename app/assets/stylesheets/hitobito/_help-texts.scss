@@ -1,0 +1,80 @@
+//  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
+//  hitobito and licensed under the Affero General Public License version 3
+//  or later. See the COPYING file at the top-level directory or at
+//  https://github.com/hitobito/hitobito.
+
+.help-text {
+  padding: 4px 10px;
+  border-radius: 3px;
+  background-color: $grayLighter;
+}
+h1 + .help-text {
+  margin: 0 -10px;
+}
+
+.checkbox + .help-text-trigger {
+  top: 0x;
+}
+
+
+.form-horizontal .controls .help-text {
+  float: none;
+  margin: -6px 0 4px 0;
+
+  width: 446px;
+  @media screen and (min-width: 1200px) {
+    width: 556px;
+  }
+  @media screen and (max-width: 979px) {
+    width: 338px;
+  }
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.help-text-trigger {
+  position: relative;
+  top: -3px;
+  padding: 0 4px;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  background-color: $grayLighter;
+  color: $gray;
+
+  &:hover {
+    background-color: $grayLight;
+  }
+  &:active {
+    background-color: $gray;
+    color: $white;
+  }
+
+  h1 & {
+    font-size: 14px;
+  }
+}
+
+.control-group {
+  position: relative;
+
+  label.checkbox {
+    display: inline-block;
+  }
+
+  .help-text-trigger {
+    margin-left: 4px;
+
+    @media screen and (max-width: 880px) {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+    @media screen and (max-width: 480px) {
+      top: 0px;
+      right: 0px;
+    }
+  }
+}

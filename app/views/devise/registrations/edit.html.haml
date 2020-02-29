@@ -11,4 +11,4 @@
     = f.labeled(:current_password, t('.old_password')) { f.input_field(:current_password) }
   = f.labeled(:password, t('.new_password')) { f.input_field(:password) }
   = f.labeled(:password_confirmation, t('.new_password_confirmation')) { f.input_field(:password_confirmation) }
-  = save_form_buttons(f, title, person_path(resource))
+  = form_buttons(f, submit_label: title, cancel_url: person_path(resource))

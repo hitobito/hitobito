@@ -59,7 +59,11 @@
 
         = render_sheets do
           .content-header
-            %h1= title
+            %h1
+              = title
+              = help_text_renderer.action_trigger
+            = help_text_renderer.action_text
+
             = sheet.render_main_tabs
 
           = yield :filter
@@ -89,6 +93,7 @@
                 = link_to "Version #{Wagons.app_version}", changelog_path
 
                 %br/
+              = app_version_links
 
               = link_to t('.source_code'), 'https://github.com/hitobito', target: '_blank'
               = t('.available_under_license')

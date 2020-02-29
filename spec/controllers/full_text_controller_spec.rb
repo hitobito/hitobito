@@ -82,6 +82,33 @@ describe FullTextController, type: :controller do
       end
     end
 
+    describe strategy.name.demodulize.downcase + ' active tab' do
+
+      it 'displays people tab' do
+        allow(@controller.send :search_strategy).to receive(:list_people).and_return(Person.where(id: people(:bottom_member).id))
+        get :index, q: 'query with people results'
+        expect(assigns(:active_tab)).to eq(:people)
+      end
+
+      it 'displays groups tab' do
+        allow(@controller.send :search_strategy).to receive(:query_groups).and_return(Group.where(id: groups(:bottom_layer_one).id))
+        get :index, q: 'query with group results'
+        expect(assigns(:active_tab)).to eq(:groups)
+      end
+
+      it 'displays events tab' do
+        allow(@controller.send :search_strategy).to receive(:query_events).and_return(Event.where(id: events(:top_course).id))
+        get :index, q: 'query with event results'
+        expect(assigns(:active_tab)).to eq(:events)
+      end
+
+      it 'displays people tab by default' do
+        get :index, q: 'query with no results'
+        expect(assigns(:active_tab)).to eq(:people)
+      end
+
+    end
+
   end
 
 end

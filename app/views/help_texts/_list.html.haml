@@ -1,0 +1,13 @@
+-#  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title t('list.index.title', models: models_label)
+
+= paginate entries
+= crud_table do |t|
+  - t.col(HelpText.human_attribute_name(:context))  { |ht| ht.entry.to_s }
+  - t.col(HelpText.human_attribute_name(:key))      { |ht| ht.entry.translate(ht.kind, ht.name) }
+  - t.attr(:body)
+  - add_table_actions(t)

@@ -1,9 +1,8 @@
-# encoding: utf-8
-
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: events
@@ -262,6 +261,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def group_names
     groups.join(', ')
+  end
+
+  def supports_application_details?
+    participant_types.present?
   end
 
   def application_duration

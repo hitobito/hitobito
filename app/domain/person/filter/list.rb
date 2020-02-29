@@ -19,15 +19,19 @@ class Person::Filter::List
   end
 
   def entries
-    default_order(filtered_accessibles.preload_groups)
+    default_order(filtered_accessibles.preload_groups.distinct)
   end
 
   def filtered_accessibles
     return filter unless user
-    filter.where(id: accessibles.unscope(:select).pluck(:id).keep_if do |id|
-      next true if @ids.blank?
-      @ids.include? id.to_s
-    end).uniq
+
+    if group_range?
+      filtered = filter.unscope(:select).select(:id).uniq
+      filtered = filtered.where(id: @ids) if @ids.present?
+      accessibles.unscope(:select).where(id: filtered)
+    else
+      accessibles.merge(filter)
+    end
   end
 
   def all_count
@@ -41,7 +45,7 @@ class Person::Filter::List
   end
 
   def accessibles
-    ability = accessibles_class.new(user, nil)
+    ability = accessibles_class.new(user, group_range? ? @group : nil, chain.roles_join)
     Person.accessible_by(ability)
   end
 
@@ -63,12 +67,9 @@ class Person::Filter::List
       @multiple_groups = true
       Person.in_layer(group, join: chain.roles_join)
     else
+      group_scope = Person.in_group(group, chain.roles_join)
       chain.blank? ? group_scope.members(group) : group_scope
     end
-  end
-
-  def group_scope
-    Person.in_group(group, chain.roles_join)
   end
 
   def group_range?

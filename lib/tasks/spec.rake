@@ -8,6 +8,11 @@
 if Rake::Task.task_defined?('spec:features') # only if current environment knows rspec
   Rake::Task['spec:features'].actions.clear
   namespace :spec do
+    RSpec::Core::RakeTask.new(:sphinx) do |t|
+      t.pattern = './spec/**/*_spec.rb'
+      t.rspec_opts = '--tag sphinx'
+    end
+
     RSpec::Core::RakeTask.new(:features) do |t|
       t.pattern = './spec/features/**/*_spec.rb'
       t.rspec_opts = '--tag type:feature'

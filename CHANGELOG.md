@@ -1,5 +1,14 @@
 # Hitobito Changelog
 
+## unreleased
+
+## Version 1.20
+
+*   Für Seiten und Formulare können Hilfetexte hinterlegt werden
+*   Erfassen von mehreren Personen erleichtert ("Speichern und weitere erfassen"-Button)
+*   Profilbilder werden bis 512x512 Pixel erlaubt
+
+
 ## Version 1.19
 
 *   Neue Navigation, mit Menü für Mobile

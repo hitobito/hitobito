@@ -12,4 +12,4 @@
                 remote: true,
                 stacked: true) do |f|
   = f.labeled_input_field(:waiting_list_comment, class: 'span12')
-  = save_form_buttons(f, nil, '#')
+  = form_buttons(f, submit_label: nil, cancel_url: '#')

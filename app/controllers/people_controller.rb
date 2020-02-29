@@ -261,8 +261,4 @@ class PeopleController < CrudController
                                                 list_filter_args)
   end
 
-  def service_token_user
-    current_ability.token.dynamic_user if current_ability.is_a?(TokenAbility)
-  end
-
 end

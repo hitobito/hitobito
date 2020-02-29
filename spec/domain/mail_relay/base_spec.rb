@@ -9,10 +9,14 @@ require 'spec_helper'
 
 describe MailRelay::Base do
 
-  let(:simple)   { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'simple.eml'))) }
-  let(:regular)  { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml'))) }
-  let(:list)     { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list.eml'))) }
-  let(:multiple) { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'multiple.eml'))) }
+
+  let(:mails)                  { Rails.root.join('spec', 'fixtures', 'email') }
+  let(:simple)                 { Mail.new(mails.join('simple.eml').read) }
+  let(:regular)                { Mail.new(mails.join('regular.eml').read) }
+  let(:list)                   { Mail.new(mails.join('list.eml').read) }
+  let(:multiple)               { Mail.new(mails.join('multiple.eml').read) }
+  let(:multiple_both)          { Mail.new(mails.join('multiple_both.eml').read) }
+  let(:multiple_x_original_to) { Mail.new(mails.join('multiple_x_original_to.eml').read) }
 
   let(:relay) { MailRelay::Base.new(message) }
 
@@ -56,6 +60,20 @@ describe MailRelay::Base do
         expect(relay.envelope_receiver_name).to eq('kalei.kontakt')
       end
     end
+    context 'multiple both' do
+      let(:message) { multiple_both }
+
+      it 'returns single receiver' do
+        expect(relay.envelope_receiver_name).to eq('kalei.kontakt')
+      end
+    end
+    context 'multiple x-original-to' do
+      let(:message) { multiple_x_original_to }
+
+      it 'returns single receiver' do
+        expect(relay.envelope_receiver_name).to eq('amatest')
+      end
+    end
     context 'regular' do
       let(:message) { regular }
 
@@ -95,7 +113,6 @@ describe MailRelay::Base do
       end
 
     end
-
   end
 
   describe '.relay_current' do
@@ -250,6 +267,19 @@ describe MailRelay::Base do
       expect(MailRelay::Base).to receive(:new).exactly(5).times
 
       expect { MailRelay::Base.relay_current }.to raise_error(MailRelay::Error)
+    end
+
+    it 'logs EOF Error without creating MailLog' do
+      expect(Mail).to receive(:find_and_delete) do |options, &block|
+        fail EOFError.new('ouch')
+      end
+
+      expect do
+        MailRelay::Base.relay_current
+      end.not_to change { MailLog.count }
+
+      mail_log = MailLog.find_by(mail_hash: '1b498b5a776254310c3699688680b37a')
+      expect(mail_log).not_to be_present
     end
   end
 end

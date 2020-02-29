@@ -34,7 +34,7 @@ class ChangelogReader
       if h = changelog_header_line(l)
         version = find_or_create_version(h)
       elsif e = changelog_entry_line(l)
-        add_changelog_entry(version, e)
+        add_changelog_entry(version, e) if version.present?
       end
     end
   end

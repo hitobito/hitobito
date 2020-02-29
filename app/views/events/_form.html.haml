@@ -18,7 +18,7 @@
     #dates.tab-pane
       = render 'date_fields', f: f
 
-    - if entry.participant_types.present?
+    - if entry.supports_application_details?
       #application.tab-pane
         = render 'application_fields', f: f
 

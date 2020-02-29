@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe SearchStrategies::Sphinx, :mysql do
+describe SearchStrategies::Sphinx, sphinx: true do
 
   sphinx_environment(:people, :groups, :events) do
 

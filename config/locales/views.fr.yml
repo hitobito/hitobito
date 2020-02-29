@@ -32,6 +32,7 @@ fr:
       back: Retour
       refresh: Mettre à jour
       print: Imprimer
+      copy: Copier
     link:
       show: Afficher
       edit: Modifier
@@ -207,7 +208,7 @@ fr:
     priorities: 'Priorité d''inscription'
     lists:
       courses:
-        title: 'Cours disponibles'
+        title: 'Cours enregistrés'
         explanation: 'Les cours de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres cours auprès des groupes qui les organisent.'
         csv_export_button: 'Export CSV'
         ical_export_button: 'Export du calendrier'
@@ -346,7 +347,7 @@ fr:
       link:
         add_event: Créer un événement
         add_event/course: Créer un cours
-        duplicate: Dupliquer
+        duplicate: Copier
     minimum_age_with_years: 'au moins %{minimum_age}  ans (année de naissance)'
     new:
       title_event: Créer un événement
@@ -414,6 +415,19 @@ fr:
       one: 'Prolonge la qualification existante %{prolonged} à la date du %{until} (dernier jour du cours).'
       other: 'Prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
     issue_and_prolong: 'Attribue la %{model} %{issued} et prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
+  event_feeds:
+    integrate: Intégrer dans le calendrier
+    show:
+      title: Intégrer mes évènements dans le calendrier
+      url: 'URL:%{url}'
+      create_url: Créer une adresse
+      url_description: 'Avec cette adresse, tu as accès à tous tes évènements. Attention: ne donne cette adresse qu''à des personnes qui peuvent voir tous les détails de tes rendez-vous.'
+      reset_url: Réinitialiser l'URL
+      reset_url_description: 'Si tu crains un abus, tu peux réinitialiser l''adresse internet de ton calendrier, ce qui désactive celle que tu utilises maintenant. Ainsi, tous les calendriers qui ne connaissent que l''ancienne adresse ne pourront plus voir tes évènements.'
+    update:
+      flash:
+        create: L'adresse a été créée.
+        reset: L'adresse a été actualisée.
   filter_navigation/dropdown:
     additional_views: 'Autres vues'
   filter_navigation/people:
@@ -697,8 +711,9 @@ fr:
     groups: 'Groupes'
     events: 'Activités'
     courses: 'Cours'
-    admin: 'Paramétrage'
-    invoices: 'factures'
+    admin: 'Paramètres'
+    admin/event_feed: 'Intégrer le calendrier'
+    invoices: 'Factures'
   notes:
     new_note: Ajouter une note
     note:
@@ -706,6 +721,19 @@ fr:
     paginator:
       newer_notes: Nouvelles contributions
       older_notes: Anciennes contributions
+  oauth:
+    applications:
+      form:
+        help_native_redirect_uris: Une entrée par ligne. Pour les tests locaux, utiliser %{native_redirect_uri}.
+      attrs:
+        profile_endpoint_help: Les informations profil de l'utilisateur peuvent être prises au-delà ce Endpoint. Pour ce faire, il faut rendre le Access Token dans le Authorization Header. Le Scope souhaité peut être rendu en tant que X-Scope.
+        profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
+    access_grants:
+      list:
+        title: '%{model_name} acrifs pour %{uri}'
+    tabs:
+      grants: Autorisations
+      tokens: Token d'accès
   qualifications:
     in_years: '%{years} ans'
     valid_until: 'à %{date}'
@@ -853,7 +881,7 @@ fr:
       history: Historique
       log: Journal
       colleagues: Collaborateurs/collaboratrices
-      invoices: factures
+      invoices: Factures
     actions_show:
       send_login: Envoyer les données d'identification
       send_login_tooltip:
@@ -913,6 +941,9 @@ fr:
       move_role: Déplacer rôles
       add_role: Ajouter rôle
       add_participation: Ajouter à l'événement
+      tag_lists: Tags
+      remove_tags: Enlever les tags
+      add_tags: Rajouter des tags
   participations:
     destroy:
       flash:
@@ -939,6 +970,11 @@ fr:
       title: Champ
       match: contient
       equal: est précis
+      greater: plus grand que
+      smaller: plus petit que
+    tag:
+      title: Tags
+      prompt_tag_selection: Que les personnes avec l'un des tags suivants
     new:
       title: Filtrer les personnes
     range:
@@ -1030,7 +1066,31 @@ fr:
       submit:
         one: 'Créer un rôle'
         other: 'Créer %{count} rôles'
+  tag_lists:
+    destroy:
+      success:
+        zero: Aucun tag n'a été enlevé
+        one: Un tag a été enlevé
+        other: '%{count} tags ont été enlevés'
+    create:
+      success:
+        zero: Aucun tag n'a été créé
+        one: Un tag a été créé
+        other: '%{count} tags ont été créés'
+    deletable:
+      title: Quels tags doivent-être supprimés?
+      no_entries: Aucun tag ne peut être supprimé parmi les personnes sélectionnées
+      submit: Enlever
+    new:
+      title: Quels tags doivent-être ajoutés?
+      no_entries: Aucun tag ne peut être créé sur les personnes sélectionnées.
+      separate_multiple_tags_with_comma: Séparez les tags par des virgules
+      submit:
+        one: 'Créer des tags sur une personne'
+        other: 'Créer des tags sur %{count} personnes'
   service_tokens:
+    abilities:
+      read: Lecture
     global:
       link:
         add: Ajouter API-Key

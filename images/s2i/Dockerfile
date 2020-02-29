@@ -13,7 +13,7 @@
 # (Using the CLI, you can achieve this by running
 # `oc start-build rails-sti-base`)
 
-FROM centos/ruby-22-centos7
+FROM centos/ruby-25-centos7
 
 USER root
 
@@ -26,8 +26,9 @@ ADD ./root /
 RUN \
     yum localinstall -y \
       "https://github.com/sphinxsearch/sphinx/releases/download/2.2.11-release/sphinx-2.2.11-1.rhel7.x86_64.rpm" && \
-    scl enable rh-ruby22 /opt/bin/install-nodejs && \
-    scl enable rh-ruby22 /opt/bin/install-transifex && \
+    scl enable rh-ruby25 /opt/bin/install-nodejs && \
+    yum install -y python-setuptools && \
+    scl enable rh-ruby25 /opt/bin/install-transifex && \
     chmod ugo+x $STI_SCRIPTS_PATH/* && \
     # TODO Why do we do this?
     # Check with the fix-permissions call in $STI_SCRIPTS_PATH/assemble.

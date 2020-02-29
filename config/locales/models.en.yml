@@ -383,6 +383,14 @@ en:
         participation: Person
       note:
         text: Text
+      people_relation:
+        head_id: Person
+        tail_id: Other person
+        kind: Type
+      phone_number:
+        number: Number
+        label: Type
+        public: Public
       qualification:
         qualification_kind: Qualification
         qualification_kind_id: Qualification
@@ -400,17 +408,9 @@ en:
         updated_at: Changed
         deleted_at: Deleted
         reactivateable: Reactivateable
-      people_relation:
-        head_id: Person
-        tail_id: Other person
-        kind: Type
       relations_to_tails:
         tail_id: Relation
         kind: Type
-      phone_number:
-        number: Number
-        label: Type
-        public: Public
       phone_numbers:
         number: Phone number
         label: Phone number type

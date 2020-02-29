@@ -22,7 +22,7 @@ class ApplicationMailer < ActionMailer::Base
 
   def compose(recipients, content_key)
     values = values_for_placeholders(content_key)
-    custom_content_mail(recipients, content_key, values)
+    custom_content_mail(recipients, content_key, values) if recipients.present?
   end
 
   # TODO: deprecate/remove values-parameter and call values_for_placeholders instead

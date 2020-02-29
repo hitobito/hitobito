@@ -3,6 +3,8 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito.
 
+- title @group.to_s
+
 = crud_table do |t|
   - t.col(ServiceToken.human_attribute_name(:key)) do |service_token|
     - service_token.full_title

@@ -57,6 +57,10 @@ it:
           attributes:
             person_id:
               taken: è già iscritto
+        oauth/application:
+          attributes:
+            scopes:
+              not_match_configured: "non coincidono con quelle depositate sul server."
         person:
           name_missing: 'Inserire un nome'
           emoji_suspected: 'Non utilizzare simboli speciali (in particolare Emoji)'
@@ -140,6 +144,9 @@ it:
       event/kind:
         one: tipo di corso
         other: Tipi di corso
+      event/role:
+        one: Ruoli evento
+        other: Ruoli evento
       event/role/assistant_leader:
         one: Responsabile
         other: Responsabile
@@ -167,6 +174,9 @@ it:
       group:
         one: gruppo
         other: Gruppi
+      help_text:
+        one: Testi ausiliari
+        other: Testi ausiliari
       invoice:
         one: Fattura
         other: Fatture
@@ -191,6 +201,15 @@ it:
       payment:
         one: Pagamento
         other: Pagamenti
+      oauth/application:
+        one: Applicazioni OAuth
+        other: Applicazioni OAuth
+      oauth/access_token:
+        one: Tokens d'accesso OAuth
+        other: Tokens di accesso OAuth
+      oauth/access_grant:
+        one: Autorizzazioni OAuth
+        other: Autorizzazioni OAuth
       payment_reminder:
         one: Sollecito
         other: Solleciti
@@ -218,6 +237,9 @@ it:
       role:
         one: ruolo
         other: Ruoli
+      service_token:
+        one: Chi
+        other: Chiavi API
       social_account:
         one: indirizzo nei social media
         other: Indirizzi nei social media
@@ -317,6 +339,7 @@ it:
         layer_group_id: Livello
         type: Tipo di gruppo
         type_name: Tipo di gruppi
+        description: Descrizione
       event:
         group_ids: Gruppi
         groups: Gruppi
@@ -419,6 +442,16 @@ it:
         participation: Persona
       note:
         text: Testo
+      oauth/application:
+        redirect_uri: Redirect URIs
+      people_relation:
+        head_id: Persona
+        tail_id: Altra persona
+        kind: Tipo
+      phone_number:
+        number: Numero
+        label: Tipo
+        public: Pubblico
       qualification:
         qualification_kind: Qualifiche
         qualification_kind_id: Qualifica
@@ -436,17 +469,9 @@ it:
         updated_at: Modificato
         deleted_at: Cancellato
         reactivateable: Riattivabile
-      people_relation:
-        head_id: Persona
-        tail_id: Altra persona
-        kind: Tipo
       relations_to_tails:
         tail_id: Relazione
         kind: Tipo
-      phone_number:
-        number: Numero
-        label: Tipo
-        public: Pubblico
       phone_numbers:
         number: Numero di telefono
         label: Tipo di numero di telefono
@@ -537,6 +562,16 @@ it:
         label: Testo
         subject: Oggetto
         body: Contenuto
+      help_text:
+        context: Contesto
+        key: Chiave
+        body: Contenuto
+        field:
+          one: Campo
+          other: Campo
+        action:
+          one: Pagine
+          other: Pag
       label_format:
         name: Definizione
         page_size: Formato della pagina
@@ -594,6 +629,9 @@ it:
         payment_slip: Polizza di versamento
         participant_number: Numero di partecipante
         creator: Emittente della fattura
+        cost_centers: Centro di costo
+        accounts: Conti
+        payments: Entrate pagamenti
       invoice_article:
         number: Numero dell'articolo
         name: Denominazione
@@ -631,6 +669,8 @@ it:
         unit_cost: Prezzo
         count: Numero
         cost: Importo
+        cost_center: Centro di costo
+        account: Conto
       invoice_items:
         name: Nome
         description: Descrizione
@@ -638,6 +678,8 @@ it:
         unit_cost: Prezzo
         count: Numero
         cost: Importo
+        cost_center: Centro di costo
+        account: Conto
       payment:
         invoice: Fattura
         amount: Importo
@@ -661,10 +703,17 @@ it:
         key: Codice
         abilities: Diritti
         last_access: Ultimo Accesso
-        people: Persone di questo gruppo
-        people_below: Persone dei sottogruppi
-        groups: Gruppi di questo gruppo
-        events: Eventi di questo gruppo
+        people: Persone su questo livello
+        people_below: Persone su questo livello e sui livelli sottostanti
+        groups: Gruppi di questo livello e dei livelli sottostanti
+        events: Eventi di questo livello e dei livelli sottostanti
+        invoices: Fatture di questo livello
+        event_participations: Partecipanti ad eventi di questo livello
+  doorkeeper:
+    scopes:
+      email: Leggono il tuo indirizzo e-mail
+      name: Leggono il tuo indirizzo e-mail e il tuo nome
+      with_roles: Leggono i tuoi dati del gruppo ed i tuoi ruoli
   errors:
     messages:
       invalid_money: "Deve essere arrotondato ai 5 centesimi"

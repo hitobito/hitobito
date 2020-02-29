@@ -57,6 +57,10 @@ fr:
           attributes:
             person_id:
               taken: est déjà annoncé
+        oauth/application:
+          attributes:
+            scopes:
+              not_match_configured: "ne correspondent pas à celles du serveur."
         person:
           name_missing: 'Veuillez entrer votre nom'
           emoji_suspected: 'Prière de ne pas utiliser de caractères spéciaux (en particulier, des emoji)'
@@ -141,6 +145,9 @@ fr:
       event/kind:
         one: Type de cours
         other: Types de cours
+      event/role:
+        one: rôles de l'évènement
+        other: rôles de l'évènement
       event/role/assistant_leader:
         one: Responsable
         other: Responsables
@@ -168,6 +175,9 @@ fr:
       group:
         one: groupe
         other: Groupes
+      help_text:
+        one: Hilfetext
+        other: Textes d'aide
       invoice:
         one: facture
         other: Factures
@@ -175,7 +185,7 @@ fr:
         one: articles de factures
         other: Articles à facturer
       invoice_config:
-        one: règlages de factures
+        one: Paramétrage
         other: Paramétrage
       invoice_item:
         one: postes de factures
@@ -192,6 +202,15 @@ fr:
       payment:
         one: paiements
         other: paiements
+      oauth/application:
+        one: Application OAuth
+        other: Applications OAuth
+      oauth/access_token:
+        one: Token d'accès OAuth
+        other: Tokens d'accès OAuth
+      oauth/access_grant:
+        one: Autorisation OAuth
+        other: Autorisations OAuth
       payment_reminder:
         one: rappel
         other: rappels
@@ -321,6 +340,7 @@ fr:
         layer_group_id: Niveau
         type: Type de groupe
         type_name: Type de groupe
+        description: Description
       event:
         group_ids: Groupes
         groups: Groupes
@@ -335,11 +355,11 @@ fr:
         description: Description
         location: Lieu / Adresse
         application_opening_at: Début des inscriptions
-        application_closing_at: Fin des inscriptions
-        application_conditions: Conditions d'admission
+        application_closing_at: Délai d'inscription
+        application_conditions: Conditions d'inscription
         external_applications: Inscriptions externes
-        signature: Signature nécessaire
-        signature_confirmation: 2ème signature nécessaire
+        signature: Signature obligatoire
+        signature_confirmation: Deuxième signature obligatoire
         signature_confirmation_text: Deuxième signature de
         dates: Dates
         dates_full: Dates
@@ -390,7 +410,7 @@ fr:
         prolongations: Prolongé
         qualification_kinds: Qualifié pour
         general_information: Informations générales
-        application_conditions: Conditions d'admission
+        application_conditions: Conditions d'inscription
         created_at: Créé
         updated_at: Modifié
         deleted_at: Supprimé
@@ -423,6 +443,16 @@ fr:
         participation: Personne
       note:
         text: Texte
+      oauth/application:
+        redirect_uri: Rediriger les URIs
+      people_relation:
+        head_id: Personne
+        tail_id: Autre personne
+        kind: genre
+      phone_number:
+        number: Numéro
+        label: Type
+        public: Public
       qualification:
         qualification_kind: Qualification
         qualification_kind_id: Qualification
@@ -440,17 +470,9 @@ fr:
         updated_at: Modifié
         deleted_at: Supprimé
         reactivateable: Pouvant être réactivé
-      people_relation:
-        head_id: Personne
-        tail_id: Autre personne
-        kind: genre
       relations_to_tails:
         tail_id: relation
         kind: genre
-      phone_number:
-        number: Numéro
-        label: Type
-        public: Public
       phone_numbers:
         number: Numéro de téléphone
         label: Type de numéro de téléphone
@@ -541,6 +563,16 @@ fr:
         label: Texte
         subject: Objet
         body: Contenu
+      help_text:
+        context: Contexte
+        key: Clef
+        body: Contenu
+        field:
+          one: Champ
+          other: Champs
+        action:
+          one: Page
+          other: Pages
       label_format:
         name: Désignation
         page_size: Taille de la page
@@ -560,7 +592,7 @@ fr:
         description: Texte
         invoice_items: Détails de la facture
         invoice_item_article: Article à facturer
-        invoice_config: réglage de facture
+        invoice_config: Paramétrage
         state: statut
         sequence_number: numéro
         esr_number: numéro de référence
@@ -584,10 +616,10 @@ fr:
         issued_at: Établi(e) le
         sent_at: Envoyé(e) le
         cost: montant
-        total_inkl_vat: Total (TVA incl.)
+        total_inkl_vat: Montant total
         total: Total (TVA incl.)
         vat: TVA
-        vat_number: No TVA
+        vat_number: N° TVA
         payment_information: Information sur le paiement
         payment_purpose: motif du paiement
         address: adresse de l'expéditeur
@@ -598,6 +630,9 @@ fr:
         payment_slip: bulletin de versement
         participant_number: numéro du participant
         creator: Auteur de la facture
+        cost_centers: Postes
+        accounts: Comptes
+        payments: Encaissements
       invoice_article:
         number: numéro d'article
         name: désignation
@@ -627,14 +662,16 @@ fr:
         participant_number: numéro du participant
         participant_number_internal: Numéro du participant interne
         payment_reminder_configs: rappels
-        vat_number: No TVA
+        vat_number: N° TVA
       invoice_item:
-        name: Nom
+        name: Désignation
         description: description
         vat_rate: TVA
         unit_cost: prix
-        count: Nombre
+        count: Quantité
         cost: montant
+        cost_center: Poste
+        account: Compte
       invoice_items:
         name: Nom
         description: description
@@ -642,6 +679,8 @@ fr:
         unit_cost: prix
         count: nombre
         cost: montant
+        cost_center: Poste
+        account: Compte
       payment:
         invoice: facture
         amount: montant
@@ -665,10 +704,17 @@ fr:
         key: Clé
         abilities: Droits
         last_access: Dernier accès
-        people: Personnes de cette groupe
-        people_below: Personnes des sous-groupes
-        groups: Groupes de cette groupe
-        events: Evénements de cette groupe
+        people: Membres de ce niveau
+        people_below: Membres de ce niveau et des niveaux inférieurs
+        groups: Groupes de ce niveau et des niveaux inférieurs
+        events: Évènements de ce niveau et des niveaux inférieurs
+        invoices: Factures de ce niveau
+        event_participations: Participants d'évènements de ce niveau
+  doorkeeper:
+    scopes:
+      email: Lecture de ton adresse e-mail
+      name: Lecture de ton adresse e-mail et de ton nom
+      with_roles: Lecture de tes données de base et rôles
   errors:
     messages:
       invalid_money: "doit être arrondi à 5 centimes"

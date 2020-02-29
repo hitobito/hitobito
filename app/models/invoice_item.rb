@@ -15,6 +15,8 @@
 #  vat_rate    :decimal(5, 2)
 #  unit_cost   :decimal(12, 2)   not null
 #  count       :integer          default(1), not null
+#  cost_center :string(255)
+#  account     :string(255)
 #
 
 class InvoiceItem < ActiveRecord::Base

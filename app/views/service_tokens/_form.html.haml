@@ -8,8 +8,11 @@
     = f.labeled_input_fields :name, :description
 
   %fieldset
-    = f.labeled(ServiceToken.human_attribute_name(:abilities)) do
-      = f.boolean_field(:people, caption: t('service_tokens.abilities.people'))
-      = f.boolean_field(:people_below, caption: t('service_tokens.abilities.people_below'))
-      = f.boolean_field(:groups, caption: t('service_tokens.abilities.groups'))
-      = f.boolean_field(:events, caption: t('service_tokens.abilities.events'))
+    = f.labeled(model_class.human_attribute_name(:abilities), nil, nil, style: 'display: flex; flex-direction: column;') do
+      = f.boolean_field(:people, caption: model_class.human_attribute_name(:people))
+      = f.boolean_field(:people_below, caption: model_class.human_attribute_name(:people_below))
+      = f.boolean_field(:groups, caption: model_class.human_attribute_name(:groups))
+      = f.boolean_field(:events, caption: model_class.human_attribute_name(:events))
+      - if parent.layer?
+        = f.boolean_field(:invoices, caption: model_class.human_attribute_name(:invoices))
+      = f.boolean_field(:event_participations, caption: model_class.human_attribute_name(:event_participations))

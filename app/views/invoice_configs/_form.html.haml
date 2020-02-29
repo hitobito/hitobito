@@ -14,4 +14,4 @@
     #reminders.tab-pane
       = f.fields_for(:payment_reminder_configs) do |ff|
         = render 'reminder_fields', f: ff
-  = save_form_buttons(f, nil, group_invoice_config_path(parent))
+  = form_buttons(f, submit_label: nil, cancel_url: group_invoice_config_path(parent))

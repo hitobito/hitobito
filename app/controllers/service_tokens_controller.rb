@@ -7,7 +7,16 @@ class ServiceTokensController < CrudController
   decorates :service_tokens
 
   self.nesting = Group
-  self.permitted_attrs = [:name, :description, :people, :people_below, :groups, :events]
+  self.permitted_attrs = [
+    :name,
+    :description,
+    :people,
+    :people_below,
+    :groups,
+    :events,
+    :invoices,
+    :event_participations
+  ]
 
   private
 

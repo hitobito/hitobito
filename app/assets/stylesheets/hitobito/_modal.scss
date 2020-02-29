@@ -34,3 +34,8 @@
 #participation-lists-new .modal-body, #tag-lists-new .modal-body {
   overflow: unset
 }
+
+// because link modal inherits z value from container-fluid we have to override here
+.wysihtml5-supported .modal-backdrop {
+  z-index: 1;
+}

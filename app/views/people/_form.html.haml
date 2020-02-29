@@ -7,9 +7,9 @@
   - if entry.new_record?
     = hidden_field_tag('role[group_id]', params[:role][:group_id])
     = hidden_field_tag('role[type]', params[:role][:type])
-  
+
   = render 'fields', f: f
-  
+
   = render 'picture_fields', f: f
 
   = hidden_field_tag('return_url', params[:return_url])

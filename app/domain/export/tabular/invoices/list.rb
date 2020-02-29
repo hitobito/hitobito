@@ -10,13 +10,17 @@ module Export::Tabular::Invoices
 
     INCLUDED_ATTRS = %w(title sequence_number state esr_number description
                         recipient_email recipient_address sent_at due_at
-                        cost vat total amount_paid)
+                        cost vat total amount_paid).freeze
+
+
+    CUSTOM_METHODS = %w(cost_centers accounts payments)
+
 
     self.model_class = Invoice
     self.row_class = Export::Tabular::Invoices::Row
 
     def attributes
-      INCLUDED_ATTRS.collect(&:to_sym)
+      (INCLUDED_ATTRS + CUSTOM_METHODS).collect(&:to_sym)
     end
   end
 end

@@ -104,6 +104,7 @@ module Hitobito
         MailRelayJob.new.schedule if Settings.email.retriever.config.present?
         SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
         DownloadCleanerJob.new.schedule
+        SessionsCleanerJob.new.schedule
       end
     end
 
@@ -127,6 +128,10 @@ module Hitobito
     def self.sphinx_local?
       host = ENV['RAILS_SPHINX_HOST']
       host.blank? || host == '127.0.0.1' || host == 'localhost'
+    end
+
+    def self.versions(file = Rails.root.join('WAGON_VERSIONS'))
+      @versions ||= file.exist? ? file.read.lines.reject(&:blank?) : []
     end
 
     def self.build_info

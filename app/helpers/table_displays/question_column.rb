@@ -13,7 +13,7 @@ module TableDisplays
     end
 
     def label
-      @question.question
+      question.label
     end
 
     def format_attr(target, _)
@@ -21,7 +21,7 @@ module TableDisplays
     end
 
     def header
-      table.sort_header(template.dom_id(@question), @question.question)
+      table.sort_header(template.dom_id(@question), label)
     end
 
     def question

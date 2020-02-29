@@ -6,4 +6,4 @@
     = f.error_messages
     = f.labeled_input_field :due_at unless entry.new_record?
     = f.labeled_input_field :message
-    = save_form_buttons(f, nil, cancel_url: entry.persisted? ? group_invoice_path(parent, entry) : group_invoices_path(parent))
+    = form_buttons(f, submit_label: nil, cancel_url: entry.persisted? ? group_invoice_path(parent, cancel_url: entry) : group_invoices_path(parent))

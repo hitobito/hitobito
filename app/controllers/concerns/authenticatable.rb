@@ -29,6 +29,12 @@ module Concerns
       current_person
     end
 
+    # TODO can we somehow use this dynamic user as a true substitute instead of passing it
+    # explicitly at various places
+    def service_token_user
+      current_ability.token.dynamic_user if current_ability.is_a?(TokenAbility)
+    end
+
     def origin_user
       return unless session[:origin_user]
       Person.find(session[:origin_user])

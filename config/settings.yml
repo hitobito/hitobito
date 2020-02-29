@@ -12,10 +12,6 @@ application:
     height: 30 # pixel, has to bet set as the logo is a background image,
     width: 230 # pixel, will also set the minimal width of the navigation
     background_color: none # optional backgroundcolor, creates a box around the logo, if changed from 'none'
-  page_background: # override default page background color depending on environment, if changed from 'none'
-    production: none
-    test: none
-    development: none
   footer:
     #logo_image: logo_hitobito.png
     logo_url: http://puzzle.ch

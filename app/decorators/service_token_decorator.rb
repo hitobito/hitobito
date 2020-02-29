@@ -7,7 +7,7 @@ class ServiceTokenDecorator < ApplicationDecorator
   decorates :service_token
 
   def abilities
-    kinds = [:people, :people_below, :events, :groups]
+    kinds = [:people, :people_below, :events, :groups, :invoices, :event_participations]
 
     safe_join(kinds.map do |ability|
       ability_description(ability, :read) if public_send(ability)
@@ -27,8 +27,8 @@ class ServiceTokenDecorator < ApplicationDecorator
   private
 
   def ability_description(ability, action)
-    prefix = 'service_tokens.abilities.'
-    safe_join([h.t("#{prefix}.#{ability}"), h.muted(h.t("#{prefix}.#{action}"))], ' ')
+    safe_join([ServiceToken.human_attribute_name(ability),
+               h.muted(h.t("service_tokens.abilities.#{action}"))], ' ')
   end
 
 end

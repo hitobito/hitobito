@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -97,9 +97,23 @@ describe Export::Ics::Events do
 
       it do
         expect(ical_event.dtstart).to be_a(ical_datetime_klass)
-        expect(ical_event.dtstart.value_ical).to eq(event_date.start_at.strftime(ical_datetime_klass::FORMAT))
+        expect(ical_event.dtstart.value_ical).to eq('20180519T100000Z')
         expect(ical_event.dtend).to be_a(ical_datetime_klass)
-        expect(ical_event.dtend).to eq(event_date.finish_at.strftime(ical_datetime_klass::FORMAT))
+        expect(ical_event.dtend.value_ical).to eq('20180521T140000Z')
+      end
+    end
+
+    context 'with an all-day event' do
+      let(:event_date) do
+        Event::Date.new(
+          event: event,
+          start_at: Time.zone.local(2018, 5, 19, 0, 0),
+          finish_at: Time.zone.local(2018, 5, 21, 0, 0)
+        )
+      end
+
+      it 'should export the non-inclusive end date' do
+        expect(ical_event.dtend.value_ical).to eq((event_date.finish_at + 1.day).strftime(ical_date_klass::FORMAT))
       end
     end
   end

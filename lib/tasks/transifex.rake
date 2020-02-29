@@ -72,5 +72,9 @@ namespace :tx do
       ENV['CMD'] = 'if [ -f .tx/config ]; then tx pull -f; fi'
       Rake::Task['wagon:exec'].invoke
     end
+    task :push do
+      ENV['CMD'] = 'if [ -f .tx/config ]; then tx push -s; fi'
+      Rake::Task['wagon:exec'].invoke
+    end
   end
 end

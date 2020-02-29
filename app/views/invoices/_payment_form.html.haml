@@ -3,5 +3,5 @@
   = standard_form(@payment, url: group_invoice_payments_path(parent, entry)) do |f|
     = f.error_messages
     = f.labeled_input_fields :amount, :received_at
-    = save_form_buttons(f, nil, cancel_url: group_invoice_path(parent, entry))
+    = form_buttons(f, submit_label: nil, cancel_url: group_invoice_path(parent, entry))
 

@@ -1,12 +1,13 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module Export::Ics
   class Events
+
     include Rails.application.routes.url_helpers
 
     def generate(events)
@@ -41,7 +42,7 @@ module Export::Ics
     def generate_ical_from_event_date(event_date, event)
       Icalendar::Event.new.tap do |ical_event|
         ical_event.dtstart = datetime_to_ical(event_date.start_at)
-        ical_event.dtend = datetime_to_ical(event_date.finish_at)
+        ical_event.dtend = finish_at_to_ical(event_date.finish_at)
         ical_event.summary = event.name
         ical_event.summary += ": #{event_date.label}" unless event_date.label.blank?
         ical_event.location = event_date.location || event.location
@@ -50,12 +51,23 @@ module Export::Ics
       end
     end
 
-    def datetime_to_ical(datetime)
-      return unless datetime.respond_to?(:strftime)
-      if Duration.date_only?(datetime)
-        Icalendar::Values::Date.new(datetime.strftime(Icalendar::Values::Date::FORMAT))
+    def finish_at_to_ical(finish_at)
+      return if finish_at.nil?
+      if Duration.date_only?(finish_at)
+        # For all-day events, the iCalendar standard requires exclusive end dates.
+        # Since we interpret 0:00 as all-day, we need to add 1 day to get the real end date.
+        datetime_to_ical(finish_at + 1.day)
       else
-        Icalendar::Values::DateTime.new(datetime.strftime(Icalendar::Values::DateTime::FORMAT))
+        datetime_to_ical(finish_at)
+      end
+    end
+
+    def datetime_to_ical(datetime)
+      return if datetime.nil?
+      if Duration.date_only?(datetime)
+        Icalendar::Values::Date.new(datetime)
+      else
+        Icalendar::Values::DateTime.new(datetime.utc, tzid: 'UTC')
       end
     end
   end

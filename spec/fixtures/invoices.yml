@@ -52,6 +52,7 @@ sent:
   payment_slip: ch_esr
   sequence_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3
   esr_number: '00 00376 80338 90000 00000 00036'
+  issued_at: <%= 20.days.ago.to_date %>
   sent_at: <%= 10.days.ago.to_date %>
   due_at: <%= 20.days.from_now.to_date %>
   account_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-3

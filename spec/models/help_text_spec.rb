@@ -21,4 +21,12 @@ describe HelpText do
     expect(ht.to_s).to eq 'Kurs - Feld "Name"'
   end
 
+  it '.list orders by human model name' do
+    first = HelpText.create!(context: 'events--event/course', key: 'action.index', body: 'test')
+    second = HelpText.create!(context: 'people--person', key: 'action.index', body: 'test')
+    third  = HelpText.create!(context: 'mailing_lists--mailing_list', key: 'action.index', body: 'test')
+
+    expect(HelpText.list).to eq [third, first, second]
+  end
+
 end

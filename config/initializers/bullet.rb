@@ -7,7 +7,7 @@
 
 if defined? Bullet
   Bullet.enable = true
-  Bullet.alert = true
+  Bullet.add_footer = true
   Bullet.bullet_logger = true
   Bullet.rails_logger  = true
 

@@ -6,7 +6,7 @@
 #main.row-fluid
   .span5
     = standard_form(:payment_process, url: group_payment_process_path(group), builder: PlainObjectFormBuilder) do |f|
-      = save_form_buttons(f, t('.upload_button'), group_invoices_path(group))
+      = form_buttons(f, submit_label: t('.upload_button'), cancel_url: group_invoices_path(group))
       = f.labeled(:file, t('.xml_file')) do
         = f.file_field(:file)
   .span7

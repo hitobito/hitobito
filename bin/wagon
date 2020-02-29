@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+#  Copyright (c) 2019, Schweizer Blasmusikverband. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+set -euo pipefail
+IFS=$'\n\t'
+
+cmd=${1:-'help'}
+wagon_name=${2-'no wagon selected'}
+wagon="hitobito_${wagon_name}"
+
+function require_wagon_name() {
+  if [[ $wagon_name = 'no wagon selected' ]]; then
+    echo "you must select a wagon to manage"
+    echo `bin/active_wagon.rb nonexisting`
+    exit 1
+  fi
+}
+
+case $cmd in
+  activate)
+    require_wagon_name
+    exec bin/active_wagon.rb $wagon_name
+    ;;
+
+  gemfile)
+    require_wagon_name # TODO: read wagons from $WAGONS instead
+    cp -v Gemfile.lock ../$wagon/
+    ;;
+
+  spec-rc)
+    require_wagon_name # TODO: read wagons from $WAGONS instead
+    cp -v .rspec ../$wagon/
+    ;;
+
+  test-prepare)
+    sed -i 's/\(config.active_record.maintain_test_schema\) = true/\1 = false/' config/environment/test.rb
+    ;;
+
+
+  completion)
+    echo "complete -W 'activate gemfile spec-rc test-prepare' `basename $0`"
+    ;;
+
+  help|*)
+    echo "USAGE: $0 [activate|gemfile|spec-rc] <PROJECT>"
+    echo "       $0 [test-prepare]"
+    echo
+    echo "Enable bash-completion with \"source <($0 completion)\""
+    ;;
+esac

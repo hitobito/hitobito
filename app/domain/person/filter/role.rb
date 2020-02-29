@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -40,13 +38,19 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def time_range
-    start_at = args[:start_at].presence || Time.zone.at(0).to_date.to_s
-    finish_at = args[:finish_at].presence || Time.zone.now.to_date.to_s
+    start_day = parse_day(args[:start_at], Time.zone.at(0), :beginning_of_day)
+    finish_day = parse_day(args[:finish_at], Time.zone.now, :end_of_day)
 
-    Date.parse(start_at).beginning_of_day..Date.parse(finish_at).end_of_day
+    start_day..finish_day
   end
 
   private
+
+  def parse_day(date, default, rounding)
+    Date.parse(date.presence).send(rounding.to_sym)
+  rescue ArgumentError, TypeError
+    Date.parse(default.to_date.to_s).send(rounding.to_sym)
+  end
 
   def merge_duration_args(hash)
     hash.merge(args.slice(:kind, :start_at, :finish_at))
@@ -85,8 +89,8 @@ class Person::Filter::Role < Person::Filter::Base
 
   def active_role_condition
     <<-SQL.strip_heredoc.split.map(&:strip).join(' ')
-    roles.created_at <= :max AND
-    (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
+      roles.created_at <= :max AND
+      (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
     SQL
   end
 

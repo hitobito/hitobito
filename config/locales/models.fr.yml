@@ -145,6 +145,9 @@ fr:
       event/kind:
         one: Type de cours
         other: Types de cours
+      event/role:
+        one: rôles de l'évènement
+        other: rôles de l'évènement
       event/role/assistant_leader:
         one: Responsable
         other: Responsables
@@ -172,6 +175,9 @@ fr:
       group:
         one: groupe
         other: Groupes
+      help_text:
+        one: Hilfetext
+        other: Textes d'aide
       invoice:
         one: facture
         other: Factures
@@ -196,6 +202,15 @@ fr:
       payment:
         one: paiements
         other: paiements
+      oauth/application:
+        one: Application OAuth
+        other: Applications OAuth
+      oauth/access_token:
+        one: Token d'accès OAuth
+        other: Tokens d'accès OAuth
+      oauth/access_grant:
+        one: Autorisation OAuth
+        other: Autorisations OAuth
       payment_reminder:
         one: rappel
         other: rappels
@@ -548,6 +563,16 @@ fr:
         label: Texte
         subject: Objet
         body: Contenu
+      help_text:
+        context: Contexte
+        key: Clef
+        body: Contenu
+        field:
+          one: Champ
+          other: Champs
+        action:
+          one: Page
+          other: Pages
       label_format:
         name: Désignation
         page_size: Taille de la page
@@ -605,6 +630,9 @@ fr:
         payment_slip: bulletin de versement
         participant_number: numéro du participant
         creator: Auteur de la facture
+        cost_centers: Postes
+        accounts: Comptes
+        payments: Encaissements
       invoice_article:
         number: numéro d'article
         name: désignation
@@ -642,6 +670,8 @@ fr:
         unit_cost: prix
         count: Quantité
         cost: montant
+        cost_center: Poste
+        account: Compte
       invoice_items:
         name: Nom
         description: description
@@ -649,6 +679,8 @@ fr:
         unit_cost: prix
         count: nombre
         cost: montant
+        cost_center: Poste
+        account: Compte
       payment:
         invoice: facture
         amount: montant
@@ -672,10 +704,12 @@ fr:
         key: Clé
         abilities: Droits
         last_access: Dernier accès
-        people: Personnes de cette groupe
-        people_below: Personnes des sous-groupes
-        groups: Groupes de cette groupe
-        events: Evénements de cette groupe
+        people: Membres de ce niveau
+        people_below: Membres de ce niveau et des niveaux inférieurs
+        groups: Groupes de ce niveau et des niveaux inférieurs
+        events: Évènements de ce niveau et des niveaux inférieurs
+        invoices: Factures de ce niveau
+        event_participations: Participants d'évènements de ce niveau
   doorkeeper:
     scopes:
       email: Lecture de ton adresse e-mail

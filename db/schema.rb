@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191115160000) do
+ActiveRecord::Schema.define(version: 20191212094521) do
 
   create_table "additional_emails", force: :cascade do |t|
     t.integer "contactable_id",   limit: 4,                   null: false
@@ -298,6 +298,8 @@ ActiveRecord::Schema.define(version: 20191115160000) do
     t.decimal "vat_rate",                  precision: 5,  scale: 2
     t.decimal "unit_cost",                 precision: 12, scale: 2,             null: false
     t.integer "count",       limit: 4,                              default: 1, null: false
+    t.string  "cost_center", limit: 255
+    t.string  "account",     limit: 255
   end
 
   add_index "invoice_items", ["invoice_id"], name: "index_invoice_items_on_invoice_id", using: :btree
@@ -641,17 +643,19 @@ ActiveRecord::Schema.define(version: 20191115160000) do
   add_index "roles", ["type"], name: "index_roles_on_type", using: :btree
 
   create_table "service_tokens", force: :cascade do |t|
-    t.integer  "layer_group_id", limit: 4,                     null: false
-    t.string   "name",           limit: 255,                   null: false
-    t.text     "description",    limit: 65535
-    t.string   "token",          limit: 255,                   null: false
+    t.integer  "layer_group_id",       limit: 4,                     null: false
+    t.string   "name",                 limit: 255,                   null: false
+    t.text     "description",          limit: 65535
+    t.string   "token",                limit: 255,                   null: false
     t.datetime "last_access"
-    t.boolean  "people",                       default: false
-    t.boolean  "people_below",                 default: false
-    t.boolean  "groups",                       default: false
-    t.boolean  "events",                       default: false
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.boolean  "people",                             default: false
+    t.boolean  "people_below",                       default: false
+    t.boolean  "groups",                             default: false
+    t.boolean  "events",                             default: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.boolean  "invoices",                           default: false, null: false
+    t.boolean  "event_participations",               default: false, null: false
   end
 
   create_table "sessions", force: :cascade do |t|

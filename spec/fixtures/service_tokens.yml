@@ -24,7 +24,7 @@
 
 permitted_top_group_token:
   layer: top_layer
-  name: MyString
+  name: Permitted
   description: MyText
   token: PermittedToken
   last_access: 2018-11-01 11:11:11
@@ -32,10 +32,12 @@ permitted_top_group_token:
   people_below: true
   groups: true
   events: true
+  invoices: true
+  event_participations: true
 
 rejected_top_group_token:
   layer: top_layer
-  name: MyString
+  name: Rejected
   description: MyText
   token: RejectedToken
   last_access: 2018-11-01 11:11:11
@@ -43,3 +45,5 @@ rejected_top_group_token:
   people_below: false
   groups: false
   events: false
+  invoices: false
+  event_participations: false

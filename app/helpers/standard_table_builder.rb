@@ -1,8 +1,6 @@
-# encoding: utf-8
-
 # rubocop:disable Attr
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,7 +9,7 @@
 #
 # Example Usage:
 #   StandardTableBuilder.table(entries, template) do |t|
-#     t.col('My Header', :class => 'css') {|e| link_to 'Show', e }
+#     t.col('My Header', :class => 'css') { |e| link_to 'Show', e }
 #     t.attrs :name, :city
 #   end
 class StandardTableBuilder
@@ -110,7 +108,7 @@ class StandardTableBuilder
   end
 
   # Helper class to store column information.
-  class Col < Struct.new(:header, :html_options, :template, :block) #:nodoc:
+  Col = Struct.new(:header, :html_options, :template, :block) do #:nodoc:
 
     delegate :content_tag, to: :template
 
@@ -161,7 +159,7 @@ class StandardTableBuilder
     # The sort mark, if any, for the given attribute.
     def current_mark(attr)
       if current_sort?(attr)
-        (sort_dir(attr) == 'asc' ? ' &uarr;' : ' &darr;').html_safe
+        (sort_dir(attr) == 'asc' ? ' &uarr;' : ' &darr;').html_safe # rubocop:disable Rails/OutputSafety
       else
         ''
       end

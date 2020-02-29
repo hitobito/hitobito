@@ -1,3 +1,14 @@
+PATH
+  remote: ../hitobito_pbs
+  specs:
+    hitobito_pbs (0.0.1)
+      hitobito_youth
+
+PATH
+  remote: ../hitobito_youth
+  specs:
+    hitobito_youth (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -64,18 +75,16 @@ GEM
       nokogiri (~> 1.8, >= 1.8.2)
       rubyzip (~> 1.2, >= 1.2.1)
     bcrypt (3.1.12)
-    bcrypt-ruby (3.1.5)
-      bcrypt (>= 3.1.3)
     better_errors (2.5.1)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
-    binding_of_caller (0.7.2)
+    binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
     bleib (0.0.10)
     bootstrap-sass (2.3.2.2)
       sass (~> 3.2)
-    bootstrap-wysihtml5-rails (0.3.1.24)
+    bootstrap-wysihtml5-rails (0.3.3.8)
       railties (>= 3.0)
     brakeman (3.5.0)
     builder (3.2.3)
@@ -115,7 +124,7 @@ GEM
       htmlentities (~> 4.3)
       nuggets (~> 1.5)
       safe_yaml (~> 1.0)
-    coderay (1.1.1)
+    coderay (1.1.2)
     codez-tarantula (0.5.5)
       hpricot (~> 0.8.4)
       htmlentities (~> 4.3.0)
@@ -155,12 +164,12 @@ GEM
       sort_alphabetical (~> 1.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.4)
+    crass (1.0.5)
     currencies (0.4.2)
     daemons (1.2.4)
     dalli (2.7.6)
     database_cleaner (1.5.3)
-    debug_inspector (0.0.2)
+    debug_inspector (0.0.3)
     debugger (1.6.8)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -168,10 +177,10 @@ GEM
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.3.8)
     deep_merge (1.0.1)
-    delayed_job (4.1.2)
-      activesupport (>= 3.0, < 5.1)
-    delayed_job_active_record (4.1.1)
-      activerecord (>= 3.0, < 5.1)
+    delayed_job (4.1.5)
+      activesupport (>= 3.0, < 5.3)
+    delayed_job_active_record (4.1.3)
+      activerecord (>= 3.0, < 5.3)
       delayed_job (>= 3.0, < 5)
     devise (4.7.1)
       bcrypt (~> 3.0)
@@ -180,7 +189,6 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.3)
-    docile (1.1.5)
     doorkeeper (5.0.2)
       railties (>= 4.2)
     doorkeeper-i18n (5.0.2)
@@ -243,6 +251,11 @@ GEM
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.17)
+    lograge (0.11.2)
+      actionpack (>= 4)
+      activesupport (>= 4)
+      railties (>= 4)
+      request_store (~> 1.0)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -261,18 +274,20 @@ GEM
       thin (~> 1.5.0)
     method_source (0.8.2)
     middleware (0.1.0)
-    mime-types (2.6.2)
+    mime-types (3.2.2)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2018.0812)
     mimemagic (0.3.2)
     mini_magick (4.9.5)
     mini_mime (1.0.1)
-    mini_portile2 (2.3.0)
-    minitest (5.11.3)
+    mini_portile2 (2.4.0)
+    minitest (5.13.0)
     multi_json (1.13.1)
     multipart-post (2.0.0)
     mysql2 (0.4.9)
     nested_form (0.3.2)
-    nokogiri (1.8.5)
-      mini_portile2 (~> 2.3.0)
+    nokogiri (1.9.1)
+      mini_portile2 (~> 2.4.0)
     nuggets (1.5.0)
     oat (0.5.0)
       activesupport
@@ -311,7 +326,7 @@ GEM
     pry-debugger (0.2.3)
       debugger (~> 1.3)
       pry (>= 0.9.10, < 0.11.0)
-    pry-doc (0.10.0)
+    pry-doc (0.12.0)
       pry (~> 0.9)
       yard (~> 0.9)
     pry-rails (0.3.5)
@@ -353,7 +368,7 @@ GEM
       activesupport (>= 3.2)
       choice (~> 0.2.0)
       ruby-graphviz (~> 1.2)
-    rails-html-sanitizer (1.0.4)
+    rails-html-sanitizer (1.2.0)
       loofah (~> 2.2, >= 2.2.2)
     rails-i18n (4.0.9)
       i18n (~> 0.7)
@@ -442,13 +457,6 @@ GEM
       rubyzip (~> 1.2)
     sentry-raven (2.11.0)
       faraday (>= 0.7.6, < 1.0)
-    simplecov (0.15.1)
-      docile (~> 1.1.0)
-      json (>= 1.8, < 3)
-      simplecov-html (~> 0.10.0)
-    simplecov-html (0.10.2)
-    simplecov-rcov (0.2.3)
-      simplecov (>= 0.4.1)
     simpleidn (0.0.7)
     sinatra (1.4.8)
       rack (~> 1.5)
@@ -529,25 +537,26 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activejob (>= 4.2.11)
   activerecord-session_store
   acts-as-taggable-on (~> 3.5.0)
   airbrake (< 5.0)
   annotate
-  awesome_nested_set (< 3.1.0)
+  awesome_nested_set
   awesome_print
   axlsx (>= 3.0.0.pre)
-  bcrypt-ruby
+  bcrypt
   better_errors
   binding_of_caller
   bleib (~> 0.0.10)
   bootstrap-sass (~> 2.3)
-  bootstrap-wysihtml5-rails (~> 0.3.1.24)
+  bootstrap-wysihtml5-rails
   brakeman
   bullet
-  cancancan (< 1.13.0)
+  cancancan
   capybara
   capybara-screenshot
-  carrierwave (< 0.11.1)
+  carrierwave
   chosen-rails
   ci_reporter_rspec
   cmess
@@ -555,46 +564,49 @@ DEPENDENCIES
   coffee-rails
   compass
   compass-rails
-  config (< 1.1.0)
+  config
   country_select
   daemons
   dalli
   database_cleaner
   delayed_job_active_record
-  devise (>= 4.7.1)
+  devise
   doorkeeper
   doorkeeper-i18n
   draper
   fabrication
-  faker (< 1.6.4)
+  faker
   font_awesome5_rails
   gibbon (~> 3.2)
   globalize
   haml
   headless
   hirb
+  hitobito_pbs!
+  hitobito_youth!
   http_accept_language
   icalendar
   jquery-cookie-rails
   jquery-rails
   jquery-turbolinks
   jquery-ui-rails
-  kaminari (< 1.0.0)
+  kaminari
   launchy
+  lograge
   loofah (~> 2.2.3)
   magiclabs-userstamp
   mailcatcher
-  mime-types (~> 2.6.2)
+  mime-types
   mini_magick
   mysql2 (= 0.4.9)
   nested_form
-  nokogiri (~> 1.8.2)
+  nokogiri (~> 1.9.1)
   oat
   paper_trail
   parallel_tests
-  paranoia (< 2.1.2)
+  paranoia
   pdf-inspector
-  prawn (< 2.0)
+  prawn
   prawn-table
   protective
   pry-debugger
@@ -624,7 +636,6 @@ DEPENDENCIES
   seed-fu
   selenium-webdriver
   sentry-raven
-  simplecov-rcov
   simpleidn
   spring-commands-rspec
   sprockets (~> 3.7.2)

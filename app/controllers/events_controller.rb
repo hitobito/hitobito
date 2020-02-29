@@ -74,7 +74,7 @@ class EventsController < CrudController
 
   def new
     assign_attributes if model_params
-    entry.dates.build
+    entry.dates.build if entry.dates.empty? # allow wagons to use derived dates
     entry.init_questions
     respond_with(entry)
   end

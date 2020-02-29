@@ -415,6 +415,19 @@ fr:
       one: 'Prolonge la qualification existante %{prolonged} à la date du %{until} (dernier jour du cours).'
       other: 'Prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
     issue_and_prolong: 'Attribue la %{model} %{issued} et prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
+  event_feeds:
+    integrate: Intégrer dans le calendrier
+    show:
+      title: Intégrer mes évènements dans le calendrier
+      url: 'URL:%{url}'
+      create_url: Créer une adresse
+      url_description: 'Avec cette adresse, tu as accès à tous tes évènements. Attention: ne donne cette adresse qu''à des personnes qui peuvent voir tous les détails de tes rendez-vous.'
+      reset_url: Réinitialiser l'URL
+      reset_url_description: 'Si tu crains un abus, tu peux réinitialiser l''adresse internet de ton calendrier, ce qui désactive celle que tu utilises maintenant. Ainsi, tous les calendriers qui ne connaissent que l''ancienne adresse ne pourront plus voir tes évènements.'
+    update:
+      flash:
+        create: L'adresse a été créée.
+        reset: L'adresse a été actualisée.
   filter_navigation/dropdown:
     additional_views: 'Autres vues'
   filter_navigation/people:
@@ -699,6 +712,7 @@ fr:
     events: 'Activités'
     courses: 'Cours'
     admin: 'Paramètres'
+    admin/event_feed: 'Intégrer le calendrier'
     invoices: 'Factures'
   notes:
     new_note: Ajouter une note
@@ -927,6 +941,9 @@ fr:
       move_role: Déplacer rôles
       add_role: Ajouter rôle
       add_participation: Ajouter à l'événement
+      tag_lists: Tags
+      remove_tags: Enlever les tags
+      add_tags: Rajouter des tags
   participations:
     destroy:
       flash:
@@ -955,6 +972,9 @@ fr:
       equal: est précis
       greater: plus grand que
       smaller: plus petit que
+    tag:
+      title: Tags
+      prompt_tag_selection: Que les personnes avec l'un des tags suivants
     new:
       title: Filtrer les personnes
     range:
@@ -1046,13 +1066,31 @@ fr:
       submit:
         one: 'Créer un rôle'
         other: 'Créer %{count} rôles'
+  tag_lists:
+    destroy:
+      success:
+        zero: Aucun tag n'a été enlevé
+        one: Un tag a été enlevé
+        other: '%{count} tags ont été enlevés'
+    create:
+      success:
+        zero: Aucun tag n'a été créé
+        one: Un tag a été créé
+        other: '%{count} tags ont été créés'
+    deletable:
+      title: Quels tags doivent-être supprimés?
+      no_entries: Aucun tag ne peut être supprimé parmi les personnes sélectionnées
+      submit: Enlever
+    new:
+      title: Quels tags doivent-être ajoutés?
+      no_entries: Aucun tag ne peut être créé sur les personnes sélectionnées.
+      separate_multiple_tags_with_comma: Séparez les tags par des virgules
+      submit:
+        one: 'Créer des tags sur une personne'
+        other: 'Créer des tags sur %{count} personnes'
   service_tokens:
     abilities:
       read: Lecture
-      people: Personnes de ce niveau
-      people_below: Personnes de ce niveau du niveau inférieur
-      groups: Groupes de ce niveau et du niveau inférieur
-      events: Événements de ce niveau et du niveau inférieur
     global:
       link:
         add: Ajouter API-Key

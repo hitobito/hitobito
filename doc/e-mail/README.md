@@ -9,7 +9,7 @@ Applikation beliebig erstellt und verwaltet werden. Dies geschieht in den Modell
 und `Subscription`.
 
 Alle E-Mails an die Applikationsdomain (z.B `news@db.jubla.ch`) werden über einen Catch-All Mail 
-Account gesammelt. Dabei muss der Mailserver den zusätzlichen E-Mail Header `X-Envelope-To` setzen, 
+Account gesammelt. Dabei muss der Mailserver den zusätzlichen E-Mail Header `X-Original-To` setzen, 
 welcher den ursprünglichen Empfänger enthält (z.B. `news`). Von der Applikation wird dieser Account 
 in einem Background Job über POP3 regelmässig gepollt. Die eingetroffenen E-Mails werden danach wie 
 folgt verarbeitet:
@@ -28,7 +28,7 @@ Jede Gruppe kann beliebig viele Abos haben, welche optional eine E-Mail Adresse
 haben und dadurch ebenfalls als E-Mail Liste verwendet werden können. Einzelne Personen, jedoch auch 
 bestimmte Rollen einer Gruppe oder Teilnehmende eines Events können Abonnenten sein.
 
-#### X-Envelope-To Header
+#### X-Original-To Header
 
 Da man aus diversen Gründen (BCC, Mail Aliase) den eigentlichen Empfänger nicht aus dem To: Header lesen kann, muss ein zusätzlicher Header mit der Empfängeradresse vom Mailserver gesetzt werden. Als quasi Standard hat sich für solche Zwecke hier der X-Envelope-to Header etabliert.
 

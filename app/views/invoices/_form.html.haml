@@ -16,7 +16,7 @@
     - if parent.invoice_articles.exists?
       = f.labeled(:invoice_item_article) do
         = select("temp", "invoice_article_id",
-          InvoiceArticle.all.pluck(:number, :name, :id).map { |ia| ["#{ia[0]} - #{ia[1]}", ia[2]] },
+          parent.invoice_articles.pluck(:number, :name, :id).map { |ia| ["#{ia[0]} - #{ia[1]}", ia[2]] },
           { include_blank: true },
           { id: "invoice_item_article" })
 

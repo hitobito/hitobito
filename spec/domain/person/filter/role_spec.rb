@@ -11,6 +11,7 @@ describe Person::Filter::Role do
 
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }
+  let(:range) { nil }
 
   context 'initialize' do
 
@@ -212,7 +213,7 @@ describe Person::Filter::Role do
         kind = attrs[:kind] || described_class.to_s
         role_type_ids = Array(role_type).collect(&:id)
         filters = { role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind) }
-        Person::Filter::List.new(group, user, range: kind, filters: filters)
+        Person::Filter::List.new(attrs.fetch(:group, group), user, range: attrs.fetch(:range, range), filters: filters)
       end
 
       context :created do
@@ -318,16 +319,15 @@ describe Person::Filter::Role do
         let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
 
         context :deleted do
-          it 'finds one deleted role but has no access' do
+          it 'finds single deleted role but cannot show it on group' do
             role.update(deleted_at: now)
             expect(filter(start_at: now).entries).to be_empty
             expect(filter(start_at: now).all_count).to eq 1
           end
 
-          it 'finds one deleted role but and has access because of another active role' do
+          it 'finds single deleted role and can show it with deep filter' do
             role.update(deleted_at: now)
-            Fabricate(role_type.name.to_sym, group: groups(:bottom_group_one_two), person: role.person)
-            expect(filter(start_at: now).entries).to have(1).item
+            expect(filter(range: 'deep', group: group, start_at: now).entries).to have(1).item
             expect(filter(start_at: now).all_count).to eq 1
           end
         end

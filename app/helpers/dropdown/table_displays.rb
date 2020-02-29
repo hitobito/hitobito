@@ -61,7 +61,7 @@ module Dropdown
       title   = Title.new(t("event.participations.#{kind}_answers")).render(template)
 
       questions.collect do |question|
-        render_item('selected[]', question.question, dom_id(question), question.question)
+        render_item('selected[]', question.label, dom_id(question), question.label)
       end.prepend(divider, title)
     end
 

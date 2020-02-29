@@ -7,6 +7,19 @@
 
 module VersionHelper
 
+  def app_version_links(url='https://github.com/hitobito/%s/commits/%s')
+    links = Hitobito::Application.versions.collect do |line|
+      commit, submodule, _ = line.split(' ')
+      content_tag(:li) do
+        path = format(url % [submodule, commit.gsub(/[+|-]/, '')])
+        link = link_to(commit[0..7], path, target: :_blank)
+
+        "#{submodule} (#{link})".html_safe
+      end
+    end
+    content_tag(:ul, safe_join(links))
+  end
+
   def app_version_changelog_link
     if app_version
       link_to app_version, changelog_path

@@ -106,7 +106,9 @@ class Event::ListsController < ApplicationController
 
   def course_scope
     Event::Course.
-      includes(:groups, additional_course_includes).
+      includes(:groups).
+      preload(additional_course_includes).
+      joins(additional_course_includes).
       order(course_ordering).
       in_year(year).
       list

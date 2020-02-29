@@ -15,7 +15,7 @@
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
   include NestedForm::BuilderMixin
 
-  REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
+  REQUIRED_MARK = ' <span class="required">*</span>'.html_safe # rubocop:disable Rails/OutputSafety
 
   attr_reader :template
 
@@ -33,7 +33,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a corresponding input field for the given attribute.
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
-  def input_field(attr, html_options = {}) # rubocop:disable Metrics/PerceivedComplexity
+  def input_field(attr, html_options = {}) # rubocop:disable Metrics/PerceivedComplexity,Metrics/MethodLength,Metrics/CyclomaticComplexity
     type = column_type(@object, attr)
     custom_field_method = :"#{type}_field"
     if type == :text
@@ -90,9 +90,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a boolean field.
   def boolean_field(attr, html_options = {})
-    caption = ' ' + html_options.delete(:caption).to_s
+    caption   = ' ' + html_options.delete(:caption).to_s
+    checked   = html_options.delete(:checked_value) { '1' }
+    unchecked = html_options.delete(:unchecked_value) { '0' }
+
     label(attr, class: 'checkbox') do
-      check_box(attr, html_options) + caption
+      check_box(attr, html_options, checked, unchecked) + caption.html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 

@@ -35,18 +35,18 @@ module FormHelper
   # given attribute array, using the StandardFormBuilder. An options hash
   # may be given as the last argument.
   # If a block is given, a custom form may be rendered and attrs is ignored.
-  def crud_form(object, *attrs, &block)
+  def crud_form(object, *attrs, &block) # rubocop:disable Metrics/MethodLength
     options = attrs.extract_options!
 
     buttons_bottom = options.delete(:buttons_bottom)
     buttons_top = options.delete(:buttons_top) { true }
-    submit_label = options.delete(:submit_label)
-    cancel_url = get_cancel_url(object, options)
+    form_button_options = options.slice(:add_another_label, :add_another, :submit_label)
+                                 .merge(cancel_url: get_cancel_url(object, options))
 
     standard_form(object, options) do |form|
       content = form.error_messages
 
-      content << save_form_buttons(form, submit_label, cancel_url, 'top') if buttons_top
+      content << form_buttons(form, form_button_options.merge(toolbar_class: 'top')) if buttons_top
 
       content << if block_given?
                    capture(form, &block)
@@ -54,17 +54,35 @@ module FormHelper
                    form.labeled_input_fields(*attrs)
                  end
 
-      content << save_form_buttons(form, submit_label, cancel_url, 'bottom') if buttons_bottom
+      if buttons_bottom
+        content << form_buttons(form, form_button_options.merge(toolbar_class: 'bottom'))
+      end
 
       content.html_safe
     end
   end
 
-  def save_form_buttons(form, submit_label, cancel_url, toolbar_class = nil)
-    submit_label ||= ti(:"button.save")
+  def button_toolbar(form, toolbar_class:, &block)
     content_tag(:div, class: "btn-toolbar #{toolbar_class}") do
-      submit_button(form, submit_label) +
-      cancel_link(cancel_url)
+      capture(form, &block)
+    end
+  end
+
+  def form_buttons(form, submit_label: ti(:"button.save"), cancel_url: nil, toolbar_class: nil,
+                          add_another: false, add_another_label: ti(:"button.add_another"))
+    button_toolbar(form, toolbar_class: toolbar_class) do
+      content = submit_button(form, submit_label)
+      content << add_another_button(form, add_another_label) if add_another.present?
+      content << cancel_link(cancel_url) if cancel_url.present?
+
+      content
+    end
+  end
+
+  def add_another_button(form, label, options = {})
+    content_tag(:div, class: 'btn-group') do
+      form.button(label, options.merge(name: :add_another, class: 'btn btn-primary',
+                                       data: { disable: true }))
     end
   end
 

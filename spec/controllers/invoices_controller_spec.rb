@@ -66,6 +66,12 @@ describe InvoicesController do
       expect(assigns(:invoices)).to have(1).item
     end
 
+    it 'filters invoices by year' do
+      invoice.update(issued_at: Date.today)
+      get :index, group_id: group.id, year: 1.year.ago.year
+      expect(assigns(:invoices)).not_to include invoice
+    end
+
     it 'filters invoices by due_since' do
       invoice.update(due_at: 2.weeks.ago)
       get :index, group_id: group.id, due_since: :one_week
@@ -92,6 +98,27 @@ describe InvoicesController do
       get :index, group_id: group.id, format: :csv
       expect(response.header['Content-Disposition']).to match(/rechnungen.csv/)
       expect(response.content_type).to eq('text/csv')
+    end
+
+    it 'renders json' do
+      get :index, group_id: group.id, format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:current_page]).to eq 1
+      expect(json[:total_pages]).to eq 1
+      expect(json[:next_page_link]).to be_nil
+      expect(json[:prev_page_link]).to be_nil
+      expect(json[:invoices]).to have(2).items
+
+      expect(json[:invoices].first[:links][:invoice_items]).to have(2).items
+      expect(json[:invoices].last[:links][:invoice_items]).to have(1).items
+
+      expect(json[:linked][:groups]).to have(1).item
+      expect(json[:linked][:groups].first[:id].to_i).to eq groups(:bottom_layer_one).id
+
+      expect(json[:linked][:invoice_items]).to have(3).items
+
+      expect(json[:links][:'invoices.creator'][:href]).to eq 'http://test.host/people/{invoices.creator}.json'
+      expect(json[:links][:'invoices.recipient'][:href]).to eq 'http://test.host/people/{invoices.recipient}.json'
     end
   end
 
@@ -134,6 +161,22 @@ describe InvoicesController do
       expect(response.header['Content-Disposition']).to match(/Rechnung-#{invoice.sequence_number}.csv/)
       expect(response.content_type).to eq('text/csv')
     end
+
+    it 'renders json' do
+      get :show, group_id: group.id, id: invoice.id, format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:invoices]).to have(1).items
+      expect(json[:invoices].first[:total]).to eq '5.35'
+      expect(json[:invoices].first[:links][:invoice_items]).to have(2).items
+
+      expect(json[:linked][:groups]).to have(1).item
+      expect(json[:linked][:groups].first[:id].to_i).to eq groups(:bottom_layer_one).id
+
+      expect(json[:linked][:invoice_items]).to have(2).items
+
+      expect(json[:links][:'invoices.creator'][:href]).to eq 'http://test.host/people/{invoices.creator}.json'
+      expect(json[:links][:'invoices.recipient'][:href]).to eq 'http://test.host/people/{invoices.recipient}.json'
+    end
   end
 
   it 'DELETE#destroy moves invoice to cancelled state' do
@@ -145,12 +188,42 @@ describe InvoicesController do
     expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
   end
 
-  it 'POST#create sets creator_id to current_user' do
-    expect do
-      post :create, { group_id: group.id, invoice: { title: 'current_user', recipient_id: person.id } }
-    end.to change { Invoice.count }.by(1)
+  context 'post' do
+    it 'POST#create sets creator_id to current_user' do
+      expect do
+        post :create, { group_id: group.id, invoice: { title: 'current_user', recipient_id: person.id } }
+      end.to change { Invoice.count }.by(1)
 
-    expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
+      expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
+    end
+
+    it 'POST#create accepts nested attributes for invoice_items' do
+      expect do
+        post :create, {
+          group_id: group.id,
+          invoice: {
+            title: 'current_user',
+            recipient_id: person.id,
+            invoice_items_attributes: {
+              '1': {
+                name: 'pen',
+                description: 'simple pen',
+                cost_center: 'board',
+                account: 'advertisment',
+                vat_rate: 0.0,
+                unit_cost: 22.0,
+                count: 1,
+                _destroy: false
+              }
+
+            }
+          }
+        }
+      end.to change { Invoice.count }.by(1)
+      expect(assigns(:invoice).invoice_items).to have(1).entry
+      expect(assigns(:invoice).invoice_items.first.cost_center).to eq 'board'
+      expect(assigns(:invoice).invoice_items.first.account).to eq 'advertisment'
+    end
   end
 
 end

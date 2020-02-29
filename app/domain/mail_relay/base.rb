@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,11 +14,6 @@ module MailRelay
   # See the .relay_current method for the main fetch loop and #relay for the processing
   # decision tree.
   class Base
-
-    # Define a header that contains the original receiver address.
-    # This header could be set by the mail server.
-    class_attribute :receiver_header
-    self.receiver_header = 'X-Envelope-To'
 
     # Number of emails to retrieve in one batch.
     class_attribute :retrieve_count
@@ -43,8 +38,9 @@ module MailRelay
         end
       end
 
-      def relay_batch # rubocop:disable Metrics/MethodLength
+      def relay_batch # rubocop:disable Metrics/MethodLength hopefully temporary, this needs refactoring to handle already processed mails better
         last_exception = nil
+        logger = Delayed::Worker.logger || Rails.logger
 
         mails = Mail.find_and_delete(count: retrieve_count) do |message|
           begin
@@ -52,7 +48,6 @@ module MailRelay
           rescue MailProcessedBeforeError => e
             mail_log = MailLog.find_by(mail_hash: MailLog.build(message).mail_hash)
             if mail_log && mail_log.completed?
-              logger = Delayed::Worker.logger || Rails.logger
               logger.info "Deleting previously processed email from #{message.from}"
             else
               message.mark_for_delete = false
@@ -61,11 +56,14 @@ module MailRelay
             end
           rescue Exception => e # rubocop:disable Lint/RescueException
             message.mark_for_delete = false
-            last_exception = MailRelay::Error.new(message, e)
+            last_exception = MailRelay::Error.new(e.message, message, e)
           end
         end
 
-        [mails, last_exception]
+        [mails || [], last_exception]
+      rescue EOFError => e
+        logger.warn(e)
+        [[], nil]
       end
 
       # rubocop:disable Rails/Output
@@ -113,7 +111,7 @@ module MailRelay
     end
 
     # Process the given email.
-    def relay
+    def relay # rubocop:disable Metrics/MethodLength
       if relay_address?
         if sender_allowed?
           @mail_log.update(status: :bulk_delivering)
@@ -145,9 +143,11 @@ module MailRelay
     # The receiver account that originally got this email.
     # Returns only the part before the @ sign
     def envelope_receiver_name
-      receiver_from_x_header ||
-      receiver_from_received_header ||
-      raise("Could not determine original receiver for email:\n#{message.header}")
+      receiver_from_x_header('X-Envelope-To') ||  # old mail server
+       receiver_from_x_header('X-Original-To') || # new mail server
+       receiver_from_received_header ||
+
+       raise("Could not determine original receiver for email:\n#{message.header}")
     end
 
     def sender_email
@@ -163,9 +163,9 @@ module MailRelay
       end
     end
 
-    # Try to read the envelope receiver from the given x header
-    def receiver_from_x_header
-      field = message.header[receiver_header]
+    # Try to read the envelope receiver from the given header
+    def receiver_from_x_header(header_name)
+      field = message.header[header_name]
       field.to_s.split('@', 2).first if field
     end
 
@@ -252,7 +252,8 @@ module MailRelay
     attr_reader :original
     attr_reader :mail
 
-    def initialize(mail, original = nil)
+    def initialize(message, mail, original = nil)
+      super(message)
       @mail = mail
       @original = original
     end

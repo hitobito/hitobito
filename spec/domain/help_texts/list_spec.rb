@@ -22,6 +22,16 @@ describe HelpTexts::List do
     expect(entry.actions).to include('edit')
   end
 
+  it 'generates all actions for sti classes' do
+    entries = subject.select { |e| e.controller_name == 'events' }
+    entries.each do |entry|
+      expect(entry.action_names).to include 'index'
+      expect(entry.action_names).to include 'new'
+      expect(entry.action_names).to include 'show'
+      expect(entry.action_names).to include 'edit'
+    end
+  end
+
   it 'takes existing help_texts into account' do
     HelpText.create!(controller: 'people', model: 'person', kind: 'action', name: 'edit', body: 'test')
     HelpText.create!(controller: 'custom_contents', model: 'custom_content', kind: 'action', name: 'edit', body: 'test')

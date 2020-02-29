@@ -693,6 +693,9 @@ de:
         payment_slip: Einzahlungsschein
         participant_number: Teilnehmernummer
         creator: Rechnungssteller
+        cost_centers: Kostenstellen
+        accounts: Konten
+        payments: Zahlungseingänge
 
       invoice_article:
         number: Artikelnummer
@@ -733,6 +736,8 @@ de:
         unit_cost: Preis
         count: Anzahl
         cost: Betrag
+        cost_center: Kostenstelle
+        account: Konto
 
       # used for nested attributes
       invoice_items:
@@ -742,6 +747,8 @@ de:
         unit_cost: Preis
         count: Anzahl
         cost: Betrag
+        cost_center: Kostenstelle
+        account: Konto
 
       payment:
         invoice: Rechnung
@@ -770,10 +777,12 @@ de:
         key: Key
         abilities: Rechte
         last_access: Letzter Zugriff
-        people: Personen dieser Gruppe
-        people_below: Personen von Untergruppen
-        groups: Gruppen dieser Gruppe
-        events: Events dieser Gruppe
+        people: Personen dieser Ebene
+        people_below: Personen dieser und der darunterliegenden Ebenen
+        groups: Gruppen dieser und der darunterliegenden Ebenen
+        events: Anlässe dieser und der darunterliegenden Ebenen
+        invoices: Rechnungen dieser Ebene
+        event_participations: Teilnehmende von Anlässen dieser Ebene
 
   doorkeeper:
     scopes:

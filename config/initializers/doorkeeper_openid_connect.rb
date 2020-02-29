@@ -1,6 +1,7 @@
 Doorkeeper::OpenidConnect.configure do
   issuer Settings.oidc.issuer
 
+  # $>openssl genrsa 2048
   #   signing_key <<-EOL
   # -----BEGIN RSA PRIVATE KEY-----
   # ....
@@ -59,16 +60,23 @@ Doorkeeper::OpenidConnect.configure do
   # end
 
   claims do
-    claim :email, scope: :email do |resource_owner|
-      resource_owner.email
-    end
-    
-    claim :first_name, scope: :name do |resource_owner|
-      resource_owner.first_name
-    end
+    claim(:email, scope: :email)     { |resource_owner| resource_owner.email }
+    claim(:first_name, scope: :name) { |resource_owner| resource_owner.first_name }
+    claim(:last_name, scope: :name)  { |resource_owner| resource_owner.last_name }
+    claim(:nickname, scope: :name)   { |resource_owner| resource_owner.nickname }
+    claim(:address, scope: :name)    { |resource_owner| resource_owner.address }
+    claim(:zip_code, scope: :name)   { |resource_owner| resource_owner.zip_code }
+    claim(:town, scope: :name)       { |resource_owner| resource_owner.town }
+    claim(:country, scope: :name)    { |resource_owner| resource_owner.country }
 
-    claim :last_name, scope: :name do |resource_owner|
-      resource_owner.last_name
+    claim(:roles, scope: :with_roles) do |resource_owner|
+      resource_owner.roles.includes(:group).collect do |role|
+        {
+          group_id: role.group_id,
+          group_name: role.group.name,
+          role: role.class.model_name,
+          role_name: role.class.model_name.human
+        }
     end
   end
 end

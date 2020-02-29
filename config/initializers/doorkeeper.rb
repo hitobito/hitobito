@@ -12,6 +12,7 @@ Doorkeeper.configure do
     if current_person
       current_person.tap { authorize!(:show, current_person) }
     else
+      store_location_for :person, request.url
       redirect_to(new_person_session_url)
     end
   end

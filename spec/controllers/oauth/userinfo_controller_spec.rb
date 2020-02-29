@@ -21,5 +21,28 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
       expect(response.status).to eq 200
       expect(JSON.parse(response.body)).to eq({ 'sub' => user.id.to_s })
     end
+
+    context 'with name scope' do
+      let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: 'openid name', expires_in: 2.hours) }
+
+      it 'shows the userinfo' do
+        get :show, params: { access_token: token.token }
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body)).to include({
+          'first_name' => user.first_name, 'last_name' => user.last_name, 'nickname' => user.nickname,
+          'address' => user.address, 'zip_code' => user.zip_code, 'town' => user.town, 'country' => user.country
+        })
+      end
+    end
+
+    context 'with email scope' do
+      let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: 'openid email', expires_in: 2.hours) }
+
+      it 'shows the userinfo' do
+        get :show, params: { access_token: token.token }
+        expect(response.status).to eq 200
+        expect(JSON.parse(response.body)).to eq({ 'sub' => user.id.to_s, 'email' => user.email })
+      end
+    end
   end
 end

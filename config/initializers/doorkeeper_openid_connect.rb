@@ -77,6 +77,7 @@ Doorkeeper::OpenidConnect.configure do
           role: role.class.model_name,
           role_name: role.class.model_name.human
         }
+      end
     end
   end
 end

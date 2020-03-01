@@ -45,12 +45,12 @@ describe Export::Tabular::People::PeopleAddress do
     context 'roles and phone number' do
       before do
         Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one), person: person)
-        person.phone_numbers.create!(label: 'vater', number: 123)
+        person.phone_numbers.create!(label: 'vater', number: '+41 44 123 45 67')
         person.additional_emails.create!(label: 'Vater', email: 'vater@example.com')
         person.additional_emails.create!(label: 'Mutter', email: 'mutter@example.com', public: false)
       end
 
-      its(['Telefonnummer Vater']) { should eq '123' }
+      its(['Telefonnummer Vater']) { should eq '+41 44 123 45 67' }
       its(['Weitere E-Mail Vater']) { should eq 'vater@example.com' }
       its(['Weitere E-Mail Mutter']) { should be_nil }
 
@@ -60,4 +60,3 @@ describe Export::Tabular::People::PeopleAddress do
     end
   end
 end
-

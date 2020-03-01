@@ -311,6 +311,7 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
+    phonelib (0.6.42)
     powerpack (0.1.1)
     prawn (1.3.0)
       pdf-core (~> 0.4.0)
@@ -606,6 +607,7 @@ DEPENDENCIES
   parallel_tests
   paranoia
   pdf-inspector
+  phonelib
   prawn
   prawn-table
   protective

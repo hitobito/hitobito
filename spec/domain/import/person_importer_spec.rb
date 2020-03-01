@@ -36,7 +36,7 @@ describe Import::PersonImporter do
     let(:data) do
       [{ first_name: 'foo',
          social_account_skype: 'foobar',
-         phone_number_vater: '0123',
+         phone_number_vater: '+41 44 123 45 67',
          tags: 'foo' }]
     end
 
@@ -279,16 +279,16 @@ describe Import::PersonImporter do
         subject { imported.phone_numbers }
         its(:size) { should eq 4 }
         its('first.label') { should eq 'Privat' }
-        its('first.number') { should eq '1-637-999-2837 x7851' }
+        its('first.number') { should eq '+49 3445 56783214' }
 
         its('second.label') { should eq 'Mobil' }
-        its('second.label') { should eq 'Mobil' }
+        its('second.number') { should eq '+41 800 123 333' }
 
         its('third.label') { should eq 'Arbeit' }
-        its('third.number') { should eq '1-403-4ä9-5561' }
+        its('third.number') { should eq '+41 77 901 23 45' }
 
         its('fourth.label') { should eq 'Vater' }
-        its('fourth.number') { should eq '908.647.4334' }
+        its('fourth.number') { should eq '+41 78 098 76 54' }
       end
 
       context 'social accounts' do

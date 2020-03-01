@@ -68,6 +68,7 @@ phone_number:
     - Mutter
     - Fax
     - Andere
+  default_country: CH
 
 social_account:
   predefined_labels:

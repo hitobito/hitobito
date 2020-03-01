@@ -56,8 +56,8 @@ describe Person::Filter::Role do
 
     before do
       @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
-      Fabricate(:phone_number, contactable: @tg_member, number: '123', label: 'Privat', public: true)
-      Fabricate(:phone_number, contactable: @tg_member, number: '456', label: 'Mobile', public: false)
+      Fabricate(:phone_number, contactable: @tg_member, number: '+41 44 123 45 67', label: 'Privat', public: true)
+      Fabricate(:phone_number, contactable: @tg_member, number: '+41 77 456 78 90', label: 'Mobile', public: false)
       Fabricate(:social_account, contactable: @tg_member, name: 'facefoo', label: 'Facebook', public: true)
       Fabricate(:social_account, contactable: @tg_member, name: 'skypefoo', label: 'Skype', public: false)
       # duplicate role

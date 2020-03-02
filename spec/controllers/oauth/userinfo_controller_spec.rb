@@ -33,8 +33,8 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
         get :show, params: { access_token: token.token }
         expect(response.status).to eq 200
         expect(JSON.parse(response.body)).to eq({
-          'sub' => user.id.to_s, 'first_name' => user.first_name, 'last_name' => user.last_name, 'nickname' => user.nickname,
-          'address' => user.address, 'zip_code' => user.zip_code, 'town' => user.town, 'country' => user.country
+          'sub' => user.id.to_s, 'first_name' => user.first_name, 'last_name' => user.last_name, 'nickname' => 'Filou',
+          'address' => 'Teststrasse 7', 'zip_code' => '8000', 'town' => 'Zürich', 'country' => 'CH'
         })
       end
     end

@@ -838,6 +838,14 @@ describe PeopleController do
 
       expect(top_leader.reload.household_key).to be_nil
     end
+
+    it 'POST#update rerenders edit formal when not permitted to update addresse' do
+      sign_in(member)
+      put :update, params: { group_id: member.primary_group_id, id: member.id, person: { household_people_ids: [top_leader.id] } }
+      expect(assigns(:person)).to have(4).errors
+      expect(response).to render_template('edit')
+    end
+
   end
 
   context 'as token user' do

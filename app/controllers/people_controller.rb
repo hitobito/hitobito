@@ -231,7 +231,7 @@ class PeopleController < CrudController
   end
 
   def validate_household
-    household.valid?
+    household.valid? || throw(:abort)
   end
 
   def persist_household

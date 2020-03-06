@@ -15,7 +15,7 @@ wagon="hitobito_${wagon_name}"
 function require_wagon_name() {
   if [[ $wagon_name = 'no wagon selected' ]]; then
     echo "you must select a wagon to manage"
-    echo `bin/active_wagon.rb nonexisting`
+    bin/active_wagon.rb nonexisting
     exit 1
   fi
 }
@@ -23,17 +23,17 @@ function require_wagon_name() {
 case $cmd in
   activate)
     require_wagon_name
-    exec bin/active_wagon.rb $wagon_name
+    exec bin/active_wagon.rb "$wagon_name"
     ;;
 
   gemfile)
     require_wagon_name # TODO: read wagons from $WAGONS instead
-    cp -v Gemfile.lock ../$wagon/
+    cp -v Gemfile.lock "../$wagon/"
     ;;
 
   spec-rc)
     require_wagon_name # TODO: read wagons from $WAGONS instead
-    cp -v .rspec ../$wagon/
+    cp -v .rspec "../$wagon/"
     ;;
 
   test-prepare)
@@ -42,7 +42,7 @@ case $cmd in
 
 
   completion)
-    echo "complete -W 'activate gemfile spec-rc test-prepare' `basename $0`"
+    echo "complete -W 'activate gemfile spec-rc test-prepare' $(basename "$0")"
     ;;
 
   help|*)

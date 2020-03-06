@@ -26,6 +26,7 @@ it:
       remove: Eliminare
     button:
       save: Salvare
+      add_another: Salvare ed inserirne altri
       cancel: Interrompere
       close: Chiudere
       search: Cercare
@@ -722,8 +723,6 @@ it:
       older_notes: Contributi più vecchi
   oauth:
     applications:
-      form:
-        help_native_redirect_uris: Una registrazione per rica. Per i test locali utilizzare %{native_redirect_uri} .
       attrs:
         profile_endpoint_help: Si può fare riferimento alle informazioni di profilo dell'utilizzatore  tramite questo endpoint. Nel far questo deve venir consegnato l'access token nell'authorization header. Lo scope desiderato può venir consegnato quale x-scope header.
         profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"

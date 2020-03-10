@@ -139,5 +139,6 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   config.hosts << ENV["RAILS_HOST_NAME"]
+  config.hosts << ENV["RAILS_HOST_NAME_INTERNAL"] if ENV.key?('RAILS_HOST_NAME_INTERNAL')
   config.hosts << ENV["LIVENESS_IP_ADDRESS"]
 end

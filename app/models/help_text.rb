@@ -27,11 +27,14 @@ class HelpText < ActiveRecord::Base
   include Globalized
   translates :body
 
-  scope :list, -> { order(Arel.sql(HelpTexts::List.new.order_statement)).order(:kind) }
-
   validates_by_schema
 
   attr_accessor :context, :key
+
+
+  def self.list
+    order(Arel.sql(HelpTexts::List.new.order_statement)).order(:kind)
+  end
 
   def to_s
     [entry.to_s, entry.translate(kind, name)].join(' - ') if persisted?

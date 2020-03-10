@@ -39,6 +39,9 @@ Hitobito::Application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   ssl = %w(true yes 1).include?(ENV['RAILS_HOST_SSL'])
   config.force_ssl = ssl
+  config.ssl_options = {
+    redirect: { exclude: ->(request) { request.path =~ /healthz/ } }
+  }
 
   # See everything in the log (default is :info)
   # config.log_level = :debug

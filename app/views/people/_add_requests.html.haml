@@ -13,7 +13,7 @@
                   title: t('people.add_requests.approve_title'))
     %td
       - if can?(:reject, request)
-        = link_to(icon(:remove),
+        = link_to(icon(:times),
                   person_add_request_path(request),
                   method: :delete,
                   title: t('people.add_requests.reject_title'))

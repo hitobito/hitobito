@@ -27,7 +27,7 @@
       - @preferred_labels.each do |label|
         %span.chip
           = label
-          = link_to(icon(:remove), '#')
+          = link_to(icon(:times), '#')
           = hidden_field_tag('mailing_list[preferred_labels][]', label)
 
       %span.help-block= t('.help_preferred_labels')

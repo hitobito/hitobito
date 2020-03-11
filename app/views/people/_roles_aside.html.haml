@@ -13,7 +13,7 @@
           %tr
             %td
               - if can?(:primary_group, entry)
-                = link_to(icon(entry.primary_group_id == group.id ? 'star' : 'star-o'),
+                = link_to(icon('star', filled: (entry.primary_group_id == group.id)),
                           primary_group_group_person_path(@group, entry, primary_group_id: group.id),
                           title: t('.set_main_group'),
                           alt: t('.set_main_group'),

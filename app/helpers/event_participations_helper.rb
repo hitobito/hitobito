@@ -52,7 +52,7 @@ module EventParticipationsHelper
     action_button(
       t('event.participations.cancel_application.caption'),
       group_event_participation_path(parent, entry, @user_participation),
-      'remove-circle',
+      'times-circle',
       data: {
         confirm: t('event.participations.cancel_application.confirmation'),
         method: :delete

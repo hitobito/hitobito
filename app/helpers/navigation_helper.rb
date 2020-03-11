@@ -16,7 +16,7 @@ module NavigationHelper
 
     { label: :events,
       url: :list_events_path,
-      icon_name: 'calendar',
+      icon_name: 'calendar-alt',
       active_for: %w(list_events),
       if: ->(_) { can?(:list_available, Event) } },
 
@@ -28,7 +28,7 @@ module NavigationHelper
 
     { label: :invoices,
       url: :first_group_invoices_or_root_path,
-      icon_name: 'money',
+      icon_name: 'money-bill-alt',
       if: ->(_) { current_user.finance_groups.any? },
       active_for: %w(invoices invoice_articles invoice_config payment_process) },
 

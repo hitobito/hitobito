@@ -36,7 +36,7 @@
 
     - t.col('') do |r|
       - if can?(:reject, r)
-        = action_button(t('.reject'), person_add_request_path(r), :remove, method: :delete)
+        = action_button(t('.reject'), person_add_request_path(r), :times, method: :delete)
 
     - t.attr(:created_at)
 

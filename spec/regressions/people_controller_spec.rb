@@ -50,12 +50,12 @@ describe PeopleController, type: :controller do
       get :show, group_id: top_group.id, id: other.id
       page_content.grep(/Info/).each { |text|  expect(response.body).to match(/#{text}/) }
       page_content.grep(/[^Info]/).each { |text|  expect(response.body).not_to match(/#{text}/) }
-      expect(dom).not_to have_selector('a[data-method="delete"] i.fa-trash')
+      expect(dom).not_to have_selector('a[data-method="delete"] i.fa-trash-alt')
     end
 
     it 'leader can see link to remove role' do
       get :show, group_id: top_group.id, id: other.id
-      expect(dom).to have_selector('a[data-method="delete"] i.fa-trash')
+      expect(dom).to have_selector('a[data-method="delete"] i.fa-trash-alt')
     end
 
     it 'leader can see created and updated info' do

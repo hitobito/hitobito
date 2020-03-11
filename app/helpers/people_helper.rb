@@ -98,7 +98,7 @@ module PeopleHelper
 
   def link_to_address(person)
     if [person.address, person.zip_code, person.town].all?(&:present?)
-      link_to(icon('map-marker', class: 'fa-2x'), person_address_url(person), target: '_blank')
+      link_to(icon('map-marker-alt', class: 'fa-2x'), person_address_url(person), target: '_blank')
     end
   end
 
@@ -120,7 +120,7 @@ module PeopleHelper
   def upcoming_events_title
     title = [t('.events')]
     if entry.id == current_user.id
-      title << link_to(icon(:calendar), event_feed_path, title: t('event_feeds.integrate'))
+      title << link_to(icon(:'calendar-alt'), event_feed_path, title: t('event_feeds.integrate'))
     end
     safe_join(title, ' ')
   end

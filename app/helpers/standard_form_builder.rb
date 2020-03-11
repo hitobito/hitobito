@@ -104,7 +104,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:value] ||= date_value(attr)
     html_options[:class] ||= 'span2 date'
     content_tag(:div, class: 'input-prepend') do
-      content_tag(:span, icon(:calendar), class: 'add-on') +
+      content_tag(:span, icon(:'calendar-alt'), class: 'add-on') +
       text_field(attr, html_options)
     end
   end

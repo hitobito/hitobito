@@ -28,14 +28,14 @@
       %label=t('.prompt_role_duration')
       .input-prepend
         %span{class: 'add-on'}
-          = icon(:calendar)
+          = icon(:'calendar-alt')
         = text_field_tag("filters[role][start_at]", filter && filter.args[:start_at], class: 'date span2')
       %div{style: 'vertical-align: middle; margin: 0px 5px 15px 5px; display: inline-block;'}
 
         =t('.prompt_role_duration_until')
       .input-prepend
         %span{class: 'add-on'}
-          = icon(:calendar)
+          = icon(:'calendar-alt')
         = text_field_tag("filters[role][finish_at]", filter && filter.args[:finish_at], class: 'date span2')
     - %w(active created deleted).each do |key|
       = render 'simple_radio',

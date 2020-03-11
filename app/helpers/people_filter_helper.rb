@@ -56,7 +56,7 @@ module PeopleFilterHelper
                                 value,
                                 html_options.merge(class: 'span2 attribute_value_input'))
 
-      content << link_to(icon(:trash), '#',
+      content << link_to(icon(:'trash-alt', filled: false), '#',
                          class: 'remove_filter_attribute',
                          style: 'padding-left: 7px; line-height: 2em')
     end

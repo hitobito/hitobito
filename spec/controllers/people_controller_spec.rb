@@ -29,9 +29,9 @@ describe PeopleController do
 
       before do
         @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
-        Fabricate(:phone_number, contactable: @tg_member, number: '123', label: 'Privat', public: true)
-        Fabricate(:phone_number, contactable: @tg_member, number: '456', label: 'Mobile', public: false)
-        Fabricate(:phone_number, contactable: @tg_member, number: '789', label: 'Office', public: true)
+        Fabricate(:phone_number, contactable: @tg_member, number: '+41 44 123 45 67', label: 'Privat', public: true)
+        Fabricate(:phone_number, contactable: @tg_member, number: '+41 77 456 78 90', label: 'Mobile', public: false)
+        Fabricate(:phone_number, contactable: @tg_member, number: '+41 800 789 012', label: 'Office', public: true)
         Fabricate(:social_account, contactable: @tg_member, name: 'facefoo', label: 'Facebook', public: true)
         Fabricate(:social_account, contactable: @tg_member, name: 'skypefoo', label: 'Skype', public: false)
         Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: @tg_member)
@@ -186,9 +186,9 @@ describe PeopleController do
             expect(cards[1]).to match(/^EMAIL;TYPE=pref:#{@tg_member.email}/)
             expect(cards[1]).to match(/^EMAIL;TYPE=privat:#{e1.email}/)
             expect(cards[1]).not_to match(/^EMAIL.*:#{e2.email}/)
-            expect(cards[1]).to match(/^TEL;TYPE=privat:123/)
-            expect(cards[1]).to match(/^TEL;TYPE=office:789/)
-            expect(cards[1]).not_to match(/^TEL.*:456/)
+            expect(cards[1]).to match(/^TEL;TYPE=privat:\+41 44 123 45 67/)
+            expect(cards[1]).to match(/^TEL;TYPE=office:\+41 800 789 012/)
+            expect(cards[1]).not_to match(/^TEL.*:\+41 77 456 78 90/)
             expect(cards[1]).to match(/^BDAY:19781009/)
           end
         end
@@ -378,7 +378,7 @@ describe PeopleController do
           end.to change { PhoneNumber.count }.by(1)
           expect(person.reload.phone_numbers.size).to eq(1)
           number = person.phone_numbers.first
-          expect(number.number).to eq '031 111 1111'
+          expect(number.number).to eq '+41 31 111 11 11'
           expect(number.label).to eq 'Privat'
           expect(number.public).to be_truthy
         end
@@ -393,7 +393,7 @@ describe PeopleController do
                                      { number: '031 111 2222', translated_label: 'Privat', public: 0, id: n.id } } }
           end.not_to change { PhoneNumber.count }
           number = person.reload.phone_numbers.first
-          expect(number.number).to eq '031 111 2222'
+          expect(number.number).to eq '+41 31 111 22 22'
           expect(number.public).to be_falsey
         end
 
@@ -418,7 +418,7 @@ describe PeopleController do
           I18n.locale = I18n.default_locale
 
           number = person.reload.phone_numbers.first
-          expect(number.number).to eq '031 111 2222'
+          expect(number.number).to eq '+41 31 111 22 22'
           expect(number.label).to eq 'Mutter'
           expect(number.public).to be_falsey
         end

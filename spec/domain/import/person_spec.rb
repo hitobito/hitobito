@@ -133,8 +133,8 @@ describe Import::Person do
     context 'keeps existing contact accounts' do
       let(:person) do
         p = Fabricate(:person, email: 'foo@example.com')
-        p.phone_numbers.create!(number: '123', label: 'Privat')
-        p.phone_numbers.create!(number: '456', label: 'Mobil')
+        p.phone_numbers.create!(number: '+41 44 123 45 67', label: 'Privat')
+        p.phone_numbers.create!(number: '+41 77 456 78 90', label: 'Mobil')
         p.social_accounts.create!(name: 'foo', label: 'Skype')
         p.social_accounts.create!(name: 'foo', label: 'MSN')
         p.additional_emails.create!(email: 'foo@example.com', label: 'Mutter')
@@ -147,15 +147,15 @@ describe Import::Person do
            email: 'foo@example.com',
            social_account_skype: 'foo',
            social_account_msn: 'bar',
-           phone_number_mobil: '789',
+           phone_number_mobil: '+41 77 789 01 23',
            additional_email_mutter: 'bar@example.com',
            additional_email_privat: 'privat@example.com' }
       end
 
       its('phone_numbers.first.label') { should eq 'Privat' }
-      its('phone_numbers.first.number') { should eq '123' }
+      its('phone_numbers.first.number') { should eq '+41 44 123 45 67' }
       its('phone_numbers.second.label') { should eq 'Mobil' }
-      its('phone_numbers.second.number') { should eq '456' }
+      its('phone_numbers.second.number') { should eq '+41 77 456 78 90' }
 
       its('social_accounts.first.label') { should eq 'Skype' }
       its('social_accounts.first.name') { should eq 'foo' }
@@ -234,8 +234,8 @@ describe Import::Person do
     context 'overrides existing contact accounts' do
       let(:person) do
         p = Fabricate(:person, email: 'foo@example.com')
-        p.phone_numbers.create!(number: '123', label: 'Privat')
-        p.phone_numbers.create!(number: '456', label: 'Mobil')
+        p.phone_numbers.create!(number: '+41 44 123 45 67', label: 'Privat')
+        p.phone_numbers.create!(number: '+41 77 456 78 90', label: 'Mobil')
         p.social_accounts.create!(name: 'foo', label: 'Skype')
         p.social_accounts.create!(name: 'foo', label: 'MSN')
         p.additional_emails.create!(email: 'foo@example.com', label: 'Mutter')
@@ -248,15 +248,15 @@ describe Import::Person do
            email: 'foo@example.com',
            social_account_skype: 'foo',
            social_account_msn: 'bar',
-           phone_number_mobil: '789',
+           phone_number_mobil: '+41 77 789 01 23',
            additional_email_mutter: 'bar@example.com',
            additional_email_privat: 'privat@example.com' }
       end
 
       its('phone_numbers.first.label') { should eq 'Privat' }
-      its('phone_numbers.first.number') { should eq '123' }
+      its('phone_numbers.first.number') { should eq '+41 44 123 45 67' }
       its('phone_numbers.second.label') { should eq 'Mobil' }
-      its('phone_numbers.second.number') { should eq '789' }
+      its('phone_numbers.second.number') { should eq '+41 77 789 01 23' }
 
       its('social_accounts.first.label') { should eq 'Skype' }
       its('social_accounts.first.name') { should eq 'foo' }

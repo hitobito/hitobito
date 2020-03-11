@@ -43,7 +43,7 @@ describe CsvImportHelper do
   context '#csv_import_contact_account_value' do
     let(:person) do
       p = Fabricate(:person)
-      p.phone_numbers.create!(label: 'Privat', number: '123')
+      p.phone_numbers.create!(label: 'Privat', number: '+41 44 123 45 67')
       p.social_accounts.create!(label: 'Facebook', name: 'foo')
       p.additional_emails.create!(label: 'Privat', email: 'privat@example.com')
       p.additional_emails.create!(label: 'Arbeit', email: 'arbeit@example.com')
@@ -63,7 +63,7 @@ describe CsvImportHelper do
     end
 
     it 'returns phone number' do
-      expect(csv_import_contact_account_value(person, 'phone_number_privat')).to eq '123'
+      expect(csv_import_contact_account_value(person, 'phone_number_privat')).to eq '+41 44 123 45 67'
     end
   end
 end

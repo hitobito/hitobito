@@ -50,7 +50,7 @@ describe Event::ParticipationContactDatasController do
 
     it 'stores attributes on person if valid' do
       course.update(required_contact_attrs: %w(phone_numbers))
-      number = top_leader.phone_numbers.create!(label: 'dummy', number: 1)
+      number = top_leader.phone_numbers.create!(label: 'dummy', number: '+41790000000')
       patch :update, params: {
         group_id: group.id,
         event_id: course.id,

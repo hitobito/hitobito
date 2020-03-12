@@ -59,7 +59,7 @@ describe Event::ParticipationContactDatasController do
           first_name: top_leader.first_name,
           last_name: 'NewName',
           phone_numbers_attributes: {
-            '1' => { id: number.id, label: number.label, number: '2', _destroy: false }
+            '1' => { id: number.id, label: number.label, number: '+41791111111', _destroy: false }
           }
         },
         event_role: {

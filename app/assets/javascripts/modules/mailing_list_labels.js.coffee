@@ -9,7 +9,7 @@ class app.MailingListLabels
 
   constructor: (@selector) ->
     @bind('click', 'a.chip-add', @show)
-    @bind('click', 'span.chip .fa-remove', @remove)
+    @bind('click', 'span.chip .fa-times', @remove)
     @bind('blur', 'input[name=label]', @update)
     @bind('keydown', 'input[name=label]', @preventEnterSubmit)
 

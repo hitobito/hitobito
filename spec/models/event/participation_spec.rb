@@ -108,4 +108,19 @@ describe Event::Participation do
     end
   end
 
+
+  context '.order_by_role_statement' do
+    it 'orders by index of role_types' do
+      event_type = double("event_type", role_types: [Event::Role::Leader, Event::Role::Participant])
+      order_clause = Event::Participation.order_by_role_statement(event_type)
+      expect(order_clause).to eq "CASE event_roles.type WHEN 'Event::Role::Leader' " \
+        "THEN 0 WHEN 'Event::Role::Participant' THEN 1 END"
+    end
+
+    it '.order_by_role_statement returns empty string when event has no role_types' do
+      event_type = double("event_type", role_types: [])
+      order_clause = Event::Participation.order_by_role_statement(event_type)
+      expect(order_clause).to eq ''
+    end
+  end
 end

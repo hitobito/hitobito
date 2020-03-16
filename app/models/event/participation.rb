@@ -68,7 +68,7 @@ class Event::Participation < ActiveRecord::Base
     end
 
     def order_by_role_statement(event_type)
-      return if event_type.role_types.blank?
+      return '' if event_type.role_types.blank?
       statement = 'CASE event_roles.type '
       event_type.role_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i} "

@@ -4,12 +4,16 @@
 -#  https://github.com/hitobito/hitobito.
 
 #main.row-fluid
-  %article.span5
+  %article.span8
     = format_attr(entry, :description)
     = render_attrs(entry, :mail_address_link, :publisher)
     - if can?(:edit, entry)
       = render_attrs(entry, :mailchimp_api_key, :mailchimp_list_id)
+      - if entry.mailchimp_result
+        = render_attrs(entry, :mailchimp_sync)
       = render_attrs(entry, :additional_sender)
+
+
     = render_attrs(entry, :main_email, :preferred_labels)
 
     = entry.subscribable_info

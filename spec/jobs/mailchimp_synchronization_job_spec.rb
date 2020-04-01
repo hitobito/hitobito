@@ -36,6 +36,7 @@ describe MailchimpSynchronizationJob do
 
     expect(mailing_list.mailchimp_syncing).to be false
     expect(mailing_list.mailchimp_last_synced_at.to_i).to eq(time_now.to_i)
+    expect(mailing_list.mailchimp_result.state).to eq :unchanged
   end
 
   it 'it sets syncing to false after success' do
@@ -50,6 +51,7 @@ describe MailchimpSynchronizationJob do
 
     expect(mailing_list.mailchimp_syncing).to be false
     expect(mailing_list.mailchimp_last_synced_at).to be_nil
+    expect(mailing_list.mailchimp_result.state).to eq :failed
   end
 
 end

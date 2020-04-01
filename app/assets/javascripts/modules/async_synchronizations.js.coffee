@@ -23,7 +23,7 @@ class app.AsyncSynchronizations
     return if Cookies.get('async_synchronizations') == undefined
     $('#synchronization-spinner').removeClass('hidden')
 
-    $.each JSON.parse($.cookie('async_synchronizations')), (index, synchronization) ->
+    $.each JSON.parse(Cookies.get('async_synchronizations')), (index, synchronization) ->
       $.ajax(
         url: "/synchronizations/#{synchronization['mailing_list_id']}",
         success: (data) ->

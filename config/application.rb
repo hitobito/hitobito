@@ -81,6 +81,7 @@ module Hitobito
         DownloadCleanerJob.new.schedule
         SessionsCleanerJob.new.schedule
         WorkerHeartbeatCheckJob.new.schedule
+        ReoccuringMailchimpSynchronizationJob.new.schedule
       end
     end
 

@@ -56,6 +56,8 @@ class MailingList < ActiveRecord::Base
 
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
 
+  scope :mailchimp, -> { where.not(mailchimp_api_key: ['', nil], mailchimp_list_id: ['', nil]) }
+
   DEFAULT_LABEL = '_main'.freeze
 
   def to_s(_format = :default)
@@ -108,6 +110,14 @@ class MailingList < ActiveRecord::Base
       where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
       where(suscriber_conditions).
       distinct
+  end
+
+  def sync
+    Synchronize::Mailchimp::Synchronizator.new(self).call
+  end
+
+  def mailchimp_client
+    Synchronize::Mailchimp::Client.new(self)
   end
 
   private
@@ -190,8 +200,6 @@ class MailingList < ActiveRecord::Base
     config = Settings.email.retriever.config
     config.presence && config.user_name.presence
   end
-
-  private
 
   def schedule_mailchimp_destroy
     MailchimpDestructionJob.new(mailchimp_list_id, mailchimp_api_key, people).enqueue!

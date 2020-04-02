@@ -143,10 +143,10 @@ module Synchronize
 
       def subscriber_body(person)
         {
-          email_address: person.email,
+          email_address: person.email.strip,
           merge_fields: {
-            FNAME: person.first_name,
-            LNAME: person.last_name,
+            FNAME: person.first_name.strip,
+            LNAME: person.last_name.strip,
           }.merge(merge_field_values(person))
         }.merge(member_field_values(person))
       end
@@ -177,8 +177,8 @@ module Synchronize
       def execute_batch(list)
         operations = list.collect do |item|
           yield(item).tap do |operation|
-            logger.info "mailchimp: #{list_id}, op: #{operation[:method]}, item: #{item}"
-            logger.info operation
+            log "mailchimp: #{list_id}, op: #{operation[:method]}, item: #{item}"
+            log operation
           end
         end
 
@@ -193,7 +193,7 @@ module Synchronize
         body = api.batches(batch_id).retrieve.body
         status = body.fetch('status')
 
-        logger.info "batch #{batch_id}, status: #{status}"
+        log "batch #{batch_id}, status: #{status}"
         fail "Batch #{batch_id} did not finish in due time, last status: #{status}" if count > 10
 
         if status != 'finished'
@@ -201,7 +201,7 @@ module Synchronize
         else
           attrs = %w(total_operations finished_operations errored_operations response_body_url)
           body.slice(*attrs).tap do |updates|
-            logger.info updates
+            log updates
           end
         end
       end
@@ -225,8 +225,8 @@ module Synchronize
         end.compact.to_h.deep_symbolize_keys
       end
 
-      def logger
-        Rails.logger
+      def log(message, logger = Rails.logger)
+        logger.tagged("mailchimp_sync(#{list_id})") { logger.info(message) }
       end
     end
   end

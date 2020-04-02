@@ -48,6 +48,16 @@ describe Synchronize::Mailchimp::Client do
   end
 
   context '#subscriber_body' do
+
+    it 'strips whitespace from fields' do
+      top_leader.update(first_name: ' top ', last_name: ' leader ', email: ' top@example.com ')
+      body = client.subscriber_body(top_leader)
+
+      expect(body[:email_address]).to eq 'top@example.com'
+      expect(body[:merge_fields][:FNAME]).to eq 'top'
+      expect(body[:merge_fields][:LNAME]).to eq 'leader'
+    end
+
     context 'merge_fields' do
       let(:merge_field) {
         [ 'Gender', 'dropdown', { choices: %w(m) },  ->(p) { p.gender } ]

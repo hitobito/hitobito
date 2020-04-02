@@ -16,26 +16,9 @@ module Synchronize
         @data = data.deep_symbolize_keys
       end
 
-      def subscribed=(response)
-        @data[:subscribed] = extract(response) if response
+      def track(key, response)
+        @data[key] = extract(response) if response
       end
-
-      def deleted=(response)
-        @data[:deleted] = extract(response) if response
-      end
-
-      def tags=(response)
-        @data[:tags] = extract(response) if response
-      end
-
-      def merge_fields=(response)
-        @data[:merge_fields] = extract(response) if response
-      end
-
-      def updates=(response)
-        @data[:updates] = extract(response) if response
-      end
-
 
       def exception=(exception)
         @data[:exception] = [exception.class, exception.message].join(' - ')
@@ -66,7 +49,7 @@ module Synchronize
       end
 
       def operations
-        @data.slice(:subscribed, :deleted, :tags, :merge_fields).values
+        @data.except(:execption).values
       end
 
       # wird nur aufgerufen, wenn operation ausgeführt wurde

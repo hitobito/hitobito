@@ -208,14 +208,21 @@ module Synchronize
 
       def merge_field_values(person)
         merge_fields.collect do |field, type, options, evaluator|
-          [field.upcase, evaluator.call(person)]
-        end.to_h.deep_symbolize_keys
+          value = evaluator.call(person)
+          next if value.blank?
+          next if options.key?(:choices) && !options[:choices].include?(value)
+
+          [field.upcase, value]
+        end.compact.to_h.deep_symbolize_keys
       end
 
       def member_field_values(person)
         member_fields.collect do |field, evaluator|
-          [field,  evaluator.call(person)]
-        end.to_h.deep_symbolize_keys
+          value = evaluator.call(person)
+          next unless value.present?
+
+          [field, value]
+        end.compact.to_h.deep_symbolize_keys
       end
 
       def logger

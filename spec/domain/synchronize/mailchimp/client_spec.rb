@@ -47,6 +47,50 @@ describe Synchronize::Mailchimp::Client do
     stub_collection("lists/2/segments", offset, body: { segments: entries, total_items: total_items || entries.count})
   end
 
+  context '#subscriber_body' do
+    context 'merge_fields' do
+      let(:merge_field) {
+        [ 'Gender', 'dropdown', { choices: %w(m) },  ->(p) { p.gender } ]
+      }
+      let(:client) { described_class.new(mailing_list, merge_fields: [merge_field]) }
+
+      it 'excludes blank value' do
+        body = client.subscriber_body(top_leader)
+        expect(body[:merge_fields]).not_to have_key :GENDER
+      end
+
+      it 'excludes present value that is not part of choices' do
+        top_leader.update(gender: 'w')
+        body = client.subscriber_body(top_leader)
+        expect(body[:merge_fields]).not_to have_key :GENDER
+      end
+
+      it 'includes present value' do
+        top_leader.update(gender: 'm')
+        body = client.subscriber_body(top_leader)
+        expect(body[:merge_fields][:GENDER]).to eq 'm'
+      end
+    end
+
+    context 'member_fields' do
+      let(:member_field) {
+        [ :company, ->(p)  { p.company } ]
+      }
+      let(:client) { described_class.new(mailing_list, member_fields: [member_field]) }
+
+      it 'excludes blank value' do
+        body = client.subscriber_body(top_leader)
+        expect(body).not_to have_key :company
+      end
+
+      it 'includes present value' do
+        top_leader.update!(company: true, company_name: 'acme')
+        body = client.subscriber_body(top_leader)
+        expect(body[:company]).to eq true
+      end
+    end
+  end
+
   context '#merge_fields' do
     subject { client.fetch_merge_fields }
 

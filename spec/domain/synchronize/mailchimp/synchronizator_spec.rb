@@ -274,14 +274,14 @@ describe Synchronize::Mailchimp::Synchronizator do
 
       it 'has result for successful sync' do
         allow(client).to receive(:fetch_members).and_return([member(user)])
-        expect(client).to receive(:delete).with([user.email]).and_return(batch_result(1,1,0))
+        expect(client).to receive(:unsubscribe_members).with([user.email]).and_return(batch_result(1,1,0))
         sync.perform
         expect(subject.state).to eq :success
       end
 
       it 'has result for partial sync' do
         allow(client).to receive(:fetch_members).and_return([member(user)])
-        expect(client).to receive(:delete).with([user.email]).and_return(batch_result(2,1,1))
+        expect(client).to receive(:unsubscribe_members).with([user.email]).and_return(batch_result(2,1,1))
         sync.perform
         expect(subject.state).to eq :partial
       end
@@ -289,8 +289,8 @@ describe Synchronize::Mailchimp::Synchronizator do
       it 'has result for two operations sync' do
         mailing_list.subscriptions.create!(subscriber: user)
         allow(client).to receive(:fetch_members).and_return([{ email_address: 'other@example.com' }])
-        expect(client).to receive(:subscribe).with([user]).and_return(batch_result(1,1,0))
-        expect(client).to receive(:delete).with(['other@example.com']).and_return(batch_result(2,1,1))
+        expect(client).to receive(:subscribe_members).with([user]).and_return(batch_result(1,1,0))
+        expect(client).to receive(:unsubscribe_members).with(['other@example.com']).and_return(batch_result(2,1,1))
         sync.perform
         expect(subject.state).to eq :partial
       end
@@ -334,8 +334,8 @@ describe Synchronize::Mailchimp::Synchronizator do
 
     context 'subscriptions' do
       it 'calls operations with empty lists' do
-        expect(client).to receive(:subscribe).with([])
-        expect(client).to receive(:delete).with([])
+        expect(client).to receive(:subscribe_members).with([])
+        expect(client).to receive(:unsubscribe_members).with([])
 
         sync.perform
       end
@@ -344,8 +344,8 @@ describe Synchronize::Mailchimp::Synchronizator do
         allow(client).to receive(:fetch_members).and_return([])
         mailing_list.subscriptions.create!(subscriber: user)
 
-        expect(client).to receive(:subscribe).with([user])
-        expect(client).to receive(:delete).with([])
+        expect(client).to receive(:subscribe_members).with([user])
+        expect(client).to receive(:unsubscribe_members).with([])
 
         sync.perform
       end
@@ -355,8 +355,8 @@ describe Synchronize::Mailchimp::Synchronizator do
         user.update(email: nil)
         mailing_list.subscriptions.create!(subscriber: user)
 
-        expect(client).to receive(:subscribe).with([])
-        expect(client).to receive(:delete).with([])
+        expect(client).to receive(:subscribe_members).with([])
+        expect(client).to receive(:unsubscribe_members).with([])
 
         sync.perform
       end
@@ -373,8 +373,8 @@ describe Synchronize::Mailchimp::Synchronizator do
       it 'removes obsolete person' do
         allow(client).to receive(:fetch_members).and_return([{ email_address: user.email }])
 
-        expect(client).to receive(:subscribe).with([])
-        expect(client).to receive(:delete).with([user.email])
+        expect(client).to receive(:subscribe_members).with([])
+        expect(client).to receive(:unsubscribe_members).with([user.email])
 
         sync.perform
       end

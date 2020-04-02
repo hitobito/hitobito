@@ -83,11 +83,11 @@ module Synchronize
       private
 
       def subscribe_missing_members
-        result.subscribed = client.subscribe(missing_people)
+        result.subscribed = client.subscribe_members(missing_people)
       end
 
       def unsubscribe_obsolete_members
-        result.deleted = client.delete(obsolete_emails)
+        result.deleted = client.unsubscribe_members(obsolete_emails)
       end
 
       def update_stale_segments

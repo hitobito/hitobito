@@ -59,12 +59,6 @@ module Synchronize
         end
       end
 
-      def delete(emails)
-        execute_batch(emails) do |email|
-          unsubscribe_member_operation(email)
-        end
-      end
-
       def delete_segments(segment_ids)
         execute_batch(segment_ids) do |segment_id|
           destroy_segment_operation(segment_id)
@@ -77,9 +71,15 @@ module Synchronize
         end
       end
 
-      def subscribe(people)
+      def subscribe_members(people)
         execute_batch(people) do |person|
           subscribe_member_operation(person)
+        end
+      end
+
+      def unsubscribe_members(emails)
+        execute_batch(emails) do |email|
+          unsubscribe_member_operation(email)
         end
       end
 

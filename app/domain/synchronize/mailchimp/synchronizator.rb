@@ -8,43 +8,139 @@ require 'digest/md5'
 module Synchronize
   module Mailchimp
     class Synchronizator
+      attr_reader :list, :result
 
-      attr_reader :mailing_list
+      class_attribute :merge_fields, :member_fields
+      self.member_fields = []
+
+      self.merge_fields = [
+        [ 'Gender', 'dropdown', { choices: %w(m w) },  ->(p) { p.gender } ]
+      ]
 
       def initialize(mailing_list)
-        @mailing_list = mailing_list
+        @list = mailing_list
+        @result = Result.new
       end
 
-      def call
-        client.subscribe(missing_people)
-        client.delete(obsolete_emails)
-      end
+      def perform
+        create_missing_segments
+        create_missing_merge_fields
 
-      private
+        subscribe_missing_members
+        unsubscribe_obsolete_members
+
+        update_stale_segments
+        update_members
+
+        destroy_obsolete_segments
+      end
 
       def missing_people
         people.reject do |person|
-          mailchimp_emails.include?(person.email)
+          members_by_email.keys.include?(person.email) || person.email.blank?
         end
       end
 
       def obsolete_emails
-        mailchimp_emails - people.collect(&:email)
+        members_by_email.keys - people.collect(&:email)
       end
 
-      def people
-        @people ||= mailing_list.people
+      def missing_segments
+        tags.keys - client.fetch_segments.collect { |s| s[:name] }
       end
 
-      # We return ALL emails, even when they have unsubscribed
-      def mailchimp_emails
-        @mailchimp_emails ||= client.members.collect do |member|
-          member[:email_address]
+      def obsolete_segment_ids
+        client.fetch_segments.reject { |s| tags.key?(s[:name]) }.collect { |s| s[:id] }
+      end
+
+      def missing_merge_fields
+        labels = client.fetch_merge_fields.collect { |field| field[:tag] }
+         merge_fields.reject { |name, _, _| labels.include?(name.upcase) }
+      end
+
+      def stale_segments
+        segments = client.fetch_segments.index_by { |t| t[:name] }
+
+        tags.collect do |tag, emails|
+          next if emails.sort == remote_tags.fetch(tag, []).sort
+          next unless segments.key?(tag)
+
+          [segments.dig(tag, :id), emails]
+        end.compact
+      end
+
+      def changed_people
+        @changed_people ||= people.select do |person|
+          member = members_by_email[person.email]
+          member.deep_merge(client.subscriber_body(person)) != member if member
         end
       end
 
       def client
-        @client ||= Client.new(mailing_list)
+        @client ||= Client.new(list, member_fields: member_fields, merge_fields: merge_fields)
+      end
+
+      private
+
+      def subscribe_missing_members
+        result.subscribed = client.subscribe(missing_people)
+      end
+
+      def unsubscribe_obsolete_members
+        result.deleted = client.delete(obsolete_emails)
+      end
+
+      def update_stale_segments
+        result.tags = client.update_segments(stale_segments)
+      end
+
+      def update_members
+        result.updates = client.update_members(changed_people) if changed_people.present?
+      end
+
+      def create_missing_merge_fields
+        result.merge_fields = client.create_merge_fields(missing_merge_fields)
+      end
+
+      def create_missing_segments
+        client.create_segments(missing_segments)
+      end
+
+      def destroy_obsolete_segments
+        client.delete_segments(obsolete_segment_ids)
+      end
+
+      def tags
+        @tags ||= people.each_with_object({}) do |person, hash|
+          next unless person.email
+
+          person.tags.each do |tag|
+            value = tag.name
+            hash[value] ||= []
+            hash[value] << person.email
+          end
+        end
+      end
+
+      def remote_tags
+        @remote_tags ||= members.each_with_object({}) do |member, hash|
+          member[:tags].each do |tag|
+            hash[tag[:name]] ||= []
+            hash[tag[:name]] << member[:email_address]
+          end
+        end
+      end
+
+      def members
+        @members ||= client.fetch_members
+      end
+
+      def members_by_email
+        @members_by_email ||= members.index_by { |m| m[:email_address] }
+      end
+
+      def people
+        @people ||= list.people.includes(:tags).unscope(:select)
       end
 
     end

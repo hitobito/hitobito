@@ -21,12 +21,14 @@ module Synchronize
       end
 
       def fetch_merge_fields
-        paged do |list, params|
-          body = api.lists(list_id).merge_fields.retrieve(params: params).body.to_h
-          body['merge_fields'].each do |entry|
-            list << entry.slice('tag', 'name', 'type').deep_symbolize_keys
-          end
-          body['total_items']
+        paged('merge_fields', %w(tag name type)) do
+          api.lists(list_id).merge_fields
+        end
+      end
+
+      def fetch_segments
+        paged('segments', %w(id name member_count)) do
+          api.lists(list_id).segments
         end
       end
 
@@ -34,22 +36,8 @@ module Synchronize
         fields = %w(email_address status tags merge_fields)
         fields += member_fields.collect(&:first).collect(&:to_s)
 
-        paged do |list, params|
-          body = api.lists(list_id).members.retrieve(params: params).body.to_h
-          body['members'].each do |entry|
-            list << entry.slice(*fields).deep_symbolize_keys
-          end
-          body['total_items']
-        end
-      end
-
-      def fetch_segments
-        paged do |list, params|
-          body = api.lists(list_id).segments.retrieve(params: params).body.to_h
-          body['segments'].each do |entry|
-            list << entry.slice('id', 'name', 'member_count').symbolize_keys
-          end
-          body['total_items']
+        paged('members', fields) do
+          api.lists(list_id).members
         end
       end
 
@@ -169,11 +157,18 @@ module Synchronize
         Digest::MD5.hexdigest(email.downcase)
       end
 
-      def paged(list = [], offset = 0, &block)
-        total_items = block.call(list, count: count, offset: offset)
+      def paged(key, fields, list: [], offset: 0, &block)
+        body = block.call(list).retrieve(params: { count: count, offset: offset }).body.to_h
+
+        body[key].each do |entry|
+          list << entry.slice(*fields).deep_symbolize_keys
+        end
+
+        total_items = body['total_items']
         next_offset = offset + count
+
         if total_items > next_offset
-          paged(list, next_offset, &block)
+          paged(key, fields, list: list, offset: next_offset, &block)
         else
           list
         end

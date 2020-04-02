@@ -23,16 +23,16 @@ module Synchronize
       end
 
       def perform
-        create_missing_segments
-        create_missing_merge_fields
+        create_segments
+        create_merge_fields
 
-        subscribe_missing_members
-        unsubscribe_obsolete_members
+        subscribe_members
+        unsubscribe_members
 
-        update_stale_segments
+        update_segments
         update_members
 
-        destroy_obsolete_segments
+        destroy_segments
       end
 
       def missing_people
@@ -82,32 +82,32 @@ module Synchronize
 
       private
 
-      def subscribe_missing_members
-        result.subscribed = client.subscribe_members(missing_people)
+      def subscribe_members
+        result.track(:subscribe_members, client.subscribe_members(missing_people))
       end
 
-      def unsubscribe_obsolete_members
-        result.deleted = client.unsubscribe_members(obsolete_emails)
+      def unsubscribe_members
+        result.track(:unsubscribe_obsolete_members, client.unsubscribe_members(obsolete_emails))
       end
 
-      def update_stale_segments
-        result.tags = client.update_segments(stale_segments)
+      def update_segments
+        result.track(:update_segments, client.update_segments(stale_segments))
       end
 
       def update_members
-        result.updates = client.update_members(changed_people) if changed_people.present?
+        result.track(:update_members, client.update_members(changed_people)) if changed_people.present?
       end
 
-      def create_missing_merge_fields
-        result.merge_fields = client.create_merge_fields(missing_merge_fields)
+      def create_merge_fields
+        result.track(:create_merge_fields, client.create_merge_fields(missing_merge_fields))
       end
 
-      def create_missing_segments
-        client.create_segments(missing_segments)
+      def create_segments
+        result.track(:create_segments, client.create_segments(missing_segments))
       end
 
-      def destroy_obsolete_segments
-        client.delete_segments(obsolete_segment_ids)
+      def destroy_segments
+        result.track(:delete_segments, client.delete_segments(obsolete_segment_ids))
       end
 
       def tags

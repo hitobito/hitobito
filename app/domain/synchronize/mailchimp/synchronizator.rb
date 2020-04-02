@@ -95,7 +95,7 @@ module Synchronize
       end
 
       def update_members
-        result.track(:update_members, client.update_members(changed_people)) if changed_people.present?
+        result.track(:update_members, client.update_members(changed_people))
       end
 
       def create_merge_fields

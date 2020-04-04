@@ -24,10 +24,13 @@ class EventParticipationSerializer < ApplicationSerializer
 
     property :first_name, item.person.first_name
     property :last_name, item.person.last_name
+    property :nickname, item.person.nickname
     property :email, item.person.email
+    property :birthday, item.person.birthday&.iso8601
+    property :gender, item.person.gender
 
-    property :roles, item.roles.collect(&:to_s)
-    entity :person, item.person_id, PersonIdSerializer
+    property :roles, Hash[item.roles.collect { |role| [role.class.name, role.to_s] }]
+    entity :person, item.person, PersonSerializer
 
     map_properties :additional_information, :active, :qualified
 

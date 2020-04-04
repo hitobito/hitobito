@@ -41,13 +41,18 @@ describe EventParticipationSerializer do
   end
 
   it 'includes main person attributes ' do
+    participation.person.update(nickname: 'Nick', birthday: Date.new(2000, 1, 1), gender: 'm')
+
     expect(subject[:first_name]).to eq('Bottom')
     expect(subject[:last_name]).to eq('Member')
     expect(subject[:email]).to eq('bottom_member@example.com')
+    expect(subject[:nickname]).to eq('Nick')
+    expect(subject[:birthday]).to eq('2000-01-01')
+    expect(subject[:gender]).to eq('m')
   end
 
   it 'includes event roles' do
-    expect(subject[:roles]).to eq ['Hauptleitung']
+    expect(subject[:roles]).to eq({ 'Event::Role::Leader' => 'Hauptleitung' })
   end
 
   it 'includes person template link' do

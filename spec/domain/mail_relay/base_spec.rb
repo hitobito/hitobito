@@ -9,7 +9,6 @@ require 'spec_helper'
 
 describe MailRelay::Base do
 
-
   let(:mails)                  { Rails.root.join('spec', 'fixtures', 'email') }
   let(:simple)                 { Mail.new(mails.join('simple.eml').read) }
   let(:regular)                { Mail.new(mails.join('regular.eml').read) }

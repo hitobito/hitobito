@@ -1,10 +1,15 @@
-Return-Path: <root@cloud.puzzle.ch>
-X-Original-To: amatest@pbs.puzzle.ch
-Delivered-To: pbsc-vbl.integration+amatest@puzzle.ch
-Received: by mailstore01.cloud.puzzle.ch (Postfix, from userid 0)
-	id 4E68AAB4; Fri, 29 Nov 2019 07:31:54 +0100 (CET)
-To: amatest@pbs.puzzle.ch, amatest2@pbs.puzzle.ch
-From: pbsc-vbl.integration@puzzle.ch
-Subject: Test
-Message-Id: <20191129063154.4E68AAB4@mailstore01.cloud.puzzle.ch>
-Date: Fri, 29 Nov 2019 07:31:54 +0100 (CET)
+Return-Path: <sender@pfadi-pfannenstil.ch>
+X-Original-To: teststatus.zha0@db.scout.ch
+Delivered-To: teststatus.zha0@db.scout.ch
+X-Original-To: teststatus@pfadi-pfannenstil.ch
+Delivered-To: teststatus@pfadi-pfannenstil.ch
+From: "Sam Sender v/o sender" <sender@example.com>
+To: <teststatus@pfadi-pfannenstil.ch>
+Subject: Weiterleitungstest
+Date: Fri, 3 Apr 2020 10:16:50 +0200
+Message-ID: <004f01d60990$3a038c60$ae0aa520$@example.com>
+
+Weiterleitungstest mit mehreren X-Original-To
+
+Das Hosting von pfadi-pfannenstil.ch leitet die mail an
+teststatus.zha0 AT db.scout.ch weiter.

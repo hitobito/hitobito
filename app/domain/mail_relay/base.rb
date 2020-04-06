@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -166,6 +166,7 @@ module MailRelay
     # Try to read the envelope receiver from the given header
     def receiver_from_x_header(header_name)
       field = message.header[header_name]
+      field = field.first if field.respond_to?(:first)
       field.to_s.split('@', 2).first if field
     end
 

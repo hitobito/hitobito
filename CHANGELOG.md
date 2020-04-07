@@ -2,6 +2,8 @@
 
 ## unreleased
 
+*  Verbesserung der Mailchimp Integration
+
 ## Version 1.21
 
 *  Stackupgrade ruby-2.5, rails-6

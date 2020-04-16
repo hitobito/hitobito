@@ -313,10 +313,28 @@ curl "https://demo.hitobito.ch/groups/1/events/1/participations.json?user_email=
       "type": "event_participations",
       "first_name": "Thomas",
       "last_name": "Schüpbach",
+      "nickname": "Ipsam",
+      "company_name": null,
+      "company": false,
       "email": "schuepbach.thomas@hotmail.com",
-      "roles": [
-        "Hauptleitung"
-      ],
+      "address": "Gluckstr. 2",
+      "zip_code": "7185",
+      "town": "Nord Judy",
+      "country": null,
+      "gender": "m",
+      "birthday": "1974-05-17",
+      "picture": {
+        "picture": {
+          "url": "/assets/profil-3a8452c9ac8e8b1b70b9d4f4250417bea5be8a4518dbfae44db944f8fda07ca5.png",
+          "thumb": {
+            "url": "/assets/profil_thumb-0296a3526d1e1cb1a5a9c63fbe5c913977bc1d1361f8bccb23259dda216aa9e8.png"
+          }
+        }
+      },
+      "primary_group_id": 18,
+      "roles": {
+        "Event::Role::Leader": "Leitung"
+      },
       "links": {
         "person": "3086"
       },
@@ -330,10 +348,28 @@ curl "https://demo.hitobito.ch/groups/1/events/1/participations.json?user_email=
       "type": "event_participations",
       "first_name": "Thomas",
       "last_name": "Test II",
+      "nickname": "Toast",
+      "company_name": null,
+      "company": false,
       "email": "thomas2@mail.com",
-      "roles": [
-        "Leitung"
-      ],
+      "address": "Gluckstr. 4",
+      "zip_code": "7185",
+      "town": "Nord Judy",
+      "country": null,
+      "gender": "m",
+      "birthday": "2000-12-31",
+      "picture": {
+        "picture": {
+          "url": "/assets/profil-3a8452c9ac8e8b1b70b9d4f4250417bea5be8a4518dbfae44db944f8fda07ca5.png",
+          "thumb": {
+            "url": "/assets/profil_thumb-0296a3526d1e1cb1a5a9c63fbe5c913977bc1d1361f8bccb23259dda216aa9e8.png"
+          }
+        }
+      },
+      "primary_group_id": 1,
+      "roles": {
+        "Event::Role::Leader": "Leitung"
+      },
       "links": {
         "person": "3103"
       },

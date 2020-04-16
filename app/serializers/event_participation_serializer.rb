@@ -37,6 +37,6 @@ class EventParticipationSerializer < ApplicationSerializer
 
     person_template_link "#{type_name}.person"
 
-    apply_extensions(:wagon)
+    apply_extensions(:attrs)
   end
 end

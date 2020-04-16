@@ -22,15 +22,14 @@ class EventParticipationSerializer < ApplicationSerializer
   schema do
     json_api_properties
 
-    property :first_name, item.person.first_name
-    property :last_name, item.person.last_name
-    property :nickname, item.person.nickname
-    property :email, item.person.email
-    property :birthday, item.person.birthday&.iso8601
-    property :gender, item.person.gender
+    (Person::PUBLIC_ATTRS - [:id]).each do |name|
+      property name, item.person.try(name)
+    end
 
+    property :birthday, item.person.birthday&.iso8601
     property :roles, Hash[item.roles.collect { |role| [role.class.name, role.to_s] }]
-    entity :person, item.person, PersonSerializer
+
+    entity :person, item.person_id, PersonIdSerializer
 
     map_properties :additional_information, :active, :qualified
 
@@ -38,6 +37,6 @@ class EventParticipationSerializer < ApplicationSerializer
 
     person_template_link "#{type_name}.person"
 
-    apply_extensions(:attrs)
+    apply_extensions(:wagon)
   end
 end

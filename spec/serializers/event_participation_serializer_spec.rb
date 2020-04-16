@@ -49,6 +49,7 @@ describe EventParticipationSerializer do
     expect(subject[:nickname]).to eq('Nick')
     expect(subject[:birthday]).to eq('2000-01-01')
     expect(subject[:gender]).to eq('m')
+    expect(subject.keys).to include(*Person::PUBLIC_ATTRS.map(&:to_s))
   end
 
   it 'includes event roles' do

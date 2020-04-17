@@ -53,7 +53,7 @@ describe EventParticipationSerializer do
   end
 
   it 'includes event roles' do
-    expect(subject[:roles]).to eq({ 'Event::Role::Leader' => 'Hauptleitung' })
+    expect(subject[:roles]).to eq([{ 'type' => 'Event::Role::Leader', 'name' => 'Hauptleitung' })
   end
 
   it 'includes person template link' do

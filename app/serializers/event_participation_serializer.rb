@@ -27,7 +27,7 @@ class EventParticipationSerializer < ApplicationSerializer
     end
 
     property :birthday, item.person.birthday.try(:iso8601)
-    property :roles, Hash[item.roles.collect { |role| { type: role.class.name, name: role.to_s } }]
+    property :roles, item.roles.collect { |role| { type: role.class.name, name: role.to_s } }
 
     entity :person, item.person_id, PersonIdSerializer
 

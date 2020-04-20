@@ -18,13 +18,13 @@ Alle Diagramme werden mit [Draw.io](http://draw.io) erstellt und jeweils als Ori
 ## Techstack
 Der aktuelle Techstack von hitobito sieht wie folgt aus:
 
-Applikation mit [RubyOnRails](http://rubyonrails.org)
-Datenbank Persistenz mit [MySQL](https://www.mysql.com/)
-Caching mit [Memcache](http://memcached.org)
-Search Enging [Sphinx](http://sphinxsearch.com/)
-Monitoring mit [Prometheus](https://prometheus.io/) und [Grafana](https://grafana.com/)
-Ausführen von [Background Jobs](https://github.com/collectiveidea/delayed_job)
-Plugin Framework: [Wagons](http://github.com/codez/wagons)
-Source Code [Git Hub](https://github.com/hitobito/)
-Container Plattform [APPUiO](https://www.appuio.ch)
-Open Source Lizenz: [GNU Affero General Public License](http://www.gnu.org/licenses/)
+* Applikation mit [RubyOnRails](http://rubyonrails.org)
+* Datenbank Persistenz mit [MySQL](https://www.mysql.com/)
+* Caching mit [Memcache](http://memcached.org)
+* Search Enging [Sphinx](http://sphinxsearch.com/)
+* Monitoring mit [Prometheus](https://prometheus.io/) und [Grafana](https://grafana.com/)
+* Ausführen von [Background Jobs](https://github.com/collectiveidea/delayed_job)
+* Plugin Framework: [Wagons](http://github.com/codez/wagons)
+* Source Code [Git Hub](https://github.com/hitobito/)
+* Container Plattform [APPUiO](https://www.appuio.ch)
+* Open Source Lizenz: [GNU Affero General Public License](http://www.gnu.org/licenses/)

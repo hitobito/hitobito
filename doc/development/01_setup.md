@@ -1,11 +1,11 @@
 ## Setup der Entwicklungsumgebung
 
-Die Applikation läuft unter Ruby >= 1.9.3, Rails 4 und Sqlite3 (development) / MySQL (production).
+Die Applikation läuft unter Ruby >= 2.2, Rails 4 und Sqlite3 (development) / MySQL (production).
 
 
 ### System
 
-Grundsätzlich muss für hitobito eine Ruby Version grösser gleich 1.9.3 sowie Bundler vorhanden sein.
+Grundsätzlich muss für hitobito eine Ruby Version grösser gleich 2.2 sowie Bundler vorhanden sein.
 Siehe dazu https://www.ruby-lang.org/en/documentation/installation/.
 
 Als Entwicklungsdatenbank wird Sqlite3 verwendet. Zur Emulation des Produktionsenvironments muss

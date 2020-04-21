@@ -4,7 +4,7 @@ Hitobito kann wie die meisten Ruby on Rails Applikationen auf verschiedene Arten
 [deployt](http://rubyonrails.org/deploy/) werden. 
 Folgende Umsysteme müssen vorgängig eingerichtet werden:
 
-* Ruby >= 1.9.3
+* Ruby >= 2.2
 * Apache HTTPD
 * Phusion Passenger
 * MySql

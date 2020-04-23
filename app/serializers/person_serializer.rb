@@ -69,7 +69,8 @@ class PersonSerializer < ApplicationSerializer
                    :address,
                    :zip_code,
                    :town,
-                   :country
+                   :country,
+                   :household_key
 
     property :picture, item.picture_full_url
     property :tags, item.tag_list.to_s if h.can?(:index_tags, item)

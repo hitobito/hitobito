@@ -65,6 +65,8 @@ describe PeopleSerializer do
 
   subject { hash[:people].first }
 
+  let(:user) { Person.first }
+
   context 'with details' do
     before { allow(controller).to receive(:can?).and_return(true) }
 
@@ -101,6 +103,26 @@ describe PeopleSerializer do
       expect(links[:additional_emails].size).to eq(1)
       expect(links).not_to have_key(:phone_numbers)
     end
+
+    it 'contains correct household key' do
+      is_expected.to have_key(:household_key)
+    end
+
+    it 'has null household key' do
+      household_key = subject[:household_key]
+      expect(household_key).to eq(nil)
+    end
+
+    it 'uses same household key if same household' do
+      other = people(:top_leader).decorate
+      person.update(household_key: "1")
+      Person::Household.new(person, Ability.new(person), other).tap(&:assign)
+      serial_person = PersonSerializer.new(person, controller: controller).to_hash[:people]
+      serial_other = PersonSerializer.new(other, controller: controller).to_hash[:people]
+      expect(serial_other.first[:household_key]).not_to eq(nil)
+      expect(serial_person.first[:household_key]).to eq(serial_other.first[:household_key])
+    end
+
   end
 
 end

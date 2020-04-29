@@ -1,9 +1,15 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
+#  Copyright (c) 2020, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require 'fileutils'
 require 'pathname'
 
-## Allows switching wagons quickly (depends on https://direnv.net/)
-
+# Allows switching wagons quickly (depends on https://direnv.net/)
 class Setup
 
   def run
@@ -32,29 +38,29 @@ class Setup
 
   def gemfile
     <<-EOF
-    # vim:ft=ruby
+      # vim:ft=ruby
 
-    group :development do
-      ENV.fetch('WAGONS').split.each do |wagon|
-        Dir[File.expand_path("../../hitobito_\#{wagon}/hitobito_\#{wagon}.gemspec", __FILE__)].each do |spec|
-          gem File.basename(spec, '.gemspec'), :path => File.expand_path('..', spec)
+      group :development do
+        ENV.fetch('WAGONS').split.each do |wagon|
+          Dir[File.expand_path("../../hitobito_\#{wagon}/hitobito_\#{wagon}.gemspec", __FILE__)].each do |spec|
+            gem File.basename(spec, '.gemspec'), :path => File.expand_path('..', spec)
+          end
         end
       end
-    end
     EOF
   end
 
   def environment
     <<-EOF
-    PATH_add bin
-    export RAILS_DB_ADAPTER=mysql2
-    export RAILS_DB_NAME=hit_#{wagon}_development
-    export RAILS_TEST_DB_NAME=hit_#{wagon}_test
-    export RAILS_PRODUCTION_DB_NAME=hit_#{wagon}_production
-    export RUBYOPT=-W0
-    export WAGONS="#{wagons.join(' ')}"
-    log_status "hitobito now uses: #{wagons.join(', ')}"
-    source_up
+      PATH_add bin
+      export RAILS_DB_ADAPTER=mysql2
+      export RAILS_DB_NAME=hit_#{wagon}_development
+      export RAILS_TEST_DB_NAME=hit_#{wagon}_test
+      export RAILS_PRODUCTION_DB_NAME=hit_#{wagon}_production
+      export RUBYOPT=-W0
+      export WAGONS="#{wagons.join(' ')}"
+      log_status "hitobito now uses: #{wagons.join(', ')}"
+      source_up
     EOF
   end
 
@@ -67,10 +73,13 @@ class Setup
   end
 
   def dependencies
-    %w(pbs cevi pro_natura).product([%w(youth)]).to_h.merge('jubla' => %w(youth jubla_ci))
+    %w(pbs cevi pro_natura).product([%w(youth)]).to_h.merge({
+      'jubla' => %w(youth jubla_ci),
+      'tenants' => %w(generic),
+    })
   end
 
-  def available(excluded = %w(youth jubla_ci site tenants))
+  def available(excluded = %w(youth jubla_ci site))
     @available ||= root.parent.entries
       .collect { |x| x.to_s[/hitobito_(.*)/, 1]  }
       .compact.reject(&:empty?) - excluded

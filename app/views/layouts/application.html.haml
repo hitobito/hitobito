@@ -31,7 +31,7 @@
 
     = yield(:head)
 
-  %body{class: ('is-logged-out' if current_user.nil?) }
+  %body{class: ('is-logged-out' unless current_user) }
     #modal-placeholder
     %main
       = render 'layouts/file_download' if current_user

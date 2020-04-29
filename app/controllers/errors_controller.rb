@@ -15,7 +15,8 @@ class ErrorsController < ActionController::Base
 
   def show
     status_code = params[:code] || 500
-    render status_code.to_s, status: status_code
+    formats = request.format.json? ? [:json] : [:html]
+    render status_code.to_s, status: status_code, formats: formats
   end
 
   private

@@ -15,6 +15,25 @@ describe ErrorsController do
       expect(response).to render_template(code)
       expect(response.status).to eq code.to_i
     end
+  end
 
+  describe 'Content-Type' do
+    %w(html json).each do |format|
+      it "renders #{format} for #{format} format" do
+        get :show, params: { code: '404' }, format: format.to_sym
+        expect(response).to render_template('404')
+        expect(response.status).to eq 404
+        expect(response.content_type).to match(Regexp.new(format))
+      end
+    end
+
+    %w(png jpeg).each do |format|
+      it "renders html for #{format}" do
+        get :show, params: { code: '404' }, format: format.to_sym
+        expect(response).to render_template('404')
+        expect(response.status).to eq 404
+        expect(response.content_type).to match(/html/)
+      end
+    end
   end
 end

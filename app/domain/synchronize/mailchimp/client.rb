@@ -226,7 +226,7 @@ module Synchronize
       end
 
       def log(message, logger = Rails.logger)
-        logger.tagged("mailchimp_sync(#{list_id})") { logger.info(message) }
+        logger.info(message)
       end
     end
   end

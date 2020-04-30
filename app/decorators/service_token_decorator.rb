@@ -6,9 +6,10 @@
 class ServiceTokenDecorator < ApplicationDecorator
   decorates :service_token
 
-  def abilities
-    kinds = [:people, :people_below, :events, :groups, :invoices, :event_participations]
+  class_attribute :kinds
+  self.kinds = [:people, :people_below, :events, :groups, :invoices, :event_participations]
 
+  def abilities
     safe_join(kinds.map do |ability|
       ability_description(ability, :read) if public_send(ability)
     end.compact, h.tag(:br))

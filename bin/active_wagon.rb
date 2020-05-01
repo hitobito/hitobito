@@ -25,7 +25,7 @@ class Setup
 
   def write_and_copy(name, content)
     write(name, content)
-    FileUtils.cp(root.join(name), root.join("../hitobito_#{wagon}"))
+    FileUtils.cp(root.join(name), root.join("../hitobito_#{wagon}")) unless core?
   end
 
   def wagon(name = ARGV.first)
@@ -59,7 +59,7 @@ class Setup
       export RAILS_PRODUCTION_DB_NAME=hit_#{wagon}_production
       export RUBYOPT=-W0
       export WAGONS="#{wagons.join(' ')}"
-      log_status "hitobito now uses: #{wagons.join(', ')}"
+      log_status "hitobito now uses: #{wagons.any? ? wagons.join(', ') : 'just the core'}"
       source_up
     EOF
   end
@@ -69,7 +69,7 @@ class Setup
   end
 
   def wagons
-    [wagon] + dependencies.fetch(wagon, [])
+    [wagon] + dependencies.fetch(wagon, []) - core_aliases
   end
 
   def dependencies
@@ -82,7 +82,15 @@ class Setup
   def available(excluded = %w(youth jubla_ci site))
     @available ||= root.parent.entries
       .collect { |x| x.to_s[/hitobito_(.*)/, 1]  }
-      .compact.reject(&:empty?) - excluded
+      .compact.reject(&:empty?) - excluded + core_aliases
+  end
+
+  def core?
+    core_aliases.include?(wagon)
+  end
+
+  def core_aliases
+    %w(core hitobito)
   end
 
   def strip_heredoc(string)

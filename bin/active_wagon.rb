@@ -37,7 +37,7 @@ class Setup
   end
 
   def gemfile
-    <<-EOF
+    <<~EOF
       # vim:ft=ruby
 
       group :development do
@@ -51,7 +51,7 @@ class Setup
   end
 
   def environment
-    <<-EOF
+    <<~EOF
       PATH_add bin
       export RAILS_DB_ADAPTER=mysql2
       export RAILS_DB_NAME=hit_#{wagon}_development

@@ -7,7 +7,6 @@
 # Handles paranoid models as well.
 class SimpleCrudController < CrudController
 
-
   def create
     super(location: index_path)
   end

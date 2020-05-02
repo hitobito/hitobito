@@ -37,12 +37,24 @@ case $cmd in
     ;;
 
   test-prepare)
-    sed -i 's/\(config.active_record.maintain_test_schema\) = true/\1 = false/' config/environment/test.rb
+    sed -i 's/\(config.active_record.maintain_test_schema\) = true/\1 = false/' config/environments/test.rb
     ;;
 
 
   completion)
     echo "complete -W 'activate gemfile spec-rc test-prepare' $(basename "$0")"
+    ;;
+
+  grep)
+    if [[ $# -ne 2 ]]; then
+      echo "You must provide a String to grep"
+      exit 1
+    fi
+    set +e
+    for wagon in cevi dsj generic glp insieme jubla pbs pro_natura sbv tenants youth; do
+      echo ">> grepping in ../hitobito_$wagon/ <<"
+      (cd "../hitobito_$wagon/"; git grep $2)
+    done
     ;;
 
   help|*)

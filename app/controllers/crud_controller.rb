@@ -16,7 +16,8 @@ class CrudController < ListController
 
   class_attribute :permitted_attrs
 
-  prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy]
+  ACTIONS = [:show, :new, :create, :edit, :update, :destroy]
+  prepend_before_action :entry, only: ACTIONS
 
   delegate :model_identifier, to: 'self.class'
 

@@ -4,9 +4,6 @@ addons:
   firefox: 60.0
 services:
   - memcached
-branches:
-  only:
-    - rails-5
 env:
   global:
     - HEADLESS=true
@@ -25,6 +22,3 @@ install:
   - bundle install --path vendor/bundle
 script:
   - bundle exec rake db:create ci --trace
-matrix:
-  allow_failures:
-  - rvm: 2.5.3

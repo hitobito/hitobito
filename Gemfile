@@ -7,15 +7,16 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.11.1'
+gem 'rails', '= 6.0.2.1'
 
 gem 'activerecord-session_store'
-gem 'acts-as-taggable-on', '~> 3.5.0'
-gem 'airbrake', '< 5.0' # requires newer errbit
+gem 'acts-as-taggable-on'
+gem 'airbrake'
 gem 'awesome_nested_set'
 gem 'axlsx', '>= 3.0.0.pre'
 gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
+gem 'bootsnap', require: false
 gem 'cancancan'
 gem 'carrierwave'
 gem 'cmess'
@@ -24,10 +25,13 @@ gem 'country_select'
 gem 'daemons'
 gem 'dalli'
 gem 'delayed_job_active_record'
+gem 'delayed_job_heartbeat_plugin'
 gem 'devise'
 gem 'doorkeeper'
 gem 'doorkeeper-i18n'
+gem 'doorkeeper-openid_connect'
 gem 'draper'
+gem 'draper-cancancan'
 gem 'faker'
 gem 'gibbon', '~> 3.2'
 gem 'globalize'
@@ -35,12 +39,14 @@ gem 'haml'
 gem 'http_accept_language'
 gem 'icalendar'
 gem 'lograge'
+gem 'lograge-sql'
+gem 'lograge_activejob'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mime-types'
 gem 'mini_magick'
 gem 'mysql2', '0.4.9'
 gem 'nested_form'
-gem 'nokogiri', '~> 1.9.1'
+gem 'nokogiri'
 gem 'oat'
 gem 'paper_trail'
 gem 'paranoia'
@@ -48,7 +54,9 @@ gem 'phonelib'
 gem 'prawn'
 gem 'prawn-table'
 gem 'protective'
+gem 'pry-rails'
 gem 'puma'
+gem 'prometheus_exporter'
 gem 'rails-i18n'
 gem 'rails_autolink'
 gem 'rubyzip', '~> 1.3.0'
@@ -60,7 +68,7 @@ gem 'thinking-sphinx'
 gem 'validates_by_schema'
 gem 'validates_timeliness', '< 4.0'
 gem 'vcard'
-gem 'wagons'
+gem 'wagons', '0.6.1'
 
 # load after others because of active record inherited alias chain.
 gem 'kaminari'
@@ -73,7 +81,7 @@ gem 'coffee-rails'
 gem 'compass'
 gem 'compass-rails'
 gem 'font_awesome5_rails'
-gem 'jquery-cookie-rails'
+gem 'js_cookie_rails'
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'jquery-ui-rails'
@@ -83,29 +91,19 @@ gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier'
 
-# security updates, can be deleted or changed if they get in the way of updates or so
-gem 'activejob', '>= 4.2.11'
-gem 'loofah', '~> 2.2.3'
-gem 'rack', '~> 1.6.11'
-gem 'sprockets', '~> 3.7.2'
-
-
 group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'parallel_tests'
-  gem 'pry-rails'
-  gem 'rspec-rails'
-
-  gem 'pry-debugger', platforms: :ruby_19
+  gem 'rspec-rails', '4.0.0.beta3' # see https://github.com/rspec/rspec-rails/issues/2177
+  gem 'pry-byebug'
   gem 'pry-doc'
-  # gem 'pry-byebug', platforms: [:ruby_20, :ruby_21]
 end
 
 group :development do
   gem 'bullet'
-  gem 'quiet_assets'
+  gem 'listen'
   gem 'redcarpet'
   gem 'request_profiler'
 end
@@ -118,17 +116,17 @@ group :test do
   gem 'headless'
   gem 'launchy'
   gem 'pdf-inspector', require: 'pdf/inspector'
+  gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'rspec-its'
   gem 'selenium-webdriver'
-  gem 'webdrivers', '3.9.4'
-  gem 'webmock', '~> 3.4', '>= 3.4.2'
+  gem 'webdrivers'
+  gem 'webmock'
 end
 
 group :console do
   gem 'awesome_print'
   gem 'hirb'
-  gem 'mailcatcher'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
   gem 'rdoc-tags'

@@ -122,62 +122,62 @@ describe Group do
 
     context 'on update' do
       it 'at the beginning' do
-        groups(:bottom_layer_two).update_attributes!(name: 'AAA')
+        groups(:bottom_layer_two).update!(name: 'AAA')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
           'AAA', 'Bottom One', 'TopGroup', 'Toppers']
       end
 
       it 'at the beginning with same name' do
-        groups(:bottom_layer_two).update_attributes!(name: 'Bottom One')
+        groups(:bottom_layer_two).update!(name: 'Bottom One')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
           'Bottom One', 'Bottom One', 'TopGroup', 'Toppers']
       end
 
       it 'in the middle keeping position right' do
-        groups(:bottom_layer_two).update_attributes!(name: 'Frosch')
+        groups(:bottom_layer_two).update!(name: 'Frosch')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Frosch', 'TopGroup', 'Toppers']
       end
 
       it 'in the middle keeping position left' do
-        groups(:bottom_layer_two).update_attributes!(name: 'Bottom P')
+        groups(:bottom_layer_two).update!(name: 'Bottom P')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Bottom P', 'TopGroup', 'Toppers']
       end
 
       it 'in the middle moving right' do
-        groups(:bottom_layer_two).update_attributes!(name: 'TopGzzz')
+        groups(:bottom_layer_two).update!(name: 'TopGzzz')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'TopGroup', 'TopGzzz', 'Toppers']
       end
 
       it 'in the middle moving left' do
-        groups(:top_group).update_attributes!(name: 'Bottom P')
+        groups(:top_group).update!(name: 'Bottom P')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'Bottom P', 'Bottom Two', 'Toppers']
       end
 
       it 'in the middle with same name' do
-        groups(:bottom_layer_two).update_attributes!(name: 'TopGroup')
+        groups(:bottom_layer_two).update!(name: 'TopGroup')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'TopGroup', 'TopGroup', 'Toppers']
       end
 
       it 'at the end' do
-        groups(:bottom_layer_two).update_attributes!(name: 'ZZ Top')
+        groups(:bottom_layer_two).update!(name: 'ZZ Top')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'TopGroup', 'Toppers', 'ZZ Top']
       end
 
       it 'at the end with same name' do
-        groups(:bottom_layer_two).update_attributes!(name: 'Toppers')
+        groups(:bottom_layer_two).update!(name: 'Toppers')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
          'Bottom One', 'TopGroup', 'Toppers', 'Toppers']
       end
 
       context 'with short_name' do
         it 'at the end' do
-          groups(:bottom_layer_two).update_attributes!(short_name: 'XXX')
+          groups(:bottom_layer_two).update!(short_name: 'XXX')
           expect(groups(:top_layer).children.order(:lft).collect(&:display_name)).to eq [
            'Bottom One', 'TopGroup', 'Toppers', "XXX"]
         end
@@ -185,7 +185,7 @@ describe Group do
 
       context 'with lowercase' do
         it 'in the middle' do
-          groups(:bottom_layer_two).update_attributes!(name: 'topGroupX')
+          groups(:bottom_layer_two).update!(name: 'topGroupX')
           expect(groups(:top_layer).children.order(:lft).collect(&:display_name)).to eq [
            'Bottom One', 'TopGroup', 'topGroupX', 'Toppers']
         end
@@ -424,7 +424,7 @@ describe Group do
     let(:group) { groups(:top_group) }
 
     subject { group }
-    before { group.update_attributes!(contactable) }
+    before { group.update!(contactable) }
 
     context 'no contactable but contact info'  do
       its(:contact)   { should be_blank }

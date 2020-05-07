@@ -18,7 +18,7 @@
 class HelpText < ActiveRecord::Base
   COLUMN_BLACKLIST = %w(id created_at updated_at deleted_at).freeze
 
-  validates :name, uniqueness: { scope: [:controller, :model, :kind] }
+  validates :name, uniqueness: { scope: [:controller, :model, :kind], case_sensitive: false }
   validates :body, presence: true
   before_validation :assign_combined_fields, if: :new_record?
 
@@ -27,11 +27,14 @@ class HelpText < ActiveRecord::Base
   include Globalized
   translates :body
 
-  scope :list, -> { order(HelpTexts::List.new.order_statement).order(:kind) }
-
   validates_by_schema
 
   attr_accessor :context, :key
+
+
+  def self.list
+    order(Arel.sql(HelpTexts::List.new.order_statement)).order(:kind)
+  end
 
   def to_s
     [entry.to_s, entry.translate(kind, name)].join(' - ') if persisted?

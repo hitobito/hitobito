@@ -34,6 +34,9 @@ module Import
     end
 
     def map_data(header_mapping)
+      if header_mapping.is_a?(ActionController::Parameters)
+        header_mapping = header_mapping.to_unsafe_h
+      end
       header_mapping = header_mapping.with_indifferent_access
       header_mapping.reject! { |_key, value| value.blank? }
       csv.map do |row|

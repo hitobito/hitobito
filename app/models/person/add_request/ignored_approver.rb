@@ -31,7 +31,7 @@ class Person::AddRequest::IgnoredApprover < ActiveRecord::Base
     def possible_approvers(layer)
       Person.in_layer(layer).
         where(roles: { type: approver_role_types.collect(&:sti_name) }).
-        uniq
+        distinct
     end
 
     def approver_role_types
@@ -41,7 +41,7 @@ class Person::AddRequest::IgnoredApprover < ActiveRecord::Base
     end
 
     def delete_old_ones
-      Group.where(id: uniq.pluck(:group_id)).find_each do |group|
+      Group.where(id: distinct.pluck(:group_id)).find_each do |group|
         where(group_id: group.id).
         where.not(person_id: possible_approvers(group)).
         destroy_all

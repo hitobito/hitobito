@@ -16,7 +16,8 @@ class CrudController < ListController
 
   class_attribute :permitted_attrs
 
-  prepend_before_action :entry, only: [:show, :new, :create, :edit, :update, :destroy]
+  ACTIONS = [:show, :new, :create, :edit, :update, :destroy]
+  prepend_before_action :entry, only: ACTIONS
 
   delegate :model_identifier, to: 'self.class'
 
@@ -31,8 +32,6 @@ class CrudController < ListController
   after_destroy :set_success_notice
 
   helper_method :entry, :full_entry_label
-
-  hide_action :model_identifier, :run_callbacks
 
   # Simple helper object to give access to required view helper methods.
   @@helper = Object.new

@@ -9,8 +9,12 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    break redirect_to(new_user_session_url) unless current_person
-    current_person.tap { authorize!(:show, current_person) }
+    if current_person
+      current_person.tap { authorize!(:show, current_person) }
+    else
+      store_location_for :person, request.url
+      redirect_to(new_person_session_url)
+    end
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
@@ -89,7 +93,7 @@ Doorkeeper.configure do
   # (disabled by default)
   #
   default_scopes :email
-  optional_scopes :name, :with_roles
+  optional_scopes :name, :with_roles, :openid
 
   enforce_configured_scopes
 
@@ -191,6 +195,7 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
   # grant_flows %w[authorization_code client_credentials]
+  grant_flows %w(authorization_code implicit_oidc)
 
   # Hook into the strategies' request & response life-cycle in case your
   # application needs advanced customization or logging:
@@ -233,3 +238,13 @@ end
 
 # Set layout
 Doorkeeper::AuthorizationsController.layout 'application'
+
+# https://github.com/rails/rails/commit/9def05385f1cfa41924bb93daa187615e88c95b9
+[[Doorkeeper::Application, :uid],
+ [Doorkeeper::AccessToken, :token],
+ [Doorkeeper::AccessGrant, :token]].each do |clazz, attribute|
+   clazz._validators[attribute].each do |v|
+     next unless v.is_a?(ActiveRecord::Validations::UniquenessValidator)
+     v.instance_variable_set('@options', v.options.merge(case_sensitive: false).freeze)
+   end
+ end

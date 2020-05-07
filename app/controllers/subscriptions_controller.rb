@@ -7,8 +7,8 @@
 
 class SubscriptionsController < CrudController
 
-  include Concerns::RenderPeopleExports
-  include Concerns::AsyncDownload
+  include RenderPeopleExports
+  include AsyncDownload
 
   self.nesting = Group, MailingList
 
@@ -48,7 +48,7 @@ class SubscriptionsController < CrudController
   # Override so we can pass preferred_labels from mailing_list
   def render_emails(people)
     emails = Person.mailing_emails_for(people, parent.labels)
-    render text: emails.join(',')
+    render plain: emails.join(',')
   end
 
   def render_tabular_in_background(format)
@@ -58,10 +58,6 @@ class SubscriptionsController < CrudController
                                    mailing_list.id,
                                    params.slice(:household).merge(filename: filename)).enqueue!
     end
-  end
-
-  def prepare_tabular_entries(people)
-    people.preload_public_accounts.includes(roles: :group)
   end
 
   def group_subscriptions

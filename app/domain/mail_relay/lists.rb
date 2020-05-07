@@ -158,7 +158,7 @@ module MailRelay
       Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
                    " AND additional_emails.contactable_type = '#{Person.sti_name}'").
              where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email).
-             uniq
+             distinct
     end
 
     def send_reject_message?

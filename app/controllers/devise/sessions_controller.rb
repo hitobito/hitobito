@@ -12,20 +12,23 @@ require_dependency Devise::Engine.root.
 class Devise::SessionsController < DeviseController
 
   # required to allow api calls
-  protect_from_forgery with: :null_session, only: [:new, :create]
+  protect_from_forgery with: :null_session, only: [:new, :create], prepend: true
 
   respond_to :html
   respond_to :json, only: [:new, :create]
 
-  def create_with_json
-    create_without_json do |resource|
-      if request.format == :json
-        resource.generate_authentication_token! unless resource.authentication_token?
-        render json: UserSerializer.new(resource, controller: self)
-        return
+  module Json
+    def create
+      super do |resource|
+        if request.format == :json
+          resource.generate_authentication_token! unless resource.authentication_token?
+          render json: UserSerializer.new(resource, controller: self)
+          return
+        end
       end
     end
   end
-  alias_method_chain :create, :json
+
+  prepend Json
 
 end

@@ -20,7 +20,7 @@ describe Person::ColleaguesController do
       c3 = create_person(Group::BottomGroup::Leader, :bottom_group_one_one)
       c4 = create_person(Group::BottomGroup::Member, :bottom_group_one_one)
 
-      get :index, group_id: groups(:top_group).id, id: c1.id, sort: :roles
+      get :index, params: { group_id: groups(:top_group).id, id: c1.id, sort: :roles }
 
       expect(assigns(:colleagues)).to eq([c1, c2, c3, c4])
     end
@@ -28,7 +28,7 @@ describe Person::ColleaguesController do
     it 'contains nobody if persons company_name is blank' do
       p = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)).person
 
-      get :index, group_id: groups(:top_group).id, id: p.id
+      get :index, params: { group_id: groups(:top_group).id, id: p.id }
 
       expect(assigns(:colleagues)).to eq([])
     end

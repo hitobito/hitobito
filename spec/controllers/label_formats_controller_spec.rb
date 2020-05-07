@@ -20,16 +20,18 @@ describe LabelFormatsController do
 
     it 'create global label' do
       expect do
-        post :create, global: 'true',
-                      label_format: { name: 'foo layer',
-                                      page_size: 'A4',
-                                      landscape: false,
-                                      font_size: 12,
-                                      width: 60, height: 30,
-                                      count_horizontal: 3,
-                                      count_vertical: 8,
-                                      padding_top: 5,
-                                      padding_left: 5 }
+        post :create, params: {
+                        global: 'true',
+                        label_format: { name: 'foo layer',
+                                        page_size: 'A4',
+                                        landscape: false,
+                                        font_size: 12,
+                                        width: 60, height: 30,
+                                        count_horizontal: 3,
+                                        count_vertical: 8,
+                                        padding_top: 5,
+                                        padding_left: 5 }
+                      }
       end.to change { LabelFormat.count }.by(1)
 
       expect(LabelFormat.last.person_id).to eq(nil)
@@ -37,16 +39,18 @@ describe LabelFormatsController do
 
     it 'create personal label' do
       expect do
-        post :create, global: 'false',
-                      label_format: { name: 'foo layer',
-                                      page_size: 'A4',
-                                      landscape: false,
-                                      font_size: 12,
-                                      width: 60, height: 30,
-                                      count_horizontal: 3,
-                                      count_vertical: 8,
-                                      padding_top: 5,
-                                      padding_left: 5 }
+        post :create, params: {
+                        global: 'false',
+                        label_format: { name: 'foo layer',
+                                        page_size: 'A4',
+                                        landscape: false,
+                                        font_size: 12,
+                                        width: 60, height: 30,
+                                        count_horizontal: 3,
+                                        count_vertical: 8,
+                                        padding_top: 5,
+                                        padding_left: 5 }
+                      }
       end.to change { LabelFormat.count }.by(1)
 
       expect(LabelFormat.last.person_id).to eq(person.id)
@@ -63,16 +67,18 @@ describe LabelFormatsController do
 
     it 'create personal label' do
       expect do
-        post :create, global: 'false',
-                      label_format: { name: 'foo layer',
-                                      page_size: 'A4',
-                                      landscape: false,
-                                      font_size: 12,
-                                      width: 60, height: 30,
-                                      count_horizontal: 3,
-                                      count_vertical: 8,
-                                      padding_top: 5,
-                                      padding_left: 5 }
+        post :create, params: {
+                        global: 'false',
+                        label_format: { name: 'foo layer',
+                                        page_size: 'A4',
+                                        landscape: false,
+                                        font_size: 12,
+                                        width: 60, height: 30,
+                                        count_horizontal: 3,
+                                        count_vertical: 8,
+                                        padding_top: 5,
+                                        padding_left: 5 }
+                      }
       end.to change { LabelFormat.count }.by(1)
 
       expect(LabelFormat.last.person_id).to eq(person.id)
@@ -80,23 +86,25 @@ describe LabelFormatsController do
 
     it 'can not create global label' do
       expect do
-        post :create, global: 'true',
-                      label_format: { name: 'foo layer',
-                                      page_size: 'A4',
-                                      landscape: false,
-                                      font_size: 12,
-                                      width: 60, height: 30,
-                                      count_horizontal: 3,
-                                      count_vertical: 8,
-                                      padding_top: 5,
-                                      padding_left: 5 }
+        post :create, params: {
+                        global: 'true',
+                        label_format: { name: 'foo layer',
+                                        page_size: 'A4',
+                                        landscape: false,
+                                        font_size: 12,
+                                        width: 60, height: 30,
+                                        count_horizontal: 3,
+                                        count_vertical: 8,
+                                        padding_top: 5,
+                                        padding_left: 5 }
+                      }
       end.to change { LabelFormat.count }.by(1)
 
       expect(LabelFormat.last.person_id).to eq(person.id)
     end
 
     it 'sorts global formats' do
-      get :index, sort: 'dimensions', sort_dir: 'desc'
+      get :index, params: { sort: 'dimensions', sort_dir: 'desc' }
 
       expect(assigns(:global_entries)).to eq(label_formats(:standard, :large, :envelope))
     end

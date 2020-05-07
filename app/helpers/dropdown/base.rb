@@ -98,9 +98,18 @@ module Dropdown
 
     def render(template)
       template.content_tag(:li, class: css_class) do
-        template.safe_join([template.link_to(label, url, options),
+        template.safe_join([link(template, label, url, options),
                             render_sub_items(template)].compact)
       end
+    end
+
+    def link(template, label, url, options)
+      new_url = case url
+      when ActionController::Parameters then url.to_unsafe_h.merge(only_path: true)
+      when Hash then url.merge(only_path: true)
+      else url
+      end
+      template.link_to(label, new_url, options)
     end
 
     def css_class

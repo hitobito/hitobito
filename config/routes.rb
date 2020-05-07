@@ -12,6 +12,7 @@ Hitobito::Application.routes.draw do
   get '/healthz', to: 'healthz#show'
   get '/healthz/mail', to: 'healthz/mail#show'
 
+  use_doorkeeper_openid_connect
   use_doorkeeper do # we only use tokens and authorizations
     skip_controllers :applications, :token_info, :authorized_applications
   end

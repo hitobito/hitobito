@@ -11,8 +11,6 @@ class PeopleFiltersController < CrudController
 
   decorates :group
 
-  hide_action :index, :show
-
   skip_authorize_resource only: [:create]
 
   # load group before authorization
@@ -76,7 +74,7 @@ class PeopleFiltersController < CrudController
   def assign_attributes
     entry.name = params[:name] || (params[:people_filter] && params[:people_filter][:name])
     entry.range = params[:range]
-    entry.filter_chain = params[:filters]
+    entry.filter_chain = params[:filters].except(:host).to_unsafe_hash if params[:filters]
   end
 
   def people_list_path(options = {})

@@ -14,7 +14,7 @@ require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 
 # Needed for feature specs
-WebMock.disable_net_connect!(allow_localhost: true)
+WebMock.disable_net_connect!(allow_localhost: true, allow: %w(chromedriver.storage.googleapis.com))
 
 
 ActiveRecord::Migration.maintain_test_schema!
@@ -23,10 +23,7 @@ ActiveRecord::Migration.maintain_test_schema!
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
-
 # Add test locales
-locales_path = Dir[Rails.root.join('spec', 'support', 'locales', '**', '*.{rb,yml}')]
-Rails.application.config.i18n.load_path += locales_path
 Faker::Config.locale = I18n.locale
 
 RSpec.configure do |config|
@@ -78,9 +75,26 @@ RSpec.configure do |config|
 
   config.before(:each, :draper_with_helpers) do
     c = ApplicationController.new
-    c.request = ActionDispatch::TestRequest.new
+    c.request = ActionDispatch::TestRequest.new({})
     allow(c).to receive(:current_person) { people(:top_leader) }
     Draper::ViewContext.current = c.view_context
+  end
+
+  config.before(:each,  file_path: %r{\bspec/views/}) do
+    view.extend(FormHelper,
+                TableHelper,
+                UtilityHelper,
+                I18nHelper,
+                FormatHelper,
+                LayoutHelper,
+                SheetHelper,
+                PeopleHelper,
+                EventParticipationsHelper,
+                TableDisplaysHelper,
+                EventKindsHelper,
+                ActionHelper,
+                InvoicesHelper,
+                ContactableHelper)
   end
 
   config.around(:each, js: true) do |example|
@@ -107,12 +121,7 @@ RSpec.configure do |config|
     config.include Warden::Test::Helpers
     Warden.test_mode!
 
-    config.use_transactional_fixtures = false
-
-    config.before(:suite) { DatabaseCleaner.strategy = DB_CLEANER_STRATEGY }
-    config.before(:each) { DatabaseCleaner.start }
-    config.after(:each) { DatabaseCleaner.clean }
-    config.after(:each) { Warden.test_reset! }
+    config.use_transactional_fixtures = true
   end
 end
 
@@ -120,19 +129,18 @@ end
 unless RSpec.configuration.exclusion_filter[:type] == 'feature'
   require 'capybara'
   require 'webdrivers/chromedriver'
-  require 'selenium/webdriver'
 
   Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
-  Capybara.default_max_wait_time = 10
+  Capybara.default_max_wait_time = 6
   Capybara.automatic_label_click = true
-  Selenium::WebDriver::Chrome.path = `which chromium-browser`.strip
 
   require 'capybara-screenshot/rspec'
   Capybara::Screenshot.prune_strategy = :keep_last_run
   Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::ProgressFormatter'] =
     CapybaraScreenshotPlainTextReporter
 
-  Capybara.register_driver :chrome_no_sandbox do |app|
+
+  Capybara.register_driver :chrome do |app|
     options = Selenium::WebDriver::Chrome::Options.new
     options.args << '--headless' if ENV['HEADLESS'] != 'false'
     options.args << '--disable-gpu' # required for windows
@@ -142,10 +150,9 @@ unless RSpec.configuration.exclusion_filter[:type] == 'feature'
     options.args << '--crash-dumps-dir=/tmp'
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
   end
-  Capybara.current_driver = :chrome_no_sandbox
 
-  # The update would be done automatically, but later. Do it here to output
-  # the current version for debugging.
-  Webdrivers::Chromedriver.update
+  Capybara.current_driver = :chrome
+  Capybara.javascript_driver = :chrome
+
   puts "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
 end

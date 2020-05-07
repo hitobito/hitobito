@@ -15,7 +15,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
   let(:version)   { PaperTrail::Version.where(main_id: person.id).order(:created_at, :id).last }
   let(:decorator) { PaperTrail::VersionDecorator.new(version) }
 
-  before { PaperTrail.whodunnit = nil }
+  before { PaperTrail.request.whodunnit = nil }
 
   context '#header' do
     subject { decorator.header }
@@ -27,7 +27,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     context 'with current user' do
       before do
-        PaperTrail.whodunnit = person.id.to_s
+        PaperTrail.request.whodunnit = person.id.to_s
         update_attributes
       end
 
@@ -45,7 +45,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     context 'with current user' do
       before do
-        PaperTrail.whodunnit = person.id.to_s
+        PaperTrail.request.whodunnit = person.id.to_s
         update_attributes
       end
 
@@ -156,7 +156,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     it 'builds update text' do
       account = Fabricate(:social_account, contactable: person, label: 'Foo', name: 'Bar')
-      account.update_attributes!(name: 'Boo')
+      account.update!(name: 'Boo')
 
       is_expected.to eq('Social Media Adresse <i>Bar (Foo)</i> wurde aktualisiert: Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.')
     end
@@ -177,7 +177,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
   end
 
   def update_attributes
-    person.update_attributes!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
+    person.update!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
   end
 
 end

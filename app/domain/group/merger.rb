@@ -66,7 +66,7 @@ class Group::Merger
     children = group1.children + group2.children
     children.each do |child|
       child.parent_id = new_group.id
-      child.parent(true)
+      child.parent.reload
       child.save!
     end
   end

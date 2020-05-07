@@ -19,19 +19,26 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   def perform
-    Synchronize::Mailchimp::Synchronizator.new(mailing_list).call
+    sync.perform
   end
 
   def success(_job)
-    mailing_list.update!(mailchimp_syncing: false, mailchimp_last_synced_at: Time.zone.now)
+    mailing_list.update(mailchimp_syncing: false,
+                        mailchimp_result: sync.result,
+                        mailchimp_last_synced_at: Time.zone.now)
   end
-
-  def error(*args)
-    mailing_list.update!(mailchimp_syncing: false)
+  def error(job, exception)
+    sync.result.exception = exception
+    mailing_list.update(mailchimp_syncing: false,
+                        mailchimp_result: sync.result)
     super
   end
 
   private
+
+  def sync
+    @sync ||= Synchronize::Mailchimp::Synchronizator.new(mailing_list)
+  end
 
   def mailing_list
     @mailing_list ||= MailingList.find(@mailing_list_id)

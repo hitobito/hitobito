@@ -7,8 +7,8 @@
 
 class Event::ParticipationsController < CrudController # rubocop:disable Metrics/ClassLength
 
-  include Concerns::RenderPeopleExports
-  include Concerns::AsyncDownload
+  include RenderPeopleExports
+  include AsyncDownload
   include Api::JsonPaging
 
   self.nesting = Group, Event
@@ -141,8 +141,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     filter = event_participation_filter
     records = filter.list_entries.page(params[:page])
     @counts = filter.counts
+    sort_param = params[:sort]
 
-    records = records.reorder(sort_expression) if params[:sort] && sortable?(params[:sort])
+    records = records.reorder(Arel.sql(sort_expression)) if sort_param && sortable?(sort_param)
     Person::PreloadPublicAccounts.for(records.collect(&:person))
     records
   end

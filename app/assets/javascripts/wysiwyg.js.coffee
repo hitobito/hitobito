@@ -42,5 +42,5 @@ app.Wysiwyg = {
 }
 
 # See https://sevos.io/2017/02/27/turbolinks-lifecycle-explained.html
-$(document).one('turbolinks:load', -> console.log('setup'); app.Wysiwyg.setup());
-$(document).on('turbolinks:render', -> console.log('render'); app.Wysiwyg.setup());
+$(document).one('turbolinks:load', -> app.Wysiwyg.setup());
+$(document).on('turbolinks:render', -> app.Wysiwyg.setup());

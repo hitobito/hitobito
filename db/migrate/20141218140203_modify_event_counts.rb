@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class ModifyEventCounts < ActiveRecord::Migration
+class ModifyEventCounts < ActiveRecord::Migration[4.2]
   def change
     rename_column :events, :representative_participant_count, :applicant_count
     add_column :events, :teamer_count, :integer, default: 0

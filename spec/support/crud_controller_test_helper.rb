@@ -14,15 +14,17 @@ module CrudControllerTestHelper
   def perform_request
     m = RSpec.current_example.metadata
     example_params = respond_to?(:params) ? send(:params) : {}
-    params = scope_params.merge(format: m[:format])
+    params = scope_params
+    params = params.merge(format: m[:format]) if m[:format].present?
     params.merge!(id: test_entry.id) if m[:id]
     params.merge!(example_params)
 
+
     sign_in(user)
     if m[:method] == :get && m[:format] == :js
-      xhr(:get, m[:action], params)
+      get m[:action], xhr: true, params: params
     else
-      send(m[:method], m[:action], params)
+      send(m[:method], m[:action], params: params)
     end
   end
 

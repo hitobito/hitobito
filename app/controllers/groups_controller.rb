@@ -7,7 +7,7 @@
 
 class GroupsController < CrudController
 
-  include Concerns::AsyncDownload
+  include AsyncDownload
 
   # Respective group attrs are added in corresponding instance method.
   self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup + [:logo, :remove_logo]

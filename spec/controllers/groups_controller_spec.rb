@@ -14,13 +14,13 @@ describe GroupsController do
 
   describe 'authentication' do
     it 'redirects to login' do
-      get :show, id: group.id
+      get :show, params: { id: group.id }
       is_expected.to redirect_to '/users/sign_in'
     end
 
     it 'renders template when signed in' do
       sign_in(person)
-      get :show, id: group.id
+      get :show, params: { id: group.id }
       is_expected.to render_template('crud/show')
     end
   end
@@ -49,7 +49,7 @@ describe GroupsController do
       subject { assigns(:sub_groups) }
 
       context 'sub_groups' do
-        before { get :show, id: group.id }
+        before { get :show, params: { id: group.id } }
 
         its(:keys) { should == ['Bottom Layer', 'Untergruppen'] }
         its(:values) do
@@ -61,7 +61,7 @@ describe GroupsController do
       context 'deleted sub groups are not shown' do
         before do
           groups(:bottom_group_one_two).destroy
-          get :show, id: groups(:bottom_layer_one).id
+          get :show, params: { id: groups(:bottom_layer_one).id }
         end
 
         its(:values) { should == [[groups(:bottom_group_one_one)]] }
@@ -71,7 +71,7 @@ describe GroupsController do
         render_views
 
         it 'is valid' do
-          get :show, id: group.id, format: :json
+          get :show, params: { id: group.id }, format: :json
           json = JSON.parse(response.body)
           group = json['groups'].first
           expect(group['links']['children'].size).to eq(4)
@@ -84,7 +84,7 @@ describe GroupsController do
       let(:attrs) {  { type: 'Group::TopGroup', parent_id: group.id } }
 
       it 'new' do
-        get :new, group: attrs
+        get :new, params: { group: attrs }
         expect(response.status).to eq(200)
         expect(assigns(:group).type).to eq 'Group::TopGroup'
         expect(assigns(:group).model.class).to eq Group::TopGroup
@@ -92,24 +92,24 @@ describe GroupsController do
       end
 
       it 'create' do
-        post :create, group: attrs.merge(name: 'foobar')
+        post :create, params: { group: attrs.merge(name: 'foobar') }
         group = assigns(:group)
         is_expected.to redirect_to group_path(group)
       end
 
       it 'edit form' do
-        get :edit, id: groups(:top_group)
+        get :edit, params: { id: groups(:top_group) }
         expect(assigns(:contacts)).to be_present
       end
     end
 
     describe '#destroy' do
       it 'leader cannot destroy his group' do
-        expect { post :destroy, id: group.id }.to raise_error(CanCan::AccessDenied)
+        expect { post :destroy, params: { id: group.id } }.to raise_error(CanCan::AccessDenied)
       end
 
       it 'leader can destroy group' do
-        expect { post :destroy, id: groups(:bottom_group_one_two).id }.to change { Group.without_deleted.count }.by(-1)
+        expect { post :destroy, params: { id: groups(:bottom_group_one_two).id } }.to change { Group.without_deleted.count }.by(-1)
         is_expected.to redirect_to groups(:bottom_layer_one)
       end
     end
@@ -119,7 +119,7 @@ describe GroupsController do
       before { groups(:bottom_group_one_one_one).destroy }
 
       it 'assigns deleted_subgroups' do
-        get :deleted_subgroups, id: group.id
+        get :deleted_subgroups, params: { id: group.id }
         expect(assigns(:sub_groups).size).to eq(1)
       end
     end
@@ -131,7 +131,7 @@ describe GroupsController do
 
       it 'reactivates group and redirects' do
         expect(group).to be_deleted
-        post :reactivate, id: group.id
+        post :reactivate, params: { id: group.id }
 
         expect(Group.find(group.id)).to be_present
         expect(flash[:notice]).to eq 'Gruppe <i>Group 111</i> wurde erfolgreich reaktiviert.'
@@ -144,7 +144,7 @@ describe GroupsController do
 
       it 'creates csv' do
         expect do
-          get :export_subgroups, id: group.id
+          get :export_subgroups, params: { id: group.id }
           expect(flash[:notice])
             .to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
         end.to change(Delayed::Job, :count).by(1)
@@ -158,13 +158,13 @@ describe GroupsController do
 
     describe 'GET index' do
       it 'shows page when token is valid' do
-        get :show, id: group.id, token: 'PermittedToken'
+        get :show, params: { id: group.id, token: 'PermittedToken' }
         is_expected.to render_template('show')
       end
 
       it 'does not show page for unpermitted token' do
         expect do
-          get :show, id: group.id, token: 'RejectedToken'
+          get :show, params: { id: group.id, token: 'RejectedToken' }
         end.to raise_error(CanCan::AccessDenied)
       end
     end

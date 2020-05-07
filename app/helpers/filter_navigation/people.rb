@@ -56,8 +56,8 @@ module FilterNavigation
         types = group.role_types.select { |t| t.kind == kind }
         next unless visible_role_types?(types)
 
-        count = group.people.where(roles: { type: types.collect(&:sti_name) }).uniq.count
-        path = kind == :member ? path : fixed_types_path(name, types)
+        count = group.people.where(roles: { type: types.collect(&:sti_name) }).distinct.count
+        path = kind == :member ? path() : fixed_types_path(name, types)
         item(name, path, count)
       end
     end

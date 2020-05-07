@@ -118,7 +118,7 @@ describe Event::ListsController, type: :controller do
       end
 
       it 'renders course info within table' do
-        get :courses, year: 2010
+        get :courses, params: { year: 2010 }
         expect(main.find('h2').text.strip).to eq 'Scharleiterkurs'
         expect(main.find('table tr:eq(1) td:eq(1) a').text).to eq 'Eventus'
         expect(main.find('table tr:eq(1) td:eq(1)').text.strip).to eq 'EventusSLK 123 Top'
@@ -131,7 +131,7 @@ describe Event::ListsController, type: :controller do
       it 'does not show details for users who cannot manage course' do
         person = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
         sign_in(person)
-        get :courses, year: 2010
+        get :courses, params: { year: 2010 }
         expect(main.find('table tr:eq(1) td:eq(1) a').text).to eq 'Eventus'
         expect(main.find('table tr:eq(1) td:eq(1)').text.strip).to eq 'EventusSLK 123 Top'
         expect(main.find('table tr:eq(1) td:eq(1) a')[:href]).to eq group_event_path(slk_ev.groups.first, slk_ev)
@@ -140,18 +140,18 @@ describe Event::ListsController, type: :controller do
       end
 
       it 'groups courses by course type' do
-        get :courses, year: 2011
+        get :courses, params: { year: 2011 }
         expect(main.all('h2')[0].text.strip).to eq 'Gruppenleiterkurs'
         expect(main.all('h2')[1].text.strip).to eq 'Scharleiterkurs'
       end
 
       it 'filters with group param' do
-        get :courses, year: 2011, group_id: glk_ev.group_ids.first
+        get :courses, params: { year: 2011, group_id: glk_ev.group_ids.first }
         expect(main.all('h2').size).to eq 1
       end
 
       it 'filters by year, keeps year in dropdown' do
-        get :courses, year: 2010
+        get :courses, params: { year: 2010 }
         expect(main.all('h2').size).to eq 1
         expect(dropdown.find('li:eq(5) a')[:href]).to eq list_courses_path(year: 2010, group_id: top_group.id)
       end

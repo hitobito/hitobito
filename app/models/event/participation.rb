@@ -64,11 +64,11 @@ class Event::Participation < ActiveRecord::Base
   class << self
     # Order people by the order participation types are listed in their event types.
     def order_by_role(event_type)
-      joins(:roles).order(order_by_role_statement(event_type))
+      joins(:roles).order(Arel.sql(order_by_role_statement(event_type)))
     end
 
     def order_by_role_statement(event_type)
-      return if event_type.role_types.blank?
+      return '' if event_type.role_types.blank?
       statement = 'CASE event_roles.type '
       event_type.role_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i} "
@@ -85,7 +85,7 @@ class Event::Participation < ActiveRecord::Base
     end
 
     def upcoming
-      joins(event: :dates).where('event_dates.start_at >= ?', ::Time.zone.today).uniq
+      joins(event: :dates).where('event_dates.start_at >= ?', ::Time.zone.today).distinct
     end
 
   end
@@ -121,7 +121,7 @@ class Event::Participation < ActiveRecord::Base
   def save(*args)
     super
   rescue ActiveRecord::StatementInvalid => e
-    raise e unless e.original_exception.message =~ /Incorrect string value/
+    raise e unless e.cause.message =~ /Incorrect string value/
     errors.add(:base, :emoji_suspected)
     false
   end

@@ -24,7 +24,7 @@ describe Person::HistoryController, type: :controller do
     let(:params) { { group_id: top_group.id, id: other.id } }
 
     it 'list current role and group' do
-      get :index, params
+      get :index, params: params
       expect(dom.all('table tbody tr').size).to eq 1
       role_row = dom.find('table tbody tr:eq(1)')
       expect(role_row.find('td:eq(1) a:eq(2)').text).to eq 'TopGroup'
@@ -37,7 +37,7 @@ describe Person::HistoryController, type: :controller do
       role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: bottom_group, person: other)
       role.created_at = Time.zone.now - 2.years
       role.destroy
-      get :index, params
+      get :index, params: params
       expect(dom.all('table tbody tr').size).to eq 2
       role_row = dom.find('table tbody tr:eq(1)')
       expect(role_row.find('td:eq(1) a:eq(2)').text).to eq 'Group 11'
@@ -48,7 +48,7 @@ describe Person::HistoryController, type: :controller do
 
     it 'lists roles in other groups' do
       Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)
-      get :index, params
+      get :index, params: params
       expect(dom.all('table tbody tr').size).to eq 2
       role_row = dom.find('table tbody tr:eq(2)')
       expect(role_row.find('td:eq(1) a:eq(2)').text).to eq 'TopGroup'
@@ -59,7 +59,7 @@ describe Person::HistoryController, type: :controller do
       role = Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group, person: other)
       role.created_at = Time.zone.now - 2.years
       role.destroy
-      get :index, params
+      get :index, params: params
       expect(dom.all('table tbody tr').size).to eq 2
       role_row = dom.find('table tbody tr:eq(2)')
       expect(role_row.find('td:eq(1) a:eq(2)').text).to eq 'TopGroup'
@@ -74,7 +74,7 @@ describe Person::HistoryController, type: :controller do
         Fabricate(:event_role, participation: Fabricate(:event_participation, person: people(:top_leader), event: event), type: 'Event::Role::Leader')
       end
 
-      get :index, group_id: top_group.id, id: top_leader.id
+      get :index, params: { group_id: top_group.id, id: top_leader.id }
 
       events = dom.find('events')
 

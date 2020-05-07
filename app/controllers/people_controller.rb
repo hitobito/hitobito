@@ -7,8 +7,8 @@
 
 class PeopleController < CrudController
 
-  include Concerns::RenderPeopleExports
-  include Concerns::AsyncDownload
+  include RenderPeopleExports
+  include AsyncDownload
 
   self.nesting = Group
 
@@ -159,7 +159,7 @@ class PeopleController < CrudController
 
   def filter_entries
     entries = person_filter.entries
-    entries = entries.reorder(sort_expression) if sorting?
+    entries = entries.reorder(Arel.sql(sort_expression)) if sorting?
     entries
   end
 
@@ -183,18 +183,6 @@ class PeopleController < CrudController
     full = params[:details].present? && index_full_ability?
     with_async_download_cookie(format, :people_export) do |filename|
       render_tabular_in_background(format, full, filename)
-    end
-  end
-
-  def prepare_tabular_entries(entries, full)
-    if full
-      entries
-        .select('people.*')
-        .preload_accounts
-        .includes(relations_to_tails: :tail, qualifications: { qualification_kind: :translations })
-        .includes(:primary_group)
-    else
-      entries.preload_public_accounts.includes(:primary_group)
     end
   end
 
@@ -237,14 +225,13 @@ class PeopleController < CrudController
     end
   end
   public :index_full_ability? # for serializer
-  hide_action :index_full_ability?
 
   def authorize_class
     authorize!(:index_people, group)
   end
 
   def validate_household
-    household.valid?
+    household.valid? || throw(:abort)
   end
 
   def persist_household

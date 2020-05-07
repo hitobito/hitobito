@@ -44,7 +44,7 @@ class TagListsController < ListController
   end
 
   def people
-    @people ||= Person.includes(:tags).where(id: people_ids).uniq
+    @people ||= Person.includes(:tags).where(id: people_ids).distinct
   end
 
   def people_ids

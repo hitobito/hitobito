@@ -8,79 +8,139 @@ require 'digest/md5'
 module Synchronize
   module Mailchimp
     class Synchronizator
+      attr_reader :list, :result
 
-      attr_reader :mailing_list, :gibbon, :people_on_the_list, :people_on_the_mailchimp_list
+      class_attribute :merge_fields, :member_fields
+      self.member_fields = []
+
+      self.merge_fields = [
+        [ 'Gender', 'dropdown', { choices: %w(m w) },  ->(p) { p.gender } ]
+      ]
 
       def initialize(mailing_list)
-        @mailing_list = mailing_list
-        @gibbon = Gibbon::Request.new(api_key: mailing_list.mailchimp_api_key)
-        @people_on_the_list = mailing_list.people
-        @people_on_the_mailchimp_list = gibbon.lists(mailing_list.mailchimp_list_id)
-                                              .members
-                                              .retrieve(params: { 'count' => '1000000' })
-                                              .body['members']
+        @list = mailing_list
+        @result = Result.new
       end
 
-      def call
-        subscribe_people_on_the_list
-        delete_people_not_on_the_list
+      def perform
+        create_segments
+        create_merge_fields
+
+        subscribe_members
+        unsubscribe_members
+
+        update_segments
+        update_members
+
+        destroy_segments
+      end
+
+      def missing_people
+        people.reject do |person|
+          members_by_email.keys.include?(person.email) || person.email.blank?
+        end
+      end
+
+      def obsolete_emails
+        members_by_email.keys - people.collect(&:email)
+      end
+
+      def missing_segments
+        tags.keys - client.fetch_segments.collect { |s| s[:name] }
+      end
+
+      def obsolete_segment_ids
+        client.fetch_segments.reject { |s| tags.key?(s[:name]) }.collect { |s| s[:id] }
+      end
+
+      def missing_merge_fields
+        labels = client.fetch_merge_fields.collect { |field| field[:tag] }
+         merge_fields.reject { |name, _, _| labels.include?(name.upcase) }
+      end
+
+      def stale_segments
+        segments = client.fetch_segments.index_by { |t| t[:name] }
+
+        tags.collect do |tag, emails|
+          next if emails.sort == remote_tags.fetch(tag, []).sort
+          next unless segments.key?(tag)
+
+          [segments.dig(tag, :id), emails]
+        end.compact
+      end
+
+      def changed_people
+        @changed_people ||= people.select do |person|
+          member = members_by_email[person.email]
+          member.deep_merge(client.subscriber_body(person)) != member if member
+        end
+      end
+
+      def client
+        @client ||= Client.new(list, member_fields: member_fields, merge_fields: merge_fields)
       end
 
       private
 
-      def subscribe_people_on_the_list
-        gibbon.batches.create(body: { operations: subscribing_operations })
+      def subscribe_members
+        result.track(:subscribe_members, client.subscribe_members(missing_people))
       end
 
-      def delete_people_not_on_the_list
-        gibbon.batches.create(body: { operations: deleting_operations })
+      def unsubscribe_members
+        result.track(:unsubscribe_obsolete_members, client.unsubscribe_members(obsolete_emails))
       end
 
-      def subscribing_operations
-        people_to_be_subscribed.map do |person|
-          {
-            method: 'POST',
-            path: "lists/#{mailing_list.mailchimp_list_id}/members",
-            body: subscriber_body(person)
-          }
+      def update_segments
+        result.track(:update_segments, client.update_segments(stale_segments))
+      end
+
+      def update_members
+        result.track(:update_members, client.update_members(changed_people))
+      end
+
+      def create_merge_fields
+        result.track(:create_merge_fields, client.create_merge_fields(missing_merge_fields))
+      end
+
+      def create_segments
+        result.track(:create_segments, client.create_segments(missing_segments))
+      end
+
+      def destroy_segments
+        result.track(:delete_segments, client.delete_segments(obsolete_segment_ids))
+      end
+
+      def tags
+        @tags ||= people.each_with_object({}) do |person, hash|
+          next unless person.email
+
+          person.tags.each do |tag|
+            value = tag.name
+            hash[value] ||= []
+            hash[value] << person.email
+          end
         end
       end
 
-      def subscriber_body(person)
-        {
-          email_address: person.email,
-          status: 'subscribed',
-          merge_fields: {
-            FNAME: person.first_name,
-            LNAME: person.last_name
-          }
-        }.to_json
-      end
-
-      def deleting_operations
-        people_to_be_deleted.map do |person|
-          {
-            method: 'DELETE',
-            path: "lists/#{mailing_list.mailchimp_list_id}/members/"\
-              "#{subscriber_hash person['email_address']}"
-          }
+      def remote_tags
+        @remote_tags ||= members.each_with_object({}) do |member, hash|
+          member[:tags].each do |tag|
+            hash[tag[:name]] ||= []
+            hash[tag[:name]] << member[:email_address]
+          end
         end
       end
 
-      def people_to_be_subscribed
-        people_on_the_list.reject do |person|
-          people_on_the_mailchimp_list.map { |p| p['email_address'] }.include? person.email
-        end
+      def members
+        @members ||= client.fetch_members
       end
 
-      def people_to_be_deleted
-        people_on_the_mailchimp_list.reject do |subscriber|
-          people_on_the_list.map(&:email).include? subscriber['email_address']
-        end
+      def members_by_email
+        @members_by_email ||= members.index_by { |m| m[:email_address] }
       end
 
-      def subscriber_hash(email)
-        Digest::MD5.hexdigest email.downcase
+      def people
+        @people ||= list.people.includes(:tags).unscope(:select)
       end
 
     end

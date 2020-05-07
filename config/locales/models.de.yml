@@ -609,6 +609,13 @@ de:
         main_email: Versand an Haupt E-Mail
         mailchimp_api_key: 'MailChimp API-Schlüssel'
         mailchimp_list_id: 'MailChimp Listen-ID'
+        mailchimp_sync: 'MailChimp Sync'
+        mailchimp_state: 'Mailchimp Status'
+        mailchimp_states:
+          unchanged: Unverändert
+          success: Aktualisiert
+          partial: Teilweise
+          failed: Fehlgeschlagen
 
       subscription:
         related_role_types: Rollen
@@ -789,7 +796,7 @@ de:
       email: Lesen deiner E-Mail Adresse
       name: Lesen deiner E-Mail Adresse und Name
       with_roles: Lesen deiner Stammdaten und Rollen
-
+      openid: Lesen deines OIDC Identity Tokens
   errors:
     messages:
       invalid_money: "muss auf 5 Rappen gerundet werden"

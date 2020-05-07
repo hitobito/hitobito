@@ -33,10 +33,6 @@
 #
 
 class Group < ActiveRecord::Base
-
-  MINIMAL_SELECT = %w(id name type parent_id lft rgt layer_group_id deleted_at).
-                   collect { |a| "groups.#{a}" }
-
   include Group::NestedSet
   include Group::Types
   include Contactable
@@ -121,7 +117,7 @@ class Group < ActiveRecord::Base
     # as they appear in possible_children, otherwise order them
     # hierarchically over all group types.
     def order_by_type(parent_group = nil)
-      reorder(order_by_type_stmt(parent_group)) # acts_as_nested_set default to new order
+      reorder(Arel.sql(order_by_type_stmt(parent_group))) # acts_as_nested_set default to new order
     end
 
     def order_by_type_stmt(parent_group = nil)
@@ -182,7 +178,7 @@ class Group < ActiveRecord::Base
   alias hard_destroy really_destroy!
   def really_destroy!
     # run nested_set callback on hard destroy
-    destroy_descendants_without_paranoia
+    # destroy_descendants_without_paranoia
 
     # load events to destroy orphaned later
     event_list = events.to_a
@@ -217,10 +213,13 @@ class Group < ActiveRecord::Base
     children.without_deleted
   end
 
-  def destroy_descendants_with_paranoia
-    # do not destroy descendants on soft delete
+  module Paranoia
+    def destroy_descendants
+      # do not destroy descendants on soft delete
+    end
   end
-  alias_method_chain :destroy_descendants, :paranoia
+
+  prepend Group::Paranoia
 
   def create_invoice_config
     create_invoice_config!

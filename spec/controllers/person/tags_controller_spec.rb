@@ -27,31 +27,33 @@ describe Person::TagsController do
     end
 
     it 'returns empty array if no :q param is given' do
-      get :query, group_id: group.id, person_id: bottom_member.id
+      get :query, params: { group_id: group.id, person_id: bottom_member.id }
       expect(JSON.parse(response.body)).to eq([])
     end
 
     it 'returns empty array if no tag matches' do
-      get :query, group_id: group.id, person_id: bottom_member.id, q: 'lipsum'
+      get :query, params: { group_id: group.id, person_id: bottom_member.id, q: 'lipsum' }
       expect(JSON.parse(response.body)).to eq([])
     end
 
     it 'returns empty array if :q param is not at least 3 chars long' do
-      get :query, group_id: group.id, person_id: bottom_member.id, q: 'or'
+      get :query, params: { group_id: group.id, person_id: bottom_member.id, q: 'or' }
       expect(JSON.parse(response.body)).to eq([])
     end
 
     it 'returns matching and unassigned tags if :q param at least 3 chars long' do
-      get :query, group_id: group.id, person_id: bottom_member.id, q: 'ore'
+      get :query, params: { group_id: group.id, person_id: bottom_member.id, q: 'ore' }
       expect(JSON.parse(response.body)).to eq([{'label' => 'lorem'}, {'label' => 'loremipsum'}])
     end
   end
 
   describe 'POST #create' do
     it 'creates person tag' do
-      post :create, group_id: bottom_member.groups.first.id,
-                    person_id: bottom_member.id,
-                    acts_as_taggable_on_tag: { name: 'lorem' }
+      post :create, params: {
+                      group_id: bottom_member.groups.first.id,
+                      person_id: bottom_member.id,
+                      acts_as_taggable_on_tag: { name: 'lorem' }
+                    }
 
       expect(bottom_member.tags.count).to eq(1)
       expect(assigns(:tags).first.first).to eq(:other)
@@ -65,9 +67,11 @@ describe Person::TagsController do
       bottom_member.tag_list.add('lorem')
       bottom_member.save!
 
-      delete :destroy, group_id: bottom_member.groups.first.id,
-                       person_id: bottom_member.id,
-                       name: 'lorem'
+      delete :destroy, params: {
+                         group_id: bottom_member.groups.first.id,
+                         person_id: bottom_member.id,
+                         name: 'lorem'
+                       }
 
       expect(bottom_member.tags.count).to eq(0)
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)

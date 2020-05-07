@@ -36,7 +36,8 @@ describe HelpTexts::Entry do
 
     it '#action_names are added from outside' do
       expect(subject.action_names).to be_empty
-      expect { subject.action_names << :foo }.to change { subject.action_names }.by([:foo])
+      subject.action_names << :foo
+      expect(subject.action_names).to eq [:foo]
     end
 
     it '#fields with label holds namespaced field name and translation' do

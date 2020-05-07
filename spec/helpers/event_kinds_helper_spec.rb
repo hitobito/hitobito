@@ -18,6 +18,20 @@ describe EventKindsHelper do
     before do
       allow(helper).to receive(:t).with(any_args()) { 'foo' }
       allow(helper).to receive(:entry) { entry }
+      view.extend(FormHelper,
+                  TableHelper,
+                  UtilityHelper,
+                  I18nHelper,
+                  FormatHelper,
+                  LayoutHelper,
+                  SheetHelper,
+                  PeopleHelper,
+                  EventParticipationsHelper,
+                  TableDisplaysHelper,
+                  EventKindsHelper,
+                  ActionHelper,
+                  InvoicesHelper,
+                  ContactableHelper)
     end
 
     it 'does not include deleted qualifications if not selected' do

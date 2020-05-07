@@ -17,29 +17,29 @@ describe InvoiceConfigsController  do
     before { sign_in(person) }
 
     it "may show when person has finance permission on layer group" do
-      get :show, group_id: group.id, id: entry.id
-      expect(response).to be_success
+      get :show, params: { group_id: group.id, id: entry.id }
+      expect(response).to be_successful
     end
 
     it "may edit when person has finance permission on layer group" do
-      get :edit, group_id: group.id, id: entry.id
-      expect(response).to be_success
+      get :edit, params: { group_id: group.id, id: entry.id }
+      expect(response).to be_successful
     end
 
     it "may not show when person has finance permission on layer group" do
       expect do
-        get :show, group_id: groups(:top_layer).id, id: invoice_configs(:top_layer).id
+        get :show, params: { group_id: groups(:top_layer).id, id: invoice_configs(:top_layer).id }
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it "may not edit when person has finance permission on layer group" do
       expect do
-        get :edit, group_id: groups(:top_layer).id, id: invoice_configs(:top_layer).id
+        get :edit, params: { group_id: groups(:top_layer).id, id: invoice_configs(:top_layer).id }
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it "initializes 3 payment reminder configs if non are set" do
-      get :edit, group_id: group.id, id: entry.id
+      get :edit, params: { group_id: group.id, id: entry.id }
       expect(assigns(:invoice_config).payment_reminder_configs).to have(3).items
     end
 
@@ -48,9 +48,9 @@ describe InvoiceConfigsController  do
         [level.to_s, { title: level, level: level, text: level, due_days: level }]
       end.to_h
       expect do
-        patch :update, group_id: group.id, id: entry.id, invoice_config: {
+        patch :update, params: { group_id: group.id, id: entry.id, invoice_config: {
           payment_reminder_configs_attributes: attrs
-        }
+        } }
       end.to change { entry.reload.payment_reminder_configs.size }.by(3)
     end
   end

@@ -1,4 +1,4 @@
-class PaymentReminderConfigs < ActiveRecord::Migration
+class PaymentReminderConfigs < ActiveRecord::Migration[4.2]
 
   def change
     create_table(:payment_reminder_configs) do |t|

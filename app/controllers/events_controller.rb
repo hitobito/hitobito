@@ -7,7 +7,7 @@
 
 class EventsController < CrudController
   include YearBasedPaging
-  include Concerns::AsyncDownload
+  include AsyncDownload
   include Api::JsonPaging
 
   self.nesting = Group
@@ -82,7 +82,7 @@ class EventsController < CrudController
   private
 
   # list scope preload :groups, :kinds which we dont need
-  def list_entries_without_sort
+  def list_entries
     event_filter.scope
   end
 
@@ -123,7 +123,7 @@ class EventsController < CrudController
   def load_kinds
     if entry.kind_class
       @kinds = entry.kind_class.list.without_deleted
-      @kinds << entry.kind if entry.kind && entry.kind.deleted?
+      @kinds += [entry.kind] if entry.kind && entry.kind.deleted?
     end
   end
 

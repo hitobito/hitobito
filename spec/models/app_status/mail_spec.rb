@@ -32,7 +32,7 @@ describe AppStatus::Mail do
 
       expect(app_status.code).to eq(:ok)
 
-      expect(cache.read(:app_status)[:seen_mails]).to eq(seen_mails) 
+      expect(cache.read(:app_status)[:seen_mails]).to eq(seen_mails)
     end
 
     it 'has no mails at all in inbox' do
@@ -57,7 +57,7 @@ describe AppStatus::Mail do
 
       expect(app_status.code).to eq(:service_unavailable)
 
-      expect(cache.read(:app_status)[:seen_mails]).to eq(seen_mails) 
+      expect(cache.read(:app_status)[:seen_mails]).to eq(seen_mails)
     end
 
   end

@@ -15,15 +15,15 @@ class app.AsyncSynchronizations
     setInterval(( -> checkSynchronization()), 3000)
 
   checkSynchronizationCookie = ->
-    if $.cookie('async_synchronizations') == null
+    if Cookies.get('async_synchronizations') == undefined
       $('#synchronization-spinner').addClass('hidden')
       return
 
   checkSynchronization = ->
-    return if $.cookie('async_synchronizations') == null
+    return if Cookies.get('async_synchronizations') == undefined
     $('#synchronization-spinner').removeClass('hidden')
 
-    $.each JSON.parse($.cookie('async_synchronizations')), (index, synchronization) ->
+    $.each JSON.parse(Cookies.get('async_synchronizations')), (index, synchronization) ->
       $.ajax(
         url: "/synchronizations/#{synchronization['mailing_list_id']}",
         success: (data) ->
@@ -36,6 +36,6 @@ class app.AsyncSynchronizations
       checkSynchronization()
 
     $(document).on 'click', '#cancel_async_synchronizations', (e) ->
-      $.removeCookie('async_synchronizations', { path: '/' })
+      Cookies.remove('async_synchronizations', { path: '/' })
 
   new AsyncSynchronizations

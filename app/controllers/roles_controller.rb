@@ -27,8 +27,6 @@ class RolesController < CrudController
   before_action :remember_primary_group, only: [:destroy]
   after_destroy :last_primary_group_role_deleted
 
-  hide_action :index, :show
-
   def create
     assign_attributes
     with_person_add_request do
@@ -163,14 +161,13 @@ class RolesController < CrudController
   end
 
   def build_person(role)
-    person_attrs = extract_model_attr(:new_person) || {}
+    person_attrs = extract_model_attr(:new_person) || ActionController::Parameters.new
     person_id = extract_model_attr(:person_id)
     if person_id.present?
       role.person_id = person_id
       role.person = Person.new unless role.person
     else
-      attrs = ActionController::Parameters.new(person_attrs)
-                                          .permit(*PeopleController.permitted_attrs)
+      attrs = person_attrs.permit(*PeopleController.permitted_attrs)
       role.person = Person.new(attrs)
     end
   end

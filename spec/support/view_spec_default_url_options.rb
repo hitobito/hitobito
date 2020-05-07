@@ -1,3 +1,3 @@
 class ActionView::TestCase::TestController
-  include Concerns::Localizable
+  include Localizable
 end

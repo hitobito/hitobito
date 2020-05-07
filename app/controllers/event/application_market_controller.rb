@@ -56,7 +56,7 @@ class Event::ApplicationMarketController < ApplicationController
       references(:application).
       where(filter_applications).
       merge(Event::Participation.pending).
-      uniq
+      distinct
   end
 
   def sort_and_decorate(applications)

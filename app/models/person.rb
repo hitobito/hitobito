@@ -182,7 +182,7 @@ class Person < ActiveRecord::Base
 
   class << self
     def order_by_name
-      order(order_by_name_statement)
+      order(Arel.sql(order_by_name_statement.join(', ')))
     end
 
     def order_by_name_statement
@@ -298,7 +298,7 @@ class Person < ActiveRecord::Base
     errors.add(:email, :taken)
     false
   rescue ActiveRecord::StatementInvalid => e
-    raise e unless e.original_exception.message =~ /Incorrect string value/
+    raise e unless e.cause.message =~ /Incorrect string value/
     errors.add(:base, :emoji_suspected)
     false
   end

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class ChangePaymentsReceivedAtToNotNull < ActiveRecord::Migration
+class ChangePaymentsReceivedAtToNotNull < ActiveRecord::Migration[4.2]
   def change
     Payment.delete_all
     change_column_null :payments, :received_at, false

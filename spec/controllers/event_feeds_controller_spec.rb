@@ -48,13 +48,13 @@ describe EventFeedsController do
       end
 
       it 'GET#show.ics returns feed' do
-        get :show, token: token, format: :ics
+        get :show, params: { token: token }, format: :ics
         expect(response).to have_http_status(:ok)
         expect(response.body.scan('BEGIN:VEVENT')).to have(1).item
       end
 
       it 'GET#show.ics returns 404 for bad token' do
-        get :show, token: 'wrong-token-IXSvkeJEHe', format: :ics
+        get :show, params: { token: 'wrong-token-IXSvkeJEHe' }, format: :ics
         expect(response.status).to eq 404
       end
 
@@ -74,12 +74,12 @@ describe EventFeedsController do
     end
 
     it 'can access token using url' do
-      get :show, token: person.event_feed_token, format: :ics
+      get :show, params: { token: person.event_feed_token }, format: :ics
       expect(response).to have_http_status(:ok)
     end
 
     it 'access denied when using wrong token' do
-      get :show, token: 'wrong-token-IXSvkeJEHe', format: :ics
+      get :show, params: { token: 'wrong-token-IXSvkeJEHe' }, format: :ics
       expect(response).to have_http_status(404)
     end
 
@@ -93,12 +93,12 @@ describe EventFeedsController do
       let!(:future_event_participation) { Fabricate(:event_participation, event: future_event, person: person) }
 
       it 'includes past event' do
-        get :show, token: person.event_feed_token, format: :ics
+        get :show, params: { token: person.event_feed_token }, format: :ics
         expect(response.body).to include(past_event.name)
       end
 
       it 'includes future event' do
-        get :show, token: person.event_feed_token, format: :ics
+        get :show, params: { token: person.event_feed_token }, format: :ics
         expect(response.body).to include(future_event.name)
       end
 

@@ -19,9 +19,10 @@ class ListController < ApplicationController
 
   delegate :model_class, :models_label, to: 'self.class'
 
-  hide_action :model_class, :models_label, :inheritable_root_controller
-
   respond_to :html
+  include DryCrud::RenderCallbacks
+
+  define_render_callbacks :index
 
   ##############  ACTIONS  ############################################
 
@@ -106,7 +107,6 @@ class ListController < ApplicationController
 
   end
 
-  include RenderCallbacks
   include Searchable
   include Sortable
   include Rememberable

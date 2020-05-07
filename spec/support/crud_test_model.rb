@@ -40,7 +40,7 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
   def protect_if_companion
     if companion.present?
       errors.add(:base, 'Cannot destroy model with companion')
-      false
+      throw :abort
     end
   end
 
@@ -85,21 +85,19 @@ class CrudTestModelsController < CrudController #:nodoc:
   attr_reader :called_callbacks
   attr_accessor :should_redirect
 
-  hide_action :called_callbacks, :should_redirect, :should_redirect=
-
   # don't use the standard layout as it may require different routes
   # than just the test route for this controller
   layout false
 
   def index
     super do |format|
-      format.js { render text: 'index js' }
+      format.js { render plain: 'index js' }
     end
   end
 
   def show
     super do |format|
-      format.html { render text: 'custom html' } if entry.name == 'BBBBB'
+      format.html { render plain: 'custom html' } if entry.name == 'BBBBB'
     end
   end
 
@@ -125,7 +123,7 @@ class CrudTestModelsController < CrudController #:nodoc:
   def handle_name
     if entry.name == 'illegal'
       flash[:alert] = 'illegal name'
-      false
+      throw(:abort)
     end
   end
 
@@ -151,7 +149,7 @@ class CrudTestModelsController < CrudController #:nodoc:
   # callback to redirect if @should_redirect is set
   def possibly_redirect
     redirect_to action: 'index' if should_redirect && !performed?
-    !should_redirect
+    throw :abort if should_redirect
   end
 
   def set_companions
@@ -217,7 +215,7 @@ module CrudTestHelper
   # Look at the source to view the column definition.
   def setup_db
     without_transaction do
-      silence_stream(STDOUT) do
+      silence_warnings do
         create_crud_test_models_table
         create_other_crud_test_models_table
         create_crud_test_models_other_crud_test_models
@@ -254,8 +252,8 @@ module CrudTestHelper
 
   def create_crud_test_models_other_crud_test_models
     ActiveRecord::Base.connection.create_table :crud_test_models_other_crud_test_models, force: true do |t|
-      t.belongs_to :crud_test_model
-      t.belongs_to :other_crud_test_model
+      t.belongs_to :crud_test_model, index: { name: 'one' }
+      t.belongs_to :other_crud_test_model, index: { name: 'other' }
     end
   end
 
@@ -263,7 +261,7 @@ module CrudTestHelper
   def reset_db
     c = ActiveRecord::Base.connection
     [:crud_test_models, :other_crud_test_models, :crud_test_models_other_crud_test_models].each do |table|
-      if c.table_exists?(table)
+      if c.data_source_exists?(table)
         c.drop_table(table) rescue nil
       end
     end

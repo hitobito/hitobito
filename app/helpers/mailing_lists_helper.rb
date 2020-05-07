@@ -21,6 +21,19 @@ module MailingListsHelper
     end
   end
 
+  def format_mailchimp_sync(mailing_list)
+    if mailing_list.mailchimp_result
+      last_synced_at = mailing_list.mailchimp_last_synced_at
+      state, badge_class = mailing_list.mailchimp_result.badge_info
+      text = I18n.t("activerecord.attributes.mailing_list.mailchimp_states.#{state}")
+      exception = mailing_list.mailchimp_result.data[:exception]
+      content = []
+      content << content_tag(:span, I18n.l(last_synced_at, format: :short)) if last_synced_at
+      content << content_tag(:span, badge(text, badge_class), title: exception)
+      content_tag(:div, safe_join(content.compact, ' '))
+    end
+  end
+
   private
 
   def button_subscribe

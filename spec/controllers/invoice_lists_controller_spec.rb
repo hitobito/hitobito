@@ -15,24 +15,24 @@ describe InvoiceListsController do
     before { sign_in(person) }
 
     it "may index when person has finance permission on layer group" do
-      get :new, group_id: group.id, invoice: { recipient_ids: [] }
-      expect(response).to be_success
+      get :new, params: { group_id: group.id, invoice: { recipient_ids: [person.id] } }
+      expect(response).to be_successful
     end
 
     it "may update when person has finance permission on layer group" do
-      put :update, group_id: group.id, invoice: { recipient_ids: [] }
+      put :update, params: { group_id: group.id, invoice: { recipient_ids: [] } }
       expect(response).to redirect_to group_invoices_path(group)
     end
 
     it "may not index when person has finance permission on layer group" do
       expect do
-        get :new, group_id: groups(:top_layer).id, invoice: { recipient_ids: [] }
+        get :new, params: { group_id: groups(:top_layer).id, invoice: { recipient_ids: [] } }
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it "may not edit when person has finance permission on layer group" do
       expect do
-        put :update, group_id: groups(:top_layer).id, invoice: { recipient_ids: [] }
+        put :update, params: { group_id: groups(:top_layer).id, invoice: { recipient_ids: [] } }
       end.to raise_error(CanCan::AccessDenied)
     end
   end
@@ -43,13 +43,13 @@ describe InvoiceListsController do
     before { sign_in(person) }
 
     it 'GET#new assigns_attributes and renders crud/new template' do
-      get :new, group_id: group.id, invoice: { recipient_ids: person.id }
+      get :new, params: { group_id: group.id, invoice: { recipient_ids: person.id } }
       expect(response).to render_template('crud/new')
       expect(assigns(:invoice).recipients).to eq [person]
     end
 
     it 'GET#new via xhr assigns invoice items and total' do
-      xhr :get, :new, { group_id: group.id, invoice: invoice_attrs }
+      get :new, xhr: true, params: { group_id: group.id, invoice: invoice_attrs }
       expect(assigns(:invoice).invoice_items).to have(2).items
       expect(assigns(:invoice).calculated[:total]).to eq 3
       expect(response).to render_template('invoice_lists/new')
@@ -57,7 +57,7 @@ describe InvoiceListsController do
 
     it 'POST#create creates an invoice for single member' do
       expect do
-        post :create, { group_id: group.id, invoice: invoice_attrs.merge(recipient_ids: person.id) }
+        post :create, params: { group_id: group.id, invoice: invoice_attrs.merge(recipient_ids: person.id) }
       end.to change { group.invoices.count }.by(1)
 
       expect(response).to redirect_to group_invoices_path(group)
@@ -66,7 +66,7 @@ describe InvoiceListsController do
 
     it 'POST#create sets creator_id to current_user' do
       expect do
-        post :create, { group_id: group.id, invoice: invoice_attrs.merge(title: 'current_user') }
+        post :create, params: { group_id: group.id, invoice: invoice_attrs.merge(title: 'current_user') }
       end.to change { group.invoices.count }.by(1)
 
       expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
@@ -76,7 +76,7 @@ describe InvoiceListsController do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group, person: Fabricate(:person))
 
       expect do
-        post :create, { group_id: group.id, invoice: invoice_attrs }
+        post :create, params: { group_id: group.id, invoice: invoice_attrs }
       end.to change { group.invoices.count }.by(2)
 
       expect(response).to redirect_to group_invoices_path(group)
@@ -84,7 +84,7 @@ describe InvoiceListsController do
     end
 
     it 'PUT#update informs if not invoice has been selected' do
-      post :update, { group_id: group.id }
+      post :update, params: { group_id: group.id }
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:alert]).to include 'Es muss mindestens eine Rechnung ausgewählt werden.'
     end
@@ -96,7 +96,7 @@ describe InvoiceListsController do
       travel(1.day) do
         expect do
           expect do
-            post :update, { group_id: group.id, ids: invoice.id }
+            post :update, params: { group_id: group.id, ids: invoice.id }
           end.to change { invoice.reload.updated_at }
         end.not_to change { Delayed::Job.count }
       end
@@ -117,7 +117,7 @@ describe InvoiceListsController do
                                 { '1' => { name: 'item1', unit_cost: 1, count: 1}})
       travel(1.day) do
         expect do
-          post :update, { group_id: group.id, ids: [invoice.id, other.id].join(',') }
+          post :update, params: { group_id: group.id, ids: [invoice.id, other.id].join(',') }
         end.to change { other.reload.updated_at }
       end
       expect(response).to redirect_to group_invoices_path(group)
@@ -130,7 +130,7 @@ describe InvoiceListsController do
                                   { '1' => { name: 'item1', unit_cost: 1, count: 1}})
 
       expect do
-        post :update, { group_id: group.id, ids: [invoice.id].join(','), mail: 'true' }
+        post :update, params: { group_id: group.id, ids: [invoice.id].join(','), mail: 'true' }
       end.to change { Delayed::Job.count }.by(1)
 
       expect(response).to redirect_to group_invoices_path(group)
@@ -139,7 +139,7 @@ describe InvoiceListsController do
     end
 
     it 'DELETE#destroy informs if no invoice has been selected' do
-      delete :destroy, { group_id: group.id }
+      delete :destroy, params: { group_id: group.id }
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:alert]).to include 'Zuerst muss eine Rechnung ausgewählt werden.'
     end
@@ -147,7 +147,7 @@ describe InvoiceListsController do
     it 'DELETE#destroy moves invoice to cancelled state' do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
-        travel(1.day) { delete :destroy, { group_id: group.id, ids: invoice.id } }
+        travel(1.day) { delete :destroy, params: { group_id: group.id, ids: invoice.id } }
       end.to change { invoice.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)
       expect(flash[:notice]).to include 'Rechnung wurde storniert.'
@@ -159,7 +159,7 @@ describe InvoiceListsController do
       other = Invoice.create!(group: group, title: 'test', recipient: person)
       expect do
         travel 1.day do
-          delete :destroy, { group_id: group.id, ids: [invoice.id, other.id].join(',') }
+          delete :destroy, params: { group_id: group.id, ids: [invoice.id, other.id].join(',') }
         end
       end.to change { other.reload.updated_at }
       expect(response).to redirect_to group_invoices_path(group)

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddSessionsTable < ActiveRecord::Migration
+class AddSessionsTable < ActiveRecord::Migration[4.2]
   def change
     create_table :sessions do |t|
       t.string :session_id, :null => false

@@ -1,31 +1,15 @@
-# encoding: utf-8
+require_relative 'boot'
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+require 'rails/all'
 
-require File.expand_path('../boot', __FILE__)
-
-def with_benchmark(tag, &block)
-  if ENV['RAILS_ENV'] == 'production'
-    yield
-  else
-    require 'benchmark'
-    puts "require #{tag}: #{Benchmark.measure(&block)}"
-  end
-end
-
-with_benchmark('rails') do
-  require 'rails/all'
-end
-with_benchmark('gems') do
-  require 'jquery/rails'
-  Bundler.require(:default, Rails.env)
-end
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
 module Hitobito
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 6.0
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -62,35 +46,26 @@ module Hitobito
     # Route errors over the Rails application.
     config.exceptions_app = self.routes
 
-    # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = 'utf-8'
-
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :user_token]
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
 
-    config.active_record.raise_in_transactional_callbacks = true
+    config.active_record.time_zone_aware_types = [:datetime, :time]
+
+    # Deviate from default here for now, revisit later
+    config.active_record.belongs_to_required_by_default = false
+    config.action_controller.per_form_csrf_tokens = true
 
     config.active_job.queue_adapter = :delayed_job
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
-
     config.log_tags = [:uuid]
 
     config.cache_store = :dalli_store, { compress: true,
                                          namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
-
-    # Enable the asset pipeline
-    config.assets.enabled = true
-
-    # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.0'
-
-    config.assets.precompile += %w(print.css ie.css ie7.css wysiwyg.css wysiwyg.js
-                                   *.png *.gif *.jpg favicon.ico)
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true
@@ -100,11 +75,13 @@ module Hitobito
       ActionMailer::Base.default from: Settings.email.sender
 
       # Assert the mail relay job is scheduled on every restart.
-      if Delayed::Job.table_exists?
+      if ActiveRecord::Base.connection.data_source_exists?('delayed_jobs')
         MailRelayJob.new.schedule if Settings.email.retriever.config.present?
         SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
         DownloadCleanerJob.new.schedule
         SessionsCleanerJob.new.schedule
+        WorkerHeartbeatCheckJob.new.schedule
+        ReoccuringMailchimpSynchronizationJob.new.schedule
       end
     end
 

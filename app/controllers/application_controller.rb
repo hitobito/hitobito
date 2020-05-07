@@ -7,12 +7,12 @@
 
 class ApplicationController < ActionController::Base
 
-  include Concerns::DecoratesBeforeRendering
+  include DecoratesBeforeRendering
   include Userstamp
   include Translatable
-  include Concerns::Stampable
-  include Concerns::Localizable
-  include Concerns::Authenticatable
+  include Stampable
+  include Localizable
+  include Authenticatable
   include ERB::Util
   include Sentry
 
@@ -20,7 +20,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :person_home_path
-  hide_action :person_home_path
 
   before_action :set_no_cache
   before_action :set_paper_trail_whodunnit
@@ -72,4 +71,7 @@ class ApplicationController < ActionController::Base
                          end
   end
 
+  def after_sign_in_path_for(resource)
+    stored_location_for(resource) || root_path
+  end
 end

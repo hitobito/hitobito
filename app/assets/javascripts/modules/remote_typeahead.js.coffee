@@ -52,22 +52,33 @@ openQuicksearchResult = (item) ->
 setupRemoteTypeahead = (input, items, updater) ->
   input.attr('autocomplete', "off")
   input.typeahead(
-         source: queryForTypeahead,
+         source: delayedQueryForTypeahead,
          updater: updater,
          matcher: (item) -> true, # match every value returned from server
          sorter: (items) -> items, # keep order from server
          items: items,
          highlighter: typeaheadHighlighter)
 
-queryForTypeahead = (query, process) ->
-  return [] if query.length < 3
-  app.request.abort() if app.request
-  $('#quicksearch').addClass('input-loading')
-  app.request = $.get(this.$element.data('url'), { q: query }, (data) ->
+queryForTypeAhead = (query, process, url)->
+  app.request = $.get(url, { q: query }, (data) ->
     json = $.map(data, (item) -> JSON.stringify(item))
     $('#quicksearch').removeClass('input-loading')
-    return process(json)
+    process(json)
   )
+
+delayedQueryForTypeahead = (query, process, delay = 450) ->
+  if query.length < 3
+    $('#quicksearch').removeClass('input-loading')
+    return []
+
+  if app.scheduledTypeahead
+    app.scheduledTypeahead = clearTimeout(app.scheduledTypeahead)
+
+  url = this.$element.data('url')
+  $('#quicksearch').addClass('input-loading')
+
+  delayedQuery = -> queryForTypeAhead(query, process, url)
+  app.scheduledTypeahead = setTimeout(delayedQuery, delay)
 
 typeaheadHighlighter = (item) ->
   query = this.query.trim().replace(/[\-\[\]{}()*+?.,\\\^$|#]/g, '\\$&')

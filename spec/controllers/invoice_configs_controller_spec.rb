@@ -38,9 +38,12 @@ describe InvoiceConfigsController  do
       end.to raise_error(CanCan::AccessDenied)
     end
 
-    it "initializes 3 payment reminder configs if non are set" do
+    it "initializes 3 valid payment reminder configs if non are set" do
       get :edit, params: { group_id: group.id, id: entry.id }
       expect(assigns(:invoice_config).payment_reminder_configs).to have(3).items
+      assigns(:invoice_config).payment_reminder_configs.each do |config|
+        expect(config).to be_valid
+      end
     end
 
     it "creates 3 payment reminder configs" do

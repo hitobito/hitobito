@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '= 6.0.2.1'
+gem 'rails', '= 6.0.3'
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on'

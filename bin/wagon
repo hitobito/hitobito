@@ -10,7 +10,6 @@ IFS=$'\n\t'
 
 cmd=${1:-'help'}
 wagon_name=${2-'no wagon selected'}
-wagon="hitobito_${wagon_name}"
 
 function require_wagon_name() {
   if [[ $wagon_name = 'no wagon selected' ]]; then
@@ -27,13 +26,13 @@ case $cmd in
     ;;
 
   gemfile)
-    require_wagon_name # TODO: read wagons from $WAGONS instead
-    cp -v Gemfile.lock "../$wagon/"
+    echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+      cp -v Gemfile.lock "../hitobito_%/"
     ;;
 
   spec-rc)
-    require_wagon_name # TODO: read wagons from $WAGONS instead
-    cp -v .rspec "../$wagon/"
+    echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+      cp -v .rspec "../hitobito_%/"
     ;;
 
   test-prepare)

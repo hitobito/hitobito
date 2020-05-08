@@ -36,9 +36,15 @@ case $cmd in
     ;;
 
   test-prepare)
+    echo 'Running Wagon-Tests to prime the DB'
+    rake wagon:test
+
+    echo 'Changing environment-config'
     sed -i 's/\(config.active_record.maintain_test_schema\) = true/\1 = false/' config/environments/test.rb
 
+    git diff config/environments/test.rb
 
+    echo 'Running specs with spring in the wagon is now faster.'
     ;;
 
   grep)

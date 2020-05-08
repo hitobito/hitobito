@@ -64,8 +64,8 @@ case $cmd in
     ;;
 
   help|*)
-    echo "USAGE: $0 [activate|gemfile|spec-rc] <PROJECT>"
-    echo "       $0 [test-prepare]"
+    echo "USAGE: $0 [activate] <PROJECT>"
+    echo "       $0 [test-prepare|gemfile|spec-rc]"
     echo "       $0 [grep] <TERM>"
     echo
     echo "Enable bash-completion with \"source <($0 completion)\""

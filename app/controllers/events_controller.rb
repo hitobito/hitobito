@@ -83,7 +83,7 @@ class EventsController < CrudController
 
   # list scope preload :groups, :kinds which we dont need
   def list_entries
-    event_filter.scope
+    event_filter.list_entries
   end
 
   def build_entry

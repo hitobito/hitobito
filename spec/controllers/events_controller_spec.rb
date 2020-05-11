@@ -47,8 +47,8 @@ describe EventsController do
       end
 
       it 'orders according to sort expression' do
-        get :index, params: { group_id: group.id, filter: 'layer', year: 2012, sort: :name, sort_dir: :desc }
-        expect(assigns(:events).first.name).to eq 'Top Event'
+        get :index, params: { group_id: group.id, filter: 'layer', year: 2012, sort: :name, sort_dir: :asc }
+        expect(assigns(:events).first.name).to eq 'Eventus'
       end
 
       it 'sets cookie on export' do

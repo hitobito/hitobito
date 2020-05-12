@@ -9,7 +9,6 @@
 = f.labeled(:payment_slip) do
   = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second, {}, class: 'span6')
 
-= f.labeled_input_field :address
 = f.labeled_input_field :iban, help: t('.iban_example')
 = f.labeled_input_field :account_number, help: t('.account_number_example')
 

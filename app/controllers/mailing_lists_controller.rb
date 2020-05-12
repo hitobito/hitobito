@@ -29,10 +29,6 @@ class MailingListsController < CrudController
 
   private
 
-  def list_entries
-    super.order(:name)
-  end
-
   def authorize_class
     authorize!(:index_mailing_lists, group)
   end

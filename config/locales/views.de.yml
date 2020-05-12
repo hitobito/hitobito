@@ -1035,6 +1035,7 @@ de:
       log: Log
       colleagues: Mitarbeiter/-innen
       invoices: Rechnungen
+      mailing_lists: Abos
 
     actions_show:
       send_login: Login schicken

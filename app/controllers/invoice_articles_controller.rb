@@ -14,6 +14,10 @@ class InvoiceArticlesController < CrudController
   self.permitted_attrs =
     [:number, :name, :description, :category, :unit_cost, :vat_rate, :cost_center, :account]
 
+  def create
+    super(location: group_invoice_articles_path(parent, returning: true))
+  end
+
   private
 
   def authorize_class

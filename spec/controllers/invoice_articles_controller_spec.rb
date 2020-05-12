@@ -11,9 +11,9 @@ describe InvoiceArticlesController  do
 
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
+  before { sign_in(person) }
 
   context 'authorization' do
-    before { sign_in(person) }
 
     it "may index when person has finance permission on layer group" do
       get :index, params: { group_id: group.id }
@@ -38,6 +38,11 @@ describe InvoiceArticlesController  do
         get :edit, params: { group_id: groups(:top_layer).id, id: invoice.id }
       end.to raise_error(CanCan::AccessDenied)
     end
+  end
+
+  it 'POST#create redirects to index page' do
+    post :create, params: { group_id: group.id, invoice_article: { number: '1', name: 'a' }  }
+    expect(response).to redirect_to(group_invoice_articles_path(group, returning: true))
   end
 
 end

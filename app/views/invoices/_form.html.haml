@@ -1,3 +1,8 @@
+-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
 = entry_form(data: { group: group_path(parent) }) do |f|
   = field_set_tag do
     = f.labeled_input_fields :title, :description, rows: 3
@@ -13,14 +18,10 @@
     = f.labeled_input_field :payment_purpose, rows: 2
 
   = field_set_tag do
-    - if parent.invoice_articles.exists?
-      = f.labeled(:invoice_item_article) do
-        = select("temp", "invoice_article_id",
-          parent.invoice_articles.pluck(:number, :name, :id).map { |ia| ["#{ia[0]} - #{ia[1]}", ia[2]] },
-          { include_blank: true },
-          { id: "invoice_item_article" })
+    = render "invoice_lists/invoice_articles", f: f
 
+  = field_set_tag do
     = f.labeled_inline_fields_for :invoice_items, 'invoice_lists/invoice_items'
 
 
-  = render "invoice_lists/calculated", invoice: entry
+  = render "invoice_lists/calculated", invoice: entry.decorate

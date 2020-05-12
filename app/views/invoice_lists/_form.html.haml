@@ -14,11 +14,8 @@
   = f.labeled_input_field :payment_information
   = f.labeled_input_field :payment_purpose
 
-  = f.labeled(:invoice_item_article) do
-    = select("temp", "invoice_article_id",
-      InvoiceArticle.all.pluck(:number, :id),
-      { include_blank: true },
-      { id: "invoice_item_article" })
+  = field_set_tag do
+    = render "invoice_articles", f: f
 
   = field_set_tag do
     = f.labeled_inline_fields_for :invoice_items, 'invoice_items'

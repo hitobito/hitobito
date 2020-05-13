@@ -694,7 +694,7 @@ de:
         payment_purpose: Zahlungszweck
         address: Absender Adresse
         beneficiary: Zugunsten von
-        payee: Einzahlung für
+        payee: Name / Firma
         account_number: Kontonummer
         iban: IBAN
         payment_slip: Einzahlungsschein

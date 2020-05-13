@@ -14,6 +14,35 @@ describe InvoiceConfig do
   let(:other_person)   { people(:bottom_member) }
   let(:invoice_config) { group.invoice_config }
 
+
+  describe 'payment_slip dependent validations' do
+    subject { Fabricate(Group::BottomLayer.sti_name, id: 1).reload.invoice_config }
+
+    it 'ch_es' do
+      subject.payment_slip = 'ch_es'
+      expect(subject).not_to be_valid
+      expect(subject.errors.keys).to eq [:payee, :iban, :account_number]
+    end
+
+    it 'ch_esr' do
+      subject.payment_slip = 'ch_esr'
+      expect(subject).not_to be_valid
+      expect(subject.errors.keys).to eq [:payee, :account_number, :participant_number]
+    end
+
+    it 'ch_bes' do
+      subject.payment_slip = 'ch_bes'
+      expect(subject).not_to be_valid
+      expect(subject.errors.keys).to eq [:payee, :beneficiary, :iban, :account_number]
+    end
+
+    it 'ch_besr' do
+      subject.payment_slip = 'ch_besr'
+      expect(subject).not_to be_valid
+      expect(subject.errors.keys).to eq [:payee, :beneficiary, :account_number, :participant_number, :participant_number_internal]
+    end
+  end
+
   it 'validates correct iban format' do
     invoice_config.update(iban: 'wrong format')
 

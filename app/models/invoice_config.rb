@@ -71,7 +71,7 @@ class InvoiceConfig < ActiveRecord::Base
   private
 
   def correct_address_wordwrap
-    return if payee.split(/\n/).length <= 2
+    return if payee.to_s.split(/\n/).length <= 2
     errors.add(:payee, :to_long)
   end
 

@@ -24,6 +24,8 @@ application:
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
                  ENV['RAILS_HOST_NAME'].presence ||
                  'localhost' %>
+currency:
+  unit: CHF
 
 email:
   # Sender for all emails sent by the application

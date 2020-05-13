@@ -29,6 +29,22 @@ describe Export::Pdf::Invoice do
     described_class.render(Invoice.new(esr_number: 1, participant_number: 1),  payment_slip: true )
   end
 
+  context 'currency' do
+    subject do
+      pdf = described_class.render(invoice, articles: true)
+      PDF::Inspector::Text.analyze(pdf).show_text.compact.join(' ')
+    end
+
+    it 'defaults to CHF' do
+      expect(subject).to match 'Gesamtbetrag 5.35 CHF'
+    end
+
+    it 'is read from settings' do
+      allow(Settings.currency).to receive(:unit).and_return('EUR')
+      expect(subject).to match 'Gesamtbetrag 5.35 EUR'
+      expect(subject).not_to match 'CHF'
+    end
+  end
 
   it 'includes payment reminder title and text' do
     reminder = Fabricate(:payment_reminder, invoice: sent, due_at: sent.due_at + 10.days)
@@ -104,5 +120,4 @@ describe Export::Pdf::Invoice do
       end
     end
   end
-
 end

@@ -20,7 +20,6 @@ de:
         format: ! '%u %n'
         separator: .
         precision: 2
-        unit: CHF
     format:
       delimiter: ! ''''
       precision: 2

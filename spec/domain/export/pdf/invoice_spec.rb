@@ -38,6 +38,20 @@ describe Export::Pdf::Invoice do
     expect(text).to include reminder.text
   end
 
+  context 'address' do
+    it 'address with 8 lines does not cause page break' do
+      invoice.update(address: 1.upto(8).to_a.join("\n"))
+      pdf = described_class.render(invoice, articles: true)
+      expect(PDF::Inspector::Page.analyze(pdf).pages.size).to eq 1
+    end
+
+    it 'address with 9 lines causes page break' do
+      invoice.update(address: 1.upto(9).to_a.join("\n"))
+      pdf = described_class.render(invoice, articles: true)
+      expect(PDF::Inspector::Page.analyze(pdf).pages.size).to eq 2
+    end
+  end
+
   context 'codeline' do
     let(:invoice) { Invoice.new(sequence_number: '1-2', participant_number: 1) }
 

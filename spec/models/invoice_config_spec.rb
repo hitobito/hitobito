@@ -40,6 +40,12 @@ describe InvoiceConfig do
       expect(subject).not_to be_valid
       expect(subject.errors.keys).to eq [:payee, :beneficiary, :participant_number, :participant_number_internal]
     end
+
+    it 'no_ps' do
+      subject.payment_slip = 'no_ps'
+      expect(subject).not_to be_valid
+      expect(subject.errors.keys).to eq [:payee, :iban]
+    end
   end
 
   it 'validates correct iban format' do

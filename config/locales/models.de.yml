@@ -731,6 +731,7 @@ de:
           ch_bes: Roter Einzahlungsschein Bank (CH)
           ch_esr: Oranger Einzahlungsschein Post (CH)
           ch_besr: Oranger Einzahlungsschein Bank (CH)
+          no_ps: Keiner
         participant_number: Teilnehmernummer
         participant_number_internal: Teilnehmernummer intern
         payment_reminder_configs: Mahnungen

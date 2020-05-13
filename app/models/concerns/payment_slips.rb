@@ -10,7 +10,7 @@ module PaymentSlips
 
   include I18nEnums
 
-  PAYMENT_SLIPS = %w(ch_es ch_bes ch_esr ch_besr).freeze
+  PAYMENT_SLIPS = %w(ch_es ch_bes ch_esr ch_besr no_ps).freeze
 
   included do
     i18n_enum :payment_slip, PAYMENT_SLIPS, scopes: true, queries: true

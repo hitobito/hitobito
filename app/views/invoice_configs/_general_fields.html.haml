@@ -4,12 +4,12 @@
 = f.labeled_input_field :payment_information, rows: 2, help: t('.payment_information_help')
 = f.labeled_input_field :vat_number
 
-%h3.form-subtitle= t('.payment_slip')
+%h3.form-subtitle= t('.payment')
 = f.labeled_input_field :payee, rows: 3, help: t('.payee_help')
+= f.labeled_input_field :iban, help: t('.iban_example')
 = f.labeled(:payment_slip) do
   = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second, {}, class: 'span6')
 
-= f.labeled_input_field :iban, help: t('.iban_example')
 = f.labeled_input_field :account_number, help: t('.account_number_example')
 
 = f.labeled_input_field :beneficiary, rows: 3, help: t('.beneficiary_help')

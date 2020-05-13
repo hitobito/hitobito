@@ -9,10 +9,10 @@ class app.InvoiceConfigs
   constructor: () ->
 
   showPaymentSlipSpecificAttributes: ->
-    payment_slip =
     beneficiary = $('#invoice_config_beneficiary').closest('.control-group')
     participant_number = $('#invoice_config_participant_number').closest('.control-group')
     participant_number_internal = $('#invoice_config_participant_number_internal').closest('.control-group')
+    account_number = $('#invoice_config_account_number').closest('.control-group')
 
     if @isBank()
       beneficiary.slideDown()
@@ -29,6 +29,11 @@ class app.InvoiceConfigs
     else
       participant_number_internal.hide()
 
+    if @isNoPaymentSlip()
+      account_number.hide()
+    else
+      account_number.show()
+
   bind: ->
     self = this
     $(document).on('change', '#invoice_config_payment_slip', (e) -> self.showPaymentSlipSpecificAttributes())
@@ -41,5 +46,9 @@ class app.InvoiceConfigs
   withReference: ->
     val = $('#invoice_config_payment_slip').find(":selected").val()
     val == 'ch_besr' || val == 'ch_esr'
+
+  isNoPaymentSlip: ->
+    val = $('#invoice_config_payment_slip').find(":selected").val()
+    val == 'no_ps'
 
 new app.InvoiceConfigs().bind()

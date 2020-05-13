@@ -14,32 +14,31 @@ describe InvoiceConfig do
   let(:other_person)   { people(:bottom_member) }
   let(:invoice_config) { group.invoice_config }
 
-
   describe 'payment_slip dependent validations' do
     subject { Fabricate(Group::BottomLayer.sti_name, id: 1).reload.invoice_config }
 
     it 'ch_es' do
       subject.payment_slip = 'ch_es'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :iban, :account_number]
+      expect(subject.errors.keys).to eq [:payee, :iban]
     end
 
     it 'ch_esr' do
       subject.payment_slip = 'ch_esr'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :account_number, :participant_number]
+      expect(subject.errors.keys).to eq [:payee, :participant_number]
     end
 
     it 'ch_bes' do
       subject.payment_slip = 'ch_bes'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :beneficiary, :iban, :account_number]
+      expect(subject.errors.keys).to eq [:payee, :beneficiary, :iban]
     end
 
     it 'ch_besr' do
       subject.payment_slip = 'ch_besr'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :beneficiary, :account_number, :participant_number, :participant_number_internal]
+      expect(subject.errors.keys).to eq [:payee, :beneficiary, :participant_number, :participant_number_internal]
     end
   end
 

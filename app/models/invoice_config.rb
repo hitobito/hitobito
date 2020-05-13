@@ -48,7 +48,6 @@ class InvoiceConfig < ActiveRecord::Base
   validates :iban, format: { with: IBAN_REGEX },
                    on: :update, allow_blank: true
 
-  validates :account_number, presence: true, on: :update
   validates :account_number, format: { with: ACCOUNT_NUMBER_REGEX },
                              on: :update, allow_blank: true, if: :post?
 

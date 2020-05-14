@@ -670,6 +670,7 @@ de:
           ch_bes: Roter Einzahlungsschein Bank (CH)
           ch_esr: Oranger Einzahlungsschein Post (CH)
           ch_besr: Oranger Einzahlungsschein Bank (CH)
+          no_ps: Keiner
         states:
           draft: Entwurf
           issued: Gestellt

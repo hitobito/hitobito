@@ -64,10 +64,11 @@ describe Invoice do
   end
 
   it '#save sets recipient and related fields' do
+    person.update(zip_code: 3003)
     invoice = create_invoice
     expect(invoice.recipient).to eq person
     expect(invoice.recipient_email).to eq person.email
-    expect(invoice.recipient_address).to eq "Top Leader\nSupertown"
+    expect(invoice.recipient_address).to eq "Top Leader\n3003 Supertown"
   end
 
   it '#save sets esr_number and participant_number for esr invoice_config' do

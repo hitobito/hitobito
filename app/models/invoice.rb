@@ -237,7 +237,7 @@ class Invoice < ActiveRecord::Base
   def build_recipient_address
     [recipient.full_name,
      recipient.address,
-     [recipient.zip_code, recipient.town].compact.join(' / '),
+     [recipient.zip_code, recipient.town].compact.join(' '),
      recipient.country].compact.join("\n")
   end
 

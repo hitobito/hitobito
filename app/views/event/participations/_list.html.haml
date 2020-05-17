@@ -19,7 +19,8 @@
 
   .pagination-info
 
-  = Dropdown::TableDisplays.new(self).to_s
+  - if @participations.size > 0
+    = Dropdown::TableDisplays.new(self).to_s
 - if @person_add_requests.present?
   = render 'person/add_requests/body_list'
 

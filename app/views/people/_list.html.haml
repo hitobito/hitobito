@@ -21,7 +21,8 @@
     - if @person_add_requests.present?
       = render 'person/add_requests/body_list'
 
-  = Dropdown::TableDisplays.new(self).to_s
+  - if @people.size > 0
+    = Dropdown::TableDisplays.new(self).to_s
 
 - if @people.total_count > 0
   = crud_table(data: { checkable: true }) do |t|

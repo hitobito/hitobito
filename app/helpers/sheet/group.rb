@@ -93,7 +93,7 @@ module Sheet
 
     def breadcrumbs
       entry.parent.hierarchy.collect do |g|
-        link_to(g.to_s, group_path(g))
+        link_to(g.to_s, group_path(g), data: { disable_with: g.to_s })
       end
     end
 

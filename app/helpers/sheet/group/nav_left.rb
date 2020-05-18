@@ -92,7 +92,7 @@ module Sheet
         cls = ' class=" is-active"' if group == entry
         "<li#{cls}>".html_safe +
         link_to(group.display_name,
-                active_path(group), title: group.to_s)
+                active_path(group), title: group.to_s, data: { disable_with: group.display_name })
       end
 
       def render_deleted_people_link
@@ -111,7 +111,7 @@ module Sheet
           safe_join(layers) do |l|
             l.use_hierarchy_from_parent(layer)
             content_tag(:li, link_to(l.display_name,
-                                     active_path(l), title: l.to_s))
+                                     active_path(l), title: l.to_s, data: { disable_with: l.display_name }))
           end
         end
       end

@@ -75,7 +75,8 @@ module NavigationHelper
       classes += " #{active_class}"
     end
     content_tag(:li, class: classes) do
-      concat(link_to(icon(icon_name) + label, url))
+      navigation_text = icon(icon_name) + label
+      concat(link_to(navigation_text, url, data: { disable_with: navigation_text }))
       yield if block_given? && active
     end
   end

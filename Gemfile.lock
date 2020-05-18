@@ -1,7 +1,7 @@
 PATH
   remote: ../hitobito_generic
   specs:
-    hitobito_generic (0.0.1)
+    hitobito_generic (1.20.12)
 
 GEM
   remote: https://rubygems.org/
@@ -543,6 +543,8 @@ GEM
       rubyzip (>= 1.2.2)
     sentry-raven (2.11.0)
       faraday (>= 0.7.6, < 1.0)
+    serviceworker-rails (0.5.5)
+      railties (>= 3.1)
     simpleidn (0.0.7)
     sixarm_ruby_unaccent (1.2.0)
     slop (3.6.0)
@@ -721,6 +723,7 @@ DEPENDENCIES
   seed-fu
   selenium-webdriver
   sentry-raven
+  serviceworker-rails
   simpleidn
   spring-commands-rspec
   sqlite3

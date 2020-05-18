@@ -40,3 +40,4 @@
 #= require wysiwyg
 #= require wagon
 #= require turbolinks
+#= require serviceworker-companion

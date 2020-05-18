@@ -1,0 +1,22 @@
+<% if pwa = Settings.pwa %>
+{
+  "start_url": "/",
+  "name": "<%= Settings.application.name %>",
+  "short_name": "<%= pwa.short_name %>",
+  "icons": [
+  <% pwa.icon_sizes.each_with_index do |dim, i| %>
+    {
+      "src": "<%= image_path "manifest-icon-#{dim}.jpg" %>",
+      "sizes": "<%= [dim, dim].join('x') %>",
+      "type": "image/png"
+    }<%= i == (pwa.icon_sizes.length - 1) ? '' : ',' %>
+  <% end %>
+  ],
+  "theme_color": "<%= pwa.theme_color %>",
+  "background_color": "#F8F7F5",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}
+<% else %>
+  {}
+<% end %>

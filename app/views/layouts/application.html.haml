@@ -12,6 +12,11 @@
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
     %meta{name: 'turbolinks-cache-control', content: 'no-cache'}
 
+    - if Settings.pwa
+      %meta{name: 'theme-color', content: Settings.pwa.theme_color }
+      %link{rel: 'manifest', href: '/manifest.json'}
+      %link{rel: 'apple-touch-icon', href: "/images/apple-icon-#{Settings.pwa.icon_sizes.first}.json"}
+
     = csrf_meta_tag
     = favicon_link_tag 'favicon.ico'
 
@@ -28,6 +33,7 @@
     = stylesheet_link_tag 'application.css', media: :screen, 'data-turbolinks-track' => true
     = stylesheet_link_tag 'print.css', media: :print
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
+
 
     = yield(:head)
 

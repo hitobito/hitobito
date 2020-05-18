@@ -350,15 +350,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   #   labeled(:attr, content)
   #   labeled(:attr, 'Caption') { #content }
   #   labeled(:attr, 'Caption', content)
-  # rubocop:todo Layout/LineLength
-  def labeled(attr, caption_or_content = nil, content = nil, mark_as_required: false, **html_options, &block) # rubocop:disable Metrics/*
-    # rubocop:enable Layout/LineLength
+  def labeled(attr, caption_or_content = nil, content = nil, mark_as_required: false, # rubocop:disable Metrics/*
+    field_help: nil, **html_options, &block)
     if block
       content = capture(&block)
     elsif content.nil?
       content = caption_or_content
       caption_or_content = nil
     end
+    content << help_texts.render_field(attr)
+    content << field_help if field_help.present?
+
     caption_or_content ||= captionize(attr, klass)
 
     label_classes = html_options.delete(:label_class) || "col-md-3 col-xl-2"
@@ -542,21 +544,23 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     content = send(field_method, *(args << options))
     content = with_addon(addon, content) if addon.present?
-    with_labeled_field_help(attr, help, help_inline) { |element| content << element }
+
+    field_help = ActiveSupport::SafeBuffer.new("")
+    with_labeled_field_help(help, help_inline) { |help| field_help << help }
 
     labeled(attr, caption, content,
+      field_help: field_help,
       required: options[:required],
       label_class: label_class,
       class: content_class)
   end
 
-  def with_labeled_field_help(attr, help, help_inline)
+  def with_labeled_field_help(help, help_inline)
     if help.present?
       yield help_inline(help_inline) if help_inline.present?
       yield help_block(help)
-    else
-      yield help_texts.render_field(attr)
-      yield help_inline(help_inline) if help_inline.present?
+    elsif help_inline.present?
+      yield help_inline(help_inline)
     end
   end
 

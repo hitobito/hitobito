@@ -21,7 +21,7 @@
     - if @person_add_requests.present?
       = render 'person/add_requests/body_list'
 
-  - if @people.size > 0
+  - if @people.present?
     = Dropdown::TableDisplays.new(self).to_s
 
 - if @people.total_count > 0

@@ -111,7 +111,9 @@ module Sheet
           safe_join(layers) do |l|
             l.use_hierarchy_from_parent(layer)
             content_tag(:li, link_to(l.display_name,
-                                     active_path(l), title: l.to_s, data: { disable_with: l.display_name }))
+                                     active_path(l),
+                                     title: l.to_s,
+                                     data: { disable_with: l.display_name }))
           end
         end
       end

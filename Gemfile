@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -53,10 +53,10 @@ gem 'paranoia'
 gem 'phonelib'
 gem 'prawn'
 gem 'prawn-table'
+gem 'prometheus_exporter'
 gem 'protective'
 gem 'pry-rails'
 gem 'puma'
-gem 'prometheus_exporter'
 gem 'rails-i18n'
 gem 'rails_autolink'
 gem 'rubyzip', '~> 1.3.0'
@@ -81,10 +81,10 @@ gem 'coffee-rails'
 gem 'compass'
 gem 'compass-rails'
 gem 'font_awesome5_rails'
-gem 'js_cookie_rails'
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'jquery-ui-rails'
+gem 'js_cookie_rails'
 gem 'remotipart'
 gem 'sass-rails'
 gem 'therubyracer', platforms: :ruby
@@ -96,9 +96,9 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'parallel_tests'
-  gem 'rspec-rails', '4.0.0.beta3' # see https://github.com/rspec/rspec-rails/issues/2177
   gem 'pry-byebug'
   gem 'pry-doc'
+  gem 'rspec-rails', '4.0.0.beta3' # see https://github.com/rspec/rspec-rails/issues/2177
 end
 
 group :development do
@@ -141,6 +141,7 @@ group :metrics do
   gem 'rails-erd'
   gem 'rubocop'
   gem 'rubocop-checkstyle_formatter'
+  gem 'rubocop-rails'
   gem 'ruby-prof'
 end
 
@@ -148,5 +149,5 @@ end
 # Do not check Wagonfile into source control.
 #
 # To create a Wagonfile suitable for development, run 'rake wagon:file'
-wagonfile = File.expand_path('../Wagonfile', __FILE__)
+wagonfile = File.expand_path('Wagonfile', __dir__)
 eval(File.read(wagonfile)) if File.exist?(wagonfile) # rubocop:disable Security/Eval

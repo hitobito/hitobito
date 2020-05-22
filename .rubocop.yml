@@ -1,3 +1,6 @@
+require:
+  - rubocop-rails
+
 AllCops:
   DisplayCopNames: true
   Exclude:
@@ -9,10 +12,7 @@ AllCops:
     - tmp/**/*
     - app/assets/config.rb
 
-Rails:
-  Enabled: true
-
-Lint/RescueWithoutErrorClass:
+Style/RescueStandardError:
   Enabled: false
 
 # we have not yet introcued ApplicationRecord as a Pattern
@@ -35,7 +35,7 @@ Metrics/CyclomaticComplexity:
   Max: 6
   Severity: error
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 100
   Severity: warning
   IgnoreCopDirectives: true

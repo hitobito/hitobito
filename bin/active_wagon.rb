@@ -37,21 +37,24 @@ class Setup
   end
 
   def gemfile
-    <<~EOF
+    <<~GEMFILE
+      # rubocop:disable Naming/FileName,Lint/MissingCopEnableDirective
+      # frozen_string_literal: true
+
       # vim:ft=ruby
 
-      group :development do
+      group :development, :test do
         ENV.fetch('WAGONS').split.each do |wagon|
-          Dir[File.expand_path("../../hitobito_\#{wagon}/hitobito_\#{wagon}.gemspec", __FILE__)].each do |spec|
-            gem File.basename(spec, '.gemspec'), :path => File.expand_path('..', spec)
+          Dir[File.expand_path("../hitobito_\#{wagon}/hitobito_\#{wagon}.gemspec", __dir__)].each do |spec|
+            gem File.basename(spec, '.gemspec'), path: File.expand_path('..', spec)
           end
         end
       end
-    EOF
+    GEMFILE
   end
 
   def environment
-    <<~EOF
+    <<~DIRENV
       PATH_add bin
       export RAILS_DB_ADAPTER=mysql2
       export RAILS_DB_NAME=hit_#{wagon}_development
@@ -61,7 +64,7 @@ class Setup
       export WAGONS="#{wagons.join(' ')}"
       log_status "hitobito now uses: #{wagons.any? ? wagons.join(', ') : 'just the core'}"
       source_up
-    EOF
+    DIRENV
   end
 
   def root

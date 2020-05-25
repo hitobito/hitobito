@@ -31,7 +31,7 @@ Before an external application can read the user's data, it must first get the a
 
 An example of the full URL, where your application could redirect the user for asking permission:
 ```
-https://demo.hitobito.ch/oauth/authorize?response_type=code&client_id=df57d88580cd81d2f7ca9974ff5a45dece279a36d4f55fe741502dd3ebb60ba8&redirect_uri=https://my-external-application.ch/callback&scope=email%20name
+https://demo.hitobito.com/oauth/authorize?response_type=code&client_id=df57d88580cd81d2f7ca9974ff5a45dece279a36d4f55fe741502dd3ebb60ba8&redirect_uri=https://my-external-application.ch/callback&scope=email%20name
 ```
 
 If the user accepts the request, the user's browser will be redirected to the specified redirect URL, with the authorization code in the `code` query parameter. Make sure this is a valid URL in your application. In our example this could be `https://my-external-application.ch/callback?code=2dd87982736ffbd2b68820a2dbcc1f3bd59c5653c5d166339ce68c320f8d83c5`
@@ -47,7 +47,7 @@ curl -X POST \
      -d "client_secret=2e1a8ef6676e3b9a13a75a7e6ae55879a02b8a5194af010dd8af0eb1a2ca0957" \
      -d "redirect_uri=https://my-external-application.ch/callback" \
      -d "code=2dd87982736ffbd2b68820a2dbcc1f3bd59c5653c5d166339ce68c320f8d83c5" \
-     https://demo.hitobito.ch/oauth/token
+     https://demo.hitobito.com/oauth/token
 ```
 
 * `grant_type` For the token request we use the value `authorization_code`
@@ -72,7 +72,7 @@ The freshly acquired token can be used in the `Authorization` HTTP header when a
 ```bash
 curl -H "Authorization: Bearer a3922ce7b6776e293c40d1d47a16d3787b860fb31ee7b121793f40492bae309f" \
      -H "X-Scope: name" \
-     https://demo.hitobito.ch/oauth/profile
+     https://demo.hitobito.com/oauth/profile
 ```
 
 An example response could be (formatted here for readability):

@@ -25,7 +25,7 @@ With `curl` it looks like this (it sets the `Content-Type` header automatically)
 ```bash
 curl -d "person[email]=mitglied@hitobito.ch" \
      -d "person[password]=demo" \
-     https://demo.hitobito.ch/users/sign_in.json
+     https://demo.hitobito.com/users/sign_in.json
 ```
 
 The response will contain the personal token (`authentication_token`) in the JSON response (formatted here for readability):
@@ -35,7 +35,7 @@ The response will contain the personal token (`authentication_token`) in the JSO
         {
             "id": "164",
             "type": "people",
-            "href": "https://demo.hitobito.ch/de/groups/17/people/164.json",
+            "href": "https://demo.hitobito.com/de/groups/17/people/164.json",
             "first_name": "Boris",
             "last_name": "Becker",
             "nickname": "Eaque",
@@ -63,12 +63,12 @@ The response will contain the personal token (`authentication_token`) in the JSO
     "links": {
         "token.regenerate": {
             "method": "POST",
-            "href": "https://demo.hitobito.ch/de/users/token.json",
+            "href": "https://demo.hitobito.com/de/users/token.json",
             "type": "tokens"
         },
         "token.delete": {
             "method": "DELETE",
-            "href": "https://demo.hitobito.ch/de/users/token.json",
+            "href": "https://demo.hitobito.com/de/users/token.json",
             "type": "tokens"
         }
     }
@@ -79,7 +79,7 @@ To use the API with the personal token, there are two possibilities:
 
 * **Query parameter**: Send `user_email` and `user_token` as query parameters in the URL, and append `.json` to the URL path
 ```bash
-curl "https://demo.hitobito.ch/groups/1.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV"
+curl "https://demo.hitobito.com/groups/1.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV"
 ```
 
 * **Request headers**: Set the following headers on the HTTP request: `X-User-Email`, `X-User-Token` and `Accept` (set this to `application/json`)
@@ -87,7 +87,7 @@ curl "https://demo.hitobito.ch/groups/1.json?user_email=mitglied@hitobito.ch&use
 curl -H "X-User-Email: mitglied@hitobito.ch" \
      -H "X-User-Token: yhFrXcydFwisXYLEUFyV" \
      -H "Accept: application/json" \
-     https://demo.hitobito.ch/groups/1
+     https://demo.hitobito.com/groups/1
 ```
 
 
@@ -125,7 +125,7 @@ The events and the course endpoints have some query parameters, as explained bel
 An example query with its response (formatted here for readability) can be seen below.
 
 ```bash
-curl "https://demo.hitobito.ch/groups/1/events.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+curl "https://demo.hitobito.com/groups/1/events.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
 ```
 
 ```json
@@ -146,7 +146,7 @@ curl "https://demo.hitobito.ch/groups/1/events.json?user_email=mitglied@hitobito
       "application_conditions": "",
       "state": "",
       "teamer_count": 6,
-      "external_application_link": "http://demo.hitobito.ch/de/groups/1/public_events/1",
+      "external_application_link": "http://demo.hitobito.com/de/groups/1/public_events/1",
       "links": {
         "kind": "1",
         "dates": [
@@ -181,7 +181,7 @@ curl "https://demo.hitobito.ch/groups/1/events.json?user_email=mitglied@hitobito
     "groups": [
       {
         "id": "1",
-        "href": "http://demo.hitobito.ch/de/groups/1.json",
+        "href": "http://demo.hitobito.com/de/groups/1.json",
         "group_type": "Hauptebene",
         "layer": true,
         "name": "Dachverband",
@@ -254,35 +254,35 @@ curl "https://demo.hitobito.ch/groups/1/events.json?user_email=mitglied@hitobito
   },
   "links": {
     "groups.creator": {
-      "href": "http://demo.hitobito.ch/de/people/{groups.creator}.json",
+      "href": "http://demo.hitobito.com/de/people/{groups.creator}.json",
       "type": "people"
     },
     "groups.updater": {
-      "href": "http://demo.hitobito.ch/de/people/{groups.updater}.json",
+      "href": "http://demo.hitobito.com/de/people/{groups.updater}.json",
       "type": "people"
     },
     "groups.deleter": {
-      "href": "http://demo.hitobito.ch/de/people/{groups.deleter}.json",
+      "href": "http://demo.hitobito.com/de/people/{groups.deleter}.json",
       "type": "people"
     },
     "groups.parent": {
-      "href": "http://demo.hitobito.ch/de/groups/{groups.parent}.json",
+      "href": "http://demo.hitobito.com/de/groups/{groups.parent}.json",
       "type": "groups"
     },
     "groups.layer_group": {
-      "href": "http://demo.hitobito.ch/de/groups/{groups.layer_group}.json",
+      "href": "http://demo.hitobito.com/de/groups/{groups.layer_group}.json",
       "type": "groups"
     },
     "groups.hierarchy": {
-      "href": "http://demo.hitobito.ch/de/groups/{groups.hierarchy}.json",
+      "href": "http://demo.hitobito.com/de/groups/{groups.hierarchy}.json",
       "type": "groups"
     },
     "groups.children": {
-      "href": "http://demo.hitobito.ch/de/groups/{groups.children}.json",
+      "href": "http://demo.hitobito.com/de/groups/{groups.children}.json",
       "type": "groups"
     },
     "groups.people": {
-      "href": "http://demo.hitobito.ch/de/groups/{groups.id}/people.json",
+      "href": "http://demo.hitobito.com/de/groups/{groups.id}/people.json",
       "type": "people"
     }
   }
@@ -298,7 +298,7 @@ The participations associated with a single evnt
 An example query with its response (formatted here for readability) can be seen below.
 
 ```bash
-curl "https://demo.hitobito.ch/groups/1/events/1/participations.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+curl "https://demo.hitobito.com/groups/1/events/1/participations.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
 ```
 
 ```json
@@ -449,7 +449,7 @@ The invoices have query parameters similar to ui, the list endpoint is paged.
 An example query with its response (formatted here for readability) can be seen below.
 
 ```bash
-curl "https://demo.hitobito.ch/groups/1/invoices.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+curl "https://demo.hitobito.com/groups/1/invoices.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
 ```
 
 ```json

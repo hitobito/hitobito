@@ -26,7 +26,7 @@ All endpoints except for the root group endpoint (`/groups`) from the [JSON API]
 
 * **Query parameter**: Send `token` as query parameter in the URL, and append `.json` to the URL path
 ```bash
-curl "https://demo.hitobito.ch/de/groups/1.json?token=DtmPJ1iimjJi2neQQDq8efrqS5gBa7-5b8ZxboBCFdAm4HBBBP"
+curl "https://demo.hitobito.com/de/groups/1.json?token=DtmPJ1iimjJi2neQQDq8efrqS5gBa7-5b8ZxboBCFdAm4HBBBP"
 ```
 
 * **Request headers**: Set the following headers on the HTTP request: `X-Token` and `Accept` (set this to `application/json`)

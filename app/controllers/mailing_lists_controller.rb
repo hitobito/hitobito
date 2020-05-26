@@ -27,6 +27,14 @@ class MailingListsController < CrudController
     super
   end
 
+  def show
+    super do |format|
+      format.json do
+        render json: MailingListSerializer.new(entry.decorate, controller: self)
+      end
+    end
+  end
+
   private
 
   def authorize_class

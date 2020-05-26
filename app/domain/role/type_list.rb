@@ -20,6 +20,15 @@ class Role
       @role_types.each(&block)
     end
 
+    def flatten
+      @role_types.flat_map do |layer, groups|
+        groups.flat_map do |group, roles|
+          next roles unless block_given?
+          roles.map { |role| yield role, group, layer }
+        end
+      end
+    end
+
     private
 
     # hash with the form {layer: {group: [roles]}}

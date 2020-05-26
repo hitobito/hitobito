@@ -68,4 +68,37 @@ describe Role::TypeList do
        { 'Global' => [Role::External] }],
     ])
   end
+
+  context 'flattens the role list' do
+
+    it 'without block' do
+      list = Role::TypeList.new(Group::TopLayer)
+      expect(list.flatten.map(&:name)).to eq(%w(Group::TopLayer::TopAdmin Group::TopGroup::Leader
+        Group::TopGroup::LocalGuide Group::TopGroup::Secretary Group::TopGroup::LocalSecretary
+        Group::TopGroup::Member Group::BottomLayer::Leader Group::BottomLayer::LocalGuide
+        Group::BottomLayer::Member Group::BottomGroup::Leader Group::BottomGroup::Member
+        Group::GlobalGroup::Leader Group::GlobalGroup::Member Role::External))
+    end
+
+    it 'with block' do
+      list = Role::TypeList.new(Group::TopLayer)
+      expect(list.flatten {|r, g, l| { layer: l, group: g, role: r }}).to eq([
+        { layer: 'Top Layer', group: 'Top Layer', role: Group::TopLayer::TopAdmin },
+        { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::Leader },
+        { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::LocalGuide },
+        { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::Secretary },
+        { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::LocalSecretary },
+        { layer: 'Top Layer', group: 'Top Group', role: Group::TopGroup::Member },
+        { layer: 'Bottom Layer', group: 'Bottom Layer', role: Group::BottomLayer::Leader },
+        { layer: 'Bottom Layer', group: 'Bottom Layer', role: Group::BottomLayer::LocalGuide },
+        { layer: 'Bottom Layer', group: 'Bottom Layer', role: Group::BottomLayer::Member },
+        { layer: 'Bottom Layer', group: 'Bottom Group', role: Group::BottomGroup::Leader },
+        { layer: 'Bottom Layer', group: 'Bottom Group', role: Group::BottomGroup::Member },
+        { layer: 'Global', group: 'Global Group', role: Group::GlobalGroup::Leader },
+        { layer: 'Global', group: 'Global Group', role: Group::GlobalGroup::Member },
+        { layer: 'Global', group: 'Global', role: Role::External }
+      ])
+    end
+
+  end
 end

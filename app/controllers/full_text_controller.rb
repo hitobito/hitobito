@@ -16,7 +16,7 @@ class FullTextController < ApplicationController
   def index
     @people = with_query { search_strategy.list_people }
     @groups = with_query { search_strategy.query_groups }
-    @events = with_query { search_strategy.query_events }
+    @events = with_query { decorate_events(search_strategy.query_events) }
     @active_tab = active_tab
   end
 
@@ -69,5 +69,11 @@ class FullTextController < ApplicationController
 
   def tab_class(tab)
     'active' if @active_tab == tab
+  end
+
+  def decorate_events(events)
+    events.map do |event|
+      EventDecorator.new(event)
+    end
   end
 end

@@ -10,13 +10,15 @@ class MailingListAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Group
 
   on(::MailingList) do
-    permission(:any).may(:show).all
+    permission(:any).may(:show).subscribable_mailing_lists
 
+    permission(:group_full).may(:show).all
     permission(:group_full).may(:index_subscriptions, :create, :update, :destroy).in_same_group
     permission(:group_full).
       may(:export_subscriptions).
       in_same_group_if_no_subscriptions_in_below_groups
 
+    permission(:group_and_below_full).may(:show).all
     permission(:group_and_below_full).
       may(:index_subscriptions, :create, :update, :destroy).
       in_same_group_or_below
@@ -24,11 +26,13 @@ class MailingListAbility < AbilityDsl::Base
       may(:export_subscriptions).
       in_same_group_or_below_if_no_subscriptions_in_below_layers
 
+    permission(:layer_full).may(:show).all
     permission(:layer_full).may(:index_subscriptions, :create, :update, :destroy).in_same_layer
     permission(:layer_full).
       may(:export_subscriptions).
       in_same_layer_if_no_subscriptions_in_below_layers
 
+    permission(:layer_and_below_full).may(:show).all
     permission(:layer_and_below_full).
       may(:index_subscriptions, :export_subscriptions, :create, :update, :destroy).in_same_layer
 
@@ -50,6 +54,10 @@ class MailingListAbility < AbilityDsl::Base
   def no_subscriptions_below
     !group_subscriptions_with_below_role_types? &&
       local_event_subscription_count == total_event_subscription_count
+  end
+
+  def subscribable_mailing_lists
+    subject.subscribable
   end
 
   private

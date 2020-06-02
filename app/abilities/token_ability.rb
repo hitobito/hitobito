@@ -27,6 +27,7 @@ class TokenAbility
     define_group_abilities if token.groups?
     define_invoice_abilities if token.invoices?
     define_event_participation_abilities if token.event_participations?
+    define_mailing_list_abilities if token.mailing_lists?
   end
 
   def define_base_abilities
@@ -74,11 +75,6 @@ class TokenAbility
     can :show, Group do |g|
       token_layer_and_below.include?(g)
     end
-
-    can :show, MailingList do |mailing_list|
-      token_layer_and_below.include?(mailing_list.group)
-    end
-
   end
 
   def define_invoice_abilities
@@ -88,6 +84,12 @@ class TokenAbility
 
     can :show, Invoice do |invoice|
       token.layer == invoice.group
+    end
+  end
+
+  def define_mailing_list_abilities
+    can :show, MailingList do |mailing_list|
+      token.layer == mailing_list.group
     end
   end
 

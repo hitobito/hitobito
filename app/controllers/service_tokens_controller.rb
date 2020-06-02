@@ -15,7 +15,8 @@ class ServiceTokensController < CrudController
     :groups,
     :events,
     :invoices,
-    :event_participations
+    :event_participations,
+    :mailing_lists
   ]
 
   private

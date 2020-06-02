@@ -80,7 +80,6 @@ Hitobito::Application.routes.draw do
         get 'qualifications' => 'qualifications#new' # route required for language switch
 
         scope module: 'person' do
-          resources :mailing_lists, only: [:index]
           post 'tags' => 'tags#create'
           delete 'tags' => 'tags#destroy'
           get 'tags/query' => 'tags#query'

@@ -16,5 +16,6 @@
       - if parent.layer?
         = f.boolean_field(:invoices, caption: model_class.human_attribute_name(:invoices))
       = f.boolean_field(:event_participations, caption: model_class.human_attribute_name(:event_participations))
+      = f.boolean_field(:mailing_lists, caption: model_class.human_attribute_name(:mailing_lists))
 
       = render_extensions :fields, locals: { f: f }

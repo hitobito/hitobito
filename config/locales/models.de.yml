@@ -796,6 +796,7 @@ de:
         events: Anlässe dieser und der darunterliegenden Ebenen
         invoices: Rechnungen dieser Ebene
         event_participations: Teilnehmende von Anlässen dieser Ebene
+        mailing_lists: Abonnent/innen von Mailinglisten dieser Ebene
 
   doorkeeper:
     scopes:

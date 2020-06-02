@@ -37,6 +37,24 @@ class MailingListsController < CrudController
 
   private
 
+  def entries
+    MailingList.where("subscribable = ? OR group_id IN (?)", true, accessible_mailing_lists_groups.flatten)
+  end
+
+  def accessible_mailing_lists_groups
+    current_user.roles.map do |role|
+      if role.permissions.include?(:group_full)
+        [group.id]
+      elsif role.permissions.include?(:group_and_below_full)
+        group.self_and_descendants.pluck(:id)
+      elsif role.permissions.include?(:layer_full)
+        group.groups_in_same_layer.pluck(:id)
+      elsif role.permissions.include?(:layer_and_below_full)
+        group.groups_in_same_layer.map { |g| g.self_and_descendants.pluck(:id) }.flatten
+      end
+    end
+  end
+
   def authorize_class
     authorize!(:index_mailing_lists, group)
   end

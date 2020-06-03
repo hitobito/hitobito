@@ -29,9 +29,7 @@ class Person::QueryController < ApplicationController
   private
 
   def list_entries
-    Person.accessible_by(PersonReadables.new(current_user))
-          .only_public_data
-          .order_by_name
+    Person.only_public_data.order_by_name
   end
 
   def authorize_action

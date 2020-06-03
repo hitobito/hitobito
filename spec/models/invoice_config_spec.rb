@@ -46,7 +46,15 @@ describe InvoiceConfig do
       expect(subject).not_to be_valid
       expect(subject.errors.keys).to eq [:payee, :iban]
     end
+
+    it 'qr' do
+      subject.payment_slip = 'qr'
+      expect(subject).not_to be_valid
+      expect(subject.errors.keys).to eq [:payee, :iban]
+    end
   end
+
+  it 'validates correct payee format'
 
   it 'validates correct iban format' do
     invoice_config.update(iban: 'wrong format')

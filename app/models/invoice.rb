@@ -184,6 +184,10 @@ class Invoice < ActiveRecord::Base
     due_at && due_at < Time.zone.today
   end
 
+  def qrcode
+    @qrcode ||= Invoice::Qrcode.new(self)
+  end
+
   private
 
   def multi_create_attributes(recipient)

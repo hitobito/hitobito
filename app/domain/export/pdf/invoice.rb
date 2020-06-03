@@ -8,11 +8,13 @@
 module Export::Pdf
   module Invoice
 
+    MARGIN = 2.cm
+
     class Runner
       def render(invoices, options)
         pdf = Prawn::Document.new(page_size: 'A4',
                                   page_layout: :portrait,
-                                  margin: 2.cm)
+                                  margin: MARGIN)
         customize(pdf)
         invoices.each do |invoice|
           invoice_page(pdf, invoice, options)
@@ -23,13 +25,19 @@ module Export::Pdf
 
       private
 
-      def invoice_page(pdf, invoice, options)
+      def invoice_page(pdf, invoice, options) # rubocop:disable Metrics/MethodLength
         if options[:articles]
-          sections.each { |section| section.new(pdf, invoice).render }
+          sections.each do |section|
+            section.new(pdf, invoice, options[:debug]).render
+          end
         end
 
         if options[:payment_slip]
-          PaymentSlip.new(pdf, invoice).render
+          if invoice.payment_slip == 'qr'
+            PaymentSlipQr.new(pdf, invoice, options[:debug]).render
+          else
+            PaymentSlip.new(pdf, invoice, options[:debug]).render
+          end
         end
       end
 

@@ -476,6 +476,10 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     riddle (2.4.1)
+    rqrcode (1.1.2)
+      chunky_png (~> 1.0)
+      rqrcode_core (~> 0.1)
+    rqrcode_core (0.1.2)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -714,6 +718,7 @@ DEPENDENCIES
   redcarpet
   remotipart
   request_profiler
+  rqrcode
   rspec-collection_matchers
   rspec-its
   rspec-rails (= 4.0.0.beta3)

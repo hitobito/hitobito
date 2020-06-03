@@ -671,6 +671,7 @@ de:
           ch_esr: Oranger Einzahlungsschein Post (CH)
           ch_besr: Oranger Einzahlungsschein Bank (CH)
           no_ps: Keiner
+          qr: QR Rechnung
         states:
           draft: Entwurf
           issued: Gestellt
@@ -727,6 +728,7 @@ de:
         payee: Einzahlung für
         payment_slip: Einzahlungsschein
         payment_slips:
+          qr: QR Rechnung
           ch_es: Roter Einzahlungsschein Post (CH)
           ch_bes: Roter Einzahlungsschein Bank (CH)
           ch_esr: Oranger Einzahlungsschein Post (CH)

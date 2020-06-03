@@ -29,7 +29,7 @@ class app.InvoiceConfigs
     else
       participant_number_internal.hide()
 
-    if @isNoPaymentSlip()
+    if @isNoPaymentSlip() || @isQr()
       account_number.hide()
     else
       account_number.show()
@@ -51,4 +51,7 @@ class app.InvoiceConfigs
     val = $('#invoice_config_payment_slip').find(":selected").val()
     val == 'no_ps'
 
+  isQr: ->
+    val = $('#invoice_config_payment_slip').find(":selected").val()
+    val == 'qr'
 new app.InvoiceConfigs().bind()

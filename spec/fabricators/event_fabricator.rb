@@ -46,7 +46,9 @@
 Fabricator(:event) do
   name { 'Eventus' }
   groups { [Group.all_types.first.first] }
-  before_validation { |event| event.dates.build(start_at: Time.zone.local(2012, 05, 11)) }
+  before_validation do |event|
+    event.dates.build(start_at: Time.zone.local(2012, 05, 11)) if event.dates.empty?
+  end
 end
 
 Fabricator(:course, from: :event, class_name: :'Event::Course') do

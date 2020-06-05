@@ -15,7 +15,8 @@ module MailRelay
     BATCH_TIMEOUT = Settings.email.bulk_mail.batch_timeout
     RETRY_AFTER_ERROR = [5.minutes, 10.minutes].freeze
     INVALID_EMAIL_ERRORS = ['Domain not found',
-                            'Recipient address rejected'].freeze
+                            'Recipient address rejected',
+                            'Bad sender address syntax'].freeze
 
     def initialize(message, envelope_sender, delivery_report_to, recipients)
       @message = message

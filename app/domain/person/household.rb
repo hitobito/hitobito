@@ -36,9 +36,13 @@ class Person::Household
     if readonly_people.empty?
       update_address
       update_people unless other == person
-    elsif same_address?(other) || ability.can?(:update, other)
+    elsif same_address?(other) || can_update(other)
       update_people
     end
+  end
+
+  def can_update(other)
+    ability.can?(:update, other) || address_attrs(other) == address_attrs(person)
   end
 
   def persist!
@@ -75,7 +79,7 @@ class Person::Household
   end
 
   def readonly_people
-    @readonly_people ||= housemates.select { |p| ability.cannot?(:update, p) }
+    @readonly_people ||= housemates.reject { |p| can_update(other) }
   end
 
   def key

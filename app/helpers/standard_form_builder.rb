@@ -471,7 +471,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def render_help_text(attr)
-    help_texts.render_field(attr)
+    help_texts.render_field(attr) || help_texts.render_field("#{attr}_id")
   end
 
   private

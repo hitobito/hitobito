@@ -677,6 +677,28 @@ describe Event do
 
   end
 
+  context 'group timestamps' do
+    let(:group) { groups(:top_layer) }
+
+    it 'does not modify the group timestamps when creating an event' do
+      expect do
+        Event.new(name: 'dummy',
+                  groups: [group],
+                  dates: [Event::Date.new(start_at: Time.now)])
+            .save!
+      end.not_to change { group.updated_at }
+    end
+
+    it 'does not modify the updater id when creating an event' do
+      expect do
+        Event.new(name: 'dummy',
+                  groups: [group],
+                  dates: [Event::Date.new(start_at: Time.now)])
+            .save!
+      end.not_to change { group.updater_id }
+    end
+
+  end
 
   def set_start_finish(event, start_at)
     start_at = Time.zone.parse(start_at)

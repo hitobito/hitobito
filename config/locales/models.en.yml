@@ -15,7 +15,6 @@ en:
         delimiter: ''''
         format: '%u %n'
         separator: .
-        unit: CHF
     format:
       delimiter: ''''
       separator: .

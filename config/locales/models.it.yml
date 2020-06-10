@@ -15,7 +15,6 @@ it:
         delimiter: ''''
         format: '%u %n'
         separator: .
-        unit: CHF
     format:
       delimiter: ''''
       separator: .
@@ -623,7 +622,6 @@ it:
         payment_purpose: Motivo del pagamento
         address: Indirizzo del mittente
         beneficiary: A favore di
-        payee: Versamento per
         account_number: Numero di conto
         iban: IBAN
         payment_slip: Polizza di versamento

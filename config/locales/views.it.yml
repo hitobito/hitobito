@@ -560,7 +560,6 @@ it:
       flash:
         success: Le impostazioni per le fatture sono state aggiornate con successo
     general_fields:
-      payment_slip: 'Polizza di versamento'
       payment_information_help: 'Viene indicato su ogni fattura, può essere modificato in ogni fattura'
       address_help: 'Compare sulla lettera come indirizzo del mittente'
       email_help: 'Viene utilizzato come mittente dell''e-mail al posto dell''utente corrente'

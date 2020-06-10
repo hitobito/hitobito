@@ -561,7 +561,6 @@ fr:
       flash:
         success: les réglages de la factures mis à jour avec succès
     general_fields:
-      payment_slip: 'bulletin de versement'
       payment_information_help: 'Apparaît sur chaque facture, mais peut être adapté pour une facture'
       address_help: 'Adresse de l''expéditeur qui apparaît sur la lettre'
       email_help: 'Est utilisé comme mail de l''expéditeur au lieu de celui de l''utilisateur actuel'

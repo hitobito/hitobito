@@ -8,6 +8,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+
 cmd=${1:-'help'}
 wagon_name=${2-'no wagon selected'}
 
@@ -18,6 +19,7 @@ function require_wagon_name() {
     exit 1
   fi
 }
+
 
 case $cmd in
   activate)
@@ -60,7 +62,42 @@ case $cmd in
     ;;
 
   completion)
-    echo "complete -W 'activate gemfile spec-rc test-prepare grep' $(basename "$0")"
+    cat <<"COMPLETION"
+function __wagon_commands() {
+  echo 'activate gemfile spec-rc test-prepare grep help'
+}
+
+function __wagon_list() {
+  find "../" -type d |\
+  sed 's!\.\./hitobito/!!' |\
+  grep 'hitobito_.*/' |\
+  sed 's!../hitobito_!!' |\
+  cut -d/ -f 1 |\
+  grep -v '\.\.' |\
+  uniq |\
+  xargs
+}
+
+function __wagon_completion() {
+  program=$1
+  cur=$2
+  prev=$3
+
+  case $prev in
+    wagon)
+      COMPREPLY=( $(compgen -W "$(__wagon_commands)" -- "$cur" ) )
+      return
+      ;;
+
+    activate)
+      COMPREPLY=( $( compgen -W "$(__wagon_list)" -- "$cur" ) )
+      return
+      ;;
+  esac
+}
+
+complete -F __wagon_completion -o default wagon
+COMPLETION
     ;;
 
   help|*)

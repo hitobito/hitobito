@@ -248,6 +248,7 @@ Hitobito::Application.routes.draw do
 
     resource :event_feed, only: [:show, :update]
     resources :help_texts, except: [:show]
+    resources :access_grants, only: [:index, :destroy]
 
     devise_for :service_tokens, only: [:sessions]
     devise_for :people, skip: [:registrations], path: "users"

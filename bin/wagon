@@ -20,6 +20,15 @@ function require_wagon_name() {
   fi
 }
 
+function existing_wagon_names() {
+  find "../" -type d |\
+  sed 's!\.\./hitobito/!!' |\
+  grep 'hitobito_.*/' |\
+  sed 's!../hitobito_!!' |\
+  cut -d/ -f 1 |\
+  grep -v '\.\.' |\
+  uniq
+}
 
 case $cmd in
   activate)
@@ -55,7 +64,13 @@ case $cmd in
       exit 1
     fi
     set +e
-    for wagon in cevi dsj generic glp insieme jubla pbs pro_natura sbv tenants youth; do
+
+    # grep in core
+    echo ">> grepping in hitobito <<"
+    git grep "$2"
+
+    # grep in installed wagons
+    for wagon in $(existing_wagon_names); do
       echo ">> grepping in ../hitobito_$wagon/ <<"
       (cd "../hitobito_$wagon/"; git grep "$2")
     done

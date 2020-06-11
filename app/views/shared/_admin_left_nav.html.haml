@@ -23,3 +23,5 @@
     = nav Oauth::Application.model_name.human(count: 2), oauth_applications_path, %w(oauth_applications)
 
   = render_extensions(:admin_nav_kinds)
+
+  = nav Oauth::AccessGrant.model_name.human(count: 2), access_grants_path, %w(access_grants)

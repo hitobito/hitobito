@@ -22,6 +22,7 @@ class Ability
                  InvoiceAbility,
                  MailingListAbility,
                  NoteAbility,
+                 OauthAbility,
                  PeopleFilterAbility,
                  PersonAbility,
                  Person::AddRequestAbility,

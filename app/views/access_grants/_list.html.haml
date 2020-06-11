@@ -1,0 +1,6 @@
+= crud_table do |t|
+  - t.sortable_attr(:token)
+  - t.col(t.sort_header(:application, Oauth::Application.model_name.human)) do |access_grant|
+    - access_grant.application.name
+  - t.sortable_attr(:created_at)
+  - action_col_destroy(t) { |e| access_grant_path(e) }

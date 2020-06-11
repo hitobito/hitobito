@@ -94,6 +94,9 @@ de:
         success: "%{model} wurde erfolgreich gelöscht."
         failure: "%{model} konnte nicht gelöscht werden."
 
+  access_grants:
+    own_access_grants: Meine Autorisierungen
+
   contactable:
     address_or_email: "%{address} oder %{email}"
     fields:

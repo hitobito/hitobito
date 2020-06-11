@@ -15,6 +15,8 @@ module Dropdown
     end
 
     def to_s
+      return unless Settings.table_displays
+
       content_tag(:div, html_options) do
         form_tag(table_displays_path(format: :js), remote: true) do
           render_parent_fields + super

@@ -6,6 +6,8 @@
 module TableDisplaysHelper
 
   def render_table_display_columns(table)
+    return unless Settings.table_displays
+
     current_person.table_display_for(parent).selected.each do |column|
       render_table_display_column(table, column)
     end

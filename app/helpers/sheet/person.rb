@@ -14,9 +14,11 @@ module Sheet
         :group_person_path,
         if: :show
 
-    tab 'people.tabs.mailing_lists',
-        :group_person_mailing_lists_path,
-        if: :show_details
+    if Settings.people.abos
+      tab 'people.tabs.subscriptions',
+          :group_person_subscriptions_path,
+          if: :show_details
+    end
 
     tab 'people.tabs.invoices',
         :invoices_group_person_path,

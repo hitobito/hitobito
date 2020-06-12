@@ -5,7 +5,7 @@
 
 module Sheet
   class Person < Base
-    class MailingList < Base
+    class Subscription < Base
 
       self.parent_sheet = Sheet::Person
 

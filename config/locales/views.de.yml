@@ -987,6 +987,14 @@ de:
       ask_responsibles:
         request_link: Anfrage beantworten
 
+    subscriptions:
+      index:
+        my_subscriptions: Meine Abos
+        available_subscriptions: Verfügbare Abos
+      create:
+        success: <i>%{person}</i> wurde für <i>%{mailing_list}</i> angemeldet.
+      destroy:
+        success: <i>%{person}</i> wurde von <i>%{mailing_list}</i> abgemeldet.
     tags:
       list:
         category_other: Andere
@@ -1035,7 +1043,7 @@ de:
       log: Log
       colleagues: Mitarbeiter/-innen
       invoices: Rechnungen
-      mailing_lists: Abos
+      subscriptions: Abos
 
     actions_show:
       send_login: Login schicken

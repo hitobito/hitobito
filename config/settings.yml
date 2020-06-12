@@ -135,6 +135,7 @@ role:
 people:
   # either name or role
   default_sort: name
+  abos: false
 
 event:
   attachments:

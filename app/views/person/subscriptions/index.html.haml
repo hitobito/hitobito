@@ -1,0 +1,32 @@
+- #  Copyright (c) 2020, Grünliberale Partei Schweiz. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito.
+
+%h2=t('.my_subscriptions')
+= table(@subscribed, class: 'table table-striped table-hover') do |t|
+  - t.col(MailingList.human_attribute_name(:name)) do |list|
+    %strong
+      = link_to(list.name, group_mailing_list_path(list.group, list.id))
+  - t.col(MailingList.human_attribute_name(:description)) do |list|
+    = list.description.to_s.truncate(60)
+  - t.attrs(:publisher)
+  - t.col(MailingList.human_attribute_name(:mail_address)) do |list|
+    = mail_to list.mail_address
+  - t.col do |list|
+    = link_to t('mailing_list_decorator.unsubscribe'), group_person_subscription_path(@group, @person, list), method: :delete, class: 'btn'
+
+
+%h2=t('.available_subscriptions')
+= table(@subscribable, class: 'table table-striped table-hover') do |t|
+  - t.col(MailingList.human_attribute_name(:name)) do |list|
+    %strong
+      = link_to(list.name, group_mailing_list_path(list.group, list.id))
+  - t.col(MailingList.human_attribute_name(:description)) do |list|
+    = list.description.to_s.truncate(60)
+  - t.attrs(:publisher)
+  - t.col(MailingList.human_attribute_name(:mail_address)) do |list|
+    = mail_to list.mail_address
+  - t.col do |list|
+    = link_to t('mailing_list_decorator.subscribe'), group_person_subscriptions_path(@group, @person, id: list.id), method: :post, class: 'btn'
+

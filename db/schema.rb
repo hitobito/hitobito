@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_11_140032) do
+ActiveRecord::Schema.define(version: 2020_06_18_113000) do
 
   create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "contactable_type", null: false
@@ -227,6 +227,7 @@ ActiveRecord::Schema.define(version: 2020_05_11_140032) do
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
+    t.index ["type"], name: "index_groups_on_type"
   end
 
   create_table "help_text_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|

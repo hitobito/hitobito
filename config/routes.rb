@@ -37,6 +37,8 @@ Hitobito::Application.routes.draw do
     get '/people/:id' => 'person/top#show', as: :person
     get '/events/:id' => 'event/top#show', as: :event
 
+    get 'list_groups' => 'group/lists#index', as: :list_groups
+
     resources :groups do
       member do
         get :deleted_subgroups

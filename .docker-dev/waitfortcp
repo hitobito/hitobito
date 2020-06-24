@@ -1,0 +1,9 @@
+#!/bin/bash
+
+HOST=$1
+PORT=$2
+
+while ! (echo >"/dev/tcp/$HOST/$PORT") &>/dev/null; do
+  echo "💤 Waiting for $HOST:$PORT to become available."
+  sleep 1
+done

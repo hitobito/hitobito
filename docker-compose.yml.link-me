@@ -1,0 +1,92 @@
+version: '3.4'
+services:
+  rails: &rails
+    build:
+      context: .
+      dockerfile: hitobito/.docker-dev/Rails.dockerfile
+    image: hitobito-dev/rails
+    entrypoint: /opt/app-root/src/hitobito/.docker-dev/rails-entrypoint
+    command: [ 'bundle', 'exec', 'rails', 'server', '-b', '0.0.0.0' ]
+    depends_on:
+    - db
+    - mailcatcher
+    - cache
+    - worker
+    env_file: hitobito/.docker-dev/rails.env
+    ports:
+    - "3000:3000"
+    tmpfs: /opt/app-root/src/hitobito/tmp/pids
+    volumes:
+    - ./:/opt/app-root/src/
+
+  worker:
+    <<: *rails
+    command: [ 'bundle', 'exec', 'rails', 'jobs:work' ]
+    ports: []
+    depends_on:
+    - db
+    - mailcatcher
+    - cache
+
+  rails-test:
+    image: hitobito-dev/rails
+    depends_on:
+    - db-test
+    env_file: hitobito/.docker-dev/rails.env
+    environment:
+      RAILS_ENV: test
+      RAILS_DB_NAME: hitobito_test
+      RAILS_DB_HOST: db-test
+    command: tail -f /dev/null
+    volumes:
+    - ./:/opt/app-root/src/
+
+  # Dependencies
+  mailcatcher:
+    image: hitobito-dev/rails
+    command: [ mailcatcher, -f, --ip, '0.0.0.0' ]
+    ports:
+    - "1080:1080"
+
+  cache:
+    image: memcached:1.5-alpine
+    command: [ memcached, -l, '0.0.0.0', -p, '11211' ]
+
+  sphinx:
+    image: macbre/sphinxsearch:3.1.1
+    depends_on:
+    - db
+    volumes:
+    - sphinx:/opt/sphinx/index
+    - ./hitobito/.docker-dev/sphinx.conf:/opt/sphinx/conf/sphinx.conf:ro
+
+  indexer:
+    image: macbre/sphinxsearch:3.1.1
+    command: [ indexer, --config, /opt/sphinx/conf/sphinx.conf, --all ]
+    depends_on:
+    - db
+    volumes:
+    - sphinx:/opt/sphinx/index
+    - ./hitobito/.docker-dev/sphinx.conf:/opt/sphinx/conf/sphinx.conf:ro
+
+  db:
+    image: mysql:5.7
+    command:
+    - --sort_buffer_size=2M
+    env_file: hitobito/.docker-dev/mysql.env
+    ports:
+    - "33066:3306"
+    volumes:
+    - db:/var/lib/mysql
+
+  db-test:
+    image: mysql:5.7
+    command:
+    - --sort_buffer_size=2M
+    env_file: hitobito/.docker-dev/mysql.env
+    environment:
+      MYSQL_DATABASE: hitobito_test
+
+volumes:
+  db:
+  sphinx:

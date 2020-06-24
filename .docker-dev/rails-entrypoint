@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+if [ ! -f "./Wagonfile" ]; then
+  echo "⚙ Creating Wagonfile from defaults because it doesn't exist yet"
+  cp Wagonfile.ci Wagonfile
+  echo "✅ Created Wagonfile"
+else
+  echo "↪️ Leaving existing Wagonfile as it is"
+fi
+
+echo "⚙️ Testing DB connection"
+timeout 300s /opt/app-root/src/hitobito/.docker-dev/waitfortcp "${RAILS_DB_HOST-db}" "${RAILS_DB_PORT-3306}"
+echo "✅ DB is ready"
+
+echo "⚙️ Performing migrations"
+bundle exec rake db:migrate wagon:migrate
+echo "✅ Migrations done"
+
+echo "➡️ Handing control over to '$*''"
+
+exec bundle exec "$@"

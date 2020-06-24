@@ -35,14 +35,14 @@ module Synchronize
         destroy_segments
       end
 
-      def missing_people
-        people.reject do |person|
-          members_by_email.keys.include?(person.email) || person.email.blank?
+      def missing_subscribers
+        subscribers.reject do |subscriber|
+          members_by_email.keys.include?(subscriber.email) || subscriber.email.blank?
         end
       end
 
       def obsolete_emails
-        members_by_email.keys - people.collect(&:email)
+        members_by_email.keys - subscribers.collect(&:email)
       end
 
       def missing_segments
@@ -69,10 +69,10 @@ module Synchronize
         end.compact
       end
 
-      def changed_people
-        @changed_people ||= people.select do |person|
-          member = members_by_email[person.email]
-          member.deep_merge(client.subscriber_body(person)) != member if member
+      def changed_subscribers
+        @changed_subscribers ||= subscribers.select do |subscriber|
+          member = members_by_email[subscriber.email]
+          member.deep_merge(client.subscriber_body(subscriber)) != member if member
         end
       end
 
@@ -83,7 +83,7 @@ module Synchronize
       private
 
       def subscribe_members
-        result.track(:subscribe_members, client.subscribe_members(missing_people))
+        result.track(:subscribe_members, client.subscribe_members(missing_subscribers))
       end
 
       def unsubscribe_members
@@ -95,7 +95,7 @@ module Synchronize
       end
 
       def update_members
-        result.track(:update_members, client.update_members(changed_people))
+        result.track(:update_members, client.update_members(changed_subscribers))
       end
 
       def create_merge_fields
@@ -108,18 +108,6 @@ module Synchronize
 
       def destroy_segments
         result.track(:delete_segments, client.delete_segments(obsolete_segment_ids))
-      end
-
-      def tags
-        @tags ||= people.each_with_object({}) do |person, hash|
-          next unless person.email
-
-          person.tags.each do |tag|
-            value = tag.name
-            hash[value] ||= []
-            hash[value] << person.email
-          end
-        end
       end
 
       def remote_tags
@@ -139,8 +127,12 @@ module Synchronize
         @members_by_email ||= members.index_by { |m| m[:email_address] }
       end
 
-      def people
-        @people ||= list.people.includes(:tags).unscope(:select)
+      def subscribers
+        @subscribers ||= Subscriber.mailing_list_subscribers(list)
+      end
+
+      def tags
+        @tags ||= Subscriber.mailing_list_tags(list)
       end
 
     end

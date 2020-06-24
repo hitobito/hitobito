@@ -13,6 +13,29 @@ module Synchronize
 
     class Subscriber
       def self.mailing_list_subscribers(mailing_list)
+        if mailing_list.include_additional_emails
+          default_and_additional_addresses(mailing_list)
+        else
+          default_addresses(mailing_list)
+        end
+      end
+
+      def self.default_and_additional_addresses(mailing_list)
+        people = mailing_list.people
+        additional_emails = AdditionalEmail.where(contactable_type: Person.sti_name,
+                                                  contactable_id: people.collect(&:id),
+                                                  mailings: true).to_a
+        people.flat_map do |person|
+          additional_email_subscribers = additional_emails.select do |additional_email|
+            additional_email.contactable_id = person.id
+          end.map do |additional_email|
+            self.new(person, additional_email.email)
+          end
+          [self.new(person, person.email)] + additional_email_subscribers
+        end
+      end
+
+      def self.default_addresses(mailing_list)
         mailing_list.people.map do |person|
           self.new(person, person.email)
         end

@@ -29,6 +29,8 @@
 
 class MailingList < ActiveRecord::Base
 
+  attr_accessor :include_additional_emails
+
   serialize :preferred_labels, Array
   attribute :mailchimp_result, Synchronize::Mailchimp::ResultType.new
 

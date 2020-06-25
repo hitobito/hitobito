@@ -7,5 +7,5 @@
   - t.col(t.sort_header(:name)) do |article|
     %strong= link_to article.name, group_invoice_article_path(parent, article)
   - t.sortable_attrs(:number, :description, :category)
-  - t.col(t.sort_header(:unit_cost), class: 'right') { |a| number_to_currency(a.unit_cost) }
+  - t.col(t.sort_header(:unit_cost), class: 'right') { |a| number_to_currency(a.unit_cost, parent.invoice_config.currency) }
   - t.sortable_attrs(:vat_rate, :cost_center, :account)

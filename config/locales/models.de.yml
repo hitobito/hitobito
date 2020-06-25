@@ -656,6 +656,7 @@ de:
         pp_post: PP-Zeile
 
       invoice:
+        currency: Währung
         title: Titel
         description: Text
         invoice_items: Rechnungsposten
@@ -716,6 +717,7 @@ de:
         account: Konto
 
       invoice_config:
+        currency: Währung
         payment_information: Zahlungsinformation
         address: Absender Adresse
         account_number: Kontonummer

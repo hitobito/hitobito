@@ -10,11 +10,11 @@ class InvoiceItemDecorator < ApplicationDecorator
   decorates :invoice_item
 
   def cost
-    h.number_to_currency(model.cost, format: '%n %u')
+    format_currency(model.cost)
   end
 
   def unit_cost
-    h.number_to_currency(model.unit_cost, format: '%n %u')
+    format_currency(model.unit_cost)
   end
 
   def vat_rate
@@ -22,7 +22,11 @@ class InvoiceItemDecorator < ApplicationDecorator
   end
 
   def total
-    h.number_to_currency(model.total, format: '%n %u')
+    format_currency(model.total)
+  end
+
+  def format_currency(value)
+    invoice.decorate.format_currency(value)
   end
 
 end

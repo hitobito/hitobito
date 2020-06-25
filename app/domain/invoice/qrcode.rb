@@ -49,7 +49,7 @@ class Invoice::Qrcode
   end
 
   def payment
-    { amount: format('%<total>.2f', total: @invoice.total), currency: Settings.currency.unit }
+    { amount: format('%<total>.2f', total: @invoice.total), currency: @invoice.currency }
   end
 
   def debitor

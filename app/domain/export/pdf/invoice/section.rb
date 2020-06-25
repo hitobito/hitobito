@@ -28,7 +28,6 @@ module Export::Pdf::Invoice
     def helper
       @helper ||= Class.new do
         include ActionView::Helpers::NumberHelper
-        include CurrencyHelper
       end.new
     end
 

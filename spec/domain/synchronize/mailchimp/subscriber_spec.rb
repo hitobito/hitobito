@@ -24,9 +24,9 @@ describe Synchronize::Mailchimp::Subscriber do
     end
   end
 
-  context 'mailing list with include_additional_emails' do
+  context 'mailing list with mailchimp_include_additional_emails' do
     before do
-      mailing_list.include_additional_emails = true
+      mailing_list.mailchimp_include_additional_emails = true
     end
 
     it 'returns an entry per people and address (default and additional)' do

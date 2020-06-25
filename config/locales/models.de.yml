@@ -615,6 +615,7 @@ de:
           success: Aktualisiert
           partial: Teilweise
           failed: Fehlgeschlagen
+        mailchimp_include_additional_emails: 'Alle Versandadressen synchronisieren'
 
       subscription:
         related_role_types: Rollen

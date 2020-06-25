@@ -13,7 +13,7 @@ module Synchronize
 
     class Subscriber
       def self.mailing_list_subscribers(mailing_list)
-        if mailing_list.include_additional_emails
+        if mailing_list.mailchimp_include_additional_emails
           default_and_additional_addresses(mailing_list)
         else
           default_addresses(mailing_list)

@@ -21,11 +21,16 @@ class TokenAbility
   private
 
   def define_token_abilities
+    define_base_abilities
     define_person_abilities if token.people? || token.people_below?
     define_event_abilities if token.events?
     define_group_abilities if token.groups?
     define_invoice_abilities if token.invoices?
     define_event_participation_abilities if token.event_participations?
+  end
+
+  def define_base_abilities
+    can :index, Group
   end
 
   def define_person_abilities

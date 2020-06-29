@@ -83,7 +83,14 @@ delayedQueryForTypeahead = (query, process, delay = 450) ->
 typeaheadHighlighter = (item) ->
   query = this.query.trim().replace(/[\-\[\]{}()*+?.,\\\^$|#]/g, '\\$&')
   query = query.replace(/\s+/g, '|')
-  labelWithIcon(JSON.parse(item)).replace(new RegExp('(' + query + ')', 'ig'), ($1, match) -> '<strong>' + match + '</strong>')
+  label = labelWithIcon(JSON.parse(item))
+  if query
+    highlightQuery(label, query)
+  else
+    label
+
+highlightQuery = (label, query) ->
+  label.replace(new RegExp('(' + query + ')', 'ig'), ($1, match) -> '<strong>' + match + '</strong>')
 
 labelWithIcon = (item) ->
   if item.icon

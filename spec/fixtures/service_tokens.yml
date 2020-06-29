@@ -34,6 +34,7 @@ permitted_top_group_token:
   events: true
   invoices: true
   event_participations: true
+  mailing_lists: true
 
 rejected_top_group_token:
   layer: top_layer

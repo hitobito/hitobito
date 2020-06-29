@@ -39,8 +39,8 @@ describe Export::Pdf::Invoice do
       expect(subject).to match 'Gesamtbetrag 5.35 CHF'
     end
 
-    it 'is read from settings' do
-      allow(Settings.currency).to receive(:unit).and_return('EUR')
+    it 'is read from invoice' do
+      invoice.update(currency: "EUR")
       expect(subject).to match 'Gesamtbetrag 5.35 EUR'
       expect(subject).not_to match 'CHF'
     end

@@ -89,13 +89,11 @@ module Export::Pdf::Invoice
     end
 
     def total_data
+      decorated = invoice.decorate
       [
-        [I18n.t('invoices.pdf.cost'),
-         helper.number_to_currency(invoice.calculated[:cost], format: '%n %u')],
-        [I18n.t('invoices.pdf.total_vat'),
-         helper.number_to_currency(invoice.calculated[:vat], format: '%n %u')],
-        [I18n.t('invoices.pdf.total'),
-         helper.number_to_currency(invoice.calculated[:total], format: '%n %u')]
+        [I18n.t('invoices.pdf.cost'), decorated.cost],
+        [I18n.t('invoices.pdf.total_vat'), decorated.vat],
+        [I18n.t('invoices.pdf.total'), decorated.total]
       ]
     end
 

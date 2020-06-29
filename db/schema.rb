@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_18_113000) do
+ActiveRecord::Schema.define(version: 2020_06_19_075516) do
 
   create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "contactable_type", null: false
@@ -278,6 +278,7 @@ ActiveRecord::Schema.define(version: 2020_06_18_113000) do
     t.string "email"
     t.string "participant_number_internal"
     t.string "vat_number"
+    t.string "currency", default: "CHF", null: false
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 
@@ -321,6 +322,7 @@ ActiveRecord::Schema.define(version: 2020_06_18_113000) do
     t.integer "creator_id"
     t.string "participant_number_internal"
     t.string "vat_number"
+    t.string "currency", default: "CHF", null: false
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["recipient_id"], name: "index_invoices_on_recipient_id"

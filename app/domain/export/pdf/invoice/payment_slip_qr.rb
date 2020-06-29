@@ -149,7 +149,7 @@ module Export::Pdf::Invoice
         text_box 'Betrag', at: [20.mm, cursor]
       end
       content do
-        text_box Settings.currency.unit, at: [0, cursor]
+        text_box @invoice.currency, at: [0, cursor]
         text_box amount, at: [20.mm, cursor]
       end
     end

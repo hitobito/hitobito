@@ -16,7 +16,7 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def as_quicksearch
-    { id: id, label: h.h(full_label), type: :person }
+    { id: id, label: h.h(full_label), type: :person, icon: :user }
   end
 
   def as_typeahead_with_address

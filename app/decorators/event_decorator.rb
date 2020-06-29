@@ -111,7 +111,7 @@ class EventDecorator < ApplicationDecorator
   end
 
   def as_quicksearch
-    { id: id, label: label_with_group, type: :event }
+    { id: id, label: label_with_group, type: :event, icon: :'calendar-alt' }
   end
 
   def label_with_group

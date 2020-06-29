@@ -32,7 +32,7 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def as_quicksearch
-    { id: id, label: label_with_parent, type: :group }
+    { id: id, label: label_with_parent, type: :group, icon: :users }
   end
 
   def label_with_parent

@@ -290,4 +290,24 @@ describe TokenAbility do
       end
     end
   end
+
+  describe :mailing_lists do
+    let(:mailing_list) { mailing_lists(:leaders) }
+
+    context 'authorized' do
+      let(:token) { service_tokens(:permitted_top_group_token) }
+
+      it 'may show' do
+        is_expected.to be_able_to(:show, mailing_list)
+      end
+    end
+
+    context 'unauthorized' do
+      let(:token) { service_tokens(:rejected_top_group_token) }
+
+      it 'may not show' do
+        is_expected.not_to be_able_to(:show, mailing_list)
+      end
+    end
+  end
 end

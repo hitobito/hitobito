@@ -44,6 +44,15 @@ nicht ins Git einchecken!). Danach erfolgt die Umstellung von einer Konfiguratio
 
 Falls `spring` im Einsatz ist, muss vor dem Wechsel `spring stop` ausgeführt werden.
 
+### Entwickeln in Alltag mit ./bin/wagon
+
+Das Script verwendet [direnv](https://direnv.net/) und steuert über environment
+variablen welcher Wagon mit welcher Datenbank verwendet wird. 
+
+Somit lässt sich auf einfache Art und Weise zwischen verschiedenen Wagons hin
+und her springen. Zudem erlaubt das script auch über wagons zu greppen oder die
+test configuration so anzupassen, dass nicht bei jedem Wageon test die DB
+entsprechend vorbereit wird.
 
 ### Instructions: create wagon
 

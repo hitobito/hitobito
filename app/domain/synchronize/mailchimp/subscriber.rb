@@ -66,6 +66,11 @@ module Synchronize
 
         person.send(method_name, *args, &block)
       end
+
+      def respond_to_missing?(method, *)
+        %i[email].include?(method) || person.respond_to?(method)
+      end
+
     end
   end
 end

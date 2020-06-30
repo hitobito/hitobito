@@ -64,11 +64,11 @@ module Synchronize
       def method_missing(method_name, *args, &block)
         super unless person.respond_to?(method_name)
 
-        person.send(method_name, *args, &block)
+        person.public_send(method_name, *args, &block)
       end
 
       def respond_to_missing?(method, *)
-        %i[email].include?(method) || person.respond_to?(method)
+        person.respond_to?(method)
       end
 
     end

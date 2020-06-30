@@ -11,21 +11,63 @@ Hitobito is a Ruby on Rails application that runs on Ruby >= 2.2 and Rails 4.
 It might run with minor tweaks on older Rubies, but is not tested against those
 versions.
 
-To get going, after you got a copy of hitobito and at least one wagon with an organization
-structure setup as described below, issue the following commands in the main directory:
+### System Requirements
 
-    sudo yum install sqlite memcached sphinxsearch imagemagick  # install system dependencies
+You need to have [Docker][docker] and _[docker-compose][doco]_ installed on your computer.
+The free _Docker Community Edition (CE)_ works perfectly fine.
 
-    bundle               # install gem dependencies
-    rake db:create       # create a development database (Sqlite3)
-    rake db:setup:all    # run migrations and load seed data of the app and all wagons
-    rails server         # start the rails server
+[docker]: https://docs.docker.com/install/
+[doco]: https://docs.docker.com/compose/install/
 
-To start the search server, run background jobs or the development mail catcher, run:
+Additionally you need **git** to be installed and configured.
 
-    rake ts:start
-    rake jobs:work
-    mailcatcher -v -f
+### Preparation
+
+First, you need to clone this repository:
+
+```bash
+mkdir -p ~/git/hitobito && cd ~/git/hitobito
+git clone https://github.com/hitobito/hitobito.git
+ln -s hitobito/docker-compose.yml.link-me docker-compose.yml
+```
+
+You need to add at least one wagon project:
+
+```bash
+# wagon project(s)
+git clone https://github.com/hitobito/hitobito_generic.git
+```
+
+The final structure should look something like this:
+
+```bash
+$ ls -lah
+total 16K
+drwxrwxr-x  4 ps ps 4.0K Jun 25 11:20 .
+drwxrwxr-x 17 ps ps 4.0K Jun 25 10:00 ..
+lrwxrwxrwx  1 ps ps   35 Jun 24 17:51 docker-compose.yml -> hitobito/docker-compose.yml.link-me
+drwxrwxr-x 18 ps ps 4.0K Jun 25 07:29 hitobito
+drwxrwxr-x 11 ps ps 4.0K Jun 24 10:53 hitobito_generic
+```
+
+### Running the project with docker-compose
+
+To start the Hitobito application, run the following command in your shell:
+
+```bash
+docker-compose up rails
+```
+
+It will initially take a while to prepare the initial Docker images, to prepare the database and to start the application.
+The process will be shorter on subsequent starts.
+
+Now it's time to seed the database:
+
+```bash
+docker-compose exec rails bash -c 'rails db:seed wagon:seed'
+```
+
+Access webapplication by browser: http://localhost:3000
 
 A more detailed development documentation in German can be found in [doc/development](doc/development).
 This is where you also find some [Deployment Instructions](doc/development/02_deployment.md).

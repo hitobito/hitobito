@@ -18,6 +18,7 @@ services:
     tmpfs: /opt/app-root/src/hitobito/tmp/pids
     volumes:
     - ./:/opt/app-root/src/
+    - bundle:/opt/bundle
 
   worker:
     <<: *rails
@@ -31,6 +32,7 @@ services:
   rails-test:
     image: hitobito-dev/rails
     depends_on:
+    - rails
     - db-test
     env_file: hitobito/.docker-dev/rails.env
     environment:
@@ -38,12 +40,17 @@ services:
       RAILS_DB_NAME: hitobito_test
       RAILS_DB_HOST: db-test
     command: tail -f /dev/null
+    entrypoint: /opt/app-root/src/hitobito/.docker-dev/rails-entrypoint
     volumes:
     - ./:/opt/app-root/src/
+    - bundle:/opt/bundle
 
   # Dependencies
   mailcatcher:
-    image: hitobito-dev/rails
+    image: hitobito-dev/mailcatcher
+    build:
+      context: .
+      dockerfile: hitobito/.docker-dev/Mailcatcher.dockerfile
     command: [ mailcatcher, -f, --ip, '0.0.0.0' ]
     ports:
     - "1080:1080"
@@ -90,3 +97,4 @@ services:
 volumes:
   db:
   sphinx:
+  bundle:

@@ -55,7 +55,7 @@ drwxrwxr-x 11 ps ps 4.0K Jun 24 10:53 hitobito_generic
 To start the Hitobito application, run the following command in your shell:
 
 ```bash
-docker-compose up rails
+docker-compose up
 ```
 
 It will initially take a while to prepare the initial Docker images, to prepare the database and to start the application.
@@ -69,8 +69,9 @@ docker-compose exec rails bash -c 'rails db:seed wagon:seed'
 
 Access webapplication by browser: http://localhost:3000
 
-A more detailed development documentation in German can be found in [doc/development](doc/development).
-This is where you also find some [Deployment Instructions](doc/development/02_deployment.md).
+Further development instructions can be found in [doc/development](doc/development).
+
+For deployment check [Deployment Instructions](doc/development/02_deployment.md).
 
 ## Architecture
 

@@ -41,25 +41,11 @@ angehängt werden. Der Output wird nach `tmp/performance` geschrieben.
 
 ### Sphinx
 
-Sphinx läuft nur unter MySql. Wenn MySql/Sphinx bei der Entwicklung verwendet werden soll, müssen
-die Datenbank Tasks und der Rails Server wie oben erwähnt mit `bin/with_mysql` gestart werden.
-
-Um die Volltextsuche zu verwenden, muss erst der Index erstellt
-
-    bin/with_mysql rake ts:index
-
-und dann Sphinx gestartet werden:
-
-    rake ts:start
+Sphinx läuft in einem Container der über docker-compose gestartet wird.
 
 Achtung: Der Index wird grundsätzlich nur über diesen Aufruf aktualisiert! Änderungen an der DB
 werden für die Volltextsuche also erst sichtbar, wenn wieder neu indexiert wurde. Auf der Produktion
 läuft dazu alle 10 Minuten ein Delayed Job.
-
-Hinweis: Falls beim Indexieren der Fehler ``ERROR: index 'group_core': sql_fetch_row: Out of sort memory, consider increasing server sort buffer size.`` auftritt, muss in der MySql-Konfiguration (je nach Distro im File ``/etc/mysql/mysql.conf.d/mysqld.cnf`` oder ``/etc/mysql/my.cnf``) folgende Buffergrösse erhöht werden:
-
-    [mysqld]
-    sort_buffer_size = 2M
 
 ### Delayed Job
 

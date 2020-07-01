@@ -7,7 +7,7 @@ hitobito is an open source web application to manage complex group hierarchies w
 
 ## Development
 
-Hitobito is a Ruby on Rails application that runs on Ruby >= 2.2 and Rails 4.
+Hitobito is a Ruby on Rails application that runs on Ruby >= 2.2 and Rails 6.
 It might run with minor tweaks on older Rubies, but is not tested against those
 versions.
 
@@ -31,7 +31,7 @@ git clone https://github.com/hitobito/hitobito.git
 ln -s hitobito/docker-compose.yml.link-me docker-compose.yml
 ```
 
-You need to add at least one wagon project:
+Now you need to add at least one wagon project:
 
 ```bash
 # wagon project(s)

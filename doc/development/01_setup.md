@@ -1,6 +1,6 @@
 ## Development
 
-Basis Setup: [instructions](https://github.com/hitobito/hitobito#development).
+Basis Setup: [Instructions](https://github.com/hitobito/hitobito#development).
 
 Siehe [Wagon erstellen](04_wagons.md#wagon-erstellen), wenn du frisch startest und einen Wagon für eine neue
 Organisation erstellen willst.

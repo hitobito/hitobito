@@ -1,85 +1,25 @@
-## Setup der Entwicklungsumgebung
+## Development
 
-Die Applikation läuft unter Ruby >= 2.2, Rails 4 und Sqlite3 (development) / MySQL (production).
-
-
-### System
-
-Grundsätzlich muss für hitobito eine Ruby Version grösser gleich 2.2 sowie Bundler vorhanden sein.
-Siehe dazu https://www.ruby-lang.org/en/documentation/installation/.
-
-Als Entwicklungsdatenbank wird Sqlite3 verwendet. Zur Emulation des Produktionsenvironments muss
-MySQL installiert sein. Die Befehle gehen von einem Ubuntu Linux als Entwicklungssystem aus.
-Bei einem anderen System müssen die Befehle entsprechend angepasst werden.
-
-    sudo apt-get install sqlite3 libsqlite3-dev libgmp3-dev
-    sudo apt-get install mysql-client libmysqlclient-dev mysql-server
-
-Folgende Dritt-Packete sind für die verschiedenen Features von hitobito zusätzlich erforderlich.
-
-    sudo apt-get install sphinxsearch memcached imagemagick transifex-client graphviz
-
-
-### Source
-
-Hitobito Core und die entsprechenden Wagons aus dem Git Remote klonen und das Wagonfile kopieren.
-Der Core und die Wagons müssen nebeneinander im gleichen Hauptverzeichnis sein.
-Dazu muss Git installiert sein.
-
-    sudo apt-get install git
-
-    cd your-code-directory
-
-    git clone https://github.com/hitobito/hitobito.git
-
-    git clone https://github.com/hitobito/hitobito_[wagon].git
-
-    cp hitobito/Wagonfile.ci hitobito/Wagonfile
-
-    cp hitobito/Gemfile.lock hitobito_[wagon]/
+Basis Setup: [instructions](https://github.com/hitobito/hitobito#development).
 
 Siehe [Wagon erstellen](04_wagons.md#wagon-erstellen), wenn du frisch startest und einen Wagon für eine neue
 Organisation erstellen willst.
-
-
-### Setup
-
-Ruby Gem Dependencies installieren (alle folgenden Befehle im Hitobito Core Verzeichnis ausführen):
-
-    bundle
-
-Datenbank erstellen
-
-    rake db:create
-
-Initialisieren der Datenbank, laden der Seeds und Wagons:
-
-    rake db:setup:all
-
-Starten des Entwicklungsservers:
-
-    rails server
-
-oder gleich aller wichtigen Prozesse:
-
-    gem install foreman
-    foreman start
 
 ### Tests
 
 Ausführen der Tests:
 
-    rake
+    docker-compose exec rails-test bash -c 'bundle exec rails spec'
 
 Dies führt aus Performancegründen keine Javascript/Feature Specs aus. Diese können explizit
 gestartet werden. Dazu muss xvfb installiert sein.
 
     sudo apt-get install xvfb
-    rake spec:features
+    docker-compose exec rails-test bash -c 'bundle exec rails spec:features'
 
-Ausführen der Wagon Tests (vom Hitobito Core aus):
+Ausführen der Wagon Tests:
 
-    rake wagon:test
+    docker-compose exec rails-test bash -c 'bundle exec rails wagon:test'
 
 Um einzelne Tests auszuführen, muss die Testdatenbank vorbereitet sein. Dazu muss nach dem Wechsel
 von Core in einen Wagon (und umgekehrt) folgender Befehl ausgeführt werden:

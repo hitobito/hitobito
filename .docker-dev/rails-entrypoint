@@ -10,6 +10,9 @@ else
   echo "↪️ Leaving existing Wagonfile as it is"
 fi
 
+echo "Running bundle install"
+bundle install
+
 echo "⚙️ Testing DB connection"
 timeout 300s /opt/app-root/src/hitobito/.docker-dev/waitfortcp "${RAILS_DB_HOST-db}" "${RAILS_DB_PORT-3306}"
 echo "✅ DB is ready"

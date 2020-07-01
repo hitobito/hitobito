@@ -1,10 +1,9 @@
 FROM centos/ruby-26-centos7
-ENV RAILS_ENV=development
+
 USER root
-COPY . /opt/app-root/src
+
+ENV RAILS_ENV=development
+ENV BUNDLE_PATH=/opt/bundle
 WORKDIR /opt/app-root/src/hitobito
-RUN cp ./Wagonfile.ci ./Wagonfile
 
-RUN bash -c bundle install
-
-CMD [ "bundle", "exec", "rails", "server", "-b", "0.0.0.0" ]
+ENTRYPOINT /opt/app-root/src/hitobito/.docker-dev/rails-entrypoint

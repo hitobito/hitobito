@@ -7,24 +7,26 @@ Organisation erstellen willst.
 
 ### Tests
 
+Als erstes eine console im test container starten:
+
+    docker-compose exec rails-test bash -c 'bundle exec bash'
+
 Ausführen der Tests:
 
-    docker-compose exec rails-test bash -c 'bundle exec rails spec'
+    rails spec
 
 Dies führt aus Performancegründen keine Javascript/Feature Specs aus. Diese können explizit
-gestartet werden. Dazu muss xvfb installiert sein.
+gestartet werden:
 
-    sudo apt-get install xvfb
-    docker-compose exec rails-test bash -c 'bundle exec rails spec:features'
+    rails spec:features
 
 Ausführen der Wagon Tests:
 
-    docker-compose exec rails-test bash -c 'bundle exec rails wagon:test'
+    rails wagon:test
 
-Um einzelne Tests auszuführen, muss die Testdatenbank vorbereitet sein. Dazu muss nach dem Wechsel
-von Core in einen Wagon (und umgekehrt) folgender Befehl ausgeführt werden:
+Um einzelne Tests auszuführen, muss die Testdatenbank vorbereitet sein:
 
-    rake db:test:prepare
+    rails db:test:prepare
 
 Danach können spezifische Tests auch mit Spring und direkt über Rspec ausgeführt werden, z.B.:
 
@@ -35,25 +37,6 @@ Danach können spezifische Tests auch mit Spring und direkt über Rspec ausgefü
 
 Um einen einzelnen Request zu Profilen, kann der Parameter `?profile_request=true` in der URL
 angehängt werden. Der Output wird nach `tmp/performance` geschrieben.
-
-
-### Datenbank Auswahl
-
-Im Entwicklungsmodus wird per Default mit Sqlite3 gearbeitet.
-
-Um den Server, die Konsole oder Rake Tasks im Development Environment mit MySQL zu starten,
-existiert das folgende Script:
-
-     bin/with_mysql rails xxx
-
-Wenn auf der DB ein Passwort verwendet wird, kann es folgendermassen angegeben weden:
-
-     RAILS_DB_PASSWORD=password bin/with_mysql rails xxx
-
-Um Tests mit MySQL auszuführen, kann der folgende Befehl verwendet werden. Dabei wird immer die
-Testdatenbank (hitobito_test) verwendet.
-
-    rake mysql test
 
 
 ### Sphinx
@@ -78,39 +61,32 @@ Hinweis: Falls beim Indexieren der Fehler ``ERROR: index 'group_core': sql_fetch
     [mysqld]
     sort_buffer_size = 2M
 
-
 ### Delayed Job
 
-Um die Background Jobs abzuarbeiten (z.B. um Mails zu versenden), muss Delayed Job gestartet werden:
+Um die Background Jobs abzuarbeiten (z.B. um Mails zu versenden), läuft ein Worker in einem eigenen Container. Die Logs können mit folgendem Befehl abgerufen werden:
 
-    rake jobs:work
-
+    docker-compose logs -f worker
 
 ### Mailcatcher
 
 Das development Environment ist so konfiguriert, dass alle E-Mails per SMTP an `localhost:1025`
-geschickt werden. Am einfachsten kann man diese E-Mails lesen, indem man mailcatcher startet:
-
-    mailcatcher -v
-
-und dann mittles Browser auf `http://localhost:1080` E-Mails liest.
-
+geschickt werden. Mailcatcher wird ebenfalls mit docker-compose gestartet und steht unter `http://localhost:1080` zur Verfügung.
 
 ### Spezifische Rake Tasks
 
 | Task | Beschreibung |
 | --- | --- |
-| `rake hitobito:abilities` | Alle Abilities ausgeben. |
-| `rake hitobito:roles` | All Gruppen, Rollen und Permissions ausgeben. |
-| `rake annotate` | Spalten Informationen als Kommentar zu ActiveRecord Modellen hinzufügen. |
-| `rake rubocop` | Führt die Rubocop Must Checks (`rubocop-must.yml`) aus und schlägt fehl, falls welche gefunden werden. |
-| `rake rubocop:report` | Führt die Rubocop Standard Checks (`.rubocop.yml`) aus und generiert einen Report für Jenkins. |
-| `rake brakeman` | Führt `brakeman` aus. |
-| `rake mysql` | Lädt die MySql Test Datenbank Konfiguration für die folgednen Tasks. |
-| `rake license:insert` | Fügt die Lizenz in alle Dateien ein. |
-| `rake license:remove` | Entfernt die Lizenz aus allen Dateien. |
-| `rake license:update` | Aktualisiert die Lizenz in allen Dateien oder fügt sie neu ein. |
-| `rake ci` | Führt die Tasks für einen Commit Build aus. |
-| `rake ci:nightly` | Führt die Tasks für einen Nightly Build aus. |
-| `rake ci:wagon` | Führt die Tasks für die Wagon Commit Builds aus. |
-| `rake ci:wagon:nightly` | Führt die Tasks für die Wagon Nightly Builds aus. |
+| `rails hitobito:abilities` | Alle Abilities ausgeben. |
+| `rails hitobito:roles` | All Gruppen, Rollen und Permissions ausgeben. |
+| `rails annotate` | Spalten Informationen als Kommentar zu ActiveRecord Modellen hinzufügen. |
+| `rails rubocop` | Führt die Rubocop Must Checks (`rubocop-must.yml`) aus und schlägt fehl, falls welche gefunden werden. |
+| `rails rubocop:report` | Führt die Rubocop Standard Checks (`.rubocop.yml`) aus und generiert einen Report für Jenkins. |
+| `rails brakeman` | Führt `brakeman` aus. |
+| `rails mysql` | Lädt die MySql Test Datenbank Konfiguration für die folgednen Tasks. |
+| `rails license:insert` | Fügt die Lizenz in alle Dateien ein. |
+| `rails license:remove` | Entfernt die Lizenz aus allen Dateien. |
+| `rails license:update` | Aktualisiert die Lizenz in allen Dateien oder fügt sie neu ein. |
+| `rails ci` | Führt die Tasks für einen Commit Build aus. |
+| `rails ci:nightly` | Führt die Tasks für einen Nightly Build aus. |
+| `rails ci:wagon` | Führt die Tasks für die Wagon Commit Builds aus. |
+| `rails ci:wagon:nightly` | Führt die Tasks für die Wagon Nightly Builds aus. |

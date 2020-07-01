@@ -74,6 +74,10 @@ geschickt werden. Mailcatcher wird ebenfalls mit docker-compose gestartet und st
 
 ### Spezifische Rake Tasks
 
+Um die Tasks auszuführen kann eine console im Rails Container gestartet werden:
+
+    docker-compose exec rails bash -c 'bundle exec bash'
+
 | Task | Beschreibung |
 | --- | --- |
 | `rails hitobito:abilities` | Alle Abilities ausgeben. |

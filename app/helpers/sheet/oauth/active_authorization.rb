@@ -5,7 +5,7 @@
 
 module Sheet
   module Oauth
-    class Authorization < Sheet::Admin
+    class ActiveAuthorization < Sheet::Admin
 
     end
   end

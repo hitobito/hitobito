@@ -21,7 +21,7 @@
     = nav QualificationKind.model_name.human(count: 2), qualification_kinds_path, %w(qualification_kinds)
   - if can?(:index, Oauth::Application)
     = nav Oauth::Application.model_name.human(count: 2), oauth_applications_path, %w(oauth_applications)
+  - if current_user.oauth_applications.exists?
+    = nav t('navigation.admin/oauth_authorizations'), oauth_active_authorizations_path, %w(oauth_active_authorizations)
 
   = render_extensions(:admin_nav_kinds)
-
-  = nav t('navigation.admin/oauth_authorizations'), oauth_authorizations_path, %w(oauth_authorizations)

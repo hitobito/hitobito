@@ -64,7 +64,7 @@ The process will be shorter on subsequent starts.
 Now it's time to seed the database:
 
 ```bash
-docker-compose exec rails bash -c 'rails db:seed wagon:seed'
+docker-compose exec rails bash -c 'bundle exec rails db:seed wagon:seed'
 ```
 
 Access webapplication by browser: http://localhost:3000

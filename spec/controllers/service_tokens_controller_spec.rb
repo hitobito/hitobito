@@ -37,7 +37,8 @@ describe ServiceTokensController do
         groups: true,
         events: true,
         invoices: true,
-        event_participations: true
+        event_participations: true,
+        mailing_lists: true
       } }
       expect(token.reload).to be_people
       expect(token.reload).to be_people_below
@@ -45,6 +46,7 @@ describe ServiceTokensController do
       expect(token.reload).to be_events
       expect(token.reload).to be_invoices
       expect(token.reload).to be_event_participations
+      expect(token.reload).to be_mailing_lists
     end
   end
 end

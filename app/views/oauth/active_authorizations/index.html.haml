@@ -1,0 +1,11 @@
+- title t('oauth.authorizations.title')
+
+#main
+  = crud_table do |t|
+    - t.col(t.sort_header(:application, Oauth::Application.model_name.human)) do |application|
+      - if can?(:index, Oauth::Application)
+        %strong= link_to(application, application)
+      - else
+        - application.name
+    - t.sortable_attr(:scopes)
+    - action_col_destroy(t) { |e| oauth_active_authorization_path(e) }

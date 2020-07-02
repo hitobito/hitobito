@@ -26,7 +26,7 @@ Hitobito::Application.routes.draw do
       end
       resources :access_grants, only: :destroy
       resources :access_tokens, only: :destroy
-      resources :authorizations, only: [:index, :destroy]
+      resources :active_authorizations, only: [:index, :destroy]
     end
 
     %w(404 500 503).each do |code|

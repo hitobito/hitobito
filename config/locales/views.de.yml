@@ -855,8 +855,7 @@ de:
         title: Aktive %{model_name} für %{uri}
     authorizations:
       title: Meine OAuth-Autorisierungen
-      valid_tokens_and_grants: Gültige Zugangsmethoden
-      revoke: "%{count} Zugangsmethode/n wurden annulliert"
+      revoke: "Zugang zu <i>%{application}</i> wurde annulliert"
     tabs:
       grants: Autorisierungen
       tokens: Zugangstoken

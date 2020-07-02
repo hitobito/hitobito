@@ -94,9 +94,6 @@ de:
         success: "%{model} wurde erfolgreich gelöscht."
         failure: "%{model} konnte nicht gelöscht werden."
 
-  access_grants:
-    own_access_grants: Meine Autorisierungen
-
   contactable:
     address_or_email: "%{address} oder %{email}"
     fields:
@@ -833,6 +830,7 @@ de:
     courses: 'Kurse'
     admin: 'Einstellungen'
     admin/event_feed: 'Kalender integrieren'
+    admin/oauth_authorizations: 'OAuth-Authorisierungen'
     invoices: 'Rechnungen'
 
   notes:
@@ -855,6 +853,10 @@ de:
     access_grants:
       list:
         title: Aktive %{model_name} für %{uri}
+    authorizations:
+      title: Meine OAuth-Autorisierungen
+      valid_tokens_and_grants: Gültige Zugangsmethoden
+      revoke: "%{count} Zugangsmethode/n wurden annulliert"
     tabs:
       grants: Autorisierungen
       tokens: Zugangstoken

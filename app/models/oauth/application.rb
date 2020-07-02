@@ -29,5 +29,17 @@ module Oauth
     def path_params(uri)
       { client_id: uid, redirect_uri: uri, response_type: 'code', scope: scopes }
     end
+
+    def valid_access_tokens
+      access_tokens.select do |access_token|
+        !access_token.expired? && access_token.revoked_at.nil?
+      end.count
+    end
+
+    def valid_access_grants
+      access_grants.select do |access_grant|
+        !access_grant.expired? && access_grant.revoked_at.nil?
+      end.count
+    end
   end
 end

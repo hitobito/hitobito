@@ -19,9 +19,14 @@ module Oauth
     belongs_to :person, foreign_key: :resource_owner_id
 
     scope :list, -> { order(created_at: :desc) }
+    scope :active, -> { where(revoked_at: nil) }
 
     def to_s
       token
+    end
+
+    def expired?
+      (created_at + expires_in) < Time.zone.now
     end
   end
 end

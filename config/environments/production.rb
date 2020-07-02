@@ -135,6 +135,6 @@ Rails.application.configure do
 
   config.hosts << ENV["RAILS_HOST_NAME"]
   config.hosts << ENV["RAILS_HOST_NAME_INTERNAL"] if ENV.key?('RAILS_HOST_NAME_INTERNAL')
-  config.hosts << Regexp.new(ENV["RAILS_HOSTS_REGEX"], Regexp::IGNORECASE) if ENV.key?('RAILS_HOSTS_REGEX')
+  config.hosts << Regexp.new(ENV["RAILS_HOST_REGEX"], Regexp::IGNORECASE) if ENV.key?('RAILS_HOSTS_REGEX')
   config.hosts << ENV["LIVENESS_IP_ADDRESS"]
 end

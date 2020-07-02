@@ -58,6 +58,15 @@ describe Synchronize::Mailchimp::Client do
       expect(body[:merge_fields][:LNAME]).to eq 'leader'
     end
 
+    it 'handles nil values' do
+      top_leader.update(first_name: nil, last_name: nil, email: ' top@example.com ')
+      body = client.subscriber_body(top_leader)
+
+      expect(body[:email_address]).to eq 'top@example.com'
+      expect(body[:merge_fields][:FNAME]).to eq ''
+      expect(body[:merge_fields][:LNAME]).to eq ''
+    end
+
     context 'merge_fields' do
       let(:merge_field) {
         [ 'Gender', 'dropdown', { choices: %w(m) },  ->(p) { p.gender } ]

@@ -145,8 +145,8 @@ module Synchronize
         {
           email_address: person.email.strip,
           merge_fields: {
-            FNAME: person.first_name.strip,
-            LNAME: person.last_name.strip,
+            FNAME: person.first_name.to_s.strip,
+            LNAME: person.last_name.to_s.strip,
           }.merge(merge_field_values(person))
         }.merge(member_field_values(person))
       end

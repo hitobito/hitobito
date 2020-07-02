@@ -143,11 +143,11 @@ class Person < ActiveRecord::Base
   has_many :label_formats, dependent: :destroy
   has_many :table_displays, dependent: :destroy
 
-  has_many :access_grants, class_name: 'Doorkeeper::AccessGrant',
+  has_many :access_grants, class_name: 'Oauth::AccessGrant',
                            foreign_key: :resource_owner_id,
                            dependent: :delete_all
 
-  has_many :access_tokens, class_name: 'Doorkeeper::AccessToken',
+  has_many :access_tokens, class_name: 'Oauth::AccessToken',
                            foreign_key: :resource_owner_id,
                            dependent: :delete_all
 
@@ -314,6 +314,11 @@ class Person < ActiveRecord::Base
 
   def table_display_for(parent)
     @table_display ||= TableDisplay.for(self, parent)
+  end
+
+  def oauth_applications
+    application_ids = (access_grants.active + access_tokens.active).collect(&:application_id)
+    Oauth::Application.where(id: application_ids)
   end
 
   private

@@ -4,7 +4,9 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class AccessGrant < Sheet::Admin
+  module Oauth
+    class Authorization < Sheet::Admin
 
+    end
   end
 end

@@ -30,7 +30,10 @@ services:
     - cache
 
   rails-test:
-    image: hitobito-dev/rails
+    image: hitobito-dev/rails-test
+    build:
+      context: .
+      dockerfile: hitobito/.docker-dev/Rails-test.dockerfile
     depends_on:
     - rails
     - db-test

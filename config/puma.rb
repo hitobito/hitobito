@@ -51,5 +51,9 @@ if ENV['PROMETHEUS_EXPORTER_HOST']
       type: 'puma_worker',
       labels: { hostname: `hostname`.strip }
     )
+    PrometheusExporter::Instrumentation::ActiveRecord.start(
+      custom_labels: { type: 'puma_worker' },
+      config_labels: [:database]
+    )
   end
 end

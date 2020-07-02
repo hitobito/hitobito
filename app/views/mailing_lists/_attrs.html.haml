@@ -8,7 +8,9 @@
     = format_attr(entry, :description)
     = render_attrs(entry, :mail_address_link, :publisher)
     - if can?(:edit, entry)
-      = render_attrs(entry, :mailchimp_api_key, :mailchimp_list_id)
+      = render_attrs(entry, :mailchimp_api_key,
+                            :mailchimp_list_id,
+                            :mailchimp_include_additional_emails)
       - if entry.mailchimp? && entry.mailchimp_result
         = render_attrs(entry, :mailchimp_sync)
       = render_attrs(entry, :additional_sender)

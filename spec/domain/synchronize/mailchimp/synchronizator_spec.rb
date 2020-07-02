@@ -158,8 +158,8 @@ describe Synchronize::Mailchimp::Synchronizator do
     end
   end
 
-  context '#missing_people' do
-    subject { sync.missing_people }
+  context '#missing_subscribers' do
+    subject { sync.missing_subscribers.map(&:person) }
 
     it 'is empty without subscriptions' do
       expect(subject).to be_empty
@@ -201,8 +201,8 @@ describe Synchronize::Mailchimp::Synchronizator do
     end
   end
 
-  context '#changed_people' do
-    subject { sync.changed_people }
+  context '#changed_subscribers' do
+    subject { sync.changed_subscribers.map(&:person) }
 
     it 'is empty when remote is empty' do
       mailing_list.subscriptions.create!(subscriber: user)
@@ -256,16 +256,16 @@ describe Synchronize::Mailchimp::Synchronizator do
       client.subscriber_body(person).merge(tags: tags)
     end
 
+    def batch_result(total, finished, errored)
+      {
+        'total_operations' => total,
+        'finished_operations' => finished,
+        'errored_operations' => errored
+      }
+    end
+
     context 'result' do
       subject { sync.result }
-
-      def batch_result(total, finished, errored)
-        {
-          'total_operations' => total,
-          'finished_operations' => finished,
-          'errored_operations' => errored
-        }
-      end
 
       it 'has result for empty sync' do
         sync.perform
@@ -289,7 +289,9 @@ describe Synchronize::Mailchimp::Synchronizator do
       it 'has result for two operations sync' do
         mailing_list.subscriptions.create!(subscriber: user)
         allow(client).to receive(:fetch_members).and_return([{ email_address: 'other@example.com' }])
-        expect(client).to receive(:subscribe_members).with([user]).and_return(batch_result(1,1,0))
+        expect(client).to receive(:subscribe_members) { |subscribers|
+          expect(subscribers.map(&:person) ).to eq([user])
+        }.and_return(batch_result(1,1,0))
         expect(client).to receive(:unsubscribe_members).with(['other@example.com']).and_return(batch_result(2,1,1))
         sync.perform
         expect(subject.state).to eq :partial
@@ -344,7 +346,9 @@ describe Synchronize::Mailchimp::Synchronizator do
         allow(client).to receive(:fetch_members).and_return([])
         mailing_list.subscriptions.create!(subscriber: user)
 
-        expect(client).to receive(:subscribe_members).with([user])
+        expect(client).to receive(:subscribe_members) { |subscribers|
+          expect(subscribers.map(&:person) ).to eq([user])
+        }.and_return(batch_result(1,1,0))
         expect(client).to receive(:unsubscribe_members).with([])
 
         sync.perform
@@ -366,7 +370,9 @@ describe Synchronize::Mailchimp::Synchronizator do
         allow(client).to receive(:fetch_members).and_return([member(user)])
 
         user.update(first_name: 'topster')
-        expect(client).to receive(:update_members).with([user])
+        expect(client).to receive(:update_members) { |subscribers|
+          expect(subscribers.map(&:person) ).to eq([user])
+        }.and_return(batch_result(1,1,0))
         sync.perform
       end
 

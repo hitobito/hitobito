@@ -41,6 +41,7 @@
   %fieldset
     = f.labeled_input_fields(:mailchimp_list_id, help: t('.help_mailchimp_sync'))
     = f.labeled_input_fields(:mailchimp_api_key)
+    = f.labeled_boolean_field(:mailchimp_include_additional_emails)
 
   %fieldset
     = f.indented do

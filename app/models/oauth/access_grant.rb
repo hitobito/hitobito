@@ -20,7 +20,14 @@ module Oauth
     scope :list, -> { order(created_at: :desc) }
     scope :for,  ->(uri) { where(redirect_uri: uri) }
     scope :not_expired, -> { where('DATE_ADD(created_at, INTERVAL expires_in SECOND) > UTC_TIME') }
-    scope :active, -> { not_expired.where(revoked_at: nil) }
+
+    def self.active
+      if connection.adapter_name == 'Mysql2'
+        not_expired.where(revoked_at: nil)
+      else
+        where(revoked_at: nil)
+      end
+    end
 
     def to_s
       token

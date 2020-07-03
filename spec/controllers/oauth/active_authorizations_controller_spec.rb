@@ -14,7 +14,7 @@ describe Oauth::ActiveAuthorizationsController do
                                                           redirect_uri: redirect_uri))
   end
 
-  context 'GET#index' do
+  context 'GET#index', :mysql do
     it 'list contains app if active access_grant exists' do
       create_grant
       get :index

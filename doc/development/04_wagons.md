@@ -44,15 +44,13 @@ nicht ins Git einchecken!). Danach erfolgt die Umstellung von einer Konfiguratio
 
 Falls `spring` im Einsatz ist, muss vor dem Wechsel `spring stop` ausgeführt werden.
 
-### Entwickeln in Alltag mit ./bin/wagon
+### Every day development - using ./bin/wagon
 
-Das Script verwendet [direnv](https://direnv.net/) und steuert über environment
-variablen welcher Wagon mit welcher Datenbank verwendet wird. 
+To facilitate working with various wagon (and therefore db schemas) it is
+recommended to use the script `./bin/wagon`. 
 
-Somit lässt sich auf einfache Art und Weise zwischen verschiedenen Wagons hin
-und her springen. Zudem erlaubt das script auch über wagons zu greppen oder die
-test configuration so anzupassen, dass nicht bei jedem Wageon test die DB
-entsprechend vorbereit wird.
+This script builds ontop of [direnv](https://direnv.net/). It controls various
+environment variables to that wagons can be activated with a single statement
 
 ### Instructions: create wagon
 
@@ -66,6 +64,7 @@ Afterwards you need to make the following adjustments:
 * Move files from `hitobito/vendor/wagons/[name]` to `hitobito_[name]`
 * Initiate a new Git Repo for the wagon
 * Copy `Gemfile.lock` from the core into the wagon.
+* Copy `.tool-versions` from the core into the wagon.
 * Adjust Organisation in the license generator (`lib/tasks/license.rake`)  and add the licence everywhere with `rake app:license:insert`.
 * Add the customer organization in `COPYING`.
 * Put you name into `AUTHORS`

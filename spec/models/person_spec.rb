@@ -530,4 +530,38 @@ describe Person do
     end
   end
 
+  describe 'e-mail validation' do
+
+    let(:person) { people(:top_leader) }
+
+    before { allow(Truemail).to receive(:valid?).and_call_original }
+
+    it 'does not allow invalid e-mail address' do
+      person.email = 'blabliblu-ke-email'
+
+      expect(person).not_to be_valid
+      expect(person.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does not allow e-mail address with non-existing domain' do
+      person.email = 'dude@gitsäuäniä.it'
+
+      expect(person).not_to be_valid
+      expect(person.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does not allow e-mail address with domain without mx record' do
+      person.email = 'dude@bluewin.com'
+
+      expect(person).not_to be_valid
+      expect(person.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does allow valid e-mail address' do
+      person.email = 'dude@puzzle.ch'
+
+      expect(person).to be_valid
+    end
+  end
+
 end

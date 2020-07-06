@@ -123,6 +123,8 @@ RSpec.configure do |config|
 
     config.use_transactional_fixtures = true
   end
+
+  config.before { allow(Truemail).to receive(:valid?).and_return(true) }
 end
 
 # Use Capybara only if features are not excluded

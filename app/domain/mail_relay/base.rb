@@ -77,8 +77,7 @@ module MailRelay
       end
 
       def valid_email?(email)
-        email_address = email.to_s.strip
-        email_address.present? && !email_address.ends_with?('<>') && email_address.include?('@')
+        Truemail.valid?(email.to_s.strip)
       end
 
       private
@@ -113,7 +112,7 @@ module MailRelay
     # Process the given email.
     def relay # rubocop:disable Metrics/MethodLength
       if relay_address?
-        if sender_allowed?
+        if sender_valid? && sender_allowed?
           @mail_log.update(status: :bulk_delivering)
           bulk_deliver(message)
           @mail_log.update(status: :completed)
@@ -178,6 +177,10 @@ module MailRelay
     # Is the mail sender allowed to post to this address
     def sender_allowed?
       true
+    end
+
+    def sender_valid?
+      valid_email?(sender_email)
     end
 
     # List of receiver email addresses for the resent email.

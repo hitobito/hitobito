@@ -648,6 +648,8 @@ describe PeopleController do
     describe 'POST #send_password_instructions' do
       let(:person) { people(:bottom_member) }
 
+      before { allow(Truemail).to receive(:valid?).and_call_original }
+
       it 'does not send instructions for self' do
         expect do
           expect do
@@ -661,6 +663,15 @@ describe PeopleController do
           post :send_password_instructions, params: { group_id: groups(:bottom_layer_one).id, id: person.id }, format: :js
         end.to change { Delayed::Job.count }.by(1)
         expect(flash[:notice]).to eq 'Login Informationen wurden verschickt.'
+      end
+
+      it 'does not send instructions if e-mail invalid' do
+        person.update_attribute(:email, 'dude@domainungueltig42.ch')
+
+        expect do
+          post :send_password_instructions, params: { group_id: groups(:bottom_layer_one).id, id: person.id }, format: :js
+        end.not_to change { Delayed::Job.count }
+        expect(flash[:alert]).to eq 'Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist.'
       end
     end
 

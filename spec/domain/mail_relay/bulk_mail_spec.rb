@@ -168,15 +168,12 @@ describe MailRelay::BulkMail do
           let(:error) { "#{error_message} #{invalid_domain_email}" }
 
           it 'skips recipients with invalid mail domain' do
-            expect(message)
-              .to receive(:deliver)
-              .and_raise(error)
+            expect(Truemail)
+              .to receive(:valid?)
+              .with(invalid_domain_email)
+              .and_return(false)
 
-            expect(message)
-              .to receive(:deliver)
-              .twice
-
-            failed_entry = [invalid_domain_email, error]
+            failed_entry = [invalid_domain_email, 'invalid e-mail address']
 
             expect_any_instance_of(DeliveryReportMailer)
               .to receive(:bulk_mail)

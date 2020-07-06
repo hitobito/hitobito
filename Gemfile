@@ -65,6 +65,7 @@ gem 'sentry-raven'
 gem 'simpleidn'
 gem 'sqlite3' # required for asset generation
 gem 'rqrcode'
+gem 'truemail'
 gem 'thinking-sphinx'
 gem 'validates_by_schema'
 gem 'validates_timeliness', '< 4.0'

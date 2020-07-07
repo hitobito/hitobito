@@ -28,29 +28,13 @@ nicht mehr passen. Das `Gemfile.lock` eines Wagons wird NIE ins Git eingecheckt.
 `vendor/wagons` in ein benachbartes Verzeichnis des Cores verschoben werden und die Datei
 `app_root.rb` des Wagons entsprechend angepasst werden.
 
-
-### Entwickeln für mehrere Verbände/Instanzen
-
-Es kann immer nur ein 'Haupt'-Wagon aktiv sein, welcher die Verbandsstruktur definiert. Um zwischen
-verschiedenen aktiven Verbänden zu wechseln, empfiehlt sich das Speichern der einzelnen Development
-Datenbanken, damit die jeweiligen Seed Daten nicht immer neu geladen werden müssen (Diese Files
-nicht ins Git einchecken!). Danach erfolgt die Umstellung von einer Konfiguration auf die andere:
-
-1. Alle aktiven Prozesse (Server, Console, ...) stoppen.
-1. Im `Wagonfile` den [new wagon] aktivieren, andere auskommentieren.
-1. `cp db/development-[new_wagon].sqlite3 db/development.sqlite3`
-1. `rm -rf tmp/cache` (Falls customized CSS vorhanden).
-1. Prozesse (Server, ...) wieder starten.
-
-Falls `spring` im Einsatz ist, muss vor dem Wechsel `spring stop` ausgeführt werden.
-
 ### Every day development - using ./bin/wagon
 
 To facilitate working with various wagon (and therefore db schemas) it is
 recommended to use the script `./bin/wagon`. 
 
 This script builds ontop of [direnv](https://direnv.net/). It controls various
-environment variables to that wagons can be activated with a single statement
+environment variables to that wagons can be activated with a single statement. 
 
 ### Instructions: create wagon
 

@@ -1,18 +1,16 @@
 ## Setup der Entwicklungsumgebung
 
-Die Applikation läuft unter Ruby >= 2.2, Rails 4 und Sqlite3 (development) / MySQL (production).
+Die Applikation läuft unter Ruby >= 2.5, Rails 6 und Mysql.
 
 
 ### System
 
-Grundsätzlich muss für hitobito eine Ruby Version grösser gleich 2.2 sowie Bundler vorhanden sein.
+Grundsätzlich muss für hitobito eine Ruby Version grösser gleich 2.5 sowie Bundler vorhanden sein.
 Siehe dazu https://www.ruby-lang.org/en/documentation/installation/.
 
-Als Entwicklungsdatenbank wird Sqlite3 verwendet. Zur Emulation des Produktionsenvironments muss
-MySQL installiert sein. Die Befehle gehen von einem Ubuntu Linux als Entwicklungssystem aus.
+Als Datenbank wird MySQL verwendet. Die Befehle gehen von einem Ubuntu Linux als Entwicklungssystem aus.
 Bei einem anderen System müssen die Befehle entsprechend angepasst werden.
 
-    sudo apt-get install sqlite3 libsqlite3-dev libgmp3-dev
     sudo apt-get install mysql-client libmysqlclient-dev mysql-server
 
 Folgende Dritt-Packete sind für die verschiedenen Features von hitobito zusätzlich erforderlich.
@@ -95,25 +93,6 @@ Danach können spezifische Tests auch mit Spring und direkt über Rspec ausgefü
 
 Um einen einzelnen Request zu Profilen, kann der Parameter `?profile_request=true` in der URL
 angehängt werden. Der Output wird nach `tmp/performance` geschrieben.
-
-
-### Datenbank Auswahl
-
-Im Entwicklungsmodus wird per Default mit Sqlite3 gearbeitet.
-
-Um den Server, die Konsole oder Rake Tasks im Development Environment mit MySQL zu starten,
-existiert das folgende Script:
-
-     bin/with_mysql rails xxx
-
-Wenn auf der DB ein Passwort verwendet wird, kann es folgendermassen angegeben weden:
-
-     RAILS_DB_PASSWORD=password bin/with_mysql rails xxx
-
-Um Tests mit MySQL auszuführen, kann der folgende Befehl verwendet werden. Dabei wird immer die
-Testdatenbank (hitobito_test) verwendet.
-
-    rake mysql test
 
 
 ### Sphinx

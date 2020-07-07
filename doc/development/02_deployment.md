@@ -4,22 +4,15 @@ Hitobito kann wie die meisten Ruby on Rails Applikationen auf verschiedene Arten
 [deployt](http://rubyonrails.org/deploy/) werden. 
 Folgende Umsysteme müssen vorgängig eingerichtet werden:
 
-* Ruby >= 2.2
+* Ruby >= 2.5
 * Apache HTTPD
 * Phusion Passenger
 * MySql
 * Memcached
-* Sphinx
+* Sphinx (optional)
 * Eine Catch-All E-Mail Adresse einer bestimmte Domain für die Mailinglisten (optional)
 * SSL Zertifikat (optional)
-* Airbrake/Errbit (optional)
- 
-Um die Applikation zu deployen, werden momentan RPM Packete oder Openshift (experimentell) 
-verwendet. Das Script `config/rpm/build_rpm.sh` erstellt mit der Spec Datei 
-`config/rpm/rails-app.spec` ein RPM für RHEL/Centos 6. Die Schritte für Openshift sind unter 
-`.openshift/README.md` beschrieben. In diesen Skripten sind auch die Befehle hinterlegt, welche bei 
-jedem Deployment ausgeführt werden müssen.
-
+* Sentry (optional)
 
 ### Konfiguration
 
@@ -30,28 +23,21 @@ gesetzt werden. Werte ohne Default müssen in der Regel definiert werden.
 | --- | --- | --- |
 | RAILS_HOST_NAME | Öffentlicher Hostname der Applikation. Wird für Links in E-Mails verwendet. | - |
 | RAILS_HOST_SSL | Gibt an, ob die Applikation unter HTTPS läuft (`true` or `false`) | `false` |
-| RAILS_ROOT_USER_EMAIL | Die E-Mailadresse des Root Users | - |
-| RAILS_SECRET_TOKEN | Secret token für die Sessions (128 byte hex). Muss für jede laufende Instanz eindeutig sein. Generierbar mit `rake secret` | - |
-| RAILS_DB_NAME | Name der Datenbank | `[environment].sqlite3` |
+| RAILS_DB_NAME | Name der Datenbank | `hitobito_[environment]` |
 | RAILS_DB_USERNAME | Benutzername, um auf die Datenbank zu verbinden. | - |
 | RAILS_DB_PASSWORD | Passwort, um auf die Datenbank zu verbinden. | - |
 | RAILS_DB_HOST | Hostname der Datenbank | - |
 | RAILS_DB_PORT | Port der Datenbank | - |
-| RAILS_DB_ADAPTER | Datenbank adapter | `sqlite3` |
+| RAILS_DB_ADAPTER | Datenbank adapter | `mysql2` |
 | RAILS_MAIL_DELIVERY_METHOD | `smtp` oder `sendmail`. Siehe [ActionMailer](http://api.rubyonrails.org/classes/ActionMailer/Base.html) für Details. | `sendmail` |
 | RAILS_MAIL_DELIVERY_CONFIG | Eine Komma-separierte `key: value` Liste mit allen erforderlichen E-Mail Sendeeinstellungen der gewählten Methode, z.B. `address: smtp.local, port: 25`. Siehe [ActionMailer](http://api.rubyonrails.org/classes/ActionMailer/Base.html) für gültige Optionen. Wenn diese Variable leer ist, werden die Rails Defaultwerte verwendet. | Rails defaults |
-| RAILS_MAIL_PERFORM_DELIVERIES | Kann auf `false` gesetzt werden, falls überhaupt keine E-Mails versendet werden sollen. | `true` |
 | RAILS_MAIL_DOMAIN | Der Domainname für die Mailinglisten/Abos | `RAILS_HOST_NAME` |
 | RAILS_MAIL_RETRIEVER_TYPE | `pop3` oder `imap`, alles was vom [Mail](https://github.com/mikel/mail) Gem unterstützt wird. | `pop3` |
 | RAILS_MAIL_RETRIEVER_CONFIG | Eine Komma-separierte `key: value` Liste mit allen erforderlichen E-Mail Empfangseinstellungen des gewählten Typs, z.B. `address: mailhost.local, port: 995, enable_ssl: true`. Siehe [Mail](https://github.com/mikel/mail#getting-emails-from-a-pop-server) für gültige Optionen. Wenn diese Variable nicht gesetzt ist, funktionieren die Mailinglisten nicht. | - |
 | RAILS_SPHINX_HOST | Hostname des Sphinx Servers | 127.0.0.1 |
 | RAILS_SPHINX_PORT | Eindeutiger Port des Sphinx Servers. Muss für jede laufende Instanz eindeutig sein. | 9312 |
 | MEMCACHE_SERVERS | Komme-getrennte Liste von Memcache Servern in der Form `host:port` | localhost:11211 |
-| RAILS_AIRBRAKE_HOST | Hostname der Airbrake/Errbit Instanz, an welche Fehler gesendet werden sollen. Falls diese Variable nicht gesetzt ist, werden keine Fehlermeldungen verschickt. | - |
-| RAILS_AIRBRAKE_PORT | Port der Airbrake/Errbit Instanz | 443 |
-| RAILS_AIRBRAKE_API_KEY | Airbrake API Key der Applikation | - |
-| RAILS_PIWIK_URL | Piwik Server URL | - |
-| RAILS_PIWIK_SITE_ID | Piwik ID der Applikation | - |
+| SENTRY_DNS | Configuration der Sentry Instanz, an welche Fehler gesendet werden sollen. Falls diese Variable nicht gesetzt ist, werden keine Fehlermeldungen verschickt. | - |
 
 
 
@@ -116,17 +102,6 @@ in dieser Rolle testen.
 Achtung: Der Symlink sollte nach dem initalen Seeden wieder entfernt werden. Geschieht dies nicht, 
 werden für neu (vom Benutzer) angelegten Gruppen bei folgenden Deployements entsprechend Mitglieder 
 und Events geseeded.
-
-#### Troubleshooting
-
-* RPM `%preun` Script (z.B. delayed_job workers stoppen) schlägt fehl: Beim Stoppen der Workers wird 
-der Applikationscode geladen. In diesem Schritt ist jedoch der alte Code (bzw. Dateien, welche in 
-der neuen Version entfernt wurden) noch vorhanden 
-(http://www.ibm.com/developerworks/library/l-rpm2/) und kann so zu Loading Problemen führen. Lösung: 
-Betreffende Datei ausfindig machen, manuell vom Server löschen und Workers nochmals stoppen 
-(`/sbin/service %{name}-workers stop`). Ev. mit weiteren Dateien wiederholen. Sobald das 
-funktioniert, die Dateien zu Beginn des `%preun` Abschnitts der Datei `config/rpm/rails-app.spec` 
-explizit löschen.
 
 ### Umsysteme
 

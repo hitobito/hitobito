@@ -63,7 +63,6 @@ gem 'rubyzip', '~> 1.3.0'
 gem 'seed-fu'
 gem 'sentry-raven'
 gem 'simpleidn'
-gem 'sqlite3' # for development, test and production when generating assets
 gem 'rqrcode'
 gem 'thinking-sphinx'
 gem 'validates_by_schema'

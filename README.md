@@ -17,7 +17,7 @@ structure setup as described below, issue the following commands in the main dir
     sudo yum install sqlite memcached sphinxsearch imagemagick  # install system dependencies
 
     bundle               # install gem dependencies
-    rake db:create       # create a development database (Sqlite3)
+    rake db:create       # create a development database
     rake db:setup:all    # run migrations and load seed data of the app and all wagons
     rails server         # start the rails server
 

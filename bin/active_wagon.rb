@@ -43,7 +43,7 @@ class Setup
 
       # vim:ft=ruby
 
-      group :development, :test do
+      group :development do
         ENV.fetch('WAGONS').split.each do |wagon|
           Dir[File.expand_path("../hitobito_\#{wagon}/hitobito_\#{wagon}.gemspec", __dir__)].each do |spec|
             gem File.basename(spec, '.gemspec'), path: File.expand_path('..', spec)

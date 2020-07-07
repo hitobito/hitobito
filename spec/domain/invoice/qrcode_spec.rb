@@ -94,5 +94,50 @@ describe Invoice::Qrcode do
     end
   end
 
+  describe :debitor do
+    subject { invoice.qrcode.debitor }
+    it 'is extracted from recipient_address' do
+      expect(subject[:address_type]).to eq 'K'
+      expect(subject[:full_name]).to eq 'Max Mustermann'
+      expect(subject[:address_line1]).to eq 'Musterweg 2'
+      expect(subject[:address_line2]).to be_blank
+      expect(subject[:zip_code]).to eq '8000'
+      expect(subject[:town]).to eq 'Alt Tylerland'
+      expect(subject[:country]).to eq 'CH'
+    end
+
+    it 'handles empty values' do
+      invoice.recipient_address = "Max Mustermann"
+      expect(subject[:address_type]).to eq "K"
+      expect(subject[:full_name]).to eq "Max Mustermann"
+      %i[address_line1 address_line2 zip_code town country].each do |key|
+        expect(subject).to have_key(key)
+        expect(subject[key]).to be_blank
+      end
+    end
+
+    it 'handles zip without town' do
+      invoice.recipient_address = "Max Mustermann\nMusterweg 2\n8000\nCH"
+      expect(subject[:address_type]).to eq "K"
+      expect(subject[:full_name]).to eq 'Max Mustermann'
+      expect(subject[:address_line1]).to eq 'Musterweg 2'
+      expect(subject[:address_line2]).to be_blank
+      expect(subject[:zip_code]).to eq '8000'
+      expect(subject[:town]).to be_blank
+      expect(subject[:country]).to eq 'CH'
+    end
+
+    it 'handles blank lines' do
+      invoice.recipient_address = "Max Mustermann\n \n \nCH"
+      expect(subject[:address_type]).to eq "K"
+      expect(subject[:full_name]).to eq 'Max Mustermann'
+      expect(subject[:address_line1]).to be_blank
+      expect(subject[:address_line2]).to be_blank
+      expect(subject[:zip_code]).to be_blank
+      expect(subject[:town]).to be_blank
+      expect(subject[:country]).to eq 'CH'
+    end
+  end
+
 end
 

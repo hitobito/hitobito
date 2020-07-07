@@ -114,8 +114,8 @@ class Invoice::Qrcode
   end
 
   def extract_contact(contactable) # rubocop:disable Metrics/MethodLength
-    parts = contactable.to_s.split(/\r*\n/)
-    zip_code = parts.third.to_s[/(\d{4})/, 1]
+    parts = contactable.strip.to_s.split(/\r*\n/)
+    zip_code = parts.third.to_s[/(\d{4})/, 1].to_s
     town = parts.third.to_s.delete(zip_code).strip
     {
       address_type: 'K',

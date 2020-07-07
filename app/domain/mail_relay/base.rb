@@ -111,20 +111,22 @@ module MailRelay
 
     # Process the given email.
     def relay # rubocop:disable Metrics/MethodLength
-      if relay_address?
-        if sender_valid? && sender_allowed?
-          @mail_log.update(status: :bulk_delivering)
-          bulk_deliver(message)
-          @mail_log.update(status: :completed)
+      Raven.extra_context(mail_hash: @mail_log.mail_hash) do
+        if relay_address?
+          if sender_valid? && sender_allowed?
+            @mail_log.update(status: :bulk_delivering)
+            bulk_deliver(message)
+            @mail_log.update(status: :completed)
+          else
+            @mail_log.update(status: :sender_rejected)
+            reject_not_allowed
+          end
         else
-          @mail_log.update(status: :sender_rejected)
-          reject_not_allowed
+          @mail_log.update(status: :unkown_recipient)
+          reject_not_existing
         end
-      else
-        @mail_log.update(status: :unkown_recipient)
-        reject_not_existing
+        nil
       end
-      nil
     end
 
     # If the email sender was not allowed to post messages, this method is called.

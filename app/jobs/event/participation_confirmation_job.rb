@@ -23,7 +23,8 @@ class Event::ParticipationConfirmationJob < BaseJob
   end
 
   def send_confirmation
-    if participation.person.email.present?
+    email = participation.person.email
+    if email && Truemail.valid?(email)
       Event::ParticipationMailer.confirmation(participation).deliver_now
     end
   end

@@ -302,7 +302,10 @@ describe Group do
 
   context '.all_types' do
     it 'lists all types' do
-      Group.all_types =~ [Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup, Group::GlobalGroup]
+      expect(Group.all_types.count).to eq(5)
+      [Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup, Group::GlobalGroup].each do |t|
+        expect(Group.all_types).to include(t)
+      end
     end
   end
 

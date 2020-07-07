@@ -3,6 +3,7 @@
 ## unreleased
 
 *  Verbesserung der Mailchimp Integration
+*  Generelle Validierung von E-Mail Adressen
 
 ## Version 1.21
 

@@ -20,6 +20,8 @@ module MailRelay
 
     class << self
       def personal_return_path(list_name, sender_email, domain = nil)
+        return nil unless sender_email.present?
+
         # recipient format (before @) must match regexp in #reject_not_existing
         id_suffix = '+' + sender_email.tr('@', '=')
         "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{domain || mail_domain}"
@@ -42,7 +44,7 @@ module MailRelay
     def reject_not_allowed
       if send_reject_message?
         reply = prepare_not_allowed_message
-        if valid_email?(reply.to.to_s.strip)
+        if valid_email?(reply.to.first)
           logger.info("Rejecting email from #{sender_email} for list #{envelope_receiver_name}")
           deliver(reply)
         end
@@ -129,6 +131,8 @@ module MailRelay
     end
 
     def sender_is_additional_sender?
+      return false unless sender_email.present?
+
       additional_senders = mailing_list.additional_sender.to_s
       list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
       sender_domain = sender_email.sub(/^[^@]*@/, '*@')

@@ -36,6 +36,8 @@ describe MailRelay::Lists do
       to receive(:bulk_mail)
   end
 
+  before { allow(Truemail).to receive(:valid?).and_call_original }
+
   subject { relay }
 
   context '#mailing_list' do

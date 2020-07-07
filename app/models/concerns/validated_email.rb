@@ -13,13 +13,18 @@ module ValidatedEmail
     validate :assert_valid_email
   end
 
+  def valid_email?
+    Truemail.valid?(email)
+  end
+
   private
 
   def assert_valid_email
-    if email
-      unless Truemail.valid?(email)
-        errors.add(:email, :invalid)
-      end
+    self.email = email.presence
+    return unless email
+
+    unless valid_email?
+      errors.add(:email, :invalid)
     end
   end
 

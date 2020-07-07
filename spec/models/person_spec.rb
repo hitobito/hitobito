@@ -543,6 +543,13 @@ describe Person do
       expect(person.errors.messages[:email].first).to eq('ist nicht gültig')
     end
 
+    it 'allows blank e-mail address' do
+      person.email = '   '
+
+      expect(person).to be_valid
+      expect(person.email).to be_nil
+    end
+
     it 'does not allow e-mail address with non-existing domain' do
       person.email = 'dude@gitsäuäniä.it'
 

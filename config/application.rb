@@ -1,3 +1,8 @@
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require_relative 'boot'
 
 require 'rails/all'
@@ -61,8 +66,6 @@ module Hitobito
     config.active_job.queue_adapter = :delayed_job
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
-
-    config.log_tags = [:uuid]
 
     config.cache_store = :dalli_store, { compress: true,
                                          namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }

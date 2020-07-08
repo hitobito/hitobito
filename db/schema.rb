@@ -633,6 +633,7 @@ ActiveRecord::Schema.define(version: 2020_06_25_114634) do
     t.datetime "updated_at", null: false
     t.boolean "invoices", default: false, null: false
     t.boolean "event_participations", default: false, null: false
+    t.boolean "mailing_lists", default: false, null: false
   end
 
   create_table "sessions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|

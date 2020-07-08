@@ -89,7 +89,7 @@ class TokenAbility
 
   def define_mailing_list_abilities
     can :show, MailingList do |mailing_list|
-      token.layer == mailing_list.group
+      token.layer.layer_group == mailing_list.group.layer_group
     end
   end
 

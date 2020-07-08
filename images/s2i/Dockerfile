@@ -29,9 +29,6 @@ RUN \
     scl enable rh-ruby25 /opt/bin/install-nodejs && \
     yum install -y python-setuptools && \
     scl enable rh-ruby25 /opt/bin/install-transifex && \
-    wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-devel-3.8.11-1.fc21.x86_64.rpm &&  \
-    wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-3.8.11-1.fc21.x86_64.rpm && \
-    yum install -y sqlite-3.8.11-1.fc21.x86_64.rpm sqlite-devel-3.8.11-1.fc21.x86_64.rpm && \
     chmod ugo+x $STI_SCRIPTS_PATH/* && \
     # TODO Why do we do this?
     # Check with the fix-permissions call in $STI_SCRIPTS_PATH/assemble.

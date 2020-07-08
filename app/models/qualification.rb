@@ -65,12 +65,7 @@ class Qualification < ActiveRecord::Base
     private
 
     def add_reactivateable_years_to_finish_at
-      case connection.adapter_name.downcase
-      when /sqlite/
-        "DATE(qualifications.finish_at, '+' || qualification_kinds.reactivateable || ' YEARS')"
-      else
-        'DATE_ADD(qualifications.finish_at, INTERVAL qualification_kinds.reactivateable YEAR)'
-      end
+      'DATE_ADD(qualifications.finish_at, INTERVAL qualification_kinds.reactivateable YEAR)'
     end
 
   end

@@ -300,6 +300,16 @@ describe TokenAbility do
       it 'may show' do
         is_expected.to be_able_to(:show, mailing_list)
       end
+
+      it 'may show for list below' do
+        list = groups(:top_group).mailing_lists.create!(name: 'list')
+        is_expected.to be_able_to(:show, list)
+      end
+
+      it 'may not show for list in sub layer' do
+        list = groups(:bottom_layer_one).mailing_lists.create!(name: 'list')
+        is_expected.not_to be_able_to(:show, list)
+      end
     end
 
     context 'unauthorized' do

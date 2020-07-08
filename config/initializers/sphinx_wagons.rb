@@ -19,7 +19,7 @@ module ThinkingSphinx
       def define_partial_indizes!
         ThinkingSphinx::Configuration.instance.preload_indices
 
-        if partial_indices.present? && ::ActiveRecord::Base.connection.adapter_name.downcase != 'sqlite'
+        if partial_indices.present?
 
           partial_indices.each do |reference, blocks|
             #puts "defining #{blocks.size} indizes for #{reference}"

@@ -10,7 +10,7 @@ class MailingListAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Group
 
   on(::MailingList) do
-    permission(:any).may(:show).subscribable_mailing_lists
+    permission(:any).may(:show).subscribable
 
     permission(:group_full).
       may(:show, :index_subscriptions, :create, :update, :destroy).
@@ -57,7 +57,7 @@ class MailingListAbility < AbilityDsl::Base
       local_event_subscription_count == total_event_subscription_count
   end
 
-  def subscribable_mailing_lists
+  def subscribable
     subject.subscribable
   end
 

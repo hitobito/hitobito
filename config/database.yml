@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 base: &generic
-  adapter: <%= ENV['RAILS_DB_ADAPTER'] || 'mysql2' %>
+  adapter: <%= ENV['RAILS_DB_ADAPTER'] || 'sqlite3' %>
   pool: 20
   timeout: 5000
   encoding: utf8
@@ -20,15 +20,15 @@ base: &generic
 
 development:
   <<: *generic
-  database: <%= ENV['RAILS_DB_NAME'] || "hitobito_development" %>
+  database: <%= ENV['RAILS_DB_NAME'] || "#{Rails.root}/db/development.sqlite3" %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *generic
-  database: <%= ENV['RAILS_TEST_DB_NAME'] || ENV['RAILS_DB_NAME'] || "hitobito_test" %>
+  database: <%= ENV['RAILS_TEST_DB_NAME'] || ENV['RAILS_DB_NAME'] || "#{Rails.root}/db/test.sqlite3" %>
 
 production:
   <<: *generic
-  database: <%= ENV['RAILS_DB_NAME'] || "hitobito_production" %>
+  database: <%= ENV['RAILS_DB_NAME'] || "#{Rails.root}/db/production.sqlite3" %>

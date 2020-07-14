@@ -21,7 +21,7 @@
                   style: display_style,
                   data: { provide: 'entity',
                           updater: 'HouseHolds.update',
-                          url: query_household_path })
+                          url: query_household_path(person_id: f.object.id) })
 
   - if @invalid
     .alert.alert-error= t('.update_denied', other_person: @other_person)

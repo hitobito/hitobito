@@ -117,6 +117,12 @@ describe Person::Household do
       member.household_people_ids = [leader.id]
       expect(household(member)).not_to be_valid
       expect(member.errors).to have_key(:town)
+      expect(member.errors.full_messages).to eq [
+        "Adresse : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
+         "PLZ : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
+         "Ort : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
+         "Land : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen."
+      ]
     end
   end
 

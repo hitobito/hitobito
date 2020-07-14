@@ -6,7 +6,8 @@
 module InvoiceArticlesHelper
 
   def format_invoice_article_unit_cost(invoice_article)
-    number_to_currency(invoice_article.unit_cost)
+    currency = invoice_article.group.invoice_config.currency
+    number_to_currency(invoice_article.unit_cost, unit: currency)
   end
 
 end

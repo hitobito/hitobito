@@ -47,6 +47,16 @@ describe Event::Role do
       expect(role.save).to be_falsey
       expect(role.errors.full_messages).to eq(['Antwort muss ausgefüllt werden'])
     end
+
+    it 'refreshes participant_count when updating role' do
+      role = Event::Course::Role::Participant.new
+      role.participation = course.participations.new(person: Person.first, active: true)
+      expect(role.save).to eq true
+      expect(course.reload.participant_count).to eq 1
+      expect do
+        expect(role.update(type: "Event::Course::Role::Leader")).to eq true
+      end.to change { course.reload.participant_count }.by(-1)
+    end
   end
 
   context 'destroying roles' do

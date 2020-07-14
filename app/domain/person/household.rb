@@ -16,8 +16,9 @@ class Person::Household
   def valid?
     same_address?(person).tap do
       address_attrs(person).each do |attr, value|
-        next if readonly_people.all? { |p| p.send(attr) == value }
-        person.errors.add(attr, :readonly, name: "#{person.first_name} #{person.last_name}")
+        readonly = readonly_people.select { |p| p.send(attr).presence != value.presence }.first
+        next unless readonly
+        person.errors.add(attr, :readonly, name: "#{readonly.first_name} #{readonly.last_name}")
       end
     end
   end
@@ -36,13 +37,9 @@ class Person::Household
     if readonly_people.empty?
       update_address
       update_people unless other == person
-    elsif same_address?(other) || can_update(other)
+    elsif same_address?(other) || ability.can?(:update, other)
       update_people
     end
-  end
-
-  def can_update(other)
-    ability.can?(:update, other) || address_attrs(other) == address_attrs(person)
   end
 
   def persist!
@@ -79,7 +76,7 @@ class Person::Household
   end
 
   def readonly_people
-    @readonly_people ||= housemates.reject { |p| can_update(other) }
+    @readonly_people ||= housemates.select { |p| ability.cannot?(:update, p) }
   end
 
   def key

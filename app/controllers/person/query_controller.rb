@@ -7,6 +7,9 @@
 
 class Person::QueryController < ApplicationController
 
+  class_attribute :serializer
+  self.serializer = :as_typeahead
+
   before_action :authorize_action
 
   delegate :model_class, to: :class
@@ -19,17 +22,17 @@ class Person::QueryController < ApplicationController
       people = decorate(people)
     end
 
-    if params.key?(:with_address)
-      render json: people.collect(&:as_typeahead_with_address)
-    else
-      render json: people.collect(&:as_typeahead)
-    end
+    render json: people.collect { |p| p.public_send(serializer) }
   end
 
   private
 
   def list_entries
-    Person.only_public_data.order_by_name
+    scope.order_by_name
+  end
+
+  def scope
+    Person.only_public_data
   end
 
   def authorize_action

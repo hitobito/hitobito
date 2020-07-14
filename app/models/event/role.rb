@@ -61,6 +61,7 @@ class Event::Role < ActiveRecord::Base
   ### CALLBACKS
 
   after_create :set_participation_active
+  after_update :update_participant_count, if: :type_previously_changed?
   before_destroy :protect_applying_participant
   after_destroy :destroy_participation_for_last
 

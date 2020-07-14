@@ -34,8 +34,8 @@ Hitobito::Application.routes.draw do
     end
 
     get '/people/query' => 'person/query#index', as: :query_people
+    get '/people/query_household' => 'person/query_household#index', as: :query_household
     get '/people/company_name' => 'person/company_name#index', as: :query_company_name
-    get '/people/household' => 'person/household#index', as: :query_household
     get '/people/:id' => 'person/top#show', as: :person
     get '/events/:id' => 'event/top#show', as: :event
 

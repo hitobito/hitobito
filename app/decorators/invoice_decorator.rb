@@ -33,4 +33,8 @@ class InvoiceDecorator < ApplicationDecorator
     ActiveSupport::NumberHelper.number_to_currency(amount, { unit: currency, format: '%n %u' })
   end
 
+  def currency
+    model.new_record? ? model.invoice_config.currency : model.currency
+  end
+
 end

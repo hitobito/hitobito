@@ -56,7 +56,7 @@ Afterwards you need to make the following adjustments:
 
 If the wagon is the main wagon for a new organization strutture, you can additionaly  do these steps:
 
-* Add Developper and Client Accounts int the seed files: `db/seed/development/1_people.rb` under `devs`.
+* Add Developer and Client Accounts int the seed files: `db/seed/development/1_people.rb` under `devs`.
 * Configure e-mail-adress for the root account in `config/settings.yml`.
 * If the application is multilingual, we reccommend to create a project in [https://www.transifex.com/](Transifex)
 * Also see the guidelines for internationalization

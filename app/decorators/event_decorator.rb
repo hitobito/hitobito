@@ -9,6 +9,11 @@ class EventDecorator < ApplicationDecorator
   decorates :event
   decorates_association :contact
 
+  class_attribute :icons
+  self.icons = {
+    'Event::Course' => 'book'
+  }
+
   def label
     safe_join([name, label_detail], h.tag(:br))
   end
@@ -111,7 +116,7 @@ class EventDecorator < ApplicationDecorator
   end
 
   def as_quicksearch
-    { id: id, label: label_with_group, type: :event, icon: :'calendar-alt' }
+    { id: id, label: label_with_group, type: :event, icon: icons.fetch(type, 'calendar-alt') }
   end
 
   def label_with_group

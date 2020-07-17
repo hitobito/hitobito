@@ -97,11 +97,16 @@ class Event::ParticipantAssigner
   def update_answers
     current_answers = participation.answers.includes(:question)
     event.questions.each do |q|
-      exists = current_answers.any? do |a|
+      existing = current_answers.find do |a|
         a.question.question == q.question &&
-        a.question.choice_items == q.choice_items
+        a.question.choice_items == q.choice_items &&
+        a.question.multiple_choices == q.question.multiple_choices
       end
-      participation.answers.create(question_id: q.id) unless exists
+      if existing
+        existing.update(question: q)
+      else
+        participation.answers.create(question_id: q.id)
+      end
     end
   end
 

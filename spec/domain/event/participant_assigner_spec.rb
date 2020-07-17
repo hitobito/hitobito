@@ -45,14 +45,23 @@ describe Event::ParticipantAssigner do
         quest = course.questions.first
         other = Fabricate(:course, groups: [groups(:top_layer)])
         other.questions << Fabricate(:event_question, event: other)
-        other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices)
+        other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices, multiple_choices: quest.multiple_choices)
         other
       end
 
-      it 'updates answers for other event' do
-        expect { subject.add_participant }.to change { Event::Answer.count }.by(1)
+      it 'updates participation' do
+        subject.add_participant
 
         expect(participation.event_id).to eq(event.id)
+      end
+
+      it 'updates answers so that every question of the new course has an answer' do
+        expect { subject.add_participant }.to change { Event::Answer.count }.by(1)
+
+        expect(participation.answers.count).to eq(3)
+        event.questions.each do |question|
+          expect(participation.answers.map {|answer| answer.question.id}).to include(question.id)
+        end
       end
 
       it 'raises error on existing participation' do

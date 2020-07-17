@@ -100,7 +100,7 @@ class Event::ParticipantAssigner
       existing = current_answers.find do |a|
         a.question.question == q.question &&
         a.question.choice_items == q.choice_items &&
-        a.question.multiple_choices == q.question.multiple_choices
+        a.question.multiple_choices? == q.multiple_choices?
       end
       if existing
         existing.update(question: q)

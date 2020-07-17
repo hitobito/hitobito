@@ -81,6 +81,14 @@ describe Event::ParticipantAssigner do
       expect(Event::Participation.where(id: participation.id).exists?).to be_truthy
     end
 
+    it 'works even when the course in priority_1 does not exist anymore' do
+      participation.application.update_attribute('priority_1_id', '99999')
+      subject.remove_participant
+      participation.reload
+      expect(participation).not_to be_active
+      expect(Event::Participation.where(id: participation.id).exists?).to be_truthy
+    end
+
     context 'roundtrip' do
       let(:event) { Fabricate(:course, groups: [groups(:top_layer)]) }
 

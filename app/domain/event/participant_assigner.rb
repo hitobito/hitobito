@@ -42,7 +42,7 @@ class Event::ParticipantAssigner
       set_active(false)
       # destroy all other roles when removing a participant
       participation.roles.where.not(type: event.participant_types.collect(&:sti_name)).destroy_all
-      original_event = participation.application.priority_1
+      original_event = participation.application.priority_1 || participation.event
       update_participation_event(original_event)
       original_event.refresh_participant_counts!
     end

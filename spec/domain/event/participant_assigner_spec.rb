@@ -59,8 +59,9 @@ describe Event::ParticipantAssigner do
         expect { subject.add_participant }.to change { Event::Answer.count }.by(1)
 
         expect(participation.answers.count).to eq(3)
+        answered = participation.reload.answers.map {|answer| answer.question.id}
         event.questions.each do |question|
-          expect(participation.answers.map {|answer| answer.question.id}).to include(question.id)
+          expect(answered).to include(question.id)
         end
       end
 

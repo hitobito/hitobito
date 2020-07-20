@@ -27,6 +27,7 @@
 
 class InvoiceConfig < ActiveRecord::Base
   include PaymentSlips
+  include ValidatedEmail
 
   IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/

@@ -111,4 +111,43 @@ describe InvoiceConfig do
     invoice_config.update(participant_number_internal: 1, payment_slip: 'ch_besr')
     expect(invoice_config.participant_number_internal).to be_present
   end
+
+  describe 'e-mail validation' do
+
+    before { allow(Truemail).to receive(:valid?).and_call_original }
+
+    it 'does not allow invalid e-mail address' do
+      invoice_config.email = 'blabliblu-ke-email'
+
+      expect(invoice_config).not_to be_valid
+      expect(invoice_config.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'allows blank e-mail address' do
+      invoice_config.email = '   '
+
+      expect(invoice_config).to be_valid
+      expect(invoice_config.email).to be_nil
+    end
+
+    it 'does not allow e-mail address with non-existing domain' do
+      invoice_config.email = 'invoices42@gitsäuäniä.it'
+
+      expect(invoice_config).not_to be_valid
+      expect(invoice_config.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does not allow e-mail address with domain without mx record' do
+      invoice_config.email = 'invoices@bluewin.com'
+
+      expect(invoice_config).not_to be_valid
+      expect(invoice_config.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does allow valid e-mail address' do
+      invoice_config.email = 'invoice42@puzzle.ch'
+
+      expect(invoice_config).to be_valid
+    end
+  end
 end

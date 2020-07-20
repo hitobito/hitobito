@@ -243,16 +243,6 @@ describe Person do
     end
   end
 
-  context 'email validation' do
-    it 'can create two people with empty email' do
-      expect { 2.times { Fabricate(:person, email: '') }  }.to change { Person.count }.by(2)
-    end
-
-    it 'cannot create two people same email' do
-      expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-  end
-
   context '#ignored_country?' do
     it 'ignores ch, empty' do
       person = Person.new(country: nil)
@@ -548,6 +538,14 @@ describe Person do
 
       expect(person).to be_valid
       expect(person.email).to be_nil
+    end
+
+    it 'can create two people with empty email' do
+      expect { 2.times { Fabricate(:person, email: '') }  }.to change { Person.count }.by(2)
+    end
+
+    it 'cannot create two people with same email' do
+      expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it 'does not allow e-mail address with non-existing domain' do

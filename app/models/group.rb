@@ -36,6 +36,7 @@ class Group < ActiveRecord::Base
   include Group::NestedSet
   include Group::Types
   include Contactable
+  include ValidatedEmail
 
   acts_as_paranoid
   extend Paranoia::RegularScope

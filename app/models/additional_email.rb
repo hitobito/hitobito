@@ -20,11 +20,11 @@
 class AdditionalEmail < ActiveRecord::Base
 
   include ContactAccount
+  include ValidatedEmail
 
   self.value_attr = :email
 
   validates_by_schema
-  validates :email, format: Devise.email_regexp
 
   # A dot at the end is invalid due to translation purpose
   validates :label, format: { without: /[.]$\z/ }

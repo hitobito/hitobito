@@ -1040,6 +1040,7 @@ de:
 
   people:
     send_password_instructions: Login Informationen wurden verschickt.
+    send_password_instructions_invalid_email: Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist.
     years_old: (%{years} Jahre alt)
 
     tabs:

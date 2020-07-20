@@ -23,11 +23,15 @@ module MailRelay
     class_attribute :mail_domain
     self.mail_domain = 'localhost'
 
-    attr_reader :message
+    attr_reader :message, :mail_log
 
     delegate :valid_email?, to: :class
 
     class << self
+
+      def logger
+        Delayed::Worker.logger || Rails.logger
+      end
 
       # Retrieve, process and delete all mails from the mail server.
       def relay_current
@@ -38,32 +42,40 @@ module MailRelay
         end
       end
 
-      def relay_batch # rubocop:disable Metrics/MethodLength hopefully temporary, this needs refactoring to handle already processed mails better
+      def relay_batch
         last_exception = nil
-        logger = Delayed::Worker.logger || Rails.logger
 
         mails = Mail.find_and_delete(count: retrieve_count) do |message|
-          begin
-            new(message).relay
-          rescue MailProcessedBeforeError => e
-            mail_log = MailLog.find_by(mail_hash: MailLog.build(message).mail_hash)
-            if mail_log && mail_log.completed?
-              logger.info "Deleting previously processed email from #{message.from}"
-            else
-              message.mark_for_delete = false
-              Airbrake.notify(e)
-              Raven.capture_exception(e, logger: 'mail_relay')
-            end
-          rescue Exception => e # rubocop:disable Lint/RescueException
-            message.mark_for_delete = false
-            last_exception = MailRelay::Error.new(e.message, message, e)
-          end
+          proccessed_error = process(message)
+          last_exception = proccessed_error if proccessed_error
         end
 
         [mails || [], last_exception]
       rescue EOFError => e
         logger.warn(e)
         [[], nil]
+      end
+
+      def process(message)
+        new(message).relay
+      rescue MailProcessedBeforeError => e
+        processed_before(message, e)
+        nil
+      rescue Exception => e # rubocop:disable Lint/RescueException
+        message.mark_for_delete = false
+        MailRelay::Error.new(e.message, message, e)
+      end
+
+      def processed_before(message, exception)
+        mail_log = MailLog.find_by(mail_hash: MailLog.build(message).mail_hash)
+        if mail_log&.completed?
+          logger.info "Deleting previously processed email from #{message.from}"
+        else
+          message.mark_for_delete = false
+          Airbrake.notify(exception)
+          mail_hash = mail_log.mail_hash
+          Raven.capture_exception(exception, logger: 'mail_relay', extra: { mail_hash: mail_hash })
+        end
       end
 
       # rubocop:disable Rails/Output
@@ -77,8 +89,7 @@ module MailRelay
       end
 
       def valid_email?(email)
-        email_address = email.to_s.strip
-        email_address.present? && !email_address.ends_with?('<>') && email_address.include?('@')
+        email.present? && Truemail.valid?(email)
       end
 
       private
@@ -113,7 +124,7 @@ module MailRelay
     # Process the given email.
     def relay # rubocop:disable Metrics/MethodLength
       if relay_address?
-        if sender_allowed?
+        if sender_valid? && sender_allowed?
           @mail_log.update(status: :bulk_delivering)
           bulk_deliver(message)
           @mail_log.update(status: :completed)
@@ -178,6 +189,10 @@ module MailRelay
     # Is the mail sender allowed to post to this address
     def sender_allowed?
       true
+    end
+
+    def sender_valid?
+      valid_email?(sender_email)
     end
 
     # List of receiver email addresses for the resent email.

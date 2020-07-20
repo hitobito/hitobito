@@ -69,12 +69,12 @@ class PeopleController < CrudController
 
   # POST button, send password instructions
   def send_password_instructions
-    Person::SendLoginJob.new(entry, current_user).enqueue!
-    notice = I18n.t("#{controller_name}.#{action_name}")
+    msg = send_login_job(entry, current_user)
+
     respond_to do |format|
-      format.html { redirect_to group_person_path(group, entry), notice: notice }
+      format.html { redirect_to group_person_path(group, entry), *msg }
       format.js do
-        flash.now.notice = notice
+        flash.now[msg.keys.first] = msg.values.first
         render 'shared/update_flash'
       end
     end
@@ -248,6 +248,15 @@ class PeopleController < CrudController
     @person_filter ||= Person::Filter::List.new(@group,
                                                 current_user || service_token_user,
                                                 list_filter_args)
+  end
+
+  def send_login_job(entry, current_user)
+    if Truemail.valid?(entry.email)
+      Person::SendLoginJob.new(entry, current_user).enqueue!
+      { notice: I18n.t("#{controller_name}.#{action_name}") }
+    else
+      { alert: I18n.t("#{controller_name}.#{action_name}_invalid_email") }
+    end
   end
 
 end

@@ -25,21 +25,47 @@ describe AdditionalEmail do
     I18n.locale = I18n.default_locale
   end
 
-  context 'validation' do
-    it 'uses devise regexp for email' do
-      a1 = Fabricate(:additional_email, label: 'Foo')
-      expect(a1).to be_valid
-
-      a1.email = 'foo'
-      expect(a1).not_to be_valid
-    end
-
+  context 'label validation' do
     it 'should not contain a dot at the end of a label' do
       a1 = Fabricate(:additional_email, label: 'Foo')
       expect(a1).to be_valid
 
       a1.label = 'Foo.'
       expect(a1).not_to be_valid
+    end
+  end
+
+  describe 'e-mail validation' do
+
+    let(:add_email) { Fabricate(:additional_email, label: 'Foo') }
+
+    before { allow(Truemail).to receive(:valid?).and_call_original }
+
+    it 'does not allow invalid e-mail address' do
+      add_email.email = 'blabliblu-ke-email'
+
+      expect(add_email).not_to be_valid
+      expect(add_email.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does not allow e-mail address with non-existing domain' do
+      add_email.email = 'dude@gitsäuäniä.it'
+
+      expect(add_email).not_to be_valid
+      expect(add_email.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does not allow e-mail address with domain without mx record' do
+      add_email.email = 'dude@bluewin.com'
+
+      expect(add_email).not_to be_valid
+      expect(add_email.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does allow valid e-mail address' do
+      add_email.email = 'dude@puzzle.ch'
+
+      expect(add_email).to be_valid
     end
   end
 

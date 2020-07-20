@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 # no wagons loaded
-if ENV['APP_ROOT'].nil? || ENV['RAILS_USE_TEST_GROUPS']
+if ENV['APP_ROOT'].blank? || ENV['RAILS_USE_TEST_GROUPS']
   Group.reset_types!
 
   # global roles and children

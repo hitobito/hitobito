@@ -302,7 +302,10 @@ describe Group do
 
   context '.all_types' do
     it 'lists all types' do
-      Group.all_types =~ [Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup, Group::GlobalGroup]
+      expect(Group.all_types.count).to eq(5)
+      [Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup, Group::GlobalGroup].each do |t|
+        expect(Group.all_types).to include(t)
+      end
     end
   end
 
@@ -463,6 +466,47 @@ describe Group do
     it 'is destroyed group when group gets destroyed' do
       group = Fabricate(Group::BottomLayer.sti_name, name: 'g', parent: parent)
       expect { group.destroy }.to change { InvoiceConfig.count }.by(-1)
+    end
+  end
+
+  describe 'e-mail validation' do
+
+    let(:group) { groups(:top_layer) }
+
+    before { allow(Truemail).to receive(:valid?).and_call_original }
+
+    it 'does not allow invalid e-mail address' do
+      group.email = 'blabliblu-ke-email'
+
+      expect(group).not_to be_valid
+      expect(group.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'allows blank e-mail address' do
+      group.email = '   '
+
+      expect(group).to be_valid
+      expect(group.email).to be_nil
+    end
+
+    it 'does not allow e-mail address with non-existing domain' do
+      group.email = 'group42@gitsäuäniä.it'
+
+      expect(group).not_to be_valid
+      expect(group.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does not allow e-mail address with domain without mx record' do
+      group.email = 'dudes@bluewin.com'
+
+      expect(group).not_to be_valid
+      expect(group.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does allow valid e-mail address' do
+      group.email = 'group42@puzzle.ch'
+
+      expect(group).to be_valid
     end
   end
 end

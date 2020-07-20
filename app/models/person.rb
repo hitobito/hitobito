@@ -84,6 +84,7 @@ class Person < ActiveRecord::Base
   include DeviseOverrides
   include I18nSettable
   include I18nEnums
+  include ValidatedEmail
 
   i18n_enum :gender, GENDERS
   i18n_setter :gender, (GENDERS + [nil])

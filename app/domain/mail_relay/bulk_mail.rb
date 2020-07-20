@@ -47,6 +47,7 @@ module MailRelay
 
       @recipients.each_slice(BULK_SIZE).with_index do |r, i|
         break if @abort
+
         @current_slice += 1
         log_info("sending #{@current_slice}/#{@slices} blocks with #{BULK_SIZE} recipients")
         batch_deliver(r)
@@ -73,6 +74,8 @@ module MailRelay
 
     def batch_deliver(recipients)
       return if recipients.blank?
+
+      recipients = validate(recipients)
       @message.smtp_envelope_to = recipients
       begin
         @message.deliver
@@ -111,6 +114,14 @@ module MailRelay
       log_info("error at #{@current_slice}/#{@slices} send blocks, " \
                "retrying in #{retry_in / 60}mins: #{error.message}")
       sleep retry_in
+    end
+
+    def validate(recipients)
+      valid, invalid = recipients.group_by { |r| Truemail.valid?(r) }.values
+      invalid&.each do |r|
+        @failed_recipients << [r, 'invalid e-mail address']
+      end
+      valid
     end
 
     def reject_failing(error, recipients)

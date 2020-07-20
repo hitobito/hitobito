@@ -243,16 +243,6 @@ describe Person do
     end
   end
 
-  context 'email validation' do
-    it 'can create two people with empty email' do
-      expect { 2.times { Fabricate(:person, email: '') }  }.to change { Person.count }.by(2)
-    end
-
-    it 'cannot create two people same email' do
-      expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error(ActiveRecord::RecordInvalid)
-    end
-  end
-
   context '#ignored_country?' do
     it 'ignores ch, empty' do
       person = Person.new(country: nil)
@@ -527,6 +517,55 @@ describe Person do
       it "scales down an image to be no wider than 512 pixels" do
         expect(person.picture).to have_dimensions(512, 512)
       end
+    end
+  end
+
+  describe 'e-mail validation' do
+
+    let(:person) { people(:top_leader) }
+
+    before { allow(Truemail).to receive(:valid?).and_call_original }
+
+    it 'does not allow invalid e-mail address' do
+      person.email = 'blabliblu-ke-email'
+
+      expect(person).not_to be_valid
+      expect(person.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'allows blank e-mail address' do
+      person.email = '   '
+
+      expect(person).to be_valid
+      expect(person.email).to be_nil
+    end
+
+    it 'can create two people with empty email' do
+      expect { 2.times { Fabricate(:person, email: '') }  }.to change { Person.count }.by(2)
+    end
+
+    it 'cannot create two people with same email' do
+      expect { 2.times { Fabricate(:person, email: 'foo@bar.com') }  }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it 'does not allow e-mail address with non-existing domain' do
+      person.email = 'dude@gitsäuäniä.it'
+
+      expect(person).not_to be_valid
+      expect(person.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does not allow e-mail address with domain without mx record' do
+      person.email = 'dude@bluewin.com'
+
+      expect(person).not_to be_valid
+      expect(person.errors.messages[:email].first).to eq('ist nicht gültig')
+    end
+
+    it 'does allow valid e-mail address' do
+      person.email = 'dude@puzzle.ch'
+
+      expect(person).to be_valid
     end
   end
 

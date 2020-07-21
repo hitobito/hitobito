@@ -6,7 +6,7 @@ Diese Dokumente beschreiben verschiedene Aspekte, welche bei der Entwicklung zu 
 
 ## Inhalt
 
-* [Entwicklungsumgebung](01_setup.md)
+* [Development](01_basics.md)
 * [Deployment](02_deployment.md)
 * [Guidelines](03_guidelines.md)
 * [Wagons](04_wagons.md)

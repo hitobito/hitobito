@@ -2,7 +2,7 @@
 
 ### Setup
 
-Please follow the instructions at (Development)[https://github.com/hitobito/development/]
+Please follow the instructions at [Development](https://github.com/hitobito/development/)
 
 Create a new Wagon? Check out [Wagon erstellen](04_wagons.md#wagon-erstellen)
 

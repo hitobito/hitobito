@@ -1,88 +1,35 @@
-## Setup der Entwicklungsumgebung
-
-Die Applikation läuft unter Ruby >= 2.5, Rails 6 und Mysql.
-
-
-### System
-
-Grundsätzlich muss für hitobito eine Ruby Version grösser gleich 2.5 sowie Bundler vorhanden sein.
-Siehe dazu https://www.ruby-lang.org/en/documentation/installation/.
-
-Als Datenbank wird MySQL verwendet. Die Befehle gehen von einem Ubuntu Linux als Entwicklungssystem aus.
-Bei einem anderen System müssen die Befehle entsprechend angepasst werden.
-
-    sudo apt-get install mysql-client libmysqlclient-dev mysql-server
-
-Folgende Dritt-Packete sind für die verschiedenen Features von hitobito zusätzlich erforderlich.
-
-    sudo apt-get install sphinxsearch memcached imagemagick transifex-client graphviz
-
-
-### Source
-
-Hitobito Core und die entsprechenden Wagons aus dem Git Remote klonen und das Wagonfile kopieren.
-Der Core und die Wagons müssen nebeneinander im gleichen Hauptverzeichnis sein.
-Dazu muss Git installiert sein.
-
-    sudo apt-get install git
-
-    cd your-code-directory
-
-    git clone https://github.com/hitobito/hitobito.git
-
-    git clone https://github.com/hitobito/hitobito_[wagon].git
-
-    cp hitobito/Wagonfile.ci hitobito/Wagonfile
-
-    cp hitobito/Gemfile.lock hitobito_[wagon]/
-
-Siehe [Wagon erstellen](04_wagons.md#wagon-erstellen), wenn du frisch startest und einen Wagon für eine neue
-Organisation erstellen willst.
-
+## Development
 
 ### Setup
 
-Ruby Gem Dependencies installieren (alle folgenden Befehle im Hitobito Core Verzeichnis ausführen):
+Please follow the instructions at (Development)[https://github.com/hitobito/development/]
 
-    bundle
+Create a new Wagon? Check out [Wagon erstellen](04_wagons.md#wagon-erstellen)
 
-Datenbank erstellen
-
-    rake db:create
-
-Initialisieren der Datenbank, laden der Seeds und Wagons:
-
-    rake db:setup:all
-
-Starten des Entwicklungsservers:
-
-    rails server
-
-oder gleich aller wichtigen Prozesse:
-
-    gem install foreman
-    foreman start
+⚡ Please note sqlite is no longer supported for development.
 
 ### Tests
 
-Ausführen der Tests:
+For executing any of the following commands, start a console inside rails-test container:
 
-    rake
+    docker-compose exec rails-test bash
 
-Dies führt aus Performancegründen keine Javascript/Feature Specs aus. Diese können explizit
-gestartet werden. Dazu muss xvfb installiert sein.
+Execute all tests:
 
-    sudo apt-get install xvfb
-    rake spec:features
+    spring rails spec
 
-Ausführen der Wagon Tests (vom Hitobito Core aus):
+For performance reasons, this does not include any Javascript/Feature Specs. To run those tests: 
 
-    rake wagon:test
+    spring rails spec:features
+
+For executing Wagon specific tests: (from core)
+
+    spring rails wagon:test
 
 Um einzelne Tests auszuführen, muss die Testdatenbank vorbereitet sein. Dazu muss nach dem Wechsel
 von Core in einen Wagon (und umgekehrt) folgender Befehl ausgeführt werden:
 
-    rake db:test:prepare
+    spring rails db:test:prepare
 
 Danach können spezifische Tests auch mit Spring und direkt über Rspec ausgeführt werden, z.B.:
 
@@ -93,29 +40,6 @@ Danach können spezifische Tests auch mit Spring und direkt über Rspec ausgefü
 
 Um einen einzelnen Request zu Profilen, kann der Parameter `?profile_request=true` in der URL
 angehängt werden. Der Output wird nach `tmp/performance` geschrieben.
-
-
-### Sphinx
-
-Sphinx läuft nur unter MySql. Wenn MySql/Sphinx bei der Entwicklung verwendet werden soll, müssen
-die Datenbank Tasks und der Rails Server wie oben erwähnt mit `bin/with_mysql` gestart werden.
-
-Um die Volltextsuche zu verwenden, muss erst der Index erstellt
-
-    bin/with_mysql rake ts:index
-
-und dann Sphinx gestartet werden:
-
-    rake ts:start
-
-Achtung: Der Index wird grundsätzlich nur über diesen Aufruf aktualisiert! Änderungen an der DB
-werden für die Volltextsuche also erst sichtbar, wenn wieder neu indexiert wurde. Auf der Produktion
-läuft dazu alle 10 Minuten ein Delayed Job.
-
-Hinweis: Falls beim Indexieren der Fehler ``ERROR: index 'group_core': sql_fetch_row: Out of sort memory, consider increasing server sort buffer size.`` auftritt, muss in der MySql-Konfiguration (je nach Distro im File ``/etc/mysql/mysql.conf.d/mysqld.cnf`` oder ``/etc/mysql/my.cnf``) folgende Buffergrösse erhöht werden:
-
-    [mysqld]
-    sort_buffer_size = 2M
 
 
 ### Delayed Job

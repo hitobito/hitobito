@@ -565,8 +565,7 @@ GEM
     slop (3.6.0)
     sort_alphabetical (1.1.0)
       unicode_utils (>= 1.2.2)
-    spring (2.0.1)
-      activesupport (>= 4.2)
+    spring (2.1.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
     sprockets (3.7.2)
@@ -630,7 +629,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.20)
-    zeitwerk (2.3.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby

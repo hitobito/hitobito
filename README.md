@@ -7,27 +7,10 @@ hitobito is an open source web application to manage complex group hierarchies w
 
 ## Development
 
-Hitobito is a Ruby on Rails application that runs on Ruby >= 2.5 and Rails 6.
-It might run with minor tweaks on older Rubies, but is not tested against those
-versions.
+Check out our [development kit](https://github.com/hitobito/development/)
 
-To get going, after you got a copy of hitobito and at least one wagon with an organization
-structure setup as described below, issue the following commands in the main directory:
+More detailed development documentation can be found in [doc/development](doc/development).
 
-    sudo yum install mysql memcached sphinxsearch imagemagick  # install system dependencies
-
-    bundle               # install gem dependencies
-    rake db:create       # create a development database
-    rake db:setup:all    # run migrations and load seed data of the app and all wagons
-    rails server         # start the rails server
-
-To start the search server, run background jobs or the development mail catcher, run:
-
-    rake ts:start
-    rake jobs:work
-    mailcatcher -v -f
-
-A more detailed development documentation in German can be found in [doc/development](doc/development).
 This is where you also find some [Deployment Instructions](doc/development/02_deployment.md).
 
 ## Architecture

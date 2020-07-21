@@ -47,7 +47,7 @@ Starting up development containers includes one with the delayed job worker. To 
     
 ### Mailcatcher
 
-Access mailcatcher with your favourite browser `http://localhost:1080`
+Access mailcatcher with your favourite browser [http://localhost:1080](http://localhost:1080)
 
 ### Specific Rake Tasks
 

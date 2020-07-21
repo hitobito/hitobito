@@ -22,44 +22,36 @@ For performance reasons, this does not include any Javascript/Feature Specs. To 
 
     spring rails spec:features
 
-For executing Wagon specific tests: (from core)
+For executing Wagon specific tests:
 
-    spring rails wagon:test
+    cd ../hitobito_generic # change to desired wagon
+    rails spec
 
-Um einzelne Tests auszuführen, muss die Testdatenbank vorbereitet sein. Dazu muss nach dem Wechsel
-von Core in einen Wagon (und umgekehrt) folgender Befehl ausgeführt werden:
+Switching between core and wagon database for executing single tests:
 
     spring rails db:test:prepare
 
-Danach können spezifische Tests auch mit Spring und direkt über Rspec ausgeführt werden, z.B.:
+Executing a specific test:
 
     spring rspec spec/domain/import
 
-
 ### Request Profiling
 
-Um einen einzelnen Request zu Profilen, kann der Parameter `?profile_request=true` in der URL
-angehängt werden. Der Output wird nach `tmp/performance` geschrieben.
-
+For profiling single requests, you can add the param `?profile_request=true` to the URL. Output will be written to `tmp/performance`.
 
 ### Delayed Job
 
-Um die Background Jobs abzuarbeiten (z.B. um Mails zu versenden), muss Delayed Job gestartet werden:
+Starting up development containers includes one with the delayed job worker. To check it's logs:
 
-    rake jobs:work
-
-
+    docker-compose logs worker
+    
 ### Mailcatcher
 
-Das development Environment ist so konfiguriert, dass alle E-Mails per SMTP an `localhost:1025`
-geschickt werden. Am einfachsten kann man diese E-Mails lesen, indem man mailcatcher startet:
+Access mailcatcher with your favourite browser `http://localhost:1080`
 
-    mailcatcher -v
+### Specific Rake Tasks
 
-und dann mittles Browser auf `http://localhost:1080` E-Mails liest.
-
-
-### Spezifische Rake Tasks
+Run the following rake tasks inside rails, rails-test container:
 
 | Task | Beschreibung |
 | --- | --- |

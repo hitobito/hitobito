@@ -1,11 +1,11 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# rubocop:disable ClassLength
+# rubocop:disable Metrics/ClassLength
 
 # A form builder that automatically selects the corresponding input field
 # for ActiveRecord column types. Convenience methods for each column type allow
@@ -15,7 +15,7 @@
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
   include NestedForm::BuilderMixin
 
-  REQUIRED_MARK = ' <span class="required">*</span>'.html_safe # rubocop:disable Rails/OutputSafety
+  REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
 
   attr_reader :template
 
@@ -463,3 +463,5 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
 end
+
+# rubocop:enable Metrics/ClassLength

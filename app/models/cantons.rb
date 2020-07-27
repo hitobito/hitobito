@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2014, insieme Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -9,8 +9,10 @@ module Cantons
 
   module_function
 
-  SHORT_NAMES = [:ag, :ai, :ar, :be, :bl, :bs, :fr, :ge, :gl, :gr, :ju, :lu, :ne,
-                 :nw, :ow, :sg, :sh, :so, :sz, :tg, :ti, :ur, :vd, :vs, :zg, :zh]
+  SHORT_NAMES = [ # rubocop:disable Style/MutableConstant This is being extended in a wagon
+    :ag, :ai, :ar, :be, :bl, :bs, :fr, :ge, :gl, :gr, :ju, :lu, :ne,
+    :nw, :ow, :sg, :sh, :so, :sz, :tg, :ti, :ur, :vd, :vs, :zg, :zh
+  ]
 
   def short_names
     SHORT_NAMES
@@ -27,8 +29,8 @@ module Cantons
   end
 
   def labels
-    short_names.each_with_object({}) do |short, labels|
-      labels[short] = full_name(short)
+    short_names.index_with do |short|
+      full_name(short)
     end
   end
 

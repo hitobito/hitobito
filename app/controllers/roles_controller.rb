@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -23,7 +23,7 @@ class RolesController < CrudController
   before_render_form :set_group_selection
   before_render_create :set_group_selection
 
-  before_action :set_person_id, only: [:new]
+  before_action :set_person_id, only: [:new] # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :remember_primary_group, only: [:destroy]
   after_destroy :last_primary_group_role_deleted
 
@@ -63,7 +63,7 @@ class RolesController < CrudController
   def role_types
     authorize!(:role_types, Role)
     @group = Group.find(params.fetch(:role, {})[:group_id])
-    @type ||= @group.default_role
+    @type ||= @group.default_role # rubocop:disable Naming/MemoizedInstanceVariableName
   end
 
   private
@@ -182,7 +182,7 @@ class RolesController < CrudController
   end
 
   def extract_model_attr(attr)
-    model_params && model_params.delete(attr)
+    model_params&.delete(attr)
   end
 
   # A label for the current entry, including the model name, used for flash

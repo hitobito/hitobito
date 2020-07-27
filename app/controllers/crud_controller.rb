@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -16,7 +16,7 @@ class CrudController < ListController
 
   class_attribute :permitted_attrs
 
-  ACTIONS = [:show, :new, :create, :edit, :update, :destroy]
+  ACTIONS = [:show, :new, :create, :edit, :update, :destroy].freeze
   prepend_before_action :entry, only: ACTIONS
 
   delegate :model_identifier, to: 'self.class'
@@ -174,7 +174,7 @@ class CrudController < ListController
 
   # Html safe error messages of the current entry.
   def error_messages
-    @@helper.safe_join(entry.errors.full_messages, '<br/>'.html_safe) # rubocop:disable Rails/OutputSafety
+    @@helper.safe_join(entry.errors.full_messages, '<br/>'.html_safe)
   end
 
   def return_path
@@ -216,10 +216,9 @@ class CrudController < ListController
 
     private
 
-    # rubocop:disable PredicateName
 
     # Check whether the resource has errors. Additionally checks the :success option.
-    def has_errors?
+    def has_errors? # rubocop:disable Name/PredicateName
       options[:success] == false || super
     end
 

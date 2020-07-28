@@ -14,7 +14,7 @@ Alle E-Mails an die Applikationsdomain (z.B `news@db.jubla.ch`) werden über ein
 1. Sende eine Rückweisungsemail, falls der Absender nicht berechtigt ist.
 1. Leite das Email weiter an alle Empfänger der Mailing Liste.
 
-⚡ Man kann aus diversen Gründen (BCC, Mail Aliase) den eigentlichen Empfänger nicht aus dem `To` Header lesen. Aus diesem Grund muss der Mailserver den `X-Original-To` oder `X-Envelope-To` Header setzen, welcher den ursprünglichen Empfänger enthält (z.B. `news` -> ohne @ und Domain)
+⚡ Man kann aus diversen Gründen (BCC, Mail Aliase) den eigentlichen Empfänger nicht aus dem `To` Header lesen. Aus diesem Grund muss der Mailserver den `X-Original-To` oder `X-Envelope-To` Header setzen, welcher den ursprünglichen Empfänger enthält (z.B. `news@db.example.com`)
 
 Berechtigung, um auf eine Mailing Liste zu schreiben, kann konfiguriert werden. Der Absender wird über seine Haupt- oder zusätzlichen E-Mail Adressen identifiziert. Standardmässig können alle Personen, welche die Liste Bearbeiten können, sowie die Gruppe, welcher das Abo gehört, E-Mails schreiben. Optional können zusätzlich spezifische E-Mail Adressen, alle Abonnenten der Gruppe oder beliebige Absender (auch nicht in hitobito erfasste) berechtigt werden. 
 

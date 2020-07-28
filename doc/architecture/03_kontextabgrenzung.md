@@ -13,3 +13,7 @@ zum Senden sowie POP3 oder IMAP zum Empfangen von E-Mails.
 
 **REST Clients**: Ausgabe von Personen- und Gruppendaten via JSON REST API. Momentan sind noch 
 keine Bearbeitungsaktionen möglich.
+
+**Mailchimp**: Integration für Massenmailing
+
+**Oauth oder OIDC**: Identity Provider für weitere Applikationen

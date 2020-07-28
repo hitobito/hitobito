@@ -10,12 +10,15 @@ potentielle Benutzende sein. Ihre Zugriffsrechte werden durch die Rollen definie
 * Organisation von Anlässen und Kursen. Dies beinhaltet Anmeldungen, Teilnehmendenverwaltung, 
 Prüfung von Vorbedingungen und Erteilung von Qualifikationen.
 * Führen und Betreiben von Mailing Listen mit individuell und/oder automatisch zusammengestellten 
-Empfängern.
+Empfängern. Schnittstelle zu Mailchimp.
 * Beliebige verbandsspezifische Erweiterungen in Plugins basierend auf einer einheitlichen 
-Basisapplikation. Z.B. Bestandesmeldungen oder Kursreporting.
-* Import und Export von Personen- und Anlassdaten als CSV.
-* Abfrage von Personen- und Gruppendaten über ein JSON REST API.
+Basisapplikation. Z.B. ausführliche Bestandesmeldungen, SUISA Meldungen, BSV Reporting oder Kursreporting.
+* Import und Export von Personen- und Anlassdaten als CSV, Excel, PDF.
+* Abfrage von Personen-, Gruppendaten und Eventdaten über ein JSON REST API.
 * Volltextsuche über alle Personen und Gruppen.
+* Rechnungsmodul individuell pro Organisation
+* Identity Provider via Oauth oder OIDC
+* ... und viel mehr!
 
 
 ## Qualitätsziele

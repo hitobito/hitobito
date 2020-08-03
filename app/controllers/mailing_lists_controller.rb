@@ -38,7 +38,8 @@ class MailingListsController < CrudController
   private
 
   def list_entries
-    can?(:update, parent) ? super : super.subscribable
+    scope = super.list
+    can?(:update, parent) ? scope : scope.subscribable
   end
 
   def authorize_class

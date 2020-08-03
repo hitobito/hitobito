@@ -8,4 +8,4 @@
       - else
         - application.name
     - t.sortable_attr(:scopes)
-    - action_col_destroy(t) { |e| oauth_active_authorization_path(e) }
+    - action_col(t) { |a| link_action_destroy(oauth_active_authorization_path(a)) }

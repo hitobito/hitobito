@@ -49,6 +49,20 @@ describe Oauth::ActiveAuthorizationsController do
       get :index
       expect(assigns(:entries)).to be_empty
     end
+
+  end
+
+  context 'GET#index', :mysql do
+    render_views
+    let(:person) { people(:bottom_member) }
+
+    it 'renders destroy link' do
+      sign_in(person)
+      create_grant(resource_owner_id: person.id)
+      get :index
+      expect(assigns(:entries)).to have(1).item
+      expect(response.body).to match(/fa-trash-alt/)
+    end
   end
 
   context 'DELETE#destroy' do

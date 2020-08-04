@@ -857,6 +857,12 @@ describe PeopleController do
       expect(response).to render_template('edit')
     end
 
+    it 'POST#update does not accept invalid file type' do
+      file = Tempfile.new(['foo', '.exe'])
+      picture = Rack::Test::UploadedFile.new(file, 'application/exe')
+      put :update, params: { group_id: member.primary_group_id, id: member.id, person: { picture: picture } }
+      expect(assigns(:person)).to have(1).error_on(:picture)
+    end
   end
 
   context 'as token user' do

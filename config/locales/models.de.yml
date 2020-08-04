@@ -817,7 +817,7 @@ de:
       after: "muss  nach %{restriction} sein"
       on_or_after: "muss %{restriction} oder danach sein"
       # carrierwave
-      extension_white_list_error: "akzeptiert nur die folgenden Dateitypen: %{allowed_types}"
+      extension_whitelist_error: "akzeptiert nur die folgenden Dateitypen: %{allowed_types}"
       dimensions_too_large: "akzeptiert nur Bilder mit einer Grösse kleiner als %{maximum} Pixel"
       filesize_too_large: "darf nicht grösser als %{maximum} MB sein"
       # devise

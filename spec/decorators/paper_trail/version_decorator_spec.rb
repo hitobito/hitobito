@@ -154,6 +154,12 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
       is_expected.to eq('Social Media Adresse <i>Bar (Foo)</i> wurde hinzugefügt.')
     end
 
+    it 'sanitizes html' do
+      Fabricate(:social_account, contactable: person, label: 'Foo', name: '<script>alert("test")</script>')
+
+      is_expected.to eq('Social Media Adresse <i>alert("test") (Foo)</i> wurde hinzugefügt.')
+    end
+
     it 'builds update text' do
       account = Fabricate(:social_account, contactable: person, label: 'Foo', name: 'Bar')
       account.update!(name: 'Boo')

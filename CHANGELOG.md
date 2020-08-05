@@ -1,14 +1,21 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.22
 
-*  Verbesserung der Mailchimp Integration
+*  Verbesserung der Mailchimp Integration und am Rechnungsmodul
+*  Liste "Meine Abos" auf der Person (optional für jede hitobito-Instanz)
+*  QR-Code-Rechnungen
+*  Icons in der Suche
+*  Neue API-Endpoints für Gruppen-Hierarchie und Abos
+*  Berechtigungen werden im OAuth-Profil mitgeliefert
+*  Eigene OAuth-Authorisierungen können entfernt werden
 *  Generelle Validierung von E-Mail Adressen
 
 ## Version 1.21
 
 *  Stackupgrade ruby-2.5, rails-6
 *  OIDC für Oauth
+*  Mehr Daten in der JSON-API
 
 ## Version 1.20
 

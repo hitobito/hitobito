@@ -25,7 +25,7 @@ Before an external application can read the user's data, it must first get the a
 * `response_type` For the authorization request we always use the value `code`
 * `client_id` The UId of the external application, this will be provided to you by your hitobito root group admin
 * `redirect_uri` A URL where your application can receive the authorization code once the user grants the permission request. The hitobito root group admin needs to know this URL (or all possible URLs if the external application has multiple) in advance in order to create your `client_id`.
-* * The URLs must have the `https://` protocol, except for `localhost` URLs, which are allowed to use `http://` (for testing and development purposes)
+* * The URLs must have the `https://` protocol. Exception: On integration environments only, `localhost` URLs can also be used with `http://` (for testing and development purposes).
 * * If you want to only test the OAuth functionality, you can use the special value `urn:ietf:wg:oauth:2.0:oob`, which will display the authorization token instead of redirecting the browser
 * `scope` One or more scopes (see above) needed by your application, separated by spaces or `%20`. The hitobito root group admin needs to know this list in advance in order to create your `client_id`
 

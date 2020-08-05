@@ -39,13 +39,26 @@ describe Synchronize::Mailchimp::Subscriber do
     end
 
     context 'strategy to include additional emails' do
+      let(:bottom_member) { people(:bottom_member) }
+
       before do
+        mailing_list.subscriptions.create(subscriber: bottom_member)
+        bottom_member.additional_emails.create!({
+          label: 'vater bottom',
+          email: 'vater+bottom@example.com',
+          mailings: true
+        })
         mailing_list.mailchimp_include_additional_emails = true
       end
 
       it 'returns an entry per person and email (default and additional)' do
-        expect(subject.count).to eq(2)
-        expect(subject.map(&:email)).to eq([person.email, 'vater@example.com'])
+        expect(subject.count).to eq(4)
+        expect(subject.map(&:email)).to match_array([
+          person.email,
+          'vater@example.com',
+          bottom_member.email,
+          'vater+bottom@example.com'
+        ])
       end
     end
   end

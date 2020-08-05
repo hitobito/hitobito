@@ -242,6 +242,55 @@ describe Synchronize::Mailchimp::Client do
     end
   end
 
+  context '#create_segment executes batch' do
+    before { expect(Settings.mailchimp).to receive(:max_attempts).and_return(3) }
+
+    it 'raises if status does not change within max_attempts' do
+      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches").
+        to_return(status: 200, body: {id: 1}.to_json)
+
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1").
+        to_return(status: 200, body: {id: 1, status: 'pending' }.to_json)
+
+      expect(client).to receive(:sleep).exactly(5).times
+      expect do
+        client.create_segments(%w(a))
+      end.to raise_error RuntimeError, 'Batch 1 exeeded max_attempts, status: pending'
+    end
+
+    it 'succeeds if status changes to finished' do
+      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches").
+        to_return(status: 200, body: {id: 1}.to_json)
+
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1").
+        to_return(status: 200, body: {id: 1, status: 'pending' }.to_json).
+        to_return(status: 200, body: {id: 1, status: 'finished' }.to_json)
+
+      expect(client).to receive(:sleep).exactly(2).times
+      client.create_segments(%w(a))
+    end
+
+    it 'resets counts when status changes' do
+      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches").
+        to_return(status: 200, body: {id: 1}.to_json)
+
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1").
+        to_return(status: 200, body: {id: 1, status: 'pending' }.to_json).
+        to_return(status: 200, body: {id: 1, status: 'pending' }.to_json).
+        to_return(status: 200, body: {id: 1, status: 'pending' }.to_json).
+        to_return(status: 200, body: {id: 1, status: 'pre-processing' }.to_json).
+        to_return(status: 200, body: {id: 1, status: 'pre-processing' }.to_json).
+        to_return(status: 200, body: {id: 1, status: 'pre-processing' }.to_json).
+        to_return(status: 200, body: {id: 1, status: 'started' }.to_json).
+        to_return(status: 200, body: {id: 1, status: 'started' }.to_json).
+        to_return(status: 200, body: {id: 1, status: 'started' }.to_json).
+        to_return(status: 200, body: {id: 1, status: 'finished' }.to_json)
+
+      expect(client).to receive(:sleep).exactly(10).times
+      client.create_segments(%w(a))
+    end
+  end
+
   context '#update_segment_operation' do
     subject { client.update_segment_operation(1, %w(leader@example.com member@example.com)) }
 
@@ -316,7 +365,6 @@ describe Synchronize::Mailchimp::Client do
       expect(body['merge_fields']['GENDER']).to eq top_leader.gender
     end
   end
-
 
   context '#unsubscribe_member_operation' do
     subject { client.unsubscribe_member_operation(@email) }

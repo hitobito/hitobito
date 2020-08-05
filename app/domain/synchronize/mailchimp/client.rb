@@ -16,6 +16,7 @@ module Synchronize
         @count   = count
         @merge_fields = merge_fields
         @member_fields = member_fields
+        @max_attempts = Settings.mailchimp.max_attempts
 
         @api = Gibbon::Request.new(api_key: mailing_list.mailchimp_api_key, debug: debug)
       end
@@ -188,16 +189,17 @@ module Synchronize
         end
       end
 
-      def wait_for_finish(batch_id, count = 0)
-        sleep count * count
+      def wait_for_finish(batch_id, prev_status = nil, attempt = 0) # rubocop:disable Metrics/MethodLength
+        sleep attempt * attempt
         body = api.batches(batch_id).retrieve.body
         status = body.fetch('status')
+        attempt = 0 if status != prev_status
 
-        log "batch #{batch_id}, status: #{status}"
-        fail "Batch #{batch_id} did not finish in due time, last status: #{status}" if count > 10
+        log "batch #{batch_id}, status: #{status}, attempt: #{attempt}"
+        fail "Batch #{batch_id} exeeded max_attempts, status: #{status}" if attempt > @max_attempts
 
         if status != 'finished'
-          wait_for_finish(batch_id, count + 1)
+          wait_for_finish(batch_id, status, attempt + 1)
         else
           attrs = %w(total_operations finished_operations errored_operations response_body_url)
           body.slice(*attrs).tap do |updates|

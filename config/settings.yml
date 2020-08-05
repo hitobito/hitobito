@@ -186,3 +186,6 @@ oidc:
   signing_key: <%= ENV['JWT_SIGNING_KEY'].to_s.lines %>
 
 table_displays: true
+
+mailchimp:
+  max_attempts: 25

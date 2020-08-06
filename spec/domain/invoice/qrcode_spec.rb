@@ -43,17 +43,17 @@ describe Invoice::Qrcode do
       expect(subject[2]).to eq '1'
     end
 
-    it 'has iban' do
-      expect(subject[3]).to eq 'CH93 0076 2011 6238 5295 7'
+    it 'has iban stripped of whitespaces' do
+      expect(subject[3]).to eq 'CH9300762011623852957'
     end
 
     it 'has recipient info of combined type' do
       expect(subject[4]).to eq 'K'
       expect(subject[5]).to eq 'Acme Corp'
       expect(subject[6]).to eq 'Hallesche Str. 37'
-      expect(subject[7]).to be_blank # 2nd address line, n/a for combined type
-      expect(subject[8]).to eq '3007'
-      expect(subject[9]).to eq 'Hinterdupfing'
+      expect(subject[7]).to eq '3007 Hinterdupfing'
+      expect(subject[8]).to be_blank
+      expect(subject[9]).to be_blank
       expect(subject[10]).to eq 'CH'
     end
 
@@ -72,9 +72,9 @@ describe Invoice::Qrcode do
       expect(subject[20]).to eq 'K'
       expect(subject[21]).to eq 'Max Mustermann'
       expect(subject[22]).to eq 'Musterweg 2'
-      expect(subject[23]).to be_blank
-      expect(subject[24]).to eq '8000'
-      expect(subject[25]).to eq 'Alt Tylerland'
+      expect(subject[23]).to eq '8000 Alt Tylerland'
+      expect(subject[24]).to be_blank
+      expect(subject[25]).to be_blank
       expect(subject[26]).to eq 'CH'
     end
 
@@ -100,9 +100,9 @@ describe Invoice::Qrcode do
       expect(subject[:address_type]).to eq 'K'
       expect(subject[:full_name]).to eq 'Max Mustermann'
       expect(subject[:address_line1]).to eq 'Musterweg 2'
-      expect(subject[:address_line2]).to be_blank
-      expect(subject[:zip_code]).to eq '8000'
-      expect(subject[:town]).to eq 'Alt Tylerland'
+      expect(subject[:address_line2]).to eq '8000 Alt Tylerland'
+      expect(subject[:zip_code]).to be_blank
+      expect(subject[:town]).to be_blank
       expect(subject[:country]).to eq 'CH'
     end
 
@@ -121,8 +121,8 @@ describe Invoice::Qrcode do
       expect(subject[:address_type]).to eq "K"
       expect(subject[:full_name]).to eq 'Max Mustermann'
       expect(subject[:address_line1]).to eq 'Musterweg 2'
-      expect(subject[:address_line2]).to be_blank
-      expect(subject[:zip_code]).to eq '8000'
+      expect(subject[:address_line2]).to eq '8000'
+      expect(subject[:zip_code]).to be_blank
       expect(subject[:town]).to be_blank
       expect(subject[:country]).to eq 'CH'
     end
@@ -138,6 +138,5 @@ describe Invoice::Qrcode do
       expect(subject[:country]).to eq 'CH'
     end
   end
-
 end
 

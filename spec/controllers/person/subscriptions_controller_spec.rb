@@ -12,20 +12,38 @@ describe Person::SubscriptionsController do
   let(:bottom_member) { people(:bottom_member) }
   let(:leaders)       { mailing_lists(:leaders) }
 
-  it 'may not index person subscriptions if we do not have no show_detail permission' do
-    sign_in(bottom_member)
-    expect do
+
+  context 'GET#index' do
+    it 'may not index person subscriptions if we do not have no show_detail permission' do
+      sign_in(bottom_member)
+      expect do
+        get :index, params: { group_id: top_group.id, person_id: top_leader.id }
+      end.to raise_error CanCan::AccessDenied
+    end
+
+    it 'may index my own subscriptions' do
+      leaders.subscriptions.create(subscriber: top_leader)
+      sign_in(top_leader)
       get :index, params: { group_id: top_group.id, person_id: top_leader.id }
-    end.to raise_error CanCan::AccessDenied
-  end
+      expect(assigns(:subscribed)).to have(1).items
+    end
 
-  it 'may index my own subscriptions' do
-    leaders.subscriptions.create(subscriber: top_leader)
-    sign_in(top_leader)
-    get :index, params: { group_id: top_group.id, person_id: top_leader.id }
-    expect(assigns(:subscribed)).to have(1).items
-  end
+    it 'sorts subscribed lists by name' do
+      first = top_group.mailing_lists.create!(name: '00 - First')
+      leaders.subscriptions.create(subscriber: top_leader)
+      first.subscriptions.create(subscriber: top_leader)
+      sign_in(top_leader)
+      get :index, params: { group_id: top_group.id, person_id: top_leader.id }
+      expect(assigns(:subscribed)).to eq [first, leaders]
+    end
 
+    it 'sorts subscribable lists by name' do
+      first = top_group.mailing_lists.create!(name: '00 - First', subscribable: true)
+      sign_in(top_leader)
+      get :index, params: { group_id: top_group.id, person_id: top_leader.id }
+      expect(assigns(:subscribable)).to eq [first, leaders]
+    end
+  end
 
   context 'POST#create' do
     it 'may not create subscriptions for other user' do

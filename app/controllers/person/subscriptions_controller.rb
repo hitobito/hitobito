@@ -12,7 +12,7 @@ class Person::SubscriptionsController < ApplicationController
     @group = Group.find(params[:group_id])
 
     @subscribed = Person::Subscriptions.new(person).mailing_lists.includes(:group).list
-    @subscribable = MailingList.includes(:group).subscribable.where.not(id: @subscribed)
+    @subscribable = MailingList.includes(:group).subscribable.where.not(id: @subscribed).list
   end
 
   def create

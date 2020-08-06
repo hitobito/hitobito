@@ -88,12 +88,13 @@ class Invoice::Qrcode
   end
 
   def creditor_values
-    values = creditor.except(:address_type, :town, :zip, :country).reverse_merge(iban: @invoice.iban)
+    values = creditor.except(:address_type, :town, :zip, :country)
+      .reverse_merge(iban: @invoice.iban)
     striped_values(values).join("\n")
   end
 
   def debitor_values
-    values = debitor.except(:address_type, :town, :zip,  :country)
+    values = debitor.except(:address_type, :town, :zip, :country)
     striped_values(values).join("\n")
   end
 

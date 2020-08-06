@@ -24,7 +24,7 @@ module Synchronize
         @data[:exception] = [exception.class, exception.message].join(' - ')
       end
 
-      def state
+      def state # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
         if exception?
           :failed
         elsif operations.empty?

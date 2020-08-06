@@ -26,7 +26,7 @@ class Invoice::Qrcode
   def payload
     striped_values(
       metadata,
-      creditor,
+      creditor.reverse_merge(iban: @invoice.iban.gsub(/\s+/, '')),
       creditor_final,
       payment,
       debitor,
@@ -41,7 +41,7 @@ class Invoice::Qrcode
   end
 
   def creditor
-    extract_contact(@invoice.payee).reverse_merge(iban: @invoice.iban.gsub(/\s+/, ''))
+    extract_contact(@invoice.payee)
   end
 
   def creditor_final
@@ -88,12 +88,12 @@ class Invoice::Qrcode
   end
 
   def creditor_values
-    values = creditor.except(:address_type, :address_line2, :zip_code, :country)
+    values = creditor.except(:address_type, :town, :zip, :country).reverse_merge(iban: @invoice.iban)
     striped_values(values).join("\n")
   end
 
   def debitor_values
-    values = debitor.except(:address_type, :address_line2, :zip_code, :town, :country)
+    values = debitor.except(:address_type, :town, :zip,  :country)
     striped_values(values).join("\n")
   end
 

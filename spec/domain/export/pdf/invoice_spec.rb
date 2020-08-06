@@ -139,8 +139,6 @@ describe Export::Pdf::Invoice do
       PDF::Inspector::Text.analyze(pdf)
     end
 
-
-
     it 'renders qrcode' do
       text_with_position = subject.positions.each_with_index.collect do |p, i|
         p.collect(&:round) + [subject.show_text[i]]
@@ -152,10 +150,11 @@ describe Export::Pdf::Invoice do
         [14, 239, 'CH93 0076 2011 6238 5295 7'],
         [14, 228, 'Acme Corp'],
         [14, 216, 'Hallesche Str. 37'],
-        [14, 205, 'Hinterdupfing'],
+        [14, 205, '3007 Hinterdupfing'],
         [14, 173, 'Zahlbar durch'],
         [14, 161, 'Max Mustermann'],
         [14, 150, 'Musterweg 2'],
+        [14, 138, '8000 Alt Tylerland'],
         [14, 89, 'Währung'],
         [71, 89, 'Betrag'],
         [14, 78, 'CHF'],
@@ -170,10 +169,11 @@ describe Export::Pdf::Invoice do
         [346, 266, 'CH93 0076 2011 6238 5295 7'],
         [346, 255, 'Acme Corp'],
         [346, 243, 'Hallesche Str. 37'],
-        [346, 232, 'Hinterdupfing'],
+        [346, 232, '3007 Hinterdupfing'],
         [346, 200, 'Zahlbar durch'],
         [346, 188, 'Max Mustermann'],
-        [346, 177, 'Musterweg 2']
+        [346, 177, 'Musterweg 2'],
+        [346, 165, '8000 Alt Tylerland']
       ]
     end
   end

@@ -34,7 +34,7 @@ class PaymentReminderConfig < ActiveRecord::Base
     [
       5,
       'Dritte Mahnung',
-      'Wir fordern Sie nun ein letztes Mal auf, den offenen Betrag innert Wochenfrist, ' \
+      'Wir fordern Sie nun ein letztes Mal auf, den offenen Betrag innert Wochenfrist ' \
       'zu begleichen.'
     ]
   ].zip(LEVELS.to_a).to_h.invert

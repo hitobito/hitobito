@@ -553,6 +553,13 @@ it:
         main_email: Spedizione all'e-mail principale
         mailchimp_api_key: 'MailChimp chiave API'
         mailchimp_list_id: 'MailChimp Lista ID'
+        mailchimp_sync: 'MailChimp Sync'
+        mailchimp_state: 'Stato Mailchimp'
+        mailchimp_states:
+          unchanged: Invariato
+          success: Aggiornato
+          partial: In parte
+          failed: Fallito
       subscription:
         related_role_types: Ruoli
       people_filter:
@@ -600,6 +607,7 @@ it:
           ch_bes: Polizza di versamento bancaria rossa (CH)
           ch_esr: Polizza di versamento postale arancione (CH)
           ch_besr: Polizza di versamento bancaria arancione (CH)
+          no_ps: Nessuno
         states:
           draft: Bozza
           issued: Emesso
@@ -622,7 +630,7 @@ it:
         payment_purpose: Motivo del pagamento
         address: Indirizzo del mittente
         beneficiary: A favore di
-        payee: Versamento per
+        payee: Nome / Ditta
         account_number: Numero di conto
         iban: IBAN
         payment_slip: Polizza di versamento
@@ -657,6 +665,7 @@ it:
           ch_bes: Polizza di versamento bancaria rossa (CH)
           ch_esr: Polizza di versamento postale arancione (CH)
           ch_besr: Polizza di versamento bancaria arancione (CH)
+          no_ps: Nessuno
         participant_number: Numero di partecipante
         participant_number_internal: Numero interno del partecipante
         payment_reminder_configs: Solleciti
@@ -713,7 +722,7 @@ it:
       email: Leggono il tuo indirizzo e-mail
       name: Leggono il tuo indirizzo e-mail e il tuo nome
       with_roles: Leggono i tuoi dati del gruppo ed i tuoi ruoli
-      openid: Leggono il tuo token di identità openid
+      openid: Leggi il tuo Token di identità OIDC
   errors:
     messages:
       invalid_money: "Deve essere arrotondato ai 5 centesimi"
@@ -725,7 +734,6 @@ it:
       on_or_before: "deve essere %{restriction} oppure prima"
       after: "deve essere dopo %{restriction}"
       on_or_after: "deve essere %{restriction} oppure dopo"
-      extension_white_list_error: "accetta solo i tipi di file seguenti: %{allowed_types}"
       dimensions_too_large: "accetta solo immagini con una dimensione inferiore a %{maximum} Pixel"
       filesize_too_large: "non può essere maggiore a %{maximum} MB"
       expired: "è scaduto, per favore richiedere nuovamente"

@@ -1,7 +1,7 @@
 en:
   time:
     formats:
-      time: "%H:%M"
+      time: "%H:%M:%S"
       date_time: "%d.%m.%Y %H:%M"
       month_year: '%B %Y'
   date:
@@ -507,6 +507,8 @@ en:
         dimensions: Number
         nickname: Nickname on label
         pp_post: PP-Line
+      invoice:
+        state: State
   errors:
     messages:
       invalid_date: "is not a valid date"
@@ -517,7 +519,6 @@ en:
       on_or_before: "must be on or before %{restriction}"
       after: "must be after %{restriction}"
       on_or_after: "must be on or after %{restriction}"
-      extension_white_list_error: "only accepts the following type of files: %{allowed_types}"
       dimensions_too_large: "only accepts images with a size smaller than  %{maximum} pixel"
       filesize_too_large: "can not be bigger than  %{maximum} mb"
       expired: "has expired, please request a new"

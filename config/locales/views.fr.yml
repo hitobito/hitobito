@@ -561,7 +561,7 @@ fr:
       flash:
         success: les réglages de la factures mis à jour avec succès
     general_fields:
-      payment_slip: 'bulletin de versement'
+      payment: 'Paiement'
       payment_information_help: 'Apparaît sur chaque facture, mais peut être adapté pour une facture'
       address_help: 'Adresse de l''expéditeur qui apparaît sur la lettre'
       email_help: 'Est utilisé comme mail de l''expéditeur au lieu de celui de l''utilisateur actuel'
@@ -724,6 +724,8 @@ fr:
       older_notes: Anciennes contributions
   oauth:
     applications:
+      form:
+        help_native_redirect_uris: Une entrée par ligne. Pour les tests locaux, utiliser %{native_redirect_uri}.
       attrs:
         profile_endpoint_help: Les informations profil de l'utilisateur peuvent être prises au-delà ce Endpoint. Pour ce faire, il faut rendre le Access Token dans le Authorization Header. Le Scope souhaité peut être rendu en tant que X-Scope.
         profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"

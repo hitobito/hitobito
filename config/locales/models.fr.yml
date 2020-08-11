@@ -554,6 +554,13 @@ fr:
         main_email: Envoi à l'adresse e-mail principale
         mailchimp_api_key: 'MailChimp API-Key'
         mailchimp_list_id: 'MailChimp List-ID'
+        mailchimp_sync: 'MailChimp Sync'
+        mailchimp_state: 'Statut de Mailchimp'
+        mailchimp_states:
+          unchanged: Inchangé
+          success: Mise à jour
+          partial: En partie
+          failed: Echoué
       subscription:
         related_role_types: Rôles
       people_filter:
@@ -601,6 +608,7 @@ fr:
           ch_bes: Bulletin de versement bancaire rouge (CH)
           ch_esr: Bulletin de versement postal orange (CH)
           ch_besr: Bulletin de versement bancaire orange (CH)
+          no_ps: Aucun
         states:
           draft: projet
           issued: Établie
@@ -623,7 +631,7 @@ fr:
         payment_purpose: motif du paiement
         address: adresse de l'expéditeur
         beneficiary: en faveur de
-        payee: Paiement à
+        payee: 'Nom / Entreprise '
         account_number: numéro de compte
         iban: IBAN
         payment_slip: bulletin de versement
@@ -658,6 +666,7 @@ fr:
           ch_bes: Bulletin de versement bancaire rouge (CH)
           ch_esr: Bulletin de versement postal orange (CH)
           ch_besr: Bulletin de versement bancaire orange (CH)
+          no_ps: Aucun
         participant_number: numéro du participant
         participant_number_internal: Numéro du participant interne
         payment_reminder_configs: rappels
@@ -714,7 +723,7 @@ fr:
       email: Lecture de ton adresse e-mail
       name: Lecture de ton adresse e-mail et de ton nom
       with_roles: Lecture de tes données de base et rôles
-      openid: Lecture de ton jeton d'identité openid
+      openid: Lisez votre Token d'identité OIDC
   errors:
     messages:
       invalid_money: "doit être arrondi à 5 centimes"
@@ -726,7 +735,6 @@ fr:
       on_or_before: "doit être %{restriction} ou antérieur"
       after: "doit être ultérieur à %{restriction}"
       on_or_after: "doit être %{restriction} ou ultérieur"
-      extension_white_list_error: "n'accepte que les types de fichiers suivants: %{allowed_types}"
       dimensions_too_large: "n'accepte que les images d'une taille de moins de %{maximum} pixels"
       filesize_too_large: "ne peut pas faire plus de %{maximum} MB"
       expired: "est échu, prière d'en refaire demande"

@@ -42,7 +42,7 @@ class Invoice < ActiveRecord::Base
 
   attr_accessor :recipient_ids
 
-  ROUND_TO = BigDecimal.new('0.05')
+  ROUND_TO = BigDecimal('0.05')
 
   STATES = %w(draft issued sent payed reminded cancelled).freeze
   STATES_REMINDABLE = %w(issued sent reminded).freeze

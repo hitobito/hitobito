@@ -5,10 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+encrypted_password = Rails.env.development? ? BCrypt::Password.create("hito42bito", cost: 1) : nil
 Person.seed(:email,
-  {company_name: 'Puzzle ITC',
-   company: true,
-   email: Settings.root_email}
+  {
+    company_name: 'Puzzle ITC',
+    company: true,
+    email: Settings.root_email,
+    encrypted_password: encrypted_password
+  }
 )
 
 

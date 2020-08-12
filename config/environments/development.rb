@@ -36,6 +36,27 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # Mail sender
+  config.action_mailer.delivery_method = (ENV['RAILS_MAIL_DELIVERY_METHOD'].presence || :smtp).to_sym
+
+  if ENV['RAILS_MAIL_DELIVERY_CONFIG'].present?
+    case config.action_mailer.delivery_method
+    when :smtp
+      config.action_mailer.smtp_settings =
+          YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys
+    when :sendmail
+      config.action_mailer.sendmail_settings =
+          YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys
+    end
+  end
+
+  ssl = %w(true yes 1).include?(ENV['RAILS_HOST_SSL'])
+  config.action_mailer.default_url_options = {
+      host: (ENV['RAILS_HOST_NAME'] || raise("No environment variable RAILS_HOST_NAME set!")),
+      protocol: (ssl ? 'https' : 'http'),
+      locale: nil
+  }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

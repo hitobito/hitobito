@@ -9,15 +9,21 @@ module Sheet
 
       tab 'global.tabs.info',
           :oauth_application_path,
-          if: :show
+          if: (lambda do |view, application|
+            application.present? && view.can?(:show, application)
+          end)
 
       tab 'oauth.tabs.grants',
           :oauth_application_access_grants_path,
-          if: :show
+          if: (lambda do |view, application|
+            application.present? && view.can?(:show, application)
+          end)
 
       tab 'oauth.tabs.tokens',
           :oauth_application_access_tokens_path,
-          if: :show
+          if: (lambda do |view, application|
+            application.present? && view.can?(:show, application)
+          end)
 
     end
   end

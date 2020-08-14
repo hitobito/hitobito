@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_25_114634) do
+ActiveRecord::Schema.define(version: 2020_08_14_170000) do
 
   create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "contactable_type", null: false
@@ -518,11 +518,13 @@ ActiveRecord::Schema.define(version: 2020_06_25_114634) do
     t.boolean "show_global_label_formats", default: true, null: false
     t.string "household_key"
     t.string "event_feed_token"
+    t.string "unlock_token"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["email"], name: "index_people_on_email", unique: true
     t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true
     t.index ["household_key"], name: "index_people_on_household_key"
     t.index ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_people_on_unlock_token", unique: true
   end
 
   create_table "people_filters", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|

@@ -1,6 +1,8 @@
 # Hitobito @ Openshift
 
-![Openshift Project](diagrams/ose3-rails.png)
+![Openshift Project](diagrams/ose-rails.png)
+
+
 
 | Container | Beschreibung | Image |
 | --- | --- | --- |

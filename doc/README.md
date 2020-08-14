@@ -3,6 +3,7 @@
 Folgende Dokumentationen sind hier zu finden:
 
 * [Architektur](architecture/README.md)
+* [Betrieb](betrieb/README.md)
 * [Entwicklung](development/README.md)
 * [E-Mail](e-mail/README.md)
 

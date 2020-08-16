@@ -58,7 +58,7 @@ class Person < ActiveRecord::Base
     :authentication_token, :contact_data_visible, :created_at, :creator_id,
     :current_sign_in_at, :current_sign_in_ip, :encrypted_password, :id,
     :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
-    :locked_at, :remember_created_at, :reset_password_token,
+    :locked_at, :remember_created_at, :reset_password_token, :unlock_token,
     :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
     :show_global_label_formats, :household_key, :event_feed_token
   ]

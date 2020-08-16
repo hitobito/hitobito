@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Unreleased
+
+* Bugfix: Vergangene Anlässe werden nicht mehr auf der Person angezeigt (#847)
+
 ## Version 1.22
 
 *  Verbesserung der Mailchimp Integration und am Rechnungsmodul

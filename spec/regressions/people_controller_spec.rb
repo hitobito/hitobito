@@ -165,7 +165,7 @@ describe PeopleController, type: :controller do
 
     context 'pending applications' do
       let(:section) { dom.all('aside section')[2] }
-      let(:date) { Time.zone.parse('02-01-2010') }
+      let(:date) { 1.week.from_now }
 
       it 'is missing if we have no applications' do
         get :show, params: params

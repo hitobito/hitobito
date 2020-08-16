@@ -16,6 +16,7 @@ class Person::EventQueries
   def pending_applications
     person.event_applications.
       merge(Event::Participation.pending).
+      merge(Event::Participation.upcoming).
       includes(event: [:groups]).
       joins(event: :dates).
       order('event_dates.start_at').
@@ -28,6 +29,7 @@ class Person::EventQueries
     person.events.
       upcoming.
       merge(Event::Participation.active).
+      merge(Event::Participation.upcoming).
       distinct.
       includes(:groups).
       preload_all_dates.

@@ -18,6 +18,8 @@ class TableDisplay < ActiveRecord::Base
   belongs_to :person
 
   serialize :selected, Array
+  before_save :reject_internal_attributes
+
 
   def self.register_permission(model_class, permission, *attrs)
     @@permissions ||= {}
@@ -58,4 +60,12 @@ class TableDisplay < ActiveRecord::Base
     @@permissions.fetch(object.class.model_name.singular, {})[name.to_s]
   end
 
+
+  private
+
+  def reject_internal_attributes
+    selected.reject! do |attr|
+      Person::INTERNAL_ATTRS.include?(attr.split('.').last.to_sym)
+    end
+  end
 end

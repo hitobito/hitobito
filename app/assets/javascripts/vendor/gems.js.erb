@@ -1,0 +1,21 @@
+/**
+ * Copyright (c) 2020, hitobito AG. This file is part of
+ * hitobito and licensed under the Affero General Public License version 3
+ * or later. See the COPYING file at the top-level directory or at
+ * https://github.com/hitobito/hitobito.
+ */
+
+<% include ActionView::Helpers %>
+<% include Webpacker::Helper %>
+<% include WebpackHelper %>
+
+// Antique Gems that provide JavaScript/CSS do not publish an NPM
+// package with these assets. We're using ERB to determine the
+// file paths of these assets to include them into the bundle.
+
+// nested_form
+import {} from '<%= gem_file_path('nested_form', File.join('vendor', 'assets', 'javascripts', 'jquery_nested_form.js')) %>';
+
+// remotipart
+import {} from '<%= gem_file_path('remotipart', File.join('vendor', 'assets', 'javascripts', 'jquery.iframe-transport.js')) %>';
+import {} from '<%= gem_file_path('remotipart', File.join('vendor', 'assets', 'javascripts', 'jquery.remotipart.js')) %>';

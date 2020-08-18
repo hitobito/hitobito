@@ -32,14 +32,10 @@ body {
   display: block;
   position: relative;
 
-  // Hide text
-  text-indent: -9999px;
-
-  background: image-url($logoUrl) transparent no-repeat;
   width: $logoWidth;
   height: $logoHeight;
-  background-size: contain;
-  background-position: center center;
+  object-fit: contain;
+  object-position: center center;
 }
 
 .dropdown-menu {

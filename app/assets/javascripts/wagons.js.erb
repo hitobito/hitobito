@@ -1,0 +1,23 @@
+/**
+ * Copyright (c) 2020, hitobito AG. This file is part of
+ * hitobito and licensed under the Affero General Public License version 3
+ * or later. See the COPYING file at the top-level directory or at
+ * https://github.com/hitobito/hitobito.
+ */
+
+<% Wagons.all.each do |wagon| %>
+  // Import all JavaScript files of the wagons (they can provide a
+  // app/assets/javascripts/wagon.js.coffee file to be included in the
+  // bundle).
+  <% wagon_script = File.join(wagon.paths.path.to_s, 'app', 'assets', 'javascripts', 'wagon.js.coffee') %>
+  <% if File.exists?(wagon_script) %>
+    import '<%= wagon_script %>';
+  <% end %>
+
+  // Import all image files of the wagons, so they can be referenced
+  // with the `wagon_image_pack_tag` and `wagon_favicon_pack_tag` helpers.
+  <% wagon_images_dir = File.join(wagon.paths.path.to_s, 'app', 'assets', 'images') %>
+  <% if File.exists?(wagon_images_dir) %>
+    require.context('<%= wagon_images_dir %>', true);
+  <% end %>
+<% end %>

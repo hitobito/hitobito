@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+import Cookies from 'js-cookie'
+
 app = window.App ||= {}
 
 class app.AsyncSynchronizations

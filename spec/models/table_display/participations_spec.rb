@@ -17,6 +17,13 @@ describe TableDisplay::Participations do
       "WHEN #{question.id} THEN 0 ELSE 1 END, TRIM(event_answers.answer)"
   end
 
+  it 'rejects internal person attribute' do
+    subject.person_id = 1
+    subject.selected = %W(name person.id)
+    expect(subject.save).to eq true
+    expect(subject.selected).not_to include 'person.id'
+  end
+
   context :with_permission_check do
     let(:participation) { event_participations(:top) }
 

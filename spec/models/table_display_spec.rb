@@ -22,6 +22,14 @@ describe TableDisplay do
     expect(subject.selected).not_to be_present
   end
 
+  it 'rejects internal person attribute' do
+    subject.person_id = 1
+    subject.selected = %W(name id)
+    subject.type = 'TableDisplay::People'
+    expect(subject.save).to eq true
+    expect(subject.selected).not_to include 'id'
+  end
+
   context :with_permission_check do
     let(:member) { people(:bottom_member) }
 

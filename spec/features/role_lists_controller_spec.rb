@@ -60,6 +60,7 @@ describe RoleListsController, js: true do
     click_link('Rolle hinzufügen')
 
     select('Leader', from: 'role_type')
+    expect(page).to have_button '2 Rollen erstellen'
     click_button('2 Rollen erstellen')
 
     is_expected.to have_content('2 Rollen wurden erstellt')

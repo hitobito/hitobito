@@ -5,34 +5,29 @@
 
 /* Imports Partials */
 
-@import "hitobito/base";
-@import "hitobito/typography";
-@import "hitobito/navigation";
-@import "hitobito/form";
-@import "hitobito/table";
-@import "hitobito/layout";
-@import "hitobito/fonts";
-@import "hitobito/utilities";
+@import "./base";
+@import "./typography";
+@import "./navigation";
+@import "./form";
+@import "./table";
+@import "./layout";
+@import "./utilities";
 
 /* Modules */
 
-@import "hitobito/modules/btn-toolbar";
-@import "hitobito/modules/btn-group";
-@import "hitobito/modules/chip";
-@import "hitobito/modules/contactable";
-@import "hitobito/modules/info_bar";
-@import "hitobito/modules/invoice";
-@import "hitobito/modules/legend";
-@import "hitobito/modules/log";
-@import "hitobito/modules/nav_left";
-@import "hitobito/modules/note";
-@import "hitobito/modules/person_tags";
-@import "hitobito/modules/profil";
-@import "hitobito/modules/step_wizard";
-@import "hitobito/modules/turbolink_progress_bar";
-@import "hitobito/modules/ui-datepicker";
-@import "hitobito/modules/well";
-
-/* Wagon */
-
-@import "hitobito/wagon";
+@import "./modules/btn-toolbar";
+@import "./modules/btn-group";
+@import "./modules/chip";
+@import "./modules/contactable";
+@import "./modules/info_bar";
+@import "./modules/invoice";
+@import "./modules/legend";
+@import "./modules/log";
+@import "./modules/nav_left";
+@import "./modules/note";
+@import "./modules/person_tags";
+@import "./modules/profil";
+@import "./modules/step_wizard";
+@import "./modules/turbolink_progress_bar";
+@import "./modules/ui-datepicker";
+@import "./modules/well";

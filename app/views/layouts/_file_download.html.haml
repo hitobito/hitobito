@@ -6,6 +6,6 @@
 #file-download-spinner.hidden{"data-turbolinks-permanent" => ""}
   .info-bar
     .alert-info
-      = image_tag('spinner.gif', size: '16x16', class: 'spinner')
+      = image_pack_tag('spinner.gif', size: '16x16', class: 'spinner')
       = t('.wait_for_downloads')
       = link_to(t('.cancel_downloads'), '#', id: 'cancel_async_downloads')

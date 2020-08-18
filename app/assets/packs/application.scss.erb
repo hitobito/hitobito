@@ -1,0 +1,79 @@
+//  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+//  hitobito and licensed under the Affero General Public License version 3
+//  or later. See the COPYING file at the top-level directory or at
+//  https://github.com/hitobito/hitobito.
+
+/*
+* This is a manifest file that'll be compiled into application.css, which will include all the files
+// listed below.
+//
+// You're free to add application-wide styles to this file and they'll appear at the top of the
+// compiled file, but it's generally better to create a new file per style scope.
+///
+
+<% include ActionView::Helpers %>
+<% include Webpacker::Helper %>
+<% include WebpackHelper %>
+
+/**
+* Variables
+*/
+
+// Can be configured in config/settings.yml
+$logoWidth: <%= Settings.application.logo.width %>px !default;
+$logoHeight: <%= Settings.application.logo.height %>px !default;
+$logoBackgroundColor: <%= Settings.application.logo.background_color %> !default;
+<% if Settings.application.page_background.try(ENV['RAILS_HOST_NAME'] || "dev") %>
+  $pageBackground: <%= Settings.application.page_background.send(ENV['RAILS_HOST_NAME']  || "dev") %>;
+<% end %>
+
+// Import the wagons' specific variables or fall back to core variables
+<% absolute_wagon_file_paths(
+  File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_variables.scss'),
+  File.join('..', 'stylesheets', 'hitobito', 'customizable', '_variables.scss')
+  ) do |file_path| %>
+  @import "<%= file_path %>";
+<% end %>
+
+/**
+* SASS Mixins
+*/
+@import "../stylesheets/hitobito/media-queries";
+@import "~compass-mixins/lib/compass/css3";
+@import "~compass-mixins/lib/compass/utilities/general/clearfix";
+@import "~compass-mixins/lib/animation/core";
+
+/**
+* Dependencies
+*/
+@import "~@fortawesome/fontawesome-free/css/all";
+@import "../stylesheets/vendor/bootstrap";
+@import "../stylesheets/vendor/jquery-ui";
+//@import "~chosen-js/chosen";
+@import "../stylesheets/vendor/chosen-bootstrap"; // Use alternate Bootstrap styles for chosen, instead of the official onces
+@import "../stylesheets/vendor/bootstrap-grid"; // Backport Grid/Flexbox helpers from Bootstrap 4
+
+/**
+ * Core styles
+ */
+@import "../stylesheets/hitobito/main";
+@import "../stylesheets/hitobito/modal";
+@import "../stylesheets/hitobito/help-texts";
+
+/**
+ * Wagon styles
+ */
+// Import the wagons' fonts or fall back to core fonts
+<% absolute_wagon_file_paths(
+     File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss'),
+     File.join('..', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss')
+) do |file_path| %>
+  @import "<%= file_path %>";
+<% end %>
+
+// Import the wagons' styles
+<% absolute_wagon_file_paths(
+     File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_wagon.scss')
+  ) do |file_path| %>
+  @import "<%= file_path %>";
+<% end %>

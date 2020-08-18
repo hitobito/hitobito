@@ -8,7 +8,7 @@
     .note-image
       - case note.subject
       - when Group
-        = image_tag('group.svg')
+        = image_pack_tag('group.svg')
       - when Person
         %img{src: note.subject.picture}
 

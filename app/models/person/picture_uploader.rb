@@ -26,7 +26,7 @@ class Person::PictureUploader < Uploader::Base
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   def default_url
-    ActionController::Base.helpers.asset_path(png_name)
+    ActionController::Base.helpers.asset_pack_path("media/images/#{png_name}")
   end
 
   def png_name

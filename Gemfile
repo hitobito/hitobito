@@ -59,6 +59,7 @@ gem 'pry-rails'
 gem 'puma'
 gem 'rails-i18n'
 gem 'rails_autolink'
+gem 'remotipart'
 gem 'rubyzip', '~> 1.3.0'
 gem 'seed-fu'
 gem 'sentry-raven'
@@ -71,27 +72,10 @@ gem 'validates_by_schema'
 gem 'validates_timeliness', '< 4.0'
 gem 'vcard'
 gem 'wagons', '0.6.1'
+gem 'webpacker'
 
 # load after others because of active record inherited alias chain.
 gem 'kaminari'
-
-# Gems used only for assets
-gem 'bootstrap-sass', '~> 2.3'
-gem 'bootstrap-wysihtml5-rails'
-gem 'chosen-rails'
-gem 'coffee-rails'
-gem 'compass'
-gem 'compass-rails'
-gem 'font_awesome5_rails'
-gem 'jquery-rails'
-gem 'jquery-turbolinks'
-gem 'jquery-ui-rails'
-gem 'js_cookie_rails'
-gem 'remotipart'
-gem 'sass-rails'
-gem 'therubyracer', platforms: :ruby
-gem 'turbolinks'
-gem 'uglifier'
 
 group :development, :test do
   gem 'better_errors'

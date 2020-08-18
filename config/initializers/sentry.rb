@@ -1,9 +1,7 @@
 Raven.configure do |config|
   config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
 
-  if ENV['OPENSHIFT_BUILD_COMMIT']
-    config.release = ENV['OPENSHIFT_BUILD_COMMIT']
-  end
+  config.release = Rails.application.class.versions(Rails.root.join('VERSION')).first.chomp
 
   if ENV['SENTRY_CURRENT_ENV'].blank?
     project, stage = [

@@ -111,7 +111,9 @@ module Hitobito
     end
 
     def self.versions(file = Rails.root.join('WAGON_VERSIONS'))
-      @versions ||= file.exist? ? file.read.lines.reject(&:blank?) : []
+      @versions ||= {}
+      @versions[file] ||= (file.exist? ? file.read.lines.reject(&:blank?) : nil)
+      @versions[file].to_a
     end
 
     def self.build_info

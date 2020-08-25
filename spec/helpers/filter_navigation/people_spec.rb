@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -63,14 +63,31 @@ describe 'FilterNavigation::People' do
       context 'with custom filters' do
 
         before do
-          group.people_filters.create!(name: 'Leaders',
+          group.people_filters.create!(name: '2_Members',
+                                       filter_chain: { role: { role_types: role_types.map(&:id) } })
+          group.people_filters.create!(name: '1_Leaders',
                                        filter_chain: { role: { role_types: role_types.map(&:id) } })
         end
 
         its('dropdown.active') { should be_falsey }
         its('dropdown.label')  { should == 'Weitere Ansichten' }
-        its('dropdown.items')  { should have(4).items }
+        its('dropdown.items')  { should have(5).items }
 
+        it 'has dropdown-items sorted by name' do
+          expected_items = [
+            'Gesamte Ebene',
+            '1_Leaders',
+            '2_Members',
+            'Neuer Filter...'
+          ]
+
+          actual_items = subject.dropdown.items
+            .select { |item| item.class == Dropdown::Item }
+            .map(&:label)
+
+          expect(actual_items).to match_array expected_items # all
+          expect(actual_items).to eq expected_items          # in order
+        end
       end
     end
 

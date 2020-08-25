@@ -36,16 +36,15 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  if ENV['RAILS_MAIL_DELIVERY_CONFIG'].present? && ENV['RAILS_HOST_NAME'].present?
+  if ENV['RAILS_MAIL_DELIVERY_CONFIG'].present?
     config.action_mailer.delivery_method = :smtp
-    config.action_mailer.default_url_options = {
-        host: ENV['RAILS_HOST_NAME'],
-        protocol: 'http',
-        locale: nil
-    }
     config.action_mailer.smtp_settings =
         YAML.load("{ #{ENV['RAILS_MAIL_DELIVERY_CONFIG']} }").symbolize_keys
   end
+
+  config.action_mailer.default_url_options = {
+    host: ENV.fetch('RAILS_HOST_NAME', 'localhost:3000'),
+  }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

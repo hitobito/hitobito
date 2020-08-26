@@ -18,7 +18,7 @@ class AppStatus
     private
 
     def secret_key_base
-      Hitobito::Application.config.secret_key_base
+      Hitobito::Application.secret_key_base
     end
   end
 

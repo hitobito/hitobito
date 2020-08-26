@@ -12,7 +12,7 @@ describe Healthz::MailController do
   describe 'GET show' do
 
     let(:json) { JSON.parse(response.body) }
-    let(:token) { '277ab37a0331e8a4f6591cf4' }
+    let(:token) { '43b3297d893f7d97e3dd60c1' }
     let(:mail)  { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'simple.eml'))) }
     let(:cache) { Rails.cache }
     let(:seen_mail) { AppStatus::Mail::SeenMail.build(mail) }

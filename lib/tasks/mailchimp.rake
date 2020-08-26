@@ -17,7 +17,7 @@ namespace :mailchimp do
       end
     end
 
-    def operations
+    def fetch_operations
       client = Synchronize::Mailchimp::Client.new(@list)
       @list.mailchimp_result.data.each do |operation, hash|
         fail "unexpected batch count " unless hash.one?
@@ -30,8 +30,8 @@ namespace :mailchimp do
       end
     end
 
-    def fetch_operations
-      operations.each do |client, operation, batch_id, outcome|
+    def fetch
+      fetch_operations do |client, operation, batch_id, outcome|
         response = Faraday.get(client.fetch_batch(batch_id)).body
         file = directory.join("#{operation}-#{outcome}/result.tgz")
         FileUtils.mkdir_p(file.dirname)
@@ -44,7 +44,7 @@ namespace :mailchimp do
   # Batch runs expire after 10 days
   desc 'Fetch non expired mailchimp batch runs'
   task :fetch => [:environment] do
-    MailingList.mailchimp.where('mailchimp_last_synced_at > ?', 10.day.ago) do
+    MailingList.mailchimp.where('mailchimp_last_synced_at > ?', 10.day.ago).find_each do |list|
       Client.new(list).fetch
     end
   end

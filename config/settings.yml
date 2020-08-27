@@ -192,3 +192,4 @@ table_displays: true
 
 mailchimp:
   max_attempts: 25
+  enabled: true

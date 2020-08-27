@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -14,7 +16,7 @@ module Synchronize
       self.member_fields = []
 
       self.merge_fields = [
-        [ 'Gender', 'dropdown', { choices: %w(m w) },  ->(p) { p.gender } ]
+        ['Gender', 'dropdown', { choices: %w(m w) }, ->(p) { p.gender }]
       ]
 
       def initialize(mailing_list)
@@ -56,7 +58,7 @@ module Synchronize
 
       def missing_merge_fields
         labels = client.fetch_merge_fields.collect { |field| field[:tag] }
-         merge_fields.reject { |name, _, _| labels.include?(name.upcase) }
+        merge_fields.reject { |name, _, _| labels.include?(name.upcase) }
       end
 
       def stale_segments

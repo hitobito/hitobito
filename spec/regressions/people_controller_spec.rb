@@ -165,7 +165,7 @@ describe PeopleController, type: :controller do
 
     context 'pending applications' do
       let(:section) { dom.all('aside section')[2] }
-      let(:date) { 1.week.from_now }
+      let(:date) { 1.week.from_now.to_date }
 
       it 'is missing if we have no applications' do
         get :show, params: params
@@ -179,7 +179,7 @@ describe PeopleController, type: :controller do
         expect(label_link[:href]).to eq "/groups/#{course.group_ids.first}/events/#{course.id}/participations/#{appl.participation.id}"
         expect(label_link.text).to match(/Eventus/)
         expect(label.text).to match(/Top/)
-        expect(dates).to eq '02.01.2010 - 07.01.2010'
+        expect(dates).to eq "#{I18n.l(date)} - #{I18n.l(date + 5.days)}"
       end
     end
 

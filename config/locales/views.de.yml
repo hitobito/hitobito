@@ -830,7 +830,7 @@ de:
     courses: 'Kurse'
     admin: 'Einstellungen'
     admin/event_feed: 'Kalender integrieren'
-    admin/oauth_authorizations: 'OAuth-Authorisierungen'
+    admin/oauth_authorizations: 'OAuth-Autorisierungen'
     invoices: 'Rechnungen'
 
   notes:

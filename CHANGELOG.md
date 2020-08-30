@@ -8,7 +8,7 @@
 *  Icons in der Suche
 *  Neue API-Endpoints für Gruppen-Hierarchie und Abos
 *  Berechtigungen werden im OAuth-Profil mitgeliefert
-*  Eigene OAuth-Authorisierungen können entfernt werden
+*  Eigene OAuth-Autorisierungen können entfernt werden
 *  Generelle Validierung von E-Mail Adressen
 
 ## Version 1.21

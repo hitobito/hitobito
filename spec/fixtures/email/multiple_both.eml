@@ -1,11 +1,10 @@
 Return-Path: <maierhofer@puzzle.ch>
-X-Original-To: amatest@pbs.puzzle.ch
 Received: from agamemnon.rz.puzzle.ch ([unix socket])
 	 by agamemnon.rz.puzzle.ch (Cyrus 2.5.11-41-gd53406f3f-Kolab-2.5.11-15.1.el7.kolab_16) with LMTPA;
 	 Tue, 16 Apr 2019 15:40:21 +0200
 X-Sieve: CMU Sieve 2.4
 X-Envelope-To: kalei.kontakt
-X-Original-To: jubla.mailinglists+kalei.kontakt@puzzle.ch
+X-Original-To: kalei.kontakt@puzzle.ch
 X-Virus-Scanned: amavisd-new at puzzle.ch
 X-Spam-Flag: NO
 X-Spam-Score: -4.902

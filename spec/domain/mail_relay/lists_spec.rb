@@ -11,8 +11,7 @@ describe MailRelay::Lists do
 
   let(:message) do
     mail = Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml')))
-    mail.header['X-Envelope-To'] = nil
-    mail.header['X-Envelope-To'] = envelope_to
+    mail.header['X-Original-To'] = envelope_to
     mail.from = from
     mail
   end
@@ -127,7 +126,7 @@ describe MailRelay::Lists do
 
       it 'creates mail log entry and assigns mailing list' do
         subject.relay
-        mail_log = MailLog.find_by(mail_hash: '0317286fdc1069f725ae971f1fd2c776')
+        mail_log = MailLog.find_by(mail_hash: '129f1da58c247ed636624432a074611d')
         expect(mail_log.mailing_list).to eq(list)
         expect(mail_log.status).to eq('completed')
       end
@@ -506,7 +505,7 @@ describe MailRelay::Lists do
       END
 
       mail = Mail.new(message)
-      mail.header['X-Envelope-To'] = envelope_to
+      mail.header['X-Original-To'] = envelope_to
       mail
     end
 

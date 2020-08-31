@@ -154,11 +154,9 @@ module MailRelay
     # The receiver account that originally got this email.
     # Returns only the part before the @ sign
     def envelope_receiver_name
-      receiver_from_x_header('X-Envelope-To') ||  # old mail server
-       receiver_from_x_header('X-Original-To') || # new mail server
-       receiver_from_received_header ||
-
-       raise("Could not determine original receiver for email:\n#{message.header}")
+      receiver_from_x_original_to_header ||
+        receiver_from_received_header ||
+        raise("Could not determine original receiver for email:\n#{message.header}")
     end
 
     def sender_email
@@ -174,11 +172,12 @@ module MailRelay
       end
     end
 
-    # Try to read the envelope receiver from the given header
-    def receiver_from_x_header(header_name)
-      field = message.header[header_name]
-      field = field.first if field.respond_to?(:first)
-      field.to_s.split('@', 2).first if field
+    def receiver_from_x_original_to_header
+      first_header('X-Original-To').to_s.split('@', 2).first.presence
+    end
+
+    def first_header(header_name)
+      Array(message.header[header_name]).first
     end
 
     # Is the mail sent to a valid relay address?

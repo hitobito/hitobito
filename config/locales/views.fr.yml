@@ -695,7 +695,6 @@ fr:
       caption_anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
       caption_delivery_report: 'Envoyer l''e-mail avec confirmation à l''expéditeur'
       help_preferred_labels: 'Si disponibles, les e-mails ne sont envoyés qu''aux adresses e-mails avec cette désignation. Ce faisant, les adresses e-mail qui ne sont pas marquées comme adresses d''envoi seront également utilisées.'
-      help_mailchimp_sync: 'Les abonnés peuvent être exportés vers la liste MailChimp, mais cela ne se fait pas automatiquement. Cette action écrase la liste MailChimp et les contacts existants sont supprimés.'
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
     may_not_subscribe: 'Les abonnés <strong>ne peuvent pas</strong> s''inscrire / se désinscrire eux-même'

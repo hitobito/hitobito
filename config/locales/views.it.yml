@@ -694,7 +694,6 @@ it:
       caption_anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
       caption_delivery_report: 'Spedire l''e-mail con conferma al mittente'
       help_preferred_labels: 'Se ci sono e-mails questi verranno spediti solo ad indirizzi e-mail con questa denominazione. Nel far questo verranno utilizzati anche indirizzi e-mail che non sono marcati come indirizzo di spedizione. '
-      help_mailchimp_sync: 'Gli abbonati possono essere esportati nella lista MailChimp, ma questo non avviene automaticamente. Questa azione sovrascrive l''elenco MailChimp e i contatti esistenti vengono eliminati. '
   mailing_list_decorator:
     may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
     may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'

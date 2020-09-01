@@ -54,7 +54,7 @@ Truemail.configure do |config|
   end
 
   if Rails.env.development? || Rails.env.test? || mailtrap?
-    config.whitelisted_domains = ['hitobito.example.com', 'example.com', 'example.net']
+    config.whitelisted_domains = ['hitobito.example.com', 'example.com', 'example.net', 'example.org']
   end
 
   # Optional parameter. With this option Truemail will validate email which contains whitelisted

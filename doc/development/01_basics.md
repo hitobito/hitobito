@@ -33,7 +33,11 @@ Switching between core and wagon database for executing single tests:
 
 Executing a specific test:
 
-    spring rspec spec/domain/import
+    spring rspec spec/domain/import_spec.rb
+    
+For executing a single feature spec call:
+
+    spring rspec --tag type:feature spec/features/role_lists_controller_spec.rb
 
 ### Request Profiling
 

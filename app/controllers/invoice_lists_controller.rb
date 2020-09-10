@@ -70,7 +70,7 @@ class InvoiceListsController < CrudController
 
   def multi_create
     assign_attributes
-    entry.recipient = parent.people.first
+    entry.recipient = entry.recipients.first
     entry.multi_create if entry.valid?
   end
 

@@ -123,7 +123,7 @@ class Invoice::Qrcode
       address_line2: parts.third,
       zip_code: nil,
       town: nil,
-      country: parts.fourth
+      country: 'CH'
     }
   end
 

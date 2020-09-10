@@ -110,10 +110,11 @@ describe Invoice::Qrcode do
       invoice.recipient_address = "Max Mustermann"
       expect(subject[:address_type]).to eq "K"
       expect(subject[:full_name]).to eq "Max Mustermann"
-      %i[address_line1 address_line2 zip_code town country].each do |key|
+      %i[address_line1 address_line2 zip_code town].each do |key|
         expect(subject).to have_key(key)
         expect(subject[key]).to be_blank
       end
+      expect(subject[:country]).to eq "CH"
     end
 
     it 'handles zip without town' do

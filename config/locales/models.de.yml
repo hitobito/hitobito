@@ -1,7 +1,3 @@
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
-
 de:
   time:
     formats:
@@ -206,6 +202,9 @@ de:
       label_format:
         one: Etikettenformat
         other: Etikettenformate
+      mail_log:
+        one: Verlauf
+        other: Verlauf
       mailing_list:
         one: Abo
         other: Abos
@@ -616,6 +615,18 @@ de:
           partial: Teilweise
           failed: Fehlgeschlagen
         mailchimp_include_additional_emails: 'Alle Versandadressen synchronisieren'
+
+      mail_log:
+        updated_at: Bearbeitet am
+        mail_from: Absender
+        mail_subject: Betreff
+        status: Status
+        statuses:
+          retreived: Wird gesendet
+          bulk_delivering: Wird gesendet
+          completed: Gesendet
+          sender_rejected: Absender abgelehnt
+          unkown_recipient: Fehler
 
       subscription:
         related_role_types: Rollen

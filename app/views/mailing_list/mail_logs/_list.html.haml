@@ -1,0 +1,15 @@
+-# Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+-# hitobito_cvp and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_cvp.
+
+- title @mailing_list.to_s
+
+- content_for :filter do
+  .pull-right
+    = render 'shared/page_per_year'
+
+= crud_table do |t|
+  - t.col('') do |p|
+    = format_attr(p, :status)
+  - t.attrs(:updated_at, :mail_from, :mail_subject)

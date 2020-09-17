@@ -1,0 +1,10 @@
+- filter = entry.filter_chain[:tag_absence]
+- selected = filter ? filter.to_hash[:names] : []
+- options = options_from_collection_for_select(@possible_tags, :to_s, :to_s, selected)
+
+%p= t('.prompt_tag_absence_selection')
+= select_tag('filters[tag_absence][names][]',
+              options,
+              class: 'chosen-select',
+              multiple: true,
+              data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_absence_placeholder') } )

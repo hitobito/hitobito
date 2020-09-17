@@ -1161,7 +1161,12 @@ de:
 
     tag:
       title: Tags
-      prompt_tag_selection: Nur Personen mit einem der untenstehenden Tags
+      prompt_tag_selection: Personen einbeziehen, die mindestens einen der untenstehenden Tags enthalten
+      prompt_tag_placeholder: Gewünschte Tag-Namen eingeben
+
+    tag_absence:
+      prompt_tag_absence_selection: Personen ausschliessen, die mindestens einen der untenstehenden Tags enthalten
+      prompt_tag_absence_placeholder: Gewünschte Tag-Namen eingeben
 
     new:
       title: Personen filtern

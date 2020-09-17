@@ -24,7 +24,9 @@
       = render 'attributes', f: f
 
     = render(layout: 'filter', locals: { type: :tag }) do
-      = render 'tag', f: f
+      .label-columns
+        = render 'tag', f: f
+        = render 'tag_absence', f: f
 
   - if can?(:create, entry)
     = f.labeled_input_field :name, placeholder: t('.save_filter_placeholder')

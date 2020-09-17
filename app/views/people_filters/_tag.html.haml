@@ -7,10 +7,10 @@
 - selected = filter ? filter.to_hash[:names] : []
 - options = options_from_collection_for_select(@possible_tags, :to_s, :to_s, selected)
 
-.label-columns
-  = field_set_tag(t('.prompt_tag_selection'), { style: 'height: 350px' }) do
-    = select_tag('filters[tag][names][]',
-                  options,
-                  class: 'chosen-select',
-                  multiple: true,
-                  data: { chosen_no_results: t('global.chosen_no_results'), placeholder: ' ' } )
+%p= t('.prompt_tag_selection')
+
+= select_tag('filters[tag][names][]',
+              options,
+              class: 'chosen-select',
+              multiple: true,
+              data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )

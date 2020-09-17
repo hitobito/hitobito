@@ -11,7 +11,8 @@ class Person::Filter::Chain
     Person::Filter::Role,
     Person::Filter::Qualification,
     Person::Filter::Attributes,
-    Person::Filter::Tag
+    Person::Filter::Tag,
+    Person::Filter::TagAbsence
   ]
 
   # Used for `serialize` method in ActiveRecord

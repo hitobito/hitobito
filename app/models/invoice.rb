@@ -238,11 +238,11 @@ class Invoice < ActiveRecord::Base
     invoice_config.increment!(:sequence_number) # rubocop:disable Rails/SkipsModelValidations
   end
 
-  def build_recipient_address
-    [recipient.full_name,
-     recipient.address,
-     [recipient.zip_code, recipient.town].compact.join(' '),
-     recipient.country].compact.join("\n")
+  def build_recipient_address # rubocop:disable Metrics/AbcSize
+    [recipient.full_name.to_s.squish,
+     recipient.address.to_s.squish,
+     [recipient.zip_code, recipient.town].compact.join(' ').squish,
+     recipient.country.to_s.squish].compact.join("\n")
   end
 
   def recipient_name_from_recipient_address

@@ -18,5 +18,11 @@ module Sheet
         if: :index_subscriptions,
         params: { returning: true }
 
+    tab 'activerecord.models.mail_log.other',
+        :group_mailing_list_mail_logs_path,
+        if: (lambda do |view, _group, mailing_list|
+          view.can?(:update, mailing_list)
+        end)
+
   end
 end

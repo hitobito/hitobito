@@ -31,10 +31,23 @@ class MailLog < ActiveRecord::Base
 
   validates :mail_hash, uniqueness: { case_sensitive: false }
 
-  def self.build(mail)
-    mail_log = new
-    mail_log.mail = mail
-    mail_log
+  scope :list, -> { order(updated_at: :desc) }
+
+  ### CLASS METHODS
+
+  class << self
+    def build(mail)
+      mail_log = new
+      mail_log.mail = mail
+      mail_log
+    end
+
+    def in_year(year)
+      year = Time.zone.today.year if year.to_i <= 0
+      start_at = Time.zone.parse "#{year}-01-01"
+      finish_at = start_at + 1.year
+      where(updated_at: [start_at...finish_at])
+    end
   end
 
   def exists?

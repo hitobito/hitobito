@@ -1,9 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+# frozen_string_literal: true
 
 class Person::TagsController < ApplicationController
 
@@ -31,8 +26,7 @@ class Person::TagsController < ApplicationController
 
   def create
     authorize!(:manage_tags, @person)
-    @person.tag_list.add(permitted_params[:name], parse: true)
-    @person.save!
+    create_tag(permitted_params[:name])
     @tags = @person.reload.tags.grouped_by_category
 
     respond_to do |format|
@@ -43,8 +37,7 @@ class Person::TagsController < ApplicationController
 
   def destroy
     authorize!(:manage_tags, @person)
-    @person.tag_list.remove(params[:name])
-    @person.save!
+    @person.tags.find_by(name: params[:name]).try(:destroy!)
 
     respond_to do |format|
       format.html { redirect_to group_person_path(@group, @person) }
@@ -54,13 +47,22 @@ class Person::TagsController < ApplicationController
 
   private
 
+  def create_tag(name)
+    ActsAsTaggableOn::Tagging.find_or_create_by!(
+      taggable: @person,
+      tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
+      context: 'tags'
+    )
+  end
+
   def permitted_params
     params.require(:acts_as_taggable_on_tag).permit(permitted_attrs)
   end
 
-  def available_tags(q)
-    Person.tags_on(:tags)
-      .where('name LIKE ?', "%#{q}%")
+  def available_tags(query)
+    Person
+      .tags_on(:tags)
+      .where('name LIKE ?', "%#{query}%")
       .order(:name)
       .limit(10)
       .pluck(:name)

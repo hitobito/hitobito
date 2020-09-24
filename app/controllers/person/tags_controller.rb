@@ -27,7 +27,7 @@ class Person::TagsController < ApplicationController
   def create
     authorize!(:manage_tags, @person)
     create_tag(permitted_params[:name])
-    @tags = @person.reload.tags.grouped_by_category
+    @tags = person_tags
 
     respond_to do |format|
       format.html { redirect_to group_person_path(@group, @person) }
@@ -47,6 +47,14 @@ class Person::TagsController < ApplicationController
 
   private
 
+  def person_tags
+    @person
+      .reload
+      .tags
+      .order(:name)
+      .grouped_by_category
+  end
+
   def create_tag(name)
     ActsAsTaggableOn::Tagging.find_or_create_by!(
       taggable: @person,
@@ -63,9 +71,14 @@ class Person::TagsController < ApplicationController
     Person
       .tags_on(:tags)
       .where('name LIKE ?', "%#{query}%")
+      .where.not(name: excluded_tags)
       .order(:name)
       .limit(10)
       .pluck(:name)
+  end
+
+  def excluded_tags
+    PersonTags::Validation.tag_names
   end
 
   def load_group

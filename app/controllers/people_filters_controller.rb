@@ -1,9 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+# frozen_string_literal: true
 
 class PeopleFiltersController < CrudController
 
@@ -82,7 +77,7 @@ class PeopleFiltersController < CrudController
   end
 
   def load_possible_tags
-    @possible_tags ||= Person.tags
+    @possible_tags ||= PersonTags::Translator.new.possible_tags
   end
 
 end

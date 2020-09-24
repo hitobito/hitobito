@@ -47,16 +47,19 @@ describe 'Person Tags', js: true do
       it 'lists tags grouped by categories' do
         person.tag_list.add('vegetable:potato', 'pizza', 'fruit:banana', 'fruit:apple')
         person.save!
+        create_tag(person, PersonTags::Validation::EMAIL_PRIMARY_INVALID, 'no-email')
         visit group_person_path(group_id: group.id, id: person.id)
 
         expect(page).to have_content('Tags')
-        expect(all('.person-tags-category').length).to eq(3)
-        expect(all('.person-tags-category-title').map(&:text)).to eq(%w(fruit vegetable Andere))
+        expect(all('.person-tags-category').length).to eq(4)
+        expect(all('.person-tags-category-title').map(&:text)).to eq(%w(fruit vegetable Validierung Andere))
         expect(all('.person-tags-category')[0].all('.person-tag').map(&:text)).
           to eq(%w(apple banana))
         expect(all('.person-tags-category')[1].all('.person-tag').map(&:text)).
           to eq(%w(potato))
         expect(all('.person-tags-category')[2].all('.person-tag').map(&:text)).
+          to eq(['Haupt-E-Mail ungültig'])
+        expect(all('.person-tags-category')[3].all('.person-tag').map(&:text)).
           to eq(%w(pizza))
       end
     end
@@ -139,6 +142,17 @@ describe 'Person Tags', js: true do
       expect(all('.person-tags-category')[0].all('.person-tag').map(&:text)).
         to eq(%w(pizza))
     end
+  end
+
+  private
+
+  def create_tag(person, name, tooltip)
+    ActsAsTaggableOn::Tagging.create!(
+      taggable: person,
+      hitobito_tooltip: tooltip,
+      tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
+      context: 'tags'
+    )
   end
 
 end

@@ -1,9 +1,4 @@
-# encoding: utf-8
-
-#  Copyright (c) 2019, hitobito AG. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+# frozen_string_literal: true
 
 module TagListsHelper
 
@@ -13,6 +8,21 @@ module TagListsHelper
         tag_checkbox(tag, count)
       end
     end, '')
+  end
+
+  def format_tag_category(category)
+    case category
+    when :other
+      t('.category_other')
+    when :category_validation
+      t('.category_validation')
+    else
+      category
+    end
+  end
+
+  def format_tag_name(tag)
+    PersonTags::Translator.new.translate(tag)
   end
 
   private

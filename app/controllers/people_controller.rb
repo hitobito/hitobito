@@ -29,6 +29,7 @@ class PeopleController < CrudController
 
   decorates :group, :person, :people, :add_requests
 
+
   helper_method :index_full_ability?
 
   # load group before authorization
@@ -138,7 +139,18 @@ class PeopleController < CrudController
   end
 
   def load_grouped_person_tags
-    @tags = entry.tags.grouped_by_category
+    @tags = collect_grouped_person_tags
+  end
+
+  def collect_grouped_person_tags
+    tags = entry.taggings.includes(:tag).order('tags.name').each_with_object({}) do |t, h|
+      tag = t.tag
+      tag.hitobito_tooltip = t.hitobito_tooltip
+      category = tag.category
+      h[category] ||= []
+      h[category] << tag
+    end
+    ActsAsTaggableOn::Tag.order_categorized(tags)
   end
 
   def show_add_request_status?

@@ -53,7 +53,7 @@ module Subscriber
     end
 
     def load_possible_tags
-      @possible_tags ||= Person.tags
+      @possible_tags ||= PersonTags::Translator.new.possible_tags
     end
 
     def subscriber

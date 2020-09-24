@@ -3,7 +3,7 @@
     - tags.each do |category, category_tags|
       .person-tags-category
         .person-tags-category-title{class: tags.length == 1 && category == :other ? 'hidden' : nil}
-          = category == :other ? t('.category_other') : category
+          = format_tag_category(category)
         .person-tags-category-list
           - category_tags.each do |tag|
-            = render 'person/tags/tag', tag: tag, person: @person
+            = render 'person/tags/tag', tag: tag, person: @person, category: category

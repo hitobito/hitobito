@@ -14,7 +14,7 @@
   - unless subscription.tag_list.empty?
     %p
       = t('.only_persons_with')
-      - subscription.tag_list.each do |tag|
-        %span.label.label-inverse.person-tag= tag
+      - subscription.tags.each do |tag|
+        %span.label.label-inverse.person-tag= format_tag_name(tag)
 - else
   = subscription.to_s(:list)

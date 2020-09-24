@@ -45,6 +45,13 @@ describe Person::TagsController do
       get :query, params: { group_id: group.id, person_id: bottom_member.id, q: 'ore' }
       expect(JSON.parse(response.body)).to eq([{'label' => 'lorem'}, {'label' => 'loremipsum'}])
     end
+
+    it 'does not return category_validation tags' do
+      create_tag(top_leader, PersonTags::Validation::EMAIL_PRIMARY_INVALID)
+      create_tag(top_leader, PersonTags::Validation::EMAIL_ADDITIONAL_INVALID)
+      get :query, params: { group_id: group.id, person_id: bottom_member.id, q: 'invalid' }
+      expect(JSON.parse(response.body)).to eq([])
+    end
   end
 
   describe 'POST #create' do
@@ -76,6 +83,16 @@ describe Person::TagsController do
       expect(bottom_member.tags.count).to eq(0)
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
+  end
+
+  private
+
+  def create_tag(person, name)
+    ActsAsTaggableOn::Tagging.create!(
+      taggable: person,
+      tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
+      context: 'tags'
+    )
   end
 
 end

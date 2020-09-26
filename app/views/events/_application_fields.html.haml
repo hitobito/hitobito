@@ -13,7 +13,7 @@
   - entry.used?(:participations_visible) do
     = f.labeled_boolean_field(:participations_visible, caption: t('events.form.caption_participations_visible'))
 
-  = render_extensions 'application_fieldsmiddle', locals: { f: f }
+  = render_extensions 'application_middle_fields', locals: { f: f }
 
   - entry.used?(:priorization) do
     = f.labeled_boolean_field(:priorization, caption: t('events.form.caption_prioritization'))

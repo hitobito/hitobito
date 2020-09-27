@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_18_085541) do
+ActiveRecord::Schema.define(version: 2020_09_26_193601) do
 
   create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "contactable_type", null: false
@@ -393,6 +393,7 @@ ActiveRecord::Schema.define(version: 2020_08_18_085541) do
     t.datetime "mailchimp_last_synced_at"
     t.text "mailchimp_result"
     t.boolean "mailchimp_include_additional_emails", default: false
+    t.boolean "mailchimp_include_names", default: false
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
 

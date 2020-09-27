@@ -26,6 +26,7 @@ module Synchronize
                                                   contactable_id: people.collect(&:id),
                                                   mailings: true).to_a
         people.flat_map do |person|
+          check_hiding_names(person, mailing_list)
           additional_email_subscribers = additional_emails.select do |additional_email|
             additional_email.contactable_id == person.id
           end.map do |additional_email|
@@ -37,6 +38,7 @@ module Synchronize
 
       def self.default_addresses(mailing_list)
         mailing_list.people.map do |person|
+          check_hiding_names(person, mailing_list)
           self.new(person, person.email)
         end
       end
@@ -51,6 +53,13 @@ module Synchronize
             hash[value] ||= []
             hash[value] << person.email
           end
+        end
+      end
+
+      def self.check_hiding_names(person, mailing_list)
+        if !mailing_list.mailchimp_include_names
+          person.first_name = ""
+          person.last_name = ""
         end
       end
 

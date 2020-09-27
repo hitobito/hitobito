@@ -10,5 +10,6 @@ class GroupListSerializer < ApplicationSerializer
     type 'group'
     property :id, item.id
     property :parent_id, item.parent_id
+    property :type, item.type
   end
 end

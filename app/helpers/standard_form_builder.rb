@@ -273,13 +273,17 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   #   labeled(:attr, content)
   #   labeled(:attr, 'Caption') { #content }
   #   labeled(:attr, 'Caption', content)
-  def labeled(attr, caption_or_content = nil, content = nil, html_options = {}, &block)
+  def labeled(attr, caption_or_content = nil, content = nil, html_options = {}, field_help = nil,
+              &block)
     if block_given?
       content = capture(&block)
     elsif content.nil?
       content = caption_or_content
       caption_or_content = nil
     end
+    content << render_help_text(attr)
+    content << field_help if field_help.present?
+
     caption_or_content ||= captionize(attr, klass)
     add_css_class(html_options, 'controls')
     css_classes = { 'control-group' => true, error: errors_on?(attr), required: required?(attr) }
@@ -376,6 +380,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
+  def render_help_text(attr)
+    help_texts.render_field(attr) || help_texts.render_field("#{attr}_id")
+  end
+
   private
 
   # Returns true if attr is a non-polymorphic association.
@@ -426,15 +434,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     label = options.delete(:label)
     addon = options.delete(:addon)
 
-    labeled_args = [args.first]
-    labeled_args << label if label.present?
+    content = send(field_method, *(args << options))
+    content = with_addon(addon, content) if addon.present?
 
-    text = send(field_method, *(args << options))
-    text = with_addon(addon, text) if addon.present?
-    with_labeled_field_help(args.first, options) { |help| text << help }
+    field_help = ActiveSupport::SafeBuffer.new("")
+    with_labeled_field_help(args.first, options) { |help| field_help << help }
 
-    labeled_args << text
-    labeled(*labeled_args)
+    labeled(args.first, label, content, {}, field_help)
   end
 
   def with_labeled_field_help(field, options)
@@ -445,7 +451,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       yield help_inline(help_inline) if help_inline.present?
       yield help_block(help)
     else
-      yield help_texts.render_field(field)
       yield help_inline(help_inline) if help_inline.present?
     end
   end

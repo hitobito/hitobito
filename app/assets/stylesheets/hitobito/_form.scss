@@ -513,6 +513,9 @@ input.switcher {
   fieldset:last-child {
     margin-bottom: 0;
   }
+  &.in.visible {
+    overflow: visible;
+  }
 }
 
 #roles {

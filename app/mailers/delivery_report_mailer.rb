@@ -10,8 +10,16 @@ class DeliveryReportMailer < ApplicationMailer
   CONTENT_BULK_MAIL_SUCCESS = 'bulk_mail_success'.freeze
   CONTENT_BULK_MAIL_WITH_FAILED = 'bulk_mail_with_failed'.freeze
 
-  def bulk_mail(report_to, sent_message, total_recipients, delivered_at, failed_recipients = nil)
+  def bulk_mail(
+    report_to,
+    envelope_sender,
+    sent_message,
+    total_recipients,
+    delivered_at,
+    failed_recipients = nil
+  )
     content = failed_recipients.present? ? CONTENT_BULK_MAIL_WITH_FAILED : CONTENT_BULK_MAIL_SUCCESS
+    @envelope_sender = envelope_sender
     @sent_message = sent_message
     @total_recipients = total_recipients
     @delivered_at = delivered_at
@@ -24,7 +32,7 @@ class DeliveryReportMailer < ApplicationMailer
   private
 
   def placeholder_mail_to
-    @sent_message.to.first
+    @envelope_sender
   end
 
   def placeholder_mail_subject

@@ -158,7 +158,7 @@ module MailRelay
 
     def delivery_report_mail
       DeliveryReportMailer.
-        bulk_mail(@delivery_report_to, @message,
+        bulk_mail(@delivery_report_to, @envelope_sender, @message,
                   @success_count, Time.zone.now,
                   @failed_recipients).deliver_now
     rescue => e

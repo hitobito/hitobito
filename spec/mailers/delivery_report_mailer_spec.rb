@@ -10,10 +10,11 @@ require 'spec_helper'
 describe DeliveryReportMailer do
 
   let(:recipient_email) { 'dude@hito42test.com' }
+  let(:envelope_sender) { 'liste@hitobito.example.com' }
   let(:sent_message) do
     mail = Mail.new
     mail.subject = 'Ausflugtips'
-    mail.to = 'liste@hitobito.example.com'
+    mail.to = 'me@mymail.org, liste@hitobito.example.com'
     mail
   end
   let(:total_recipients) { 42 }
@@ -23,7 +24,7 @@ describe DeliveryReportMailer do
   context 'bulk mail success' do
 
     let(:failed_recipients) { nil }
-    let(:delivery_report) { DeliveryReportMailer.bulk_mail(recipient_email, sent_message, total_recipients, delivered_at) }
+    let(:delivery_report) { DeliveryReportMailer.bulk_mail(recipient_email, envelope_sender, sent_message, total_recipients, delivered_at) }
 
     subject { delivery_report }
 
@@ -42,7 +43,7 @@ describe DeliveryReportMailer do
     let(:failed_recipient_one) { ['dude@gugunidgit.ch', '450 4.1.2 dude@gugunidgit.ch: Recipient address rejected: Domain not found']}
     let(:failed_recipient_two) { ['dude2@gugunidgit.ch', '450 4.1.2 dude2@gugunidgit.ch: Recipient address rejected: Domain not found']}
     let(:failed_recipients) { [failed_recipient_one, failed_recipient_two] }
-    let(:delivery_report) { DeliveryReportMailer.bulk_mail(recipient_email, sent_message, total_recipients, delivered_at, failed_recipients) }
+    let(:delivery_report) { DeliveryReportMailer.bulk_mail(recipient_email, envelope_sender, sent_message, total_recipients, delivered_at, failed_recipients) }
 
     subject { delivery_report }
 

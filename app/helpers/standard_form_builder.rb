@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# rubocop:disable Metrics/ClassLength
+# rubocop:disable Metrics/ClassLength,Rails/HelperInstanceVariable
 
 # A form builder that automatically selects the corresponding input field
 # for ActiveRecord column types. Convenience methods for each column type allow
@@ -273,7 +273,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   #   labeled(:attr, content)
   #   labeled(:attr, 'Caption') { #content }
   #   labeled(:attr, 'Caption', content)
-  def labeled(attr, caption_or_content = nil, content = nil, html_options = {}, &block)
+  def labeled(attr, caption_or_content = nil, content = nil, html_options = {}, &block) # rubocop:disable Metrics/MethodLength
     if block_given?
       content = capture(&block)
     elsif content.nil?
@@ -464,4 +464,4 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
 end
 
-# rubocop:enable Metrics/ClassLength
+# rubocop:enable Metrics/ClassLength,Rails/HelperInstanceVariable

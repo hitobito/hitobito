@@ -111,7 +111,7 @@ module Group::NestedSet
   end
 
   def move_to_right_of_if_change(node)
-    if node.display_name.downcase != display_name.downcase && node.rgt != lft - 1 # rubocop:disable Performance/Casecmp
+    if node.display_name.downcase != display_name.downcase && node.rgt != lft - 1
       move_to_right_of(node)
     end
   end

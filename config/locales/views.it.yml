@@ -694,6 +694,7 @@ it:
       caption_anyone_may_post: 'Qualunque mittente può scrivere a questa mailing list.'
       caption_delivery_report: 'Spedire l''e-mail con conferma al mittente'
       help_preferred_labels: 'Se ci sono e-mails questi verranno spediti solo ad indirizzi e-mail con questa denominazione. Nel far questo verranno utilizzati anche indirizzi e-mail che non sono marcati come indirizzo di spedizione. '
+      help_mailchimp_sync: 'Gli abbonati possono venir esportati alla lista MailChimp. Quest''azione sovrascrive la lista MailChimp ed i contatti esistenti vengono eliminati.'
   mailing_list_decorator:
     may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
     may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'
@@ -712,6 +713,7 @@ it:
     courses: 'corsi'
     admin: 'admin'
     admin/event_feed: 'Integrare il calendario.'
+    admin/oauth_authorizations: 'Autorizzazioni OAuth'
     invoices: 'Fatture'
   notes:
     new_note: Nuova nota
@@ -730,6 +732,9 @@ it:
     access_grants:
       list:
         title: Attiva %{model_name} per %{uri}
+    authorizations:
+      title: Le mie autorizzazioni OAuth
+      revoke: "L'accesso a <i>%{application}</i> è stato annullato"
     tabs:
       grants: Autorizzazioni
       tokens: Token di accesso
@@ -842,6 +847,14 @@ it:
         request_link: Rispondere alla richiesta
       ask_responsibles:
         request_link: Rispondere alla richiesta
+    subscriptions:
+      index:
+        my_subscriptions: I miei abbonamenti
+        available_subscriptions: Abbonamenti disponibili
+      create:
+        success: <i>%{person}</i> è stato iscritto/a a <i>%{mailing_list}</i>.
+      destroy:
+        success: <i>%{person}</i> è stata levata da <i>%{mailing_list}</i>.
     tags:
       list:
         category_other: Altro
@@ -878,12 +891,14 @@ it:
         other: '%{count} %{role} hanno ricevuto una richiesta d''accesso per i loro dati personali. Tutte le modifiche dovute a questa importazione devono essere nuovamente intraprese dopo la conferma della richiesta.'
   people:
     send_password_instructions: Le informazioni per il login sono state spedite.
+    send_password_instructions_invalid_email: Le informazioni per il login non sono state mandate in quanto l'e-mail indicato non è valido
     years_old: (%{years} anni)
     tabs:
       history: Azioni
       log: Log
       colleagues: Collaboratore
       invoices: Fatture
+      subscriptions: Abbonamenti
     actions_show:
       send_login: Inviare login
       send_login_tooltip:
@@ -975,7 +990,6 @@ it:
       smaller: più piccolo di
     tag:
       title: Tags
-      prompt_tag_selection: Solo persone con uno dei tags seguenti
     new:
       title: Filtro per le persone
     range:

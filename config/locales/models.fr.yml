@@ -192,6 +192,9 @@ fr:
       label_format:
         one: format d'étiquette
         other: Formats d'étiquettes
+      mail_log:
+        one: Historique
+        other: Historique
       mailing_list:
         one: abonnement
         other: Abonnements
@@ -346,7 +349,7 @@ fr:
         state: Statut
         name: Nom
         number: Numéro
-        motto: Devise
+        motto: Thème
         cost: Coûts
         contact: ' Personne de contact '
         maximum_participants: Nombre maximal de participants
@@ -561,6 +564,18 @@ fr:
           success: Mise à jour
           partial: En partie
           failed: Echoué
+        mailchimp_include_additional_emails: 'Synchroniser toutes adresses d''envoi'
+      mail_log:
+        updated_at: Réalisé le
+        mail_from: Expéditeur
+        mail_subject: Objet
+        status: Statut
+        statuses:
+          retreived: En cours d'envoi
+          bulk_delivering: En cours d'envoi
+          completed: Envoyé
+          sender_rejected: Expéditeur refusé
+          unkown_recipient: Erreur
       subscription:
         related_role_types: Rôles
       people_filter:
@@ -594,6 +609,7 @@ fr:
         nickname: Surnom sur l'étiquette
         pp_post: Espace PP
       invoice:
+        currency: Devise
         title: titre
         description: Texte
         invoice_items: Détails de la facture
@@ -609,6 +625,7 @@ fr:
           ch_esr: Bulletin de versement postal orange (CH)
           ch_besr: Bulletin de versement bancaire orange (CH)
           no_ps: Aucun
+          qr: Facture QR
         states:
           draft: projet
           issued: Établie
@@ -650,6 +667,7 @@ fr:
         cost_center: centre de coûts
         account: Compte
       invoice_config:
+        currency: Devise
         payment_information: Information sur le paiement
         address: adresse de l'expéditeur
         account_number: numéro de compte
@@ -662,6 +680,7 @@ fr:
         payee: Paiement à
         payment_slip: bulletin de versement
         payment_slips:
+          qr: Facture QR
           ch_es: Bulletin de versement postal rouge (CH)
           ch_bes: Bulletin de versement bancaire rouge (CH)
           ch_esr: Bulletin de versement postal orange (CH)
@@ -718,6 +737,7 @@ fr:
         events: Évènements de ce niveau et des niveaux inférieurs
         invoices: Factures de ce niveau
         event_participations: Participants d'évènements de ce niveau
+        mailing_lists: Abonné-e-s des mailing listes de ce niveau
   doorkeeper:
     scopes:
       email: Lecture de ton adresse e-mail
@@ -735,6 +755,7 @@ fr:
       on_or_before: "doit être %{restriction} ou antérieur"
       after: "doit être ultérieur à %{restriction}"
       on_or_after: "doit être %{restriction} ou ultérieur"
+      extension_whitelist_error: "n'accepte que les types de données suivants : %{allowed_types}"
       dimensions_too_large: "n'accepte que les images d'une taille de moins de %{maximum} pixels"
       filesize_too_large: "ne peut pas faire plus de %{maximum} MB"
       expired: "est échu, prière d'en refaire demande"

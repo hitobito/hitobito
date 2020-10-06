@@ -695,6 +695,7 @@ fr:
       caption_anyone_may_post: 'Tous les expéditeurs peuvent écrire à la liste de diffusion.'
       caption_delivery_report: 'Envoyer l''e-mail avec confirmation à l''expéditeur'
       help_preferred_labels: 'Si disponibles, les e-mails ne sont envoyés qu''aux adresses e-mails avec cette désignation. Ce faisant, les adresses e-mail qui ne sont pas marquées comme adresses d''envoi seront également utilisées.'
+      help_mailchimp_sync: 'Les personnes abonnées peuvent être exportées vers la liste MailChimp. Cette action écrase la liste MailChimp et les contacts actuels sont effacés.'
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
     may_not_subscribe: 'Les abonnés <strong>ne peuvent pas</strong> s''inscrire / se désinscrire eux-même'
@@ -713,6 +714,7 @@ fr:
     courses: 'Cours'
     admin: 'Paramètres'
     admin/event_feed: 'Intégrer le calendrier'
+    admin/oauth_authorizations: 'Autoriser OAuth'
     invoices: 'Factures'
   notes:
     new_note: Ajouter une note
@@ -731,6 +733,9 @@ fr:
     access_grants:
       list:
         title: '%{model_name} acrifs pour %{uri}'
+    authorizations:
+      title: Mes autorisations OAuth
+      revoke: "L'accès à <i>%{application}</i>a été annulé"
     tabs:
       grants: Autorisations
       tokens: Token d'accès
@@ -840,6 +845,14 @@ fr:
         request_link: Répondre à la requête
       ask_responsibles:
         request_link: 'Répondre à la requête '
+    subscriptions:
+      index:
+        my_subscriptions: Mes abonnements
+        available_subscriptions: Abonnements disponibles
+      create:
+        success: <i>%{person}</i>a été inscrit-e à <i>%{mailing_list}</i>.
+      destroy:
+        success: <i>%{person}</i> a été désinscrit-e de <i>%{mailing_list}</i>.
     tags:
       list:
         category_other: Autre
@@ -876,12 +889,14 @@ fr:
         other: '%{count} %{role} ont reçu une demande d''accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation.'
   people:
     send_password_instructions: Les données d'authentification ont été envoyées.
+    send_password_instructions_invalid_email: Les informations de login n'ont pas été envoyées étant donné que l'adresse e-mail indiquée n'est pas valable.
     years_old: (%{years} ans)
     tabs:
       history: Historique
       log: Journal
       colleagues: Collaborateurs/collaboratrices
       invoices: Factures
+      subscriptions: Abonnements
     actions_show:
       send_login: Envoyer les données d'identification
       send_login_tooltip:
@@ -974,7 +989,6 @@ fr:
       smaller: plus petit que
     tag:
       title: Tags
-      prompt_tag_selection: Que les personnes avec l'un des tags suivants
     new:
       title: Filtrer les personnes
     range:

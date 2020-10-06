@@ -560,6 +560,18 @@ it:
           success: Aggiornato
           partial: In parte
           failed: Fallito
+        mailchimp_include_additional_emails: 'Sincronizzare tutti gli indirizzi di invio'
+      mail_log:
+        updated_at: Elaborato il
+        mail_from: Mittente
+        mail_subject: Concerne
+        status: Stato
+        statuses:
+          retreived: Viene spedito
+          bulk_delivering: Viene spedito
+          completed: Spedito
+          sender_rejected: Mittente rifiutato
+          unkown_recipient: Errore
       subscription:
         related_role_types: Ruoli
       people_filter:
@@ -593,6 +605,7 @@ it:
         nickname: Soprannome sull'etichetta
         pp_post: Riga PP
       invoice:
+        currency: Valuta
         title: Titolo
         description: Testo
         invoice_items: Voci contabili
@@ -608,6 +621,7 @@ it:
           ch_esr: Polizza di versamento postale arancione (CH)
           ch_besr: Polizza di versamento bancaria arancione (CH)
           no_ps: Nessuno
+          qr: Fattura QR
         states:
           draft: Bozza
           issued: Emesso
@@ -649,6 +663,7 @@ it:
         cost_center: Centro di costo
         account: Conto
       invoice_config:
+        currency: Valuta
         payment_information: Informazioni sul pagamento
         address: Indirizzo del mittente
         account_number: Numero di conto
@@ -661,6 +676,7 @@ it:
         payee: Versamento per
         payment_slip: Polizza di versamento
         payment_slips:
+          qr: Fattura QR
           ch_es: Polizza di versamento postale rossa (CH)
           ch_bes: Polizza di versamento bancaria rossa (CH)
           ch_esr: Polizza di versamento postale arancione (CH)
@@ -717,6 +733,7 @@ it:
         events: Eventi di questo livello e dei livelli sottostanti
         invoices: Fatture di questo livello
         event_participations: Partecipanti ad eventi di questo livello
+        mailing_lists: Abbonati a liste mail di questo livello
   doorkeeper:
     scopes:
       email: Leggono il tuo indirizzo e-mail
@@ -734,6 +751,7 @@ it:
       on_or_before: "deve essere %{restriction} oppure prima"
       after: "deve essere dopo %{restriction}"
       on_or_after: "deve essere %{restriction} oppure dopo"
+      extension_whitelist_error: "accetta solo i seguenti tipi di dati: %{allowed_types}"
       dimensions_too_large: "accetta solo immagini con una dimensione inferiore a %{maximum} Pixel"
       filesize_too_large: "non può essere maggiore a %{maximum} MB"
       expired: "è scaduto, per favore richiedere nuovamente"

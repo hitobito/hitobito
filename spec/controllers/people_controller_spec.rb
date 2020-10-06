@@ -597,12 +597,15 @@ describe PeopleController do
         before do
           top_leader.tags.create!(name: 'fruit:banana')
           top_leader.tags.create!(name: 'pizza')
+          create_tag(top_leader, PersonTags::Validation::EMAIL_PRIMARY_INVALID)
         end
 
         it 'preloads and assigns grouped tags' do
           get :show, params: { group_id: group.id, id: people(:top_leader).id }
-          expect(assigns(:tags).map(&:first)).to eq([:fruit, :other])
-          expect(assigns(:tags).second.second.map(&:name)).to eq(%w(pizza))
+          tags = assigns(:tags)
+          expect(tags.map(&:first)).to eq([:fruit, :category_validation, :other])
+          expect(tags.second[1].map(&:name)).to eq(%w(category_validation:email_primary_invalid))
+          expect(tags.third[1].map(&:name)).to eq(%w(pizza))
         end
       end
 
@@ -950,5 +953,15 @@ describe PeopleController do
       expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
       expect(Delayed::Job.last.payload_object.send(:exporter)).to eq Export::Tabular::People::TableDisplays
     end
+  end
+
+  private
+
+  def create_tag(person, name)
+    ActsAsTaggableOn::Tagging.create!(
+      taggable: person,
+      tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
+      context: 'tags'
+    )
   end
 end

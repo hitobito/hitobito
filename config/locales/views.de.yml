@@ -1002,6 +1002,11 @@ de:
     tags:
       list:
         category_other: Andere
+        category_validation: Validierung
+      tag:
+        category_validation:
+          email_primary_invalid: Haupt-E-Mail ungültig
+          email_additional_invalid: Weitere E-Mail ungültig
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.

@@ -35,8 +35,14 @@ module CategorizedTags
         h[category] ||= []
         h[category] << tag
       end
+      order_categorized(tags)
+    end
+
+    def order_categorized(tags)
       tags.to_a.sort do |a, b|
-        if a[0] == :other || a[0] > b[0]
+        if a[0] == :category_validation && b[0] == :other
+          -1
+        elsif %i[other category_validation].include?(a[0]) || a[0] > b[0]
           1
         elsif a[0] < b[0]
           -1

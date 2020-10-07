@@ -95,7 +95,7 @@ class RoleListsController < CrudController
   end
 
   def people_ids
-    params[:ids].to_s.split(',')
+    list_param(:ids)
   end
 
   def person_filter

@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   include Authenticatable
   include ERB::Util
   include Sentry
+  include ParamConverters
 
   # protect with null_session only in specific api controllers
   protect_from_forgery with: :exception

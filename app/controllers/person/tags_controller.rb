@@ -37,7 +37,8 @@ class Person::TagsController < ApplicationController
 
   def destroy
     authorize!(:manage_tags, @person)
-    @person.tags.find_by(name: params[:name]).try(:destroy!)
+    @person.tag_list.remove(params[:name])
+    @person.save!
 
     respond_to do |format|
       format.html { redirect_to group_person_path(@group, @person) }
@@ -68,8 +69,7 @@ class Person::TagsController < ApplicationController
   end
 
   def available_tags(query)
-    Person
-      .tags_on(:tags)
+    ActsAsTaggableOn::Tag
       .where('name LIKE ?', "%#{query}%")
       .where.not(name: excluded_tags)
       .order(:name)

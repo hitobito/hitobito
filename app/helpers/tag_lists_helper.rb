@@ -13,9 +13,9 @@ module TagListsHelper
   def format_tag_category(category)
     case category
     when :other
-      t('.category_other')
+      t('tags.categories.other')
     when :category_validation
-      t('.category_validation')
+      t('tags.categories.validation')
     else
       category
     end

@@ -1000,9 +1000,6 @@ de:
       destroy:
         success: <i>%{person}</i> wurde von <i>%{mailing_list}</i> abgemeldet.
     tags:
-      list:
-        category_other: Andere
-        category_validation: Validierung
       tag:
         category_validation:
           email_primary_invalid: Haupt-E-Mail ungültig
@@ -1277,6 +1274,13 @@ de:
         one: Eine Rolle erstellen
         other: '%{count} Rollen erstellen'
 
+  tags:
+    multiselect_actions:
+      merge_tags: Zusammenführen
+    categories:
+      other: Andere
+      validation: Validierung
+
   tag_lists:
     destroy:
       success:
@@ -1381,6 +1385,16 @@ de:
     append_to_household: "%{item} wurde zum Haushalt (%{object_changes}) hinzugefügt."
     household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
     remove_from_household: "%{item} wurde vom Haushalt (%{object_changes}) entfernt."
+
+  tags/merge:
+    success: Die Tags wurden erfolgreich zusammengeführt.
+
+  tags_merge:
+    tags: Tags
+    title: Sollen die gewählten Tags zusammengeführt werden?
+    name: Neuer Name
+    submit: Zusammenführen
+    category: Kategorie
 
   views:
     pagination:

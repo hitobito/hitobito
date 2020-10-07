@@ -24,7 +24,7 @@ describe TagListsController do
     end
 
     it 'filters out people whose tags we cannot manage from create request' do
-      allow_any_instance_of(Tag::List).to receive(:new) do |people, _|
+      allow_any_instance_of(TagList).to receive(:new) do |people, _|
         expect(people).to contain_exactly bottom_member
         tag_list_double
       end
@@ -32,7 +32,7 @@ describe TagListsController do
     end
 
     it 'filters out people whose tags we cannot manage from destroy request' do
-      allow_any_instance_of(Tag::List).to receive(:new) do |people, _|
+      allow_any_instance_of(TagList).to receive(:new) do |people, _|
         expect(people).to contain_exactly bottom_member
         tag_list_double
       end

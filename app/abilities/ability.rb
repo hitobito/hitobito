@@ -30,6 +30,7 @@ class Ability
                  RoleAbility,
                  ServiceTokenAbility,
                  SubscriptionAbility,
+                 TagAbility,
                  VariousAbility
 
   attr_reader :user, :user_context

@@ -1,0 +1,26 @@
+#tags-merge-form.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.bold.modal-title
+          %b= t('tags_merge.title')
+
+      = form_for(:tags_merge, url: merge_tags_path, remote: true, html: { class: "form-horizontal" }) do |f|
+        .modal-body
+          .row-fluid
+            .control-group
+              %label.control-label= t('tags_merge.tags')
+              .controls
+                %div{style: 'padding-top: 5px;'}= @tag_names
+          .row-fluid
+            .control-group
+              %label.control-label= t('tags_merge.name')
+              .controls
+                = f.text_field(:name, value: @name, placeholder: @name)
+            = f.hidden_field(:dst_tag_id, value: @dst_tag.id)
+            = f.hidden_field(:src_tag_ids, value: @src_tag_ids)
+        .modal-footer
+          = submit_button(f, t('tags_merge.submit'))
+          = link_to(ti('button.cancel'), '#',
+            class: 'link cancel',
+            onclick: "event.preventDefault(); $('#tags-merge-form').modal('hide')")

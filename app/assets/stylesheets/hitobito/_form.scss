@@ -517,6 +517,13 @@ input.switcher {
     overflow: visible;
   }
 }
+.chosen-drop {
+  height: 0;
+  overflow: hidden;
+}
+.shown .chosen-drop {
+  height: auto;
+}
 
 #roles {
   legend + .layer {

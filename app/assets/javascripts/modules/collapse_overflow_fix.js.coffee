@@ -1,9 +1,11 @@
 $(document).on('turbolinks:load', ->
-  $('.collapse').on 'shown', (event) ->
-    event.target.classList.add 'shown'
+  $('.collapse.in').addClass('shown')
+
+  $('.collapse').on 'shown', () ->
+    $(this).addClass('shown')
     return
 
-  $('.collapse').on 'hide', (event) ->
-    event.target.classList.remove 'shown'
+  $('.collapse').on 'hide', () ->
+    $(this).removeClass('shown')
     return
 )

@@ -513,6 +513,16 @@ input.switcher {
   fieldset:last-child {
     margin-bottom: 0;
   }
+  &.in.shown {
+    overflow: visible;
+  }
+}
+.chosen-drop {
+  height: 0;
+  overflow: hidden;
+}
+.shown .chosen-drop {
+  height: auto;
 }
 
 #roles {
@@ -559,4 +569,8 @@ input.switcher {
 
 .controls-row [class*="span"] + ul.typeahead + [class*="span"] {
   margin-left: 30px;
+}
+
+.chosen-container-multi .chosen-choices .search-field input {
+  margin: 4px 0 !important;
 }

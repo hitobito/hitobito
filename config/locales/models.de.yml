@@ -167,17 +167,17 @@ de:
         one: Küche
         other: Küche
       event/role/helper:
-        one: Helfer/-in
-        other: Helfer/-innen
+        one: Helfer*in
+        other: Helfer*innen
       event/role/participant:
-        one: Teilnehmer/-in
-        other: Teilnehmer/-innen
+        one: Teilnehmer*in
+        other: Teilnehmer*innen
       event/role/treasurer:
         one: Kassier
         other: Kassiere
       event/role/speaker:
-        one: Referent/-in
-        other: Referent/-innen
+        one: Referent*in
+        other: Referent*innen
       event/date:
         one: Datum
         other: Daten
@@ -807,7 +807,7 @@ de:
         events: Anlässe dieser und der darunterliegenden Ebenen
         invoices: Rechnungen dieser Ebene
         event_participations: Teilnehmende von Anlässen dieser Ebene
-        mailing_lists: Abonnent/-innen von Mailinglisten dieser Ebene
+        mailing_lists: Abonnent*innen von Mailinglisten dieser Ebene
 
   doorkeeper:
     scopes:

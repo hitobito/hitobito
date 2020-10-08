@@ -42,9 +42,13 @@ case $cmd in
       cp -v Gemfile.lock "../hitobito_%/"
     ;;
 
-  spec-rc)
+  configs)
     echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
       cp -v .rspec "../hitobito_%/"
+    echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+      cp -v .overcommit.yml "../hitobito_%/"
+    echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+      cp -vrf .git-hooks "../hitobito_%/"
     ;;
 
   test-prepare)
@@ -80,7 +84,7 @@ case $cmd in
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile spec-rc test-prepare grep help'
+  echo 'activate gemfile configs test-prepare grep help'
 }
 
 function __wagon_list() {
@@ -118,7 +122,7 @@ COMPLETION
 
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
-    echo "       $0 [test-prepare|gemfile|spec-rc]"
+    echo "       $0 [test-prepare|gemfile|configs]"
     echo "       $0 [grep] <TERM>"
     echo
     echo "Enable bash-completion with \"source <($0 completion)\""

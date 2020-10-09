@@ -44,7 +44,7 @@ class Setup
       # vim:ft=ruby
 
       group :development do
-        ENV.fetch('WAGONS').split.each do |wagon|
+        ENV.fetch('WAGONS', '').split.each do |wagon|
           Dir[File.expand_path("../hitobito_\#{wagon}/hitobito_\#{wagon}.gemspec", __dir__)].each do |spec|
             gem File.basename(spec, '.gemspec'), path: File.expand_path('..', spec)
           end
@@ -61,7 +61,7 @@ class Setup
       export RAILS_TEST_DB_NAME=hit_#{wagon}_test
       export RAILS_PRODUCTION_DB_NAME=hit_#{wagon}_production
       export RUBYOPT=-W0
-      export WAGONS="#{wagons.join(' ')}"
+      #{'export WAGONS="' + wagons.join(' ') + '"' if wagons.any?}
       log_status "hitobito now uses: #{wagons.any? ? wagons.join(', ') : 'just the core'}"
       source_up
     DIRENV

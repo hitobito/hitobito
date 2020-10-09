@@ -3,7 +3,7 @@
   = f.error_messages
   - if @group_selection.present? && @group_selection.size > 1
     = f.labeled(:group_id) do
-      .span4.shown.{style: 'margin-left: 0px'}
+      .span4.shown{style: 'margin-left: 0px'}
         = f.select(:group_id,
                    group_options_with_level,
                    { },

@@ -11,7 +11,7 @@
     = f.string_field(:zip_code, class: 'span2', maxlength: 10)
     = f.string_field(:town, class: 'span4')
   = f.labeled(:country) do
-    .span6{style: 'margin-left: 0px'}
+    .span6.shown{style: 'margin-left: 0px'}
       = country_select(f.object.class.model_name.param_key,
                        'country',
                        { priority_countries: Settings.countries.prioritized,

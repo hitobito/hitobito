@@ -8,7 +8,7 @@
 = f.labeled_input_field(:town, class: 'span4') if entry.show_attr?(:town)
 - if entry.show_attr?(:country)
   = f.labeled(:country) do
-    .span6{style: 'margin-left: 0px'}
+    .span6.shown{style: 'margin-left: 0px'}
       = country_select(f.object.class.model_name.param_key,
                        'country',
                        { priority_countries: Settings.countries.prioritized,

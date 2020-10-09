@@ -9,8 +9,9 @@
 
 %p= t('.prompt_tag_selection')
 
-= select_tag('filters[tag][names][]',
-              options,
-              class: 'chosen-select',
-              multiple: true,
-              data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )
+.shown
+  = select_tag('filters[tag][names][]',
+                options,
+                class: 'chosen-select',
+                multiple: true,
+                data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )

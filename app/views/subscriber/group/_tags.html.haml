@@ -5,12 +5,13 @@
 
 %p= t('.only_add_persons_with_tags')
 
-= f.collection_select(:tag_list,
-           @possible_tags,
-           :second,
-           :first,
-           { },
-           { class: 'chosen-select',
-             multiple: true,
-             data: { chosen_no_results: t('global.chosen_no_results'),
-                     placeholder: ' ' } })
+.shown
+  = f.collection_select(:tag_list,
+             @possible_tags,
+             :second,
+             :first,
+             { },
+             { class: 'chosen-select',
+               multiple: true,
+               data: { chosen_no_results: t('global.chosen_no_results'),
+                       placeholder: ' ' } })

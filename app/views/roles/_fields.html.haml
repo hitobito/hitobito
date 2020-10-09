@@ -1,6 +1,6 @@
 - if @group_selection.present? && @group_selection.size > 1
   = f.labeled(:group_id) do
-    .span6
+    .span6.shown
       = f.select(:group_id,
                  group_options_with_level,
                  { },

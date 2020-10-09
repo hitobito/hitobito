@@ -3,8 +3,9 @@
 - options = options_from_collection_for_select(@possible_tags, :second, :first, selected)
 
 %p= t('.prompt_tag_absence_selection')
-= select_tag('filters[tag_absence][names][]',
-              options,
-              class: 'chosen-select',
-              multiple: true,
-              data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_absence_placeholder') } )
+.shown
+  = select_tag('filters[tag_absence][names][]',
+                options,
+                class: 'chosen-select',
+                multiple: true,
+                data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_absence_placeholder') } )

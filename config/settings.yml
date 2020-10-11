@@ -23,7 +23,10 @@ application:
 
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
                  ENV['RAILS_HOST_NAME'].presence ||
-                 'localhost' %>
+                 'localhost'
+   hostname    = ENV['RAILS_HOST_NAME'].presence || 'localhost:3000'
+   protocol    = %w(true yes 1).include?(ENV['RAILS_HOST_SSL']) ? 'https' : 'http'
+%>
 currency:
   unit: CHF
 
@@ -182,7 +185,7 @@ worker_heartbeats:
     interval: 60
 
 oidc:
-  issuer: <%= ENV['RAILS_HOST_NAME'].presence || 'http://localhost:3000' %>
+  issuer: <%= protocol + "://" + hostname %>
   signing_key: <%= ENV['JWT_SIGNING_KEY'].to_s.lines %>
 
 table_displays: true

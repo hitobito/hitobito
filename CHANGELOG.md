@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Datenbank kann nun Emoji (also: alles aus Unicode) speichern
+
 ## Version 1.22
 
 *  Bugfix: Vergangene Anlässe werden nicht mehr auf der Person angezeigt (#847)

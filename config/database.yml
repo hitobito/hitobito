@@ -9,7 +9,7 @@ base: &generic
   timeout: 5000
 <% if ENV.fetch('RAILS_DB_ADAPTER', 'sqlite3') =~ /mysql/ %>
   encoding: 'utf8mb4'
-  collation: 'utf8mb4_bin'
+  collation: 'utf8mb4_general_ci' # case insensitive search is a feature
 <% else %>
   encoding: 'utf8'
 <% end %>

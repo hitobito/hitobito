@@ -225,7 +225,6 @@ describe MailRelay::Base do
       expect(mail_log.status).to eq('completed')
     end
 
-    # our mysql instances to not support storeing emojis
     it 'creates mail log entry for mail with emoji in subject' do
       emoji_subject = "⛴ Unvergessliche Erlebnisse"
       simple.subject = emoji_subject
@@ -239,7 +238,7 @@ describe MailRelay::Base do
       end.to change { MailLog.count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: 'e63f22f5d97d8030174951265555794f')
-      expect(mail_log.mail_subject).to eq("? Unvergessliche Erlebnisse")
+      expect(mail_log.mail_subject).to eq("⛴ Unvergessliche Erlebnisse")
       expect(mail_log.mail_from).to eq(simple.from.first)
       expect(mail_log.status).to eq('completed')
     end

@@ -52,7 +52,6 @@ it:
             choices:
               requires_more_than_one_choice: 'deve contenere almeno due risposte'
         event/participation:
-          emoji_suspected: 'Non utilizzare simboli speciali (in particolare Emoji)'
           attributes:
             person_id:
               taken: è già iscritto
@@ -62,7 +61,6 @@ it:
               not_match_configured: "non coincidono con quelle depositate sul server."
         person:
           name_missing: 'Inserire un nome'
-          emoji_suspected: 'Non utilizzare simboli speciali (in particolare Emoji)'
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             email:

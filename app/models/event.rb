@@ -305,15 +305,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
   end
 
-  # Overwrite to handle improper characters
-  def save(*args)
-    super
-  rescue ActiveRecord::StatementInvalid => e
-    raise e unless e.cause.message =~ /Incorrect string value/
-    errors.add(:base, :emoji_suspected)
-    false
-  end
-
   private
 
   def assert_type_is_allowed_for_groups

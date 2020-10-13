@@ -61,11 +61,6 @@ class MailLog < ActiveRecord::Base
     self.mail_hash = md5_hash(mail)
   end
 
-  def mail_subject=(value)
-    value = I18n.transliterate(value, '?') if value.present?
-    super(value)
-  end
-
   private
 
   def md5_hash(mail)

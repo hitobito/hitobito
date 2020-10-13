@@ -52,13 +52,11 @@ en:
             choices:
               requires_more_than_one_choice: 'needs at least two picks'
         event/participation:
-          emoji_suspected: 'Please don''t use any special characters (especially emojis).'
           attributes:
             person_id:
               taken: is already registered
         person:
           name_missing: 'Please enter a name'
-          emoji_suspected: 'Please don''t use any special characters (especially emojis).'
           attributes:
             email:
               taken: >

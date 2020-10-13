@@ -52,7 +52,6 @@ fr:
             choices:
               requires_more_than_one_choice: 'doit au moins contenir deux réponses'
         event/participation:
-          emoji_suspected: 'Prière de ne pas utiliser de caractères spéciaux (en particulier, des emoji)'
           attributes:
             person_id:
               taken: est déjà annoncé
@@ -62,7 +61,6 @@ fr:
               not_match_configured: "ne correspondent pas à celles du serveur."
         person:
           name_missing: 'Veuillez entrer votre nom'
-          emoji_suspected: 'Prière de ne pas utiliser de caractères spéciaux (en particulier, des emoji)'
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
           attributes:
             email:

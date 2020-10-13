@@ -56,7 +56,6 @@ de:
             choices:
               requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten'
         event/participation:
-          emoji_suspected: 'Bitte keine Sonderzeichen (insbesondere Emoji) verwenden'
           attributes:
             person_id:
               taken: ist bereits angemeldet
@@ -71,7 +70,6 @@ de:
               not_match_configured: "stimmen nicht mit denen am server hinterlegten überein."
         person:
           name_missing: 'Bitte geben Sie einen Namen ein'
-          emoji_suspected: 'Bitte keine Sonderzeichen (insbesondere Emoji) verwenden'
           readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
           attributes:
             email:

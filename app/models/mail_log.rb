@@ -1,5 +1,10 @@
 # encoding: utf-8
 
+#  Copyright (c) 2018-2020, Hitobito AG. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: mail_logs
@@ -14,12 +19,6 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #
-
-
-#  Copyright (c) 2018, Hitobito AG. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
 
 class MailLog < ActiveRecord::Base
 
@@ -52,6 +51,7 @@ class MailLog < ActiveRecord::Base
 
   def exists?
     return false unless mail_hash
+
     self.class.exists?(mail_hash: mail_hash)
   end
 

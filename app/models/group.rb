@@ -101,9 +101,10 @@ class Group < ActiveRecord::Base
 
   ### VALIDATIONS
 
-  validates_by_schema except: [:logo]
+  validates_by_schema except: [:logo, :address]
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
+  validates :address, length: { allow_nil: true, maximum: 1024 }
 
   ### CLASS METHODS
 

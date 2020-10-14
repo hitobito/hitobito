@@ -6,6 +6,7 @@ class ConvertDatabaseToUtf8mb4 < ActiveRecord::Migration[6.0]
   end
 
   def down
-    # could raise ActiveRecord::IrreversibleMigration, but there is no point
+    # could raise ActiveRecord::IrreversibleMigration, but there is no point.
+    # the migration is repeatable, but not reversible, therefore an empty down
   end
 end

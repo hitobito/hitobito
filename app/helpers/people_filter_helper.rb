@@ -25,8 +25,7 @@ module PeopleFilterHelper
     people_filter_attribute_form(nil, 0, disabled: :disabled)
   end
 
-  # rubocop:disable AbcSize, MethodLength
-  def people_filter_attribute_form(attr, count, html_options = {})
+  def people_filter_attribute_form(attr, count, html_options = {}) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     key, constraint, value = attr.to_h.symbolize_keys.slice(:key, :constraint, :value).values
     type = Person.filter_attrs[key.to_sym][:type] if key
     time = (Time.zone.now.to_f * 1000).to_i + count

@@ -28,8 +28,7 @@
                   - roles.each_with_index do |role, index|
                     %tr
                       %td
-                        %strong
-                          = role.to_s
+                        = role.decorate.for_aside
                       %td= link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
                       %td= link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)
 

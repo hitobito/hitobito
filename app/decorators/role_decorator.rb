@@ -7,4 +7,8 @@
 
 class RoleDecorator < ApplicationDecorator
   decorates :role
+
+  def for_aside
+    content_tag(:strong, model.to_s)
+  end
 end

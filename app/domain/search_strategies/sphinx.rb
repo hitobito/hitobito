@@ -33,6 +33,11 @@ module SearchStrategies
                    default_search_options.merge(sql: sql))
     end
 
+    def query_addresses
+      return Address.none.page(1) if @term.blank?
+      Address.search(Riddle::Query.escape(@term), default_search_options)
+    end
+
     protected
 
     def default_search_options

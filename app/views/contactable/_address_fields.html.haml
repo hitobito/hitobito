@@ -6,7 +6,9 @@
 .address-input-fields
   %div.alert.alert-warning.updates-household-address.hidden
     = t('.updates_household_address')
-  = f.labeled_text_area(:address, rows: 2)
+  = f.labeled_text_area(:address, rows: 2, data: { provide: 'entity',
+                                                   updater: 'AddressTypeahead.update',
+                                                   url: addresses_query_url })
   = f.labeled(:zip_code, t('contactable.fields.zip_town'), nil, class: 'controls-row') do
     = f.string_field(:zip_code, class: 'span2', maxlength: 10)
     = f.string_field(:town, class: 'span4')
@@ -15,7 +17,9 @@
       = country_select(f.object.class.model_name.param_key,
                        'country',
                        { priority_countries: Settings.countries.prioritized,
+                         selected: f.object.country || Settings.addresses.typeahead_supported_countries.first,
                          include_blank: true },
                        { class: 'chosen-select',
                          data: { placeholder: ' ',
-                                 chosen_no_results: t('global.chosen_no_results') } })
+                                 chosen_no_results: t('global.chosen_no_results'),
+                                 typeahead_supported_countries: Settings.addresses.typeahead_supported_countries } })

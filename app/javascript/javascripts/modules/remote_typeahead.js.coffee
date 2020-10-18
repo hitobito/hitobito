@@ -67,6 +67,8 @@ queryForTypeAhead = (query, process, url)->
   )
 
 delayedQueryForTypeahead = (query, process, delay = 450) ->
+  return if this.$element[0].dataset.typeaheadDisabled == 'true'
+
   if query.length < 3
     $('#quicksearch').removeClass('input-loading')
     return []

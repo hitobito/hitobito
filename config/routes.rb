@@ -30,6 +30,9 @@ Hitobito::Application.routes.draw do
       get code, to: 'errors#show', code: code
     end
 
+
+    get '/addresses/query' => 'addresses#query'
+
     get '/people/query' => 'person/query#index', as: :query_people
     get '/people/query_household' => 'person/query_household#index', as: :query_household
     get '/people/company_name' => 'person/company_name#index', as: :query_company_name

@@ -24,4 +24,11 @@ class Address < ActiveRecord::Base
 
   scope :list, -> { order(:street, "LENGTH(numbers) DESC") }
 
+  def self.search(zip_code, street)
+    where(zip_code: zip_code).
+      where('LOWER(street_short) = :street OR LOWER(street_short_old) = :street OR ' \
+            'LOWER(street_long) = :street OR LOWER(street_long_old) = :street',
+            street: street.to_s.downcase)
+  end
+
 end

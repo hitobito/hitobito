@@ -29,7 +29,7 @@ describe RoleListsController, js: true do
 
     click_link('Rollen entfernen')
     expect(page).to have_content 'Welche Rollen sollen gelöscht werden?'
-    click_button('Entfernen')
+    find('button', text: 'Entfernen').click
     expect(page).to have_content '2 Rollen wurden entfernt'
 
     is_expected.not_to have_content(role1.person.first_name)
@@ -45,7 +45,7 @@ describe RoleListsController, js: true do
     expect(page).to have_content 'Welche Rollen sollen gelöscht werden?'
 
     find(:css,"input[name='role[types][Group::TopGroup::Member]']").set(false)
-    click_button('Entfernen')
+    find('button', text: 'Entfernen').click
 
     expect(page).to have_content 'Eine Rolle wurde entfernt'
     is_expected.to     have_content(role1.person.first_name)
@@ -61,7 +61,7 @@ describe RoleListsController, js: true do
 
     select('Leader', from: 'role_type')
     expect(page).to have_button '2 Rollen erstellen'
-    click_button('2 Rollen erstellen')
+    find('button', text: '2 Rollen erstellen').click
 
     is_expected.to have_content('2 Rollen wurden erstellt')
     is_expected.to have_css("tr#person_#{role1.person.id} td p", text: 'Leader')
@@ -80,7 +80,7 @@ describe RoleListsController, js: true do
     click_button('Weiter')
 
     find(:css,"input[name='role[types][Group::TopGroup::Leader]']").set(false)
-    click_button('Rollen verschieben')
+    find('button', text: 'Rollen verschiebeni').click
 
     is_expected.to have_content('3 Rollen wurden verschoben')
     is_expected.to have_css("tr#person_#{role1.person.id} td p", text: 'Secretary')

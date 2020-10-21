@@ -8,7 +8,6 @@
 class CustomContentDecorator < ApplicationDecorator
   decorates :custom_content
 
-
   def available_placeholders
     if placeholders_required? || placeholders_optional?
       list = placeholders_list.collect do |ph|

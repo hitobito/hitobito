@@ -3,6 +3,7 @@
 ## unreleased
 
 *  Datenbank kann nun Emoji (also: alles aus Unicode) speichern
+*  Bug behoben, der das Übersetzen von Texten in neue Sprachen verhindert hat
 
 ## Version 1.22
 

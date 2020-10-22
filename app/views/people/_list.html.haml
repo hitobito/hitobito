@@ -38,7 +38,7 @@
         %br/
         = muted p.additional_name
     - t.col(t.sort_header(:roles, Role.model_name.human(count: 2))) do |p|
-      = p.roles_short(@person_filter.multiple_groups ? nil : @group)
+      = p.roles_short(@group, @person_filter.multiple_groups)
     - t.col(Person.human_attribute_name(:emails)) do |p|
       = p.all_emails(!index_full_ability?)
     - t.col(PhoneNumber.model_name.human(count: 2)) do |p|

@@ -73,12 +73,17 @@ class PersonDecorator < ApplicationDecorator
 
   # render a list of all roles
   # if a group is given, only render the roles of this group
-  def roles_short(group = nil)
-    functions_short(filtered_roles(group), group)
+  def roles_short(group, multiple_groups = false)
+    functions_short(filtered_roles(group, multiple_groups), multiple_groups)
   end
 
-  def filtered_roles(group = nil)
-    filtered_functions(roles.to_a, :group, group)
+  def filtered_roles(group, multiple_groups = false)
+    filtered_roles = filtered_functions(roles.to_a, :group, multiple_groups ? nil : group)
+    if multiple_groups
+      filtered_roles.select { |r| group.subgroup_ids.include? r.group_id }
+    else
+      filtered_roles
+    end
   end
 
   # returns roles grouped by their group
@@ -153,15 +158,15 @@ class PersonDecorator < ApplicationDecorator
     end
   end
 
-  def functions_short(functions, scope = nil)
+  def functions_short(functions, multiple_groups)
     h.safe_join(functions) do |f|
-      content_tag(:p, function_short(f, scope), id: h.dom_id(f))
+      content_tag(:p, function_short(f, multiple_groups), id: h.dom_id(f))
     end
   end
 
-  def function_short(function, scope = nil)
+  def function_short(function, multiple_groups)
     html = [function.to_s]
-    html << h.muted(h.safe_join(function.group.with_layer, ' / ')) if scope.nil?
+    html << h.muted(h.safe_join(function.group.with_layer, ' / ')) if multiple_groups
     html << popover_edit_link(function) if h.can?(:update, function)
     h.safe_join(html, ' ')
   end

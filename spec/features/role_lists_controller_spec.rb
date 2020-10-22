@@ -80,7 +80,7 @@ describe RoleListsController, js: true do
     click_button('Weiter')
 
     find(:css,"input[name='role[types][Group::TopGroup::Leader]']").set(false)
-    find('button', text: 'Rollen verschiebeni').click
+    find('button', text: 'Rollen verschieben').click
 
     is_expected.to have_content('3 Rollen wurden verschoben')
     is_expected.to have_css("tr#person_#{role1.person.id} td p", text: 'Secretary')

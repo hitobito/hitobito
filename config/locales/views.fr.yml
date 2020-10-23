@@ -527,7 +527,7 @@ fr:
       other: "%{count} entrées lues avec succès."
   import/person_importer:
     row_with_error: "Ligne %{row}: %{errors}"
-  import/person_doublette_finder:
+  import/person_duplicate_finder:
     duplicates: "%{count} emplacements trouvés lors de la recherche de doublons."
   invoices:
     filter:

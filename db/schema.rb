@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2020_12_14_202413) do
-
   create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false
@@ -198,7 +197,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.boolean "signature"
     t.boolean "signature_confirmation"
     t.string "signature_confirmation_text"
-    t.integer "creator_id"
+    t.integer "creatorid"
     t.integer "updater_id"
     t.boolean "applications_cancelable", default: false, null: false
     t.text "required_contact_attrs"
@@ -579,6 +578,16 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.index ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
   end
 
+  create_table "person_duplicates", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.integer "person_1_id", null: false
+    t.integer "person_2_id", null: false
+    t.boolean "acknowledged", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["person_1_id", "person_2_id"], name: "index_person_duplicates_on_person_1_id_and_person_2_id", unique: true
+    t.index ["person_2_id"], name: "fk_rails_f3df850de7"
+  end
+
   create_table "phone_numbers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false
@@ -724,4 +733,6 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
+  add_foreign_key "person_duplicates", "people", column: "person_1_id"
+  add_foreign_key "person_duplicates", "people", column: "person_2_id"
 end

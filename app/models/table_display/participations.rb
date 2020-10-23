@@ -17,7 +17,7 @@ class TableDisplay::Participations < TableDisplay
   end
 
   def people_columns
-    People.new.available.collect do |column|
+    TableDisplay::People.new.available.collect do |column|
       "person.#{column}"
     end
   end

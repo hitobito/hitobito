@@ -461,7 +461,7 @@ en:
       other: "%{count} records read succesfully."
   import/person_importer:
     row_with_error: "row %{row}: %{errors}"
-  import/person_doublette_finder:
+  import/person_duplicate_finder:
     duplicates: "%{count} results in duplicate detection."
   invoices:
     filter:

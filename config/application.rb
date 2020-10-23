@@ -85,6 +85,7 @@ module Hitobito
         SessionsCleanerJob.new.schedule
         WorkerHeartbeatCheckJob.new.schedule
         ReoccuringMailchimpSynchronizationJob.new.schedule
+        People::DuplicateLocatorJob.new.schedule
       end
     end
 

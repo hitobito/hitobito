@@ -623,7 +623,7 @@ de:
   import/person_importer:
     row_with_error: "Zeile %{row}: %{errors}"
 
-  import/person_doublette_finder:
+  import/person_duplicate_finder:
     duplicates: "%{count} Treffer in Duplikatserkennung."
 
   invoices:

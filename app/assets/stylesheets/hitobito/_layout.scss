@@ -149,7 +149,7 @@ body {
 .sheet.parent {
   padding-bottom: 1px;
   background: lighten($contentBackground, 3%);
-  @include single-box-shadow($shadowColor, 0, 2px, 8px);
+  box-shadow: 0 2px 8px $shadowColor;
   .sheet {
     margin: 0 3px 3px;
     @include responsive(mediaTablet){
@@ -163,7 +163,7 @@ body {
 }
 
 #content {
-  @include single-box-shadow($shadowColor, 0, 2px, 8px);
+  box-shadow: 0 2px 8px $shadowColor;
   background: white;
   padding: 10px 10px 20px;
   @include responsive(mediaTablet){

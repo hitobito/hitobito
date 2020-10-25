@@ -10,8 +10,12 @@ class ServiceTokenAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Group
 
   on(ServiceToken) do
-    permission(:layer_and_below_full).may(:manage).in_same_layer
-    permission(:layer_full).may(:manage).in_same_layer
+    permission(:layer_and_below_full).may(:manage).service_token_core_constraints
+    permission(:layer_full).may(:manage).service_token_core_constraints
+  end
+
+  def service_token_core_constraints
+    in_same_layer
   end
 
   private

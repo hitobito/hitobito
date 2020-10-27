@@ -1,10 +1,5 @@
 # Hitobito Changelog
 
-## unreleased
-
-*  Datenbank kann nun Emoji (also: alles aus Unicode) speichern
-*  Bug behoben, der das Übersetzen von Texten in neue Sprachen verhindert hat
-
 ## Version 1.22
 
 *  Bugfix: Vergangene Anlässe werden nicht mehr auf der Person angezeigt (#847)
@@ -16,6 +11,9 @@
 *  Berechtigungen werden im OAuth-Profil mitgeliefert
 *  Eigene OAuth-Autorisierungen können entfernt werden
 *  Generelle Validierung von E-Mail Adressen
+*  Datenbank kann nun Emoji (also: alles aus Unicode) speichern
+*  Bug behoben, der das Übersetzen von Texten in neue Sprachen verhindert hat
+
 
 ## Version 1.21
 

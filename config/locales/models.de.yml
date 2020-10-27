@@ -335,6 +335,10 @@ de:
         created_at: Erstellt
         updated_at: Geändert
 
+      person_duplicate:
+        birth_year: Jahrgang
+        roles_list: Rollen
+
       person/add_request:
         person: Person
         requester: Anfrage von

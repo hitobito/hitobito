@@ -516,6 +516,7 @@ de:
     entire_layer: 'Gesamte Ebene'
     entire_group: 'Gesamte Gruppe'
     new_filter: 'Neuer Filter...'
+    duplicates: 'Duplikate'
 
   filter_navigation/events:
     all: 'Alle'
@@ -879,6 +880,22 @@ de:
 
   paper_trail/version_decorator:
     by: 'von %{author}'
+
+  person_duplicates:
+    merge:
+      new:
+        title: Personen zusammenführen
+        select_person: In welchen der beiden Einträge sollen die beiden Personen zusammengeführt werden?
+        ireversable: Dieser Vorgang kann nicht rückgängig gemacht werden.
+      action: Zusammenführen
+      success: Die Personen Einträge wurden erfolgreich zusammengeführt.
+    acknowledge:
+      new:
+        title: Als nicht Duplikat markieren
+        confirm: Handelt es sich bei den beiden Einträgen für %{person} wirklich nicht um ein Duplikat?
+        ireversable: Dieser Vorgang kann nicht rückgängig gemacht werden.
+      action: Ignorieren
+      success: Der Duplikats-Eintrag wurde erfolgreich entfernt. 
 
   person:
     confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."

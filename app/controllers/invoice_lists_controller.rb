@@ -95,7 +95,7 @@ class InvoiceListsController < CrudController
   end
 
   def invoices
-    parent.invoices.where(id: params[:ids].to_s.split(','))
+    parent.invoices.where(id: list_param(:ids))
   end
 
   def flash_message(attrs)

@@ -18,6 +18,7 @@ describe Person::TagsController do
     let(:group) { groups(:top_layer) }
     let(:top_leader) { people(:top_leader) }
     let(:bottom_member) { people(:bottom_member) }
+    let!(:tag1) { Fabricate(:tag, name: 'morelim') }
 
     before do
       bottom_member.tag_list.add('loremipsum')
@@ -43,7 +44,7 @@ describe Person::TagsController do
 
     it 'returns matching and unassigned tags if :q param at least 3 chars long' do
       get :query, params: { group_id: group.id, person_id: bottom_member.id, q: 'ore' }
-      expect(JSON.parse(response.body)).to eq([{'label' => 'lorem'}, {'label' => 'loremipsum'}])
+      expect(JSON.parse(response.body)).to eq([{'label' => 'lorem'}, {'label' => 'loremipsum'}, {'label' => 'morelim'}])
     end
 
     it 'does not return category_validation tags' do
@@ -74,11 +75,31 @@ describe Person::TagsController do
       bottom_member.tag_list.add('lorem')
       bottom_member.save!
 
-      delete :destroy, params: {
-                         group_id: bottom_member.groups.first.id,
-                         person_id: bottom_member.id,
-                         name: 'lorem'
-                       }
+      expect do
+        delete :destroy, params: {
+          group_id: bottom_member.groups.first.id,
+          person_id: bottom_member.id,
+          name: 'lorem'
+        }
+      end.to change(ActsAsTaggableOn::Tag, :count).by(-1)
+
+      expect(bottom_member.tags.count).to eq(0)
+      is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
+    end
+
+    it 'removes assignment only if tag is still assigned to other person' do
+      top_leader.tag_list.add('lorem')
+      top_leader.save!
+      bottom_member.tag_list.add('lorem')
+      bottom_member.save!
+
+      expect do
+        delete :destroy, params: {
+          group_id: bottom_member.groups.first.id,
+          person_id: bottom_member.id,
+          name: 'lorem'
+        }
+      end.to change(ActsAsTaggableOn::Tag, :count).by(0)
 
       expect(bottom_member.tags.count).to eq(0)
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)

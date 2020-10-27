@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Tag Verwaltung unter Einstellungen
+
 ## Version 1.22
 
 *  Bugfix: Vergangene Anlässe werden nicht mehr auf der Person angezeigt (#847)
@@ -13,7 +17,7 @@
 *  Generelle Validierung von E-Mail Adressen
 *  Datenbank kann nun Emoji (also: alles aus Unicode) speichern
 *  Bug behoben, der das Übersetzen von Texten in neue Sprachen verhindert hat
-
+*  Personen filtern die einen spezifischen Tag nicht besitzen
 
 ## Version 1.21
 

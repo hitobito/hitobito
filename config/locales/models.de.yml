@@ -257,6 +257,9 @@ de:
       subscription:
         one: Abonnent
         other: Abonnenten
+      tag:
+        one: Tag
+        other: Tags
 
     attributes:
       acts_as_taggable_on/tag:
@@ -806,6 +809,8 @@ de:
         invoices: Rechnungen dieser Ebene
         event_participations: Teilnehmende von Anlässen dieser Ebene
         mailing_lists: Abonnent/-innen von Mailinglisten dieser Ebene
+      tag:
+        taggings_count: Anzahl
 
   doorkeeper:
     scopes:

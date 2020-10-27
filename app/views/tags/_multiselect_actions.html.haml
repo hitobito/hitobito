@@ -1,0 +1,10 @@
+.hidden
+  .multiselect
+    .count
+    = ti('selected')
+    .actions
+      = action_button(translate('.merge_tags'),
+        merge_tags_path,
+        :tags,
+        data: { checkable: true, method: :get },
+        remote: true)

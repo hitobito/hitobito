@@ -48,7 +48,7 @@ class TagListsController < ListController
   end
 
   def people_ids
-    params[:ids].to_s.split(',')
+    list_param(:ids)
   end
 
   def tags
@@ -57,10 +57,10 @@ class TagListsController < ListController
 
   def tag_names
     return params[:tags].each(&:strip) if params[:tags].is_a?(Array)
-    params[:tags].to_s.split(',').each(&:strip)
+    list_param(:tags)
   end
 
   def tag_list
-    @tag_list ||= Tag::List.new(manageable_people, tags)
+    @tag_list ||= TagList.new(manageable_people, tags)
   end
 end

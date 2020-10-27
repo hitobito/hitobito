@@ -5,7 +5,7 @@
 
 require 'spec_helper'
 
-describe Tag::List do
+describe TagList do
 
   let(:leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
@@ -14,7 +14,7 @@ describe Tag::List do
 
   context 'add tags' do
     it 'creates only one tag for one person' do
-      tag_list = Tag::List.new([leader], [tag1])
+      tag_list = TagList.new([leader], [tag1])
       expect do
         expect(tag_list.add).to be 1
       end.to change { leader.tags.count }.by(1)
@@ -23,14 +23,14 @@ describe Tag::List do
     it 'does nothing if the tag already exists' do
       leader.tag_list.add(tag1)
       leader.save!
-      tag_list = Tag::List.new([leader], [tag1])
+      tag_list = TagList.new([leader], [tag1])
       expect do
         expect(tag_list.add).to be 0
       end.not_to(change { leader.reload.tags.count })
     end
 
     it 'may create the same tag on multiple people' do
-      tag_list = Tag::List.new([leader, bottom_member], [tag1])
+      tag_list = TagList.new([leader, bottom_member], [tag1])
       expect do
         expect(tag_list.add).to be 2
       end.to change { leader.tags.count }.by(1).and change { bottom_member.tags.count }.by(1)
@@ -40,7 +40,7 @@ describe Tag::List do
     end
 
     it 'may create multiple tags for one person' do
-      tag_list = Tag::List.new([leader], [tag1, tag2])
+      tag_list = TagList.new([leader], [tag1, tag2])
       expect do
         expect(tag_list.add).to be 2
       end.to change { leader.tags.count }.by(2)
@@ -51,7 +51,7 @@ describe Tag::List do
     it 'may create multiple tags on multiple people' do
       bottom_member.tag_list.add(tag2)
       bottom_member.save!
-      tag_list = Tag::List.new([leader, bottom_member], [tag1, tag2])
+      tag_list = TagList.new([leader, bottom_member], [tag1, tag2])
       expect do
         expect(tag_list.add).to be 3
       end.to change { leader.tags.count }.by(2).and change { bottom_member.tags.count }.by(1)
@@ -65,14 +65,14 @@ describe Tag::List do
     it 'deletes only one tag from one person' do
       leader.tag_list.add(tag1)
       leader.save!
-      tag_list = Tag::List.new([leader], [tag1])
+      tag_list = TagList.new([leader], [tag1])
       expect do
         expect(tag_list.remove).to be 1
       end.to change { leader.tags.count }.by(-1)
     end
 
     it 'does nothing if the tag does not exist on the person' do
-      tag_list = Tag::List.new([leader], [tag1])
+      tag_list = TagList.new([leader], [tag1])
       expect do
         expect(tag_list.remove).to be 0
       end.not_to(change { leader.reload.tags.count })
@@ -83,7 +83,7 @@ describe Tag::List do
       leader.save!
       bottom_member.tag_list.add(tag1)
       bottom_member.save!
-      tag_list = Tag::List.new([leader, bottom_member], [tag1])
+      tag_list = TagList.new([leader, bottom_member], [tag1])
       expect do
         expect(tag_list.remove).to be 2
       end.to change { leader.tags.count }.by(-1).and change { bottom_member.tags.count }.by(-1)
@@ -95,7 +95,7 @@ describe Tag::List do
     it 'may delete multiple tags from one person' do
       leader.tag_list.add(tag1, tag2)
       leader.save!
-      tag_list = Tag::List.new([leader], [tag1, tag2])
+      tag_list = TagList.new([leader], [tag1, tag2])
       expect do
         expect(tag_list.remove).to be 2
       end.to change { leader.tags.count }.by(-2)
@@ -108,7 +108,7 @@ describe Tag::List do
       leader.save!
       bottom_member.tag_list.add(tag1)
       bottom_member.save!
-      tag_list = Tag::List.new([leader, bottom_member], [tag1, tag2])
+      tag_list = TagList.new([leader, bottom_member], [tag1, tag2])
       expect do
         expect(tag_list.remove).to be 3
       end.to change { leader.tags.count }.by(-2).and change { bottom_member.tags.count }.by(-1)

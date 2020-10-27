@@ -13,7 +13,7 @@ module PersonTags
       end
 
       def list
-        [email_primary_invalid, email_additional_invalid]
+        [email_primary_invalid, email_additional_invalid].compact
       end
 
       def email_primary_invalid(create: false)

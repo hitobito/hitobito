@@ -42,7 +42,8 @@ module NavigationHelper
                      oauth/applications
                      help_texts
                      oauth/active_authorizations
-                     event_feed),
+                     event_feed
+                     tags),
       if: ->(_) { can?(:index, LabelFormat) } }
   ]
 

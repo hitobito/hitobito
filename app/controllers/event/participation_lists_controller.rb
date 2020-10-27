@@ -69,6 +69,6 @@ class Event::ParticipationListsController < SimpleCrudController
   end
 
   def people_ids
-    params[:ids].to_s.split(',')
+    list_param(:ids)
   end
 end

@@ -24,7 +24,8 @@ class MailingListSerializer < ApplicationSerializer
     entity :group, item.group, GroupLinkSerializer
     entities :subscribers,
              item.people.includes(subscribers_includes),
-             MailingListSubscriberSerializer
+             MailingListSubscriberSerializer,
+             mailing_list: item
   end
 
   private

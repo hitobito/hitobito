@@ -9,5 +9,6 @@ class MailingListSubscriberSerializer < ContactSerializer
   schema do
     map_properties :primary_group_id
     property :primary_group_name, item.primary_group.name
+    property :list_emails, Person.mailing_emails_for(item, context[:mailing_list].labels)
   end
 end

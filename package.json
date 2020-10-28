@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
+    "@rails/actiontext": "^6.0.3-3",
     "@rails/webpacker": "5.2.1",
     "bootstrap-sass": "~2.3.2",
     "bootstrap3-wysihtml5-bower": "~0.3.3",
@@ -24,6 +25,7 @@
     "moment": "~2.9.0",
     "rails-erb-loader": "^5.5.2",
     "resolve-url-loader": "^3.1.1",
+    "trix": "^1.2.0",
     "turbolinks": "~5.0.1"
   },
   "devDependencies": {

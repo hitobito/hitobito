@@ -237,7 +237,7 @@ Hitobito::Application.routes.draw do
     resources :event_kinds, module: 'event', controller: 'kinds'
 
     resources :qualification_kinds
-    resources :tags do
+    resources :tags, except: :show do
       collection do
         get 'merge' => 'tags/merge#new', as: 'new_merge'
         post 'merge' => 'tags/merge#create', as: 'merge'

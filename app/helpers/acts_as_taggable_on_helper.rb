@@ -11,11 +11,11 @@ module ActsAsTaggableOnHelper
     edit_tag_path(entry)
   end
 
-  def acts_as_taggable_on_tag_path(entry, options = nil)
+  def acts_as_taggable_on_tag_path(entry, options = {})
     tag_path(entry, options)
   end
 
-  def acts_as_taggable_on_tags_path(options = nil)
+  def acts_as_taggable_on_tags_path(options = {})
     tags_path(options)
   end
 

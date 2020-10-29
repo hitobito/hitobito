@@ -10,6 +10,7 @@ de:
   global:
     "yes": "ja"
     "no": "nein"
+    ok: OK
     unknown: unbekannt
     nobody: niemand
     all: Alle

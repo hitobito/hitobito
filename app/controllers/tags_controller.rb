@@ -8,10 +8,6 @@ class TagsController < SimpleCrudController
     ActsAsTaggableOn::Tag
   end
 
-  def self.model_identifier
-    'tag'
-  end
-
   def index_path
     tags_path(returning: true)
   end

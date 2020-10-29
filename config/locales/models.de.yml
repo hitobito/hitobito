@@ -809,8 +809,11 @@ de:
         invoices: Rechnungen dieser Ebene
         event_participations: Teilnehmende von Anlässen dieser Ebene
         mailing_lists: Abonnent/-innen von Mailinglisten dieser Ebene
-      tag:
+
+      acts_as_taggable_on/tag:
         taggings_count: Anzahl
+        category: Kategorie
+        name: Name
 
   doorkeeper:
     scopes:

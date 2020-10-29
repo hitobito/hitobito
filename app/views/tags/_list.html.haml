@@ -2,7 +2,7 @@
   - t.col('', width: '50px') do |i|
     - if can?(:edit, i)
       - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
-  - t.col(t('tags_merge.category')) do |i|
+  - t.col(t('activerecord.attributes.acts_as_taggable_on/tag.category')) do |i|
     = format_tag_category(i.category)
   - t.attrs(:name, :taggings_count)
   - add_table_actions(t)

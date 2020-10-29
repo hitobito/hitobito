@@ -7,7 +7,7 @@ hitobito is an open source web application to manage organisation and communitie
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/hitobito/hitobito/graphs/commit-activity) 
 [![Documentation Status](https://readthedocs.org/projects/hitobito/badge/?version=latest)](https://hitobito.readthedocs.io/?badge=latest)
-[![GitHub](https://img.shields.io/github/license/hitobito/hitobito)](https://github.com/olibrian/hitobito/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/hitobito/hitobito)](https://github.com/hitobito/hitobito/blob/master/LICENSE)
 [![Open Source Helpers](https://www.codetriage.com/hitobito/hitobito/badges/users.svg)](https://www.codetriage.com/hitobito/hitobito)
 [![Build Status](https://travis-ci.org/hitobito/hitobito.svg?branch=master)](https://travis-ci.org/hitobito/hitobito)
 

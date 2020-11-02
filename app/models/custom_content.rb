@@ -59,7 +59,7 @@ class CustomContent < ActiveRecord::Base
   end
 
   def body_with_values(placeholders = {})
-    replace_placeholders(body.dup, placeholders)
+    replace_placeholders(body.to_s, placeholders)
   end
 
   private

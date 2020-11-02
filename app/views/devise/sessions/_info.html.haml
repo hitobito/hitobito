@@ -1,3 +1,3 @@
-- info = CustomContent.get('views/devise/sessions/info').body.to_s
-- if info.gsub('&nbsp;', '').present?
-  .alert.alert-info= info.html_safe
+- info = CustomContent.get('views/devise/sessions/info').body
+- if info.to_plain_text.present?
+  .alert.alert-info= info.to_s.html_safe

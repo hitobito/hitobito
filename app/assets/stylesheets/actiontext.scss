@@ -9,8 +9,6 @@
 // <action-text-attachment> element we wrap around attachments. Otherwise,
 // images in galleries will be squished by the max-width: 33%; rule.
 .trix-content {
-  margin-bottom: 0.75em;
-
   .attachment-gallery {
     > action-text-attachment,
     > .attachment {
@@ -35,6 +33,10 @@
       max-width: 100% !important;
     }
   }
+}
+
+trix-editor + .help-block {
+  margin-top: 0.25em !important;
 }
 
 // Remove the attachments button from the toolbar

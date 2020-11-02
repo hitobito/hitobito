@@ -7,6 +7,6 @@
 
 module CustomContentsHelper
   def format_custom_content_body(content)
-    strip_tags(content.body).to_s.truncate(100)
+    content.body.to_plain_text.truncate(100)
   end
 end

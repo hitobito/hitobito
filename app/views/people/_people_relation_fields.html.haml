@@ -1,5 +1,5 @@
 - if f.object.new_record?
-  = f.person_field(:tail, class: 'span4', placeholder: t('.placeholder_value'))
+  = f.person_field(:tail, class: 'span4')
 - else
   = f.object.tail
 = f.hidden_field(:kind, value: PeopleRelation.possible_kinds.first)

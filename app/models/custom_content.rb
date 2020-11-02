@@ -17,7 +17,8 @@
 class CustomContent < ActiveRecord::Base
 
   include Globalized
-  translates :label, :subject, :body
+  translates :label, :subject
+  translates_rich_text :body
 
   # specify validations for translated attributes explicitly
   validates :label, presence: true

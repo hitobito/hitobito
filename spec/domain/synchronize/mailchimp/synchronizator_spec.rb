@@ -25,7 +25,7 @@ describe Synchronize::Mailchimp::Synchronizator do
     end
   end
 
-  def member(person, tags = [])
+  def member(person, tags = [], status: 'subscribed')
     sync.client.subscriber_body(person).merge(tags: tags)
   end
 
@@ -193,8 +193,13 @@ describe Synchronize::Mailchimp::Synchronizator do
       expect(subject).to be_empty
     end
 
-    it 'includes email email remotely email does not exist locally' do
+    it 'includes email if remote email does not exist locally' do
       expect(sync.client).to receive(:fetch_members).and_return([member(user)])
+      expect(subject).to eq([user.email])
+    end
+
+    it 'is empty if remote email does not exist locally but is cleaned' do
+      expect(sync.client).to receive(:fetch_members).and_return([member(user), status: 'cleaned'])
       expect(subject).to eq([user.email])
     end
 

@@ -42,7 +42,8 @@ module Synchronize
       end
 
       def obsolete_emails
-        members_by_email.keys - subscribers.collect(&:email)
+        emails = members.reject { |m| m[:status]  == 'cleaned'  }.collect { |m| m[:email_address] }
+        emails - subscribers.collect(&:email)
       end
 
       def missing_segments

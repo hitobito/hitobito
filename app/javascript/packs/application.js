@@ -77,3 +77,7 @@ const imagePath = (name) => images(name, true);
  */
 require("trix")
 require("@rails/actiontext")
+// prevent attachments
+document.addEventListener("trix-file-accept", function(event) {
+  event.preventDefault();
+});

@@ -66,6 +66,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     super(attr, html_options)
   end
 
+  # Render an action text input field.
+  def rich_text_area(attr, html_options = {})
+    html_options[:rows] ||= 5
+    super(attr, html_options)
+  end
+
   # Render a number field.
   def number_field(attr, html_options = {})
     html_options[:size] ||= 10

@@ -36,3 +36,6 @@
     }
   }
 }
+
+// Remove the attachments button from the toolbar
+.trix-button-group--file-tools { display: none !important; }

@@ -33,17 +33,7 @@ module Globalized
         end
       end
 
-      self.const_get(:Translation).include(Module.new do
-        extend ActiveSupport::Concern
-
-        included do
-          columns.each do |col|
-            has_rich_text col.to_sym
-          end
-
-          default_scope { includes(*columns.map { |col| "rich_text_#{col}".to_sym }) }
-        end
-      end)
+      self.const_get(:Translation).include globalized_translation(columns)
     end
 
     def list
@@ -56,6 +46,20 @@ module Globalized
 
     def translated_label_column
       "#{reflect_on_association(:translations).table_name}.#{translated_attribute_names.first}"
+    end
+
+    def globalized_translation(columns)
+      Module.new do
+        extend ActiveSupport::Concern
+
+        included do
+          columns.each do |col|
+            has_rich_text col.to_sym
+          end
+
+          default_scope { includes(*columns.map { |col| "rich_text_#{col}".to_sym }) }
+        end
+      end
     end
   end
 

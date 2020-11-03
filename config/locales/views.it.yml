@@ -855,9 +855,6 @@ it:
         success: <i>%{person}</i> è stato iscritto/a a <i>%{mailing_list}</i>.
       destroy:
         success: <i>%{person}</i> è stata levata da <i>%{mailing_list}</i>.
-    tags:
-      list:
-        category_other: Altro
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
     duplicate_keys:

@@ -244,8 +244,6 @@ it:
         one: abbonato
         other: Abbonati
     attributes:
-      acts_as_taggable_on/tag:
-        name: Nome
       cantons:
         ag: Argovia
         ai: Appenzello Interno
@@ -732,6 +730,8 @@ it:
         invoices: Fatture di questo livello
         event_participations: Partecipanti ad eventi di questo livello
         mailing_lists: Abbonati a liste mail di questo livello
+      acts_as_taggable_on/tag:
+        name: Nome
   doorkeeper:
     scopes:
       email: Leggono il tuo indirizzo e-mail

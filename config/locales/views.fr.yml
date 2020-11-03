@@ -853,9 +853,6 @@ fr:
         success: <i>%{person}</i>a été inscrit-e à <i>%{mailing_list}</i>.
       destroy:
         success: <i>%{person}</i> a été désinscrit-e de <i>%{mailing_list}</i>.
-    tags:
-      list:
-        category_other: Autre
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:

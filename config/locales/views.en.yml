@@ -619,9 +619,6 @@ en:
         request_link: Answer request
       ask_responsibles:
         request_link: Answer request
-    tags:
-      list:
-        category_other: Other
   person/csv_imports:
     invalid_file: Please select a valid CSV file.
     duplicate_keys:

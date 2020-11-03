@@ -248,8 +248,6 @@ fr:
         one: abonné
         other: Abonnés
     attributes:
-      acts_as_taggable_on/tag:
-        name: Nom
       cantons:
         ag: Argovie
         ai: Appenzell Rhodes Intérieures
@@ -736,6 +734,8 @@ fr:
         invoices: Factures de ce niveau
         event_participations: Participants d'évènements de ce niveau
         mailing_lists: Abonné-e-s des mailing listes de ce niveau
+      acts_as_taggable_on/tag:
+        name: Nom
   doorkeeper:
     scopes:
       email: Lecture de ton adresse e-mail

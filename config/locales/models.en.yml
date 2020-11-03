@@ -189,8 +189,6 @@ en:
         one: Subscriber
         other: Subscribers
     attributes:
-      acts_as_taggable_on/tag:
-        name: name
       cantons:
         ag: Aargau
         ai: Appenzell Innerrhoden
@@ -507,6 +505,8 @@ en:
         pp_post: PP-Line
       invoice:
         state: State
+      acts_as_taggable_on/tag:
+        name: name
   errors:
     messages:
       invalid_date: "is not a valid date"

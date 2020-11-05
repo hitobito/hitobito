@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -7,9 +7,9 @@
 
 class Licenser
   FORMATS = {
-    rb:   '#  ',
+    rb: '#  ',
     rake: '#  ',
-    yml:  '#  ',
+    yml: '#  ',
     haml: '-#  ',
     coffee: '#  ',
     scss: '//  '
@@ -28,9 +28,12 @@ class Licenser
     config/initializers/wrap_parameters.rb
   ).freeze
 
-  ENCODING_EXTENSIONS = [:rb, :rake].freeze
-  ENCODING_STRING     = '# encoding: utf-8'.freeze
-  ENCODING_PATTERN    = /#\s*encoding: utf-8/i
+  SHEBANG_COMMENT_EXTENSIONS = [:rb, :rake].freeze
+  SHEBANG_COMMENT_STRING     = '# frozen_string_literal: true'
+  SHEBANG_COMMENT_PATTERN    = Regexp.union(
+    /#\s*encoding: utf-8\n?/i,
+    /#\s*frozen_string_literal: true\n?/i
+  )
 
 
   def initialize(project_name, copyright_holder, copyright_source)
@@ -48,6 +51,7 @@ class Licenser
       #{@copyright_source}.
     COPYRIGHT
   end
+  # rubocop:enable Rails/TimeZone
 
   def insert
     each_file do |content, format|
@@ -77,8 +81,8 @@ class Licenser
   private
 
   def insert_preamble(content, format)
-    if format.file_with_encoding? && content.strip =~ /\A#{ENCODING_PATTERN}/i
-      content.gsub!(/\A#{ENCODING_PATTERN}\s*/mi, '')
+    if format.file_with_shebang_comment? && content.strip =~ /\A#{SHEBANG_COMMENT_PATTERN}/i
+      content.gsub!(/#{SHEBANG_COMMENT_PATTERN}\s*/mi, '')
     end
     format.preamble + content
   end
@@ -90,8 +94,8 @@ class Licenser
     end
     content.gsub!(/\A\s*\n/, '')
     content.gsub!(/\A\s*\n/, '')
-    if format.file_with_encoding?
-      content = ENCODING_STRING + "\n\n" + content
+    if format.file_with_shebang_comment?
+      content = SHEBANG_COMMENT_STRING + "\n\n" + content
     end
     content
   end
@@ -102,6 +106,7 @@ class Licenser
 
       Dir.glob("**/*.#{extension}").each do |file|
         next if EXCLUDES.include?(file)
+
         content = yield File.read(file), format
         next unless content
 
@@ -119,14 +124,14 @@ class Licenser
       @prefix = prefix
       @preamble = preamble_text.each_line.collect { |l| prefix + l }.join + "\n\n"
       @copyright_pattern = /#{prefix.strip}\s+Copyright/
-      if file_with_encoding?
-        @preamble = "#{ENCODING_STRING}\n\n" + @preamble
-        @copyright_pattern = /#{ENCODING_PATTERN}\n\n+#{@copyright_pattern}/
+      if file_with_shebang_comment?
+        @preamble = "#{SHEBANG_COMMENT_STRING}\n\n" + @preamble
+        @copyright_pattern = /#{SHEBANG_COMMENT_PATTERN}\n+#{@copyright_pattern}/
       end
     end
 
-    def file_with_encoding?
-      ENCODING_EXTENSIONS.include?(extension)
+    def file_with_shebang_comment?
+      SHEBANG_COMMENT_EXTENSIONS.include?(extension)
     end
 
     def has_preamble?(content) # rubocop:disable Naming/PredicateName
@@ -142,7 +147,7 @@ end
 
 
 namespace :license do
-  task :config do
+  task :config do # rubocop:disable Rails/RakeEnvironment
     @licenser = Licenser.new('hitobito',
                              'Jungwacht Blauring Schweiz',
                              'https://github.com/hitobito/hitobito')

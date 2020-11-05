@@ -31,10 +31,10 @@ nicht mehr passen. Das `Gemfile.lock` eines Wagons wird NIE ins Git eingecheckt.
 ### Every day development - using ./bin/wagon
 
 To facilitate working with various wagon (and therefore db schemas) it is
-recommended to use the script `./bin/wagon`. 
+recommended to use the script `./bin/wagon`.
 
 This script builds ontop of [direnv](https://direnv.net/). It controls various
-environment variables to that wagons can be activated with a single statement. 
+environment variables to that wagons can be activated with a single statement.
 
 ### Instructions: create wagon
 
@@ -47,14 +47,15 @@ Afterwards you need to make the following adjustments:
 
 * Move files from `hitobito/vendor/wagons/[name]` to `hitobito_[name]`
 * Initiate a new Git Repo for the wagon
-* Copy `Gemfile.lock` from the core into the wagon.
-* Copy `.tool-versions` from the core into the wagon.
+* Copy `.tool-versions` from the core into the wagon. (or use `wagon activate [name]`)
+* Copy `Gemfile.lock` from the core into the wagon. (or use `wagon gemfile`)
+* Optional: Copy local config from the core into the wagon. (or use `wagon config`)
 * Adjust Organisation in the license generator (`lib/tasks/license.rake`)  and add the licence everywhere with `rake app:license:insert`.
 * Add the customer organization in `COPYING`.
 * Put you name into `AUTHORS`
 * Edit authors, email, summary und description `hitobito_[name].gemspec`.
 
-If the wagon is the main wagon for a new organization strutture, you can additionaly  do these steps:
+If the wagon is the main wagon for a new organization structure, you can additionally do these steps:
 
 * Add Developer and Client Accounts in the seed files: `db/seed/development/1_people.rb` under `devs`.
 * Configure e-mail-adress for the root account in `config/settings.yml`.
@@ -69,18 +70,18 @@ If the wagon is not for a specific organisation and does not define a group stru
 
 In order to have useful Testdata and to use tarantula, adjust the fixtures in the wagon according to the generated organizational structure:
 
-* Fixtures for people, groups, roles, events, ... (`spec/fixtures`)
+* Fixtures for people, groups, roles, events, ... (`spec/fixtures`) (Groups can be exported with `rake fixtures:groups`)
 * Adjusting the tarantula tests in the wagon (`test/tarantula/tarantula_test.rb`)
 
 ### Anleitung: Gruppenstruktur definieren
 
-Nachdem für eine Organisation ein neuer Wagon erstellt worden ist, muss oft auch eine 
-Gruppenstruktur definiert werden. Wie die entsprechenden Modelle aufgebaut sind, ist in der 
+Nachdem für eine Organisation ein neuer Wagon erstellt worden ist, muss oft auch eine
+Gruppenstruktur definiert werden. Wie die entsprechenden Modelle aufgebaut sind, ist in der
 Architekturdokumentation beschrieben. Hier die einzelnen Schritte, welche für das Aufsetzen der
 Entwicklungsumgebung noch vorgenommen werden müssen:
 
-* Am Anfang steht die alleroberste Gruppe. Die Klasse in `app/models/group/root.rb` entsprechend 
-  umbenennen (z.B. nach "Dachverband") und erste Rollen definieren. 
+* Am Anfang steht die alleroberste Gruppe. Die Klasse in `app/models/group/root.rb` entsprechend
+  umbenennen (z.B. nach "Dachverband") und erste Rollen definieren.
 * `app/models/[name]/group.rb#root_types` entsprechend anpassen.
 * In `config/locales/models.[name].de.yml` Übersetzungen für Gruppe und Rollen hinzufügen.
 * In `db/seed/development/1_people.rb` die Admin Rolle für die Entwickler anpassen.
@@ -109,7 +110,7 @@ Die Implementation im Core sieht dabei folgendermassen aus: (`hitobito/app/model
      end
 
 Im PBS Wagon gibt es ein entsprechendes Modul mit dem benutzerspezifischen Code für die Person Model Klasse: (`hitobito_pbs/app/models/pbs/person.rb`)
- 
+
      module Pbs::Person
        ...
        extend ActiveSupport::Concern
@@ -140,7 +141,7 @@ Damit der Code in diesem Module entsprechend für das Person Model übernommen w
          ...
 
 
-### Anleitung: Attribute hinzufügen 
+### Anleitung: Attribute hinzufügen
 
 The following documentation describes how new attributes can be added to a model in an own wagon. For reasons of simplification, this documentation follows an example where the generic wagon is going to be adapted and the `Person` model gets two new attributes called `title` and `salutation`.
 
@@ -179,7 +180,7 @@ end
 ```
 
 If attributes are not in this list but need to be, you might see an `ActiveModel::MissingAttributeError`-Exception in the rails-server log.
-         
+
 #### Permit attributes for editing
 
 The new attributes must be included in the application logic. To do so, a new controller has to be created in `app/controllers/<wagon_namespace>/people_controller.rb` which permits the two attributes to be updated:
@@ -226,11 +227,11 @@ If wished, the attributes can be included in the CSV-File that is generated when
           module People
             module PeopleAddress
               extend ActiveSupport::Concern
-              
+
               included do
                 alias_method_chain :person_attributes, :title
               end
-              
+
               def person_attributes_with_title
                 person_attributes_without_title + [:title, :salutation]
               end
@@ -278,9 +279,9 @@ Arbitrary tests cases can be defined in the `spec/` directory of the wagon. As a
 
     require 'spec_helper'
     require 'csv'
-    
+
     describe Export::Tabular::People::PeopleAddress do
-    
+
       let(:person) { people(:admin) }
       let(:simple_headers) do
         %w(Vorname Nachname Übername Firmenname Firma Haupt-E-Mail Adresse PLZ Ort Land
@@ -289,19 +290,19 @@ Arbitrary tests cases can be defined in the `spec/` directory of the wagon. As a
       let(:list) { Person.where(id: person) }
       let(:data) { Export::Tabular::People::PeopleAddress.csv(list) }
       let(:csv)  { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
-    
+
       subject { csv }
-    
+
       before do
         person.update!(title: 'Dr.', salutation: 'Herr', town: 'Bern')
       end
-      
+
       context 'export' do
         its(:headers) { should == simple_headers }
-    
+
         context 'first row' do
           subject { csv[0] }
-          
+
           its(['Vorname']) { should eq person.first_name }
           its(['Nachname']) { should eq person.last_name }
           its(['Haupt-E-Mail']) { should eq person.email }
@@ -312,16 +313,16 @@ Arbitrary tests cases can be defined in the `spec/` directory of the wagon. As a
           its(['Anrede']) { should eq 'Herr' }
         end
       end
-    
+
       context 'export_full' do
         its(:headers) { should include('Titel') }
         its(:headers) { should include('Anrede') }
-            
+
         let(:data) { Export::Tabular::People::PeopleFull.csv(list) }
-    
+
         context 'first row' do
           subject { csv[0] }
-    
+
           its(['Titel']) { should eq 'Dr.' }
           its(['Anrede']) { should eq 'Herr' }
         end

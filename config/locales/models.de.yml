@@ -205,6 +205,9 @@ de:
       invoice_item:
         one: Rechnungsposten
         other: Rechnungsposten
+      invoice_list:
+        one: Sammelrechnung
+        other: Sammelrechnungen
       label_format:
         one: Etikettenformat
         other: Etikettenformate
@@ -782,6 +785,15 @@ de:
         cost: Betrag
         cost_center: Kostenstelle
         account: Konto
+
+
+      invoice_list:
+        title: Titel
+        receiver: Quelle
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
 
       # used for nested attributes
       invoice_items:

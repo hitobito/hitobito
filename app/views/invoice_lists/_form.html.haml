@@ -7,17 +7,21 @@
              cancel_url: cancel_url,
              data: { group: group_path(parent) }) do |f|
 
+  = f.hidden_field :receiver_id
+  = f.hidden_field :receiver_type
   = f.hidden_field :recipient_ids
-  = f.labeled_input_field :title, help: t('.recipient_info', count: entry.recipients.size)
 
-  = f.labeled_input_field :description
-  = f.labeled_input_field :payment_information
-  = f.labeled_input_field :payment_purpose
+  = f.fields_for :invoice, entry.invoice do |fi|
+    = fi.labeled_input_field :title, help: t('.recipient_info', count: entry.recipient_ids_count)
 
-  = field_set_tag do
-    = render "invoice_articles", f: f
+    = fi.labeled_input_field :description
+    = fi.labeled_input_field :payment_information
+    = fi.labeled_input_field :payment_purpose
 
-  = field_set_tag do
-    = f.labeled_inline_fields_for :invoice_items, 'invoice_items'
+    = field_set_tag do
+      = render "invoice_articles", f: fi
 
-  = render "calculated", invoice: entry.decorate
+    = field_set_tag do
+      = fi.labeled_inline_fields_for :invoice_items, 'invoice_items'
+
+    = render "calculated", invoice: fi.object.decorate

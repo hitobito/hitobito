@@ -57,6 +57,7 @@ Hitobito::Application.routes.draw do
 
       resource :invoice_list, except: [:edit]
       resource :invoice_config, only: [:edit, :show, :update]
+      resources :invoice_lists
 
       resources :invoices do
         resources :payments, only: :create

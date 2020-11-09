@@ -14,25 +14,25 @@ describe InvoiceListsController do
   context 'authorization' do
     before { sign_in(person) }
 
-    it "may index when person has finance permission on layer group" do
-      get :new, params: { group_id: group.id, invoice: { recipient_ids: [person.id] } }
+    it "may new when person has finance permission on layer group" do
+      get :new, params: { group_id: group.id, invoice_list: { recipient_ids: [person.id] } }
       expect(response).to be_successful
     end
 
     it "may update when person has finance permission on layer group" do
-      put :update, params: { group_id: group.id, invoice: { recipient_ids: [] } }
+      put :update, params: { group_id: group.id, invoice_list: { recipient_ids: [] } }
       expect(response).to redirect_to group_invoices_path(group)
     end
 
     it "may not index when person has finance permission on layer group" do
       expect do
-        get :new, params: { group_id: groups(:top_layer).id, invoice: { recipient_ids: [] } }
+        get :new, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: [] } }
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it "may not edit when person has finance permission on layer group" do
       expect do
-        put :update, params: { group_id: groups(:top_layer).id, invoice: { recipient_ids: [] } }
+        put :update, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: [] } }
       end.to raise_error(CanCan::AccessDenied)
     end
   end
@@ -41,21 +41,29 @@ describe InvoiceListsController do
     before { sign_in(person) }
 
     it 'GET#new assigns_attributes and renders crud/new template' do
-      get :new, params: { group_id: group.id, invoice: { recipient_ids: person.id } }
+      get :new, params: { group_id: group.id, invoice_list: { recipient_ids: person.id } }
       expect(response).to render_template('crud/new')
-      expect(assigns(:invoice).recipients).to eq [person]
+      expect(assigns(:invoice_list).recipients).to eq [person]
+    end
+
+    it 'GET#new assigns assigns invoice_list from receiver' do
+      mailing_list = mailing_lists(:leaders)
+      get :new, params: { group_id: group.id, invoice_list: { receiver_id: mailing_list.id, receiver_type: mailing_list.class  } }
+      expect(response).to render_template('crud/new')
+      expect(assigns(:invoice_list).receiver).to eq mailing_list
     end
 
     it 'GET#new via xhr assigns invoice items and total' do
-      get :new, xhr: true, params: { group_id: group.id, invoice: invoice_attrs }
-      expect(assigns(:invoice).invoice_items).to have(2).items
-      expect(assigns(:invoice).calculated[:total]).to eq 3
+      get :new, xhr: true, params: { group_id: group.id, invoice_list: { invoice: invoice_attrs } }
+      invoice = assigns(:invoice_list).invoice
+      expect(invoice.invoice_items).to have(2).items
+      expect(invoice.calculated[:total]).to eq 3
       expect(response).to render_template('invoice_lists/new')
     end
 
     it 'POST#create creates an invoice for single member' do
       expect do
-        post :create, params: { group_id: group.id, invoice: invoice_attrs.merge(recipient_ids: person.id) }
+        post :create, params: { group_id: group.id, invoice_list: { recipient_ids: person.id, invoice: invoice_attrs } }
       end.to change { group.invoices.count }.by(1)
 
       expect(response).to redirect_to group_invoices_path(group)
@@ -64,21 +72,10 @@ describe InvoiceListsController do
 
     it 'POST#create sets creator_id to current_user' do
       expect do
-        post :create, params: { group_id: group.id, invoice: invoice_attrs.merge(title: 'current_user') }
+        post :create, params: { group_id: group.id, invoice_list: { recipient_ids: person.id, invoice: invoice_attrs.merge(title: 'current_user')  }}
       end.to change { group.invoices.count }.by(1)
 
       expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
-    end
-
-    it 'POST#create creates an invoice for each member of group' do
-      Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group, person: Fabricate(:person))
-
-      expect do
-        post :create, params: { group_id: group.id, invoice: invoice_attrs }
-      end.to change { group.invoices.count }.by(2)
-
-      expect(response).to redirect_to group_invoices_path(group)
-      expect(flash[:notice]).to include 'Rechnung <i>Title</i> wurde für 2 Empfänger erstellt.'
     end
 
     it 'PUT#update informs if not invoice has been selected' do

@@ -308,6 +308,23 @@ ActiveRecord::Schema.define(version: 2020_12_22_123403) do
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
   end
 
+  create_table "invoice_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "receiver_type"
+    t.bigint "receiver_id"
+    t.bigint "group_id"
+    t.bigint "creator_id"
+    t.string "title", null: false
+    t.decimal "amount_total", precision: 15, scale: 2, default: "0.0", null: false
+    t.decimal "amount_payed", precision: 15, scale: 2, default: "0.0", null: false
+    t.integer "recipients_total", default: 0, null: false
+    t.integer "recipients_payed", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "index_invoice_lists_on_creator_id"
+    t.index ["group_id"], name: "index_invoice_lists_on_group_id"
+    t.index ["receiver_type", "receiver_id"], name: "index_invoice_lists_on_receiver_type_and_receiver_id"
+  end
+
   create_table "invoices", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title", null: false
     t.string "sequence_number", null: false
@@ -338,8 +355,10 @@ ActiveRecord::Schema.define(version: 2020_12_22_123403) do
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
     t.string "reference", null: false
+    t.bigint "invoice_list_id"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
+    t.index ["invoice_list_id"], name: "index_invoices_on_invoice_list_id"
     t.index ["recipient_id"], name: "index_invoices_on_recipient_id"
     t.index ["sequence_number"], name: "index_invoices_on_sequence_number"
   end

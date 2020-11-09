@@ -101,37 +101,6 @@ describe Invoice do
     expect(invoice.total).to eq(1.5)
   end
 
-  it '#recipients loads people from recipient_ids' do
-    invoice = Invoice.new(title: 'invoice', group: group)
-    invoice.recipient_ids = "2,b,#{person.id},c,"
-    expect(invoice.recipients).to eq [person]
-  end
-
-  it '#multi_create creates invoices for multiple recipients' do
-    invoice = Invoice.new(title: 'invoice', group: group)
-    invoice.recipient_ids = [person.id, other_person.id].join(',')
-    invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)
-    invoice.invoice_items.build(name: 'pins', unit_cost: 0.5, count: 2)
-
-    expect do
-      invoice.multi_create
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([2, 4])
-  end
-
-  it '#multi_create does rollsback if any save fails' do
-    invoice = Invoice.new(title: 'invoice', group: group)
-    invoice.recipient_ids = [person.id, other_person.id].join(',')
-    invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)
-
-    allow_any_instance_of(Invoice).to receive(:save).and_wrap_original do |m|
-      @saved = @saved ? false : m.call
-    end
-
-    expect do
-      invoice.multi_create
-    end.not_to change { [group.invoices.count, group.invoice_items.count] }
-  end
-
   it '#to_s returns total amount' do
     invoice = invoices(:invoice)
     expect(invoice.to_s).to eq "Invoice(#{invoice.sequence_number}): 5.35"

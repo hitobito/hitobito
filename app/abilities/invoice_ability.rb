@@ -11,6 +11,10 @@ class InvoiceAbility < AbilityDsl::Base
     permission(:finance).may(:create, :show, :edit, :update, :destroy).in_layer
   end
 
+  on(InvoiceList) do
+    permission(:finance).may(:create, :show, :edit, :update, :destroy).in_layer
+  end
+
   on(InvoiceArticle) do
     permission(:finance).may(:new, :create, :show, :edit, :update, :destroy).in_layer
   end

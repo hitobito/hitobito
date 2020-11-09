@@ -7,19 +7,24 @@
 
 class InvoiceListsController < CrudController
   self.nesting = Group
-  self.permitted_attrs = [:title,
-                          :description,
-                          :payment_information,
-                          :payment_purpose,
-                          :recipient_ids,
-                          invoice_items_attributes: [
-                            :name,
-                            :description,
-                            :unit_cost,
-                            :vat_rate,
-                            :count,
-                            :_destroy
-                          ]]
+  self.permitted_attrs = [
+    :receiver_id,
+    :receiver_type,
+    :recipient_ids,
+    invoice: [
+      :title,
+      :description,
+      :payment_information,
+      :payment_purpose,
+      invoice_items_attributes: [
+        :name,
+        :description,
+        :unit_cost,
+        :vat_rate,
+        :count,
+        :_destroy
+      ]
+    ]]
 
   skip_authorize_resource
   before_action :authorize
@@ -29,15 +34,15 @@ class InvoiceListsController < CrudController
 
   def new
     assign_attributes
-    entry.attributes = { payment_information: entry.invoice_config.payment_information }
-    entry.recipient_ids = params[:ids] if params[:ids].present?
 
     session[:invoice_referer] = request.referer
   end
 
   def create
-    if multi_create
-      message = flash_message(count: entry.recipients.size, title: entry.title)
+    assign_attributes
+
+    if entry.multi_create
+      message = flash_message(count: entry.recipient_ids_count, title: entry.title)
       redirect_to return_path, notice: message
       session.delete :invoice_referer
     else
@@ -62,21 +67,7 @@ class InvoiceListsController < CrudController
     redirect_to group_invoices_path(parent)
   end
 
-  def self.model_class
-    Invoice
-  end
-
   private
-
-  def multi_create
-    assign_attributes
-    entry.recipient = entry.recipients.first
-    entry.multi_create if entry.valid?
-  end
-
-  def permitted_params
-    super.merge(creator_id: current_user.id)
-  end
 
   def return_path
     if params[:singular]
@@ -90,10 +81,11 @@ class InvoiceListsController < CrudController
     params[:mail] == 'true' && current_user
   end
 
-  def list_entries
-    super.includes(recipient: [:groups, :roles])
-  end
-
+  # Ouch
+  # def list_entries
+  #   super.includes(recipient: [:groups, :roles])
+  # end
+  #
   def invoices
     parent.invoices.where(id: list_param(:ids))
   end
@@ -110,4 +102,12 @@ class InvoiceListsController < CrudController
     session[:invoice_referer] || group_invoices_path(parent)
   end
 
+  def assign_attributes
+    entry.attributes = permitted_params.slice(:receiver_id, :receiver_type, :recipient_ids).merge(creator_id: current_user.id)
+    entry.invoice = parent.invoices.build(permitted_params[:invoice])
+  end
+
+  def authorize_class
+    authorize!(:index_invoices, parent)
+  end
 end

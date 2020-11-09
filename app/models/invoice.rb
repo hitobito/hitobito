@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 #
-#  Copyright (c) 2017-2020, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 # == Schema Information
@@ -42,8 +40,6 @@ class Invoice < ActiveRecord::Base
   include I18nEnums
   include PaymentSlips
 
-  attr_accessor :recipient_ids
-
   ROUND_TO = BigDecimal('0.05')
 
   SEQUENCE_NR_SEPARATOR = '-'
@@ -57,6 +53,7 @@ class Invoice < ActiveRecord::Base
   belongs_to :group
   belongs_to :recipient, class_name: 'Person'
   belongs_to :creator, class_name: 'Person'
+  belongs_to :invoice_list, optional: true
 
 
   has_many :invoice_items, dependent: :destroy
@@ -122,15 +119,6 @@ class Invoice < ActiveRecord::Base
     end
   end
 
-  def multi_create
-    Invoice.transaction do
-      recipients.all? do |recipient|
-        invoice = self.class.new(multi_create_attributes(recipient))
-        invoice.save
-      end || (raise ActiveRecord::Rollback)
-    end
-  end
-
   def calculated
     [:total, :cost, :vat].collect do |field|
       [field, round(invoice_items.reject(&:frozen?).sum(&field))]
@@ -155,10 +143,6 @@ class Invoice < ActiveRecord::Base
 
   def payable?
     STATES_PAYABLE.include?(state)
-  end
-
-  def recipients
-    Person.where(id: recipient_ids.to_s.split(','))
   end
 
   def recipient_name
@@ -194,13 +178,6 @@ class Invoice < ActiveRecord::Base
   end
 
   private
-
-  def multi_create_attributes(recipient)
-    attributes.merge(
-      invoice_items_attributes: invoice_items.collect(&:attributes),
-      recipient_id: recipient.id
-    )
-  end
 
   def set_self_in_nested
     invoice_items.each { |item| item.invoice = self }

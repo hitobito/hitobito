@@ -16,7 +16,7 @@
 
 class Event::Role < ActiveRecord::Base
 
-  # rubocop:disable ConstantName
+  # rubocop:disable Rails/ConstantName,Style/MutableConstant
 
   Permissions = [:event_full, :participations_full, :participations_read, :qualify]
 
@@ -25,7 +25,7 @@ class Event::Role < ActiveRecord::Base
   # kind nil is for restricted roles.
   Kinds = [:leader, :helper, :participant]
 
-  # rubocop:enable ConstantName
+  # rubocop:enable Rails/ConstantName,Style/MutableConstant
 
   include NormalizedLabels
 
@@ -116,13 +116,14 @@ class Event::Role < ActiveRecord::Base
 
   # A participation with at least one role is active
   def set_participation_active
-    participation.update_attribute(:active, true) unless applying_participant?
+    participation.update_attribute(:active, true) unless applying_participant? # rubocop:disable Rails/SkipsModelValidations
     update_participant_count
   end
 
   def destroy_participation_for_last
     # prevent callback loops
     return if @_destroying
+
     @_destroying = true
 
     update_participant_count
@@ -133,7 +134,7 @@ class Event::Role < ActiveRecord::Base
     return if destroyed_by_participation?
 
     if applying_participant? && participation.roles == [self]
-      participation.update_attribute(:active, false)
+      participation.update_attribute(:active, false) # rubocop:disable Rails/SkipsModelValidations
       update_participant_count
       false # do not destroy
     end

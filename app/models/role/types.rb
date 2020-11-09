@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -8,7 +8,7 @@
 module Role::Types
   extend ActiveSupport::Concern
 
-  # rubocop:disable ConstantName
+  # rubocop:disable Style/ConstantName,Style/MutableConstant Keep mutable to enable extension
 
   # All possible permissions
   Permissions = [:admin,
@@ -24,7 +24,7 @@ module Role::Types
 
   Kinds = [:member, :passive, :external]
 
-  # rubocop:enable ConstantName
+  # rubocop:enable Style/ConstantName,Style/MutableConstant
 
   included do
     class_attribute :permissions, :visible_from_above, :kind

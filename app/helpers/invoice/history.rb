@@ -85,7 +85,7 @@ class Invoice::History
     [
       '⬤', # Middle Dot
       long_date(payment.received_at),
-      "#{number_to_currency(payment.amount)} #{t('invoices.payed')}"
+      "#{invoice.decorate.format_currency(payment.amount)} #{t('invoices.payed')}"
     ]
   end
 

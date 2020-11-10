@@ -16,6 +16,10 @@ class InvoiceList < ActiveRecord::Base
 
   validates_by_schema
 
+  def update_paid
+    update(amount_paid: invoices.sum(&:amount_paid), recipients_paid: invoices.payed.count)
+  end
+
   def receiver_label
     "#{receiver} (#{receiver.model_name.human})"
   end
@@ -28,27 +32,9 @@ class InvoiceList < ActiveRecord::Base
       Invoice.transaction do
         create_invoices
       end
-      save!
+      update_total
     end
   end
-
-  def create_invoices
-    recipients.all? do |recipient|
-      attributes = invoice.attributes.merge(
-        invoice_items_attributes: invoice.invoice_items.collect(&:attributes),
-        recipient_id: recipient.id,
-        invoice_list_id: id,
-        creator_id: creator_id
-      )
-      invoice = group.invoices.build(attributes)
-      invoice.save.tap do |result|
-        next unless result
-        self.recipients_total += 1
-        self.amount_total += invoice.total
-      end
-    end || (raise ActiveRecord::Rollback)
-  end
-
 
   def recipient_ids_count
     if receiver
@@ -73,4 +59,23 @@ class InvoiceList < ActiveRecord::Base
       Person.where(id: recipient_ids.split(','))
     end
   end
+
+  private
+
+  def create_invoices
+    recipients.all? do |recipient|
+      attributes = invoice.attributes.merge(
+        invoice_items_attributes: invoice.invoice_items.collect(&:attributes),
+        recipient_id: recipient.id,
+        invoice_list_id: id,
+        creator_id: creator_id
+      )
+      group.invoices.build(attributes).save
+    end || (raise ActiveRecord::Rollback)
+  end
+
+  def update_total
+    update(amount_total: invoices.sum(&:total), recipients_total: invoices.pluck(:recipient_id).count)
+  end
+
 end

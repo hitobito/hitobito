@@ -48,7 +48,7 @@ describe InvoiceListsController do
     end
 
     it 'GET#new assigns assigns invoice_list from receiver' do
-      get :new, params: { group_id: group.id, invoice_list: { receiver_id: list.id, receiver_type: mailing_list.class  } }
+      get :new, params: { group_id: group.id, invoice_list: { receiver_id: list.id, receiver_type: list.class  } }
       expect(response).to render_template('crud/new')
       expect(assigns(:invoice_list).receiver).to eq list
     end

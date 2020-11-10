@@ -1,19 +1,20 @@
 require 'spec_helper'
 
 describe 'invoice_lists/_form.html.haml' do
-  let(:group)   { groups(:bottom_layer_one) }
-  let(:person)  { people(:bottom_member) }
-  let(:invoice) { group.invoices.build }
-  let(:dom)     { Capybara::Node::Simple.new(render) }
+  let(:group)        {  groups(:bottom_layer_one) }
+  let(:person)       {  people(:bottom_member) }
+  let(:invoice)      {  group.invoices.build }
+  let(:invoice_list) {  InvoiceList.new(group: group, recipient_ids: '1,2', invoice: invoice) }
+  let(:dom)          {  Capybara::Node::Simple.new(render) }
 
   before do
     allow(view).to receive_messages({
       current_user: person,
       parent: group,
       cancel_url: '',
-      model_class: Invoice,
-      entry: invoice,
-      path_args: [group, invoice]
+      model_class: InvoiceList,
+      entry: invoice_list,
+      path_args: [group, invoice_list]
     })
 
     allow(controller).to receive_messages(current_user: person)

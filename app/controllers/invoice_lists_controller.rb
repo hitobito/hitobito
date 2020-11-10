@@ -41,7 +41,8 @@ class InvoiceListsController < CrudController
   def create
     assign_attributes
 
-    if entry.multi_create
+    if entry.prepare_for_batch_create
+      Invoice::BatchCreate.new(entry).call
       message = flash_message(count: entry.recipient_ids_count, title: entry.title)
       redirect_to return_path, notice: message
       session.delete :invoice_referer

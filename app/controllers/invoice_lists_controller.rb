@@ -60,7 +60,7 @@ class InvoiceListsController < CrudController
   def destroy
     count = invoices.update_all(state: :cancelled, updated_at: Time.zone.now)
     key = count > 0 ? :notice : :alert
-    redirect_to(group_invoices_path(parent), key => flash_message(count: count))
+    redirect_to(group_invoices_path(parent, returning: true), key => flash_message(count: count))
   end
 
   def show
@@ -75,7 +75,7 @@ class InvoiceListsController < CrudController
     elsif params.dig(:invoice_list, :receiver_id)
       group_invoice_lists_path(parent)
     else
-      group_invoices_path(parent)
+      group_invoices_path(parent, returning: true)
     end
   end
 

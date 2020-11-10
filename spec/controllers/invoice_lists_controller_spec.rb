@@ -22,7 +22,7 @@ describe InvoiceListsController do
 
     it "may update when person has finance permission on layer group" do
       put :update, params: { group_id: group.id, invoice_list: { recipient_ids: [] } }
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
     end
 
     it "may not index when person has finance permission on layer group" do
@@ -66,7 +66,7 @@ describe InvoiceListsController do
         post :create, params: { group_id: group.id, invoice_list: { recipient_ids: person.id, invoice: invoice_attrs } }
       end.to change { group.invoices.count }.by(1)
 
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:notice]).to include 'Rechnung <i>Title</i> wurde erstellt.'
     end
 
@@ -89,7 +89,7 @@ describe InvoiceListsController do
 
     it 'PUT#update informs if not invoice has been selected' do
       post :update, params: { group_id: group.id }
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:alert]).to include 'Es muss mindestens eine Rechnung ausgewählt werden.'
     end
 
@@ -104,7 +104,7 @@ describe InvoiceListsController do
           end.to change { invoice.reload.updated_at }
         end.not_to change { Delayed::Job.count }
       end
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:notice][0]).to match /Rechnung \d+-\d+ wurde gestellt./
       expect(invoice.reload.state).to eq 'issued'
       expect(invoice.due_at).to be_present
@@ -124,7 +124,7 @@ describe InvoiceListsController do
           post :update, params: { group_id: group.id, ids: [invoice.id, other.id].join(',') }
         end.to change { other.reload.updated_at }
       end
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:notice]).to include '2 Rechnungen wurden gestellt.'
     end
 
@@ -137,14 +137,14 @@ describe InvoiceListsController do
         post :update, params: { group_id: group.id, ids: [invoice.id].join(','), mail: 'true' }
       end.to change { Delayed::Job.count }.by(1)
 
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:notice][0]).to match(/Rechnung \d+-\d+ wurde gestellt./)
       expect(flash[:notice][1]).to match(/Rechnung \d+-\d+ wird im Hintergrund per E-Mail verschickt./)
     end
 
     it 'DELETE#destroy informs if no invoice has been selected' do
       delete :destroy, params: { group_id: group.id }
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:alert]).to include 'Zuerst muss eine Rechnung ausgewählt werden.'
     end
 
@@ -153,7 +153,7 @@ describe InvoiceListsController do
       expect do
         travel(1.day) { delete :destroy, params: { group_id: group.id, ids: invoice.id } }
       end.to change { invoice.reload.updated_at }
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:notice]).to include 'Rechnung wurde storniert.'
       expect(invoice.reload.state).to eq 'cancelled'
     end
@@ -166,7 +166,7 @@ describe InvoiceListsController do
           delete :destroy, params: { group_id: group.id, ids: [invoice.id, other.id].join(',') }
         end
       end.to change { other.reload.updated_at }
-      expect(response).to redirect_to group_invoices_path(group)
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:notice]).to include '2 Rechnungen wurden storniert.'
       expect(other.reload.state).to eq 'cancelled'
     end

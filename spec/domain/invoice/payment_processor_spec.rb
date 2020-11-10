@@ -31,6 +31,20 @@ describe Invoice::PaymentProcessor do
     expect(invoice.reload).to be_payed
   end
 
+  it 'creates payment and marks invoice as payed and updates invoice_list' do
+    list = InvoiceList.create!(title: :title, group: invoice.group)
+    invoice.update_columns(esr_number: '00 00000 00000 10000 00000 00905',
+                           invoice_list_id: list.id,
+                           total: 710.82)
+    expect do
+      expect(parser.process).to eq 1
+    end.to change { Payment.count }.by(1)
+    expect(invoice.reload).to be_payed
+    expect(list.reload.amount_paid.to_s).to eq '710.82'
+    expect(list.reload.recipients_paid).to eq 1
+  end
+
+
   it 'invalid payments only produce set alert' do
     expect(parser.alert).to be_present
     expect(parser.notice).to be_blank

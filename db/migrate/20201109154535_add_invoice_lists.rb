@@ -13,9 +13,9 @@ class AddInvoiceLists < ActiveRecord::Migration[6.0]
       t.belongs_to :creator
       t.string :title, null: false
       t.decimal :amount_total, precision: 15, scale: 2, default: 0, null: false
-      t.decimal :amount_payed, precision: 15, scale: 2, default: 0, null: false
+      t.decimal :amount_paid, precision: 15, scale: 2, default: 0, null: false
       t.integer :recipients_total, default: 0, null: false
-      t.integer :recipients_payed, default: 0, null: false
+      t.integer :recipients_paid, default: 0, null: false
       t.timestamps
     end
 

@@ -16,10 +16,9 @@ class InvoiceList < ActiveRecord::Base
 
   validates_by_schema
 
-  def prepare_for_batch_create
-    self.title = invoice.title
-    invoice.recipient = first_recipient
-    invoice.valid?
+  def invoice_parameters
+    invoice_item_attributes = invoice.invoice_items.collect { |item| item.attributes.compact }
+    invoice.attributes.compact.merge(invoice_items_attributes: invoice_item_attributes)
   end
 
   def update_paid

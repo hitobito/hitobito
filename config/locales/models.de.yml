@@ -789,7 +789,7 @@ de:
 
       invoice_list:
         title: Titel
-        receiver: Quelle
+        receiver: Empfänger
         recipients_total: Empfänger Insgesamt
         recipients_paid: Empfänger Bezahlt
         amount_total: Betrag insgesamt

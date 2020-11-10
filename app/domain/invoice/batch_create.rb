@@ -8,6 +8,17 @@
 class Invoice::BatchCreate
   attr_reader :invoice_list, :invoice
 
+  def self.call(invoice_list, limit = 100)
+    invoice_parameters = invoice_list.invoice_parameters
+    if invoice_list.recipient_ids_count > limit
+      invoice_list.save
+      Invoice::BatchCreateJob.new(invoice_list.id, invoice_parameters).enqueue!
+    else
+      invoice_list.invoice = Invoice.new(invoice_parameters)
+      Invoice::BatchCreate.new(invoice_list).call
+    end
+  end
+
   def initialize(invoice_list)
     @invoice_list = invoice_list
     @invoice = invoice_list.invoice
@@ -15,9 +26,10 @@ class Invoice::BatchCreate
 
   def call
     Invoice.transaction do
-      invoice_list.save! if receiver?
-      create_invoices
-      update_total if receiver?
+      invoice_list.save! if receiver? && invoice_list.new_record?
+      create_invoices.tap do
+        update_total if receiver?
+      end
     end
   end
 
@@ -28,9 +40,13 @@ class Invoice::BatchCreate
   end
 
   def create_invoices
-    invoice_list.recipients.all? do |recipient|
-      invoice_list.group.invoices.build(attributes(recipient)).save
-    end || (raise ActiveRecord::Rollback)
+    results = []
+    invoice_list.recipients.find_in_batches do |batch|
+      results += batch.collect do |recipient|
+        invoice_list.group.invoices.build(attributes(recipient)).save
+      end
+      invoice_list.update(recipients_processed: results.count(true)) if receiver?
+    end
   end
 
   def attributes(recipient)

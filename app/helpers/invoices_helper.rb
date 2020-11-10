@@ -8,13 +8,13 @@
 module InvoicesHelper
 
   def format_invoice_list_amount_paid(invoice_list)
-    invoice = invoice_list.invoices.first.decorate
-    invoice.format_currency(invoice_list.amount_paid)
+    invoice = invoice_list.invoices.first
+    invoice.decorate.format_currency(invoice_list.amount_paid) if invoice
   end
 
   def format_invoice_list_amount_total(invoice_list)
-    invoice = invoice_list.invoices.first.decorate
-    invoice.format_currency(invoice_list.amount_total)
+    invoice = invoice_list.invoices.first
+    invoice.decorate.format_currency(invoice_list.amount_total) if invoice
   end
 
   def format_invoice_state(invoice)

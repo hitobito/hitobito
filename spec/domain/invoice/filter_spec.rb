@@ -21,4 +21,10 @@ describe Invoice::Filter do
     filtered = Invoice::Filter.new(year: today.last_year.year).apply(Invoice)
     expect(filtered.count).to eq 1
   end
+
+  it 'filters by invoice_list_id' do
+    invoice.update(invoice_list_id: 1)
+    filtered = Invoice::Filter.new(invoice_list_id: 1).apply(Invoice)
+    expect(filtered.count).to eq 1
+  end
 end

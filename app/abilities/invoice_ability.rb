@@ -12,7 +12,7 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   on(InvoiceList) do
-    permission(:finance).may(:create, :show, :edit, :update, :destroy).in_layer
+    permission(:finance).may(:create, :show, :edit, :update, :destroy).in_layer_with_receiver
   end
 
   on(InvoiceArticle) do
@@ -35,8 +35,13 @@ class InvoiceAbility < AbilityDsl::Base
     user.finance_groups.present?
   end
 
-  def in_layer
-    user.groups_with_permission(:finance).collect(&:layer_group).include?(subject.group)
+  def in_layer(group = subject.group)
+    user.groups_with_permission(:finance).collect(&:layer_group).include?(group)
+  end
+
+  def in_layer_with_receiver
+    return in_layer unless subject.receiver
+    in_layer && in_layer(subject.receiver.group.layer_group)
   end
 
 end

@@ -30,6 +30,7 @@ class Invoice::PaymentProcessor
   def process
     Payment.transaction do
       valid_payments.all?(&:save) || (raise ActiveRecord::Rollback)
+      invoice_lists.each(&:update_paid)
       valid_payments.count
     end
   end
@@ -62,6 +63,10 @@ class Invoice::PaymentProcessor
                   invoice: invoices[reference(s)],
                   reference: fetch('Refs', 'AcctSvcrRef', s))
     end
+  end
+
+  def invoice_lists
+    InvoiceList.where(id: invoices.values.collect(&:invoice_list_id))
   end
 
   def invoices

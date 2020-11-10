@@ -72,6 +72,8 @@ class InvoiceListsController < CrudController
   def return_path
     if params[:singular]
       group_invoice_path(parent, invoices.first)
+    elsif params.dig(:invoice_list, :receiver_id)
+      group_invoice_lists_path(parent)
     else
       group_invoices_path(parent)
     end
@@ -81,11 +83,6 @@ class InvoiceListsController < CrudController
     params[:mail] == 'true' && current_user
   end
 
-  # Ouch
-  # def list_entries
-  #   super.includes(recipient: [:groups, :roles])
-  # end
-  #
   def invoices
     parent.invoices.where(id: list_param(:ids))
   end

@@ -10,6 +10,7 @@ require 'spec_helper'
 describe InvoiceListsController do
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
+  let(:list) { mailing_lists(:leaders) }
 
   context 'authorization' do
     before { sign_in(person) }
@@ -47,10 +48,9 @@ describe InvoiceListsController do
     end
 
     it 'GET#new assigns assigns invoice_list from receiver' do
-      mailing_list = mailing_lists(:leaders)
-      get :new, params: { group_id: group.id, invoice_list: { receiver_id: mailing_list.id, receiver_type: mailing_list.class  } }
+      get :new, params: { group_id: group.id, invoice_list: { receiver_id: list.id, receiver_type: mailing_list.class  } }
       expect(response).to render_template('crud/new')
-      expect(assigns(:invoice_list).receiver).to eq mailing_list
+      expect(assigns(:invoice_list).receiver).to eq list
     end
 
     it 'GET#new via xhr assigns invoice items and total' do
@@ -76,6 +76,15 @@ describe InvoiceListsController do
       end.to change { group.invoices.count }.by(1)
 
       expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
+    end
+
+    it 'POST#create for receiver redirects to invoice_lists page' do
+      Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
+      expect do
+        post :create, params: { group_id: group.id, invoice_list: { receiver_id: list.id, receiver_type: list.class, invoice: invoice_attrs.merge(title: 'test') } }
+      end.to change { group.invoices.count }.by(1)
+      expect(assigns(:invoice_list).receiver).to eq list
+      expect(response).to redirect_to group_invoice_lists_path(group)
     end
 
     it 'PUT#update informs if not invoice has been selected' do

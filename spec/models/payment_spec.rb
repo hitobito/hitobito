@@ -25,12 +25,14 @@ describe Payment do
       invoice.payments.create!(amount: invoice.total)
     end.to change { invoice.state }
     expect(invoice.state).to eq 'payed'
+    expect(invoice.amount_open).to eq 0.0
   end
 
   it 'creating a smaller payment does not change invoice state' do
     expect do
       invoice.payments.create!(amount: invoice.total - 1)
     end.not_to change { invoice.state }
+    expect(invoice.amount_open).to eq 1.0
   end
 
   it 'allows multiple payments for same invoice without reference' do

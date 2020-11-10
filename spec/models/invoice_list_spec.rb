@@ -68,7 +68,7 @@ describe InvoiceList do
     expect(subject.amount_paid).to eq 0
   end
 
-  it '#multi_create does rollsback if any save fails' do
+  it '#multi_create does rollback if any save fails' do
     subject.recipient_ids = [person.id, other_person.id].join(',')
     subject.group = group
 
@@ -84,5 +84,15 @@ describe InvoiceList do
       subject.multi_create
     end.not_to change { [group.invoices.count, group.invoice_items.count] }
   end
-end
 
+  it '#update_paid updates payment informations' do
+    subject.update(group: group, title: :title)
+    invoice = subject.invoices.create!(title: :title, recipient_id: person.id, total: 10, group: group)
+    subject.invoices.create!(title: :title, recipient_id: other_person.id, total: 20, group: group)
+    invoice.payments.create!(amount: 10)
+    subject.update_paid
+    expect(subject.amount_paid).to eq 10
+    expect(subject.recipients_paid).to eq 1
+  end
+
+end

@@ -11,6 +11,8 @@ class InvoicesController < CrudController
   decorates :invoice
 
   self.nesting = Group
+  self.optional_nesting = [InvoiceList]
+
   self.sort_mappings = { recipient: Person.order_by_name_statement,
                          sequence_number: Invoice.order_by_sequence_number_statement }
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]
@@ -32,6 +34,8 @@ class InvoicesController < CrudController
                           ]]
 
   before_render_index :year  # sets ivar used in view
+
+  helper_method :group, :invoice_list
 
   def new
     entry.attributes = { payment_information: entry.invoice_config.payment_information }
@@ -61,7 +65,7 @@ class InvoicesController < CrudController
   def destroy
     cancelled = run_callbacks(:destroy) { entry.update(state: :cancelled) }
     set_failure_notice unless cancelled
-    respond_with(entry, success: cancelled, location: group_invoices_path(parent))
+    respond_with(entry, success: cancelled, location: group_invoices_path(group))
   end
 
   private
@@ -70,14 +74,14 @@ class InvoicesController < CrudController
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
                   ListSerializer.new(paged_entries,
-                                     group: parent,
+                                     group: group,
                                      page: params[:page],
                                      serializer: InvoiceSerializer,
                                      controller: self)].inject(&:merge)
   end
 
   def render_entry_json
-    render json: InvoiceSerializer.new(entry, group: parent, controller: self)
+    render json: InvoiceSerializer.new(entry, group: group, controller: self)
   end
 
   def build_payment
@@ -152,7 +156,15 @@ class InvoicesController < CrudController
   end
 
   def authorize_class
-    authorize!(:index_invoices, parent)
+    authorize!(:index_invoices, group)
+  end
+
+  def group
+    parent.is_a?(InvoiceList) ? parent.group : parent
+  end
+
+  def invoice_list
+    parent if parent.is_a?(InvoiceList)
   end
 
 end

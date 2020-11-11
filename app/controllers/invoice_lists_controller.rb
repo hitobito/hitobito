@@ -72,10 +72,13 @@ class InvoiceListsController < CrudController
   private
 
   def return_path
+    invoice_list_id = params[:invoice_list_id].presence
     if params[:singular]
       group_invoice_path(parent, invoices.first)
     elsif params.dig(:invoice_list, :receiver_id)
       group_invoice_lists_path(parent)
+    elsif invoice_list_id
+      group_invoice_list_invoices_path(parent, invoice_list_id: invoice_list_id, returning: true)
     else
       group_invoices_path(parent, returning: true)
     end

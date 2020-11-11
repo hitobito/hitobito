@@ -111,6 +111,16 @@ describe InvoiceListsController do
       expect(invoice.issued_at).to be_present
     end
 
+    it 'PUT#update redirects to invoice_list_invoices path if invoice_list is set' do
+      list = InvoiceList.create!(title: :title, group: group)
+      invoice = Invoice.create!(group: group, title: 'test', recipient: person,
+                                invoice_list: list,
+                                invoice_items_attributes:
+                                  { '1' => { name: 'item1', unit_cost: 1, count: 1}})
+      post :update, params: { group_id: group.id, invoice_list_id: list.id, ids: invoice.id }
+      expect(response).to redirect_to group_invoice_list_invoices_path(group, list, returning: true)
+    end
+
     it 'PUT#update can move multiple invoices at once' do
       invoice = Invoice.create!(group: group, title: 'test', recipient: person,
                                 invoice_items_attributes:

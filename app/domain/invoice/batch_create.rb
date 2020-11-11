@@ -28,7 +28,7 @@ class Invoice::BatchCreate
     Invoice.transaction do
       invoice_list.save! if receiver? && invoice_list.new_record?
       create_invoices.tap do
-        update_total if receiver?
+        invoice_list.update_total if receiver?
       end
     end
   end
@@ -56,11 +56,5 @@ class Invoice::BatchCreate
       invoice_list_id: invoice_list.id,
       creator_id: invoice_list.creator_id
     )
-  end
-
-  def update_total
-    total_sum = invoice_list.invoices.sum(&:total)
-    total_count = invoice_list.invoices.pluck(:recipient_id).count
-    invoice_list.update(amount_total: total_sum, recipients_total: total_count)
   end
 end

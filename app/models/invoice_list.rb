@@ -26,6 +26,12 @@ class InvoiceList < ActiveRecord::Base
     update(amount_paid: invoices.sum(&:amount_paid), recipients_paid: invoices.payed.count)
   end
 
+  def update_total
+    total_sum = invoices.sum(&:total)
+    total_count = invoices.pluck(:recipient_id).count
+    update(amount_total: total_sum, recipients_total: total_count)
+  end
+
   def receiver_label
     "#{receiver} (#{receiver.model_name.human})"
   end

@@ -12,9 +12,12 @@ require 'pathname'
 # Allows switching wagons quickly (depends on https://direnv.net/)
 class Setup
 
+  USED_RUBY_VERSION = '2.5.5'
+
   def run
     write_and_copy('.envrc', environment)
-    write_and_copy('.tool-versions', 'ruby 2.5.5')
+    write_and_copy('.tool-versions', "ruby #{USED_RUBY_VERSION}")
+    write_and_copy('.ruby-version', USED_RUBY_VERSION)
     write('Wagonfile', gemfile)
     FileUtils.rm_rf(root.join('tmp'))
   end

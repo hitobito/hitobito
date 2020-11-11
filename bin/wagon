@@ -44,9 +44,7 @@ case $cmd in
 
   configs)
     echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
-      cp -v .rspec "../hitobito_%/"
-    echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
-      cp -v .overcommit.yml "../hitobito_%/"
+      cp -v .rspec .overcommit.yml "../hitobito_%/"
     echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
       cp -vrf .git-hooks "../hitobito_%/"
     ;;

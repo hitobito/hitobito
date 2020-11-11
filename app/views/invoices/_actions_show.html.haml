@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= invoice_sending_dropdown(:group_invoice_list_path) unless entry.payed?
+= invoice_sending_dropdown unless entry.payed?
 = button_action_edit
 = invoices_export_dropdown
 = invoices_print_dropdown

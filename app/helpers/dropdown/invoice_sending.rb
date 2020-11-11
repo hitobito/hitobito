@@ -9,12 +9,12 @@
 module Dropdown
   class InvoiceSending < Base
 
-    attr_reader :params
+    attr_reader :params, :path, :invoice_list_id
 
-    def initialize(template, params, path_method)
+    def initialize(template, params)
       super(template, translate(:button), :envelope)
       @params      = params
-      @path_method = path_method
+      @invoice_list_id = template.invoice_list&.id
       init_items
     end
 
@@ -25,12 +25,12 @@ module Dropdown
     end
 
     def send_links
-      add_item(:set_state, mail: false)
-      add_item(:send_mail, mail: true)
+      add_item(:set_state, mail: false, invoice_list_id: invoice_list_id)
+      add_item(:send_mail, mail: true, invoice_list_id: invoice_list_id)
     end
 
     def add_item(key, options = {})
-      path = @template.send(@path_method, options)
+      path = template.group_invoice_list_path(template.parent, options)
       super(translate(key), path, data: { method: :put, checkable: true })
     end
 

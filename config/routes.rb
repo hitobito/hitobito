@@ -55,16 +55,18 @@ Hitobito::Application.routes.draw do
 
       end
 
-      resource :invoice_list, except: [:edit]
-      resource :invoice_config, only: [:edit, :show, :update]
-      resources :invoice_lists
-
       resources :invoices do
         resources :payments, only: :create
       end
       resources :invoice_articles
+      resource :invoice_config, only: [:edit, :show, :update]
 
+      resource :invoice_list, except: [:edit, :show]
+      resources :invoice_lists, only: [:index] do
+        resources :invoices, only: [:index]
+      end
       resource :payment_process, only: [:new, :show, :create]
+
       resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do

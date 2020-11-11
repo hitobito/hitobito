@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceListsController < CrudController
+  include YearBasedPaging
   self.nesting = Group
   self.permitted_attrs = [
     :receiver_id,
@@ -70,6 +71,10 @@ class InvoiceListsController < CrudController
   end
 
   private
+
+  def list_entries
+    super.includes(:receiver, :invoice).list
+  end
 
   def return_path
     invoice_list_id = params[:invoice_list_id].presence

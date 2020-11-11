@@ -8,12 +8,12 @@
 module InvoicesHelper
 
   def format_invoice_list_amount_paid(invoice_list)
-    invoice = invoice_list.invoices.first
-    invoice.decorate.format_currency(invoice_list.amount_paid) if invoice
+    invoice = invoice_list.invoice
+    invoice_list.invoice.decorate.format_currency(invoice_list.amount_paid) if invoice
   end
 
   def format_invoice_list_amount_total(invoice_list)
-    invoice = invoice_list.invoices.first
+    invoice = invoice_list.invoice
     invoice.decorate.format_currency(invoice_list.amount_total) if invoice
   end
 
@@ -66,8 +66,8 @@ module InvoicesHelper
     Dropdown::Invoices.new(self, params, :print).print
   end
 
-  def invoice_sending_dropdown(path_meth)
-    Dropdown::InvoiceSending.new(self, params, path_meth)
+  def invoice_sending_dropdown
+    Dropdown::InvoiceSending.new(self, params)
   end
 
   def invoice_history(invoice)

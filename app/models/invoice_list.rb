@@ -10,10 +10,13 @@ class InvoiceList < ActiveRecord::Base
   belongs_to :group
   belongs_to :receiver, polymorphic: true
   belongs_to :creator, class_name: 'Person'
+  has_one :invoice
   has_many :invoices, dependent: :destroy
 
   attr_accessor :recipient_ids, :invoice
   validates :receiver_type, inclusion: %w(MailingList), allow_blank: true
+
+  scope :list, -> { order(:created_at) }
 
   validates_by_schema
 

@@ -49,7 +49,9 @@ module InvoicesHelper
 
   def new_invoices_for_people_path(group, people)
     if people.is_a?(MailingList)
-      new_group_invoice_list_path(group, invoice_list: { receiver_id: people.id, receiver_type: people.class })
+      new_group_invoice_list_path(group, {
+        invoice_list: { receiver_id: people.id, receiver_type: people.class }
+      })
     else
       ids = people.collect(&:id).join(',')
       new_group_invoice_list_path(group, invoice_list: { recipient_ids: ids })

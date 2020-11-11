@@ -102,7 +102,9 @@ class InvoiceListsController < CrudController
   end
 
   def assign_attributes
-    entry.attributes = permitted_params.slice(:receiver_id, :receiver_type, :recipient_ids).merge(creator_id: current_user.id)
+    entry.attributes = permitted_params.slice(:receiver_id,
+                                              :receiver_type,
+                                              :recipient_ids).merge(creator_id: current_user.id)
     entry.invoice = parent.invoices.build(permitted_params[:invoice])
   end
 

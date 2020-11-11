@@ -189,6 +189,9 @@ it:
       label_format:
         one: formato delle etichette
         other: Formati delle etichette
+      mail_log:
+        one: Corso
+        other: Corso
       mailing_list:
         one: abbonamento
         other: Abbonamenti

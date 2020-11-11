@@ -1076,7 +1076,7 @@ it:
     new:
       title: Dove dovrebbero essere creati i nuovi ruoli?
       submit:
-        one: 'Creare %{count} ruoli'
+        one: 'Creare 1 ruoli'
         other: 'Creare %{count} ruoli '
   tag_lists:
     destroy:

@@ -8,6 +8,7 @@
 require 'spec_helper'
 
 describe InvoicesController do
+  include ActiveSupport::Testing::TimeHelpers
 
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
@@ -69,6 +70,14 @@ describe InvoicesController do
     it 'filters invoices by year' do
       invoice.update(issued_at: Date.today)
       get :index, params: { group_id: group.id, year: 1.year.ago.year }
+      expect(assigns(:invoices)).not_to include invoice
+    end
+
+    it 'filters invoices by year with default set to current year' do
+      invoice.update(issued_at: Date.today)
+      travel_to(1.year.ago) do
+        get :index, params: { group_id: group.id }
+      end
       expect(assigns(:invoices)).not_to include invoice
     end
 

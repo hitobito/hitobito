@@ -13,6 +13,7 @@ class InvoiceList < ActiveRecord::Base
   has_many :invoices, dependent: :destroy
 
   attr_accessor :recipient_ids, :invoice
+  validates :receiver_type, inclusion: %w(MailingList), allow_blank: true
 
   validates_by_schema
 
@@ -52,6 +53,4 @@ class InvoiceList < ActiveRecord::Base
       Person.where(id: recipient_ids.split(','))
     end
   end
-
-
 end

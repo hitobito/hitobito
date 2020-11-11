@@ -28,6 +28,14 @@ describe InvoiceList do
     expect(subject.first_recipient).to eq person
   end
 
+  it 'only accepts mailing list as receiver' do
+    subject.attributes = { title: :test, receiver: list }
+    expect(subject).to be_valid
+
+    subject.attributes = { title: :test, receiver: group }
+    expect(subject).not_to be_valid
+  end
+
   it '#update_paid updates payment informations' do
     subject.update(group: group, title: :title)
     invoice = subject.invoices.create!(title: :title, recipient_id: person.id, total: 10, group: group)

@@ -9,4 +9,4 @@
   - t.col(t.sort_header(:receiver)) do |item|
     = link_to(item.receiver_label, [item.group, item.receiver]) if item.receiver
 
-  - t.sortable_attrs(:recipients_total, :amount_total, :recipients_paid, :amount_paid)
+  - t.sortable_attrs(:recipients_total, :recipients_paid, :amount_total, :amount_paid)

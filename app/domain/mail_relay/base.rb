@@ -8,7 +8,7 @@
 
 module MailRelay
   # A generic email relay object. Retrieves messages from a mail server and resends
-  # them to a list of recievers.
+  # them to a list of receivers.
   # In subclasses, override the methods #relay_address?, #sender_allowed? and #receivers
   # to constrain which mails are sent to whom.
   #

@@ -7,13 +7,17 @@
 
 module Sheet
   class Invoice < Base
-
     def title
-      ::Invoice.model_name.human(count: 2)
+      title = ::Invoice.model_name.human(count: 2)
+      invoice_list ? invoice_list.title : ::Invoice.model_name.human(count: 2)
     end
 
-    def self.parent_sheet
-      nil
+    def parent_sheet
+      @parent_sheet ||= invoice_list ? create_parent(Sheet::InvoiceList) : nil
+    end
+
+    def invoice_list
+      @invoice_list ||= ::InvoiceList.find_by(id: view.params[:invoice_list_id])
     end
 
     def left_nav?

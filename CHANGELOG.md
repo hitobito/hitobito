@@ -8,6 +8,7 @@
 *  Tägliche Validierung der Adressen einer Person (hitobito_cvp#19)
 *  Anlässen können den Teilnehmern erlauben, sich gegenseitig in der Teilnehmerliste zu sehen (#878)
 *  Personen / Duplikate zusammenführen (hitobito_cvp#23)
+*  Erstellen von Rechungen für Abonnenten von Abos
 
 ## Version 1.22
 

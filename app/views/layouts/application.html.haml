@@ -29,9 +29,8 @@
       - if origin_user
         = render 'layouts/user_impersonation'
 
-    = header_logo_css
     %header.logo
-      = link_to(wagon_image_pack_tag(Settings.application.logo.image, alt: Settings.application.name), root_path, class: 'logo-image')
+      = link_to(header_logo, root_path, class: 'logo-image')
 
     #page
       - if current_user

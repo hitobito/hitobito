@@ -31,7 +31,7 @@
 
     = header_logo_css
     %header.logo
-      = link_to(image_pack_tag(Settings.application.logo.image, alt: Settings.application.name), root_path, class: 'logo-image')
+      = link_to(wagon_image_pack_tag(Settings.application.logo.image, alt: Settings.application.name), root_path, class: 'logo-image')
 
     #page
       - if current_user

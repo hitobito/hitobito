@@ -36,6 +36,12 @@ body {
   height: $logoHeight;
   object-fit: contain;
   object-position: center center;
+  text-align: center;
+
+  img {
+    max-width: $logoWidth;
+    max-height: $logoHeight;
+  }
 }
 
 .dropdown-menu {

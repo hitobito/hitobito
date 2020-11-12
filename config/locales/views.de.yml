@@ -280,7 +280,7 @@ de:
         national_waitinglist: 'nationale Warteliste'
       index:
         assigned_participants: 'Zugeteilte Teilnehmende'
-        add_participant: Teilnehmer/-in hinzufügen
+        add_participant: Teilnehmer*in hinzufügen
       waiting_list_link:
         title_active: 'Entfernen von der Warteliste'
         title_inactive: 'Hinzufügen zur Warteliste'
@@ -384,7 +384,7 @@ de:
 
   events:
     application_fields:
-      caption_signature: Teilnehmer/-innen müssen die Anmeldung unterschreiben
+      caption_signature: Teilnehmer*innen müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
       signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
     attachments:
@@ -394,12 +394,12 @@ de:
     form:
       caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
       caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
-      caption_requires_approval: 'Der/Die Gruppenleiter/-in wird informiert und muss die Anmeldung bestätigen'
+      caption_requires_approval: 'Der*die Gruppenleiter*in wird informiert und muss die Anmeldung bestätigen'
       times_are_optional: Uhrzeiten sind optional
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
         Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
         um beliebige Antworten zu ermöglichen.
-      explain_admin_questions: Hier kannst du weitere Angaben pro Teilnehmer/-in definieren,
+      explain_admin_questions: Hier kannst du weitere Angaben pro Teilnehmer*in definieren,
         welche nur für die Kursadministration verwendet werden.
       explain_contact_attrs: Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung
         abgefragt werden sollen.
@@ -806,7 +806,7 @@ de:
       caption_main_email_with_preferred_labels: 'Versand auch an Haupt E-Mail Adresse'
       caption_subscribable: 'Abonnenten dürfen sich selbst an-/abmelden'
       caption_subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
-      caption_anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
+      caption_anyone_may_post: 'Beliebige Absender*innen dürfen auf die Mailingliste schreiben'
       caption_delivery_report: 'E-Mail mit Bestätigung an Absender schicken'
       help_preferred_labels: 'E-Mails werden falls vorhanden, nur an E-Mailadressen mit dieser Bezeichnung verschickt. Dabei werden auch E-Mail Adressen verwendet, die nicht als Versand-Adresse markiert sind.'
       help_mailchimp_sync: 'Abonnenten können an die MailChimp-Liste exportiert werden. Diese Aktion überschreibt die MailChimp-Liste und bestehende Kontakte werden gelöscht.'
@@ -816,8 +816,8 @@ de:
     may_not_subscribe: 'Abonnenten dürfen sich <strong>nicht</strong> selbst an/abmelden'
     subscribers_may_post: 'Abonnenten dürfen auf die Mailingliste schreiben'
     subscribers_may_not_post: 'Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
-    anyone_may_post: 'Beliebige Absender/-innen dürfen auf die Mailingliste schreiben'
-    anyone_may_not_post: 'Beliebige Absender/-innen dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
+    anyone_may_post: 'Beliebige Absender*innen dürfen auf die Mailingliste schreiben'
+    anyone_may_not_post: 'Beliebige Absender*innen dürfen <strong>nicht</strong> auf die Mailingliste schreiben'
     delivery_report: 'Absender erhalten ein E-Mail als Versandbestätigung'
     no_delivery_report: 'Absender erhalten kein E-Mail als Versandbestätigung'
 
@@ -1049,7 +1049,7 @@ de:
     tabs:
       history: Verlauf
       log: Log
-      colleagues: Mitarbeiter/-innen
+      colleagues: Mitarbeiter*innen
       invoices: Rechnungen
       subscriptions: Abos
 
@@ -1325,7 +1325,7 @@ de:
 
     exclude_person:
       form:
-        exclude_subscriber: 'Abonnent/-in ausschliessen'
+        exclude_subscriber: 'Abonnent*in ausschliessen'
 
   subscriber/base:
     blank: '%{model_label} muss ausgewählt werden'
@@ -1338,7 +1338,7 @@ de:
 
   subscriber/exclude_person:
     success: '%{subscriber} wurde erfolgreich ausgeschlossen'
-    failure: '%{subscriber} ist nicht Abonnent/-in'
+    failure: '%{subscriber} ist nicht Abonnent*in'
 
   sheet/person/csv_import:
     title: 'Personen über CSV importieren'

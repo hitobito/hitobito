@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -25,8 +25,9 @@ class Event::Question < ActiveRecord::Base
   has_many :answers, dependent: :destroy
 
   validates_by_schema
-  validate :assert_zero_or_more_than_one_choice
+  validate :assert_number_of_choices
 
+  before_validation :make_choices_checkboxes
   after_create :add_answer_to_participations
 
   scope :global, -> { where(event_id: nil) }
@@ -43,6 +44,26 @@ class Event::Question < ActiveRecord::Base
   end
 
   private
+
+  def make_choices_checkboxes
+    return true if multiple_choices
+
+    self.multiple_choices = true if checkbox
+  end
+
+  def assert_number_of_choices
+    if checkbox
+      assert_exactly_one_choice
+    else
+      assert_zero_or_more_than_one_choice
+    end
+  end
+
+  def assert_exactly_one_choice
+    if choice_items.size != 1
+      errors.add(:choices, :requires_exactly_one_choice)
+    end
+  end
 
   def assert_zero_or_more_than_one_choice
     if choice_items.size == 1

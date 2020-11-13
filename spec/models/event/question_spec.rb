@@ -50,6 +50,7 @@ describe Event::Question do
 
     it 'is valid with one choice if single-choice' do
       subject.choices = 'ja'
+      subject.checkbox = true
       expect(subject.choice_items).to have(1).item
       expect(subject.checkbox).to be true
 
@@ -64,7 +65,7 @@ describe Event::Question do
     end
   end
 
-  context 'with single-choice' do
+  context 'with single-choice checkbox' do
     subject { described_class.new(question: 'Test?', choices: 'ja', checkbox: true) }
 
     it 'has basic assumptions' do
@@ -74,8 +75,8 @@ describe Event::Question do
 
     it 'is set to multiple-choice so that checkboxes are rendered' do
       expect do
-        subject.save!
-      end.to change(:multiple_choice).from(false).to(true)
+        subject.save
+      end.to change(subject, :multiple_choices).to(true)
     end
 
     it 'is valid with one choice' do

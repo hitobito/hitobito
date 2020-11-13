@@ -20,6 +20,10 @@ before_install:
   - mysql -e 'CREATE DATABASE hitobito_test;'
 install:
   - bundle install --path vendor/bundle
+  - nvm install node
+  - node -v
+  - npm i -g yarn
+  - yarn install
   - bundle exec rake webpacker:compile
 script:
   - bundle exec rake db:create ci --trace

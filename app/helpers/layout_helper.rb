@@ -104,8 +104,10 @@ module LayoutHelper
 
   def header_logo
     logo_group = closest_group_with_logo
-    return wagon_image_pack_tag(Settings.application.logo.image, alt: Settings.application.name) unless logo_group
-    image_tag(logo_group.logo.to_s)
+
+    return image_tag(logo_group.logo.to_s) if logo_group
+
+    wagon_image_pack_tag(Settings.application.logo.image, alt: Settings.application.name)
   end
 
   private

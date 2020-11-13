@@ -670,7 +670,7 @@ describe Event::ParticipationsController do
     let(:event) { events(:top_event) }
     let(:person) { people(:bottom_member) }
 
-    let(:question) do
+    let!(:question) do
       event.questions.create!(
         question: 'Terms and Conditions? Do you speak it?',
         choices: 'yep',

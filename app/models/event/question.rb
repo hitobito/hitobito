@@ -36,6 +36,7 @@ class Event::Question < ActiveRecord::Base
 
 
   def choice_items
+    # return choices if checkbox # if this active, adapt the validation.
     choices.to_s.split(',').collect(&:strip)
   end
 

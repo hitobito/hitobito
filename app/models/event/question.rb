@@ -4,6 +4,8 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
+
 # == Schema Information
 #
 # Table name: event_questions
@@ -20,7 +22,6 @@
 class Event::Question < ActiveRecord::Base
 
   belongs_to :event
-
   has_many :answers, dependent: :destroy
 
   validates_by_schema
@@ -29,7 +30,6 @@ class Event::Question < ActiveRecord::Base
   after_create :add_answer_to_participations
 
   scope :global, -> { where(event_id: nil) }
-
   scope :application, -> { where(admin: false) }
   scope :admin, -> { where(admin: true) }
 
@@ -51,10 +51,10 @@ class Event::Question < ActiveRecord::Base
   end
 
   def add_answer_to_participations
-    if event
-      event.participations.find_each do |p|
-        p.answers << answers.new
-      end
+    return unless event
+
+    event.participations.find_each do |p|
+      p.answers << answers.new
     end
   end
 

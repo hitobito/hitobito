@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -19,17 +19,17 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.remember_params += [:filter]
 
-  self.sort_mappings = { last_name:  'people.last_name',
+  self.sort_mappings = { last_name: 'people.last_name',
                          first_name: 'people.first_name',
                          roles: lambda do |event|
                                   Person.order_by_name_statement.unshift(
                                     Event::Participation.order_by_role_statement(event)
                                   )
                                 end,
-                         nickname:   'people.nickname',
-                         zip_code:   'people.zip_code',
-                         town:       'people.town',
-                         birthday:   'people.birthday' }
+                         nickname: 'people.nickname',
+                         zip_code: 'people.zip_code',
+                         town: 'people.town',
+                         birthday: 'people.birthday' }
 
 
   decorates :group, :event, :participation, :participations, :alternatives

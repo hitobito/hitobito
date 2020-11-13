@@ -280,22 +280,23 @@ describe EventsController do
 
         expect do
           put :update, params: {
-                         group_id: group.id,
-                         id: event.id,
-                         event: { name: 'testevent',
-                                  application_questions_attributes: {
-                                    q1.id.to_s => { id: q1.id,
-                                                    question: 'Whoo?' },
-                                    q2.id.to_s => { id: q2.id, _destroy: true },
-                                    '999' => { question: 'How much?',
-                                               choices: '1,2,3' } },
-                                  admin_questions_attributes: {
-                                    q3.id.to_s => { id: q3.id, _destroy: true },
-                                    '999' => { question: 'Powned?',
-                                               choices: 'ja, nein' } } }
-                       }
+            group_id: group.id,
+            id: event.id,
+            event: {
+              name: 'testevent',
+              application_questions_attributes: {
+                q1.id.to_s => { id: q1.id, question: 'Whoo?' },
+                q2.id.to_s => { id: q2.id, _destroy: true },
+                '999' => { question: 'How much?', choices: '1,2,3' }
+              },
+              admin_questions_attributes: {
+                q3.id.to_s => { id: q3.id, _destroy: true },
+                '999' => { question: 'Powned?', choices: 'ja, nein' }
+              }
+            }
+          }
           expect(assigns(:event)).to be_valid
-        end.not_to change { Event::Question.count }
+        end.not_to(change { Event::Question.count })
 
         expect(event.reload.name).to eq 'testevent'
         questions = event.questions.order(:question)

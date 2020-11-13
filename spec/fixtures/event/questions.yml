@@ -29,6 +29,7 @@ top_more:
   question: Sonst noch was?
   event: top_course
 
+
 # global questions (not assigned to event)
 ga:
   question: Ich habe folgendes ÖV Abo

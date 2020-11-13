@@ -287,7 +287,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     kind_class == Event::Kind && kind.present?
   end
 
-  def duplicate # rubocop:disable Metrics/MethodLength splitting this up does not make it better
+  def duplicate # rubocop:disable Metrics/AbcSize,Metrics/MethodLength splitting this up does not make it better
     dup.tap do |event|
       event.groups = groups
       event.state = nil

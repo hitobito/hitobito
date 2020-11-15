@@ -3,6 +3,7 @@
 ## unreleased
 
 *  Tag Verwaltung unter Einstellungen
+*  Checkboxen als Antwortmöglichkeit für Anmeldungsfragen hinzugefügt (#1079)
 
 ## Version 1.22
 
@@ -22,7 +23,7 @@
 ## Version 1.21
 
 *  Stackupgrade ruby-2.5, rails-6
-*  OIDC für Oauth
+*  OIDC für OAuth
 *  Mehr Daten in der JSON-API
 
 ## Version 1.20

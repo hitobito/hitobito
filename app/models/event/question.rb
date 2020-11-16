@@ -25,9 +25,7 @@ class Event::Question < ActiveRecord::Base
   has_many :answers, dependent: :destroy
 
   validates_by_schema
-  validate :assert_number_of_choices
 
-  before_validation :make_choices_checkboxes
   after_create :add_answer_to_participations
 
   scope :global, -> { where(event_id: nil) }
@@ -36,7 +34,6 @@ class Event::Question < ActiveRecord::Base
 
 
   def choice_items
-    # return choices if checkbox # if this active, adapt the validation.
     choices.to_s.split(',').collect(&:strip)
   end
 
@@ -44,33 +41,11 @@ class Event::Question < ActiveRecord::Base
     question.truncate(30)
   end
 
+  def one_answer_available?
+    choice_items.compact.one?
+  end
+
   private
-
-  def make_choices_checkboxes
-    return true if multiple_choices
-
-    self.multiple_choices = true if checkbox
-  end
-
-  def assert_number_of_choices
-    if checkbox
-      assert_exactly_one_choice
-    else
-      assert_zero_or_more_than_one_choice
-    end
-  end
-
-  def assert_exactly_one_choice
-    if choice_items.size != 1
-      errors.add(:choices, :requires_exactly_one_choice)
-    end
-  end
-
-  def assert_zero_or_more_than_one_choice
-    if choice_items.size == 1
-      errors.add(:choices, :requires_more_than_one_choice)
-    end
-  end
 
   def add_answer_to_participations
     return unless event

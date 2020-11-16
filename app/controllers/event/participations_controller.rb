@@ -63,7 +63,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     end
   end
 
-  def index
+  def index # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     respond_to do |format|
       format.html do
         entries
@@ -196,7 +196,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def person_id
     return current_user.try(:id) unless event.supports_applications
 
-    if model_params && model_params.key?(:person_id)
+    if model_params&.key?(:person_id)
       params[:for_someone_else] = true
       model_params.delete(:person)
       model_params.delete(:person_id)
@@ -213,6 +213,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     unless type.participant?
       raise ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
     end
+
     role_type
   end
 

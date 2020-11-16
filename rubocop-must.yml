@@ -11,6 +11,7 @@ AllCops:
     - vendor/**/*
     - tmp/**/*
     - vendor/bundle/**/*
+    - node_modules/**/*
 
 
 Metrics/CyclomaticComplexity:

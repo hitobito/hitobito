@@ -33,6 +33,7 @@ module Synchronize
         update_members
 
         destroy_segments
+        tag_cleaned_members
       end
 
       def missing_subscribers
@@ -42,8 +43,7 @@ module Synchronize
       end
 
       def obsolete_emails
-        emails = members.reject { |m| m[:status]  == 'cleaned'  }.collect { |m| m[:email_address] }
-        emails - subscribers.collect(&:email)
+        (members - cleaned_members).collect { |m| m[:email_address] } - subscribers.collect(&:email)
       end
 
       def missing_segments
@@ -111,6 +111,11 @@ module Synchronize
         result.track(:delete_segments, client.delete_segments(obsolete_segment_ids))
       end
 
+      def tag_cleaned_members
+        emails = cleaned_members.collect { |m| m[:email_address] }
+        SubscriberTagger.new(emails, list).tag!
+      end
+
       def remote_tags
         @remote_tags ||= members.each_with_object({}) do |member, hash|
           member[:tags].each do |tag|
@@ -122,6 +127,10 @@ module Synchronize
 
       def members
         @members ||= client.fetch_members
+      end
+
+      def cleaned_members
+        @cleaned_members ||= members.select { |m| m[:status] == 'cleaned' }
       end
 
       def members_by_email

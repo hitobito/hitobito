@@ -51,7 +51,7 @@ describe Export::EventParticipationsExportJob do
       lines = File.readlines("#{filepath}.#{format}")
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Firmenname;Übername.*/)
-      expect(lines[0]).to match(/;Bemerkungen \(Allgemeines.*/)
+      expect(lines[0]).to match(/;Bemerkungen.*/)
       expect(lines[0].split(';').count).to match(21)
     end
   end

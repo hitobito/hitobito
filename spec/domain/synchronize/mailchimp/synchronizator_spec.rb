@@ -60,6 +60,15 @@ describe Synchronize::Mailchimp::Synchronizator do
       expect(subject).to be_empty
     end
 
+    it 'is empty when subscribers have only technical tags' do
+      Contactable::InvalidEmailTagger.new(user, user.email, :primary).tag!
+      Contactable::InvalidEmailTagger.new(user, user.email, :additional).tag!
+
+      allow(sync.client).to receive(:fetch_segments).and_return([])
+      mailing_list.subscriptions.create!(subscriber: user)
+      expect(subject).to be_empty
+    end
+
     it 'is includes local tag if it does not exist remotely' do
       allow(sync.client).to receive(:fetch_segments).and_return([])
       mailing_list.subscriptions.create!(subscriber: user)

@@ -26,7 +26,7 @@ describe Event::Answer do
     subject { question.reload.answers.build }
 
     before do
-      question.update_attribute(:multiple_choices, true)
+      question.update_attribute(:multiple_choices, true) # rubocop:disable Rails/SkipsModelValidations
       subject.answer = answer_param
     end
 

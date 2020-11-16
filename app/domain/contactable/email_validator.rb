@@ -1,4 +1,9 @@
 # frozen_string_literal: true
+#
+#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  hitobito_cvp and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_cvp.
 
 module Contactable
   class EmailValidator
@@ -30,21 +35,7 @@ module Contactable
     end
 
     def tag_invalid!(person, invalid_email, kind = :primary)
-      ActsAsTaggableOn::Tagging
-        .find_or_create_by!(taggable: person,
-                            hitobito_tooltip: invalid_email,
-                            context: :tags,
-                            tag: send("invalid_tag_#{kind}"))
-    end
-
-    def invalid_tag_primary
-      @invalid_tag_primary ||=
-        PersonTags::Validation.email_primary_invalid(create: true)
-    end
-
-    def invalid_tag_additional
-      @invalid_tag_additional ||=
-        PersonTags::Validation.email_additional_invalid(create: true)
+      InvalidEmailTagger.new(person, invalid_email, kind).tag!
     end
   end
 end

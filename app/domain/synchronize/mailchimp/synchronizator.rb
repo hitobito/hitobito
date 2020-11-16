@@ -142,9 +142,11 @@ module Synchronize
       end
 
       def tags
-        @tags ||= Subscriber.mailing_list_tags(list)
+        @tags ||= Subscriber.mailing_list_tags(list).except(
+          PersonTags::Validation::EMAIL_PRIMARY_INVALID,
+          PersonTags::Validation::EMAIL_ADDITIONAL_INVALID,
+        )
       end
-
     end
   end
 end

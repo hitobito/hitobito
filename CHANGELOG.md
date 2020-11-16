@@ -3,7 +3,7 @@
 ## unreleased
 
 *  Tag Verwaltung unter Einstellungen
-*  Checkboxen als Antwortmöglichkeit für Anmeldungsfragen hinzugefügt (#1079)
+*  Anmeldungsfragen können auch nur eine Antwort haben (#1079)
 
 ## Version 1.22
 

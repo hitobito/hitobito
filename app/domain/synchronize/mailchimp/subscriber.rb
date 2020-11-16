@@ -60,6 +60,10 @@ module Synchronize
         @email = email
       end
 
+      def primary?
+        email == person.email
+      end
+
       # Delegate all other messages to person
       def method_missing(method_name, *args, &block)
         super unless person.respond_to?(method_name)

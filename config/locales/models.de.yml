@@ -448,7 +448,7 @@ de:
       event/participation:
         person_id: Person
         event_id: Event
-        additional_information: Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)
+        additional_information: Bemerkungen
         answers: Fragen
         created_at: Anmeldedatum
         roles: Rolle

@@ -414,7 +414,7 @@ it:
       event/participation:
         person_id: Persona
         event_id: Evento
-        additional_information: Osservazioni (generali, informazioni sullo stato di salute, allergie, ecc.)
+        additional_information: Osservazioni
         answers: Domande
         created_at: Data di iscrizione
         roles: Ruolo

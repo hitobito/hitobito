@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -397,8 +397,7 @@ de:
       caption_requires_approval: 'Der/Die Gruppenleiter/-in wird informiert und muss die Anmeldung bestätigen'
       times_are_optional: Uhrzeiten sind optional
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
-        Gib mögliche Antworten mit Komma getrennt ein oder lass das Feld leer,
-        um beliebige Antworten zu ermöglichen.
+      explain_choices: mehrere Antwortmöglichkeiten mit Komma trennen oder komplett leer lassen, um beliebige Antworten zu ermöglichen.
       explain_admin_questions: Hier kannst du weitere Angaben pro Teilnehmer/-in definieren,
         welche nur für die Kursadministration verwendet werden.
       explain_contact_attrs: Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung

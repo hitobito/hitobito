@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -36,7 +36,7 @@ class Event::Answer < ActiveRecord::Base
     if question_with_choices? && question.multiple_choices? && text.is_a?(Array)
       valid_range = (0...question.choice_items.size)
       # have submit index + 1 and handle reset via index 0
-      index_array = text.map(&:to_i).map { |i| i - 1 }
+      index_array = text.map { |i| i.to_i - 1 }
 
       super(valid_index_based_values(index_array, valid_range) || nil)
     else

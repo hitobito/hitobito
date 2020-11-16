@@ -33,7 +33,7 @@ class Event::Answer < ActiveRecord::Base
 
   # override to handle array values submitted from checkboxes
   def answer=(text)
-    if question_with_choices? && question.multiple_choices? && text.is_a?(Array)
+    if question_with_choices? && question_with_checkboxes? && text.is_a?(Array)
       valid_range = (0...question.choice_items.size)
       # have submit index + 1 and handle reset via index 0
       index_array = text.map { |i| i.to_i - 1 }
@@ -59,6 +59,10 @@ class Event::Answer < ActiveRecord::Base
 
   def question_with_choices?
     question && question.choice_items.present?
+  end
+
+  def question_with_checkboxes?
+    question.multiple_choices? || question.one_answer_available?
   end
 
   def valid_index_based_values(index_array, valid_range)

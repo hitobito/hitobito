@@ -15,7 +15,8 @@ class Address::Importer
                03-locations
                04-streets
                05-streets_other_languages
-               06-house_numbers).freeze
+               06-house_numbers
+              ).freeze
 
   delegate :url, :token, to: 'Settings.addresses'
 
@@ -111,7 +112,7 @@ class Address::Importer
   def parse_house_numbers
     parse(:house_numbers).each_with_object({}) do |row, hash|
       hash[row[2]] ||= []
-      hash[row[2]] << row[3].to_i
+      hash[row[2]] << [row[3].to_i, row[4].presence&.downcase].join
     end
   end
 

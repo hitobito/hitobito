@@ -31,6 +31,11 @@ describe Address::Importer do
       06;57006052;64853;214;;J;N;
       06;57006053;64853;215;;J;N;
       06;57006054;64853;217;;J;N;
+
+
+      01;3243;1054;20;6030;00;6030;Ebikon;Ebikon;LU;1;;7202;19860521;603060;J
+      04;16979;3243;Luzernerstrasse;Luzernerstrasse;Luzernerstrasse;Luzernerstrasse;1;1;J;;
+      06;1079;16979;25;A;J;N;
     CSV
   end
 
@@ -70,19 +75,26 @@ describe Address::Importer do
 
     expect do
       subject.run
-    end.to change { Address.count }.by(3)
+    end.to change { Address.count }.by(4)
 
     bs_bern = Address.find_by(street_short: 'Belpstrasse', zip_code: 3007)
     expect(bs_bern.street_long).to eq 'Belpstrasse'
     expect(bs_bern.town).to eq 'Bern'
     expect(bs_bern.zip_code).to eq 3007
-    expect(bs_bern.numbers).to eq [36,37,38,40]
+    expect(bs_bern.numbers).to eq %w(36 37 38 40)
 
     bs_muri = Address.find_by(street_short: 'Belpstrasse', zip_code: 3074)
     expect(bs_muri.street_long).to eq 'Belpstrasse'
     expect(bs_muri.town).to eq 'Muri b. Bern'
     expect(bs_muri.zip_code).to eq 3074
-    expect(bs_muri.numbers).to eq [3]
+    expect(bs_muri.numbers).to eq %w(3)
+    expect(dir).to be_exist
+
+    luzernstrasse = Address.find_by(street_short: 'Luzernerstrasse', zip_code: 6030)
+    expect(luzernstrasse.street_long).to eq 'Luzernerstrasse'
+    expect(luzernstrasse.town).to eq 'Ebikon'
+    expect(luzernstrasse.zip_code).to eq 6030
+    expect(luzernstrasse.numbers).to eq %w(25a)
     expect(dir).to be_exist
   end
 

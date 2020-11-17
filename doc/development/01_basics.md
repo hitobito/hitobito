@@ -45,10 +45,6 @@ Start Webpack development server with live-reload (then visit your Puma's http:/
 
     bin/webpack-dev-server
 
-Display Webpack production bundle contents:
-
-    yarn analyze
-
 ### Request Profiling
 
 For profiling single requests, you can add the param `?profile_request=true` to the URL. Output will be written to `tmp/performance`.

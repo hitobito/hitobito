@@ -11,6 +11,7 @@ Diese Dokumente beschreiben verschiedene Aspekte, welche bei der Entwicklung zu 
 * [Guidelines](03_guidelines.md)
 * [Wagons](04_wagons.md)
 * [Jenkins Setup](06_jenkins_setup.md)
+* [Frontend & Assets](09_webpacker.md)
 
 Alle Diagramme werden mit [Draw.io](https://draw.io) erstellt und jeweils als Original .xml sowie als .svg abgespeichert.
 

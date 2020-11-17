@@ -85,6 +85,7 @@ module Hitobito
         SessionsCleanerJob.new.schedule
         WorkerHeartbeatCheckJob.new.schedule
         ReoccuringMailchimpSynchronizationJob.new.schedule
+        Address::ImportJob.new.schedule if Settings.addresses.token
       end
     end
 

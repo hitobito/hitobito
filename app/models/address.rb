@@ -30,5 +30,4 @@ class Address < ActiveRecord::Base
             'LOWER(street_long) = :street OR LOWER(street_long_old) = :street',
             street: street.to_s.downcase)
   end
-
 end

@@ -12,4 +12,3 @@ class Address::ImportJob < RecurringJob
     Address::Import.new.run
   end
 end
-

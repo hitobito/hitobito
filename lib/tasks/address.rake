@@ -11,7 +11,6 @@ namespace :address do
     Address::Importer.new.run
   end
 
-
   class Overview
     def initialize(file)
       @file = file

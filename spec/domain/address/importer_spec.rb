@@ -125,4 +125,32 @@ describe Address::Importer do
     expect(subject.streets.to_h.values.first[:town]).to eq 'Lausanne'
   end
 
+
+  it 'ignores empty numbers' do
+    csv = <<~CSV
+      00;20200817;13229
+
+      01;1775;356;10;3074;00;3074;Muri b. Bern;Muri b. Bern;BE;1;;7272;19860521;307360;J
+      04;57347;1775;Belpstrasse;Belpstrasse;Belpstrasse;Belpstrasse;1;1;J;;
+      06;7185168;57347;;;J;N;
+    CSV
+
+    allow(Settings.addresses).to receive(:token).and_return('foo')
+    zip = Zip::OutputStream.write_buffer(StringIO.new('sample.zip')) do |out|
+      out.put_next_entry('sample.csv')
+      out.write csv
+    end
+
+    headers = {
+      'Accept' => '*/*',
+      'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Authorization' => 'Basic foo',
+      'User-Agent' => 'Faraday v0.15.3'
+    }
+    stub_request(:get, 'https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway').
+      with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
+
+    subject.prepare_files
+    expect(subject.streets.to_h.values.first[:numbers]).to eq []
+  end
 end

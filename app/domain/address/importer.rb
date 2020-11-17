@@ -117,6 +117,7 @@ class Address::Importer
 
   def parse_house_numbers
     parse(:house_numbers).each_with_object({}) do |row, hash|
+      next if row[3].blank?
       hash[row[2]] ||= []
       hash[row[2]] << [row[3].to_i, row[4].presence&.downcase].join
     end

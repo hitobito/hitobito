@@ -32,9 +32,11 @@ class Address::Importer
   end
 
   def replace_addresses
-    Address.delete_all
-    streets.to_h.values.each_slice(500) do |slice|
-      Address.insert_all(slice)
+    Address.transaction do
+      Address.delete_all
+      streets.to_h.values.each_slice(5_000) do |slice|
+        Address.insert_all(slice)
+      end
     end
   end
 

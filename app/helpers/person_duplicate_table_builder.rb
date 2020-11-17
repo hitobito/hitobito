@@ -10,7 +10,7 @@ class PersonDuplicateTableBuilder
   I18N_PREFIX = 'person_duplicates'.freeze
   I18N_PERSON = 'activerecord.attributes.person'.freeze
   I18N_PERSON_DUPLICATE = 'activerecord.attributes.person_duplicate'.freeze
-  TABLE_CLASS = 'table table-hover'.freeze
+  TABLE_CLASS = 'table'.freeze
 
   attr_reader :template
   delegate :can?, :content_tag, :content_tag_nested, :action_button, to: :template

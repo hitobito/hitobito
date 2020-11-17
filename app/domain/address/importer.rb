@@ -95,12 +95,16 @@ class Address::Importer
         street_short_old: row[3],
         street_long_old: row[4],
         zip_code: zip_code[:zip],
-        town: zip_code[:name],
+        town: town_name(zip_code),
         state: zip_code[:state],
         numbers: numbers
       }
       [row[1], street]
     end
+  end
+
+  def town_name(zip_code)
+    zip_code[:name] =~ /Lausanne\s+\d+/ ? 'Lausanne' : zip_code[:name]
   end
 
   def parse_zip_codes

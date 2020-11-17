@@ -98,4 +98,31 @@ describe Address::Importer do
     expect(dir).to be_exist
   end
 
+  it 'overrides strange lausane town name' do
+    csv = <<~CSV
+      00;20200817;13229
+
+      01;125;5586;20;1000;25;1000;Lausanne 25;Lausanne 25;VD;2;;130;19880301;100060;J
+      04;30235;125;Berne, route de;Berne, route de;Route de Berne;Route de Berne;1;2;J;;
+    CSV
+
+    allow(Settings.addresses).to receive(:token).and_return('foo')
+    zip = Zip::OutputStream.write_buffer(StringIO.new('sample.zip')) do |out|
+      out.put_next_entry('sample.csv')
+      out.write csv
+    end
+
+    headers = {
+      'Accept' => '*/*',
+      'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      'Authorization' => 'Basic foo',
+      'User-Agent' => 'Faraday v0.15.3'
+    }
+    stub_request(:get, 'https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway').
+      with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
+
+    subject.prepare_files
+    expect(subject.streets.to_h.values.first[:town]).to eq 'Lausanne'
+  end
+
 end

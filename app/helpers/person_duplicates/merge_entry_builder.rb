@@ -27,17 +27,19 @@ module PersonDuplicates
 
     def person_entry(p_nr)
       person = send(p_nr).decorate
-      radio_button(person, p_nr) +
-        details(person) +
-        person.roles_short(nil, edit: false)
+      radio_button_with_details(person, p_nr)
     end
 
-    def radio_button(person, p_nr)
+    def radio_button_with_details(person, p_nr)
       f.label("dst_#{p_nr}", class: 'radio') do
         checked = p_nr.eql?(:person_1)
         options = { checked: checked }
-        f.radio_button("dst_person", p_nr, options) +
-          person_label(person)
+        f.radio_button("dst", p_nr, options) +
+          f.content_tag(:div,
+            person_label(person) +
+            details(person) +
+            person.roles_short(nil, edit: false)
+          )
       end
     end
 
@@ -54,7 +56,9 @@ module PersonDuplicates
     def details(person)
       %w[company_name birth_year town].collect do |a|
         person.send(a)
-      end.compact.join(' / ')
+      end.compact.map do |detail|
+        f.content_tag(:div, detail, class: 'label')
+      end.join.html_safe
     end
 
   end

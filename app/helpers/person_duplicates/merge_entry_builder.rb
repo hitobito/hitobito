@@ -31,9 +31,9 @@ module PersonDuplicates
     end
 
     def radio_button_with_details(person, p_nr)
-      f.label("dst_#{p_nr}", class: 'radio') do
-        checked = p_nr.eql?(:person_1)
-        options = { checked: checked }
+      selected = p_nr.eql?(:person_1)
+      f.label("dst_#{p_nr}", class: label_class(selected)) do
+        options = { checked: selected }
         f.radio_button("dst", p_nr, options) +
           f.content_tag(:div,
             person_label(person) +
@@ -41,6 +41,10 @@ module PersonDuplicates
             person.roles_short(nil, edit: false)
           )
       end
+    end
+
+    def label_class(selected)
+      selected ? 'radio selected' : 'radio'
     end
 
     def person_label(person)

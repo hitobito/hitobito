@@ -1,2 +1,9 @@
 $('#modal-placeholder').html("#{escape_javascript(render(partial: 'person_duplicates/merge/new'))}")
 $('#person-duplicates-merge').modal('show')
+$('.person-duplicate-options input').change(function() {
+$('.person-duplicate-options label').removeClass('selected'); 
+label = $(this).parent();
+if (this.checked) {
+label.addClass('selected');
+}
+});

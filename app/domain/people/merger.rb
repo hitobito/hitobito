@@ -15,8 +15,8 @@ module People
 
     def merge!
       Person.transaction do
-        merge_person_attrs
         @src_person.destroy!
+        merge_person_attrs
       end
     end
 

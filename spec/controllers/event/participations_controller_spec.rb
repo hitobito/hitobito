@@ -674,7 +674,6 @@ describe Event::ParticipationsController do
       event.questions.create!(
         question: 'Terms and Conditions? Do you speak it?',
         choices: 'yep',
-        checkbox: true,
         required: true
       )
     end

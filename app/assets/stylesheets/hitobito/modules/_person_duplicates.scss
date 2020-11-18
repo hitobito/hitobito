@@ -25,8 +25,11 @@
       color: $black;
       text-shadow: none;
     }
-    > p > .muted {
-      margin-left: 0.25rem;
+    > p {
+      margin: 0;
+      > .muted {
+        margin-left: 0.25rem;
+      }
     }
   }
 

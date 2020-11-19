@@ -1,9 +1,0 @@
-ErrorDocument 503 /503.html
-
-<IfModule mod_rewrite.c>
-    RewriteEngine on
-
-    RewriteCond %{DOCUMENT_ROOT}/../tmp/stop.txt -f
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*)$ /$1 [R=503,L]
-</IfModule>

@@ -24,7 +24,7 @@ rm -r hitobito/.git
 mv hitobito/* .
 
 # add wagon sources
-mkdir vendor/wagons
+mkdir -p vendor/wagons
 for dir in hitobito_*; do
   if [[ ( -d $dir ) ]]; then
     rm -r $dir/.git

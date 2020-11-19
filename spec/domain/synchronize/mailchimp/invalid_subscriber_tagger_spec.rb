@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Synchronize::Mailchimp::SubscriberTagger do
+describe Synchronize::Mailchimp::InvalidSubscriberTagger do
   let(:list) { mailing_lists(:leaders) }
   let(:person) { people(:top_leader) }
 
@@ -16,7 +16,7 @@ describe Synchronize::Mailchimp::SubscriberTagger do
   end
 
   it 'tags by primary email' do
-    Synchronize::Mailchimp::SubscriberTagger.new([person.email], list).tag!
+    Synchronize::Mailchimp::InvalidSubscriberTagger.new([person.email], list).tag!
     expect(person.tags).to have(1).item
     expect(person.tags.first.name).to eq 'category_validation:email_primary_invalid'
   end
@@ -24,7 +24,7 @@ describe Synchronize::Mailchimp::SubscriberTagger do
   it 'tags by secondary email' do
     AdditionalEmail.create!(email: 'foo@bar.com', contactable: person, label: 'Privat', mailings: true)
     list.update(mailchimp_include_additional_emails: true)
-    Synchronize::Mailchimp::SubscriberTagger.new(['foo@bar.com'], list).tag!
+    Synchronize::Mailchimp::InvalidSubscriberTagger.new(['foo@bar.com'], list).tag!
     expect(person.tags).to have(1).item
     expect(person.tags.first.name).to eq 'category_validation:email_additional_invalid'
   end

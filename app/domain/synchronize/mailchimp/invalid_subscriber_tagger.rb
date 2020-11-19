@@ -7,7 +7,7 @@
 
 module Synchronize
   module Mailchimp
-    class SubscriberTagger
+    class InvalidSubscriberTagger
       attr_reader :emails, :list
 
       def initialize(emails, list)

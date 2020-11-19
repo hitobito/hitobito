@@ -115,7 +115,7 @@ module Synchronize
 
       def tag_cleaned_members
         emails = cleaned_members.collect { |m| m[:email_address] }
-        SubscriberTagger.new(emails, list).tag!
+        InvalidSubscriberTagger.new(emails, list).tag!
       end
 
       def remote_tags

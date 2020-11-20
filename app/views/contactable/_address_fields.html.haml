@@ -17,9 +17,9 @@
       = country_select(f.object.class.model_name.param_key,
                        'country',
                        { priority_countries: Settings.countries.prioritized,
-                         selected: f.object.country || Settings.addresses.typeahead_supported_countries.first,
+                         selected: f.object.country || Settings.addresses.imported_countries.first,
                          include_blank: true },
                        { class: 'chosen-select',
                          data: { placeholder: ' ',
                                  chosen_no_results: t('global.chosen_no_results'),
-                                 typeahead_supported_countries: Settings.addresses.typeahead_supported_countries } })
+                                 typeahead_supported_countries: Settings.addresses.imported_countries } })

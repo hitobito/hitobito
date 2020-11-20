@@ -55,3 +55,7 @@ person_add_request_rejected:
   key: person_add_request_rejected
   placeholders_required: person-name, request-body
   placeholders_optional: recipient-name, rejecter-name, rejecter-roles
+
+address_validation_checks:
+  key: address_validation_checks
+  placeholders_required: invalid-people

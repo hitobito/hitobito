@@ -60,7 +60,12 @@ CustomContent.seed_once(:key,
 
   {key: DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED,
    placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients, total-succeeded-recipients, failed-recipients',
+   placeholders_optional: nil},
+
+  {key: Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS,
+   placeholders_required: 'invalid-people',
    placeholders_optional: nil}
+
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
@@ -77,8 +82,21 @@ invoice_notification_id = CustomContent.get(InvoiceMailer::CONTENT_INVOICE_NOTIF
 user_impersonation_id = CustomContent.get(Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION).id
 bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS).id
 bulk_mail_with_failed_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED).id
+address_validation_checks_id = CustomContent.get(Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
+
+  {custom_content_id: address_validation_checks_id,
+   locale: 'de',
+   label: 'Addressen Validations Checks',
+   subject: 'Address Validierungen',
+   body: "Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden." },
+
+  {custom_content_id: address_validation_checks_id,
+   locale: 'fr',
+   label: 'Addressen Validations Checks',
+   subject: 'Validation des adresses',
+   body: "Les personnes: {invalid-people} ont des adresses, qui n'ont pas été trouvées dans les archives." },
 
   {custom_content_id: send_login_id,
    locale: 'de',

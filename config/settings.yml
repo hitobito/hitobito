@@ -197,5 +197,5 @@ mailchimp:
 addresses:
   url: https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway
   token: <%= ENV['ADDRESSES_TOKEN'] %>
-  typeahead_supported_countries:
+  imported_countries: 
     - CH

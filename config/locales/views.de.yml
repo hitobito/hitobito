@@ -1005,6 +1005,7 @@ de:
         category_validation:
           email_primary_invalid: Haupt-E-Mail ungültig
           email_additional_invalid: Weitere E-Mail ungültig
+          address_invalid: Addresse befindet sich nicht im Verzeichnis
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.

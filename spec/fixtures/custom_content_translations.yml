@@ -136,3 +136,11 @@ person_add_request_rejected:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+address_validation_checks:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:address_validation_checks) %>
+  locale: de
+  label: 'Addressen Validations Checks'
+  subject: Address Validierungen
+  body: 'Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden.'
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

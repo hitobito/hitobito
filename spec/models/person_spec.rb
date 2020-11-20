@@ -603,4 +603,41 @@ describe Person do
 
   end
 
+  describe 'invalid address tags' do
+    let (:person) { people(:bottom_member) }
+    let(:taggings) do
+      ActsAsTaggableOn::Tagging
+        .where(taggable: person)
+    end
+
+    before { Contactable::AddressValidator.new.validate_people }
+
+    it 'removes invalid address tags when saving new address' do
+      expect(taggings.count).to eq(1)
+
+      person.address = 'Belpstrasse 37'
+      person.save!
+
+      expect(taggings.reload.count).to eq(0)
+    end
+
+    it 'removes invalid address tags when saving new town' do
+      expect(taggings.count).to eq(1)
+
+      person.town = 'Bern'
+      person.save!
+
+      expect(taggings.reload.count).to eq(0)
+    end
+
+    it 'removes invalid address tags when saving new zip_code' do
+      expect(taggings.count).to eq(1)
+
+      person.zip_code = 3007
+      person.save!
+
+      expect(taggings.reload.count).to eq(0)
+    end
+  end
+
 end

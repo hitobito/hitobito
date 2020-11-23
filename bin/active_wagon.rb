@@ -16,7 +16,11 @@ class Setup
 
   def run
     write_and_copy('.envrc', environment)
-    write_and_copy('.tool-versions', "ruby #{USED_RUBY_VERSION}")
+    write_and_copy('.tool-versions', <<~TOOL_VERSION)
+      ruby #{USED_RUBY_VERSION}
+      nodejs 10.19.0
+      yarn 1.22.10
+    TOOL_VERSION
     write_and_copy('.ruby-version', USED_RUBY_VERSION)
     write('Wagonfile', gemfile)
     FileUtils.rm_rf(root.join('tmp'))

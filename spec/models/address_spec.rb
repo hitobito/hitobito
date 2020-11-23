@@ -20,7 +20,7 @@
 require 'spec_helper'
 
 describe Address do
-  it 'serializes number as array' do
+  it 'serializes numbers as array' do
     bs_bern = addresses(:bs_bern)
     expect(bs_bern.numbers).to eq [36, 37, 38, 40, 41]
   end

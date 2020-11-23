@@ -102,23 +102,23 @@ module LayoutHelper
     end
   end
 
-  def header_logo_css
-    return unless @group
+  def header_logo
+    logo_group = closest_group_with_logo
 
-    logo_group = @group.self_and_ancestors.reverse.find do |group|
-      group.logo.present?
-    end
+    return image_tag(logo_group.logo.to_s) if logo_group
 
-    return unless logo_group
-
-    selector = 'header.logo a.logo-image'
-
-    content_tag 'style' do
-      "#{selector} { background-image: url(#{asset_path(logo_group.logo)}); }"
-    end
+    wagon_image_pack_tag(Settings.application.logo.image, alt: Settings.application.name)
   end
 
   private
+
+  def closest_group_with_logo
+    return unless @group
+
+    @group.self_and_ancestors.reverse.find do |group|
+      group.logo.present?
+    end
+  end
 
   def include_add_button(title, add_path)
     button = action_button(ti(:'link.add'),

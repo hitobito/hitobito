@@ -13,21 +13,11 @@
     %meta{name: 'turbolinks-cache-control', content: 'no-cache'}
 
     = csrf_meta_tag
-    = favicon_link_tag 'favicon.ico'
+    = wagon_favicon_pack_tag 'favicon.ico'
 
-    <!-- HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
-    = stylesheet_link_tag 'ie.css', media: 'all', 'data-turbolinks-track' => true
-    <![endif]-->
-
-    <!--[if IE 7]>
-    = stylesheet_link_tag 'ie7.css', media: 'all', 'data-turbolinks-track' => true
-    <![endif]-->
-
-    = stylesheet_link_tag 'application.css', media: :screen, 'data-turbolinks-track' => true
-    = stylesheet_link_tag 'print.css', media: :print
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = stylesheet_pack_tag 'application', media: 'screen', 'data-turbolinks-track': true
+    = stylesheet_pack_tag 'print', media: 'print'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': true
 
     = yield(:head)
 
@@ -39,9 +29,8 @@
       - if origin_user
         = render 'layouts/user_impersonation'
 
-    = header_logo_css
     %header.logo
-      = link_to Settings.application.name, root_path, class: 'logo-image'
+      = link_to(header_logo, root_path, class: 'logo-image')
 
     #page
       - if current_user
@@ -82,7 +71,7 @@
           - footer = Settings.application.footer
           .span3
             - if footer.logo_image.present?
-              = link_to image_tag(footer.logo_image), footer.logo_url, target: '_blank'
+              = link_to wagon_image_pack_tag(footer.logo_image), footer.logo_url, target: '_blank'
           .footer_content.span9
             %p
               - footer.links.to_hash.fetch(I18n.locale, footer.links.to_hash).each do |label, url|

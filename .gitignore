@@ -34,6 +34,7 @@ doc/architecture/assets/**/*
 doc/development/development.html
 doc/development/assets/**/*
 spec/reports
+stats.json
 
 
 # precompiled assets
@@ -81,3 +82,10 @@ yarn-debug.log*
 
 # for those who want to reduce errors in the rails-log
 public/favicon.ico
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

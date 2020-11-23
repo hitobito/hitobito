@@ -5,7 +5,7 @@
         %h5.bold.modal-title
           %b= t('tags_merge.title')
 
-      = form_for(:tags_merge, url: merge_tags_path, remote: true, html: { class: "form-horizontal" }) do |f|
+      = form_for(:tags_merge, url: merge_tags_path, remote: false, html: { class: "form-horizontal" }) do |f|
         .modal-body
           .row-fluid
             .control-group

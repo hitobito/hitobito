@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -14,7 +16,7 @@ module Synchronize
       self.member_fields = []
 
       self.merge_fields = [
-        [ 'Gender', 'dropdown', { choices: %w(m w) },  ->(p) { p.gender } ]
+        ['Gender', 'dropdown', { choices: %w(m w) }, ->(p) { p.gender }]
       ]
 
       def initialize(mailing_list)
@@ -33,6 +35,7 @@ module Synchronize
         update_members
 
         destroy_segments
+        tag_cleaned_members
       end
 
       def missing_subscribers
@@ -42,8 +45,7 @@ module Synchronize
       end
 
       def obsolete_emails
-        emails = members.reject { |m| m[:status]  == 'cleaned'  }.collect { |m| m[:email_address] }
-        emails - subscribers.collect(&:email)
+        (members - cleaned_members).collect { |m| m[:email_address] } - subscribers.collect(&:email)
       end
 
       def missing_segments
@@ -56,7 +58,7 @@ module Synchronize
 
       def missing_merge_fields
         labels = client.fetch_merge_fields.collect { |field| field[:tag] }
-         merge_fields.reject { |name, _, _| labels.include?(name.upcase) }
+        merge_fields.reject { |name, _, _| labels.include?(name.upcase) }
       end
 
       def stale_segments
@@ -111,6 +113,11 @@ module Synchronize
         result.track(:delete_segments, client.delete_segments(obsolete_segment_ids))
       end
 
+      def tag_cleaned_members
+        emails = cleaned_members.collect { |m| m[:email_address] }
+        InvalidSubscriberTagger.new(emails, list).tag!
+      end
+
       def remote_tags
         @remote_tags ||= members.each_with_object({}) do |member, hash|
           member[:tags].each do |tag|
@@ -124,6 +131,10 @@ module Synchronize
         @members ||= client.fetch_members
       end
 
+      def cleaned_members
+        @cleaned_members ||= members.select { |m| m[:status] == 'cleaned' }
+      end
+
       def members_by_email
         @members_by_email ||= members.index_by { |m| m[:email_address] }
       end
@@ -133,9 +144,11 @@ module Synchronize
       end
 
       def tags
-        @tags ||= Subscriber.mailing_list_tags(list)
+        @tags ||= Subscriber.mailing_list_tags(list).except(
+          PersonTags::Validation::EMAIL_PRIMARY_INVALID,
+          PersonTags::Validation::EMAIL_ADDITIONAL_INVALID,
+        )
       end
-
     end
   end
 end

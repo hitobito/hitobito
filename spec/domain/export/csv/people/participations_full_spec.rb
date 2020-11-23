@@ -22,7 +22,7 @@ describe Export::Tabular::People::ParticipationsFull do
   end
 
   context 'participation_additional_information' do
-    its([:participation_additional_information]) { should eq 'Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)' }
+    its([:participation_additional_information]) { should eq 'Bemerkungen' }
   end
 
   context 'questions' do
@@ -65,7 +65,7 @@ describe Export::Tabular::People::ParticipationsFull do
 
       context 'with additional information' do
         before { participation.update_attribute(:additional_information, 'foobar') }
-        its(['Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)']) { should eq 'foobar' }
+        its(['Bemerkungen']) { should eq 'foobar' }
       end
 
       context 'with roles' do

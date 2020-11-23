@@ -11,6 +11,7 @@ AllCops:
     - vendor/**/*
     - tmp/**/*
     - app/assets/config.rb
+    - node_modules/**/*
 
 Style/RescueStandardError:
   Enabled: false

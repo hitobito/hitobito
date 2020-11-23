@@ -97,7 +97,7 @@ module FormHelper
   end
 
   def spinner
-    image_tag('spinner.gif', size: '16x16', class: 'spinner', style: 'display: none;')
+    image_pack_tag('spinner.gif', size: '16x16', class: 'spinner', style: 'display: none;')
   end
 
   private

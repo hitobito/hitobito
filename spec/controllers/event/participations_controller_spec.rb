@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -663,6 +663,37 @@ describe Event::ParticipationsController do
 
     it 'bottom_member can create when supplying required answer' do
       expect(make_request(people(:bottom_member), 'dummy')).to be_valid
+    end
+  end
+
+  context 'mandatory single checkbox answer' do
+    let(:event) { events(:top_event) }
+    let(:person) { people(:bottom_member) }
+
+    let!(:question) do
+      event.questions.create!(
+        question: 'Terms and Conditions? Do you speak it?',
+        choices: 'yep',
+        required: true
+      )
+    end
+
+    before do
+      sign_in(person)
+    end
+
+    it 'bottom_member cannot create without supplying required answer' do
+      post :create, params: { group_id: event.groups.first.id, event_id: event.id, event_participation:
+        {} } # <- look ma, no answer!
+
+      expect(assigns(:participation)).not_to be_valid
+    end
+
+    it 'bottom_member can create when supplying required answer' do
+      post :create, params: { group_id: event.groups.first.id, event_id: event.id, event_participation:
+        { answers_attributes: { '0' => { 'question_id' => question.id, 'answer' =>  'yep' } } } }
+
+      expect(assigns(:participation)).to be_valid
     end
   end
 

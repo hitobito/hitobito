@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -23,7 +23,7 @@ class EventsController < CrudController
                             :_destroy
                           ],
                           application_questions_attributes: [
-                            :id, :question, :choices, :multiple_choices, :required, :_destroy
+                            :id, :question, :choices, :multiple_choices, :_destroy, :required
                           ],
                           admin_questions_attributes: [
                             :id, :question, :choices, :multiple_choices, :_destroy
@@ -123,7 +123,7 @@ class EventsController < CrudController
   def load_kinds
     if entry.kind_class
       @kinds = entry.kind_class.list.without_deleted
-      @kinds += [entry.kind] if entry.kind && entry.kind.deleted?
+      @kinds += [entry.kind] if entry.kind&.deleted?
     end
   end
 
@@ -197,6 +197,7 @@ class EventsController < CrudController
   def assign_contact_attrs
     contact_attrs = model_params.delete(:contact_attrs)
     return if contact_attrs.blank?
+
     reset_contact_attrs
     contact_attrs.each do |a, v|
       entry.required_contact_attrs << a if v.to_sym == :required

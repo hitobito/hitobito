@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -19,17 +19,17 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.remember_params += [:filter]
 
-  self.sort_mappings = { last_name:  'people.last_name',
+  self.sort_mappings = { last_name: 'people.last_name',
                          first_name: 'people.first_name',
                          roles: lambda do |event|
                                   Person.order_by_name_statement.unshift(
                                     Event::Participation.order_by_role_statement(event)
                                   )
                                 end,
-                         nickname:   'people.nickname',
-                         zip_code:   'people.zip_code',
-                         town:       'people.town',
-                         birthday:   'people.birthday' }
+                         nickname: 'people.nickname',
+                         zip_code: 'people.zip_code',
+                         town: 'people.town',
+                         birthday: 'people.birthday' }
 
 
   decorates :group, :event, :participation, :participations, :alternatives
@@ -63,7 +63,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     end
   end
 
-  def index
+  def index # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     respond_to do |format|
       format.html do
         entries
@@ -196,7 +196,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def person_id
     return current_user.try(:id) unless event.supports_applications
 
-    if model_params && model_params.key?(:person_id)
+    if model_params&.key?(:person_id)
       params[:for_someone_else] = true
       model_params.delete(:person)
       model_params.delete(:person_id)
@@ -213,6 +213,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     unless type.participant?
       raise ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
     end
+
     role_type
   end
 

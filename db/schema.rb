@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_12_121723) do
+ActiveRecord::Schema.define(version: 2020_11_13_151157) do
 
   create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "contactable_type", null: false
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 2020_10_12_121723) do
     t.boolean "multiple_choices", default: false, null: false
     t.boolean "required", default: false, null: false
     t.boolean "admin", default: false, null: false
+    t.boolean "checkbox", default: false, null: false
     t.index ["event_id"], name: "index_event_questions_on_event_id"
   end
 

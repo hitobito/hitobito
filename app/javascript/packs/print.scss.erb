@@ -1,0 +1,204 @@
+//  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+//  hitobito and licensed under the Affero General Public License version 3
+//  or later. See the COPYING file at the top-level directory or at
+//  https://github.com/hitobito/hitobito.
+
+<% include ActionView::Helpers %>
+<% include Webpacker::Helper %>
+<% include WebpackHelper %>
+
+@charset "utf-8";
+
+// Import the wagons' specific variables or fall back to core variables
+<% absolute_wagon_file_paths(
+  File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_variables.scss'),
+  File.join('..', 'stylesheets', 'hitobito', 'customizable', '_variables.scss')
+  ) do |file_path| %>
+  @import "<%= file_path %>";
+<% end %>
+
+// Import the wagons' fonts or fall back to core fonts
+<% absolute_wagon_file_paths(
+  File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss'),
+  File.join('..', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss')
+  ) do |file_path| %>
+  @import "<%= file_path %>";
+<% end %>
+
+/*
+Version     :  0.1
+Author      :  Fritsch Pierre
+Author URL  :  http://www.wearecube.ch
+Mixed with  :  HTML5 Boilerplate & inseo
+*  @see  https://github.com/h5bp/html5-boilerplate
+*  @see  https://github.com/inseo
+*/
+
+/** --- = @section GENERIC --- */
+
+/** Init Colors, remove shadows and backgrounds
+ *  @see  http://www.sanbeiji.com/archives/953 */
+* {
+  color: #000 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  -ms-filter: none !important;
+      filter: none !important;
+  background-color: transparent !important;
+}
+
+/** Remove margin and width in <body>.
+ *  Init font. */
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  font-size: 10pt;
+  font-family: $sansFontFamily;
+}
+
+/** Titles followed by content
+ *  @note  just on Opera and IE 8+.
+ *  @see   http://en.wikipedia.org/wiki/Comparison_of_layout_engines_%28Cascading_Style_Sheets%29#cite_ref-75 */
+#{headings(all)} {
+  font-family: $headingFontFamily;
+  page-break-after: avoid;
+}
+
+h1, h2, h3, h4, h5, h6,
+blockquote,
+code, pre,
+tr,
+img {
+  page-break-inside: avoid;
+}
+
+/** Minimum lines before next page
+ *  @note  Doesn't work on Firefox. */
+p {
+  orphans: 3;   /** bas de page */
+  widows: 3;  /** haut de page */
+}
+
+/** Repeat table header on different pages */
+thead {
+  display: table-header-group;
+}
+
+/** Links underlign */
+a:link {
+  text-decoration: none;
+}
+
+/** Links + URL (but not the anchors) */
+// a[href]:after {
+//   content: " (" attr(href) ")";
+// }
+
+// a[href^="#"]:after {
+//   content: "";
+// }
+
+/** Abbreviations */
+abbr[title]:after {
+  content: " (" attr(title) ")";
+}
+
+/** Image width */
+img {
+  max-width: 100% !important;
+}
+
+/** --- = @section STYLES PARTICULIERS --- */
+
+/** Remove some elements */
+header, nav, footer,
+.nav, .breadcrumb, .btn-toolbar, .btn, .info-bar, #page-header {
+  display: none;
+}
+
+/** Réinitialiser les marges et la largeur du conteneur principal. */
+#page {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+}
+
+li { list-style: none; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th {
+  text-align: left;
+  display: table-cell;
+}
+
+table td,
+table th {
+  vertical-align: top;
+  padding:12px 12px 12px 0;
+  border-bottom: 1px solid $grayLight;
+
+  p { margin: 0; padding: 0; }
+
+  .profil {display: none; }
+}
+
+section {
+  margin-bottom: 25px;
+}
+
+article {
+  float: left;
+  width: 60%;
+  margin-right: 25px;
+}
+
+aside {
+  table.table {
+    width: auto;
+  }
+
+}
+
+.row-fluid {
+  clear: both;
+}
+
+dd > p {
+  margin: 0px;
+}
+
+body.application {
+  h1 { font-size: 1.4em; }
+  h2 { font-size: 1.3em; }
+  h3 { font-size: 1.2em; }
+  h4 { font-size: 1.1em; }
+  h5 { font-size: 1.1em; }
+
+  .profil-big {
+    display: none;
+  }
+}
+
+table tr td:first-of-type,
+table tr th:first-of-type {
+  input[type='checkbox'] {
+    & {
+      display: none !important;
+    }
+  }
+}
+
+table thead th:last-of-type, .multiselect {
+  & {
+    display: none;
+  }
+}
+
+table tr th[style] {
+  display: table-cell !important;
+}

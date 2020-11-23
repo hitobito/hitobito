@@ -415,7 +415,7 @@ fr:
       event/participation:
         person_id: Personne
         event_id: Evénement
-        additional_information: Commentaires (généralités, informations en lien avec la santé, allergies, etc.)
+        additional_information: Commentaires
         answers: Questions
         created_at: date d'inscription
         roles: rôle

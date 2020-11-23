@@ -21,7 +21,7 @@ describe Export::Tabular::People::ParticipationsFull do
   end
 
   context 'participation_additional_information' do
-    its([:participation_additional_information]) { should eq 'Bemerkungen (Allgemeines, Gesundheitsinformationen, Allergien, usw.)' }
+    its([:participation_additional_information]) { should eq 'Bemerkungen' }
   end
 
   context 'questions' do

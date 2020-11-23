@@ -192,6 +192,7 @@ table_displays: true
 
 mailchimp:
   max_attempts: 25
+  enabled: true
 
 addresses:
   url: https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway

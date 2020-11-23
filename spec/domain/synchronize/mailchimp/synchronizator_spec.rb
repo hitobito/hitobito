@@ -18,7 +18,6 @@ describe Synchronize::Mailchimp::Synchronizator do
     [ 'Gender', 'dropdown', { choices: %w(m w) }, ->(p) { person.gender } ]
   }
 
-
   def segments(names)
     names.collect.each_with_index do |name, index|
       { id: index, name: name, member_count: 0 }
@@ -56,6 +55,15 @@ describe Synchronize::Mailchimp::Synchronizator do
     subject { sync.missing_segments }
 
     it 'is empty when subscribers have no tags' do
+      allow(sync.client).to receive(:fetch_segments).and_return([])
+      mailing_list.subscriptions.create!(subscriber: user)
+      expect(subject).to be_empty
+    end
+
+    it 'is empty when subscribers have only technical tags' do
+      Contactable::InvalidEmailTagger.new(user, user.email, :primary).tag!
+      Contactable::InvalidEmailTagger.new(user, user.email, :additional).tag!
+
       allow(sync.client).to receive(:fetch_segments).and_return([])
       mailing_list.subscriptions.create!(subscriber: user)
       expect(subject).to be_empty
@@ -252,7 +260,6 @@ describe Synchronize::Mailchimp::Synchronizator do
     end
   end
 
-
   context '#perform' do
     before do
       sync.merge_fields  = []
@@ -393,6 +400,29 @@ describe Synchronize::Mailchimp::Synchronizator do
         expect(client).to receive(:unsubscribe_members).with([user.email])
 
         sync.perform
+      end
+
+      it 'ignores obsolete person when email is cleaned' do
+        allow(client).to receive(:fetch_members).and_return([{ email_address: user.email, status: 'cleaned' }])
+
+        expect(client).to receive(:subscribe_members).with([])
+        expect(client).to receive(:unsubscribe_members).with([])
+
+        sync.perform
+      end
+    end
+
+    context 'tag_cleaned_members' do
+      it 'creates invalid email tag on person' do
+        allow(client).to receive(:fetch_members).and_return([{ email_address: user.email, status: 'cleaned' }])
+
+        expect(client).to receive(:update_members)
+        expect(client).to receive(:subscribe_members).with([])
+        expect(client).to receive(:unsubscribe_members).with([])
+
+        Subscription.create!(mailing_list: mailing_list, subscriber: user)
+        sync.perform
+        expect(user).to have(1).tag
       end
     end
   end

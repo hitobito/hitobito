@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -69,11 +69,13 @@ class Event::Participation < ActiveRecord::Base
 
     def order_by_role_statement(event_type)
       return '' if event_type.role_types.blank?
-      statement = 'CASE event_roles.type '
+
+      statement = ['CASE event_roles.type']
       event_type.role_types.each_with_index do |t, i|
-        statement << "WHEN '#{t.sti_name}' THEN #{i} "
+        statement << "WHEN '#{t.sti_name}' THEN #{i}"
       end
       statement << 'END'
+      statement.join(' ')
     end
 
     def active
@@ -85,7 +87,7 @@ class Event::Participation < ActiveRecord::Base
     end
 
     def upcoming
-      joins(:event).merge(Event::upcoming(::Time.zone.today)).distinct
+      joins(:event).merge(Event.upcoming(::Time.zone.today)).distinct
     end
 
   end
@@ -97,6 +99,7 @@ class Event::Participation < ActiveRecord::Base
     answers.tap do |list|
       event.questions.each do |q|
         next if list.find { |a| a.question_id == q.id }
+
         a = q.answers.new
         a.question = q # without this, only the id is set
         list << a
@@ -113,8 +116,8 @@ class Event::Participation < ActiveRecord::Base
   end
 
   def applying_participant?
-    role = roles.first
-    event.supports_applications && (application_id || role && role.class.participant?)
+    first_role_class = roles.first&.class
+    event.supports_applications && (application_id || first_role_class&.participant?)
   end
 
   private

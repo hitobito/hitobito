@@ -68,6 +68,17 @@ describe Person::TagsController do
       expect(assigns(:tags).first.second.first.name).to eq('lorem')
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
     end
+
+    it 'ignores creation if name blank' do
+      post :create, params: {
+                      group_id: bottom_member.groups.first.id,
+                      person_id: bottom_member.id,
+                      acts_as_taggable_on_tag: { name: '' }
+                    }
+
+      expect(bottom_member.tags.count).to eq(0)
+      is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
+    end
   end
 
   describe 'DELETE #destroy' do

@@ -1,0 +1,63 @@
+//  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+//  hitobito and licensed under the Affero General Public License version 3
+//  or later. See the COPYING file at the top-level directory or at
+//  https://github.com/hitobito/hitobito.
+
+/**
+ * This is a manual selection of the used bootstrap packages.
+ */
+
+// Core variables and mixins
+@import "~bootstrap-sass/lib/variables"; // Modify this for custom colors, font-sizes, etc
+@import "~bootstrap-sass/lib/mixins";
+
+// CSS Reset
+@import "~bootstrap-sass/lib/reset";
+
+// Grid system and page structure
+@import "~bootstrap-sass/lib/scaffolding";
+@import "~bootstrap-sass/lib/grid";
+@import "~bootstrap-sass/lib/layouts";
+
+// Base CSS
+@import "~bootstrap-sass/lib/type";
+//@import "~bootstrap-sass/lib/code";
+@import "~bootstrap-sass/lib/forms";
+@import "~bootstrap-sass/lib/tables";
+
+// Components: common
+@import "~bootstrap-sass/lib/sprites";
+@import "~bootstrap-sass/lib/dropdowns";
+@import "~bootstrap-sass/lib/wells";
+@import "~bootstrap-sass/lib/component-animations";
+@import "~bootstrap-sass/lib/close";
+
+// Components: Buttons & Alerts
+@import "~bootstrap-sass/lib/buttons";
+@import "~bootstrap-sass/lib/button-groups";
+@import "~bootstrap-sass/lib/alerts"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
+
+// Components: Nav
+@import "~bootstrap-sass/lib/navs";
+@import "~bootstrap-sass/lib/navbar";
+@import "~bootstrap-sass/lib/breadcrumbs";
+@import "~bootstrap-sass/lib/pagination";
+//@import "~bootstrap-sass/lib/pager";
+
+// Components: Popovers
+@import "~bootstrap-sass/lib/modals";
+@import "~bootstrap-sass/lib/tooltip";
+@import "~bootstrap-sass/lib/popovers";
+
+// Components: Misc
+//@import "~bootstrap-sass/lib/thumbnails";
+@import "~bootstrap-sass/lib/labels-badges";
+//@import "~bootstrap-sass/lib/progress-bars";
+@import "~bootstrap-sass/lib/accordion";
+//@import "~bootstrap-sass/lib/carousel";
+//@import "~bootstrap-sass/lib/hero-unit";
+
+// Utility classes
+@import "~bootstrap-sass/lib/utilities"; // Has to be last to override when necessary
+
+@import "~bootstrap-sass/lib/responsive";

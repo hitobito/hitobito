@@ -53,7 +53,7 @@ module Export::Pdf
       end
 
       def ocrb_path
-        Rails.root.join('app', 'assets', 'fonts', 'OCRB.ttf')
+        Rails.root.join('app', 'javascript', 'fonts', 'OCRB.ttf')
       end
 
     end

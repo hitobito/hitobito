@@ -15,7 +15,7 @@ module PersonDuplicates
     def create
       PersonDuplicate.transaction do
         entry.destroy!
-        People::Merger.new(src_person_id, dst_person_id).merge!
+        People::Merger.new(src_person_id, dst_person_id, current_user).merge!
       end
 
       redirect_to group_person_duplicates_path(group), notice: success_message

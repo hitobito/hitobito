@@ -1406,6 +1406,7 @@ de:
     append_to_household: "%{item} wurde zum Haushalt (%{object_changes}) hinzugefügt."
     household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
     remove_from_household: "%{item} wurde vom Haushalt (%{object_changes}) entfernt."
+    person_merge: "Zwei Personen wurden in diesen Eintrag zusammengeführt. Gelöschte Person:" 
 
   tags/merge:
     success: Die Tags wurden erfolgreich zusammengeführt.

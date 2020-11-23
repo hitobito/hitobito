@@ -6,12 +6,19 @@ describe People::Merger do
 
   let(:person) { Fabricate(:person) }
   let(:doublet) { Fabricate(:person_with_address_and_phone) }
+  let(:actor) { people(:root) }
 
-  let(:merger) { described_class.new(@src_person_id, @dst_person_id) }
+  let(:merger) { described_class.new(@src_person_id, @dst_person_id, actor) }
+
+  before do
+    Fabricate('Group::BottomGroup::Member',
+              group: groups(:bottom_group_one_one),
+              person: doublet)
+  end
 
   context 'merge people' do
 
-    it 'merges two people and it\'s associations' do
+    it 'merges two people and it\'s associations, creates log entry' do
       @src_person_id = doublet.id
       @dst_person_id = person.id
 
@@ -35,6 +42,10 @@ describe People::Merger do
       expect(person.country).to eq(doublet.country)
 
       expect(Person.where(id: doublet.id)).not_to exist
+
+      log_hash = YAML.load(person.versions.first.object_changes)
+      expect(log_hash).to include(:last_name)
+      expect(log_hash).to include(:roles)
     end
 
   end

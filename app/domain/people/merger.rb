@@ -8,13 +8,15 @@
 module People
   class Merger
 
-    def initialize(src_person_id, dst_person_id)
+    def initialize(src_person_id, dst_person_id, actor)
       @src_person = Person.find(src_person_id)
       @dst_person = Person.find(dst_person_id)
+      @actor = actor
     end
 
     def merge!
       Person.transaction do
+        create_log_entry
         @src_person.destroy!
         merge_person_attrs
       end
@@ -23,7 +25,7 @@ module People
     private
 
     def merge_person_attrs
-      Person::PUBLIC_ATTRS.each do |a|
+      person_attrs.each do |a|
         assign(a)
       end
       @dst_person.save!
@@ -35,6 +37,42 @@ module People
 
       src_value = @src_person.send(attr)
       @dst_person.send("#{attr}=", src_value)
+    end
+
+    def create_log_entry
+      PaperTrail::Version.create!(main: @dst_person,
+                                  item: @dst_person,
+                                  whodunnit: @actor.id,
+                                  event: :person_merge,
+                                  object_changes: src_person_details)
+    end
+
+    def src_person_details
+      src_person_attrs.merge(src_person_roles).to_yaml
+    end
+
+    def person_attrs
+      Person::PUBLIC_ATTRS - [:id, :primary_group_id]
+    end
+
+    def src_person_attrs
+      person_attrs.each_with_object({}) do |a, h|
+        value = @dst_person.send(a)
+        next if value.blank?
+
+        h[a] = value
+      end
+    end
+
+    def src_person_roles
+      roles = @src_person.roles
+      return {} if roles.empty?
+
+      roles = roles.collect do |r|
+        "#{r} (#{r.group})"
+      end
+
+      { roles: roles }
     end
 
   end

@@ -20,7 +20,7 @@ class Address::Importer
   delegate :url, :token, to: 'Settings.addresses'
 
   def run
-    prepare_files unless dir.exist?
+    prepare_files if stale?
     replace_addresses
   end
 
@@ -137,5 +137,9 @@ class Address::Importer
       key, name = model.split('-')
       [name.to_sym, { key: key, file: dir.join("#{key}-#{name}.csv") }]
     end.to_h
+  end
+
+  def stale?
+    !dir.exist? || dir.ctime < 1.week.ago
   end
 end

@@ -37,16 +37,17 @@ describe Address::Importer do
     CSV
   end
 
-  let(:dir) { Rails.root.join('tmp/post-test') }
+  let(:dir) { @dir }
 
   around do |example|
-    FileUtils.rm_rf(dir)
-    example.run
-    FileUtils.rm_rf(dir)
+    Dir.mktmpdir("post-test") do |dir|
+      @dir = Pathname.new(dir)
+      example.run
+    end
   end
 
   before do
-    allow(subject).to receive(:dir).and_return(dir)
+    allow(subject).to receive(:stale?).and_return(true)
   end
 
   it 'raises if token is not set' do

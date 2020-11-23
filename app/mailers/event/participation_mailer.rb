@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -73,7 +73,7 @@ class Event::ParticipationMailer < ApplicationMailer
 
     values = if values
                values.merge(
-                 'event-details'   => event_details,
+                 'event-details' => event_details,
                  'application-url' => link_to(participation_url)
                )
              else
@@ -87,8 +87,7 @@ class Event::ParticipationMailer < ApplicationMailer
     group_event_participation_url(event.groups.first, event, participation)
   end
 
-  # rubocop:disable MethodLength, Metrics/AbcSize
-  def event_details
+  def event_details # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     infos = []
     infos << event.name
     infos << labeled(:dates) { event.dates.map(&:to_s).join('<br/>') }
@@ -102,7 +101,6 @@ class Event::ParticipationMailer < ApplicationMailer
     infos << participation_details
     infos.compact.join('<br/><br/>')
   end
-  # rubocop:enable MethodLength, Metrics/AbcSize
 
   def event_without_participation
     infos = []
@@ -133,9 +131,9 @@ class Event::ParticipationMailer < ApplicationMailer
 
   def load_application_answers
     participation.answers
-      .joins(:question)
-      .includes(:question)
-      .where(event_questions: { admin: false })
+                 .joins(:question)
+                 .includes(:question)
+                 .where(event_questions: { admin: false })
   end
 
   def additional_information_details

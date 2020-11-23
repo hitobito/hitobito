@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2014, 2019 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -56,6 +56,7 @@ module Group::NestedSet
   # The layer hierarchy without the layer of this group.
   def upper_layer_hierarchy
     return [] unless parent
+
     if new_record?
       if layer?
         parent.layer_hierarchy

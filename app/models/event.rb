@@ -58,10 +58,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   ### ATTRIBUTES
 
   class_attribute :used_attributes,
-                  :role_types,
-                  :supports_applications,
-                  :possible_states,
-                  :kind_class
+    :role_types,
+    :supports_applications,
+    :possible_states,
+    :kind_class
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,

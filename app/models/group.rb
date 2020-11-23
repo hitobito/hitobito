@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -125,14 +125,14 @@ class Group < ActiveRecord::Base
     def order_by_type_stmt(parent_group = nil)
       types = with_child_types(parent_group)
       if types.present?
-        statement = 'CASE groups.type '
+        statement = ['CASE groups.type']
         types.each_with_index do |t, i|
-          statement << "WHEN '#{t.sti_name}' THEN #{i} "
+          statement << "WHEN '#{t.sti_name}' THEN #{i}"
         end
-        statement << 'END, '
+        statement << 'END,'
       end
 
-      "#{statement} lft"
+      "#{statement.join(' ')} lft"
     end
 
     private
@@ -156,7 +156,7 @@ class Group < ActiveRecord::Base
   end
 
   def display_name
-    short_name.present? ? short_name : name
+    short_name.presence || name
   end
 
   def display_name_downcase

@@ -14,7 +14,6 @@ class Address::Importer
   RECORDS = %w(01-zip_codes
                03-locations
                04-streets
-               05-streets_other_languages
                06-house_numbers
               ).freeze
 

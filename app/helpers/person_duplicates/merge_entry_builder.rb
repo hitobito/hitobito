@@ -34,7 +34,7 @@ module PersonDuplicates
       selected = p_nr.eql?(:person_1)
       f.label("dst_#{p_nr}", class: label_class(selected)) do
         options = { checked: selected }
-        f.radio_button("dst", p_nr, options) +
+        f.radio_button('dst_person', p_nr, options) +
           f.content_tag(:div,
             person_label(person) +
             details(person) +

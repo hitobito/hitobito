@@ -18,10 +18,14 @@ module PersonDuplicates
         People::Merger.new(src_person_id, dst_person_id, current_user).merge!
       end
 
-      redirect_to group_person_duplicates_path(group), notice: success_message
+      redirect_to group_person_path(dst_person.primary_group, dst_person), notice: success_message
     end
 
     private
+
+    def dst_person
+      Person.find(dst_person_id)
+    end
 
     def dst_person_id
       dst_person_2? ? entry.person_2.id : entry.person_1.id
@@ -32,7 +36,7 @@ module PersonDuplicates
     end
 
     def dst_person_2?
-      params[:dst_person].eql?('person_2')
+      params[:person_duplicate][:dst_person].eql?('person_2')
     end
     
     def success_message

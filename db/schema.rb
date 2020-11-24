@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
   end
 
-  create_table "addresses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "addresses", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "street_short", limit: 128, null: false
     t.string "street_short_old", limit: 128, null: false
     t.string "street_long", limit: 128, null: false

@@ -17,12 +17,48 @@ module People
     def merge!
       Person.transaction do
         create_log_entry
+        merge_associations
+        # remove src person first to avoid validation errors (e.g. uniqueness)
         @src_person.destroy!
         merge_person_attrs
       end
     end
 
     private
+
+    def merge_associations
+      merge_roles
+      merge_contactables
+    end
+
+    def merge_contactables
+      merge_contactable(:additional_emails, :email)
+      merge_contactable(:phone_numbers, :number)
+      merge_contactable(:social_accounts, :name, match_label: true)
+    end
+
+    def merge_contactable(assoc, key, match_label: false)
+      @src_person.send(assoc).each do |c|
+        find_attrs = { key => c.send(key) }
+        find_attrs[:label] = c.label if match_label
+        existing = @dst_person.send(assoc).find_by(find_attrs)
+        return if existing.present?
+
+        dup = c.dup
+        dup.contactable = @dst_person
+        dup.save!
+      end
+    end
+
+    def merge_roles
+      @src_person.roles.each do |role|
+        Role.find_or_create_by!(
+          type: role.type,
+          person: @dst_person,
+          group: role.group
+        )
+      end
+    end
 
     def merge_person_attrs
       person_attrs.each do |a|
@@ -69,7 +105,7 @@ module People
       return {} if roles.empty?
 
       roles = roles.collect do |r|
-        "#{r} (#{r.group})"
+        "#{r} (#{r.group.with_layer.join(' / ')})"
       end
 
       { roles: roles }

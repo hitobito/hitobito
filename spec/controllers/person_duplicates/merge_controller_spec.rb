@@ -40,19 +40,19 @@ describe PersonDuplicates::MergeController do
       it 'merges duplicate entry' do
         sign_in(layer_leader)
 
-        post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id, dst_person: 'person_2' }
+        post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id, person_duplicate: { dst_person: 'person_2' }}
 
         expect(PersonDuplicate.where(id: duplicate_entry.id)).not_to exist
         expect(Person.where(id: person_1.id)).not_to exist
         expect(Person.where(id: person_2.id)).to exist
-        expect(response.body).to include('Turbolinks.visit("' + group_person_duplicates_url(layer))
+        expect(response).to redirect_to(group_person_path(person_2.primary_group, person_2))
         expect(flash[:notice]).to eq 'Die Personen Einträge wurden erfolgreich zusammengeführt.'
       end
 
       it 'is not possible to merge without write permission on at least one person' do
         sign_in(people(:top_leader))
 
-        expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
+        expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id, person_duplicate: { dst_person: 'person_2' } } }.to raise_error(CanCan::AccessDenied)
 
         expect(PersonDuplicate.where(id: duplicate_entry.id)).to exist
         expect(Person.where(id: person_1.id)).to exist
@@ -62,7 +62,7 @@ describe PersonDuplicates::MergeController do
       it 'is not possible to merge without permission to manage person duplicates' do
         sign_in(people(:bottom_member))
 
-        expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
+        expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id, person_duplicate: { dst_person: 'person_2' } } }.to raise_error(CanCan::AccessDenied)
 
         expect(PersonDuplicate.where(id: duplicate_entry.id)).to exist
         expect(Person.where(id: person_1.id)).to exist

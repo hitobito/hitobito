@@ -68,13 +68,31 @@ module PaperTrail
     def person_merge_list
       content = content_tag(:div, t_event).html_safe
       content += safe_join(YAML.load(model.object_changes)) do |line|
-        content_tag(:div, line)
+        person_merge_value(line)
       end
       content
     end
 
+    def person_merge_value(line)
+      attr, value = line
+      attr = t_person(attr)
+      if value.is_a?(Array)
+        c = content_tag(:div, "#{attr}:")
+        value.each do |v|
+          c += content_tag(:div, v)
+        end
+        c
+      else
+        content_tag(:div, "#{attr}: #{value}")
+      end
+    end
+
     def t_event
       I18n.t("version.#{event}")
+    end
+
+    def t_person(attr)
+      I18n.t("activerecord.attributes.person.#{attr}")
     end
 
     def attribute_change(attr, from, to)

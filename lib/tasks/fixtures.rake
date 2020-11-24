@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2018, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -11,14 +11,23 @@ namespace :fixtures do
     data = {}
 
     fixture_id = lambda { |group|
-      [group.name.parameterize, group.id].join('-').tr('-', '_') if group
+      return nil unless group
+      return 'root' if group.id == 1 && group.parent_id.nil?
+
+      parts = if Group.where(name: group.name).one?
+                [group.display_name.parameterize]
+              else
+                [group.display_name.parameterize, group.id]
+              end
+
+      parts.join('-').tr('-', '_')
     }
 
-    fixture_data = [:lft, :rgt, :name, :type, :email, :address, :zip_code, :town]
+    fixture_data = [:lft, :rgt, :name, :short_name, :type, :email, :address, :zip_code, :town]
 
     Group.order(:lft).find_each do |group|
       entry = {
-        'parent'         => fixture_id[group.parent],
+        'parent' => fixture_id[group.parent],
         'layer_group_id' =>
           "<%=ActiveRecord::FixtureSet.identify(:#{fixture_id[group.layer_group]})%>"
       }

@@ -7,8 +7,11 @@ $('#modal-placeholder').html("#{escape_javascript(render(partial: 'person_duplic
 $('#person-duplicates-merge').modal('show')
 $('.person-duplicate-options input').change(function() {
 $('.person-duplicate-options label').removeClass('selected'); 
+$('.person-duplicate-options #merge-hint').removeClass('hidden'); 
 label = $(this).parent();
+hint = $(this).parent().find('#merge-hint');
 if (this.checked) {
+hint.addClass('hidden');
 label.addClass('selected');
 }
 });

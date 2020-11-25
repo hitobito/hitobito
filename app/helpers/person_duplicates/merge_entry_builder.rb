@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2020, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module PersonDuplicates
   class MergeEntryBuilder
+
+    delegate :t, to: :template
 
     def initialize(form, duplicate_entry, template)
       @f = form
@@ -38,7 +40,8 @@ module PersonDuplicates
           f.content_tag(:div,
             person_label(person) +
             details(person) +
-            person.roles_short(nil, edit: false)
+            person.roles_short(nil, edit: false) +
+            merge_hint(p_nr)
           )
       end
     end
@@ -58,11 +61,23 @@ module PersonDuplicates
     end
 
     def details(person)
-      %w[company_name birth_year town].collect do |a|
-        person.send(a)
-      end.compact.map do |detail|
-        f.content_tag(:div, detail, class: 'label')
+      detail_values(person).compact.map do |v|
+        f.content_tag(:div, v, class: 'label')
       end.join.html_safe
+    end
+
+    def detail_values(person)
+      %w[company_name birth_year town].map do |a|
+        person.send(a)
+      end
+    end
+
+    def merge_hint(p_nr)
+      style_class = 'muted'
+      style_class += ' hidden' if p_nr.eql?(:person_1)
+      f.content_tag(:div, id: 'merge-hint', class: style_class) do
+        t('.merge_hint')
+      end
     end
 
   end

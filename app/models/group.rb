@@ -197,22 +197,23 @@ class Group < ActiveRecord::Base
   end
 
   def person_duplicates
-    duplicates = PersonDuplicate.includes(person_1: [:roles, :groups], person_2: [:roles, :groups])
     if top?
-      duplicates.all
+      duplicates = PersonDuplicate.all
     elsif layer?
-      duplicates = person_duplicates_in_layer(duplicates)
+      duplicates = PersonDuplicate.where(id: layer_person_duplicate_ids)
     end
-    duplicates
+    duplicates.includes(person_1: { roles: :group }, person_2: { roles: :group })
   end
 
   private
 
-  def person_duplicates_in_layer(duplicates)
-    group_ids = children.map(&:id) + [self.id]
-    duplicates
-      .where(person_1: { roles: { group_id: group_ids }})
-      .or(duplicates.where(person_2: { roles: { group_id: group_ids }}))
+  def layer_person_duplicate_ids
+    duplicates = PersonDuplicate.joins(person_1: :roles).joins(person_2: :roles)
+    group_ids = children.map(&:id) + [id]
+    ids = duplicates
+      .where('roles.group_id IN (:group_ids) OR roles_people.group_id IN (:group_ids)',
+             group_ids: group_ids)
+      .pluck(:id)
   end
 
   def top?

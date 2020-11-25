@@ -39,4 +39,8 @@
     background: desaturate(lighten($linkColor, 50%), 20%);
   }
 
+  #merge-hint {
+    padding-top: 10px;
+  }
+
 }

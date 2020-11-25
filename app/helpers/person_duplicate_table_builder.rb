@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2020, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -34,7 +34,7 @@ class PersonDuplicateTableBuilder
         content_tag_nested(:tbody, @entries) do |e|
           person_row(e, :person_1) +
             person_row(e, :person_2) +
-            blank_row unless @entries.last == e
+            divider_row(e)
       end
     end
   end
@@ -90,7 +90,9 @@ class PersonDuplicateTableBuilder
   end
 
 
-  def blank_row
+  def divider_row(entry) 
+    return '' if @entries.last == entry
+
     content_tag(:tr, class: 'divider') do
       content_tag(:td, colspan: @cols.count) do
         ''

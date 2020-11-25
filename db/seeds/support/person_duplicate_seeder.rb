@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2020, CVP Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 class PersonDuplicateSeeder
 
   attr_accessor :encrypted_password
@@ -38,6 +43,3 @@ class PersonDuplicateSeeder
     Person.order('RAND()').limit(10)
   end
 end
-
-seeder = PersonDuplicateSeeder.new
-seeder.seed_duplicates

@@ -886,6 +886,7 @@ de:
       new:
         title: Personen zusammenführen
         select_person: In welchen der beiden Einträge sollen die beiden Personen zusammengeführt werden?
+        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnr, Zusätzliche E-Mails sowie die Social Media Einträge übernommen. Alle anderen Daten dieser Person wie z.B. Notizen, Kursanmeldungen usw. werden gelöscht.
         ireversable: Dieser Vorgang kann nicht rückgängig gemacht werden.
       action: Zusammenführen
       success: Die Personen Einträge wurden erfolgreich zusammengeführt.

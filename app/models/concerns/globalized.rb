@@ -27,7 +27,7 @@ module Globalized
         delegate "#{col}=".to_sym, to: :translation
       end
 
-      after_save do
+      after_update do
         columns.each do |col|
           translation.send(col).save if translation.send(col).changed?
         end

@@ -8,12 +8,6 @@ login_de:
   locale: de
   label: Login senden
   subject: "Willkommen bei <%= Settings.application.name %>"
-  body: '
-  Hallo {recipient-name}<br/><br/>
-  Willkommen bei <%= Settings.application.name %>!
-  Unter dem folgenden Link kannst du
-  dein Login Passwort setzen:<br/><br/>{login-url}<br/><br/>
-  Bis bald!<br/><br/>{sender-name}'
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -22,7 +16,6 @@ login_fr:
   locale: fr
   label: Login E-Mail
   subject: Tes informations login
-  body: "Salut {recipient-name}, voici ta site login: {login-url}"
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -30,7 +23,6 @@ notes:
   custom_content_id: <%= ActiveRecord::FixtureSet.identify(:notes) %>
   locale: de
   label: Any Notes
-  body: Bla bla bla bla
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -39,11 +31,6 @@ bulk_mail_success_de:
   locale: de
   label: 'Sendebericht Abo'
   subject: 'Sendebericht Mail an {mail-to}'
-  body: '
-  Deine Mail an {mail-to} wurde verschickt:<br/><br/>
-  Betreff: {mail-subject}<br/>
-  Zeit: {delivered-at}<br/>
-  Empfänger: {total-recipients}<br/><br/>'
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -52,14 +39,6 @@ bulk_mail_with_failed_de:
   locale: de
   label: Sendebericht Abo nicht alle erfolgreich,
   subject: Sendebericht Mail an {mail-to}
-  body: '
-  Deine Mail an {mail-to} wurde verschickt:<br/><br/>
-  Betreff: {mail-subject}<br/>
-  Zeit: {delivered-at}<br/>
-  Empfänger: {total-succeeded-recipients}/{total-recipients}<br/><br/>
-  Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>{failed-recipients}
-  <br/><br/>
-  '
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -68,14 +47,6 @@ content_invoice_notification:
   locale: de
   label: Rechnung
   subject: Rechnung {invoice-number} von {group-name}
-  body: '<p>Hallo {recipient-name}</p>
-   <p>Rechnung von:</p>
-   <p><b>Absender: {group-address}</b></p>
-   <br/><br/>
-   {invoice-items}<br/><br/>
-   {invoice-total}<br/><br/>
-   {payment-information}<br/><br/>
-  '
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -84,14 +55,6 @@ person_add_request_person:
   locale: de
   label: 'Anfrage Personendaten: E-Mail Freigabe durch Person'
   subject: Freigabe deiner Personendaten
-  body: 'Hallo {recipient-name}<br/><br/>
-    {requester-name} möchte dich hier hinzufügen: <br><br/>
-    {request-body}<br><br/>
-    {requester-name} hat folgende schreibberechtigten Rollen: <br><br/>
-    {requester-roles}<br><br/>
-    Bitte bestätige oder verwerfe diese Anfrage:<br><br/>
-    {answer-request-url}
-  '
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -100,13 +63,6 @@ person_add_request_responsibles:
   locale: de
   label: 'Anfrage Personendaten: E-Mail Freigabe durch Verantwortliche'
   subject: Freigabe Personendaten
-  body: 'Hallo {recipient-names}<br/><br/>
-    {requester-name} möchte {person-name} hier hinzufügen: <br/><br/>
-    {request-body}<br/><br/>
-    {requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>
-    {requester-roles}<br/><br/>
-    Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>
-    {answer-request-url}'
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -115,11 +71,6 @@ person_add_request_approved:
   locale: de
   label: 'Anfrage Personendaten: E-Mail Freigabe akzeptiert'
   subject: Freigabe der Personendaten akzeptiert
-  body: 'Hallo {recipient-name}<br/><br/>
-   {approver-name} hat deine Anfrage für {person-name} freigegeben.<br/><br/>
-   {person-name} wurde zu {request-body} hinzugefügt.<br/><br/>
-   {approver-name} hat folgende schreibberechtigten Rollen: <br/><br/>
-   {approver-roles}<br/><br/>'
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -128,11 +79,6 @@ person_add_request_rejected:
   locale: de
   label: 'Anfrage Personendaten: E-Mail Freigabe abgelehnt'
   subject: Freigabe der Personendaten abgelehnt
-  body: 'Hallo {recipient-name}<br/><br/>
-    {rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br/><br/>
-    {person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>
-    {rejecter-name} hat folgende schreibberechtigten Rollen: <br/><br/>
-    {rejecter-roles}<br/><br/>'
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
@@ -141,6 +87,5 @@ address_validation_checks:
   locale: de
   label: 'Addressen Validations Checks'
   subject: Address Validierungen
-  body: 'Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden.'
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

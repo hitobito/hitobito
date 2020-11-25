@@ -1,4 +1,98 @@
-# one:
-#   record: name_of_fixture (ClassOfFixture)
-#   name: content
-#   body: <p>In a <i>million</i> stars!</p>
+login_de_body:
+  record: login_de (CustomContent::Translation)
+  name: body
+  body: '
+  Hallo {recipient-name}<br/><br/>
+  Willkommen bei <%= Settings.application.name %>!
+  Unter dem folgenden Link kannst du
+  dein Login Passwort setzen:<br/><br/>{login-url}<br/><br/>
+  Bis bald!<br/><br/>{sender-name}'
+
+login_fr_body:
+  record: login_fr (CustomContent::Translation)
+  name: body
+  body: "Salut {recipient-name}, voici ta site login: {login-url}"
+
+notes_body:
+  record: notes (CustomContent::Translation)
+  name: body
+  body: Bla bla bla bla
+
+bulk_mail_success_de_body:
+  record: bulk_mail_success_de (CustomContent::Translation)
+  name: body
+  body: '
+  Deine Mail an {mail-to} wurde verschickt:<br/><br/>
+  Betreff: {mail-subject}<br/>
+  Zeit: {delivered-at}<br/>
+  Empfänger: {total-recipients}<br/><br/>'
+
+bulk_mail_with_failed_de_body:
+  record: bulk_mail_with_failed_de (CustomContent::Translation)
+  name: body
+  body: '
+  Deine Mail an {mail-to} wurde verschickt:<br/><br/>
+  Betreff: {mail-subject}<br/>
+  Zeit: {delivered-at}<br/>
+  Empfänger: {total-succeeded-recipients}/{total-recipients}<br/><br/>
+  Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>{failed-recipients}
+  <br/><br/>
+  '
+
+content_invoice_notification_body:
+  record: content_invoice_notification (CustomContent::Translation)
+  name: body
+  body: '<p>Hallo {recipient-name}</p>
+   <p>Rechnung von:</p>
+   <p><b>Absender: {group-address}</b></p>
+   <br/><br/>
+   {invoice-items}<br/><br/>
+   {invoice-total}<br/><br/>
+   {payment-information}<br/><br/>
+  '
+
+person_add_request_person_body:
+  record: person_add_request_person (CustomContent::Translation)
+  name: body
+  body: 'Hallo {recipient-name}<br/><br/>
+    {requester-name} möchte dich hier hinzufügen: <br><br/>
+    {request-body}<br><br/>
+    {requester-name} hat folgende schreibberechtigten Rollen: <br><br/>
+    {requester-roles}<br><br/>
+    Bitte bestätige oder verwerfe diese Anfrage:<br><br/>
+    {answer-request-url}
+  '
+
+person_add_request_responsibles_body:
+  record: person_add_request_responsibles (CustomContent::Translation)
+  name: body
+  body: 'Hallo {recipient-names}<br/><br/>
+    {requester-name} möchte {person-name} hier hinzufügen: <br/><br/>
+    {request-body}<br/><br/>
+    {requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>
+    {requester-roles}<br/><br/>
+    Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>
+    {answer-request-url}'
+
+person_add_request_approved_body:
+  record: person_add_request_approved (CustomContent::Translation)
+  name: body
+  body: 'Hallo {recipient-name}<br/><br/>
+   {approver-name} hat deine Anfrage für {person-name} freigegeben.<br/><br/>
+   {person-name} wurde zu {request-body} hinzugefügt.<br/><br/>
+   {approver-name} hat folgende schreibberechtigten Rollen: <br/><br/>
+   {approver-roles}<br/><br/>'
+
+person_add_request_rejected_body:
+  record: person_add_request_rejected (CustomContent::Translation)
+  name: body
+  body: 'Hallo {recipient-name}<br/><br/>
+    {rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br/><br/>
+    {person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>
+    {rejecter-name} hat folgende schreibberechtigten Rollen: <br/><br/>
+    {rejecter-roles}<br/><br/>'
+
+address_validation_checks_body:
+  record: address_validation_checks (CustomContent::Translation)
+  name: body
+  body: 'Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden.'

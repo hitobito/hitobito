@@ -28,16 +28,12 @@ module People
 
     def merge_associations
       merge_roles
-      merge_contactables
+      merge_contactables(:additional_emails, :email)
+      merge_contactables(:phone_numbers, :number)
+      merge_contactables(:social_accounts, :name, match_label: true)
     end
 
-    def merge_contactables
-      merge_contactable(:additional_emails, :email)
-      merge_contactable(:phone_numbers, :number)
-      merge_contactable(:social_accounts, :name, match_label: true)
-    end
-
-    def merge_contactable(assoc, key, match_label: false)
+    def merge_contactables(assoc, key, match_label: false)
       @src_person.send(assoc).each do |c|
         find_attrs = { key => c.send(key) }
         find_attrs[:label] = c.label if match_label

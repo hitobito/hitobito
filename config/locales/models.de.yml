@@ -236,6 +236,9 @@ de:
       person/add_request:
         one: Zugriffsanfrage
         other: Anfragen
+      person_duplicate:
+        one: Duplikat
+        other: Duplikate
       people_filter:
         one: Filter
         other: Filter

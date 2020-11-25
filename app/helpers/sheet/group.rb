@@ -12,7 +12,7 @@ module Sheet
     tab 'activerecord.models.person.other',
         :group_people_path,
         if: :index_people,
-        alt: [:group_roles_path, :new_group_csv_imports_path],
+        alt: [:group_roles_path, :new_group_csv_imports_path, :group_person_duplicates_path],
         params: { returning: true }
 
     tab 'activerecord.models.event.other',

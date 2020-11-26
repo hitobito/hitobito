@@ -129,9 +129,6 @@ class PersonDecorator < ApplicationDecorator
     last_role.group.deleted_at? ? default_group : last_role.group
   end
 
-  def overview
-  end
-
   private
 
   def event_queries

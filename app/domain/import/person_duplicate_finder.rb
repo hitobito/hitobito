@@ -10,9 +10,9 @@ module Import
     include Translatable
 
     # if multiple rows match the same existing person, always return the same object
-    attr_reader :doublettes
+    attr_reader :duplicate_entries
 
-    DOUBLETTE_ATTRIBUTES = [
+    DUPLICATE_ATTRIBUTES = [
       :first_name,
       :last_name,
       :company_name,
@@ -21,7 +21,7 @@ module Import
     ]
 
     def initialize
-      @doublettes = {}
+      @duplicate_entries = {}
     end
 
     def find(attrs)
@@ -29,7 +29,7 @@ module Import
       if people.present?
         person = people.first
         if people.size == 1
-          doublettes[person.id] ||= person
+          duplicate_entries[person.id] ||= person
         else
           person.errors.add(:base, translate(:duplicates, count: people.size))
           person
@@ -37,8 +37,8 @@ module Import
       end
     end
 
-    def doublette_count
-      doublettes.size
+    def duplicate_count
+      duplicate_entries.size
     end
 
     private
@@ -54,13 +54,13 @@ module Import
 
     def duplicate_conditions(attrs)
       [''].tap do |conditions|
-        append_doublette_conditions(attrs, conditions)
+        append_duplicate_conditions(attrs, conditions)
         append_email_condition(attrs, conditions)
       end
     end
 
-    def append_doublette_conditions(attrs, conditions)
-      exisiting_doublette_attrs(attrs).each do |key, value|
+    def append_duplicate_conditions(attrs, conditions)
+      exisiting_duplicate_attrs(attrs).each do |key, value|
         conditions.first << ' AND ' if conditions.first.present?
         conditions.first << if %w(first_name last_name company_name).include?(key.to_s)
                               "#{key} = ?"
@@ -82,9 +82,9 @@ module Import
       end
     end
 
-    def exisiting_doublette_attrs(attrs)
+    def exisiting_duplicate_attrs(attrs)
       existing = attrs.select do |key, value|
-        value.present? && DOUBLETTE_ATTRIBUTES.include?(key.to_sym)
+        value.present? && DUPLICATE_ATTRIBUTES.include?(key.to_sym)
       end
       existing.delete(:birthday) unless parse_date(existing[:birthday])
       existing

@@ -47,7 +47,7 @@ describe PersonDuplicates::AcknowledgeController do
 
         post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id }
 
-        expect(response.body).to include('Turbolinks.visit("' + group_person_duplicates_url(layer))
+        expect(response).to redirect_to(group_person_duplicates_path(layer))
 
         expect(duplicate_entry.reload.acknowledged).to eq(true)
         expect(flash[:notice]).to eq 'Der Duplikats-Eintrag wurde erfolgreich entfernt.'

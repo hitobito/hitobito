@@ -44,7 +44,7 @@ module Import
     end
 
     def update_count
-      duplicate_finder.doublette_count - request_people.size
+      duplicate_finder.duplicate_count - request_people.size
     end
 
     private

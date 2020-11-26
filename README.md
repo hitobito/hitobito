@@ -82,16 +82,30 @@ See [Wagon Guidelines](doc/development/04_wagons.md) or [Wagons](http://github.c
 for more information on wagons and its available rake tasks.
 
 
+## Community
+hitobito made with 💙 and the incredible community:
+
+* Jungwacht Blauring Schweiz
+* [Puzzle ITC GmbH](https://www.puzzle.ch)
+* Pfadibewegung Schweiz
+* hitobito AG
+* CEVI Regionalverband ZH-SH-GL / CEVI Schweiz
+* Dachverband Schweizer Jugendparlamente DSJ
+* Insieme Schweiz 
+* Forschungstelle Digitale Nachhaltigkeit
+* CH Open
+* Schweizer Blasmusikverband
+* CVP Schweiz
+* Stiftung für junge Auslandschweizer
+
+Please contact [KunoKunz](https://github.com/KunoKunz) if you want to be part of our community.
+
 ## License
 
-hitobito is released under the GNU Affero General Public License.
-Copyright 2012-2020 by Jungwacht Blauring Schweiz, Puzzle ITC GmbH, Pfadibewegung Schweiz, hitobito AG,
-CEVI Regionalverband ZH-SH-GL, CEVI Schweiz, Dachverband Schweizer Jugendparlamente DSJ, Insieme Schweiz, 
-Forschungstelle Digitale Nachhaltigkeit, Schweizer Blasmusikverband, CVP Schweiz.
-See COPYING for more details.
+hitobito is released under the [GNU Affero General Public License](LICENSE).
 
-hitobito was developed by [Puzzle ITC GmbH](http://puzzle.ch).
+The hitobito logo is a registered trademark of hitobito LTD, Switzerland. 
 
-The hitobito logo is a registered trademark of hitobito LTD, Switzerland. Please contact [KunoKunz](https://github.com/KunoKunz) if you want to use the logo and be part of our community.
+---
 
 btw: hitobito 人人 [means](https://www.wordsense.eu/%E4%BA%BA%E4%BA%BA/) "everyone"  

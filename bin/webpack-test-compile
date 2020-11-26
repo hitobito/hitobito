@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+
+rm -rf public/packs-test/ && echo "remove public/packs-test"
+rake webpacker:compile
+cp -rf public/packs public/packs-test && echo "copied public/packs -> public/packs-test"
+

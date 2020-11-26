@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,9 +11,13 @@ module Export::Tabular::People
     SHORTEN_AT = 40
 
     def name
-      with_combined_first_names.collect do |last_name, combined_first_name|
-        without_blanks([combined_first_name, last_name]).join(' ')
-      end.join(', ')
+      if entry.company?
+        entry.company_name
+      else
+        with_combined_first_names.collect do |last_name, combined_first_name|
+          without_blanks([combined_first_name, last_name]).join(' ')
+        end.join(', ')
+      end
     end
 
     private

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,11 +12,18 @@ describe Export::Tabular::People::HouseholdRow do
   def name(first_names = [], last_names = [])
     person = Person.new(first_name: first_names.join(','),
                         last_name: last_names.join(','))
-    Export::Tabular::People::HouseholdRow.new(person).name
+    described_class.new(person).name
+  end
+
+  it 'shows the company name for companies' do
+    person = Person.new(first_name: 'Tom', last_name: 'Tester',
+                        company: true, company_name: 'ACME Corp.')
+
+    expect(described_class.new(person).name).to eq 'ACME Corp.'
   end
 
   it 'handles nil first and last name' do
-    expect(Export::Tabular::People::HouseholdRow.new(Person.new).name).to eq ''
+    expect(described_class.new(Person.new).name).to eq ''
   end
 
   it 'treats blank last name as first present lastname' do

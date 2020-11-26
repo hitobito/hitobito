@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2017, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2017-2020, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -36,6 +36,7 @@ class Export::PeopleExportJob < Export::ExportBaseJob
 
   def data
     return super unless @options[:selection]
+
     table_display = TableDisplay::People.find_or_initialize_by(person_id: @user_id)
     Export::Tabular::People::TableDisplays.export(@format, entries, table_display)
   end
@@ -43,7 +44,9 @@ class Export::PeopleExportJob < Export::ExportBaseJob
   def exporter
     return Export::Tabular::People::Households if @options[:household]
     return Export::Tabular::People::TableDisplays if @options[:selection]
-    full? ? Export::Tabular::People::PeopleFull : Export::Tabular::People::PeopleAddress
+    return Export::Tabular::People::PeopleFull if full?
+
+    Export::Tabular::People::PeopleAddress
   end
 
   def full?

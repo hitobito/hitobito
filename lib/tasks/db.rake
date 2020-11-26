@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 desc 'Load the mysql database configuration for the following tasks'
-task :mysql do
+task :mysql do # rubocop:disable Rails/RakeEnvironment
   ENV['RAILS_DB_ADAPTER']   = 'mysql2'
   ENV['RAILS_DB_NAME']      = 'hitobito_development'
   ENV['RAILS_TEST_DB_NAME'] = 'hitobito_test'
@@ -35,14 +35,37 @@ namespace :db do
           end
 
     Group.find_each do |group|
-      begin
-        group.send(:move_to_alphabetic_position)
-        bar.increment
-      rescue => e
-        puts e
-        puts group
-      end
+      group.send(:move_to_alphabetic_position)
+      bar.increment
+    rescue => e
+      puts e
+      puts group
     end
     puts 'Done.'
+  end
+
+  desc 'Import a dump and run migrations'
+  task :import, [:backup_filename] do |_t, args| # rubocop:disable Rails/RakeEnvironment
+    args.with_defaults(backup_filename: 'tmp/backup.sql.gz')
+    backup = Pathname.new(args[:backup_filename]).expand_path
+
+    cat = if backup.extname == '.gz'
+            if Gem::Platform.local.os == 'darwin'
+              'gunzip -c'
+            else # we assume Linux
+              'zcat'
+            end
+          else # we assume SQL in a text/plain file
+            'cat'
+          end
+
+
+    # some things are more stable and understandable when expressed as a shell-command
+    sh 'rails db:drop db:create'
+    sh "#{cat} #{backup} | rails db -p"
+
+    # other things are straightforward rake-tasks
+    Rake::Task['db:migrate'].invoke
+    Rake::Task['wagon:migrate'].invoke
   end
 end

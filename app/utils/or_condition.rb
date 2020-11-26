@@ -1,29 +1,37 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 # Builder for SQL OR conditions
 class OrCondition
-
   def initialize
-    @condition = ['']
+    @conditions = []
   end
 
   def or(clause, *args)
-    @condition.first << ' OR ' if present?
-    @condition.first << "(#{clause})"
-    @condition.push(*args)
+    @conditions << { clause: clause, args: args }
+    self
+  end
+
+  def delete(clause, *args)
+    @conditions.delete_if do |condition|
+      condition == { clause: clause, args: args }
+    end
   end
 
   def to_a
-    @condition
+    combined = @conditions.each_with_object({ clauses: [], args: [] }) do |condition, memo|
+      memo[:clauses] << "(#{condition[:clause]})"
+      memo[:args].push(*condition[:args])
+    end
+
+    [combined[:clauses].join(' OR '), *combined[:args]]
   end
 
   def blank?
-    @condition.first.blank?
+    @conditions.empty?
   end
-
 end

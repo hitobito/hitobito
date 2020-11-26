@@ -83,6 +83,10 @@ HasAndBelongsToMany:
 Rails/Delegate:
   Enabled: false
 
+# with the use of controller-abstraction via dry_crud, this is intended
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
 # That's no huge stopper
 Layout/EmptyLines:
   Enabled: false

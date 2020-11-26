@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -45,7 +45,7 @@ class PeopleController < CrudController
   before_render_show :load_grouped_person_tags, if: -> { html_request? }
   before_render_index :load_people_add_requests, if: -> { html_request? }
 
-  def index # rubocop:disable Metrics/AbcSize we support a lot of format, hence many code-branches
+  def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
     respond_to do |format|
       format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
       format.pdf   { render_pdf(filter_entries, group) }
@@ -82,19 +82,18 @@ class PeopleController < CrudController
   end
 
   # PUT button, ajax
-  def primary_group
+  def primary_group # rubocop:disable Metrics/AbcSize
     success = entry.update(primary_group_id: params[:primary_group_id])
     respond_to do |format|
       format.html { redirect_to group_person_path(group, entry) }
       format.js do
         return render :primary_group if success
+
         flash.now.alert = I18n.t('global.errors.header', count: entry.errors.size)
         render 'shared/update_flash'
       end
     end
   end
-
-  private_class_method
 
   # dont use class level accessor as expression is evaluated whenever constant is
   # loaded which might be before wagon that defines groups / roles has been loaded
@@ -107,14 +106,10 @@ class PeopleController < CrudController
 
   alias group parent
 
+  # every person may be displayed underneath the root group,
+  # even if it does not directly belong to it.
   def find_entry
-    if group && group.root?
-      # every person may be displayed underneath the root group,
-      # even if it does not directly belong to it.
-      Person.find(params[:id])
-    else
-      super
-    end
+    group&.root? ? Person.find(params[:id]) : super
   end
 
   def assign_attributes
@@ -143,12 +138,12 @@ class PeopleController < CrudController
   end
 
   def collect_grouped_person_tags
-    tags = entry.taggings.includes(:tag).order('tags.name').each_with_object({}) do |t, h|
+    tags = entry.taggings.includes(:tag).order('tags.name').each_with_object({}) do |t, memo|
       tag = t.tag
       tag.hitobito_tooltip = t.hitobito_tooltip
-      category = tag.category
-      h[category] ||= []
-      h[category] << tag
+
+      memo[tag.category] ||= []
+      memo[tag.category] << tag
     end
     ActsAsTaggableOn::Tag.order_categorized(tags)
   end
@@ -216,9 +211,7 @@ class PeopleController < CrudController
   end
 
   def render_entries_json(entries)
-    render json: ListSerializer.new(prepare_entries(entries).
-                                      includes(:social_accounts).
-                                      decorate,
+    render json: ListSerializer.new(prepare_entries(entries).includes(:social_accounts).decorate,
                                     group: @group,
                                     multiple_groups: @person_filter.multiple_groups,
                                     serializer: PeopleSerializer,

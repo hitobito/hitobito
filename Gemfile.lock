@@ -609,6 +609,7 @@ DEPENDENCIES
   draper-cancancan
   fabrication
   faker
+  faraday
   gibbon (~> 3.2)
   globalize
   haml

@@ -5,7 +5,7 @@
 
 hitobito is an open source web application to manage organisation and communities with complex group hierarchies with members, events, courses, mailings, communication and a lot more.
 
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/hitobito/hitobito/graphs/commit-activity) 
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/hitobito/hitobito/graphs/commit-activity)
 [![Documentation Status](https://readthedocs.org/projects/hitobito/badge/?version=latest)](https://hitobito.readthedocs.io/?badge=latest)
 [![GitHub](https://img.shields.io/github/license/hitobito/hitobito)](https://github.com/hitobito/hitobito/blob/master/LICENSE)
 [![Open Source Helpers](https://www.codetriage.com/hitobito/hitobito/badges/users.svg)](https://www.codetriage.com/hitobito/hitobito)
@@ -91,12 +91,12 @@ hitobito made with 💙 and the incredible community:
 * hitobito AG
 * CEVI Regionalverband ZH-SH-GL / CEVI Schweiz
 * Dachverband Schweizer Jugendparlamente DSJ
-* Insieme Schweiz 
+* Insieme Schweiz
 * Forschungstelle Digitale Nachhaltigkeit
 * CH Open
 * Digital Impact Network
 * Schweizer Blasmusikverband
-* GLP 
+* GLP
 * CVP Schweiz
 * Stiftung für junge Auslandschweizer
 
@@ -106,8 +106,8 @@ Please contact [KunoKunz](https://github.com/KunoKunz) if you want to be part of
 
 hitobito is released under the [GNU Affero General Public License](LICENSE).
 
-The hitobito logo is a registered trademark of hitobito LTD, Switzerland. 
+The hitobito logo is a registered trademark of hitobito LTD, Switzerland.
 
 ---
 
-btw: hitobito 人人 [means](https://www.wordsense.eu/%E4%BA%BA%E4%BA%BA/) "everyone"  
+btw: hitobito 人人 [means](https://www.wordsense.eu/%E4%BA%BA%E4%BA%BA/) "everyone"

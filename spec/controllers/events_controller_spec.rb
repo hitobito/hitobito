@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -34,6 +34,16 @@ describe EventsController do
         events(:top_event).dates.create!(start_at: '2012-3-02')
         get :index, params: { group_id: group.id, year: 2012, filter: 'all' }
         expect(assigns(:events)).to have(2).entries
+      end
+
+      it 'does show the last filled page if page-number is too high' do
+        expect(Kaminari.config).to receive(:default_per_page).and_return(2).at_least(:once)
+
+        # there are 3 events, with the paging-limit of 2, the pages 1 and 2 are
+        # filled, page 42 is not
+
+        get :index, params: { group_id: group.id, year: 2012, filter: 'all', page: 42 }
+        expect(assigns(:events)).to have(1).entries
       end
 
       it 'lists events of descendant groups by default' do

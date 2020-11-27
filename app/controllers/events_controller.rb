@@ -50,7 +50,7 @@ class EventsController < CrudController
 
   def index
     respond_to do |format|
-      format.html { @events = entries.page(params[:page]) }
+      format.html { @events = entries_page(params[:page]) }
       format.csv  { render_tabular_in_background(:csv) }
       format.xlsx { render_tabular_in_background(:xlsx) }
       format.ics  { render_ical(entries) }
@@ -216,6 +216,16 @@ class EventsController < CrudController
     else
       expression = sort_expression if sorting?
       Event::Filter.new(group, params[:type], params[:filter], year, expression)
+    end
+  end
+
+  def entries_page(page_param)
+    page_scope = entries.page(page_param)
+
+    if page_scope.out_of_range?
+      entries.page(page_scope.total_pages)
+    else
+      page_scope
     end
   end
 

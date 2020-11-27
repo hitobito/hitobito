@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -47,7 +47,8 @@ describe EventsController do
       end
 
       it 'orders according to sort expression' do
-        get :index, params: { group_id: group.id, filter: 'layer', year: 2012, sort: :name, sort_dir: :asc }
+        get :index, params: { group_id: group.id, filter: 'layer', year: 2012,
+                              sort: :name, sort_dir: :asc }
         expect(assigns(:events).first.name).to eq 'Eventus'
       end
 
@@ -175,7 +176,8 @@ describe EventsController do
         expect(event.name).to eq(source.name)
         expect(event.kind_id).to eq(source.kind_id)
         expect(event.application_questions.map(&:question)).to match_array(
-          source.application_questions.map(&:question))
+          source.application_questions.map(&:question)
+        )
         expect(event.application_questions.map(&:id).uniq).to eq([nil])
       end
 
@@ -189,21 +191,23 @@ describe EventsController do
     end
 
     context 'POST create' do
-      let(:date)  { { label: 'foo', start_at_date: Date.today, finish_at_date: Date.today } }
+      let(:date)  do
+        { label: 'foo', start_at_date: Time.zone.today, finish_at_date: Time.zone.today }
+      end
       let(:question)  { { question: 'foo?', choices: '1,2,3,4' } }
 
       it 'creates new event course with dates' do
         sign_in(people(:top_leader))
 
         post :create, params: {
-                                                        event: {  group_ids: [group.id, group2.id],
-                                                          name: 'foo',
-                                                          kind_id: event_kinds(:slk).id,
-                                                          dates_attributes: [date],
-                                                          application_questions_attributes: [question],
-                                                          contact_id: people(:top_leader).id,
-                                                          type: 'Event::Course' },
-                                                group_id: group.id
+          event: {  group_ids: [group.id, group2.id],
+                    name: 'foo',
+                    kind_id: event_kinds(:slk).id,
+                    dates_attributes: [date],
+                    application_questions_attributes: [question],
+                    contact_id: people(:top_leader).id,
+                    type: 'Event::Course' },
+          group_id: group.id
         }
 
         event = assigns(:event)
@@ -223,10 +227,10 @@ describe EventsController do
 
         expect do
           post :create, params: {
-                                                            event: {  group_id: group.id,
-                                                            name: 'foo',
-                                                            type: 'Event::Course' },
-                                                  group_id: group.id
+            event: {  group_id: group.id,
+                      name: 'foo',
+                      type: 'Event::Course' },
+            group_id: group.id
           }
         end.to raise_error(CanCan::AccessDenied)
       end
@@ -239,26 +243,29 @@ describe EventsController do
       before { sign_in(people(:top_leader)) }
 
       it 'creates, updates and destroys dates' do
-        d1 = event.dates.create!(label: 'Pre', start_at_date: '1.1.2014', finish_at_date: '3.1.2014')
-        d2 = event.dates.create!(label: 'Main', start_at_date: '1.2.2014', finish_at_date: '7.2.2014')
+        d1 = event.dates.create!(label: 'Pre',
+                                 start_at_date: '1.1.2014', finish_at_date: '3.1.2014')
+        d2 = event.dates.create!(label: 'Main',
+                                 start_at_date: '1.2.2014', finish_at_date: '7.2.2014')
 
         expect do
           put :update, params: {
-                         group_id: group.id,
-                         id: event.id,
-                         event: { name: 'testevent',
-                                  dates_attributes: {
-                                     d1.id.to_s => { id: d1.id,
-                                                     label: 'Vorweek',
-                                                     start_at_date: '3.1.2014',
-                                                     finish_at_date: '4.1.2014' },
-                                     d2.id.to_s => { id: d2.id, _destroy: true },
-                                     '999' => { label: 'Nachweek',
-                                                start_at_date: '3.2.2014',
-                                                finish_at_date: '5.2.2014' } } }
-                       }
+            group_id: group.id,
+            id: event.id,
+            event: { name: 'testevent',
+                     dates_attributes: {
+                       d1.id.to_s => { id: d1.id,
+                                       label: 'Vorweek',
+                                       start_at_date: '3.1.2014',
+                                       finish_at_date: '4.1.2014' },
+                       d2.id.to_s => { id: d2.id, _destroy: true },
+                       '999' => { label: 'Nachweek',
+                                  start_at_date: '3.2.2014',
+                                  finish_at_date: '5.2.2014' }
+                     } }
+          }
           expect(assigns(:event)).to be_valid
-        end.not_to change { Event::Date.count }
+        end.not_to(change { Event::Date.count })
 
         expect(event.reload.name).to eq 'testevent'
         dates = event.dates.order(:start_at)
@@ -362,7 +369,10 @@ describe EventsController do
 
     it 'assigns required and hidden contact attributes' do
 
-      put :update, params: { group_id: group.id, id: event.id, event: { contact_attrs: { nickname: :required, address: :hidden, social_accounts: :hidden } } }
+      put :update, params: { group_id: group.id, id: event.id,
+                             event: { contact_attrs: { nickname: :required,
+                                                       address: :hidden,
+                                                       social_accounts: :hidden } } }
 
       expect(event.reload.required_contact_attrs).to include('nickname')
       expect(event.reload.hidden_contact_attrs).to include('address')
@@ -372,9 +382,10 @@ describe EventsController do
 
     it 'removes contact attributes' do
 
-      event.update!({hidden_contact_attrs: ['social_accounts', 'address', 'nickname']})
+      event.update!({ hidden_contact_attrs: %w(social_accounts address nickname) })
 
-      put :update, params: { group_id: group.id, id: event.id, event: { contact_attrs: { nickname: :hidden } } }
+      put :update, params: { group_id: group.id, id: event.id,
+                             event: { contact_attrs: { nickname: :hidden } } }
 
       expect(event.reload.hidden_contact_attrs).to include('nickname')
       expect(event.hidden_contact_attrs).not_to include('address')

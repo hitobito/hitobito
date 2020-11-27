@@ -94,7 +94,9 @@ hitobito made with 💙 and the incredible community:
 * Insieme Schweiz 
 * Forschungstelle Digitale Nachhaltigkeit
 * CH Open
+* Digital Impact Network
 * Schweizer Blasmusikverband
+* GLP 
 * CVP Schweiz
 * Stiftung für junge Auslandschweizer
 

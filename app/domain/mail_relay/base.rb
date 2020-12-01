@@ -75,7 +75,8 @@ module MailRelay
           message.mark_for_delete = false
           Airbrake.notify(exception)
           mail_hash = mail_log.mail_hash
-          Raven.capture_exception(exception, logger: 'mail_relay', extra: { mail_hash: mail_hash })
+          Raven.capture_exception(exception, logger: 'mail_relay', extra: { mail_hash: mail_hash },
+                                             fingerprint: ['{{ default }}', mail_hash])
         end
       end
 

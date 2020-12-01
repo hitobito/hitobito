@@ -79,38 +79,9 @@ module MailRelay
         end
       end
 
-      # Use this method in the console to clean up errorenous emails.
-      def manually_clear_emails
-        Mail.find_and_delete(count: 10) do |message|
-          message.mark_for_delete = should_clear_email?(message)
-          puts ''
-        end
-      end
-
       def valid_email?(email)
         email.present? && Truemail.valid?(email)
       end
-
-      private
-
-      def should_clear_email?(message)
-        print "Delete message '#{message.subject}' (y/N/i)? "
-        case gets.strip.downcase
-        when 'y'
-          true
-        when 'i'
-          inspect_message(message)
-        else
-          false
-        end
-      end
-
-      def inspect_message(message)
-        puts message
-        puts "\n\n"
-        should_clear_email?(message)
-      end
-
     end
 
     def initialize(message)

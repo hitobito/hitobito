@@ -28,7 +28,11 @@ class Person::LogController < ApplicationController
   end
 
   def entry
-    @entry ||= group.people.find(params[:id])
+    person
+  end
+
+  def person
+    @person ||= group.people.find(params[:id])
   end
 
   def group

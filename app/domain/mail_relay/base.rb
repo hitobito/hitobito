@@ -1,9 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 
 module MailRelay
   # A generic email relay object. Retrieves messages from a mail server and resends
@@ -78,8 +79,6 @@ module MailRelay
         end
       end
 
-      # rubocop:disable Rails/Output
-
       # Use this method in the console to clean up errorenous emails.
       def manually_clear_emails
         Mail.find_and_delete(count: 10) do |message|
@@ -111,8 +110,6 @@ module MailRelay
         puts "\n\n"
         should_clear_email?(message)
       end
-
-      # rubocop:enable Rails/Output
 
     end
 

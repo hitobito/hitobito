@@ -263,7 +263,7 @@ class Person < ActiveRecord::Base
     primary_group_id || groups.first.try(:id) || Group.root.id
   end
 
-  def years # rubocop:disable Metrics/AbcSize Age calculation is complex
+  def years
     return unless birthday?
 
     now = Time.zone.now.to_date
@@ -288,8 +288,7 @@ class Person < ActiveRecord::Base
     email == Settings.root_email
   end
 
-  # Overwrite to handle uniquness validation race conditions
-  def save(*args)
+  def save(*args) # rubocop:disable Rails/ActiveRecordOverride Overwritten to handle uniqueness validation race conditions
     super
   rescue ActiveRecord::RecordNotUnique
     errors.add(:email, :taken)
@@ -297,7 +296,7 @@ class Person < ActiveRecord::Base
   end
 
   def layer_group
-    primary_group.layer_group if primary_group
+    primary_group&.layer_group
   end
 
   def finance_groups

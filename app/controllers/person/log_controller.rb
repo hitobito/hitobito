@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -12,16 +12,16 @@ class Person::LogController < ApplicationController
   decorates :group, :person, :versions
 
   def index
-    @versions = PaperTrail::Version.where(main_id: entry.id, main_type: Person.sti_name).
-                                    reorder('created_at DESC, id DESC').
-                                    includes(:item).
-                                    page(params[:page])
+    @versions = PaperTrail::Version.where(main_id: entry.id, main_type: Person.sti_name)
+                                   .reorder('created_at DESC, id DESC')
+                                   .includes(:item)
+                                   .page(params[:page])
   end
 
   private
 
   def entry
-    @person ||= group.people.find(params[:id])
+    @entry ||= group.people.find(params[:id])
   end
 
   def group

@@ -241,36 +241,12 @@ module MailRelay
 
     def init_mail_log(message)
       mail_log = MailLog.build(message)
-      if mail_log.exists?
-        processed_before_error(mail_log)
-        return
-      end
+      raise MailProcessedBeforeError, mail_log if mail_log.exists?
+
       mail_log.mailing_list_name = envelope_receiver_name
       mail_log.save
       mail_log
     end
 
-    def processed_before_error(mail_log)
-      msg = "Mail with subject '#{mail_log.mail_subject}' has already been " \
-            'processed before and is skipped. Please remove it manually ' \
-            "from catch-all inbox and check why it could not be processed.\n" \
-            "Mail Hash: #{mail_log.mail_hash}"
-      raise MailProcessedBeforeError, msg
-    end
-
   end
-
-  class Error < StandardError
-    attr_reader :original
-    attr_reader :mail
-
-    def initialize(message, mail, original = nil)
-      super(message)
-      @mail = mail
-      @original = original
-    end
-  end
-
-  class MailProcessedBeforeError < StandardError; end
-
 end

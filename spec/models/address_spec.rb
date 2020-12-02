@@ -9,12 +9,15 @@
 #
 # Table name: addresses
 #
-#  id       :bigint           not null, primary key
-#  street   :string(255)      not null
-#  town     :string(255)      not null
-#  zip_code :integer          not null
-#  state    :string(255)      not null
-#  numbers  :text(65535)
+#  id               :bigint           not null, primary key
+#  street_short     :string(128)      not null
+#  street_short_old :string(128)      not null
+#  street_long      :string(128)      not null
+#  street_long_old  :string(128)      not null
+#  town             :string(128)      not null
+#  zip_code         :integer          not null
+#  state            :string(128)      not null
+#  numbers          :text(16777215)
 #
 
 require 'spec_helper'

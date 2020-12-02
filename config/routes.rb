@@ -224,7 +224,9 @@ Hitobito::Application.routes.draw do
 
         resources :mailchimp_synchronizations, only: [:create]
 
-        resources :mail_logs, only: [:index], controller: 'mailing_list/mail_logs'
+        resources :messages, only: [:index], controller: 'messages'
+        resources :text_messages, except: [:index], controller: 'messages/text_messages'
+        resources :letters, except: [:index], controller: 'messages/letters'
       end
 
       resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do

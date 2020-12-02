@@ -1,11 +1,11 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2020, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-class MailingList::MailLogsController < CrudController
+class MessagesController < CrudController
 
   include YearBasedPaging
 
@@ -14,10 +14,14 @@ class MailingList::MailLogsController < CrudController
   private
 
   def list_entries
-    mailing_list.mail_logs.list.in_year(year)
+    parent.messages.list.in_year(year)
   end
 
-  def mailing_list
+  def parent
+    recipients_source
+  end
+
+  def recipients_source
     MailingList.find(mailing_list_id)
   end
 
@@ -26,7 +30,7 @@ class MailingList::MailLogsController < CrudController
   end
 
   def authorize_class
-    authorize!(:update, mailing_list)
+    authorize!(:update, recipients_source)
   end
 
 end

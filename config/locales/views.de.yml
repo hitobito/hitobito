@@ -65,6 +65,7 @@ de:
 
     tabs:
       info: Info
+      settings: Einstellungen
 
     search:
       placeholder: 'Suchen...'

@@ -42,7 +42,8 @@ class MailingList < ActiveRecord::Base
            class_name: 'Person::AddRequest::MailingList',
            dependent: :destroy
 
-  has_many :mail_logs, dependent: :nullify
+  has_many :mail_logs, through: :messages
+  has_many :messages, dependent: :nullify, foreign_key: :recipients_source_id
 
   validates_by_schema
   validates :mail_name, uniqueness: { case_sensitive: false },

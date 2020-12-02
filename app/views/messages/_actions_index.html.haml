@@ -1,0 +1,8 @@
+-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- if can?(:update, @mailing_list)
+  = button_action_add(new_group_mailing_list_text_message_path(@group, @mailing_list))
+  = button_action_add(new_group_mailing_list_letter_path(@group, @mailing_list))

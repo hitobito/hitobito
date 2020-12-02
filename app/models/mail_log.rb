@@ -15,16 +15,17 @@
 #  mail_hash         :string(255)
 #  status            :integer          default(0)
 #  mailing_list_name :string(255)
-#  mailing_list_id   :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #
 
 class MailLog < ActiveRecord::Base
 
+  delegate :mailing_list, to: :message
+
   enum status: [:retreived, :bulk_delivering, :completed, :sender_rejected, :unkown_recipient]
 
-  belongs_to :mailing_list
+  belongs_to :message
 
   validates_by_schema
 

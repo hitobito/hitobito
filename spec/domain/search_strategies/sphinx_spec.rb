@@ -250,6 +250,22 @@ describe SearchStrategies::Sphinx, sphinx: true do
 
     end
 
+    describe '#query_addresses' do
+      let(:user) { people(:top_leader) }
+      it 'finds streets' do
+        result = strategy(addresses(:bs_bern).to_s[1..5]).query_addresses
+
+        expect(result).to include(addresses(:bs_bern))
+      end
+
+      context 'without any params' do
+        it 'returns nothing' do
+          result = strategy.query_addresses
+
+          expect(result).to eq([])
+        end
+      end
+    end
   end
 
   def strategy(term = nil, page = nil)

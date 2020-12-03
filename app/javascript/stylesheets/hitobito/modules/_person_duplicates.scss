@@ -44,3 +44,9 @@
   }
 
 }
+
+.person-duplicates-table {
+  td:first-child, th:first-child {
+    padding-left: 8px;
+  }
+}

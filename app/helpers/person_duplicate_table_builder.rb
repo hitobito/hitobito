@@ -10,16 +10,19 @@ class PersonDuplicateTableBuilder
   I18N_PREFIX = 'person_duplicates'.freeze
   I18N_PERSON = 'activerecord.attributes.person'.freeze
   I18N_PERSON_DUPLICATE = 'activerecord.attributes.person_duplicate'.freeze
-  TABLE_CLASS = 'table'.freeze
+  TABLE_CLASS = 'table person-duplicates-table'.freeze
 
   attr_reader :template
-  delegate :can?, :content_tag, :content_tag_nested, :action_button, to: :template
+
+  delegate :can?, :group_person_path, :link_to,
+    :content_tag, :content_tag_nested,
+    :action_button, to: :template
 
   def initialize(entries, group, template)
     @template = template
     @entries = entries
     @group = group
-    @cols = [:first_name, :last_name, :nickname, :company_name,
+    @cols = [:person_name, :company_name,
              :birth_year, :town, :roles_list, :actions]
   end
 
@@ -39,18 +42,31 @@ class PersonDuplicateTableBuilder
     end
   end
 
-  def person_row(entry, pnr)
-    person = entry.send(pnr)
+  def person_row(entry, p_nr)
+    person = entry.send(p_nr)
     content_tag_nested(:tr, @cols) do |c|
       if c == :actions
-        action_col(entry, pnr) if pnr == :person_1
+        action_col(entry, p_nr) if p_nr == :person_1
+      elsif c == :person_name
+        content_tag(:td, label(person))
       else
         content_tag(:td, person.send(c))
       end
     end
   end
 
-  def action_col(entry, pnr)
+  def label(person)
+    label = person.person_name
+    if can?(:show, person)
+      link_to(label,
+              group_person_path(person.primary_group, person),
+              target: '_blank')
+    else
+      label
+    end
+  end
+
+  def action_col(entry, p_nr)
     content_tag(:td, class: 'right vertical-middle', rowspan: 2) do
       content = ''
       if can?(:merge, entry)

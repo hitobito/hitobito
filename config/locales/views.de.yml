@@ -885,16 +885,16 @@ de:
     merge:
       new:
         title: Personen zusammenführen
-        select_person: In welchen der beiden Einträge sollen die beiden Personen zusammengeführt werden?
+        select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
         merge_hint: Beim Zusammenführen werden die Rollen, Telefonnr., Zusätzliche E-Mails sowie die Social Media Einträge übernommen. Alle anderen Daten dieser Person wie z.B. Notizen, Kursanmeldungen usw. werden gelöscht.
         ireversable: Dieser Vorgang kann nicht rückgängig gemacht werden.
       action: Zusammenführen
       success: Die Personen Einträge wurden erfolgreich zusammengeführt.
     ignore:
       new:
-        title: Als nicht Duplikat markieren
+        title: Duplikat wirklich ignorieren?
         confirm: Handelt es sich bei den beiden Einträgen für %{person} wirklich nicht um ein Duplikat?
-        ireversable: Dieser Vorgang kann nicht rückgängig gemacht werden.
+        irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
       action: Ignorieren
       success: Der Duplikats-Eintrag wurde erfolgreich entfernt. 
 

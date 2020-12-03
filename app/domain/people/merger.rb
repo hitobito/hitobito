@@ -47,12 +47,17 @@ module People
     end
 
     def merge_roles
-      @src_person.roles.each do |role|
-        Role.find_or_create_by!(
-          type: role.type,
+      @src_person.roles.with_deleted.each do |src_role|
+        dst_role = Role.find_or_initialize_by(
+          type: src_role.type,
           person: @dst_person,
-          group: role.group
+          group: src_role.group
         )
+
+        next unless dst_role.new_record?
+
+        dst_role.deleted_at = src_role.deleted_at
+        dst_role.save!
       end
     end
 

@@ -10,7 +10,7 @@ module PersonDuplicates
 
     WARNING_ICON = '⚠️'
 
-    delegate :t, to: :template
+    delegate :t, :safe_join, to: :template
 
     def initialize(form, duplicate_entry, template)
       @f = form
@@ -19,7 +19,7 @@ module PersonDuplicates
     end
 
     def render
-      [person_entry(:person_1), person_entry(:person_2)].join.html_safe
+      safe_join([person_entry(:person_1), person_entry(:person_2)])
     end
 
     private
@@ -57,13 +57,9 @@ module PersonDuplicates
     end
 
     def person_label(person)
-      if person.primary_group
-        link_to(person.to_s,
-                group_person_path(person.primary_group, person),
-                target: '_blank')
-      else
-        person.to_s
-      end
+      link_to(person.to_s,
+              group_person_path(person.primary_group, person),
+              target: '_blank')
     end
 
     def details(person)

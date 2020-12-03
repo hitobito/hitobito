@@ -48,8 +48,8 @@ module PersonDuplicates
     end
 
     def authorize_action
-      authorize!(:manage_person_duplicates, group)
-      authorize!(:merge, entry)
+      authorize!(:manage_person_duplicates, group) &&
+        authorize!(:merge, entry)
     end
 
     def group

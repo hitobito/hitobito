@@ -341,6 +341,7 @@ de:
       person_duplicate:
         birth_year: Jahrgang
         roles_list: Rollen
+        person_name: Vorname / Name / Übername
 
       person/add_request:
         person: Person

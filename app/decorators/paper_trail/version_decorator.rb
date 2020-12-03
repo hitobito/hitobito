@@ -47,10 +47,9 @@ module PaperTrail
 
     def custom_event_changes
       content_tag(:div,
-                  t_event,
-                  user: whodunnit,
-                  item: item,
-                  object_changes: object_changes)
+                  t_event(user: whodunnit,
+                          item: item,
+                          object_changes: object_changes))
     end
 
     def changeset_lines
@@ -87,8 +86,11 @@ module PaperTrail
       end
     end
 
-    def t_event
-      I18n.t("version.#{event}")
+    def t_event(user: nil, item: nil, object_changes: nil)
+      I18n.t("version.#{event}",
+             user: user,
+             item: item,
+             object_changes: object_changes)
     end
 
     def t_person(attr)

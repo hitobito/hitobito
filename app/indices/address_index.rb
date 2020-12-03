@@ -8,5 +8,5 @@
 module AddressIndex; end
 
 ThinkingSphinx::Index.define_partial :address do
-  indexes street_short, street_long, street_short_old, street_long_old, town, zip_code, numbers, sortable: true
+  indexes street_short, town, zip_code, sortable: true
 end

@@ -251,11 +251,24 @@ describe SearchStrategies::Sphinx, sphinx: true do
     end
 
     describe '#query_addresses' do
-      let(:user) { people(:top_leader) }
-      it 'finds streets' do
-        result = strategy(addresses(:bs_bern).to_s[1..5]).query_addresses
+      let(:user)    { people(:top_leader) }
 
+      it 'finds multiple streets by name' do
+        result = strategy("Belpst").query_addresses
         expect(result).to include(addresses(:bs_bern))
+        expect(result).to include(addresses(:bs_muri))
+      end
+
+      it 'finds single streets by name and number' do
+        result = strategy("Belpst 36").query_addresses
+        expect(result).to include(addresses(:bs_bern))
+        expect(result).not_to include(addresses(:bs_muri))
+      end
+
+      it 'finds single streets by name and town' do
+        result = strategy("Belpst Muri").query_addresses
+        expect(result).not_to include(addresses(:bs_bern))
+        expect(result).to include(addresses(:bs_muri))
       end
 
       context 'without any params' do

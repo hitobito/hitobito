@@ -35,7 +35,7 @@ module SearchStrategies
 
     def query_addresses
       return Address.none.page(1) if @term.blank?
-      Address.search(Riddle::Query.escape(@term), default_search_options)
+      Address.search(Riddle::Query.escape(@term), default_search_options.merge(match_mode: :phrase))
     end
 
     protected

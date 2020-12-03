@@ -59,7 +59,7 @@ module MailRelay
 
       def process(message)
         new(message).relay
-      rescue MailProcessedBeforeError => e
+      rescue MailRelay::MailProcessedBeforeError => e
         processed_before(message, e)
         nil
       rescue Exception => e # rubocop:disable Lint/RescueException

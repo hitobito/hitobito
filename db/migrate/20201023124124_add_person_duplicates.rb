@@ -10,7 +10,7 @@ class AddPersonDuplicates < ActiveRecord::Migration[6.0]
     create_table(:person_duplicates) do |t|
       t.integer :person_1_id, null: false
       t.integer :person_2_id, null: false
-      t.boolean :acknowledged, null: false, default: false
+      t.boolean :ignore, null: false, default: false
 
       t.timestamps
     end

@@ -12,7 +12,7 @@
 #  id                   :integer          not null, primary key
 #  person_1_id          :integer          not null
 #  person_2_id          :integer          not null
-#  acknowledged         :boolean          default(FALSE), not null
+#  ignore               :boolean          default(FALSE), not null
 #
 
 require 'spec_helper'

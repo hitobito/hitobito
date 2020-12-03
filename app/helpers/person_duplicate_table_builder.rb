@@ -56,8 +56,8 @@ class PersonDuplicateTableBuilder
       if can?(:merge, entry)
         content += action_button_merge(entry)
       end
-      if can?(:acknowledge, entry)
-        content += action_button_acknowledge(entry)
+      if can?(:ignore, entry)
+        content += action_button_ignore(entry)
       end
       content.html_safe
     end
@@ -70,9 +70,9 @@ class PersonDuplicateTableBuilder
                   remote: true)
   end
 
-  def action_button_acknowledge(entry)
-    action_button(t('acknowledge.action'),
-                  new_acknowledge_path(entry),
+  def action_button_ignore(entry)
+    action_button(t('ignore.action'),
+                  new_ignore_path(entry),
                   :'user-slash',
                   remote: true)
   end
@@ -83,8 +83,8 @@ class PersonDuplicateTableBuilder
       id: entry.id)
   end
 
-  def new_acknowledge_path(entry)
-    template.new_acknowledge_group_person_duplicate_path(
+  def new_ignore_path(entry)
+    template.new_ignore_group_person_duplicate_path(
       group_id: @group.id,
       id: entry.id)
   end

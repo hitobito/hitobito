@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
   end
 
-  create_table "addresses", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "addresses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "street_short", limit: 128, null: false
     t.string "street_short_old", limit: 128, null: false
     t.string "street_long", limit: 128, null: false
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.string "town", limit: 128, null: false
     t.integer "zip_code", null: false
     t.string "state", limit: 128, null: false
-    t.text "numbers"
+    t.text "numbers", size: :medium
     t.index ["zip_code", "street_short"], name: "index_addresses_on_zip_code_and_street_short"
   end
 
@@ -581,7 +581,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   create_table "person_duplicates", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "person_1_id", null: false
     t.integer "person_2_id", null: false
-    t.boolean "acknowledged", default: false, null: false
+    t.boolean "ignore", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["person_1_id", "person_2_id"], name: "index_person_duplicates_on_person_1_id_and_person_2_id", unique: true

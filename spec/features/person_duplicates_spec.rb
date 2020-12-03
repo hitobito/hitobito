@@ -24,7 +24,7 @@ describe :person_duplicates, js: true do
     visit group_person_duplicates_path(top_layer)
   end
 
-  it 'lists duplicates and acknowledges or merges them' do
+  it 'lists duplicates and ignores or merges them' do
     person_rows = find('#content table.table tbody').all('tr:not(.divider)')
 
     expect(person_rows.count).to eq(6)

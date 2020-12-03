@@ -99,8 +99,8 @@ Hitobito::Application.routes.draw do
         member do
           get 'merge' => 'person_duplicates/merge#new', as: 'new_merge'
           post 'merge' => 'person_duplicates/merge#create', as: 'merge'
-          get 'acknowledge' => 'person_duplicates/acknowledge#new', as: 'new_acknowledge'
-          post 'acknowledge' => 'person_duplicates/acknowledge#create', as: 'acknowledge'
+          get 'ignore' => 'person_duplicates/ignore#new', as: 'new_ignore'
+          post 'ignore' => 'person_duplicates/ignore#create', as: 'ignore'
         end
       end
 

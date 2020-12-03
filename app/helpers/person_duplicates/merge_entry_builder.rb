@@ -8,6 +8,8 @@
 module PersonDuplicates
   class MergeEntryBuilder
 
+    WARNING_ICON = '⚠️'
+
     delegate :t, to: :template
 
     def initialize(form, duplicate_entry, template)
@@ -34,7 +36,7 @@ module PersonDuplicates
 
     def radio_button_with_details(person, p_nr)
       selected = p_nr.eql?(:person_1)
-      f.label("dst_#{p_nr}", class: label_class(selected)) do
+      f.label("dst_#{p_nr}", class: label_class(selected), for: label_for(p_nr)) do
         options = { checked: selected }
         f.radio_button('dst_person', p_nr, options) +
           f.content_tag(:div,
@@ -48,6 +50,10 @@ module PersonDuplicates
 
     def label_class(selected)
       selected ? 'radio selected' : 'radio'
+    end
+
+    def label_for(p_nr)
+      "person_duplicate_dst_person_#{p_nr}"
     end
 
     def person_label(person)
@@ -73,10 +79,10 @@ module PersonDuplicates
     end
 
     def merge_hint(p_nr)
-      style_class = 'muted'
+      style_class = ''
       style_class += ' hidden' if p_nr.eql?(:person_1)
       f.content_tag(:div, id: 'merge-hint', class: style_class) do
-        t('.merge_hint')
+        [WARNING_ICON, t('.merge_hint')].join(' ')
       end
     end
 

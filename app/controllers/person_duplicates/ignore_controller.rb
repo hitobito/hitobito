@@ -6,14 +6,14 @@
 #  https://github.com/hitobito/hitobito.
 
 module PersonDuplicates
-  class AcknowledgeController < ApplicationController
+  class IgnoreController < ApplicationController
 
     before_action :authorize_action
 
     def new; end
 
     def create
-      entry.update!(acknowledged: true)
+      entry.update!(ignore: true)
 
       redirect_to group_person_duplicates_path(group), notice: success_message
     end
@@ -21,7 +21,7 @@ module PersonDuplicates
     private
     
     def success_message
-      I18n.t('person_duplicates.acknowledge.success')
+      I18n.t('person_duplicates.ignore.success')
     end
 
     def entry
@@ -33,7 +33,8 @@ module PersonDuplicates
     end
 
     def authorize_action
-      authorize!(:manage_person_duplicates, group) && authorize!(:acknowledge, entry)
+      authorize!(:manage_person_duplicates, group) &&
+        authorize!(:ignore, entry)
     end
 
   end

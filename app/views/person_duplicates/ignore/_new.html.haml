@@ -3,21 +3,21 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-#person-duplicates-acknowledge.modal.fade
+#person-duplicates-ignore.modal.fade
   .modal-dialog
     .modal-content
       .modal-header
         %h5.bold.modal-title
           %b= t('.title')
 
-      = standard_form(@entry, url: acknowledge_group_person_duplicate_url(@group, @entry), method: :post) do |f|
+      = standard_form(@entry, url: ignore_group_person_duplicate_url(@group, @entry), method: :post) do |f|
         .modal-body
           .row-fluid
             = t('.confirm', person: @entry.person_1.to_s)
             %br
             = t('.ireversable')
         .modal-footer
-          = submit_button(f, t('person_duplicates.acknowledge.action'))
+          = submit_button(f, t('person_duplicates.ignore.action'))
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
-            onclick: "event.preventDefault(); $('#person-duplicates-acknowledge').modal('hide')")
+            onclick: "event.preventDefault(); $('#person-duplicates-ignore').modal('hide')")

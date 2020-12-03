@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe PersonDuplicates::AcknowledgeController do
+describe PersonDuplicates::IgnoreController do
 
     let(:layer) { groups(:bottom_layer_one) }
     let(:layer_leader) { Fabricate('Group::BottomLayer::Leader', group: layer).person }
@@ -16,7 +16,7 @@ describe PersonDuplicates::AcknowledgeController do
     let!(:duplicate_entry) { PersonDuplicate.create!(person_1: person_1, person_2: person_2) }
 
     context '#new' do
-      it 'access acknowledge confirm dialog' do
+      it 'access ignore confirm dialog' do
         sign_in(layer_leader)
 
         post :new, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id }
@@ -29,7 +29,7 @@ describe PersonDuplicates::AcknowledgeController do
 
         expect { post :new, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
 
-        expect(duplicate_entry.reload.acknowledged).to eq(false)
+        expect(duplicate_entry.reload.ignore).to eq(false)
       end
 
       it 'is not possible access confirm dialog  without permission to manage person duplicates' do
@@ -37,36 +37,36 @@ describe PersonDuplicates::AcknowledgeController do
 
         expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
 
-        expect(duplicate_entry.reload.acknowledged).to eq(false)
+        expect(duplicate_entry.reload.ignore).to eq(false)
       end
     end
 
     context '#create' do
-      it 'acknowledges duplicate entry' do
+      it 'ignores duplicate entry' do
         sign_in(layer_leader)
 
         post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id }
 
         expect(response).to redirect_to(group_person_duplicates_path(layer))
 
-        expect(duplicate_entry.reload.acknowledged).to eq(true)
+        expect(duplicate_entry.reload.ignore).to eq(true)
         expect(flash[:notice]).to eq 'Der Duplikats-Eintrag wurde erfolgreich entfernt.'
       end
 
-      it 'is not possible to acknowledge without write permission on at least one person' do
+      it 'is not possible to ignore without write permission on at least one person' do
         sign_in(people(:top_leader))
 
         expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
 
-        expect(duplicate_entry.reload.acknowledged).to eq(false)
+        expect(duplicate_entry.reload.ignore).to eq(false)
       end
 
-      it 'is not possible to acknowledge without permission to manage person duplicates' do
+      it 'is not possible to ignore without permission to manage person duplicates' do
         sign_in(people(:bottom_member))
 
         expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
 
-        expect(duplicate_entry.reload.acknowledged).to eq(false)
+        expect(duplicate_entry.reload.ignore).to eq(false)
       end
     end
 end

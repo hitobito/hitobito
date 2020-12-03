@@ -9,7 +9,7 @@ class PersonDuplicateAbility < AbilityDsl::Base
 
   on(PersonDuplicate) do
     permission(:any).may(:merge).if_read_write_on_person
-    permission(:any).may(:acknowledge).if_read_write_on_person
+    permission(:any).may(:ignore).if_read_write_on_person
   end
 
   def if_read_write_on_person

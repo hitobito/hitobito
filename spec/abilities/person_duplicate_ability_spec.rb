@@ -46,25 +46,25 @@ describe PersonDuplicateAbility do
     end
   end
 
-  context :acknowledge do
-    it 'may acknowledge if at least one person readable / one writable' do
+  context :ignore do
+    it 'may ignore if at least one person readable / one writable' do
       @role = Fabricate('Group::BottomLayer::Leader', group: bottom_layer_one)
       Fabricate('Group::BottomLayer::Member', group: bottom_layer_two, person: user)
 
-      is_expected.to be_able_to(:acknowledge, duplicate_entry)
+      is_expected.to be_able_to(:ignore, duplicate_entry)
     end
 
-    it 'may not acknowledge if both persons are readable only' do
+    it 'may not ignore if both persons are readable only' do
       @role = Fabricate('Group::BottomLayer::Member', group: bottom_layer_one)
       Fabricate('Group::BottomLayer::Member', group: bottom_layer_two, person: user)
 
-      is_expected.not_to be_able_to(:acknowledge, duplicate_entry)
+      is_expected.not_to be_able_to(:ignore, duplicate_entry)
     end
 
-    it 'may not acknowledge if one person is not readable' do
+    it 'may not ignore if one person is not readable' do
       @role = Fabricate('Group::BottomLayer::Member', group: bottom_layer_one)
 
-      is_expected.not_to be_able_to(:acknowledge, duplicate_entry)
+      is_expected.not_to be_able_to(:ignore, duplicate_entry)
     end
   end
 end

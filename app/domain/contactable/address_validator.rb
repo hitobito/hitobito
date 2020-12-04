@@ -12,7 +12,7 @@ module Contactable
       Person.find_each do |person|
         next unless should_be_validated?(person)
 
-        if invalid?(person.address, person.zip_code, person.town)
+        if invalid?(person)
           tag_invalid!(person, person.address)
         end
       end
@@ -27,8 +27,10 @@ module Contactable
         person.tags.exclude?(invalid_override_tag)
     end
 
-    def invalid?(address, zip_code, town)
-      Address.where(street_short: address, zip_code: zip_code, town: town).empty?
+    def invalid?(person)
+      full_text_search(person).results
+                              .select { |a| a.zip_code == person.zip_code.to_i && a.town == person.town }
+                              .empty?
     end
 
     def tag_invalid!(person, invalid_address, kind = :primary)
@@ -47,6 +49,26 @@ module Contactable
     def invalid_override_tag
       @invalid_override_tag ||=
         PersonTags::Validation.invalid_address_override
+    end
+
+    def full_text_search(person)
+      Address::FullTextSearch.new(person.address, search_strategy(person))
+    end
+
+    def search_strategy(person)
+      search_strategy_class.new(person, person.address, '')
+    end
+
+    def search_strategy_class
+      if sphinx?
+        SearchStrategies::Sphinx
+      else
+        SearchStrategies::Sql
+      end
+    end
+
+    def sphinx?
+      Hitobito::Application.sphinx_present?
     end
   end
 end

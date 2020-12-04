@@ -29,8 +29,8 @@ module Contactable
 
     def invalid?(person)
       full_text_search(person).results
-                              .select { |a| a.zip_code == person.zip_code.to_i && a.town == person.town }
-                              .empty?
+                              .select { |a| a.zip_code == person.zip_code.to_i &&
+                                            a.town == person.town }.empty?
     end
 
     def tag_invalid!(person, invalid_address, kind = :primary)

@@ -14,9 +14,9 @@ class Address::CheckValidityJob < RecurringJob
 
     return if invalid_people.empty? || Settings.addresses.validity_job_notification_emails.blank?
 
-    invalid_people_names = invalid_people.map(&:full_name).join(', ')
+    invalid_names = invalid_people.map(&:full_name).join(', ')
     Settings.addresses.validity_job_notification_emails.each do |mail_address|
-      Address::ValidationChecksMailer.validation_checks(mail_address, invalid_people_names).deliver_later
+      Address::ValidationChecksMailer.validation_checks(mail_address, invalid_names).deliver_later
     end
   end
 end

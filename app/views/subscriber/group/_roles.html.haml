@@ -15,7 +15,7 @@
                         class: 'checkbox inline') do
               = check_box_tag("subscription[role_types][]",
                               role_type.sti_name,
-                              false,
+                              defined?(selected) && selected.include?(role_type.sti_name),
                               id: "subscription_role_types_#{role_type.sti_name.downcase}")
               = role_type.label
 

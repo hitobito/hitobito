@@ -62,7 +62,11 @@ module Subscriber
     end
 
     def authorize!
-      super(:create, @subscription || @mailing_list.subscriptions.new)
+      if ['edit', 'update'].include? action_name
+        super(:update, entry)
+      else
+        super(:create, @subscription || @mailing_list.subscriptions.new)
+      end
     end
 
     class << self

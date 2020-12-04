@@ -1316,6 +1316,8 @@ de:
 
   subscriber:
     group:
+      edit:
+        title: Abonnenten bearbeiten
       form:
         subgroups_selectable: 'Es können nur Gruppen unterhalb der Abogruppe ausgewählt werden'
         subgroups_and_siblings_selectable: 'Es können nur Gruppen unterhalb der Abogruppe oder unterhalb der benachbarten Gruppen vom Typ %{type} ausgewählt werden'

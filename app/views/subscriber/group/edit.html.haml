@@ -1,0 +1,19 @@
+-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title t('.title')
+
+= entry_form(url: group_mailing_list_group_path(@group, @mailing_list, entry.id),
+             cancel_url: group_mailing_list_subscriptions_path(@group, @mailing_list),
+             noindent: true) do |f|
+
+  = field_set_tag Group.model_name.human do
+    = f.string_field(:subscriber, readonly: true)
+
+  = field_set_tag Role.model_name.human(count: 2) do
+    #roles.label-columns= render 'roles', selected: entry.related_role_types.map(&:role_type)
+
+  = field_set_tag ActsAsTaggableOn::Tag.model_name.human(count: 2) do
+    = render 'tags', f: f

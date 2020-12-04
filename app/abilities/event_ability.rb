@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -64,6 +64,7 @@ class EventAbility < AbilityDsl::Base
 
   def for_participations_read_events_and_course_participants
     return for_participations_read_events unless subject.is_a?(::Event::Course)
+
     for_participations_read_events || participant?
   end
 

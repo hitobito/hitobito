@@ -61,10 +61,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   ### ATTRIBUTES
 
   class_attribute :used_attributes,
-    :role_types,
-    :supports_applications,
-    :possible_states,
-    :kind_class
+                  :role_types,
+                  :supports_applications,
+                  :possible_states,
+                  :kind_class
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
@@ -236,6 +236,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     def find_event_type!(sti_name)
       type = all_types.detect { |t| t.sti_name == sti_name }
       raise ActiveRecord::RecordNotFound, "No event type '#{sti_name}' found" if type.nil?
+
       type
     end
 
@@ -247,6 +248,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     def find_role_type!(sti_name)
       type = role_types.detect { |t| t.sti_name == sti_name }
       raise ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
+
       type
     end
   end

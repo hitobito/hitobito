@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2020_12_03_223107) do
     t.string "town", limit: 128, null: false
     t.integer "zip_code", null: false
     t.string "state", limit: 128, null: false
-    t.text "numbers", size: :medium
+    t.text "numbers"
     t.index ["zip_code", "street_short"], name: "index_addresses_on_zip_code_and_street_short"
   end
 
@@ -160,7 +160,6 @@ ActiveRecord::Schema.define(version: 2020_12_03_223107) do
     t.boolean "multiple_choices", default: false, null: false
     t.boolean "required", default: false, null: false
     t.boolean "admin", default: false, null: false
-    t.boolean "checkbox", default: false, null: false
     t.index ["event_id"], name: "index_event_questions_on_event_id"
   end
 
@@ -429,6 +428,8 @@ ActiveRecord::Schema.define(version: 2020_12_03_223107) do
     t.datetime "created_at", null: false
     t.datetime "revoked_at"
     t.string "scopes"
+    t.string "code_challenge"
+    t.string "code_challenge_method"
     t.index ["application_id"], name: "fk_rails_b4b53e07b8"
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end

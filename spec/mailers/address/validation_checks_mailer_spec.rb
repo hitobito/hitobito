@@ -9,15 +9,14 @@ require 'spec_helper'
 
 describe Address::ValidationChecksMailer do
   let(:invalid_people) { [people(:top_leader), people(:bottom_member)] }
+  let(:invalid_people_names) { invalid_people.map(&:full_name).join(', ') }
   let(:recipient_email) { 'validation_checks@example.com' }
-  let(:mail) { Address::ValidationChecksMailer.validation_checks(recipient_email, invalid_people) }
+  let(:mail) { Address::ValidationChecksMailer.validation_checks(recipient_email, invalid_people_names) }
 
   context 'validation checks mail' do
     it 'shows full names of the invalid people' do
-      full_names = invalid_people.map(&:full_name)
-
       expect(mail.subject).to eq('Address Validierungen')
-      expect(mail.body).to include(full_names.join(', '))
+      expect(mail.body).to include(invalid_people_names)
     end
   end
 end

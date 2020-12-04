@@ -22,6 +22,14 @@ class Address::FullTextSearch
     typeahead_entries(addresses)
   end
 
+  def results
+    addresses = with_query { search_strategy.query_addresses }
+
+    addresses = addresses_with_numbers(addresses).map(&:first) if query_ends_with_number?
+
+    addresses
+  end
+
   private
 
   def typeahead_entries(addresses)
@@ -33,9 +41,15 @@ class Address::FullTextSearch
   end
 
   def typeahead_results_with_numbers(addresses)
+    addresses_with_numbers(addresses).map do |address, number|
+      address.as_typeahead_with_number(number)
+    end
+  end
+
+  def addresses_with_numbers(addresses)
     addresses.flat_map do |address|
       address.numbers.map do |number|
-        address.as_typeahead_with_number(number) if number.to_s.include? street_number_from_query
+        [address, number] if number.to_s.include? street_number_from_query
       end.compact
     end
   end

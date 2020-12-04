@@ -81,7 +81,7 @@ class CustomContent < ActiveRecord::Base
 
   def assert_required_placeholders_are_used
     placeholders_required_list.each do |placeholder|
-      unless [subject, body].any? { |str| str.to_s.include?(placeholder_token(placeholder)) }
+      unless [subject, body.to_s].any? { |str| str.to_s.include?(placeholder_token(placeholder)) }
         errors.add(:body, :placeholder_missing, placeholder: placeholder_token(placeholder))
       end
     end

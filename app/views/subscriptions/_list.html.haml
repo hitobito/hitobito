@@ -12,6 +12,6 @@
   = render 'person/add_requests/body_list'
 
 = render('subs_table', title: Person.model_name.human(count: 2), subs: @person_subs)
-= render('subs_table', title: [Group.model_name.human(count: 2), Role.model_name.human(count: 2)].join(' / '), subs: @group_subs)
+= render('subs_table', title: [Group.model_name.human(count: 2), Role.model_name.human(count: 2)].join(' / '), subs: @group_subs, edit_controller: 'group')
 = render('subs_table', title: Event.model_name.human(count: 2), subs: @event_subs)
 = render('subs_table', title: t('.excluded_people'), subs: @excluded_person_subs)

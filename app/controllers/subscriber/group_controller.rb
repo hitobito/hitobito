@@ -29,6 +29,19 @@ module Subscriber
       load_role_types
     end
 
+    def edit
+      @selected_group ||= Group.find(entry.subscriber_id)
+      load_role_types
+    end
+
+    def update
+      super do |format|
+        format.html do
+          redirect_to(group_mailing_list_subscriptions_path(mailing_list.group, mailing_list))
+        end
+      end
+    end
+
     private
 
     def groups_query

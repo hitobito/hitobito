@@ -194,7 +194,7 @@ Hitobito::Application.routes.draw do
             resources :exclude_person, only: [:new, :create], controller: 'subscriber/exclude_person'
             get 'exclude_person' => 'subscriber/exclude_person#new' # route required for language switch
 
-            resources :group, only: [:new, :create], controller: 'subscriber/group' do
+            resources :group, only: [:new, :create, :edit, :update], controller: 'subscriber/group' do
               collection do
                 get :query
                 get :roles

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_13_151157) do
+ActiveRecord::Schema.define(version: 2020_12_03_223107) do
 
   create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "contactable_type", null: false
@@ -205,6 +205,7 @@ ActiveRecord::Schema.define(version: 2020_11_13_151157) do
     t.text "required_contact_attrs"
     t.text "hidden_contact_attrs"
     t.boolean "display_booking_info", default: true, null: false
+    t.boolean "participations_visible", default: false, null: false
     t.index ["kind_id"], name: "index_events_on_kind_id"
   end
 

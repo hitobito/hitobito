@@ -398,6 +398,7 @@ de:
         applicant_count: Anzahl Anmeldungen
         applications_cancelable: Abmeldung möglich
         display_booking_info: Anzeige Anmeldestand
+        participations_visible: Teilnehmersichtbarkeit
 
       event/contact_attrs:
         required: Obligatorisch

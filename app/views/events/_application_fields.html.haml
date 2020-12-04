@@ -10,6 +10,9 @@
   - entry.used?(:external_applications) do
     = f.labeled_boolean_field(:external_applications, caption: t('events.form.caption_external_applications'))
 
+  - entry.used?(:participations_visible) do
+    = f.labeled_boolean_field(:participations_visible, caption: t('events.form.caption_participations_visible'))
+
   - entry.used?(:priorization) do
     = f.labeled_boolean_field(:priorization, caption: t('events.form.caption_prioritization'))
 

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -539,18 +539,28 @@ describe EventAbility do
     end
 
     context Event::Role::Participant do
-      let(:event_role)    { Event::Role::Participant }
+      let(:event_role) { Event::Role::Participant }
 
       before { participation.update(active: true) }
 
       context Event do
-        it 'may not index people for his event' do
+        it 'may index people for his event with visible participations' do
+          event.update(participations_visible: true)
+          expect(event).to be_participations_visible
+
+          is_expected.to be_able_to(:index_participations, event)
+        end
+
+        it 'may not index people for his event with invisible participations' do
+          event.update(participations_visible: false)
+          expect(event).not_to be_participations_visible
+
           is_expected.not_to be_able_to(:index_participations, event)
         end
       end
 
       context Event::Course do
-        let(:event)      { Fabricate(:course) }
+        let(:event) { Fabricate(:course) }
 
         it 'may index people for his event' do
           is_expected.to be_able_to(:index_participations, event)

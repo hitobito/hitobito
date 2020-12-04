@@ -1,7 +1,10 @@
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 
 # == Schema Information
 #
@@ -69,7 +72,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                           :application_closing_at, :application_conditions,
                           :external_applications, :applications_cancelable,
                           :signature, :signature_confirmation, :signature_confirmation_text,
-                          :required_contact_attrs, :hidden_contact_attrs]
+                          :required_contact_attrs, :hidden_contact_attrs,
+                          :participations_visible]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,

@@ -96,6 +96,7 @@ module CrudControllerTestHelper
         end
       else
         actual[key] = entry.send(key)
+        actual[key] = actual[key].to_plain_text if actual[key].instance_of?(ActionText::RichText)
       end
     end
     actual

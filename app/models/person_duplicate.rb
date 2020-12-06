@@ -19,4 +19,9 @@ class PersonDuplicate < ActiveRecord::Base
     self.person_1, self.person_2 = [self.person_1, self.person_2].sort_by(&:id)
   end
 
+  def persons_valid?
+    person_1.valid? && person_2.valid?
+  end
+
+
 end

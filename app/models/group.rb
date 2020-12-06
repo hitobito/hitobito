@@ -202,8 +202,8 @@ class Group < ActiveRecord::Base
     elsif layer?
       duplicates = layer_person_duplicates
     end
-    duplicates.includes(person_1: [{ roles: :group }, :groups],
-                        person_2: [{ roles: :group }, :groups])
+    duplicates.includes(person_1: [{ roles: :group }, :groups, :primary_group],
+                        person_2: [{ roles: :group }, :groups, :primary_group])
   end
 
   private

@@ -11,6 +11,7 @@ module PersonDuplicates
     WARNING_ICON = '⚠️'
 
     delegate :t, :safe_join, to: :template
+    delegate :persons_valid?, to: :duplicate_entry
 
     def initialize(form, duplicate_entry, template)
       @f = form
@@ -37,19 +38,24 @@ module PersonDuplicates
     def radio_button_with_details(person, p_nr)
       selected = p_nr.eql?(:person_1)
       f.label("dst_#{p_nr}", class: label_class(selected), for: label_for(p_nr)) do
-        options = { checked: selected }
+        options = {}
+        if persons_valid?
+          options[:checked] = selected
+        else
+          options[:checked] = false
+          options[:disabled] = 'disabled'
+        end
         f.radio_button('dst_person', p_nr, options) +
           f.content_tag(:div,
             person_label(person) +
             details(person) +
             person.roles_short(nil, edit: false) +
-            merge_hint(p_nr)
-          )
+            merge_hint(p_nr, person))
       end
     end
 
     def label_class(selected)
-      selected ? 'radio selected' : 'radio'
+      selected && persons_valid? ? 'radio selected' : 'radio'
     end
 
     def label_for(p_nr)
@@ -74,13 +80,24 @@ module PersonDuplicates
       end
     end
 
-    def merge_hint(p_nr)
-      style_class = ''
-      style_class += ' hidden' if p_nr.eql?(:person_1)
-      f.content_tag(:div, id: 'merge-hint', class: style_class) do
-        [WARNING_ICON, t('.merge_hint')].join(' ')
+    def merge_hint(p_nr, person)
+      return merge_hint_invalid unless person.valid?
+
+      if persons_valid?
+        style_class = ''
+        style_class += ' hidden' if p_nr.eql?(:person_1)
+        f.content_tag(:div, id: 'merge-hint', class: style_class) do
+          [WARNING_ICON, t('.merge_hint')].join(' ')
+        end
+      else
+        ''.html_safe
       end
     end
 
+    def merge_hint_invalid
+      f.content_tag(:div, id: 'merge-hint') do
+        [WARNING_ICON, t('.merge_hint_invalid')].join(' ')
+      end
+    end
   end
 end

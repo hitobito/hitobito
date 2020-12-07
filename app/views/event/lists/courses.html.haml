@@ -6,7 +6,7 @@
 - title t('.title')
 - manager = can?(:list_all, Event::Course)
 
-%p= t('.explanation') unless can?(:list_all, Event::Course) 
+%p= t('.explanation') unless can?(:list_all, Event::Course)
 
 - content_for :toolbar do
   - if manager

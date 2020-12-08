@@ -855,6 +855,7 @@ de:
 
   errors:
     messages:
+      attachments_not_allowed: "darf keine Anhänge enthalten"
       invalid_money: "muss auf 5 Rappen gerundet werden"
       # timeliness
       invalid_date: "ist kein gültiges Datum"

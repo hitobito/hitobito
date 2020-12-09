@@ -7,9 +7,9 @@
 
 class Event::ParticipationMailer < ApplicationMailer
 
-  CONTENT_CONFIRMATION = 'event_application_confirmation'.freeze
-  CONTENT_APPROVAL     = 'event_application_approval'.freeze
-  CONTENT_CANCEL       = 'event_cancel_application'.freeze
+  CONTENT_CONFIRMATION = 'event_application_confirmation'
+  CONTENT_APPROVAL     = 'event_application_approval'
+  CONTENT_CANCEL       = 'event_cancel_application'
 
   # Include all helpers that are required directly or indirectly (in decorators)
   helper :format, :layout, :auto_link_value

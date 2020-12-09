@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2020, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -15,7 +15,7 @@ describe LayoutHelper do
     let(:group) { groups(:bottom_group_one_one_one) }
     let(:parent) { groups(:bottom_group_one_one) }
     let(:grandparent) { groups(:bottom_layer_one) }
-    let(:app_logo) { "/packs-test/media/images/logo-[0-9a-f]+.png" }
+    let(:app_logo) { '/packs-test/media/images/logo-[0-9a-f]+.png' }
 
     before { assign(:group, group) }
 
@@ -45,6 +45,34 @@ describe LayoutHelper do
 
     it 'should return nil when no logo is set' do
       expect(helper.header_logo).to match Regexp.new("<img alt=\"hitobito\" src=\"#{app_logo}\" />")
+    end
+  end
+
+  context '#icon' do
+    it 'emits an html-tag with the icon css-class' do
+      expect(helper.icon(:edit)).to eq('<i class="fa fa-edit"></i>')
+    end
+
+    it 'dasherizes the css-class' do
+      expect(extract_classes(helper.icon(:hand_point_up))).to include('fa-hand-point-up')
+    end
+
+    it 'uses the filled-form by default' do
+      expect(extract_classes(helper.icon(:edit))).to include('fa')
+    end
+
+    it 'can add the non-filled form' do
+      expect(extract_classes(helper.icon(:edit, filled: false))).to include('far')
+    end
+
+    # sorry for this violation of demeter
+    def extract_classes(tag_string)
+      Nokogiri::HTML.fragment(tag_string) # NodeSet
+                    .children # Array
+                    .first # Element
+                    .attributes['class'] # Attr
+                    .value # String
+                    .split(' ')
     end
   end
 end

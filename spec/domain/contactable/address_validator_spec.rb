@@ -40,6 +40,16 @@ describe Contactable::AddressValidator do
     end.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 
+  it 'does not tag person with valid address and invalid street number' do
+    person.address = "#{address.street_short} 1234"
+    person.zip_code = address.zip_code
+    person.town = address.town
+    person.save!
+
+    expect do
+      validator.validate_people
+    end.to change { ActsAsTaggableOn::Tagging.count }
+  end
 
   it 'does not tag people from non imported countries' do
     person.update!(country: 'DE')

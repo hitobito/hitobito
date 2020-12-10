@@ -21,6 +21,10 @@ class Address::Parser
     match[2]&.gsub(' ', '')
   end
 
+  def parse
+    [street, number]
+  end
+
   private
 
   def match

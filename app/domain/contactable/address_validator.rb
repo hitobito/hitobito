@@ -9,7 +9,7 @@ module Contactable
   class AddressValidator
 
     def validate_people
-      Person.find_each do |person|
+      scope.includes(:tags).find_each do |person|
         next unless should_be_validated?(person)
 
         if invalid?(person)
@@ -20,20 +20,41 @@ module Contactable
       Person.tagged_with(invalid_tag)
     end
 
+    def scope
+      Person
+        .where(country: Settings.addresses.imported_countries)
+        .where.not(address: '')
+        .where.not(zip_code: '')
+    end
+
     private
 
     def should_be_validated?(person)
-      Settings.addresses.imported_countries.include?(person.country) &&
-        person.tags.exclude?(invalid_override_tag)
+      person.tags.exclude?(invalid_override_tag)
     end
 
     def invalid?(person)
-      full_text_search(person).results
-                              .select { |a| a.zip_code == person.zip_code.to_i &&
-                                            a.town == person.town }.empty?
+      street, number = parse(person.address)
+      addresses = find_address(person.zip_code, street)
+      addresses.empty? || invalid_number?(addresses, number)
     end
 
-    def tag_invalid!(person, invalid_address, kind = :primary)
+    def invalid_number?(addresses, number)
+      number && addresses.none? { |a| a.numbers.include?(number) }
+    end
+
+    def parse(string)
+      Address::Parser.new(string).parse
+    end
+
+    def find_address(zip_code, street)
+      Address.where(zip_code: zip_code).
+        where('LOWER(street_short) = :street OR LOWER(street_short_old) = :street OR ' \
+              'LOWER(street_long) = :street OR LOWER(street_long_old) = :street',
+              street: street.to_s.downcase)
+    end
+
+    def tag_invalid!(person, invalid_address)
       ActsAsTaggableOn::Tagging
         .find_or_create_by!(taggable: person,
                             hitobito_tooltip: invalid_address,
@@ -49,26 +70,6 @@ module Contactable
     def invalid_override_tag
       @invalid_override_tag ||=
         PersonTags::Validation.invalid_address_override
-    end
-
-    def full_text_search(person)
-      Address::FullTextSearch.new(person.address, search_strategy(person))
-    end
-
-    def search_strategy(person)
-      search_strategy_class.new(person, person.address, '')
-    end
-
-    def search_strategy_class
-      if sphinx?
-        SearchStrategies::Sphinx
-      else
-        SearchStrategies::Sql
-      end
-    end
-
-    def sphinx?
-      Hitobito::Application.sphinx_present?
     end
   end
 end

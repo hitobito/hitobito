@@ -5,4 +5,9 @@ namespace :validate do
   task :people_email => :environment do
     Contactable::EmailValidator.new.validate_people
   end
+
+  desc 'Validate all peoples addresses'
+  task :people_address => :environment do
+    Contactable::AddressValidator.new.validate_people
+  end
 end

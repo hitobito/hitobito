@@ -35,7 +35,7 @@ module Contactable
 
     def invalid?(person)
       street, number = parse(person.address)
-      addresses = find_address(person.zip_code, street)
+      addresses = Address.for(person.zip_code, street)
       addresses.empty? || invalid_number?(addresses, number)
     end
 
@@ -45,13 +45,6 @@ module Contactable
 
     def parse(string)
       Address::Parser.new(string).parse
-    end
-
-    def find_address(zip_code, street)
-      Address.where(zip_code: zip_code).
-        where('LOWER(street_short) = :street OR LOWER(street_short_old) = :street OR ' \
-              'LOWER(street_long) = :street OR LOWER(street_long_old) = :street',
-              street: street.to_s.downcase)
     end
 
     def tag_invalid!(person, invalid_address)

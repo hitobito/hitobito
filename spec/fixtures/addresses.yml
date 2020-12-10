@@ -28,7 +28,7 @@ bs_bern:
   town: Bern
   state: BE
   zip_code: 3007
-  numbers: [36, 37, 38, 40, 41]
+  numbers: ['36', '37', '38', '40', '41']
 
 bs_muri:
   street_short: Belpstrasse
@@ -38,7 +38,7 @@ bs_muri:
   town: Muri b. Bern
   state: BE
   zip_code: 3007
-  numbers: [3]
+  numbers: ['3']
 
 ls_zurich:
   street_short: Limmatstrasse
@@ -48,4 +48,4 @@ ls_zurich:
   town: Zürich
   state: ZH
   zip_code: 8005
-  numbers: [214,215,217]
+  numbers: ['214','215','217']

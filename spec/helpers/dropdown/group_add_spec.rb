@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -15,11 +15,11 @@ describe 'Dropdown::GroupAdd' do
   include UtilityHelper
 
   let(:group) { groups(:top_layer) }
-  let(:dropdown) { Dropdown::GroupAdd.new(self, group)}
+  let(:dropdown) { Dropdown::GroupAdd.new(self, group) }
 
   subject { dropdown.to_s }
 
-  def can?(*args)
+  def can?(*_args)
     true
   end
 

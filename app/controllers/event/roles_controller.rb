@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -51,8 +51,9 @@ class Event::RolesController < CrudController
     # assert that type is valid
     event.find_role_type!(attrs[:type])
 
-    participation = event.participations.where(person_id: attrs.delete(:person_id)).
-                                         first_or_initialize
+    participation = event.participations
+                         .where(person_id: attrs.delete(:person_id))
+                         .first_or_initialize
     participation.roles.build(type: attrs[:type]).tap do |role|
       role.participation = participation
     end
@@ -64,7 +65,7 @@ class Event::RolesController < CrudController
   end
 
   def set_type
-    type = model_params && model_params.delete(:type)
+    type = model_params&.delete(:type)
     if type && possible_types.collect(&:sti_name).include?(type)
       entry.type = type
     end

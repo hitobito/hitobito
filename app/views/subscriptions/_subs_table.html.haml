@@ -6,7 +6,7 @@
 %h2= title
 
 = table(subs, class: 'table table-striped') do |t|
-  - t.col('', width: '98%') { |e| render 'subscription', subscription: e }
+  - t.col('') { |e| render 'subscription', subscription: e }
   - t.col('', style: 'text-align: right; padding-right: 8px') do |e|
     - if can?(:edit, e) && defined?(edit_controller) && edit_controller.present?
       = link_action_edit(send("edit_group_mailing_list_#{edit_controller.to_s}_path", @group.id, e.mailing_list.id, e.id))

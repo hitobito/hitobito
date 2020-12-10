@@ -31,7 +31,7 @@ module Contactable
     end
 
     def invalid?(email)
-      !Truemail.valid?(email)
+      email.present? && !Truemail.valid?(email)
     end
 
     def tag_invalid!(person, invalid_email, kind = :primary)

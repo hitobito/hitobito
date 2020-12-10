@@ -14,6 +14,13 @@ describe Contactable::EmailValidator do
 
   before { allow(Truemail).to receive(:valid?).and_call_original }
 
+  it 'ignores person with blank email' do
+    top_leader.email = nil
+    top_leader.save!(validate: false)
+    validator.validate_people
+    expect(taggings_for(top_leader).count).to eq(0)
+  end
+
   it 'tags people with invalid primary e-mail' do
     top_leader.email = 'not-an-email'
     top_leader.save!(validate: false)

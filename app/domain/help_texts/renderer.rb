@@ -38,15 +38,11 @@ class HelpTexts::Renderer
     @entry ||= derive_entry
   end
 
-  def safe_html(text, tags: %w(h1 h2 h3 h4 h5 h6 b i u blockquote ul ol li a))
-    template.sanitize(text, tags: tags)
-  end
-
   private
 
   def render_text(help_text)
     content_tag(:div, class: "help-text #{dom_id(help_text)}") do
-      help_text.body && safe_html(help_text.body)
+      help_text.body.to_s.html_safe if help_text.body.to_plain_text.present?
     end
   end
 

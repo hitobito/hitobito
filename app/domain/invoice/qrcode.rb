@@ -57,7 +57,8 @@ class Invoice::Qrcode
   end
 
   def payment_reference
-    { type: 'NON', ref: nil }
+    type = @invoice.reference.starts_with?('RF') ? 'SCOR' : 'QRR'
+    { type: type, reference: @invoice.reference }
   end
 
   def additional_infos

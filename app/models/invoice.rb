@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+#
 #  Copyright (c) 2017-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -44,6 +46,8 @@ class Invoice < ActiveRecord::Base
 
   ROUND_TO = BigDecimal('0.05')
 
+  SEQUENCE_NR_SEPARATOR = '-'
+
   STATES = %w(draft issued sent payed reminded cancelled).freeze
   STATES_REMINDABLE = %w(issued sent reminded).freeze
   STATES_PAYABLE = %w(issued sent reminded).freeze
@@ -61,6 +65,7 @@ class Invoice < ActiveRecord::Base
 
   before_validation :set_sequence_number, on: :create, if: :group
   before_validation :set_esr_number, on: :create, if: :group
+  before_validation :set_reference_number, on: :create, if: :group
   before_validation :set_payment_attributes, on: :create, if: :group
   before_validation :set_dates, on: :update
   before_validation :set_self_in_nested
@@ -202,11 +207,15 @@ class Invoice < ActiveRecord::Base
   end
 
   def set_sequence_number
-    self.sequence_number = [group_id, invoice_config.sequence_number].join('-')
+    self.sequence_number = [group_id, invoice_config.sequence_number].join(SEQUENCE_NR_SEPARATOR)
   end
 
   def set_esr_number
     self.esr_number = Invoice::PaymentSlip.new(self).esr_number
+  end
+
+  def set_reference_number
+    self.reference = Invoice::Reference.create(self)
   end
 
   def set_payment_attributes

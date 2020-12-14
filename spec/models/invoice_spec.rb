@@ -156,6 +156,23 @@ describe Invoice do
     expect(invoice.vat_number).to eq invoice_config.vat_number
   end
 
+  context 'reference' do
+    let(:iban)               { 'CH12 2134 1234 1234 1234' }
+    let(:qr_iban)            { 'CH053 0000 0013 0003 6664' }
+    let(:esr_without_blanks) { '000083496356700000000000019' }
+
+    it 'sets esr without blanks per default' do
+      expect(create_invoice.reference).to eq esr_without_blanks
+    end
+
+    it 'sets esr without blanks for qr invoice with qr iban' do
+      expect(create_invoice(payment_slip: :qr, iban: qr_iban).reference).to eq esr_without_blanks
+    end
+
+    it 'sets cors for qr invoice without qr iban' do
+      expect(create_invoice(payment_slip: :qr, iban: iban).reference).to eq 'RF29834963567Z1'
+    end
+  end
 
   context 'state changes' do
     include ActiveSupport::Testing::TimeHelpers

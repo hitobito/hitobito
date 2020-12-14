@@ -886,7 +886,7 @@ de:
       new:
         title: Personen zusammenführen
         select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
-        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnr., Zusätzliche E-Mails sowie die Social Media Einträge übernommen. Alle anderen Daten dieser Person wie z.B. Notizen, Kursanmeldungen usw. werden gelöscht.
+        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnr., zusätzlichen E-Mails sowie die Social Media Einträge übernommen. Alle anderen Daten dieser Person wie z.B. Notizen, Kursanmeldungen usw. werden gelöscht.
         merge_hint_invalid: Diese Person hat ungültige Daten.
         irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
         invalid_persons: Die Einträge können erst zusammengeführt werden wenn beide gültig sind.

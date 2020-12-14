@@ -57,9 +57,9 @@ class Invoice::PaymentProcessor
   def payments
     @payments ||= credit_statements.collect do |s|
       Payment.new(amount: fetch('Amt', s),
-                  esr_number: esr_number(s),
+                  esr_number: reference(s),
                   received_at: to_datetime(fetch('RltdDts', 'AccptncDtTm', s)),
-                  invoice: invoices[esr_number(s)],
+                  invoice: invoices[reference(s)],
                   reference: fetch('Refs', 'AcctSvcrRef', s))
     end
   end
@@ -67,12 +67,12 @@ class Invoice::PaymentProcessor
   def invoices
     @invoices ||= Invoice
                   .includes(:group, :recipient)
-                  .where(esr_number: esr_numbers)
-                  .index_by(&:esr_number)
+                  .where(reference: references)
+                  .index_by(&:reference)
   end
 
-  def esr_numbers
-    credit_statements.collect { |s| esr_number(s) }
+  def references
+    credit_statements.collect { |s| reference(s) }
   end
 
   def credit_statements
@@ -100,12 +100,8 @@ class Invoice::PaymentProcessor
     keys.inject(hash) { |h, key| h.fetch(key) }
   end
 
-  def esr_number(transaction)
-    to_esr(fetch('RmtInf', 'Strd', 'CdtrRefInf', 'Ref', transaction))
-  end
-
-  def to_esr(string)
-    string[2..-1].scan(/\d{5}/).prepend(string[0..1]).join(' ')
+  def reference(transaction)
+    fetch('RmtInf', 'Strd', 'CdtrRefInf', 'Ref', transaction)
   end
 
   def to_datetime(string)

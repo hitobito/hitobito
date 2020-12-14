@@ -32,7 +32,7 @@ describe PersonDuplicatesController do
         expect(entries.count).to eq(4)
       end
 
-      it 'lists all duplicates on and bellow given layer' do
+      it 'lists all duplicates on and below given layer' do
         sign_in(layer_leader)
 
         get :index, params: { group_id: layer_one.id }

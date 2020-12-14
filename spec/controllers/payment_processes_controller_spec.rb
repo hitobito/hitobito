@@ -38,7 +38,7 @@ describe PaymentProcessesController do
   end
 
   it 'POST#create with file informs about valid and invalid payments' do
-    invoice.update_columns(esr_number: '00 00000 00000 10000 00000 00905')
+    invoice.update_columns(reference: '000000000000100000000000905')
     post :create, params: { group_id: group.id, payment_process: { file: file } }
     expect(response).to be_successful
     expect(flash[:alert]).to be_present
@@ -46,7 +46,7 @@ describe PaymentProcessesController do
   end
 
   it 'POST#create with data persists valid payments' do
-    invoice.update_columns(esr_number: '00 00000 00000 10000 00000 00905')
+    invoice.update_columns(reference: '000000000000100000000000905')
     expect do
       post :create, params: { group_id: group.id, data: xmlfile.read }
     end.to change { invoice.payments.count }.by(1)

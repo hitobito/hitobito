@@ -16,7 +16,8 @@ describe Invoice::Qrcode do
       total: 1500,
       iban: 'CH93 0076 2011 6238 5295 7',
       payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing\nCH",
-      recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland\nCH"
+      recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland\nCH",
+      reference: 'RF561A1'
     )
   end
 
@@ -78,9 +79,9 @@ describe Invoice::Qrcode do
       expect(subject[26]).to eq 'CH'
     end
 
-    it 'has blank reference' do
-      expect(subject[27]).to eq 'NON'
-      expect(subject[28]).to be_blank
+    it 'has CORS reference' do
+      expect(subject[27]).to eq 'SCOR'
+      expect(subject[28]).to eq 'RF561A1'
     end
 
     it 'has blank additional information ' do

@@ -16,24 +16,49 @@ describe InvoiceListsController do
     before { sign_in(person) }
 
     it "may new when person has finance permission on layer group" do
-      get :new, params: { group_id: group.id, invoice_list: { recipient_ids: [person.id] } }
+      get :new, params: { group_id: group.id, invoice_list: { recipient_ids: person.id } }
       expect(response).to be_successful
+      expect(assigns(:invoice_list)).to have(1).recipient
+    end
+
+    it "ignores empty ids param" do
+      get :new, {
+        params: {
+          group_id: group.id,
+          invoice_list: { recipient_ids: person.id },
+          ids: ''
+        }
+      }
+      expect(response).to be_successful
+      expect(assigns(:invoice_list)).to have(1).recipients
+    end
+
+    it "values from ids param as passed by checkable override recipient_ids" do
+      get :new, {
+        params: {
+          group_id: group.id,
+          invoice_list: { recipient_ids: person.id },
+          ids: "#{person.id},#{people(:top_leader).id}"
+        }
+      }
+      expect(response).to be_successful
+      expect(assigns(:invoice_list)).to have(2).recipients
     end
 
     it "may update when person has finance permission on layer group" do
-      put :update, params: { group_id: group.id, invoice_list: { recipient_ids: [] } }
+      put :update, params: { group_id: group.id, invoice_list: { recipient_ids: '' } }
       expect(response).to redirect_to group_invoices_path(group, returning: true)
     end
 
     it "may not index when person has finance permission on layer group" do
       expect do
-        get :new, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: [] } }
+        get :new, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: '' } }
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it "may not edit when person has finance permission on layer group" do
       expect do
-        put :update, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: [] } }
+        put :update, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: '' } }
       end.to raise_error(CanCan::AccessDenied)
     end
   end

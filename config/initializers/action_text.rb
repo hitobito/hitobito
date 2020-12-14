@@ -31,7 +31,8 @@ Rails.application.config.after_initialize do
       "del",
       ActionText::Attachment::TAG_NAME,
       "figure",
-      "figcaption"
+      "figcaption",
+      "br"
   ]
 
 end

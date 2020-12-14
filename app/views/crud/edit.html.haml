@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title ti(:title, :model => h(entry.to_s)).html_safe
+- title ti(:title, :model => h(entry.to_s), :default => h(entry.to_s)).html_safe
 
 - content_for(:toolbar, render('actions_edit'))
 

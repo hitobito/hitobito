@@ -113,6 +113,7 @@ class InvoiceListsController < CrudController
     entry.attributes = permitted_params.slice(:receiver_id,
                                               :receiver_type,
                                               :recipient_ids).merge(creator_id: current_user.id)
+    entry.recipient_ids = params[:ids] if params[:ids].present?
     entry.invoice = parent.invoices.build(permitted_params[:invoice])
   end
 

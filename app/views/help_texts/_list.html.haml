@@ -9,5 +9,5 @@
 = crud_table do |t|
   - t.col(HelpText.human_attribute_name(:context))  { |ht| ht.entry.to_s }
   - t.col(HelpText.human_attribute_name(:key))      { |ht| ht.entry.translate(ht.kind, ht.name) }
-  - t.attr(:body)
+  - t.col(HelpText.human_attribute_name(:body))     { |ht| ht.body.to_plain_text }
   - add_table_actions(t)

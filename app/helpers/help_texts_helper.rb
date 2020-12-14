@@ -12,6 +12,6 @@ module HelpTextsHelper
   end
 
   def format_help_text_body(help_text)
-    help_text_renderer.safe_html(help_text.body)
+    help_text.body
   end
 end

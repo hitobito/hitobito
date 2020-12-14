@@ -279,7 +279,6 @@ ActiveRecord::Schema.define(version: 2020_12_22_123403) do
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "body"
     t.index ["help_text_id"], name: "index_help_text_translations_on_help_text_id"
     t.index ["locale"], name: "index_help_text_translations_on_locale"
   end

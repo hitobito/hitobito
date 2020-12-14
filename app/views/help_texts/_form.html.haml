@@ -13,4 +13,4 @@
       %div.help_text_context_keys.hidden{ id: context }
         = f.labeled_grouped_collection_select(:key, group, :list, :label, :first, :second)
 
-  = f.labeled_text_area :body, class: 'span8 wysiwyg', rows: 20
+  = f.labeled_rich_text_area :body, rows: 20

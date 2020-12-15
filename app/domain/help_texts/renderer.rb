@@ -38,11 +38,15 @@ class HelpTexts::Renderer
     @entry ||= derive_entry
   end
 
+  def safe_html(rich_text)
+    template.sanitize_action_text_content(rich_text.body)
+  end
+
   private
 
   def render_text(help_text)
     content_tag(:div, class: "help-text #{dom_id(help_text)}") do
-      help_text.body.to_s.html_safe if help_text.body.to_plain_text.present?
+      safe_html(help_text.body) if help_text.body.to_plain_text.present?
     end
   end
 

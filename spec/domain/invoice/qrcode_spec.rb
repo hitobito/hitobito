@@ -79,7 +79,7 @@ describe Invoice::Qrcode do
       expect(subject[26]).to eq 'CH'
     end
 
-    it 'has CORS reference' do
+    it 'has SCOR reference' do
       expect(subject[27]).to eq 'SCOR'
       expect(subject[28]).to eq 'RF561A1'
     end

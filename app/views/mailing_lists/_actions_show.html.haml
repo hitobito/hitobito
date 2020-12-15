@@ -7,4 +7,4 @@
 = button_action_destroy if can?(:destroy, entry)
 = button_toggle_subscription
 - if can?(:create_invoices_from_list, entry.group)
-  = invoice_button(Draper.undecorate(entry))
+  = invoice_button(mailing_list: Draper.undecorate(entry))

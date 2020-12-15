@@ -109,12 +109,22 @@ class InvoiceListsController < CrudController
     session[:invoice_referer] || group_invoices_path(parent)
   end
 
-  def assign_attributes
-    entry.attributes = permitted_params.slice(:receiver_id,
-                                              :receiver_type,
-                                              :recipient_ids).merge(creator_id: current_user.id)
-    entry.recipient_ids = params[:ids] if params[:ids].present?
+  def assign_attributes # rubocop:disable Metrics/AbcSize
+    if params[:ids].present?
+      entry.recipient_ids = params[:ids]
+    elsif params[:filter].present?
+      entry.recipient_ids = recipient_ids_from_people_filter
+    else
+      entry.attributes = permitted_params.slice(:receiver_id, :receiver_type, :recipient_ids)
+    end
+    entry.creator = current_user
     entry.invoice = parent.invoices.build(permitted_params[:invoice])
+  end
+
+  def recipient_ids_from_people_filter
+    group = Group.find(params.dig(:filter, :group_id))
+    filter = Person::Filter::List.new(group, current_user, params[:filter])
+    filter.entries.pluck(:id).join(',')
   end
 
   def authorize_class

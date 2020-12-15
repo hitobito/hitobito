@@ -96,3 +96,33 @@ address_validation_checks_body:
   record: address_validation_checks (CustomContent::Translation)
   name: body
   body: 'Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden.'
+
+people_action_index_de_body:
+  record: people_action_index_de (HelpText::Translation)
+  name: body
+  body: 'test'
+
+person_field_name_de_body:
+  record: person_field_name_de (HelpText::Translation)
+  name: body
+  body: 'test'
+
+event_field_name_de_body:
+  record: event_field_name_de (HelpText::Translation)
+  name: body
+  body: 'base'
+
+course_field_name_de_body:
+  record: course_field_name_de (HelpText::Translation)
+  name: body
+  body: 'inherited'
+
+participations_action_index_de_body:
+  record: participations_action_index_de (HelpText::Translation)
+  name: body
+  body: 'test'
+
+events_action_index_de_body:
+  record: events_action_index_de (HelpText::Translation)
+  name: body
+  body: 'test'

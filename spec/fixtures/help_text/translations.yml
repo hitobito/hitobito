@@ -1,0 +1,40 @@
+#  Copyright (c) 2020, CVP Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+people_action_index_de:
+  help_text_id: <%= ActiveRecord::FixtureSet.identify(:people_action_index) %>
+  locale: de
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+person_field_name_de:
+  help_text_id: <%= ActiveRecord::FixtureSet.identify(:person_field_name) %>
+  locale: de
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+event_field_name_de:
+  help_text_id: <%= ActiveRecord::FixtureSet.identify(:event_field_name) %>
+  locale: de
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+course_field_name_de:
+  help_text_id: <%= ActiveRecord::FixtureSet.identify(:course_field_name) %>
+  locale: de
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+participations_action_index_de:
+  help_text_id: <%= ActiveRecord::FixtureSet.identify(:participations_action_index) %>
+  locale: de
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+events_action_index_de:
+  help_text_id: <%= ActiveRecord::FixtureSet.identify(:events_action_index) %>
+  locale: de
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

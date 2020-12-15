@@ -18,7 +18,11 @@ module Sheet
     end
 
     def render_left_nav
-      view.render('invoices/nav_left')
+      if form?
+        parent_sheet.render_left_nav
+      else
+        view.render('invoices/nav_left')
+      end
     end
 
     # Needs spacing because parent has no tabs
@@ -28,6 +32,14 @@ module Sheet
 
     def link_url
       view.group_invoice_lists_path(view.group, returning: true)
+    end
+
+    def parent_sheet
+      create_parent(Sheet::Group) if form?
+    end
+
+    def form?
+      %w(new create).include?(view.action_name)
     end
 
   end

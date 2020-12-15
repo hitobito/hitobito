@@ -11,7 +11,7 @@ class Invoice::ScorReference
   # https://www.mobilefish.com/services/creditor_reference/creditor_reference.php
 
   PREFIX = 'RF'
-  REGEXP = /^[\d|[a-z]]+$/i.freeze
+  REGEXP = /^[\d[a-z]]+$/i.freeze
 
   def self.create(reference)
     new(reference).create

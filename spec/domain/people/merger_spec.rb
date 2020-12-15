@@ -153,6 +153,10 @@ describe People::Merger do
       duplicate.phone_numbers.create!(number: '0900 42 42 42', label: 'Other')
       person.phone_numbers.create!(number: '0900 42 42 42', label: 'Mobile')
 
+      # does not merge invalid contactable
+      invalid_contactable = PhoneNumber.new(contactable: duplicate, number: 'abc 123', label: 'Holiday') 
+      invalid_contactable.save!(validate: false)
+
       expect do
         merger.merge!
       end.to change(Person, :count).by(-1)

@@ -29,12 +29,13 @@ class PhoneNumber < ActiveRecord::Base
   validates_by_schema
 
   private
-    def format_number
-      phone = Phonelib.parse(self.number)
-      if phone.valid?
-        self.number = phone.international
-      end
+
+  def format_number
+    phone = Phonelib.parse(self.number)
+    if phone.valid?
+      self.number = phone.international
     end
+  end
 
   class << self
     def predefined_labels

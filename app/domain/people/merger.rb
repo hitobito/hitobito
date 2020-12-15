@@ -38,7 +38,8 @@ module People
         find_attrs = { key => c.send(key) }
         find_attrs[:label] = c.label if match_label
         existing = @dst_person.send(assoc).find_by(find_attrs)
-        return if existing.present?
+        # do not merge invalid contactables
+        next if existing.present? || !c.valid?
 
         dup = c.dup
         dup.contactable = @dst_person

@@ -37,6 +37,7 @@ describe :person_duplicates, js: true do
     
     expect do
       modal.find('button.btn', text: 'Zusammenführen').click
+      expect(page).to have_content 'Die Personen Einträge wurden erfolgreich zusammengeführt.'
     end.to change(Person, :count).by(-1)
 
     expect(Person.where(id: duplicate1.id)).not_to exist

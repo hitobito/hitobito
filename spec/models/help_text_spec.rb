@@ -3,7 +3,7 @@ require 'spec_helper'
 describe HelpText do
 
   it 'assigns from context and key for new records' do
-    ht = HelpText.create!(context: 'events--event/course', key: 'action.index', body: 'test')
+    ht = help_texts(:events_action_index)
     expect(ht.controller).to eq 'events'
     expect(ht.model).to eq 'event/course'
     expect(ht.kind).to eq 'action'
@@ -14,17 +14,18 @@ describe HelpText do
     ht = HelpText.new
     expect(ht.to_s).to be_nil
 
-    ht = HelpText.create!(context: 'events--event/course', key: 'action.index', body: 'test')
-    expect(ht.to_s).to eq 'Kurs - Seite "Liste"'
+    ht = help_texts(:people_action_index)
+    expect(ht.to_s).to eq 'Person - Seite "Liste"'
 
-    ht = HelpText.create!(context: 'events--event/course', key: 'field.name', body: 'test')
-    expect(ht.to_s).to eq 'Kurs - Feld "Name"'
+    ht = help_texts(:person_field_name)
+    expect(ht.to_s).to eq 'Person - Feld "Name"'
   end
 
   it '.list orders by human model name' do
-    first = HelpText.create!(context: 'events--event/course', key: 'action.index', body: 'test')
-    second = HelpText.create!(context: 'people--person', key: 'action.index', body: 'test')
-    third  = HelpText.create!(context: 'mailing_lists--mailing_list', key: 'action.index', body: 'test')
+    first = help_texts(:course_field_name)
+    second = help_texts(:people_action_index)
+    third  = help_texts(:events_action_index)
+    HelpText.where.not(id: [first.id, second.id, third.id]).destroy_all
 
     expect(HelpText.list).to eq [third, first, second]
   end

@@ -1,0 +1,40 @@
+#  Copyright (c) 2020, CVP Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+people_action_index:
+  controller: people
+  model: person
+  kind: action
+  name: index
+
+person_field_name:
+  controller: people
+  model: person
+  kind: field
+  name: name
+
+event_field_name:
+  controller: events
+  model: event
+  kind: field
+  name: name
+
+course_field_name:
+  controller: events
+  model: event/course
+  kind: field
+  name: name
+
+participations_action_index:
+  controller: event/participations
+  model: event/participation
+  kind: action
+  name: index
+
+events_action_index:
+  controller: events
+  model: event/course
+  kind: action
+  name: index

@@ -45,6 +45,28 @@ describe InvoiceListsController do
       expect(assigns(:invoice_list)).to have(2).recipients
     end
 
+    it "values from filter param" do
+      leader = Fabricate(Group::BottomLayer::Leader.sti_name, group: group).person
+      role_types = [Group::BottomLayer::Leader]
+
+      get :new, {
+        params: {
+          group_id: group.id,
+          invoice_list: { recipient_ids: person.id },
+          filter: {
+            group_id: group.id,
+            range: 'deep',
+            filters: {
+              role: { role_type_ids: role_types.collect(&:id).join("-") }
+            }
+          }
+        }
+      }
+      expect(response).to be_successful
+      expect(assigns(:invoice_list)).to have(1).recipients
+      expect(assigns(:invoice_list).recipients).to eq([leader])
+    end
+
     it "may update when person has finance permission on layer group" do
       put :update, params: { group_id: group.id, invoice_list: { recipient_ids: '' } }
       expect(response).to redirect_to group_invoices_path(group, returning: true)

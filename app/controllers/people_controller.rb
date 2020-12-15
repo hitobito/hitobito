@@ -45,6 +45,8 @@ class PeopleController < CrudController
   before_render_show :load_grouped_person_tags, if: -> { html_request? }
   before_render_index :load_people_add_requests, if: -> { html_request? }
 
+  helper_method :list_filter_args
+
   def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
     respond_to do |format|
       format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }

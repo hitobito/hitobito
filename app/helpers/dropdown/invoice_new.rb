@@ -7,12 +7,14 @@
 
 module Dropdown
   class InvoiceNew < Base
-    attr_reader :people, :mailing_list
-
-    def initialize(template, people: [], mailing_list: nil)
+    def initialize(template, people: [], mailing_list: nil, filter: nil)
       super(template, label, :plus)
       @people = people
       @mailing_list = mailing_list
+      @filter = filter
+      if @filter.is_a?(ActionController::Parameters)
+        @filter = filter.to_unsafe_h.slice(:group_id, :range, :filters)
+      end
       init_items
     end
 
@@ -36,15 +38,20 @@ module Dropdown
     end
 
     def path(finance_group) # rubocop:disable Metrics/MethodLength
-      if mailing_list
+      if @mailing_list
         template.new_group_invoice_list_path(
           finance_group,
-          invoice_list: { receiver_id: mailing_list.id, receiver_type: mailing_list.class }
+          invoice_list: { receiver_id: @mailing_list.id, receiver_type: @mailing_list.class }
+        )
+      elsif @filter
+        template.new_group_invoice_list_path(
+          finance_group,
+          filter: @filter, invoice_list: { recipient_ids: '' }
         )
       else
         template.new_group_invoice_list_path(
           finance_group,
-          invoice_list: { recipient_ids: people.collect(&:id).join(',') }
+          invoice_list: { recipient_ids: @people.collect(&:id).join(',') }
         )
       end
     end

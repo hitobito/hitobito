@@ -17,6 +17,8 @@
 
     = stylesheet_pack_tag 'application', media: 'screen', 'data-turbolinks-track': true
     = stylesheet_pack_tag 'print', media: 'print'
+    - if Rails.env.test?
+      = stylesheet_pack_tag 'disable_animations'
     = javascript_pack_tag 'application', 'data-turbolinks-track': true
 
     = yield(:head)

@@ -1,0 +1,7 @@
+.modal.fade, .fade {
+  -webkit-transition: opacity 0.01s;
+  -moz-transition: opacity 0.01s;
+  -ms-transition: opacity 0.01s;
+  -o-transition: opacity 0.01s;
+  transition: opacity 0.01s;
+}

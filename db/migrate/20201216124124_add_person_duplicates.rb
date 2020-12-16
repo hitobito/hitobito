@@ -15,9 +15,6 @@ class AddPersonDuplicates < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
-    add_foreign_key(:person_duplicates, :people, column: :person_1_id)
-    add_foreign_key(:person_duplicates, :people, column: :person_2_id)
-
     add_index(:person_duplicates, [:person_1_id, :person_2_id], unique: true)
   end
 end

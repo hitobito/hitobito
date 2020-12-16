@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_14_202413) do
+ActiveRecord::Schema.define(version: 2020_12_16_124124) do
+
   create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false
@@ -29,7 +30,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.string "town", limit: 128, null: false
     t.integer "zip_code", null: false
     t.string "state", limit: 128, null: false
-    t.text "numbers", size: :medium
+    t.text "numbers"
     t.index ["zip_code", "street_short"], name: "index_addresses_on_zip_code_and_street_short"
   end
 
@@ -40,7 +41,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "label", null: false
     t.string "subject"
-    t.text "body", size: :medium
+    t.text "body"
     t.index ["custom_content_id"], name: "index_custom_content_translations_on_custom_content_id"
     t.index ["locale"], name: "index_custom_content_translations_on_locale"
   end
@@ -54,8 +55,8 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   create_table "delayed_jobs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "priority", default: 0
     t.integer "attempts", default: 0
-    t.text "handler", size: :medium
-    t.text "last_error", size: :medium
+    t.text "handler"
+    t.text "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
@@ -88,7 +89,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.boolean "approved", default: false, null: false
     t.boolean "rejected", default: false, null: false
     t.boolean "waiting_list", default: false, null: false
-    t.text "waiting_list_comment", size: :medium
+    t.text "waiting_list_comment"
   end
 
   create_table "event_attachments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -124,8 +125,8 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "label", null: false
     t.string "short_name"
-    t.text "general_information", size: :medium
-    t.text "application_conditions", size: :medium
+    t.text "general_information"
+    t.text "application_conditions"
     t.index ["event_kind_id"], name: "index_event_kind_translations_on_event_kind_id"
     t.index ["locale"], name: "index_event_kind_translations_on_locale"
   end
@@ -140,7 +141,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   create_table "event_participations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "event_id", null: false
     t.integer "person_id", null: false
-    t.text "additional_information", size: :medium
+    t.text "additional_information"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean "active", default: false, null: false
@@ -178,11 +179,11 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.string "cost"
     t.integer "maximum_participants"
     t.integer "contact_id"
-    t.text "description", size: :medium
-    t.text "location", size: :medium
+    t.text "description"
+    t.text "location"
     t.date "application_opening_at"
     t.date "application_closing_at"
-    t.text "application_conditions", size: :medium
+    t.text "application_conditions"
     t.integer "kind_id"
     t.string "state", limit: 60
     t.boolean "priorization", default: false, null: false
@@ -200,8 +201,8 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.integer "creator_id"
     t.integer "updater_id"
     t.boolean "applications_cancelable", default: false, null: false
-    t.text "required_contact_attrs", size: :medium
-    t.text "hidden_contact_attrs", size: :medium
+    t.text "required_contact_attrs"
+    t.text "hidden_contact_attrs"
     t.boolean "display_booking_info", default: true, null: false
     t.boolean "participations_visible", default: false, null: false
     t.index ["kind_id"], name: "index_events_on_kind_id"
@@ -221,7 +222,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.string "short_name", limit: 31
     t.string "type", null: false
     t.string "email"
-    t.text "address", size: :medium
+    t.text "address"
     t.integer "zip_code"
     t.string "town"
     t.string "country"
@@ -234,7 +235,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.integer "updater_id"
     t.integer "deleter_id"
     t.boolean "require_person_add_requests", default: false, null: false
-    t.text "description", size: :medium
+    t.text "description"
     t.string "logo"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
@@ -247,7 +248,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "body", size: :medium
+    t.text "body"
     t.index ["help_text_id"], name: "index_help_text_translations_on_help_text_id"
     t.index ["locale"], name: "index_help_text_translations_on_locale"
   end
@@ -263,7 +264,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   create_table "invoice_articles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "number"
     t.string "name", null: false
-    t.text "description", size: :medium
+    t.text "description"
     t.string "category"
     t.decimal "unit_cost", precision: 12, scale: 2
     t.decimal "vat_rate", precision: 5, scale: 2
@@ -279,13 +280,13 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.integer "sequence_number", default: 1, null: false
     t.integer "due_days", default: 30, null: false
     t.integer "group_id", null: false
-    t.text "address", size: :medium
-    t.text "payment_information", size: :medium
+    t.text "address"
+    t.text "payment_information"
     t.string "account_number"
     t.string "iban"
     t.string "payment_slip", default: "ch_es", null: false
-    t.text "beneficiary", size: :medium
-    t.text "payee", size: :medium
+    t.text "beneficiary"
+    t.text "payee"
     t.string "participant_number"
     t.string "email"
     t.string "participant_number_internal"
@@ -297,7 +298,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   create_table "invoice_items", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "invoice_id", null: false
     t.string "name", null: false
-    t.text "description", size: :medium
+    t.text "description"
     t.decimal "vat_rate", precision: 5, scale: 2
     t.decimal "unit_cost", precision: 12, scale: 2, null: false
     t.integer "count", default: 1, null: false
@@ -311,9 +312,9 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.string "sequence_number", null: false
     t.string "state", default: "draft", null: false
     t.string "esr_number", null: false
-    t.text "description", size: :medium
+    t.text "description"
     t.string "recipient_email"
-    t.text "recipient_address", size: :medium
+    t.text "recipient_address"
     t.date "sent_at"
     t.date "due_at"
     t.integer "group_id", null: false
@@ -322,14 +323,14 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "account_number"
-    t.text "address", size: :medium
+    t.text "address"
     t.date "issued_at"
     t.string "iban"
-    t.text "payment_purpose", size: :medium
-    t.text "payment_information", size: :medium
+    t.text "payment_purpose"
+    t.text "payment_information"
     t.string "payment_slip", default: "ch_es", null: false
-    t.text "beneficiary", size: :medium
-    t.text "payee", size: :medium
+    t.text "beneficiary"
+    t.text "payee"
     t.string "participant_number"
     t.integer "creator_id"
     t.string "participant_number_internal"
@@ -390,7 +391,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   create_table "mailing_lists", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.integer "group_id", null: false
-    t.text "description", size: :medium
+    t.text "description"
     t.string "publisher"
     t.string "mail_name"
     t.string "additional_sender"
@@ -404,7 +405,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.string "mailchimp_list_id"
     t.boolean "mailchimp_syncing", default: false
     t.datetime "mailchimp_last_synced_at"
-    t.text "mailchimp_result", size: :medium
+    t.text "mailchimp_result"
     t.boolean "mailchimp_include_additional_emails", default: false
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
@@ -412,7 +413,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   create_table "notes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "subject_id", null: false
     t.integer "author_id", null: false
-    t.text "text", size: :medium
+    t.text "text"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "subject_type"
@@ -424,7 +425,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.integer "application_id", null: false
     t.string "token", null: false
     t.integer "expires_in", null: false
-    t.text "redirect_uri", size: :medium, null: false
+    t.text "redirect_uri", null: false
     t.datetime "created_at", null: false
     t.datetime "revoked_at"
     t.string "scopes"
@@ -454,7 +455,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.string "name", null: false
     t.string "uid", null: false
     t.string "secret", null: false
-    t.text "redirect_uri", size: :medium, null: false
+    t.text "redirect_uri", null: false
     t.string "scopes", default: "", null: false
     t.boolean "confidential", default: true, null: false
     t.datetime "created_at", null: false
@@ -503,13 +504,13 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.string "nickname"
     t.boolean "company", default: false, null: false
     t.string "email"
-    t.text "address", size: :medium
+    t.text "address"
     t.string "zip_code"
     t.string "town"
     t.string "country"
     t.string "gender", limit: 1
     t.date "birthday"
-    t.text "additional_information", size: :medium
+    t.text "additional_information"
     t.boolean "contact_data_visible", default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -546,7 +547,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.string "name", null: false
     t.integer "group_id"
     t.string "group_type"
-    t.text "filter_chain", size: :medium
+    t.text "filter_chain"
     t.string "range", default: "deep"
     t.timestamp "created_at"
     t.timestamp "updated_at"
@@ -585,7 +586,6 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["person_1_id", "person_2_id"], name: "index_person_duplicates_on_person_1_id_and_person_2_id", unique: true
-    t.index ["person_2_id"], name: "fk_rails_f3df850de7"
   end
 
   create_table "phone_numbers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -603,7 +603,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "label", null: false
-    t.text "description", size: :medium
+    t.text "description"
     t.index ["locale"], name: "index_qualification_kind_translations_on_locale"
     t.index ["qualification_kind_id"], name: "index_qualification_kind_translations_on_qualification_kind_id"
   end
@@ -649,7 +649,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   create_table "service_tokens", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "layer_group_id", null: false
     t.string "name", null: false
-    t.text "description", size: :medium
+    t.text "description"
     t.string "token", null: false
     t.datetime "last_access"
     t.boolean "people", default: false
@@ -665,7 +665,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
 
   create_table "sessions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "session_id", null: false
-    t.text "data", size: :medium
+    t.text "data"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["session_id"], name: "index_sessions_on_session_id"
@@ -693,7 +693,7 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   create_table "table_displays", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "type", null: false
     t.integer "person_id", null: false
-    t.text "selected", size: :medium
+    t.text "selected"
     t.index ["person_id", "type"], name: "index_table_displays_on_person_id_and_type", unique: true
   end
 
@@ -721,8 +721,8 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.integer "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
-    t.text "object", size: :medium
-    t.text "object_changes", size: :medium
+    t.text "object"
+    t.text "object_changes"
     t.string "main_type"
     t.integer "main_id"
     t.datetime "created_at"
@@ -733,6 +733,4 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
-  add_foreign_key "person_duplicates", "people", column: "person_1_id"
-  add_foreign_key "person_duplicates", "people", column: "person_2_id"
 end

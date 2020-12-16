@@ -37,6 +37,8 @@ describe :person_duplicates, js: true do
     
     expect do
       modal.find('button.btn', text: 'Zusammenführen').click
+      dst_person = duplicate1.person_1
+      expect(page).to have_current_path(group_person_path(dst_person.primary_group_id, dst_person.id))
       expect(page).to have_content 'Die Personen Einträge wurden erfolgreich zusammengeführt.'
     end.to change(Person, :count).by(-1)
 

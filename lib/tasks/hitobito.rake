@@ -13,7 +13,7 @@ namespace :hitobito do
       groups.each do |group, roles|
         puts '  * ' + group
         roles.each do |r|
-          puts "    * #{r.model_name.human}: #{r.permissions.inspect}"
+          puts "    * #{r.label}: #{r.permissions.inspect}"
         end
       end
     end

@@ -516,6 +516,7 @@ de:
     entire_layer: 'Gesamte Ebene'
     entire_group: 'Gesamte Gruppe'
     new_filter: 'Neuer Filter...'
+    duplicates: 'Duplikate'
 
   filter_navigation/events:
     all: 'Alle'
@@ -624,7 +625,7 @@ de:
   import/person_importer:
     row_with_error: "Zeile %{row}: %{errors}"
 
-  import/person_doublette_finder:
+  import/person_duplicate_finder:
     duplicates: "%{count} Treffer in Duplikatserkennung."
 
   invoices:
@@ -880,6 +881,26 @@ de:
   paper_trail/version_decorator:
     by: 'von %{author}'
 
+  person_duplicates:
+    merge:
+      new:
+        title: Personen zusammenführen
+        select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
+        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnr., zusätzlichen E-Mails sowie die Social Media Einträge übernommen. Alle anderen Daten dieser Person wie z.B. Notizen, Kursanmeldungen usw. werden gelöscht.
+        merge_hint_invalid: Diese Person hat ungültige Daten.
+        irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
+        invalid_persons: Die Einträge können erst zusammengeführt werden wenn beide gültig sind.
+        reload: Erneut prüfen
+      action: Zusammenführen
+      success: Die Personen Einträge wurden erfolgreich zusammengeführt.
+    ignore:
+      new:
+        title: Duplikat wirklich ignorieren?
+        confirm: Handelt es sich bei den beiden Einträgen für %{person} wirklich nicht um ein Duplikat?
+        irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
+      action: Ignorieren
+      success: Der Duplikats-Eintrag wurde erfolgreich entfernt. 
+
   person:
     confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
 
@@ -1067,6 +1088,7 @@ de:
     actions_index:
       add_person: Person hinzufügen
       import_list: Liste importieren
+      person_duplicate_list: Duplikate
 
     add_requests:
       approve_title: 'Anfrage akzeptieren'
@@ -1389,6 +1411,7 @@ de:
     append_to_household: "%{item} wurde zum Haushalt (%{object_changes}) hinzugefügt."
     household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
     remove_from_household: "%{item} wurde vom Haushalt (%{object_changes}) entfernt."
+    person_merge: "Zwei Personen wurden in diesen Eintrag zusammengeführt. Gelöschte Person:" 
 
   tags/merge:
     success: Die Tags wurden erfolgreich zusammengeführt.

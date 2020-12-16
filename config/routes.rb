@@ -95,6 +95,15 @@ Hitobito::Application.routes.draw do
 
       end
 
+      resources :person_duplicates, only: [:index] do
+        member do
+          get 'merge' => 'person_duplicates/merge#new', as: 'new_merge'
+          post 'merge' => 'person_duplicates/merge#create', as: 'merge'
+          get 'ignore' => 'person_duplicates/ignore#new', as: 'new_ignore'
+          post 'ignore' => 'person_duplicates/ignore#create', as: 'ignore'
+        end
+      end
+
       resource :tag_list, only: [:destroy, :create, :new] do
         get 'deletable' => 'tag_lists#deletable'
       end

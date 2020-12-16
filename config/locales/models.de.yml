@@ -236,6 +236,9 @@ de:
       person/add_request:
         one: Zugriffsanfrage
         other: Anfragen
+      person_duplicate:
+        one: Duplikat
+        other: Duplikate
       people_filter:
         one: Filter
         other: Filter
@@ -334,6 +337,11 @@ de:
         tags: Tags
         created_at: Erstellt
         updated_at: Geändert
+
+      person_duplicate:
+        birth_year: Jahrgang
+        roles_list: Rollen
+        person_name: Vorname / Name / Übername
 
       person/add_request:
         person: Person

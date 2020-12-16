@@ -15,3 +15,5 @@
 
 = action_button(t('global.button.print'), 'javascript:window.print();', :print)
 
+- if can?(:manage_person_duplicates, @group)
+  = action_button(t('.person_duplicate_list'), group_person_duplicates_path(@group), :'user-friends')

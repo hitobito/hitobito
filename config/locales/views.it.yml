@@ -526,7 +526,7 @@ it:
       other: "%{count} record sono stati letti con successo."
   import/person_importer:
     row_with_error: "riga %{row}: %{errors}"
-  import/person_doublette_finder:
+  import/person_duplicate_finder:
     duplicates: "%{count} risultati nel riconoscimento di duplicati."
   invoices:
     filter:

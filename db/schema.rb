@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_14_202413) do
+ActiveRecord::Schema.define(version: 2020_12_16_124124) do
 
   create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "contactable_type", null: false
@@ -577,6 +577,15 @@ ActiveRecord::Schema.define(version: 2020_12_14_202413) do
     t.timestamp "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["person_id"], name: "index_person_add_requests_on_person_id"
     t.index ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
+  end
+
+  create_table "person_duplicates", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.integer "person_1_id", null: false
+    t.integer "person_2_id", null: false
+    t.boolean "ignore", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["person_1_id", "person_2_id"], name: "index_person_duplicates_on_person_1_id_and_person_2_id", unique: true
   end
 
   create_table "phone_numbers", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

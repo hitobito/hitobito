@@ -196,7 +196,29 @@ class Group < ActiveRecord::Base
     GroupDecorator
   end
 
+  def person_duplicates
+    if top?
+      duplicates = PersonDuplicate.all
+    elsif layer?
+      duplicates = layer_person_duplicates
+    end
+    duplicates.includes(person_1: [{ roles: :group }, :groups, :primary_group],
+                        person_2: [{ roles: :group }, :groups, :primary_group])
+  end
+
   private
+
+  def layer_person_duplicates
+    duplicates = PersonDuplicate.joins(person_1: :roles).joins(person_2: :roles)
+    group_ids = children.map(&:id) + [id]
+    duplicates
+      .where('roles.group_id IN (:group_ids) OR roles_people.group_id IN (:group_ids)',
+             group_ids: group_ids)
+  end
+
+  def top?
+    parent.nil?
+  end
 
   def destroy_orphaned_event(event)
     if event.group_ids.blank? || event.group_ids == [id]

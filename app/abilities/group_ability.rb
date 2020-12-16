@@ -63,11 +63,18 @@ class GroupAbility < AbilityDsl::Base
     permission(:finance).may(:index_invoices).in_layer_group
     permission(:finance).may(:create_invoices_from_list).in_same_layer_or_below
 
+    permission(:admin).may(:manage_person_duplicates).if_layer_group
+    permission(:layer_and_below_full).may(:manage_person_duplicates).if_permission_in_layer
+
     general(:update).group_not_deleted
     general(:index_person_add_requests,
             :activate_person_add_requests,
             :deactivate_person_add_requests).
       if_layer_group
+  end
+
+  def if_permission_in_layer
+    group.layer? && permission_in_layer?(group.id)
   end
 
   def in_layer_group

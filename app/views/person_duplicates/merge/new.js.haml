@@ -1,0 +1,17 @@
+-#  Copyright (c) 2020, CVP Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+$('#modal-placeholder').html("#{escape_javascript(render(partial: 'person_duplicates/merge/new'))}")
+$('#person-duplicates-merge').modal('show')
+$('.person-duplicate-options input').change(function() {
+$('.person-duplicate-options label').removeClass('selected'); 
+$('.person-duplicate-options #merge-hint').removeClass('hidden'); 
+label = $(this).parent();
+hint = $(this).parent().find('#merge-hint');
+if (this.checked) {
+hint.addClass('hidden');
+label.addClass('selected');
+}
+});

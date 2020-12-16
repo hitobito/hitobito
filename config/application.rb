@@ -87,6 +87,7 @@ module Hitobito
         ReoccuringMailchimpSynchronizationJob.new.schedule
         Address::CheckValidityJob.new.schedule
         Address::ImportJob.new.schedule if Settings.addresses.token
+        People::DuplicateLocatorJob.new.schedule
       end
     end
 

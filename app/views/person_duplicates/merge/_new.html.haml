@@ -1,0 +1,29 @@
+-#  Copyright (c) 2020, CVP Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+#person-duplicates-merge.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.bold.modal-title
+          %b= t('.title')
+
+      = standard_form(@entry, url: merge_group_person_duplicate_url(@group, @entry), method: :post) do |f|
+        .modal-body
+          .row-fluid
+            = t('.select_person')
+            .person-duplicate-options
+              = person_duplicates_merge_entries(f, @entry)
+              %br
+              -if @entry.persons_valid?
+                = t('.irreversible')
+              -else
+                = t('.invalid_persons')
+        .modal-footer
+          -if @entry.persons_valid?
+            = submit_button(f, t('person_duplicates.merge.action'))
+          = link_to(ti('button.cancel'), '#',
+            class: 'link cancel',
+            onclick: "event.preventDefault(); $('#person-duplicates-merge').modal('hide')")

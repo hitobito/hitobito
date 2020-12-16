@@ -54,10 +54,22 @@ table.actions-enabled {
   th:first-child input[type='checkbox']{
     margin-bottom: 12px;
   }
-
 }
 
 table tr :first-child input[type='checkbox'] {
   width: 20px;
   margin-right: 5px;
+}
+
+table tr.divider, table tr.divider td:hover {
+  background-color: #f9f9f9;
+}
+
+table td.vertical-middle {
+  vertical-align: middle;
+
+  div.btn-group {
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
 }

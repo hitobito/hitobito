@@ -32,19 +32,24 @@ module PaperTrail
     def changes
       if item_type != main_type
         content_tag(:div, association_change)
-      elsif !item_class.paper_trail_options[:on].include?(event.to_sym)
+      elsif event.to_sym.eql?(:person_merge)
+        person_merge_list
+      elsif custom_event_action?
         custom_event_changes
       else
         changeset_lines
       end
     end
 
+    def custom_event_action?
+      !item_class.paper_trail_options[:on].include?(event.to_sym)
+    end
+
     def custom_event_changes
       content_tag(:div,
-                  I18n.t("version.#{event}",
-                  user: whodunnit,
-                  item: item,
-                  object_changes: object_changes))
+                  t_event(user: whodunnit,
+                          item: item,
+                          object_changes: object_changes))
     end
 
     def changeset_lines
@@ -57,6 +62,39 @@ module PaperTrail
       safe_join(model.changeset, ', ') do |attr, (from, to)|
         attribute_change(attr, from, to)
       end
+    end
+
+    def person_merge_list
+      content = content_tag(:div, t_event).html_safe
+      content += safe_join(YAML.load(model.object_changes)) do |line|
+        person_merge_value(line)
+      end
+      content
+    end
+
+    def person_merge_value(line)
+      attr, value = line
+      attr = t_person(attr)
+      if value.is_a?(Array)
+        c = content_tag(:div, "#{attr}:")
+        value.each do |v|
+          c += content_tag(:div, v)
+        end
+        c
+      else
+        content_tag(:div, "#{attr}: #{value}")
+      end
+    end
+
+    def t_event(user: nil, item: nil, object_changes: nil)
+      I18n.t("version.#{event}",
+             user: user,
+             item: item,
+             object_changes: object_changes)
+    end
+
+    def t_person(attr)
+      I18n.t("activerecord.attributes.person.#{attr}")
     end
 
     def attribute_change(attr, from, to)

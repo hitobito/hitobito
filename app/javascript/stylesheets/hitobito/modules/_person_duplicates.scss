@@ -1,0 +1,52 @@
+.person-duplicate-options {
+  margin: 1rem 0;
+
+  label {
+    border: 1px solid $borderColor;
+    border-radius: 6px;
+    padding: 0.75rem 0.75rem 0.75rem 2rem;
+
+    display: flex;
+    flex-direction: row;
+    > input {
+      align-self: center;
+      margin-right: 0.5rem;
+    }
+  }
+
+  label > div {
+    > a {
+      font-size: 1.1em;
+      margin-right: 0.25rem;
+    }
+    > .label {
+      margin-left: 0.25rem;
+      background: $grayLight;
+      color: $black;
+      text-shadow: none;
+    }
+    > p {
+      margin: 0;
+      > .muted {
+        margin-left: 0.25rem;
+      }
+    }
+  }
+
+  label.selected,
+  label:hover {
+    border-color: $blue;
+    background: desaturate(lighten($linkColor, 50%), 20%);
+  }
+
+  #merge-hint {
+    padding-top: 10px;
+  }
+
+}
+
+.person-duplicates-table {
+  td:first-child, th:first-child {
+    padding-left: 8px;
+  }
+}

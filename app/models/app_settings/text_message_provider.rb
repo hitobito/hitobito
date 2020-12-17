@@ -6,10 +6,15 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 module AppSettings
-  class SmsProvider
+  class TextMessageProvider
     include Encryptable
 
-    attr_accessor :provider, :encrypted_username, :encrypted_password
+    attr_accessor :provider
     attr_encrypted :username, :password
+
+    private
+
+    attr_accessor :encrypted_username, :encrypted_password
+
   end
 end

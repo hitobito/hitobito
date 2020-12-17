@@ -58,6 +58,8 @@ class Group < ActiveRecord::Base
 
   attr_readonly :type
 
+  serialize :settings, AppSettings::Group
+
   ### CALLBACKS
 
   before_save :reset_contact_info

@@ -5,11 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-module Group::Settings
-  extend ActiveSupport::Concern
+module AppSettings
+  class Group
 
-  included do
-    serialize :settings, Hash
+    attr_accessor :text_message_provider
+
   end
-
 end

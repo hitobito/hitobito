@@ -8,15 +8,25 @@
 class PersonDuplicateAbility < AbilityDsl::Base
 
   on(PersonDuplicate) do
-    permission(:any).may(:merge).if_read_write_on_person
-    permission(:any).may(:ignore).if_read_write_on_person
+    permission(:any).may(:merge).if_processible
+    permission(:any).may(:ignore).if_processible
   end
 
-  def if_read_write_on_person
+  def if_processible
+    not_ignored && read_write_on_person
+  end
+
+  def read_write_on_person
     persons = [subject.person_1, subject.person_2]
     persons.all? { |p| person_ability_can?(:show, p) } &&
       persons.any? { |p| person_ability_can?(:update, p) }
   end
+
+  def not_ignored
+    !subject.ignore
+  end
+
+  private
 
   def person_ability_can?(action, person)
     Ability.new(user).can?(action, person)

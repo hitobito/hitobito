@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_16_124124) do
+ActiveRecord::Schema.define(version: 2020_12_18_083609) do
 
   create_table "additional_emails", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "contactable_type", null: false
@@ -538,7 +538,9 @@ ActiveRecord::Schema.define(version: 2020_12_16_124124) do
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["email"], name: "index_people_on_email", unique: true
     t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true
+    t.index ["first_name"], name: "index_people_on_first_name"
     t.index ["household_key"], name: "index_people_on_household_key"
+    t.index ["last_name"], name: "index_people_on_last_name"
     t.index ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_people_on_unlock_token", unique: true
   end

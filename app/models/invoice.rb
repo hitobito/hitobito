@@ -62,8 +62,8 @@ class Invoice < ActiveRecord::Base
 
   before_validation :set_sequence_number, on: :create, if: :group
   before_validation :set_esr_number, on: :create, if: :group
-  before_validation :set_reference_number, on: :create, if: :group
   before_validation :set_payment_attributes, on: :create, if: :group
+  before_validation :set_reference_number, on: :create, if: :group
   before_validation :set_dates, on: :update
   before_validation :set_self_in_nested
   before_validation :recalculate

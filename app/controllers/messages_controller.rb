@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-class MessagesController < CrudController
+class MessagesController < ModalCrudController
 
   skip_authorize_resource
   before_action :authorize_action

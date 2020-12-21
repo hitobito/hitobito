@@ -1,7 +1,7 @@
 PATH
-  remote: ../hitobito_cvp
+  remote: ../hitobito_generic
   specs:
-    hitobito_cvp (0.0.1)
+    hitobito_generic (1.22.2)
 
 GEM
   remote: https://rubygems.org/
@@ -615,7 +615,6 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_cvp!
   http_accept_language
   icalendar
   kaminari

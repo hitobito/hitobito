@@ -123,7 +123,8 @@ class InvoiceListsController < CrudController
 
   def recipient_ids_from_people_filter
     group = Group.find(params.dig(:filter, :group_id))
-    filter = Person::Filter::List.new(group, current_user, params[:filter])
+    filter_params = params[:filter].to_unsafe_h.transform_values(&:presence)
+    filter = Person::Filter::List.new(group, current_user, filter_params)
     filter.entries.pluck(:id).join(',')
   end
 

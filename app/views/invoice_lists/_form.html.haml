@@ -7,9 +7,12 @@
              cancel_url: cancel_url,
              data: { group: group_path(parent) }) do |f|
 
-  = f.hidden_field :receiver_id
-  = f.hidden_field :receiver_type
-  = f.hidden_field :recipient_ids
+  - if entry.receiver
+    = f.hidden_field :receiver_id
+    = f.hidden_field :receiver_type
+
+  - if entry.recipient_ids
+    = f.hidden_field :recipient_ids
 
   = f.fields_for :invoice, entry.invoice do |fi|
     = fi.labeled_input_field :title, help: t('.recipient_info', count: entry.recipient_ids_count)

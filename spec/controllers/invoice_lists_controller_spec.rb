@@ -21,6 +21,28 @@ describe InvoiceListsController do
       expect(assigns(:invoice_list)).to have(1).recipient
     end
 
+    it "may update when person has finance permission on layer group" do
+      put :update, params: { group_id: group.id, invoice_list: { recipient_ids: '' } }
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
+    end
+
+    it "may not index when person has finance permission on layer group" do
+      expect do
+        get :new, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: '' } }
+      end.to raise_error(CanCan::AccessDenied)
+    end
+
+    it "may not edit when person has finance permission on layer group" do
+      expect do
+        put :update, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: '' } }
+      end.to raise_error(CanCan::AccessDenied)
+    end
+  end
+
+
+  context 'parameter handling' do
+    before { sign_in(person) }
+
     it "ignores empty ids param" do
       get :new, {
         params: {
@@ -66,22 +88,43 @@ describe InvoiceListsController do
       expect(assigns(:invoice_list)).to have(1).recipients
       expect(assigns(:invoice_list).recipients).to eq([leader])
     end
+  end
 
-    it "may update when person has finance permission on layer group" do
-      put :update, params: { group_id: group.id, invoice_list: { recipient_ids: '' } }
-      expect(response).to redirect_to group_invoices_path(group, returning: true)
+  context 'sheet title' do
+    before { sign_in(person) }
+    let(:sheet_title) { Capybara::Node::Simple.new(response.body).find('.content-header') }
+    render_views
+
+    it 'renders Rechnung title for single person' do
+      get :new, {
+        params: {
+          group_id: group.id,
+          invoice_list: { recipient_ids: person.id },
+          ids: ''
+        }
+      }
+      expect(sheet_title).to have_text 'Rechnung'
     end
 
-    it "may not index when person has finance permission on layer group" do
-      expect do
-        get :new, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: '' } }
-      end.to raise_error(CanCan::AccessDenied)
+    it 'renders Rechnung title for multiple people' do
+      get :new, {
+        params: {
+          group_id: group.id,
+          invoice_list: { recipient_ids: "#{person.id},#{people(:top_leader).id}" },
+          ids: ''
+        }
+      }
+      expect(sheet_title).to have_text 'Rechnung'
     end
 
-    it "may not edit when person has finance permission on layer group" do
-      expect do
-        put :update, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: '' } }
-      end.to raise_error(CanCan::AccessDenied)
+    it 'renders Sammelrechnung title for abo' do
+      get :new, {
+        params: {
+          group_id: group.id,
+          invoice_list: { receiver_id: list.id, receiver_type: list.class }
+        }
+      }
+      expect(sheet_title).to have_text 'Sammelrechnung'
     end
   end
 

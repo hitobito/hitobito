@@ -135,11 +135,13 @@ describe Invoice do
     end
 
     it 'sets esr without blanks for qr invoice with qr iban' do
-      expect(create_invoice(payment_slip: :qr, iban: qr_iban).reference).to eq esr_without_blanks
+      group.invoice_config.update(payment_slip: :qr, iban: qr_iban)
+      expect(create_invoice.reference).to eq esr_without_blanks
     end
 
     it 'sets cors for qr invoice without qr iban' do
-      expect(create_invoice(payment_slip: :qr, iban: iban).reference).to eq 'RF29834963567Z1'
+      group.invoice_config.update(payment_slip: :qr, iban: iban)
+      expect(create_invoice.reference).to eq 'RF29834963567Z1'
     end
   end
 

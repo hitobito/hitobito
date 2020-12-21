@@ -33,7 +33,7 @@ describe Invoice::PaymentProcessor do
 
   it 'creates payment and marks invoice as payed and updates invoice_list' do
     list = InvoiceList.create!(title: :title, group: invoice.group)
-    invoice.update_columns(esr_number: '00 00000 00000 10000 00000 00905',
+    invoice.update_columns(reference: '000000000000100000000000905',
                            invoice_list_id: list.id,
                            total: 710.82)
     expect do

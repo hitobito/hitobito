@@ -10,7 +10,11 @@ module Sheet
   class InvoiceList < Sheet::Base
 
     def title
-      ::InvoiceList.model_name.human(count: 2)
+      if entry && !entry.receiver
+        ::Invoice.model_name.human
+      else
+        ::InvoiceList.model_name.human(count: 2)
+      end
     end
 
     def left_nav?

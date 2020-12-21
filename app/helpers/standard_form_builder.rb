@@ -37,7 +37,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     type = column_type(@object, attr)
     custom_field_method = :"#{type}_field"
     if type == :text
-      text_area(attr, html_options)
+      if association_kind?("rich_text_#{attr}", nil, :has_one)
+        rich_text_area(attr, html_options)
+      else
+        text_area(attr, html_options)
+      end
     elsif association_kind?(attr, type, :belongs_to)
       belongs_to_field(attr, html_options)
     elsif association_kind?(attr, type, :has_and_belongs_to_many, :has_many)

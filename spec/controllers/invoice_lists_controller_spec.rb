@@ -88,6 +88,25 @@ describe InvoiceListsController do
       expect(assigns(:invoice_list)).to have(1).recipients
       expect(assigns(:invoice_list).recipients).to eq([leader])
     end
+
+    it "handles  blank filter params" do
+      leader = Fabricate(Group::BottomLayer::Leader.sti_name, group: group).person
+      role_types = [Group::BottomLayer::Leader]
+
+      get :new, {
+        params: {
+          group_id: group.id,
+          invoice_list: { recipient_ids: person.id },
+          filter: {
+            group_id: group.id,
+            range: '',
+            filters: ''
+          }
+        }
+      }
+      expect(response).to be_successful
+      expect(assigns(:invoice_list)).to have(2).recipients
+    end
   end
 
   context 'sheet title' do

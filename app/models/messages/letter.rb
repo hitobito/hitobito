@@ -6,4 +6,11 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Messages::Letter < Message
+
+  has_rich_text :body
+
+  def to_s
+    subject
+  end
+
 end

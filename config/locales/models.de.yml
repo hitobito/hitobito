@@ -215,6 +215,9 @@ de:
       message:
         one: Kommunikation
         other: Kommunikation
+      messages/letter:
+        one: Brief
+        other: Briefe
       note:
         one: Notiz
         other: Notizen
@@ -646,6 +649,10 @@ de:
           completed: Gesendet
           sender_rejected: Absender abgelehnt
           unkown_recipient: Fehler
+
+      messages/letter:
+        subject: Betreff
+        body: Inhalt
 
       subscription:
         related_role_types: Rollen

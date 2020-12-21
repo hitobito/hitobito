@@ -900,7 +900,7 @@ de:
         confirm: Handelt es sich bei den beiden Einträgen für %{person} wirklich nicht um ein Duplikat?
         irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
       action: Ignorieren
-      success: Der Duplikats-Eintrag wurde erfolgreich entfernt. 
+      success: Der Duplikats-Eintrag wurde erfolgreich entfernt.
 
   person:
     confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
@@ -1412,7 +1412,7 @@ de:
     append_to_household: "%{item} wurde zum Haushalt (%{object_changes}) hinzugefügt."
     household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
     remove_from_household: "%{item} wurde vom Haushalt (%{object_changes}) entfernt."
-    person_merge: "Zwei Personen wurden in diesen Eintrag zusammengeführt. Gelöschte Person:" 
+    person_merge: "Zwei Personen wurden in diesen Eintrag zusammengeführt. Gelöschte Person:"
 
   tags/merge:
     success: Die Tags wurden erfolgreich zusammengeführt.
@@ -1434,5 +1434,10 @@ de:
 
   messages:
     actions_index:
+      letters:
+        new: Neuer Brief
       text_messages:
         new: Neue SMS
+    letters:
+      new:
+        title: Neuer Brief

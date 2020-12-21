@@ -6,4 +6,16 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Messages::LettersController < MessagesController
+
+  self.permitted_attrs = [:body, :subject]
+
+  def self.model_class
+    @model_class ||= Messages::Letter
+  end
+
+  def full_entry_label
+    "#{I18n.t('activerecord.models.messages/letter.one')} <i>#{ERB::Util.h(entry.to_s)}</i>"
+        .html_safe
+  end
+
 end

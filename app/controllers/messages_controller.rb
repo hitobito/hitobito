@@ -32,12 +32,26 @@ class MessagesController < ModalCrudController
     params[:mailing_list_id]
   end
 
+  def assign_attributes
+    entry.recipients_source_id = recipients_source.id
+    entry.recipients_source_type = recipients_source.class.name
+    super
+  end
+
   def authorize_class
     authorize_action
   end
 
   def authorize_action
     authorize!(:update, recipients_source)
+  end
+
+  def return_path
+    group_mailing_list_messages_path
+  end
+
+  def parent_scope
+    model_class
   end
 
 end

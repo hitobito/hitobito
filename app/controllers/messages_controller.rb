@@ -7,6 +7,9 @@
 
 class MessagesController < CrudController
 
+  skip_authorize_resource
+  before_action :authorize_action
+
   include YearBasedPaging
 
   self.nesting = Group, MailingList
@@ -30,6 +33,10 @@ class MessagesController < CrudController
   end
 
   def authorize_class
+    authorize_action
+  end
+
+  def authorize_action
     authorize!(:update, recipients_source)
   end
 

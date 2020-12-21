@@ -6,9 +6,14 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Messages::TextMessagesController < MessagesController
+
   private
 
-  def model_class
+  def self.model_class
     Messages::TextMessage
+  end
+
+  def parent_scope
+    model_class
   end
 end

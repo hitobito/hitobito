@@ -5,5 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-class Messages::SmsController < MessagesController
+class Messages::TextMessagesController < MessagesController
+  private
+
+  def model_class
+    Messages::TextMessage
+  end
 end

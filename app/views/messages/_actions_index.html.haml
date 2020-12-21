@@ -4,5 +4,5 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if can?(:update, @mailing_list)
-  = button_action_add(new_group_mailing_list_text_message_path(@group, @mailing_list))
+  = action_button(t('.text_messages.new'), new_group_mailing_list_text_message_path(@group, @mailing_list), :sms, remote: true)
   = button_action_add(new_group_mailing_list_letter_path(@group, @mailing_list))

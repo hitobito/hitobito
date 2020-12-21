@@ -1439,5 +1439,8 @@ de:
       text_messages:
         new: Neue SMS
     letters:
+      form:
+        available_placeholders: 'Verfügbare Platzhalter: {salutation}, {first_name}, {last_name}'
+        prompt_tag_placeholder: '-'
       new:
         title: Neuer Brief

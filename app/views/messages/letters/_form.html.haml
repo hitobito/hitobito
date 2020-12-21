@@ -5,5 +5,27 @@
 
 
 = entry_form(url: entry.new_record? ? group_mailing_list_letters_path : group_mailing_list_letter_path(entry.id)) do |f|
-  = f.labeled_input_field :subject
-  = f.labeled_rich_text_area :content
+  = f.labeled :subject do
+    .span6{ style: 'margin-left: 0' }
+      = f.text_field :subject, style: 'width: 100%'
+
+  = f.labeled :preset do
+    - preset_options = options_from_collection_for_select(presets, :second, :first, [])
+    .span6{ style: 'margin-left: 0' }
+      = select_tag('letter_preset',
+                  preset_options,
+                  class: 'chosen-select',
+                  data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )
+
+  = f.labeled :recipients do
+    .inline
+      %a.collapsed.header{ href: "#recipients-collapse", data: { toggle: :collapse } }
+        63 Empfänger anzeigen
+
+      .collapse{ id: 'recipients-collapse' }
+        .entry
+          Peter Hans
+        .entry
+          Peter Hans 2
+
+  = f.labeled_rich_text_area :content, help: t('.available_placeholders')

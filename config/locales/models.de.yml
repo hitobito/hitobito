@@ -653,6 +653,8 @@ de:
       messages/letter:
         subject: Titel
         content: Inhalt
+        preset: Vorlage
+        recipients: Empfänger
 
       subscription:
         related_role_types: Rollen

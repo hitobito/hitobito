@@ -9,6 +9,8 @@ class Messages::LettersController < MessagesController
 
   self.permitted_attrs = [:subject, :content]
 
+  helper_method :presets
+
   def self.model_class
     @model_class ||= Messages::Letter
   end
@@ -16,6 +18,13 @@ class Messages::LettersController < MessagesController
   def full_entry_label
     "#{I18n.t('activerecord.models.messages/letter.one')} <i>#{ERB::Util.h(entry.to_s)}</i>"
         .html_safe
+  end
+
+  def presets
+    @presets ||= [
+        ['Willkommens-Brief', 'welcome' ],
+        [ 'Dankes-Brief', 'thanks' ]
+    ]
   end
 
 end

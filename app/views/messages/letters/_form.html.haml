@@ -4,6 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 
-= entry_form(:subject,
-             :body,
-              url: entry.new_record? ? group_mailing_list_letters_path : group_mailing_list_letter_path(entry.id))
+= entry_form(url: entry.new_record? ? group_mailing_list_letters_path : group_mailing_list_letter_path(entry.id)) do |f|
+  = f.labeled_input_field :subject
+  = f.labeled_rich_text_area :content

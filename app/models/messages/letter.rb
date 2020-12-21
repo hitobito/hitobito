@@ -7,7 +7,7 @@
 
 class Messages::Letter < Message
 
-  has_rich_text :body
+  has_rich_text :content
 
   def to_s
     subject

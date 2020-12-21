@@ -651,8 +651,8 @@ de:
           unkown_recipient: Fehler
 
       messages/letter:
-        subject: Betreff
-        body: Inhalt
+        subject: Titel
+        content: Inhalt
 
       subscription:
         related_role_types: Rollen

@@ -7,7 +7,7 @@
 
 class Messages::LettersController < MessagesController
 
-  self.permitted_attrs = [:body, :subject]
+  self.permitted_attrs = [:subject, :content]
 
   def self.model_class
     @model_class ||= Messages::Letter

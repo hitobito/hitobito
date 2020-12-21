@@ -45,7 +45,7 @@ class InvoiceConfig < ActiveRecord::Base
   validates :email, format: Devise.email_regexp, allow_blank: true
 
   # TODO: probably the if condition is not correct, verification needed
-  validates :iban, presence: true, on: :update, if: :without_reference?
+  validates :iban, presence: true, on: :update, if: :qr?
   validates :iban, format: { with: IBAN_REGEX },
                    on: :update, allow_blank: true
 

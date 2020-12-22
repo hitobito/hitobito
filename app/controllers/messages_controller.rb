@@ -14,19 +14,21 @@ class MessagesController < ModalCrudController
 
   self.nesting = Group, MailingList
 
+  self.permitted_attrs = [:type, :subject, :content]
+
   private
 
   def build_entry
-    klazz = Message.user_types[params[:type]]
+    klazz = model_params ? model_params[:type].constantize : Message.user_types[params[:type]]
     if klazz
       klazz.new
     else
-      raise 'invalid message type provided'
+      raise "invalid message type provided"
     end
   end
 
   def list_entries
-    parent.messages.list.in_year(year)
+    super.in_year(year)
   end
 
   def parent

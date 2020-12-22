@@ -650,6 +650,10 @@ de:
           sender_rejected: Absender abgelehnt
           unkown_recipient: Fehler
 
+      message:
+        subject: Betreff
+        type: Typ
+
       messages/letter:
         subject: Titel
         content: Inhalt

@@ -3,19 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+= entry_form do |f|
+  = f.hidden_field :type
 
-= entry_form(url: entry.new_record? ? group_mailing_list_letters_path : group_mailing_list_letter_path(entry.id)) do |f|
-  = f.labeled :subject do
-    .span6{ style: 'margin-left: 0' }
-      = f.text_field :subject, style: 'width: 100%'
-
-  = f.labeled :preset do
-    - preset_options = options_from_collection_for_select(presets, :second, :first, [])
-    .span6{ style: 'margin-left: 0' }
-      = select_tag('letter_preset',
-                  preset_options,
-                  class: 'chosen-select',
-                  data: { chosen_no_results: t('global.chosen_no_results'), placeholder: t('.prompt_tag_placeholder') } )
+  = f.labeled_string_field :subject
 
   = f.labeled :recipients do
     .inline

@@ -5,5 +5,5 @@
 
 - title @mailing_list.to_s
 
-= crud_table do |t|
-  - t.attrs(:type, :subject)
+= crud_table(:type, :subject) do |t|
+  - add_table_actions(t)

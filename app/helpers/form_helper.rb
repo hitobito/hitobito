@@ -40,8 +40,9 @@ module FormHelper
     options[:noindent] = true
     options[:stacked] = true
     attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
+    content = ''
     standard_form(path_args(entry), options) do |form|
-      content = form.error_messages
+      content << form.error_messages
       content << form.labeled_input_fields(*attrs)
     end
     content.html_safe

@@ -78,7 +78,7 @@ de:
     index:
       title: '%{models}'
 
-  crud:
+  crud: &crud
     show:
       title: "%{model}"
     new:
@@ -95,6 +95,8 @@ de:
       flash:
         success: "%{model} wurde erfolgreich gelöscht."
         failure: "%{model} konnte nicht gelöscht werden."
+
+  model_crud: *crud
 
   contactable:
     address_or_email: "%{address} oder %{email}"

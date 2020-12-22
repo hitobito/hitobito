@@ -16,6 +16,15 @@ class MessagesController < ModalCrudController
 
   private
 
+  def build_entry
+    klazz = Message.user_types[params[:type]]
+    if klazz
+      klazz.new
+    else
+      raise 'invalid message type provided'
+    end
+  end
+
   def list_entries
     parent.messages.list.in_year(year)
   end

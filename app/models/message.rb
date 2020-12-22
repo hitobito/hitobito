@@ -9,6 +9,8 @@ class Message < ActiveRecord::Base
   belongs_to :recipients_source, polymorphic: true
   has_many :message_recipients
 
+  attr_readonly :type
+
   scope :list, -> { order(:updated_at) }
 
   ### CLASS METHODS
@@ -19,6 +21,12 @@ class Message < ActiveRecord::Base
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
       where(updated_at: [start_at...finish_at])
+    end
+
+    def user_types
+      { text_message: Messages::TextMessage,
+        letter: Messages::Letter
+      }.with_indifferent_access
     end
   end
 end

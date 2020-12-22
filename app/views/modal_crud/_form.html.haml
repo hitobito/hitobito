@@ -8,6 +8,7 @@
     .modal-content
       .modal-header
         %h5.bold.modal-title
-          %b= t('.title')
+          -# %b= t('title')
+          %b = 'blabla'
       .modal-body
-        = entry_form
+        = modal_entry_form

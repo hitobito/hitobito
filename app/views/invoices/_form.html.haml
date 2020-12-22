@@ -14,7 +14,7 @@
     = f.labeled_input_field :recipient_address, rows: 4
 
   = f.labeled_input_field :payment_information, rows: 2
-  - if parent.invoice_config.with_reference?
+  - if parent.invoice_config.with_reference? || entry.qr?
     = f.labeled_input_field :payment_purpose, rows: 2
 
   = field_set_tag do

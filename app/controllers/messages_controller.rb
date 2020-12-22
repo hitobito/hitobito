@@ -31,6 +31,10 @@ class MessagesController < ModalCrudController
     super.in_year(year)
   end
 
+  def model_scope
+    parent.messages.list
+  end
+
   def parent
     recipients_source
   end

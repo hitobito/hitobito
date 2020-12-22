@@ -31,10 +31,6 @@ class MessagesController < ModalCrudController
     super.in_year(year)
   end
 
-  def model_scope
-    parent.messages.list
-  end
-
   def parent
     recipients_source
   end
@@ -63,10 +59,6 @@ class MessagesController < ModalCrudController
 
   def return_path
     group_mailing_list_messages_path
-  end
-
-  def parent_scope
-    model_class
   end
 
 end

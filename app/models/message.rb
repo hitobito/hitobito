@@ -13,6 +13,8 @@ class Message < ActiveRecord::Base
 
   scope :list, -> { order(:updated_at) }
 
+  ### INSTANCE METHODS
+
   ### CLASS METHODS
 
   class << self

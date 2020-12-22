@@ -3,5 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-$('#modal-placeholder').html("#{escape_javascript(render(partial: 'form'))}")
-$('#modal-crud-form').modal('show')
+- title ti(:title, :model => model_class_label(entry), :default => model_class_label(entry))
+$('#modal-placeholder').html("#{escape_javascript(render('form'))}")
+$('#modal-crud').modal('show')

@@ -3,12 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-=##letters-form.modal.fade
-=#  .modal-dialog
-=#    .modal-content
-=#      .modal-header
-=#        %h5.bold.modal-title
-=#         - title t('.title')
+- type = entry.class.name.demodulize.underscore
+= render partial: "messages/#{type}/form", locals: { title: title, entry: entry }
 
-- title t('.title')
-= render partial: 'form'

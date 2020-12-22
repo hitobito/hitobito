@@ -98,14 +98,14 @@ describe Invoice::Qrcode do
   describe :additional_infos do
     subject { invoice.qrcode.additional_infos }
     it 'reads payment_purpose' do
-      invoice.payment_information = "Some\ndata"
+      invoice.payment_purpose = "Some\ndata"
       expect(subject[:purpose]).to eq 'Some data'
       expect(subject[:trailer]).to eq 'EPD'
       expect(subject[:infos]).to be_nil
     end
 
     it 'truncates payment_purpose to 120 chars' do
-      invoice.payment_information = "A" * 121
+      invoice.payment_purpose = "A" * 121
       expect(subject[:purpose].size).to eq 120
     end
   end

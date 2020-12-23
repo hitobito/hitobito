@@ -37,4 +37,39 @@ describe MessagesController do
     end
   end
 
+  describe 'POST #create' do
+
+    context 'bulk mail' do
+      it 'cannot create bulk mail' do
+        message_params = { body: 'Einfach unmöglich!', type: Messages::BulkMail.sti_name }
+        expect do
+          post :create, params: { group_id: group.id, mailing_list_id: list.id,
+                                  message: message_params }
+        end.to raise_error('invalid message type provided')
+      end
+    end
+
+    context 'text message' do
+      it 'creates new text message' do
+        message_params = { body: 'Dies ist eine fröhliche SMS :)', type: Messages::TextMessage.sti_name }
+        expect do
+          post :create, params: { group_id: group.id, mailing_list_id: list.id,
+                                  message: message_params }
+        end.to change { Messages::TextMessage.count }.by(1)
+      end
+    end
+
+    context 'letter' do
+      it 'creates new letter' do
+        message_params = { content: 'Dies ist ein fröhlicher Brief :)', type: Messages::Letter.sti_name }
+        expect do
+          post :create, params: { group_id: group.id, mailing_list_id: list.id,
+                                  message: message_params }
+        end.to change { Messages::Letter.count }.by(1)
+      end
+    end
+
+  end
+
+
 end

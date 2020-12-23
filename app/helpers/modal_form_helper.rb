@@ -15,10 +15,12 @@ module ModalFormHelper
     options[:html] ||= {}
     attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
     standard_form(path_args(entry), options) do |form|
-      content = content_tag(:div, 'modal-body') do
-        body = form.error_messages
-        body << form.labeled_input_fields(*attrs)
-        body
+      content = content_tag(:div, class: 'modal-body') do
+        content_tag(:div, class: 'row-fluid') do
+          c = form.error_messages
+          c << form.labeled_input_fields(*attrs)
+          c
+        end
       end
       content << modal_submit_buttons(form)
       content.html_safe

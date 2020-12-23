@@ -20,7 +20,7 @@ class MessagesController < ModalCrudController
 
   def build_entry
     klazz = model_params ? model_params[:type].constantize : Message.user_types[params[:type]]
-    if klazz
+    if klazz && Message.user_types.values.include?(klazz)
       klazz.new
     else
       raise "invalid message type provided"

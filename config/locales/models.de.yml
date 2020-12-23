@@ -218,6 +218,9 @@ de:
       messages/letter:
         one: Brief
         other: Briefe
+      messages/text_message:
+        one: SMS
+        other: SMS
       note:
         one: Notiz
         other: Notizen

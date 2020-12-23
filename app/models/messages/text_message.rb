@@ -18,6 +18,6 @@ class Messages::TextMessage < Message
   private
 
   def target(person)
-    person.phone_numbers.first.try? :number
+    person.phone_numbers.first.try :number
   end
 end

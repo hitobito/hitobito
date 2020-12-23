@@ -17,4 +17,8 @@ module MessagesHelper
     icon(message_icon(message), title: message.model_name.human)
   end
 
+  def letter_placeholders
+    Export::Pdf::Message::PLACEHOLDERS.map { |p| "{#{p.to_s}}" }.join(', ')
+  end
+
 end

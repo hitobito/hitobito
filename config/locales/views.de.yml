@@ -14,6 +14,7 @@ de:
     unknown: unbekannt
     nobody: niemand
     all: Alle
+    salutation: Guten Tag
 
     from: Von
     until: Bis
@@ -1442,7 +1443,7 @@ de:
         new: Neue SMS
     letter:
       form:
-        available_placeholders: 'Verfügbare Platzhalter: {salutation}, {first_name}, {last_name}'
+        available_placeholders: 'Verfügbare Platzhalter: %{placeholders}'
         prompt_tag_placeholder: '-'
       new:
         title: Neuer Brief

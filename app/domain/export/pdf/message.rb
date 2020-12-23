@@ -25,7 +25,7 @@ module Export::Pdf
       end
 
       def salutation(recipient)
-        'Hallo!'
+        I18n.t('global.salutation')
       end
 
       def first_name(recipient)

@@ -24,11 +24,16 @@ class Messages::Letter < Message
   def address(contactable)
     parts = []
     parts << contactable.company_name if contactable.try(:company) && contactable.company_name?
-    parts << contactable.nickname if contactable.respond_to?(:nickname) && contactable.nickname.present?
+    name = full_name(contactable)
+    parts << name if name.present?
     parts << contactable.address.to_s if contactable.address.to_s.strip.present?
     parts << "#{contactable.zip_code.to_s} #{contactable.town.to_s}"
     parts << contactable.country_label unless contactable.ignored_country?
     parts.join("\n")
+  end
+
+  def full_name(contactable)
+    [contactable.try(:first_name), contactable.try(:last_name)].join(' ')
   end
 
 end

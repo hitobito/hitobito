@@ -34,18 +34,15 @@ module FormHelper
   # Render a generic modal form for the current entry
   def modal_entry_form(*attrs, &block)
     options = attrs.extract_options!
-    options[:buttons_bottom] = false
-    options[:buttons_top] = false
-    options[:cancel_url] = '#'
     options[:noindent] = true
     options[:stacked] = true
+    buttons = options[:buttons] || true
     attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
-    content = ''
     standard_form(path_args(entry), options) do |form|
-      content << form.error_messages
+      content = form.error_messages
       content << form.labeled_input_fields(*attrs)
+      content.html_safe
     end
-    content.html_safe
   end
 
   # Renders a generic form for the given entry with :default_attrs or the

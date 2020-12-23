@@ -279,6 +279,8 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.4.3)
       addressable (~> 2.3)
+    ledermann-rails-settings (2.5.0)
+      activerecord (>= 4.2)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -615,10 +617,12 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_cvp!
   http_accept_language
   icalendar
   kaminari
   launchy
+  ledermann-rails-settings
   listen
   lograge
   lograge-sql

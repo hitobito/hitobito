@@ -57,8 +57,6 @@ class Group < ActiveRecord::Base
 
   attr_readonly :type
 
-  serialize :settings, AppSettings::Group
-
   ### CALLBACKS
 
   before_save :reset_contact_info
@@ -100,6 +98,9 @@ class Group < ActiveRecord::Base
   has_many :service_tokens,
            foreign_key: :layer_group_id,
            dependent: :destroy
+
+
+  has_settings :text_message_provider, class_name: 'RailsSettings::Group'
 
   ### VALIDATIONS
 

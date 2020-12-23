@@ -28,7 +28,7 @@ class MessagesController < ModalCrudController
   end
 
   def full_entry_label
-    "#{entry.class.model_name.human} <i>#{ERB::Util.h(entry.to_s)}</i>".html_safe # rubocop:disable Rails/OutputSafety
+    "#{entry.class.model_name.human} <i>#{ERB::Util.h(entry.to_s)}</i>".html_safe
   end
 
   def list_entries

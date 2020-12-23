@@ -19,7 +19,7 @@ class CreateMessages < ActiveRecord::Migration[6.0]
     create_table :message_recipients do |t|
       t.belongs_to :person, null: false
       t.belongs_to :message, null: false
-      t.string :status, null: false
+      t.string :state, null: false
       t.string :target
       t.timestamps
     end

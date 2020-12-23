@@ -8,6 +8,8 @@
 class MessageRecipient < ActiveRecord::Base
   STATES = %w(delivered failed).freeze
 
+  include I18nEnums
+
   belongs_to :person
   belongs_to :message
 

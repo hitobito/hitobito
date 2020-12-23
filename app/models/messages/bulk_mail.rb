@@ -7,4 +7,7 @@
 
 class Messages::BulkMail < Message
   has_one :mail_log, foreign_key: :message_id
+
+  before_create :set_message_recipients
+
 end

@@ -9,7 +9,15 @@ class Messages::TextMessage < Message
 
   validates :body, presence: true
 
+  before_create :set_message_recipients
+
   def subject
     body[0..20] + '...'
+  end
+
+  private
+
+  def target(person)
+    person.phone_numbers.first.try? :number
   end
 end

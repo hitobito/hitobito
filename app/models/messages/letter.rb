@@ -9,8 +9,26 @@ class Messages::Letter < Message
 
   has_rich_text :content
 
+  before_save :set_message_recipients
+
   def to_s
     subject
+  end
+
+  private
+
+  def target(person)
+    address(person)
+  end
+
+  def address(contactable)
+    parts = []
+    parts << contactable.company_name if contactable.try(:company) && contactable.company_name?
+    parts << contactable.nickname if contactable.respond_to?(:nickname) && contactable.nickname.present?
+    parts << contactable.address.to_s if contactable.address.to_s.strip.present?
+    parts << "#{contactable.zip_code.to_s} #{contactable.town.to_s}"
+    parts << contactable.country_label unless contactable.ignored_country?
+    parts.join("\n")
   end
 
 end

@@ -6,4 +6,7 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Messages::Mail < Message
+
+  before_create :set_message_recipients
+
 end

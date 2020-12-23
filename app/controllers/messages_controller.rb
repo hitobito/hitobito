@@ -16,6 +16,12 @@ class MessagesController < ModalCrudController
 
   self.permitted_attrs = [:type, :subject, :content, :body]
 
+  def show
+    respond_to do |format|
+      format.pdf { render_pdf(entry) }
+    end
+  end
+
   private
 
   def build_entry
@@ -63,6 +69,11 @@ class MessagesController < ModalCrudController
 
   def return_path
     group_mailing_list_messages_path
+  end
+
+  def render_pdf(message)
+    pdf = Export::Pdf::Message.render(message)
+    send_data pdf, type: :pdf, disposition: 'inline'
   end
 
 end

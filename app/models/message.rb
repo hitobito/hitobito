@@ -11,9 +11,32 @@ class Message < ActiveRecord::Base
 
   attr_readonly :type
 
+  class_attribute :default_recipient_status
+  self.default_recipient_status = :delivered
+
   scope :list, -> { order(:updated_at) }
 
   ### INSTANCE METHODS
+
+  private
+
+  def set_message_recipients
+    self.message_recipients.destroy_all
+    self.message_recipients = recipients_source.people.map { |person| message_recipient(person) }
+  end
+
+  def message_recipient(person)
+    MessageRecipient.new(
+        message: self,
+        person: person,
+        state: self.class.default_recipient_status,
+        target: target(person)
+    )
+  end
+
+  def target(person)
+    person.email
+  end
 
   ### CLASS METHODS
 

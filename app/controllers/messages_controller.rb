@@ -14,7 +14,7 @@ class MessagesController < ModalCrudController
 
   self.nesting = Group, MailingList
 
-  self.permitted_attrs = [:type, :subject, :content]
+  self.permitted_attrs = [:type, :subject, :content, :body]
 
   private
 

@@ -6,4 +6,10 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Messages::TextMessage < Message
+
+  validates :body, presence: true
+
+  def subject
+    body[0..20] + '...'
+  end
 end

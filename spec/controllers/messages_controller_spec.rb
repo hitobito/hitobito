@@ -9,7 +9,6 @@ describe MessagesController do
   before { sign_in(top_leader) }
 
   describe 'GET #new' do
-
     context 'message type' do
       it 'builds new text message if type text_message' do
         get :new, xhr: true, params: { group_id: group.id, mailing_list_id: list.id, type: 'text_message' }
@@ -38,7 +37,6 @@ describe MessagesController do
   end
 
   describe 'POST #create' do
-
     context 'bulk mail' do
       it 'cannot create bulk mail' do
         message_params = { body: 'Einfach unmöglich!', type: Messages::BulkMail.sti_name }
@@ -56,6 +54,9 @@ describe MessagesController do
           post :create, params: { group_id: group.id, mailing_list_id: list.id,
                                   message: message_params }
         end.to change { Messages::TextMessage.count }.by(1)
+
+        message = list.text_messages.first
+        expect(message.body).to match(/fröhliche SMS/)
       end
     end
 
@@ -68,8 +69,5 @@ describe MessagesController do
         end.to change { Messages::Letter.count }.by(1)
       end
     end
-
   end
-
-
 end

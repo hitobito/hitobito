@@ -14,7 +14,6 @@ class Message < ActiveRecord::Base
   class_attribute :default_recipient_status
   self.default_recipient_status = :delivered
 
-  default_scope { includes(:message_recipients) }
   scope :list, -> { order(:updated_at) }
 
   ### INSTANCE METHODS

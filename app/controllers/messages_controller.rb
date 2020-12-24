@@ -35,6 +35,10 @@ class MessagesController < ModalCrudController
     end
   end
 
+  def find_entry
+    model_scope.includes(:message_recipients).find(params[:id])
+  end
+
   def full_entry_label
     "#{entry.class.model_name.human} <i>#{ERB::Util.h(entry.to_s)}</i>".html_safe
   end

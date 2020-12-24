@@ -263,6 +263,9 @@ de:
       qualification_kind:
         one: Qualifikationsart
         other: Qualifikationsarten
+      rails_settings:
+        one: Einstellung
+        other: Einstellungen
       role:
         one: Rolle
         other: Rollen
@@ -545,6 +548,11 @@ de:
         number: Telefonnummer
         label: Telefonnummer Typ
         public: Öffentlich
+
+      rails_settings/group:
+        var: Einstellung
+        settings:
+          text_message_provider: SMS Provider
 
       role:
         label: Bezeichnung

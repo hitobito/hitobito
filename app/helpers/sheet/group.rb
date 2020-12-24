@@ -51,10 +51,10 @@ module Sheet
         :deleted_subgroups_group_path,
         if: :deleted_subgroups
 
-    tab 'activerecord.models.service_token.other',
-        :group_service_tokens_path,
+    tab 'activerecord.models.rails_settings.other',
+        :group_settings_path,
         if: (lambda do |view, group|
-          view.can?(:index_service_tokens, group)
+          view.can?(:update, group)
         end)
 
     delegate :group_path, to: :view

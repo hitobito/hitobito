@@ -5,10 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# https://github.com/ledermann/rails-settings
+
 module RailsSettings
   class Group < RailsSettings::SettingObject
 
     ENCRYPTED_VALUES = %w(username password).freeze
+    SETTINGS = {
+      text_message_provider: [:username, :password, :provider]
+    }.with_indifferent_access.freeze
 
     private
 
@@ -42,6 +47,10 @@ module RailsSettings
 
     def encrypted?(name)
       ENCRYPTED_VALUES.include?(name)
+    end
+
+    def self.settings
+      SETTINGS
     end
   end
 end

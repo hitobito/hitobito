@@ -7,6 +7,6 @@
 
 module Sheet
   class ServiceToken < Base
-    self.parent_sheet = Sheet::Group
+    self.parent_sheet = Sheet::GroupSetting
   end
 end

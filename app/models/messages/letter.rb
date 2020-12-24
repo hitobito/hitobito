@@ -7,6 +7,8 @@
 
 class Messages::Letter < Message
 
+  self.default_recipient_status = :planned
+
   has_rich_text :content
 
   before_save :set_message_recipients

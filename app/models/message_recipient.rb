@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class MessageRecipient < ActiveRecord::Base
-  STATES = %w(delivered failed).freeze
+  STATES = %w(delivered failed planned).freeze
 
   include I18nEnums
 

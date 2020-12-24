@@ -27,9 +27,8 @@ module MessagesHelper
     badges = []
     MessageRecipient::STATES.each do |state|
       count = state_counts[state]
-      if count.present? && count > 0
-        badges << badge(message_state_label(state, count), type_mapping.fetch(state.to_sym, 'info'))
-      end
+      type = type_mapping.fetch(state.to_sym, 'info')
+      badges << badge(message_state_label(state, count), type) if count.present? && count > 0
     end
     safe_join badges, ' '
   end

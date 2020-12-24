@@ -20,7 +20,17 @@ class MessagesController < ModalCrudController
 
   def show
     respond_to do |format|
-      format.pdf { render_pdf(entry) }
+      format.pdf { render_pdf(entry, entry.message_recipients) }
+    end
+  end
+
+  def preview
+    model_ivar_set(find_entry(params[:message_id]))
+    assign_attributes if params.has_key? model_identifier
+
+    respond_to do |format|
+      format.js
+      format.pdf { render_pdf(entry, preview_recipients(entry.message_recipients)) }
     end
   end
 
@@ -35,8 +45,8 @@ class MessagesController < ModalCrudController
     end
   end
 
-  def find_entry
-    model_scope.includes(:message_recipients).find(params[:id])
+  def find_entry(id=params[:id])
+    model_scope.includes(:message_recipients).find(id)
   end
 
   def full_entry_label
@@ -83,8 +93,12 @@ class MessagesController < ModalCrudController
                         entry.message_recipients.includes(:person).map(&:person).map(&:decorate)
   end
 
-  def render_pdf(message)
-    pdf = Export::Pdf::Message.render(message)
+  def preview_recipients(recipients)
+    recipients.count > 1 ? [recipients.first] : recipients
+  end
+
+  def render_pdf(message, recipients)
+    pdf = Export::Pdf::Message.render(message, recipients)
     send_data pdf, type: :pdf, disposition: 'inline'
   end
 

@@ -69,7 +69,9 @@ module FormHelper
                  end
 
       if buttons_bottom
-        content << form_buttons(form, form_button_options.merge(toolbar_class: 'bottom'))
+        buttons_bottom = content_for?(:buttons_bottom) ? content_for(:buttons_bottom) : ''
+        content << form_buttons(form, form_button_options.merge(toolbar_class: 'bottom',
+                                                                additional_buttons: buttons_bottom))
       end
 
       content.html_safe
@@ -83,12 +85,13 @@ module FormHelper
   end
 
   def form_buttons(form, submit_label: ti(:"button.save"), cancel_url: nil, toolbar_class: nil,
-                          add_another: false, add_another_label: ti(:"button.add_another"))
+                          add_another: false, add_another_label: ti(:"button.add_another"),
+                          additional_buttons: '')
     button_toolbar(form, toolbar_class: toolbar_class) do
       content = submit_button(form, submit_label)
       content << add_another_button(form, add_another_label) if add_another.present?
       content << cancel_link(cancel_url) if cancel_url.present?
-
+      content << additional_buttons
       content
     end
   end

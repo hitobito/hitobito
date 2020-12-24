@@ -4,7 +4,8 @@
 -#  https://github.com/hitobito/hitobito.
 
 - content_for :buttons_bottom do
-  = action_button(t('global.button.preview'), group_mailing_list_message_preview_path(message_id: entry.id, format: :js), :eye, remote: true)
+  - unless entry.new_record?
+    = action_button(t('global.button.preview'), group_mailing_list_message_preview_path(message_id: entry.id, format: :js), :eye, remote: true)
 
 = entry_form cancel_url: group_mailing_list_messages_path, buttons_top: false do |f|
   = f.hidden_field :type

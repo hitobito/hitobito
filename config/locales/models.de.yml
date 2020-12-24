@@ -656,6 +656,7 @@ de:
       message:
         subject: Betreff
         type: Typ
+        state: Versand
 
       messages/letter:
         subject: Titel

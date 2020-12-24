@@ -10,4 +10,5 @@
     = render 'shared/page_per_year', paging_params: { returning: true }
 
 = crud_table(:type, :subject) do |t|
+  - t.attr :state
   - add_table_actions(t)

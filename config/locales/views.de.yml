@@ -1447,3 +1447,7 @@ de:
         prompt_tag_placeholder: '-'
       new:
         title: Neuer Brief
+    list:
+      states:
+        delivered: '%{count} zugestellt'
+        failed: '%{count} fehlgeschlagen'

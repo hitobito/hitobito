@@ -21,4 +21,21 @@ module MessagesHelper
     Export::Pdf::Message::PLACEHOLDERS.map { |p| "{#{p.to_s}}" }.join(', ')
   end
 
+  def format_message_state(message)
+    state_counts = message.message_recipients.group(:state).count
+    type_mapping = { delivered: 'success', failed: 'important' }
+    badges = []
+    MessageRecipient::STATES.each do |state|
+      count = state_counts[state]
+      if count.present? && count > 0
+        badges << badge(message_state_label(state, count), type_mapping.fetch(state.to_sym, 'info'))
+      end
+    end
+    safe_join badges, ' '
+  end
+
+  def message_state_label(state, count)
+    translate(".states.#{state}", count: count)
+  end
+
 end

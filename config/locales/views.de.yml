@@ -1445,6 +1445,7 @@ de:
       form:
         available_placeholders: 'Verfügbare Platzhalter: %{placeholders}'
         prompt_tag_placeholder: '-'
+        recipients_count: '%{count} Empfänger'
       new:
         title: Neuer Brief
     list:

@@ -16,6 +16,8 @@ class MessagesController < ModalCrudController
 
   self.permitted_attrs = [:type, :subject, :content, :body]
 
+  helper_method :recipients
+
   def show
     respond_to do |format|
       format.pdf { render_pdf(entry) }
@@ -69,6 +71,12 @@ class MessagesController < ModalCrudController
 
   def return_path
     group_mailing_list_messages_path
+  end
+
+  def recipients
+    @recipients ||= entry.new_record? ?
+                        parent.people.map(&:decorate) :
+                        entry.message_recipients.includes(:person).map(&:person).map(&:decorate)
   end
 
   def render_pdf(message)

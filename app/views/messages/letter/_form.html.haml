@@ -11,12 +11,11 @@
   = f.labeled :recipients do
     .inline
       %a.collapsed.header{ href: "#recipients-collapse", data: { toggle: :collapse } }
-        63 Empfänger anzeigen
+        = translate('.recipients_count', count: recipients.count)
 
       .collapse{ id: 'recipients-collapse' }
-        .entry
-          Peter Hans
-        .entry
-          Peter Hans 2
+        - recipients.each do |recipient|
+          .entry
+            = recipient.full_label
 
   = f.labeled_rich_text_area :content, help: t('.available_placeholders', placeholders: letter_placeholders)

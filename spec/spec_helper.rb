@@ -117,6 +117,10 @@ RSpec.configure do |config|
     printer.print(File.open(filename, 'w'))
   end
 
+  RSpec.configure do |config|
+    config.include ActiveSupport::Testing::TimeHelpers
+  end
+
   unless RSpec.configuration.exclusion_filter[:type] == 'feature'
     config.include Warden::Test::Helpers
     Warden.test_mode!

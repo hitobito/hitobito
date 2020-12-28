@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -109,11 +109,14 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   private
 
   def render_entry_json
-    render json: EventParticipationSerializer.new(entry, {
-      group: parents.first,
-      event: parents.last,
-      controller: self
-    })
+    render json: EventParticipationSerializer.new(
+      entry,
+      {
+        group: parents.first,
+        event: parents.last,
+        controller: self
+      }
+    )
   end
 
   def render_entries_json(entries)
@@ -281,6 +284,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     if action_name.to_s == 'create'
       notice = translate(:success, full_entry_label: full_entry_label)
       notice += '<br />' + translate(:instructions) if append_mailing_instructions?
+      notice += '<br />' + translate(:waiting_list) if entry.waiting_list?
       flash[:notice] ||= notice
     else
       super

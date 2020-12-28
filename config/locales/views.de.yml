@@ -428,6 +428,7 @@ de:
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'
     rejected: 'Die Anmeldung wurde abgelehnt.'
+    directly_to_waiting_list: 'Es sind alle Plätze belegt, daher ist die Anmeldung direkt auf der Warteliste.'
 
   event/application_decorator:
     approval:

@@ -1,4 +1,5 @@
-# encoding: utf-8
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: event_participations
@@ -43,8 +44,8 @@ describe Event::Participation do
     end
 
     it 'does not save associations in database' do
-      expect { subject.init_answers }.not_to change { Event::Answer.count }
-      expect { subject.init_answers }.not_to change { Event::Participation.count }
+      expect { subject.init_answers }.not_to change(Event::Answer, :count)
+      expect { subject.init_answers }.not_to change(Event::Participation, :count)
     end
   end
 
@@ -55,10 +56,11 @@ describe Event::Participation do
       q = course.questions
       subject.person_id = 42
       subject.attributes = {
-            additional_information: 'bla',
-            application_attributes: { priority_2_id: 42 },
-            answers_attributes: [{ question_id: q[0].id, answer: 'ja' },
-                                 { question_id: q[1].id, answer: 'nein' }] }
+        additional_information: 'bla',
+        application_attributes: { priority_2_id: 42 },
+        answers_attributes: [{ question_id: q[0].id, answer: 'ja' },
+                             { question_id: q[1].id, answer: 'nein' }]
+      }
 
       expect(subject.additional_information).to eq('bla')
       expect(subject.answers.size).to eq(2)
@@ -73,10 +75,11 @@ describe Event::Participation do
 
       q = course.questions
       subject.attributes = {
-            additional_information: 'bla',
-            application_attributes: { priority_2_id: 42 },
-            answers_attributes: [{ question_id: q[0].id, answer: 'ja', id: subject.answers.first.id },
-                                 { question_id: q[1].id, answer: 'nein', id: subject.answers.last.id }] }
+        additional_information: 'bla',
+        application_attributes: { priority_2_id: 42 },
+        answers_attributes: [{ question_id: q[0].id, answer: 'ja', id: subject.answers.first.id },
+                             { question_id: q[1].id, answer: 'nein', id: subject.answers.last.id }]
+      }
 
       expect(subject.person_id).to eq(p.id)
       expect(subject.additional_information).to eq('bla')
@@ -93,7 +96,8 @@ describe Event::Participation do
       subject.person_id = Person.first.id
       subject.init_answers
       subject.attributes = {
-        answers_attributes: [{ question_id: q[1].id, answer: 'ja' }] }
+        answers_attributes: [{ question_id: q[1].id, answer: 'ja' }]
+      }
       subject.roles.new(type: Event::Course::Role::Participant.sti_name)
       expect(subject.save).to be_falsey
       expect(subject.errors.full_messages).to eq(['Antwort muss ausgefüllt werden'])
@@ -111,14 +115,14 @@ describe Event::Participation do
 
   context '.order_by_role_statement' do
     it 'orders by index of role_types' do
-      event_type = double("event_type", role_types: [Event::Role::Leader, Event::Role::Participant])
+      event_type = double('event_type', role_types: [Event::Role::Leader, Event::Role::Participant])
       order_clause = Event::Participation.order_by_role_statement(event_type)
       expect(order_clause).to eq "CASE event_roles.type WHEN 'Event::Role::Leader' " \
         "THEN 0 WHEN 'Event::Role::Participant' THEN 1 END"
     end
 
     it '.order_by_role_statement returns empty string when event has no role_types' do
-      event_type = double("event_type", role_types: [])
+      event_type = double('event_type', role_types: [])
       order_clause = Event::Participation.order_by_role_statement(event_type)
       expect(order_clause).to eq ''
     end

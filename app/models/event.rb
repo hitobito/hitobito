@@ -107,11 +107,13 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   has_many :attachments, dependent: :destroy
 
-  has_many :dates, -> { order(:start_at) }, dependent: :destroy, validate: true
+  has_many :dates, -> { order(:start_at) }, dependent: :destroy, validate: true, inverse_of: :event
   has_many :questions, dependent: :destroy, validate: true
 
-  has_many :application_questions, -> { where(admin: false) }, class_name: 'Event::Question'
-  has_many :admin_questions, -> { where(admin: true) }, class_name: 'Event::Question'
+  has_many :application_questions, -> { where(admin: false) },
+           class_name: 'Event::Question', inverse_of: :event
+  has_many :admin_questions, -> { where(admin: true) },
+           class_name: 'Event::Question', inverse_of: :event
 
   has_many :participations, dependent: :destroy
   has_many :people, through: :participations
@@ -181,8 +183,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     # Event with start and end-date overlay
     def between(start_date, end_date)
       joins(:dates).
-        where('event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date
-              OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date',
+        where('event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date ' \
+              'OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date',
               start_date: start_date, end_date: end_date).distinct
     end
 
@@ -338,9 +340,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def valid_contact_attr?(attr)
-    (ParticipationContactData.contact_attrs +
-      ParticipationContactData.contact_associations).
-      map(&:to_s).include?(attr.to_s)
+    (
+      ParticipationContactData.contact_attrs +
+      ParticipationContactData.contact_associations
+    ).map(&:to_s).include?(attr.to_s)
   end
 
   def assert_required_contact_attrs_valid
@@ -350,6 +353,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
              map(&:to_s).exclude?(a)
         errors.add(:base, :contact_attr_invalid, attribute: a)
       end
+
       if hidden_contact_attrs.include?(a)
         errors.add(:base, :contact_attr_hidden_required, attribute: a)
       end

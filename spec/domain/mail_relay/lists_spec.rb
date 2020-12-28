@@ -10,7 +10,7 @@ require 'spec_helper'
 describe MailRelay::Lists do
 
   let(:message) do
-    mail = Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml')))
+    mail = Mail.new(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml').read)
     mail.header['X-Original-To'] = envelope_to
     mail.from = from
     mail
@@ -216,7 +216,7 @@ describe MailRelay::Lists do
     let(:from) { 'news@example.com' }
 
     before { create_individual_subscribers }
-    before { list.update_column(:additional_sender, "*@example.com") }
+    before { list.update_column(:additional_sender, '*@example.com') }
 
     it { is_expected.to be_sender_allowed }
     its(:sender_email) { is_expected.to eq from }
@@ -234,23 +234,23 @@ describe MailRelay::Lists do
     before { create_individual_subscribers }
     context 'wrong sender' do
       let(:from) { 'news@other.com' }
-      before { list.update_column(:additional_sender, "*@example.com") }
+      before { list.update_column(:additional_sender, '*@example.com') }
       it { is_expected.not_to be_sender_allowed }
     end
     context 'invalid list' do
       let(:from) { 'news@example.com' }
       test_mails = ['*ws@example.com', 'ne@ws@example.com', 'ne*@example.com', 'n*s@example.com']
-      test_mails.each { |x|
+      test_mails.each do |x|
         before { list.update_column(:additional_sender, x) }
         it { is_expected.not_to be_sender_allowed }
-      }
+      end
     end
     context 'invalid domain' do
       test_mails = ['ws@exa-mple.com', 'ne@ws@example.com', 'ne@exam*ple.com', 'n*s@exa_mple.com']
-      test_mails.each { |x|
+      test_mails.each do |x|
         let(:from) { x }
         it { is_expected.not_to be_sender_allowed }
-      }
+      end
     end
   end
 

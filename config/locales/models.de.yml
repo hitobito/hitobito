@@ -9,11 +9,13 @@ de:
       time: "%H:%M"
       date_time: "%d.%m.%Y %H:%M"
       month_year: '%B %Y'
+
   date:
     formats:
       default: ! '%d.%m.%Y'
       long: ! '%e %B %Y'
       short: ! '%e %b'
+
   number:
     currency:
       format:
@@ -836,6 +838,7 @@ de:
       name: Lesen deiner E-Mail Adresse und Name
       with_roles: Lesen deiner Stammdaten und Rollen
       openid: Lesen deines OIDC Identity Tokens
+
   errors:
     messages:
       invalid_money: "muss auf 5 Rappen gerundet werden"

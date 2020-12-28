@@ -76,7 +76,6 @@ Hitobito::Application.routes.draw do
           get 'log' => 'person/log#index'
           get 'colleagues' => 'person/colleagues#index'
           get 'invoices' => 'person/invoices#index'
-
         end
 
         resources :notes, only: [:create, :destroy]
@@ -92,7 +91,6 @@ Hitobito::Application.routes.draw do
           delete 'impersonate' => 'impersonation#destroy'
           get 'households' => 'households#new'
         end
-
       end
 
       resources :person_duplicates, only: [:index] do

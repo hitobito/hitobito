@@ -46,8 +46,8 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def load_participants
-    event.participations_for(*event.participant_types).
-          includes(:application, person: [:primary_group])
+    event.participations_for(*event.participant_types)
+         .includes(:application, person: [:primary_group])
   end
 
   def load_applications

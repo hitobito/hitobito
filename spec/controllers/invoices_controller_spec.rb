@@ -8,8 +8,6 @@
 require 'spec_helper'
 
 describe InvoicesController do
-  include ActiveSupport::Testing::TimeHelpers
-
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
   let(:invoice) { invoices(:invoice) }

@@ -161,8 +161,6 @@ describe Person::Filter::Role do
   end
 
   context 'filering specific timeframe' do
-    include ActiveSupport::Testing::TimeHelpers
-
     let(:person)      { people(:top_leader) }
     let(:now)         { Time.zone.parse('2017-02-01 10:00:00') }
 

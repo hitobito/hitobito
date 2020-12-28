@@ -38,8 +38,6 @@ describe InvoiceListsController do
   end
 
   context 'authorized' do
-    include ActiveSupport::Testing::TimeHelpers
-
     before { sign_in(person) }
 
     it 'GET#new assigns_attributes and renders crud/new template' do

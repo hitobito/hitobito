@@ -6,8 +6,6 @@
 require 'spec_helper'
 
 describe Invoice::Filter do
-  include ActiveSupport::Testing::TimeHelpers
-
   let(:invoice) { invoices(:invoice) }
   let(:today)   { Time.zone.parse('2019-12-16 10:00:00') }
 

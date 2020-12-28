@@ -18,6 +18,7 @@ describe Event::ParticipationMailer do
   let(:event) { Fabricate(:event) }
   let(:participation) { Fabricate(:event_participation, event: event, person: person) }
   let(:mail) { Event::ParticipationMailer.confirmation(participation) }
+  let(:localhost) { ENV['RAILS_HOST_NAME'] || 'localhost' }
 
   before do
     Fabricate(:phone_number, contactable: person, public: true)
@@ -83,7 +84,7 @@ describe Event::ParticipationMailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Bestätigung der Anmeldung'
       expect(mail.to).to eq(['top_leader@example.com'])
-      expect(mail.from).to eq(['noreply@localhost'])
+      expect(mail.from).to eq("hitobito <noreply@#{localhost}>")
     end
 
     it { is_expected.to match(/Hallo Top/) }
@@ -144,7 +145,7 @@ describe Event::ParticipationMailer do
     it 'renders the headers' do
       expect(mail.subject).to eq 'Bestätigung der Abmeldung'
       expect(mail.to).to eq(['top_leader@example.com'])
-      expect(mail.from).to eq(['noreply@localhost'])
+      expect(mail.from).to eq("hitobito <noreply@#{localhost}>")
     end
 
     it { is_expected.to match(/Hallo Top/) }

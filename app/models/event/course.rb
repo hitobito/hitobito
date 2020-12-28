@@ -43,6 +43,8 @@
 #  display_booking_info        :boolean          default(TRUE), not null
 #
 
+# A course is a specialised Event that has by default applications,
+# preconditions and may give a qualification after attending it.
 class Event::Course < Event
 
   # This statement is required because this class would not be loaded otherwise.

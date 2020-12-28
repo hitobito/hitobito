@@ -45,6 +45,11 @@
 #  display_booking_info        :boolean          default(TRUE), not null
 #
 
+# An event is any single or multi-day event that has participants and a
+# leader-team. This could be anything from an internal team-meeting to a
+# externally available information event for interested people.
+#
+# The same event may be attached to multiple groups of the same kind.
 class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # This statement is required because these classes would not be loaded correctly otherwise.

@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Oauth::ActiveAuthorizationsController do
-  include ActiveSupport::Testing::TimeHelpers
   let(:top_leader)   { people(:top_leader) }
   let(:redirect_uri) { 'urn:ietf:wg:oauth:2.0:oob' }
   let(:application) { Oauth::Application.create!(name: 'MyApp', redirect_uri: redirect_uri) }

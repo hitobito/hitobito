@@ -9,8 +9,6 @@
 require 'spec_helper'
 
 describe Invoice::BatchUpdate do
-  include ActiveSupport::Testing::TimeHelpers
-
   let(:person)  { people(:top_leader) }
   let(:draft)   { invoices(:invoice) }
   let(:sent)    { invoices(:sent) }

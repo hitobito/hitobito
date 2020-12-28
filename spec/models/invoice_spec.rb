@@ -175,8 +175,6 @@ describe Invoice do
   end
 
   context 'state changes' do
-    include ActiveSupport::Testing::TimeHelpers
-
     let(:now)     { Time.zone.parse('2017-09-18 14:00:00') }
     let(:invoice) { invoices(:invoice) }
     before        { travel_to(now) }
@@ -281,8 +279,6 @@ describe Invoice do
   end
 
   context '.draft_or_issued_in' do
-    include ActiveSupport::Testing::TimeHelpers
-
     let(:today)   { Time.zone.parse('2019-12-16 10:00:00') }
     let(:invoice) { invoices(:invoice) }
     let(:issued)  { invoices(:sent) }

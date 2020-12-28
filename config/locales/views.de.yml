@@ -404,6 +404,8 @@ de:
         abgefragt werden sollen.
       caption_applications_cancelable: Teilnehmende können sich selbst abmelden
       caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar
+      caption_waiting_list: Teilnehmende können auf eine Warteliste geschoben werden, wenn Anmeldungen freigegeben werden.
+        Wenn keine Plätze mehr frei sind, landen neue Anmeldungen automatisch auf der Warteliste.
     form_tabs:
       general: Allgemein
       application_questions: Anmeldeangaben
@@ -445,6 +447,7 @@ de:
     success: '%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
     instructions: 'Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    waiting_list: 'Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste.'
 
     show:
       link:

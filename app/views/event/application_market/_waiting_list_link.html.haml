@@ -1,6 +1,6 @@
 - if p.application
   - if p.application.waiting_list?
-    = link_to("#{icon('ok')}&nbsp; #{t('.label')}".html_safe,
+    = link_to("#{icon(:check)}&nbsp; #{t('.label')}".html_safe,
               waiting_list_group_event_application_market_path(@group, @event, p.id),
               title: t('.title_active'),
               remote: true,
@@ -11,7 +11,7 @@
 
   - else
     .popover-small
-      = link_to("#{icon('minus')}&nbsp; #{t('.label')}".html_safe,
+      = link_to("#{icon(:minus)}&nbsp; #{t('.label')}".html_safe,
                 '#',
                 title: t('.title_inactive'),
                 data: { toggle: 'popover',

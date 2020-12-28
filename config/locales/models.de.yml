@@ -409,6 +409,8 @@ de:
         applications_cancelable: Abmeldung möglich
         display_booking_info: Anzeige Anmeldestand
         participations_visible: Teilnehmersichtbarkeit
+        waiting_list: Warteliste
+        requires_approval: Empfehlung nötig
 
       event/contact_attrs:
         required: Obligatorisch

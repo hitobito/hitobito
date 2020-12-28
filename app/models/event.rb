@@ -287,9 +287,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # May participants apply now?
   def application_possible?
-    (!application_opening_at? || application_opening_at <= Time.zone.today) &&
-    (!application_closing_at? || application_closing_at >= Time.zone.today) &&
-    (maximum_participants.to_i.zero? || participant_count < maximum_participants)
+    application_period_open? && (places_available? || waiting_list_available?)
   end
 
   def init_questions
@@ -318,7 +316,24 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
   end
 
+  def attr_used?(attr)
+    self.class.used_attributes.include?(attr)
+  end
+
+  def places_available?
+    maximum_participants.to_i.zero? || participant_count < maximum_participants
+  end
+
+  def waiting_list_available?
+    self.class.supports_applications && attr_used?(:waiting_list)
+  end
+
   private
+
+  def application_period_open?
+    (!application_opening_at? || application_opening_at <= Time.zone.today) &&
+    (!application_closing_at? || application_closing_at >= Time.zone.today)
+  end
 
   def assert_type_is_allowed_for_groups
     master = groups.try(:first)

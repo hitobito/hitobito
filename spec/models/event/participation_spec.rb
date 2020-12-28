@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 20120-2020, Stiftung für junge Auslandssschweizer. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+
 # == Schema Information
 #
 # Table name: event_participations
@@ -112,6 +118,33 @@ describe Event::Participation do
     end
   end
 
+  context 'waiting_list?' do
+    subject { course.participations.new }
+
+    it 'is true if the application is on the waiting-list' do
+      subject.build_application(waiting_list: true)
+
+      expect(subject.application).to be_present
+      expect(subject.application.waiting_list).to be_truthy
+
+      is_expected.to be_waiting_list
+    end
+
+    it 'is false if the application is not on the waiting-list' do
+      subject.build_application(waiting_list: false)
+
+      expect(subject.application).to be_present
+      expect(subject.application.waiting_list).to be_falsey
+
+      is_expected.to_not be_waiting_list
+    end
+
+    it 'is false if no application it present' do
+      expect(subject.application).to_not be_present
+
+      is_expected.to_not be_waiting_list
+    end
+  end
 
   context '.order_by_role_statement' do
     it 'orders by index of role_types' do

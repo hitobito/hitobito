@@ -325,7 +325,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def waiting_list_available?
-    self.class.supports_applications && attr_used?(:waiting_list)
+    self.class.supports_applications && attr_used?(:waiting_list) && waiting_list?
   end
 
   private

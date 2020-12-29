@@ -14,6 +14,7 @@ module ActiveModel
       def initialize(*args)
         super(*args)
       return if @klass == Oauth::Application
+      return if @klass == GroupSetting
 
         if @klass != @klass.base_class
           base_name = @klass.base_class.model_name

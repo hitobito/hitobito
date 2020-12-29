@@ -3,5 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= render 'modal_crud/modal' do
-  = modal_entry_form
+- title entry.name
+$('#modal-placeholder').html("#{escape_javascript(render('form'))}")
+$('#modal-crud').modal('show')

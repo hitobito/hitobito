@@ -8,28 +8,31 @@
 class GroupSettingsController < ModalCrudController
 
   skip_authorize_resource
-  before_action :authorize_class, except: [:index]
+  before_action :authorize_class
 
   self.nesting = Group
+
+  decorates :setting_objects
 
   private
 
   alias group parent
 
-  def self.model_class
-    RailsSettings::Group
-  end
-
-  def entries
-    model_class.list
+  def list_entries
+    group.settings_all
   end
 
   def authorize_class
-    authorize!(:update, parent)
+    authorize!(:update, group)
   end
 
   def entry
-    @group_setting ||= group.setting_objects.find_or_initialize_by(var: setting_id)
+    @group_setting ||= fetch_entry
+  end
+
+  def fetch_entry
+    entry = group.setting_objects.find_or_initialize_by(var: setting_id)
+    entry.becomes(GroupSetting).decorate
   end
 
   def setting_id
@@ -43,7 +46,5 @@ class GroupSettingsController < ModalCrudController
       entry.send("#{a}=", value)
     end
   end
-
-  alias group_rails_settings_setting_object_url group_settings_url
 
 end

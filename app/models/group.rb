@@ -100,7 +100,7 @@ class Group < ActiveRecord::Base
            dependent: :destroy
 
 
-  has_settings :text_message_provider, class_name: 'RailsSettings::Group'
+  has_settings :text_message_provider, class_name: 'GroupSetting'
 
   ### VALIDATIONS
 
@@ -207,6 +207,10 @@ class Group < ActiveRecord::Base
     end
     duplicates.includes(person_1: [{ roles: :group }, :groups, :primary_group],
                         person_2: [{ roles: :group }, :groups, :primary_group])
+  end
+
+  def settings_all
+    GroupSetting.list(id)
   end
 
   private

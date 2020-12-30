@@ -20,13 +20,11 @@ describe Event::RegisterMailer do
   let(:person) { Fabricate(:person, email: 'fooo@example.com', reset_password_token: 'abc') }
   let(:mail) { Event::RegisterMailer.register_login(person, group, event, 'abcdef') }
 
-  let(:localhost) { ENV['RAILS_HOST_NAME'] || 'localhost' }
-
   context 'headers' do
     subject { mail }
     its(:subject) { should eq 'Anmeldelink für Anlass' }
     its(:to)      { should eq(['fooo@example.com']) }
-    its(:from)    { should eq("hitobito <noreply@#{localhost}>") }
+    its(:from)    { should eq(['noreply@localhost']) }
   end
 
   context 'body' do

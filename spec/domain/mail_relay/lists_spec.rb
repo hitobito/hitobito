@@ -29,8 +29,6 @@ describe MailRelay::Lists do
 
   let(:relay) { MailRelay::Lists.new(message) }
 
-  let(:localhost) { ENV['RAILS_HOST_NAME'] || 'localhost' }
-
   before do
     # we do not have custom content for report loaded in test env
     allow_any_instance_of(DeliveryReportMailer).
@@ -179,7 +177,7 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
-        expect(last_email.sender).to eq("leaders-bounces+toplayer=hitobito.example.com@#{localhost}")
+        expect(last_email.sender).to eq('leaders-bounces+toplayer=hitobito.example.com@localhost')
       end
     end
 
@@ -191,7 +189,7 @@ describe MailRelay::Lists do
 
       it 'relays' do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
-        expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@#{localhost}")
+        expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
       end
     end
   end
@@ -279,7 +277,7 @@ describe MailRelay::Lists do
           expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
           expect(last_email.smtp_envelope_to).to match_array(Person.mailing_emails_for(subscribers))
-          expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@#{localhost}")
+          expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
         end
 
       end
@@ -296,7 +294,7 @@ describe MailRelay::Lists do
           expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
           expect(last_email.smtp_envelope_to).to match_array(Person.mailing_emails_for(subscribers))
-          expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@#{localhost}")
+          expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
         end
 
       end
@@ -314,7 +312,7 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(last_email.smtp_envelope_to).to eq [from]
-        expect(last_email.from).to eq "#{list.mail_name}-bounces@#{localhost}"
+        expect(last_email.from).to eq ["#{list.mail_name}-bounces@localhost"]
         expect(last_email.body).to match(/nicht berechtigt/)
       end
     end
@@ -335,7 +333,7 @@ describe MailRelay::Lists do
       expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
       expect(last_email.smtp_envelope_to).to eq [from]
-      expect(last_email.from).to eq "#{list.mail_name}-bounces@#{localhost}"
+      expect(last_email.from).to eq ["#{list.mail_name}-bounces@localhost"]
       expect(last_email.body).to match(/nicht berechtigt/)
     end
   end
@@ -357,7 +355,7 @@ describe MailRelay::Lists do
 
         expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
         expect(last_email.from).to eq [from]
-        expect(last_email.sender).to eq "leaders-bounces+bottom_member=example.com@#{localhost}"
+        expect(last_email.sender).to eq 'leaders-bounces+bottom_member=example.com@localhost'
       end
 
       context 'with no sender address' do
@@ -405,7 +403,7 @@ describe MailRelay::Lists do
 
           expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
           expect(last_email.from).to eq [from]
-          expect(last_email.sender).to eq "leaders-bounces+bottom_member=example.com@#{localhost}"
+          expect(last_email.sender).to eq 'leaders-bounces+bottom_member=example.com@localhost'
         end
       end
 
@@ -424,7 +422,7 @@ describe MailRelay::Lists do
 
           expect(last_email.smtp_envelope_to).to match_array(subscribers.collect(&:email))
           expect(last_email.from).to eq [from]
-          expect(last_email.sender).to eq "leaders-bounces+bottom_member=example.com@#{localhost}"
+          expect(last_email.sender).to eq 'leaders-bounces+bottom_member=example.com@localhost'
         end
       end
     end
@@ -441,7 +439,7 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(last_email.smtp_envelope_to).to eq [from]
-        expect(last_email.from).to eq "#{list.mail_name}-bounces@#{localhost}"
+        expect(last_email.from).to eq ["#{list.mail_name}-bounces@localhost"]
         expect(last_email.body).to match(/nicht berechtigt/)
       end
     end
@@ -476,7 +474,7 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(last_email.smtp_envelope_to).to eq [from]
-        expect(last_email.from).to eq "#{list.mail_name}-bounces@#{localhost}"
+        expect(last_email.from).to eq ["#{list.mail_name}-bounces@localhost"]
         expect(last_email.body).to match(/nicht berechtigt/)
       end
     end
@@ -532,7 +530,7 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
         expect(last_email.smtp_envelope_to).to eq ['test@example.com']
-        expect(last_email.smtp_envelope_from).to eq "#{list.mail_name}-bounces@#{localhost}"
+        expect(last_email.smtp_envelope_from).to eq "#{list.mail_name}-bounces@localhost"
         expect(last_email.from).to eq([from])
       end
     end

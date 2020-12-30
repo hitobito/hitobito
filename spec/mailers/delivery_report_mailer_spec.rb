@@ -20,7 +20,6 @@ describe DeliveryReportMailer do
   let(:total_recipients) { 42 }
   let(:delivered_at) { DateTime.now }
   let(:formatted_delivered_at) { I18n.l(delivered_at) }
-  let(:localhost) { ENV['RAILS_HOST_NAME'] || 'localhost' }
 
   context 'bulk mail success' do
 
@@ -30,9 +29,9 @@ describe DeliveryReportMailer do
     subject { delivery_report }
 
     its(:to)       { should == [recipient_email] }
-    its(:from)     { should == "hitobito <noreply@#{localhost}>" }
-    its(:subject)  { should == 'Sendebericht Mail an liste@hitobito.example.com' }
-    its(:body)     { should =~ /Deine Mail an liste@hitobito.example.com wurde verschickt:/ }
+    its(:from)     { should == ['noreply@localhost'] }
+    its(:subject)  { should == "Sendebericht Mail an liste@hitobito.example.com" }
+    its(:body)     { should =~ /Deine Mail an liste@hitobito.example.com wurde verschickt:/}
     its(:body)     { should =~ /Zeit: #{formatted_delivered_at}/}
     its(:body)     { should =~ /Betreff: Ausflugtips/}
     its(:body)     { should =~ /Empfänger: 42/}
@@ -49,8 +48,8 @@ describe DeliveryReportMailer do
     subject { delivery_report }
 
     its(:to)       { should == [recipient_email] }
-    its(:from)     { should == "hitobito <noreply@#{localhost}>" }
-    its(:subject)  { should == 'Sendebericht Mail an liste@hitobito.example.com' }
+    its(:from)     { should == ['noreply@localhost'] }
+    its(:subject)  { should == "Sendebericht Mail an liste@hitobito.example.com" }
     its(:body)     { should =~ /Deine Mail an liste@hitobito.example.com wurde verschickt:/}
     its(:body)     { should =~ /Zeit: #{formatted_delivered_at}/}
     its(:body)     { should =~ /Betreff: Ausflugtips/}

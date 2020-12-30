@@ -11,9 +11,8 @@ describe InvoiceMailer do
   let(:invoice) { invoices(:invoice) }
   let(:sender) { people(:bottom_member) }
   let(:mail) { InvoiceMailer.notification(invoice, sender) }
-  let(:html) { mail.body.parts.find { |p| p.content_type =~ /html/ }.to_s }
-  let(:pdf) { mail.body.parts.find { |p| p.content_type =~ /pdf/ } }
-  let(:localhost) { ENV['RAILS_HOST_NAME'] || 'localhost' }
+  let(:html) { mail.body.parts.find { |p| p.content_type =~/html/ }.to_s }
+  let(:pdf) { mail.body.parts.find { |p| p.content_type =~/pdf/ } }
 
   subject { mail }
 

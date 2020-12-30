@@ -274,7 +274,7 @@ de:
     application_market:
       already_assigned: 'Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet.'
       participation:
-        registered_at: 'Anmeldung am %{date}'
+        registered_at: 'Anmeldung am %{datetime}'
         town: Wohnort
       prio_buttons:
         national_waitinglist: 'nationale Warteliste'

@@ -4,15 +4,17 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if show_application_priorities?(entry)
+
   = section t('event.priorities') do
-    %table.table
-      - [@application.priority_1,
-         @application.priority_2,
-         @application.priority_3].each_with_index do |prio, i|
-        %tr
-          %td= "#{i+1}."
-          %td= prio.try :labeled_link
-          %td= prio.try :dates_full
+    - if @application.event.attr_used?(:priorization)
+      %table.table
+        - [@application.priority_1,
+           @application.priority_2,
+           @application.priority_3].each_with_index do |prio, i|
+          %tr
+            %td= "#{i+1}."
+            %td= prio.try :labeled_link
+            %td= prio.try :dates_full
 
     - if @application.waiting_list?
       %strong= t('event.participations.priorities.on_waiting_list')

@@ -31,6 +31,8 @@ class GroupSettingsController < ModalCrudController
   end
 
   def fetch_entry
+    raise ActiveRecord::RecordNotFound unless GroupSetting::SETTINGS.keys.include?(setting_id)
+
     entry = group.setting_objects.find_or_initialize_by(var: setting_id)
     entry.becomes(GroupSetting).decorate
   end
@@ -39,9 +41,12 @@ class GroupSettingsController < ModalCrudController
     params[:id]
   end
 
+  def return_path
+    group_group_settings_path(group: @group)
+  end
+
   def assign_attributes
-    attrs = model_class.settings[setting_id]
-    attrs.each do |a|
+    entry.attrs.each do |a|
       value = model_params[a]
       entry.send("#{a}=", value)
     end

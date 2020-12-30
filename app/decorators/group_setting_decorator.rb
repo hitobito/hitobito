@@ -8,10 +8,13 @@
 class GroupSettingDecorator < ApplicationDecorator
 
   def translated_values
-    # TODO translate keys, format values, hide password
-    # username: bla@mam.com, password: ****, provider: aspsms
-    # seperated by new line ? br ?
-    object.attrs.join(', ')
+    object.attrs.collect do |a|
+      "#{t(a)}: #{formatted_value(a)}"
+    end.join(', ')
+  end
+
+  def to_s
+    name
   end
 
   def name
@@ -21,8 +24,16 @@ class GroupSettingDecorator < ApplicationDecorator
   private
 
   def t(key)
-    prefix = 'activerecord.attributes.group_settings'
+    prefix = 'activerecord.attributes.group_setting'
     I18n.t("#{prefix}.#{key}")
+  end
+
+  def formatted_value(attr)
+    if attr.eql?(:password)
+      '****'
+    else
+      object.send(attr)
+    end
   end
 
 end

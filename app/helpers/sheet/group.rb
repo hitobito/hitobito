@@ -51,7 +51,7 @@ module Sheet
         :deleted_subgroups_group_path,
         if: :deleted_subgroups
 
-    tab 'activerecord.models.group_settings.other',
+    tab 'activerecord.models.group_setting.other',
         :group_group_settings_path,
         if: (lambda do |view, group|
           view.can?(:update, group)

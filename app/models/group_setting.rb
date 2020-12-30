@@ -33,7 +33,7 @@ class GroupSetting < RailsSettings::SettingObject
   def _set_value(name, v)
     if encrypted?(name)
       name = "encrypted_#{name}"
-      v = encrypt(v)
+      v = encrypt(v) if v.present?
     end
     super(name, v)
   end

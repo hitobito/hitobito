@@ -28,7 +28,7 @@ describe InvoiceMailer do
   end
 
   it 'uses sender email in mail headers' do
-    expect(mail.from).to eq 'hitobito <noreply@localhost>'
+    expect(mail.from).to eq ['noreply@localhost']
     expect(mail.sender).to match(/^noreply-bounces\+bottom_member=example\.com@/)
     expect(mail.reply_to).to eq %w(bottom_member@example.com)
   end

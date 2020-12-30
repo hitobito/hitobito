@@ -7,6 +7,9 @@
 
 class InvoiceListsController < CrudController
   include YearBasedPaging
+
+  LIMIT_CREATE = 100
+
   self.nesting = Group
   self.permitted_attrs = [
     :receiver_id,
@@ -44,8 +47,8 @@ class InvoiceListsController < CrudController
     entry.title = entry.invoice.title
 
     if entry.valid?
-      result = Invoice::BatchCreate.call(entry)
-      message = flash_message(count: entry.recipient_ids_count, title: entry.title)
+      result = Invoice::BatchCreate.call(entry, LIMIT_CREATE)
+      message = flash_message_create(count: entry.recipient_ids_count, title: entry.title)
       redirect_to return_path, notice: message
       session.delete :invoice_referer
     else
@@ -97,8 +100,13 @@ class InvoiceListsController < CrudController
     parent.invoices.where(id: list_param(:ids))
   end
 
-  def flash_message(attrs)
-    I18n.t("#{controller_name}.#{action_name}", attrs)
+  def flash_message(action: action_name, count: nil, title: nil)
+    I18n.t("#{controller_name}.#{action}", count: count, title: title)
+  end
+
+  def flash_message_create(count:, title:)
+    action_name = count < LIMIT_CREATE ? :create : :create_batch
+    flash_message(action: action_name, count: count, title: title)
   end
 
   def authorize

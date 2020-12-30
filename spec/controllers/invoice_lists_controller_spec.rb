@@ -39,7 +39,6 @@ describe InvoiceListsController do
     end
   end
 
-
   context 'parameter handling' do
     before { sign_in(person) }
 
@@ -193,6 +192,19 @@ describe InvoiceListsController do
         post :create, params: { group_id: group.id, invoice_list: { receiver_id: list.id, receiver_type: list.class, invoice: invoice_attrs.merge(title: 'test') } }
       end.to change { group.invoices.count }.by(1)
       expect(assigns(:invoice_list).receiver).to eq list
+      expect(response).to redirect_to group_invoice_lists_path(group)
+    end
+
+    it 'POST#create an invoice in background' do
+      stub_const("InvoiceListsController::LIMIT_CREATE", 2)
+      Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
+      Subscription.create!(mailing_list: list, subscriber: groups(:bottom_layer_one), role_types: [Group::BottomLayer::Member])
+      expect do
+        post :create, params: { group_id: group.id, invoice_list: { receiver_id: list.id, receiver_type: list.class, invoice: invoice_attrs.merge(title: 'test') } }
+        Delayed::Job.last.payload_object.perform
+      end.to change { group.invoices.count }.by(2)
+
+      expect(flash[:notice]).to include 'Rechnung <i>test</i> wird für 2 Empfänger im Hintergrund erstellt.'
       expect(response).to redirect_to group_invoice_lists_path(group)
     end
 

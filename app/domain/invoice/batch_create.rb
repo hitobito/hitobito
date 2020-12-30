@@ -8,14 +8,14 @@
 class Invoice::BatchCreate
   attr_reader :invoice_list, :invoice
 
-  def self.call(invoice_list, limit = 100)
+  def self.call(invoice_list, limit = InvoiceListsController::LIMIT_CREATE)
     invoice_parameters = invoice_list.invoice_parameters
-    if invoice_list.recipient_ids_count > limit
-      invoice_list.save
-      Invoice::BatchCreateJob.new(invoice_list.id, invoice_parameters).enqueue!
-    else
+    if invoice_list.recipient_ids_count < limit
       invoice_list.invoice = Invoice.new(invoice_parameters)
       Invoice::BatchCreate.new(invoice_list).call
+    else
+      invoice_list.save
+      Invoice::BatchCreateJob.new(invoice_list.id, invoice_parameters).enqueue!
     end
   end
 

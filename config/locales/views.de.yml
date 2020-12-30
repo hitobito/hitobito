@@ -683,6 +683,7 @@ de:
     create:
       one: "Rechnung <i>%{title}</i> wurde erstellt."
       other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+    create_batch: "Rechnung <i>%{title}</i> wird für %{count} Empfänger im Hintergrund erstellt."
     update:
       zero: 'Es muss mindestens eine Rechnung ausgewählt werden.'
       model_error: "Rechnung %{number} ist ungültig - %{error}."

@@ -22,7 +22,7 @@ class Devise::RegistrationsController < DeviseController
     params[:person].select! { |key| key =~ /password/ }
   end
 
-  # rubocop:disable PredicateName
+  # rubocop:disable Naming/PredicateName
 
   def has_old_password
     @old_password = resource.encrypted_password?

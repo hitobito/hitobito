@@ -16,7 +16,7 @@
 
 class Event::Role < ActiveRecord::Base
 
-  # rubocop:disable Rails/ConstantName,Style/MutableConstant
+  # rubocop:disable Naming/ConstantName,Style/MutableConstant
 
   Permissions = [:event_full, :participations_full, :participations_read, :qualify]
 
@@ -25,7 +25,7 @@ class Event::Role < ActiveRecord::Base
   # kind nil is for restricted roles.
   Kinds = [:leader, :helper, :participant]
 
-  # rubocop:enable Rails/ConstantName,Style/MutableConstant
+  # rubocop:enable Naming/ConstantName,Style/MutableConstant
 
   include NormalizedLabels
 

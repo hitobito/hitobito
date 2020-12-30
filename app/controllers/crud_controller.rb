@@ -218,7 +218,7 @@ class CrudController < ListController
 
 
     # Check whether the resource has errors. Additionally checks the :success option.
-    def has_errors? # rubocop:disable Name/PredicateName
+    def has_errors? # rubocop:disable Naming/PredicateName
       options[:success] == false || super
     end
 

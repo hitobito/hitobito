@@ -284,7 +284,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     if action_name.to_s == 'create'
       notice = translate(:success, full_entry_label: full_entry_label)
       notice += '<br />' + translate(:instructions) if append_mailing_instructions?
-      notice += '<br />' + translate(:waiting_list) if entry.waiting_list?
+      flash[:alert] ||= translate(:waiting_list) if entry.waiting_list?
       flash[:notice] ||= notice
     else
       super

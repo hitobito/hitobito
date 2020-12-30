@@ -1,4 +1,6 @@
 # encoding: utf-8
+# frozen_string_literal: true
+
 
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -11,8 +13,8 @@ describe InvoiceMailer do
   let(:invoice) { invoices(:invoice) }
   let(:sender) { people(:bottom_member) }
   let(:mail) { InvoiceMailer.notification(invoice, sender) }
-  let(:html) { mail.body.parts.find { |p| p.content_type =~/html/ }.to_s }
-  let(:pdf) { mail.body.parts.find { |p| p.content_type =~/pdf/ } }
+  let(:html) { mail.body.parts.find { |p| p.content_type =~ /html/ }.to_s }
+  let(:pdf) { mail.body.parts.find { |p| p.content_type =~ /pdf/ } }
 
   subject { mail }
 
@@ -26,7 +28,7 @@ describe InvoiceMailer do
   end
 
   it 'uses sender email in mail headers' do
-    expect(mail.from).to eq "hitobito <noreply@#{localhost}>"
+    expect(mail.from).to eq 'hitobito <noreply@localhost>'
     expect(mail.sender).to match(/^noreply-bounces\+bottom_member=example\.com@/)
     expect(mail.reply_to).to eq %w(bottom_member@example.com)
   end

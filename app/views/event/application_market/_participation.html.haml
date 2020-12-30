@@ -12,5 +12,5 @@
     = t('.registered_at', datetime: f(p.created_at.to_datetime))
 
 %td= p.application.priority(event) if event.attr_used?(:priorization)
-%td= p.application.precondition_warnings(event)
+%td= p.application&.precondition_warnings(event)
 %td= p.application.approval_badge if event.requires_approval?

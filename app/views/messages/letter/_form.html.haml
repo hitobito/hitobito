@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form cancel_url: group_mailing_list_messages_path, buttons_top: false do |f|
+= entry_form cancel_url: group_mailing_list_messages_path, buttons_top: false, multiple_submit: true do |f|
 
   -# Necessary because we modify the formaction on some of the submit buttons
   = hidden_field_tag :authenticity_token, form_authenticity_token

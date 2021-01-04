@@ -54,7 +54,8 @@ module FormHelper
 
     buttons_bottom = options.delete(:buttons_bottom)
     buttons_top = options.delete(:buttons_top) { true }
-    form_button_options = options.slice(:add_another_label, :add_another, :submit_label)
+    form_button_options = options.slice(:add_another_label, :add_another, :submit_label,
+                                        :multiple_submit)
                                  .merge(cancel_url: get_cancel_url(object, options))
 
     standard_form(object, options) do |form|
@@ -86,10 +87,12 @@ module FormHelper
 
   def form_buttons(form, submit_label: ti(:"button.save"), cancel_url: nil, toolbar_class: nil,
                           add_another: false, add_another_label: ti(:"button.add_another"),
-                          additional_buttons: '')
+                          additional_buttons: '', multiple_submit: false)
     button_toolbar(form, toolbar_class: toolbar_class) do
-      content = submit_button(form, submit_label)
-      content << add_another_button(form, add_another_label) if add_another.present?
+      content = submit_button(form, submit_label, disable: !multiple_submit)
+      if add_another.present?
+        content << add_another_button(form, add_another_label, disable: !multiple_submit)
+      end
       content << cancel_link(cancel_url) if cancel_url.present?
       content << additional_buttons
       content
@@ -97,15 +100,16 @@ module FormHelper
   end
 
   def add_another_button(form, label, options = {})
+    data = options.fetch(:disable, true) ? { disable: true } : {}
     content_tag(:div, class: 'btn-group') do
-      form.button(label, options.merge(name: :add_another, class: 'btn btn-primary',
-                                       data: { disable: true }))
+      form.button(label, options.merge(name: :add_another, class: 'btn btn-primary', data: data))
     end
   end
 
   def submit_button(form, label, options = {})
+    data = options.fetch(:disable, true) ? { disable_with: label } : {}
     content_tag(:div, class: 'btn-group') do
-      form.button(label, options.merge(class: 'btn btn-primary', data: { disable_with: label }))
+      form.button(label, options.merge(class: 'btn btn-primary', data: data))
     end
   end
 

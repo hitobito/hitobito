@@ -18,12 +18,12 @@ class Message < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  private
-
   def set_message_recipients
     self.message_recipients.destroy_all
     self.message_recipients = recipients_source.people.map { |person| message_recipient(person) }
   end
+
+  private
 
   def message_recipient(person)
     MessageRecipient.new(

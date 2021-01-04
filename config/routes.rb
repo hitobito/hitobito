@@ -227,7 +227,10 @@ Hitobito::Application.routes.draw do
         resources :mailchimp_synchronizations, only: [:create]
 
         resources :messages, controller: 'messages' do
-          patch :preview
+          collection do
+            post 'preview' # needed for preview of new letter
+            patch 'preview' # needed for preview of existing letter
+          end
         end
       end
 

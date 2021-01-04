@@ -18,7 +18,7 @@ module MessagesHelper
   end
 
   def letter_placeholders
-    Export::Pdf::Message::PLACEHOLDERS.map { |p| "{#{p.to_s}}" }.join(', ')
+    Export::Pdf::Messages::Letter::PLACEHOLDERS.map { |p| "{#{p.to_s}}" }.join(', ')
   end
 
   def format_message_state(message)

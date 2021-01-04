@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Pdf::Message
+module Export::Pdf::Messages::Letter
   class Section
     include ActionView::Helpers::SanitizeHelper
 
@@ -18,11 +18,11 @@ module Export::Pdf::Message
 
     delegate :recipients, :content, to: :message
 
-    delegate *Export::Pdf::Message::PLACEHOLDERS, to: :exporter
+    delegate *Export::Pdf::Messages::Letter::PLACEHOLDERS, to: :exporter
 
-    def initialize(pdf, message, exporter)
+    def initialize(pdf, letter, exporter)
       @pdf = pdf
-      @message = message
+      @letter = letter
       @exporter = exporter
     end
 

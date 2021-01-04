@@ -6,20 +6,19 @@
 #  https://github.com/hitobito/hitobito.
 
 module Export::Pdf
-  module Message
+  module Messages::Letter
 
     PLACEHOLDERS = %i[salutation first_name last_name]
 
     class Runner
-      def render(message, recipients)
-        raise 'Cannot render PDF for this message type' unless message.is_a? Messages::Letter
+      def render(letter)
         pdf = Prawn::Document.new(page_size: 'A4',
                                   page_layout: :portrait,
                                   margin: 2.cm)
         customize(pdf)
-        recipients.each do |recipient|
-          sections.each { |section| section.new(pdf, message, self).render(recipient) }
-          pdf.start_new_page unless recipient == recipients.last
+        letter.message_recipients.each do |recipient|
+          sections.each { |section| section.new(pdf, letter, self).render(recipient) }
+          pdf.start_new_page unless recipient == letter.message_recipients.last
         end
         pdf.render
       end
@@ -52,12 +51,12 @@ module Export::Pdf
 
     self.runner = Runner
 
-    def self.render(message, recipients)
-      runner.new.render(message, recipients)
+    def self.render(letter, opts={})
+      runner.new.render(letter)
     end
 
-    def self.filename(message)
-      "#{message.subject.parameterize(separator: '_')}.pdf"
+    def self.filename(letter, opts={})
+      "#{letter.subject.parameterize(separator: '_')}.pdf"
     end
   end
 end

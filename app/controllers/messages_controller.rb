@@ -8,6 +8,7 @@
 class MessagesController < ModalCrudController
 
   skip_authorize_resource
+  skip_before_action :verify_authenticity_token, only: :preview
   before_action :authorize_action
 
   include YearBasedPaging
@@ -20,16 +21,17 @@ class MessagesController < ModalCrudController
 
   def show
     respond_to do |format|
-      format.pdf { render_pdf(entry, entry.message_recipients) }
+      format.pdf { render_letter_pdf(entry) }
     end
   end
 
   def preview
-    model_ivar_set(find_entry(params[:message_id]))
-    assign_attributes if params.has_key? model_identifier
+    model_ivar_set(build_entry)
+    assign_attributes
+    entry.set_message_recipients
 
     respond_to do |format|
-      format.pdf { render_pdf(entry, preview_recipients(entry.message_recipients)) }
+      format.pdf { render_letter_pdf(entry, preview: true) }
     end
   end
 
@@ -92,13 +94,10 @@ class MessagesController < ModalCrudController
                         entry.message_recipients.includes(:person).map(&:person).map(&:decorate)
   end
 
-  def preview_recipients(recipients)
-    recipients.count > 1 ? [recipients.first] : recipients
-  end
-
-  def render_pdf(message, recipients)
-    pdf = Export::Pdf::Message.render(message, recipients)
-    send_data pdf, type: :pdf, disposition: 'inline'
+  def render_letter_pdf(letter, opts={})
+    pdf = Export::Pdf::Messages::Letter.render(letter, opts)
+    filename = Export::Pdf::Messages::Letter.filename(letter, opts)
+    send_data pdf, type: :pdf, disposition: 'inline', filename: filename
   end
 
 end

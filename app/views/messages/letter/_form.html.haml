@@ -4,7 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form cancel_url: group_mailing_list_messages_path, buttons_top: false do |f|
-
   = f.hidden_field :type
 
   = f.labeled_string_field :subject
@@ -24,4 +23,5 @@
 
 
   - content_for :buttons_bottom do
-    = button_tag(t('global.button.preview'), type: :submit, name: :preview, class: 'btn btn-secondary', formtarget: '_blank', formaction: group_mailing_list_message_preview_path(message_id: entry.id, format: :pdf, anchor: 'toolbar=0'))
+
+    = button_tag(t('global.button.preview'), type: :submit, name: :preview, class: 'btn btn-secondary', formtarget: '_blank', formaction: preview_group_mailing_list_messages_path(format: :pdf, anchor: 'toolbar=0'))

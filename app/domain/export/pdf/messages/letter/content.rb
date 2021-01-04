@@ -5,17 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Pdf::Message
+module Export::Pdf::Messages::Letter
   class Content < Section
 
     def render(recipient)
-      pdf.markup(replace_placeholders(@message.content.to_s, recipient))
+      pdf.markup(replace_placeholders(@letter.content.to_s, recipient))
     end
 
     private
 
     def replace_placeholders(text, recipient)
-      Export::Pdf::Message::PLACEHOLDERS.each do |placeholder|
+      Export::Pdf::Messages::Letter::PLACEHOLDERS.each do |placeholder|
         text = text.gsub(Regexp.new("\\{#{placeholder.to_s}\\}"), replacement(placeholder, recipient))
       end
       text

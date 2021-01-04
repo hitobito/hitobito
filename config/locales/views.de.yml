@@ -1446,6 +1446,8 @@ de:
     letter:
       form:
         available_placeholders: 'Verfügbare Platzhalter: %{placeholders}'
+        finalize_and_print: 'Finalisieren und drucken...'
+        finalize_and_print_notice: 'Nach dieser Aktion zählt der Brief<br/>als versendet und kann nicht mehr<br/>bearbeitet werden.'
         prompt_tag_placeholder: '-'
         recipients_count: '%{count} Empfänger'
       new:

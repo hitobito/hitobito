@@ -6,5 +6,5 @@
 # only bind events for non-document elements in turbolinks:load
 $(document).on('turbolinks:load', ->
   # wire up tooltips
-  $(document).tooltip({ selector: '[rel^=tooltip]', placement: 'right' })
+  $(document).tooltip({ selector: '[rel^=tooltip]' })
 )

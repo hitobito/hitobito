@@ -230,6 +230,8 @@ Hitobito::Application.routes.draw do
           collection do
             post 'preview' # needed for preview of new letter
             patch 'preview' # needed for preview of existing letter
+            post 'print' # needed for printing new letter
+            patch 'print' # needed for printing existing letter
           end
         end
       end

@@ -11,7 +11,7 @@
   = f.labeled :recipients do
     .inline
       %a.collapsed.header{ href: "#recipients-collapse", data: { toggle: :collapse } }
-        = translate('.recipients_count', count: recipients.count)
+        = t('.recipients_count', count: recipients.count)
 
       .collapse{ id: 'recipients-collapse' }
         - recipients.each do |recipient|
@@ -24,4 +24,22 @@
 
   - content_for :buttons_bottom do
 
-    = button_tag(t('global.button.preview'), type: :submit, name: :preview, class: 'btn btn-secondary', formtarget: '_blank', formaction: preview_group_mailing_list_messages_path(format: :pdf, anchor: 'toolbar=0'))
+    .btn-group
+      = button_tag(t('global.button.preview'),
+                   type: :submit,
+                   name: :preview,
+                   class: 'btn btn-secondary',
+                   formtarget: '_blank',
+                   formaction: preview_group_mailing_list_messages_path(format: :pdf, anchor: 'toolbar=0'))
+
+    .btn-group
+      = button_tag(t('.finalize_and_print'),
+                   type: :submit,
+                   name: :print,
+                   class: 'btn btn-secondary',
+                   formtarget: '_blank',
+                   formaction: print_group_mailing_list_messages_path(format: :pdf),
+                   rel: :tooltip,
+                   'data-html' => 'true',
+                   'data-placement' => 'bottom',
+                   title: t('.finalize_and_print_notice'))

@@ -19,12 +19,6 @@ class MessagesController < ModalCrudController
 
   helper_method :recipients
 
-  def show
-    respond_to do |format|
-      format.pdf { render_letter_pdf(entry) }
-    end
-  end
-
   def preview
     model_ivar_set(build_entry)
     assign_attributes
@@ -32,6 +26,15 @@ class MessagesController < ModalCrudController
 
     respond_to do |format|
       format.pdf { render_letter_pdf(entry, preview: true) }
+    end
+  end
+
+  def print
+    assign_attributes
+    if entry.new_record?
+      update { |format| format.pdf { render_letter_pdf(entry) } }
+    else
+      create { |format| format.pdf { render_letter_pdf(entry) } }
     end
   end
 

@@ -797,6 +797,12 @@ ActiveRecord::Schema.define(version: 2021_01_18_151446) do
     t.index ["contactable_id", "contactable_type"], name: "index_social_accounts_on_contactable_id_and_contactable_type"
   end
 
+  create_table "subscription_tags", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.boolean "excluded"
+    t.bigint "subscription_id"
+    t.index ["subscription_id"], name: "index_subscription_tags_on_subscription_id"
+  end
+
   create_table "subscriptions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "mailing_list_id", null: false
     t.string "subscriber_type", null: false

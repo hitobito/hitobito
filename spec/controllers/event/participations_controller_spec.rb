@@ -51,9 +51,11 @@ describe Event::ParticipationsController do
       @leader, @participant = *create(Event::Role::Leader, course.participant_types.first)
 
       update_person(@participant, first_name: 'Al', last_name: 'Barns', nickname: 'al',
-                    town: 'Eye', address: 'Spring Road', zip_code: '3000', birthday: '21.10.1978')
+                                  town: 'Eye', address: 'Spring Road', zip_code: '3000',
+                                  birthday: '21.10.1978')
       update_person(@leader, first_name: 'Joe', last_name: 'Smith', nickname: 'js',
-                    town: 'Stoke', address: 'Howard Street', zip_code: '8000', birthday: '1.3.1992')
+                             town: 'Stoke', address: 'Howard Street', zip_code: '8000',
+                             birthday: '1.3.1992')
     end
 
     it 'lists participant and leader group by default' do
@@ -79,7 +81,9 @@ describe Event::ParticipationsController do
     end
 
     it 'generates pdf labels' do
-      get :index, params: { group_id: group, event_id: course.id, label_format_id: label_formats(:standard).id }, format: :pdf
+      get :index, format: :pdf, params: {
+        group_id: group, event_id: course.id, label_format_id: label_formats(:standard).id
+      }
 
       expect(@response.media_type).to eq('application/pdf')
       expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
@@ -88,14 +92,18 @@ describe Event::ParticipationsController do
     it 'exports csv files' do
       expect do
         get :index, params: { group_id: group, event_id: course.id }, format: :csv
-        expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+        expect(flash[:notice]).to match(
+          /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+        )
       end.to change(Delayed::Job, :count).by(1)
     end
 
     it 'exports xlsx files' do
       expect do
         get :index, params: { group_id: group, event_id: course.id }, format: :xlsx
-        expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+        expect(flash[:notice]).to match(
+          /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+        )
       end.to change(Delayed::Job, :count).by(1)
     end
 
@@ -104,7 +112,9 @@ describe Event::ParticipationsController do
 
       cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
 
-      expect(cookie[0]['name']).to match(/^(event_participation_export)+\S*(#{people(:top_leader).id})+$/)
+      expect(cookie[0]['name']).to match(
+        /^(event_participation_export)+\S*(#{people(:top_leader).id})+$/
+      )
       expect(cookie[0]['type']).to match(/^csv$/)
     end
 
@@ -113,18 +123,19 @@ describe Event::ParticipationsController do
       Fabricate(:additional_email, contactable: @leader.person, mailings: false)
       get :index, params: { group_id: group, event_id: course.id }, format: :email
       expect(@response.body.split(',')).to match_array([
-        @participant.person.email,
-        @leader.person.email,
-        e1.email
-      ])
+                                                         @participant.person.email,
+                                                         @leader.person.email,
+                                                         e1.email
+                                                       ])
     end
 
     it 'loads pending person add requests' do
       r1 = Person::AddRequest::Event.create!(
-              person: Fabricate(:person),
-              requester: Fabricate(:person),
-              body: course,
-              role_type: course.class.role_types.first.sti_name)
+        person: Fabricate(:person),
+        requester: Fabricate(:person),
+        body: course,
+        role_type: course.class.role_types.first.sti_name
+      )
 
       get :index, params: { group_id: group.id, event_id: course.id }
       expect(assigns(:participations)).to eq [@participant, @leader]
@@ -144,7 +155,8 @@ describe Event::ParticipationsController do
     it 'renders json for service token user' do
       allow(controller).to receive_messages(current_user: nil)
 
-      get :index, params: { group_id: group.id, event_id: course.id, token: 'PermittedToken' }, format: :json
+      get :index, params: { group_id: group.id, event_id: course.id, token: 'PermittedToken' },
+                  format: :json
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:current_page]).to eq 1
     end
@@ -152,7 +164,8 @@ describe Event::ParticipationsController do
     it 'redirects for service token csv request' do
       allow(controller).to receive_messages(current_user: nil)
 
-      get :index, params: { group_id: group.id, event_id: course.id, token: 'PermittedToken' }, format: :csv
+      get :index, params: { group_id: group.id, event_id: course.id, token: 'PermittedToken' },
+                  format: :csv
       expect(response).to redirect_to group_event_participations_path(group, course, returning: true)
     end
 
@@ -191,13 +204,16 @@ describe Event::ParticipationsController do
   context 'GET show' do
 
     it 'renders json' do
-      get :show, params: { group_id: group.id, event_id: course.id, id: participation.id }, format: :json
+      get :show, params: { group_id: group.id, event_id: course.id, id: participation.id },
+                 format: :json
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:event_participations]).to have(1).items
     end
 
     context 'for same event' do
-      before { get :show, params: { group_id: group.id, event_id: course.id, id: participation.id } }
+      before do
+        get :show, params: { group_id: group.id, event_id: course.id, id: participation.id }
+      end
 
       it 'has two answers' do
         expect(assigns(:answers).size).to eq(2)
@@ -209,7 +225,9 @@ describe Event::ParticipationsController do
     end
 
     context 'for other event of same group' do
-      before { get :show, params: { group_id: group.id, event_id: other_course.id, id: participation.id } }
+      before do
+        get :show, params: { group_id: group.id, event_id: other_course.id, id: participation.id }
+      end
 
       it 'has participation' do
         expect(assigns(:participation)).to eq(participation)
@@ -240,7 +258,9 @@ describe Event::ParticipationsController do
           p
         end
 
-        before { get :show, params: { group_id: group.id, event_id: course.id, id: participation.id } }
+        before do
+          get :show, params: { group_id: group.id, event_id: course.id, id: participation.id }
+        end
 
         it 'has participation' do
           expect(response.status).to eq(200)
@@ -257,7 +277,9 @@ describe Event::ParticipationsController do
           p
         end
 
-        before { get :show, params: { group_id: group.id, event_id: course.id, id: participation.id } }
+        before do
+          get :show, params: { group_id: group.id, event_id: course.id, id: participation.id }
+        end
 
         it 'has participation' do
           expect(response.status).to eq(200)
@@ -286,7 +308,8 @@ describe Event::ParticipationsController do
     render_views
 
     it 'renders participation as pdf' do
-      get :print, params: { group_id: group.id, event_id: course.id, id: participation.id }, format: :pdf
+      get :print, params: { group_id: group.id, event_id: course.id, id: participation.id },
+                  format: :pdf
       expect(response).to be_ok
     end
   end
@@ -362,11 +385,11 @@ describe Event::ParticipationsController do
       before do
         # create one person with two approvers
         Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app1,
-                  group: groups(:bottom_layer_one))
+                                                          group: groups(:bottom_layer_one))
         Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app2,
-                  group: groups(:bottom_layer_one))
+                                                          group: groups(:bottom_layer_one))
         Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person,
-                  group: groups(:bottom_group_one_one))
+                                                          group: groups(:bottom_group_one_one))
 
         person.qualifications << Fabricate(:qualification,
                                            qualification_kind: qualification_kinds(:sl))
@@ -374,7 +397,7 @@ describe Event::ParticipationsController do
 
       it 'creates confirmation job' do
         expect do
-          post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}}
+          post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
           expect(assigns(:participation)).to be_valid
         end.to change { Delayed::Job.count }.by(1)
         expect(flash[:notice]).not_to include 'Für die definitive Anmeldung musst du diese ' \
@@ -383,7 +406,7 @@ describe Event::ParticipationsController do
 
       it 'creates active participant role for non course events' do
         event = Fabricate(:event)
-        post :create, params: {group_id: group.id, event_id: event.id, event_participation: {}}
+        post :create, params: { group_id: group.id, event_id: event.id, event_participation: {} }
 
         participation = assigns(:participation)
         expect(participation).to be_valid
@@ -404,7 +427,7 @@ describe Event::ParticipationsController do
 
       it 'creates non-active participant role for course events' do
         groups(:top_layer).update_column(:require_person_add_requests, true)
-        post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}}
+        post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
 
         participation = assigns(:participation)
         expect(participation).to be_valid
@@ -428,11 +451,11 @@ describe Event::ParticipationsController do
         class TestParticipant < Event::Course::Role::Participant; end
         Event::Course.role_types << TestParticipant
         post :create, params: {
-                        group_id: group.id,
-                        event_id: course.id,
-                        event_participation: {},
-                        event_role: { type: 'TestParticipant' }
-                      }
+          group_id: group.id,
+          event_id: course.id,
+          event_participation: {},
+          event_role: { type: 'TestParticipant' }
+        }
         Event::Course.role_types -= [TestParticipant]
         participation = assigns(:participation)
         expect(participation).to be_valid
@@ -446,7 +469,10 @@ describe Event::ParticipationsController do
       end
 
       it 'creates new participation with application' do
-        post :create, params: {group_id: group.id, event_id: course.id, event_participation: { application_attributes: {priority_2_id: other_course.id} }}
+        post :create, params: { group_id: group.id, event_id: course.id,
+                                event_participation: {
+                                  application_attributes: { priority_2_id: other_course.id }
+                                } }
 
         participation = assigns(:participation)
         application = participation.application
@@ -487,11 +513,11 @@ describe Event::ParticipationsController do
       it 'fails for invalid event role' do
         expect do
           post :create, params: {
-                          group_id: group.id,
-                          event_id: course.id,
-                          event_participation: {},
-                          event_role: { type: 'DummyParticipant' }
-                        }
+            group_id: group.id,
+            event_id: course.id,
+            event_participation: {},
+            event_role: { type: 'DummyParticipant' }
+          }
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
 
@@ -502,21 +528,24 @@ describe Event::ParticipationsController do
 
         it 'does not check preconditions' do
           expect do
-            post :create, params: {group_id: group.id, event_id: course.id, event_participation: {}}
+            post :create, params: { group_id: group.id, event_id: course.id,
+                                    event_participation: {} }
           end.to change { Event::Participation.count }.by(1)
         end
 
       end
 
       it 'stores additional information' do
-        post :create, params: { group_id: group.id, event_id: course.id, event_participation: { additional_information: 'Vegetarier'} }
+        post :create, params: { group_id: group.id, event_id: course.id,
+                                event_participation: { additional_information: 'Vegetarier' } }
 
         expect(assigns(:participation)).to be_valid
         expect(assigns(:participation).additional_information).to eq('Vegetarier')
       end
 
       it 'can handle wide unicode characters (esp. emoji)', :mysql do
-        post :create, params: { group_id: group.id, event_id: course.id, event_participation: { additional_information: 'Vegetarier😝'} }
+        post :create, params: { group_id: group.id, event_id: course.id,
+                                event_participation: { additional_information: 'Vegetarier😝' } }
 
         expect(assigns(:participation)).to be_valid
         expect(assigns(:participation).additional_information).to eq('Vegetarier😝')
@@ -528,7 +557,8 @@ describe Event::ParticipationsController do
       let(:participation) { assigns(:participation) }
 
       it 'top leader can create participation for bottom member' do
-        post :create, params: { group_id: group.id, event_id: course.id, event_participation: { person_id: bottom_member.id } }
+        post :create, params: { group_id: group.id, event_id: course.id,
+                                event_participation: { person_id: bottom_member.id } }
         expect(participation).to be_present
         expect(participation).to be_valid
         expect(participation).to be_persisted
@@ -544,7 +574,8 @@ describe Event::ParticipationsController do
         sign_in(user)
         groups(:bottom_layer_one).update_column(:require_person_add_requests, true)
 
-        post :create, params: { group_id: group.id, event_id: course.id, event_participation: { person_id: bottom_member.id } }
+        post :create, params: { group_id: group.id, event_id: course.id,
+                                event_participation: { person_id: bottom_member.id } }
 
         is_expected.to redirect_to(group_event_participations_path(group, course))
         expect(flash[:alert]).to match(/versendet/)
@@ -556,7 +587,8 @@ describe Event::ParticipationsController do
       it 'bottom member can not create participation for top leader' do
         sign_in(bottom_member)
         expect do
-          post :create, params: { group_id: group.id, event_id: course.id, event_participation: { person_id: user.id } }
+          post :create, params: { group_id: group.id, event_id: course.id,
+                                  event_participation: { person_id: user.id } }
         end.to raise_error(CanCan::AccessDenied)
       end
     end
@@ -570,7 +602,7 @@ describe Event::ParticipationsController do
 
       is_expected.to redirect_to group_event_application_market_index_path(group, course)
       expect(flash[:notice]).to match(/Anmeldung/)
-      expect(Delayed::Job.where("handler LIKE ?", '%CancelApplicationJob%')).not_to exist
+      expect(Delayed::Job.where('handler LIKE ?', '%CancelApplicationJob%')).not_to exist
     end
 
     it 'redirects to event show if own participation' do
@@ -578,7 +610,7 @@ describe Event::ParticipationsController do
       delete :destroy, params: { group_id: group.id, event_id: course.id, id: participation.id }
 
       is_expected.to redirect_to group_event_path(group, course)
-      expect(Delayed::Job.where("handler LIKE ?", '%CancelApplicationJob%')).to exist
+      expect(Delayed::Job.where('handler LIKE ?', '%CancelApplicationJob%')).to exist
     end
 
   end
@@ -589,8 +621,13 @@ describe Event::ParticipationsController do
     context 'GET show' do
 
       context 'for participant' do
-        before { Fabricate(:event_role, type: Event::Course::Role::Participant.sti_name, participation: participation) }
-        before { get :show, params: { group_id: group.id, event_id: course.id, id: participation.id } }
+        before do
+          Fabricate(:event_role, type: Event::Course::Role::Participant.sti_name,
+                                 participation: participation)
+        end
+        before do
+          get :show, params: { group_id: group.id, event_id: course.id, id: participation.id }
+        end
         let(:warnings) { assigns(:precondition_warnings) }
 
         it 'assigns precondition_warnings' do
@@ -600,8 +637,13 @@ describe Event::ParticipationsController do
       end
 
       context 'for leader' do
-        before { Fabricate(:event_role, type: Event::Role::Leader.sti_name, participation: participation) }
-        before { get :show, params: { group_id: group.id, event_id: course.id, id: participation.id } }
+        before do
+          Fabricate(:event_role, type: Event::Role::Leader.sti_name,
+                                 participation: participation)
+        end
+        before do
+          get :show, params: { group_id: group.id, event_id: course.id, id: participation.id }
+        end
         let(:warnings) { assigns(:precondition_warnings) }
 
         it 'does not assign precondition_warnings' do
@@ -648,8 +690,10 @@ describe Event::ParticipationsController do
       question = event.questions.create!(question: 'dummy', required: true)
       sign_in(person)
 
-      post :create, params: { group_id: event.groups.first.id, event_id: event.id, event_participation:
-        { answers_attributes: { '0' => { 'question_id' => question.id, 'answer' => answer } } } }
+      post :create, params: { group_id: event.groups.first.id, event_id: event.id,
+                              event_participation: { answers_attributes: {
+                                '0' => { 'question_id' => question.id, 'answer' => answer }
+                              } } }
       assigns(:participation)
     end
 
@@ -683,15 +727,17 @@ describe Event::ParticipationsController do
     end
 
     it 'bottom_member cannot create without supplying required answer' do
-      post :create, params: { group_id: event.groups.first.id, event_id: event.id, event_participation:
-        {} } # <- look ma, no answer!
+      post :create, params: { group_id: event.groups.first.id, event_id: event.id,
+                              event_participation: {} } # <- look ma, no answer!
 
       expect(assigns(:participation)).not_to be_valid
     end
 
     it 'bottom_member can create when supplying required answer' do
-      post :create, params: { group_id: event.groups.first.id, event_id: event.id, event_participation:
-        { answers_attributes: { '0' => { 'question_id' => question.id, 'answer' =>  'yep' } } } }
+      post :create, params: { group_id: event.groups.first.id, event_id: event.id,
+                              event_participation: { answers_attributes: {
+                                '0' => { 'question_id' => question.id, 'answer' => 'yep' }
+                              } } }
 
       expect(assigns(:participation)).to be_valid
     end
@@ -712,10 +758,10 @@ describe Event::ParticipationsController do
 
       it 'handles multiple choice answers' do
         post :create, params: {
-                        group_id: event.groups.first.id,
-                        event_id: event.id,
-                        event_participation: { answers_attributes: answers_attributes }
-                      }
+          group_id: event.groups.first.id,
+          event_id: event.id,
+          event_participation: { answers_attributes: answers_attributes }
+        }
         expect(assigns(:participation).answers.first.answer).to eq 'GA, Halbtax'
       end
     end
@@ -735,11 +781,11 @@ describe Event::ParticipationsController do
       it 'handles resetting of multiple choice answers' do
         expect(participation.reload.answers.first.answer).to eq 'GA, Halbtax'
         put :update, params: {
-                       group_id: event.groups.first.id,
-                       event_id: event.id,
-                       id: participation.id,
-                       event_participation: { answers_attributes: answers_attributes }
-                     }
+          group_id: event.groups.first.id,
+          event_id: event.id,
+          id: participation.id,
+          event_participation: { answers_attributes: answers_attributes }
+        }
         expect(participation.reload.answers.first.answer).to be_nil
       end
     end
@@ -765,7 +811,7 @@ describe Event::ParticipationsController do
     end
 
     it 'GET#index lists extra event application question' do
-      top_leader.table_display_for(course).update!(selected: %W(event_question_#{question.id}))
+      top_leader.table_display_for(course).update!(selected: %W[event_question_#{question.id}])
       participation.answers.create!(question: question, answer: 'GA')
 
       get :index, params: { group_id: group.id, event_id: course.id }
@@ -774,21 +820,25 @@ describe Event::ParticipationsController do
     end
 
     it 'GET#index sorts by extra event application question' do
-      top_leader.table_display_for(course).update!(selected: %W(event_question_#{question.id}))
+      top_leader.table_display_for(course).update!(selected: %W[event_question_#{question.id}])
       role = Fabricate(:event_role, type: participation.roles.first.type)
       other = Fabricate(:event_participation, event: course, roles: [role], active: true)
 
       participation.answers.create!(question: question, answer: 'GA')
       other.answers.find { |a| a.question == question }.update(answer: 'Halbtax')
 
-      get :index, params: {group_id: group.id, event_id: course.id, sort: "event_question_#{question.id}", sort_dir: :desc}
+      get :index, params: { group_id: group.id, event_id: course.id,
+                            sort: "event_question_#{question.id}", sort_dir: :desc }
       expect(assigns(:participations).first).to eq other
     end
 
     it 'GET#index exports to csv using TableDisplay' do
       get :index, params: { group_id: group.id, event_id: course.id, selection: true }, format: :csv
-      expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
-      expect(Delayed::Job.last.payload_object.send(:exporter)).to eq Export::Tabular::People::TableDisplays
+      expect(flash[:notice]).to match(
+        /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+      )
+      expect(Delayed::Job.last.payload_object.send(:exporter))
+        .to eq Export::Tabular::People::TableDisplays
     end
 
   end

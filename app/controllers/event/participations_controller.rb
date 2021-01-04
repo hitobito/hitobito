@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,6 +10,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   include RenderPeopleExports
   include AsyncDownload
   include Api::JsonPaging
+  include ActionView::Helpers::SanitizeHelper
 
   self.nesting = Group, Event
 
@@ -59,6 +60,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     set_active
     with_person_add_request do
       created = with_callbacks(:create, :save) { save_entry }
+      directly_assign_place if created
       respond_with(entry, success: created, location: return_path)
     end
   end
@@ -236,6 +238,13 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     entry.init_application
   end
 
+  def directly_assign_place
+    if event.waiting_list_available? && event.places_available? && !event.attr_used?(:priorization)
+      assigner = Event::ParticipantAssigner.new(event, @participation)
+      assiger.add_participant if assigner.createable?
+    end
+  end
+
   def load_priorities
     if entry.application && event.priorization && current_user
       @alternatives = event.class.application_possible
@@ -263,9 +272,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   # A label for the current entry, including the model name, used for flash
   def full_entry_label
-    translate(:full_entry_label, model_label: models_label(false),
-                                 person: h(entry.person),
-                                 event: h(entry.event)).html_safe
+    label = translate(:full_entry_label, model_label: models_label(false),
+                                         person: h(entry.person),
+                                         event: h(entry.event))
+    sanitize(label, tags: %w(i))
   end
 
   def send_confirmation_email
@@ -284,7 +294,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     if action_name.to_s == 'create'
       notice = translate(:success, full_entry_label: full_entry_label)
       notice += '<br />' + translate(:instructions) if append_mailing_instructions?
-      notice += '<br />' + translate(:waiting_list) if entry.waiting_list?
+      flash[:alert] ||= translate(:waiting_list) if entry.waiting_list?
       flash[:notice] ||= notice
     else
       super

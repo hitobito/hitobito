@@ -29,7 +29,6 @@ class MessagesController < ModalCrudController
     assign_attributes if params.has_key? model_identifier
 
     respond_to do |format|
-      format.js
       format.pdf { render_pdf(entry, preview_recipients(entry.message_recipients)) }
     end
   end

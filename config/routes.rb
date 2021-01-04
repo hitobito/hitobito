@@ -227,8 +227,7 @@ Hitobito::Application.routes.draw do
         resources :mailchimp_synchronizations, only: [:create]
 
         resources :messages, controller: 'messages' do
-          get :preview
-          post :preview
+          patch :preview
         end
       end
 

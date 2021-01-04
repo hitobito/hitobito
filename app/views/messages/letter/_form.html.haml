@@ -3,11 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- content_for :buttons_bottom do
-  - unless entry.new_record?
-    = action_button(t('global.button.preview'), group_mailing_list_message_preview_path(message_id: entry.id, format: :js), :eye, remote: true)
-
 = entry_form cancel_url: group_mailing_list_messages_path, buttons_top: false do |f|
+
   = f.hidden_field :type
 
   = f.labeled_string_field :subject
@@ -24,3 +21,7 @@
 
   #rich-text-editor-message-content
     = f.labeled_rich_text_area :content, help: t('.available_placeholders', placeholders: letter_placeholders)
+
+
+  - content_for :buttons_bottom do
+    = button_tag(t('global.button.preview'), type: :submit, name: :preview, class: 'btn btn-secondary', formtarget: '_blank', formaction: group_mailing_list_message_preview_path(message_id: entry.id, format: :pdf, anchor: 'toolbar=0'))

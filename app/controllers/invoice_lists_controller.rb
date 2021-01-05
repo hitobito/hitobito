@@ -76,7 +76,7 @@ class InvoiceListsController < CrudController
   private
 
   def list_entries
-    super.includes(:receiver, :invoice).list.where(created_at: Date.new(year, 1, 1).all_year)
+    super.includes(:receiver).list.where(created_at: Date.new(year, 1, 1).all_year)
   end
 
   def return_path

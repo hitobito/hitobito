@@ -33,24 +33,21 @@
 
 
   - content_for :buttons_bottom do
-    .right
-
-      .btn-group
-        = button_tag(t('global.button.preview'),
-                     type: :submit,
-                     name: :preview,
-                     class: 'btn btn-secondary',
-                     formtarget: '_blank',
-                     formaction: preview_group_mailing_list_messages_path(format: :pdf, anchor: 'toolbar=0'))
-
-      .btn-group
-        = button_tag(t('.finalize_and_print'),
-                     type: :submit,
-                     name: :print,
-                     class: 'btn btn-secondary',
-                     formtarget: '_blank',
-                     formaction: print_group_mailing_list_messages_path(format: :pdf, message_id: entry.id),
-                     rel: :tooltip,
-                     'data-html' => 'true',
-                     'data-placement' => 'bottom',
-                     title: t('.finalize_and_print_notice'))
+    .btn-group
+      = button_tag(t('global.button.preview'),
+                   type: :submit,
+                   name: :preview,
+                   class: 'btn btn-secondary',
+                   formtarget: '_blank',
+                   formaction: preview_group_mailing_list_messages_path(format: :pdf, anchor: 'toolbar=0'))
+    .btn-group
+      = button_tag(entry.printed_at.nil? ? t('.finalize_and_print') : t('.print_again'),
+                   type: :submit,
+                   name: :print,
+                   class: 'btn btn-secondary',
+                   formtarget: '_blank',
+                   formaction: print_group_mailing_list_messages_path(format: :pdf, message_id: entry.id),
+                   rel: :tooltip,
+                   'data-html' => 'true',
+                   'data-placement' => 'bottom',
+                   title: entry.printed_at.nil? ? t('.finalize_and_print_notice') : '')

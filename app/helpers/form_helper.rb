@@ -97,8 +97,8 @@ module FormHelper
       if add_another.present?
         content << add_another_button(form, add_another_label, disable: !multiple_submit)
       end
-      content << cancel_link(cancel_url) if cancel_url.present?
       content << additional_buttons
+      content << cancel_link(cancel_url) if cancel_url.present?
       content
     end
   end

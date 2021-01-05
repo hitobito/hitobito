@@ -36,14 +36,15 @@ module Export::Pdf
       private
 
       def render_opts(opts)
-        image_dir = Rails.root.join('app', 'javascript', 'images')
-        background = opts.fetch(:preview, false) ? image_dir.join('preview.png') : ''
-        {
-          page_size: 'A4',
-          page_layout: :portrait,
-          margin: 2.cm,
-          background: background
+        options = {
+            page_size: 'A4',
+            page_layout: :portrait,
+            margin: 2.cm
         }
+        if opts.fetch(:preview, false)
+          options[:background] = Rails.root.join('app', 'javascript', 'images', 'preview.png')
+        end
+        options
       end
 
       def customize(pdf)

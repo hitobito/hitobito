@@ -56,6 +56,7 @@ describe InvoicesController do
 
     it 'creates payment reminder for multiple resources', js: true do
       Invoice.update_all(state: :issued, due_at: 1.day.ago)
+      update_issued_at_to_current_year
       visit group_invoices_path(group)
       check 'all'
       click_link 'Rechnung stellen / mahnen'
@@ -101,6 +102,13 @@ describe InvoicesController do
       click_link('Export')
       click_link('Einzahlungsschein separat')
       expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf?articles=false")
+    end
+  end
+
+  def update_issued_at_to_current_year
+    sent = invoices(:sent)
+    if sent.issued_at.year != Date.today.year
+      sent.update(issued_at: Date.today.beginning_of_year)
     end
   end
 end

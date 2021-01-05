@@ -18,13 +18,13 @@ module Globalized
       super(*columns, fallbacks_for_empty_translations: true)
     end
 
+    # Inspired by https://github.com/rails/actiontext/issues/32#issuecomment-450653800
     def translates_rich_text(*columns)
       translates(*columns)
 
       columns.each do |col|
-        col = col.to_s
-        delegate col.to_sym, to: :translation
-        delegate "#{col}=".to_sym, to: :translation
+        delegate col, to: :translation
+        delegate "#{col}=", to: :translation
       end
 
       after_update do
@@ -33,7 +33,7 @@ module Globalized
         end
       end
 
-      self.const_get(:Translation).include globalized_translation(columns)
+      const_get(:Translation).include globalized_translation(columns)
     end
 
     def list

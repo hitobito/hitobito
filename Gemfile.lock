@@ -615,6 +615,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_generic!
   http_accept_language
   icalendar
   kaminari

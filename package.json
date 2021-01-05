@@ -11,7 +11,6 @@
     "@rails/actiontext": "^6.0.3-3",
     "@rails/webpacker": "5.2.1",
     "bootstrap-sass": "~2.3.2",
-    "bootstrap3-wysihtml5-bower": "~0.3.3",
     "chosen-js": "~1.8.7",
     "coffee-loader": "^1.0.0",
     "coffeescript": "1.12.7",

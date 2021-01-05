@@ -6,30 +6,41 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::BatchCreate
-  attr_reader :invoice_list, :invoice
+  attr_reader :invoice_list, :invoice, :results, :invalid
 
   def self.call(invoice_list, limit = InvoiceListsController::LIMIT_CREATE)
     invoice_parameters = invoice_list.invoice_parameters
     if invoice_list.recipient_ids_count < limit
-      invoice_list.invoice = Invoice.new(invoice_parameters)
-      Invoice::BatchCreate.new(invoice_list).call
+      create(invoice_list, invoice_parameters)
     else
-      invoice_list.save
-      Invoice::BatchCreateJob.new(invoice_list.id, invoice_parameters).enqueue!
+      create_async(invoice_list, invoice_parameters)
     end
+  end
+
+  def self.create(invoice_list, invoice_parameters)
+    invoice_list.invoice = Invoice.new(invoice_parameters)
+    Invoice::BatchCreate.new(invoice_list).call
+  end
+
+  def self.create_async(invoice_list, invoice_parameters)
+    invoice_list.save
+    Invoice::BatchCreateJob.new(invoice_list.id, invoice_parameters).enqueue!
   end
 
   def initialize(invoice_list)
     @invoice_list = invoice_list
     @invoice = invoice_list.invoice
+    @results = []
+    @invalid = []
   end
 
   def call
-    Invoice.transaction do
-      invoice_list.save! if receiver? && invoice_list.new_record?
-      create_invoices.tap do
-        invoice_list.update_total if receiver?
-      end
+    if receiver? && invoice_list.new_record?
+      invoice_list.recipients_total = invoice_list.recipient_ids_count
+      invoice_list.save!
+    end
+    create_invoices.tap do
+      invoice_list.update_total if receiver?
     end
   end
 
@@ -40,13 +51,18 @@ class Invoice::BatchCreate
   end
 
   def create_invoices
-    results = []
     invoice_list.recipients.find_in_batches do |batch|
-      results += batch.collect do |recipient|
-        invoice_list.group.invoices.build(attributes(recipient)).save
+      batch.each do |recipient|
+        success = invoice_list.group.invoices.build(attributes(recipient)).save
+        invalid << recipient.id unless success
+        results << success
       end
-      invoice_list.update(recipients_processed: results.count(true)) if receiver?
+      update_invoice_list if receiver?
     end
+  end
+
+  def update_invoice_list
+    invoice_list.update(recipients_processed: results.count(true), invalid_recipient_ids: invalid)
   end
 
   def attributes(recipient)

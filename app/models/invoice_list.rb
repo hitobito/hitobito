@@ -7,10 +7,11 @@
 
 
 class InvoiceList < ActiveRecord::Base
+  serialize :invalid_recipient_ids, Array
   belongs_to :group
   belongs_to :receiver, polymorphic: true
   belongs_to :creator, class_name: 'Person'
-  has_one :invoice
+  has_one :invoice, dependent: :destroy
   has_many :invoices, dependent: :destroy
 
   attr_accessor :recipient_ids, :invoice
@@ -18,7 +19,7 @@ class InvoiceList < ActiveRecord::Base
 
   scope :list, -> { order(:created_at) }
 
-  validates_by_schema
+  validates_by_schema except: :invalid_recipient_ids
 
   def invoice_parameters
     invoice_item_attributes = invoice.invoice_items.collect { |item| item.attributes.compact }

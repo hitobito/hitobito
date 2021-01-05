@@ -80,10 +80,13 @@ describe Invoice::BatchCreate do
     expect(list).not_to be_persisted
   end
 
-  xit '#call does rollback if any save fails' do
-    list = InvoiceList.new(group: group)
-    list.recipient_ids = [person.id, other_person.id].join(',')
+  it '#call does not rollback if any save fails' do
+    Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group))
+    Subscription.create!(mailing_list: mailing_list,
+                         subscriber: group,
+                         role_types: [Group::TopGroup::Leader])
 
+    list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
     invoice = Invoice.new(title: 'invoice', group: group)
     invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)
     list.invoice = invoice
@@ -94,6 +97,7 @@ describe Invoice::BatchCreate do
 
     expect do
       Invoice::BatchCreate.new(list).call
-    end.not_to change { [group.invoices.count, group.invoice_items.count] }
+    end.to change { [group.invoices.count, group.invoice_items.count] }.by([1, 1])
+    expect((list.invalid_recipient_ids)).to have(1).item
   end
 end

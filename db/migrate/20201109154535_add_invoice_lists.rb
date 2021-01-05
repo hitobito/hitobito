@@ -17,6 +17,7 @@ class AddInvoiceLists < ActiveRecord::Migration[6.0]
       t.integer :recipients_total, default: 0, null: false
       t.integer :recipients_paid, default: 0, null: false
       t.integer :recipients_processed, default: 0, null: false
+      t.text :invalid_recipient_ids
       t.timestamps
     end
 

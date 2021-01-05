@@ -89,18 +89,26 @@ module FormHelper
     end
   end
 
-  def form_buttons(form, submit_label: ti(:"button.save"), cancel_url: nil, toolbar_class: nil,
-                          add_another: false, add_another_label: ti(:"button.add_another"),
-                          additional_buttons: '', multiple_submit: false)
-    button_toolbar(form, toolbar_class: toolbar_class) do
-      content = submit_button(form, submit_label, disable: !multiple_submit)
-      if add_another.present?
-        content << add_another_button(form, add_another_label, disable: !multiple_submit)
-      end
-      content << additional_buttons
-      content << cancel_link(cancel_url) if cancel_url.present?
-      content
+  def form_buttons(form, options = {})
+    button_toolbar(form, toolbar_class: options[:toolbar_class]) do
+      button_toolbar_content(form, options)
     end
+  end
+
+  def button_toolbar_content(form, options)
+    submit_label = options[:submit_label] || ti(:'button.save')
+    add_another = options[:add_another].eql?(true)
+    add_another_label = options[:add_another_label] || ti(:'button.add_another')
+    multiple_submit = options[:multiple_submit].eql?(true)
+    cancel_url = options[:cancel_url]
+
+    content = submit_button(form, submit_label, disable: !multiple_submit)
+    if add_another.present?
+      content << add_another_button(form, add_another_label, disable: !multiple_submit)
+    end
+    content << options[:additional_buttons]
+    content << cancel_link(cancel_url) if cancel_url.present?
+    content
   end
 
   def add_another_button(form, label, options = {})

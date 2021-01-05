@@ -16,7 +16,8 @@ module Export::Pdf::Messages::Letter
 
     def replace_placeholders(text, recipient)
       Export::Pdf::Messages::Letter::PLACEHOLDERS.each do |placeholder|
-        text = text.gsub(Regexp.new("\\{#{placeholder.to_s}\\}"), replacement(placeholder, recipient))
+        placeholder_regex = Regexp.new("\\{#{placeholder.to_s}\\}")
+        text = text.gsub(placeholder_regex, replacement(placeholder, recipient))
       end
       text
     end

@@ -44,8 +44,16 @@ class MailingList < ActiveRecord::Base
 
   has_many :mail_logs, through: :messages
   has_many :messages, dependent: :nullify, foreign_key: :recipients_source_id
-  has_many :text_messages, class_name: 'Messages::TextMessage', dependent: :nullify, foreign_key: :recipients_source_id
-  has_many :letters, class_name: 'Messages::Letter', dependent: :nullify, foreign_key: :recipients_source_id
+
+  has_many :text_messages,
+           class_name: 'Messages::TextMessage',
+           dependent: :nullify,
+           foreign_key: :recipients_source_id
+
+  has_many :letters,
+           class_name: 'Messages::Letter',
+           dependent: :nullify,
+           foreign_key: :recipients_source_id
 
   validates_by_schema
   validates :mail_name, uniqueness: { case_sensitive: false },

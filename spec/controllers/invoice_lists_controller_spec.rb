@@ -39,6 +39,27 @@ describe InvoiceListsController do
     end
   end
 
+  context 'index' do
+    render_views
+    let(:group) { groups(:top_layer) }
+    let(:node) { Capybara::Node::Simple.new(response.body) }
+    let(:column) { node.find('#main table tbody tr td:eq(3)') }
+
+    before { sign_in(people(:top_leader)) }
+
+    it 'renders processed and total Empfänger count' do
+      InvoiceList.create!(group: group, title: 'title', recipients_processed: 10, recipients_total: 20)
+      get :index, params: { group_id: group.id }
+      expect(column).to have_text("10 / 20")
+    end
+
+    it 'renders final Empfänger count' do
+      InvoiceList.create!(group: group, title: 'title', recipients_processed: 20, recipients_total: 20)
+      get :index, params: { group_id: group.id }
+      expect(column).to have_text("20")
+    end
+  end
+
   context 'parameter handling' do
     before { sign_in(person) }
 

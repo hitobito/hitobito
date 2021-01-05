@@ -7,6 +7,10 @@
 
 module InvoicesHelper
 
+  def format_invoice_list_recipients_total(invoice_list)
+    [invoice_list.recipients_processed, invoice_list.recipients_total].uniq.join(' / ')
+  end
+
   def format_invoice_list_amount_paid(invoice_list)
     invoice = invoice_list.invoice || invoice_list.group.invoices.build
     invoice.decorate.format_currency(invoice_list.amount_paid)

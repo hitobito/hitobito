@@ -319,6 +319,7 @@ ActiveRecord::Schema.define(version: 2020_12_22_123403) do
     t.integer "recipients_total", default: 0, null: false
     t.integer "recipients_paid", default: 0, null: false
     t.integer "recipients_processed", default: 0, null: false
+    t.text "invalid_recipient_ids"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["creator_id"], name: "index_invoice_lists_on_creator_id"

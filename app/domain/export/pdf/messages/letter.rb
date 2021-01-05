@@ -11,10 +11,8 @@ module Export::Pdf
     PLACEHOLDERS = %i[salutation first_name last_name]
 
     class Runner
-      def render(letter)
-        pdf = Prawn::Document.new(page_size: 'A4',
-                                  page_layout: :portrait,
-                                  margin: 2.cm)
+      def render(letter, opts)
+        pdf = Prawn::Document.new(render_opts(opts))
         customize(pdf)
         letter.message_recipients.each do |recipient|
           sections.each { |section| section.new(pdf, letter, self).render(recipient) }
@@ -37,6 +35,17 @@ module Export::Pdf
 
       private
 
+      def render_opts(opts)
+        image_dir = Rails.root.join('app', 'javascript', 'images')
+        background = opts.fetch(:preview, false) ? image_dir.join('preview.png') : ''
+        {
+          page_size: 'A4',
+          page_layout: :portrait,
+          margin: 2.cm,
+          background: background
+        }
+      end
+
       def customize(pdf)
         pdf.font_size 9
         pdf
@@ -52,7 +61,7 @@ module Export::Pdf
     self.runner = Runner
 
     def self.render(letter, opts={})
-      runner.new.render(letter)
+      runner.new.render(letter, opts)
     end
 
     def self.filename(letter, opts={})

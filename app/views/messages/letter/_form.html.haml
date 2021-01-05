@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form cancel_url: group_mailing_list_messages_path, buttons_top: false, multiple_submit: true do |f|
+= entry_form cancel_url: group_mailing_list_messages_path, buttons_top: false, buttons_bottom: entry.printed_at.nil?, multiple_submit: true do |f|
 
   -# Necessary because we modify the formaction on some of the submit buttons
   = hidden_field_tag :authenticity_token, form_authenticity_token
@@ -23,27 +23,34 @@
             = recipient.full_label
 
   #rich-text-editor-message-content
-    = f.labeled_rich_text_area :content, help: t('.available_placeholders', placeholders: letter_placeholders)
+    %div{ class: entry.printed_at.present? ? '' : 'hidden' }
+      = f.labeled :content do
+        .inline
+          = entry.content.to_s
+    %div{ class: entry.printed_at.nil? ? '' : 'hidden' }
+      = f.labeled_rich_text_area :content,
+                                 help: t('.available_placeholders', placeholders: letter_placeholders)
 
 
   - content_for :buttons_bottom do
+    .right
 
-    .btn-group
-      = button_tag(t('global.button.preview'),
-                   type: :submit,
-                   name: :preview,
-                   class: 'btn btn-secondary',
-                   formtarget: '_blank',
-                   formaction: preview_group_mailing_list_messages_path(format: :pdf, anchor: 'toolbar=0'))
+      .btn-group
+        = button_tag(t('global.button.preview'),
+                     type: :submit,
+                     name: :preview,
+                     class: 'btn btn-secondary',
+                     formtarget: '_blank',
+                     formaction: preview_group_mailing_list_messages_path(format: :pdf, anchor: 'toolbar=0'))
 
-    .btn-group
-      = button_tag(t('.finalize_and_print'),
-                   type: :submit,
-                   name: :print,
-                   class: 'btn btn-secondary',
-                   formtarget: '_blank',
-                   formaction: print_group_mailing_list_messages_path(format: :pdf),
-                   rel: :tooltip,
-                   'data-html' => 'true',
-                   'data-placement' => 'bottom',
-                   title: t('.finalize_and_print_notice'))
+      .btn-group
+        = button_tag(t('.finalize_and_print'),
+                     type: :submit,
+                     name: :print,
+                     class: 'btn btn-secondary',
+                     formtarget: '_blank',
+                     formaction: print_group_mailing_list_messages_path(format: :pdf, message_id: entry.id),
+                     rel: :tooltip,
+                     'data-html' => 'true',
+                     'data-placement' => 'bottom',
+                     title: t('.finalize_and_print_notice'))

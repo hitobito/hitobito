@@ -584,7 +584,10 @@ input.switcher {
   display: flex;
 
   .link.cancel {
-    margin-right: auto;
     padding: 5px 0;
+  }
+
+  .right {
+    margin-left: auto;
   }
 }

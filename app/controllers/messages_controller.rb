@@ -29,11 +29,14 @@ class MessagesController < ModalCrudController
   end
 
   def print
+    params[:id] = params[:message_id]
     assign_attributes
+    entry.set_message_recipients
+    entry.printed_at = DateTime.now
     if entry.new_record?
-      update { |format| format.pdf { render_letter_pdf(entry) } }
-    else
       create { |format| format.pdf { render_letter_pdf(entry) } }
+    else
+      update { |format| format.pdf { render_letter_pdf(entry) } }
     end
   end
 

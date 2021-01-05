@@ -69,10 +69,14 @@ module FormHelper
                    form.labeled_input_fields(*attrs)
                  end
 
-      if buttons_bottom
+      if buttons_bottom && content_for?(:buttons_bottom)
         buttons_bottom = content_for?(:buttons_bottom) ? content_for(:buttons_bottom) : ''
         content << form_buttons(form, form_button_options.merge(toolbar_class: 'bottom',
                                                                 additional_buttons: buttons_bottom))
+      elsif content_for?(:buttons_bottom)
+        content << button_toolbar(form, toolbar_class: 'bottom') do
+          content_for(:buttons_bottom)
+        end
       end
 
       content.html_safe

@@ -21,6 +21,7 @@
 
 class Message < ActiveRecord::Base
   belongs_to :recipients_source, polymorphic: true
+  has_one :mail_log, foreign_key: :message_id
   has_many :message_recipients
 
   attr_readonly :type

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 #  Copyright (c) 2020, CVP Schweiz. This file is part of
-#  hitobito_cvp and licensed under the Affero General Public License version 3
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_cvp.
+#  https://github.com/hitobito/hitobito.
 
 class MessagesController < ModalCrudController
 
@@ -49,6 +49,10 @@ class MessagesController < ModalCrudController
     else
       raise "invalid message type provided"
     end
+  end
+
+  def model_scope
+    recipients_source.messages.list.includes([:mail_log])
   end
 
   def find_entry(id=params[:id])

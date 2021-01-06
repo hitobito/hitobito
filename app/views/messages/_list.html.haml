@@ -9,6 +9,8 @@
   .pull-right
     = render 'shared/page_per_year', paging_params: { returning: true }
 
-= crud_table(:type, :subject) do |t|
+= crud_table(:type, :updated_at, :subject) do |t|
   - t.attr :state
-  - add_table_actions(t)
+  - action_col(t) do |e|
+    - if !e.is_a?(Messages::BulkMail)
+      - link_action_edit(action_path(e))

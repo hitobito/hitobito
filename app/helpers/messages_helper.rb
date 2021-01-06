@@ -22,6 +22,8 @@ module MessagesHelper
   end
 
   def format_message_state(message)
+    return format_bulk_mail_state(message) if message.is_a?(Messages::BulkMail)
+
     state_counts = message.message_recipients.group(:state).count
     type_mapping = { delivered: 'success', failed: 'important' }
     badges = []
@@ -35,6 +37,10 @@ module MessagesHelper
 
   def message_state_label(state, count)
     translate(".states.#{state}", count: count)
+  end
+
+  def format_bulk_mail_state(message)
+    format_mail_log_status(message.mail_log)
   end
 
 end

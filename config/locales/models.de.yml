@@ -214,9 +214,6 @@ de:
       label_format:
         one: Etikettenformat
         other: Etikettenformate
-      mail_log:
-        one: Verlauf
-        other: Verlauf
       mailing_list:
         one: Abo
         other: Abos
@@ -229,6 +226,9 @@ de:
       messages/text_message:
         one: SMS
         other: SMS
+      messages/bulk_mail:
+        one: E-Mail
+        other: E-Mail
       note:
         one: Notiz
         other: Notizen
@@ -636,6 +636,14 @@ de:
         public: Öffentlich
         mailings: Versand
 
+      mail_log:
+        statuses:
+          retreived: Wird gesendet
+          bulk_delivering: Wird gesendet
+          completed: Gesendet
+          sender_rejected: Absender abgelehnt
+          unkown_recipient: Fehler
+
       mailing_list:
         name: Name
         description: Beschreibung
@@ -658,23 +666,11 @@ de:
           partial: Teilweise
           failed: Fehlgeschlagen
         mailchimp_include_additional_emails: 'Alle Versandadressen synchronisieren'
-
-      mail_log:
-        updated_at: Bearbeitet am
-        mail_from: Absender
-        mail_subject: Betreff
-        status: Status
-        statuses:
-          retreived: Wird gesendet
-          bulk_delivering: Wird gesendet
-          completed: Gesendet
-          sender_rejected: Absender abgelehnt
-          unkown_recipient: Fehler
-
       message:
         subject: Betreff
         type: Typ
         state: Versand
+        updated_at: Bearbeitet am
 
       messages/letter:
         subject: Titel

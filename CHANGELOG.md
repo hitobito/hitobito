@@ -1,5 +1,7 @@
 # Hitobito Changelog
 
+## unreleased
+
 ## Version 1.22
 
 *  Tag Verwaltung unter Einstellungen
@@ -9,9 +11,6 @@
 *  Anlässe können den Teilnehmern erlauben, sich gegenseitig in der Teilnehmerliste zu sehen (#878)
 *  Personen / Duplikate zusammenführen (hitobito_cvp#23)
 *  Erstellen von Rechungen für Abonnenten von Abos
-
-## Version 1.22
-
 *  Bugfix: Vergangene Anlässe werden nicht mehr auf der Person angezeigt (#847)
 *  Verbesserung der Mailchimp Integration und am Rechnungsmodul
 *  Liste "Meine Abos" auf der Person (optional für jede hitobito-Instanz)

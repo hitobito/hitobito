@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -147,7 +147,9 @@ describe MailRelay::Base do
       end.to change { MailLog.count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: 'e63f22f5d97d8030174951265555794f')
-      expect(mail_log.mail_subject).to eq(simple.subject)
+      expect(mail_log.message.subject).to eq(simple.subject)
+      expect(mail_log.message.state).to eq('failed')
+      expect(mail_log.message.sent_at).to eq(mail_log.updated_at)
       expect(mail_log.mail_from).to eq(simple.from.first)
       expect(mail_log.status).to eq('sender_rejected')
     end
@@ -165,7 +167,9 @@ describe MailRelay::Base do
       end.to change { MailLog.count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: 'e63f22f5d97d8030174951265555794f')
-      expect(mail_log.mail_subject).to eq(simple.subject)
+      expect(mail_log.message.subject).to eq(simple.subject)
+      expect(mail_log.message.state).to eq('failed')
+      expect(mail_log.message.sent_at).to eq(mail_log.updated_at)
       expect(mail_log.mail_from).to eq(simple.from.first)
       expect(mail_log.status).to eq('unkown_recipient')
     end
@@ -220,7 +224,9 @@ describe MailRelay::Base do
       end.to change { MailLog.count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: 'e63f22f5d97d8030174951265555794f')
-      expect(mail_log.mail_subject).to eq(simple.subject)
+      expect(mail_log.message.subject).to eq(simple.subject)
+      expect(mail_log.message.state).to eq('finished')
+      expect(mail_log.message.sent_at).to eq(mail_log.updated_at)
       expect(mail_log.mail_from).to eq(simple.from.first)
       expect(mail_log.status).to eq('completed')
     end
@@ -238,7 +244,7 @@ describe MailRelay::Base do
       end.to change { MailLog.count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: 'e63f22f5d97d8030174951265555794f')
-      expect(mail_log.mail_subject).to eq("⛴ Unvergessliche Erlebnisse")
+      expect(mail_log.message.subject).to eq("⛴ Unvergessliche Erlebnisse")
       expect(mail_log.mail_from).to eq(simple.from.first)
       expect(mail_log.status).to eq('completed')
     end

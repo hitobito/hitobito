@@ -36,6 +36,18 @@ module MessagesHelper
     badge(message.state_label, type)
   end
 
+  def format_message_infos(message)
+    infos = []
+    if message.respond_to?(:mail_from) && message.mail_from
+      infos << t('messages.table.infos.sender', mail: message.mail_from)
+    end
+    if message.failed? && message.respond_to?(:mail_log)
+      mail_log_error_key = message.mail_log.status.to_s
+      infos <<  t("messages.table.infos.#{mail_log_error_key}")
+    end
+    infos.join(', ')
+  end
+
   def max_text_message_length
     Message::TextMessage.validators_on(:text).first.options[:maximum]
   end

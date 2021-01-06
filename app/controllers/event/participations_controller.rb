@@ -241,7 +241,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def directly_assign_place
     if event.waiting_list_available? && event.places_available? && !event.attr_used?(:priorization)
       assigner = Event::ParticipantAssigner.new(event, @participation)
-      assiger.add_participant if assigner.createable?
+      assigner.add_participant if assigner.createable?
     end
   end
 

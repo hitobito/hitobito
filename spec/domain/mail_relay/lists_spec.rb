@@ -128,6 +128,7 @@ describe MailRelay::Lists do
         subject.relay
         mail_log = MailLog.find_by(mail_hash: '129f1da58c247ed636624432a074611d')
         expect(mail_log.mailing_list).to eq(list)
+        expect(mail_log.mail_subject).to eq('Re: Jubla Gruppen')
         expect(mail_log.status).to eq('completed')
       end
 

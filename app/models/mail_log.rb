@@ -36,6 +36,7 @@ class MailLog < ActiveRecord::Base
     def build(mail)
       mail_log = new
       mail_log.mail = mail
+      mail_log.message = Messages::BulkMail.new(subject: mail.subject)
       mail_log
     end
 
@@ -54,9 +55,16 @@ class MailLog < ActiveRecord::Base
   end
 
   def mail=(mail)
-    self.mail_subject = mail.subject
     self.mail_from = Array(mail.from).first
     self.mail_hash = md5_hash(mail)
+  end
+
+  def mail_subject
+    message.subject
+  end
+
+  def mailing_list
+    message.recipients_source
   end
 
   private

@@ -5,6 +5,20 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# == Schema Information
+#
+# Table name: messages
+#
+#  id                       :integer          not null, primary key
+#  type                     :string(255)      not null
+#  recipients_source_id     :integer
+#  recipients_source_type   :string(255)
+#  subject                  :string(255)
+#  body                     :text
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  printed_at               :datetime
+
 class Message < ActiveRecord::Base
   belongs_to :recipients_source, polymorphic: true
   has_many :message_recipients

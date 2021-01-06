@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_23_131128) do
+ActiveRecord::Schema.define(version: 2021_01_05_120000) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "name", null: false
@@ -406,7 +406,6 @@ ActiveRecord::Schema.define(version: 2020_12_23_131128) do
 
   create_table "mail_logs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "mail_from"
-    t.string "mail_subject"
     t.string "mail_hash"
     t.integer "status", default: 0
     t.string "mailing_list_name"
@@ -458,6 +457,7 @@ ActiveRecord::Schema.define(version: 2020_12_23_131128) do
     t.string "subject"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "printed_at"
   end
 
   create_table "notes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

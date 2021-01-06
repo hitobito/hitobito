@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 #  Copyright (c) 2020, CVP Schweiz. This file is part of
-#  hitobito_cvp and licensed under the Affero General Public License version 3
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_cvp.
+#  https://github.com/hitobito/hitobito.
 
 class MigrateMailLog < ActiveRecord::Migration[6.0]
 
@@ -11,15 +11,18 @@ class MigrateMailLog < ActiveRecord::Migration[6.0]
     change_table :mail_logs do |t|
       t.belongs_to :message
     end
+    MailLog.reset_column_information
     subject_to_message
-    remove_column :mail_logs, :mailing_list_id
+    remove_columns :mail_logs, :mailing_list_id, :mail_subject
   end
 
   def down
-    subject_to_mail_log
+    add_column :mail_logs, :mail_subject, :string
     change_table :mail_logs do |t|
       t.belongs_to :mailing_list
     end
+    MailLog.reset_column_information
+    subject_to_mail_log
     remove_column :mail_logs, :message_id
   end
 
@@ -28,10 +31,11 @@ class MigrateMailLog < ActiveRecord::Migration[6.0]
   def subject_to_message
     MailLog.find_each do |l|
       message = Messages::BulkMail
-        .create!(mailing_list_id: l.mailing_list_id,
+        .create!(recipients_source_id: l.mailing_list_id,
+                 recipients_source_type: MailingList.sti_name,
                  subject: l.mail_subject,
                  mail_log: l)
-      l.update!(message: message, mail_subject: nil)
+      l.update!(message: message)
     end
   end
 

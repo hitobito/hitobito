@@ -10,4 +10,5 @@ class Messages::BulkMail < Message
 
   before_create :set_message_recipients
 
+
 end

@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.22
 
 *  Tag Verwaltung unter Einstellungen
 *  Anmeldungsfragen können auch nur eine Antwort haben (#1079)

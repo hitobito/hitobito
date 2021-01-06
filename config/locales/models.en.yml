@@ -51,10 +51,15 @@ en:
           attributes:
             choices:
               requires_more_than_one_choice: 'needs at least two picks'
+              requires_exactly_one_choice: 'must contain exactly one answer'
         event/participation:
           attributes:
             person_id:
               taken: is already registered
+        oauth/application:
+          attributes:
+            scopes:
+              not_match_configured: "do not match the ones configured on the server"
         person:
           name_missing: 'Please enter a name'
           attributes:
@@ -85,6 +90,14 @@ en:
           attributes:
             name:
               must_be_unique: 'already exists'
+        invoice_config:
+          attributes:
+            iban:
+              required: 'is required'
+            account_number:
+              required: 'is required'
+            payee:
+              to_long: 'is too long, may only have 2 lines'
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -113,6 +126,9 @@ en:
       event/kind:
         one: Course type
         other: Course types
+      event/role:
+        one: Role
+        other: Roles
       event/role/assistant_leader:
         one: Leader
         other: Leaders
@@ -140,6 +156,9 @@ en:
       group:
         one: Group
         other: Groups
+      help_text:
+        one: Helptext
+        other: Helptexts
       invoice:
         one: Invoice
         other: Invoices
@@ -149,15 +168,36 @@ en:
       invoice_config:
         one: Invoice setting
         other: Invoice settings
+      invoice_item:
+        one: Invoice Item
+        other: Invoice Items
       label_format:
         one: Label format
         other: Label formats
+      mail_log:
+        one: Log
+        other: Logs
       mailing_list:
         one: Subscription
         other: Subscriptions
       note:
         one: Note
         other: Notes
+      payment:
+        one: Payment
+        other: Payments
+      oauth/application:
+        one: OAuth application
+        other: OAuth applications
+      oauth/access_token:
+        one: OAuth access token
+        other: OAuth access tokens
+      oauth/access_grant:
+        one: OAuth access grant
+        other: OAuth access grants
+      payment_reminder:
+        one: payment reminder
+        other: payment reminders
       person:
         one: Person
         other: Persons
@@ -182,12 +222,18 @@ en:
       role:
         one: Role
         other: Roles
+      service_token:
+        one: API-Key
+        other: API-Keys
       social_account:
         one: Social Media
         other: Social Media
       subscription:
         one: Subscriber
         other: Subscribers
+      tag:
+        one: Tag
+        other: Tags
     attributes:
       cantons:
         ag: Aargau
@@ -274,12 +320,16 @@ en:
         phone_numbers: Phone numbers
         social_accounts: Social Media
         additional_emails: Further e-mails
+        layer_group: Level
         parent_id: Parents group
         layer_group_id: Level
         type: Group type
         type_name: Group type
+        description: Description
       event:
         group_ids: Groups
+        groups: groups
+        state: state
         name: Name
         number: Number
         motto: Motto
@@ -352,7 +402,7 @@ en:
       event/participation:
         person_id: Person
         event_id: Event
-        additional_information: Comments (general, health information, allergies, etc.)
+        additional_information: Comments
         answers: Questions
         created_at: Registration date
         roles: Role
@@ -378,6 +428,8 @@ en:
         participation: Person
       note:
         text: Text
+      oauth/application:
+        redirect_uri: redirect URIs
       people_relation:
         head_id: Person
         tail_id: Other person
@@ -506,6 +558,8 @@ en:
       invoice:
         state: State
       acts_as_taggable_on/tag:
+        taggings_count: Number
+        category: Category
         name: name
   errors:
     messages:

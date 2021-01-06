@@ -2,6 +2,7 @@ it:
   global:
     'yes': "Si"
     'no': "No"
+    ok: OK
     unknown: Sconosciuto
     nobody: nessuno
     all: Tutti
@@ -220,7 +221,6 @@ it:
     application_market:
       already_assigned: 'Questa persona è già assegnata da un''altra parte.'
       participation:
-        registered_at: 'iscrizione il %{date}'
         town: Domicilio
       prio_buttons:
         national_waitinglist: 'lista d''attesa nazionale'
@@ -330,15 +330,11 @@ it:
     default_description_link:
       insert_general_information: Inserire informazioni generali
     form:
-      caption_external_applications: 'esterni possono iscriversi a questo evento'
-      caption_prioritization: 'i partecipanti possono dare durante l''iscrizione due ulteriori corsi come alternative.'
-      caption_requires_approval: 'il responsabile verrà informato e dovrà confermare l''iscrizione'
       times_are_optional: Gli orari sono opzionali
-      explain_application_questions: qui puoi richiedere altri dati per l'iscrizione. Digita le risposte dividendole con una virgola oppure lascia il campo vuoto per rendere possibile qualunque risposta.
+      explain_application_questions: Qui potete richiedere ulteriori informazioni per la registrazione.
+      explain_choices: Lasciare vuoto per la risposta di testo libero, una o più opzioni di risposta (separate da virgole) per la selezione.
       explain_admin_questions: Qui per ogni partecipante puoi definire altri dati che vengono utilizzati solo per l'amministratzione del corso.
       explain_contact_attrs: Qui puoi scegliere quali dati di contatto devono essere chiesti al momento dell'iscrizione.
-      caption_applications_cancelable: I partecipanti si possono disiscrivere personalmente
-      caption_display_booking_info: Il numero di iscrizioni/posti è visibile a tutti sulla lista del corso
     form_tabs:
       general: In generale
       application_questions: Dati per l'iscrizione
@@ -436,6 +432,7 @@ it:
     entire_layer: 'livello intero'
     entire_group: 'tutto il gruppo'
     new_filter: 'Nuovo filtro...'
+    duplicates: 'Duplicati'
   filter_navigation/events:
     all: 'Tutti'
     layer: 'solo %{layer}'
@@ -753,6 +750,12 @@ it:
       title: Creare il tipo di qualifica
   paper_trail/version_decorator:
     by: 'da %{author}'
+  person_duplicates:
+    merge:
+      action: Merge
+    ignore:
+      new:
+        irreversible: Questo processo non può essere annullato!
   person:
     confirm_delete: "Tutti i dati relativi a %{person} vengono cancellati definitivamente, incl. partecipazioni e qualifiche. Cancella questa persona solo se nessuno ha ancora bisogno di queste informazioni."
     add_requests:
@@ -855,6 +858,11 @@ it:
         success: <i>%{person}</i> è stato iscritto/a a <i>%{mailing_list}</i>.
       destroy:
         success: <i>%{person}</i> è stata levata da <i>%{mailing_list}</i>.
+    tags:
+      tag:
+        category_validation:
+          email_primary_invalid: Email principale non valida
+          email_additional_invalid: Altre email non valida
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
     duplicate_keys:
@@ -907,6 +915,7 @@ it:
     actions_index:
       add_person: Aggiungere una persona
       import_list: Importare lista
+      person_duplicate_list: Duplicati
     add_requests:
       approve_title: 'Accettare la richiesta'
       reject_title: 'Rifiutare la richiesta'
@@ -987,6 +996,11 @@ it:
       smaller: più piccolo di
     tag:
       title: Tags
+      prompt_tag_selection: Includere le persone che contengono almeno uno dei tag qui sotto
+      prompt_tag_placeholder: Inserire i nomi dei tag desiderati
+    tag_absence:
+      prompt_tag_absence_selection: Escludere le persone che contengono almeno uno dei tag qui sotto
+      prompt_tag_absence_placeholder: Inserire i nomi dei tag desiderati
     new:
       title: Filtro per le persone
     range:
@@ -1078,6 +1092,12 @@ it:
       submit:
         one: 'Creare 1 ruoli'
         other: 'Creare %{count} ruoli '
+  tags:
+    multiselect_actions:
+      merge_tags: Merge
+    categories:
+      other: Altro
+      validation: Validazione
   tag_lists:
     destroy:
       success:
@@ -1166,6 +1186,14 @@ it:
     append_to_household: "è stato aggiunto all'economia domestica"
     household_updated: "L'economia domestica (%{object_changes}) è stata aggiornata"
     remove_from_household: "è stato rimosso dall'economia domestica"
+  tags/merge:
+    success: Le tag sono state fuse con successo.
+  tags_merge:
+    tags: Tags
+    title: I tag selezionati devono essere uniti?
+    name: Nuovo nome
+    submit: Merge
+    category: Categoria
   views:
     pagination:
       next: '>>'

@@ -2,6 +2,7 @@ fr:
   global:
     'yes': "oui"
     'no': "non"
+    ok: OK
     unknown: Inconnu
     nobody: personne
     all: Tous
@@ -220,7 +221,6 @@ fr:
     application_market:
       already_assigned: 'Cette personne est déjà attribuée à un autre endroit.'
       participation:
-        registered_at: 'Inscription le %{date}'
         town: Domicile
       prio_buttons:
         national_waitinglist: 'liste d''attente nationale'
@@ -330,15 +330,11 @@ fr:
     default_description_link:
       insert_general_information: Placer une description standard
     form:
-      caption_external_applications: 'Les personnes externes peuvent s''inscrire à cet événement.'
-      caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'
-      caption_requires_approval: 'Le responsable de troupe est informé et doit confirmer l''inscription.'
       times_are_optional: L'heure est optionnelle.
-      explain_application_questions: Tu peux demander des données supplémentaires pour l'inscription. Saisis les réponses possibles en les séparant avec une virgule, ou laisse le champ vierge pour permettre des réponses libres.
+      explain_application_questions: Ici, tu peux demander des informations supplémentaires pour les inscriptions.
+      explain_choices: Laissez vide pour la réponse en texte libre, une ou plusieurs options de réponse (séparées par des virgules) pour la sélection.
       explain_admin_questions: Tu peux définir des données supplémentaires pour chaque participant(e); elles ne seront utilisées que pour l'administration du cours.
       explain_contact_attrs: Tu peux choisir les coordonnées requises pour l'inscription.
-      caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
-      caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
     form_tabs:
       general: Général
       application_questions: Données pour l'inscription
@@ -436,6 +432,7 @@ fr:
     entire_layer: 'Tous les niveaux'
     entire_group: 'Tout le groupe'
     new_filter: 'Nouveau filtre…'
+    duplicates: 'Duplicatas'
   filter_navigation/events:
     all: 'Tous'
     layer: 'uniquement %{layer}'
@@ -754,6 +751,14 @@ fr:
       title: Créer une catégorie de qualification
   paper_trail/version_decorator:
     by: 'de %{author}'
+  person_duplicates:
+    merge:
+      new:
+        title: Merge une personne
+        irreversible: Cette opération est irréversible.
+    ignore:
+      new:
+        irreversible: Cette opération est irréversible.
   person:
     confirm_delete: "Toutes les données sur %{person} vont être définitivement effacées, y compris les participations et les qualifications. N'efface cette personne que si plus personne n'a besoin de ces données. "
     add_requests:
@@ -853,6 +858,11 @@ fr:
         success: <i>%{person}</i>a été inscrit-e à <i>%{mailing_list}</i>.
       destroy:
         success: <i>%{person}</i> a été désinscrit-e de <i>%{mailing_list}</i>.
+    tags:
+      tag:
+        category_validation:
+          email_primary_invalid: Adresse e-mail principale non valide
+          email_additional_invalid: Adresse e-mail supplémentaire non valide
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:
@@ -905,6 +915,7 @@ fr:
     actions_index:
       add_person: Ajouter une personne
       import_list: Importer une liste
+      person_duplicate_list: Duplicatas
     add_requests:
       approve_title: 'Accepter la requête'
       reject_title: 'Refuser la requête'
@@ -986,6 +997,11 @@ fr:
       smaller: plus petit que
     tag:
       title: Tags
+      prompt_tag_selection: Inclure les personnes qui contiennent au moins une des tags ci-dessous
+      prompt_tag_placeholder: Entrez les noms de tags souhaités
+    tag_absence:
+      prompt_tag_absence_selection: 'Exclure les personnes qui contiennent au moins une des tags ci-dessous '
+      prompt_tag_absence_placeholder: Entrez les noms de tags souhaités
     new:
       title: Filtrer les personnes
     range:
@@ -1077,6 +1093,12 @@ fr:
       submit:
         one: 'Créer un rôle'
         other: 'Créer %{count} rôles'
+  tags:
+    multiselect_actions:
+      merge_tags: Merge
+    categories:
+      other: Autre
+      validation: Validation
   tag_lists:
     destroy:
       success:
@@ -1107,6 +1129,8 @@ fr:
         add: Ajouter API-Key
   subscriber:
     group:
+      edit:
+        title: Modifier abonnés
       form:
         subgroups_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement peuvent être sélectionnés.'
         subgroups_and_siblings_selectable: 'Seuls des groupes à un niveau inférieur du groupe d''abonnement ou inférieur aux groupes voisins de type %{type} peuvent être sélectionnés.'
@@ -1165,6 +1189,14 @@ fr:
     append_to_household: "%{item} a été ajouté au ménage (%{object_changes})."
     household_updated: "Le foyer (%{object_changes}) a été actualisé."
     remove_from_household: "%{item} a été retiré du ménage (%{object_changes})."
+  tags/merge:
+    success: Les tags ont été fusionnés avec succès.
+  tags_merge:
+    tags: Tags
+    title: Faut-il fusionner les tags sélectionnés?
+    name: Nouveau nom
+    submit: Merge
+    category: catégorie
   views:
     pagination:
       next: '>>'

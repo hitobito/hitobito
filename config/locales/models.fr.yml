@@ -51,6 +51,7 @@ fr:
           attributes:
             choices:
               requires_more_than_one_choice: 'doit au moins contenir deux réponses'
+              requires_exactly_one_choice: 'doit contenir exactement une réponse'
         event/participation:
           attributes:
             person_id:
@@ -220,6 +221,9 @@ fr:
       person/add_request:
         one: Question
         other: Questions
+      person_duplicate:
+        one: Duplicata
+        other: Duplicatas
       people_filter:
         one: Filtre
         other: Filtres
@@ -247,6 +251,9 @@ fr:
       subscription:
         one: abonné
         other: Abonnés
+      tag:
+        one: Tag
+        other: Tags
     attributes:
       cantons:
         ag: Argovie
@@ -310,6 +317,10 @@ fr:
         tags: Tags
         created_at: Créé
         updated_at: Modifié
+      person_duplicate:
+        birth_year: Année
+        roles_list: Rôles
+        person_name: Prénom / Nom / Totem
       person/add_request:
         person: Personne
         requester: Question de
@@ -369,6 +380,7 @@ fr:
         applicant_count: Nombre d'inscriptions
         applications_cancelable: Désinscription possible
         display_booking_info: Voir l'état des inscriptions
+        participations_visible: Visibilité des participants
       event/contact_attrs:
         required: Obligatoire
         optional: Optionnel
@@ -735,6 +747,8 @@ fr:
         event_participations: Participants d'évènements de ce niveau
         mailing_lists: Abonné-e-s des mailing listes de ce niveau
       acts_as_taggable_on/tag:
+        taggings_count: Nombre
+        category: catégorie
         name: Nom
   doorkeeper:
     scopes:

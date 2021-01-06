@@ -196,7 +196,7 @@ module MailRelay
     end
 
     def bulk_mail
-      bulk_mail = BulkMail.new(message, envelope_sender, delivery_report_to, receivers)
+      bulk_mail = MailRelay::BulkMail.new(message, envelope_sender, delivery_report_to, receivers)
       bulk_mail.headers['Precedence'] = 'list'
       bulk_mail.headers['List-Id'] = list_id
       bulk_mail

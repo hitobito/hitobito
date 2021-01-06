@@ -13,6 +13,7 @@ describe Event::ApiFilter do
   let(:today)  { Date.today }
 
   before do
+    travel_to Time.zone.local(2020,7,1,12)
     @g1 = Fabricate(Group::TopGroup.name.to_sym, name: 'g1', parent: groups(:top_group))
     Fabricate(:event_date, event: Fabricate(:event, groups: [@g1]))
   end

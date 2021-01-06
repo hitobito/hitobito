@@ -7,7 +7,7 @@
   = Dropdown::Event::RoleAdd.new(self, @group, @event)
 
 - if can?(:create_invoices_from_list, @group)
-  = invoice_button(entries.collect(&:person))
+  = invoice_button(people: entries.collect(&:person))
 
 = dropdown_people_export(can?(:show_details, entries.first))
 

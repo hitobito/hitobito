@@ -5,6 +5,7 @@
 
 - title @group.to_s
 
+
 = content_for(:filter) do
   %div.toolbar-pills
     %ul.nav.nav-pills.group-pills
@@ -13,4 +14,5 @@
       %li.active
         = link_to(t('activerecord.models.person_duplicate.other'), group_person_duplicates_path(@group))
 
+= paginate entries
 = person_duplicates_table(entries)

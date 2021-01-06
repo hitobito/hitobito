@@ -4,13 +4,15 @@
 -#  https://github.com/hitobito/hitobito.
 
 - current_user.finance_groups.each do |group|
-  - if group == parent
+  - parent_group = parent.is_a?(InvoiceList) ? parent.group : group
+  - if group == parent_group
     .divider
-      = parent
-      = link_to icon('link'), parent, class: 'inline'
+      = group
+      = link_to icon('link'), group, class: 'inline'
     %ul
-      = nav Invoice.model_name.human(count: 2), group_invoices_path(parent), %w(invoices)
-      = nav InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(parent), %w(invoice_articles)
-      = nav t('navigation.admin'), group_invoice_config_path(parent), %w(invoice_config)
+      = nav Invoice.model_name.human(count: 2), group_invoices_path(group), %w(invoices)
+      = nav InvoiceList.model_name.human(count: 2), group_invoice_lists_path(group), %w(invoice_lists)
+      = nav InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(group), %w(invoice_articles)
+      = nav t('navigation.admin'), group_invoice_config_path(group), %w(invoice_config)
   - else
     = nav(group, group_invoices_path(group))

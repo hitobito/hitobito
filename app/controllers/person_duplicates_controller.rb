@@ -18,4 +18,8 @@ class PersonDuplicatesController < ListController
     authorize!(:manage_person_duplicates, group)
   end
 
+  def list_entries
+    super.list.distinct.page(params[:page]).per(20)
+  end
+
 end

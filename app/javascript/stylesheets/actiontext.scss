@@ -35,12 +35,8 @@
   }
 }
 
-trix-editor {
-  margin-bottom: 9px !important;
-
-  &+ .help-block {
-    margin-top: calc(0.25em - 9px) !important;
-  }
+trix-editor + .help-block {
+  margin-top: 0.25em !important;
 }
 
 // Remove the attachments button from the toolbar

@@ -621,7 +621,6 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_cvp!
   http_accept_language
   icalendar
   kaminari

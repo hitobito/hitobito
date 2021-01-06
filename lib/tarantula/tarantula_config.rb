@@ -112,7 +112,7 @@ module TarantulaConfig
     # tarantula posts number instead of filename which causes a 500 error
     t.allow_500_for(/groups\/\d+\/events\/\d+\/attachments/)
   end
-  # rubocop:enable MethodLength, Style/RegexpLiteral, Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength, Style/RegexpLiteral, Metrics/AbcSize
 
   # Creates a regexp that only allows the last, current and next year
   def outside_three_years_window

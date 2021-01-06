@@ -3,4 +3,4 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-$('#calculated').html('#{escape_javascript(render('calculated', invoice: entry.decorate))}')
+$('#calculated').html('#{escape_javascript(render('calculated', invoice: entry.invoice.decorate))}')

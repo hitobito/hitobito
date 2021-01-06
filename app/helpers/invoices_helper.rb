@@ -7,6 +7,20 @@
 
 module InvoicesHelper
 
+  def format_invoice_list_recipients_total(invoice_list)
+    [invoice_list.recipients_processed, invoice_list.recipients_total].uniq.join(' / ')
+  end
+
+  def format_invoice_list_amount_paid(invoice_list)
+    invoice = invoice_list.invoice || invoice_list.group.invoices.build
+    invoice.decorate.format_currency(invoice_list.amount_paid)
+  end
+
+  def format_invoice_list_amount_total(invoice_list)
+    invoice = invoice_list.invoice || invoice_list.group.invoices.build
+    invoice.decorate.format_currency(invoice_list.amount_total) if invoice
+  end
+
   def format_invoice_state(invoice)
     type = case invoice.state
            when /draft|cancelled/ then 'info'
@@ -37,9 +51,12 @@ module InvoicesHelper
     end
   end
 
-  def new_invoices_for_people_path(group, people)
-    ids = people.collect(&:id).join(',')
-    new_group_invoice_list_path(group, invoice: { recipient_ids: ids })
+  def invoice_button(people: [], mailing_list: nil, filter: nil)
+    Dropdown::InvoiceNew.new(self, {
+      people: people,
+      mailing_list: mailing_list,
+      filter: filter
+    }).button_or_dropdown
   end
 
   def invoices_export_dropdown
@@ -50,8 +67,8 @@ module InvoicesHelper
     Dropdown::Invoices.new(self, params, :print).print
   end
 
-  def invoice_sending_dropdown(path_meth)
-    Dropdown::InvoiceSending.new(self, params, path_meth)
+  def invoice_sending_dropdown
+    Dropdown::InvoiceSending.new(self, params)
   end
 
   def invoice_history(invoice)

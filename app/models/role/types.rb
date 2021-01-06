@@ -8,7 +8,7 @@
 module Role::Types
   extend ActiveSupport::Concern
 
-  # rubocop:disable Style/ConstantName,Style/MutableConstant Keep mutable to enable extension
+  # rubocop:disable Naming/ConstantName,Style/MutableConstant Keep mutable to enable extension
 
   # All possible permissions
   Permissions = [:admin,
@@ -24,7 +24,7 @@ module Role::Types
 
   Kinds = [:member, :passive, :external]
 
-  # rubocop:enable Style/ConstantName,Style/MutableConstant
+  # rubocop:enable Naming/ConstantName,Style/MutableConstant
 
   included do
     class_attribute :permissions, :visible_from_above, :kind

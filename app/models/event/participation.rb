@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -112,12 +112,20 @@ class Event::Participation < ActiveRecord::Base
 
     (application || build_application).tap do |appl|
       appl.priority_1 = event
+      if directly_to_waiting_list?(event)
+        appl.waiting_list = true
+        appl.waiting_list_comment = I18n.t('event/applications.directly_to_waiting_list')
+      end
     end
   end
 
   def applying_participant?
     first_role_class = roles.first&.class
     event.supports_applications && (application_id || first_role_class&.participant?)
+  end
+
+  def waiting_list?
+    application&.waiting_list? || false
   end
 
   private
@@ -135,5 +143,9 @@ class Event::Participation < ActiveRecord::Base
 
   def update_participant_count
     event.refresh_participant_counts!
+  end
+
+  def directly_to_waiting_list?(event)
+    !event.places_available? && event.waiting_list_available?
   end
 end

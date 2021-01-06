@@ -3,13 +3,16 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= form_tag nil, class: 'form-inline', style: 'margin-bottom: 10px;', method: :get do
-  .btn-group{data_toggle: 'buttons-checkbox'}
-    = render 'prio_check', prio: 1
-    = render 'prio_check', prio: 2
-    = render 'prio_check', prio: 3
-    %label.checkbox
-      = check_box_tag :waiting_list, true, params[:waiting_list]
-      = t('.national_waitinglist')
+- if event.attr_used?(:priorization) || event.attr_used?(:waiting_list)
+  = form_tag nil, class: 'form-inline', style: 'margin-bottom: 10px;', method: :get do
+    .btn-group{data_toggle: 'buttons-checkbox'}
+      - if event.attr_used?(:priorization)
+        = render 'prio_check', prio: 1
+        = render 'prio_check', prio: 2
+        = render 'prio_check', prio: 3
+      - if event.attr_used?(:waiting_list)
+        %label.checkbox
+          = check_box_tag :waiting_list, true, params[:waiting_list]
+          = t('.national_waitinglist')
 
-  = submit_tag t('global.button.refresh'), class: 'btn btn-small'
+    = submit_tag t('global.button.refresh'), class: 'btn btn-small'

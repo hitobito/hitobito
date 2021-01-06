@@ -16,10 +16,22 @@ describe InvoiceConfig do
   describe 'payment_slip dependent validations' do
     subject { Fabricate(Group::BottomLayer.sti_name, id: 1).reload.invoice_config }
 
+    it 'qr' do
+      subject.payment_slip = 'qr'
+      expect(subject).not_to be_valid
+      expect(subject.errors.keys).to eq [:payee, :iban]
+    end
+
+    it 'no_ps' do
+      subject.payment_slip = 'no_ps'
+      expect(subject).not_to be_valid
+      expect(subject.errors.keys).to eq [:payee]
+    end
+
     it 'ch_es' do
       subject.payment_slip = 'ch_es'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :iban]
+      expect(subject.errors.keys).to eq [:payee]
     end
 
     it 'ch_esr' do
@@ -31,7 +43,7 @@ describe InvoiceConfig do
     it 'ch_bes' do
       subject.payment_slip = 'ch_bes'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :beneficiary, :iban]
+      expect(subject.errors.keys).to eq [:payee, :beneficiary]
     end
 
     it 'ch_besr' do
@@ -40,17 +52,6 @@ describe InvoiceConfig do
       expect(subject.errors.keys).to eq [:payee, :beneficiary, :participant_number, :participant_number_internal]
     end
 
-    it 'no_ps' do
-      subject.payment_slip = 'no_ps'
-      expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :iban]
-    end
-
-    it 'qr' do
-      subject.payment_slip = 'qr'
-      expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :iban]
-    end
   end
 
   it 'validates correct payee format'

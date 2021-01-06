@@ -27,7 +27,6 @@ module Dropdown
         end
       end
 
-
       def initialize(template, group, event, label, icon, url_options = {})
         super(template, label, icon)
         @group = group

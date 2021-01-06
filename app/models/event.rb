@@ -45,6 +45,11 @@
 #  display_booking_info        :boolean          default(TRUE), not null
 #
 
+# An event is any single or multi-day event that has participants and a
+# leader-team. This could be anything from an internal team-meeting to a
+# externally available information event for interested people.
+#
+# The same event may be attached to multiple groups of the same kind.
 class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # This statement is required because these classes would not be loaded correctly otherwise.
@@ -107,11 +112,13 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   has_many :attachments, dependent: :destroy
 
-  has_many :dates, -> { order(:start_at) }, dependent: :destroy, validate: true
+  has_many :dates, -> { order(:start_at) }, dependent: :destroy, validate: true, inverse_of: :event
   has_many :questions, dependent: :destroy, validate: true
 
-  has_many :application_questions, -> { where(admin: false) }, class_name: 'Event::Question'
-  has_many :admin_questions, -> { where(admin: true) }, class_name: 'Event::Question'
+  has_many :application_questions, -> { where(admin: false) },
+           class_name: 'Event::Question', inverse_of: :event
+  has_many :admin_questions, -> { where(admin: true) },
+           class_name: 'Event::Question', inverse_of: :event
 
   has_many :participations, dependent: :destroy
   has_many :people, through: :participations
@@ -181,8 +188,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     # Event with start and end-date overlay
     def between(start_date, end_date)
       joins(:dates).
-        where('event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date
-              OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date',
+        where('event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date ' \
+              'OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date',
               start_date: start_date, end_date: end_date).distinct
     end
 
@@ -280,9 +287,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # May participants apply now?
   def application_possible?
-    (!application_opening_at? || application_opening_at <= Time.zone.today) &&
-    (!application_closing_at? || application_closing_at >= Time.zone.today) &&
-    (maximum_participants.to_i.zero? || participant_count < maximum_participants)
+    application_period_open? && (places_available? || waiting_list_available?)
   end
 
   def init_questions
@@ -311,7 +316,24 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
   end
 
+  def attr_used?(attr)
+    self.class.used_attributes.include?(attr)
+  end
+
+  def places_available?
+    maximum_participants.to_i.zero? || participant_count < maximum_participants
+  end
+
+  def waiting_list_available?
+    self.class.supports_applications && attr_used?(:waiting_list) && waiting_list?
+  end
+
   private
+
+  def application_period_open?
+    (!application_opening_at? || application_opening_at <= Time.zone.today) &&
+    (!application_closing_at? || application_closing_at >= Time.zone.today)
+  end
 
   def assert_type_is_allowed_for_groups
     master = groups.try(:first)
@@ -338,9 +360,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def valid_contact_attr?(attr)
-    (ParticipationContactData.contact_attrs +
-      ParticipationContactData.contact_associations).
-      map(&:to_s).include?(attr.to_s)
+    (
+      ParticipationContactData.contact_attrs +
+      ParticipationContactData.contact_associations
+    ).map(&:to_s).include?(attr.to_s)
   end
 
   def assert_required_contact_attrs_valid
@@ -350,6 +373,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
              map(&:to_s).exclude?(a)
         errors.add(:base, :contact_attr_invalid, attribute: a)
       end
+
       if hidden_contact_attrs.include?(a)
         errors.add(:base, :contact_attr_hidden_required, attribute: a)
       end

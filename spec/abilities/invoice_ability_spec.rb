@@ -90,4 +90,28 @@ describe InvoiceAbility do
       end
     end
   end
+
+  context 'InvoiceList' do
+
+    def invoice_list(group, abo_group)
+      InvoiceList.new(group: groups(group), receiver: groups(abo_group).mailing_lists.build)
+    end
+
+    def ability(role)
+      Ability.new(roles(role).person)
+    end
+
+    it 'top_leader may work only with abos in his layer' do
+      expect(ability(:top_leader)).to be_able_to(:create, invoice_list(:top_layer, :top_layer))
+      expect(ability(:top_leader)).to be_able_to(:create, invoice_list(:top_layer, :top_group))
+      expect(ability(:top_leader)).not_to be_able_to(:create, invoice_list(:top_layer, :bottom_layer_one))
+    end
+
+    it 'bottom_member may work only with abos in his layer' do
+      expect(ability(:bottom_member)).to be_able_to(:create, invoice_list(:bottom_layer_one, :bottom_layer_one))
+      expect(ability(:bottom_member)).not_to be_able_to(:create, invoice_list(:bottom_layer_one, :top_group))
+      expect(ability(:bottom_member)).not_to be_able_to(:create, invoice_list(:bottom_layer_one, :top_layer))
+    end
+  end
+
 end

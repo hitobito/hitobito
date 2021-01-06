@@ -46,7 +46,7 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
-  config.backtrace_exclusion_patterns = [/lib\/rspec/]
+  config.backtrace_exclusion_patterns = [/lib\/rspec/, /asdf/]
   config.example_status_persistence_file_path = Rails.root.join('tmp', 'examples.txt').to_s
 
   config.include(MailerMacros)
@@ -115,6 +115,10 @@ RSpec.configure do |config|
     FileUtils.mkdir_p(dir)
     printer = RubyProf::CallStackPrinter.new(result)
     printer.print(File.open(filename, 'w'))
+  end
+
+  RSpec.configure do |config|
+    config.include ActiveSupport::Testing::TimeHelpers
   end
 
   unless RSpec.configuration.exclusion_filter[:type] == 'feature'

@@ -9,11 +9,13 @@ de:
       time: "%H:%M"
       date_time: "%d.%m.%Y %H:%M"
       month_year: '%B %Y'
+
   date:
     formats:
       default: ! '%d.%m.%Y'
       long: ! '%e %B %Y'
       short: ! '%e %b'
+
   number:
     currency:
       format:
@@ -206,6 +208,9 @@ de:
       invoice_item:
         one: Rechnungsposten
         other: Rechnungsposten
+      invoice_list:
+        one: Sammelrechnung
+        other: Sammelrechnungen
       label_format:
         one: Etikettenformat
         other: Etikettenformate
@@ -419,6 +424,8 @@ de:
         applications_cancelable: Abmeldung möglich
         display_booking_info: Anzeige Anmeldestand
         participations_visible: Teilnehmersichtbarkeit
+        waiting_list: Warteliste
+        requires_approval: Empfehlung nötig
 
       event/contact_attrs:
         required: Obligatorisch
@@ -810,6 +817,15 @@ de:
         cost_center: Kostenstelle
         account: Konto
 
+
+      invoice_list:
+        title: Titel
+        receiver: Empfänger
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
+
       # used for nested attributes
       invoice_items:
         name: Name
@@ -867,6 +883,7 @@ de:
       name: Lesen deiner E-Mail Adresse und Name
       with_roles: Lesen deiner Stammdaten und Rollen
       openid: Lesen deines OIDC Identity Tokens
+
   errors:
     messages:
       attachments_not_allowed: "darf keine Anhänge enthalten"

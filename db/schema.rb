@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_05_120000) do
+ActiveRecord::Schema.define(version: 2020_12_22_123403) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "name", null: false
@@ -235,6 +235,7 @@ ActiveRecord::Schema.define(version: 2021_01_05_120000) do
     t.text "hidden_contact_attrs", size: :medium
     t.boolean "display_booking_info", default: true, null: false
     t.boolean "participations_visible", default: false, null: false
+    t.boolean "waiting_list", default: true, null: false
     t.index ["kind_id"], name: "index_events_on_kind_id"
   end
 
@@ -336,6 +337,25 @@ ActiveRecord::Schema.define(version: 2021_01_05_120000) do
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
   end
 
+  create_table "invoice_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "receiver_type"
+    t.bigint "receiver_id"
+    t.bigint "group_id"
+    t.bigint "creator_id"
+    t.string "title", null: false
+    t.decimal "amount_total", precision: 15, scale: 2, default: "0.0", null: false
+    t.decimal "amount_paid", precision: 15, scale: 2, default: "0.0", null: false
+    t.integer "recipients_total", default: 0, null: false
+    t.integer "recipients_paid", default: 0, null: false
+    t.integer "recipients_processed", default: 0, null: false
+    t.text "invalid_recipient_ids"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "index_invoice_lists_on_creator_id"
+    t.index ["group_id"], name: "index_invoice_lists_on_group_id"
+    t.index ["receiver_type", "receiver_id"], name: "index_invoice_lists_on_receiver_type_and_receiver_id"
+  end
+
   create_table "invoices", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title", null: false
     t.string "sequence_number", null: false
@@ -366,8 +386,10 @@ ActiveRecord::Schema.define(version: 2021_01_05_120000) do
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
     t.string "reference", null: false
+    t.bigint "invoice_list_id"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
+    t.index ["invoice_list_id"], name: "index_invoices_on_invoice_list_id"
     t.index ["recipient_id"], name: "index_invoices_on_recipient_id"
     t.index ["sequence_number"], name: "index_invoices_on_sequence_number"
   end
@@ -588,7 +610,9 @@ ActiveRecord::Schema.define(version: 2021_01_05_120000) do
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["email"], name: "index_people_on_email", unique: true
     t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true
+    t.index ["first_name"], name: "index_people_on_first_name"
     t.index ["household_key"], name: "index_people_on_household_key"
+    t.index ["last_name"], name: "index_people_on_last_name"
     t.index ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_people_on_unlock_token", unique: true
   end

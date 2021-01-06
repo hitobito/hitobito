@@ -169,6 +169,7 @@ class Person < ActiveRecord::Base
   before_validation :override_blank_email
   before_validation :remove_blank_relations
   before_destroy :destroy_roles
+  before_destroy :destroy_person_duplicates
 
   ### Scopes
 
@@ -313,6 +314,10 @@ class Person < ActiveRecord::Base
     Oauth::Application.where(id: application_ids)
   end
 
+  def person_duplicates
+    PersonDuplicate.where(person_1: id).or(PersonDuplicate.where(person_2: id))
+  end
+
   private
 
   def override_blank_email
@@ -337,6 +342,10 @@ class Person < ActiveRecord::Base
   # dependent: :destroy does not work here, because roles are paranoid.
   def destroy_roles
     roles.with_deleted.delete_all
+  end
+
+  def destroy_person_duplicates
+    person_duplicates.delete_all
   end
 
 end

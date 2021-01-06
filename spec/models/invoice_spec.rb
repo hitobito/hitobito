@@ -101,37 +101,6 @@ describe Invoice do
     expect(invoice.total).to eq(1.5)
   end
 
-  it '#recipients loads people from recipient_ids' do
-    invoice = Invoice.new(title: 'invoice', group: group)
-    invoice.recipient_ids = "2,b,#{person.id},c,"
-    expect(invoice.recipients).to eq [person]
-  end
-
-  it '#multi_create creates invoices for multiple recipients' do
-    invoice = Invoice.new(title: 'invoice', group: group)
-    invoice.recipient_ids = [person.id, other_person.id].join(',')
-    invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)
-    invoice.invoice_items.build(name: 'pins', unit_cost: 0.5, count: 2)
-
-    expect do
-      invoice.multi_create
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([2, 4])
-  end
-
-  it '#multi_create does rollsback if any save fails' do
-    invoice = Invoice.new(title: 'invoice', group: group)
-    invoice.recipient_ids = [person.id, other_person.id].join(',')
-    invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)
-
-    allow_any_instance_of(Invoice).to receive(:save).and_wrap_original do |m|
-      @saved = @saved ? false : m.call
-    end
-
-    expect do
-      invoice.multi_create
-    end.not_to change { [group.invoices.count, group.invoice_items.count] }
-  end
-
   it '#to_s returns total amount' do
     invoice = invoices(:invoice)
     expect(invoice.to_s).to eq "Invoice(#{invoice.sequence_number}): 5.35"
@@ -166,17 +135,17 @@ describe Invoice do
     end
 
     it 'sets esr without blanks for qr invoice with qr iban' do
-      expect(create_invoice(payment_slip: :qr, iban: qr_iban).reference).to eq esr_without_blanks
+      group.invoice_config.update(payment_slip: :qr, iban: qr_iban)
+      expect(create_invoice.reference).to eq esr_without_blanks
     end
 
     it 'sets cors for qr invoice without qr iban' do
-      expect(create_invoice(payment_slip: :qr, iban: iban).reference).to eq 'RF29834963567Z1'
+      group.invoice_config.update(payment_slip: :qr, iban: iban)
+      expect(create_invoice.reference).to eq 'RF29834963567Z1'
     end
   end
 
   context 'state changes' do
-    include ActiveSupport::Testing::TimeHelpers
-
     let(:now)     { Time.zone.parse('2017-09-18 14:00:00') }
     let(:invoice) { invoices(:invoice) }
     before        { travel_to(now) }
@@ -281,8 +250,6 @@ describe Invoice do
   end
 
   context '.draft_or_issued_in' do
-    include ActiveSupport::Testing::TimeHelpers
-
     let(:today)   { Time.zone.parse('2019-12-16 10:00:00') }
     let(:invoice) { invoices(:invoice) }
     let(:issued)  { invoices(:sent) }

@@ -9,7 +9,7 @@ class People::DuplicateLocatorJob < RecurringJob
   run_every 1.day
 
   def perform
-    People::DuplicateLocator.run
+    People::DuplicateLocator.new.run
   end
 
 end

@@ -16,6 +16,9 @@
   - entry.used?(:priorization) do
     = f.labeled_boolean_field(:priorization, caption: t('events.form.caption_prioritization'))
 
+  - entry.used?(:waiting_list) do
+    = f.labeled_boolean_field(:waiting_list, caption: t('events.form.caption_waiting_list'))
+
   - application_approve_role_exists? && entry.used?(:requires_approval) do
     = f.labeled_boolean_field(:requires_approval, caption: t('events.form.caption_requires_approval'))
 

@@ -1,4 +1,4 @@
-# rubocop:disable Attr
+# rubocop:disable Style/Attr
 
 #  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

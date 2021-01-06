@@ -63,9 +63,9 @@ class Invoice::Qrcode
 
   def additional_infos
     {
-      purpose: @invoice.payment_purpose.to_s.truncate(60),
+      purpose: @invoice.payment_purpose.to_s.gsub("\n", " ").truncate(120),
       trailer: 'EPD',
-      infos: @invoice.payment_information.to_s.truncate(60)
+      infos: nil
     }
   end
 

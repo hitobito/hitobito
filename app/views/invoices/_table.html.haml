@@ -5,7 +5,7 @@
   - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
     - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
   - t.col(t.sort_header(:title)) do |invoice|
-    %strong= link_to invoice.title, group_invoice_path(parent, invoice)
+    %strong= link_to invoice.title, group_invoice_path(invoice.group_id, invoice)
   - t.sortable_attrs(:sequence_number, :state, :recipient, :issued_at, :sent_at, :due_at)
   - t.col(t.sort_header(:total), class: 'right') { |i| i.decorate.total }
 

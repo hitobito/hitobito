@@ -57,15 +57,18 @@ Hitobito::Application.routes.draw do
 
       resources :settings, only: [:index, :edit, :update], controller: 'group_settings', as: 'group_settings'
 
-      resource :invoice_list, except: [:edit]
-      resource :invoice_config, only: [:edit, :show, :update]
-
       resources :invoices do
         resources :payments, only: :create
       end
       resources :invoice_articles
+      resource :invoice_config, only: [:edit, :show, :update]
 
+      resource :invoice_list, except: [:edit, :show]
+      resources :invoice_lists, only: [:index] do
+        resources :invoices, only: [:index]
+      end
       resource :payment_process, only: [:new, :show, :create]
+
       resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do
@@ -78,7 +81,6 @@ Hitobito::Application.routes.draw do
           get 'log' => 'person/log#index'
           get 'colleagues' => 'person/colleagues#index'
           get 'invoices' => 'person/invoices#index'
-
         end
 
         resources :notes, only: [:create, :destroy]
@@ -94,7 +96,6 @@ Hitobito::Application.routes.draw do
           delete 'impersonate' => 'impersonation#destroy'
           get 'households' => 'households#new'
         end
-
       end
 
       resources :person_duplicates, only: [:index] do

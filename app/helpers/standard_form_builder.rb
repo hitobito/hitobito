@@ -220,7 +220,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Use additional html_options for the select element.
   # To pass a custom element list, specify the list with the :list key or
   # define an instance variable with the pluralized name of the association.
-  def has_many_field(attr, html_options = {}) # rubocop:disable PredicateName
+  def has_many_field(attr, html_options = {}) # rubocop:disable Naming/PredicateName
     html_options[:multiple] = true
     html_options[:class] ||= 'span6'
     add_css_class(html_options, 'multiselect')

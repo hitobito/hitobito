@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -37,7 +37,7 @@ class EventDecorator < ApplicationDecorator
   end
 
   def booking_info
-    if maximum_participants.to_i > 0
+    if maximum_participants.to_i.positive?
       translate(:participants_info_with_limit, count: applicant_count,
                                                limit: maximum_participants.to_i)
     else

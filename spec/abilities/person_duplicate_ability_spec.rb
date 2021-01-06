@@ -44,6 +44,15 @@ describe PersonDuplicateAbility do
 
       is_expected.not_to be_able_to(:merge, duplicate_entry)
     end
+
+    it 'may not merge if duplicate entry ignored' do
+      duplicate_entry.update!(ignore: true)
+      @role = Fabricate('Group::BottomLayer::Leader', group: bottom_layer_one)
+      Fabricate('Group::BottomLayer::Member', group: bottom_layer_two, person: user)
+
+      is_expected.not_to be_able_to(:merge, duplicate_entry)
+    end
+
   end
 
   context :ignore do

@@ -13,6 +13,8 @@ class PersonDuplicate < ActiveRecord::Base
   belongs_to :person_1, class_name: 'Person'
   belongs_to :person_2, class_name: 'Person'
 
+  scope :list, -> { where(ignore: false).order(:created_at) }
+
   before_save :assign_persons_sorted_by_id
   # Sorting by id to only allow a single PersonDuplicate entry per Person combination
   def assign_persons_sorted_by_id

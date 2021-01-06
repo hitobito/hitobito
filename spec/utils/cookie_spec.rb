@@ -6,8 +6,6 @@
 require 'spec_helper'
 
 describe Cookie do
-  include ActiveSupport::Testing::TimeHelpers
-
   let(:cookie_jar) { ActionDispatch::Request.new({}).cookie_jar }
   let(:value)      { JSON.parse(cookie_jar[:cookie]) }
   let(:subject)    { described_class.new(cookie_jar, 'cookie', [:name]) }

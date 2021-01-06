@@ -280,7 +280,7 @@ de:
     application_market:
       already_assigned: 'Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet.'
       participation:
-        registered_at: 'Anmeldung am %{date}'
+        registered_at: 'Anmeldung am %{datetime}'
         town: Wohnort
       prio_buttons:
         national_waitinglist: 'nationale Warteliste'
@@ -387,7 +387,6 @@ de:
         event_search: Anlass Suchen...
         submit: Hinzufügen
 
-
   events:
     application_fields:
       caption_signature: Teilnehmer/-innen müssen die Anmeldung unterschreiben
@@ -398,10 +397,10 @@ de:
     default_description_link:
       insert_general_information: Standardbeschreibung einsetzen
     form:
-      caption_external_applications: 'Externe können sich für diesen Anlass anmelden'
-      caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben'
-      caption_requires_approval: 'Der/Die Gruppenleiter/-in wird informiert und muss die Anmeldung bestätigen'
-      caption_participations_visible: 'Teilnehmende können sich gegenseitig in der Teilnehmerliste sehen'
+      caption_external_applications: 'Externe können sich für diesen Anlass anmelden.'
+      caption_prioritization: 'Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben.'
+      caption_requires_approval: 'Der/Die Gruppenleiter/-in wird informiert und muss die Anmeldung bestätigen.'
+      caption_participations_visible: 'Teilnehmende können sich gegenseitig in der Teilnehmerliste sehen.'
       times_are_optional: Uhrzeiten sind optional
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
       explain_choices: Leer lassen für Freitextantwort, eine oder mehrere Antwortmöglichkeiten (mit Komma getrennt) für Auswahl.
@@ -409,8 +408,9 @@ de:
         welche nur für die Kursadministration verwendet werden.
       explain_contact_attrs: Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung
         abgefragt werden sollen.
-      caption_applications_cancelable: Teilnehmende können sich selbst abmelden
-      caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar
+      caption_applications_cancelable: Teilnehmende können sich selbst abmelden.
+      caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar.
+      caption_waiting_list: Wenn keine Plätze mehr frei sind, landen neue Anmeldungen automatisch auf der Warteliste.
     form_tabs:
       general: Allgemein
       application_questions: Anmeldeangaben
@@ -433,6 +433,7 @@ de:
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'
     rejected: 'Die Anmeldung wurde abgelehnt.'
+    directly_to_waiting_list: 'Es sind alle Plätze belegt, daher ist die Anmeldung direkt auf der Warteliste.'
 
   event/application_decorator:
     approval:
@@ -452,6 +453,7 @@ de:
     success: '%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
     instructions: 'Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    waiting_list: 'Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste.'
 
     show:
       link:
@@ -687,6 +689,7 @@ de:
     create:
       one: "Rechnung <i>%{title}</i> wurde erstellt."
       other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+    create_batch: "Rechnung <i>%{title}</i> wird für %{count} Empfänger im Hintergrund erstellt."
     update:
       zero: 'Es muss mindestens eine Rechnung ausgewählt werden.'
       model_error: "Rechnung %{number} ist ungültig - %{error}."

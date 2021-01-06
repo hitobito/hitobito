@@ -8,8 +8,6 @@
 require 'spec_helper'
 
 describe InvoicesController do
-  include ActiveSupport::Testing::TimeHelpers
-
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
   let(:invoice) { invoices(:invoice) }
@@ -43,6 +41,7 @@ describe InvoicesController do
 
   context 'index' do
     it 'GET#index finds invoices by title' do
+      update_issued_at_to_current_year
       get :index, params: { group_id: group.id, q: 'Invoice' }
       expect(assigns(:invoices)).to have(1).item
     end
@@ -53,6 +52,7 @@ describe InvoicesController do
     end
 
     it 'GET#index finds invoices by recipient.last_name' do
+      update_issued_at_to_current_year
       get :index, params: { group_id: group.id, q: people(:top_leader).last_name }
       expect(assigns(:invoices)).to have(2).item
     end
@@ -88,11 +88,13 @@ describe InvoicesController do
     end
 
     it 'ignores page param when passing in ids' do
+      update_issued_at_to_current_year
       get :index, params: { group_id: group.id, ids: Invoice.pluck(:id).join(','), page: 2 }
       expect(assigns(:invoices)).to have(2).items
     end
 
     it 'exports pdf' do
+      update_issued_at_to_current_year
       get :index, params: { group_id: group.id }, format: :pdf
       expect(response.header['Content-Disposition']).to match(/rechnungen.pdf/)
       expect(response.media_type).to eq('application/pdf')
@@ -104,12 +106,14 @@ describe InvoicesController do
     end
 
     it 'exports pdf' do
+      update_issued_at_to_current_year
       get :index, params: { group_id: group.id }, format: :csv
       expect(response.header['Content-Disposition']).to match(/rechnungen.csv/)
       expect(response.media_type).to eq('text/csv')
     end
 
     it 'renders json' do
+      update_issued_at_to_current_year
       get :index, params: { group_id: group.id }, format: :json
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:current_page]).to eq 1
@@ -235,4 +239,10 @@ describe InvoicesController do
     end
   end
 
+  def update_issued_at_to_current_year
+    sent = invoices(:sent)
+    if sent.issued_at.year != Date.today.year
+      sent.update(issued_at: Date.today.beginning_of_year)
+    end
+  end
 end

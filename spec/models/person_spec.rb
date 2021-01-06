@@ -640,4 +640,18 @@ describe Person do
     end
   end
 
+  describe 'person_duplicates' do
+    let!(:duplicate1) { Fabricate(:person_duplicate) }
+    let!(:duplicate2) do
+      PersonDuplicate.create!(person_1: person_1, person_2: people(:top_leader))
+    end
+    let(:person_1) { duplicate1.person_1 }
+
+    it 'deletes person duplicates if person is deleted' do
+      expect do
+        person_1.destroy!
+      end.to change(PersonDuplicate, :count).by(-2)
+    end
+  end
+
 end

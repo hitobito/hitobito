@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -43,13 +43,15 @@
 #  display_booking_info        :boolean          default(TRUE), not null
 #
 
+# A course is a specialised Event that has by default applications,
+# preconditions and may give a qualification after attending it.
 class Event::Course < Event
 
   # This statement is required because this class would not be loaded otherwise.
   require_dependency 'event/course/role/participant'
 
   self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids,
-                           :requires_approval, :display_booking_info]
+                           :requires_approval, :display_booking_info, :waiting_list]
 
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
@@ -71,7 +73,7 @@ class Event::Course < Event
 
   def label_detail
     label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ''
-    label << "#{number} #{group_names}"
+    "#{label}#{number} #{group_names}"
   end
 
   # Does this event provide qualifications

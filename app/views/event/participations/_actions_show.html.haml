@@ -7,7 +7,7 @@
   = button_action_edit
 
 - if can?(:create_invoice, entry.person)
-  = invoice_button([entry.person])
+  = invoice_button(people: [entry.person])
 
 - if can?(:print, entry)
   = action_button(t('global.button.print'),

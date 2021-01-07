@@ -15,30 +15,26 @@ module PersonDuplicates
     def create
       PersonDuplicate.transaction do
         entry.destroy!
-        People::Merger.new(src_person_id, dst_person_id, current_user).merge!
+        People::Merger.new(source, destination, current_user).merge!
       end
 
-      redirect_to group_person_path(dst_person.primary_group, dst_person), notice: success_message
+      redirect_to group_person_path(destination.primary_group, destination), notice: success_message
     end
 
     private
 
-    def dst_person
-      Person.find(dst_person_id)
+    def destination
+      dst_person_2? ? entry.person_2 : entry.person_1
     end
 
-    def dst_person_id
-      dst_person_2? ? entry.person_2.id : entry.person_1.id
-    end
-
-    def src_person_id
-      dst_person_2? ? entry.person_1.id : entry.person_2.id
+    def source
+      dst_person_2? ? entry.person_1 : entry.person_2
     end
 
     def dst_person_2?
       params[:person_duplicate][:dst_person].eql?('person_2')
     end
-    
+
     def success_message
       I18n.t('person_duplicates.merge.success')
     end

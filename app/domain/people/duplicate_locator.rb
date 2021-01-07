@@ -6,8 +6,13 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class People::DuplicateLocator
+
+  def initialize(scope = Person.all)
+    @scope = scope
+  end
+
   def run
-    Person.find_each do |person|
+    @scope.find_each do |person|
       duplicate = find_duplicate(person)
 
       next unless duplicate
@@ -27,7 +32,7 @@ class People::DuplicateLocator
                                                  company_name: person.company_name,
                                                  zip_code: person.zip_code,
                                                  birthday: person.birthday })
-      
+
       duplicate unless person == duplicate
   end
 

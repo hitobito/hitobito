@@ -9,7 +9,7 @@ describe People::Merger do
   let(:actor) { people(:root) }
   let(:person_roles) { person.roles.with_deleted }
 
-  let(:merger) { described_class.new(@src_person.id, @dst_person.id, actor) }
+  let(:merger) { described_class.new(@source.reload, @target.reload, actor) }
 
   before do
     Fabricate('Group::BottomGroup::Member',
@@ -20,8 +20,8 @@ describe People::Merger do
   context 'merge people' do
 
     it 'copies attributes, removes source person, creates log entry' do
-      @src_person = duplicate
-      @dst_person = person
+      @source = duplicate
+      @target = person
 
       orig_nickname = person.nickname
       orig_first_name = person.first_name
@@ -52,8 +52,8 @@ describe People::Merger do
     end
 
     it 'merges roles, phone numbers and e-mail addresses' do
-      @src_person = duplicate
-      @dst_person = person
+      @source = duplicate
+      @target = person
 
       Fabricate('Group::BottomGroup::Member',
                 group: groups(:bottom_group_two_one),
@@ -74,8 +74,8 @@ describe People::Merger do
     end
 
     it 'does not merge role if same role already present on destination person' do
-      @src_person = duplicate
-      @dst_person = person
+      @source = duplicate
+      @target = person
 
       Fabricate('Group::BottomGroup::Member',
                 group: groups(:bottom_group_one_one),
@@ -93,8 +93,8 @@ describe People::Merger do
     end
 
     it 'does also merge deleted roles' do
-      @src_person = duplicate
-      @dst_person = person
+      @source = duplicate
+      @target = person
 
       duplicate_two_one_role = Fabricate('Group::BottomGroup::Member',
                                group: groups(:bottom_group_two_one),
@@ -123,8 +123,8 @@ describe People::Merger do
     end
 
     it 'merges additional e-mails' do
-      @src_person = duplicate
-      @dst_person = person
+      @source = duplicate
+      @target = person
 
       5.times do
         Fabricate(:additional_email, contactable: duplicate)
@@ -137,15 +137,15 @@ describe People::Merger do
       end.to change(Person, :count).by(-1)
 
       person.reload
-      
+
       expect(person.additional_emails.reload.count).to eq(6)
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end
 
     it 'merges phone numbers' do
-      @src_person = duplicate
-      @dst_person = person
+      @source = duplicate
+      @target = person
 
       5.times do
         Fabricate(:phone_number, contactable: duplicate)
@@ -154,7 +154,7 @@ describe People::Merger do
       person.phone_numbers.create!(number: '0900 42 42 42', label: 'Mobile')
 
       # does not merge invalid contactable
-      invalid_contactable = PhoneNumber.new(contactable: duplicate, number: 'abc 123', label: 'Holiday') 
+      invalid_contactable = PhoneNumber.new(contactable: duplicate, number: 'abc 123', label: 'Holiday')
       invalid_contactable.save!(validate: false)
 
       expect do
@@ -162,15 +162,15 @@ describe People::Merger do
       end.to change(Person, :count).by(-1)
 
       person.reload
-      
+
       expect(person.phone_numbers.reload.count).to eq(7)
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end
 
     it 'merges social accounts' do
-      @src_person = duplicate
-      @dst_person = person
+      @source = duplicate
+      @target = person
 
       Fabricate(:social_account, contactable: duplicate)
       duplicate.social_accounts.create!(name: 'john.member', label: 'Telegram')
@@ -183,7 +183,7 @@ describe People::Merger do
       end.to change(Person, :count).by(-1)
 
       person.reload
-      
+
       expect(person.social_accounts.reload.count).to eq(3)
 
       expect(Person.where(id: duplicate.id)).not_to exist

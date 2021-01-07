@@ -199,3 +199,6 @@ addresses:
   token: <%= ENV['ADDRESSES_TOKEN'] %>
   imported_countries: 
     - CH
+
+messages:
+  enable_writing: false

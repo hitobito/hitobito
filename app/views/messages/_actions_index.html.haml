@@ -3,6 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if can?(:update, @mailing_list)
+- if Settings.messages.enable_writing && can?(:update, @mailing_list)
   = action_button(t('.text_messages.new'), new_group_mailing_list_message_path(@group, @mailing_list, type: 'text_message'), :sms, remote: true)
   = action_button(t('.letters.new'), new_group_mailing_list_message_path(@group, @mailing_list, type: 'letter'), :'envelope-open-text', remote: false)

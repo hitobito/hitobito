@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module TextMessages
-  class Transmitter
+module Messages
+  class TextMessageTransmitter
 
     def send(message)
       @message = message

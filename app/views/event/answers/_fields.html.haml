@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 - question = f.object.question
-- question_label = h(question.question)
+- question_label = auto_link(h(question.question))
 - question_label += StandardFormBuilder::REQUIRED_MARK if question.required?
 
 = f.hidden_field(:question_id)

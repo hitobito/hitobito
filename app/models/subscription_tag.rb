@@ -16,5 +16,8 @@
 
 class SubscriptionTag < ActiveRecord::Base
   belongs_to :subscription
-  belongs_to :tag
+  belongs_to :tag, class_name: 'ActsAsTaggableOn::Tag'
+
+  scope :excluded, -> { where(excluded: true) }
+  scope :included, -> { where(excluded: false) }
 end

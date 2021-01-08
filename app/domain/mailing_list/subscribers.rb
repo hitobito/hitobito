@@ -18,6 +18,7 @@ class MailingList::Subscribers
       joins(subscription_joins).
       where(subscriptions: { mailing_list_id: id }).
       where("people.id NOT IN (#{excluded_person_subscribers.to_sql})").
+      where("people.id NOT IN (#{excluded_people_by_tag.to_sql})").
       where(suscriber_conditions).
       distinct
   end
@@ -34,7 +35,7 @@ class MailingList::Subscribers
       SQL
     end
 
-    if subscriptions.groups.tagged.exists?
+    if subscriptions.groups.any?(&:subscription_tags)
       sql += <<~SQL
         LEFT JOIN taggings AS people_taggings ON people_taggings.taggable_type = 'Person'
           AND people_taggings.taggable_id = people.id
@@ -57,7 +58,7 @@ class MailingList::Subscribers
       SQL
     end
 
-    if subscriptions.groups.tagged.exists?
+    if subscriptions.groups.any?(&:subscription_tags)
       sql += <<~SQL
         LEFT JOIN taggings AS subscriptions_taggings
           ON subscriptions_taggings.taggable_type = 'Subscription'
@@ -91,6 +92,10 @@ class MailingList::Subscribers
             subscriber_type: Person.sti_name)
   end
 
+  def excluded_people_by_tag
+    ActsAsTaggableOn::Tagging.select(:taggable_id).where(taggable_type: 'Person', tag_id: SubscriptionTag.select(:tag_id).joins(:subscription).where(subscription_tags: { excluded: true }, subscriptions: { mailing_list_id: id }))
+  end
+
   def group_subscribers(condition)
     sql = <<~SQL
       subscriptions.subscriber_type = ? AND
@@ -100,10 +105,10 @@ class MailingList::Subscribers
       roles.deleted_at IS NULL
     SQL
 
-    if subscriptions.groups.tagged.exists?
+    if subscriptions.groups.any?(&:subscription_tags)
       sql += <<~SQL
-        AND (subscriptions_taggings.tag_id IS NULL OR
-        people_taggings.tag_id = subscriptions_taggings.tag_id)
+        AND (subscription_tags.tag_id IS NULL OR
+        subscription_tags.tag_id = people_taggings.tag_id)
       SQL
     end
 

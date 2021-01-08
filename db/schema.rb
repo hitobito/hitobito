@@ -799,8 +799,10 @@ ActiveRecord::Schema.define(version: 2021_01_18_151446) do
 
   create_table "subscription_tags", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.boolean "excluded"
-    t.bigint "subscription_id"
+    t.integer "subscription_id"
+    t.integer "tag_id"
     t.index ["subscription_id"], name: "index_subscription_tags_on_subscription_id"
+    t.index ["tag_id"], name: "index_subscription_tags_on_tag_id"
   end
 
   create_table "subscriptions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -856,4 +858,6 @@ ActiveRecord::Schema.define(version: 2021_01_18_151446) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
+  add_foreign_key "subscription_tags", "subscriptions"
+  add_foreign_key "subscription_tags", "tags"
 end

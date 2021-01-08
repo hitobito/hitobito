@@ -21,6 +21,7 @@ class Person::Subscriptions
 
   def exclusions
     @person.subscriptions.where(excluded: true)
+           .or(Subscription.where(id: exclusions_by_subscription_tags.pluck(:id)))
   end
 
   def from_events
@@ -33,12 +34,12 @@ class Person::Subscriptions
       related_role_types.role_type = ? AND
       #{Group.quoted_table_name}.lft <= ? AND
       #{Group.quoted_table_name}.rgt >= ? AND
-      (tags.name IS NULL OR tags.name IN (?))
+      (subscription_tags.tag_id IS NULL OR (subscription_tags.excluded <> true AND subscription_tags.tag_id IN (?)))
     SQL
 
     condition = OrCondition.new
     @person.roles.each do |role|
-      condition.or(sql, role.type, role.group.lft, role.group.rgt, @person.tag_list)
+      condition.or(sql, role.type, role.group.lft, role.group.rgt, @person.tag_ids)
     end
 
     Subscription
@@ -46,7 +47,14 @@ class Person::Subscriptions
       .joins("INNER JOIN #{Group.quoted_table_name} ON " \
              "#{Group.quoted_table_name}.id = subscriptions.subscriber_id")
       .joins(:related_role_types)
-      .left_joins(:tags)
+      .left_joins(:subscription_tags)
       .where(condition.to_a)
+      .where.not(id: exclusions.pluck(:id))
+  end
+
+  private
+
+  def exclusions_by_subscription_tags
+    Subscription.joins(:subscription_tags).where(subscription_tags: { tag_id: @person.tag_ids, excluded: true })
   end
 end

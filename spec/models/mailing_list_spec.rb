@@ -166,7 +166,7 @@ describe MailingList do
       it 'is true if in group and all tags match' do
         sub = create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
-        sub.tag_list = 'foo: bar, baz'
+        sub.subscription_tags = subscription_tags(%w(bar baz))
         sub.save!
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         p.tag_list = 'foo:bar, geez, baz'
@@ -178,22 +178,35 @@ describe MailingList do
       it 'is true if in group and not all tags match' do
         sub = create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
-        sub.tag_list = 'foo: bar, baz'
+        sub.subscription_tags = subscription_tags(%w(bar foo:baz))
         sub.save!
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
-        p.tag_list = 'foo:bar'
+        p.tag_list = 'foo:baz'
         p.save!
 
         expect(list.subscribed?(p)).to be_truthy
       end
 
-      it 'is false if in group and no tags match' do
+      it 'is false if in group and excluded tag matches' do
         sub = create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)
-        sub.tag_list = 'foo: bar, baz'
+        sub.subscription_tags = subscription_tags(%w(bar foo:baz))
+        sub.subscription_tags.second.update!(excluded: true)
         sub.save!
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         p.tag_list = 'foo:baz'
+        p.save!
+
+        expect(list.subscribed?(p)).to be_falsey
+      end
+
+      it 'is false if in group and no tags match' do
+        sub = create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        sub.subscription_tags = subscription_tags(%w(foo:bar foo:baz))
+        sub.save!
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
+        p.tag_list = 'baz'
         p.save!
 
         expect(list.subscribed?(p)).to be_falsey
@@ -383,7 +396,7 @@ describe MailingList do
                                    Group::BottomGroup::Leader.sti_name)
         sub2 = create_subscription(groups(:bottom_group_one_one), false,
                                    Group::BottomGroup::Member.sti_name)
-        sub2.tag_list = 'foo, bar'
+        sub2.subscription_tags = subscription_tags(%w(foo, bar))
         sub2.save!
 
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
@@ -506,6 +519,17 @@ describe MailingList do
     end
   end
 
+  context 'messages' do
+    let(:message) { messages(:simple) }
+
+    it 'delete nullifies mailing_list on message' do
+      expect(message.mailing_list.destroy).to be_truthy
+      expect(message.reload.mailing_list).to be_nil
+    end
+  end
+
+  private
+
   def create_subscription(subscriber, excluded = false, *role_types)
     sub = list.subscriptions.new
     sub.subscriber = subscriber
@@ -515,12 +539,12 @@ describe MailingList do
     sub
   end
 
-  context 'messages' do
-    let(:message) { messages(:simple) }
-
-    it 'delete nullifies mailing_list on message' do
-      expect(message.mailing_list.destroy).to be_truthy
-      expect(message.reload.mailing_list).to be_nil
+  def subscription_tags(names)
+    tags = names.map do |name|
+      ActsAsTaggableOn::Tag.create_or_find_by!(name: name)
+    end
+    tags.map do |tag|
+      SubscriptionTag.create!(tag: tag)
     end
   end
 end

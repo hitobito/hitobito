@@ -6,12 +6,25 @@
 %p= t('.only_add_persons_with_tags')
 
 .shown
-  = f.collection_select(:tag_list,
-             @possible_tags,
-             :second,
-             :first,
-             { },
-             { class: 'chosen-select',
-               multiple: true,
-               data: { chosen_no_results: t('global.chosen_no_results'),
-                       placeholder: ' ' } })
+  = f.collection_select(:included_subscription_tags,
+                        @possible_tags,
+                        :third,
+                        :first,
+                        { },
+                        { class: 'chosen-select',
+                          multiple: true,
+                          data: { chosen_no_results: t('global.chosen_no_results'),
+                                  placeholder: ' ' } })
+
+%p= t('.exclude_persons_with_tags')
+
+.shown
+  = f.collection_select(:excluded_subscription_tags,
+                        @possible_tags,
+                        :third,
+                        :first,
+                        { },
+                        { class: 'chosen-select',
+                          multiple: true,
+                          data: { chosen_no_results: t('global.chosen_no_results'),
+                                  placeholder: ' ' } })

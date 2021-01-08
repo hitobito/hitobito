@@ -99,11 +99,5 @@ module Subscriber
 
       model_params[:excluded_subscription_tags].map { |tag| { id: tag, excluded: true } }
     end
-
-    class << self
-      def model_class
-        Subscription
-      end
-    end
   end
 end

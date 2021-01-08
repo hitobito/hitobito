@@ -48,7 +48,7 @@ module FormatHelper
   # Otherwise, calls format_type.
   def format_attr(obj, attr) # rubocop:disable Metrics/MethodLength
     format_type_attr_method = format_type_attr_method(obj, attr)
-    format_attr_method = :"format_#{attr.to_s}"
+    format_attr_method = :"format_#{attr}"
     if respond_to?(format_type_attr_method)
       send(format_type_attr_method, obj)
     elsif respond_to?(format_attr_method)
@@ -93,6 +93,7 @@ module FormatHelper
   # If the optional block returns false for a given attribute, it will not be rendered.
   def render_attrs(obj, *attrs)
     return if attrs.blank?
+
     content = safe_join(attrs) do |a|
       labeled_attr(obj, a) if !block_given? || yield(a)
     end
@@ -113,10 +114,11 @@ module FormatHelper
 
   def format_column(type, val) # rubocop:disable Metrics/CyclomaticComplexity
     return EMPTY_STRING if val.nil?
+
     case type
-    when :time    then f(val.to_time)
+    when :time    then f(val.to_time) # rubocop:disable Rails/Date
     when :date    then f(val.to_date)
-    when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}"
+    when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}" # rubocop:disable Rails/Date
     when :text    then val.present? ? simple_format(h(val)) : EMPTY_STRING
     when :decimal then f(val.to_s.to_f)
     else f(val)

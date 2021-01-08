@@ -12,3 +12,4 @@ class AddSubscriptionTags < ActiveRecord::Migration[6.0]
     drop_table :subscription_tags
   end
 end
+

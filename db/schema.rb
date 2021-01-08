@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_22_123403) do
+ActiveRecord::Schema.define(version: 2021_01_07_151626) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "name", null: false
@@ -183,10 +183,19 @@ ActiveRecord::Schema.define(version: 2020_12_22_123403) do
     t.index ["person_id"], name: "index_event_participations_on_person_id"
   end
 
-  create_table "event_questions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.integer "event_id"
+  create_table "event_question_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.integer "event_question_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "question"
     t.string "choices"
+    t.index ["event_question_id"], name: "index_event_question_translations_on_event_question_id"
+    t.index ["locale"], name: "index_event_question_translations_on_locale"
+  end
+
+  create_table "event_questions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.integer "event_id"
     t.boolean "multiple_choices", default: false, null: false
     t.boolean "required", default: false, null: false
     t.boolean "admin", default: false, null: false

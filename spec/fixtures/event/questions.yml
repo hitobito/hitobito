@@ -16,30 +16,17 @@
 #
 
 top_ov:
-  question: GA oder Halbtax?
-  choices: "GA, Halbtax, nix"
   event: top_course
 
 top_vegi:
-  question: Ich bin Vegetarier
-  choices: "ja, nein"
   event: top_course
 
 top_more:
-  question: Sonst noch was?
   event: top_course
 
 
 # global questions (not assigned to event)
-ga:
-  question: Ich habe folgendes ÖV Abo
-  choices: GA, Halbtax / unter 16, keine Vergünstigung
-
-vegi:
-  question: Ich bin Vegetarier
-  choices: ja,nein
-
-schub:
-  question: Ich habe bereits den Schub (das Werkbuch für Leiterinnen und Leiter der Jubla)
-  choices: ja,nein
+ga: {}
+vegi: {}
+schub: {}
 

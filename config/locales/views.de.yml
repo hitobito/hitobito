@@ -1373,6 +1373,7 @@ de:
         please_choose_group: Bitte wähle eine Gruppe aus
       tags:
         only_add_persons_with_tags: 'Nur Person mit einem der untenstehenden Tags hinzufügen:'
+        exclude_persons_with_tags: 'Personen mit einem der untenstehenden Tags ausschliessen:'
 
     exclude_person:
       form:
@@ -1413,6 +1414,7 @@ de:
       export_not_allowed: 'Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten.'
     subscription:
       only_persons_with: 'Nur Personen mit:'
+      persons_excluded_with: 'Personen ausschliessen mit:'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
 
   version:

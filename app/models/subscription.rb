@@ -24,18 +24,18 @@ class Subscription < ActiveRecord::Base
 
   include RelatedRoleType::Assigners
 
-  acts_as_taggable
-
   scope :people, -> { where(subscriber_type: Person.sti_name) }
   scope :groups, -> { where(subscriber_type: Group.sti_name) }
   scope :events, -> { where(subscriber_type: Event.sti_name) }
-  scope :tagged, -> { joins(:tags) }
+  scope :tagged, -> { joins(:subscription_tags) }
 
   ### ASSOCIATIONS
 
   belongs_to :mailing_list
 
   belongs_to :subscriber, polymorphic: true
+
+  has_many :subscription_tags, dependent: :destroy
 
   has_many :related_role_types, as: :relation, dependent: :destroy
 
@@ -87,6 +87,14 @@ class Subscription < ActiveRecord::Base
       result[layer] = groups_result if groups_result.present?
     end
     result
+  end
+
+  def included_subscription_tags
+    subscription_tags.included.map(&:tag).pluck(:id)
+  end
+
+  def excluded_subscription_tags
+    subscription_tags.excluded.map(&:tag).pluck(:id)
   end
 
   private

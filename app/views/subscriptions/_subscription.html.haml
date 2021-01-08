@@ -11,10 +11,15 @@
       - groups.each do |group, role_types|
         %dt= group
         %dd= role_types.map(&:label).join(', ')
-  - unless subscription.tag_list.empty?
+  - unless subscription.subscription_tags.included.empty?
     %p
       = t('.only_persons_with')
-      - subscription.tags.each do |tag|
-        %span.label.label-inverse.person-tag= format_tag_name(tag)
+      - subscription.subscription_tags.included.each do |subscription_tag|
+        %span.label.label-inverse.person-tag= format_tag_name(subscription_tag.tag)
+  - unless subscription.subscription_tags.excluded.empty?
+    %p
+      = t('.persons_excluded_with')
+      - subscription.subscription_tags.excluded.each do |subscription_tag|
+        %span.label.label-inverse.person-tag= format_tag_name(subscription_tag.tag)
 - else
   = subscription.to_s(:list)

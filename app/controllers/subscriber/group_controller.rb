@@ -57,7 +57,7 @@ module Subscriber
       super
       if model_params
         entry.role_types = model_params[:role_types]
-        entry.tag_list = model_params[:tag_list]
+        entry.subscription_tags = subscription_tags
       end
     end
 
@@ -82,5 +82,28 @@ module Subscriber
       end
     end
 
+    def subscription_tags
+      [included_tags, excluded_tags].flatten.map do |tag|
+        SubscriptionTag.find_or_create_by(subscription: entry, tag_id: tag[:id], excluded: tag[:excluded]) unless tag[:id].empty?
+      end.compact
+    end
+
+    def included_tags
+      return [] unless model_params[:included_subscription_tags]
+
+      model_params[:included_subscription_tags].map { |tag| { id: tag, excluded: false } }
+    end
+
+    def excluded_tags
+      return [] unless model_params[:excluded_subscription_tags]
+
+      model_params[:excluded_subscription_tags].map { |tag| { id: tag, excluded: true } }
+    end
+
+    class << self
+      def model_class
+        Subscription
+      end
+    end
   end
 end

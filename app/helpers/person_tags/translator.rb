@@ -5,7 +5,7 @@ module PersonTags
 
     def possible_tags
       ActsAsTaggableOn::Tag.all.order(:name).collect do |tag|
-        [translate(tag, include_category: true), tag.name]
+        [translate(tag, include_category: true), tag.name, tag.id]
       end
     end
 

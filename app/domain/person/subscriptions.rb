@@ -55,6 +55,6 @@ class Person::Subscriptions
   private
 
   def exclusions_by_subscription_tags
-    SubscriptionTag.where(subscription_tags: { tag_id: @person.tag_ids, excluded: true }).pluck(:subscription_id)
+    SubscriptionTag.where(tag_id: @person.tag_ids, excluded: true).pluck(:subscription_id)
   end
 end

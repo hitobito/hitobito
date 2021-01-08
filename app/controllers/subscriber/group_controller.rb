@@ -84,7 +84,9 @@ module Subscriber
 
     def subscription_tags
       [included_tags, excluded_tags].flatten.map do |tag|
-        SubscriptionTag.find_or_create_by(subscription: entry, tag_id: tag[:id], excluded: tag[:excluded]) unless tag[:id].empty?
+        SubscriptionTag.create(subscription: entry,
+                               tag_id: tag[:id],
+                               excluded: tag[:excluded]) unless tag[:id].empty?
       end.compact
     end
 

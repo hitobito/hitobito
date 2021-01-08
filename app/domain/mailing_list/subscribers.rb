@@ -85,17 +85,6 @@ class MailingList::Subscribers
                  false)
   end
 
-  def excluded_person_subscribers
-    Subscription.select(:subscriber_id).
-      where(mailing_list_id: id,
-            excluded: true,
-            subscriber_type: Person.sti_name)
-  end
-
-  def excluded_people_by_tag
-    ActsAsTaggableOn::Tagging.select(:taggable_id).where(taggable_type: 'Person', tag_id: SubscriptionTag.select(:tag_id).joins(:subscription).where(subscription_tags: { excluded: true }, subscriptions: { mailing_list_id: id }))
-  end
-
   def group_subscribers(condition)
     sql = <<~SQL
       subscriptions.subscriber_type = ? AND
@@ -121,5 +110,26 @@ class MailingList::Subscribers
                  'event_participations.active = ?',
                  Event.sti_name,
                  true)
+  end
+
+  private
+
+  def excluded_people_by_tag
+    ActsAsTaggableOn::Tagging.select(:taggable_id)
+                             .where(taggable_type: 'Person', tag_id: excluded_subscription_tags)
+  end
+
+  def excluded_subscription_tags
+    SubscriptionTag.select(:tag_id)
+                   .joins(:subscription)
+                   .where(subscription_tags: { excluded: true },
+                                             subscriptions: { mailing_list_id: id })
+  end
+
+  def excluded_person_subscribers
+    Subscription.select(:subscriber_id).
+      where(mailing_list_id: id,
+            excluded: true,
+            subscriber_type: Person.sti_name)
   end
 end

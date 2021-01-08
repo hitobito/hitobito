@@ -21,7 +21,7 @@ class Person::Subscriptions
 
   def exclusions
     @person.subscriptions.where(excluded: true)
-           .or(Subscription.where(id: exclusions_by_subscription_tags.pluck(:id)))
+           .or(Subscription.where(id: exclusions_by_subscription_tags))
   end
 
   def from_events
@@ -55,6 +55,6 @@ class Person::Subscriptions
   private
 
   def exclusions_by_subscription_tags
-    Subscription.joins(:subscription_tags).where(subscription_tags: { tag_id: @person.tag_ids, excluded: true })
+    SubscriptionTag.where(subscription_tags: { tag_id: @person.tag_ids, excluded: true }).pluck(:subscription_id)
   end
 end

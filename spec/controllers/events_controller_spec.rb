@@ -435,6 +435,66 @@ describe EventsController do
     end
   end
 
+  describe 'with valid OAuth token' do
+    let(:event) { events(:top_event) }
+    let(:group) { groups(:top_layer) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => true, :accessible? => true, :resource_owner_id => people(:top_leader).id) }
+
+    before do
+      allow(controller).to receive(:doorkeeper_token) { token }
+    end
+
+    it 'GET index indexes page' do
+      get :index, params: { group_id: group.id }
+      is_expected.to render_template('index')
+    end
+
+    it 'GET show shows page when token is valid' do
+      get :show, params: { group_id: group.id, id: event }
+      is_expected.to render_template('show')
+    end
+  end
+
+  describe 'with invalid OAuth token (expired or revoked)' do
+    let(:event) { events(:top_event) }
+    let(:group) { groups(:top_layer) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => true, :accessible? => false, :resource_owner_id => people(:top_leader).id) }
+
+    before do
+      allow(controller).to receive(:doorkeeper_token) { token }
+    end
+
+    it 'GET index redirects to login' do
+      get :index, params: { group_id: group.id }
+      is_expected.to redirect_to('http://test.host/users/sign_in')
+    end
+
+    it 'GET show redirects to login' do
+      get :show, params: { group_id: group.id, id: event }
+      is_expected.to redirect_to('http://test.host/users/sign_in')
+    end
+  end
+
+  describe 'without acceptable OAuth token (missing scope)' do
+    let(:event) { events(:top_event) }
+    let(:group) { groups(:top_layer) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => false, :accessible? => true, :resource_owner_id => people(:top_leader).id) }
+
+    before do
+      allow(controller).to receive(:doorkeeper_token) { token }
+    end
+
+    it 'GET index fails with HTTP 403 (forbidden)' do
+      get :index, params: { group_id: group.id }
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'GET show fails with HTTP 403 (forbidden)' do
+      get :show, params: { group_id: group.id, id: event }
+      expect(response).to have_http_status(:forbidden)
+    end
+  end
+
   describe 'default scope' do
     let(:top_layer) { groups(:top_layer) }
 
@@ -447,6 +507,24 @@ describe EventsController do
 
       it 'in 2012' do
         get :index, params: { group_id: top_layer.id, year: 2012, token: 'PermittedToken' }
+        expect(assigns(:events)).to have(1).entries
+      end
+    end
+
+    context 'oauth' do
+      let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => true, :accessible? => true, :resource_owner_id => people(:top_leader).id) }
+
+      before do
+        allow(controller).to receive(:doorkeeper_token) { token }
+      end
+  
+      it 'in current year' do
+        get :index, params: { group_id: top_layer.id }
+        expect(assigns(:events)).to be_empty
+      end
+
+      it 'in 2012' do
+        get :index, params: { group_id: top_layer.id, year: 2012 }
         expect(assigns(:events)).to have(1).entries
       end
     end

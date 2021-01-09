@@ -27,9 +27,8 @@ Service Accounts ermöglichen es, für eine externe Applikation einen eigenen Ac
 Mehr Infos auf englisch hier: [Service Accounts](07_service_accounts.md)
 
 ### OAuth
-Hitobito ist ein OAuth 2.0 Anbieter, das heisst dass eine externe Applikation Benutzer via hitobito autentifizieren kann ("Anmelden mit hitobito", ähnlich wie das Google, Facebook, etc. anbieten). Die externe Applikation kann danach Informationen über den Benutzer aus hitobito abfragen, wenn der Benutzer dies selber freigibt.
+Hitobito ist ein OAuth 2.0 Anbieter, das heisst dass eine externe Applikation Benutzer via hitobito autentifizieren kann ("Anmelden mit hitobito", ähnlich wie das Google, Facebook, etc. anbieten). Die externe Applikation kann danach Informationen über den Benutzer aus hitobito abfragen wenn der Benutzer dies selber freigibt. Die OAuth-Anmeldung ermöglicht es auch, dass die externe Applikation die JSON-Schnittstellen im Namen des Users nutzen kann. Die Applikation hat dabei dieselben Berechtigungen wie der Benutzer.
 Mehr Infos auf englisch hier: [OAuth](08_oauth.md)
-
 
 # Developer documentation (English)
 
@@ -57,5 +56,5 @@ Service accounts allow to create a dedicated account with certain permissions fo
 More info: [Service accounts](07_service_accounts.md)
 
 ### OAuth
-Hitobito is an OAuth 2.0 provider, meaning that an external application can authenticate users via hitobito (usually in the form of a "Login via hitobito" feature, similar to Google and Facebook etc.). The external application can then query information about the user, if the user has granted this permission.
+Hitobito is an OAuth 2.0 provider, meaning that an external application can authenticate users via hitobito (usually in the form of a "Login via hitobito" feature, similar to Google and Facebook etc.). The external application can then query information about the user, if the user has granted this permission. OAuth authentication also allows the external application to use the JSON API. The external application has the same permissions as the user.
 More info: [OAuth](08_oauth.md)

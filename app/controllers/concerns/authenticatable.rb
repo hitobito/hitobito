@@ -51,7 +51,9 @@ module Authenticatable
   end
 
   def doorkeeper_sign_in
-    return unless doorkeeper_token.present?
+    return unless doorkeeper_token.present? && doorkeeper_token.accessible?
+    doorkeeper_authorize! :api
+
     user = Person.find(doorkeeper_token.resource_owner_id)
     sign_in user, store: false
   end
@@ -59,7 +61,7 @@ module Authenticatable
   def authenticate_person!(*args)
     normalize_user_params
 
-    user_sign_in || service_token_sign_in || super(*args)
+    user_sign_in || service_token_sign_in || doorkeeper_sign_in || super(*args)
   end
 
   def user_sign_in
@@ -75,7 +77,7 @@ module Authenticatable
     request.env['devise.skip_trackable'] = true
 
     # Notice the store option defaults to false, so the entity
-    # is not actually stoeed in the session and a token is needed
+    # is not actually stored in the session and a token is needed
     # for every request. That behaviour can be configured through
     # the sign_in_token option.
     sign_in user, store: false

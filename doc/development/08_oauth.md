@@ -1,5 +1,5 @@
 ## OAuth 2.0
-Hitobito is an OAuth 2.0 provider, meaning that an external application can authenticate users via hitobito (usually in the form of a "Login via hitobito" feature, similar to Google and Facebook etc.). The external application can then query information about the user, if the user has granted this permission. This works without giving the user's password or token to the external application.
+Hitobito is an OAuth 2.0 provider, meaning that an external application can authenticate users via hitobito (usually in the form of a "Login via hitobito" feature, similar to Google and Facebook etc.). The external application can then query information about the user or use the [REST API](05_rest_api.md) in the name of the user, if the user has granted this permission. This works without giving the user's password or token to the external application.
 
 ### Managing OAuth applications in hitobito
 Users with admin privilege on the application root group (e.g. "Bundesebene" or "Dachverband") are allowed to manage the OAuth applications in the global hitobito settings.
@@ -9,11 +9,12 @@ Applications must be registered with allowed callback URLs and allowed scopes (s
 #### Scopes
 Different external applications need different types of data about their users. Scopes are used to define what information an external application can request and access.
 
-| Scope        | Available user data                       |
+| Scope        | Available user data / functionality       |
 | ---          | ---                                       |
 | `email`      | id, email                                 |
 | `name`       | id, email, firstname, lastname, nickname  |
 | `with_roles` | All the profile data, roles within groups |
+| `api`        | All REST APIs                             |
 
 The scope `with_roles` contains most of the profile information, including the fields of the name scope. Multiple scopes can be combined in a single authorization request.
 

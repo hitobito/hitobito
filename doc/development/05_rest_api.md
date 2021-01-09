@@ -3,13 +3,37 @@
 Hitobito offers a read-only JSON REST API that gives access to the basic data stored in the database. The output format follows the conventions of [json:api](http://jsonapi.org) (although in an older version according to this issue https://github.com/hitobito/hitobito/issues/207). The API currently does not set any CORS headers, so it has to be consumed server-side (querying it in JavaScript in a browser is not possible).
 
 ### Authentication
-* To use the API you need an authentication token.
+
+To use the API you need a valid authentication token, this can be one of the following
+
+* Service token
+* Personal OAuth access token
+* Personal API token
+
+#### Service token
+
+Service tokens are impersonal tokens ([service accounts](07_service_accounts.md)), that are meant to represent external applications.
+
+> :bangbang: Service tokens allow you to implement user unaware applications. Note that the
+consumer application is responsible for data protection: with service tokens the application
+may be able to access data which is not intended for public access!
+
+#### Personal OAuth access token
+
+Personal OAuth access tokens have the same permissions as the corresponding user, this allows you
+to implement an application where users log in using Hitobito as an OAuth authentication provider.
+
+To use the API, the provided access token is required to have the `api` scope, see [OAuth](08_oauth.md) for more information.
+
+#### Personal API token
+
 * Every user account can create personal tokens.
 * The tokens have the same permissions as the corresponding user.
 * Tokens have no expiration date, but can be actively deleted by the user.
-* There are also impersonal tokens ([service accounts](07_service_accounts.md)), that are meant to represent external applications.
 
-> :bangbang: If you have an application that needs to read data from hitobito, you'll probably want to use [service accounts](07_service_accounts.md).
+> :bangbang: If you have an application that needs to read data from hitobito, you'll probably
+want to use personal OAuth access tokens or [service accounts](07_service_accounts.md), depending
+on permission requirements.
 
 If you still want to use personal tokens, they can be managed using the following HTTP endpoints:
 

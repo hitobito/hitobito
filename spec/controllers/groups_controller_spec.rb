@@ -169,4 +169,46 @@ describe GroupsController do
       end
     end
   end
+
+  describe 'with valid OAuth token' do
+    let(:group) { groups(:top_layer) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => true, :accessible? => true, :resource_owner_id => people(:top_leader).id) }
+
+    before do
+      allow(controller).to receive(:doorkeeper_token) { token }
+    end
+
+    it 'GET index shows page' do
+      get :show, params: { id: group.id }
+      is_expected.to render_template('show')
+    end
+  end
+
+  describe 'with invalid OAuth token (expired or revoked)' do
+    let(:group) { groups(:top_layer) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => true, :accessible? => false, :resource_owner_id => people(:top_leader).id) }
+
+    before do
+      allow(controller).to receive(:doorkeeper_token) { token }
+    end
+
+    it 'GET index redirect to login' do
+      get :show, params: { id: group.id }
+      is_expected.to redirect_to('http://test.host/users/sign_in')
+    end
+  end
+
+  describe 'without acceptable OAuth token (missing scope)' do
+    let(:group) { groups(:top_layer) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => false, :accessible? => true, :resource_owner_id => people(:top_leader).id) }
+
+    before do
+      allow(controller).to receive(:doorkeeper_token) { token }
+    end
+
+    it 'GET index fails with HTTP 403 (forbidden)' do
+      get :show, params: { id: group.id }
+      expect(response).to have_http_status(:forbidden)
+    end
+  end
 end

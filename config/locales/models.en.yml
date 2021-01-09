@@ -561,6 +561,13 @@ en:
         taggings_count: Number
         category: Category
         name: name
+  doorkeeper:
+    scopes:
+      email: Read your e-mail address
+      name: Read your e-mail address and name
+      with_roles: Read your base data and roles
+      openid: Read your OIDC Identity Token
+      api: Call all JSON-Interfaces in your name
   errors:
     messages:
       invalid_date: "is not a valid date"

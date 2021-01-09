@@ -917,6 +917,137 @@ describe PeopleController do
     end
   end
 
+  context 'with valid oauth token' do
+    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => true, :accessible? => true, :resource_owner_id => top_leader.id) }
+
+    before do
+      allow(controller).to receive(:doorkeeper_token) { token }
+    end
+
+    it 'shows page' do
+      get :show, params: { group_id: group.id, id: top_leader.id }
+      is_expected.to render_template('show')
+    end
+
+    it 'indexes page' do
+      get :index, params: { group_id: group.id }
+      is_expected.to render_template('index')
+    end
+
+    context 'bottom_group' do
+      let(:group)  { groups(:bottom_group_one_one_one) }
+
+      before do
+        @member = Fabricate(Group::BottomGroup::Member.sti_name, group: group).person
+        @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
+      end
+
+      it 'shows only leader in list' do
+        get :index, params: { group_id: group.id }
+        expect(assigns(:people)).to eq [@leader]
+      end
+
+      it 'shows leader' do
+        get :show, params: { group_id: group.id, id: @leader.id }
+        expect(response).to be_successful
+      end
+
+      it 'raises when trying to view member' do
+        expect do
+          get :show, params: { group_id: group.id, id: @member.id }
+        end.to raise_error CanCan::AccessDenied
+      end
+    end
+  end
+
+  context 'without acceptable oauth token (required scope is missing)' do
+    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => false, :accessible? => true, :resource_owner_id => top_leader.id) }
+
+    before do
+      allow(controller).to receive(:doorkeeper_token) { token }
+    end
+
+    it 'fails with HTTP 403 (forbidden) when trying to show page' do
+      get :show, params: { group_id: group.id, id: top_leader.id }
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it 'fails with HTTP 403 (forbidden) when trying to index page' do
+      get :index, params: { group_id: group.id }
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    context 'bottom_group' do
+      let(:group)  { groups(:bottom_group_one_one_one) }
+
+      before do
+        @member = Fabricate(Group::BottomGroup::Member.sti_name, group: group).person
+        @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
+      end
+
+      it 'fails with HTTP 403 (forbidden) when trying to show leader in list' do
+        get :index, params: { group_id: group.id }
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'fails with HTTP 403 (forbidden) when trying to show leader' do
+        get :show, params: { group_id: group.id, id: @leader.id }
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'fails with HTTP 403 (forbidden) when trying to view member' do
+        get :show, params: { group_id: group.id, id: @member.id }
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  context 'with invalid oauth token (expired or revoked)' do
+    let(:token) { 
+      instance_double(
+        'Doorkeeper::AccessToken', :acceptable? => true, 
+        :accessible? => false, :resource_owner_id => top_leader.id)
+    }
+
+    before do
+      allow(controller).to receive(:doorkeeper_token) { token }
+    end
+
+    it 'redirects to login when trying to show page' do
+      get :show, params: { group_id: group.id, id: top_leader.id }
+      is_expected.to redirect_to('http://test.host/users/sign_in')
+    end
+
+    it 'redirects to login when trying to index page' do
+      get :index, params: { group_id: group.id }
+      is_expected.to redirect_to('http://test.host/users/sign_in')
+    end
+
+    context 'bottom_group' do
+      let(:group)  { groups(:bottom_group_one_one_one) }
+
+      before do
+        @member = Fabricate(Group::BottomGroup::Member.sti_name, group: group).person
+        @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
+      end
+
+      it 'redirects to legin when trying to show leader in list' do
+        get :index, params: { group_id: group.id }
+        is_expected.to redirect_to('http://test.host/users/sign_in')
+      end
+
+      it 'redirects to login when trying to show leader' do
+        get :show, params: { group_id: group.id, id: @leader.id }
+        is_expected.to redirect_to('http://test.host/users/sign_in')
+      end
+
+      it 'redirects to login when trying to view member' do
+        get :show, params: { group_id: group.id, id: @member.id }
+        is_expected.to redirect_to('http://test.host/users/sign_in')
+      end
+    end
+  end
+
   context 'table_displays'do
     render_views
     let(:dom) { Capybara::Node::Simple.new(response.body) }

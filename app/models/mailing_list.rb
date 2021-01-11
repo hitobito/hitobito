@@ -49,6 +49,7 @@ class MailingList < ActiveRecord::Base
            dependent: :destroy
 
   has_many :mail_logs, dependent: :nullify
+  has_many :messages, dependent: :nullify
 
   validates_by_schema
   validates :mail_name, uniqueness: { case_sensitive: false },

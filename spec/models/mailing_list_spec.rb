@@ -515,4 +515,12 @@ describe MailingList do
     sub
   end
 
+  context 'messages' do
+    let(:message) { messages(:simple) }
+
+    it 'delete nullifies mailing_list on message' do
+      expect(message.mailing_list.destroy).to be_truthy
+      expect(message.reload.mailing_list).to be_nil
+    end
+  end
 end

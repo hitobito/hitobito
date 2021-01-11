@@ -470,6 +470,35 @@ ActiveRecord::Schema.define(version: 2021_01_13_131128) do
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
 
+  create_table "message_recipients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.bigint "person_id", null: false
+    t.string "phone_number"
+    t.string "email"
+    t.string "address"
+    t.timestamp "created_at"
+    t.timestamp "failed_at"
+    t.text "error"
+    t.index ["message_id"], name: "index_message_recipients_on_message_id"
+    t.index ["person_id"], name: "index_message_recipients_on_person_id"
+  end
+
+  create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "mailing_list_id"
+    t.bigint "sender_id"
+    t.string "type", null: false
+    t.string "subject", limit: 1024, null: false
+    t.string "state", default: "draft"
+    t.integer "recipient_count", default: 0
+    t.integer "success_count", default: 0
+    t.integer "failed_count", default: 0
+    t.timestamp "sent_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
+    t.index ["sender_id"], name: "index_messages_on_sender_id"
+  end
+
   create_table "notes", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "subject_id", null: false
     t.integer "author_id", null: false

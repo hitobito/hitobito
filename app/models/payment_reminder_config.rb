@@ -3,11 +3,15 @@
 # Table name: payment_reminder_configs
 #
 #  id                :integer          not null, primary key
-#  invoice_config_id :integer          not null
-#  title             :string(255)      not null
-#  text              :string(255)      not null
 #  due_days          :integer          not null
 #  level             :integer          not null
+#  text              :string(255)      not null
+#  title             :string(255)      not null
+#  invoice_config_id :integer          not null
+#
+# Indexes
+#
+#  index_payment_reminder_configs_on_invoice_config_id  (invoice_config_id)
 #
 
 class PaymentReminderConfig < ActiveRecord::Base

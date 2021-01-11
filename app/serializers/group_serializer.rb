@@ -5,27 +5,35 @@
 # Table name: groups
 #
 #  id                          :integer          not null, primary key
-#  parent_id                   :integer
-#  lft                         :integer
-#  rgt                         :integer
-#  name                        :string(255)      not null
-#  short_name                  :string(31)
-#  type                        :string(255)      not null
-#  email                       :string(255)
-#  address                     :string(1024)
-#  zip_code                    :integer
-#  town                        :string(255)
+#  address                     :text(16777215)
 #  country                     :string(255)
-#  contact_id                  :integer
+#  deleted_at                  :datetime
+#  description                 :text(16777215)
+#  email                       :string(255)
+#  lft                         :integer
+#  logo                        :string(255)
+#  name                        :string(255)      not null
+#  require_person_add_requests :boolean          default(FALSE), not null
+#  rgt                         :integer
+#  short_name                  :string(31)
+#  town                        :string(255)
+#  type                        :string(255)      not null
+#  zip_code                    :integer
 #  created_at                  :datetime
 #  updated_at                  :datetime
-#  deleted_at                  :datetime
-#  layer_group_id              :integer
+#  contact_id                  :integer
 #  creator_id                  :integer
-#  updater_id                  :integer
 #  deleter_id                  :integer
-#  require_person_add_requests :boolean          default(FALSE), not null
-#  description                 :text(65535)
+#  layer_group_id              :integer
+#  parent_id                   :integer
+#  updater_id                  :integer
+#
+# Indexes
+#
+#  index_groups_on_layer_group_id  (layer_group_id)
+#  index_groups_on_lft_and_rgt     (lft,rgt)
+#  index_groups_on_parent_id       (parent_id)
+#  index_groups_on_type            (type)
 #
 
 #  Copyright (c) 2014, CEVI Regionalverband ZH-SH-GL. This file is part of

@@ -4,10 +4,14 @@
 # Table name: help_texts
 #
 #  id         :integer          not null, primary key
-#  controller :string(255)      not null
-#  model      :string(255)
-#  kind       :string(255)      not null
-#  name       :string(255)      not null
+#  controller :string(100)      not null
+#  kind       :string(100)      not null
+#  model      :string(100)
+#  name       :string(100)      not null
+#
+# Indexes
+#
+#  index_help_texts_fields  (controller,model,kind,name) UNIQUE
 #
 
 #  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of

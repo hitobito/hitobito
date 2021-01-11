@@ -9,11 +9,15 @@
 # Table name: social_accounts
 #
 #  id               :integer          not null, primary key
-#  contactable_id   :integer          not null
 #  contactable_type :string(255)      not null
-#  name             :string(255)      not null
 #  label            :string(255)
+#  name             :string(255)      not null
 #  public           :boolean          default(TRUE), not null
+#  contactable_id   :integer          not null
+#
+# Indexes
+#
+#  index_social_accounts_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #
 
 Fabricator(:social_account) do

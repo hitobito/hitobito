@@ -9,17 +9,21 @@
 # Table name: invoice_articles
 #
 #  id          :integer          not null, primary key
-#  number      :string(255)
-#  name        :string(255)      not null
-#  description :text(65535)
+#  account     :string(255)
 #  category    :string(255)
+#  cost_center :string(255)
+#  description :text(16777215)
+#  name        :string(255)      not null
+#  number      :string(255)
 #  unit_cost   :decimal(12, 2)
 #  vat_rate    :decimal(5, 2)
-#  cost_center :string(255)
-#  account     :string(255)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  group_id    :integer          not null
+#
+# Indexes
+#
+#  index_invoice_articles_on_number_and_group_id  (number,group_id) UNIQUE
 #
 
 class InvoiceArticle < ActiveRecord::Base

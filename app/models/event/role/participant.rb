@@ -9,9 +9,14 @@
 # Table name: event_roles
 #
 #  id               :integer          not null, primary key
+#  label            :string(255)
 #  type             :string(255)      not null
 #  participation_id :integer          not null
-#  label            :string(255)
+#
+# Indexes
+#
+#  index_event_roles_on_participation_id  (participation_id)
+#  index_event_roles_on_type              (type)
 #
 
 # Teilnehmer

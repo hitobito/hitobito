@@ -2,10 +2,16 @@
 #
 # Table name: person_duplicates
 #
-#  id                   :integer          not null, primary key
-#  person_1_id          :integer          not null
-#  person_2_id          :integer          not null
-#  ignore               :boolean          default(FALSE), not null
+#  id          :bigint           not null, primary key
+#  ignore      :boolean          default(FALSE), not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  person_1_id :integer          not null
+#  person_2_id :integer          not null
+#
+# Indexes
+#
+#  index_person_duplicates_on_person_1_id_and_person_2_id  (person_1_id,person_2_id) UNIQUE
 #
 
 class PersonDuplicate < ActiveRecord::Base

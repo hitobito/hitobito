@@ -9,12 +9,14 @@
 # Table name: event_questions
 #
 #  id               :integer          not null, primary key
-#  event_id         :integer
-#  question         :string(255)
-#  choices          :string(255)
+#  admin            :boolean          default(FALSE), not null
 #  multiple_choices :boolean          default(FALSE), not null
 #  required         :boolean          default(FALSE), not null
-#  admin            :boolean          default(FALSE), not null
+#  event_id         :integer
+#
+# Indexes
+#
+#  index_event_questions_on_event_id  (event_id)
 #
 
 Fabricator(:event_question, class_name: 'Event::Question') do

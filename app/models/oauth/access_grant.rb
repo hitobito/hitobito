@@ -2,15 +2,26 @@
 #
 # Table name: oauth_access_grants
 #
-#  id                :integer          not null, primary key
-#  resource_owner_id :integer          not null
-#  application_id    :integer          not null
-#  token             :string(255)      not null
-#  expires_in        :integer          not null
-#  redirect_uri      :text(65535)      not null
-#  created_at        :datetime         not null
-#  revoked_at        :datetime
-#  scopes            :string(255)
+#  id                    :integer          not null, primary key
+#  code_challenge        :string(255)
+#  code_challenge_method :string(255)
+#  expires_in            :integer          not null
+#  redirect_uri          :text(16777215)   not null
+#  revoked_at            :datetime
+#  scopes                :string(255)
+#  token                 :string(255)      not null
+#  created_at            :datetime         not null
+#  application_id        :integer          not null
+#  resource_owner_id     :integer          not null
+#
+# Indexes
+#
+#  fk_rails_b4b53e07b8                 (application_id)
+#  index_oauth_access_grants_on_token  (token) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (application_id => oauth_applications.id)
 #
 
 module Oauth

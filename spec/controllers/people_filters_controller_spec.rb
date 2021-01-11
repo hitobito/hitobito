@@ -44,8 +44,8 @@ describe PeopleFiltersController do
         Contactable::EmailValidator.new.validate_people
 
         get :new, params: { group_id: group.id }
-        invalid_email_tags = [['Haupt-E-Mail ungültig', 'category_validation:email_primary_invalid'],
-                              ['Weitere E-Mail ungültig', 'category_validation:email_additional_invalid']]
+        invalid_email_tags = [['Haupt-E-Mail ungültig', 'category_validation:email_primary_invalid', PersonTags::Validation.email_primary_invalid.id],
+                              ['Weitere E-Mail ungültig', 'category_validation:email_additional_invalid', PersonTags::Validation.email_additional_invalid.id]]
 
         tags = assigns(:possible_tags)
         expect(tags.count).to eq(2)

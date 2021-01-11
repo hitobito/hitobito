@@ -1,7 +1,8 @@
 class ConvertDatabaseToUtf8mb4 < ActiveRecord::Migration[6.0]
   def up
-    ActiveRecord::Base.connection.tables.each do |table|
-      execute "ALTER TABLE #{table} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci"
+    conn = ActiveRecord::Base.connection
+    conn.tables.each do |table|
+      execute "ALTER TABLE #{conn.quote_table_name(table)} CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci"
     end
   end
 

@@ -1135,6 +1135,7 @@ it:
         please_choose_group: prego selezionare un gruppo
       tags:
         only_add_persons_with_tags: 'Aggiungere solo una persona con i tags sottostanti'
+        exclude_persons_with_tags: 'Escludi le persone con uno dei tag qui sotto'
     exclude_person:
       form:
         exclude_subscriber: 'Escludere abbonato/a'
@@ -1167,6 +1168,7 @@ it:
       export_not_allowed: 'Non è possibiie esportare gli abbonati di questo abbonamento perché contengono anche ruoli e/o eventi del tuo ambito di autorizzazioni.'
     subscription:
       only_persons_with: 'Solo persone con'
+      persons_excluded_with: 'Escludere le persone con'
     export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
   version:
     attribute_change:

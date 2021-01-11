@@ -1138,6 +1138,7 @@ fr:
         please_choose_group: S'il te plaît, choisis un groupe.
       tags:
         only_add_persons_with_tags: 'Seulement ajouter les contacts aves un des tags suivants:'
+        exclude_persons_with_tags: 'Exclure les contacts avec un des tags suivants:'
     exclude_person:
       form:
         exclude_subscriber: 'Exclure les abonné-e-s'
@@ -1170,6 +1171,7 @@ fr:
       export_not_allowed: 'Tu n''as pas le droit d''exporté les abonnés de cet abonnement, car ils contiennent des rôles ou des activités qui ne font pas partie de ton domaine d''autorisation.'
     subscription:
       only_persons_with: 'Seulement personnes avec:'
+      persons_excluded_with: 'Personnes exclues avec:'
     export_enqueued: 'L''exportation commence en arrière-plan et sera téléchargé après avoir été complété.'
   version:
     attribute_change:

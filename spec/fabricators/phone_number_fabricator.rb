@@ -9,11 +9,15 @@
 # Table name: phone_numbers
 #
 #  id               :integer          not null, primary key
-#  contactable_id   :integer          not null
 #  contactable_type :string(255)      not null
-#  number           :string(255)      not null
 #  label            :string(255)
+#  number           :string(255)      not null
 #  public           :boolean          default(TRUE), not null
+#  contactable_id   :integer          not null
+#
+# Indexes
+#
+#  index_phone_numbers_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #
 
 Fabricator(:phone_number) do

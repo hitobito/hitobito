@@ -9,9 +9,13 @@
 # Table name: event_answers
 #
 #  id               :integer          not null, primary key
+#  answer           :string(255)
 #  participation_id :integer          not null
 #  question_id      :integer          not null
-#  answer           :string(255)
+#
+# Indexes
+#
+#  index_event_answers_on_participation_id_and_question_id  (participation_id,question_id) UNIQUE
 #
 
 class Event::Answer < ActiveRecord::Base

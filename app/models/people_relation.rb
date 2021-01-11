@@ -9,9 +9,14 @@
 # Table name: people_relations
 #
 #  id      :integer          not null, primary key
+#  kind    :string(255)      not null
 #  head_id :integer          not null
 #  tail_id :integer          not null
-#  kind    :string(255)      not null
+#
+# Indexes
+#
+#  index_people_relations_on_head_id  (head_id)
+#  index_people_relations_on_tail_id  (tail_id)
 #
 
 # Relates two people together. Every relation has an opposite that is created,

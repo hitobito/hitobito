@@ -13,6 +13,10 @@
 #  group_id  :integer          not null
 #  person_id :integer          not null
 #
+# Indexes
+#
+#  person_add_request_ignored_approvers_index  (group_id,person_id) UNIQUE
+#
 class Person::AddRequest::IgnoredApprover < ActiveRecord::Base
 
   belongs_to :group, class_name: '::Group'

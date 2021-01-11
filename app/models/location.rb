@@ -9,9 +9,13 @@
 # Table name: locations
 #
 #  id       :integer          not null, primary key
-#  name     :string(255)      not null
 #  canton   :string(2)        not null
+#  name     :string(255)      not null
 #  zip_code :string(255)      not null
+#
+# Indexes
+#
+#  index_locations_on_zip_code_and_canton_and_name  (zip_code,canton,name) UNIQUE
 #
 
 class Location < ActiveRecord::Base

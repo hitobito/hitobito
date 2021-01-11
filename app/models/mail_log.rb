@@ -11,13 +11,18 @@
 #
 #  id                :integer          not null, primary key
 #  mail_from         :string(255)
-#  mail_subject      :string(255)
 #  mail_hash         :string(255)
-#  status            :integer          default(0)
+#  mail_subject      :string(255)
 #  mailing_list_name :string(255)
-#  mailing_list_id   :integer
+#  status            :integer          default("retreived")
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  mailing_list_id   :integer
+#
+# Indexes
+#
+#  index_mail_logs_on_mail_hash        (mail_hash)
+#  index_mail_logs_on_mailing_list_id  (mailing_list_id)
 #
 
 class MailLog < ActiveRecord::Base

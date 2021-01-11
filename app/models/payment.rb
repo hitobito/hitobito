@@ -5,10 +5,14 @@
 # Table name: payments
 #
 #  id          :integer          not null, primary key
-#  invoice_id  :integer          not null
 #  amount      :decimal(12, 2)   not null
 #  received_at :date             not null
 #  reference   :string(255)
+#  invoice_id  :integer          not null
+#
+# Indexes
+#
+#  index_payments_on_invoice_id  (invoice_id)
 #
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of

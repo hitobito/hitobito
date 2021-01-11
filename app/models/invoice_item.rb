@@ -9,14 +9,18 @@
 # Table name: invoice_items
 #
 #  id          :integer          not null, primary key
-#  invoice_id  :integer          not null
-#  name        :string(255)      not null
-#  description :text(65535)
-#  vat_rate    :decimal(5, 2)
-#  unit_cost   :decimal(12, 2)   not null
-#  count       :integer          default(1), not null
-#  cost_center :string(255)
 #  account     :string(255)
+#  cost_center :string(255)
+#  count       :integer          default(1), not null
+#  description :text(16777215)
+#  name        :string(255)      not null
+#  unit_cost   :decimal(12, 2)   not null
+#  vat_rate    :decimal(5, 2)
+#  invoice_id  :integer          not null
+#
+# Indexes
+#
+#  index_invoice_items_on_invoice_id  (invoice_id)
 #
 
 class InvoiceItem < ActiveRecord::Base

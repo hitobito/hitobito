@@ -8,7 +8,7 @@
 
 desc 'Add column annotations to active records'
 task :annotate do
-  sh 'annotate -p before -e tests'
+  sh 'RAILS_ENV=test annotate -p before -e tests'
 end
 
 namespace :erd do

@@ -9,11 +9,16 @@
 # Table name: event_kind_qualification_kinds
 #
 #  id                    :integer          not null, primary key
+#  category              :string(255)      not null
+#  grouping              :integer
+#  role                  :string(255)      not null
 #  event_kind_id         :integer          not null
 #  qualification_kind_id :integer          not null
-#  category              :string(255)      not null
-#  role                  :string(255)      not null
-#  grouping              :integer
+#
+# Indexes
+#
+#  index_event_kind_qualification_kinds_on_category  (category)
+#  index_event_kind_qualification_kinds_on_role      (role)
 #
 
 class Event::KindQualificationKind < ActiveRecord::Base

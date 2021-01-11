@@ -9,13 +9,17 @@
 # Table name: payment_reminders
 #
 #  id         :integer          not null, primary key
-#  invoice_id :integer          not null
 #  due_at     :date             not null
+#  level      :integer
+#  text       :string(255)
+#  title      :string(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  title      :string(255)
-#  text       :string(255)
-#  level      :integer
+#  invoice_id :integer          not null
+#
+# Indexes
+#
+#  index_payment_reminders_on_invoice_id  (invoice_id)
 #
 
 class PaymentReminder < ActiveRecord::Base

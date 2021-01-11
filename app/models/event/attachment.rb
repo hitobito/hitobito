@@ -9,8 +9,12 @@
 # Table name: event_attachments
 #
 #  id       :integer          not null, primary key
-#  event_id :integer          not null
 #  file     :string(255)      not null
+#  event_id :integer          not null
+#
+# Indexes
+#
+#  index_event_attachments_on_event_id  (event_id)
 #
 
 class Event::Attachment < ActiveRecord::Base

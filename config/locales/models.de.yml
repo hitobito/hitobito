@@ -142,6 +142,9 @@ de:
       custom_content:
         one: Text
         other: Texte
+      dispatch:
+        one: Versand
+        other: Versände
       event:
         one: Anlass
         other: Anlässe
@@ -211,6 +214,9 @@ de:
       label_format:
         one: Etikettenformat
         other: Etikettenformate
+      message:
+        one: Nachricht
+        other: Nachrichten
       mail_log:
         one: Verlauf
         other: Verlauf
@@ -651,10 +657,14 @@ de:
           sender_rejected: Absender abgelehnt
           unkown_recipient: Fehler
 
+      message:
+        source: Empfänger
+        subject: Betreff
+        recipient_count: Anzahl Empfänger
+
       subscription:
         related_role_types: Rollen
         subscriber_id: '' # not used, error messages require different labels
-
       people_filter:
         name: Name
 

@@ -1,3 +1,8 @@
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 class EventSeeder
 
   @@kinds = Event::Kind.list
@@ -88,11 +93,12 @@ class EventSeeder
 
   def seed_questions(event)
     Event::Question.global.limit(rand(4)).each do |q|
-      Event::Question.seed(:event_id, :question,
-       {event_id: event.id,
+      eq = Event::Question.find_or_initialize_by(
+        event_id: event.id,
         question: q.question,
-        choices: q.choices}
       )
+      eq.attributes = { choices: q.choices }
+      eq.save!
     end
   end
 

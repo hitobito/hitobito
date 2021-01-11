@@ -134,7 +134,7 @@ class Group < ActiveRecord::Base
     def order_by_type_stmt(parent_group = nil)
       types = with_child_types(parent_group)
       if types.present?
-        statement = ['CASE groups.type']
+        statement = ["CASE #{Group.quoted_table_name}.type"]
         types.each_with_index do |t, i|
           statement << "WHEN '#{t.sti_name}' THEN #{i}"
         end

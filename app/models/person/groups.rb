@@ -98,7 +98,8 @@ module Person::Groups
     def in_or_below(group, join = { roles: :group })
       joins(join).
         where(groups: { deleted_at: nil }).
-        where('groups.lft >= :lft AND groups.rgt <= :rgt', lft: group.lft, rgt: group.rgt).
+        where("#{Group.quoted_table_name}.lft >= :lft AND #{Group.quoted_table_name}.rgt <= :rgt",
+              lft: group.lft, rgt: group.rgt).
         distinct
     end
 

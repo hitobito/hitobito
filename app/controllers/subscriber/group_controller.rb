@@ -46,10 +46,10 @@ module Subscriber
 
     def groups_query
       possible = Subscription.new(mailing_list: @mailing_list).possible_groups
-      possible.where(search_condition('groups.name', 'parents_groups.name')).
+      possible.where(search_condition("#{Group.quoted_table_name}.name", 'parents_groups.name')).
                includes(:parent).
                references(:parent).
-               order('groups.lft').
+               order("#{Group.quoted_table_name}.lft").
                limit(10)
     end
 

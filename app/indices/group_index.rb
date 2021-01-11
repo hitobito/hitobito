@@ -17,5 +17,5 @@ ThinkingSphinx::Index.define_partial :group do
   indexes social_accounts.name, as: :social_account
   indexes additional_emails.email, as: :additional_email
 
-  where 'groups.deleted_at IS NULL'
+  where "#{Group.quoted_table_name}.deleted_at IS NULL"
 end

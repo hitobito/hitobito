@@ -5,14 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module TextMessages
-  module Provider
+module Messages
+  module TextMessageProvider
     class Base
-      def initialize(config)
+
+      def initialize(config:)
         @config = config
       end
 
-      def send(message, recipients)
+      def send(text, recipients)
         raise 'implement in subclass'
       end
     end

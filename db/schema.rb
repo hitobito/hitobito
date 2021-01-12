@@ -337,7 +337,7 @@ ActiveRecord::Schema.define(version: 2021_01_05_120000) do
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
   end
 
-  create_table "invoice_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "invoice_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "receiver_type"
     t.bigint "receiver_id"
     t.bigint "group_id"
@@ -385,8 +385,8 @@ ActiveRecord::Schema.define(version: 2021_01_05_120000) do
     t.string "participant_number_internal"
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
-    t.string "reference", null: false
     t.bigint "invoice_list_id"
+    t.string "reference", null: false
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_list_id"], name: "index_invoices_on_invoice_list_id"

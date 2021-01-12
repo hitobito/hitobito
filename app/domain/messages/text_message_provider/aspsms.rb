@@ -7,9 +7,28 @@
 
 # https://json.aspsms.com/
 
-module TextMessages
-  module Provider
-    class Aspsms
+module Messages
+  module TextMessageProvider
+    class Aspsms < Base
+
+      SEND_URL = 'https://json.aspsms.com/SendSimpleTextSMS'
+
+      def send(text:, recipients: [])
+        params = config_params
+        params[:MessageText] = text
+        params[:Recipients] = recipients
+        r = RestClient.post(SEND_URL, params.to_json)
+        JSON.parse(r.body)
+      end
+
+      private
+
+      def config_params
+        { UserName: @config[:username],
+          Password: @config[:password],
+          Originator: @config[:originator] }
+      end
+
     end
   end
 end

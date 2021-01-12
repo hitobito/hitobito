@@ -23,10 +23,10 @@ class GroupSetting < RailsSettings::SettingObject
   def _get_value(name)
     if encrypted?(name)
       name = "encrypted_#{name}"
-      encrypted_value = super(name)
+      encrypted_value = value[name]
       decrypt(encrypted_value) if encrypted_value.present?
     else
-      super(name)
+      value[name]
     end
   end
 

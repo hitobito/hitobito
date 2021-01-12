@@ -1,9 +1,9 @@
-# frozen_string_literal: true
+  # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+  #  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+  #  hitobito and licensed under the Affero General Public License version 3
+  #  or later. See the COPYING file at the top-level directory or at
+  #  https://github.com/hitobito/hitobito.
 
 source 'https://rubygems.org'
 
@@ -63,6 +63,7 @@ gem 'rails_autolink'
 gem 'rails-i18n'
 gem 'ledermann-rails-settings'
 gem 'remotipart'
+gem 'rest-client'
 gem 'rqrcode'
 gem 'rubyzip', '~> 1.3.0'
 gem 'seed-fu'

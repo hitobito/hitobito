@@ -223,6 +223,9 @@ de:
       message/letter:
         one: Brief
         other: Briefe
+      message/letter_with_invoice:
+        one: Rechnungsbrief
+        other: Rechnungsbriefe
       mail_log:
         one: Verlauf
         other: Verlauf

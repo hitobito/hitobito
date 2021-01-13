@@ -20,7 +20,7 @@ module Messages
     private
 
     def pdf
-      @pdf ||= Export::Pdf::Messages::Letter.new(message, recipients, preview: true)
+      @pdf ||= message.exporter_class.new(message, recipients, preview: true)
     end
 
     def message

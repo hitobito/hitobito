@@ -1,0 +1,10 @@
+%h2= InvoiceItem.model_name.human(count: 2)
+= table(invoice.invoice_items, class: 'table table-striped') do |t|
+  - t.attr(:name)
+  - t.attr(:description)
+  - t.attr(:cost_center)
+  - t.attr(:account)
+  - t.attr(:count)
+  - t.attr(:vat_rate) { |i| i.decorate.vat_rate }
+  - t.attr(:unit_cost) { |i| i.decorate.unit_cost }
+  - t.attr(:total)  { |i| i.decorate.cost }

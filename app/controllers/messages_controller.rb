@@ -7,7 +7,7 @@
 
 class MessagesController < CrudController
   include YearBasedPaging
-  self.permitted_attrs = [:type, :subject, :body]
+  self.permitted_attrs = [:type, :subject, :body, invoice_attributes: {}]
 
   self.nesting = [Group, MailingList]
   self.remember_params += [:year]

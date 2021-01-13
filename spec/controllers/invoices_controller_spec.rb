@@ -100,6 +100,19 @@ describe InvoicesController do
       expect(response.media_type).to eq('application/pdf')
     end
 
+    it 'exports pdf for invoice with letter' do
+      update_issued_at_to_current_year
+      invoice_list = messages(:with_invoice).create_invoice_list(title: 'test')
+      invoices(:sent).update(invoice_list: invoice_list)
+      expect(Export::Pdf::Messages::LetterWithInvoice).to receive(:new).with(
+        messages(:with_invoice),
+        [invoices(:sent).recipient]
+      ).and_call_original
+      get :index, params: { group_id: group.id }, format: :pdf
+      expect(response.header['Content-Disposition']).to match(/rechnungen.pdf/)
+      expect(response.media_type).to eq('application/pdf')
+    end
+
     it 'exports labels pdf' do
       get :index, params: { group_id: group.id, label_format_id: label_formats(:standard).id }, format: :pdf
       expect(response.media_type).to eq('application/pdf')

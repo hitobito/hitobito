@@ -107,8 +107,18 @@ class InvoicesController < CrudController
   end
 
   def render_invoices_pdf(invoices)
-    pdf = Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
+    letter = find_letter(invoices)
+    pdf = if letter
+            recipients = Person.where(id: invoices.pluck(:recipient_id))
+            Export::Pdf::Messages::LetterWithInvoice.new(letter, recipients).render
+          else
+            Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
+          end
     send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
+  end
+
+  def find_letter(invoices)
+    Message::LetterWithInvoice.find_by(invoice_list_id: invoices.first.invoice_list_id)
   end
 
   def filename(extension, invoices)

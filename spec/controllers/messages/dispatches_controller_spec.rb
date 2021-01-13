@@ -8,17 +8,34 @@
 require 'spec_helper'
 
 describe Messages::DispatchesController do
-  let(:message)    { messages(:letter) }
   let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
 
-  it 'POST#creates creates dispatch and enqueues job' do
-    expect do
-      post :create, params: { message_id: message.id }
-    end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
-    expect(message.reload.state).to eq 'pending'
-    expect(response).to redirect_to message.path_args
-    expect(flash[:notice]).to eq 'Brief wurde als Druckauftrag vorbereitet.'
+  context 'letter' do
+    let(:message)    { messages(:letter) }
+
+    it 'POST#creates creates dispatch and enqueues job' do
+      expect do
+        post :create, params: { message_id: message.id }
+      end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
+      expect(message.reload.state).to eq 'pending'
+      expect(response).to redirect_to message.path_args
+      expect(flash[:notice]).to eq 'Brief wurde als Druckauftrag vorbereitet.'
+    end
+  end
+
+  context 'letter with invoice' do
+    let(:message)    { messages(:with_invoice) }
+
+    it 'POST#creates creates dispatch and enqueues job' do
+      expect do
+        post :create, params: { message_id: message.id }
+      end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
+      expect(message.reload.invoice_list).to be_persisted
+      expect(message.reload.state).to eq 'pending'
+      expect(response).to redirect_to message.path_args
+      expect(flash[:notice]).to eq 'Rechnungsbrief wurde als Druckauftrag vorbereitet.'
+    end
   end
 end

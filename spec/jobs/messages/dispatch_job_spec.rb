@@ -30,4 +30,14 @@ describe Messages::DispatchJob do
       expect(recipient.address).to eq "Top Leader\n\nSupertown\n"
     end
   end
+
+  context :with_invoice do
+    let(:message) { messages(:with_invoice) }
+
+    subject { Messages::DispatchJob.new(message, sender) }
+
+    pending 'creates reciepts invoices and invoice_list ' do
+      subject.perform
+    end
+  end
 end

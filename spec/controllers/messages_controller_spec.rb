@@ -28,18 +28,68 @@ describe MessagesController do
     end
   end
 
-  it 'GET#new builds new Letter and sets recipient count' do
-    Fabricate(:subscription, mailing_list: list, subscriber: top_leader)
-    get :new, params: nesting.merge(message: { type: 'Message::Letter' })
-    expect(assigns(:message)).to be_kind_of(Message::Letter)
-    expect(assigns(:recipient_count)).to eq 1
+  context 'GET#new' do
+    before do
+      Fabricate(:subscription, mailing_list: list, subscriber: top_leader)
+    end
+
+    it 'builds new Letter' do
+      get :new, params: nesting.merge(message: { type: 'Message::Letter' })
+      expect(assigns(:message)).to be_kind_of(Message::Letter)
+      expect(assigns(:recipient_count)).to eq 1
+    end
+
+    it 'builds new LetterWithInvoice' do
+      get :new, params: nesting.merge(message: { type: 'Message::LetterWithInvoice' })
+      expect(assigns(:message)).to be_kind_of(Message::LetterWithInvoice)
+      expect(assigns(:recipient_count)).to eq 1
+    end
   end
 
-  it 'POST#create saves Letter' do
-    post :create, params: nesting.merge(
-      message: { subject: 'Mitgliedsbeitrag', type: 'Message::Letter' }
-    )
-    expect(assigns(:message)).to be_persisted
-    expect(response).to redirect_to group_mailing_list_message_path(id: assigns(:message).id)
+  context 'POST#create' do
+    it 'saves Letter' do
+      post :create, params: nesting.merge(
+        message: { subject: 'Mitgliedsbeitrag', body: 'body', type: 'Message::Letter' }
+      )
+      expect(assigns(:message)).to be_persisted
+      expect(response).to redirect_to group_mailing_list_message_path(id: assigns(:message).id)
+    end
+
+    it 'saves LetterWithInvoice with invoice_items attributes' do
+      Subscription.create!(mailing_list: list, subscriber: top_leader)
+
+      post :create, params: nesting.merge(
+        message: {
+          subject: 'Mitgliedsbeitrag',
+          type: 'Message::LetterWithInvoice',
+          body: 'Bitte einzahlen',
+          invoice_attributes: {
+            invoice_items_attributes: {
+              '1' => { 'name' => 'Mitgliedsbeitrag', '_destroy' => 'false' }
+            }
+          }
+        }
+      )
+      expect(assigns(:message)).to be_persisted
+      expect(assigns(:message).invoice.invoice_items.first.name).to eq 'Mitgliedsbeitrag'
+      expect(response).to redirect_to group_mailing_list_message_path(id: assigns(:message).id)
+    end
+
+    it 'keeps invoice_items attributes for LetterWithInvoice' do
+      post :create, params: nesting.merge(
+        message: {
+          type: 'Message::LetterWithInvoice',
+          subject: 'Mitgliedsbeitrag',
+          invoice_attributes: {
+            invoice_items_attributes: {
+              '1' => { 'name' => 'Mitgliedsbeitrag', '_destroy' => 'false' }
+            }
+          }
+        }
+      )
+      expect(assigns(:message)).to be_invalid
+      expect(assigns(:message).invoice.invoice_items.first.name).to eq 'Mitgliedsbeitrag'
+      expect(response).to render_template :new
+    end
   end
 end

@@ -3,8 +3,9 @@
 / #  or later. See the COPYING file at the top-level directory or at
 / #  https://github.com/hitobito/hitobito.
 
-- if entry.letter?
+- if entry.letter? && !entry.dispatched?
   = action_button(t('.button_preview'), message_preview_path(message_id: entry.id, format: :pdf), :eye)
+  = action_button(t('.button_dispatch_letter'), message_dispatch_path(message_id: entry.id), :paper_plane, method: :post)
 
-= button_action_edit if can?(:edit, entry)
-= button_action_destroy if can?(:destroy, entry)
+  = button_action_edit if can?(:edit, entry)
+  = button_action_destroy if can?(:destroy, entry)

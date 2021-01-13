@@ -11,10 +11,17 @@ class MessageAbility < AbilityDsl::Base
     permission(:layer_and_below_full)
       .may(:create, :show, :edit, :update, :destroy)
       .in_layer_or_below
+    permission(:layer_and_below_full)
+      .may(:edit, :update, :destroy)
+      .in_layer_or_below_if_not_dispatched
   end
 
   def in_layer_or_below
     permission_in_layers?(subject.group.layer_hierarchy.collect(&:id))
+  end
+
+  def in_layer_or_below_if_not_dispatched
+    in_layer_or_below && !subject.dispatched?
   end
 
 end

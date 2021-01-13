@@ -15,7 +15,7 @@ describe Messages::PreviewsController do
 
   it 'GET#show redirects to message when recipients are empty' do
     get :show, params: { message_id: message.id }
-    expect(response).to redirect_to [message.group, message.mailing_list, message]
+    expect(response).to redirect_to message.path_args
     expect(flash[:alert]).to eq 'Empfängerliste ist leer, kann keine Vorschau erstellen.'
   end
 

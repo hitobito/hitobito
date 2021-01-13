@@ -224,7 +224,7 @@ class Invoice < ActiveRecord::Base
 
   def set_recipient_fields
     self.recipient_email = recipient.email
-    self.recipient_address = build_recipient_address
+    self.recipient_address = recipient.address_for_letter
   end
 
   def item_invalid?(attributes)
@@ -233,13 +233,6 @@ class Invoice < ActiveRecord::Base
 
   def increment_sequence_number
     invoice_config.increment!(:sequence_number) # rubocop:disable Rails/SkipsModelValidations
-  end
-
-  def build_recipient_address # rubocop:disable Metrics/AbcSize
-    [recipient.full_name.to_s.squish,
-     recipient.address.to_s.squish,
-     [recipient.zip_code, recipient.town].compact.join(' ').squish,
-     recipient.country.to_s.squish].compact.join("\n")
   end
 
   def recipient_name_from_recipient_address

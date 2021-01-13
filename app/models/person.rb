@@ -60,7 +60,7 @@
 #  index_people_on_unlock_token          (unlock_token) UNIQUE
 #
 
-class Person < ActiveRecord::Base
+class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,
@@ -336,6 +336,10 @@ class Person < ActiveRecord::Base
 
   def person_duplicates
     PersonDuplicate.where(person_1: id).or(PersonDuplicate.where(person_2: id))
+  end
+
+  def address_for_letter
+    Person::Address.new(self).for_letter
   end
 
   private

@@ -33,5 +33,5 @@ curl "https://demo.hitobito.com/de/groups/1.json?token=DtmPJ1iimjJi2neQQDq8efrqS
 ```bash
 curl -H "X-Token: DtmPJ1iimjJi2neQQDq8efrqS5gBa7-5b8ZxboBCFdAm4HBBBP" \
      -H "Accept: application/json" \
-     https://demo.puzzle.ch/de/groups/1
+     https://demo.hitobito.com/de/groups/1
 ```

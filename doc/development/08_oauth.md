@@ -86,3 +86,19 @@ An example response could be (formatted here for readability):
   "nickname": "Polka"
 }
 ```
+
+### Accessing the JSON-API
+
+All endpoints except for the root group endpoint (`/groups`) from the [JSON API](05_rest_api.md) can be used with a personal OAuth access token (if the token has the `api` scope). As with personal tokens, there are two possibilities to use the API:
+
+* **Query parameter**: Send `access_token` as query parameter in the URL, and append `.json` to the URL path
+```bash
+curl "https://demo.hitobito.com/de/groups/1.json?access_token=a3922ce7b6776e293c40d1d47a16d3787b860fb31ee7b121793f40492bae309f"
+```
+
+* **Request headers**: Set the following headers on the HTTP request: `Authorization: Bearer <access_token>` and `Accept: application/json`
+```bash
+curl -H "Authorization: Bearer a3922ce7b6776e293c40d1d47a16d3787b860fb31ee7b121793f40492bae309f" \
+     -H "Accept: application/json" \
+     https://demo.hitobito.com/de/groups/1
+```

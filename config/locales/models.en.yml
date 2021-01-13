@@ -567,7 +567,7 @@ en:
       name: Read your e-mail address and name
       with_roles: Read your base data and roles
       openid: Read your OIDC Identity Token
-      api: Call all JSON-Interfaces in your name
+      api: Read all people, groups, events and invoices to which you have access, via the JSON-interfaces
   errors:
     messages:
       invalid_date: "is not a valid date"

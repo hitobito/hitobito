@@ -756,7 +756,7 @@ fr:
       name: Lecture de ton adresse e-mail et de ton nom
       with_roles: Lecture de tes données de base et rôles
       openid: Lecture de ton Token d'identité OIDC
-      api: Appeler toutes les interfaces JSON en ton nom
+      api: Lecture de toutes les personnes, groupes, événements et factures auxquels vous avez accès, via les interfaces JSON
   errors:
     messages:
       invalid_money: "doit être arrondi à 5 centimes"

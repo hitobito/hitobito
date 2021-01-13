@@ -48,8 +48,9 @@ module Group::NestedSet
   # siblings with the same type and all their descendant groups, including self
   def sister_groups_with_descendants
     Group.without_deleted
-         .joins('LEFT JOIN groups AS sister_groups ' \
-                'ON groups.lft >= sister_groups.lft AND groups.lft < sister_groups.rgt')
+         .joins("LEFT JOIN #{Group.quoted_table_name} AS sister_groups " \
+                "ON #{Group.quoted_table_name}.lft >= sister_groups.lft " \
+                "AND #{Group.quoted_table_name}.lft < sister_groups.rgt")
          .where(sister_groups: { type: type, parent_id: parent_id })
   end
 

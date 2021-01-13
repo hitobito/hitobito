@@ -34,7 +34,7 @@ class EventsController < CrudController
 
   self.sort_mappings = { name: 'events.name', state: 'events.state',
                          dates_full: 'event_dates.start_at',
-                         group_ids: 'groups.name' }
+                         group_ids: "#{Group.quoted_table_name}.name" }
 
   self.search_columns = [:name]
 

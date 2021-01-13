@@ -1,0 +1,14 @@
+-#  Copyright (c) 2020, CVP Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title @group.to_s
+
+= crud_table do |t|
+  - t.col(t('activerecord.attributes.group_setting.var')) do |s|
+    = s.name
+  - t.col('') do |s|
+    = s.translated_values
+  - action_col(t) do |s|
+    = link_action_edit(edit_group_group_setting_path(@group, s.var), remote: true)

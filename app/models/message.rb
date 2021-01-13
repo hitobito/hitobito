@@ -14,9 +14,11 @@
 #  updated_at      :datetime         not null
 #  mailing_list_id :bigint
 #  sender_id       :bigint
+#  invoice_list_id :bigint
 #
 # Indexes
 #
+#  index_messages_on_invoice_list_id  (invoice_list_id)
 #  index_messages_on_mailing_list_id  (mailing_list_id)
 #  index_messages_on_sender_id        (sender_id)
 #
@@ -50,6 +52,10 @@ class Message < ActiveRecord::Base
     is_a?(Message::Letter)
   end
 
+  def invoice?
+    is_a?(Message::LetterWithInvoice)
+  end
+
   def dispatched?
     state != 'draft'
   end
@@ -60,5 +66,9 @@ class Message < ActiveRecord::Base
 
   def path_args
     [group, mailing_list, self]
+  end
+
+  def exporter_class
+    "Export::Pdf::Messages::#{type.demodulize}".constantize
   end
 end

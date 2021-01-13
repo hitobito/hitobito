@@ -18,7 +18,7 @@
     = f.labeled_input_field :payment_purpose, rows: 2
 
   = field_set_tag do
-    = render "invoice_lists/invoice_articles", f: f
+    = render "invoice_lists/invoice_articles", f: f, group: parent
 
   = field_set_tag do
     = f.labeled_inline_fields_for :invoice_items, 'invoice_lists/invoice_items'

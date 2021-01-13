@@ -479,6 +479,8 @@ ActiveRecord::Schema.define(version: 2021_01_13_131128) do
     t.timestamp "created_at"
     t.timestamp "failed_at"
     t.text "error"
+    t.bigint "invoice_id"
+    t.index ["invoice_id"], name: "index_message_recipients_on_invoice_id"
     t.index ["message_id"], name: "index_message_recipients_on_message_id"
     t.index ["person_id"], name: "index_message_recipients_on_person_id"
   end
@@ -495,6 +497,9 @@ ActiveRecord::Schema.define(version: 2021_01_13_131128) do
     t.timestamp "sent_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "invoice_attributes"
+    t.bigint "invoice_list_id"
+    t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end

@@ -27,6 +27,10 @@ module Sheet
             (view.can?(:index_invoices, group) || view.can?(:index_invoices, person))
         end)
 
+    tab 'activerecord.models.message.other',
+        :messages_group_person_path,
+        if: :show_details
+
     tab 'people.tabs.history',
         :history_group_person_path,
         if: :history
@@ -40,10 +44,6 @@ module Sheet
         if: (lambda do |_view, _group, person|
           person.company_name?
         end)
-
-    tab 'activerecord.models.message.other',
-        :messages_group_person_path,
-        if: :show_details
 
     def link_url
       view.group_person_path(parent_sheet.entry.id, entry.id)

@@ -28,24 +28,36 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+class Message::LetterWithInvoice < Message::Letter
 
-simple:
-  mailing_list: leaders
-  type: Message
-  subject: Simple
+  belongs_to :invoice_list
+  serialize :invoice_attributes, Hash
 
-letter:
-  mailing_list: leaders
-  type: Message::Letter
-  subject: Information
+  def invoice_list
+    @invoice_list ||= InvoiceList.create!(
+      title: subject,
+      group: group,
+      receiver: mailing_list,
+      invoice: invoice
+    )
+  end
 
-with_invoice:
-  mailing_list: leaders
-  type: Message::LetterWithInvoice
-  subject: Mitgliedsbeitrag
-  invoice_attributes:
-    invoice_items_attributes:
-      1:
-        name: Mitgliedsbeitrag
-        count: 1
-        unit_cost: 10
+  def invoice
+    @invoice ||= Invoice.new.tap do |invoice|
+      invoice.group = group
+      invoice.group = group.layer_group
+      invoice.title = subject
+      invoice_attributes.to_h.fetch('invoice_items_attributes', {}).values.each do |v|
+        invoice.invoice_items.build(v.except('_destroy'))
+      end
+    end
+  end
+
+  def invoice_for(receiver)
+    invoice.tap do |invoice|
+      invoice.recipient = receiver
+      invoice.send(:set_recipient_fields)
+      raise 'invoice invalid' unless invoice.valid?
+    end
+  end
+end

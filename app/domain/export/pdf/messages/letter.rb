@@ -18,15 +18,22 @@ module Export::Pdf::Messages
       pdf = Prawn::Document.new(render_options)
       customize(pdf)
       @recipients.each do |recipient|
-        sections.each { |section| section.new(pdf, @letter, self).render(recipient) }
+        render_sections(pdf, recipient)
         pdf.start_new_page unless last?(recipient)
       end
       pdf.render
     end
 
+    def render_sections(pdf, recipient)
+      sections.each do |section|
+        section.new(pdf, @letter, self).render(recipient)
+      end
+    end
+
     def filename
       parts = [@letter.subject.parameterize(separator: '_')]
       parts << %w(preview) if preview?
+      yield parts if block_given?
       [parts.join('-'), :pdf].join('.')
     end
 

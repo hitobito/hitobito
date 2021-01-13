@@ -22,7 +22,7 @@
     = fi.labeled_input_field :payment_purpose
 
     = field_set_tag do
-      = render "invoice_articles", f: fi
+      = render "invoice_articles", f: fi, group: parent
 
     = field_set_tag do
       = fi.labeled_inline_fields_for :invoice_items, 'invoice_items'

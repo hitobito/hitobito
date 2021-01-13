@@ -14,3 +14,7 @@
       = render_attrs entry, :recipient_count, :state
       - if entry.sent_at
         = render_attrs entry, :sent_at, :success_count, :failed_count, :sent_at
+
+  - if entry.invoice?
+    %aside.col-lg-5.offset-lg-1
+      = render "invoice_aside", invoice: entry.invoice

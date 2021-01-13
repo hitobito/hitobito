@@ -8,22 +8,36 @@
 require 'spec_helper'
 
 describe Messages::PreviewsController do
-  let(:message)    { messages(:letter) }
   let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
 
-  it 'GET#show redirects to message when recipients are empty' do
-    get :show, params: { message_id: message.id }
-    expect(response).to redirect_to message.path_args
-    expect(flash[:alert]).to eq 'Empfängerliste ist leer, kann keine Vorschau erstellen.'
-  end
+  context 'letter' do
+    let(:message) { messages(:letter) }
 
-  it 'GET#show renders file' do
-    Subscription.create!(mailing_list: message.mailing_list, subscriber: top_leader)
-    get :show, params: { message_id: message.id }
-    expect(response.header['Content-Disposition']).to match(/information-preview.pdf/)
-    expect(response.media_type).to eq('application/pdf')
-  end
+    it 'redirects to message when recipients are empty' do
+      get :show, params: { message_id: message.id }
+      expect(response).to redirect_to message.path_args
+      expect(flash[:alert]).to eq 'Empfängerliste ist leer, kann keine Vorschau erstellen.'
+    end
 
+    it 'renders file' do
+      Subscription.create!(mailing_list: message.mailing_list, subscriber: top_leader)
+      get :show, params: { message_id: message.id }
+      expect(response.header['Content-Disposition']).to match(/information-preview.pdf/)
+      expect(response.media_type).to eq('application/pdf')
+    end
+
+    context 'letter_with_invoice' do
+      let(:message) { messages(:with_invoice) }
+
+      it 'renders file' do
+        invoice_configs(:top_layer).update(payment_slip: :qr)
+        Subscription.create!(mailing_list: message.source, subscriber: top_leader)
+        get :show, params: { message_id: message.id }
+        expect(response.header['Content-Disposition']).to match(/rechnung-mitgliedsbeitrag-preview.pdf/)
+        expect(response.media_type).to eq('application/pdf')
+      end
+    end
+  end
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2017-2018, Jungwacht Blauring Schweiz. This file is part of
@@ -57,6 +56,15 @@ describe Invoice do
     invoice.reload.update(state: :sent)
     expect(invoice).not_to be_valid
     expect(invoice.errors.full_messages).to include(/Rechnungsposten muss ausgefüllt werden/)
+  end
+
+  it 'accepts that an invoice in state issued or sent has no items if  part of an invoice_list' do
+    invoice = create_invoice
+    invoice.update(invoice_list: InvoiceList.create!(group: group, title: 'list'))
+    invoice.update(state: :issued)
+    expect(invoice).to be_valid
+    invoice.reload.update(state: :sent)
+    expect(invoice).to be_valid
   end
 
   it 'computes sequence_number based of group_id and invoice_config.sequence_number' do

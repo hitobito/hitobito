@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-RSpec.describe 'GET oauth/profile', :type => :request do
+RSpec.describe 'GET oauth/profile', type: :request do
   let(:application) { Fabricate(:application) }
   let(:user)        { people(:bottom_member) }
 
@@ -22,7 +22,7 @@ RSpec.describe 'GET oauth/profile', :type => :request do
     let(:token)  { Fabricate(:access_token, application: application, resource_owner_id: user.id) }
 
     it 'fails with HTTP 403 (forbidden)' do
-      get '/oauth/profile', :headers => { 'Authorization': 'Bearer ' + token.token }
+      get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token }
 
       expect(response).to have_http_status(:forbidden)
     end
@@ -33,7 +33,7 @@ RSpec.describe 'GET oauth/profile', :type => :request do
     
     context 'with bad token signature' do
       it 'fails with HTTP 401 (unauthorized)' do
-        get '/oauth/profile', :headers => { 'Authorization': 'Bearer ' + token.token + 'X'}
+        get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token + 'X'}
   
         expect(response).to have_http_status(:unauthorized)
       end
@@ -41,7 +41,7 @@ RSpec.describe 'GET oauth/profile', :type => :request do
 
     context 'with wrong scope in request' do
       it 'fails with HTTP 403 (forbidden)' do
-        get '/oauth/profile', :headers => { 'Authorization': 'Bearer ' + token.token, 'X-Scope': 'name' }
+        get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token, 'X-Scope': 'name' }
         
         expect(response).to have_http_status(:forbidden)
         expect(response.content_type).to eq('application/json; charset=utf-8')
@@ -51,7 +51,7 @@ RSpec.describe 'GET oauth/profile', :type => :request do
 
     context 'without scope in request' do
       it 'succeeds' do
-        get '/oauth/profile', :headers => { 'Authorization': 'Bearer ' + token.token }
+        get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token }
 
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json; charset=utf-8')
@@ -61,7 +61,7 @@ RSpec.describe 'GET oauth/profile', :type => :request do
 
     context 'with email scope in request' do
       it 'succeeds' do
-        get '/oauth/profile', :headers => { 'Authorization': 'Bearer ' + token.token, 'X-Scope': 'email' }
+        get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token, 'X-Scope': 'email' }
 
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json; charset=utf-8')
@@ -74,7 +74,7 @@ RSpec.describe 'GET oauth/profile', :type => :request do
     let(:token)  { Fabricate(:access_token, application: application, scopes: { scopes: 'email' }, resource_owner_id: user.id, expires_in: -1.minute ) }
 
     it 'fails with 401 (unauthorized)' do
-      get '/oauth/profile', :headers => { 'Authorization': 'Bearer ' + token.token }
+      get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token }
 
       expect(response).to have_http_status(:unauthorized)  
     end
@@ -85,7 +85,7 @@ RSpec.describe 'GET oauth/profile', :type => :request do
 
     context 'with scope "name" in request' do
       it 'succeeds' do
-        get '/oauth/profile', :headers => { 'Authorization': 'Bearer ' + token.token, 'X-Scope': 'name' }
+        get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token, 'X-Scope': 'name' }
 
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json; charset=utf-8')
@@ -101,7 +101,7 @@ RSpec.describe 'GET oauth/profile', :type => :request do
 
     context 'with scope "with_roles" in request' do
       it 'succeeds' do
-        get '/oauth/profile', :headers => { 'Authorization': 'Bearer ' + token.token, 'X-Scope': 'with_roles' }
+        get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token, 'X-Scope': 'with_roles' }
 
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json; charset=utf-8')

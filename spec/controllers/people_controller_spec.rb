@@ -918,7 +918,7 @@ describe PeopleController do
   end
 
   context 'with valid oauth token' do
-    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => true, :accessible? => true, :resource_owner_id => top_leader.id) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: true, accessible?: true, resource_owner_id: top_leader.id) }
 
     before do
       allow(controller).to receive(:doorkeeper_token) { token }
@@ -961,7 +961,7 @@ describe PeopleController do
   end
 
   context 'without acceptable oauth token (required scope is missing)' do
-    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => false, :accessible? => true, :resource_owner_id => top_leader.id) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: false, accessible?: true, resource_owner_id: top_leader.id) }
 
     before do
       allow(controller).to receive(:doorkeeper_token) { token }

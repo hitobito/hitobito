@@ -438,7 +438,7 @@ describe EventsController do
   describe 'with valid OAuth token' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => true, :accessible? => true, :resource_owner_id => people(:top_leader).id) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: true, accessible?: true, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow(controller).to receive(:doorkeeper_token) { token }
@@ -458,7 +458,7 @@ describe EventsController do
   describe 'with invalid OAuth token (expired or revoked)' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => true, :accessible? => false, :resource_owner_id => people(:top_leader).id) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: true, accessible?: false, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow(controller).to receive(:doorkeeper_token) { token }
@@ -478,7 +478,7 @@ describe EventsController do
   describe 'without acceptable OAuth token (missing scope)' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => false, :accessible? => true, :resource_owner_id => people(:top_leader).id) }
+    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: false, accessible?: true, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow(controller).to receive(:doorkeeper_token) { token }
@@ -512,7 +512,7 @@ describe EventsController do
     end
 
     context 'oauth' do
-      let(:token) { instance_double('Doorkeeper::AccessToken', :acceptable? => true, :accessible? => true, :resource_owner_id => people(:top_leader).id) }
+      let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: true, accessible?: true, resource_owner_id: people(:top_leader).id) }
 
       before do
         allow(controller).to receive(:doorkeeper_token) { token }

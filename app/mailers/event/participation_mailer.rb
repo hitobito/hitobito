@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -84,7 +84,11 @@ class Event::ParticipationMailer < ApplicationMailer
   end
 
   def participation_url
-    group_event_participation_url(event.groups.first, event, participation)
+    group_event_participation_url(
+      group_id: event.groups.first.id,
+      event_id: event.id,
+      id: participation.id
+    )
   end
 
   def event_details # rubocop:disable Metrics/MethodLength,Metrics/AbcSize

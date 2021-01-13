@@ -108,6 +108,9 @@ class Group < ActiveRecord::Base
            foreign_key: :layer_group_id,
            dependent: :destroy
 
+
+  has_settings :text_message_provider, class_name: 'GroupSetting'
+
   ### VALIDATIONS
 
   validates_by_schema except: [:logo, :address]
@@ -213,6 +216,10 @@ class Group < ActiveRecord::Base
     end
     duplicates.includes(person_1: [{ roles: :group }, :groups, :primary_group],
                         person_2: [{ roles: :group }, :groups, :primary_group])
+  end
+
+  def settings_all
+    GroupSetting.list(id)
   end
 
   private

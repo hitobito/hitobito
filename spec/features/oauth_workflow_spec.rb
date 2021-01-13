@@ -8,8 +8,10 @@ describe 'OauthWorkflow' do
 
   it 'creates new application' do
     visit root_path
-    click_link 'Einstellungen'
-    click_link 'OAuth Applikationen'
+    within('#page-navigation') do
+      click_link 'Einstellungen'
+      click_link 'OAuth Applikationen'
+    end
     click_link 'Erstellen'
     fill_in 'Name', with: 'MyApp'
     fill_in 'Redirect URI', with: 'urn:ietf:wg:oauth:2.0:oob'

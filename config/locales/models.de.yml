@@ -190,6 +190,9 @@ de:
       group:
         one: Gruppe
         other: Gruppen
+      group_setting:
+        one: Einstellung
+        other: Einstellungen
       help_text:
         one: Hilfetext
         other: Hilfetexte
@@ -543,6 +546,14 @@ de:
         number: Telefonnummer
         label: Telefonnummer Typ
         public: Öffentlich
+
+      group_setting:
+        var: Einstellung
+        settings:
+          text_message_provider: SMS Provider
+        username: Benutzername
+        password: Passwort
+        provider: Provider
 
       role:
         label: Bezeichnung

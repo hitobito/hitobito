@@ -65,6 +65,7 @@ de:
 
     tabs:
       info: Info
+      settings: Einstellungen
 
     search:
       placeholder: 'Suchen...'
@@ -77,7 +78,7 @@ de:
     index:
       title: '%{models}'
 
-  crud:
+  crud: &crud
     show:
       title: "%{model}"
     new:
@@ -94,6 +95,8 @@ de:
       flash:
         success: "%{model} wurde erfolgreich gelöscht."
         failure: "%{model} konnte nicht gelöscht werden."
+
+  modal_crud: *crud
 
   contactable:
     address_or_email: "%{address} oder %{email}"

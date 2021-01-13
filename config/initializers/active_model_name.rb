@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -13,7 +13,8 @@ module ActiveModel
       # So only one controller/route for all STI classes is used.
       def initialize(*args)
         super(*args)
-      return if @klass == Oauth::Application
+        return if @klass == Oauth::Application
+        return if @klass == GroupSetting
 
         if @klass != @klass.base_class
           base_name = @klass.base_class.model_name

@@ -55,6 +55,8 @@ Hitobito::Application.routes.draw do
 
       end
 
+      resources :settings, only: [:index, :edit, :update], controller: 'group_settings', as: 'group_settings'
+
       resources :invoices do
         resources :payments, only: :create
       end

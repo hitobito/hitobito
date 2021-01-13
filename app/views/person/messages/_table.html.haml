@@ -9,8 +9,11 @@
 = crud_table do |t|
   - t.col(Message.human_attribute_name(:subject)) do |message|
     %strong
-      = link_to(message, message.path_args)
-  - t.sortable_attrs(:type, :state, :sent_at)
-  - add_table_actions(t)
+      - if can?(:update, message.mailing_list)
+        = link_to(message, [message.group, message.mailing_list, message])
+      - else
+        = message
+
+  - t.sortable_attrs(:type, :state)
 
 = paginate @messages

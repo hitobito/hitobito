@@ -79,6 +79,7 @@ Hitobito::Application.routes.draw do
           get 'log' => 'person/log#index'
           get 'colleagues' => 'person/colleagues#index'
           get 'invoices' => 'person/invoices#index'
+          get 'messages' => 'person/messages#index'
         end
 
         resources :notes, only: [:create, :destroy]
@@ -295,6 +296,7 @@ Hitobito::Application.routes.draw do
     resources :table_displays, only: [:create]
     resources :messages, only: [] do
       resource :preview, only: [:show], module: :messages
+      resource :dispatch, only: [:create, :show], module: :messages
     end
   end # scope locale
 

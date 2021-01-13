@@ -318,6 +318,10 @@ class Person < ActiveRecord::Base
     PersonDuplicate.where(person_1: id).or(PersonDuplicate.where(person_2: id))
   end
 
+  def address_for_letter
+    Person::Address.new(self).for_letter
+  end
+
   private
 
   def override_blank_email

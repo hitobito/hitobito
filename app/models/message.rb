@@ -28,11 +28,17 @@
 
 
 class Message < ActiveRecord::Base
+  include I18nEnums
+
   validates_by_schema
   belongs_to :mailing_list
   belongs_to :sender, class_name: 'Person'
   has_many :message_recipients, dependent: :restrict_with_error
   has_one :group, through: :mailing_list
+
+  STATES = %w(draft pending processing finished failed).freeze
+  i18n_enum :state, STATES, scopes: true, queries: true
+  validates :state, inclusion: { in: STATES }
 
   scope :list, -> { order(:created_at) }
 
@@ -44,4 +50,15 @@ class Message < ActiveRecord::Base
     is_a?(Message::Letter)
   end
 
+  def dispatched?
+    state != 'draft'
+  end
+
+  def dispatcher_class
+    "Messages::Dispatch::#{type.demodulize}".constantize
+  end
+
+  def path_args
+    [group, mailing_list, self]
+  end
 end

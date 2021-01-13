@@ -663,7 +663,17 @@ de:
       message:
         source: Empfänger
         subject: Betreff
+        state: Zustand
+        states:
+          draft: Entwurf
+          pending: Vorbereitet
+          processing: in Bearbeitung
+          finished: Abgeschlossen
         recipient_count: Anzahl Empfänger
+        success_count: Empfänger erfolgreich
+        failed_count: Empfänger fehlerhaft
+        sent_at: Verarbeitet um
+
       message/letter:
         body: Inhalt
 

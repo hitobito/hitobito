@@ -3,6 +3,14 @@
 / #  or later. See the COPYING file at the top-level directory or at
 / #  https://github.com/hitobito/hitobito.
 
-= render_attrs entry, :type, :subject
-- if entry.letter?
-  = render_attrs entry, :body
+#main.row
+  %article.col-lg-5
+    = render_attrs entry, :type, :subject
+    - if entry.letter?
+      = render_attrs entry, :body
+
+    - if entry.dispatched?
+      %h2=t('.dispatch_infos')
+      = render_attrs entry, :recipient_count, :state
+      - if entry.sent_at
+        = render_attrs entry, :sent_at, :success_count, :failed_count, :sent_at

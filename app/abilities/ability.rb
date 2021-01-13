@@ -21,6 +21,7 @@ class Ability
                  GroupAbility,
                  InvoiceAbility,
                  MailingListAbility,
+                 MessageAbility,
                  NoteAbility,
                  OauthAbility,
                  PeopleFilterAbility,

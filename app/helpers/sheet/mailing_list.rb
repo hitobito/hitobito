@@ -13,6 +13,12 @@ module Sheet
         :group_mailing_list_path,
         no_alt: true
 
+    tab 'activerecord.models.message.other',
+        :group_mailing_list_messages_path,
+        if: (lambda do |view, _group, mailing_list|
+          view.can?(:update, mailing_list)
+        end)
+
     tab 'activerecord.models.subscription.other',
         :group_mailing_list_subscriptions_path,
         if: :index_subscriptions,

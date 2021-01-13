@@ -198,6 +198,8 @@ Hitobito::Application.routes.draw do
       end
 
       resources :mailing_lists do
+        resources :messages
+
         resources :subscriptions, only: [:index, :destroy] do
           collection do
             resources :person, only: [:new, :create], controller: 'subscriber/person'
@@ -293,7 +295,9 @@ Hitobito::Application.routes.draw do
     get 'synchronizations/:id' => 'async_synchronizations#show'
 
     resources :table_displays, only: [:create]
-
+    resources :messages, only: [] do
+      resource :preview, only: [:show], module: :messages
+    end
   end # scope locale
 
   # The priority is based upon order of creation:

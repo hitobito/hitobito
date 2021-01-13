@@ -26,22 +26,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
-class Message < ActiveRecord::Base
-  validates_by_schema
-  belongs_to :mailing_list
-  belongs_to :sender, class_name: 'Person'
-  has_many :message_recipients, dependent: :restrict_with_error
-  has_one :group, through: :mailing_list
-
-  scope :list, -> { order(:created_at) }
-
-  def to_s
-    subject ? subject.truncate(20) : super
-  end
-
-  def letter?
-    is_a?(Message::Letter)
-  end
-
+class Message::Letter < Message
+  has_rich_text :body
 end

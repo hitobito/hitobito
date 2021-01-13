@@ -27,9 +27,10 @@ class Invoice::BatchCreate
     Invoice::BatchCreateJob.new(invoice_list.id, invoice_parameters).enqueue!
   end
 
-  def initialize(invoice_list)
+  def initialize(invoice_list, people = nil)
     @invoice_list = invoice_list
     @invoice = invoice_list.invoice
+    @people = people
     @results = []
     @invalid = []
   end
@@ -44,6 +45,10 @@ class Invoice::BatchCreate
     end
   end
 
+  def create_invoice(recipient)
+    invoice_list.group.invoices.build(attributes(recipient)).save
+  end
+
   private
 
   def receiver?
@@ -51,14 +56,18 @@ class Invoice::BatchCreate
   end
 
   def create_invoices
-    invoice_list.recipients.find_in_batches do |batch|
+    recipients.find_in_batches do |batch|
       batch.each do |recipient|
-        success = invoice_list.group.invoices.build(attributes(recipient)).save
+        success = create_invoice(recipient)
         invalid << recipient.id unless success
         results << success
       end
       update_invoice_list if receiver?
     end
+  end
+
+  def recipients
+    @people || invoice_list.recipients
   end
 
   def update_invoice_list

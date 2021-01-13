@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-module Messages::Dispatch
-  class Letter
+module Messages
+  class LetterDispatch
     delegate :update, :success_count, to: '@message'
 
     def initialize(message, people)

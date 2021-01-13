@@ -197,5 +197,14 @@ mailchimp:
 addresses:
   url: https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway
   token: <%= ENV['ADDRESSES_TOKEN'] %>
-  imported_countries: 
+  imported_countries:
     - CH
+
+messages:
+  pdf:
+    logo: <%= Rails.root.join("app/javascript/images/logo-black.png") %>
+    preview: <%= Rails.root.join("app/javascript/images/preview.png") %>
+    address: |-
+      hitobito AG
+      Belpstrasse 37
+      3007 Bern

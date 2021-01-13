@@ -22,6 +22,11 @@ module YearBasedPaging
     @year_range ||= (year - 2)..(year + 1)
   end
 
+  def year_filter
+    date = Date.new(year, 1 , 1)
+    date.beginning_of_year..date.end_of_year
+  end
+
   def default_year
     @default_year ||= Time.zone.today.year
   end

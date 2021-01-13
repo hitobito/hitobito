@@ -126,3 +126,12 @@ events_action_index_de_body:
   record: events_action_index_de (HelpText::Translation)
   name: body
   body: 'test'
+
+letter_body:
+  record: letter (Message)
+  name: body
+  body: |
+    Hallo {first_name}<br/><br/>
+    Wir laden <strong>dich</strong> ein!
+    <br/><br/>
+    Bis bald

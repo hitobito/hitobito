@@ -40,7 +40,7 @@ class Person::AddRequest < ActiveRecord::Base
   class << self
     def for_layer(layer_group)
       joins(:person).
-        joins("LEFT JOIN #{::Group.quoted_table_name} AS primary_groups ON primary_groups.id = people.primary_group_id").
+        joins('LEFT JOIN groups AS primary_groups ON primary_groups.id = people.primary_group_id').
         where('primary_groups.layer_group_id = ? OR people.id IN (?)',
               layer_group.id,
               ::Group::DeletedPeople.deleted_for(layer_group).select(:id))

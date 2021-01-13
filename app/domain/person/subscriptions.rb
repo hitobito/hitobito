@@ -31,8 +31,7 @@ class Person::Subscriptions
   def from_groups
     sql = <<~SQL
       related_role_types.role_type = ? AND
-      #{Group.quoted_table_name}.lft <= ? AND
-      #{Group.quoted_table_name}.rgt >= ? AND
+      groups.lft <= ? AND groups.rgt >= ? AND
       (tags.name IS NULL OR tags.name IN (?))
     SQL
 
@@ -43,8 +42,7 @@ class Person::Subscriptions
 
     Subscription
       .groups
-      .joins("INNER JOIN #{Group.quoted_table_name} ON " \
-             "#{Group.quoted_table_name}.id = subscriptions.subscriber_id")
+      .joins('INNER JOIN groups ON groups.id = subscriptions.subscriber_id')
       .joins(:related_role_types)
       .left_joins(:tags)
       .where(condition.to_a)

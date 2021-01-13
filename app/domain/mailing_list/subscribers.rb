@@ -25,13 +25,13 @@ class MailingList::Subscribers
   def people_joins
     sql = <<~SQL
       LEFT JOIN roles ON people.id = roles.person_id
-      LEFT JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
+      LEFT JOIN groups ON roles.group_id = groups.id
     SQL
 
     if subscriptions.events.exists?
-      sql += <<~SQL
+      sql += <<~sql
         LEFT JOIN event_participations ON event_participations.person_id = people.id
-      SQL
+      sql
     end
 
     if subscriptions.groups.tagged.exists?
@@ -45,23 +45,23 @@ class MailingList::Subscribers
   end
 
   def subscription_joins
-    sql = ', subscriptions ' # the comma is needed because it is not a JOIN, but a second "FROM"
+    sql = ", subscriptions " # the comma is needed because it is not a JOIN, but a second "FROM"
 
     if subscriptions.groups.exists?
       sql += <<~SQL
-        LEFT JOIN #{Group.quoted_table_name} sub_groups
-          ON subscriptions.subscriber_type = 'Group' AND subscriptions.subscriber_id = sub_groups.id
-        LEFT JOIN related_role_types
-          ON related_role_types.relation_type = 'Subscription'
-          AND related_role_types.relation_id = subscriptions.id
+      LEFT JOIN groups sub_groups
+        ON subscriptions.subscriber_type = 'Group' AND subscriptions.subscriber_id = sub_groups.id
+      LEFT JOIN related_role_types
+        ON related_role_types.relation_type = 'Subscription'
+        AND related_role_types.relation_id = subscriptions.id
       SQL
     end
 
     if subscriptions.groups.tagged.exists?
       sql += <<~SQL
-        LEFT JOIN taggings AS subscriptions_taggings
-          ON subscriptions_taggings.taggable_type = 'Subscription'
-          AND subscriptions_taggings.taggable_id = subscriptions.id
+      LEFT JOIN taggings AS subscriptions_taggings
+        ON subscriptions_taggings.taggable_type = 'Subscription'
+        AND subscriptions_taggings.taggable_id = subscriptions.id
       SQL
     end
 
@@ -94,8 +94,7 @@ class MailingList::Subscribers
   def group_subscribers(condition)
     sql = <<~SQL
       subscriptions.subscriber_type = ? AND
-      #{Group.quoted_table_name}.lft >= sub_groups.lft AND
-      #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND
+      groups.lft >= sub_groups.lft AND groups.rgt <= sub_groups.rgt AND
       roles.type = related_role_types.role_type AND
       roles.deleted_at IS NULL
     SQL

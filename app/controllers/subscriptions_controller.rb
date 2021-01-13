@@ -63,7 +63,7 @@ class SubscriptionsController < CrudController
   def group_subscriptions
     subscriptions_for_type(Group).
       includes(:related_role_types).
-      order("#{Group.quoted_table_name}.name")
+      order('groups.name')
   end
 
   def person_subscriptions(excluded = false)

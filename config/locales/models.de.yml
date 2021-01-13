@@ -217,6 +217,9 @@ de:
       message:
         one: Nachricht
         other: Nachrichten
+      message/letter:
+        one: Brief
+        other: Briefe
       mail_log:
         one: Verlauf
         other: Verlauf
@@ -661,6 +664,8 @@ de:
         source: Empfänger
         subject: Betreff
         recipient_count: Anzahl Empfänger
+      message/letter:
+        body: Inhalt
 
       subscription:
         related_role_types: Rollen

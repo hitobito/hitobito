@@ -829,6 +829,21 @@ de:
     subscribe: 'Anmelden'
     unsubscribe: 'Abmelden'
 
+
+  messages:
+    previews:
+      show:
+        recipients_empty: Empfängerliste ist leer, kann keine Vorschau erstellen.
+    actions_show:
+      button_dispatch_print: Druckauftrag erstellen
+      button_dispatch_email: Per Email Verschicken
+      button_preview: Vorschau
+    form:
+      available_placeholders: 'Verfügbare Platzhalter: %{placeholders}'
+      recipient_info:
+        one: "%{model_class} wird für eine Person erstellt."
+        other: "%{model_class} wird für %{count} Personen erstellt."
+
   navigation:
     menu: 'Menü'
     groups: 'Gruppen'

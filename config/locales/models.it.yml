@@ -755,7 +755,7 @@ it:
       name: Leggono il tuo indirizzo e-mail e il tuo nome
       with_roles: Leggono i tuoi dati del gruppo ed i tuoi ruoli
       openid: Leggi il tuo Token di identità OIDC
-      api: Chiamare tutte le interfacce JSON per tuo conto
+      api: Leggi tutte le persone, i gruppi, gli eventi e le fatture a cui si ha accesso, tramite le interfacce JSON
   errors:
     messages:
       invalid_money: "Deve essere arrotondato ai 5 centesimi"

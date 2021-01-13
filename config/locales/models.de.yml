@@ -863,7 +863,7 @@ de:
       name: Lesen deiner E-Mail Adresse und Name
       with_roles: Lesen deiner Stammdaten und Rollen
       openid: Lesen deines OIDC Identity Tokens
-      api: Aufrufen aller JSON-Schnittstellen in deinem Namen
+      api: Lesen aller Personen, Gruppen, Events und Rechnungen auf die du Zugriff hast, via die JSON-Schnittstellen
   errors:
     messages:
       attachments_not_allowed: "darf keine Anhänge enthalten"

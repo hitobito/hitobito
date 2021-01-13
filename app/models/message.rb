@@ -33,6 +33,7 @@ class Message < ActiveRecord::Base
   include I18nEnums
 
   validates_by_schema
+  belongs_to :invoice_list
   belongs_to :mailing_list
   belongs_to :sender, class_name: 'Person'
   has_many :message_recipients, dependent: :restrict_with_error
@@ -61,7 +62,7 @@ class Message < ActiveRecord::Base
   end
 
   def dispatcher_class
-    "Messages::Dispatch::#{type.demodulize}".constantize
+    "Messages::#{type.demodulize}Dispatch".constantize
   end
 
   def path_args

@@ -27,17 +27,17 @@ describe Messages::PreviewsController do
       expect(response.header['Content-Disposition']).to match(/information-preview.pdf/)
       expect(response.media_type).to eq('application/pdf')
     end
+  end
 
-    context 'letter_with_invoice' do
-      let(:message) { messages(:with_invoice) }
+  context 'letter_with_invoice' do
+    let(:message) { messages(:with_invoice) }
 
-      it 'renders file' do
-        invoice_configs(:top_layer).update(payment_slip: :qr)
-        Subscription.create!(mailing_list: message.source, subscriber: top_leader)
-        get :show, params: { message_id: message.id }
-        expect(response.header['Content-Disposition']).to match(/rechnung-mitgliedsbeitrag-preview.pdf/)
-        expect(response.media_type).to eq('application/pdf')
-      end
+    it 'renders file' do
+      invoice_configs(:top_layer).update(payment_slip: :qr)
+      Subscription.create!(mailing_list: message.mailing_list, subscriber: top_leader)
+      get :show, params: { message_id: message.id }
+      expect(response.header['Content-Disposition']).to match(/rechnung-mitgliedsbeitrag-preview.pdf/)
+      expect(response.media_type).to eq('application/pdf')
     end
   end
 end

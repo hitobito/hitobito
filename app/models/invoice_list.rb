@@ -39,6 +39,7 @@ class InvoiceList < ActiveRecord::Base
   belongs_to :receiver, polymorphic: true
   belongs_to :creator, class_name: 'Person'
   has_one :invoice, dependent: :destroy
+  has_one :message, dependent: :nullify
   has_many :invoices, dependent: :destroy
 
   attr_accessor :recipient_ids, :invoice

@@ -19,4 +19,13 @@ module MessagesHelper
     message.recipients_total.to_s
   end
 
+  def format_message_state(message)
+    type = case message.state
+           when /pending|draft/ then 'info'
+           when /processing/ then 'warning'
+           when /finished/ then 'success'
+           when /failed/ then 'important'
+           end
+    badge(message.state_label, type)
+  end
 end

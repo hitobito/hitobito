@@ -13,7 +13,7 @@ module Messages
       if recipients.present?
         send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename
       else
-        redirect_to [message.group, message.mailing_list, message], alert: t('.recipients_empty')
+        redirect_to  message.path_args, alert: t('.recipients_empty')
       end
     end
 

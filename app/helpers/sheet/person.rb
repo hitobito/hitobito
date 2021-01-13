@@ -41,6 +41,10 @@ module Sheet
           person.company_name?
         end)
 
+    tab 'activerecord.models.message.other',
+        :messages_group_person_path,
+        if: :show_details
+
     def link_url
       view.group_person_path(parent_sheet.entry.id, entry.id)
     end

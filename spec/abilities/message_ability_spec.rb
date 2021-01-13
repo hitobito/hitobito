@@ -26,6 +26,13 @@ describe MessageAbility do
           is_expected.to be_able_to(action, message)
         end
       end
+
+      it 'may not edit, update and destroy if message is not in state draft' do
+        message.state = :pending
+        is_expected.not_to be_able_to(:edit, message)
+        is_expected.not_to be_able_to(:update, message)
+        is_expected.not_to be_able_to(:destroy, message)
+      end
     end
 
     context 'in group in same layer' do

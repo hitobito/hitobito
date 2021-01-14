@@ -9,7 +9,7 @@ class MessageAbility < AbilityDsl::Base
 
   on(Message) do
     permission(:layer_and_below_full)
-      .may(:create, :show, :edit, :update, :destroy)
+      .may(:create, :show)
       .in_layer_or_below
     permission(:layer_and_below_full)
       .may(:edit, :update, :destroy)

@@ -144,7 +144,7 @@ de:
         other: Texte
       dispatch:
         one: Versand
-        other: Versände
+        other: Versand
       event:
         one: Anlass
         other: Anlässe

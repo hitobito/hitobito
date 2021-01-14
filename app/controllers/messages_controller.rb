@@ -30,7 +30,8 @@ class MessagesController < CrudController
   end
 
   def well_known?(type)
-    type.safe_constantize&.new&.is_a?(Message)
+    type_class = type.safe_constantize
+    type_class && type_class <= Message
   end
 
   def raise_type_error

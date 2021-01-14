@@ -20,7 +20,7 @@ module Messages
     end
 
     def update_and_enqueue
-      message.update(
+      message.update!(
         recipient_count: message.mailing_list.people.size,
         state: :pending,
         sender: current_user

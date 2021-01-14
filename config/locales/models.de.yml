@@ -678,6 +678,7 @@ de:
         source: Empfänger
         subject: Betreff
         state: Zustand
+        type: Typ
         states:
           draft: Entwurf
           pending: Vorbereitet

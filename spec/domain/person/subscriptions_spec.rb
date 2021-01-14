@@ -119,21 +119,21 @@ describe Person::Subscriptions do
     end
 
     it 'is empty when tag required' do
-      subscription_tag = SubscriptionTag.create!(tag: ActsAsTaggableOn::Tag.create!(name: 'foo'))
+      subscription_tag = SubscriptionTag.new(tag: ActsAsTaggableOn::Tag.create!(name: 'foo'))
       list.subscriptions.create!(subscriber: bottom_layer_one, role_types: ['Group::BottomLayer::Member'], subscription_tags: [subscription_tag])
       expect(subject).to be_empty
     end
 
     it 'is present when tag is required and any person matches and tag does not exclude' do
-      subscription_tag = SubscriptionTag.create!(tag: ActsAsTaggableOn::Tag.create!(name: 'foo'), excluded: false)
+      subscription_tag = SubscriptionTag.new(tag: ActsAsTaggableOn::Tag.create!(name: 'foo'), excluded: false)
       list.subscriptions.create!(subscriber: bottom_layer_one, role_types: ['Group::BottomLayer::Member'], subscription_tags: [subscription_tag])
       person.update!(tag_list: %w(foo buz))
       expect(subject).to have(1).item
     end
 
     it 'is empty when tag is required and any person matches and tag does exclude' do
-      subscription_tag = SubscriptionTag.create!(tag: ActsAsTaggableOn::Tag.create!(name: 'foo'), excluded: true)
-      subscription_tag2 = SubscriptionTag.create!(tag: ActsAsTaggableOn::Tag.create!(name: 'bar'), excluded: false)
+      subscription_tag = SubscriptionTag.new(tag: ActsAsTaggableOn::Tag.create!(name: 'foo'), excluded: true)
+      subscription_tag2 = SubscriptionTag.new(tag: ActsAsTaggableOn::Tag.create!(name: 'bar'), excluded: false)
       list.subscriptions.create!(subscriber: bottom_layer_one, role_types: ['Group::BottomLayer::Member'], subscription_tags: [subscription_tag, subscription_tag2])
       person.update!(tag_list: %w(foo bar))
       expect(subject).to be_empty

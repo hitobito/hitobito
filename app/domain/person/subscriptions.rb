@@ -20,8 +20,8 @@ class Person::Subscriptions
   end
 
   def exclusions
-    @person.subscriptions.where(excluded: true)
-           .or(Subscription.where(id: exclusions_by_subscription_tags))
+    @exclusions ||= @person.subscriptions.where(excluded: true)
+                           .or(Subscription.where(id: exclusions_by_subscription_tags))
   end
 
   def from_events

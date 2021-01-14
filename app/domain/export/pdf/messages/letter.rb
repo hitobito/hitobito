@@ -15,8 +15,7 @@ module Export::Pdf::Messages
     end
 
     def render
-      pdf = Prawn::Document.new(render_options)
-      customize(pdf)
+      pdf = customize(Prawn::Document.new(render_options))
       @recipients.each do |recipient|
         render_sections(pdf, recipient)
         pdf.start_new_page unless last?(recipient)

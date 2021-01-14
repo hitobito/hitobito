@@ -544,7 +544,7 @@ describe MailingList do
       ActsAsTaggableOn::Tag.create_or_find_by!(name: name)
     end
     tags.map do |tag|
-      SubscriptionTag.create!(tag: tag)
+      SubscriptionTag.new(tag: tag)
     end
   end
 end

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -55,8 +55,8 @@ class BaseJob
   end
 
   def parameters
-    Array(self.class.parameters).each_with_object({}) do |p, hash|
-      hash[p] = instance_variable_get(:"@#{p}")
+    Array(self.class.parameters).index_with do |p|
+      instance_variable_get(:"@#{p}")
     end
   end
 

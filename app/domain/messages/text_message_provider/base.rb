@@ -9,11 +9,15 @@ module Messages
   module TextMessageProvider
     class Base
 
+      STATUS_OK = 'OK'
+      STATUS_ERROR = 'ERROR'
+      STATUS_AUTH_ERROR = 'AUTH_ERROR'
+
       def initialize(config:)
         @config = config
       end
 
-      def send(text, recipients)
+      def send(_text, _recipients)
         raise 'implement in subclass'
       end
     end

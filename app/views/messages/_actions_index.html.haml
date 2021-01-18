@@ -3,8 +3,10 @@
 / #  or later. See the COPYING file at the top-level directory or at
 / #  https://github.com/hitobito/hitobito.
 
-- if can?(:new, parent.messages.build)
-  = add_message_button(Message::Letter)
+- if Settings.messages.enable_writing
 
-  - if can?(:index_invoices, parent.group.layer_group) && parent.group.layer_group.invoice_config.valid?
-    = add_message_button(Message::LetterWithInvoice)
+  - if can?(:new, parent.messages.build)
+    = add_message_button(Message::Letter)
+
+    - if can?(:index_invoices, parent.group.layer_group) && parent.group.layer_group.invoice_config.valid?
+      = add_message_button(Message::LetterWithInvoice)

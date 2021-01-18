@@ -201,6 +201,7 @@ addresses:
     - CH
 
 messages:
+  enable_writing: false
   pdf:
     logo: <%= Rails.root.join("app/javascript/images/logo-black.png") %>
     preview: <%= Rails.root.join("app/javascript/images/preview.png") %>

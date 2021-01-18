@@ -11,7 +11,7 @@
       - groups.each do |group, role_types|
         %dt= group
         %dd= role_types.map(&:label).join(', ')
-  - if subscription.subscription_tags.included.any?
+  - if subscription.subscription_tags.included.present?
     %p
       = t('.only_persons_with')
       - subscription.subscription_tags.included.each do |subscription_tag|

@@ -83,16 +83,20 @@ module Subscriber
     end
 
     def subscription_tags
-      [collect_tags, collect_tags(excluded: true)].flatten.map do |tag|
+      tags = collect_included_tags + collect_excluded_tags
+      tags.map do |tag|
         SubscriptionTag.new(subscription: entry,
                             tag_id: tag[:id],
                             excluded: tag[:excluded]) unless tag[:id].empty?
       end.compact
     end
 
-    def collect_tags(excluded: false)
-      param_key = excluded ? :excluded_subscription_tags : :included_subscription_tags
-      model_params[param_key]&.map { |tag| { id: tag, excluded: false } } || []
+    def collect_included_tags
+      model_params[:included_subscription_tags_ids]&.map { |id| { id: id, excluded: false } } || []
+    end
+
+    def collect_excluded_tags
+      model_params[:excluded_subscription_tags_ids]&.map { |id| { id: id, excluded: true } } || []
     end
   end
 end

@@ -6,7 +6,7 @@
 %p= t('.only_add_persons_with_tags')
 
 .shown
-  = f.collection_select(:included_subscription_tags,
+  = f.collection_select(:included_subscription_tags_ids,
                         @possible_tags,
                         :third,
                         :first,
@@ -19,7 +19,7 @@
 %p= t('.exclude_persons_with_tags')
 
 .shown
-  = f.collection_select(:excluded_subscription_tags,
+  = f.collection_select(:excluded_subscription_tags_ids,
                         @possible_tags,
                         :third,
                         :first,

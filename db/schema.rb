@@ -798,9 +798,9 @@ ActiveRecord::Schema.define(version: 2021_01_18_151446) do
   end
 
   create_table "subscription_tags", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.boolean "excluded"
-    t.integer "subscription_id"
-    t.integer "tag_id"
+    t.boolean "excluded", default: false
+    t.integer "subscription_id", null: false
+    t.integer "tag_id", null: false
     t.index ["subscription_id"], name: "index_subscription_tags_on_subscription_id"
     t.index ["tag_id"], name: "index_subscription_tags_on_tag_id"
   end

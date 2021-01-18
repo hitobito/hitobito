@@ -85,9 +85,11 @@ module Subscriber
     def subscription_tags
       tags = collect_included_tags + collect_excluded_tags
       tags.map do |tag|
+        next if tag[:id].empty?
+
         SubscriptionTag.new(subscription: entry,
                             tag_id: tag[:id],
-                            excluded: tag[:excluded]) unless tag[:id].empty?
+                            excluded: tag[:excluded])
       end.compact
     end
 

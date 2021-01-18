@@ -1372,8 +1372,8 @@ de:
       roles:
         please_choose_group: Bitte wähle eine Gruppe aus
       tags:
-        only_add_persons_with_tags: 'Nur Person mit einem der untenstehenden Tags hinzufügen:'
-        exclude_persons_with_tags: 'Personen mit einem der untenstehenden Tags ausschliessen:'
+        only_add_persons_with_tags: 'Hinzufügen von Person mit Tags:'
+        exclude_persons_with_tags: 'Ausschliessen von Personen mit folgenden Tags:'
 
     exclude_person:
       form:

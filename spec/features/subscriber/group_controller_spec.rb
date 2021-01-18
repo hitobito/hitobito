@@ -72,4 +72,90 @@ describe Subscriber::GroupController, js: true do
     end
   end
 
+  context 'assign tags' do
+    let! (:email_primary_invalid) { PersonTags::Validation.email_primary_invalid(create: true) } 
+    let! (:email_additional_invalid) { PersonTags::Validation.email_additional_invalid(create: true) } 
+
+    it 'assigns multiple included tags' do
+      obsolete_node_safe do
+        collection_select = find('#subscription_included_subscription_tags_ids_chosen .chosen-choices') 
+
+        expect(collection_select).to have_no_selector('li.search-choice')
+
+        collection_select.fill_in(with: 'Mail')
+
+        find('.chosen-drop li.active-result', text: 'Haupt-E-Mail ungültig').click
+
+        collection_select.fill_in(with: 'Mail')
+
+        find('.chosen-drop li.active-result', text: 'Weitere E-Mail ungültig').click
+
+        expect(collection_select).to have_selector('li.search-choice', count: 2)
+
+        all('form .btn-toolbar').first.click_button 'Speichern'
+        expect(page).to have_content('Abonnent Bottom One wurde erfolgreich')
+
+        expect(page).to have_content('Nur Personen mit:')
+        is_expected.to have_selector('span.person-tag', text: 'Haupt-E-Mail ungültig')
+        is_expected.to have_selector('span.person-tag', text: 'Weitere E-Mail ungültig')
+      end
+    end
+
+    it 'assigns multiple excluded tags' do
+      obsolete_node_safe do
+        collection_select = find('#subscription_excluded_subscription_tags_ids_chosen .chosen-choices') 
+
+        expect(collection_select).to have_no_selector('li.search-choice')
+
+        collection_select.fill_in(with: 'Mail')
+
+        find('.chosen-drop li.active-result', text: 'Haupt-E-Mail ungültig').click
+
+        collection_select.fill_in(with: 'Mail')
+
+        find('.chosen-drop li.active-result', text: 'Weitere E-Mail ungültig').click
+
+        expect(collection_select).to have_selector('li.search-choice', count: 2)
+
+        all('form .btn-toolbar').first.click_button 'Speichern'
+        expect(page).to have_content('Abonnent Bottom One wurde erfolgreich')
+
+        expect(page).to have_content('Personen ausschliessen mit:')
+        is_expected.to have_selector('span.person-tag', text: 'Haupt-E-Mail ungültig')
+        is_expected.to have_selector('span.person-tag', text: 'Weitere E-Mail ungültig')
+      end
+    end
+
+    it 'assigns same tag as excluded and included' do
+      obsolete_node_safe do
+        excluded_collection_select = find('#subscription_excluded_subscription_tags_ids_chosen .chosen-choices') 
+
+        expect(excluded_collection_select).to have_no_selector('li.search-choice')
+
+        excluded_collection_select.fill_in(with: 'Mail')
+
+        find('.chosen-drop li.active-result', text: 'Haupt-E-Mail ungültig').click
+
+        expect(excluded_collection_select).to have_selector('li.search-choice', count: 2)
+
+        included_collection_select = find('#subscription_included_subscription_tags_ids_chosen .chosen-choices') 
+
+        expect(included_collection_select).to have_no_selector('li.search-choice')
+
+        included_collection_select.fill_in(with: 'Mail')
+
+        find('.chosen-drop li.active-result', text: 'Haupt-E-Mail ungültig').click
+
+        expect(included_collection_select).to have_selector('li.search-choice', count: 2)
+
+        all('form .btn-toolbar').first.click_button 'Speichern'
+        expect(page).to have_content('Abonnent Bottom One wurde erfolgreich')
+
+        expect(page).to have_content('Personen ausschliessen mit:')
+        expect(page).to have_content('Nur Personen mit:')
+        is_expected.to have_selector('span.person-tag', text: 'Haupt-E-Mail ungültig', count: 2)
+        is_expected.to have_selector('span.person-tag', text: 'Weitere E-Mail ungültig', count: 2)
+      end
+    end
+  end
 end

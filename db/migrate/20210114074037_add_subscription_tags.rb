@@ -6,14 +6,26 @@
 class AddSubscriptionTags < ActiveRecord::Migration[6.0]
   def up
     create_table :subscription_tags do |t|
-      t.boolean :excluded
+      t.boolean :excluded, default: false
 
       t.references :subscription, foreign_key: true, type: :integer, null: false
       t.references :tag, foreign_key: true, type: :integer, null: false
     end
+
+    Subscription.groups.find_each do |subscription|
+      tagging = ActsAsTaggableOn::Tagging.find_by(taggable_id: subscription.id,
+                                                   taggable_type: Subscription.sti_name)
+      SubscriptionTag.create!(subscription_id: tagging.id, tag_id: tagging.tag_id)
+    end
   end
 
   def down
+    SubscriptionTag.included.find_each do |subscription_tag|
+      subscription = subscription_tag.subscription
+      subscription.tag_list += subscription_tag.tag
+      subscription.save!
+    end
+
     drop_table :subscription_tags
   end
 end

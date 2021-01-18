@@ -540,11 +540,7 @@ describe MailingList do
   end
 
   def subscription_tags(names)
-    tags = names.map do |name|
-      ActsAsTaggableOn::Tag.create_or_find_by!(name: name)
-    end
-    tags.map do |tag|
-      SubscriptionTag.new(tag: tag)
-    end
+    tags = names.map { |name| ActsAsTaggableOn::Tag.create_or_find_by!(name: name) }
+    tags.map { |tag| SubscriptionTag.new(tag: tag) }
   end
 end

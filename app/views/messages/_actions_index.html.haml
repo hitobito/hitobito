@@ -10,3 +10,5 @@
 
     - if can?(:index_invoices, parent.group.layer_group) && parent.group.layer_group.invoice_config.valid?
       = add_message_button(Message::LetterWithInvoice)
+
+    = add_message_button(Message::TextMessage)

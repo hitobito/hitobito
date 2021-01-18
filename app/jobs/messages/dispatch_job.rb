@@ -22,7 +22,7 @@ module Messages
 
       update(sent_at: Time.current, state: :processing)
       message.dispatcher_class.new(message, recipients).run
-      update(state: :finished)
+      update(state: :finished) unless message.text_message?
     end
 
     def error(job, exception)

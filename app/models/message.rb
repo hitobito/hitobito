@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: messages
@@ -7,7 +9,7 @@
 #  recipient_count :integer          default(0)
 #  sent_at         :datetime
 #  state           :string(255)      default("draft")
-#  subject         :string(1024)     not null
+#  subject         :string(1024)
 #  success_count   :integer          default(0)
 #  type            :string(255)      not null
 #  created_at      :datetime         not null
@@ -45,6 +47,8 @@ class Message < ActiveRecord::Base
 
   scope :list, -> { order(:created_at) }
 
+  attr_readonly :type
+
   class_attribute :icon
   self.icon = :envelope
 
@@ -58,6 +62,10 @@ class Message < ActiveRecord::Base
 
   def invoice?
     is_a?(Message::LetterWithInvoice)
+  end
+
+  def text_message?
+    is_a?(Message::TextMessage)
   end
 
   def dispatched?

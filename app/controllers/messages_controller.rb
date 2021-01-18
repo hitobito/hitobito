@@ -6,8 +6,24 @@
 #  https://github.com/hitobito/hitobito.
 
 class MessagesController < CrudController
+
   include YearBasedPaging
-  self.permitted_attrs = [:type, :subject, :body, invoice_attributes: {}]
+
+  PERMITTED_TEXT_MESSAGE_ATTRS = [:type, :text].freeze
+  PERMITTED_LETTER_ATTRS = [:type, :subject, :body].freeze
+  PERMITTED_INVOICE_LETTER_ATTRS = [:type, :subject, :body,
+                                    invoice_attributes: {
+                                      invoice_items_attributes: [
+                                        :name,
+                                        :description,
+                                        :unit_cost,
+                                        :vat_rate,
+                                        :count,
+                                        :cost_center,
+                                        :account,
+                                        :_destroy
+                                      ]
+                                    }].freeze
 
   self.nesting = [Group, MailingList]
   self.remember_params += [:year]
@@ -36,6 +52,17 @@ class MessagesController < CrudController
 
   def raise_type_error
     raise ActiveRecord::RecordNotFound, "No message type '#{type}' found"
+  end
+
+  def permitted_attrs
+    case type
+    when Message::Letter.sti_name
+      PERMITTED_LETTER_ATTRS
+    when Message::LetterWithInvoice.sti_name
+      PERMITTED_INVOICE_LETTER_ATTRS
+    when Message::TextMessage.sti_name
+      PERMITTED_TEXT_MESSAGE_ATTRS
+    end
   end
 
   def authorize_class

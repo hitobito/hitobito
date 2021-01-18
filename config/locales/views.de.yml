@@ -845,6 +845,7 @@ de:
     actions_show:
       button_dispatch_letter: Druckauftrag erstellen
       button_preview: Vorschau
+      button_dispatch_text_message: Senden
     form:
       available_placeholders: 'Verfügbare Platzhalter: %{placeholders}'
       recipient_info:

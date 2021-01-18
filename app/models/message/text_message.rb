@@ -14,43 +14,24 @@
 #  updated_at      :datetime         not null
 #  mailing_list_id :bigint
 #  sender_id       :bigint
-#  invoice_list_id :bigint
 #
 # Indexes
 #
-#  index_messages_on_invoice_list_id  (invoice_list_id)
 #  index_messages_on_mailing_list_id  (mailing_list_id)
 #  index_messages_on_sender_id        (sender_id)
 #
 
-#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
-#  hitobito_cvp and licensed under the Affero General Public License version 3
+#  Copyright (c) 2021, CVP Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+class Message::TextMessage < Message
+  self.icon = :sms
 
-simple:
-  mailing_list: leaders
-  type: Message
-  subject: Simple
+  validates :text, length: { minimum: 1, maximum: 160 }
 
-letter:
-  mailing_list: leaders
-  type: Message::Letter
-  subject: Information
-
-with_invoice:
-  mailing_list: leaders
-  type: Message::LetterWithInvoice
-  subject: Mitgliedsbeitrag
-  invoice_attributes:
-    invoice_items_attributes:
-      1:
-        name: Mitgliedsbeitrag
-        count: 1
-        unit_cost: 10
-
-sms:
-  mailing_list: leaders
-  type: Message
-  text: Long live SMS!
+  def subject
+    text && text[0..20]
+  end
+end

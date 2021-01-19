@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_13_131128) do
+ActiveRecord::Schema.define(version: 2021_01_18_151446) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "name", null: false
@@ -210,19 +210,29 @@ ActiveRecord::Schema.define(version: 2021_01_13_131128) do
     t.index ["type"], name: "index_event_roles_on_type"
   end
 
+  create_table "event_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+    t.text "description"
+    t.text "application_conditions"
+    t.string "signature_confirmation_text"
+    t.index ["event_id"], name: "index_event_translations_on_event_id"
+    t.index ["locale"], name: "index_event_translations_on_locale"
+  end
+
   create_table "events", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "type"
-    t.string "name", null: false
     t.string "number"
     t.string "motto"
     t.string "cost"
     t.integer "maximum_participants"
     t.integer "contact_id"
-    t.text "description", size: :medium
-    t.text "location", size: :medium
+    t.text "location"
     t.date "application_opening_at"
     t.date "application_closing_at"
-    t.text "application_conditions", size: :medium
     t.integer "kind_id"
     t.string "state", limit: 60
     t.boolean "priorization", default: false, null: false
@@ -236,7 +246,6 @@ ActiveRecord::Schema.define(version: 2021_01_13_131128) do
     t.integer "teamer_count", default: 0
     t.boolean "signature"
     t.boolean "signature_confirmation"
-    t.string "signature_confirmation_text"
     t.integer "creator_id"
     t.integer "updater_id"
     t.boolean "applications_cancelable", default: false, null: false

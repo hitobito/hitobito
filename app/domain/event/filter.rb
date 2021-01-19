@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -25,6 +25,7 @@ class Event::Filter
     Event. # nesting restricts to parent, we want more
       where(type: type).
       includes(:groups).
+      left_joins(:translations).
       with_group_id(relevant_group_ids).
       in_year(year).
       preload_all_dates

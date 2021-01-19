@@ -22,13 +22,13 @@ class Event::Filter
   end
 
   def scope
-    Event. # nesting restricts to parent, we want more
-      where(type: type).
-      includes(:groups).
-      left_joins(:translations).
-      with_group_id(relevant_group_ids).
-      in_year(year).
-      preload_all_dates
+    Event # nesting restricts to parent, we want more
+      .where(type: type)
+      .includes(:groups)
+      .left_joins(:translations)
+      .with_group_id(relevant_group_ids)
+      .in_year(year)
+      .preload_all_dates
   end
 
   def to_h

@@ -320,8 +320,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # only an initial selection prompt or a blank option, respectively.
   def select_options(attr)
     assoc = association(@object, attr)
-    required?(attr) ? { prompt: ta(:please_select, assoc) } :
-                      { include_blank: ta(:no_entry, assoc) }
+    if required?(attr)
+      { prompt: ta(:please_select, assoc) }
+    else
+      { include_blank: ta(:no_entry, assoc) }
+    end
   end
 
   # Dispatch methods starting with 'labeled_' to render a label and the corresponding
@@ -404,6 +407,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Returns true if the given attribute must be present.
   def required?(attr)
     return true if dynamic_required?(attr)
+
     attr = attr.to_s
     attr, attr_id = assoc_and_id_attr(attr)
     validators = klass.validators_on(attr) +
@@ -416,6 +420,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def dynamic_required?(attr)
     return false unless @object.respond_to?(:required_attributes)
+
     @object.required_attributes.include?(attr.to_s)
   end
 

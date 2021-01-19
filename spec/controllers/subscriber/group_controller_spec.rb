@@ -50,18 +50,20 @@ describe Subscriber::GroupController do
 
   context 'GET roles.js' do
     it 'load role types' do
-      get :roles, xhr: true, params: { group_id: group.id,
-                                       mailing_list_id: list.id,
-                                       subscription: { subscriber_id: groups(:bottom_layer_one) } },
-      format: :js
+      get :roles, xhr: true, params: {
+        group_id: group.id,
+        mailing_list_id: list.id,
+        subscription: { subscriber_id: groups(:bottom_layer_one) }
+      }, format: :js
 
       expect(assigns(:role_types).root).to eq(Group::BottomLayer)
     end
 
     it 'does not load role types for nil group' do
-      get :roles, xhr: true, params: { group_id: group.id,
-                                       mailing_list_id: list.id },
-                                       format: :js
+      get :roles, xhr: true, params: {
+        group_id: group.id,
+        mailing_list_id: list.id
+      }, format: :js
 
       expect(assigns(:role_types)).to be_nil
     end
@@ -71,9 +73,9 @@ describe Subscriber::GroupController do
   context 'POST create' do
     it 'without subscriber_id replaces error' do
       post :create, params: {
-                      group_id: group.id,
-                      mailing_list_id: list.id
-                    }
+        group_id: group.id,
+        mailing_list_id: list.id
+      }
 
       is_expected.to render_template('crud/new')
       expect(assigns(:subscription).errors[:subscriber_id]).to be_blank
@@ -85,11 +87,11 @@ describe Subscriber::GroupController do
       expect do
         expect do
           post :create, params: {
-                          group_id: group.id,
-                          mailing_list_id: list.id,
-                          subscription: { subscriber_id: groups(:bottom_layer_one),
-                                          role_types: [Group::BottomLayer::Leader, Group::BottomGroup::Leader] }
-                        }
+            group_id: group.id,
+            mailing_list_id: list.id,
+            subscription: { subscriber_id: groups(:bottom_layer_one),
+                            role_types: [Group::BottomLayer::Leader, Group::BottomGroup::Leader] }
+          }
         end.to change { Subscription.count }.by(1)
       end.to change { RelatedRoleType.count }.by(2)
 

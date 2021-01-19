@@ -517,7 +517,7 @@ describe EventsController do
       before do
         allow(controller).to receive(:doorkeeper_token) { token }
       end
-  
+
       it 'in current year' do
         get :index, params: { group_id: top_layer.id }
         expect(assigns(:events)).to be_empty

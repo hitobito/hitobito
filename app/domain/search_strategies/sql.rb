@@ -24,11 +24,11 @@ module SearchStrategies
                 "phone_numbers.contactable_type = 'Person'"]
       },
       'Group' => {
-        attrs: ["#{Group.quoted_table_name}.name", "#{Group.quoted_table_name}.short_name",
-                "#{Group.quoted_table_name}.email", "#{Group.quoted_table_name}.address",
-                "#{Group.quoted_table_name}.zip_code", "#{Group.quoted_table_name}.town",
-                "#{Group.quoted_table_name}.country", 'parent.name', 'parent.short_name',
-                'phone_numbers.number', 'social_accounts.name', 'additional_emails.email'],
+        attrs: ['groups.name', 'groups.short_name', 'groups.email',
+                'groups.address', 'groups.zip_code', 'groups.town',
+                'groups.country', 'parent.name', 'parent.short_name',
+                'phone_numbers.number', 'social_accounts.name',
+                'additional_emails.email'],
 
         joins: ["LEFT JOIN #{Group.quoted_table_name} parent ON " \
                 "parent.id = #{Group.quoted_table_name}.parent_id",
@@ -46,7 +46,7 @@ module SearchStrategies
                 "phone_numbers.contactable_type = 'Group'"]
       },
       'Event' => {
-        attrs: ['events.name', 'events.number', "#{Group.quoted_table_name}.name"],
+        attrs: ['events.name', 'events.number', 'groups.name'],
         joins: [:groups]
       },
       'Address' => {

@@ -18,7 +18,7 @@ class SubscriptionsController < CrudController
 
   alias mailing_list parent
 
-  def index # rubocop:disable Metrics/MethodLength there are a lof of formats supported
+  def index # rubocop:disable Metrics/AbcSize,Metrics/MethodLength there are a lof of formats supported
     respond_to do |format|
       format.html do
         @person_add_requests = fetch_person_add_requests

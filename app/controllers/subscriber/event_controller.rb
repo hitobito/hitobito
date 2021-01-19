@@ -44,11 +44,11 @@ module Subscriber
                      'ON events.kind_id = event_kinds.id ' \
                      "AND events.type = '#{Event::Course.sti_name}' " \
                      'LEFT JOIN event_kind_translations ' \
-                     'ON event_kinds.id  = event_kind_translations.event_kind_id').
-               left_joins(:translations). # event_translations
-               where(search_condition(*SEARCH_COLUMNS)).
-               order_by_date.
-               distinct
+                     'ON event_kinds.id  = event_kind_translations.event_kind_id')
+              .left_joins(:translations) # event_translations
+              .where(search_condition(*SEARCH_COLUMNS))
+              .order_by_date
+              .distinct
     end
 
     def model_label

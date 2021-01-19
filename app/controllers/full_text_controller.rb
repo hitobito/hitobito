@@ -61,9 +61,10 @@ class FullTextController < ApplicationController
   end
 
   def active_tab
-    return :people if @people.length > 0
-    return :groups if @groups.length > 0
-    return :events if @events.length > 0
+    return :people if @people.present?
+    return :groups if @groups.present?
+    return :events if @events.present?
+
     :people
   end
 

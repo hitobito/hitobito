@@ -39,7 +39,9 @@ class EventSeeder
 
   def seed_base_event(values)
     date, number = values[:application_opening_at], values[:number]
-    event = Event.seed(:name, values.merge(name: "Anlass #{number}")).first
+    event = Event.find_or_initialize_by(name: "Anlass #{number}")
+    event.attributes = values
+    event.save!
     seed_dates(event, date + 90.days)
     seed_questions(event) if true?
     seed_leaders(event)
@@ -51,7 +53,10 @@ class EventSeeder
   end
 
   def seed_course(values)
-    event = Event::Course.seed(:name, course_attributes(values)).first
+    course_attrs = course_attributes(values)
+    event = Event::Course.find_or_initialize_by(name: course_attrs[:name])
+    event.attributes = course_attrs
+    event.save!
 
     seed_dates(event, values[:application_opening_at] + 90.days)
     seed_questions(event)

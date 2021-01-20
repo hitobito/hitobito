@@ -86,6 +86,10 @@ class EventsController < CrudController
     event_filter.list_entries
   end
 
+  def model_scope
+    super.includes([:translations])
+  end
+
   def build_entry
     if params[:source_id]
       group.events.find(params[:source_id]).duplicate

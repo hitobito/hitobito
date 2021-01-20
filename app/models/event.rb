@@ -173,6 +173,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     # Default scope for event lists
     def list
       order_by_date.
+        includes(:translations).
         order(:name).
         preload_all_dates.
         distinct

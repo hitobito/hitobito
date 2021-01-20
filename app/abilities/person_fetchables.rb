@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -51,7 +51,8 @@ class PersonFetchables
 
   def in_same_layer_condition(condition)
     if layer_groups_same_layer.present?
-      condition.or("#{Group.quoted_table_name}.layer_group_id IN (?)", layer_groups_same_layer.collect(&:id))
+      condition.or("#{Group.quoted_table_name}.layer_group_id IN (?)",
+                   layer_groups_same_layer.collect(&:id))
     end
   end
 

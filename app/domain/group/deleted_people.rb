@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2017 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -13,7 +13,8 @@ class Group::DeletedPeople
     def deleted_for(layer_group)
       Person.
         joins('INNER JOIN roles ON roles.person_id = people.id').
-        joins("INNER JOIN #{Group.quoted_table_name} ON #{Group.quoted_table_name}.id = roles.group_id").
+        joins("INNER JOIN #{Group.quoted_table_name} " \
+              "ON #{Group.quoted_table_name}.id = roles.group_id").
         where("NOT EXISTS (#{undeleted_roles})").
         where("roles.deleted_at = (#{last_role_deleted})").
         where("#{Group.quoted_table_name}.layer_group_id = ?", layer_group.id).

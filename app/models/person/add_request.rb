@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -40,7 +40,8 @@ class Person::AddRequest < ActiveRecord::Base
   class << self
     def for_layer(layer_group)
       joins(:person).
-        joins("LEFT JOIN #{::Group.quoted_table_name} AS primary_groups ON primary_groups.id = people.primary_group_id").
+        joins("LEFT JOIN #{::Group.quoted_table_name} AS primary_groups " \
+              'ON primary_groups.id = people.primary_group_id').
         where('primary_groups.layer_group_id = ? OR people.id IN (?)',
               layer_group.id,
               ::Group::DeletedPeople.deleted_for(layer_group).select(:id))
@@ -77,7 +78,9 @@ class Person::AddRequest < ActiveRecord::Base
 
   def last_layer_group
     last_role = person.last_non_restricted_role
-    last_role && last_role.group.layer_group
+    return unless last_role
+
+    last_role.group.layer_group
   end
 
 end

@@ -24,16 +24,25 @@ module SearchStrategies
                 "phone_numbers.contactable_type = 'Person'"]
       },
       'Group' => {
-        attrs: ['groups.name', 'groups.short_name', 'groups.email', 'groups.address',
-                'groups.zip_code', 'groups.town', 'groups.country',
-                'parent.name', 'parent.short_name', 'phone_numbers.number', 'social_accounts.name',
+        attrs: ['groups.name', 'groups.short_name', 'groups.email',
+                'groups.address', 'groups.zip_code', 'groups.town',
+                'groups.country', 'parent.name', 'parent.short_name',
+                'phone_numbers.number', 'social_accounts.name',
                 'additional_emails.email'],
-        joins: ['LEFT JOIN groups parent ON parent.id = groups.parent_id',
-                'LEFT JOIN phone_numbers ON phone_numbers.contactable_id = groups.id AND ' \
+
+        joins: ["LEFT JOIN #{Group.quoted_table_name} parent ON " \
+                "parent.id = #{Group.quoted_table_name}.parent_id",
+
+                'LEFT JOIN phone_numbers ON ' \
+                "phone_numbers.contactable_id = #{Group.quoted_table_name}.id AND " \
                 "phone_numbers.contactable_type = 'Group'",
-                'LEFT JOIN social_accounts ON social_accounts.contactable_id = groups.id AND '\
+
+                'LEFT JOIN social_accounts ON ' \
+                "social_accounts.contactable_id = #{Group.quoted_table_name}.id AND "\
                 "phone_numbers.contactable_type = 'Group'",
-                'LEFT JOIN additional_emails ON additional_emails.contactable_id = groups.id AND '\
+
+                'LEFT JOIN additional_emails ON ' \
+                "additional_emails.contactable_id = #{Group.quoted_table_name}.id AND "\
                 "phone_numbers.contactable_type = 'Group'"]
       },
       'Event' => {
@@ -44,15 +53,17 @@ module SearchStrategies
         attrs: ['addresses.street_short', 'addresses.town', 'addresses.state',
                 'addresses.zip_code', 'addresses.numbers']
       }
-    }
+    }.freeze
 
     def list_people
       return Person.none.page(1) unless term_present?
+
       Kaminari.paginate_array(super).page(@page)
     end
 
     def query_people
       return Person.none.page(1) unless term_present?
+
       query_accessible_people do |ids|
         query_entities(Person.where(id: ids)).page(1).per(QUERY_PER_PAGE)
       end
@@ -60,16 +71,19 @@ module SearchStrategies
 
     def query_groups
       return Group.none.page(1) unless term_present?
+
       query_entities(Group.all).page(1).per(QUERY_PER_PAGE)
     end
 
     def query_events
       return Event.none.page(1) unless term_present?
+
       query_entities(Event.includes(:groups, :dates).all).page(1).per(QUERY_PER_PAGE)
     end
 
     def query_addresses
       return Address.none.page(1) unless term_present?
+
       query_entities(Address.list).page(1).per(QUERY_PER_PAGE)
     end
 

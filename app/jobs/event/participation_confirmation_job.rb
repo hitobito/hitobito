@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -39,19 +39,19 @@ class Event::ParticipationConfirmationJob < BaseJob
 
   def approvers
     approver_types = Role.types_with_permission(:approve_applications).collect(&:sti_name)
-    layer_ids = participation.person.groups.without_deleted.
-                                            merge(Person.members).
-                                            collect(&:layer_group_id).
-                                            uniq
-    Person.only_public_data.
-           joins(roles: :group).
-           where(roles: { type: approver_types, deleted_at: nil },
-                 groups: { layer_group_id: layer_ids }).
-           distinct
+    layer_ids = participation.person.groups.without_deleted
+                             .merge(Person.members)
+                             .collect(&:layer_group_id)
+                             .uniq
+    Person.only_public_data
+          .joins(roles: :group)
+          .where(roles: { type: approver_types, deleted_at: nil },
+                 groups: { layer_group_id: layer_ids })
+          .distinct
   end
 
   def participation
-    @participation ||= Event::Participation.where(id: @participation_id).first
+    @participation ||= Event::Participation.find_by(id: @participation_id)
   end
 
 end

@@ -63,7 +63,7 @@ class SubscriptionsController < CrudController
   def group_subscriptions
     subscriptions_for_type(Group).
       includes(:related_role_types).
-      order('groups.name')
+      order("#{Group.quoted_table_name}.name")
   end
 
   def person_subscriptions(excluded = false)
@@ -77,11 +77,11 @@ class SubscriptionsController < CrudController
   end
 
   def subscriptions_for_type(klass)
-    mailing_list.subscriptions.
-      where(subscriber_type: klass.name).
-      joins("INNER JOIN #{klass.table_name} " \
-            "ON #{klass.table_name}.id = subscriptions.subscriber_id").
-      includes(:subscriber)
+    mailing_list
+      .subscriptions
+      .where(subscriber_type: klass.sti_name)
+      .joins("INNER JOIN #{klass.quoted_table_name} " \
+             "ON #{klass.quoted_table_name}.id = subscriptions.subscriber_id")
   end
 
   def authorize_class

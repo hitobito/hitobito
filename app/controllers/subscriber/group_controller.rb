@@ -49,7 +49,7 @@ module Subscriber
       possible.where(search_condition('groups.name', 'parents_groups.name')).
                includes(:parent).
                references(:parent).
-               order('groups.lft').
+               order("#{Group.quoted_table_name}.lft").
                limit(10)
     end
 

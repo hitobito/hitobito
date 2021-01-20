@@ -70,7 +70,11 @@ module EventsHelper
   def format_event_application_conditions(entry)
     texts = [entry.application_conditions]
     texts.unshift(entry.kind.application_conditions) if entry.course_kind?
-    safe_join(texts.select(&:present?).map { |text| simple_format(text) })
+    safe_join(texts.select(&:present?).map { |text| auto_link(simple_format(text)) })
+  end
+
+  def format_event_description(event)
+    auto_link(simple_format(event.description))
   end
 
   def format_event_state(event)

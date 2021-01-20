@@ -1,4 +1,3 @@
-
 Faker::Config.locale = I18n.locale
 
 class PersonSeeder
@@ -64,10 +63,19 @@ class PersonSeeder
 
   def seed_developer(name, email, group, role_type)
     first, last = name.split
-    attrs = { email: email,
-              first_name: first,
-              last_name: last,
-              encrypted_password: encrypted_password }
+    attrs = standard_attributes(first, last).merge({
+      email: email,
+      encrypted_password: encrypted_password
+    }).reject do |key, _value|
+      %i(
+        address
+        zip_code
+        town
+        gender
+        birthday
+      ).include? key
+    end
+
     Person.seed_once(:email, attrs)
     person = Person.find_by_email(attrs[:email])
 

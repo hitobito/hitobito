@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -33,8 +33,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a corresponding input field for the given attribute.
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
-  def input_field(attr, html_options = {}) # rubocop:disable Metrics/PerceivedComplexity,Metrics/MethodLength,Metrics/CyclomaticComplexity
-    type = column_type(@object, attr)
+  def input_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
+    type = column_type(@object, attr.to_sym)
     custom_field_method = :"#{type}_field"
     if type == :text
       text_area(attr, html_options)

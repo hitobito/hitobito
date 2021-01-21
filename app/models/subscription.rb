@@ -24,8 +24,6 @@ class Subscription < ActiveRecord::Base
 
   include RelatedRoleType::Assigners
 
-  acts_as_taggable
-
   scope :people, -> { where(subscriber_type: Person.sti_name) }
   scope :groups, -> { where(subscriber_type: Group.sti_name) }
   scope :events, -> { where(subscriber_type: Event.sti_name) }

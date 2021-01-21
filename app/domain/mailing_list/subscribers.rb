@@ -60,9 +60,8 @@ class MailingList::Subscribers
 
     if subscriptions.groups.any?(&:subscription_tags)
       sql += <<~SQL
-        LEFT JOIN taggings AS subscriptions_taggings
-          ON subscriptions_taggings.taggable_type = 'Subscription'
-          AND subscriptions_taggings.taggable_id = subscriptions.id
+        LEFT JOIN subscription_tags
+          ON subscription_tags.subscription_id = subscriptions.id
       SQL
     end
 

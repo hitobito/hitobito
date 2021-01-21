@@ -13,17 +13,23 @@ class AddSubscriptionTags < ActiveRecord::Migration[6.0]
     end
 
     Subscription.groups.find_each do |subscription|
-      tagging = ActsAsTaggableOn::Tagging.find_by(taggable_id: subscription.id,
-                                                   taggable_type: Subscription.sti_name)
-      SubscriptionTag.create!(subscription_id: tagging.id, tag_id: tagging.tag_id)
+      taggings = ActsAsTaggableOn::Tagging.where(taggable_id: subscription.id,
+                                                taggable_type: Subscription.sti_name)
+      next unless taggings.present?
+      taggings.find_each do |tagging|
+        SubscriptionTag.create!(subscription_id: subscription.id, tag_id: tagging.tag_id)
+        tagging.delete
+      end
     end
   end
 
   def down
     SubscriptionTag.included.find_each do |subscription_tag|
       subscription = subscription_tag.subscription
-      subscription.tag_list += subscription_tag.tag
-      subscription.save!
+      ActsAsTaggableOn::Tagging.create!(taggable_id: subscription.id,
+                                        taggable_type: Subscription.sti_name,
+                                        tag_id: subscription_tag.tag_id,
+                                        context: 'tags')
     end
 
     drop_table :subscription_tags

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -73,7 +73,9 @@ class SubscriptionsController < CrudController
   end
 
   def event_subscriptions
-    subscriptions_for_type(Event).order('event_translations.name')
+    subscriptions_for_type(Event)
+      .joins('LEFT JOIN event_translations ON events.id = event_translations.event_id')
+      .order('event_translations.name')
   end
 
   def subscriptions_for_type(klass)

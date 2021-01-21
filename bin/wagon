@@ -51,7 +51,7 @@ case $cmd in
 
   test-prepare)
     echo 'Running Wagon-Tests to prime the DB'
-    rake wagon:test
+    rake wagon:test || true # do not fail, it's more about the setup than the result
 
     echo 'Changing environment-config'
     sed -i 's/\(config.active_record.maintain_test_schema\) = true/\1 = false/' config/environments/test.rb

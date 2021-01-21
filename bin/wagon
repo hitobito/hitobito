@@ -79,10 +79,14 @@ case $cmd in
     done
     ;;
 
+  test-core)
+    WAGONS= RAILS_TEST_DB_NAME=hit_core_test rspec $@
+    ;;
+
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile configs test-prepare grep help'
+  echo 'activate gemfile configs test-prepare test-core grep help'
 }
 
 function __wagon_list() {
@@ -120,7 +124,7 @@ COMPLETION
 
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
-    echo "       $0 [test-prepare|gemfile|configs]"
+    echo "       $0 [test-prepare|test-core|gemfile|configs]"
     echo "       $0 [grep] <TERM>"
     echo
     echo "Enable bash-completion with \"source <($0 completion)\""

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -39,14 +39,16 @@ module Hitobito
     config.i18n.available_locales = [:de, :fr, :it, :en] # en required for faker (seeds)
     config.i18n.default_locale = :de
     config.i18n.locale = :de # required to always have default_locale used if nothing else is set.
-    config.i18n.fallbacks = [:de]
-    I18n.config.enforce_available_locales = true
     # All languages should fall back on each other to avoid empty attributes
     # if an entry is created in a different language.
-    Globalize.fallbacks = { de: [:de, :fr, :it, :en],
-                            fr: [:fr, :it, :en, :de],
-                            it: [:it, :fr, :en, :de],
-                            en: [:en, :de, :fr, :it] }
+    # This is read by globalize as well
+    config.i18n.fallbacks = {
+      de: [:de, :fr, :it, :en],
+      fr: [:fr, :it, :en, :de],
+      it: [:it, :fr, :en, :de],
+      en: [:en, :de, :fr, :it]
+    }
+    I18n.config.enforce_available_locales = true
 
     # Route errors over the Rails application.
     config.exceptions_app = self.routes

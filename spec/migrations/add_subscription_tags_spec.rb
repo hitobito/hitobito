@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-migration_file_name = Dir[Rails.root.join('db/migrate/20210114074037_add_subscription_tags.rb')].first
+migration_file_name = Dir[Rails.root.join('db/migrate/20210122074037_add_subscription_tags.rb')].first
 require migration_file_name
 
 

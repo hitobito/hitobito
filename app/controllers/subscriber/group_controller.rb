@@ -90,7 +90,7 @@ module Subscriber
         SubscriptionTag.new(subscription: entry,
                             tag_id: tag[:id],
                             excluded: tag[:excluded])
-      end.compact
+      end
     end
 
     def collect_included_tags

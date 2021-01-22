@@ -47,7 +47,7 @@ describe AddSubscriptionTags do
         migration.up
       end.to change { ActsAsTaggableOn::Tagging.count }.by(-2)
 
-      expect(SubscriptionTag.where(subscription: subscription).count).to eq(2)
+      expect(subscription.subscription_tags.count).to eq(2)
       expect(SubscriptionTag.where(subscription: subscription, tag: email_primary_invalid)).to exist
       expect(SubscriptionTag.where(subscription: subscription, tag: email_additional_invalid)).to exist
     end

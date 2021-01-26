@@ -12,6 +12,7 @@
       = country_select(f.object.class.model_name.param_key,
                        'country',
                        { priority_countries: Settings.countries.prioritized,
+                         selected: f.object.country,
                          include_blank: true },
                        { class: 'chosen-select',
                          data: { placeholder: ' ',

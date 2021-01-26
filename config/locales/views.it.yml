@@ -272,7 +272,7 @@ it:
         and: e
     participation_contact_datas:
       edit:
-        title: Dati di contatto della persona partecipante
+        title: Registrare i dati di contatto del/la partecipante
         wizard_title: Dati di contatto
         save: avanti
     participations:

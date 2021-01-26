@@ -272,8 +272,8 @@ fr:
         and: et
     participation_contact_datas:
       edit:
-        title: Coordonnées de la personne participante
-        wizard_title: Contacts
+        title: Saisir les données de contact de la personne participante
+        wizard_title: Données de contact
         save: Continuer
     participations:
       edit:

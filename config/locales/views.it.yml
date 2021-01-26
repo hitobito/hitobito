@@ -47,6 +47,7 @@ it:
         other: '%{count} errori impediscono il salvataggio:'
     tabs:
       info: Informazioni
+      settings: Admin
     search:
       placeholder: 'Cercare...'
       placeholder_person: 'Ricerca della persona....'
@@ -57,6 +58,23 @@ it:
     index:
       title: '%{models}'
   crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "Inserire %{model}"
+    edit:
+      title: "Modificare %{model}"
+    create:
+      flash:
+        success: "%{model} è stato salvato con successo."
+    update:
+      flash:
+        success: "%{model} è stato modificato con successo."
+    destroy:
+      flash:
+        success: "%{model} è stato cancellato con successo."
+        failure: "%{model} non può essere cancellato."
+  modal_crud:
     show:
       title: "%{model}"
     new:
@@ -221,6 +239,7 @@ it:
     application_market:
       already_assigned: 'Questa persona è già assegnata da un''altra parte.'
       participation:
+        registered_at: 'iscrizione il %{datetime}'
         town: Domicilio
       prio_buttons:
         national_waitinglist: 'lista d''attesa nazionale'
@@ -253,7 +272,8 @@ it:
         and: e
     participation_contact_datas:
       edit:
-        title: Dati di contatto
+        title: Dati di contatto della persona partecipante
+        wizard_title: Dati di contatto
         save: avanti
     participations:
       edit:
@@ -330,11 +350,17 @@ it:
     default_description_link:
       insert_general_information: Inserire informazioni generali
     form:
+      caption_external_applications: 'Esterni possono iscriversi a questo evento.'
+      caption_prioritization: 'I partecipanti possono dare durante l''iscrizione due ulteriori corsi come alternative.'
+      caption_requires_approval: 'Il responsabile verrà informato e dovrà confermare l''iscrizione.'
       times_are_optional: Gli orari sono opzionali
       explain_application_questions: Qui potete richiedere ulteriori informazioni per la registrazione.
       explain_choices: Lasciare vuoto per la risposta di testo libero, una o più opzioni di risposta (separate da virgole) per la selezione.
       explain_admin_questions: Qui per ogni partecipante puoi definire altri dati che vengono utilizzati solo per l'amministratzione del corso.
       explain_contact_attrs: Qui puoi scegliere quali dati di contatto devono essere chiesti al momento dell'iscrizione.
+      caption_applications_cancelable: I partecipanti si possono disiscrivere personalmente.
+      caption_display_booking_info: Il numero di iscrizioni/posti è visibile a tutti sulla lista del corso.
+      caption_waiting_list: Se non ci sono più posti disponibili, le nuove iscrizioni finiscono automaticamente nella lista d'attesa.
     form_tabs:
       general: In generale
       application_questions: Dati per l'iscrizione
@@ -356,6 +382,7 @@ it:
   event/applications:
     approved: 'L''iscrizione è stata accettata'
     rejected: 'L''iscrizione è stata rifiutata'
+    directly_to_waiting_list: 'Tutti i posti sono occupati, quindi l''iscrizione è direttamente sulla lista d''attesa.'
   event/application_decorator:
     approval:
       approved: 'Attivazione del corso confermata'
@@ -372,6 +399,7 @@ it:
     success: '%{full_entry_label} è stato creato con successo.'
     instructions: 'per l''iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all''indirizzo corrispondente'
     export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
+    waiting_list: 'Tutti i posti sono attualmente occupati, l''iscrizione è in lista d''attesa.'
     show:
       link:
         delete: 'cancellare iscrizione'

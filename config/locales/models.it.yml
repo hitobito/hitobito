@@ -172,6 +172,9 @@ it:
       group:
         one: gruppo
         other: Gruppi
+      group_setting:
+        one: Admin
+        other: Admin
       help_text:
         one: Testi ausiliari
         other: Testi ausiliari
@@ -380,6 +383,7 @@ it:
         applications_cancelable: Disiscrizione possibile
         display_booking_info: Visualizza stato iscrizioni
         participations_visible: Visibilità dei partecipanti
+        waiting_list: Lista d'attesa
       event/contact_attrs:
         required: Obbligatorio
         optional: Facoltativo

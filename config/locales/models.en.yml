@@ -156,6 +156,9 @@ en:
       group:
         one: Group
         other: Groups
+      group_setting:
+        one: Setting
+        other: Settings
       help_text:
         one: Helptext
         other: Helptexts
@@ -200,7 +203,7 @@ en:
         other: payment reminders
       person:
         one: Person
-        other: Persons
+        other: People
       person/add_request:
         one: request
         other: requests
@@ -356,6 +359,8 @@ en:
         applicant_count: Registrations count
         applications_cancelable: Deregistration possible
         display_booking_info: Display number of registrations
+        participations_visible: Visibility of participants
+        waiting_list: Waiting list
       event/contact_attrs:
         required: Mandatory
         optional: Optional
@@ -462,6 +467,8 @@ en:
         number: Phone number
         label: Phone number type
         public: Public
+      group_setting:
+        var: Settings
       role:
         label: Description
         type: Role
@@ -481,9 +488,9 @@ en:
               group_and_below_read: 'All reading at this group and all lower groups (without layers). '
               group_full: Reading and writing at this group. Creating events and subscriptions at this group.
               group_read: Reading at this group.
-              contact_data: Read the contact details of all other persons with contact data authorization.
-              qualify: Creating qualifications for persons at this level and all lower levels.
-              approve_applications: Confirmation of course registrations for persons at this level.
+              contact_data: Read the contact details of all other people with contact data authorization.
+              qualify: Creating qualifications for people at this level and all lower levels.
+              approve_applications: Confirmation of course registrations for people at this level.
           kind:
             member:
               one: Member
@@ -556,6 +563,7 @@ en:
         nickname: Nickname on label
         pp_post: PP-Line
       invoice:
+        invoice_config: Invoice setting
         state: State
       acts_as_taggable_on/tag:
         taggings_count: Number

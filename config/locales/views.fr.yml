@@ -47,6 +47,7 @@ fr:
         other: '%{count} erreurs sont apparues, l''entrée suivante n''a pas pu être enregistrée :'
     tabs:
       info: Informations
+      settings: Paramètres
     search:
       placeholder: 'Recherche...'
       placeholder_person: 'Chercher une personne …'
@@ -57,6 +58,23 @@ fr:
     index:
       title: '%{models}'
   crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "Créer %{model}"
+    edit:
+      title: "Modifier %{model}"
+    create:
+      flash:
+        success: "%{model} a été créé avec succès."
+    update:
+      flash:
+        success: "%{model} a été mis à jour avec succès."
+    destroy:
+      flash:
+        success: "%{model} a été effacé avec succès."
+        failure: "%{model} n'a pas pu être effacé."
+  modal_crud:
     show:
       title: "%{model}"
     new:
@@ -221,6 +239,7 @@ fr:
     application_market:
       already_assigned: 'Cette personne est déjà attribuée à un autre endroit.'
       participation:
+        registered_at: 'Inscription le %{datetime}'
         town: Domicile
       prio_buttons:
         national_waitinglist: 'liste d''attente nationale'
@@ -253,7 +272,8 @@ fr:
         and: et
     participation_contact_datas:
       edit:
-        title: Coordonnées
+        title: Coordonnées de la personne participante
+        wizard_title: Contacts
         save: Continuer
     participations:
       edit:
@@ -330,11 +350,17 @@ fr:
     default_description_link:
       insert_general_information: Placer une description standard
     form:
+      caption_external_applications: 'Les personnes externes peuvent s''inscrire à cet événement.'
+      caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'
+      caption_requires_approval: 'Le responsable de troupe est informé et doit confirmer l''inscription.'
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Ici, tu peux demander des informations supplémentaires pour les inscriptions.
       explain_choices: Laissez vide pour la réponse en texte libre, une ou plusieurs options de réponse (séparées par des virgules) pour la sélection.
       explain_admin_questions: Tu peux définir des données supplémentaires pour chaque participant(e); elles ne seront utilisées que pour l'administration du cours.
       explain_contact_attrs: Tu peux choisir les coordonnées requises pour l'inscription.
+      caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
+      caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
+      caption_waiting_list: S'il n'y a plus de places disponibles, les nouvelles inscriptions se retrouvent automatiquement sur la liste d'attente.
     form_tabs:
       general: Général
       application_questions: Données pour l'inscription
@@ -356,6 +382,7 @@ fr:
   event/applications:
     approved: 'L''inscription a été autorisée.'
     rejected: 'L''inscription a été refusée.'
+    directly_to_waiting_list: 'Toutes les places sont prises, donc l''inscription est directement sur la liste d''attente.'
   event/application_decorator:
     approval:
       approved: 'Autorisation du cours confirmée'
@@ -372,6 +399,7 @@ fr:
     success: '%{full_entry_label} a été ajouté avec succès.'
     instructions: 'Pour l''inscription définitive, tu dois imprimer cette page en utilisant l''option <i>imprimer</i>, puis la signer et l''envoyer par poste à l''adresse indiquée.'
     export_enqueued: 'l''exportation débute en arrière-plan et est téléchargée quand elle est terminée'
+    waiting_list: 'Toutes les places sont actuellement prises, l''inscription est sur la liste d''attente.'
     show:
       link:
         delete: 'Effacer l''inscription'
@@ -387,7 +415,7 @@ fr:
   event/register:
     not_logged_in: "Tu dois t'authentifier afin de pouvoir t'inscrire à l'événement '%{event}'."
     person_found: 'Nous t''avons trouvé(e) dans notre base de données.'
-    email_sent: 'Nous t''avons envoyer un courriel avec un lien avec lequel tu pourras t''inscrire directement à cet événement.'
+    email_sent: 'Nous t''avons envoyer un courriel. Dans ce courriel il y a un lien avec lequel tu pourras t''inscrire directement à cet événement.'
     email_missing: 'Indique une adresse e-mail, s''il te plaît.'
     form_data_missing: 'Prière de remplir le formulaire suivant avant de t''inscrire à cet événement.'
     registered: 'Tes données personnelles ont été enregistrées. Prière d''apporter les indications complémentaires suivantes en vue de l''inscription.'
@@ -756,6 +784,7 @@ fr:
       new:
         title: Merge une personne
         irreversible: Cette opération est irréversible.
+      action: Merge
     ignore:
       new:
         irreversible: Cette opération est irréversible.

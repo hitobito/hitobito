@@ -173,6 +173,9 @@ fr:
       group:
         one: groupe
         other: Groupes
+      group_setting:
+        one: Paramètre
+        other: Paramètres
       help_text:
         one: Hilfetext
         other: Textes d'aide
@@ -381,6 +384,7 @@ fr:
         applications_cancelable: Désinscription possible
         display_booking_info: Voir l'état des inscriptions
         participations_visible: Visibilité des participants
+        waiting_list: Liste d'attente
       event/contact_attrs:
         required: Obligatoire
         optional: Optionnel
@@ -429,7 +433,7 @@ fr:
         event_id: Evénement
         additional_information: Commentaires
         answers: Questions
-        created_at: date d'inscription
+        created_at: Date d'inscription
         roles: rôle
       event/question:
         question: Question
@@ -707,6 +711,8 @@ fr:
         cost: montant
         cost_center: Poste
         account: Compte
+      invoice_list:
+        receiver: destinataire
       invoice_items:
         name: Nom
         description: description
@@ -719,7 +725,7 @@ fr:
       payment:
         invoice: facture
         amount: montant
-        received_at: date de réception
+        received_at: Date de réception
         reference: référence de paiement
       payment_reminder:
         invoice: facture

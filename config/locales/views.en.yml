@@ -2,6 +2,7 @@ en:
   global:
     'yes': "yes"
     'no': "no"
+    ok: OK
     unknown: unknown
     nobody: nobody
     all: all
@@ -45,6 +46,7 @@ en:
         other: '%{count} errors prevented the saving of this post:'
     tabs:
       info: Info
+      settings: Settings
     search:
       placeholder: 'Search...'
       placeholder_person: 'Search person...'
@@ -55,6 +57,23 @@ en:
     index:
       title: 'Listing %{models}'
   crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "New %{model}"
+    edit:
+      title: "Edit %{model}"
+    create:
+      flash:
+        success: "%{model} was successfully created."
+    update:
+      flash:
+        success: "%{model} was successfully updated."
+    destroy:
+      flash:
+        success: "%{model} was successfully deleted."
+        failure: "%{model} could not be deleted."
+  modal_crud:
     show:
       title: "%{model}"
     new:
@@ -210,6 +229,7 @@ en:
     application_market:
       already_assigned: 'This person was already assigned or registered for a different event.'
       participation:
+        registered_at: 'Registration on %{datetime}'
         town: town
       prio_buttons:
         national_waitinglist: 'national waiting list'
@@ -242,11 +262,16 @@ en:
         and: and
     participation_contact_datas:
       edit:
+        title: Contact details of the participating person
+        wizard_title: Contact data
         save: Next
     participations:
+      edit:
+        title: Registration
       approvals:
         title: Approval
       specific_information: 'Specific information'
+      application_answers: Registration details
       no_answer_given: '(not answered)'
       actions_show:
         change_contact_data_button: 'Change contact data'
@@ -257,7 +282,7 @@ en:
         title_new: "Register as %{role}"
         title_edit: "Edit registration from %{person}"
         apply: 'Register'
-        explain_required_checkmark: 'Reply mandatory'
+        explain_required_checkmark: '* = Reply mandatory'
       application_fields:
         alternative_dates_info: 'Please enter more suitable courses.'
         course_information: 'Information about the courses'
@@ -289,6 +314,11 @@ en:
       email_check:
         next: Further
         enter_email: Please enter your email address so you can register for the event.
+    participation_lists:
+      new:
+        title: Assign persons to %{event_label}
+        event_search: Search event...
+        submit: add
   events:
     application_fields:
       caption_signature: Participants must sign the application
@@ -299,13 +329,26 @@ en:
     default_description_link:
       insert_general_information: Insert standard description
     form:
+      caption_external_applications: 'Externals can sign up for this event'
+      caption_prioritization: 'Participants may set two additional courses as alternatives.'
+      caption_requires_approval: 'The group leader will be informed and has to confirm your registration.'
+      caption_participations_visible: 'Participants can see each other in the participants list.'
       times_are_optional: Times are optional
+      explain_application_questions: Here you can request further information for the application.
+      explain_choices: Leave blank for free text answer, one or more answer choices (comma separated) for selection.
+      explain_admin_questions: Here you can define further details per participant, which are only used for course administration.
+      explain_contact_attrs: Here you can choose which contact details should be requested during registration.
+      caption_applications_cancelable: Participants can cancel their registration.
+      caption_waiting_list: If there are no more places available, new registrations automatically end up on the waiting list.
     form_tabs:
       general: General
+      application_questions: Registration details
+      contact_attrs: Contact data
     global:
       link:
         add_event: Create event
         add_event/course: Create course
+        duplicate: Duplicate
     minimum_age_with_years: '%{minimum_age} years (vintage)'
     new:
       title_event: Create event
@@ -316,6 +359,7 @@ en:
   event/applications:
     approved: 'The application was approved.'
     rejected: 'The application was declined.'
+    directly_to_waiting_list: 'All places are taken, so registration is directly on the waiting list.'
   event/application_decorator:
     approval:
       approved: 'Course approval confirmed'
@@ -330,6 +374,7 @@ en:
   event/participations:
     full_entry_label: '%{model_label} from <i>%{person}</i> in <i>%{event}</i>'
     success: '%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary.'
+    waiting_list: 'All places are currently taken, registration is on the waiting list.'
     show:
       link:
         delete: 'Delete application'
@@ -339,6 +384,7 @@ en:
       remove: 'Markes course as not passed and removes qualifications.'
   event/precondition_checker:
     preconditions_not_fulfilled: '<b>Prerequisites for registration are not met.</ b>'
+    below_minimum_age: "Age limit falls below %{course_minimum_age}"
     qualifications_missing: "The following qualifications are missing: %{missing}"
   event/register:
     not_logged_in: "You must log in for the registration of the event '%{event}'. "
@@ -358,17 +404,32 @@ en:
       one: '%{count} registered'
       other: '%{count} registered'
     participants_info_with_limit:
-      one: '%{count} registered for %{limit} plesac'
+      one: '%{count} registered for %{limit} place'
       other: '%{count} registered for %{limit} places'
     active_participants_info:
       one: '%{count} assigned registration'
       other: '%{count} assigned registrations'
+  event_feeds:
+    integrate: Integrate into calendar
+    show:
+      title: 'Integrate my events into calendars '
+      url: 'URL: %{url}'
+      create_url: Create address
+      url_description: 'With this address you can access your events from other applications. Note: Only share this address with people who are allowed to see all your event details.'
+      reset_url: Reset URL
+      reset_url_description: 'If you suspect abuse, you can reset the address and thus make the current one invalid. All calendars that still know the old address will no longer be able to see your events.'
+    update:
+      flash:
+        create: Address was created.
+        reset: Address has been updated.
   filter_navigation/dropdown:
     additional_views: 'Further views'
   filter_navigation/people:
     custom_filter: 'Own filter'
     entire_layer: 'Whole level'
     entire_group: 'Whole group'
+    new_filter: 'New filter...'
+    duplicates: 'Duplicates'
   filter_navigation/events:
     all: 'all'
     layer: 'only %{layer}'
@@ -425,12 +486,14 @@ en:
     global:
       link:
         add: Create group
+        deleted_person: Without roles
     new:
       title: 'Create %{model}'
     reactivated: "Group <i>%{group}</ i> has been successfully reactivated."
     subgroups: 'Subgroups'
     tabs:
       deleted: 'Deleted'
+    export_enqueued: 'Export is started in the background and downloaded after completion.'
   group/person_add_requests:
     deactivated: Manual approval deactivated
     activated: Manual approval activated
@@ -480,7 +543,7 @@ en:
       title: Create label format
   layouts:
     nav:
-      sign_out: 'Log off'
+      sign_out: 'Sign out'
     unauthorized:
       forgot_password: 'Forgot your password?'
     application:
@@ -504,12 +567,14 @@ en:
     anyone_may_post: 'Anyone may write to the mailing list'
     anyone_may_not_post: '<strong>Not</strong> anyone may write to the mailing list'
     subscribe: 'Log in'
-    unsubscribe: 'Log off'
+    unsubscribe: 'Sign out'
   navigation:
     groups: 'Groups'
     events: 'Events'
     courses: 'Courses'
     admin: 'Settings'
+  notes:
+    new_note: Add note
   qualifications:
     in_years: '%{years} years'
     valid_until: 'to %{date}'
@@ -561,6 +626,9 @@ en:
         mailing_list:
           approved: "The request for access for %{person} has already been granted."
           rejected: "The request for access for %{person} has already been denied."
+    households:
+      fields:
+        lives_in_household_with: "Lives in household with"
     csv_imports:
       description:
         header: CSV files
@@ -657,12 +725,15 @@ en:
     actions_index:
       add_person: Add Person
       import_list: Import list
+      person_duplicate_list: Duplicates
     add_requests:
       approve_title: 'Approve request'
       reject_title: 'Deny request'
     attrs:
       additional_data: More information
       events: My next events
+    contact_data:
+      lives_in_household_with: Lives in household with
     email_field:
       used_as_login: Is used as login
       only_changeable_by_superior: >
@@ -681,6 +752,12 @@ en:
       no_changes: So far, no changes were recorded.
     pdf:
       cannot_fit: The addresses do not fit into the defined label format.
+    print:
+      name: "Name"
+      address: "Address"
+      email: "E-Mail"
+      home_phone: "Private"
+      mobile_phone: "Mobile"
     roles:
       title: Active roles
     roles_aside:
@@ -788,6 +865,8 @@ en:
         create: "Access for <i>%{label}</i> requested."
         update: "Update of request for <i>%{label}</i>: %{changeset}"
         destroy: "Request for <i>%{label}</i> has been answered."
+  tags_merge:
+    category: Category
   views:
     pagination:
       next: '>>'

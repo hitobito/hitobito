@@ -11,7 +11,7 @@ module Contactable
 
   extend ActiveSupport::Concern
 
-  ACCESSIBLE_ATTRS = [:email, :address, :zip_code, :town, :country,
+  ACCESSIBLE_ATTRS = [:email, :address, :zip_code, :town, :country, # rubocop:disable Style/MutableConstant extension point
                       phone_numbers_attributes:
                         [:id, :number, :translated_label, :public, :_destroy],
                       social_accounts_attributes:

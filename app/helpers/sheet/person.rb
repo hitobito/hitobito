@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -29,15 +29,21 @@ module Sheet
 
     tab 'activerecord.models.message.other',
         :messages_group_person_path,
-        if: :show_details
+        if: (lambda do |view, _group, person|
+          view.can?(:show_details, person) && person.roles.any?
+        end)
 
     tab 'people.tabs.history',
         :history_group_person_path,
-        if: :history
+        if: (lambda do |view, _group, person|
+          view.can?(:history, person) && person.roles.any?
+        end)
 
     tab 'people.tabs.log',
         :log_group_person_path,
-        if: :log
+        if: (lambda do |view, _group, person|
+          view.can?(:log, person) && person.roles.any?
+        end)
 
     tab 'people.tabs.colleagues',
         :colleagues_group_person_path,

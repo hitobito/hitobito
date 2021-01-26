@@ -14,7 +14,8 @@
 
 = field_set_tag do
   - unless entry.hidden_contact_attrs.include?(:phone_numbers)
-    = f.labeled_inline_fields_for :phone_numbers, "contactable/phone_number_fields"
+    = f.labeled_inline_fields_for :phone_numbers, "contactable/phone_number_fields",
+                                  nil, entry.required_attr?(:phone_numbers)
 
 = field_set_tag do
   - if entry.show_attr?(:gender)

@@ -240,8 +240,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                          url: @template.query_people_path })
   end
 
-  def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, &block)
-    content_tag(:div, class: 'control-group') do
+  def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, required = false,
+                                &block)
+    required_class = required ? ' required' : nil
+    content_tag(:div, class: ['control-group', required_class].compact.join(' ')) do
       label(assoc, class: 'control-label') +
       nested_fields_for(assoc, partial_name, record_object) do |fields|
         content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)

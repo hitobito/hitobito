@@ -366,7 +366,7 @@ de:
 
     register:
       register:
-        title: Kontaktdaten erfassen
+        title: Kontaktdaten der teilnehmenden Person erfassen
       index:
         sign_in: Anmelden
         login: Login

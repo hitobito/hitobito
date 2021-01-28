@@ -33,6 +33,8 @@ class Message::LetterWithInvoice < Message::Letter
   belongs_to :invoice_list
   serialize :invoice_attributes, Hash
 
+  self.icon = :'file-invoice'
+
   def invoice_list
     @invoice_list ||= InvoiceList.create!(
       title: subject,

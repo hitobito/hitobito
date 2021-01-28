@@ -19,7 +19,7 @@ module MessagesHelper
   end
 
   def format_message_type(message)
-    message.type.constantize.model_name.human if message.type
+    icon(message.class.icon, title: message.type.constantize.model_name.human)
   end
 
   def format_message_recipients_total(message)

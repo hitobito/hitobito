@@ -45,6 +45,9 @@ class Message < ActiveRecord::Base
 
   scope :list, -> { order(:created_at) }
 
+  class_attribute :icon
+  self.icon = :envelope
+
   def to_s
     subject ? subject.truncate(20) : super
   end

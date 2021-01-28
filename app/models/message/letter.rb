@@ -29,5 +29,7 @@
 class Message::Letter < Message
   has_rich_text :body
 
+  self.icon = :'envelope-open-text'
+
   validates_presence_of :body
 end

@@ -863,6 +863,7 @@ de:
       fields:
         remaining_chars: Verbleibende Zeichen
     form:
+      available_placeholders: 'Verfügbare Platzhalter:'
       recipient_info:
         one: "%{model_class} wird für eine Person erstellt."
         other: "%{model_class} wird für %{count} Personen erstellt."

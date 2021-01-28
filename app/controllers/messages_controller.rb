@@ -30,7 +30,21 @@ class MessagesController < CrudController
 
   before_render_form :set_recipient_count
 
+  before_action :authorize_duplicate, only: :new
+
+  def new
+    assign_attributes_from_duplication_source if duplication_source.present?
+    super
+  end
+
   private
+
+  def assign_attributes_from_duplication_source
+    # We can't simply assign .attributes because the rich text body is not included in .attributes
+    duplication_source.class.duplicatable_attrs.each do |attr|
+      entry.send("#{attr}=", template.send(attr))
+    end
+  end
 
   def list_entries
     super
@@ -64,8 +78,16 @@ class MessagesController < CrudController
     end
   end
 
+  def duplication_source
+    @duplication_source ||= Message.find_by(id: params[:duplication_source_id])
+  end
+
   def authorize_class
     authorize!(:update, parent)
+  end
+
+  def authorize_duplicate
+    authorize!(:show, duplication_source) if duplication_source.present?
   end
 
   def set_recipient_count

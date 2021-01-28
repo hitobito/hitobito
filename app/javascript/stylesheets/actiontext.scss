@@ -40,4 +40,4 @@ trix-editor + .help-block {
 }
 
 // Remove the attachments button from the toolbar
-.trix-button-group--file-tools { display: none !important; }
+.no-attachments .trix-button-group--file-tools { display: none !important; }

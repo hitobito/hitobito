@@ -79,5 +79,7 @@ require("trix")
 require("@rails/actiontext")
 // prevent adding attachments via drag and drop
 document.addEventListener("trix-file-accept", function(event) {
-  event.preventDefault();
+  if(event.target.parentNode.parentNode.classList.contains('no-attachments')) {
+    event.preventDefault();
+  }
 });

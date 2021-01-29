@@ -7,5 +7,5 @@
   = section title do
     %dl
       - answers.each do |answer|
-        %dt= answer.question.question
+        %dt= sanitize(answer.question.question)
         %dd= answer.answer || t('event.participations.no_answer_given')

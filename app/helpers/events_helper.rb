@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -70,11 +70,13 @@ module EventsHelper
   def format_event_application_conditions(entry)
     texts = [entry.application_conditions]
     texts.unshift(entry.kind.application_conditions) if entry.course_kind?
-    safe_join(texts.select(&:present?).map { |text| auto_link(simple_format(text)) })
+    safe_join(texts.select(&:present?).map do |text|
+      auto_link(simple_format(text), html: { target: '_blank' })
+    end)
   end
 
   def format_event_description(event)
-    auto_link(simple_format(event.description))
+    auto_link(simple_format(event.description), html: { target: '_blank' })
   end
 
   def format_event_state(event)

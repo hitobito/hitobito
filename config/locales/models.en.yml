@@ -177,6 +177,9 @@ en:
       label_format:
         one: Label format
         other: Label formats
+      message:
+        one: Message
+        other: Messages
       mail_log:
         one: Log
         other: Logs

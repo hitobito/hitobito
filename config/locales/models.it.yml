@@ -364,7 +364,7 @@ it:
         maximum_participants: Numero massimo di partecipanti
         contact_id: Persona di contatto
         description: Descrizione
-        location: Luogo / indirizzo
+        location: Luogo / Indirizzo
         application_opening_at: Apertura delle iscrizioni
         application_closing_at: Termine per le iscrizioni
         application_conditions: Condizioni di ammissione

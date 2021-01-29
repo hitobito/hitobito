@@ -305,8 +305,6 @@ en:
         caption: Cancel registration
         confirmation: "Are you sure, that you want to cancel your registration?"
     register:
-      register:
-        title: Collect contact data
       index:
         sign_in: Register
         login: Login
@@ -573,6 +571,7 @@ en:
     events: 'Events'
     courses: 'Courses'
     admin: 'Settings'
+    invoices: 'Invoices'
   notes:
     new_note: Add note
   qualifications:
@@ -679,6 +678,10 @@ en:
         request_link: Answer request
       ask_responsibles:
         request_link: Answer request
+    subscriptions:
+      index:
+        my_subscriptions: My Subscriptions
+        available_subscriptions: Available Subscriptions
   person/csv_imports:
     invalid_file: Please select a valid CSV file.
     duplicate_keys:
@@ -716,6 +719,8 @@ en:
     tabs:
       history: History
       log: log
+      invoices: Invoices
+      subscriptions: Subscriptions
     actions_show:
       send_login: Send login
       send_login_tooltip:

@@ -163,13 +163,13 @@ it:
       inactive: 'il tuo account non è attivo'
       not_found_in_database: 'dati di registrazione non validi.'
       signin_not_allowed: 'non sei autorizzato ad iscriverti qui.'
-      not_permitted_to_view_page: 'non è autorizzato a visitare questa pagina'
+      not_permitted_to_view_page: 'Non è autorizzato a visitare questa pagina'
     sessions:
-      signed_out: 'ora sei registrato.'
+      signed_out: 'Ora sei registrato.'
       new:
-        sign_in: login
+        sign_in: Login
       form:
-        sign_in: 'login'
+        sign_in: 'Login'
     passwords:
       send_instructions: 'riceverai nei prossimi minuti un''e-mail con le istruzioni su come reimpostare la tua password.'
       updated: 'la tua passwort è stata cambiata. Sei ora registrato.'
@@ -192,10 +192,10 @@ it:
     registrations:
       edit:
         change_password: "cambiare la password"
-        set_password: "mettere la password"
+        set_password: "Mettere la password"
         old_password: 'vecchia password'
-        new_password: 'nuova password'
-        new_password_confirmation: 'confermare la nuova password'
+        new_password: 'Nuova password'
+        new_password_confirmation: 'Confermare la nuova password'
       person:
         updated: 'la tua password è stata attualizzata.'
     mailer:
@@ -222,8 +222,8 @@ it:
     duration: Periodo di tempo
     date: "Data %{index}"
   event:
-    run_by: 'eseguito da'
-    applied_to: iscrizioni a
+    run_by: 'Eseguito da'
+    applied_to: Iscrizioni a
     alternative_dates: date alternativi
     priorities: 'Priorità per l''iscrizione'
     lists:
@@ -233,7 +233,7 @@ it:
         csv_export_button: 'esportazione CSV'
         ical_export_button: 'Esportazione del calendario'
       events:
-        title: 'eventi che si terranno prossimamente'
+        title: 'Eventi che si terranno prossimamente'
         explanation: 'Qui vengono mostrati gli eventi dei gruppi così come nei gruppi superiori nei quali sei membro. Puoi trovare altri eventi tra i gruppi che li organizzano.'
       apply_until: 'fino a %{date}'
     application_market:
@@ -312,7 +312,7 @@ it:
       list:
         incomplete: mancano dei campi obbligatori
       cancel_application:
-        explanation: Sei iscritto a questo evento.
+        explanation: Sei iscritto/a a questo evento.
         caption: Disiscriversi
         confirmation: "Sei sicuro di volerti disiscrivere da questo evento?"
     qualifications:
@@ -322,12 +322,10 @@ it:
         flash:
           success: Le qualifiche sono state aggiornate con successo.
     register:
-      register:
-        title: registrare i dati di contatto
       index:
-        sign_in: iscriversi
-        login: login
-        no_login: non hai ancora nessun login?
+        sign_in: Iscriversi
+        login: Login
+        no_login: Non hai ancora nessun login?
       email_check:
         next: avanti
         enter_email: Inserisci per favore il tuo indirizzo email, affinché tu possa iscriverti all'evento.
@@ -413,17 +411,17 @@ it:
     qualifications_missing: "mancano le qualifiche seguenti: %{missing}"
     some_qualifications_missing: "Le qualifiche necessarie mancano."
   event/register:
-    not_logged_in: "devi effettuare l'accesso per poterti iscrivere all'evento '%{event}'."
+    not_logged_in: "Devi effettuare l'accesso per poterti iscrivere all'evento '%{event}'."
     person_found: 'ti abbiamo trovato all''interno della nostra banca dati.'
     email_sent: 'ti abbiamo inviato un''email con un link, da cui potrai iscriverti direttamente all''evento'
     email_missing: 'digitare l''indirzzo email'
-    form_data_missing: 'compila per favore il formulario seguente prima di iscriverti all''evento.'
-    registered: 'i tuoi dati personali sono stati registrati. Completa ancora solo i dati per l''iscrizione.'
+    form_data_missing: 'Compila per favore il formulario seguente prima di iscriverti all''evento.'
+    registered: 'I tuoi dati personali sono stati registrati. Completa ancora solo i dati per l''iscrizione.'
     application_window_closed: 'il periodo per l''iscrizione per questo evento è terminato.'
   event/roles:
     full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i>"
   event_decorator:
-    apply: 'iscriversi'
+    apply: 'Iscriversi'
     applied: 'iscritto'
     not_possible: 'impossibile'
     participants_info:
@@ -691,7 +689,7 @@ it:
     nav:
       sign_out: 'logout'
     unauthorized:
-      forgot_password: 'password dimenticata?'
+      forgot_password: 'Password dimenticata?'
     application:
       available_under_license: 'disponibile in'
       developed_by: 'sviluppato da'
@@ -729,7 +727,7 @@ it:
     anyone_may_not_post: 'abbonati <strong>non</strong> possono scrivere alla mailing list'
     delivery_report: 'I mittenti ricevono un e-mail a conferma dell''invio.'
     no_delivery_report: 'I mittenti non ricevono nessun e-mail a conferma dell''invio.'
-    subscribe: 'iscriversi'
+    subscribe: 'Iscriversi'
     unsubscribe: 'scollegarsi'
   navigation:
     menu: 'Menu'

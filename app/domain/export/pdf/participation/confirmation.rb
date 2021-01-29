@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -22,7 +23,7 @@ module Export::Pdf::Participation
     end
 
     def contact
-      application && application.contact
+      application&.contact
     end
 
     def render_read_and_agreed

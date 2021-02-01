@@ -322,6 +322,8 @@ it:
         flash:
           success: Le qualifiche sono state aggiornate con successo.
     register:
+      register:
+        title: Registrare i dati di contatto del/la partecipante
       index:
         sign_in: Iscriversi
         login: Login

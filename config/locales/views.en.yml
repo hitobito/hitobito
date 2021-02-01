@@ -305,6 +305,8 @@ en:
         caption: Cancel registration
         confirmation: "Are you sure, that you want to cancel your registration?"
     register:
+      register:
+        title: Contact details of the participating person
       index:
         sign_in: Register
         login: Login

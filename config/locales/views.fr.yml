@@ -322,6 +322,8 @@ fr:
         flash:
           success: Les qualifications ont été mises à jour.
     register:
+      register:
+        title: Saisir les données de contact de la personne participante
       index:
         sign_in: Inscription
         login: Login

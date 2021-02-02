@@ -2,8 +2,8 @@
 
 ## Version 1.22
 
-## Version 1.22
-
+*  Anlässe und deren Anmeldeangaben können übersetzt werden (#1135, hitobito_sjas#28)
+*  automatische Warteliste für Anlässe (hitobito_sjas#27)
 *  Tag Verwaltung unter Einstellungen
 *  Anmeldungsfragen können auch nur eine Antwort haben (#1079)
 *  Adressvervollständigung auf Personen (hitobito_cvp#18)

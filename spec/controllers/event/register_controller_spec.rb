@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -96,7 +96,12 @@ describe Event::RegisterController do
 
     context 'with honeypot filled' do
       it 'redirects to login' do
-        post :check, params: { group_id: group.id, id: event.id, person: { email: 'foo@example.com', name: 'Foo' } }
+        post :check, params: {
+          group_id: group.id,
+          id: event.id,
+          person: { email: 'foo@example.com', verification: 'Foo' }
+        }
+
         is_expected.to redirect_to(new_person_session_path)
       end
     end
@@ -139,7 +144,16 @@ describe Event::RegisterController do
       it 'redirects to login' do
         event.update!(required_contact_attrs: [])
 
-        put :register, params: { group_id: group.id, id: event.id, event_participation_contact_data: { first_name: 'barney', last_name: 'foo', email: 'foo@example.com', name: 'Foo' } }
+        put :register, params: {
+          group_id: group.id,
+          id: event.id,
+          event_participation_contact_data: {
+            first_name: 'barney',
+            last_name: 'foo',
+            email: 'foo@example.com',
+            verification: 'Foo'
+          }
+        }
         is_expected.to redirect_to(new_person_session_path)
       end
     end

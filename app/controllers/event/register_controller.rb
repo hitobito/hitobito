@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -67,7 +67,7 @@ class Event::RegisterController < ApplicationController
   end
 
   def assert_honeypot_is_empty
-    if (params[:person] || params[:event_participation_contact_data]).delete(:name).present?
+    if (params[:person] || params[:event_participation_contact_data]).delete(:verification).present?
       redirect_to event_or_login_page
     end
   end

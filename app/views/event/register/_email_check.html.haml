@@ -8,5 +8,5 @@
 = standard_form(Person.new, {url: register_group_event_path(group, event)}) do |f|
   = f.error_messages
   = f.labeled_input_field(:email)
-  = f.honeypot
+  = f.honeypot(:verification)
   = f.indented(submit_button(f, t('.next')))

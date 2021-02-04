@@ -1,4 +1,6 @@
-if Rails.env.test?
+annotate_disabled = %w[true yes 1].include?(ENV['DISABLE_ANNOTATE'])
+
+if !annotate_disabled && Rails.env.test?
   require 'annotate'
   task :set_annotation_options do
     # You can override any of these by setting an environment variable of the

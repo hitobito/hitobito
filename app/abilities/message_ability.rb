@@ -14,6 +14,13 @@ class MessageAbility < AbilityDsl::Base
     permission(:layer_and_below_full)
       .may(:edit, :update, :destroy)
       .in_layer_or_below_if_not_dispatched
+    permission(:any)
+      .may(:show)
+      .if_assignment_assignee_or_creator
+  end
+
+  def if_assignment_assignee_or_creator
+    subject.assignments.any? { |a| [a.person_id, a.creator_id].include?(user.id) }
   end
 
   def in_layer_or_below

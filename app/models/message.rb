@@ -41,6 +41,8 @@ class Message < ActiveRecord::Base
   has_many :message_recipients, dependent: :restrict_with_error
   has_one :group, through: :mailing_list
 
+  has_many :assignments, as: :attachment
+
   STATES = %w(draft pending processing finished failed).freeze
   i18n_enum :state, STATES, scopes: true, queries: true
   validates :state, inclusion: { in: STATES }

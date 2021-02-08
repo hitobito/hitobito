@@ -64,6 +64,10 @@ CustomContent.seed_once(:key,
 
   {key: Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS,
    placeholders_required: 'invalid-people',
+   placeholders_optional: nil},
+
+  {key: Assignment::AssigneeNotificationMailer::CONTENT_ASSIGNMENT_ASSIGNEE_NOTIFICATION,
+   placeholders_required: 'assignment-title',
    placeholders_optional: nil}
 
 )
@@ -83,8 +87,15 @@ user_impersonation_id = CustomContent.get(Person::UserImpersonationMailer::CONTE
 bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS).id
 bulk_mail_with_failed_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED).id
 address_validation_checks_id = CustomContent.get(Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS).id
+assignment_assignee_notification_id = CustomContent.get(Assignment::AssigneeNotificationMailer::CONTENT_ASSIGNMENT_ASSIGNEE_NOTIFICATION).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
+
+  {custom_content_id: assignment_assignee_notification_id,
+   locale: 'de',
+   label: 'Auftrag erhalten',
+   subject: 'Druckauftrag erhalten',
+   body: "Sie haben einen neuen Druckauftrag: {assignment-title} erhalten. Login Sie sich bitte ein, um diesen einzusehen." },
 
   {custom_content_id: address_validation_checks_id,
    locale: 'de',

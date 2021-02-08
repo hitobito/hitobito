@@ -89,3 +89,11 @@ address_validation_checks:
   subject: Address Validierungen
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+assignment_assignee_notification:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:assignment_assignee_notification) %>
+  locale: de
+  label: 'Auftrag erhalten'
+  subject: Druckauftrag erhalten
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

@@ -97,6 +97,11 @@ address_validation_checks_body:
   name: body
   body: 'Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden.'
 
+assignment_assignee_notification_body:
+  record: assignment_assignee_notification (CustomContent::Translation)
+  name: body
+  body: 'Sie haben einen neuen Druckauftrag: {assignment-title} erhalten. Login Sie sich bitte ein, um diesen einzusehen.'
+
 people_action_index_de_body:
   record: people_action_index_de (HelpText::Translation)
   name: body

@@ -91,5 +91,14 @@ describe MessagesController do
       expect(assigns(:message).invoice.invoice_items.first.name).to eq 'Mitgliedsbeitrag'
       expect(response).to render_template :new
     end
+
+    it 'creates Text Message' do
+      post :create, params: nesting.merge(
+        message: { text: 'Long live SMS!', type: 'Message::TextMessage' }
+      )
+      expect(assigns(:message)).to be_persisted
+      expect(response).to redirect_to group_mailing_list_message_path(id: assigns(:message).id)
+    end
+
   end
 end

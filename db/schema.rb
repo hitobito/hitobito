@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2021_02_02_153103) do
-
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -479,7 +478,7 @@ ActiveRecord::Schema.define(version: 2021_02_02_153103) do
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
 
-  create_table "message_recipients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+  create_table "message_recipients", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.bigint "message_id", null: false
     t.bigint "person_id", null: false
     t.string "phone_number"
@@ -489,16 +488,17 @@ ActiveRecord::Schema.define(version: 2021_02_02_153103) do
     t.timestamp "failed_at"
     t.text "error"
     t.bigint "invoice_id"
+    t.string "state"
     t.index ["invoice_id"], name: "index_message_recipients_on_invoice_id"
     t.index ["message_id"], name: "index_message_recipients_on_message_id"
     t.index ["person_id"], name: "index_message_recipients_on_person_id"
   end
 
-  create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+  create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.bigint "mailing_list_id"
     t.bigint "sender_id"
     t.string "type", null: false
-    t.string "subject", limit: 1024, null: false
+    t.string "subject", limit: 256
     t.string "state", default: "draft"
     t.integer "recipient_count", default: 0
     t.integer "success_count", default: 0
@@ -508,6 +508,7 @@ ActiveRecord::Schema.define(version: 2021_02_02_153103) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "invoice_attributes"
     t.bigint "invoice_list_id"
+    t.text "text"
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"

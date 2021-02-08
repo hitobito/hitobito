@@ -5,7 +5,10 @@
 
 #main.row
   %article.col-lg-5
-    = render_attrs entry, :type, :subject
+    - if entry.text_message?
+      = render_attrs entry, :type, :text
+    - else
+      = render_attrs entry, :type, :subject
     - if entry.letter?
       = render_attrs entry, :body
 

@@ -226,6 +226,9 @@ de:
       message/letter_with_invoice:
         one: Rechnungsbrief
         other: Rechnungsbriefe
+      message/text_message:
+        one: SMS
+        other: SMS
       mail_log:
         one: Verlauf
         other: Verlauf
@@ -684,6 +687,7 @@ de:
           pending: Vorbereitet
           processing: in Bearbeitung
           finished: Abgeschlossen
+          failed: Fehlgeschlagen
         recipient_count: Anzahl Empfänger
         success_count: Empfänger erfolgreich
         failed_count: Empfänger fehlerhaft

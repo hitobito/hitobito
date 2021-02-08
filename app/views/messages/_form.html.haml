@@ -10,7 +10,8 @@
         =t('.recipient_info', count: @recipient_count, model_class: model_class.model_name.human)
 
   = f.hidden_field :type
-  = f.labeled_input_fields :subject
+  - if !entry.text_message?
+    = f.labeled_input_fields :subject
   - if entry.letter?
     = f.labeled_rich_text_area :body, style: 'min-height: 250px',  help: t('.available_placeholders', placeholders: message_placeholders)
 
@@ -24,6 +25,9 @@
 
       / calculation dependant on invoice_list, change first
       / = render "invoice_lists/calculated", invoice: fi.object.decorate
+
+  - if entry.text_message?
+    = f.labeled_input_field(:text)
 
   %br
   = form_buttons(f, cancel_url: [parent.group, parent, :messages])

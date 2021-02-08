@@ -38,6 +38,17 @@ describe GroupSetting do
     expect(settings.keys).to include('text_message_provider')
   end
 
+  it 'returns default value if present' do
+    expect(setting.username).to be(nil)
+    expect(setting.provider).to eq('aspsms')
+  end
+
+  it 'does not return default value if value present' do
+    setting.provider = 'other'
+
+    expect(setting.provider).to eq('other')
+  end
+
   it 'encrypts username, password' do
     setting.username = 'david.hasselhoff'
     setting.password = 'knightrider'

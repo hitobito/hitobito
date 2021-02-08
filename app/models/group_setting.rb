@@ -29,11 +29,11 @@ class GroupSetting < RailsSettings::SettingObject
 
   ENCRYPTED_VALUES = %w(username password).freeze
   SETTINGS = {
-    text_message_provider: [:username, :password, :provider]
+    text_message_provider: { username: nil, password: nil, provider: %w(aspsms) }
   }.with_indifferent_access.freeze
 
   def attrs
-    SETTINGS[var]
+    SETTINGS[var].symbolize_keys.keys
   end
 
   private
@@ -44,16 +44,20 @@ class GroupSetting < RailsSettings::SettingObject
       encrypted_value = value[name]
       decrypt(encrypted_value) if encrypted_value.present?
     else
-      value[name]
+      value[name] || default_value(name)
     end
   end
 
-  def _set_value(name, v)
+  def default_value(name)
+    SETTINGS[var].try(:[], name).try(:first)
+  end
+
+  def _set_value(name, value)
     if encrypted?(name)
       name = "encrypted_#{name}"
-      v = encrypt(v) if v.present?
+      value = encrypt(value) if value.present?
     end
-    super(name, v)
+    super(name, value)
   end
 
   def encrypt(value)

@@ -48,7 +48,8 @@ class GroupSettingsController < ModalCrudController
   def assign_attributes
     entry.attrs.each do |a|
       value = model_params[a]
-      break if a.eql?(:password) && value.blank?
+      # set password only if value provided
+      next if a.eql?(:password) && value.blank?
 
       entry.send("#{a}=", value)
     end

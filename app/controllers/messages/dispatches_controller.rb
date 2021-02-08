@@ -10,10 +10,24 @@ module Messages
     def create
       authorize!(:update, message)
       update_and_enqueue
-      redirect_to message.path_args, notice: flash_message
+      redirect_to redirect_path, notice: flash_message
     end
 
     private
+
+    def redirect_path
+      case message
+      when Message::Letter, Message::LetterWithInvoice
+        new_assignment_path(assignment: { attachment_id: message.id,
+                                          attachment_type: Message.sti_name },
+                            return_url: group_mailing_list_message_path(message.group,
+                                                                   message.mailing_list,
+                                                                   message)
+                            )
+      else
+        message.path_args
+      end
+    end
 
     def flash_message
       t('.success', model_class: message.class.model_name.human)

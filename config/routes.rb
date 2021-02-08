@@ -88,7 +88,9 @@ Hitobito::Application.routes.draw do
         resources :qualifications, only: [:new, :create, :destroy]
         get 'qualifications' => 'qualifications#new' # route required for language switch
 
+        resources :assignments, only: [:show, :edit, :update]
         scope module: 'person' do
+          resources :assignments, only: [:index]
           resources :subscriptions, only: [:index, :create, :destroy]
           post 'tags' => 'tags#create'
           delete 'tags' => 'tags#destroy'
@@ -295,8 +297,9 @@ Hitobito::Application.routes.draw do
 
     get 'synchronizations/:id' => 'async_synchronizations#show'
 
+    resources :assignments, only: [:new, :create]
     resources :table_displays, only: [:create]
-    resources :messages, only: [] do
+    resources :messages, only: [:show] do
       resource :preview, only: [:show], module: :messages
       resource :dispatch, only: [:create, :show], module: :messages
     end

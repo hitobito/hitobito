@@ -139,6 +139,9 @@ de:
       additional_email:
         one: Weitere E-Mail
         other: Weitere E-Mails
+      assignment:
+        one: Auftrag
+        other: Aufträge
       custom_content:
         one: Text
         other: Texte
@@ -324,6 +327,11 @@ de:
         vs: Wallis
         zg: Zug
         zh: Zürich
+
+      assignment:
+        title: Titel
+        description: Beschreibung
+        state: Status
 
       person:
         first_name: Vorname

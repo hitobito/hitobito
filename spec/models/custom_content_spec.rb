@@ -10,9 +10,9 @@
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
-#  key                   :string           not null
-#  placeholders_required :string
-#  placeholders_optional :string
+#  key                   :string(255)      not null
+#  placeholders_optional :string(255)
+#  placeholders_required :string(255)
 #
 
 require 'spec_helper'
@@ -23,7 +23,7 @@ describe CustomContent do
 
   context '.list' do
     it 'contains one entry per main item' do
-      expect(CustomContent.list.size).to eq(10)
+      expect(CustomContent.list.size).to eq(11)
     end
   end
 

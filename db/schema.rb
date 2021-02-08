@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_02_153103) do
+ActiveRecord::Schema.define(version: 2021_02_08_135042) do
+
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -62,6 +63,20 @@ ActiveRecord::Schema.define(version: 2021_02_02_153103) do
     t.string "state", limit: 128, null: false
     t.text "numbers"
     t.index ["zip_code", "street_short"], name: "index_addresses_on_zip_code_and_street_short"
+  end
+
+  create_table "assignments", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.bigint "creator_id", null: false
+    t.string "title", null: false
+    t.text "description", null: false
+    t.string "attachment_type"
+    t.integer "attachment_id"
+    t.date "read_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "index_assignments_on_creator_id"
+    t.index ["person_id"], name: "index_assignments_on_person_id"
   end
 
   create_table "custom_content_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|

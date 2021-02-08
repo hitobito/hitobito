@@ -385,6 +385,12 @@ de:
         event_search: Anlass Suchen...
         submit: Hinzufügen
 
+  assignments:
+    attachment: 'Anhang'
+    form:
+      attachment:
+        subject: 'Nachrichten Betreff:'
+
   events:
     application_fields:
       caption_signature: Teilnehmer/-innen müssen die Anmeldung unterschreiben
@@ -844,6 +850,7 @@ de:
         success: "%{model_class} wurde als Druckauftrag vorbereitet."
     actions_show:
       button_dispatch_letter: Druckauftrag erstellen
+      button_show_assignment: Druckauftrag anzeigen
       button_preview: Vorschau
       button_dispatch_text_message: Senden
     form:

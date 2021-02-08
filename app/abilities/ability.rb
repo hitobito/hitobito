@@ -13,7 +13,8 @@ class Ability
   cattr_reader :store
   @@store = AbilityDsl::Store.new
 
-  store.register EventAbility,
+  store.register AssignmentAbility,
+                 EventAbility,
                  Event::ApplicationAbility,
                  Event::ParticipationAbility,
                  Event::ParticipationContactDataAbility,

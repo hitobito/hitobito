@@ -15,12 +15,12 @@ describe Messages::DispatchesController do
   context 'letter' do
     let(:message)    { messages(:letter) }
 
-    it 'POST#creates creates dispatch and enqueues job' do
+    it 'POST#creates creates dispatch and enqueues job and redirect to assignments#new' do
       expect do
         post :create, params: { message_id: message.id }
       end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
       expect(message.reload.state).to eq 'pending'
-      expect(response).to redirect_to message.path_args
+      expect(response).to redirect_to new_assignment_redirect_path(message)
       expect(flash[:notice]).to eq 'Brief wurde als Druckauftrag vorbereitet.'
     end
   end
@@ -28,14 +28,24 @@ describe Messages::DispatchesController do
   context 'letter with invoice' do
     let(:message)    { messages(:with_invoice) }
 
-    it 'POST#creates creates dispatch and enqueues job' do
+    it 'POST#creates creates dispatch and enqueues job and redirect to assignments#new' do
       expect do
         post :create, params: { message_id: message.id }
       end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
       expect(message.reload.invoice_list).to be_persisted
       expect(message.reload.state).to eq 'pending'
-      expect(response).to redirect_to message.path_args
+      expect(response).to redirect_to new_assignment_redirect_path(message)
       expect(flash[:notice]).to eq 'Rechnungsbrief wurde als Druckauftrag vorbereitet.'
     end
+  end
+
+  private
+
+  def new_assignment_redirect_path(message)
+    new_assignment_path(assignment: { attachment_id: message.id, attachment_type: 'Message'},
+                        return_url: group_mailing_list_message_path(message.group,
+                                                               message.mailing_list,
+                                                               message)
+                        )
   end
 end

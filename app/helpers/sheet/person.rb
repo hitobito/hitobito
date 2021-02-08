@@ -51,6 +51,12 @@ module Sheet
           person.company_name?
         end)
 
+    if Settings.assignments.enabled
+      tab 'activerecord.models.assignment.other',
+          :group_person_assignments_path,
+          if: :show_details
+    end
+
     def link_url
       view.group_person_path(parent_sheet.entry.id, entry.id)
     end

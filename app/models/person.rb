@@ -6,15 +6,12 @@
 #
 #  id                        :integer          not null, primary key
 #  additional_information    :text(16777215)
-#  additional_languages      :string(255)
 #  address                   :text(16777215)
-#  advertising               :string(255)
 #  authentication_token      :string(255)
 #  birthday                  :date
 #  company                   :boolean          default(FALSE), not null
 #  company_name              :string(255)
 #  contact_data_visible      :boolean          default(FALSE), not null
-#  correspondence_language   :string(255)
 #  country                   :string(255)
 #  current_sign_in_at        :datetime
 #  current_sign_in_ip        :string(255)
@@ -29,7 +26,6 @@
 #  last_sign_in_at           :datetime
 #  last_sign_in_ip           :string(255)
 #  locked_at                 :datetime
-#  nationality               :string(255)
 #  nickname                  :string(255)
 #  picture                   :string(255)
 #  remember_created_at       :datetime
@@ -37,7 +33,6 @@
 #  reset_password_token      :string(255)
 #  show_global_label_formats :boolean          default(TRUE), not null
 #  sign_in_count             :integer          default(0)
-#  title                     :string(255)
 #  town                      :string(255)
 #  unlock_token              :string(255)
 #  zip_code                  :string(255)
@@ -158,6 +153,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :label_formats, dependent: :destroy
   has_many :table_displays, dependent: :destroy
+
+  has_many :assignments, dependent: :destroy
 
   has_many :access_grants, class_name: 'Oauth::AccessGrant',
                            foreign_key: :resource_owner_id,

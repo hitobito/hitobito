@@ -3,10 +3,13 @@
 / #  or later. See the COPYING file at the top-level directory or at
 / #  https://github.com/hitobito/hitobito.
 
+- if Settings.assignments.enabled && entry.letter? 
+  - if entry.assignments.empty?
+    = action_button(t('.button_dispatch_letter'), message_dispatch_path(message_id: entry.id), :paper_plane, method: :post)
+  - else
+    = action_button(t('.button_show_assignment'), group_person_assignment_path(*entry.assignments.first.path_args), :paper_plane, method: :get)
 - if entry.letter? && !entry.dispatched?
   = action_button(t('.button_preview'), message_preview_path(message_id: entry.id, format: :pdf), :eye, target: :_blank)
-  = action_button(t('.button_dispatch_letter'), message_dispatch_path(message_id: entry.id), :paper_plane, method: :post)
-
   = button_action_edit if can?(:edit, entry)
   = button_action_destroy if can?(:destroy, entry)
 

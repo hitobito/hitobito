@@ -59,3 +59,7 @@ person_add_request_rejected:
 address_validation_checks:
   key: address_validation_checks
   placeholders_required: invalid-people
+
+assignment_assignee_notification:
+  key: assignment_assignee_notification
+  placeholders_required: assignment-title

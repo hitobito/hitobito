@@ -18,7 +18,7 @@ module Messages
     end
 
     def perform
-      raise 'Cannot run twice' if sent_at?
+      return update(state: :finished) if sent_at?
 
       update(sent_at: Time.current, state: :processing)
       message.dispatcher_class.new(message, recipients).run

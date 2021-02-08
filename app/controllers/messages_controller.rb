@@ -9,9 +9,9 @@ class MessagesController < CrudController
 
   include YearBasedPaging
 
-  PERMITTED_TEXT_MESSAGE_ATTRS = [:type, :text].freeze
-  PERMITTED_LETTER_ATTRS = [:type, :subject, :body].freeze
-  PERMITTED_INVOICE_LETTER_ATTRS = [:type, :subject, :body,
+  PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze
+  PERMITTED_LETTER_ATTRS = [:subject, :body].freeze
+  PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body,
                                     invoice_attributes: {
                                       invoice_items_attributes: [
                                         :name,
@@ -37,25 +37,21 @@ class MessagesController < CrudController
   end
 
   def build_entry
-    raise_type_error unless well_known?(type)
-    type.constantize.new(mailing_list: parent, sender: current_user)
+    type = model_params && model_params[:type]
+    message = Message.find_message_type!(type).new
+    message.mailing_list = parent
+    message.sender = current_user
+    message
   end
 
-  def type
-    model_params && model_params[:type].presence
-  end
-
-  def well_known?(type)
-    type_class = type.safe_constantize
-    type_class && type_class <= Message
-  end
-
-  def raise_type_error
-    raise ActiveRecord::RecordNotFound, "No message type '#{type}' found"
+  def permitted_params
+    p = model_params.dup
+    p.delete(:type)
+    p.permit(permitted_attrs)
   end
 
   def permitted_attrs
-    case type
+    case entry.class.sti_name
     when Message::Letter.sti_name
       PERMITTED_LETTER_ATTRS
     when Message::LetterWithInvoice.sti_name

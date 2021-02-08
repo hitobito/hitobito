@@ -54,6 +54,21 @@ class Message < ActiveRecord::Base
   class_attribute :icon
   self.icon = :envelope
 
+  class << self
+    def all_types
+      [Message::TextMessage,
+       Message::Letter,
+       Message::LetterWithInvoice]
+    end
+
+    def find_message_type!(sti_name)
+      type = all_types.detect { |t| t.sti_name == sti_name }
+      raise ActiveRecord::RecordNotFound, "No event type '#{sti_name}' found" if type.nil?
+
+      type
+    end
+  end
+
   def to_s
     subject ? subject.truncate(20) : super
   end
@@ -85,4 +100,5 @@ class Message < ActiveRecord::Base
   def exporter_class
     "Export::Pdf::Messages::#{type.demodulize}".constantize
   end
+
 end

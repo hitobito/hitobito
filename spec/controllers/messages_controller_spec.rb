@@ -75,11 +75,11 @@ describe MessagesController do
       expect(response).to redirect_to group_mailing_list_message_path(id: assigns(:message).id)
     end
 
-    it 'keeps invoice_items attributes for LetterWithInvoice' do
+    it 'keeps invoice_items attributes if missing body for LetterWithInvoice' do
       post :create, params: nesting.merge(
         message: {
-          type: 'Message::LetterWithInvoice',
           subject: 'Mitgliedsbeitrag',
+          type: 'Message::LetterWithInvoice',
           invoice_attributes: {
             invoice_items_attributes: {
               '1' => { 'name' => 'Mitgliedsbeitrag', '_destroy' => 'false' }

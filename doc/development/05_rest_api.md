@@ -358,7 +358,7 @@ curl "https://demo.hitobito.com/groups/1/events/1/participations.json?user_email
       "primary_group_id": 18,
       "roles": [
         {
-          "type": "Event::Role::Leader", 
+          "type": "Event::Role::Leader",
           "name": "Leitung"
         }
       ],
@@ -396,7 +396,7 @@ curl "https://demo.hitobito.com/groups/1/events/1/participations.json?user_email
       "primary_group_id": 1,
       "roles": [
         {
-          "type": "Event::Role::Leader", 
+          "type": "Event::Role::Leader",
           "name": "Leitung"
         }
       ],
@@ -434,7 +434,7 @@ curl "https://demo.hitobito.com/groups/1/events/1/participations.json?user_email
       "primary_group_id": 33,
       "roles": [
         {
-          "type": "Event::Role::Participant", 
+          "type": "Event::Role::Participant",
           "name": "Teilnehmer"
         }
       ],

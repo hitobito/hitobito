@@ -18,7 +18,7 @@ Execute all tests:
 
     spring rails spec
 
-For performance reasons, this does not include any Javascript/Feature Specs. To run those tests: 
+For performance reasons, this does not include any Javascript/Feature Specs. To run those tests:
 
     spring rails spec:features
 
@@ -34,7 +34,7 @@ Switching between core and wagon database for executing single tests:
 Executing a specific test:
 
     spring rspec spec/domain/import_spec.rb
-    
+
 For executing a single feature spec call:
 
     spring rspec --tag type:feature spec/features/role_lists_controller_spec.rb
@@ -54,7 +54,7 @@ For profiling single requests, you can add the param `?profile_request=true` to 
 Starting up development containers includes one with the delayed job worker. To check it's logs:
 
     docker-compose logs worker
-    
+
 ### Mailcatcher
 
 Access mailcatcher with your favourite browser [http://localhost:1080](http://localhost:1080)

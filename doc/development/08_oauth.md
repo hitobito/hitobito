@@ -1,4 +1,5 @@
 ## OAuth 2.0
+
 Hitobito is an OAuth 2.0 provider, meaning that an external application can authenticate users via hitobito (usually in the form of a "Login via hitobito" feature, similar to Google and Facebook etc.). The external application can then query information about the user or use the [REST API](05_rest_api.md) in the name of the user, if the user has granted this permission. This works without giving the user's password or token to the external application.
 
 ### Managing OAuth applications in hitobito
@@ -69,6 +70,7 @@ The response will contain the access token (formatted here for readability):
 ```
 
 #### Use your access token to get information about the user
+
 The freshly acquired token can be used in the `Authorization` HTTP header when accessing the OAuth profile endpoint. You also have to set the `X-Scope` HTTP header to one of the scopes you requested when asking the user for permission.
 ```bash
 curl -H "Authorization: Bearer a3922ce7b6776e293c40d1d47a16d3787b860fb31ee7b121793f40492bae309f" \

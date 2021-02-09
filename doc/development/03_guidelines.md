@@ -154,7 +154,7 @@ ihre Files anpassen. Siehe `hitobito_generic/lib/tasks/license.rake`.
 Changelogs werden in den Wagons und im Core geführt. Die Dateien dafür, müssen immer CHANGELOG.md genannt werden. Eine neue Version kann folgendermassen spezifiziert werden:
 
     ## Version 1.0
-    
+
 Wenn du nicht weisst, in welche Versionsnummer deine Contribution aufgenommen wird, dann erstellen einen Titel `## Version 1.X` (falls nicht schon vorhanden).
 
 Um einen Change hinzuzufügen, kann man unter der Version eine Linie wie gefolgt eintragen.

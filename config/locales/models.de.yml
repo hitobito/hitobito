@@ -577,6 +577,7 @@ de:
         username: Benutzername
         password: Passwort
         provider: Provider
+        originator: Absender
 
       role:
         label: Bezeichnung

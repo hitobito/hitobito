@@ -27,7 +27,13 @@ module Messages
     private
 
     def provider_config
-      @message.mailing_list.group.settings(:text_message_provider)
+      s = group.settings(:text_message_provider)
+      s.originator = group.name if s.originator.blank?
+      s
+    end
+
+    def group
+      @group ||= @message.mailing_list.group
     end
 
     def init_recipient_entries

@@ -7,6 +7,8 @@
 
 # https://json.aspsms.com/
 
+require 'rest-client'
+
 module Messages
   module TextMessageProvider
     class Aspsms < Base

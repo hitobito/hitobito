@@ -13,7 +13,8 @@ describe Messages::TextMessageProvider::Aspsms do
     GroupSetting.new(
       username: 'goofy',
       password: 'max42',
-      originator: 'Acme' )
+      originator: 'Acme'
+    )
   end
   let(:provider) { described_class.new(config: config) }
   let(:success_response) do

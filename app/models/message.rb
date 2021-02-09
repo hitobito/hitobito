@@ -34,7 +34,7 @@
 class Message < ActiveRecord::Base
   include I18nEnums
 
-  validates_by_schema
+  validates_by_schema except: :text
   belongs_to :invoice_list
   belongs_to :mailing_list
   belongs_to :sender, class_name: 'Person'

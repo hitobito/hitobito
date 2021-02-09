@@ -3,4 +3,20 @@
 / #  or later. See the COPYING file at the top-level directory or at
 / #  https://github.com/hitobito/hitobito.
 
-= f.labeled_input_field(:text)
+= f.labeled_input_field(:text, maxlength: max_text_message_length)
+.controls
+  = t('.remaining_chars') + ':'
+  %span{id: 'counter', 'data-maximum-length': max_text_message_length}= max_text_message_length
+
+:javascript
+  $(document).ready(function() {
+    var message_text = $("#message_text");
+    var counter = $("#counter");
+    var maxLength = counter.data("maximum-length");
+
+    counter.text(maxLength - $(message_text).val().length);
+
+    message_text.keyup(function() {
+      counter.text(maxLength - $(this).val().length);
+    });
+  });

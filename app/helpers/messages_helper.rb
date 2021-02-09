@@ -35,4 +35,8 @@ module MessagesHelper
            end
     badge(message.state_label, type)
   end
+
+  def max_text_message_length
+    Message::TextMessage.validators_on(:text).first.options[:maximum]
+  end
 end

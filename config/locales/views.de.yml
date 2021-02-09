@@ -856,6 +856,9 @@ de:
     letter:
       fields:
         available_placeholders: 'Verfügbare Platzhalter: %{placeholders}'
+    text_message:
+      fields:
+        remaining_chars: Verbleibende Zeichen
     form:
       recipient_info:
         one: "%{model_class} wird für eine Person erstellt."

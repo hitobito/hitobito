@@ -10,24 +10,13 @@
         =t('.recipient_info', count: @recipient_count, model_class: model_class.model_name.human)
 
   = f.hidden_field :type
-  - if !entry.text_message?
-    = f.labeled_input_fields :subject
-  - if entry.letter?
-    = f.labeled_rich_text_area :body, style: 'min-height: 250px',  help: t('.available_placeholders', placeholders: message_placeholders)
-
-  - if entry.invoice?
-    = f.fields_for :invoice do |fi|
-      = field_set_tag do
-        = render "invoice_lists/invoice_articles", f: fi, group: parent.group
-
-      = field_set_tag do
-        = fi.labeled_inline_fields_for :invoice_items, 'invoice_lists/invoice_items'
-
-      / calculation dependant on invoice_list, change first
-      / = render "invoice_lists/calculated", invoice: fi.object.decorate
 
   - if entry.text_message?
-    = f.labeled_input_field(:text)
+    = render 'messages/text_message/fields', f: f
+  - elsif entry.invoice?
+    = render 'messages/letter_with_invoice/fields', f: f
+  - elsif entry.letter?
+    = render 'messages/letter/fields', f: f
 
   %br
   = form_buttons(f, cancel_url: [parent.group, parent, :messages])

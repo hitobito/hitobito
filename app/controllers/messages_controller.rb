@@ -33,7 +33,7 @@ class MessagesController < CrudController
   private
 
   def list_entries
-    super.list.page(params[:page]).per(50).where(created_at: year_filter)
+    super.list.includes(:group).page(params[:page]).per(50).where(created_at: year_filter)
   end
 
   def build_entry

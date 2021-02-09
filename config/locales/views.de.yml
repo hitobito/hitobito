@@ -853,8 +853,10 @@ de:
       button_show_assignment: Druckauftrag anzeigen
       button_preview: Vorschau
       button_dispatch_text_message: Senden
+    letter:
+      fields:
+        available_placeholders: 'Verfügbare Platzhalter: %{placeholders}'
     form:
-      available_placeholders: 'Verfügbare Platzhalter: %{placeholders}'
       recipient_info:
         one: "%{model_class} wird für eine Person erstellt."
         other: "%{model_class} wird für %{count} Personen erstellt."

@@ -51,7 +51,7 @@ module Sheet
           person.company_name?
         end)
 
-    if Settings.assignments.enabled
+    if Settings.assignments&.enabled
       tab 'activerecord.models.assignment.other',
           :group_person_assignments_path,
           if: :show_details

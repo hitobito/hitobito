@@ -3,7 +3,7 @@
 / #  or later. See the COPYING file at the top-level directory or at
 / #  https://github.com/hitobito/hitobito.
 
-- if Settings.assignments.enabled && entry.letter? 
+- if Settings.assignments&.enabled && entry.letter? 
   - if entry.assignments.empty?
     = action_button(t('.button_dispatch_letter'), message_dispatch_path(message_id: entry.id), :paper_plane, method: :post)
   - else

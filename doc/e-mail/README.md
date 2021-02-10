@@ -9,7 +9,7 @@ Diese können in der Applikation beliebig erstellt und verwaltet werden. Dies
 geschieht in den Modellen `MailingList` und `Subscription`.
 
 Alle E-Mails an die Applikationsdomain (z.B `news@db.jubla.ch`) werden über
-einen Catch-All Mail Account gesammelt. Von der Applikation wird dieser Account
+einen [Catch-All](https://de.wikipedia.org/wiki/Catch-All) Mail Account gesammelt. Von der Applikation wird dieser Account
 in einem Background Job über POP3 regelmässig gepollt. Die eingetroffenen
 E-Mails werden danach wie folgt verarbeitet:
 

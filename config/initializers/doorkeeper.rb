@@ -1,4 +1,4 @@
-#  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2021, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -13,7 +13,7 @@ Doorkeeper.configure do
       current_person.tap { authorize!(:show, current_person) }
     else
       store_location_for :person, request.url
-      redirect_to(new_person_session_url)
+      redirect_to(new_person_session_url(oauth: true))
     end
   end
 

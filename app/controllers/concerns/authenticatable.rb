@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -28,14 +28,15 @@ module Authenticatable
     current_person
   end
 
-  # TODO can we somehow use this dynamic user as a true substitute instead of passing it
-  # explicitly at various places
+  # TODO: can we somehow use this dynamic user as a true substitute instead of
+  #       passing it explicitly at various places
   def service_token_user
     current_ability.token.dynamic_user if current_ability.is_a?(TokenAbility)
   end
 
   def origin_user
     return unless session[:origin_user]
+
     Person.find(session[:origin_user])
   end
 
@@ -52,6 +53,7 @@ module Authenticatable
 
   def doorkeeper_sign_in
     return unless doorkeeper_token.present? && doorkeeper_token.accessible?
+
     doorkeeper_authorize! :api
 
     user = Person.find(doorkeeper_token.resource_owner_id)

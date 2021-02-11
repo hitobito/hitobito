@@ -21,3 +21,13 @@
     }
   }
 }
+
+.oauth-application-logo {
+  text-align: center;
+  padding: 10px;
+
+  img {
+    border: 1px solid $gray;
+    margin-bottom: 10px;
+  }
+}

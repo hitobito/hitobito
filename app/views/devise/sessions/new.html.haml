@@ -5,7 +5,10 @@
 
 -title t('.sign_in')
 
-= render 'info'
+- if params[:oauth] == 'true'
+  = render 'oauth_info'
+- else
+  = render 'info'
 
 %br/
 

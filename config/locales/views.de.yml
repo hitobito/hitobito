@@ -195,7 +195,10 @@ de:
       new:
         sign_in: Anmelden
       form:
-        sign_in: 'Anmelden'
+        sign_in: Anmelden
+      oauth_info:
+        sign_in: 'Anmelden mit %{name}'
+        info: 'Bitte melde dich an, um weiter zu %{oauth_app} zu gelangen.'
     passwords:
       send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst.'
       updated: 'Dein Passwort wurde geändert. Du bist jetzt angemeldet.'

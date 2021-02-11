@@ -1,0 +1,33 @@
+.oauth-dialog {
+  @media screen and (min-width: 500px) {
+    #page .container-fluid {
+      min-width: auto;
+      width: 450px;
+    }
+
+    .form-horizontal .control-label {
+      width: auto;
+      float: none;
+      text-align: left;
+    }
+
+    .form-horizontal .controls {
+      margin-left: 0px;
+    }
+
+    input.span6, textarea.span6, .uneditable-input.span6 {
+      /* width: 556px; */
+      width: 100%;
+    }
+  }
+}
+
+.oauth-application-logo {
+  text-align: center;
+  padding: 10px;
+
+  img {
+    border: 1px solid $gray;
+    margin-bottom: 10px;
+  }
+}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_08_135042) do
+ActiveRecord::Schema.define(version: 2021_02_10_231300) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 2021_02_08_135042) do
     t.index ["zip_code", "street_short"], name: "index_addresses_on_zip_code_and_street_short"
   end
 
-  create_table "assignments", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "assignments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "person_id", null: false
     t.bigint "creator_id", null: false
     t.string "title", null: false
@@ -493,7 +493,7 @@ ActiveRecord::Schema.define(version: 2021_02_08_135042) do
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
 
-  create_table "message_recipients", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "message_recipients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "message_id", null: false
     t.bigint "person_id", null: false
     t.string "phone_number"
@@ -509,7 +509,7 @@ ActiveRecord::Schema.define(version: 2021_02_08_135042) do
     t.index ["person_id"], name: "index_message_recipients_on_person_id"
   end
 
-  create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.bigint "mailing_list_id"
     t.bigint "sender_id"
     t.string "type", null: false
@@ -579,6 +579,7 @@ ActiveRecord::Schema.define(version: 2021_02_08_135042) do
     t.boolean "confidential", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "logo"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 

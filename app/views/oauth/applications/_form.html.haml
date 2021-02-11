@@ -13,3 +13,11 @@
                         { id: "oauth_application_scope_#{scope}" })
         = format_doorkeeper_application_scope(scope).html_safe
 
+  = field_set_tag do
+    = f.labeled :logo do
+      = f.file_field :logo, type: :file, accept: Oauth::LogoUploader.accept_extensions
+
+    - if entry.logo.present?
+      = f.labeled :remove_logo do
+        = f.boolean_field :remove_logo
+

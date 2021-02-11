@@ -1,10 +1,27 @@
 <% title t('.title') %>
 
-<div class="row-fluid" role="main">
-  <div class="span7">
+<div class="container">
+  <div class="oauth-application-logo">
+    <%= image_tag(Oauth::Application.find_by(uid: @pre_auth.client.uid).logo_url, size: '64x64') %>
+  </div>
+
   <p style="margin-bottom: 2rem;">
     <%= raw t('.prompt', client_name: content_tag(:strong) { @pre_auth.client.name }) %>
   </p>
+
+  <% if @pre_auth.scopes.count > 0 %>
+    <div id="oauth-permissions">
+      <div class="well help">
+        <p><%= t('.able_to') %>:</p>
+
+        <ul>
+          <% @pre_auth.scopes.each do |scope| %>
+            <li><%= t scope, scope: [:doorkeeper, :scopes] %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
 
   <div class="actions row-fluid">
     <%= form_tag oauth_authorization_path, method: :post, class: 'span6' do %>
@@ -30,20 +47,4 @@
       <%= submit_tag t('doorkeeper.authorizations.buttons.deny'), class: "btn btn-danger btn-lg btn-block" %>
     <% end %>
   </div>
-</div>
-  <div class="span5">
-  <% if @pre_auth.scopes.count > 0 %>
-    <div id="oauth-permissions">
-      <div class="well help">
-      <p><%= t('.able_to') %>:</p>
-
-      <ul>
-        <% @pre_auth.scopes.each do |scope| %>
-          <li><%= t scope, scope: [:doorkeeper, :scopes] %></li>
-        <% end %>
-      </ul>
-    </div>
-    </div>
-  <% end %>
-</div>
 </div>

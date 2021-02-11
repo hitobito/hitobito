@@ -1,15 +1,16 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_dependency Devise::Engine.root.
-                                  join('app', 'controllers', 'devise', 'sessions_controller').
-                                  to_s
+require_dependency Devise::Engine.root
+                                 .join('app', 'controllers', 'devise', 'sessions_controller')
+                                 .to_s
 
 class Devise::SessionsController < DeviseController
+  layout :devise_layout
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:new, :create], prepend: true
@@ -29,6 +30,19 @@ class Devise::SessionsController < DeviseController
     end
   end
 
+  module OauthSigninLayout
+    private
+
+    def devise_layout
+      if params['oauth'] == 'true'
+        'oauth'
+      else
+        'application'
+      end
+    end
+  end
+
   prepend Json
+  prepend OauthSigninLayout
 
 end

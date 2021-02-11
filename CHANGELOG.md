@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Layout der OAuth-Dialoge angepasst und Logos ermöglicht (#1044)
+
 ## Version 1.22
 
 *  Anlässe und deren Anmeldeangaben können übersetzt werden (#1135, hitobito_sjas#28)

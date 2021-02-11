@@ -79,14 +79,16 @@ case $cmd in
     done
     ;;
 
-  test-core)
-    WAGONS= RAILS_TEST_DB_NAME=hit_core_test rspec $@
+  core-spec)
+    export WAGONS=''
+    export RAILS_TEST_DB_NAME=hit_core_test
+    rspec
     ;;
 
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile configs test-prepare test-core grep help'
+  echo 'activate gemfile configs test-prepare core-spec grep help'
 }
 
 function __wagon_list() {

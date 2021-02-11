@@ -237,8 +237,10 @@ Doorkeeper.configure do
 end
 
 Rails.application.config.to_prepare do
-  # Only Authorization endpoint
-  Doorkeeper::AuthorizationsController.layout 'oauth'
+  if Doorkeeper::AuthorizationsController.respond_to? :layout
+    # Only Authorization endpoint
+    Doorkeeper::AuthorizationsController.layout 'oauth'
+  end
 end
 
 # https://github.com/rails/rails/commit/9def05385f1cfa41924bb93daa187615e88c95b9

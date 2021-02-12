@@ -5,13 +5,13 @@
 
 - uid = session['person_return_to']&.gsub(/.*client_id=([^&]*).*/, '\1')
 - if uid.present?
-  - oauth_app = Doorkeeper::Application.find_by(uid: uid)
+  - oauth_app = Oauth::Application.find_by(uid: uid)
 
 - title t('.sign_in', name: Settings.application.name)
 
 .fields-separation
   - if oauth_app.present?
-    .oauth-application-log
+    .oauth-application-logo
       = image_tag(oauth_app.logo_url, size: '64x64')
 
   %p

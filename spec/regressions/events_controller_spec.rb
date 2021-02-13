@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -17,7 +15,7 @@ describe EventsController, type: :controller do
   let(:test_entry_attrs) do
     {name: "Chief Leader Course",
      group_ids: [group.id],
-     dates_attributes: [date]}
+     dates_attributes: [date],}
   end
 
   def scope_params
@@ -30,7 +28,7 @@ describe EventsController, type: :controller do
     it { is_expected.to redirect_to course_group_events_path(group.id, returning: true) }
   end
 
-  include_examples "crud controller", skip: [%w(index), %w(new)]
+  include_examples "crud controller", skip: [%w[index], %w[new]]
 
   def deep_attributes(*args)
     {name: "Chief Leader Course", dates_attributes: [date], group_ids: [group.id]}
@@ -89,17 +87,17 @@ describe EventsController, type: :controller do
       let(:group) { groups(:top_layer) }
 
       it "renders events csv" do
-        expect do
+        expect {
           get :index, params: {group_id: group.id, year: 2012}, format: :csv
           expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
-        end.to change(Delayed::Job, :count).by(1)
+        }.to change(Delayed::Job, :count).by(1)
       end
 
       it "renders courses csv" do
-        expect do
+        expect {
           get :index, params: {group_id: group.id, year: 2012, type: Event::Course.sti_name}, format: :csv
           expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
-        end.to change(Delayed::Job, :count).by(1)
+        }.to change(Delayed::Job, :count).by(1)
       end
 
       it "sets cookie on export" do

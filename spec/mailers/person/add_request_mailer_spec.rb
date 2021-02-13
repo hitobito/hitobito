@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,7 +19,8 @@ describe Person::AddRequestMailer do
       person: person,
       requester: requester,
       body: group,
-      role_type: Group::BottomLayer::Member.sti_name)
+      role_type: Group::BottomLayer::Member.sti_name
+    )
   end
 
   context "ask person to add" do
@@ -29,17 +28,17 @@ describe Person::AddRequestMailer do
 
     subject { mail }
 
-    its(:to) { should == [person.email] }
-    its(:sender) { should =~ /#{requester.email.gsub('@', '=')}/ }
-    its(:subject) { should == "Freigabe deiner Personendaten" }
-    its(:body) { should =~ /Hallo #{person.first_name}/ }
-    its(:body) { should =~ /#{requester.full_name} möchte dich/ }
-    its(:body) { should =~ /Bottom Layer Bottom One/ }
-    its(:body) { should =~ /test.host\/groups\/#{group.id}/ }
-    its(:body) { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
-    its(:body) { should =~ /Leader in Bottom One/ }
-    its(:body) { should =~ /test.host\/people\/#{person.id}\?body_id=#{group.id}&body_type=Group/ }
-    its(:body) { should have_css "a", text: "Anfrage beantworten" }
+    its(:to) { is_expected.to == [person.email] }
+    its(:sender) { is_expected.to =~ /#{requester.email.tr('@', '=')}/ }
+    its(:subject) { is_expected.to == "Freigabe deiner Personendaten" }
+    its(:body) { is_expected.to =~ /Hallo #{person.first_name}/ }
+    its(:body) { is_expected.to =~ /#{requester.full_name} möchte dich/ }
+    its(:body) { is_expected.to =~ /Bottom Layer Bottom One/ }
+    its(:body) { is_expected.to =~ /test.host\/groups\/#{group.id}/ }
+    its(:body) { is_expected.to =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
+    its(:body) { is_expected.to =~ /Leader in Bottom One/ }
+    its(:body) { is_expected.to =~ /test.host\/people\/#{person.id}\?body_id=#{group.id}&body_type=Group/ }
+    its(:body) { is_expected.to have_css "a", text: "Anfrage beantworten" }
 
     it "lists requester group roles with write permissions only" do
       Fabricate(Group::BottomLayer::Member.name, group: group, person: requester)
@@ -63,18 +62,18 @@ describe Person::AddRequestMailer do
 
     subject { mail }
 
-    its(:to) { should == [leader.email, leader2.email] }
-    its(:sender) { should =~ /#{requester.email.gsub('@', '=')}/ }
-    its(:subject) { should == "Freigabe Personendaten" }
-    its(:body) { should =~ /Hallo #{leader.greeting_name}, #{leader2.greeting_name}/ }
-    its(:body) { should =~ /#{requester.full_name} möchte #{person.full_name}/ }
-    its(:body) { should =~ /Bottom Layer Bottom One/ }
-    its(:body) { should have_css "a", text: "Bottom Layer Bottom One" }
-    its(:body) { should =~ /test.host\/groups\/#{group.id}/ }
-    its(:body) { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
-    its(:body) { should =~ /Leader in Bottom One/ }
-    its(:body) { should have_css "a", text: "Anfrage beantworten" }
-    its(:body) { should =~ /test.host\/groups\/#{person_layer.id}\/person_add_requests\?body_id=#{group.id}&body_type=Group&person_id=#{person.id}/ }
+    its(:to) { is_expected.to == [leader.email, leader2.email] }
+    its(:sender) { is_expected.to =~ /#{requester.email.tr('@', '=')}/ }
+    its(:subject) { is_expected.to == "Freigabe Personendaten" }
+    its(:body) { is_expected.to =~ /Hallo #{leader.greeting_name}, #{leader2.greeting_name}/ }
+    its(:body) { is_expected.to =~ /#{requester.full_name} möchte #{person.full_name}/ }
+    its(:body) { is_expected.to =~ /Bottom Layer Bottom One/ }
+    its(:body) { is_expected.to have_css "a", text: "Bottom Layer Bottom One" }
+    its(:body) { is_expected.to =~ /test.host\/groups\/#{group.id}/ }
+    its(:body) { is_expected.to =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
+    its(:body) { is_expected.to =~ /Leader in Bottom One/ }
+    its(:body) { is_expected.to have_css "a", text: "Anfrage beantworten" }
+    its(:body) { is_expected.to =~ /test.host\/groups\/#{person_layer.id}\/person_add_requests\?body_id=#{group.id}&body_type=Group&person_id=#{person.id}/ }
   end
 
   context "request approved" do
@@ -86,14 +85,14 @@ describe Person::AddRequestMailer do
 
       subject { mail }
 
-      its(:to) { should == [requester.email] }
-      its(:sender) { should =~ /#{leader.email.gsub('@', '=')}/ }
-      its(:subject) { should == "Freigabe der Personendaten akzeptiert" }
-      its(:body) { should =~ /Hallo #{requester.greeting_name}/ }
-      its(:body) { should =~ /#{leader.full_name} hat deine Anfrage für #{person.full_name} freigegeben/ }
-      its(:body) { should =~ /#{leader.full_name} hat folgende schreibberechtigten Rollen:/ }
-      its(:body) { should =~ /Leader in Bottom Two/ }
-      its(:body) { should have_css "a", text: "Bottom Layer Bottom One" }
+      its(:to) { is_expected.to == [requester.email] }
+      its(:sender) { is_expected.to =~ /#{leader.email.tr('@', '=')}/ }
+      its(:subject) { is_expected.to == "Freigabe der Personendaten akzeptiert" }
+      its(:body) { is_expected.to =~ /Hallo #{requester.greeting_name}/ }
+      its(:body) { is_expected.to =~ /#{leader.full_name} hat deine Anfrage für #{person.full_name} freigegeben/ }
+      its(:body) { is_expected.to =~ /#{leader.full_name} hat folgende schreibberechtigten Rollen:/ }
+      its(:body) { is_expected.to =~ /Leader in Bottom Two/ }
+      its(:body) { is_expected.to have_css "a", text: "Bottom Layer Bottom One" }
     end
 
     context "by person" do
@@ -101,13 +100,13 @@ describe Person::AddRequestMailer do
 
       subject { mail }
 
-      its(:to) { should == [requester.email] }
-      its(:sender) { should =~ /#{person.email.gsub('@', '=')}/ }
-      its(:subject) { should == "Freigabe der Personendaten akzeptiert" }
-      its(:body) { should =~ /Hallo #{requester.greeting_name}/ }
-      its(:body) { should =~ /#{person.full_name} hat deine Anfrage für #{person.full_name} freigegeben/ }
-      its(:body) { should =~ /#{person.full_name} hat folgende schreibberechtigten Rollen:/ }
-      its(:body) { should have_css "a", text: "Bottom Layer Bottom One" }
+      its(:to) { is_expected.to == [requester.email] }
+      its(:sender) { is_expected.to =~ /#{person.email.tr('@', '=')}/ }
+      its(:subject) { is_expected.to == "Freigabe der Personendaten akzeptiert" }
+      its(:body) { is_expected.to =~ /Hallo #{requester.greeting_name}/ }
+      its(:body) { is_expected.to =~ /#{person.full_name} hat deine Anfrage für #{person.full_name} freigegeben/ }
+      its(:body) { is_expected.to =~ /#{person.full_name} hat folgende schreibberechtigten Rollen:/ }
+      its(:body) { is_expected.to have_css "a", text: "Bottom Layer Bottom One" }
     end
   end
 
@@ -120,14 +119,14 @@ describe Person::AddRequestMailer do
 
     subject { mail }
 
-    its(:to) { should == [requester.email] }
-    its(:sender) { should =~ /#{leader.email.gsub('@', '=')}/ }
-    its(:subject) { should == "Freigabe der Personendaten abgelehnt" }
-    its(:body) { should =~ /Hallo #{requester.greeting_name}/ }
-    its(:body) { should =~ /#{leader.full_name} hat deine Anfrage für #{person.full_name} abgelehnt/ }
-    its(:body) { should =~ /#{leader.full_name} hat folgende schreibberechtigten Rollen:/ }
-    its(:body) { should =~ /Leader in Bottom Two/ }
-    its(:body) { should have_css "a", text: "Bottom Layer Bottom One" }
+    its(:to) { is_expected.to == [requester.email] }
+    its(:sender) { is_expected.to =~ /#{leader.email.tr('@', '=')}/ }
+    its(:subject) { is_expected.to == "Freigabe der Personendaten abgelehnt" }
+    its(:body) { is_expected.to =~ /Hallo #{requester.greeting_name}/ }
+    its(:body) { is_expected.to =~ /#{leader.full_name} hat deine Anfrage für #{person.full_name} abgelehnt/ }
+    its(:body) { is_expected.to =~ /#{leader.full_name} hat folgende schreibberechtigten Rollen:/ }
+    its(:body) { is_expected.to =~ /Leader in Bottom Two/ }
+    its(:body) { is_expected.to have_css "a", text: "Bottom Layer Bottom One" }
   end
 
   context "body url" do

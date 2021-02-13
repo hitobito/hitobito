@@ -20,9 +20,9 @@ class MessagesController < CrudController
                                         :count,
                                         :cost_center,
                                         :account,
-                                        :_destroy
-                                      ]
-                                    }].freeze
+                                        :_destroy,
+                                      ],
+                                    },].freeze
 
   self.nesting = [Group, MailingList]
   self.remember_params += [:year]

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,13 +5,13 @@
 
 class NoteAbility < AbilityDsl::Base
   on(Note) do
-    permission(:layer_full).
-      may(:create, :show, :destroy).
-      in_same_layer
+    permission(:layer_full)
+      .may(:create, :show, :destroy)
+      .in_same_layer
 
-    permission(:layer_and_below_full).
-      may(:create, :show, :destroy).
-      in_same_layer_or_below
+    permission(:layer_and_below_full)
+      .may(:create, :show, :destroy)
+      .in_same_layer_or_below
   end
 
   def in_same_layer

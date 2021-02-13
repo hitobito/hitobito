@@ -21,19 +21,19 @@ module Synchronize
       end
 
       def fetch_merge_fields
-        paged("merge_fields", %w(tag name type)) do
+        paged("merge_fields", %w[tag name type]) do
           api.lists(list_id).merge_fields
         end
       end
 
       def fetch_segments
-        paged("segments", %w(id name member_count)) do
+        paged("segments", %w[id name member_count]) do
           api.lists(list_id).segments
         end
       end
 
       def fetch_members
-        fields = %w(email_address status tags merge_fields)
+        fields = %w[email_address status tags merge_fields]
         fields += member_fields.collect(&:first).collect(&:to_s)
 
         paged("members", fields) do
@@ -91,7 +91,7 @@ module Synchronize
         {
           method: "POST",
           path: "lists/#{list_id}/merge-fields",
-          body: {tag: name.upcase, name: name, type: type, options: options}.to_json
+          body: {tag: name.upcase, name: name, type: type, options: options}.to_json,
         }
       end
 
@@ -99,7 +99,7 @@ module Synchronize
         {
           method: "POST",
           path: "lists/#{list_id}/segments",
-          body: {name: name, static_segment: []}.to_json
+          body: {name: name, static_segment: []}.to_json,
         }
       end
 
@@ -114,14 +114,14 @@ module Synchronize
         {
           method: "POST",
           path: "lists/#{list_id}/segments/#{segment_id}",
-          body: {members_to_add: emails}.to_json
+          body: {members_to_add: emails}.to_json,
         }
       end
 
       def unsubscribe_member_operation(email)
         {
           method: "DELETE",
-          path: "lists/#{list_id}/members/#{subscriber_id(email)}"
+          path: "lists/#{list_id}/members/#{subscriber_id(email)}",
         }
       end
 
@@ -129,7 +129,7 @@ module Synchronize
         {
           method: "POST",
           path: "lists/#{list_id}/members",
-          body: subscriber_body(person).merge(status: :subscribed).to_json
+          body: subscriber_body(person).merge(status: :subscribed).to_json,
         }
       end
 
@@ -137,7 +137,7 @@ module Synchronize
         {
           method: "PUT",
           path: "lists/#{list_id}/members/#{subscriber_id(person.email)}",
-          body: subscriber_body(person).to_json
+          body: subscriber_body(person).to_json,
         }
       end
 
@@ -147,7 +147,7 @@ module Synchronize
           merge_fields: {
             FNAME: person.first_name.to_s.strip,
             LNAME: person.last_name.to_s.strip,
-          }.merge(merge_field_values(person))
+          }.merge(merge_field_values(person)),
         }.merge(member_field_values(person))
       end
 
@@ -175,12 +175,12 @@ module Synchronize
       end
 
       def execute_batch(list)
-        operations = list.collect do |item|
+        operations = list.collect { |item|
           yield(item).tap do |operation|
             log "mailchimp: #{list_id}, op: #{operation[:method]}, item: #{item}"
             log operation
           end
-        end
+        }
 
         if operations.present?
           batch_id = api.batches.create(body: {operations: operations}).body.fetch("id")
@@ -200,7 +200,7 @@ module Synchronize
         if status != "finished"
           wait_for_finish(batch_id, status, attempt + 1)
         else
-          attrs = %w(total_operations finished_operations errored_operations response_body_url)
+          attrs = %w[total_operations finished_operations errored_operations response_body_url]
           body.slice(*attrs).tap do |updates|
             log updates
           end
@@ -208,22 +208,22 @@ module Synchronize
       end
 
       def merge_field_values(person)
-        merge_fields.collect do |field, type, options, evaluator|
+        merge_fields.collect { |field, type, options, evaluator|
           value = evaluator.call(person)
           next if value.blank?
           next if options.key?(:choices) && !options[:choices].include?(value)
 
           [field.upcase, value]
-        end.compact.to_h.deep_symbolize_keys
+        }.compact.to_h.deep_symbolize_keys
       end
 
       def member_field_values(person)
-        member_fields.collect do |field, evaluator|
+        member_fields.collect { |field, evaluator|
           value = evaluator.call(person)
-          next unless value.present?
+          next if value.blank?
 
           [field, value]
-        end.compact.to_h.deep_symbolize_keys
+        }.compact.to_h.deep_symbolize_keys
       end
 
       def log(message, logger = Rails.logger)

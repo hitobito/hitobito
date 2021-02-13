@@ -17,11 +17,11 @@ describe Address::CheckValidityJob do
   it "sends email if invalid people are found and mail address is defined" do
     allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(["mail@example.com"])
 
-    expect do
+    expect {
       perform_enqueued_jobs do
         job.perform
       end
-    end.to change { ActionMailer::Base.deliveries.size }.by(1)
+    }.to change { ActionMailer::Base.deliveries.size }.by(1)
     expect(ActsAsTaggableOn::Tagging.count).to eq(1)
   end
 
@@ -29,9 +29,9 @@ describe Address::CheckValidityJob do
     allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(["mail@example.com", "addresses@example.com"])
 
     perform_enqueued_jobs do
-      expect do
+      expect {
         job.perform
-      end.to change { ActionMailer::Base.deliveries.size }.by(2)
+      }.to change { ActionMailer::Base.deliveries.size }.by(2)
       expect(ActsAsTaggableOn::Tagging.count).to eq(1)
     end
   end
@@ -41,9 +41,9 @@ describe Address::CheckValidityJob do
     person.update!(address: address.street_short, zip_code: address.zip_code, town: address.town)
 
     perform_enqueued_jobs do
-      expect do
+      expect {
         job.perform
-      end.to_not change { ActionMailer::Base.deliveries.size }
+      }.to_not change { ActionMailer::Base.deliveries.size }
       expect(ActsAsTaggableOn::Tagging.count).to eq(0)
     end
   end
@@ -52,9 +52,9 @@ describe Address::CheckValidityJob do
     allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return([])
 
     perform_enqueued_jobs do
-      expect do
+      expect {
         job.perform
-      end.to_not change { ActionMailer::Base.deliveries.size }
+      }.to_not change { ActionMailer::Base.deliveries.size }
       expect(ActsAsTaggableOn::Tagging.count).to eq(1)
     end
   end
@@ -65,9 +65,9 @@ describe Address::CheckValidityJob do
     person.update!(address: address.street_short, zip_code: address.zip_code, town: address.town)
 
     perform_enqueued_jobs do
-      expect do
+      expect {
         job.perform
-      end.to_not change { ActionMailer::Base.deliveries.size }
+      }.to_not change { ActionMailer::Base.deliveries.size }
       expect(ActsAsTaggableOn::Tagging.count).to eq(0)
     end
   end

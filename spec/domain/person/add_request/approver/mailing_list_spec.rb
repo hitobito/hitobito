@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -22,7 +20,8 @@ describe Person::AddRequest::Approver::MailingList do
     Person::AddRequest::MailingList.create!(
       person: person,
       requester: requester,
-      body: list)
+      body: list
+    )
   end
 
   it "resolves correct subclass based on request" do
@@ -34,9 +33,9 @@ describe Person::AddRequest::Approver::MailingList do
     before { subject }
 
     it "creates a new subscription" do
-      expect do
+      expect {
         expect(subject.approve).to eq(true)
-      end.to change { Subscription.count }.by(1)
+      }.to change { Subscription.count }.by(1)
 
       s = list.subscriptions.first
       expect(s.subscriber).to eq(person)
@@ -45,17 +44,17 @@ describe Person::AddRequest::Approver::MailingList do
     it "does nothing if subscription already exists" do
       list.subscriptions.create!(subscriber: person)
 
-      expect do
+      expect {
         expect(subject.approve).to eq(true)
-      end.not_to change { Subscription.count }
+      }.not_to change { Subscription.count }
     end
 
     it "creates new one if subscription was excluded before" do
       list.subscriptions.create!(subscriber: person, excluded: true)
 
-      expect do
+      expect {
         expect(subject.approve).to eq(true)
-      end.not_to change { Subscription.count }
+      }.not_to change { Subscription.count }
 
       s = list.subscriptions.first
       expect(s.subscriber).to eq(person)

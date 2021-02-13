@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -15,7 +13,7 @@ module Export::Tabular::People
     def person_attributes
       [:first_name, :last_name, :nickname, :company_name, :company, :email,
        :address, :zip_code, :town, :country, :gender, :birthday, :layer_group,
-       :roles, :tags]
+       :roles, :tags,]
     end
 
     def association_attributes

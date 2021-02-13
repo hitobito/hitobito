@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -51,7 +49,7 @@ module UtilityHelper
 
   def column_for_attr(obj, attr)
     return nil unless obj.respond_to?(:column_for_attribute) && obj.has_attribute?(attr)
-    return obj.column_for_attribute(attr)
+    obj.column_for_attribute(attr)
   end
 
   # Returns the association proxy for the given attribute. The attr parameter

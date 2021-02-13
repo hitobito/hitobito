@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -17,7 +15,7 @@ describe ReoccuringMailchimpSynchronizationJob do
              when :success then {foo: {total: 1, success: 1}}
              when :partial then {foo: {failed: 1}, bar: {success: 1}}
              when :unchanged then {}
-             end
+      end
       list.update!(mailchimp_result: Synchronize::Mailchimp::Result.new(data)) if data
     end
   end

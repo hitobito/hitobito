@@ -18,7 +18,7 @@
 #  index_event_answers_on_participation_id_and_question_id  (participation_id,question_id) UNIQUE
 #
 
-class Event::Answer < ActiveRecord::Base
+class Event::Answer < ApplicationRecord
   attr_writer :answer_required
 
   delegate :admin?, to: :question
@@ -68,11 +68,11 @@ class Event::Answer < ActiveRecord::Base
   end
 
   def valid_index_based_values(index_array, valid_range)
-    indexes = index_array.map do |index|
+    indexes = index_array.map { |index|
       if valid_range.include?(index)
         question.choice_items[index]
       end
-    end.compact
+    }.compact
 
     indexes.present? ? indexes.join(", ") : nil
   end

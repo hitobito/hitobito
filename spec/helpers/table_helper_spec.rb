@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -162,10 +160,10 @@ describe TableHelper do
 
   describe "#default_attrs" do
     it "should not contain id" do
-        expect(default_attrs).to eq([:name, :whatever, :children, :companion_id, :rating, :income,
-                                 :birthdate, :gets_up_at, :last_seen, :human, :remarks,
-                                 :created_at, :updated_at])
-      end
+      expect(default_attrs).to eq([:name, :whatever, :children, :companion_id, :rating, :income,
+                                   :birthdate, :gets_up_at, :last_seen, :human, :remarks,
+                                   :created_at, :updated_at,])
+    end
   end
 
   describe "#crud_table" do
@@ -257,7 +255,7 @@ describe TableHelper do
     end
 
     context "with data" do
-      subject { table(%w(foo bar), :size) { |t| t.attrs :upcase } }
+      subject { table(%w[foo bar], :size) { |t| t.attrs :upcase } }
 
       it { is_expected.to be_html_safe }
 

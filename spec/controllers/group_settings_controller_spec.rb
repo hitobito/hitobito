@@ -13,7 +13,7 @@ describe GroupSettingsController do
   let(:setting_params) do
     {username: "gollum",
      password: "my-precious",
-     provider: "aspsms"}
+     provider: "aspsms",}
   end
   let(:setting) { group.settings(:text_message_provider) }
 
@@ -22,7 +22,7 @@ describe GroupSettingsController do
   describe "POST #update" do
     it "initializes setting on first update" do
       patch :update, params: {group_id: group.id, id: "text_message_provider",
-                              group_setting: setting_params}
+                              group_setting: setting_params,}
 
       expect(setting.username).to eq("gollum")
       expect(setting.password).to eq("my-precious")
@@ -32,7 +32,7 @@ describe GroupSettingsController do
     it "only concerns available attrs when updating" do
       setting_params[:gollum] = "smeagol"
       patch :update, params: {group_id: group.id, id: "text_message_provider",
-                              group_setting: setting_params}
+                              group_setting: setting_params,}
 
       expect(setting.gollum).to be_nil
     end
@@ -44,7 +44,7 @@ describe GroupSettingsController do
       setting_params[:password] = "his-precious"
 
       patch :update, params: {group_id: group.id, id: "text_message_provider",
-                              group_setting: setting_params}
+                              group_setting: setting_params,}
 
       setting.reload
       expect(setting.username).to eq("frodo")
@@ -59,7 +59,7 @@ describe GroupSettingsController do
       setting_params[:password] = ""
 
       patch :update, params: {group_id: group.id, id: "text_message_provider",
-                              group_setting: setting_params}
+                              group_setting: setting_params,}
 
       setting.reload
       expect(setting.username).to eq("frodo")
@@ -70,17 +70,17 @@ describe GroupSettingsController do
     it "cannot update setting if no permission" do
       sign_in(people(:bottom_member))
 
-      expect do
+      expect {
         patch :update, params: {group_id: group.id, id: "text_message_provider",
-                                group_setting: setting_params}
-      end.to raise_error(CanCan::AccessDenied)
+                                group_setting: setting_params,}
+      }.to raise_error(CanCan::AccessDenied)
     end
 
     it "cannot create/update not configured setting" do
-      expect do
+      expect {
         patch :update, params: {group_id: group.id, id: "non_existent",
-                                group_setting: setting_params}
-      end.to raise_error(ActiveRecord::RecordNotFound)
+                                group_setting: setting_params,}
+      }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
@@ -95,9 +95,9 @@ describe GroupSettingsController do
     it "cannot list settings if no permission" do
       sign_in(people(:bottom_member))
 
-      expect do
+      expect {
         get :index, params: {group_id: group.id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 end

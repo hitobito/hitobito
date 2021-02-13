@@ -12,7 +12,7 @@ describe MailingListsController, js: true do
   before { sign_in }
 
   it "removes two labels from existing mailing" do
-    list.update(preferred_labels: %w(Mutter Vater))
+    list.update(preferred_labels: %w[Mutter Vater])
     visit edit_group_mailing_list_path(list.group, list)
 
     all("span.chip a")[0].click

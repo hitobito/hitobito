@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -11,7 +9,7 @@ module MailLogHelper
            when /retreived|bulk_delivering/ then "info"
            when /sender_rejected|unkown_recipient/ then "important"
            when /completed/ then "success"
-           end
+    end
     badge(mail_log_status_label(mail_log), type)
   end
 

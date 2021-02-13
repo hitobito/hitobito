@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: event_roles
@@ -43,7 +41,8 @@ describe Event::Role do
       role.participation.enforce_required_answers = true
       role.participation.init_answers
       role.participation.attributes = {
-        answers_attributes: [{question_id: q[1].id, answer: "ja"}]}
+        answers_attributes: [{question_id: q[1].id, answer: "ja"}],
+      }
       expect(role.save).to be_falsey
       expect(role.errors.full_messages).to eq(["Antwort muss ausgefüllt werden"])
     end
@@ -53,9 +52,9 @@ describe Event::Role do
       role.participation = course.participations.new(person: Person.first, active: true)
       expect(role.save).to eq true
       expect(course.reload.participant_count).to eq 1
-      expect do
+      expect {
         expect(role.update(type: "Event::Course::Role::Leader")).to eq true
-      end.to change { course.reload.participant_count }.by(-1)
+      }.to change { course.reload.participant_count }.by(-1)
     end
   end
 
@@ -99,9 +98,9 @@ describe Event::Role do
     end
 
     it "destroys participation if it was the last role" do
-      expect do
+      expect {
         event_roles(:top_leader).destroy
-      end.to change { Event::Participation.count }.by(-1)
+      }.to change { Event::Participation.count }.by(-1)
     end
   end
 end

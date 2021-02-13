@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -25,7 +23,7 @@ describe MailingListsController, type: :controller do
      mail_name: "tester",
      subscribable: true,
      subscribers_may_post: false,
-     anyone_may_post: false}
+     anyone_may_post: false,}
   end
 
   before do
@@ -53,7 +51,7 @@ describe MailingListsController, type: :controller do
         preferred_labels: [],
         delivery_report: false,
         main_email: false,
-        links: {group: group.id.to_s}
+        links: {group: group.id.to_s},
       })
     end
   end

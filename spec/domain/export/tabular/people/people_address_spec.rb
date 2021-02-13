@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -15,17 +13,17 @@ describe Export::Tabular::People::PeopleAddress do
   subject { people_list }
 
   its(:attributes) do
-    should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-               :zip_code, :town, :country, :gender, :birthday, :layer_group, :roles, :tags]
+    is_expected.to == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
+                       :zip_code, :town, :country, :gender, :birthday, :layer_group, :roles, :tags,]
   end
 
   context "standard attributes" do
     context "#attribute_labels" do
       subject { people_list.attribute_labels }
 
-      its([:id]) { should be_blank }
-      its([:roles]) { should eq "Rollen" }
-      its([:first_name]) { should eq "Vorname" }
+      its([:id]) { is_expected.to be_blank }
+      its([:roles]) { is_expected.to eq "Rollen" }
+      its([:first_name]) { is_expected.to eq "Vorname" }
     end
 
     context "key list" do
@@ -41,8 +39,8 @@ describe Export::Tabular::People::PeopleAddress do
 
     subject { people_list.attribute_labels }
 
-    its([:phone_number_privat]) { should eq "Telefonnummer Privat" }
-    its([:phone_number_mobil]) { should be_nil }
+    its([:phone_number_privat]) { is_expected.to eq "Telefonnummer Privat" }
+    its([:phone_number_mobil]) { is_expected.to be_nil }
 
     context "different labels" do
       let(:other) { people(:bottom_member) }
@@ -53,14 +51,14 @@ describe Export::Tabular::People::PeopleAddress do
         person.phone_numbers << PhoneNumber.new(label: "Privat", number: 321)
       end
 
-      its([:phone_number_privat]) { should eq "Telefonnummer Privat" }
-      its([:phone_number_foobar]) { should eq "Telefonnummer Foobar" }
+      its([:phone_number_privat]) { is_expected.to eq "Telefonnummer Privat" }
+      its([:phone_number_foobar]) { is_expected.to eq "Telefonnummer Foobar" }
     end
 
     context "blank label is not exported" do
       before { person.phone_numbers << PhoneNumber.new(label: "", number: 321) }
 
-      its(:keys) { should_not include :phone_number_ }
+      its(:keys) { is_expected.to_not include :phone_number_ }
     end
   end
 end

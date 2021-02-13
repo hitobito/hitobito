@@ -2,9 +2,9 @@
 
 class Tags::Merger
   def initialize(src_tag_ids, dst_tag_id, new_name)
-    @src_tag_ids = src_tag_ids.reject do |s|
+    @src_tag_ids = src_tag_ids.reject { |s|
       validation_tag_ids.include?(s)
-    end
+    }
     @dst_tag_id = dst_tag_id
     @new_name = new_name
   end
@@ -62,7 +62,7 @@ class Tags::Merger
        taggable_type: Person.name,
        tag_id: @dst_tag_id,
        created_at: Time.zone.now,
-       context: :tags}
+       context: :tags,}
     end
   end
 

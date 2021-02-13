@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -18,12 +16,12 @@ describe Export::Tabular::People::Households do
   context "header" do
     it "includes name, address attributes and layer group columns" do
       expect(households.attributes).to eq [:name, :address, :zip_code, :town,
-                                           :country, :layer_group]
+                                           :country, :layer_group,]
     end
 
     it "translates name, address attributes and layer group columns" do
       expect(households.attribute_labels.values).to eq ["Name", "Adresse", "PLZ",
-                                                        "Ort", "Land", "Hauptebene"]
+                                                        "Ort", "Land", "Hauptebene",]
     end
   end
 

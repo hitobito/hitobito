@@ -10,7 +10,7 @@ describe Synchronize::Mailchimp::Result do
     {
       "total_operations" => total,
       "finished_operations" => finished,
-      "errored_operations" => failed
+      "errored_operations" => failed,
     }
   end
 

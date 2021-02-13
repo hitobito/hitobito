@@ -19,7 +19,7 @@ module Messages
       STATUS = {
         "0" => STATUS_OK,
         "1" => STATUS_OK,
-        "3" => STATUS_AUTH_ERROR
+        "3" => STATUS_AUTH_ERROR,
       }.freeze
 
       def send(text:, recipients: [])
@@ -50,7 +50,7 @@ module Messages
           id = n["TransactionReferenceNumber"]
           h[id] = {
             status: delivery_status(n["DeliveryStatus"]),
-            status_message: n["DeliveryStatusDescription"]
+            status_message: n["DeliveryStatusDescription"],
           }
         end
       end
@@ -73,7 +73,7 @@ module Messages
 
       def default_params
         {UserName: @config.username,
-         Password: @config.password}
+         Password: @config.password,}
       end
     end
   end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: payments
@@ -20,7 +18,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Payment < ActiveRecord::Base
+class Payment < ApplicationRecord
   belongs_to :invoice
 
   validates :reference, uniqueness: {scope: :invoice_id, allow_nil: true, case_sensitive: false}
@@ -34,9 +32,7 @@ class Payment < ActiveRecord::Base
 
   validates_by_schema
 
-  def group
-    invoice.group
-  end
+  delegate :group, to: :invoice
 
   def settles?
     invoice && invoice.amount_open == amount

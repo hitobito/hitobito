@@ -50,9 +50,9 @@ module Sheet
 
       def controller_sheet_class(controller)
         controller.class.name
-                  .gsub(/Controller/, "")
-                  .underscore.singularize.camelize
-                  .prepend("Sheet::").constantize
+          .gsub(/Controller/, "")
+          .underscore.singularize.camelize
+          .prepend("Sheet::").constantize
       rescue NameError
         Sheet::Base
       end
@@ -72,7 +72,7 @@ module Sheet
     end
 
     def render_main_tabs
-      unless %w(new create).include?(view.action_name)
+      unless %w[new create].include?(view.action_name)
         render_tabs
       end
     end
@@ -207,8 +207,8 @@ module Sheet
 
     def visible_tabs
       @visible_tabs ||= Array(tabs)
-                        .collect { |tab| tab.renderer(view, path_args) }
-                        .select(&:show?)
+        .collect { |tab| tab.renderer(view, path_args) }
+        .select(&:show?)
     end
   end
 end

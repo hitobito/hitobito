@@ -12,14 +12,14 @@ class MailingList::Subscribers
   end
 
   def people
-    @people_scope.
-      joins(people_joins).
-      joins(subscription_joins).
-      where(subscriptions: {mailing_list_id: id}).
-      where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})").
-      where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})").
-      where(suscriber_conditions).
-      distinct
+    @people_scope
+      .joins(people_joins)
+      .joins(subscription_joins)
+      .where(subscriptions: {mailing_list_id: id})
+      .where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})")
+      .where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})")
+      .where(suscriber_conditions)
+      .distinct
   end
 
   def people_joins
@@ -114,21 +114,21 @@ class MailingList::Subscribers
 
   def tag_excluded_person_ids
     ActsAsTaggableOn::Tagging.select(:taggable_id)
-                             .where(taggable_type: Person.sti_name,
-                                    tag_id: tag_excluded_subscription_ids)
+      .where(taggable_type: Person.sti_name,
+             tag_id: tag_excluded_subscription_ids)
   end
 
   def tag_excluded_subscription_ids
     SubscriptionTag.select(:tag_id)
-                   .joins(:subscription)
-                   .where(subscription_tags: {excluded: true},
-                          subscriptions: {mailing_list_id: id})
+      .joins(:subscription)
+      .where(subscription_tags: {excluded: true},
+             subscriptions: {mailing_list_id: id})
   end
 
   def excluded_subscriber_ids
-    Subscription.select(:subscriber_id).
-      where(mailing_list_id: id,
-            excluded: true,
-            subscriber_type: Person.sti_name)
+    Subscription.select(:subscriber_id)
+      .where(mailing_list_id: id,
+             excluded: true,
+             subscriber_type: Person.sti_name)
   end
 end

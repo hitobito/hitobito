@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,9 +14,9 @@ INIT_ABILITY_TIME = 1.5
 describe Ability, performance: true do
   def measure(max_time, &block)
     Benchmark.bm(12) do |x|
-      ms = x.report(RSpec.current_example.description) do
+      ms = x.report(RSpec.current_example.description) {
         N.times(&block)
-      end
+      }
 
       if ms.total > max_time
         puts "!!! TOOK LONGER THAN #{max_time} !!!"

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -24,9 +22,9 @@ describe PaymentReminder do
 
   it "creating a payment_reminder updates invoice" do
     due_at = sent.due_at + 2.weeks
-    expect do
+    expect {
       Fabricate(:payment_reminder, invoice: sent, due_at: due_at)
-    end.to change { [sent.due_at, sent.state] }
+    }.to change { [sent.due_at, sent.state] }
     expect(sent.due_at).to eq due_at
     expect(sent.state).to eq "reminded"
   end

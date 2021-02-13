@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -19,9 +17,9 @@ describe Person::SendLoginJob do
   subject { Person::SendLoginJob.new(recipient, sender) }
 
   its(:parameters) do
-    should == {recipient_id: recipient.id,
-               sender_id: sender.id,
-               locale: I18n.locale.to_s}
+    is_expected.to == {recipient_id: recipient.id,
+                       sender_id: sender.id,
+                       locale: I18n.locale.to_s,}
   end
 
   it "generates reset token" do

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -48,9 +46,9 @@ describe Person::Filter::Qualification do
       start = case validity
               when "active" then Date.today
               when "reactivateable" then Date.today - kind.validity.years - 1.year
-              when Fixnum then Date.new(validity, 1, 1)
+              when Integer then Date.new(validity, 1, 1)
               else Date.today - 20.years
-              end
+      end
       Fabricate(:qualification, person: person, qualification_kind: kind, start_at: start)
     end
     person
@@ -68,14 +66,14 @@ describe Person::Filter::Qualification do
       expect(described_class.new(:qualification, {})).not_to be_year_scope
     end
 
-    %w(start_at finish_at).product(%w(year_from year_until)).each do |pre, post|
+    %w[start_at finish_at].product(%w[year_from year_until]).each do |pre, post|
       it "is year_scope if #{pre}_#{post} is present" do
-        filter = described_class.new(:qualification, :"#{pre}_#{post}" => nil)
+        filter = described_class.new(:qualification, "#{pre}_#{post}": nil)
         expect(filter).not_to be_year_scope
       end
 
       it "is not year_scope if #{pre}_#{post} is present but blank" do
-        filter = described_class.new(:qualification, :"#{pre}_#{post}" => 1)
+        filter = described_class.new(:qualification, "#{pre}_#{post}": 1)
         expect(filter).to be_year_scope
       end
     end
@@ -117,7 +115,7 @@ describe Person::Filter::Qualification do
             @tg_member,
             @tg_extern,
             @bl_leader,
-            @bg_leader
+            @bg_leader,
           ])
         end
       end
@@ -146,7 +144,7 @@ describe Person::Filter::Qualification do
           context "loads entry with start_at later" do
             let(:additional_filters) do
               {
-                start_at_year_from: 2015
+                start_at_year_from: 2015,
               }
             end
 
@@ -158,7 +156,7 @@ describe Person::Filter::Qualification do
           context "loads entry with start_at before" do
             let(:additional_filters) do
               {
-                start_at_year_until: "2015"
+                start_at_year_until: "2015",
               }
             end
 
@@ -176,7 +174,7 @@ describe Person::Filter::Qualification do
             let(:additional_filters) do
               {
                 start_at_year_from: 2014,
-                start_at_year_until: 2015
+                start_at_year_until: 2015,
               }
             end
 
@@ -188,7 +186,7 @@ describe Person::Filter::Qualification do
           context "loads entry with finish_at later" do
             let(:additional_filters) do
               {
-                finish_at_year_from: 2016
+                finish_at_year_from: 2016,
               }
             end
 
@@ -200,7 +198,7 @@ describe Person::Filter::Qualification do
           context "loads entry with finish_at before" do
             let(:additional_filters) do
               {
-                finish_at_year_until: 2016
+                finish_at_year_until: 2016,
               }
             end
 
@@ -213,7 +211,7 @@ describe Person::Filter::Qualification do
             let(:additional_filters) do
               {
                 finish_at_year_from: 2016,
-                finish_at_year_until: 2017
+                finish_at_year_until: 2017,
               }
             end
 
@@ -227,7 +225,7 @@ describe Person::Filter::Qualification do
               let(:additional_filters) do
                 {
                   validity: "active",
-                  finish_at_year_until: 2016
+                  finish_at_year_until: 2016,
                 }
               end
 
@@ -259,13 +257,13 @@ describe Person::Filter::Qualification do
                     role_types: [
                       Group::TopGroup::Member.sti_name,
                       Group::BottomLayer::Leader.sti_name,
-                      Group::BottomGroup::Leader.sti_name
-                    ]
+                      Group::BottomGroup::Leader.sti_name,
+                    ],
                   },
                   qualification: {
                     qualification_kind_ids: qualification_kind_ids,
-                    validity: validity
-                  }
+                    validity: validity,
+                  },
                 })
             end
 
@@ -353,14 +351,14 @@ describe Person::Filter::Qualification do
             let(:additional_filters) do
               {
                 start_at_year_from: start_at.year,
-                start_at_year_until: start_at.year
+                start_at_year_until: start_at.year,
               }
             end
 
             it "correctly" do
-              @bg_leader.qualifications.
-                find { |q| q.qualification_kind == qualification_kinds(:ql) }.
-                update!(start_at: start_at)
+              @bg_leader.qualifications
+                .find { |q| q.qualification_kind == qualification_kinds(:ql) }
+                .update!(start_at: start_at)
               Fabricate(:qualification,
                 person: @bg_leader,
                 qualification_kind: qualification_kinds(:sl),
@@ -375,14 +373,14 @@ describe Person::Filter::Qualification do
             let(:additional_filters) do
               {
                 start_at_year_from: start_at.year - 2,
-                start_at_year_until: start_at.year - 1
+                start_at_year_until: start_at.year - 1,
               }
             end
 
             it "correctly" do
-              @bg_leader.qualifications.
-                find { |q| q.qualification_kind == qualification_kinds(:ql) }.
-                update!(start_at: start_at)
+              @bg_leader.qualifications
+                .find { |q| q.qualification_kind == qualification_kinds(:ql) }
+                .update!(start_at: start_at)
               Fabricate(:qualification,
                 person: @bg_leader,
                 qualification_kind: qualification_kinds(:sl),

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -104,7 +102,7 @@ describe Event::ParticipationMailer do
 
     let(:approvers) do
       [Fabricate(:person, email: "approver0@example.com", first_name: "firsty"),
-       Fabricate(:person, email: "approver1@example.com", first_name: "lasty")]
+       Fabricate(:person, email: "approver1@example.com", first_name: "lasty"),]
     end
     let(:mail) { Event::ParticipationMailer.approval(participation, approvers) }
 

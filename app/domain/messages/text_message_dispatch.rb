@@ -40,9 +40,9 @@ module Messages
       return if @message.message_recipients.present?
 
       recipient_numbers.find_in_batches do |batch|
-        rows = batch.collect do |phone_nr|
+        rows = batch.collect { |phone_nr|
           reciept_attrs(phone_nr, :pending)
-        end
+        }
         MessageRecipient.insert_all(rows)
       end
     end
@@ -62,7 +62,7 @@ module Messages
        created_at: @now,
        person_id: phone_nr.contactable_id,
        phone_number: phone_nr.number,
-       state: state}
+       state: state,}
     end
 
     def update_message_status

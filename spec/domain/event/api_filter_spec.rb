@@ -46,8 +46,8 @@ describe Event::ApiFilter do
 
   context "date params" do
     before do
-      Event::Date.create(event: event, start_at: 5.days.ago, finish_at: 1.days.ago)
-      Event::Date.create(event: event2, start_at: 5.days.from_now, finish_at: 1.years.from_now)
+      Event::Date.create(event: event, start_at: 5.days.ago, finish_at: 1.day.ago)
+      Event::Date.create(event: event2, start_at: 5.days.from_now, finish_at: 1.year.from_now)
     end
 
     it "lists upcoming events from now by default" do
@@ -74,8 +74,8 @@ describe Event::ApiFilter do
     end
 
     it "lists events on finish date" do
-      expect(filter(start_date: 1.days.ago,
-                    end_date: 1.days.ago).list_entries).to have(1).entries
+      expect(filter(start_date: 1.day.ago,
+                    end_date: 1.day.ago).list_entries).to have(1).entries
     end
 
     it "does not raise error if dates invalid" do

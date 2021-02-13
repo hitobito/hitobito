@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -34,7 +32,7 @@ describe "contactable/_fields.html.haml" do
   context "standard" do
     before { render }
 
-    its([:style]) { should be_blank }
+    its([:style]) { is_expected.to be_blank }
   end
 
   context "when contact is set" do
@@ -43,6 +41,6 @@ describe "contactable/_fields.html.haml" do
       render
     end
 
-    its([:style]) { should eq "display: none" }
+    its([:style]) { is_expected.to eq "display: none" }
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -62,15 +60,15 @@ describe Event::ApplicationsController do
     before { sign_in(user) }
 
     it "PUT approve is not allowed" do
-      expect do
+      expect {
         put :approve, params: {group_id: group.id, event_id: event.id, id: application.id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
 
     it "DELETE reject is not allowed" do
-      expect do
+      expect {
         delete :reject, params: {group_id: group.id, event_id: event.id, id: application.id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2014, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,7 +19,7 @@
 
 # Relates two people together. Every relation has an opposite that is created,
 # updated and deleted at the same time.
-class PeopleRelation < ActiveRecord::Base
+class PeopleRelation < ApplicationRecord
   KIND_TRANSLATION_KEY = "activerecord.attributes.people_relation.kinds"
 
   class_attribute :kind_opposites
@@ -113,6 +111,6 @@ class PeopleRelation < ActiveRecord::Base
   def old_opposite_attrs
     {head_id: tail_id_change ? tail_id_change.first : tail_id,
      tail_id: head_id,
-     kind: kind_change ? kind_opposites.fetch(kind_change.first) : opposite_kind}
+     kind: kind_change ? kind_opposites.fetch(kind_change.first) : opposite_kind,}
   end
 end

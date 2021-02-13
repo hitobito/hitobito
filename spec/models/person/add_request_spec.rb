@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -33,7 +31,8 @@ describe Person::AddRequest do
           person: p,
           requester: bottom,
           body: groups(:bottom_layer_one),
-          role_type: Group::BottomLayer::Member.sti_name)
+          role_type: Group::BottomLayer::Member.sti_name
+        )
       end
 
       people = Person::AddRequest.for_layer(groups(:top_layer)).pluck(:person_id)
@@ -54,7 +53,8 @@ describe Person::AddRequest do
           person: p,
           requester: bottom,
           body: groups(:bottom_layer_one),
-          role_type: Group::BottomLayer::Member.sti_name)
+          role_type: Group::BottomLayer::Member.sti_name
+        )
       end
 
       people = Person::AddRequest.for_layer(groups(:top_layer)).pluck(:person_id)
@@ -69,13 +69,15 @@ describe Person::AddRequest do
         person: people(:bottom_member),
         requester: people(:top_leader),
         body: groups(:top_layer),
-        role_type: Group::TopLayer::TopAdmin.sti_name)
+        role_type: Group::TopLayer::TopAdmin.sti_name
+      )
 
       other = Person::AddRequest::Event.new(
         person: people(:bottom_member),
         requester: people(:top_leader),
         body: events(:top_event),
-        role_type: Event::Role::Leader.sti_name)
+        role_type: Event::Role::Leader.sti_name
+      )
       expect(other).to be_valid
     end
 
@@ -84,13 +86,15 @@ describe Person::AddRequest do
         person: people(:bottom_member),
         requester: people(:top_leader),
         body: groups(:top_group),
-        role_type: Group::TopGroup::Leader.sti_name)
+        role_type: Group::TopGroup::Leader.sti_name
+      )
 
       other = Person::AddRequest::Group.new(
         person: people(:bottom_member),
         requester: people(:top_leader),
         body: groups(:top_group),
-        role_type: Group::TopGroup::Member.sti_name)
+        role_type: Group::TopGroup::Member.sti_name
+      )
       expect(other).not_to be_valid
     end
   end
@@ -105,20 +109,23 @@ describe Person::AddRequest do
         person: people(:bottom_member),
         requester: people(:top_leader),
         body: group,
-        role_type: Group::TopGroup::Leader.sti_name)
+        role_type: Group::TopGroup::Leader.sti_name
+      )
 
       event.update_column(:id, group.id) # set same id for strong test
       @re = Person::AddRequest::Event.create!(
         person: people(:bottom_member),
         requester: people(:top_leader),
         body: event,
-        role_type: Event::Role::Leader.sti_name)
+        role_type: Event::Role::Leader.sti_name
+      )
 
       abo.update_column(:id, group.id) # set same id for strong test
       @rm = Person::AddRequest::MailingList.create!(
         person: people(:bottom_member),
         requester: people(:top_leader),
-        body: abo)
+        body: abo
+      )
     end
 
     context "group" do
@@ -143,7 +150,8 @@ describe Person::AddRequest do
           person: topper,
           requester: bottom,
           body: groups(:bottom_layer_one),
-          role_type: Group::BottomLayer::Member.sti_name)
+          role_type: Group::BottomLayer::Member.sti_name
+        )
         topper.roles.first.destroy!
         add_request = Person::AddRequest.where(person_id: topper.id)
         expect(add_request.first.send(:last_layer_group)).to eq(groups(:top_layer))
@@ -174,7 +182,7 @@ describe Person::AddRequest do
       end
 
       it "#to_s contains group type" do
-        expect(@rm.to_s).to eq("Abo #{abo.to_s} in Top Group TopGroup")
+        expect(@rm.to_s).to eq("Abo #{abo} in Top Group TopGroup")
       end
     end
   end

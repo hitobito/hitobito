@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -34,15 +32,15 @@ describe "FilterNavigation::People" do
 
     let(:role_types) do
       [Group::TopGroup::Leader,
-       Group::BottomLayer::Leader]
+       Group::BottomLayer::Leader,]
     end
 
     context "without params" do
-      its(:main_items) { should have(2).item }
-      its(:active_label) { should == "Mitglieder" }
-      its("dropdown.active") { should be_falsey }
-      its("dropdown.label") { should == "Weitere Ansichten" }
-      its("dropdown.items") { should have(3).items }
+      its(:main_items) { is_expected.to have(2).item }
+      its(:active_label) { is_expected.to == "Mitglieder" }
+      its("dropdown.active") { is_expected.to be_falsey }
+      its("dropdown.label") { is_expected.to == "Weitere Ansichten" }
+      its("dropdown.items") { is_expected.to have(3).items }
 
       it "contains external item with count" do
         expect(subject.main_items.last).to match(/Externe \(0\)/)
@@ -54,8 +52,8 @@ describe "FilterNavigation::People" do
                                                 Group::GlobalGroup::Member,
                                                 Group::TopGroup::Leader,
                                                 Group::TopGroup::Secretary,
-                                                Group::TopGroup::Member].
-                                               collect(&:id).join('-')}/
+                                                Group::TopGroup::Member,]
+                                               .collect(&:id).join('-')}/
       end
 
       context "with custom filters" do
@@ -66,16 +64,16 @@ describe "FilterNavigation::People" do
                                        filter_chain: {role: {role_types: role_types.map(&:id)}})
         end
 
-        its("dropdown.active") { should be_falsey }
-        its("dropdown.label") { should == "Weitere Ansichten" }
-        its("dropdown.items") { should have(5).items }
+        its("dropdown.active") { is_expected.to be_falsey }
+        its("dropdown.label") { is_expected.to == "Weitere Ansichten" }
+        its("dropdown.items") { is_expected.to have(5).items }
 
         it "has dropdown-items sorted by name" do
           expected_items = [
             "Gesamte Ebene",
             "1_Leaders",
             "2_Members",
-            "Neuer Filter..."
+            "Neuer Filter...",
           ]
 
           actual_items = subject.dropdown.items
@@ -102,11 +100,11 @@ describe "FilterNavigation::People" do
         FilterNavigation::People.new(template, group, filter)
       end
 
-      its(:main_items) { should have(2).items }
-      its(:active_label) { should == nil }
-      its("dropdown.active") { should be_truthy }
-      its("dropdown.label") { should == "Leaders" }
-      its("dropdown.items") { should have(4).item }
+      its(:main_items) { is_expected.to have(2).items }
+      its(:active_label) { is_expected.to.nil? }
+      its("dropdown.active") { is_expected.to be_truthy }
+      its("dropdown.label") { is_expected.to == "Leaders" }
+      its("dropdown.items") { is_expected.to have(4).item }
     end
   end
 
@@ -125,15 +123,15 @@ describe "FilterNavigation::People" do
   context "bottom group" do
     let(:group) { groups(:bottom_group_one_one).decorate }
 
-    its("dropdown.items") { should have(3).items }
+    its("dropdown.items") { is_expected.to have(3).items }
 
     it "entire sub groups contains only sub groups role types" do
       subject.dropdown.items.first.url =~ /#{[Role::External,
                                               Group::GlobalGroup::Leader,
                                               Group::GlobalGroup::Member,
                                               Group::BottomGroup::Leader,
-                                              Group::BottomGroup::Member].
-                                             collect(&:id).join('-')}/
+                                              Group::BottomGroup::Member,]
+                                             .collect(&:id).join('-')}/
     end
 
     it "contains member item with count" do

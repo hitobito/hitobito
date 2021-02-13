@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -43,7 +41,7 @@ module Export::Pdf
 
     def self.filename(participation)
       parts = [participation.event.name, participation.person.full_name]
-      "#{parts.join('-').parameterize(separator: '_')}.pdf"
+      "#{parts.join("-").parameterize(separator: "_")}.pdf"
     end
   end
 end

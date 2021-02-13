@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -52,15 +50,15 @@ describe "Person Tags", js: true do
 
         expect(page).to have_content("Tags")
         expect(all(".person-tags-category").length).to eq(4)
-        expect(all(".person-tags-category-title").map(&:text)).to eq(%w(fruit vegetable Validierung Andere))
-        expect(all(".person-tags-category")[0].all(".person-tag").map(&:text)).
-          to eq(%w(apple banana))
-        expect(all(".person-tags-category")[1].all(".person-tag").map(&:text)).
-          to eq(%w(potato))
-        expect(all(".person-tags-category")[2].all(".person-tag").map(&:text)).
-          to eq(["Haupt-E-Mail ungültig"])
-        expect(all(".person-tags-category")[3].all(".person-tag").map(&:text)).
-          to eq(%w(pizza))
+        expect(all(".person-tags-category-title").map(&:text)).to eq(%w[fruit vegetable Validierung Andere])
+        expect(all(".person-tags-category")[0].all(".person-tag").map(&:text))
+          .to eq(%w[apple banana])
+        expect(all(".person-tags-category")[1].all(".person-tag").map(&:text))
+          .to eq(%w[potato])
+        expect(all(".person-tags-category")[2].all(".person-tag").map(&:text))
+          .to eq(["Haupt-E-Mail ungültig"])
+        expect(all(".person-tags-category")[3].all(".person-tag").map(&:text))
+          .to eq(%w[pizza])
       end
     end
   end
@@ -82,7 +80,7 @@ describe "Person Tags", js: true do
       expect(page).to have_selector(".person-tags-add-form")
 
       within ".person-tags-add-form" do
-        fill_in "acts_as_taggable_on_tag[name]", :with => "pizza"
+        fill_in "acts_as_taggable_on_tag[name]", with: "pizza"
       end
       find(".person-tags-add-form button").click
       expect(page).to have_selector(".person-tag", text: "pizza")
@@ -94,7 +92,7 @@ describe "Person Tags", js: true do
 
       find(".person-tag-add").click
       within ".person-tags-add-form" do
-        fill_in "acts_as_taggable_on_tag[name]", :with => "pas"
+        fill_in "acts_as_taggable_on_tag[name]", with: "pas"
       end
       expect(page).to have_selector("ul.typeahead li a", text: "pasta")
       find("ul.typeahead li a").click
@@ -106,15 +104,15 @@ describe "Person Tags", js: true do
 
       find(".person-tag-add").click
       within ".person-tags-add-form" do
-        fill_in "acts_as_taggable_on_tag[name]", :with => "fruit:banana"
+        fill_in "acts_as_taggable_on_tag[name]", with: "fruit:banana"
       end
       find(".person-tags-add-form button").click
       expect(page).to have_selector(".person-tags-category", count: 2)
-      expect(all(".person-tags-category-title").map(&:text)).to eq(%w(fruit Andere))
-      expect(all(".person-tags-category")[0].all(".person-tag").map(&:text)).
-        to eq(%w(banana))
-      expect(all(".person-tags-category")[1].all(".person-tag").map(&:text)).
-        to eq(%w(pasta pizza))
+      expect(all(".person-tags-category-title").map(&:text)).to eq(%w[fruit Andere])
+      expect(all(".person-tags-category")[0].all(".person-tag").map(&:text))
+        .to eq(%w[banana])
+      expect(all(".person-tags-category")[1].all(".person-tag").map(&:text))
+        .to eq(%w[pasta pizza])
       person.reload
       expect(person.tags.count).to eq(3)
       expect(Set.new(person.tag_list)).to eq(Set.new(["pizza", "pasta", "fruit:banana"]))
@@ -134,13 +132,13 @@ describe "Person Tags", js: true do
 
       find(".person-tag", text: "apple").find(".person-tag-remove").click
       expect(page).to have_selector(".person-tags-category", count: 2)
-      expect(all(".person-tags-category")[0].all(".person-tag").map(&:text)).
-        to eq(%w(banana))
+      expect(all(".person-tags-category")[0].all(".person-tag").map(&:text))
+        .to eq(%w[banana])
 
       find(".person-tag", text: "banana").find(".person-tag-remove").click
       expect(page).to have_selector(".person-tags-category", count: 1)
-      expect(all(".person-tags-category")[0].all(".person-tag").map(&:text)).
-        to eq(%w(pizza))
+      expect(all(".person-tags-category")[0].all(".person-tag").map(&:text))
+        .to eq(%w[pizza])
     end
   end
 

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,10 +19,10 @@ class Invoice::PaymentSlip
   end
 
   def check_digit(string)
-    number = string.each_char.inject(0) do |digit, char|
+    number = string.each_char.inject(0) { |digit, char|
       current_digit = digit + char.to_i
       ESR9_TABLE[current_digit % 10]
-    end
+    }
     (10 - number) % 10
   end
 

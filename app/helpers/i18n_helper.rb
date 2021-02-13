@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -51,7 +49,7 @@ module I18nHelper
       if assoc
         assoc_class_key = assoc.klass.model_name.to_s.underscore
         variables[:default] ||= [:"activerecord.associations.#{assoc_class_key}.#{key}",
-                                 :"global.associations.#{key}"]
+                                 :"global.associations.#{key}",]
         owner_class_key = assoc.active_record.model_name.to_s.underscore
         "activerecord.associations.models.#{owner_class_key}.#{assoc.name}.#{key}"
       else

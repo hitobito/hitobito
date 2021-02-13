@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -27,16 +25,16 @@ describe InvoicesController do
     end
 
     it "may not index when person has no finance permission on layer group" do
-      expect do
+      expect {
         get :index, params: {group_id: groups(:top_layer).id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
 
     it "may not edit when person has no finance permission on layer group" do
       invoice = Invoice.create!(group: groups(:top_layer), title: "test", recipient: person)
-      expect do
+      expect {
         get :edit, params: {group_id: groups(:top_layer).id, id: invoice.id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -207,9 +205,9 @@ describe InvoicesController do
   end
 
   it "DELETE#destroy moves invoice to cancelled state" do
-    expect do
+    expect {
       delete :destroy, params: {group_id: group.id, id: invoice.id}
-    end.not_to change { group.invoices.count }
+    }.not_to change { group.invoices.count }
     expect(invoice.reload.state).to eq "cancelled"
     expect(response).to redirect_to group_invoices_path(group)
     expect(flash[:notice]).to eq "Rechnung wurde storniert."
@@ -217,15 +215,15 @@ describe InvoicesController do
 
   context "post" do
     it "POST#create sets creator_id to current_user" do
-      expect do
+      expect {
         post :create, params: {group_id: group.id, invoice: {title: "current_user", recipient_id: person.id}}
-      end.to change { Invoice.count }.by(1)
+      }.to change { Invoice.count }.by(1)
 
       expect(Invoice.find_by(title: "current_user").creator).to eq(person)
     end
 
     it "POST#create accepts nested attributes for invoice_items" do
-      expect do
+      expect {
         post :create, params: {
           group_id: group.id,
           invoice: {
@@ -240,13 +238,13 @@ describe InvoicesController do
                 vat_rate: 0.0,
                 unit_cost: 22.0,
                 count: 1,
-                _destroy: false
-              }
+                _destroy: false,
+              },
 
-            }
-          }
+            },
+          },
         }
-      end.to change { Invoice.count }.by(1)
+      }.to change { Invoice.count }.by(1)
       expect(assigns(:invoice).invoice_items).to have(1).entry
       expect(assigns(:invoice).invoice_items.first.cost_center).to eq "board"
       expect(assigns(:invoice).invoice_items.first.account).to eq "advertisment"

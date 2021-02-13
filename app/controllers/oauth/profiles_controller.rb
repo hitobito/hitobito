@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -39,14 +37,14 @@ module Oauth
     end
 
     def public_attrs_with_roles
-      roles = person.roles.includes(:group).collect do |role|
+      roles = person.roles.includes(:group).collect { |role|
         {
           group_id: role.group_id,
           group_name: role.group.name,
           role_name: role.class.model_name.human,
-          permissions: role.class.permissions
+          permissions: role.class.permissions,
         }
-      end
+      }
       person.attributes.slice(*Person::PUBLIC_ATTRS.collect(&:to_s)).merge(roles: roles)
     end
 

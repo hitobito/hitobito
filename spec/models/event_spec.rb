@@ -58,7 +58,7 @@ describe Event do
       event.reload
     end
 
-    its(:participant_count) { should == 2 }
+    its(:participant_count) { is_expected.to == 2 }
   end
 
   context "#application_possible?" do
@@ -392,7 +392,7 @@ describe Event do
       ed = e.dates.first
       e.update(
         dates_attributes: {
-          "0" => {start_at_date: d, start_at_hour: 18, start_at_min: 10, id: ed.id}
+          "0" => {start_at_date: d, start_at_hour: 18, start_at_min: 10, id: ed.id},
         }
       )
       expect(e.dates.first.start_at).to eq(Time.zone.local(2012, 12, 12, 18, 10))
@@ -559,15 +559,15 @@ describe Event do
     let(:event) { events(:top_course) }
 
     it "destroys everything with event" do
-      expect do
-        expect do
-          expect do
-            expect do
+      expect {
+        expect {
+          expect {
+            expect {
               expect { event.destroy }.to change { Event.count }.by(-1)
-            end.to change { Event::Participation.count }.by(-1)
-          end.to change { Event::Role.count }.by(-1)
-        end.to change { Event::Date.count }.by(-1)
-      end.to change { Event::Question.count }.by(-3)
+            }.to change { Event::Participation.count }.by(-1)
+          }.to change { Event::Role.count }.by(-1)
+        }.to change { Event::Date.count }.by(-1)
+      }.to change { Event::Question.count }.by(-3)
     end
 
     it "nullifies contact on person destroy" do
@@ -606,7 +606,7 @@ describe Event do
 
     it "does not accept invalid person attributes" do
       event.update({required_contact_attrs: ["foobla"],
-                    hidden_contact_attrs: ["foofofofo"]})
+                    hidden_contact_attrs: ["foofofofo"],})
 
       expect(event.errors.full_messages.first)
         .to match(/'foobla' ist kein gültiges Personen-Attribut/)
@@ -616,7 +616,7 @@ describe Event do
 
     it "is not possible to set same attr as hidden and required" do
       event.update({required_contact_attrs: ["nickname"],
-                    hidden_contact_attrs: ["nickname"]})
+                    hidden_contact_attrs: ["nickname"],})
 
       expect(event.errors.full_messages.first)
         .to match(/'nickname' kann nicht als obligatorisch und 'nicht anzeigen' gesetzt werden/)
@@ -671,10 +671,10 @@ describe Event do
       event.questions << Fabricate(:event_question, admin: true)
       d = event.duplicate
 
-      expect do
+      expect {
         d.dates << Fabricate.build(:event_date, event: d)
         d.save!
-      end.to change { Event::Question.count }.by(2)
+      }.to change { Event::Question.count }.by(2)
     end
 
     it "copies all groups" do
@@ -690,21 +690,21 @@ describe Event do
     let(:group) { groups(:top_layer) }
 
     it "does not modify the group timestamps when creating an event" do
-      expect do
+      expect {
         Event.new(name: "dummy",
                   groups: [group],
                   dates: [Event::Date.new(start_at: Time.zone.now)])
-             .save!
-      end.not_to(change { group.updated_at })
+          .save!
+      }.not_to(change { group.updated_at })
     end
 
     it "does not modify the updater id when creating an event" do
-      expect do
+      expect {
         Event.new(name: "dummy",
                   groups: [group],
                   dates: [Event::Date.new(start_at: Time.zone.now)])
-             .save!
-      end.not_to(change { group.updater_id })
+          .save!
+      }.not_to(change { group.updater_id })
     end
   end
 

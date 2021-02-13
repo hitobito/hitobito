@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -36,21 +34,21 @@ describe FormatHelper do
 
       it { is_expected.to be_html_safe }
       # its(:squish) { should == '<div class="labeled"> <label>label</label> <div class="value">value</div> </div>'.gsub('"', "'") }
-      its(:squish) { should == '<dt class="muted">label</dt> <dd>value</dd>'.gsub('"', "'") }
+      its(:squish) { is_expected.to == '<dt class="muted">label</dt> <dd>value</dd>'.tr('"', "'") }
     end
 
     context "with empty value" do
       subject { labeled("label") { "" } }
 
       it { is_expected.to be_html_safe }
-      its(:squish) { should == '<dt class="muted">label</dt> <dd>'.gsub('"', "'") + FormatHelper::EMPTY_STRING + "</dd>" }
+      its(:squish) { is_expected.to == '<dt class="muted">label</dt> <dd>'.tr('"', "'") + FormatHelper::EMPTY_STRING + "</dd>" }
     end
 
     context "with unsafe value" do
       subject { labeled("label") { "value <unsafe>" } }
 
       it { is_expected.to be_html_safe }
-      its(:squish) { should == '<dt class="muted">label</dt> <dd>value &lt;unsafe&gt;</dd>'.gsub('"', "'") }
+      its(:squish) { is_expected.to == '<dt class="muted">label</dt> <dd>value &lt;unsafe&gt;</dd>'.tr('"', "'") }
     end
   end
 
@@ -58,7 +56,7 @@ describe FormatHelper do
     subject { labeled_attr("foo", :size) }
 
     it { is_expected.to be_html_safe }
-    its(:squish) { should == '<dt class="muted">Size</dt> <dd>3 chars</dd>'.gsub('"', "'") }
+    its(:squish) { is_expected.to == '<dt class="muted">Size</dt> <dd>3 chars</dd>'.tr('"', "'") }
   end
 
   describe "#f" do
@@ -261,18 +259,18 @@ describe FormatHelper do
 
   describe "#content_tag_nested" do
     it "should escape safe content" do
-      html = content_tag_nested(:div, %w(a b)) { |e| content_tag(:span, e) }
+      html = content_tag_nested(:div, %w[a b]) { |e| content_tag(:span, e) }
       expect(html).to be_html_safe
       expect(html).to eq("<div><span>a</span><span>b</span></div>")
     end
 
     it "should escape unsafe content" do
-      html = content_tag_nested(:div, %w(a b)) { |e| "<#{e}>" }
+      html = content_tag_nested(:div, %w[a b]) { |e| "<#{e}>" }
       expect(html).to eq("<div>&lt;a&gt;&lt;b&gt;</div>")
     end
 
     it "should simply join without block" do
-      html = content_tag_nested(:div, %w(a b))
+      html = content_tag_nested(:div, %w[a b])
       expect(html).to eq("<div>ab</div>")
     end
   end
@@ -284,7 +282,7 @@ describe FormatHelper do
     end
 
     it "should collect contents for array" do
-      html = safe_join(%w(a b)) { |e| content_tag(:span, e) }
+      html = safe_join(%w[a b]) { |e| content_tag(:span, e) }
       expect(html).to eq("<span>a</span><span>b</span>")
     end
   end
@@ -364,7 +362,10 @@ describe FormatHelper do
           activerecord: {
             associations: {
               crud_test_model: {
-                test_key: "model"}}}
+                test_key: "model",
+              },
+            },
+          }
       end
 
       it { is_expected.to eq("model") }
@@ -377,7 +378,12 @@ describe FormatHelper do
                 models: {
                   crud_test_model: {
                     companion: {
-                      test_key: "companion"}}}}}
+                      test_key: "companion",
+                    },
+                  },
+                },
+              },
+            }
         end
 
         it { is_expected.to eq("companion") }

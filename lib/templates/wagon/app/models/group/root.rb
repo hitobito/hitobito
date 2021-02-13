@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # TODO: rename class to specific name and change all references
 class Group::Root < ::Group
   self.layer = true

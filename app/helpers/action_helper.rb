@@ -74,7 +74,7 @@ module ActionHelper
       title: ti(:"link.delete"),
       alt: ti(:"link.delete"),
       data: {confirm: ti(:confirm_delete),
-             method: :delete}
+             method: :delete,}
   end
 
   private

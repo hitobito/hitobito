@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -112,12 +110,12 @@ describe Event::ListsController do
     context "without kind_id" do
       before { Event::Course.used_attributes -= [:kind_id] }
 
+      after { Event::Course.used_attributes += [:kind_id] }
+
       it "groups by month" do
         get :courses, params: {year: 2012}
         expect(assigns(:grouped_events).keys).to eq(["März 2012"])
       end
-
-      after { Event::Course.used_attributes += [:kind_id] }
     end
 
     context "booking info" do

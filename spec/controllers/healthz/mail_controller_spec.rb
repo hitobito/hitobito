@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -52,7 +50,7 @@ describe Healthz::MailController do
         expect(response.status).to eq(503)
 
         expect(json).to eq("app_status" => {"code" => "service_unavailable",
-                                            "details" => {"catch_all_inbox" => "catch-all mailbox contains overdue mails. please make sure delayed job worker is running and no e-mail is blocking the queue/job."}})
+                                            "details" => {"catch_all_inbox" => "catch-all mailbox contains overdue mails. please make sure delayed job worker is running and no e-mail is blocking the queue/job."},})
       end
     end
 

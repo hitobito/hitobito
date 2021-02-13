@@ -24,9 +24,9 @@ describe Invoice::PaymentProcessor do
   it "creates payment and marks invoice as payed" do
     invoice.update_columns(reference: "000000000000100000000000905",
                            total: 710.82)
-    expect do
+    expect {
       expect(parser.process).to eq 1
-    end.to change { Payment.count }.by(1)
+    }.to change { Payment.count }.by(1)
     expect(invoice.reload).to be_payed
   end
 
@@ -35,9 +35,9 @@ describe Invoice::PaymentProcessor do
     invoice.update_columns(reference: "000000000000100000000000905",
                            invoice_list_id: list.id,
                            total: 710.82)
-    expect do
+    expect {
       expect(parser.process).to eq 1
-    end.to change { Payment.count }.by(1)
+    }.to change { Payment.count }.by(1)
     expect(invoice.reload).to be_payed
     expect(list.reload.amount_paid.to_s).to eq "710.82"
     expect(list.reload.recipients_paid).to eq 1

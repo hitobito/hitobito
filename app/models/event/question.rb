@@ -20,7 +20,7 @@
 #  index_event_questions_on_event_id  (event_id)
 #
 
-class Event::Question < ActiveRecord::Base
+class Event::Question < ApplicationRecord
   include Globalized
   translates :question, :choices
 

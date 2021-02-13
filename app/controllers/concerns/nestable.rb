@@ -41,7 +41,7 @@ module Nestable
 
   # Returns the direct parent ActiveRecord of the current request, if any.
   def parent
-    parents.select { |p| p.is_a?(ActiveRecord::Base) }.last
+    parents.reverse.find { |p| p.is_a?(ActiveRecord::Base) }
   end
 
   # Returns the parent entries of the current request, if any.

@@ -14,14 +14,14 @@ module Encryptable
         define_method("#{attribute}=".to_sym) do |value|
           return if value.nil?
 
-          self.send(
+          send(
             "encrypted_#{attribute}=".to_sym,
             EncryptionService.encrypt(value)
           )
         end
 
         define_method(attribute) do
-          data = self.send("encrypted_#{attribute}".to_sym)
+          data = send("encrypted_#{attribute}".to_sym)
           encrypted_value = data[:encrypted_value]
           iv = data[:iv]
           EncryptionService.decrypt(encrypted_value, iv) if encrypted_value.present?

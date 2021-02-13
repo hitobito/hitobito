@@ -112,8 +112,10 @@ describe Event::ParticipantAssigner do
 
   describe "participation with different prios" do
     let(:event1) { events(:top_course) }
-    let(:event2) { Event::Course.create!(name: "Event 2", group_ids: event1.group_ids,
-                                         dates: event1.dates, kind: event_kinds(:slk)) }
+    let(:event2) {
+      Event::Course.create!(name: "Event 2", group_ids: event1.group_ids,
+                            dates: event1.dates, kind: event_kinds(:slk))
+    }
     let(:assigner1) { Event::ParticipantAssigner.new(event1, participation) }
     let(:assigner2) { Event::ParticipantAssigner.new(event2, participation) }
 

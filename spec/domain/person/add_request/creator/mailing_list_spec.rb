@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -81,20 +79,21 @@ describe Person::AddRequest::Creator::MailingList do
     end
 
     it "schedules emails" do
-      expect do
+      expect {
         subject.create_request
-      end.to change { Delayed::Job.count }.by(1)
+      }.to change { Delayed::Job.count }.by(1)
     end
 
     it "does not persist if request already exists" do
       Person::AddRequest::MailingList.create!(
         person: person,
         requester: requester,
-        body: mailing_list)
+        body: mailing_list
+      )
 
-      expect do
+      expect {
         subject.create_request
-      end.not_to change { Delayed::Job.count }
+      }.not_to change { Delayed::Job.count }
       expect(subject.request).to be_new_record
       expect(subject.error_message).to match(/Person wurde bereits angefragt/)
     end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -10,7 +8,7 @@ module PaymentSlips
 
   include I18nEnums
 
-  PAYMENT_SLIPS = %w(ch_es ch_bes ch_esr ch_besr no_ps qr).freeze
+  PAYMENT_SLIPS = %w[ch_es ch_bes ch_esr ch_besr no_ps qr].freeze
 
   included do
     i18n_enum :payment_slip, PAYMENT_SLIPS, scopes: true, queries: true

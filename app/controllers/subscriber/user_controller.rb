@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -45,8 +43,8 @@ module Subscriber
 
     def find_subscription
       mailing_list.subscriptions.where(subscriber_id: current_user.id,
-                                       subscriber_type: Person.sti_name).
-                                 first
+                                       subscriber_type: Person.sti_name)
+        .first
     end
 
     def mailing_list

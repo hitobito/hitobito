@@ -43,10 +43,10 @@ module MailRelay
       def relay_batch
         last_exception = nil
 
-        mails = Mail.find_and_delete(count: retrieve_count) do |message|
+        mails = Mail.find_and_delete(count: retrieve_count) { |message|
           proccessed_error = process(message)
           last_exception = proccessed_error if proccessed_error
-        end
+        }
 
         [mails || [], last_exception]
       rescue EOFError => e

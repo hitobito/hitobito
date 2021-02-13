@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,7 +14,7 @@ module CrudControllerTestHelper
     example_params = respond_to?(:params) ? send(:params) : {}
     params = scope_params
     params = params.merge(format: m[:format]) if m[:format].present?
-    params.merge!(id: test_entry.id) if m[:id]
+    params[:id] = test_entry.id if m[:id]
     params.merge!(example_params)
 
     sign_in(user)
@@ -48,7 +46,7 @@ module CrudControllerTestHelper
       @@current_templates = @_templates
 
       # hack to get around rollback (#restore_transaction_record_state) of in-memory entry state.
-      entry.committed! if entry
+      entry&.committed!
     else
       perform_request
     end
@@ -107,8 +105,8 @@ module CrudControllerTestHelper
       describe("#{method.to_s.upcase} #{action}",
         {if: described_class.instance_methods.collect(&:to_s).include?(action.to_s),
          method: method,
-         action: action}.
-        merge(metadata),
+         action: action,}
+        .merge(metadata),
         &block)
     end
 
@@ -124,7 +122,7 @@ module CrudControllerTestHelper
 
     # Test the response status, default 200.
     def it_should_respond(status = 200)
-      its(:status) { should == status }
+      its(:status) { is_expected.to == status }
     end
 
     # Test that entries are assigned.
@@ -170,7 +168,7 @@ module CrudControllerTestHelper
         subject { flash }
 
         its([type]) do
-          should(message ? match(message) : be_present)
+          is_expected.to(message ? match(message) : be_present)
         end
       end
     end
@@ -180,7 +178,7 @@ module CrudControllerTestHelper
       context "flash" do
         subject { flash }
 
-        its([type]) { should be_blank }
+        its([type]) { is_expected.to be_blank }
       end
     end
 

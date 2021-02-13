@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -51,13 +49,13 @@ module Searchable
   module ClassMethods
     # All search columns divided in table and field names.
     def search_tables_and_fields
-      @search_tables_and_fields ||= search_columns.map do |f|
+      @search_tables_and_fields ||= search_columns.map { |f|
         if f.to_s.include?(".")
           f
         else
           "#{model_class.table_name}.#{f}"
         end
-      end
+      }
     end
   end
 end

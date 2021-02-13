@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -29,14 +27,14 @@ describe Person::ImpersonationController do
     end
 
     it "impersonates user and create Log entry" do
-      expect { post :create, params: {group_id: group.id, person_id: people(:bottom_member).id} }.
-        to change { PaperTrail::Version.count }.by 1
+      expect { post :create, params: {group_id: group.id, person_id: people(:bottom_member).id} }
+        .to change { PaperTrail::Version.count }.by 1
     end
 
     it "impersonates user and sends mail" do
       perform_enqueued_jobs do
-        expect { post :create, params: {group_id: group.id, person_id: people(:bottom_member).id} }.
-          to change { ActionMailer::Base.deliveries.size }.by 1
+        expect { post :create, params: {group_id: group.id, person_id: people(:bottom_member).id} }
+          .to change { ActionMailer::Base.deliveries.size }.by 1
       end
     end
 
@@ -60,8 +58,8 @@ describe Person::ImpersonationController do
 
     it "returns to origin user and creates log entry" do
       session[:origin_user] = people(:top_leader).id
-      expect { delete :destroy, params: {group_id: group.id, person_id: people(:bottom_member).id} }.
-        to change { PaperTrail::Version.count }.by 1
+      expect { delete :destroy, params: {group_id: group.id, person_id: people(:bottom_member).id} }
+        .to change { PaperTrail::Version.count }.by 1
       expect(controller.send(:origin_user)).to be_nil
     end
 

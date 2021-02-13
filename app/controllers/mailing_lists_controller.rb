@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -12,7 +10,7 @@ class MailingListsController < CrudController
                           :additional_sender, :subscribable, :subscribers_may_post,
                           :anyone_may_post, :main_email, :delivery_report,
                           :mailchimp_list_id, :mailchimp_api_key,
-                          :mailchimp_include_additional_emails, preferred_labels: []]
+                          :mailchimp_include_additional_emails, preferred_labels: [],]
 
   decorates :group, :mailing_list
 

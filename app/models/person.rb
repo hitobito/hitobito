@@ -55,11 +55,11 @@
 #  index_people_on_unlock_token          (unlock_token) UNIQUE
 #
 
-class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
+class Person < ApplicationRecord # rubocop:disable Metrics/ClassLength
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,
     :email, :address, :zip_code, :town, :country, :gender, :birthday,
-    :picture, :primary_group_id
+    :picture, :primary_group_id,
   ]
 
   INTERNAL_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -68,16 +68,16 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
     :locked_at, :remember_created_at, :reset_password_token, :unlock_token,
     :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
-    :show_global_label_formats, :household_key, :event_feed_token
+    :show_global_label_formats, :household_key, :event_feed_token,
   ]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
-    :first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country
+    :first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country,
   ]
 
-  GENDERS = %w(m w).freeze
+  GENDERS = %w[m w].freeze
 
-  ADDRESS_ATTRS = %w(address zip_code town country).freeze
+  ADDRESS_ATTRS = %w[address zip_code town country].freeze
 
   # define devise before other modules
   devise :database_authenticatable,
@@ -200,7 +200,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     def order_by_name_statement
       [company_case_column(:company_name, :last_name),
        company_case_column(:last_name, :first_name),
-       company_case_column(:first_name, :nickname)]
+       company_case_column(:first_name, :nickname),]
     end
 
     def only_public_data
@@ -220,10 +220,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
 
     def filter_attrs
-      Person::FILTER_ATTRS.collect do |key, type|
+      Person::FILTER_ATTRS.collect { |key, type|
         type ||= Person.columns_hash.fetch(key.to_s).type
         [key.to_sym, {label: Person.human_attribute_name(key), type: type}]
-      end.to_h
+      }.to_h
     end
 
     def tags
@@ -262,10 +262,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def household_people
-    Person.
-      includes(:groups).
-      where.not(id: id).
-      where("id IN (?) OR (household_key IS NOT NULL AND household_key = ?)",
+    Person
+      .includes(:groups)
+      .where.not(id: id)
+      .where("id IN (?) OR (household_key IS NOT NULL AND household_key = ?)",
         household_people_ids, household_key)
   end
 
@@ -314,8 +314,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def finance_groups
-    groups_with_permission(:finance).
-      flat_map(&:layer_group)
+    groups_with_permission(:finance)
+      .flat_map(&:layer_group)
   end
 
   def table_display_for(parent)

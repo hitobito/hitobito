@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 if Rake::Task.task_defined?("spec:features")
   # we DO have feature specs in this wagon.
   Rake::Task["spec:features"].actions.clear

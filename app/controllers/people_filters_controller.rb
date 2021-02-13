@@ -54,7 +54,7 @@ class PeopleFiltersController < CrudController
       search_params = {
         name: entry.name,
         range: entry.range || "deep",
-        filters: entry.filter_chain.to_params
+        filters: entry.filter_chain.to_params,
       }
     end
     people_list_path(search_params)

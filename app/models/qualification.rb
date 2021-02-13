@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,7 +19,7 @@
 #  index_qualifications_on_qualification_kind_id  (qualification_kind_id)
 #
 
-class Qualification < ActiveRecord::Base
+class Qualification < ApplicationRecord
   ### ASSOCIATIONS
 
   belongs_to :person
@@ -36,7 +34,7 @@ class Qualification < ActiveRecord::Base
   validates_by_schema
   validates :qualification_kind_id,
     uniqueness: {scope: [:person_id, :start_at, :finish_at],
-                 message: :exists_for_timeframe}
+                 message: :exists_for_timeframe,}
   validates :start_at, :finish_at,
     timeliness: {type: :date, allow_blank: true, before: Date.new(9999, 12, 31)}
 
@@ -49,15 +47,15 @@ class Qualification < ActiveRecord::Base
 
     def active(date = nil)
       date ||= Time.zone.today
-      where("qualifications.start_at <= ?", date).
-        where("qualifications.finish_at >= ? OR qualifications.finish_at IS NULL", date)
+      where("qualifications.start_at <= ?", date)
+        .where("qualifications.finish_at >= ? OR qualifications.finish_at IS NULL", date)
     end
 
     def reactivateable(date = nil)
       date ||= Time.zone.today
-      joins(:qualification_kind).
-        where("qualifications.start_at <= ?", date).
-        where("qualifications.finish_at IS NULL OR " \
+      joins(:qualification_kind)
+        .where("qualifications.start_at <= ?", date)
+        .where("qualifications.finish_at IS NULL OR " \
               "(qualification_kinds.reactivateable IS NULL AND " \
               " qualifications.finish_at >= ?) OR " \
               "#{add_reactivateable_years_to_finish_at} >= ?",

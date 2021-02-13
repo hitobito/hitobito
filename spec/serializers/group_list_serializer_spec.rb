@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: groups
@@ -37,9 +35,11 @@ require "spec_helper"
 
 describe GroupListSerializer do
   let(:group) { groups(:top_group).decorate }
-  let(:controller) { double().as_null_object }
-  let(:serializer) { ListSerializer.new(Group.where(id: group.id), serializer: GroupListSerializer,
-                                                                   controller: controller) }
+  let(:controller) { double.as_null_object }
+  let(:serializer) {
+    ListSerializer.new(Group.where(id: group.id), serializer: GroupListSerializer,
+                                                  controller: controller)
+  }
 
   subject(:hash) { serializer.to_hash[:groups].first }
 

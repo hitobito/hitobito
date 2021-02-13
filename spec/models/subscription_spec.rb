@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: subscriptions
@@ -94,12 +92,12 @@ describe Subscription do
       list = Fabricate(:mailing_list, group: groups(:top_layer))
       subscription = Subscription.new(mailing_list: list, subscriber: groups(:bottom_layer_one))
       subscription.role_types = [Group::BottomLayer::Leader, Group::BottomGroup::Leader,
-                                 Group::BottomGroup::Member]
+                                 Group::BottomGroup::Member,]
       expect(subscription.grouped_role_types).to eq({
         "Bottom Layer" => {
           "Bottom Layer" => [Group::BottomLayer::Leader],
-          "Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member]
-        }
+          "Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member],
+        },
       })
     end
   end

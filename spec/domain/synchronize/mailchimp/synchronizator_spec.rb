@@ -13,9 +13,9 @@ describe Synchronize::Mailchimp::Synchronizator do
   let(:sync) { Synchronize::Mailchimp::Synchronizator.new(mailing_list) }
   let(:client) { sync.client }
 
-  let(:tags) { %w(foo bar) }
+  let(:tags) { %w[foo bar] }
   let(:merge_field) {
-    ["Gender", "dropdown", {choices: %w(m w)}, ->(p) { person.gender }]
+    ["Gender", "dropdown", {choices: %w[m w]}, ->(p) { person.gender }]
   }
 
   def segments(names)
@@ -46,7 +46,7 @@ describe Synchronize::Mailchimp::Synchronizator do
 
     it "is empty when merge_field exists locally and remotely" do
       sync.merge_fields = [merge_field]
-      allow(sync.client).to receive(:fetch_merge_fields).and_return([{tag: "GENDER",}])
+      allow(sync.client).to receive(:fetch_merge_fields).and_return([{tag: "GENDER"}])
       expect(subject).to be_empty
     end
   end
@@ -72,22 +72,22 @@ describe Synchronize::Mailchimp::Synchronizator do
     it "is includes local tag if it does not exist remotely" do
       allow(sync.client).to receive(:fetch_segments).and_return([])
       mailing_list.subscriptions.create!(subscriber: user)
-      user.update(tag_list: %w(foo))
-      expect(subject).to eq %w(foo)
+      user.update(tag_list: %w[foo])
+      expect(subject).to eq %w[foo]
     end
 
     it "is includes other local tag if it does not exist remotely" do
       allow(sync.client).to receive(:fetch_segments).and_return([])
       mailing_list.subscriptions.create!(subscriber: user)
-      user.update(tag_list: %w(foo bar))
-      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w(foo)))
-      expect(subject).to eq %w(bar)
+      user.update(tag_list: %w[foo bar])
+      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w[foo]))
+      expect(subject).to eq %w[bar]
     end
 
     it "is empty if both tags exists remotely" do
-      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w(foo bar)))
+      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w[foo bar]))
       mailing_list.subscriptions.create!(subscriber: user)
-      user.update(tag_list: %w(foo bar))
+      user.update(tag_list: %w[foo bar])
       expect(subject).to be_empty
     end
   end
@@ -101,14 +101,14 @@ describe Synchronize::Mailchimp::Synchronizator do
     end
 
     it "is present if no local tag exists for remote segment" do
-      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w(foo)))
+      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w[foo]))
       expect(subject).to eq [0]
     end
 
     it "is empty if local tag exists remotely" do
-      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w(foo)))
+      allow(sync.client).to receive(:fetch_segments).and_return(segments(%w[foo]))
       mailing_list.subscriptions.create!(subscriber: user)
-      user.update(tag_list: %w(foo))
+      user.update(tag_list: %w[foo])
       expect(subject).to be_empty
     end
   end
@@ -142,7 +142,7 @@ describe Synchronize::Mailchimp::Synchronizator do
         member(other, segments(tags)),
       ])
       expect(sync.client).to receive(:fetch_segments).and_return(segments(tags))
-      expect(subject).to eq [[1, %w(top_leader@example.com)]]
+      expect(subject).to eq [[1, %w[top_leader@example.com]]]
     end
 
     it "contains diff when local has extra tags" do
@@ -158,7 +158,7 @@ describe Synchronize::Mailchimp::Synchronizator do
       expect(sync.client).to receive(:fetch_segments).and_return(segments(tags))
       expect(subject).to have(1).item
       expect(subject.first.first).to eq 1
-      expect(subject.first.second.sort).to eq %w(bottom_member@example.com top_leader@example.com)
+      expect(subject.first.second.sort).to eq %w[bottom_member@example.com top_leader@example.com]
     end
 
     it "is empty when all local tags exist remotely" do
@@ -276,7 +276,7 @@ describe Synchronize::Mailchimp::Synchronizator do
       {
         "total_operations" => total,
         "finished_operations" => finished,
-        "errored_operations" => errored
+        "errored_operations" => errored,
       }
     end
 
@@ -325,9 +325,9 @@ describe Synchronize::Mailchimp::Synchronizator do
 
     context "segments" do
       it "creates missing" do
-        allow(sync).to receive(:missing_segments).and_return(%w(foo bar))
+        allow(sync).to receive(:missing_segments).and_return(%w[foo bar])
         allow(client).to receive(:fetch_members).and_return([])
-        expect(client).to receive(:create_segments).with(%w(foo bar))
+        expect(client).to receive(:create_segments).with(%w[foo bar])
         sync.perform
       end
 
@@ -337,15 +337,15 @@ describe Synchronize::Mailchimp::Synchronizator do
 
         allow(client).to receive(:fetch_members).and_return([member(user)])
         expect(client).to receive(:fetch_segments).thrice.and_return(segments(tags))
-        expect(client).to receive(:update_segments).with([[0, %w(top_leader@example.com)],
-                                                          [1, %w(top_leader@example.com)]])
+        expect(client).to receive(:update_segments).with([[0, %w[top_leader@example.com]],
+                                                          [1, %w[top_leader@example.com]],])
         sync.perform
       end
 
       it "removes obsolete" do
-        allow(sync).to receive(:obsolete_segment_ids).and_return(%w(0 1))
+        allow(sync).to receive(:obsolete_segment_ids).and_return(%w[0 1])
         allow(client).to receive(:fetch_members).and_return([])
-        expect(client).to receive(:delete_segments).with(%w(0 1))
+        expect(client).to receive(:delete_segments).with(%w[0 1])
         sync.perform
       end
     end

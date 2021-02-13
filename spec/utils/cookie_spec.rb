@@ -75,7 +75,7 @@ describe Cookie do
       write(now) { subject.set(name: "cookie") }
       _, _, expires = write(now + 1.day) { subject.set(name: "cookie") }
       expires_at = Time.zone.parse(expires.match(%{expires=(.*)})[1])
-      expect(expires_at).to eq now + 2.day
+      expect(expires_at).to eq now + 2.days
     end
   end
 end

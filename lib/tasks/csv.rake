@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -12,12 +10,12 @@ require "csv"
 namespace :csv do
   desc "Generates dummy csv file"
   task :generate do
-    csv_string = CSV.generate do |csv|
+    csv_string = CSV.generate { |csv|
       csv << person_attributes.keys
       5.times do
         csv << enhance(person_attributes).values
       end
-    end
+    }
     File.write("dummy.csv", csv_string)
   end
 
@@ -41,7 +39,7 @@ namespace :csv do
       address: Faker::Address.street_address,
       zip_code: Faker::Address.zip_code,
       town: Faker::Address.city,
-      gender: %w(m w).sample,
+      gender: %w[m w].sample,
       birthday: random_date.to_s,
       phone_number_andere: Faker::PhoneNumber.phone_number,
       phone_number_arbeit: Faker::PhoneNumber.phone_number,
@@ -53,7 +51,7 @@ namespace :csv do
       social_account_skype: Faker::Internet.user_name,
       social_account_msn: Faker::Internet.user_name,
       social_account_webseite: Faker::Internet.domain_name,
-      additional_information: Faker::Lorem.paragraph
+      additional_information: Faker::Lorem.paragraph,
     }
   end
 

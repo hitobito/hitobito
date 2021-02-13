@@ -41,8 +41,8 @@ describe Event::Qualifier do
   end
 
   def obtained_qualification_kinds(person)
-    person.qualifications.where(start_at: quali_date, origin: course.name).
-                          map(&:qualification_kind)
+    person.qualifications.where(start_at: quali_date, origin: course.name)
+      .map(&:qualification_kind)
   end
 
   def person_qualifier(person)

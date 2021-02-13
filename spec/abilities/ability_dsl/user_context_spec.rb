@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -19,7 +17,7 @@ describe AbilityDsl::UserContext do
     it { expect(subject.permission_group_ids(:layer_and_below_read)).to eq [groups(:top_group).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [groups(:top_layer).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:top_layer).id] }
-    its(:admin) { should be_truthy }
+    its(:admin) { is_expected.to be_truthy }
     its(:all_permissions) { is_expected.to contain_exactly(:admin, :finance, :impersonation, :layer_and_below_full, :layer_and_below_read, :contact_data) }
 
     it "has no events with permission full" do
@@ -36,7 +34,7 @@ describe AbilityDsl::UserContext do
     it { expect(subject.permission_group_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [] }
     it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
-    its(:admin) { should be_falsey }
+    its(:admin) { is_expected.to be_falsey }
     its(:all_permissions) { is_expected.to eq [:layer_and_below_read, :finance] }
 
     it "has events with permission full" do
@@ -62,7 +60,7 @@ describe AbilityDsl::UserContext do
     it { expect(subject.permission_group_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [groups(:bottom_layer_one).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
-    its(:admin) { should be_falsey }
+    its(:admin) { is_expected.to be_falsey }
     its(:all_permissions) { is_expected.to contain_exactly(:layer_and_below_full, :layer_and_below_read, :group_read, :group_and_below_read, :contact_data, :approve_applications) }
   end
 end

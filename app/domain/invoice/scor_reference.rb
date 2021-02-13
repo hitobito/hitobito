@@ -45,7 +45,7 @@ class Invoice::ScorReference
   end
 
   def right_size?
-    (1..21).include?(@chars.size)
+    (1..21).cover?(@chars.size)
   end
 
   def right_chars?

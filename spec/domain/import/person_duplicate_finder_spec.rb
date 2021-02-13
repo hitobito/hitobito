@@ -49,7 +49,7 @@ describe Import::PersonDuplicateFinder do
 
     let(:attrs) { {first_name: "foo", last_name: "Bar", zip_code: "3000"} }
 
-    its("errors.full_messages") { should eq [] }
+    its("errors.full_messages") { is_expected.to eq [] }
     it { is_expected.to be_present }
     it "has no error" do
       expect(subject.errors.size).to eq(0)
@@ -78,7 +78,8 @@ describe Import::PersonDuplicateFinder do
         expect(conditions).to eq([
           "last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL) " \
           "AND (birthday = ? OR birthday IS NULL)",
-          "bar", "foo", "8000", Time.zone.parse("1991-05-06").to_date])
+          "bar", "foo", "8000", Time.zone.parse("1991-05-06").to_date,
+        ])
       end
       it { is_expected.to be_present }
       it "has no error" do
@@ -94,7 +95,8 @@ describe Import::PersonDuplicateFinder do
       it do
         expect(conditions).to eq([
           "last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL)",
-          "bar", "foo", "8000"])
+          "bar", "foo", "8000",
+        ])
       end
       it { is_expected.to be_present }
       it "has no error" do
@@ -111,7 +113,8 @@ describe Import::PersonDuplicateFinder do
         expect(conditions).to eq([
           "last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL) " \
            "AND (birthday = ? OR birthday IS NULL)",
-          "bar", "foo", "8000", Time.zone.parse("2000-01-01").to_date])
+          "bar", "foo", "8000", Time.zone.parse("2000-01-01").to_date,
+        ])
       end
       it { is_expected.to be_present }
       it "has no error" do

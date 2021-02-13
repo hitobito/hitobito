@@ -34,8 +34,8 @@ class CrudController < ListController
 
   # Simple helper object to give access to required view helper methods.
   @@helper = Object.new
-                   .extend(ActionView::Helpers::TranslationHelper)
-                   .extend(ActionView::Helpers::OutputSafetyHelper)
+    .extend(ActionView::Helpers::TranslationHelper)
+    .extend(ActionView::Helpers::OutputSafetyHelper)
 
   ##############  ACTIONS  ############################################
 
@@ -166,7 +166,7 @@ class CrudController < ListController
     keys = [:"#{controller_name}.#{scope}_html",
             :"#{controller_name}.#{scope}",
             :"crud.#{scope}_html",
-            :"crud.#{scope}"]
+            :"crud.#{scope}",]
     @@helper.t(keys.shift, model: full_entry_label, default: keys)
   end
 

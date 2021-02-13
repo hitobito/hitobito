@@ -30,16 +30,16 @@ describe Event::Answer do
     end
 
     context "valid array values (position + 1)" do
-      let(:answer_param) { %w(1 2) }
+      let(:answer_param) { %w[1 2] }
 
-      its(:answer) { should eq "GA, Halbtax" }
+      its(:answer) { is_expected.to eq "GA, Halbtax" }
       it { is_expected.to have(0).errors_on(:answer) }
     end
 
     context "values outside of array size" do
-      let(:answer_param) { %w(4 5) }
+      let(:answer_param) { %w[4 5] }
 
-      its(:answer) { should be_nil }
+      its(:answer) { is_expected.to be_nil }
     end
 
     context "resetting values" do
@@ -47,7 +47,7 @@ describe Event::Answer do
 
       let(:answer_param) { ["0"] }
 
-      its(:answer) { should be_nil }
+      its(:answer) { is_expected.to be_nil }
     end
   end
 

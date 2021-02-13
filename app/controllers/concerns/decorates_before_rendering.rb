@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # Copyright (c) 2012 Rob Hanlon, MIT License
 
 #  Copyright (c) 2017, Pfadibewebung Schweiz. This file is part of

@@ -24,9 +24,9 @@ describe Event::Question do
     let(:event) { events(:top_course) }
 
     it "adds answer to participation after create" do
-      expect do
+      expect {
         event.questions.create!(question: "Test?", required: true)
-      end.to change { Event::Answer.count }.by(1)
+      }.to change { Event::Answer.count }.by(1)
     end
   end
 

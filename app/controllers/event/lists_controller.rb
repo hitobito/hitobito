@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -41,9 +39,9 @@ class Event::ListsController < ApplicationController
   private
 
   def grouped(scope, grouping = DEFAULT_GROUPING)
-    EventDecorator.
-      decorate_collection(scope).
-      group_by(&grouping)
+    EventDecorator
+      .decorate_collection(scope)
+      .group_by(&grouping)
   end
 
   def sorted(courses)
@@ -67,12 +65,12 @@ class Event::ListsController < ApplicationController
   end
 
   def upcoming_user_events
-    Event.
-      upcoming.
-      in_hierarchy(current_user).
-      includes(:dates, :groups).
-      where("events.type != ? OR events.type IS NULL", Event::Course.sti_name).
-      order("event_dates.start_at ASC")
+    Event
+      .upcoming
+      .in_hierarchy(current_user)
+      .includes(:dates, :groups)
+      .where("events.type != ? OR events.type IS NULL", Event::Course.sti_name)
+      .order("event_dates.start_at ASC")
   end
 
   def default_user_course_group
@@ -80,19 +78,19 @@ class Event::ListsController < ApplicationController
   end
 
   def course_group_from_primary_layer
-    Group.
-      course_offerers.
-      where(id: current_user.primary_group.try(:layer_group_id)).
-      first
+    Group
+      .course_offerers
+      .where(id: current_user.primary_group.try(:layer_group_id))
+      .first
   end
 
   def course_group_from_hierarchy
-    Group.
-      course_offerers.
-      where(id: current_user.groups_hierarchy_ids).
-      where("groups.id <> ?", Group.root.id).
-      select(:id).
-      first
+    Group
+      .course_offerers
+      .where(id: current_user.groups_hierarchy_ids)
+      .where("groups.id <> ?", Group.root.id)
+      .select(:id)
+      .first
   end
 
   def limited_courses_scope(scope = course_scope)
@@ -104,13 +102,13 @@ class Event::ListsController < ApplicationController
   end
 
   def course_scope
-    Event::Course.
-      includes(:groups).
-      preload(additional_course_includes).
-      joins(additional_course_includes).
-      order(course_ordering).
-      in_year(year).
-      list
+    Event::Course
+      .includes(:groups)
+      .preload(additional_course_includes)
+      .joins(additional_course_includes)
+      .order(course_ordering)
+      .in_year(year)
+      .list
   end
 
   def course_grouping

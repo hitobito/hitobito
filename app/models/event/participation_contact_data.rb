@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito_youth and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -18,7 +16,7 @@ class Event::ParticipationContactData
 
   self.contact_attrs = [:first_name, :last_name, :nickname, :company_name,
                         :email, :address, :zip_code, :town,
-                        :country, :gender, :birthday, :phone_numbers]
+                        :country, :gender, :birthday, :phone_numbers,]
 
   self.contact_associations = [:additional_emails, :social_accounts]
 
@@ -65,8 +63,8 @@ class Event::ParticipationContactData
   end
 
   def method_missing(method)
-    return person.send(method) if method =~ /^.*_came_from_user\?/
-    return person.send(method) if method =~ /^.*_before_type_cast/
+    return person.send(method) if /^.*_came_from_user\?/.match?(method)
+    return person.send(method) if /^.*_before_type_cast/.match?(method)
 
     super(method)
   end
@@ -131,10 +129,10 @@ class Event::ParticipationContactData
     phone_changes = {add: [], sub: []}
     changed_attrs = model_params.to_h.fetch("phone_numbers_attributes", {})
 
-    phone_changes = changed_attrs.each_with_object(phone_changes) do |(_key, entry), memo|
+    phone_changes = changed_attrs.each_with_object(phone_changes) { |(_key, entry), memo|
       key = entry["_destroy"] == "false" ? :add : :sub
       memo[key] << entry["number"]
-    end
+    }
 
     if (phone_changes[:add] - phone_changes[:sub]).empty?
       errors.add("phone_numbers", t("errors.messages.blank"))

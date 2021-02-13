@@ -38,9 +38,9 @@ describe Export::Pdf::Messages::LetterWithInvoice do
     end
 
     it "renders text at positions" do
-      text_with_position = subject.positions.each_with_index.collect do |p, i|
+      text_with_position = subject.positions.each_with_index.collect { |p, i|
         p.collect(&:round) + [subject.show_text[i]]
-      end
+      }
       expect(text_with_position).to match_array [
         [57, 729, "hitobito AG"],
         [57, 718, "Belpstrasse 37"],
@@ -78,7 +78,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         [346, 200, "Zahlbar durch"],
         [346, 188, "Bottom Member"],
         [346, 177, "Greatstreet 345"],
-        [346, 165, "3456 Greattown"]
+        [346, 165, "3456 Greattown"],
       ]
     end
   end

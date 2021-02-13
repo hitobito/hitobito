@@ -7,5 +7,5 @@
 
 [
   Person,
-  Group
+  Group,
 ].each(&:reset_column_information)

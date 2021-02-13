@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -29,8 +27,8 @@ describe Person::Filter::Attributes do
       '1234567890123': {
         key: key,
         constraint: constraint,
-        value: value
-      }
+        value: value,
+      },
     }
   end
 
@@ -230,8 +228,8 @@ describe Person::Filter::Attributes do
           '2234567890123': {
             key: "first_name",
             constraint: "match",
-            value: "test"
-          }
+            value: "test",
+          },
         }
       end
 

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -73,7 +71,7 @@ describe PeopleController do
           expect(assigns(:people)).to eq([top_leader, @tg_member, @tg_extern])
         end
 
-        %w(first_name nickname zip_code town).each do |attr|
+        %w[first_name nickname zip_code town].each do |attr|
           it "sorts based on #{attr}" do
             get :index, params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: attr, sort_dir: :asc}
             expect(assigns(:people)).to eq([@tg_member, top_leader, @tg_extern])
@@ -106,7 +104,8 @@ describe PeopleController do
             person: Fabricate(:person),
             requester: Fabricate(:person),
             body: group,
-            role_type: group.class.role_types.first.sti_name)
+            role_type: group.class.role_types.first.sti_name
+          )
 
           get :index, params: {group_id: group.id}
 
@@ -124,19 +123,19 @@ describe PeopleController do
 
         context "background job" do
           it "exports csv" do
-            expect do
+            expect {
               get :index, params: {group_id: group}, format: :csv
               expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
               expect(response).to redirect_to(returning: true)
-            end.to change(Delayed::Job, :count).by(1)
+            }.to change(Delayed::Job, :count).by(1)
           end
 
           it "exports xlsx" do
-            expect do
+            expect {
               get :index, params: {group_id: group}, format: :xlsx
               expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
               expect(response).to redirect_to(returning: true)
-            end.to change(Delayed::Job, :count).by(1)
+            }.to change(Delayed::Job, :count).by(1)
           end
 
           it "sets cookie on export" do
@@ -159,7 +158,7 @@ describe PeopleController do
 
             expect(@response.media_type).to eq("text/vcard")
             cards = @response.body.split("END:VCARD\n")
-            expect(cards.length).to equal(2);
+            expect(cards.length).to equal(2)
 
             if cards[1].include?("N:Member;Bottom")
               cards.reverse!
@@ -227,11 +226,11 @@ describe PeopleController do
 
             expect(assigns(:people).collect(&:id)).to match_array(
               [people(:bottom_member),
-                @bl_leader,
-                @bl_extern,
-                @bg_leader,
-                @bg_member,
-                @tg_member # also has Group::BottomGroup::Leader role
+               @bl_leader,
+               @bl_extern,
+               @bg_leader,
+               @bg_member,
+               @tg_member, # also has Group::BottomGroup::Leader role
 ].collect(&:id)
             )
           end
@@ -240,7 +239,7 @@ describe PeopleController do
             get :index, params: {
               group_id: group,
               filters: {role: {role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join("-")}},
-              range: "layer"
+              range: "layer",
             }
 
             expect(assigns(:people).collect(&:id)).to match_array([@bg_member, @bl_extern].collect(&:id))
@@ -251,7 +250,8 @@ describe PeopleController do
               person: Fabricate(:person),
               requester: Fabricate(:person),
               body: group,
-              role_type: group.class.role_types.first.sti_name)
+              role_type: group.class.role_types.first.sti_name
+            )
 
             get :index, params: {group_id: group.id, range: "layer"}
 
@@ -265,7 +265,7 @@ describe PeopleController do
               get :index, params: {
                 group_id: group,
                 range: "layer",
-                filters: {role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}}
+                filters: {role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}},
               },
                           format: :json
               json = JSON.parse(@response.body)
@@ -287,14 +287,14 @@ describe PeopleController do
                                                                  @tg_member,
                                                                  @tg_extern,
                                                                  @bl_leader,
-                                                                 @bg_leader].collect(&:id))
+                                                                 @bg_leader,].collect(&:id))
         end
 
         it "loads selected roles of a group when types given" do
           get :index, params: {
             group_id: group,
             filters: {role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}},
-            range: "deep"
+            range: "deep",
           }
 
           expect(assigns(:people).collect(&:id)).to match_array([@bg_leader, @tg_member, @tg_extern].collect(&:id))
@@ -307,7 +307,7 @@ describe PeopleController do
             get :index, params: {
               group_id: group,
               range: "deep",
-              filters: {role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}}
+              filters: {role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}},
             },
                         format: :json
             json = JSON.parse(@response.body)
@@ -325,7 +325,7 @@ describe PeopleController do
             name: "My Filter",
             range: "deep",
             filter_chain: {
-              role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}
+              role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")},
             }
           )
 
@@ -365,13 +365,13 @@ describe PeopleController do
           put :update, params: {
             group_id: group.id,
             id: person.id,
-            person: {password: "yadayada", password_confirmation: "yadayada"}
+            person: {password: "yadayada", password_confirmation: "yadayada"},
           }
           expect(person.reload.encrypted_password).to eq encrypted
         end
 
         it "create new phone numbers" do
-          expect do
+          expect {
             put :update, params: {
               group_id: group.id,
               id: person.id,
@@ -380,10 +380,11 @@ describe PeopleController do
                          "111" =>
                            {number: "031 111 1111", translated_label: "Privat", public: 1},
                          "222" =>
-                                         {number: "", translated_label: "Arbeit", public: 1}}}
+                                         {number: "", translated_label: "Arbeit", public: 1},
+                       },},
             }
             expect(assigns(:person)).to be_valid
-          end.to change { PhoneNumber.count }.by(1)
+          }.to change { PhoneNumber.count }.by(1)
           expect(person.reload.phone_numbers.size).to eq(1)
           number = person.phone_numbers.first
           expect(number.number).to eq "+41 31 111 11 11"
@@ -393,15 +394,15 @@ describe PeopleController do
 
         it "updates existing phone numbers" do
           n = person.phone_numbers.create!(number: "031 111 1111", label: "Privat", public: 1)
-          expect do
+          expect {
             put :update, params: {
               group_id: group.id,
               id: person.id,
               person: {town: "testtown",
                        phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "031 111 2222", translated_label: "Privat", public: 0, id: n.id}}}
+                                       {number: "031 111 2222", translated_label: "Privat", public: 0, id: n.id}},},
             }
-          end.not_to change { PhoneNumber.count }
+          }.not_to change { PhoneNumber.count }
           number = person.reload.phone_numbers.first
           expect(number.number).to eq "+41 31 111 22 22"
           expect(number.public).to be_falsey
@@ -414,16 +415,16 @@ describe PeopleController do
           I18n.available_locales = Settings.application.languages.keys
 
           n = person.phone_numbers.create!(number: "031 111 1111", label: "Vater", public: 1)
-          expect do
+          expect {
             put :update, params: {
               group_id: group.id,
               id: person.id,
               locale: :fr,
               person: {town: "testtown",
                        phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "031 111 2222", translated_label: "mère", public: 0, id: n.id}}}
+                                       {number: "031 111 2222", translated_label: "mère", public: 0, id: n.id}},},
             }
-          end.not_to change { PhoneNumber.count }
+          }.not_to change { PhoneNumber.count }
 
           I18n.available_locales = @cached_locales
           Settings.application.languages = @cached_languages
@@ -437,36 +438,36 @@ describe PeopleController do
 
         it "destroys existing phone numbers" do
           n = person.phone_numbers.create!(number: "031 111 1111", label: "Privat", public: 1)
-          expect do
+          expect {
             put :update, params: {
               group_id: group.id,
               id: person.id,
               person: {town: "testtown",
                        phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "031 111 1111", translated_label: "Privat", public: 0, id: n.id, _destroy: true}}}
+                                       {number: "031 111 1111", translated_label: "Privat", public: 0, id: n.id, _destroy: true}},},
             }
-          end.to change { PhoneNumber.count }.by(-1)
+          }.to change { PhoneNumber.count }.by(-1)
           expect(person.reload.phone_numbers).to be_blank
         end
 
         it "destroys existing phone numbers when number is empty" do
           n = person.phone_numbers.create!(number: "031 111 1111", label: "Privat", public: 1)
-          expect do
+          expect {
             put :update, params: {
               group_id: group.id,
               id: person.id,
               person: {town: "testtown",
                        phone_numbers_attributes: {n.id.to_s =>
-                                       {number: "   ", translated_label: "Privat", public: 0, id: n.id}}}
+                                       {number: "   ", translated_label: "Privat", public: 0, id: n.id}},},
             }
-          end.to change { PhoneNumber.count }.by(-1)
+          }.to change { PhoneNumber.count }.by(-1)
           expect(person.reload.phone_numbers).to be_blank
         end
 
         it "create, update and destroys social accounts" do
           a1 = person.social_accounts.create!(name: "Housi", label: "Facebook", public: 0)
           a2 = person.social_accounts.create!(name: "Hans", label: "Skype", public: 1)
-          expect do
+          expect {
             put :update, params: {
               group_id: group.id,
               id: person.id,
@@ -475,14 +476,15 @@ describe PeopleController do
                          a1.id.to_s => {id: a1.id,
                                         name: "Housi1",
                                         translated_label: "Facebook",
-                                        public: 1},
+                                        public: 1,},
                          a2.id.to_s => {id: a2.id, _destroy: true},
                          "999" => {name: "John",
                                    translated_label: "Twitter",
-                                   public: 0},}}
+                                   public: 0,},
+                       },},
             }
             expect(assigns(:person)).to be_valid
-          end.not_to change { SocialAccount.count }
+          }.not_to change { SocialAccount.count }
 
           accounts = person.reload.social_accounts.order(:label)
           expect(accounts.size).to eq(2)
@@ -499,7 +501,7 @@ describe PeopleController do
         it "create, update and destroys additional emails" do
           a1 = person.additional_emails.create!(email: "Housi@example.com", translated_label: "Arbeit", public: 0)
           a2 = person.additional_emails.create!(email: "Hans@example.com", translated_label: "Privat", public: 1)
-          expect do
+          expect {
             put :update, params: {
               group_id: group.id,
               id: person.id,
@@ -508,17 +510,18 @@ describe PeopleController do
                          a1.id.to_s => {id: a1.id,
                                         email: "Housi1@example.com",
                                         translated_label: "Arbeit",
-                                        public: 1},
+                                        public: 1,},
                          a2.id.to_s => {id: a2.id, _destroy: true},
                          "998" => {email: " ",
                                    translated_label: "Vater",
-                                   public: 1},
+                                   public: 1,},
                          "999" => {email: "John@example.com",
                                    translated_label: "Mutter",
-                                   public: 0},}}
+                                   public: 0,},
+                       },},
             }
             expect(assigns(:person)).to be_valid
-          end.not_to change { AdditionalEmail.count }
+          }.not_to change { AdditionalEmail.count }
 
           emails = person.reload.additional_emails.order(:label)
           expect(emails.size).to eq(2)
@@ -538,7 +541,7 @@ describe PeopleController do
           p3 = Fabricate(:person)
           r1 = person.relations_to_tails.create!(tail_id: people(:top_leader).id, kind: "child")
           r2 = person.relations_to_tails.create!(tail_id: p1.id, kind: "parent")
-          expect do
+          expect {
             put :update, params: {
               group_id: group.id,
               id: person.id,
@@ -546,15 +549,16 @@ describe PeopleController do
                        relations_to_tails_attributes: {
                          r1.id.to_s => {id: r1.id,
                                         tail_id: p2.id,
-                                        kind: "parent"},
+                                        kind: "parent",},
                          r2.id.to_s => {id: r2.id, _destroy: true},
                          "998" => {tail_id: " ",
-                                   kind: "child"},
+                                   kind: "child",},
                          "999" => {tail_id: p3.id,
-                                   kind: "child"},}}
+                                   kind: "child",},
+                       },},
             }
             expect(assigns(:person)).to be_valid
-          end.not_to change { PeopleRelation.count }
+          }.not_to change { PeopleRelation.count }
 
           relations = person.reload.relations_to_tails.order(:tail_id)
           expect(relations.size).to eq(2)
@@ -600,8 +604,8 @@ describe PeopleController do
           get :show, params: {group_id: group.id, id: people(:top_leader).id}
           tags = assigns(:tags)
           expect(tags.map(&:first)).to eq([:fruit, :category_validation, :other])
-          expect(tags.second[1].map(&:name)).to eq(%w(category_validation:email_primary_invalid))
-          expect(tags.third[1].map(&:name)).to eq(%w(pizza))
+          expect(tags.second[1].map(&:name)).to eq(%w[category_validation:email_primary_invalid])
+          expect(tags.third[1].map(&:name)).to eq(%w[pizza])
         end
       end
 
@@ -625,7 +629,8 @@ describe PeopleController do
             person: person,
             requester: Fabricate(:person),
             body: groups(:bottom_layer_one),
-            role_type: Group::BottomLayer::Member.sti_name)
+            role_type: Group::BottomLayer::Member.sti_name
+          )
           get :show, params: {group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_layer_one).id}
           expect(assigns(:add_requests)).to eq([r1])
           expect(flash[:notice]).to be_blank
@@ -649,26 +654,26 @@ describe PeopleController do
       before { allow(Truemail).to receive(:valid?).and_call_original }
 
       it "does not send instructions for self" do
-        expect do
-          expect do
+        expect {
+          expect {
             post :send_password_instructions, params: {group_id: group.id, id: top_leader.id}, format: :js
-          end.to raise_error(CanCan::AccessDenied)
-        end.not_to change { Delayed::Job.count }
+          }.to raise_error(CanCan::AccessDenied)
+        }.not_to change { Delayed::Job.count }
       end
 
       it "sends password instructions" do
-        expect do
+        expect {
           post :send_password_instructions, params: {group_id: groups(:bottom_layer_one).id, id: person.id}, format: :js
-        end.to change { Delayed::Job.count }.by(1)
+        }.to change { Delayed::Job.count }.by(1)
         expect(flash[:notice]).to eq "Login Informationen wurden verschickt."
       end
 
       it "does not send instructions if e-mail invalid" do
         person.update_attribute(:email, "dude@domainungueltig42.ch")
 
-        expect do
+        expect {
           post :send_password_instructions, params: {group_id: groups(:bottom_layer_one).id, id: person.id}, format: :js
-        end.not_to change { Delayed::Job.count }
+        }.not_to change { Delayed::Job.count }
         expect(flash[:alert]).to eq "Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist."
       end
     end
@@ -758,7 +763,8 @@ describe PeopleController do
           person: person,
           requester: Fabricate(:person),
           body: groups(:bottom_layer_one),
-          role_type: Group::BottomLayer::Member.sti_name)
+          role_type: Group::BottomLayer::Member.sti_name
+        )
         get :show, params: {group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_layer_one).id}
         expect(assigns(:add_requests)).to be_nil
         expect(flash[:notice]).to be_blank
@@ -807,9 +813,9 @@ describe PeopleController do
       end
 
       it "deletes person" do
-        expect do
+        expect {
           delete :destroy, params: {group_id: member.primary_group.id, id: member.id}
-        end.to change(Person, :count).by(-1)
+        }.to change(Person, :count).by(-1)
       end
     end
 
@@ -817,9 +823,9 @@ describe PeopleController do
       before { sign_in(member) }
 
       it "fails without permissions" do
-        expect do
+        expect {
           delete :destroy, params: {group_id: group.id, id: admin.id}
-        end.to raise_error(CanCan::AccessDenied)
+        }.to raise_error(CanCan::AccessDenied)
       end
     end
   end
@@ -865,9 +871,9 @@ describe PeopleController do
     end
 
     it "does not show page for unpermitted token" do
-      expect do
+      expect {
         get :show, params: {group_id: group.id, id: top_leader.id, token: "RejectedToken"}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
 
     it "indexes page when token is valid" do
@@ -876,9 +882,9 @@ describe PeopleController do
     end
 
     it "does not index page for unpermitted token" do
-      expect do
+      expect {
         get :index, params: {group_id: group.id, token: "RejectedToken"}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
 
     context "bottom_group" do
@@ -900,9 +906,9 @@ describe PeopleController do
       end
 
       it "raises when trying to view member" do
-        expect do
+        expect {
           get :show, params: {group_id: group.id, id: @member.id, token: "PermittedToken"}
-        end.to raise_error CanCan::AccessDenied
+        }.to raise_error CanCan::AccessDenied
       end
     end
   end
@@ -943,9 +949,9 @@ describe PeopleController do
       end
 
       it "raises when trying to view member" do
-        expect do
+        expect {
           get :show, params: {group_id: group.id, id: @member.id}
-        end.to raise_error CanCan::AccessDenied
+        }.to raise_error CanCan::AccessDenied
       end
     end
   end
@@ -995,8 +1001,9 @@ describe PeopleController do
   context "with invalid oauth token (expired or revoked)" do
     let(:token) {
       instance_double(
-        "Doorkeeper::AccessToken", :acceptable? => true,
-                                   :accessible? => false, :resource_owner_id => top_leader.id)
+        "Doorkeeper::AccessToken", acceptable?: true,
+                                   accessible?: false, resource_owner_id: top_leader.id
+      )
     }
 
     before do
@@ -1047,7 +1054,7 @@ describe PeopleController do
     after { TableDisplay.class_variable_set("@@permissions", {}) }
 
     it "GET#index lists extra column" do
-      top_leader.table_display_for(group).update(selected: %w(gender))
+      top_leader.table_display_for(group).update(selected: %w[gender])
 
       get :index, params: {group_id: group.id}
       expect(dom).to have_checked_field "Geschlecht"
@@ -1056,7 +1063,7 @@ describe PeopleController do
 
     it "GET#index lists extra column without content if permission check fails" do
       TableDisplay.register_permission(Person, :missing_permission, :gender)
-      top_leader.table_display_for(group).update(selected: %w(gender))
+      top_leader.table_display_for(group).update(selected: %w[gender])
 
       get :index, params: {group_id: group.id}
       expect(dom).to have_checked_field "Geschlecht"
@@ -1064,7 +1071,7 @@ describe PeopleController do
     end
 
     it "GET#index sorts by extra column" do
-      top_leader.table_display_for(group).update(selected: %w(gender))
+      top_leader.table_display_for(group).update(selected: %w[gender])
       Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person.update(gender: "m")
       get :index, params: {group_id: group.id, sort: :gender, sort_dir: :desc}
       expect(assigns(:people).first).to eq top_leader

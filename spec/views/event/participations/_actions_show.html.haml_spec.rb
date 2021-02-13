@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -33,8 +31,8 @@ describe "event/participations/_actions_show.html.haml" do
     context "last button per default is the change contact data button" do
       before { render }
 
-      its([:href]) { should eq edit_group_person_path(user.groups.first, user, return_url: "/groups/42/events/42/participations/42") }
-      its(:text) { should eq " Kontaktdaten ändern" } # space because of icon
+      its([:href]) { is_expected.to eq edit_group_person_path(user.groups.first, user, return_url: "/groups/42/events/42/participations/42") }
+      its(:text) { is_expected.to eq " Kontaktdaten ändern" } # space because of icon
     end
   end
 end

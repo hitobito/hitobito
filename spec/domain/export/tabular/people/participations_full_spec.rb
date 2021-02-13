@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,11 +14,11 @@ describe Export::Tabular::People::ParticipationsFull do
   subject { people_list.attribute_labels }
 
   context "additional_information" do
-    its([:additional_information]) { should eq "Zusätzliche Angaben" }
+    its([:additional_information]) { is_expected.to eq "Zusätzliche Angaben" }
   end
 
   context "participation_additional_information" do
-    its([:participation_additional_information]) { should eq "Bemerkungen" }
+    its([:participation_additional_information]) { is_expected.to eq "Bemerkungen" }
   end
 
   context "questions" do
@@ -31,7 +29,7 @@ describe Export::Tabular::People::ParticipationsFull do
 
     it "has keys and values" do
       expect(subject[:"question_#{event_questions(:top_ov).id}"]).to eq "GA oder Halbtax?"
-      expect(subject.keys.select { |key| key =~ /question/ }.size).to eq(3)
+      expect(subject.keys.count { |key| key =~ /question/ }).to eq(3)
     end
   end
 end

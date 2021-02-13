@@ -7,9 +7,9 @@
 
 class GroupSettingDecorator < ApplicationDecorator
   def translated_values
-    object.attrs.collect do |a|
+    object.attrs.collect { |a|
       "#{t(a)}: #{formatted_value(a)}"
-    end.join(", ")
+    }.join(", ")
   end
 
   def to_s

@@ -30,7 +30,7 @@ class People::DuplicateLocator
                                               last_name: person.last_name,
                                               company_name: person.company_name,
                                               zip_code: person.zip_code,
-                                              birthday: person.birthday})
+                                              birthday: person.birthday,})
 
     duplicate unless person == duplicate
   end

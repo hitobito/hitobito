@@ -26,9 +26,9 @@ describe Tags::MergeController do
     it "is not possible to merge tags without permission" do
       sign_in(bottom_member)
 
-      expect do
+      expect {
         get :new, params: {ids: [tag2.id, tag1.id].join(",")}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -68,9 +68,9 @@ describe Tags::MergeController do
     it "is not possible to merge tags without permission" do
       sign_in(bottom_member)
 
-      expect do
+      expect {
         post :create, params: {tags_merge: {src_tag_ids: tag2.id, dst_tag_id: tag1.id, name: tag2.name}}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
 
       expect(tag1_owner.reload.tags.to_a).to eq([tag1])
       expect(tag2_owner.reload.tags.to_a).to eq([tag2])

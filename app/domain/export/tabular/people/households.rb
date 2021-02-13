@@ -30,21 +30,21 @@ module Export::Tabular::People
       list = add_household_key(list)
       people_memo = build_memo(list)
 
-      people_memo.collect do |key, people|
+      people_memo.collect { |key, people|
         next people if key.blank?
 
         first_name, last_name = join_names(people)
         [assign(people.first, first_name, last_name)]
-      end.flatten
+      }.flatten
     end
 
     def add_household_key(list)
       return list unless list.respond_to?(:unscoped)
 
       list.unscope(:select)
-          .only_public_data
-          .select("household_key")
-          .includes(:primary_group)
+        .only_public_data
+        .select("household_key")
+        .includes(:primary_group)
     end
 
     def build_memo(list)

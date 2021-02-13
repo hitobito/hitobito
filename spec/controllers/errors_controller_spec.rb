@@ -8,7 +8,7 @@ require "spec_helper"
 describe ErrorsController do
   render_views
 
-  %w(404 500 503).each do |code|
+  %w[404 500 503].each do |code|
     it "renders #{code} with correct view and status code" do
       get :show, params: {code: code}
       expect(response).to render_template(code)
@@ -17,7 +17,7 @@ describe ErrorsController do
   end
 
   describe "Content-Type" do
-    %w(html json).each do |format|
+    %w[html json].each do |format|
       it "renders #{format} for #{format} format" do
         get :show, params: {code: "404"}, format: format.to_sym
         expect(response).to render_template("404")
@@ -26,7 +26,7 @@ describe ErrorsController do
       end
     end
 
-    %w(png jpeg).each do |format|
+    %w[png jpeg].each do |format|
       it "renders html for #{format}" do
         get :show, params: {code: "404"}, format: format.to_sym
         expect(response).to render_template("404")

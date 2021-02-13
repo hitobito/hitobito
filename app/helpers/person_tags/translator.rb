@@ -21,7 +21,7 @@ module PersonTags
     private
 
     def translatable_tags
-      {category_validation: %w(email_primary_invalid email_additional_invalid address_invalid)}
+      {category_validation: %w[email_primary_invalid email_additional_invalid address_invalid]}
     end
   end
 end

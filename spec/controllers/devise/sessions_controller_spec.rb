@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -18,7 +16,7 @@ describe Devise::SessionsController do
   context "person has single role" do
     subject { person.roles.first }
 
-    its(:type) { should eq "Group::BottomGroup::Member" }
+    its(:type) { is_expected.to eq "Group::BottomGroup::Member" }
     specify "person has only single role" do
       expect(person.roles.size).to eq 1
     end

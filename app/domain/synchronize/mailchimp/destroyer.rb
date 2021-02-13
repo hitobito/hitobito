@@ -30,7 +30,7 @@ module Synchronize
         people_to_be_deleted.map do |person|
           {
             method: "DELETE",
-            path: "lists/#{mailchimp_list_id}/members/#{subscriber_hash person.email}"
+            path: "lists/#{mailchimp_list_id}/members/#{subscriber_hash person.email}",
           }
         end
       end

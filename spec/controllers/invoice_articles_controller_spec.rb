@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -26,16 +24,16 @@ describe InvoiceArticlesController do
     end
 
     it "may not index when person has no finance permission on layer group" do
-      expect do
+      expect {
         get :index, params: {group_id: groups(:top_layer).id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
 
     it "may not edit when person has no finance permission on layer group" do
       invoice = InvoiceArticle.create!(group: groups(:top_layer), number: 1, name: "test")
-      expect do
+      expect {
         get :edit, params: {group_id: groups(:top_layer).id, id: invoice.id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 

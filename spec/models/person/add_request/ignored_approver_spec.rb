@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: person_add_request_ignored_approvers
@@ -55,9 +53,9 @@ describe Person::AddRequest::IgnoredApprover do
       Person::AddRequest::IgnoredApprover.create!(group: layer, person: r3)
       Person::AddRequest::IgnoredApprover.create!(group: layer, person: r4)
 
-      expect do
+      expect {
         Person::AddRequest::IgnoredApprover.delete_old_ones
-      end.to change { Person::AddRequest::IgnoredApprover.count }.by(-3)
+      }.to change { Person::AddRequest::IgnoredApprover.count }.by(-3)
     end
   end
 end

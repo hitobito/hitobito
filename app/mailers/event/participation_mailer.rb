@@ -75,9 +75,9 @@ class Event::ParticipationMailer < ApplicationMailer
         "event-details" => event_details,
         "application-url" => link_to(participation_url)
       )
-             else
-               values_for_placeholders(content_key)
-             end
+    else
+      values_for_placeholders(content_key)
+    end
 
     custom_content_mail(recipients, content_key, values)
   end
@@ -134,9 +134,9 @@ class Event::ParticipationMailer < ApplicationMailer
 
   def load_application_answers
     participation.answers
-                 .joins(:question)
-                 .includes(:question)
-                 .where(event_questions: {admin: false})
+      .joins(:question)
+      .includes(:question)
+      .where(event_questions: {admin: false})
   end
 
   def additional_information_details
@@ -149,7 +149,7 @@ class Event::ParticipationMailer < ApplicationMailer
 
   def participation_details
     ["#{Event::Role::Participant.model_name.human}:",
-     person.decorate.complete_contact].join("<br/>")
+     person.decorate.complete_contact,].join("<br/>")
   end
 
   def person

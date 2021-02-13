@@ -32,40 +32,40 @@ describe RoleListsController do
     end
 
     it "PUT update" do
-      expect do
+      expect {
         put :update, params: {
           group_id: group,
           ids: person1.id,
           moving_role_type: Group::TopGroup::Member,
           role: {type: Group::TopGroup::Leader,
-                 group_id: group}
+                 group_id: group,},
         }
-      end.not_to change(Group::TopGroup::Leader, :count)
+      }.not_to change(Group::TopGroup::Leader, :count)
 
       expect(flash[:alert]).to include "Zugriff auf #{person1.full_name} verweigert"
     end
 
     it "DELETE destroy" do
-      expect do
+      expect {
         delete :destroy, params: {
           group_id: group,
           ids: person1.id,
-          role: {types: {Group::TopGroup::Member => 1}}
+          role: {types: {Group::TopGroup::Member => 1}},
         }
-      end.not_to change(Role, :count)
+      }.not_to change(Role, :count)
 
       expect(flash[:alert]).to include "Zugriff auf #{person1.full_name} verweigert"
     end
 
     it "POST create" do
-      expect do
+      expect {
         post :create, params: {
           group_id: group,
           ids: person1.id,
           role: {type: Group::TopGroup::Member,
-                 group_id: group}
+                 group_id: group,},
         }
-      end.not_to change(Role, :count)
+      }.not_to change(Role, :count)
 
       expect(flash[:alert]).to include "Zugriff auf #{person1.full_name} verweigert"
     end
@@ -73,26 +73,26 @@ describe RoleListsController do
 
   context "DELETE destroy" do
     it "only removes one role" do
-      expect do
+      expect {
         delete :destroy, params: {
           group_id: group,
           ids: person1.id,
-          role: {types: {Group::TopGroup::Member => 1}}
+          role: {types: {Group::TopGroup::Member => 1}},
         }
-      end.to change(Role, :count).by(-1)
+      }.to change(Role, :count).by(-1)
 
       expect(flash[:notice]).to include "Eine Rolle wurde entfernt"
     end
 
     it "may remove multiple roles" do
-      expect do
+      expect {
         delete :destroy, params: {
           group_id: group,
           ids: [person1.id, person2.id].join(","),
           role: {types: {Group::TopGroup::Member => 1,
-                         Group::TopGroup::Leader => 1}}
+                         Group::TopGroup::Leader => 1,}},
         }
-      end.to change(Role, :count).by(-2)
+      }.to change(Role, :count).by(-2)
 
       expect(flash[:notice]).to include "2 Rollen wurden entfernt"
     end
@@ -100,40 +100,40 @@ describe RoleListsController do
 
   context "POST create" do
     it "creates only one role for one person" do
-      expect do
+      expect {
         post :create, params: {
           group_id: group,
           ids: person1.id,
           role: {type: Group::TopGroup::Member,
-                 group_id: group}
+                 group_id: group,},
         }
-      end.to change(Role, :count).by(1)
+      }.to change(Role, :count).by(1)
 
       expect(flash[:notice]).to include "Eine Rolle wurde erstellt"
     end
 
     it "may create multiple roles" do
-      expect do
+      expect {
         post :create, params: {
           group_id: group,
           ids: [person2.id, person1.id].join(","),
           role: {type: Group::TopGroup::Member,
-                 group_id: group}
+                 group_id: group,},
         }
-      end.to change(Role, :count).by(2)
+      }.to change(Role, :count).by(2)
 
       expect(flash[:notice]).to include "2 Rollen wurden erstellt"
     end
 
     it "may create multiple roles in another group" do
-      expect do
+      expect {
         post :create, params: {
           group_id: group,
           ids: [person2.id, person1.id].join(","),
           role: {type: Group::TopLayer::TopAdmin,
-                 group_id: groups(:top_layer)}
+                 group_id: groups(:top_layer),},
         }
-      end.to change(Group::TopLayer::TopAdmin, :count).by(2)
+      }.to change(Group::TopLayer::TopAdmin, :count).by(2)
 
       expect(flash[:notice]).to include "2 Rollen wurden erstellt"
       expect(person1.roles.count).to eq(2)
@@ -148,7 +148,7 @@ describe RoleListsController do
         ids: person1.id,
         moving_role_type: Group::TopGroup::Member,
         role: {type: "invalid",
-               group_id: group}
+               group_id: group,},
       }
 
       expect(flash[:alert]).to include "Bitte geben Sie eine valide Rolle an"
@@ -160,7 +160,7 @@ describe RoleListsController do
         ids: person1.id,
         role: {types: {Group::TopGroup::Member => 1},
                type: Group::TopGroup::Leader,
-               group_id: group}
+               group_id: group,},
       }
 
       role = person1.roles.first
@@ -173,9 +173,9 @@ describe RoleListsController do
         group_id: group,
         ids: [person1.id, person2.id].join(","),
         role: {types: {Group::TopGroup::Member => 1,
-                       Group::TopGroup::Leader => 1},
+                       Group::TopGroup::Leader => 1,},
                type: Group::TopGroup::Leader,
-               group_id: group}
+               group_id: group,},
       }
 
       role1 = person1.roles.first
@@ -192,9 +192,9 @@ describe RoleListsController do
         group_id: group,
         ids: [person1.id, person2.id].join(","),
         role: {types: {Group::TopGroup::Member => 1,
-                       Group::TopGroup::Leader => 1},
+                       Group::TopGroup::Leader => 1,},
                type: Group::TopLayer::TopAdmin,
-               group_id: groups(:top_layer)}
+               group_id: groups(:top_layer),},
       }
 
       role1 = person1.roles.first

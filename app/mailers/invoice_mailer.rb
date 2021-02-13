@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
@@ -7,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceMailer < ApplicationMailer
-  CONTENT_INVOICE_NOTIFICATION = "content_invoice_notification".freeze
+  CONTENT_INVOICE_NOTIFICATION = "content_invoice_notification"
 
   def notification(invoice, sender)
     @sender = sender
@@ -35,30 +34,30 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def placeholder_invoice_items
-    InvoiceItemDecorator.decorate_collection(@invoice.invoice_items).map do |item|
+    InvoiceItemDecorator.decorate_collection(@invoice.invoice_items).map { |item|
       [
         item.name,
         item.description,
-        item.total
+        item.total,
       ].join("<br/>")
-    end.join("<br/>" * 2)
+    }.join("<br/>" * 2)
   end
 
   def placeholder_invoice_total
     content_tag :table do
-      [:total, :vat].map do |key|
+      [:total, :vat].map { |key|
         content_tag :tr do
           [content_tag(:th, t("activerecord.attributes.invoice.#{key}")),
-           content_tag(:td, @invoice.decorate.send(key))].join
+           content_tag(:td, @invoice.decorate.send(key)),].join
         end
-      end.join
+      }.join
     end
   end
 
   def placeholder_group_address
     [group.name,
      group.address,
-     [group.zip_code, group.town].compact.join(" ").presence].compact.join(", ")
+     [group.zip_code, group.town].compact.join(" ").presence,].compact.join(", ")
   end
 
   def placeholder_group_name

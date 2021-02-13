@@ -16,7 +16,7 @@ module Synchronize
       self.member_fields = []
 
       self.merge_fields = [
-        ["Gender", "dropdown", {choices: %w(m w)}, ->(p) { p.gender }]
+        ["Gender", "dropdown", {choices: %w[m w]}, ->(p) { p.gender }],
       ]
 
       def initialize(mailing_list)
@@ -40,7 +40,7 @@ module Synchronize
 
       def missing_subscribers
         subscribers.reject do |subscriber|
-          members_by_email.keys.include?(subscriber.email) || subscriber.email.blank?
+          members_by_email.key?(subscriber.email) || subscriber.email.blank?
         end
       end
 
@@ -64,19 +64,19 @@ module Synchronize
       def stale_segments
         segments = client.fetch_segments.index_by { |t| t[:name] }
 
-        tags.collect do |tag, emails|
+        tags.collect { |tag, emails|
           next if emails.sort == remote_tags.fetch(tag, []).sort
           next unless segments.key?(tag)
 
           [segments.dig(tag, :id), emails]
-        end.compact
+        }.compact
       end
 
       def changed_subscribers
-        @changed_subscribers ||= subscribers.select do |subscriber|
+        @changed_subscribers ||= subscribers.select { |subscriber|
           member = members_by_email[subscriber.email]
           member.deep_merge(client.subscriber_body(subscriber)) != member if member
-        end
+        }
       end
 
       def client
@@ -119,12 +119,12 @@ module Synchronize
       end
 
       def remote_tags
-        @remote_tags ||= members.each_with_object({}) do |member, hash|
+        @remote_tags ||= members.each_with_object({}) { |member, hash|
           member[:tags].each do |tag|
             hash[tag[:name]] ||= []
             hash[tag[:name]] << member[:email_address]
           end
-        end
+        }
       end
 
       def members

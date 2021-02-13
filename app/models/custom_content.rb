@@ -14,7 +14,7 @@
 #  placeholders_optional :string(255)
 #
 
-class CustomContent < ActiveRecord::Base
+class CustomContent < ApplicationRecord
   include Globalized
   translates :label, :subject
   translates_rich_text :body
@@ -90,7 +90,7 @@ class CustomContent < ActiveRecord::Base
     non_existing = (placeholders.keys - placeholders_list).presence
     if non_existing
       raise(ArgumentError,
-        "Placeholder(s) #{non_existing.join(', ')} given, " \
+        "Placeholder(s) #{non_existing.join(", ")} given, " \
         "but not defined for this custom content")
     end
   end

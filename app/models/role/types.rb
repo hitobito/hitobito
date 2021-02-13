@@ -14,13 +14,13 @@ module Role::Types
   Permissions = [:admin,
                  :layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
                  :group_and_below_full, :group_and_below_read, :group_full, :group_read,
-                 :contact_data, :approve_applications, :finance, :impersonation]
+                 :contact_data, :approve_applications, :finance, :impersonation,]
 
   # If a role contains the first permission, the second one is automatically active as well
   PermissionImplications = {layer_and_below_full: :layer_and_below_read,
                             layer_full: :layer_read,
                             group_and_below_full: :group_and_below_read,
-                            group_full: :group_read}
+                            group_full: :group_read,}
 
   Kinds = [:member, :passive, :external]
 
@@ -102,7 +102,7 @@ module Role::Types
       [label,
        I18n.translate("#{group_key}.long",
          count: 1,
-         default: I18n.translate(group_key.to_s))].join(" ")
+         default: I18n.translate(group_key.to_s)),].join(" ")
     end
 
     def description

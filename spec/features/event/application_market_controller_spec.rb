@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -124,7 +122,7 @@ describe Event::ApplicationMarketController do
           expect(all("#applications ##{appl_id} td").last).to have_selector(".fa-ok")
           expect(all("#applications ##{appl_id} td").last).to have_no_selector(".fa-comment")
 
-          visit group_event_application_market_index_path(group.id, event.id, "prio[]" => 1, waiting_list: true)
+          visit group_event_application_market_index_path(group.id, event.id, "prio[]" => 1, :waiting_list => true)
 
           expect(find("#participants").text).to eq(participants)
           expect(find("#applications").text).to eq(applications)
@@ -192,7 +190,7 @@ describe Event::ApplicationMarketController do
           expect(all("#applications tr").last).to have_content(appl_waiting.person.to_s(:list))
           expect(all("#applications tr").last).to have_selector(".fa-minus")
 
-          visit group_event_application_market_index_path(group.id, event.id, "prio[]" => 1, waiting_list: true)
+          visit group_event_application_market_index_path(group.id, event.id, "prio[]" => 1, :waiting_list => true)
 
           # once assigned, a participant is removed from the waiting list
           expect(page).to have_no_selector("#applications ##{appl_id}")

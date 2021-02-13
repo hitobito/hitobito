@@ -8,9 +8,9 @@ describe Contactable::AddressValidator do
   let(:address) { addresses(:bs_bern) }
 
   it "tags people with invalid address" do
-    expect do
+    expect {
       validator.validate_people
-    end.to change { ActsAsTaggableOn::Tagging.count }.by(1)
+    }.to change { ActsAsTaggableOn::Tagging.count }.by(1)
 
     tagging = ActsAsTaggableOn::Tagging.find_by(taggable: person, hitobito_tooltip: person.address)
 
@@ -24,9 +24,9 @@ describe Contactable::AddressValidator do
     person.town = address.town
     person.save!
 
-    expect do
+    expect {
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    }.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 
   it "does not tag person with valid address with street number" do
@@ -35,9 +35,9 @@ describe Contactable::AddressValidator do
     person.town = address.town
     person.save!
 
-    expect do
+    expect {
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    }.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 
   it "does not tag person with valid address and invalid street number" do
@@ -46,17 +46,17 @@ describe Contactable::AddressValidator do
     person.town = address.town
     person.save!
 
-    expect do
+    expect {
       validator.validate_people
-    end.to change { ActsAsTaggableOn::Tagging.count }
+    }.to change { ActsAsTaggableOn::Tagging.count }
   end
 
   it "does not tag people from non imported countries" do
     person.update!(country: "DE")
 
-    expect do
+    expect {
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    }.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 
   it "does not tag people if tagged as override" do
@@ -65,18 +65,18 @@ describe Contactable::AddressValidator do
                context: :tags,
                tag: PersonTags::Validation.invalid_address_override(create: true))
 
-    expect do
+    expect {
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    }.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 
   it "tags people only once" do
-    expect do
+    expect {
       validator.validate_people
-    end.to change { ActsAsTaggableOn::Tagging.count }.by(1)
+    }.to change { ActsAsTaggableOn::Tagging.count }.by(1)
 
-    expect do
+    expect {
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    }.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 end

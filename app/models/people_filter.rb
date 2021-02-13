@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -22,8 +20,8 @@
 #  index_people_filters_on_group_id_and_group_type  (group_id,group_type)
 #
 
-class PeopleFilter < ActiveRecord::Base
-  RANGES = %w(deep layer group).freeze
+class PeopleFilter < ApplicationRecord
+  RANGES = %w[deep layer group].freeze
 
   serialize :filter_chain, Person::Filter::Chain
 

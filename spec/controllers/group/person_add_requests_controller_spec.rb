@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -35,7 +33,7 @@ describe Group::PersonAddRequestsController do
             group_id: group.id,
             person_id: people(:bottom_member).id,
             body_id: groups(:top_group).id,
-            body_type: "Group"
+            body_type: "Group",
           }
 
         expect(flash[:notice]).to be_blank
@@ -48,7 +46,7 @@ describe Group::PersonAddRequestsController do
             group_id: group.id,
             person_id: people(:top_leader).id,
             body_id: groups(:top_group).id,
-            body_type: "Group"
+            body_type: "Group",
           }
 
         expect(flash[:notice]).to match(/freigegeben/)
@@ -61,7 +59,7 @@ describe Group::PersonAddRequestsController do
             group_id: group.id,
             person_id: people(:top_leader).id,
             body_id: groups(:top_layer).id,
-            body_type: "Group"
+            body_type: "Group",
           }
 
         expect(flash[:notice]).to be_blank
@@ -81,7 +79,7 @@ describe Group::PersonAddRequestsController do
             group_id: group.id,
             person_id: people(:top_leader).id,
             body_id: groups(:top_layer).id,
-            body_type: "Group"
+            body_type: "Group",
           }
 
         expect(flash[:notice]).to be_blank
@@ -104,9 +102,9 @@ describe Group::PersonAddRequestsController do
     end
 
     it "access denied when trying to activate for other group" do
-      expect do
+      expect {
         post :activate, params: {group_id: other_group.id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -123,9 +121,9 @@ describe Group::PersonAddRequestsController do
     end
 
     it "access denied when trying to deactivate for other group" do
-      expect do
+      expect {
         delete :deactivate, params: {group_id: other_group.id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 end

@@ -54,9 +54,9 @@ describe Export::Pdf::Messages::Letter do
     end
 
     it "renders text at positions" do
-      text_with_position = subject.positions.each_with_index.collect do |p, i|
+      text_with_position = subject.positions.each_with_index.collect { |p, i|
         p.collect(&:round) + [subject.show_text[i]]
-      end
+      }
       expect(text_with_position).to match_array [
         [57, 729, "hitobito AG"],
         [57, 718, "Belpstrasse 37"],
@@ -69,7 +69,7 @@ describe Export::Pdf::Messages::Letter do
         [57, 558, "Wir laden "],
         [97, 558, "dich"],
         [116, 558, " ein! "],
-        [57, 537, "Bis bald"]
+        [57, 537, "Bis bald"],
       ]
     end
   end

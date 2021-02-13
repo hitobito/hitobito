@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,12 +19,12 @@ class DownloadCleanerJob < RecurringJob
   end
 
   def removable_files
-    Dir[AsyncDownloadFile::DIRECTORY.join("*")].collect do |fullpath|
+    Dir[AsyncDownloadFile::DIRECTORY.join("*")].collect { |fullpath|
       timestamp = calculate_timestamp(fullpath)
       next unless timestamp
       next unless older_than_a_day?(timestamp)
       fullpath
-    end.compact
+    }.compact
   end
 
   def calculate_timestamp(fullpath)

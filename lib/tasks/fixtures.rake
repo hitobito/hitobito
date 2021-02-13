@@ -16,9 +16,9 @@ namespace :fixtures do
 
       parts = if Group.where(name: group.name).one?
         [group.display_name.parameterize]
-              else
-                [group.display_name.parameterize, group.id]
-              end
+      else
+        [group.display_name.parameterize, group.id]
+      end
 
       parts.join("-").tr("-", "_")
     }
@@ -29,7 +29,7 @@ namespace :fixtures do
       entry = {
         "parent" => fixture_id[group.parent],
         "layer_group_id" =>
-          "<%=ActiveRecord::FixtureSet.identify(:#{fixture_id[group.layer_group]})%>"
+          "<%=ActiveRecord::FixtureSet.identify(:#{fixture_id[group.layer_group]})%>",
       }
 
       fixture_data.each do |field|

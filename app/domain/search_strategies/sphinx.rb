@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -41,7 +39,7 @@ module SearchStrategies
 
     def default_search_options
       {per_page: QUERY_PER_PAGE,
-       star: star_supported?}
+       star: star_supported?,}
     end
 
     def fetch_people(ids)

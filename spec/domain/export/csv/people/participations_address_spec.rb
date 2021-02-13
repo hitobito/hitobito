@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -17,14 +15,14 @@ describe Export::Tabular::People::ParticipationsAddress do
   subject { people_list.attribute_labels }
 
   context "address data" do
-    its([:first_name]) { should eq "Vorname" }
-    its([:town]) { should eq "Ort" }
+    its([:first_name]) { is_expected.to eq "Vorname" }
+    its([:town]) { is_expected.to eq "Ort" }
   end
 
   context "integration" do
     let(:simple_headers) do
       ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
-       "Adresse", "PLZ", "Ort", "Land", "Geschlecht", "Geburtstag", "Hauptebene", "Rollen", "Tags"]
+       "Adresse", "PLZ", "Ort", "Land", "Geschlecht", "Geburtstag", "Hauptebene", "Rollen", "Tags",]
     end
 
     let(:data) { Export::Tabular::People::ParticipationsAddress.export(:csv, list) }
@@ -32,13 +30,13 @@ describe Export::Tabular::People::ParticipationsAddress do
 
     subject { csv }
 
-    its(:headers) { should == simple_headers }
+    its(:headers) { is_expected.to == simple_headers }
 
     context "first row" do
       subject { csv[0] }
 
-      its(["Vorname"]) { should eq person.first_name }
-      its(["Rollen"]) { should be_blank }
+      its(["Vorname"]) { is_expected.to eq person.first_name }
+      its(["Rollen"]) { is_expected.to be_blank }
 
       context "with roles" do
         before do
@@ -47,7 +45,7 @@ describe Export::Tabular::People::ParticipationsAddress do
           participation.reload
         end
 
-        its(["Rollen"]) { should eq "Hauptleitung, Leitung" }
+        its(["Rollen"]) { is_expected.to eq "Hauptleitung, Leitung" }
       end
     end
   end

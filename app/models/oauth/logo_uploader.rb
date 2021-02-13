@@ -8,7 +8,7 @@
 class Oauth::LogoUploader < Uploader::Base
   MAX_DIMENSION = 8000
 
-  self.allowed_extensions = %w(jpg jpeg gif png)
+  self.allowed_extensions = %w[jpg jpeg gif png]
 
   include CarrierWave::MiniMagick
 

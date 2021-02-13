@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -87,16 +85,16 @@ describe Person::AddRequest::Creator::Group do
     it "creates group request if deleted role already exists" do
       Fabricate(Group::BottomGroup::Member.name, group: group, person: person, deleted_at: 1.year.ago)
 
-      expect do
+      expect {
         subject.create_request
-      end.to change { Person::AddRequest.count }.by(1)
+      }.to change { Person::AddRequest.count }.by(1)
       expect(subject.request).to be_persisted
     end
 
     it "schedules emails" do
-      expect do
+      expect {
         subject.create_request
-      end.to change { Delayed::Job.count }.by(1)
+      }.to change { Delayed::Job.count }.by(1)
     end
 
     it "does not persist if request already exists" do
@@ -104,11 +102,12 @@ describe Person::AddRequest::Creator::Group do
         person: person,
         requester: requester,
         body: group,
-        role_type: Group::BottomGroup::Member.sti_name)
+        role_type: Group::BottomGroup::Member.sti_name
+      )
 
-      expect do
+      expect {
         subject.create_request
-      end.not_to change { Delayed::Job.count }
+      }.not_to change { Delayed::Job.count }
       expect(subject.request).to be_new_record
       expect(subject.error_message).to match(/Person wurde bereits angefragt/)
     end

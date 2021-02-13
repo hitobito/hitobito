@@ -84,7 +84,7 @@ class Event::RegisterController < ApplicationController
   end
 
   def params_key
-    %w(event_participation_contact_data person).find { |key| params.key?(key) }
+    %w[event_participation_contact_data person].find { |key| params.key?(key) }
   end
 
   alias resource person # used by devise-form

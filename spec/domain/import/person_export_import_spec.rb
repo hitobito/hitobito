@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -39,16 +37,16 @@ describe "export import person" do
 
     import(csv)
 
-    imported = Person.find_by_email("exporter@hitobito.example.org")
+    imported = Person.find_by(email: "exporter@hitobito.example.org")
     expect(imported).not_to eq(exported)
 
-    excluded = %w(id created_at updated_at primary_group_id contact_data_visible email last_name)
+    excluded = %w[id created_at updated_at primary_group_id contact_data_visible email last_name]
     expect_attrs_equal(imported, exported, excluded)
 
-    %w(phone_numbers social_accounts additional_emails).each do |assoc|
+    %w[phone_numbers social_accounts additional_emails].each do |assoc|
       expect(imported.send(assoc).size).to eq(exported.send(assoc).to_a.size)
       exported.send(assoc).each_with_index do |e, i|
-        expect_attrs_equal(imported.send(assoc)[i], e, %w(id contactable_id))
+        expect_attrs_equal(imported.send(assoc)[i], e, %w[id contactable_id])
       end
     end
   end
@@ -62,9 +60,9 @@ describe "export import person" do
     parser.parse
 
     guesser = Import::PersonColumnGuesser.new(parser.headers)
-    header_mapping = guesser.mapping.each_with_object({}) do |map, hash|
+    header_mapping = guesser.mapping.each_with_object({}) { |map, hash|
       hash[map.first] = map.last[:key]
-    end
+    }
 
     data = parser.map_data(header_mapping)
     importer = Import::PersonImporter.new(data, group, role_type)

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -15,9 +13,9 @@ describe Person::InvoicesController do
 
   it "may not index person invoices if we have no finance permission in layer" do
     sign_in(bottom_member)
-    expect do
+    expect {
       get :index, params: {group_id: groups(:top_group).id, id: top_leader.id}
-    end.to raise_error(CanCan::AccessDenied)
+    }.to raise_error(CanCan::AccessDenied)
   end
 
   it "may index my own invoices" do

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -20,14 +18,14 @@ describe Event::PreconditionChecker do
   subject { Event::PreconditionChecker.new(course, person) }
 
   before do
-    course.kind.event_kind_qualification_kinds.
-      where(category: "precondition", role: "participant").
-      destroy_all
+    course.kind.event_kind_qualification_kinds
+      .where(category: "precondition", role: "participant")
+      .destroy_all
   end
 
   describe "defaults" do
-    its(:course_minimum_age) { should be_blank }
-    its(:valid?) { should be_truthy }
+    its(:course_minimum_age) { is_expected.to be_blank }
+    its(:valid?) { is_expected.to be_truthy }
   end
 
   describe "minimum age person" do
@@ -36,29 +34,29 @@ describe Event::PreconditionChecker do
     let(:too_young_error) { "Altersgrenze von 16 Jahren ist unterschritten." }
 
     context "has no birthday" do
-      its(:valid?) { should be_falsey }
-      its("errors_text.last") { should eq too_young_error }
+      its(:valid?) { is_expected.to be_falsey }
+      its("errors_text.last") { is_expected.to eq too_young_error }
     end
 
     context "is younger than 16" do
       before { person.birthday = (course_start_at.beginning_of_year - 15.years) }
 
-      its(:valid?) { should be_falsey }
-      its("errors_text.last") { should eq too_young_error }
+      its(:valid?) { is_expected.to be_falsey }
+      its("errors_text.last") { is_expected.to eq too_young_error }
     end
 
     context "is 16 years during course" do
       before { person.birthday = course_start_at - 16.years }
 
-      its(:valid?) { should be_truthy }
-      its("errors") { should be_empty }
+      its(:valid?) { is_expected.to be_truthy }
+      its("errors") { is_expected.to be_empty }
     end
 
     context "is 16 years end of year" do
       before { person.birthday = course_start_at.end_of_year - 16.years }
 
-      its(:valid?) { should be_truthy }
-      its("errors") { should be_empty }
+      its(:valid?) { is_expected.to be_truthy }
+      its("errors") { is_expected.to be_empty }
     end
   end
 
@@ -73,27 +71,27 @@ describe Event::PreconditionChecker do
     end
 
     context "person without 'super lead'" do
-      its(:valid?) { should be_falsey }
-      its("errors_text.last") { should =~ /Qualifikationen fehlen: Super Lead/ }
+      its(:valid?) { is_expected.to be_falsey }
+      its("errors_text.last") { is_expected.to =~ /Qualifikationen fehlen: Super Lead/ }
     end
 
     context "person with expired 'super lead'" do
       before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: expired_date) }
 
-      its(:valid?) { should be_falsey }
+      its(:valid?) { is_expected.to be_falsey }
 
       context "'super lead kind' reactivateable in range" do
         before { sl.update_attribute(:reactivateable, Date.today.year - expired_date.year) }
 
-        its(:valid?) { should be_truthy }
+        its(:valid?) { is_expected.to be_truthy }
       end
     end
 
     context "person with valid 'super lead'" do
       before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
-      its(:valid?) { should be_truthy }
-      its(:errors_text) { should == [] }
+      its(:valid?) { is_expected.to be_truthy }
+      its(:errors_text) { is_expected.to == [] }
     end
 
     context "person with expired and valid 'super lead'" do
@@ -102,8 +100,8 @@ describe Event::PreconditionChecker do
         qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
       end
 
-      its(:valid?) { should be_truthy }
-      its(:errors_text) { should == [] }
+      its(:valid?) { is_expected.to be_truthy }
+      its(:errors_text) { is_expected.to == [] }
     end
 
     context "person with unlimited 'super lead'" do
@@ -112,7 +110,7 @@ describe Event::PreconditionChecker do
         qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: course_start_at - 1.day)
       end
 
-      its(:valid?) { should be_truthy }
+      its(:valid?) { is_expected.to be_truthy }
     end
 
     context "multiple preconditions" do
@@ -124,13 +122,13 @@ describe Event::PreconditionChecker do
                                                            role: "participant")
       end
 
-      its("errors_text.last") { should =~ /Qualifikationen fehlen: Super Lead, Group Lead/ }
+      its("errors_text.last") { is_expected.to =~ /Qualifikationen fehlen: Super Lead, Group Lead/ }
 
       context "missing only one" do
         before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
-        its(:valid?) { should be_falsey }
-        its("errors_text.last") { should =~ /Qualifikationen fehlen: Group Lead/ }
+        its(:valid?) { is_expected.to be_falsey }
+        its("errors_text.last") { is_expected.to =~ /Qualifikationen fehlen: Group Lead/ }
       end
 
       context "with both present" do
@@ -139,7 +137,7 @@ describe Event::PreconditionChecker do
           qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
         end
 
-        its(:valid?) { should be_truthy }
+        its(:valid?) { is_expected.to be_truthy }
       end
 
       context "in multiple groups" do
@@ -152,13 +150,13 @@ describe Event::PreconditionChecker do
                                                              grouping: 1)
         end
 
-        its("errors_text.last") { should =~ /Erforderliche Qualifikationen fehlen/ }
+        its("errors_text.last") { is_expected.to =~ /Erforderliche Qualifikationen fehlen/ }
 
         context "missing only one in a grouping" do
           before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
-          its(:valid?) { should be_falsey }
-          its("errors_text.last") { should =~ /Erforderliche Qualifikationen fehlen/ }
+          its(:valid?) { is_expected.to be_falsey }
+          its("errors_text.last") { is_expected.to =~ /Erforderliche Qualifikationen fehlen/ }
         end
 
         context "with both in grouping nil" do
@@ -167,13 +165,13 @@ describe Event::PreconditionChecker do
             qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date)
           end
 
-          its(:valid?) { should be_truthy }
+          its(:valid?) { is_expected.to be_truthy }
         end
 
         context "with the single one in grouping 1" do
           before { qualifications << Fabricate(:qualification, qualification_kind: ql, start_at: valid_date) }
 
-          its(:valid?) { should be_truthy }
+          its(:valid?) { is_expected.to be_truthy }
         end
       end
     end

@@ -30,7 +30,7 @@ class GroupSettingsController < ModalCrudController
   end
 
   def fetch_entry
-    raise ActiveRecord::RecordNotFound unless GroupSetting::SETTINGS.keys.include?(setting_id)
+    raise ActiveRecord::RecordNotFound unless GroupSetting::SETTINGS.key?(setting_id)
 
     entry = group.setting_objects.find_or_initialize_by(var: setting_id)
     entry.becomes(GroupSetting).decorate

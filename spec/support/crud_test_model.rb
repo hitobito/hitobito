@@ -1,12 +1,10 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 # A dummy model used for general testing.
-class CrudTestModel < ActiveRecord::Base #:nodoc:
+class CrudTestModel < ApplicationRecord #:nodoc:
   include DatetimeAttribute
   datetime_attr :last_seen
 
@@ -49,7 +47,7 @@ class CrudTestModelDecorator < Draper::Decorator
   decorates :crud_test_model
 end
 
-class OtherCrudTestModel < ActiveRecord::Base #:nodoc:
+class OtherCrudTestModel < ApplicationRecord #:nodoc:
   has_and_belongs_to_many :others, class_name: "CrudTestModel"
   belongs_to :more, foreign_key: :more_id, class_name: "CrudTestModel"
 
@@ -66,7 +64,7 @@ class CrudTestModelsController < CrudController #:nodoc:
   self.sort_mappings = {chatty: "length(remarks)"}
   self.permitted_attrs = [:name, :email, :password, :whatever, :children,
                           :companion_id, :rating, :income, :birthdate,
-                          :gets_up_at, :last_seen, :human, :remarks]
+                          :gets_up_at, :last_seen, :human, :remarks,]
 
   skip_authorize_resource
   skip_authorization_check
@@ -127,15 +125,15 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   # create callback methods that record the before/after callbacks
   [:create, :update, :save, :destroy].each do |a|
-    callback = "before_#{a.to_s}"
+    callback = "before_#{a}"
     send(callback.to_sym, :"#{HANDLE_PREFIX}#{callback}")
-    callback = "after_#{a.to_s}"
+    callback = "after_#{a}"
     send(callback.to_sym, :"#{HANDLE_PREFIX}#{callback}")
   end
 
   # create callback methods that record the before_render callbacks
   [:index, :show, :new, :edit, :form].each do |a|
-    callback = "before_render_#{a.to_s}"
+    callback = "before_render_#{a}"
     send(callback.to_sym, :"#{HANDLE_PREFIX}#{callback}")
   end
 
@@ -257,7 +255,11 @@ module CrudTestHelper
     c = ActiveRecord::Base.connection
     [:crud_test_models, :other_crud_test_models, :crud_test_models_other_crud_test_models].each do |table|
       if c.data_source_exists?(table)
-        c.drop_table(table) rescue nil
+        begin
+          c.drop_table(table)
+        rescue
+          nil
+        end
       end
     end
   end
@@ -270,7 +272,7 @@ module CrudTestHelper
 
   # Fixture-style accessor method to get CrudTestModel instances by name
   def crud_test_models(name)
-    CrudTestModel.find_by_name(name.to_s)
+    CrudTestModel.find_by(name: name.to_s)
   end
 
   def with_test_routing
@@ -304,8 +306,8 @@ module CrudTestHelper
                           income: 10_000_000 * index + 0.1 * index,
                           birthdate: "#{1900 + 10 * index}-#{index}-#{index}",
                           # store entire date to avoid time zone issues
-                          gets_up_at: Time.local(2000, 1, 1, index, index),
-                          last_seen: Time.local(2000 + 10 * index, index, index, 10 + index, 20 + index),
+                          gets_up_at: Time.zone.local(2000, 1, 1, index, index),
+                          last_seen: Time.zone.local(2000 + 10 * index, index, index, 10 + index, 20 + index),
                           human: index % 2 == 0,
                           remarks: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))
   end

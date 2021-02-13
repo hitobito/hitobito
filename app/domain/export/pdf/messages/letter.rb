@@ -30,7 +30,7 @@ module Export::Pdf::Messages
 
     def filename
       parts = [@letter.subject.parameterize(separator: "_")]
-      parts << %w(preview) if preview?
+      parts << %w[preview] if preview?
       yield parts if block_given?
       [parts.join("-"), :pdf].join(".")
     end

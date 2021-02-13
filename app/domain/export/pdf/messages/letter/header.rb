@@ -39,7 +39,7 @@ class Export::Pdf::Messages::Letter
       [recipient.full_name.to_s.squish,
        recipient.address.to_s.squish,
        [recipient.zip_code, recipient.town].compact.join(" ").squish,
-       recipient.country.to_s.squish].compact.join("\n")
+       recipient.country.to_s.squish,].compact.join("\n")
     end
 
     def logo_path

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -42,7 +40,7 @@ describe Event::ParticipationContactDatasController, type: :controller do
       contact_attrs = [:first_name, :last_name, :nickname,
                        :company_name, :zip_code, :town,
                        :gender_w, :gender_m, :gender_,
-                       :birthday, :email]
+                       :birthday, :email,]
 
       contact_attrs.each do |a|
         expect(dom).to have_selector("input#event_participation_contact_data_#{a}")
@@ -82,7 +80,7 @@ describe Event::ParticipationContactDatasController, type: :controller do
     it "updates person attributes and redirects to event questions" do
       contact_data_params = {first_name: "Hans", last_name: "Gugger",
                              email: "dude@example.com", nickname: "Jojo",
-                             address: "Street 33"}
+                             address: "Street 33",}
 
       post :update, params: {group_id: group.id, event_id: course.id, event_participation_contact_data: contact_data_params, event_role: {type: "Event::Course::Role::Participant"}}
 

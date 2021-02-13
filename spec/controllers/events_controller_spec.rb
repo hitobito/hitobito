@@ -55,7 +55,7 @@ describe EventsController do
 
       it "orders according to sort expression" do
         get :index, params: {group_id: group.id, filter: "layer", year: 2012,
-                             sort: :name, sort_dir: :asc}
+                             sort: :name, sort_dir: :asc,}
         expect(assigns(:events).first.name).to eq "Eventus"
       end
 
@@ -188,9 +188,9 @@ describe EventsController do
       it "raises not found if event is in other group" do
         sign_in(people(:top_leader))
 
-        expect do
+        expect {
           get :new, params: {group_id: group.id, source_id: events(:top_course).id}
-        end.to raise_error(ActiveRecord::RecordNotFound)
+        }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
@@ -210,8 +210,8 @@ describe EventsController do
                   dates_attributes: [date],
                   application_questions_attributes: [question],
                   contact_id: people(:top_leader).id,
-                  type: "Event::Course"},
-          group_id: group.id
+                  type: "Event::Course",},
+          group_id: group.id,
         }
 
         event = assigns(:event)
@@ -229,14 +229,14 @@ describe EventsController do
         user = Fabricate(Group::BottomGroup::Leader.name.to_s, group: groups(:bottom_group_one_one))
         sign_in(user.person)
 
-        expect do
+        expect {
           post :create, params: {
             event: {group_id: group.id,
                     name: "foo",
-                    type: "Event::Course"},
-            group_id: group.id
+                    type: "Event::Course",},
+            group_id: group.id,
           }
-        end.to raise_error(CanCan::AccessDenied)
+        }.to raise_error(CanCan::AccessDenied)
       end
     end
 
@@ -252,7 +252,7 @@ describe EventsController do
         d2 = event.dates.create!(label: "Main",
                                  start_at_date: "1.2.2014", finish_at_date: "7.2.2014")
 
-        expect do
+        expect {
           put :update, params: {
             group_id: group.id,
             id: event.id,
@@ -261,15 +261,15 @@ describe EventsController do
                       d1.id.to_s => {id: d1.id,
                                      label: "Vorweek",
                                      start_at_date: "3.1.2014",
-                                     finish_at_date: "4.1.2014"},
+                                     finish_at_date: "4.1.2014",},
                       d2.id.to_s => {id: d2.id, _destroy: true},
                       "999" => {label: "Nachweek",
                                 start_at_date: "3.2.2014",
-                                finish_at_date: "5.2.2014"}
-                    }}
+                                finish_at_date: "5.2.2014",},
+                    },},
           }
           expect(assigns(:event)).to be_valid
-        end.not_to(change { Event::Date.count })
+        }.not_to(change { Event::Date.count })
 
         expect(event.reload.name).to eq "testevent"
         dates = event.dates.order(:start_at)
@@ -289,7 +289,7 @@ describe EventsController do
         q2 = event.questions.create!(question: "What?")
         q3 = event.questions.create!(question: "Payed?", admin: true)
 
-        expect do
+        expect {
           put :update, params: {
             group_id: group.id,
             id: event.id,
@@ -298,16 +298,16 @@ describe EventsController do
               application_questions_attributes: {
                 q1.id.to_s => {id: q1.id, question: "Whoo?"},
                 q2.id.to_s => {id: q2.id, _destroy: true},
-                "999" => {question: "How much?", choices: "1,2,3"}
+                "999" => {question: "How much?", choices: "1,2,3"},
               },
               admin_questions_attributes: {
                 q3.id.to_s => {id: q3.id, _destroy: true},
-                "999" => {question: "Powned?", choices: "ja, nein"}
-              }
-            }
+                "999" => {question: "Powned?", choices: "ja, nein"},
+              },
+            },
           }
           expect(assigns(:event)).to be_valid
-        end.not_to(change { Event::Question.count })
+        }.not_to(change { Event::Question.count })
 
         expect(event.reload.name).to eq "testevent"
         questions = event.questions.order(:question)
@@ -372,7 +372,7 @@ describe EventsController do
       put :update, params: {group_id: group.id, id: event.id,
                             event: {contact_attrs: {nickname: :required,
                                                     address: :hidden,
-                                                    social_accounts: :hidden}}}
+                                                    social_accounts: :hidden,}},}
 
       expect(event.reload.required_contact_attrs).to include("nickname")
       expect(event.reload.hidden_contact_attrs).to include("address")
@@ -380,10 +380,10 @@ describe EventsController do
     end
 
     it "removes contact attributes" do
-      event.update!({hidden_contact_attrs: %w(social_accounts address nickname)})
+      event.update!({hidden_contact_attrs: %w[social_accounts address nickname]})
 
       put :update, params: {group_id: group.id, id: event.id,
-                            event: {contact_attrs: {nickname: :hidden}}}
+                            event: {contact_attrs: {nickname: :hidden}},}
 
       expect(event.reload.hidden_contact_attrs).to include("nickname")
       expect(event.hidden_contact_attrs).not_to include("address")
@@ -402,9 +402,9 @@ describe EventsController do
       end
 
       it "does not show page for unpermitted token" do
-        expect do
+        expect {
           get :index, params: {group_id: group.id, token: "RejectedToken"}
-        end.to raise_error(CanCan::AccessDenied)
+        }.to raise_error(CanCan::AccessDenied)
       end
     end
 
@@ -415,9 +415,9 @@ describe EventsController do
       end
 
       it "does not show page for unpermitted token" do
-        expect do
+        expect {
           get :show, params: {group_id: group.id, id: event, token: "RejectedToken"}
-        end.to raise_error(CanCan::AccessDenied)
+        }.to raise_error(CanCan::AccessDenied)
       end
     end
   end

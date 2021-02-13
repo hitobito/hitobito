@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -34,7 +32,7 @@
 #  index_mailing_lists_on_group_id  (group_id)
 #
 
-class MailingList < ActiveRecord::Base
+class MailingList < ApplicationRecord
   serialize :preferred_labels, Array
   attribute :mailchimp_result, Synchronize::Mailchimp::ResultType.new
 
@@ -101,8 +99,8 @@ class MailingList < ActiveRecord::Base
   def exclude_person(person)
     subscriptions.where(subscriber_id: person.id,
                         subscriber_type: Person.sti_name,
-                        excluded: false).
-      destroy_all
+                        excluded: false)
+      .destroy_all
 
     if subscribed?(person)
       sub = subscriptions.new

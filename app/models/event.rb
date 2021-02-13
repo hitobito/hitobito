@@ -55,7 +55,7 @@
 # externally available information event for interested people.
 #
 # The same event may be attached to multiple groups of the same kind.
-class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
+class Event < ApplicationRecord # rubocop:disable Metrics/ClassLength:
   # This statement is required because these classes would not be loaded correctly otherwise.
   # The price we pay for using classes as namespace.
   require_dependency "event/date"
@@ -85,7 +85,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                           :external_applications, :applications_cancelable,
                           :signature, :signature_confirmation, :signature_confirmation_text,
                           :required_contact_attrs, :hidden_contact_attrs,
-                          :participations_visible]
+                          :participations_visible,]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,
@@ -94,7 +94,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                      Event::Role::Helper,
                      Event::Role::Treasurer,
                      Event::Role::Speaker,
-                     Event::Role::Participant]
+                     Event::Role::Participant,]
 
   # Are Event::Applications possible for this event type
   self.supports_applications = false
@@ -168,11 +168,11 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   class << self
     # Default scope for event lists
     def list
-      order_by_date.
-        includes(:translations).
-        order(:name).
-        preload_all_dates.
-        distinct
+      order_by_date
+        .includes(:translations)
+        .order(:name)
+        .preload_all_dates
+        .distinct
     end
 
     def preload_all_dates
@@ -193,8 +193,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     # Event with start and end-date overlay
     def between(start_date, end_date)
-      joins(:dates).
-        where("event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date " \
+      joins(:dates)
+        .where("event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date " \
               "OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date",
           start_date: start_date, end_date: end_date).distinct
     end
@@ -211,16 +211,16 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     # Events running now or in the future.
     def upcoming(midnight = Time.zone.now.midnight)
-      joins(:dates).
-        where("event_dates.start_at >= ? OR event_dates.finish_at >= ?", midnight, midnight)
+      joins(:dates)
+        .where("event_dates.start_at >= ? OR event_dates.finish_at >= ?", midnight, midnight)
     end
 
     # Events that are open for applications.
     def application_possible
       today = Time.zone.today
-      where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", today).
-        where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", today).
-        where("events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR " \
+      where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", today)
+        .where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", today)
+        .where("events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR " \
             "events.participant_count < events.maximum_participants")
     end
 
@@ -374,8 +374,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   def assert_required_contact_attrs_valid
     required_contact_attrs.map(&:to_s).each do |a|
       unless valid_contact_attr?(a) &&
-          ParticipationContactData.contact_associations.
-             map(&:to_s).exclude?(a)
+          ParticipationContactData.contact_associations
+              .map(&:to_s).exclude?(a)
         errors.add(:base, :contact_attr_invalid, attribute: a)
       end
 

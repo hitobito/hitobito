@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -46,7 +44,7 @@ describe Event::Course do
     Fabricate(:course, groups: [groups(:top_group)])
   end
 
-  its(:qualification_date) { should == Date.new(2012, 5, 11) }
+  its(:qualification_date) { is_expected.to == Date.new(2012, 5, 11) }
 
   context "#qualification_date" do
     before do
@@ -56,7 +54,7 @@ describe Event::Course do
       add_date("2011-01-02")
     end
 
-    its(:qualification_date) { should == Date.new(2011, 02, 20) }
+    its(:qualification_date) { is_expected.to == Date.new(2011, 0o2, 20) }
 
     def add_date(start_at, event = subject)
       start_at = Time.zone.parse(start_at)
@@ -67,11 +65,13 @@ describe Event::Course do
   context "multiple start_at" do
     before { subject.dates.create(start_at: Date.new(2012, 5, 14)) }
 
-    its(:qualification_date) { should == Date.new(2012, 5, 14) }
+    its(:qualification_date) { is_expected.to == Date.new(2012, 5, 14) }
   end
 
   context "without event_kind" do
     before { Event::Course.used_attributes -= [:kind_id] }
+
+    after { Event::Course.used_attributes += [:kind_id] }
 
     it "creates course" do
       Event::Course.create!(groups: [groups(:top_group)],
@@ -83,8 +83,6 @@ describe Event::Course do
       events(:top_course).update(kind_id: nil, number: 123)
       expect(events(:top_course).label_detail).to eq "123 Top"
     end
-
-    after { Event::Course.used_attributes += [:kind_id] }
   end
 
   it "sets signtuare to true when signature confirmation is required" do
@@ -120,10 +118,10 @@ describe Event::Course do
 
     it "copies existing questions" do
       d = event.duplicate
-      expect do
+      expect {
         d.dates << Fabricate.build(:event_date, event: d)
         d.save!
-      end.to change { Event::Question.count }.by(3)
+      }.to change { Event::Question.count }.by(3)
     end
   end
 end

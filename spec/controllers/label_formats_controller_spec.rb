@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -17,7 +15,7 @@ describe LabelFormatsController do
     end
 
     it "create global label" do
-      expect do
+      expect {
         post :create, params: {
           global: "true",
           label_format: {name: "foo layer",
@@ -28,15 +26,15 @@ describe LabelFormatsController do
                          count_horizontal: 3,
                          count_vertical: 8,
                          padding_top: 5,
-                         padding_left: 5}
+                         padding_left: 5,},
         }
-      end.to change { LabelFormat.count }.by(1)
+      }.to change { LabelFormat.count }.by(1)
 
       expect(LabelFormat.last.person_id).to eq(nil)
     end
 
     it "create personal label" do
-      expect do
+      expect {
         post :create, params: {
           global: "false",
           label_format: {name: "foo layer",
@@ -47,9 +45,9 @@ describe LabelFormatsController do
                          count_horizontal: 3,
                          count_vertical: 8,
                          padding_top: 5,
-                         padding_left: 5}
+                         padding_left: 5,},
         }
-      end.to change { LabelFormat.count }.by(1)
+      }.to change { LabelFormat.count }.by(1)
 
       expect(LabelFormat.last.person_id).to eq(person.id)
     end
@@ -63,7 +61,7 @@ describe LabelFormatsController do
     end
 
     it "create personal label" do
-      expect do
+      expect {
         post :create, params: {
           global: "false",
           label_format: {name: "foo layer",
@@ -74,15 +72,15 @@ describe LabelFormatsController do
                          count_horizontal: 3,
                          count_vertical: 8,
                          padding_top: 5,
-                         padding_left: 5}
+                         padding_left: 5,},
         }
-      end.to change { LabelFormat.count }.by(1)
+      }.to change { LabelFormat.count }.by(1)
 
       expect(LabelFormat.last.person_id).to eq(person.id)
     end
 
     it "can not create global label" do
-      expect do
+      expect {
         post :create, params: {
           global: "true",
           label_format: {name: "foo layer",
@@ -93,9 +91,9 @@ describe LabelFormatsController do
                          count_horizontal: 3,
                          count_vertical: 8,
                          padding_top: 5,
-                         padding_left: 5}
+                         padding_left: 5,},
         }
-      end.to change { LabelFormat.count }.by(1)
+      }.to change { LabelFormat.count }.by(1)
 
       expect(LabelFormat.last.person_id).to eq(person.id)
     end

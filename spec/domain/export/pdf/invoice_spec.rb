@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -82,8 +80,7 @@ describe Export::Pdf::Invoice do
        "esr_number",
        "payment_purpose",
        "left_receiver_address",
-       "right_receiver_address",
-      ].each do |method|
+       "right_receiver_address",].each do |method|
         allow_any_instance_of(Export::Pdf::Invoice::PaymentSlip).to receive(method.to_sym)
       end
     end
@@ -111,10 +108,10 @@ describe Export::Pdf::Invoice do
 
       it "has code_line" do
         expect(subject.positions).to eq [[271.95971338582683, 44.532913385826845],
-                                         [463.69931338582677, 44.532913385826845]]
+                                         [463.69931338582677, 44.532913385826845],]
 
         expect(subject.show_text.compact).to eq ["0100000005353>000037680338900000000000021+",
-                                                 "376803389000004>"]
+                                                 "376803389000004>",]
       end
     end
   end
@@ -138,9 +135,9 @@ describe Export::Pdf::Invoice do
     end
 
     it "renders qrcode" do
-      text_with_position = subject.positions.each_with_index.collect do |p, i|
+      text_with_position = subject.positions.each_with_index.collect { |p, i|
         p.collect(&:round) + [subject.show_text[i]]
-      end
+      }
 
       expect(text_with_position).to eq [
         [14, 276, "Empfangsschein"],
@@ -171,7 +168,7 @@ describe Export::Pdf::Invoice do
         [346, 200, "Zahlbar durch"],
         [346, 188, "Max Mustermann"],
         [346, 177, "Musterweg 2"],
-        [346, 165, "8000 Alt Tylerland"]
+        [346, 165, "8000 Alt Tylerland"],
       ]
     end
   end

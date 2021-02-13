@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -19,7 +17,7 @@ module MailRelay
 
     class << self
       def personal_return_path(list_name, sender_email, domain = nil)
-        return nil unless sender_email.present?
+        return nil if sender_email.blank?
 
         # recipient format (before @) must match regexp in #reject_not_existing
         id_suffix = "+" + sender_email.tr("@", "=")
@@ -130,7 +128,7 @@ module MailRelay
     end
 
     def sender_is_additional_sender?
-      return false unless sender_email.present?
+      return false if sender_email.blank?
 
       additional_senders = mailing_list.additional_sender.to_s
       list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
@@ -159,9 +157,9 @@ module MailRelay
 
     def potential_senders
       Person.joins("LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id" \
-                   " AND additional_emails.contactable_type = '#{Person.sti_name}'").
-             where("people.email = ? OR additional_emails.email = ?", sender_email, sender_email).
-             distinct
+                   " AND additional_emails.contactable_type = '#{Person.sti_name}'")
+        .where("people.email = ? OR additional_emails.email = ?", sender_email, sender_email)
+        .distinct
     end
 
     def send_reject_message?

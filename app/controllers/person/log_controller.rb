@@ -12,9 +12,9 @@ class Person::LogController < ApplicationController
 
   def index
     @versions = PaperTrail::Version.where(version_conditions)
-                                   .reorder("created_at DESC, id DESC")
-                                   .includes(:item)
-                                   .page(params[:page])
+      .reorder("created_at DESC, id DESC")
+      .includes(:item)
+      .page(params[:page])
   end
 
   private
@@ -22,7 +22,7 @@ class Person::LogController < ApplicationController
   def version_conditions
     {
       main_id: entry.id,
-      main_type: Person.sti_name
+      main_type: Person.sti_name,
     }
   end
 

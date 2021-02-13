@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -100,7 +98,7 @@ describe Event::RegisterController do
         post :check, params: {
           group_id: group.id,
           id: event.id,
-          person: {email: "foo@example.com", verification: "Foo"}
+          person: {email: "foo@example.com", verification: "Foo"},
         }
 
         is_expected.to redirect_to(new_person_session_path)
@@ -109,9 +107,9 @@ describe Event::RegisterController do
 
     context "for existing person" do
       it "generates one time login token" do
-        expect do
+        expect {
           post :check, params: {group_id: group.id, id: event.id, person: {email: people(:top_leader).email}}
-        end.to change { Delayed::Job.count }.by(1)
+        }.to change { Delayed::Job.count }.by(1)
         is_expected.to render_template("index")
         expect(flash[:notice]).to include "Wir haben dich in unserer Datenbank gefunden."
         expect(flash[:notice]).to include "Wir haben dir ein E-Mail mit einem Link geschickt, wo du"
@@ -132,9 +130,9 @@ describe Event::RegisterController do
       it "creates person" do
         event.update!(required_contact_attrs: [])
 
-        expect do
+        expect {
           put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com"}}
-        end.to change { Person.count }.by(1)
+        }.to change { Person.count }.by(1)
 
         is_expected.to redirect_to(new_group_event_participation_path(group, event))
         expect(flash[:notice]).to include "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben"
@@ -152,8 +150,8 @@ describe Event::RegisterController do
             first_name: "barney",
             last_name: "foo",
             email: "foo@example.com",
-            verification: "Foo"
-          }
+            verification: "Foo",
+          },
         }
         is_expected.to redirect_to(new_person_session_path)
       end
@@ -163,9 +161,9 @@ describe Event::RegisterController do
       it "does not create person" do
         event.update!(required_contact_attrs: [])
 
-        expect do
+        expect {
           put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {email: "not-existing@example.com"}}
-        end.not_to change { Person.count }
+        }.not_to change { Person.count }
 
         is_expected.to render_template("register")
       end

@@ -45,9 +45,9 @@ describe PaymentProcessesController do
 
   it "POST#create with data persists valid payments" do
     invoice.update_columns(reference: "000000000000100000000000905")
-    expect do
+    expect {
       post :create, params: {group_id: group.id, data: xmlfile.read}
-    end.to change { invoice.payments.count }.by(1)
+    }.to change { invoice.payments.count }.by(1)
     expect(response).to redirect_to group_invoices_path(group)
     expect(invoice.reload).to be_payed
   end

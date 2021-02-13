@@ -16,13 +16,13 @@ class Person::Filter::Attributes < Person::Filter::Base
   private
 
   def attributes_condition(scope)
-    args.values.map do |v|
+    args.values.map { |v|
       key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
       next unless key && value
       next unless Person.filter_attrs.key?(key.to_sym)
 
       attribute_condition_sql(key, value, constraint, scope)
-    end.compact.join(" AND ")
+    }.compact.join(" AND ")
   end
 
   def attribute_condition_sql(key, value, constraint, scope)
@@ -41,14 +41,14 @@ class Person::Filter::Attributes < Person::Filter::Base
                 when /greater/ then ["people.#{key} > ?", value]
                 when /smaller/ then ["people.#{key} < ?", value]
                 else ["people.#{key} = ?", value]
-                end
+    end
     ActiveRecord::Base.send(:sanitize_sql_array, sql_array)
   end
 
   def unpersisted_attribute_condition_sql(key, value, constraint, scope)
-    people_ids = scope.map do |p|
+    people_ids = scope.map { |p|
       p.id if matching_attribute?(p.send(key), value, constraint)
-    end.compact.join(",")
+    }.compact.join(",")
 
     people_ids = -1 if people_ids.blank?
 

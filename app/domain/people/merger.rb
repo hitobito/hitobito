@@ -105,9 +105,9 @@ module People
       roles = @source.roles
       return {} if roles.empty?
 
-      roles = roles.collect do |r|
-        "#{r} (#{r.group.with_layer.join(' / ')})"
-      end
+      roles = roles.collect { |r|
+        "#{r} (#{r.group.with_layer.join(" / ")})"
+      }
 
       {roles: roles}
     end

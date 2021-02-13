@@ -118,9 +118,9 @@ describe Person::Household do
       expect(member.errors).to have_key(:town)
       expect(member.errors.full_messages).to eq [
         "Adresse : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
-         "PLZ : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
-         "Ort : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
-         "Land : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen."
+        "PLZ : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
+        "Ort : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
+        "Land : Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne Top Leader aus dem Haushalt, um die Adresse anzupassen.",
       ]
     end
   end
@@ -128,9 +128,9 @@ describe Person::Household do
   context "#save" do
     it "persists new household", versioning: true do
       leader.household_people_ids = [member.id]
-      expect do
+      expect {
         household(leader).save
-      end.to change { member.versions.count }.by(2)
+      }.to change { member.versions.count }.by(2)
 
       expect(leader.reload.household_key).to eq member.reload.household_key
       expect(leader.household_key).to be_present
@@ -175,9 +175,9 @@ describe Person::Household do
 
     it "raises if person address attrs differ from readonly person address attrs" do
       member.household_people_ids = [leader.id]
-      expect do
+      expect {
         household(member).save
-      end.to raise_error "invalid"
+      }.to raise_error "invalid"
     end
 
     it "raises if two readonly people have different addresses" do
@@ -185,16 +185,16 @@ describe Person::Household do
       member.household_people_ids = [leader.id, other.id]
       member.attributes = leader.attributes.slice(*Person::ADDRESS_ATTRS)
 
-      expect do
+      expect {
         household(member).save
-      end.to raise_error "invalid"
+      }.to raise_error "invalid"
     end
 
     it "creates append_to_household version" do
       leader.household_people_ids = [member.id]
-      expect do
+      expect {
         household(leader).save
-      end.to change { PaperTrail::Version.count }.by(2)
+      }.to change { PaperTrail::Version.count }.by(2)
       expect(leader.versions.last.event).to eq "append_to_household"
       expect(member.versions.last.event).to eq "append_to_household"
     end
@@ -204,9 +204,9 @@ describe Person::Household do
       household(leader).save
 
       leader.town = "Greattown"
-      expect do
+      expect {
         household(leader).save
-      end.to change { PaperTrail::Version.count }.by(2)
+      }.to change { PaperTrail::Version.count }.by(2)
       expect(leader.versions.last.event).to eq "household_updated"
       expect(member.versions.last.event).to eq "household_updated"
     end
@@ -216,9 +216,9 @@ describe Person::Household do
       household(leader).save
 
       leader.nickname = "Nik"
-      expect do
+      expect {
         household(leader).save
-      end.to change { PaperTrail::Version.count }.by(0)
+      }.to change { PaperTrail::Version.count }.by(0)
     end
   end
 
@@ -238,9 +238,9 @@ describe Person::Household do
       leader.update(household_key: 1)
       other.update(household_key: 1)
 
-      expect do
+      expect {
         household(leader).remove
-      end.to change { PaperTrail::Version.count }.by(3)
+      }.to change { PaperTrail::Version.count }.by(3)
       expect(leader.reload.household_key).to be_nil
       expect(leader.household_people).to be_empty
       expect(member.reload.household_key).to eq "1"
@@ -250,9 +250,9 @@ describe Person::Household do
       member.update(household_key: 1)
       leader.update(household_key: 1)
 
-      expect do
+      expect {
         household(leader).remove
-      end.to change { PaperTrail::Version.count }.by(2)
+      }.to change { PaperTrail::Version.count }.by(2)
       expect(leader.versions.last.event).to eq "remove_from_household"
       expect(member.versions.last.event).to eq "remove_from_household"
     end
@@ -263,17 +263,17 @@ describe Person::Household do
       leader.update(household_key: 1)
       other.update(household_key: 1)
 
-      expect do
+      expect {
         household(leader).remove
-      end.to change { PaperTrail::Version.count }.by(3)
+      }.to change { PaperTrail::Version.count }.by(3)
     end
 
     it "does not create Papertrail for remove household, if person does not belong to a household" do
       # test needed, because an unchecked checkbox triggers the remove method
       leader.nickname = "Nik"
-      expect do
+      expect {
         household(leader).remove
-      end.to change { PaperTrail::Version.count }.by(0)
+      }.to change { PaperTrail::Version.count }.by(0)
     end
   end
 end

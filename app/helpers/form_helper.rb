@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -23,9 +21,9 @@ module FormHelper
     options[:buttons_top] = true unless options.key?(:buttons_top)
     options[:cancel_url] ||= if controller.is_a?(SimpleCrudController)
       polymorphic_path(path_args(model_class), returning: true)
-                             else
-                               polymorphic_path(path_args(entry))
-                             end
+    else
+      polymorphic_path(path_args(entry))
+    end
     attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
     crud_form(path_args(entry), *attrs, options, &block)
   end
@@ -40,7 +38,7 @@ module FormHelper
     buttons_bottom = options.delete(:buttons_bottom)
     buttons_top = options.delete(:buttons_top) { true }
     form_button_options = options.slice(:add_another_label, :add_another, :submit_label)
-                                 .merge(cancel_url: get_cancel_url(object, options))
+      .merge(cancel_url: get_cancel_url(object, options))
 
     standard_form(object, options) do |form|
       content = form.error_messages
@@ -49,9 +47,9 @@ module FormHelper
 
       content << if block_given?
         capture(form, &block)
-                 else
-                   form.labeled_input_fields(*attrs)
-                 end
+      else
+        form.labeled_input_fields(*attrs)
+      end
 
       if buttons_bottom
         content << form_buttons(form, form_button_options.merge(toolbar_class: "bottom"))
@@ -68,7 +66,7 @@ module FormHelper
   end
 
   def form_buttons(form, submit_label: ti(:"button.save"), cancel_url: nil, toolbar_class: nil,
-                          add_another: false, add_another_label: ti(:"button.add_another"))
+    add_another: false, add_another_label: ti(:"button.add_another"))
     button_toolbar(form, toolbar_class: toolbar_class) do
       content = submit_button(form, submit_label)
       content << add_another_button(form, add_another_label) if add_another.present?
@@ -107,7 +105,11 @@ module FormHelper
   # 3. Use polymorphic_path(object)
   def get_cancel_url(object, options)
     if params[:return_url].present?
-      url = URI.parse(params[:return_url]).path rescue nil
+      url = begin
+              URI.parse(params[:return_url]).path
+            rescue
+              nil
+            end
       return url if url
     end
 

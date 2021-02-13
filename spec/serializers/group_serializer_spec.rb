@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: groups
@@ -45,7 +43,7 @@ require "spec_helper"
 
 describe GroupSerializer do
   let(:group) { groups(:top_group).decorate }
-  let(:controller) { double().as_null_object }
+  let(:controller) { double.as_null_object }
 
   let(:serializer) { GroupSerializer.new(group, controller: controller) }
   let(:hash) { serializer.to_hash }

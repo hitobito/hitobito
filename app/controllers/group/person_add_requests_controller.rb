@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -33,21 +31,21 @@ class Group::PersonAddRequestsController < ApplicationController
   private
 
   def load_entries
-    Person::AddRequest.
-      for_layer(group).
-      includes(:person,
-        requester: {roles: :group}).
-      merge(Person.order_by_name)
+    Person::AddRequest
+      .for_layer(group)
+      .includes(:person,
+        requester: {roles: :group})
+      .merge(Person.order_by_name)
   end
 
   def load_approvers
-    @possible_approvers = Person::AddRequest::IgnoredApprover.
-                            possible_approvers(group).
-                            includes(roles: :group).
-                            order_by_name
-    @ignored_approvers = Person::AddRequest::IgnoredApprover.
-                            where(group_id: group.id).
-                            pluck(:person_id)
+    @possible_approvers = Person::AddRequest::IgnoredApprover
+      .possible_approvers(group)
+      .includes(roles: :group)
+      .order_by_name
+    @ignored_approvers = Person::AddRequest::IgnoredApprover
+      .where(group_id: group.id)
+      .pluck(:person_id)
   end
 
   def show_status_notification?

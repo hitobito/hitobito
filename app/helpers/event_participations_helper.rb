@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -42,8 +40,7 @@ module EventParticipationsHelper
   end
 
   def show_application_priorities?(participation)
-    participation.application &&
-      participation.application.priorities? &&
+    participation.application&.priorities? &&
       can?(:show_priorities, participation.application)
   end
 
@@ -54,7 +51,7 @@ module EventParticipationsHelper
       "times-circle",
       data: {
         confirm: t("event.participations.cancel_application.confirmation"),
-        method: :delete
+        method: :delete,
       }
     )
   end

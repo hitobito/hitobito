@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -23,8 +21,8 @@ class QualificationAbility < AbilityDsl::Base
 
   def in_course_layer_with(permission, person_layer_ids)
     layers = user.groups_with_permission(permission).collect(&:layer_group).uniq
-    qualify_layer_ids = layers.select { |g| g.event_types.include?(Event::Course) }.
-                               collect(&:id)
+    qualify_layer_ids = layers.select { |g| g.event_types.include?(Event::Course) }
+      .collect(&:id)
 
     qualify_layer_ids.present? &&
       contains_any?(qualify_layer_ids, person_layer_ids)

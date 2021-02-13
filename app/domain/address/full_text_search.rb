@@ -47,9 +47,9 @@ class Address::FullTextSearch
 
   def addresses_with_numbers(addresses)
     addresses.flat_map do |address|
-      address.numbers.map do |number|
+      address.numbers.map { |number|
         [address, number] if number.to_s.include? street_number_from_query
-      end.compact
+      }.compact
     end
   end
 

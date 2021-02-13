@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -91,13 +90,13 @@ describe Subscriber::EventController do
     let(:event) { create_event("event", now) }
 
     it "adds subscription" do
-      expect do
+      expect {
         post :create, params: {
           group_id: group.id,
           mailing_list_id: list.id,
-          subscription: {subscriber_id: event.id}
+          subscription: {subscriber_id: event.id},
         }
-      end.to change(Subscription, :count).by(1)
+      }.to change(Subscription, :count).by(1)
 
       is_expected.to redirect_to(group_mailing_list_subscriptions_path(list.group_id, list.id))
     end
@@ -105,7 +104,7 @@ describe Subscriber::EventController do
     it "without subscriber_id replaces error" do
       post :create, params: {
         group_id: group.id,
-        mailing_list_id: list.id
+        mailing_list_id: list.id,
       }
 
       is_expected.to render_template("crud/new")
@@ -117,13 +116,13 @@ describe Subscriber::EventController do
       subscription = list.subscriptions.build
       subscription.update_attribute(:subscriber, event)
 
-      expect do
+      expect {
         post :create, params: {
           group_id: group.id,
           mailing_list_id: list.id,
-          subscription: {subscriber_id: event.id}
+          subscription: {subscriber_id: event.id},
         }
-      end.not_to change(Subscription, :count)
+      }.not_to change(Subscription, :count)
 
       is_expected.to render_template("crud/new")
       expect(assigns(:subscription).errors.size).to eq(1)

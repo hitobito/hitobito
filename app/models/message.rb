@@ -30,7 +30,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Message < ActiveRecord::Base
+class Message < ApplicationRecord
   include I18nEnums
 
   validates_by_schema except: :text
@@ -45,12 +45,12 @@ class Message < ActiveRecord::Base
 
   has_many :assignments, as: :attachment, dependent: :destroy
 
-  STATES = %w(draft pending processing finished failed).freeze
+  STATES = %w[draft pending processing finished failed].freeze
   i18n_enum :state, STATES, scopes: true, queries: true
   validates :state, inclusion: {in: STATES}
 
   class_attribute :duplicatable_attrs
-  self.duplicatable_attrs = %w(subject type mailing_list_id)
+  self.duplicatable_attrs = %w[subject type mailing_list_id]
 
   scope :list, -> { order(:created_at) }
 
@@ -63,7 +63,7 @@ class Message < ActiveRecord::Base
     def all_types
       [Message::TextMessage,
        Message::Letter,
-       Message::LetterWithInvoice]
+       Message::LetterWithInvoice,]
     end
 
     def find_message_type!(sti_name)

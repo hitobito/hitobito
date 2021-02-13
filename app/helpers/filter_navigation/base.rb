@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -32,7 +30,7 @@ module FilterNavigation
 
     def dropdown_item
       if dropdown.items.present?
-        content_tag(:li, class: "dropdown #{'active' if dropdown.active}") do
+        content_tag(:li, class: "dropdown #{"active" if dropdown.active}") do
           template.in_button_group { dropdown.to_s }
         end
       end

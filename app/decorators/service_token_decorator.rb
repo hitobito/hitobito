@@ -10,9 +10,9 @@ class ServiceTokenDecorator < ApplicationDecorator
   self.kinds = %i[people people_below events groups invoices event_participations mailing_lists]
 
   def abilities
-    safe_join(kinds.map do |ability|
+    safe_join(kinds.map { |ability|
       ability_description(ability, :read) if public_send(ability)
-    end.compact, h.tag(:br))
+    }.compact, h.tag(:br))
   end
 
   def full_title
@@ -29,6 +29,6 @@ class ServiceTokenDecorator < ApplicationDecorator
 
   def ability_description(ability, action)
     safe_join([ServiceToken.human_attribute_name(ability),
-               h.muted(h.t("service_tokens.abilities.#{action}"))], " ")
+               h.muted(h.t("service_tokens.abilities.#{action}")),], " ")
   end
 end

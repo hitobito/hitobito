@@ -8,6 +8,6 @@
 module GroupSettingsHelper
   def group_setting_form_params
     {url: group_group_setting_path(group: @group, id: entry.var),
-     method: :patch}
+     method: :patch,}
   end
 end

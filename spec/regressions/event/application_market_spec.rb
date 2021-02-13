@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -57,7 +55,7 @@ describe Event::ApplicationMarketController, type: :controller do
       expect(button.text).to eq " Teilnehmer/-in hinzufügen"
       expect(button).to have_css("i.fa-plus")
       path_options = {for_someone_else: true,
-                      event_role: {type: course.class.participant_types.first.sti_name}}
+                      event_role: {type: course.class.participant_types.first.sti_name},}
       expect(button[:href]).to eq new_group_event_participation_path(group, course, path_options)
     end
 

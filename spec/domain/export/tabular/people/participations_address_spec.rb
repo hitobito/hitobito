@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,7 +14,7 @@ describe Export::Tabular::People::ParticipationsAddress do
   subject { people_list.attribute_labels }
 
   context "address data" do
-    its([:first_name]) { should eq "Vorname" }
-    its([:town]) { should eq "Ort" }
+    its([:first_name]) { is_expected.to eq "Vorname" }
+    its([:town]) { is_expected.to eq "Ort" }
   end
 end

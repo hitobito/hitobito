@@ -19,11 +19,10 @@ module Messages
       case message
       when Message::Letter, Message::LetterWithInvoice
         new_assignment_path(assignment: {attachment_id: message.id,
-                                         attachment_type: Message.sti_name},
+                                         attachment_type: Message.sti_name,},
                             return_url: group_mailing_list_message_path(message.group,
                               message.mailing_list,
-                              message)
-                            )
+                              message))
       else
         message.path_args
       end

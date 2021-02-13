@@ -18,7 +18,7 @@
 #  priority_3_id        :integer
 #
 
-class Event::Application < ActiveRecord::Base
+class Event::Application < ApplicationRecord
   self.demodulized_route_keys = true
 
   ### ASSOCIATION
@@ -37,9 +37,9 @@ class Event::Application < ActiveRecord::Base
 
   class << self
     def pending
-      joins(:participation).
-        where(event_participations: {active: false},
-              rejected: false)
+      joins(:participation)
+        .where(event_participations: {active: false},
+               rejected: false)
     end
 
     def label(args = {})

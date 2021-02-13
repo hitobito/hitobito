@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -25,24 +23,24 @@ describe SearchStrategies::Sql do
 
     @bg_member_with_deleted = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
     leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: @bg_member_with_deleted)
-    leader.update(created_at: Time.now - 1.year)
+    leader.update(created_at: Time.zone.now - 1.year)
     leader.destroy!
 
     @no_role = Fabricate(:person)
 
     role = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
-    role.update(created_at: Time.now - 1.year)
+    role.update(created_at: Time.zone.now - 1.year)
     role.destroy
     @deleted_leader = role.person
 
     role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
-    role.update(created_at: Time.now - 1.year)
+    role.update(created_at: Time.zone.now - 1.year)
     role.destroy
     @deleted_bg_member = role.person
 
     # make sure names are long enough
     [@tg_member, @tg_extern, @bl_leader, @bl_extern, @bg_leader, @bg_member,
-     @bg_member_with_deleted, @no_role, @deleted_leader, @deleted_bg_member].each do |p|
+     @bg_member_with_deleted, @no_role, @deleted_leader, @deleted_bg_member,].each do |p|
       p.update_columns(last_name: p.last_name * 3, first_name: p.first_name * 3)
     end
   end

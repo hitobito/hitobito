@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -15,17 +13,17 @@ module MailRelay
     end
 
     def entries
-      people.flat_map do |person|
+      people.flat_map { |person|
         preferred_emails(person).presence || default_emails(person)
-      end.reject(&:blank?).uniq
+      }.reject(&:blank?).uniq
     end
 
     private
 
     def preferred_emails(person)
-      additional_emails_with_default(person).select do |email|
+      additional_emails_with_default(person).select { |email|
         sanitized_labels.include?(email.label.strip.downcase)
-      end.collect(&:email)
+      }.collect(&:email)
     end
 
     def default_emails(person)
@@ -33,9 +31,9 @@ module MailRelay
     end
 
     def sanitized_labels
-      @sanitized_labels ||= labels.collect do |label|
+      @sanitized_labels ||= labels.collect { |label|
         label.strip.downcase
-      end.compact
+      }.compact
     end
 
     def additional_emails_with_default(person)
@@ -47,10 +45,10 @@ module MailRelay
     end
 
     def additional_emails(person)
-      @additional_emails ||= additional_emails_scope.
-        each_with_object(hash_with_array) do |email, memo|
+      @additional_emails ||= additional_emails_scope
+        .each_with_object(hash_with_array) { |email, memo|
         memo[email.contactable_id] << email
-      end
+      }
       @additional_emails[person.id]
     end
 

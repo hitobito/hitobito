@@ -31,7 +31,7 @@ class Message::Letter < Message
 
   self.icon = :'envelope-open-text'
 
-  validates_presence_of :body
+  validates :body, presence: true
 
-  self.duplicatable_attrs << "body"
+  duplicatable_attrs << "body"
 end

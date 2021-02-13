@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -27,9 +25,9 @@ describe Invoice::BatchCreate do
     invoice.invoice_items.build(name: "pins", unit_cost: 0.5, count: 2)
     list.invoice = invoice
 
-    expect do
+    expect {
       Invoice::BatchCreate.call(list)
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([1, 2])
+    }.to change { [group.invoices.count, group.invoice_items.count] }.by([1, 2])
     expect(list.reload).to have(1).invoices
     expect(list.receiver).to eq mailing_list
     expect(list.recipients_total).to eq 1
@@ -51,10 +49,10 @@ describe Invoice::BatchCreate do
     invoice.invoice_items.build(name: "pins", unit_cost: 0.5, count: 2)
     list.invoice = invoice
 
-    expect do
+    expect {
       Invoice::BatchCreate.call(list, 1)
       Delayed::Job.last.payload_object.perform
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([2, 4])
+    }.to change { [group.invoices.count, group.invoice_items.count] }.by([2, 4])
     expect(list.reload).to have(2).invoices
     expect(list.receiver).to eq mailing_list
     expect(list.recipients_total).to eq 2
@@ -73,9 +71,9 @@ describe Invoice::BatchCreate do
     invoice.invoice_items.build(name: "pins", unit_cost: 0.5, count: 2)
     list.invoice = invoice
 
-    expect do
+    expect {
       Invoice::BatchCreate.call(list)
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([2, 4])
+    }.to change { [group.invoices.count, group.invoice_items.count] }.by([2, 4])
     expect(list).not_to be_persisted
   end
 
@@ -94,9 +92,9 @@ describe Invoice::BatchCreate do
       @saved = @saved ? false : m.call
     end
 
-    expect do
+    expect {
       Invoice::BatchCreate.new(list).call
-    end.to change { [group.invoices.count, group.invoice_items.count] }.by([1, 1])
-    expect((list.invalid_recipient_ids)).to have(1).item
+    }.to change { [group.invoices.count, group.invoice_items.count] }.by([1, 1])
+    expect(list.invalid_recipient_ids).to have(1).item
   end
 end

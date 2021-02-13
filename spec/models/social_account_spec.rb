@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -49,9 +47,9 @@ describe SocialAccount do
     let(:person) { people(:top_leader) }
 
     it "sets main on create" do
-      expect do
+      expect {
         person.social_accounts.create!(label: "Foo", name: "Bar")
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("create")
@@ -60,9 +58,9 @@ describe SocialAccount do
 
     it "sets main on update" do
       account = person.social_accounts.create(label: "Foo", name: "Bar")
-      expect do
+      expect {
         account.update!(name: "Bur")
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("update")
@@ -71,9 +69,9 @@ describe SocialAccount do
 
     it "sets main on destroy" do
       account = person.social_accounts.create(label: "Foo", name: "Bar")
-      expect do
+      expect {
         account.destroy!
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("destroy")

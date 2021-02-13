@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,7 +19,7 @@ describe ActsAsTaggableOn::Tag do
      {input: "lorem: ipsum", output: "lorem:ipsum"},
      {input: "lorem : ipsum", output: "lorem:ipsum"},
      {input: " lorem:ipsum ", output: "lorem:ipsum"},
-     {input: "lorem:  ipsum", output: "lorem:ipsum"}].each do |data|
+     {input: "lorem:  ipsum", output: "lorem:ipsum"},].each do |data|
       it "strips '#{data[:input]}' '#{data[:input]}'" do
         person.tag_list.add(data[:input])
         person.save!
@@ -40,9 +38,9 @@ describe ActsAsTaggableOn::Tag do
       result = person.tags.grouped_by_category
       expect(result.length).to eq(3)
       expect(result.map(&:first)).to eq([:fruit, :vegetable, :other])
-      expect(result.first.second.map(&:name)).to eq(%w(fruit:apple fruit:banana))
-      expect(result.second.second.map(&:name)).to eq(%w(vegetable:potato))
-      expect(result.third.second.map(&:name)).to eq(%w(pizza))
+      expect(result.first.second.map(&:name)).to eq(%w[fruit:apple fruit:banana])
+      expect(result.second.second.map(&:name)).to eq(%w[vegetable:potato])
+      expect(result.third.second.map(&:name)).to eq(%w[pizza])
     end
   end
 

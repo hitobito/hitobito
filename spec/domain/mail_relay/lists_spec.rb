@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -30,8 +28,8 @@ describe MailRelay::Lists do
 
   before do
     # we do not have custom content for report loaded in test env
-    allow_any_instance_of(DeliveryReportMailer).
-      to receive(:bulk_mail)
+    allow_any_instance_of(DeliveryReportMailer)
+      .to receive(:bulk_mail)
   end
 
   before { allow(Truemail).to receive(:valid?).and_call_original }
@@ -41,8 +39,8 @@ describe MailRelay::Lists do
   context "#mailing_list" do
     let(:from) { people(:top_leader).email }
 
-    its(:envelope_receiver_name) { should == list.mail_name }
-    its(:mailing_list) { should == list }
+    its(:envelope_receiver_name) { is_expected.to == list.mail_name }
+    its(:mailing_list) { is_expected.to == list }
     it { is_expected.to be_relay_address }
   end
 
@@ -77,7 +75,7 @@ describe MailRelay::Lists do
 
     context "with matching preferred_labels" do
       before do
-        list.update(preferred_labels: %w(preferred1 preferred2))
+        list.update(preferred_labels: %w[preferred1 preferred2])
       end
 
       let!(:e1) { Fabricate(:additional_email, contactable: ind, label: "preferred1") }
@@ -88,7 +86,7 @@ describe MailRelay::Lists do
 
     context "without matching preferred_labels" do
       before do
-        list.update(preferred_labels: %w(preferred1 preferred2))
+        list.update(preferred_labels: %w[preferred1 preferred2])
       end
 
       let!(:e1) { Fabricate(:additional_email, contactable: ind, label: "preferreda", mailings: false) }
@@ -190,7 +188,7 @@ describe MailRelay::Lists do
 
       it "relays" do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
-        expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
+        expect(last_email.sender).to eq("leaders-bounces+#{from.tr("@", "=")}@localhost")
       end
     end
   end
@@ -243,6 +241,7 @@ describe MailRelay::Lists do
 
       it { is_expected.not_to be_sender_allowed }
     end
+
     context "invalid list" do
       let(:from) { "news@example.com" }
 
@@ -253,6 +252,7 @@ describe MailRelay::Lists do
         it { is_expected.not_to be_sender_allowed }
       end
     end
+
     context "invalid domain" do
       test_mails = ["ws@exa-mple.com", "ne@ws@example.com", "ne@exam*ple.com", "n*s@exa_mple.com"]
       test_mails.each do |x|
@@ -285,7 +285,7 @@ describe MailRelay::Lists do
           expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
           expect(last_email.smtp_envelope_to).to match_array(Person.mailing_emails_for(subscribers))
-          expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
+          expect(last_email.sender).to eq("leaders-bounces+#{from.tr("@", "=")}@localhost")
         end
       end
 
@@ -301,7 +301,7 @@ describe MailRelay::Lists do
           expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
 
           expect(last_email.smtp_envelope_to).to match_array(Person.mailing_emails_for(subscribers))
-          expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
+          expect(last_email.sender).to eq("leaders-bounces+#{from.tr("@", "=")}@localhost")
         end
       end
     end

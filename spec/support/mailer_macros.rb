@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -15,14 +13,14 @@ module MailerMacros
   end
 
   def expect_no_enqueued_mail_jobs
-    expect do
+    expect {
       yield
-    end.not_to change { Delayed::Job.where('handler like "%ActionMailer::MailDeliveryJob%"').count }
+    }.not_to change { Delayed::Job.where('handler like "%ActionMailer::MailDeliveryJob%"').count }
   end
 
   def expect_enqueued_mail_jobs(count:)
-    expect do
+    expect {
       yield
-    end.to change { Delayed::Job.where('handler like "%ActionMailer::MailDeliveryJob%"').count }.by(count)
+    }.to change { Delayed::Job.where('handler like "%ActionMailer::MailDeliveryJob%"').count }.by(count)
   end
 end

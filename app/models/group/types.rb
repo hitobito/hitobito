@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -56,9 +54,9 @@ module Group::Types
   def set_layer_group_id
     layer_id = self.class.layer ? id : parent.layer_group_id
     unless layer_id == layer_group_id
-      self_and_descendants.
-        where(layer_group_id: layer_group_id).
-        update_all(layer_group_id: layer_id)
+      self_and_descendants
+        .where(layer_group_id: layer_group_id)
+        .update_all(layer_group_id: layer_id)
       self.layer_group_id = layer_id
     end
   end
@@ -107,15 +105,15 @@ module Group::Types
     # All group types the may provide courses
     def course_types
       @@course_types ||=
-        all_types.select do |type|
+        all_types.select { |type|
           type.event_types.include?(Event::Course)
-        end
+        }
     end
 
     # All groups that may offer courses
     def course_offerers
-      where(type: course_types.map(&:sti_name)).
-        order(:parent_id, :name)
+      where(type: course_types.map(&:sti_name))
+        .order(:parent_id, :name)
     end
 
     # Return the group type with the given sti_name or raise an exception if not found

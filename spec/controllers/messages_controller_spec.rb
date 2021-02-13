@@ -65,9 +65,9 @@ describe MessagesController do
           body: "Bitte einzahlen",
           invoice_attributes: {
             invoice_items_attributes: {
-              "1" => {"name" => "Mitgliedsbeitrag", "_destroy" => "false"}
-            }
-          }
+              "1" => {"name" => "Mitgliedsbeitrag", "_destroy" => "false"},
+            },
+          },
         }
       )
       expect(assigns(:message)).to be_persisted
@@ -82,9 +82,9 @@ describe MessagesController do
           type: "Message::LetterWithInvoice",
           invoice_attributes: {
             invoice_items_attributes: {
-              "1" => {"name" => "Mitgliedsbeitrag", "_destroy" => "false"}
-            }
-          }
+              "1" => {"name" => "Mitgliedsbeitrag", "_destroy" => "false"},
+            },
+          },
         }
       )
       expect(assigns(:message)).to be_invalid

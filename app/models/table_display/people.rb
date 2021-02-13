@@ -18,8 +18,8 @@ class TableDisplay::People < TableDisplay
   end
 
   def excluded
-    %w(first_name last_name nickname zip_code town address) +
+    %w[first_name last_name nickname zip_code town address] +
       Person::INTERNAL_ATTRS.collect(&:to_s) +
-      %w(picture primary_group_id)
+      %w[picture primary_group_id]
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -37,7 +35,7 @@ describe Import::PersonImporter do
       [{first_name: "foo",
         social_account_skype: "foobar",
         phone_number_vater: "+41 44 123 45 67",
-        tags: "foo"}]
+        tags: "foo",}]
     end
 
     it "creates social account" do
@@ -73,8 +71,8 @@ describe Import::PersonImporter do
     context "result" do
       before { importer.import }
 
-      its(:new_count) { should eq 1 }
-      its(:failure_count) { should eq 1 }
+      its(:new_count) { is_expected.to eq 1 }
+      its(:failure_count) { is_expected.to eq 1 }
     end
 
     context "base error" do
@@ -82,13 +80,13 @@ describe Import::PersonImporter do
 
       before { importer.import }
 
-      its("errors.first") { should eq "Zeile 1: Bitte geben Sie einen Namen ein" }
+      its("errors.first") { is_expected.to eq "Zeile 1: Bitte geben Sie einen Namen ein" }
     end
 
     context "zip_code validation" do
       before { importer.import }
 
-      its("errors.first") { should eq "Zeile 2: PLZ ist nicht gültig" }
+      its("errors.first") { is_expected.to eq "Zeile 2: PLZ ist nicht gültig" }
     end
   end
 
@@ -98,8 +96,8 @@ describe Import::PersonImporter do
 
     before { importer.import }
 
-    its(:errors) { should have(1).item }
-    its("errors.last") { should start_with "Zeile 5: Haupt-E-Mail ist bereits vergeben" }
+    its(:errors) { is_expected.to have(1).item }
+    its("errors.last") { is_expected.to start_with "Zeile 5: Haupt-E-Mail ist bereits vergeben" }
   end
 
   context "existing tags" do
@@ -130,8 +128,8 @@ describe Import::PersonImporter do
     context "adds role, does not update email" do
       before { importer.import }
 
-      its(:email) { should eq "foo@bar.net" }
-      its("roles.size") { should eq 1 }
+      its(:email) { is_expected.to eq "foo@bar.net" }
+      its("roles.size") { is_expected.to eq 1 }
       it "updates double and success count" do
         expect(importer.update_count).to eq 1
         expect(importer.new_count).to eq 0
@@ -149,8 +147,8 @@ describe Import::PersonImporter do
         person.reload
       end
 
-      its(:email) { should eq "foo@bar.net" }
-      its("roles.size") { should eq 1 }
+      its(:email) { is_expected.to eq "foo@bar.net" }
+      its("roles.size") { is_expected.to eq 1 }
     end
 
     context "marks multiple" do
@@ -158,7 +156,7 @@ describe Import::PersonImporter do
 
       subject { importer }
 
-      its(:errors) { should eq ["Zeile 1: 2 Treffer in Duplikatserkennung."] }
+      its(:errors) { is_expected.to eq ["Zeile 1: 2 Treffer in Duplikatserkennung."] }
       it "does not change person" do
         expect(person.reload.roles.size).to eq 0
       end
@@ -166,16 +164,18 @@ describe Import::PersonImporter do
 
     context "person loaded multiple times via doublette finder" do
       let(:attrs) { {email: "foo@bar.net", nickname: "", last_name: ""} }
-      let(:data) do [{email: "foo@bar.net", nickname: "nickname", town: "Bern", social_account_msn: "msn"},
-                     {email: "foo@bar.net", last_name: "last_name", town: "Muri", social_account_skype: "skype"}] end
+      let(:data) do
+        [{email: "foo@bar.net", nickname: "nickname", town: "Bern", social_account_msn: "msn"},
+         {email: "foo@bar.net", last_name: "last_name", town: "Muri", social_account_skype: "skype"},]
+      end
 
       before { importer.import }
 
-      its("roles.size") { should eq 1 }
-      its(:nickname) { should eq "nickname" }
-      its(:last_name) { should eq "last_name" }
-      its(:town) { should eq "Bern" }
-      its("social_accounts.size") { should eq 2 }
+      its("roles.size") { is_expected.to eq 1 }
+      its(:nickname) { is_expected.to eq "nickname" }
+      its(:last_name) { is_expected.to eq "last_name" }
+      its(:town) { is_expected.to eq "Bern" }
+      its("social_accounts.size") { is_expected.to eq 2 }
     end
   end
 
@@ -195,7 +195,7 @@ describe Import::PersonImporter do
       let(:data) do
         [{first_name: "foobar", email: "foo@bar.net"},
          {first_name: "foobar", zip_code: "asdf", country: "CH"},
-         {first_name: person.first_name, email: person.email, town: "Wabern"}]
+         {first_name: person.first_name, email: person.email, town: "Wabern"},]
       end
 
       it "creates only first record" do
@@ -238,7 +238,8 @@ describe Import::PersonImporter do
           person: person,
           requester: Fabricate(:person),
           body: group,
-          role_type: Group::BottomGroup::Leader.sti_name)
+          role_type: Group::BottomGroup::Leader.sti_name
+        )
 
         subject.import
 
@@ -265,10 +266,10 @@ describe Import::PersonImporter do
 
       subject { importer }
 
-      its(:errors) { should include "Zeile 1: Firmenname muss ausgefüllt werden" }
-      its(:errors) { should include "Zeile 2: Land ist kein gültiger Wert, Firmenname muss ausgefüllt werden" }
-      its(:errors) { should include "Zeile 4: PLZ ist nicht gültig" }
-      its(:errors) { should have(3).items }
+      its(:errors) { is_expected.to include "Zeile 1: Firmenname muss ausgefüllt werden" }
+      its(:errors) { is_expected.to include "Zeile 2: Land ist kein gültiger Wert, Firmenname muss ausgefüllt werden" }
+      its(:errors) { is_expected.to include "Zeile 4: PLZ ist nicht gültig" }
+      its(:errors) { is_expected.to have(3).items }
     end
 
     context "imported person" do
@@ -276,55 +277,55 @@ describe Import::PersonImporter do
 
       subject { imported }
 
-      its(:first_name) { should eq "Ramiro" }
-      its(:last_name) { should eq "Brown" }
-      its(:additional_information) { should be_present }
-      its(:company) { should eq true }
-      its(:company_name) { should eq "Mrs. Jalon Kling" }
-      its(:email) { should eq "ramiro_brown@example.com" }
-      its(:address) { should eq "1649 Georgette Circles" }
-      its(:zip_code) { should eq "7202" }
-      its(:town) { should be_blank }
-      its(:gender) { should eq "m" }
-      its(:additional_information) { should be_present }
+      its(:first_name) { is_expected.to eq "Ramiro" }
+      its(:last_name) { is_expected.to eq "Brown" }
+      its(:additional_information) { is_expected.to be_present }
+      its(:company) { is_expected.to eq true }
+      its(:company_name) { is_expected.to eq "Mrs. Jalon Kling" }
+      its(:email) { is_expected.to eq "ramiro_brown@example.com" }
+      its(:address) { is_expected.to eq "1649 Georgette Circles" }
+      its(:zip_code) { is_expected.to eq "7202" }
+      its(:town) { is_expected.to be_blank }
+      its(:gender) { is_expected.to eq "m" }
+      its(:additional_information) { is_expected.to be_present }
 
       context "phone numbers" do
         subject { imported.phone_numbers }
 
-        its(:size) { should eq 4 }
-        its("first.label") { should eq "Privat" }
-        its("first.number") { should eq "+49 3445 56783214" }
+        its(:size) { is_expected.to eq 4 }
+        its("first.label") { is_expected.to eq "Privat" }
+        its("first.number") { is_expected.to eq "+49 3445 56783214" }
 
-        its("second.label") { should eq "Mobil" }
-        its("second.number") { should eq "+41 800 123 333" }
+        its("second.label") { is_expected.to eq "Mobil" }
+        its("second.number") { is_expected.to eq "+41 800 123 333" }
 
-        its("third.label") { should eq "Arbeit" }
-        its("third.number") { should eq "+41 77 901 23 45" }
+        its("third.label") { is_expected.to eq "Arbeit" }
+        its("third.number") { is_expected.to eq "+41 77 901 23 45" }
 
-        its("fourth.label") { should eq "Vater" }
-        its("fourth.number") { should eq "+41 78 098 76 54" }
+        its("fourth.label") { is_expected.to eq "Vater" }
+        its("fourth.number") { is_expected.to eq "+41 78 098 76 54" }
       end
 
       context "social accounts" do
         subject { imported.social_accounts.order(:label) }
 
-        its(:size) { should eq 3 }
-        its("first.label") { should eq "MSN" }
-        its("first.name") { should eq "reyes_mckenzie" }
+        its(:size) { is_expected.to eq 3 }
+        its("first.label") { is_expected.to eq "MSN" }
+        its("first.name") { is_expected.to eq "reyes_mckenzie" }
 
-        its("second.label") { should eq "Skype" }
-        its("second.name") { should eq "florida_armstrong" }
+        its("second.label") { is_expected.to eq "Skype" }
+        its("second.name") { is_expected.to eq "florida_armstrong" }
 
-        its("third.label") { should eq "Webseite" }
-        its("third.name") { should eq "colliäs.com" }
+        its("third.label") { is_expected.to eq "Webseite" }
+        its("third.name") { is_expected.to eq "colliäs.com" }
       end
 
       context "tags" do
         subject { imported.tags }
 
-        its(:size) { should eq 2 }
-        its("first.name") { should eq "foo" }
-        its("second.name") { should eq "bar" }
+        its(:size) { is_expected.to eq 2 }
+        its("first.name") { is_expected.to eq "foo" }
+        its("second.name") { is_expected.to eq "bar" }
       end
     end
   end

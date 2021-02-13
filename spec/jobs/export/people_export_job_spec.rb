@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -59,7 +57,7 @@ describe Export::PeopleExportJob do
       end
 
       it "appends selected column and renders value" do
-        user.table_display_for(group).update(selected: %w(additional_information))
+        user.table_display_for(group).update(selected: %w[additional_information])
         Person.update_all(additional_information: "bla bla")
         subject.perform
         expect(csv.headers.last).to eq "Zusätzliche Angaben"

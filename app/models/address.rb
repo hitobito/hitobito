@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -24,7 +22,7 @@
 #  index_addresses_on_zip_code_and_street_short  (zip_code,street_short)
 #
 
-class Address < ActiveRecord::Base
+class Address < ApplicationRecord
   serialize :numbers, Array
 
   validates_by_schema
@@ -32,8 +30,8 @@ class Address < ActiveRecord::Base
   scope :list, -> { order(:street_short, "LENGTH(numbers) DESC") }
 
   def self.for(zip_code, street)
-    where(zip_code: zip_code).
-      where("LOWER(street_short) = :street OR LOWER(street_short_old) = :street OR " \
+    where(zip_code: zip_code)
+      .where("LOWER(street_short) = :street OR LOWER(street_short_old) = :street OR " \
             "LOWER(street_long) = :street OR LOWER(street_long_old) = :street",
         street: street.to_s.downcase)
   end
@@ -48,7 +46,7 @@ class Address < ActiveRecord::Base
      town: town,
      zip_code: zip_code,
      street: street_short,
-     state: state}
+     state: state,}
   end
 
   def as_typeahead_with_number(number)
@@ -58,7 +56,7 @@ class Address < ActiveRecord::Base
      zip_code: zip_code,
      street: street_short,
      state: state,
-     number: number}
+     number: number,}
   end
 
   def label_with_number(number)

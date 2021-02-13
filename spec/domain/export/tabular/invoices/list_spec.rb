@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -29,7 +27,7 @@ describe Export::Tabular::Invoices::List do
                                       :amount_paid,
                                       :cost_centers,
                                       :accounts,
-                                      :payments]
+                                      :payments,]
 
     expect(subject.labels).to eq ["Titel",
                                   "Nummer",
@@ -46,6 +44,6 @@ describe Export::Tabular::Invoices::List do
                                   "Total bezahlt",
                                   "Kostenstellen",
                                   "Konten",
-                                  "Zahlungseingänge"]
+                                  "Zahlungseingänge",]
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -75,7 +73,7 @@ module Export::Pdf
       address << contactable.nickname << "\n" if print_nickname?(contactable)
       address << name << "\n" if name.present?
       address << contactable.address.to_s
-      address << "\n" unless contactable.address =~ /\n\s*$/
+      address << "\n" unless /\n\s*$/.match?(contactable.address)
       address << contactable.zip_code.to_s << " " << contactable.town.to_s << "\n"
       address << contactable.country_label unless contactable.ignored_country?
       address

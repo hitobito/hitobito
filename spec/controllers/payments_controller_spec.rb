@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,9 +14,9 @@ describe PaymentsController do
 
   it "POST#creates valid arguments create payment" do
     invoice.update(state: :sent)
-    expect do
+    expect {
       post :create, params: {group_id: group.id, invoice_id: invoice.id, payment: {amount: invoice.total}}
-    end.to change { invoice.payments.count }.by(1)
+    }.to change { invoice.payments.count }.by(1)
 
     expect(flash[:notice]).to be_present
     expect(response).to redirect_to(group_invoice_path(group, invoice))
@@ -27,9 +25,9 @@ describe PaymentsController do
   it "POST#creates valid arguments create payment and updates invoice_list" do
     list = InvoiceList.create(title: :title, group: invoice.group)
     invoice.update(state: :sent, invoice_list: list)
-    expect do
+    expect {
       post :create, params: {group_id: group.id, invoice_id: invoice.id, payment: {amount: invoice.total}}
-    end.to change { invoice.payments.count }.by(1)
+    }.to change { invoice.payments.count }.by(1)
 
     expect(flash[:notice]).to be_present
     expect(response).to redirect_to(group_invoice_path(group, invoice))
@@ -39,9 +37,9 @@ describe PaymentsController do
 
   it "POST#creates invalid arguments redirect back" do
     invoice.update(state: :sent)
-    expect do
+    expect {
       post :create, params: {group_id: group.id, invoice_id: invoice.id, payment: {amount: ""}}
-    end.not_to change { invoice.payments.count }
+    }.not_to change { invoice.payments.count }
     expect(assigns(:payment)).to be_invalid
     expect(response).to redirect_to(group_invoice_path(group, invoice))
   end

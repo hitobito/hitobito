@@ -51,7 +51,7 @@ describe Synchronize::Mailchimp::Subscriber do
         bottom_member.additional_emails.create!({
           label: "vater bottom",
           email: "vater+bottom@example.com",
-          mailings: true
+          mailings: true,
         })
         mailing_list.mailchimp_include_additional_emails = true
       end
@@ -62,7 +62,7 @@ describe Synchronize::Mailchimp::Subscriber do
           person.email,
           "vater@example.com",
           bottom_member.email,
-          "vater+bottom@example.com"
+          "vater+bottom@example.com",
         ])
       end
     end

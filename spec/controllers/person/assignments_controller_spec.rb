@@ -20,7 +20,7 @@ describe Person::AssignmentsController do
 
       get :index, params: nesting
 
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(:ok)
     end
 
     it "can not show assignments if not able to show person" do
@@ -28,9 +28,9 @@ describe Person::AssignmentsController do
 
       @user = top_leader
 
-      expect do
+      expect {
         get :index, params: nesting
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -44,7 +42,7 @@ describe EventsController, js: true do
     let(:form_path) { new_group_event_path(event.group_ids.first, event.id, event: {type: Event::Course}, format: :html) }
 
     context "if textarea is empty" do
-      before :each do
+      before do
         sign_in
         visit form_path
       end
@@ -67,7 +65,7 @@ describe EventsController, js: true do
     context "if textarea is not empty" do
       let(:prefill_description) { "Test description" }
 
-      before :each do
+      before do
         sign_in
         visit form_path
 

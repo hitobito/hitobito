@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -31,9 +29,9 @@ describe ApplicationDecorator do
       allow(dec).to receive(:can?).and_return(true)
       begin
         expect(dec.created_info).to match(/#{I18n.l(@person.created_at.to_date)}/)
-        expect(dec.created_info).to match(/#{@creator.to_s}/)
+        expect(dec.created_info).to match(/#{@creator}/)
         expect(dec.updated_info).to match(/#{I18n.l(@person.updated_at.to_date)}/)
-        expect(dec.updated_info).to match(/#{@updater.to_s}/)
+        expect(dec.updated_info).to match(/#{@updater}/)
       rescue ActionController::RoutingError => e
         # this weird bitch pops up on rare occasions - let's figure out why
         puts e.message

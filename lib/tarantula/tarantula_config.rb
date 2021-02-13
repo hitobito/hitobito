@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2014-2017, insime Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -116,8 +114,8 @@ module TarantulaConfig
   # Creates a regexp that only allows the last, current and next year
   def outside_three_years_window
     year = Time.zone.today.year
-    [year - 1, year, year + 1].collect do |d|
+    [year - 1, year, year + 1].collect { |d|
       "(?!#{d})"
-    end.join
+    }.join
   end
 end

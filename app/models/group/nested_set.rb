@@ -42,16 +42,16 @@ module Group::NestedSet
 
   def self_and_sister_groups
     Group.without_deleted
-         .where(parent_id: parent_id, type: type)
+      .where(parent_id: parent_id, type: type)
   end
 
   # siblings with the same type and all their descendant groups, including self
   def sister_groups_with_descendants
     Group.without_deleted
-         .joins("LEFT JOIN #{Group.quoted_table_name} AS sister_groups " \
+      .joins("LEFT JOIN #{Group.quoted_table_name} AS sister_groups " \
                 "ON #{Group.quoted_table_name}.lft >= sister_groups.lft " \
                 "AND #{Group.quoted_table_name}.lft < sister_groups.rgt")
-         .where(sister_groups: {type: type, parent_id: parent_id})
+      .where(sister_groups: {type: type, parent_id: parent_id})
   end
 
   # The layer hierarchy without the layer of this group.
@@ -76,8 +76,8 @@ module Group::NestedSet
 
   def groups_in_same_layer
     Group.where(layer_group_id: layer_group_id)
-         .without_deleted
-         .order(:lft)
+      .without_deleted
+      .order(:lft)
   end
 
   def has_sublayers? # rubocop:disable Naming/PredicateName

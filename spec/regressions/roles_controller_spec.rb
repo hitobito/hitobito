@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -14,7 +12,7 @@ describe RolesController, type: :controller do
 
   let(:new_entry_attrs) do
     {
-      type: Group::BottomLayer::Member.sti_name
+      type: Group::BottomLayer::Member.sti_name,
     }
   end
 
@@ -22,14 +20,14 @@ describe RolesController, type: :controller do
     {
       label: "Materialchef",
       type: Group::BottomLayer::Member.sti_name,
-      person_id: people(:top_leader).id
+      person_id: people(:top_leader).id,
     }
   end
 
   let(:test_entry_attrs) do
     {
       type: Group::BottomLayer::Member.sti_name,
-      label: "Materialchef"
+      label: "Materialchef",
     }
   end
 
@@ -57,9 +55,9 @@ describe RolesController, type: :controller do
     end
   end
 
-  include_examples "crud controller", skip: [%w(index), %w(show), %w(new plain)]
-
   let!(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
+
+  include_examples "crud controller", skip: [%w[index], %w[show], %w[new plain]]
 
   describe_action :get, :new do
     context ".html", format: :html do
@@ -68,7 +66,7 @@ describe RolesController, type: :controller do
       end
 
       it "chooses default role" do
-        expect(response.body).to have_select("role_type", :selected => group.default_role.label)
+        expect(response.body).to have_select("role_type", selected: group.default_role.label)
       end
 
       context "with invalid type" do
@@ -83,7 +81,7 @@ describe RolesController, type: :controller do
 
   describe_action :get, :edit, id: true do
     it "shows current role type rather than default" do
-      expect(response.body).to have_select("role_type", :selected => "Member")
+      expect(response.body).to have_select("role_type", selected: "Member")
     end
   end
 
@@ -97,7 +95,8 @@ describe RolesController, type: :controller do
         group_id: group.id,
         role: {group_id: group.id,
                person_id: person.id,
-               type: Group::BottomLayer::Member.sti_name}}
+               type: Group::BottomLayer::Member.sti_name,},
+      }
 
       expect(response).to have_http_status(:ok)
       is_expected.to render_template("create")
@@ -107,7 +106,7 @@ describe RolesController, type: :controller do
     it "creation of role without type returns error" do
       post :create, xhr: true, params: {
         group_id: group.id,
-        role: {group_id: group.id, person_id: person.id}
+        role: {group_id: group.id, person_id: person.id},
       }
 
       expect(response).to have_http_status(:ok)

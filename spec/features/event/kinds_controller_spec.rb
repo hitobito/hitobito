@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -39,7 +37,8 @@ describe Event::KindsController, js: true do
       qualification_kind: qualification_kinds(:ql),
       category: "precondition",
       role: "participant",
-      grouping: 2)
+      grouping: 2
+    )
 
     obsolete_node_safe do
       sign_in

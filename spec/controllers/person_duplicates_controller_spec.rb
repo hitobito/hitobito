@@ -52,7 +52,7 @@ describe PersonDuplicatesController do
     end
   end
 
-    private
+  private
 
   def assign_people
     # duplicate1

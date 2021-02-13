@@ -2,11 +2,11 @@
 
 module TagListsHelper
   def available_tags_checkboxes(tags)
-    safe_join(tags.map do |tag, count|
+    safe_join(tags.map { |tag, count|
       content_tag(:div, class: "control-group  available-tag") do
         tag_checkbox(tag, count)
       end
-    end, "")
+    }, "")
   end
 
   def format_tag_category(category)
@@ -30,9 +30,9 @@ module TagListsHelper
     label_tag(nil, class: "checkbox ") do
       out = check_box_tag("tags[]", tag.name, false)
       out << tag
-      out << content_tag(:div, class: "role-count") do
+      out << content_tag(:div, class: "role-count") {
         count.to_s
-      end
+      }
       out.html_safe
     end
   end

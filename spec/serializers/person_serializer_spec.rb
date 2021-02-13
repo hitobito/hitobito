@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: people
@@ -76,7 +74,7 @@ describe PeopleSerializer do
     p.decorate
   end
 
-  let(:controller) { double().as_null_object }
+  let(:controller) { double.as_null_object }
 
   let(:serializer) { PersonSerializer.new(person, controller: controller) }
   let(:hash) { serializer.to_hash }

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -28,9 +26,9 @@ class AppStatus::Mail < AppStatus
 
   def catch_all_inbox
     update_seen_mails
-    overdue = seen_mails.any? do |m|
+    overdue = seen_mails.any? { |m|
       m.first_seen < DateTime.now - CATCH_ALL_INBOX_OVERDUE_TIME
-    end
+    }
 
     overdue ? CATCH_ALL_INBOX_OVERDUE : "ok"
   end
@@ -42,9 +40,9 @@ class AppStatus::Mail < AppStatus
   end
 
   def add_new_mails
-    new_mails = current_mails.select do |m|
+    new_mails = current_mails.select { |m|
       seen_mails.exclude?(m)
-    end
+    }
     @seen_mails += new_mails
   end
 

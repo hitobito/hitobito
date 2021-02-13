@@ -56,13 +56,13 @@ class Invoice::PaymentProcessor
   end
 
   def payments
-    @payments ||= credit_statements.collect do |s|
+    @payments ||= credit_statements.collect { |s|
       Payment.new(amount: fetch("Amt", s),
                   esr_number: reference(s),
                   received_at: to_datetime(fetch("RltdDts", "AccptncDtTm", s)),
                   invoice: invoices[reference(s)],
                   reference: fetch("Refs", "AcctSvcrRef", s))
-    end
+    }
   end
 
   def invoice_lists
@@ -71,9 +71,9 @@ class Invoice::PaymentProcessor
 
   def invoices
     @invoices ||= Invoice
-                  .includes(:group, :recipient)
-                  .where(reference: references)
-                  .index_by(&:reference)
+      .includes(:group, :recipient)
+      .where(reference: references)
+      .index_by(&:reference)
   end
 
   def references
@@ -88,8 +88,8 @@ class Invoice::PaymentProcessor
 
   def transaction_details
     Array.wrap(fetch("Ntfctn", "Ntry"))
-         .collect { |s| fetch("NtryDtls", "TxDtls", s) }
-         .flatten
+      .collect { |s| fetch("NtryDtls", "TxDtls", s) }
+      .flatten
   end
 
   def translate(state, count)

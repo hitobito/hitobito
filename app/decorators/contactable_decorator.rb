@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -65,12 +63,12 @@ module ContactableDecorator
   private
 
   def nested_values(values, only_public)
-    html = values.collect do |v|
+    html = values.collect { |v|
       if !only_public || v.public?
         val = block_given? ? yield(v.value) : v.value
         h.value_with_muted(val, v.translated_label)
       end
-    end.compact
+    }.compact
 
     html = h.safe_join(html, br)
     content_tag(:p, html) if html.present?
@@ -89,5 +87,6 @@ module ContactableDecorator
     html
   end
 
-  def prepend_complete_address(_html); end
+  def prepend_complete_address(_html)
+  end
 end

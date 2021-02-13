@@ -23,10 +23,10 @@ class OrCondition
   end
 
   def to_a
-    combined = @conditions.each_with_object({clauses: [], args: []}) do |condition, memo|
+    combined = @conditions.each_with_object({clauses: [], args: []}) { |condition, memo|
       memo[:clauses] << "(#{condition[:clause]})"
       memo[:args].push(*condition[:args])
-    end
+    }
 
     [combined[:clauses].join(" OR "), *combined[:args]]
   end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -24,7 +22,7 @@ namespace :hitobito do
     puts ["Permission".ljust(18), "\t",
           "Class".ljust(24), "\t",
           "Action".ljust(25), "\t",
-          "Constraint"].join
+          "Constraint",].join
     puts "=" * 100
     all = Role::Permissions + [AbilityDsl::Recorder::General::PERMISSION]
     Ability.store.configs_for_permissions(all) do |c|

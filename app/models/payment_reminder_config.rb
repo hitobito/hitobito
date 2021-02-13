@@ -14,7 +14,7 @@
 #  index_payment_reminder_configs_on_invoice_config_id  (invoice_config_id)
 #
 
-class PaymentReminderConfig < ActiveRecord::Base
+class PaymentReminderConfig < ApplicationRecord
   belongs_to :invoice_config
 
   validates_by_schema
@@ -27,20 +27,20 @@ class PaymentReminderConfig < ActiveRecord::Base
       "Im hektischen Alltag kann es vorkommen, eine fällige Zahlung zu übersehen. " \
       "\nDanke, dass Sie die Überweisung in den nächsten "\
       "Tagen vornehmen. Sollten Sie die Zahlung bereits veranlasst haben, betrachten Sie bitte " \
-      "dieses Schreiben als gegenstandslos."
+      "dieses Schreiben als gegenstandslos.",
     ],
     [
       14,
       "Zweite Mahnung",
       "Trotz unserer Zahlungserinnerung haben Sie unsere Rechnung noch " \
-      "nicht beglichen.\nWir bitten Sie den fehlbaren Betrag zu begleichen."
+      "nicht beglichen.\nWir bitten Sie den fehlbaren Betrag zu begleichen.",
     ],
     [
       5,
       "Dritte Mahnung",
       "Wir fordern Sie nun ein letztes Mal auf, den offenen Betrag innert Wochenfrist " \
-      "zu begleichen."
-    ]
+      "zu begleichen.",
+    ],
   ].zip(LEVELS.to_a).to_h.invert
 
   validates :level, length: {in: LEVELS}

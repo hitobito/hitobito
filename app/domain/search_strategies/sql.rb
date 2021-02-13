@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017-2021, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -14,20 +12,20 @@ module SearchStrategies
         attrs: ["people.first_name", "people.last_name", "people.company_name", "people.nickname",
                 "people.company", "people.email", "people.address", "people.zip_code",
                 "people.town", "people.country", "people.birthday", "people.additional_information",
-                "phone_numbers.number", "social_accounts.name", "additional_emails.email"],
+                "phone_numbers.number", "social_accounts.name", "additional_emails.email",],
         joins: ["LEFT JOIN phone_numbers ON phone_numbers.contactable_id = people.id AND " \
                 "phone_numbers.contactable_type = 'Person'",
                 "LEFT JOIN social_accounts ON social_accounts.contactable_id = people.id AND "\
                 "phone_numbers.contactable_type = 'Person'",
                 "LEFT JOIN additional_emails ON additional_emails.contactable_id = people.id AND "\
-                "phone_numbers.contactable_type = 'Person'"]
+                "phone_numbers.contactable_type = 'Person'",],
       },
       "Group" => {
         attrs: ["groups.name", "groups.short_name", "groups.email",
                 "groups.address", "groups.zip_code", "groups.town",
                 "groups.country", "parent.name", "parent.short_name",
                 "phone_numbers.number", "social_accounts.name",
-                "additional_emails.email"],
+                "additional_emails.email",],
 
         joins: ["LEFT JOIN #{Group.quoted_table_name} parent ON " \
                 "parent.id = #{Group.quoted_table_name}.parent_id",
@@ -42,19 +40,19 @@ module SearchStrategies
 
                 "LEFT JOIN additional_emails ON " \
                 "additional_emails.contactable_id = #{Group.quoted_table_name}.id AND "\
-                "phone_numbers.contactable_type = 'Group'"]
+                "phone_numbers.contactable_type = 'Group'",],
       },
       "Event" => {
         attrs: ["event_translations.name", "events.number", "groups.name"],
         joins: ["LEFT JOIN event_translations ON event_translations.event_id = events.id",
                 "INNER JOIN events_groups ON events.id = events_groups.event_id",
                 "INNER JOIN #{Group.quoted_table_name} ON " \
-                "events_groups.group_id = #{Group.quoted_table_name}.id"]
+                "events_groups.group_id = #{Group.quoted_table_name}.id",],
       },
       "Address" => {
         attrs: ["addresses.street_short", "addresses.town", "addresses.state",
-                "addresses.zip_code", "addresses.numbers"]
-      }
+                "addresses.zip_code", "addresses.numbers",],
+      },
     }.freeze
 
     def list_people
@@ -98,8 +96,8 @@ module SearchStrategies
     def query_entities(scope)
       fields = SEARCH_FIELDS[scope.model.sti_name]
       scope.joins(fields[:joins])
-           .where(SqlConditionBuilder.new(@term, fields[:attrs]).search_conditions)
-           .distinct
+        .where(SqlConditionBuilder.new(@term, fields[:attrs]).search_conditions)
+        .distinct
     end
 
     def term_present?

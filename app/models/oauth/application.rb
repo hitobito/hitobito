@@ -46,15 +46,15 @@ module Oauth
     end
 
     def valid_access_tokens
-      access_tokens.select do |access_token|
+      access_tokens.count { |access_token|
         !access_token.expired? && access_token.revoked_at.nil?
-      end.count
+      }
     end
 
     def valid_access_grants
-      access_grants.select do |access_grant|
+      access_grants.count { |access_grant|
         !access_grant.expired? && access_grant.revoked_at.nil?
-      end.count
+      }
     end
   end
 end

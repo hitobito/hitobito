@@ -89,12 +89,12 @@ RSpec.describe "GET oauth/profile", type: :request do
 
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq("application/json; charset=utf-8")
-        expect(response.body).to eq("{" +
-          "\"id\":#{user.id}," +
-          "\"email\":\"#{user.email}\"," +
-          "\"first_name\":\"#{user.first_name}\"," +
-          "\"last_name\":\"#{user.last_name}\"," +
-          "\"nickname\":null" +
+        expect(response.body).to eq("{" \
+          "\"id\":#{user.id}," \
+          "\"email\":\"#{user.email}\"," \
+          "\"first_name\":\"#{user.first_name}\"," \
+          "\"last_name\":\"#{user.last_name}\"," \
+          "\"nickname\":null" \
           "}")
       end
     end

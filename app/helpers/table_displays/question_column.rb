@@ -11,9 +11,7 @@ module TableDisplays
       super if question
     end
 
-    def label
-      question.label
-    end
+    delegate :label, to: :question
 
     def format_attr(target, _)
       target.answers.find { |answer| answer.question == @question }.try(:answer)

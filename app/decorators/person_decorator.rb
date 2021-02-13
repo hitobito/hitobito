@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -96,10 +94,10 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def latest_qualifications_uniq_by_kind
-    qualifications.
-      includes(:person, qualification_kind: :translations).
-      order_by_date.
-      group_by(&:qualification_kind).values.map(&:first)
+    qualifications
+      .includes(:person, qualification_kind: :translations)
+      .order_by_date
+      .group_by(&:qualification_kind).values.map(&:first)
   end
 
   def pending_applications

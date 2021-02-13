@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -18,7 +16,7 @@ describe Event::RolesController, type: :controller do
 
   let(:new_entry_attrs) do
     {
-      type: Event::Role::AssistantLeader.sti_name
+      type: Event::Role::AssistantLeader.sti_name,
     }
   end
 
@@ -26,13 +24,13 @@ describe Event::RolesController, type: :controller do
     {
       label: "Materialchef",
       type: Event::Role::AssistantLeader.sti_name,
-      person_id: Fabricate(:person).id
+      person_id: Fabricate(:person).id,
     }
   end
 
   let(:test_entry_attrs) do
     {
-      label: "Materialchef"
+      label: "Materialchef",
     }
   end
 
@@ -59,7 +57,7 @@ describe Event::RolesController, type: :controller do
     end
   end
 
-  include_examples "crud controller", skip: [%w(index), %w(show), %w(new plain), %w(create html)]
+  include_examples "crud controller", skip: [%w[index], %w[show], %w[new plain], %w[create html]]
 
   describe_action :get, :new do
     context ".html", format: :html do
@@ -78,18 +76,18 @@ describe Event::RolesController, type: :controller do
       end
 
       context "with valid params" do
-         it_should_redirect_to_show
-         # it_should_set_attrs
-         it_should_have_flash(:notice)
+        it_should_redirect_to_show
+        # it_should_set_attrs
+        it_should_have_flash(:notice)
 
-         it "should persist entry" do
-           expect(entry).to be_persisted
-           expect(entry).to be_kind_of(Event::Role::AssistantLeader)
-           expect(entry.label).to eq(create_entry_attrs[:label])
-           expect(entry.participation).to be_persisted
-           expect(entry.participation.person_id).to eq(create_entry_attrs[:person_id])
-         end
-       end
+        it "should persist entry" do
+          expect(entry).to be_persisted
+          expect(entry).to be_kind_of(Event::Role::AssistantLeader)
+          expect(entry.label).to eq(create_entry_attrs[:label])
+          expect(entry.participation).to be_persisted
+          expect(entry.participation.person_id).to eq(create_entry_attrs[:person_id])
+        end
+      end
     end
   end
 

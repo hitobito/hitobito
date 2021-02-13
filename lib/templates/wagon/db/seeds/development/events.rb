@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require Rails.root.join("db", "seeds", "support", "event_seeder")
 
 srand(42)

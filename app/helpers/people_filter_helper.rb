@@ -15,9 +15,9 @@ module PeopleFilterHelper
   def people_filter_attribute_forms(filter)
     return unless filter
 
-    filter.args.each_with_index.map do |(_k, attr), i|
+    filter.args.each_with_index.map { |(_k, attr), i|
       people_filter_attribute_form(attr, i)
-    end.join.html_safe
+    }.join.html_safe
   end
 
   def people_filter_attribute_form_template

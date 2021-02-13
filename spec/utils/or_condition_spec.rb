@@ -13,10 +13,10 @@ describe OrCondition do
   end
 
   it "can be extended" do
-    expect do
+    expect {
       subject.or("1=1")
       subject.or("foo = ?", 2)
-    end.to_not raise_error
+    }.to_not raise_error
   end
 
   it "is present if a condition as been added" do
@@ -25,7 +25,7 @@ describe OrCondition do
 
   it "can be exported as array" do
     expect(subject.or("foo = ?", 1).to_a).to eq [
-      "(foo = ?)", 1
+      "(foo = ?)", 1,
     ]
   end
 
@@ -38,12 +38,12 @@ describe OrCondition do
   end
 
   it "add ORs to the SQL if multiple conditions are added" do
-    expect do
+    expect {
       subject.or("1=1")
       subject.or("foo = ?", 2)
 
       expect(subject.to_a.first).to match(/OR/)
-    end.to_not raise_error
+    }.to_not raise_error
   end
 
   it "is exported as useful data for ActiveRecord" do
@@ -53,7 +53,7 @@ describe OrCondition do
 
     expect(subject.to_a).to eq [
       "(1=1) OR (foo = ?) OR (bar = ? AND baz = ?)",
-      2, 3, 4
+      2, 3, 4,
     ]
   end
 
@@ -65,7 +65,7 @@ describe OrCondition do
 
     expect(subject.to_a).to eq [
       "(1=1) OR (foo = ?) OR (bar = ? AND baz = ?)",
-      2, 3, 4
+      2, 3, 4,
     ]
   end
 
@@ -78,7 +78,7 @@ describe OrCondition do
 
     expect(subject.to_a).to eq [
       "(1=1) OR (bar = ? AND baz = ?)",
-      3, 4
+      3, 4,
     ]
   end
 end

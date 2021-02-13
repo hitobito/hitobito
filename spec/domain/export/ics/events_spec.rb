@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -83,7 +81,7 @@ describe Export::Ics::Events do
       end
 
       it "omits the empty date label and colon" do
-        expect(ical_event.summary.to_s).to eq("#{event.name}")
+        expect(ical_event.summary.to_s).to eq(event.name.to_s)
       end
     end
 
@@ -120,26 +118,26 @@ describe Export::Ics::Events do
   end
 
   describe "#datetime_to_ical" do
-  subject { export.datetime_to_ical(datetime) }
+    subject { export.datetime_to_ical(datetime) }
 
-  context "with fullday event" do
-    let(:datetime) { Time.zone.local(2018, 5, 19) }
+    context "with fullday event" do
+      let(:datetime) { Time.zone.local(2018, 5, 19) }
 
-    it { is_expected.to be_a(ical_date_klass) }
+      it { is_expected.to be_a(ical_date_klass) }
+    end
+
+    context "with timed event" do
+      let(:datetime) { Time.zone.local(2018, 5, 19, 12, 15) }
+
+      it { is_expected.to be_a(ical_datetime_klass) }
+    end
+
+    context "with nil" do
+      let(:datetime) { nil }
+
+      it { is_expected.to be nil }
+    end
   end
-
-  context "with timed event" do
-    let(:datetime) { Time.zone.local(2018, 5, 19, 12, 15) }
-
-    it { is_expected.to be_a(ical_datetime_klass) }
-  end
-
-  context "with nil" do
-    let(:datetime) { nil }
-
-    it { is_expected.to be nil }
-  end
-end
 
   describe "#generate" do
     subject(:ical_events) { export.generate([event, event]) }

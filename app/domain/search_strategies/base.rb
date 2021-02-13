@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -79,7 +77,7 @@ module SearchStrategies
     def load_deleted_people_ids
       Person.where("NOT EXISTS (SELECT * FROM roles " \
                    "WHERE roles.deleted_at IS NULL AND roles.person_id = people.id)")
-            .pluck(:id)
+        .pluck(:id)
     end
   end
 end

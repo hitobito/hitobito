@@ -12,8 +12,8 @@ class Person::MessagesController < ListController
 
   def list_entries
     Message.list.joins(:message_recipients)
-                .where(message_recipients: {person_id: person.id})
-                .page(params[:page]).per(50).where(created_at: year_filter)
+      .where(message_recipients: {person_id: person.id})
+      .page(params[:page]).per(50).where(created_at: year_filter)
   end
 
   def person

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -25,13 +23,13 @@ describe ServiceTokenAbility do
       is_expected.to be_able_to(:create, groups(:toppers).service_tokens.new)
     end
 
-    %i(update show edit destroy).each do |action|
+    %i[update show edit destroy].each do |action|
       it "may #{action} service_account in his layer" do
         is_expected.to be_able_to(action, service_token)
       end
     end
 
-    %i(update show edit destroy).each do |action|
+    %i[update show edit destroy].each do |action|
       it "may not #{action} service_account in layer below" do
         other = Fabricate(:service_token, layer: groups(:bottom_layer_one))
         is_expected.not_to be_able_to(action, other)
@@ -50,13 +48,13 @@ describe ServiceTokenAbility do
       is_expected.to be_able_to(:create, groups(:toppers).service_tokens.new)
     end
 
-    %i(update show edit destroy).each do |action|
+    %i[update show edit destroy].each do |action|
       it "may #{action} service_account in his layer" do
         is_expected.to be_able_to(action, service_token)
       end
     end
 
-    %i(update show edit destroy).each do |action|
+    %i[update show edit destroy].each do |action|
       it "may not #{action} service_account in layer below" do
         other = Fabricate(:service_token, layer: groups(:bottom_layer_one))
         is_expected.not_to be_able_to(action, other)

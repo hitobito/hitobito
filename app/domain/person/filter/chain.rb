@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017 - 2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -11,7 +9,7 @@ class Person::Filter::Chain
     Person::Filter::Qualification,
     Person::Filter::Attributes,
     Person::Filter::Tag,
-    Person::Filter::TagAbsence
+    Person::Filter::TagAbsence,
   ]
 
   # Used for `serialize` method in ActiveRecord
@@ -46,9 +44,7 @@ class Person::Filter::Chain
     filters.find { |f| f.attr == attr.to_s }
   end
 
-  def blank?
-    filters.blank?
-  end
+  delegate :blank?, to: :filters
 
   def roles_join
     first_custom_roles_join || {roles: :group}
@@ -86,7 +82,7 @@ class Person::Filter::Chain
     type = filter_type(attr)
     if type
       filter = type.new(attr, args.with_indifferent_access)
-      filter.present? ? filter : nil
+      filter.presence
     end
   end
 

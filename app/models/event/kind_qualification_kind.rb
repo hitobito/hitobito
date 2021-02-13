@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,16 +19,16 @@
 #  index_event_kind_qualification_kinds_on_role      (role)
 #
 
-class Event::KindQualificationKind < ActiveRecord::Base
-  CATEGORIES = %w(qualification precondition prolongation).freeze
-  ROLES = %w(participant leader).freeze
+class Event::KindQualificationKind < ApplicationRecord
+  CATEGORIES = %w[qualification precondition prolongation].freeze
+  ROLES = %w[participant leader].freeze
 
   class << self
     def grouped_qualification_kind_ids(category, role)
-      where(category: category, role: role).
-        pluck(:grouping, :qualification_kind_id).
-        group_by(&:first).
-        map { |_, v| v.map(&:last) }
+      where(category: category, role: role)
+        .pluck(:grouping, :qualification_kind_id)
+        .group_by(&:first)
+        .map { |_, v| v.map(&:last) }
     end
   end
 

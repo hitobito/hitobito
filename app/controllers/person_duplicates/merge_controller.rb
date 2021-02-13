@@ -9,7 +9,8 @@ module PersonDuplicates
   class MergeController < ApplicationController
     before_action :authorize_action
 
-    def new; end
+    def new
+    end
 
     def create
       PersonDuplicate.transaction do

@@ -26,7 +26,7 @@ class TableDisplay::Participations < TableDisplay
   end
 
   def with_permission_check(object, path)
-    return super unless path =~ QUESTION_REGEX
+    return super unless QUESTION_REGEX.match?(path)
 
     if ability.can?(:update, object.event) || ability.can?(:show_full, object.person)
       yield(*resolve(object, path))
@@ -38,22 +38,22 @@ class TableDisplay::Participations < TableDisplay
   end
 
   def selected_questions(question_ids)
-    selected.collect do |column|
+    selected.collect { |column|
       next unless column =~ QUESTION_REGEX
       id = Regexp.last_match(1).to_i
       [column, id] if question_ids.include?(id)
-    end.compact
+    }.compact
   end
 
   def person_sort_statements
-    selected.grep(/person/).collect do |key|
+    selected.grep(/person/).collect { |key|
       [key, key.gsub("person", "people")]
-    end.to_h
+    }.to_h
   end
 
   def question_sort_statements(question_ids)
-    selected_questions(question_ids).collect do |column, id|
+    selected_questions(question_ids).collect { |column, id|
       [column, "CASE event_questions.id WHEN #{id} THEN 0 ELSE 1 END, TRIM(event_answers.answer)"]
-    end.to_h
+    }.to_h
   end
 end

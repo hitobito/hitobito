@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require "spec_helper"
 
 describe "StandardFormBuilder" do
@@ -32,8 +30,7 @@ describe "StandardFormBuilder" do
      gets_up_at: :time_field,
      companion_id: :belongs_to_field,
      other_ids: :has_many_field,
-     more_ids: :has_many_field,
-    }.each do |attr, method|
+     more_ids: :has_many_field,}.each do |attr, method|
       it "dispatches #{attr} attr to #{method}" do
         expect(form).to receive(method).with(attr, {})
         form.input_field(attr)

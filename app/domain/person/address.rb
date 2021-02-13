@@ -14,6 +14,6 @@ class Person::Address
     [@person.full_name.to_s.squish,
      @person.address.to_s.squish,
      [@person.zip_code, @person.town].compact.join(" ").squish,
-     @person.country.to_s.squish].compact.join("\n")
+     @person.country.to_s.squish,].compact.join("\n")
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -35,18 +33,18 @@ describe Person::Filter::Tag do
     end
 
     it "#to_params inludes names" do
-      expect(subject.to_params[:names]).to eq %w(foo)
+      expect(subject.to_params[:names]).to eq %w[foo]
     end
 
     it "#to_hash includes names" do
-      expect(subject.to_params[:names]).to eq %w(foo)
+      expect(subject.to_params[:names]).to eq %w[foo]
     end
   end
 
   context :apply do
     let(:other) { people(:bottom_member) }
 
-    subject { Person::Filter::Tag.new(:tag, names: %w(test1 test2)).apply(Person.all) }
+    subject { Person::Filter::Tag.new(:tag, names: %w[test1 test2]).apply(Person.all) }
 
     it "does not return any person if not tagged" do
       expect(subject).to be_empty

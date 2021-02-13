@@ -26,9 +26,9 @@ module DryCrud
       # Helper method the run the given block in between the before and after
       # callbacks of the given kinds.
       def with_callbacks(*kinds, &block)
-        kinds.reverse.reduce(block) do |a, e|
+        kinds.reverse.reduce(block) { |a, e|
           -> { run_callbacks(e, &a) }
-        end.call
+        }.call
       end
     end
 

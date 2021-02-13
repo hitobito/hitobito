@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -8,10 +6,10 @@
 # This class is only used for fetching lists based on a group association.
 class PersonReadables < PersonFetchables
   self.same_group_permissions = [:group_full, :group_read,
-                                  :group_and_below_full, :group_and_below_read]
+                                 :group_and_below_full, :group_and_below_read,]
   self.above_group_permissions = [:group_and_below_full, :group_and_below_read]
   self.same_layer_permissions = [:layer_full, :layer_read,
-                                  :layer_and_below_full, :layer_and_below_read]
+                                 :layer_and_below_full, :layer_and_below_read,]
   self.above_layer_permissions = [:layer_and_below_full, :layer_and_below_read]
 
   attr_reader :group
@@ -53,10 +51,10 @@ class PersonReadables < PersonFetchables
       Person.only_public_data
     else
       Person.only_public_data
-            .joins(@roles_join)
-            .where(groups: {deleted_at: nil})
-            .where(accessible_conditions.to_a)
-            .distinct
+        .joins(@roles_join)
+        .where(groups: {deleted_at: nil})
+        .where(accessible_conditions.to_a)
+        .distinct
     end
   end
 

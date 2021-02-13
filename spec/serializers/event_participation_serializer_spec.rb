@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,7 +19,7 @@
 require "spec_helper"
 
 describe EventParticipationSerializer do
-  let(:controller) { double().as_null_object }
+  let(:controller) { double.as_null_object }
   let(:participation) { event_participations(:top) }
   let(:serializer) { EventParticipationSerializer.new(participation, controller) }
 

@@ -52,19 +52,19 @@ class Event::ParticipantAssigner
 
   def participating?(event)
     event.participations
-         .active # only active/assigned participations are relevant
-         .joins(:roles)
-         .where(event_roles: {type: event.participant_types.map(&:sti_name)})
-         .where(person_id: participation.person_id)
-         .exists?
+      .active # only active/assigned participations are relevant
+      .joins(:roles)
+      .where(event_roles: {type: event.participant_types.map(&:sti_name)})
+      .where(person_id: participation.person_id)
+      .exists?
   end
 
   def applied?(event)
     event.participations
-         .joins(:roles)
-         .where(event_roles: {type: event.participant_types.map(&:sti_name)})
-         .where(person_id: participation.person_id)
-         .exists?
+      .joins(:roles)
+      .where(event_roles: {type: event.participant_types.map(&:sti_name)})
+      .where(person_id: participation.person_id)
+      .exists?
   end
 
   def create_participant_role
@@ -96,11 +96,11 @@ class Event::ParticipantAssigner
   def update_answers
     current_answers = participation.answers.includes(:question)
     event.questions.each do |q|
-      existing = current_answers.find do |a|
+      existing = current_answers.find { |a|
         a.question.question == q.question &&
           a.question.choice_items == q.choice_items &&
           a.question.multiple_choices? == q.multiple_choices?
-      end
+      }
       if existing
         existing.update(question: q)
       else

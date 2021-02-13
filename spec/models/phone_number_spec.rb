@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: phone_numbers
@@ -76,9 +74,9 @@ describe PhoneNumber do
     let(:person) { people(:top_leader) }
 
     it "sets main on create" do
-      expect do
+      expect {
         person.phone_numbers.create!(label: "Foo", number: "+41 44 123 45 67")
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("create")
@@ -87,9 +85,9 @@ describe PhoneNumber do
 
     it "sets main on update" do
       account = person.phone_numbers.create(label: "Foo", number: "+41 44 123 45 67")
-      expect do
+      expect {
         account.update!(number: "021 987 65 43")
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("update")
@@ -98,9 +96,9 @@ describe PhoneNumber do
 
     it "sets main on destroy" do
       account = person.phone_numbers.create(label: "Foo", number: "+41 44 123 45 67")
-      expect do
+      expect {
         account.destroy!
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("destroy")

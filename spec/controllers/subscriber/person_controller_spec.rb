@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -18,7 +16,7 @@ describe Subscriber::PersonController do
     it "without subscriber_id replaces error" do
       post :create, params: {
         group_id: group.id,
-        mailing_list_id: list.id
+        mailing_list_id: list.id,
       }
 
       is_expected.to render_template("crud/new")
@@ -29,14 +27,14 @@ describe Subscriber::PersonController do
     it "duplicated subscription replaces error" do
       Fabricate(:subscription, mailing_list: list, subscriber: user)
 
-      expect do
+      expect {
         post :create,
           params: {
             group_id: group.id,
             mailing_list_id: list.id,
-            subscription: {subscriber_id: user.id}
+            subscription: {subscriber_id: user.id},
           }
-      end.not_to change(Subscription, :count)
+      }.not_to change(Subscription, :count)
 
       is_expected.to render_template("crud/new")
       expect(assigns(:subscription).errors.size).to eq(1)
@@ -46,14 +44,14 @@ describe Subscriber::PersonController do
     it "updates exclude flag for existing subscription" do
       subscription = Fabricate(:subscription, mailing_list: list, subscriber: user, excluded: true)
 
-      expect do
+      expect {
         post :create,
           params: {
             group_id: group.id,
             mailing_list_id: list.id,
-            subscription: {subscriber_id: user.id}
+            subscription: {subscriber_id: user.id},
           }
-      end.not_to change(Subscription, :count)
+      }.not_to change(Subscription, :count)
 
       expect(subscription.reload).not_to be_excluded
     end
@@ -69,7 +67,7 @@ describe Subscriber::PersonController do
           params: {
             group_id: group.id,
             mailing_list_id: list.id,
-            subscription: {subscriber_id: people(:bottom_member).id}
+            subscription: {subscriber_id: people(:bottom_member).id},
           }
 
         expect(list.reload.subscriptions.first.subscriber).to eq(people(:bottom_member))
@@ -82,7 +80,7 @@ describe Subscriber::PersonController do
           params: {
             group_id: group.id,
             mailing_list_id: list.id,
-            subscription: {subscriber_id: person.id}
+            subscription: {subscriber_id: person.id},
           }
 
         expect(flash[:alert]).to match(/versendet/)
@@ -95,12 +93,13 @@ describe Subscriber::PersonController do
         Person::AddRequest::MailingList.create!(
           person: person,
           requester: user,
-          body: list)
+          body: list
+        )
         post :create,
           params: {
             group_id: group.id,
             mailing_list_id: list.id,
-            subscription: {subscriber_id: person.id}
+            subscription: {subscriber_id: person.id},
           }
 
         expect(flash[:alert]).to match(/bereits angefragt/)

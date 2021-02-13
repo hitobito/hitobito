@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -18,7 +16,7 @@ describe GroupsController, type: :controller do
 
   before { sign_in(user) }
 
-  include_examples "crud controller", skip: [%w(index), %w(new), %w(destroy)]
+  include_examples "crud controller", skip: [%w[index], %w[new], %w[destroy]]
 
   describe "happy path for skipped crud views" do
     render_views
@@ -51,7 +49,7 @@ describe GroupsController, type: :controller do
                    "crud/new",
                    "layouts/_nav",
                    "layouts/_flash",
-                   "layouts/application"]
+                   "layouts/application",]
 
       get :new, params: {group: {parent_id: group.id, type: "Group::TopGroup"}}
       templates.each { |template| is_expected.to render_template(template) }

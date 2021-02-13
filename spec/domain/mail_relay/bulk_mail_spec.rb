@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -41,9 +39,9 @@ describe MailRelay::BulkMail do
           .to receive(:info)
           .with("#{log_prefix} initial send failed: execution expired")
 
-        expect do
+        expect {
           bulk_mail.deliver
-        end.to raise_error(Net::OpenTimeout)
+        }.to raise_error(Net::OpenTimeout)
       end
 
       it "throws exception if smtp relaying denied" do
@@ -55,9 +53,9 @@ describe MailRelay::BulkMail do
           .to receive(:info)
           .with("#{log_prefix} initial send failed: 550 5.7.1 <mail@recipient.com> Relaying denied")
 
-        expect do
+        expect {
           bulk_mail.deliver
-        end.to raise_error(Net::SMTPFatalError)
+        }.to raise_error(Net::SMTPFatalError)
       end
     end
 
@@ -188,9 +186,9 @@ describe MailRelay::BulkMail do
               .to receive(:deliver)
               .and_raise(invalid_domain_not_found_error)
 
-            expect do
+            expect {
               bulk_mail.deliver
-            end.to raise_error(invalid_domain_not_found_error)
+            }.to raise_error(invalid_domain_not_found_error)
           end
         end
       end
@@ -236,8 +234,7 @@ describe MailRelay::BulkMail do
         expect(bulk_mail)
           .to receive(:sleep)
           .with(5)
-          .exactly(2)
-          .times
+          .twice
 
         expect(logger)
           .to receive(:info)

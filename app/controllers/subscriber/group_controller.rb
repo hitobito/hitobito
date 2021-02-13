@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -45,11 +43,11 @@ module Subscriber
 
     def groups_query
       possible = Subscription.new(mailing_list: @mailing_list).possible_groups
-      possible.where(search_condition("groups.name", "parents_groups.name")).
-               includes(:parent).
-               references(:parent).
-               order("#{Group.quoted_table_name}.lft").
-               limit(10)
+      possible.where(search_condition("groups.name", "parents_groups.name"))
+        .includes(:parent)
+        .references(:parent)
+        .order("#{Group.quoted_table_name}.lft")
+        .limit(10)
     end
 
     def assign_attributes
@@ -83,13 +81,13 @@ module Subscriber
 
     def subscription_tags
       tags = collect_included_tags + collect_excluded_tags
-      tags.map do |tag|
+      tags.map { |tag|
         next if tag[:id].empty?
 
         SubscriptionTag.new(subscription: entry,
                             tag_id: tag[:id],
                             excluded: tag[:excluded])
-      end.compact
+      }.compact
     end
 
     def collect_included_tags

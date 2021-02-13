@@ -52,7 +52,7 @@ namespace :tx do
             "hostname = #{host}",
             "password = #{password}",
             "token =",
-            "username = #{username}"].join("\n")
+            "username = #{username}",].join("\n")
       File.open(".transifexrc", "w") { |f| f.puts rc }
     else
       puts "No username and password given"

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -161,7 +159,7 @@ describe Qualification do
 
     let(:today) { Time.zone.today }
     let(:kind) { qualification_kinds(:sl) }
-    let(:start_date) { today - 1.years }
+    let(:start_date) { today - 1.year }
     let(:q) { Fabricate(:qualification, qualification_kind: kind, person: person, start_at: start_date) }
 
     context "not reactivateable" do
@@ -221,11 +219,11 @@ describe Qualification do
     let(:person) { people(:top_leader) }
 
     it "sets main on create" do
-      expect do
+      expect {
         person.qualifications.create!(qualification_kind: qualification_kinds(:sl),
                                       origin: "Bar",
                                       start_at: Time.zone.today)
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("create")
@@ -236,9 +234,9 @@ describe Qualification do
       quali = person.qualifications.create!(qualification_kind: qualification_kinds(:sl),
                                             origin: "Bar",
                                             start_at: Time.zone.today)
-      expect do
+      expect {
         quali.update!(origin: "Bur")
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("update")
@@ -249,9 +247,9 @@ describe Qualification do
       quali = person.qualifications.create!(qualification_kind: qualification_kinds(:sl),
                                             origin: "Bar",
                                             start_at: Time.zone.today)
-      expect do
+      expect {
         quali.destroy!
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("destroy")

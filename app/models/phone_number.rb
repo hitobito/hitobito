@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -20,7 +18,7 @@
 #  index_phone_numbers_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #
 
-class PhoneNumber < ActiveRecord::Base
+class PhoneNumber < ApplicationRecord
   include ContactAccount
 
   self.value_attr = :number
@@ -34,7 +32,7 @@ class PhoneNumber < ActiveRecord::Base
   private
 
   def format_number
-    phone = Phonelib.parse(self.number)
+    phone = Phonelib.parse(number)
     if phone.valid?
       self.number = phone.international
     end

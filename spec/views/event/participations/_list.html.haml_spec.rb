@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -19,7 +17,7 @@ describe "event/participations/_list.html.haml" do
     {"action" => "index",
      "controller" => "event/participations",
      "group_id" => "1",
-     "event_id" => "36"}
+     "event_id" => "36",}
   end
 
   before do

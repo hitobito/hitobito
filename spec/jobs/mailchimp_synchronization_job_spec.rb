@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -14,9 +12,9 @@ describe MailchimpSynchronizationJob do
   subject { MailchimpSynchronizationJob.new(mailing_list.id) }
 
   it "sets mailing_list state to syncing if jobs eunqueues" do
-    expect do
+    expect {
       subject.enqueue!
-    end.to change { Delayed::Job.count }.by 1
+    }.to change { Delayed::Job.count }.by 1
 
     mailing_list.reload
 

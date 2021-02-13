@@ -108,9 +108,9 @@ describe Messages::TextMessageDispatch do
 
   context "#init_recipient_entries" do
     it "creates recipient entries with state pending" do
-      expect do
+      expect {
         subject.send(:init_recipient_entries)
-      end.to change { MessageRecipient.count }.by(2)
+      }.to change { MessageRecipient.count }.by(2)
 
       recipient1 = message.message_recipients.find_by(phone_number: mobile1.number)
       expect(recipient1.state).to eq("pending")
@@ -126,9 +126,9 @@ describe Messages::TextMessageDispatch do
                                phone_number: "42",
                                state: :pending)
 
-      expect do
+      expect {
         subject.send(:init_recipient_entries)
-      end.to change { MessageRecipient.count }.by(0)
+      }.to change { MessageRecipient.count }.by(0)
     end
   end
 end

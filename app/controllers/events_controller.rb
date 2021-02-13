@@ -20,20 +20,20 @@ class EventsController < CrudController
                             :id, :label, :location, :start_at, :start_at_date,
                             :start_at_hour, :start_at_min, :finish_at,
                             :finish_at_date, :finish_at_hour, :finish_at_min,
-                            :_destroy
+                            :_destroy,
                           ],
                           application_questions_attributes: [
-                            :id, :question, :choices, :multiple_choices, :_destroy, :required
+                            :id, :question, :choices, :multiple_choices, :_destroy, :required,
                           ],
                           admin_questions_attributes: [
-                            :id, :question, :choices, :multiple_choices, :_destroy
-                          ]]
+                            :id, :question, :choices, :multiple_choices, :_destroy,
+                          ],]
 
   self.remember_params += [:year]
 
   self.sort_mappings = {name: "event_translations.name", state: "events.state",
                         dates_full: "event_dates.start_at",
-                        group_ids: "#{Group.quoted_table_name}.name"}
+                        group_ids: "#{Group.quoted_table_name}.name",}
 
   self.search_columns = [:name]
 
@@ -164,7 +164,7 @@ class EventsController < CrudController
                     group: group,
                     page: params[:page],
                     serializer: EventSerializer,
-                    controller: self)].inject(&:merge)
+                    controller: self),].inject(&:merge)
   end
 
   def render_entry_json

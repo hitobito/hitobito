@@ -14,7 +14,7 @@ describe "invoice_lists/_form.html.haml" do
       cancel_url: "",
       model_class: InvoiceList,
       entry: invoice_list,
-      path_args: [group, invoice_list]
+      path_args: [group, invoice_list],
     })
 
     allow(controller).to receive_messages(current_user: person)
@@ -28,7 +28,7 @@ describe "invoice_lists/_form.html.haml" do
       "",
       "BEI-JU - Beitrag Kinder",
       "BEI-18 - Beitrag Erwachsene",
-      "ABO-NEWS - Abonnement der Mitgliederzeitschrift"
+      "ABO-NEWS - Abonnement der Mitgliederzeitschrift",
     ])
   end
 end

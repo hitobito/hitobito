@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -17,7 +15,8 @@ class Person::CsvImportsController < ApplicationController
 
   decorates :group
 
-  def new; end
+  def new
+  end
 
   def define_mapping
     @role_type = params[:role_type] || group.default_role
@@ -101,7 +100,7 @@ class Person::CsvImportsController < ApplicationController
   def valid_role?
     return true if params[:role_type].present?
 
-    flash.now[:alert] = "#{Role.model_name} #{I18n.t('errors.messages.blank')}."
+    flash.now[:alert] = "#{Role.model_name} #{I18n.t("errors.messages.blank")}."
     render :define_mapping
     false
   end
@@ -132,7 +131,7 @@ class Person::CsvImportsController < ApplicationController
   def valid_file?(io)
     io.present? &&
       io.respond_to?(:content_type) &&
-    # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
+      # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
       io.content_type =~ /text\/|excel|octet-stream/
   end
 
@@ -141,7 +140,7 @@ class Person::CsvImportsController < ApplicationController
 
     success = parser.parse
     unless success
-      filename = file_param && file_param.original_filename
+      filename = file_param&.original_filename
       filename ||= "csv formular daten"
       flash[:alert] = parser.flash_alert(filename)
       redirect_to new_group_csv_imports_path(group)
@@ -165,9 +164,9 @@ class Person::CsvImportsController < ApplicationController
 
   def find_duplicate_mappings
     attrs = field_mappings.values
-    attrs.select do |attr|
+    attrs.select { |attr|
       attr.present? && attrs.count(attr) > 1
-    end.uniq
+    }.uniq
   end
 
   def map_headers_and_import
@@ -210,6 +209,6 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def read_file_or_data
-    (file_param && file_param.read) || params[:data]
+    file_param&.read || params[:data]
   end
 end

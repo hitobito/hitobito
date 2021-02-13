@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -17,7 +15,7 @@ module InvoicesHelper
 
   def format_invoice_list_amount_total(invoice_list)
     invoice = invoice_list.invoice || invoice_list.group.invoices.build
-    invoice.decorate.format_currency(invoice_list.amount_total) if invoice
+    invoice&.decorate&.format_currency(invoice_list.amount_total)
   end
 
   def format_invoice_state(invoice)
@@ -26,7 +24,7 @@ module InvoicesHelper
            when /sent|issued/ then "warning"
            when /payed/ then "success"
            when /reminded/ then "important"
-           end
+    end
     badge(invoice_state_label(invoice), type)
   end
 
@@ -54,7 +52,7 @@ module InvoicesHelper
     Dropdown::InvoiceNew.new(self, {
       people: people,
       mailing_list: mailing_list,
-      filter: filter
+      filter: filter,
     }).button_or_dropdown
   end
 

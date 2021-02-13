@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -27,7 +25,7 @@ describe Invoice::BatchUpdateResult do
     subject.track_update(:issued, draft)
     subject.track_update(:send_notification, draft)
     expect(subject.notice).to eq ["Rechnung #{draft.sequence_number} wurde gestellt.",
-                                  "Rechnung #{draft.sequence_number} wird im Hintergrund per E-Mail verschickt."]
+                                  "Rechnung #{draft.sequence_number} wird im Hintergrund per E-Mail verschickt.",]
   end
 
   it "tracks multiple invoices being sent" do
@@ -36,7 +34,7 @@ describe Invoice::BatchUpdateResult do
     subject.track_update(:issued, sent)
     subject.track_update(:send_notification, sent)
     expect(subject.notice).to eq ["2 Rechnungen wurden gestellt.",
-                                  "2 Rechnungen werden im Hintergrund per E-Mail verschickt."]
+                                  "2 Rechnungen werden im Hintergrund per E-Mail verschickt.",]
   end
 
   it "tracks single invoice which could not be sent" do

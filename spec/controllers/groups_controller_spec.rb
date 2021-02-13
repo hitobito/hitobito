@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -51,10 +49,10 @@ describe GroupsController do
       context "sub_groups" do
         before { get :show, params: {id: group.id} }
 
-        its(:keys) { should == ["Bottom Layer", "Untergruppen"] }
+        its(:keys) { is_expected.to == ["Bottom Layer", "Untergruppen"] }
         its(:values) do
-          should == [[groups(:bottom_layer_one), groups(:bottom_layer_two)],
-                     [groups(:top_group), groups(:toppers)]]
+          is_expected.to == [[groups(:bottom_layer_one), groups(:bottom_layer_two)],
+                             [groups(:top_group), groups(:toppers)],]
         end
       end
 
@@ -64,7 +62,7 @@ describe GroupsController do
           get :show, params: {id: groups(:bottom_layer_one).id}
         end
 
-        its(:values) { should == [[groups(:bottom_group_one_one)]] }
+        its(:values) { is_expected.to == [[groups(:bottom_group_one_one)]] }
       end
 
       context "json" do
@@ -143,11 +141,11 @@ describe GroupsController do
       let(:group) { groups(:top_layer) }
 
       it "creates csv" do
-        expect do
+        expect {
           get :export_subgroups, params: {id: group.id}
           expect(flash[:notice])
             .to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
-        end.to change(Delayed::Job, :count).by(1)
+        }.to change(Delayed::Job, :count).by(1)
       end
     end
   end
@@ -162,9 +160,9 @@ describe GroupsController do
       end
 
       it "does not show page for unpermitted token" do
-        expect do
+        expect {
           get :show, params: {id: group.id, token: "RejectedToken"}
-        end.to raise_error(CanCan::AccessDenied)
+        }.to raise_error(CanCan::AccessDenied)
       end
     end
   end

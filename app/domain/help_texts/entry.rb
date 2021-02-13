@@ -26,13 +26,13 @@ class HelpTexts::Entry
   end
 
   def grouped
-    %w(action field).collect do |kind|
-      label = HelpText.human_attribute_name("#{kind}", count: 2)
+    %w[action field].collect { |kind|
+      label = HelpText.human_attribute_name(kind.to_s, count: 2)
       list = labeled_list(kind)
       next if list.empty?
 
       OpenStruct.new(label: label, list: list)
-    end.compact
+    }.compact
   end
 
   def present?
@@ -40,21 +40,21 @@ class HelpTexts::Entry
   end
 
   def translate(kind, name)
-    format('%s "%s"', HelpText.human_attribute_name("#{kind}"), send("translate_#{kind}", name))
+    format('%s "%s"', HelpText.human_attribute_name(kind.to_s), send("translate_#{kind}", name))
   end
 
   def fields
     ((used_attributes + permitted_attributes).collect(&:to_s) - existing(:field) - blacklist).uniq
   end
 
-  def actions(supported_actions = %w(index new edit show))
+  def actions(supported_actions = %w[index new edit show])
     (action_names & supported_actions) - existing(:action)
   end
 
   def labeled_list(kind)
-    send(kind.to_s.pluralize).collect do |name, _|
+    send(kind.to_s.pluralize).collect { |name, _|
       ["#{kind}.#{name}", send("translate_#{kind}", name)]
-    end.compact.sort_by(&:second)
+    }.compact.sort_by(&:second)
   end
 
   private

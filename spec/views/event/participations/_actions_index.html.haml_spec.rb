@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,10 +14,12 @@ describe "event/participations/_actions_index.html.haml" do
   let(:dom) { render; Capybara::Node::Simple.new(@rendered) }
   let(:dropdowns) { dom.all(".dropdown-toggle") }
 
-  let(:params) do {"action" => "index",
-                   "controller" => "event/participations",
-                   "group_id" => "1",
-                   "event_id" => "36"} end
+  let(:params) do
+    {"action" => "index",
+     "controller" => "event/participations",
+     "group_id" => "1",
+     "event_id" => "36",}
+  end
 
   before do
     assign(:event, event)

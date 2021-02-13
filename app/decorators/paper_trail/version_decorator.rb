@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -65,9 +63,9 @@ module PaperTrail
 
     def person_merge_list
       content = content_tag(:div, t_event).html_safe
-      content += safe_join(YAML.load(model.object_changes)) do |line|
+      content += safe_join(YAML.safe_load(model.object_changes)) { |line|
         person_merge_value(line)
-      end
+      }
       content
     end
 
@@ -100,8 +98,8 @@ module PaperTrail
       key = attribute_change_key(from, to)
       if key
         I18n.t("version.attribute_change.#{key}",
-          attribute_change_args(attr, from, to)).
-             html_safe
+          attribute_change_args(attr, from, to))
+          .html_safe
       else
         ""
       end
@@ -116,7 +114,7 @@ module PaperTrail
         model: item_class.model_name.human,
         label: item ? label_with_fallback(item) : "",
         changeset: changeset)
-      h.sanitize(text, tags: %w(i))
+      h.sanitize(text, tags: %w[i])
     end
 
     private
@@ -147,7 +145,7 @@ module PaperTrail
     def reify(version)
       item_type = version.item_type.constantize
       return version.reify unless item_type.column_names.include?("type")
-      model_type = YAML.load(version.object)["type"]
+      model_type = YAML.safe_load(version.object)["type"]
       Object.const_defined?(model_type) ? version.reify : Wrapped.new(model_type)
     end
 
@@ -164,7 +162,7 @@ module PaperTrail
     def attribute_change_args(attr, from, to)
       {attr: item_class.human_attribute_name(attr),
        from: normalize(attr, from),
-       to: normalize(attr, to)}
+       to: normalize(attr, to),}
     end
 
     def normalize(attr, value)

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -22,9 +20,9 @@ describe Event::RegisterMailer do
   context "headers" do
     subject { mail }
 
-    its(:subject) { should eq "Anmeldelink für Anlass" }
-    its(:to) { should eq(["fooo@example.com"]) }
-    its(:from) { should eq(["noreply@localhost"]) }
+    its(:subject) { is_expected.to eq "Anmeldelink für Anlass" }
+    its(:to) { is_expected.to eq(["fooo@example.com"]) }
+    its(:from) { is_expected.to eq(["noreply@localhost"]) }
   end
 
   context "body" do

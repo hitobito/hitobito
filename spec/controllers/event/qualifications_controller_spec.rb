@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -52,9 +50,9 @@ describe Event::QualificationsController do
       let(:event) { events(:top_event) }
 
       it "is not possible" do
-        expect do
+        expect {
           get :index, params: {group_id: group.id, event_id: event.id}
-        end.to raise_error(ActionController::RoutingError)
+        }.to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -74,9 +72,9 @@ describe Event::QualificationsController do
           let(:start_at) { event.qualification_date - 1.day }
 
           it "issues qualification" do
-            expect do
+            expect {
               put :update, params: {group_id: group.id, event_id: event.id, participation_ids: [participant_1.id.to_s]}
-            end.to change { Qualification.count }.by(1)
+            }.to change { Qualification.count }.by(1)
             expect(subject.size).to eq(1)
           end
         end
@@ -85,9 +83,9 @@ describe Event::QualificationsController do
           let(:start_at) { event.qualification_date }
 
           it "keeps existing qualification" do
-            expect do
+            expect {
               put :update, params: {group_id: group.id, event_id: event.id, participation_ids: [participant_1.id]}
-            end.not_to change { Qualification.count }
+            }.not_to change { Qualification.count }
             expect(subject.size).to eq(1)
           end
         end

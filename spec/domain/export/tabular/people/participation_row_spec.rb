@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -37,7 +35,7 @@ describe Export::Tabular::People::ParticipationRow do
 
   context "with answers" do
     let(:question) { event_questions(:top_ov) }
-    let(:answer) { participation.answers.find_by_question_id(question.id) }
+    let(:answer) { participation.answers.find_by(question_id: question.id) }
 
     before do
       participation.init_answers

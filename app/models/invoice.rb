@@ -48,7 +48,7 @@
 #  index_invoices_on_sequence_number  (sequence_number)
 #
 
-class Invoice < ActiveRecord::Base
+class Invoice < ApplicationRecord
   include I18nEnums
   include PaymentSlips
 
@@ -56,11 +56,11 @@ class Invoice < ActiveRecord::Base
 
   SEQUENCE_NR_SEPARATOR = "-"
 
-  STATES = %w(draft issued sent payed reminded cancelled).freeze
-  STATES_REMINDABLE = %w(issued sent reminded).freeze
-  STATES_PAYABLE = %w(issued sent reminded).freeze
+  STATES = %w[draft issued sent payed reminded cancelled].freeze
+  STATES_REMINDABLE = %w[issued sent reminded].freeze
+  STATES_PAYABLE = %w[issued sent reminded].freeze
 
-  DUE_SINCE = %w(one_day one_week one_month).freeze
+  DUE_SINCE = %w[one_day one_week one_month].freeze
 
   belongs_to :group
   belongs_to :recipient, class_name: "Person"
@@ -103,7 +103,7 @@ class Invoice < ActiveRecord::Base
 
   class << self
     def draft_or_issued_in(year)
-      return all unless year.to_s =~ /\A\d+\z/
+      return all unless /\A\d+\z/.match?(year.to_s)
       condition = OrCondition.new
       condition.or("EXTRACT(YEAR FROM issued_at) = ?", year)
       condition.or("issued_at IS NULL AND EXTRACT(YEAR FROM invoices.created_at) = ?", year)
@@ -111,10 +111,10 @@ class Invoice < ActiveRecord::Base
     end
 
     def to_contactables(invoices)
-      invoices.collect do |invoice|
+      invoices.collect { |invoice|
         next if invoice.recipient_address.blank?
         Person.new(address: invoice.recipient_address)
-      end.compact
+      }.compact
     end
 
     def order_by_sequence_number
@@ -123,16 +123,16 @@ class Invoice < ActiveRecord::Base
 
     # Orders by first integer, second integer
     def order_by_sequence_number_statement
-      %w(sequence_number).product(%w(1 -1)).map do |field, index|
+      %w[sequence_number].product(%w[1 -1]).map do |field, index|
         "CAST(SUBSTRING_INDEX(#{field}, '-', #{index}) AS UNSIGNED)"
       end
     end
   end
 
   def calculated
-    [:total, :cost, :vat].collect do |field|
+    [:total, :cost, :vat].collect { |field|
       [field, round(invoice_items.reject(&:frozen?).sum(&field))]
-    end.to_h
+    }.to_h
   end
 
   def recalculate
@@ -163,9 +163,7 @@ class Invoice < ActiveRecord::Base
     format("%s-%s.%s", self.class.model_name.human, sequence_number, extension)
   end
 
-  def invoice_config
-    group.invoice_config
-  end
+  delegate :invoice_config, to: :group
 
   def state
     ActiveSupport::StringInquirer.new(self[:state])
@@ -208,7 +206,7 @@ class Invoice < ActiveRecord::Base
   def set_payment_attributes
     [:address, :account_number, :iban, :payment_slip,
      :beneficiary, :payee, :participant_number,
-     :participant_number_internal, :vat_number, :currency].each do |at|
+     :participant_number_internal, :vat_number, :currency,].each do |at|
       assign_attributes(at => invoice_config.send(at))
     end
   end

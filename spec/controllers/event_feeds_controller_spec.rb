@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -73,7 +71,7 @@ describe EventFeedsController do
 
     it "access denied when using wrong token" do
       get :show, params: {token: "wrong-token-IXSvkeJEHe"}, format: :ics
-      expect(response).to have_http_status(404)
+      expect(response).to have_http_status(:not_found)
     end
 
     context "with event participations" do

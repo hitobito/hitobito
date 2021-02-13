@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -39,7 +37,7 @@ module RolesHelper
       link_to_if(can?(:show, group), group, group)
     else
       group = Group.with_deleted.where(id: role.group_id).first
-      group.to_s + " (#{t('attributes.deleted_info')})"
+      group.to_s + " (#{t("attributes.deleted_info")})"
     end
   end
 

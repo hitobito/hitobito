@@ -11,8 +11,8 @@ describe Message::LetterWithInvoice do
   let(:invoice_attrs) {
     {
       "invoice_items_attributes" => {
-        "1" => {"name" => "Mitgliedsbeitrag 2021", "_destroy" => "false"}
-      }
+        "1" => {"name" => "Mitgliedsbeitrag 2021", "_destroy" => "false"},
+      },
     }
   }
 

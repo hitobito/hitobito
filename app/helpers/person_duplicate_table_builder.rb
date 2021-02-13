@@ -6,10 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class PersonDuplicateTableBuilder
-  I18N_PREFIX = "person_duplicates".freeze
-  I18N_PERSON = "activerecord.attributes.person".freeze
-  I18N_PERSON_DUPLICATE = "activerecord.attributes.person_duplicate".freeze
-  TABLE_CLASS = "table person-duplicates-table".freeze
+  I18N_PREFIX = "person_duplicates"
+  I18N_PERSON = "activerecord.attributes.person"
+  I18N_PERSON_DUPLICATE = "activerecord.attributes.person_duplicate"
+  TABLE_CLASS = "table person-duplicates-table"
 
   attr_reader :template
 
@@ -22,7 +22,7 @@ class PersonDuplicateTableBuilder
     @entries = entries
     @group = group
     @cols = [:person_name, :company_name,
-             :birth_year, :town, :roles_list, :actions]
+             :birth_year, :town, :roles_list, :actions,]
   end
 
   def self.table(entries, group, template)
@@ -33,11 +33,11 @@ class PersonDuplicateTableBuilder
   def to_html
     content_tag(:table, class: TABLE_CLASS) do
       content_tag(:thead, html_header) +
-        content_tag_nested(:tbody, @entries) do |e|
-        person_row(e, :person_1) +
-          person_row(e, :person_2) +
-          divider_row(e)
-      end
+        content_tag_nested(:tbody, @entries) { |e|
+          person_row(e, :person_1) +
+            person_row(e, :person_2) +
+            divider_row(e)
+        }
     end
   end
 
@@ -95,13 +95,15 @@ class PersonDuplicateTableBuilder
   def new_merge_path(entry)
     template.new_merge_group_person_duplicate_path(
       group_id: @group.id,
-      id: entry.id)
+      id: entry.id
+    )
   end
 
   def new_ignore_path(entry)
     template.new_ignore_group_person_duplicate_path(
       group_id: @group.id,
-      id: entry.id)
+      id: entry.id
+    )
   end
 
   def divider_row(entry)
@@ -124,8 +126,7 @@ class PersonDuplicateTableBuilder
     return if header == :actions
 
     I18n.t("#{I18N_PERSON}.#{header}",
-      default: I18n.t("#{I18N_PERSON_DUPLICATE}.#{header}")
-     )
+      default: I18n.t("#{I18N_PERSON_DUPLICATE}.#{header}"))
   end
 
   def t(key)

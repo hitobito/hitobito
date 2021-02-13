@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
 #  This file is part of hitobito and licensed under the Affero General Public
 #  License version 3 or later. See the COPYING file at the top-level
@@ -50,7 +48,7 @@ describe RolesController, js: true do
 
       all("form .btn-toolbar").first.click_button "Speichern"
 
-      expect(current_path).to eq(group_people_path(group))
+      expect(page).to have_current_path(group_people_path(group), ignore_query: true)
       is_expected.to have_content "Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt."
     end
   end
@@ -74,7 +72,7 @@ describe RolesController, js: true do
 
       all("form .btn-toolbar").first.click_button "Speichern"
 
-      expect(current_path).not_to eq(group_people_path(group))
+      expect(page).to have_no_current_path(group_people_path(group), ignore_query: true)
       is_expected.to have_content "Rolle Leader für Tester in TopGroup wurde erfolgreich erstellt."
     end
   end
@@ -128,7 +126,7 @@ describe RolesController, js: true do
       # save
       all("form .btn-toolbar").first.click_button "Speichern"
 
-      expect(current_path).to eq(group_people_path(groups(:toppers)))
+      expect(page).to have_current_path(group_people_path(groups(:toppers)), ignore_query: true)
       is_expected.to have_content "Rolle Member für Top Leader in Toppers wurde erfolgreich erstellt."
     end
   end

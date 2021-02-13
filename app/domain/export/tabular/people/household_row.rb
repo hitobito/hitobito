@@ -13,9 +13,9 @@ module Export::Tabular::People
       if entry.company?
         entry.company_name
       else
-        with_combined_first_names.collect do |last_name, combined_first_name|
+        with_combined_first_names.collect { |last_name, combined_first_name|
           without_blanks([combined_first_name, last_name]).join(" ")
-        end.join(", ")
+        }.join(", ")
       end
     end
 
@@ -30,11 +30,11 @@ module Export::Tabular::People
     end
 
     def names_hash
-      @names_hash ||= first_names.zip(last_names).each_with_object({}) do |(first, last), memo|
+      @names_hash ||= first_names.zip(last_names).each_with_object({}) { |(first, last), memo|
         last = first_present_last_name if last.blank?
         memo[last] ||= []
         memo[last] << first
-      end
+      }
     end
 
     def combine(first_names)
@@ -49,7 +49,7 @@ module Export::Tabular::People
     end
 
     def first_present_last_name
-      last_names.select(&:present?).first
+      last_names.find(&:present?)
     end
 
     def first_names

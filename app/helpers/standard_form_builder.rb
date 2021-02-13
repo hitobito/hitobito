@@ -157,7 +157,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
-    label(id_from_value(attr, value), class: "radio#{' inline' if inline}") do
+    label(id_from_value(attr, value), class: "radio#{" inline" if inline}") do
       radio_button(attr, value, html_options) + " " +
         caption
     end
@@ -236,32 +236,32 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         placeholder: I18n.t("global.search.placeholder_person"),
         data: {provide: "entity",
                id_field: "#{object_name}_#{attr_id}",
-               url: @template.query_people_path})
+               url: @template.query_people_path,})
   end
 
   def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, required = false,
-                                &block)
+    &block)
     required_class = required ? " required" : nil
     content_tag(:div, class: ["control-group", required_class].compact.join(" ")) do
       label(assoc, class: "control-label") +
-        nested_fields_for(assoc, partial_name, record_object) do |fields|
+        nested_fields_for(assoc, partial_name, record_object) { |fields|
           content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
 
           content << help_inline(fields.link_to_remove(I18n.t("global.associations.remove")))
           content_tag(:div, content, class: "controls controls-row well")
-        end
+        }
     end
   end
 
   def nested_fields_for(assoc, partial_name = nil, record_object = nil, &block)
-    content_tag(:div, id: "#{assoc}_fields") do
+    content_tag(:div, id: "#{assoc}_fields") {
       fields_for(assoc, record_object) do |fields|
         block_given? ? capture(fields, &block) : render(partial_name, f: fields)
       end
-    end +
-      content_tag(:div, class: "controls") do
+    } +
+      content_tag(:div, class: "controls") {
         content_tag(:p, link_to_add(I18n.t("global.associations.add"), assoc), class: "text")
-      end
+      }
   end
 
   def readonly_value(attr, html_options = {})
@@ -289,10 +289,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
     caption_or_content ||= captionize(attr, klass)
     add_css_class(html_options, "controls")
-    css_classes = { "control-group" => true,
-                    error: errors_on?(attr),
-                    required: required?(attr),
-                    "no-attachments": no_attachments?(attr) }
+    css_classes = {"control-group" => true,
+                   :error => errors_on?(attr),
+                   :required => required?(attr),
+                   :"no-attachments" => no_attachments?(attr),}
 
     content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(" ")) do
       label(attr, caption_or_content, class: "control-label") +
@@ -357,7 +357,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Generates a help block for fields
   def help_block(text = nil, options = {}, &block)
     additional_classes = Array(options.delete(:class))
-    content_tag(:span, text, class: "help-block #{additional_classes.join(' ')}", &block)
+    content_tag(:span, text, class: "help-block #{additional_classes.join(" ")}", &block)
   end
 
   # Returns the list of association entries, either from options[:list],
@@ -376,9 +376,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def honeypot(name = :name)
     content_tag(:div, class: "control-group hp") do
       label(name, name, class: "control-label") +
-        content_tag(:div, class: "controls") do
+        content_tag(:div, class: "controls") {
           text_field(name, value: nil, placeholder: I18n.t("global.do_not_fill"))
-        end
+        }
     end
   end
 
@@ -481,7 +481,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def id_from_value(attr, value)
-    "#{attr}_#{value.to_s.gsub(/\s/, '_').gsub(/[^-\w]/, '').downcase}"
+    "#{attr}_#{value.to_s.gsub(/\s/, "_").gsub(/[^-\w]/, "").downcase}"
   end
 end
 

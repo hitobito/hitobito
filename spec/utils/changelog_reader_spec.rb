@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2016, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -93,7 +91,7 @@ describe ChangelogReader do
     expect(sorted[3]).to eq(v3)
     expect(sorted[4]).to eq(v1)
 
-    expect(sorted.map(&:version)).to eq(%w(2.15 2.3 1.X 1.11 1.1))
+    expect(sorted.map(&:version)).to eq(%w[2.15 2.3 1.X 1.11 1.1])
   end
 
   it "reads existing changelog file" do

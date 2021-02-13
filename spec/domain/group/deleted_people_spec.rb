@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -93,13 +91,13 @@ describe Group::DeletedPeople do
 
     it "doesnt find when not visible from above" do
       role_bottom = Fabricate(Role::External.name.to_sym, group: bottom_group, person: person,
-                                                          created_at: DateTime.current - 30.day)
+                                                          created_at: DateTime.current - 30.days)
       role_top.destroy
       expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
     end
 
     it "finds multiple people" do
-      del = 1.months.ago
+      del = 1.month.ago
       role_top.destroy
       role_top.update!(deleted_at: del)
       top2 = Fabricate(Group::TopLayer::TopAdmin.name, group: group,

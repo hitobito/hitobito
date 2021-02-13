@@ -60,15 +60,15 @@ class SubscriptionsController < CrudController
   end
 
   def group_subscriptions
-    subscriptions_for_type(Group).
-      includes(:related_role_types).
-      order("#{Group.quoted_table_name}.name")
+    subscriptions_for_type(Group)
+      .includes(:related_role_types)
+      .order("#{Group.quoted_table_name}.name")
   end
 
   def person_subscriptions(excluded = false)
-    subscriptions_for_type(Person).
-      where(excluded: excluded).
-      order("people.last_name", "people.first_name")
+    subscriptions_for_type(Person)
+      .where(excluded: excluded)
+      .order("people.last_name", "people.first_name")
   end
 
   def event_subscriptions

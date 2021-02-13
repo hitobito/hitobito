@@ -64,9 +64,9 @@ module Sheet
 
       content_tag(:div, class: "breadcrumb") do
         content_tag(:ul) do
-          crumbs = breadcrumbs.reverse.collect do |crumb|
+          crumbs = breadcrumbs.reverse.collect { |crumb|
             content_tag(:li, crumb)
-          end
+          }
 
           content_tag(:li, belongs_to) + safe_join(crumbs, divider)
         end

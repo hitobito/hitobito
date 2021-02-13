@@ -129,7 +129,7 @@ describe Person::HouseholdsController do
     {group_id: person.groups.first.id,
      person_id: person.id,
      other_person_id: other.id,
-     person: person_attrs(ids)}
+     person: person_attrs(ids),}
   end
 
   def person_attrs(ids)
@@ -137,7 +137,7 @@ describe Person::HouseholdsController do
      zip_code: "",
      town: "",
      country: "",
-     household_people_ids: ids}
+     household_people_ids: ids,}
   end
 
   def create(role, group)

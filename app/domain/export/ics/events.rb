@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -30,7 +28,7 @@ module Export::Ics
         event.contact.person_name,
         event.contact.phone_numbers.map { |pn| "#{pn.label}: #{pn.number}" if pn.public },
         event.contact.email, "",
-        url(event)
+        url(event),
       ].flatten.compact.join("\n")
     end
 
@@ -43,7 +41,7 @@ module Export::Ics
         ical_event.dtstart = datetime_to_ical(event_date.start_at)
         ical_event.dtend = finish_at_to_ical(event_date.finish_at)
         ical_event.summary = event.name
-        ical_event.summary += ": #{event_date.label}" unless event_date.label.blank?
+        ical_event.summary += ": #{event_date.label}" if event_date.label.present?
         ical_event.location = event_date.location || event.location
         ical_event.description = event_description(event)
         ical_event.contact = event.contact && event.contact.to_s

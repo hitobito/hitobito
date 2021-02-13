@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -10,7 +8,7 @@ module Export::Tabular::Events
     self.dynamic_attributes = {
       /^contact_/ => :contactable_attribute,
       /^leader_/ => :contactable_attribute,
-      /^date_\d+_/ => :date_attribute
+      /^date_\d+_/ => :date_attribute,
     }
 
     def kind

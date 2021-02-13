@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2016, insieme Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -72,7 +70,7 @@ module Export::Xlsx
     def page_setup
       {paper_size: 9, # Default A4
        fit_to_height: 1,
-       orientation: :landscape}
+       orientation: :landscape,}
     end
 
     def default_style_data_rows
@@ -89,8 +87,8 @@ module Export::Xlsx
     def default_style
       {
         style: {
-          font_name: Settings.xlsx.font_name, alignment: {horizontal: :left}
-        }
+          font_name: Settings.xlsx.font_name, alignment: {horizontal: :left},
+        },
       }
     end
 

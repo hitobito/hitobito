@@ -34,9 +34,9 @@ module Dropdown
       options = {class: "dropdown-menu pull-right", data: {persistent: true}, role: "menu"}
 
       content_tag(:ul, options) do
-        items = table_display.available.collect do |column|
+        items = table_display.available.collect { |column|
           render_item("selected[]", column)
-        end
+        }
 
         items += event_specific_items if parent.is_a?(::Event)
         safe_join(items)
@@ -61,9 +61,9 @@ module Dropdown
       divider = Divider.new.render(template)
       title = Title.new(t("event.participations.#{kind}_answers")).render(template)
 
-      questions.collect do |question|
+      questions.collect { |question|
         render_item("selected[]", question.label, dom_id(question), question.label)
-      end.prepend(divider, title)
+      }.prepend(divider, title)
     end
 
     def present_questions(kind)
@@ -94,7 +94,7 @@ module Dropdown
       {
         id: dom_id(parent),
         class: "table-display-dropdown",
-        data: {turbolinks_permanent: 1}
+        data: {turbolinks_permanent: 1},
       }
     end
   end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
 #  This file is part of hitobito and licensed under the Affero General Public
 #  License version 3 or later. See the COPYING file at the top-level directory
@@ -44,7 +42,7 @@ module Export::Tabular
 
     def handle_dynamic_attribute(attr)
       dynamic_attributes.each do |regexp, handler|
-        if attr.to_s =~ regexp
+        if attr.to_s&.match?(regexp)
           return send(handler, attr)
         end
       end

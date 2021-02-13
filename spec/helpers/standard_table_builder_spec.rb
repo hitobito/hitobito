@@ -4,7 +4,7 @@ describe "StandardTableBuilder" do
   include UtilityHelper
   include FormatHelper
 
-  let(:entries) { %w(foo bahr) }
+  let(:entries) { %w[foo bahr] }
   let(:table) { StandardTableBuilder.new(entries, self) }
 
   def format_size(obj) #:nodoc:

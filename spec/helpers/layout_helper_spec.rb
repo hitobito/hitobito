@@ -67,11 +67,11 @@ describe LayoutHelper do
     # sorry for this violation of demeter
     def extract_classes(tag_string)
       Nokogiri::HTML.fragment(tag_string) # NodeSet
-                    .children # Array
-                    .first # Element
-                    .attributes["class"] # Attr
-                    .value # String
-                    .split(" ")
+        .children # Array
+        .first # Element
+        .attributes["class"] # Attr
+        .value # String
+        .split(" ")
     end
   end
 end

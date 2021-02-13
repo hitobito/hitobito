@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
@@ -16,9 +15,9 @@ describe InvoiceMailer do
 
   subject { mail }
 
-  its(:to) { should == [invoice.recipient.email] }
-  its(:reply_to) { should == [sender.email] }
-  its(:subject) { should =~ /Rechnung \d+-\d+ von Bottom One/ }
+  its(:to) { is_expected.to == [invoice.recipient.email] }
+  its(:reply_to) { is_expected.to == [sender.email] }
+  its(:subject) { is_expected.to =~ /Rechnung \d+-\d+ von Bottom One/ }
 
   it "renders body if invoice.recipient is missing" do
     invoice.update(recipient: nil, recipient_email: "test@example.com")
@@ -28,14 +27,14 @@ describe InvoiceMailer do
   it "uses sender email in mail headers" do
     expect(mail.from).to eq ["noreply@localhost"]
     expect(mail.sender).to match(/^noreply-bounces\+bottom_member=example\.com@/)
-    expect(mail.reply_to).to eq %w(bottom_member@example.com)
+    expect(mail.reply_to).to eq %w[bottom_member@example.com]
   end
 
   it "uses invoice_config.email in mail headers" do
     invoice.invoice_config.update(email: "invoices@example.com")
-    expect(mail.from).to eq %w(invoices@example.com)
+    expect(mail.from).to eq %w[invoices@example.com]
     expect(mail.sender).to eq "invoices@example.com"
-    expect(mail.reply_to).to eq %w(invoices@example.com)
+    expect(mail.reply_to).to eq %w[invoices@example.com]
   end
 
   describe :html_body do

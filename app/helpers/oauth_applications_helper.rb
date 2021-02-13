@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -12,9 +10,9 @@ module OauthApplicationsHelper
   end
 
   def format_doorkeeper_application_scopes(application)
-    human_scopes = application.scopes.collect do |key|
+    human_scopes = application.scopes.collect { |key|
       format_doorkeeper_application_scope(key)
-    end.collect(&:html_safe)
+    }.collect(&:html_safe)
 
     simple_list(human_scopes, class: "unstyled")
   end

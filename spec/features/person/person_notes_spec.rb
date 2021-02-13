@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -37,12 +35,12 @@ describe "Person Notes", js: true do
       expect(page).to have_selector("#notes-error", text: "Text muss ausgefüllt werden")
 
       # submit with input
-      expect do
+      expect {
         fill_in("note_text", with: "ladida")
         find("#new_note button").click
         expect(page).to have_no_content("Keine Einträge gefunden")
         expect(page).to have_selector("#notes-list .note", count: 1)
-      end.to change { Note.count }.by(1)
+      }.to change { Note.count }.by(1)
     end
   end
 
@@ -56,12 +54,12 @@ describe "Person Notes", js: true do
     it "removes deleted notes" do
       expect(page).to have_selector("#notes-list .note", count: 2)
 
-      expect do
+      expect {
         accept_confirm do
           find("#note_#{@n1.id} a[data-method=delete]").click
         end
         expect(page).to have_selector("#notes-list .note", count: 1)
-      end.to change { Note.count }.by(-1)
+      }.to change { Note.count }.by(-1)
     end
   end
 end

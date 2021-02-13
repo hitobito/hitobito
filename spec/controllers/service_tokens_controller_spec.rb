@@ -18,9 +18,9 @@ describe ServiceTokensController do
     end
 
     it "may not index when person has no permission on top group" do
-      expect do
+      expect {
         get :index, params: {group_id: groups(:top_group).id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -37,8 +37,8 @@ describe ServiceTokensController do
         events: true,
         invoices: true,
         event_participations: true,
-        mailing_lists: true
-      }}
+        mailing_lists: true,
+      },}
       expect(token.reload).to be_people
       expect(token.reload).to be_people_below
       expect(token.reload).to be_groups

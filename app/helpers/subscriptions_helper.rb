@@ -3,7 +3,7 @@ module SubscriptionsHelper
     path = if @mailing_list.mailchimp?
       group_mailing_list_mailchimp_synchronizations_path(group_id: @group.id,
                                                          mailing_list_id: @mailing_list.id)
-           end
+    end
 
     Dropdown::PeopleExport.new(self, current_user, params,
       details: false,

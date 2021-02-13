@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -30,6 +28,7 @@ describe IdnSanitizer do
 
   it "sanitizes multiple emails" do
     expect(IdnSanitizer.sanitize(["foo@exämple.com", "bar@exämple.com"])).to eq(
-      ["foo@xn--exmple-cua.com", "bar@xn--exmple-cua.com"])
+      ["foo@xn--exmple-cua.com", "bar@xn--exmple-cua.com"]
+    )
   end
 end

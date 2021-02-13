@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -54,10 +52,10 @@ module ContactAttrs
     end
 
     def radio_buttons(attr, disabled = false, options = [:required, :optional, :hidden])
-      buttons = options.collect do |o|
+      buttons = options.collect { |o|
         checked = options.size == 1
         radio_button(attr, disabled, o, checked)
-      end
+      }
       safe_join(buttons)
     end
 

@@ -14,25 +14,25 @@ describe TagList do
   context "add tags" do
     it "creates only one tag for one person" do
       tag_list = TagList.new([leader], [tag1])
-      expect do
+      expect {
         expect(tag_list.add).to be 1
-      end.to change { leader.tags.count }.by(1)
+      }.to change { leader.tags.count }.by(1)
     end
 
     it "does nothing if the tag already exists" do
       leader.tag_list.add(tag1)
       leader.save!
       tag_list = TagList.new([leader], [tag1])
-      expect do
+      expect {
         expect(tag_list.add).to be 0
-      end.not_to(change { leader.reload.tags.count })
+      }.not_to(change { leader.reload.tags.count })
     end
 
     it "may create the same tag on multiple people" do
       tag_list = TagList.new([leader, bottom_member], [tag1])
-      expect do
+      expect {
         expect(tag_list.add).to be 2
-      end.to change { leader.tags.count }.by(1).and change { bottom_member.tags.count }.by(1)
+      }.to change { leader.tags.count }.by(1).and change { bottom_member.tags.count }.by(1)
 
       expect(leader.reload.tags.collect(&:name)).to include tag1.name
       expect(bottom_member.reload.tags.collect(&:name)).to include tag1.name
@@ -40,9 +40,9 @@ describe TagList do
 
     it "may create multiple tags for one person" do
       tag_list = TagList.new([leader], [tag1, tag2])
-      expect do
+      expect {
         expect(tag_list.add).to be 2
-      end.to change { leader.tags.count }.by(2)
+      }.to change { leader.tags.count }.by(2)
 
       expect(leader.reload.tags.collect(&:name)).to include tag1.name, tag2.name
     end
@@ -51,9 +51,9 @@ describe TagList do
       bottom_member.tag_list.add(tag2)
       bottom_member.save!
       tag_list = TagList.new([leader, bottom_member], [tag1, tag2])
-      expect do
+      expect {
         expect(tag_list.add).to be 3
-      end.to change { leader.tags.count }.by(2).and change { bottom_member.tags.count }.by(1)
+      }.to change { leader.tags.count }.by(2).and change { bottom_member.tags.count }.by(1)
 
       expect(leader.reload.tags.collect(&:name)).to include tag1.name, tag2.name
       expect(bottom_member.reload.tags.collect(&:name)).to include tag1.name, tag2.name
@@ -65,16 +65,16 @@ describe TagList do
       leader.tag_list.add(tag1)
       leader.save!
       tag_list = TagList.new([leader], [tag1])
-      expect do
+      expect {
         expect(tag_list.remove).to be 1
-      end.to change { leader.tags.count }.by(-1)
+      }.to change { leader.tags.count }.by(-1)
     end
 
     it "does nothing if the tag does not exist on the person" do
       tag_list = TagList.new([leader], [tag1])
-      expect do
+      expect {
         expect(tag_list.remove).to be 0
-      end.not_to(change { leader.reload.tags.count })
+      }.not_to(change { leader.reload.tags.count })
     end
 
     it "may delete the same tag from multiple people" do
@@ -83,9 +83,9 @@ describe TagList do
       bottom_member.tag_list.add(tag1)
       bottom_member.save!
       tag_list = TagList.new([leader, bottom_member], [tag1])
-      expect do
+      expect {
         expect(tag_list.remove).to be 2
-      end.to change { leader.tags.count }.by(-1).and change { bottom_member.tags.count }.by(-1)
+      }.to change { leader.tags.count }.by(-1).and change { bottom_member.tags.count }.by(-1)
 
       expect(leader.reload.tags.collect(&:name)).not_to include tag1.name
       expect(bottom_member.reload.tags.collect(&:name)).not_to include tag1.name
@@ -95,9 +95,9 @@ describe TagList do
       leader.tag_list.add(tag1, tag2)
       leader.save!
       tag_list = TagList.new([leader], [tag1, tag2])
-      expect do
+      expect {
         expect(tag_list.remove).to be 2
-      end.to change { leader.tags.count }.by(-2)
+      }.to change { leader.tags.count }.by(-2)
 
       expect(leader.reload.tags.collect(&:name)).not_to include tag1.name, tag2.name
     end
@@ -108,9 +108,9 @@ describe TagList do
       bottom_member.tag_list.add(tag1)
       bottom_member.save!
       tag_list = TagList.new([leader, bottom_member], [tag1, tag2])
-      expect do
+      expect {
         expect(tag_list.remove).to be 3
-      end.to change { leader.tags.count }.by(-2).and change { bottom_member.tags.count }.by(-1)
+      }.to change { leader.tags.count }.by(-2).and change { bottom_member.tags.count }.by(-1)
 
       expect(leader.reload.tags.collect(&:name)).not_to include tag1.name, tag2.name
       expect(bottom_member.reload.tags.collect(&:name)).not_to include tag1.name, tag2.name

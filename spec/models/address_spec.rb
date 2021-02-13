@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -25,6 +23,6 @@ require "spec_helper"
 describe Address do
   it "serializes numbers as array" do
     bs_bern = addresses(:bs_bern)
-    expect(bs_bern.numbers).to eq %w(36 37 38 40 41)
+    expect(bs_bern.numbers).to eq %w[36 37 38 40 41]
   end
 end

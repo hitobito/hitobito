@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -18,7 +17,7 @@ task :ci do
            "ci:setup:rspec",
            "spec:sphinx",
            "spec:features", # run feature specs first to get coverage from spec
-           "spec"].delete_if { |task| tasks_to_skip.include?(task) }
+           "spec",].delete_if { |task| tasks_to_skip.include?(task) }
 
   tasks.each { |task| Rake::Task[task].invoke }
 end
@@ -34,7 +33,7 @@ namespace :ci do
                  # 'spec:features', # run feature specs first to get coverage from spec
                  "spec",
                  "rubocop:report",
-                 "brakeman"]
+                 "brakeman",]
 
   desc "Run the tasks for a wagon commit build"
   task :wagon do

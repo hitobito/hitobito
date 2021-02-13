@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -25,16 +23,16 @@ describe PeopleController, type: :controller do
     {group_id: top_group.id, role: {type: "Group::TopGroup::Member", group_id: top_group.id}}
   end
 
-  include_examples "crud controller", skip: [%w(new), %w(create), %w(destroy)]
+  include_examples "crud controller", skip: [%w[new], %w[create], %w[destroy]]
 
   describe "#show" do
     let(:page_content) { ["Bearbeiten", "Info", "Verlauf", "Aktive Rollen", "Passwort ändern"] }
 
     it "cannot view person in uppper group" do
       sign_in(Fabricate(Group::BottomGroup::Leader.name.to_sym, group: bottom_group).person)
-      expect do
+      expect {
         get :show, params: {group_id: top_group.id, id: top_leader.id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
 
     it "renders my own page" do
@@ -63,8 +61,8 @@ describe PeopleController, type: :controller do
     end
 
     it "member without permission to see details cannot see created or updated info" do
-      person1 = (Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person)
-      person2 = (Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)).person)
+      person1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
+      person2 = Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)).person
       sign_in(person1)
       get :show, params: {group_id: person2.primary_group_id, id: person2}
       expect(dom).not_to have_selector("dt", text: "Erstellt")
@@ -121,16 +119,19 @@ describe PeopleController, type: :controller do
         person: top_leader,
         requester: Fabricate(:person),
         body: groups(:bottom_layer_one),
-        role_type: Group::BottomLayer::Member.sti_name)
+        role_type: Group::BottomLayer::Member.sti_name
+      )
       r2 = Person::AddRequest::Event.create!(
         person: top_leader,
         requester: Fabricate(:person),
         body: events(:top_course),
-        role_type: Event::Role::Cook.sti_name)
+        role_type: Event::Role::Cook.sti_name
+      )
       r3 = Person::AddRequest::MailingList.create!(
         person: top_leader,
         requester: Fabricate(:person),
-        body: mailing_lists(:leaders))
+        body: mailing_lists(:leaders)
+      )
       get :show, params: {group_id: top_group.id, id: top_leader.id}
 
       expect(section.find("h2").text).to eq "Anfragen"
@@ -144,7 +145,8 @@ describe PeopleController, type: :controller do
         person: Fabricate(:person),
         requester: Fabricate(:person),
         body: groups(:bottom_layer_one),
-        role_type: Group::BottomLayer::Member.sti_name)
+        role_type: Group::BottomLayer::Member.sti_name
+      )
       get :show, params: {group_id: top_group.id, id: top_leader.id}
 
       expect(section.find("h2").text).to eq "Qualifikationen Erstellen"
@@ -230,7 +232,7 @@ describe PeopleController, type: :controller do
       get :edit, params: {
         group_id: top_group.id,
         id: top_leader.id,
-        return_url: "foo"
+        return_url: "foo",
       }
 
       expect(dom.all("a", text: "Abbrechen").first[:href]).to eq "foo"

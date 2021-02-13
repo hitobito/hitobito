@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Person::Filter::TagAbsence < Person::Filter::Tag
   def apply(scope)
     scope.where.not(people: {id: tagged_people_ids}).distinct

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -14,34 +12,38 @@ describe PersonDecorator, :draper_with_helpers do
 
   subject { PersonDecorator.new(person) }
 
-  its(:full_label) { should == "Top Leader, Supertown" }
-  its(:address_name) { should == "<strong>Top Leader</strong>" }
+  its(:full_label) { is_expected.to == "Top Leader, Supertown" }
+  its(:address_name) { is_expected.to == "<strong>Top Leader</strong>" }
 
   context "with town and birthday" do
-    let(:person) do Fabricate(:person, first_name: "Fra",
-                                       last_name: "Stuck",
-                                       nickname: "Schu",
-                                       company_name: "Coorp",
-                                       birthday: "3.8.76",
-                                       town: "City") end
+    let(:person) do
+      Fabricate(:person, first_name: "Fra",
+                         last_name: "Stuck",
+                         nickname: "Schu",
+                         company_name: "Coorp",
+                         birthday: "3.8.76",
+                         town: "City")
+    end
 
-    its(:full_label) { should == "Fra Stuck / Schu, City (1976)" }
-    its(:address_name) { should == "Coorp<br /><strong>Fra Stuck / Schu</strong>" }
-    its(:additional_name) { should == "Coorp" }
+    its(:full_label) { is_expected.to == "Fra Stuck / Schu, City (1976)" }
+    its(:address_name) { is_expected.to == "Coorp<br /><strong>Fra Stuck / Schu</strong>" }
+    its(:additional_name) { is_expected.to == "Coorp" }
   end
 
   context "as company" do
-    let(:person) do Fabricate(:person, first_name: "Fra",
-                                       last_name: "Stuck",
-                                       nickname: "Schu",
-                                       company_name: "Coorp",
-                                       birthday: "3.8.76",
-                                       town: "City",
-                                       company: true) end
+    let(:person) do
+      Fabricate(:person, first_name: "Fra",
+                         last_name: "Stuck",
+                         nickname: "Schu",
+                         company_name: "Coorp",
+                         birthday: "3.8.76",
+                         town: "City",
+                         company: true)
+    end
 
-    its(:full_label) { should == "Coorp, City (Fra Stuck)" }
-    its(:address_name) { should == "<strong>Coorp</strong><br />Fra Stuck" }
-    its(:additional_name) { should == "Fra Stuck" }
+    its(:full_label) { is_expected.to == "Coorp, City (Fra Stuck)" }
+    its(:address_name) { is_expected.to == "<strong>Coorp</strong><br />Fra Stuck" }
+    its(:additional_name) { is_expected.to == "Fra Stuck" }
   end
 
   context "roles grouped" do

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Dachverband Schweizer Jugendparlamente. This file is
 #  part of hitobito and licensed under the Affero General Public License
 #  version 3 or later. See the COPYING file at the top-level directory or at
@@ -22,14 +20,14 @@ class Person::ColleaguesController < ApplicationController
   def list_entries
     return Person.none.page(1) unless person.company_name?
 
-    Person.
-      where(company_name: person.company_name).
-      preload_public_accounts.
-      preload_groups.
-      joins(:roles).
-      order_by_name.
-      distinct.
-      page(params[:page])
+    Person
+      .where(company_name: person.company_name)
+      .preload_public_accounts
+      .preload_groups
+      .joins(:roles)
+      .order_by_name
+      .distinct
+      .page(params[:page])
   end
 
   def person
@@ -51,6 +49,6 @@ class Person::ColleaguesController < ApplicationController
   include Sortable
 
   self.sort_mappings = {
-    roles: [Person.order_by_role_statement].concat(Person.order_by_name_statement)
+    roles: [Person.order_by_role_statement].concat(Person.order_by_name_statement),
   }
 end

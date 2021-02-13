@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,9 +14,9 @@ module Export::Pdf::Invoice
     private
 
     def information
-      information_hash.map do |k, v|
+      information_hash.map { |k, v|
         labeled_information(k, v)
-      end.compact
+      }.compact
     end
 
     def information_hash
@@ -27,7 +25,7 @@ module Export::Pdf::Invoice
         invoice_date: (I18n.l(invoice.issued_at) if invoice.issued_at),
         due_at: (I18n.l(invoice.due_at) if invoice.due_at),
         creator: invoice.creator.try(:full_name),
-        vat_number: invoice.vat_number
+        vat_number: invoice.vat_number,
       }
     end
 

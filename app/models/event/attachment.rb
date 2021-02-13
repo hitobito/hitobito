@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2015, Pro Natura Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -17,7 +15,7 @@
 #  index_event_attachments_on_event_id  (event_id)
 #
 
-class Event::Attachment < ActiveRecord::Base
+class Event::Attachment < ApplicationRecord
   MAX_FILE_SIZE = Settings.event.attachments.max_file_size.megabytes
 
   belongs_to :event

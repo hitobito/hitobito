@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
@@ -57,8 +56,8 @@ module Dropdown
           href: "#",
           data: {toggle: "dropdown"}) do
           safe_join([label_without_link,
-                     content_tag(:b, "", class: "caret")].compact, " ")
-        end
+                     content_tag(:b, "", class: "caret"),].compact, " ")
+        end,
       ].compact, " ")
     end
 
@@ -85,7 +84,7 @@ module Dropdown
     end
   end
 
-  Item = Struct.new(:label, :url, :sub_items, :options) do
+  Item = Struct.new(:label, :url, :sub_items, :options) {
     def initialize(label, url, options = {})
       super(label, url, [], options)
     end
@@ -97,7 +96,7 @@ module Dropdown
     def render(template)
       template.content_tag(:li, class: css_class) do
         template.safe_join([link(template, label, url, options),
-                            render_sub_items(template)].compact)
+                            render_sub_items(template),].compact)
       end
     end
 
@@ -121,7 +120,7 @@ module Dropdown
         end
       end
     end
-  end
+  }
 
   class Divider
     def render(template)
@@ -129,7 +128,7 @@ module Dropdown
     end
   end
 
-  Title = Struct.new(:label, :options) do
+  Title = Struct.new(:label, :options) {
     def initialize(label, options = {})
       super(label, options)
     end
@@ -139,5 +138,5 @@ module Dropdown
         template.content_tag(:small, label, options)
       end
     end
-  end
+  }
 end

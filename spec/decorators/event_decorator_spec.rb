@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -25,8 +23,10 @@ describe EventDecorator, :draper_with_helpers do
     it { is_expected.to eq "#{event} (#{event.groups.first})" }
 
     context "multiple groups are joined and truncated" do
-      before do event.groups += [groups(:top_group), groups(:bottom_layer_one), groups(:bottom_group_one_one),
-                                 groups(:bottom_layer_two), groups(:bottom_group_two_one)] end
+      before do
+        event.groups += [groups(:top_group), groups(:bottom_layer_one), groups(:bottom_group_one_one),
+                         groups(:bottom_layer_two), groups(:bottom_group_two_one),]
+      end
 
       it { is_expected.to eq "#{event} (Top, TopGroup, Bottom One...)" }
     end
@@ -101,11 +101,11 @@ describe EventDecorator, :draper_with_helpers do
   context "qualification infos" do
     context "with qualifications and prolongations" do
       its(:issued_qualifications_info_for_leaders) do
-        should == "Vergibt die Qualifikation Super Lead (for Leaders) unmittelbar per 01.03.2012 (letztes Kursdatum)."
+        is_expected.to == "Vergibt die Qualifikation Super Lead (for Leaders) unmittelbar per 01.03.2012 (letztes Kursdatum)."
       end
 
       its(:issued_qualifications_info_for_participants) do
-        should == "Vergibt die Qualifikation Super Lead und verlängert existierende Qualifikationen Group Lead unmittelbar per 01.03.2012 (letztes Kursdatum)."
+        is_expected.to == "Vergibt die Qualifikation Super Lead und verlängert existierende Qualifikationen Group Lead unmittelbar per 01.03.2012 (letztes Kursdatum)."
       end
     end
 
@@ -113,11 +113,11 @@ describe EventDecorator, :draper_with_helpers do
       before { event.kind = event_kinds(:glk) }
 
       its(:issued_qualifications_info_for_leaders) do
-        should == "Vergibt die Qualifikation Group Lead (for Leaders) unmittelbar per 01.03.2012 (letztes Kursdatum)."
+        is_expected.to == "Vergibt die Qualifikation Group Lead (for Leaders) unmittelbar per 01.03.2012 (letztes Kursdatum)."
       end
 
       its(:issued_qualifications_info_for_participants) do
-        should == "Vergibt die Qualifikation Group Lead unmittelbar per 01.03.2012 (letztes Kursdatum)."
+        is_expected.to == "Vergibt die Qualifikation Group Lead unmittelbar per 01.03.2012 (letztes Kursdatum)."
       end
     end
 
@@ -125,11 +125,11 @@ describe EventDecorator, :draper_with_helpers do
       before { event.kind = event_kinds(:fk) }
 
       its(:issued_qualifications_info_for_leaders) do
-        should == "Verlängert existierende Qualifikationen Group Lead (for Leaders), Super Lead (for Leaders) unmittelbar per 01.03.2012 (letztes Kursdatum)."
+        is_expected.to == "Verlängert existierende Qualifikationen Group Lead (for Leaders), Super Lead (for Leaders) unmittelbar per 01.03.2012 (letztes Kursdatum)."
       end
 
       its(:issued_qualifications_info_for_participants) do
-        should == "Verlängert existierende Qualifikationen Group Lead, Super Lead unmittelbar per 01.03.2012 (letztes Kursdatum)."
+        is_expected.to == "Verlängert existierende Qualifikationen Group Lead, Super Lead unmittelbar per 01.03.2012 (letztes Kursdatum)."
       end
     end
 
@@ -137,11 +137,11 @@ describe EventDecorator, :draper_with_helpers do
       before { event.kind = event_kinds(:old) }
 
       its(:issued_qualifications_info_for_leaders) do
-        should == ""
+        is_expected.to == ""
       end
 
       its(:issued_qualifications_info_for_participants) do
-        should == ""
+        is_expected.to == ""
       end
     end
   end

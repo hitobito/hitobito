@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,7 +14,7 @@ describe FullTextController, type: :controller do
         [[:list_people, Person.where(id: people(:bottom_member).id)],
          [:query_people, Person.where(id: people(:bottom_member).id)],
          [:query_groups, Group.where(id: groups(:bottom_layer_one).id)],
-         [:query_events, Event.where(id: events(:top_course).id)]].each do |stub, value|
+         [:query_events, Event.where(id: events(:top_course).id)],].each do |stub, value|
           allow_any_instance_of(strategy).to receive(stub).and_return(value)
         end
 
@@ -78,19 +76,19 @@ describe FullTextController, type: :controller do
 
     describe strategy.name.demodulize.downcase + " active tab" do
       it "displays people tab" do
-        allow(@controller.send :search_strategy).to receive(:list_people).and_return(Person.where(id: people(:bottom_member).id))
+        allow(@controller.send(:search_strategy)).to receive(:list_people).and_return(Person.where(id: people(:bottom_member).id))
         get :index, params: {q: "query with people results"}
         expect(assigns(:active_tab)).to eq(:people)
       end
 
       it "displays groups tab" do
-        allow(@controller.send :search_strategy).to receive(:query_groups).and_return(Group.where(id: groups(:bottom_layer_one).id))
+        allow(@controller.send(:search_strategy)).to receive(:query_groups).and_return(Group.where(id: groups(:bottom_layer_one).id))
         get :index, params: {q: "query with group results"}
         expect(assigns(:active_tab)).to eq(:groups)
       end
 
       it "displays events tab" do
-        allow(@controller.send :search_strategy).to receive(:query_events).and_return(Event.where(id: events(:top_course).id))
+        allow(@controller.send(:search_strategy)).to receive(:query_events).and_return(Event.where(id: events(:top_course).id))
         get :index, params: {q: "query with event results"}
         expect(assigns(:active_tab)).to eq(:events)
       end

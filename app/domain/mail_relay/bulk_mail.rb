@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -14,7 +12,7 @@ module MailRelay
     RETRY_AFTER_ERROR = [5.minutes, 10.minutes].freeze
     INVALID_EMAIL_ERRORS = ["Domain not found",
                             "Recipient address rejected",
-                            "Bad sender address syntax"].freeze
+                            "Bad sender address syntax",].freeze
 
     def initialize(message, envelope_sender, delivery_report_to, recipients)
       @message = message
@@ -155,8 +153,8 @@ module MailRelay
     end
 
     def delivery_report_mail
-      DeliveryReportMailer.
-        bulk_mail(@delivery_report_to, @envelope_sender, @message,
+      DeliveryReportMailer
+        .bulk_mail(@delivery_report_to, @envelope_sender, @message,
           @success_count, Time.zone.now,
           @failed_recipients).deliver_now
     rescue => e

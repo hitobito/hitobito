@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -50,7 +48,7 @@ module Person::AddRequest::Creator
     def request_attrs
       {person: person,
        requester: requester,
-       body: body}
+       body: body,}
     end
 
     def body
@@ -82,7 +80,7 @@ module Person::AddRequest::Creator
 
     def last_layer_group
       last_role = person.last_non_restricted_role
-      last_role && last_role.group.layer_group
+      last_role&.group&.layer_group
     end
   end
 end

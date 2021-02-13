@@ -14,16 +14,18 @@ describe Role::List do
   let!(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
 
   context "build_new_roles_hash" do
-    let(:params) { ActionController::Parameters.new({ids: person.id,
-                                                     role: {type: "Group::TopGroup::Leader",
-                                                            group_id: group.id}}) }
+    let(:params) {
+      ActionController::Parameters.new({ids: person.id,
+                                        role: {type: "Group::TopGroup::Leader",
+                                               group_id: group.id,},})
+    }
 
     it "throws access denied error if authorizaion fils" do
       allow(ability).to receive(:can?).and_return(false)
 
-      expect do
+      expect {
         role_list.build_new_roles_hash
-      end.to raise_error(CanCan::AccessDenied, "Zugriff auf Top Leader verweigert")
+      }.to raise_error(CanCan::AccessDenied, "Zugriff auf Top Leader verweigert")
     end
   end
 
@@ -45,8 +47,8 @@ describe Role::List do
     end
 
     it "builds correct hash for multiple groups" do
-      allow(role_list).to receive(:roles).
-        and_return(group.roles + groups(:toppers).roles)
+      allow(role_list).to receive(:roles)
+        .and_return(group.roles + groups(:toppers).roles)
 
       available_role_types = role_list.collect_available_role_types
 

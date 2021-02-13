@@ -7,12 +7,14 @@ describe CsvImportHelper do
   context "#csv_field_documentation" do
     it "renders string directly" do
       expect(csv_field_documentation(:first_name, "Only nice names")).to(
-        eq "<dt>Vorname</dt><dd>Only nice names</dd>")
+        eq "<dt>Vorname</dt><dd>Only nice names</dd>"
+      )
     end
 
     it "renders hashes as options" do
       expect(csv_field_documentation(:gender, "w" => "Girls", "m" => "Gents")).to(
-        eq "<dt>Geschlecht</dt><dd><em>w</em> - Girls<br /><em>m</em> - Gents</dd>")
+        eq "<dt>Geschlecht</dt><dd><em>w</em> - Girls<br /><em>m</em> - Gents</dd>"
+      )
     end
   end
 
@@ -26,16 +28,16 @@ describe CsvImportHelper do
        "Telefonnummer Privat" => "phone_number_privat",
        "Telefonnummer Vater" => "phone_number_vater",
        "Weitere E-Mail Privat" => "additional_email_privat",
-       "Social Media Adresse Facebook" => "social_account_facebook"}
+       "Social Media Adresse Facebook" => "social_account_facebook",}
     end
 
     it "returns mapping values" do
       fields = []
       csv_import_contact_account_attrs { |f| fields << f[:key] }
-      expect(fields).to eq %w(additional_email_privat
-                          phone_number_privat
-                          phone_number_vater
-                          social_account_facebook)
+      expect(fields).to eq %w[additional_email_privat
+                              phone_number_privat
+                              phone_number_vater
+                              social_account_facebook]
     end
   end
 

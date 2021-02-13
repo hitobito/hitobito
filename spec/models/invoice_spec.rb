@@ -28,16 +28,16 @@ describe Invoice do
   end
 
   it "saving increments number on invoice_config" do
-    expect do
+    expect {
       2.times { create_invoice }
-    end.to change { invoice_config.reload.sequence_number }.by(2)
+    }.to change { invoice_config.reload.sequence_number }.by(2)
   end
 
   it "validates that at least one email or an address is specified if no recipient" do
     invoice = Invoice.create(title: "invoice", group: group)
     expect(invoice).not_to be_valid
-    expect(invoice.errors.full_messages).
-      to include("Empfänger Addresse oder E-Mail muss ausgefüllt werden")
+    expect(invoice.errors.full_messages)
+      .to include("Empfänger Addresse oder E-Mail muss ausgefüllt werden")
   end
 
   it "validates that the invoice_config is valid" do
@@ -181,12 +181,12 @@ describe Invoice do
   end
 
   context "#remindable?" do
-    %w(issued sent reminded).each do |state|
+    %w[issued sent reminded].each do |state|
       it "#{state} invoice is remindable" do
         expect(Invoice.new(state: state)).to be_remindable
       end
     end
-    %w(draft payed cancelled).each do |state|
+    %w[draft payed cancelled].each do |state|
       it "#{state} invoice is not remindable" do
         expect(Invoice.new(state: state)).not_to be_remindable
       end

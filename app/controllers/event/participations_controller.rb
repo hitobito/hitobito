@@ -15,21 +15,21 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.permitted_attrs = [:additional_information,
                           answers_attributes: [:id, :question_id, :answer, answer: []],
-                          application_attributes: [:id, :priority_2_id, :priority_3_id]]
+                          application_attributes: [:id, :priority_2_id, :priority_3_id],]
 
   self.remember_params += [:filter]
 
   self.sort_mappings = {last_name: "people.last_name",
                         first_name: "people.first_name",
                         roles: lambda do |event|
-                                  Person.order_by_name_statement.unshift(
-                                    Event::Participation.order_by_role_statement(event)
-                                  )
-                                end,
+                                 Person.order_by_name_statement.unshift(
+                                   Event::Participation.order_by_role_statement(event)
+                                 )
+                               end,
                         nickname: "people.nickname",
                         zip_code: "people.zip_code",
                         town: "people.town",
-                        birthday: "people.birthday"}
+                        birthday: "people.birthday",}
 
   decorates :group, :event, :participation, :participations, :alternatives
 
@@ -96,9 +96,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def destroy
     location = if entry.person_id == current_user.id
       group_event_path(group, event)
-               else
-                 group_event_application_market_index_path(group, event)
-               end
+    else
+      group_event_application_market_index_path(group, event)
+    end
     super(location: location)
   end
 
@@ -114,7 +114,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       {
         group: parents.first,
         event: parents.last,
-        controller: self
+        controller: self,
       }
     )
   end
@@ -127,7 +127,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
                     event: event,
                     page: params[:page],
                     serializer: EventParticipationSerializer,
-                    controller: self)].inject(&:merge)
+                    controller: self),].inject(&:merge)
   end
 
   def sort_mappings_with_indifferent_access
@@ -246,10 +246,10 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def load_priorities
     if entry.application && event.priorization && current_user
       @alternatives = event.class.application_possible
-                           .where(kind_id: event.kind_id)
-                           .in_hierarchy(current_user)
-                           .includes(:groups)
-                           .list
+        .where(kind_id: event.kind_id)
+        .in_hierarchy(current_user)
+        .includes(:groups)
+        .list
       @priority_2s = @priority_3s = (@alternatives.to_a - [event])
     end
   end
@@ -273,7 +273,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     label = translate(:full_entry_label, model_label: models_label(false),
                                          person: h(entry.person),
                                          event: h(entry.event))
-    sanitize(label, tags: %w(i))
+    sanitize(label, tags: %w[i])
   end
 
   def send_confirmation_email

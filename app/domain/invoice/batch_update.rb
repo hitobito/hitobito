@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -76,7 +74,7 @@ class Invoice::BatchUpdate
   end
 
   def changed_from_issued_to_sent?(invoice)
-    invoice.previous_changes["state"] == %w(issued sent)
+    invoice.previous_changes["state"] == %w[issued sent]
   end
 
   def enqueue_send_job(invoice)

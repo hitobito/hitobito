@@ -108,7 +108,7 @@ class StandardTableBuilder
   end
 
   # Helper class to store column information.
-  Col = Struct.new(:header, :html_options, :template, :block) do #:nodoc:
+  Col = Struct.new(:header, :html_options, :template, :block) { #:nodoc:
     delegate :content_tag, to: :template
 
     def content(entry)
@@ -122,7 +122,7 @@ class StandardTableBuilder
     def html_cell(entry)
       content_tag :td, content(entry), html_options
     end
-  end
+  }
 
   # Provides headers with sort links. Expects a method :sortable?(attr)
   # in the template/controller to tell if an attribute is sortable or not.

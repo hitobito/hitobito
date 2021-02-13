@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -35,11 +33,11 @@ describe Person::Filter::TagAbsence do
     end
 
     it "#to_params inludes names" do
-      expect(subject.to_params[:names]).to eq %w(foo)
+      expect(subject.to_params[:names]).to eq %w[foo]
     end
 
     it "#to_hash includes names" do
-      expect(subject.to_params[:names]).to eq %w(foo)
+      expect(subject.to_params[:names]).to eq %w[foo]
     end
   end
 
@@ -47,7 +45,7 @@ describe Person::Filter::TagAbsence do
     let(:other) { people(:bottom_member) }
     let(:root) { people(:root) }
 
-    subject { Person::Filter::TagAbsence.new(:tag, names: %w(test1 test2)).apply(Person.all) }
+    subject { Person::Filter::TagAbsence.new(:tag, names: %w[test1 test2]).apply(Person.all) }
 
     it "does not return tagged people" do
       other.tags.create!(name: "test1")

@@ -22,10 +22,10 @@ describe Assignment::SendNotificationJob do
   end
 
   it "sends email notification with assignment title" do
-    expect do
+    expect {
       perform_enqueued_jobs do
         job.perform
       end
-    end.to change { ActionMailer::Base.deliveries.size }.by(1)
+    }.to change { ActionMailer::Base.deliveries.size }.by(1)
   end
 end

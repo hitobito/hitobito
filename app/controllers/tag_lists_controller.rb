@@ -24,9 +24,9 @@ class TagListsController < ListController
 
   def deletable
     @existing_tags = manageable_people.flat_map(&:tags)
-                                      .each_with_object(Hash.new(0)) do |tag, tag_counts|
-                                        tag_counts[tag] += 1
-                                      end
+      .each_with_object(Hash.new(0)) { |tag, tag_counts|
+      tag_counts[tag] += 1
+    }
   end
 
   private

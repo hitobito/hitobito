@@ -46,16 +46,16 @@ class Event::ApplicationMarketController < ApplicationController
 
   def load_participants
     event.participations_for(*event.participant_types)
-         .includes(:application, person: [:primary_group])
+      .includes(:application, person: [:primary_group])
   end
 
   def load_applications
-    Event::Participation.
-      includes(:application, :event, person: [:primary_group]).
-      references(:application).
-      where(filter_applications).
-      merge(Event::Participation.pending).
-      distinct
+    Event::Participation
+      .includes(:application, :event, person: [:primary_group])
+      .references(:application)
+      .where(filter_applications)
+      .merge(Event::Participation.pending)
+      .distinct
   end
 
   def sort_and_decorate(applications)
@@ -68,13 +68,13 @@ class Event::ApplicationMarketController < ApplicationController
     applications.to_a.sort_by! do |p|
       [p.application.priority(event) || 99,
        p.person.last_name || "",
-       p.person.first_name || ""]
+       p.person.first_name || "",]
     end
   end
 
   def filter_applications
     if params[:prio].nil? && params[:waiting_list].nil?
-      params[:prio] = %w(1) # default filter
+      params[:prio] = %w[1] # default filter
     end
 
     conditions = []

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
@@ -48,7 +47,7 @@ module Export::Pdf::Participation
     end
 
     def render_signature(header = Event::Role::Participant.model_name.human,
-                         key = "event.participations.print.signature")
+      key = "event.participations.print.signature")
       render_columns(
         lambda do
           text header
@@ -67,14 +66,14 @@ module Export::Pdf::Participation
 
     def location_and_date
       [Event::Date.human_attribute_name(:location),
-       Event::Date.model_name.human].join(" / ")
+       Event::Date.model_name.human,].join(" / ")
     end
 
     def contact_address
       [contact.company_name,
        contact.full_name,
        contact.address.present? && contact.address.split("\n"),
-       "#{contact.zip_code} #{contact.town}".strip]
+       "#{contact.zip_code} #{contact.town}".strip,]
         .flatten
         .select { |v| v.present? }
         .join(", ")

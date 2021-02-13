@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,8 +19,8 @@ describe Event::ParticipationsController, type: :controller do
       answers_attributes: [
         {answer: "Halbtax", question_id: event_questions(:top_ov).id},
         {answer: "nein", question_id: event_questions(:top_vegi).id},
-        {answer: "Ne du", question_id: event_questions(:top_more).id}
-      ]
+        {answer: "Ne du", question_id: event_questions(:top_more).id},
+      ],
     }
   end
 
@@ -37,7 +35,7 @@ describe Event::ParticipationsController, type: :controller do
     sign_in(user)
   end
 
-  include_examples "crud controller", skip: [%w(destroy)]
+  include_examples "crud controller", skip: [%w[destroy]]
 
   describe_action :get, :show, id: true, perform_request: false do
     let(:user) { test_entry.person }
@@ -119,9 +117,9 @@ describe Event::ParticipationsController, type: :controller do
     it "redirects users without permission" do
       sign_in(Fabricate(Group::BottomGroup::Member.name.to_s,
         group: groups(:bottom_group_one_one)).person)
-      expect do
+      expect {
         get :print, params: {group_id: group.id, event_id: test_entry.event.id, id: test_entry.id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 

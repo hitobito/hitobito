@@ -25,11 +25,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class MessageRecipient < ActiveRecord::Base
+class MessageRecipient < ApplicationRecord
   include I18nEnums
   validates_by_schema
 
-  STATES = %w(pending sending sent failed).freeze
+  STATES = %w[pending sending sent failed].freeze
   i18n_enum :state, STATES
   validates :state, inclusion: {in: STATES}, allow_nil: true
 

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2014 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -20,7 +18,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     subject { decorator.header }
 
     context "without current user" do
-      before { update_attributes }
+      before { update }
 
       it { is_expected.to match(/^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr$/) }
     end
@@ -28,10 +26,10 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     context "with current user" do
       before do
         PaperTrail.request.whodunnit = person.id.to_s
-        update_attributes
+        update
       end
 
-      it { is_expected.to match(/^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>von <a href=".+">#{person.to_s}<\/a>$/) }
+      it { is_expected.to match(/^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>von <a href=".+">#{person}<\/a>$/) }
     end
   end
 
@@ -39,7 +37,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     subject { decorator.author }
 
     context "without current user" do
-      before { update_attributes }
+      before { update }
 
       it { is_expected.to be_nil }
     end
@@ -47,13 +45,13 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     context "with current user" do
       before do
         PaperTrail.request.whodunnit = person.id.to_s
-        update_attributes
+        update
       end
 
       context "and permission to link" do
         it do
           expect(decorator.h).to receive(:can?).with(:show, person).and_return(true)
-          is_expected.to match(/^<a href=".+">#{person.to_s}<\/a>$/)
+          is_expected.to match(/^<a href=".+">#{person}<\/a>$/)
         end
       end
 
@@ -70,7 +68,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     subject { decorator.changes }
 
     context "with attribute changes" do
-      before { update_attributes }
+      before { update }
 
       it { is_expected.to match(/<div>Ort wurde/) }
       it { is_expected.to match(/<div>PLZ wurde/) }
@@ -107,7 +105,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
   end
 
   context "#attribute_change" do
-    before { update_attributes }
+    before { update }
 
     it "contains from and to attributes" do
       string = decorator.attribute_change(:first_name, "Hans", "Fritz")
@@ -138,7 +136,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
 
     it "formats according to column info" do
-      now = Time.local(2014, 6, 21, 18)
+      now = Time.zone.local(2014, 6, 21, 18)
       string = decorator.attribute_change(:updated_at, nil, now)
       expect(string).to eq "Geändert wurde auf <i>21.06.2014 18:00</i> gesetzt."
     end

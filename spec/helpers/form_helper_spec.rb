@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -78,9 +76,10 @@ describe FormHelper do
   describe "#crud_form" do
     subject do
       Capybara::Node::Simple.new(
-        with_test_routing do
+        with_test_routing {
           capture { crud_form(entry, :name, :children, :birthdate, :human, html: {class: "special"}) }
-        end)
+        }
+      )
     end
 
     context "for existing entry" do
@@ -124,9 +123,10 @@ describe FormHelper do
   describe "#standard_form" do
     subject do
       Capybara::Node::Simple.new(
-        with_test_routing do
+        with_test_routing {
           capture { standard_form(entry, html: {class: "special"}) { |f| } }
-        end)
+        }
+      )
     end
 
     let(:entry) { crud_test_models(:AAAAA) }

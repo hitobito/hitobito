@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -44,7 +42,7 @@ describe PeopleFiltersController do
 
         get :new, params: {group_id: group.id}
         invalid_email_tags = [["Haupt-E-Mail ungültig", "category_validation:email_primary_invalid", PersonTags::Validation.email_primary_invalid.id],
-                              ["Weitere E-Mail ungültig", "category_validation:email_additional_invalid", PersonTags::Validation.email_additional_invalid.id]]
+                              ["Weitere E-Mail ungültig", "category_validation:email_additional_invalid", PersonTags::Validation.email_additional_invalid.id],]
 
         tags = assigns(:possible_tags)
         expect(tags.count).to eq(2)
@@ -57,27 +55,27 @@ describe PeopleFiltersController do
 
   context "POST create" do
     it "redirects to show for search" do
-      expect do
+      expect {
         post :create, params: {group_id: group.id, filters: {role: {role_type_ids: role_type_ids}}, button: "search"}
-      end.not_to change { PeopleFilter.count }
+      }.not_to change { PeopleFilter.count }
 
       is_expected.to redirect_to(group_people_path(group, filters: {role: {role_type_ids: role_type_ids_string}}, range: "deep"))
     end
 
     it "redirects to show for empty search" do
-      expect do
+      expect {
         post :create, params: {group_id: group.id, button: "search", people_filter: {}, filters: {qualification: {validity: "active"}}}
-      end.not_to change { PeopleFilter.count }
+      }.not_to change { PeopleFilter.count }
 
       is_expected.to redirect_to(group_people_path(group))
     end
 
     it "saves filter and redirects to show with save" do
-      expect do
+      expect {
         post :create, params: {group_id: group.id, filters: {role: {role_type_ids: role_type_ids}}, range: "deep", name: "Test Filter", button: "save"}
         expect(assigns(:people_filter)).to be_valid
         is_expected.to redirect_to(group_people_path(group, filter_id: assigns(:people_filter).id))
-      end.to change { PeopleFilter.count }.by(1)
+      }.to change { PeopleFilter.count }.by(1)
     end
 
     context "with read only permissions" do
@@ -90,17 +88,17 @@ describe PeopleFiltersController do
       let(:group) { @role.group }
 
       it "redirects to show with search" do
-        expect do
+        expect {
           post :create, params: {group_id: group.id, filters: {role: {role_type_ids: role_type_ids}}, button: "search"}
-        end.not_to change { PeopleFilter.count }
+        }.not_to change { PeopleFilter.count }
 
         is_expected.to redirect_to(group_people_path(group, filters: {role: {role_type_ids: role_type_ids_string}}, range: "deep"))
       end
 
       it "is not authorized with save" do
-        expect do
+        expect {
           post :create, params: {group_id: group.id, filters: {role: {role_type_ids: role_type_ids}}, name: "Test Filter", button: "save"}
-        end.to raise_error(CanCan::AccessDenied)
+        }.to raise_error(CanCan::AccessDenied)
       end
     end
   end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -26,15 +24,15 @@ describe InvoiceConfigsController do
     end
 
     it "may not show when person has finance permission on layer group" do
-      expect do
+      expect {
         get :show, params: {group_id: groups(:top_layer).id, id: invoice_configs(:top_layer).id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
 
     it "may not edit when person has finance permission on layer group" do
-      expect do
+      expect {
         get :edit, params: {group_id: groups(:top_layer).id, id: invoice_configs(:top_layer).id}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
 
     it "initializes 3 valid payment reminder configs if non are set" do
@@ -46,14 +44,14 @@ describe InvoiceConfigsController do
     end
 
     it "creates 3 payment reminder configs" do
-      attrs = 1.upto(3).collect do |level|
+      attrs = 1.upto(3).collect { |level|
         [level.to_s, {title: level, level: level, text: level, due_days: level}]
-      end.to_h
-      expect do
+      }.to_h
+      expect {
         patch :update, params: {group_id: group.id, id: entry.id, invoice_config: {
-          payment_reminder_configs_attributes: attrs
-        }}
-      end.to change { entry.reload.payment_reminder_configs.size }.by(3)
+          payment_reminder_configs_attributes: attrs,
+        },}
+      }.to change { entry.reload.payment_reminder_configs.size }.by(3)
     end
   end
 end

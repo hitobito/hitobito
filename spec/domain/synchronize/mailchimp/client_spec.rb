@@ -11,38 +11,38 @@ describe Synchronize::Mailchimp::Client do
   let(:client) { described_class.new(mailing_list) }
 
   def stub_collection(path, offset, count = client.count, body:)
-    stub_request(:get, "https://us12.api.mailchimp.com/3.0/#{path}?count=#{count}&offset=#{offset}").
-      with(
+    stub_request(:get, "https://us12.api.mailchimp.com/3.0/#{path}?count=#{count}&offset=#{offset}")
+      .with(
         headers: {
           "Accept" => "*/*",
           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
           "Authorization" => "Basic YXBpa2V5OjEyMzQ1Njc4OTBkNjZkMjVjYzVjOTI4NWFiNWE1NTUyLXVzMTI=",
           "Content-Type" => "application/json",
-          "User-Agent" => "Faraday v0.15.3"
+          "User-Agent" => "Faraday v0.15.3",
 
         }
-    ).
-    to_return(status: 200, body: body.to_json, headers: {})
+      )
+      .to_return(status: 200, body: body.to_json, headers: {})
   end
 
   def stub_merge_fields(*fields, total_items: nil, offset: 0)
-    entries = fields.collect do |tag, name, type|
+    entries = fields.collect { |tag, name, type|
       {tag: tag, name: name, type: type}
-    end
+    }
     stub_collection("lists/2/merge-fields", offset, body: {merge_fields: entries, total_items: total_items || entries.count})
   end
 
   def stub_members(*members, total_items: nil, offset: 0)
-    entries = members.collect do |email, status = "subscribed", tags = [], merge_fields = {}, extra_fields = {}|
+    entries = members.collect { |email, status = "subscribed", tags = [], merge_fields = {}, extra_fields = {}|
       {email_address: email, status: status, tags: tags, merge_fields: merge_fields}.merge(extra_fields)
-    end
+    }
     stub_collection("lists/2/members", offset, body: {members: entries, total_items: total_items || entries.count})
   end
 
   def stub_segments(*segments, total_items: nil, offset: 0)
-    entries = segments.collect do |name, id|
+    entries = segments.collect { |name, id|
       {name: name, id: id.to_i}
-    end
+    }
     stub_collection("lists/2/segments", offset, body: {segments: entries, total_items: total_items || entries.count})
   end
 
@@ -67,7 +67,7 @@ describe Synchronize::Mailchimp::Client do
 
     context "merge_fields" do
       let(:merge_field) {
-        ["Gender", "dropdown", {choices: %w(m)}, ->(p) { p.gender }]
+        ["Gender", "dropdown", {choices: %w[m]}, ->(p) { p.gender }]
       }
       let(:client) { described_class.new(mailing_list, merge_fields: [merge_field]) }
 
@@ -142,7 +142,7 @@ describe Synchronize::Mailchimp::Client do
     end
 
     it "returns segments with id" do
-      stub_segments(%w(a 1), %w(b 2))
+      stub_segments(%w[a 1], %w[b 2])
       expect(subject).to have(2).items
 
       first = subject.first
@@ -164,7 +164,7 @@ describe Synchronize::Mailchimp::Client do
     end
 
     it "returns members with subscription state" do
-      stub_members(%w(a@example.com subscribed), %w(b@example.com unsubscribed))
+      stub_members(%w[a@example.com subscribed], %w[b@example.com unsubscribed])
       expect(subject).to have(2).items
 
       first = subject.first
@@ -196,19 +196,19 @@ describe Synchronize::Mailchimp::Client do
       let(:client) { described_class.new(mailing_list, count: 2) }
 
       it "fetches until total has been reached" do
-        stub_members(%w(a@example.com), %w(b@example.com), total_items: 5)
-        stub_members(%w(c@example.com), %w(d@example.com), total_items: 5, offset: 2)
-        stub_members(%w(e@example.com), total_items: 5, offset: 4)
+        stub_members(%w[a@example.com], %w[b@example.com], total_items: 5)
+        stub_members(%w[c@example.com], %w[d@example.com], total_items: 5, offset: 2)
+        stub_members(%w[e@example.com], total_items: 5, offset: 4)
         expect(subject).to have(5).items
 
         users = subject.collect { |e| e[:email_address].split("@").first }
-        expect(users).to eq %w(a b c d e)
+        expect(users).to eq %w[a b c d e]
       end
     end
   end
 
   context "#create_merge_field_operation" do
-    subject { client.create_merge_field_operation("Gender", "dropdown", {choices: %w(m w)}) }
+    subject { client.create_merge_field_operation("Gender", "dropdown", {choices: %w[m w]}) }
 
     it "POSTs to segments list resource" do
       expect(subject[:method]).to eq "POST"
@@ -220,7 +220,7 @@ describe Synchronize::Mailchimp::Client do
       expect(body["tag"]).to eq "GENDER"
       expect(body["name"]).to eq "Gender"
       expect(body["type"]).to eq "dropdown"
-      expect(body["options"]["choices"]).to eq %w(m w)
+      expect(body["options"]["choices"]).to eq %w[m w]
     end
   end
 
@@ -243,53 +243,53 @@ describe Synchronize::Mailchimp::Client do
     before { expect(Settings.mailchimp).to receive(:max_attempts).and_return(3) }
 
     it "raises if status does not change within max_attempts" do
-      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches").
-        to_return(status: 200, body: {id: 1}.to_json)
+      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches")
+        .to_return(status: 200, body: {id: 1}.to_json)
 
-      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1").
-        to_return(status: 200, body: {id: 1, status: "pending"}.to_json)
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1")
+        .to_return(status: 200, body: {id: 1, status: "pending"}.to_json)
 
       expect(client).to receive(:sleep).exactly(5).times
-      expect do
-        client.create_segments(%w(a))
-      end.to raise_error RuntimeError, "Batch 1 exeeded max_attempts, status: pending"
+      expect {
+        client.create_segments(%w[a])
+      }.to raise_error RuntimeError, "Batch 1 exeeded max_attempts, status: pending"
     end
 
     it "succeeds if status changes to finished" do
-      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches").
-        to_return(status: 200, body: {id: 1}.to_json)
+      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches")
+        .to_return(status: 200, body: {id: 1}.to_json)
 
-      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1").
-        to_return(status: 200, body: {id: 1, status: "pending"}.to_json).
-        to_return(status: 200, body: {id: 1, status: "finished"}.to_json)
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1")
+        .to_return(status: 200, body: {id: 1, status: "pending"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "finished"}.to_json)
 
-      expect(client).to receive(:sleep).exactly(2).times
-      client.create_segments(%w(a))
+      expect(client).to receive(:sleep).twice
+      client.create_segments(%w[a])
     end
 
     it "resets counts when status changes" do
-      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches").
-        to_return(status: 200, body: {id: 1}.to_json)
+      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches")
+        .to_return(status: 200, body: {id: 1}.to_json)
 
-      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1").
-        to_return(status: 200, body: {id: 1, status: "pending"}.to_json).
-        to_return(status: 200, body: {id: 1, status: "pending"}.to_json).
-        to_return(status: 200, body: {id: 1, status: "pending"}.to_json).
-        to_return(status: 200, body: {id: 1, status: "pre-processing"}.to_json).
-        to_return(status: 200, body: {id: 1, status: "pre-processing"}.to_json).
-        to_return(status: 200, body: {id: 1, status: "pre-processing"}.to_json).
-        to_return(status: 200, body: {id: 1, status: "started"}.to_json).
-        to_return(status: 200, body: {id: 1, status: "started"}.to_json).
-        to_return(status: 200, body: {id: 1, status: "started"}.to_json).
-        to_return(status: 200, body: {id: 1, status: "finished"}.to_json)
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1")
+        .to_return(status: 200, body: {id: 1, status: "pending"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "pending"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "pending"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "pre-processing"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "pre-processing"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "pre-processing"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "started"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "started"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "started"}.to_json)
+        .to_return(status: 200, body: {id: 1, status: "finished"}.to_json)
 
       expect(client).to receive(:sleep).exactly(10).times
-      client.create_segments(%w(a))
+      client.create_segments(%w[a])
     end
   end
 
   context "#update_segment_operation" do
-    subject { client.update_segment_operation(1, %w(leader@example.com member@example.com)) }
+    subject { client.update_segment_operation(1, %w[leader@example.com member@example.com]) }
 
     it "POSTs to segments list resource" do
       expect(subject[:method]).to eq "POST"
@@ -298,7 +298,7 @@ describe Synchronize::Mailchimp::Client do
 
     it "body includes name and static_segment fields" do
       body = JSON.parse(subject[:body])
-      expect(body["members_to_add"]).to eq %w(leader@example.com member@example.com)
+      expect(body["members_to_add"]).to eq %w[leader@example.com member@example.com]
     end
   end
 
@@ -326,7 +326,7 @@ describe Synchronize::Mailchimp::Client do
     end
 
     it "body includes merge fields" do
-      merge_field = ["Gender", "dropdown", {choices: %w(w m)}, ->(p) { p.gender }]
+      merge_field = ["Gender", "dropdown", {choices: %w[w m]}, ->(p) { p.gender }]
       expect(client).to receive(:merge_fields).and_return([merge_field])
       body = JSON.parse(subject[:body])
       expect(body["merge_fields"]["GENDER"]).to eq top_leader.gender
@@ -356,7 +356,7 @@ describe Synchronize::Mailchimp::Client do
     end
 
     it "body includes merge fields" do
-      merge_field = ["Gender", "dropdown", {choices: %w(w m)}, ->(p) { p.gender }]
+      merge_field = ["Gender", "dropdown", {choices: %w[w m]}, ->(p) { p.gender }]
       expect(client).to receive(:merge_fields).and_return([merge_field])
       body = JSON.parse(subject[:body])
       expect(body["merge_fields"]["GENDER"]).to eq top_leader.gender

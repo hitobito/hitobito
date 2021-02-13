@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -34,8 +32,8 @@ describe MailingList do
     end
 
     it "sorts array and removes duplicates" do
-      list.update(preferred_labels: %w(foo bar bar baz))
-      expect(list.reload.preferred_labels).to eq %w(bar baz foo)
+      list.update(preferred_labels: %w[foo bar bar baz])
+      expect(list.reload.preferred_labels).to eq %w[bar baz foo]
     end
 
     it "ignores blank values" do
@@ -52,10 +50,10 @@ describe MailingList do
   describe "labels" do
     it "includes main if set" do
       expect(list.labels).to eq []
-      list.update(preferred_labels: %w(foo))
-      expect(list.reload.labels).to eq %w(foo)
+      list.update(preferred_labels: %w[foo])
+      expect(list.reload.labels).to eq %w[foo]
       list.update(main_email: true)
-      expect(list.reload.labels).to eq %w(foo _main)
+      expect(list.reload.labels).to eq %w[foo _main]
     end
   end
 
@@ -165,7 +163,7 @@ describe MailingList do
       it "is true if in group and all tags match" do
         sub = create_subscription(groups(:bottom_layer_one), false,
           Group::BottomGroup::Leader.sti_name)
-        sub.subscription_tags = subscription_tags(%w(bar baz))
+        sub.subscription_tags = subscription_tags(%w[bar baz])
         sub.save!
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         p.tag_list = "foo:bar, geez, baz"
@@ -177,7 +175,7 @@ describe MailingList do
       it "is true if in group and not all tags match" do
         sub = create_subscription(groups(:bottom_layer_one), false,
           Group::BottomGroup::Leader.sti_name)
-        sub.subscription_tags = subscription_tags(%w(bar foo:baz))
+        sub.subscription_tags = subscription_tags(%w[bar foo:baz])
         sub.save!
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         p.tag_list = "foo:baz"
@@ -189,7 +187,7 @@ describe MailingList do
       it "is false if in group and excluded tag matches" do
         sub = create_subscription(groups(:bottom_layer_one), false,
           Group::BottomGroup::Leader.sti_name)
-        sub.subscription_tags = subscription_tags(%w(bar foo:baz))
+        sub.subscription_tags = subscription_tags(%w[bar foo:baz])
         sub.subscription_tags.second.update!(excluded: true)
         sub.save!
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
@@ -202,7 +200,7 @@ describe MailingList do
       it "is false if in group and no tags match" do
         sub = create_subscription(groups(:bottom_layer_one), false,
           Group::BottomGroup::Leader.sti_name)
-        sub.subscription_tags = subscription_tags(%w(foo:bar foo:baz))
+        sub.subscription_tags = subscription_tags(%w[foo:bar foo:baz])
         sub.save!
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         p.tag_list = "baz"
@@ -392,7 +390,7 @@ describe MailingList do
           Group::BottomGroup::Leader.sti_name)
         sub2 = create_subscription(groups(:bottom_group_one_one), false,
           Group::BottomGroup::Member.sti_name)
-        sub2.subscription_tags = subscription_tags(%w(foo, bar))
+        sub2.subscription_tags = subscription_tags(%w[foo, bar])
         sub2.save!
 
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person

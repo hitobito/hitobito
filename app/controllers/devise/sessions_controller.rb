@@ -6,8 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 require_dependency Devise::Engine.root
-                                 .join("app", "controllers", "devise", "sessions_controller")
-                                 .to_s
+  .join("app", "controllers", "devise", "sessions_controller")
+  .to_s
 
 class Devise::SessionsController < DeviseController
   layout :devise_layout

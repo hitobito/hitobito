@@ -29,9 +29,9 @@ describe TagsController do
     it "user without permission cannot create tags" do
       sign_in(bottom_member)
 
-      expect do
+      expect {
         post :create, params: {acts_as_taggable_on_tag: {name: "supertag42"}}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -50,9 +50,9 @@ describe TagsController do
     it "does not update validation tags" do
       validation_tags.each do |t|
         name = t.name
-        expect do
+        expect {
           put :update, params: {id: t.id, acts_as_taggable_on_tag: {name: "tag42"}}
-        end.to raise_error(CanCan::AccessDenied)
+        }.to raise_error(CanCan::AccessDenied)
 
         expect(t.reload.name).to eq(t.name)
       end
@@ -61,9 +61,9 @@ describe TagsController do
     it "user without permission cannot update tags" do
       sign_in(bottom_member)
 
-      expect do
+      expect {
         put :update, params: {id: tag.id, acts_as_taggable_on_tag: {name: "tag42"}}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -71,18 +71,18 @@ describe TagsController do
     let!(:tag) { ActsAsTaggableOn::Tag.create!(name: "supertag42", taggings_count: 4200) }
 
     it "deletes given tag" do
-      expect do
+      expect {
         delete :destroy, params: {id: tag.id}
-      end.to change { ActsAsTaggableOn::Tag.count }.by(-1)
+      }.to change { ActsAsTaggableOn::Tag.count }.by(-1)
 
       expect(response).to redirect_to(tags_path(returning: true))
     end
 
     it "is not possible to delete validation tags" do
       validation_tags.each do |t|
-        expect do
+        expect {
           delete :destroy, params: {id: t.id}
-        end.to change { ActsAsTaggableOn::Tag.count }.by(0)
+        }.to change { ActsAsTaggableOn::Tag.count }.by(0)
           .and raise_error(CanCan::AccessDenied)
       end
     end

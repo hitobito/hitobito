@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -83,7 +81,7 @@ class Role
       group_layers = {}
       find_group_layers(group, layer, group_layers)
       group_layers.select { |_, layers| layers.uniq.size > 1 }
-                  .collect(&:first)
+        .collect(&:first)
     end
 
     def find_group_layers(group, layer, group_layers)

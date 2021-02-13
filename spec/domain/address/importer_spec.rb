@@ -57,42 +57,42 @@ describe Address::Importer do
   it "fetches and updates addresses" do
     Address.delete_all
     allow(Settings.addresses).to receive(:token).and_return("foo")
-    zip = Zip::OutputStream.write_buffer(StringIO.new("sample.zip")) do |out|
+    zip = Zip::OutputStream.write_buffer(StringIO.new("sample.zip")) { |out|
       out.put_next_entry("sample.csv")
       out.write csv
-    end
+    }
 
     headers = {
       "Accept" => "*/*",
       "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
       "Authorization" => "Basic foo",
-      "User-Agent" => "Faraday v0.15.3"
+      "User-Agent" => "Faraday v0.15.3",
     }
-    stub_request(:get, "https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway").
-      with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
+    stub_request(:get, "https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway")
+      .with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
 
-    expect do
+    expect {
       subject.run
-    end.to change { Address.count }.by(4)
+    }.to change { Address.count }.by(4)
 
     bs_bern = Address.find_by(street_short: "Belpstrasse", zip_code: 3007)
     expect(bs_bern.street_long).to eq "Belpstrasse"
     expect(bs_bern.town).to eq "Bern"
     expect(bs_bern.zip_code).to eq 3007
-    expect(bs_bern.numbers).to eq %w(36 37 38 40)
+    expect(bs_bern.numbers).to eq %w[36 37 38 40]
 
     bs_muri = Address.find_by(street_short: "Belpstrasse", zip_code: 3074)
     expect(bs_muri.street_long).to eq "Belpstrasse"
     expect(bs_muri.town).to eq "Muri b. Bern"
     expect(bs_muri.zip_code).to eq 3074
-    expect(bs_muri.numbers).to eq %w(3)
+    expect(bs_muri.numbers).to eq %w[3]
     expect(dir).to be_exist
 
     luzernstrasse = Address.find_by(street_short: "Luzernerstrasse", zip_code: 6030)
     expect(luzernstrasse.street_long).to eq "Luzernerstrasse"
     expect(luzernstrasse.town).to eq "Ebikon"
     expect(luzernstrasse.zip_code).to eq 6030
-    expect(luzernstrasse.numbers).to eq %w(25a)
+    expect(luzernstrasse.numbers).to eq %w[25a]
     expect(dir).to be_exist
   end
 
@@ -105,19 +105,19 @@ describe Address::Importer do
     CSV
 
     allow(Settings.addresses).to receive(:token).and_return("foo")
-    zip = Zip::OutputStream.write_buffer(StringIO.new("sample.zip")) do |out|
+    zip = Zip::OutputStream.write_buffer(StringIO.new("sample.zip")) { |out|
       out.put_next_entry("sample.csv")
       out.write csv
-    end
+    }
 
     headers = {
       "Accept" => "*/*",
       "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
       "Authorization" => "Basic foo",
-      "User-Agent" => "Faraday v0.15.3"
+      "User-Agent" => "Faraday v0.15.3",
     }
-    stub_request(:get, "https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway").
-      with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
+    stub_request(:get, "https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway")
+      .with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
 
     subject.prepare_files
     expect(subject.streets.to_h.values.first[:town]).to eq "Lausanne"
@@ -133,19 +133,19 @@ describe Address::Importer do
     CSV
 
     allow(Settings.addresses).to receive(:token).and_return("foo")
-    zip = Zip::OutputStream.write_buffer(StringIO.new("sample.zip")) do |out|
+    zip = Zip::OutputStream.write_buffer(StringIO.new("sample.zip")) { |out|
       out.put_next_entry("sample.csv")
       out.write csv
-    end
+    }
 
     headers = {
       "Accept" => "*/*",
       "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
       "Authorization" => "Basic foo",
-      "User-Agent" => "Faraday v0.15.3"
+      "User-Agent" => "Faraday v0.15.3",
     }
-    stub_request(:get, "https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway").
-      with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
+    stub_request(:get, "https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway")
+      .with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
 
     subject.prepare_files
     expect(subject.streets.to_h.values.first[:numbers]).to eq []

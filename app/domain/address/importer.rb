@@ -10,11 +10,10 @@ class Address::Importer
   # Imports Swiss addresses
   # see https://service.post.ch/zopa/dlc/app/#/main
 
-  RECORDS = %w(01-zip_codes
+  RECORDS = %w[01-zip_codes
                03-locations
                04-streets
-               06-house_numbers
-              ).freeze
+               06-house_numbers].freeze
 
   delegate :url, :token, to: "Settings.addresses"
 
@@ -97,20 +96,20 @@ class Address::Importer
         zip_code: zip_code[:zip],
         town: town_name(zip_code),
         state: zip_code[:state],
-        numbers: numbers
+        numbers: numbers,
       }
       [row[1], street]
     end
   end
 
   def town_name(zip_code)
-    zip_code[:name] =~ /Lausanne\s+\d+/ ? "Lausanne" : zip_code[:name]
+    /Lausanne\s+\d+/.match?(zip_code[:name]) ? "Lausanne" : zip_code[:name]
   end
 
   def parse_zip_codes
-    parse(:zip_codes).collect do |row|
+    parse(:zip_codes).collect { |row|
       [row[1], {zip: row[4], name: row[8], short_name: row[7], state: row[9]}]
-    end.compact.to_h
+    }.compact.to_h
   end
 
   def parse_house_numbers
@@ -132,10 +131,10 @@ class Address::Importer
   end
 
   def records
-    @records ||= RECORDS.collect do |model|
+    @records ||= RECORDS.collect { |model|
       key, name = model.split("-")
       [name.to_sym, {key: key, file: dir.join("#{key}-#{name}.csv")}]
-    end.to_h
+    }.to_h
   end
 
   def stale?

@@ -17,14 +17,14 @@ describe TableDisplay do
 
   it "allows resetting selected columns" do
     subject = TableDisplay.for(leader, event)
-    subject.update(selected: %w(gender))
+    subject.update(selected: %w[gender])
     subject.update(selected: [])
     expect(subject.selected).not_to be_present
   end
 
   it "rejects internal person attribute" do
     subject.person_id = 1
-    subject.selected = %W(name id)
+    subject.selected = %W[name id]
     subject.type = "TableDisplay::People"
     expect(subject.save).to eq true
     expect(subject.selected).not_to include "id"
@@ -37,7 +37,7 @@ describe TableDisplay do
 
     before do
       TableDisplay.register_permission(Person, :update, :attr)
-      subject.selected = %w(other_attr attr)
+      subject.selected = %w[other_attr attr]
     end
 
     after { TableDisplay.class_variable_set("@@permissions", {}) }

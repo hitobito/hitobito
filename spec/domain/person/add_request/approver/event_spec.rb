@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -24,7 +22,8 @@ describe Person::AddRequest::Approver::Event do
         person: person,
         requester: requester,
         body: event,
-        role_type: Event::Role::Participant.sti_name)
+        role_type: Event::Role::Participant.sti_name
+      )
     end
 
     it "resolves correct subclass based on request" do
@@ -43,9 +42,9 @@ describe Person::AddRequest::Approver::Event do
 
       it "creates a new participation and sends email" do
         expect_enqueued_mail_jobs(count: 1) do
-          expect do
+          expect {
             subject.approve
-          end.to change { Event::Participation.count }.by(1)
+          }.to change { Event::Participation.count }.by(1)
         end
 
         p = person.event_participations.first
@@ -85,7 +84,8 @@ describe Person::AddRequest::Approver::Event do
         person: person,
         requester: requester,
         body: event,
-        role_type: role_type.sti_name)
+        role_type: role_type.sti_name
+      )
     end
 
     before do
@@ -98,9 +98,9 @@ describe Person::AddRequest::Approver::Event do
       let(:role_type) { Event::Course::Role::Participant }
 
       it "creates a new participation" do
-        expect do
+        expect {
           subject.approve
-        end.to change { Event::Participation.count }.by(1)
+        }.to change { Event::Participation.count }.by(1)
 
         p = person.event_participations.first
         expect(p).to be_active
@@ -119,9 +119,9 @@ describe Person::AddRequest::Approver::Event do
           application: Fabricate(:event_application, priority_1: event))
         Fabricate(role_type.name, participation: p)
 
-        expect do
+        expect {
           expect(subject.approve).to eq(true)
-        end.not_to change { Event::Participation.count }
+        }.not_to change { Event::Participation.count }
 
         p = person.event_participations.first
         expect(p).not_to be_active
@@ -136,9 +136,9 @@ describe Person::AddRequest::Approver::Event do
       let(:role_type) { Event::Role::Leader }
 
       it "creates a new participation" do
-        expect do
+        expect {
           subject.approve
-        end.to change { Event::Participation.count }.by(1)
+        }.to change { Event::Participation.count }.by(1)
 
         p = person.event_participations.first
         expect(p).to be_active
@@ -152,9 +152,9 @@ describe Person::AddRequest::Approver::Event do
         p = Fabricate(:event_participation, event: event, person: person, active: true)
         Fabricate(Event::Role::Cook.name, participation: p)
 
-        expect do
+        expect {
           expect(subject.approve).to eq(true)
-        end.not_to change { Event::Participation.count }
+        }.not_to change { Event::Participation.count }
 
         p = person.event_participations.first
         expect(p).to be_active
@@ -168,9 +168,9 @@ describe Person::AddRequest::Approver::Event do
         p = Fabricate(:event_participation, event: event, person: person, active: true)
         Fabricate(role_type.name, participation: p)
 
-        expect do
+        expect {
           expect(subject.approve).to eq(true)
-        end.not_to change { Event::Participation.count }
+        }.not_to change { Event::Participation.count }
 
         p = person.event_participations.first
         expect(p).to be_active

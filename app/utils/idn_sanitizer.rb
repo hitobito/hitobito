@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -17,7 +15,7 @@ module IdnSanitizer
   end
 
   def sanitize_idn(email)
-    if email.strip =~ /[^\w@\.\-]/ # simple regexp to skip most unaffected addresses
+    if /[^\w@\.\-]/.match?(email.strip) # simple regexp to skip most unaffected addresses
       parts = email.strip.split("@")
       domain = parts.last
       suffix = ""

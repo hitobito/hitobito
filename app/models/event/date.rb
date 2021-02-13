@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,7 +19,7 @@
 #  index_event_dates_on_event_id_and_start_at  (event_id,start_at)
 #
 
-class Event::Date < ActiveRecord::Base
+class Event::Date < ApplicationRecord
   include DatetimeAttribute
   datetime_attr :start_at, :finish_at
 

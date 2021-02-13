@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -9,7 +7,7 @@ class Person::Filter::Qualification < Person::Filter::Base
   self.required_ability = :full
   self.permitted_args = [:qualification_kind_ids, :validity, :match,
                          :start_at_year_from, :start_at_year_until,
-                         :finish_at_year_from, :finish_at_year_until]
+                         :finish_at_year_from, :finish_at_year_until,]
 
   def initialize(attr, args)
     super
@@ -35,7 +33,7 @@ class Person::Filter::Qualification < Person::Filter::Base
   end
 
   def year_scope?
-    %w(start_at finish_at).product(%w(year_from year_until)).any? do |pre, post|
+    %w[start_at finish_at].product(%w[year_from year_until]).any? do |pre, post|
       key = [pre, post].join("_")
       args[key.to_sym].present? || args[key].present?
     end
@@ -44,9 +42,9 @@ class Person::Filter::Qualification < Person::Filter::Base
   private
 
   def match_all_qualification_kinds(scope)
-    subquery = qualification_scope(scope).
-               select("1").
-               where("qualifications.person_id = people.id AND " \
+    subquery = qualification_scope(scope)
+      .select("1")
+      .where("qualifications.person_id = people.id AND " \
                        "qualifications.qualification_kind_id = qk.id")
 
     scope.where("NOT EXISTS (" \
@@ -57,26 +55,26 @@ class Person::Filter::Qualification < Person::Filter::Base
   end
 
   def match_one_qualification_kind(scope)
-    scope.
-      joins(:qualifications).
-      where(qualifications: {qualification_kind_id: args[:qualification_kind_ids]}).
-      merge(qualification_scope(scope))
+    scope
+      .joins(:qualifications)
+      .where(qualifications: {qualification_kind_id: args[:qualification_kind_ids]})
+      .merge(qualification_scope(scope))
   end
 
   def qualification_scope(scope)
     scope = qualification_validity_scope(scope)
     return scope unless year_scope?
 
-    scope.
-      where(id: grouped_most_recent_qualifications_ids).
-      merge(start_scope).
-      merge(finish_scope)
+    scope
+      .where(id: grouped_most_recent_qualifications_ids)
+      .merge(start_scope)
+      .merge(finish_scope)
   end
 
   def grouped_most_recent_qualifications_ids
-    Qualification.
-      group(:person_id, :qualification_kind_id).select("max(id)").
-      where(qualification_kind_id: args[:qualification_kind_ids])
+    Qualification
+      .group(:person_id, :qualification_kind_id).select("max(id)")
+      .where(qualification_kind_id: args[:qualification_kind_ids])
   end
 
   def finish_scope

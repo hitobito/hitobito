@@ -9,9 +9,9 @@ describe MailchimpSynchronizationsController do
 
   context "POST create" do
     it "runs a delayed job." do
-      expect do
+      expect {
         post :create, params: {group_id: group.id, mailing_list_id: mailing_list.id}
-      end.to change(Delayed::Job, :count).by(1)
+      }.to change(Delayed::Job, :count).by(1)
     end
   end
 end

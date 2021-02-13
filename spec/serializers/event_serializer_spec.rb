@@ -52,7 +52,7 @@ require "spec_helper"
 
 describe EventSerializer do
   let(:event) { events(:top_event).decorate }
-  let(:controller) { double().as_null_object }
+  let(:controller) { double.as_null_object }
   let(:serializer) { EventSerializer.new(event, controller: controller) }
   let(:hash) { serializer.to_hash.with_indifferent_access }
 
@@ -61,8 +61,8 @@ describe EventSerializer do
   context "event properties" do
     it "includes all keys" do
       keys = [:name, :description, :motto, :cost, :maximum_participants, :participant_count,
-       :location, :application_opening_at, :application_closing_at, :application_conditions,
-       :state, :teamer_count, :external_application_link, :links]
+              :location, :application_opening_at, :application_closing_at, :application_conditions,
+              :state, :teamer_count, :external_application_link, :links,]
 
       keys.each do |key|
         is_expected.to have_key(key)
@@ -80,7 +80,7 @@ describe EventSerializer do
 
     it "includes groups properties" do
       keys = [:id, :href, :group_type, :layer, :name, :short_name, :email, :address,
-              :zip_code, :town, :country, :created_at, :updated_at]
+              :zip_code, :town, :country, :created_at, :updated_at,]
 
       group = hash[:linked][:groups].first
 

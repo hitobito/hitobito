@@ -14,7 +14,7 @@ require "paper_trail/frameworks/rspec"
 require "webmock/rspec"
 
 # Needed for feature specs
-WebMock.disable_net_connect!(allow_localhost: true, allow: %w(chromedriver.storage.googleapis.com))
+WebMock.disable_net_connect!(allow_localhost: true, allow: %w[chromedriver.storage.googleapis.com])
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -66,7 +66,7 @@ RSpec.configure do |config|
     FileUtils.rm_rf(Dir.glob(AsyncDownloadFile::DIRECTORY.join("*")))
   end
 
-  config.before(:each) do
+  config.before do
     ActionMailer::Base.deliveries = []
     Person.stamper = nil
   end

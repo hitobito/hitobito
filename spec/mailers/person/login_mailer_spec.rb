@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -14,10 +12,10 @@ describe Person::LoginMailer do
 
   subject { mail }
 
-  its(:to) { should == [recipient.email] }
-  its(:reply_to) { should == [sender.email] }
-  its(:subject) { should == "Willkommen bei #{Settings.application.name}" }
-  its(:body) { should =~ /Hallo Bottom<br>.*test.host\/users\/password\/edit\?reset_password_token=/ }
+  its(:to) { is_expected.to == [recipient.email] }
+  its(:reply_to) { is_expected.to == [sender.email] }
+  its(:subject) { is_expected.to == "Willkommen bei #{Settings.application.name}" }
+  its(:body) { is_expected.to =~ /Hallo Bottom<br>.*test.host\/users\/password\/edit\?reset_password_token=/ }
 
   context "with additional emails" do
     it "does not send to them" do
@@ -28,11 +26,11 @@ describe Person::LoginMailer do
 
   context "with internationalized domain names" do
     before do
-     recipient.update!(email: "member@exämple.com")
-     sender.update!(email: "leader@exämple.com")
-   end
+      recipient.update!(email: "member@exämple.com")
+      sender.update!(email: "leader@exämple.com")
+    end
 
-    its(:to) { should == %w(member@xn--exmple-cua.com) }
-    its(:reply_to) { should == %w(leader@xn--exmple-cua.com) }
+    its(:to) { is_expected.to == %w[member@xn--exmple-cua.com] }
+    its(:reply_to) { is_expected.to == %w[leader@xn--exmple-cua.com] }
   end
 end

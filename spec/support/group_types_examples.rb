@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -9,25 +7,23 @@
 shared_examples "group types" do |options|
   describe "fixtures" do
     it "is a valid nested set" do
-      begin
-        expect(Group).to be_left_and_rights_valid
-        expect(Group).to be_no_duplicates_for_columns
-        expect(Group).to be_all_roots_valid
-        expect(Group).to be_valid
-      rescue => e
-        puts e
-        Group.rebuild!
-        puts "valid are:"
-        Group.order(:lft).each do |g|
-          puts "  " * g.level + "#{g.name} lft: #{g.lft}, rgt: #{g.rgt}"
-        end
+      expect(Group).to be_left_and_rights_valid
+      expect(Group).to be_no_duplicates_for_columns
+      expect(Group).to be_all_roots_valid
+      expect(Group).to be_valid
+    rescue => e
+      puts e
+      Group.rebuild!
+      puts "valid are:"
+      Group.order(:lft).each do |g|
+        puts "  " * g.level + "#{g.name} lft: #{g.lft}, rgt: #{g.rgt}"
       end
     end
 
     it "has all layer_group_ids set correctly" do
       Group.all.each do |group|
-        msg = "#{group.to_s}: expected <#{group.layer_group.id}> (#{group.layer_group.to_s}), "
-        msg << "got <#{group.layer_group_id}> (#{Group.find(group.layer_group_id).to_s})"
+        msg = "#{group}: expected <#{group.layer_group.id}> (#{group.layer_group}), "
+        msg << "got <#{group.layer_group_id}> (#{Group.find(group.layer_group_id)})"
         expect(group.layer_group_id).to(eq(group.layer_group.id), msg)
       end
     end

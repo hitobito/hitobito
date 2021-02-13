@@ -19,11 +19,11 @@ class Event::ApiFilter < Event::Filter
 
   def list_entries
     scope = Event.where(type: type)
-                 .includes(:groups)
-                 .with_group_id(relevant_group_ids)
-                 .order_by_date
-                 .preload_all_dates
-                 .distinct
+      .includes(:groups)
+      .with_group_id(relevant_group_ids)
+      .order_by_date
+      .preload_all_dates
+      .distinct
 
     end_date ? scope.between(start_date, end_date) : scope.upcoming(start_date)
   end

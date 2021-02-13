@@ -21,9 +21,9 @@ module Contactable
 
     def validate_additional_emails(person)
       additional_emails = person.additional_emails.pluck(:email)
-      invalid_emails = additional_emails.select do |a|
+      invalid_emails = additional_emails.select { |a|
         invalid?(a)
-      end
+      }
 
       if invalid_emails.present?
         tag_invalid!(person, invalid_emails.join(" "), :additional)

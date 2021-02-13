@@ -43,9 +43,9 @@ describe AssignmentsController do
     it "can not show assignment if attachment not readable" do
       sign_in(different_member)
 
-      expect do
+      expect {
         get :show, params: nesting.merge(id: assignment.id)
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -68,24 +68,24 @@ describe AssignmentsController do
     it "can not new if attachment not writable" do
       sign_in(different_member)
 
-      expect do
+      expect {
         get :new, params: {assignment: {attachment_id: assignment.attachment.id}}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 
   context "POST#create" do
     it "creates new assignment and assigns creator_id" do
-      expect do
+      expect {
         post :create, params: {
           assignment: {
             title: "test title",
             description: "test description",
             attachment_id: messages(:letter).id,
-            person_id: bottom_member.id
-          }
+            person_id: bottom_member.id,
+          },
         }
-      end.to change { Assignment.count }.by(1)
+      }.to change { Assignment.count }.by(1)
 
       created = Assignment.find_by(title: "test title")
 
@@ -95,31 +95,31 @@ describe AssignmentsController do
     it "enqueues notification mailer job" do
       expect(Assignment::SendNotificationJob).to receive(:new).and_call_original
 
-      expect do
+      expect {
         post :create, params: {
           assignment: {
             title: "test title",
             description: "test description",
             attachment_id: messages(:letter).id,
-            person_id: bottom_member.id
-          }
+            person_id: bottom_member.id,
+          },
         }
-      end.to change { Delayed::Job.count }.by(1)
+      }.to change { Delayed::Job.count }.by(1)
     end
 
     it "can not create if attachment not writeable" do
       sign_in(different_member)
 
-      expect do
+      expect {
         post :create, params: {
           assignment: {
             title: "test title",
             description: "test description",
             attachment_id: messages(:letter).id,
-            person_id: bottom_member.id
-          }
+            person_id: bottom_member.id,
+          },
         }
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
     end
   end
 end

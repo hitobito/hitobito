@@ -27,12 +27,16 @@ namespace :db do
   task resort_groups: [:environment] do
     puts "Moving Groups in alphabetical order..."
 
-    bar = begin
-      require 'ruby-progressbar'
-      ProgressBar.create(format: '%a |%w>%i| %c/%C | %E ', total: Group.count)
-    rescue LoadError
-      Class.new { def increment; end }.new
-    end
+    bar =
+      begin
+        require "ruby-progressbar"
+        ProgressBar.create(format: "%a |%w>%i| %c/%C | %E ", total: Group.count)
+      rescue LoadError
+        Class.new {
+          def increment
+          end
+        }.new
+      end
 
     Group.find_each do |group|
       group.send(:move_to_alphabetic_position)
@@ -55,25 +59,20 @@ namespace :db do
       else # we assume Linux
         "zcat"
       end
-          else # we assume SQL in a text/plain file
-            "cat"
-          end
+    else # we assume SQL in a text/plain file
+      "cat"
+    end
 
     # some things are more stable and understandable when expressed as a shell-command
     sh "rails db:drop db:create"
     sh "#{cat} #{backup} | rails db -p"
 
     # other things are straightforward rake-tasks
-<<<<<<< HEAD
-    Rake::Task['db:migrate'].invoke
-    Rake::Task['wagon:migrate'].invoke
-
-    ENV['NO_ENV'] = 1
-    Rake::Task['db:seed'].invoke
-    Rake::Task['wagon:seed'].invoke
-=======
     Rake::Task["db:migrate"].invoke
     Rake::Task["wagon:migrate"].invoke
->>>>>>> [Corrected] Style/StringLiterals
+
+    ENV["NO_ENV"] = 1
+    Rake::Task["db:seed"].invoke
+    Rake::Task["wagon:seed"].invoke
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -8,21 +6,19 @@
 module FeatureHelpers
   def sign_in(user = nil)
     user ||= people(:top_leader)
-    login_as(user, :scope => :person)
+    login_as(user, scope: :person)
   end
 
   private
 
   # catch some errors occuring now and then in capybara tests
   def obsolete_node_safe
-    begin
-      yield
-    rescue Errno::ECONNREFUSED,
-           Timeout::Error,
-           Capybara::FrozenInTime,
-           Capybara::ElementNotFound => e
-      skip e.message
-    end
+    yield
+  rescue Errno::ECONNREFUSED,
+         Timeout::Error,
+         Capybara::FrozenInTime,
+         Capybara::ElementNotFound => e
+    skip e.message
   end
 
   # due to concurrent requests in js specs, it happens that

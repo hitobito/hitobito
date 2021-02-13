@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -10,10 +8,10 @@ module AbilityDsl
     # rubocop:disable Style/MutableConstant These constants are meant to be extended
     GROUP_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
                          :group_and_below_full, :group_and_below_read, :group_full, :group_read,
-                         :finance]
+                         :finance,]
 
     LAYER_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
-                         :finance]
+                         :finance,]
     # rubocop:enable Style/MutableConstant
 
     attr_reader :user, :admin
@@ -75,18 +73,18 @@ module AbilityDsl
     end
 
     def init_permission_groups
-      @permission_group_ids = GROUP_PERMISSIONS.each_with_object({}) do |permission, hash|
+      @permission_group_ids = GROUP_PERMISSIONS.each_with_object({}) { |permission, hash|
         groups = user.groups_with_permission(permission).to_a
         given = Role::PermissionImplications.invert[permission]
         groups += user.groups_with_permission(given).to_a if given
         hash[permission] = groups
-      end
+      }
     end
 
     def init_permission_layers
-      @permission_layer_ids = LAYER_PERMISSIONS.each_with_object({}) do |permission, hash|
+      @permission_layer_ids = LAYER_PERMISSIONS.each_with_object({}) { |permission, hash|
         hash[permission] = layer_ids(@permission_group_ids[permission])
-      end
+      }
     end
 
     def collect_group_ids!
@@ -103,7 +101,7 @@ module AbilityDsl
 
     def find_events_with_permission(permission)
       participations.select { |p| p.roles.any? { |r| r.class.permissions.include?(permission) } }
-                    .collect(&:event_id)
+        .collect(&:event_id)
     end
   end
 end

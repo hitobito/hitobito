@@ -13,7 +13,7 @@
 #  excluded         :boolean      not null
 #
 
-class SubscriptionTag < ActiveRecord::Base
+class SubscriptionTag < ApplicationRecord
   belongs_to :subscription
   belongs_to :tag, class_name: "ActsAsTaggableOn::Tag"
 

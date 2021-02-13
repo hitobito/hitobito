@@ -22,9 +22,9 @@
 #  index_person_add_requests_on_type_and_body_id  (type,body_id)
 #
 
-class Person::AddRequest < ActiveRecord::Base
+class Person::AddRequest < ApplicationRecord
   has_paper_trail meta: {main_id: ->(r) { r.person_id },
-                         main_type: Person.sti_name}
+                         main_type: Person.sti_name,}
 
   belongs_to :person
   belongs_to :requester, class_name: "Person"
@@ -38,10 +38,10 @@ class Person::AddRequest < ActiveRecord::Base
 
   class << self
     def for_layer(layer_group)
-      joins(:person).
-        joins("LEFT JOIN #{::Group.quoted_table_name} AS primary_groups " \
-              "ON primary_groups.id = people.primary_group_id").
-        where("primary_groups.layer_group_id = ? OR people.id IN (?)",
+      joins(:person)
+        .joins("LEFT JOIN #{::Group.quoted_table_name} AS primary_groups " \
+              "ON primary_groups.id = people.primary_group_id")
+        .where("primary_groups.layer_group_id = ? OR people.id IN (?)",
           layer_group.id,
           ::Group::DeletedPeople.deleted_for(layer_group).select(:id))
     end

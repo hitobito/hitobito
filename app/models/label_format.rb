@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -24,7 +22,7 @@
 #  pp_post          :string(23)
 #
 
-class LabelFormat < ActiveRecord::Base
+class LabelFormat < ApplicationRecord
   class << self
     def available_page_sizes
       PDF::Core::PageGeometry::SIZES.keys

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -23,11 +21,11 @@ describe Export::Tabular::Events::List do
   context "first row" do
     subject { csv.second.split(";") }
 
-    its([1]) { should eq "TopGroup" }
+    its([1]) { is_expected.to eq "TopGroup" }
 
-    its([5]) { should eq "somestate" }
+    its([5]) { is_expected.to eq "somestate" }
 
-    its([6]) { should eq "somewhere" }
+    its([6]) { is_expected.to eq "somewhere" }
 
     context "state" do
       # This tests the case where Event.possible_states is empty,
@@ -109,7 +107,7 @@ describe Export::Tabular::Events::List do
         expect(row[28..-1]).to eq ["Motto", "Kosten", "Anmeldebeginn", "Anmeldeschluss",
                                    "Maximale Teilnehmerzahl", "Externe Anmeldungen",
                                    "Priorisierung", "Anzahl Leitungsteam", "Anzahl Teilnehmende",
-                                   "Anzahl Anmeldungen"]
+                                   "Anzahl Anmeldungen",]
       end
     end
 
@@ -118,7 +116,7 @@ describe Export::Tabular::Events::List do
 
       it "should contain contain the additional course and record fields" do
         expect(row[28..-1]).to eq ["All for one", "1000", "01.01.2000", "01.02.2000", "10",
-                                   "nein", "nein", "1", "1", "2"]
+                                   "nein", "nein", "1", "1", "2",]
       end
     end
 

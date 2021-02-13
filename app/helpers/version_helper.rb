@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,7 @@
 
 module VersionHelper
   def app_version_links(url = "https://github.com/hitobito/%s/commits/%s")
-    links = Hitobito::Application.versions.collect do |line|
+    links = Hitobito::Application.versions.collect { |line|
       commit, submodule, _ = line.split(" ")
       content_tag(:li) do
         path = format(url % [submodule, commit.gsub(/[+|-]/, "")])
@@ -15,7 +13,7 @@ module VersionHelper
 
         "#{submodule} (#{link})".html_safe
       end
-    end
+    }
     content_tag(:ul, safe_join(links))
   end
 

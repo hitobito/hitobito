@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -51,7 +49,7 @@ describe Subscriber::GroupController do
       get :roles, xhr: true, params: {
         group_id: group.id,
         mailing_list_id: list.id,
-        subscription: {subscriber_id: groups(:bottom_layer_one)}
+        subscription: {subscriber_id: groups(:bottom_layer_one)},
       }, format: :js
 
       expect(assigns(:role_types).root).to eq(Group::BottomLayer)
@@ -60,7 +58,7 @@ describe Subscriber::GroupController do
     it "does not load role types for nil group" do
       get :roles, xhr: true, params: {
         group_id: group.id,
-        mailing_list_id: list.id
+        mailing_list_id: list.id,
       }, format: :js
 
       expect(assigns(:role_types)).to be_nil
@@ -71,7 +69,7 @@ describe Subscriber::GroupController do
     it "without subscriber_id replaces error" do
       post :create, params: {
         group_id: group.id,
-        mailing_list_id: list.id
+        mailing_list_id: list.id,
       }
 
       is_expected.to render_template("crud/new")
@@ -81,16 +79,16 @@ describe Subscriber::GroupController do
     end
 
     it "create subscription with role types" do
-      expect do
-        expect do
+      expect {
+        expect {
           post :create, params: {
             group_id: group.id,
             mailing_list_id: list.id,
             subscription: {subscriber_id: groups(:bottom_layer_one),
-                           role_types: [Group::BottomLayer::Leader, Group::BottomGroup::Leader]}
+                           role_types: [Group::BottomLayer::Leader, Group::BottomGroup::Leader],},
           }
-        end.to change { Subscription.count }.by(1)
-      end.to change { RelatedRoleType.count }.by(2)
+        }.to change { Subscription.count }.by(1)
+      }.to change { RelatedRoleType.count }.by(2)
 
       is_expected.to redirect_to(group_mailing_list_subscriptions_path(group, list))
     end

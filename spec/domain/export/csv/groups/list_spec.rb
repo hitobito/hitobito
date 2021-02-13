@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -18,7 +16,7 @@ describe Export::Tabular::Groups::List do
   subject { csv }
 
   its(:headers) do
-    should == %w(Id Elterngruppe Name Kurzname Gruppentyp Haupt-E-Mail Adresse PLZ Ort Land Ebene Beschreibung)
+    is_expected.to == %w[Id Elterngruppe Name Kurzname Gruppentyp Haupt-E-Mail Adresse PLZ Ort Land Ebene Beschreibung]
   end
 
   it "has 4 items" do
@@ -28,17 +26,17 @@ describe Export::Tabular::Groups::List do
   context "first row" do
     subject { csv[0] }
 
-    its(["Id"]) { should == group.id.to_s }
-    its(["Elterngruppe"]) { should == group.parent_id.to_s }
-    its(["Name"]) { should == group.name }
-    its(["Kurzname"]) { should == group.short_name }
-    its(["Gruppentyp"]) { should == "Bottom Layer" }
-    its(["Haupt-E-Mail"]) { should == group.email }
-    its(["Adresse"]) { should == group.address }
-    its(["PLZ"]) { should == group.zip_code.to_s }
-    its(["Ort"]) { should == group.town }
-    its(["Land"]) { should == group.country_label }
-    its(["Ebene"]) { should == group.id.to_s }
+    its(["Id"]) { is_expected.to == group.id.to_s }
+    its(["Elterngruppe"]) { is_expected.to == group.parent_id.to_s }
+    its(["Name"]) { is_expected.to == group.name }
+    its(["Kurzname"]) { is_expected.to == group.short_name }
+    its(["Gruppentyp"]) { is_expected.to == "Bottom Layer" }
+    its(["Haupt-E-Mail"]) { is_expected.to == group.email }
+    its(["Adresse"]) { is_expected.to == group.address }
+    its(["PLZ"]) { is_expected.to == group.zip_code.to_s }
+    its(["Ort"]) { is_expected.to == group.town }
+    its(["Land"]) { is_expected.to == group.country_label }
+    its(["Ebene"]) { is_expected.to == group.id.to_s }
   end
 
   context "group with contact" do
@@ -46,12 +44,12 @@ describe Export::Tabular::Groups::List do
 
     subject { csv[1] }
 
-    its(["Elterngruppe"]) { should == group.id.to_s }
-    its(["Ebene"]) { should == group.id.to_s }
-    its(["Haupt-E-Mail"]) { should == groups(:bottom_group_one_one).email }
-    its(["Adresse"]) { should == contact.address }
-    its(["PLZ"]) { should == contact.zip_code.to_s }
-    its(["Ort"]) { should == contact.town }
-    its(["Land"]) { should == contact.country_label }
+    its(["Elterngruppe"]) { is_expected.to == group.id.to_s }
+    its(["Ebene"]) { is_expected.to == group.id.to_s }
+    its(["Haupt-E-Mail"]) { is_expected.to == groups(:bottom_group_one_one).email }
+    its(["Adresse"]) { is_expected.to == contact.address }
+    its(["PLZ"]) { is_expected.to == contact.zip_code.to_s }
+    its(["Ort"]) { is_expected.to == contact.town }
+    its(["Land"]) { is_expected.to == contact.country_label }
   end
 end

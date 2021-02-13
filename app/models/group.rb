@@ -40,7 +40,7 @@
 #  index_groups_on_type            (type)
 #
 
-class Group < ActiveRecord::Base
+class Group < ApplicationRecord
   include Group::NestedSet
   include Group::Types
   include Contactable
@@ -57,7 +57,7 @@ class Group < ActiveRecord::Base
   # This must contain the superior attributes as well.
   class_attribute :used_attributes
   self.used_attributes = [:name, :short_name, :email, :contact_id,
-                          :email, :address, :zip_code, :town, :country, :description]
+                          :email, :address, :zip_code, :town, :country, :description,]
 
   # Attributes that may only be modified by people from superior layers.
   class_attribute :superior_attributes
@@ -142,7 +142,7 @@ class Group < ActiveRecord::Base
         statement << "END,"
       end
 
-      "#{statement.join(' ')} lft"
+      "#{statement.join(" ")} lft"
     end
 
     private

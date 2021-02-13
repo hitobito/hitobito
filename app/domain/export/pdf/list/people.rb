@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -22,7 +20,7 @@ module Export::Pdf::List
         I18n.t("people.print.address"),
         I18n.t("people.print.email"),
         I18n.t("people.print.home_phone"),
-        I18n.t("people.print.mobile_phone")
+        I18n.t("people.print.mobile_phone"),
       ]
     end
 
@@ -31,8 +29,8 @@ module Export::Pdf::List
         person.person_name,
         address(person),
         person.email,
-        phone_numbers(person, %w(Privat)),
-        phone_numbers(person, %w(Mobil))
+        phone_numbers(person, %w[Privat]),
+        phone_numbers(person, %w[Mobil]),
       ]
     end
 

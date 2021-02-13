@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -62,7 +60,7 @@ describe Event::RolesController do
           params: {
             group_id: group.id,
             event_id: course.id,
-            event_role: {type: Event::Role::Speaker.sti_name, person_id: person.id}
+            event_role: {type: Event::Role::Speaker.sti_name, person_id: person.id},
           }
 
         is_expected.to redirect_to(group_event_participations_path(group, course))
@@ -78,7 +76,7 @@ describe Event::RolesController do
           params: {
             group_id: group.id,
             event_id: course.id,
-            event_role: {type: Event::Role::Speaker.sti_name, person_id: user.id}
+            event_role: {type: Event::Role::Speaker.sti_name, person_id: user.id},
           }
 
         role = assigns(:role)
@@ -94,9 +92,9 @@ describe Event::RolesController do
       it "creates role" do
         participation = Fabricate(:event_participation, event: course, person: user)
         Fabricate(Event::Role::Cook.name, participation: participation)
-        expect do
+        expect {
           post :create, params: {group_id: group.id, event_id: course.id, event_role: {type: Event::Role::Leader.sti_name, person_id: user.id}}
-        end.to change { Event::Participation.count }.by(0)
+        }.to change { Event::Participation.count }.by(0)
 
         role = assigns(:role)
         expect(role).to be_persisted
@@ -118,7 +116,7 @@ describe Event::RolesController do
           params: {
             group_id: group.id,
             event_id: course.id,
-            event_role: {type: Event::Role::Speaker.sti_name, person_id: person.id}
+            event_role: {type: Event::Role::Speaker.sti_name, person_id: person.id},
           }
 
         is_expected.to redirect_to(group_event_participations_path(group, course))
@@ -137,7 +135,7 @@ describe Event::RolesController do
           group_id: group.id,
           event_id: course.id,
           id: role.id,
-          event_role: {label: "Foo"}
+          event_role: {label: "Foo"},
         }
 
       role = Event::Role.find(role.id)
@@ -153,7 +151,7 @@ describe Event::RolesController do
           group_id: group.id,
           event_id: course.id,
           id: role.id,
-          event_role: {type: Event::Role::Cook.sti_name}
+          event_role: {type: Event::Role::Cook.sti_name},
         }
 
       role = Event::Role.find(role.id)
@@ -168,7 +166,7 @@ describe Event::RolesController do
           group_id: group.id,
           event_id: course.id,
           id: role.id,
-          event_role: {type: Event::Course::Role::Participant.sti_name}
+          event_role: {type: Event::Course::Role::Participant.sti_name},
         }
 
       role = Event::Role.find(role.id)
@@ -184,7 +182,7 @@ describe Event::RolesController do
           group_id: group.id,
           event_id: course.id,
           id: role.id,
-          event_role: {type: Event::Role::Cook.sti_name}
+          event_role: {type: Event::Role::Cook.sti_name},
         }
 
       role = Event::Role.find(role.id)

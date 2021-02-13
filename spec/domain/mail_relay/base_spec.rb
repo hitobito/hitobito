@@ -20,8 +20,8 @@ describe MailRelay::Base do
 
   before do
     # we do not have custom content for report loaded in test env
-    allow_any_instance_of(DeliveryReportMailer).
-      to receive(:bulk_mail)
+    allow_any_instance_of(DeliveryReportMailer)
+      .to receive(:bulk_mail)
   end
 
   describe "#receiver_from_received_header" do
@@ -58,6 +58,7 @@ describe MailRelay::Base do
         expect(relay.envelope_receiver_name).to eq("kalei.kontakt")
       end
     end
+
     context "multiple both" do
       let(:message) { multiple_both }
 
@@ -65,6 +66,7 @@ describe MailRelay::Base do
         expect(relay.envelope_receiver_name).to eq("kalei.kontakt")
       end
     end
+
     context "multiple x-original-to" do
       let(:message) { multiple_x_original_to }
 
@@ -72,6 +74,7 @@ describe MailRelay::Base do
         expect(relay.envelope_receiver_name).to eq("teststatus.zha0")
       end
     end
+
     context "regular" do
       let(:message) { regular }
 
@@ -93,7 +96,7 @@ describe MailRelay::Base do
     end
 
     context "with receivers" do
-      let(:receivers) { %w(a@example.com b@example.com) }
+      let(:receivers) { %w[a@example.com b@example.com] }
 
       before do
         allow(relay).to receive(:receivers).and_return(receivers)
@@ -101,14 +104,14 @@ describe MailRelay::Base do
       end
 
       it { is_expected.to be_present }
-      its(:smtp_envelope_to) { should == receivers }
-      its(:to) { should == ["zumkehr@puzzle.ch"] }
-      its(:from) { should == ["animation@jublaluzern.ch"] }
+      its(:smtp_envelope_to) { is_expected.to == receivers }
+      its(:to) { is_expected.to == ["zumkehr@puzzle.ch"] }
+      its(:from) { is_expected.to == ["animation@jublaluzern.ch"] }
 
       context "with internationalized domain names" do
-        let(:receivers) { %w(a@exämple.com b@example.com) }
+        let(:receivers) { %w[a@exämple.com b@example.com] }
 
-        its(:smtp_envelope_to) { should == %w(a@xn--exmple-cua.com b@example.com) }
+        its(:smtp_envelope_to) { is_expected.to == %w[a@xn--exmple-cua.com b@example.com] }
       end
     end
   end
@@ -141,9 +144,9 @@ describe MailRelay::Base do
 
       expect_any_instance_of(MailRelay::Base).to receive(:sender_allowed?).and_return(false)
 
-      expect do
+      expect {
         MailRelay::Base.relay_current
-      end.to change { MailLog.count }.by(1)
+      }.to change { MailLog.count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: "e63f22f5d97d8030174951265555794f")
       expect(mail_log.message.subject).to eq(simple.subject)
@@ -161,9 +164,9 @@ describe MailRelay::Base do
 
       expect_any_instance_of(MailRelay::Base).to receive(:relay_address?).and_return(false)
 
-      expect do
+      expect {
         MailRelay::Base.relay_current
-      end.to change { MailLog.count }.by(1)
+      }.to change { MailLog.count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: "e63f22f5d97d8030174951265555794f")
       expect(mail_log.message.subject).to eq(simple.subject)
@@ -183,9 +186,11 @@ describe MailRelay::Base do
 
       expect(Airbrake).to receive(:notify) do |exception|
         expect(exception.message).to match(
-          /Mail with subject 'Re: Jubla Gruppen' has already been processed before and is skipped/)
+          /Mail with subject 'Re: Jubla Gruppen' has already been processed before and is skipped/
+        )
         expect(exception.message).to match(
-          /e63f22f5d97d8030174951265555794f$/)
+          /e63f22f5d97d8030174951265555794f$/
+        )
       end
 
       MailRelay::Base.relay_current
@@ -203,9 +208,11 @@ describe MailRelay::Base do
 
       expect(Airbrake).not_to receive(:notify) do |exception|
         expect(exception.message).to match(
-          /Mail with subject 'Re: Jubla Gruppen' has already been processed before and is skipped/)
+          /Mail with subject 'Re: Jubla Gruppen' has already been processed before and is skipped/
+        )
         expect(exception.message).to match(
-          /e63f22f5d97d8030174951265555794f$/)
+          /e63f22f5d97d8030174951265555794f$/
+        )
       end
 
       MailRelay::Base.relay_current
@@ -217,9 +224,9 @@ describe MailRelay::Base do
         [simple]
       end
 
-      expect do
+      expect {
         MailRelay::Base.relay_current
-      end.to change { MailLog.count }.by(1)
+      }.to change { MailLog.count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: "e63f22f5d97d8030174951265555794f")
       expect(mail_log.message.subject).to eq(simple.subject)
@@ -237,9 +244,9 @@ describe MailRelay::Base do
         [simple]
       end
 
-      expect do
+      expect {
         MailRelay::Base.relay_current
-      end.to change { MailLog.count }.by(1)
+      }.to change { MailLog.count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: "e63f22f5d97d8030174951265555794f")
       expect(mail_log.message.subject).to eq("⛴ Unvergessliche Erlebnisse")
@@ -276,9 +283,9 @@ describe MailRelay::Base do
         fail EOFError.new("ouch")
       end
 
-      expect do
+      expect {
         MailRelay::Base.relay_current
-      end.not_to change { MailLog.count }
+      }.not_to change { MailLog.count }
 
       mail_log = MailLog.find_by(mail_hash: "e63f22f5d97d8030174951265555794f")
       expect(mail_log).not_to be_present

@@ -13,7 +13,7 @@ describe "invoices/_form.html.haml" do
       cancel_url: "",
       model_class: Invoice,
       entry: invoice.decorate,
-      path_args: [group, invoice]
+      path_args: [group, invoice],
     })
 
     allow(controller).to receive_messages(current_user: person)
@@ -27,7 +27,7 @@ describe "invoices/_form.html.haml" do
       "",
       "BEI-JU - Beitrag Kinder",
       "BEI-18 - Beitrag Erwachsene",
-      "ABO-NEWS - Abonnement der Mitgliederzeitschrift"
+      "ABO-NEWS - Abonnement der Mitgliederzeitschrift",
     ])
   end
 end

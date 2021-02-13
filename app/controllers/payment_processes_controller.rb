@@ -8,7 +8,8 @@ class PaymentProcessesController < ApplicationController
 
   helper_method :group, :parent, :processor
 
-  def new; end
+  def new
+  end
 
   def show
     unless processor
@@ -68,7 +69,7 @@ class PaymentProcessesController < ApplicationController
   def valid_file?(io)
     io.present? &&
       io.respond_to?(:content_type) &&
-    # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
+      # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
       io.content_type =~ %r{text/xml}
   end
 end

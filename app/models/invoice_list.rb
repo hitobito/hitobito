@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: invoice_lists
@@ -31,7 +29,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-class InvoiceList < ActiveRecord::Base
+class InvoiceList < ApplicationRecord
   serialize :invalid_recipient_ids, Array
   belongs_to :group
   belongs_to :receiver, polymorphic: true
@@ -41,7 +39,7 @@ class InvoiceList < ActiveRecord::Base
   has_many :invoices, dependent: :destroy
 
   attr_accessor :recipient_ids, :invoice
-  validates :receiver_type, inclusion: %w(MailingList), allow_blank: true
+  validates :receiver_type, inclusion: %w[MailingList], allow_blank: true
 
   scope :list, -> { order(:created_at) }
 

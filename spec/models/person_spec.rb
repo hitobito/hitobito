@@ -1,5 +1,3 @@
-# vim:fileencoding=utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -114,7 +112,7 @@ describe Person do
   context "with one role" do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
-    its(:layer_groups) { should == [groups(:top_layer)] }
+    its(:layer_groups) { is_expected.to == [groups(:top_layer)] }
 
     it "has layer_and_below_full permission in top_group" do
       expect(person.groups_with_permission(:layer_and_below_full)).to eq([groups(:top_group)])
@@ -135,7 +133,7 @@ describe Person do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), person: role1.person)
     end
 
-    its(:layer_groups) { should == [groups(:bottom_layer_one)] }
+    its(:layer_groups) { is_expected.to == [groups(:bottom_layer_one)] }
 
     it "has layer_and_below_full permission in top_group" do
       expect(person.groups_with_permission(:layer_and_below_full)).to eq([groups(:bottom_layer_one)])
@@ -186,8 +184,8 @@ describe Person do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), person: role1.person)
     end
 
-    its(:layer_groups) { should have(2).items }
-    its(:layer_groups) { should include(groups(:top_layer), groups(:bottom_layer_one)) }
+    its(:layer_groups) { is_expected.to have(2).items }
+    its(:layer_groups) { is_expected.to include(groups(:top_layer), groups(:bottom_layer_one)) }
 
     it "has contact_data permission in both groups" do
       expect(person.groups_with_permission(:contact_data)).to match_array([groups(:top_group), groups(:bottom_layer_one)])
@@ -297,10 +295,10 @@ describe Person do
     context "stores person id in main id" do
       it "on create" do
         p = nil
-        expect do
+        expect {
           p = Person.new(first_name: "Foo")
           p.save!
-        end.to change { PaperTrail::Version.count }.by(1)
+        }.to change { PaperTrail::Version.count }.by(1)
 
         v = PaperTrail::Version.order(:created_at).last
         expect(v.event).to eq("create")
@@ -317,12 +315,12 @@ describe Person do
     end
 
     [["2006-02-12", 8],
-      ["2005-03-15", 8],
-      ["2004-02-29", 10]].each do |birthday, years|
-       it "is #{years} years old if born on #{birthday}" do
-         expect(Person.new(birthday: birthday).years).to eq years
-       end
-     end
+     ["2005-03-15", 8],
+     ["2004-02-29", 10],].each do |birthday, years|
+      it "is #{years} years old if born on #{birthday}" do
+        expect(Person.new(birthday: birthday).years).to eq years
+      end
+    end
   end
 
   context "#country_label" do
@@ -644,9 +642,9 @@ describe Person do
     let(:person_1) { duplicate1.person_1 }
 
     it "deletes person duplicates if person is deleted" do
-      expect do
+      expect {
         person_1.destroy!
-      end.to change(PersonDuplicate, :count).by(-2)
+      }.to change(PersonDuplicate, :count).by(-2)
     end
   end
 end

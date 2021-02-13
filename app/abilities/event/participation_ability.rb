@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,22 +14,22 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:any).may(:show_full, :update).for_participations_full_events
     permission(:any).may(:destroy).her_own_if_application_cancelable
 
-    permission(:group_full).
-      may(:show, :show_details, :show_full, :print, :create, :update, :destroy).
-      in_same_group
+    permission(:group_full)
+      .may(:show, :show_details, :show_full, :print, :create, :update, :destroy)
+      .in_same_group
 
-    permission(:group_and_below_full).
-      may(:show, :show_details, :show_full, :print, :create, :update, :destroy).
-      in_same_group_or_below
+    permission(:group_and_below_full)
+      .may(:show, :show_details, :show_full, :print, :create, :update, :destroy)
+      .in_same_group_or_below
 
-    permission(:layer_full).
-      may(:show, :show_details, :show_full, :print, :update).
-      in_same_layer_or_different_prio
+    permission(:layer_full)
+      .may(:show, :show_details, :show_full, :print, :update)
+      .in_same_layer_or_different_prio
     permission(:layer_full).may(:create, :destroy).in_same_layer
 
-    permission(:layer_and_below_full).
-      may(:show, :show_details, :show_full, :print, :update).
-      in_same_layer_or_below_or_different_prio
+    permission(:layer_and_below_full)
+      .may(:show, :show_details, :show_full, :print, :update)
+      .in_same_layer_or_below_or_different_prio
     permission(:layer_and_below_full).may(:create, :destroy).in_same_layer
 
     permission(:approve_applications).may(:show).for_applicant_in_same_layer

@@ -66,7 +66,7 @@ module FormatHelper
       "format_#{obj.class.base_class.name.underscore}_#{attr}"
     else
       "format_#{obj.class.name.underscore}_#{attr}"
-    end.gsub(/\//, "_") # deal with nested models
+    end.tr("/", "_") # deal with nested models
   end
 
   ##############  STANDARD HTML SECTIONS  ############################
@@ -92,9 +92,9 @@ module FormatHelper
   def render_attrs(obj, *attrs)
     return if attrs.blank?
 
-    content = safe_join(attrs) do |a|
+    content = safe_join(attrs) { |a|
       labeled_attr(obj, a) if !block_given? || yield(a)
-    end
+    }
     content_tag(:dl, content, class: "dl-horizontal") if content.present?
   end
 

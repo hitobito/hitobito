@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2014, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -164,9 +162,9 @@ describe AdditionalEmail do
     let(:person) { people(:top_leader) }
 
     it "sets main on create" do
-      expect do
+      expect {
         person.additional_emails.create!(label: "Foo", email: "bar@bar.com")
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("create")
@@ -175,9 +173,9 @@ describe AdditionalEmail do
 
     it "sets main on update" do
       account = person.additional_emails.create(label: "Foo", email: "bar@bar.com")
-      expect do
+      expect {
         account.update!(email: "bur@bur.com")
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("update")
@@ -186,9 +184,9 @@ describe AdditionalEmail do
 
     it "sets main on destroy" do
       account = person.additional_emails.create(label: "Foo", email: "bar@bar.com")
-      expect do
+      expect {
         account.destroy!
-      end.to change { PaperTrail::Version.count }.by(1)
+      }.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("destroy")

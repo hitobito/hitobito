@@ -5,12 +5,12 @@ describe TableDisplay::Participations do
   let(:question) { event_questions(:top_ov) }
 
   it "translates person columns for sort statements" do
-    subject.selected = %w(name person.birthday)
+    subject.selected = %w[name person.birthday]
     expect(subject.person_sort_statements).to eq("person.birthday" => "people.birthday")
   end
 
   it "builds custom sort statements for questions" do
-    subject.selected = %W(event_question_1 event_question_#{question.id} event_question_2)
+    subject.selected = %W[event_question_1 event_question_#{question.id} event_question_2]
     statements = subject.question_sort_statements(top_course.question_ids)
     expect(statements).to have(1).item
     expect(statements["event_question_#{question.id}"]).to eq "CASE event_questions.id " \
@@ -19,7 +19,7 @@ describe TableDisplay::Participations do
 
   it "rejects internal person attribute" do
     subject.person_id = 1
-    subject.selected = %W(name person.id)
+    subject.selected = %W[name person.id]
     expect(subject.save).to eq true
     expect(subject.selected).not_to include "person.id"
   end
@@ -50,20 +50,20 @@ describe TableDisplay::Participations do
 
       it "yields if person and attr" do
         subject = TableDisplay.for(participation.person, participation.event)
-        subject.selected = %w(person.gender)
+        subject.selected = %w[person.gender]
         expect { |b| subject.with_permission_check(participation, "person.gender", &b) }.to yield_with_args(participation.person, "gender")
       end
 
       it "yields if person if attr is protected and person has access" do
         subject = TableDisplay.for(participation.person, participation.event)
-        subject.selected = %w(person.gender)
+        subject.selected = %w[person.gender]
         TableDisplay.register_permission(Person, :update, :gender)
         expect { |b| subject.with_permission_check(participation, "person.gender", &b) }.to yield_with_args(participation.person, "gender")
       end
 
       it "does not yield if person if attr is protected and person has no access" do
         subject = TableDisplay.for(participation.person, participation.event)
-        subject.selected = %w(person.gender)
+        subject.selected = %w[person.gender]
         TableDisplay.register_permission(Person, :missing, :gender)
         expect { |b| subject.with_permission_check(participation, "person.gender", &b) }.not_to yield_control
       end

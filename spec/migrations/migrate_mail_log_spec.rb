@@ -9,11 +9,10 @@ require "spec_helper"
 migration_file_name = Dir[Rails.root.join("db/migrate/20210212111156_migrate_mail_log.rb")].first
 require migration_file_name
 
-
 describe MigrateMailLog do
-
   before(:all) { self.use_transactional_tests = false }
-  after(:all)  { self.use_transactional_tests = true }
+
+  after(:all) { self.use_transactional_tests = true }
 
   let(:migration) { described_class.new }
   let(:mailing_list) { mailing_lists(:leaders) }
@@ -24,7 +23,7 @@ describe MigrateMailLog do
         mail_from: Faker::Internet.email,
         mail_hash: Digest::MD5.new.hexdigest(Faker::Lorem.characters(200)),
         status: MailLog.statuses.to_a.sample.first,
-        updated_at: Faker::Time.between(DateTime.now - 3.months, DateTime.now) 
+        updated_at: Faker::Time.between(DateTime.now - 3.months, DateTime.now)
       )
     end
   end
@@ -49,7 +48,6 @@ describe MigrateMailLog do
   end
 
   context "#up" do
-
     let(:legacy_mail_logs) do
       10.times.collect do
         MailLog.create!(
@@ -69,9 +67,9 @@ describe MigrateMailLog do
     end
 
     it "creates messages/bulk_mail for every log entry" do
-      expect do
+      expect {
         migration.up
-      end.to change { Message::BulkMail.count }.by(10)
+      }.to change { Message::BulkMail.count }.by(10)
         .and change(MailLog, :count).by(0)
 
       legacy_mail_logs.each do |l|
@@ -80,7 +78,8 @@ describe MigrateMailLog do
           subject: l.mail_subject,
           sent_at: l.updated_at,
           mailing_list_id: l.mailing_list_id,
-          state: message_state)).to exist
+          state: message_state
+        )).to exist
       end
 
       Message::BulkMail.all.each do |m|
@@ -95,10 +94,10 @@ describe MigrateMailLog do
     end
 
     it "updates log subject and mailing list according to bulk mail" do
-      mails = bulk_mails.map { |m| { subject: m.subject, mailing_list_id: m.mailing_list_id } }
-      expect do
+      mails = bulk_mails.map { |m| {subject: m.subject, mailing_list_id: m.mailing_list_id} }
+      expect {
         migration.down
-      end.to change { Message.count }.by(-10)
+      }.to change { Message.count }.by(-10)
         .and change(MailLog, :count).by(0)
 
       mails.each do |mail|
@@ -107,5 +106,4 @@ describe MigrateMailLog do
       end
     end
   end
-
 end

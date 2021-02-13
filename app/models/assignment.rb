@@ -24,7 +24,7 @@
 #  index_assignments_on_person_id   (person_id)
 #
 
-class Assignment < ActiveRecord::Base
+class Assignment < ApplicationRecord
   include I18nEnums
 
   belongs_to :person

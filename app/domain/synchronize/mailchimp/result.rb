@@ -11,7 +11,7 @@ module Synchronize
         success: :success,
         partial: :info,
         failed: :warning,
-        fatal: :danger
+        fatal: :danger,
       }.freeze
 
       attr_reader :data

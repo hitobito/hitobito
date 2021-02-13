@@ -68,9 +68,9 @@ module PersonDuplicates
     end
 
     def details(person)
-      detail_values(person).compact.map do |v|
+      detail_values(person).compact.map { |v|
         f.content_tag(:div, v, class: "label")
-      end.join.html_safe
+      }.join.html_safe
     end
 
     def detail_values(person)

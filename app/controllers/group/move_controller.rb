@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -37,8 +35,8 @@ class Group::MoveController < ApplicationController
   end
 
   def candidates
-    @candidates = mover.candidates.select { |candidate| can?(:update, candidate) }.
-                                   group_by { |candidate| candidate.class.label }
+    @candidates = mover.candidates.select { |candidate| can?(:update, candidate) }
+      .group_by { |candidate| candidate.class.label }
     @candidates.values.each { |groups| groups.sort_by(&:name) }
 
     if @candidates.empty?

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, insieme Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -28,11 +26,11 @@ module Export::Xlsx
     private
 
     def generate
-      package = Axlsx::Package.new do |p|
+      package = Axlsx::Package.new { |p|
         p.workbook do |wb|
           build_sheets(wb)
         end
-      end
+      }
       package.to_stream.read
     end
 
@@ -106,9 +104,9 @@ module Export::Xlsx
     end
 
     def cell_styles(styles)
-      styles = styles.collect do |s|
+      styles = styles.collect { |s|
         style_definition(s)[:style]
-      end
+      }
       {style: styles}
     end
   end

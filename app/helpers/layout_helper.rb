@@ -51,11 +51,11 @@ module LayoutHelper
   end
 
   def badge(label, type = nil, tooltip = nil)
-    options = {class: "badge badge-#{type || 'default'}"}
+    options = {class: "badge badge-#{type || "default"}"}
     if tooltip.present?
-      options.merge!(rel: :tooltip,
+      options.merge!(:rel => :tooltip,
                      "data-html" => "true",
-                     title: tooltip)
+                     :title => tooltip)
     end
     content_tag(:span, label, options)
   end
@@ -93,7 +93,7 @@ module LayoutHelper
   end
 
   def element_visible(visible)
-    "display: #{visible ? 'block' : 'none'};"
+    "display: #{visible ? "block" : "none"};"
   end
 
   def sign_out_path

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,9 +19,9 @@ module Import
     private
 
     def population_mapping
-      @mapping = headers.each_with_object({}) do |header, memo|
+      @mapping = headers.each_with_object({}) { |header, memo|
         memo[header] = find_field(header)
-      end
+      }
     end
 
     def find_field(header)

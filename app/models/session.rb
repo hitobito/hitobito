@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: sessions
@@ -21,7 +19,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Session < ActiveRecord::Base
+class Session < ApplicationRecord
   def self.outdated
     where("updated_at < ?", 1.month.ago)
   end

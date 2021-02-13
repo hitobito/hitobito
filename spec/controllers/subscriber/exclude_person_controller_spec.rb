@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,12 +14,16 @@ describe Subscriber::ExcludePersonController do
 
   context "POST create" do
     context "with existing subscription" do
+      after do
+        expect(list.subscribed?(person)).to be_falsey
+      end
+
       it "destroys subscription" do
         Fabricate(:subscription, mailing_list: list, subscriber: person)
 
-        expect do
+        expect {
           post :create, params: {group_id: group.id, mailing_list_id: list.id, subscription: {subscriber_id: person.id}}
-        end.to change(Subscription, :count).by(-1)
+        }.to change(Subscription, :count).by(-1)
         expect(flash[:notice]).to eq "#{person} wurde erfolgreich ausgeschlossen"
       end
 
@@ -31,9 +33,9 @@ describe Subscriber::ExcludePersonController do
         event.groups << group
         Fabricate(:subscription, mailing_list: list, subscriber: event)
 
-        expect do
+        expect {
           post :create, params: {group_id: group.id, mailing_list_id: list.id, subscription: {subscriber_id: person.id}}
-        end.to change(Subscription, :count).by(1)
+        }.to change(Subscription, :count).by(1)
         expect(flash[:notice]).to eq "#{person} wurde erfolgreich ausgeschlossen"
       end
 
@@ -51,14 +53,10 @@ describe Subscriber::ExcludePersonController do
         event.groups << group
         Fabricate(:subscription, mailing_list: list, subscriber: event)
 
-        expect do
+        expect {
           post :create, params: {group_id: group.id, mailing_list_id: list.id, subscription: {subscriber_id: person.id}}
-        end.to change(Subscription, :count).by(1)
+        }.to change(Subscription, :count).by(1)
         expect(flash[:notice]).to eq "#{person} wurde erfolgreich ausgeschlossen"
-      end
-
-      after do
-        expect(list.subscribed?(person)).to be_falsey
       end
     end
 
@@ -84,14 +82,14 @@ describe Subscriber::ExcludePersonController do
       subscription.update_attribute(:subscriber, person)
       subscription.update_attribute(:excluded, true)
 
-      expect do
+      expect {
         post :create,
           params: {
             group_id: group.id,
             mailing_list_id: list.id,
-            subscription: {subscriber_id: person.id}
+            subscription: {subscriber_id: person.id},
           }
-      end.not_to change(Subscription, :count)
+      }.not_to change(Subscription, :count)
 
       is_expected.to render_template("crud/new")
       expect(assigns(:subscription).errors.size).to eq(1)

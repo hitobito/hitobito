@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -136,7 +134,7 @@ describe Event::ApplicationMarketController do
     end
 
     context "with mixed prio filter" do
-      before { get :index, params: {group_id: group.id, event_id: event.id, prio: %w(1 3)} }
+      before { get :index, params: {group_id: group.id, event_id: event.id, prio: %w[1 3]} }
 
       subject { assigns(:applications) }
 
@@ -151,7 +149,7 @@ describe Event::ApplicationMarketController do
     end
 
     context "with prio and waiting list filter" do
-      before { get :index, params: {group_id: group.id, event_id: event.id, prio: %w(2), waiting_list: true} }
+      before { get :index, params: {group_id: group.id, event_id: event.id, prio: %w[2], waiting_list: true} }
 
       subject { assigns(:applications) }
 
@@ -194,9 +192,9 @@ describe Event::ApplicationMarketController do
       let(:leader) {}
 
       it "is not possible" do
-        expect do
+        expect {
           get :index, params: {group_id: group.id, event_id: event.id}
-        end.to raise_error(ActionController::RoutingError)
+        }.to raise_error(ActionController::RoutingError)
       end
     end
   end
@@ -245,7 +243,7 @@ describe Event::ApplicationMarketController do
           group_id: group.id,
           event_id: event.id,
           id: appl_prio_1.id,
-          event_application: {waiting_list_comment: "foo bar"}
+          event_application: {waiting_list_comment: "foo bar"},
         },
         format: :js
     end

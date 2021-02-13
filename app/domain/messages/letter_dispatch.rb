@@ -17,12 +17,12 @@ module Messages
 
     def run
       @people.find_in_batches do |batch|
-        rows = batch.collect do |person|
+        rows = batch.collect { |person|
           reciept_attrs.merge(
             person_id: person.id,
             address: person.address_for_letter
           )
-        end
+        }
         MessageRecipient.insert_all(rows)
         update(success_count: success_count + rows.size)
       end

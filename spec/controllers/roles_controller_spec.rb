@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -27,7 +25,7 @@ describe RolesController do
         group_id: group.id,
         role: {group_id: group.id,
                person_id: person.id,
-               type: Group::TopGroup::Member.sti_name}
+               type: Group::TopGroup::Member.sti_name,},
       }
 
       is_expected.to redirect_to(group_people_path(group))
@@ -45,7 +43,7 @@ describe RolesController do
                person_id: nil,
                type: Group::TopGroup::Member.sti_name,
                new_person: {first_name: "Hans",
-                            last_name: "Beispiel"}}
+                            last_name: "Beispiel",},},
       }
 
       role = assigns(:role)
@@ -64,7 +62,7 @@ describe RolesController do
         group_id: group.id,
         role: {group_id: g.id,
                person_id: person.id,
-               type: Group::GlobalGroup::Member.sti_name}
+               type: Group::GlobalGroup::Member.sti_name,},
       }
 
       is_expected.to redirect_to(group_people_path(g))
@@ -81,7 +79,7 @@ describe RolesController do
         role: {group_id: group.id,
                person_id: nil,
                type: Group::TopGroup::Member.sti_name,
-               new_person: {}}
+               new_person: {},},
       }
 
       is_expected.to render_template("new")
@@ -112,7 +110,7 @@ describe RolesController do
           group_id: group.id,
           role: {group_id: group.id,
                  person_id: person.id,
-                 type: Group::TopGroup::Member.sti_name}
+                 type: Group::TopGroup::Member.sti_name,},
         }
 
         is_expected.to redirect_to(group_people_path(group))
@@ -125,14 +123,14 @@ describe RolesController do
 
       it "new role for different group is not allowed" do
         g = groups(:toppers)
-        expect do
+        expect {
           post :create, params: {
             group_id: group.id,
             role: {group_id: g.id,
                    person_id: person.id,
-                   type: Group::GlobalGroup::Member.sti_name}
+                   type: Group::GlobalGroup::Member.sti_name,},
           }
-        end.to raise_error(CanCan::AccessDenied)
+        }.to raise_error(CanCan::AccessDenied)
       end
     end
 
@@ -150,7 +148,7 @@ describe RolesController do
           group_id: group.id,
           role: {group_id: group.id,
                  person_id: person.id,
-                 type: Group::BottomGroup::Member.sti_name}
+                 type: Group::BottomGroup::Member.sti_name,},
         }
 
         is_expected.to redirect_to(group_people_path(group))
@@ -169,7 +167,7 @@ describe RolesController do
           group_id: group.id,
           role: {group_id: group.id,
                  person_id: person.id,
-                 type: Group::BottomGroup::Member.sti_name}
+                 type: Group::BottomGroup::Member.sti_name,},
         }
         is_expected.to redirect_to(group_people_path(group))
 
@@ -184,13 +182,14 @@ describe RolesController do
           person: person,
           requester: Fabricate(:person),
           body: group,
-          role_type: Group::BottomGroup::Leader.sti_name)
+          role_type: Group::BottomGroup::Leader.sti_name
+        )
 
         post :create, params: {
           group_id: group.id,
           role: {group_id: group.id,
                  person_id: person.id,
-                 type: Group::BottomGroup::Member.sti_name}
+                 type: Group::BottomGroup::Member.sti_name,},
         }
 
         is_expected.to redirect_to(group_people_path(group))
@@ -210,7 +209,7 @@ describe RolesController do
             group_id: group.id,
             role: {group_id: group.id,
                    person_id: person.id,
-                   type: Group::TopGroup::Member.sti_name}
+                   type: Group::TopGroup::Member.sti_name,},
           }
 
           expect(flash[:notice]).to eq("Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich erstellt.")
@@ -232,9 +231,9 @@ describe RolesController do
     end
 
     it "redirects to person after update" do
-      expect do
+      expect {
         put :update, params: {group_id: group.id, id: role.id, role: {label: "bla", type: role.type, group_id: role.group_id}}
-      end.not_to change { Role.with_deleted.count }
+      }.not_to change { Role.with_deleted.count }
 
       expect(flash[:notice]).to eq "Rolle <i>Member (bla)</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich aktualisiert."
       expect(role.reload.label).to eq "bla"
@@ -243,9 +242,9 @@ describe RolesController do
     end
 
     it "terminates and creates new role if type changes" do
-      expect do
+      expect {
         put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
-      end.not_to change { Role.with_deleted.count }
+      }.not_to change { Role.with_deleted.count }
       is_expected.to redirect_to(group_person_path(group, person))
       expect(Role.with_deleted.where(id: role.id)).not_to be_exists
       expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
@@ -253,9 +252,9 @@ describe RolesController do
 
     it "terminates and creates new role if type and group changes" do
       group2 = groups(:toppers)
-      expect do
+      expect {
         put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group2.id}}
-      end.not_to change { Role.with_deleted.count }
+      }.not_to change { Role.with_deleted.count }
 
       person.update_attribute(:primary_group_id, group.id)
 
@@ -275,9 +274,9 @@ describe RolesController do
       it "terminates and creates new role if group changes" do
         group3 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers)).group
         person.update_attribute(:primary_group_id, group3.id)
-        expect do
+        expect {
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::BottomGroup::Leader.sti_name, group_id: group2.id}}
-        end.not_to change { Role.with_deleted.count }
+        }.not_to change { Role.with_deleted.count }
         is_expected.to redirect_to(group_person_path(group2, person))
         expect(Role.with_deleted.where(id: role.id)).not_to be_exists
         expect(flash[:notice]).to eq "Rolle <i>Leader</i> für <i>#{person}</i> in <i>Group 11</i> zu <i>Leader</i> in <i>Group 12</i> geändert."
@@ -289,9 +288,9 @@ describe RolesController do
       it "changes primary group if role changes group" do
         group3 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers)).group
         person.update_attribute(:primary_group_id, group.id)
-        expect do
+        expect {
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Leader.sti_name, group_id: group3.id}}
-        end.not_to change { Role.with_deleted.count }
+        }.not_to change { Role.with_deleted.count }
         is_expected.to redirect_to(group_person_path(group3, person))
         expect(Role.with_deleted.where(id: role.id)).not_to be_exists
         expect(flash[:notice]).to eq "Rolle <i>Leader</i> für <i>#{person}</i> in <i>Group 11</i> zu <i>Leader</i> in <i>Toppers</i> geändert."
@@ -305,9 +304,9 @@ describe RolesController do
       before { sign_in(Fabricate(Group::TopGroup::Secretary.name.to_sym, group: group).person) }
 
       it "terminates and creates new role if type changes" do
-        expect do
+        expect {
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
-        end.not_to change { Role.with_deleted.count }
+        }.not_to change { Role.with_deleted.count }
         is_expected.to redirect_to(group_person_path(group, person))
         expect(Role.with_deleted.where(id: role.id)).not_to be_exists
         expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
@@ -315,9 +314,9 @@ describe RolesController do
 
       it "is not allowed if group changes" do
         g = groups(:toppers)
-        expect do
+        expect {
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::GlobalGroup::Member.sti_name, group_id: g.id}}
-        end.to raise_error(CanCan::AccessDenied)
+        }.to raise_error(CanCan::AccessDenied)
         expect(Role.with_deleted.where(id: role.id)).to be_exists
       end
     end
@@ -330,7 +329,7 @@ describe RolesController do
 
     it "displays only roles in group after updating" do
       patch :update, xhr: true, params: {group_id: group.id, id: role.id,
-                                         role: {type: role.type, group_id: group.id, label: "label"}}
+                                         role: {type: role.type, group_id: group.id, label: "label"},}
 
       expect(response.body).not_to include("muted")
     end
@@ -371,7 +370,7 @@ describe RolesController do
 
       delete :destroy, params: {group_id: group.id, id: role.id}
 
-      expect(flash[:alert]).to eq "Hauptgruppe auf <i>#{group2.to_s}</i> geändert."
+      expect(flash[:alert]).to eq "Hauptgruppe auf <i>#{group2}</i> geändert."
       is_expected.to redirect_to(person_path(person))
       expect(person.reload.primary_group).to eq group2
     end
@@ -493,7 +492,7 @@ describe RolesController do
       get :details, xhr: true,
                     format: :js,
                     params: {role: {type: Group::TopGroup::Member.sti_name},
-                             group_id: group.id}
+                             group_id: group.id,}
 
       is_expected.to render_template("details")
       expect(assigns(:type)).to eq(Group::TopGroup::Member)
@@ -508,9 +507,9 @@ describe RolesController do
     end
 
     it "returns 404 without role" do
-      expect do
+      expect {
         get :role_types, xhr: true, params: {group_id: group.id}
-      end.to raise_error(ActiveRecord::RecordNotFound)
+      }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
@@ -519,7 +518,7 @@ describe RolesController do
       post :create, params: {
         group_id: group.id,
         role: {group_id: group.id, person_id: person.id, type: Group::TopGroup::Member.sti_name},
-        return_url: group_person_path(group, person)
+        return_url: group_person_path(group, person),
       }
       is_expected.to redirect_to group_person_path(group, person)
     end

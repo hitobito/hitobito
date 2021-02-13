@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -54,7 +52,7 @@ require "spec_helper"
 describe InvoiceSerializer do
   let(:top_leader) { people(:top_leader) }
   let(:invoice) { invoices(:invoice) }
-  let(:controller) { double().as_null_object }
+  let(:controller) { double.as_null_object }
   let(:serializer) { InvoiceSerializer.new(invoice, controller: controller) }
   let(:hash) { serializer.to_hash.with_indifferent_access }
 
@@ -83,7 +81,7 @@ describe InvoiceSerializer do
               :beneficiary,
               :payee,
               :participant_number,
-              :vat_number]
+              :vat_number,]
       keys.each do |key|
         is_expected.to have_key(key)
       end
@@ -119,7 +117,7 @@ describe InvoiceSerializer do
               :unit_cost,
               :count,
               :cost_center,
-              :account]
+              :account,]
 
       keys.each do |key|
         expect(hash[:linked][:invoice_items].first).to have_key(key)
@@ -162,7 +160,7 @@ describe InvoiceSerializer do
               :updated_at,
               :title,
               :text,
-              :level]
+              :level,]
 
       keys.each do |key|
         expect(hash[:linked][:payment_reminders].first).to have_key(key)

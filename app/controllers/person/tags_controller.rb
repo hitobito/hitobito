@@ -56,7 +56,7 @@ class Person::TagsController < ApplicationController
   end
 
   def create_tag(name)
-    return unless name.present?
+    return if name.blank?
 
     ActsAsTaggableOn::Tagging.find_or_create_by!(
       taggable: @person,

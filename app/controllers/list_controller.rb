@@ -72,11 +72,11 @@ class ListController < ApplicationController
   def model_ivar_set(value)
     name = if value.is_a?(ActiveRecord::Relation)
       ivar_name(value.klass).pluralize
-           elsif value.respond_to?(:each) # Array
-             ivar_name(value.first.class).pluralize
-           else
-             ivar_name(value.class)
-           end
+    elsif value.respond_to?(:each) # Array
+      ivar_name(value.first.class).pluralize
+    else
+      ivar_name(value.class)
+    end
     instance_variable_set(:"@#{name}", value)
   end
 

@@ -12,10 +12,10 @@ class Licenser
     yml: "#  ",
     haml: "-#  ",
     coffee: "#  ",
-    scss: "//  "
+    scss: "//  ",
   }.freeze
 
-  EXCLUDES = %w(
+  EXCLUDES = %w[
     db/schema.rb
     config/boot.rb
     config/environment.rb
@@ -26,7 +26,7 @@ class Licenser
     config/initializers/mime_types.rb
     config/initializers/session_store.rb
     config/initializers/wrap_parameters.rb
-  ).freeze
+  ].freeze
 
   SHEBANG_COMMENT_EXTENSIONS = [:rb, :rake].freeze
   SHEBANG_COMMENT_STRING = "# frozen_string_literal: true"

@@ -26,7 +26,7 @@
 #  index_event_participations_on_person_id               (person_id)
 #
 
-class Event::Participation < ActiveRecord::Base
+class Event::Participation < ApplicationRecord
   self.demodulized_route_keys = true
 
   attr_accessor :enforce_required_answers

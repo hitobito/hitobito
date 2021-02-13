@@ -33,12 +33,12 @@ describe :person_duplicates, js: true do
     modal = page.find("div.modal-dialog")
     expect(modal.find("h5")).to have_content "Personen zusammenführen"
 
-    expect do
+    expect {
       modal.find("button.btn", text: "Zusammenführen").click
       dst_person = duplicate1.person_1
       expect(page).to have_current_path(group_person_path(dst_person.primary_group_id, dst_person.id))
       expect(page).to have_content "Die Personen Einträge wurden erfolgreich zusammengeführt."
-    end.to change(Person, :count).by(-1)
+    }.to change(Person, :count).by(-1)
 
     expect(Person.where(id: duplicate1.id)).not_to exist
   end

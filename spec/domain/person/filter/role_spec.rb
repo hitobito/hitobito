@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -14,23 +12,23 @@ describe Person::Filter::Role do
 
   context "initialize" do
     it "ignores unknown role types" do
-      filter = Person::Filter::Role.new(:role, role_types: %w(Group::TopGroup::Leader Group::BottomGroup::OldRole File Group::BottomGroup::Member))
-      expect(filter.to_hash).to eq(role_types: %w(Group::TopGroup::Leader Group::BottomGroup::Member))
+      filter = Person::Filter::Role.new(:role, role_types: %w[Group::TopGroup::Leader Group::BottomGroup::OldRole File Group::BottomGroup::Member])
+      expect(filter.to_hash).to eq(role_types: %w[Group::TopGroup::Leader Group::BottomGroup::Member])
     end
 
     it "ignores unknown role ids" do
-      filter = Person::Filter::Role.new(:role, role_type_ids: %w(1 304 3 judihui))
+      filter = Person::Filter::Role.new(:role, role_type_ids: %w[1 304 3 judihui])
       expect(filter.to_params).to eq(role_type_ids: "1-3")
     end
 
     it "is considered blank if no role_type_ids are set" do
-      filter = Person::Filter::Role.new(:role, role_type_ids: %w())
+      filter = Person::Filter::Role.new(:role, role_type_ids: %w[])
       expect(filter).to be_blank
     end
 
-    %w(active deleted).each do |kind|
+    %w[active deleted].each do |kind|
       it "is not considered blank if kind #{kind} but no role_type_ids are set" do
-        filter = Person::Filter::Role.new(:role, role_type_ids: %w(), kind: kind)
+        filter = Person::Filter::Role.new(:role, role_type_ids: %w[], kind: kind)
         expect(filter).not_to be_blank
       end
     end
@@ -42,7 +40,7 @@ describe Person::Filter::Role do
         user,
         range: range,
         filters: {
-          role: {role_type_ids: role_type_ids_string}
+          role: {role_type_ids: role_type_ids_string},
         })
     end
 
@@ -114,7 +112,7 @@ describe Person::Filter::Role do
                                                         @bl_leader,
                                                         @bl_extern,
                                                         @bg_leader,
-                                                        @bg_member].collect(&:id))
+                                                        @bg_member,].collect(&:id))
           expect(list_filter.all_count).to eq(5)
         end
 
@@ -139,8 +137,7 @@ describe Person::Filter::Role do
                                                       @tg_member,
                                                       @tg_extern,
                                                       @bl_leader,
-                                                      @bg_leader,
-                                                      ].collect(&:id))
+                                                      @bg_leader,].collect(&:id))
         expect(list_filter.all_count).to eq(8)
       end
 
@@ -162,7 +159,7 @@ describe Person::Filter::Role do
     let(:person) { people(:top_leader) }
     let(:now) { Time.zone.parse("2017-02-01 10:00:00") }
 
-    around(:each) { |example| travel_to(now) { example.run } }
+    around { |example| travel_to(now) { example.run } }
 
     def transform(attrs)
       attrs.slice(:start_at, :finish_at).transform_values do |value|

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -22,15 +20,15 @@ describe Subscriber::PersonController, type: :controller do
 
   before { sign_in(people(:top_leader)) }
 
-  include_examples "crud controller", skip: [%w(index), %w(show), %w(edit), %w(update), %w(destroy)]
+  include_examples "crud controller", skip: [%w[index], %w[show], %w[edit], %w[update], %w[destroy]]
 
   def deep_attributes(*args)
     {subscriber_id: people(:top_leader).id}
   end
 
   it "does not duplicate subscription" do
-    expect do
+    expect {
       2.times { post :create, params: scope_params.merge(subscription: test_entry_attrs) }
-    end.to change(Subscription, :count).by(1)
+    }.to change(Subscription, :count).by(1)
   end
 end

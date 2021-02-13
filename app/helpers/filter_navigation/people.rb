@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,9 +19,7 @@ module FilterNavigation
       init_dropdown_links
     end
 
-    def name
-      filter.name
-    end
+    delegate :name, to: :filter
 
     def match
       @params[:match]
@@ -39,7 +35,7 @@ module FilterNavigation
     end
 
     def init_labels
-      if name.present? && @kind_filter_names.values.include?(name)
+      if name.present? && @kind_filter_names.value?(name)
         @active_label = name
       elsif name.present?
         dropdown.activate(name)

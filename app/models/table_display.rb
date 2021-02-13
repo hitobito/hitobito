@@ -16,7 +16,7 @@
 #  index_table_displays_on_person_id_and_type  (person_id,type) UNIQUE
 #
 
-class TableDisplay < ActiveRecord::Base
+class TableDisplay < ApplicationRecord
   validates_by_schema
 
   belongs_to :person

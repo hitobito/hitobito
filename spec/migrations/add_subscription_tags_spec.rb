@@ -42,9 +42,9 @@ describe AddSubscriptionTags do
 
       expect(ActsAsTaggableOn::Tagging.count).to eq(2)
 
-      expect do
+      expect {
         migration.up
-      end.to change { ActsAsTaggableOn::Tagging.count }.by(-2)
+      }.to change { ActsAsTaggableOn::Tagging.count }.by(-2)
 
       expect(subscription.subscription_tags.count).to eq(2)
       expect(SubscriptionTag.where(subscription: subscription, tag: email_primary_invalid)).to exist
@@ -64,9 +64,9 @@ describe AddSubscriptionTags do
                               tag: email_additional_invalid)
       expect(SubscriptionTag.count).to eq(2)
 
-      expect do
+      expect {
         migration.down
-      end.to change { ActsAsTaggableOn::Tagging.count }.by(2)
+      }.to change { ActsAsTaggableOn::Tagging.count }.by(2)
 
       expect(ActsAsTaggableOn::Tagging.where(taggable_id: subscription.id,
                                              taggable_type: Subscription.sti_name).count).to eq(2)

@@ -26,9 +26,9 @@ describe People::Merger do
       orig_last_name = person.last_name
       orig_email = person.email
 
-      expect do
+      expect {
         merger.merge!
-      end.to change(Person, :count).by(-1)
+      }.to change(Person, :count).by(-1)
 
       person.reload
       expect(person.nickname).to eq(orig_nickname)
@@ -42,7 +42,7 @@ describe People::Merger do
 
       expect(Person.where(id: duplicate.id)).not_to exist
 
-      log_hash = YAML.load(person.versions.first.object_changes)
+      log_hash = YAML.safe_load(person.versions.first.object_changes)
       expect(log_hash).to include(:last_name)
       expect(log_hash).not_to include(:id)
       expect(log_hash).not_to include(:primary_group_id)
@@ -57,9 +57,9 @@ describe People::Merger do
         group: groups(:bottom_group_two_one),
         person: person)
 
-      expect do
+      expect {
         merger.merge!
-      end.to change(Person, :count).by(-1)
+      }.to change(Person, :count).by(-1)
 
       person.reload
 
@@ -79,9 +79,9 @@ describe People::Merger do
         group: groups(:bottom_group_one_one),
         person: person)
 
-      expect do
+      expect {
         merger.merge!
-      end.to change(Person, :count).by(-1)
+      }.to change(Person, :count).by(-1)
 
       expect(person_roles.count).to eq(1)
       group_ids = person_roles.map(&:group_id)
@@ -108,9 +108,9 @@ describe People::Merger do
         group: groups(:bottom_group_one_one),
         person: duplicate)
 
-      expect do
+      expect {
         merger.merge!
-      end.to change(Person, :count).by(-1)
+      }.to change(Person, :count).by(-1)
 
       expect(person_roles.count).to eq(2)
       group_ids = person_roles.with_deleted.map(&:group_id)
@@ -130,9 +130,9 @@ describe People::Merger do
       duplicate.additional_emails.create!(email: "myadditional@example.com", label: "Other")
       person.additional_emails.create!(email: "myadditional@example.com", label: "Business")
 
-      expect do
+      expect {
         merger.merge!
-      end.to change(Person, :count).by(-1)
+      }.to change(Person, :count).by(-1)
 
       person.reload
 
@@ -155,9 +155,9 @@ describe People::Merger do
       invalid_contactable = PhoneNumber.new(contactable: duplicate, number: "abc 123", label: "Holiday")
       invalid_contactable.save!(validate: false)
 
-      expect do
+      expect {
         merger.merge!
-      end.to change(Person, :count).by(-1)
+      }.to change(Person, :count).by(-1)
 
       person.reload
 
@@ -176,9 +176,9 @@ describe People::Merger do
       duplicate.social_accounts.create!(name: "john.member", label: "Signal")
       person.social_accounts.create!(name: "john.member", label: "Signal")
 
-      expect do
+      expect {
         merger.merge!
-      end.to change(Person, :count).by(-1)
+      }.to change(Person, :count).by(-1)
 
       person.reload
 

@@ -21,11 +21,11 @@ module CategorizedTags
 
   module ClassMethods
     def grouped_by_category
-      tags = order(:name).each_with_object({}) do |tag, h|
+      tags = order(:name).each_with_object({}) { |tag, h|
         category = tag.category
         h[category] ||= []
         h[category] << tag
-      end
+      }
       order_categorized(tags)
     end
 

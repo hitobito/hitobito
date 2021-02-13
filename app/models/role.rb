@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -23,9 +21,9 @@
 #  index_roles_on_type                    (type)
 #
 
-class Role < ActiveRecord::Base
+class Role < ApplicationRecord
   has_paper_trail meta: {main_id: ->(r) { r.person_id },
-                         main_type: Person.sti_name},
+                         main_type: Person.sti_name,},
                   skip: [:updated_at]
 
   acts_as_paranoid

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -26,7 +24,7 @@
 #  index_invoice_articles_on_number_and_group_id  (number,group_id) UNIQUE
 #
 
-class InvoiceArticle < ActiveRecord::Base
+class InvoiceArticle < ApplicationRecord
   belongs_to :group
 
   validates :name, presence: true, uniqueness: {scope: :group_id, case_sensitive: false}

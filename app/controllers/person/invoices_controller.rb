@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -12,10 +10,10 @@ class Person::InvoicesController < ListController
   private
 
   def list_entries
-    scope = Invoice.
-      includes(:group, recipient: [:groups, :roles]).
-      where(search_conditions).
-      joins(:recipient).where(recipient: person).list
+    scope = Invoice
+      .includes(:group, recipient: [:groups, :roles])
+      .where(search_conditions)
+      .joins(:recipient).where(recipient: person).list
 
     scope = scope.page(params[:page]).per(50)
     Invoice::Filter.new(params).apply(scope)

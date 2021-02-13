@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -26,7 +24,7 @@ module FilterNavigation
       private
 
       def init_labels
-        if @query && !@query.blank?
+        if @query&.present?
           @active_label = @query
         elsif role_labels.include?(filter)
           dropdown.label = filter
@@ -39,7 +37,7 @@ module FilterNavigation
       end
 
       def init_items
-        item(@query, "", counts[:query]) unless @query.blank?
+        item(@query, "", counts[:query]) if @query.present?
         predefined_filters.each do |key|
           item(predefined_filter_label(key), event_participation_filter_link(key), counts[key])
         end

@@ -10,7 +10,7 @@ module Oauth
     self.permitted_attrs = [
       :name, :redirect_uri, :confidential,
       :logo, :remove_logo,
-      scopes: []
+      scopes: [],
     ]
 
     def self.model_class

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -61,7 +59,7 @@ module Export::Tabular::Events
         prefix = translate("date", index: i + 1)
         labels[:"date_#{i}_label"] = "#{prefix} #{Event::Date.human_attribute_name(:label)}"
         labels[:"date_#{i}_location"] = "#{prefix} #{Event::Date.human_attribute_name(:location)}"
-        labels[:"date_#{i}_duration"] = "#{prefix} #{translate('duration')}"
+        labels[:"date_#{i}_duration"] = "#{prefix} #{translate("duration")}"
       end
     end
 

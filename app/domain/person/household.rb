@@ -16,7 +16,7 @@ class Person::Household
   def valid?
     same_address?(person).tap do
       address_attrs(person).each do |attr, value|
-        readonly = readonly_people.select { |p| p.send(attr).presence != value.presence }.first
+        readonly = readonly_people.find { |p| p.send(attr).presence != value.presence }
         next unless readonly
         person.errors.add(attr, :readonly, name: "#{readonly.first_name} #{readonly.last_name}")
       end
@@ -122,7 +122,7 @@ class Person::Household
 
   def update_address
     unless address_attrs(person) == address_attrs(other)
-      unless %w(plz town zip_code).all? { |attr| address_attrs(other)[attr].blank? }
+      unless %w[plz town zip_code].all? { |attr| address_attrs(other)[attr].blank? }
         person.attributes = address_attrs(other)
         @address_changed = true
       end
@@ -131,7 +131,7 @@ class Person::Household
 
   def address_attrs(person)
     person.attributes.slice(*Person::ADDRESS_ATTRS).transform_values do |val|
-      val.blank? ? nil : val
+      val.presence
     end
   end
 
@@ -158,7 +158,7 @@ class Person::Household
   end
 
   def household_log(housemate, _household, existing_household_key, options = {})
-    item = options[:item] ? options[:item] : housemate
+    item = options[:item] || housemate
     if existing_household_key
       household_log_entry(housemate, people, :household_updated, item: item)
     else
@@ -167,7 +167,7 @@ class Person::Household
   end
 
   def household_log_entry(housemate, household, event, options = {})
-    item = options[:item] ? options[:item] : housemate
+    item = options[:item] || housemate
     PaperTrail::Version.create(main: housemate,
                                item: item,
                                whodunnit: current_user.id,

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -32,7 +30,8 @@ describe Person::LogController, type: :controller do
         person: test_entry,
         requester: Fabricate(:person),
         body: groups(:top_group),
-        role_type: Group::TopGroup::Member.sti_name)
+        role_type: Group::TopGroup::Member.sti_name
+      )
       Fabricate(:phone_number, contactable: test_entry, label: "Foo", number: "43 3453 45 254")
 
       get :index, params: {id: test_entry.id, group_id: top_group.id}

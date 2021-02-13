@@ -11,7 +11,7 @@ class EventDecorator < ApplicationDecorator
 
   class_attribute :icons
   self.icons = {
-    "Event::Course" => "book"
+    "Event::Course" => "book",
   }
 
   def label
@@ -90,7 +90,7 @@ class EventDecorator < ApplicationDecorator
                  model: quali_model_name(qualis),
                  issued: qualis.join(", "),
                  prolonged: prolongs.join(", "),
-                 count: prolongs.size}
+                 count: prolongs.size,}
 
     translate_issued_qualifications_info(qualis, prolongs, variables)
   end
@@ -102,7 +102,7 @@ class EventDecorator < ApplicationDecorator
                  model: quali_model_name(qualis),
                  issued: qualis.join(", "),
                  prolonged: prolongs.join(", "),
-                 count: prolongs.size}
+                 count: prolongs.size,}
 
     translate_issued_qualifications_info(qualis, prolongs, variables)
   end

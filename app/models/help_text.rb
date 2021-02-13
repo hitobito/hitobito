@@ -20,8 +20,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class HelpText < ActiveRecord::Base
-  COLUMN_BLACKLIST = %w(id created_at updated_at deleted_at).freeze
+class HelpText < ApplicationRecord
+  COLUMN_BLACKLIST = %w[id created_at updated_at deleted_at].freeze
 
   validates :name, uniqueness: {scope: [:controller, :model, :kind], case_sensitive: false}
   validates :body, presence: true, no_attachments: true

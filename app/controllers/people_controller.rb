@@ -15,7 +15,7 @@ class PeopleController < CrudController
 
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
                           :gender, :birthday, :additional_information,
-                          :picture, :remove_picture] +
+                          :picture, :remove_picture,] +
     Contactable::ACCESSIBLE_ATTRS +
     [household_people_ids: []] +
     [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
@@ -31,7 +31,7 @@ class PeopleController < CrudController
   prepend_before_action :parent
 
   prepend_before_action :entry, only: [:show, :edit, :update, :destroy,
-                                       :send_password_instructions, :primary_group]
+                                       :send_password_instructions, :primary_group,]
 
   before_save :validate_household
   after_save :persist_household
@@ -95,8 +95,8 @@ class PeopleController < CrudController
   # dont use class level accessor as expression is evaluated whenever constant is
   # loaded which might be before wagon that defines groups / roles has been loaded
   def self.sort_mappings_with_indifferent_access
-    {roles: [Person.order_by_role_statement].
-      concat(Person.order_by_name_statement)}.with_indifferent_access
+    {roles: [Person.order_by_role_statement]
+      .concat(Person.order_by_name_statement)}.with_indifferent_access
   end
 
   private
@@ -135,13 +135,13 @@ class PeopleController < CrudController
   end
 
   def collect_grouped_person_tags
-    tags = entry.taggings.includes(:tag).order("tags.name").each_with_object({}) do |t, memo|
+    tags = entry.taggings.includes(:tag).order("tags.name").each_with_object({}) { |t, memo|
       tag = t.tag
       tag.hitobito_tooltip = t.hitobito_tooltip
 
       memo[tag.category] ||= []
       memo[tag.category] << tag
-    end
+    }
     ActsAsTaggableOn::Tag.order_categorized(tags)
   end
 

@@ -36,10 +36,10 @@ describe "OauthWorkflow" do
       expect(page).to have_content "Diese Anwendung wird folgende Rechte haben:"
       expect(page).to have_content "Lesen deiner E-Mail Adresse"
 
-      expect do
+      expect {
         click_button "Autorisieren"
         expect(page).to have_content "Autorisierungscode"
-      end.to change { app.access_grants.count }.by(1)
+      }.to change { app.access_grants.count }.by(1)
 
       code = find("#authorization_code").text
       visit oauth_application_path(app)
@@ -72,7 +72,7 @@ describe "OauthWorkflow" do
       skip "page.driver.header is not supported"
       page.driver.header "Authorization", "Bearer #{token}"
       page.driver.get oauth_profile_path
-      expect(json.keys).to eq %w(id email)
+      expect(json.keys).to eq %w[id email]
     end
 
     it "returns different representation for different scope" do
@@ -81,7 +81,7 @@ describe "OauthWorkflow" do
       page.driver.header "Authorization", "Bearer #{token}"
       page.driver.header "X-Scope", "name"
       page.driver.get oauth_profile_path
-      expect(json.keys).to eq %w(id email first_name last_name nickname)
+      expect(json.keys).to eq %w[id email first_name last_name nickname]
     end
 
     it "return error if scope is not configured on application" do
@@ -90,7 +90,7 @@ describe "OauthWorkflow" do
       page.driver.header "Authorization", "Bearer #{token}"
       page.driver.header "X-Scope", "name"
       page.driver.get oauth_profile_path
-      expect(json.keys).to eq %w(error)
+      expect(json.keys).to eq %w[error]
       expect(page.driver.response.status).to eq 403
     end
   end

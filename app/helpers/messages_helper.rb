@@ -16,7 +16,7 @@ module MessagesHelper
   def available_message_placeholders(editor_id)
     safe_join([t("messages.form.available_placeholders"),
                " ",
-               safe_join(placeholder_links(editor_id), ", ")])
+               safe_join(placeholder_links(editor_id), ", "),])
   end
 
   def format_message_type(message)
@@ -33,7 +33,7 @@ module MessagesHelper
            when /processing/ then "warning"
            when /finished/ then "success"
            when /failed/ then "important"
-           end
+    end
     badge(message.state_label, type)
   end
 
@@ -44,7 +44,7 @@ module MessagesHelper
     end
     if message.failed? && message.respond_to?(:mail_log)
       mail_log_error_key = message.mail_log.status.to_s
-      infos <<  t("messages.table.infos.#{mail_log_error_key}")
+      infos << t("messages.table.infos.#{mail_log_error_key}")
     end
     infos.join(", ")
   end
@@ -59,9 +59,9 @@ module MessagesHelper
     placeholders = Export::Pdf::Messages::Letter::Content.placeholders
     placeholders.map do |p|
       content_tag(:a,
-                  "{#{p}}",
-                  { data: { 'clickable-placeholder': editor_id } },
-                  false).html_safe
+        "{#{p}}",
+        {data: {'clickable-placeholder': editor_id}},
+        false).html_safe
     end
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -30,6 +28,7 @@ module Export::Pdf::Participation
       event.dates.map(&:start_at).map(&:year).min
     end
 
-    def render_image; end
+    def render_image
+    end
   end
 end

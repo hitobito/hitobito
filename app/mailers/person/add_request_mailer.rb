@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -129,6 +127,6 @@ class Person::AddRequestMailer < ApplicationMailer
 
   def body_params
     {body_type: add_request.class.name.demodulize,
-     body_id: add_request.body_id}
+     body_id: add_request.body_id,}
   end
 end

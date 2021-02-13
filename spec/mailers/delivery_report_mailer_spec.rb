@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -26,13 +24,13 @@ describe DeliveryReportMailer do
 
     subject { delivery_report }
 
-    its(:to) { should == [recipient_email] }
-    its(:from) { should == ["noreply@localhost"] }
-    its(:subject) { should == "Sendebericht Mail an liste@hitobito.example.com" }
-    its(:body) { should =~ /Deine Mail an liste@hitobito.example.com wurde verschickt:/ }
-    its(:body) { should =~ /Zeit: #{formatted_delivered_at}/ }
-    its(:body) { should =~ /Betreff: Ausflugtips/ }
-    its(:body) { should =~ /Empfänger: 42/ }
+    its(:to) { is_expected.to == [recipient_email] }
+    its(:from) { is_expected.to == ["noreply@localhost"] }
+    its(:subject) { is_expected.to == "Sendebericht Mail an liste@hitobito.example.com" }
+    its(:body) { is_expected.to =~ /Deine Mail an liste@hitobito.example.com wurde verschickt:/ }
+    its(:body) { is_expected.to =~ /Zeit: #{formatted_delivered_at}/ }
+    its(:body) { is_expected.to =~ /Betreff: Ausflugtips/ }
+    its(:body) { is_expected.to =~ /Empfänger: 42/ }
   end
 
   context "bulk mail with failed recipients" do
@@ -43,12 +41,12 @@ describe DeliveryReportMailer do
 
     subject { delivery_report }
 
-    its(:to) { should == [recipient_email] }
-    its(:from) { should == ["noreply@localhost"] }
-    its(:subject) { should == "Sendebericht Mail an liste@hitobito.example.com" }
-    its(:body) { should =~ /Deine Mail an liste@hitobito.example.com wurde verschickt:/ }
-    its(:body) { should =~ /Zeit: #{formatted_delivered_at}/ }
-    its(:body) { should =~ /Betreff: Ausflugtips/ }
-    its(:body) { should =~ /Empfänger: 40\/42/ }
+    its(:to) { is_expected.to == [recipient_email] }
+    its(:from) { is_expected.to == ["noreply@localhost"] }
+    its(:subject) { is_expected.to == "Sendebericht Mail an liste@hitobito.example.com" }
+    its(:body) { is_expected.to =~ /Deine Mail an liste@hitobito.example.com wurde verschickt:/ }
+    its(:body) { is_expected.to =~ /Zeit: #{formatted_delivered_at}/ }
+    its(:body) { is_expected.to =~ /Betreff: Ausflugtips/ }
+    its(:body) { is_expected.to =~ /Empfänger: 40\/42/ }
   end
 end

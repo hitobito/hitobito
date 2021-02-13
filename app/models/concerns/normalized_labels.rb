@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,11 +19,11 @@ module NormalizedLabels
   def normalize_label
     return if label.blank?
 
-    fresh = self.class.available_labels.none? do |l|
+    fresh = self.class.available_labels.none? { |l|
       equal = l.casecmp(label) == 0
       self.label = l if equal
       equal
-    end
+    }
     self.class.sweep_available_labels if fresh
   end
 

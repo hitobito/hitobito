@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -41,7 +39,7 @@ module Sheet
     end
 
     def form?
-      %w(new create).include?(view.action_name)
+      %w[new create].include?(view.action_name)
     end
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -37,9 +35,9 @@ describe Event::RegisterController, type: :controller do
   context "POST check" do
     context "for existing person" do
       it "generates one time login token" do
-        expect do
+        expect {
           post :check, params: {group_id: group.id, id: event.id, person: {email: people(:top_leader).email}}
-        end.to change { Delayed::Job.count }.by(1)
+        }.to change { Delayed::Job.count }.by(1)
         is_expected.to render_template("index")
         expect(flash[:notice]).to include "Wir haben dich in unserer Datenbank gefunden."
         expect(flash[:notice]).to include "Wir haben dir ein E-Mail mit einem Link geschickt, wo du"

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -12,16 +10,16 @@ class Event::KindsController < SimpleCrudController
                           qualification_kinds: {
                             participant: {
                               qualification: {qualification_kind_ids: []},
-                              prolongation: {qualification_kind_ids: []}
+                              prolongation: {qualification_kind_ids: []},
                             },
                             leader: {
                               qualification: {qualification_kind_ids: []},
-                              prolongation: {qualification_kind_ids: []}
-                            }
-                          }]
+                              prolongation: {qualification_kind_ids: []},
+                            },
+                          },]
 
   self.sort_mappings = {label: "event_kind_translations.label",
-                        short_name: "event_kind_translations.short_name"}
+                        short_name: "event_kind_translations.short_name",}
 
   before_render_form :load_assocations
 
@@ -68,7 +66,7 @@ class Event::KindsController < SimpleCrudController
           {id: find_qualification_kind_assoc_id(existing_kinds, id, role, category),
            role: role,
            category: category,
-           qualification_kind_id: id}
+           qualification_kind_id: id,}
         end
       end
     end
@@ -82,19 +80,19 @@ class Event::KindsController < SimpleCrudController
          role: "participant",
          category: "precondition",
          qualification_kind_id: id,
-         grouping: index + 1}
+         grouping: index + 1,}
       end
     end
   end
 
   def find_qualification_kind_assoc_id(existing_kinds, qualification_kind_id, role,
-                                       category, grouping = nil)
-    kind = existing_kinds.find do |k|
+    category, grouping = nil)
+    kind = existing_kinds.find { |k|
       k.role == role &&
         k.category == category &&
         k.qualification_kind_id == qualification_kind_id &&
         k.grouping == grouping
-    end
+    }
     kind.try(:id)
   end
 

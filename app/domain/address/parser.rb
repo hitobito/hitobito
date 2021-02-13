@@ -9,7 +9,7 @@ class Address::Parser
   REGEX = /^(.*?)[,?\s*]?(\d+\s?\w?)?$/.freeze
 
   def initialize(string)
-    @string = string.gsub(",", "")
+    @string = string.delete(",")
   end
 
   def street

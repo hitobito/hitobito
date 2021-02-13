@@ -30,7 +30,7 @@ describe HelpTexts::Entry do
 
     it "#fields is returned without duplicates" do
       subject = HelpTexts::Entry.new("events", Event::Course)
-      expect(subject.fields.uniq.size).to eq (subject.fields.size)
+      expect(subject.fields.uniq.size).to eq subject.fields.size
     end
 
     it "#action_names are added from outside" do
@@ -53,7 +53,7 @@ describe HelpTexts::Entry do
 
     it "#fields with label filters based on existing fields" do
       field_count = subject.labeled_list(:field).size
-      subject = HelpTexts::Entry.new(controller, model_class, {action: [], field: %w(address)})
+      subject = HelpTexts::Entry.new(controller, model_class, {action: [], field: %w[address]})
       expect(subject.labeled_list(:field)).to have(field_count - 1).items
     end
 
@@ -65,7 +65,7 @@ describe HelpTexts::Entry do
     end
 
     it "#actions with label filters based on existing actions" do
-      subject = HelpTexts::Entry.new(controller, model_class, {action: %w(index), field: []})
+      subject = HelpTexts::Entry.new(controller, model_class, {action: %w[index], field: []})
       subject.action_names << "index"
       expect(subject.labeled_list(:action)).to be_empty
     end
@@ -120,7 +120,7 @@ describe HelpTexts::Entry do
 
       it "is false if both are empty" do
         existing_fields = PeopleController.permitted_attrs.collect(&:to_s)
-        subject = HelpTexts::Entry.new(controller, model_class, {action: %w(index), field: existing_fields})
+        subject = HelpTexts::Entry.new(controller, model_class, {action: %w[index], field: existing_fields})
         subject.action_names << "index"
         expect(subject.actions).to be_empty
         expect(subject.fields).to be_empty

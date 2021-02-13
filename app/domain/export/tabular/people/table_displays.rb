@@ -57,9 +57,7 @@ module Export::Tabular::People
       person_attributes.include?(attr.gsub("person.", "").to_sym)
     end
 
-    def selected
-      table_display.selected
-    end
+    delegate :selected, to: :table_display
 
     def with_selected_questions
       without_questions = selected - selected.grep(TableDisplay::Participations::QUESTION_REGEX)

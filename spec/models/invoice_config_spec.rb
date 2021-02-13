@@ -86,8 +86,8 @@ describe InvoiceConfig do
     invoice_config.update(payee: "line1 \n line2 \n \line 3", payment_slip: "ch_bes")
 
     expect(invoice_config).not_to be_valid
-    expect(invoice_config.errors.full_messages).
-      to include("Einzahlung für darf höchstens 2 Zeilen enthalten")
+    expect(invoice_config.errors.full_messages)
+      .to include("Einzahlung für darf höchstens 2 Zeilen enthalten")
   end
 
   it "validates account_number check digit if post payment" do

@@ -10,7 +10,7 @@ module Cantons
 
   SHORT_NAMES = [ # rubocop:disable Style/MutableConstant This is being extended in a wagon
     :ag, :ai, :ar, :be, :bl, :bs, :fr, :ge, :gl, :gr, :ju, :lu, :ne,
-    :nw, :ow, :sg, :sh, :so, :sz, :tg, :ti, :ur, :vd, :vs, :zg, :zh
+    :nw, :ow, :sg, :sh, :so, :sz, :tg, :ti, :ur, :vd, :vs, :zg, :zh,
   ]
 
   def short_names

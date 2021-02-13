@@ -24,9 +24,9 @@ describe Event::ParticipationListsController do
     end
 
     it "POST create" do
-      expect do
+      expect {
         post :create, params: {group_id: group, event_id: course, ids: person1.id, role: {type: Event::Role::Leader}}
-      end.to raise_error(CanCan::AccessDenied)
+      }.to raise_error(CanCan::AccessDenied)
         .and change(Event::Role::Leader, :count).by(0)
         .and change(Event::Participation, :count).by(0)
     end
@@ -34,18 +34,18 @@ describe Event::ParticipationListsController do
 
   context "POST create" do
     it "creates only one participation for one person" do
-      expect do
+      expect {
         post :create, params: {group_id: group, event_id: course, ids: person1.id, role: {type: Event::Role::Leader}}
-      end.to change(Event::Role::Leader, :count).by(1)
+      }.to change(Event::Role::Leader, :count).by(1)
         .and change(Event::Participation, :count).by(1)
 
       expect(flash[:notice]).to include "Eine Person wurde erfolgreich zum Kurs 'Eventus' hinzugefügt"
     end
 
     it "may create multiple participations" do
-      expect do
+      expect {
         post :create, params: {group_id: group, event_id: course, ids: [person2.id, person1.id].join(","), role: {type: Event::Role::Leader}}
-      end.to change(Event::Role::Leader, :count).by(2)
+      }.to change(Event::Role::Leader, :count).by(2)
         .and change(Event::Participation, :count).by(2)
 
       expect(flash[:notice]).to include "2 Personen wurden erfolgreich zum Kurs 'Eventus' hinzugefügt"

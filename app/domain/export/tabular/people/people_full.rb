@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -36,9 +34,9 @@ module Export::Tabular::People
     end
 
     def qualification_kind_labels
-      qualification_kinds = people.flat_map do |p|
+      qualification_kinds = people.flat_map { |p|
         p.qualifications.map { |q| q.qualification_kind.label }
-      end
+      }
       qualification_kinds.uniq.sort.each_with_object({}) do |label, obj|
         if label.present?
           obj[ContactAccounts.key(QualificationKind, label)] = label

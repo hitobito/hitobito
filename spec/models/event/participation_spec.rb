@@ -63,7 +63,7 @@ describe Event::Participation do
         additional_information: "bla",
         application_attributes: {priority_2_id: 42},
         answers_attributes: [{question_id: q[0].id, answer: "ja"},
-                             {question_id: q[1].id, answer: "nein"}]
+                             {question_id: q[1].id, answer: "nein"},],
       }
 
       expect(subject.additional_information).to eq("bla")
@@ -82,7 +82,7 @@ describe Event::Participation do
         additional_information: "bla",
         application_attributes: {priority_2_id: 42},
         answers_attributes: [{question_id: q[0].id, answer: "ja", id: subject.answers.first.id},
-                             {question_id: q[1].id, answer: "nein", id: subject.answers.last.id}]
+                             {question_id: q[1].id, answer: "nein", id: subject.answers.last.id},],
       }
 
       expect(subject.person_id).to eq(p.id)
@@ -100,7 +100,7 @@ describe Event::Participation do
       subject.person_id = Person.first.id
       subject.init_answers
       subject.attributes = {
-        answers_attributes: [{question_id: q[1].id, answer: "ja"}]
+        answers_attributes: [{question_id: q[1].id, answer: "ja"}],
       }
       subject.roles.new(type: Event::Course::Role::Participant.sti_name)
       expect(subject.save).to be_falsey
@@ -110,9 +110,9 @@ describe Event::Participation do
 
   context "#destroy" do
     it "destroy roles as well" do
-      expect do
+      expect {
         event_participations(:top).destroy
-      end.to change { Event::Role.count }.by(-1)
+      }.to change { Event::Role.count }.by(-1)
     end
   end
 

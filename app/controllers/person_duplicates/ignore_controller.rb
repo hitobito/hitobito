@@ -9,7 +9,8 @@ module PersonDuplicates
   class IgnoreController < ApplicationController
     before_action :authorize_action
 
-    def new; end
+    def new
+    end
 
     def create
       entry.update!(ignore: true)

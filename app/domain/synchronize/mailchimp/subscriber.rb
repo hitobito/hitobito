@@ -25,18 +25,18 @@ module Synchronize
                                                   contactable_id: people.collect(&:id),
                                                   mailings: true).to_a
         people.flat_map do |person|
-          additional_email_subscribers = additional_emails.select do |additional_email|
+          additional_email_subscribers = additional_emails.select { |additional_email|
             additional_email.contactable_id == person.id
-          end.map do |additional_email|
-            self.new(person, additional_email.email)
-          end
-          [self.new(person, person.email)] + additional_email_subscribers
+          }.map { |additional_email|
+            new(person, additional_email.email)
+          }
+          [new(person, person.email)] + additional_email_subscribers
         end
       end
 
       def self.default_addresses(mailing_list)
         mailing_list.people.map do |person|
-          self.new(person, person.email)
+          new(person, person.email)
         end
       end
 

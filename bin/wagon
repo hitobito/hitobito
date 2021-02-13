@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#  Copyright (c) 2019-2020, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2019-2021, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -82,7 +82,8 @@ case $cmd in
   core-spec)
     export WAGONS=''
     export RAILS_TEST_DB_NAME=hit_core_test
-    rspec
+    shift # loose the "core-spec" argument
+    rspec $@
     ;;
 
   completion)

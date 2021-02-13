@@ -91,6 +91,12 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-doc'
   gem 'rspec-rails', '4.0.0.beta3' # see https://github.com/rspec/rspec-rails/issues/2177
+
+  gem 'standard'
+
+  gem 'rubocop'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
 end
 
 group :development do
@@ -131,9 +137,7 @@ group :metrics do
   gem 'brakeman'
   gem 'ci_reporter_rspec'
   gem 'rails-erd'
-  gem 'rubocop'
   gem 'rubocop-checkstyle_formatter'
-  gem 'rubocop-rails'
   gem 'ruby-prof'
 end
 

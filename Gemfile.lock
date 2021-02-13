@@ -499,10 +499,14 @@ GEM
       unicode-display_width (>= 1.4.0, < 1.7)
     rubocop-checkstyle_formatter (0.3.0)
       rubocop (>= 0.30.1)
+    rubocop-performance (1.5.2)
+      rubocop (>= 0.71.0)
     rubocop-rails (2.5.2)
       activesupport
       rack (>= 1.1)
       rubocop (>= 0.72.0)
+    rubocop-rspec (1.41.0)
+      rubocop (>= 0.68.1)
     ruby-graphviz (1.2.2)
     ruby-prof (0.16.2)
     ruby-progressbar (1.10.1)
@@ -539,6 +543,9 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.2)
+    standard (0.1.8)
+      rubocop (~> 0.77.0)
+      rubocop-performance (~> 1.5.1)
     temple (0.8.2)
     thinking-sphinx (4.4.1)
       activerecord (>= 3.1.0)
@@ -691,6 +698,7 @@ DEPENDENCIES
   rubocop
   rubocop-checkstyle_formatter
   rubocop-rails
+  rubocop-rspec
   ruby-prof
   rubyzip (~> 1.3.0)
   seed-fu
@@ -700,6 +708,7 @@ DEPENDENCIES
   spring-commands-rspec
   sprockets (~> 3.7.2)
   sqlite3
+  standard
   thinking-sphinx
   truemail
   validates_by_schema

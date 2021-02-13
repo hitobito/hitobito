@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Address::Parser do
-
   FORMATS = [
     ["Belpstrasse", "Belpstrasse", nil],
     ["Belpstrasse 1", "Belpstrasse", "1"],
@@ -48,5 +47,4 @@ describe Address::Parser do
 
     end
   end
-
 end

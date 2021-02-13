@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::SendAddRequestJob do
-
   let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
   let(:group) { groups(:bottom_layer_one) }
@@ -62,5 +61,4 @@ describe Person::SendAddRequestJob do
     expect(Person::AddRequestMailer).to receive(:ask_responsibles).with(request, [r1, r2]).and_return(mail)
     job.perform
   end
-
 end

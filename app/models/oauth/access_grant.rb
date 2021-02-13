@@ -29,7 +29,7 @@ module Oauth
     belongs_to :person, foreign_key: :resource_owner_id
 
     scope :list, -> { order(created_at: :desc) }
-    scope :for,  ->(uri) { where(redirect_uri: uri) }
+    scope :for, ->(uri) { where(redirect_uri: uri) }
     scope :not_expired, -> { where("DATE_ADD(created_at, INTERVAL expires_in SECOND) > UTC_TIME") }
 
     def self.active

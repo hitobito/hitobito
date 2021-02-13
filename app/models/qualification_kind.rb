@@ -17,7 +17,6 @@
 #
 
 class QualificationKind < ActiveRecord::Base
-
   include Paranoia::Globalized
   translates :label, :description
 
@@ -28,16 +27,14 @@ class QualificationKind < ActiveRecord::Base
   has_many :event_kind_qualification_kinds, class_name: "Event::KindQualificationKind"
   has_many :event_kinds, through: :event_kind_qualification_kinds
 
-
   ### VALIDATES
 
   validates_by_schema
-  validates :label, presence: true, length: { maximum: 255, allow_nil: true }
-  validates :description, length: { maximum: 1023, allow_nil: true }
-  validates :reactivateable, numericality: { greater_than_or_equal_to: 1, allow_nil: true }
+  validates :label, presence: true, length: {maximum: 255, allow_nil: true}
+  validates :description, length: {maximum: 1023, allow_nil: true}
+  validates :reactivateable, numericality: {greater_than_or_equal_to: 1, allow_nil: true}
 
   validate :assert_validity_when_reactivateable
-
 
   ### INSTANCE METHODS
 
@@ -61,5 +58,4 @@ class QualificationKind < ActiveRecord::Base
       errors.add(:validity, :not_a_valid_number)
     end
   end
-
 end

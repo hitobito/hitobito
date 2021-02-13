@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::PeopleExportJob < Export::ExportBaseJob
-
   self.parameters = PARAMETERS + [:group_id, :list_filter_args]
 
   def initialize(format, user_id, group_id, list_filter_args, options)
@@ -30,7 +29,7 @@ class Export::PeopleExportJob < Export::ExportBaseJob
     entries
       .select("people.*")
       .preload_accounts
-      .includes(relations_to_tails: :tail, qualifications: { qualification_kind: :translations })
+      .includes(relations_to_tails: :tail, qualifications: {qualification_kind: :translations})
       .includes(:primary_group)
   end
 

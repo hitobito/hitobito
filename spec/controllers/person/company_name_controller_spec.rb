@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::CompanyNameController do
-
   let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
@@ -18,11 +17,10 @@ describe Person::CompanyNameController do
       Fabricate(:person, company_name: "Puzzle ITC")
       Fabricate(:person, company_name: "PuzzleWorks Ltd")
       Fabricate(:person, company_name: "Swisscom")
-      get :index, params: { q: "puz" }
+      get :index, params: {q: "puz"}
 
       expect(response.body).to match(/Puzzle ITC/)
       expect(response.body).to match(/PuzzleWorks Ltd/)
     end
   end
-
 end

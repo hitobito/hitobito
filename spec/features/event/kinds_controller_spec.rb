@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Event::KindsController, js: true do
-
   it "may add new preconditions" do
     obsolete_node_safe do
       sign_in
@@ -62,5 +61,4 @@ describe Event::KindsController, js: true do
       expect(event_kinds(:slk).reload.qualification_kinds("precondition", "participant").count).to eq(0)
     end
   end
-
 end

@@ -21,5 +21,4 @@ class PersonDuplicatesController < ListController
   def list_entries
     super.list.distinct.page(params[:page]).per(20)
   end
-
 end

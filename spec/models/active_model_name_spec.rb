@@ -8,8 +8,6 @@
 require "spec_helper"
 
 describe ActiveModel::Name do
-
-
   it "has regular route keys" do
     Event.model_name.route_key == "events"
   end

@@ -27,7 +27,6 @@ describe GroupDecorator, :draper_with_helpers do
   end
 
   describe "selecting attributes" do
-
     class DummyGroup < Group
       self.used_attributes += [:foo, :bar]
     end
@@ -64,5 +63,4 @@ describe GroupDecorator, :draper_with_helpers do
       expect(subject.modifiable_attributes(:foo) { |val| val }).to eq %w()
     end
   end
-
 end

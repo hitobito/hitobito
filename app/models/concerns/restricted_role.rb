@@ -103,5 +103,4 @@ module RestrictedRole
       end
     end
   end
-
 end

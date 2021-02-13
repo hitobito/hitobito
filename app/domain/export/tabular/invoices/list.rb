@@ -7,14 +7,11 @@
 
 module Export::Tabular::Invoices
   class List < Export::Tabular::Base
-
     INCLUDED_ATTRS = %w(title sequence_number state esr_number description
                         recipient_email recipient_address sent_at due_at
                         cost vat total amount_paid).freeze
 
-
     CUSTOM_METHODS = %w(cost_centers accounts payments)
-
 
     self.model_class = Invoice
     self.row_class = Export::Tabular::Invoices::Row

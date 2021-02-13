@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class EventFeedsController < ApplicationController
-
   def show
     respond_to do |format|
       format.html { authorize!(:show, current_user) }
@@ -37,5 +36,4 @@ class EventFeedsController < ApplicationController
   def devise_controller?
     request.format.ics? # hence, no login required
   end
-
 end

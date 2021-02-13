@@ -10,7 +10,6 @@
 require "spec_helper"
 
 describe Event::ListsController, type: :controller do
-
   render_views
 
   before { sign_in(people(:top_leader)) }
@@ -27,7 +26,8 @@ describe Event::ListsController, type: :controller do
     let(:table) { dom.find("table") }
     let(:description) { "Impedit rem occaecati quibusdam. Ad voluptatem dolorum hic. Non ad aut repudiandae. " }
     let(:event) { Fabricate(:event, groups: [top_group], description: description) }
-    before  { event.dates.create(start_at: tomorrow) }
+
+    before { event.dates.create(start_at: tomorrow) }
 
     it "renders title, grouper and selected tab" do
       get :events
@@ -47,6 +47,7 @@ describe Event::ListsController, type: :controller do
 
     context "application" do
       let(:link) { dom.all("table a").last }
+
       it "contains apply button for future events" do
         expect(event.application_possible?).to eq true
 
@@ -54,17 +55,17 @@ describe Event::ListsController, type: :controller do
 
         expect(link.text.strip).to eq "Anmelden"
         expect(link[:href]).to eq contact_data_group_event_participations_path(event.groups.first,
-                                                                 event,
-                                                                 event_role: {
-                                                                   type: event.participant_types.first.sti_name})
+          event,
+          event_role: {
+            type: event.participant_types.first.sti_name})
       end
     end
   end
 
   context "GET courses" do
-
     context "filter dropdown" do
       before { get :courses }
+
       let(:items) { dropdown.all("a") }
       let(:first) { items.first }
       let(:middle) { items[1] }
@@ -94,6 +95,7 @@ describe Event::ListsController, type: :controller do
 
     context "yearwise paging" do
       before { get :courses }
+
       let(:tabs) { dom.find("#content .pagination") }
 
       it "tabs contain year based pagination" do
@@ -118,7 +120,7 @@ describe Event::ListsController, type: :controller do
       end
 
       it "renders course info within table" do
-        get :courses, params: { year: 2010 }
+        get :courses, params: {year: 2010}
         expect(main.find("h2").text.strip).to eq "Scharleiterkurs"
         expect(main.find("table tr:eq(1) td:eq(1) a").text).to eq "Eventus"
         expect(main.find("table tr:eq(1) td:eq(1)").text.strip).to eq "EventusSLK 123 Top"
@@ -131,7 +133,7 @@ describe Event::ListsController, type: :controller do
       it "does not show details for users who cannot manage course" do
         person = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
         sign_in(person)
-        get :courses, params: { year: 2010 }
+        get :courses, params: {year: 2010}
         expect(main.find("table tr:eq(1) td:eq(1) a").text).to eq "Eventus"
         expect(main.find("table tr:eq(1) td:eq(1)").text.strip).to eq "EventusSLK 123 Top"
         expect(main.find("table tr:eq(1) td:eq(1) a")[:href]).to eq group_event_path(slk_ev.groups.first, slk_ev)
@@ -140,23 +142,21 @@ describe Event::ListsController, type: :controller do
       end
 
       it "groups courses by course type" do
-        get :courses, params: { year: 2011 }
+        get :courses, params: {year: 2011}
         expect(main.all("h2")[0].text.strip).to eq "Gruppenleiterkurs"
         expect(main.all("h2")[1].text.strip).to eq "Scharleiterkurs"
       end
 
       it "filters with group param" do
-        get :courses, params: { year: 2011, group_id: glk_ev.group_ids.first }
+        get :courses, params: {year: 2011, group_id: glk_ev.group_ids.first}
         expect(main.all("h2").size).to eq 1
       end
 
       it "filters by year, keeps year in dropdown" do
-        get :courses, params: { year: 2010 }
+        get :courses, params: {year: 2010}
         expect(main.all("h2").size).to eq 1
         expect(dropdown.find("li:eq(5) a")[:href]).to eq list_courses_path(year: 2010, group_id: top_group.id)
       end
-
     end
-
   end
 end

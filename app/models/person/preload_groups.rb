@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Person::PreloadGroups
-
   def self.extended(base)
     base.do_preload_groups
   end
@@ -56,5 +55,4 @@ module Person::PreloadGroups
 
     records
   end
-
 end

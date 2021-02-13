@@ -22,13 +22,12 @@
 #
 
 class Qualification < ActiveRecord::Base
-
   ### ASSOCIATIONS
 
   belongs_to :person
   belongs_to :qualification_kind
 
-  has_paper_trail meta: { main_id: ->(q) { q.person_id }, main_type: Person.sti_name }
+  has_paper_trail meta: {main_id: ->(q) { q.person_id }, main_type: Person.sti_name}
 
   ### VALIDATIONS
 
@@ -36,16 +35,14 @@ class Qualification < ActiveRecord::Base
 
   validates_by_schema
   validates :qualification_kind_id,
-            uniqueness: { scope: [:person_id, :start_at, :finish_at],
-                          message: :exists_for_timeframe }
+    uniqueness: {scope: [:person_id, :start_at, :finish_at],
+                 message: :exists_for_timeframe}
   validates :start_at, :finish_at,
-            timeliness: { type: :date, allow_blank: true, before: Date.new(9999, 12, 31) }
-
+    timeliness: {type: :date, allow_blank: true, before: Date.new(9999, 12, 31)}
 
   delegate :cover?, :active?, to: :duration
 
   class << self
-
     def order_by_date
       order("finish_at DESC")
     end
@@ -64,7 +61,7 @@ class Qualification < ActiveRecord::Base
               "(qualification_kinds.reactivateable IS NULL AND " \
               " qualifications.finish_at >= ?) OR " \
               "#{add_reactivateable_years_to_finish_at} >= ?",
-              date, date)
+          date, date)
     end
 
     private
@@ -72,7 +69,6 @@ class Qualification < ActiveRecord::Base
     def add_reactivateable_years_to_finish_at
       "DATE_ADD(qualifications.finish_at, INTERVAL qualification_kinds.reactivateable YEAR)"
     end
-
   end
 
   def duration
@@ -86,9 +82,9 @@ class Qualification < ActiveRecord::Base
 
   def to_s(format = :default)
     I18n.t("activerecord.attributes.qualification.#{to_s_key(format)}",
-           kind: qualification_kind.to_s,
-           finish_at: finish_at? ? I18n.l(finish_at) : nil,
-           origin: origin)
+      kind: qualification_kind.to_s,
+      finish_at: finish_at? ? I18n.l(finish_at) : nil,
+      origin: origin)
   end
 
   private
@@ -106,5 +102,4 @@ class Qualification < ActiveRecord::Base
 
     ["string", cols.join("_and_").presence].compact.join("_with_")
   end
-
 end

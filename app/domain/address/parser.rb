@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Address::Parser
-
   REGEX = /^(.*?)[,?\s*]?(\d+\s?\w?)?$/.freeze
 
   def initialize(string)
@@ -30,5 +29,4 @@ class Address::Parser
   def match
     @match ||= REGEX.match(@string)
   end
-
 end

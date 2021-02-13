@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 # == Schema Information
 #
 # Table name: subscriptions
@@ -10,7 +11,6 @@
 #  excluded        :boolean          default(FALSE), not null
 #
 
-
 #  Copyright (c) 2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -19,7 +19,6 @@
 require "spec_helper"
 
 describe Subscription do
-
   context "#possible_groups" do
     it "is valid if descendant group is used" do
       list = Fabricate(:mailing_list, group: groups(:bottom_layer_one))
@@ -49,8 +48,8 @@ describe Subscription do
   context "#possible_events" do
     it "is valid if descendant event is used" do
       event = Fabricate(:event,
-                        groups: [groups(:bottom_group_one_one)],
-                        dates: [Fabricate(:event_date, start_at: Time.zone.today)])
+        groups: [groups(:bottom_group_one_one)],
+        dates: [Fabricate(:event_date, start_at: Time.zone.today)])
       list = Fabricate(:mailing_list, group: groups(:bottom_layer_one))
       subscription = Subscription.new(mailing_list: list, subscriber: event)
       expect(subscription).to be_valid
@@ -58,8 +57,8 @@ describe Subscription do
 
     it "is invalid if other group is used" do
       event = Fabricate(:event,
-                        groups: [groups(:top_group)],
-                        dates: [Fabricate(:event_date, start_at: Time.zone.today)])
+        groups: [groups(:top_group)],
+        dates: [Fabricate(:event_date, start_at: Time.zone.today)])
       list = Fabricate(:mailing_list, group: groups(:bottom_layer_one))
       subscription = Subscription.new(mailing_list: list, subscriber: event)
       expect(subscription).not_to be_valid
@@ -82,8 +81,8 @@ describe Subscription do
 
     it "renders event label" do
       event = Fabricate(:event,
-                        groups: [groups(:bottom_group_one_one)],
-                        dates: [Fabricate(:event_date, start_at: Time.zone.today)])
+        groups: [groups(:bottom_group_one_one)],
+        dates: [Fabricate(:event_date, start_at: Time.zone.today)])
       list = Fabricate(:mailing_list, group: groups(:bottom_layer_one))
       subscription = Subscription.new(mailing_list: list, subscriber: event)
       expect(subscription.to_s).to eq(event.to_s)
@@ -104,5 +103,4 @@ describe Subscription do
       })
     end
   end
-
 end

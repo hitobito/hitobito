@@ -7,16 +7,15 @@
 
 require "spec_helper"
 
-
 describe ReoccuringMailchimpSynchronizationJob do
   let(:group) { groups(:top_group) }
 
   def create(state = nil)
     Fabricate(:mailing_list, group: group, mailchimp_list_id: 1, mailchimp_api_key: 1).tap do |list|
       data = case state
-             when :failed then  { exception: ArgumentError.new("ouch") }
-             when :success then { foo: { total: 1, success: 1 } }
-             when :partial then { foo: { failed: 1 }, bar: { success: 1 } }
+             when :failed then {exception: ArgumentError.new("ouch")}
+             when :success then {foo: {total: 1, success: 1}}
+             when :partial then {foo: {failed: 1}, bar: {success: 1}}
              when :unchanged then {}
              end
       list.update!(mailchimp_result: Synchronize::Mailchimp::Result.new(data)) if data
@@ -41,5 +40,4 @@ describe ReoccuringMailchimpSynchronizationJob do
       expect { subject.perform }.to change { Delayed::Job.count }.by(1)
     end
   end
-
 end

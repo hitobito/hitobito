@@ -10,18 +10,18 @@ module Sheet
     self.parent_sheet = Sheet::Group
 
     tab "activerecord.models.message.other",
-        :group_mailing_list_messages_path,
-        if: (lambda do |view, _group, mailing_list|
-          view.can?(:update, mailing_list)
-        end)
+      :group_mailing_list_messages_path,
+      if: (lambda do |view, _group, mailing_list|
+        view.can?(:update, mailing_list)
+      end)
 
     tab "global.tabs.settings",
-        :group_mailing_list_path,
-        no_alt: true
+      :group_mailing_list_path,
+      no_alt: true
 
     tab "activerecord.models.subscription.other",
-        :group_mailing_list_subscriptions_path,
-        if: :index_subscriptions,
-        params: { returning: true }
+      :group_mailing_list_subscriptions_path,
+      if: :index_subscriptions,
+      params: {returning: true}
 
 end

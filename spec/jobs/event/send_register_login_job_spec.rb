@@ -8,14 +8,12 @@
 require "spec_helper"
 
 describe Event::SendRegisterLoginJob do
-
   let(:group) { event.groups.first }
   let(:event) { events(:top_event) }
 
   let(:person) { Fabricate(:person) }
 
   subject { Event::SendRegisterLoginJob.new(person, group, event) }
-
 
   before do
     SeedFu.quiet = true
@@ -33,5 +31,4 @@ describe Event::SendRegisterLoginJob do
     expect(ActionMailer::Base.deliveries.size).to eq(1)
     expect(last_email.subject).to eq("Anmeldelink für Anlass")
   end
-
 end

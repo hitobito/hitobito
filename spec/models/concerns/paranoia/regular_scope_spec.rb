@@ -8,9 +8,9 @@
 require "spec_helper"
 
 describe Paranoia::RegularScope do
-
-  let(:kind)   { event_kinds(:slk) }
+  let(:kind) { event_kinds(:slk) }
   let(:course) { Fabricate(:course, kind: kind) }
+
   before do
     course
     kind.events.reload
@@ -34,5 +34,4 @@ describe Paranoia::RegularScope do
     course.reload
     expect(course.kind.to_s).to eq("SLK (Scharleiterkurs)")
   end
-
 end

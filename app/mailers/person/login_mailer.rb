@@ -6,13 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::LoginMailer < ApplicationMailer
-
   CONTENT_LOGIN = "send_login".freeze
 
   def login(recipient, sender, token)
     @recipient = recipient
-    @sender    = sender
-    @token     = token
+    @sender = sender
+    @token = token
 
     values = values_for_placeholders(CONTENT_LOGIN)
 
@@ -38,5 +37,4 @@ class Person::LoginMailer < ApplicationMailer
   def login_url(token)
     edit_person_password_url(reset_password_token: token)
   end
-
 end

@@ -10,7 +10,7 @@ module Import
     include Translatable
 
     attr_reader :data, :role_type, :group, :options,
-                :failure_count, :new_count, :request_people, :errors
+      :failure_count, :new_count, :request_people, :errors
 
     attr_accessor :user_ability
 
@@ -111,6 +111,5 @@ module Import
     def duplicate_finder
       @duplicate_finder ||= PersonDuplicateFinder.new
     end
-
   end
 end

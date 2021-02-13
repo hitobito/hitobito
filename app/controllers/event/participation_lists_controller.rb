@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationListsController < SimpleCrudController
-
   skip_authorization_check
   skip_authorize_resource
 
@@ -21,7 +20,7 @@ class Event::ParticipationListsController < SimpleCrudController
     end
 
     redirect_to(group_people_path(group),
-                notice: flash_message(:success, count: new_participations.count))
+      notice: flash_message(:success, count: new_participations.count))
   end
 
   def new

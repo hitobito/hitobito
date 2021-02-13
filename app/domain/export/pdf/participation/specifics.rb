@@ -12,7 +12,7 @@ module Export::Pdf::Participation
 
       if data.present?
         with_header(I18n.t("event.participations.application_answers")) do
-          table(data, cell_style: { border_width: 0, padding: 2 })
+          table(data, cell_style: {border_width: 0, padding: 2})
         end
       end
 
@@ -27,7 +27,7 @@ module Export::Pdf::Participation
       participation.answers.
         joins(:question).
         includes(:question).
-        where(event_questions: { admin: false })
+        where(event_questions: {admin: false})
     end
 
     def additional_information_label

@@ -8,17 +8,16 @@
 require "spec_helper"
 
 describe Person::LoginMailer do
-
   let(:sender) { people(:top_leader) }
   let(:recipient) { people(:bottom_member) }
   let(:mail) { Person::LoginMailer.login(recipient, sender, "abcdef") }
 
   subject { mail }
 
-  its(:to)       { should == [recipient.email] }
+  its(:to) { should == [recipient.email] }
   its(:reply_to) { should == [sender.email] }
-  its(:subject)  { should == "Willkommen bei #{Settings.application.name}" }
-  its(:body)     { should =~ /Hallo Bottom<br>.*test.host\/users\/password\/edit\?reset_password_token=/ }
+  its(:subject) { should == "Willkommen bei #{Settings.application.name}" }
+  its(:body) { should =~ /Hallo Bottom<br>.*test.host\/users\/password\/edit\?reset_password_token=/ }
 
   context "with additional emails" do
     it "does not send to them" do
@@ -36,5 +35,4 @@ describe Person::LoginMailer do
     its(:to) { should == %w(member@xn--exmple-cua.com) }
     its(:reply_to) { should == %w(leader@xn--exmple-cua.com) }
   end
-
 end

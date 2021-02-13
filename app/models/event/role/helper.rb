@@ -21,9 +21,7 @@
 
 # Kueche
 class Event::Role::Helper < Event::Role
-
   self.permissions = [:participations_read]
 
   self.kind = :helper
-
 end

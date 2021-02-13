@@ -48,8 +48,8 @@
 require "spec_helper"
 
 describe Person do
-
   let(:person) { role.person.reload }
+
   subject { person }
 
   it "is not valid without any names" do
@@ -127,14 +127,12 @@ describe Person do
       expect(person.roles.count).to eq 0
       expect(person.decorate.last_role.deleted_at.to_time.to_i).to eq(deletion_date.to_time.to_i)
     end
-
   end
-
 
   context "with multiple roles in same layer" do
     let(:role) do
-       role1 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
-       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), person: role1.person)
+      role1 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
+      Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), person: role1.person)
     end
 
     its(:layer_groups) { should == [groups(:bottom_layer_one)] }
@@ -184,8 +182,8 @@ describe Person do
 
   context "with multiple roles in different layers" do
     let(:role) do
-       role1 = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
-       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), person: role1.person)
+      role1 = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
+      Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), person: role1.person)
     end
 
     its(:layer_groups) { should have(2).items }
@@ -318,9 +316,9 @@ describe Person do
       expect(Person.new.years).to be_nil
     end
 
-    [ ["2006-02-12", 8],
+    [["2006-02-12", 8],
       ["2005-03-15", 8],
-      ["2004-02-29", 10] ].each do |birthday, years|
+      ["2004-02-29", 10]].each do |birthday, years|
        it "is #{years} years old if born on #{birthday}" do
          expect(Person.new(birthday: birthday).years).to eq years
        end
@@ -520,7 +518,6 @@ describe Person do
   end
 
   describe "e-mail validation" do
-
     let(:person) { people(:top_leader) }
 
     before { allow(Truemail).to receive(:valid?).and_call_original }
@@ -540,11 +537,11 @@ describe Person do
     end
 
     it "can create two people with empty email" do
-      expect { 2.times { Fabricate(:person, email: "") }  }.to change { Person.count }.by(2)
+      expect { 2.times { Fabricate(:person, email: "") } }.to change { Person.count }.by(2)
     end
 
     it "cannot create two people with same email" do
-      expect { 2.times { Fabricate(:person, email: "foo@bar.com") }  }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { 2.times { Fabricate(:person, email: "foo@bar.com") } }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     it "does not allow e-mail address with non-existing domain" do
@@ -600,7 +597,6 @@ describe Person do
 
       expect(taggings.reload.count).to eq(0)
     end
-
   end
 
   describe "invalid address tags" do
@@ -653,5 +649,4 @@ describe Person do
       end.to change(PersonDuplicate, :count).by(-2)
     end
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Countries
-
   module_function
 
   def codes
@@ -40,5 +39,4 @@ module Countries
   def swiss?(country)
     ["", "ch"].include?(country.to_s.strip.downcase)
   end
-
 end

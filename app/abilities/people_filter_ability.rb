@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class PeopleFilterAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Group
 
   on(::PeopleFilter) do
@@ -18,5 +17,4 @@ class PeopleFilterAbility < AbilityDsl::Base
     permission(:layer_and_below_read).may(:new).in_same_layer_or_below
     permission(:layer_and_below_full).may(:create, :destroy, :edit, :update).in_same_layer
   end
-
 end

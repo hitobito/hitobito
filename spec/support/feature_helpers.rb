@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module FeatureHelpers
-
   def sign_in(user = nil)
     user ||= people(:top_leader)
     login_as(user, :scope => :person)
@@ -35,5 +34,4 @@ module FeatureHelpers
   ensure
     STDOUT.reopen(old_stream)
   end
-
 end

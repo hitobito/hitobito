@@ -7,7 +7,6 @@
 
 module SearchStrategies
   class SqlConditionBuilder
-
     def initialize(search_string, search_tables_and_fields)
       @search_string = search_string
       @search_tables_and_fields = search_tables_and_fields
@@ -42,6 +41,5 @@ module SearchStrategies
         table[field].matches(Arel::Nodes::Quoted.new("%#{word}%"))
       end
     end
-
   end
 end

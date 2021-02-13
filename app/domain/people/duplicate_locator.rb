@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class People::DuplicateLocator
-
   def initialize(scope = Person.all)
     @scope = scope
   end
@@ -27,13 +26,13 @@ class People::DuplicateLocator
   private
 
   def find_duplicate(person)
-      duplicate = person_duplicate_finder.find({ first_name: person.first_name,
-                                                 last_name: person.last_name,
-                                                 company_name: person.company_name,
-                                                 zip_code: person.zip_code,
-                                                 birthday: person.birthday })
+    duplicate = person_duplicate_finder.find({first_name: person.first_name,
+                                              last_name: person.last_name,
+                                              company_name: person.company_name,
+                                              zip_code: person.zip_code,
+                                              birthday: person.birthday})
 
-      duplicate unless person == duplicate
+    duplicate unless person == duplicate
   end
 
   def person_duplicate_finder

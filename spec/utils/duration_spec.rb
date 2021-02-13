@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Duration do
-
   let(:duration) { Duration.new(start, finish) }
 
   context "#cover?" do
@@ -18,24 +17,26 @@ describe Duration do
 
     subject { duration }
 
-
     context "between start finish" do
       it { is_expected.to be_cover(now) }
     end
 
     context "without finish" do
       let(:finish) { nil }
+
       it { is_expected.to be_cover(now) }
     end
 
     context "without start" do
       let(:start) { nil }
+
       it { is_expected.to be_cover(now) }
     end
 
     context "without start or finish" do
       let(:start) { nil }
       let(:finish) { nil }
+
       it { is_expected.not_to be_cover(now) }
     end
   end
@@ -44,7 +45,7 @@ describe Duration do
     subject { duration.days }
 
     context "with finish_at" do
-      let(:start)  { Time.zone.parse("2013-10-10 22:30") }
+      let(:start) { Time.zone.parse("2013-10-10 22:30") }
       let(:finish) { Time.zone.parse("2013-10-12 09:30") }
 
       it "returns number of days including start and finish" do
@@ -53,7 +54,7 @@ describe Duration do
     end
 
     context "without finish_at" do
-      let(:start)  { Time.zone.parse("2013-10-10 10:30") }
+      let(:start) { Time.zone.parse("2013-10-10 10:30") }
       let(:finish) { nil }
 
       it "defaults to 1" do
@@ -61,5 +62,4 @@ describe Duration do
       end
     end
   end
-
 end

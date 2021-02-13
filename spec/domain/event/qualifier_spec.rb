@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe Event::Qualifier do
-
   let(:event_kind) { event_kinds(:slk) }
   let(:course) do
     event = Fabricate(:course, kind: event_kind)
@@ -28,14 +27,14 @@ describe Event::Qualifier do
     participation.reload
   end
 
-  let(:participant)      { participation.person }
-  let(:leader)           { leader_participation.person }
-  let(:hybrid)           { hybrid_participation.person }
+  let(:participant) { participation.person }
+  let(:leader) { leader_participation.person }
+  let(:hybrid) { hybrid_participation.person }
 
   let(:participant_qualifier) { Event::Qualifier.for(participation) }
   let(:leader_qualifier) { Event::Qualifier.for(leader_participation) }
   let(:hybrid_qualifier) { Event::Qualifier.for(hybrid_participation) }
-  let(:quali_date)       { Date.new(2012, 10, 20) }
+  let(:quali_date) { Date.new(2012, 10, 20) }
 
   def create_qualification(person, date, kind)
     Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(kind), start_at: date)
@@ -112,7 +111,7 @@ describe Event::Qualifier do
         before do
           # TODO: why person with two participations and not only two roles/same participation?
           Fabricate(Event::Course::Role::Participant.name.to_sym,
-                    participation: Fabricate(:event_participation, event: course))
+            participation: Fabricate(:event_participation, event: course))
         end
 
         it_creates_qualifications_of_kinds(:leader, :sl_leader)
@@ -163,9 +162,10 @@ describe Event::Qualifier do
       end
 
       context "prolongs reactivatable qualification" do
-        let(:date)  { Date.new(2005, 3, 15) }
+        let(:date) { Date.new(2005, 3, 15) }
         let(:years) { quali_date.year - date.year }
-        before      { qualification_kinds(:gl).update_column(:reactivateable, years) }
+
+        before { qualification_kinds(:gl).update_column(:reactivateable, years) }
 
         it_creates_qualifications_of_kinds(:participant, :sl, :gl)
       end

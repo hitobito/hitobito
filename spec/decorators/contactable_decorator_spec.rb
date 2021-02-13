@@ -81,7 +81,6 @@ describe ContactableDecorator do
       it { is_expected.to match(/http:\/\/puzzle.ch<\/a>/) }
       it { is_expected.not_to match(/bad.website.link<\/a>/) }
       it { is_expected.not_to match(/www.<\/a>/) }
-
     end
   end
 
@@ -97,5 +96,4 @@ describe ContactableDecorator do
       end
     end
   end
-
 end

@@ -8,18 +8,15 @@
 require "spec_helper"
 
 describe Person::AddRequest::Status do
-
   let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
   let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_two)).person }
 
   let(:body_type) { body.class.base_class.name }
 
-
   subject { Person::AddRequest::Status.for(person.id, body_type, body.id) }
 
   context "Group" do
-
     let(:body) { groups(:bottom_layer_one) }
 
     it "resolves to correct subclass" do
@@ -52,7 +49,5 @@ describe Person::AddRequest::Status do
         expect(subject).to be_created
       end
     end
-
   end
-
 end

@@ -8,20 +8,19 @@
 require "spec_helper"
 
 describe Person::Filter::Attributes do
-
-  let(:user)         { people(:top_leader) }
-  let(:group)        { groups(:top_group) }
-  let(:key)          { "" }
-  let(:constraint)   { "match" }
-  let(:value)        { "" }
-  let(:range)         { "deep" }
+  let(:user) { people(:top_leader) }
+  let(:group) { groups(:top_group) }
+  let(:key) { "" }
+  let(:constraint) { "match" }
+  let(:value) { "" }
+  let(:range) { "deep" }
 
   let(:list_filter) do
     Person::Filter::List.new(
       group,
       user,
       range: range,
-      filters: { attributes: filters.merge(additional_filters) }
+      filters: {attributes: filters.merge(additional_filters)}
     )
   end
 
@@ -40,7 +39,6 @@ describe Person::Filter::Attributes do
   let(:entries) { list_filter.entries }
 
   context "filtering" do
-
     before do
       @tg_member1 = Fabricate(:person, first_name: "test1", last_name: "same")
       Fabricate(Group::TopGroup::Member.name.to_sym, group: group, person: @tg_member1)
@@ -71,7 +69,7 @@ describe Person::Filter::Attributes do
       let(:value) { "'INJECTION" }
 
       it "does not cause sql injection" do
-        expect{ entries.size }.not_to raise_exception
+        expect { entries.size }.not_to raise_exception
       end
     end
 
@@ -100,7 +98,7 @@ describe Person::Filter::Attributes do
           end
         end
 
-        context "match"  do
+        context "match" do
           let(:constraint) { "match" }
           let(:value) { "test" }
 
@@ -117,7 +115,7 @@ describe Person::Filter::Attributes do
         let(:key) { "id" }
 
         before do
-          expect(Person).to receive(:filter_attrs).and_return(id: { type: :integer })
+          expect(Person).to receive(:filter_attrs).and_return(id: {type: :integer})
         end
 
         context do
@@ -137,7 +135,7 @@ describe Person::Filter::Attributes do
           end
         end
 
-        context "smaller"  do
+        context "smaller" do
           let(:constraint) { "smaller" }
           let(:value) { people(:bottom_member).id }
 
@@ -146,7 +144,7 @@ describe Person::Filter::Attributes do
           end
         end
 
-        context "greater"  do
+        context "greater" do
           let(:constraint) { "greater" }
           let(:value) { people(:bottom_member).id }
 
@@ -161,7 +159,7 @@ describe Person::Filter::Attributes do
       let(:key) { "years" }
 
       before do
-        expect(Person).to receive(:filter_attrs).and_return(years: { type: :integer })
+        expect(Person).to receive(:filter_attrs).and_return(years: {type: :integer})
         allow_any_instance_of(Person).to receive(:years) do |person|
           case person.first_name
           when "test1" then 27
@@ -192,7 +190,7 @@ describe Person::Filter::Attributes do
         end
       end
 
-      context "match"  do
+      context "match" do
         let(:constraint) { "match" }
         let(:value) { "7" }
 
@@ -203,26 +201,26 @@ describe Person::Filter::Attributes do
         end
       end
 
-        context "smaller"  do
-          let(:constraint) { "smaller" }
-          let(:value) { 32 }
+      context "smaller" do
+        let(:constraint) { "smaller" }
+        let(:value) { 32 }
 
-          it "returns people with matching attribute" do
-            expect(entries.size).to eq(2)
-            expect(entries).to include(@tg_member1)
-            expect(entries).to include(@tg_member2)
-          end
+        it "returns people with matching attribute" do
+          expect(entries.size).to eq(2)
+          expect(entries).to include(@tg_member1)
+          expect(entries).to include(@tg_member2)
         end
+      end
 
-        context "greater"  do
-          let(:constraint) { "greater" }
-          let(:value) { 32 }
+      context "greater" do
+        let(:constraint) { "greater" }
+        let(:value) { 32 }
 
-          it "returns people with matching attribute" do
-            expect(entries.size).to eq(1)
-            expect(entries).to include(@tg_member3)
-          end
+        it "returns people with matching attribute" do
+          expect(entries.size).to eq(1)
+          expect(entries).to include(@tg_member3)
         end
+      end
     end
 
     context "multiple attributes" do

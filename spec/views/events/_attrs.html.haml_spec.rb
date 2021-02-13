@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe "events/_attrs.html.haml" do
-
   let(:top_leader) { people(:top_leader) }
 
   before do
@@ -24,6 +23,7 @@ describe "events/_attrs.html.haml" do
 
   context "course" do
     let(:event) { EventDecorator.decorate(events(:top_course)) }
+
     it "lists preconditions" do
       render
       is_expected.to have_content "Qualifikationen"
@@ -40,7 +40,6 @@ describe "events/_attrs.html.haml" do
     end
   end
 
-
   context "event dates" do
     let(:event) { EventDecorator.decorate(event_with_date) }
     let(:event_with_date) { Fabricate(:event_date, event: events(:top_event), label: "Vorweekend", location: "Im Wald").event }
@@ -50,5 +49,4 @@ describe "events/_attrs.html.haml" do
       is_expected.to have_content "Vorweekend, Im Wald"
     end
   end
-
 end

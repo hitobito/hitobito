@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::LogController, type: :controller do
-
   render_views
 
   let(:top_leader) { people(:top_leader) }
@@ -19,9 +18,8 @@ describe Person::LogController, type: :controller do
   before { sign_in(top_leader) }
 
   describe "GET index", versioning: true do
-
     it "renders empty log" do
-      get :index, params: { id: test_entry.id, group_id: top_group.id }
+      get :index, params: {id: test_entry.id, group_id: top_group.id}
 
       expect(response.body).to match(/keine Änderungen/)
     end
@@ -37,12 +35,10 @@ describe Person::LogController, type: :controller do
         role_type: Group::TopGroup::Member.sti_name)
       Fabricate(:phone_number, contactable: test_entry, label: "Foo", number: "43 3453 45 254")
 
-      get :index, params: { id: test_entry.id, group_id: top_group.id }
+      get :index, params: {id: test_entry.id, group_id: top_group.id}
 
       expect(dom.all("h4").size).to eq(1)
       expect(dom.all("#content div").size).to eq(12)
     end
-
   end
-
 end

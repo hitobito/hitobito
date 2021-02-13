@@ -7,7 +7,6 @@
 
 module Person::AddRequest::Approver
   class Base
-
     attr_reader :request, :user
 
     def initialize(request, user)
@@ -64,6 +63,5 @@ module Person::AddRequest::Approver
     def email
       request.person.email
     end
-
   end
 end

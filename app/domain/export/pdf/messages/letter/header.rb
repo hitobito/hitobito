@@ -8,7 +8,7 @@
 class Export::Pdf::Messages::Letter
   class Header < Section
     LOGO_BOX = [200, 40]
-    ADDRESS_BOX =  [200, 40]
+    ADDRESS_BOX = [200, 40]
 
     def render(recipient)
       render_logo
@@ -49,7 +49,5 @@ class Export::Pdf::Messages::Letter
     def sender_address
       Settings.messages.pdf.address
     end
-
   end
-
 end

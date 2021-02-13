@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 module MailRelay
   class MailProcessedBeforeError < StandardError
     def initialize(mail_log)

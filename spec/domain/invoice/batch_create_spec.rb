@@ -5,15 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-
 require "spec_helper"
 
 describe Invoice::BatchCreate do
   include ActiveJob::TestHelper
 
   let(:mailing_list) { mailing_lists(:leaders) }
-  let(:group)        { groups(:top_layer) }
-  let(:person)       { people(:top_leader) }
+  let(:group) { groups(:top_layer) }
+  let(:person) { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
 
   it "#call creates invoices for abo" do

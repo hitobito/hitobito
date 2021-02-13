@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe ActsAsTaggableOn::Tag do
-
   let(:person) { people(:top_leader) }
 
   context "stripping" do
@@ -18,11 +17,11 @@ describe ActsAsTaggableOn::Tag do
       expect(person.reload.tag_list.first).to eq("loremipsum")
     end
 
-    [{ input: "lorem:ipsum", output: "lorem:ipsum" },
-     { input: "lorem: ipsum", output: "lorem:ipsum" },
-     { input: "lorem : ipsum", output: "lorem:ipsum" },
-     { input: " lorem:ipsum ", output: "lorem:ipsum" },
-     { input: "lorem:  ipsum", output: "lorem:ipsum" }].each do |data|
+    [{input: "lorem:ipsum", output: "lorem:ipsum"},
+     {input: "lorem: ipsum", output: "lorem:ipsum"},
+     {input: "lorem : ipsum", output: "lorem:ipsum"},
+     {input: " lorem:ipsum ", output: "lorem:ipsum"},
+     {input: "lorem:  ipsum", output: "lorem:ipsum"}].each do |data|
       it "strips '#{data[:input]}' '#{data[:input]}'" do
         person.tag_list.add(data[:input])
         person.save!
@@ -80,5 +79,4 @@ describe ActsAsTaggableOn::Tag do
       expect(ActsAsTaggableOn::Tag.new(name: "lorem:ipsum:dolor").name_without_category).to eq("ipsum:dolor")
     end
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Role < Person::Filter::Base
-
   self.permitted_args = [:role_type_ids, :role_types, :kind, :start_at, :finish_at]
 
   def initialize(attr, args)
@@ -78,13 +77,13 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def type_conditions
-    [[:roles, { type: args[:role_types] }]].to_h if args[:role_types].present?
+    [[:roles, {type: args[:role_types]}]].to_h if args[:role_types].present?
   end
 
   def duration_conditions
     case args[:kind]
-    when "created" then [[:roles, { created_at: time_range }]].to_h
-    when "deleted" then [[:roles, { deleted_at: time_range }]].to_h
+    when "created" then [[:roles, {created_at: time_range}]].to_h
+    when "deleted" then [[:roles, {deleted_at: time_range}]].to_h
     when "active" then [active_role_condition, min: time_range.min, max: time_range.max]
     end
   end
@@ -110,5 +109,4 @@ class Person::Filter::Role < Person::Filter::Base
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
   end
-
 end

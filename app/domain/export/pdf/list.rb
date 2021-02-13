@@ -7,7 +7,6 @@
 
 module Export::Pdf
   module List
-
     class Runner
       def render(contactables, group)
         pdf = Prawn::Document.new(page_size: "A4",
@@ -27,8 +26,8 @@ module Export::Pdf
 
       def footer(pdf)
         pdf.number_pages(I18n.t("event.participations.print.page_of_pages"),
-                         at: [0, 0],
-                         align: :right)
+          at: [0, 0],
+          align: :right)
 
         pdf.repeat(:all) do
           pdf.bounding_box([0, 0], width: pdf.bounds.width, height: 2.cm) do
@@ -36,7 +35,6 @@ module Export::Pdf
           end
         end
       end
-
     end
 
     mattr_accessor :runner
@@ -46,6 +44,5 @@ module Export::Pdf
     def self.render(contactables, group)
       runner.new.render(contactables, group)
     end
-
   end
 end

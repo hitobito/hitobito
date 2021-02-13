@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ApplicationAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Event
   include AbilityDsl::Constraints::Event::Participation
 
@@ -24,5 +23,4 @@ class Event::ApplicationAbility < AbilityDsl::Base
       may(:show_priorities, :show_approval, :approve, :reject).
       for_applicant_in_same_layer
   end
-
 end

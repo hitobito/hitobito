@@ -9,7 +9,6 @@ require "spec_helper"
 require "csv"
 
 describe Export::Tabular::People::ParticipationsFull do
-
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
   let(:list) { [participation] }
@@ -43,7 +42,6 @@ describe Export::Tabular::People::ParticipationsFull do
   end
 
   context "integration" do
-
     let(:data) { Export::Tabular::People::ParticipationsFull.export(:csv, list) }
     let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
     let(:full_headers) do
@@ -59,12 +57,13 @@ describe Export::Tabular::People::ParticipationsFull do
     context "first row" do
       subject { csv[0] }
 
-      its(["Vorname"])      { should eq person.first_name }
-      its(["Rollen"])       { should be_blank }
+      its(["Vorname"]) { should eq person.first_name }
+      its(["Rollen"]) { should be_blank }
       its(["Anmeldedatum"]) { should eq I18n.l(Time.zone.now.to_date) }
 
       context "with additional information" do
         before { participation.update_attribute(:additional_information, "foobar") }
+
         its(["Bemerkungen"]) { should eq "foobar" }
       end
 
@@ -74,15 +73,16 @@ describe Export::Tabular::People::ParticipationsFull do
           Fabricate(:event_role, participation: participation, type: "Event::Role::AssistantLeader")
           participation.reload
         end
+
         its(["Rollen"]) { should eq "Hauptleitung, Leitung" }
       end
 
       context "with answers" do
         let(:first_question) { event_questions(:top_ov) }
-        let(:first_answer)  { participation.answers.find_by_question_id(first_question.id) }
+        let(:first_answer) { participation.answers.find_by_question_id(first_question.id) }
 
         let(:second_question) { event_questions(:top_vegi) }
-        let(:second_answer)  { participation.answers.find_by_question_id(second_question.id) }
+        let(:second_answer) { participation.answers.find_by_question_id(second_question.id) }
 
         before do
           participation.init_answers

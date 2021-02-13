@@ -7,7 +7,6 @@
 
 module Export::Tabular::People
   class PeopleFull < PeopleAddress
-
     def person_attributes
       Person.column_names.collect(&:to_sym) -
         Person::INTERNAL_ATTRS -
@@ -46,6 +45,5 @@ module Export::Tabular::People
         end
       end
     end
-
   end
 end

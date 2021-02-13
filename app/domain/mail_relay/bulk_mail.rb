@@ -6,9 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module MailRelay
-
   class BulkMail
-
     attr_accessor :headers
 
     BULK_SIZE = Settings.email.bulk_mail.bulk_size
@@ -159,8 +157,8 @@ module MailRelay
     def delivery_report_mail
       DeliveryReportMailer.
         bulk_mail(@delivery_report_to, @envelope_sender, @message,
-                  @success_count, Time.zone.now,
-                  @failed_recipients).deliver_now
+          @success_count, Time.zone.now,
+          @failed_recipients).deliver_now
     rescue => e
       log_info("Delivery report for bulk mail to " \
                "#{@delivery_report_to} could not be delivered: #{e.message}")
@@ -184,6 +182,5 @@ module MailRelay
         @message[k] = v
       end
     end
-
   end
 end

@@ -7,7 +7,6 @@
 
 require "spec_helper"
 describe Group::Mover do
-
   let(:move) { Group::Mover.new(group) }
 
   describe "#candidates" do
@@ -15,36 +14,43 @@ describe Group::Mover do
 
     context "top_group" do
       let(:group) { groups(:top_group) }
+
       its(:candidates) { is_expected.to be_blank }
     end
 
     context "bottom_layer_one" do
       let(:group) { groups(:bottom_layer_one) }
+
       its(:candidates) { is_expected.to be_blank }
     end
 
     context "bottom_layer_two" do
       let(:group) { groups(:bottom_layer_two) }
+
       its(:candidates) { is_expected.to be_blank }
     end
 
     context "bottom_group_one_one" do
       let(:group) { groups(:bottom_group_one_one) }
+
       its(:candidates) { is_expected.to match_array groups_for(:bottom_layer_two, :bottom_group_one_two) }
     end
 
     context "bottom_group_one_two" do
       let(:group) { groups(:bottom_group_one_two) }
+
       its(:candidates) { is_expected.to match_array groups_for(:bottom_layer_two, :bottom_group_one_one) }
     end
 
     context "bottom_group_two_one" do
       let(:group) { groups(:bottom_group_two_one) }
+
       its(:candidates) { is_expected.to match_array groups_for(:bottom_layer_one) }
     end
 
     context "bottom_group_one_one_one" do
       let(:group) { groups(:bottom_group_one_one_one) }
+
       its(:candidates) { is_expected.to match_array groups_for(:bottom_layer_one, :bottom_layer_two, :bottom_group_one_two) }
     end
 
@@ -59,6 +65,7 @@ describe Group::Mover do
 
     context "moved group" do
       subject { group.reload }
+
       before { move.perform(target); }
 
       its(:parent) { is_expected.to eq target }
@@ -87,5 +94,4 @@ describe Group::Mover do
       end
     end
   end
-
 end

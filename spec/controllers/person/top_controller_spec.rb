@@ -8,31 +8,27 @@
 require "spec_helper"
 
 describe Person::TopController do
-  
   let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
 
   context "GET show" do
-
     context "html" do
       it "keeps flash" do
-        get :show, params: { id: top_leader.id }
+        get :show, params: {id: top_leader.id}
         is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: :html))
       end
     end
 
     context "json" do
       it "redirects to json" do
-        get :show, params: { id: top_leader.id, user_email: "hans@example.com", user_token: "123" }, format: :json
+        get :show, params: {id: top_leader.id, user_email: "hans@example.com", user_token: "123"}, format: :json
         is_expected.to redirect_to(group_person_path(top_leader.primary_group_id,
-                                                     top_leader.id,
-                                                     format: :json,
-                                                     user_email: "hans@example.com",
-                                                     user_token: "123"))
+          top_leader.id,
+          format: :json,
+          user_email: "hans@example.com",
+          user_token: "123"))
       end
     end
-
   end
-
 end

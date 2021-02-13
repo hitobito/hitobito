@@ -23,7 +23,6 @@
 #
 
 class Person::AddRequest::Event < Person::AddRequest
-
   belongs_to :body, class_name: "::Event"
 
   validates :role_type, presence: true
@@ -39,5 +38,4 @@ class Person::AddRequest::Event < Person::AddRequest
       self.class.human_attribute_name(:deleted_event)
     end
   end
-
 end

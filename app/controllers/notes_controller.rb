@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class NotesController < ApplicationController
-
   decorates :group, :person
 
   def index
@@ -80,5 +79,4 @@ class NotesController < ApplicationController
       group_person_path(group_id: group.id, id: subject.id)
     end
   end
-
 end

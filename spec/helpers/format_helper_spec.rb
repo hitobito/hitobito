@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe FormatHelper do
-
   include I18nHelper
   include UtilityHelper
   include CrudTestHelper
@@ -59,11 +58,10 @@ describe FormatHelper do
     subject { labeled_attr("foo", :size) }
 
     it { is_expected.to be_html_safe }
-    its(:squish) {  should == '<dt class="muted">Size</dt> <dd>3 chars</dd>'.gsub('"', "'") }
+    its(:squish) { should == '<dt class="muted">Size</dt> <dd>3 chars</dd>'.gsub('"', "'") }
   end
 
   describe "#f" do
-
     context "Fixnums" do
       it "should print small values unchanged" do
         expect(f(10)).to eq("10")
@@ -113,7 +111,6 @@ describe FormatHelper do
         expect(f("<injection>")).not_to be_html_safe
       end
     end
-
   end
 
   describe "#format_attr" do
@@ -263,7 +260,6 @@ describe FormatHelper do
   end
 
   describe "#content_tag_nested" do
-
     it "should escape safe content" do
       html = content_tag_nested(:div, %w(a b)) { |e| content_tag(:span, e) }
       expect(html).to be_html_safe
@@ -310,33 +306,40 @@ describe FormatHelper do
   describe "#translate_inheritable" do
     before { @controller = CrudTestModelsController.new }
 
-    before { I18n.backend.store_translations :de, global: { test_key: "global" } }
+    before { I18n.backend.store_translations :de, global: {test_key: "global"} }
+
     subject { ti(:test_key) }
 
     it { is_expected.to eq("global") }
 
     context "with list key" do
-      before { I18n.backend.store_translations :de, list: { global: { test_key: "list global" } } }
+      before { I18n.backend.store_translations :de, list: {global: {test_key: "list global"}} }
+
       it { is_expected.to eq("list global") }
 
       context "and list action key" do
-        before { I18n.backend.store_translations :de, list: { index: { test_key: "list index" } } }
+        before { I18n.backend.store_translations :de, list: {index: {test_key: "list index"}} }
+
         it { is_expected.to eq("list index") }
 
         context "and crud global key" do
-          before { I18n.backend.store_translations :de, crud: {  global: { test_key: "crud global" } } }
+          before { I18n.backend.store_translations :de, crud: {global: {test_key: "crud global"}} }
+
           it { is_expected.to eq("crud global") }
 
           context "and crud action key" do
-            before { I18n.backend.store_translations :de, crud: {  index: { test_key: "crud index" } } }
+            before { I18n.backend.store_translations :de, crud: {index: {test_key: "crud index"}} }
+
             it { is_expected.to eq("crud index") }
 
             context "and controller global key" do
-              before { I18n.backend.store_translations :de, crud_test_models: {  global: { test_key: "test global" } } }
+              before { I18n.backend.store_translations :de, crud_test_models: {global: {test_key: "test global"}} }
+
               it { is_expected.to eq("test global") }
 
               context "and controller action key" do
-                before { I18n.backend.store_translations :de, crud_test_models: {  index: { test_key: "test index" } } }
+                before { I18n.backend.store_translations :de, crud_test_models: {index: {test_key: "test index"}} }
+
                 it { is_expected.to eq("test index") }
               end
             end
@@ -348,18 +351,20 @@ describe FormatHelper do
 
   describe "#translate_association" do
     let(:assoc) { CrudTestModel.reflect_on_association(:companion) }
+
     subject { ta(:test_key, assoc) }
 
-    before { I18n.backend.store_translations :de, global: { associations: { test_key: "global" } } }
+    before { I18n.backend.store_translations :de, global: {associations: {test_key: "global"}} }
+
     it { is_expected.to eq("global") }
 
     context "with model key" do
       before do
         I18n.backend.store_translations :de,
-                                        activerecord: {
-                                          associations: {
-                                            crud_test_model: {
-                                              test_key: "model" } } }
+          activerecord: {
+            associations: {
+              crud_test_model: {
+                test_key: "model"}}}
       end
 
       it { is_expected.to eq("model") }
@@ -367,12 +372,12 @@ describe FormatHelper do
       context "and assoc key" do
         before do
           I18n.backend.store_translations :de,
-                                          activerecord: {
-                                            associations: {
-                                              models: {
-                                                crud_test_model: {
-                                                  companion: {
-                                                    test_key: "companion" } } } } }
+            activerecord: {
+              associations: {
+                models: {
+                  crud_test_model: {
+                    companion: {
+                      test_key: "companion"}}}}}
         end
 
         it { is_expected.to eq("companion") }

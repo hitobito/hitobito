@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Event
   include AbilityDsl::Constraints::Event::Participation
 

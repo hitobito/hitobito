@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe InvoiceDecorator do
-
   context :currency do
     it "is read from invoice_config for new record" do
       group = groups(:top_layer)
@@ -15,5 +14,4 @@ describe InvoiceDecorator do
       expect(invoice.currency).to eq "EUR"
     end
   end
-
 end

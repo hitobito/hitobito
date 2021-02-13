@@ -7,10 +7,8 @@
 
 module Person::AddRequest::Status
   class Group < Base
-
     def created?
       Role.where(group_id: body_id, person_id: person_id).exists?
     end
-
   end
 end

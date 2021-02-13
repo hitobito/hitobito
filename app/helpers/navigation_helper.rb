@@ -6,36 +6,35 @@
 #  https://github.com/hitobito/hitobito.
 
 module NavigationHelper
-
   MAIN = [
-    { label: :groups,
-      url: :groups_path,
-      icon_name: "users",
-      active_for: %w(groups people),
-      inactive_for: %w(invoices invoice_articles invoice_config payment_process invoice_lists) },
+    {label: :groups,
+     url: :groups_path,
+     icon_name: "users",
+     active_for: %w(groups people),
+     inactive_for: %w(invoices invoice_articles invoice_config payment_process invoice_lists)},
 
-    { label: :events,
-      url: :list_events_path,
-      icon_name: "calendar-alt",
-      active_for: %w(list_events),
-      if: ->(_) { can?(:list_available, Event) } },
+    {label: :events,
+     url: :list_events_path,
+     icon_name: "calendar-alt",
+     active_for: %w(list_events),
+     if: ->(_) { can?(:list_available, Event) }},
 
-    { label: :courses,
-      url: :list_courses_path,
-      icon_name: "book",
-      active_for: %w(list_courses),
-      if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) } },
+    {label: :courses,
+     url: :list_courses_path,
+     icon_name: "book",
+     active_for: %w(list_courses),
+     if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) }},
 
-    { label: :invoices,
-      url: :first_group_invoices_or_root_path,
-      icon_name: "money-bill-alt",
-      if: ->(_) { current_user.finance_groups.any? },
-      active_for: %w(invoices invoice_articles invoice_config payment_process invoice_lists) },
+    {label: :invoices,
+     url: :first_group_invoices_or_root_path,
+     icon_name: "money-bill-alt",
+     if: ->(_) { current_user.finance_groups.any? },
+     active_for: %w(invoices invoice_articles invoice_config payment_process invoice_lists)},
 
-    { label: :admin,
-      url: :label_formats_path,
-      icon_name: "cog",
-      active_for: %w(label_formats
+    {label: :admin,
+     url: :label_formats_path,
+     icon_name: "cog",
+     active_for: %w(label_formats
                      custom_contents
                      event_kinds
                      qualification_kinds
@@ -44,9 +43,8 @@ module NavigationHelper
                      oauth/active_authorizations
                      event_feed
                      tags),
-      if: ->(_) { can?(:index, LabelFormat) } }
+     if: ->(_) { can?(:index, LabelFormat) }}
   ]
-
 
   def render_main_nav
     content_tag_nested(:ul, MAIN, class: "nav-left-list") do |options|
@@ -60,7 +58,7 @@ module NavigationHelper
     url = send(options[:url]) if options[:url].is_a?(Symbol)
     active = section_active?(url, options[:active_for], options[:inactive_for])
     nav(I18n.t("navigation.#{options[:label]}"), url, options[:icon_name], active,
-        class: "nav-left-section", active_class: "active") do
+      class: "nav-left-section", active_class: "active") do
       concat(sheet.render_left_nav) if sheet.left_nav?
     end
   end
@@ -78,7 +76,7 @@ module NavigationHelper
     end
     content_tag(:li, class: classes) do
       navigation_text = icon(icon_name) + label
-      concat(link_to(navigation_text, url, data: { disable_with: navigation_text }))
+      concat(link_to(navigation_text, url, data: {disable_with: navigation_text}))
       yield if block_given? && active
     end
   end
@@ -92,6 +90,6 @@ module NavigationHelper
   def section_active?(url, active_for = [], inactive_for = [])
     current_page?(url) ||
       Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
-      Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
+        Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} }
   end
 end

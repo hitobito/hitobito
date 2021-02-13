@@ -17,11 +17,12 @@ describe "qualifications/_form.html.haml" do
     path_args = [group, person, qualification]
     allow(view).to receive_messages(parents: [group, person], entry: qualification, path_args: path_args)
   end
+
   subject { Capybara::Node::Simple.new(rendered) }
+
   it "translates form fields" do
     render
     is_expected.to have_content "Qualifikation"
     is_expected.to have_content "Seit"
   end
-
 end

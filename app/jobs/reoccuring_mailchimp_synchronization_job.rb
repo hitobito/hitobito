@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class ReoccuringMailchimpSynchronizationJob < RecurringJob
-
   run_every 24.hours
 
   def perform
@@ -17,4 +16,3 @@ class ReoccuringMailchimpSynchronizationJob < RecurringJob
     end
   end
 end
-

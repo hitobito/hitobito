@@ -6,12 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class LabelFormat::SettingsController < ApplicationController
-
   before_action :authorize
 
   def update
     current_user.update_column(:show_global_label_formats,
-                               params[:show_global_label_formats].present?)
+      params[:show_global_label_formats].present?)
   end
 
   private
@@ -19,5 +18,4 @@ class LabelFormat::SettingsController < ApplicationController
   def authorize
     authorize!(:update_settings, current_user)
   end
-
 end

@@ -6,13 +6,11 @@
 #  or at https://github.com/hitobito/hitobito.
 
 module Export::Tabular
-
   # Decorator for a row entry.
   # Attribute values may be accessed with fetch(attr).
   # If a method named #attr is defined on the decorator class, return its value.
   # Otherwise, the attr is delegated to the entry.
   class Row
-
     # regexp for attribute names which are handled dynamically.
     class_attribute :dynamic_attributes
     self.dynamic_attributes = {}
@@ -67,6 +65,5 @@ module Export::Tabular
         value
       end
     end
-
   end
 end

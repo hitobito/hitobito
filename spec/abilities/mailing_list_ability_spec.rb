@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe MailingListAbility do
-
   let(:user) { role.person }
   let(:group) { role.group }
   let(:list) { Fabricate(:mailing_list, group: group) }
@@ -181,7 +180,6 @@ describe MailingListAbility do
         create_event_subscription(*groups(:bottom_layer_one, :bottom_layer_two))
         is_expected.to be_able_to(:export_subscriptions, list)
       end
-
     end
 
     context "in top group" do
@@ -220,7 +218,6 @@ describe MailingListAbility do
         is_expected.to be_able_to(:export_subscriptions, list)
       end
     end
-
   end
 
   context "group and below full" do

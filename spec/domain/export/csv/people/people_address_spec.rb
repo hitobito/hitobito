@@ -9,7 +9,6 @@ require "spec_helper"
 require "csv"
 
 describe Export::Tabular::People::PeopleAddress do
-
   let(:person) { people(:top_leader) }
   let(:list) { [person] }
   let(:people_list) { Export::Tabular::People::PeopleAddress.new(list) }
@@ -17,7 +16,6 @@ describe Export::Tabular::People::PeopleAddress do
 
   let(:data) { Export::Tabular::People::PeopleAddress.export(:csv, list) }
   let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
-
 
   context "headers" do
     let(:simple_headers) do
@@ -32,7 +30,6 @@ describe Export::Tabular::People::PeopleAddress do
   end
 
   context "first row" do
-
     subject { csv[0] }
 
     its(["Vorname"]) { should eq person.first_name }

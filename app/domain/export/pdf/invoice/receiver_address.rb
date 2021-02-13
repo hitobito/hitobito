@@ -7,11 +7,10 @@
 
 module Export::Pdf::Invoice
   class ReceiverAddress < Section
-
     def render
       float do
         bounding_box([290, 640], width: bounds.width, height: 80) do
-          table(receiver_address_data, cell_style: { borders: [], padding: [0, 0, 0, 0] })
+          table(receiver_address_data, cell_style: {borders: [], padding: [0, 0, 0, 0]})
         end
       end
     end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module I18nHelper
-
   # Translates the passed key by looking it up over the controller hierarchy.
   # The key is searched in the following order:
   #  - {controller}.{current_partial}.{key}
@@ -62,6 +61,4 @@ module I18nHelper
   end
 
   alias ta translate_association
-
-
 end

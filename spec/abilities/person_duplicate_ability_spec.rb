@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe PersonDuplicateAbility do
-
   let(:user) { @role.person }
   let(:top_leader) { people(:top_leader) }
   let(:bottom_layer_one) { groups(:bottom_layer_one) }
@@ -52,7 +51,6 @@ describe PersonDuplicateAbility do
 
       is_expected.not_to be_able_to(:merge, duplicate_entry)
     end
-
   end
 
   context :ignore do

@@ -8,13 +8,13 @@
 require "spec_helper"
 
 describe InvoiceList do
-  let(:list)         { mailing_lists(:leaders) }
-  let(:group)        { groups(:top_layer) }
-  let(:person)       { people(:top_leader) }
+  let(:list) { mailing_lists(:leaders) }
+  let(:group) { groups(:top_layer) }
+  let(:person) { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
 
   it "accepts recipient_ids as comma-separates values" do
-    subject.attributes = { recipient_ids: "#{person.id},#{other_person.id}" }
+    subject.attributes = {recipient_ids: "#{person.id},#{other_person.id}"}
     expect(subject.recipient_ids_count).to eq 2
     expect(subject.first_recipient).to eq person
   end
@@ -23,16 +23,16 @@ describe InvoiceList do
     Subscription.create!(mailing_list: list,
                          subscriber: group,
                          role_types: [Group::TopGroup::Leader])
-    subject.attributes = { receiver_type: "MailingList", receiver_id: list.id }
+    subject.attributes = {receiver_type: "MailingList", receiver_id: list.id}
     expect(subject.recipient_ids_count).to eq 1
     expect(subject.first_recipient).to eq person
   end
 
   it "only accepts mailing list as receiver" do
-    subject.attributes = { title: :test, receiver: list }
+    subject.attributes = {title: :test, receiver: list}
     expect(subject).to be_valid
 
-    subject.attributes = { title: :test, receiver: group }
+    subject.attributes = {title: :test, receiver: group}
     expect(subject).not_to be_valid
   end
 

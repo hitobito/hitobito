@@ -6,10 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationMailer < ApplicationMailer
-
   CONTENT_CONFIRMATION = "event_application_confirmation"
-  CONTENT_APPROVAL     = "event_application_approval"
-  CONTENT_CANCEL       = "event_cancel_application"
+  CONTENT_APPROVAL = "event_application_approval"
+  CONTENT_CANCEL = "event_cancel_application"
 
   # Include all helpers that are required directly or indirectly (in decorators)
   helper :format, :layout, :auto_link_value
@@ -27,7 +26,7 @@ class Event::ParticipationMailer < ApplicationMailer
 
   def approval(participation, recipients)
     @participation = participation
-    @recipients    = recipients
+    @recipients = recipients
 
     compose(@recipients, CONTENT_APPROVAL)
   end
@@ -72,10 +71,10 @@ class Event::ParticipationMailer < ApplicationMailer
     view_context
 
     values = if values
-               values.merge(
-                 "event-details" => event_details,
-                 "application-url" => link_to(participation_url)
-               )
+      values.merge(
+        "event-details" => event_details,
+        "application-url" => link_to(participation_url)
+      )
              else
                values_for_placeholders(content_key)
              end
@@ -137,14 +136,14 @@ class Event::ParticipationMailer < ApplicationMailer
     participation.answers
                  .joins(:question)
                  .includes(:question)
-                 .where(event_questions: { admin: false })
+                 .where(event_questions: {admin: false})
   end
 
   def additional_information_details
     if participation.additional_information?
       t("activerecord.attributes.event/participation.additional_information") +
-      ":<br/>" +
-      participation.additional_information.gsub("\n", "<br/>")
+        ":<br/>" +
+        participation.additional_information.gsub("\n", "<br/>")
     end
   end
 
@@ -160,5 +159,4 @@ class Event::ParticipationMailer < ApplicationMailer
   def event
     @event ||= participation.event
   end
-
 end

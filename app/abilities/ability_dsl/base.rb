@@ -39,7 +39,6 @@ module AbilityDsl
   # BEWARE: The constraint methods only apply if you pass an instance to the #can?
   # method. If you pass a class, no constraints will be checked at all!
   class Base
-
     private
 
     attr_reader :user_context, :subject, :permission
@@ -149,6 +148,5 @@ module AbilityDsl
     def user
       user_context.user
     end
-
   end
 end

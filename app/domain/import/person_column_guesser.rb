@@ -48,12 +48,11 @@ module Import
     end
 
     def null_field
-      { key: nil }
+      {key: nil}
     end
 
     def person_fields
       @person_fields ||= Import::Person.fields
     end
-
   end
 end

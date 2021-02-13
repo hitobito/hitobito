@@ -10,9 +10,7 @@ require "axlsx"
 
 module Export::Xlsx
   class Style
-
     class << self
-
       def register(style_class, *exportables)
         exportables.each do |e|
           registry[e] = style_class
@@ -28,7 +26,6 @@ module Export::Xlsx
       def registry
         @registry ||= {}
       end
-
     end
 
     LABEL_BACKGROUND = Settings.xlsx.label_background
@@ -73,9 +70,9 @@ module Export::Xlsx
 
     # override in subclass to define page setup
     def page_setup
-      { paper_size: 9, # Default A4
-        fit_to_height: 1,
-        orientation: :landscape }
+      {paper_size: 9, # Default A4
+       fit_to_height: 1,
+       orientation: :landscape}
     end
 
     def default_style_data_rows
@@ -92,21 +89,21 @@ module Export::Xlsx
     def default_style
       {
         style: {
-          font_name: Settings.xlsx.font_name, alignment: { horizontal: :left }
+          font_name: Settings.xlsx.font_name, alignment: {horizontal: :left}
         }
       }
     end
 
     def date_style
-      default_style.deep_merge(style: { numFmts: NUM_FMT_YYYYMMDD })
+      default_style.deep_merge(style: {numFmts: NUM_FMT_YYYYMMDD})
     end
 
     def attribute_labels_style
-      default_style.deep_merge(style: { bg_color: LABEL_BACKGROUND })
+      default_style.deep_merge(style: {bg_color: LABEL_BACKGROUND})
     end
 
     def centered_style
-      default_style.deep_merge(style: { alignment: { horizontal: :center } })
+      default_style.deep_merge(style: {alignment: {horizontal: :center}})
     end
   end
 end

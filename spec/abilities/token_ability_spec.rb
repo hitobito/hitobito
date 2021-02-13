@@ -8,8 +8,8 @@
 require "spec_helper"
 
 describe TokenAbility do
-
   subject { ability }
+
   let(:ability) { TokenAbility.new(token) }
 
   describe :people do
@@ -20,7 +20,6 @@ describe TokenAbility do
     end
 
     context "authorized" do
-
       it "may index on group" do
         is_expected.to be_able_to(:index_people, token.layer)
       end
@@ -50,7 +49,7 @@ describe TokenAbility do
       end
 
       it "may not index on subgroup" do
-        is_expected.not_to be_able_to(:index_people,  groups(:top_group))
+        is_expected.not_to be_able_to(:index_people, groups(:top_group))
       end
 
       it "may not show in subgroup" do
@@ -68,7 +67,6 @@ describe TokenAbility do
     end
 
     context "authorized" do
-
       it "may index on group" do
         is_expected.to be_able_to(:index_people, token.layer)
       end
@@ -116,15 +114,14 @@ describe TokenAbility do
     end
 
     context "authorized" do
-
       it "may index on group" do
         is_expected.to be_able_to(:index_events, token.layer)
         is_expected.to be_able_to(:'index_event/courses', token.layer)
       end
 
       it "may index on subgroup" do
-        is_expected.to be_able_to(:index_events,  groups(:top_group))
-        is_expected.to be_able_to(:'index_event/courses',  groups(:top_group))
+        is_expected.to be_able_to(:index_events, groups(:top_group))
+        is_expected.to be_able_to(:'index_event/courses', groups(:top_group))
       end
 
       it "may show on group" do

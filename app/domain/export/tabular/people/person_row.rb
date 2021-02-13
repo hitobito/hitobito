@@ -7,12 +7,11 @@
 
 module Export::Tabular::People
   class PersonRow < Export::Tabular::Row
-
-    self.dynamic_attributes = { /^phone_number_/ => :phone_number_attribute,
-                                /^social_account_/ => :social_account_attribute,
-                                /^additional_email_/ => :additional_email_attribute,
-                                /^people_relation_/ => :people_relation_attribute,
-                                /^qualification_kind_/ => :qualification_kind }
+    self.dynamic_attributes = {/^phone_number_/ => :phone_number_attribute,
+                               /^social_account_/ => :social_account_attribute,
+                               /^additional_email_/ => :additional_email_attribute,
+                               /^people_relation_/ => :people_relation_attribute,
+                               /^qualification_kind_/ => :qualification_kind}
 
     def country
       entry.country_label
@@ -67,7 +66,7 @@ module Export::Tabular::People
     def find_qualification(label)
       entry.decorate.latest_qualifications_uniq_by_kind.find do |q|
         qualification_active?(q) &&
-        ContactAccounts.key(q.qualification_kind.class, q.qualification_kind.label) == label
+          ContactAccounts.key(q.qualification_kind.class, q.qualification_kind.label) == label
       end
     end
 
@@ -82,6 +81,5 @@ module Export::Tabular::People
       end
       account.value if account
     end
-
   end
 end

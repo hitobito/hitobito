@@ -7,7 +7,6 @@
 
 module SearchStrategies
   class Base
-
     QUERY_PER_PAGE = 10
 
     def initialize(user, term, page)
@@ -82,6 +81,5 @@ module SearchStrategies
                    "WHERE roles.deleted_at IS NULL AND roles.person_id = people.id)")
             .pluck(:id)
     end
-
   end
 end

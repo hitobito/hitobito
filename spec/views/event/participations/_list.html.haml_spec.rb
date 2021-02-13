@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe "event/participations/_list.html.haml" do
-
   let(:event) { EventDecorator.decorate(Fabricate(:course, groups: [groups(:top_layer)])) }
   let(:participation) { Fabricate(:event_participation, event: event) }
   let(:participations) { Kaminari.paginate_array([participation.decorate]).page(1) }
@@ -17,10 +16,10 @@ describe "event/participations/_list.html.haml" do
   let(:dropdowns) { dom.all(".dropdown-toggle") }
 
   let(:params) do
-    { "action" => "index",
-      "controller" => "event/participations",
-      "group_id" => "1",
-      "event_id" => "36" }
+    {"action" => "index",
+     "controller" => "event/participations",
+     "group_id" => "1",
+     "event_id" => "36"}
   end
 
   before do
@@ -43,7 +42,6 @@ describe "event/participations/_list.html.haml" do
   end
 
   context "created_at" do
-
     it "can be viewed by someone how can show participation details" do
       login_as(people(:top_leader))
       expect(dom).to have_text "Rollen | Anmeldedatum"
@@ -55,7 +53,6 @@ describe "event/participations/_list.html.haml" do
       expect(dom).not_to have_text "Rollen | Anmeldedatum"
       expect(dom).not_to have_text "Teilnehmer/-in#{I18n.l(Time.zone.now.to_date)}"
     end
-
   end
 
   def login_as(user)

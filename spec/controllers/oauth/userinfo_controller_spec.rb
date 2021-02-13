@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 require "spec_helper"
 
 describe Doorkeeper::OpenidConnect::UserinfoController do
@@ -17,9 +16,9 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
     let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: "openid", expires_in: 2.hours) }
 
     it "shows the userinfo" do
-      get :show, params: { access_token: token.token }
+      get :show, params: {access_token: token.token}
       expect(response.status).to eq 200
-      expect(JSON.parse(response.body)).to eq({ "sub" => user.id.to_s })
+      expect(JSON.parse(response.body)).to eq({"sub" => user.id.to_s})
     end
 
     context "with name scope" do
@@ -30,7 +29,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
       end
 
       it "shows the userinfo" do
-        get :show, params: { access_token: token.token }
+        get :show, params: {access_token: token.token}
         expect(response.status).to eq 200
         expect(JSON.parse(response.body)).to eq({
           "sub" => user.id.to_s, "first_name" => user.first_name, "last_name" => user.last_name, "nickname" => "Filou",
@@ -43,9 +42,9 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
       let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: "openid email", expires_in: 2.hours) }
 
       it "shows the userinfo" do
-        get :show, params: { access_token: token.token }
+        get :show, params: {access_token: token.token}
         expect(response.status).to eq 200
-        expect(JSON.parse(response.body)).to eq({ "sub" => user.id.to_s, "email" => user.email })
+        expect(JSON.parse(response.body)).to eq({"sub" => user.id.to_s, "email" => user.email})
       end
     end
   end

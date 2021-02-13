@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: event_participations
@@ -24,7 +23,6 @@
 require "spec_helper"
 
 describe Event::Participation do
-
   let(:course) do
     course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
     course.questions << Fabricate(:event_question, event: course, required: true)
@@ -41,7 +39,7 @@ describe Event::Participation do
     end
 
     it "creates missing answers" do
-      subject.answers_attributes = [{ question_id: course.questions.first.id, answer: "Foo" }]
+      subject.answers_attributes = [{question_id: course.questions.first.id, answer: "Foo"}]
       subject.init_answers
 
       expect(subject.answers.size).to eq(2)
@@ -63,9 +61,9 @@ describe Event::Participation do
       subject.person_id = 42
       subject.attributes = {
         additional_information: "bla",
-        application_attributes: { priority_2_id: 42 },
-        answers_attributes: [{ question_id: q[0].id, answer: "ja" },
-                             { question_id: q[1].id, answer: "nein" }]
+        application_attributes: {priority_2_id: 42},
+        answers_attributes: [{question_id: q[0].id, answer: "ja"},
+                             {question_id: q[1].id, answer: "nein"}]
       }
 
       expect(subject.additional_information).to eq("bla")
@@ -82,9 +80,9 @@ describe Event::Participation do
       q = course.questions
       subject.attributes = {
         additional_information: "bla",
-        application_attributes: { priority_2_id: 42 },
-        answers_attributes: [{ question_id: q[0].id, answer: "ja", id: subject.answers.first.id },
-                             { question_id: q[1].id, answer: "nein", id: subject.answers.last.id }]
+        application_attributes: {priority_2_id: 42},
+        answers_attributes: [{question_id: q[0].id, answer: "ja", id: subject.answers.first.id},
+                             {question_id: q[1].id, answer: "nein", id: subject.answers.last.id}]
       }
 
       expect(subject.person_id).to eq(p.id)
@@ -102,7 +100,7 @@ describe Event::Participation do
       subject.person_id = Person.first.id
       subject.init_answers
       subject.attributes = {
-        answers_attributes: [{ question_id: q[1].id, answer: "ja" }]
+        answers_attributes: [{question_id: q[1].id, answer: "ja"}]
       }
       subject.roles.new(type: Event::Course::Role::Participant.sti_name)
       expect(subject.save).to be_falsey

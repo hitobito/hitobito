@@ -51,17 +51,14 @@
 require "spec_helper"
 
 describe EventSerializer do
-
-  let(:event)      { events(:top_event).decorate }
+  let(:event) { events(:top_event).decorate }
   let(:controller) { double().as_null_object }
-  let(:serializer) { EventSerializer.new(event, controller: controller)}
-  let(:hash)       { serializer.to_hash.with_indifferent_access }
+  let(:serializer) { EventSerializer.new(event, controller: controller) }
+  let(:hash) { serializer.to_hash.with_indifferent_access }
 
   subject { hash[:events].first }
 
-
   context "event properties" do
-
     it "includes all keys" do
       keys = [:name, :description, :motto, :cost, :maximum_participants, :participant_count,
        :location, :application_opening_at, :application_closing_at, :application_conditions,
@@ -100,7 +97,6 @@ describe EventSerializer do
     it "does not include kind" do
       expect(subject[:links]).not_to have_key(:kind)
     end
-
   end
 
   context "coures properties" do
@@ -115,5 +111,4 @@ describe EventSerializer do
       expect(subject[:links]).to have_key(:kind)
     end
   end
-
 end

@@ -7,7 +7,6 @@
 
 module Sheet
   class Admin < Base
-
     def left_nav?
       true
     end

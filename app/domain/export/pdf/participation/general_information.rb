@@ -7,7 +7,6 @@
 
 module Export::Pdf::Participation
   class GeneralInformation < Section
-
     def render
       return unless event_with_kind?
       render_general_information
@@ -22,6 +21,5 @@ module Export::Pdf::Participation
         text event.kind.general_information
       end
     end
-
   end
 end

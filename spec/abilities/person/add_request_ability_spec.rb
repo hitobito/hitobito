@@ -8,8 +8,8 @@
 require "spec_helper"
 
 describe Person::AddRequestAbility do
-
   subject { ability }
+
   let(:ability) { Ability.new(role.person.reload) }
 
   context :layer_and_below_full do
@@ -54,7 +54,6 @@ describe Person::AddRequestAbility do
       is_expected.to be_able_to(:index_person_add_requests, groups(:bottom_layer_one))
     end
 
-
     context "in below layer" do
       let(:role) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)) }
 
@@ -91,10 +90,10 @@ describe Person::AddRequestAbility do
       it "not allowed with person in neighbour layer and deleted role in same layer" do
         other = Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person
         Fabricate(Group::BottomGroup::Member.name,
-                  group: groups(:bottom_group_one_one),
-                  person: other,
-                  created_at: 1.year.ago,
-                  deleted_at: 1.month.ago)
+          group: groups(:bottom_group_one_one),
+          person: other,
+          created_at: 1.year.ago,
+          deleted_at: 1.month.ago)
         request = create_request(other)
 
         is_expected.not_to be_able_to(:approve, request)
@@ -134,12 +133,10 @@ describe Person::AddRequestAbility do
         is_expected.not_to be_able_to(:reject, request)
         is_expected.not_to be_able_to(:add_without_request, request)
       end
-
     end
   end
 
   context :layer_full do
-
     let(:role) { Fabricate(Group::TopGroup::LocalGuide.name, group: groups(:top_group)) }
 
     it "allowed with person in same layer" do
@@ -174,7 +171,6 @@ describe Person::AddRequestAbility do
   end
 
   context :group_full do
-
     context "with layer and below read" do
       let(:role) { Fabricate(Group::TopGroup::Secretary.name, group: groups(:top_group)) }
 
@@ -261,5 +257,4 @@ describe Person::AddRequestAbility do
       role_type: Group::BottomLayer::Member.sti_name
     )
   end
-
 end

@@ -44,6 +44,7 @@ describe Export::Ics::Events do
 
   describe "#event_description" do
     subject { export.event_description(event) }
+
     let(:contact) { people(:top_leader) }
 
     before do
@@ -119,22 +120,25 @@ describe Export::Ics::Events do
   end
 
   describe "#datetime_to_ical" do
-    subject { export.datetime_to_ical(datetime) }
+  subject { export.datetime_to_ical(datetime) }
 
-    context "with fullday event" do
-      let(:datetime) { Time.zone.local(2018, 5, 19) }
-      it { is_expected.to be_a(ical_date_klass) }
-    end
+  context "with fullday event" do
+    let(:datetime) { Time.zone.local(2018, 5, 19) }
 
-    context "with timed event" do
-      let(:datetime) { Time.zone.local(2018, 5, 19, 12, 15) }
-      it { is_expected.to be_a(ical_datetime_klass) }
-    end
+    it { is_expected.to be_a(ical_date_klass) }
+  end
 
-    context "with nil" do
-      let(:datetime) { nil }
-      it { is_expected.to be nil }
-    end
+  context "with timed event" do
+    let(:datetime) { Time.zone.local(2018, 5, 19, 12, 15) }
+
+    it { is_expected.to be_a(ical_datetime_klass) }
+  end
+
+  context "with nil" do
+    let(:datetime) { nil }
+
+    it { is_expected.to be nil }
+  end
 end
 
   describe "#generate" do

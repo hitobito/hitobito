@@ -7,9 +7,7 @@
 
 require "spec_helper"
 
-
 describe FormHelper do
-
   include ActionHelper
   include I18nHelper
   include TableHelper
@@ -28,7 +26,6 @@ describe FormHelper do
 
   after(:all) { reset_db }
 
-
   describe "#entry_form" do
     let(:entry) { CrudTestModel.first }
 
@@ -41,7 +38,7 @@ describe FormHelper do
     end
 
     it "should contain input for name" do
-      #is_expected.to match /input [^>]*?name="crud_test_model\[name\]" [^>]*?type="text"/
+      # is_expected.to match /input [^>]*?name="crud_test_model\[name\]" [^>]*?type="text"/
       is_expected.to have_selector('input[name="crud_test_model[name]"][type=text]')
     end
 
@@ -76,14 +73,13 @@ describe FormHelper do
     it "should contain input for remarks" do
       is_expected.to have_selector('textarea[name="crud_test_model[remarks]"]')
     end
-
   end
 
   describe "#crud_form" do
     subject do
       Capybara::Node::Simple.new(
         with_test_routing do
-          capture { crud_form(entry, :name, :children, :birthdate, :human, html: { class: "special" }) }
+          capture { crud_form(entry, :name, :children, :birthdate, :human, html: {class: "special"}) }
         end)
     end
 
@@ -129,14 +125,12 @@ describe FormHelper do
     subject do
       Capybara::Node::Simple.new(
         with_test_routing do
-          capture { standard_form(entry, html: { class: "special" }) { |f| } }
+          capture { standard_form(entry, html: {class: "special"}) { |f| } }
         end)
     end
 
     let(:entry) { crud_test_models(:AAAAA) }
 
     it { is_expected.to have_selector("form.form-horizontal.special[method=post][action='/crud_test_models/#{entry.id}']") }
-
   end
-
 end

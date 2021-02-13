@@ -16,7 +16,6 @@ require "webmock/rspec"
 # Needed for feature specs
 WebMock.disable_net_connect!(allow_localhost: true, allow: %w(chromedriver.storage.googleapis.com))
 
-
 ActiveRecord::Migration.maintain_test_schema!
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -27,7 +26,6 @@ Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f 
 Faker::Config.locale = I18n.locale
 
 RSpec.configure do |config|
-
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
@@ -80,21 +78,21 @@ RSpec.configure do |config|
     Draper::ViewContext.current = c.view_context
   end
 
-  config.before(:each,  file_path: %r{\bspec/views/}) do
+  config.before(:each, file_path: %r{\bspec/views/}) do
     view.extend(FormHelper,
-                TableHelper,
-                UtilityHelper,
-                I18nHelper,
-                FormatHelper,
-                LayoutHelper,
-                SheetHelper,
-                PeopleHelper,
-                EventParticipationsHelper,
-                TableDisplaysHelper,
-                EventKindsHelper,
-                ActionHelper,
-                InvoicesHelper,
-                ContactableHelper)
+      TableHelper,
+      UtilityHelper,
+      I18nHelper,
+      FormatHelper,
+      LayoutHelper,
+      SheetHelper,
+      PeopleHelper,
+      EventParticipationsHelper,
+      TableDisplaysHelper,
+      EventKindsHelper,
+      ActionHelper,
+      InvoicesHelper,
+      ContactableHelper)
   end
 
   config.around(:each, js: true) do |example|
@@ -144,7 +142,6 @@ unless RSpec.configuration.exclusion_filter[:type] == "feature"
   Capybara::Screenshot.prune_strategy = :keep_last_run
   Capybara::Screenshot::RSpec::REPORTERS["RSpec::Core::Formatters::ProgressFormatter"] =
     CapybaraScreenshotPlainTextReporter
-
 
   Capybara.register_driver :chrome do |app|
     options = Selenium::WebDriver::Chrome::Options.new

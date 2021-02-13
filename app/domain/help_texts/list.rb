@@ -22,7 +22,7 @@ class HelpTexts::List
 
   def entries
     prepared_infos.each_with_object({}) do |(controller_name, action_name, model_class), memo|
-      key   = HelpTexts::Entry.key(controller_name, model_class)
+      key = HelpTexts::Entry.key(controller_name, model_class)
       entry = memo.fetch(key) do
         memo[key] = HelpTexts::Entry.new(controller_name, model_class, help_texts(key))
       end
@@ -36,9 +36,9 @@ class HelpTexts::List
   def help_texts(key)
     @help_texts ||= HelpText.all.each_with_object({}) do |help_text, memo|
       entry_key = HelpTexts::Entry.key(help_text.controller, help_text.model)
-      kind_key  = help_text.kind.to_sym
+      kind_key = help_text.kind.to_sym
 
-      memo[entry_key] ||= { field: [], action: [] }
+      memo[entry_key] ||= {field: [], action: []}
       memo[entry_key][kind_key] << help_text.name
     end
     @help_texts[key]
@@ -49,8 +49,8 @@ class HelpTexts::List
       controller_name = info[:controller]
       next if CONTROLLER_BLACKLIST.include?(controller_name) || controller_name.blank?
 
-      action_name     = info[:action]
-      model_class     = model_for(info[:type] || controller_name.classify)
+      action_name = info[:action]
+      model_class = model_for(info[:type] || controller_name.classify)
       next unless model_class
 
       [controller_name, action_name, model_class]
@@ -65,5 +65,4 @@ class HelpTexts::List
       model if model && model <= ActiveRecord::Base
     end.presence
   end
-
 end

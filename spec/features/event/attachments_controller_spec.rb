@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Event::AttachmentsController do
-
   let(:group) { groups(:top_layer) }
   let(:event) { events(:top_event) }
 

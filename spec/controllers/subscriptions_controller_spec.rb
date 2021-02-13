@@ -8,10 +8,9 @@
 require "spec_helper"
 
 describe SubscriptionsController do
-
   before { sign_in(user) }
 
-  let(:user)  { people(:top_leader) }
+  let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
   let(:event) { Fabricate(:event, groups: [group], dates: [Fabricate(:event_date, start_at: Time.zone.today)]) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
@@ -25,7 +24,7 @@ describe SubscriptionsController do
     end
 
     it "groups subscriptions by type" do
-      get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }
+      get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}
 
       expect(assigns(:group_subs).count).to eq 1
       expect(assigns(:person_subs).count).to eq 1
@@ -36,7 +35,7 @@ describe SubscriptionsController do
 
     it "renders csv in backround job" do
       expect do
-        get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :csv
+        get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :csv
         expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
         expect(response).to redirect_to(returning: true)
       end.to change(Delayed::Job, :count).by(1)
@@ -44,14 +43,14 @@ describe SubscriptionsController do
 
     it "renders xlsx in backround job" do
       expect do
-        get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :xlsx
+        get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :xlsx
         expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
         expect(response).to redirect_to(returning: true)
       end.to change(Delayed::Job, :count).by(1)
     end
 
     it "sets cookie on export" do
-      get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :csv
+      get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :csv
 
       cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
 
@@ -60,7 +59,7 @@ describe SubscriptionsController do
     end
 
     it "exports vcf files" do
-      get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :vcf
+      get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :vcf
       expect(@response.media_type).to eq("text/vcard")
 
       cards = @response.body.split("END:VCARD\n")
@@ -86,24 +85,24 @@ describe SubscriptionsController do
     it "renders email addresses with additional ones" do
       e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, mailings: true)
       Fabricate(:additional_email, contactable: @excluded_person_subscription.subscriber, mailings: true)
-      get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :email
+      get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :email
       expect(@response.body.split(",")).to match_array([people(:bottom_member).email, @person_subscription.subscriber.email, e1.email])
     end
 
     it "renders email addresses with additional_email matching preferred_labels instead of subscriber email" do
       e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, label: :preferred)
       mailing_list.update(preferred_labels: %w(preferred))
-      get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :email
+      get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :email
       expect(@response.body.split(",")).to match_array([people(:bottom_member).email, e1.email])
     end
 
     it "loads pending person add requests" do
       r1 = Person::AddRequest::MailingList.create!(
-              person: Fabricate(:person),
-              requester: Fabricate(:person),
-              body: mailing_list)
+        person: Fabricate(:person),
+        requester: Fabricate(:person),
+        body: mailing_list)
 
-      get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }
+      get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}
 
       expect(assigns(:person_add_requests)).to eq([r1])
     end
@@ -112,9 +111,9 @@ describe SubscriptionsController do
   def create_group_subscription(mailing_list)
     group = groups(:bottom_layer_one)
     Fabricate(:subscription,
-              mailing_list: mailing_list,
-              subscriber: group,
-              related_role_types: [RelatedRoleType.new(role_type: Group::BottomLayer::Member.sti_name)])
+      mailing_list: mailing_list,
+      subscriber: group,
+      related_role_types: [RelatedRoleType.new(role_type: Group::BottomLayer::Member.sti_name)])
   end
 
   def create_person_subscription(mailing_list, excluded = false)
@@ -124,5 +123,4 @@ describe SubscriptionsController do
   def create_event_subscription(mailing_list)
     Fabricate(:subscription, mailing_list: mailing_list, subscriber: event)
   end
-
 end

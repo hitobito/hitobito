@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Invoice::ScorReference
-
   # Simple Creditor Reference ISO 11649 generator
   # https://www.mobilefish.com/services/creditor_reference/creditor_reference.php
 
@@ -52,5 +51,4 @@ class Invoice::ScorReference
   def right_chars?
     REGEXP.match(@reference)
   end
-
 end

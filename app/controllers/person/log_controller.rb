@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::LogController < ApplicationController
-
   before_action :authorize_action
 
   decorates :group, :person, :versions
@@ -42,5 +41,4 @@ class Person::LogController < ApplicationController
   def authorize_action
     authorize!(:log, entry)
   end
-
 end

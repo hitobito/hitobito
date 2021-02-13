@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::Filter
-
   attr_reader :params
 
   def initialize(params = {})
@@ -46,5 +45,4 @@ class Invoice::Filter
   def invoice_ids
     @invoice_ids = params[:ids].to_s.split(",")
   end
-
 end

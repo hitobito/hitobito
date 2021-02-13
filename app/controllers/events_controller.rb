@@ -29,12 +29,11 @@ class EventsController < CrudController
                             :id, :question, :choices, :multiple_choices, :_destroy
                           ]]
 
-
   self.remember_params += [:year]
 
-  self.sort_mappings = { name: "event_translations.name", state: "events.state",
-                         dates_full: "event_dates.start_at",
-                         group_ids: "#{Group.quoted_table_name}.name" }
+  self.sort_mappings = {name: "event_translations.name", state: "events.state",
+                        dates_full: "event_dates.start_at",
+                        group_ids: "#{Group.quoted_table_name}.name"}
 
   self.search_columns = [:name]
 
@@ -51,9 +50,9 @@ class EventsController < CrudController
   def index
     respond_to do |format|
       format.html { @events = entries_page(params[:page]) }
-      format.csv  { render_tabular_in_background(:csv) }
+      format.csv { render_tabular_in_background(:csv) }
       format.xlsx { render_tabular_in_background(:xlsx) }
-      format.ics  { render_ical(entries) }
+      format.ics { render_ical(entries) }
       format.json { render_entries_json(entries) }
     end
   end
@@ -67,7 +66,7 @@ class EventsController < CrudController
   def show
     respond_to do |format|
       format.html { entry }
-      format.ics  { render_ical([entry]) }
+      format.ics { render_ical([entry]) }
       format.json { render_entry_json }
     end
   end
@@ -140,10 +139,10 @@ class EventsController < CrudController
   def render_tabular_in_background(format, name = :events_export)
     with_async_download_cookie(format, name) do |filename|
       Export::EventsExportJob.new(format,
-                                  current_person.id,
-                                  group.id,
-                                  event_filter.to_h,
-                                  filename: filename).enqueue!
+        current_person.id,
+        group.id,
+        event_filter.to_h,
+        filename: filename).enqueue!
     end
   end
 
@@ -153,8 +152,8 @@ class EventsController < CrudController
 
   def for_typeahead(entries)
     entries.map do |entry|
-      role_types = entry.role_types.map { |type| { label: type.label, name: type.name } }
-      { id: entry.id, label: entry.name, types: role_types }
+      role_types = entry.role_types.map { |type| {label: type.label, name: type.name} }
+      {id: entry.id, label: entry.name, types: role_types}
     end
   end
 
@@ -162,10 +161,10 @@ class EventsController < CrudController
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
                   ListSerializer.new(paged_entries.decorate,
-                                     group: group,
-                                     page: params[:page],
-                                     serializer: EventSerializer,
-                                     controller: self)].inject(&:merge)
+                    group: group,
+                    page: params[:page],
+                    serializer: EventSerializer,
+                    controller: self)].inject(&:merge)
   end
 
   def render_entry_json
@@ -232,5 +231,4 @@ class EventsController < CrudController
       page_scope
     end
   end
-
 end

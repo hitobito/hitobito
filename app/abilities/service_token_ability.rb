@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class ServiceTokenAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Group
 
   on(ServiceToken) do
@@ -19,5 +18,4 @@ class ServiceTokenAbility < AbilityDsl::Base
   def group
     subject.layer
   end
-
 end

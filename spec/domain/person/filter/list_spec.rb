@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::Filter::List do
-
   it "empty filter works for normal user" do
     list = filter_list
     expect(list.all_count).to eq 1

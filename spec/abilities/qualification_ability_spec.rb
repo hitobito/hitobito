@@ -8,12 +8,10 @@
 require "spec_helper"
 
 describe QualificationAbility do
-
   let(:user) { role.person }
   let(:group) { role.group }
 
   subject { Ability.new(user.reload) }
-
 
   let(:qualification) { Fabricate(:qualification, person: person) }
 
@@ -82,6 +80,4 @@ describe QualificationAbility do
       end
     end
   end
-
-
 end

@@ -8,7 +8,6 @@
 # This class is only used for fetching lists based on a group association.
 # Returns all people that are fully readable.
 class PersonFullReadables < PersonReadables
-
   self.same_group_permissions = [:group_full, :group_and_below_full]
   self.above_group_permissions = [:group_and_below_full]
 
@@ -26,5 +25,4 @@ class PersonFullReadables < PersonReadables
     ids = permission_group_ids(:group_and_below_full)
     ids.present? && (ids & group.local_hierarchy.collect(&:id)).present?
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::Merger
-
   attr_reader :group1, :group2, :new_group_name, :new_group, :errors
 
   def initialize(group1, group2, new_group_name)
@@ -99,5 +98,4 @@ class Group::Merger
       group.reload.destroy
     end
   end
-
 end

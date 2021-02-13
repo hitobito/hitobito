@@ -7,7 +7,6 @@
 
 module Export::Tabular::People
   class ParticipationsFull < PeopleFull
-
     self.row_class = ParticipationRow
 
     def build_attribute_labels
@@ -28,6 +27,5 @@ module Export::Tabular::People
     def questions
       list.map(&:answers).flatten.map(&:question).uniq
     end
-
   end
 end

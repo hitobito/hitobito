@@ -93,10 +93,10 @@ class Group < ActiveRecord::Base
   has_many :notes, as: :subject, dependent: :destroy
 
   has_many :person_add_requests,
-           foreign_key: :body_id,
-           inverse_of: :body,
-           class_name: "Person::AddRequest::Group",
-           dependent: :destroy
+    foreign_key: :body_id,
+    inverse_of: :body,
+    class_name: "Person::AddRequest::Group",
+    dependent: :destroy
 
   has_one :invoice_config, dependent: :destroy
   has_many :invoices
@@ -105,9 +105,8 @@ class Group < ActiveRecord::Base
   has_many :invoice_items, through: :invoices
 
   has_many :service_tokens,
-           foreign_key: :layer_group_id,
-           dependent: :destroy
-
+    foreign_key: :layer_group_id,
+    dependent: :destroy
 
   has_settings :text_message_provider, class_name: "GroupSetting"
 
@@ -115,13 +114,12 @@ class Group < ActiveRecord::Base
 
   validates_by_schema except: [:logo, :address]
   validates :email, format: Devise.email_regexp, allow_blank: true
-  validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
-  validates :address, length: { allow_nil: true, maximum: 1024 }
+  validates :description, length: {allow_nil: true, maximum: 2**16 - 1}
+  validates :address, length: {allow_nil: true, maximum: 1024}
 
   ### CLASS METHODS
 
   class << self
-
     # Is the given attribute used in the current STI class
     def attr_used?(attr)
       used_attributes.include?(attr)
@@ -156,12 +154,9 @@ class Group < ActiveRecord::Base
         all_types
       end
     end
-
   end
 
-
   ### INSTANCE METHODS
-
 
   def to_s(_format = :default)
     name
@@ -214,8 +209,8 @@ class Group < ActiveRecord::Base
     elsif layer?
       duplicates = layer_person_duplicates
     end
-    duplicates.includes(person_1: [{ roles: :group }, :groups, :primary_group],
-                        person_2: [{ roles: :group }, :groups, :primary_group])
+    duplicates.includes(person_1: [{roles: :group}, :groups, :primary_group],
+                        person_2: [{roles: :group}, :groups, :primary_group])
   end
 
   def settings_all
@@ -229,7 +224,7 @@ class Group < ActiveRecord::Base
     group_ids = children.map(&:id) + [id]
     duplicates
       .where("roles.group_id IN (:group_ids) OR roles_people.group_id IN (:group_ids)",
-             group_ids: group_ids)
+        group_ids: group_ids)
   end
 
   def top?
@@ -244,7 +239,7 @@ class Group < ActiveRecord::Base
 
   def reset_contact_info
     if contact
-      clear_contacts = { address: nil, town: nil, zip_code: nil, country: nil }
+      clear_contacts = {address: nil, town: nil, zip_code: nil, country: nil}
       assign_attributes(clear_contacts)
     end
   end
@@ -264,5 +259,4 @@ class Group < ActiveRecord::Base
   def create_invoice_config
     create_invoice_config!
   end
-
 end

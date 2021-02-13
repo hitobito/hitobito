@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ApplicationsController < ApplicationController
-
   before_action :application
   authorize_resource
 

@@ -7,9 +7,7 @@
 
 require "spec_helper"
 
-
 describe Export::Tabular::People::ContactAccounts do
-
   subject { Export::Tabular::People::ContactAccounts }
 
   context "phone_numbers" do
@@ -25,5 +23,4 @@ describe Export::Tabular::People::ContactAccounts do
       expect(subject.human(SocialAccount, "foo")).to eq "Social Media Adresse foo"
     end
   end
-
 end

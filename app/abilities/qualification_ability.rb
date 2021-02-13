@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class QualificationAbility < AbilityDsl::Base
-
   on(Qualification) do
     permission(:layer_full).may(:create, :destroy).in_course_layer
     permission(:layer_and_below_full).may(:create, :destroy).in_course_layer_or_below
@@ -28,7 +27,6 @@ class QualificationAbility < AbilityDsl::Base
                                collect(&:id)
 
     qualify_layer_ids.present? &&
-    contains_any?(qualify_layer_ids, person_layer_ids)
+      contains_any?(qualify_layer_ids, person_layer_ids)
   end
-
 end

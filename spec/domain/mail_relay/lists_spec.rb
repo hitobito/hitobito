@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe MailRelay::Lists do
-
   let(:message) do
     mail = Mail.new(Rails.root.join("spec", "fixtures", "email", "regular.eml").read)
     mail.header["X-Original-To"] = envelope_to
@@ -18,10 +17,10 @@ describe MailRelay::Lists do
 
   let(:envelope_to) { list.mail_name }
 
-  let(:bll)  { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
+  let(:bll) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
   let(:bgl1) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person }
   let(:bgl2) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_two)).person }
-  let(:ind)  { Fabricate(:person) }
+  let(:ind) { Fabricate(:person) }
 
   let(:list) { mailing_lists(:leaders) }
 
@@ -41,6 +40,7 @@ describe MailRelay::Lists do
 
   context "#mailing_list" do
     let(:from) { people(:top_leader).email }
+
     its(:envelope_receiver_name) { should == list.mail_name }
     its(:mailing_list) { should == list }
     it { is_expected.to be_relay_address }
@@ -48,6 +48,7 @@ describe MailRelay::Lists do
 
   context "#receivers" do
     let(:from) { people(:top_leader).email }
+
     subject { relay.receivers }
 
     before do
@@ -68,7 +69,6 @@ describe MailRelay::Lists do
     end
 
     context "with additional emails" do
-
       let!(:e1) { Fabricate(:additional_email, contactable: ind, mailings: true) }
       let!(:e2) { Fabricate(:additional_email, contactable: ind, mailings: false) }
 
@@ -79,6 +79,7 @@ describe MailRelay::Lists do
       before do
         list.update(preferred_labels: %w(preferred1 preferred2))
       end
+
       let!(:e1) { Fabricate(:additional_email, contactable: ind, label: "preferred1") }
       let!(:e2) { Fabricate(:additional_email, contactable: ind, label: "preferred2") }
 
@@ -89,6 +90,7 @@ describe MailRelay::Lists do
       before do
         list.update(preferred_labels: %w(preferred1 preferred2))
       end
+
       let!(:e1) { Fabricate(:additional_email, contactable: ind, label: "preferreda", mailings: false) }
       let!(:e2) { Fabricate(:additional_email, contactable: ind, label: "preferredb", mailings: true) }
 
@@ -130,7 +132,6 @@ describe MailRelay::Lists do
         expect(mail_log.message.mailing_list).to eq(list)
         expect(mail_log.status).to eq("completed")
       end
-
     end
 
     context "from additional email" do
@@ -147,8 +148,8 @@ describe MailRelay::Lists do
           @other1 = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
           Fabricate(:additional_email, contactable: @other1, email: from)
           @other2 = Fabricate(Group::BottomLayer::Leader.name,
-                              group: groups(:bottom_layer_one),
-                              person: Fabricate(:person, email: from)).person
+            group: groups(:bottom_layer_one),
+            person: Fabricate(:person, email: from)).person
         end
 
         it { is_expected.to be_sender_allowed }
@@ -198,6 +199,7 @@ describe MailRelay::Lists do
     let(:from) { "news@example.com" }
 
     before { create_individual_subscribers }
+
     before { list.update_column(:additional_sender, from) }
 
     it { is_expected.to be_sender_allowed }
@@ -216,6 +218,7 @@ describe MailRelay::Lists do
     let(:from) { "news@example.com" }
 
     before { create_individual_subscribers }
+
     before { list.update_column(:additional_sender, "*@example.com") }
 
     it { is_expected.to be_sender_allowed }
@@ -232,16 +235,21 @@ describe MailRelay::Lists do
 
   context "additional wildcard sender not allowed" do
     before { create_individual_subscribers }
+
     context "wrong sender" do
       let(:from) { "news@other.com" }
+
       before { list.update_column(:additional_sender, "*@example.com") }
+
       it { is_expected.not_to be_sender_allowed }
     end
     context "invalid list" do
       let(:from) { "news@example.com" }
+
       test_mails = ["*ws@example.com", "ne@ws@example.com", "ne*@example.com", "n*s@example.com"]
       test_mails.each do |x|
         before { list.update_column(:additional_sender, x) }
+
         it { is_expected.not_to be_sender_allowed }
       end
     end
@@ -254,12 +262,12 @@ describe MailRelay::Lists do
     end
   end
 
-
   context "list member" do
     before { create_individual_subscribers }
 
     context "may post" do
       before { list.update_column(:subscribers_may_post, true) }
+
       before do
         Fabricate(:additional_email, contactable: bgl1)
         Fabricate(:additional_email, contactable: bgl1)
@@ -279,7 +287,6 @@ describe MailRelay::Lists do
           expect(last_email.smtp_envelope_to).to match_array(Person.mailing_emails_for(subscribers))
           expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
         end
-
       end
 
       context "from additional email" do
@@ -296,12 +303,12 @@ describe MailRelay::Lists do
           expect(last_email.smtp_envelope_to).to match_array(Person.mailing_emails_for(subscribers))
           expect(last_email.sender).to eq("leaders-bounces+#{from.tr('@', '=')}@localhost")
         end
-
       end
     end
 
     context "may not post" do
       let(:from) { bgl1.email }
+
       before { list.update_column(:subscribers_may_post, false) }
 
       it { is_expected.not_to be_sender_allowed }
@@ -316,13 +323,13 @@ describe MailRelay::Lists do
         expect(last_email.body).to match(/nicht berechtigt/)
       end
     end
-
   end
 
   context "excluded person" do
     let(:from) { bgl2.email }
 
     before { create_individual_subscribers }
+
     before { list.update_column(:subscribers_may_post, true) }
 
     it { is_expected.not_to be_sender_allowed }
@@ -343,6 +350,7 @@ describe MailRelay::Lists do
 
     context "may post" do
       before { create_individual_subscribers }
+
       before { list.update_column(:anyone_may_post, true) }
 
       it { is_expected.to be_sender_allowed }
@@ -429,6 +437,7 @@ describe MailRelay::Lists do
 
     context "may not post" do
       before { create_individual_subscribers }
+
       before { list.update_column(:anyone_may_post, false) }
 
       it { is_expected.not_to be_sender_allowed }
@@ -450,6 +459,7 @@ describe MailRelay::Lists do
 
     context "may post" do
       before { create_individual_subscribers }
+
       before { list.update_column(:anyone_may_post, true) }
 
       it { is_expected.to be_sender_allowed }
@@ -465,6 +475,7 @@ describe MailRelay::Lists do
 
     context "may not post" do
       before { create_individual_subscribers }
+
       before { list.update_column(:anyone_may_post, false) }
 
       it { is_expected.not_to be_sender_allowed }
@@ -492,7 +503,6 @@ describe MailRelay::Lists do
   end
 
   context "empty reply to" do
-
     let(:message) do
       message = <<-END
         Return-Path: <d.k@autoreply.example.com>

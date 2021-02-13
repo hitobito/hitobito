@@ -5,9 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 module OauthApplicationsHelper
-
   def oauth_spec_link(anchor)
     url = ["https://tools.ietf.org/html/rfc6749", anchor].join("#")
     link_to(url, url, target: :_blank)
@@ -24,5 +22,4 @@ module OauthApplicationsHelper
   def format_doorkeeper_application_scope(key)
     Oauth::Application.human_scope(key) << " " << muted("(#{key})")
   end
-
 end

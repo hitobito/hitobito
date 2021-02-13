@@ -7,7 +7,6 @@
 
 module Person::AddRequest::Approver
   class Group < Base
-
     private
 
     def build_entity
@@ -19,6 +18,5 @@ module Person::AddRequest::Approver
     def role_type
       request.body.class.find_role_type!(request.role_type)
     end
-
   end
 end

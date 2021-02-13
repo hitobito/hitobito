@@ -58,11 +58,11 @@ module Messages
     end
 
     def reciept_attrs(phone_nr, state)
-      { message_id: @message.id,
-        created_at: @now,
-        person_id: phone_nr.contactable_id,
-        phone_number: phone_nr.number,
-        state: state }
+      {message_id: @message.id,
+       created_at: @now,
+       person_id: phone_nr.contactable_id,
+       phone_number: phone_nr.number,
+       state: state}
     end
 
     def update_message_status

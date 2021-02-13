@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module TableDisplaysHelper
-
   def render_table_display_columns(table)
     return unless Settings.table_displays
 

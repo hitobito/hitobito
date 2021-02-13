@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe MailchimpSynchronizationJob do
-
   let(:group) { groups(:top_group) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group, mailchimp_api_key: "1234") }
 

@@ -20,7 +20,6 @@
 require "spec_helper"
 
 describe AdditionalEmail do
-
   after do
     I18n.locale = I18n.default_locale
   end
@@ -36,7 +35,6 @@ describe AdditionalEmail do
   end
 
   describe "e-mail validation" do
-
     let(:add_email) { Fabricate(:additional_email, label: "Foo") }
 
     before { allow(Truemail).to receive(:valid?).and_call_original }
@@ -111,13 +109,16 @@ describe AdditionalEmail do
 
   context "#available_labels" do
     subject { AdditionalEmail.available_labels }
+
     before do
       @settings_langs = Settings.application.languages
-      Settings.application.languages = { de: "Deutsch", fr: "Français" }
+      Settings.application.languages = {de: "Deutsch", fr: "Français"}
     end
+
     after do
       Settings.application.languages = @settings_langs
     end
+
     it { is_expected.to include(Settings.additional_email.predefined_labels.first) }
 
     it "includes labels from database" do

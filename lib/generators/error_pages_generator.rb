@@ -7,7 +7,6 @@
 
 # always call with RAILS_GROUPS=assets
 class ErrorPagesGenerator < Rails::Generators::Base
-
   ERROR_PAGES = [404, 500, 503].freeze
 
   desc "Generate a static error page based on the layout."
@@ -21,5 +20,4 @@ class ErrorPagesGenerator < Rails::Generators::Base
       create_file "public/#{error}.html", body.join, force: true
     end
   end
-
 end

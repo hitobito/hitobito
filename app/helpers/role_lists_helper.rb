@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module RoleListsHelper
-
   def available_role_types_checkboxes(roles)
     safe_join(roles.map do |k, v|
       content_tag(:b, k, class: "filter-toggle") +

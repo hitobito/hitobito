@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TagListsHelper
-
   def available_tags_checkboxes(tags)
     safe_join(tags.map do |tag, count|
       content_tag(:div, class: "control-group  available-tag") do

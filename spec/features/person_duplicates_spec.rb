@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe :person_duplicates, js: true do
-
   subject { page }
 
   let(:top_layer) { groups(:top_layer) }
@@ -16,7 +15,6 @@ describe :person_duplicates, js: true do
   let!(:duplicate1) { Fabricate(:person_duplicate) }
   let!(:duplicate2) { Fabricate(:person_duplicate) }
   let!(:duplicate3) { Fabricate(:person_duplicate) }
-
 
   before do
     assign_people
@@ -34,7 +32,7 @@ describe :person_duplicates, js: true do
 
     modal = page.find("div.modal-dialog")
     expect(modal.find("h5")).to have_content "Personen zusammenführen"
-    
+
     expect do
       modal.find("button.btn", text: "Zusammenführen").click
       dst_person = duplicate1.person_1
@@ -53,5 +51,4 @@ describe :person_duplicates, js: true do
       Fabricate("Group::TopLayer::TopAdmin", group: top_layer, person: d.person_2)
     end
   end
-
 end

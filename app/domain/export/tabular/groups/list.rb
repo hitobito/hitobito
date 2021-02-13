@@ -7,7 +7,6 @@
 
 module Export::Tabular::Groups
   class List < Export::Tabular::Base
-
     EXCLUDED_ATTRS = %w(lft rgt contact_id require_person_add_requests logo
                         created_at updated_at deleted_at
                         creator_id updater_id deleter_id).freeze
@@ -18,6 +17,5 @@ module Export::Tabular::Groups
     def attributes
       (model_class.column_names - EXCLUDED_ATTRS).collect(&:to_sym)
     end
-
   end
 end

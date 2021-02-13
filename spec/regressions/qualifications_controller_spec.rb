@@ -10,14 +10,12 @@
 require "spec_helper"
 
 describe QualificationsController, type: :controller do
-
   let(:top_group) { groups(:top_group) }
   let(:top_leader) { people(:top_leader) }
 
   def scope_params
-    { group_id: top_group.id, person_id: top_leader.id }
+    {group_id: top_group.id, person_id: top_leader.id}
   end
-
 
   # Override a few methods to match the actual behavior.
   class << self
@@ -33,7 +31,7 @@ describe QualificationsController, type: :controller do
   end
 
   let(:test_entry) { @entry }
-  let(:test_entry_attrs) { { start_at: 1.days.from_now.to_date, qualification_kind_id: qualification_kinds(:sl).id } }
+  let(:test_entry_attrs) { {start_at: 1.days.from_now.to_date, qualification_kind_id: qualification_kinds(:sl).id} }
 
   before do
     sign_in(people(:top_leader))
@@ -61,6 +59,4 @@ describe QualificationsController, type: :controller do
       end
     end
   end
-
-
 end

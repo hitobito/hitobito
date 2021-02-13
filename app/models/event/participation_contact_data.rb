@@ -6,14 +6,13 @@
 #  https://github.com/hitobito/hitobito_youth.
 
 class Event::ParticipationContactData
-
   attr_reader :person
 
   T_PERSON_ATTRS = "activerecord.attributes.person.".freeze
 
   class_attribute :mandatory_contact_attrs,
-                  :contact_attrs,
-                  :contact_associations
+    :contact_attrs,
+    :contact_associations
 
   self.mandatory_contact_attrs = [:email, :first_name, :last_name]
 
@@ -29,7 +28,7 @@ class Event::ParticipationContactData
   delegate :t, to: I18n
 
   delegate :gender_label, :column_for_attribute, :timeliness_cache_attribute,
-           :has_attribute?, to: :person
+    :has_attribute?, to: :person
 
   delegate :layer_group, to: :event
 
@@ -39,7 +38,6 @@ class Event::ParticipationContactData
   validate :assert_person_attrs_valid
 
   class << self
-
     delegate :reflect_on_association, :human_attribute_name, to: Person
 
     def base_class
@@ -49,7 +47,6 @@ class Event::ParticipationContactData
     def demodulized_route_keys
       nil
     end
-
   end
 
   def initialize(event, person, model_params = {})
@@ -131,7 +128,7 @@ class Event::ParticipationContactData
   end
 
   def assert_phone_number_present
-    phone_changes = { add: [], sub: [] }
+    phone_changes = {add: [], sub: []}
     changed_attrs = model_params.to_h.fetch("phone_numbers_attributes", {})
 
     phone_changes = changed_attrs.each_with_object(phone_changes) do |(_key, entry), memo|
@@ -155,5 +152,4 @@ class Event::ParticipationContactData
       errors.add(:base, m)
     end
   end
-
 end

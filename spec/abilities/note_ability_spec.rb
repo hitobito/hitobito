@@ -8,8 +8,8 @@
 require "spec_helper"
 
 describe NoteAbility do
-
   subject { ability }
+
   let(:ability) { Ability.new(role.person.reload) }
 
   context :layer_and_below_full do
@@ -28,7 +28,6 @@ describe NoteAbility do
       is_expected.to be_able_to(:create, note)
       is_expected.to be_able_to(:destroy, note)
     end
-
   end
 
   context "layer_and_below_full in bottom layer" do
@@ -110,5 +109,4 @@ describe NoteAbility do
       text: "Lorem ipsum"
     )
   end
-
 end

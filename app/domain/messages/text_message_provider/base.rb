@@ -8,7 +8,6 @@
 module Messages
   module TextMessageProvider
     class Base
-
       STATUS_OK = :ok
       STATUS_ERROR = :error
       STATUS_AUTH_ERROR = :auth_error

@@ -8,8 +8,7 @@
 require "spec_helper"
 
 describe MailRelay::BulkMail do
-
-  let(:message)  { Mail.new(File.read(Rails.root.join("spec", "fixtures", "email", "simple.eml"))) }
+  let(:message) { Mail.new(File.read(Rails.root.join("spec", "fixtures", "email", "simple.eml"))) }
   let(:recipients) { 16.times.collect { Faker::Internet.email } }
   let(:envelope_sender) { "mailing_list@example.hitobito.com" }
   let(:delivery_report_to) { "author@example.hitobito.com" }
@@ -32,9 +31,7 @@ describe MailRelay::BulkMail do
   end
 
   describe "delivery error" do
-
     context "at initial deliver" do
-
       it "throws exception if smtp connection error" do
         expect(message)
           .to receive(:deliver)
@@ -62,11 +59,9 @@ describe MailRelay::BulkMail do
           bulk_mail.deliver
         end.to raise_error(Net::SMTPFatalError)
       end
-
     end
 
     context "after previous successful deliver of recipients block" do
-
       before do
         # initial block deliver successful
         expect(message)
@@ -156,11 +151,9 @@ describe MailRelay::BulkMail do
         expect(bulk_mail.instance_variable_get(:@retry)).to eql(2)
         expect(failed_recipients.first).to eq([recipients.last, "execution expired"])
       end
-
     end
 
     context "domain not found error" do
-
       let(:invalid_domain_email) { recipients[3] }
 
       described_class::INVALID_EMAIL_ERRORS.each do |error_message|
@@ -204,7 +197,6 @@ describe MailRelay::BulkMail do
     end
 
     context "only one recipient" do
-
       let(:recipient) { Faker::Internet.email }
       let(:domain_not_found_error) { "450 4.1.2 #{recipient}: Recipient address rejected: Domain not found" }
       let(:recipients) { [recipient] }
@@ -228,19 +220,14 @@ describe MailRelay::BulkMail do
         expect(failed_recipients.size).to eq(1)
         expect(failed_recipients.first).to eq(failed_entry)
       end
-
     end
-
   end
 
   describe "send" do
-
     context "bulk send" do
-
       let(:recipients) { 42.times.collect { Faker::Internet.email } }
 
       it "sends mail to recipients in blocks" do
-
         expect(message)
           .to receive(:deliver)
           .exactly(3)
@@ -281,26 +268,20 @@ describe MailRelay::BulkMail do
         succeeded_recipients = bulk_mail.instance_variable_get(:@succeeded_recipients)
         expect(succeeded_recipients).to eq(recipients)
       end
-
     end
 
     context "without subject" do
-
       it "delivers message" do
-
         message.subject = nil
 
         bulk_mail.deliver
         expect(failed_recipients.size).to eq(0)
         succeeded_recipients = bulk_mail.instance_variable_get(:@succeeded_recipients)
         expect(succeeded_recipients).to eq(recipients)
-
       end
-
     end
 
     context "with delivery_report_to set to nil" do
-
       let(:delivery_report_to) { nil }
 
       it "does not send delivery_report" do
@@ -309,8 +290,5 @@ describe MailRelay::BulkMail do
         bulk_mail.deliver
       end
     end
-
-
   end
-
 end

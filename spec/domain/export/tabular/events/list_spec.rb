@@ -8,9 +8,8 @@
 require "spec_helper"
 
 describe Export::Tabular::Events::List do
-
   let(:courses) { double("courses", map: [], first: nil) }
-  let(:list)  { Export::Tabular::Events::List.new(courses) }
+  let(:list) { Export::Tabular::Events::List.new(courses) }
 
   subject { list }
 
@@ -47,5 +46,4 @@ describe Export::Tabular::Events::List do
                  "Anzahl Teilnehmende", "Anzahl Anmeldungen"]
     end
   end
-
 end

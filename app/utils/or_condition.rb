@@ -12,18 +12,18 @@ class OrCondition
   end
 
   def or(clause, *args)
-    @conditions << { clause: clause, args: args }
+    @conditions << {clause: clause, args: args}
     self
   end
 
   def delete(clause, *args)
     @conditions.delete_if do |condition|
-      condition == { clause: clause, args: args }
+      condition == {clause: clause, args: args}
     end
   end
 
   def to_a
-    combined = @conditions.each_with_object({ clauses: [], args: [] }) do |condition, memo|
+    combined = @conditions.each_with_object({clauses: [], args: []}) do |condition, memo|
       memo[:clauses] << "(#{condition[:clause]})"
       memo[:args].push(*condition[:args])
     end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Ability
-
   include CanCan::Ability
   prepend Draper::CanCanCan
 
@@ -14,27 +13,27 @@ class Ability
   @@store = AbilityDsl::Store.new
 
   store.register AssignmentAbility,
-                 EventAbility,
-                 Event::ApplicationAbility,
-                 Event::ParticipationAbility,
-                 Event::ParticipationContactDataAbility,
-                 Event::RoleAbility,
-                 GroupAbility,
-                 InvoiceAbility,
-                 MailingListAbility,
-                 MessageAbility,
-                 NoteAbility,
-                 OauthAbility,
-                 PeopleFilterAbility,
-                 PersonAbility,
-                 PersonDuplicateAbility,
-                 Person::AddRequestAbility,
-                 QualificationAbility,
-                 RoleAbility,
-                 ServiceTokenAbility,
-                 SubscriptionAbility,
-                 TagAbility,
-                 VariousAbility
+    EventAbility,
+    Event::ApplicationAbility,
+    Event::ParticipationAbility,
+    Event::ParticipationContactDataAbility,
+    Event::RoleAbility,
+    GroupAbility,
+    InvoiceAbility,
+    MailingListAbility,
+    MessageAbility,
+    NoteAbility,
+    OauthAbility,
+    PeopleFilterAbility,
+    PersonAbility,
+    PersonDuplicateAbility,
+    Person::AddRequestAbility,
+    QualificationAbility,
+    RoleAbility,
+    ServiceTokenAbility,
+    SubscriptionAbility,
+    TagAbility,
+    VariousAbility
 
   attr_reader :user, :user_context
 
@@ -104,9 +103,9 @@ class Ability
   end
 
   def class_side_action_allowed?(c)
-    constraints = { c.ability_class => [c.constraint] }
+    constraints = {c.ability_class => [c.constraint]}
     c.constraint == :everybody ||
-    (c.constraint != :nobody && action_allowed?(constraints, :any, c.subject_class))
+      (c.constraint != :nobody && action_allowed?(constraints, :any, c.subject_class))
   end
 
   def general_constraints(config)
@@ -132,5 +131,4 @@ class Ability
       constraints.all? { |constraint| ability.send(constraint) }
     end
   end
-
 end

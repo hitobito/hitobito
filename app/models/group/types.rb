@@ -10,11 +10,11 @@ module Group::Types
 
   included do
     class_attribute :layer,
-                    :role_types,
-                    :possible_children,
-                    :default_children,
-                    :event_types,
-                    :default_role
+      :role_types,
+      :possible_children,
+      :default_children,
+      :event_types,
+      :default_role
 
     # Whether this group type builds a layer or is a regular group.
     # Layers influence some permissions.
@@ -27,7 +27,6 @@ module Group::Types
     self.default_children = []
     # All possible Event types that may be created for this group
     self.event_types = [Event]
-
 
     after_save :set_layer_group_id
     after_save :create_default_children
@@ -65,7 +64,6 @@ module Group::Types
   end
 
   module ClassMethods
-
     # DSL method to define children
     def children(*group_types)
       self.possible_children = group_types + possible_children
@@ -158,7 +156,6 @@ module Group::Types
     def tsort(types)
       TypeSorter.new(types).sort
     end
-
   end
 
   # Sorts a list of types according to the defined hierarchy

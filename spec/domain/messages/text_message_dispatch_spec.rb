@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Messages::TextMessageDispatch do
-  let(:message)    { messages(:sms) }
+  let(:message) { messages(:sms) }
   let(:top_leader) { people(:top_leader) }
   let!(:mobile1) { Fabricate(:phone_number, contactable: top_leader, label: "Mobil") }
   let!(:mobile2) { Fabricate(:phone_number, contactable: top_leader, label: "Mobil") }
@@ -17,6 +17,7 @@ describe Messages::TextMessageDispatch do
   subject { described_class.new(message, Person.where(id: top_leader.id)) }
 
   let(:client_double) { double(:client) }
+
   before { allow(subject).to receive(:client).and_return(client_double) }
 
   context "#run" do

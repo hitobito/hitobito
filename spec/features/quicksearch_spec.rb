@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe "Quicksearch", sphinx: true do
-
   sphinx_environment(:people, :groups, :events) do
     it "finds people and groups", js: true do
       obsolete_node_safe do

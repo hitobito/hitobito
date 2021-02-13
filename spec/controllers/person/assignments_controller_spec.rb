@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Person::AssignmentsController do
-  let(:nesting)    { { group_id: @user.primary_group.id, person_id: @user.id } }
+  let(:nesting) { {group_id: @user.primary_group.id, person_id: @user.id} }
   let(:bottom_member) { people(:bottom_member) }
   let(:top_leader) { people(:top_leader) }
 

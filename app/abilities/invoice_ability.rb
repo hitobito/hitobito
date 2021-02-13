@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceAbility < AbilityDsl::Base
-
   on(Invoice) do
     permission(:finance).may(:create, :show, :edit, :update, :destroy).in_layer
   end
@@ -43,5 +42,4 @@ class InvoiceAbility < AbilityDsl::Base
     return in_layer unless subject.receiver
     in_layer && in_layer(subject.receiver.group.layer_group)
   end
-
 end

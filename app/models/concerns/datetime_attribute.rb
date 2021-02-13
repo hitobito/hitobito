@@ -61,7 +61,6 @@ module DatetimeAttribute
   end
 
   module ClassMethods
-
     def datetime_attr(*attrs)
       attrs.each do |attr|
         datetime_attributes << attr
@@ -93,7 +92,5 @@ module DatetimeAttribute
     def datetime_accessor(attr, field)
       :"#{attr}_#{field}"
     end
-
   end
-
 end

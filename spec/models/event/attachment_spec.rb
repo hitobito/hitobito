@@ -17,7 +17,6 @@
 require "spec_helper"
 
 describe Event::Attachment do
-
   let(:event) { events(:top_event) }
 
   context "file_size" do

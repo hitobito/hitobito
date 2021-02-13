@@ -19,13 +19,11 @@
 #
 
 class Location < ActiveRecord::Base
-
   validates_by_schema
-  validates :name, uniqueness: { scope: [:zip_code, :canton], case_sensitive: true }
-  validates :canton, inclusion: { in: Cantons.short_name_strings }
+  validates :name, uniqueness: {scope: [:zip_code, :canton], case_sensitive: true}
+  validates :canton, inclusion: {in: Cantons.short_name_strings}
 
   def canton_label
     Cantons.full_name(canton)
   end
-
 end

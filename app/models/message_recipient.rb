@@ -20,7 +20,6 @@
 #  index_message_recipients_on_person_id   (person_id)
 #
 
-
 #  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -32,7 +31,7 @@ class MessageRecipient < ActiveRecord::Base
 
   STATES = %w(pending sending sent failed).freeze
   i18n_enum :state, STATES
-  validates :state, inclusion: { in: STATES }, allow_nil: true
+  validates :state, inclusion: {in: STATES}, allow_nil: true
 
   belongs_to :message
   belongs_to :person

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module ActionHelper
-
   # Standard button action to the show page of a given record.
   # Uses the current record if none is given.
   def button_action_show(path = nil, options = {})
@@ -19,9 +18,9 @@ module ActionHelper
   def button_action_edit(path = nil, options = {})
     path ||= path_args(entry)
     action_button ti(:"link.edit"),
-                  path.is_a?(String) ? path : edit_polymorphic_path(path),
-                  "edit",
-                  options
+      path.is_a?(String) ? path : edit_polymorphic_path(path),
+      "edit",
+      options
   end
 
   # Standard button action to the destroy action of a given record.
@@ -35,12 +34,12 @@ module ActionHelper
 
   # Standard button action to the list page.
   # Links to the current model_class if no path is given.
-  def button_action_index(path = nil, url_options = { returning: true }, options = {})
+  def button_action_index(path = nil, url_options = {returning: true}, options = {})
     path ||= path_args(model_class)
     action_button ti(:"link.list"),
-                  path.is_a?(String) ? path : polymorphic_path(path, url_options),
-                  "list",
-                  options
+      path.is_a?(String) ? path : polymorphic_path(path, url_options),
+      "list",
+      options
   end
 
   # Standard button action to the new page.
@@ -48,9 +47,9 @@ module ActionHelper
   def button_action_add(path = nil, url_options = {}, options = {})
     path ||= path_args(model_class)
     action_button ti(:"link.add"),
-                  path.is_a?(String) ? path : new_polymorphic_path(path, url_options),
-                  "plus",
-                  options
+      path.is_a?(String) ? path : new_polymorphic_path(path, url_options),
+      "plus",
+      options
   end
 
   # Standard link action to the edit page of a given record.
@@ -59,10 +58,10 @@ module ActionHelper
     path ||= path_args(entry)
     remote = options[:remote]
     link_to(icon(:edit),
-            path.is_a?(String) ? path : edit_polymorphic_path(path),
-            title: ti(:"link.edit"),
-            alt: ti(:"link.edit"),
-            remote: remote)
+      path.is_a?(String) ? path : edit_polymorphic_path(path),
+      title: ti(:"link.edit"),
+      alt: ti(:"link.edit"),
+      remote: remote)
   end
 
   # Standard link action to the destroy action of a given record.
@@ -70,12 +69,12 @@ module ActionHelper
   def link_action_destroy(path = nil, label = icon(:'trash-alt', filled: false))
     path ||= path_args(entry)
     link_to label,
-            path,
-            class: "action",
-            title: ti(:"link.delete"),
-            alt: ti(:"link.delete"),
-            data: { confirm: ti(:confirm_delete),
-                    method: :delete }
+      path,
+      class: "action",
+      title: ti(:"link.delete"),
+      alt: ti(:"link.delete"),
+      data: {confirm: ti(:confirm_delete),
+             method: :delete}
   end
 
   private
@@ -85,5 +84,4 @@ module ActionHelper
   def action_path(e)
     block_given? ? yield(e) : path_args(e)
   end
-
 end

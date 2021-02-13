@@ -7,7 +7,6 @@
 
 module Subscriber
   class GroupController < BaseController
-
     skip_authorize_resource # must be in leaf class
 
     before_render_form :replace_validation_errors
@@ -94,11 +93,11 @@ module Subscriber
     end
 
     def collect_included_tags
-      model_params[:included_subscription_tags_ids]&.map { |id| { id: id, excluded: false } } || []
+      model_params[:included_subscription_tags_ids]&.map { |id| {id: id, excluded: false} } || []
     end
 
     def collect_excluded_tags
-      model_params[:excluded_subscription_tags_ids]&.map { |id| { id: id, excluded: true } } || []
+      model_params[:excluded_subscription_tags_ids]&.map { |id| {id: id, excluded: true} } || []
     end
   end
 end

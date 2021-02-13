@@ -8,10 +8,9 @@
 require "spec_helper"
 
 describe Event::Filter do
-
   let(:group) { groups(:top_layer) }
-  let(:year)  { 2012 }
-  let(:type)  { nil }
+  let(:year) { 2012 }
+  let(:type) { nil }
 
   before do
     @g1 = Fabricate(Group::TopGroup.name.to_sym, name: "g1", parent: groups(:top_group))
@@ -39,5 +38,4 @@ describe Event::Filter do
     expect(filter("layer", "event_translations.name").list_entries.first.name).to eq "Eventus"
     expect(filter("layer", "event_translations.name desc").list_entries.first.name).to eq "Top Event"
   end
-
 end

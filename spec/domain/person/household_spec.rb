@@ -6,7 +6,6 @@
 require "spec_helper"
 
 describe Person::Household do
-
   let(:leader) { people(:top_leader) }
   let(:member) { people(:bottom_member) }
 
@@ -215,13 +214,12 @@ describe Person::Household do
     it "does not create household_updated version when addesss and people are unchanged" do
       leader.household_people_ids = [member.id]
       household(leader).save
-      
+
       leader.nickname = "Nik"
       expect do
         household(leader).save
       end.to change { PaperTrail::Version.count }.by(0)
     end
-
   end
 
   context "#remove" do
@@ -270,7 +268,6 @@ describe Person::Household do
       end.to change { PaperTrail::Version.count }.by(3)
     end
 
-
     it "does not create Papertrail for remove household, if person does not belong to a household" do
       # test needed, because an unchecked checkbox triggers the remove method
       leader.nickname = "Nik"
@@ -279,5 +276,4 @@ describe Person::Household do
       end.to change { PaperTrail::Version.count }.by(0)
     end
   end
-
 end

@@ -9,7 +9,6 @@ module I18nEnums
   NIL_KEY = "_nil".freeze
 
   module ClassMethods
-
     def i18n_enum(attr, possible_values, scopes: false, queries: false, key: nil) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       key ||= attr.to_s.pluralize
       i18n_prefix = "activerecord.attributes.#{name.underscore}.#{key}"
@@ -26,10 +25,9 @@ module I18nEnums
       end
 
       possible_values.each do |value|
-        scope value.to_sym, -> { where(attr => value) }  if scopes
+        scope value.to_sym, -> { where(attr => value) } if scopes
         define_method("#{value}?") { self[attr] == value } if queries
       end
     end
-
   end
 end

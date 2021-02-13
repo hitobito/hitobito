@@ -9,7 +9,6 @@
 module Export::Tabular
   # Base class for csv/xlsx export
   class Base
-
     class_attribute :model_class, :row_class, :auto_filter
     self.row_class = Export::Tabular::Row
     self.auto_filter = true
@@ -33,7 +32,7 @@ module Export::Tabular
 
       def generator(format)
         case format
-        when :csv  then Export::Csv::Generator
+        when :csv then Export::Csv::Generator
         when :xlsx then Export::Xlsx::Generator
         else raise ArgumentError, "Invalid format #{format}"
         end
@@ -97,6 +96,5 @@ module Export::Tabular
     def row_for(entry, format = nil)
       row_class.new(entry, format)
     end
-
   end
 end

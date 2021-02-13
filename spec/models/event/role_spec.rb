@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 # == Schema Information
 #
 # Table name: event_roles
@@ -16,7 +17,6 @@
 require "spec_helper"
 
 describe Event::Role do
-
   [Event, Event::Course].each do |event_type|
     event_type.role_types.each do |part|
       context part do
@@ -43,7 +43,7 @@ describe Event::Role do
       role.participation.enforce_required_answers = true
       role.participation.init_answers
       role.participation.attributes = {
-        answers_attributes: [{ question_id: q[1].id, answer: "ja" }] }
+        answers_attributes: [{question_id: q[1].id, answer: "ja"}]}
       expect(role.save).to be_falsey
       expect(role.errors.full_messages).to eq(["Antwort muss ausgefüllt werden"])
     end
@@ -67,7 +67,7 @@ describe Event::Role do
     end
 
     let(:event) { events(:top_event) }
-    let(:role)  { @role.reload }
+    let(:role) { @role.reload }
     let(:participation) { Fabricate(:event_participation, event: event, active: true) }
 
     it "decrements event#(representative_)participant_count" do
@@ -103,6 +103,5 @@ describe Event::Role do
         event_roles(:top_leader).destroy
       end.to change { Event::Participation.count }.by(-1)
     end
-
   end
 end

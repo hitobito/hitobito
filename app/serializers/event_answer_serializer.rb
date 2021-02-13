@@ -21,4 +21,3 @@ class EventAnswerSerializer < ApplicationSerializer
     property :answer, item.answer
   end
 end
-

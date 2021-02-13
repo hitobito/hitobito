@@ -5,18 +5,15 @@
 #  License version 3 or later. See the COPYING file at the top-level
 #  directory or at https://github.com/hitobito/hitobito.
 
-
 require "spec_helper"
 
-
 describe PeopleController, js: true do
-
   subject { page }
 
   context "inline editing of role" do
     let(:group) { groups(:bottom_layer_one) }
-    let(:row)   { find("#content table.table").all("tr").find { |row| row.text =~ /Member Bottom/ } }
-    let(:cell)  { row.all("td")[2] }
+    let(:row) { find("#content table.table").all("tr").find { |row| row.text =~ /Member Bottom/ } }
+    let(:cell) { row.all("td")[2] }
 
     before do
       sign_in(user)
@@ -32,9 +29,9 @@ describe PeopleController, js: true do
       end
     end
 
-
     context "with permission" do
       let(:user) { people(:top_leader) }
+
       before { within(cell) { skip "Unable to find Bearbeiten"; click_link "Bearbeiten" } }
 
       it "cancel closes popover" do
@@ -85,7 +82,6 @@ describe PeopleController, js: true do
     end
   end
 
-
   context "people relations" do
     let(:user) { people(:top_leader) }
 
@@ -97,7 +93,6 @@ describe PeopleController, js: true do
     end
 
     context "with kinds" do
-
       before do
         PeopleRelation.kind_opposites["sibling"] = "sibling"
         sign_in(user)

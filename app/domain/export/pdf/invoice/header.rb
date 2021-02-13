@@ -7,7 +7,6 @@
 
 module Export::Pdf::Invoice
   class Header < Section
-
     def render
       bounding_box([0, cursor + 30], width: bounds.width, height: 100) do
         text invoice.address

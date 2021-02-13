@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe IdnSanitizer do
-
   it "sanitizes single email" do
     expect(IdnSanitizer.sanitize("foo@exämple.com")).to eq("foo@xn--exmple-cua.com")
   end
@@ -33,5 +32,4 @@ describe IdnSanitizer do
     expect(IdnSanitizer.sanitize(["foo@exämple.com", "bar@exämple.com"])).to eq(
       ["foo@xn--exmple-cua.com", "bar@xn--exmple-cua.com"])
   end
-
 end

@@ -28,10 +28,8 @@
 
 module PaperTrail
   class Version < ActiveRecord::Base
-
     include PaperTrail::VersionConcern
 
     belongs_to :main, polymorphic: true
-
   end
 end

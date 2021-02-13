@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::AddRequestAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Person
 
   on(Person::AddRequest) do
@@ -110,5 +109,4 @@ class Person::AddRequestAbility < AbilityDsl::Base
     role = person.last_non_restricted_role
     role && permission_in_layers?(role.group.hierarchy.collect(&:id))
   end
-
 end

@@ -2,8 +2,8 @@ require "spec_helper"
 
 describe TableDisplay do
   let(:leader) { people(:top_leader) }
-  let(:group)  { groups(:top_layer) }
-  let(:event)  { events(:top_event) }
+  let(:group) { groups(:top_layer) }
+  let(:event) { events(:top_event) }
 
   it "initializes TableDisplay::Group for group parent" do
     subject = TableDisplay.for(leader, group)
@@ -34,11 +34,13 @@ describe TableDisplay do
     let(:member) { people(:bottom_member) }
 
     subject { TableDisplay.for(member, group) }
-    before  do
+
+    before do
       TableDisplay.register_permission(Person, :update, :attr)
       subject.selected = %w(other_attr attr)
     end
-    after   { TableDisplay.class_variable_set("@@permissions", {}) }
+
+    after { TableDisplay.class_variable_set("@@permissions", {}) }
 
     context :on_leader do
       it "yields if accessing unprotected attr" do

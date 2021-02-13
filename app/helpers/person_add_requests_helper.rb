@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module PersonAddRequestsHelper
-
   def require_person_add_requests_button
     required = @group.require_person_add_requests
     action = required ? "deactivate" : "activate"
@@ -25,5 +24,4 @@ module PersonAddRequestsHelper
       types.include?(r.class) && r.group.layer_group_id == @group.id
     end.collect(&:to_s).join(", ")
   end
-
 end

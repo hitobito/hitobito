@@ -51,15 +51,15 @@ class InvoiceConfig < ActiveRecord::Base
 
   # TODO: probably the if condition is not correct, verification needed
   validates :iban, presence: true, on: :update, if: :qr?
-  validates :iban, format: { with: IBAN_REGEX },
+  validates :iban, format: {with: IBAN_REGEX},
                    on: :update, allow_blank: true
 
-  validates :account_number, format: { with: ACCOUNT_NUMBER_REGEX },
+  validates :account_number, format: {with: ACCOUNT_NUMBER_REGEX},
                              on: :update, allow_blank: true, if: :post?
 
   validates :participant_number, presence: true, on: :update, if: :with_reference?
   validates :participant_number_internal, presence: true, on: :update, if: :bank_with_reference?
-  validates :participant_number_internal, format: { with: PARTICIPANT_NUMBER_INTERNAL_REGEX },
+  validates :participant_number_internal, format: {with: PARTICIPANT_NUMBER_INTERNAL_REGEX},
                                           on: :update, if: :bank_with_reference?
 
   validate :correct_address_wordwrap, if: :bank?
@@ -92,5 +92,4 @@ class InvoiceConfig < ActiveRecord::Base
   def nullify_participant_number_internal
     self.participant_number_internal = nil
   end
-
 end

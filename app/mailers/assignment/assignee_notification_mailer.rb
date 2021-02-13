@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Assignment::AssigneeNotificationMailer < ApplicationMailer
-
   CONTENT_ASSIGNMENT_ASSIGNEE_NOTIFICATION = "assignment_assignee_notification".freeze
 
   def assignee_notification(assignee_email, assignment)

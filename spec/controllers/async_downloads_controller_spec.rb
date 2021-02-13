@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe AsyncDownloadsController do
-
   let(:person) { people(:bottom_member) }
 
   before do
@@ -21,7 +20,7 @@ describe AsyncDownloadsController do
       Cookies::AsyncDownload.new(cookies).set(name: filename, type: "txt")
       generate_test_file(filename)
 
-      get :show, params: { id: filename, file_type: "txt" }
+      get :show, params: {id: filename, file_type: "txt"}
 
       expect(response.body).to match("this is a testfile")
       expect(response.status).to match(200)
@@ -34,7 +33,7 @@ describe AsyncDownloadsController do
       Cookies::AsyncDownload.new(cookies).set(name: "second_download", type: "txt")
       generate_test_file(filename)
 
-      get :show, params: { id: filename, file_type: "txt" }
+      get :show, params: {id: filename, file_type: "txt"}
 
       cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
 
@@ -50,14 +49,14 @@ describe AsyncDownloadsController do
       filename = AsyncDownloadFile.create_name("test", 1234) # random person_id
       generate_test_file(filename)
 
-      get :show, params: { id: filename, file_type: "txt" }
+      get :show, params: {id: filename, file_type: "txt"}
 
       is_expected.to render_template("errors/404")
       expect(response.status).to match(404)
     end
 
     it "returns 404 if file does not exists" do
-      get :show, params: { id: "unknown_file", file_type: "txt" }
+      get :show, params: {id: "unknown_file", file_type: "txt"}
 
       is_expected.to render_template("errors/404")
       expect(response.status).to match(404)
@@ -71,7 +70,7 @@ describe AsyncDownloadsController do
       Cookies::AsyncDownload.new(cookies).set(name: filename, type: "csv")
       generate_test_file(filename, :csv)
 
-      get :show, params: { id: filename, file_type: "csv" }
+      get :show, params: {id: filename, file_type: "csv"}
 
       expect(response.body).to match("this is a testfile")
       expect(response.body.encoding.to_s).to eq("ISO-8859-1")
@@ -83,7 +82,7 @@ describe AsyncDownloadsController do
       filename = AsyncDownloadFile.create_name("test", person.id)
       generate_test_file(filename)
 
-      get :exists?, params: { id: filename, file_type: "txt" }, format: :json
+      get :exists?, params: {id: filename, file_type: "txt"}, format: :json
 
       json = JSON.parse(@response.body)
       expect(json["status"]).to match(200)
@@ -93,14 +92,14 @@ describe AsyncDownloadsController do
       filename = AsyncDownloadFile.create_name("test", 1234) # random person_id
       generate_test_file(filename)
 
-      get :exists?, params: { id: filename, file_type: "txt" }, format: :json
+      get :exists?, params: {id: filename, file_type: "txt"}, format: :json
 
       json = JSON.parse(@response.body)
       expect(json["status"]).to match(404)
     end
 
     it "render json status 404 if file does not exist" do
-      get :exists?, params: { id: "unknown_file", file_type: "txt" }, format: :json
+      get :exists?, params: {id: "unknown_file", file_type: "txt"}, format: :json
 
       json = JSON.parse(@response.body)
       expect(json["status"]).to match(404)

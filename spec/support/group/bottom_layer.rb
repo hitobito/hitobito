@@ -8,13 +8,11 @@
 require Rails.root.join("spec/support/group/bottom_group.rb")
 
 class Group::BottomLayer < Group
-
   self.layer = true
 
   self.event_types = [Event, Event::Course]
 
   children Group::BottomGroup
-
 
   class Leader < ::Role
     self.permissions = [:layer_and_below_full, :contact_data, :approve_applications]
@@ -30,5 +28,4 @@ class Group::BottomLayer < Group
 
   roles Leader, LocalGuide, Member
   self.default_role = Leader
-
 end

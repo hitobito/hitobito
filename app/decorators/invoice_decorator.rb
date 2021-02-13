@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 class InvoiceDecorator < ApplicationDecorator
   decorates :invoice
 
@@ -30,11 +29,10 @@ class InvoiceDecorator < ApplicationDecorator
   end
 
   def format_currency(amount)
-    ActiveSupport::NumberHelper.number_to_currency(amount, { unit: currency, format: "%n %u" })
+    ActiveSupport::NumberHelper.number_to_currency(amount, {unit: currency, format: "%n %u"})
   end
 
   def currency
     model.new_record? ? model.invoice_config.currency : model.currency
   end
-
 end

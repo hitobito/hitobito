@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Export::Tabular::People::PersonRow do
-
   before do
     PeopleRelation.kind_opposites["parent"] = "child"
     PeopleRelation.kind_opposites["child"] = "parent"
@@ -30,21 +29,25 @@ describe Export::Tabular::People::PersonRow do
 
   context "phone numbers" do
     before { person.phone_numbers << PhoneNumber.new(label: "foobar", number: 321) }
+
     it { expect(row.fetch(:phone_number_foobar)).to eq "321" }
   end
 
   context "social accounts" do
     before { person.social_accounts << SocialAccount.new(label: "foo oder bar!", name: "asdf") }
+
     it { expect(row.fetch(:'social_account_foo oder bar!')).to eq "asdf" }
   end
 
   context "people relations" do
     before { person.relations_to_tails << PeopleRelation.new(tail_id: people(:bottom_member).id, kind: "parent") }
+
     it { expect(row.fetch(:people_relation_parent)).to eq "Bottom Member" }
   end
 
   context "country" do
     before { person.country = "IT" }
+
     it { expect(row.fetch(:country)).to eq "Italien" }
   end
 
@@ -53,6 +56,7 @@ describe Export::Tabular::People::PersonRow do
 
     context "multiple roles" do
       let(:group) { groups(:bottom_group_one_one) }
+
       before { Fabricate(Group::BottomGroup::Member.name.to_s, group: group, person: person) }
 
       it { expect(row.fetch(:roles)).to eq "Member Bottom One / Group 11, Leader Top / TopGroup" }
@@ -64,7 +68,7 @@ describe Export::Tabular::People::PersonRow do
       person.tag_list = "lorem: ipsum, loremipsum"
       person.save
     end
-    it { expect(row.fetch(:tags)).to eq "lorem:ipsum, loremipsum"}
-  end
 
+    it { expect(row.fetch(:tags)).to eq "lorem:ipsum, loremipsum" }
+  end
 end

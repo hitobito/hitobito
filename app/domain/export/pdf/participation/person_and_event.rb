@@ -7,9 +7,7 @@
 
 module Export::Pdf::Participation
   class PersonAndEvent < Section
-
     class Person < Section
-
       def render
         render_address
         move_down_line
@@ -87,11 +85,11 @@ module Export::Pdf::Participation
     def render
       heading do
         render_columns(-> { text human_participant_name, style: :bold },
-                       -> { text human_event_name, style: :bold })
+          -> { text human_event_name, style: :bold })
       end
 
       render_columns(-> { render_section(person_section) },
-                     -> { render_section(Event) })
+        -> { render_section(Event) })
     end
 
     private
@@ -100,6 +98,5 @@ module Export::Pdf::Participation
     def section_size
       super - 10
     end
-
   end
 end

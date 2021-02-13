@@ -51,18 +51,16 @@
 
 require "spec_helper"
 
-
 describe InvoiceSerializer do
   let(:top_leader) { people(:top_leader) }
-  let(:invoice)    { invoices(:invoice) }
+  let(:invoice) { invoices(:invoice) }
   let(:controller) { double().as_null_object }
-  let(:serializer) { InvoiceSerializer.new(invoice, controller: controller)}
-  let(:hash)       { serializer.to_hash.with_indifferent_access }
+  let(:serializer) { InvoiceSerializer.new(invoice, controller: controller) }
+  let(:hash) { serializer.to_hash.with_indifferent_access }
 
   subject { hash[:invoices].first }
 
   context "invoice properties" do
-
     it "includes all keys" do
       keys = [:title,
               :sequence_number,
@@ -107,7 +105,6 @@ describe InvoiceSerializer do
       expect(hash[:links]).to have_key("invoices.creator")
       expect(hash[:links]).to have_key("invoices.recipient")
     end
-
   end
 
   context "invoice items" do
@@ -150,6 +147,7 @@ describe InvoiceSerializer do
 
   context "payment_reminders" do
     let(:invoice) { invoices(:sent) }
+
     before do
       invoice.payment_reminders.create!(due_at: 30.days.from_now, level: 1)
     end
@@ -165,7 +163,6 @@ describe InvoiceSerializer do
               :title,
               :text,
               :level]
-
 
       keys.each do |key|
         expect(hash[:linked][:payment_reminders].first).to have_key(key)

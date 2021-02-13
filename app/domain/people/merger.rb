@@ -7,7 +7,6 @@
 
 module People
   class Merger
-
     def initialize(source, target, actor)
       @source = source
       @target = target
@@ -35,7 +34,7 @@ module People
 
     def merge_contactables(assoc, key, match_label: false)
       @source.send(assoc).each do |c|
-        find_attrs = { key => c.send(key) }
+        find_attrs = {key => c.send(key)}
         find_attrs[:label] = c.label if match_label
         existing = @target.send(assoc).find_by(find_attrs)
         # do not merge invalid contactables
@@ -110,8 +109,7 @@ module People
         "#{r} (#{r.group.with_layer.join(' / ')})"
       end
 
-      { roles: roles }
+      {roles: roles}
     end
-
   end
 end

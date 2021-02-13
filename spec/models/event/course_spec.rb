@@ -42,7 +42,6 @@
 require "spec_helper"
 
 describe Event::Course do
-
   subject do
     Fabricate(:course, groups: [groups(:top_group)])
   end
@@ -67,6 +66,7 @@ describe Event::Course do
 
   context "multiple start_at" do
     before { subject.dates.create(start_at: Date.new(2012, 5, 14)) }
+
     its(:qualification_date) { should == Date.new(2012, 5, 14) }
   end
 
@@ -76,8 +76,7 @@ describe Event::Course do
     it "creates course" do
       Event::Course.create!(groups: [groups(:top_group)],
                             name: "test",
-                            dates_attributes: [{ start_at: Time.zone.now }])
-
+                            dates_attributes: [{start_at: Time.zone.now}])
     end
 
     it "renders label_detail" do
@@ -89,7 +88,7 @@ describe Event::Course do
   end
 
   it "sets signtuare to true when signature confirmation is required" do
-    course = Event::Course.new(signature_confirmation:true)
+    course = Event::Course.new(signature_confirmation: true)
     expect(course.signature).to be_falsy
     expect(course.signature_confirmation).to be_truthy
     course.valid?
@@ -99,7 +98,6 @@ describe Event::Course do
   end
 
   context "#duplicate" do
-
     let(:event) { events(:top_course) }
 
     it "resets participant counts" do
@@ -127,7 +125,5 @@ describe Event::Course do
         d.save!
       end.to change { Event::Question.count }.by(3)
     end
-
   end
-
 end

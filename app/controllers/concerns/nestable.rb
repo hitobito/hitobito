@@ -10,7 +10,6 @@
 # namespace, may define this attribute as follows:
 #   self.nesting = :admin, Country
 module Nestable
-
   # Adds the :nesting class attribute and parent helper methods
   # to the including controller.
   def self.prepended(klass)
@@ -93,10 +92,8 @@ module Nestable
     clazz.name.demodulize.underscore
   end
 
-
   # The model scope for the current parent resource.
   def parent_scope
     parent.send(model_class.name.demodulize.underscore.pluralize)
   end
-
 end

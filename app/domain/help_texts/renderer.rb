@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_pbs.
 
 class HelpTexts::Renderer
-
   attr_reader :template
 
   delegate :dom_id, :content_tag, :icon, :action_name, :params, :model_class, to: :template
@@ -51,7 +50,7 @@ class HelpTexts::Renderer
   end
 
   def render_trigger(help_text)
-    content_tag(:span, class: "help-text-trigger", data: { key: dom_id(help_text) }) do
+    content_tag(:span, class: "help-text-trigger", data: {key: dom_id(help_text)}) do
       icon("info-circle")
     end
   end

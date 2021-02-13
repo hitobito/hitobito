@@ -8,7 +8,6 @@
 
 module FilterNavigation
   class Events < Base
-
     def initialize(template, group)
       super(template)
       @group = group
@@ -37,6 +36,5 @@ module FilterNavigation
     def filter_path(name)
       template.url_for(template.params.to_unsafe_h.merge(filter: name, only_path: true))
     end
-
   end
 end

@@ -34,5 +34,4 @@ module TypeId
       @@types_by_id.dup
     end
   end
-
 end

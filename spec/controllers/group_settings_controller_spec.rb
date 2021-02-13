@@ -8,13 +8,12 @@
 require "spec_helper"
 
 describe GroupSettingsController do
-
   let(:top_leader) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
   let(:setting_params) do
-    { username: "gollum",
-      password: "my-precious",
-      provider: "aspsms" }
+    {username: "gollum",
+     password: "my-precious",
+     provider: "aspsms"}
   end
   let(:setting) { group.settings(:text_message_provider) }
 
@@ -22,8 +21,8 @@ describe GroupSettingsController do
 
   describe "POST #update" do
     it "initializes setting on first update" do
-      patch :update, params: { group_id: group.id, id: "text_message_provider",
-                               group_setting: setting_params }
+      patch :update, params: {group_id: group.id, id: "text_message_provider",
+                              group_setting: setting_params}
 
       expect(setting.username).to eq("gollum")
       expect(setting.password).to eq("my-precious")
@@ -32,8 +31,8 @@ describe GroupSettingsController do
 
     it "only concerns available attrs when updating" do
       setting_params[:gollum] = "smeagol"
-      patch :update, params: { group_id: group.id, id: "text_message_provider",
-                               group_setting: setting_params }
+      patch :update, params: {group_id: group.id, id: "text_message_provider",
+                              group_setting: setting_params}
 
       expect(setting.gollum).to be_nil
     end
@@ -44,8 +43,8 @@ describe GroupSettingsController do
       setting_params[:username] = "frodo"
       setting_params[:password] = "his-precious"
 
-      patch :update, params: { group_id: group.id, id: "text_message_provider",
-                               group_setting: setting_params }
+      patch :update, params: {group_id: group.id, id: "text_message_provider",
+                              group_setting: setting_params}
 
       setting.reload
       expect(setting.username).to eq("frodo")
@@ -59,8 +58,8 @@ describe GroupSettingsController do
       setting_params[:username] = "frodo"
       setting_params[:password] = ""
 
-      patch :update, params: { group_id: group.id, id: "text_message_provider",
-                               group_setting: setting_params }
+      patch :update, params: {group_id: group.id, id: "text_message_provider",
+                              group_setting: setting_params}
 
       setting.reload
       expect(setting.username).to eq("frodo")
@@ -72,22 +71,22 @@ describe GroupSettingsController do
       sign_in(people(:bottom_member))
 
       expect do
-        patch :update, params: { group_id: group.id, id: "text_message_provider",
-                                 group_setting: setting_params }
+        patch :update, params: {group_id: group.id, id: "text_message_provider",
+                                group_setting: setting_params}
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it "cannot create/update not configured setting" do
       expect do
-        patch :update, params: { group_id: group.id, id: "non_existent",
-                                 group_setting: setting_params }
+        patch :update, params: {group_id: group.id, id: "non_existent",
+                                group_setting: setting_params}
       end.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
   describe "GET #index" do
     it "lists all available settings for given group" do
-      get :index, params: { group_id: group.id }
+      get :index, params: {group_id: group.id}
 
       settings = assigns(:setting_objects)
       expect(settings.count).to eq(1)
@@ -97,9 +96,8 @@ describe GroupSettingsController do
       sign_in(people(:bottom_member))
 
       expect do
-        get :index, params: { group_id: group.id }
+        get :index, params: {group_id: group.id}
       end.to raise_error(CanCan::AccessDenied)
     end
   end
-
 end

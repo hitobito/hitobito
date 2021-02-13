@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::DeletedPeopleController < ListController
-
   before_action :authorize_action
 
   self.nesting = Group

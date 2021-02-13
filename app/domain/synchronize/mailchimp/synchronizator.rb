@@ -16,7 +16,7 @@ module Synchronize
       self.member_fields = []
 
       self.merge_fields = [
-        ["Gender", "dropdown", { choices: %w(m w) }, ->(p) { p.gender }]
+        ["Gender", "dropdown", {choices: %w(m w)}, ->(p) { p.gender }]
       ]
 
       def initialize(mailing_list)

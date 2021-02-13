@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::SendRegisterLoginJob < BaseJob
-
   self.parameters = [:recipient_id, :group_id, :event_id, :locale]
 
   def initialize(recipient, group, event)

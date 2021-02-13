@@ -1,5 +1,4 @@
 module CategorizedTags
-
   extend ActiveSupport::Concern
 
   included do
@@ -21,7 +20,6 @@ module CategorizedTags
   end
 
   module ClassMethods
-
     def grouped_by_category
       tags = order(:name).each_with_object({}) do |tag, h|
         category = tag.category
@@ -60,7 +58,5 @@ module CategorizedTags
       n = parse_name_without_category(str)
       c == :other ? n : "#{c}:#{n}"
     end
-
   end
-
 end

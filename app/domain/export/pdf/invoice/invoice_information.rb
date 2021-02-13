@@ -7,10 +7,9 @@
 
 module Export::Pdf::Invoice
   class InvoiceInformation < Section
-
     def render
       bounding_box([0, 640], width: bounds.width, height: 80) do
-        table(information, cell_style: { borders: [], padding: [1, 20, 0, 0] })
+        table(information, cell_style: {borders: [], padding: [1, 20, 0, 0]})
       end
     end
 

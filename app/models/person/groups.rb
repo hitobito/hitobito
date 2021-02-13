@@ -71,7 +71,6 @@ module Person::Groups
     roles
   end
 
-
   module ClassMethods
     # Scope listing only people that have roles that are visible from above.
     # If group is given, only visible roles from this group are considered.
@@ -82,24 +81,24 @@ module Person::Groups
     end
 
     # Scope listing all people with a role in the given group.
-    def in_group(group, join = { roles: :group })
-      joins(join).where(groups: { id: group.id })
+    def in_group(group, join = {roles: :group})
+      joins(join).where(groups: {id: group.id})
     end
 
     # Scope listing all people with a role in the given layer.
     def in_layer(*groups)
-      joins(groups.extract_options![:join] || { roles: :group }).
-        where(groups: { layer_group_id: groups.collect(&:layer_group_id),
-                        deleted_at: nil }).
+      joins(groups.extract_options![:join] || {roles: :group}).
+        where(groups: {layer_group_id: groups.collect(&:layer_group_id),
+                       deleted_at: nil}).
         distinct
     end
 
     # Scope listing all people with a role in or below the given group.
-    def in_or_below(group, join = { roles: :group })
+    def in_or_below(group, join = {roles: :group})
       joins(join).
-        where(groups: { deleted_at: nil }).
+        where(groups: {deleted_at: nil}).
         where("#{Group.quoted_table_name}.lft >= :lft AND #{Group.quoted_table_name}.rgt <= :rgt",
-              lft: group.lft, rgt: group.rgt).
+          lft: group.lft, rgt: group.rgt).
         distinct
     end
 
@@ -107,7 +106,7 @@ module Person::Groups
     def members(group = nil)
       types = group ? group.role_types : Role.all_types
       member_types = types.select(&:member?).collect(&:sti_name)
-      where(roles: { type: member_types })
+      where(roles: {type: member_types})
     end
 
     # Order people by the order role types are listed in their group types.
@@ -122,6 +121,5 @@ module Person::Groups
       end
       statement << "END"
     end
-
   end
 end

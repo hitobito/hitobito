@@ -7,7 +7,6 @@
 
 require "csv"
 
-
 module Import
   class CsvParser
     include Translatable
@@ -62,9 +61,9 @@ module Import
     private
 
     def options
-      { converters: ->(field, _info) { field && field.strip },
-        header_converters: ->(header, _info) { header.to_s.strip },
-        headers: true, skip_blanks: true }
+      {converters: ->(field, _info) { field && field.strip },
+       header_converters: ->(header, _info) { header.to_s.strip },
+       headers: true, skip_blanks: true}
     end
 
     def encode_as_utf8(input)
@@ -86,6 +85,5 @@ module Import
         start.count(char) > start.count(most_seen) ? char : most_seen
       end
     end
-
   end
 end

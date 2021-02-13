@@ -20,9 +20,8 @@ class EventDateSerializer < ApplicationSerializer
     json_api_properties
 
     map_properties :label,
-                   :start_at,
-                   :finish_at,
-                   :location
+      :start_at,
+      :finish_at,
+      :location
   end
-
 end

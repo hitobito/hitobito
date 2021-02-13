@@ -7,7 +7,6 @@
 #
 # Fetches people for which the user has write access via layer permissions.
 class PersonLayerWritables < PersonFetchables
-
   self.same_group_permissions = []
   self.above_group_permissions = []
   self.same_layer_permissions = [:layer_and_below_full, :layer_full]
@@ -34,7 +33,7 @@ class PersonLayerWritables < PersonFetchables
     if conditions.present?
       Person.only_public_data.
         joins(roles: :group).
-        where(roles: { deleted_at: nil }, groups: { deleted_at: nil }).
+        where(roles: {deleted_at: nil}, groups: {deleted_at: nil}).
         where(conditions.to_a).
         distinct
     else
@@ -47,5 +46,4 @@ class PersonLayerWritables < PersonFetchables
       append_group_conditions(condition)
     end
   end
-
 end

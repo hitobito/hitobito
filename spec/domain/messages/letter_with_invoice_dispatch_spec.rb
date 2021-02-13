@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Messages::LetterWithInvoiceDispatch do
-  let(:message)    { messages(:with_invoice) }
+  let(:message) { messages(:with_invoice) }
   let(:top_leader) { people(:top_leader) }
 
   subject { described_class.new(message, Person.where(id: top_leader.id)) }

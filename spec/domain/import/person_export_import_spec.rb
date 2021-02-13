@@ -8,25 +8,24 @@
 require "spec_helper"
 
 describe "export import person" do
-
   let(:group) { groups(:top_group) }
   let(:role_type) { Group::TopGroup::Leader }
 
   it "may import what is exported" do
     exported = Fabricate(:person,
-                         first_name: "Foo",
-                         last_name: "Exporter",
-                         company_name: "Puzzle",
-                         company: false,
-                         nickname: "Expo",
-                         email: "exporter@hitobito.example.org",
-                         address: "Foostreet",
-                         zip_code: "A1234",
-                         town: "Berlin",
-                         country: "DE",
-                         gender: "m",
-                         birthday: Date.new(1980, 5, 1),
-                         additional_information: "bla bla bla\nbla bla")
+      first_name: "Foo",
+      last_name: "Exporter",
+      company_name: "Puzzle",
+      company: false,
+      nickname: "Expo",
+      email: "exporter@hitobito.example.org",
+      address: "Foostreet",
+      zip_code: "A1234",
+      town: "Berlin",
+      country: "DE",
+      gender: "m",
+      birthday: Date.new(1980, 5, 1),
+      additional_information: "bla bla bla\nbla bla")
 
     Fabricate(:phone_number, contactable: exported, label: "Privat")
     Fabricate(:phone_number, contactable: exported, label: "Mobil")
@@ -76,5 +75,4 @@ describe "export import person" do
   def expect_attrs_equal(actual, expected, excluded)
     expect(actual.attributes.except(*excluded)).to eq(expected.attributes.except(*excluded))
   end
-
 end

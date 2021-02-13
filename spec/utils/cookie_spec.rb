@@ -7,8 +7,8 @@ require "spec_helper"
 
 describe Cookie do
   let(:cookie_jar) { ActionDispatch::Request.new({}).cookie_jar }
-  let(:value)      { JSON.parse(cookie_jar[:cookie]) }
-  let(:subject)    { described_class.new(cookie_jar, "cookie", [:name]) }
+  let(:value) { JSON.parse(cookie_jar[:cookie]) }
+  let(:subject) { described_class.new(cookie_jar, "cookie", [:name]) }
 
   it "set single cookie" do
     subject.set(name: "cookie")
@@ -61,7 +61,7 @@ describe Cookie do
     end
 
     it "sets path" do
-      _, path, _= write(now) { subject.set(name: "cookie") }
+      _, path, _ = write(now) { subject.set(name: "cookie") }
       expect(path).to eq "path=/"
     end
 

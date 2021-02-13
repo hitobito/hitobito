@@ -1,5 +1,4 @@
 class Person::Subscriptions
-
   def initialize(person)
     @person = person
   end

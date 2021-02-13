@@ -21,7 +21,6 @@
 #
 
 class Subscription < ActiveRecord::Base
-
   include RelatedRoleType::Assigners
 
   scope :people, -> { where(subscriber_type: Person.sti_name) }
@@ -39,20 +38,19 @@ class Subscription < ActiveRecord::Base
 
   has_many :related_role_types, as: :relation, dependent: :destroy
 
-
   ### VALIDATIONS
 
   validates_by_schema
-  validates :related_role_types, presence: { if: ->(s) { s.subscriber.is_a?(Group) } }
+  validates :related_role_types, presence: {if: ->(s) { s.subscriber.is_a?(Group) }}
 
-  validates :subscriber_id, uniqueness: { unless: ->(s) { s.subscriber.is_a?(Group) },
-                                          scope: [:mailing_list_id, :subscriber_type, :excluded] }
-  validates :subscriber_id, inclusion: { if: ->(s) { s.subscriber.is_a?(Group) },
-                                         in: ->(s) { s.possible_groups.pluck(:id) },
-                                         message: :group_not_allowed }
-  validates :subscriber_id, inclusion: { if: ->(s) { s.subscriber.is_a?(Event) },
-                                         in: ->(s) { s.possible_events.pluck(:id) },
-                                         message: :event_not_allowed }
+  validates :subscriber_id, uniqueness: {unless: ->(s) { s.subscriber.is_a?(Group) },
+                                         scope: [:mailing_list_id, :subscriber_type, :excluded]}
+  validates :subscriber_id, inclusion: {if: ->(s) { s.subscriber.is_a?(Group) },
+                                        in: ->(s) { s.possible_groups.pluck(:id) },
+                                        message: :group_not_allowed}
+  validates :subscriber_id, inclusion: {if: ->(s) { s.subscriber.is_a?(Event) },
+                                        in: ->(s) { s.possible_events.pluck(:id) },
+                                        message: :event_not_allowed}
 
   ### INSTANCE METHODS
 
@@ -68,7 +66,7 @@ class Subscription < ActiveRecord::Base
     Event.
       joins(:groups, :dates).
       where("event_dates.start_at >= ?", earliest_possible_event_date).
-      where(groups: { id: possible_event_groups })
+      where(groups: {id: possible_event_groups})
   end
 
   def possible_groups
@@ -107,5 +105,4 @@ class Subscription < ActiveRecord::Base
   def possible_event_groups
     mailing_list.group.self_and_descendants
   end
-
 end

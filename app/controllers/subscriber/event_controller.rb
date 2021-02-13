@@ -8,7 +8,6 @@
 
 module Subscriber
   class EventController < BaseController
-
     skip_authorize_resource # must be in leaf class
 
     before_render_form :replace_validation_errors

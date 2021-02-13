@@ -41,14 +41,12 @@ module FilterNavigation
     def item(label, url, count = nil)
       caption = count ? "#{label} (#{count})" : label
       @main_items << content_tag(:li,
-                                 link_to(caption, url),
-                                 class: ("active" if active_label == label))
+        link_to(caption, url),
+        class: ("active" if active_label == label))
     end
-
   end
 
   class Dropdown < Dropdown::Base
-
     attr_accessor :active
 
     def initialize(template)

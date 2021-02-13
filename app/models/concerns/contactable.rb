@@ -8,7 +8,6 @@
 require_relative Rails.root.join("app", "models", "countries")
 
 module Contactable
-
   extend ActiveSupport::Concern
 
   ACCESSIBLE_ATTRS = [:email, :address, :zip_code, :town, :country, # rubocop:disable Style/MutableConstant extension point
@@ -27,7 +26,7 @@ module Contactable
     belongs_to :location, foreign_key: "zip_code", primary_key: "zip_code"
 
     accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails,
-                                  allow_destroy: true
+      allow_destroy: true
 
     before_validation :set_self_in_nested
 
@@ -83,5 +82,4 @@ module Contactable
       all.extending(Person::PreloadPublicAccounts)
     end
   end
-
 end

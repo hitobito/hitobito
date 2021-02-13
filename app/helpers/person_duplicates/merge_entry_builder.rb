@@ -7,7 +7,6 @@
 
 module PersonDuplicates
   class MergeEntryBuilder
-
     WARNING_ICON = "⚠️"
 
     delegate :t, :safe_join, to: :template
@@ -64,8 +63,8 @@ module PersonDuplicates
 
     def person_label(person)
       link_to(person.to_s,
-              group_person_path(person.primary_group, person),
-              target: "_blank")
+        group_person_path(person.primary_group, person),
+        target: "_blank")
     end
 
     def details(person)

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe "contactable/_fields.html.haml" do
-
   let(:group) { groups(:top_layer) }
   let(:current_user) { people(:top_leader) }
   let(:form_builder) { StandardFormBuilder.new(:group, group, view, {}) }
@@ -37,7 +36,6 @@ describe "contactable/_fields.html.haml" do
 
     its([:style]) { should be_blank }
   end
-
 
   context "when contact is set" do
     before do

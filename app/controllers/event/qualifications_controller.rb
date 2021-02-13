@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::QualificationsController < ApplicationController
-
   before_action :authorize_write, except: :index
   before_action :authorize_read, only: :index
 
@@ -29,7 +28,7 @@ class Event::QualificationsController < ApplicationController
     end
 
     redirect_to group_event_qualifications_path(group, event),
-                notice: t("event.qualifications.update.flash.success")
+      notice: t("event.qualifications.update.flash.success")
   end
 
   private
@@ -65,5 +64,4 @@ class Event::QualificationsController < ApplicationController
   def event_qualifying
     not_found unless event.course_kind? && event.qualifying?
   end
-
 end

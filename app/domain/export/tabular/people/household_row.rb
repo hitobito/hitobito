@@ -7,7 +7,6 @@
 
 module Export::Tabular::People
   class HouseholdRow < PersonRow
-
     SHORTEN_AT = 40
 
     def name
@@ -76,6 +75,5 @@ module Export::Tabular::People
     def length
       names_hash.keys.uniq.join.size + names_hash.values.join.size
     end
-
   end
 end

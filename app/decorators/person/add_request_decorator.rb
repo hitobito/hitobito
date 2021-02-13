@@ -34,5 +34,4 @@ class Person::AddRequestDecorator < ApplicationDecorator
       raise NotImplementedError
     end
   end
-
 end

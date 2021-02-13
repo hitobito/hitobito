@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: events
@@ -57,7 +56,6 @@
 #
 # The same event may be attached to multiple groups of the same kind.
 class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
-
   # This statement is required because these classes would not be loaded correctly otherwise.
   # The price we pay for using classes as namespace.
   require_dependency "event/date"
@@ -75,10 +73,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   ### ATTRIBUTES
 
   class_attribute :used_attributes,
-                  :role_types,
-                  :supports_applications,
-                  :possible_states,
-                  :kind_class
+    :role_types,
+    :supports_applications,
+    :possible_states,
+    :kind_class
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
@@ -107,7 +105,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   # The class used for the kind_id
   self.kind_class = nil
 
-
   model_stamper
   stampable stamper_class_name: :person,
             deleter: false
@@ -125,9 +122,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_many :questions, dependent: :destroy, validate: true
 
   has_many :application_questions, -> { where(admin: false) },
-           class_name: "Event::Question", inverse_of: :event
+    class_name: "Event::Question", inverse_of: :event
   has_many :admin_questions, -> { where(admin: true) },
-           class_name: "Event::Question", inverse_of: :event
+    class_name: "Event::Question", inverse_of: :event
 
   has_many :participations, dependent: :destroy
   has_many :people, through: :participations
@@ -135,20 +132,20 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
   has_many :person_add_requests,
-           foreign_key: :body_id,
-           inverse_of: :body,
-           class_name: "Person::AddRequest::Event",
-           dependent: :destroy
+    foreign_key: :body_id,
+    inverse_of: :body,
+    class_name: "Person::AddRequest::Event",
+    dependent: :destroy
 
   ### VALIDATIONS
 
   validates_by_schema
-  validates :dates, presence: { message: :must_exist }
-  validates :group_ids, presence: { message: :must_exist }
+  validates :dates, presence: {message: :must_exist}
+  validates :group_ids, presence: {message: :must_exist}
   validates :application_opening_at, :application_closing_at,
-            timeliness: { type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31) }
+    timeliness: {type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31)}
   validates :description, :location, :application_conditions,
-            length: { allow_nil: true, maximum: 2**16 - 1 }
+    length: {allow_nil: true, maximum: 2**16 - 1}
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
   validate :assert_required_contact_attrs_valid
@@ -160,7 +157,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   before_validation :set_signature, if: :signature_confirmation?
 
   accepts_nested_attributes_for :dates, :application_questions, :admin_questions,
-                                allow_destroy: true
+    allow_destroy: true
 
   ### SERIALIZED ATTRIBUTES
   serialize :required_contact_attrs, Array
@@ -169,7 +166,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   ### CLASS METHODS
 
   class << self
-
     # Default scope for event lists
     def list
       order_by_date.
@@ -192,7 +188,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       year = Time.zone.today.year if year.to_i <= 0
       start_at = Time.zone.parse "#{year}-01-01"
       finish_at = start_at + 1.year
-      joins(:dates).where(event_dates: { start_at: [start_at...finish_at] })
+      joins(:dates).where(event_dates: {start_at: [start_at...finish_at]})
     end
 
     # Event with start and end-date overlay
@@ -200,7 +196,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       joins(:dates).
         where("event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date " \
               "OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date",
-              start_date: start_date, end_date: end_date).distinct
+          start_date: start_date, end_date: end_date).distinct
     end
 
     # Events from groups in the hierarchy of the given user.
@@ -210,7 +206,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     # Events belonging to the given group ids
     def with_group_id(group_ids)
-      joins(:groups).where(groups: { id: group_ids })
+      joins(:groups).where(groups: {id: group_ids})
     end
 
     # Events running now or in the future.
@@ -269,7 +265,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       type
     end
   end
-
 
   ### INSTANCE METHODS
 
@@ -342,7 +337,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def application_period_open?
     (!application_opening_at? || application_opening_at <= Time.zone.today) &&
-    (!application_closing_at? || application_closing_at >= Time.zone.today)
+      (!application_closing_at? || application_closing_at >= Time.zone.today)
   end
 
   def assert_type_is_allowed_for_groups
@@ -404,5 +399,4 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   def set_signature
     self.signature = true
   end
-
 end

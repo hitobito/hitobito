@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Group::Merger do
-
   let(:group1) { groups(:bottom_layer_one) }
   let(:group2) { groups(:bottom_layer_two) }
   let(:other_group) { groups(:top_layer) }
@@ -18,10 +17,9 @@ describe Group::Merger do
   let(:new_group) { Group.find(merger.new_group.id) }
 
   context "merge groups" do
-
     before do
       @person = Fabricate(Group::BottomLayer::Member.name.to_sym,
-                          created_at: Date.today - 14, group: group1).person
+        created_at: Date.today - 14, group: group1).person
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: group1)
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: group2)
 
@@ -101,6 +99,5 @@ describe Group::Merger do
 
       expect(new_group.invoice_articles.count).to eq 4
     end
-
   end
 end

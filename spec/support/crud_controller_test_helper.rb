@@ -19,7 +19,6 @@ module CrudControllerTestHelper
     params.merge!(id: test_entry.id) if m[:id]
     params.merge!(example_params)
 
-
     sign_in(user)
     if m[:method] == :get && m[:format] == :js
       get m[:action], xhr: true, params: params
@@ -77,12 +76,11 @@ module CrudControllerTestHelper
     if respond_to?(action_specific_attr_name)
       send(action_specific_attr_name)
     else
-      action = { new: :create, edit: :update }[action.to_sym] || action
+      action = {new: :create, edit: :update}[action.to_sym] || action
       action_specific_attr_name = "#{action}_entry_attrs".to_sym
       respond_to?(action_specific_attr_name) ? send(action_specific_attr_name) : test_entry_attrs
     end
   end
-
 
   def deep_attributes(attrs, entry)
     actual = {}
@@ -103,16 +101,15 @@ module CrudControllerTestHelper
   end
 
   module ClassMethods
-
     # Describe a certain action and provide some usefull metadata.
     # Tests whether this action is configured to be skipped.
     def describe_action(method, action, metadata = {}, &block)
       describe("#{method.to_s.upcase} #{action}",
-               { if: described_class.instance_methods.collect(&:to_s).include?(action.to_s),
-                 method: method,
-                 action: action }.
-               merge(metadata),
-               &block)
+        {if: described_class.instance_methods.collect(&:to_s).include?(action.to_s),
+         method: method,
+         action: action}.
+        merge(metadata),
+        &block)
     end
 
     def skip?(options, *contexts)
@@ -182,6 +179,7 @@ module CrudControllerTestHelper
     def it_should_not_have_flash(type)
       context "flash" do
         subject { flash }
+
         its([type]) { should be_blank }
       end
     end
@@ -200,5 +198,4 @@ module CrudControllerTestHelper
       end
     end
   end
-
 end

@@ -10,7 +10,6 @@ require_dependency Devise::Engine.root.
                                   to_s
 
 class Devise::RegistrationsController < DeviseController
-
   before_action :has_old_password, only: [:edit, :update]
   before_action :reject_non_password_params, only: [:update]
 

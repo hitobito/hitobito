@@ -6,21 +6,20 @@
 #  https://github.com/hitobito/hitobito.
 
 class PersonDecorator < ApplicationDecorator
-
   decorates :person
 
   include ContactableDecorator
 
   def as_typeahead
-    { id: id, label: h.h(full_label) }
+    {id: id, label: h.h(full_label)}
   end
 
   def as_quicksearch
-    { id: id, label: h.h(full_label), type: :person, icon: :user }
+    {id: id, label: h.h(full_label), type: :person, icon: :user}
   end
 
   def as_typeahead_with_address
-    { id: id, label: h.h(name_with_address) }
+    {id: id, label: h.h(name_with_address)}
   end
 
   def full_label
@@ -182,9 +181,9 @@ class PersonDecorator < ApplicationDecorator
   def role_popover_link(path, html_id = nil)
     content_tag(:span, style: "padding-left: 10px", id: html_id) do
       h.link_to(h.icon(:edit),
-                path,
-                title: h.t("global.link.edit"),
-                remote: true)
+        path,
+        title: h.t("global.link.edit"),
+        remote: true)
     end
   end
 end

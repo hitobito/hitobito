@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceConfigsController < CrudController
-
   self.nesting = Group
   self.permitted_attrs = [:payment_information, :address, :iban, :account_number,
                           :payment_slip, :beneficiary, :payee, :participant_number,
@@ -40,5 +39,4 @@ class InvoiceConfigsController < CrudController
   def missing_payment_reminder_levels
     PaymentReminderConfig::LEVELS.to_a - entry.payment_reminder_configs.collect(&:level)
   end
-
 end

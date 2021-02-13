@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailRelayJob < RecurringJob
-
   run_every Settings.email.retriever.interval.minutes
 
   def perform_internal
@@ -33,5 +32,4 @@ class MailRelayJob < RecurringJob
       nil
     end
   end
-
 end

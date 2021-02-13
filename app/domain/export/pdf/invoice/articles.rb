@@ -38,13 +38,13 @@ module Export::Pdf::Invoice
 
     def articles_table
       table(articles,
-            header: true,
-            column_widths: { 0 => 290, 1 => 40, 2 => 50, 3 => 50, 4 => 50 },
-            cell_style: { borders: [:bottom],
-                          border_color: "CCCCCC",
-                          border_width: 0.5,
-                          padding: [2, 0, 2, 0],
-                          inline_format: true })
+        header: true,
+        column_widths: {0 => 290, 1 => 40, 2 => 50, 3 => 50, 4 => 50},
+        cell_style: {borders: [:bottom],
+                     border_color: "CCCCCC",
+                     border_width: 0.5,
+                     padding: [2, 0, 2, 0],
+                     inline_format: true})
     end
 
     def articles
@@ -72,9 +72,9 @@ module Export::Pdf::Invoice
     def total_box # rubocop:disable Metrics/MethodLength
       bounding_box([0, cursor], width: bounds.width) do
         font_size(8) do
-          pdf.table total_data, position: :right, cell_style: { borders: [],
-                                                                border_color: "CCCCCC",
-                                                                border_width: 0.5 } do
+          pdf.table total_data, position: :right, cell_style: {borders: [],
+                                                               border_color: "CCCCCC",
+                                                               border_width: 0.5} do
             rows(0..1).padding = [2, 0]
 
             row(2).font_style = :bold

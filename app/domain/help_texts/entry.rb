@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class HelpTexts::Entry
-  attr_reader :key, :action_names,  :controller_name, :model_class
+  attr_reader :key, :action_names, :controller_name, :model_class
 
   def self.key(controller_name, model_class)
     [controller_name, model_class.to_s.underscore].compact.join("--")
@@ -14,9 +14,9 @@ class HelpTexts::Entry
 
   def initialize(controller_name, model_class, existing = nil)
     @controller_name = controller_name
-    @model_class     = model_class
-    @existing        = existing || {}
-    @key             = self.class.key(controller_name, model_class)
+    @model_class = model_class
+    @existing = existing || {}
+    @key = self.class.key(controller_name, model_class)
 
     @action_names = []
   end
@@ -28,7 +28,7 @@ class HelpTexts::Entry
   def grouped
     %w(action field).collect do |kind|
       label = HelpText.human_attribute_name("#{kind}", count: 2)
-      list  = labeled_list(kind)
+      list = labeled_list(kind)
       next if list.empty?
 
       OpenStruct.new(label: label, list: list)
@@ -77,7 +77,7 @@ class HelpTexts::Entry
     end
   end
 
-  def translate_action(action, mapping = { index: :list, new: :add })
+  def translate_action(action, mapping = {index: :list, new: :add})
     I18n.t("global.link.#{mapping.fetch(action.to_sym, action)}")
   end
 
@@ -89,5 +89,3 @@ class HelpTexts::Entry
     @controller_class ||= "#{@controller_name}_controller".classify.constantize
   end
 end
-
-

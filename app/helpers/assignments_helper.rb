@@ -3,10 +3,10 @@ module AssignmentsHelper
     case attachment
     when Message::Letter
       link_to(t("assignments.attachment"),
-              group_mailing_list_message_path(attachment.group,
-                                              attachment.mailing_list,
-                                              attachment,
-                                              format: :pdf))
+        group_mailing_list_message_path(attachment.group,
+          attachment.mailing_list,
+          attachment,
+          format: :pdf))
     end
   end
 end

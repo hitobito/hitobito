@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::InvoicesController < ListController
-
-  self.sort_mappings = { recipient: Person.order_by_name_statement }
+  self.sort_mappings = {recipient: Person.order_by_name_statement}
   self.search_columns = [:title, :sequence_number, "people.last_name", "people.email"]
 
   private
@@ -33,5 +32,4 @@ class Person::InvoicesController < ListController
   def authorize_class
     authorize!(:index_invoices, person)
   end
-
 end

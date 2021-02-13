@@ -44,5 +44,4 @@ class Devise::SessionsController < DeviseController
 
   prepend Json
   prepend OauthSigninLayout
-
 end

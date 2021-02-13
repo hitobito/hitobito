@@ -3,7 +3,6 @@
 require "spec_helper"
 
 describe TagsController, js: true do
-
   subject { page }
 
   let(:top_leader) { people(:top_leader) }
@@ -46,5 +45,4 @@ describe TagsController, js: true do
     person.update!(tags: tags)
     person
   end
-
 end

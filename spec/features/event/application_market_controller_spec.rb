@@ -8,36 +8,35 @@
 require "spec_helper"
 
 describe Event::ApplicationMarketController do
-
   let(:event) { Fabricate(:course) }
 
   let(:group) { event.groups.first }
 
   let(:appl_prio_1) do
     Fabricate(:event_participation,
-              event: event,
-              application: Fabricate(:event_application, priority_1: event))
+      event: event,
+      application: Fabricate(:event_application, priority_1: event))
   end
 
   let(:appl_prio_2) do
     Fabricate(:event_participation,
-              application: Fabricate(:event_application, priority_2: event))
+      application: Fabricate(:event_application, priority_2: event))
   end
 
   let(:appl_prio_3) do
     Fabricate(:event_participation,
-              application: Fabricate(:event_application, priority_3: event))
+      application: Fabricate(:event_application, priority_3: event))
   end
 
   let(:appl_waiting) do
     Fabricate(:event_participation,
-              application: Fabricate(:event_application, waiting_list: true),
-              event: Fabricate(:course, kind: event.kind))
+      application: Fabricate(:event_application, waiting_list: true),
+      event: Fabricate(:course, kind: event.kind))
   end
 
   let(:appl_other) do
     Fabricate(:event_participation,
-              application: Fabricate(:event_application))
+      application: Fabricate(:event_application))
   end
   let(:appl_other_assigned) do
     participation = Fabricate(:event_participation, active: true)
@@ -70,9 +69,7 @@ describe Event::ApplicationMarketController do
     leader
   end
 
-
   describe "requests are mutually undoable", js: true do
-
     context "waiting_list" do
       it "starting from application", unstable: true do
         obsolete_node_safe do
@@ -234,7 +231,6 @@ describe Event::ApplicationMarketController do
           expect(find("#applications").text).to eq(applications)
         end
       end
-
     end
   end
 
@@ -276,5 +272,4 @@ describe Event::ApplicationMarketController do
       expect(all("#applications ##{appl1_id} td").last).to have_no_selector(".popover")
     end
   end
-
 end

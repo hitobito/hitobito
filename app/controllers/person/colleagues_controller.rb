@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::ColleaguesController < ApplicationController
-
   before_action :authorize_action
 
   decorates :group, :person, :colleagues
@@ -54,5 +53,4 @@ class Person::ColleaguesController < ApplicationController
   self.sort_mappings = {
     roles: [Person.order_by_role_statement].concat(Person.order_by_name_statement)
   }
-
 end

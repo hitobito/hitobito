@@ -8,8 +8,7 @@
 require "spec_helper"
 
 describe MailRelay::AddressList do
-
-  let(:top_leader)    { people(:top_leader) }
+  let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
 
   it "contains main and additional mailing emails" do

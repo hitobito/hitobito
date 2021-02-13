@@ -7,11 +7,10 @@
 
 module Import
   class Person
-
     delegate :save, :new_record?, :persisted?, to: :person
 
     attr_reader :person, :attributes, :override, :can_manage_tags, :role,
-                :phone_numbers, :social_accounts, :additional_emails, :tags
+      :phone_numbers, :social_accounts, :additional_emails, :tags
 
     class << self
       def fields
@@ -26,12 +25,12 @@ module Import
 
       def person_attributes
         relevant_attributes.map! do |name|
-          { key: name, value: ::Person.human_attribute_name(name, default: "") }
+          {key: name, value: ::Person.human_attribute_name(name, default: "")}
         end
       end
 
       def tag_attributes
-        [{ key: "tags", value: ActsAsTaggableOn::Tag.model_name.human(count: 2) }]
+        [{key: "tags", value: ActsAsTaggableOn::Tag.model_name.human(count: 2)}]
       end
 
       # alle attributes - technische attributes
@@ -140,7 +139,7 @@ module Import
       accounts.map do |key|
         label = key.split("_").last.capitalize
         value = attributes.delete(key)
-        { model.value_attr => value, :label => label } if value.present?
+        {model.value_attr => value, :label => label} if value.present?
       end.compact
     end
 
@@ -148,7 +147,5 @@ module Import
       tags = attributes.delete("tags")
       can_manage_tags ? tags.to_s.split(",").map { |t| t.strip } : nil
     end
-
   end
-
 end

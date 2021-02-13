@@ -5,10 +5,9 @@
 
 module Dropdown
   class TableDisplays < Base
-
     delegate :form_tag, :hidden_field_tag, :label_tag, :check_box_tag, :content_tag,
-             :content_tag_nested, :table_displays_path, :parent, :current_person, :t,
-             :dom_id, to: :template
+      :content_tag_nested, :table_displays_path, :parent, :current_person, :t,
+      :dom_id, to: :template
 
     def initialize(template)
       super(template, template.t("global.columns"), :bars)
@@ -32,7 +31,7 @@ module Dropdown
     end
 
     def render_items
-      options = { class: "dropdown-menu pull-right", data: { persistent: true }, role: "menu" }
+      options = {class: "dropdown-menu pull-right", data: {persistent: true}, role: "menu"}
 
       content_tag(:ul, options) do
         items = table_display.available.collect do |column|
@@ -46,7 +45,7 @@ module Dropdown
 
     def render_item(name, column, value = column, label = render_label(column))
       content_tag(:li) do
-        check_box_tag(name, value, selected?(value), id: value, data: { submit: true }) +
+        check_box_tag(name, value, selected?(value), id: value, data: {submit: true}) +
           label_tag(value, label)
       end
     end
@@ -60,7 +59,7 @@ module Dropdown
       return [] if questions.empty?
 
       divider = Divider.new.render(template)
-      title   = Title.new(t("event.participations.#{kind}_answers")).render(template)
+      title = Title.new(t("event.participations.#{kind}_answers")).render(template)
 
       questions.collect do |question|
         render_item("selected[]", question.label, dom_id(question), question.label)
@@ -95,9 +94,8 @@ module Dropdown
       {
         id: dom_id(parent),
         class: "table-display-dropdown",
-        data: { turbolinks_permanent: 1 }
+        data: {turbolinks_permanent: 1}
       }
     end
-
   end
 end

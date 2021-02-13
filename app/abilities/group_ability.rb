@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Group
 
   on(Group) do # rubocop:disable Metrics/BlockLength
@@ -33,20 +32,20 @@ class GroupAbility < AbilityDsl::Base
 
     permission(:layer_read).
       may(:show_details, :index_people, :index_local_people, :index_full_people,
-          :index_deep_full_people, :export_events, :'export_event/courses').
+        :index_deep_full_people, :export_events, :'export_event/courses').
       in_same_layer
 
     permission(:layer_full).may(:create).with_parent_in_same_layer
     permission(:layer_full).may(:destroy).in_same_layer_except_permission_giving
     permission(:layer_full).
       may(:update, :reactivate, :index_person_add_requests, :index_notes,
-          :manage_person_tags, :activate_person_add_requests, :deactivate_person_add_requests,
-          :index_deleted_people, :index_service_tokens).
+        :manage_person_tags, :activate_person_add_requests, :deactivate_person_add_requests,
+        :index_deleted_people, :index_service_tokens).
       in_same_layer
 
     permission(:layer_and_below_read).
       may(:show_details, :index_people, :index_full_people, :index_deep_full_people,
-          :export_subgroups, :export_events, :'export_event/courses').
+        :export_subgroups, :export_events, :'export_event/courses').
       in_same_layer_or_below
     permission(:layer_and_below_read).may(:index_local_people).in_same_layer
 
@@ -54,7 +53,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:destroy).in_same_layer_or_below_except_permission_giving
     permission(:layer_and_below_full).
       may(:update, :reactivate, :index_person_add_requests, :index_notes,
-          :manage_person_tags, :index_deleted_people).in_same_layer_or_below
+        :manage_person_tags, :index_deleted_people).in_same_layer_or_below
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers
     permission(:layer_and_below_full).
       may(:activate_person_add_requests, :deactivate_person_add_requests, :index_service_tokens).
@@ -68,8 +67,8 @@ class GroupAbility < AbilityDsl::Base
 
     general(:update).group_not_deleted
     general(:index_person_add_requests,
-            :activate_person_add_requests,
-            :deactivate_person_add_requests).
+      :activate_person_add_requests,
+      :deactivate_person_add_requests).
       if_layer_group
   end
 
@@ -94,14 +93,14 @@ class GroupAbility < AbilityDsl::Base
   def with_parent_in_same_group_hierarchy
     parent = group.parent
     parent &&
-    !parent.deleted? &&
-    !group.layer? &&
-    permission_in_groups?(parent.local_hierarchy.collect(&:id))
+      !parent.deleted? &&
+      !group.layer? &&
+      permission_in_groups?(parent.local_hierarchy.collect(&:id))
   end
 
   def in_below_group
     !permission_in_group?(group.id) &&
-    permission_in_groups?(group.local_hierarchy.collect(&:id))
+      permission_in_groups?(group.local_hierarchy.collect(&:id))
   end
 
   def in_same_layer_except_permission_giving
@@ -115,7 +114,7 @@ class GroupAbility < AbilityDsl::Base
   def except_permission_giving
     [:layer_and_below_full, :layer_full].none? do |permission|
       user_context.permission_group_ids(permission).include?(group.id) ||
-      user_context.permission_layer_ids(permission).include?(group.id)
+        user_context.permission_layer_ids(permission).include?(group.id)
     end
   end
 
@@ -133,5 +132,4 @@ class GroupAbility < AbilityDsl::Base
   def group
     subject
   end
-
 end

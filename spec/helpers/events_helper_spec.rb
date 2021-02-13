@@ -20,5 +20,4 @@ describe EventsHelper, type: :helper do
       expect(helper.export_events_ical_button).to eq(button_label)
     end
   end
-
 end

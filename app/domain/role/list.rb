@@ -5,7 +5,6 @@
 
 class Role
   class List
-
     attr_reader :ability, :params
     delegate :authorize!, :can?, to: :ability
 
@@ -95,6 +94,5 @@ class Role
     def model_params
       params[:role]
     end
-
   end
 end

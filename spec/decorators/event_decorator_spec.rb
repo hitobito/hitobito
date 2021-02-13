@@ -10,17 +10,18 @@ require "spec_helper"
 describe EventDecorator, :draper_with_helpers do
   include Rails.application.routes.url_helpers
 
-
   let(:event) { events(:top_course) }
+
   subject { EventDecorator.new(event) }
 
   its(:labeled_link) { is_expected.to match(/SLK TOP\-007 Top/) }
   its(:labeled_link) { is_expected.to match(%r{<a href="/groups/#{event.group_ids.first}/events/#{event.id}">}) }
 
-  its(:label_with_group) { is_expected.to eq("Top: Top Course (TOP-007)")}
+  its(:label_with_group) { is_expected.to eq("Top: Top Course (TOP-007)") }
 
   context "typeahead label" do
     subject { EventDecorator.new(event).as_typeahead[:label] }
+
     it { is_expected.to eq "#{event} (#{event.groups.first})" }
 
     context "multiple groups are joined and truncated" do
@@ -32,7 +33,6 @@ describe EventDecorator, :draper_with_helpers do
   end
 
   describe "#dates" do
-
     before { event.dates.clear }
 
     it "joins multiple dates" do
@@ -41,7 +41,7 @@ describe EventDecorator, :draper_with_helpers do
       expect(subject.dates_info).to eq "01.01.2002<br />01.01.2002"
     end
 
-    context "date objects"  do
+    context "date objects" do
       it "start_at only" do
         add_date(start_at: "2002-01-01")
         expect(subject.dates_info).to eq "01.01.2002"
@@ -96,7 +96,6 @@ describe EventDecorator, :draper_with_helpers do
     def parse(str)
       Time.zone.parse(str)
     end
-
   end
 
   context "qualification infos" do
@@ -149,8 +148,8 @@ describe EventDecorator, :draper_with_helpers do
 
   context "external_application_link" do
     let(:group) { groups(:top_group) }
-    subject { EventDecorator.new(event).external_application_link(group) }
 
+    subject { EventDecorator.new(event).external_application_link(group) }
 
     context "event does not support external applications" do
       before { event.update_column(:external_applications, false) }
@@ -163,7 +162,5 @@ describe EventDecorator, :draper_with_helpers do
 
       it { is_expected.to match(/public_event/) }
     end
-
   end
-
 end

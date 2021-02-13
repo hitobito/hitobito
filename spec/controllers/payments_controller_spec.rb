@@ -8,9 +8,8 @@
 require "spec_helper"
 
 describe PaymentsController do
-
-  let(:group)   { groups(:bottom_layer_one) }
-  let(:person)  { people(:bottom_member) }
+  let(:group) { groups(:bottom_layer_one) }
+  let(:person) { people(:bottom_member) }
   let(:invoice) { invoices(:invoice) }
 
   before { sign_in(person) }
@@ -18,7 +17,7 @@ describe PaymentsController do
   it "POST#creates valid arguments create payment" do
     invoice.update(state: :sent)
     expect do
-      post :create, params: { group_id: group.id, invoice_id: invoice.id, payment: { amount: invoice.total } }
+      post :create, params: {group_id: group.id, invoice_id: invoice.id, payment: {amount: invoice.total}}
     end.to change { invoice.payments.count }.by(1)
 
     expect(flash[:notice]).to be_present
@@ -29,7 +28,7 @@ describe PaymentsController do
     list = InvoiceList.create(title: :title, group: invoice.group)
     invoice.update(state: :sent, invoice_list: list)
     expect do
-      post :create, params: { group_id: group.id, invoice_id: invoice.id, payment: { amount: invoice.total } }
+      post :create, params: {group_id: group.id, invoice_id: invoice.id, payment: {amount: invoice.total}}
     end.to change { invoice.payments.count }.by(1)
 
     expect(flash[:notice]).to be_present
@@ -41,10 +40,9 @@ describe PaymentsController do
   it "POST#creates invalid arguments redirect back" do
     invoice.update(state: :sent)
     expect do
-      post :create, params: { group_id: group.id, invoice_id: invoice.id, payment: { amount: "" } }
+      post :create, params: {group_id: group.id, invoice_id: invoice.id, payment: {amount: ""}}
     end.not_to change { invoice.payments.count }
     expect(assigns(:payment)).to be_invalid
     expect(response).to redirect_to(group_invoice_path(group, invoice))
   end
-
 end

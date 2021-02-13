@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe I18nEnums do
-
   let(:person) { Person.new(first_name: "Dummy") }
 
   it "returns translated labels" do
@@ -43,6 +42,6 @@ describe I18nEnums do
   end
 
   it "has class side method to return all labels" do
-    expect(Person.gender_labels).to eq({ m: "männlich", w: "weiblich" })
+    expect(Person.gender_labels).to eq({m: "männlich", w: "weiblich"})
   end
 end

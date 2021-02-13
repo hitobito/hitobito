@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupsController < CrudController
-
   include AsyncDownload
 
   # Respective group attrs are added in corresponding instance method.
@@ -15,19 +14,17 @@ class GroupsController < CrudController
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]
 
-
   decorates :group, :groups, :contact
 
   before_render_show :active_sub_groups, if: -> { html_request? }
   before_render_form :load_contacts
 
-
   def index
     flash.keep if html_request?
     redirect_to group_path(Group.root.id,
-                           format: request.format.to_sym,
-                           user_email: params[:user_email],
-                           user_token: params[:user_token])
+      format: request.format.to_sym,
+      user_email: params[:user_email],
+      user_token: params[:user_token])
   end
 
   def show
@@ -110,5 +107,4 @@ class GroupsController < CrudController
   def sub_groups_label
     @sub_groups_label ||= translate(:subgroups)
   end
-
 end

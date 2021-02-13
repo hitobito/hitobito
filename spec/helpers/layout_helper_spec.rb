@@ -11,7 +11,6 @@ describe LayoutHelper do
   include Webpacker::Helper
 
   describe "#header_logo" do
-
     let(:group) { groups(:bottom_group_one_one_one) }
     let(:parent) { groups(:bottom_group_one_one) }
     let(:grandparent) { groups(:bottom_layer_one) }

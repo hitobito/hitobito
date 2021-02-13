@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::AddRequestsController < ApplicationController
-
   authorize_resource
 
   prepend_before_action :entry
@@ -15,12 +14,12 @@ class Person::AddRequestsController < ApplicationController
     approver = Person::AddRequest::Approver.for(entry, current_user)
     if approver.approve
       redirect_back fallback_location: person_path(entry.person),
-        notice: t("person.add_requests.approve.success_notice", person: entry.person.full_name)
+                    notice: t("person.add_requests.approve.success_notice", person: entry.person.full_name)
     else
       redirect_back fallback_location: person_path(entry.person),
-        alert: t("person.add_requests.approve.failure_notice",
-                 person: entry.person.full_name,
-                 errors: approver.error_message)
+                    alert: t("person.add_requests.approve.failure_notice",
+                      person: entry.person.full_name,
+                      errors: approver.error_message)
     end
   end
 
@@ -28,8 +27,8 @@ class Person::AddRequestsController < ApplicationController
     Person::AddRequest::Approver.for(entry, current_user).reject
     action = params[:cancel] ? "cancel" : "reject"
     redirect_back fallback_location: person_path(entry.person),
-      notice: t("person.add_requests.#{action}.success_notice",
-                person: entry.person.full_name)
+                  notice: t("person.add_requests.#{action}.success_notice",
+                    person: entry.person.full_name)
   end
 
   private

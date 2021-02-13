@@ -5,13 +5,11 @@
 #  License version 3 or later. See the COPYING file at the top-level
 #  directory or at https://github.com/hitobito/hitobito.
 
-
 require "spec_helper"
 
-
 describe RolesController, js: true do
-
   subject { page }
+
   let(:group) { groups(:top_group) }
 
   it "toggles people fields" do

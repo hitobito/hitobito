@@ -5,10 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 module Oauth
   class ApplicationsController < CrudController
-
     self.permitted_attrs = [
       :name, :redirect_uri, :confidential,
       :logo, :remove_logo,

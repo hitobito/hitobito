@@ -35,7 +35,6 @@
 #
 
 class MailingList < ActiveRecord::Base
-
   serialize :preferred_labels, Array
   attribute :mailchimp_result, Synchronize::Mailchimp::ResultType.new
 
@@ -44,29 +43,29 @@ class MailingList < ActiveRecord::Base
   has_many :subscriptions, dependent: :destroy
 
   has_many :person_add_requests,
-           foreign_key: :body_id,
-           inverse_of: :body,
-           class_name: "Person::AddRequest::MailingList",
-           dependent: :destroy
+    foreign_key: :body_id,
+    inverse_of: :body,
+    class_name: "Person::AddRequest::MailingList",
+    dependent: :destroy
 
   has_many :messages, dependent: :nullify
 
   validates_by_schema
-  validates :mail_name, uniqueness: { case_sensitive: false },
+  validates :mail_name, uniqueness: {case_sensitive: false},
                         format: /\A[a-z][a-z0-9\-\_\.]*\Z/,
                         allow_blank: true
-  validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
+  validates :description, length: {allow_nil: true, maximum: 2**16 - 1}
   validate :assert_mail_name_is_not_protected
   validates :additional_sender,
-      allow_blank: true,
-      format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
+    allow_blank: true,
+    format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
 
   after_destroy :schedule_mailchimp_destroy, if: :mailchimp?
 
   scope :list, -> { order(:name) }
   scope :subscribable, -> { where(subscribable: true) }
   scope :mailchimp, -> do
-    where.not(mailchimp_api_key: ["", nil]).where.not( mailchimp_list_id: ["", nil])
+    where.not(mailchimp_api_key: ["", nil]).where.not(mailchimp_list_id: ["", nil])
   end
 
   DEFAULT_LABEL = "_main".freeze
@@ -143,5 +142,4 @@ class MailingList < ActiveRecord::Base
   def schedule_mailchimp_destroy
     MailchimpDestructionJob.new(mailchimp_list_id, mailchimp_api_key, people).enqueue!
   end
-
 end

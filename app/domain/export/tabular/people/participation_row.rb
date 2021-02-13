@@ -7,7 +7,6 @@
 
 module Export::Tabular::People
   class ParticipationRow < PersonRow
-
     attr_reader :participation
 
     delegate :additional_information, to: :participation, prefix: true
@@ -32,6 +31,5 @@ module Export::Tabular::People
       answer = participation.answers.find { |e| e.question_id == id.to_i }
       answer.try(:answer)
     end
-
   end
 end

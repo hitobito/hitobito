@@ -5,17 +5,14 @@
 #  License version 3 or later. See the COPYING file at the top-level
 #  directory or at https://github.com/hitobito/hitobito.
 
-
 require "spec_helper"
 
-
 describe RoleListsController, js: true do
-
   subject { page }
 
-  let(:group)   { groups(:top_group) }
-  let!(:role1)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
-  let!(:role2)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
+  let(:group) { groups(:top_group) }
+  let!(:role1) { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
+  let!(:role2) { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
   let!(:leader) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group) }
 
   before do
@@ -44,12 +41,12 @@ describe RoleListsController, js: true do
     click_link("Rollen entfernen")
     expect(page).to have_content "Welche Rollen sollen gelöscht werden?"
 
-    find(:css,"input[name='role[types][Group::TopGroup::Member]']").set(false)
+    find(:css, "input[name='role[types][Group::TopGroup::Member]']").set(false)
     find("button", text: "Entfernen").click
 
     expect(page).to have_content "Eine Rolle wurde entfernt"
-    is_expected.to     have_content(role1.person.first_name)
-    is_expected.to     have_content(role2.person.first_name)
+    is_expected.to have_content(role1.person.first_name)
+    is_expected.to have_content(role2.person.first_name)
     is_expected.not_to have_content(leader.person.first_name)
   end
 
@@ -79,7 +76,7 @@ describe RoleListsController, js: true do
     select("Secretary", from: "role_type")
     click_button("Weiter")
 
-    find(:css,"input[name='role[types][Group::TopGroup::Leader]']").set(false)
+    find(:css, "input[name='role[types][Group::TopGroup::Leader]']").set(false)
     find("button", text: "Rollen verschieben").click
 
     is_expected.to have_content("3 Rollen wurden verschoben")
@@ -89,7 +86,6 @@ describe RoleListsController, js: true do
 
     is_expected.not_to have_css("tr#person_#{role1.person.id} td p", text: "Member")
     is_expected.not_to have_css("tr#person_#{role2.person.id} td p", text: "Member")
-    is_expected.to     have_css("tr#person_#{leader.person.id} td p", text: "Leader")
+    is_expected.to have_css("tr#person_#{leader.person.id} td p", text: "Leader")
   end
-
 end

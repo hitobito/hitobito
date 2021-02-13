@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module EventMacros
-
   def set_start_finish(event, start_at, finish_at)
     event.dates.clear
     event.dates.build(start_at: start_at, finish_at: finish_at)

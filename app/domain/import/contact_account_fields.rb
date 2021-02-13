@@ -18,7 +18,7 @@ module Import
     end
 
     def fields
-      map { |key, value| { key: key, value: value } }
+      map { |key, value| {key: key, value: value} }
     end
 
     def key_for(label)

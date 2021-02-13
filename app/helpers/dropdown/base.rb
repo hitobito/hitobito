@@ -27,7 +27,7 @@ module Dropdown
     def to_s
       template.button_group do
         render_dropdown_button +
-        render_items
+          render_items
       end
     end
 
@@ -53,9 +53,9 @@ module Dropdown
       safe_join([
         label_with_link,
         content_tag(:a,
-                    class: "dropdown-toggle #{button_class}",
-                    href: "#",
-                    data: { toggle: "dropdown" }) do
+          class: "dropdown-toggle #{button_class}",
+          href: "#",
+          data: {toggle: "dropdown"}) do
           safe_join([label_without_link,
                      content_tag(:b, "", class: "caret")].compact, " ")
         end
@@ -83,11 +83,9 @@ module Dropdown
         item.render(template)
       end
     end
-
   end
 
   Item = Struct.new(:label, :url, :sub_items, :options) do
-
     def initialize(label, url, options = {})
       super(label, url, [], options)
     end
@@ -123,7 +121,6 @@ module Dropdown
         end
       end
     end
-
   end
 
   class Divider

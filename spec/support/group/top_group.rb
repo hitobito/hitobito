@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::TopGroup < Group
-
   self.event_types = [Event, Event::Course]
 
   children Group::TopGroup
@@ -32,5 +31,4 @@ class Group::TopGroup < Group
   end
 
   roles Leader, LocalGuide, Secretary, LocalSecretary, Member
-
 end

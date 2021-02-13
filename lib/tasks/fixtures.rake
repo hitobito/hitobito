@@ -15,7 +15,7 @@ namespace :fixtures do
       return "root" if group.id == 1 && group.parent_id.nil?
 
       parts = if Group.where(name: group.name).one?
-                [group.display_name.parameterize]
+        [group.display_name.parameterize]
               else
                 [group.display_name.parameterize, group.id]
               end

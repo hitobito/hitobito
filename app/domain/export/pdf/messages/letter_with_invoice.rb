@@ -7,7 +7,6 @@
 
 module Export::Pdf::Messages
   class LetterWithInvoice < Letter
-
     def filename
       super do |parts|
         parts.prepend Invoice.model_name.human.downcase
@@ -25,7 +24,7 @@ module Export::Pdf::Messages
         Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice).render
       else
         ocrb_path = Rails.root.join("app", "javascript", "fonts", "OCRB.ttf")
-        pdf.font_families.update("ocrb" => { normal: ocrb_path })
+        pdf.font_families.update("ocrb" => {normal: ocrb_path})
         Export::Pdf::Invoice::PaymentSlip.new(pdf, invoice).render
       end
     end

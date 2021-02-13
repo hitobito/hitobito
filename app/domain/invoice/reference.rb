@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Invoice::Reference
-
   QR_ID_RANGE = (30_000..31_999).freeze
   SEPARATOR_SUBSTITUTE = "ZZ"
 

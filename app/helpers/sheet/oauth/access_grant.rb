@@ -6,9 +6,7 @@
 module Sheet
   module Oauth
     class AccessGrant < Sheet::Admin
-
       self.parent_sheet = Sheet::Oauth::Application
-
     end
   end
 end

@@ -7,9 +7,7 @@
 
 require "spec_helper"
 
-
 describe ActionHelper do
-
   include LayoutHelper
   include I18nHelper
   include UtilityHelper
@@ -24,7 +22,6 @@ describe ActionHelper do
   end
 
   after(:all) { reset_db }
-
 
   describe "#button_action_destroy" do
     let(:entry) { people(:top_leader) }
@@ -50,13 +47,13 @@ describe ActionHelper do
     context "with options" do
       it "should override data-confirm" do
         label = t("person.confirm_delete", person: entry)
-        button = button_action_destroy(nil, { data: { confirm: label }})
+        button = button_action_destroy(nil, {data: {confirm: label}})
         expect(button).to have_selector("a[data-confirm='#{label}']")
         expect(button).to have_selector("a[data-method='delete']")
       end
 
       it "should override data-method" do
-        button = button_action_destroy(nil, { data: { method: :put }})
+        button = button_action_destroy(nil, {data: {method: :put}})
         expect(button).to have_selector("a[data-method=put]")
         expect(button).to have_selector("a[data-confirm='Wollen Sie diesen Eintrag wirklich löschen?']")
       end

@@ -24,9 +24,8 @@
 #
 
 class Role < ActiveRecord::Base
-
-  has_paper_trail meta: { main_id: ->(r) { r.person_id },
-                          main_type: Person.sti_name },
+  has_paper_trail meta: {main_id: ->(r) { r.person_id },
+                         main_type: Person.sti_name},
                   skip: [:updated_at]
 
   acts_as_paranoid
@@ -107,7 +106,7 @@ class Role < ActiveRecord::Base
   # If this role was the last one with contact_data permission, remove the flag from the person
   def reset_contact_data_visible
     if permissions.include?(:contact_data) &&
-       !person.roles.collect(&:permissions).flatten.include?(:contact_data)
+        !person.roles.collect(&:permissions).flatten.include?(:contact_data)
       person.update_column :contact_data_visible, false
     end
   end

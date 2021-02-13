@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RolesController < CrudController
-
   self.nesting = Group, Event
 
   self.permitted_attrs = [:label]
@@ -116,5 +115,4 @@ class Event::RolesController < CrudController
       Event::Role
     end
   end
-
 end

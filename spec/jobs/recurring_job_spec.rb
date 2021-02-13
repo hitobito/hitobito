@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe RecurringJob do
-
   subject { RecurringJob.new }
 
   its(:interval) { should == 15.minutes }

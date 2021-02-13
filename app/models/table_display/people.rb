@@ -22,5 +22,4 @@ class TableDisplay::People < TableDisplay
       Person::INTERNAL_ATTRS.collect(&:to_s) +
       %w(picture primary_group_id)
   end
-
 end

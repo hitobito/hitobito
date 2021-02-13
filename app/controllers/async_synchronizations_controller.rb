@@ -13,10 +13,10 @@ class AsyncSynchronizationsController < ApplicationController
   def show
     if mailing_list.mailchimp_syncing
       return synchronization_failed if job.last_error.present?
-      render json: { status: 404 }
+      render json: {status: 404}
     else
       Cookies::AsyncSynchronization.new(cookies).remove(mailing_list_id: params[:id].to_i)
-      render json: { status: 200 }
+      render json: {status: 200}
     end
   end
 
@@ -25,9 +25,9 @@ class AsyncSynchronizationsController < ApplicationController
   def synchronization_failed
     Cookies::AsyncSynchronization.new(cookies).remove(mailing_list_id: params[:id].to_i)
     flash[:alert] = I18n.t("layouts.synchronization.synchronization_failed",
-                           error: job.last_error.lines.first.strip)
+      error: job.last_error.lines.first.strip)
     job.destroy
-    render json: { status: 422 }
+    render json: {status: 422}
   end
 
   def mailing_list
@@ -37,5 +37,4 @@ class AsyncSynchronizationsController < ApplicationController
   def job
     @job ||= MailchimpSynchronizationJob.new(mailing_list.id).delayed_jobs.first
   end
-
 end

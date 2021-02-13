@@ -14,12 +14,11 @@ module Export::Pdf::Participation
     class_attribute :model_class
 
     delegate :bounds, :bounding_box, :table,
-             :text, :cursor, :font_size, :text_box,
-             :fill_and_stroke_rectangle, :fill_color,
-             :image, :group, to: :pdf
+      :text, :cursor, :font_size, :text_box,
+      :fill_and_stroke_rectangle, :fill_color,
+      :image, :group, to: :pdf
 
     delegate :event, :person, :application, to: :participation
-
 
     def initialize(pdf, participation)
       @pdf = pdf
@@ -45,9 +44,9 @@ module Export::Pdf::Participation
         width = (bounds.width / 2) - (gutter / 2)
         starting_page = pdf.page_number
 
-        pdf.span(width, { position: 0 }, &left)
+        pdf.span(width, {position: 0}, &left)
         pdf.go_to_page(starting_page)
-        pdf.span(width, { position: width + gutter }, &right)
+        pdf.span(width, {position: width + gutter}, &right)
       end
       move_down_line
     end
@@ -83,10 +82,10 @@ module Export::Pdf::Participation
 
     def f(value)
       case value
-      when Date   then I18n.l(value)
-      when Time   then I18n.l(value, format: :time)
-      when true   then I18n.t(:"global.yes")
-      when false  then I18n.t(:"global.no")
+      when Date then I18n.l(value)
+      when Time then I18n.l(value, format: :time)
+      when true then I18n.t(:"global.yes")
+      when false then I18n.t(:"global.no")
       else value.to_s
       end
     end

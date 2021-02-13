@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupSettingDecorator < ApplicationDecorator
-
   def translated_values
     object.attrs.collect do |a|
       "#{t(a)}: #{formatted_value(a)}"
@@ -35,5 +34,4 @@ class GroupSettingDecorator < ApplicationDecorator
       object.send(attr)
     end
   end
-
 end

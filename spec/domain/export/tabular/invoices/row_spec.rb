@@ -8,8 +8,8 @@
 require "spec_helper"
 
 describe Export::Tabular::Invoices::Row do
-
   let(:invoice) { invoices(:invoice) }
+
   subject { described_class.new(invoice) }
 
   it "reads cost_centers and accounts from invoice items" do
@@ -29,21 +29,21 @@ describe Export::Tabular::Invoices::Row do
   end
 
   it "reads a set of attributes from invoice" do
-    values = Export::Tabular::Invoices::List::INCLUDED_ATTRS.collect { |x| [x, subject.fetch(x)]   }.to_h
+    values = Export::Tabular::Invoices::List::INCLUDED_ATTRS.collect { |x| [x, subject.fetch(x)] }.to_h
     expect(values).to match(
-      {"title"=>"Invoice",
-       "sequence_number"=>"376803389-2",
-       "state"=>"Entwurf",
-       "esr_number"=>"00 00376 80338 90000 00000 00021",
-       "description"=>nil,
-       "recipient_email"=>"top_leader@example.com",
-       "recipient_address"=>nil,
-       "sent_at"=>nil,
-       "due_at"=>nil,
-       "cost"=>"5.00",
-       "vat"=>"0.35",
-       "total"=>"5.35",
-       "amount_paid"=>"0.00"}
+      {"title" => "Invoice",
+       "sequence_number" => "376803389-2",
+       "state" => "Entwurf",
+       "esr_number" => "00 00376 80338 90000 00000 00021",
+       "description" => nil,
+       "recipient_email" => "top_leader@example.com",
+       "recipient_address" => nil,
+       "sent_at" => nil,
+       "due_at" => nil,
+       "cost" => "5.00",
+       "vat" => "0.35",
+       "total" => "5.35",
+       "amount_paid" => "0.00"}
     )
   end
 
@@ -57,4 +57,3 @@ describe Export::Tabular::Invoices::Row do
     expect(subject.total).to eq "10.00"
   end
 end
-

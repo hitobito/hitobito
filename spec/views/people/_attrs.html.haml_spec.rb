@@ -7,7 +7,6 @@
 
 require "spec_helper"
 describe "people/_attrs.html.haml" do
-
   let(:top_group) { groups(:top_group) }
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }

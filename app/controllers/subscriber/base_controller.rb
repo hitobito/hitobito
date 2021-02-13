@@ -6,9 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Subscriber
-
   class BaseController < CrudController
-
     self.nesting = Group, MailingList
 
     decorates :group
@@ -42,7 +40,6 @@ module Subscriber
 
     def replace_validation_errors
       default_base_errors.each do |attr, old, msg|
-
         if entry.errors[attr].first == old
           entry.errors.clear
           entry.errors.add(:base, msg)
@@ -74,6 +71,5 @@ module Subscriber
         Subscription
       end
     end
-
   end
 end

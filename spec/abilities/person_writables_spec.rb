@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe PersonWritables do
-
   let(:user) { role.person.reload }
   let(:ability) { PersonWritables.new(user) }
   let(:accessibles) { Person.accessible_by(ability) }
@@ -94,5 +93,4 @@ describe PersonWritables do
       end
     end
   end
-
 end

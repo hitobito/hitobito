@@ -20,7 +20,5 @@ module Export::Tabular::People
         super(attr.to_s.gsub("person.", "").to_sym)
       end
     end
-
   end
-
 end

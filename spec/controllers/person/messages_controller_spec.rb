@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::MessagesController do
-
   let(:message) { messages(:simple) }
   let(:top_leader) { people(:top_leader) }
   let(:top_group) { groups(:top_group) }
@@ -19,7 +18,7 @@ describe Person::MessagesController do
     it "shows messages of person" do
       MessageRecipient.create!(message: message, person: top_leader)
 
-      get :index, params: { id: top_leader.id, group_id: top_group.id }
+      get :index, params: {id: top_leader.id, group_id: top_group.id}
 
       expect(assigns(:messages)).to eq([message])
     end

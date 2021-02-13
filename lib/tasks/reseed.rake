@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 namespace :db do
-
   desc "Empties the database and loads the seeds again"
   task reseed: ["db:clobber", "db:schema:load", "db:seed", "wagon:seed"]
 

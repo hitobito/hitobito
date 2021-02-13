@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module RelatedRoleType::Assigners
-
   # - has not to be encoded in URLs, ',' must be and thus generate a much longer string.
   ID_URL_SEPARATOR = "-"
 

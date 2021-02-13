@@ -8,14 +8,13 @@
 require "spec_helper"
 
 describe Person::QueryHouseholdController do
-
   let(:bottom_member) { people(:bottom_member) }
 
   it "does not find person if its not writable" do
     sign_in(people(:bottom_member))
     person = Fabricate(:person, first_name: "Pascal")
     Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
-    get :index, params: { q: "pas", person_id: bottom_member.id }
+    get :index, params: {q: "pas", person_id: bottom_member.id}
     expect(response.body).not_to match(/Pascal/)
   end
 
@@ -23,7 +22,7 @@ describe Person::QueryHouseholdController do
     sign_in(people(:top_leader))
     person = Fabricate(:person, first_name: "Pascal")
     Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
-    get :index, params: { q: "pas", person_id: bottom_member.id }
+    get :index, params: {q: "pas", person_id: bottom_member.id}
     expect(response.body).to match(/Pascal/)
   end
 
@@ -31,7 +30,7 @@ describe Person::QueryHouseholdController do
     sign_in(people(:bottom_member))
     person = Fabricate(:person, first_name: "Pascal", town: "Greattown", zip_code: "3456", address: "Greatstreet 345")
     Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
-    get :index, params: { q: "pas", person_id: bottom_member.id }
+    get :index, params: {q: "pas", person_id: bottom_member.id}
     expect(response.body).to match(/Pascal/)
   end
 
@@ -40,8 +39,7 @@ describe Person::QueryHouseholdController do
     people(:bottom_member).update(zip_code: nil, address: nil)
     person = Fabricate(:person, first_name: "Pascal", town: "Greattown", zip_code: "3456", address: "Greatstreet 345")
     Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
-    get :index, params: { q: "pas", person_id: bottom_member.id }
+    get :index, params: {q: "pas", person_id: bottom_member.id}
     expect(response.body).to match(/Pascal/)
   end
-
 end

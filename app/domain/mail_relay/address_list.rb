@@ -7,7 +7,6 @@
 
 module MailRelay
   class AddressList
-
     attr_reader :people, :labels
 
     def initialize(people, labels = [])
@@ -50,7 +49,7 @@ module MailRelay
     def additional_emails(person)
       @additional_emails ||= additional_emails_scope.
         each_with_object(hash_with_array) do |email, memo|
-          memo[email.contactable_id] << email
+        memo[email.contactable_id] << email
       end
       @additional_emails[person.id]
     end
@@ -63,6 +62,5 @@ module MailRelay
       AdditionalEmail.where(contactable_type: Person.sti_name,
                             contactable_id: people.collect(&:id))
     end
-
   end
 end

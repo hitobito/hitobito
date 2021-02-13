@@ -7,7 +7,6 @@
 
 module Dropdown
   class PeopleExport < Base
-
     attr_reader :user, :params
 
     def initialize(template, user, params, options = {})
@@ -41,17 +40,17 @@ module Dropdown
       item = add_item(translate(format), "#")
       if Settings.table_displays
         item.sub_items << Item.new(translate(:selection),
-                                   path.merge(selection: true),
-                                   data: { checkable: true })
+          path.merge(selection: true),
+          data: {checkable: true})
       end
-      item.sub_items << Item.new(translate(:addresses), path, data: { checkable: true })
+      item.sub_items << Item.new(translate(:addresses), path, data: {checkable: true})
       item.sub_items << Item.new(translate(:households),
-                                 path.merge(household: true),
-                                 data: { checkable: true }) if @households
+        path.merge(household: true),
+        data: {checkable: true}) if @households
 
       item.sub_items << Item.new(translate(:everything),
-                                 path.merge(details: true),
-                                 data: { checkable: true }) if @details
+        path.merge(details: true),
+        data: {checkable: true}) if @details
     end
 
     def vcard_link
@@ -80,5 +79,4 @@ module Dropdown
       end
     end
   end
-
 end

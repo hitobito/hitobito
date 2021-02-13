@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe "OauthWorkflow" do
-  let(:user)         { people(:top_leader) }
+  let(:user) { people(:top_leader) }
   let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
 
   before { sign_in }
@@ -52,7 +52,7 @@ describe "OauthWorkflow" do
     skip "page.driver.post is not supported"
     app = Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri)
     grant = app.access_grants.create!(resource_owner_id: user.id, expires_in: 10, redirect_uri: redirect_uri)
-    page.driver.post oauth_token_path, { client_id: app.uid, client_secret: app.secret, redirect_uri: redirect_uri, code: grant.token, grant_type: "authorization_code" }
+    page.driver.post oauth_token_path, {client_id: app.uid, client_secret: app.secret, redirect_uri: redirect_uri, code: grant.token, grant_type: "authorization_code"}
     access_token = json["access_token"]
     expect(access_token).to be_present
     visit oauth_application_path(app)

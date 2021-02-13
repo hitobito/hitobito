@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::ExportBaseJob < BaseJob
-
   PARAMETERS = [:locale, :format, :exporter, :user_id, :options].freeze
 
   attr_reader :exporter
@@ -46,5 +45,4 @@ class Export::ExportBaseJob < BaseJob
   def filename
     @options.fetch(:filename)
   end
-
 end

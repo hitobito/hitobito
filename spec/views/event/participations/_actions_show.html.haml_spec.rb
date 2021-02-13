@@ -27,7 +27,6 @@ describe "event/participations/_actions_show.html.haml" do
     assign(:group, group)
   end
 
-
   context "last button" do
     subject { Capybara::Node::Simple.new(rendered).all("a").last }
 

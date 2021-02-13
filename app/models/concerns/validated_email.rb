@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module ValidatedEmail
-
   extend ActiveSupport::Concern
 
   included do
@@ -27,5 +26,4 @@ module ValidatedEmail
       errors.add(:email, :invalid)
     end
   end
-
 end

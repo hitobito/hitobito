@@ -7,7 +7,6 @@
 
 module PaperTrail
   class VersionDecorator < ApplicationDecorator
-
     def header
       if author
         [created_at, translate(:by, author: author)].join(h.tag(:br)).html_safe
@@ -47,9 +46,9 @@ module PaperTrail
 
     def custom_event_changes
       content_tag(:div,
-                  t_event(user: whodunnit,
-                          item: item,
-                          object_changes: object_changes))
+        t_event(user: whodunnit,
+                item: item,
+                object_changes: object_changes))
     end
 
     def changeset_lines
@@ -88,9 +87,9 @@ module PaperTrail
 
     def t_event(user: nil, item: nil, object_changes: nil)
       I18n.t("version.#{event}",
-             user: user,
-             item: item,
-             object_changes: object_changes)
+        user: user,
+        item: item,
+        object_changes: object_changes)
     end
 
     def t_person(attr)
@@ -101,7 +100,7 @@ module PaperTrail
       key = attribute_change_key(from, to)
       if key
         I18n.t("version.attribute_change.#{key}",
-               attribute_change_args(attr, from, to)).
+          attribute_change_args(attr, from, to)).
              html_safe
       else
         ""
@@ -113,10 +112,10 @@ module PaperTrail
       item = reifyed_item
 
       text = I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}",
-                    default: :"version.association_change.#{model.event}",
-                    model: item_class.model_name.human,
-                    label: item ? label_with_fallback(item) : "",
-                    changeset: changeset)
+        default: :"version.association_change.#{model.event}",
+        model: item_class.model_name.human,
+        label: item ? label_with_fallback(item) : "",
+        changeset: changeset)
       h.sanitize(text, tags: %w(i))
     end
 
@@ -163,9 +162,9 @@ module PaperTrail
     end
 
     def attribute_change_args(attr, from, to)
-      { attr: item_class.human_attribute_name(attr),
-        from: normalize(attr, from),
-        to: normalize(attr, to) }
+      {attr: item_class.human_attribute_name(attr),
+       from: normalize(attr, from),
+       to: normalize(attr, to)}
     end
 
     def normalize(attr, value)

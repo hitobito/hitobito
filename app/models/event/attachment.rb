@@ -18,7 +18,6 @@
 #
 
 class Event::Attachment < ActiveRecord::Base
-
   MAX_FILE_SIZE = Settings.event.attachments.max_file_size.megabytes
 
   belongs_to :event
@@ -41,5 +40,4 @@ class Event::Attachment < ActiveRecord::Base
       errors.add(:file, :filesize_too_large, maximum: MAX_FILE_SIZE / 1.megabyte)
     end
   end
-
 end

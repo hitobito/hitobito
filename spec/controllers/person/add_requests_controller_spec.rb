@@ -8,13 +8,12 @@
 require "spec_helper"
 
 describe Person::AddRequestsController do
-
   before { sign_in(user) }
+
   let(:group) { groups(:top_layer) }
   let(:user) { people(:top_leader) }
 
   context "POST approve" do
-
     let!(:request) do
       Person::AddRequest::Group.create!(
         person: people(:top_leader),
@@ -24,17 +23,15 @@ describe Person::AddRequestsController do
     end
 
     it "removes the given request" do
-      expect { post :approve, params: { id: request.id } }.
+      expect { post :approve, params: {id: request.id} }.
         to change { Person::AddRequest::Group.count }.by(-1)
       expect(flash[:notice]).to match(/freigegeben/)
       is_expected.to redirect_to(person_path(request.person))
       expect(people(:top_leader).reload.roles.any? { |r| r.type == request.role_type }).to be_truthy
     end
-
   end
 
   context "DELETE reject" do
-
     let!(:request) do
       Person::AddRequest::Group.create!(
         person: people(:top_leader),
@@ -44,7 +41,7 @@ describe Person::AddRequestsController do
     end
 
     it "removes the given request" do
-      expect { delete :reject, params: { id: request.id } }.
+      expect { delete :reject, params: {id: request.id} }.
         to change { Person::AddRequest::Group.count }.by(-1)
       expect(flash[:notice]).to match(/abgelehnt/)
       is_expected.to redirect_to(person_path(request.person))
@@ -54,12 +51,10 @@ describe Person::AddRequestsController do
       let(:user) { people(:bottom_member) }
 
       it "removes the given request" do
-        expect { delete :reject, params: { id: request.id, cancel: true } }.
+        expect { delete :reject, params: {id: request.id, cancel: true} }.
           to change { Person::AddRequest::Group.count }.by(-1)
         expect(flash[:notice]).to match(/zurückgezogen/)
       end
     end
-
   end
-
 end

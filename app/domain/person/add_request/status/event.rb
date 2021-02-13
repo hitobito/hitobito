@@ -7,10 +7,8 @@
 
 module Person::AddRequest::Status
   class Event < Base
-
     def created?
       ::Event::Participation.where(event_id: body_id, person_id: person_id).exists?
     end
-
   end
 end

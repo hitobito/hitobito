@@ -3,7 +3,6 @@
 require "spec_helper"
 
 describe People::Merger do
-
   let(:person) { Fabricate(:person) }
   let(:duplicate) { Fabricate(:person_with_address_and_phone) }
   let(:actor) { people(:root) }
@@ -13,12 +12,11 @@ describe People::Merger do
 
   before do
     Fabricate("Group::BottomGroup::Member",
-              group: groups(:bottom_group_one_one),
-              person: duplicate)
+      group: groups(:bottom_group_one_one),
+      person: duplicate)
   end
 
   context "merge people" do
-
     it "copies attributes, removes source person, creates log entry" do
       @source = duplicate
       @target = person
@@ -56,8 +54,8 @@ describe People::Merger do
       @target = person
 
       Fabricate("Group::BottomGroup::Member",
-                group: groups(:bottom_group_two_one),
-                person: person)
+        group: groups(:bottom_group_two_one),
+        person: person)
 
       expect do
         merger.merge!
@@ -78,8 +76,8 @@ describe People::Merger do
       @target = person
 
       Fabricate("Group::BottomGroup::Member",
-                group: groups(:bottom_group_one_one),
-                person: person)
+        group: groups(:bottom_group_one_one),
+        person: person)
 
       expect do
         merger.merge!
@@ -97,8 +95,8 @@ describe People::Merger do
       @target = person
 
       duplicate_two_one_role = Fabricate("Group::BottomGroup::Member",
-                               group: groups(:bottom_group_two_one),
-                               person: duplicate)
+        group: groups(:bottom_group_two_one),
+        person: duplicate)
 
       duplicate_two_one_role.delete
       # check soft delete
@@ -106,9 +104,9 @@ describe People::Merger do
 
       # should not merge this deleted role since person has it already
       Fabricate("Group::BottomGroup::Member",
-                deleted_at: 2.months.ago,
-                group: groups(:bottom_group_one_one),
-                person: duplicate)
+        deleted_at: 2.months.ago,
+        group: groups(:bottom_group_one_one),
+        person: duplicate)
 
       expect do
         merger.merge!
@@ -188,7 +186,5 @@ describe People::Merger do
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end
-
   end
-
 end

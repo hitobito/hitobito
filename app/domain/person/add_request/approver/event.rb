@@ -7,7 +7,6 @@
 
 module Person::AddRequest::Approver
   class Event < Base
-
     private
 
     # set state assigned for youth wagon
@@ -38,6 +37,5 @@ module Person::AddRequest::Approver
         role.participation = participation
       end
     end
-
   end
 end

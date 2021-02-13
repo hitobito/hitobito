@@ -10,7 +10,7 @@ require "spec_helper"
 
 describe Invoice::BatchUpdateResult do
   let(:draft) { invoices(:invoice) }
-  let(:sent)  { invoices(:sent) }
+  let(:sent) { invoices(:sent) }
 
   it "tracks single invoice being issued" do
     subject.track_update(:issued, draft)
@@ -44,7 +44,6 @@ describe Invoice::BatchUpdateResult do
     expect(subject.notice).to eq ["Rechnung #{draft.sequence_number} konnte nicht " \
                                   "verschickt werden, da keine Empfänger E-Mail " \
                                   "hinterlegt ist."]
-
   end
 
   it "tracks multiple invoices which could not be sent" do
@@ -63,6 +62,4 @@ describe Invoice::BatchUpdateResult do
     expect(subject.alert).to eq ["Rechnung #{invoice.sequence_number} ist ungültig - " \
                                  "Rechnungsposten muss ausgefüllt werden."]
   end
-
 end
-

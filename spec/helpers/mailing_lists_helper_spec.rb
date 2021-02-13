@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe MailingListsHelper do
-
   include UtilityHelper
   include FormatHelper
   include LayoutHelper
@@ -17,7 +16,6 @@ describe MailingListsHelper do
   let(:current_user) { people(:top_leader) }
 
   describe "#button_toggle_subscription" do
-
     it "with subscribed user shows 'Anmelden'" do
       sub = entry.subscriptions.new
       sub.subscriber = current_user
@@ -32,5 +30,4 @@ describe MailingListsHelper do
       expect(button_toggle_subscription).to match(/Anmelden/)
     end
   end
-
 end

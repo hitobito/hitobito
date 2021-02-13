@@ -50,41 +50,38 @@
 #
 
 class InvoiceSerializer < ApplicationSerializer
-
   schema do
     json_api_properties
 
     map_properties :title,
-                   :sequence_number,
-                   :state,
-                   :esr_number,
-                   :description,
-                   :recipient_email,
-                   :recipient_address,
-                   :sent_at,
-                   :due_at,
-                   :total,
-                   :created_at,
-                   :updated_at,
-                   :account_number,
-                   :address,
-                   :issued_at,
-                   :iban,
-                   :payment_purpose,
-                   :payment_information,
-                   :beneficiary,
-                   :payee,
-                   :participant_number,
-                   :vat_number
-
-
+      :sequence_number,
+      :state,
+      :esr_number,
+      :description,
+      :recipient_email,
+      :recipient_address,
+      :sent_at,
+      :due_at,
+      :total,
+      :created_at,
+      :updated_at,
+      :account_number,
+      :address,
+      :issued_at,
+      :iban,
+      :payment_purpose,
+      :payment_information,
+      :beneficiary,
+      :payee,
+      :participant_number,
+      :vat_number
 
     entity :creator, item.creator_id, PersonIdSerializer
     entity :recipient, item.recipient_id, PersonIdSerializer
 
     person_template_link "#{type_name}.creator"
     person_template_link "#{type_name}.recipient"
-    group_template_link  "#{type_name}.group"
+    group_template_link "#{type_name}.group"
 
     entity :group, item.group, GroupLinkSerializer
 
@@ -93,4 +90,3 @@ class InvoiceSerializer < ApplicationSerializer
     entities :payment_reminders, item.payment_reminders, PaymentReminderSerializer
   end
 end
-

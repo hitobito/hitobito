@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module FilterHelper
-
   # rubocop:disable Rails/OutputSafety
   def direct_filter(attr, label = nil, &block)
     html = "".html_safe
@@ -23,9 +22,9 @@ module FilterHelper
     options[:data] ||= {}
     options[:data][:submit] = true
     select_options = options_from_collection_for_select(list,
-                                                        options.delete(:value_method),
-                                                        options.delete(:text_method),
-                                                        params[attr])
+      options.delete(:value_method),
+      options.delete(:text_method),
+      params[attr])
     direct_filter(attr, label) { select_tag(attr, select_options, options) }
   end
 end

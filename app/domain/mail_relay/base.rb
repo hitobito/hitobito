@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 module MailRelay
   # A generic email relay object. Retrieves messages from a mail server and resends
   # them to a list of receivers.
@@ -15,7 +14,6 @@ module MailRelay
   # See the .relay_current method for the main fetch loop and #relay for the processing
   # decision tree.
   class Base
-
     # Number of emails to retrieve in one batch.
     class_attribute :retrieve_count
     self.retrieve_count = 5
@@ -29,7 +27,6 @@ module MailRelay
     delegate :valid_email?, to: :class
 
     class << self
-
       def logger
         Delayed::Worker.logger || Rails.logger
       end
@@ -75,7 +72,7 @@ module MailRelay
           message.mark_for_delete = false
           Airbrake.notify(exception)
           mail_hash = mail_log.mail_hash
-          Raven.capture_exception(exception, logger: "mail_relay", extra: { mail_hash: mail_hash },
+          Raven.capture_exception(exception, logger: "mail_relay", extra: {mail_hash: mail_hash},
                                              fingerprint: ["{{ default }}", mail_hash])
         end
       end
@@ -219,6 +216,5 @@ module MailRelay
       mail_log.save
       mail_log
     end
-
   end
 end

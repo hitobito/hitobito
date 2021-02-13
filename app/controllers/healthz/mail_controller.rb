@@ -7,7 +7,6 @@
 require_dependency "app_status/mail"
 
 class Healthz::MailController < HealthzController
-
   before_action :validate_token
 
   private
@@ -21,5 +20,4 @@ class Healthz::MailController < HealthzController
       render json: "", status: :unauthorized
     end
   end
-
 end

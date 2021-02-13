@@ -40,6 +40,4 @@ describe HelpTexts::List do
     expect(entry.fields).not_to include("body")
     expect(entry.actions).not_to include("edit")
   end
-
 end
-

@@ -23,7 +23,6 @@
 #
 
 class Person::AddRequest::Group < Person::AddRequest
-
   belongs_to :body, class_name: "::Group"
 
   validates :role_type, presence: true
@@ -38,5 +37,4 @@ class Person::AddRequest::Group < Person::AddRequest
       errors.add(:role_type, :type_not_allowed)
     end
   end
-
 end

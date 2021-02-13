@@ -8,14 +8,14 @@
 require "spec_helper"
 
 describe "Sheet::Group::NavLeft" do
-
   let(:group) { groups(:bottom_group_one_one) }
   let(:sheet) { Sheet::Group.new(self, nil, group) }
-  let(:nav)   { Sheet::Group::NavLeft.new(sheet) }
+  let(:nav) { Sheet::Group::NavLeft.new(sheet) }
 
   let(:request) { ActionController::TestRequest.create({}) }
 
   let(:html) { nav.render }
+
   subject { Capybara::Node::Simple.new(html) }
 
   def can?(*_args)
@@ -177,5 +177,4 @@ describe "Sheet::Group::NavLeft" do
       end
     end
   end
-
 end

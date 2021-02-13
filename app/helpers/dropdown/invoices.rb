@@ -7,7 +7,6 @@
 
 module Dropdown
   class Invoices < Base
-
     attr_reader :params, :user
 
     def initialize(template, params, type)
@@ -46,7 +45,7 @@ module Dropdown
     end
 
     def item_options
-      { target: :new, data: { checkable: true } }
+      {target: :new, data: {checkable: true}}
     end
 
     def export_path(format, options = {})

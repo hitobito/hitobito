@@ -23,16 +23,16 @@ class GroupDecorator < ApplicationDecorator
     klass.role_types.select do |type|
       # users from above cannot create non visible roles
       !type.restricted? &&
-      (type.visible_from_above? || can?(:index_local_people, model))
+        (type.visible_from_above? || can?(:index_local_people, model))
     end
   end
 
   def as_typeahead
-    { id: id, label: label_with_parent }
+    {id: id, label: label_with_parent}
   end
 
   def as_quicksearch
-    { id: id, label: label_with_parent, type: :group, icon: :users }
+    {id: id, label: label_with_parent, type: :group, icon: :users}
   end
 
   def label_with_parent
@@ -71,5 +71,4 @@ class GroupDecorator < ApplicationDecorator
   def type_name
     klass.label
   end
-
 end

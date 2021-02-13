@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: oauth_applications
@@ -43,7 +42,7 @@ module Oauth
     end
 
     def path_params(uri)
-      { client_id: uid, redirect_uri: uri, response_type: "code", scope: scopes }
+      {client_id: uid, redirect_uri: uri, response_type: "code", scope: scopes}
     end
 
     def valid_access_tokens

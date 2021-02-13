@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::ImpersonationController < ApplicationController
-
   before_action :authorize_action
 
   def create

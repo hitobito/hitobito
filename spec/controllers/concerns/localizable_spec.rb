@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Localizable do
-
   controller(ApplicationController) do
     def index; end
   end
@@ -16,7 +15,7 @@ describe Localizable do
   before do
     @cached_locales = I18n.available_locales
     @cached_languages = Settings.application.languages
-    Settings.application.languages = { de: "Deutsch", fr: "Français" }
+    Settings.application.languages = {de: "Deutsch", fr: "Français"}
     I18n.available_locales = Settings.application.languages.keys
   end
 
@@ -28,7 +27,7 @@ describe Localizable do
 
   it "uses locale from params if given" do
     cookies[:locale] = "de"
-    get :index, params: { locale: "fr" }
+    get :index, params: {locale: "fr"}
 
     expect(I18n.locale).to eq(:fr)
     expect(cookies[:locale].to_sym).to eq(:fr)
@@ -36,7 +35,7 @@ describe Localizable do
 
   it "uses locale from cookie if param empty" do
     cookies[:locale] = "fr"
-    get :index, params: { locale: " " }
+    get :index, params: {locale: " "}
 
     expect(I18n.locale).to eq(:fr)
     expect(cookies[:locale].to_sym).to eq(:fr)
@@ -44,7 +43,7 @@ describe Localizable do
 
   it "uses locale from cookie if param invalid" do
     cookies[:locale] = "fr"
-    get :index, params: { locale: "et" }
+    get :index, params: {locale: "et"}
 
     expect(I18n.locale).to eq(:fr)
     expect(cookies[:locale].to_sym).to eq(:fr)

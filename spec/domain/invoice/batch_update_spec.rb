@@ -9,10 +9,10 @@
 require "spec_helper"
 
 describe Invoice::BatchUpdate do
-  let(:person)  { people(:top_leader) }
-  let(:draft)   { invoices(:invoice) }
-  let(:sent)    { invoices(:sent) }
-  let(:results) { @results  }
+  let(:person) { people(:top_leader) }
+  let(:draft) { invoices(:invoice) }
+  let(:sent) { invoices(:sent) }
+  let(:results) { @results }
 
   def update(invoices, sender = nil)
     @results = Invoice::BatchUpdate.new(invoices, sender).call

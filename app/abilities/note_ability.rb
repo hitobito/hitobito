@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class NoteAbility < AbilityDsl::Base
-
   on(Note) do
     permission(:layer_full).
       may(:create, :show, :destroy).
@@ -38,5 +37,4 @@ class NoteAbility < AbilityDsl::Base
   def subj
     subject.subject
   end
-
 end

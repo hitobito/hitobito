@@ -8,11 +8,10 @@
 require "spec_helper"
 
 describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
-
   include Rails.application.routes.url_helpers
 
-  let(:person)    { people(:top_leader) }
-  let(:version)   { PaperTrail::Version.where(main_id: person.id).order(:created_at, :id).last }
+  let(:person) { people(:top_leader) }
+  let(:version) { PaperTrail::Version.where(main_id: person.id).order(:created_at, :id).last }
   let(:decorator) { PaperTrail::VersionDecorator.new(version) }
 
   before { PaperTrail.request.whodunnit = nil }
@@ -22,6 +21,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     context "without current user" do
       before { update_attributes }
+
       it { is_expected.to match(/^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr$/) }
     end
 
@@ -40,6 +40,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
     context "without current user" do
       before { update_attributes }
+
       it { is_expected.to be_nil }
     end
 
@@ -66,7 +67,6 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
   end
 
   context "#changes" do
-
     subject { decorator.changes }
 
     context "with attribute changes" do
@@ -78,7 +78,6 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
 
     context "with association changes" do
-
       context "social account" do
         before { Fabricate(:social_account, contactable: person, label: "Foo", name: "Bar") }
 
@@ -185,5 +184,4 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
   def update_attributes
     person.update!(town: "Bern", zip_code: "3007", email: "new@hito.example.com")
   end
-
 end

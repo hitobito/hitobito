@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::MergeController < ApplicationController
-
   decorates :group
 
   before_action :authorize
@@ -28,7 +27,7 @@ class Group::MergeController < ApplicationController
 
   def respond_success
     flash[:notice] = translate(:success, new_group_name: merger.new_group_name)
-    flash[:alert]  = translate(:invoice_config_not_merged)
+    flash[:alert] = translate(:invoice_config_not_merged)
     redirect_to group_path(merger.new_group)
   end
 
@@ -76,5 +75,4 @@ class Group::MergeController < ApplicationController
   def authorize
     authorize!(:edit, group)
   end
-
 end

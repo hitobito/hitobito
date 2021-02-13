@@ -6,11 +6,10 @@
 require "spec_helper"
 
 describe Person::HouseholdsController do
-
   let(:leader) { people(:top_leader) }
-  let(:member)    { people(:bottom_member) }
+  let(:member) { people(:bottom_member) }
   let(:top_group) { groups(:top_group) }
-  let(:person)    { assigns(:person) }
+  let(:person) { assigns(:person) }
   let(:household) { assigns(:household) }
 
   context "as leader" do
@@ -80,7 +79,6 @@ describe Person::HouseholdsController do
   end
 
   context "as member with non writable person" do
-
     before { sign_in(member) }
 
     it "adds person to new household" do
@@ -127,23 +125,22 @@ describe Person::HouseholdsController do
 
   private
 
-  def parameters(person: , other: , ids: [])
-    { group_id: person.groups.first.id,
-      person_id: person.id,
-      other_person_id: other.id,
-      person: person_attrs(ids) }
+  def parameters(person:, other:, ids: [])
+    {group_id: person.groups.first.id,
+     person_id: person.id,
+     other_person_id: other.id,
+     person: person_attrs(ids)}
   end
 
   def person_attrs(ids)
-    { address: "",
-      zip_code: "",
-      town: "",
-      country: "",
-      household_people_ids: ids }
+    {address: "",
+     zip_code: "",
+     town: "",
+     country: "",
+     household_people_ids: ids}
   end
 
   def create(role, group)
     Fabricate(role.name.to_s, group: group).person
   end
-
 end

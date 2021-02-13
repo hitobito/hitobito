@@ -7,7 +7,6 @@
 
 module Export::Pdf::Messages
   class Letter
-
     def initialize(letter, recipients, options = {})
       @letter = letter
       @recipients = recipients
@@ -47,7 +46,7 @@ module Export::Pdf::Messages
     end
 
     def preview_option
-      { background: Settings.messages.pdf.preview } if preview?
+      {background: Settings.messages.pdf.preview} if preview?
     end
 
     def customize(pdf)
@@ -67,5 +66,4 @@ module Export::Pdf::Messages
       @options[:preview]
     end
   end
-
 end

@@ -10,7 +10,6 @@
 require "spec_helper"
 
 describe RolesController, type: :controller do
-
   let(:test_entry) { roles(:bottom_member) }
 
   let(:new_entry_attrs) do
@@ -36,7 +35,7 @@ describe RolesController, type: :controller do
 
   let(:group) { groups(:bottom_layer_one) }
 
-  let(:scope_params) { { group_id: group.id } }
+  let(:scope_params) { {group_id: group.id} }
 
   # Override a few methods to match the actual behavior.
   class << self
@@ -58,7 +57,6 @@ describe RolesController, type: :controller do
     end
   end
 
-
   include_examples "crud controller", skip: [%w(index), %w(show), %w(new plain)]
 
   let!(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
@@ -74,7 +72,7 @@ describe RolesController, type: :controller do
       end
 
       context "with invalid type" do
-        let(:params) { { role: { type: "foo" } } }
+        let(:params) { {role: {type: "foo"}} }
 
         it "raises exception", perform_request: false do
           expect { perform_request }.to raise_error(ActiveRecord::RecordNotFound)
@@ -90,7 +88,6 @@ describe RolesController, type: :controller do
   end
 
   context "using js" do
-
     before { sign_in(user) }
 
     let(:person) { Fabricate(:person) }
@@ -98,9 +95,9 @@ describe RolesController, type: :controller do
     it "new role for existing person returns new role" do
       post :create, xhr: true, params: {
         group_id: group.id,
-        role: { group_id: group.id,
-                person_id: person.id,
-                type: Group::BottomLayer::Member.sti_name } }
+        role: {group_id: group.id,
+               person_id: person.id,
+               type: Group::BottomLayer::Member.sti_name}}
 
       expect(response).to have_http_status(:ok)
       is_expected.to render_template("create")
@@ -110,7 +107,7 @@ describe RolesController, type: :controller do
     it "creation of role without type returns error" do
       post :create, xhr: true, params: {
         group_id: group.id,
-        role: { group_id: group.id, person_id: person.id }
+        role: {group_id: group.id, person_id: person.id}
       }
 
       expect(response).to have_http_status(:ok)
@@ -118,5 +115,4 @@ describe RolesController, type: :controller do
       expect(response.body).to include("alert")
     end
   end
-
 end

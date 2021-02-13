@@ -8,9 +8,9 @@
 require "spec_helper"
 
 describe InvoiceConfig do
-  let(:group)          { groups(:top_layer) }
-  let(:person)         { people(:top_leader) }
-  let(:other_person)   { people(:bottom_member) }
+  let(:group) { groups(:top_layer) }
+  let(:person) { people(:top_leader) }
+  let(:other_person) { people(:bottom_member) }
   let(:invoice_config) { group.invoice_config }
 
   describe "payment_slip dependent validations" do
@@ -51,7 +51,6 @@ describe InvoiceConfig do
       expect(subject).not_to be_valid
       expect(subject.errors.keys).to eq [:payee, :beneficiary, :participant_number, :participant_number_internal]
     end
-
   end
 
   it "validates correct payee format"
@@ -113,7 +112,6 @@ describe InvoiceConfig do
   end
 
   describe "e-mail validation" do
-
     before { allow(Truemail).to receive(:valid?).and_call_original }
 
     it "does not allow invalid e-mail address" do

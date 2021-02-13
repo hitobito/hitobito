@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::AddRequest::Approver::Group do
-
   let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
 
@@ -17,7 +16,6 @@ describe Person::AddRequest::Approver::Group do
   subject { Person::AddRequest::Approver.for(request, user) }
 
   # TODO: test what happens if request is approved after the role/participation/subscription was created
-
 
   let(:group) { groups(:bottom_group_one_one) }
 
@@ -34,7 +32,6 @@ describe Person::AddRequest::Approver::Group do
   end
 
   context "#approve" do
-
     # load before to get correct change counts
     before { subject }
 
@@ -84,11 +81,9 @@ describe Person::AddRequest::Approver::Group do
         expect(subject.approve).to eq(true)
       end.not_to change { Role.count }
     end
-
   end
 
   context "reject" do
-
     # load before to get correct change counts
     before { subject }
 
@@ -111,7 +106,6 @@ describe Person::AddRequest::Approver::Group do
     end
 
     context "as requester" do
-
       let(:user) { requester }
 
       it "does not schedule email" do
@@ -125,9 +119,6 @@ describe Person::AddRequest::Approver::Group do
           subject.reject
         end.to change { PaperTrail::Version.count }.by(1)
       end
-
     end
-
   end
-
 end

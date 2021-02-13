@@ -14,8 +14,7 @@ describe PersonDecorator, :draper_with_helpers do
 
   subject { PersonDecorator.new(person) }
 
-
-  its(:full_label)   { should == "Top Leader, Supertown" }
+  its(:full_label) { should == "Top Leader, Supertown" }
   its(:address_name) { should == "<strong>Top Leader</strong>" }
 
   context "with town and birthday" do
@@ -26,8 +25,8 @@ describe PersonDecorator, :draper_with_helpers do
                                        birthday: "3.8.76",
                                        town: "City") end
 
-    its(:full_label)     { should == "Fra Stuck / Schu, City (1976)" }
-    its(:address_name)   { should == "Coorp<br /><strong>Fra Stuck / Schu</strong>" }
+    its(:full_label) { should == "Fra Stuck / Schu, City (1976)" }
+    its(:address_name) { should == "Coorp<br /><strong>Fra Stuck / Schu</strong>" }
     its(:additional_name) { should == "Coorp" }
   end
 
@@ -40,8 +39,8 @@ describe PersonDecorator, :draper_with_helpers do
                                        town: "City",
                                        company: true) end
 
-    its(:full_label)      { should == "Coorp, City (Fra Stuck)" }
-    its(:address_name)    { should == "<strong>Coorp</strong><br />Fra Stuck" }
+    its(:full_label) { should == "Coorp, City (Fra Stuck)" }
+    its(:address_name) { should == "<strong>Coorp</strong><br />Fra Stuck" }
     its(:additional_name) { should == "Fra Stuck" }
   end
 
@@ -59,7 +58,6 @@ describe PersonDecorator, :draper_with_helpers do
       expect(roles_grouped[groups(:bottom_layer_one)].size).to eq(1)
     end
   end
-
 
   context "participations" do
     it "pending_applications returns participations that are not active" do

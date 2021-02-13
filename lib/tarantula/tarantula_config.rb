@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 module TarantulaConfig
-
   def crawl_as(person)
     person.password = "foobar"
     person.save!
-    post "/users/sign_in", person: { email: person.email, password: "foobar" }
+    post "/users/sign_in", person: {email: person.email, password: "foobar"}
     follow_redirect!
 
     t = tarantula_crawler(self)

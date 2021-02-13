@@ -31,5 +31,4 @@ class ServiceTokenDecorator < ApplicationDecorator
     safe_join([ServiceToken.human_attribute_name(ability),
                h.muted(h.t("service_tokens.abilities.#{action}"))], " ")
   end
-
 end

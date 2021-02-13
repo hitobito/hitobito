@@ -18,7 +18,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
   def labeled_link(group = nil)
     group ||= event.groups.first
     event.labeled_link(h.group_event_participation_path(group, event, participation),
-                       can?(:show, participation))
+      can?(:show, participation))
   end
 
   def contact
@@ -33,7 +33,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
   def priority(event)
     prio = model.priority(event)
     prio = if prio
-             "Prio #{prio}"
+      "Prio #{prio}"
            else
              waiting_list? ? "Warteliste" : nil
            end
@@ -65,5 +65,4 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
       ["?", "warning", translate("approval.missing")]
     end
   end
-
 end

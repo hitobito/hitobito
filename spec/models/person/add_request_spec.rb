@@ -21,9 +21,7 @@
 require "spec_helper"
 
 describe Person::AddRequest do
-
   context "#for_layer" do
-
     it "contains people with this primary group layer" do
       admin = Fabricate(Group::TopLayer::TopAdmin.name, group: groups(:top_layer)).person
       topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group)).person
@@ -63,7 +61,6 @@ describe Person::AddRequest do
 
       expect(people).to match_array([admin, ex_topper].collect(&:id))
     end
-
   end
 
   context "uniqueness" do
@@ -180,6 +177,5 @@ describe Person::AddRequest do
         expect(@rm.to_s).to eq("Abo #{abo.to_s} in Top Group TopGroup")
       end
     end
-
   end
 end

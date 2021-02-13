@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PeopleFiltersController < CrudController
-
   self.nesting = Group
 
   decorates :group
@@ -79,5 +78,4 @@ class PeopleFiltersController < CrudController
   def load_possible_tags
     @possible_tags ||= PersonTags::Translator.new.possible_tags
   end
-
 end

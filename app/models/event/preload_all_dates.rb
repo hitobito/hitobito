@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Event::PreloadAllDates
-
   def self.extended(base)
     base.do_preload_all_dates
   end

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe "event/participations/_actions_index.html.haml" do
-
   # subject { render; Capybara::Node::Simple.new(rendered).all('a').last }
   let(:event) { EventDecorator.decorate(Fabricate(:course, groups: [groups(:top_layer)])) }
   let(:participation) { Fabricate(:event_participation, event: event) }
@@ -17,10 +16,10 @@ describe "event/participations/_actions_index.html.haml" do
   let(:dom) { render; Capybara::Node::Simple.new(@rendered) }
   let(:dropdowns) { dom.all(".dropdown-toggle") }
 
-  let(:params) do { "action" => "index",
-                    "controller" => "event/participations",
-                    "group_id" => "1",
-                    "event_id" => "36" } end
+  let(:params) do {"action" => "index",
+                   "controller" => "event/participations",
+                   "group_id" => "1",
+                   "event_id" => "36"} end
 
   before do
     assign(:event, event)

@@ -8,13 +8,11 @@
 require "spec_helper"
 
 describe Person::Filter::Role do
-
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }
   let(:range) { nil }
 
   context "initialize" do
-
     it "ignores unknown role types" do
       filter = Person::Filter::Role.new(:role, role_types: %w(Group::TopGroup::Leader Group::BottomGroup::OldRole File Group::BottomGroup::Member))
       expect(filter.to_hash).to eq(role_types: %w(Group::TopGroup::Leader Group::BottomGroup::Member))
@@ -41,18 +39,17 @@ describe Person::Filter::Role do
   context "filtering" do
     let(:list_filter) do
       Person::Filter::List.new(group,
-                               user,
-                               range: range,
-                               filters: {
-                                 role: {role_type_ids: role_type_ids_string }
-                               })
+        user,
+        range: range,
+        filters: {
+          role: {role_type_ids: role_type_ids_string}
+        })
     end
 
     let(:entries) { list_filter.entries }
     let(:range) { nil }
     let(:role_types) { [] }
     let(:role_type_ids_string) { role_types.collect(&:id).join(Person::Filter::Role::ID_URL_SEPARATOR) }
-
 
     before do
       @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
@@ -82,6 +79,7 @@ describe Person::Filter::Role do
 
       context "with external types" do
         let(:role_types) { [Role::External] }
+
         it "loads externs of a group" do
           expect(entries.collect(&:id)).to match_array([@tg_extern].collect(&:id))
         end
@@ -93,6 +91,7 @@ describe Person::Filter::Role do
 
       context "with specific types" do
         let(:role_types) { [Role::External, Group::TopGroup::Member] }
+
         it "loads selected roles of a group" do
           expect(entries.collect(&:id)).to match_array([@tg_member, @tg_extern].collect(&:id))
         end
@@ -128,7 +127,6 @@ describe Person::Filter::Role do
           end
         end
       end
-
     end
 
     context "deep" do
@@ -161,8 +159,8 @@ describe Person::Filter::Role do
   end
 
   context "filering specific timeframe" do
-    let(:person)      { people(:top_leader) }
-    let(:now)         { Time.zone.parse("2017-02-01 10:00:00") }
+    let(:person) { people(:top_leader) }
+    let(:now) { Time.zone.parse("2017-02-01 10:00:00") }
 
     around(:each) { |example| travel_to(now) { example.run } }
 
@@ -210,7 +208,7 @@ describe Person::Filter::Role do
       def filter(attrs)
         kind = attrs[:kind] || described_class.to_s
         role_type_ids = Array(role_type).collect(&:id)
-        filters = { role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind) }
+        filters = {role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind)}
         Person::Filter::List.new(attrs.fetch(:group, group), user, range: attrs.fetch(:range, range), filters: filters)
       end
 
@@ -311,10 +309,10 @@ describe Person::Filter::Role do
       end
 
       context :bottom_group_one_one do
-        let(:group)     { groups(:bottom_group_one_one) }
+        let(:group) { groups(:bottom_group_one_one) }
         let(:role_type) { Group::BottomGroup::Member }
-        let(:role)      { Fabricate(role_type.name.to_sym, group: group) }
-        let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
+        let(:role) { Fabricate(role_type.name.to_sym, group: group) }
+        let(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
 
         context :deleted do
           it "finds single deleted role but cannot show it on group" do

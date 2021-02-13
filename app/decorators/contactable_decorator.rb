@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module ContactableDecorator
-
   def address_name
     content_tag(:strong, to_s)
   end
@@ -26,11 +25,11 @@ module ContactableDecorator
 
   def complete_contact
     address_name +
-    complete_address +
-    primary_email +
-    all_additional_emails(true) +
-    all_phone_numbers(true) +
-    all_social_accounts(true)
+      complete_address +
+      primary_email +
+      all_additional_emails(true) +
+      all_phone_numbers(true) +
+      all_social_accounts(true)
   end
 
   def primary_email
@@ -91,5 +90,4 @@ module ContactableDecorator
   end
 
   def prepend_complete_address(_html); end
-
 end

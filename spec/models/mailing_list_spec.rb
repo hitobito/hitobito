@@ -23,10 +23,9 @@
 require "spec_helper"
 
 describe MailingList do
-
-  let(:list)   { Fabricate(:mailing_list, group: groups(:top_layer)) }
+  let(:list) { Fabricate(:mailing_list, group: groups(:top_layer)) }
   let(:person) { Fabricate(:person) }
-  let(:event)  { Fabricate(:event, groups: [list.group], dates: [Fabricate(:event_date, start_at: Time.zone.today)]) }
+  let(:event) { Fabricate(:event, groups: [list.group], dates: [Fabricate(:event_date, start_at: Time.zone.today)]) }
 
   describe "preferred_labels" do
     it "serializes to empty array if missing" do
@@ -149,7 +148,7 @@ describe MailingList do
     context "groups" do
       it "is true if in group" do
         create_subscription(groups(:bottom_layer_one), false,
-                                  Group::BottomGroup::Leader.sti_name)
+          Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
 
         expect(list.subscribed?(p)).to be_truthy
@@ -157,7 +156,7 @@ describe MailingList do
 
       it "is false if different role in group" do
         create_subscription(groups(:bottom_layer_one), false,
-                                  Group::BottomGroup::Leader.sti_name)
+          Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
 
         expect(list.subscribed?(p)).to be_falsey
@@ -165,7 +164,7 @@ describe MailingList do
 
       it "is true if in group and all tags match" do
         sub = create_subscription(groups(:bottom_layer_one), false,
-                                  Group::BottomGroup::Leader.sti_name)
+          Group::BottomGroup::Leader.sti_name)
         sub.subscription_tags = subscription_tags(%w(bar baz))
         sub.save!
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
@@ -177,7 +176,7 @@ describe MailingList do
 
       it "is true if in group and not all tags match" do
         sub = create_subscription(groups(:bottom_layer_one), false,
-                                  Group::BottomGroup::Leader.sti_name)
+          Group::BottomGroup::Leader.sti_name)
         sub.subscription_tags = subscription_tags(%w(bar foo:baz))
         sub.save!
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
@@ -189,7 +188,7 @@ describe MailingList do
 
       it "is false if in group and excluded tag matches" do
         sub = create_subscription(groups(:bottom_layer_one), false,
-                                  Group::BottomGroup::Leader.sti_name)
+          Group::BottomGroup::Leader.sti_name)
         sub.subscription_tags = subscription_tags(%w(bar foo:baz))
         sub.subscription_tags.second.update!(excluded: true)
         sub.save!
@@ -202,7 +201,7 @@ describe MailingList do
 
       it "is false if in group and no tags match" do
         sub = create_subscription(groups(:bottom_layer_one), false,
-                                  Group::BottomGroup::Leader.sti_name)
+          Group::BottomGroup::Leader.sti_name)
         sub.subscription_tags = subscription_tags(%w(foo:bar foo:baz))
         sub.save!
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
@@ -214,7 +213,7 @@ describe MailingList do
 
       it "is false if explicitly excluded" do
         create_subscription(groups(:bottom_layer_one), false,
-                                  Group::BottomGroup::Leader.sti_name)
+          Group::BottomGroup::Leader.sti_name)
         p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         create_subscription(p, true)
 
@@ -224,9 +223,7 @@ describe MailingList do
   end
 
   describe "#people" do
-
     subject { list.people }
-
 
     context "only people" do
       it "includes single person" do
@@ -274,8 +271,8 @@ describe MailingList do
 
         # different event in same group
         Fabricate(Event::Role::Participant.name.to_sym,
-                  participation: Fabricate(:event_participation,
-                                           event: Fabricate(:event, groups: [list.group])))
+          participation: Fabricate(:event_participation,
+            event: Fabricate(:event, groups: [list.group])))
 
         is_expected.to include(p1)
         is_expected.to include(p2)
@@ -287,7 +284,7 @@ describe MailingList do
     context "only groups" do
       it "includes people with the given roles" do
         create_subscription(groups(:bottom_layer_one), false,
-                                  Group::BottomGroup::Leader.sti_name)
+          Group::BottomGroup::Leader.sti_name)
 
         role = Group::BottomGroup::Leader.name.to_sym
         p1 = Fabricate(role, group: groups(:bottom_group_one_one)).person
@@ -308,10 +305,10 @@ describe MailingList do
 
       it "includes people with the given roles in multiple groups" do
         create_subscription(groups(:bottom_layer_one), false,
-                                   Group::BottomLayer::Leader.sti_name,
-                                   Group::BottomGroup::Leader.sti_name)
+          Group::BottomLayer::Leader.sti_name,
+          Group::BottomGroup::Leader.sti_name)
         create_subscription(groups(:bottom_group_one_one), false,
-                                   Group::BottomGroup::Member.sti_name)
+          Group::BottomGroup::Member.sti_name)
 
         p1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
         p2 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
@@ -360,7 +357,7 @@ describe MailingList do
     context "groups with excluded" do
       it "excludes person from groups" do
         create_subscription(groups(:bottom_layer_one), false,
-                                  Group::BottomGroup::Leader.sti_name)
+          Group::BottomGroup::Leader.sti_name)
 
         role = Group::BottomGroup::Leader.name.to_sym
         p1 = Fabricate(role, group: groups(:bottom_group_one_one)).person
@@ -389,13 +386,12 @@ describe MailingList do
         pe3 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: e2)).participation.person
         Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: e2, person: pe1))
 
-
         # groups
         create_subscription(groups(:bottom_layer_one), false,
-                                   Group::BottomLayer::Leader.sti_name,
-                                   Group::BottomGroup::Leader.sti_name)
+          Group::BottomLayer::Leader.sti_name,
+          Group::BottomGroup::Leader.sti_name)
         sub2 = create_subscription(groups(:bottom_group_one_one), false,
-                                   Group::BottomGroup::Member.sti_name)
+          Group::BottomGroup::Member.sti_name)
         sub2.subscription_tags = subscription_tags(%w(foo, bar))
         sub2.save!
 
@@ -435,13 +431,12 @@ describe MailingList do
         pe3 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: e2)).participation.person
         Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: e2, person: pe1))
 
-
         # groups
         create_subscription(groups(:bottom_layer_one), false,
-                                   Group::BottomLayer::Leader.sti_name,
-                                   Group::BottomGroup::Leader.sti_name)
+          Group::BottomLayer::Leader.sti_name,
+          Group::BottomGroup::Leader.sti_name)
         create_subscription(groups(:bottom_group_one_one), false,
-                                   Group::BottomGroup::Member.sti_name)
+          Group::BottomGroup::Member.sti_name)
 
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
         pg2 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
@@ -460,7 +455,6 @@ describe MailingList do
     end
 
     context "all with excluded" do
-
       it "excludes overlapping people from events and groups" do
         # people
         create_subscription(people(:top_leader))
@@ -475,13 +469,12 @@ describe MailingList do
         pe3 = Fabricate(Event::Role::Leader.name.to_sym, participation: Fabricate(:event_participation, event: e2)).participation.person
         Fabricate(Event::Role::Participant.name.to_sym, participation: Fabricate(:event_participation, event: e2, person: pe1))
 
-
         # groups
         create_subscription(groups(:bottom_layer_one), false,
-                                   Group::BottomLayer::Leader.sti_name,
-                                   Group::BottomGroup::Leader.sti_name)
+          Group::BottomLayer::Leader.sti_name,
+          Group::BottomGroup::Leader.sti_name)
         create_subscription(groups(:bottom_group_one_one), false,
-                                   Group::BottomGroup::Member.sti_name)
+          Group::BottomGroup::Member.sti_name)
 
         pg1 = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
         pg2 = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person

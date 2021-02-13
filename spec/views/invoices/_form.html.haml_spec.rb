@@ -1,10 +1,10 @@
 require "spec_helper"
 
 describe "invoices/_form.html.haml" do
-  let(:group)   { groups(:bottom_layer_one) }
-  let(:person)  { people(:bottom_member) }
+  let(:group) { groups(:bottom_layer_one) }
+  let(:person) { people(:bottom_member) }
   let(:invoice) { group.invoices.build }
-  let(:dom)     { Capybara::Node::Simple.new(render) }
+  let(:dom) { Capybara::Node::Simple.new(render) }
 
   before do
     allow(view).to receive_messages({
@@ -30,5 +30,4 @@ describe "invoices/_form.html.haml" do
       "ABO-NEWS - Abonnement der Mitgliederzeitschrift"
     ])
   end
-
 end

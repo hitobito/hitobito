@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class AppStatus
-
   class << self
     def auth_token
       @token ||= begin
@@ -31,5 +30,4 @@ class AppStatus
   def code
     :service_unavailable
   end
-
 end

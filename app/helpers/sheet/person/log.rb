@@ -8,9 +8,7 @@
 module Sheet
   class Person < Base
     class Log < Base
-
       self.parent_sheet = Sheet::Person
-
     end
   end
 end

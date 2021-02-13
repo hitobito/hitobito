@@ -33,7 +33,7 @@ module Dropdown
     end
 
     def single_button
-      data = { checkable: true } if template.action_name == "index"
+      data = {checkable: true} if template.action_name == "index"
       template.action_button(label, path(finance_groups.first), :plus, data: data)
     end
 
@@ -41,17 +41,17 @@ module Dropdown
       if @mailing_list
         template.new_group_invoice_list_path(
           finance_group,
-          invoice_list: { receiver_id: @mailing_list.id, receiver_type: @mailing_list.class }
+          invoice_list: {receiver_id: @mailing_list.id, receiver_type: @mailing_list.class}
         )
       elsif @filter
         template.new_group_invoice_list_path(
           finance_group,
-          filter: @filter, invoice_list: { recipient_ids: "" }
+          filter: @filter, invoice_list: {recipient_ids: ""}
         )
       else
         template.new_group_invoice_list_path(
           finance_group,
-          invoice_list: { recipient_ids: @people.collect(&:id).join(",") }
+          invoice_list: {recipient_ids: @people.collect(&:id).join(",")}
         )
       end
     end

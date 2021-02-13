@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Export::Pdf::Messages::LetterWithInvoice do
-
   let(:letter) { messages(:with_invoice) }
   let(:recipients) { [people(:bottom_member)] }
   let(:options) { {} }
@@ -84,4 +83,3 @@ describe Export::Pdf::Messages::LetterWithInvoice do
     end
   end
 end
-

@@ -3,7 +3,6 @@
 require "spec_helper"
 
 describe Tags::Merger do
-
   let(:tag1) { Fabricate(:tag) }
   let(:tag2) { Fabricate(:tag) }
   let!(:tag3) { Fabricate(:tag) }
@@ -20,7 +19,6 @@ describe Tags::Merger do
   let(:merger) { described_class.new(@src_tag_ids, tag1.id, @new_name) }
 
   context "merge tags" do
-
     it "merges tag2 into tag1" do
       @src_tag_ids = [tag2.id]
 
@@ -29,7 +27,7 @@ describe Tags::Merger do
       expect(tag1_owner.reload.tags.to_a).to eq([tag1])
       expect(tag2_owner.reload.tags.to_a).to eq([tag1])
       expect(all_tag_owner.reload.tags.to_a).to eq([tag1])
-      
+
       expect(tag2_owner.taggings.count).to eq(1)
       expect(tag1_owner.taggings.count).to eq(1)
       expect(all_tag_owner.taggings.count).to eq(1)
@@ -49,7 +47,7 @@ describe Tags::Merger do
       expect(tag1_owner.reload.tags.to_a).to eq([tag1])
       expect(tag2_owner.reload.tags.to_a).to eq([tag1])
       expect(all_tag_owner.reload.tags.to_a).to eq([tag1])
-      
+
       expect(tag2_owner.taggings.count).to eq(1)
       expect(tag1_owner.taggings.count).to eq(1)
       expect(all_tag_owner.taggings.count).to eq(1)

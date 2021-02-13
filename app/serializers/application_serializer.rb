@@ -117,5 +117,4 @@ class ApplicationSerializer < Oat::Serializer
     hash[:links] ||= {}
     hash[:links].merge!(template_links)
   end
-
 end

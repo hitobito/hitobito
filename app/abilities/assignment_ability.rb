@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class AssignmentAbility < AbilityDsl::Base
-
   on(Assignment) do
     class_side(:index).all
 

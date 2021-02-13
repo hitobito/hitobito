@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::HistoryController, type: :controller do
-
   render_views
 
   let(:top_leader) { people(:top_leader) }
@@ -21,7 +20,7 @@ describe Person::HistoryController, type: :controller do
   before { sign_in(top_leader) }
 
   describe "#index" do
-    let(:params) { { group_id: top_group.id, id: other.id } }
+    let(:params) { {group_id: top_group.id, id: other.id} }
 
     it "list current role and group" do
       get :index, params: params
@@ -74,7 +73,7 @@ describe Person::HistoryController, type: :controller do
         Fabricate(:event_role, participation: Fabricate(:event_participation, person: people(:top_leader), event: event), type: "Event::Role::Leader")
       end
 
-      get :index, params: { group_id: top_group.id, id: top_leader.id }
+      get :index, params: {group_id: top_group.id, id: top_leader.id}
 
       events = dom.find("events")
 
@@ -84,5 +83,4 @@ describe Person::HistoryController, type: :controller do
       expect(events.all("tr td a").size).to eq 3
     end
   end
-
 end

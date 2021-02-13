@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module RolesHelper
-
   def role_cancel_url
     if flash[:redirect_to]
       flash[:redirect_to]
@@ -19,8 +18,8 @@ module RolesHelper
 
   def swappable_role_add_fieldset(*keys)
     title = t("roles.person_fields.text_with_alternative_link_html",
-              text: t(".#{keys.last}_person"),
-              link: link_to(t(".#{keys.first}_person"), "#", data: { swap: "person-fields" }))
+      text: t(".#{keys.last}_person"),
+      link: link_to(t(".#{keys.first}_person"), "#", data: {swap: "person-fields"}))
 
     visible = keys.first == :create_new ? !entry.person.changed? : entry.person.changed?
     field_set_tag(title, class: "person-fields", style: element_visible(visible)) { yield }
@@ -56,7 +55,7 @@ module RolesHelper
   end
 
   def roles_type_select_options(group, role)
-    options = { include_blank: true }
+    options = {include_blank: true}
     selected = existing_role(role) || default_role(group)
     options.merge(selected: selected)
   end
@@ -70,5 +69,4 @@ module RolesHelper
   def existing_role(role)
     role ? role.type : nil
   end
-
 end

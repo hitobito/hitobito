@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MessagesController < CrudController
-
   include YearBasedPaging
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze

@@ -8,8 +8,7 @@
 require "spec_helper"
 
 describe Person::Filter::Tag do
-
-  let(:user)  { people(:top_leader) }
+  let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }
 
   context :blank do
@@ -46,7 +45,8 @@ describe Person::Filter::Tag do
 
   context :apply do
     let(:other) { people(:bottom_member) }
-    subject     { Person::Filter::Tag.new(:tag, names: %w(test1 test2)).apply(Person.all) }
+
+    subject { Person::Filter::Tag.new(:tag, names: %w(test1 test2)).apply(Person.all) }
 
     it "does not return any person if not tagged" do
       expect(subject).to be_empty

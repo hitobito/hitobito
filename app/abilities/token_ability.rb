@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class TokenAbility
-
   include CanCan::Ability
 
   attr_reader :token
@@ -96,5 +95,4 @@ class TokenAbility
   def token_layer_and_below
     token.layer.self_and_descendants
   end
-
 end

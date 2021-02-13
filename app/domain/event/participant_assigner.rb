@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipantAssigner
-
   attr_reader :event, :participation, :user
 
   delegate :application, to: :participation
@@ -55,7 +54,7 @@ class Event::ParticipantAssigner
     event.participations
          .active # only active/assigned participations are relevant
          .joins(:roles)
-         .where(event_roles: { type: event.participant_types.map(&:sti_name) })
+         .where(event_roles: {type: event.participant_types.map(&:sti_name)})
          .where(person_id: participation.person_id)
          .exists?
   end
@@ -63,7 +62,7 @@ class Event::ParticipantAssigner
   def applied?(event)
     event.participations
          .joins(:roles)
-         .where(event_roles: { type: event.participant_types.map(&:sti_name) })
+         .where(event_roles: {type: event.participant_types.map(&:sti_name)})
          .where(person_id: participation.person_id)
          .exists?
   end
@@ -99,8 +98,8 @@ class Event::ParticipantAssigner
     event.questions.each do |q|
       existing = current_answers.find do |a|
         a.question.question == q.question &&
-        a.question.choice_items == q.choice_items &&
-        a.question.multiple_choices? == q.multiple_choices?
+          a.question.choice_items == q.choice_items &&
+          a.question.multiple_choices? == q.multiple_choices?
       end
       if existing
         existing.update(question: q)
@@ -109,5 +108,4 @@ class Event::ParticipantAssigner
       end
     end
   end
-
 end

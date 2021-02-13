@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe InvoicesController do
-  let(:group)   { groups(:bottom_layer_one) }
+  let(:group) { groups(:bottom_layer_one) }
   let(:invoice) { invoices(:invoice) }
 
   it "hides invoices link when person is not authorised" do
@@ -19,7 +19,7 @@ describe InvoicesController do
   end
 
   context "authenticated" do
-    let(:person)  { people(:bottom_member) }
+    let(:person) { people(:bottom_member) }
 
     before { sign_in(person) }
 
@@ -112,4 +112,3 @@ describe InvoicesController do
     end
   end
 end
-

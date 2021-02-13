@@ -9,7 +9,6 @@ require "faker"
 require "bcrypt"
 require "csv"
 
-
 namespace :csv do
   desc "Generates dummy csv file"
   task :generate do
@@ -21,7 +20,6 @@ namespace :csv do
     end
     File.write("dummy.csv", csv_string)
   end
-
 
   # rubocop:disable Rails/TimeZone
   def random_date
@@ -41,7 +39,7 @@ namespace :csv do
       company_name: Faker::Name.name,
       email: "#{Faker::Internet.user_name("#{first_name} #{last_name}")}@example.com",
       address: Faker::Address.street_address,
-      zip_code:  Faker::Address.zip_code,
+      zip_code: Faker::Address.zip_code,
       town: Faker::Address.city,
       gender: %w(m w).sample,
       birthday: random_date.to_s,

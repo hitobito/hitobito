@@ -7,11 +7,11 @@
 
 desc "Load the mysql database configuration for the following tasks"
 task :mysql do # rubocop:disable Rails/RakeEnvironment
-  ENV["RAILS_DB_ADAPTER"]   = "mysql2"
-  ENV["RAILS_DB_NAME"]      = "hitobito_development"
+  ENV["RAILS_DB_ADAPTER"] = "mysql2"
+  ENV["RAILS_DB_NAME"] = "hitobito_development"
   ENV["RAILS_TEST_DB_NAME"] = "hitobito_test"
-  ENV["RAILS_DB_PASSWORD"]  = "root"
-  ENV["RAILS_DB_SOCKET"]    = "/var/run/mysqld/mysqld.sock"
+  ENV["RAILS_DB_PASSWORD"] = "root"
+  ENV["RAILS_DB_SOCKET"] = "/var/run/mysqld/mysqld.sock"
 end
 
 namespace :db do
@@ -50,15 +50,14 @@ namespace :db do
     backup = Pathname.new(args[:backup_filename]).expand_path
 
     cat = if backup.extname == ".gz"
-            if Gem::Platform.local.os == "darwin"
-              "gunzip -c"
-            else # we assume Linux
-              "zcat"
-            end
+      if Gem::Platform.local.os == "darwin"
+        "gunzip -c"
+      else # we assume Linux
+        "zcat"
+      end
           else # we assume SQL in a text/plain file
             "cat"
           end
-
 
     # some things are more stable and understandable when expressed as a shell-command
     sh "rails db:drop db:create"

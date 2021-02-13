@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Tag < Person::Filter::Base
-
   self.permitted_args = [:names]
 
   def apply(scope)
@@ -18,21 +17,20 @@ class Person::Filter::Tag < Person::Filter::Base
   end
 
   def to_hash
-    { names: names }
+    {names: names}
   end
 
   def to_params
-    { names: names }
+    {names: names}
   end
 
   private
 
   def tags_condition
-    { tags: { name: names } }
+    {tags: {name: names}}
   end
 
   def names
     @names ||= Array(args[:names]).reject(&:blank?).compact
   end
-
 end

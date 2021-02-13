@@ -7,7 +7,6 @@
 
 module Export::Tabular::People
   class PeopleAddress < Export::Tabular::Base
-
     self.model_class = ::Person
     self.row_class = PersonRow
 
@@ -50,6 +49,5 @@ module Export::Tabular::People
     def people
       list
     end
-
   end
 end

@@ -10,7 +10,6 @@ require_dependency Devise::Engine.root.
                                   to_s
 
 class Devise::PasswordsController < DeviseController
-
   def successfully_sent?(resource)
     if resource.login?
       super
@@ -18,5 +17,4 @@ class Devise::PasswordsController < DeviseController
       flash[:alert] = I18n.translate("devise.failure.signin_not_allowed")
     end
   end
-
 end

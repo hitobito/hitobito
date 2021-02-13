@@ -54,6 +54,5 @@ module Export::Tabular::Invoices
         field ? item.send(field) : yield(item)
       end.reject(&:blank?).join(", ")
     end
-
   end
 end

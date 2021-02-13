@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class DashboardController < ApplicationController
-
   skip_before_action :authenticate_person!, only: :index
   skip_authorization_check only: :index
 
@@ -22,5 +21,4 @@ class DashboardController < ApplicationController
       redirect_to new_person_session_path
     end
   end
-
 end

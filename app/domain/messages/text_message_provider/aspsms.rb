@@ -12,7 +12,6 @@ require "rest-client"
 module Messages
   module TextMessageProvider
     class Aspsms < Base
-
       SEND_URL = "https://json.aspsms.com/SendSimpleTextSMS"
       DELIVERY_REPORTS_URL = "https://json.aspsms.com/InquireDeliveryNotifications"
       MAX_CHARS = 160
@@ -58,7 +57,7 @@ module Messages
 
       def result(response)
         data = JSON.parse(response.body)
-        r = { status: status(data), message: data["StatusInfo"] }
+        r = {status: status(data), message: data["StatusInfo"]}
         yield(r, data) if block_given?
         r
       end
@@ -73,10 +72,9 @@ module Messages
       end
 
       def default_params
-        { UserName: @config.username,
-          Password: @config.password }
+        {UserName: @config.username,
+         Password: @config.password}
       end
-
     end
   end
 end

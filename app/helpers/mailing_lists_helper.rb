@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module MailingListsHelper
-
   def format_mailing_list_preferred_labels(mailing_list)
     safe_join mailing_list.preferred_labels.sort, ", "
   end
@@ -38,16 +37,15 @@ module MailingListsHelper
 
   def button_subscribe
     action_button(t("mailing_list_decorator.unsubscribe"),
-                  group_mailing_list_user_path(@group, entry),
-                  :minus,
-                  method: "delete")
+      group_mailing_list_user_path(@group, entry),
+      :minus,
+      method: "delete")
   end
 
   def button_unsubscribe
     action_button(t("mailing_list_decorator.subscribe"),
-                  group_mailing_list_user_path(@group, entry),
-                  :plus,
-                  method: "post")
+      group_mailing_list_user_path(@group, entry),
+      :plus,
+      method: "post")
   end
-
 end

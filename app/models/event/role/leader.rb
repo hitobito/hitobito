@@ -21,9 +21,7 @@
 
 # Hauptsleiter
 class Event::Role::Leader < Event::Role
-
   self.permissions = [:event_full, :participations_full, :qualify]
 
   self.kind = :leader
-
 end

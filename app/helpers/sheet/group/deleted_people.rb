@@ -8,7 +8,6 @@
 module Sheet
   class Group
     class DeletedPeople < Group
-
       self.tabs = []
 
       def title
@@ -38,7 +37,6 @@ module Sheet
       def translation_prefix
         "sheet/group"
       end
-
     end
   end
 end

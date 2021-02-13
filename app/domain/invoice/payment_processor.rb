@@ -82,8 +82,8 @@ class Invoice::PaymentProcessor
 
   def credit_statements
     transaction_details
-      .select  { |s| fetch("CdtDbtInd", s) == "CRDT" }
-      .reject  { |s| fetch("RmtInf", s)["AddtlRmtInf"] =~ /REJECT/i }
+      .select { |s| fetch("CdtDbtInd", s) == "CRDT" }
+      .reject { |s| fetch("RmtInf", s)["AddtlRmtInf"] =~ /REJECT/i }
   end
 
   def transaction_details

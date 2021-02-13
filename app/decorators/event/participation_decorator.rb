@@ -13,8 +13,8 @@ class Event::ParticipationDecorator < ApplicationDecorator
   decorates_association :application
 
   delegate :to_s, :email, :primary_email, :all_emails, :all_additional_emails,
-           :all_phone_numbers, :all_social_accounts, :complete_address, :town, :layer_group_label,
-           :layer_group, to: :person
+    :all_phone_numbers, :all_social_accounts, :complete_address, :town, :layer_group_label,
+    :layer_group, to: :person
 
   def person_additional_information
     h.tag(:br) + h.muted(person.additional_name) + incomplete_label
@@ -44,5 +44,4 @@ class Event::ParticipationDecorator < ApplicationDecorator
   def town_info
     "(#{h.t('.town')}: #{person.town})" if person.town
   end
-
 end

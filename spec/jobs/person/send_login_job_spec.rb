@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::SendLoginJob do
-
   let(:sender) { people(:top_leader) }
   let(:recipient) { people(:bottom_member) }
 
@@ -20,9 +19,9 @@ describe Person::SendLoginJob do
   subject { Person::SendLoginJob.new(recipient, sender) }
 
   its(:parameters) do
-    should == { recipient_id: recipient.id,
-                sender_id: sender.id,
-                locale: I18n.locale.to_s }
+    should == {recipient_id: recipient.id,
+               sender_id: sender.id,
+               locale: I18n.locale.to_s}
   end
 
   it "generates reset token" do
@@ -53,5 +52,4 @@ describe Person::SendLoginJob do
       expect(last_email.body).to match(/Salut #{recipient.greeting_name}/)
     end
   end
-
 end

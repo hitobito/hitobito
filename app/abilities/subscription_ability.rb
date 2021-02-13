@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class SubscriptionAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Group
 
   on(Subscription) do

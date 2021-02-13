@@ -179,7 +179,7 @@ module Export::Pdf::Invoice
       raise "exceeding size" if @padded_percent + percent > 1
 
       computed_height = padded_height * percent
-      computed_width  = width - (pad_right ? (PAD * 2) : PAD)
+      computed_width = width - (pad_right ? (PAD * 2) : PAD)
       y = HEIGHT - PAD - (@padded_percent * padded_height)
 
       bounding_box([x, y], width: computed_width, height: computed_height) do
@@ -187,6 +187,5 @@ module Export::Pdf::Invoice
       end
       @padded_percent += percent
     end
-
   end
 end

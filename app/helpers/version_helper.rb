@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module VersionHelper
-
-  def app_version_links(url="https://github.com/hitobito/%s/commits/%s")
+  def app_version_links(url = "https://github.com/hitobito/%s/commits/%s")
     links = Hitobito::Application.versions.collect do |line|
       commit, submodule, _ = line.split(" ")
       content_tag(:li) do
@@ -33,5 +32,4 @@ module VersionHelper
     return unless app_version > "0.0"
     ["Version", app_version, Hitobito::Application.build_info].compact.join(" ")
   end
-
 end

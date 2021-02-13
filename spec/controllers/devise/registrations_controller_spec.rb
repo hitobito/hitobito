@@ -9,6 +9,7 @@ require "spec_helper"
 
 describe Devise::RegistrationsController do
   before { request.env["devise.mapping"] = Devise.mappings[:person] }
+
   render_views
 
   let(:person) { people(:top_leader) }
@@ -19,16 +20,18 @@ describe Devise::RegistrationsController do
   subject { dom }
 
   describe "GET #edit" do
-
     context "user with password" do
       before { get :edit }
+
       it { is_expected.to have_content "Passwort ändern" }
       it { is_expected.to have_content "Altes Passwort" }
     end
 
     context "user without password" do
       before { person.update_column(:encrypted_password, nil) }
+
       before { sign_in(person) }
+
       before { get :edit }
 
       it { is_expected.to have_content "Passwort setzen" }
@@ -37,24 +40,24 @@ describe Devise::RegistrationsController do
   end
 
   describe "put #update" do
-    let(:data) { { password: "foofoo", password_confirmation: "foofoo" } }
+    let(:data) { {password: "foofoo", password_confirmation: "foofoo"} }
 
     context "with old password" do
-      before { put :update, params: { person: data.merge(current_password: "foobar") } }
+      before { put :update, params: {person: data.merge(current_password: "foobar")} }
 
       it { is_expected.to redirect_to(root_path) }
       it { expect(flash[:notice]).to eq "Dein Passwort wurde aktualisiert." }
     end
 
     context "with wrong old password" do
-      before { put :update, params: { person: data.merge(current_password: "barfoo") } }
+      before { put :update, params: {person: data.merge(current_password: "barfoo")} }
 
       it { is_expected.to render_template("edit") }
       it { is_expected.to have_content "Altes Passwort ist nicht gültig" }
     end
 
     context "without old password" do
-      before { put :update, params: { person: data } }
+      before { put :update, params: {person: data} }
 
       it { is_expected.to render_template("edit") }
       it { is_expected.to have_content "Altes Passwort muss ausgefüllt werden" }
@@ -62,30 +65,30 @@ describe Devise::RegistrationsController do
 
     context "user without password" do
       before { person.update_column(:encrypted_password, nil) }
+
       before { sign_in(person) }
-      before { put :update, params: { person: data } }
+
+      before { put :update, params: {person: data} }
 
       it { is_expected.to redirect_to(root_path) }
       it { expect(flash[:notice]).to eq "Dein Passwort wurde aktualisiert." }
     end
 
     context "with wrong confirmation" do
-      before { put :update, params: { person: { current_password: "foobar", passsword: "foofoo", password_confirmation: "barfoo" } } }
+      before { put :update, params: {person: {current_password: "foobar", passsword: "foofoo", password_confirmation: "barfoo"}} }
 
       it { is_expected.to render_template("edit") }
       it { is_expected.to have_content "Passwort Bestätigung stimmt nicht mit Passwort überein" }
     end
 
-
     context "with empty password" do
       it "does not change password" do
         old = person.encrypted_password
-        put :update, params: { person: { current_password: "foobar", passsword: "", password_confirmation: "" } }
+        put :update, params: {person: {current_password: "foobar", passsword: "", password_confirmation: ""}}
 
         is_expected.to redirect_to(root_path)
         expect(person.reload.encrypted_password).to eq(old)
       end
     end
   end
-
 end

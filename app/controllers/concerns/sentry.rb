@@ -21,4 +21,3 @@ module Sentry
     Raven.user_context(id: current_user.try(:id), name: current_user.try(:email))
   end
 end
-

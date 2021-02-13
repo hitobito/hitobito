@@ -36,7 +36,7 @@ module NormalizedI18nLabels
     label_translations = I18n.t(labels_translations_key).invert
     if label_translations.key?(label)
       self.label = I18n.t("#{labels_translations_key}.#{label_translations[label]}",
-                          locale: I18n.default_locale)
+        locale: I18n.default_locale)
     end
   end
 
@@ -51,7 +51,7 @@ module NormalizedI18nLabels
       return label if label.blank?
 
       I18n.t("#{labels_translations_key}.#{label.downcase}",
-             default: label)
+        default: label)
     end
 
     private
@@ -65,5 +65,4 @@ module NormalizedI18nLabels
       "#{super()}.#{lang}"
     end
   end
-
 end

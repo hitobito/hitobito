@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingListsController < CrudController
-
   self.nesting = Group
 
   self.permitted_attrs = [:name, :description, :publisher, :mail_name,
@@ -52,5 +51,4 @@ class MailingListsController < CrudController
   end
 
   alias group parent
-
 end

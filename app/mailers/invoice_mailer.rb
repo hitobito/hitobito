@@ -7,18 +7,17 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceMailer < ApplicationMailer
-
   CONTENT_INVOICE_NOTIFICATION = "content_invoice_notification".freeze
 
   def notification(invoice, sender)
-    @sender  = sender
+    @sender = sender
     @invoice = invoice
 
     attachments[invoice.filename] = generate_pdf
 
     custom_content_mail(@invoice.recipient_email, CONTENT_INVOICE_NOTIFICATION,
-                        values_for_placeholders(CONTENT_INVOICE_NOTIFICATION),
-                        mail_headers(@sender, @invoice.invoice_config.email))
+      values_for_placeholders(CONTENT_INVOICE_NOTIFICATION),
+      mail_headers(@sender, @invoice.invoice_config.email))
   end
 
   private
@@ -80,12 +79,11 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def pdf_options
-    { articles: true, payment_slip: true }
+    {articles: true, payment_slip: true}
   end
 
   def mail_headers(person, email)
     return with_personal_sender(person) if email.blank?
-    { return_path: email, sender: email, reply_to: email, from: email }
+    {return_path: email, sender: email, reply_to: email, from: email}
   end
-
 end

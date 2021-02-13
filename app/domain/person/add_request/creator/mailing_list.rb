@@ -7,7 +7,6 @@
 
 module Person::AddRequest::Creator
   class MailingList < Base
-
     alias subscription entity
 
     def required?
@@ -23,6 +22,5 @@ module Person::AddRequest::Creator
     def person
       subscription.subscriber
     end
-
   end
 end

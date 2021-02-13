@@ -8,9 +8,9 @@
 require "spec_helper"
 
 describe Invoice do
-  let(:group)          { groups(:top_layer) }
-  let(:person)         { people(:top_leader) }
-  let(:other_person)   { people(:bottom_member) }
+  let(:group) { groups(:top_layer) }
+  let(:person) { people(:top_leader) }
+  let(:other_person) { people(:bottom_member) }
   let(:invoice_config) { invoice_configs(:top_layer) }
 
   it "sorts by sequence_number on list" do
@@ -134,8 +134,8 @@ describe Invoice do
   end
 
   context "reference" do
-    let(:iban)               { "CH12 2134 1234 1234 1234" }
-    let(:qr_iban)            { "CH053 0000 0013 0003 6664" }
+    let(:iban) { "CH12 2134 1234 1234 1234" }
+    let(:qr_iban) { "CH053 0000 0013 0003 6664" }
     let(:esr_without_blanks) { "000083496356700000000000019" }
 
     it "sets esr without blanks per default" do
@@ -154,10 +154,12 @@ describe Invoice do
   end
 
   context "state changes" do
-    let(:now)     { Time.zone.parse("2017-09-18 14:00:00") }
+    let(:now) { Time.zone.parse("2017-09-18 14:00:00") }
     let(:invoice) { invoices(:invoice) }
-    before        { travel_to(now) }
-    after         { travel_back }
+
+    before { travel_to(now) }
+
+    after { travel_back }
 
     it "creating sets state to draft" do
       expect(create_invoice.state).to eq "draft"
@@ -258,9 +260,9 @@ describe Invoice do
   end
 
   context ".draft_or_issued_in" do
-    let(:today)   { Time.zone.parse("2019-12-16 10:00:00") }
+    let(:today) { Time.zone.parse("2019-12-16 10:00:00") }
     let(:invoice) { invoices(:invoice) }
-    let(:issued)  { invoices(:sent) }
+    let(:issued) { invoices(:sent) }
 
     around do |example|
       travel_to(today) do
@@ -309,5 +311,4 @@ describe Invoice do
     invoice.update_attribute(:sequence_number, attrs[:sequence_number]) if attrs[:sequence_number]
     invoice
   end
-
 end

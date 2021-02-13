@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Globalized
-
   extend ActiveSupport::Concern
 
   included do
@@ -68,5 +67,4 @@ module Globalized
   def remember_translated_label
     to_s # fetches the required translations and keeps them around
   end
-
 end

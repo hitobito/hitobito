@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::AddRequestMailer < ApplicationMailer
-
   CONTENT_ADD_REQUEST_PERSON = "person_add_request_person".freeze
   CONTENT_ADD_REQUEST_RESPONSIBLES = "person_add_request_responsibles".freeze
   CONTENT_ADD_REQUEST_APPROVED = "person_add_request_approved".freeze
@@ -17,30 +16,30 @@ class Person::AddRequestMailer < ApplicationMailer
   delegate :body, :person, :requester, to: :add_request
 
   def ask_person_to_add(add_request)
-    @add_request        = add_request
+    @add_request = add_request
     @answer_request_url = link_to_request
-    @recipient          = person
+    @recipient = person
     compose(person, CONTENT_ADD_REQUEST_PERSON, requester)
   end
 
   def ask_responsibles(add_request, responsibles)
-    @add_request        = add_request
+    @add_request = add_request
     @answer_request_url = link_to_add_requests
-    @recipients         = responsibles
+    @recipients = responsibles
     compose(responsibles, CONTENT_ADD_REQUEST_RESPONSIBLES, requester)
   end
 
   def approved(person, body, requester, user)
     @add_request = body.person_add_requests.build(person: person, requester: requester)
-    @recipient   = requester
-    @user        = user
+    @recipient = requester
+    @user = user
     compose(requester, CONTENT_ADD_REQUEST_APPROVED, user)
   end
 
   def rejected(person, body, requester, user)
     @add_request = body.person_add_requests.build(person: person, requester: requester)
-    @recipient   = requester
-    @user        = user
+    @recipient = requester
+    @user = user
     compose(requester, CONTENT_ADD_REQUEST_REJECTED, user)
   end
 
@@ -129,8 +128,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def body_params
-    { body_type: add_request.class.name.demodulize,
-      body_id: add_request.body_id }
+    {body_type: add_request.class.name.demodulize,
+     body_id: add_request.body_id}
   end
-
 end

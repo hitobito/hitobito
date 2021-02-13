@@ -11,7 +11,6 @@
 # will be re-used.
 # Extracted into an own module for convenience.
 module Rememberable
-
   # Adds the :remember_params class attribute and a before filter to the index action.
   def self.included(controller)
     # Define a list of param keys that should be remembered for the list action.

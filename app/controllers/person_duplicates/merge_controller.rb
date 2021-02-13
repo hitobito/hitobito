@@ -7,7 +7,6 @@
 
 module PersonDuplicates
   class MergeController < ApplicationController
-
     before_action :authorize_action
 
     def new; end
@@ -51,6 +50,5 @@ module PersonDuplicates
     def group
       @group ||= Group.find(params[:group_id])
     end
-
   end
 end

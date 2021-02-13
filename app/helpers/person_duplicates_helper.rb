@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module PersonDuplicatesHelper
-
   def person_duplicates_table(entries)
     if entries.present?
       content_tag(:div, class: "table-responsive") do

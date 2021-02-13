@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::PreconditionChecker
-
   extend Forwardable
   include Translatable
 
@@ -102,5 +101,4 @@ class Event::PreconditionChecker
     kinds = QualificationKind.includes(:translations).find(errors)
     translate(:qualifications_missing, missing: kinds.collect(&:label).join(", "))
   end
-
 end

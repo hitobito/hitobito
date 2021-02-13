@@ -13,11 +13,11 @@ describe Messages::DispatchesController do
   before { sign_in(top_leader) }
 
   context "letter" do
-    let(:message)    { messages(:letter) }
+    let(:message) { messages(:letter) }
 
     it "POST#creates creates dispatch and enqueues job and redirect to assignments#new" do
       expect do
-        post :create, params: { message_id: message.id }
+        post :create, params: {message_id: message.id}
       end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
       expect(message.reload.state).to eq "pending"
       expect(response).to redirect_to new_assignment_redirect_path(message)
@@ -26,11 +26,11 @@ describe Messages::DispatchesController do
   end
 
   context "letter with invoice" do
-    let(:message)    { messages(:with_invoice) }
+    let(:message) { messages(:with_invoice) }
 
     it "POST#creates creates dispatch and enqueues job and redirect to assignments#new" do
       expect do
-        post :create, params: { message_id: message.id }
+        post :create, params: {message_id: message.id}
       end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
       expect(message.reload.invoice_list).to be_persisted
       expect(message.reload.state).to eq "pending"
@@ -42,10 +42,10 @@ describe Messages::DispatchesController do
   private
 
   def new_assignment_redirect_path(message)
-    new_assignment_path(assignment: { attachment_id: message.id, attachment_type: "Message"},
+    new_assignment_path(assignment: {attachment_id: message.id, attachment_type: "Message"},
                         return_url: group_mailing_list_message_path(message.group,
-                                                               message.mailing_list,
-                                                               message)
+                          message.mailing_list,
+                          message)
                         )
   end
 end

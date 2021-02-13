@@ -13,8 +13,8 @@ class InvoicesController < CrudController
   self.nesting = Group
   self.optional_nesting = [InvoiceList]
 
-  self.sort_mappings = { recipient: Person.order_by_name_statement,
-                         sequence_number: Invoice.order_by_sequence_number_statement }
+  self.sort_mappings = {recipient: Person.order_by_name_statement,
+                        sequence_number: Invoice.order_by_sequence_number_statement}
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]
 
   self.search_columns = [:title, :sequence_number, "people.last_name", "people.email"]
@@ -33,22 +33,22 @@ class InvoicesController < CrudController
                             :_destroy
                           ]]
 
-  before_render_index :year  # sets ivar used in view
+  before_render_index :year # sets ivar used in view
 
   helper_method :group, :invoice_list
 
   def new
-    entry.attributes = { payment_information: entry.invoice_config.payment_information }
+    entry.attributes = {payment_information: entry.invoice_config.payment_information}
   end
 
   def index
     respond_to do |format|
       format.html { super }
-      format.pdf  { generate_pdf(list_entries.includes(:invoice_items)) }
-      format.csv  { render_invoices_csv(list_entries.includes(:invoice_items)) }
+      format.pdf { generate_pdf(list_entries.includes(:invoice_items)) }
+      format.csv { render_invoices_csv(list_entries.includes(:invoice_items)) }
       format.json { render_entries_json(list_entries.includes(:invoice_items,
-                                                              :payments,
-                                                              :payment_reminders)) }
+        :payments,
+        :payment_reminders)) }
     end
   end
 
@@ -56,8 +56,8 @@ class InvoicesController < CrudController
     @invoice_items = InvoiceItemDecorator.decorate_collection(entry.invoice_items)
     respond_to do |format|
       format.html { build_payment }
-      format.pdf  { generate_pdf([entry]) }
-      format.csv  { render_invoices_csv([entry]) }
+      format.pdf { generate_pdf([entry]) }
+      format.csv { render_invoices_csv([entry]) }
       format.json { render_entry_json }
     end
   end
@@ -74,10 +74,10 @@ class InvoicesController < CrudController
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
                   ListSerializer.new(paged_entries,
-                                     group: group,
-                                     page: params[:page],
-                                     serializer: InvoiceSerializer,
-                                     controller: self)].inject(&:merge)
+                    group: group,
+                    page: params[:page],
+                    serializer: InvoiceSerializer,
+                    controller: self)].inject(&:merge)
   end
 
   def render_entry_json
@@ -109,8 +109,8 @@ class InvoicesController < CrudController
   def render_invoices_pdf(invoices)
     letter = find_letter(invoices)
     pdf = if letter
-            recipients = Person.where(id: invoices.pluck(:recipient_id))
-            Export::Pdf::Messages::LetterWithInvoice.new(letter, recipients).render
+      recipients = Person.where(id: invoices.pluck(:recipient_id))
+      Export::Pdf::Messages::LetterWithInvoice.new(letter, recipients).render
           else
             Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
           end
@@ -147,7 +147,7 @@ class InvoicesController < CrudController
   end
 
   def payment_attrs
-    @payment_attrs ||= flash[:payment] || { amount: entry.amount_open }
+    @payment_attrs ||= flash[:payment] || {amount: entry.amount_open}
   end
 
   def pdf_options
@@ -176,5 +176,4 @@ class InvoicesController < CrudController
   def invoice_list
     parent if parent.is_a?(InvoiceList)
   end
-
 end

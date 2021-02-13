@@ -7,7 +7,6 @@
 
 module Export::Pdf
   module Invoice
-
     MARGIN = 2.cm
 
     class Runner
@@ -44,7 +43,7 @@ module Export::Pdf
       def customize(pdf)
         pdf.font_size 10
         pdf.font "Helvetica"
-        pdf.font_families.update("ocrb" => { normal: ocrb_path })
+        pdf.font_families.update("ocrb" => {normal: ocrb_path})
         pdf
       end
 
@@ -55,7 +54,6 @@ module Export::Pdf
       def ocrb_path
         Rails.root.join("app", "javascript", "fonts", "OCRB.ttf")
       end
-
     end
 
     mattr_accessor :runner

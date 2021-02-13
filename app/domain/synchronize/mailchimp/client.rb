@@ -1,4 +1,3 @@
-
 #  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -13,7 +12,7 @@ module Synchronize
 
       def initialize(mailing_list, member_fields: [], merge_fields: [], count: 50, debug: false)
         @list_id = mailing_list.mailchimp_list_id
-        @count   = count
+        @count = count
         @merge_fields = merge_fields
         @member_fields = member_fields
         @max_attempts = Settings.mailchimp.max_attempts
@@ -92,7 +91,7 @@ module Synchronize
         {
           method: "POST",
           path: "lists/#{list_id}/merge-fields",
-          body: { tag: name.upcase, name: name, type: type, options: options }.to_json
+          body: {tag: name.upcase, name: name, type: type, options: options}.to_json
         }
       end
 
@@ -100,7 +99,7 @@ module Synchronize
         {
           method: "POST",
           path: "lists/#{list_id}/segments",
-          body: { name: name, static_segment: [] }.to_json
+          body: {name: name, static_segment: []}.to_json
         }
       end
 
@@ -115,7 +114,7 @@ module Synchronize
         {
           method: "POST",
           path: "lists/#{list_id}/segments/#{segment_id}",
-          body: { members_to_add: emails }.to_json
+          body: {members_to_add: emails}.to_json
         }
       end
 
@@ -159,7 +158,7 @@ module Synchronize
       end
 
       def paged(key, fields, list: [], offset: 0, &block)
-        body = block.call(list).retrieve(params: { count: count, offset: offset }).body.to_h
+        body = block.call(list).retrieve(params: {count: count, offset: offset}).body.to_h
 
         body[key].each do |entry|
           list << entry.slice(*fields).deep_symbolize_keys
@@ -184,7 +183,7 @@ module Synchronize
         end
 
         if operations.present?
-          batch_id = api.batches.create(body: { operations: operations }).body.fetch("id")
+          batch_id = api.batches.create(body: {operations: operations}).body.fetch("id")
           wait_for_finish(batch_id)
         end
       end

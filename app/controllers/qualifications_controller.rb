@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class QualificationsController < CrudController
-
   self.nesting = Group, Person
 
   self.permitted_attrs = [:qualification_kind_id, :qualification_kind, :start_at, :origin]
@@ -35,5 +34,4 @@ class QualificationsController < CrudController
   def load_qualification_kinds
     @qualification_kinds = QualificationKind.without_deleted.list
   end
-
 end

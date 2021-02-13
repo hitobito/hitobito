@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Address::FullTextSearch
-
   attr_reader :query, :search_strategy
 
   ADDRESS_WITH_NUMBER_REGEX = /^.*[^\d](\d+[A-Z]?$)/

@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::SubscriptionsController < ApplicationController
-
   skip_authorization_check
 
   def index
@@ -51,4 +50,3 @@ class Person::SubscriptionsController < ApplicationController
     mailing_list.subscriptions.create(options.merge(subscriber: person))
   end
 end
-

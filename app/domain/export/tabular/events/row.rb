@@ -7,10 +7,9 @@
 
 module Export::Tabular::Events
   class Row < Export::Tabular::Row
-
     self.dynamic_attributes = {
-      /^contact_/  => :contactable_attribute,
-      /^leader_/   => :contactable_attribute,
+      /^contact_/ => :contactable_attribute,
+      /^leader_/ => :contactable_attribute,
       /^date_\d+_/ => :date_attribute
     }
 
@@ -64,6 +63,5 @@ module Export::Tabular::Events
     def contact_phone_numbers(contactable)
       contactable.phone_numbers.map(&:to_s).join(", ")
     end
-
   end
 end

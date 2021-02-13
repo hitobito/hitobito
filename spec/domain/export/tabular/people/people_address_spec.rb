@@ -8,10 +8,10 @@
 require "spec_helper"
 
 describe Export::Tabular::People::PeopleAddress do
-
   let(:person) { people(:top_leader) }
   let(:list) { [person] }
   let(:people_list) { Export::Tabular::People::PeopleAddress.new(list) }
+
   subject { people_list }
 
   its(:attributes) do
@@ -20,7 +20,6 @@ describe Export::Tabular::People::PeopleAddress do
   end
 
   context "standard attributes" do
-
     context "#attribute_labels" do
       subject { people_list.attribute_labels }
 
@@ -31,6 +30,7 @@ describe Export::Tabular::People::PeopleAddress do
 
     context "key list" do
       subject { people_list.attribute_labels.keys.join(" ") }
+
       it { is_expected.not_to match(/phone/) }
       it { is_expected.not_to match(/social_account/) }
     end
@@ -59,8 +59,8 @@ describe Export::Tabular::People::PeopleAddress do
 
     context "blank label is not exported" do
       before { person.phone_numbers << PhoneNumber.new(label: "", number: 321) }
+
       its(:keys) { should_not include :phone_number_ }
     end
   end
-
 end

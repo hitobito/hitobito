@@ -1,4 +1,3 @@
-
 # encoding: utf-8
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
@@ -9,7 +8,6 @@
 require "spec_helper"
 
 describe InvoiceAbility do
-
   subject { ability }
 
   let(:ability) { Ability.new(role.person.reload) }
@@ -19,11 +17,11 @@ describe InvoiceAbility do
     %w(top_leader top_layer bottom_layer_one)
   ].each do |role, own_group, other_group|
     context role do
-      let(:role)     { roles(role)}
-      let(:invoice)  { Invoice.new(group: group) }
-      let(:article)  { InvoiceArticle.new(group: group) }
+      let(:role) { roles(role) }
+      let(:invoice) { Invoice.new(group: group) }
+      let(:article) { InvoiceArticle.new(group: group) }
       let(:reminder) { invoice.payment_reminders.build }
-      let(:payment)  { invoice.payments.build }
+      let(:payment) { invoice.payments.build }
 
       it "may not index" do
         is_expected.not_to be_able_to(:index, Invoice)
@@ -92,7 +90,6 @@ describe InvoiceAbility do
   end
 
   context "InvoiceList" do
-
     def invoice_list(group, abo_group)
       InvoiceList.new(group: groups(group), receiver: groups(abo_group).mailing_lists.build)
     end
@@ -113,5 +110,4 @@ describe InvoiceAbility do
       expect(ability(:bottom_member)).not_to be_able_to(:create, invoice_list(:bottom_layer_one, :top_layer))
     end
   end
-
 end

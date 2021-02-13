@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe LabelFormatsController, js: true do
-
   subject { page }
+
   let(:user) { people(:top_leader) }
   let(:toggle) { find("label[for=show_global_label_formats]") }
 

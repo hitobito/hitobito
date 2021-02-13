@@ -10,7 +10,7 @@ require "spec_helper"
 describe Assignment::AssigneeNotificationMailer do
   let(:assignment) { assignments(:printing) }
   let(:assignee_email) { "assignee_notifications@example.com" }
-  let(:mail) {  Assignment::AssigneeNotificationMailer.assignee_notification(assignee_email, assignment) }
+  let(:mail) { Assignment::AssigneeNotificationMailer.assignee_notification(assignee_email, assignment) }
 
   context "assignee notification mail" do
     it "shows assignment title" do

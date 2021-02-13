@@ -23,10 +23,10 @@ class PaymentProcessesController < ApplicationController
       render :show
     elsif processor && params[:data]
       redirect_to group_invoices_path(group), notice: t("payment_processes.created",
-                                                        count: processor.process)
+        count: processor.process)
     elsif @parsing_error
       redirect_to new_group_payment_process_path(group), alert: t("payment_processes.parsing_error",
-                                                                  error: @parsing_error)
+        error: @parsing_error)
     else
       redirect_to new_group_payment_process_path(group), alert: t("payment_processes.invalid_file")
     end
@@ -67,9 +67,8 @@ class PaymentProcessesController < ApplicationController
 
   def valid_file?(io)
     io.present? &&
-    io.respond_to?(:content_type) &&
+      io.respond_to?(:content_type) &&
     # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
-    io.content_type =~ %r{text/xml}
+      io.content_type =~ %r{text/xml}
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module FormHelper
-
   # Renders a generic form for the given object using StandardFormBuilder.
   def standard_form(object, options = {}, &block)
     options[:builder] ||= StandardFormBuilder
@@ -23,7 +22,7 @@ module FormHelper
     options[:buttons_bottom] = true unless options.key?(:buttons_bottom)
     options[:buttons_top] = true unless options.key?(:buttons_top)
     options[:cancel_url] ||= if controller.is_a?(SimpleCrudController)
-                               polymorphic_path(path_args(model_class), returning: true)
+      polymorphic_path(path_args(model_class), returning: true)
                              else
                                polymorphic_path(path_args(entry))
                              end
@@ -49,7 +48,7 @@ module FormHelper
       content << form_buttons(form, form_button_options.merge(toolbar_class: "top")) if buttons_top
 
       content << if block_given?
-                   capture(form, &block)
+        capture(form, &block)
                  else
                    form.labeled_input_fields(*attrs)
                  end
@@ -82,13 +81,13 @@ module FormHelper
   def add_another_button(form, label, options = {})
     content_tag(:div, class: "btn-group") do
       form.button(label, options.merge(name: :add_another, class: "btn btn-primary",
-                                       data: { disable: true }))
+                                       data: {disable: true}))
     end
   end
 
   def submit_button(form, label, options = {})
     content_tag(:div, class: "btn-group") do
-      form.button(label, options.merge(class: "btn btn-primary", data: { disable_with: label }))
+      form.button(label, options.merge(class: "btn btn-primary", data: {disable_with: label}))
     end
   end
 
@@ -119,5 +118,4 @@ module FormHelper
     url = record.new_record? ? cancel_url_new : cancel_url_edit
     url || cancel_url || polymorphic_path(object)
   end
-
 end

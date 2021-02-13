@@ -7,8 +7,8 @@ require "spec_helper"
 
 describe Cookies::AsyncDownload do
   let(:cookie_jar) { ActionDispatch::Request.new({}).cookie_jar }
-  let(:value)      { JSON.parse(cookie_jar[:async_downloads]) }
-  let(:subject)    { described_class.new(cookie_jar) }
+  let(:value) { JSON.parse(cookie_jar[:async_downloads]) }
+  let(:subject) { described_class.new(cookie_jar) }
 
   it "tracks single download in cookie" do
     subject.set(name: "my-file", type: "txt")
@@ -42,5 +42,4 @@ describe Cookies::AsyncDownload do
     described_class.new(cookie_jar).remove(name: "my-file", type: "txt")
     expect(cookie_jar).not_to have_key(:async_downloads)
   end
-
 end

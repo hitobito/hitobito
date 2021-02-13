@@ -7,7 +7,6 @@
 
 module Export::Pdf::Participation
   class Header < Section
-
     def render
       bounding_box([0, cursor], width: bounds.width, height: 40) do
         font_size(20) do
@@ -32,6 +31,5 @@ module Export::Pdf::Participation
     end
 
     def render_image; end
-
   end
 end

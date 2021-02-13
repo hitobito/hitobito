@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe DownloadCleanerJob do
-
   subject { DownloadCleanerJob.new }
 
   it "removes files and gets rescheduled" do
@@ -24,7 +23,7 @@ describe DownloadCleanerJob do
     generate_test_file(now_file)
     generate_test_file(one_day_file)
     generate_test_file(two_days_file)
-    
+
     subject.perform_internal
 
     expect(File.exist?("#{AsyncDownloadFile::DIRECTORY}/#{now_file}.txt")).to be true
@@ -41,5 +40,4 @@ describe DownloadCleanerJob do
   def download_filename(filename, time)
     "#{filename}_#{time}-1234"
   end
-
 end

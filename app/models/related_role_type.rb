@@ -20,11 +20,10 @@
 #
 
 class RelatedRoleType < ActiveRecord::Base
-
   belongs_to :relation, polymorphic: true
 
   validates_by_schema
-  validates :role_type, inclusion: { in: ->(_) { Role.all_types.collect(&:sti_name) } }
+  validates :role_type, inclusion: {in: ->(_) { Role.all_types.collect(&:sti_name) }}
 
   def to_s(_format = :default)
     role_class.label_long
@@ -37,5 +36,4 @@ class RelatedRoleType < ActiveRecord::Base
   def group_class
     role_class.model_name.to_s.deconstantize.constantize
   end
-
 end

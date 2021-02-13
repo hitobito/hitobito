@@ -9,7 +9,6 @@ require "csv"
 
 module Export
   module Csv
-
     def self.export(exportable)
       Generator.new(exportable).call
     end
@@ -50,9 +49,8 @@ module Export
       end
 
       def options
-        { col_sep: Settings.csv.separator.strip }
+        {col_sep: Settings.csv.separator.strip}
       end
-
     end
   end
 end

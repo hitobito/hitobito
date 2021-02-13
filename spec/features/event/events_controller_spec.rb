@@ -8,13 +8,11 @@
 require "spec_helper"
 
 describe EventsController, js: true do
-
   let(:event) do
     event = Fabricate(:course, kind: event_kinds(:slk), groups: [groups(:top_group)])
     event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
     event
   end
-
 
   it "may set and remove contact from event" do
     obsolete_node_safe do
@@ -43,7 +41,7 @@ describe EventsController, js: true do
   end
 
   context "standard course description" do
-    let(:form_path) { new_group_event_path(event.group_ids.first, event.id, event: { type: Event::Course }, format: :html) }
+    let(:form_path) { new_group_event_path(event.group_ids.first, event.id, event: {type: Event::Course}, format: :html) }
 
     context "if textarea is empty" do
       before :each do
@@ -102,5 +100,4 @@ describe EventsController, js: true do
       end
     end
   end
-
 end

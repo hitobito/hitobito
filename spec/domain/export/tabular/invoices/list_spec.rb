@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe Export::Tabular::Invoices::List do
   let(:invoice) { invoices(:invoice) }
-  let(:list)    { Export::Tabular::Invoices::List.new([invoice]) }
+  let(:list) { Export::Tabular::Invoices::List.new([invoice]) }
 
   subject { list }
 

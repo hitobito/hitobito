@@ -7,10 +7,11 @@
 
 require "spec_helper"
 describe Import::ContactAccountFields do
-
   subject { Import::ContactAccountFields.new(model) }
+
   context "PhoneNumber" do
     let(:model) { PhoneNumber }
+
     its(:keys) { should eq Settings.phone_number.predefined_labels.collect { |l| "phone_number_#{l.downcase}" } }
     its(:values) { should eq Settings.phone_number.predefined_labels.collect { |l| "Telefonnummer #{l}" } }
 
@@ -19,21 +20,23 @@ describe Import::ContactAccountFields do
 
   context "SocialAccount" do
     let(:model) { SocialAccount }
+
     its(:keys) { should eq Settings.social_account.predefined_labels.collect { |l| "social_account_#{l.downcase}" } }
     its(:values) { should eq Settings.social_account.predefined_labels.collect { |l| "Social Media Adresse #{l}" } }
     its("fields.first") do
-       should eq(key: "social_account_#{Settings.social_account.predefined_labels.first.downcase}",
-                 value: "Social Media Adresse #{Settings.social_account.predefined_labels.first}")
+      should eq(key: "social_account_#{Settings.social_account.predefined_labels.first.downcase}",
+                value: "Social Media Adresse #{Settings.social_account.predefined_labels.first}")
     end
   end
 
   context "AdditionalEmail" do
     let(:model) { AdditionalEmail }
+
     its(:keys) { should eq Settings.additional_email.predefined_labels.collect { |l| "additional_email_#{l.downcase}" } }
     its(:values) { should eq Settings.additional_email.predefined_labels.collect { |l| "Weitere E-Mail #{l}" } }
     its("fields.first") do
-       should eq(key: "additional_email_#{Settings.additional_email.predefined_labels.first.downcase}",
-                 value: "Weitere E-Mail #{Settings.additional_email.predefined_labels.first}")
+      should eq(key: "additional_email_#{Settings.additional_email.predefined_labels.first.downcase}",
+                value: "Weitere E-Mail #{Settings.additional_email.predefined_labels.first}")
     end
   end
 end

@@ -8,8 +8,8 @@
 require "spec_helper"
 
 describe MessagesController do
-  let(:list)       { mailing_lists(:leaders) }
-  let(:nesting)    { { group_id: list.group_id, mailing_list_id: list.id } }
+  let(:list) { mailing_lists(:leaders) }
+  let(:nesting) { {group_id: list.group_id, mailing_list_id: list.id} }
   let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
@@ -34,13 +34,13 @@ describe MessagesController do
     end
 
     it "builds new Letter" do
-      get :new, params: nesting.merge(message: { type: "Message::Letter" })
+      get :new, params: nesting.merge(message: {type: "Message::Letter"})
       expect(assigns(:message)).to be_kind_of(Message::Letter)
       expect(assigns(:recipient_count)).to eq 1
     end
 
     it "builds new LetterWithInvoice" do
-      get :new, params: nesting.merge(message: { type: "Message::LetterWithInvoice" })
+      get :new, params: nesting.merge(message: {type: "Message::LetterWithInvoice"})
       expect(assigns(:message)).to be_kind_of(Message::LetterWithInvoice)
       expect(assigns(:recipient_count)).to eq 1
     end
@@ -49,7 +49,7 @@ describe MessagesController do
   context "POST#create" do
     it "saves Letter" do
       post :create, params: nesting.merge(
-        message: { subject: "Mitgliedsbeitrag", body: "body", type: "Message::Letter" }
+        message: {subject: "Mitgliedsbeitrag", body: "body", type: "Message::Letter"}
       )
       expect(assigns(:message)).to be_persisted
       expect(response).to redirect_to group_mailing_list_message_path(id: assigns(:message).id)
@@ -65,7 +65,7 @@ describe MessagesController do
           body: "Bitte einzahlen",
           invoice_attributes: {
             invoice_items_attributes: {
-              "1" => { "name" => "Mitgliedsbeitrag", "_destroy" => "false" }
+              "1" => {"name" => "Mitgliedsbeitrag", "_destroy" => "false"}
             }
           }
         }
@@ -82,7 +82,7 @@ describe MessagesController do
           type: "Message::LetterWithInvoice",
           invoice_attributes: {
             invoice_items_attributes: {
-              "1" => { "name" => "Mitgliedsbeitrag", "_destroy" => "false" }
+              "1" => {"name" => "Mitgliedsbeitrag", "_destroy" => "false"}
             }
           }
         }
@@ -94,11 +94,10 @@ describe MessagesController do
 
     it "creates Text Message" do
       post :create, params: nesting.merge(
-        message: { text: "Long live SMS!", type: "Message::TextMessage" }
+        message: {text: "Long live SMS!", type: "Message::TextMessage"}
       )
       expect(assigns(:message)).to be_persisted
       expect(response).to redirect_to group_mailing_list_message_path(id: assigns(:message).id)
     end
-
   end
 end

@@ -8,7 +8,6 @@
 # The search functionality for the index table.
 # Extracted into an own module for convenience.
 module Searchable
-
   extend ActiveSupport::Concern
 
   included do
@@ -22,7 +21,6 @@ module Searchable
 
   # Prepended methods for searching.
   module Prepends
-
     private
 
     # Enhance the list entries with an optional search criteria
@@ -41,19 +39,16 @@ module Searchable
       SearchStrategies::SqlConditionBuilder.new(params[:q], fields).search_conditions
     end
 
-
     # Returns true if this controller has searchable columns.
     def search_support?
       search_columns.present?
     end
-
   end
 
   private
 
   # Class methods for Searchable.
   module ClassMethods
-
     # All search columns divided in table and field names.
     def search_tables_and_fields
       @search_tables_and_fields ||= search_columns.map do |f|
@@ -64,7 +59,5 @@ module Searchable
         end
       end
     end
-
   end
-
 end

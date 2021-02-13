@@ -7,7 +7,6 @@
 
 module Contactable
   class AddressValidator
-
     def validate_people
       scope.includes(:tags).find_each do |person|
         next unless should_be_validated?(person)

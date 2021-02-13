@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Person::TagsController < ApplicationController
-
   class_attribute :permitted_attrs
 
   before_action :load_group
@@ -18,7 +17,7 @@ class Person::TagsController < ApplicationController
     tags = []
 
     if params.key?(:q) && params[:q].size >= 3
-      tags = available_tags(params[:q]).map { |tag| { label: tag } }
+      tags = available_tags(params[:q]).map { |tag| {label: tag} }
     end
 
     render json: tags
@@ -90,5 +89,4 @@ class Person::TagsController < ApplicationController
   def load_person
     @person = Person.find(params[:person_id])
   end
-
 end

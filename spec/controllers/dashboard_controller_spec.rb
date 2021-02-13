@@ -8,9 +8,7 @@
 require "spec_helper"
 
 describe DashboardController do
-
   describe "GET index" do
-
     context "html" do
       it "redirects to login if no user" do
         get :index
@@ -36,11 +34,9 @@ describe DashboardController do
       it "redirects to user home if logged in" do
         person = people(:top_leader)
         person.generate_authentication_token!
-        get :index, params: { user_email: person.email, user_token: person.authentication_token }, format: :json
+        get :index, params: {user_email: person.email, user_token: person.authentication_token}, format: :json
         is_expected.to redirect_to(group_person_path(person.groups.first, person, format: :json))
       end
     end
-
   end
-
 end

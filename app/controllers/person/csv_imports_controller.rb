@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::CsvImportsController < ApplicationController
-
   attr_accessor :group
   attr_reader :importer, :parser, :entries, :can_manage_tags
 
@@ -80,9 +79,9 @@ class Person::CsvImportsController < ApplicationController
   def add_importer_info_to_flash(flash, key, count)
     if count > 0
       add_to_flash(flash,
-                   translate([action_name, key].join(".").to_sym,
-                             count: count,
-                             role: importer.human_name(count: count)))
+        translate([action_name, key].join(".").to_sym,
+          count: count,
+          role: importer.human_name(count: count)))
     end
   end
 
@@ -132,9 +131,9 @@ class Person::CsvImportsController < ApplicationController
 
   def valid_file?(io)
     io.present? &&
-    io.respond_to?(:content_type) &&
+      io.respond_to?(:content_type) &&
     # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
-    io.content_type =~ /text\/|excel|octet-stream/
+      io.content_type =~ /text\/|excel|octet-stream/
   end
 
   def parse_or_redirect
@@ -179,7 +178,7 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def redirect_params
-    { filters: { role: { role_type_ids: [role_type.id] } }, name: importer.human_role_name }
+    {filters: {role: {role_type_ids: [role_type.id]}}, name: importer.human_role_name}
   end
 
   def role_type
@@ -213,5 +212,4 @@ class Person::CsvImportsController < ApplicationController
   def read_file_or_data
     (file_param && file_param.read) || params[:data]
   end
-
 end

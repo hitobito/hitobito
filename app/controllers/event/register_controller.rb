@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RegisterController < ApplicationController
-
   helper_method :resource, :entry, :group, :event
 
   before_action :assert_external_application_possible
@@ -113,6 +112,4 @@ class Event::RegisterController < ApplicationController
   def devise_controller?
     true # hence, no login required
   end
-
-
 end

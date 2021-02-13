@@ -8,16 +8,14 @@
 require "spec_helper"
 
 describe Export::SubgroupsExportJob do
-
   subject { Export::SubgroupsExportJob.new(user.id, group.id, filename: "subgroups_export") }
 
-  let(:user)     { people(:top_leader) }
-  let(:group)    { groups(:top_layer) }
-  let(:year)     { 2012 }
+  let(:user) { people(:top_leader) }
+  let(:group) { groups(:top_layer) }
+  let(:year) { 2012 }
   let(:filepath) { AsyncDownloadFile::DIRECTORY.join("subgroups_export") }
 
   context "creates a CSV-Export" do
-
     it "and saves it" do
       subject.perform
 
@@ -28,5 +26,4 @@ describe Export::SubgroupsExportJob do
       expect(lines[2]).to match(/^#{groups(:bottom_layer_one).id};#{group.id};Bottom One;.*/)
     end
   end
-
 end

@@ -7,7 +7,7 @@ require "spec_helper"
 require "digest/md5"
 
 describe Synchronize::Mailchimp::Subscriber do
-  let(:person)       { people(:top_leader) }
+  let(:person) { people(:top_leader) }
 
   context "subscriber instance" do
     let(:subscriber) { described_class.new(person, "test@example.com") }

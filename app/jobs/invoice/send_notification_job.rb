@@ -6,13 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::SendNotificationJob < BaseJob
-
   self.parameters = [:invoice_id, :sender_id, :locale]
 
   def initialize(invoice, sender)
     super()
     @invoice_id = invoice.id
-    @sender_id  = sender.id
+    @sender_id = sender.id
   end
 
   def perform

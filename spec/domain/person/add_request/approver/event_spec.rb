@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::AddRequest::Approver::Event do
-
   let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
 
@@ -17,7 +16,6 @@ describe Person::AddRequest::Approver::Event do
   subject { Person::AddRequest::Approver.for(request, user) }
 
   context "Event" do
-
     let(:group) { groups(:bottom_group_one_one) }
     let(:event) { Fabricate(:event, groups: [group]) }
 
@@ -34,7 +32,6 @@ describe Person::AddRequest::Approver::Event do
     end
 
     context "#approve" do
-
       before do
         Fabricate(:event_question, event: event)
         Fabricate(:event_question, event: event)
@@ -116,10 +113,10 @@ describe Person::AddRequest::Approver::Event do
 
       it "does nothing if role already exists" do
         p = Fabricate(:event_participation,
-                      event: event,
-                      person: person,
-                      active: false,
-                      application: Fabricate(:event_application, priority_1: event))
+          event: event,
+          person: person,
+          active: false,
+          application: Fabricate(:event_application, priority_1: event))
         Fabricate(role_type.name, participation: p)
 
         expect do
@@ -184,5 +181,4 @@ describe Person::AddRequest::Approver::Event do
       end
     end
   end
-
 end

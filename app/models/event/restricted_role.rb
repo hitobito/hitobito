@@ -24,14 +24,13 @@ module Event::RestrictedRole
   def destroy_previous_role(attr, type)
     # be on the save side with destroy_all
     Event::Role.joins(:participation).
-                where(event_participations: { event_id: id },
-                      event_roles: { type: type.sti_name }).
+                where(event_participations: {event_id: id},
+                      event_roles: {type: type.sti_name}).
                 destroy_all
     @restricted_role[attr] = nil # clear cache
   end
 
   def restricted_role_scope(type)
-    participations.joins(:roles).where(event_roles: { type: type.sti_name })
+    participations.joins(:roles).where(event_roles: {type: type.sti_name})
   end
-
 end

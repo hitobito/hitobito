@@ -38,8 +38,8 @@ module Dropdown
         last_format = user.last_label_format
         parent.sub_items << Title.new(dropdown.template.t("dropdown.last_used"))
         parent.sub_items << Item.new(last_format.to_s,
-                                     export_label_format_path(last_format.id),
-                                     target: :new, class: "export-label-format")
+          export_label_format_path(last_format.id),
+          target: :new, class: "export-label-format")
         parent.sub_items << Divider.new
       end
     end
@@ -51,7 +51,7 @@ module Dropdown
     def add_label_format_items(parent)
       LabelFormat.list.for_person(user).each do |label_format|
         parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
-                                     target: :new, class: "export-label-format")
+          target: :new, class: "export-label-format")
       end
     end
 
@@ -67,7 +67,6 @@ module Dropdown
       params.merge(format: :pdf, label_format_id: id,
                    household: households)
     end
-
 
     class ToggleHouseholdsLabelsItem < Dropdown::Base
       DEFAULT_STATE = true
@@ -95,6 +94,5 @@ module Dropdown
         end
       end
     end
-
   end
 end

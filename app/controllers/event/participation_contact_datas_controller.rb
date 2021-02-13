@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_pbs.
 
 class Event::ParticipationContactDatasController < ApplicationController
-
   helper_method :group, :event, :entry
 
   authorize_resource :entry, class: Event::ParticipationContactData
@@ -22,7 +21,7 @@ class Event::ParticipationContactDatasController < ApplicationController
       redirect_to new_group_event_participation_path(
         group,
         event,
-        event_role: { type: params[:event_role][:type] }
+        event_role: {type: params[:event_role][:type]}
       )
     else
       render :edit
@@ -63,5 +62,4 @@ class Event::ParticipationContactDatasController < ApplicationController
   def permitted_attrs
     PeopleController.permitted_attrs
   end
-
 end

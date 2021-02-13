@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class ApplicationController < ActionController::Base
-
   include DecoratesBeforeRendering
   include Userstamp
   include Translatable
@@ -35,8 +34,8 @@ class ApplicationController < ActionController::Base
     end
 
     rescue_from ActionController::UnknownFormat,
-                ActionView::MissingTemplate,
-                with: :not_found
+      ActionView::MissingTemplate,
+      with: :not_found
   end
 
   def person_home_path(person, options = {})
@@ -66,7 +65,7 @@ class ApplicationController < ActionController::Base
 
   def current_ability
     @current_ability ||= if current_user
-                           Ability.new(current_user)
+      Ability.new(current_user)
                          else
                            TokenAbility.new(current_service_token)
                          end

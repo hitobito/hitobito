@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class FullTextController < ApplicationController
-
   skip_authorization_check
 
   helper_method :entries, :tab_class
@@ -32,7 +31,7 @@ class FullTextController < ApplicationController
 
   def results_with_separator(*sets)
     sets.select(&:present?).inject do |memo, set|
-      memo + [{ label: "—" * 20 }] + set
+      memo + [{label: "—" * 20}] + set
     end
   end
 

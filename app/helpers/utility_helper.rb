@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module UtilityHelper
-
   # Overridden method that takes a block that is executed for each item in array
   # before appending the results.
   def safe_join(array, sep = $OUTPUT_FIELD_SEPARATOR, &block)
@@ -80,5 +79,4 @@ module UtilityHelper
       [attr, "#{attr}_id"]
     end
   end
-
 end

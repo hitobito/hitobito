@@ -1,14 +1,11 @@
 require "spec_helper"
 
-
 describe Person::Subscriptions do
-
-  let(:list)      { mailing_lists(:leaders) }
-  let(:person)    { people(:top_leader) }
+  let(:list) { mailing_lists(:leaders) }
+  let(:person) { people(:top_leader) }
 
   let(:top_layer) { groups(:top_layer) }
   let(:top_group) { groups(:top_group) }
-
 
   context :mailing_lists do
     subject { Person::Subscriptions.new(person).mailing_lists }
@@ -73,8 +70,8 @@ describe Person::Subscriptions do
   end
 
   context :from_events do
-    let(:person)        { people(:bottom_member) }
-    let(:event)         { events(:top_course) }
+    let(:person) { people(:bottom_member) }
+    let(:event) { events(:top_course) }
     let(:participation) { event_participations(:top) }
 
     subject { Person::Subscriptions.new(person).from_events }
@@ -95,7 +92,7 @@ describe Person::Subscriptions do
   end
 
   context :from_groups do
-    let(:person)       { people(:bottom_member) }
+    let(:person) { people(:bottom_member) }
     let(:subscription) { subscriptions(:leaders_group) }
 
     let(:bottom_layer_one) { groups(:bottom_layer_one) }
@@ -139,5 +136,4 @@ describe Person::Subscriptions do
       expect(subject).to be_empty
     end
   end
-
 end

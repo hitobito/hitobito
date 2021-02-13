@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingList::Subscribers
-
   delegate :id, :subscriptions, to: "@list"
 
   def initialize(mailing_list, people_scope = Person.only_public_data)
@@ -16,7 +15,7 @@ class MailingList::Subscribers
     @people_scope.
       joins(people_joins).
       joins(subscription_joins).
-      where(subscriptions: { mailing_list_id: id }).
+      where(subscriptions: {mailing_list_id: id}).
       where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})").
       where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})").
       where(suscriber_conditions).
@@ -80,8 +79,8 @@ class MailingList::Subscribers
     condition.or("subscriptions.subscriber_type = ? AND " \
                  "subscriptions.excluded = ? AND " \
                  "subscriptions.subscriber_id = people.id",
-                 Person.sti_name,
-                 false)
+      Person.sti_name,
+      false)
   end
 
   def group_subscribers(condition)
@@ -107,8 +106,8 @@ class MailingList::Subscribers
     condition.or("subscriptions.subscriber_type = ? AND " \
                  "subscriptions.subscriber_id = event_participations.event_id AND " \
                  "event_participations.active = ?",
-                 Event.sti_name,
-                 true)
+      Event.sti_name,
+      true)
   end
 
   private
@@ -122,8 +121,8 @@ class MailingList::Subscribers
   def tag_excluded_subscription_ids
     SubscriptionTag.select(:tag_id)
                    .joins(:subscription)
-                   .where(subscription_tags: { excluded: true },
-                                             subscriptions: { mailing_list_id: id })
+                   .where(subscription_tags: {excluded: true},
+                          subscriptions: {mailing_list_id: id})
   end
 
   def excluded_subscriber_ids

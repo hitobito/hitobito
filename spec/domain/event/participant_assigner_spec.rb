@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Event::ParticipantAssigner do
-
   let(:course) do
     course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
     course.questions << Fabricate(:event_question, event: course)
@@ -27,7 +26,6 @@ describe Event::ParticipantAssigner do
   subject { Event::ParticipantAssigner.new(event, participation) }
 
   describe "#add_participant" do
-
     before do
       participation.active = false
       participation.init_answers
@@ -59,7 +57,7 @@ describe Event::ParticipantAssigner do
         expect { subject.add_participant }.to change { Event::Answer.count }.by(1)
 
         expect(participation.answers.count).to eq(3)
-        answered = participation.reload.answers.map {|answer| answer.question.id}
+        answered = participation.reload.answers.map { |answer| answer.question.id }
         event.questions.each do |question|
           expect(answered).to include(question.id)
         end
@@ -72,7 +70,6 @@ describe Event::ParticipantAssigner do
       end
     end
   end
-
 
   describe "#remove_participant" do
     before do
@@ -166,7 +163,6 @@ describe Event::ParticipantAssigner do
     end
 
     describe "event#applicant_count" do
-
       before do
         participation
         assert_applicant_count(1, 0)
@@ -192,7 +188,6 @@ describe Event::ParticipantAssigner do
         expect(event1.reload.applicant_count).to eq count1
         expect(event2.reload.applicant_count).to eq count2
       end
-
     end
   end
 end

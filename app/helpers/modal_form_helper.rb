@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module ModalFormHelper
-
   # Render a generic modal form for the current entry
   def modal_entry_form(*attrs)
     options = attrs.extract_options!
@@ -38,5 +37,4 @@ module ModalFormHelper
       btns
     end
   end
-
 end

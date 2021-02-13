@@ -8,7 +8,6 @@
 module Dropdown
   module Event
     class ParticipantAdd < Dropdown::Base
-
       attr_reader :group, :event
 
       class << self
@@ -54,7 +53,7 @@ module Dropdown
 
       def init_items(url_options)
         event.participant_types.each do |type|
-          opts = url_options.merge(event_role: { type: type.sti_name })
+          opts = url_options.merge(event_role: {type: type.sti_name})
           link = participate_link(opts)
           add_item(translate(:as, role: type.label), link)
         end
@@ -67,7 +66,6 @@ module Dropdown
           template.contact_data_group_event_participations_path(group, event, opts)
         end
       end
-
     end
   end
 end

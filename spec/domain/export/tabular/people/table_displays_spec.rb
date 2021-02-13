@@ -6,13 +6,12 @@
 require "spec_helper"
 
 describe Export::Tabular::People::TableDisplays do
-
   let(:person) { people(:top_leader) }
 
   context "people" do
-    let(:people_list)   { Export::Tabular::People::TableDisplays.new(list, table_display) }
+    let(:people_list) { Export::Tabular::People::TableDisplays.new(list, table_display) }
     let(:table_display) { TableDisplay::People.new }
-    let(:list)          { [person] }
+    let(:list) { [person] }
 
     subject { people_list }
 
@@ -50,14 +49,15 @@ describe Export::Tabular::People::TableDisplays do
 
       it "does not fail" do
         table_display.selected = %w(first_name)
-        expect {  people_list.data_rows }.not_to raise_error ActiveModel::MissingAttributeError
+        expect { people_list.data_rows }.not_to raise_error ActiveModel::MissingAttributeError
         expect(people_list.data_rows.collect(&:presence).compact.size).to eq 1
       end
     end
 
     context :with_permission_check do
-      before  { TableDisplay.register_permission(Person, :show_full, :additional_information) }
-      after   { TableDisplay.class_variable_set("@@permissions", {}) }
+      before { TableDisplay.register_permission(Person, :show_full, :additional_information) }
+
+      after { TableDisplay.class_variable_set("@@permissions", {}) }
 
       context :as_leader do
         let(:table_display) { TableDisplay::People.new(person: people(:top_leader)) }
@@ -82,13 +82,13 @@ describe Export::Tabular::People::TableDisplays do
   end
 
   context "participations" do
-    let(:people_list)   { Export::Tabular::People::TableDisplays.new(list, table_display) }
+    let(:people_list) { Export::Tabular::People::TableDisplays.new(list, table_display) }
     let(:table_display) { TableDisplay::Participations.new(person: person) }
     let(:participation) { event_participations(:top) }
-    let(:person)        { participation.person }
-    let(:list)          { [participation] }
-    let(:question)      { event_questions(:top_ov) }
-    let(:top_course)    { participation.event }
+    let(:person) { participation.person }
+    let(:list) { [participation] }
+    let(:question) { event_questions(:top_ov) }
+    let(:top_course) { participation.event }
 
     subject { people_list }
 
@@ -131,11 +131,12 @@ describe Export::Tabular::People::TableDisplays do
     end
 
     context :with_permission_check do
-      before  { TableDisplay.register_permission(Person, :show_full, :additional_information) }
-      after   { TableDisplay.class_variable_set("@@permissions", {}) }
+      before { TableDisplay.register_permission(Person, :show_full, :additional_information) }
+
+      after { TableDisplay.class_variable_set("@@permissions", {}) }
 
       context :event_leader do
-        let(:person) { Fabricate(Event::Role::Leader.sti_name, participation: Fabricate(:event_participation, event: top_course)).person  }
+        let(:person) { Fabricate(Event::Role::Leader.sti_name, participation: Fabricate(:event_participation, event: top_course)).person }
 
         it "does include value of configured questions" do
           participation.answers.create!(question: question, answer: "GA")

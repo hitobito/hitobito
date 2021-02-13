@@ -10,12 +10,11 @@
 require "spec_helper"
 
 describe Event::RolesController, type: :controller do
-
   # always use fixtures with crud controller examples, otherwise request reuse might produce errors
   let(:test_entry) { event_roles(:top_leader) }
 
   let(:course) { test_entry.event }
-  let(:group)  { course.groups.first }
+  let(:group) { course.groups.first }
 
   let(:new_entry_attrs) do
     {
@@ -38,9 +37,8 @@ describe Event::RolesController, type: :controller do
   end
 
   def scope_params
-     { group_id: group.id, event_id: course.id }
+    {group_id: group.id, event_id: course.id}
   end
-
 
   before { sign_in(people(:top_leader)) }
 
@@ -59,12 +57,9 @@ describe Event::RolesController, type: :controller do
     def it_should_redirect_to_index
       it { is_expected.to redirect_to group_event_participations_path(group, course) }
     end
-
   end
 
-
   include_examples "crud controller", skip: [%w(index), %w(show), %w(new plain), %w(create html)]
-
 
   describe_action :get, :new do
     context ".html", format: :html do
@@ -76,24 +71,25 @@ describe Event::RolesController, type: :controller do
 
   describe_action :post, :create do
     context ".html", format: :html do
-      let(:params) { { model_identifier => create_entry_attrs } }
+      let(:params) { {model_identifier => create_entry_attrs} }
+
       it "creates answers on the go", perform_request: false do
         expect { perform_request }.to change { Event::Answer.count }.by(3)
       end
 
-     context "with valid params" do
-        it_should_redirect_to_show
-        # it_should_set_attrs
-        it_should_have_flash(:notice)
+      context "with valid params" do
+         it_should_redirect_to_show
+         # it_should_set_attrs
+         it_should_have_flash(:notice)
 
-        it "should persist entry" do
-          expect(entry).to be_persisted
-          expect(entry).to be_kind_of(Event::Role::AssistantLeader)
-          expect(entry.label).to eq(create_entry_attrs[:label])
-          expect(entry.participation).to be_persisted
-          expect(entry.participation.person_id).to eq(create_entry_attrs[:person_id])
-        end
-      end
+         it "should persist entry" do
+           expect(entry).to be_persisted
+           expect(entry).to be_kind_of(Event::Role::AssistantLeader)
+           expect(entry.label).to eq(create_entry_attrs[:label])
+           expect(entry.participation).to be_persisted
+           expect(entry.participation.person_id).to eq(create_entry_attrs[:person_id])
+         end
+       end
     end
   end
 

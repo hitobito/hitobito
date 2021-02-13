@@ -43,7 +43,6 @@
 
 # Serializes a single group.
 class GroupSerializer < ApplicationSerializer
-
   include ContactableSerializer
 
   schema do
@@ -59,8 +58,8 @@ class GroupSerializer < ApplicationSerializer
     if item.contact
       entity :contact, item.contact, ContactSerializer
       template_link "groups.contact",
-                    :people,
-                    h.group_person_url("{groups.id}", "{groups.contact}", format: :json)
+        :people,
+        h.group_person_url("{groups.id}", "{groups.contact}", format: :json)
     else
       map_properties :address, :zip_code, :town, :country
     end
@@ -85,5 +84,4 @@ class GroupSerializer < ApplicationSerializer
 
     template_link "groups.people", :people, h.group_people_url("{groups.id}", format: :json)
   end
-
 end

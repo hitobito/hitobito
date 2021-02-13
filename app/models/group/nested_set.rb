@@ -51,7 +51,7 @@ module Group::NestedSet
          .joins("LEFT JOIN #{Group.quoted_table_name} AS sister_groups " \
                 "ON #{Group.quoted_table_name}.lft >= sister_groups.lft " \
                 "AND #{Group.quoted_table_name}.lft < sister_groups.rgt")
-         .where(sister_groups: { type: type, parent_id: parent_id })
+         .where(sister_groups: {type: type, parent_id: parent_id})
   end
 
   # The layer hierarchy without the layer of this group.
@@ -108,8 +108,8 @@ module Group::NestedSet
 
   def move_required?
     (@move_to_new_parent_id != false || @move_to_new_name != false) &&
-    parent_id &&
-    parent.children.count > 1
+      parent_id &&
+      parent.children.count > 1
   end
 
   def move_to_right_of_if_change(node)
@@ -122,5 +122,4 @@ module Group::NestedSet
     first = parent.children[0]
     move_to_left_of(first) unless first == self
   end
-
 end

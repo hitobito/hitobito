@@ -17,7 +17,7 @@ describe Devise::PasswordsController do
 
   describe "#create" do
     it "#create with invalid email invalid password" do
-      post :create, params: { person: { email: "asdf" } }
+      post :create, params: {person: {email: "asdf"}}
       expect(last_email).not_to be_present
       expect(controller.send(:resource).errors[:email]).to eq ["nicht gefunden"]
     end
@@ -26,7 +26,7 @@ describe Devise::PasswordsController do
       let(:person) { Fabricate("Group::BottomGroup::Leader", group: bottom_group).person.reload }
 
       it "#create shows invalid password" do
-        post :create, params: { person: { email: person.email } }
+        post :create, params: {person: {email: person.email}}
         expect(flash[:notice]).to eq "Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
         expect(last_email).to be_present
       end
@@ -34,9 +34,9 @@ describe Devise::PasswordsController do
 
     context "without login permission" do
       it "#create shows invalid password" do
-        post :create, params: { person: { email: "not-existing@example.com" } }
+        post :create, params: {person: {email: "not-existing@example.com"}}
         expect(last_email).not_to be_present
-        expect(flash[:alert]).to eq  "Du bist nicht berechtigt, Dich hier anzumelden."
+        expect(flash[:alert]).to eq "Du bist nicht berechtigt, Dich hier anzumelden."
       end
     end
 
@@ -44,5 +44,4 @@ describe Devise::PasswordsController do
       ActionMailer::Base.deliveries.last
     end
   end
-
 end

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Export::ExportBaseJob do
-
   class MyJob < described_class
     self.parameters = PARAMETERS
   end
@@ -23,5 +22,4 @@ describe Export::ExportBaseJob do
     job = subject.delayed_jobs.last.payload_object
     expect(job.instance_variable_get("@locale")).to eq "fr"
   end
-
 end

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe "FilterNavigation::People" do
-
   let(:template) do
     double("template").tap do |t|
       allow(t).to receive_messages(can?: true)
@@ -39,12 +38,11 @@ describe "FilterNavigation::People" do
     end
 
     context "without params" do
-
-      its(:main_items)      { should have(2).item }
-      its(:active_label)    { should == "Mitglieder" }
+      its(:main_items) { should have(2).item }
+      its(:active_label) { should == "Mitglieder" }
       its("dropdown.active") { should be_falsey }
-      its("dropdown.label")  { should == "Weitere Ansichten" }
-      its("dropdown.items")  { should have(3).items }
+      its("dropdown.label") { should == "Weitere Ansichten" }
+      its("dropdown.items") { should have(3).items }
 
       it "contains external item with count" do
         expect(subject.main_items.last).to match(/Externe \(0\)/)
@@ -61,17 +59,16 @@ describe "FilterNavigation::People" do
       end
 
       context "with custom filters" do
-
         before do
           group.people_filters.create!(name: "2_Members",
-                                       filter_chain: { role: { role_types: role_types.map(&:id) } })
+                                       filter_chain: {role: {role_types: role_types.map(&:id)}})
           group.people_filters.create!(name: "1_Leaders",
-                                       filter_chain: { role: { role_types: role_types.map(&:id) } })
+                                       filter_chain: {role: {role_types: role_types.map(&:id)}})
         end
 
         its("dropdown.active") { should be_falsey }
-        its("dropdown.label")  { should == "Weitere Ansichten" }
-        its("dropdown.items")  { should have(5).items }
+        its("dropdown.label") { should == "Weitere Ansichten" }
+        its("dropdown.items") { should have(5).items }
 
         it "has dropdown-items sorted by name" do
           expected_items = [
@@ -86,32 +83,30 @@ describe "FilterNavigation::People" do
             .map(&:label)
 
           expect(actual_items).to match_array expected_items # all
-          expect(actual_items).to eq expected_items          # in order
+          expect(actual_items).to eq expected_items # in order
         end
       end
     end
 
     context "with selected filter" do
-
       before do
         group.people_filters.create!(name: "Leaders",
-                                     filter_chain: { role: { role_types: role_types.map(&:id) } })
+                                     filter_chain: {role: {role_types: role_types.map(&:id)}})
       end
 
       subject do
         filter = Person::Filter::List.new(group,
-                                          nil,
-                                          name: "Leaders",
-                                          filters: { role: { role_type_ids: role_types.map(&:id) } })
+          nil,
+          name: "Leaders",
+          filters: {role: {role_type_ids: role_types.map(&:id)}})
         FilterNavigation::People.new(template, group, filter)
       end
 
-      its(:main_items)      { should have(2).items }
-      its(:active_label)    { should == nil }
+      its(:main_items) { should have(2).items }
+      its(:active_label) { should == nil }
       its("dropdown.active") { should be_truthy }
-      its("dropdown.label")  { should == "Leaders" }
-      its("dropdown.items")  { should have(4).item }
-
+      its("dropdown.label") { should == "Leaders" }
+      its("dropdown.items") { should have(4).item }
     end
   end
 
@@ -130,7 +125,7 @@ describe "FilterNavigation::People" do
   context "bottom group" do
     let(:group) { groups(:bottom_group_one_one).decorate }
 
-    its("dropdown.items")  { should have(3).items }
+    its("dropdown.items") { should have(3).items }
 
     it "entire sub groups contains only sub groups role types" do
       subject.dropdown.items.first.url =~ /#{[Role::External,

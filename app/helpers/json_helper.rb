@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module JsonHelper
-
   def api_response(json, object, key = nil)
     json.set! key || model_class.model_name.plural do
       json.array!(Array(object)) do |entry|
@@ -27,9 +26,9 @@ module JsonHelper
     json.set! accounts.klass.model_name.plural do
       json.array! accounts.select { |a| a.public? || !only_public } do |account|
         json.extract!(account, :id,
-                      account.value_attr,
-                      :label,
-                      :public)
+          account.value_attr,
+          :label,
+          :public)
         yield account if block_given?
       end
     end

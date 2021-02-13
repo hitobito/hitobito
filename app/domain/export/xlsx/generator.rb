@@ -9,13 +9,11 @@
 require "axlsx"
 
 module Export::Xlsx
-
   def self.export(exportable)
     Generator.new(exportable).call
   end
 
   class Generator
-
     attr_reader :exportable, :style
 
     def initialize(exportable)
@@ -78,7 +76,7 @@ module Export::Xlsx
     end
 
     def data_row_height(height)
-      height.nil? ? {} : { height: height }
+      height.nil? ? {} : {height: height}
     end
 
     def apply_column_widths(sheet)
@@ -111,9 +109,7 @@ module Export::Xlsx
       styles = styles.collect do |s|
         style_definition(s)[:style]
       end
-      { style: styles }
+      {style: styles}
     end
-
   end
-
 end

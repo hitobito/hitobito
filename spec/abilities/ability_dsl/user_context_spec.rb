@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe AbilityDsl::UserContext do
-
   subject { AbilityDsl::UserContext.new(user) }
 
   context :top_leader do
@@ -20,8 +19,8 @@ describe AbilityDsl::UserContext do
     it { expect(subject.permission_group_ids(:layer_and_below_read)).to eq [groups(:top_group).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [groups(:top_layer).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:top_layer).id] }
-    its(:admin)             { should be_truthy }
-    its(:all_permissions)   { is_expected.to contain_exactly(:admin, :finance, :impersonation, :layer_and_below_full, :layer_and_below_read, :contact_data) }
+    its(:admin) { should be_truthy }
+    its(:all_permissions) { is_expected.to contain_exactly(:admin, :finance, :impersonation, :layer_and_below_full, :layer_and_below_read, :contact_data) }
 
     it "has no events with permission full" do
       expect(subject.events_with_permission(:event_full)).to be_blank
@@ -37,8 +36,8 @@ describe AbilityDsl::UserContext do
     it { expect(subject.permission_group_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [] }
     it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
-    its(:admin)             { should be_falsey }
-    its(:all_permissions)   { is_expected.to eq [:layer_and_below_read, :finance] }
+    its(:admin) { should be_falsey }
+    its(:all_permissions) { is_expected.to eq [:layer_and_below_read, :finance] }
 
     it "has events with permission full" do
       expect(subject.events_with_permission(:event_full)).to match_array([events(:top_course).id])
@@ -63,8 +62,7 @@ describe AbilityDsl::UserContext do
     it { expect(subject.permission_group_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_full)).to eq [groups(:bottom_layer_one).id] }
     it { expect(subject.permission_layer_ids(:layer_and_below_read)).to eq [groups(:bottom_layer_one).id] }
-    its(:admin)             { should be_falsey }
-    its(:all_permissions)   { is_expected.to contain_exactly(:layer_and_below_full, :layer_and_below_read, :group_read, :group_and_below_read, :contact_data, :approve_applications) }
+    its(:admin) { should be_falsey }
+    its(:all_permissions) { is_expected.to contain_exactly(:layer_and_below_full, :layer_and_below_read, :group_read, :group_and_below_read, :contact_data, :approve_applications) }
   end
-
 end

@@ -34,5 +34,4 @@ class ServiceTokensController < CrudController
   def authorize_class
     authorize!(:index_service_tokens, group)
   end
-
 end

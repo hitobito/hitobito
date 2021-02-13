@@ -7,7 +7,6 @@
 
 # A set of examples that validate the people relation kind definitions.
 shared_examples "people relation kinds" do |options|
-
   context ".kind_opposites" do
     it "contains all keys and values" do
       hash = PeopleRelation.kind_opposites

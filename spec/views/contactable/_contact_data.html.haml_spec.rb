@@ -7,9 +7,9 @@
 
 require "spec_helper"
 describe "contactable/_contact_data.html.haml" do
-
   let(:group) { groups(:top_layer) }
   let(:current_user) { people(:top_leader) }
+
   subject { Capybara::Node::Simple.new(@rendered) }
 
   before do
@@ -43,5 +43,4 @@ describe "contactable/_contact_data.html.haml" do
       is_expected.to have_content("Österreich")
     end
   end
-
 end

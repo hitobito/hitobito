@@ -8,8 +8,8 @@
 require "spec_helper"
 
 describe PersonAbility do
-
   subject { ability }
+
   let(:ability) { Ability.new(role.person.reload) }
 
   context :layer_and_below_full do
@@ -105,8 +105,8 @@ describe PersonAbility do
 
     it "may modify any public role in same layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym,
-                        group: groups(:bottom_layer_one),
-                        person: Fabricate(:person, password: "foobar", password_confirmation: "foobar"))
+        group: groups(:bottom_layer_one),
+        person: Fabricate(:person, password: "foobar", password_confirmation: "foobar"))
       is_expected.to be_able_to(:update, other.person.reload)
       is_expected.to be_able_to(:update_email, other.person)
       is_expected.to be_able_to(:update, other)
@@ -242,7 +242,7 @@ describe PersonAbility do
 
   context :layer_and_below_read do
     # member with additional group_full role
-    let(:role)       { Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)) }
+    let(:role) { Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)) }
 
     it "may view details of himself" do
       is_expected.to be_able_to(:show_full, role.person.reload)
@@ -415,8 +415,8 @@ describe PersonAbility do
 
     it "may modify any public role in same layer" do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym,
-                        group: groups(:bottom_layer_one),
-                        person: Fabricate(:person, password: "foobar", password_confirmation: "foobar"))
+        group: groups(:bottom_layer_one),
+        person: Fabricate(:person, password: "foobar", password_confirmation: "foobar"))
       is_expected.to be_able_to(:update, other.person.reload)
       is_expected.to be_able_to(:update_email, other.person)
       is_expected.to be_able_to(:update, other)
@@ -1227,14 +1227,12 @@ describe PersonAbility do
     let(:user) { people(:root) }
     let(:ability) { Ability.new(user) }
 
-
     it "may not change her email" do
       is_expected.not_to be_able_to(:update_email, user)
     end
   end
 
   describe "people filter" do
-
     context "root layer and below full" do
       let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
@@ -1317,6 +1315,7 @@ describe PersonAbility do
 
     context "layer and below full" do
       let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+
       it "can show_details" do
         is_expected.to be_able_to(:show_details, other)
         is_expected.to be_able_to(:show_full, other)
@@ -1325,6 +1324,7 @@ describe PersonAbility do
 
     context "same group" do
       let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)) }
+
       it "can show_details" do
         is_expected.to be_able_to(:show_details, other)
         is_expected.not_to be_able_to(:show_full, other)
@@ -1333,6 +1333,7 @@ describe PersonAbility do
 
     context "group below" do
       let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
+
       it "cannot show_details" do
         is_expected.not_to be_able_to(:show_details, other)
         is_expected.not_to be_able_to(:show_full, other)
@@ -1345,6 +1346,7 @@ describe PersonAbility do
 
     context "layer and below full" do
       let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+
       it "can send_password_instructions" do
         is_expected.to be_able_to(:send_password_instructions, other)
       end
@@ -1361,6 +1363,7 @@ describe PersonAbility do
 
     context "same group" do
       let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)) }
+
       it "cannot send_password_instructions" do
         is_expected.not_to be_able_to(:send_password_instructions, other)
       end
@@ -1368,10 +1371,10 @@ describe PersonAbility do
 
     context "group below" do
       let(:role) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
+
       it "cannot send_password_instructions" do
         is_expected.not_to be_able_to(:send_password_instructions, other)
       end
     end
   end
-
 end

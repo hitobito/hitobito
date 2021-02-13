@@ -12,7 +12,6 @@ module I18nSettable
   extend ActiveSupport::Concern
 
   module ClassMethods
-
     # Define a setter for the given attribute that accepts translated values
     # in the current language as well as the system defined values.
     # Translated values are automatically converted.
@@ -56,5 +55,4 @@ module I18nSettable
       normalized
     end
   end
-
 end

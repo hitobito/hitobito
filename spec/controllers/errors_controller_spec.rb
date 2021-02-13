@@ -6,12 +6,11 @@
 require "spec_helper"
 
 describe ErrorsController do
-
   render_views
 
   %w(404 500 503).each do |code|
     it "renders #{code} with correct view and status code" do
-      get :show, params: { code: code }
+      get :show, params: {code: code}
       expect(response).to render_template(code)
       expect(response.status).to eq code.to_i
     end
@@ -20,7 +19,7 @@ describe ErrorsController do
   describe "Content-Type" do
     %w(html json).each do |format|
       it "renders #{format} for #{format} format" do
-        get :show, params: { code: "404" }, format: format.to_sym
+        get :show, params: {code: "404"}, format: format.to_sym
         expect(response).to render_template("404")
         expect(response.status).to eq 404
         expect(response.content_type).to match(Regexp.new(format))
@@ -29,7 +28,7 @@ describe ErrorsController do
 
     %w(png jpeg).each do |format|
       it "renders html for #{format}" do
-        get :show, params: { code: "404" }, format: format.to_sym
+        get :show, params: {code: "404"}, format: format.to_sym
         expect(response).to render_template("404")
         expect(response.status).to eq 404
         expect(response.content_type).to match(/html/)

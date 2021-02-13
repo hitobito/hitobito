@@ -22,7 +22,6 @@
 #
 
 class Note < ActiveRecord::Base
-
   ### ASSOCIATIONS
 
   belongs_to :subject, polymorphic: true
@@ -43,10 +42,10 @@ class Note < ActiveRecord::Base
               "ON (#{Group.quoted_table_name}.id = notes.subject_id "\
                   "AND notes.subject_type = '#{Group.sti_name}') " \
               "OR (#{Group.quoted_table_name}.id = roles.group_id)").
-        where(roles: { deleted_at: nil },
-              groups: { deleted_at: nil, layer_group_id: group.layer_group_id }).
+        where(roles: {deleted_at: nil},
+              groups: {deleted_at: nil, layer_group_id: group.layer_group_id}).
         where("#{Group.quoted_table_name}.lft >= :lft AND #{Group.quoted_table_name}.rgt <= :rgt",
-              lft: group.lft, rgt: group.rgt).
+          lft: group.lft, rgt: group.rgt).
         distinct
     end
   end
@@ -54,5 +53,4 @@ class Note < ActiveRecord::Base
   def to_s
     text.to_s.delete("\n").truncate(10)
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class VariousAbility < AbilityDsl::Base
-
   on(CustomContent) do
     class_side(:index).if_admin
     permission(:admin).may(:update).all

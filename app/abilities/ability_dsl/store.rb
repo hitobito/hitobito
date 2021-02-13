@@ -7,7 +7,6 @@
 
 module AbilityDsl
   class Store
-
     def register(*classes)
       ability_classes.concat(classes)
     end
@@ -56,6 +55,5 @@ module AbilityDsl
     def ability_classes
       @ability_classes ||= []
     end
-
   end
 end

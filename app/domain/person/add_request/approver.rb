@@ -6,11 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 module Person::AddRequest::Approver
-
   def self.for(request, current_user)
     name = request.class.name.demodulize
     klass = "Person::AddRequest::Approver::#{name}".constantize
     klass.new(request, current_user)
   end
-
 end

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe AbilityDsl::Store do
-
   subject { AbilityDsl::Store.new }
 
   before { subject.load }
@@ -52,5 +51,4 @@ describe AbilityDsl::Store do
       expect(subject.general_constraints(:subj, :action)).to match_array([c1])
     end
   end
-
 end

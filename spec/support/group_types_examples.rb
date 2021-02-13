@@ -7,7 +7,6 @@
 
 # A set of examples that validate the group hierarchy and role definitions as well as the group fixtures.
 shared_examples "group types" do |options|
-
   describe "fixtures" do
     it "is a valid nested set" do
       begin
@@ -44,7 +43,6 @@ shared_examples "group types" do |options|
 
   Group.all_types.each do |group|
     context group do
-
       it "default_children must be part of possible_children" do
         expect(group.possible_children).to include(*group.default_children)
       end

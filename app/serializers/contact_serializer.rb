@@ -10,14 +10,14 @@ class ContactSerializer < ApplicationSerializer
     json_api_properties
 
     map_properties :first_name,
-                   :last_name,
-                   :nickname,
-                   :company_name,
-                   :company,
-                   :email,
-                   :address,
-                   :zip_code,
-                   :town,
-                   :country
+      :last_name,
+      :nickname,
+      :company_name,
+      :company,
+      :email,
+      :address,
+      :zip_code,
+      :town,
+      :country
   end
 end

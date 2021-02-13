@@ -43,12 +43,12 @@ class PaymentReminderConfig < ActiveRecord::Base
     ]
   ].zip(LEVELS.to_a).to_h.invert
 
-  validates :level, length: { in: LEVELS }
+  validates :level, length: {in: LEVELS}
 
   scope :list, -> { order(:level) }
 
   def with_defaults(level)
     due_days, title, text = DEFAULTS.fetch(level)
-    self.attributes = { due_days: due_days, title: title, text: text, level: level }
+    self.attributes = {due_days: due_days, title: title, text: text, level: level}
   end
 end

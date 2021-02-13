@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Invoice::Qrcode do
-
   let(:invoice) do
     Invoice.new(
       sequence_number: "1-1",
@@ -97,6 +96,7 @@ describe Invoice::Qrcode do
 
   describe :additional_infos do
     subject { invoice.qrcode.additional_infos }
+
     it "reads payment_purpose" do
       invoice.payment_purpose = "Some\ndata"
       expect(subject[:purpose]).to eq "Some data"
@@ -112,6 +112,7 @@ describe Invoice::Qrcode do
 
   describe :debitor do
     subject { invoice.qrcode.debitor }
+
     it "is extracted from recipient_address" do
       expect(subject[:address_type]).to eq "K"
       expect(subject[:full_name]).to eq "Max Mustermann"
@@ -156,4 +157,3 @@ describe Invoice::Qrcode do
     end
   end
 end
-

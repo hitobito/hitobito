@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationsController < CrudController # rubocop:disable Metrics/ClassLength
-
   include RenderPeopleExports
   include AsyncDownload
   include Api::JsonPaging
@@ -20,18 +19,17 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.remember_params += [:filter]
 
-  self.sort_mappings = { last_name: "people.last_name",
-                         first_name: "people.first_name",
-                         roles: lambda do |event|
+  self.sort_mappings = {last_name: "people.last_name",
+                        first_name: "people.first_name",
+                        roles: lambda do |event|
                                   Person.order_by_name_statement.unshift(
                                     Event::Participation.order_by_role_statement(event)
                                   )
                                 end,
-                         nickname: "people.nickname",
-                         zip_code: "people.zip_code",
-                         town: "people.town",
-                         birthday: "people.birthday" }
-
+                        nickname: "people.nickname",
+                        zip_code: "people.zip_code",
+                        town: "people.town",
+                        birthday: "people.birthday"}
 
   decorates :group, :event, :participation, :participations, :alternatives
 
@@ -71,12 +69,12 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
         entries
         @person_add_requests = fetch_person_add_requests
       end
-      format.pdf   { render_pdf(filter_entries.collect(&:person), group) }
-      format.csv   { render_tabular_in_background(:csv) }
-      format.vcf   { render_vcf(filter_entries.includes(person: :phone_numbers).collect(&:person)) }
-      format.xlsx  { render_tabular_in_background(:xlsx) }
+      format.pdf { render_pdf(filter_entries.collect(&:person), group) }
+      format.csv { render_tabular_in_background(:csv) }
+      format.vcf { render_vcf(filter_entries.includes(person: :phone_numbers).collect(&:person)) }
+      format.xlsx { render_tabular_in_background(:xlsx) }
       format.email { render_emails(filter_entries.collect(&:person)) }
-      format.json  { render_entries_json(filter_entries) }
+      format.json { render_entries_json(filter_entries) }
     end
   end
 
@@ -97,7 +95,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def destroy
     location = if entry.person_id == current_user.id
-                 group_event_path(group, event)
+      group_event_path(group, event)
                else
                  group_event_application_market_index_path(group, event)
                end
@@ -125,11 +123,11 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
                   ListSerializer.new(paged_entries.decorate,
-                                     group: group,
-                                     event: event,
-                                     page: params[:page],
-                                     serializer: EventParticipationSerializer,
-                                     controller: self)].inject(&:merge)
+                    group: group,
+                    event: event,
+                    page: params[:page],
+                    serializer: EventParticipationSerializer,
+                    controller: self)].inject(&:merge)
   end
 
   def sort_mappings_with_indifferent_access
@@ -164,9 +162,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def render_tabular_in_background(format)
     with_async_download_cookie(format, :event_participation_export) do |filename|
       Export::EventParticipationsExportJob.new(format,
-                                               current_person.id,
-                                               event_participation_filter,
-                                               params.merge(filename: filename)).enqueue!
+        current_person.id,
+        event_participation_filter,
+        params.merge(filename: filename)).enqueue!
     end
   end
 
@@ -330,5 +328,4 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     user_id = current_user.try(:id) || service_token_user.try(:id)
     Event::ParticipationFilter.new(event.id, user_id, params)
   end
-
 end

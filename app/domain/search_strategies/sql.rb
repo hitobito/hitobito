@@ -7,7 +7,6 @@
 
 module SearchStrategies
   class Sql < Base
-
     MIN_TERM_LENGTH = 2
 
     SEARCH_FIELDS = {
@@ -106,6 +105,5 @@ module SearchStrategies
     def term_present?
       @term.present? && @term.length > MIN_TERM_LENGTH
     end
-
   end
 end

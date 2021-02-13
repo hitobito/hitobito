@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Base
-
   # - has not to be encoded in URLs, ',' must be and thus generate a much longer string.
   ID_URL_SEPARATOR = "-".freeze
 
@@ -54,5 +53,4 @@ class Person::Filter::Base
     args[key] = args[key].to_s.split(ID_URL_SEPARATOR) unless args[key].is_a?(Array)
     args[key].collect!(&:to_i)
   end
-
 end

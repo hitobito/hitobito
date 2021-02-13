@@ -76,8 +76,8 @@ class Invoice::History
       "⬤", # Middle Dot
       long_date(reminder.created_at.to_date),
       "#{count}. #{t('invoices.reminder_sent',
-                     title: reminder.title,
-                     date: long_date(reminder.due_at))}"
+        title: reminder.title,
+        date: long_date(reminder.due_at))}"
     ]
   end
 

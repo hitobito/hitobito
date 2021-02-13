@@ -10,7 +10,6 @@
 # is called with a param returning=true, these parameters are reused to present
 # the user the same list as he left it.
 class ListController < ApplicationController
-
   # customized cancan code to authorize with #model_class
   authorize_resource except: :index
   before_action :authorize_class, only: :index
@@ -72,7 +71,7 @@ class ListController < ApplicationController
   # If the value is a collection, sets the plural name.
   def model_ivar_set(value)
     name = if value.is_a?(ActiveRecord::Relation)
-             ivar_name(value.klass).pluralize
+      ivar_name(value.klass).pluralize
            elsif value.respond_to?(:each) # Array
              ivar_name(value.first.class).pluralize
            else
@@ -89,7 +88,6 @@ class ListController < ApplicationController
     authorize!(action_name.to_sym, model_class)
   end
 
-
   class << self
     # The ActiveRecord class of the model.
     def model_class
@@ -98,18 +96,16 @@ class ListController < ApplicationController
 
     # A human readable plural name of the model.
     def models_label(plural = true)
-      opts = { count: (plural ? 3 : 1) }
+      opts = {count: (plural ? 3 : 1)}
       opts[:default] = model_class.model_name.human.titleize
       opts[:default] = opts[:default].pluralize if plural
 
       model_class.model_name.human(opts)
     end
-
   end
 
   include Searchable
   include Sortable
   include Rememberable
   prepend Nestable
-
 end

@@ -8,12 +8,11 @@
 require "spec_helper"
 
 describe Export::EventsExportJob do
-
   subject { Export::EventsExportJob.new(format, user.id, group.id, event_filter.to_h, filename: "event_export") }
 
-  let(:user)         { people(:top_leader) }
-  let(:group)        { groups(:top_layer) }
-  let(:year)         { 2012 }
+  let(:user) { people(:top_leader) }
+  let(:group) { groups(:top_layer) }
+  let(:year) { 2012 }
   let(:event_filter) { Event::Filter.new(group, nil, "all", year, false) }
   let(:filepath) { AsyncDownloadFile::DIRECTORY.join("event_export") }
 
@@ -45,5 +44,4 @@ describe Export::EventsExportJob do
       expect(File.exist?("#{filepath}.#{format}"))
     end
   end
-
 end

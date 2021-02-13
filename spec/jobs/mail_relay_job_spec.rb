@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe MailRelayJob do
-
   subject { MailRelayJob.new }
 
   it "relays mails and gets rescheduled" do
@@ -19,5 +18,4 @@ describe MailRelayJob do
   end
 
   its(:parameters) { should be_blank }
-
 end

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe PeopleController, js: true do
-
   let(:group) { groups(:top_layer) }
 
   it "may define role filter, display and edit it again" do

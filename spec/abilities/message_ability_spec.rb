@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe MessageAbility do
-
   let(:user) { role.person }
   let(:group) { role.group }
   let(:list) { Fabricate(:mailing_list, group: group) }
@@ -37,6 +36,7 @@ describe MessageAbility do
 
     context "in group in same layer" do
       let(:group) { groups(:top_layer) }
+
       it "may manage messages" do
         actions.each do |action|
           is_expected.to be_able_to(action, message)

@@ -8,11 +8,11 @@
 require "spec_helper"
 
 describe Export::Tabular::People::ParticipationRow do
-
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
 
   let(:row) { Export::Tabular::People::ParticipationRow.new(participation) }
+
   subject { row }
 
   it { expect(row.fetch(:first_name)).to eq "Top" }
@@ -21,6 +21,7 @@ describe Export::Tabular::People::ParticipationRow do
 
   context "with additional information" do
     before { participation.update_attribute(:additional_information, "foobar") }
+
     it { expect(row.fetch(:participation_additional_information)).to eq "foobar" }
   end
 
@@ -30,17 +31,20 @@ describe Export::Tabular::People::ParticipationRow do
       Fabricate(:event_role, participation: participation, type: "Event::Role::AssistantLeader")
       participation.reload
     end
+
     it { expect(row.fetch(:roles)).to eq "Hauptleitung, Leitung" }
   end
 
   context "with answers" do
     let(:question) { event_questions(:top_ov) }
-    let(:answer)  { participation.answers.find_by_question_id(question.id) }
+    let(:answer) { participation.answers.find_by_question_id(question.id) }
+
     before do
       participation.init_answers
       answer.update_attribute(:answer, question.choice_items.first)
       participation.reload
     end
+
     it "has answer for first question" do
       expect(row.fetch(:"question_#{question.id}")).to be_present
     end

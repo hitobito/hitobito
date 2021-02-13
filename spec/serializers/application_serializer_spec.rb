@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe ApplicationSerializer do
-
   class TestPersonSerializer < ApplicationSerializer
     schema do
       json_api_properties
@@ -59,7 +58,7 @@ describe ApplicationSerializer do
 
   let(:controller) { double().as_null_object }
 
-  let(:serializer) { TestPersonSerializer.new(person, controller: controller)}
+  let(:serializer) { TestPersonSerializer.new(person, controller: controller) }
   let(:hash) { serializer.to_hash }
 
   subject { hash[:people].first }
@@ -70,7 +69,6 @@ describe ApplicationSerializer do
       expect(hash[:people].size).to eq(1)
     end
   end
-
 
   context "#extensions" do
     it "contains all extension properties" do

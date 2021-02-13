@@ -8,8 +8,7 @@
 require "spec_helper"
 
 describe Subscriber::GroupController, js: true do
-
-  let(:list)  { mailing_lists(:leaders) }
+  let(:list) { mailing_lists(:leaders) }
   let(:group) { list.group }
   let!(:subscriber_id) { groups(:bottom_layer_one).id } # preload
 
@@ -73,12 +72,12 @@ describe Subscriber::GroupController, js: true do
   end
 
   context "assign tags" do
-    let! (:email_primary_invalid) { PersonTags::Validation.email_primary_invalid(create: true) } 
-    let! (:email_additional_invalid) { PersonTags::Validation.email_additional_invalid(create: true) } 
+    let! (:email_primary_invalid) { PersonTags::Validation.email_primary_invalid(create: true) }
+    let! (:email_additional_invalid) { PersonTags::Validation.email_additional_invalid(create: true) }
 
     it "assigns multiple included tags" do
       obsolete_node_safe do
-        collection_select = find("#subscription_included_subscription_tags_ids_chosen .chosen-choices") 
+        collection_select = find("#subscription_included_subscription_tags_ids_chosen .chosen-choices")
 
         expect(collection_select).to have_no_selector("li.search-choice")
 
@@ -103,7 +102,7 @@ describe Subscriber::GroupController, js: true do
 
     it "assigns multiple excluded tags" do
       obsolete_node_safe do
-        collection_select = find("#subscription_excluded_subscription_tags_ids_chosen .chosen-choices") 
+        collection_select = find("#subscription_excluded_subscription_tags_ids_chosen .chosen-choices")
 
         expect(collection_select).to have_no_selector("li.search-choice")
 
@@ -128,7 +127,7 @@ describe Subscriber::GroupController, js: true do
 
     it "assigns same tag as excluded and included" do
       obsolete_node_safe do
-        excluded_collection_select = find("#subscription_excluded_subscription_tags_ids_chosen .chosen-choices") 
+        excluded_collection_select = find("#subscription_excluded_subscription_tags_ids_chosen .chosen-choices")
 
         expect(excluded_collection_select).to have_no_selector("li.search-choice")
 
@@ -138,7 +137,7 @@ describe Subscriber::GroupController, js: true do
 
         expect(excluded_collection_select).to have_selector("li.search-choice", count: 2)
 
-        included_collection_select = find("#subscription_included_subscription_tags_ids_chosen .chosen-choices") 
+        included_collection_select = find("#subscription_included_subscription_tags_ids_chosen .chosen-choices")
 
         expect(included_collection_select).to have_no_selector("li.search-choice")
 

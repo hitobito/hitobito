@@ -7,7 +7,6 @@
 
 namespace :dev do
   namespace :oauth do
-
     desc "Obtain oauth access token"
     task :token, [:application_id, :redirect_uri, :code] => [:environment] do |_, args|
       app = Oauth::Application.find(args.fetch(:application_id))

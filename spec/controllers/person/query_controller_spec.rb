@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::QueryController do
-
   let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
@@ -18,11 +17,10 @@ describe Person::QueryController do
       Fabricate(:person, first_name: "Pascal")
       Fabricate(:person, last_name: "Opassum")
       Fabricate(:person, last_name: "Anything")
-      get :index, params: { q: "pas" }
+      get :index, params: {q: "pas"}
 
       expect(response.body).to match(/Pascal/)
       expect(response.body).to match(/Opassum/)
     end
   end
-
 end

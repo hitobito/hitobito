@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class RoleAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Group
 
   on(Role) do
@@ -29,7 +28,7 @@ class RoleAbility < AbilityDsl::Base
 
   def in_same_layer_or_visible_below
     in_same_layer ||
-    (subject.visible_from_above? && permission_in_layers?(group.layer_hierarchy.collect(&:id)))
+      (subject.visible_from_above? && permission_in_layers?(group.layer_hierarchy.collect(&:id)))
   end
 
   def non_restricted
@@ -40,7 +39,7 @@ class RoleAbility < AbilityDsl::Base
   # Should not be removed because this cannot be undone by the user.
   def not_permission_giving
     subject.person_id != user.id ||
-    ([:layer_and_below_full, :layer_full, :group_full] & subject.permissions).blank?
+      ([:layer_and_below_full, :layer_full, :group_full] & subject.permissions).blank?
   end
 
   private
@@ -48,5 +47,4 @@ class RoleAbility < AbilityDsl::Base
   def group
     subject.group
   end
-
 end

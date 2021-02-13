@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupSettingsController < ModalCrudController
-
   skip_authorize_resource
   before_action :authorize_class
 
@@ -54,5 +53,4 @@ class GroupSettingsController < ModalCrudController
       entry.send("#{a}=", value)
     end
   end
-
 end

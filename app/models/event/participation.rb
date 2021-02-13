@@ -27,7 +27,6 @@
 #
 
 class Event::Participation < ActiveRecord::Base
-
   self.demodulized_route_keys = true
 
   attr_accessor :enforce_required_answers
@@ -43,18 +42,15 @@ class Event::Participation < ActiveRecord::Base
 
   has_many :answers, dependent: :destroy, validate: true
 
-
   accepts_nested_attributes_for :answers, :application
-
 
   ### VALIDATIONS
 
   validates_by_schema
   validates :person_id,
-            uniqueness: { scope: :event_id }
+    uniqueness: {scope: :event_id}
   validates :additional_information,
-            length: { allow_nil: true, maximum: 2**16 - 1 }
-
+    length: {allow_nil: true, maximum: 2**16 - 1}
 
   ### CALLBACKS
 
@@ -64,7 +60,6 @@ class Event::Participation < ActiveRecord::Base
   # There may be old participations without roles, so they must
   # update the count directly.
   after_destroy :update_participant_count
-
 
   ### CLASS METHODS
 
@@ -96,9 +91,7 @@ class Event::Participation < ActiveRecord::Base
     def upcoming
       joins(:event).merge(Event.upcoming(::Time.zone.today)).distinct
     end
-
   end
-
 
   ### INSTANCE METHODS
 

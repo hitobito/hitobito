@@ -3,7 +3,6 @@ require "spec_helper"
 describe InvoiceItem do
   let(:invoice) { invoices(:invoice) }
 
-
   it "can calculate total, cost and vat" do
     item = InvoiceItem.new(invoice: invoice,
                            name: :pens,
@@ -62,5 +61,4 @@ describe InvoiceItem do
     expect(item.cost).to eq 0
     expect(item.vat).to eq 0
   end
-
 end

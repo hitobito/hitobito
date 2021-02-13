@@ -31,7 +31,7 @@ def init_sphinx_before_all(tables)
   obj = self
   before(:all) do
     obj.use_transactional_tests = false
-    DatabaseCleaner.strategy = :truncation, { only: tables }
+    DatabaseCleaner.strategy = :truncation, {only: tables}
     ThinkingSphinx::Test.init
   end
 end
@@ -57,7 +57,6 @@ def reset_configuration_after_all(transactional)
     obj.use_transactional_tests = transactional
   end
 end
-
 
 def index_finished?
   Dir[Rails.root.join("db", "sphinx", "test", "*.{new,tmp}.*")].empty?

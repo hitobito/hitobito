@@ -39,7 +39,7 @@ class MailLog < ActiveRecord::Base
 
   validates_by_schema
 
-  validates :mail_hash, uniqueness: { case_sensitive: false }
+  validates :mail_hash, uniqueness: {case_sensitive: false}
 
   scope :list, -> { order(updated_at: :desc) }
 

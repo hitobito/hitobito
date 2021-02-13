@@ -34,6 +34,5 @@ module Oauth
     def entries
       @entries ||= current_user.oauth_applications.list
     end
-
   end
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class AddressesController < ApplicationController
-
   skip_authorization_check
 
   def query

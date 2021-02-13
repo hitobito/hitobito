@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class AsyncDownloadsController < ApplicationController
-
   skip_authorization_check
 
   def show
@@ -27,7 +26,7 @@ class AsyncDownloadsController < ApplicationController
     status = async_download_file.downloadable?(current_person) ? 200 : 404
 
     respond_to do |format|
-      format.json { render json: { status: status } }
+      format.json { render json: {status: status} }
     end
   end
 
@@ -44,5 +43,4 @@ class AsyncDownloadsController < ApplicationController
   def css_encoding(data)
     data.force_encoding(Settings.csv.encoding)
   end
-
 end

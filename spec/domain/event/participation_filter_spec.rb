@@ -3,10 +3,10 @@ require "spec_helper"
 RSpec.describe Event::ParticipationFilter, type: :domain do
   subject { Event::ParticipationFilter.new(event.id, people(:bottom_member), params) }
 
-  let(:participation)              { event_participations(:top) }
-  let(:person)                     { Fabricate(:person, first_name: "Max", last_name: "muster", nickname: "bambi") }
-  let(:event)                      { participation.event }
-  let(:params)                     { { filter: "all" } }
+  let(:participation) { event_participations(:top) }
+  let(:person) { Fabricate(:person, first_name: "Max", last_name: "muster", nickname: "bambi") }
+  let(:event) { participation.event }
+  let(:params) { {filter: "all"} }
 
   before do
     participation = Event::Participation.create(event: event, active: true, person: person)
@@ -20,7 +20,7 @@ RSpec.describe Event::ParticipationFilter, type: :domain do
   end
 
   context "search for first_name" do
-    let(:params) { { filter: "all", q: "max" } }
+    let(:params) { {filter: "all", q: "max"} }
 
     it "and list matching entries" do
       participants = subject.list_entries
@@ -30,7 +30,7 @@ RSpec.describe Event::ParticipationFilter, type: :domain do
   end
 
   context "search for last_name" do
-    let(:params) { { filter: "all", q: "ember" } }
+    let(:params) { {filter: "all", q: "ember"} }
 
     it "and list matching entries" do
       participants = subject.list_entries
@@ -40,7 +40,7 @@ RSpec.describe Event::ParticipationFilter, type: :domain do
   end
 
   context "search for nickname" do
-    let(:params) { { filter: "all", q: "bambi" } }
+    let(:params) { {filter: "all", q: "bambi"} }
 
     it "and list matching entries" do
       participants = subject.list_entries
@@ -48,5 +48,4 @@ RSpec.describe Event::ParticipationFilter, type: :domain do
       expect(participants.first.person).to eq(person)
     end
   end
-
 end

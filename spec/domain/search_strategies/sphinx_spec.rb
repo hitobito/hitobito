@@ -8,9 +8,7 @@
 require "spec_helper"
 
 describe SearchStrategies::Sphinx, sphinx: true do
-
   sphinx_environment(:people, :groups, :events) do
-
     before do
       Rails.cache.clear
       @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
@@ -20,11 +18,11 @@ describe SearchStrategies::Sphinx, sphinx: true do
       @bl_extern = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one)).person
 
       @bg_leader = Fabricate(Group::BottomGroup::Leader.name.to_sym,
-                             group: groups(:bottom_group_one_one),
-                             person: Fabricate(:person, last_name: "Schurter", first_name: "Franz", town: "St-Luc")).person
+        group: groups(:bottom_group_one_one),
+        person: Fabricate(:person, last_name: "Schurter", first_name: "Franz", town: "St-Luc")).person
       @bg_member = Fabricate(Group::BottomGroup::Member.name.to_sym,
-                             group: groups(:bottom_group_one_one),
-                             person: Fabricate(:person, last_name: "Bindella", first_name: "Yasmine")).person
+        group: groups(:bottom_group_one_one),
+        person: Fabricate(:person, last_name: "Bindella", first_name: "Yasmine")).person
 
       @bg_member_with_deleted = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
       leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: @bg_member_with_deleted)
@@ -47,7 +45,6 @@ describe SearchStrategies::Sphinx, sphinx: true do
     end
 
     describe "#list_people" do
-
       context "as admin" do
         let(:user) { people(:top_leader) }
 
@@ -145,11 +142,9 @@ describe SearchStrategies::Sphinx, sphinx: true do
           expect(result).to include(@bg_member)
         end
       end
-
     end
 
     describe "#query_people" do
-
       context "as leader" do
         let(:user) { people(:top_leader) }
 
@@ -183,11 +178,9 @@ describe SearchStrategies::Sphinx, sphinx: true do
           expect(result).to eq(Person.none)
         end
       end
-
     end
 
     describe "#query_groups" do
-
       context "as leader" do
         let(:user) { people(:top_leader) }
 
@@ -215,11 +208,9 @@ describe SearchStrategies::Sphinx, sphinx: true do
           expect(result).to include(groups(:bottom_layer_one))
         end
       end
-
     end
 
     describe "#query_events" do
-
       context "as leader" do
         let(:user) { people(:top_leader) }
 
@@ -247,7 +238,6 @@ describe SearchStrategies::Sphinx, sphinx: true do
           expect(result).to include(events(:top_course))
         end
       end
-
     end
 
     describe "#query_addresses" do
@@ -284,5 +274,4 @@ describe SearchStrategies::Sphinx, sphinx: true do
   def strategy(term = nil, page = nil)
     SearchStrategies::Sphinx.new(user, term, page)
   end
-
 end

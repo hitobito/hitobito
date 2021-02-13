@@ -6,7 +6,5 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::AttachmentUploader < Uploader::Base
-
   self.allowed_extensions = Settings.event.attachments.file_extensions.split(/\s+/)
-
 end

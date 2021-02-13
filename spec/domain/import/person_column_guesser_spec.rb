@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 require "spec_helper"
-describe  Import::PersonColumnGuesser do
-
+describe Import::PersonColumnGuesser do
   let(:headers) { %w(Geschlecht vorname Name skype) }
   let(:guesser) { Import::PersonColumnGuesser.new(headers, params) }
-  let(:nil_key) { { key: nil } }
+  let(:nil_key) { {key: nil} }
   let(:params) { {} }
 
   subject { guesser.mapping }
@@ -20,7 +19,6 @@ describe  Import::PersonColumnGuesser do
     its(["vorname"]) { should eq field_for(:first_name) }
     its(["skype"]) { should eq field_for(:social_account_skype) }
 
-
     context "handles noexisting headers" do
       let(:headers) { %w(Geburtsdatum Email) }
 
@@ -29,7 +27,8 @@ describe  Import::PersonColumnGuesser do
     end
 
     context "params override mapping" do
-      let(:params) { { "Name" => "first_name" } }
+      let(:params) { {"Name" => "first_name"} }
+
       its(["Name"]) { should eq field_for(:first_name) }
     end
   end
@@ -44,20 +43,20 @@ describe  Import::PersonColumnGuesser do
 
     context "uses first exact matched value" do
       let(:headers) { %w(Name) }
+
       its(["Name"]) { should eq field_for(:name) }
     end
 
     context "falls back first partial matched value if no exact match found" do
       let(:headers) { %w(ame) }
+
       its(["ame"]) { should eq field_for(:other_name) }
     end
   end
-
 
   def field_for(key)
     field = Import::Person.fields.find { |f| f[:key] == key.to_s }
     fail "no Person field found for #{key}" if !field
     field
   end
-
 end

@@ -35,20 +35,19 @@ end
 # them by passing a skip parameter with context arrays:
 #   include_examples 'crud controller', :skip => [%w(index html sort) %w(destroy json)]
 shared_examples "crud controller" do |options|
-
   include CrudControllerTestHelper
 
   render_views
 
   subject { response }
 
-  let(:user)               { people(:top_leader) }
-  let(:model_class)        { controller.send(:model_class) }
-  let(:model_identifier)   { controller.model_identifier }
-  let(:test_params)        { scope_params }
-  let(:entry)              { assigns(controller.send(:ivar_name, model_class)) }
-  let(:entries)            { assigns(controller.send(:ivar_name, model_class).pluralize) }
-  let(:sort_column)        { model_class.column_names.first }
+  let(:user) { people(:top_leader) }
+  let(:model_class) { controller.send(:model_class) }
+  let(:model_identifier) { controller.model_identifier }
+  let(:test_params) { scope_params }
+  let(:entry) { assigns(controller.send(:ivar_name, model_class)) }
+  let(:entries) { assigns(controller.send(:ivar_name, model_class).pluralize) }
+  let(:sort_column) { model_class.column_names.first }
 
   let(:search_value) do
     field = controller.search_columns.first
@@ -62,9 +61,7 @@ shared_examples "crud controller" do |options|
   end
 
   describe_action :get, :index, unless: skip?(options, "index") do
-
     context ".html", format: :html, unless: skip?(options, %w(index html)) do
-
       context "plain", unless: skip?(options, %w(index html plain)), combine: "ihp" do
         it_should_respond
         it_should_assign_entries
@@ -72,18 +69,19 @@ shared_examples "crud controller" do |options|
       end
 
       context "search", if: described_class.search_columns.present?, unless: skip?(options, %w(index html search)), combine: "ihse" do
-        let(:params) { { q: search_value } }
+        let(:params) { {q: search_value} }
 
         it_should_respond
         context "entries" do
           subject { entries }
+
           it { is_expected.to include(test_entry) }
         end
       end
 
       context "sort", unless: skip?(options, %w(index html sort)) do
         context "ascending", unless: skip?(options, %w(index html sort ascending)), combine: "ihsa" do
-          let(:params) { { sort: sort_column, sort_dir: "asc" } }
+          let(:params) { {sort: sort_column, sort_dir: "asc"} }
 
           it_should_respond
           it "should have sorted entries" do
@@ -93,7 +91,7 @@ shared_examples "crud controller" do |options|
         end
 
         context "descending", unless: skip?(options, %w(index html sort descending)), combine: "ihsd" do
-          let(:params) { { sort: sort_column, sort_dir: "desc" } }
+          let(:params) { {sort: sort_column, sort_dir: "desc"} }
 
           it_should_respond
           it "should have sorted entries" do
@@ -109,11 +107,9 @@ shared_examples "crud controller" do |options|
       it_should_assign_entries
       its(:body) { is_expected.to start_with("[{") }
     end
-
   end
 
   describe_action :get, :show, id: true, unless: skip?(options, "show") do
-
     context ".html", format: :html, unless: skip?(options, %w(show html)) do
       context "plain", unless: skip?(options, %w(show html plain)), combine: "sh" do
         it_should_respond
@@ -122,7 +118,7 @@ shared_examples "crud controller" do |options|
       end
 
       context "with non-existing id", unless: skip?(options, "show", "html", "with non-existing id") do
-        let(:params) { { id: 9999 } }
+        let(:params) { {id: 9999} }
 
         it "should raise RecordNotFound", perform_request: false do
           expect { perform_request }.to raise_error(ActiveRecord::RecordNotFound)
@@ -145,13 +141,14 @@ shared_examples "crud controller" do |options|
     end
 
     context "with params", unless: skip?(options, "new", "with params") do
-      let(:params) { { model_identifier => test_attrs } }
+      let(:params) { {model_identifier => test_attrs} }
+
       it_should_set_attrs
     end
   end
 
   describe_action :post, :create, unless: skip?(options, %w(create)) do
-    let(:params) { { model_identifier => test_attrs } }
+    let(:params) { {model_identifier => test_attrs} }
 
     it "should add entry to database", perform_request: false do
       expect { perform_request }.to change { model_class.count }.by(1)
@@ -197,7 +194,7 @@ shared_examples "crud controller" do |options|
   end
 
   describe_action :put, :update, id: true, unless: skip?(options, %w(update)) do
-    let(:params) { { model_identifier => test_attrs } }
+    let(:params) { {model_identifier => test_attrs} }
 
     it "should update entry in database", perform_request: false do
       expect { perform_request }.to change { model_class.count }.by(0)
@@ -235,8 +232,7 @@ shared_examples "crud controller" do |options|
   end
 
   describe_action :delete, :destroy, id: true, unless: skip?(options, %w(destroy)) do
-
-    it "should remove entry from database", perform_request: false  do
+    it "should remove entry from database", perform_request: false do
       expect { perform_request }.to change { model_class.count }.by(-1)
     end
 

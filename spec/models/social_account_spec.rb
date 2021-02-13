@@ -20,9 +20,7 @@
 require "spec_helper"
 
 describe SocialAccount do
-
   context ".normalize_label" do
-
     it "reuses existing label" do
       a1 = Fabricate(:social_account, label: "Foo")
       a2 = Fabricate(:social_account, label: "fOO")
@@ -32,6 +30,7 @@ describe SocialAccount do
 
   context "#available_labels" do
     subject { SocialAccount.available_labels }
+
     it { is_expected.to include(Settings.social_account.predefined_labels.first) }
 
     it "includes labels from database" do

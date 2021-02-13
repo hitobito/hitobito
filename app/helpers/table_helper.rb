@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module TableHelper
-
   # Renders a table for the given entries. One column is rendered for each attribute passed.
   # If a block is given, the columns defined therein are appended to the attribute columns.
   # If entries is empty, an appropriate message is rendered.
@@ -94,5 +93,4 @@ module TableHelper
     attrs = yield if attrs.blank?
     attrs << options
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_pbs.
 
 class Group::ListsController < ApplicationController
-
   def index
     authorize!(:index, Group)
 
@@ -22,5 +21,4 @@ class Group::ListsController < ApplicationController
   def groups
     @groups ||= Group.all
   end
-
 end

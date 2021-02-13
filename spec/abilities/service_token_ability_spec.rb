@@ -8,16 +8,13 @@
 require "spec_helper"
 
 describe ServiceTokenAbility do
-
-  let(:user)          { role.person }
-  let(:group)         { role.group }
+  let(:user) { role.person }
+  let(:group) { role.group }
   let(:service_token) { Fabricate(:service_token, layer: group) }
-
 
   subject { Ability.new(user.reload) }
 
   context :layer_and_below_full do
-
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
     it "may create service token in his group" do
@@ -42,7 +39,6 @@ describe ServiceTokenAbility do
     end
   end
 
-
   context :layer_full do
     let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
 
@@ -66,6 +62,5 @@ describe ServiceTokenAbility do
         is_expected.not_to be_able_to(action, other)
       end
     end
-
   end
 end

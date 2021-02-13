@@ -29,7 +29,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Message::LetterWithInvoice < Message::Letter
-
   belongs_to :invoice_list
   serialize :invoice_attributes, Hash
 

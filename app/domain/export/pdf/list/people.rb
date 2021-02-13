@@ -7,7 +7,6 @@
 
 module Export::Pdf::List
   class People < Section
-
     def render
       bounding_box([bounds.left, bounds.top], width: bounds.width, height: bounds.height - 5.mm) do
         move_down_line 40; # first page has a header

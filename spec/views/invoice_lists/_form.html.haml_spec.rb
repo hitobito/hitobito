@@ -1,11 +1,11 @@
 require "spec_helper"
 
 describe "invoice_lists/_form.html.haml" do
-  let(:group)        {  groups(:bottom_layer_one) }
-  let(:person)       {  people(:bottom_member) }
-  let(:invoice)      {  group.invoices.build }
-  let(:invoice_list) {  InvoiceList.new(group: group, recipient_ids: "1,2", invoice: invoice) }
-  let(:dom)          {  Capybara::Node::Simple.new(render) }
+  let(:group) { groups(:bottom_layer_one) }
+  let(:person) { people(:bottom_member) }
+  let(:invoice) { group.invoices.build }
+  let(:invoice_list) { InvoiceList.new(group: group, recipient_ids: "1,2", invoice: invoice) }
+  let(:dom) { Capybara::Node::Simple.new(render) }
 
   before do
     allow(view).to receive_messages({
@@ -31,5 +31,4 @@ describe "invoice_lists/_form.html.haml" do
       "ABO-NEWS - Abonnement der Mitgliederzeitschrift"
     ])
   end
-
 end

@@ -21,9 +21,7 @@
 
 # Teilnehmer
 class Event::Role::Participant < Event::Role
-
   self.permissions = []
 
   self.kind = :participant
-
 end

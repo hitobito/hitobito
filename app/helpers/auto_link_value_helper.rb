@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module AutoLinkValueHelper
-
   def auto_link_value(str, options = {})
     if email?(str)
       mail_to(str)
@@ -42,5 +41,4 @@ module AutoLinkValueHelper
     options[:target] ||= "_blank"
     link_to(label, url, options)
   end
-
 end

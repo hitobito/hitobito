@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe People::DuplicateLocator do
-
   let(:checker) { described_class.new }
 
   context "check" do

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe "event/participations/_form.html.haml" do
-
   let(:participant) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: participant, event: event) }
   let(:user) { participant }
@@ -40,7 +39,6 @@ describe "event/participations/_form.html.haml" do
   context "course" do
     let(:event) { events(:top_course) }
 
-
     context "kind" do
       it "shows application conditions and general information when set" do
         event.kind.update!(application_conditions: "some application conditions",
@@ -57,7 +55,6 @@ describe "event/participations/_form.html.haml" do
     let(:halbtax) { dom.find_field("Halbtax") }
 
     context "unchecked" do
-
       shared_examples "unchecked_multichoice_checkbox" do
         before { render }
 
@@ -69,6 +66,7 @@ describe "event/participations/_form.html.haml" do
 
       describe "Choice GA" do
         subject { ga }
+
         let(:value) { "1" }
 
         it_behaves_like "unchecked_multichoice_checkbox"
@@ -76,6 +74,7 @@ describe "event/participations/_form.html.haml" do
 
       describe "Choice Halbtax" do
         subject { halbtax }
+
         let(:value) { "2" }
 
         it_behaves_like "unchecked_multichoice_checkbox"
@@ -84,20 +83,20 @@ describe "event/participations/_form.html.haml" do
 
     describe "Halbtax checked" do
       let(:answer_text) { "Halbtax" }
+
       before { render }
 
       it { expect(ga).not_to be_checked }
       it { expect(halbtax).to be_checked }
     end
 
-
     describe "GA, Halbtax checked" do
       let(:answer_text) { "GA, Halbtax" }
+
       before { render }
 
       it { expect(ga).to be_checked }
       it { expect(halbtax).to be_checked }
     end
   end
-
 end

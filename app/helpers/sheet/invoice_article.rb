@@ -1,4 +1,3 @@
-
 # encoding: utf-8
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
@@ -8,10 +7,8 @@
 
 module Sheet
   class InvoiceArticle < Sheet::Invoice
-
     def title
       ::InvoiceArticle.model_name.human(count: 2)
     end
-
   end
 end

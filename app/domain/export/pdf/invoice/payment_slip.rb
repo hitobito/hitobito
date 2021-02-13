@@ -7,7 +7,6 @@
 
 module Export::Pdf::Invoice
   class PaymentSlip < Section
-
     def render
       pdf.start_new_page if cursor < 225
       invoice_address
@@ -64,11 +63,11 @@ module Export::Pdf::Invoice
       [-58, 120].each do |x|
         pdf.font("Courier", size: 12) do
           bounding_box([x, 100], width: 145) do
-            table amount_data(0), cell_style: { padding: [2, 3.7, 1, 3.7], borders: [] }
+            table amount_data(0), cell_style: {padding: [2, 3.7, 1, 3.7], borders: []}
           end
 
           bounding_box([x + 131, 100], width: 36) do
-            table amount_data(1), cell_style: { padding: [2, 3.7, 1, 3.7], borders: [] }
+            table amount_data(1), cell_style: {padding: [2, 3.7, 1, 3.7], borders: []}
           end
         end
       end
@@ -92,8 +91,8 @@ module Export::Pdf::Invoice
       receiver_address(-50, 66) do
         if with_reference?
           pdf.text_box(invoice.esr_number,
-                       at: [0, cursor], width: 150, height: 10,
-                       overflow: :shrink_to_fit)
+            at: [0, cursor], width: 150, height: 10,
+            overflow: :shrink_to_fit)
           pdf.move_down 7
         end
       end
@@ -106,7 +105,7 @@ module Export::Pdf::Invoice
     def receiver_address(width, height)
       bounding_box([width, height], width: 150, height: 100) do
         yield if block_given?
-        table receiver_address_data.take(3), cell_style: { padding: [3.5, 0, 1, 0], borders: [] }
+        table receiver_address_data.take(3), cell_style: {padding: [3.5, 0, 1, 0], borders: []}
       end
     end
 
@@ -120,8 +119,8 @@ module Export::Pdf::Invoice
 
     def amount_data(i)
       numbers = helper.number_to_currency(invoice.calculated[:total],
-                                          format: "%n",
-                                          delimiter: "").split(".")
+        format: "%n",
+        delimiter: "").split(".")
       number_array = numbers[i].split("")
       return [number_array] if i != 0
 

@@ -14,7 +14,7 @@ module ContactAccount
 
     self.labels_translations_key = "activerecord.attributes.contact_account.predefined_labels"
 
-    has_paper_trail meta: { main: :contactable }
+    has_paper_trail meta: {main: :contactable}
 
     belongs_to :contactable, polymorphic: true
 

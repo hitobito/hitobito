@@ -8,7 +8,6 @@
 
 module Export::Pdf::Participation
   class Confirmation < Section
-
     def render
       render_read_and_agreed if event.signature? || signature_confirmation?
       render_signature if event.signature?
@@ -28,7 +27,7 @@ module Export::Pdf::Participation
 
     def render_read_and_agreed
       text(I18n.t("event.participations.print.read_and_agreed_for_#{i18n_event_postfix}"),
-           style: :bold)
+        style: :bold)
       move_down_line
     end
 
@@ -37,15 +36,15 @@ module Export::Pdf::Participation
 
       pdf.bounding_box([10, cursor], width: bounds.width) do
         text(I18n.t("contactable.address_or_email",
-                    address: contact_address,
-                    email: contact.email))
+          address: contact_address,
+          email: contact.email))
       end
       move_down_line
     end
 
     def render_signature_confirmation
       render_signature(event.signature_confirmation_text,
-                       "event.participations.print.signature_confirmation")
+        "event.participations.print.signature_confirmation")
     end
 
     def render_signature(header = Event::Role::Participant.model_name.human,
@@ -86,6 +85,5 @@ module Export::Pdf::Participation
       move_down_line
       text "." * 55
     end
-
   end
 end

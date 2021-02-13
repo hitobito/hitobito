@@ -20,9 +20,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   attr_reader :template
 
   delegate :association, :column_type, :column_property, :captionize, :ta, :tag,
-           :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
-           :render, :f, :icon,
-           to: :template
+    :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
+    :render, :f, :icon,
+    to: :template
 
   # Render multiple input fields together with a label for the given attributes.
   def labeled_input_fields(*attrs)
@@ -95,8 +95,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a boolean field.
   def boolean_field(attr, html_options = {})
-    caption   = " " + html_options.delete(:caption).to_s
-    checked   = html_options.delete(:checked_value) { "1" }
+    caption = " " + html_options.delete(:caption).to_s
+    checked = html_options.delete(:checked_value) { "1" }
     unchecked = html_options.delete(:unchecked_value) { "0" }
 
     label(attr, class: "checkbox") do
@@ -110,7 +110,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] ||= "span2 date"
     content_tag(:div, class: "input-prepend") do
       content_tag(:span, icon(:'calendar-alt'), class: "add-on") +
-      text_field(attr, html_options)
+        text_field(attr, html_options)
     end
   end
 
@@ -127,7 +127,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to enter a time. You might want to customize this.
   def time_field(attr, html_options = {})
     html_options[:class] ||= "time"
-    time_select(attr, { include_blank: true, ignore_date: true }, html_options)
+    time_select(attr, {include_blank: true, ignore_date: true}, html_options)
   end
 
   # Render a select with minutes
@@ -150,16 +150,16 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:class] ||= "span6"
 
     date_field("#{attr}_date") +
-    " " +
-    hours_select("#{attr}_hour") +
-    " : " +
-    minutes_select("#{attr}_min")
+      " " +
+      hours_select("#{attr}_hour") +
+      " : " +
+      minutes_select("#{attr}_min")
   end
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
     label(id_from_value(attr, value), class: "radio#{' inline' if inline}") do
       radio_button(attr, value, html_options) + " " +
-      caption
+        caption
     end
   end
 
@@ -176,9 +176,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     @template.label_tag(sanitized_id, class: "checkbox") do
       hidden_field.html_safe +
-      @template.check_box_tag(name, index + 1, checked, id: sanitized_id) +
-      " " +
-      value
+        @template.check_box_tag(name, index + 1, checked, id: sanitized_id) +
+        " " +
+        value
     end
   end
 
@@ -189,8 +189,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:id] = "#{model_param}_#{id}"
     label(id, class: "checkbox inline") do
       @template.check_box_tag(name, value, @object.send(attr).include?(value), html_options) +
-      " " +
-      caption
+        " " +
+        caption
     end
   end
 
@@ -203,8 +203,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     list = association_entries(attr, html_options)
     if list.present?
       collection_select(attr, list, :id, :to_s,
-                        collection_prompt(attr, html_options),
-                        html_options)
+        collection_prompt(attr, html_options),
+        html_options)
     else
       content_tag(:p, ta(:none_available, association(@object, attr)), class: "text")
     end
@@ -225,18 +225,18 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def i18n_enum_field(attr, labels, html_options = {})
     html_options[:class] ||= "span6"
     collection_select(attr, labels, :first, :last,
-                      collection_prompt(attr, html_options),
-                      html_options)
+      collection_prompt(attr, html_options),
+      html_options)
   end
 
   def person_field(attr, _html_options = {})
     attr, attr_id = assoc_and_id_attr(attr)
     hidden_field(attr_id) +
-    string_field(attr,
-                 placeholder: I18n.t("global.search.placeholder_person"),
-                 data: { provide: "entity",
-                         id_field: "#{object_name}_#{attr_id}",
-                         url: @template.query_people_path })
+      string_field(attr,
+        placeholder: I18n.t("global.search.placeholder_person"),
+        data: {provide: "entity",
+               id_field: "#{object_name}_#{attr_id}",
+               url: @template.query_people_path})
   end
 
   def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, required = false,
@@ -244,12 +244,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     required_class = required ? " required" : nil
     content_tag(:div, class: ["control-group", required_class].compact.join(" ")) do
       label(assoc, class: "control-label") +
-      nested_fields_for(assoc, partial_name, record_object) do |fields|
-        content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
+        nested_fields_for(assoc, partial_name, record_object) do |fields|
+          content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
 
-        content << help_inline(fields.link_to_remove(I18n.t("global.associations.remove")))
-        content_tag(:div, content, class: "controls controls-row well")
-      end
+          content << help_inline(fields.link_to_remove(I18n.t("global.associations.remove")))
+          content_tag(:div, content, class: "controls controls-row well")
+        end
     end
   end
 
@@ -259,9 +259,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         block_given? ? capture(fields, &block) : render(partial_name, f: fields)
       end
     end +
-    content_tag(:div, class: "controls") do
-      content_tag(:p, link_to_add(I18n.t("global.associations.add"), assoc), class: "text")
-    end
+      content_tag(:div, class: "controls") do
+        content_tag(:p, link_to_add(I18n.t("global.associations.add"), assoc), class: "text")
+      end
   end
 
   def readonly_value(attr, html_options = {})
@@ -292,10 +292,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     css_classes = { "control-group" => true,
                     error: errors_on?(attr),
                     required: required?(attr),
-                    'no-attachments': no_attachments?(attr) }
+                    "no-attachments": no_attachments?(attr) }
+
     content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(" ")) do
       label(attr, caption_or_content, class: "control-label") +
-      content_tag(:div, content, html_options)
+        content_tag(:div, content, html_options)
     end
   end
 
@@ -303,15 +304,15 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     content = capture(&block) if block_given?
     content_tag(:div, class: "control-group") do
       content_tag(:label, "", class: "control-label") +
-      content_tag(:div, content, class: "controls")
+        content_tag(:div, content, class: "controls")
     end
   end
 
   def collection_prompt(attr, html_options = {})
     if html_options[:prompt]
-      { prompt: html_options[:prompt] }
+      {prompt: html_options[:prompt]}
     elsif html_options[:include_blank]
-      { include_blank: html_options[:include_blank] }
+      {include_blank: html_options[:include_blank]}
     elsif html_options[:multiple]
       {}
     else
@@ -324,9 +325,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def select_options(attr)
     assoc = association(@object, attr)
     if required?(attr)
-      { prompt: ta(:please_select, assoc) }
+      {prompt: ta(:please_select, assoc)}
     else
-      { include_blank: ta(:no_entry, assoc) }
+      {include_blank: ta(:no_entry, assoc)}
     end
   end
 
@@ -375,9 +376,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def honeypot(name = :name)
     content_tag(:div, class: "control-group hp") do
       label(name, name, class: "control-label") +
-      content_tag(:div, class: "controls") do
-        text_field(name, value: nil, placeholder: I18n.t("global.do_not_fill"))
-      end
+        content_tag(:div, class: "controls") do
+          text_field(name, value: nil, placeholder: I18n.t("global.do_not_fill"))
+        end
     end
   end
 
@@ -404,7 +405,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def errors_on?(attr)
     attr_plain, attr_id = assoc_and_id_attr(attr)
     @object.errors.key?(attr_plain.to_sym) ||
-    @object.errors.key?(attr_id.to_sym)
+      @object.errors.key?(attr_id.to_sym)
   end
 
   # Returns true if the given attribute must be present.
@@ -414,10 +415,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     attr = attr.to_s
     attr, attr_id = assoc_and_id_attr(attr)
     validators = klass.validators_on(attr) +
-                 klass.validators_on(attr_id)
+      klass.validators_on(attr_id)
     validators.any? do |v|
       v.kind == :presence &&
-      !v.options.key?(:if) && !v.options.key?(:unless)
+        !v.options.key?(:if) && !v.options.key?(:unless)
     end
   end
 
@@ -482,7 +483,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def id_from_value(attr, value)
     "#{attr}_#{value.to_s.gsub(/\s/, '_').gsub(/[^-\w]/, '').downcase}"
   end
-
 end
 
 # rubocop:enable Metrics/ClassLength,Rails/HelperInstanceVariable

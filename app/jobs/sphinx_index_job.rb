@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class SphinxIndexJob < RecurringJob
-
   run_every Settings.sphinx.index.interval.minutes
 
   def perform_internal
@@ -33,5 +32,4 @@ class SphinxIndexJob < RecurringJob
     Hitobito::Application.load_tasks
     Rake::Task["ts:rebuild"].invoke
   end
-
 end

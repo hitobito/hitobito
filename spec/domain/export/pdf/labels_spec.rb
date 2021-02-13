@@ -1,8 +1,7 @@
 require "spec_helper"
 
 describe Export::Pdf::Labels do
-
-  let(:contactables) { [people(:top_leader).tap{ |u| u.update(nickname: "Funny Name") }] }
+  let(:contactables) { [people(:top_leader).tap { |u| u.update(nickname: "Funny Name") }] }
   let(:label_format) { label_formats(:standard) }
   let(:pdf) { Export::Pdf::Labels.new(label_format).generate(contactables) }
 
@@ -33,7 +32,7 @@ describe Export::Pdf::Labels do
 
   context "when company_name is given" do
     let(:company_name) { "Sample Inc." }
-    let(:contactables) { [people(:top_leader).tap{ |u| u.update(company_name: company_name, company: company) }] }
+    let(:contactables) { [people(:top_leader).tap { |u| u.update(company_name: company_name, company: company) }] }
 
     context "when marked as a company" do
       let(:company) { true }

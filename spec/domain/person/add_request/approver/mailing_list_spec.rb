@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::AddRequest::Approver::MailingList do
-
   let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
 
@@ -31,7 +30,6 @@ describe Person::AddRequest::Approver::MailingList do
   end
 
   context "#approve" do
-
     # load before to get correct change counts
     before { subject }
 
@@ -63,7 +61,5 @@ describe Person::AddRequest::Approver::MailingList do
       expect(s.subscriber).to eq(person)
       expect(s.excluded).to eq(false)
     end
-
   end
-
 end

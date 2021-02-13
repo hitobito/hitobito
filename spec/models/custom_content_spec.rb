@@ -18,7 +18,6 @@
 require "spec_helper"
 
 describe CustomContent do
-
   subject { custom_contents(:login) }
 
   context ".list" do
@@ -125,5 +124,4 @@ describe CustomContent do
       expect(output).to eq("Your new Login at example.com/login")
     end
   end
-
 end

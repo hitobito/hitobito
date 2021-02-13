@@ -7,9 +7,9 @@
 
 require "spec_helper"
 describe Import::Person do
-
   context "keys" do
-    subject { Import::Person.fields.map { |entry| entry[:key] }  }
+    subject { Import::Person.fields.map { |entry| entry[:key] } }
+
     it "contains social media" do
       is_expected.to include("social_account_skype")
     end
@@ -24,7 +24,7 @@ describe Import::Person do
   end
 
   context "labels" do
-    subject { Import::Person.fields.map { |entry| entry[:value] }  }
+    subject { Import::Person.fields.map { |entry| entry[:value] } }
 
     it "contains social media" do
       is_expected.to include("Social Media Adresse Skype")
@@ -41,12 +41,13 @@ describe Import::Person do
 
   context "extract contact accounts" do
     let(:data) do
-      { first_name: "foo",
-        social_account_skype: "foobar",
-        phone_number_vater: "0123",
-        additional_email_mutter: "mutter@example.com" }
+      {first_name: "foo",
+       social_account_skype: "foobar",
+       phone_number_vater: "0123",
+       additional_email_mutter: "mutter@example.com"}
     end
     let(:person) { Person.new }
+
     before { Import::Person.new(person, data.with_indifferent_access).populate }
 
     subject { person }
@@ -67,14 +68,15 @@ describe Import::Person do
 
   context "tags" do
     let(:data) do
-      { first_name: "foo",
-        tags: "de, responsible:jack,foo bar" }
+      {first_name: "foo",
+       tags: "de, responsible:jack,foo bar"}
     end
 
     let(:person) { Fabricate(:person) }
     let(:import_person) do
       Import::Person.new(person, data.with_indifferent_access, can_manage_tags: can_manage_tags)
     end
+
     before do
       import_person.populate
     end
@@ -98,14 +100,12 @@ describe Import::Person do
 
       its("tag_list") { should eq [] }
     end
-
   end
 
   context "with keep behaviour" do
-
     before do
       Import::Person.new(person, data.with_indifferent_access,
-                         override: false, can_manage_tags: true).populate
+        override: false, can_manage_tags: true).populate
     end
 
     subject { person }
@@ -116,11 +116,11 @@ describe Import::Person do
       end
 
       let(:data) do
-         { first_name: "foo",
-           last_name: "",
-           email: "foo@example.com",
-           town: "Bern",
-           birthday: "-" }
+        {first_name: "foo",
+         last_name: "",
+         email: "foo@example.com",
+         town: "Bern",
+         birthday: "-"}
       end
 
       its("first_name") { should eq "Peter" }
@@ -143,13 +143,13 @@ describe Import::Person do
       end
 
       let(:data) do
-         { first_name: "foo",
-           email: "foo@example.com",
-           social_account_skype: "foo",
-           social_account_msn: "bar",
-           phone_number_mobil: "+41 77 789 01 23",
-           additional_email_mutter: "bar@example.com",
-           additional_email_privat: "privat@example.com" }
+        {first_name: "foo",
+         email: "foo@example.com",
+         social_account_skype: "foo",
+         social_account_msn: "bar",
+         phone_number_mobil: "+41 77 789 01 23",
+         additional_email_mutter: "bar@example.com",
+         additional_email_privat: "privat@example.com"}
       end
 
       its("phone_numbers.first.label") { should eq "Privat" }
@@ -182,8 +182,8 @@ describe Import::Person do
 
       context "nonempty" do
         let(:data) do
-          { first_name: "foo",
-            tags: "de, responsible:jack,foo bar" }
+          {first_name: "foo",
+           tags: "de, responsible:jack,foo bar"}
         end
 
         its("tag_list") { should eq ["foo bar", "bar", "de", "responsible:jack"] }
@@ -191,20 +191,18 @@ describe Import::Person do
 
       context "empty" do
         let(:data) do
-          { first_name: "foo" }
+          {first_name: "foo"}
         end
 
         its("tag_list") { should eq ["foo bar", "bar"] }
       end
     end
-
   end
 
   context "with override behaviour" do
-
     before do
       Import::Person.new(person, data.with_indifferent_access,
-                         override: true, can_manage_tags: true).populate
+        override: true, can_manage_tags: true).populate
     end
 
     subject { person }
@@ -212,17 +210,17 @@ describe Import::Person do
     context "overrides existing attributes" do
       let(:person) do
         Fabricate(:person,
-                  email: "foo@example.com",
-                  first_name: "Peter",
-                  last_name: "Muster",
-                  address: "EP 4")
+          email: "foo@example.com",
+          first_name: "Peter",
+          last_name: "Muster",
+          address: "EP 4")
       end
 
       let(:data) do
-         { first_name: "foo",
-           last_name: "",
-           email: "foo@example.com",
-           town: "Bern" }
+        {first_name: "foo",
+         last_name: "",
+         email: "foo@example.com",
+         town: "Bern"}
       end
 
       its("first_name") { should eq "foo" }
@@ -244,13 +242,13 @@ describe Import::Person do
       end
 
       let(:data) do
-         { first_name: "foo",
-           email: "foo@example.com",
-           social_account_skype: "foo",
-           social_account_msn: "bar",
-           phone_number_mobil: "+41 77 789 01 23",
-           additional_email_mutter: "bar@example.com",
-           additional_email_privat: "privat@example.com" }
+        {first_name: "foo",
+         email: "foo@example.com",
+         social_account_skype: "foo",
+         social_account_msn: "bar",
+         phone_number_mobil: "+41 77 789 01 23",
+         additional_email_mutter: "bar@example.com",
+         additional_email_privat: "privat@example.com"}
       end
 
       its("phone_numbers.first.label") { should eq "Privat" }
@@ -283,8 +281,8 @@ describe Import::Person do
 
       context "nonempty" do
         let(:data) do
-          { first_name: "foo",
-            tags: "de, responsible:jack,foo bar" }
+          {first_name: "foo",
+           tags: "de, responsible:jack,foo bar"}
         end
 
         its("tag_list") { should eq ["de", "responsible:jack", "foo bar"] }
@@ -292,13 +290,12 @@ describe Import::Person do
 
       context "empty" do
         let(:data) do
-          { first_name: "foo" }
+          {first_name: "foo"}
         end
 
         its("tag_list") { should eq [] }
       end
     end
-
   end
 
   context "can assign mass assigned attributes" do
@@ -306,7 +303,7 @@ describe Import::Person do
 
     it "all protected attributes are filtered via blacklist" do
       public_attributes = person.attributes.reject { |key, value| ::Person::INTERNAL_ATTRS.include?(key.to_sym) }
-      expect(public_attributes.size).to eq 16  # lists tag_list
+      expect(public_attributes.size).to eq 16 # lists tag_list
       expect do
         Import::Person.new(person, public_attributes).populate
       end.not_to raise_error
@@ -336,5 +333,4 @@ describe Import::Person do
       expect(import_people.fifth.human_errors).to start_with "Haupt-E-Mail ist bereits vergeben"
     end
   end
-
 end

@@ -8,13 +8,12 @@
 require "spec_helper"
 
 describe MailRelay::Base do
-
-  let(:mails)                  { Rails.root.join("spec", "fixtures", "email") }
-  let(:simple)                 { Mail.new(mails.join("simple.eml").read) }
-  let(:regular)                { Mail.new(mails.join("regular.eml").read) }
-  let(:list)                   { Mail.new(mails.join("list.eml").read) }
-  let(:multiple)               { Mail.new(mails.join("multiple.eml").read) }
-  let(:multiple_both)          { Mail.new(mails.join("multiple_both.eml").read) }
+  let(:mails) { Rails.root.join("spec", "fixtures", "email") }
+  let(:simple) { Mail.new(mails.join("simple.eml").read) }
+  let(:regular) { Mail.new(mails.join("regular.eml").read) }
+  let(:list) { Mail.new(mails.join("list.eml").read) }
+  let(:multiple) { Mail.new(mails.join("multiple.eml").read) }
+  let(:multiple_both) { Mail.new(mails.join("multiple_both.eml").read) }
   let(:multiple_x_original_to) { Mail.new(mails.join("multiple_x_original_to.eml").read) }
 
   let(:relay) { MailRelay::Base.new(message) }
@@ -95,6 +94,7 @@ describe MailRelay::Base do
 
     context "with receivers" do
       let(:receivers) { %w(a@example.com b@example.com) }
+
       before do
         allow(relay).to receive(:receivers).and_return(receivers)
         relay.relay
@@ -110,7 +110,6 @@ describe MailRelay::Base do
 
         its(:smtp_envelope_to) { should == %w(a@xn--exmple-cua.com b@example.com) }
       end
-
     end
   end
 
@@ -211,7 +210,6 @@ describe MailRelay::Base do
 
       MailRelay::Base.relay_current
     end
-
 
     it "creates mail log entry for sent bulk mail" do
       expect(Mail).to receive(:find_and_delete) do |options, &block|

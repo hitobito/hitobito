@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module LayoutHelper
-
   # render a single button
   def action_button(label, url, icon = nil, options = {})
     if @in_button_group || options[:in_button_group]
@@ -52,7 +51,7 @@ module LayoutHelper
   end
 
   def badge(label, type = nil, tooltip = nil)
-    options = { class: "badge badge-#{type || 'default'}" }
+    options = {class: "badge badge-#{type || 'default'}"}
     if tooltip.present?
       options.merge!(rel: :tooltip,
                      "data-html" => "true",
@@ -62,7 +61,7 @@ module LayoutHelper
   end
 
   def section(title, &block)
-    render(layout: "shared/section", locals: { title: title }, &block)
+    render(layout: "shared/section", locals: {title: title}, &block)
   end
 
   def section_table(title, collection, add_path = nil, &block)
@@ -70,16 +69,16 @@ module LayoutHelper
     if add_path || collection.present?
       title = include_add_button(title, add_path) if add_path
       render(layout: "shared/section_table",
-             locals: { title: title, collection: collection, add_path: add_path },
-             &block)
+             locals: {title: title, collection: collection, add_path: add_path},
+        &block)
     end
   end
 
   def grouped_table(grouped_lists, column_count, &block)
     if grouped_lists.present?
       render(layout: "shared/grouped_table",
-             locals: { grouped_lists: grouped_lists, column_count: column_count },
-             &block)
+             locals: {grouped_lists: grouped_lists, column_count: column_count},
+        &block)
     else
       content_tag(:div, ti(:no_list_entries), class: "table")
     end
@@ -126,9 +125,9 @@ module LayoutHelper
 
   def include_add_button(title, add_path)
     button = action_button(ti(:'link.add'),
-                           add_path,
-                           "plus",
-                           class: "btn-small")
+      add_path,
+      "plus",
+      class: "btn-small")
     safe_join([title, content_tag(:span, button, class: "pull-right")])
   end
 
@@ -142,5 +141,4 @@ module LayoutHelper
       safe_join(html, " ")
     end
   end
-
 end

@@ -5,36 +5,31 @@
 #  License version 3 or later. See the COPYING file at the top-level
 #  directory or at https://github.com/hitobito/hitobito.
 
-
 require "spec_helper"
 
-
 describe Group::DeletedPeopleController, js: true do
-
   subject { page }
 
   context "inline creation of role" do
-
     let(:group) { groups(:bottom_layer_one) }
-    let(:row)   { find("#content table.table").all("tr").last }
-    let(:cell)  { row.all("td")[2] }
+    let(:row) { find("#content table.table").all("tr").last }
+    let(:cell) { row.all("td")[2] }
     let(:user) { people(:top_leader) }
 
     before do
       Fabricate(Group::BottomLayer::Member.name.to_sym,
-                group: groups(:bottom_layer_one),
-                created_at: 1.year.ago,
-                deleted_at: 1.month.ago)
+        group: groups(:bottom_layer_one),
+        created_at: 1.year.ago,
+        deleted_at: 1.month.ago)
       Fabricate(Group::BottomGroup::Leader.name.to_sym,
-                group: groups(:bottom_group_one_one_one),
-                created_at: 1.year.ago,
-                deleted_at: 1.month.ago)
+        group: groups(:bottom_group_one_one_one),
+        created_at: 1.year.ago,
+        deleted_at: 1.month.ago)
 
       sign_in(user)
       visit group_deleted_people_path(group_id: group.id)
       within(cell) { click_link "Bearbeiten" }
     end
-
 
     it "cancel closes popover" do
       obsolete_node_safe do
@@ -70,5 +65,4 @@ describe Group::DeletedPeopleController, js: true do
       end
     end
   end
-
 end

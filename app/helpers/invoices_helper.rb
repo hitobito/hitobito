@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module InvoicesHelper
-
   def format_invoice_list_recipients_total(invoice_list)
     [invoice_list.recipients_processed, invoice_list.recipients_total].uniq.join(" / ")
   end

@@ -7,7 +7,6 @@
 
 require "spec_helper"
 describe "people/_qualifications.html.haml" do
-
   let(:top_leader) { people(:top_leader) }
   let(:top_group) { groups(:top_group) }
   let(:sl) { qualification_kinds(:sl) }
@@ -19,7 +18,6 @@ describe "people/_qualifications.html.haml" do
     allow(view).to receive_messages(current_user: top_leader)
     allow(controller).to receive_messages(current_user: top_leader)
   end
-
 
   context "table order" do
     before do
@@ -37,6 +35,7 @@ describe "people/_qualifications.html.haml" do
 
   context "action links" do
     let(:ql_sl) { create_qualification }
+
     before { ql_sl }
 
     it "lists delete buttons" do
@@ -52,13 +51,10 @@ describe "people/_qualifications.html.haml" do
     def path(qualification)
       group_person_qualification_path(top_group, top_leader, qualification)
     end
-
   end
-
 
   def create_qualification(opts = {})
-    opts = { kind: sl, finish_at: 1.year.from_now }.merge(opts)
+    opts = {kind: sl, finish_at: 1.year.from_now}.merge(opts)
     Fabricate(:qualification, person: top_leader, qualification_kind: opts[:kind], finish_at: opts[:finish_at].to_date)
   end
-
 end

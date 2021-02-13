@@ -10,7 +10,7 @@ describe Duration do
   describe "#dates" do
     subject { @duration.to_s }
 
-    context "date objects"  do
+    context "date objects" do
       it "start_at only" do
         create_duration(start_at: "2002-01-01")
         is_expected.to eq "01.01.2002"
@@ -44,7 +44,7 @@ describe Duration do
       end
       it "finish_at only" do
         create_duration(finish_at: "2002-01-01 13:30")
-        is_expected.to eq  "01.01.2002 13:30"
+        is_expected.to eq "01.01.2002 13:30"
       end
 
       it "start and finish" do
@@ -130,8 +130,8 @@ describe Duration do
   def parse(str)
     Time.zone.parse(str) if str.present?
   end
+
   def create_duration(date)
     @duration = Duration.new(parse(date[:start_at]), parse(date[:finish_at]))
   end
-
 end

@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe AssignmentsController do
-  let(:nesting)    { { group_id: bottom_member.primary_group.id, person_id: bottom_member.id } }
+  let(:nesting) { {group_id: bottom_member.primary_group.id, person_id: bottom_member.id} }
   let(:bottom_member) { people(:bottom_member) }
   let(:top_leader) { people(:top_leader) }
   let(:assignment) { assignments(:printing) }
@@ -69,7 +69,7 @@ describe AssignmentsController do
       sign_in(different_member)
 
       expect do
-        get :new, params: { assignment: { attachment_id: assignment.attachment.id } }
+        get :new, params: {assignment: {attachment_id: assignment.attachment.id}}
       end.to raise_error(CanCan::AccessDenied)
     end
   end

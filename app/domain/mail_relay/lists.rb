@@ -13,7 +13,6 @@ module MailRelay
   # When a receiving server bounces the mail, it is relayed again to the original sender,
   # based on the encoded return path address.
   class Lists < Base
-
     SENDER_SUFFIX = "-bounces"
 
     self.mail_domain = Settings.email.list_domain
@@ -84,17 +83,17 @@ module MailRelay
       return false unless valid_email?(sender_email)
 
       mailing_list.anyone_may_post ||
-      sender_is_additional_sender? ||
-      sender_is_group_email? ||
-      sender_is_list_administrator? ||
-      (mailing_list.subscribers_may_post? && sender_is_list_member?)
+        sender_is_additional_sender? ||
+        sender_is_group_email? ||
+        sender_is_list_administrator? ||
+        (mailing_list.subscribers_may_post? && sender_is_list_member?)
     end
 
     # List of receiver email addresses for the resent email.
     def receivers
       @mail_log.message.update(mailing_list: mailing_list)
       Person.mailing_emails_for(mailing_list.people.to_a,
-                                mailing_list.labels)
+        mailing_list.labels)
     end
 
     def mailing_list
@@ -139,13 +138,13 @@ module MailRelay
       # check if the domain is valid, if the sender is in the senders
       # list or if the domain is whitelisted
       list.include?(sender_email) ||
-          (valid_domain?(sender_domain) && list.include?(sender_domain))
+        (valid_domain?(sender_domain) && list.include?(sender_domain))
     end
 
     def sender_is_group_email?
       group = mailing_list.group
       group.email == sender_email ||
-      group.additional_emails.collect(&:email).include?(sender_email)
+        group.additional_emails.collect(&:email).include?(sender_email)
     end
 
     def sender_is_list_administrator?
@@ -178,6 +177,5 @@ module MailRelay
         message.header[field.name] = nil
       end
     end
-
   end
 end

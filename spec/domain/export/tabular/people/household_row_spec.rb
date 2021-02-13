@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Export::Tabular::People::HouseholdRow do
-
   def name(first_names = [], last_names = [])
     person = Person.new(first_name: first_names.join(","),
                         last_name: last_names.join(","))
@@ -62,5 +61,4 @@ describe Export::Tabular::People::HouseholdRow do
     aggregated = name(%w(Andreas Rahel Rahel Blunsch), %w(Mäder Steiner Emmenegger Wyss))
     expect(aggregated).to eq "A. Mäder, R. Steiner, R. Emmenegger, B. Wyss"
   end
-
 end

@@ -23,7 +23,7 @@ module YearBasedPaging
   end
 
   def year_filter
-    date = Date.new(year, 1 , 1)
+    date = Date.new(year, 1, 1)
     date.beginning_of_year..date.end_of_year
   end
 

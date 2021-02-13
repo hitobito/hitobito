@@ -1,7 +1,6 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -9,7 +8,6 @@
 require "spec_helper"
 
 describe InvoiceMailer do
-
   let(:invoice) { invoices(:invoice) }
   let(:sender) { people(:bottom_member) }
   let(:mail) { InvoiceMailer.notification(invoice, sender) }
@@ -18,9 +16,9 @@ describe InvoiceMailer do
 
   subject { mail }
 
-  its(:to)        { should == [invoice.recipient.email] }
-  its(:reply_to)  { should == [sender.email] }
-  its(:subject)   { should =~ /Rechnung \d+-\d+ von Bottom One/ }
+  its(:to) { should == [invoice.recipient.email] }
+  its(:reply_to) { should == [sender.email] }
+  its(:subject) { should =~ /Rechnung \d+-\d+ von Bottom One/ }
 
   it "renders body if invoice.recipient is missing" do
     invoice.update(recipient: nil, recipient_email: "test@example.com")
@@ -59,5 +57,4 @@ describe InvoiceMailer do
       expect(pdf.content_type).to match(/filename=#{invoice.filename}/)
     end
   end
-
 end

@@ -178,5 +178,4 @@ class Person::Household
   def household_name(household)
     household.map(&:full_name).join(", ")
   end
-
 end

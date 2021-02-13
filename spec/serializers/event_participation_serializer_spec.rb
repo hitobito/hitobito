@@ -21,11 +21,11 @@
 require "spec_helper"
 
 describe EventParticipationSerializer do
-  let(:controller)    { double().as_null_object }
+  let(:controller) { double().as_null_object }
   let(:participation) { event_participations(:top) }
-  let(:serializer)    { EventParticipationSerializer.new(participation, controller) }
+  let(:serializer) { EventParticipationSerializer.new(participation, controller) }
 
-  let(:hash)          { serializer.to_hash.with_indifferent_access }
+  let(:hash) { serializer.to_hash.with_indifferent_access }
 
   subject { hash[:event_participations].first }
 
@@ -53,7 +53,7 @@ describe EventParticipationSerializer do
   end
 
   it "includes event roles" do
-    expect(subject[:roles]).to eq([{ "type" => "Event::Role::Leader", "name" => "Hauptleitung" }])
+    expect(subject[:roles]).to eq([{"type" => "Event::Role::Leader", "name" => "Hauptleitung"}])
   end
 
   it "includes person template link" do

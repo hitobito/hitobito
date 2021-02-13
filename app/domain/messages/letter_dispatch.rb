@@ -31,7 +31,7 @@ module Messages
     private
 
     def reciept_attrs
-      { message_id: @message.id, created_at: @now }
+      {message_id: @message.id, created_at: @now}
     end
   end
 end

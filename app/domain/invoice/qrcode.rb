@@ -5,9 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 class Invoice::Qrcode
-
   SWISS_CROSS_EDGE_SIDE_PX = 166
   SWISS_CROSS_EDGE_SIDE_MM = 7
 
@@ -16,7 +14,6 @@ class Invoice::Qrcode
   QR_CODE_EDGE_SIDE_PX = SWISS_CROSS_EDGE_SIDE_PX / SWISS_CROSS_EDGE_SIDE_MM * QR_CODE_EDGE_SIDE_MM
   QR_CROSS_X = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
   QR_CROSS_Y = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
-
 
   def initialize(invoice)
     @invoice = invoice
@@ -37,7 +34,7 @@ class Invoice::Qrcode
   end
 
   def metadata
-    { type: "SPC", version: "0200", coding: "1" }
+    {type: "SPC", version: "0200", coding: "1"}
   end
 
   def creditor
@@ -49,7 +46,7 @@ class Invoice::Qrcode
   end
 
   def payment
-    { amount: format("%<total>.2f", total: @invoice.total), currency: @invoice.currency }
+    {amount: format("%<total>.2f", total: @invoice.total), currency: @invoice.currency}
   end
 
   def debitor
@@ -58,7 +55,7 @@ class Invoice::Qrcode
 
   def payment_reference
     type = @invoice.reference.starts_with?("RF") ? "SCOR" : "QRR"
-    { type: type, reference: @invoice.reference }
+    {type: type, reference: @invoice.reference}
   end
 
   def additional_infos
@@ -70,7 +67,7 @@ class Invoice::Qrcode
   end
 
   def alternative_payment
-    { type: nil }
+    {type: nil}
   end
 
   def scissor(kind)
@@ -80,7 +77,7 @@ class Invoice::Qrcode
   def generate
     Tempfile.create([@invoice.sequence_number, ".png"], binmode: true) do |file|
       qrcode = generate_png
-      cross  = ChunkyPNG::Image.from_file(image("CH-Kreuz_7mm_small.png"))
+      cross = ChunkyPNG::Image.from_file(image("CH-Kreuz_7mm_small.png"))
       point = (qrcode.width / 2) - cross.width / 2
       qrcode.replace!(cross, point, point)
       qrcode.save(file.path, :fast_rgba)
@@ -102,7 +99,7 @@ class Invoice::Qrcode
   private
 
   def generate_png # rubocop:disable Metrics/MethodLength
-    RQRCode::QRCode.new(payload,  level: :m).as_png(
+    RQRCode::QRCode.new(payload, level: :m).as_png(
       bit_depth: 1,
       border_modules: 4,
       color_mode: ChunkyPNG::COLOR_GRAYSCALE,
@@ -136,4 +133,3 @@ class Invoice::Qrcode
     Rails.root.join("app/domain/invoice/assets/#{filename}")
   end
 end
-

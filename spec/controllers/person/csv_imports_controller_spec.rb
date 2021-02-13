@@ -9,7 +9,6 @@ require "spec_helper"
 require "csv"
 
 describe Person::CsvImportsController do
-
   include CsvImportMacros
 
   let(:group) { groups(:top_group) }
@@ -17,12 +16,10 @@ describe Person::CsvImportsController do
 
   before { sign_in(person) }
 
-
   describe "POST #define_mapping" do
-
     it "populates flash, data and columns" do
       file = Rack::Test::UploadedFile.new(path(:utf8), "text/csv")
-      post :define_mapping, params: { group_id: group.id, csv_import: { file: file } }
+      post :define_mapping, params: {group_id: group.id, csv_import: {file: file}}
       parser = assigns(:parser)
       expect(parser.to_csv).to be_present
       expect(parser.headers).to be_present
@@ -31,28 +28,27 @@ describe Person::CsvImportsController do
 
     it "redisplays form if failed to parse csv" do
       file = Rack::Test::UploadedFile.new(path(:utf8, :ods), "text/csv")
-      post :define_mapping, params: { group_id: group.id, csv_import: { file: file } }
+      post :define_mapping, params: {group_id: group.id, csv_import: {file: file}}
       expect(flash[:data]).not_to be_present
       expect(flash[:alert]).to match(/Fehler beim Lesen von utf8.ods/)
       is_expected.to redirect_to new_group_csv_imports_path(group)
     end
 
     it "renders form when submitted without file" do
-      post :define_mapping, params: { group_id: group.id }
+      post :define_mapping, params: {group_id: group.id}
       expect(flash[:alert]).to eq "Bitte wählen Sie eine gültige CSV Datei aus."
       is_expected.to redirect_to new_group_csv_imports_path(group)
     end
-
   end
 
   describe "POST preview" do
     let(:data) { File.read(path(:utf8)) }
     let(:role_type) { "Group::TopGroup::Leader" }
-    let(:mapping) { { Vorname: "first_name", Nachname: "last_name", Geburtsdatum: "birthday" } }
-    let(:required_params) { { group_id: group.id, data: data, role_type: role_type } }
+    let(:mapping) { {Vorname: "first_name", Nachname: "last_name", Geburtsdatum: "birthday"} }
+    let(:required_params) { {group_id: group.id, data: data, role_type: role_type} }
 
     it "informs about newly imported person" do
-      post :preview, params: required_params.merge(field_mappings: { Vorname: "first_name", Nachname: "last_name" })
+      post :preview, params: required_params.merge(field_mappings: {Vorname: "first_name", Nachname: "last_name"})
       expect(flash[:notice]).to eq ["1 Person (Leader) wird neu importiert."]
       is_expected.to render_template(:preview)
     end
@@ -65,13 +61,13 @@ describe Person::CsvImportsController do
     end
 
     it "informs about duplicates in assignment" do
-      post :preview, params: required_params.merge(field_mappings: { Vorname: "first_name", Nachname: "first_name" })
+      post :preview, params: required_params.merge(field_mappings: {Vorname: "first_name", Nachname: "first_name"})
       expect(flash[:alert]).to eq "Vorname wurde mehrfach zugewiesen."
       is_expected.to render_template(:define_mapping)
     end
 
     it "rerenders form when role_type is missing" do
-      post :preview, params: { group_id: group.id, data: data }
+      post :preview, params: {group_id: group.id, data: data}
       expect(flash.now[:alert]).to eq "Role muss ausgefüllt werden."
       is_expected.to render_template(:define_mapping)
     end
@@ -82,23 +78,22 @@ describe Person::CsvImportsController do
       it "reports error if multiple candidates for doublettes are found" do
         Fabricate(:person, first_name: "bar", email: "foo@bar.net")
         Fabricate(:person, first_name: "foo", email: "bar@bar.net")
-        post :preview, params: required_params.merge(field_mappings: { Vorname: "first_name", Email: "email" })
+        post :preview, params: required_params.merge(field_mappings: {Vorname: "first_name", Email: "email"})
         expect(flash[:alert]).to eq ["1 Person (Leader) wird nicht importiert.",
                                  "Zeile 1: 2 Treffer in Duplikatserkennung."]
       end
     end
-
   end
 
   describe "POST #create" do
     let(:data) { File.read(path(:utf8)) }
     let(:role_type) { Group::TopGroup::Leader }
-    let(:mapping) { { Vorname: "first_name", Nachname: "last_name", Geburtsdatum: "birthday" } }
-    let(:required_params) { { group_id: group.id, data: data, role_type: role_type.sti_name, field_mappings: mapping } }
+    let(:mapping) { {Vorname: "first_name", Nachname: "last_name", Geburtsdatum: "birthday"} }
+    let(:required_params) { {group_id: group.id, data: data, role_type: role_type.sti_name, field_mappings: mapping} }
 
     it "fails if role_type is missing" do
       expect do
-        post :create, params: { group_id: group.id, data: data, field_mappings: { first_name: "first_name" } }
+        post :create, params: {group_id: group.id, data: data, field_mappings: {first_name: "first_name"}}
       end.to raise_error(ActiveRecord::RecordNotFound)
     end
 
@@ -111,38 +106,38 @@ describe Person::CsvImportsController do
       expect { post :create, params: required_params }.to change(Person, :count).by(1)
       expect(flash[:notice]).to eq ["1 Person (Leader) wurde erfolgreich importiert."]
       expect(flash[:alert]).not_to be_present
-      is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: "Leader")
+      is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Leader")
     end
 
     context "mapping misses attribute" do
-      let(:mapping) { { email: :email, role: role_type.sti_name } }
+      let(:mapping) { {email: :email, role: role_type.sti_name} }
       let(:data) { generate_csv(%w{name email}, %w{foo foo@bar.net}) }
 
       it "imports first person and displays errors for second person" do
         expect { post :create, params: required_params }.to change(Person, :count).by(0)
         expect(flash[:alert]).to eq ["1 Person (Leader) wurde nicht importiert."]
-        is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: "Leader")
+        is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Leader")
       end
     end
 
     context "trying to update email of user with superior permissions" do
       let(:role_type) { Group::BottomLayer::Member }
-      let(:mapping) { { Nachname: "last_name",
-                        Geburtsdatum: "birthday",
-                        Email: "email"} }
+      let(:mapping) { {Nachname: "last_name",
+                       Geburtsdatum: "birthday",
+                       Email: "email"} }
 
       let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
       let(:group) { groups(:bottom_layer_one) }
 
       let(:data) { generate_csv(%w{Nachname Email Geburtsdatum},
-                                [person.last_name, "abusive_email@example.com", person.birthday],
-                                ["new_user", "new_user@example.com", Time.now]) }
+        [person.last_name, "abusive_email@example.com", person.birthday],
+        ["new_user", "new_user@example.com", Time.now]) }
 
-      let(:required_params) { { group_id: group.id,
-                                data: data,
-                                role_type: role_type.sti_name,
-                                field_mappings: mapping,
-                                update_behaviour: "override"} }
+      let(:required_params) { {group_id: group.id,
+                               data: data,
+                               role_type: role_type.sti_name,
+                               field_mappings: mapping,
+                               update_behaviour: "override"} }
 
       before { sign_in(user) }
 
@@ -155,13 +150,13 @@ describe Person::CsvImportsController do
     end
 
     context "invalid phone number value" do
-      let(:mapping) { { Vorname: "first_name", Telefon: "phone_number_vater", role: role_type.sti_name } }
-      let(:data) { generate_csv(%w{Vorname Telefon}, %w{foo }) }
+      let(:mapping) { {Vorname: "first_name", Telefon: "phone_number_vater", role: role_type.sti_name} }
+      let(:data) { generate_csv(%w{Vorname Telefon}, %w{foo}) }
 
       it "is ignored" do
         expect { post :create, params: required_params }.to change(Person, :count).by(1)
         expect(flash[:alert]).to be_blank
-        is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: "Leader")
+        is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Leader")
       end
     end
 
@@ -170,7 +165,7 @@ describe Person::CsvImportsController do
       let(:last_person) { Person.last }
 
       context "mapping single attribute" do
-        let(:mapping) { { first_name: "first_name" } }
+        let(:mapping) { {first_name: "first_name"} }
 
         it "imports first name of all 4 people" do
           expect { post :create, params: required_params }.to change(Person, :count).by(4)
@@ -191,11 +186,9 @@ describe Person::CsvImportsController do
         end
       end
 
-
       context "with add request" do
-
         let(:role_type) { Group::BottomGroup::Member }
-        let(:mapping) { { Vorname: "first_name", Nachname: "last_name", Geburtsdatum: "birthday", Email: "email", Ort: "town" } }
+        let(:mapping) { {Vorname: "first_name", Nachname: "last_name", Geburtsdatum: "birthday", Email: "email", Ort: "town"} }
 
         let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
         let(:person) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group)).person }
@@ -204,12 +197,13 @@ describe Person::CsvImportsController do
         let(:data) { generate_csv(%w{Nachname Email Ort}, [person.last_name, person.email, "Wabern"]) }
 
         before { sign_in(user) }
+
         before { groups(:top_layer).update_column(:require_person_add_requests, true) }
 
         it "creates request" do
           person # create
           post :create, params: required_params.merge(update_behaviour: "override")
-          is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: "Member")
+          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Member")
 
           expect(person.reload.roles.count).to eq(1)
           expect(person.town).not_to eq("Wabern")
@@ -224,7 +218,7 @@ describe Person::CsvImportsController do
           Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: user)
 
           post :create, params: required_params.merge(update_behaviour: "override")
-          is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: "Member")
+          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Member")
 
           expect(person.reload.roles.count).to eq(2)
           expect(person.town).to eq("Wabern")
@@ -242,7 +236,7 @@ describe Person::CsvImportsController do
 
           post :create, params: required_params
 
-          is_expected.to redirect_to group_people_path(group, filters: { role: { role_type_ids: [role_type.id] } }, name: "Member")
+          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}}, name: "Member")
           expect(person.reload.roles.count).to eq(1)
           expect(person.add_requests.count).to eq(1)
           expect(flash[:alert].join).to match(/Zugriffsanfrage .*erhalten/)
@@ -252,7 +246,7 @@ describe Person::CsvImportsController do
 
     context "doublette handling" do
       context "multiple updates to single person" do
-        let(:mapping) { { vorname: :first_name, email: :email, nickname: :nickname } }
+        let(:mapping) { {vorname: :first_name, email: :email, nickname: :nickname} }
         let(:data) { generate_csv(%w{vorname email nickname}, %w{foo foo@bar.net foobar}, %w{bar bar@bar.net barfoo}) }
 
         before do
@@ -272,7 +266,7 @@ describe Person::CsvImportsController do
       end
 
       context "csv data matches multiple people" do
-        let(:mapping) { { vorname: :first_name, email: :email, role: role_type.sti_name } }
+        let(:mapping) { {vorname: :first_name, email: :email, role: role_type.sti_name} }
         let(:data) { generate_csv(%w{vorname email}, %w{foo foo@bar.net}) }
 
         it "reports error if multiple candidates for doublettes are found" do

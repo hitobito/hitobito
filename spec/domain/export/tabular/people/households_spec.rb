@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 #  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +8,6 @@
 require "spec_helper"
 
 describe Export::Tabular::People::Households do
-
   let(:leader) { people(:top_leader) }
   let(:member) { people(:bottom_member) }
 
@@ -48,5 +48,4 @@ describe Export::Tabular::People::Households do
     expect(data[0].shift).to eq "Bottom Member, Top Leader"
     expect(data[0]).to eq ["Greatstreet 345", "3456", "Greattown", "Schweiz", "Bottom One"]
   end
-
 end

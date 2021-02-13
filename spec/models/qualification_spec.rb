@@ -19,7 +19,6 @@
 require "spec_helper"
 
 describe Qualification do
-
   let(:qualification) { Fabricate(:qualification) }
   let(:person) { qualification.person }
 
@@ -61,26 +60,30 @@ describe Qualification do
   end
 
   context "creating a second qualification of identical kind with validity" do
-    before     { Fabricate(:qualification, args.merge(start_at: Date.parse("2011-3-3").to_date)) }
-    subject    { Fabricate.build(:qualification, args.merge(start_at: date.to_date)) }
-    let(:args) { { person: person, qualification_kind: qualification_kinds(:sl), start_at: date } }
+    before { Fabricate(:qualification, args.merge(start_at: Date.parse("2011-3-3").to_date)) }
+
+    subject { Fabricate.build(:qualification, args.merge(start_at: date.to_date)) }
+
+    let(:args) { {person: person, qualification_kind: qualification_kinds(:sl), start_at: date} }
 
     context "on same day" do
       let(:date) { Date.parse("2011-3-3") }
-      it { is_expected.not_to be_valid  }
+
+      it { is_expected.not_to be_valid }
     end
 
     context "later in same year" do
       let(:date) { Date.parse("2011-5-5") }
-      it { is_expected.to be_valid  }
+
+      it { is_expected.to be_valid }
     end
 
     context "in next year" do
       let(:date) { Date.parse("2012-5-5") }
-      it { is_expected.to be_valid  }
+
+      it { is_expected.to be_valid }
     end
   end
-
 
   context "#set_finish_at" do
     let(:date) { Time.zone.today }
@@ -121,6 +124,7 @@ describe Qualification do
 
   context "#active" do
     subject { qualification }
+
     it { is_expected.to be_active }
   end
 
@@ -204,11 +208,12 @@ describe Qualification do
 
     context "#reactivateable? takes parameter" do
       let(:start_date) { today - 3.years }
+
       before { kind.update_column(:reactivateable, 2) }
 
       it { expect(q).to be_reactivateable }
       it { expect(q.reactivateable?(today + 2.years)).to be_falsey }
-        it { expect(Qualification.reactivateable(today + 2.years)).not_to include q }
+      it { expect(Qualification.reactivateable(today + 2.years)).not_to include q }
     end
   end
 

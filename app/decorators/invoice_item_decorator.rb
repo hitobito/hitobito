@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 class InvoiceItemDecorator < ApplicationDecorator
   decorates :invoice_item
 
@@ -28,5 +27,4 @@ class InvoiceItemDecorator < ApplicationDecorator
   def format_currency(value)
     invoice.decorate.format_currency(value)
   end
-
 end

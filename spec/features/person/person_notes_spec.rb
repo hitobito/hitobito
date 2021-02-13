@@ -8,8 +8,8 @@
 require "spec_helper"
 
 describe "Person Notes", js: true do
-
   subject { page }
+
   let(:group) { groups(:top_group) }
   let(:leader) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group).person }
   let(:secretary) { Fabricate(Group::TopGroup::LocalSecretary.name.to_sym, group: group).person }
@@ -35,7 +35,6 @@ describe "Person Notes", js: true do
       # submit without input
       find("#new_note button").click
       expect(page).to have_selector("#notes-error", text: "Text muss ausgefüllt werden")
-
 
       # submit with input
       expect do
@@ -65,5 +64,4 @@ describe "Person Notes", js: true do
       end.to change { Note.count }.by(-1)
     end
   end
-
 end

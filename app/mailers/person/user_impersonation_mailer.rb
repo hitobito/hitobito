@@ -7,7 +7,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::UserImpersonationMailer < ApplicationMailer
-
   CONTENT_USER_IMPERSONATION = "content_user_impersonation".freeze
 
   def completed(recipient, taker_name)

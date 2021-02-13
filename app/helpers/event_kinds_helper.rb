@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module EventKindsHelper
-
   def labeled_qualification_kinds_field(form, collection, category, role, title)
     selected = entry.qualification_kinds(category, role)
 
@@ -15,10 +14,10 @@ module EventKindsHelper
 
     form.labeled(title) do
       select_tag("event_kind[qualification_kinds][#{role}][#{category}][qualification_kind_ids]",
-                 options_from_collection_for_select(options, :id, :to_s,
-                                                    selected.collect(&:id)),
-                 multiple: true,
-                 class: "span6")
+        options_from_collection_for_select(options, :id, :to_s,
+          selected.collect(&:id)),
+        multiple: true,
+        class: "span6")
     end
   end
 
@@ -34,5 +33,4 @@ module EventKindsHelper
       ids.collect { |id| kinds[id].first.to_s }.sort.to_sentence
     end
   end
-
 end

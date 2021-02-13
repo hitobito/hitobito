@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Cookie
-
   attr_accessor :cookies, :name, :attributes
 
   def initialize(cookies, name, attributes)
@@ -33,7 +32,7 @@ class Cookie
   end
 
   def with_expiration(values)
-    { value: values.to_json, expires: 1.day.from_now }
+    {value: values.to_json, expires: 1.day.from_now}
   end
 
   def to_value(options)

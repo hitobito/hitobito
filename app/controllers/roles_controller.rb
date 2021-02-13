@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class RolesController < CrudController
-
   respond_to :js
 
   self.nesting = Group
@@ -246,5 +245,4 @@ class RolesController < CrudController
   def set_person_id
     @person_id = Role.with_deleted.find(params[:role_id]).person_id if params[:role_id]
   end
-
 end

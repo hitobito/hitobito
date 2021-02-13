@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module PeopleHelper
-
   def format_gender(person)
     person.gender_label
   end
@@ -86,10 +85,10 @@ module PeopleHelper
   end
 
   def person_address_url(person)
-    query_params = { street: person.address,
-                     postalcode: person.zip_code,
-                     city: person.town,
-                     country_codes: person.country }.to_query
+    query_params = {street: person.address,
+                    postalcode: person.zip_code,
+                    city: person.town,
+                    country_codes: person.country}.to_query
 
     openstreetmap_url(query_params)
   end
@@ -111,5 +110,4 @@ module PeopleHelper
   def person_event_feed_url
     event_feed_url(token: current_user.event_feed_token, format: :ics)
   end
-
 end

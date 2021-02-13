@@ -9,7 +9,6 @@ require "spec_helper"
 require "csv"
 
 describe Export::Tabular::People::PeopleFull do
-
   let(:person) { people(:top_leader) }
   let(:list) { [person] }
   let(:data) { Export::Tabular::People::PeopleFull.export(:csv, list) }
@@ -37,7 +36,7 @@ describe Export::Tabular::People::PeopleFull do
       expect(csv.headers).to eq([
         "Vorname", "Nachname", "Firmenname", "Übername", "Firma", "Haupt-E-Mail",
         "Adresse", "PLZ", "Ort", "Land", "Geschlecht", "Geburtstag",
-        "Zusätzliche Angaben", "Hauptebene", "Rollen",  "Tags", "Weitere E-Mail Vater",
+        "Zusätzliche Angaben", "Hauptebene", "Rollen", "Tags", "Weitere E-Mail Vater",
         "Telefonnummer Vater", "Social Media Adresse Skype", "Elternteil"])
     end
 

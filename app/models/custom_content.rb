@@ -15,15 +15,14 @@
 #
 
 class CustomContent < ActiveRecord::Base
-
   include Globalized
   translates :label, :subject
   translates_rich_text :body
 
   # specify validations for translated attributes explicitly
   validates :label, presence: true
-  validates :label, :subject, length: { maximum: 255, allow_nil: true }
-  validates :body, length: { allow_nil: true, maximum: 2**16 - 1 }, no_attachments: true
+  validates :label, :subject, length: {maximum: 255, allow_nil: true}
+  validates :body, length: {allow_nil: true, maximum: 2**16 - 1}, no_attachments: true
   validates_by_schema
 
   validate :assert_required_placeholders_are_used
@@ -91,8 +90,8 @@ class CustomContent < ActiveRecord::Base
     non_existing = (placeholders.keys - placeholders_list).presence
     if non_existing
       raise(ArgumentError,
-            "Placeholder(s) #{non_existing.join(', ')} given, " \
-            "but not defined for this custom content")
+        "Placeholder(s) #{non_existing.join(', ')} given, " \
+        "but not defined for this custom content")
     end
   end
 end

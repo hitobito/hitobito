@@ -99,5 +99,4 @@ module DecoratesBeforeRendering
       raise ArgumentError, "#{ivar.inspect} does not have an associated model"
     end
   end
-
 end

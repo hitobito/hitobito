@@ -7,18 +7,17 @@
 
 module Subscriber
   class UserController < ApplicationController
-
     before_action :authorize
 
     def create
       subscription.excluded = false
       if subscription.save
         redirect_to(mailing_list_path,
-                    notice: translate(:success))
+          notice: translate(:success))
       else
         redirect_to(mailing_list_path,
-                    alert: translate(:failure,
-                                     errors: subscription.errors.full_messages.join(", ")))
+          alert: translate(:failure,
+            errors: subscription.errors.full_messages.join(", ")))
       end
     end
 
@@ -57,6 +56,5 @@ module Subscriber
     def mailing_list_path
       group_mailing_list_path(group_id: mailing_list.group.id, id: mailing_list.id)
     end
-
   end
 end

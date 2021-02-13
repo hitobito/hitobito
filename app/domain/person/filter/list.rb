@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::List
-
   attr_reader :group, :user, :chain, :range, :name, :multiple_groups
 
   def initialize(group, user, params = {})
@@ -80,5 +79,4 @@ class Person::Filter::List
     entries = entries.order_by_role if Settings.people.default_sort == "role"
     entries.order_by_name
   end
-
 end

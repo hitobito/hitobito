@@ -12,15 +12,15 @@ class UserSerializer < ApplicationSerializer
     property :href, h.group_person_url(item.default_group_id, item, format: :json)
 
     map_properties :first_name,
-                   :last_name,
-                   :nickname,
-                   :company_name,
-                   :company,
-                   :gender,
-                   :email,
-                   :authentication_token,
-                   :last_sign_in_at,
-                   :current_sign_in_at
+      :last_name,
+      :nickname,
+      :company_name,
+      :company,
+      :gender,
+      :email,
+      :authentication_token,
+      :last_sign_in_at,
+      :current_sign_in_at
 
     entity :primary_group, item.primary_group, GroupLinkSerializer
 

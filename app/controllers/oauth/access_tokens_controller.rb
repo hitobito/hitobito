@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 module Oauth
   class AccessTokensController < CrudController
     self.optional_nesting = Oauth::Application

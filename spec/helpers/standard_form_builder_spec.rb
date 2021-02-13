@@ -3,7 +3,6 @@
 require "spec_helper"
 
 describe "StandardFormBuilder" do
-
   include FormatHelper
   include I18nHelper
   include FormHelper
@@ -21,20 +20,19 @@ describe "StandardFormBuilder" do
   after(:all) { reset_db }
 
   let(:entry) { CrudTestModel.first }
-  let(:form)  { StandardFormBuilder.new(:entry, entry, self, {}) }
+  let(:form) { StandardFormBuilder.new(:entry, entry, self, {}) }
 
   describe "#input_field" do
-
-    { name: :string_field,
-      password: :password_field,
-      remarks: :text_area,
-      children: :integer_field,
-      human: :boolean_field,
-      birthdate: :date_field,
-      gets_up_at: :time_field,
-      companion_id: :belongs_to_field,
-      other_ids: :has_many_field,
-      more_ids: :has_many_field,
+    {name: :string_field,
+     password: :password_field,
+     remarks: :text_area,
+     children: :integer_field,
+     human: :boolean_field,
+     birthdate: :date_field,
+     gets_up_at: :time_field,
+     companion_id: :belongs_to_field,
+     other_ids: :has_many_field,
+     more_ids: :has_many_field,
     }.each do |attr, method|
       it "dispatches #{attr} attr to #{method}" do
         expect(form).to receive(method).with(attr, {})
@@ -43,7 +41,6 @@ describe "StandardFormBuilder" do
 
       it { expect(form.input_field(attr)).to be_html_safe }
     end
-
   end
 
   describe "#labeled_input_fields" do
@@ -58,26 +55,31 @@ describe "StandardFormBuilder" do
   describe "#labeled_input_field" do
     context "when required" do
       subject { form.labeled_input_field(:name) }
+
       it { is_expected.to include('class="control-group required"') }
     end
 
     context "when not required" do
       subject { form.labeled_input_field(:remarks) }
+
       it { is_expected.not_to include('class="control-group required"') }
     end
 
     context "with help text" do
       subject { form.labeled_input_field(:name, help: "Some Help") }
+
       it { is_expected.to include(form.help_block("Some Help")) }
     end
 
     context "with label" do
       subject { form.labeled_input_field(:name, label: "Some Caption") }
+
       it { is_expected.to include(form.label(:name, "Some Caption", class: "control-label")) }
     end
 
     context "with addon" do
       subject { form.labeled_input_field(:name, addon: "Some Addon") }
+
       it { is_expected.to match(/class="input-append"/) }
       it { is_expected.to match(/class="add-on"/) }
       it { is_expected.to match(/Some Addon/) }
@@ -126,10 +128,10 @@ describe "StandardFormBuilder" do
     end
 
     it "displays a message for an empty list" do
-       @others = []
-       f = form.has_many_field(:other_ids)
-       expect(f).to match /keine verfügbar/m
-       expect(f.scan("</option>").size).to eq(0)
+      @others = []
+      f = form.has_many_field(:other_ids)
+      expect(f).to match /keine verfügbar/m
+      expect(f.scan("</option>").size).to eq(0)
     end
   end
 
@@ -181,7 +183,6 @@ describe "StandardFormBuilder" do
         is_expected.to match /label [^>]*for.+hoho/
       end
     end
-
   end
 
   describe "#labeled" do

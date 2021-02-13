@@ -30,6 +30,5 @@ module PaymentSlips
     def bank_with_reference?
       bank? && with_reference?
     end
-
   end
 end

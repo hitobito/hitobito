@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 # == Schema Information
 #
 # Table name: event_kinds
@@ -18,7 +19,6 @@
 require "spec_helper"
 
 describe Event::Kind do
-
   let(:slk) { event_kinds(:slk) }
 
   it "does not destroy translations on soft destroy" do
@@ -28,5 +28,4 @@ describe Event::Kind do
   it "does destroy translations on hard destroy" do
     expect { slk.really_destroy! }.to change { Event::Kind::Translation.count }.by(-1)
   end
-
 end

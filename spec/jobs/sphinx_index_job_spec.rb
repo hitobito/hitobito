@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe SphinxIndexJob do
-
   subject { SphinxIndexJob.new }
 
   it "disables job if sphinx running on external host" do
@@ -18,5 +17,4 @@ describe SphinxIndexJob do
       subject.perform
     end.to change { Delayed::Job.count }.by(-1)
   end
-
 end

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Export::Tabular::People::ParticipationsFull do
-
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
   let(:list) { [participation] }
@@ -28,11 +27,11 @@ describe Export::Tabular::People::ParticipationsFull do
     let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
     let(:question) { events(:top_course).questions.first }
 
-    before {  participation.init_answers }
+    before { participation.init_answers }
+
     it "has keys and values" do
       expect(subject[:"question_#{event_questions(:top_ov).id}"]).to eq "GA oder Halbtax?"
       expect(subject.keys.select { |key| key =~ /question/ }.size).to eq(3)
     end
   end
-
 end

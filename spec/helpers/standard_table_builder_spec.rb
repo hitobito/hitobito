@@ -5,7 +5,7 @@ describe "StandardTableBuilder" do
   include FormatHelper
 
   let(:entries) { %w(foo bahr) }
-  let(:table)   { StandardTableBuilder.new(entries, self) }
+  let(:table) { StandardTableBuilder.new(entries, self) }
 
   def format_size(obj) #:nodoc:
     "#{obj.size} chars"
@@ -116,5 +116,4 @@ describe "StandardTableBuilder" do
 
     assert_dom_equal dom, table.to_html
   end
-
 end

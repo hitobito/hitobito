@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::TagsController do
-
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
 
@@ -28,29 +27,29 @@ describe Person::TagsController do
     end
 
     it "returns empty array if no :q param is given" do
-      get :query, params: { group_id: group.id, person_id: bottom_member.id }
+      get :query, params: {group_id: group.id, person_id: bottom_member.id}
       expect(JSON.parse(response.body)).to eq([])
     end
 
     it "returns empty array if no tag matches" do
-      get :query, params: { group_id: group.id, person_id: bottom_member.id, q: "lipsum" }
+      get :query, params: {group_id: group.id, person_id: bottom_member.id, q: "lipsum"}
       expect(JSON.parse(response.body)).to eq([])
     end
 
     it "returns empty array if :q param is not at least 3 chars long" do
-      get :query, params: { group_id: group.id, person_id: bottom_member.id, q: "or" }
+      get :query, params: {group_id: group.id, person_id: bottom_member.id, q: "or"}
       expect(JSON.parse(response.body)).to eq([])
     end
 
     it "returns matching and unassigned tags if :q param at least 3 chars long" do
-      get :query, params: { group_id: group.id, person_id: bottom_member.id, q: "ore" }
+      get :query, params: {group_id: group.id, person_id: bottom_member.id, q: "ore"}
       expect(JSON.parse(response.body)).to eq([{"label" => "lorem"}, {"label" => "loremipsum"}, {"label" => "morelim"}])
     end
 
     it "does not return category_validation tags" do
       create_tag(top_leader, PersonTags::Validation::EMAIL_PRIMARY_INVALID)
       create_tag(top_leader, PersonTags::Validation::EMAIL_ADDITIONAL_INVALID)
-      get :query, params: { group_id: group.id, person_id: bottom_member.id, q: "invalid" }
+      get :query, params: {group_id: group.id, person_id: bottom_member.id, q: "invalid"}
       expect(JSON.parse(response.body)).to eq([])
     end
   end
@@ -58,10 +57,10 @@ describe Person::TagsController do
   describe "POST #create" do
     it "creates person tag" do
       post :create, params: {
-                      group_id: bottom_member.groups.first.id,
-                      person_id: bottom_member.id,
-                      acts_as_taggable_on_tag: { name: "lorem" }
-                    }
+        group_id: bottom_member.groups.first.id,
+        person_id: bottom_member.id,
+        acts_as_taggable_on_tag: {name: "lorem"}
+      }
 
       expect(bottom_member.tags.count).to eq(1)
       expect(assigns(:tags).first.first).to eq(:other)
@@ -71,10 +70,10 @@ describe Person::TagsController do
 
     it "ignores creation if name blank" do
       post :create, params: {
-                      group_id: bottom_member.groups.first.id,
-                      person_id: bottom_member.id,
-                      acts_as_taggable_on_tag: { name: "" }
-                    }
+        group_id: bottom_member.groups.first.id,
+        person_id: bottom_member.id,
+        acts_as_taggable_on_tag: {name: ""}
+      }
 
       expect(bottom_member.tags.count).to eq(0)
       is_expected.to redirect_to group_person_path(bottom_member.groups.first, bottom_member)
@@ -126,5 +125,4 @@ describe Person::TagsController do
       context: "tags"
     )
   end
-
 end

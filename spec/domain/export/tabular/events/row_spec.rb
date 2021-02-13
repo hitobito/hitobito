@@ -8,13 +8,12 @@
 require "spec_helper"
 
 describe Export::Tabular::Events::Row do
-
   let(:max_dates) { 3 }
   let(:contactable_keys) { [:name, :address, :zip_code, :town, :email, :phone_numbers] }
   let(:person) { Fabricate(:person_with_address_and_phone) }
   let(:course) do
     Fabricate(:course, state: "some state", groups: [groups(:top_group)],
-              description: "some description", number: 123, location: "somewhere")
+                       description: "some description", number: 123, location: "somewhere")
   end
 
   let(:row) { Export::Tabular::Events::Row.new(course) }
@@ -60,7 +59,9 @@ describe Export::Tabular::Events::Row do
 
     context "with contact" do
       let(:contactable) { person }
+
       before { course.contact = person }
+
       it_should_behave_like "contactable with value"
     end
   end
@@ -73,6 +74,7 @@ describe Export::Tabular::Events::Row do
     context "with leader" do
       let(:participation) { Fabricate(:event_participation, event: course) }
       let!(:contactable) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation).person }
+
       it_should_behave_like "contactable with value"
     end
   end
@@ -92,5 +94,4 @@ describe Export::Tabular::Events::Row do
       expect(row.fetch(:date_2_label)).to eq nil
     end
   end
-
 end

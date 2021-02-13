@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe PersonLayerWritables do
-
   let(:user) { role.person.reload }
   let(:ability) { PersonLayerWritables.new(user) }
   let(:accessibles) { Person.accessible_by(ability) }

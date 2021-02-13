@@ -7,7 +7,6 @@
 
 module Export::Tabular::People
   class Households < Export::Tabular::Base
-
     self.model_class = ::Person
     self.row_class = HouseholdRow
 
@@ -66,6 +65,5 @@ module Export::Tabular::People
       person.last_name = last_name
       person
     end
-
   end
 end

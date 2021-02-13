@@ -5,11 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 require "spec_helper"
 
 describe Doorkeeper::OpenidConnect::DiscoveryController do
-
   describe "GET#keys" do
     it "shows the keys" do
       get :keys

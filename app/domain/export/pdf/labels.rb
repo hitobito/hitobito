@@ -7,7 +7,6 @@
 
 module Export::Pdf
   class Labels
-
     attr_reader :format
 
     def initialize(format)
@@ -26,8 +25,8 @@ module Export::Pdf
         name = to_name(contactable)
 
         print_address_in_bounding_box(pdf,
-                                      address(contactable, name),
-                                      position(pdf, i))
+          address(contactable, name),
+          position(pdf, i))
       end
 
       pdf.render
@@ -46,8 +45,8 @@ module Export::Pdf
     # print with automatic line wrap
     def print_address_in_bounding_box(pdf, address, pos)
       pdf.bounding_box(pos,
-                       width: format.width.mm - min_border,
-                       height: format.height.mm - min_border) do
+        width: format.width.mm - min_border,
+        height: format.height.mm - min_border) do
         left = format.padding_left.mm
         top = format.height.mm - format.padding_top.mm - min_border
         # pdf.stroke_bounds
@@ -105,13 +104,12 @@ module Export::Pdf
     def print_pp_post(pdf, at)
       pdf.text_box("<u><font size='12'><b>P.P.</b></font> " \
                    "<font size='8'>#{format.pp_post}  Post CH AG</font></u>",
-                   inline_format: true,
-                   at: at)
+        inline_format: true,
+        at: at)
     end
 
     def min_border
       Settings.pdf.labels.min_border.to_i.mm
     end
-
   end
 end

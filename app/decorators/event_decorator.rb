@@ -86,11 +86,11 @@ class EventDecorator < ApplicationDecorator
   def issued_qualifications_info_for_leaders
     qualis = kind.qualification_kinds("qualification", "leader").list.to_a
     prolongs = kind.qualification_kinds("prolongation", "leader").list.to_a
-    variables = { until: quali_date,
-                  model: quali_model_name(qualis),
-                  issued: qualis.join(", "),
-                  prolonged: prolongs.join(", "),
-                  count: prolongs.size }
+    variables = {until: quali_date,
+                 model: quali_model_name(qualis),
+                 issued: qualis.join(", "),
+                 prolonged: prolongs.join(", "),
+                 count: prolongs.size}
 
     translate_issued_qualifications_info(qualis, prolongs, variables)
   end
@@ -98,11 +98,11 @@ class EventDecorator < ApplicationDecorator
   def issued_qualifications_info_for_participants
     qualis = kind.qualification_kinds("qualification", "participant").list.to_a
     prolongs = kind.qualification_kinds("prolongation", "participant").list.to_a
-    variables = { until: quali_date,
-                  model: quali_model_name(qualis),
-                  issued: qualis.join(", "),
-                  prolonged: prolongs.join(", "),
-                  count: prolongs.size }
+    variables = {until: quali_date,
+                 model: quali_model_name(qualis),
+                 issued: qualis.join(", "),
+                 prolonged: prolongs.join(", "),
+                 count: prolongs.size}
 
     translate_issued_qualifications_info(qualis, prolongs, variables)
   end
@@ -112,11 +112,11 @@ class EventDecorator < ApplicationDecorator
     if groups.size > 1
       groups_label = h.truncate(groups.join(", "), count: 50, separator: ",")
     end
-    { id: id, label: "#{model} (#{groups_label})" }
+    {id: id, label: "#{model} (#{groups_label})"}
   end
 
   def as_quicksearch
-    { id: id, label: label_with_group, type: :event, icon: icons.fetch(type, "calendar-alt") }
+    {id: id, label: label_with_group, type: :event, icon: icons.fetch(type, "calendar-alt")}
   end
 
   def label_with_group
@@ -146,5 +146,4 @@ class EventDecorator < ApplicationDecorator
   def quali_date
     h.f(qualification_date)
   end
-
 end

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Messages::TextMessageProvider::Aspsms do
-
   let(:config) do
     GroupSetting.new(
       username: "goofy",
@@ -18,29 +17,29 @@ describe Messages::TextMessageProvider::Aspsms do
   end
   let(:provider) { described_class.new(config: config) }
   let(:success_response) do
-    { StatusCode: "1",
-      StatusInfo: "OK" }.to_json
+    {StatusCode: "1",
+     StatusInfo: "OK"}.to_json
   end
 
   let(:delivery_response) do
-    { StatusCode: "0",
-      StatusInfo: "OK",
-      DeliveryNotifications: [
-        { TransactionReferenceNumber: "4242",
-          DeliveryStatus: "0",
-          DeliveryStatusDescription: "Delivered",
-          SubmissionDate: "2021-01-21T13:46:28Z",
-          NotificationDate: "2021-01-21T13:46:34Z",
-          Reasoncode: "000",
-          ReasoncodeDescription: "" },
-        { TransactionReferenceNumber: "4243",
-          DeliveryStatus: "-1",
-          DeliveryStatusDescription: "Not yet submitted or rejected",
-          SubmissionDate: "2021-01-21T13:49:28Z",
-          NotificationDate: "2021-01-21T13:49:34Z",
-          Reasoncode: ":",
-          ReasoncodeDescription: "" }
-      ] }.to_json
+    {StatusCode: "0",
+     StatusInfo: "OK",
+     DeliveryNotifications: [
+        {TransactionReferenceNumber: "4242",
+         DeliveryStatus: "0",
+         DeliveryStatusDescription: "Delivered",
+         SubmissionDate: "2021-01-21T13:46:28Z",
+         NotificationDate: "2021-01-21T13:46:34Z",
+         Reasoncode: "000",
+         ReasoncodeDescription: ""},
+        {TransactionReferenceNumber: "4243",
+         DeliveryStatus: "-1",
+         DeliveryStatusDescription: "Not yet submitted or rejected",
+         SubmissionDate: "2021-01-21T13:49:28Z",
+         NotificationDate: "2021-01-21T13:49:34Z",
+         Reasoncode: ":",
+         ReasoncodeDescription: ""}
+      ]}.to_json
   end
 
   context "#send" do
@@ -64,7 +63,7 @@ describe Messages::TextMessageProvider::Aspsms do
     end
 
     it "handles invalid provider credentials" do
-      auth_error_response = { StatusCode: "3", StatusInfo: "Authorization failed." }.to_json
+      auth_error_response = {StatusCode: "3", StatusInfo: "Authorization failed."}.to_json
       stub_request(:post, "https://json.aspsms.com/SendSimpleTextSMS")
         .with(body: send_body, headers: headers).to_return(status: 200, body: auth_error_response)
 
@@ -93,7 +92,7 @@ describe Messages::TextMessageProvider::Aspsms do
     end
 
     it "handles invalid provider credentials" do
-      auth_error_response = { StatusCode: "3", StatusInfo: "Authorization failed." }.to_json
+      auth_error_response = {StatusCode: "3", StatusInfo: "Authorization failed."}.to_json
       stub_request(:post, "https://json.aspsms.com/InquireDeliveryNotifications")
         .with(body: delivery_report_body, headers: headers)
         .to_return(status: 200, body: auth_error_response)
@@ -108,23 +107,23 @@ describe Messages::TextMessageProvider::Aspsms do
   private
 
   def send_body
-    { UserName: "goofy",
-      Password: "max42",
-      Originator: "Acme",
-      MessageText: "Hi Mickey! how are you today?",
-      Recipients: recipients[0..999] }.to_json
+    {UserName: "goofy",
+     Password: "max42",
+     Originator: "Acme",
+     MessageText: "Hi Mickey! how are you today?",
+     Recipients: recipients[0..999]}.to_json
   end
 
   def delivery_report_body
-    { UserName: "goofy",
-      Password: "max42",
-      TransactionReferenceNumbers: "4242;4243" }.to_json
+    {UserName: "goofy",
+     Password: "max42",
+     TransactionReferenceNumbers: "4242;4243"}.to_json
   end
 
   def headers
-    { Accept: "*/*",
-      'Accept-Encoding': "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-      Host: "json.aspsms.com" }
+    {Accept: "*/*",
+     'Accept-Encoding': "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+     Host: "json.aspsms.com"}
   end
 
   def recipients

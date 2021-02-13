@@ -7,20 +7,20 @@ require "spec_helper"
 require "digest/md5"
 
 describe Synchronize::Mailchimp::Synchronizator do
-  let(:user)         { people(:top_leader) }
-  let(:other)        { people(:bottom_member) }
+  let(:user) { people(:top_leader) }
+  let(:other) { people(:bottom_member) }
   let(:mailing_list) { mailing_lists(:leaders) }
-  let(:sync)         { Synchronize::Mailchimp::Synchronizator.new(mailing_list) }
-  let(:client)       { sync.client }
+  let(:sync) { Synchronize::Mailchimp::Synchronizator.new(mailing_list) }
+  let(:client) { sync.client }
 
-  let(:tags)         { %w(foo bar) }
+  let(:tags) { %w(foo bar) }
   let(:merge_field) {
-    [ "Gender", "dropdown", { choices: %w(m w) }, ->(p) { person.gender } ]
+    ["Gender", "dropdown", {choices: %w(m w)}, ->(p) { person.gender }]
   }
 
   def segments(names)
     names.collect.each_with_index do |name, index|
-      { id: index, name: name, member_count: 0 }
+      {id: index, name: name, member_count: 0}
     end
   end
 
@@ -29,7 +29,7 @@ describe Synchronize::Mailchimp::Synchronizator do
   end
 
   context "#missing_merge_fields" do
-    before  { sync.merge_fields = [] }
+    before { sync.merge_fields = [] }
 
     subject { sync.missing_merge_fields }
 
@@ -46,7 +46,7 @@ describe Synchronize::Mailchimp::Synchronizator do
 
     it "is empty when merge_field exists locally and remotely" do
       sync.merge_fields = [merge_field]
-      allow(sync.client).to receive(:fetch_merge_fields).and_return([{ tag: "GENDER", }])
+      allow(sync.client).to receive(:fetch_merge_fields).and_return([{tag: "GENDER",}])
       expect(subject).to be_empty
     end
   end
@@ -243,7 +243,6 @@ describe Synchronize::Mailchimp::Synchronizator do
       expect(subject).to be_empty
     end
 
-
     it "includes person if has changed a merge field" do
       mailing_list.subscriptions.create!(subscriber: user)
       expect(sync.client).to receive(:fetch_members).and_return([member(user)])
@@ -262,7 +261,7 @@ describe Synchronize::Mailchimp::Synchronizator do
 
   context "#perform" do
     before do
-      sync.merge_fields  = []
+      sync.merge_fields = []
 
       allow(client).to receive(:fetch_merge_fields).and_return([])
       allow(client).to receive(:fetch_segments).and_return([])
@@ -291,25 +290,25 @@ describe Synchronize::Mailchimp::Synchronizator do
 
       it "has result for successful sync" do
         allow(client).to receive(:fetch_members).and_return([member(user)])
-        expect(client).to receive(:unsubscribe_members).with([user.email]).and_return(batch_result(1,1,0))
+        expect(client).to receive(:unsubscribe_members).with([user.email]).and_return(batch_result(1, 1, 0))
         sync.perform
         expect(subject.state).to eq :success
       end
 
       it "has result for partial sync" do
         allow(client).to receive(:fetch_members).and_return([member(user)])
-        expect(client).to receive(:unsubscribe_members).with([user.email]).and_return(batch_result(2,1,1))
+        expect(client).to receive(:unsubscribe_members).with([user.email]).and_return(batch_result(2, 1, 1))
         sync.perform
         expect(subject.state).to eq :partial
       end
 
       it "has result for two operations sync" do
         mailing_list.subscriptions.create!(subscriber: user)
-        allow(client).to receive(:fetch_members).and_return([{ email_address: "other@example.com" }])
+        allow(client).to receive(:fetch_members).and_return([{email_address: "other@example.com"}])
         expect(client).to receive(:subscribe_members) { |subscribers|
-          expect(subscribers.map(&:person) ).to eq([user])
-        }.and_return(batch_result(1,1,0))
-        expect(client).to receive(:unsubscribe_members).with(["other@example.com"]).and_return(batch_result(2,1,1))
+          expect(subscribers.map(&:person)).to eq([user])
+        }.and_return(batch_result(1, 1, 0))
+        expect(client).to receive(:unsubscribe_members).with(["other@example.com"]).and_return(batch_result(2, 1, 1))
         sync.perform
         expect(subject.state).to eq :partial
       end
@@ -364,8 +363,8 @@ describe Synchronize::Mailchimp::Synchronizator do
         mailing_list.subscriptions.create!(subscriber: user)
 
         expect(client).to receive(:subscribe_members) { |subscribers|
-          expect(subscribers.map(&:person) ).to eq([user])
-        }.and_return(batch_result(1,1,0))
+          expect(subscribers.map(&:person)).to eq([user])
+        }.and_return(batch_result(1, 1, 0))
         expect(client).to receive(:unsubscribe_members).with([])
 
         sync.perform
@@ -388,13 +387,13 @@ describe Synchronize::Mailchimp::Synchronizator do
 
         user.update(first_name: "topster")
         expect(client).to receive(:update_members) { |subscribers|
-          expect(subscribers.map(&:person) ).to eq([user])
-        }.and_return(batch_result(1,1,0))
+          expect(subscribers.map(&:person)).to eq([user])
+        }.and_return(batch_result(1, 1, 0))
         sync.perform
       end
 
       it "removes obsolete person" do
-        allow(client).to receive(:fetch_members).and_return([{ email_address: user.email }])
+        allow(client).to receive(:fetch_members).and_return([{email_address: user.email}])
 
         expect(client).to receive(:subscribe_members).with([])
         expect(client).to receive(:unsubscribe_members).with([user.email])
@@ -403,7 +402,7 @@ describe Synchronize::Mailchimp::Synchronizator do
       end
 
       it "ignores obsolete person when email is cleaned" do
-        allow(client).to receive(:fetch_members).and_return([{ email_address: user.email, status: "cleaned" }])
+        allow(client).to receive(:fetch_members).and_return([{email_address: user.email, status: "cleaned"}])
 
         expect(client).to receive(:subscribe_members).with([])
         expect(client).to receive(:unsubscribe_members).with([])
@@ -414,7 +413,7 @@ describe Synchronize::Mailchimp::Synchronizator do
 
     context "tag_cleaned_members" do
       it "creates invalid email tag on person" do
-        allow(client).to receive(:fetch_members).and_return([{ email_address: user.email, status: "cleaned" }])
+        allow(client).to receive(:fetch_members).and_return([{email_address: user.email, status: "cleaned"}])
 
         expect(client).to receive(:update_members)
         expect(client).to receive(:subscribe_members).with([])

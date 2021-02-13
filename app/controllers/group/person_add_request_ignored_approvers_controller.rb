@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::PersonAddRequestIgnoredApproversController < ApplicationController
-
   before_action :authorize_action
 
   def update
@@ -33,5 +32,4 @@ class Group::PersonAddRequestIgnoredApproversController < ApplicationController
   def authorize_action
     authorize!(:activate_person_add_requests, group)
   end
-
 end

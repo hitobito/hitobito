@@ -7,7 +7,6 @@
 
 module Export::Tabular::Events
   class List < Export::Tabular::Base
-
     include Translatable
 
     MAX_DATES = 3

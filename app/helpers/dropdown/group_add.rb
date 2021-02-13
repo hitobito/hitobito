@@ -7,7 +7,6 @@
 
 module Dropdown
   class GroupAdd < Base
-
     attr_reader :group
 
     def initialize(template, group)
@@ -21,11 +20,10 @@ module Dropdown
     def init_items
       group.possible_children.each do |type|
         if template.can?(:create, type.new(parent: group))
-          link = template.new_group_path(group: { parent_id: group.id, type: type.sti_name })
+          link = template.new_group_path(group: {parent_id: group.id, type: type.sti_name})
           add_item(type.label, link)
         end
       end
     end
-
   end
 end

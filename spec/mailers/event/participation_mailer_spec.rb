@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Event::ParticipationMailer do
-
   before do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
@@ -79,7 +78,6 @@ describe Event::ParticipationMailer do
   end
 
   describe "#confirmation" do
-
     it "renders the headers" do
       expect(mail.subject).to eq "Bestätigung der Anmeldung"
       expect(mail.to).to eq(["top_leader@example.com"])
@@ -99,7 +97,6 @@ describe Event::ParticipationMailer do
       expect(mail.to).to eq [e1.email]
       is_expected.to match(/a href="mailto:#{e1.email}"/)
     end
-
   end
 
   describe "#approval" do
@@ -126,6 +123,7 @@ describe Event::ParticipationMailer do
 
   describe "#cancel" do
     let(:mail) { Event::ParticipationMailer.cancel(event, person) }
+
     subject { mail.body }
 
     it "renders dates if set" do
@@ -148,6 +146,5 @@ describe Event::ParticipationMailer do
     end
 
     it { is_expected.to match(/Hallo Top/) }
-
   end
 end

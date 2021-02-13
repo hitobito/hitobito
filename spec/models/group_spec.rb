@@ -34,7 +34,6 @@
 require "spec_helper"
 
 describe Group do
-
   it "should load fixtures" do
     expect(groups(:top_layer)).to be_present
   end
@@ -106,7 +105,7 @@ describe Group do
           group = Group::TopGroup.new(name: "Bottom A", short_name: "Bottom X", parent_id: parent.id)
           group.save!
           expect = expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-           "Bottom One", "Bottom Two","Bottom A", "TopGroup", "Toppers"]
+           "Bottom One", "Bottom Two", "Bottom A", "TopGroup", "Toppers"]
         end
       end
 
@@ -191,7 +190,6 @@ describe Group do
            "Bottom One", "TopGroup", "topGroupX", "Toppers"]
         end
       end
-
     end
   end
 
@@ -326,10 +324,10 @@ describe Group do
     it "has correct ordering with parent group" do
       parent = groups(:top_layer)
       expect(parent.children.order_by_type(parent)).to eq(
-          [groups(:top_group),
-           groups(:bottom_layer_one),
-           groups(:bottom_layer_two),
-           groups(:toppers)]
+        [groups(:top_group),
+         groups(:bottom_layer_one),
+         groups(:bottom_layer_two),
+         groups(:toppers)]
       )
     end
 
@@ -338,7 +336,6 @@ describe Group do
       expect(parent.children.order_by_type(parent)).to be_empty
     end
   end
-
 
   context "#set_layer_group_id" do
     it "sets layer_group_id on group" do
@@ -373,7 +370,7 @@ describe Group do
 
     it "destroys self" do
       expect { bottom_group.destroy }.to change { Group.without_deleted.count }.by(-1)
-      expect(Group.only_deleted.collect(&:id)).to  match_array([bottom_group.id])
+      expect(Group.only_deleted.collect(&:id)).to match_array([bottom_group.id])
       expect(Group).to be_valid
     end
 
@@ -390,7 +387,7 @@ describe Group do
       expect { top_layer.destroy }.not_to change { Group.count }
     end
 
-    context "role assignments"  do
+    context "role assignments" do
       it "terminates own roles" do
         role = Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
         deleted_ids = bottom_group.roles.collect(&:id)
@@ -424,31 +421,31 @@ describe Group do
   end
 
   context "contacts" do
-    let(:contactable) { { address: "foobar", zip_code: 3600, town: "thun", country: "ch" } }
+    let(:contactable) { {address: "foobar", zip_code: 3600, town: "thun", country: "ch"} }
     let(:group) { groups(:top_group) }
 
     subject { group }
+
     before { group.update!(contactable) }
 
-    context "no contactable but contact info"  do
-      its(:contact)   { should be_blank }
-      its(:address)   { should eq "foobar" }
-      its(:town)      { should eq "thun" }
-      its(:zip_code)  { should eq 3600 }
-      its(:country)   { should eq "CH" }
+    context "no contactable but contact info" do
+      its(:contact) { should be_blank }
+      its(:address) { should eq "foobar" }
+      its(:town) { should eq "thun" }
+      its(:zip_code) { should eq 3600 }
+      its(:country) { should eq "CH" }
     end
 
     context "discards contact info when contactable is set" do
       let(:contact) { Fabricate(:person, other_contactable) }
-      let(:other_contactable) { { address: "barfoo", zip_code: nil } }
+      let(:other_contactable) { {address: "barfoo", zip_code: nil} }
 
       before { group.update_attribute(:contact, contact) }
 
-      its(:address)   { should eq "barfoo" }
-      its(:address?)   { should be_truthy }
-      its(:zip_code?)   { should be_falsey }
+      its(:address) { should eq "barfoo" }
+      its(:address?) { should be_truthy }
+      its(:zip_code?) { should be_falsey }
     end
-
   end
 
   context "invoice_config" do
@@ -471,7 +468,6 @@ describe Group do
   end
 
   describe "e-mail validation" do
-
     let(:group) { groups(:top_layer) }
 
     before { allow(Truemail).to receive(:valid?).and_call_original }

@@ -8,7 +8,6 @@
 module Export::Tabular::People
   module ContactAccounts
     class << self
-
       def key(model, label)
         :"#{model.model_name.to_s.underscore}_#{label.downcase}"
       end
@@ -16,7 +15,6 @@ module Export::Tabular::People
       def human(model, label)
         "#{model.model_name.human} #{label}"
       end
-
     end
   end
 end

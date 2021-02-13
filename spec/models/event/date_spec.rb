@@ -19,7 +19,6 @@
 require "spec_helper"
 
 describe Event::Date do
-
   let(:event) { events(:top_course) }
 
   it "should only store date when no time is given" do

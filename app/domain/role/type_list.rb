@@ -8,7 +8,6 @@
 class Role
   # Composes a nested hash of layer types, group types and role types.
   class TypeList
-
     attr_reader :root, :role_types
 
     def initialize(root_type)
@@ -124,6 +123,5 @@ class Role
     def local_role_type?(type)
       !@global_role_types.include?(type)
     end
-
   end
 end

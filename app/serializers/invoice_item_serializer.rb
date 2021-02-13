@@ -1,4 +1,3 @@
-
 # encoding: utf-8
 
 #  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
@@ -25,17 +24,15 @@
 #
 
 class InvoiceItemSerializer < ApplicationSerializer
-
   schema do
     json_api_properties
 
     map_properties :name,
-                   :description,
-                   :vat_rate,
-                   :unit_cost,
-                   :count,
-                   :cost_center,
-                   :account
+      :description,
+      :vat_rate,
+      :unit_cost,
+      :count,
+      :cost_center,
+      :account
   end
 end
-

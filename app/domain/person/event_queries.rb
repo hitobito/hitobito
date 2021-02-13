@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::EventQueries
-
   attr_reader :person
 
   def initialize(person)
@@ -43,5 +42,4 @@ class Person::EventQueries
       distinct.
       order("event_dates.start_at DESC")
   end
-
 end

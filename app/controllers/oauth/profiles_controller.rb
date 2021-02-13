@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 module Oauth
   class ProfilesController < ActionController::Base
     before_action do
@@ -16,7 +15,7 @@ module Oauth
       if scope.blank? || doorkeeper_token.acceptable?(scope)
         render json: email_attrs.merge(scope_attrs || {})
       else
-        render json: { error: "invalid scope: #{scope}" }, status: 403
+        render json: {error: "invalid scope: #{scope}"}, status: 403
       end
     end
 
@@ -52,7 +51,7 @@ module Oauth
     end
 
     def email_attrs
-      { id: person.id, email: person.email }
+      {id: person.id, email: person.email}
     end
   end
 end

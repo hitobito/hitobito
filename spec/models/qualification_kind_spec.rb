@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 # == Schema Information
 #
 # Table name: qualification_kinds
@@ -19,12 +20,11 @@
 require "spec_helper"
 
 describe QualificationKind do
-
   subject { quali_kind }
+
   let(:quali_kind) { qualification_kinds(:sl) }
 
   context "validity is required for reactivateable" do
-
     before do
       quali_kind.reactivateable = 1
       quali_kind.validity = validity
@@ -32,22 +32,25 @@ describe QualificationKind do
 
     context "positive validity" do
       let(:validity) { 1 }
+
       it { is_expected.to be_valid }
     end
 
     context "negative validity" do
       let(:validity) { -1 }
+
       it { is_expected.to have(1).error_on(:validity) }
     end
 
     context "0 year validity" do
       let(:validity) { 0 }
-      it{ is_expected.to be_valid }
-    end
 
+      it { is_expected.to be_valid }
+    end
 
     context "nil validity" do
       let(:validity) { nil }
+
       it { is_expected.to have(1).error_on(:validity) }
     end
   end
@@ -65,5 +68,4 @@ describe QualificationKind do
   it "does destroy translations on hard destroy" do
     expect { subject.really_destroy! }.to change { QualificationKind::Translation.count }.by(-1)
   end
-
 end

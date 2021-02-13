@@ -9,7 +9,6 @@ require "spec_helper"
 require_dependency "app_status/mail"
 
 describe AppStatus::Mail do
-
   let(:app_status) { AppStatus::Mail.new }
   let(:cache) { Rails.cache }
   let(:mail1) { Mail.new(File.read(Rails.root.join("spec", "fixtures", "email", "simple.eml"))) }
@@ -21,12 +20,12 @@ describe AppStatus::Mail do
   end
 
   before { cache.write(:app_status, nil) }
+
   after { cache.write(:app_status, nil) }
 
   context "mail healthy" do
-
     it "has no overdue mails in inbox" do
-      cache.write(:app_status, { seen_mails: seen_mails})
+      cache.write(:app_status, {seen_mails: seen_mails})
 
       expect(Mail).to receive(:all).and_return([mail1, mail2])
 
@@ -36,7 +35,7 @@ describe AppStatus::Mail do
     end
 
     it "has no mails at all in inbox" do
-      cache.write(:app_status, { seen_mails: seen_mails})
+      cache.write(:app_status, {seen_mails: seen_mails})
 
       expect(Mail).to receive(:all).and_return([])
 
@@ -44,14 +43,12 @@ describe AppStatus::Mail do
 
       expect(cache.read(:app_status)[:seen_mails]).to be_empty
     end
-
   end
 
   context "mail unhealthy" do
-
     it "has overdue mail in inbox" do
       seen_mails.last.first_seen = DateTime.now - 52.minutes
-      cache.write(:app_status, { seen_mails: seen_mails})
+      cache.write(:app_status, {seen_mails: seen_mails})
 
       expect(Mail).to receive(:all).and_return([mail1, mail2])
 
@@ -59,6 +56,5 @@ describe AppStatus::Mail do
 
       expect(cache.read(:app_status)[:seen_mails]).to eq(seen_mails)
     end
-
   end
 end

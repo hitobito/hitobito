@@ -7,7 +7,6 @@
 
 module Export::Tabular::Groups
   class Row < Export::Tabular::Row
-
     def type
       entry.class.label
     end
@@ -15,6 +14,5 @@ module Export::Tabular::Groups
     def country
       entry.country_label
     end
-
   end
 end

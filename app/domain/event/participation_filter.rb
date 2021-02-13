@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationFilter
-
   PREDEFINED_FILTERS = %w(all teamers participants)
   SEARCH_COLUMNS = %w(people.first_name people.last_name people.nickname).freeze
 
@@ -82,5 +81,4 @@ class Event::ParticipationFilter
       end
     end
   end
-
 end

@@ -9,7 +9,6 @@ require "spec_helper"
 require "csv"
 
 describe Export::Tabular::People::ParticipationsAddress do
-
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
   let(:list) { [participation] }
@@ -47,6 +46,7 @@ describe Export::Tabular::People::ParticipationsAddress do
           Fabricate(:event_role, participation: participation, type: "Event::Role::AssistantLeader")
           participation.reload
         end
+
         its(["Rollen"]) { should eq "Hauptleitung, Leitung" }
       end
     end

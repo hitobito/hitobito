@@ -21,15 +21,15 @@ class PeopleSerializer < ApplicationSerializer
     end
 
     map_properties :first_name,
-                   :last_name,
-                   :nickname,
-                   :company_name,
-                   :company,
-                   :email,
-                   :address,
-                   :zip_code,
-                   :town,
-                   :country
+      :last_name,
+      :nickname,
+      :company_name,
+      :company,
+      :email,
+      :address,
+      :zip_code,
+      :town,
+      :country
 
     property :picture, item.picture_full_url
     property :tags, item.tag_list.to_s if h.can?(:index_tags, item)
@@ -39,7 +39,7 @@ class PeopleSerializer < ApplicationSerializer
     contact_accounts(!h.index_full_ability?)
 
     entities :roles,
-             item.filtered_roles(context[:multiple_groups] ? nil : context[:group]),
-             RoleSerializer
+      item.filtered_roles(context[:multiple_groups] ? nil : context[:group]),
+      RoleSerializer
   end
 end

@@ -5,7 +5,6 @@
 
 module Synchronize
   module Mailchimp
-
     # Subscriber represents a single entry of our data that should be synchronized.
     # This entry always belongs to, but does not equal a Person: Depending on the mailing_list
     # configuration the Persons additional_emails should be synchronized as well, leading to
@@ -74,7 +73,6 @@ module Synchronize
       def respond_to_missing?(method, *)
         person.respond_to?(method)
       end
-
     end
   end
 end

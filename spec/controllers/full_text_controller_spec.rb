@@ -8,11 +8,9 @@
 require "spec_helper"
 
 describe FullTextController, type: :controller do
-
   before { sign_in(people(:top_leader)) }
 
   [SearchStrategies::Sphinx, SearchStrategies::Sql].each do |strategy|
-
     context strategy.name.demodulize.downcase do
       before do
         [[:list_people, Person.where(id: people(:bottom_member).id)],
@@ -27,18 +25,17 @@ describe FullTextController, type: :controller do
       end
 
       describe "GET index" do
-
         before do
           sign_in(people(:top_leader))
         end
 
         it "uses correct search strategy" do
-          get :index, params: { q: "Bottom" }
+          get :index, params: {q: "Bottom"}
           expect(assigns(:search_strategy).class).to eq(strategy)
         end
 
         it "finds person" do
-          get :index, params: { q: "Bottom" }
+          get :index, params: {q: "Bottom"}
 
           expect(assigns(:people)).to include(people(:bottom_member))
         end
@@ -51,64 +48,57 @@ describe FullTextController, type: :controller do
             expect(assigns(:people)).to eq([])
           end
         end
-
       end
 
       describe "GET query" do
-
         it "uses correct search strategy" do
-          get :query, params: { q: "Bottom" }
+          get :query, params: {q: "Bottom"}
           expect(assigns(:search_strategy).class).to eq(strategy)
         end
 
         it "finds person" do
-          get :query, params: { q: "Bottom" }
+          get :query, params: {q: "Bottom"}
 
           expect(@response.body).to include(people(:bottom_member).full_name)
         end
 
         it "finds groups" do
-          get :query, params: { q: groups(:bottom_layer_one).to_s[1..5] }
+          get :query, params: {q: groups(:bottom_layer_one).to_s[1..5]}
 
           expect(@response.body).to include(groups(:bottom_layer_one).to_s)
         end
 
         it "finds events" do
-          get :query, params: { q: events(:top_course).to_s[1..5] }
+          get :query, params: {q: events(:top_course).to_s[1..5]}
 
           expect(@response.body).to include(events(:top_course).to_s)
         end
-
       end
     end
 
     describe strategy.name.demodulize.downcase + " active tab" do
-
       it "displays people tab" do
         allow(@controller.send :search_strategy).to receive(:list_people).and_return(Person.where(id: people(:bottom_member).id))
-        get :index, params: { q: "query with people results" }
+        get :index, params: {q: "query with people results"}
         expect(assigns(:active_tab)).to eq(:people)
       end
 
       it "displays groups tab" do
         allow(@controller.send :search_strategy).to receive(:query_groups).and_return(Group.where(id: groups(:bottom_layer_one).id))
-        get :index, params: { q: "query with group results" }
+        get :index, params: {q: "query with group results"}
         expect(assigns(:active_tab)).to eq(:groups)
       end
 
       it "displays events tab" do
         allow(@controller.send :search_strategy).to receive(:query_events).and_return(Event.where(id: events(:top_course).id))
-        get :index, params: { q: "query with event results" }
+        get :index, params: {q: "query with event results"}
         expect(assigns(:active_tab)).to eq(:events)
       end
 
       it "displays people tab by default" do
-        get :index, params: { q: "query with no results" }
+        get :index, params: {q: "query with no results"}
         expect(assigns(:active_tab)).to eq(:people)
       end
-
     end
-
   end
-
 end

@@ -12,7 +12,7 @@ describe HelpTexts::Renderer do
   subject { HelpTexts::Renderer.new(template, Person.new) }
 
   let(:controller) { PeopleController.new }
-  let(:template)   { controller.view_context }
+  let(:template) { controller.view_context }
 
   context "action" do
     before { controller.action_name = "index" }
@@ -42,7 +42,7 @@ describe HelpTexts::Renderer do
         expect(subject.action_text).to have_selector(tag)
       end
 
-      %w( img em).each do |tag|
+      %w(img em).each do |tag|
         help_text = help_texts(:people_action_index)
         help_text.update!(body: "<#{tag}>test</#{tag}>")
         expect(subject).to receive(:with_help_text).and_yield(help_text)
@@ -104,7 +104,6 @@ describe HelpTexts::Renderer do
         end
       end
     end
-
   end
 
   context "namespaced controller" do
@@ -121,6 +120,7 @@ describe HelpTexts::Renderer do
 
   context "entry" do
     subject { HelpTexts::Renderer.new(template) }
+
     let(:controller) { EventsController.new }
 
     it "derives from type param" do

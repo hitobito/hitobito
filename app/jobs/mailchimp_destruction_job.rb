@@ -19,8 +19,7 @@ class MailchimpDestructionJob < BaseJob
     return unless Settings.mailchimp.enabled?
 
     Synchronize::Mailchimp::Destroyer.new(@mailchimp_list_id,
-                                          @mailchimp_api_key,
-                                          @people_to_be_deleted).call
+      @mailchimp_api_key,
+      @people_to_be_deleted).call
   end
-
 end

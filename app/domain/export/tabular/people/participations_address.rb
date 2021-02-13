@@ -7,12 +7,10 @@
 
 module Export::Tabular::People
   class ParticipationsAddress < PeopleAddress
-
     self.row_class = ParticipationRow
 
     def people
       list.map(&:person)
     end
-
   end
 end

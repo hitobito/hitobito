@@ -12,5 +12,4 @@ class Cookies::AsyncSynchronization < Cookie
   def initialize(cookies)
     super(cookies, NAME, ATTRIBUTES)
   end
-
 end

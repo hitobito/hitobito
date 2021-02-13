@@ -6,19 +6,17 @@
 require "spec_helper"
 
 describe Role::List do
-
   let(:role_list) { Role::List.new(ability, params) }
-  let(:ability)   { Ability.new(person) }
-  let(:params)    { {} }
-  let(:person)    { people(:top_leader) }
-  let(:group)     { groups(:top_group) }
-  let!(:role)     { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
-
+  let(:ability) { Ability.new(person) }
+  let(:params) { {} }
+  let(:person) { people(:top_leader) }
+  let(:group) { groups(:top_group) }
+  let!(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
 
   context "build_new_roles_hash" do
-    let(:params) { ActionController::Parameters.new({ ids: person.id,
-                                                      role: { type: "Group::TopGroup::Leader",
-                                                              group_id: group.id } }) }
+    let(:params) { ActionController::Parameters.new({ids: person.id,
+                                                     role: {type: "Group::TopGroup::Leader",
+                                                            group_id: group.id}}) }
 
     it "throws access denied error if authorizaion fils" do
       allow(ability).to receive(:can?).and_return(false)
@@ -72,5 +70,4 @@ describe Role::List do
       expect(group["Group::TopGroup::Member"]).to eq(1)
     end
   end
-
 end

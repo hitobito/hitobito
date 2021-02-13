@@ -6,12 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 module MessagesHelper
-
   def add_message_button(type, path = path_args(model_class))
     label = [type.model_name.human, ti(:"link.add").downcase].join(" ")
     action_button(label,
-                  new_polymorphic_path(path, message: { type: type }),
-                  "plus")
+      new_polymorphic_path(path, message: {type: type}),
+      "plus")
   end
 
   def available_message_placeholders(editor_id)

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::MoveController < ApplicationController
-
   decorates :group
   helper_method :group
 
@@ -54,7 +53,7 @@ class Group::MoveController < ApplicationController
 
   def target
     @target ||= (params[:move] && params[:move][:target_group_id]) &&
-                Group.find(params[:move][:target_group_id])
+      Group.find(params[:move][:target_group_id])
   end
 
   def build_flash_messages(success)
@@ -68,5 +67,4 @@ class Group::MoveController < ApplicationController
   def authorize
     authorize!(:update, group)
   end
-
 end

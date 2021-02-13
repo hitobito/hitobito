@@ -8,14 +8,13 @@
 require "spec_helper"
 
 describe Export::PeopleExportJob do
+  subject { Export::PeopleExportJob.new(format, user.id, group.id, {}, {household: household, full: full, selection: selection, filename: "people_export"}) }
 
-  subject { Export::PeopleExportJob.new(format, user.id, group.id, {}, { household: household, full: full, selection: selection, filename: "people_export" }) }
-
-  let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
-  let(:group)     { groups(:bottom_layer_one) }
+  let(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
+  let(:group) { groups(:bottom_layer_one) }
   let(:household) { false }
   let(:selection) { false }
-  let(:filepath)  { AsyncDownloadFile::DIRECTORY.join("people_export") }
+  let(:filepath) { AsyncDownloadFile::DIRECTORY.join("people_export") }
 
   before do
     SeedFu.quiet = true
@@ -93,5 +92,4 @@ describe Export::PeopleExportJob do
       expect(File.exist?("#{filepath}.#{format}")).to be true
     end
   end
-
 end

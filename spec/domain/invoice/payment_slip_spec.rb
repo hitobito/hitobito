@@ -38,7 +38,7 @@ describe Invoice::PaymentSlip do
     padded_group_id = subject.send(:zero_padded, invoice.group_id.to_s, 13)
     padded_index = subject.send(:zero_padded, "2", 13)
     expect(padded_group_id).to eq "0000376803389"
-    expect(padded_index).to    eq "0000000000002"
+    expect(padded_index).to eq "0000000000002"
     expect(subject.check_digit([padded_group_id, padded_index].join)).to eq 1
   end
 

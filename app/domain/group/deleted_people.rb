@@ -7,9 +7,7 @@
 #
 
 class Group::DeletedPeople
-
   class << self
-
     def deleted_for(layer_group)
       Person.
         joins("INNER JOIN roles ON roles.person_id = people.id").
@@ -33,7 +31,5 @@ class Group::DeletedPeople
       "SELECT MAX(roles.deleted_at) FROM roles " \
       "WHERE roles.person_id = people.id "
     end
-
   end
-
 end

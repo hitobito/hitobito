@@ -7,11 +7,9 @@
 
 module Subscriber
   class PersonController < BaseController
-
     skip_authorize_resource # must be in leaf class
 
     before_render_form :replace_validation_errors
-
 
     def create
       assign_attributes
@@ -20,7 +18,6 @@ module Subscriber
         respond_with(entry, success: created, location: index_path)
       end
     end
-
 
     private
 

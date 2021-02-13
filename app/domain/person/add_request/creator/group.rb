@@ -7,7 +7,6 @@
 
 module Person::AddRequest::Creator
   class Group < Base
-
     alias role entity
 
     def required?
@@ -25,6 +24,5 @@ module Person::AddRequest::Creator
     def request_attrs
       super.merge(role_type: entity.type)
     end
-
   end
 end

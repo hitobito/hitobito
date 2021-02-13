@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::Filter
-
   attr_reader :type, :filter, :group, :year, :sort_expression
 
   def initialize(group, type, filter, year, sort_expression)
@@ -32,10 +31,10 @@ class Event::Filter
   end
 
   def to_h
-    { year: year,
-      type: type,
-      filter: filter,
-      sort_expression: sort_expression }
+    {year: year,
+     type: type,
+     filter: filter,
+     sort_expression: sort_expression}
   end
 
   private

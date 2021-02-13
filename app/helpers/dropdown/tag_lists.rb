@@ -7,7 +7,6 @@
 
 module Dropdown
   class TagLists < Dropdown::Base
-
     def initialize(template, group, translation)
       super(template, translation, :tag)
       @template = template
@@ -19,13 +18,13 @@ module Dropdown
 
     def init_items
       add_item(I18n.t("people.multiselect_actions.add_tags"),
-               template.new_group_tag_list_path(@group),
-               data: { checkable: true, method: :get },
-               remote: true)
+        template.new_group_tag_list_path(@group),
+        data: {checkable: true, method: :get},
+        remote: true)
       add_item(I18n.t("people.multiselect_actions.remove_tags"),
-               template.deletable_group_tag_list_path(@group),
-               data: { checkable: true, method: :get },
-               remote: true)
+        template.deletable_group_tag_list_path(@group),
+        data: {checkable: true, method: :get},
+        remote: true)
     end
   end
 end

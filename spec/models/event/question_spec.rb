@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: event_questions
@@ -21,7 +20,6 @@
 require "spec_helper"
 
 describe Event::Question do
-
   context "with an event assigned" do
     let(:event) { events(:top_course) }
 
@@ -75,5 +73,4 @@ describe Event::Question do
       is_expected.to be_valid
     end
   end
-
 end

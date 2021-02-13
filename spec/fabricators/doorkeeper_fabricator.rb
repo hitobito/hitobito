@@ -10,6 +10,6 @@ Fabricator(:access_token, class_name: :'Doorkeeper::AccessToken') do
 end
 
 Fabricator(:application, class_name: :'Doorkeeper::Application') do
-  name  { Faker::Name.name }
+  name { Faker::Name.name }
   redirect_uri { "https://app.com/callback" }
 end

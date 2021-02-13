@@ -24,13 +24,12 @@
 #
 
 class ServiceToken < ActiveRecord::Base
-
   belongs_to :layer, class_name: "Group", foreign_key: :layer_group_id
 
   before_validation :generate_token!, on: :create
 
-  validates :token, uniqueness: { case_sensitive: false }, presence: true
-  validates :name, uniqueness: { scope: :layer_group_id, case_sensitive: false }, presence: true
+  validates :token, uniqueness: {case_sensitive: false}, presence: true
+  validates :name, uniqueness: {scope: :layer_group_id, case_sensitive: false}, presence: true
   validates_by_schema
 
   def to_s
@@ -58,5 +57,4 @@ class ServiceToken < ActiveRecord::Base
       end
     end
   end
-
 end

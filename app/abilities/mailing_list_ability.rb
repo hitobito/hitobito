@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingListAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Group
 
   on(::MailingList) do
@@ -67,7 +66,7 @@ class MailingListAbility < AbilityDsl::Base
     subject.subscriptions.
       where(subscriber_type: "Group").
       joins(:related_role_types).
-      where.not(related_role_types: { role_type: local_role_types.collect(&:sti_name) }).
+      where.not(related_role_types: {role_type: local_role_types.collect(&:sti_name)}).
       exists?
   end
 
@@ -100,7 +99,7 @@ class MailingListAbility < AbilityDsl::Base
       where(subscriber_type: "Event").
       joins("INNER JOIN events ON subscriptions.subscriber_id = events.id").
       joins("INNER JOIN events_groups ON events_groups.event_id = events.id").
-      where(events_groups: { group_id: local_group_ids }).
+      where(events_groups: {group_id: local_group_ids}).
       distinct.
       count
   end
@@ -117,5 +116,4 @@ class MailingListAbility < AbilityDsl::Base
       raise("Unexpected permission")
     end
   end
-
 end

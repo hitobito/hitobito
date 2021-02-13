@@ -65,6 +65,5 @@ module Export::Tabular::People
       without_questions = selected - selected.grep(TableDisplay::Participations::QUESTION_REGEX)
       without_questions + table_display.selected_questions(questions.collect(&:id)).collect(&:first)
     end
-
   end
 end

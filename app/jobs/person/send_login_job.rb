@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::SendLoginJob < BaseJob
-
   self.parameters = [:recipient_id, :sender_id, :locale]
 
   def initialize(recipient, sender)

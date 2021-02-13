@@ -7,7 +7,6 @@
 
 module AbilityDsl
   class UserContext
-
     # rubocop:disable Style/MutableConstant These constants are meant to be extended
     GROUP_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
                          :group_and_below_full, :group_and_below_read, :group_full, :group_read,

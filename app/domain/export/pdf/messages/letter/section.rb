@@ -14,10 +14,9 @@ class Export::Pdf::Messages::Letter
     class_attribute :model_class
 
     delegate :bounds, :bounding_box, :table, :cursor, :font_size, :text_box,
-             :fill_and_stroke_rectangle, :fill_color, :image, :group, to: :pdf
+      :fill_and_stroke_rectangle, :fill_color, :image, :group, to: :pdf
 
     delegate :recipients, :content, to: :message
-
 
     def initialize(pdf, letter, exporter)
       @pdf = pdf
@@ -38,6 +37,5 @@ class Export::Pdf::Messages::Letter
       options = args.extract_options!
       pdf.text args.join(" "), options
     end
-
   end
 end

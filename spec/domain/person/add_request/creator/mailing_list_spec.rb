@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::AddRequest::Creator::MailingList do
-
   let(:primary_layer) { person.primary_group.layer_group }
   let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
@@ -23,7 +22,6 @@ describe Person::AddRequest::Creator::MailingList do
   before { primary_layer.update_column(:require_person_add_requests, true) }
 
   context "#required" do
-
     it "is true if primary layer activated requests" do
       expect(subject).to be_required
     end
@@ -71,7 +69,6 @@ describe Person::AddRequest::Creator::MailingList do
   end
 
   context "#create_request" do
-
     it "creates event request" do
       subject.create_request
 
@@ -102,5 +99,4 @@ describe Person::AddRequest::Creator::MailingList do
       expect(subject.error_message).to match(/Person wurde bereits angefragt/)
     end
   end
-
 end

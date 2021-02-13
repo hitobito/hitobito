@@ -8,13 +8,12 @@
 require "spec_helper"
 
 describe Event::ParticipationContactDatasController do
-
   before { sign_in(top_leader) }
 
   let(:top_leader) { people(:top_leader) }
-  let(:group)      { groups(:top_group) }
-  let(:course)     { Fabricate(:course, groups: [group]) }
-  let(:entry)      { assigns(:participation_contact_data) }
+  let(:group) { groups(:top_group) }
+  let(:course) { Fabricate(:course, groups: [group]) }
+  let(:entry) { assigns(:participation_contact_data) }
 
   context "PATCH#update" do
     it "validates default attrs" do
@@ -59,7 +58,7 @@ describe Event::ParticipationContactDatasController do
           first_name: top_leader.first_name,
           last_name: "NewName",
           phone_numbers_attributes: {
-            "1" => { id: number.id, label: number.label, number: "+41791111111", _destroy: false }
+            "1" => {id: number.id, label: number.label, number: "+41791111111", _destroy: false}
           }
         },
         event_role: {
@@ -70,6 +69,4 @@ describe Event::ParticipationContactDatasController do
       expect(top_leader.reload.last_name).to eq "NewName"
     end
   end
-
-
 end

@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module AsyncDownload
-  def with_async_download_cookie(format, name, redirection_target: { returning: true })
+  def with_async_download_cookie(format, name, redirection_target: {returning: true})
     filename ||= AsyncDownloadFile.create_name(name, current_person.id)
     Cookies::AsyncDownload.new(cookies).set(name: filename, type: format)
     yield filename

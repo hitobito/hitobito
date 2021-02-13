@@ -47,7 +47,7 @@ class Message < ActiveRecord::Base
 
   STATES = %w(draft pending processing finished failed).freeze
   i18n_enum :state, STATES, scopes: true, queries: true
-  validates :state, inclusion: { in: STATES }
+  validates :state, inclusion: {in: STATES}
 
   class_attribute :duplicatable_attrs
   self.duplicatable_attrs = %w(subject type mailing_list_id)
@@ -105,5 +105,4 @@ class Message < ActiveRecord::Base
   def exporter_class
     "Export::Pdf::Messages::#{type.demodulize}".constantize
   end
-
 end

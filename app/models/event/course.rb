@@ -52,7 +52,6 @@
 # A course is a specialised Event that has by default applications,
 # preconditions and may give a qualification after attending it.
 class Event::Course < Event
-
   # This statement is required because this class would not be loaded otherwise.
   require_dependency "event/course/role/participant"
 
@@ -71,11 +70,9 @@ class Event::Course < Event
 
   self.kind_class = Event::Kind
 
-
   belongs_to :kind
 
   validates :kind_id, presence: true, if: -> { used_attributes.include?(:kind_id) }
-
 
   def label_detail
     label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ""
@@ -106,5 +103,4 @@ class Event::Course < Event
       end
     end
   end
-
 end

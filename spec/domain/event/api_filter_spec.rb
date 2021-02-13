@@ -6,14 +6,13 @@
 require "spec_helper"
 
 describe Event::ApiFilter do
-
-  let(:group)  { groups(:top_layer) }
+  let(:group) { groups(:top_layer) }
   let!(:event) { Fabricate(:event, groups: [groups(:bottom_group_one_one)]) }
   let(:event2) { Fabricate(:event, groups: [groups(:bottom_group_one_one)]) }
-  let(:today)  { Date.today }
+  let(:today) { Date.today }
 
   before do
-    travel_to Time.zone.local(2020,7,1,12)
+    travel_to Time.zone.local(2020, 7, 1, 12)
     @g1 = Fabricate(Group::TopGroup.name.to_sym, name: "g1", parent: groups(:top_group))
     Fabricate(:event_date, event: Fabricate(:event, groups: [@g1]))
   end
@@ -83,7 +82,5 @@ describe Event::ApiFilter do
       expect { filter(end_date: "inv'alid").list_entries }.not_to raise_error
       expect { filter(start_date: "inv'alid").list_entries }.not_to raise_error
     end
-
   end
-
 end

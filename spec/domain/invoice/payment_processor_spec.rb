@@ -1,8 +1,7 @@
 require "spec_helper"
 
 describe Invoice::PaymentProcessor do
-
-  let(:invoice)        { invoices(:sent) }
+  let(:invoice) { invoices(:sent) }
   let(:invoice_config) { invoice.invoice_config }
 
   it "parses 5 credit statements" do
@@ -44,7 +43,6 @@ describe Invoice::PaymentProcessor do
     expect(list.reload.recipients_paid).to eq 1
   end
 
-
   it "invalid payments only produce set alert" do
     expect(parser.alert).to be_present
     expect(parser.notice).to be_blank
@@ -65,5 +63,4 @@ describe Invoice::PaymentProcessor do
   def read(name)
     Rails.root.join("spec/fixtures/invoices/#{name}.xml").read
   end
-
 end

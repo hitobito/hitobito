@@ -19,7 +19,6 @@
 #
 
 class Event::Application < ActiveRecord::Base
-
   self.demodulized_route_keys = true
 
   ### ASSOCIATION
@@ -32,7 +31,6 @@ class Event::Application < ActiveRecord::Base
   belongs_to :priority_2, class_name: "Event" #::Course
   belongs_to :priority_3, class_name: "Event" #::Course
 
-
   validates_by_schema
 
   ### CLASS METHODS
@@ -40,7 +38,7 @@ class Event::Application < ActiveRecord::Base
   class << self
     def pending
       joins(:participation).
-        where(event_participations: { active: false },
+        where(event_participations: {active: false},
               rejected: false)
     end
 

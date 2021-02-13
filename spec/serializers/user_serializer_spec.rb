@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe UserSerializer do
-
   let(:person) do
     p = people(:top_leader)
     p.generate_authentication_token!
@@ -17,7 +16,7 @@ describe UserSerializer do
 
   let(:controller) { double().as_null_object }
 
-  let(:serializer) { UserSerializer.new(person, controller: controller)}
+  let(:serializer) { UserSerializer.new(person, controller: controller) }
   let(:hash) { serializer.to_hash }
 
   subject { hash[:people].first }
@@ -29,5 +28,4 @@ describe UserSerializer do
   it "contains authentication token" do
     expect(subject).to have_key(:authentication_token)
   end
-
 end

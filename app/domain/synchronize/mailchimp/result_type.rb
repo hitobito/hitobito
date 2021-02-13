@@ -6,7 +6,6 @@
 module Synchronize
   module Mailchimp
     class ResultType < ActiveRecord::Type::Value
-
       # to db
       def serialize(result)
         result ? result.data.to_json : nil
@@ -21,7 +20,6 @@ module Synchronize
         else Synchronize::Mailchimp::Result.new
         end
       end
-
     end
   end
 end

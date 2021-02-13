@@ -17,7 +17,7 @@ class StandardTableBuilder
 
   # Delegate called methods to template.
   delegate :content_tag, :format_attr, :column_type, :association, :dom_id,
-           :captionize, :add_css_class, :content_tag_nested, to: :template
+    :captionize, :add_css_class, :content_tag_nested, to: :template
 
   def initialize(entries, template, options = {})
     @entries = entries
@@ -65,7 +65,7 @@ class StandardTableBuilder
   def to_html
     content_tag :table, options do
       content_tag(:thead, html_header) +
-      content_tag_nested(:tbody, entries) { |e| html_row(e) }
+        content_tag_nested(:tbody, entries) { |e| html_row(e) }
     end
   end
 
@@ -109,7 +109,6 @@ class StandardTableBuilder
 
   # Helper class to store column information.
   Col = Struct.new(:header, :html_options, :template, :block) do #:nodoc:
-
     delegate :content_tag, to: :template
 
     def content(entry)
@@ -123,7 +122,6 @@ class StandardTableBuilder
     def html_cell(entry)
       content_tag :td, content(entry), html_options
     end
-
   end
 
   # Provides headers with sort links. Expects a method :sortable?(attr)
@@ -183,5 +181,4 @@ class StandardTableBuilder
   end
 
   include Sorting
-
 end

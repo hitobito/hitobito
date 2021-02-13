@@ -8,8 +8,8 @@
 require "spec_helper"
 
 describe "Person Autocomplete", js: true do
-
   subject { page }
+
   let(:group) { groups(:top_group) }
 
   it "knows about visibility of dropdown menu" do
@@ -50,7 +50,7 @@ describe "Person Autocomplete", js: true do
     it "for two word queries" do
       obsolete_node_safe do
         sign_in
-        visit new_group_role_path(group, role: { type: "Group::TopGroup::Leader" })
+        visit new_group_role_path(group, role: {type: "Group::TopGroup::Leader"})
 
         fill_in "Person", with: "Top Super"
 
@@ -63,7 +63,7 @@ describe "Person Autocomplete", js: true do
     it "for queries with weird spaces" do
       obsolete_node_safe do
         sign_in
-        visit new_group_role_path(group, role: { type: "Group::TopGroup::Leader" })
+        visit new_group_role_path(group, role: {type: "Group::TopGroup::Leader"})
 
         fill_in "Person", with: "Top  Super "
 
@@ -76,7 +76,7 @@ describe "Person Autocomplete", js: true do
     it "saves content from typeahead" do
       obsolete_node_safe do
         sign_in
-        visit new_group_role_path(group, role: { type: "Group::TopGroup::Leader" })
+        visit new_group_role_path(group, role: {type: "Group::TopGroup::Leader"})
 
         # search name only
         fill_in "Person", with: "Top"
@@ -87,7 +87,5 @@ describe "Person Autocomplete", js: true do
         is_expected.to have_content "Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt."
       end
     end
-
   end
-
 end

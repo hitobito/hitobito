@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Attributes < Person::Filter::Base
-
   def initialize(attr, args)
     @attr = attr
     @args = args

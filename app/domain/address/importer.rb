@@ -7,7 +7,6 @@
 
 require "csv"
 class Address::Importer
-
   # Imports Swiss addresses
   # see https://service.post.ch/zopa/dlc/app/#/main
 
@@ -61,7 +60,7 @@ class Address::Importer
     raise "expected token is blank" if token.blank?
 
     FileUtils.mkdir_p(dir)
-    @response = Faraday.get(url, {}, { "Authorization" => "Basic #{token}" }).tap do |res|
+    @response = Faraday.get(url, {}, {"Authorization" => "Basic #{token}"}).tap do |res|
       log "status: #{res.status}"
     end
   end
@@ -110,7 +109,7 @@ class Address::Importer
 
   def parse_zip_codes
     parse(:zip_codes).collect do |row|
-      [row[1], { zip: row[4], name: row[8], short_name: row[7], state: row[9] }]
+      [row[1], {zip: row[4], name: row[8], short_name: row[7], state: row[9]}]
     end.compact.to_h
   end
 
@@ -135,7 +134,7 @@ class Address::Importer
   def records
     @records ||= RECORDS.collect do |model|
       key, name = model.split("-")
-      [name.to_sym, { key: key, file: dir.join("#{key}-#{name}.csv") }]
+      [name.to_sym, {key: key, file: dir.join("#{key}-#{name}.csv")}]
     end.to_h
   end
 

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Subscriber::PersonController do
-
   before { sign_in(user) }
 
   let(:group) { groups(:top_group) }
@@ -18,9 +17,9 @@ describe Subscriber::PersonController do
   context "POST create" do
     it "without subscriber_id replaces error" do
       post :create, params: {
-                      group_id: group.id,
-                      mailing_list_id: list.id
-                    }
+        group_id: group.id,
+        mailing_list_id: list.id
+      }
 
       is_expected.to render_template("crud/new")
       expect(assigns(:subscription).errors.size).to eq(1)
@@ -32,11 +31,11 @@ describe Subscriber::PersonController do
 
       expect do
         post :create,
-             params: {
-               group_id: group.id,
-               mailing_list_id: list.id,
-               subscription: { subscriber_id: user.id }
-             }
+          params: {
+            group_id: group.id,
+            mailing_list_id: list.id,
+            subscription: {subscriber_id: user.id}
+          }
       end.not_to change(Subscription, :count)
 
       is_expected.to render_template("crud/new")
@@ -49,30 +48,29 @@ describe Subscriber::PersonController do
 
       expect do
         post :create,
-             params: {
-               group_id: group.id,
-               mailing_list_id: list.id,
-               subscription: { subscriber_id: user.id }
-             }
+          params: {
+            group_id: group.id,
+            mailing_list_id: list.id,
+            subscription: {subscriber_id: user.id}
+          }
       end.not_to change(Subscription, :count)
 
       expect(subscription.reload).not_to be_excluded
     end
 
-
     context "with required person add requests" do
       let(:group) { groups(:bottom_layer_one) }
-      let(:user)  { Fabricate(Group::BottomLayer::Leader.name, group: group).person }
+      let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: group).person }
       let(:person) { Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_two_one)).person }
 
       it "creates subscription if person already visible" do
         group.update_column(:require_person_add_requests, true)
         post :create,
-             params: {
-               group_id: group.id,
-               mailing_list_id: list.id,
-               subscription: { subscriber_id: people(:bottom_member).id }
-             }
+          params: {
+            group_id: group.id,
+            mailing_list_id: list.id,
+            subscription: {subscriber_id: people(:bottom_member).id}
+          }
 
         expect(list.reload.subscriptions.first.subscriber).to eq(people(:bottom_member))
         expect(people(:bottom_member).add_requests.count).to eq(0)
@@ -81,11 +79,11 @@ describe Subscriber::PersonController do
       it "creates person add request" do
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
         post :create,
-             params: {
-               group_id: group.id,
-               mailing_list_id: list.id,
-               subscription: { subscriber_id: person.id }
-             }
+          params: {
+            group_id: group.id,
+            mailing_list_id: list.id,
+            subscription: {subscriber_id: person.id}
+          }
 
         expect(flash[:alert]).to match(/versendet/)
         expect(list.reload.subscriptions.count).to eq(0)
@@ -99,18 +97,16 @@ describe Subscriber::PersonController do
           requester: user,
           body: list)
         post :create,
-             params: {
-               group_id: group.id,
-               mailing_list_id: list.id,
-               subscription: { subscriber_id: person.id }
-             }
+          params: {
+            group_id: group.id,
+            mailing_list_id: list.id,
+            subscription: {subscriber_id: person.id}
+          }
 
         expect(flash[:alert]).to match(/bereits angefragt/)
         expect(list.reload.subscriptions.count).to eq(0)
         expect(person.reload.add_requests.count).to eq(1)
       end
-
     end
-
   end
 end

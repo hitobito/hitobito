@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe EventKindsHelper do
-
   context "qualification kinds" do
     let(:old) { qualification_kinds(:old) }
     let(:entry) { event_kinds(:glk) }
@@ -19,19 +18,19 @@ describe EventKindsHelper do
       allow(helper).to receive(:t).with(any_args()) { "foo" }
       allow(helper).to receive(:entry) { entry }
       view.extend(FormHelper,
-                  TableHelper,
-                  UtilityHelper,
-                  I18nHelper,
-                  FormatHelper,
-                  LayoutHelper,
-                  SheetHelper,
-                  PeopleHelper,
-                  EventParticipationsHelper,
-                  TableDisplaysHelper,
-                  EventKindsHelper,
-                  ActionHelper,
-                  InvoicesHelper,
-                  ContactableHelper)
+        TableHelper,
+        UtilityHelper,
+        I18nHelper,
+        FormatHelper,
+        LayoutHelper,
+        SheetHelper,
+        PeopleHelper,
+        EventParticipationsHelper,
+        TableDisplaysHelper,
+        EventKindsHelper,
+        ActionHelper,
+        InvoicesHelper,
+        ContactableHelper)
     end
 
     it "does not include deleted qualifications if not selected" do
@@ -42,10 +41,9 @@ describe EventKindsHelper do
                                                    role: "participant",
                                                    category: "prolongation")
 
-
       html = helper.labeled_qualification_kinds_field(form, collection,
-                                                      "qualification", "participant",
-                                                      Event::Kind.human_attribute_name(:qualification_kinds))
+        "qualification", "participant",
+        Event::Kind.human_attribute_name(:qualification_kinds))
       node = Capybara::Node::Simple.new(html)
 
       options = node.find("select").all("option")
@@ -66,8 +64,8 @@ describe EventKindsHelper do
                                                    category: "prolongation")
 
       html = helper.labeled_qualification_kinds_field(form, collection,
-                                                      "qualification", "participant",
-                                                      Event::Kind.human_attribute_name(:qualification_kinds))
+        "qualification", "participant",
+        Event::Kind.human_attribute_name(:qualification_kinds))
       node = Capybara::Node::Simple.new(html)
 
       options = node.find("select").all("option")
@@ -75,6 +73,5 @@ describe EventKindsHelper do
       expect(options.select { |o| o.selected? }.size).to eq(2)
       expect(options.one? { |o| o.value == old.id.to_s }).to eq true
     end
-
   end
 end

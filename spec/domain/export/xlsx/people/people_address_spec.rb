@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Export::Tabular::People::PeopleAddress do
-
   before do
     PeopleRelation.kind_opposites["parent"] = "child"
     PeopleRelation.kind_opposites["child"] = "parent"

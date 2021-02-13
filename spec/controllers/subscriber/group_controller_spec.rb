@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Subscriber::GroupController do
-
   before { sign_in(people(:top_leader)) }
 
   let(:list) { mailing_lists(:leaders) }
@@ -19,7 +18,7 @@ describe Subscriber::GroupController do
 
     context "top group" do
       before do
-        get :query, params: { q: "bot", group_id: group.id, mailing_list_id: list.id }
+        get :query, params: {q: "bot", group_id: group.id, mailing_list_id: list.id}
       end
 
       it { is_expected.to match(/Top \\u0026gt; Bottom One/) }
@@ -36,7 +35,7 @@ describe Subscriber::GroupController do
 
       before do
         Group::BottomLayer::Leader.create!(group: group, person: people(:top_leader))
-        get :query, params: { q: "bot", group_id: group.id, mailing_list_id: list.id }
+        get :query, params: {q: "bot", group_id: group.id, mailing_list_id: list.id}
       end
 
       it "does not include sister group or their descendants" do
@@ -45,7 +44,6 @@ describe Subscriber::GroupController do
         is_expected.not_to match(/Bottom Two \\u0026gt; Group 21/)
       end
     end
-
   end
 
   context "GET roles.js" do
@@ -53,7 +51,7 @@ describe Subscriber::GroupController do
       get :roles, xhr: true, params: {
         group_id: group.id,
         mailing_list_id: list.id,
-        subscription: { subscriber_id: groups(:bottom_layer_one) }
+        subscription: {subscriber_id: groups(:bottom_layer_one)}
       }, format: :js
 
       expect(assigns(:role_types).root).to eq(Group::BottomLayer)
@@ -67,7 +65,6 @@ describe Subscriber::GroupController do
 
       expect(assigns(:role_types)).to be_nil
     end
-
   end
 
   context "POST create" do
@@ -89,8 +86,8 @@ describe Subscriber::GroupController do
           post :create, params: {
             group_id: group.id,
             mailing_list_id: list.id,
-            subscription: { subscriber_id: groups(:bottom_layer_one),
-                            role_types: [Group::BottomLayer::Leader, Group::BottomGroup::Leader] }
+            subscription: {subscriber_id: groups(:bottom_layer_one),
+                           role_types: [Group::BottomLayer::Leader, Group::BottomGroup::Leader]}
           }
         end.to change { Subscription.count }.by(1)
       end.to change { RelatedRoleType.count }.by(2)
@@ -98,5 +95,4 @@ describe Subscriber::GroupController do
       is_expected.to redirect_to(group_mailing_list_subscriptions_path(group, list))
     end
   end
-
 end

@@ -44,5 +44,4 @@ describe Payment do
     invoice.payments.create!(amount: invoice.total - 1, reference: 1)
     expect(invoice.payments.build(amount: 1, reference: 1)).not_to be_valid
   end
-
 end

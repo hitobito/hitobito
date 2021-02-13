@@ -21,7 +21,6 @@
 #
 
 class PhoneNumber < ActiveRecord::Base
-
   include ContactAccount
 
   self.value_attr = :number
@@ -46,5 +45,4 @@ class PhoneNumber < ActiveRecord::Base
       Settings.phone_number.predefined_labels
     end
   end
-
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -66,7 +67,6 @@ class Invoice < ActiveRecord::Base
   belongs_to :creator, class_name: "Person"
   belongs_to :invoice_list, optional: true
 
-
   has_many :invoice_items, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :payment_reminders, dependent: :destroy
@@ -79,8 +79,8 @@ class Invoice < ActiveRecord::Base
   before_validation :set_self_in_nested
   before_validation :recalculate
 
-  validates :state, inclusion: { in: STATES }
-  validates :due_at, timeliness: { after: :sent_at }, presence: true, if: :sent?
+  validates :state, inclusion: {in: STATES}
+  validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
   validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_list }
   validate :assert_sendable?, unless: :recipient_id?
   validates_associated :invoice_config
@@ -88,19 +88,18 @@ class Invoice < ActiveRecord::Base
   before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
 
-
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
   i18n_enum :state, STATES, scopes: true, queries: true
 
   validates_by_schema
 
-  scope :list,           -> { order_by_sequence_number }
-  scope :one_day,        -> { where("invoices.due_at < ?", 1.day.ago.to_date) }
-  scope :one_week,       -> { where("invoices.due_at < ?", 1.week.ago.to_date) }
-  scope :one_month,      -> { where("invoices.due_at < ?", 1.month.ago.to_date) }
-  scope :visible,        -> { where.not(state: :cancelled) }
-  scope :remindable,     -> { where(state: STATES_REMINDABLE) }
+  scope :list, -> { order_by_sequence_number }
+  scope :one_day, -> { where("invoices.due_at < ?", 1.day.ago.to_date) }
+  scope :one_week, -> { where("invoices.due_at < ?", 1.week.ago.to_date) }
+  scope :one_month, -> { where("invoices.due_at < ?", 1.month.ago.to_date) }
+  scope :visible, -> { where.not(state: :cancelled) }
+  scope :remindable, -> { where(state: STATES_REMINDABLE) }
 
   class << self
     def draft_or_issued_in(year)

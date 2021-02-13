@@ -8,7 +8,6 @@
 module FilterNavigation
   module Event
     class Participations < FilterNavigation::Base
-
       attr_reader :group, :event, :filter
 
       delegate :can?, to: :template

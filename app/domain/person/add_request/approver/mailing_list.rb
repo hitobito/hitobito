@@ -7,7 +7,6 @@
 
 module Person::AddRequest::Approver
   class MailingList < Base
-
     private
 
     def build_entity
@@ -15,6 +14,5 @@ module Person::AddRequest::Approver
         s.excluded = false
       end
     end
-
   end
 end

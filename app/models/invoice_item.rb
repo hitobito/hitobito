@@ -24,7 +24,6 @@
 #
 
 class InvoiceItem < ActiveRecord::Base
-
   after_destroy :recalculate!
 
   belongs_to :invoice

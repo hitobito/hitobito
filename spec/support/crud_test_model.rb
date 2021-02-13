@@ -7,7 +7,6 @@
 
 # A dummy model used for general testing.
 class CrudTestModel < ActiveRecord::Base #:nodoc:
-
   include DatetimeAttribute
   datetime_attr :last_seen
 
@@ -18,8 +17,8 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
   before_destroy :protect_if_companion
 
   validates :name, presence: true
-  validates :birthdate, timeliness: { type: :date, allow_blank: true }
-  validates :rating, inclusion: { in: 1..10 }
+  validates :birthdate, timeliness: {type: :date, allow_blank: true}
+  validates :rating, inclusion: {in: 1..10}
 
   default_scope -> { order("name") }
 
@@ -43,7 +42,6 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
       throw :abort
     end
   end
-
 end
 
 class CrudTestModelDecorator < Draper::Decorator
@@ -65,7 +63,7 @@ class CrudTestModelsController < CrudController #:nodoc:
   HANDLE_PREFIX = "handle_"
 
   self.search_columns = [:name, :whatever, :remarks]
-  self.sort_mappings = { chatty: "length(remarks)" }
+  self.sort_mappings = {chatty: "length(remarks)"}
   self.permitted_attrs = [:name, :email, :password, :whatever, :children,
                           :companion_id, :rating, :income, :birthdate,
                           :gets_up_at, :last_seen, :human, :remarks]
@@ -165,7 +163,6 @@ class CrudTestModelsController < CrudController #:nodoc:
   def authorize_class
     # nada
   end
-
 end
 
 REGEXP_ROWS = /<tr.+?<\/tr>/m
@@ -173,12 +170,10 @@ REGEXP_HEADERS = /<th.+?<\/th>/m
 REGEXP_SORT_HEADERS = /<th.*?><a .*?sort_dir=asc.*?>.*?<\/a><\/th>/m
 REGEXP_ACTION_CELL = /<td class=\"action\"><a .*?href.+?<\/a><\/td>/m
 
-
 # A simple test helper to prepare the test database with a CrudTestModel model.
 # This helper is used to test the CrudController and various helpers
 # without the need for an application based model.
 module CrudTestHelper
-
   # Controller helper methods for the tests
 
   def model_class
@@ -226,18 +221,18 @@ module CrudTestHelper
 
   def create_crud_test_models_table
     ActiveRecord::Base.connection.create_table :crud_test_models, force: true do |t|
-      t.string   :name, null: false, limit: 50
-      t.string   :password
-      t.string   :whatever
-      t.integer  :children
-      t.integer  :companion_id
-      t.float    :rating
-      t.decimal  :income, precision: 14, scale: 2
-      t.date     :birthdate
-      t.time     :gets_up_at
+      t.string :name, null: false, limit: 50
+      t.string :password
+      t.string :whatever
+      t.integer :children
+      t.integer :companion_id
+      t.float :rating
+      t.decimal :income, precision: 14, scale: 2
+      t.date :birthdate
+      t.time :gets_up_at
       t.datetime :last_seen
-      t.boolean  :human, default: true
-      t.text     :remarks
+      t.boolean :human, default: true
+      t.text :remarks
 
       t.timestamps null: false
     end
@@ -245,15 +240,15 @@ module CrudTestHelper
 
   def create_other_crud_test_models_table
     ActiveRecord::Base.connection.create_table :other_crud_test_models, force: true do |t|
-      t.string   :name, null: false, limit: 50
-      t.integer  :more_id
+      t.string :name, null: false, limit: 50
+      t.integer :more_id
     end
   end
 
   def create_crud_test_models_other_crud_test_models
     ActiveRecord::Base.connection.create_table :crud_test_models_other_crud_test_models, force: true do |t|
-      t.belongs_to :crud_test_model, index: { name: "one" }
-      t.belongs_to :other_crud_test_model, index: { name: "other" }
+      t.belongs_to :crud_test_model, index: {name: "one"}
+      t.belongs_to :other_crud_test_model, index: {name: "other"}
     end
   end
 
@@ -282,13 +277,13 @@ module CrudTestHelper
     with_routing do |set|
       set.draw { resources :crud_test_models }
       # used to define a controller in these tests
-      set.default_url_options = { controller: "crud_test_models" }
+      set.default_url_options = {controller: "crud_test_models"}
       yield
     end
   end
 
   def special_routing
-    controller = @controller || controller  # test:unit uses instance variable, rspec the method
+    controller = @controller || controller # test:unit uses instance variable, rspec the method
     @routes = ActionDispatch::Routing::RouteSet.new
     @routes.draw { resources :crud_test_models }
 
@@ -339,5 +334,4 @@ module CrudTestHelper
 
     c.execute("BEGIN") if start_transaction
   end
-
 end

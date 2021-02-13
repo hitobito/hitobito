@@ -8,8 +8,8 @@
 require "spec_helper"
 describe "groups/_form.html.haml" do
   let(:group) { groups(:top_layer) }
-  let(:stubs) { {  model_class: Group, path_args: group,
-                   entry: GroupDecorator.new(group),
+  let(:stubs) { {model_class: Group, path_args: group,
+                 entry: GroupDecorator.new(group),
                     } }
 
   before do

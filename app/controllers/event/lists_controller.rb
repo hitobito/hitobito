@@ -15,7 +15,6 @@ class Event::ListsController < ApplicationController
 
   skip_authorize_resource only: [:events, :courses]
 
-
   def events
     authorize!(:list_available, Event)
 
@@ -123,7 +122,7 @@ class Event::ListsController < ApplicationController
   end
 
   def additional_course_includes
-    kind_used? ? { kind: :translations } : {}
+    kind_used? ? {kind: :translations} : {}
   end
 
   def kind_used?
@@ -145,5 +144,4 @@ class Event::ListsController < ApplicationController
       authorize!(:list_available, Event::Course)
     end
   end
-
 end

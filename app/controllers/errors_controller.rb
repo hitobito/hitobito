@@ -28,5 +28,4 @@ class ErrorsController < ActionController::Base
   def origin_user
     false
   end
-
 end

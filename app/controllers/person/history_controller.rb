@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::HistoryController < ApplicationController
-
   before_action :authorize_action
 
   decorates :group, :person
@@ -46,5 +45,4 @@ class Person::HistoryController < ApplicationController
   def authorize_action
     authorize!(:history, entry)
   end
-
 end

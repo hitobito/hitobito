@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class DeliveryReportMailer < ApplicationMailer
-
   CONTENT_BULK_MAIL_SUCCESS = "bulk_mail_success".freeze
   CONTENT_BULK_MAIL_WITH_FAILED = "bulk_mail_with_failed".freeze
 
@@ -25,8 +24,8 @@ class DeliveryReportMailer < ApplicationMailer
     @delivered_at = delivered_at
     @failed_recipients = failed_recipients
     custom_content_mail(report_to,
-                        content,
-                        values_for_placeholders(content))
+      content,
+      values_for_placeholders(content))
   end
 
   private
@@ -56,5 +55,4 @@ class DeliveryReportMailer < ApplicationMailer
       r.join(" | ")
     end.join("<br/>")
   end
-
 end

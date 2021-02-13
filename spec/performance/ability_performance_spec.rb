@@ -14,7 +14,6 @@ LOAD_USER_TIME = 1.0
 INIT_ABILITY_TIME = 1.5
 
 describe Ability, performance: true do
-
   def measure(max_time, &block)
     Benchmark.bm(12) do |x|
       ms = x.report(RSpec.current_example.description) do
@@ -41,5 +40,4 @@ describe Ability, performance: true do
       Ability.new(user)
     end
   end
-
 end

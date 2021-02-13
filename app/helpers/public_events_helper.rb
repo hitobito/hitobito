@@ -9,8 +9,8 @@ module PublicEventsHelper
   def button_action_public_event_apply(event, group)
     if event.application_possible?
       action_button(I18n.t("event_decorator.apply"),
-                    register_group_event_path(group, event),
-                    "edit")
+        register_group_event_path(group, event),
+        "edit")
     end
   end
 end

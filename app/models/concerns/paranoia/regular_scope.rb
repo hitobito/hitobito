@@ -7,7 +7,6 @@
 
 module Paranoia
   module RegularScope
-
     # Do not exclude deleted entries in default scope.
     # Benefit: When an association references a deleted entry,
     # this entry is still found and may be displayed.
@@ -20,6 +19,5 @@ module Paranoia
     def without_deleted
       where(deleted_at: nil)
     end
-
   end
 end

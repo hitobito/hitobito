@@ -10,7 +10,6 @@ require "spec_helper"
 describe "Dropdown::PeopleExport" do
   include Rails.application.routes.url_helpers
 
-
   include FormatHelper
   include LayoutHelper
   include UtilityHelper
@@ -18,9 +17,9 @@ describe "Dropdown::PeopleExport" do
   let(:user) { people(:top_leader) }
   let(:dropdown) do
     Dropdown::PeopleExport.new(self,
-                               user,
-                               { controller: "people", group_id: groups(:top_group).id },
-                               households: true, labels: true)
+      user,
+      {controller: "people", group_id: groups(:top_group).id},
+      households: true, labels: true)
   end
 
   subject { dropdown.to_s }

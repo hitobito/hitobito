@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Oauth::ActiveAuthorizationsController do
-  let(:top_leader)   { people(:top_leader) }
+  let(:top_leader) { people(:top_leader) }
   let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
   let(:application) { Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri) }
 
@@ -48,7 +48,6 @@ describe Oauth::ActiveAuthorizationsController do
       get :index
       expect(assigns(:entries)).to be_empty
     end
-
   end
 
   context "GET#index", :mysql do
@@ -68,7 +67,7 @@ describe Oauth::ActiveAuthorizationsController do
     it "revokes acces_grant and access_token" do
       grant = create_grant
       token = application.access_tokens.create!(resource_owner_id: top_leader.id)
-      delete :destroy, params: { id: application.id }
+      delete :destroy, params: {id: application.id}
       expect(flash[:notice]).to eq "Zugang zu <i>MyApp</i> wurde annulliert"
       expect(token.reload).to be_revoked
       expect(grant.reload).to be_revoked
@@ -76,4 +75,3 @@ describe Oauth::ActiveAuthorizationsController do
     end
   end
 end
-

@@ -5,11 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-
 require "spec_helper"
 
 describe Messages::DispatchJob do
-  let(:letter)     { messages(:letter) }
+  let(:letter) { messages(:letter) }
   let(:top_leader) { people(:top_leader) }
 
   context :letter do

@@ -7,6 +7,5 @@
 
 module Sheet
   class EventFeed < Sheet::Admin
-
   end
 end

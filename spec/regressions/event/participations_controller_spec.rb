@@ -8,27 +8,26 @@
 require "spec_helper"
 
 describe Event::ParticipationsController, type: :controller do
-
   # always use fixtures with crud controller examples, otherwise request reuse might produce errors
   let(:test_entry) { event_participations(:top) }
 
   let(:course) { test_entry.event }
-  let(:group)  { course.groups.first }
+  let(:group) { course.groups.first }
   let(:event_base) { Fabricate(:event) }
 
   let(:test_entry_attrs) do
     {
       additional_information: "blalbalbalsbla",
       answers_attributes: [
-        { answer: "Halbtax", question_id: event_questions(:top_ov).id },
-        { answer: "nein",    question_id: event_questions(:top_vegi).id },
-        { answer: "Ne du",   question_id: event_questions(:top_more).id }
+        {answer: "Halbtax", question_id: event_questions(:top_ov).id},
+        {answer: "nein", question_id: event_questions(:top_vegi).id},
+        {answer: "Ne du", question_id: event_questions(:top_more).id}
       ]
     }
   end
 
   def scope_params
-    { group_id: group.id, event_id: course.id }
+    {group_id: group.id, event_id: course.id}
   end
 
   before do
@@ -58,11 +57,10 @@ describe Event::ParticipationsController, type: :controller do
       perform_request
       expect(dom).to have_content(contact.to_s)
     end
-
   end
 
   describe_action :put, :update, id: true do
-    let(:params) { { model_identifier => test_attrs } }
+    let(:params) { {model_identifier => test_attrs} }
 
     context ".html", format: :html do
       context "with valid params", combine: "uhv" do
@@ -78,15 +76,16 @@ describe Event::ParticipationsController, type: :controller do
 
   describe "GET new" do
     subject { Capybara::Node::Simple.new(response.body) }
+
     [:event_base, :course].each do |event_sym|
       it "renders title for #{event_sym}" do
         event = send(event_sym)
-        get :new, params: { group_id: group.id, event_id: event.id }
+        get :new, params: {group_id: group.id, event_id: event.id}
         is_expected.to have_content "Anmeldung als Teilnehmer/-in"
       end
     end
     it "renders person field when passed for_someone_else param" do
-      get :new, params: { group_id: group.id, event_id: course.id, for_someone_else: true }
+      get :new, params: {group_id: group.id, event_id: course.id, for_someone_else: true}
       person_field = subject.all("form .control-group")[0]
       expect(person_field).to have_content "Person"
       expect(person_field).to have_css("input", visible: false, count: 2)
@@ -96,7 +95,7 @@ describe Event::ParticipationsController, type: :controller do
     it "renders alternatives" do
       a = Fabricate(:course, kind_id: course.kind_id)
       a.dates.create!(start_at: course.dates.first.start_at + 2.weeks)
-      get :new, params: { group_id: group.id, event_id: course.id }
+      get :new, params: {group_id: group.id, event_id: course.id}
       is_expected.to have_content a.name
     end
   end
@@ -113,21 +112,20 @@ describe Event::ParticipationsController, type: :controller do
     end
 
     it "renders participant and course contact" do
-      get :print, params: { group_id: group.id, event_id: test_entry.event.id, id: test_entry.id }, format: :pdf
+      get :print, params: {group_id: group.id, event_id: test_entry.event.id, id: test_entry.id}, format: :pdf
       expect(response).to be_ok
     end
 
     it "redirects users without permission" do
       sign_in(Fabricate(Group::BottomGroup::Member.name.to_s,
-                        group: groups(:bottom_group_one_one)).person)
+        group: groups(:bottom_group_one_one)).person)
       expect do
-        get :print, params: { group_id: group.id, event_id: test_entry.event.id, id: test_entry.id }
+        get :print, params: {group_id: group.id, event_id: test_entry.event.id, id: test_entry.id}
       end.to raise_error(CanCan::AccessDenied)
     end
   end
 
   describe "participation role label filter" do
-
     let(:event) { events(:top_event) }
     let(:parti1) { Fabricate(:event_participation, event: event) }
     let(:parti2) { Fabricate(:event_participation, event: event) }
@@ -146,7 +144,7 @@ describe Event::ParticipationsController, type: :controller do
     end
 
     it "filters by event role label" do
-      get :index, params: { group_id: event.groups.first.id, event_id: event.id, filter: "Foolabel" }
+      get :index, params: {group_id: event.groups.first.id, event_id: event.id, filter: "Foolabel"}
 
       expect(dom).to have_selector("a.dropdown-toggle", text: "Foolabel")
       expect(dom).to have_selector(".dropdown a", text: "Foolabel")
@@ -158,10 +156,9 @@ describe Event::ParticipationsController, type: :controller do
     end
 
     it "exports all pages for emails" do
-      get :index, params: { group_id: event.groups.first.id, event_id: event.id }, format: "email"
+      get :index, params: {group_id: event.groups.first.id, event_id: event.id}, format: "email"
       expect(dom.text.count("@")).to eq(53)
     end
-
   end
 
   context "preconditions not fullfilled" do
@@ -171,10 +168,9 @@ describe Event::ParticipationsController, type: :controller do
 
     it "displays full warning on detail" do
       Fabricate(:event_role, type: Event::Course::Role::Participant.sti_name, participation: test_entry)
-      get :show, params: { group_id: group.id, event_id: course.id, id: test_entry.id }
+      get :show, params: {group_id: group.id, event_id: course.id, id: test_entry.id}
 
       expect(dom).to have_content "Vorbedingungen für Anmeldung sind nicht erfüllt"
     end
   end
-
 end

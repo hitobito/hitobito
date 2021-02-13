@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::AddRequest::Creator::Group do
-
   let(:primary_layer) { person.primary_group.layer_group }
   let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two), created_at: 1.year.ago).person }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
@@ -23,7 +22,6 @@ describe Person::AddRequest::Creator::Group do
   before { primary_layer.update_column(:require_person_add_requests, true) }
 
   context "#required" do
-
     it "is true if primary layer activated requests" do
       expect(subject).to be_required
     end
@@ -72,11 +70,9 @@ describe Person::AddRequest::Creator::Group do
       Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two), person: requester)
       expect(subject).not_to be_required
     end
-
   end
 
   context "#create_request" do
-
     it "creates group request" do
       subject.create_request
 
@@ -117,5 +113,4 @@ describe Person::AddRequest::Creator::Group do
       expect(subject.error_message).to match(/Person wurde bereits angefragt/)
     end
   end
-
 end

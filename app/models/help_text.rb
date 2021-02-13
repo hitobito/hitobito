@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: help_texts
@@ -22,7 +23,7 @@
 class HelpText < ActiveRecord::Base
   COLUMN_BLACKLIST = %w(id created_at updated_at deleted_at).freeze
 
-  validates :name, uniqueness: { scope: [:controller, :model, :kind], case_sensitive: false }
+  validates :name, uniqueness: {scope: [:controller, :model, :kind], case_sensitive: false}
   validates :body, presence: true, no_attachments: true
   before_validation :assign_combined_fields, if: :new_record?
 
@@ -34,7 +35,6 @@ class HelpText < ActiveRecord::Base
   validates_by_schema
 
   attr_accessor :context, :key
-
 
   def self.list
     order(Arel.sql(HelpTexts::List.new.order_statement)).order(:kind)
@@ -62,5 +62,4 @@ class HelpText < ActiveRecord::Base
     end
     errors.add(attr, :invalid) if fields.any? { |field| send(field).blank? }
   end
-
 end

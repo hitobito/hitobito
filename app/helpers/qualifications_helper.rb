@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module QualificationsHelper
-
   def format_qualification_kind_validity(kind)
     format_unbounded_value(kind.validity) do |d|
       t("qualifications.in_years", years: d)
@@ -34,5 +33,4 @@ module QualificationsHelper
       text
     end
   end
-
 end

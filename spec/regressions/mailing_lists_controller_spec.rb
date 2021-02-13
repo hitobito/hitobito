@@ -10,23 +10,22 @@
 require "spec_helper"
 
 describe MailingListsController, type: :controller do
-
   let(:group) { groups(:top_layer) }
   let(:top_leader) { people(:top_leader) }
 
   def scope_params
-    { group_id: group.id }
+    {group_id: group.id}
   end
 
   let(:test_entry) { mailing_lists(:leaders) }
   let(:test_entry_attrs) do
-    { name: "Test mailing list",
-      description: "Bla bla bla",
-      publisher: "Me & You",
-      mail_name: "tester",
-      subscribable: true,
-      subscribers_may_post: false,
-      anyone_may_post: false }
+    {name: "Test mailing list",
+     description: "Bla bla bla",
+     publisher: "Me & You",
+     mail_name: "tester",
+     subscribable: true,
+     subscribers_may_post: false,
+     anyone_may_post: false}
   end
 
   before do
@@ -37,7 +36,7 @@ describe MailingListsController, type: :controller do
 
   context "show" do
     it "renders json" do
-      get :show, params: { group_id: group.id, id: test_entry.id }, format: :json
+      get :show, params: {group_id: group.id, id: test_entry.id}, format: :json
       json = JSON.parse(response.body).deep_symbolize_keys
       mailing_list = json[:mailing_lists].first
       expect(mailing_list).to eq({
@@ -58,5 +57,4 @@ describe MailingListsController, type: :controller do
       })
     end
   end
-
 end

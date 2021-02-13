@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Qualification < Person::Filter::Base
-
   self.required_ability = :full
   self.permitted_args = [:qualification_kind_ids, :validity, :match,
                          :start_at_year_from, :start_at_year_until,
@@ -54,13 +53,13 @@ class Person::Filter::Qualification < Person::Filter::Base
                 "  SELECT 1 FROM qualification_kinds qk" \
                 "  WHERE qk.id IN (?) " \
                 "  AND NOT EXISTS (#{subquery.to_sql}) )",
-                args[:qualification_kind_ids])
+      args[:qualification_kind_ids])
   end
 
   def match_one_qualification_kind(scope)
     scope.
       joins(:qualifications).
-      where(qualifications: { qualification_kind_id: args[:qualification_kind_ids] }).
+      where(qualifications: {qualification_kind_id: args[:qualification_kind_ids]}).
       merge(qualification_scope(scope))
   end
 
@@ -100,10 +99,9 @@ class Person::Filter::Qualification < Person::Filter::Base
 
   def qualification_validity_scope(_scope)
     case args[:validity].to_s
-    when "active"         then ::Qualification.active
+    when "active" then ::Qualification.active
     when "reactivateable" then ::Qualification.reactivateable
     else ::Qualification.all
     end
   end
-
 end

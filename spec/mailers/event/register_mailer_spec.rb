@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Event::RegisterMailer do
-
   before do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
@@ -22,9 +21,10 @@ describe Event::RegisterMailer do
 
   context "headers" do
     subject { mail }
+
     its(:subject) { should eq "Anmeldelink für Anlass" }
-    its(:to)      { should eq(["fooo@example.com"]) }
-    its(:from)    { should eq(["noreply@localhost"]) }
+    its(:to) { should eq(["fooo@example.com"]) }
+    its(:from) { should eq(["noreply@localhost"]) }
   end
 
   context "body" do

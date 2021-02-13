@@ -5,10 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-
 module Sheet
   class InvoiceList < Sheet::Base
-
     def title
       if entry && !entry.receiver
         ::Invoice.model_name.human
@@ -45,6 +43,5 @@ module Sheet
     def form?
       %w(new create).include?(view.action_name)
     end
-
   end
 end

@@ -6,7 +6,6 @@
 require "spec_helper"
 
 describe TagList do
-
   let(:leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
   let(:tag1) { ActsAsTaggableOn::Tag.find_or_create_with_like_by_name("No mail") }
@@ -117,5 +116,4 @@ describe TagList do
       expect(bottom_member.reload.tags.collect(&:name)).not_to include tag1.name, tag2.name
     end
   end
-
 end

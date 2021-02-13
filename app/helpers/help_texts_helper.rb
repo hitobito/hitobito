@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module HelpTextsHelper
-
   def help_text_renderer
     @help_text_renderer ||= HelpTexts::Renderer.new(self)
   end

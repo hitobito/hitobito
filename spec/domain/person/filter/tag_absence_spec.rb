@@ -8,8 +8,7 @@
 require "spec_helper"
 
 describe Person::Filter::TagAbsence do
-
-  let(:user)  { people(:top_leader) }
+  let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }
 
   context :blank do
@@ -47,6 +46,7 @@ describe Person::Filter::TagAbsence do
   context :apply do
     let(:other) { people(:bottom_member) }
     let(:root) { people(:root) }
+
     subject { Person::Filter::TagAbsence.new(:tag, names: %w(test1 test2)).apply(Person.all) }
 
     it "does not return tagged people" do

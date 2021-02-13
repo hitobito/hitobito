@@ -8,28 +8,27 @@
 require "spec_helper"
 
 describe PeopleSerializer do
-
   let(:group) { groups(:top_group) }
   let(:list) { group.people.decorate }
-  let(:person) { people(:top_leader)}
+  let(:person) { people(:top_leader) }
   let(:multiple) { true }
 
   let(:controller) { double().as_null_object }
 
   let(:serializer) do
     ListSerializer.new(list,
-                       group: group,
-                       multiple_groups: multiple,
-                       serializer: PeopleSerializer,
-                       controller: controller)
+      group: group,
+      multiple_groups: multiple,
+      serializer: PeopleSerializer,
+      controller: controller)
   end
 
   let(:hash) { serializer.to_hash }
 
-
   subject { hash[:people].first }
 
   before { Fabricate(Group::BottomGroup::Member.name.to_sym, person: person, group: groups(:bottom_group_one_one)) }
+
   before { Draper::ViewContext.clear! }
 
   it "has one entry" do
@@ -69,5 +68,4 @@ describe PeopleSerializer do
       expect(hash[:linked]["groups"].size).to eq(4)
     end
   end
-
 end

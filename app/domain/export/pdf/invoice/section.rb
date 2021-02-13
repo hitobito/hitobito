@@ -7,13 +7,12 @@
 
 module Export::Pdf::Invoice
   class Section
-
     attr_reader :pdf, :invoice
 
     delegate :bounds, :text, :cursor, :font_size, :text_box,
-             :fill_and_stroke_rectangle, :fill_color,
-             :image, :group, :move_cursor_to, :float,
-             :stroke_bounds, to: :pdf
+      :fill_and_stroke_rectangle, :fill_color,
+      :image, :group, :move_cursor_to, :float,
+      :stroke_bounds, to: :pdf
 
     delegate :invoice_items, :address, :with_reference?, :participant_number, to: :invoice
 
@@ -49,6 +48,5 @@ module Export::Pdf::Invoice
         pdf.transparent(0.5) { stroke_bounds } if @debug
       end
     end
-
   end
 end

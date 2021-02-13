@@ -9,16 +9,15 @@ require "spec_helper"
 migration_file_name = Dir[Rails.root.join("db/migrate/20210122074037_add_subscription_tags.rb")].first
 require migration_file_name
 
-
 describe AddSubscriptionTags do
-
   before(:all) { self.use_transactional_tests = false }
-  after(:all)  { self.use_transactional_tests = true }
-  
+
+  after(:all) { self.use_transactional_tests = true }
+
   let(:migration) { described_class.new }
   let(:subscription) { subscriptions(:leaders_group) }
-  let!(:email_primary_invalid) { PersonTags::Validation.email_primary_invalid(create: true) } 
-  let!(:email_additional_invalid) { PersonTags::Validation.email_additional_invalid(create: true) } 
+  let!(:email_primary_invalid) { PersonTags::Validation.email_primary_invalid(create: true) }
+  let!(:email_additional_invalid) { PersonTags::Validation.email_additional_invalid(create: true) }
 
   after do
     SubscriptionTag.find_each { |subscription_tag| subscription_tag.delete }
@@ -57,7 +56,7 @@ describe AddSubscriptionTags do
     after do
       migration.up
     end
-    
+
     it "creates subscription taggings for each subscription_tag" do
       SubscriptionTag.create!(subscription: subscription,
                               tag: email_primary_invalid)

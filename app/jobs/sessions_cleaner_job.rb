@@ -6,12 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class SessionsCleanerJob < RecurringJob
-
   run_every 24.hours
 
   def perform_internal
     Session.outdated.delete_all
   end
-
 end
-

@@ -7,7 +7,6 @@
 
 module FilterNavigation
   class People < Base
-
     attr_reader :group, :filter
 
     delegate :can?, to: :template
@@ -56,7 +55,7 @@ module FilterNavigation
         types = group.role_types.select { |t| t.kind == kind }
         next unless visible_role_types?(types)
 
-        count = group.people.where(roles: { type: types.collect(&:sti_name) }).distinct.count
+        count = group.people.where(roles: {type: types.collect(&:sti_name)}).distinct.count
         path = kind == :member ? path() : fixed_types_path(name, types)
         item(name, path, count)
       end
@@ -138,7 +137,7 @@ module FilterNavigation
       ::Dropdown::Item.new(
         filter_label(:'trash-alt', :delete),
         delete_group_people_filter_path(filter),
-        data: { confirm: template.ti(:confirm_delete), method: :delete }
+        data: {confirm: template.ti(:confirm_delete), method: :delete}
       )
     end
 
@@ -164,7 +163,7 @@ module FilterNavigation
     def fixed_types_path(name, types, options = {})
       type_ids = types.collect(&:id).join(Person::Filter::Base::ID_URL_SEPARATOR)
       path(options.merge(name: name,
-                         filters: { role: { role_type_ids: type_ids } }))
+                         filters: {role: {role_type_ids: type_ids}}))
     end
 
     def path(options = {})
@@ -188,6 +187,5 @@ module FilterNavigation
 
       all
     end
-
   end
 end

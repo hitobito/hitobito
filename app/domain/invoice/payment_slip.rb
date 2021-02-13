@@ -6,10 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::PaymentSlip
-
   # Defined at http://www.pruefziffernberechnung.de/E/Einzahlungsschein-CH.shtml
   ESR9_TABLE = [0, 9, 4, 6, 8, 2, 7, 1, 3, 5].freeze
-  BCS = { esr: "01", esr_plus: "04" }.freeze
+  BCS = {esr: "01", esr_plus: "04"}.freeze
 
   attr_reader :invoice
 
@@ -87,5 +86,4 @@ class Invoice::PaymentSlip
   def format_as_esr(string)
     string.reverse.gsub(/(.{5})/, '\1 ').reverse
   end
-
 end

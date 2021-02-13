@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe I18nSettable do
-
   let(:person) { Person.new(first_name: "Dummy") }
 
   it "sets i18n attribute as basic value" do
@@ -114,5 +113,4 @@ describe I18nSettable do
     person.company = nil
     expect(person.company).to eq false
   end
-
 end

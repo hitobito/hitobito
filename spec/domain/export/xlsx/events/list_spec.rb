@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Export::Tabular::Events::List do
-
   let(:courses) { [course1] }
   let(:course1) { events(:top_course) }
 
@@ -19,5 +18,4 @@ describe Export::Tabular::Events::List do
 
     Export::Tabular::Events::List.xlsx(courses)
   end
-
 end

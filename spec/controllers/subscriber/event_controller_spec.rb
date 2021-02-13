@@ -9,7 +9,6 @@
 require "spec_helper"
 
 describe Subscriber::EventController do
-
   before { sign_in(person) }
 
   let(:now) { Time.zone.now }
@@ -24,7 +23,7 @@ describe Subscriber::EventController do
       before do
         create_event("event", now)
 
-        get :query, params: { q: "event", group_id: group.id, mailing_list_id: list.id }
+        get :query, params: {q: "event", group_id: group.id, mailing_list_id: list.id}
       end
 
       it { is_expected.to match(/event \(TopGroup\)/) }
@@ -37,7 +36,7 @@ describe Subscriber::EventController do
         create_event("event last_year", now - 1.year)
         create_event("event two_years_ago", now - 5.years)
 
-        get :query, params: { q: "event", group_id: group.id, mailing_list_id: list.id }
+        get :query, params: {q: "event", group_id: group.id, mailing_list_id: list.id}
       end
 
       it { is_expected.to match(/now/) }
@@ -57,7 +56,7 @@ describe Subscriber::EventController do
         create_event("event", now, groups(:bottom_layer_two))
         create_event("event", now, groups(:top_group))
 
-        get :query, params: { q: "event", group_id: group.id, mailing_list_id: list.id }
+        get :query, params: {q: "event", group_id: group.id, mailing_list_id: list.id}
       end
 
       it { is_expected.to match(%r{#{groups(:bottom_group_one_one).name}}) }
@@ -70,7 +69,7 @@ describe Subscriber::EventController do
       before do
         create_event("foobar", now)
 
-        get :query, params: { q: "Top Group", group_id: group.id, mailing_list_id: list.id }
+        get :query, params: {q: "Top Group", group_id: group.id, mailing_list_id: list.id}
       end
 
       it { is_expected.to match(/foobar/) }
@@ -81,7 +80,7 @@ describe Subscriber::EventController do
         course = Fabricate(:course, name: "foobar", groups: [group])
         Fabricate(:event_date, event: course, start_at: now)
 
-        get :query, params: { q: "Scharleiter", group_id: group.id, mailing_list_id: list.id }
+        get :query, params: {q: "Scharleiter", group_id: group.id, mailing_list_id: list.id}
       end
 
       it { is_expected.to match(/foobar/) }
@@ -89,16 +88,15 @@ describe Subscriber::EventController do
   end
 
   context "POST create" do
-
     let(:event) { create_event("event", now) }
 
     it "adds subscription" do
       expect do
         post :create, params: {
-                        group_id: group.id,
-                        mailing_list_id: list.id,
-                        subscription: { subscriber_id: event.id }
-                      }
+          group_id: group.id,
+          mailing_list_id: list.id,
+          subscription: {subscriber_id: event.id}
+        }
       end.to change(Subscription, :count).by(1)
 
       is_expected.to redirect_to(group_mailing_list_subscriptions_path(list.group_id, list.id))
@@ -106,9 +104,9 @@ describe Subscriber::EventController do
 
     it "without subscriber_id replaces error" do
       post :create, params: {
-                      group_id: group.id,
-                      mailing_list_id: list.id
-                    }
+        group_id: group.id,
+        mailing_list_id: list.id
+      }
 
       is_expected.to render_template("crud/new")
       expect(assigns(:subscription).errors.size).to eq(1)
@@ -121,10 +119,10 @@ describe Subscriber::EventController do
 
       expect do
         post :create, params: {
-                        group_id: group.id,
-                        mailing_list_id: list.id,
-                        subscription: { subscriber_id: event.id }
-                      }
+          group_id: group.id,
+          mailing_list_id: list.id,
+          subscription: {subscriber_id: event.id}
+        }
       end.not_to change(Subscription, :count)
 
       is_expected.to render_template("crud/new")
@@ -133,11 +131,9 @@ describe Subscriber::EventController do
     end
   end
 
-
   def create_event(name, start_at, event_group = group)
     event = Fabricate(:event, name: name, groups: [event_group])
     event.dates.first.update_attribute(:start_at, start_at)
     event
   end
-
 end

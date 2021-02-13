@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 # == Schema Information
 #
 # Table name: people
@@ -67,7 +68,6 @@
 require "spec_helper"
 
 describe PeopleSerializer do
-
   let(:person) do
     p = people(:top_leader)
     Fabricate(:additional_email, contactable: p, public: true)
@@ -78,7 +78,7 @@ describe PeopleSerializer do
 
   let(:controller) { double().as_null_object }
 
-  let(:serializer) { PersonSerializer.new(person, controller: controller)}
+  let(:serializer) { PersonSerializer.new(person, controller: controller) }
   let(:hash) { serializer.to_hash }
 
   subject { hash[:people].first }
@@ -140,7 +140,5 @@ describe PeopleSerializer do
       expect(serial_other.first[:household_key]).not_to eq(nil)
       expect(serial_person.first[:household_key]).to eq(serial_other.first[:household_key])
     end
-
   end
-
 end

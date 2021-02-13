@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::PersonAddRequestsController < ApplicationController
-
   before_action :authorize_action
 
   prepend_before_action :group
@@ -37,7 +36,7 @@ class Group::PersonAddRequestsController < ApplicationController
     Person::AddRequest.
       for_layer(group).
       includes(:person,
-               requester: { roles: :group }).
+        requester: {roles: :group}).
       merge(Person.order_by_name)
   end
 
@@ -86,5 +85,4 @@ class Group::PersonAddRequestsController < ApplicationController
   def authorize_action
     authorize!(:"#{action_name}_person_add_requests", group)
   end
-
 end

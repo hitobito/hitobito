@@ -5,9 +5,7 @@
 
 require "spec_helper"
 
-
 describe MailingListsController, js: true do
-
   let(:user) { people(:top_leader) }
   let(:list) { mailing_lists(:leaders) }
 
@@ -58,5 +56,4 @@ describe MailingListsController, js: true do
 
     expect(page).to have_content "Mutter, Vater"
   end
-
 end

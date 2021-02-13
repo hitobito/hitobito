@@ -13,7 +13,6 @@
 # With the help of additional callbacks, it is possible to hook into the action
 # procedures without overriding the entire method.
 class CrudController < ListController
-
   class_attribute :permitted_attrs
 
   ACTIONS = [:show, :new, :create, :edit, :update, :destroy].freeze
@@ -37,7 +36,6 @@ class CrudController < ListController
   @@helper = Object.new
                    .extend(ActionView::Helpers::TranslationHelper)
                    .extend(ActionView::Helpers::OutputSafetyHelper)
-
 
   ##############  ACTIONS  ############################################
 
@@ -209,13 +207,11 @@ class CrudController < ListController
   # Custom Responder that handles the controller's path_args.
   # An additional :success option is used to handle action callback chain halts.
   class Responder < ActionController::Responder
-
     def initialize(controller, resources, options = {})
       super(controller, with_path_args(resources, controller), options)
     end
 
     private
-
 
     # Check whether the resource has errors. Additionally checks the :success option.
     def has_errors? # rubocop:disable Naming/PredicateName
@@ -226,9 +222,7 @@ class CrudController < ListController
     def with_path_args(resources, controller)
       resources.size == 1 ? Array(controller.send(:path_args, resources.first)) : resources
     end
-
   end
 
   self.responder = Responder
-
 end

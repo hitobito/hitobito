@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::Qualifier
-
   class << self
     def for(participation)
       new(participation, qualifier_role(participation))
@@ -107,5 +106,4 @@ class Event::Qualifier
   def prolongation_kinds
     event.kind.qualification_kinds("prolongation", @role)
   end
-
 end

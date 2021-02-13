@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Invoice::ScorReference do
-
   it "succeeds for valid sequence value" do
     expect(described_class.create("test")).to eq "RF55TEST"
   end
@@ -24,5 +23,4 @@ describe Invoice::ScorReference do
   it "fails if string is too long" do
     expect { described_class.create("A" * 26) }.to raise_error(/^Invalid size/)
   end
-
 end

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe ChangelogReader do
-
   subject { ChangelogReader.new }
 
   context "parsing changelog lines" do
@@ -28,6 +27,7 @@ describe ChangelogReader do
         "* another change",
       ].join("\n")
     end
+
     before do
       ChangelogReader.instance_variable_set(:@changelogs, [])
     end
@@ -93,7 +93,7 @@ describe ChangelogReader do
     expect(sorted[3]).to eq(v3)
     expect(sorted[4]).to eq(v1)
 
-    expect(sorted.map(&:version)).to eq(%w( 2.15 2.3 1.X 1.11 1.1 ))
+    expect(sorted.map(&:version)).to eq(%w(2.15 2.3 1.X 1.11 1.1))
   end
 
   it "reads existing changelog file" do

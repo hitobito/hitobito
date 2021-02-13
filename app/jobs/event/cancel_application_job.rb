@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_jubla.
 
 class Event::CancelApplicationJob < BaseJob
-
   self.parameters = [:event_id, :person_id]
 
   def initialize(event, person)
@@ -25,5 +24,4 @@ class Event::CancelApplicationJob < BaseJob
   def person
     Person.find(@person_id)
   end
-
 end

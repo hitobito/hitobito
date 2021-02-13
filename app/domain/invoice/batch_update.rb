@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::BatchUpdate
-
   attr_reader :invoices, :sender
 
   def initialize(invoices, sender = nil)
@@ -91,5 +90,4 @@ class Invoice::BatchUpdate
   def result
     @result ||= Invoice::BatchUpdateResult.new
   end
-
 end

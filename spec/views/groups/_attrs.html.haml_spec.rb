@@ -7,15 +7,14 @@
 
 require "spec_helper"
 describe "groups/_attrs.html.haml" do
-
   let(:group) { groups(:top_layer) }
 
-  let(:dom) { Capybara::Node::Simple.new(@rendered)  }
+  let(:dom) { Capybara::Node::Simple.new(@rendered) }
 
   before do
     assign(:group, group)
-    assign(:sub_groups,  "Gruppen" => [groups(:bottom_layer_one)],
-                         "Untergruppen" => [groups(:top_group)])
+    assign(:sub_groups, "Gruppen" => [groups(:bottom_layer_one)],
+                        "Untergruppen" => [groups(:top_group)])
     allow(view).to receive_messages(current_user: current_user)
     allow(controller).to receive_messages(current_user: current_user)
     allow(view).to receive_messages(entry: GroupDecorator.decorate(group))
@@ -31,5 +30,4 @@ describe "groups/_attrs.html.haml" do
       expect(sections.last).to have_content "Untergruppen"
     end
   end
-
 end

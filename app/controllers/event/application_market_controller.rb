@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ApplicationMarketController < ApplicationController
-
   before_action :authorize
 
   decorates :event, :participants, :participation, :group

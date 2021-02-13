@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe ApplicationDecorator do
-  it "#klass returns model class"  do
+  it "#klass returns model class" do
     dec = GroupDecorator.new(Group.new)
     expect(dec.klass).to eq Group
   end
@@ -49,6 +49,4 @@ describe ApplicationDecorator do
       end
     end
   end
-
-
 end

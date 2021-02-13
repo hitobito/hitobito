@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 module Sheet
   class Base
     include Translatable
@@ -143,16 +142,16 @@ module Sheet
       content_tag(:div, class: "container-shadow") do
         content_tag(:div, id: "content") do
           render_breadcrumbs +
-          capture(&block)
+            capture(&block)
         end
       end
     end
 
     def render_as_parent(&block)
       render_breadcrumbs +
-      render_parent_title +
-      render_tabs +
-      child.render(&block)
+        render_parent_title +
+        render_tabs +
+        child.render(&block)
     end
 
     # title in parent sheet

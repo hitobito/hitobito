@@ -7,7 +7,6 @@ require "spec_helper"
 require "csv"
 
 describe Address::Importer do
-
   let(:csv) do
     <<~CSV
       00;20200817;13229
@@ -123,7 +122,6 @@ describe Address::Importer do
     subject.prepare_files
     expect(subject.streets.to_h.values.first[:town]).to eq "Lausanne"
   end
-
 
   it "ignores empty numbers" do
     csv = <<~CSV

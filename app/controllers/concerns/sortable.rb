@@ -40,7 +40,6 @@ module Sortable
 
   # Prepended methods for sorting.
   module Prepends
-
     private
 
     # Enhance the list entries with an optional sort order.
@@ -55,6 +54,7 @@ module Sortable
     def sorting?
       params[:sort].present? && sortable?(params[:sort])
     end
+
     # Return sort columns from defined mappings or as null_safe_sort from parameter.
     def sort_columns
       sort_mappings_with_indifferent_access[params[:sort]] ||

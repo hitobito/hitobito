@@ -8,15 +8,14 @@
 require "spec_helper"
 
 describe Export::SubscriptionsJob do
-
   subject { Export::SubscriptionsJob.new(format, user.id, mailing_list.id, household: true, filename: "subscription_export") }
 
   let(:mailing_list) { mailing_lists(:info) }
-  let(:user)         { people(:top_leader)}
+  let(:user) { people(:top_leader) }
 
-  let(:group)        { groups(:top_layer) }
+  let(:group) { groups(:top_layer) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
-  let(:filepath)     { AsyncDownloadFile::DIRECTORY.join("subscription_export") }
+  let(:filepath) { AsyncDownloadFile::DIRECTORY.join("subscription_export") }
 
   before do
     SeedFu.quiet = true
@@ -31,7 +30,6 @@ describe Export::SubscriptionsJob do
 
     it "and saves it" do
       subject.perform
-
 
       lines = File.readlines("#{filepath}.#{format}")
       expect(lines.size).to eq(3)
@@ -48,5 +46,4 @@ describe Export::SubscriptionsJob do
       expect(File.exist?("#{filepath}.#{format}"))
     end
   end
-
 end

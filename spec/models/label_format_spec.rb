@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 # == Schema Information
 #
 # Table name: label_formats
@@ -23,7 +24,6 @@
 require "spec_helper"
 
 describe LabelFormat do
-
   it "nullifies people last_label_format_id on destroy" do
     f = Fabricate(:label_format)
     p = Person.first
@@ -33,7 +33,6 @@ describe LabelFormat do
   end
 
   context ".for_person" do
-
     let(:person) { Person.first }
 
     before do
@@ -51,7 +50,5 @@ describe LabelFormat do
 
       expect(LabelFormat.for_person(person).size).to eq(1)
     end
-
   end
-
 end

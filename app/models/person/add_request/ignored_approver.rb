@@ -18,23 +18,21 @@
 #  person_add_request_ignored_approvers_index  (group_id,person_id) UNIQUE
 #
 class Person::AddRequest::IgnoredApprover < ActiveRecord::Base
-
   belongs_to :group, class_name: "::Group"
   belongs_to :person
 
   validates_by_schema
-  validates :person_id, uniqueness: { scope: :group_id }
+  validates :person_id, uniqueness: {scope: :group_id}
 
   class << self
-
     def approvers(layer)
       ignored = select(:person_id).where(group_id: layer.id)
-      possible_approvers(layer).where.not(people: { id: ignored })
+      possible_approvers(layer).where.not(people: {id: ignored})
     end
 
     def possible_approvers(layer)
       Person.in_layer(layer).
-        where(roles: { type: approver_role_types.collect(&:sti_name) }).
+        where(roles: {type: approver_role_types.collect(&:sti_name)}).
         distinct
     end
 
@@ -51,7 +49,5 @@ class Person::AddRequest::IgnoredApprover < ActiveRecord::Base
         destroy_all
       end
     end
-
   end
-
 end

@@ -7,8 +7,8 @@ require "spec_helper"
 
 describe Cookies::AsyncSynchronization do
   let(:cookie_jar) { ActionDispatch::Request.new({}).cookie_jar }
-  let(:value)      { JSON.parse(cookie_jar[:async_synchronizations]) }
-  let(:subject)    { described_class.new(cookie_jar) }
+  let(:value) { JSON.parse(cookie_jar[:async_synchronizations]) }
+  let(:subject) { described_class.new(cookie_jar) }
 
   it "tracks single synchronization in cookie" do
     subject.set(mailing_list_id: 1)
@@ -36,5 +36,4 @@ describe Cookies::AsyncSynchronization do
     subject.remove(mailing_list_id: 1)
     expect(cookie_jar).not_to have_key(:async_synchronizations)
   end
-
 end

@@ -7,13 +7,12 @@
 
 module Messages
   class PreviewsController < ApplicationController
-
     def show
       authorize!(:show, message)
       if recipients.present?
         send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename
       else
-        redirect_to  message.path_args, alert: t(".recipients_empty")
+        redirect_to message.path_args, alert: t(".recipients_empty")
       end
     end
 
@@ -35,6 +34,5 @@ module Messages
     def people
       message.mailing_list.people
     end
-
   end
 end

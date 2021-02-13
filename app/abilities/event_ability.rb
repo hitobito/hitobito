@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class EventAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Event
 
   on(Event) do
@@ -26,7 +25,7 @@ class EventAbility < AbilityDsl::Base
 
     permission(:layer_full).
       may(:index_participations, :update, :create, :destroy,
-          :application_market, :qualify, :qualifications_read).
+        :application_market, :qualify, :qualifications_read).
       in_same_layer
 
     permission(:layer_and_below_full).
@@ -55,7 +54,7 @@ class EventAbility < AbilityDsl::Base
   def if_full_permission_in_course_layer
     contains_any?(user_context.permission_layer_ids(:layer_full) +
                   user_context.permission_layer_ids(:layer_and_below_full),
-                  course_offerers)
+      course_offerers)
   end
 
   def if_layer_and_below_full_on_root
@@ -85,5 +84,4 @@ class EventAbility < AbilityDsl::Base
       flat_map(&:roles).
       any? { |r| r.is_a?(Event::Role::Participant) }
   end
-
 end

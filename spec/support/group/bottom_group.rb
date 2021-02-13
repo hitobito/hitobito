@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::BottomGroup < Group
-
   children Group::BottomGroup
 
   class Leader < ::Role
@@ -19,5 +18,4 @@ class Group::BottomGroup < Group
   end
 
   roles Leader, Member
-
 end

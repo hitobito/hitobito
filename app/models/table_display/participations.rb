@@ -13,7 +13,6 @@
 #
 
 class TableDisplay::Participations < TableDisplay
-
   QUESTION_REGEX = /^event_question_(\d+)$/
 
   def available

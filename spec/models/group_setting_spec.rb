@@ -26,7 +26,6 @@
 require "spec_helper"
 
 describe GroupSetting do
-
   let(:group) { groups(:top_layer) }
   let(:setting) do
     GroupSetting.new(var: "text_message_provider")

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Event::RegisterController do
-
   let(:event) do
     events(:top_event).tap do |e|
       e.update_column(:external_applications, true)
@@ -17,7 +16,6 @@ describe Event::RegisterController do
   let(:group) { event.groups.first }
 
   context "GET index" do
-
     context "no external applications" do
       before do
         event.update_column(:external_applications, false)
@@ -25,15 +23,16 @@ describe Event::RegisterController do
 
       context "as logged in user" do
         before { sign_in(people(:top_leader)) }
+
         it "displays event page" do
-          get :index, params: { group_id: group.id, id: event.id }
+          get :index, params: {group_id: group.id, id: event.id}
           is_expected.to redirect_to(group_event_path(group, event))
         end
       end
 
       context "as external user" do
         it "displays standard login forms" do
-          get :index, params: { group_id: group.id, id: event.id }
+          get :index, params: {group_id: group.id, id: event.id}
           is_expected.to redirect_to(new_person_session_path)
         end
       end
@@ -46,15 +45,16 @@ describe Event::RegisterController do
 
       context "as logged in user" do
         before { sign_in(people(:top_leader)) }
+
         it "displays event page" do
-          get :index, params: { group_id: group.id, id: event.id }
+          get :index, params: {group_id: group.id, id: event.id}
           is_expected.to redirect_to(group_event_path(group, event))
         end
       end
 
       context "as external user" do
         it "displays external login forms" do
-          get :index, params: { group_id: group.id, id: event.id }
+          get :index, params: {group_id: group.id, id: event.id}
           is_expected.to render_template("index")
           expect(flash[:notice]).to eq "Du musst dich einloggen um dich für den Anlass 'Top Event' anzumelden."
         end
@@ -68,8 +68,9 @@ describe Event::RegisterController do
 
       context "as logged in user" do
         before { sign_in(people(:top_leader)) }
+
         it "displays event page" do
-          get :index, params: { group_id: group.id, id: event.id }
+          get :index, params: {group_id: group.id, id: event.id}
           is_expected.to redirect_to(group_event_path(group, event))
           expect(flash[:alert]).to eq "Das Anmeldefenster für diesen Anlass ist geschlossen."
         end
@@ -77,7 +78,7 @@ describe Event::RegisterController do
 
       context "as external user" do
         it "displays standard login forms" do
-          get :index, params: { group_id: group.id, id: event.id }
+          get :index, params: {group_id: group.id, id: event.id}
           is_expected.to redirect_to(new_person_session_path)
           expect(flash[:alert]).to eq "Das Anmeldefenster für diesen Anlass ist geschlossen."
         end
@@ -88,7 +89,7 @@ describe Event::RegisterController do
   context "POST check" do
     context "without email" do
       it "displays form again" do
-        post :check, params: { group_id: group.id, id: event.id, person: { email: "" } }
+        post :check, params: {group_id: group.id, id: event.id, person: {email: ""}}
         is_expected.to render_template("index")
         expect(flash[:alert]).to eq "Bitte gib eine E-Mail ein"
       end
@@ -99,7 +100,7 @@ describe Event::RegisterController do
         post :check, params: {
           group_id: group.id,
           id: event.id,
-          person: { email: "foo@example.com", verification: "Foo" }
+          person: {email: "foo@example.com", verification: "Foo"}
         }
 
         is_expected.to redirect_to(new_person_session_path)
@@ -109,7 +110,7 @@ describe Event::RegisterController do
     context "for existing person" do
       it "generates one time login token" do
         expect do
-          post :check, params: { group_id: group.id, id: event.id, person: { email: people(:top_leader).email } }
+          post :check, params: {group_id: group.id, id: event.id, person: {email: people(:top_leader).email}}
         end.to change { Delayed::Job.count }.by(1)
         is_expected.to render_template("index")
         expect(flash[:notice]).to include "Wir haben dich in unserer Datenbank gefunden."
@@ -119,7 +120,7 @@ describe Event::RegisterController do
 
     context "for non-existing person" do
       it "displays person form" do
-        post :check, params: { group_id: group.id, id: event.id, person: { email: "not-existing@example.com" } }
+        post :check, params: {group_id: group.id, id: event.id, person: {email: "not-existing@example.com"}}
         is_expected.to render_template("register")
         expect(flash[:notice]).to eq "Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest."
       end
@@ -132,7 +133,7 @@ describe Event::RegisterController do
         event.update!(required_contact_attrs: [])
 
         expect do
-          put :register, params: { group_id: group.id, id: event.id, event_participation_contact_data: { first_name: "barney", last_name: "foo", email: "not-existing@example.com" } }
+          put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {first_name: "barney", last_name: "foo", email: "not-existing@example.com"}}
         end.to change { Person.count }.by(1)
 
         is_expected.to redirect_to(new_group_event_participation_path(group, event))
@@ -163,12 +164,11 @@ describe Event::RegisterController do
         event.update!(required_contact_attrs: [])
 
         expect do
-          put :register, params: { group_id: group.id, id: event.id, event_participation_contact_data: { email: "not-existing@example.com" } }
+          put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: {email: "not-existing@example.com"}}
         end.not_to change { Person.count }
 
         is_expected.to render_template("register")
       end
     end
   end
-
 end

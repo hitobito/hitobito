@@ -8,8 +8,8 @@
 require "spec_helper"
 
 describe "Person Tags", js: true do
-
   subject { page }
+
   let(:group) { groups(:top_group) }
   let(:leader) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group).person }
   let(:secretary) { Fabricate(Group::TopGroup::LocalSecretary.name.to_sym, group: group).person }
@@ -154,5 +154,4 @@ describe "Person Tags", js: true do
       context: "tags"
     )
   end
-
 end

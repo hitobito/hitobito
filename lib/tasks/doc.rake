@@ -7,7 +7,6 @@
 
 module Hitobito
   class DocGenerator
-
     attr_reader :title, :dir
 
     def initialize(dir, title)
@@ -35,7 +34,7 @@ module Hitobito
       html.gsub!("{content}", generate_html(markdown))
       html.gsub!("<table>", '<table class="table table-striped">')
       html.gsub!(/<nav class='nav-left'>(.*?)<ul>/m,
-                 "<nav class='nav-left'>\\1<ul class='nav-left-list'>")
+        "<nav class='nav-left'>\\1<ul class='nav-left-list'>")
       html
     end
 
@@ -52,8 +51,8 @@ module Hitobito
 
     def generate_html(markdown)
       Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(with_toc_data: true),
-                              tables: true,
-                              no_intra_emphasis: true).render(markdown)
+        tables: true,
+        no_intra_emphasis: true).render(markdown)
     end
 
     def generate_toc(markdown)

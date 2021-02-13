@@ -6,14 +6,14 @@
 #  https://github.com/hitobito/hitobito.
 
 require "spec_helper"
-describe CustomContentDecorator, :draper_with_helpers  do
+describe CustomContentDecorator, :draper_with_helpers do
   let(:decorator) { CustomContentDecorator.new(content) }
 
   context "#available_placeholders" do
     subject { decorator.available_placeholders }
 
     context "placeholders present" do
-      let(:content)   { custom_contents(:login) }
+      let(:content) { custom_contents(:login) }
 
       it "lists available placeholders in string" do
         is_expected.to eq "Verfügbare Platzhalter: {login-url}, {recipient-name}, {sender-name}"
@@ -21,12 +21,11 @@ describe CustomContentDecorator, :draper_with_helpers  do
     end
 
     context "placeholders missing" do
-      let(:content)   { CustomContent.new }
+      let(:content) { CustomContent.new }
 
       it "informs when no placeholders are available" do
         is_expected.to eq "Keine Platzhalter vorhanden"
       end
     end
   end
-
 end

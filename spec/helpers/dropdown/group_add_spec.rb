@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe "Dropdown::GroupAdd" do
-
   include FormatHelper
   include I18nHelper
   include LayoutHelper

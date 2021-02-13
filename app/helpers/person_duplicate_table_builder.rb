@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class PersonDuplicateTableBuilder
-
   I18N_PREFIX = "person_duplicates".freeze
   I18N_PERSON = "activerecord.attributes.person".freeze
   I18N_PERSON_DUPLICATE = "activerecord.attributes.person_duplicate".freeze
@@ -35,9 +34,9 @@ class PersonDuplicateTableBuilder
     content_tag(:table, class: TABLE_CLASS) do
       content_tag(:thead, html_header) +
         content_tag_nested(:tbody, @entries) do |e|
-          person_row(e, :person_1) +
-            person_row(e, :person_2) +
-            divider_row(e)
+        person_row(e, :person_1) +
+          person_row(e, :person_2) +
+          divider_row(e)
       end
     end
   end
@@ -59,8 +58,8 @@ class PersonDuplicateTableBuilder
     label = person.person_name
     if can?(:show, person)
       link_to(label,
-              group_person_path(person.primary_group, person),
-              target: "_blank")
+        group_person_path(person.primary_group, person),
+        target: "_blank")
     else
       label
     end
@@ -81,16 +80,16 @@ class PersonDuplicateTableBuilder
 
   def action_button_merge(entry)
     action_button(t("merge.action"),
-                  new_merge_path(entry),
-                  :'user-friends',
-                  remote: true)
+      new_merge_path(entry),
+      :'user-friends',
+      remote: true)
   end
 
   def action_button_ignore(entry)
     action_button(t("ignore.action"),
-                  new_ignore_path(entry),
-                  :'user-slash',
-                  remote: true)
+      new_ignore_path(entry),
+      :'user-slash',
+      remote: true)
   end
 
   def new_merge_path(entry)
@@ -105,8 +104,7 @@ class PersonDuplicateTableBuilder
       id: entry.id)
   end
 
-
-  def divider_row(entry) 
+  def divider_row(entry)
     return "" if @entries.last == entry
 
     content_tag(:tr, class: "divider") do

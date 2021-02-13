@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Export::Pdf::Messages::Letter do
-
   let(:letter) { messages(:letter) }
   let(:recipients) { [people(:bottom_member)] }
   let(:options) { {} }
@@ -34,7 +33,7 @@ describe Export::Pdf::Messages::Letter do
   end
 
   context "preview" do
-    let(:options) { { preview: true } }
+    let(:options) { {preview: true} }
 
     it "renders extra background image" do
       expect(Prawn::Document).to receive(:new).with(
@@ -74,6 +73,4 @@ describe Export::Pdf::Messages::Letter do
       ]
     end
   end
-
-
 end

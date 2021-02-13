@@ -6,13 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 class AppStatus::Store < AppStatus
-
   def initialize
     @store_ok = store_ok?
   end
 
   def details
-    { store_ok?: @store_ok }
+    {store_ok?: @store_ok}
   end
 
   def code
@@ -25,5 +24,4 @@ class AppStatus::Store < AppStatus
     folder = Rails.root.join("public")
     File.directory?(folder) && File.writable?(folder)
   end
-
 end

@@ -8,14 +8,13 @@
 require "spec_helper"
 
 describe Event::KindsController do
-
   let(:destroyed) { Event::Kind.with_deleted.find(ActiveRecord::FixtureSet.identify(:old)) }
 
   before { sign_in(people(:top_leader)) }
 
   it "POST update resets destroy flag when updating deleted kinds" do
     expect(destroyed).to be_deleted
-    post :update, params: { id: destroyed.id, event_kind: { label: destroyed.label } }
+    post :update, params: {id: destroyed.id, event_kind: {label: destroyed.label}}
     expect(destroyed.reload).not_to be_deleted
   end
 
@@ -26,9 +25,9 @@ describe Event::KindsController do
 
   it "POST create accepts qualification_conditions and general_information" do
     post :create, params: {
-                                event_kind: { label: "Foo",
-                                                            application_conditions: "<b>bar</b>",
-                                                            general_information: "<b>baz</b>" }
+      event_kind: {label: "Foo",
+                   application_conditions: "<b>bar</b>",
+                   general_information: "<b>baz</b>"}
     }
 
     kind = assigns(:kind)
@@ -43,7 +42,7 @@ describe Event::KindsController do
     let(:kind) { event_kinds(:fk) }
 
     it "creates event kind without associations" do
-      post :create, params: { event_kind: { label: "Foo" } }
+      post :create, params: {event_kind: {label: "Foo"}}
 
       expect(assigns(:kind).errors.full_messages).to eq []
 
@@ -53,22 +52,22 @@ describe Event::KindsController do
 
     it "adds associations to new event kind" do
       post :create, params: {
-                                  event_kind: { label: "Foo",
-                                                              precondition_qualification_kinds: {
-                                                                "0" => { qualification_kind_ids: [sl.id, gl.id] },
-                                                                "2" => { qualification_kind_ids: [sl.id, ql.id] }
-                                                              },
-                                                              qualification_kinds: {
-                                                                participant: {
-                                                                  qualification: { qualification_kind_ids: [sl.id, gl.id] },
-                                                                  prolongation: { qualification_kind_ids: [sl.id] }
-                                                                },
-                                                                leader: {
-                                                                  qualification: { qualification_kind_ids: [sl.id, gl.id] },
-                                                                  prolongation: { qualification_kind_ids: [sl.id, gl.id] }
-                                                                }
-                                                              }
-                                                            }
+        event_kind: {label: "Foo",
+                     precondition_qualification_kinds: {
+                       "0" => {qualification_kind_ids: [sl.id, gl.id]},
+                       "2" => {qualification_kind_ids: [sl.id, ql.id]}
+                     },
+                     qualification_kinds: {
+                       participant: {
+                         qualification: {qualification_kind_ids: [sl.id, gl.id]},
+                         prolongation: {qualification_kind_ids: [sl.id]}
+                       },
+                       leader: {
+                         qualification: {qualification_kind_ids: [sl.id, gl.id]},
+                         prolongation: {qualification_kind_ids: [sl.id, gl.id]}
+                       }
+                     }
+                                  }
       }
 
       expect(assigns(:kind).errors.full_messages).to eq []
@@ -88,9 +87,9 @@ describe Event::KindsController do
       ids = kind.event_kind_qualification_kinds.pluck(:qualification_kind_id)
       ids << ql.id
 
-      put :update, params: { id: kind.id, event_kind: { label: kind.label,
-                                              qualification_kinds: { participant: { prolongation: {
-                                                qualification_kind_ids: ids } } } } }
+      put :update, params: {id: kind.id, event_kind: {label: kind.label,
+                                                      qualification_kinds: {participant: {prolongation: {
+                                                        qualification_kind_ids: ids}}}}}
 
       assocs = assigns(:kind).event_kind_qualification_kinds
       expect(assocs.count).to eq 5
@@ -104,13 +103,13 @@ describe Event::KindsController do
         category: "precondition", role: "participant", grouping: 2, qualification_kind_id: sl.id)
       expect(kind.event_kind_qualification_kinds.count).to eq 6
 
-      put :update, params: { id: kind.id, event_kind: { label: kind.label,
-                                              precondition_qualification_kinds: {
-                                                "0" => { qualification_kind_ids: [ql.id] },
-                                                "1" => { qualification_kind_ids: [gl.id] },
-                                              },
-                                              qualification_kinds: { participant: { prolongation: {
-                                                qualification_kind_ids: [gl.id] } } } } }
+      put :update, params: {id: kind.id, event_kind: {label: kind.label,
+                                                      precondition_qualification_kinds: {
+                                                        "0" => {qualification_kind_ids: [ql.id]},
+                                                        "1" => {qualification_kind_ids: [gl.id]},
+                                                      },
+                                                      qualification_kinds: {participant: {prolongation: {
+                                                        qualification_kind_ids: [gl.id]}}}}}
 
       assocs = assigns(:kind).event_kind_qualification_kinds
       expect(assocs.count).to eq 3
@@ -122,15 +121,12 @@ describe Event::KindsController do
         category: "precondition", role: "participant", grouping: 1, qualification_kind_id: gl.id)
       expect(kind.event_kind_qualification_kinds.count).to eq 5
 
-      put :update, params: { id: kind.id, event_kind: { label: kind.label,
-                                              qualification_kinds: { participant: { prolongation: {
-                                                qualification_kind_ids: [] } } } } }
+      put :update, params: {id: kind.id, event_kind: {label: kind.label,
+                                                      qualification_kinds: {participant: {prolongation: {
+                                                        qualification_kind_ids: []}}}}}
 
       assocs = assigns(:kind).event_kind_qualification_kinds
       expect(assocs.count).to eq 0
     end
-
   end
-
-
 end

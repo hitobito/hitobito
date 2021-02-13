@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe HelpText do
-
   it "assigns from context and key for new records" do
     ht = help_texts(:events_action_index)
     expect(ht.controller).to eq "events"
@@ -24,10 +23,9 @@ describe HelpText do
   it ".list orders by human model name" do
     first = help_texts(:course_field_name)
     second = help_texts(:people_action_index)
-    third  = help_texts(:events_action_index)
+    third = help_texts(:events_action_index)
     HelpText.where.not(id: [first.id, second.id, third.id]).destroy_all
 
     expect(HelpText.list).to eq [third, first, second]
   end
-
 end

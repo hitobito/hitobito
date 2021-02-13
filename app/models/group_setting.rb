@@ -26,10 +26,9 @@
 # https://github.com/ledermann/rails-settings
 
 class GroupSetting < RailsSettings::SettingObject
-
   ENCRYPTED_VALUES = %w(username password).freeze
   SETTINGS = {
-    text_message_provider: { username: nil, password: nil, provider: %w(aspsms), originator: nil }
+    text_message_provider: {username: nil, password: nil, provider: %w(aspsms), originator: nil}
   }.with_indifferent_access.freeze
 
   def attrs
@@ -100,5 +99,4 @@ class GroupSetting < RailsSettings::SettingObject
       where(target_id: group_id, target_type: Group.sti_name)
     end
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module WebpackHelper
-
   # Returns the path of a given image as provided by Webpack
   # (e.g. `/packs/images/myimage.png`). Prioritizes wagon images, if
   # available. This makes it possible for wagons to "override" core
@@ -80,5 +79,4 @@ module WebpackHelper
   def wagon_media_image_path(file_name)
     File.join("wagon-media", "images", file_name)
   end
-
 end

@@ -7,7 +7,7 @@ require "spec_helper"
 
 describe Invoice::Filter do
   let(:invoice) { invoices(:invoice) }
-  let(:today)   { Time.zone.parse("2019-12-16 10:00:00") }
+  let(:today) { Time.zone.parse("2019-12-16 10:00:00") }
 
   around do |example|
     travel_to(today) do

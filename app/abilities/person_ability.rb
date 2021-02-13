@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class PersonAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Person
 
   on(Person) do
@@ -17,7 +16,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:any).
       may(:show, :show_details, :show_full, :history, :update, :update_email, :primary_group, :log,
-          :update_settings).
+        :update_settings).
       herself
 
     permission(:contact_data).may(:show).other_with_contact_data
@@ -50,7 +49,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:layer_full).
       may(:update, :primary_group, :send_password_instructions, :log, :approve_add_request,
-          :index_tags, :manage_tags, :index_notes).
+        :index_tags, :manage_tags, :index_notes).
       non_restricted_in_same_layer
     permission(:layer_full).may(:update_email).if_permissions_in_all_capable_groups_or_layer
     permission(:layer_full).may(:create).all # restrictions are on Roles
@@ -61,7 +60,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:layer_and_below_full).
       may(:update, :primary_group, :send_password_instructions, :log, :approve_add_request,
-          :index_tags, :manage_tags, :index_notes).non_restricted_in_same_layer_or_visible_below
+        :index_tags, :manage_tags, :index_notes).non_restricted_in_same_layer_or_visible_below
     permission(:layer_and_below_full).
       may(:update_email).
       if_permissions_in_all_capable_groups_or_layer_or_above
@@ -97,41 +96,41 @@ class PersonAbility < AbilityDsl::Base
   def if_permissions_in_all_capable_groups
     !subject.root? &&
     # true if capable roles is empty.
-    capable_roles.all? do |role|
-      permission_in_group?(role.group_id)
-    end
+      capable_roles.all? do |role|
+        permission_in_group?(role.group_id)
+      end
   end
 
   def if_permissions_in_all_capable_groups_or_above
     !subject.root? &&
     # true if capable roles is empty.
-    capable_roles.all? do |role|
-      capable_group_roles?(role.group)
-    end
+      capable_roles.all? do |role|
+        capable_group_roles?(role.group)
+      end
   end
 
   def if_permissions_in_all_capable_groups_or_layer
     !subject.root? &&
     # true if capable roles is empty.
-    capable_roles.all? do |role|
-      permission_in_layer?(role.group.layer_group_id) ||
-      capable_group_roles?(role.group)
-    end
+      capable_roles.all? do |role|
+        permission_in_layer?(role.group.layer_group_id) ||
+          capable_group_roles?(role.group)
+      end
   end
 
   def if_permissions_in_all_capable_groups_or_layer_or_above
     !subject.root? &&
     # true if capable roles is empty.
-    capable_roles.all? do |role|
-      permission_in_layers?(role.group.layer_hierarchy.collect(&:id)) ||
-      capable_group_roles?(role.group)
-    end
+      capable_roles.all? do |role|
+        permission_in_layers?(role.group.layer_hierarchy.collect(&:id)) ||
+          capable_group_roles?(role.group)
+      end
   end
 
   def capable_group_roles?(group)
     user_context.permission_group_ids(:group_full).include?(group.id) ||
-    contains_any?(user_context.permission_group_ids(:group_and_below_full),
-                  group.local_hierarchy.collect(&:id))
+      contains_any?(user_context.permission_group_ids(:group_and_below_full),
+        group.local_hierarchy.collect(&:id))
   end
 
   # Roles of the subject that are capable of doing at least something a their group
@@ -144,5 +143,4 @@ class PersonAbility < AbilityDsl::Base
   def person
     subject
   end
-
 end

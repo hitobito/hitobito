@@ -9,7 +9,6 @@
 # inspect the application health without credentials.
 # If we'd return 401 the application would be treated as unhealthy.
 class HealthzController < ActionController::Base
-
   protect_from_forgery with: :exception
 
   def show

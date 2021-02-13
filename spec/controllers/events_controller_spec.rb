@@ -8,19 +8,16 @@
 require "spec_helper"
 
 describe EventsController do
-
   let(:group) { groups(:top_group) }
   let(:group2) { Fabricate(Group::TopGroup.name.to_sym, name: "CCC", parent: groups(:top_layer)) }
   let(:group3) { Fabricate(Group::TopGroup.name.to_sym, name: "AAA", parent: groups(:top_layer)) }
 
   context "event_course" do
-
     before { group2 }
 
     context "GET index" do
       let(:group) { groups(:top_layer) }
       let(:top_leader) { people(:top_leader) }
-
 
       before do
         sign_in(top_leader)
@@ -32,7 +29,7 @@ describe EventsController do
       it "does page correctly even if event have multiple dates" do
         expect(Kaminari.config).to receive(:default_per_page).and_return(2).at_least(:once)
         events(:top_event).dates.create!(start_at: "2012-3-02")
-        get :index, params: { group_id: group.id, year: 2012, filter: "all" }
+        get :index, params: {group_id: group.id, year: 2012, filter: "all"}
         expect(assigns(:events)).to have(2).entries
       end
 
@@ -42,28 +39,28 @@ describe EventsController do
         # there are 3 events, with the paging-limit of 2, the pages 1 and 2 are
         # filled, page 42 is not
 
-        get :index, params: { group_id: group.id, year: 2012, filter: "all", page: 42 }
+        get :index, params: {group_id: group.id, year: 2012, filter: "all", page: 42}
         expect(assigns(:events)).to have(1).entries
       end
 
       it "lists events of descendant groups by default" do
-        get :index, params: { group_id: group.id, year: 2012 }
+        get :index, params: {group_id: group.id, year: 2012}
         expect(assigns(:events)).to have(3).entries
       end
 
       it "limits list to events of all non layer descendants" do
-        get :index, params: { group_id: group.id, filter: "layer", year: 2012 }
+        get :index, params: {group_id: group.id, filter: "layer", year: 2012}
         expect(assigns(:events)).to have(2).entries
       end
 
       it "orders according to sort expression" do
-        get :index, params: { group_id: group.id, filter: "layer", year: 2012,
-                              sort: :name, sort_dir: :asc }
+        get :index, params: {group_id: group.id, filter: "layer", year: 2012,
+                             sort: :name, sort_dir: :asc}
         expect(assigns(:events).first.name).to eq "Eventus"
       end
 
       it "sets cookie on export" do
-        get :index, params: { group_id: group.id }, format: :csv
+        get :index, params: {group_id: group.id}, format: :csv
 
         cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
 
@@ -74,7 +71,7 @@ describe EventsController do
 
       it "renders json with dates" do
         Fabricate(:event_date, event: @e1)
-        get :index, params: { group_id: @g1 }, format: :json
+        get :index, params: {group_id: @g1}, format: :json
         json = JSON.parse(@response.body)
 
         event = json["events"].find { |e| e["id"] == @e1.id.to_s }
@@ -95,7 +92,7 @@ describe EventsController do
         allow_any_instance_of(relation)
           .to receive(:page).with(nil).and_return(Event.with_group_id([@g1]).page(1).per(3))
 
-        get :index, params: { group_id: @g1 }, format: :json
+        get :index, params: {group_id: @g1}, format: :json
         json = JSON.parse(@response.body)
 
         expect(json["events"].count).to eq(3)
@@ -113,8 +110,7 @@ describe EventsController do
         allow_any_instance_of(relation)
           .to receive(:page).with("2").and_return(Event.with_group_id([@g1]).page(2).per(3))
 
-
-        get :index, params: { group_id: @g1, page: 2 }, format: :json
+        get :index, params: {group_id: @g1, page: 2}, format: :json
         json = JSON.parse(@response.body)
 
         expect(json["events"].count).to eq(3)
@@ -127,11 +123,10 @@ describe EventsController do
     end
 
     context "GET show" do
-
       it "sets empty @user_participation" do
         sign_in(people(:top_leader))
 
-        get :show, params: { group_id: groups(:top_layer).id, id: events(:top_event) }
+        get :show, params: {group_id: groups(:top_layer).id, id: events(:top_event)}
 
         expect(assigns(:user_participation)).to be_nil
       end
@@ -140,7 +135,7 @@ describe EventsController do
         p = Fabricate(:event_participation, event: events(:top_event), person: people(:top_leader))
         sign_in(people(:top_leader))
 
-        get :show, params: { group_id: groups(:top_layer).id, id: events(:top_event) }
+        get :show, params: {group_id: groups(:top_layer).id, id: events(:top_event)}
 
         expect(assigns(:user_participation)).to eq(p)
       end
@@ -148,14 +143,13 @@ describe EventsController do
       it "renders json" do
         sign_in(people(:top_leader))
 
-        get :show, params: { group_id: groups(:top_layer), id: events(:top_event) }, format: :json
+        get :show, params: {group_id: groups(:top_layer), id: events(:top_event)}, format: :json
         json = JSON.parse(@response.body)
 
         event = json["events"].find { |e| e["id"] == events(:top_event).id.to_s }
         expect(event["name"]).to eq("Top Event")
         expect(event["links"]["dates"].size).to eq(1)
       end
-
     end
 
     context "GET new" do
@@ -163,7 +157,7 @@ describe EventsController do
         sign_in(people(:top_leader))
         group3
 
-        get :new, params: { group_id: group.id, event: { type: "Event" } }
+        get :new, params: {group_id: group.id, event: {type: "Event"}}
 
         expect(assigns(:groups)).to eq([group3, group2])
       end
@@ -171,7 +165,7 @@ describe EventsController do
       it "does not load deleted kinds" do
         sign_in(people(:top_leader))
 
-        get :new, params: { group_id: group.id, event: { type: "Event::Course" } }
+        get :new, params: {group_id: group.id, event: {type: "Event::Course"}}
         expect(assigns(:kinds)).not_to include event_kinds(:old)
       end
 
@@ -179,7 +173,7 @@ describe EventsController do
         sign_in(people(:top_leader))
         source = events(:top_course)
 
-        get :new, params: { group_id: source.groups.first.id, source_id: source.id }
+        get :new, params: {group_id: source.groups.first.id, source_id: source.id}
 
         event = assigns(:event)
         expect(event.state).to be_nil
@@ -195,28 +189,28 @@ describe EventsController do
         sign_in(people(:top_leader))
 
         expect do
-          get :new, params: { group_id: group.id, source_id: events(:top_course).id }
+          get :new, params: {group_id: group.id, source_id: events(:top_course).id}
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
     context "POST create" do
-      let(:date)  do
-        { label: "foo", start_at_date: Time.zone.today, finish_at_date: Time.zone.today }
+      let(:date) do
+        {label: "foo", start_at_date: Time.zone.today, finish_at_date: Time.zone.today}
       end
-      let(:question)  { { question: "foo?", choices: "1,2,3,4" } }
+      let(:question) { {question: "foo?", choices: "1,2,3,4"} }
 
       it "creates new event course with dates" do
         sign_in(people(:top_leader))
 
         post :create, params: {
-          event: {  group_ids: [group.id, group2.id],
-                    name: "foo",
-                    kind_id: event_kinds(:slk).id,
-                    dates_attributes: [date],
-                    application_questions_attributes: [question],
-                    contact_id: people(:top_leader).id,
-                    type: "Event::Course" },
+          event: {group_ids: [group.id, group2.id],
+                  name: "foo",
+                  kind_id: event_kinds(:slk).id,
+                  dates_attributes: [date],
+                  application_questions_attributes: [question],
+                  contact_id: people(:top_leader).id,
+                  type: "Event::Course"},
           group_id: group.id
         }
 
@@ -237,9 +231,9 @@ describe EventsController do
 
         expect do
           post :create, params: {
-            event: {  group_id: group.id,
-                      name: "foo",
-                      type: "Event::Course" },
+            event: {group_id: group.id,
+                    name: "foo",
+                    type: "Event::Course"},
             group_id: group.id
           }
         end.to raise_error(CanCan::AccessDenied)
@@ -262,17 +256,17 @@ describe EventsController do
           put :update, params: {
             group_id: group.id,
             id: event.id,
-            event: { name: "testevent",
-                     dates_attributes: {
-                       d1.id.to_s => { id: d1.id,
-                                       label: "Vorweek",
-                                       start_at_date: "3.1.2014",
-                                       finish_at_date: "4.1.2014" },
-                       d2.id.to_s => { id: d2.id, _destroy: true },
-                       "999" => { label: "Nachweek",
-                                  start_at_date: "3.2.2014",
-                                  finish_at_date: "5.2.2014" }
-                     } }
+            event: {name: "testevent",
+                    dates_attributes: {
+                      d1.id.to_s => {id: d1.id,
+                                     label: "Vorweek",
+                                     start_at_date: "3.1.2014",
+                                     finish_at_date: "4.1.2014"},
+                      d2.id.to_s => {id: d2.id, _destroy: true},
+                      "999" => {label: "Nachweek",
+                                start_at_date: "3.2.2014",
+                                finish_at_date: "5.2.2014"}
+                    }}
           }
           expect(assigns(:event)).to be_valid
         end.not_to(change { Event::Date.count })
@@ -302,13 +296,13 @@ describe EventsController do
             event: {
               name: "testevent",
               application_questions_attributes: {
-                q1.id.to_s => { id: q1.id, question: "Whoo?" },
-                q2.id.to_s => { id: q2.id, _destroy: true },
-                "999" => { question: "How much?", choices: "1,2,3" }
+                q1.id.to_s => {id: q1.id, question: "Whoo?"},
+                q2.id.to_s => {id: q2.id, _destroy: true},
+                "999" => {question: "How much?", choices: "1,2,3"}
               },
               admin_questions_attributes: {
-                q3.id.to_s => { id: q3.id, _destroy: true },
-                "999" => { question: "Powned?", choices: "ja, nein" }
+                q3.id.to_s => {id: q3.id, _destroy: true},
+                "999" => {question: "Powned?", choices: "ja, nein"}
               }
             }
           }
@@ -329,7 +323,6 @@ describe EventsController do
         expect(third.admin).to eq false
       end
     end
-
   end
 
   context "destroyed associations" do
@@ -344,63 +337,57 @@ describe EventsController do
       before { course.kind.destroy }
 
       it "new does not include delted kind" do
-        get :new, params: { group_id: group.id, event: { type: "Event::Course" } }
+        get :new, params: {group_id: group.id, event: {type: "Event::Course"}}
         expect(assigns(:kinds)).not_to include(course.reload.kind)
       end
 
       it "edit does include deleted kind" do
-        get :edit, params: { group_id: group.id, id: course.id }
+        get :edit, params: {group_id: group.id, id: course.id}
         expect(assigns(:kinds)).to include(course.reload.kind)
       end
-
     end
 
     context "groups" do
       before { group3.destroy }
 
       it "new does not include delete" do
-        get :new, params: { group_id: group.id, event: { type: "Event::Course" } }
+        get :new, params: {group_id: group.id, event: {type: "Event::Course"}}
         expect(assigns(:groups)).not_to include(group3)
       end
 
       it "edit does include delete" do
-        get :edit, params: { group_id: group.id, id: course.id }
+        get :edit, params: {group_id: group.id, id: course.id}
         expect(assigns(:groups)).to include(group3)
       end
     end
   end
 
   context "contact attributes" do
-
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
 
     before { sign_in(people(:top_leader)) }
 
     it "assigns required and hidden contact attributes" do
-
-      put :update, params: { group_id: group.id, id: event.id,
-                             event: { contact_attrs: { nickname: :required,
-                                                       address: :hidden,
-                                                       social_accounts: :hidden } } }
+      put :update, params: {group_id: group.id, id: event.id,
+                            event: {contact_attrs: {nickname: :required,
+                                                    address: :hidden,
+                                                    social_accounts: :hidden}}}
 
       expect(event.reload.required_contact_attrs).to include("nickname")
       expect(event.reload.hidden_contact_attrs).to include("address")
       expect(event.reload.hidden_contact_attrs).to include("social_accounts")
-
     end
 
     it "removes contact attributes" do
+      event.update!({hidden_contact_attrs: %w(social_accounts address nickname)})
 
-      event.update!({ hidden_contact_attrs: %w(social_accounts address nickname) })
-
-      put :update, params: { group_id: group.id, id: event.id,
-                             event: { contact_attrs: { nickname: :hidden } } }
+      put :update, params: {group_id: group.id, id: event.id,
+                            event: {contact_attrs: {nickname: :hidden}}}
 
       expect(event.reload.hidden_contact_attrs).to include("nickname")
       expect(event.hidden_contact_attrs).not_to include("address")
       expect(event.hidden_contact_attrs).not_to include("social_accounts")
-
     end
   end
 
@@ -410,26 +397,26 @@ describe EventsController do
 
     describe "GET index" do
       it "indexes page when token is valid" do
-        get :index, params: { group_id: group.id, token: "PermittedToken" }
+        get :index, params: {group_id: group.id, token: "PermittedToken"}
         is_expected.to render_template("index")
       end
 
       it "does not show page for unpermitted token" do
         expect do
-          get :index, params: { group_id: group.id, token: "RejectedToken" }
+          get :index, params: {group_id: group.id, token: "RejectedToken"}
         end.to raise_error(CanCan::AccessDenied)
       end
     end
 
     describe "GET show" do
       it "shows page when token is valid" do
-        get :show, params: { group_id: group.id, id: event, token: "PermittedToken" }
+        get :show, params: {group_id: group.id, id: event, token: "PermittedToken"}
         is_expected.to render_template("show")
       end
 
       it "does not show page for unpermitted token" do
         expect do
-          get :show, params: { group_id: group.id, id: event, token: "RejectedToken" }
+          get :show, params: {group_id: group.id, id: event, token: "RejectedToken"}
         end.to raise_error(CanCan::AccessDenied)
       end
     end
@@ -445,12 +432,12 @@ describe EventsController do
     end
 
     it "GET index indexes page" do
-      get :index, params: { group_id: group.id }
+      get :index, params: {group_id: group.id}
       is_expected.to render_template("index")
     end
 
     it "GET show shows page when token is valid" do
-      get :show, params: { group_id: group.id, id: event }
+      get :show, params: {group_id: group.id, id: event}
       is_expected.to render_template("show")
     end
   end
@@ -465,12 +452,12 @@ describe EventsController do
     end
 
     it "GET index redirects to login" do
-      get :index, params: { group_id: group.id }
+      get :index, params: {group_id: group.id}
       is_expected.to redirect_to("http://test.host/users/sign_in")
     end
 
     it "GET show redirects to login" do
-      get :show, params: { group_id: group.id, id: event }
+      get :show, params: {group_id: group.id, id: event}
       is_expected.to redirect_to("http://test.host/users/sign_in")
     end
   end
@@ -485,12 +472,12 @@ describe EventsController do
     end
 
     it "GET index fails with HTTP 403 (forbidden)" do
-      get :index, params: { group_id: group.id }
+      get :index, params: {group_id: group.id}
       expect(response).to have_http_status(:forbidden)
     end
 
     it "GET show fails with HTTP 403 (forbidden)" do
-      get :show, params: { group_id: group.id, id: event }
+      get :show, params: {group_id: group.id, id: event}
       expect(response).to have_http_status(:forbidden)
     end
   end
@@ -499,14 +486,13 @@ describe EventsController do
     let(:top_layer) { groups(:top_layer) }
 
     context "token" do
-
       it "in current year" do
-        get :index, params: { group_id: top_layer.id, token: "PermittedToken" }
+        get :index, params: {group_id: top_layer.id, token: "PermittedToken"}
         expect(assigns(:events)).to be_empty
       end
 
       it "in 2012" do
-        get :index, params: { group_id: top_layer.id, year: 2012, token: "PermittedToken" }
+        get :index, params: {group_id: top_layer.id, year: 2012, token: "PermittedToken"}
         expect(assigns(:events)).to have(1).entries
       end
     end
@@ -519,12 +505,12 @@ describe EventsController do
       end
 
       it "in current year" do
-        get :index, params: { group_id: top_layer.id }
+        get :index, params: {group_id: top_layer.id}
         expect(assigns(:events)).to be_empty
       end
 
       it "in 2012" do
-        get :index, params: { group_id: top_layer.id, year: 2012 }
+        get :index, params: {group_id: top_layer.id, year: 2012}
         expect(assigns(:events)).to have(1).entries
       end
     end
@@ -533,15 +519,14 @@ describe EventsController do
       before { sign_in(people(:top_leader)) }
 
       it "in current year" do
-        get :index, params: { group_id: top_layer.id }
+        get :index, params: {group_id: top_layer.id}
         expect(assigns(:events)).to be_empty
       end
 
       it "in 2012" do
-        get :index, params: { group_id: top_layer.id, year: 2012 }
+        get :index, params: {group_id: top_layer.id, year: 2012}
         expect(assigns(:events)).to have(1).entries
       end
     end
   end
-
 end

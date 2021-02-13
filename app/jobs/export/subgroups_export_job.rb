@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::SubgroupsExportJob < Export::ExportBaseJob
-
   self.parameters = PARAMETERS + [:group_id]
 
   def initialize(user_id, group_id, options)

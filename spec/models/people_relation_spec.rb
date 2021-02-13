@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 # == Schema Information
 #
 # Table name: people_relations
@@ -17,7 +18,6 @@
 require "spec_helper"
 
 describe PeopleRelation do
-
   before do
     PeopleRelation.kind_opposites["parent"] = "child"
     PeopleRelation.kind_opposites["child"] = "parent"

@@ -38,7 +38,6 @@ namespace :ci do
 
   desc "Run the tasks for a wagon commit build"
   task :wagon do
-
     Rake::Task["log:clear"].invoke
 
     wagon_exec("DISABLE_DATABASE_ENVIRONMENT_CHECK=1 " \
@@ -52,7 +51,6 @@ namespace :ci do
   end
 
   namespace :wagon do
-
     desc "Run the tasks for a wagon nightly build"
     task :nightly do
       Rake::Task["log:clear"].invoke
@@ -61,7 +59,6 @@ namespace :ci do
                  "app:ci:setup:rspec spec:all app:rubocop:report app:brakeman")
       Rake::Task["erd"].invoke
     end
-
   end
 
   def wagon_exec(cmd)

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Tags::MergeController < ApplicationController
-
   before_action :authorize
 
   def new
@@ -38,8 +37,8 @@ class Tags::MergeController < ApplicationController
 
   def merger
     Tags::Merger.new(list_param(:src_tag_ids, :tags_merge),
-                     merge_params[:dst_tag_id],
-                     merge_params[:name])
+      merge_params[:dst_tag_id],
+      merge_params[:name])
   end
 
   def merge_params

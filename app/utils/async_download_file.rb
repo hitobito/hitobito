@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class AsyncDownloadFile
-
   DIRECTORY = Pathname.new(Settings.downloads.folder)
   PERSON_ID = /-(\w+?)\./
 
@@ -43,5 +42,4 @@ class AsyncDownloadFile
       f.write(data)
     end
   end
-
 end

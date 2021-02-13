@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::SendAddRequestJob < BaseJob
-
   self.parameters = [:request_id, :locale]
 
   def initialize(request)
@@ -63,5 +62,4 @@ class Person::SendAddRequestJob < BaseJob
     last_role = person.last_non_restricted_role
     last_role && last_role.group.layer_group
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module CsvImportHelper
-
   def application_person_fields
     Import::Person.fields.map { |field| OpenStruct.new(field) }
   end
@@ -19,7 +18,7 @@ module CsvImportHelper
     end
 
     content_tag(:dt, t("activerecord.attributes.person.#{field}")) +
-    content_tag(:dd, values)
+      content_tag(:dd, values)
   end
 
   def csv_import_attrs
@@ -50,5 +49,4 @@ module CsvImportHelper
   def csv_import_tag_values(p)
     p.tag_list.to_s
   end
-
 end

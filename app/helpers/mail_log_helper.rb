@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 module MailLogHelper
-
   def format_mail_log_status(mail_log)
     type = case mail_log.status
            when /retreived|bulk_delivering/ then "info"
@@ -20,5 +19,4 @@ module MailLogHelper
     i18n_prefix = "activerecord.attributes.mail_log"
     t("#{i18n_prefix}.statuses.#{mail_log.status}")
   end
-
 end

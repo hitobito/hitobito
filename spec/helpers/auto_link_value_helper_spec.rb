@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe AutoLinkValueHelper do
-
   it "links www addresses" do
     expect(auto_link_value("www.puzzle.ch")).to eq('<a target="_blank" href="http://www.puzzle.ch">www.puzzle.ch</a>')
   end
@@ -37,5 +36,4 @@ describe AutoLinkValueHelper do
     expect(auto_link_value("@puzzle.ch")).to eq("@puzzle.ch")
     expect(auto_link_value("a$#!@puzzle.ch")).to eq("a$#!@puzzle.ch")
   end
-
 end

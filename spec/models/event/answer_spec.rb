@@ -18,7 +18,6 @@
 require "spec_helper"
 
 describe Event::Answer do
-
   let(:question) { event_questions(:top_ov) }
   let(:choices) { question.choices.split(",") }
 
@@ -30,15 +29,16 @@ describe Event::Answer do
       subject.answer = answer_param
     end
 
-
     context "valid array values (position + 1)" do
       let(:answer_param) { %w(1 2) }
+
       its(:answer) { should eq "GA, Halbtax" }
       it { is_expected.to have(0).errors_on(:answer) }
     end
 
     context "values outside of array size" do
       let(:answer_param) { %w(4 5) }
+
       its(:answer) { should be_nil }
     end
 
@@ -46,6 +46,7 @@ describe Event::Answer do
       subject { question.reload.answers.build(answer: "GA, Halbtax") }
 
       let(:answer_param) { ["0"] }
+
       its(:answer) { should be_nil }
     end
   end
@@ -55,7 +56,9 @@ describe Event::Answer do
       let(:question) { Fabricate(:event_question, required: false, choices: "Ja") }
 
       subject(:no_answer_given) { build_answer("0") } # no choice
+
       subject(:yes_answer) { build_answer("1") }
+
       subject(:depends_answer) { build_answer("2") } # not a valid choice
 
       it "may be left unanswered" do
@@ -77,5 +80,4 @@ describe Event::Answer do
       end
     end
   end
-
 end

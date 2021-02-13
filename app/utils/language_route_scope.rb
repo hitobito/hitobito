@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module LanguageRouteScope
-
   def language_scope(&block)
     languages = Settings.application.languages.to_hash.keys
     get "/:locale" => "dashboard#index", locale: /#{languages.join('|')}/
@@ -17,5 +16,4 @@ module LanguageRouteScope
       yield
     end
   end
-
 end

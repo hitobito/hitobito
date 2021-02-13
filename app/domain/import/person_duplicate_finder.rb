@@ -63,7 +63,7 @@ module Import
       exisiting_duplicate_attrs(attrs).each do |key, value|
         conditions.first << " AND " if conditions.first.present?
         conditions.first << if %w(first_name last_name company_name).include?(key.to_s)
-                              "#{key} = ?"
+          "#{key} = ?"
                             else
                               "(#{key} = ? OR #{key} IS NULL)"
                             end

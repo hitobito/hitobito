@@ -8,20 +8,19 @@
 require "spec_helper"
 
 describe Event::ParticipationConfirmationJob do
-
   let(:course) { Fabricate(:course, groups: [groups(:top_layer)], priorization: true) }
 
   let(:participation) do
     Fabricate(:event_participation,
-              event: course,
-              person: participant,
-              application: Fabricate(:event_application,
-                                     priority_2: Fabricate(:course, kind: course.kind)))
+      event: course,
+      person: participant,
+      application: Fabricate(:event_application,
+        priority_2: Fabricate(:course, kind: course.kind)))
   end
 
-  let(:person)  { Fabricate(:person, email: "anybody@example.com") }
-  let(:app1)    { Fabricate(:person, email: "approver1@example.com") }
-  let(:app2)    { Fabricate(:person, email: "approver2@example.com") }
+  let(:person) { Fabricate(:person, email: "anybody@example.com") }
+  let(:app1) { Fabricate(:person, email: "approver1@example.com") }
+  let(:app2) { Fabricate(:person, email: "approver2@example.com") }
 
   before do
     SeedFu.quiet = true
@@ -34,7 +33,6 @@ describe Event::ParticipationConfirmationJob do
   end
 
   subject { Event::ParticipationConfirmationJob.new(participation) }
-
 
   context "without approvers" do
     let(:participant) { people(:top_leader) }
@@ -102,5 +100,4 @@ describe Event::ParticipationConfirmationJob do
       end
     end
   end
-
 end

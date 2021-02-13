@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Person::AddRequest::Status
-
   def self.for(person_id, body_type, body_id)
     type = "Person::AddRequest::Status::#{body_type}".constantize rescue nil
 
@@ -16,5 +15,4 @@ module Person::AddRequest::Status
 
     type.new(person_id, body_id)
   end
-
 end

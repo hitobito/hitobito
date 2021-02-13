@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: event_questions
@@ -22,7 +21,6 @@
 #
 
 class Event::Question < ActiveRecord::Base
-
   include Globalized
   translates :question, :choices
 
@@ -36,7 +34,6 @@ class Event::Question < ActiveRecord::Base
   scope :global, -> { where(event_id: nil) }
   scope :application, -> { where(admin: false) }
   scope :admin, -> { where(admin: true) }
-
 
   def choice_items
     choices.to_s.split(",").collect(&:strip)
@@ -59,5 +56,4 @@ class Event::Question < ActiveRecord::Base
       p.answers << answers.new
     end
   end
-
 end

@@ -31,36 +31,34 @@ class Address < ActiveRecord::Base
 
   scope :list, -> { order(:street_short, "LENGTH(numbers) DESC") }
 
-
   def self.for(zip_code, street)
     where(zip_code: zip_code).
       where("LOWER(street_short) = :street OR LOWER(street_short_old) = :street OR " \
             "LOWER(street_long) = :street OR LOWER(street_long_old) = :street",
-            street: street.to_s.downcase)
+        street: street.to_s.downcase)
   end
-
 
   def to_s(_format = :default)
     "#{street_short} #{zip_code} #{town}"
   end
 
   def as_typeahead
-    { id: id,
-      label: to_s,
-      town: town,
-      zip_code: zip_code,
-      street: street_short,
-      state: state }
+    {id: id,
+     label: to_s,
+     town: town,
+     zip_code: zip_code,
+     street: street_short,
+     state: state}
   end
 
   def as_typeahead_with_number(number)
-    { id: id,
-      label: label_with_number(number),
-      town: town,
-      zip_code: zip_code,
-      street: street_short,
-      state: state,
-      number: number }
+    {id: id,
+     label: label_with_number(number),
+     town: town,
+     zip_code: zip_code,
+     street: street_short,
+     state: state,
+     number: number}
   end
 
   def label_with_number(number)

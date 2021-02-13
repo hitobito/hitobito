@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Uploader::Base < CarrierWave::Uploader::Base
-
   class_attribute :allowed_extensions
 
   # Choose what kind of storage to use for this uploader
@@ -33,5 +32,4 @@ class Uploader::Base < CarrierWave::Uploader::Base
   def store_dir
     "#{base_store_dir}/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
-
 end

@@ -18,7 +18,6 @@
 require "spec_helper"
 
 describe PersonDuplicate do
-
   context "before_save" do
     context "assign_persons_sorted_by_id" do
       it "assigns person with lower id to person_1" do

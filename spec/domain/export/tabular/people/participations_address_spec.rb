@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Export::Tabular::People::ParticipationsAddress do
-
   let(:person) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: person, event: events(:top_course)) }
   let(:list) { [participation] }
@@ -20,5 +19,4 @@ describe Export::Tabular::People::ParticipationsAddress do
     its([:first_name]) { should eq "Vorname" }
     its([:town]) { should eq "Ort" }
   end
-
 end

@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe LabelFormat::SettingsController do
-
   let(:user) { people(:top_leader) }
 
   context "PUT :update" do
@@ -17,7 +16,7 @@ describe LabelFormat::SettingsController do
     it "renders update.js" do
       sign_in(user)
 
-      put :update, params: { show_global_label_formats: "" }, format: :js
+      put :update, params: {show_global_label_formats: ""}, format: :js
 
       is_expected.to render_template("update")
     end
@@ -25,7 +24,7 @@ describe LabelFormat::SettingsController do
     it "sets flag to false if param empty" do
       sign_in(user)
 
-      put :update, params: { show_global_label_formats: "" }, format: :js
+      put :update, params: {show_global_label_formats: ""}, format: :js
       user.reload
       expect(user.show_global_label_formats).to be_falsey
     end
@@ -33,10 +32,9 @@ describe LabelFormat::SettingsController do
     it "sets flag to true if param not empty" do
       sign_in(user)
 
-      put :update, params: { show_global_label_formats: "true" }, format: :js
+      put :update, params: {show_global_label_formats: "true"}, format: :js
       user.reload
       expect(user.show_global_label_formats).to be_truthy
     end
   end
-
 end

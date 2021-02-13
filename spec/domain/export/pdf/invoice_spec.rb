@@ -7,10 +7,9 @@
 
 require "spec_helper"
 
-
 describe Export::Pdf::Invoice do
   let(:invoice) { invoices(:invoice) }
-  let(:sent)    { invoices(:sent) }
+  let(:sent) { invoices(:sent) }
 
   it "renders invoice with articles and payment_slip" do
     described_class.render(invoice, articles: true, payment_slip: true)
@@ -26,7 +25,7 @@ describe Export::Pdf::Invoice do
 
   it "renders empty invoice payment slip if without codeline" do
     expect_any_instance_of(Invoice::PaymentSlip).not_to receive(:code_line)
-    described_class.render(Invoice.new(esr_number: 1, participant_number: 1),  payment_slip: true )
+    described_class.render(Invoice.new(esr_number: 1, participant_number: 1), payment_slip: true)
   end
 
   context "currency" do
@@ -84,7 +83,7 @@ describe Export::Pdf::Invoice do
        "payment_purpose",
        "left_receiver_address",
        "right_receiver_address",
-      ].each do  |method|
+      ].each do |method|
         allow_any_instance_of(Export::Pdf::Invoice::PaymentSlip).to receive(method.to_sym)
       end
     end
@@ -106,7 +105,6 @@ describe Export::Pdf::Invoice do
       expect(subject.positions).to eq [[323.5819133858268, 44.532913385826845]]
       expect(subject.show_text.first).to eq "042>000000000000100000000000023+ 1>"
     end
-
 
     context "fixutre" do
       let(:invoice) { invoices(:invoice) }

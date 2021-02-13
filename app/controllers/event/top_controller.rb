@@ -7,7 +7,6 @@
 
 # Handles a top-level event route (/event/:id)
 class Event::TopController < ApplicationController
-
   before_action :authorize_action
 
   def show
@@ -23,14 +22,13 @@ class Event::TopController < ApplicationController
   def redirect_to_group_event
     flash.keep if html_request?
     redirect_to group_event_path(entry.groups.first,
-                                 entry,
-                                 format: request.format.to_sym,
-                                 user_email: params[:user_email],
-                                 user_token: params[:user_token])
+      entry,
+      format: request.format.to_sym,
+      user_email: params[:user_email],
+      user_token: params[:user_token])
   end
 
   def authorize_action
     authorize!(:show, entry)
   end
-
 end

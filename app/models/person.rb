@@ -56,7 +56,6 @@
 #
 
 class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
-
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,
     :email, :address, :zip_code, :town, :country, :gender, :birthday,
@@ -82,11 +81,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   # define devise before other modules
   devise :database_authenticatable,
-         :lockable,
-         :recoverable,
-         :rememberable,
-         :trackable,
-         :validatable
+    :lockable,
+    :recoverable,
+    :rememberable,
+    :trackable,
+    :validatable
 
   include Groups
   include Contactable
@@ -106,7 +105,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   stampable stamper_class_name: :person,
             deleter: false
 
-  has_paper_trail meta: { main_id: ->(p) { p.id }, main_type: sti_name },
+  has_paper_trail meta: {main_id: ->(p) { p.id }, main_type: sti_name},
                   skip: Person::INTERNAL_ATTRS + [:picture]
 
   acts_as_taggable
@@ -171,15 +170,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### VALIDATIONS
 
   validates_by_schema except: [:email, :picture, :address]
-  validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
-  validates :company_name, presence: { if: :company? }
+  validates :email, length: {allow_nil: true, maximum: 255} # other email validations by devise
+  validates :company_name, presence: {if: :company?}
   validates :birthday,
-            timeliness: { type: :date, allow_blank: true, before: Date.new(10_000, 1, 1) }
-  validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
+    timeliness: {type: :date, allow_blank: true, before: Date.new(10_000, 1, 1)}
+  validates :additional_information, length: {allow_nil: true, maximum: 2**16 - 1}
   validate :assert_has_any_name
-  validates :address, length: { allow_nil: true, maximum: 1024 }
+  validates :address, length: {allow_nil: true, maximum: 1024}
   # more validations defined by devise
-
 
   ### CALLBACKS
 
@@ -191,7 +189,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### Scopes
 
   scope :household, -> { where.not(household_key: nil) }
-
 
   ### CLASS METHODS
 
@@ -225,7 +222,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     def filter_attrs
       Person::FILTER_ATTRS.collect do |key, type|
         type ||= Person.columns_hash.fetch(key.to_s).type
-        [key.to_sym, { label: Person.human_attribute_name(key), type: type }]
+        [key.to_sym, {label: Person.human_attribute_name(key), type: type}]
       end.to_h
     end
 
@@ -240,7 +237,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       "THEN people.#{if_company} ELSE people.#{otherwise} END"
     end
   end
-
 
   ### ATTRIBUTE INSTANCE METHODS
 
@@ -270,7 +266,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       includes(:groups).
       where.not(id: id).
       where("id IN (?) OR (household_key IS NOT NULL AND household_key = ?)",
-            household_people_ids, household_key)
+        household_people_ids, household_key)
   end
 
   def greeting_name
@@ -368,5 +364,4 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   def destroy_person_duplicates
     person_duplicates.delete_all
   end
-
 end

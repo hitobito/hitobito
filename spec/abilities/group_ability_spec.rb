@@ -7,10 +7,9 @@
 
 require "spec_helper"
 
-
 describe GroupAbility do
-
   subject { ability }
+
   let(:ability) { Ability.new(role.person.reload) }
 
   context "layer and below full" do
@@ -249,6 +248,7 @@ describe GroupAbility do
 
     context "in own group" do
       let(:group) { role.group }
+
       it "may create subgroup" do
         is_expected.to be_able_to(:create, group.children.new)
       end
@@ -306,6 +306,7 @@ describe GroupAbility do
 
     context "in other group from same layer" do
       let(:group) { groups(:top_group) }
+
       it "may create subgroup" do
         is_expected.to be_able_to(:create, group.children.new)
       end
@@ -313,6 +314,7 @@ describe GroupAbility do
 
     context "in group from lower layer" do
       let(:group) { groups(:bottom_layer_one) }
+
       it "may not create subgroup" do
         is_expected.not_to be_able_to(:create, group.children.new)
       end
@@ -324,6 +326,7 @@ describe GroupAbility do
 
     context "in own group" do
       let(:group) { role.group }
+
       it "may not create subgroup" do
         is_expected.not_to be_able_to(:create, group.children.new)
       end
@@ -361,6 +364,7 @@ describe GroupAbility do
 
     context "in other group from same layer" do
       let(:group) { groups(:top_group) }
+
       it "may not create subgroup" do
         is_expected.not_to be_able_to(:create, group.children.new)
       end
@@ -368,6 +372,7 @@ describe GroupAbility do
 
     context "in group from lower layer" do
       let(:group) { groups(:bottom_layer_one) }
+
       it "may not create subgroup" do
         is_expected.not_to be_able_to(:create, group.children.new)
       end
@@ -397,6 +402,7 @@ describe GroupAbility do
   context "deleted group" do
     let(:group) { groups(:bottom_layer_two) }
     let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group) }
+
     before do
       group.children.each { |g| g.destroy }
       group.destroy
@@ -422,7 +428,6 @@ describe GroupAbility do
     let(:bottom_group) { groups(:bottom_group_one_one) }
 
     context :permission_admin do
-
       before do
         allow(Group::TopLayer::TopAdmin).to receive(:permissions)
           .and_return([:admin])
@@ -444,7 +449,6 @@ describe GroupAbility do
     end
 
     context :permission_layer_and_below_full do
-
       let(:role) { Fabricate("Group::BottomLayer::Leader", group: bottom_layer) }
 
       it "may not list duplicates on top layer" do

@@ -6,25 +6,24 @@
 require "spec_helper"
 
 describe Person::SubscriptionsController do
-  let(:group)         { groups(:bottom_layer_one) }
-  let(:top_group)     { groups(:top_group) }
-  let(:top_leader)    { people(:top_leader) }
+  let(:group) { groups(:bottom_layer_one) }
+  let(:top_group) { groups(:top_group) }
+  let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
-  let(:leaders)       { mailing_lists(:leaders) }
-
+  let(:leaders) { mailing_lists(:leaders) }
 
   context "GET#index" do
     it "may not index person subscriptions if we do not have no show_detail permission" do
       sign_in(bottom_member)
       expect do
-        get :index, params: { group_id: top_group.id, person_id: top_leader.id }
+        get :index, params: {group_id: top_group.id, person_id: top_leader.id}
       end.to raise_error CanCan::AccessDenied
     end
 
     it "may index my own subscriptions" do
       leaders.subscriptions.create(subscriber: top_leader)
       sign_in(top_leader)
-      get :index, params: { group_id: top_group.id, person_id: top_leader.id }
+      get :index, params: {group_id: top_group.id, person_id: top_leader.id}
       expect(assigns(:subscribed)).to have(1).items
     end
 
@@ -33,14 +32,14 @@ describe Person::SubscriptionsController do
       leaders.subscriptions.create(subscriber: top_leader)
       first.subscriptions.create(subscriber: top_leader)
       sign_in(top_leader)
-      get :index, params: { group_id: top_group.id, person_id: top_leader.id }
+      get :index, params: {group_id: top_group.id, person_id: top_leader.id}
       expect(assigns(:subscribed)).to eq [first, leaders]
     end
 
     it "sorts subscribable lists by name" do
       first = top_group.mailing_lists.create!(name: "00 - First", subscribable: true)
       sign_in(top_leader)
-      get :index, params: { group_id: top_group.id, person_id: top_leader.id }
+      get :index, params: {group_id: top_group.id, person_id: top_leader.id}
       expect(assigns(:subscribable)).to eq [first, leaders]
     end
   end
@@ -49,20 +48,19 @@ describe Person::SubscriptionsController do
     it "may not create subscriptions for other user" do
       sign_in(bottom_member)
       expect do
-        post :create, params: { group_id: top_group.id, person_id: top_leader.id, id: leaders.id }
+        post :create, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
       end.to raise_error CanCan::AccessDenied
     end
 
     it "may create my own subscriptions" do
       sign_in(top_leader)
       expect do
-        post :create, params: { group_id: top_group.id, person_id: top_leader.id, id: leaders.id }
+        post :create, params: {group_id: top_group.id, person_id: top_leader.id, id: leaders.id}
       end.to change { top_leader.subscriptions.count }.by(1)
       expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)
       expect(flash[:notice]).to eq "<i>Top Leader</i> wurde für <i>Leaders</i> angemeldet."
     end
   end
-
 
   context "DELETE#destroy" do
     it "may not delete subscriptions for other user" do
@@ -71,7 +69,7 @@ describe Person::SubscriptionsController do
 
       sign_in(bottom_member)
       expect do
-        delete :destroy, params: { group_id: top_group.id, person_id: top_leader.id, id: list_id }
+        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: list_id}
       end.to raise_error CanCan::AccessDenied
     end
 
@@ -81,7 +79,7 @@ describe Person::SubscriptionsController do
 
       sign_in(top_leader)
       expect do
-        delete :destroy, params: { group_id: top_group.id, person_id: top_leader.id, id: list_id }
+        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: list_id}
       end.to change { top_leader.subscriptions.count }.by(-1)
       expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)
       expect(flash[:notice]).to eq "<i>Top Leader</i> wurde von <i>Leaders</i> abgemeldet."
@@ -96,7 +94,7 @@ describe Person::SubscriptionsController do
 
       sign_in(top_leader)
       expect do
-        delete :destroy, params: { group_id: top_group.id, person_id: top_leader.id, id: list_id }
+        delete :destroy, params: {group_id: top_group.id, person_id: top_leader.id, id: list_id}
       end.to change { top_leader.subscriptions.count }.by(1)
 
       expect(response).to redirect_to group_person_subscriptions_path(top_group, top_leader)

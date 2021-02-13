@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::PictureUploader < Uploader::Base
-
   MAX_DIMENSION = 8000
 
   self.allowed_extensions = %w(jpg jpeg gif png)
@@ -22,7 +21,6 @@ class Person::PictureUploader < Uploader::Base
   version :thumb do
     process resize_to_fill: [32, 32]
   end
-
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   def default_url
@@ -40,7 +38,7 @@ class Person::PictureUploader < Uploader::Base
     manipulate! do |img|
       if img.dimensions.any? { |i| i > MAX_DIMENSION }
         raise CarrierWave::ProcessingError,
-              I18n.t("errors.messages.dimensions_too_large", maximum: MAX_DIMENSION)
+          I18n.t("errors.messages.dimensions_too_large", maximum: MAX_DIMENSION)
       end
       img
     end
@@ -52,5 +50,4 @@ class Person::PictureUploader < Uploader::Base
       img
     end
   end
-
 end

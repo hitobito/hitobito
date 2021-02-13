@@ -11,17 +11,20 @@ describe Import::PersonDuplicateFinder do
   let(:finder) { Import::PersonDuplicateFinder.new }
   subject { finder.find(attrs) }
 
-  let(:conditions) { finder.send(:duplicate_conditions, attrs)}
+  let(:conditions) { finder.send(:duplicate_conditions, attrs) }
 
   context "empty attrs" do
     let(:attrs) { {} }
+
     it { expect(conditions).to eq [""] }
     it { is_expected.to be_nil }
   end
 
   context "firstname only" do
-    before { Person.create!(attrs)  }
-    let(:attrs) { { first_name: "foo" } }
+    before { Person.create!(attrs) }
+
+    let(:attrs) { {first_name: "foo"} }
+
     it { expect(conditions).to eq ["first_name = ?", "foo"] }
     it { is_expected.to be_present }
     it "has no error" do
@@ -31,7 +34,9 @@ describe Import::PersonDuplicateFinder do
 
   context "email only" do
     before { Person.create!(attrs.merge(first_name: "foo")) }
-    let(:attrs) { { email: "foo@bar.com" } }
+
+    let(:attrs) { {email: "foo@bar.com"} }
+
     it { expect(conditions).to eq ["email = ?", "foo@bar.com"] }
     it { is_expected.to be_present }
     it "has no error" do
@@ -41,7 +46,9 @@ describe Import::PersonDuplicateFinder do
 
   context "adding new doublette attrs" do
     before { Person.create!(first_name: "foo", last_name: "Bar") }
-    let(:attrs) { { first_name: "foo", last_name: "Bar", zip_code: "3000" } }
+
+    let(:attrs) { {first_name: "foo", last_name: "Bar", zip_code: "3000"} }
+
     its("errors.full_messages") { should eq [] }
     it { is_expected.to be_present }
     it "has no error" do
@@ -51,7 +58,9 @@ describe Import::PersonDuplicateFinder do
 
   context "joins with or clause, does not change first_name, adds nickname" do
     before { Person.create!(attrs.merge(first_name: "foo", nickname: "foobar")) }
-    let(:attrs) { { email: "foo@bar.com", first_name: "bla" } }
+
+    let(:attrs) { {email: "foo@bar.com", first_name: "bla"} }
+
     it { expect(conditions).to eq ["(first_name = ?) OR email = ?", "bla", "foo@bar.com"] }
     it { is_expected.to be_present }
     it "has no error" do
@@ -62,12 +71,14 @@ describe Import::PersonDuplicateFinder do
   context "joins others with and" do
     context "includes valid birthday" do
       before { Person.create!(attrs) }
-      let(:attrs) { { last_name: "bar", first_name: "foo", zip_code: "8000", birthday: "1991-05-06" } }
+
+      let(:attrs) { {last_name: "bar", first_name: "foo", zip_code: "8000", birthday: "1991-05-06"} }
+
       it do
-         expect(conditions).to eq([
-           "last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL) " \
-           "AND (birthday = ? OR birthday IS NULL)",
-           "bar", "foo", "8000", Time.zone.parse("1991-05-06").to_date])
+        expect(conditions).to eq([
+          "last_name = ? AND first_name = ? AND (zip_code = ? OR zip_code IS NULL) " \
+          "AND (birthday = ? OR birthday IS NULL)",
+          "bar", "foo", "8000", Time.zone.parse("1991-05-06").to_date])
       end
       it { is_expected.to be_present }
       it "has no error" do
@@ -77,7 +88,8 @@ describe Import::PersonDuplicateFinder do
 
     context "ignores invalid birthday" do
       before { Person.create!(attrs.merge(birthday: "2000-01-01")) }
-      let(:attrs) { { last_name: "bar", first_name: "foo", zip_code: "8000", birthday: "33.33.33" } }
+
+      let(:attrs) { {last_name: "bar", first_name: "foo", zip_code: "8000", birthday: "33.33.33"} }
 
       it do
         expect(conditions).to eq([
@@ -92,7 +104,8 @@ describe Import::PersonDuplicateFinder do
 
     context "accepts two-digit year birthday" do
       before { Person.create!(attrs.merge(birthday: "2000-01-01")) }
-      let(:attrs) { { last_name: "bar", first_name: "foo", zip_code: "8000", birthday: "1.1.00" } }
+
+      let(:attrs) { {last_name: "bar", first_name: "foo", zip_code: "8000", birthday: "1.1.00"} }
 
       it do
         expect(conditions).to eq([
@@ -108,7 +121,7 @@ describe Import::PersonDuplicateFinder do
   end
 
   context "multiple doublettes for the same person" do
-    let(:attrs) { { first_name: "Peter", last_name: "Meier" } }
+    let(:attrs) { {first_name: "Peter", last_name: "Meier"} }
 
     before do
       Person.create!(attrs)
@@ -123,13 +136,13 @@ describe Import::PersonDuplicateFinder do
 
   context "multiple updates to the same person" do
     let(:existing) { Person.create!(attrs.merge(first_name: "foo")) }
-    let(:attrs) { { email: "foo@bar.com" } }
+    let(:attrs) { {email: "foo@bar.com"} }
 
     before do
       existing
       @first = finder.find(attrs)
     end
+
     it { is_expected.to be @first }
   end
-
 end

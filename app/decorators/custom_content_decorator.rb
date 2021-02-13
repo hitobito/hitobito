@@ -18,5 +18,4 @@ class CustomContentDecorator < ApplicationDecorator
       translate(:available_placeholders_empty)
     end
   end
-
 end

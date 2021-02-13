@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module Translatable
-
   def translate(key, options = {})
     I18n.t(full_translation_key(key), options)
   end
@@ -20,5 +19,4 @@ module Translatable
   def translation_prefix
     @translation_prefix ||= self.class.to_s.underscore.gsub("_controller", "")
   end
-
 end

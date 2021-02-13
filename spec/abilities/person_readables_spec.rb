@@ -7,14 +7,12 @@
 
 require "spec_helper"
 
-
 # Specs for listing and searching people
 describe PersonReadables do
-
   [:index, :layer_search, :deep_search, :global].each do |action|
     context action do
       let(:action) { action }
-      let(:user)   { role.person.reload }
+      let(:user) { role.person.reload }
       let(:ability) { PersonReadables.new(user, action == :index ? group : nil) }
 
       let(:all_accessibles) do
@@ -26,7 +24,6 @@ describe PersonReadables do
         when :global then people
         end
       end
-
 
       subject { all_accessibles }
 
@@ -68,9 +65,7 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
-
       end
-
 
       context :layer_and_below_read do
         let(:role) { Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)) }
@@ -133,9 +128,7 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
-
       end
-
 
       context :layer_full do
         let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
@@ -176,7 +169,6 @@ describe PersonReadables do
           end
         end
       end
-
 
       context :layer_read do
         let(:role) { Fabricate(Group::TopGroup::LocalSecretary.name.to_sym, group: groups(:top_group)) }
@@ -239,9 +231,7 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
-
       end
-
 
       context :group_and_below_full do
         let(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
@@ -295,7 +285,6 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
-
       end
 
       context :group_and_below_read do
@@ -350,7 +339,6 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
-
       end
 
       context :group_full do
@@ -391,7 +379,6 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
-
       end
 
       context :contact_data do
@@ -451,9 +438,7 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
-
       end
-
 
       context :group_read do
         let(:role) { Fabricate(Group::GlobalGroup::Member.name.to_sym, group: groups(:toppers)) }
@@ -507,9 +492,7 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
-
       end
-
 
       describe "no permissions" do
         let(:role) { Fabricate(Role::External.name.to_sym, group: groups(:top_group)) }
@@ -559,7 +542,6 @@ describe PersonReadables do
             is_expected.not_to include(other.person)
           end
         end
-
       end
 
       context :root do
@@ -589,9 +571,7 @@ describe PersonReadables do
             is_expected.to include(other)
           end
         end
-
       end
-
     end
   end
 end

@@ -21,14 +21,13 @@
 require "spec_helper"
 
 describe Event::Application do
-
   let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
 
   subject { Event::Application.new }
 
-
   context ".pending" do
     let(:course) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk)) }
+
     subject { Event::Application.pending }
 
     context "with assigned event role" do
@@ -45,7 +44,6 @@ describe Event::Application do
         application = Fabricate(:event_application, priority_1: course, participation: participation, rejected: true)
         is_expected.to eq([])
       end
-
     end
 
     context "without event role" do

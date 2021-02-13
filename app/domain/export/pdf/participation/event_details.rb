@@ -93,5 +93,4 @@ module Export::Pdf::Participation
       end
     end
   end
-
 end

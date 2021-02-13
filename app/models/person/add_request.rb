@@ -23,15 +23,14 @@
 #
 
 class Person::AddRequest < ActiveRecord::Base
-
-  has_paper_trail meta: { main_id: ->(r) { r.person_id },
-                          main_type: Person.sti_name }
+  has_paper_trail meta: {main_id: ->(r) { r.person_id },
+                         main_type: Person.sti_name}
 
   belongs_to :person
   belongs_to :requester, class_name: "Person"
 
   validates_by_schema
-  validates :person_id, uniqueness: { scope: [:type, :body_id] }
+  validates :person_id, uniqueness: {scope: [:type, :body_id]}
 
   scope :list, (lambda do
     includes(:person).references(:person).merge(Person.order_by_name).order(:created_at)
@@ -43,8 +42,8 @@ class Person::AddRequest < ActiveRecord::Base
         joins("LEFT JOIN #{::Group.quoted_table_name} AS primary_groups " \
               "ON primary_groups.id = people.primary_group_id").
         where("primary_groups.layer_group_id = ? OR people.id IN (?)",
-              layer_group.id,
-              ::Group::DeletedPeople.deleted_for(layer_group).select(:id))
+          layer_group.id,
+          ::Group::DeletedPeople.deleted_for(layer_group).select(:id))
     end
   end
 
@@ -53,7 +52,6 @@ class Person::AddRequest < ActiveRecord::Base
   require_dependency "person/add_request/group"
   require_dependency "person/add_request/event"
   require_dependency "person/add_request/mailing_list"
-
 
   def to_s(_format = :default)
     body_label
@@ -82,5 +80,4 @@ class Person::AddRequest < ActiveRecord::Base
 
     last_role.group.layer_group
   end
-
 end

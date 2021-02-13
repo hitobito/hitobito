@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Person::AddRequest::Creator::Event do
-
   let(:primary_layer) { person.primary_group.layer_group }
   let(:person) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two)).person }
   let(:requester) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
@@ -16,7 +15,7 @@ describe Person::AddRequest::Creator::Event do
   let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
   let(:entity) do
     Fabricate.build(Event::Role::Participant.name,
-                    participation: Fabricate.build(:event_participation, event: event, person: person))
+      participation: Fabricate.build(:event_participation, event: event, person: person))
   end
 
   let(:ability) { Ability.new(requester) }
@@ -26,7 +25,6 @@ describe Person::AddRequest::Creator::Event do
   before { primary_layer.update_column(:require_person_add_requests, true) }
 
   context "#required" do
-
     it "is true if primary layer activated requests" do
       expect(subject).to be_required
     end
@@ -43,7 +41,7 @@ describe Person::AddRequest::Creator::Event do
 
     it "is false if role is invalid" do
       entity = Fabricate.build(Event::Role::Participant.name,
-                               participation: Fabricate.build(:event_participation, event: event))
+        participation: Fabricate.build(:event_participation, event: event))
       creator = Person::AddRequest::Creator::Event.new(entity, ability)
       expect(creator).not_to be_required
     end
@@ -63,11 +61,9 @@ describe Person::AddRequest::Creator::Event do
       entity.participation.reload
       expect(subject).not_to be_required
     end
-
   end
 
   context "#create_request" do
-
     it "creates event request" do
       subject.create_request
 
@@ -108,5 +104,4 @@ describe Person::AddRequest::Creator::Event do
       expect(subject.error_message).to match(/Person wurde bereits angefragt./)
     end
   end
-
 end

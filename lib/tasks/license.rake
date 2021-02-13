@@ -29,12 +29,11 @@ class Licenser
   ).freeze
 
   SHEBANG_COMMENT_EXTENSIONS = [:rb, :rake].freeze
-  SHEBANG_COMMENT_STRING     = "# frozen_string_literal: true"
-  SHEBANG_COMMENT_PATTERN    = Regexp.union(
+  SHEBANG_COMMENT_STRING = "# frozen_string_literal: true"
+  SHEBANG_COMMENT_PATTERN = Regexp.union(
     /#\s*encoding: utf-8\n?/i,
     /#\s*frozen_string_literal: true\n?/i
   )
-
 
   def initialize(project_name, copyright_holder, copyright_source)
     @project_name = project_name
@@ -141,16 +140,14 @@ class Licenser
     def comment
       @comment ||= prefix.strip
     end
-
   end
 end
-
 
 namespace :license do
   task :config do # rubocop:disable Rails/RakeEnvironment
     @licenser = Licenser.new("hitobito",
-                             "Jungwacht Blauring Schweiz",
-                             "https://github.com/hitobito/hitobito")
+      "Jungwacht Blauring Schweiz",
+      "https://github.com/hitobito/hitobito")
   end
 
   desc "Insert the license preamble in all source files"

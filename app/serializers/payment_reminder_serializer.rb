@@ -23,17 +23,14 @@
 #
 
 class PaymentReminderSerializer < ApplicationSerializer
-
   schema do
     json_api_properties
 
     map_properties :due_at,
-                   :created_at,
-                   :updated_at,
-                   :title,
-                   :text,
-                   :level
-
+      :created_at,
+      :updated_at,
+      :title,
+      :text,
+      :level
   end
 end
-

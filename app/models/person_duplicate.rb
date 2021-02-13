@@ -17,7 +17,6 @@
 #
 
 class PersonDuplicate < ActiveRecord::Base
-
   belongs_to :person_1, class_name: "Person"
   belongs_to :person_2, class_name: "Person"
 
@@ -34,6 +33,4 @@ class PersonDuplicate < ActiveRecord::Base
   def persons_valid?
     person_1.valid? && person_2.valid?
   end
-
-
 end

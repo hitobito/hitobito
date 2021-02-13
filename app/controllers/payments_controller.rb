@@ -29,5 +29,4 @@ class PaymentsController < CrudController
   def flash_message
     I18n.t("#{controller_name}.#{action_name}.flash.success", amount: f(entry.amount))
   end
-
 end

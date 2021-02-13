@@ -27,7 +27,7 @@ module Event::Participatable
   def active_participations_without_affiliate_types
     affiliate_types = role_types.reject(&:kind).collect(&:sti_name)
     exclude_affiliate_types = affiliate_types.present? &&
-      ['event_roles.type NOT IN (?)', affiliate_types]
+      ["event_roles.type NOT IN (?)", affiliate_types]
 
     participations.active.
                    joins(:roles).
@@ -38,7 +38,7 @@ module Event::Participatable
   def participation_role_labels
     @participation_role_labels ||=
       Event::Role.joins(:participation).
-                  where('event_participations.event_id = ?', id).
+                  where("event_participations.event_id = ?", id).
                   where('event_roles.label <> ""').
                   distinct.order(:label).
                   pluck(:label)
@@ -62,8 +62,8 @@ module Event::Participatable
   # Assigned participations (all prios, no leaders/teamers) and unassigned with prio 1
   def applicants_scope
     participations.
-      joins('LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id').
-      where('event_roles.participation_id IS NULL OR event_roles.type IN (?)',
+      joins("LEFT JOIN event_roles ON event_participations.id = event_roles.participation_id").
+      where("event_roles.participation_id IS NULL OR event_roles.type IN (?)",
             participant_types.collect(&:sti_name))
   end
 

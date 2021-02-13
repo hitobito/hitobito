@@ -41,7 +41,7 @@ class PersonDecorator < ApplicationDecorator
 
   def name_with_address
     label = to_s
-    details = [zip_code, town].compact.join(' ')
+    details = [zip_code, town].compact.join(" ")
     label << " (#{details})" if details.present?
     label
   end
@@ -145,7 +145,7 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def private_address_name
-    html = ''.html_safe
+    html = "".html_safe
     if company_name.present?
       html << company_name
       html << br
@@ -169,9 +169,9 @@ class PersonDecorator < ApplicationDecorator
 
   def function_short(function, scope: nil, edit: true)
     html = [function.to_s]
-    html << h.muted(h.safe_join(function.group.with_layer, ' / ')) if scope.nil?
+    html << h.muted(h.safe_join(function.group.with_layer, " / ")) if scope.nil?
     html << popover_edit_link(function) if edit && h.can?(:update, function)
-    h.safe_join(html, ' ')
+    h.safe_join(html, " ")
   end
 
   def popover_edit_link(function)
@@ -180,10 +180,10 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def role_popover_link(path, html_id = nil)
-    content_tag(:span, style: 'padding-left: 10px', id: html_id) do
+    content_tag(:span, style: "padding-left: 10px", id: html_id) do
       h.link_to(h.icon(:edit),
                 path,
-                title: h.t('global.link.edit'),
+                title: h.t("global.link.edit"),
                 remote: true)
     end
   end

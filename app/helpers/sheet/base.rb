@@ -43,7 +43,7 @@ module Sheet
 
       def sheet_for_controller(view_context)
         sheet_class = controller_sheet_class(view_context.controller)
-        if view_context.action_name == 'index' && sheet_class.parent_sheet
+        if view_context.action_name == "index" && sheet_class.parent_sheet
           sheet_class = sheet_class.parent_sheet
         end
         sheet_class
@@ -51,9 +51,9 @@ module Sheet
 
       def controller_sheet_class(controller)
         controller.class.name
-                  .gsub(/Controller/, '')
+                  .gsub(/Controller/, "")
                   .underscore.singularize.camelize
-                  .prepend('Sheet::').constantize
+                  .prepend("Sheet::").constantize
       rescue NameError
         Sheet::Base
       end
@@ -80,7 +80,7 @@ module Sheet
 
     def render_tabs
       if tabs?
-        content_tag(:ul, class: 'nav nav-sub') do
+        content_tag(:ul, class: "nav nav-sub") do
           safe_join(visible_tabs) do |tab|
             tab.render(tab == active_tab)
           end
@@ -140,8 +140,8 @@ module Sheet
     private
 
     def render_as_current(&block)
-      content_tag(:div, class: 'container-shadow') do
-        content_tag(:div, id: 'content') do
+      content_tag(:div, class: "container-shadow") do
+        content_tag(:div, id: "content") do
           render_breadcrumbs +
           capture(&block)
         end
@@ -158,9 +158,9 @@ module Sheet
     # title in parent sheet
     def render_parent_title
       if parent_link_url
-        link_to(title, parent_link_url, class: 'level active')
+        link_to(title, parent_link_url, class: "level active")
       else
-        content_tag(:div, title, class: 'level active')
+        content_tag(:div, title, class: "level active")
       end
     end
 
@@ -175,11 +175,11 @@ module Sheet
     end
 
     def render_breadcrumbs
-      ''.html_safe # rubocop:disable Rails/OutputSafety
+      "".html_safe # rubocop:disable Rails/OutputSafety
     end
 
     def css_class
-      current? ? 'current' : 'parent'
+      current? ? "current" : "parent"
     end
 
     def current?

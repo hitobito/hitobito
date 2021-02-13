@@ -42,7 +42,7 @@ class Person::CsvImportsController < ApplicationController
 
   def create
     valid_for_import? do
-      if params[:button] != 'back'
+      if params[:button] != "back"
         perform_import
       else
         define_mapping
@@ -72,7 +72,7 @@ class Person::CsvImportsController < ApplicationController
   def set_importer_flash_errors
     errors = importer.errors
     if errors.size > 10
-      errors = errors.take(10) + ['...']
+      errors = errors.take(10) + ["..."]
     end
     errors.each { |error| add_to_flash(:alert, error) }
   end
@@ -80,14 +80,14 @@ class Person::CsvImportsController < ApplicationController
   def add_importer_info_to_flash(flash, key, count)
     if count > 0
       add_to_flash(flash,
-                   translate([action_name, key].join('.').to_sym,
+                   translate([action_name, key].join(".").to_sym,
                              count: count,
                              role: importer.human_name(count: count)))
     end
   end
 
   def add_to_flash(key, text)
-    flash_hash = action_name == 'preview' ? flash.now : flash
+    flash_hash = action_name == "preview" ? flash.now : flash
     flash_hash[key] ||= []
     flash_hash[key] << text if text.present?
   end
@@ -108,7 +108,7 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def custom_authorization
-    if action_name == 'create'
+    if action_name == "create"
       role = role_type.new
       role.group_id = group.id
       authorize! :create, role
@@ -143,7 +143,7 @@ class Person::CsvImportsController < ApplicationController
     success = parser.parse
     unless success
       filename = file_param && file_param.original_filename
-      filename ||= 'csv formular daten'
+      filename ||= "csv formular daten"
       flash[:alert] = parser.flash_alert(filename)
       redirect_to new_group_csv_imports_path(group)
     end
@@ -155,7 +155,7 @@ class Person::CsvImportsController < ApplicationController
 
     if duplicates.present?
       fields = Import::Person.fields.each_with_object({}) { |f, o| o[f[:key]] = f[:value] }
-      list = duplicates.collect { |d| fields[d.to_s] }.join(', ')
+      list = duplicates.collect { |d| fields[d.to_s] }.join(", ")
       flash.now[:alert] = translate(:duplicate_keys, count: duplicates.size, list: list)
       render :define_mapping
       false
@@ -187,7 +187,7 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def override_behaviour
-    params[:update_behaviour] == 'override'
+    params[:update_behaviour] == "override"
   end
 
   def file_param

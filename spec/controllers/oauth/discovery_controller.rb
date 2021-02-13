@@ -6,26 +6,26 @@
 #  https://github.com/hitobito/hitobito.
 
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Doorkeeper::OpenidConnect::DiscoveryController do
 
-  describe 'GET#keys' do
-    it 'shows the keys' do
+  describe "GET#keys" do
+    it "shows the keys" do
       get :keys
       expect(response.status).to eq 200
     end
   end
 
-  describe 'GET#provider' do
-    it 'shows the config of this oidc provider' do
+  describe "GET#provider" do
+    it "shows the config of this oidc provider" do
       get :provider
       expect(response.status).to eq 200
     end
   end
 
-  describe 'GET#webfinger' do
-    it 'shows webfinger infos' do
+  describe "GET#webfinger" do
+    it "shows webfinger infos" do
       get :webfinger
       expect(response.status).to eq 200
     end

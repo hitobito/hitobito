@@ -26,7 +26,7 @@ module WebpackHelper
     if options[:srcset] && !options[:srcset].is_a?(String)
       options[:srcset] = options[:srcset].map do |src_name, size|
         "#{wagon_image_pack_path(src_name)} #{size}"
-      end.join(', ')
+      end.join(", ")
     end
 
     image_tag(wagon_image_pack_path(name), options)
@@ -78,7 +78,7 @@ module WebpackHelper
   private
 
   def wagon_media_image_path(file_name)
-    File.join('wagon-media', 'images', file_name)
+    File.join("wagon-media", "images", file_name)
   end
 
 end

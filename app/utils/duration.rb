@@ -22,7 +22,7 @@ class Duration
     elsif finish_at
       format_datetime(finish_at)
     else
-      ''
+      ""
     end
   end
 
@@ -91,6 +91,6 @@ class Duration
   end
 
   deprecate date_only?: "Don't use this private method anymore." \
-                        'Instead use the static variant `Duration.date_only?`'
+                        "Instead use the static variant `Duration.date_only?`"
 
 end

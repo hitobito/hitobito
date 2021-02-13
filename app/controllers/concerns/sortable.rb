@@ -30,7 +30,7 @@ module Sortable
     # Puts null and empty strings last
     def null_safe_sort(sort_expression)
       table_attr, direction = sort_expression.split
-      null_safe = 'CASE'
+      null_safe = "CASE"
       null_safe << " WHEN #{table_attr} IS NULL THEN 1"
       null_safe << " WHEN #{table_attr} = '' THEN 1"
       null_safe << " ELSE 0 END #{direction}"
@@ -63,12 +63,12 @@ module Sortable
 
     # Return the sort expression to be used in the list query.
     def sort_expression
-      Array(sort_columns).collect { |c| "#{c} #{sort_dir}" }.join(', ')
+      Array(sort_columns).collect { |c| "#{c} #{sort_dir}" }.join(", ")
     end
 
     # The sort direction, either 'asc' or 'desc'.
     def sort_dir
-      params[:sort_dir] == 'desc' ? 'desc' : 'asc'
+      params[:sort_dir] == "desc" ? "desc" : "asc"
     end
 
     # Returns true if the passed attribute is sortable.

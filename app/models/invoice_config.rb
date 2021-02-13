@@ -38,7 +38,7 @@ class InvoiceConfig < ActiveRecord::Base
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
   PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}/
 
-  belongs_to :group, class_name: 'Group'
+  belongs_to :group, class_name: "Group"
 
   has_many :payment_reminder_configs, dependent: :destroy
 
@@ -83,7 +83,7 @@ class InvoiceConfig < ActiveRecord::Base
   def correct_check_digit
     return if account_number.blank? || bank?
     payment_slip = Invoice::PaymentSlip.new
-    splitted = account_number.delete('-').split('')
+    splitted = account_number.delete("-").split("")
     check_digit = splitted.pop
     return if payment_slip.check_digit(splitted.join) == check_digit.to_i
     errors.add(:account_number, :invalid_check_digit)

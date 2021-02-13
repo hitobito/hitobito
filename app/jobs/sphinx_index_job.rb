@@ -31,7 +31,7 @@ class SphinxIndexJob < RecurringJob
 
   def run_rebuild_task
     Hitobito::Application.load_tasks
-    Rake::Task['ts:rebuild'].invoke
+    Rake::Task["ts:rebuild"].invoke
   end
 
 end

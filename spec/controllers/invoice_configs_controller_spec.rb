@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe InvoiceConfigsController  do
 
@@ -13,7 +13,7 @@ describe InvoiceConfigsController  do
   let(:person) { people(:bottom_member) }
   let(:entry)  { invoice_configs(:bottom_layer_one) }
 
-  context 'authorization' do
+  context "authorization" do
     before { sign_in(person) }
 
     it "may show when person has finance permission on layer group" do

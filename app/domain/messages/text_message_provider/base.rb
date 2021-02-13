@@ -17,10 +17,10 @@ module Messages
 
       def self.init(config:)
         case config.provider
-        when 'aspsms'
+        when "aspsms"
           Aspsms.new(config: config)
         else
-          raise 'unkown text message provider in config'
+          raise "unkown text message provider in config"
         end
       end
 
@@ -29,11 +29,11 @@ module Messages
       end
 
       def send(_text:, _recipients:)
-        raise 'implement in subclass'
+        raise "implement in subclass"
       end
 
       def delivery_reports(_recipient_ids:)
-        raise 'implement in subclass'
+        raise "implement in subclass"
       end
     end
   end

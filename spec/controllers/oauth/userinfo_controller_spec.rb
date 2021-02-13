@@ -6,46 +6,46 @@
 #  https://github.com/hitobito/hitobito.
 
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Doorkeeper::OpenidConnect::UserinfoController do
   let(:user) { people(:top_leader) }
-  let(:app) { Oauth::Application.create!(name: 'MyApp', redirect_uri: redirect_uri) }
-  let(:redirect_uri) { 'urn:ietf:wg:oauth:2.0:oob' }
+  let(:app) { Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri) }
+  let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
 
-  describe 'GET#show' do
-    let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: 'openid', expires_in: 2.hours) }
+  describe "GET#show" do
+    let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: "openid", expires_in: 2.hours) }
 
-    it 'shows the userinfo' do
+    it "shows the userinfo" do
       get :show, params: { access_token: token.token }
       expect(response.status).to eq 200
-      expect(JSON.parse(response.body)).to eq({ 'sub' => user.id.to_s })
+      expect(JSON.parse(response.body)).to eq({ "sub" => user.id.to_s })
     end
 
-    context 'with name scope' do
-      let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: 'openid name', expires_in: 2.hours) }
+    context "with name scope" do
+      let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: "openid name", expires_in: 2.hours) }
 
       before do
-        user.update(nickname: 'Filou', address: 'Teststrasse 7', zip_code: '8000', town: 'Zürich', country: 'CH')
+        user.update(nickname: "Filou", address: "Teststrasse 7", zip_code: "8000", town: "Zürich", country: "CH")
       end
 
-      it 'shows the userinfo' do
+      it "shows the userinfo" do
         get :show, params: { access_token: token.token }
         expect(response.status).to eq 200
         expect(JSON.parse(response.body)).to eq({
-          'sub' => user.id.to_s, 'first_name' => user.first_name, 'last_name' => user.last_name, 'nickname' => 'Filou',
-          'address' => 'Teststrasse 7', 'zip_code' => '8000', 'town' => 'Zürich', 'country' => 'CH'
+          "sub" => user.id.to_s, "first_name" => user.first_name, "last_name" => user.last_name, "nickname" => "Filou",
+          "address" => "Teststrasse 7", "zip_code" => "8000", "town" => "Zürich", "country" => "CH"
         })
       end
     end
 
-    context 'with email scope' do
-      let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: 'openid email', expires_in: 2.hours) }
+    context "with email scope" do
+      let(:token) { app.access_tokens.create!(resource_owner_id: user.id, scopes: "openid email", expires_in: 2.hours) }
 
-      it 'shows the userinfo' do
+      it "shows the userinfo" do
         get :show, params: { access_token: token.token }
         expect(response.status).to eq 200
-        expect(JSON.parse(response.body)).to eq({ 'sub' => user.id.to_s, 'email' => user.email })
+        expect(JSON.parse(response.body)).to eq({ "sub" => user.id.to_s, "email" => user.email })
       end
     end
   end

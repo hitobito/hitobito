@@ -49,8 +49,8 @@ class Message::LetterWithInvoice < Message::Letter
       invoice.group = group
       invoice.group = group.layer_group
       invoice.title = subject
-      invoice_attributes.to_h.fetch('invoice_items_attributes', {}).values.each do |v|
-        invoice.invoice_items.build(v.except('_destroy'))
+      invoice_attributes.to_h.fetch("invoice_items_attributes", {}).values.each do |v|
+        invoice.invoice_items.build(v.except("_destroy"))
       end
     end
   end
@@ -59,7 +59,7 @@ class Message::LetterWithInvoice < Message::Letter
     invoice.tap do |invoice|
       invoice.recipient = receiver
       invoice.send(:set_recipient_fields)
-      raise 'invoice invalid' unless invoice.valid?
+      raise "invoice invalid" unless invoice.valid?
     end
   end
 end

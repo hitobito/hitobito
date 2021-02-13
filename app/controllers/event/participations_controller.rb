@@ -20,17 +20,17 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   self.remember_params += [:filter]
 
-  self.sort_mappings = { last_name: 'people.last_name',
-                         first_name: 'people.first_name',
+  self.sort_mappings = { last_name: "people.last_name",
+                         first_name: "people.first_name",
                          roles: lambda do |event|
                                   Person.order_by_name_statement.unshift(
                                     Event::Participation.order_by_role_statement(event)
                                   )
                                 end,
-                         nickname: 'people.nickname',
-                         zip_code: 'people.zip_code',
-                         town: 'people.town',
-                         birthday: 'people.birthday' }
+                         nickname: "people.nickname",
+                         zip_code: "people.zip_code",
+                         town: "people.town",
+                         birthday: "people.birthday" }
 
 
   decorates :group, :event, :participation, :participations, :alternatives
@@ -92,7 +92,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     pdf = Export::Pdf::Participation.render(entry)
     filename = Export::Pdf::Participation.filename(entry)
 
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename
+    send_data pdf, type: :pdf, disposition: "inline", filename: filename
   end
 
   def destroy
@@ -176,7 +176,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def sort_columns
-    params[:sort] == 'roles' ? sort_mappings_with_indifferent_access[:roles].call(event) : super
+    params[:sort] == "roles" ? sort_mappings_with_indifferent_access[:roles].call(event) : super
   end
 
   def find_entry
@@ -291,9 +291,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def set_success_notice
-    if action_name.to_s == 'create'
+    if action_name.to_s == "create"
       notice = translate(:success, full_entry_label: full_entry_label)
-      notice += '<br />' + translate(:instructions) if append_mailing_instructions?
+      notice += "<br />" + translate(:instructions) if append_mailing_instructions?
       flash[:alert] ||= translate(:waiting_list) if entry.waiting_list?
       flash[:notice] ||= notice
     else

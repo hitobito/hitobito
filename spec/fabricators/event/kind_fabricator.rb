@@ -14,7 +14,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-Fabricator(:event_kind, class_name: 'Event::Kind') do
+Fabricator(:event_kind, class_name: "Event::Kind") do
   label { Faker::Company.bs }
   general_information { Faker::Lorem.sentence }
 end

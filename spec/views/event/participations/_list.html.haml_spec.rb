@@ -5,22 +5,22 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'event/participations/_list.html.haml' do
+describe "event/participations/_list.html.haml" do
 
   let(:event) { EventDecorator.decorate(Fabricate(:course, groups: [groups(:top_layer)])) }
   let(:participation) { Fabricate(:event_participation, event: event) }
   let(:participations) { Kaminari.paginate_array([participation.decorate]).page(1) }
 
   let(:dom) { render; Capybara::Node::Simple.new(@rendered) }
-  let(:dropdowns) { dom.all('.dropdown-toggle') }
+  let(:dropdowns) { dom.all(".dropdown-toggle") }
 
   let(:params) do
-    { 'action' => 'index',
-      'controller' => 'event/participations',
-      'group_id' => '1',
-      'event_id' => '36' }
+    { "action" => "index",
+      "controller" => "event/participations",
+      "group_id" => "1",
+      "event_id" => "36" }
   end
 
   before do
@@ -34,25 +34,25 @@ describe 'event/participations/_list.html.haml' do
     participation.reload
   end
 
-  it 'marks participations where required questions are unanswered' do
+  it "marks participations where required questions are unanswered" do
     login_as(people(:top_leader))
 
-    event.questions.create!(question: 'dummy', required: true)
+    event.questions.create!(question: "dummy", required: true)
     participation.reload
-    expect(dom).to have_text 'Pflichtangaben fehlen'
+    expect(dom).to have_text "Pflichtangaben fehlen"
   end
 
-  context 'created_at' do
+  context "created_at" do
 
-    it 'can be viewed by someone how can show participation details' do
+    it "can be viewed by someone how can show participation details" do
       login_as(people(:top_leader))
-      expect(dom).to have_text 'Rollen | Anmeldedatum'
+      expect(dom).to have_text "Rollen | Anmeldedatum"
       expect(dom).to have_text "Teilnehmer/-in#{I18n.l(Time.zone.now.to_date)}"
     end
 
-    it 'is not seen by participants' do
+    it "is not seen by participants" do
       login_as(participation.person)
-      expect(dom).not_to have_text 'Rollen | Anmeldedatum'
+      expect(dom).not_to have_text "Rollen | Anmeldedatum"
       expect(dom).not_to have_text "Teilnehmer/-in#{I18n.l(Time.zone.now.to_date)}"
     end
 

@@ -48,9 +48,9 @@ module I18nSettable
 
   def normalize_i18n_boolean(value)
     normalized = value.to_s.strip.downcase
-    if I18n.t('global.yes').downcase == normalized
+    if I18n.t("global.yes").downcase == normalized
       true
-    elsif value.blank? || I18n.t('global.no').downcase == normalized
+    elsif value.blank? || I18n.t("global.no").downcase == normalized
       false
     else
       normalized

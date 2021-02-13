@@ -3,10 +3,10 @@
 module PersonTags
   class Validation
 
-    EMAIL_PRIMARY_INVALID='category_validation:email_primary_invalid'.freeze
-    EMAIL_ADDITIONAL_INVALID='category_validation:email_additional_invalid'.freeze
-    ADDRESS_INVALID='category_validation:address_invalid'.freeze
-    INVALID_ADDRESS_OVERRIDE='category_validation:invalid_address_override'.freeze
+    EMAIL_PRIMARY_INVALID="category_validation:email_primary_invalid".freeze
+    EMAIL_ADDITIONAL_INVALID="category_validation:email_additional_invalid".freeze
+    ADDRESS_INVALID="category_validation:address_invalid".freeze
+    INVALID_ADDRESS_OVERRIDE="category_validation:invalid_address_override".freeze
 
     class << self
 

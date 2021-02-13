@@ -5,13 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PeopleController do
 
   before do
-    PeopleRelation.kind_opposites['parent'] = 'child'
-    PeopleRelation.kind_opposites['child'] = 'parent'
+    PeopleRelation.kind_opposites["parent"] = "child"
+    PeopleRelation.kind_opposites["child"] = "parent"
   end
 
   after do
@@ -21,19 +21,19 @@ describe PeopleController do
   let(:top_leader) { people(:top_leader) }
   let(:group) { groups(:top_group) }
 
-  context 'as top leader' do
+  context "as top leader" do
 
     before { sign_in(top_leader) }
 
-    context 'GET index' do
+    context "GET index" do
 
       before do
         @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
-        Fabricate(:phone_number, contactable: @tg_member, number: '+41 44 123 45 67', label: 'Privat', public: true)
-        Fabricate(:phone_number, contactable: @tg_member, number: '+41 77 456 78 90', label: 'Mobile', public: false)
-        Fabricate(:phone_number, contactable: @tg_member, number: '+41 800 789 012', label: 'Office', public: true)
-        Fabricate(:social_account, contactable: @tg_member, name: 'facefoo', label: 'Facebook', public: true)
-        Fabricate(:social_account, contactable: @tg_member, name: 'skypefoo', label: 'Skype', public: false)
+        Fabricate(:phone_number, contactable: @tg_member, number: "+41 44 123 45 67", label: "Privat", public: true)
+        Fabricate(:phone_number, contactable: @tg_member, number: "+41 77 456 78 90", label: "Mobile", public: false)
+        Fabricate(:phone_number, contactable: @tg_member, number: "+41 800 789 012", label: "Office", public: true)
+        Fabricate(:social_account, contactable: @tg_member, name: "facefoo", label: "Facebook", public: true)
+        Fabricate(:social_account, contactable: @tg_member, name: "skypefoo", label: "Skype", public: false)
         Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: @tg_member)
         @tg_extern = Fabricate(Role::External.name.to_sym, group: groups(:top_group)).person
 
@@ -42,70 +42,70 @@ describe PeopleController do
 
         @bg_leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
         @bg_member = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
-        @tg_member.update(first_name: 'Al', last_name: 'Zoe', nickname: 'al', town: 'Eye', zip_code: '8000')
+        @tg_member.update(first_name: "Al", last_name: "Zoe", nickname: "al", town: "Eye", zip_code: "8000")
       end
 
-      context 'sorting' do
+      context "sorting" do
         before do
-          top_leader.update(first_name: 'Joe', last_name: 'Smith', nickname: 'js', town: 'Stoke', address: 'Howard Street', zip_code: '9000')
-          @tg_extern.update(first_name: '', last_name: 'Bundy', nickname: '', town: '', address: '', zip_code: '')
+          top_leader.update(first_name: "Joe", last_name: "Smith", nickname: "js", town: "Stoke", address: "Howard Street", zip_code: "9000")
+          @tg_extern.update(first_name: "", last_name: "Bundy", nickname: "", town: "", address: "", zip_code: "")
         end
 
-        let(:role_type_ids) { [Role::External.id, Group::TopGroup::Leader.id, Group::TopGroup::Member.id].join('-') }
+        let(:role_type_ids) { [Role::External.id, Group::TopGroup::Leader.id, Group::TopGroup::Member.id].join("-") }
 
 
-        context 'default sort' do
+        context "default sort" do
           it "sorts by name" do
-            get :index, params: { group_id: group, range: 'layer', filters: { role: { role_type_ids: role_type_ids } } }
+            get :index, params: { group_id: group, range: "layer", filters: { role: { role_type_ids: role_type_ids } } }
             expect(assigns(:people).collect(&:id)).to eq([@tg_extern, top_leader,  @tg_member].collect(&:id))
           end
 
           it "people.default_sort setting can override it to sort by role" do
-            allow(Settings.people).to receive_messages(default_sort: 'role')
-            get :index, params: { group_id: group, range: 'layer', filters: { role: { role_type_ids: role_type_ids }} }
+            allow(Settings.people).to receive_messages(default_sort: "role")
+            get :index, params: { group_id: group, range: "layer", filters: { role: { role_type_ids: role_type_ids }} }
             expect(assigns(:people).collect(&:id)).to eq([top_leader,  @tg_member, @tg_extern].collect(&:id))
           end
         end
 
         it "sorts based on last_name" do
-          get :index, params: { group_id: group, range: 'layer', filters: { role: { role_type_ids: role_type_ids } }, sort: :last_name, sort_dir: :asc }
+          get :index, params: { group_id: group, range: "layer", filters: { role: { role_type_ids: role_type_ids } }, sort: :last_name, sort_dir: :asc }
           expect(assigns(:people).collect(&:id)).to eq([@tg_extern, top_leader,  @tg_member].collect(&:id))
         end
 
         it "sorts based on roles" do
-          get :index, params: { group_id: group, range: 'layer', filters: { role: { role_type_ids: role_type_ids } }, sort: :roles, sort_dir: :asc }
+          get :index, params: { group_id: group, range: "layer", filters: { role: { role_type_ids: role_type_ids } }, sort: :roles, sort_dir: :asc }
           expect(assigns(:people)).to eq([top_leader,  @tg_member, @tg_extern])
         end
 
         %w(first_name nickname zip_code town).each do |attr|
           it "sorts based on #{attr}" do
-            get :index, params: { group_id: group, range: 'layer', filters: { role: { role_type_ids: role_type_ids } }, sort: attr, sort_dir: :asc }
+            get :index, params: { group_id: group, range: "layer", filters: { role: { role_type_ids: role_type_ids } }, sort: attr, sort_dir: :asc }
             expect(assigns(:people)).to eq([@tg_member, top_leader,  @tg_extern])
           end
         end
       end
 
-      context 'group' do
-        it 'loads all members of a group' do
+      context "group" do
+        it "loads all members of a group" do
           get :index, params: { group_id: group }
 
           expect(assigns(:people).collect(&:id)).to match_array([top_leader, @tg_member].collect(&:id))
           expect(assigns(:person_add_requests)).to eq([])
         end
 
-        it 'loads externs of a group when type given' do
-          get :index, params: { group_id: group, filters: { role: { role_type_ids: [Role::External.id].join('-') } } }
+        it "loads externs of a group when type given" do
+          get :index, params: { group_id: group, filters: { role: { role_type_ids: [Role::External.id].join("-") } } }
 
           expect(assigns(:people).collect(&:id)).to match_array([@tg_extern].collect(&:id))
         end
 
-        it 'loads selected roles of a group when types given' do
-          get :index, params: { group_id: group, filters: { role: { role_type_ids: [Role::External.id, Group::TopGroup::Member.id].join('-') } } }
+        it "loads selected roles of a group when types given" do
+          get :index, params: { group_id: group, filters: { role: { role_type_ids: [Role::External.id, Group::TopGroup::Member.id].join("-") } } }
 
           expect(assigns(:people).collect(&:id)).to match_array([@tg_member, @tg_extern].collect(&:id))
         end
 
-        it 'loads pending person add requests' do
+        it "loads pending person add requests" do
           r1 = Person::AddRequest::Group.create!(
                   person: Fabricate(:person),
                   requester: Fabricate(:person),
@@ -117,17 +117,17 @@ describe PeopleController do
           expect(assigns(:person_add_requests)).to eq([r1])
         end
 
-        context '.pdf' do
-          it 'generates pdf labels' do
+        context ".pdf" do
+          it "generates pdf labels" do
             get :index, params: { group_id: group, label_format_id: label_formats(:standard).id }, format: :pdf
 
-            expect(@response.media_type).to eq('application/pdf')
+            expect(@response.media_type).to eq("application/pdf")
             expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
           end
         end
 
-        context 'background job' do
-          it 'exports csv' do
+        context "background job" do
+          it "exports csv" do
             expect do
               get :index, params: { group_id: group }, format: :csv
               expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
@@ -135,7 +135,7 @@ describe PeopleController do
             end.to change(Delayed::Job, :count).by(1)
           end
 
-          it 'exports xlsx' do
+          it "exports xlsx" do
             expect do
               get :index, params: { group_id: group }, format: :xlsx
               expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
@@ -143,25 +143,25 @@ describe PeopleController do
             end.to change(Delayed::Job, :count).by(1)
           end
 
-          it 'sets cookie on export' do
+          it "sets cookie on export" do
             get :index, params: { group_id: group }, format: :csv
 
             cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
 
-            expect(cookie[0]['name']).to match(/^(people_export)+\S*(#{top_leader.id})+$/)
-            expect(cookie[0]['type']).to match(/^csv$/)
+            expect(cookie[0]["name"]).to match(/^(people_export)+\S*(#{top_leader.id})+$/)
+            expect(cookie[0]["type"]).to match(/^csv$/)
           end
         end
 
-        context '.vcf' do
-          it 'exports vcf files' do
+        context ".vcf" do
+          it "exports vcf files" do
             e1 = Fabricate(:additional_email, contactable: @tg_member, public: true)
             e2 = Fabricate(:additional_email, contactable: @tg_member, public: false)
-            @tg_member.update(birthday: '09.10.1978')
+            @tg_member.update(birthday: "09.10.1978")
 
             get :index, params: { group_id: group }, format: :vcf
 
-            expect(@response.media_type).to eq('text/vcard')
+            expect(@response.media_type).to eq("text/vcard")
             cards = @response.body.split("END:VCARD\n")
             expect(cards.length).to equal(2);
 
@@ -193,14 +193,14 @@ describe PeopleController do
           end
         end
 
-        context '.email' do
-          it 'renders email addresses' do
+        context ".email" do
+          it "renders email addresses" do
             get :index, params: { group_id: group }, format: :email
-            expect(@response.media_type).to eq('text/plain')
+            expect(@response.media_type).to eq("text/plain")
             expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email}")
           end
 
-          it 'renders email addresses with additional ones' do
+          it "renders email addresses with additional ones" do
             e1 = Fabricate(:additional_email, contactable: @tg_member, mailings: true)
             Fabricate(:additional_email, contactable: @tg_member, mailings: false)
             get :index, params: { group_id: group }, format: :email
@@ -208,26 +208,26 @@ describe PeopleController do
           end
         end
 
-        context '.json' do
+        context ".json" do
           render_views
 
-          it 'renders json with only the one role in this group' do
+          it "renders json with only the one role in this group" do
             get :index, params: { group_id: group }, format: :json
             json = JSON.parse(@response.body)
-            person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
-            expect(person['links']['roles'].size).to eq(1)
+            person = json["people"].find { |p| p["id"] == @tg_member.id.to_s }
+            expect(person["links"]["roles"].size).to eq(1)
           end
         end
       end
 
-      context 'layer' do
+      context "layer" do
         let(:group) { groups(:bottom_layer_one) }
 
-        context 'with layer and below full' do
+        context "with layer and below full" do
           before { sign_in(@bl_leader) }
 
-          it 'loads people in layer when no types given' do
-            get :index, params: { group_id: group, range: 'layer' }
+          it "loads people in layer when no types given" do
+            get :index, params: { group_id: group, range: "layer" }
 
             expect(assigns(:people).collect(&:id)).to match_array(
               [ people(:bottom_member),
@@ -240,51 +240,51 @@ describe PeopleController do
             )
           end
 
-          it 'loads selected roles of a group when types given' do
+          it "loads selected roles of a group when types given" do
             get :index, params: {
                           group_id: group,
-                          filters: { role: { role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join('-') } },
-                          range: 'layer'
+                          filters: { role: { role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join("-") } },
+                          range: "layer"
                         }
 
             expect(assigns(:people).collect(&:id)).to match_array([@bg_member, @bl_extern].collect(&:id))
           end
 
-          it 'does not load pending person add requests' do
+          it "does not load pending person add requests" do
             r1 = Person::AddRequest::Group.create!(
               person: Fabricate(:person),
               requester: Fabricate(:person),
               body: group,
               role_type: group.class.role_types.first.sti_name)
 
-            get :index, params: { group_id: group.id, range: 'layer' }
+            get :index, params: { group_id: group.id, range: "layer" }
 
             expect(assigns(:person_add_requests)).to be_nil
           end
 
-          context 'json' do
+          context "json" do
             render_views
 
-            it 'renders json with only the one role in this group' do
+            it "renders json with only the one role in this group" do
               get :index, params: {
                             group_id: group,
-                            range: 'layer',
-                            filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-') } }
+                            range: "layer",
+                            filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-") } }
                           },
                           format: :json
               json = JSON.parse(@response.body)
-              person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
-              expect(person['links']['roles'].size).to eq(2)
+              person = json["people"].find { |p| p["id"] == @tg_member.id.to_s }
+              expect(person["links"]["roles"].size).to eq(2)
             end
           end
         end
       end
 
-      context 'deep' do
+      context "deep" do
         let(:group) { groups(:top_layer) }
 
-        it 'loads people in subtree when no types are given' do
-          get :index, params: { group_id: group, range: 'deep' }
+        it "loads people in subtree when no types are given" do
+          get :index, params: { group_id: group, range: "deep" }
 
           expect(assigns(:people).collect(&:id)).to match_array([people(:top_leader),
                                                                  people(:bottom_member),
@@ -294,42 +294,42 @@ describe PeopleController do
                                                                  @bg_leader].collect(&:id))
         end
 
-        it 'loads selected roles of a group when types given' do
+        it "loads selected roles of a group when types given" do
           get :index, params: {
                         group_id: group,
-                        filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-') } },
-                        range: 'deep'
+                        filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-") } },
+                        range: "deep"
                       }
 
           expect(assigns(:people).collect(&:id)).to match_array([@bg_leader, @tg_member, @tg_extern].collect(&:id))
         end
 
-        context 'json' do
+        context "json" do
           render_views
 
-          it 'renders json with only the one role in this group' do
+          it "renders json with only the one role in this group" do
             get :index, params: {
                           group_id: group,
-                          range: 'deep',
-                          filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-') } }
+                          range: "deep",
+                          filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-") } }
                         },
                         format: :json
             json = JSON.parse(@response.body)
-            person = json['people'].find { |p| p['id'] == @tg_member.id.to_s }
-            expect(person['links']['roles'].size).to eq(2)
+            person = json["people"].find { |p| p["id"] == @tg_member.id.to_s }
+            expect(person["links"]["roles"].size).to eq(2)
           end
         end
       end
 
-      context 'filter_id' do
+      context "filter_id" do
         let(:group) { groups(:top_layer) }
 
-        it 'loads selected roles of a group' do
+        it "loads selected roles of a group" do
           filter = PeopleFilter.create!(
-            name: 'My Filter',
-            range: 'deep',
+            name: "My Filter",
+            range: "deep",
             filter_chain: {
-              role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-') }
+              role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-") }
             }
           )
 
@@ -340,92 +340,92 @@ describe PeopleController do
       end
     end
 
-    context 'PUT update' do
+    context "PUT update" do
       let(:person) { people(:bottom_member) }
       let(:group) { person.groups.first }
 
-      it 'as admin updates email with password' do
-        put :update, params: { group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' } }
-        expect(assigns(:person).email).to eq('foo@example.com')
+      it "as admin updates email with password" do
+        put :update, params: { group_id: group.id, id: person.id, person: { last_name: "Foo", email: "foo@example.com" } }
+        expect(assigns(:person).email).to eq("foo@example.com")
       end
 
-      context 'as bottom leader' do
+      context "as bottom leader" do
         before { sign_in(Fabricate(Group::BottomLayer::Leader.sti_name, group: group).person) }
 
-        it 'updates email for person in one group' do
+        it "updates email for person in one group" do
           person.update_column(:encrypted_password, nil)
-          put :update, params: { group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' } }
-          expect(assigns(:person).email).to eq('foo@example.com')
+          put :update, params: { group_id: group.id, id: person.id, person: { last_name: "Foo", email: "foo@example.com" } }
+          expect(assigns(:person).email).to eq("foo@example.com")
         end
 
-        it 'does not update email for person in multiple groups' do
+        it "does not update email for person in multiple groups" do
           Fabricate(Group::BottomLayer::Member.name.to_sym, person: person, group: groups(:bottom_layer_two))
-          put :update, params: { group_id: group.id, id: person.id, person: { last_name: 'Foo', email: 'foo@example.com' } }
-          expect(assigns(:person).email).to eq('bottom_member@example.com')
+          put :update, params: { group_id: group.id, id: person.id, person: { last_name: "Foo", email: "foo@example.com" } }
+          expect(assigns(:person).email).to eq("bottom_member@example.com")
         end
 
-        it 'does not update password for other person' do
+        it "does not update password for other person" do
           encrypted = person.encrypted_password
           put :update, params: {
                          group_id: group.id,
                          id: person.id,
-                         person: { password: 'yadayada', password_confirmation: 'yadayada' }
+                         person: { password: "yadayada", password_confirmation: "yadayada" }
                        }
           expect(person.reload.encrypted_password).to eq encrypted
         end
 
-        it 'create new phone numbers' do
+        it "create new phone numbers" do
           expect do
             put :update, params: {
                            group_id: group.id,
                            id: person.id,
-                           person: { town: 'testtown',
+                           person: { town: "testtown",
                                      phone_numbers_attributes: {
-                                       '111' =>
-                                         { number: '031 111 1111', translated_label: 'Privat', public: 1 },
-                                       '222' =>
-                                         { number: '', translated_label: 'Arbeit', public: 1 }  } }
+                                       "111" =>
+                                         { number: "031 111 1111", translated_label: "Privat", public: 1 },
+                                       "222" =>
+                                         { number: "", translated_label: "Arbeit", public: 1 }  } }
                          }
             expect(assigns(:person)).to be_valid
           end.to change { PhoneNumber.count }.by(1)
           expect(person.reload.phone_numbers.size).to eq(1)
           number = person.phone_numbers.first
-          expect(number.number).to eq '+41 31 111 11 11'
-          expect(number.label).to eq 'Privat'
+          expect(number.number).to eq "+41 31 111 11 11"
+          expect(number.label).to eq "Privat"
           expect(number.public).to be_truthy
         end
 
-        it 'updates existing phone numbers' do
-          n = person.phone_numbers.create!(number: '031 111 1111', label: 'Privat', public: 1)
+        it "updates existing phone numbers" do
+          n = person.phone_numbers.create!(number: "031 111 1111", label: "Privat", public: 1)
           expect do
             put :update, params: {
                            group_id: group.id,
                            id: person.id,
-                           person: { town: 'testtown',
+                           person: { town: "testtown",
                                      phone_numbers_attributes: { n.id.to_s =>
-                                       { number: '031 111 2222', translated_label: 'Privat', public: 0, id: n.id } } }
+                                       { number: "031 111 2222", translated_label: "Privat", public: 0, id: n.id } } }
                          }
           end.not_to change { PhoneNumber.count }
           number = person.reload.phone_numbers.first
-          expect(number.number).to eq '+41 31 111 22 22'
+          expect(number.number).to eq "+41 31 111 22 22"
           expect(number.public).to be_falsey
         end
 
-        it 'updates existing phone numbers in other language' do
+        it "updates existing phone numbers in other language" do
           @cached_locales = I18n.available_locales
           @cached_languages = Settings.application.languages
-          Settings.application.languages = { de: 'Deutsch', fr: 'Français' }
+          Settings.application.languages = { de: "Deutsch", fr: "Français" }
           I18n.available_locales = Settings.application.languages.keys
 
-          n = person.phone_numbers.create!(number: '031 111 1111', label: 'Vater', public: 1)
+          n = person.phone_numbers.create!(number: "031 111 1111", label: "Vater", public: 1)
           expect do
             put :update, params: {
                            group_id: group.id,
                            id: person.id,
                            locale: :fr,
-                           person: { town: 'testtown',
+                           person: { town: "testtown",
                                      phone_numbers_attributes: { n.id.to_s =>
-                                       { number: '031 111 2222', translated_label: 'mère', public: 0, id: n.id } } }
+                                       { number: "031 111 2222", translated_label: "mère", public: 0, id: n.id } } }
                          }
           end.not_to change { PhoneNumber.count }
 
@@ -434,55 +434,55 @@ describe PeopleController do
           I18n.locale = I18n.default_locale
 
           number = person.reload.phone_numbers.first
-          expect(number.number).to eq '+41 31 111 22 22'
-          expect(number.label).to eq 'Mutter'
+          expect(number.number).to eq "+41 31 111 22 22"
+          expect(number.label).to eq "Mutter"
           expect(number.public).to be_falsey
         end
 
-        it 'destroys existing phone numbers' do
-          n = person.phone_numbers.create!(number: '031 111 1111', label: 'Privat', public: 1)
+        it "destroys existing phone numbers" do
+          n = person.phone_numbers.create!(number: "031 111 1111", label: "Privat", public: 1)
           expect do
             put :update, params: {
                            group_id: group.id,
                            id: person.id,
-                           person: { town: 'testtown',
+                           person: { town: "testtown",
                                      phone_numbers_attributes: { n.id.to_s =>
-                                       { number: '031 111 1111', translated_label: 'Privat', public: 0, id: n.id, _destroy: true } } }
+                                       { number: "031 111 1111", translated_label: "Privat", public: 0, id: n.id, _destroy: true } } }
                          }
           end.to change { PhoneNumber.count }.by(-1)
           expect(person.reload.phone_numbers).to be_blank
         end
 
-        it 'destroys existing phone numbers when number is empty' do
-          n = person.phone_numbers.create!(number: '031 111 1111', label: 'Privat', public: 1)
+        it "destroys existing phone numbers when number is empty" do
+          n = person.phone_numbers.create!(number: "031 111 1111", label: "Privat", public: 1)
           expect do
             put :update, params: {
                            group_id: group.id,
                            id: person.id,
-                           person: { town: 'testtown',
+                           person: { town: "testtown",
                                      phone_numbers_attributes: { n.id.to_s =>
-                                       { number: '   ', translated_label: 'Privat', public: 0, id: n.id } } }
+                                       { number: "   ", translated_label: "Privat", public: 0, id: n.id } } }
                          }
           end.to change { PhoneNumber.count }.by(-1)
           expect(person.reload.phone_numbers).to be_blank
         end
 
-        it 'create, update and destroys social accounts' do
-          a1 = person.social_accounts.create!(name: 'Housi', label: 'Facebook', public: 0)
-          a2 = person.social_accounts.create!(name: 'Hans', label: 'Skype', public: 1)
+        it "create, update and destroys social accounts" do
+          a1 = person.social_accounts.create!(name: "Housi", label: "Facebook", public: 0)
+          a2 = person.social_accounts.create!(name: "Hans", label: "Skype", public: 1)
           expect do
             put :update, params: {
                            group_id: group.id,
                            id: person.id,
-                           person: { town: 'testtown',
+                           person: { town: "testtown",
                                      social_accounts_attributes: {
                                        a1.id.to_s => { id: a1.id,
-                                                       name: 'Housi1',
-                                                       translated_label: 'Facebook',
+                                                       name: "Housi1",
+                                                       translated_label: "Facebook",
                                                        public: 1 },
                                        a2.id.to_s => { id: a2.id, _destroy: true },
-                                       '999' => { name: 'John',
-                                                  translated_label: 'Twitter',
+                                       "999" => { name: "John",
+                                                  translated_label: "Twitter",
                                                   public: 0 }, } }
                          }
             expect(assigns(:person)).to be_valid
@@ -491,34 +491,34 @@ describe PeopleController do
           accounts = person.reload.social_accounts.order(:label)
           expect(accounts.size).to eq(2)
           fb = accounts.first
-          expect(fb.label).to eq 'Facebook'
-          expect(fb.name).to eq 'Housi1'
+          expect(fb.label).to eq "Facebook"
+          expect(fb.name).to eq "Housi1"
           expect(fb.public).to be_truthy
           tw = accounts.second
-          expect(tw.label).to eq 'Twitter'
-          expect(tw.name).to eq 'John'
+          expect(tw.label).to eq "Twitter"
+          expect(tw.name).to eq "John"
           expect(tw.public).to be_falsey
         end
 
-        it 'create, update and destroys additional emails' do
-          a1 = person.additional_emails.create!(email: 'Housi@example.com', translated_label: 'Arbeit', public: 0)
-          a2 = person.additional_emails.create!(email: 'Hans@example.com', translated_label: 'Privat', public: 1)
+        it "create, update and destroys additional emails" do
+          a1 = person.additional_emails.create!(email: "Housi@example.com", translated_label: "Arbeit", public: 0)
+          a2 = person.additional_emails.create!(email: "Hans@example.com", translated_label: "Privat", public: 1)
           expect do
             put :update, params: {
                            group_id: group.id,
                            id: person.id,
-                           person: { town: 'testtown',
+                           person: { town: "testtown",
                                      additional_emails_attributes: {
                                        a1.id.to_s => { id: a1.id,
-                                                       email: 'Housi1@example.com',
-                                                       translated_label: 'Arbeit',
+                                                       email: "Housi1@example.com",
+                                                       translated_label: "Arbeit",
                                                        public: 1 },
                                        a2.id.to_s => { id: a2.id, _destroy: true },
-                                       '998' => { email: ' ',
-                                                  translated_label: 'Vater',
+                                       "998" => { email: " ",
+                                                  translated_label: "Vater",
                                                   public: 1 },
-                                       '999' => { email: 'John@example.com',
-                                                  translated_label: 'Mutter',
+                                       "999" => { email: "John@example.com",
+                                                  translated_label: "Mutter",
                                                   public: 0 }, } }
                          }
             expect(assigns(:person)).to be_valid
@@ -527,35 +527,35 @@ describe PeopleController do
           emails = person.reload.additional_emails.order(:label)
           expect(emails.size).to eq(2)
           a = emails.first
-          expect(a.label).to eq 'Arbeit'
-          expect(a.email).to eq 'Housi1@example.com'
+          expect(a.label).to eq "Arbeit"
+          expect(a.email).to eq "Housi1@example.com"
           expect(a.public).to be_truthy
           tw = emails.second
-          expect(tw.label).to eq 'Mutter'
-          expect(tw.email).to eq 'John@example.com'
+          expect(tw.label).to eq "Mutter"
+          expect(tw.email).to eq "John@example.com"
           expect(tw.public).to be_falsey
         end
 
-        it 'create, update and destroys people relations' do
+        it "create, update and destroys people relations" do
           p1 = Fabricate(:person)
           p2 = Fabricate(:person)
           p3 = Fabricate(:person)
-          r1 = person.relations_to_tails.create!(tail_id: people(:top_leader).id, kind: 'child')
-          r2 = person.relations_to_tails.create!(tail_id: p1.id, kind: 'parent')
+          r1 = person.relations_to_tails.create!(tail_id: people(:top_leader).id, kind: "child")
+          r2 = person.relations_to_tails.create!(tail_id: p1.id, kind: "parent")
           expect do
             put :update, params: {
                            group_id: group.id,
                            id: person.id,
-                           person: { town: 'testtown',
+                           person: { town: "testtown",
                                      relations_to_tails_attributes: {
                                        r1.id.to_s => { id: r1.id,
                                                        tail_id: p2.id,
-                                                       kind: 'parent' },
+                                                       kind: "parent" },
                                        r2.id.to_s => { id: r2.id, _destroy: true },
-                                       '998' => { tail_id: ' ',
-                                                  kind: 'child' },
-                                       '999' => { tail_id: p3.id,
-                                                  kind: 'child' }, } }
+                                       "998" => { tail_id: " ",
+                                                  kind: "child" },
+                                       "999" => { tail_id: p3.id,
+                                                  kind: "child" }, } }
                          }
             expect(assigns(:person)).to be_valid
           end.not_to change { PeopleRelation.count }
@@ -564,43 +564,43 @@ describe PeopleController do
           expect(relations.size).to eq(2)
           a = relations.first
           expect(a.tail_id).to eq p2.id
-          expect(a.kind).to eq 'parent'
-          expect(a.opposite.kind).to eq 'child'
+          expect(a.kind).to eq "parent"
+          expect(a.opposite.kind).to eq "child"
           b = relations.second
           expect(b.tail_id).to eq p3.id
-          expect(b.kind).to eq 'child'
+          expect(b.kind).to eq "child"
           expect(b.opposite.tail_id).to eq person.id
         end
       end
     end
 
-    describe 'GET #show' do
+    describe "GET #show" do
       let(:gl) { qualification_kinds(:gl) }
       let(:sl) { qualification_kinds(:sl) }
 
-      it 'generates pdf labels' do
+      it "generates pdf labels" do
         get :show, params: { group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id }, format: :pdf
 
-        expect(@response.media_type).to eq('application/pdf')
+        expect(@response.media_type).to eq("application/pdf")
         expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
       end
 
-      it 'exports csv file' do
+      it "exports csv file" do
         get :show, params: { group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id }, format: :csv
 
-        expect(@response.media_type).to eq('text/csv')
+        expect(@response.media_type).to eq("text/csv")
         expect(@response.body).to match(/^Vorname;Nachname/)
         expect(@response.body).to match(/^Top;Leader/)
       end
 
-      context 'tags' do
+      context "tags" do
         before do
-          top_leader.tags.create!(name: 'fruit:banana')
-          top_leader.tags.create!(name: 'pizza')
+          top_leader.tags.create!(name: "fruit:banana")
+          top_leader.tags.create!(name: "pizza")
           create_tag(top_leader, PersonTags::Validation::EMAIL_PRIMARY_INVALID)
         end
 
-        it 'preloads and assigns grouped tags' do
+        it "preloads and assigns grouped tags" do
           get :show, params: { group_id: group.id, id: people(:top_leader).id }
           tags = assigns(:tags)
           expect(tags.map(&:first)).to eq([:fruit, :category_validation, :other])
@@ -609,51 +609,51 @@ describe PeopleController do
         end
       end
 
-      context 'qualifications' do
+      context "qualifications" do
         before do
           @ql_gl = Fabricate(:qualification, person: top_leader, qualification_kind: gl, start_at: Time.zone.now)
           @ql_sl = Fabricate(:qualification, person: top_leader, qualification_kind: sl, start_at: Time.zone.now)
         end
 
-        it 'preloads data for asides, ordered by finish_at' do
+        it "preloads data for asides, ordered by finish_at" do
           get :show, params: { group_id: group.id, id: people(:top_leader).id }
           expect(assigns(:person).latest_qualifications_uniq_by_kind).to eq [@ql_sl, @ql_gl]
         end
       end
 
-      context 'add requests' do
+      context "add requests" do
         let(:person) { people(:top_leader) }
 
-        it 'loads requests' do
+        it "loads requests" do
           r1 = Person::AddRequest::Group.create!(
             person: person,
             requester: Fabricate(:person),
             body: groups(:bottom_layer_one),
             role_type: Group::BottomLayer::Member.sti_name)
-          get :show, params: { group_id: group.id, id: person.id, body_type: 'Group', body_id: groups(:bottom_layer_one).id }
+          get :show, params: { group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_layer_one).id }
           expect(assigns(:add_requests)).to eq([r1])
           expect(flash[:notice]).to be_blank
         end
 
-        it 'shows flash status accepted' do
-          get :show, params: { group_id: group.id, id: person.id, body_type: 'Group', body_id: group.id }
+        it "shows flash status accepted" do
+          get :show, params: { group_id: group.id, id: person.id, body_type: "Group", body_id: group.id }
           expect(flash[:notice]).to match(/freigegeben/)
         end
 
-        it 'shows flash status rejected' do
-          get :show, params: { group_id: group.id, id: person.id, body_type: 'Group', body_id: groups(:bottom_group_one_one).id }
+        it "shows flash status rejected" do
+          get :show, params: { group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_group_one_one).id }
           expect(flash[:alert]).to match(/abgelehnt/)
         end
       end
 
     end
 
-    describe 'POST #send_password_instructions' do
+    describe "POST #send_password_instructions" do
       let(:person) { people(:bottom_member) }
 
       before { allow(Truemail).to receive(:valid?).and_call_original }
 
-      it 'does not send instructions for self' do
+      it "does not send instructions for self" do
         expect do
           expect do
             post :send_password_instructions, params: { group_id: group.id, id: top_leader.id }, format: :js
@@ -661,43 +661,43 @@ describe PeopleController do
         end.not_to change { Delayed::Job.count }
       end
 
-      it 'sends password instructions' do
+      it "sends password instructions" do
         expect do
           post :send_password_instructions, params: { group_id: groups(:bottom_layer_one).id, id: person.id }, format: :js
         end.to change { Delayed::Job.count }.by(1)
-        expect(flash[:notice]).to eq 'Login Informationen wurden verschickt.'
+        expect(flash[:notice]).to eq "Login Informationen wurden verschickt."
       end
 
-      it 'does not send instructions if e-mail invalid' do
-        person.update_attribute(:email, 'dude@domainungueltig42.ch')
+      it "does not send instructions if e-mail invalid" do
+        person.update_attribute(:email, "dude@domainungueltig42.ch")
 
         expect do
           post :send_password_instructions, params: { group_id: groups(:bottom_layer_one).id, id: person.id }, format: :js
         end.not_to change { Delayed::Job.count }
-        expect(flash[:alert]).to eq 'Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist.'
+        expect(flash[:alert]).to eq "Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist."
       end
     end
 
-    describe 'PUT #primary_group' do
-      it 'sets primary group' do
+    describe "PUT #primary_group" do
+      it "sets primary group" do
         put :primary_group, params: { group_id: group, id: top_leader.id, primary_group_id: group.id }, format: :js
 
         expect(top_leader.reload.primary_group_id).to eq(group.id)
-        is_expected.to render_template('primary_group')
+        is_expected.to render_template("primary_group")
       end
 
-      it 'does not set primary group if person has invalid data' do
+      it "does not set primary group if person has invalid data" do
         top_leader.update_columns(first_name: nil, last_name: nil) # produce invalid person model
         put :primary_group, params: { group_id: group, id: top_leader.id, primary_group_id: group.id }, format: :js
 
         expect(top_leader.reload.primary_group_id).to eq(group.id)
-        is_expected.to render_template('shared/update_flash')
+        is_expected.to render_template("shared/update_flash")
       end
     end
 
   end
 
-  context 'json' do
+  context "json" do
     render_views
 
     before do
@@ -706,67 +706,67 @@ describe PeopleController do
       Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_two_one), person: top_leader)
     end
 
-    context 'as self' do
+    context "as self" do
       before { sign_in(top_leader) }
 
-      it 'GET index contains current role and all data' do
+      it "GET index contains current role and all data" do
         get :index, params: { group_id: group.id }, format: :json
         json = JSON.parse(response.body)
-        person = json['people'].first
-        expect(person['links']['phone_numbers'].size).to eq(2)
-        expect(person['links']['roles'].size).to eq(1)
+        person = json["people"].first
+        expect(person["links"]["phone_numbers"].size).to eq(2)
+        expect(person["links"]["roles"].size).to eq(1)
       end
 
-      it 'GET show contains all roles and all data' do
+      it "GET show contains all roles and all data" do
         get :show, params: { group_id: group.id, id: top_leader.id }, format: :json
         json = JSON.parse(response.body)
-        person = json['people'].first
-        expect(person['links']['phone_numbers'].size).to eq(2)
-        expect(person['links']['roles'].size).to eq(2)
+        person = json["people"].first
+        expect(person["links"]["phone_numbers"].size).to eq(2)
+        expect(person["links"]["roles"].size).to eq(2)
       end
     end
 
-    context 'with contact data' do
+    context "with contact data" do
 
       let(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
       before { sign_in(user) }
 
-      it 'GET index contains only current roles and public data' do
+      it "GET index contains only current roles and public data" do
         get :index, params: { group_id: group.id }, format: :json
         json = JSON.parse(response.body)
-        person = json['people'].first
-        expect(person['links']['phone_numbers'].size).to eq(1)
-        expect(person['links']['phone_numbers'].first).to eq(@public_number.id.to_s)
-        expect(person['links']['roles'].size).to eq(1)
+        person = json["people"].first
+        expect(person["links"]["phone_numbers"].size).to eq(1)
+        expect(person["links"]["phone_numbers"].first).to eq(@public_number.id.to_s)
+        expect(person["links"]["roles"].size).to eq(1)
       end
 
-      it 'GET show contains only current roles and public data' do
+      it "GET show contains only current roles and public data" do
         get :show, params: { group_id: group.id, id: top_leader.id }, format: :json
         json = JSON.parse(response.body)
-        person = json['people'].first
-        expect(person['links']['phone_numbers'].size).to eq(1)
-        expect(person['links']['phone_numbers'].first).to eq(@public_number.id.to_s)
-        expect(person['links']['roles'].size).to eq(1)
+        person = json["people"].first
+        expect(person["links"]["phone_numbers"].size).to eq(1)
+        expect(person["links"]["phone_numbers"].first).to eq(@public_number.id.to_s)
+        expect(person["links"]["roles"].size).to eq(1)
       end
     end
   end
 
-  context 'as reader' do
+  context "as reader" do
 
     before { sign_in(user) }
 
     let(:user) { Fabricate(Group::TopGroup::LocalSecretary.name, group: groups(:top_group)).person }
 
-    context 'add requests' do
+    context "add requests" do
       let(:person) { people(:top_leader) }
 
-      it 'does not load requests' do
+      it "does not load requests" do
         r1 = Person::AddRequest::Group.create!(
           person: person,
           requester: Fabricate(:person),
           body: groups(:bottom_layer_one),
           role_type: Group::BottomLayer::Member.sti_name)
-        get :show, params: { group_id: group.id, id: person.id, body_type: 'Group', body_id: groups(:bottom_layer_one).id }
+        get :show, params: { group_id: group.id, id: person.id, body_type: "Group", body_id: groups(:bottom_layer_one).id }
         expect(assigns(:add_requests)).to be_nil
         expect(flash[:notice]).to be_blank
       end
@@ -774,60 +774,60 @@ describe PeopleController do
 
   end
 
-  context 'as api user' do
+  context "as api user" do
 
-    describe 'GET #show' do
-      it 'redirects when token is nil' do
-        get :show, params: { group_id: group.id, id: top_leader.id, user_token: '', user_email: top_leader.email }
+    describe "GET #show" do
+      it "redirects when token is nil" do
+        get :show, params: { group_id: group.id, id: top_leader.id, user_token: "", user_email: top_leader.email }
         is_expected.to redirect_to new_person_session_path
       end
 
-      it 'redirects when token is invalid' do
-        get :show, params: { group_id: group.id, id: top_leader.id, user_token: 'yadayada', user_email: top_leader.email }
+      it "redirects when token is invalid" do
+        get :show, params: { group_id: group.id, id: top_leader.id, user_token: "yadayada", user_email: top_leader.email }
         is_expected.to redirect_to new_person_session_path
       end
 
-      it 'shows page when token is valid' do
+      it "shows page when token is valid" do
         top_leader.generate_authentication_token!
         get :show, params: { group_id: group.id, id: top_leader.id, user_token: top_leader.authentication_token, user_email: top_leader.email }
-        is_expected.to render_template('show')
+        is_expected.to render_template("show")
       end
 
-      it 'shows page when headers are valid' do
+      it "shows page when headers are valid" do
         top_leader.generate_authentication_token!
-        @request.headers['X-User-Email'] = top_leader.email
-        @request.headers['X-User-Token'] = top_leader.authentication_token
+        @request.headers["X-User-Email"] = top_leader.email
+        @request.headers["X-User-Token"] = top_leader.authentication_token
         get :show, params: { group_id: group.id, id: top_leader.id }
-        is_expected.to render_template('show')
+        is_expected.to render_template("show")
       end
     end
 
   end
 
-  context 'DELETE #destroy' do
+  context "DELETE #destroy" do
 
     let(:member) { people(:bottom_member) }
     let(:admin) { people(:top_leader) }
 
-    describe 'as admin user' do
+    describe "as admin user" do
       before { sign_in(admin) }
 
-      it 'can delete person' do
+      it "can delete person" do
         delete :destroy, params: { group_id: member.primary_group.id, id: member.id }
         expect(response.status).to eq(302)
       end
 
-      it 'deletes person' do
+      it "deletes person" do
         expect do
           delete :destroy, params: { group_id: member.primary_group.id, id: member.id }
         end.to change(Person, :count).by(-1)
       end
     end
 
-    describe 'as normal user' do
+    describe "as normal user" do
       before { sign_in(member) }
 
-      it 'fails without permissions' do
+      it "fails without permissions" do
         expect do
           delete :destroy, params: { group_id: group.id, id: admin.id }
         end.to raise_error(CanCan::AccessDenied)
@@ -835,63 +835,63 @@ describe PeopleController do
     end
   end
 
-  context 'households' do
+  context "households" do
     let(:member) { people(:bottom_member) }
     before { sign_in(top_leader) }
 
-    it 'POST#update creates household' do
+    it "POST#update creates household" do
       put :update, params: { group_id: group.id, id: top_leader.id, person: { household_people_ids: [member.id] } }
 
       expect(top_leader.reload.household_key).to be_present
       expect(top_leader.household_people).to eq [member]
     end
 
-    it 'POST#update clears household' do
+    it "POST#update clears household" do
       top_leader.update(household_key: 1)
       put :update, params: { group_id: group.id, id: top_leader.id, person: { town: top_leader.town } }
 
       expect(top_leader.reload.household_key).to be_nil
     end
 
-    it 'POST#update rerenders edit formal when not permitted to update addresse' do
+    it "POST#update rerenders edit formal when not permitted to update addresse" do
       sign_in(member)
       put :update, params: { group_id: member.primary_group_id, id: member.id, person: { household_people_ids: [top_leader.id] } }
       expect(assigns(:person)).to have(4).errors
-      expect(response).to render_template('edit')
+      expect(response).to render_template("edit")
     end
 
-    it 'POST#update does not accept invalid file type' do
-      file = Tempfile.new(['foo', '.exe'])
-      picture = Rack::Test::UploadedFile.new(file, 'application/exe')
+    it "POST#update does not accept invalid file type" do
+      file = Tempfile.new(["foo", ".exe"])
+      picture = Rack::Test::UploadedFile.new(file, "application/exe")
       put :update, params: { group_id: member.primary_group_id, id: member.id, person: { picture: picture } }
       expect(assigns(:person)).to have(1).error_on(:picture)
     end
   end
 
-  context 'as token user' do
-    it 'shows page when token is valid' do
-      get :show, params: { group_id: group.id, id: top_leader.id, token: 'PermittedToken' }
-      is_expected.to render_template('show')
+  context "as token user" do
+    it "shows page when token is valid" do
+      get :show, params: { group_id: group.id, id: top_leader.id, token: "PermittedToken" }
+      is_expected.to render_template("show")
     end
 
-    it 'does not show page for unpermitted token' do
+    it "does not show page for unpermitted token" do
       expect do
-        get :show, params: { group_id: group.id, id: top_leader.id, token: 'RejectedToken' }
+        get :show, params: { group_id: group.id, id: top_leader.id, token: "RejectedToken" }
       end.to raise_error(CanCan::AccessDenied)
     end
 
-    it 'indexes page when token is valid' do
-      get :index, params: { group_id: group.id, token: 'PermittedToken' }
-      is_expected.to render_template('index')
+    it "indexes page when token is valid" do
+      get :index, params: { group_id: group.id, token: "PermittedToken" }
+      is_expected.to render_template("index")
     end
 
-    it 'does not index page for unpermitted token' do
+    it "does not index page for unpermitted token" do
       expect do
-        get :index, params: { group_id: group.id, token: 'RejectedToken' }
+        get :index, params: { group_id: group.id, token: "RejectedToken" }
       end.to raise_error(CanCan::AccessDenied)
     end
 
-    context 'bottom_group' do
+    context "bottom_group" do
       let(:group)  { groups(:bottom_group_one_one_one) }
 
       before do
@@ -899,42 +899,42 @@ describe PeopleController do
         @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
       end
 
-      it 'shows only leader in list' do
-        get :index, params: { group_id: group.id, token: 'PermittedToken' }
+      it "shows only leader in list" do
+        get :index, params: { group_id: group.id, token: "PermittedToken" }
         expect(assigns(:people)).to eq [@leader]
       end
 
-      it 'shows leader' do
-        get :show, params: { group_id: group.id, id: @leader.id, token: 'PermittedToken' }
+      it "shows leader" do
+        get :show, params: { group_id: group.id, id: @leader.id, token: "PermittedToken" }
         expect(response).to be_successful
       end
 
-      it 'raises when trying to view member' do
+      it "raises when trying to view member" do
         expect do
-          get :show, params: { group_id: group.id, id: @member.id, token: 'PermittedToken' }
+          get :show, params: { group_id: group.id, id: @member.id, token: "PermittedToken" }
         end.to raise_error CanCan::AccessDenied
       end
     end
   end
 
-  context 'with valid oauth token' do
-    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: true, accessible?: true, resource_owner_id: top_leader.id) }
+  context "with valid oauth token" do
+    let(:token) { instance_double("Doorkeeper::AccessToken", acceptable?: true, accessible?: true, resource_owner_id: top_leader.id) }
 
     before do
       allow(controller).to receive(:doorkeeper_token) { token }
     end
 
-    it 'shows page' do
+    it "shows page" do
       get :show, params: { group_id: group.id, id: top_leader.id }
-      is_expected.to render_template('show')
+      is_expected.to render_template("show")
     end
 
-    it 'indexes page' do
+    it "indexes page" do
       get :index, params: { group_id: group.id }
-      is_expected.to render_template('index')
+      is_expected.to render_template("index")
     end
 
-    context 'bottom_group' do
+    context "bottom_group" do
       let(:group)  { groups(:bottom_group_one_one_one) }
 
       before do
@@ -942,17 +942,17 @@ describe PeopleController do
         @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
       end
 
-      it 'shows only leader in list' do
+      it "shows only leader in list" do
         get :index, params: { group_id: group.id }
         expect(assigns(:people)).to eq [@leader]
       end
 
-      it 'shows leader' do
+      it "shows leader" do
         get :show, params: { group_id: group.id, id: @leader.id }
         expect(response).to be_successful
       end
 
-      it 'raises when trying to view member' do
+      it "raises when trying to view member" do
         expect do
           get :show, params: { group_id: group.id, id: @member.id }
         end.to raise_error CanCan::AccessDenied
@@ -960,24 +960,24 @@ describe PeopleController do
     end
   end
 
-  context 'without acceptable oauth token (required scope is missing)' do
-    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: false, accessible?: true, resource_owner_id: top_leader.id) }
+  context "without acceptable oauth token (required scope is missing)" do
+    let(:token) { instance_double("Doorkeeper::AccessToken", acceptable?: false, accessible?: true, resource_owner_id: top_leader.id) }
 
     before do
       allow(controller).to receive(:doorkeeper_token) { token }
     end
 
-    it 'fails with HTTP 403 (forbidden) when trying to show page' do
+    it "fails with HTTP 403 (forbidden) when trying to show page" do
       get :show, params: { group_id: group.id, id: top_leader.id }
       expect(response).to have_http_status(:forbidden)
     end
 
-    it 'fails with HTTP 403 (forbidden) when trying to index page' do
+    it "fails with HTTP 403 (forbidden) when trying to index page" do
       get :index, params: { group_id: group.id }
       expect(response).to have_http_status(:forbidden)
     end
 
-    context 'bottom_group' do
+    context "bottom_group" do
       let(:group)  { groups(:bottom_group_one_one_one) }
 
       before do
@@ -985,27 +985,27 @@ describe PeopleController do
         @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
       end
 
-      it 'fails with HTTP 403 (forbidden) when trying to show leader in list' do
+      it "fails with HTTP 403 (forbidden) when trying to show leader in list" do
         get :index, params: { group_id: group.id }
         expect(response).to have_http_status(:forbidden)
       end
 
-      it 'fails with HTTP 403 (forbidden) when trying to show leader' do
+      it "fails with HTTP 403 (forbidden) when trying to show leader" do
         get :show, params: { group_id: group.id, id: @leader.id }
         expect(response).to have_http_status(:forbidden)
       end
 
-      it 'fails with HTTP 403 (forbidden) when trying to view member' do
+      it "fails with HTTP 403 (forbidden) when trying to view member" do
         get :show, params: { group_id: group.id, id: @member.id }
         expect(response).to have_http_status(:forbidden)
       end
     end
   end
 
-  context 'with invalid oauth token (expired or revoked)' do
+  context "with invalid oauth token (expired or revoked)" do
     let(:token) { 
       instance_double(
-        'Doorkeeper::AccessToken', :acceptable? => true, 
+        "Doorkeeper::AccessToken", :acceptable? => true, 
         :accessible? => false, :resource_owner_id => top_leader.id)
     }
 
@@ -1013,17 +1013,17 @@ describe PeopleController do
       allow(controller).to receive(:doorkeeper_token) { token }
     end
 
-    it 'redirects to login when trying to show page' do
+    it "redirects to login when trying to show page" do
       get :show, params: { group_id: group.id, id: top_leader.id }
-      is_expected.to redirect_to('http://test.host/users/sign_in')
+      is_expected.to redirect_to("http://test.host/users/sign_in")
     end
 
-    it 'redirects to login when trying to index page' do
+    it "redirects to login when trying to index page" do
       get :index, params: { group_id: group.id }
-      is_expected.to redirect_to('http://test.host/users/sign_in')
+      is_expected.to redirect_to("http://test.host/users/sign_in")
     end
 
-    context 'bottom_group' do
+    context "bottom_group" do
       let(:group)  { groups(:bottom_group_one_one_one) }
 
       before do
@@ -1031,55 +1031,55 @@ describe PeopleController do
         @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
       end
 
-      it 'redirects to legin when trying to show leader in list' do
+      it "redirects to legin when trying to show leader in list" do
         get :index, params: { group_id: group.id }
-        is_expected.to redirect_to('http://test.host/users/sign_in')
+        is_expected.to redirect_to("http://test.host/users/sign_in")
       end
 
-      it 'redirects to login when trying to show leader' do
+      it "redirects to login when trying to show leader" do
         get :show, params: { group_id: group.id, id: @leader.id }
-        is_expected.to redirect_to('http://test.host/users/sign_in')
+        is_expected.to redirect_to("http://test.host/users/sign_in")
       end
 
-      it 'redirects to login when trying to view member' do
+      it "redirects to login when trying to view member" do
         get :show, params: { group_id: group.id, id: @member.id }
-        is_expected.to redirect_to('http://test.host/users/sign_in')
+        is_expected.to redirect_to("http://test.host/users/sign_in")
       end
     end
   end
 
-  context 'table_displays'do
+  context "table_displays"do
     render_views
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
     before { sign_in(top_leader) }
-    after  { TableDisplay.class_variable_set('@@permissions', {}) }
+    after  { TableDisplay.class_variable_set("@@permissions", {}) }
 
-    it 'GET#index lists extra column' do
+    it "GET#index lists extra column" do
       top_leader.table_display_for(group).update(selected: %w(gender))
 
       get :index, params: { group_id: group.id }
-      expect(dom).to have_checked_field 'Geschlecht'
-      expect(dom.find('table tbody tr')).to have_content 'unbekannt'
+      expect(dom).to have_checked_field "Geschlecht"
+      expect(dom.find("table tbody tr")).to have_content "unbekannt"
     end
 
-    it 'GET#index lists extra column without content if permission check fails' do
+    it "GET#index lists extra column without content if permission check fails" do
       TableDisplay.register_permission(Person, :missing_permission, :gender)
       top_leader.table_display_for(group).update(selected: %w(gender))
 
       get :index, params: { group_id: group.id }
-      expect(dom).to have_checked_field 'Geschlecht'
-      expect(dom.find('table tbody tr')).not_to have_content 'unbekannt'
+      expect(dom).to have_checked_field "Geschlecht"
+      expect(dom.find("table tbody tr")).not_to have_content "unbekannt"
     end
 
-    it 'GET#index sorts by extra column' do
+    it "GET#index sorts by extra column" do
       top_leader.table_display_for(group).update(selected: %w(gender))
-      Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person.update(gender: 'm')
+      Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person.update(gender: "m")
       get :index, params: { group_id: group.id, sort: :gender, sort_dir: :desc }
       expect(assigns(:people).first).to eq top_leader
     end
 
-    it 'GET#index exports to csv using TableDisplay' do
+    it "GET#index exports to csv using TableDisplay" do
       get :index, params: { group_id: group, selection: true }, format: :csv
       expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
       expect(Delayed::Job.last.payload_object.send(:exporter)).to eq Export::Tabular::People::TableDisplays
@@ -1092,7 +1092,7 @@ describe PeopleController do
     ActsAsTaggableOn::Tagging.create!(
       taggable: person,
       tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
-      context: 'tags'
+      context: "tags"
     )
   end
 end

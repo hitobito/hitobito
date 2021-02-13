@@ -40,7 +40,7 @@ module FilterNavigation
       end
 
       def init_items
-        item(@query, '', counts[:query]) unless @query.blank?
+        item(@query, "", counts[:query]) unless @query.blank?
         predefined_filters.each do |key|
           item(predefined_filter_label(key), event_participation_filter_link(key), counts[key])
         end
@@ -51,7 +51,7 @@ module FilterNavigation
       end
 
       def counts
-        @counts ||= template.instance_variable_get('@counts') || {}
+        @counts ||= template.instance_variable_get("@counts") || {}
       end
 
       def init_dropdown_items

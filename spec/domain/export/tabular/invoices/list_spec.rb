@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Tabular::Invoices::List do
   let(:invoice) { invoices(:invoice) }
@@ -13,7 +13,7 @@ describe Export::Tabular::Invoices::List do
 
   subject { list }
 
-  it 'uses certain attributes with tranlsations' do
+  it "uses certain attributes with tranlsations" do
     expect(subject.attributes).to eq [:title,
                                       :sequence_number,
                                       :state,
@@ -31,21 +31,21 @@ describe Export::Tabular::Invoices::List do
                                       :accounts,
                                       :payments]
 
-    expect(subject.labels).to eq ['Titel',
-                                  'Nummer',
-                                  'Status',
-                                  'Referenz Nummer',
-                                  'Text',
-                                  'Empfänger E-Mail',
-                                  'Empfänger Adresse',
-                                  'Verschickt am',
-                                  'Fällig am',
-                                  'Betrag',
-                                  'MwSt.',
-                                  'Total inkl. MwSt.',
-                                  'Total bezahlt',
-                                  'Kostenstellen',
-                                  'Konten',
-                                  'Zahlungseingänge']
+    expect(subject.labels).to eq ["Titel",
+                                  "Nummer",
+                                  "Status",
+                                  "Referenz Nummer",
+                                  "Text",
+                                  "Empfänger E-Mail",
+                                  "Empfänger Adresse",
+                                  "Verschickt am",
+                                  "Fällig am",
+                                  "Betrag",
+                                  "MwSt.",
+                                  "Total inkl. MwSt.",
+                                  "Total bezahlt",
+                                  "Kostenstellen",
+                                  "Konten",
+                                  "Zahlungseingänge"]
   end
 end

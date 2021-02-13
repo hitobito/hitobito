@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Address::FullTextSearch do
 
@@ -12,11 +12,11 @@ describe Address::FullTextSearch do
           .and_return(Address.where(id: addresses(:bs_bern)))
       end
 
-      it 'finds typeahead results from street query without street number' do
+      it "finds typeahead results from street query without street number" do
         bs_bern = addresses(:bs_bern)
-        query = 'lpstra'
+        query = "lpstra"
 
-        search = Address::FullTextSearch.new(query, strategy.new(person, query, ''))
+        search = Address::FullTextSearch.new(query, strategy.new(person, query, ""))
         results = search.typeahead_results
 
         expect(results.size).to eq(1)
@@ -31,11 +31,11 @@ describe Address::FullTextSearch do
         expect(result[:state]).to eq(bs_bern.state)
       end
 
-      it 'finds typeahead results from street query with street number' do
+      it "finds typeahead results from street query with street number" do
         bs_bern = addresses(:bs_bern)
-        query = 'lpstra 4'
+        query = "lpstra 4"
 
-        search = Address::FullTextSearch.new(query, strategy.new(person, query, ''))
+        search = Address::FullTextSearch.new(query, strategy.new(person, query, ""))
         results = search.typeahead_results
 
         expect(results.size).to eq(2)

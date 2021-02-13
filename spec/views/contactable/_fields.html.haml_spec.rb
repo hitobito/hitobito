@@ -5,46 +5,46 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'contactable/_fields.html.haml' do
+describe "contactable/_fields.html.haml" do
 
   let(:group) { groups(:top_layer) }
   let(:current_user) { people(:top_leader) }
   let(:form_builder) { StandardFormBuilder.new(:group, group, view, {}) }
 
-  subject { Capybara::Node::Simple.new(@rendered).find('fieldset.info', visible: false) }
+  subject { Capybara::Node::Simple.new(@rendered).find("fieldset.info", visible: false) }
 
   before do
-    controller.controller_path = 'groups'
-    controller.request.path_parameters[:controller] = 'groups'
+    controller.controller_path = "groups"
+    controller.request.path_parameters[:controller] = "groups"
     view.extend FormatHelper
     allow(view).to receive_messages(entry: GroupDecorator.decorate(group), f: form_builder)
 
     # mock render call to emai_field partial
     render_method = view.method(:render)
     expect(view).to receive(:render) { |*args|
-      if args == ['email_field', f: form_builder]
-        ''
+      if args == ["email_field", f: form_builder]
+        ""
       else
         render_method.call(*args)
       end
     }.exactly(3).times
   end
 
-  context 'standard' do
+  context "standard" do
     before { render }
 
     its([:style]) { should be_blank }
   end
 
 
-  context 'when contact is set' do
+  context "when contact is set" do
     before do
       group.contact = current_user
       render
     end
 
-    its([:style]) { should eq 'display: none' }
+    its([:style]) { should eq "display: none" }
   end
 end

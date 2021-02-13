@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Person::HouseholdsController do
 
@@ -13,109 +13,109 @@ describe Person::HouseholdsController do
   let(:person)    { assigns(:person) }
   let(:household) { assigns(:household) }
 
-  context 'as leader' do
+  context "as leader" do
     before { sign_in(leader) }
 
-    it 'adds person to new household' do
+    it "adds person to new household" do
       get :new, xhr: true, params: parameters(person: leader, other: member)
 
       expect(person.household_people_ids).to eq [member.id]
-      expect(person.town).to eq 'Greattown'
+      expect(person.town).to eq "Greattown"
       expect(assigns(:household)).to be_address_changed
       expect(assigns(:household)).to be_people_changed
     end
 
-    it 'adds person to existing household' do
+    it "adds person to existing household" do
       leader.update(household_key: 1)
       get :new, xhr: true, params: parameters(person: leader, other: member)
 
       expect(person.household_people_ids).to eq [member.id]
-      expect(person.town).to eq 'Greattown'
+      expect(person.town).to eq "Greattown"
       expect(assigns(:household)).to be_address_changed
       expect(assigns(:household)).to be_people_changed
     end
 
-    it 'adds person from existing household' do
+    it "adds person from existing household" do
       member.update(household_key: 1)
       get :new, xhr: true, params: parameters(person: leader, other: member)
 
       expect(person.household_people_ids).to eq [member.id]
-      expect(person.town).to eq 'Greattown'
+      expect(person.town).to eq "Greattown"
       expect(assigns(:household)).to be_people_changed
       expect(assigns(:household)).to be_address_changed
     end
 
-    it 'adds person from existing household to existing household' do
+    it "adds person from existing household to existing household" do
       member.update(household_key: 1)
       leader.update(household_key: 2)
       get :new, xhr: true, params: parameters(person: leader, other: member)
 
       expect(person.household_people_ids).to eq [member.id]
-      expect(person.town).to eq 'Greattown'
+      expect(person.town).to eq "Greattown"
       expect(assigns(:household)).to be_address_changed
       expect(assigns(:household)).to be_people_changed
     end
 
-    it 'adds two people from an existing household' do
+    it "adds two people from an existing household" do
       other = create(Group::TopGroup::Leader, groups(:top_group))
       other.update(household_key: 1)
       member.update(household_key: 1)
 
       get :new, xhr: true, params: parameters(person: leader, other: member)
       expect(person.household_people_ids).to match_array [other.id, member.id]
-      expect(person.town).to eq 'Greattown'
+      expect(person.town).to eq "Greattown"
       expect(assigns(:household)).to be_address_changed
       expect(assigns(:household)).to be_people_changed
     end
 
-    it 'adds two people from different existing households' do
+    it "adds two people from different existing households" do
       other = create(Group::TopGroup::Leader, groups(:top_group))
       other.update(household_key: 1)
       member.update(household_key: 2)
 
       get :new, xhr: true, params: parameters(person: leader, other: member, ids: [other.id])
       expect(person.household_people_ids).to match_array [other.id.to_s, member.id]
-      expect(person.changes).to include 'address'
+      expect(person.changes).to include "address"
     end
   end
 
-  context 'as member with non writable person' do
+  context "as member with non writable person" do
 
     before { sign_in(member) }
 
-    it 'adds person to new household' do
+    it "adds person to new household" do
       get :new, xhr: true, params: parameters(person: member, other: leader)
 
       expect(person.household_people_ids).to eq [leader.id]
-      expect(person.changes).to include 'address'
+      expect(person.changes).to include "address"
     end
 
-    it 'adds person to existing household' do
+    it "adds person to existing household" do
       member.update(household_key: 1)
       get :new, xhr: true, params: parameters(person: member, other: leader)
 
       expect(person.household_people_ids).to eq [leader.id]
-      expect(person.changes).to include 'address'
+      expect(person.changes).to include "address"
     end
 
-    it 'adds person from existing household' do
+    it "adds person from existing household" do
       member.update(household_key: 1)
       get :new, xhr: true, params: parameters(person: member, other: leader)
 
       expect(person.household_people_ids).to eq [leader.id]
-      expect(person.changes).to include 'address'
+      expect(person.changes).to include "address"
     end
 
-    it 'adds person from existing household to existing household' do
+    it "adds person from existing household to existing household" do
       member.update(household_key: 1)
       leader.update(household_key: 2)
       get :new, xhr: true, params: parameters(person: member, other: leader)
 
       expect(person.household_people_ids).to eq [leader.id]
-      expect(person.changes).to include 'address'
+      expect(person.changes).to include "address"
     end
 
-    it 'adds two people from an existing household' do
+    it "adds two people from an existing household" do
       other = create(Group::TopGroup::Leader, groups(:top_group))
       other.update(household_key: 1)
       leader.update(household_key: 2)
@@ -135,10 +135,10 @@ describe Person::HouseholdsController do
   end
 
   def person_attrs(ids)
-    { address: '',
-      zip_code: '',
-      town: '',
-      country: '',
+    { address: "",
+      zip_code: "",
+      town: "",
+      country: "",
       household_people_ids: ids }
   end
 

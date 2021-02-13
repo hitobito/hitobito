@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 
 describe ReoccuringMailchimpSynchronizationJob do
@@ -14,7 +14,7 @@ describe ReoccuringMailchimpSynchronizationJob do
   def create(state = nil)
     Fabricate(:mailing_list, group: group, mailchimp_list_id: 1, mailchimp_api_key: 1).tap do |list|
       data = case state
-             when :failed then  { exception: ArgumentError.new('ouch') }
+             when :failed then  { exception: ArgumentError.new("ouch") }
              when :success then { foo: { total: 1, success: 1 } }
              when :partial then { foo: { failed: 1 }, bar: { success: 1 } }
              when :unchanged then {}
@@ -25,12 +25,12 @@ describe ReoccuringMailchimpSynchronizationJob do
 
   subject { ReoccuringMailchimpSynchronizationJob.new }
 
-  it 'ignores list not linked' do
+  it "ignores list not linked" do
     Fabricate(:mailing_list, group: group)
     expect { subject.perform }.not_to change { Delayed::Job.count }
   end
 
-  it 'ignores list with failed result' do
+  it "ignores list with failed result" do
     create(:failed)
     expect { subject.perform }.not_to change { Delayed::Job.count }
   end

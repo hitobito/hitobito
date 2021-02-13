@@ -11,8 +11,8 @@ module FormHelper
   def standard_form(object, options = {}, &block)
     options[:builder] ||= StandardFormBuilder
     options[:html] ||= {}
-    add_css_class options[:html], 'form-horizontal' unless options.delete(:stacked)
-    add_css_class options[:html], 'form-noindent' if options.delete(:noindent)
+    add_css_class options[:html], "form-horizontal" unless options.delete(:stacked)
+    add_css_class options[:html], "form-noindent" if options.delete(:noindent)
 
     form_for(object, options, &block) + send(:after_nested_form_callbacks)
   end
@@ -46,7 +46,7 @@ module FormHelper
     standard_form(object, options) do |form|
       content = form.error_messages
 
-      content << form_buttons(form, form_button_options.merge(toolbar_class: 'top')) if buttons_top
+      content << form_buttons(form, form_button_options.merge(toolbar_class: "top")) if buttons_top
 
       content << if block_given?
                    capture(form, &block)
@@ -55,7 +55,7 @@ module FormHelper
                  end
 
       if buttons_bottom
-        content << form_buttons(form, form_button_options.merge(toolbar_class: 'bottom'))
+        content << form_buttons(form, form_button_options.merge(toolbar_class: "bottom"))
       end
 
       content.html_safe
@@ -80,24 +80,24 @@ module FormHelper
   end
 
   def add_another_button(form, label, options = {})
-    content_tag(:div, class: 'btn-group') do
-      form.button(label, options.merge(name: :add_another, class: 'btn btn-primary',
+    content_tag(:div, class: "btn-group") do
+      form.button(label, options.merge(name: :add_another, class: "btn btn-primary",
                                        data: { disable: true }))
     end
   end
 
   def submit_button(form, label, options = {})
-    content_tag(:div, class: 'btn-group') do
-      form.button(label, options.merge(class: 'btn btn-primary', data: { disable_with: label }))
+    content_tag(:div, class: "btn-group") do
+      form.button(label, options.merge(class: "btn btn-primary", data: { disable_with: label }))
     end
   end
 
   def cancel_link(url)
-    link_to(ti(:"button.cancel"), url, class: 'link cancel')
+    link_to(ti(:"button.cancel"), url, class: "link cancel")
   end
 
   def spinner
-    image_pack_tag('spinner.gif', size: '16x16', class: 'spinner', style: 'display: none;')
+    image_pack_tag("spinner.gif", size: "16x16", class: "spinner", style: "display: none;")
   end
 
   private

@@ -40,7 +40,7 @@ class Event::KindQualificationKind < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :event_kind, class_name: 'Event::Kind'
+  belongs_to :event_kind, class_name: "Event::Kind"
   belongs_to :qualification_kind
 
 

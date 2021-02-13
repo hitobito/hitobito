@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe :person_duplicates, js: true do
 
@@ -24,22 +24,22 @@ describe :person_duplicates, js: true do
     visit group_person_duplicates_path(top_layer)
   end
 
-  it 'lists duplicates and ignores or merges them' do
-    person_rows = find('#content table.table tbody').all('tr:not(.divider)')
+  it "lists duplicates and ignores or merges them" do
+    person_rows = find("#content table.table tbody").all("tr:not(.divider)")
 
     expect(person_rows.count).to eq(6)
 
     d1_merge_link = new_merge_group_person_duplicate_path(top_layer, duplicate1)
     page.find('#content table.table a[href="' + d1_merge_link + '"]').click
 
-    modal = page.find('div.modal-dialog')
-    expect(modal.find('h5')).to have_content 'Personen zusammenführen'
+    modal = page.find("div.modal-dialog")
+    expect(modal.find("h5")).to have_content "Personen zusammenführen"
     
     expect do
-      modal.find('button.btn', text: 'Zusammenführen').click
+      modal.find("button.btn", text: "Zusammenführen").click
       dst_person = duplicate1.person_1
       expect(page).to have_current_path(group_person_path(dst_person.primary_group_id, dst_person.id))
-      expect(page).to have_content 'Die Personen Einträge wurden erfolgreich zusammengeführt.'
+      expect(page).to have_content "Die Personen Einträge wurden erfolgreich zusammengeführt."
     end.to change(Person, :count).by(-1)
 
     expect(Person.where(id: duplicate1.id)).not_to exist
@@ -49,8 +49,8 @@ describe :person_duplicates, js: true do
 
   def assign_people
     [duplicate1, duplicate2, duplicate3].each do |d|
-      Fabricate('Group::TopLayer::TopAdmin', group: top_layer, person: d.person_1)
-      Fabricate('Group::TopLayer::TopAdmin', group: top_layer, person: d.person_2)
+      Fabricate("Group::TopLayer::TopAdmin", group: top_layer, person: d.person_1)
+      Fabricate("Group::TopLayer::TopAdmin", group: top_layer, person: d.person_2)
     end
   end
 

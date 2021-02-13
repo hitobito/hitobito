@@ -15,7 +15,7 @@ module MailRelay
     def manually_clear_emails
       Mail.find_and_delete(count: 10) do |message|
         message.mark_for_delete = should_clear_email?(message)
-        puts ''
+        puts ""
       end
     end
 
@@ -24,9 +24,9 @@ module MailRelay
     def should_clear_email?(message)
       print "Delete message '#{message.subject}' (y/N/i)? "
       case gets.strip.downcase
-      when 'y'
+      when "y"
         true
-      when 'i'
+      when "i"
         inspect_message(message)
       else
         false

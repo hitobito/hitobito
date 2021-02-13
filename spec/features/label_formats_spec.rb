@@ -1,10 +1,10 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe LabelFormatsController, js: true do
 
   subject { page }
   let(:user) { people(:top_leader) }
-  let(:toggle) { find('label[for=show_global_label_formats]') }
+  let(:toggle) { find("label[for=show_global_label_formats]") }
 
   before :each do
     sign_in
@@ -13,24 +13,24 @@ describe LabelFormatsController, js: true do
 
   def expect_global_to_be(state)
     if state == :visible
-      is_expected.to have_selector('.global-formats', visible: true)
+      is_expected.to have_selector(".global-formats", visible: true)
     else
-      is_expected.to have_selector('.global-formats', visible: false)
+      is_expected.to have_selector(".global-formats", visible: false)
     end
   end
 
-  context 'if display global enabled' do
+  context "if display global enabled" do
     before :each do
       user.update(show_global_label_formats: true)
     end
 
-    it 'displays global label formats' do
+    it "displays global label formats" do
       obsolete_node_safe do
         expect_global_to_be :visible
       end
     end
 
-    it 'hides global formats if switch is toggled' do
+    it "hides global formats if switch is toggled" do
       obsolete_node_safe do
         toggle.click
         expect_global_to_be :invisible
@@ -38,18 +38,18 @@ describe LabelFormatsController, js: true do
     end
   end
 
-  context 'if display global is disabled' do
+  context "if display global is disabled" do
     before :each do
       user.update(show_global_label_formats: false)
     end
 
-    it 'displays global label formats' do
+    it "displays global label formats" do
       obsolete_node_safe do
         expect_global_to_be :invisible
       end
     end
 
-    it 'hides global formats if switch is toggled' do
+    it "hides global formats if switch is toggled" do
       obsolete_node_safe do
         toggle.click
         expect_global_to_be :visible

@@ -26,7 +26,7 @@ Fabricator(:person_duplicate) do
   person_1 { Fabricate(:person) }
   before_save do |d,t|
     p2 = d.person_1.dup
-    p2.email = p2.email.sub('hitobito.example.com', 'duplicates.example.com')
+    p2.email = p2.email.sub("hitobito.example.com", "duplicates.example.com")
     p2.save!
     d.person_2 = p2
   end

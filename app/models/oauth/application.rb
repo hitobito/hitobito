@@ -27,8 +27,8 @@
 
 module Oauth
   class Application < Doorkeeper::Application
-    has_many :access_grants, dependent: :delete_all, class_name: 'Oauth::AccessGrant'
-    has_many :access_tokens, dependent: :delete_all, class_name: 'Oauth::AccessToken'
+    has_many :access_grants, dependent: :delete_all, class_name: "Oauth::AccessGrant"
+    has_many :access_tokens, dependent: :delete_all, class_name: "Oauth::AccessToken"
 
     mount_uploader :logo, Oauth::LogoUploader
 
@@ -43,7 +43,7 @@ module Oauth
     end
 
     def path_params(uri)
-      { client_id: uid, redirect_uri: uri, response_type: 'code', scope: scopes }
+      { client_id: uid, redirect_uri: uri, response_type: "code", scope: scopes }
     end
 
     def valid_access_tokens

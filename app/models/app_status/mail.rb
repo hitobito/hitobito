@@ -7,9 +7,9 @@
 
 class AppStatus::Mail < AppStatus
 
-  CATCH_ALL_INBOX_OVERDUE = 'catch-all mailbox contains overdue mails. ' \
-                            'please make sure delayed job worker is running ' \
-                            'and no e-mail is blocking the queue/job.'.freeze
+  CATCH_ALL_INBOX_OVERDUE = "catch-all mailbox contains overdue mails. " \
+                            "please make sure delayed job worker is running " \
+                            "and no e-mail is blocking the queue/job.".freeze
 
   CATCH_ALL_INBOX_OVERDUE_TIME = 42.minutes
 
@@ -22,7 +22,7 @@ class AppStatus::Mail < AppStatus
   end
 
   def code
-    @catch_all_inbox.eql?('ok') ? :ok : :service_unavailable
+    @catch_all_inbox.eql?("ok") ? :ok : :service_unavailable
   end
 
   private
@@ -33,7 +33,7 @@ class AppStatus::Mail < AppStatus
       m.first_seen < DateTime.now - CATCH_ALL_INBOX_OVERDUE_TIME
     end
 
-    overdue ? CATCH_ALL_INBOX_OVERDUE : 'ok'
+    overdue ? CATCH_ALL_INBOX_OVERDUE : "ok"
   end
 
   def update_seen_mails

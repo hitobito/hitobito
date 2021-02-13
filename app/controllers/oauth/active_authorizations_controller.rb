@@ -19,7 +19,7 @@ module Oauth
       revoke!(application.access_grants)
       revoke!(application.access_tokens)
 
-      message = t('oauth.authorizations.revoke', application: application)
+      message = t("oauth.authorizations.revoke", application: application)
       redirect_to oauth_active_authorizations_path, notice: message
     end
 

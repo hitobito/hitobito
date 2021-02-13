@@ -6,7 +6,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe InvoiceAbility do
 
@@ -25,15 +25,15 @@ describe InvoiceAbility do
       let(:reminder) { invoice.payment_reminders.build }
       let(:payment)  { invoice.payments.build }
 
-      it 'may not index' do
+      it "may not index" do
         is_expected.not_to be_able_to(:index, Invoice)
       end
 
-      it 'may not manage' do
+      it "may not manage" do
         is_expected.not_to be_able_to(:manage, Invoice)
       end
 
-      context 'in own group' do
+      context "in own group" do
         let(:group) { groups(own_group) }
 
         %w(create edit show update destroy).each do |action|
@@ -61,7 +61,7 @@ describe InvoiceAbility do
         end
       end
 
-      context 'in other group' do
+      context "in other group" do
         let(:group) { groups(other_group) }
 
         %w(create edit show update destroy).each do |action|
@@ -91,7 +91,7 @@ describe InvoiceAbility do
     end
   end
 
-  context 'InvoiceList' do
+  context "InvoiceList" do
 
     def invoice_list(group, abo_group)
       InvoiceList.new(group: groups(group), receiver: groups(abo_group).mailing_lists.build)
@@ -101,13 +101,13 @@ describe InvoiceAbility do
       Ability.new(roles(role).person)
     end
 
-    it 'top_leader may work only with abos in his layer' do
+    it "top_leader may work only with abos in his layer" do
       expect(ability(:top_leader)).to be_able_to(:create, invoice_list(:top_layer, :top_layer))
       expect(ability(:top_leader)).to be_able_to(:create, invoice_list(:top_layer, :top_group))
       expect(ability(:top_leader)).not_to be_able_to(:create, invoice_list(:top_layer, :bottom_layer_one))
     end
 
-    it 'bottom_member may work only with abos in his layer' do
+    it "bottom_member may work only with abos in his layer" do
       expect(ability(:bottom_member)).to be_able_to(:create, invoice_list(:bottom_layer_one, :bottom_layer_one))
       expect(ability(:bottom_member)).not_to be_able_to(:create, invoice_list(:bottom_layer_one, :top_group))
       expect(ability(:bottom_member)).not_to be_able_to(:create, invoice_list(:bottom_layer_one, :top_layer))

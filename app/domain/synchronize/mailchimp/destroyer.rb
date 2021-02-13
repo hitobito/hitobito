@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'digest/md5'
+require "digest/md5"
 
 module Synchronize
   module Mailchimp
@@ -30,7 +30,7 @@ module Synchronize
       def deleting_operations
         people_to_be_deleted.map do |person|
           {
-            method: 'DELETE',
+            method: "DELETE",
             path: "lists/#{mailchimp_list_id}/members/#{subscriber_hash person.email}"
           }
         end

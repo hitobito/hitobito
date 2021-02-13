@@ -56,9 +56,9 @@ module Export::Tabular
     # rubocop:disable Metrics/PerceivedComplexity
     def normalize(value)
       if value == true
-        I18n.t('global.yes')
+        I18n.t("global.yes")
       elsif value == false
-        I18n.t('global.no')
+        I18n.t("global.no")
       elsif value.is_a?(Time)
         format == :xlsx ? value.to_s : "#{I18n.l(value.to_date)} #{I18n.l(value, format: :time)}"
       elsif value.is_a?(Date)

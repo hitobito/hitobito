@@ -8,7 +8,7 @@
 namespace :dev do
   namespace :oauth do
 
-    desc 'Obtain oauth access token'
+    desc "Obtain oauth access token"
     task :token, [:application_id, :redirect_uri, :code] => [:environment] do |_, args|
       app = Oauth::Application.find(args.fetch(:application_id))
       sh <<-BASH.strip_heredoc
@@ -19,7 +19,7 @@ namespace :dev do
       BASH
     end
 
-    desc 'Introspect oauth token'
+    desc "Introspect oauth token"
     task :introspect, [:access_token, :token] do |_, args|
       access_token = args.fetch(:access_token)
       token = args.fetch(:token, access_token)
@@ -31,7 +31,7 @@ namespace :dev do
       BASH
     end
 
-    desc 'Obtain profile information'
+    desc "Obtain profile information"
     task :profile, [:access_token, :scope] do |_, args|
       access_token = args.fetch(:access_token)
       sh <<-BASH.strip_heredoc
@@ -44,26 +44,26 @@ namespace :dev do
   end
 
   namespace :help_texts do
-    desc 'Create all helptexts'
+    desc "Create all helptexts"
     task create: [:environment] do
       HelpText.destroy_all
 
       HelpTexts::List.new.entries.each do |entry|
-        entry.labeled_list('action').each do |key, value|
+        entry.labeled_list("action").each do |key, value|
           p [entry.controller_name, entry.model_class.to_s.underscore, :action, key]
           HelpText.create!(controller: entry.controller_name,
                            model: entry.model_class.to_s.underscore,
                            kind: :action,
-                           name: key.split('.').last,
-                           body: [key, entry.to_s, value].join(' '))
+                           name: key.split(".").last,
+                           body: [key, entry.to_s, value].join(" "))
         end
-        entry.labeled_list('field').each do |key, value|
+        entry.labeled_list("field").each do |key, value|
           p [entry.controller_name, entry.model_class.to_s.underscore, :field, key]
           HelpText.create!(controller: entry.controller_name,
                            model: entry.model_class.to_s.underscore,
                            kind: :field,
-                           name: key.split('.').last,
-                           body: [key, entry.to_s, value].join(' '))
+                           name: key.split(".").last,
+                           body: [key, entry.to_s, value].join(" "))
         end
       end
     end

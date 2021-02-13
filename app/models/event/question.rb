@@ -39,7 +39,7 @@ class Event::Question < ActiveRecord::Base
 
 
   def choice_items
-    choices.to_s.split(',').collect(&:strip)
+    choices.to_s.split(",").collect(&:strip)
   end
 
   def label

@@ -109,7 +109,7 @@ class PersonSerializer < ApplicationSerializer
     end
 
     entity :primary_group, item.primary_group, GroupLinkSerializer
-    group_template_link 'people.primary_group'
+    group_template_link "people.primary_group"
 
     entities :roles, item.filtered_roles(full ? nil : context[:group]), RoleSerializer
   end

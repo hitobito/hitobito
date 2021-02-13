@@ -46,7 +46,7 @@ module Subscriber
 
     def groups_query
       possible = Subscription.new(mailing_list: @mailing_list).possible_groups
-      possible.where(search_condition('groups.name', 'parents_groups.name')).
+      possible.where(search_condition("groups.name", "parents_groups.name")).
                includes(:parent).
                references(:parent).
                order("#{Group.quoted_table_name}.lft").
@@ -78,7 +78,7 @@ module Subscriber
         entry.errors[:subscriber].clear
         entry.errors[:subscriber_id].clear
         entry.errors[:subscriber_type].clear
-        entry.errors.add(:base, 'Gruppe muss ausgewählt werden')
+        entry.errors.add(:base, "Gruppe muss ausgewählt werden")
       end
     end
 

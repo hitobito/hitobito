@@ -7,8 +7,8 @@
 
 class DeliveryReportMailer < ApplicationMailer
 
-  CONTENT_BULK_MAIL_SUCCESS = 'bulk_mail_success'.freeze
-  CONTENT_BULK_MAIL_WITH_FAILED = 'bulk_mail_with_failed'.freeze
+  CONTENT_BULK_MAIL_SUCCESS = "bulk_mail_success".freeze
+  CONTENT_BULK_MAIL_WITH_FAILED = "bulk_mail_with_failed".freeze
 
   def bulk_mail(
     report_to,
@@ -53,8 +53,8 @@ class DeliveryReportMailer < ApplicationMailer
 
   def placeholder_failed_recipients
     @failed_recipients.collect do |r|
-      r.join(' | ')
-    end.join('<br/>')
+      r.join(" | ")
+    end.join("<br/>")
   end
 
 end

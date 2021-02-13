@@ -22,7 +22,7 @@ class AppStatus::Store < AppStatus
   private
 
   def store_ok?
-    folder = Rails.root.join('public')
+    folder = Rails.root.join("public")
     File.directory?(folder) && File.writable?(folder)
   end
 

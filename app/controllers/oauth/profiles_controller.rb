@@ -25,14 +25,14 @@ module Oauth
     def scope_attrs
       case scope
       when /name/ then
-        person.attributes.slice('first_name', 'last_name', 'nickname')
+        person.attributes.slice("first_name", "last_name", "nickname")
       when /with_roles/ then
         public_attrs_with_roles
       end
     end
 
     def scope
-      request.headers['X-Scope'].to_s
+      request.headers["X-Scope"].to_s
     end
 
     def person

@@ -6,7 +6,7 @@
 class Invoice::PaymentProcessor
   attr_reader :xml
 
-  ESR_FIELD = 'AcctSvcrRef'.freeze
+  ESR_FIELD = "AcctSvcrRef".freeze
 
   def initialize(xml)
     @xml = xml
@@ -14,16 +14,16 @@ class Invoice::PaymentProcessor
   end
 
   def message_id
-    fetch('GrpHdr', 'MsgId')
+    fetch("GrpHdr", "MsgId")
   end
 
   def from
-    value = fetch_date('FrDtTm')
+    value = fetch_date("FrDtTm")
     to_datetime(value).to_date if value
   end
 
   def to
-    value = fetch_date('ToDtTm')
+    value = fetch_date("ToDtTm")
     to_datetime(value).to_date if value
   end
 
@@ -57,11 +57,11 @@ class Invoice::PaymentProcessor
 
   def payments
     @payments ||= credit_statements.collect do |s|
-      Payment.new(amount: fetch('Amt', s),
+      Payment.new(amount: fetch("Amt", s),
                   esr_number: reference(s),
-                  received_at: to_datetime(fetch('RltdDts', 'AccptncDtTm', s)),
+                  received_at: to_datetime(fetch("RltdDts", "AccptncDtTm", s)),
                   invoice: invoices[reference(s)],
-                  reference: fetch('Refs', 'AcctSvcrRef', s))
+                  reference: fetch("Refs", "AcctSvcrRef", s))
     end
   end
 
@@ -82,13 +82,13 @@ class Invoice::PaymentProcessor
 
   def credit_statements
     transaction_details
-      .select  { |s| fetch('CdtDbtInd', s) == 'CRDT' }
-      .reject  { |s| fetch('RmtInf', s)['AddtlRmtInf'] =~ /REJECT/i }
+      .select  { |s| fetch("CdtDbtInd", s) == "CRDT" }
+      .reject  { |s| fetch("RmtInf", s)["AddtlRmtInf"] =~ /REJECT/i }
   end
 
   def transaction_details
-    Array.wrap(fetch('Ntfctn', 'Ntry'))
-         .collect { |s| fetch('NtryDtls', 'TxDtls', s) }
+    Array.wrap(fetch("Ntfctn", "Ntry"))
+         .collect { |s| fetch("NtryDtls", "TxDtls", s) }
          .flatten
   end
 
@@ -97,7 +97,7 @@ class Invoice::PaymentProcessor
   end
 
   def parse(xml)
-    fetch('Document', 'BkToCstmrDbtCdtNtfctn', Hash.from_xml(xml))
+    fetch("Document", "BkToCstmrDbtCdtNtfctn", Hash.from_xml(xml))
   end
 
   def fetch(*keys)
@@ -106,7 +106,7 @@ class Invoice::PaymentProcessor
   end
 
   def reference(transaction)
-    fetch('RmtInf', 'Strd', 'CdtrRefInf', 'Ref', transaction)
+    fetch("RmtInf", "Strd", "CdtrRefInf", "Ref", transaction)
   end
 
   def to_datetime(string)
@@ -114,6 +114,6 @@ class Invoice::PaymentProcessor
   end
 
   def fetch_date(key)
-    fetch('Ntfctn').fetch('FrToDt', {})[key]
+    fetch("Ntfctn").fetch("FrToDt", {})[key]
   end
 end

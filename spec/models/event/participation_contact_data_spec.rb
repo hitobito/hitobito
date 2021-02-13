@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_youth.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::ParticipationContactData do
 
@@ -14,41 +14,41 @@ describe Event::ParticipationContactData do
 
   let(:attributes) do
     h = ActiveSupport::HashWithIndifferentAccess.new
-    h.merge({ first_name: 'John', last_name: 'Gonzales',
-      email: 'top_leader@example.com',
-      nickname: '' })
+    h.merge({ first_name: "John", last_name: "Gonzales",
+      email: "top_leader@example.com",
+      nickname: "" })
   end
 
-  context 'validations' do
+  context "validations" do
 
-    it 'validates contact attributes' do
+    it "validates contact attributes" do
       contact_data = participation_contact_data(attributes)
-      event.update!(required_contact_attrs: ['nickname'])
+      event.update!(required_contact_attrs: ["nickname"])
 
       expect(contact_data).not_to be_valid
-      expect(contact_data.errors.full_messages.first).to eq('Übername muss ausgefüllt werden')
+      expect(contact_data.errors.full_messages.first).to eq("Übername muss ausgefüllt werden")
     end
 
-    it 'validates person attributes' do
+    it "validates person attributes" do
       attrs = attributes
-      attrs[:birthday] = 'invalid'
+      attrs[:birthday] = "invalid"
       contact_data = participation_contact_data(attrs)
 
       expect(contact_data).not_to be_valid
-      expect(contact_data.errors.full_messages.first).to eq('Geburtstag ist kein gültiges Datum')
+      expect(contact_data.errors.full_messages.first).to eq("Geburtstag ist kein gültiges Datum")
     end
 
-    it 'can have a mandatory phone-number' do
+    it "can have a mandatory phone-number" do
       contact_data = participation_contact_data(attributes)
-      event.update!(required_contact_attrs: ['phone_numbers'])
+      event.update!(required_contact_attrs: ["phone_numbers"])
 
       expect(contact_data).not_to be_valid
-      expect(contact_data.errors.full_messages.first).to eq('Telefonnummern muss ausgefüllt werden')
+      expect(contact_data.errors.full_messages.first).to eq("Telefonnummern muss ausgefüllt werden")
     end
 
-    it 'can handle deletion and mutation of phone-number' do
-      event.update!(required_contact_attrs: ['phone_numbers'])
-      existing_number = person.phone_numbers.create(number: '044 112 00 00', translated_label: 'Privat', public: true)
+    it "can handle deletion and mutation of phone-number" do
+      event.update!(required_contact_attrs: ["phone_numbers"])
+      existing_number = person.phone_numbers.create(number: "044 112 00 00", translated_label: "Privat", public: true)
       expect(person.phone_numbers.count).to be > 0
 
       add_a_number = {"number"=>"044 110 00 00", "translated_label"=>"Privat", "public"=>"1", "_destroy"=>"false"}
@@ -66,17 +66,17 @@ describe Event::ParticipationContactData do
 
   end
 
-  context 'update person data' do
+  context "update person data" do
 
-    it 'updates person attributes' do
+    it "updates person attributes" do
       contact_data = participation_contact_data(attributes)
 
       contact_data.save
 
       person.reload
 
-      expect(person.first_name).to eq('John')
-      expect(person.last_name).to eq('Gonzales')
+      expect(person.first_name).to eq("John")
+      expect(person.last_name).to eq("Gonzales")
     end
 
   end

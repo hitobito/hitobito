@@ -54,7 +54,7 @@ module Export::Tabular::People
     end
 
     def person_attr?(attr)
-      person_attributes.include?(attr.gsub('person.', '').to_sym)
+      person_attributes.include?(attr.gsub("person.", "").to_sym)
     end
 
     def selected

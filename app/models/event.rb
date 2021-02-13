@@ -60,12 +60,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # This statement is required because these classes would not be loaded correctly otherwise.
   # The price we pay for using classes as namespace.
-  require_dependency 'event/date'
-  require_dependency 'event/role'
-  require_dependency 'event/restricted_role'
-  require_dependency 'event/application_decorator'
-  require_dependency 'event/role_decorator'
-  require_dependency 'event/role_ability'
+  require_dependency "event/date"
+  require_dependency "event/role"
+  require_dependency "event/restricted_role"
+  require_dependency "event/application_decorator"
+  require_dependency "event/role_decorator"
+  require_dependency "event/role_ability"
 
   include Event::Participatable
 
@@ -117,7 +117,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   # Autosave would change updated_at and updater on the group when creating an event.
   has_and_belongs_to_many :groups, autosave: false
 
-  belongs_to :contact, class_name: 'Person'
+  belongs_to :contact, class_name: "Person"
 
   has_many :attachments, dependent: :destroy
 
@@ -125,9 +125,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_many :questions, dependent: :destroy, validate: true
 
   has_many :application_questions, -> { where(admin: false) },
-           class_name: 'Event::Question', inverse_of: :event
+           class_name: "Event::Question", inverse_of: :event
   has_many :admin_questions, -> { where(admin: true) },
-           class_name: 'Event::Question', inverse_of: :event
+           class_name: "Event::Question", inverse_of: :event
 
   has_many :participations, dependent: :destroy
   has_many :people, through: :participations
@@ -137,7 +137,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_many :person_add_requests,
            foreign_key: :body_id,
            inverse_of: :body,
-           class_name: 'Person::AddRequest::Event',
+           class_name: "Person::AddRequest::Event",
            dependent: :destroy
 
   ### VALIDATIONS
@@ -184,7 +184,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     def order_by_date
-      joins(:dates).order('event_dates.start_at')
+      joins(:dates).order("event_dates.start_at")
     end
 
     # Events with at least one date in the given year
@@ -198,8 +198,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     # Event with start and end-date overlay
     def between(start_date, end_date)
       joins(:dates).
-        where('event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date ' \
-              'OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date',
+        where("event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date " \
+              "OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date",
               start_date: start_date, end_date: end_date).distinct
     end
 
@@ -216,16 +216,16 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     # Events running now or in the future.
     def upcoming(midnight = Time.zone.now.midnight)
       joins(:dates).
-        where('event_dates.start_at >= ? OR event_dates.finish_at >= ?', midnight, midnight)
+        where("event_dates.start_at >= ? OR event_dates.finish_at >= ?", midnight, midnight)
     end
 
     # Events that are open for applications.
     def application_possible
       today = Time.zone.today
-      where('events.application_opening_at IS NULL OR events.application_opening_at <= ?', today).
-        where('events.application_closing_at IS NULL OR events.application_closing_at >= ?', today).
-        where('events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR ' \
-            'events.participant_count < events.maximum_participants')
+      where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", today).
+        where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", today).
+        where("events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR " \
+            "events.participant_count < events.maximum_participants")
     end
 
     # Is the given attribute used in the current STI class
@@ -242,7 +242,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     def type_name
-      self == base_class ? 'simple' : name.demodulize.underscore
+      self == base_class ? "simple" : name.demodulize.underscore
     end
 
     def all_types
@@ -284,7 +284,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def group_names
-    groups.join(', ')
+    groups.join(", ")
   end
 
   def supports_application_details?

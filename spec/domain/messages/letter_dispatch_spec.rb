@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Messages::LetterDispatch do
   let(:message)    { messages(:letter) }
@@ -13,12 +13,12 @@ describe Messages::LetterDispatch do
 
   subject { described_class.new(message, Person.where(id: top_leader.id)) }
 
-  it 'updates success count' do
+  it "updates success count" do
     subject.run
     expect(message.reload.success_count).to eq 1
   end
 
-  it 'creates recipient' do
+  it "creates recipient" do
     subject.run
     recipient = message.message_recipients.first
     expect(recipient.message).to eq message

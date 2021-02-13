@@ -13,14 +13,14 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::Role do
 
   [Event, Event::Course].each do |event_type|
     event_type.role_types.each do |part|
       context part do
-        it 'must have valid permissions' do
+        it "must have valid permissions" do
           # although it looks like, this example is about participation.permissions and not about Participation::Permissions
           expect(Event::Role::Permissions).to include(*part.permissions)
         end
@@ -28,7 +28,7 @@ describe Event::Role do
     end
   end
 
-  context 'save together with participation' do
+  context "save together with participation" do
     let(:course) do
       course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))
       course.questions << Fabricate(:event_question, event: course, required: true)
@@ -36,19 +36,19 @@ describe Event::Role do
       course
     end
 
-    it 'validates answers' do
+    it "validates answers" do
       q = course.questions
       role = Event::Role::Participant.new
       role.participation = course.participations.new(person: Person.first)
       role.participation.enforce_required_answers = true
       role.participation.init_answers
       role.participation.attributes = {
-        answers_attributes: [{ question_id: q[1].id, answer: 'ja' }] }
+        answers_attributes: [{ question_id: q[1].id, answer: "ja" }] }
       expect(role.save).to be_falsey
-      expect(role.errors.full_messages).to eq(['Antwort muss ausgefüllt werden'])
+      expect(role.errors.full_messages).to eq(["Antwort muss ausgefüllt werden"])
     end
 
-    it 'refreshes participant_count when updating role' do
+    it "refreshes participant_count when updating role" do
       role = Event::Course::Role::Participant.new
       role.participation = course.participations.new(person: Person.first, active: true)
       expect(role.save).to eq true
@@ -59,7 +59,7 @@ describe Event::Role do
     end
   end
 
-  context 'destroying roles' do
+  context "destroying roles" do
     before do
       @role = Event::Role::Participant.new
       @role.participation = participation
@@ -70,7 +70,7 @@ describe Event::Role do
     let(:role)  { @role.reload }
     let(:participation) { Fabricate(:event_participation, event: event, active: true) }
 
-    it 'decrements event#(representative_)participant_count' do
+    it "decrements event#(representative_)participant_count" do
       event.reload
       participant_count = event.participant_count
       applicant_count = event.applicant_count
@@ -82,7 +82,7 @@ describe Event::Role do
       expect(event.applicant_count).to eq applicant_count - 1
     end
 
-    it 'decrements event#participant_count if participations has other non participant roles' do
+    it "decrements event#participant_count if participations has other non participant roles" do
       treasurer = Event::Role::Treasurer.new
       treasurer.participation = Fabricate(:event_participation, event: event, active: true)
       treasurer.save!
@@ -98,7 +98,7 @@ describe Event::Role do
       expect(event.applicant_count).to eq applicant_count - 1
     end
 
-    it 'destroys participation if it was the last role' do
+    it "destroys participation if it was the last role" do
       expect do
         event_roles(:top_leader).destroy
       end.to change { Event::Participation.count }.by(-1)

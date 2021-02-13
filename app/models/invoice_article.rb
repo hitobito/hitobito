@@ -49,7 +49,7 @@ class InvoiceArticle < ActiveRecord::Base
   end
 
   def to_s
-    [number, name].compact.join(' - ')
+    [number, name].compact.join(" - ")
   end
 
 end

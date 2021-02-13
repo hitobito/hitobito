@@ -50,16 +50,16 @@ module Export::Pdf::Participation
     end
 
     def translated_minimum_age
-      I18n.t('qualifications.in_years', years: event_kind.minimum_age) if event_kind.minimum_age
+      I18n.t("qualifications.in_years", years: event_kind.minimum_age) if event_kind.minimum_age
     end
 
     def precondition_qualifications_summary
-      kinds = event_kind.qualification_kinds('precondition', 'participant').group_by(&:id)
-      grouped_ids = event_kind.grouped_qualification_kind_ids('precondition', 'participant')
+      kinds = event_kind.qualification_kinds("precondition", "participant").group_by(&:id)
+      grouped_ids = event_kind.grouped_qualification_kind_ids("precondition", "participant")
       sentences = grouped_ids.collect do |ids|
         ids.collect { |id| kinds[id].first.to_s }.sort.to_sentence
       end
-      sentences.join(' ' + I18n.t('event.kinds.qualifications.or').upcase + ' ')
+      sentences.join(" " + I18n.t("event.kinds.qualifications.or").upcase + " ")
     end
 
     def description_title
@@ -77,7 +77,7 @@ module Export::Pdf::Participation
     def requirements?
       [event.application_conditions,
        event_kind.minimum_age,
-       event_kind.qualification_kinds('precondition', 'participant')].any?(&:present?)
+       event_kind.qualification_kinds("precondition", "participant")].any?(&:present?)
     end
 
     def boxed_attr(title)

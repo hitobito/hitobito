@@ -28,7 +28,7 @@ class Export::PeopleExportJob < Export::ExportBaseJob
 
   def full_entries(entries)
     entries
-      .select('people.*')
+      .select("people.*")
       .preload_accounts
       .includes(relations_to_tails: :tail, qualifications: { qualification_kind: :translations })
       .includes(:primary_group)

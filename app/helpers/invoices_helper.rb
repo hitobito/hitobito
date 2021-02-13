@@ -8,7 +8,7 @@
 module InvoicesHelper
 
   def format_invoice_list_recipients_total(invoice_list)
-    [invoice_list.recipients_processed, invoice_list.recipients_total].uniq.join(' / ')
+    [invoice_list.recipients_processed, invoice_list.recipients_total].uniq.join(" / ")
   end
 
   def format_invoice_list_amount_paid(invoice_list)
@@ -23,10 +23,10 @@ module InvoicesHelper
 
   def format_invoice_state(invoice)
     type = case invoice.state
-           when /draft|cancelled/ then 'info'
-           when /sent|issued/ then 'warning'
-           when /payed/ then 'success'
-           when /reminded/ then 'important'
+           when /draft|cancelled/ then "info"
+           when /sent|issued/ then "warning"
+           when /payed/ then "success"
+           when /reminded/ then "important"
            end
     badge(invoice_state_label(invoice), type)
   end
@@ -77,11 +77,11 @@ module InvoicesHelper
 
   def invoice_receiver_address(invoice)
     return unless invoice.recipient_address
-    out = ''
+    out = ""
     recipient_address_lines = invoice.recipient_address.split(/\n/)
     content_tag(:p) do
       recipient_address_lines.collect do |l|
-        out << (l == recipient_address_lines.first ? "<b>#{l}</b>" : l) + '<br>'
+        out << (l == recipient_address_lines.first ? "<b>#{l}</b>" : l) + "<br>"
       end
       out << mail_to(entry.recipient_email)
       out.html_safe # rubocop:disable Rails/OutputSafety

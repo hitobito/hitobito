@@ -5,12 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 
 describe SessionsCleanerJob do
 
-  it 'clears out outdated sessesion' do
+  it "clears out outdated sessesion" do
     outdated = Session.create!(session_id: :outdated, updated_at: 40.days.ago)
     current  = Session.create!(session_id: :current, updated_at: 20.days.ago)
 

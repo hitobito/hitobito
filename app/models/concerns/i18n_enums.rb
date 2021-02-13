@@ -6,7 +6,7 @@
 module I18nEnums
   extend ActiveSupport::Concern
 
-  NIL_KEY = '_nil'.freeze
+  NIL_KEY = "_nil".freeze
 
   module ClassMethods
 

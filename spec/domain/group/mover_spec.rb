@@ -5,45 +5,45 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 describe Group::Mover do
 
   let(:move) { Group::Mover.new(group) }
 
-  describe '#candidates' do
+  describe "#candidates" do
     subject { Group::Mover.new(group) }
 
-    context 'top_group' do
+    context "top_group" do
       let(:group) { groups(:top_group) }
       its(:candidates) { is_expected.to be_blank }
     end
 
-    context 'bottom_layer_one' do
+    context "bottom_layer_one" do
       let(:group) { groups(:bottom_layer_one) }
       its(:candidates) { is_expected.to be_blank }
     end
 
-    context 'bottom_layer_two' do
+    context "bottom_layer_two" do
       let(:group) { groups(:bottom_layer_two) }
       its(:candidates) { is_expected.to be_blank }
     end
 
-    context 'bottom_group_one_one' do
+    context "bottom_group_one_one" do
       let(:group) { groups(:bottom_group_one_one) }
       its(:candidates) { is_expected.to match_array groups_for(:bottom_layer_two, :bottom_group_one_two) }
     end
 
-    context 'bottom_group_one_two' do
+    context "bottom_group_one_two" do
       let(:group) { groups(:bottom_group_one_two) }
       its(:candidates) { is_expected.to match_array groups_for(:bottom_layer_two, :bottom_group_one_one) }
     end
 
-    context 'bottom_group_two_one' do
+    context "bottom_group_two_one" do
       let(:group) { groups(:bottom_group_two_one) }
       its(:candidates) { is_expected.to match_array groups_for(:bottom_layer_one) }
     end
 
-    context 'bottom_group_one_one_one' do
+    context "bottom_group_one_one_one" do
       let(:group) { groups(:bottom_group_one_one_one) }
       its(:candidates) { is_expected.to match_array groups_for(:bottom_layer_one, :bottom_layer_two, :bottom_group_one_two) }
     end
@@ -53,27 +53,27 @@ describe Group::Mover do
     end
   end
 
-  context '#perform' do
+  context "#perform" do
     let(:group) { groups(:bottom_group_one_one) }
     let(:target) { groups(:bottom_layer_two) }
 
-    context 'moved group' do
+    context "moved group" do
       subject { group.reload }
       before { move.perform(target); }
 
       its(:parent) { is_expected.to eq target }
       its(:layer_group_id) { is_expected.to eq target.id }
 
-      it 'nested set should still be valid' do
+      it "nested set should still be valid" do
         expect(Group).to be_valid
       end
 
-      it 'updates layer groups of children' do
+      it "updates layer groups of children" do
         expect(groups(:bottom_group_one_one_one).layer_group_id).to eq(target.id)
       end
     end
 
-    context 'association count' do
+    context "association count" do
       before do
         event = Fabricate(:event, groups: [group])
         Fabricate(:event_participation, event: event)

@@ -80,7 +80,7 @@ class Role < ActiveRecord::Base
     model_name = self.class.label
     string = label? ? "#{model_name} (#{label})" : model_name
     if format == :long
-      I18n.t('activerecord.attributes.role.string_long', role: string, group: group.to_s)
+      I18n.t("activerecord.attributes.role.string_long", role: string, group: group.to_s)
     else
       string
     end

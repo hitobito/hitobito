@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::ApplicationMarketController, type: :controller do
 
@@ -35,44 +35,44 @@ describe Event::ApplicationMarketController, type: :controller do
   end
 
 
-  describe 'GET index' do
+  describe "GET index" do
 
     before { get :index, params: { event_id: course.id, group_id: group.id } }
 
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
-    it { is_expected.to render_template('index') }
+    it { is_expected.to render_template("index") }
 
-    it 'has participants' do
+    it "has participants" do
       expect(assigns(:participants).size).to eq(2)
     end
 
-    it 'has applications' do
+    it "has applications" do
       expect(assigns(:applications).size).to eq(1)
     end
 
-    it 'has event' do
+    it "has event" do
       expect(assigns(:event)).to eq(course)
     end
 
-    it 'has add button' do
-      button = dom.find('.btn-group a')
-      expect(button.text).to eq ' Teilnehmer/-in hinzufügen'
-      expect(button).to have_css('i.fa-plus')
+    it "has add button" do
+      button = dom.find(".btn-group a")
+      expect(button.text).to eq " Teilnehmer/-in hinzufügen"
+      expect(button).to have_css("i.fa-plus")
       path_options = { for_someone_else: true,
                        event_role: { type: course.class.participant_types.first.sti_name } }
       expect(button[:href]).to eq new_group_event_participation_path(group, course, path_options)
     end
 
-    context 'preconditions not fullfilled' do
+    context "preconditions not fullfilled" do
       before { course.kind.update(minimum_age: 21) }
 
-      it 'displays warning badge' do
+      it "displays warning badge" do
         get :index, params: { group_id: group.id, event_id: course.id }
 
-        expect(dom).to have_selector('.badge.badge-warning', text: '!')
-        badge = dom.all('.badge.badge-warning', text: '!')[0]
-        expect(badge[:title]).to include('Vorbedingungen für Anmeldung sind nicht erfüllt')
+        expect(dom).to have_selector(".badge.badge-warning", text: "!")
+        badge = dom.all(".badge.badge-warning", text: "!")[0]
+        expect(badge[:title]).to include("Vorbedingungen für Anmeldung sind nicht erfüllt")
       end
     end
   end

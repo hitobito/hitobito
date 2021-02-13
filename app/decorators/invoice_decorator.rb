@@ -30,7 +30,7 @@ class InvoiceDecorator < ApplicationDecorator
   end
 
   def format_currency(amount)
-    ActiveSupport::NumberHelper.number_to_currency(amount, { unit: currency, format: '%n %u' })
+    ActiveSupport::NumberHelper.number_to_currency(amount, { unit: currency, format: "%n %u" })
   end
 
   def currency

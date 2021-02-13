@@ -7,7 +7,7 @@
 
 # encoding:  utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe MailingListsController, type: :controller do
 
@@ -20,10 +20,10 @@ describe MailingListsController, type: :controller do
 
   let(:test_entry) { mailing_lists(:leaders) }
   let(:test_entry_attrs) do
-    { name: 'Test mailing list',
-      description: 'Bla bla bla',
-      publisher: 'Me & You',
-      mail_name: 'tester',
+    { name: "Test mailing list",
+      description: "Bla bla bla",
+      publisher: "Me & You",
+      mail_name: "tester",
       subscribable: true,
       subscribers_may_post: false,
       anyone_may_post: false }
@@ -33,10 +33,10 @@ describe MailingListsController, type: :controller do
     sign_in(people(:top_leader))
   end
 
-  include_examples 'crud controller'
+  include_examples "crud controller"
 
-  context 'show' do
-    it 'renders json' do
+  context "show" do
+    it "renders json" do
       get :show, params: { group_id: group.id, id: test_entry.id }, format: :json
       json = JSON.parse(response.body).deep_symbolize_keys
       mailing_list = json[:mailing_lists].first

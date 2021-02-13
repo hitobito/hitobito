@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PaymentsController do
 
@@ -15,7 +15,7 @@ describe PaymentsController do
 
   before { sign_in(person) }
 
-  it 'POST#creates valid arguments create payment' do
+  it "POST#creates valid arguments create payment" do
     invoice.update(state: :sent)
     expect do
       post :create, params: { group_id: group.id, invoice_id: invoice.id, payment: { amount: invoice.total } }
@@ -25,7 +25,7 @@ describe PaymentsController do
     expect(response).to redirect_to(group_invoice_path(group, invoice))
   end
 
-  it 'POST#creates valid arguments create payment and updates invoice_list' do
+  it "POST#creates valid arguments create payment and updates invoice_list" do
     list = InvoiceList.create(title: :title, group: invoice.group)
     invoice.update(state: :sent, invoice_list: list)
     expect do
@@ -38,10 +38,10 @@ describe PaymentsController do
     expect(list.amount_paid).to eq invoice.total
   end
 
-  it 'POST#creates invalid arguments redirect back' do
+  it "POST#creates invalid arguments redirect back" do
     invoice.update(state: :sent)
     expect do
-      post :create, params: { group_id: group.id, invoice_id: invoice.id, payment: { amount: '' } }
+      post :create, params: { group_id: group.id, invoice_id: invoice.id, payment: { amount: "" } }
     end.not_to change { invoice.payments.count }
     expect(assigns(:payment)).to be_invalid
     expect(response).to redirect_to(group_invoice_path(group, invoice))

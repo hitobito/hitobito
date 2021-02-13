@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe AbilityDsl::Store do
 
@@ -13,8 +13,8 @@ describe AbilityDsl::Store do
 
   before { subject.load }
 
-  context '#add' do
-    it 'storing config with the same key overrides the previous one' do
+  context "#add" do
+    it "storing config with the same key overrides the previous one" do
       c1 = AbilityDsl::Config.new(:perm, :subj, :action, :ability1, :constraint1)
       c2 = AbilityDsl::Config.new(:perm, :subj, :action, :ability1, :constraint2)
       c3 = AbilityDsl::Config.new(:perm, :subj, :action, :ability2, :constraint2)
@@ -27,8 +27,8 @@ describe AbilityDsl::Store do
     end
   end
 
-  context '#general_constraints' do
-    it 'retrieves general constraint for all and specific action' do
+  context "#general_constraints" do
+    it "retrieves general constraint for all and specific action" do
       c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, AbilityDsl::Recorder::General::ALL_ACTION, :ability1, :constraint1)
       c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, :action, :ability1, :constraint2)
       subject.add(c1)
@@ -36,7 +36,7 @@ describe AbilityDsl::Store do
       expect(subject.general_constraints(:subj, :action)).to match_array([c1, c2])
     end
 
-    it 'retrieves general constraint for all action' do
+    it "retrieves general constraint for all action" do
       c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, AbilityDsl::Recorder::General::ALL_ACTION, :ability1, :constraint1)
       c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, :action2, :ability1, :constraint2)
       subject.add(c1)
@@ -44,7 +44,7 @@ describe AbilityDsl::Store do
       expect(subject.general_constraints(:subj, :action)).to match_array([c1])
     end
 
-    it 'retrieves general constraint for specific action' do
+    it "retrieves general constraint for specific action" do
       c1 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, :action, :ability1, :constraint1)
       c2 = AbilityDsl::Config.new(AbilityDsl::Recorder::General::PERMISSION, :subj, :action2, :ability1, :constraint2)
       subject.add(c1)

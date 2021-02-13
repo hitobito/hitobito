@@ -5,37 +5,37 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::PeopleExportJob do
 
-  subject { Export::PeopleExportJob.new(format, user.id, group.id, {}, { household: household, full: full, selection: selection, filename: 'people_export' }) }
+  subject { Export::PeopleExportJob.new(format, user.id, group.id, {}, { household: household, full: full, selection: selection, filename: "people_export" }) }
 
   let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
   let(:group)     { groups(:bottom_layer_one) }
   let(:household) { false }
   let(:selection) { false }
-  let(:filepath)  { AsyncDownloadFile::DIRECTORY.join('people_export') }
+  let(:filepath)  { AsyncDownloadFile::DIRECTORY.join("people_export") }
 
   before do
     SeedFu.quiet = true
-    SeedFu.seed [Rails.root.join('db', 'seeds')]
+    SeedFu.seed [Rails.root.join("db", "seeds")]
   end
 
-  context 'creates a CSV-Export' do
+  context "creates a CSV-Export" do
     let(:format) { :csv }
     let(:full) { false }
 
-    it 'and saves it' do
+    it "and saves it" do
       subject.perform
 
       lines = File.readlines("#{filepath}.#{format}")
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
-      expect(lines[0].split(';').count).to match(15)
+      expect(lines[0].split(";").count).to match(15)
     end
 
-    context 'household' do
+    context "household" do
       let(:household) { true }
 
       before do
@@ -43,52 +43,52 @@ describe Export::PeopleExportJob do
         people(:bottom_member).update(household_key: 1)
       end
 
-      it 'and saves it with single line per household' do
+      it "and saves it with single line per household" do
         subject.perform
         lines = File.readlines("#{filepath}.#{format}")
         expect(lines.size).to eq(2)
       end
     end
 
-    context 'table_display' do
+    context "table_display" do
       let(:selection) { true }
       let(:csv) { CSV.read("#{filepath}.#{format}", col_sep: Settings.csv.separator.strip, headers: true) }
 
-      it 'renders standard columns' do
+      it "renders standard columns" do
         subject.perform
-        expect(csv.headers.last).not_to eq 'Zusätzliche Angaben'
+        expect(csv.headers.last).not_to eq "Zusätzliche Angaben"
       end
 
-      it 'appends selected column and renders value' do
+      it "appends selected column and renders value" do
         user.table_display_for(group).update(selected: %w(additional_information))
-        Person.update_all(additional_information: 'bla bla')
+        Person.update_all(additional_information: "bla bla")
         subject.perform
-        expect(csv.headers.last).to eq 'Zusätzliche Angaben'
-        expect(csv.first['Zusätzliche Angaben']).to eq 'bla bla'
+        expect(csv.headers.last).to eq "Zusätzliche Angaben"
+        expect(csv.first["Zusätzliche Angaben"]).to eq "bla bla"
       end
     end
   end
 
-  context 'creates a full CSV-Export' do
+  context "creates a full CSV-Export" do
     let(:format) { :csv }
     let(:full) { true }
 
-    it 'and saves it' do
+    it "and saves it" do
       subject.perform
 
       lines = File.readlines("#{filepath}.#{format}")
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
       expect(lines[0]).to match(/Zusätzliche Angaben;.*/)
-      expect(lines[0].split(';').count).not_to match(14)
+      expect(lines[0].split(";").count).not_to match(14)
     end
   end
 
-  context 'creates an Excel-Export' do
+  context "creates an Excel-Export" do
     let(:format) { :xlsx }
     let(:full) { false }
 
-    it 'and saves it' do
+    it "and saves it" do
       subject.perform
       expect(File.exist?("#{filepath}.#{format}")).to be true
     end

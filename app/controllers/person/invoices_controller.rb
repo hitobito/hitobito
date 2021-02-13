@@ -8,7 +8,7 @@
 class Person::InvoicesController < ListController
 
   self.sort_mappings = { recipient: Person.order_by_name_statement }
-  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
+  self.search_columns = [:title, :sequence_number, "people.last_name", "people.email"]
 
   private
 

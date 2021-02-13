@@ -24,7 +24,7 @@
 
 class Person::AddRequest::Event < Person::AddRequest
 
-  belongs_to :body, class_name: '::Event'
+  belongs_to :body, class_name: "::Event"
 
   validates :role_type, presence: true
 

@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Devise::RegistrationsController do
-  before { request.env['devise.mapping'] = Devise.mappings[:person] }
+  before { request.env["devise.mapping"] = Devise.mappings[:person] }
   render_views
 
   let(:person) { people(:top_leader) }
@@ -18,69 +18,69 @@ describe Devise::RegistrationsController do
 
   subject { dom }
 
-  describe 'GET #edit' do
+  describe "GET #edit" do
 
-    context 'user with password' do
+    context "user with password" do
       before { get :edit }
-      it { is_expected.to have_content 'Passwort ändern' }
-      it { is_expected.to have_content 'Altes Passwort' }
+      it { is_expected.to have_content "Passwort ändern" }
+      it { is_expected.to have_content "Altes Passwort" }
     end
 
-    context 'user without password' do
+    context "user without password" do
       before { person.update_column(:encrypted_password, nil) }
       before { sign_in(person) }
       before { get :edit }
 
-      it { is_expected.to have_content 'Passwort setzen' }
-      it { is_expected.not_to have_content 'Altes Passwort' }
+      it { is_expected.to have_content "Passwort setzen" }
+      it { is_expected.not_to have_content "Altes Passwort" }
     end
   end
 
-  describe 'put #update' do
-    let(:data) { { password: 'foofoo', password_confirmation: 'foofoo' } }
+  describe "put #update" do
+    let(:data) { { password: "foofoo", password_confirmation: "foofoo" } }
 
-    context 'with old password' do
-      before { put :update, params: { person: data.merge(current_password: 'foobar') } }
+    context "with old password" do
+      before { put :update, params: { person: data.merge(current_password: "foobar") } }
 
       it { is_expected.to redirect_to(root_path) }
-      it { expect(flash[:notice]).to eq 'Dein Passwort wurde aktualisiert.' }
+      it { expect(flash[:notice]).to eq "Dein Passwort wurde aktualisiert." }
     end
 
-    context 'with wrong old password' do
-      before { put :update, params: { person: data.merge(current_password: 'barfoo') } }
+    context "with wrong old password" do
+      before { put :update, params: { person: data.merge(current_password: "barfoo") } }
 
-      it { is_expected.to render_template('edit') }
-      it { is_expected.to have_content 'Altes Passwort ist nicht gültig' }
+      it { is_expected.to render_template("edit") }
+      it { is_expected.to have_content "Altes Passwort ist nicht gültig" }
     end
 
-    context 'without old password' do
+    context "without old password" do
       before { put :update, params: { person: data } }
 
-      it { is_expected.to render_template('edit') }
-      it { is_expected.to have_content 'Altes Passwort muss ausgefüllt werden' }
+      it { is_expected.to render_template("edit") }
+      it { is_expected.to have_content "Altes Passwort muss ausgefüllt werden" }
     end
 
-    context 'user without password' do
+    context "user without password" do
       before { person.update_column(:encrypted_password, nil) }
       before { sign_in(person) }
       before { put :update, params: { person: data } }
 
       it { is_expected.to redirect_to(root_path) }
-      it { expect(flash[:notice]).to eq 'Dein Passwort wurde aktualisiert.' }
+      it { expect(flash[:notice]).to eq "Dein Passwort wurde aktualisiert." }
     end
 
-    context 'with wrong confirmation' do
-      before { put :update, params: { person: { current_password: 'foobar', passsword: 'foofoo', password_confirmation: 'barfoo' } } }
+    context "with wrong confirmation" do
+      before { put :update, params: { person: { current_password: "foobar", passsword: "foofoo", password_confirmation: "barfoo" } } }
 
-      it { is_expected.to render_template('edit') }
-      it { is_expected.to have_content 'Passwort Bestätigung stimmt nicht mit Passwort überein' }
+      it { is_expected.to render_template("edit") }
+      it { is_expected.to have_content "Passwort Bestätigung stimmt nicht mit Passwort überein" }
     end
 
 
-    context 'with empty password' do
-      it 'does not change password' do
+    context "with empty password" do
+      it "does not change password" do
         old = person.encrypted_password
-        put :update, params: { person: { current_password: 'foobar', passsword: '', password_confirmation: '' } }
+        put :update, params: { person: { current_password: "foobar", passsword: "", password_confirmation: "" } }
 
         is_expected.to redirect_to(root_path)
         expect(person.reload.encrypted_password).to eq(old)

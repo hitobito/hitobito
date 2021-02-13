@@ -5,25 +5,25 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe LabelFormatsController do
 
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
 
-  describe 'with admin permissions' do
+  describe "with admin permissions" do
 
     before do
       sign_in(person)
     end
 
-    it 'create global label' do
+    it "create global label" do
       expect do
         post :create, params: {
-                        global: 'true',
-                        label_format: { name: 'foo layer',
-                                        page_size: 'A4',
+                        global: "true",
+                        label_format: { name: "foo layer",
+                                        page_size: "A4",
                                         landscape: false,
                                         font_size: 12,
                                         width: 60, height: 30,
@@ -37,12 +37,12 @@ describe LabelFormatsController do
       expect(LabelFormat.last.person_id).to eq(nil)
     end
 
-    it 'create personal label' do
+    it "create personal label" do
       expect do
         post :create, params: {
-                        global: 'false',
-                        label_format: { name: 'foo layer',
-                                        page_size: 'A4',
+                        global: "false",
+                        label_format: { name: "foo layer",
+                                        page_size: "A4",
                                         landscape: false,
                                         font_size: 12,
                                         width: 60, height: 30,
@@ -57,7 +57,7 @@ describe LabelFormatsController do
     end
   end
 
-  describe 'without admin permissions' do
+  describe "without admin permissions" do
 
     let(:person) { Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person }
 
@@ -65,12 +65,12 @@ describe LabelFormatsController do
       sign_in(person)
     end
 
-    it 'create personal label' do
+    it "create personal label" do
       expect do
         post :create, params: {
-                        global: 'false',
-                        label_format: { name: 'foo layer',
-                                        page_size: 'A4',
+                        global: "false",
+                        label_format: { name: "foo layer",
+                                        page_size: "A4",
                                         landscape: false,
                                         font_size: 12,
                                         width: 60, height: 30,
@@ -84,12 +84,12 @@ describe LabelFormatsController do
       expect(LabelFormat.last.person_id).to eq(person.id)
     end
 
-    it 'can not create global label' do
+    it "can not create global label" do
       expect do
         post :create, params: {
-                        global: 'true',
-                        label_format: { name: 'foo layer',
-                                        page_size: 'A4',
+                        global: "true",
+                        label_format: { name: "foo layer",
+                                        page_size: "A4",
                                         landscape: false,
                                         font_size: 12,
                                         width: 60, height: 30,
@@ -103,8 +103,8 @@ describe LabelFormatsController do
       expect(LabelFormat.last.person_id).to eq(person.id)
     end
 
-    it 'sorts global formats' do
-      get :index, params: { sort: 'dimensions', sort_dir: 'desc' }
+    it "sorts global formats" do
+      get :index, params: { sort: "dimensions", sort_dir: "desc" }
 
       expect(assigns(:global_entries)).to eq(label_formats(:standard, :large, :envelope))
     end

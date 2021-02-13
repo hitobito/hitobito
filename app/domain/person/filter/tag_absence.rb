@@ -13,7 +13,7 @@ class Person::Filter::TagAbsence < Person::Filter::Tag
       .joins(:tag)
       .where(taggable_type: Person.to_s)
       .where(tags_condition)
-      .select('DISTINCT taggable_id')
+      .select("DISTINCT taggable_id")
   end
 
 end

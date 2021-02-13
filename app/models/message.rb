@@ -36,7 +36,7 @@ class Message < ActiveRecord::Base
   validates_by_schema except: :text
   belongs_to :invoice_list
   belongs_to :mailing_list
-  belongs_to :sender, class_name: 'Person'
+  belongs_to :sender, class_name: "Person"
   has_many :message_recipients, dependent: :restrict_with_error
   has_one :group, through: :mailing_list
 
@@ -91,7 +91,7 @@ class Message < ActiveRecord::Base
   end
 
   def dispatched?
-    state != 'draft'
+    state != "draft"
   end
 
   def dispatcher_class

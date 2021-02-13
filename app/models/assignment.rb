@@ -28,7 +28,7 @@ class Assignment < ActiveRecord::Base
   include I18nEnums
 
   belongs_to :person
-  belongs_to :creator, class_name: 'Person'
+  belongs_to :creator, class_name: "Person"
   belongs_to :attachment, polymorphic: true
 
   scope :list, -> { order(:created_at) }

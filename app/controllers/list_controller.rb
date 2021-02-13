@@ -17,7 +17,7 @@ class ListController < ApplicationController
 
   helper_method :model_class, :models_label, :entries, :path_args
 
-  delegate :model_class, :models_label, to: 'self.class'
+  delegate :model_class, :models_label, to: "self.class"
 
   respond_to :html
   include DryCrud::RenderCallbacks

@@ -13,7 +13,7 @@ class CustomContentDecorator < ApplicationDecorator
       list = placeholders_list.collect do |ph|
         placeholder_token(ph)
       end
-      translate(:available_placeholders, placeholders: list.join(', '))
+      translate(:available_placeholders, placeholders: list.join(", "))
     else
       translate(:available_placeholders_empty)
     end

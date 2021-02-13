@@ -28,7 +28,7 @@ class OrCondition
       memo[:args].push(*condition[:args])
     end
 
-    [combined[:clauses].join(' OR '), *combined[:args]]
+    [combined[:clauses].join(" OR "), *combined[:args]]
   end
 
   def blank?

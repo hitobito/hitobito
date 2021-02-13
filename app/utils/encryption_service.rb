@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class EncryptionService
-  @@cypher = 'aes-256-cbc'
+  @@cypher = "aes-256-cbc"
 
   class << self
     def encrypt(value)

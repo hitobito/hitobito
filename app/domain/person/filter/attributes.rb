@@ -23,7 +23,7 @@ class Person::Filter::Attributes < Person::Filter::Base
       next unless Person.filter_attrs.key?(key.to_sym)
 
       attribute_condition_sql(key, value, constraint, scope)
-    end.compact.join(' AND ')
+    end.compact.join(" AND ")
   end
 
   def attribute_condition_sql(key, value, constraint, scope)
@@ -49,7 +49,7 @@ class Person::Filter::Attributes < Person::Filter::Base
   def unpersisted_attribute_condition_sql(key, value, constraint, scope)
     people_ids = scope.map do |p|
       p.id if matching_attribute?(p.send(key), value, constraint)
-    end.compact.join(',')
+    end.compact.join(",")
 
     people_ids = -1 if people_ids.blank?
 

@@ -57,7 +57,7 @@ class Event::ParticipationContactDatasController < ApplicationController
   end
 
   def model_params
-    params.require('event_participation_contact_data').permit(permitted_attrs)
+    params.require("event_participation_contact_data").permit(permitted_attrs)
   end
 
   def permitted_attrs

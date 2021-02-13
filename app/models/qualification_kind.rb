@@ -25,7 +25,7 @@ class QualificationKind < ActiveRecord::Base
 
   has_many :qualifications
 
-  has_many :event_kind_qualification_kinds, class_name: 'Event::KindQualificationKind'
+  has_many :event_kind_qualification_kinds, class_name: "Event::KindQualificationKind"
   has_many :event_kinds, through: :event_kind_qualification_kinds
 
 

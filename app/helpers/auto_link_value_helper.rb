@@ -13,7 +13,7 @@ module AutoLinkValueHelper
     elsif url_with_protocol?(str)
       link_to_blank(str, str, options)
     elsif url_without_protocol?(str)
-      url = 'http://' + str
+      url = "http://" + str
       link_to_blank(str, url, options)
     else
       str
@@ -39,7 +39,7 @@ module AutoLinkValueHelper
   end
 
   def link_to_blank(label, url, options = {})
-    options[:target] ||= '_blank'
+    options[:target] ||= "_blank"
     link_to(label, url, options)
   end
 

@@ -10,7 +10,7 @@ class Address::Parser
   REGEX = /^(.*?)[,?\s*]?(\d+\s?\w?)?$/.freeze
 
   def initialize(string)
-    @string = string.gsub(',', '')
+    @string = string.gsub(",", "")
   end
 
   def street
@@ -18,7 +18,7 @@ class Address::Parser
   end
 
   def number
-    match[2]&.gsub(' ', '')
+    match[2]&.gsub(" ", "")
   end
 
   def parse

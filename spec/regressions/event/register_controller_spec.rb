@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::RegisterController, type: :controller do
 
@@ -19,39 +19,39 @@ describe Event::RegisterController, type: :controller do
 
   let(:group) { event.groups.first }
 
-  context 'GET index' do
-    context 'application possible' do
+  context "GET index" do
+    context "application possible" do
       before do
         event.update_column(:application_opening_at, 5.days.ago)
       end
 
-      context 'as external user' do
-        it 'displays external login forms' do
+      context "as external user" do
+        it "displays external login forms" do
           get :index, params: { group_id: group.id, id: event.id }
-          is_expected.to render_template('index')
+          is_expected.to render_template("index")
           expect(flash[:notice]).to eq "Du musst dich einloggen um dich für den Anlass 'Top Event' anzumelden."
         end
       end
     end
   end
 
-  context 'POST check' do
-    context 'for existing person' do
-      it 'generates one time login token' do
+  context "POST check" do
+    context "for existing person" do
+      it "generates one time login token" do
         expect do
           post :check, params: { group_id: group.id, id: event.id, person: { email: people(:top_leader).email } }
         end.to change { Delayed::Job.count }.by(1)
-        is_expected.to render_template('index')
-        expect(flash[:notice]).to include 'Wir haben dich in unserer Datenbank gefunden.'
-        expect(flash[:notice]).to include 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du'
+        is_expected.to render_template("index")
+        expect(flash[:notice]).to include "Wir haben dich in unserer Datenbank gefunden."
+        expect(flash[:notice]).to include "Wir haben dir ein E-Mail mit einem Link geschickt, wo du"
       end
     end
 
-    context 'for non-existing person' do
-      it 'displays person form' do
-        post :check, params: { group_id: group.id, id: event.id, person: { email: 'not-existing@example.com' } }
-        is_expected.to render_template('register')
-        expect(flash[:notice]).to eq 'Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest.'
+    context "for non-existing person" do
+      it "displays person form" do
+        post :check, params: { group_id: group.id, id: event.id, person: { email: "not-existing@example.com" } }
+        is_expected.to render_template("register")
+        expect(flash[:notice]).to eq "Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest."
       end
     end
   end

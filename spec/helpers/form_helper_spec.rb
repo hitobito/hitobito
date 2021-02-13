@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 
 describe FormHelper do
@@ -29,65 +29,65 @@ describe FormHelper do
   after(:all) { reset_db }
 
 
-  describe '#entry_form' do
+  describe "#entry_form" do
     let(:entry) { CrudTestModel.first }
 
     subject do
       with_test_routing { Capybara::Node::Simple.new(entry_form) }
     end
 
-    it 'should contain form tag' do
+    it "should contain form tag" do
       is_expected.to have_selector("form[action='/crud_test_models/#{entry.id}']")
     end
 
-    it 'should contain input for name' do
+    it "should contain input for name" do
       #is_expected.to match /input [^>]*?name="crud_test_model\[name\]" [^>]*?type="text"/
       is_expected.to have_selector('input[name="crud_test_model[name]"][type=text]')
     end
 
-    it 'should contain input for whatever' do
+    it "should contain input for whatever" do
       is_expected.to have_selector('input[name="crud_test_model[whatever]"][type=text]')
     end
 
-    it 'should contain input for children' do
+    it "should contain input for children" do
       is_expected.to have_selector('input[name="crud_test_model[children]"][type=text]')
     end
 
-    it 'should contain input for rating' do
+    it "should contain input for rating" do
       is_expected.to have_selector('input[name="crud_test_model[rating]"][type=text]')
     end
 
-    it 'should contain input for income' do
+    it "should contain input for income" do
       is_expected.to have_selector('input[name="crud_test_model[income]"][type=text]')
     end
 
-    it 'should contain input for birthdate' do
+    it "should contain input for birthdate" do
       is_expected.to have_selector('input[name="crud_test_model[birthdate]"]')
     end
 
-    it 'should contain input for human' do
+    it "should contain input for human" do
       is_expected.to have_selector('input[name="crud_test_model[human]"][type=checkbox]')
     end
 
-    it 'should contain input for companion' do
+    it "should contain input for companion" do
       is_expected.to have_selector('select[name="crud_test_model[companion_id]"]')
     end
 
-    it 'should contain input for remarks' do
+    it "should contain input for remarks" do
       is_expected.to have_selector('textarea[name="crud_test_model[remarks]"]')
     end
 
   end
 
-  describe '#crud_form' do
+  describe "#crud_form" do
     subject do
       Capybara::Node::Simple.new(
         with_test_routing do
-          capture { crud_form(entry, :name, :children, :birthdate, :human, html: { class: 'special' }) }
+          capture { crud_form(entry, :name, :children, :birthdate, :human, html: { class: "special" }) }
         end)
     end
 
-    context 'for existing entry' do
+    context "for existing entry" do
       let(:entry) { crud_test_models(:AAAAA) }
 
       it { is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models/#{entry.id}'][method=post]") }
@@ -99,7 +99,7 @@ describe FormHelper do
       it { is_expected.to have_selector("button[type=submit]") }
     end
 
-    context 'for new entry' do
+    context "for new entry" do
       let(:entry) { CrudTestModel.new }
 
       it { is_expected.to have_selector("form.special.form-horizontal[action='/crud_test_models'][method=post]") }
@@ -111,7 +111,7 @@ describe FormHelper do
       it { is_expected.to have_selector("button[type=submit]") }
     end
 
-    context 'for invalid entry' do
+    context "for invalid entry" do
       let(:entry) do
         e = crud_test_models(:AAAAA)
         e.name = nil
@@ -125,11 +125,11 @@ describe FormHelper do
     end
   end
 
-  describe '#standard_form' do
+  describe "#standard_form" do
     subject do
       Capybara::Node::Simple.new(
         with_test_routing do
-          capture { standard_form(entry, html: { class: 'special' }) { |f| } }
+          capture { standard_form(entry, html: { class: "special" }) { |f| } }
         end)
     end
 

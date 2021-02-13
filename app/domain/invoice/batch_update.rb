@@ -36,8 +36,8 @@ class Invoice::BatchUpdate
   private
 
   def invalid?(invoice, next_state)
-    if next_state == 'reminded' && invoice.invoice_config.payment_reminder_configs.empty?
-      result.track_error('payment_reminders_missing', invoice)
+    if next_state == "reminded" && invoice.invoice_config.payment_reminder_configs.empty?
+      result.track_error("payment_reminders_missing", invoice)
     elsif send_email? && !invoice.recipient_email
       result.track_error(:recipient_email_invalid, invoice)
     elsif next_state.nil?
@@ -46,7 +46,7 @@ class Invoice::BatchUpdate
   end
 
   def track_state_change(invoice, next_state)
-    next_state = 'issued' if next_state == 'sent' # Always track sent as issued
+    next_state = "issued" if next_state == "sent" # Always track sent as issued
     result.track_update(next_state, invoice) unless changed_from_issued_to_sent?(invoice)
   end
 
@@ -62,22 +62,22 @@ class Invoice::BatchUpdate
 
   def compute_next_state(invoice)
     if invoice.draft?
-      send_email? ? 'sent' : 'issued'
+      send_email? ? "sent" : "issued"
     elsif invoice.issued? && send_email?
-      'sent'
+      "sent"
     elsif invoice.overdue?
-      'reminded'
+      "reminded"
     end
   end
 
   def payment_reminder_attrs(reminders, config)
     next_level = [3, reminders.size + 1].min
     config = config.payment_reminder_configs.find_by(level: next_level)
-    config.slice('title', 'text', 'level').merge(due_at: Time.zone.today + config.due_days)
+    config.slice("title", "text", "level").merge(due_at: Time.zone.today + config.due_days)
   end
 
   def changed_from_issued_to_sent?(invoice)
-    invoice.previous_changes['state'] == %w(issued sent)
+    invoice.previous_changes["state"] == %w(issued sent)
   end
 
   def enqueue_send_job(invoice)

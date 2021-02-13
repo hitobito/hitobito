@@ -16,16 +16,16 @@
 #  location  :string
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::Date do
 
   let(:event) { events(:top_course) }
 
-  it 'should only store date when no time is given' do
-    date1 = '12.12.2012'
-    date2 = '13.12.2012'
-    event_date = event.dates.new(label: 'foobar')
+  it "should only store date when no time is given" do
+    date1 = "12.12.2012"
+    date2 = "13.12.2012"
+    event_date = event.dates.new(label: "foobar")
     event_date.start_at_date = date1
     event_date.finish_at_date = date2
 
@@ -34,10 +34,10 @@ describe Event::Date do
     expect(event_date.finish_at).to eq(Time.zone.local(2012, 12, 13))
   end
 
-  it 'should store short format date' do
-    date1 = '1.2.98'
-    date2 = '11.12.01'
-    event_date = event.dates.new(label: 'foobar')
+  it "should store short format date" do
+    date1 = "1.2.98"
+    date2 = "11.12.01"
+    event_date = event.dates.new(label: "foobar")
     event_date.start_at_date = date1
     event_date.finish_at_date = date2
 
@@ -46,11 +46,11 @@ describe Event::Date do
     expect(event_date.finish_at).to eq(Time.zone.local(2001, 12, 11))
   end
 
-  it 'should have date and time when hours and min are given' do
+  it "should have date and time when hours and min are given" do
     date1 = Time.zone.local(2012, 12, 12).to_date
     hours = 18
     min = 10
-    event_date = event.dates.new(label: 'foobar')
+    event_date = event.dates.new(label: "foobar")
     event_date.start_at_date = date1
     event_date.start_at_hour = hours
     event_date.start_at_min = min
@@ -61,9 +61,9 @@ describe Event::Date do
     expect(event_date.start_at_min).to eq(10)
   end
 
-  it 'should get hours,mins and date seperately' do
+  it "should get hours,mins and date seperately" do
     date = Time.zone.local(2012, 12, 12, 18, 10)
-    event_date = event.dates.new(label: 'foobar')
+    event_date = event.dates.new(label: "foobar")
     # start_at
     event_date.start_at = date
 
@@ -80,9 +80,9 @@ describe Event::Date do
     expect(event_date.finish_at_min).to eq(10)
   end
 
-  it 'should update hours,mins when a date was stored previously' do
+  it "should update hours,mins when a date was stored previously" do
     date = Time.zone.local(2012, 12, 12).to_date
-    event_date = event.dates.new(label: 'foobar')
+    event_date = event.dates.new(label: "foobar")
     # set start_at date
     event_date.start_at_date = date
     expect(event_date).to be_valid
@@ -95,16 +95,16 @@ describe Event::Date do
     expect(event_date.start_at).to eq(Time.zone.local(2012, 12, 12, 18, 10))
   end
 
-  it 'should remove date that was stored previously' do
+  it "should remove date that was stored previously" do
     date = Time.zone.local(2012, 12, 12).to_date
-    event_date = event.dates.new(label: 'foobar')
+    event_date = event.dates.new(label: "foobar")
     # set start_at date
     event_date.start_at_date = date
     expect(event_date).to be_valid
     expect(event_date.start_at).to eq(Time.zone.local(2012, 12, 12))
 
     # update time
-    event_date.start_at_date = ''
+    event_date.start_at_date = ""
     event_date.start_at_hour = 18
     event_date.start_at_min = 10
     expect(event_date).not_to be_valid
@@ -112,16 +112,16 @@ describe Event::Date do
     expect(event_date.start_at).to be_nil
   end
 
-  it 'is invalid on partial date input' do
-    date = event.dates.new(label: 'foobar')
-    date.start_at_date = '15.12'
+  it "is invalid on partial date input" do
+    date = event.dates.new(label: "foobar")
+    date.start_at_date = "15.12"
     expect(date).not_to be_valid
     expect(date).to have(2).errors_on(:start_at)
   end
 
-  it 'is invalid on plain numbers input' do
-    date = event.dates.new(label: 'foobar')
-    date.start_at_date = '77'
+  it "is invalid on plain numbers input" do
+    date = event.dates.new(label: "foobar")
+    date.start_at_date = "77"
     expect(date).not_to be_valid
     expect(date).to have(2).errors_on(:start_at)
   end

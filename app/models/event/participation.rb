@@ -75,14 +75,14 @@ class Event::Participation < ActiveRecord::Base
     end
 
     def order_by_role_statement(event_type)
-      return '' if event_type.role_types.blank?
+      return "" if event_type.role_types.blank?
 
-      statement = ['CASE event_roles.type']
+      statement = ["CASE event_roles.type"]
       event_type.role_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i}"
       end
-      statement << 'END'
-      statement.join(' ')
+      statement << "END"
+      statement.join(" ")
     end
 
     def active
@@ -121,7 +121,7 @@ class Event::Participation < ActiveRecord::Base
       appl.priority_1 = event
       if directly_to_waiting_list?(event)
         appl.waiting_list = true
-        appl.waiting_list_comment = I18n.t('event/applications.directly_to_waiting_list')
+        appl.waiting_list_comment = I18n.t("event/applications.directly_to_waiting_list")
       end
     end
   end

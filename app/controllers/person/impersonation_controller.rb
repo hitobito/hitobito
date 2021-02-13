@@ -41,7 +41,7 @@ class Person::ImpersonationController < ApplicationController
   private
 
   def authorize_action
-    if action_name == 'destroy'
+    if action_name == "destroy"
       authorize!(:show, Person)
     else
       authorize!(:impersonate_user, Person)

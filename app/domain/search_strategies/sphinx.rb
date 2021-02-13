@@ -48,9 +48,9 @@ module SearchStrategies
     def fetch_people(ids)
       Person.search(Riddle::Query.escape(@term),
                     page: @page,
-                    order: 'last_name asc, ' \
-                           'first_name asc, ' \
-                           'weight() desc',
+                    order: "last_name asc, " \
+                           "first_name asc, " \
+                           "weight() desc",
                     star: star_supported?,
                     with: { sphinx_internal_id: ids })
     end
@@ -59,7 +59,7 @@ module SearchStrategies
 
       def star_supported?
         version = Rails.application.class.sphinx_version
-        version.nil? || version >= '2.1'
+        version.nil? || version >= "2.1"
       end
 
     end

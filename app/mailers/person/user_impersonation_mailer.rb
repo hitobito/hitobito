@@ -8,7 +8,7 @@
 
 class Person::UserImpersonationMailer < ApplicationMailer
 
-  CONTENT_USER_IMPERSONATION = 'content_user_impersonation'.freeze
+  CONTENT_USER_IMPERSONATION = "content_user_impersonation".freeze
 
   def completed(recipient, taker_name)
     @recipient = recipient

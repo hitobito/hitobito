@@ -10,13 +10,13 @@ class ErrorPagesGenerator < Rails::Generators::Base
 
   ERROR_PAGES = [404, 500, 503].freeze
 
-  desc 'Generate a static error page based on the layout.'
+  desc "Generate a static error page based on the layout."
 
   def generate_page
     ERROR_PAGES.each do |error|
       run "rm -f public/#{error}.html"
       request = Rack::MockRequest.env_for "/#{error}"
-      request['action_dispatch.exception'] = StandardError.new 'generator'
+      request["action_dispatch.exception"] = StandardError.new "generator"
       _, _, body = *Hitobito::Application.call(request)
       create_file "public/#{error}.html", body.join, force: true
     end

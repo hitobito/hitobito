@@ -5,19 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe DashboardController do
 
-  describe 'GET index' do
+  describe "GET index" do
 
-    context 'html' do
-      it 'redirects to login if no user' do
+    context "html" do
+      it "redirects to login if no user" do
         get :index
         is_expected.to redirect_to(new_person_session_path)
       end
 
-      it 'redirects to user home if logged in' do
+      it "redirects to user home if logged in" do
         person = people(:top_leader)
         sign_in(person)
         get :index
@@ -25,15 +25,15 @@ describe DashboardController do
       end
     end
 
-    context 'json' do
-      it 'shows error if no user' do
+    context "json" do
+      it "shows error if no user" do
         get :index, format: :json
         expect(response.status).to be(401)
         json = JSON.parse(response.body)
-        expect(json['error']).to be_present
+        expect(json["error"]).to be_present
       end
 
-      it 'redirects to user home if logged in' do
+      it "redirects to user home if logged in" do
         person = people(:top_leader)
         person.generate_authentication_token!
         get :index, params: { user_email: person.email, user_token: person.authentication_token }, format: :json

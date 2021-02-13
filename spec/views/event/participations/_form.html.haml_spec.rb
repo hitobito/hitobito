@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'event/participations/_form.html.haml' do
+describe "event/participations/_form.html.haml" do
 
   let(:participant) { people(:top_leader) }
   let(:participation) { Fabricate(:event_participation, person: participant, event: event) }
@@ -37,53 +37,53 @@ describe 'event/participations/_form.html.haml' do
     assign(:answers, participation.answers)
   end
 
-  context 'course' do
+  context "course" do
     let(:event) { events(:top_course) }
 
 
-    context 'kind' do
-      it 'shows application conditions and general information when set' do
-        event.kind.update!(application_conditions: 'some application conditions',
-                           general_information: 'some general information')
+    context "kind" do
+      it "shows application conditions and general information when set" do
+        event.kind.update!(application_conditions: "some application conditions",
+                           general_information: "some general information")
         render
-        is_expected.not_to have_content 'some general informations'
-        is_expected.not_to have_content 'some application conditions'
+        is_expected.not_to have_content "some general informations"
+        is_expected.not_to have_content "some application conditions"
       end
     end
   end
 
-  context 'checkboxes' do
-    let(:ga) { dom.find_field('GA') }
-    let(:halbtax) { dom.find_field('Halbtax') }
+  context "checkboxes" do
+    let(:ga) { dom.find_field("GA") }
+    let(:halbtax) { dom.find_field("Halbtax") }
 
-    context 'unchecked' do
+    context "unchecked" do
 
-      shared_examples 'unchecked_multichoice_checkbox' do
+      shared_examples "unchecked_multichoice_checkbox" do
         before { render }
 
         it { is_expected.not_to be_checked }
-        its([:name]) { should eq 'event_participation[answers_attributes][0][answer][]' }
-        its([:type]) { should eq 'checkbox' }
+        its([:name]) { should eq "event_participation[answers_attributes][0][answer][]" }
+        its([:type]) { should eq "checkbox" }
         its([:value]) { should eq value }
       end
 
-      describe 'Choice GA' do
+      describe "Choice GA" do
         subject { ga }
-        let(:value) { '1' }
+        let(:value) { "1" }
 
-        it_behaves_like 'unchecked_multichoice_checkbox'
+        it_behaves_like "unchecked_multichoice_checkbox"
       end
 
-      describe 'Choice Halbtax' do
+      describe "Choice Halbtax" do
         subject { halbtax }
-        let(:value) { '2' }
+        let(:value) { "2" }
 
-        it_behaves_like 'unchecked_multichoice_checkbox'
+        it_behaves_like "unchecked_multichoice_checkbox"
       end
     end
 
-    describe 'Halbtax checked' do
-      let(:answer_text) { 'Halbtax' }
+    describe "Halbtax checked" do
+      let(:answer_text) { "Halbtax" }
       before { render }
 
       it { expect(ga).not_to be_checked }
@@ -91,8 +91,8 @@ describe 'event/participations/_form.html.haml' do
     end
 
 
-    describe 'GA, Halbtax checked' do
-      let(:answer_text) { 'GA, Halbtax' }
+    describe "GA, Halbtax checked" do
+      let(:answer_text) { "GA, Halbtax" }
       before { render }
 
       it { expect(ga).to be_checked }

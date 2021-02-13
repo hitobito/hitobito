@@ -36,7 +36,7 @@ class Export::Pdf::Messages::Letter
 
     def text(*args)
       options = args.extract_options!
-      pdf.text args.join(' '), options
+      pdf.text args.join(" "), options
     end
 
   end

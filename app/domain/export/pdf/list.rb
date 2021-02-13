@@ -10,7 +10,7 @@ module Export::Pdf
 
     class Runner
       def render(contactables, group)
-        pdf = Prawn::Document.new(page_size: 'A4',
+        pdf = Prawn::Document.new(page_size: "A4",
                                   page_layout: :portrait,
                                   margin: 1.cm)
         pdf.font_size Settings.pdf.font_size
@@ -26,7 +26,7 @@ module Export::Pdf
       end
 
       def footer(pdf)
-        pdf.number_pages(I18n.t('event.participations.print.page_of_pages'),
+        pdf.number_pages(I18n.t("event.participations.print.page_of_pages"),
                          at: [0, 0],
                          align: :right)
 

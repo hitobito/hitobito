@@ -16,7 +16,7 @@ class Group::Merger
   end
 
   def merge!
-    raise('Cannot merge these Groups') unless group2_valid?
+    raise("Cannot merge these Groups") unless group2_valid?
 
     ::Group.transaction do
       if create_new_group

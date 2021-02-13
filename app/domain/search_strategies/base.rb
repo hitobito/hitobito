@@ -72,14 +72,14 @@ module SearchStrategies
       # accessible.pluck('people.id')
 
       # rewrite query to only include id column
-      sql = accessible.to_sql.gsub(/SELECT (.+) FROM /, 'SELECT DISTINCT people.id FROM ')
+      sql = accessible.to_sql.gsub(/SELECT (.+) FROM /, "SELECT DISTINCT people.id FROM ")
       result = Person.connection.execute(sql)
       result.collect { |row| row[0] }
     end
 
     def load_deleted_people_ids
-      Person.where('NOT EXISTS (SELECT * FROM roles ' \
-                   'WHERE roles.deleted_at IS NULL AND roles.person_id = people.id)')
+      Person.where("NOT EXISTS (SELECT * FROM roles " \
+                   "WHERE roles.deleted_at IS NULL AND roles.person_id = people.id)")
             .pluck(:id)
     end
 

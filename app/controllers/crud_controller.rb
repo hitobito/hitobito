@@ -19,7 +19,7 @@ class CrudController < ListController
   ACTIONS = [:show, :new, :create, :edit, :update, :destroy].freeze
   prepend_before_action :entry, only: ACTIONS
 
-  delegate :model_identifier, to: 'self.class'
+  delegate :model_identifier, to: "self.class"
 
   # Defines before and after callback hooks for create, update, save and destroy actions.
   define_model_callbacks :create, :update, :save, :destroy
@@ -174,7 +174,7 @@ class CrudController < ListController
 
   # Html safe error messages of the current entry.
   def error_messages
-    @@helper.safe_join(entry.errors.full_messages, '<br/>'.html_safe)
+    @@helper.safe_join(entry.errors.full_messages, "<br/>".html_safe)
   end
 
   def return_path
@@ -188,7 +188,7 @@ class CrudController < ListController
   end
 
   def destroy_return_path(destroyed, options = {})
-    (!destroyed && request.env['HTTP_REFERER'].presence) ||
+    (!destroyed && request.env["HTTP_REFERER"].presence) ||
       (options[:location] || index_path)
   end
 

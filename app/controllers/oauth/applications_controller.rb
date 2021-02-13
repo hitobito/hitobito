@@ -21,7 +21,7 @@ module Oauth
 
     def permitted_params
       super.tap do |attrs|
-        attrs[:scopes] = Array(attrs.delete(:scopes)).join(' ')
+        attrs[:scopes] = Array(attrs.delete(:scopes)).join(" ")
       end
     end
   end

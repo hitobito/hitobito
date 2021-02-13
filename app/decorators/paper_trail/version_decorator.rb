@@ -59,7 +59,7 @@ module PaperTrail
     end
 
     def changeset_list
-      safe_join(model.changeset, ', ') do |attr, (from, to)|
+      safe_join(model.changeset, ", ") do |attr, (from, to)|
         attribute_change(attr, from, to)
       end
     end
@@ -104,18 +104,18 @@ module PaperTrail
                attribute_change_args(attr, from, to)).
              html_safe
       else
-        ''
+        ""
       end
     end
 
     def association_change
-      changeset = model.event == 'update' ? changeset_list : nil
+      changeset = model.event == "update" ? changeset_list : nil
       item = reifyed_item
 
       text = I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}",
                     default: :"version.association_change.#{model.event}",
                     model: item_class.model_name.human,
-                    label: item ? label_with_fallback(item) : '',
+                    label: item ? label_with_fallback(item) : "",
                     changeset: changeset)
       h.sanitize(text, tags: %w(i))
     end
@@ -125,7 +125,7 @@ module PaperTrail
     def label_with_fallback(item)
       item.to_s(:long)
     rescue
-      I18n.t('global.unknown')
+      I18n.t("global.unknown")
     end
 
     def item_class
@@ -133,7 +133,7 @@ module PaperTrail
     end
 
     def reifyed_item
-      if model.event == 'create'
+      if model.event == "create"
         version = model.next
         if version
           reify(version)
@@ -147,18 +147,18 @@ module PaperTrail
 
     def reify(version)
       item_type = version.item_type.constantize
-      return version.reify unless item_type.column_names.include?('type')
-      model_type = YAML.load(version.object)['type']
+      return version.reify unless item_type.column_names.include?("type")
+      model_type = YAML.load(version.object)["type"]
       Object.const_defined?(model_type) ? version.reify : Wrapped.new(model_type)
     end
 
     def attribute_change_key(from, to)
       if from.present? && to.present?
-        'from_to'
+        "from_to"
       elsif from.present?
-        'from'
+        "from"
       elsif to.present?
-        'to'
+        "to"
       end
     end
 

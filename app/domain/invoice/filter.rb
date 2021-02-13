@@ -30,7 +30,7 @@ class Invoice::Filter
   end
 
   def cancelled?
-    params[:state] == 'cancelled'
+    params[:state] == "cancelled"
   end
 
   def filter_by_invoice_list_id(relation)
@@ -44,7 +44,7 @@ class Invoice::Filter
   end
 
   def invoice_ids
-    @invoice_ids = params[:ids].to_s.split(',')
+    @invoice_ids = params[:ids].to_s.split(",")
   end
 
 end

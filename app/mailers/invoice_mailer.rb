@@ -8,7 +8,7 @@
 
 class InvoiceMailer < ApplicationMailer
 
-  CONTENT_INVOICE_NOTIFICATION = 'content_invoice_notification'.freeze
+  CONTENT_INVOICE_NOTIFICATION = "content_invoice_notification".freeze
 
   def notification(invoice, sender)
     @sender  = sender
@@ -41,8 +41,8 @@ class InvoiceMailer < ApplicationMailer
         item.name,
         item.description,
         item.total
-      ].join('<br/>')
-    end.join('<br/>' * 2)
+      ].join("<br/>")
+    end.join("<br/>" * 2)
   end
 
   def placeholder_invoice_total
@@ -59,7 +59,7 @@ class InvoiceMailer < ApplicationMailer
   def placeholder_group_address
     [group.name,
      group.address,
-     [group.zip_code, group.town].compact.join(' ').presence].compact.join(', ')
+     [group.zip_code, group.town].compact.join(" ").presence].compact.join(", ")
   end
 
   def placeholder_group_name

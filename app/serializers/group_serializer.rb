@@ -58,9 +58,9 @@ class GroupSerializer < ApplicationSerializer
 
     if item.contact
       entity :contact, item.contact, ContactSerializer
-      template_link 'groups.contact',
+      template_link "groups.contact",
                     :people,
-                    h.group_person_url('{groups.id}', '{groups.contact}', format: :json)
+                    h.group_person_url("{groups.id}", "{groups.contact}", format: :json)
     else
       map_properties :address, :zip_code, :town, :country
     end
@@ -78,12 +78,12 @@ class GroupSerializer < ApplicationSerializer
     entities :hierarchy, item.hierarchy, GroupLinkSerializer
     entities :children, item.children.without_deleted.order(:lft), GroupLinkSerializer
 
-    group_template_link 'groups.parent'
-    group_template_link 'groups.layer_group'
-    group_template_link 'groups.hierarchy'
-    group_template_link 'groups.children'
+    group_template_link "groups.parent"
+    group_template_link "groups.layer_group"
+    group_template_link "groups.hierarchy"
+    group_template_link "groups.children"
 
-    template_link 'groups.people', :people, h.group_people_url('{groups.id}', format: :json)
+    template_link "groups.people", :people, h.group_people_url("{groups.id}", format: :json)
   end
 
 end

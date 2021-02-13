@@ -32,7 +32,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe GroupListSerializer do
 
@@ -43,7 +43,7 @@ describe GroupListSerializer do
 
   subject(:hash) { serializer.to_hash[:groups].first }
 
-  it 'has different entities' do
+  it "has different entities" do
     expect(hash[:id]).to eq(group.id)
     expect(hash[:parent_id]).to eq(group.parent_id)
     expect(hash[:type]).to eq(group.type.to_s)

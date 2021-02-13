@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-GITHUB_REPO_URL='https://github.com/transifex/transifex-client'.freeze
-DOWNLOAD_BASE_URL='https://github.com/transifex/transifex-client/archive'.freeze
-MINOR_TRANSIFEX_CLIENT_VERSION='0.13'
+GITHUB_REPO_URL="https://github.com/transifex/transifex-client".freeze
+DOWNLOAD_BASE_URL="https://github.com/transifex/transifex-client/archive".freeze
+MINOR_TRANSIFEX_CLIENT_VERSION="0.13"
 
 def github_releases
   `git ls-remote -t #{GITHUB_REPO_URL}  | sort -V -k2`
@@ -16,7 +16,7 @@ end
 # errror: pkg_resources.DistributionNotFound: urllib3>=1.24.2,<2.0.0
 # maybe related https://github.com/transifex/transifex-client/issues/211
 def version
-  @version ||= '0.13.6'
+  @version ||= "0.13.6"
 end
 
 def version_info
@@ -37,7 +37,7 @@ end
 
 def install_transifex_client
   p "installing transifex client #{version} ..."
-  Dir.chdir('/tmp') do
+  Dir.chdir("/tmp") do
     system!("wget #{download_url}")
     system!("tar xvfz #{file_name}")
   end

@@ -9,10 +9,10 @@ class ChangelogVersion
   attr_accessor :major_version, :minor_version, :log_entries, :version
 
   def initialize(header_line)
-    values         = header_line.split('.')
+    values         = header_line.split(".")
     @version       = header_line
     @major_version = values.first.to_i
-    @minor_version = values.second.casecmp('x') == 0 ? Float::INFINITY : values.second.to_i
+    @minor_version = values.second.casecmp("x") == 0 ? Float::INFINITY : values.second.to_i
     @log_entries   = []
   end
 

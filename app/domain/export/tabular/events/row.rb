@@ -29,7 +29,7 @@ module Export::Tabular::Events
     private
 
     def date_attribute(date_attr)
-      _, index, attr = date_attr.to_s.split('_', 3)
+      _, index, attr = date_attr.to_s.split("_", 3)
       date = entry.dates[index.to_i]
       date.try(attr).try(:to_s)
     end
@@ -45,7 +45,7 @@ module Export::Tabular::Events
     end
 
     def contactable_attribute(contactable_attr)
-      subject, attr = contactable_attr.to_s.split('_', 2)
+      subject, attr = contactable_attr.to_s.split("_", 2)
       contactable = send(subject)
       if contactable
         contact_attr = :"contact_#{attr}"
@@ -62,7 +62,7 @@ module Export::Tabular::Events
     end
 
     def contact_phone_numbers(contactable)
-      contactable.phone_numbers.map(&:to_s).join(', ')
+      contactable.phone_numbers.map(&:to_s).join(", ")
     end
 
   end

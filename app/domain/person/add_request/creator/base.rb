@@ -70,7 +70,7 @@ module Person::AddRequest::Creator
     def error_message
       I18n.t("person.add_requests.creator.#{body_class_name.underscore}.failure",
              person: person.full_name,
-             errors: request.errors.full_messages.join(', '))
+             errors: request.errors.full_messages.join(", "))
     end
 
     def request_class

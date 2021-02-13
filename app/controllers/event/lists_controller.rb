@@ -72,8 +72,8 @@ class Event::ListsController < ApplicationController
       upcoming.
       in_hierarchy(current_user).
       includes(:dates, :groups).
-      where('events.type != ? OR events.type IS NULL', Event::Course.sti_name).
-      order('event_dates.start_at ASC')
+      where("events.type != ? OR events.type IS NULL", Event::Course.sti_name).
+      order("event_dates.start_at ASC")
   end
 
   def default_user_course_group
@@ -91,7 +91,7 @@ class Event::ListsController < ApplicationController
     Group.
       course_offerers.
       where(id: current_user.groups_hierarchy_ids).
-      where('groups.id <> ?', Group.root.id).
+      where("groups.id <> ?", Group.root.id).
       select(:id).
       first
   end
@@ -119,7 +119,7 @@ class Event::ListsController < ApplicationController
   end
 
   def course_ordering
-    kind_used? ? 'event_kind_translations.label, event_dates.start_at' : 'event_dates.start_at'
+    kind_used? ? "event_kind_translations.label, event_dates.start_at" : "event_dates.start_at"
   end
 
   def additional_course_includes

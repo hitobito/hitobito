@@ -7,10 +7,10 @@
 
 class PersonDuplicateTableBuilder
 
-  I18N_PREFIX = 'person_duplicates'.freeze
-  I18N_PERSON = 'activerecord.attributes.person'.freeze
-  I18N_PERSON_DUPLICATE = 'activerecord.attributes.person_duplicate'.freeze
-  TABLE_CLASS = 'table person-duplicates-table'.freeze
+  I18N_PREFIX = "person_duplicates".freeze
+  I18N_PERSON = "activerecord.attributes.person".freeze
+  I18N_PERSON_DUPLICATE = "activerecord.attributes.person_duplicate".freeze
+  TABLE_CLASS = "table person-duplicates-table".freeze
 
   attr_reader :template
 
@@ -60,15 +60,15 @@ class PersonDuplicateTableBuilder
     if can?(:show, person)
       link_to(label,
               group_person_path(person.primary_group, person),
-              target: '_blank')
+              target: "_blank")
     else
       label
     end
   end
 
   def action_col(entry, p_nr)
-    content_tag(:td, class: 'right vertical-middle', rowspan: 2) do
-      content = ''
+    content_tag(:td, class: "right vertical-middle", rowspan: 2) do
+      content = ""
       if can?(:merge, entry)
         content += action_button_merge(entry)
       end
@@ -80,14 +80,14 @@ class PersonDuplicateTableBuilder
   end
 
   def action_button_merge(entry)
-    action_button(t('merge.action'),
+    action_button(t("merge.action"),
                   new_merge_path(entry),
                   :'user-friends',
                   remote: true)
   end
 
   def action_button_ignore(entry)
-    action_button(t('ignore.action'),
+    action_button(t("ignore.action"),
                   new_ignore_path(entry),
                   :'user-slash',
                   remote: true)
@@ -107,11 +107,11 @@ class PersonDuplicateTableBuilder
 
 
   def divider_row(entry) 
-    return '' if @entries.last == entry
+    return "" if @entries.last == entry
 
-    content_tag(:tr, class: 'divider') do
+    content_tag(:tr, class: "divider") do
       content_tag(:td, colspan: @cols.count) do
-        ''
+        ""
       end
     end
   end

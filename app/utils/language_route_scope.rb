@@ -9,10 +9,10 @@ module LanguageRouteScope
 
   def language_scope(&block)
     languages = Settings.application.languages.to_hash.keys
-    get '/:locale' => 'dashboard#index', locale: /#{languages.join('|')}/
+    get "/:locale" => "dashboard#index", locale: /#{languages.join('|')}/
 
     if languages.size > 1
-      scope '(:locale)', locale: /#{languages.join('|')}/, &block
+      scope "(:locale)", locale: /#{languages.join('|')}/, &block
     else
       yield
     end

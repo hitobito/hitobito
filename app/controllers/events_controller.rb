@@ -32,8 +32,8 @@ class EventsController < CrudController
 
   self.remember_params += [:year]
 
-  self.sort_mappings = { name: 'event_translations.name', state: 'events.state',
-                         dates_full: 'event_dates.start_at',
+  self.sort_mappings = { name: "event_translations.name", state: "events.state",
+                         dates_full: "event_dates.start_at",
                          group_ids: "#{Group.quoted_table_name}.name" }
 
   self.search_columns = [:name]
@@ -183,8 +183,8 @@ class EventsController < CrudController
   end
 
   def authorize_class
-    type = params[:type].presence || 'Event'
-    action = export? ? 'export' : 'index'
+    type = params[:type].presence || "Event"
+    action = export? ? "export" : "index"
     authorize!(:"#{action}_#{type.underscore.pluralize}", group)
   end
 

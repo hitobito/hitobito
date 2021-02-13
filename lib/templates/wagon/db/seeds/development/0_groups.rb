@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require Rails.root.join('db', 'seeds', 'support', 'group_seeder')
+require Rails.root.join("db", "seeds", "support", "group_seeder")
 
 seeder = GroupSeeder.new
 

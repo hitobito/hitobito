@@ -13,13 +13,13 @@ class Tags::MergeController < ApplicationController
   def create
     merger.merge!
 
-    redirect_to tags_path, notice: translate('success')
+    redirect_to tags_path, notice: translate("success")
   end
 
   private
 
   def tag_names
-    tags.collect(&:name).join(', ')
+    tags.collect(&:name).join(", ")
   end
 
   def src_tag_ids

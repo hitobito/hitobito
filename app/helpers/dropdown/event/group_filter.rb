@@ -21,7 +21,7 @@ module Dropdown
 
       def init_items
         year_param = { year: year }
-        add_item('Alle Gruppen', template.list_courses_path(year_param))
+        add_item("Alle Gruppen", template.list_courses_path(year_param))
         Group.course_offerers.each do |group|
           link = template.list_courses_path(year_param.merge(group_id: group.id))
           add_item(group.name, link)

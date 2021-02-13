@@ -9,7 +9,7 @@ class HelpTexts::Entry
   attr_reader :key, :action_names,  :controller_name, :model_class
 
   def self.key(controller_name, model_class)
-    [controller_name, model_class.to_s.underscore].compact.join('--')
+    [controller_name, model_class.to_s.underscore].compact.join("--")
   end
 
   def initialize(controller_name, model_class, existing = nil)

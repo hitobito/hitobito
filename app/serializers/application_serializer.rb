@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'oat/adapters/json_api'
+require "oat/adapters/json_api"
 
 class ApplicationSerializer < Oat::Serializer
   adapter Oat::Adapters::JsonAPI
@@ -57,7 +57,7 @@ class ApplicationSerializer < Oat::Serializer
 
   # alternative to store custom link templates
   def template_link(key, type, href, options = {})
-    template_links[key] = options.merge(href: href.gsub('%7B', '{').gsub('%7D', '}'),
+    template_links[key] = options.merge(href: href.gsub("%7B", "{").gsub("%7D", "}"),
                                         type: type.to_s.pluralize)
   end
 

@@ -26,7 +26,7 @@ class Invoice::Qrcode
   def payload
     striped_values(
       metadata,
-      creditor.reverse_merge(iban: @invoice.iban.gsub(/\s+/, '')),
+      creditor.reverse_merge(iban: @invoice.iban.gsub(/\s+/, "")),
       creditor_final,
       payment,
       debitor,
@@ -37,7 +37,7 @@ class Invoice::Qrcode
   end
 
   def metadata
-    { type: 'SPC', version: '0200', coding: '1' }
+    { type: "SPC", version: "0200", coding: "1" }
   end
 
   def creditor
@@ -49,7 +49,7 @@ class Invoice::Qrcode
   end
 
   def payment
-    { amount: format('%<total>.2f', total: @invoice.total), currency: @invoice.currency }
+    { amount: format("%<total>.2f", total: @invoice.total), currency: @invoice.currency }
   end
 
   def debitor
@@ -57,14 +57,14 @@ class Invoice::Qrcode
   end
 
   def payment_reference
-    type = @invoice.reference.starts_with?('RF') ? 'SCOR' : 'QRR'
+    type = @invoice.reference.starts_with?("RF") ? "SCOR" : "QRR"
     { type: type, reference: @invoice.reference }
   end
 
   def additional_infos
     {
       purpose: @invoice.payment_purpose.to_s.gsub("\n", " ").truncate(120),
-      trailer: 'EPD',
+      trailer: "EPD",
       infos: nil
     }
   end
@@ -78,9 +78,9 @@ class Invoice::Qrcode
   end
 
   def generate
-    Tempfile.create([@invoice.sequence_number, '.png'], binmode: true) do |file|
+    Tempfile.create([@invoice.sequence_number, ".png"], binmode: true) do |file|
       qrcode = generate_png
-      cross  = ChunkyPNG::Image.from_file(image('CH-Kreuz_7mm_small.png'))
+      cross  = ChunkyPNG::Image.from_file(image("CH-Kreuz_7mm_small.png"))
       point = (qrcode.width / 2) - cross.width / 2
       qrcode.replace!(cross, point, point)
       qrcode.save(file.path, :fast_rgba)
@@ -106,9 +106,9 @@ class Invoice::Qrcode
       bit_depth: 1,
       border_modules: 4,
       color_mode: ChunkyPNG::COLOR_GRAYSCALE,
-      color: 'black',
+      color: "black",
       file: nil,
-      fill: 'white',
+      fill: "white",
       module_px_size: 6,
       resize_exactly_to: false,
       resize_gte_to: false,
@@ -118,13 +118,13 @@ class Invoice::Qrcode
   def extract_contact(contactable) # rubocop:disable Metrics/MethodLength
     parts = contactable.strip.to_s.split(/\r*\n/)
     {
-      address_type: 'K',
+      address_type: "K",
       full_name: parts.first,
       address_line1: parts.second,
       address_line2: parts.third,
       zip_code: nil,
       town: nil,
-      country: 'CH'
+      country: "CH"
     }
   end
 

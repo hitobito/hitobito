@@ -22,7 +22,7 @@ class Event::ApplicationMarketController < ApplicationController
     if assigner.createable?
       assigner_add_participant
     else
-      render 'participation_exists_error'
+      render "participation_exists_error"
     end
   end
 
@@ -31,12 +31,12 @@ class Event::ApplicationMarketController < ApplicationController
   def put_on_waiting_list
     application.update!(waiting_list: true,
                         waiting_list_comment: params[:event_application][:waiting_list_comment])
-    render 'waiting_list'
+    render "waiting_list"
   end
 
   def remove_from_waiting_list
     application.update_column(:waiting_list, false) # rubocop:disable Rails/SkipsModelValidations
-    render 'waiting_list'
+    render "waiting_list"
   end
 
   private
@@ -68,8 +68,8 @@ class Event::ApplicationMarketController < ApplicationController
     # do not include nil values in arrays returned by #sort_by
     applications.to_a.sort_by! do |p|
       [p.application.priority(event) || 99,
-       p.person.last_name || '',
-       p.person.first_name || '']
+       p.person.last_name || "",
+       p.person.first_name || ""]
     end
   end
 
@@ -83,7 +83,7 @@ class Event::ApplicationMarketController < ApplicationController
     filter_by_prio(conditions, args) if params[:prio]
     filter_by_waiting_list(conditions, args) if params[:waiting_list]
 
-    [conditions.join(' OR '), *args] if conditions.present?
+    [conditions.join(" OR "), *args] if conditions.present?
   end
 
   def filter_by_prio(conditions, args)
@@ -95,10 +95,10 @@ class Event::ApplicationMarketController < ApplicationController
 
   def filter_by_waiting_list(conditions, args)
     if event.kind_id
-      conditions << '(event_applications.waiting_list = ? AND events.kind_id = ?)'
+      conditions << "(event_applications.waiting_list = ? AND events.kind_id = ?)"
       args << true << event.kind_id
     else
-      conditions << '(event_applications.waiting_list = ? AND events.kind_id IS NULL)'
+      conditions << "(event_applications.waiting_list = ? AND events.kind_id IS NULL)"
       args << true
     end
   end

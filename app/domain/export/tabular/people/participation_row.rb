@@ -20,7 +20,7 @@ module Export::Tabular::People
     end
 
     def roles
-      participation.roles.map { |role| role }.join(', ')
+      participation.roles.map { |role| role }.join(", ")
     end
 
     def created_at
@@ -28,7 +28,7 @@ module Export::Tabular::People
     end
 
     def question_attribute(attr)
-      id = attr.to_s.split('_').last
+      id = attr.to_s.split("_").last
       answer = participation.answers.find { |e| e.question_id == id.to_i }
       answer.try(:answer)
     end

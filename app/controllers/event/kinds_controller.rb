@@ -21,8 +21,8 @@ class Event::KindsController < SimpleCrudController
                             }
                           }]
 
-  self.sort_mappings = { label:      'event_kind_translations.label',
-                         short_name: 'event_kind_translations.short_name' }
+  self.sort_mappings = { label:      "event_kind_translations.label",
+                         short_name: "event_kind_translations.short_name" }
 
   before_render_form :load_assocations
 
@@ -80,9 +80,9 @@ class Event::KindsController < SimpleCrudController
     grouped_ids.each_with_index.flat_map do |(_, ids), index|
       ids.fetch(:qualification_kind_ids, []).map do |id|
         { id: find_qualification_kind_assoc_id(existing_kinds, id,
-                                               'participant', 'precondition', index + 1),
-          role: 'participant',
-          category: 'precondition',
+                                               "participant", "precondition", index + 1),
+          role: "participant",
+          category: "precondition",
           qualification_kind_id: id,
           grouping: index + 1 }
       end

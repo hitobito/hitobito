@@ -7,7 +7,7 @@
 
 class Event::RegisterMailer < ApplicationMailer
 
-  CONTENT_REGISTER_LOGIN = 'event_register_login'.freeze
+  CONTENT_REGISTER_LOGIN = "event_register_login".freeze
 
   def register_login(recipient, group, event, token)
     @recipient = recipient

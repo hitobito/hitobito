@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe TagsController, js: true do
 
@@ -26,17 +26,17 @@ describe TagsController, js: true do
     visit tags_path
   end
 
-  it 'merges tags' do
+  it "merges tags" do
     find(:css, "#ids_[value='#{tag1.id}']").set(true)
     find(:css, "#ids_[value='#{tag2.id}']").set(true)
 
-    click_link('Zusammenführen')
-    expect(page).to have_content 'Sollen die gewählten Tags zusammengeführt werden?'
-    fill_in id: 'tags_merge_name', with: 'Fantastic'
-    click_button('Zusammenführen')
+    click_link("Zusammenführen")
+    expect(page).to have_content "Sollen die gewählten Tags zusammengeführt werden?"
+    fill_in id: "tags_merge_name", with: "Fantastic"
+    click_button("Zusammenführen")
 
     is_expected.not_to have_content(tag2.name)
-    is_expected.to have_content('Fantastic')
+    is_expected.to have_content("Fantastic")
   end
 
   private

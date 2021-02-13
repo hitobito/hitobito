@@ -48,7 +48,7 @@ class TableDisplay::Participations < TableDisplay
 
   def person_sort_statements
     selected.grep(/person/).collect do |key|
-      [key, key.gsub('person', 'people')]
+      [key, key.gsub("person", "people")]
     end.to_h
   end
 

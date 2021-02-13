@@ -116,18 +116,18 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :roles, inverse_of: :person
   has_many :groups, through: :roles
 
-  has_many :event_participations, class_name: 'Event::Participation',
+  has_many :event_participations, class_name: "Event::Participation",
                                   dependent: :destroy,
                                   inverse_of: :person
-  has_many :event_applications, class_name: 'Event::Application',
+  has_many :event_applications, class_name: "Event::Application",
                                 through: :event_participations,
                                 source: :application
-  has_many :event_roles, class_name: 'Event::Role',
+  has_many :event_roles, class_name: "Event::Role",
                          through: :event_participations,
                          source: :roles
   has_many :events, through: :event_participations
 
-  has_many :event_responsibilities, class_name: 'Event',
+  has_many :event_responsibilities, class_name: "Event",
                                     foreign_key: :contact_id,
                                     inverse_of: :contact,
                                     dependent: :nullify
@@ -136,7 +136,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
-  has_many :relations_to_tails, class_name: 'PeopleRelation',
+  has_many :relations_to_tails, class_name: "PeopleRelation",
                                 dependent: :destroy,
                                 foreign_key: :head_id
 
@@ -144,23 +144,23 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :notes, dependent: :destroy, as: :subject
 
-  has_many :authored_notes, class_name: 'Note',
-                            foreign_key: 'author_id',
+  has_many :authored_notes, class_name: "Note",
+                            foreign_key: "author_id",
                             dependent: :destroy
 
-  belongs_to :primary_group, class_name: 'Group'
-  belongs_to :last_label_format, class_name: 'LabelFormat'
+  belongs_to :primary_group, class_name: "Group"
+  belongs_to :last_label_format, class_name: "LabelFormat"
 
   has_many :label_formats, dependent: :destroy
   has_many :table_displays, dependent: :destroy
 
   has_many :assignments, dependent: :destroy
 
-  has_many :access_grants, class_name: 'Oauth::AccessGrant',
+  has_many :access_grants, class_name: "Oauth::AccessGrant",
                            foreign_key: :resource_owner_id,
                            dependent: :delete_all
 
-  has_many :access_tokens, class_name: 'Oauth::AccessToken',
+  has_many :access_tokens, class_name: "Oauth::AccessToken",
                            foreign_key: :resource_owner_id,
                            dependent: :delete_all
 
@@ -197,7 +197,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   class << self
     def order_by_name
-      order(Arel.sql(order_by_name_statement.join(', ')))
+      order(Arel.sql(order_by_name_statement.join(", ")))
     end
 
     def order_by_name_statement
@@ -269,7 +269,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     Person.
       includes(:groups).
       where.not(id: id).
-      where('id IN (?) OR (household_key IS NOT NULL AND household_key = ?)',
+      where("id IN (?) OR (household_key IS NOT NULL AND household_key = ?)",
             household_people_ids, household_key)
   end
 

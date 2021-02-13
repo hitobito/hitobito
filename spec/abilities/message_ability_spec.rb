@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe MessageAbility do
 
@@ -17,17 +17,17 @@ describe MessageAbility do
 
   subject { Ability.new(user.reload) }
 
-  context 'layer and below full' do
+  context "layer and below full" do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
-    context 'in own group' do
-      it 'may manage messages' do
+    context "in own group" do
+      it "may manage messages" do
         actions.each do |action|
           is_expected.to be_able_to(action, message)
         end
       end
 
-      it 'may not edit, update and destroy if message is not in state draft' do
+      it "may not edit, update and destroy if message is not in state draft" do
         message.state = :pending
         is_expected.not_to be_able_to(:edit, message)
         is_expected.not_to be_able_to(:update, message)
@@ -35,40 +35,40 @@ describe MessageAbility do
       end
     end
 
-    context 'in group in same layer' do
+    context "in group in same layer" do
       let(:group) { groups(:top_layer) }
-      it 'may manage messages' do
+      it "may manage messages" do
         actions.each do |action|
           is_expected.to be_able_to(action, message)
         end
       end
     end
 
-    context 'in global group in same layer' do
+    context "in global group in same layer" do
       let(:group) { groups(:toppers) }
 
-      it 'may manage messages' do
+      it "may manage messages" do
         actions.each do |action|
           is_expected.to be_able_to(action, message)
         end
       end
     end
 
-    context 'in group in lower layer' do
+    context "in group in lower layer" do
       let(:group) { groups(:bottom_layer_one) }
 
-      it 'may manage messages' do
+      it "may manage messages" do
         actions.each do |action|
           is_expected.to be_able_to(action, message)
         end
       end
     end
 
-    context 'in group in upper layer' do
+    context "in group in upper layer" do
       let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
       let(:group) { groups(:top_layer) }
 
-      it 'may not manage messages' do
+      it "may not manage messages" do
         actions.each do |action|
           is_expected.not_to be_able_to(action, message)
         end

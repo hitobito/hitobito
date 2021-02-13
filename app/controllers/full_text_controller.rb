@@ -32,7 +32,7 @@ class FullTextController < ApplicationController
 
   def results_with_separator(*sets)
     sets.select(&:present?).inject do |memo, set|
-      memo + [{ label: '—' * 20 }] + set
+      memo + [{ label: "—" * 20 }] + set
     end
   end
 
@@ -69,7 +69,7 @@ class FullTextController < ApplicationController
   end
 
   def tab_class(tab)
-    'active' if @active_tab == tab
+    "active" if @active_tab == tab
   end
 
   def decorate_events(events)

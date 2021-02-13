@@ -59,7 +59,7 @@ module Export::Tabular::Events
 
     def add_date_labels(labels)
       MAX_DATES.times.each do |i|
-        prefix = translate('date', index: i + 1)
+        prefix = translate("date", index: i + 1)
         labels[:"date_#{i}_label"] = "#{prefix} #{Event::Date.human_attribute_name(:label)}"
         labels[:"date_#{i}_location"] = "#{prefix} #{Event::Date.human_attribute_name(:location)}"
         labels[:"date_#{i}_duration"] = "#{prefix} #{translate('duration')}"

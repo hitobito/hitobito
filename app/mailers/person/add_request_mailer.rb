@@ -7,10 +7,10 @@
 
 class Person::AddRequestMailer < ApplicationMailer
 
-  CONTENT_ADD_REQUEST_PERSON = 'person_add_request_person'.freeze
-  CONTENT_ADD_REQUEST_RESPONSIBLES = 'person_add_request_responsibles'.freeze
-  CONTENT_ADD_REQUEST_APPROVED = 'person_add_request_approved'.freeze
-  CONTENT_ADD_REQUEST_REJECTED = 'person_add_request_rejected'.freeze
+  CONTENT_ADD_REQUEST_PERSON = "person_add_request_person".freeze
+  CONTENT_ADD_REQUEST_RESPONSIBLES = "person_add_request_responsibles".freeze
+  CONTENT_ADD_REQUEST_APPROVED = "person_add_request_approved".freeze
+  CONTENT_ADD_REQUEST_REJECTED = "person_add_request_rejected".freeze
 
   attr_reader :add_request
 
@@ -72,7 +72,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def placeholder_recipient_names
-    @recipients.collect(&:greeting_name).join(', ')
+    @recipients.collect(&:greeting_name).join(", ")
   end
 
   def placeholder_person_name
@@ -96,7 +96,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def roles_as_string(roles)
-    roles.collect { |r| r.to_s(:long) }.join(', ')
+    roles.collect { |r| r.to_s(:long) }.join(", ")
   end
 
   def layer_full_roles(person)
@@ -111,12 +111,12 @@ class Person::AddRequestMailer < ApplicationMailer
     params[:person_id] = add_request.person_id
     params[:group_id] = add_request.person_layer.id
     url = group_person_add_requests_url(params)
-    link_to(t('.request_link'), url)
+    link_to(t(".request_link"), url)
   end
 
   def link_to_request
     url = person_url(person, body_params)
-    link_to(t('.request_link'), url)
+    link_to(t(".request_link"), url)
   end
 
   def body_url

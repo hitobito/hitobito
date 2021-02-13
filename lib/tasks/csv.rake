@@ -5,13 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'faker'
-require 'bcrypt'
-require 'csv'
+require "faker"
+require "bcrypt"
+require "csv"
 
 
 namespace :csv do
-  desc 'Generates dummy csv file'
+  desc "Generates dummy csv file"
   task :generate do
     csv_string = CSV.generate do |csv|
       csv << person_attributes.keys
@@ -19,7 +19,7 @@ namespace :csv do
         csv << enhance(person_attributes).values
       end
     end
-    File.write('dummy.csv', csv_string)
+    File.write("dummy.csv", csv_string)
   end
 
 
@@ -66,7 +66,7 @@ namespace :csv do
       when 0 then hash[k] = "#{v} "
       when 1 then hash[k] = " #{v}"
       when 2 then hash[k] = " #{v} "
-      when 3 then hash[k] = (v[v.size / 2] = 'ä'; v) # rubocop:disable Style/Semicolon
+      when 3 then hash[k] = (v[v.size / 2] = "ä"; v) # rubocop:disable Style/Semicolon
       when 4 then hash[k] = nil
       when 5 then hash[k] = nil
       end

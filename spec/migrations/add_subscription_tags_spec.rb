@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
-migration_file_name = Dir[Rails.root.join('db/migrate/20210122074037_add_subscription_tags.rb')].first
+require "spec_helper"
+migration_file_name = Dir[Rails.root.join("db/migrate/20210122074037_add_subscription_tags.rb")].first
 require migration_file_name
 
 
@@ -26,20 +26,20 @@ describe AddSubscriptionTags do
     ActsAsTaggableOn::Tag.find_each { |tag| tag.delete }
   end
 
-  context '#up' do
+  context "#up" do
     before do
       migration.down
     end
 
-    it 'creates subscription_tags for each subscription tagging' do
+    it "creates subscription_tags for each subscription tagging" do
       ActsAsTaggableOn::Tagging.create!(taggable_id: subscription.id,
                                         taggable_type: Subscription.sti_name,
                                         tag_id: email_primary_invalid.id,
-                                        context: 'tags')
+                                        context: "tags")
       ActsAsTaggableOn::Tagging.create!(taggable_id: subscription.id,
                                         taggable_type: Subscription.sti_name,
                                         tag_id: email_additional_invalid.id,
-                                        context: 'tags')
+                                        context: "tags")
 
       expect(ActsAsTaggableOn::Tagging.count).to eq(2)
 
@@ -53,12 +53,12 @@ describe AddSubscriptionTags do
     end
   end
 
-  context '#down' do
+  context "#down" do
     after do
       migration.up
     end
     
-    it 'creates subscription taggings for each subscription_tag' do
+    it "creates subscription taggings for each subscription_tag" do
       SubscriptionTag.create!(subscription: subscription,
                               tag: email_primary_invalid)
       SubscriptionTag.create!(subscription: subscription,

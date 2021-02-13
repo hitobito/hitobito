@@ -26,7 +26,7 @@ module Contactable
       end
 
       if invalid_emails.present?
-        tag_invalid!(person, invalid_emails.join(' '), :additional)
+        tag_invalid!(person, invalid_emails.join(" "), :additional)
       end
     end
 

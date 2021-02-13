@@ -19,7 +19,7 @@
 #
 class Person::AddRequest::IgnoredApprover < ActiveRecord::Base
 
-  belongs_to :group, class_name: '::Group'
+  belongs_to :group, class_name: "::Group"
   belongs_to :person
 
   validates_by_schema

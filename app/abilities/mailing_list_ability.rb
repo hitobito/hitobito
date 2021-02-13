@@ -65,7 +65,7 @@ class MailingListAbility < AbilityDsl::Base
 
   def group_subscriptions_with_below_role_types?
     subject.subscriptions.
-      where(subscriber_type: 'Group').
+      where(subscriber_type: "Group").
       joins(:related_role_types).
       where.not(related_role_types: { role_type: local_role_types.collect(&:sti_name) }).
       exists?
@@ -80,7 +80,7 @@ class MailingListAbility < AbilityDsl::Base
     when :layer_full
       local_group_role_types(group.layer_group.class)
     else
-      raise('Unexpected permission')
+      raise("Unexpected permission")
     end
   end
 
@@ -91,15 +91,15 @@ class MailingListAbility < AbilityDsl::Base
 
   def total_event_subscription_count
     subject.subscriptions.
-      where(subscriber_type: 'Event').
+      where(subscriber_type: "Event").
       count
   end
 
   def local_event_subscription_count
     subject.subscriptions.
-      where(subscriber_type: 'Event').
-      joins('INNER JOIN events ON subscriptions.subscriber_id = events.id').
-      joins('INNER JOIN events_groups ON events_groups.event_id = events.id').
+      where(subscriber_type: "Event").
+      joins("INNER JOIN events ON subscriptions.subscriber_id = events.id").
+      joins("INNER JOIN events_groups ON events_groups.event_id = events.id").
       where(events_groups: { group_id: local_group_ids }).
       distinct.
       count
@@ -114,7 +114,7 @@ class MailingListAbility < AbilityDsl::Base
     when :layer_full
       group.groups_in_same_layer
     else
-      raise('Unexpected permission')
+      raise("Unexpected permission")
     end
   end
 

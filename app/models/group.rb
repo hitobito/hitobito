@@ -78,7 +78,7 @@ class Group < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :contact, class_name: 'Person'
+  belongs_to :contact, class_name: "Person"
 
   has_many :roles, dependent: :destroy, inverse_of: :group
   has_many :people, through: :roles
@@ -95,7 +95,7 @@ class Group < ActiveRecord::Base
   has_many :person_add_requests,
            foreign_key: :body_id,
            inverse_of: :body,
-           class_name: 'Person::AddRequest::Group',
+           class_name: "Person::AddRequest::Group",
            dependent: :destroy
 
   has_one :invoice_config, dependent: :destroy
@@ -109,7 +109,7 @@ class Group < ActiveRecord::Base
            dependent: :destroy
 
 
-  has_settings :text_message_provider, class_name: 'GroupSetting'
+  has_settings :text_message_provider, class_name: "GroupSetting"
 
   ### VALIDATIONS
 
@@ -141,7 +141,7 @@ class Group < ActiveRecord::Base
         types.each_with_index do |t, i|
           statement << "WHEN '#{t.sti_name}' THEN #{i}"
         end
-        statement << 'END,'
+        statement << "END,"
       end
 
       "#{statement.join(' ')} lft"
@@ -228,7 +228,7 @@ class Group < ActiveRecord::Base
     duplicates = PersonDuplicate.joins(person_1: :roles).joins(person_2: :roles)
     group_ids = children.map(&:id) + [id]
     duplicates
-      .where('roles.group_id IN (:group_ids) OR roles_people.group_id IN (:group_ids)',
+      .where("roles.group_id IN (:group_ids) OR roles_people.group_id IN (:group_ids)",
              group_ids: group_ids)
   end
 

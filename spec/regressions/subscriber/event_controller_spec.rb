@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Subscriber::EventController, type: :controller do
 
@@ -25,13 +25,13 @@ describe Subscriber::EventController, type: :controller do
 
   before { sign_in(people(:top_leader)) }
 
-  include_examples 'crud controller', skip: [%w(index), %w(show), %w(edit), %w(update), %w(destroy)]
+  include_examples "crud controller", skip: [%w(index), %w(show), %w(edit), %w(update), %w(destroy)]
 
   def deep_attributes(*args)
     { subscriber_id: event.id }
   end
 
-  it 'does not duplicate subscription' do
+  it "does not duplicate subscription" do
     expect do
       2.times { post :create, params: scope_params.merge(subscription: test_entry_attrs) }
     end.to change(Subscription, :count).by(1)

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe SearchStrategies::Sql do
 
@@ -19,10 +19,10 @@ describe SearchStrategies::Sql do
 
     @bg_leader = Fabricate(Group::BottomGroup::Leader.name.to_sym,
                            group: groups(:bottom_group_one_one),
-                           person: Fabricate(:person, last_name: 'Schurter', first_name: 'Franz')).person
+                           person: Fabricate(:person, last_name: "Schurter", first_name: "Franz")).person
     @bg_member = Fabricate(Group::BottomGroup::Member.name.to_sym,
                            group: groups(:bottom_group_one_one),
-                           person: Fabricate(:person, last_name: 'Bindella', first_name: 'Yasmine')).person
+                           person: Fabricate(:person, last_name: "Bindella", first_name: "Yasmine")).person
 
     @bg_member_with_deleted = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
     leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: @bg_member_with_deleted)
@@ -48,61 +48,61 @@ describe SearchStrategies::Sql do
     end
   end
 
-  describe '#list_people' do
+  describe "#list_people" do
 
-    context 'as admin' do
+    context "as admin" do
       let(:user) { people(:top_leader) }
 
-      it 'finds accessible person' do
+      it "finds accessible person" do
         result = strategy(@bg_leader.last_name[1..5]).list_people
 
         expect(result).to include(@bg_leader)
       end
 
-      it 'finds accessible person with two terms' do
+      it "finds accessible person with two terms" do
         result = strategy("#{@bg_leader.last_name[1..5]} #{@bg_leader.first_name[0..3]}").list_people
 
         expect(result).to include(@bg_leader)
       end
 
-      it 'does not find not accessible person' do
+      it "does not find not accessible person" do
         result = strategy(@bg_member.last_name[1..5]).list_people
 
         expect(result).not_to include(@bg_member)
       end
 
-      it 'does not search for too short queries' do
-        result = strategy('e').list_people
+      it "does not search for too short queries" do
+        result = strategy("e").list_people
 
         expect(result).to eq([])
       end
 
-      it 'finds people without any roles' do
+      it "finds people without any roles" do
         result = strategy(@no_role.last_name[1..5]).list_people
 
         expect(result).to include(@no_role)
       end
 
-      it 'does not find people not accessible person with deleted role' do
+      it "does not find people not accessible person with deleted role" do
         result = strategy(@bg_member_with_deleted.last_name[1..5]).list_people
 
         expect(result).not_to include(@bg_member_with_deleted)
       end
 
-      it 'finds deleted people' do
+      it "finds deleted people" do
         result = strategy(@deleted_leader.last_name[1..5]).list_people
 
         expect(result).to include(@deleted_leader)
       end
 
-      it 'finds deleted, not accessible people' do
+      it "finds deleted, not accessible people" do
         result = strategy(@deleted_bg_member.last_name[1..5]).list_people
 
         expect(result).to include(@deleted_bg_member)
       end
 
-      context 'without any params' do
-        it 'returns nothing' do
+      context "without any params" do
+        it "returns nothing" do
           result = strategy.list_people
 
           expect(result).to eq([])
@@ -110,38 +110,38 @@ describe SearchStrategies::Sql do
       end
     end
 
-    context 'as leader' do
+    context "as leader" do
       let(:user) { @bl_leader }
 
-      it 'finds accessible person' do
+      it "finds accessible person" do
         result = strategy(@bg_leader.last_name[1..5]).list_people
 
         expect(result).to include(@bg_leader)
       end
 
-      it 'finds local accessible person' do
+      it "finds local accessible person" do
         result = strategy(@bg_member.last_name[1..5]).list_people
 
         expect(result).to include(@bg_member)
       end
 
-      it 'does not find people without any roles' do
+      it "does not find people without any roles" do
         result = strategy(@no_role.last_name[1..5]).list_people
 
         expect(result).not_to include(@no_role)
       end
 
-      it 'does not find deleted people' do
+      it "does not find deleted people" do
         result = strategy(@deleted_leader.last_name[1..5]).list_people
 
         expect(result).not_to include(@deleted_leader)
       end
     end
 
-    context 'as root' do
+    context "as root" do
       let(:user) { people(:root) }
 
-      it 'finds every person' do
+      it "finds every person" do
         result = strategy(@bg_member.last_name[1..5]).list_people
 
         expect(result).to include(@bg_member)
@@ -150,25 +150,25 @@ describe SearchStrategies::Sql do
 
   end
 
-  describe '#query_people' do
+  describe "#query_people" do
 
-    context 'as leader' do
+    context "as leader" do
       let(:user) { people(:top_leader) }
 
-      it 'finds accessible person' do
+      it "finds accessible person" do
         result = strategy(@bg_leader.last_name[1..5]).query_people
 
         expect(result).to include(@bg_leader)
       end
 
-      it 'does not find not accessible person' do
+      it "does not find not accessible person" do
         result = strategy(@bg_member.last_name[1..5]).query_people
 
         expect(result).not_to include(@bg_member)
       end
 
-      context 'without any params' do
-        it 'returns nothing' do
+      context "without any params" do
+        it "returns nothing" do
           result = strategy.query_people
 
           expect(result).to eq(Person.none)
@@ -176,10 +176,10 @@ describe SearchStrategies::Sql do
       end
     end
 
-    context 'as unprivileged person' do
+    context "as unprivileged person" do
       let(:user) { Fabricate(:person) }
 
-      it 'finds zero people' do
+      it "finds zero people" do
         result = strategy(@bg_member.last_name[1..5]).query_people
 
         expect(result).to eq(Person.none)
@@ -188,19 +188,19 @@ describe SearchStrategies::Sql do
 
   end
 
-  describe '#query_groups' do
+  describe "#query_groups" do
 
-    context 'as leader' do
+    context "as leader" do
       let(:user) { people(:top_leader) }
 
-      it 'finds groups' do
+      it "finds groups" do
         result = strategy(groups(:bottom_layer_one).to_s[1..5]).query_groups
 
         expect(result).to include(groups(:bottom_layer_one))
       end
 
-      context 'without any params' do
-        it 'returns nothing' do
+      context "without any params" do
+        it "returns nothing" do
           result = strategy.query_groups
 
           expect(result).to eq([])
@@ -208,10 +208,10 @@ describe SearchStrategies::Sql do
       end
     end
 
-    context 'as unprivileged person' do
+    context "as unprivileged person" do
       let(:user) { Fabricate(:person) }
 
-      it 'finds groups' do
+      it "finds groups" do
         result = strategy(groups(:bottom_layer_one).to_s[1..5]).query_groups
 
         expect(result).to include(groups(:bottom_layer_one))
@@ -220,19 +220,19 @@ describe SearchStrategies::Sql do
 
   end
 
-  describe '#query_events' do
+  describe "#query_events" do
 
-    context 'as leader' do
+    context "as leader" do
       let(:user) { people(:top_leader) }
 
-      it 'finds events' do
+      it "finds events" do
         result = strategy(events(:top_course).to_s[1..5]).query_events
 
         expect(result).to include(events(:top_course))
       end
 
-      context 'without any params' do
-        it 'returns nothing' do
+      context "without any params" do
+        it "returns nothing" do
           result = strategy.query_events
 
           expect(result).to eq([])
@@ -240,10 +240,10 @@ describe SearchStrategies::Sql do
       end
     end
 
-    context 'as unprivileged person' do
+    context "as unprivileged person" do
       let(:user) { Fabricate(:person) }
 
-      it 'finds events' do
+      it "finds events" do
         result = strategy(events(:top_course).to_s[1..5]).query_events
 
         expect(result).to include(events(:top_course))

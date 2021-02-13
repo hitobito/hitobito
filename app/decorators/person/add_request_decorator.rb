@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::AddRequestDecorator < ApplicationDecorator
-  decorates 'person/add_request'
+  decorates "person/add_request"
   decorates_association :person
 
   def body_path
@@ -27,7 +27,7 @@ class Person::AddRequestDecorator < ApplicationDecorator
     when Person::AddRequest::Group
       body.class.find_role_type!(role_type).model_name.human
     when Person::AddRequest::Event
-      body.groups.join(', ')
+      body.groups.join(", ")
     when Person::AddRequest::MailingList
       body.group.to_s
     else

@@ -11,7 +11,7 @@ module Dropdown
     attr_reader :group
 
     def initialize(template, group)
-      super(template, template.t('groups.global.link.add'), :plus)
+      super(template, template.t("groups.global.link.add"), :plus)
       @group = group
       init_items
     end

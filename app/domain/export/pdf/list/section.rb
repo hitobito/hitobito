@@ -22,7 +22,7 @@ module Export::Pdf::List
 
     def text(*args)
       options = args.extract_options!
-      pdf.text args.join(' '), options
+      pdf.text args.join(" "), options
     end
 
     def move_down_line(line = 10)

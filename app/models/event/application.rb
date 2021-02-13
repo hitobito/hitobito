@@ -28,9 +28,9 @@ class Event::Application < ActiveRecord::Base
 
   has_one :event, through: :participation
 
-  belongs_to :priority_1, class_name: 'Event' #::Course
-  belongs_to :priority_2, class_name: 'Event' #::Course
-  belongs_to :priority_3, class_name: 'Event' #::Course
+  belongs_to :priority_1, class_name: "Event" #::Course
+  belongs_to :priority_2, class_name: "Event" #::Course
+  belongs_to :priority_3, class_name: "Event" #::Course
 
 
   validates_by_schema

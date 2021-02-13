@@ -76,7 +76,7 @@ class CustomContent < ActiveRecord::Base
   end
 
   def as_list(placeholders)
-    placeholders.to_s.split(',').collect(&:strip)
+    placeholders.to_s.split(",").collect(&:strip)
   end
 
   def assert_required_placeholders_are_used
@@ -92,7 +92,7 @@ class CustomContent < ActiveRecord::Base
     if non_existing
       raise(ArgumentError,
             "Placeholder(s) #{non_existing.join(', ')} given, " \
-            'but not defined for this custom content')
+            "but not defined for this custom content")
     end
   end
 end

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe UserSerializer do
 
@@ -22,11 +22,11 @@ describe UserSerializer do
 
   subject { hash[:people].first }
 
-  it 'contains home url' do
+  it "contains home url" do
     expect(subject).to have_key(:href)
   end
 
-  it 'contains authentication token' do
+  it "contains authentication token" do
     expect(subject).to have_key(:authentication_token)
   end
 

@@ -22,7 +22,7 @@ module MailRelay
 
     # The local domain where mails are received.
     class_attribute :mail_domain
-    self.mail_domain = 'localhost'
+    self.mail_domain = "localhost"
 
     attr_reader :message, :mail_log
 
@@ -75,8 +75,8 @@ module MailRelay
           message.mark_for_delete = false
           Airbrake.notify(exception)
           mail_hash = mail_log.mail_hash
-          Raven.capture_exception(exception, logger: 'mail_relay', extra: { mail_hash: mail_hash },
-                                             fingerprint: ['{{ default }}', mail_hash])
+          Raven.capture_exception(exception, logger: "mail_relay", extra: { mail_hash: mail_hash },
+                                             fingerprint: ["{{ default }}", mail_hash])
         end
       end
 
@@ -142,7 +142,7 @@ module MailRelay
     end
 
     def receiver_from_x_original_to_header
-      first_header('X-Original-To').to_s.split('@', 2).first.presence
+      first_header("X-Original-To").to_s.split("@", 2).first.presence
     end
 
     def first_header(header_name)
@@ -182,8 +182,8 @@ module MailRelay
       if defined?(ActionMailer::Base)
         ActionMailer::Base.wrap_delivery_behavior(message)
       end
-      message.header['Precedence'] = 'list'
-      message.header['List-Id'] = list_id
+      message.header["Precedence"] = "list"
+      message.header["List-Id"] = list_id
       message.deliver
     end
 
@@ -197,8 +197,8 @@ module MailRelay
 
     def bulk_mail
       bulk_mail = BulkMail.new(message, envelope_sender, delivery_report_to, receivers)
-      bulk_mail.headers['Precedence'] = 'list'
-      bulk_mail.headers['List-Id'] = list_id
+      bulk_mail.headers["Precedence"] = "list"
+      bulk_mail.headers["List-Id"] = list_id
       bulk_mail
     end
 

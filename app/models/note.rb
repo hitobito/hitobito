@@ -26,7 +26,7 @@ class Note < ActiveRecord::Base
   ### ASSOCIATIONS
 
   belongs_to :subject, polymorphic: true
-  belongs_to :author, class_name: 'Person'
+  belongs_to :author, class_name: "Person"
 
   ### VALIDATIONS
 
@@ -37,7 +37,7 @@ class Note < ActiveRecord::Base
 
   class << self
     def in_or_layer_below(group)
-      joins('LEFT JOIN roles ' \
+      joins("LEFT JOIN roles " \
             "ON roles.person_id = notes.subject_id AND notes.subject_type = '#{Person.sti_name}'").
         joins("INNER JOIN #{Group.quoted_table_name} " \
               "ON (#{Group.quoted_table_name}.id = notes.subject_id "\

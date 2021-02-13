@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Tabular::People::ParticipationsAddress do
 
@@ -16,9 +16,9 @@ describe Export::Tabular::People::ParticipationsAddress do
 
   subject { people_list.attribute_labels }
 
-  context 'address data' do
-    its([:first_name]) { should eq 'Vorname' }
-    its([:town]) { should eq 'Ort' }
+  context "address data" do
+    its([:first_name]) { should eq "Vorname" }
+    its([:town]) { should eq "Ort" }
   end
 
 end

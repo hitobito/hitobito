@@ -18,7 +18,7 @@
 #  waiting_list_comment :text
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::Application do
 
@@ -27,36 +27,36 @@ describe Event::Application do
   subject { Event::Application.new }
 
 
-  context '.pending' do
+  context ".pending" do
     let(:course) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk)) }
     subject { Event::Application.pending }
 
-    context 'with assigned event role' do
+    context "with assigned event role" do
       let(:participation) { Fabricate(:event_participation, person: people(:top_leader)) }
 
       before { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
 
-      it 'does not include non rejected appliations' do
+      it "does not include non rejected appliations" do
         application = Fabricate(:event_application, priority_1: course, participation: participation, rejected: false)
         is_expected.to eq([])
       end
 
-      it 'does not include rejected applications' do
+      it "does not include rejected applications" do
         application = Fabricate(:event_application, priority_1: course, participation: participation, rejected: true)
         is_expected.to eq([])
       end
 
     end
 
-    context 'without event role' do
+    context "without event role" do
       let(:participation) { Fabricate(:event_participation, person: people(:top_leader)) }
 
-      it 'does not include rejected appliations' do
+      it "does not include rejected appliations" do
         application = Fabricate(:event_application, priority_1: course, rejected: true, participation: participation)
         is_expected.to eq([])
       end
 
-      it 'includes non reject applications' do
+      it "includes non reject applications" do
         application = Fabricate(:event_application, priority_1: course, rejected: false, participation: participation)
         is_expected.to eq([application])
       end

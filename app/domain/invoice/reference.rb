@@ -8,7 +8,7 @@
 class Invoice::Reference
 
   QR_ID_RANGE = (30_000..31_999).freeze
-  SEPARATOR_SUBSTITUTE = 'ZZ'
+  SEPARATOR_SUBSTITUTE = "ZZ"
 
   def self.create(invoice)
     new(invoice).create
@@ -22,7 +22,7 @@ class Invoice::Reference
     if qr_without_qr_iban?
       scor_reference
     else
-      @invoice.esr_number.delete(' ')
+      @invoice.esr_number.delete(" ")
     end
   end
 
@@ -36,6 +36,6 @@ class Invoice::Reference
   end
 
   def qr_id
-    @invoice.iban.delete(' ')[4..8].to_i
+    @invoice.iban.delete(" ")[4..8].to_i
   end
 end

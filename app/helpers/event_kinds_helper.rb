@@ -18,7 +18,7 @@ module EventKindsHelper
                  options_from_collection_for_select(options, :id, :to_s,
                                                     selected.collect(&:id)),
                  multiple: true,
-                 class: 'span6')
+                 class: "span6")
     end
   end
 
@@ -26,9 +26,9 @@ module EventKindsHelper
     kinds = kind.qualification_kinds(category, role).group_by(&:id)
     grouped_ids = kind.grouped_qualification_kind_ids(category, role)
     or_separator = [
-      ' ',
-      content_tag(:span, t('event.kinds.qualifications.or'), class: 'muted'),
-      ' '
+      " ",
+      content_tag(:span, t("event.kinds.qualifications.or"), class: "muted"),
+      " "
     ]
     safe_join(grouped_ids, safe_join(or_separator)) do |ids|
       ids.collect { |id| kinds[id].first.to_s }.sort.to_sentence

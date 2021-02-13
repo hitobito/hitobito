@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
-describe 'people/_qualifications.html.haml' do
+require "spec_helper"
+describe "people/_qualifications.html.haml" do
 
   let(:top_leader) { people(:top_leader) }
   let(:top_group) { groups(:top_group) }
@@ -21,32 +21,32 @@ describe 'people/_qualifications.html.haml' do
   end
 
 
-  context 'table order' do
+  context "table order" do
     before do
       create_qualification
       create_qualification(finish_at_at: 1.year.ago, kind: gl)
       render
     end
 
-    it 'lists qualifications finish_at DESC ' do
-      expect(dom).to have_css('table tr', count: 2)
-      expect(dom.all('tr strong').first.text).to eq 'Super Lead'
-      expect(dom.all('tr strong').last.text).to eq 'Group Lead'
+    it "lists qualifications finish_at DESC " do
+      expect(dom).to have_css("table tr", count: 2)
+      expect(dom.all("tr strong").first.text).to eq "Super Lead"
+      expect(dom.all("tr strong").last.text).to eq "Group Lead"
     end
   end
 
-  context 'action links' do
+  context "action links" do
     let(:ql_sl) { create_qualification }
     before { ql_sl }
 
-    it 'lists delete buttons' do
+    it "lists delete buttons" do
       render
-      expect(dom.all('tr a').first[:href]).to eq path(ql_sl)
+      expect(dom.all("tr a").first[:href]).to eq path(ql_sl)
     end
 
-    it 'has button to add new qualification' do
+    it "has button to add new qualification" do
       render
-      expect(dom.all('a').first[:href]).to eq new_group_person_qualification_path(top_group, top_leader)
+      expect(dom.all("a").first[:href]).to eq new_group_person_qualification_path(top_group, top_leader)
     end
 
     def path(qualification)

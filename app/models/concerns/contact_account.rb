@@ -12,7 +12,7 @@ module ContactAccount
   included do
     class_attribute :value_attr
 
-    self.labels_translations_key = 'activerecord.attributes.contact_account.predefined_labels'
+    self.labels_translations_key = "activerecord.attributes.contact_account.predefined_labels"
 
     has_paper_trail meta: { main: :contactable }
 

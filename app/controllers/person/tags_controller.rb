@@ -62,7 +62,7 @@ class Person::TagsController < ApplicationController
     ActsAsTaggableOn::Tagging.find_or_create_by!(
       taggable: @person,
       tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
-      context: 'tags'
+      context: "tags"
     )
   end
 
@@ -72,7 +72,7 @@ class Person::TagsController < ApplicationController
 
   def available_tags(query)
     ActsAsTaggableOn::Tag
-      .where('name LIKE ?', "%#{query}%")
+      .where("name LIKE ?", "%#{query}%")
       .where.not(name: excluded_tags)
       .order(:name)
       .limit(10)

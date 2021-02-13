@@ -37,7 +37,7 @@ class InvoiceList < ActiveRecord::Base
   serialize :invalid_recipient_ids, Array
   belongs_to :group
   belongs_to :receiver, polymorphic: true
-  belongs_to :creator, class_name: 'Person'
+  belongs_to :creator, class_name: "Person"
   has_one :invoice, dependent: :destroy
   has_one :message, dependent: :nullify
   has_many :invoices, dependent: :destroy
@@ -72,7 +72,7 @@ class InvoiceList < ActiveRecord::Base
     if receiver
       receiver.people.unscope(:select).count
     else
-      recipient_ids.split(',').count
+      recipient_ids.split(",").count
     end
   end
 
@@ -80,7 +80,7 @@ class InvoiceList < ActiveRecord::Base
     if receiver
       receiver.people.first
     else
-      Person.find(recipient_ids.split(',').first)
+      Person.find(recipient_ids.split(",").first)
     end
   end
 
@@ -88,7 +88,7 @@ class InvoiceList < ActiveRecord::Base
     if receiver
       receiver.people
     else
-      Person.where(id: recipient_ids.split(','))
+      Person.where(id: recipient_ids.split(","))
     end
   end
 end

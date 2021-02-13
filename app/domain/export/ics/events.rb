@@ -27,16 +27,16 @@ module Export::Ics
       return event.description unless event.contact
 
       [
-        event.description, '',
+        event.description, "",
         event.contact.person_name,
         event.contact.phone_numbers.map { |pn| "#{pn.label}: #{pn.number}" if pn.public },
-        event.contact.email, '',
+        event.contact.email, "",
         url(event)
       ].flatten.compact.join("\n")
     end
 
     def url(event)
-      group_event_url(group_id: event.groups.first.id, id: event.id, host: ENV['RAILS_HOST_NAME'])
+      group_event_url(group_id: event.groups.first.id, id: event.id, host: ENV["RAILS_HOST_NAME"])
     end
 
     def generate_ical_from_event_date(event_date, event)
@@ -67,7 +67,7 @@ module Export::Ics
       if Duration.date_only?(datetime)
         Icalendar::Values::Date.new(datetime)
       else
-        Icalendar::Values::DateTime.new(datetime.utc, tzid: 'UTC')
+        Icalendar::Values::DateTime.new(datetime.utc, tzid: "UTC")
       end
     end
   end

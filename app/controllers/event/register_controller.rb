@@ -23,16 +23,16 @@ class Event::RegisterController < ApplicationController
         # send_login_and_render_index
         Event::SendRegisterLoginJob.new(user, group, event).enqueue!
         flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
-        render 'index'
+        render "index"
       else
         # register_new_person
         @person = Person.new(email: email)
         flash.now[:notice] = translate(:form_data_missing)
-        render 'register'
+        render "register"
       end
     else
       flash.now[:alert] = translate(:email_missing)
-      render 'index'
+      render "index"
     end
   end
 
@@ -42,7 +42,7 @@ class Event::RegisterController < ApplicationController
       flash[:notice] = translate(:registered)
       redirect_to new_group_event_participation_path(group, event)
     else
-      render 'register'
+      render "register"
     end
   end
 

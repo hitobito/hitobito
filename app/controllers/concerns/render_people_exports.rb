@@ -10,27 +10,27 @@ module RenderPeopleExports
 
   def render_pdf(people, group = nil)
     pdf = generate_pdf(people, group)
-    send_data pdf, type: :pdf, disposition: 'inline'
+    send_data pdf, type: :pdf, disposition: "inline"
   rescue Prawn::Errors::CannotFit
     redirect_back(fallback_location: group_people_path(group, returning: true),
-                  alert: t('people.pdf.cannot_fit'))
+                  alert: t("people.pdf.cannot_fit"))
   end
 
   def render_emails(people)
     emails = Person.mailing_emails_for(people)
-    render plain: emails.join(',')
+    render plain: emails.join(",")
   end
 
   def render_vcf(people)
     vcf = generate_vcf(people)
-    send_data vcf, type: :vcf, disposition: 'inline'
+    send_data vcf, type: :vcf, disposition: "inline"
   end
 
   private
 
   def generate_pdf(people, group)
     if params[:label_format_id]
-      household = params[:household] == 'true'
+      household = params[:household] == "true"
       Export::Pdf::Labels.new(find_and_remember_label_format).generate(people, household)
     else
       Export::Pdf::List.render(people, group)

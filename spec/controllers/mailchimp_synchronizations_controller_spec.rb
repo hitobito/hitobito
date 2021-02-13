@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe MailchimpSynchronizationsController do
   before { sign_in(user) }
@@ -7,7 +7,7 @@ describe MailchimpSynchronizationsController do
   let(:group) { groups(:top_group) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
 
-  context 'POST create' do
+  context "POST create" do
     it "runs a delayed job." do
       expect do
         post :create, params: { group_id: group.id, mailing_list_id: mailing_list.id }

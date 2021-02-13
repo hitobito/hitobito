@@ -13,7 +13,7 @@ module Sheet
     end
 
     def render_left_nav
-      view.render('shared/admin_left_nav')
+      view.render("shared/admin_left_nav")
     end
   end
 end

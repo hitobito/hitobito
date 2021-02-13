@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Paranoia::RegularScope do
 
@@ -17,22 +17,22 @@ describe Paranoia::RegularScope do
     kind.destroy # explicitly destroy kind in spec to test interaction with translations
   end
 
-  it 'default scope returns also deleted entries' do
+  it "default scope returns also deleted entries" do
     expect(Event::Kind.all.size).to eq(4)
   end
 
-  it 'list returns also deleted entries' do
+  it "list returns also deleted entries" do
     expect(Event::Kind.list.size).to eq(4)
   end
 
-  it 'keeps references to deleted entries' do
+  it "keeps references to deleted entries" do
     course.reload
     expect(course.kind).to eq(kind)
   end
 
-  it 'shows names of deleted entries' do
+  it "shows names of deleted entries" do
     course.reload
-    expect(course.kind.to_s).to eq('SLK (Scharleiterkurs)')
+    expect(course.kind.to_s).to eq("SLK (Scharleiterkurs)")
   end
 
 end

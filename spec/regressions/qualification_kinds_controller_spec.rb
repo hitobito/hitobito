@@ -7,7 +7,7 @@
 
 # encoding:  utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe QualificationKindsController, type: :controller do
 
@@ -18,10 +18,10 @@ describe QualificationKindsController, type: :controller do
   end
 
   let(:test_entry) { qualification_kinds(:sl) }
-  let(:test_entry_attrs) { { label: 'Super Leader', description: 'More bla', validity: 3 } }
+  let(:test_entry_attrs) { { label: "Super Leader", description: "More bla", validity: 3 } }
 
   before { sign_in(people(:top_leader)) }
 
-  include_examples 'crud controller', skip: [%w(show)]
+  include_examples "crud controller", skip: [%w(show)]
 
 end

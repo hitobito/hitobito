@@ -10,12 +10,12 @@ module Export::Pdf
 
     class Runner
       def render(participation)
-        pdf = Prawn::Document.new(page_size: 'A4',
+        pdf = Prawn::Document.new(page_size: "A4",
                                   page_layout: :portrait,
                                   margin: 2.cm)
         customize(pdf)
         sections.each { |section| section.new(pdf, participation).render }
-        pdf.number_pages(I18n.t('event.participations.print.page_of_pages'),
+        pdf.number_pages(I18n.t("event.participations.print.page_of_pages"),
                          at: [0, 0],
                          align: :right,
                          size: 9)

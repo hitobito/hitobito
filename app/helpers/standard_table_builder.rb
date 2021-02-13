@@ -38,7 +38,7 @@ class StandardTableBuilder
   # Define a column for the table with the given header, the html_options used for
   # each td and a block rendering the contents of a cell for the current entry.
   # The columns appear in the order they are defined.
-  def col(header = '', html_options = {}, &block)
+  def col(header = "", html_options = {}, &block)
     @cols << Col.new(header, html_options, @template, block)
   end
 
@@ -75,9 +75,9 @@ class StandardTableBuilder
     entry = entry_class.respond_to?(:new) ? entry_class.new : nil
     case column_type(entry, attr)
     when :integer, :float, :decimal
-      'right' unless association(entry, attr, :belongs_to)
+      "right" unless association(entry, attr, :belongs_to)
     when :boolean
-      'center'
+      "center"
     end
   end
 
@@ -113,7 +113,7 @@ class StandardTableBuilder
     delegate :content_tag, to: :template
 
     def content(entry)
-      entry.nil? ? '' : template.capture(entry, &block)
+      entry.nil? ? "" : template.capture(entry, &block)
     end
 
     def html_header
@@ -160,9 +160,9 @@ class StandardTableBuilder
     # The sort mark, if any, for the given attribute.
     def current_mark(attr)
       if current_sort?(attr)
-        (sort_dir(attr) == 'asc' ? ' &uarr;' : ' &darr;').html_safe # rubocop:disable Rails/OutputSafety
+        (sort_dir(attr) == "asc" ? " &uarr;" : " &darr;").html_safe # rubocop:disable Rails/OutputSafety
       else
-        ''
+        ""
       end
     end
 
@@ -173,7 +173,7 @@ class StandardTableBuilder
 
     # The sort direction to use in the sort link for the given attribute.
     def sort_dir(attr)
-      current_sort?(attr) && params[:sort_dir] == 'asc' ? 'desc' : 'asc'
+      current_sort?(attr) && params[:sort_dir] == "asc" ? "desc" : "asc"
     end
 
     # Delegate to template.

@@ -72,11 +72,11 @@ class Role
       # global groups
       @global_group_types.each do |group|
         types = local_role_types(group)
-        @role_types['Global'][group.label] = types if types.present?
+        @role_types["Global"][group.label] = types if types.present?
       end
 
       # global roles
-      @role_types['Global']['Global'] = @global_role_types if @global_role_types.present?
+      @role_types["Global"]["Global"] = @global_role_types if @global_role_types.present?
     end
 
     # groups appearing in the possible (sub) children of more than one layer

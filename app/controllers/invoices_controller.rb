@@ -17,7 +17,7 @@ class InvoicesController < CrudController
                          sequence_number: Invoice.order_by_sequence_number_statement }
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]
 
-  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
+  self.search_columns = [:title, :sequence_number, "people.last_name", "people.email"]
   self.permitted_attrs = [:title, :description, :state, :due_at,
                           :recipient_id, :recipient_email, :recipient_address,
                           :payment_information, :payment_purpose,
@@ -114,7 +114,7 @@ class InvoicesController < CrudController
           else
             Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
           end
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
+    send_data pdf, type: :pdf, disposition: "inline", filename: filename(:pdf, invoices)
   end
 
   def find_letter(invoices)
@@ -132,9 +132,9 @@ class InvoicesController < CrudController
   def render_labels(invoices)
     recipients = Invoice.to_contactables(invoices)
     pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)
-    send_data pdf, type: :pdf, disposition: 'inline'
+    send_data pdf, type: :pdf, disposition: "inline"
   rescue Prawn::Errors::CannotFit
-    redirect_back(fallback_location: group_ionvoices_path(group), alert: t('people.pdf.cannot_fit'))
+    redirect_back(fallback_location: group_ionvoices_path(group), alert: t("people.pdf.cannot_fit"))
   end
 
   def list_entries
@@ -152,8 +152,8 @@ class InvoicesController < CrudController
 
   def pdf_options
     {
-      articles: params[:articles] != 'false',
-      payment_slip: params[:payment_slip] != 'false'
+      articles: params[:articles] != "false",
+      payment_slip: params[:payment_slip] != "false"
     }
   end
 

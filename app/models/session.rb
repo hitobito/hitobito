@@ -25,7 +25,7 @@
 class Session < ActiveRecord::Base
 
   def self.outdated
-    where('updated_at < ?', 1.month.ago)
+    where("updated_at < ?", 1.month.ago)
   end
 
 end

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_relative Rails.root.join('app', 'models', 'countries')
+require_relative Rails.root.join("app", "models", "countries")
 
 module Contactable
 
@@ -24,7 +24,7 @@ module Contactable
     has_many :social_accounts, as: :contactable, dependent: :destroy
     has_many :additional_emails, as: :contactable, dependent: :destroy
 
-    belongs_to :location, foreign_key: 'zip_code', primary_key: 'zip_code'
+    belongs_to :location, foreign_key: "zip_code", primary_key: "zip_code"
 
     accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails,
                                   allow_destroy: true

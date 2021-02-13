@@ -48,7 +48,7 @@ class SubscriptionsController < CrudController
   # Override so we can pass preferred_labels from mailing_list
   def render_emails(people)
     emails = Person.mailing_emails_for(people, parent.labels)
-    render plain: emails.join(',')
+    render plain: emails.join(",")
   end
 
   def render_tabular_in_background(format)
@@ -69,13 +69,13 @@ class SubscriptionsController < CrudController
   def person_subscriptions(excluded = false)
     subscriptions_for_type(Person).
       where(excluded: excluded).
-      order('people.last_name', 'people.first_name')
+      order("people.last_name", "people.first_name")
   end
 
   def event_subscriptions
     subscriptions_for_type(Event)
-      .joins('LEFT JOIN event_translations ON events.id = event_translations.event_id')
-      .order('event_translations.name')
+      .joins("LEFT JOIN event_translations ON events.id = event_translations.event_id")
+      .order("event_translations.name")
   end
 
   def subscriptions_for_type(klass)

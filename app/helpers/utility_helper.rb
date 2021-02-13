@@ -16,8 +16,8 @@ module UtilityHelper
   # Returns the css class for the given flash level.
   def flash_class(level)
     case level
-    when :notice then 'success'
-    when :alert then 'error'
+    when :notice then "success"
+    when :alert then "error"
     else level.to_s
     end
   end
@@ -25,7 +25,7 @@ module UtilityHelper
   # Adds a class to the given options, even if there are already classes.
   def add_css_class(options, classes)
     if options[:class]
-      options[:class] += ' ' + classes
+      options[:class] += " " + classes
     else
       options[:class] = classes
     end
@@ -72,9 +72,9 @@ module UtilityHelper
   # Returns the name of the attr and it's corresponding field
   def assoc_and_id_attr(attr)
     attr = attr.to_s
-    if attr.end_with?('_id')
+    if attr.end_with?("_id")
       [attr[0..-4], attr]
-    elsif attr.end_with?('_ids')
+    elsif attr.end_with?("_ids")
       [attr[0..-5].pluralize, attr]
     else
       [attr, "#{attr}_id"]

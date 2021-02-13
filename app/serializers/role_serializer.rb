@@ -28,8 +28,8 @@ class RoleSerializer < ApplicationSerializer
   schema do
     json_api_properties
 
-    group_template_link 'roles.group'
-    group_template_link 'roles.layer_group'
+    group_template_link "roles.group"
+    group_template_link "roles.layer_group"
 
     property :role_type, item.class.label
     map_properties :label, :created_at, :updated_at, :deleted_at

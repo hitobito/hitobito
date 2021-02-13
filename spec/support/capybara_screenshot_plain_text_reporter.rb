@@ -1,5 +1,5 @@
-require 'capybara-screenshot/rspec/base_reporter'
-require 'capybara-screenshot/helpers'
+require "capybara-screenshot/rspec/base_reporter"
+require "capybara-screenshot/helpers"
 
 module CapybaraScreenshotPlainTextReporter
   extend Capybara::Screenshot::RSpec::BaseReporter
@@ -29,6 +29,6 @@ module CapybaraScreenshotPlainTextReporter
   end
 
   def long_padding
-    '  '
+    "  "
   end
 end

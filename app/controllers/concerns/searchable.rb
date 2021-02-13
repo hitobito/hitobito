@@ -57,7 +57,7 @@ module Searchable
     # All search columns divided in table and field names.
     def search_tables_and_fields
       @search_tables_and_fields ||= search_columns.map do |f|
-        if f.to_s.include?('.')
+        if f.to_s.include?(".")
           f
         else
           "#{model_class.table_name}.#{f}"

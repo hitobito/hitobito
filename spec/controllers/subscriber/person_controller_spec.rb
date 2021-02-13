@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Subscriber::PersonController do
 
@@ -15,19 +15,19 @@ describe Subscriber::PersonController do
   let(:user) { people(:top_leader) }
   let(:list) { Fabricate(:mailing_list, group: group) }
 
-  context 'POST create' do
-    it 'without subscriber_id replaces error' do
+  context "POST create" do
+    it "without subscriber_id replaces error" do
       post :create, params: {
                       group_id: group.id,
                       mailing_list_id: list.id
                     }
 
-      is_expected.to render_template('crud/new')
+      is_expected.to render_template("crud/new")
       expect(assigns(:subscription).errors.size).to eq(1)
-      expect(assigns(:subscription).errors[:base]).to eq ['Person muss ausgewählt werden']
+      expect(assigns(:subscription).errors[:base]).to eq ["Person muss ausgewählt werden"]
     end
 
-    it 'duplicated subscription replaces error' do
+    it "duplicated subscription replaces error" do
       Fabricate(:subscription, mailing_list: list, subscriber: user)
 
       expect do
@@ -39,12 +39,12 @@ describe Subscriber::PersonController do
              }
       end.not_to change(Subscription, :count)
 
-      is_expected.to render_template('crud/new')
+      is_expected.to render_template("crud/new")
       expect(assigns(:subscription).errors.size).to eq(1)
-      expect(assigns(:subscription).errors[:base]).to eq ['Person wurde bereits hinzugefügt']
+      expect(assigns(:subscription).errors[:base]).to eq ["Person wurde bereits hinzugefügt"]
     end
 
-    it 'updates exclude flag for existing subscription' do
+    it "updates exclude flag for existing subscription" do
       subscription = Fabricate(:subscription, mailing_list: list, subscriber: user, excluded: true)
 
       expect do
@@ -60,12 +60,12 @@ describe Subscriber::PersonController do
     end
 
 
-    context 'with required person add requests' do
+    context "with required person add requests" do
       let(:group) { groups(:bottom_layer_one) }
       let(:user)  { Fabricate(Group::BottomLayer::Leader.name, group: group).person }
       let(:person) { Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_two_one)).person }
 
-      it 'creates subscription if person already visible' do
+      it "creates subscription if person already visible" do
         group.update_column(:require_person_add_requests, true)
         post :create,
              params: {
@@ -78,7 +78,7 @@ describe Subscriber::PersonController do
         expect(people(:bottom_member).add_requests.count).to eq(0)
       end
 
-      it 'creates person add request' do
+      it "creates person add request" do
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
         post :create,
              params: {
@@ -92,7 +92,7 @@ describe Subscriber::PersonController do
         expect(person.reload.add_requests.count).to eq(1)
       end
 
-      it 'shows notification if person add request already exists' do
+      it "shows notification if person add request already exists" do
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
         Person::AddRequest::MailingList.create!(
           person: person,

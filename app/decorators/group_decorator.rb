@@ -36,18 +36,18 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def label_with_parent
-    h.safe_join([parent.to_s.presence, to_s].compact, ' > ')
+    h.safe_join([parent.to_s.presence, to_s].compact, " > ")
   end
 
   def link_with_layer
     links = with_layer.map { |g| h.link_to_if(can?(:show, g), g, g) }
-    h.safe_join(links, ' / ')
+    h.safe_join(links, " / ")
   end
 
   # compute layers and concat group names using a '/'
   def name_with_layer
     group_names = with_layer.map { |g| g.to_s }
-    group_names.join(' / ')
+    group_names.join(" / ")
   end
 
   def possible_events

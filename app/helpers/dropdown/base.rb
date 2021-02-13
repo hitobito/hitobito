@@ -20,7 +20,7 @@ module Dropdown
       @label = label
       @icon = icon
       @main_link = nil
-      @button_class = 'btn'
+      @button_class = "btn"
       @items = []
     end
 
@@ -54,12 +54,12 @@ module Dropdown
         label_with_link,
         content_tag(:a,
                     class: "dropdown-toggle #{button_class}",
-                    href: '#',
-                    data: { toggle: 'dropdown' }) do
+                    href: "#",
+                    data: { toggle: "dropdown" }) do
           safe_join([label_without_link,
-                     content_tag(:b, '', class: 'caret')].compact, ' ')
+                     content_tag(:b, "", class: "caret")].compact, " ")
         end
-      ].compact, ' ')
+      ].compact, " ")
     end
 
     def label_with_link
@@ -71,7 +71,7 @@ module Dropdown
     def label_without_link
       unless main_link
         if icon
-          safe_join([template.icon(icon), label], ' ')
+          safe_join([template.icon(icon), label], " ")
         else
           label
         end
@@ -79,7 +79,7 @@ module Dropdown
     end
 
     def render_items
-      template.content_tag_nested(:ul, items, class: 'dropdown-menu', role: 'menu') do |item|
+      template.content_tag_nested(:ul, items, class: "dropdown-menu", role: "menu") do |item|
         item.render(template)
       end
     end
@@ -113,12 +113,12 @@ module Dropdown
     end
 
     def css_class
-      'dropdown-submenu' if sub_items?
+      "dropdown-submenu" if sub_items?
     end
 
     def render_sub_items(template)
       if sub_items?
-        template.content_tag_nested(:ul, sub_items, class: 'dropdown-menu') do |sub|
+        template.content_tag_nested(:ul, sub_items, class: "dropdown-menu") do |sub|
           sub.render(template)
         end
       end
@@ -128,7 +128,7 @@ module Dropdown
 
   class Divider
     def render(template)
-      template.content_tag(:li, '', class: 'divider')
+      template.content_tag(:li, "", class: "divider")
     end
   end
 
@@ -138,7 +138,7 @@ module Dropdown
     end
 
     def render(template)
-      template.content_tag(:li, class: 'muted dropdown-menu-subtitle') do
+      template.content_tag(:li, class: "muted dropdown-menu-subtitle") do
         template.content_tag(:small, label, options)
       end
     end

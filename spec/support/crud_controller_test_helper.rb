@@ -87,7 +87,7 @@ module CrudControllerTestHelper
   def deep_attributes(attrs, entry)
     actual = {}
     attrs.keys.each do |key|
-      if key.to_s.ends_with?('_attributes')
+      if key.to_s.ends_with?("_attributes")
         assoc = entry.send(key.to_s[/(.+)_attributes/, 1])
         actual[key] = if assoc.respond_to?(:each)
           assoc.collect { |a| deep_attributes(attrs[key].first, a) }
@@ -132,14 +132,14 @@ module CrudControllerTestHelper
 
     # Test that entries are assigned.
     def it_should_assign_entries
-      it 'should assign entries' do
+      it "should assign entries" do
         expect(entries).to be_present
       end
     end
 
     # Test that entry is assigned.
     def it_should_assign_entry
-      it 'should assign entry' do
+      it "should assign entry" do
         expect(entry).to eq(test_entry)
       end
     end
@@ -151,7 +151,7 @@ module CrudControllerTestHelper
 
     # Test that test_entry_attrs are set on entry.
     def it_should_set_attrs
-      it 'should set params as entry attributes' do
+      it "should set params as entry attributes" do
         attrs = test_attrs
         expect(deep_attributes(attrs, entry)).to eq(attrs)
       end
@@ -159,17 +159,17 @@ module CrudControllerTestHelper
 
     # Test that the response redirects to the index action.
     def it_should_redirect_to_index
-      it { is_expected.to redirect_to scope_params.merge(action: 'index', returning: true) }
+      it { is_expected.to redirect_to scope_params.merge(action: "index", returning: true) }
     end
 
     # Test that the response redirects to the show action of the current entry.
     def it_should_redirect_to_show
-      it { is_expected.to redirect_to scope_params.merge(action: 'show', id: entry.id) }
+      it { is_expected.to redirect_to scope_params.merge(action: "show", id: entry.id) }
     end
 
     # Test that the given flash type is present.
     def it_should_have_flash(type, message = nil)
-      context 'flash' do
+      context "flash" do
         subject { flash }
 
         its([type]) do
@@ -180,7 +180,7 @@ module CrudControllerTestHelper
 
     # Test that not flash of the given type is present.
     def it_should_not_have_flash(type)
-      context 'flash' do
+      context "flash" do
         subject { flash }
         its([type]) { should be_blank }
       end
@@ -188,7 +188,7 @@ module CrudControllerTestHelper
 
     # Test that the current entry is persistend and valid, or not.
     def it_should_persist_entry(bool = true)
-      context 'entry' do
+      context "entry" do
         subject { entry }
 
         if bool

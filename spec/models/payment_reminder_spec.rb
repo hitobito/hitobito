@@ -16,33 +16,33 @@
 #  updated_at :datetime         not null
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PaymentReminder do
 
   let(:draft) { invoices(:invoice) }
   let(:sent)  { invoices(:sent) }
 
-  it 'creating a payment_reminder updates invoice' do
+  it "creating a payment_reminder updates invoice" do
     due_at = sent.due_at + 2.weeks
     expect do
       Fabricate(:payment_reminder, invoice: sent, due_at: due_at)
     end.to change { [sent.due_at, sent.state] }
     expect(sent.due_at).to eq due_at
-    expect(sent.state).to eq 'reminded'
+    expect(sent.state).to eq "reminded"
   end
 
-  it 'validates invoice is in state sent' do
+  it "validates invoice is in state sent" do
     reminder = Invoice.new.payment_reminders.build
     expect(reminder).to have(1).error_on(:invoice)
   end
 
-  it 'validates due_at is set' do
+  it "validates due_at is set" do
     reminder = sent.payment_reminders.build
     expect(reminder).to have(1).error_on(:due_at)
   end
 
-  it 'validates due_at is after invoice.due_date' do
+  it "validates due_at is after invoice.due_date" do
     reminder = sent.payment_reminders.build(due_at: sent.due_at)
     expect(reminder).to have(1).error_on(:due_at)
   end

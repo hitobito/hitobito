@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Tags::MergeController do
 
@@ -15,28 +15,28 @@ describe Tags::MergeController do
 
   before { sign_in(top_leader) }
 
-  describe 'GET #new' do
+  describe "GET #new" do
 
-    it 'suggests new tag name based on tagging count' do
-      get :new, xhr: true, params: { ids: [tag2.id, tag3.id].join(',') }
+    it "suggests new tag name based on tagging count" do
+      get :new, xhr: true, params: { ids: [tag2.id, tag3.id].join(",") }
 
       expect(assigns(:name)).to eq tag2.name
-      expect(assigns(:tag_names)).to eq [tag3.name, tag2.name].join(', ')
+      expect(assigns(:tag_names)).to eq [tag3.name, tag2.name].join(", ")
       expect(assigns(:src_tag_ids)).to eq [tag3.id]
     end
 
-    it 'is not possible to merge tags without permission' do
+    it "is not possible to merge tags without permission" do
       sign_in(bottom_member)
 
       expect do
-        get :new, params: { ids: [tag2.id, tag1.id].join(',') }
+        get :new, params: { ids: [tag2.id, tag1.id].join(",") }
       end.to raise_error(CanCan::AccessDenied)
     end
   end
 
-  describe 'POST #create' do
+  describe "POST #create" do
 
-    it 'merges tags' do
+    it "merges tags" do
       post :create, params: { tags_merge: { src_tag_ids: tag1.id, dst_tag_id: tag2.id, name: tag2.name }}
 
       expect(tag1_owner.reload.tags.to_a).to eq([tag2])
@@ -48,11 +48,11 @@ describe Tags::MergeController do
       expect(ActsAsTaggableOn::Tag.where(id: tag1.id)).not_to exist
 
       is_expected.to redirect_to tags_path
-      expect(flash[:notice]).to eq 'Die Tags wurden erfolgreich zusammengeführt.'
+      expect(flash[:notice]).to eq "Die Tags wurden erfolgreich zusammengeführt."
     end
 
-    it 'merges multiple tags' do
-      post :create, params: { tags_merge: { src_tag_ids: [tag3.id, tag1.id].join(','), dst_tag_id: tag2.id, name: tag2.name }}
+    it "merges multiple tags" do
+      post :create, params: { tags_merge: { src_tag_ids: [tag3.id, tag1.id].join(","), dst_tag_id: tag2.id, name: tag2.name }}
 
       expect(tag1_owner.reload.tags.to_a).to eq([tag2])
       expect(tag2_owner.reload.tags.to_a).to eq([tag2])
@@ -65,10 +65,10 @@ describe Tags::MergeController do
 
       is_expected.to redirect_to tags_path
 
-      expect(flash[:notice]).to eq 'Die Tags wurden erfolgreich zusammengeführt.'
+      expect(flash[:notice]).to eq "Die Tags wurden erfolgreich zusammengeführt."
     end
 
-    it 'is not possible to merge tags without permission' do
+    it "is not possible to merge tags without permission" do
       sign_in(bottom_member)
 
       expect do

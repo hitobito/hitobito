@@ -41,7 +41,7 @@ class HelpText < ActiveRecord::Base
   end
 
   def to_s
-    [entry.to_s, entry.translate(kind, name)].join(' - ') if persisted?
+    [entry.to_s, entry.translate(kind, name)].join(" - ") if persisted?
   end
 
   def entry
@@ -49,8 +49,8 @@ class HelpText < ActiveRecord::Base
   end
 
   def assign_combined_fields
-    assign_and_validate(:context, '--', :controller, :model)
-    assign_and_validate(:key, '.', :kind, :name)
+    assign_and_validate(:context, "--", :controller, :model)
+    assign_and_validate(:key, ".", :kind, :name)
   end
 
   private

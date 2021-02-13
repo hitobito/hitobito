@@ -7,7 +7,7 @@
 
 class Address::ValidationChecksMailer < ApplicationMailer
 
-  CONTENT_ADDRESS_VALIDATION_CHECKS = 'address_validation_checks'.freeze
+  CONTENT_ADDRESS_VALIDATION_CHECKS = "address_validation_checks".freeze
 
   def validation_checks(recipient_email, invalid_people)
     @invalid_people = invalid_people

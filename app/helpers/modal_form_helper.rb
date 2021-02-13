@@ -14,8 +14,8 @@ module ModalFormHelper
     options[:html] ||= {}
     attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
     standard_form(path_args(entry), options) do |form|
-      content = content_tag(:div, class: 'modal-body') do
-        content_tag(:div, class: 'row-fluid') do
+      content = content_tag(:div, class: "modal-body") do
+        content_tag(:div, class: "row-fluid") do
           c = form.error_messages
           c << form.labeled_input_fields(*attrs)
           c
@@ -29,11 +29,11 @@ module ModalFormHelper
   def modal_submit_buttons(form, submit_label: ti(:'button.save'))
     onclick = "event.preventDefault(); $('#modal-crud').modal('hide')"
 
-    content_tag(:div, class: 'modal-footer') do
-      btns = content_tag(:div, class: 'btn-group') do
-        form.button(submit_label, class: 'btn btn-primary')
+    content_tag(:div, class: "modal-footer") do
+      btns = content_tag(:div, class: "btn-group") do
+        form.button(submit_label, class: "btn btn-primary")
       end
-      btns << link_to(ti(:"button.cancel"), '#', onclick: onclick, class: 'link cancel')
+      btns << link_to(ti(:"button.cancel"), "#", onclick: onclick, class: "link cancel")
 
       btns
     end

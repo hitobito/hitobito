@@ -5,22 +5,22 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-if Rake::Task.task_defined?('spec:features') # only if current environment knows rspec
-  Rake::Task['spec:features'].actions.clear
+if Rake::Task.task_defined?("spec:features") # only if current environment knows rspec
+  Rake::Task["spec:features"].actions.clear
   namespace :spec do
     RSpec::Core::RakeTask.new(:sphinx) do |t|
-      t.pattern = './spec/**/*_spec.rb'
-      t.rspec_opts = '--tag sphinx'
+      t.pattern = "./spec/**/*_spec.rb"
+      t.rspec_opts = "--tag sphinx"
     end
 
     RSpec::Core::RakeTask.new(:features) do |t|
-      t.pattern = './spec/features/**/*_spec.rb'
-      t.rspec_opts = '--tag type:feature'
+      t.pattern = "./spec/features/**/*_spec.rb"
+      t.rspec_opts = "--tag type:feature"
     end
 
     RSpec::Core::RakeTask.new(:performance) do |t|
-      t.pattern = './spec/performance/**/*_spec.rb'
-      t.rspec_opts = '--tag performance:true'
+      t.pattern = "./spec/performance/**/*_spec.rb"
+      t.rspec_opts = "--tag performance:true"
     end
 
     [:abilities, :decorators, :domain, :jobs, :regressions].each do |dir|

@@ -8,7 +8,7 @@
 class Person::Filter::Base
 
   # - has not to be encoded in URLs, ',' must be and thus generate a much longer string.
-  ID_URL_SEPARATOR = '-'.freeze
+  ID_URL_SEPARATOR = "-".freeze
 
   class_attribute :required_ability, :permitted_args
 

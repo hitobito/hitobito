@@ -7,10 +7,10 @@
 
 namespace :db do
 
-  desc 'Empties the database and loads the seeds again'
-  task reseed: ['db:clobber', 'db:schema:load', 'db:seed', 'wagon:seed']
+  desc "Empties the database and loads the seeds again"
+  task reseed: ["db:clobber", "db:schema:load", "db:seed", "wagon:seed"]
 
-  desc 'Deletes all data from the database, but keeps the tables'
+  desc "Deletes all data from the database, but keeps the tables"
   task truncate: :environment do
     con = ActiveRecord::Base.connection
     tables = con.tables - %w(schema_migrations delayed_jobs)
@@ -21,7 +21,7 @@ namespace :db do
     end
   end
 
-  desc 'Completely empties the database'
+  desc "Completely empties the database"
   task clobber: :environment do
     con = ActiveRecord::Base.connection
     ActiveRecord::Base.transaction do

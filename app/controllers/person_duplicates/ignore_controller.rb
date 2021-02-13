@@ -21,7 +21,7 @@ module PersonDuplicates
     private
     
     def success_message
-      I18n.t('person_duplicates.ignore.success')
+      I18n.t("person_duplicates.ignore.success")
     end
 
     def entry

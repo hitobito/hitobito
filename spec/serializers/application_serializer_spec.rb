@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe ApplicationSerializer do
 
@@ -33,7 +33,7 @@ describe ApplicationSerializer do
         s.json_api_properties
       end
 
-      template_link(:primary_group, 'groups', '/groups/%7Bprimary_group%7D', returning: true)
+      template_link(:primary_group, "groups", "/groups/%7Bprimary_group%7D", returning: true)
 
       modification_properties
     end
@@ -64,84 +64,84 @@ describe ApplicationSerializer do
 
   subject { hash[:people].first }
 
-  context 'format' do
-    it 'contains plural main key with one entry' do
+  context "format" do
+    it "contains plural main key with one entry" do
       expect(hash).to have_key(:people)
       expect(hash[:people].size).to eq(1)
     end
   end
 
 
-  context '#extensions' do
-    it 'contains all extension properties' do
+  context "#extensions" do
+    it "contains all extension properties" do
       is_expected.to have_key(:town)
       is_expected.to have_key(:email)
       is_expected.not_to have_key(:country)
     end
   end
 
-  context '#json_api_properties' do
-    it 'contains id as string' do
+  context "#json_api_properties" do
+    it "contains id as string" do
       expect(subject[:id]).to eq(person.id.to_s)
     end
 
-    it 'contains plural type' do
-      expect(subject[:type]).to eq('people')
+    it "contains plural type" do
+      expect(subject[:type]).to eq("people")
     end
   end
 
-  context '#modification_properties' do
-    it 'contains created_at and updated_at' do
+  context "#modification_properties" do
+    it "contains created_at and updated_at" do
       expect(subject[:created_at]).to be_kind_of(Time)
       expect(subject[:updated_at]).to be_kind_of(Time)
     end
 
-    it 'contains creator_id and updater_id' do
+    it "contains creator_id and updater_id" do
       expect(subject[:links][:creator]).to eq(person.id.to_s)
       expect(subject[:links][:updater]).to be_nil
     end
 
-    it 'contains links for creator and updater' do
-      expect(hash[:links]['people.creator']).to have_key(:href)
-      expect(hash[:links]['people.creator'][:type]).to eq('people')
-      expect(hash[:links]['people.updater']).to have_key(:href)
-      expect(hash[:links]['people.updater'][:type]).to eq('people')
+    it "contains links for creator and updater" do
+      expect(hash[:links]["people.creator"]).to have_key(:href)
+      expect(hash[:links]["people.creator"][:type]).to eq("people")
+      expect(hash[:links]["people.updater"]).to have_key(:href)
+      expect(hash[:links]["people.updater"][:type]).to eq("people")
     end
   end
 
-  context '#template_link' do
-    it 'are added to top level links' do
-      expect(hash[:links][:primary_group][:type]).to eq('groups')
-      expect(hash[:links][:primary_group][:href]).to eq('/groups/{primary_group}')
+  context "#template_link" do
+    it "are added to top level links" do
+      expect(hash[:links][:primary_group][:type]).to eq("groups")
+      expect(hash[:links][:primary_group][:href]).to eq("/groups/{primary_group}")
       expect(hash[:links][:primary_group][:returning]).to eq(true)
     end
   end
 
-  context '#unify_linked_entities' do
-    context 'with attributes' do
-      it 'contains linked entries only once' do
-        expect(hash[:linked]['groups'].size).to eq(1)
+  context "#unify_linked_entities" do
+    context "with attributes" do
+      it "contains linked entries only once" do
+        expect(hash[:linked]["groups"].size).to eq(1)
       end
 
-      it 'contains link data' do
-        group = hash[:linked]['groups'].first
+      it "contains link data" do
+        group = hash[:linked]["groups"].first
         expect(group[:id]).to eq(person.primary_group_id.to_s)
-        expect(group[:name]).to eq('TopGroup')
+        expect(group[:name]).to eq("TopGroup")
       end
 
-      it 'contains only ids in item links' do
+      it "contains only ids in item links" do
         expect(subject[:links][:primary_group]).to eq(person.primary_group_id.to_s)
         expect(subject[:links][:default_group]).to eq(person.primary_group_id.to_s)
       end
     end
 
-    context 'without attributes' do
-      it 'contains only ids in item links' do
+    context "without attributes" do
+      it "contains only ids in item links" do
         expect(subject[:links][:roles]).to eq([person.roles.first.id.to_s])
       end
 
-      it 'does not contain linked entries' do
-        expect(hash[:linked]).not_to have_key('roles')
+      it "does not contain linked entries" do
+        expect(hash[:linked]).not_to have_key("roles")
       end
     end
   end

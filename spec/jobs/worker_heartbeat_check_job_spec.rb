@@ -5,12 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe WorkerHeartbeatCheckJob do
   subject { WorkerHeartbeatCheckJob.new }
 
-  it 'relays mails and gets rescheduled' do
+  it "relays mails and gets rescheduled" do
     expect(Delayed::Heartbeat).to receive(
       :delete_workers_with_different_version
     )

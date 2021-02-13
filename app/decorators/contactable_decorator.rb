@@ -12,13 +12,13 @@ module ContactableDecorator
   end
 
   def complete_address
-    html = ''.html_safe
+    html = "".html_safe
 
     prepend_complete_address(html)
 
     html << safe_join(address.split("\n"), br) << br if address?
     html << zip_code.to_s if zip_code?
-    html << ' ' << town if town?
+    html << " " << town if town?
     html << country_unless_ignored
 
     content_tag(:p, html)
@@ -40,7 +40,7 @@ module ContactableDecorator
   end
 
   def all_emails(only_public = true)
-    ''.html_safe <<
+    "".html_safe <<
       primary_email <<
       all_additional_emails(only_public)
   end
@@ -82,7 +82,7 @@ module ContactableDecorator
   end
 
   def country_unless_ignored
-    html = ''.html_safe
+    html = "".html_safe
     unless ignored_country?
       html << br if zip_code? || town?
       html << country_label

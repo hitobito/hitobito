@@ -8,7 +8,7 @@
 module MailingListsHelper
 
   def format_mailing_list_preferred_labels(mailing_list)
-    safe_join mailing_list.preferred_labels.sort, ', '
+    safe_join mailing_list.preferred_labels.sort, ", "
   end
 
   def button_toggle_subscription
@@ -30,24 +30,24 @@ module MailingListsHelper
       content = []
       content << content_tag(:span, I18n.l(last_synced_at, format: :short)) if last_synced_at
       content << content_tag(:span, badge(text, badge_class), title: exception)
-      content_tag(:div, safe_join(content.compact, ' '))
+      content_tag(:div, safe_join(content.compact, " "))
     end
   end
 
   private
 
   def button_subscribe
-    action_button(t('mailing_list_decorator.unsubscribe'),
+    action_button(t("mailing_list_decorator.unsubscribe"),
                   group_mailing_list_user_path(@group, entry),
                   :minus,
-                  method: 'delete')
+                  method: "delete")
   end
 
   def button_unsubscribe
-    action_button(t('mailing_list_decorator.subscribe'),
+    action_button(t("mailing_list_decorator.subscribe"),
                   group_mailing_list_user_path(@group, entry),
                   :plus,
-                  method: 'post')
+                  method: "post")
   end
 
 end

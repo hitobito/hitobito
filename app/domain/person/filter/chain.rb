@@ -18,7 +18,7 @@ class Person::Filter::Chain
   # Used for `serialize` method in ActiveRecord
   class << self
     def load(yaml)
-      new(YAML.safe_load(yaml || ''))
+      new(YAML.safe_load(yaml || ""))
     end
 
     def dump(obj)

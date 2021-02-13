@@ -23,7 +23,7 @@
 # updated and deleted at the same time.
 class PeopleRelation < ActiveRecord::Base
 
-  KIND_TRANSLATION_KEY = 'activerecord.attributes.people_relation.kinds'
+  KIND_TRANSLATION_KEY = "activerecord.attributes.people_relation.kinds"
 
   class_attribute :kind_opposites
   self.kind_opposites = {}
@@ -33,8 +33,8 @@ class PeopleRelation < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :head, class_name: 'Person'
-  belongs_to :tail, class_name: 'Person'
+  belongs_to :head, class_name: "Person"
+  belongs_to :tail, class_name: "Person"
 
   ### VALIDATIONS
 

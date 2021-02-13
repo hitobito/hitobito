@@ -30,7 +30,7 @@ class Person::PictureUploader < Uploader::Base
   end
 
   def png_name
-    ['profil', version_name].compact.join('_') + '.png'
+    ["profil", version_name].compact.join("_") + ".png"
   end
 
   private
@@ -40,7 +40,7 @@ class Person::PictureUploader < Uploader::Base
     manipulate! do |img|
       if img.dimensions.any? { |i| i > MAX_DIMENSION }
         raise CarrierWave::ProcessingError,
-              I18n.t('errors.messages.dimensions_too_large', maximum: MAX_DIMENSION)
+              I18n.t("errors.messages.dimensions_too_large", maximum: MAX_DIMENSION)
       end
       img
     end

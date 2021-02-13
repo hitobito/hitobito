@@ -53,7 +53,7 @@ module Import
     end
 
     def duplicate_conditions(attrs)
-      [''].tap do |conditions|
+      [""].tap do |conditions|
         append_duplicate_conditions(attrs, conditions)
         append_email_condition(attrs, conditions)
       end
@@ -61,7 +61,7 @@ module Import
 
     def append_duplicate_conditions(attrs, conditions)
       exisiting_duplicate_attrs(attrs).each do |key, value|
-        conditions.first << ' AND ' if conditions.first.present?
+        conditions.first << " AND " if conditions.first.present?
         conditions.first << if %w(first_name last_name company_name).include?(key.to_s)
                               "#{key} = ?"
                             else
@@ -77,7 +77,7 @@ module Import
         if conditions.first.present?
           conditions[0] = "(#{conditions[0]}) OR "
         end
-        conditions.first << 'email = ?'
+        conditions.first << "email = ?"
         conditions << attrs[:email]
       end
     end

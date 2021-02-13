@@ -65,7 +65,7 @@ module Export::Pdf::Participation
 
     def text(*args)
       options = args.extract_options!
-      pdf.text args.join(' '), options
+      pdf.text args.join(" "), options
     end
 
     def move_down_line(line = 10)
@@ -78,7 +78,7 @@ module Export::Pdf::Participation
 
     def labeled_attr(model, attr)
       value = model.send(attr)
-      text [model.class.human_attribute_name(attr), f(value)].join(': ') if value.present?
+      text [model.class.human_attribute_name(attr), f(value)].join(": ") if value.present?
     end
 
     def f(value)
@@ -108,7 +108,7 @@ module Export::Pdf::Participation
     end
 
     def i18n_event_postfix
-      event.class.to_s.underscore.tr('/', '_')
+      event.class.to_s.underscore.tr("/", "_")
     end
   end
 end

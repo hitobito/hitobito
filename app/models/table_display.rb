@@ -50,7 +50,7 @@ class TableDisplay < ActiveRecord::Base
   end
 
   def resolve(object, path)
-    *parts, attr = *path.to_s.split('.')
+    *parts, attr = *path.to_s.split(".")
     parts.empty? ? [object, attr] : [parts.inject(object) { |obj, name| obj.send(name) }, attr]
   end
 
@@ -67,7 +67,7 @@ class TableDisplay < ActiveRecord::Base
 
   def reject_internal_attributes
     selected.reject! do |attr|
-      Person::INTERNAL_ATTRS.include?(attr.split('.').last.to_sym)
+      Person::INTERNAL_ATTRS.include?(attr.split(".").last.to_sym)
     end
   end
 end

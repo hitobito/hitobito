@@ -5,4 +5,4 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-json.partial! 'devise/sessions/user'
+json.partial! "devise/sessions/user"

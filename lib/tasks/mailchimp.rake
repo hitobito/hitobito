@@ -1,7 +1,7 @@
-require 'rubygems'
-require 'rubygems/package'
-require 'zlib'
-require 'fileutils'
+require "rubygems"
+require "rubygems/package"
+require "zlib"
+require "fileutils"
 
 namespace :mailchimp do
   # Extract batch id from results, get status (generate response file), download and extract
@@ -11,7 +11,7 @@ namespace :mailchimp do
     end
 
     def directory
-      name = [@list.id, @list.name.parameterize, @list.people.to_a.count].join('-')
+      name = [@list.id, @list.name.parameterize, @list.people.to_a.count].join("-")
       Rails.root.join("tmp/mailchimp/#{name}").tap do |dir|
         FileUtils.mkdir_p(dir)
       end
@@ -42,19 +42,19 @@ namespace :mailchimp do
   end
 
   # Batch runs expire after 10 days
-  desc 'Fetch non expired mailchimp batch runs'
+  desc "Fetch non expired mailchimp batch runs"
   task :fetch => [:environment] do
-    MailingList.mailchimp.where('mailchimp_last_synced_at > ?', 10.day.ago).find_each do |list|
+    MailingList.mailchimp.where("mailchimp_last_synced_at > ?", 10.day.ago).find_each do |list|
       Client.new(list).fetch
     end
   end
 
-  desc 'List largest files'
+  desc "List largest files"
   task :list do
     sh "find ./ -iname '*.json'  -printf '%s %p\n'| sort -nr | head -10"
   end
 
-  desc 'Show details for file'
+  desc "Show details for file"
   task :details, :file do |t, args|
     # Show details for error code 400
     sh "cat #{args[:file]} | jq ' .[] | select(.status_code==400) | .response | fromjson | .detail'"

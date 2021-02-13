@@ -18,12 +18,12 @@ module RolesHelper
   end
 
   def swappable_role_add_fieldset(*keys)
-    title = t('roles.person_fields.text_with_alternative_link_html',
+    title = t("roles.person_fields.text_with_alternative_link_html",
               text: t(".#{keys.last}_person"),
-              link: link_to(t(".#{keys.first}_person"), '#', data: { swap: 'person-fields' }))
+              link: link_to(t(".#{keys.first}_person"), "#", data: { swap: "person-fields" }))
 
     visible = keys.first == :create_new ? !entry.person.changed? : entry.person.changed?
-    field_set_tag(title, class: 'person-fields', style: element_visible(visible)) { yield }
+    field_set_tag(title, class: "person-fields", style: element_visible(visible)) { yield }
   end
 
   def format_role_created_at(role)
@@ -49,7 +49,7 @@ module RolesHelper
     base_level = nil
     Group.each_with_level(@group_selection) do |group, level|
       base_level ||= level
-      label = ('&nbsp; ' * (level - base_level)).html_safe + h(group.to_s)
+      label = ("&nbsp; " * (level - base_level)).html_safe + h(group.to_s)
       options << [label, group.id]
     end
     options

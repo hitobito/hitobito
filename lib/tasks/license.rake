@@ -7,12 +7,12 @@
 
 class Licenser
   FORMATS = {
-    rb: '#  ',
-    rake: '#  ',
-    yml: '#  ',
-    haml: '-#  ',
-    coffee: '#  ',
-    scss: '//  '
+    rb: "#  ",
+    rake: "#  ",
+    yml: "#  ",
+    haml: "-#  ",
+    coffee: "#  ",
+    scss: "//  "
   }.freeze
 
   EXCLUDES = %w(
@@ -29,7 +29,7 @@ class Licenser
   ).freeze
 
   SHEBANG_COMMENT_EXTENSIONS = [:rb, :rake].freeze
-  SHEBANG_COMMENT_STRING     = '# frozen_string_literal: true'
+  SHEBANG_COMMENT_STRING     = "# frozen_string_literal: true"
   SHEBANG_COMMENT_PATTERN    = Regexp.union(
     /#\s*encoding: utf-8\n?/i,
     /#\s*frozen_string_literal: true\n?/i
@@ -82,18 +82,18 @@ class Licenser
 
   def insert_preamble(content, format)
     if format.file_with_shebang_comment? && content.strip =~ /\A#{SHEBANG_COMMENT_PATTERN}/i
-      content.gsub!(/#{SHEBANG_COMMENT_PATTERN}\s*/mi, '')
+      content.gsub!(/#{SHEBANG_COMMENT_PATTERN}\s*/mi, "")
     end
     format.preamble + content
   end
 
   def remove_preamble(content, format)
-    content.gsub!(/\A#{format.copyright_pattern}.*$/, '')
+    content.gsub!(/\A#{format.copyright_pattern}.*$/, "")
     while content.start_with?("\n#{format.comment}")
-      content.gsub!(/\A\n#{format.comment}\s+.*$/, '')
+      content.gsub!(/\A\n#{format.comment}\s+.*$/, "")
     end
-    content.gsub!(/\A\s*\n/, '')
-    content.gsub!(/\A\s*\n/, '')
+    content.gsub!(/\A\s*\n/, "")
+    content.gsub!(/\A\s*\n/, "")
     if format.file_with_shebang_comment?
       content = SHEBANG_COMMENT_STRING + "\n\n" + content
     end
@@ -111,7 +111,7 @@ class Licenser
         next unless content
 
         puts file
-        File.open(file, 'w') { |f| f.print content }
+        File.open(file, "w") { |f| f.print content }
       end
     end
   end
@@ -148,22 +148,22 @@ end
 
 namespace :license do
   task :config do # rubocop:disable Rails/RakeEnvironment
-    @licenser = Licenser.new('hitobito',
-                             'Jungwacht Blauring Schweiz',
-                             'https://github.com/hitobito/hitobito')
+    @licenser = Licenser.new("hitobito",
+                             "Jungwacht Blauring Schweiz",
+                             "https://github.com/hitobito/hitobito")
   end
 
-  desc 'Insert the license preamble in all source files'
+  desc "Insert the license preamble in all source files"
   task insert: :config do
     @licenser.insert
   end
 
-  desc 'Update or insert the license preamble in all source files'
+  desc "Update or insert the license preamble in all source files"
   task update: :config do
     @licenser.update
   end
 
-  desc 'Remove the license preamble from all source files'
+  desc "Remove the license preamble from all source files"
   task remove: :config do
     @licenser.remove
   end

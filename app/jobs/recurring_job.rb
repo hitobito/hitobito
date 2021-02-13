@@ -55,7 +55,7 @@ class RecurringJob < BaseJob
   def others_scheduled?
     # when called from a job worker, @delayed_job is set.
     @delayed_job &&
-    delayed_jobs.where('id > ?', @delayed_job.id).exists?
+    delayed_jobs.where("id > ?", @delayed_job.id).exists?
   end
 
   def next_run

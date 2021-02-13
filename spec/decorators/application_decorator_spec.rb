@@ -5,15 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe ApplicationDecorator do
-  it '#klass returns model class'  do
+  it "#klass returns model class"  do
     dec = GroupDecorator.new(Group.new)
     expect(dec.klass).to eq Group
   end
 
-  context 'userstamp' do
+  context "userstamp" do
     before do
       Person.reset_stamper
       @person = Fabricate(:person)
@@ -24,7 +24,7 @@ describe ApplicationDecorator do
       @person.save!
     end
 
-    it 'should return date and time with updater/creator' do
+    it "should return date and time with updater/creator" do
       dec = PersonDecorator.new(@person)
       expect(@person.creator).to eq(@creator)
       expect(@person.updater).to eq(@updater)
@@ -38,13 +38,13 @@ describe ApplicationDecorator do
         # this weird bitch pops up on rare occasions - let's figure out why
         puts e.message
         puts e.backtrace.join("\n\t")
-        puts 'Person:'
+        puts "Person:"
         p @person
-        puts 'Creator:'
+        puts "Creator:"
         p @creator
-        puts 'Updater:'
+        puts "Updater:"
         p @updater
-        puts 'Other person ids:'
+        puts "Other person ids:"
         p Person.pluck(:id)
       end
     end

@@ -51,8 +51,8 @@ class HelpTexts::Renderer
   end
 
   def render_trigger(help_text)
-    content_tag(:span, class: 'help-text-trigger', data: { key: dom_id(help_text) }) do
-      icon('info-circle')
+    content_tag(:span, class: "help-text-trigger", data: { key: dom_id(help_text) }) do
+      icon("info-circle")
     end
   end
 
@@ -66,13 +66,13 @@ class HelpTexts::Renderer
   end
 
   def controller_name
-    template.controller.class.to_s.underscore.gsub('_controller', '')
+    template.controller.class.to_s.underscore.gsub("_controller", "")
   end
 
   def derive_entry
     if params[:type]
       params[:type].constantize.new
-    elsif action_name == 'index'
+    elsif action_name == "index"
       model_class.new
     else
       entry = template.controller.send(:entry)

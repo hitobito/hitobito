@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'Person Notes', js: true do
+describe "Person Notes", js: true do
 
   subject { page }
   let(:group) { groups(:top_group) }
@@ -20,48 +20,48 @@ describe 'Person Notes', js: true do
     sign_in(user)
   end
 
-  context 'creation' do
+  context "creation" do
     before do
       visit group_person_path(group_id: group.id, id: person.id)
     end
 
-    it 'adds newly created notes' do
-      expect(page).to have_content('Keine Einträge gefunden')
+    it "adds newly created notes" do
+      expect(page).to have_content("Keine Einträge gefunden")
 
       # open form
-      find('#notes-new-button').click
-      expect(page).to have_selector('#note_text')
+      find("#notes-new-button").click
+      expect(page).to have_selector("#note_text")
 
       # submit without input
-      find('#new_note button').click
-      expect(page).to have_selector('#notes-error', text: 'Text muss ausgefüllt werden')
+      find("#new_note button").click
+      expect(page).to have_selector("#notes-error", text: "Text muss ausgefüllt werden")
 
 
       # submit with input
       expect do
-        fill_in('note_text', with: 'ladida')
-        find('#new_note button').click
-        expect(page).to have_no_content('Keine Einträge gefunden')
-        expect(page).to have_selector('#notes-list .note', count: 1)
+        fill_in("note_text", with: "ladida")
+        find("#new_note button").click
+        expect(page).to have_no_content("Keine Einträge gefunden")
+        expect(page).to have_selector("#notes-list .note", count: 1)
       end.to change { Note.count }.by(1)
     end
   end
 
-  context 'deletion' do
+  context "deletion" do
     before do
-      @n1 = group.notes.create!(text: 'foo', author: user)
-      @n2 = group.notes.create!(text: 'bar', author: user)
+      @n1 = group.notes.create!(text: "foo", author: user)
+      @n2 = group.notes.create!(text: "bar", author: user)
       visit group_path(id: group.id)
     end
 
-    it 'removes deleted notes' do
-      expect(page).to have_selector('#notes-list .note', count: 2)
+    it "removes deleted notes" do
+      expect(page).to have_selector("#notes-list .note", count: 2)
 
       expect do
         accept_confirm do
           find("#note_#{@n1.id} a[data-method=delete]").click
         end
-        expect(page).to have_selector('#notes-list .note', count: 1)
+        expect(page).to have_selector("#notes-list .note", count: 1)
       end.to change { Note.count }.by(-1)
     end
   end

@@ -25,8 +25,8 @@ class Event::Kind < ActiveRecord::Base
 
   has_many :events
 
-  has_many :event_kind_qualification_kinds, class_name: 'Event::KindQualificationKind',
-                                            foreign_key: 'event_kind_id'
+  has_many :event_kind_qualification_kinds, class_name: "Event::KindQualificationKind",
+                                            foreign_key: "event_kind_id"
 
 
   ### VALIDATIONS
@@ -55,7 +55,7 @@ class Event::Kind < ActiveRecord::Base
 
   # is this event type qualifying
   def qualifying?
-    event_kind_qualification_kinds.where('category IN (?)', %w(qualification prolongation)).exists?
+    event_kind_qualification_kinds.where("category IN (?)", %w(qualification prolongation)).exists?
   end
 
   def qualification_kinds(category, role)

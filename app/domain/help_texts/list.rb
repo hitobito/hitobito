@@ -15,9 +15,9 @@ class HelpTexts::List
   def order_statement
     prepared_infos.collect(&:last).uniq.sort_by do |model_class|
       model_class.model_name.human
-    end.each_with_index.inject('CASE model') do |sql, (model_class, index)|
+    end.each_with_index.inject("CASE model") do |sql, (model_class, index)|
       sql += " WHEN '#{model_class.to_s.underscore}' THEN #{index}"
-    end + ' END'
+    end + " END"
   end
 
   def entries
@@ -27,8 +27,8 @@ class HelpTexts::List
         memo[key] = HelpTexts::Entry.new(controller_name, model_class, help_texts(key))
       end
       entry.action_names << action_name
-      if entry.controller_name == 'events' && entry.model_class != Event
-        entry.action_names << 'new' << 'show' << 'edit'
+      if entry.controller_name == "events" && entry.model_class != Event
+        entry.action_names << "new" << "show" << "edit"
       end
     end.values
   end

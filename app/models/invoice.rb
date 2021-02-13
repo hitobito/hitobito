@@ -51,9 +51,9 @@ class Invoice < ActiveRecord::Base
   include I18nEnums
   include PaymentSlips
 
-  ROUND_TO = BigDecimal('0.05')
+  ROUND_TO = BigDecimal("0.05")
 
-  SEQUENCE_NR_SEPARATOR = '-'
+  SEQUENCE_NR_SEPARATOR = "-"
 
   STATES = %w(draft issued sent payed reminded cancelled).freeze
   STATES_REMINDABLE = %w(issued sent reminded).freeze
@@ -62,8 +62,8 @@ class Invoice < ActiveRecord::Base
   DUE_SINCE = %w(one_day one_week one_month).freeze
 
   belongs_to :group
-  belongs_to :recipient, class_name: 'Person'
-  belongs_to :creator, class_name: 'Person'
+  belongs_to :recipient, class_name: "Person"
+  belongs_to :creator, class_name: "Person"
   belongs_to :invoice_list, optional: true
 
 
@@ -96,9 +96,9 @@ class Invoice < ActiveRecord::Base
   validates_by_schema
 
   scope :list,           -> { order_by_sequence_number }
-  scope :one_day,        -> { where('invoices.due_at < ?', 1.day.ago.to_date) }
-  scope :one_week,       -> { where('invoices.due_at < ?', 1.week.ago.to_date) }
-  scope :one_month,      -> { where('invoices.due_at < ?', 1.month.ago.to_date) }
+  scope :one_day,        -> { where("invoices.due_at < ?", 1.day.ago.to_date) }
+  scope :one_week,       -> { where("invoices.due_at < ?", 1.week.ago.to_date) }
+  scope :one_month,      -> { where("invoices.due_at < ?", 1.month.ago.to_date) }
   scope :visible,        -> { where.not(state: :cancelled) }
   scope :remindable,     -> { where(state: STATES_REMINDABLE) }
 
@@ -106,8 +106,8 @@ class Invoice < ActiveRecord::Base
     def draft_or_issued_in(year)
       return all unless year.to_s =~ /\A\d+\z/
       condition = OrCondition.new
-      condition.or('EXTRACT(YEAR FROM issued_at) = ?', year)
-      condition.or('issued_at IS NULL AND EXTRACT(YEAR FROM invoices.created_at) = ?', year)
+      condition.or("EXTRACT(YEAR FROM issued_at) = ?", year)
+      condition.or("issued_at IS NULL AND EXTRACT(YEAR FROM invoices.created_at) = ?", year)
       where(condition.to_a)
     end
 
@@ -119,7 +119,7 @@ class Invoice < ActiveRecord::Base
     end
 
     def order_by_sequence_number
-      order(Arel.sql(order_by_sequence_number_statement.join(', ')))
+      order(Arel.sql(order_by_sequence_number_statement.join(", ")))
     end
 
     # Orders by first integer, second integer
@@ -160,8 +160,8 @@ class Invoice < ActiveRecord::Base
     recipient.try(:greeting_name) || recipient_name_from_recipient_address
   end
 
-  def filename(extension = 'pdf')
-    format('%s-%s.%s', self.class.model_name.human, sequence_number, extension)
+  def filename(extension = "pdf")
+    format("%s-%s.%s", self.class.model_name.human, sequence_number, extension)
   end
 
   def invoice_config

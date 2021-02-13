@@ -33,5 +33,5 @@ class Message::Letter < Message
 
   validates_presence_of :body
 
-  self.duplicatable_attrs << 'body'
+  self.duplicatable_attrs << "body"
 end

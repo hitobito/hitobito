@@ -41,7 +41,7 @@ module Export::Pdf::Invoice
             header: true,
             column_widths: { 0 => 290, 1 => 40, 2 => 50, 3 => 50, 4 => 50 },
             cell_style: { borders: [:bottom],
-                          border_color: 'CCCCCC',
+                          border_color: "CCCCCC",
                           border_width: 0.5,
                           padding: [2, 0, 2, 0],
                           inline_format: true })
@@ -49,11 +49,11 @@ module Export::Pdf::Invoice
 
     def articles
       [
-        [I18n.t('activerecord.models.invoice_article.one'),
-         align_right(I18n.t('activerecord.attributes.invoice_item.count')),
-         align_right(I18n.t('activerecord.attributes.invoice_item.unit_cost')),
-         align_right(I18n.t('activerecord.attributes.invoice_item.cost')),
-         align_right(I18n.t('activerecord.attributes.invoice_item.vat_rate'))]
+        [I18n.t("activerecord.models.invoice_article.one"),
+         align_right(I18n.t("activerecord.attributes.invoice_item.count")),
+         align_right(I18n.t("activerecord.attributes.invoice_item.unit_cost")),
+         align_right(I18n.t("activerecord.attributes.invoice_item.cost")),
+         align_right(I18n.t("activerecord.attributes.invoice_item.vat_rate"))]
       ] + article_data
     end
 
@@ -62,8 +62,8 @@ module Export::Pdf::Invoice
         [
           "<b>#{it.name}</b>\n#{it.description}",
           align_right(it.count.to_s),
-          align_right(helper.number_to_currency(it.unit_cost, unit: '')),
-          align_right(helper.number_to_currency(it.cost, unit: '')),
+          align_right(helper.number_to_currency(it.unit_cost, unit: "")),
+          align_right(helper.number_to_currency(it.cost, unit: "")),
           align_right(helper.number_to_percentage(it.vat_rate, precision: 1))
         ]
       end
@@ -73,7 +73,7 @@ module Export::Pdf::Invoice
       bounding_box([0, cursor], width: bounds.width) do
         font_size(8) do
           pdf.table total_data, position: :right, cell_style: { borders: [],
-                                                                border_color: 'CCCCCC',
+                                                                border_color: "CCCCCC",
                                                                 border_width: 0.5 } do
             rows(0..1).padding = [2, 0]
 
@@ -91,9 +91,9 @@ module Export::Pdf::Invoice
     def total_data
       decorated = invoice.decorate
       [
-        [I18n.t('invoices.pdf.cost'), decorated.cost],
-        [I18n.t('invoices.pdf.total_vat'), decorated.vat],
-        [I18n.t('invoices.pdf.total'), decorated.total]
+        [I18n.t("invoices.pdf.cost"), decorated.cost],
+        [I18n.t("invoices.pdf.total_vat"), decorated.vat],
+        [I18n.t("invoices.pdf.total"), decorated.total]
       ]
     end
 

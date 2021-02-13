@@ -34,7 +34,7 @@ module Export::Pdf::Invoice
 
     def labeled_information(attr, value)
       return if value.blank?
-      [I18n.t("invoices.pdf.#{attr}") + ':', value]
+      [I18n.t("invoices.pdf.#{attr}") + ":", value]
     end
   end
 end

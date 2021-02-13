@@ -78,7 +78,7 @@ class PeopleController < CrudController
       format.html { redirect_to group_person_path(group, entry), *msg }
       format.js do
         flash.now[msg.keys.first] = msg.values.first
-        render 'shared/update_flash'
+        render "shared/update_flash"
       end
     end
   end
@@ -91,8 +91,8 @@ class PeopleController < CrudController
       format.js do
         return render :primary_group if success
 
-        flash.now.alert = I18n.t('global.errors.header', count: entry.errors.size)
-        render 'shared/update_flash'
+        flash.now.alert = I18n.t("global.errors.header", count: entry.errors.size)
+        render "shared/update_flash"
       end
     end
   end
@@ -140,7 +140,7 @@ class PeopleController < CrudController
   end
 
   def collect_grouped_person_tags
-    tags = entry.taggings.includes(:tag).order('tags.name').each_with_object({}) do |t, memo|
+    tags = entry.taggings.includes(:tag).order("tags.name").each_with_object({}) do |t, memo|
       tag = t.tag
       tag.hitobito_tooltip = t.hitobito_tooltip
 
@@ -225,7 +225,7 @@ class PeopleController < CrudController
   end
 
   def index_full_ability?
-    if params[:range].blank? || params[:range] == 'group'
+    if params[:range].blank? || params[:range] == "group"
       can?(:index_full_people, @group)
     else
       can?(:index_deep_full_people, @group)

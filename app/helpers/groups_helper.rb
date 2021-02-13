@@ -8,7 +8,7 @@
 module GroupsHelper
 
   def tab_person_add_request_label(group)
-    label = t('activerecord.models.person/add_request.other')
+    label = t("activerecord.models.person/add_request.other")
     count = Person::AddRequest.for_layer(group).count
     label << " (#{count})" if count > 0
     label.html_safe

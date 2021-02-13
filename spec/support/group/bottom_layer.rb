@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require Rails.root.join('spec/support/group/bottom_group.rb')
+require Rails.root.join("spec/support/group/bottom_group.rb")
 
 class Group::BottomLayer < Group
 

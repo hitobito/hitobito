@@ -40,7 +40,7 @@ module Person::AddRequest::Approver
     end
 
     def error_message
-      entity.errors.full_messages.join(', ')
+      entity.errors.full_messages.join(", ")
     end
 
     private

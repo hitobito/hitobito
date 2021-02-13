@@ -23,8 +23,8 @@ module Contactable
     def scope
       Person
         .where(country: Settings.addresses.imported_countries)
-        .where.not(address: '')
-        .where.not(zip_code: '')
+        .where.not(address: "")
+        .where.not(zip_code: "")
     end
 
     private

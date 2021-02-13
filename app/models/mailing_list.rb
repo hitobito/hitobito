@@ -46,7 +46,7 @@ class MailingList < ActiveRecord::Base
   has_many :person_add_requests,
            foreign_key: :body_id,
            inverse_of: :body,
-           class_name: 'Person::AddRequest::MailingList',
+           class_name: "Person::AddRequest::MailingList",
            dependent: :destroy
 
   has_many :messages, dependent: :nullify
@@ -66,10 +66,10 @@ class MailingList < ActiveRecord::Base
   scope :list, -> { order(:name) }
   scope :subscribable, -> { where(subscribable: true) }
   scope :mailchimp, -> do
-    where.not(mailchimp_api_key: ['', nil]).where.not( mailchimp_list_id: ['', nil])
+    where.not(mailchimp_api_key: ["", nil]).where.not( mailchimp_list_id: ["", nil])
   end
 
-  DEFAULT_LABEL = '_main'.freeze
+  DEFAULT_LABEL = "_main".freeze
 
   def to_s(_format = :default)
     name
@@ -129,7 +129,7 @@ class MailingList < ActiveRecord::Base
 
   def assert_mail_name_is_not_protected
     if mail_name? && application_retriever_name
-      if mail_name.casecmp(application_retriever_name.split('@', 2).first).zero?
+      if mail_name.casecmp(application_retriever_name.split("@", 2).first).zero?
         errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end

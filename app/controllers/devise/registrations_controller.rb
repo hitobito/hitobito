@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require_dependency Devise::Engine.root.
-                                  join('app', 'controllers', 'devise', 'registrations_controller').
+                                  join("app", "controllers", "devise", "registrations_controller").
                                   to_s
 
 class Devise::RegistrationsController < DeviseController

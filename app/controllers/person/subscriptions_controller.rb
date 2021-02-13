@@ -31,7 +31,7 @@ class Person::SubscriptionsController < ApplicationController
 
   def redirect_with_notice
     group = Group.find(params[:group_id])
-    message = t('.success', mailing_list: mailing_list, person: person)
+    message = t(".success", mailing_list: mailing_list, person: person)
     redirect_to group_person_subscriptions_path(group, person), notice: message
   end
 

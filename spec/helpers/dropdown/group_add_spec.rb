@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'Dropdown::GroupAdd' do
+describe "Dropdown::GroupAdd" do
 
   include FormatHelper
   include I18nHelper
@@ -23,14 +23,14 @@ describe 'Dropdown::GroupAdd' do
     true
   end
 
-  it 'renders dropdown' do
-    is_expected.to have_content 'Gruppe erstellen'
-    is_expected.to have_selector 'ul.dropdown-menu'
-    is_expected.to have_selector 'a' do |tag|
-      expect(tag).to have_content 'Group::TopGroup'
+  it "renders dropdown" do
+    is_expected.to have_content "Gruppe erstellen"
+    is_expected.to have_selector "ul.dropdown-menu"
+    is_expected.to have_selector "a" do |tag|
+      expect(tag).to have_content "Group::TopGroup"
     end
-    is_expected.to have_selector 'a' do |tag|
-      expect(tag).to have_content 'Group::BottomLayer'
+    is_expected.to have_selector "a" do |tag|
+      expect(tag).to have_content "Group::BottomLayer"
     end
   end
 end

@@ -7,7 +7,7 @@
 
 # encoding:  utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::KindsController, type: :controller do
 
@@ -18,15 +18,15 @@ describe Event::KindsController, type: :controller do
   end
 
   let(:test_entry) { event_kinds(:slk) }
-  let(:test_entry_attrs) do { label: 'Automatic Bar Course',
-                              short_name: 'ABC',
+  let(:test_entry_attrs) do { label: "Automatic Bar Course",
+                              short_name: "ABC",
                               minimum_age: 21 } end
 
   before { sign_in(people(:top_leader)) }
 
-  include_examples 'crud controller', skip: [%w(show), %w(destroy)]
+  include_examples "crud controller", skip: [%w(show), %w(destroy)]
 
-  it 'soft deletes' do
+  it "soft deletes" do
     expect { post :destroy, params: { id: test_entry.id } }.to change { Event::Kind.without_deleted.count }.by(-1)
   end
 

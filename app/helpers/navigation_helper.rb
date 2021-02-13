@@ -10,31 +10,31 @@ module NavigationHelper
   MAIN = [
     { label: :groups,
       url: :groups_path,
-      icon_name: 'users',
+      icon_name: "users",
       active_for: %w(groups people),
       inactive_for: %w(invoices invoice_articles invoice_config payment_process invoice_lists) },
 
     { label: :events,
       url: :list_events_path,
-      icon_name: 'calendar-alt',
+      icon_name: "calendar-alt",
       active_for: %w(list_events),
       if: ->(_) { can?(:list_available, Event) } },
 
     { label: :courses,
       url: :list_courses_path,
-      icon_name: 'book',
+      icon_name: "book",
       active_for: %w(list_courses),
       if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) } },
 
     { label: :invoices,
       url: :first_group_invoices_or_root_path,
-      icon_name: 'money-bill-alt',
+      icon_name: "money-bill-alt",
       if: ->(_) { current_user.finance_groups.any? },
       active_for: %w(invoices invoice_articles invoice_config payment_process invoice_lists) },
 
     { label: :admin,
       url: :label_formats_path,
-      icon_name: 'cog',
+      icon_name: "cog",
       active_for: %w(label_formats
                      custom_contents
                      event_kinds
@@ -49,7 +49,7 @@ module NavigationHelper
 
 
   def render_main_nav
-    content_tag_nested(:ul, MAIN, class: 'nav-left-list') do |options|
+    content_tag_nested(:ul, MAIN, class: "nav-left-list") do |options|
       if !options.key?(:if) || instance_eval(&options[:if])
         main_nav_section(options)
       end
@@ -60,7 +60,7 @@ module NavigationHelper
     url = send(options[:url]) if options[:url].is_a?(Symbol)
     active = section_active?(url, options[:active_for], options[:inactive_for])
     nav(I18n.t("navigation.#{options[:label]}"), url, options[:icon_name], active,
-        class: 'nav-left-section', active_class: 'active') do
+        class: "nav-left-section", active_class: "active") do
       concat(sheet.render_left_nav) if sheet.left_nav?
     end
   end
@@ -71,8 +71,8 @@ module NavigationHelper
   end
 
   def nav(label, url, icon_name = false, active = false, options = {})
-    classes = options[:class] || ''
-    active_class = options[:active_class] || 'is-active'
+    classes = options[:class] || ""
+    active_class = options[:active_class] || "is-active"
     if active
       classes += " #{active_class}"
     end

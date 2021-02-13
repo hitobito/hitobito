@@ -5,7 +5,7 @@
 
 class MailingList::Subscribers
 
-  delegate :id, :subscriptions, to: '@list'
+  delegate :id, :subscriptions, to: "@list"
 
   def initialize(mailing_list, people_scope = Person.only_public_data)
     @list = mailing_list
@@ -46,7 +46,7 @@ class MailingList::Subscribers
   end
 
   def subscription_joins
-    sql = ', subscriptions ' # the comma is needed because it is not a JOIN, but a second "FROM"
+    sql = ", subscriptions " # the comma is needed because it is not a JOIN, but a second "FROM"
 
     if subscriptions.groups.exists?
       sql += <<~SQL
@@ -77,9 +77,9 @@ class MailingList::Subscribers
   end
 
   def person_subscribers(condition)
-    condition.or('subscriptions.subscriber_type = ? AND ' \
-                 'subscriptions.excluded = ? AND ' \
-                 'subscriptions.subscriber_id = people.id',
+    condition.or("subscriptions.subscriber_type = ? AND " \
+                 "subscriptions.excluded = ? AND " \
+                 "subscriptions.subscriber_id = people.id",
                  Person.sti_name,
                  false)
   end
@@ -104,9 +104,9 @@ class MailingList::Subscribers
   end
 
   def event_subscribers(condition)
-    condition.or('subscriptions.subscriber_type = ? AND ' \
-                 'subscriptions.subscriber_id = event_participations.event_id AND ' \
-                 'event_participations.active = ?',
+    condition.or("subscriptions.subscriber_type = ? AND " \
+                 "subscriptions.subscriber_id = event_participations.event_id AND " \
+                 "event_participations.active = ?",
                  Event.sti_name,
                  true)
   end

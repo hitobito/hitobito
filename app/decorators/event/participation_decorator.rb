@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationDecorator < ApplicationDecorator
-  decorates 'event/participation'
+  decorates "event/participation"
 
   decorates_association :person
   decorates_association :event, with: EventDecorator
@@ -21,12 +21,12 @@ class Event::ParticipationDecorator < ApplicationDecorator
   end
 
   def person_location_information
-    [layer_group, town_info].reject(&:blank?).join(' ')
+    [layer_group, town_info].reject(&:blank?).join(" ")
   end
 
   def incomplete_label
     if answers.any? { |answer| answer.question.required? && answer.answer.blank? }
-      content_tag(:div, h.t('.incomplete'), class: 'text-warning')
+      content_tag(:div, h.t(".incomplete"), class: "text-warning")
     end
   end
 

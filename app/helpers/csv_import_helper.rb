@@ -40,9 +40,9 @@ module CsvImportHelper
   end
 
   def csv_import_contact_account_value(p, key)
-    parts = key.split('_')
+    parts = key.split("_")
     key = parts.last
-    assoc = parts[0..-2].join('_').pluralize
+    assoc = parts[0..-2].join("_").pluralize
     contact = p.send(assoc).find { |c| c.label.downcase == key }
     contact && contact.value
   end

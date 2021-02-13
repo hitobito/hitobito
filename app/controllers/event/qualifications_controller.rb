@@ -29,7 +29,7 @@ class Event::QualificationsController < ApplicationController
     end
 
     redirect_to group_event_qualifications_path(group, event),
-                notice: t('event.qualifications.update.flash.success')
+                notice: t("event.qualifications.update.flash.success")
   end
 
   private

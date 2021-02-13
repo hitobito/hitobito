@@ -15,8 +15,8 @@ module Export::Tabular::People
         entry.company_name
       else
         with_combined_first_names.collect do |last_name, combined_first_name|
-          without_blanks([combined_first_name, last_name]).join(' ')
-        end.join(', ')
+          without_blanks([combined_first_name, last_name]).join(" ")
+        end.join(", ")
       end
     end
 
@@ -41,7 +41,7 @@ module Export::Tabular::People
     def combine(first_names)
       if first_names.count > 2
         last_first_name = first_names.pop
-        [first_names.join(', '), last_first_name].to_sentence
+        [first_names.join(", "), last_first_name].to_sentence
       elsif first_names.count == 2
         first_names.to_sentence
       else
@@ -54,11 +54,11 @@ module Export::Tabular::People
     end
 
     def first_names
-      strip(entry.first_name.to_s.split(','))
+      strip(entry.first_name.to_s.split(","))
     end
 
     def last_names
-      strip(entry.last_name.to_s.split(','))
+      strip(entry.last_name.to_s.split(","))
     end
 
     def strip(array)

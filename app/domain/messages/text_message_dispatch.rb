@@ -7,7 +7,7 @@
 
 module Messages
   class TextMessageDispatch
-    delegate :update, :success_count, to: '@message'
+    delegate :update, :success_count, to: "@message"
 
     def initialize(message, people)
       @message = message
@@ -52,7 +52,7 @@ module Messages
     end
 
     def recipient_numbers
-      PhoneNumber.where(label: 'Mobil', # get from settings
+      PhoneNumber.where(label: "Mobil", # get from settings
                         contactable_type: Person.sti_name,
                         contactable_id: person_ids)
     end
@@ -66,16 +66,16 @@ module Messages
     end
 
     def update_message_status
-      failed_count = recipients(state: 'failed').count
-      success_count = recipients(state: 'sent').count
-      state = success_count.eql?(0) && failed_count.positive? ? 'failed' : 'finished'
+      failed_count = recipients(state: "failed").count
+      success_count = recipients(state: "sent").count
+      state = success_count.eql?(0) && failed_count.positive? ? "failed" : "finished"
       @message.update!(success_count: success_count, failed_count: failed_count, state: state)
     end
 
     def send_text_message!
-      recipients(state: 'pending')
+      recipients(state: "pending")
         .find_in_batches(batch_size: Messages::TextMessageProvider::Base::MAX_RECIPIENTS) do |rps|
-          update_recipients(rps, state: 'sending')
+          update_recipients(rps, state: "sending")
           send_status = client.send(text: @message.text, recipients: recipients_list(rps))
           if not_ok?(send_status)
             abort_dispatch(send_status, rps)
@@ -91,7 +91,7 @@ module Messages
     end
 
     def abort_dispatch(status, recipient_list)
-      update_recipients(recipient_list, state: 'failed', error: status[:message])
+      update_recipients(recipient_list, state: "failed", error: status[:message])
     end
 
     def recipients_list(recipients)
@@ -120,16 +120,16 @@ module Messages
 
     def update_recipient(delivery_reports, recipient)
       report = delivery_reports[recipient.id.to_s]
-      error = 'unkown'
+      error = "unkown"
       if report
         if report[:status].eql?(:ok)
-          state = 'sent'
+          state = "sent"
           error = nil
         else
           error = report[:status_message]
         end
       end
-      recipient.update!(state: state || 'failed', error: error)
+      recipient.update!(state: state || "failed", error: error)
     end
 
     def client

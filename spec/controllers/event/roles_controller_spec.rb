@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::RolesController do
 
@@ -22,10 +22,10 @@ describe Event::RolesController do
 
   before { sign_in(user) }
 
-  context 'GET new' do
+  context "GET new" do
     before { get :new, params: { group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name } } }
 
-    it 'builds participation without answers' do
+    it "builds participation without answers" do
       role = assigns(:role)
       participation = role.participation
       expect(participation.event_id).to eq(course.id)
@@ -34,11 +34,11 @@ describe Event::RolesController do
 
   end
 
-  context 'POST create' do
+  context "POST create" do
 
-    context 'without participation' do
+    context "without participation" do
 
-      it 'creates role and participation' do
+      it "creates role and participation" do
         post :create, params: { group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id } }
 
         role = assigns(:role)
@@ -51,11 +51,11 @@ describe Event::RolesController do
         expect(course.reload.applicant_count).to eq 0
         expect(course.teamer_count).to eq 1
         expect(course.participant_count).to eq 0
-        expect(flash[:notice]).to eq 'Rolle <i>Hauptleitung</i> für <i>Top Leader</i> wurde erfolgreich erstellt.'
+        expect(flash[:notice]).to eq "Rolle <i>Hauptleitung</i> für <i>Top Leader</i> wurde erfolgreich erstellt."
         is_expected.to redirect_to(edit_group_event_participation_path(group, course, participation))
       end
 
-      it 'creates person add request if required' do
+      it "creates person add request if required" do
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
         user.roles.destroy_all
         Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one), person: user)
@@ -75,7 +75,7 @@ describe Event::RolesController do
         expect(person.add_requests.count).to eq(1)
       end
 
-      it 'creates roles and participation for user even if person add request required' do
+      it "creates roles and participation for user even if person add request required" do
         groups(:top_layer).update_column(:require_person_add_requests, true)
 
         post :create,
@@ -94,8 +94,8 @@ describe Event::RolesController do
       end
     end
 
-    context 'with existing participation' do
-      it 'creates role' do
+    context "with existing participation" do
+      it "creates role" do
         participation = Fabricate(:event_participation, event: course, person: user)
         Fabricate(Event::Role::Cook.name, participation: participation)
         expect do
@@ -110,7 +110,7 @@ describe Event::RolesController do
         is_expected.to redirect_to(group_event_participations_path(group, course))
       end
 
-      it 'creates role if person add request' do
+      it "creates role if person add request" do
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)
         user.roles.destroy_all
         Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one), person: user)
@@ -134,24 +134,24 @@ describe Event::RolesController do
 
   end
 
-  context 'PUT update' do
-    it 'keeps type if not given' do
+  context "PUT update" do
+    it "keeps type if not given" do
       role = event_roles(:top_leader)
       put :update,
           params: {
             group_id: group.id,
             event_id: course.id,
             id: role.id,
-            event_role: { label: 'Foo' }
+            event_role: { label: "Foo" }
           }
 
       role = Event::Role.find(role.id)
       expect(role).to be_kind_of(Event::Role::Leader)
-      expect(role.label).to eq 'Foo'
+      expect(role.label).to eq "Foo"
       is_expected.to redirect_to(group_event_participation_path(group, course, role.participation_id))
     end
 
-    it 'may change type for teamers' do
+    it "may change type for teamers" do
       role = event_roles(:top_leader)
       put :update,
           params: {
@@ -166,7 +166,7 @@ describe Event::RolesController do
       is_expected.to redirect_to(group_event_participation_path(group, course, role.participation_id))
     end
 
-    it 'may not change type for teamers to participant' do
+    it "may not change type for teamers to participant" do
       role = event_roles(:top_leader)
       put :update,
           params: {
@@ -182,7 +182,7 @@ describe Event::RolesController do
     end
 
 
-    it 'may not change type for participant to team' do
+    it "may not change type for participant to team" do
       role = Fabricate(Event::Course::Role::Participant.name.to_sym,
                        participation: Fabricate(:event_participation, event: course))
       put :update,

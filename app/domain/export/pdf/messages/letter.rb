@@ -30,17 +30,17 @@ module Export::Pdf::Messages
     end
 
     def filename
-      parts = [@letter.subject.parameterize(separator: '_')]
+      parts = [@letter.subject.parameterize(separator: "_")]
       parts << %w(preview) if preview?
       yield parts if block_given?
-      [parts.join('-'), :pdf].join('.')
+      [parts.join("-"), :pdf].join(".")
     end
 
     private
 
     def render_options
       preview_option.to_h.merge(
-        page_size: 'A4',
+        page_size: "A4",
         page_layout: :portrait,
         margin: 2.cm
       )

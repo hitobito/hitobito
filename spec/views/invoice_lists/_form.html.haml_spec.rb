@@ -1,17 +1,17 @@
-require 'spec_helper'
+require "spec_helper"
 
-describe 'invoice_lists/_form.html.haml' do
+describe "invoice_lists/_form.html.haml" do
   let(:group)        {  groups(:bottom_layer_one) }
   let(:person)       {  people(:bottom_member) }
   let(:invoice)      {  group.invoices.build }
-  let(:invoice_list) {  InvoiceList.new(group: group, recipient_ids: '1,2', invoice: invoice) }
+  let(:invoice_list) {  InvoiceList.new(group: group, recipient_ids: "1,2", invoice: invoice) }
   let(:dom)          {  Capybara::Node::Simple.new(render) }
 
   before do
     allow(view).to receive_messages({
       current_user: person,
       parent: group,
-      cancel_url: '',
+      cancel_url: "",
       model_class: InvoiceList,
       entry: invoice_list,
       path_args: [group, invoice_list]
@@ -20,11 +20,11 @@ describe 'invoice_lists/_form.html.haml' do
     allow(controller).to receive_messages(current_user: person)
   end
 
-  it 'only renders invoice articles of group' do
+  it "only renders invoice articles of group" do
     expect(group.invoice_articles).to have(3).items
-    groups(:top_layer).invoice_articles.create!(number: 1, name: 'test')
+    groups(:top_layer).invoice_articles.create!(number: 1, name: "test")
 
-    expect(dom).to have_select('invoice_item_article', options: [
+    expect(dom).to have_select("invoice_item_article", options: [
       "",
       "BEI-JU - Beitrag Kinder",
       "BEI-18 - Beitrag Erwachsene",

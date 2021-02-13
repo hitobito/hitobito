@@ -14,11 +14,11 @@ module Translatable
   private
 
   def full_translation_key(suffix)
-    [translation_prefix, suffix].join('.').to_sym
+    [translation_prefix, suffix].join(".").to_sym
   end
 
   def translation_prefix
-    @translation_prefix ||= self.class.to_s.underscore.gsub('_controller', '')
+    @translation_prefix ||= self.class.to_s.underscore.gsub("_controller", "")
   end
 
 end

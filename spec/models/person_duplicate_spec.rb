@@ -15,13 +15,13 @@
 #  ignore               :boolean          default(FALSE), not null
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PersonDuplicate do
 
-  context 'before_save' do
-    context 'assign_persons_sorted_by_id' do
-      it 'assigns person with lower id to person_1' do
+  context "before_save" do
+    context "assign_persons_sorted_by_id" do
+      it "assigns person with lower id to person_1" do
         people = [people(:top_leader), people(:bottom_member)]
         lower_id_person, higher_id_person = people.sort_by(&:id)
 

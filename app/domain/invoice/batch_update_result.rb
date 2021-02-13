@@ -54,9 +54,9 @@ class Invoice::BatchUpdateResult
   end
 
   def model_error_message(invoice)
-    I18n.t('invoice_lists.update.model_error',
+    I18n.t("invoice_lists.update.model_error",
            number: invoice.sequence_number,
-           error: invoice.errors.full_messages.join(', '))
+           error: invoice.errors.full_messages.join(", "))
   end
 
   def message(key, invoices)
@@ -66,7 +66,7 @@ class Invoice::BatchUpdateResult
   end
 
   def empty_message
-    I18n.t('invoice_lists.update', count: 0)
+    I18n.t("invoice_lists.update", count: 0)
   end
 
 end

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Person::QueryController do
 
@@ -13,12 +13,12 @@ describe Person::QueryController do
 
   before { sign_in(top_leader) }
 
-  context 'GET index' do
-    it 'queries all people' do
-      Fabricate(:person, first_name: 'Pascal')
-      Fabricate(:person, last_name: 'Opassum')
-      Fabricate(:person, last_name: 'Anything')
-      get :index, params: { q: 'pas' }
+  context "GET index" do
+    it "queries all people" do
+      Fabricate(:person, first_name: "Pascal")
+      Fabricate(:person, last_name: "Opassum")
+      Fabricate(:person, last_name: "Anything")
+      get :index, params: { q: "pas" }
 
       expect(response.body).to match(/Pascal/)
       expect(response.body).to match(/Opassum/)

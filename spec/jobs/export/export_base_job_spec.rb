@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::ExportBaseJob do
 
@@ -15,13 +15,13 @@ describe Export::ExportBaseJob do
 
   let(:subject) { MyJob.new(:csv, people(:top_leader).id) }
 
-  it 'sets locale when reading job from database' do
+  it "sets locale when reading job from database" do
     allow(I18n).to receive(:locale).and_return(:fr)
     subject.enqueue!
-    expect(subject.instance_variable_get('@locale')).to eq 'fr'
+    expect(subject.instance_variable_get("@locale")).to eq "fr"
 
     job = subject.delayed_jobs.last.payload_object
-    expect(job.instance_variable_get('@locale')).to eq 'fr'
+    expect(job.instance_variable_get("@locale")).to eq "fr"
   end
 
 end

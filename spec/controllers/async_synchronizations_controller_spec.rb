@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe AsyncSynchronizationsController do
 
@@ -17,18 +17,18 @@ describe AsyncSynchronizationsController do
     sign_in(person)
   end
 
-  context 'show' do
-    it 'deletes cookie and returns Status 200 if done' do
+  context "show" do
+    it "deletes cookie and returns Status 200 if done" do
       allow(mailing_list).to receive(:mailchimp_syncing).and_return(false)
 
       get :show, params: { group: group, id: mailing_list }
       json = JSON.parse(response.body)
 
-      expect(json['status']).to match(200)
+      expect(json["status"]).to match(200)
       expect(cookies[Cookies::AsyncSynchronization::NAME]).to be_nil
     end
 
-    it 'returns 404 if sync is not ready yet' do
+    it "returns 404 if sync is not ready yet" do
       Cookies::AsyncSynchronization.new(cookies).set(mailing_list_id: mailing_list.id)
       mailing_list.update(mailchimp_syncing: true)
       allow_any_instance_of(Delayed::Job)
@@ -37,23 +37,23 @@ describe AsyncSynchronizationsController do
       get :show, params: { group: group, id: mailing_list }
       json = JSON.parse(response.body)
 
-      expect(json['status']).to match(404)
+      expect(json["status"]).to match(404)
       expect(cookies[Cookies::AsyncSynchronization::NAME]).to be_present
     end
 
-    it 'returns 422 if sync failed' do
+    it "returns 422 if sync failed" do
       Cookies::AsyncSynchronization.new(cookies).set(mailing_list_id: mailing_list.id)
       mailing_list.update(mailchimp_syncing: true)
       allow_any_instance_of(Delayed::Job)
-        .to receive(:last_error).and_return('error_message')
+        .to receive(:last_error).and_return("error_message")
 
       get :show, params: { group: group, id: mailing_list }
       json = JSON.parse(response.body)
 
-      expect(json['status']).to match(422)
+      expect(json["status"]).to match(422)
       expect(cookies[Cookies::AsyncSynchronization::NAME]).to be_nil
       expect(flash[:alert])
-        .to eq('Beim Senden der Daten an MailChimp ist ein Fehler aufgetreten (error_message).')
+        .to eq("Beim Senden der Daten an MailChimp ist ein Fehler aufgetreten (error_message).")
     end
   end
 end

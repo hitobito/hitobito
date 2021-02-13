@@ -6,12 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 namespace :hitobito do
-  desc 'Print all groups, roles and permissions'
+  desc "Print all groups, roles and permissions"
   task roles: :environment do
     Role::TypeList.new(Group.root_types.first).each do |layer, groups|
-      puts '* ' + layer
+      puts "* " + layer
       groups.each do |group, roles|
-        puts '  * ' + group
+        puts "  * " + group
         roles.each do |r|
           puts "    * #{r.label}: #{r.permissions.inspect}"
         end
@@ -19,13 +19,13 @@ namespace :hitobito do
     end
   end
 
-  desc 'Print all abilities'
+  desc "Print all abilities"
   task abilities: :environment do
-    puts ['Permission'.ljust(18), "\t",
-          'Class'.ljust(24), "\t",
-          'Action'.ljust(25), "\t",
-          'Constraint'].join
-    puts '=' * 100
+    puts ["Permission".ljust(18), "\t",
+          "Class".ljust(24), "\t",
+          "Action".ljust(25), "\t",
+          "Constraint"].join
+    puts "=" * 100
     all = Role::Permissions + [AbilityDsl::Recorder::General::PERMISSION]
     Ability.store.configs_for_permissions(all) do |c|
       puts "#{c.permission.to_s.ljust(18)}\t" \

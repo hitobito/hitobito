@@ -84,13 +84,13 @@ module FilterNavigation
 
     def add_entire_layer_filter_link
       name = translate(:entire_layer)
-      link = fixed_types_path(name, sub_groups_role_types, range: 'layer')
+      link = fixed_types_path(name, sub_groups_role_types, range: "layer")
       dropdown.add_item(name, link)
     end
 
     def add_entire_subgroup_filter_link
       name = translate(:entire_group)
-      link = fixed_types_path(name, sub_groups_role_types, range: 'deep')
+      link = fixed_types_path(name, sub_groups_role_types, range: "deep")
       dropdown.add_item(name, link)
     end
 
@@ -158,7 +158,7 @@ module FilterNavigation
     end
 
     def filter_label(icon, desc)
-      template.safe_join([template.icon(icon), ' ', template.t("global.link.#{desc}")])
+      template.safe_join([template.icon(icon), " ", template.t("global.link.#{desc}")])
     end
 
     def fixed_types_path(name, types, options = {})

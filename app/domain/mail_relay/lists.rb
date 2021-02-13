@@ -14,7 +14,7 @@ module MailRelay
   # based on the encoded return path address.
   class Lists < Base
 
-    SENDER_SUFFIX = '-bounces'
+    SENDER_SUFFIX = "-bounces"
 
     self.mail_domain = Settings.email.list_domain
 
@@ -23,13 +23,13 @@ module MailRelay
         return nil unless sender_email.present?
 
         # recipient format (before @) must match regexp in #reject_not_existing
-        id_suffix = '+' + sender_email.tr('@', '=')
+        id_suffix = "+" + sender_email.tr("@", "=")
         "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{domain || mail_domain}"
       end
 
       def app_sender_name
         app_sender = Settings.email.sender
-        app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || 'noreply'
+        app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || "noreply"
       end
     end
 
@@ -113,13 +113,13 @@ module MailRelay
     def prepare_not_allowed_message
       sender = "#{envelope_receiver_name}#{SENDER_SUFFIX}@#{mail_domain}"
       message.reply do
-        body 'Du bist nicht berechtigt, auf diese Liste zu schreiben.'
+        body "Du bist nicht berechtigt, auf diese Liste zu schreiben."
         from sender
       end
     end
 
     def prepare_bounced_message(list_address, sender_address)
-      message.to = sender_address.tr('=', '@')
+      message.to = sender_address.tr("=", "@")
 
       env_sender = "#{list_address}#{SENDER_SUFFIX}@#{mail_domain}"
       message.sender = env_sender
@@ -135,7 +135,7 @@ module MailRelay
 
       additional_senders = mailing_list.additional_sender.to_s
       list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
-      sender_domain = sender_email.sub(/^[^@]*@/, '*@')
+      sender_domain = sender_email.sub(/^[^@]*@/, "*@")
       # check if the domain is valid, if the sender is in the senders
       # list or if the domain is whitelisted
       list.include?(sender_email) ||
@@ -159,9 +159,9 @@ module MailRelay
     end
 
     def potential_senders
-      Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
+      Person.joins("LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id" \
                    " AND additional_emails.contactable_type = '#{Person.sti_name}'").
-             where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email).
+             where("people.email = ? OR additional_emails.email = ?", sender_email, sender_email).
              distinct
     end
 

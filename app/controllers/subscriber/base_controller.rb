@@ -51,10 +51,10 @@ module Subscriber
     end
 
     def default_base_errors
-      [[:subscriber_type, I18n.t('errors.messages.blank'),
-        I18n.t('subscriber/base.blank', model_label: model_label)],
-       [:subscriber_id, I18n.t('errors.messages.taken'),
-        I18n.t('subscriber/base.taken', model_label: model_label)]]
+      [[:subscriber_type, I18n.t("errors.messages.blank"),
+        I18n.t("subscriber/base.blank", model_label: model_label)],
+       [:subscriber_id, I18n.t("errors.messages.taken"),
+        I18n.t("subscriber/base.taken", model_label: model_label)]]
     end
 
     def index_path
@@ -62,7 +62,7 @@ module Subscriber
     end
 
     def authorize!
-      if ['edit', 'update'].include? action_name
+      if ["edit", "update"].include? action_name
         super(:update, entry)
       else
         super(:create, @subscription || @mailing_list.subscriptions.new)

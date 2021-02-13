@@ -21,9 +21,9 @@
 #  index_event_dates_on_event_id_and_start_at  (event_id,start_at)
 #
 
-Fabricator(:event_date, class_name: 'Event::Date') do
+Fabricator(:event_date, class_name: "Event::Date") do
   event
-  label { 'Hauptanlass' }
+  label { "Hauptanlass" }
   start_at { Date.today }
   finish_at { |date| date[:start_at] + 7.days }
 end

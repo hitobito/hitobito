@@ -14,7 +14,7 @@ class Uploader::Base < CarrierWave::Uploader::Base
 
   class << self
     def accept_extensions
-      allowed_extensions.collect { |e| ".#{e}" }.join(', ')
+      allowed_extensions.collect { |e| ".#{e}" }.join(", ")
     end
   end
 
@@ -25,7 +25,7 @@ class Uploader::Base < CarrierWave::Uploader::Base
   end
 
   def base_store_dir
-    'uploads'
+    "uploads"
   end
 
   # Override the directory where uploaded files will be stored.

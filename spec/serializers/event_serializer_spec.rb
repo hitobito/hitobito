@@ -48,7 +48,7 @@
 #  index_events_on_kind_id  (kind_id)
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe EventSerializer do
 
@@ -60,9 +60,9 @@ describe EventSerializer do
   subject { hash[:events].first }
 
 
-  context 'event properties' do
+  context "event properties" do
 
-    it 'includes all keys' do
+    it "includes all keys" do
       keys = [:name, :description, :motto, :cost, :maximum_participants, :participant_count,
        :location, :application_opening_at, :application_closing_at, :application_conditions,
        :state, :teamer_count, :external_application_link, :links]
@@ -72,7 +72,7 @@ describe EventSerializer do
       end
     end
 
-    it 'includes dates properties' do
+    it "includes dates properties" do
       keys = [:id, :label, :start_at, :finish_at, :location]
       keys.each do |key|
         expect(hash[:linked][:event_dates].first).to have_key(key)
@@ -81,7 +81,7 @@ describe EventSerializer do
       expect(subject[:links]).to have_key(:dates)
     end
 
-    it 'includes groups properties' do
+    it "includes groups properties" do
       keys = [:id, :href, :group_type, :layer, :name, :short_name, :email, :address,
               :zip_code, :town, :country, :created_at, :updated_at]
 
@@ -97,16 +97,16 @@ describe EventSerializer do
       expect(subject[:links]).to have_key(:groups)
     end
 
-    it 'does not include kind' do
+    it "does not include kind" do
       expect(subject[:links]).not_to have_key(:kind)
     end
 
   end
 
-  context 'coures properties' do
+  context "coures properties" do
     let(:event) { events(:top_course).decorate }
 
-    it 'includes kind properties' do
+    it "includes kind properties" do
       keys = [:id, :label, :short_name, :minimum_age, :general_information, :application_conditions]
       keys.each do |key|
         expect(hash[:linked][:event_kinds].first).to have_key(key)

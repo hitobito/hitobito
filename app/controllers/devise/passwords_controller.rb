@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require_dependency Devise::Engine.root.
-                                  join('app', 'controllers', 'devise', 'passwords_controller').
+                                  join("app", "controllers", "devise", "passwords_controller").
                                   to_s
 
 class Devise::PasswordsController < DeviseController
@@ -15,7 +15,7 @@ class Devise::PasswordsController < DeviseController
     if resource.login?
       super
     else
-      flash[:alert] = I18n.translate('devise.failure.signin_not_allowed')
+      flash[:alert] = I18n.translate("devise.failure.signin_not_allowed")
     end
   end
 

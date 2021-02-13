@@ -24,9 +24,9 @@ module Export::Tabular::People
 
     def roles
       if entry.try(:role_with_layer).present?
-        entry.roles.zip(entry.role_with_layer.split(', ')).map { |arr| arr.join(' ') }.join(', ')
+        entry.roles.zip(entry.role_with_layer.split(", ")).map { |arr| arr.join(" ") }.join(", ")
       else
-        entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+        entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(", ")
       end
     end
 
@@ -56,12 +56,12 @@ module Export::Tabular::People
       entry.relations_to_tails.
         select { |r| attr == :"people_relation_#{r.kind}" }.
         map { |r| r.tail.to_s }.
-        join(', ')
+        join(", ")
     end
 
     def qualification_kind(attr)
       qualification = find_qualification(attr)
-      qualification.finish_at.try(:to_s) || I18n.t('global.yes') if qualification
+      qualification.finish_at.try(:to_s) || I18n.t("global.yes") if qualification
     end
 
     def find_qualification(label)

@@ -5,13 +5,13 @@
 
 DB_CLEANER_STRATEGY = :truncation
 
-ENV['RAILS_ENV'] = 'test'
-ENV['RAILS_GROUPS'] = 'assets'
-require File.expand_path('../../config/environment', __FILE__)
-require 'rspec/rails'
-require 'cancan/matchers'
-require 'paper_trail/frameworks/rspec'
-require 'webmock/rspec'
+ENV["RAILS_ENV"] = "test"
+ENV["RAILS_GROUPS"] = "assets"
+require File.expand_path("../../config/environment", __FILE__)
+require "rspec/rails"
+require "cancan/matchers"
+require "paper_trail/frameworks/rspec"
+require "webmock/rspec"
 
 # Needed for feature specs
 WebMock.disable_net_connect!(allow_localhost: true, allow: %w(chromedriver.storage.googleapis.com))
@@ -21,7 +21,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
 
 # Add test locales
 Faker::Config.locale = I18n.locale
@@ -44,10 +44,10 @@ RSpec.configure do |config|
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  config.order = 'random'
+  config.order = "random"
 
   config.backtrace_exclusion_patterns = [/lib\/rspec/, /asdf/]
-  config.example_status_persistence_file_path = Rails.root.join('tmp', 'examples.txt').to_s
+  config.example_status_persistence_file_path = Rails.root.join("tmp", "examples.txt").to_s
 
   config.include(MailerMacros)
   config.include(EventMacros)
@@ -55,17 +55,17 @@ RSpec.configure do |config|
   config.include FeatureHelpers, type: :feature
   config.include Warden::Test::Helpers, type: :feature
 
-  config.filter_run_excluding type: 'feature', performance: true
-  config.filter_run_excluding type: 'sphinx', sphinx: true
+  config.filter_run_excluding type: "feature", performance: true
+  config.filter_run_excluding type: "sphinx", sphinx: true
 
-  if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2' # rubocop:disable Performance/Casecmp
+  if ActiveRecord::Base.connection.adapter_name.downcase != "mysql2" # rubocop:disable Performance/Casecmp
     config.filter_run_excluding :mysql
   end
 
   config.before :all do
     # load all fixtures
     self.class.fixtures :all
-    FileUtils.rm_rf(Dir.glob(AsyncDownloadFile::DIRECTORY.join('*')))
+    FileUtils.rm_rf(Dir.glob(AsyncDownloadFile::DIRECTORY.join("*")))
   end
 
   config.before(:each) do
@@ -104,24 +104,24 @@ RSpec.configure do |config|
   end
 
   config.around(:each, profile: true) do |example|
-    require 'ruby-prof'
+    require "ruby-prof"
 
     # Profile the code
     result = RubyProf.profile { example.run }
 
     # Print a graph profile to text
-    dir = Rails.root.join('tmp', 'performance')
+    dir = Rails.root.join("tmp", "performance")
     filename = File.join(dir, "#{example.metadata[:full_description]} stack.html")
     FileUtils.mkdir_p(dir)
     printer = RubyProf::CallStackPrinter.new(result)
-    printer.print(File.open(filename, 'w'))
+    printer.print(File.open(filename, "w"))
   end
 
   RSpec.configure do |config|
     config.include ActiveSupport::Testing::TimeHelpers
   end
 
-  unless RSpec.configuration.exclusion_filter[:type] == 'feature'
+  unless RSpec.configuration.exclusion_filter[:type] == "feature"
     config.include Warden::Test::Helpers
     Warden.test_mode!
 
@@ -132,28 +132,28 @@ RSpec.configure do |config|
 end
 
 # Use Capybara only if features are not excluded
-unless RSpec.configuration.exclusion_filter[:type] == 'feature'
-  require 'capybara'
-  require 'webdrivers/chromedriver'
+unless RSpec.configuration.exclusion_filter[:type] == "feature"
+  require "capybara"
+  require "webdrivers/chromedriver"
 
-  Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
+  Capybara.server_port = ENV["CAPYBARA_SERVER_PORT"].to_i if ENV["CAPYBARA_SERVER_PORT"]
   Capybara.default_max_wait_time = 6
   Capybara.automatic_label_click = true
 
-  require 'capybara-screenshot/rspec'
+  require "capybara-screenshot/rspec"
   Capybara::Screenshot.prune_strategy = :keep_last_run
-  Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::ProgressFormatter'] =
+  Capybara::Screenshot::RSpec::REPORTERS["RSpec::Core::Formatters::ProgressFormatter"] =
     CapybaraScreenshotPlainTextReporter
 
 
   Capybara.register_driver :chrome do |app|
     options = Selenium::WebDriver::Chrome::Options.new
-    options.args << '--headless' if ENV['HEADLESS'] != 'false'
-    options.args << '--disable-gpu' # required for windows
-    options.args << '--no-sandbox' # required for docker
-    options.args << '--disable-dev-shm-usage' # helps with docker resource limitations
-    options.args << '--window-size=1800,1000'
-    options.args << '--crash-dumps-dir=/tmp'
+    options.args << "--headless" if ENV["HEADLESS"] != "false"
+    options.args << "--disable-gpu" # required for windows
+    options.args << "--no-sandbox" # required for docker
+    options.args << "--disable-dev-shm-usage" # helps with docker resource limitations
+    options.args << "--window-size=1800,1000"
+    options.args << "--crash-dumps-dir=/tmp"
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
   end
 

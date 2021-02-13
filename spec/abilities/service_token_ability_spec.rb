@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe ServiceTokenAbility do
 
@@ -20,11 +20,11 @@ describe ServiceTokenAbility do
 
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
-    it 'may create service token in his group' do
+    it "may create service token in his group" do
       is_expected.to be_able_to(:create, group.service_tokens.new)
     end
 
-    it 'may create service token in his layer' do
+    it "may create service token in his layer" do
       is_expected.to be_able_to(:create, groups(:toppers).service_tokens.new)
     end
 
@@ -46,11 +46,11 @@ describe ServiceTokenAbility do
   context :layer_full do
     let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
 
-    it 'may create service token in his group' do
+    it "may create service token in his group" do
       is_expected.to be_able_to(:create, group.service_tokens.new)
     end
 
-    it 'may create service token in his layer' do
+    it "may create service token in his layer" do
       is_expected.to be_able_to(:create, groups(:toppers).service_tokens.new)
     end
 

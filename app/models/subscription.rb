@@ -58,7 +58,7 @@ class Subscription < ActiveRecord::Base
 
   def to_s(format = :default)
     if subscriber.is_a?(Group)
-      subscriber.with_layer.join(' / ')
+      subscriber.with_layer.join(" / ")
     else
       subscriber.to_s(format).dup
     end
@@ -67,7 +67,7 @@ class Subscription < ActiveRecord::Base
   def possible_events
     Event.
       joins(:groups, :dates).
-      where('event_dates.start_at >= ?', earliest_possible_event_date).
+      where("event_dates.start_at >= ?", earliest_possible_event_date).
       where(groups: { id: possible_event_groups })
   end
 

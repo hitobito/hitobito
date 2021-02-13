@@ -9,73 +9,73 @@
 # requires transifex-client system package
 # rubocop:disable Rails/RakeEnvironment
 namespace :tx do
-  desc 'Configure locale files for transifex'
+  desc "Configure locale files for transifex"
   task :config do
-    Dir.glob(File.join('config', 'locales', '*.de.yml')).each do |file|
+    Dir.glob(File.join("config", "locales", "*.de.yml")).each do |file|
       resource = File.basename(file)[/^(.+)\.de\.yml$/, 1]
-      slug = resource.gsub(/\W/, '-')
-      gemspec = Dir.glob('*.gemspec').first
-      project = gemspec ? gemspec[/^(.+)\.gemspec$/, 1] : 'hitobito'
+      slug = resource.gsub(/\W/, "-")
+      gemspec = Dir.glob("*.gemspec").first
+      project = gemspec ? gemspec[/^(.+)\.gemspec$/, 1] : "hitobito"
 
       sh %W[tx set --auto-local
             -r #{project}.#{slug}
             'config/locales/#{resource}.<lang>.yml'
             --source-lang de
-            --execute].join(' ')
+            --execute].join(" ")
     end
   end
 
-  desc 'Init a wagon to use transifex'
+  desc "Init a wagon to use transifex"
   task :init do
-    sh 'tx init'
-    sh 'tx set -t YML'
+    sh "tx init"
+    sh "tx set -t YML"
   end
 
-  desc 'Push source files (=german locales) to transifex'
+  desc "Push source files (=german locales) to transifex"
   task :push do
-    with_tx { sh 'tx push -s' }
+    with_tx { sh "tx push -s" }
   end
 
-  desc 'Pull translations from transifex'
+  desc "Pull translations from transifex"
   task :pull do
     # force pull because git locale file timestamps
     # will be newer than transifex files during rpm build.
-    with_tx { sh 'tx pull -f' }
+    with_tx { sh "tx pull -f" }
   end
 
   # desc 'Save transifex credentials from env into .transifexrc'
   task :auth do
-    username = ENV['RAILS_TRANSIFEX_USERNAME']
-    password = ENV['RAILS_TRANSIFEX_PASSWORD']
+    username = ENV["RAILS_TRANSIFEX_USERNAME"]
+    password = ENV["RAILS_TRANSIFEX_PASSWORD"]
     if username && password
-      host = ENV['RAILS_TRANSIFEX_HOST'] || 'https://www.transifex.com'
+      host = ENV["RAILS_TRANSIFEX_HOST"] || "https://www.transifex.com"
       rc = ["[#{host}]",
             "hostname = #{host}",
             "password = #{password}",
-            'token =',
+            "token =",
             "username = #{username}"].join("\n")
-      File.open('.transifexrc', 'w') { |f| f.puts rc }
+      File.open(".transifexrc", "w") { |f| f.puts rc }
     else
-      puts 'No username and password given'
+      puts "No username and password given"
     end
   end
 
   def with_tx
-    if File.exist?('.tx')
+    if File.exist?(".tx")
       yield
     else
-      puts 'Transifex not configured. Please run rake tx:init first'
+      puts "Transifex not configured. Please run rake tx:init first"
     end
   end
 
   namespace :wagon do
     task :pull do
-      ENV['CMD'] = 'if [ -f .tx/config ]; then tx pull -f; fi'
-      Rake::Task['wagon:exec'].invoke
+      ENV["CMD"] = "if [ -f .tx/config ]; then tx pull -f; fi"
+      Rake::Task["wagon:exec"].invoke
     end
     task :push do
-      ENV['CMD'] = 'if [ -f .tx/config ]; then tx push -s; fi'
-      Rake::Task['wagon:exec'].invoke
+      ENV["CMD"] = "if [ -f .tx/config ]; then tx push -s; fi"
+      Rake::Task["wagon:exec"].invoke
     end
   end
 end

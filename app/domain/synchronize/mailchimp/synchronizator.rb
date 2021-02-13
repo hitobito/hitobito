@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'digest/md5'
+require "digest/md5"
 
 module Synchronize
   module Mailchimp
@@ -16,7 +16,7 @@ module Synchronize
       self.member_fields = []
 
       self.merge_fields = [
-        ['Gender', 'dropdown', { choices: %w(m w) }, ->(p) { p.gender }]
+        ["Gender", "dropdown", { choices: %w(m w) }, ->(p) { p.gender }]
       ]
 
       def initialize(mailing_list)
@@ -132,7 +132,7 @@ module Synchronize
       end
 
       def cleaned_members
-        @cleaned_members ||= members.select { |m| m[:status] == 'cleaned' }
+        @cleaned_members ||= members.select { |m| m[:status] == "cleaned" }
       end
 
       def members_by_email

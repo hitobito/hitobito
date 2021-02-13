@@ -38,7 +38,7 @@ module Dropdown
 
     def tabular_links(format) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       path = params.merge(format: format)
-      item = add_item(translate(format), '#')
+      item = add_item(translate(format), "#")
       if Settings.table_displays
         item.sub_items << Item.new(translate(:selection),
                                    path.merge(selection: true),
@@ -60,7 +60,7 @@ module Dropdown
 
     def mailchimp_link
       if @mailchimp_synchronization_path
-        add_item('MailChimp', @mailchimp_synchronization_path, method: :post, remote: true)
+        add_item("MailChimp", @mailchimp_synchronization_path, method: :post, remote: true)
       end
     end
 

@@ -7,7 +7,7 @@
 
 # encoding:  utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe RolesController, type: :controller do
 
@@ -21,7 +21,7 @@ describe RolesController, type: :controller do
 
   let(:create_entry_attrs) do
     {
-      label: 'Materialchef',
+      label: "Materialchef",
       type: Group::BottomLayer::Member.sti_name,
       person_id: people(:top_leader).id
     }
@@ -30,7 +30,7 @@ describe RolesController, type: :controller do
   let(:test_entry_attrs) do
     {
       type: Group::BottomLayer::Member.sti_name,
-      label: 'Materialchef'
+      label: "Materialchef"
     }
   end
 
@@ -59,24 +59,24 @@ describe RolesController, type: :controller do
   end
 
 
-  include_examples 'crud controller', skip: [%w(index), %w(show), %w(new plain)]
+  include_examples "crud controller", skip: [%w(index), %w(show), %w(new plain)]
 
   let!(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
 
   describe_action :get, :new do
-    context '.html', format: :html do
-      it 'does not raise exception if no type is given' do
+    context ".html", format: :html do
+      it "does not raise exception if no type is given" do
         expect(test_entry).to be_kind_of(Role)
       end
 
-      it 'chooses default role' do
-        expect(response.body).to have_select('role_type', :selected => group.default_role.label)
+      it "chooses default role" do
+        expect(response.body).to have_select("role_type", :selected => group.default_role.label)
       end
 
-      context 'with invalid type' do
-        let(:params) { { role: { type: 'foo' } } }
+      context "with invalid type" do
+        let(:params) { { role: { type: "foo" } } }
 
-        it 'raises exception', perform_request: false do
+        it "raises exception", perform_request: false do
           expect { perform_request }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
@@ -84,18 +84,18 @@ describe RolesController, type: :controller do
   end
 
   describe_action :get, :edit, id: true do
-    it 'shows current role type rather than default' do
-      expect(response.body).to have_select('role_type', :selected => "Member")
+    it "shows current role type rather than default" do
+      expect(response.body).to have_select("role_type", :selected => "Member")
     end
   end
 
-  context 'using js' do
+  context "using js" do
 
     before { sign_in(user) }
 
     let(:person) { Fabricate(:person) }
 
-    it 'new role for existing person returns new role' do
+    it "new role for existing person returns new role" do
       post :create, xhr: true, params: {
         group_id: group.id,
         role: { group_id: group.id,
@@ -103,19 +103,19 @@ describe RolesController, type: :controller do
                 type: Group::BottomLayer::Member.sti_name } }
 
       expect(response).to have_http_status(:ok)
-      is_expected.to render_template('create')
-      expect(response.body).to include('Bottom One')
+      is_expected.to render_template("create")
+      expect(response.body).to include("Bottom One")
     end
 
-    it 'creation of role without type returns error' do
+    it "creation of role without type returns error" do
       post :create, xhr: true, params: {
         group_id: group.id,
         role: { group_id: group.id, person_id: person.id }
       }
 
       expect(response).to have_http_status(:ok)
-      is_expected.to render_template('create')
-      expect(response.body).to include('alert')
+      is_expected.to render_template("create")
+      expect(response.body).to include("alert")
     end
   end
 

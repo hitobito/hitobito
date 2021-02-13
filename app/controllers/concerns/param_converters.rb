@@ -6,7 +6,7 @@ module ParamConverters
 
   def list_param(key, model = nil)
     param = model ? params[model][key] : params[key]
-    param.to_s.split(',').map(&:strip)
+    param.to_s.split(",").map(&:strip)
   end
 
 end

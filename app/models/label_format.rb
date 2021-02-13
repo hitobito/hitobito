@@ -53,11 +53,11 @@ class LabelFormat < ActiveRecord::Base
   validates :padding_top, numericality: { less_than: :height, if: :height }
   validates :padding_left, numericality: { less_than: :width, if: :width }
 
-  scope :for_user, ->(user) { where('user_id = ? OR user_id IS null', user.id) }
+  scope :for_user, ->(user) { where("user_id = ? OR user_id IS null", user.id) }
 
   def self.for_person(person)
     if person.show_global_label_formats?
-      where('person_id = ? OR person_id IS NULL', person.id)
+      where("person_id = ? OR person_id IS NULL", person.id)
     else
       where(person_id: person.id)
     end

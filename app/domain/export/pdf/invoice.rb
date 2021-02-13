@@ -12,7 +12,7 @@ module Export::Pdf
 
     class Runner
       def render(invoices, options)
-        pdf = Prawn::Document.new(page_size: 'A4',
+        pdf = Prawn::Document.new(page_size: "A4",
                                   page_layout: :portrait,
                                   margin: MARGIN)
         customize(pdf)
@@ -33,7 +33,7 @@ module Export::Pdf
         end
 
         if options[:payment_slip]
-          if invoice.payment_slip == 'qr'
+          if invoice.payment_slip == "qr"
             PaymentSlipQr.new(pdf, invoice, options[:debug]).render
           else
             PaymentSlip.new(pdf, invoice, options[:debug]).render
@@ -43,8 +43,8 @@ module Export::Pdf
 
       def customize(pdf)
         pdf.font_size 10
-        pdf.font 'Helvetica'
-        pdf.font_families.update('ocrb' => { normal: ocrb_path })
+        pdf.font "Helvetica"
+        pdf.font_families.update("ocrb" => { normal: ocrb_path })
         pdf
       end
 
@@ -53,7 +53,7 @@ module Export::Pdf
       end
 
       def ocrb_path
-        Rails.root.join('app', 'javascript', 'fonts', 'OCRB.ttf')
+        Rails.root.join("app", "javascript", "fonts", "OCRB.ttf")
       end
 
     end

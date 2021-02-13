@@ -66,7 +66,7 @@ module Sheet
       def render(active = false)
         content_tag(:li,
                     link_to(label, path, data: { disable_with: label }),
-                    class: active ? 'active' : nil)
+                    class: active ? "active" : nil)
       end
 
       def show?

@@ -24,15 +24,15 @@ module PeopleHelper
 
   def format_birthday(person)
     if person.birthday?
-      f(person.birthday) << ' ' << t('people.years_old', years: person.years)
+      f(person.birthday) << " " << t("people.years_old", years: person.years)
     end
   end
 
   def format_tags(person)
     if person.tags.present?
-      person.tags.map(&:name).join(', ')
+      person.tags.map(&:name).join(", ")
     else
-      t('global.associations.no_entry')
+      t("global.associations.no_entry")
     end
   end
 
@@ -45,15 +45,15 @@ module PeopleHelper
       end
     end
 
-    header = list[0..-2].collect { |i| content_tag(:span, "#{i} |".html_safe, class: 'nowrap') }
+    header = list[0..-2].collect { |i| content_tag(:span, "#{i} |".html_safe, class: "nowrap") }
     header << list.last
-    t.col(safe_join(header, ' '), &block)
+    t.col(safe_join(header, " "), &block)
   end
 
   def send_login_tooltip_text
-    entry.password? && t('.send_login_tooltip.reset') ||
-      entry.reset_password_sent_at.present? && t('.send_login_tooltip.resend') ||
-      t('.send_login_tooltip.new')
+    entry.password? && t(".send_login_tooltip.reset") ||
+      entry.reset_password_sent_at.present? && t(".send_login_tooltip.resend") ||
+      t(".send_login_tooltip.new")
   end
 
   def person_link(person)
@@ -66,7 +66,7 @@ module PeopleHelper
 
   def render_household(person)
     safe_join(person.household_people.collect do |p|
-      content_tag(:li, class: 'chip') do
+      content_tag(:li, class: "chip") do
         can?(:show, p) ? link_to(p, p) : p.to_s
       end
     end, "\n")
@@ -81,7 +81,7 @@ module PeopleHelper
 
   def link_to_address(person)
     if [person.address, person.zip_code, person.town].all?(&:present?)
-      link_to(icon('map-marker-alt', class: 'fa-2x'), person_address_url(person), target: '_blank')
+      link_to(icon("map-marker-alt", class: "fa-2x"), person_address_url(person), target: "_blank")
     end
   end
 
@@ -95,17 +95,17 @@ module PeopleHelper
   end
 
   def openstreetmap_url(query_params)
-    URI::HTTP.build(host: 'nominatim.openstreetmap.org',
-                    path: '/search.php',
+    URI::HTTP.build(host: "nominatim.openstreetmap.org",
+                    path: "/search.php",
                     query: query_params).to_s
   end
 
   def upcoming_events_title
-    title = [t('.events')]
+    title = [t(".events")]
     if entry.id == current_user.id
-      title << link_to(icon(:'calendar-alt'), event_feed_path, title: t('event_feeds.integrate'))
+      title << link_to(icon(:'calendar-alt'), event_feed_path, title: t("event_feeds.integrate"))
     end
-    safe_join(title, ' ')
+    safe_join(title, " ")
   end
 
   def person_event_feed_url

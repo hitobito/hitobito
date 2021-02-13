@@ -24,7 +24,7 @@ class UserSerializer < ApplicationSerializer
 
     entity :primary_group, item.primary_group, GroupLinkSerializer
 
-    template_link('token.regenerate', 'tokens', h.users_token_url(format: :json), method: 'POST')
-    template_link('token.delete', 'tokens', h.users_token_url(format: :json), method: 'DELETE')
+    template_link("token.regenerate", "tokens", h.users_token_url(format: :json), method: "POST")
+    template_link("token.delete", "tokens", h.users_token_url(format: :json), method: "DELETE")
   end
 end

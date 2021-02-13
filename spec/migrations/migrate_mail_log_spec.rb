@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
-migration_file_name = Dir[Rails.root.join('db/migrate/20210212111156_migrate_mail_log.rb')].first
+require "spec_helper"
+migration_file_name = Dir[Rails.root.join("db/migrate/20210212111156_migrate_mail_log.rb")].first
 require migration_file_name
 
 
@@ -48,7 +48,7 @@ describe MigrateMailLog do
     Message.delete_all
   end
 
-  context '#up' do
+  context "#up" do
 
     let(:legacy_mail_logs) do
       10.times.collect do
@@ -68,7 +68,7 @@ describe MigrateMailLog do
       legacy_mail_logs
     end
 
-    it 'creates messages/bulk_mail for every log entry' do
+    it "creates messages/bulk_mail for every log entry" do
       expect do
         migration.up
       end.to change { Message::BulkMail.count }.by(10)
@@ -89,12 +89,12 @@ describe MigrateMailLog do
     end
   end
 
-  context '#down' do
+  context "#down" do
     after do
       migration.up
     end
 
-    it 'updates log subject and mailing list according to bulk mail' do
+    it "updates log subject and mailing list according to bulk mail" do
       mails = bulk_mails.map { |m| { subject: m.subject, mailing_list_id: m.mailing_list_id } }
       expect do
         migration.down

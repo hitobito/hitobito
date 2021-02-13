@@ -26,27 +26,27 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Message do
 
-  it '#to_s shows truncated subject' do
-    subject.subject = 'This is a very long text'
-    expect(subject.to_s).to eq 'This is a very lo...'
+  it "#to_s shows truncated subject" do
+    subject.subject = "This is a very long text"
+    expect(subject.to_s).to eq "This is a very lo..."
   end
 
-  it 'can create message without sender' do
-    mailing_lists(:leaders).messages.create!(subject: 'test', type: 'Message')
+  it "can create message without sender" do
+    mailing_lists(:leaders).messages.create!(subject: "test", type: "Message")
   end
 
-  context '#destroy' do
+  context "#destroy" do
     subject { messages(:simple) }
 
-    it 'might be destroy when no dispatch exists' do
+    it "might be destroy when no dispatch exists" do
       expect(subject.destroy).to be_truthy
     end
 
-    it 'existing recipient prevents destruction' do
+    it "existing recipient prevents destruction" do
       subject.message_recipients.create!(person: people(:top_leader))
       expect(subject.reload.destroy).to eq false
     end

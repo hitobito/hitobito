@@ -19,7 +19,7 @@
 #  index_event_roles_on_type              (type)
 #
 
-Fabricator(:event_role, class_name: 'Event::Role') do
+Fabricator(:event_role, class_name: "Event::Role") do
   participation { Fabricate(:event_participation) }
 end
 

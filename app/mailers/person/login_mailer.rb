@@ -7,7 +7,7 @@
 
 class Person::LoginMailer < ApplicationMailer
 
-  CONTENT_LOGIN = 'send_login'.freeze
+  CONTENT_LOGIN = "send_login".freeze
 
   def login(recipient, sender, token)
     @recipient = recipient

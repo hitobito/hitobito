@@ -40,7 +40,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe GroupSerializer do
 
@@ -52,7 +52,7 @@ describe GroupSerializer do
 
   subject { hash[:groups].first }
 
-  it 'has different entities' do
+  it "has different entities" do
     links = subject[:links]
     expect(links[:parent]).to eq(group.parent_id.to_s)
     expect(links).not_to have_key(:children)
@@ -60,7 +60,7 @@ describe GroupSerializer do
     expect(links[:hierarchies].size).to eq(2)
   end
 
-  it 'does not include deleted children' do
+  it "does not include deleted children" do
     a = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
     b = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
     b.update!(deleted_at: 1.month.ago)

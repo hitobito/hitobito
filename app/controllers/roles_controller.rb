@@ -128,7 +128,7 @@ class RolesController < CrudController
   end
 
   def copy_errors(new_role)
-    entry.attributes = new_role.attributes.except('id')
+    entry.attributes = new_role.attributes.except("id")
     new_role.errors.each do |key, value|
       entry.errors.add(key, value)
     end
@@ -222,7 +222,7 @@ class RolesController < CrudController
     # only show warning if more than one group remains
     if @was_last_primary_group_role && entry.person.roles.select(:group_id).distinct.count > 1
       new_group = entry.person.primary_group
-      flash[:alert] = t('roles.role_primary_group_changed', new_group: new_group.to_s)
+      flash[:alert] = t("roles.role_primary_group_changed", new_group: new_group.to_s)
     end
   end
 

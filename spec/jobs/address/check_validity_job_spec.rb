@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Address::CheckValidityJob do
   include ActiveJob::TestHelper
@@ -14,8 +14,8 @@ describe Address::CheckValidityJob do
   let(:person) { people(:bottom_member) }
   let(:address) { addresses(:bs_bern) }
 
-  it 'sends email if invalid people are found and mail address is defined' do
-    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(['mail@example.com'])
+  it "sends email if invalid people are found and mail address is defined" do
+    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(["mail@example.com"])
 
     expect do
       perform_enqueued_jobs do
@@ -25,8 +25,8 @@ describe Address::CheckValidityJob do
     expect(ActsAsTaggableOn::Tagging.count).to eq(1)
   end
 
-  it 'sends multiple emails if invalid people are found and multiple mail addresses is defined' do
-    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(['mail@example.com', 'addresses@example.com'])
+  it "sends multiple emails if invalid people are found and multiple mail addresses is defined" do
+    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(["mail@example.com", "addresses@example.com"])
 
     perform_enqueued_jobs do
       expect do
@@ -36,8 +36,8 @@ describe Address::CheckValidityJob do
     end
   end
 
-  it 'sends no emails if no invalid people are found' do
-    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(['mail@example.com', 'addresses@example.com'])
+  it "sends no emails if no invalid people are found" do
+    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(["mail@example.com", "addresses@example.com"])
     person.update!(address: address.street_short, zip_code: address.zip_code, town: address.town)
 
     perform_enqueued_jobs do
@@ -48,7 +48,7 @@ describe Address::CheckValidityJob do
     end
   end
 
-  it 'sends no emails if no mail address is defined' do
+  it "sends no emails if no mail address is defined" do
     allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return([])
 
     perform_enqueued_jobs do
@@ -59,7 +59,7 @@ describe Address::CheckValidityJob do
     end
   end
 
-  it 'sends no emails if no invalid people are found and no mail address is defined' do
+  it "sends no emails if no invalid people are found and no mail address is defined" do
     allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return([])
 
     person.update!(address: address.street_short, zip_code: address.zip_code, town: address.town)

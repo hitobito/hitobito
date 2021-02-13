@@ -9,7 +9,7 @@
 module OauthApplicationsHelper
 
   def oauth_spec_link(anchor)
-    url = ['https://tools.ietf.org/html/rfc6749', anchor].join('#')
+    url = ["https://tools.ietf.org/html/rfc6749", anchor].join("#")
     link_to(url, url, target: :_blank)
   end
 
@@ -18,7 +18,7 @@ module OauthApplicationsHelper
       format_doorkeeper_application_scope(key)
     end.collect(&:html_safe)
 
-    simple_list(human_scopes, class: 'unstyled')
+    simple_list(human_scopes, class: "unstyled")
   end
 
   def format_doorkeeper_application_scope(key)

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 #
 
-require 'axlsx'
+require "axlsx"
 
 module Export::Xlsx
   class Style

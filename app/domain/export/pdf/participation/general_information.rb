@@ -18,7 +18,7 @@ module Export::Pdf::Participation
     def render_general_information
       return if event.kind.try(:general_information).blank?
 
-      with_header(I18n.t('activerecord.attributes.event/kind.general_information')) do
+      with_header(I18n.t("activerecord.attributes.event/kind.general_information")) do
         text event.kind.general_information
       end
     end

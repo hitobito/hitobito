@@ -20,11 +20,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe LabelFormat do
 
-  it 'nullifies people last_label_format_id on destroy' do
+  it "nullifies people last_label_format_id on destroy" do
     f = Fabricate(:label_format)
     p = Person.first
     p.update!(last_label_format: f)
@@ -32,7 +32,7 @@ describe LabelFormat do
     expect(p.reload.last_label_format_id).to be_nil
   end
 
-  context '.for_person' do
+  context ".for_person" do
 
     let(:person) { Person.first }
 
@@ -40,13 +40,13 @@ describe LabelFormat do
       Fabricate(:label_format, person: person)
     end
 
-    it 'includes all label formats if show_global_label_formats' do
+    it "includes all label formats if show_global_label_formats" do
       person.show_global_label_formats = true
 
       expect(LabelFormat.for_person(person).size).to eq(4)
     end
 
-    it 'includes only personal label formats if !show_global_label_formats' do
+    it "includes only personal label formats if !show_global_label_formats" do
       person.show_global_label_formats = false
 
       expect(LabelFormat.for_person(person).size).to eq(1)

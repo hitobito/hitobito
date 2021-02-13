@@ -26,12 +26,12 @@ module Import
 
       def person_attributes
         relevant_attributes.map! do |name|
-          { key: name, value: ::Person.human_attribute_name(name, default: '') }
+          { key: name, value: ::Person.human_attribute_name(name, default: "") }
         end
       end
 
       def tag_attributes
-        [{ key: 'tags', value: ActsAsTaggableOn::Tag.model_name.human(count: 2) }]
+        [{ key: "tags", value: ActsAsTaggableOn::Tag.model_name.human(count: 2) }]
       end
 
       # alle attributes - technische attributes
@@ -69,7 +69,7 @@ module Import
     def human_errors
       person.errors.messages.map do |key, value|
         key == :base ? value : "#{::Person.human_attribute_name(key)} #{value.join(', ')}"
-      end.flatten.join(', ')
+      end.flatten.join(", ")
     end
 
     def valid?
@@ -138,15 +138,15 @@ module Import
       keys = ContactAccountFields.new(model).keys
       accounts = keys.select { |key| attributes.key?(key) }
       accounts.map do |key|
-        label = key.split('_').last.capitalize
+        label = key.split("_").last.capitalize
         value = attributes.delete(key)
         { model.value_attr => value, :label => label } if value.present?
       end.compact
     end
 
     def extract_tags
-      tags = attributes.delete('tags')
-      can_manage_tags ? tags.to_s.split(',').map { |t| t.strip } : nil
+      tags = attributes.delete("tags")
+      can_manage_tags ? tags.to_s.split(",").map { |t| t.strip } : nil
     end
 
   end

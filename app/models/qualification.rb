@@ -47,22 +47,22 @@ class Qualification < ActiveRecord::Base
   class << self
 
     def order_by_date
-      order('finish_at DESC')
+      order("finish_at DESC")
     end
 
     def active(date = nil)
       date ||= Time.zone.today
-      where('qualifications.start_at <= ?', date).
-        where('qualifications.finish_at >= ? OR qualifications.finish_at IS NULL', date)
+      where("qualifications.start_at <= ?", date).
+        where("qualifications.finish_at >= ? OR qualifications.finish_at IS NULL", date)
     end
 
     def reactivateable(date = nil)
       date ||= Time.zone.today
       joins(:qualification_kind).
-        where('qualifications.start_at <= ?', date).
-        where('qualifications.finish_at IS NULL OR ' \
-              '(qualification_kinds.reactivateable IS NULL AND ' \
-              ' qualifications.finish_at >= ?) OR ' \
+        where("qualifications.start_at <= ?", date).
+        where("qualifications.finish_at IS NULL OR " \
+              "(qualification_kinds.reactivateable IS NULL AND " \
+              " qualifications.finish_at >= ?) OR " \
               "#{add_reactivateable_years_to_finish_at} >= ?",
               date, date)
     end
@@ -70,7 +70,7 @@ class Qualification < ActiveRecord::Base
     private
 
     def add_reactivateable_years_to_finish_at
-      'DATE_ADD(qualifications.finish_at, INTERVAL qualification_kinds.reactivateable YEAR)'
+      "DATE_ADD(qualifications.finish_at, INTERVAL qualification_kinds.reactivateable YEAR)"
     end
 
   end
@@ -104,7 +104,7 @@ class Qualification < ActiveRecord::Base
     cols << :finish_at if finish_at?
     cols << :origin if format == :long && origin?
 
-    ['string', cols.join('_and_').presence].compact.join('_with_')
+    ["string", cols.join("_and_").presence].compact.join("_with_")
   end
 
 end

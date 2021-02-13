@@ -18,7 +18,7 @@
 #  priority_3_id        :integer
 #
 
-Fabricator(:event_application, class_name: 'Event::Application') do
+Fabricator(:event_application, class_name: "Event::Application") do
   priority_1    { Fabricate(:course) }
   priority_2    { Fabricate(:course) }
 end

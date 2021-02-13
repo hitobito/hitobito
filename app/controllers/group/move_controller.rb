@@ -61,7 +61,7 @@ class Group::MoveController < ApplicationController
     if success
       flash[:notice] = translate(:success, group: group, target: target)
     else
-      flash[:alert] = group.errors.full_messages.join(', ')
+      flash[:alert] = group.errors.full_messages.join(", ")
     end
   end
 

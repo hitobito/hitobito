@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 describe  Import::PersonColumnGuesser do
 
   let(:headers) { %w(Geschlecht vorname Name skype) }
@@ -15,41 +15,41 @@ describe  Import::PersonColumnGuesser do
 
   subject { guesser.mapping }
 
-  context 'maps default values for header' do
-    its(['Geschlecht']) { should eq field_for(:gender) }
-    its(['vorname']) { should eq field_for(:first_name) }
-    its(['skype']) { should eq field_for(:social_account_skype) }
+  context "maps default values for header" do
+    its(["Geschlecht"]) { should eq field_for(:gender) }
+    its(["vorname"]) { should eq field_for(:first_name) }
+    its(["skype"]) { should eq field_for(:social_account_skype) }
 
 
-    context 'handles noexisting headers' do
+    context "handles noexisting headers" do
       let(:headers) { %w(Geburtsdatum Email) }
 
-      its(['Geburtsdatum']) { should eq nil_key }
-      its(['Email']) { should eq nil_key }
+      its(["Geburtsdatum"]) { should eq nil_key }
+      its(["Email"]) { should eq nil_key }
     end
 
-    context 'params override mapping' do
-      let(:params) { { 'Name' => 'first_name' } }
-      its(['Name']) { should eq field_for(:first_name) }
+    context "params override mapping" do
+      let(:params) { { "Name" => "first_name" } }
+      its(["Name"]) { should eq field_for(:first_name) }
     end
   end
 
-  context 'matching' do
+  context "matching" do
     before do
       allow(Import::Person).to receive_messages(fields: [
-        {key: 'other_name', value: 'Anderer Name'},
-        {key: 'name', value: 'Name'}
+        {key: "other_name", value: "Anderer Name"},
+        {key: "name", value: "Name"}
       ])
     end
 
-    context 'uses first exact matched value' do
+    context "uses first exact matched value" do
       let(:headers) { %w(Name) }
-      its(['Name']) { should eq field_for(:name) }
+      its(["Name"]) { should eq field_for(:name) }
     end
 
-    context 'falls back first partial matched value if no exact match found' do
+    context "falls back first partial matched value if no exact match found" do
       let(:headers) { %w(ame) }
-      its(['ame']) { should eq field_for(:other_name) }
+      its(["ame"]) { should eq field_for(:other_name) }
     end
   end
 

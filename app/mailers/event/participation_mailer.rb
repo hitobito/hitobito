@@ -7,9 +7,9 @@
 
 class Event::ParticipationMailer < ApplicationMailer
 
-  CONTENT_CONFIRMATION = 'event_application_confirmation'
-  CONTENT_APPROVAL     = 'event_application_approval'
-  CONTENT_CANCEL       = 'event_cancel_application'
+  CONTENT_CONFIRMATION = "event_application_confirmation"
+  CONTENT_APPROVAL     = "event_application_approval"
+  CONTENT_CANCEL       = "event_cancel_application"
 
   # Include all helpers that are required directly or indirectly (in decorators)
   helper :format, :layout, :auto_link_value
@@ -50,7 +50,7 @@ class Event::ParticipationMailer < ApplicationMailer
   end
 
   def placeholder_recipient_names
-    @recipients.collect(&:greeting_name).join(', ')
+    @recipients.collect(&:greeting_name).join(", ")
   end
 
   def placeholder_event_details
@@ -73,8 +73,8 @@ class Event::ParticipationMailer < ApplicationMailer
 
     values = if values
                values.merge(
-                 'event-details' => event_details,
-                 'application-url' => link_to(participation_url)
+                 "event-details" => event_details,
+                 "application-url" => link_to(participation_url)
                )
              else
                values_for_placeholders(content_key)
@@ -94,23 +94,23 @@ class Event::ParticipationMailer < ApplicationMailer
   def event_details # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     infos = []
     infos << event.name
-    infos << labeled(:dates) { event.dates.map(&:to_s).join('<br/>') }
+    infos << labeled(:dates) { event.dates.map(&:to_s).join("<br/>") }
     infos << labeled(:motto)
     infos << labeled(:cost)
-    infos << labeled(:description) { event.description.gsub("\n", '<br/>') }
-    infos << labeled(:location) { event.location.gsub("\n", '<br/>') }
+    infos << labeled(:description) { event.description.gsub("\n", "<br/>") }
+    infos << labeled(:location) { event.location.gsub("\n", "<br/>") }
     infos << labeled(:contact) { "#{event.contact}<br/>#{event.contact.email}" }
     infos << answers_details
     infos << additional_information_details
     infos << participation_details
-    infos.compact.join('<br/><br/>')
+    infos.compact.join("<br/><br/>")
   end
 
   def event_without_participation
     infos = []
     infos << event.name
-    infos << labeled(:dates) { event.dates.map(&:to_s).join('<br/>') }
-    infos.compact.join('<br/><br/>')
+    infos << labeled(:dates) { event.dates.map(&:to_s).join("<br/>") }
+    infos.compact.join("<br/><br/>")
   end
 
   def labeled(key)
@@ -129,7 +129,7 @@ class Event::ParticipationMailer < ApplicationMailer
       answers.each do |a|
         text << "#{a.question.question}: #{a.answer}"
       end
-      text.join('<br/>')
+      text.join("<br/>")
     end
   end
 
@@ -142,15 +142,15 @@ class Event::ParticipationMailer < ApplicationMailer
 
   def additional_information_details
     if participation.additional_information?
-      t('activerecord.attributes.event/participation.additional_information') +
-      ':<br/>' +
-      participation.additional_information.gsub("\n", '<br/>')
+      t("activerecord.attributes.event/participation.additional_information") +
+      ":<br/>" +
+      participation.additional_information.gsub("\n", "<br/>")
     end
   end
 
   def participation_details
     ["#{Event::Role::Participant.model_name.human}:",
-     person.decorate.complete_contact].join('<br/>')
+     person.decorate.complete_contact].join("<br/>")
   end
 
   def person

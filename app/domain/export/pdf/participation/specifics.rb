@@ -11,13 +11,13 @@ module Export::Pdf::Participation
       data = answers.map { |a| [strip_tags(a.question.question), a.answer] }
 
       if data.present?
-        with_header(I18n.t('event.participations.application_answers')) do
+        with_header(I18n.t("event.participations.application_answers")) do
           table(data, cell_style: { border_width: 0, padding: 2 })
         end
       end
 
       with_header(additional_information_label) do
-        text(participation.additional_information.to_s.strip.presence || '-')
+        text(participation.additional_information.to_s.strip.presence || "-")
       end
     end
 
@@ -31,7 +31,7 @@ module Export::Pdf::Participation
     end
 
     def additional_information_label
-      I18n.t('activerecord.attributes.event/participation.additional_information')
+      I18n.t("activerecord.attributes.event/participation.additional_information")
     end
   end
 end

@@ -76,6 +76,6 @@ class Event::Answer < ActiveRecord::Base
       end
     end.compact
 
-    indexes.present? ? indexes.join(', ') : nil
+    indexes.present? ? indexes.join(", ") : nil
   end
 end

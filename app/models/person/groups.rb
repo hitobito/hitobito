@@ -78,7 +78,7 @@ module Person::Groups
     def visible_from_above(group = nil)
       role_types = group ? group.role_types.select(&:visible_from_above) : Role.visible_types
       # use string query to only get these roles (hash query would be merged).
-      where('roles.type IN (?)', role_types.collect(&:sti_name))
+      where("roles.type IN (?)", role_types.collect(&:sti_name))
     end
 
     # Scope listing all people with a role in the given group.
@@ -116,11 +116,11 @@ module Person::Groups
     end
 
     def order_by_role_statement
-      statement = 'CASE roles.type '
+      statement = "CASE roles.type "
       Role.all_types.each_with_index do |t, i|
         statement << "WHEN '#{t.sti_name}' THEN #{i} "
       end
-      statement << 'END'
+      statement << "END"
     end
 
   end

@@ -11,7 +11,7 @@ module ActionHelper
   # Uses the current record if none is given.
   def button_action_show(path = nil, options = {})
     path ||= path_args(entry)
-    action_button ti(:"link.show"), path, 'zoom-in', options
+    action_button ti(:"link.show"), path, "zoom-in", options
   end
 
   # Standard button action to the edit page of a given record.
@@ -20,7 +20,7 @@ module ActionHelper
     path ||= path_args(entry)
     action_button ti(:"link.edit"),
                   path.is_a?(String) ? path : edit_polymorphic_path(path),
-                  'edit',
+                  "edit",
                   options
   end
 
@@ -30,7 +30,7 @@ module ActionHelper
     path ||= path_args(entry)
     options[:data] ||= {}
     options[:data].reverse_merge!(confirm: ti(:confirm_delete), method: :delete)
-    action_button ti(:"link.delete"), path, 'trash-alt', options
+    action_button ti(:"link.delete"), path, "trash-alt", options
   end
 
   # Standard button action to the list page.
@@ -39,7 +39,7 @@ module ActionHelper
     path ||= path_args(model_class)
     action_button ti(:"link.list"),
                   path.is_a?(String) ? path : polymorphic_path(path, url_options),
-                  'list',
+                  "list",
                   options
   end
 
@@ -49,7 +49,7 @@ module ActionHelper
     path ||= path_args(model_class)
     action_button ti(:"link.add"),
                   path.is_a?(String) ? path : new_polymorphic_path(path, url_options),
-                  'plus',
+                  "plus",
                   options
   end
 
@@ -71,7 +71,7 @@ module ActionHelper
     path ||= path_args(entry)
     link_to label,
             path,
-            class: 'action',
+            class: "action",
             title: ti(:"link.delete"),
             alt: ti(:"link.delete"),
             data: { confirm: ti(:confirm_delete),

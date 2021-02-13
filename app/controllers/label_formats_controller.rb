@@ -11,7 +11,7 @@ class LabelFormatsController < SimpleCrudController
                           :padding_top, :padding_left, :count_horizontal, :count_vertical,
                           :nickname, :pp_post]
 
-  self.sort_mappings = { name: 'label_format_translations.name',
+  self.sort_mappings = { name: "label_format_translations.name",
                          dimensions: %w(count_horizontal count_vertical) }
 
   before_render_index :global_entries
@@ -25,7 +25,7 @@ class LabelFormatsController < SimpleCrudController
   end
 
   def manage_global?
-    params[:global] == 'true' && can?(:manage_global, LabelFormat)
+    params[:global] == "true" && can?(:manage_global, LabelFormat)
   end
 
   def list_entries

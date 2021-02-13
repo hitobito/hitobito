@@ -44,7 +44,7 @@ module Export::Tabular::People
 
       list.unscope(:select)
           .only_public_data
-          .select('household_key')
+          .select("household_key")
           .includes(:primary_group)
     end
 
@@ -58,7 +58,7 @@ module Export::Tabular::People
       people
         .collect { |person| [person.first_name, person.last_name] }
         .transpose
-        .collect { |list| list.join(',') }
+        .collect { |list| list.join(",") }
     end
 
     def assign(person, first_name, last_name)

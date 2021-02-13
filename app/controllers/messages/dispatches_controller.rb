@@ -30,7 +30,7 @@ module Messages
     end
 
     def flash_message
-      t('.success', model_class: message.class.model_name.human)
+      t(".success", model_class: message.class.model_name.human)
     end
 
     def update_and_enqueue

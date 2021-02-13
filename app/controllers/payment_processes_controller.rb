@@ -12,7 +12,7 @@ class PaymentProcessesController < ApplicationController
 
   def show
     unless processor
-      redirect_to new_group_payment_process_path(group), alert: t('payment_processes.invalid_file')
+      redirect_to new_group_payment_process_path(group), alert: t("payment_processes.invalid_file")
     end
   end
 
@@ -22,13 +22,13 @@ class PaymentProcessesController < ApplicationController
       flash.now[:alert] = processor.alert
       render :show
     elsif processor && params[:data]
-      redirect_to group_invoices_path(group), notice: t('payment_processes.created',
+      redirect_to group_invoices_path(group), notice: t("payment_processes.created",
                                                         count: processor.process)
     elsif @parsing_error
-      redirect_to new_group_payment_process_path(group), alert: t('payment_processes.parsing_error',
+      redirect_to new_group_payment_process_path(group), alert: t("payment_processes.parsing_error",
                                                                   error: @parsing_error)
     else
-      redirect_to new_group_payment_process_path(group), alert: t('payment_processes.invalid_file')
+      redirect_to new_group_payment_process_path(group), alert: t("payment_processes.invalid_file")
     end
   end
 
@@ -62,7 +62,7 @@ class PaymentProcessesController < ApplicationController
   end
 
   def read_file
-    file_param && valid_file?(file_param) && file_param.read.force_encoding('UTF-8')
+    file_param && valid_file?(file_param) && file_param.read.force_encoding("UTF-8")
   end
 
   def valid_file?(io)

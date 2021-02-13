@@ -39,7 +39,7 @@
 #  updater_id                  :integer
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::Course do
 
@@ -49,12 +49,12 @@ describe Event::Course do
 
   its(:qualification_date) { should == Date.new(2012, 5, 11) }
 
-  context '#qualification_date' do
+  context "#qualification_date" do
     before do
       subject.dates.destroy_all
-      add_date('2011-01-20')
-      add_date('2011-02-15')
-      add_date('2011-01-02')
+      add_date("2011-01-20")
+      add_date("2011-02-15")
+      add_date("2011-01-02")
     end
 
     its(:qualification_date) { should == Date.new(2011, 02, 20) }
@@ -65,30 +65,30 @@ describe Event::Course do
     end
   end
 
-  context 'multiple start_at' do
+  context "multiple start_at" do
     before { subject.dates.create(start_at: Date.new(2012, 5, 14)) }
     its(:qualification_date) { should == Date.new(2012, 5, 14) }
   end
 
-  context 'without event_kind' do
+  context "without event_kind" do
     before { Event::Course.used_attributes -= [:kind_id] }
 
-    it 'creates course' do
+    it "creates course" do
       Event::Course.create!(groups: [groups(:top_group)],
-                            name: 'test',
+                            name: "test",
                             dates_attributes: [{ start_at: Time.zone.now }])
 
     end
 
-    it 'renders label_detail' do
+    it "renders label_detail" do
       events(:top_course).update(kind_id: nil, number: 123)
-      expect(events(:top_course).label_detail).to eq '123 Top'
+      expect(events(:top_course).label_detail).to eq "123 Top"
     end
 
     after { Event::Course.used_attributes += [:kind_id] }
   end
 
-  it 'sets signtuare to true when signature confirmation is required' do
+  it "sets signtuare to true when signature confirmation is required" do
     course = Event::Course.new(signature_confirmation:true)
     expect(course.signature).to be_falsy
     expect(course.signature_confirmation).to be_truthy
@@ -98,29 +98,29 @@ describe Event::Course do
     expect(course.signature_confirmation).to be_truthy
   end
 
-  context '#duplicate' do
+  context "#duplicate" do
 
     let(:event) { events(:top_course) }
 
-    it 'resets participant counts' do
+    it "resets participant counts" do
       d = event.duplicate
       expect(d.participant_count).to eq(0)
       expect(d.teamer_count).to eq(0)
       expect(d.applicant_count).to eq(0)
     end
 
-    it 'resets state' do
+    it "resets state" do
       d = event.duplicate
       expect(d.state).to be_nil
     end
 
-    it 'keeps empty questions' do
+    it "keeps empty questions" do
       event.questions = []
       d = event.duplicate
       expect(d.application_questions.size).to eq(0)
     end
 
-    it 'copies existing questions' do
+    it "copies existing questions" do
       d = event.duplicate
       expect do
         d.dates << Fabricate.build(:event_date, event: d)

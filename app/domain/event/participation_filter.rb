@@ -49,7 +49,7 @@ class Event::ParticipationFilter
   end
 
   def apply_default_sort(records)
-    records = records.order_by_role(event) if Settings.people.default_sort == 'role'
+    records = records.order_by_role(event) if Settings.people.default_sort == "role"
     records.merge(Person.order_by_name)
   end
 
@@ -68,15 +68,15 @@ class Event::ParticipationFilter
 
   def apply_filter_scope(records, kind = params[:filter])
     case kind
-    when 'all'
+    when "all"
       records
-    when 'teamers'
-      records.where.not('event_roles.type' => event.participant_types.collect(&:sti_name))
-    when 'participants'
-      records.where('event_roles.type' => event.participant_types.collect(&:sti_name))
+    when "teamers"
+      records.where.not("event_roles.type" => event.participant_types.collect(&:sti_name))
+    when "participants"
+      records.where("event_roles.type" => event.participant_types.collect(&:sti_name))
     else
       if event.participation_role_labels.include?(kind)
-        records.where('event_roles.label' => kind)
+        records.where("event_roles.label" => kind)
       else
         records
       end

@@ -15,7 +15,7 @@ class Event::Qualifier
     private
 
     def qualifier_role(participation)
-      leader?(participation) ? 'leader' : 'participant'
+      leader?(participation) ? "leader" : "participant"
     end
 
     def leader?(participation)
@@ -101,11 +101,11 @@ class Event::Qualifier
   end
 
   def qualification_kinds
-    event.kind.qualification_kinds('qualification', @role)
+    event.kind.qualification_kinds("qualification", @role)
   end
 
   def prolongation_kinds
-    event.kind.qualification_kinds('prolongation', @role)
+    event.kind.qualification_kinds("prolongation", @role)
   end
 
 end

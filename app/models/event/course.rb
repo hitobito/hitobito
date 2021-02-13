@@ -54,7 +54,7 @@
 class Event::Course < Event
 
   # This statement is required because this class would not be loaded otherwise.
-  require_dependency 'event/course/role/participant'
+  require_dependency "event/course/role/participant"
 
   self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids,
                            :requires_approval, :display_booking_info, :waiting_list]
@@ -78,7 +78,7 @@ class Event::Course < Event
 
 
   def label_detail
-    label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ''
+    label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ""
     "#{label}#{number} #{group_names}"
   end
 
@@ -90,7 +90,7 @@ class Event::Course < Event
   # The date on which qualification obtained in this course start
   def qualification_date
     @qualification_date ||= begin
-      last = dates.reorder('event_dates.start_at DESC').first
+      last = dates.reorder("event_dates.start_at DESC").first
       last.finish_at || last.start_at
     end.to_date
   end

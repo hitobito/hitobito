@@ -25,7 +25,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-Fabricator(:event_participation, class_name: 'Event::Participation') do
+Fabricator(:event_participation, class_name: "Event::Participation") do
   person
   event
 end

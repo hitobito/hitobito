@@ -21,7 +21,7 @@ module Sheet
       def render
         render_upwards +
         render_header +
-        content_tag(:ul, class: 'nav-left-list') do
+        content_tag(:ul, class: "nav-left-list") do
           render_layer_groups + render_deleted_people_link + render_sub_layers
         end
       end
@@ -40,11 +40,11 @@ module Sheet
         if layer.parent_id
           parent = layer.hierarchy[-2]
           parent.use_hierarchy_from_parent(layer.hierarchy[0..-3])
-          link_to(I18n.t('sheet/group.layer_upwards'),
+          link_to(I18n.t("sheet/group.layer_upwards"),
                   active_path(parent),
-                  class: 'nav-left-back')
+                  class: "nav-left-back")
         else
-          ''.html_safe
+          "".html_safe
         end
       end
 
@@ -54,7 +54,7 @@ module Sheet
       end
 
       def render_layer_groups
-        out = ''.html_safe
+        out = "".html_safe
         stack = []
         Array(groups[1..-1]).each do |group|
           render_stacked_group(group, stack, out)
@@ -98,8 +98,8 @@ module Sheet
       def render_deleted_people_link
         if view.can?(:index_deleted_people, layer)
           active = view.current_page?(view.group_deleted_people_path(layer.id))
-          content_tag(:li, class: ('is-active' if active).to_s) do
-            link_to(view.t('groups.global.link.deleted_person'),
+          content_tag(:li, class: ("is-active" if active).to_s) do
+            link_to(view.t("groups.global.link.deleted_person"),
                     view.group_deleted_people_path(layer.id))
           end
         end
@@ -107,7 +107,7 @@ module Sheet
 
       def render_sub_layers
         safe_join(grouped_sub_layers) do |type, layers|
-          content_tag(:li, content_tag(:span, type, class: 'divider')) +
+          content_tag(:li, content_tag(:span, type, class: "divider")) +
           safe_join(layers) do |l|
             l.use_hierarchy_from_parent(layer)
             content_tag(:li, link_to(l.display_name,

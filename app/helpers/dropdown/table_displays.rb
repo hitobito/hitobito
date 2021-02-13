@@ -11,7 +11,7 @@ module Dropdown
              :dom_id, to: :template
 
     def initialize(template)
-      super(template, template.t('global.columns'), :bars)
+      super(template, template.t("global.columns"), :bars)
     end
 
     def to_s
@@ -27,16 +27,16 @@ module Dropdown
     private
 
     def render_parent_fields
-      hidden_field_tag('parent_id', parent.id) +
-        hidden_field_tag('parent_type', parent.class.base_class)
+      hidden_field_tag("parent_id", parent.id) +
+        hidden_field_tag("parent_type", parent.class.base_class)
     end
 
     def render_items
-      options = { class: 'dropdown-menu pull-right', data: { persistent: true }, role: 'menu' }
+      options = { class: "dropdown-menu pull-right", data: { persistent: true }, role: "menu" }
 
       content_tag(:ul, options) do
         items = table_display.available.collect do |column|
-          render_item('selected[]', column)
+          render_item("selected[]", column)
         end
 
         items += event_specific_items if parent.is_a?(::Event)
@@ -63,7 +63,7 @@ module Dropdown
       title   = Title.new(t("event.participations.#{kind}_answers")).render(template)
 
       questions.collect do |question|
-        render_item('selected[]', question.label, dom_id(question), question.label)
+        render_item("selected[]", question.label, dom_id(question), question.label)
       end.prepend(divider, title)
     end
 
@@ -75,7 +75,7 @@ module Dropdown
       table_display.selected.collect do |column|
         next unless column =~ TableDisplay::Participations::QUESTION_REGEX
         next if parent.question_ids.include?(Regexp.last_match(1).to_i)
-        hidden_field_tag('selected[]', column)
+        hidden_field_tag("selected[]", column)
       end
     end
 
@@ -94,7 +94,7 @@ module Dropdown
     def html_options
       {
         id: dom_id(parent),
-        class: 'table-display-dropdown',
+        class: "table-display-dropdown",
         data: { turbolinks_permanent: 1 }
       }
     end

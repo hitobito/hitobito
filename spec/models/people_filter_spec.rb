@@ -15,15 +15,15 @@
 #  group_type :string
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PeopleFilter do
 
-  context '#filter_chain=' do
+  context "#filter_chain=" do
 
-    it 'assigns hash to filter_chain' do
+    it "assigns hash to filter_chain" do
       filter = PeopleFilter.new(filter_chain: { role: { role_type_ids: [1, 2, 3] }})
-      expect(filter.filter_chain[:role].to_params).to eq(role_type_ids: '1-2-3')
+      expect(filter.filter_chain[:role].to_params).to eq(role_type_ids: "1-2-3")
     end
 
   end

@@ -5,42 +5,42 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'export import person' do
+describe "export import person" do
 
   let(:group) { groups(:top_group) }
   let(:role_type) { Group::TopGroup::Leader }
 
-  it 'may import what is exported' do
+  it "may import what is exported" do
     exported = Fabricate(:person,
-                         first_name: 'Foo',
-                         last_name: 'Exporter',
-                         company_name: 'Puzzle',
+                         first_name: "Foo",
+                         last_name: "Exporter",
+                         company_name: "Puzzle",
                          company: false,
-                         nickname: 'Expo',
-                         email: 'exporter@hitobito.example.org',
-                         address: 'Foostreet',
-                         zip_code: 'A1234',
-                         town: 'Berlin',
-                         country: 'DE',
-                         gender: 'm',
+                         nickname: "Expo",
+                         email: "exporter@hitobito.example.org",
+                         address: "Foostreet",
+                         zip_code: "A1234",
+                         town: "Berlin",
+                         country: "DE",
+                         gender: "m",
                          birthday: Date.new(1980, 5, 1),
                          additional_information: "bla bla bla\nbla bla")
 
-    Fabricate(:phone_number, contactable: exported, label: 'Privat')
-    Fabricate(:phone_number, contactable: exported, label: 'Mobil')
+    Fabricate(:phone_number, contactable: exported, label: "Privat")
+    Fabricate(:phone_number, contactable: exported, label: "Mobil")
     Fabricate(:additional_email, contactable: exported)
-    Fabricate(:social_account, contactable: exported, label: 'Webseite')
+    Fabricate(:social_account, contactable: exported, label: "Webseite")
 
     csv = export(exported)
 
     # change to not get a duplicate match
-    exported.update!(last_name: 'Exported', email: 'exported@hitobito.example.org')
+    exported.update!(last_name: "Exported", email: "exported@hitobito.example.org")
 
     import(csv)
 
-    imported = Person.find_by_email('exporter@hitobito.example.org')
+    imported = Person.find_by_email("exporter@hitobito.example.org")
     expect(imported).not_to eq(exported)
 
     excluded = %w(id created_at updated_at primary_group_id contact_data_visible email last_name)

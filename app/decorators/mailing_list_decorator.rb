@@ -14,7 +14,7 @@ class MailingListDecorator < ApplicationDecorator
   end
 
   def subscribable_info
-    html = ''.html_safe
+    html = "".html_safe
     html << if !subscribable
               translate(:may_not_subscribe).html_safe
             else
@@ -24,7 +24,7 @@ class MailingListDecorator < ApplicationDecorator
   end
 
   def subscribers_may_post_info
-    html = ''.html_safe
+    html = "".html_safe
     html << if !subscribers_may_post
               translate(:subscribers_may_not_post).html_safe
             else
@@ -34,7 +34,7 @@ class MailingListDecorator < ApplicationDecorator
   end
 
   def anyone_may_post_info
-    html = ''.html_safe
+    html = "".html_safe
     html << if !anyone_may_post
               translate(:anyone_may_not_post).html_safe
             else
@@ -44,7 +44,7 @@ class MailingListDecorator < ApplicationDecorator
   end
 
   def delivery_report_info
-    html = ''.html_safe
+    html = "".html_safe
     html << if !delivery_report
               translate(:no_delivery_report).html_safe
             else

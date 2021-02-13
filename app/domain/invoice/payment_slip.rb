@@ -9,7 +9,7 @@ class Invoice::PaymentSlip
 
   # Defined at http://www.pruefziffernberechnung.de/E/Einzahlungsschein-CH.shtml
   ESR9_TABLE = [0, 9, 4, 6, 8, 2, 7, 1, 3, 5].freeze
-  BCS = { esr: '01', esr_plus: '04' }.freeze
+  BCS = { esr: "01", esr_plus: "04" }.freeze
 
   attr_reader :invoice
 
@@ -48,20 +48,20 @@ class Invoice::PaymentSlip
   end
 
   def code_line_prefix
-    block = ''
+    block = ""
     block << BCS[calculate_bc.to_sym]
-    block << format('%011.2f', invoice.total).delete('.') if calculate_bc == 'esr'
+    block << format("%011.2f", invoice.total).delete(".") if calculate_bc == "esr"
     block << check_digit(block).to_s
   end
 
   def code_line_suffix
-    participant_number_parts.each_with_index.inject('') do |block, (nr, i)|
+    participant_number_parts.each_with_index.inject("") do |block, (nr, i)|
       block << (i != 1 ? nr : zero_padded(nr, 6))
     end
   end
 
   def calculate_bc
-    invoice.invoice_items.present? ? 'esr' : 'esr_plus'
+    invoice.invoice_items.present? ? "esr" : "esr_plus"
   end
 
   def number_string_with_check
@@ -69,15 +69,15 @@ class Invoice::PaymentSlip
   end
 
   def group_id
-    invoice.sequence_number.split('-')[0]
+    invoice.sequence_number.split("-")[0]
   end
 
   def index
-    invoice.sequence_number.split('-')[1]
+    invoice.sequence_number.split("-")[1]
   end
 
   def participant_number_parts
-    invoice.participant_number.split('-')
+    invoice.participant_number.split("-")
   end
 
   def zero_padded(string, length)

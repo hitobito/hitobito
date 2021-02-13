@@ -15,11 +15,11 @@ class AsyncDownloadsController < ApplicationController
       Cookies::AsyncDownload.new(cookies).remove(name: params[:id], type: file_type)
 
       data = File.read(async_download_file.full_path)
-      data = css_encoding(data) if file_type == 'csv'
+      data = css_encoding(data) if file_type == "csv"
 
       send_data data, filename: filename(file_type)
     else
-      render 'errors/404', status: 404
+      render "errors/404", status: 404
     end
   end
 

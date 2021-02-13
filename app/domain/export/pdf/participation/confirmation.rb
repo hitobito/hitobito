@@ -33,10 +33,10 @@ module Export::Pdf::Participation
     end
 
     def render_contact_address
-      text(I18n.t('event.applied_to'), style: :bold)
+      text(I18n.t("event.applied_to"), style: :bold)
 
       pdf.bounding_box([10, cursor], width: bounds.width) do
-        text(I18n.t('contactable.address_or_email',
+        text(I18n.t("contactable.address_or_email",
                     address: contact_address,
                     email: contact.email))
       end
@@ -45,11 +45,11 @@ module Export::Pdf::Participation
 
     def render_signature_confirmation
       render_signature(event.signature_confirmation_text,
-                       'event.participations.print.signature_confirmation')
+                       "event.participations.print.signature_confirmation")
     end
 
     def render_signature(header = Event::Role::Participant.model_name.human,
-                         key = 'event.participations.print.signature')
+                         key = "event.participations.print.signature")
       render_columns(
         lambda do
           text header
@@ -68,7 +68,7 @@ module Export::Pdf::Participation
 
     def location_and_date
       [Event::Date.human_attribute_name(:location),
-       Event::Date.model_name.human].join(' / ')
+       Event::Date.model_name.human].join(" / ")
     end
 
     def contact_address
@@ -78,13 +78,13 @@ module Export::Pdf::Participation
        "#{contact.zip_code} #{contact.town}".strip]
         .flatten
         .select { |v| v.present? }
-        .join(', ')
+        .join(", ")
     end
 
     def label_with_dots(content)
       text content
       move_down_line
-      text '.' * 55
+      text "." * 55
     end
 
   end

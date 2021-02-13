@@ -25,7 +25,7 @@
 
 class ServiceToken < ActiveRecord::Base
 
-  belongs_to :layer, class_name: 'Group', foreign_key: :layer_group_id
+  belongs_to :layer, class_name: "Group", foreign_key: :layer_group_id
 
   before_validation :generate_token!, on: :create
 

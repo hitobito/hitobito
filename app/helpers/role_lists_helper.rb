@@ -9,22 +9,22 @@ module RoleListsHelper
 
   def available_role_types_checkboxes(roles)
     safe_join(roles.map do |k, v|
-      content_tag(:b, k, class: 'filter-toggle') +
+      content_tag(:b, k, class: "filter-toggle") +
       safe_join(v.map do |type, count|
-        content_tag(:div, class: 'control-group available-role-type') do
+        content_tag(:div, class: "control-group available-role-type") do
           type_checkbox(type, count)
         end
-      end, '')
-    end, '')
+      end, "")
+    end, "")
   end
 
   private
 
   def type_checkbox(type, count)
-    label_tag(nil, class: 'checkbox ') do
+    label_tag(nil, class: "checkbox ") do
       out = check_box_tag("role[types][#{type}]", nil, true)
       out << type.constantize.label
-      out << content_tag(:div, class: 'role-count') do
+      out << content_tag(:div, class: "role-count") do
         count.to_s
       end
       out.html_safe

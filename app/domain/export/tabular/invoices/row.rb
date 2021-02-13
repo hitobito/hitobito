@@ -52,7 +52,7 @@ module Export::Tabular::Invoices
     def aggregated(list, field = nil)
       list.collect do |item|
         field ? item.send(field) : yield(item)
-      end.reject(&:blank?).join(', ')
+      end.reject(&:blank?).join(", ")
     end
 
   end

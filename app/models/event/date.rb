@@ -42,7 +42,7 @@ class Event::Date < ActiveRecord::Base
   end
 
   def label_and_location
-    [label, location].compact.reject(&:empty?).join(', ')
+    [label, location].compact.reject(&:empty?).join(", ")
   end
 
   private

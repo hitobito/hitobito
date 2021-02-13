@@ -11,9 +11,9 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
   include DatetimeAttribute
   datetime_attr :last_seen
 
-  belongs_to :companion, class_name: 'CrudTestModel'
-  has_and_belongs_to_many :others, class_name: 'OtherCrudTestModel'
-  has_many :mores, class_name: 'OtherCrudTestModel', foreign_key: :more_id
+  belongs_to :companion, class_name: "CrudTestModel"
+  has_and_belongs_to_many :others, class_name: "OtherCrudTestModel"
+  has_many :mores, class_name: "OtherCrudTestModel", foreign_key: :more_id
 
   before_destroy :protect_if_companion
 
@@ -21,7 +21,7 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
   validates :birthdate, timeliness: { type: :date, allow_blank: true }
   validates :rating, inclusion: { in: 1..10 }
 
-  default_scope -> { order('name') }
+  default_scope -> { order("name") }
 
   def to_s
     name
@@ -39,7 +39,7 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
 
   def protect_if_companion
     if companion.present?
-      errors.add(:base, 'Cannot destroy model with companion')
+      errors.add(:base, "Cannot destroy model with companion")
       throw :abort
     end
   end
@@ -52,8 +52,8 @@ class CrudTestModelDecorator < Draper::Decorator
 end
 
 class OtherCrudTestModel < ActiveRecord::Base #:nodoc:
-  has_and_belongs_to_many :others, class_name: 'CrudTestModel'
-  belongs_to :more, foreign_key: :more_id, class_name: 'CrudTestModel'
+  has_and_belongs_to_many :others, class_name: "CrudTestModel"
+  belongs_to :more, foreign_key: :more_id, class_name: "CrudTestModel"
 
   def to_s
     name
@@ -62,10 +62,10 @@ end
 
 # Controller for the dummy model.
 class CrudTestModelsController < CrudController #:nodoc:
-  HANDLE_PREFIX = 'handle_'
+  HANDLE_PREFIX = "handle_"
 
   self.search_columns = [:name, :whatever, :remarks]
-  self.sort_mappings = { chatty: 'length(remarks)' }
+  self.sort_mappings = { chatty: "length(remarks)" }
   self.permitted_attrs = [:name, :email, :password, :whatever, :children,
                           :companion_id, :rating, :income, :birthdate,
                           :gets_up_at, :last_seen, :human, :remarks]
@@ -91,19 +91,19 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   def index
     super do |format|
-      format.js { render plain: 'index js' }
+      format.js { render plain: "index js" }
     end
   end
 
   def show
     super do |format|
-      format.html { render plain: 'custom html' } if entry.name == 'BBBBB'
+      format.html { render plain: "custom html" } if entry.name == "BBBBB"
     end
   end
 
   def create
     super do |format|
-      flash[:notice] = 'model got created' if entry.persisted?
+      flash[:notice] = "model got created" if entry.persisted?
     end
   end
 
@@ -112,7 +112,7 @@ class CrudTestModelsController < CrudController #:nodoc:
   def list_entries
     entries = super
     if params[:filter]
-      entries = entries.where(['rating < ?', 3]).except(:order).order('children DESC')
+      entries = entries.where(["rating < ?", 3]).except(:order).order("children DESC")
     end
     entries
   end
@@ -121,8 +121,8 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   # custom callback
   def handle_name
-    if entry.name == 'illegal'
-      flash[:alert] = 'illegal name'
+    if entry.name == "illegal"
+      flash[:alert] = "illegal name"
       throw(:abort)
     end
   end
@@ -148,7 +148,7 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   # callback to redirect if @should_redirect is set
   def possibly_redirect
-    redirect_to action: 'index' if should_redirect && !performed?
+    redirect_to action: "index" if should_redirect && !performed?
     throw :abort if should_redirect
   end
 
@@ -186,11 +186,11 @@ module CrudTestHelper
   end
 
   def controller_name
-    'crud_test_models'
+    "crud_test_models"
   end
 
   def action_name
-    'index'
+    "index"
   end
 
   def params
@@ -252,8 +252,8 @@ module CrudTestHelper
 
   def create_crud_test_models_other_crud_test_models
     ActiveRecord::Base.connection.create_table :crud_test_models_other_crud_test_models, force: true do |t|
-      t.belongs_to :crud_test_model, index: { name: 'one' }
-      t.belongs_to :other_crud_test_model, index: { name: 'other' }
+      t.belongs_to :crud_test_model, index: { name: "one" }
+      t.belongs_to :other_crud_test_model, index: { name: "other" }
     end
   end
 
@@ -282,7 +282,7 @@ module CrudTestHelper
     with_routing do |set|
       set.draw { resources :crud_test_models }
       # used to define a controller in these tests
-      set.default_url_options = { controller: 'crud_test_models' }
+      set.default_url_options = { controller: "crud_test_models" }
       yield
     end
   end
@@ -329,15 +329,15 @@ module CrudTestHelper
   def without_transaction
     c = ActiveRecord::Base.connection
     start_transaction = false
-    if c.adapter_name.downcase.include?('mysql') && c.open_transactions > 0
+    if c.adapter_name.downcase.include?("mysql") && c.open_transactions > 0
       # in transactional tests, we may simply rollback
-      c.execute('ROLLBACK')
+      c.execute("ROLLBACK")
       start_transaction = true
     end
 
     yield
 
-    c.execute('BEGIN') if start_transaction
+    c.execute("BEGIN") if start_transaction
   end
 
 end

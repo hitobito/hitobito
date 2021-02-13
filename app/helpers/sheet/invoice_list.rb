@@ -25,13 +25,13 @@ module Sheet
       if form?
         parent_sheet.render_left_nav
       else
-        view.render('invoices/nav_left')
+        view.render("invoices/nav_left")
       end
     end
 
     # Needs spacing because parent has no tabs
     def render_parent_title
-      content_tag(:div, super, style: 'padding-bottom: 1em')
+      content_tag(:div, super, style: "padding-bottom: 1em")
     end
 
     def link_url

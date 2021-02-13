@@ -5,14 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe MailRelayJob do
 
   subject { MailRelayJob.new }
 
-  it 'relays mails and gets rescheduled' do
-    Settings.email.retriever.config = Config::Options.new(address: 'localhost')
+  it "relays mails and gets rescheduled" do
+    Settings.email.retriever.config = Config::Options.new(address: "localhost")
     expect(MailRelay::Lists).to receive(:relay_current)
     subject.perform
     expect(subject.delayed_jobs).to be_exists

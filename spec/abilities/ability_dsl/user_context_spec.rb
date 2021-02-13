@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe AbilityDsl::UserContext do
 
@@ -23,7 +23,7 @@ describe AbilityDsl::UserContext do
     its(:admin)             { should be_truthy }
     its(:all_permissions)   { is_expected.to contain_exactly(:admin, :finance, :impersonation, :layer_and_below_full, :layer_and_below_read, :contact_data) }
 
-    it 'has no events with permission full' do
+    it "has no events with permission full" do
       expect(subject.events_with_permission(:event_full)).to be_blank
     end
   end
@@ -40,7 +40,7 @@ describe AbilityDsl::UserContext do
     its(:admin)             { should be_falsey }
     its(:all_permissions)   { is_expected.to eq [:layer_and_below_read, :finance] }
 
-    it 'has events with permission full' do
+    it "has events with permission full" do
       expect(subject.events_with_permission(:event_full)).to match_array([events(:top_course).id])
     end
   end

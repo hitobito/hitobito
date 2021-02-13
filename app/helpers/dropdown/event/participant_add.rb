@@ -14,9 +14,9 @@ module Dropdown
       class << self
         def for_user(template, group, event, user)
           if user_participates_in?(user, event)
-            new(template, group, event, I18n.t('event_decorator.applied'), :check).disabled_button
+            new(template, group, event, I18n.t("event_decorator.applied"), :check).disabled_button
           else
-            new(template, group, event, I18n.t('event_decorator.apply'), :check).to_s
+            new(template, group, event, I18n.t("event_decorator.apply"), :check).to_s
           end
         end
 
@@ -43,7 +43,7 @@ module Dropdown
       end
 
       def disabled_button
-        simple_button('#', class: 'disabled')
+        simple_button("#", class: "disabled")
       end
 
       private

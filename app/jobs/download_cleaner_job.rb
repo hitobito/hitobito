@@ -22,7 +22,7 @@ class DownloadCleanerJob < RecurringJob
   end
 
   def removable_files
-    Dir[AsyncDownloadFile::DIRECTORY.join('*')].collect do |fullpath|
+    Dir[AsyncDownloadFile::DIRECTORY.join("*")].collect do |fullpath|
       timestamp = calculate_timestamp(fullpath)
       next unless timestamp
       next unless older_than_a_day?(timestamp)

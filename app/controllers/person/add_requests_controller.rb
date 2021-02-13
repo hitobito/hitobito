@@ -15,10 +15,10 @@ class Person::AddRequestsController < ApplicationController
     approver = Person::AddRequest::Approver.for(entry, current_user)
     if approver.approve
       redirect_back fallback_location: person_path(entry.person),
-        notice: t('person.add_requests.approve.success_notice', person: entry.person.full_name)
+        notice: t("person.add_requests.approve.success_notice", person: entry.person.full_name)
     else
       redirect_back fallback_location: person_path(entry.person),
-        alert: t('person.add_requests.approve.failure_notice',
+        alert: t("person.add_requests.approve.failure_notice",
                  person: entry.person.full_name,
                  errors: approver.error_message)
     end
@@ -26,7 +26,7 @@ class Person::AddRequestsController < ApplicationController
 
   def reject
     Person::AddRequest::Approver.for(entry, current_user).reject
-    action = params[:cancel] ? 'cancel' : 'reject'
+    action = params[:cancel] ? "cancel" : "reject"
     redirect_back fallback_location: person_path(entry.person),
       notice: t("person.add_requests.#{action}.success_notice",
                 person: entry.person.full_name)

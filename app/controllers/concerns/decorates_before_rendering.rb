@@ -83,8 +83,8 @@ module DecoratesBeforeRendering
       raise ArgumentError, "#{ivar} does not have an associated decorator"
     end
 
-    superclass_decorator_name = (superclass == Object ? 'Object' : superclass.model_name.to_s)
-    superclass_decorator_name += 'Decorator'
+    superclass_decorator_name = (superclass == Object ? "Object" : superclass.model_name.to_s)
+    superclass_decorator_name += "Decorator"
     [superclass, superclass_decorator_name]
   end
 

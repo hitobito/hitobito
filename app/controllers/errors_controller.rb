@@ -8,7 +8,7 @@
 # Used to generate static error pages with the application layout:
 # RAILS_GROUPS=assets rails generate error_page {status}
 class ErrorsController < ActionController::Base
-  layout 'application'
+  layout "application"
   helper_method :current_user, :origin_user
 
   protect_from_forgery with: :exception

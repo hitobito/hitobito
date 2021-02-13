@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Assignment::SendNotificationJob do
   include ActiveJob::TestHelper
@@ -17,11 +17,11 @@ describe Assignment::SendNotificationJob do
     Assignment.create!(person: person,
                        creator: people(:top_leader),
                        attachment: attachment,
-                       title: 'Example printing assignment',
-                       description: 'please print this ok?')
+                       title: "Example printing assignment",
+                       description: "please print this ok?")
   end
 
-  it 'sends email notification with assignment title' do
+  it "sends email notification with assignment title" do
     expect do
       perform_enqueued_jobs do
         job.perform

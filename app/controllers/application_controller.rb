@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
 
   if Rails.env.production?
     rescue_from CanCan::AccessDenied do |_exception|
-      redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
+      redirect_to root_path, alert: I18n.t("devise.failure.not_permitted_to_view_page")
     end
 
     rescue_from ActionController::UnknownFormat,
@@ -46,13 +46,13 @@ class ApplicationController < ActionController::Base
   private
 
   def not_found
-    raise ActionController::RoutingError, 'Not Found'
+    raise ActionController::RoutingError, "Not Found"
   end
 
   def set_no_cache
-    response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
 
   def html_request?

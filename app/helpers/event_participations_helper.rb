@@ -19,7 +19,7 @@ module EventParticipationsHelper
                                Event::Participation.human_attribute_name(:created_at))
     end
 
-    headers.join(' | ').html_safe
+    headers.join(" | ").html_safe
   end
 
   def event_participations_roles_content(p)
@@ -50,11 +50,11 @@ module EventParticipationsHelper
 
   def action_button_cancel_participation
     action_button(
-      t('event.participations.cancel_application.caption'),
+      t("event.participations.cancel_application.caption"),
       group_event_participation_path(parent, entry, @user_participation),
-      'times-circle',
+      "times-circle",
       data: {
-        confirm: t('event.participations.cancel_application.confirmation'),
+        confirm: t("event.participations.cancel_application.confirmation"),
         method: :delete
       }
     )

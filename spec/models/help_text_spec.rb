@@ -1,16 +1,16 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe HelpText do
 
-  it 'assigns from context and key for new records' do
+  it "assigns from context and key for new records" do
     ht = help_texts(:events_action_index)
-    expect(ht.controller).to eq 'events'
-    expect(ht.model).to eq 'event/course'
-    expect(ht.kind).to eq 'action'
-    expect(ht.name).to eq 'index'
+    expect(ht.controller).to eq "events"
+    expect(ht.model).to eq "event/course"
+    expect(ht.kind).to eq "action"
+    expect(ht.name).to eq "index"
   end
 
-  it '#to_s includes all information for persisted record' do
+  it "#to_s includes all information for persisted record" do
     ht = HelpText.new
     expect(ht.to_s).to be_nil
 
@@ -21,7 +21,7 @@ describe HelpText do
     expect(ht.to_s).to eq 'Person - Feld "Name"'
   end
 
-  it '.list orders by human model name' do
+  it ".list orders by human model name" do
     first = help_texts(:course_field_name)
     second = help_texts(:people_action_index)
     third  = help_texts(:events_action_index)

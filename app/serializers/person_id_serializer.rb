@@ -7,8 +7,8 @@
 
 class PersonIdSerializer < ApplicationSerializer
   schema do
-    type 'people'
+    type "people"
     property :id, item.to_s
-    property :type, 'people'
+    property :type, "people"
   end
 end

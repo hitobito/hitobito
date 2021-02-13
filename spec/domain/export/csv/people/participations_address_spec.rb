@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
-require 'csv'
+require "spec_helper"
+require "csv"
 
 describe Export::Tabular::People::ParticipationsAddress do
 
@@ -17,15 +17,15 @@ describe Export::Tabular::People::ParticipationsAddress do
 
   subject { people_list.attribute_labels }
 
-  context 'address data' do
-    its([:first_name]) { should eq 'Vorname' }
-    its([:town]) { should eq 'Ort' }
+  context "address data" do
+    its([:first_name]) { should eq "Vorname" }
+    its([:town]) { should eq "Ort" }
   end
 
-  context 'integration' do
+  context "integration" do
     let(:simple_headers) do
-      ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
-       'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag', 'Hauptebene', 'Rollen', 'Tags']
+      ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
+       "Adresse", "PLZ", "Ort", "Land", "Geschlecht", "Geburtstag", "Hauptebene", "Rollen", "Tags"]
     end
 
     let(:data) { Export::Tabular::People::ParticipationsAddress.export(:csv, list) }
@@ -35,19 +35,19 @@ describe Export::Tabular::People::ParticipationsAddress do
 
     its(:headers) { should == simple_headers }
 
-    context 'first row' do
+    context "first row" do
       subject { csv[0] }
 
-      its(['Vorname']) { should eq person.first_name }
-      its(['Rollen']) { should be_blank }
+      its(["Vorname"]) { should eq person.first_name }
+      its(["Rollen"]) { should be_blank }
 
-      context 'with roles' do
+      context "with roles" do
         before do
-          Fabricate(:event_role, participation: participation, type: 'Event::Role::Leader')
-          Fabricate(:event_role, participation: participation, type: 'Event::Role::AssistantLeader')
+          Fabricate(:event_role, participation: participation, type: "Event::Role::Leader")
+          Fabricate(:event_role, participation: participation, type: "Event::Role::AssistantLeader")
           participation.reload
         end
-        its(['Rollen']) { should eq 'Hauptleitung, Leitung' }
+        its(["Rollen"]) { should eq "Hauptleitung, Leitung" }
       end
     end
   end

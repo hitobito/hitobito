@@ -13,7 +13,7 @@ class Person::Address
   def for_letter
     [@person.full_name.to_s.squish,
      @person.address.to_s.squish,
-     [@person.zip_code, @person.town].compact.join(' ').squish,
+     [@person.zip_code, @person.town].compact.join(" ").squish,
      @person.country.to_s.squish].compact.join("\n")
   end
 end

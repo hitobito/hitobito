@@ -19,7 +19,7 @@
 #  index_event_questions_on_event_id  (event_id)
 #
 
-Fabricator(:event_question, class_name: 'Event::Question') do
+Fabricator(:event_question, class_name: "Event::Question") do
   event
-  question { Faker::Lorem.words.join(' ') + '?' }
+  question { Faker::Lorem.words.join(" ") + "?" }
 end

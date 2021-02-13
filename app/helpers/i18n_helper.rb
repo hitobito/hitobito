@@ -20,7 +20,7 @@ module I18nHelper
   def translate_inheritable(key, variables = {})
     defaults = []
     unless controller.try(:skip_translate_inheritable)
-      partial = @virtual_path ? @virtual_path.gsub(/.*\/_?/, '') : nil
+      partial = @virtual_path ? @virtual_path.gsub(/.*\/_?/, "") : nil
       current = controller.class
       while current < ActionController::Base
         folder = current.controller_path

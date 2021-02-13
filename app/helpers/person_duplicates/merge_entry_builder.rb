@@ -8,7 +8,7 @@
 module PersonDuplicates
   class MergeEntryBuilder
 
-    WARNING_ICON = '⚠️'
+    WARNING_ICON = "⚠️"
 
     delegate :t, :safe_join, to: :template
     delegate :persons_valid?, to: :duplicate_entry
@@ -43,9 +43,9 @@ module PersonDuplicates
           options[:checked] = selected
         else
           options[:checked] = false
-          options[:disabled] = 'disabled'
+          options[:disabled] = "disabled"
         end
-        f.radio_button('dst_person', p_nr, options) +
+        f.radio_button("dst_person", p_nr, options) +
           f.content_tag(:div,
             person_label(person) +
             details(person) +
@@ -55,7 +55,7 @@ module PersonDuplicates
     end
 
     def label_class(selected)
-      selected && persons_valid? ? 'radio selected' : 'radio'
+      selected && persons_valid? ? "radio selected" : "radio"
     end
 
     def label_for(p_nr)
@@ -65,12 +65,12 @@ module PersonDuplicates
     def person_label(person)
       link_to(person.to_s,
               group_person_path(person.primary_group, person),
-              target: '_blank')
+              target: "_blank")
     end
 
     def details(person)
       detail_values(person).compact.map do |v|
-        f.content_tag(:div, v, class: 'label')
+        f.content_tag(:div, v, class: "label")
       end.join.html_safe
     end
 
@@ -84,19 +84,19 @@ module PersonDuplicates
       return merge_hint_invalid unless person.valid?
 
       if persons_valid?
-        style_class = ''
-        style_class += ' hidden' if p_nr.eql?(:person_1)
-        f.content_tag(:div, id: 'merge-hint', class: style_class) do
-          [WARNING_ICON, t('.merge_hint')].join(' ')
+        style_class = ""
+        style_class += " hidden" if p_nr.eql?(:person_1)
+        f.content_tag(:div, id: "merge-hint", class: style_class) do
+          [WARNING_ICON, t(".merge_hint")].join(" ")
         end
       else
-        ''.html_safe
+        "".html_safe
       end
     end
 
     def merge_hint_invalid
-      f.content_tag(:div, id: 'merge-hint') do
-        [WARNING_ICON, t('.merge_hint_invalid')].join(' ')
+      f.content_tag(:div, id: "merge-hint") do
+        [WARNING_ICON, t(".merge_hint_invalid")].join(" ")
       end
     end
   end

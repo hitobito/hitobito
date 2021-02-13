@@ -70,11 +70,11 @@ class PersonReadables < PersonFetchables
   end
 
   def contact_data_condition
-    ['people.contact_data_visible = ?', true]
+    ["people.contact_data_visible = ?", true]
   end
 
   def herself_condition
-    ['people.id = ?', user.id]
+    ["people.id = ?", user.id]
   end
 
   def read_permission_for_this_group?

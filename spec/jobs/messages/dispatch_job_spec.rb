@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Messages::DispatchJob do
   let(:letter)     { messages(:letter) }
@@ -15,10 +15,10 @@ describe Messages::DispatchJob do
   context :letter do
     subject { Messages::DispatchJob.new(letter) }
 
-    it 'updates message and creates message_recipients' do
+    it "updates message and creates message_recipients" do
       # Subscription.create!(mailing_list: letter.mailing_list, subscriber: top_leader)
       subject.perform
-      expect(letter.reload.state).to eq 'finished'
+      expect(letter.reload.state).to eq "finished"
       expect(letter.sent_at).to be_present
       expect(letter.failed_count).to eq 0
     end
@@ -29,7 +29,7 @@ describe Messages::DispatchJob do
 
     subject { Messages::DispatchJob.new(message) }
 
-    pending 'creates reciepts invoices and invoice_list ' do
+    pending "creates reciepts invoices and invoice_list " do
       expect_any_instance_of(Messages::LetterWithInvoiceDispatch).to receive(:perform)
       subject.perform
     end

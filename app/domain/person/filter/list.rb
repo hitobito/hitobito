@@ -15,7 +15,7 @@ class Person::Filter::List
     @chain = Person::Filter::Chain.new(params[:filters])
     @range = params[:range]
     @name = params[:name]
-    @ids = params[:ids].to_s.split(',')
+    @ids = params[:ids].to_s.split(",")
   end
 
   def entries
@@ -60,10 +60,10 @@ class Person::Filter::List
 
   def list_range
     case range
-    when 'deep'
+    when "deep"
       @multiple_groups = true
       Person.in_or_below(group, chain.roles_join)
-    when 'layer'
+    when "layer"
       @multiple_groups = true
       Person.in_layer(group, join: chain.roles_join)
     else
@@ -77,7 +77,7 @@ class Person::Filter::List
   end
 
   def default_order(entries)
-    entries = entries.order_by_role if Settings.people.default_sort == 'role'
+    entries = entries.order_by_role if Settings.people.default_sort == "role"
     entries.order_by_name
   end
 

@@ -7,7 +7,7 @@
 
 # encoding:  utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::RolesController, type: :controller do
 
@@ -25,7 +25,7 @@ describe Event::RolesController, type: :controller do
 
   let(:create_entry_attrs) do
     {
-      label: 'Materialchef',
+      label: "Materialchef",
       type: Event::Role::AssistantLeader.sti_name,
       person_id: Fabricate(:person).id
     }
@@ -33,7 +33,7 @@ describe Event::RolesController, type: :controller do
 
   let(:test_entry_attrs) do
     {
-      label: 'Materialchef'
+      label: "Materialchef"
     }
   end
 
@@ -63,30 +63,30 @@ describe Event::RolesController, type: :controller do
   end
 
 
-  include_examples 'crud controller', skip: [%w(index), %w(show), %w(new plain), %w(create html)]
+  include_examples "crud controller", skip: [%w(index), %w(show), %w(new plain), %w(create html)]
 
 
   describe_action :get, :new do
-    context '.html', format: :html do
-      it 'should raise exception if no type is given', perform_request: false do
+    context ".html", format: :html do
+      it "should raise exception if no type is given", perform_request: false do
         expect { perform_request }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
 
   describe_action :post, :create do
-    context '.html', format: :html do
+    context ".html", format: :html do
       let(:params) { { model_identifier => create_entry_attrs } }
-      it 'creates answers on the go', perform_request: false do
+      it "creates answers on the go", perform_request: false do
         expect { perform_request }.to change { Event::Answer.count }.by(3)
       end
 
-     context 'with valid params' do
+     context "with valid params" do
         it_should_redirect_to_show
         # it_should_set_attrs
         it_should_have_flash(:notice)
 
-        it 'should persist entry' do
+        it "should persist entry" do
           expect(entry).to be_persisted
           expect(entry).to be_kind_of(Event::Role::AssistantLeader)
           expect(entry.label).to eq(create_entry_attrs[:label])
@@ -98,8 +98,8 @@ describe Event::RolesController, type: :controller do
   end
 
   describe_action :delete, :destroy, id: true do
-    context '.html', format: :html do
-      it 'should destroy participation for last role', perform_request: false do
+    context ".html", format: :html do
+      it "should destroy participation for last role", perform_request: false do
         expect { perform_request }.to change { Event::Participation.count }.by(-1)
       end
     end

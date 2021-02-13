@@ -16,14 +16,14 @@ module FilterNavigation
     end
 
     def active_label
-      label_for_filter(template.params.fetch(:filter, 'all'))
+      label_for_filter(template.params.fetch(:filter, "all"))
     end
 
     private
 
     def init_items
-      filter_item('all')
-      filter_item('layer')
+      filter_item("all")
+      filter_item("layer")
     end
 
     def filter_item(name)

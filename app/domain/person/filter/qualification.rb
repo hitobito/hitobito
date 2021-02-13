@@ -18,7 +18,7 @@ class Person::Filter::Qualification < Person::Filter::Base
   end
 
   def apply(scope)
-    if args[:match].to_s == 'all'
+    if args[:match].to_s == "all"
       match_all_qualification_kinds(scope)
     else
       match_one_qualification_kind(scope)
@@ -37,7 +37,7 @@ class Person::Filter::Qualification < Person::Filter::Base
 
   def year_scope?
     %w(start_at finish_at).product(%w(year_from year_until)).any? do |pre, post|
-      key = [pre, post].join('_')
+      key = [pre, post].join("_")
       args[key.to_sym].present? || args[key].present?
     end
   end
@@ -46,13 +46,13 @@ class Person::Filter::Qualification < Person::Filter::Base
 
   def match_all_qualification_kinds(scope)
     subquery = qualification_scope(scope).
-               select('1').
-               where('qualifications.person_id = people.id AND ' \
-                       'qualifications.qualification_kind_id = qk.id')
+               select("1").
+               where("qualifications.person_id = people.id AND " \
+                       "qualifications.qualification_kind_id = qk.id")
 
-    scope.where('NOT EXISTS (' \
-                '  SELECT 1 FROM qualification_kinds qk' \
-                '  WHERE qk.id IN (?) ' \
+    scope.where("NOT EXISTS (" \
+                "  SELECT 1 FROM qualification_kinds qk" \
+                "  WHERE qk.id IN (?) " \
                 "  AND NOT EXISTS (#{subquery.to_sql}) )",
                 args[:qualification_kind_ids])
   end
@@ -76,7 +76,7 @@ class Person::Filter::Qualification < Person::Filter::Base
 
   def grouped_most_recent_qualifications_ids
     Qualification.
-      group(:person_id, :qualification_kind_id).select('max(id)').
+      group(:person_id, :qualification_kind_id).select("max(id)").
       where(qualification_kind_id: args[:qualification_kind_ids])
   end
 
@@ -100,8 +100,8 @@ class Person::Filter::Qualification < Person::Filter::Base
 
   def qualification_validity_scope(_scope)
     case args[:validity].to_s
-    when 'active'         then ::Qualification.active
-    when 'reactivateable' then ::Qualification.reactivateable
+    when "active"         then ::Qualification.active
+    when "reactivateable" then ::Qualification.reactivateable
     else ::Qualification.all
     end
   end

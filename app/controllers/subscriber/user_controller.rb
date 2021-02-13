@@ -18,7 +18,7 @@ module Subscriber
       else
         redirect_to(mailing_list_path,
                     alert: translate(:failure,
-                                     errors: subscription.errors.full_messages.join(', ')))
+                                     errors: subscription.errors.full_messages.join(", ")))
       end
     end
 

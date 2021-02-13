@@ -24,7 +24,7 @@
 
 class Person::AddRequest::MailingList < Person::AddRequest
 
-  belongs_to :body, class_name: '::MailingList'
+  belongs_to :body, class_name: "::MailingList"
 
   def to_s(_format = :default)
     group = body.group

@@ -21,7 +21,7 @@ class PeopleFiltersController < CrudController
   end
 
   def create
-    if params[:button] == 'save'
+    if params[:button] == "save"
       authorize!(:create, entry)
       super
     else
@@ -54,7 +54,7 @@ class PeopleFiltersController < CrudController
     if entry.filter_chain.present?
       search_params = {
         name: entry.name,
-        range: entry.range || 'deep',
+        range: entry.range || "deep",
         filters: entry.filter_chain.to_params
       }
     end

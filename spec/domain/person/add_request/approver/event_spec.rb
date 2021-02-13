@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Person::AddRequest::Approver::Event do
 
@@ -16,7 +16,7 @@ describe Person::AddRequest::Approver::Event do
 
   subject { Person::AddRequest::Approver.for(request, user) }
 
-  context 'Event' do
+  context "Event" do
 
     let(:group) { groups(:bottom_group_one_one) }
     let(:event) { Fabricate(:event, groups: [group]) }
@@ -29,11 +29,11 @@ describe Person::AddRequest::Approver::Event do
         role_type: Event::Role::Participant.sti_name)
     end
 
-    it 'resolves correct subclass based on request' do
+    it "resolves correct subclass based on request" do
       is_expected.to be_a(Person::AddRequest::Approver::Event)
     end
 
-    context '#approve' do
+    context "#approve" do
 
       before do
         Fabricate(:event_question, event: event)
@@ -44,7 +44,7 @@ describe Person::AddRequest::Approver::Event do
       # load before to get correct change counts
       before { subject }
 
-      it 'creates a new participation and sends email' do
+      it "creates a new participation and sends email" do
         expect_enqueued_mail_jobs(count: 1) do
           expect do
             subject.approve
@@ -59,7 +59,7 @@ describe Person::AddRequest::Approver::Event do
         expect(p.application).to be_nil
       end
 
-      it 'creates new participation and does not send email' do
+      it "creates new participation and does not send email" do
         person.update(email: nil)
         expect_no_enqueued_mail_jobs do
           expect { subject.approve }.to change { Event::Participation.count }.by(1)
@@ -67,19 +67,19 @@ describe Person::AddRequest::Approver::Event do
       end
     end
 
-    context '#reject' do
-      it 'sends email if email is set' do
+    context "#reject" do
+      it "sends email if email is set" do
         expect_enqueued_mail_jobs(count: 1) { subject.reject }
       end
 
-      it 'does not send email if email is blank' do
+      it "does not send email if email is blank" do
         person.update(email: nil)
         expect_no_enqueued_mail_jobs { subject.reject }
       end
     end
   end
 
-  context 'Course' do
+  context "Course" do
     let(:group) { groups(:bottom_layer_one) }
     let(:event) { Fabricate(:course, groups: [group]) }
 
@@ -97,10 +97,10 @@ describe Person::AddRequest::Approver::Event do
       event.reload
     end
 
-    context 'participant' do
+    context "participant" do
       let(:role_type) { Event::Course::Role::Participant }
 
-      it 'creates a new participation' do
+      it "creates a new participation" do
         expect do
           subject.approve
         end.to change { Event::Participation.count }.by(1)
@@ -114,7 +114,7 @@ describe Person::AddRequest::Approver::Event do
         expect(p.application.priority_1).to eq event
       end
 
-      it 'does nothing if role already exists' do
+      it "does nothing if role already exists" do
         p = Fabricate(:event_participation,
                       event: event,
                       person: person,
@@ -135,10 +135,10 @@ describe Person::AddRequest::Approver::Event do
       end
     end
 
-    context 'leader' do
+    context "leader" do
       let(:role_type) { Event::Role::Leader }
 
-      it 'creates a new participation' do
+      it "creates a new participation" do
         expect do
           subject.approve
         end.to change { Event::Participation.count }.by(1)
@@ -151,7 +151,7 @@ describe Person::AddRequest::Approver::Event do
         expect(p.application).to be_nil
       end
 
-      it 'creates second role if participation already exists' do
+      it "creates second role if participation already exists" do
         p = Fabricate(:event_participation, event: event, person: person, active: true)
         Fabricate(Event::Role::Cook.name, participation: p)
 
@@ -167,7 +167,7 @@ describe Person::AddRequest::Approver::Event do
         expect(p.application).to be_nil
       end
 
-      it 'does nothing if role already exists' do
+      it "does nothing if role already exists" do
         p = Fabricate(:event_participation, event: event, person: person, active: true)
         Fabricate(role_type.name, participation: p)
 

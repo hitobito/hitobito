@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe ErrorsController do
 
@@ -17,11 +17,11 @@ describe ErrorsController do
     end
   end
 
-  describe 'Content-Type' do
+  describe "Content-Type" do
     %w(html json).each do |format|
       it "renders #{format} for #{format} format" do
-        get :show, params: { code: '404' }, format: format.to_sym
-        expect(response).to render_template('404')
+        get :show, params: { code: "404" }, format: format.to_sym
+        expect(response).to render_template("404")
         expect(response.status).to eq 404
         expect(response.content_type).to match(Regexp.new(format))
       end
@@ -29,8 +29,8 @@ describe ErrorsController do
 
     %w(png jpeg).each do |format|
       it "renders html for #{format}" do
-        get :show, params: { code: '404' }, format: format.to_sym
-        expect(response).to render_template('404')
+        get :show, params: { code: "404" }, format: format.to_sym
+        expect(response).to render_template("404")
         expect(response.status).to eq 404
         expect(response.content_type).to match(/html/)
       end

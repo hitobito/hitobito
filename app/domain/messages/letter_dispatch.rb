@@ -7,7 +7,7 @@
 
 module Messages
   class LetterDispatch
-    delegate :update, :success_count, to: '@message'
+    delegate :update, :success_count, to: "@message"
 
     def initialize(message, people)
       @message = message

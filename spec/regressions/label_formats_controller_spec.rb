@@ -7,7 +7,7 @@
 
 # encoding:  utf-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe LabelFormatsController, type: :controller do
 
@@ -19,8 +19,8 @@ describe LabelFormatsController, type: :controller do
 
   let(:test_entry) { label_formats(:standard) }
   let(:test_entry_attrs) do
-    { name: 'foo',
-      page_size: 'A4',
+    { name: "foo",
+      page_size: "A4",
       landscape: true,
       font_size: 12.0,
       width: 99.0,
@@ -35,6 +35,6 @@ describe LabelFormatsController, type: :controller do
 
   before { sign_in(people(:top_leader)) }
 
-  include_examples 'crud controller', skip: [%w(show)]
+  include_examples "crud controller", skip: [%w(show)]
 
 end

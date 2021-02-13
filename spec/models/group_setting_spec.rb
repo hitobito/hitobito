@@ -23,55 +23,55 @@
 #  index_settings_on_target_type_and_target_id_and_var  (target_type,target_id,var) UNIQUE
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe GroupSetting do
 
   let(:group) { groups(:top_layer) }
   let(:setting) do
-    GroupSetting.new(var: 'text_message_provider')
+    GroupSetting.new(var: "text_message_provider")
   end
 
-  it 'returns all possible group settings' do
+  it "returns all possible group settings" do
     settings = GroupSetting.settings
     expect(settings.size).to eq(1)
-    expect(settings.keys).to include('text_message_provider')
+    expect(settings.keys).to include("text_message_provider")
   end
 
-  it 'returns default value if present' do
+  it "returns default value if present" do
     expect(setting.username).to be(nil)
-    expect(setting.provider).to eq('aspsms')
+    expect(setting.provider).to eq("aspsms")
   end
 
-  it 'does not return default value if value present' do
-    setting.provider = 'other'
+  it "does not return default value if value present" do
+    setting.provider = "other"
 
-    expect(setting.provider).to eq('other')
+    expect(setting.provider).to eq("other")
   end
 
-  it 'encrypts username, password' do
-    setting.username = 'david.hasselhoff'
-    setting.password = 'knightrider'
-    setting.provider = 'aspsms'
+  it "encrypts username, password" do
+    setting.username = "david.hasselhoff"
+    setting.password = "knightrider"
+    setting.provider = "aspsms"
     value = setting.value
 
-    expect(value).not_to include('username')
-    expect(value).to include('encrypted_username')
+    expect(value).not_to include("username")
+    expect(value).to include("encrypted_username")
 
-    expect(value).not_to include('password')
-    expect(value).to include('encrypted_password')
+    expect(value).not_to include("password")
+    expect(value).to include("encrypted_password")
 
-    expect(value).not_to include('encrypted_provider')
-    expect(value).to include('provider')
+    expect(value).not_to include("encrypted_provider")
+    expect(value).to include("provider")
 
-    encrypted_password = value['encrypted_password']
+    encrypted_password = value["encrypted_password"]
     expect(encrypted_password[:encrypted_value]).to be_present
     expect(encrypted_password[:iv]).to be_present
-    expect(setting.password).to eq('knightrider')
+    expect(setting.password).to eq("knightrider")
 
-    encrypted_username = value['encrypted_username']
+    encrypted_username = value["encrypted_username"]
     expect(encrypted_username[:encrypted_value]).to be_present
     expect(encrypted_username[:iv]).to be_present
-    expect(setting.username).to eq('david.hasselhoff')
+    expect(setting.username).to eq("david.hasselhoff")
   end
 end

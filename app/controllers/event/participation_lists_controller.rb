@@ -28,7 +28,7 @@ class Event::ParticipationListsController < SimpleCrudController
     @people_ids = params[:ids]
     @event_type = params[:type]
     @event_label = params[:label]
-    render 'new'
+    render "new"
   end
 
   def self.model_class

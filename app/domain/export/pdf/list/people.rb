@@ -19,11 +19,11 @@ module Export::Pdf::List
 
     def table_header
       [
-        I18n.t('people.print.name'),
-        I18n.t('people.print.address'),
-        I18n.t('people.print.email'),
-        I18n.t('people.print.home_phone'),
-        I18n.t('people.print.mobile_phone')
+        I18n.t("people.print.name"),
+        I18n.t("people.print.address"),
+        I18n.t("people.print.email"),
+        I18n.t("people.print.home_phone"),
+        I18n.t("people.print.mobile_phone")
       ]
     end
 

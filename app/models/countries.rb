@@ -38,7 +38,7 @@ module Countries
   end
 
   def swiss?(country)
-    ['', 'ch'].include?(country.to_s.strip.downcase)
+    ["", "ch"].include?(country.to_s.strip.downcase)
   end
 
 end

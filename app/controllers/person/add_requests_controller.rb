@@ -12,7 +12,8 @@ class Person::AddRequestsController < ApplicationController
     approver = Person::AddRequest::Approver.for(entry, current_user)
     if approver.approve
       redirect_back fallback_location: person_path(entry.person),
-                    notice: t("person.add_requests.approve.success_notice", person: entry.person.full_name)
+                    notice: t("person.add_requests.approve.success_notice",
+                      person: entry.person.full_name)
     else
       redirect_back fallback_location: person_path(entry.person),
                     alert: t("person.add_requests.approve.failure_notice",

@@ -4,14 +4,18 @@ AllCops:
   DisplayCopNames: true
   DisabledByDefault: true
   Exclude:
+    - Rakefile
     - db/**/*
     - config/**/*
     - bin/**/*
     - spec/**/*
     - vendor/**/*
     - tmp/**/*
-    - vendor/bundle/**/*
+    - app/assets/config.rb
     - node_modules/**/*
+
+# inherit_gem:
+#   standard: config/base.yml
 
 inherit_from:
   - .rubocop_strict.yml

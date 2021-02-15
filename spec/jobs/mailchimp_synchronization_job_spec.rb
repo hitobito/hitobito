@@ -54,4 +54,18 @@ describe MailchimpSynchronizationJob do
     expect(mailing_list.mailchimp_result.state).to eq :failed
   end
 
+  describe 'setting' do
+    it 'syncs per default' do
+      expect_any_instance_of(Synchronize::Mailchimp::Synchronizator).to receive(:perform)
+      subject.enqueue!
+      Delayed::Worker.new.work_off
+    end
+
+    it 'may be overridden via setting' do
+      expect(Settings.mailchimp).to receive(:enabled).and_return(false)
+      expect_any_instance_of(Synchronize::Mailchimp::Synchronizator).not_to receive(:perform)
+      subject.enqueue!
+      Delayed::Worker.new.work_off
+    end
+  end
 end

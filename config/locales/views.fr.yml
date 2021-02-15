@@ -169,7 +169,7 @@ fr:
       new:
         sign_in: Inscription
       form:
-        sign_in: 'Inscription'
+        sign_in: Inscription
     passwords:
       send_instructions: 'Dans quelques minutes, tu recevras un courriel qui t''expliquera comment réinitialiser ton mot de passe.'
       updated: 'Ton mot de passe a été modifié. Tu es maintenant authentifié(e).'

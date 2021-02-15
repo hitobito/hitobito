@@ -169,7 +169,7 @@ it:
       new:
         sign_in: Login
       form:
-        sign_in: 'Login'
+        sign_in: Login
     passwords:
       send_instructions: 'riceverai nei prossimi minuti un''e-mail con le istruzioni su come reimpostare la tua password.'
       updated: 'la tua passwort è stata cambiata. Sei ora registrato.'

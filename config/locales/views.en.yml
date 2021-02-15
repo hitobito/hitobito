@@ -159,7 +159,7 @@ en:
       new:
         sign_in: Sign in
       form:
-        sign_in: 'Sign in'
+        sign_in: Sign in
     passwords:
       send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to reset your password.'
       updated: 'Your password has been changed. You''re now logged in.'

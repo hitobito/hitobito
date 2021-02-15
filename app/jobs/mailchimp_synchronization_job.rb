@@ -19,7 +19,7 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   def perform
-    return unless Settings.mailchimp.enabled?
+    return unless Settings.mailchimp.enabled
 
     sync.perform
   end

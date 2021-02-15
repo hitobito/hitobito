@@ -33,7 +33,9 @@ class PersonDuplicateSeeder
                                                    group_id:  group.id,
                                                    type:      role_type.sti_name })
 
-      PersonDuplicate.create!(person_1: p, person_2: doublet)
+      d = PersonDuplicate.new(person_1: p, person_2: doublet)
+      d.assign_persons_sorted_by_id
+      d.save
     end
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_10_231300) do
+ActiveRecord::Schema.define(version: 2021_02_12_111156) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -460,15 +460,14 @@ ActiveRecord::Schema.define(version: 2021_02_10_231300) do
 
   create_table "mail_logs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "mail_from"
-    t.string "mail_subject"
     t.string "mail_hash"
     t.integer "status", default: 0
     t.string "mailing_list_name"
-    t.integer "mailing_list_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "message_id"
     t.index ["mail_hash"], name: "index_mail_logs_on_mail_hash"
-    t.index ["mailing_list_id"], name: "index_mail_logs_on_mailing_list_id"
+    t.index ["message_id"], name: "index_mail_logs_on_message_id"
   end
 
   create_table "mailing_lists", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|

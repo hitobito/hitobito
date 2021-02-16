@@ -33,7 +33,10 @@ class MessagesController < CrudController
   private
 
   def list_entries
-    super.list.includes(:group).page(params[:page]).per(50).where(created_at: year_filter)
+    super
+      .list
+      .includes(:group, :mail_log)
+      .page(params[:page]).per(50).where(created_at: year_filter)
   end
 
   def build_entry
@@ -68,5 +71,4 @@ class MessagesController < CrudController
   def set_recipient_count
     @recipient_count = parent.people.size
   end
-
 end

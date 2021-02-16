@@ -12,6 +12,8 @@
     %strong
       = link_to(message, message.path_args)
   - t.sortable_attrs(:state, :sent_at)
+  - t.col('') do |message|
+    = format_message_infos(message)
   - add_table_actions(t)
 
 = paginate @messages

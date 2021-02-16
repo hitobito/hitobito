@@ -124,10 +124,10 @@ describe MailRelay::Lists do
         expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
       end
 
-      it 'creates mail log entry and assigns mailing list' do
+      it 'creates mail log entry and assigns mailing list to message' do
         subject.relay
         mail_log = MailLog.find_by(mail_hash: '129f1da58c247ed636624432a074611d')
-        expect(mail_log.mailing_list).to eq(list)
+        expect(mail_log.message.mailing_list).to eq(list)
         expect(mail_log.status).to eq('completed')
       end
 

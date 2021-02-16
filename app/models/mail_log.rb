@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2018-2020, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -12,24 +12,30 @@
 #  id                :integer          not null, primary key
 #  mail_from         :string(255)
 #  mail_hash         :string(255)
-#  mail_subject      :string(255)
 #  mailing_list_name :string(255)
 #  status            :integer          default("retreived")
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  mailing_list_id   :integer
+#  message_id        :bigint
 #
 # Indexes
 #
-#  index_mail_logs_on_mail_hash        (mail_hash)
-#  index_mail_logs_on_mailing_list_id  (mailing_list_id)
+#  index_mail_logs_on_mail_hash   (mail_hash)
+#  index_mail_logs_on_message_id  (message_id)
 #
 
 class MailLog < ActiveRecord::Base
 
-  enum status: [:retreived, :bulk_delivering, :completed, :sender_rejected, :unkown_recipient]
+  belongs_to :message
 
-  belongs_to :mailing_list
+  STATES = [:retreived, :bulk_delivering, :completed, :sender_rejected, :unkown_recipient].freeze
+  enum status: STATES
+
+  BULK_MESSAGE_STATUS = { bulk_delivering: :processing,
+                          retreived: :pending,
+                          completed: :finished,
+                          sender_rejected: :failed,
+                          unkown_recipient: :failed }.freeze
 
   validates_by_schema
 
@@ -37,7 +43,7 @@ class MailLog < ActiveRecord::Base
 
   scope :list, -> { order(updated_at: :desc) }
 
-  ### CLASS METHODS
+  before_update :update_message_state, if: :status_changed?
 
   class << self
     def build(mail)
@@ -45,13 +51,12 @@ class MailLog < ActiveRecord::Base
       mail_log.mail = mail
       mail_log
     end
+  end
 
-    def in_year(year)
-      year = Time.zone.today.year if year.to_i <= 0
-      start_at = Time.zone.parse "#{year}-01-01"
-      finish_at = start_at + 1.year
-      where(updated_at: [start_at...finish_at])
-    end
+  def update_message_state
+    message.state = BULK_MESSAGE_STATUS[status.to_sym]
+    message.sent_at = updated_at
+    message.save!
   end
 
   def exists?
@@ -61,9 +66,9 @@ class MailLog < ActiveRecord::Base
   end
 
   def mail=(mail)
-    self.mail_subject = mail.subject
     self.mail_from = Array(mail.from).first
     self.mail_hash = md5_hash(mail)
+    self.message = Message::BulkMail.new(subject: mail.subject, state: :pending)
   end
 
   private
@@ -71,5 +76,4 @@ class MailLog < ActiveRecord::Base
   def md5_hash(mail)
     Digest::MD5.new.hexdigest(mail.raw_source)
   end
-
 end

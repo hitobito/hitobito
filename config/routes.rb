@@ -231,8 +231,6 @@ Hitobito::Application.routes.draw do
         end
 
         resources :mailchimp_synchronizations, only: [:create]
-
-        resources :mail_logs, only: [:index], controller: 'mailing_list/mail_logs'
       end
 
       resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do

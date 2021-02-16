@@ -866,6 +866,11 @@ de:
       recipient_info:
         one: "%{model_class} wird für eine Person erstellt."
         other: "%{model_class} wird für %{count} Personen erstellt."
+    table:
+      infos:
+        sender: "Absender: %{mail}"
+        sender_rejected: Absender wurde abgelehnt
+        unkown_recipient: Empfänger unbekannt
 
   navigation:
     menu: 'Menü'

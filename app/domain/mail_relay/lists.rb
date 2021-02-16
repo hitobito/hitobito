@@ -92,7 +92,7 @@ module MailRelay
 
     # List of receiver email addresses for the resent email.
     def receivers
-      @mail_log.update(mailing_list: mailing_list)
+      @mail_log.message.update(mailing_list: mailing_list)
       Person.mailing_emails_for(mailing_list.people.to_a,
                                 mailing_list.labels)
     end

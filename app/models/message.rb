@@ -30,7 +30,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 class Message < ActiveRecord::Base
   include I18nEnums
 
@@ -41,7 +40,10 @@ class Message < ActiveRecord::Base
   has_many :message_recipients, dependent: :restrict_with_error
   has_one :group, through: :mailing_list
 
-  has_many :assignments, as: :attachment
+  # bulk mail only
+  has_one :mail_log, foreign_key: :message_id, dependent: :nullify, inverse_of: :message
+
+  has_many :assignments, as: :attachment, dependent: :destroy
 
   STATES = %w(draft pending processing finished failed).freeze
   i18n_enum :state, STATES, scopes: true, queries: true

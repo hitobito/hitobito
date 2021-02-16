@@ -49,7 +49,6 @@ class MailingList < ActiveRecord::Base
            class_name: 'Person::AddRequest::MailingList',
            dependent: :destroy
 
-  has_many :mail_logs, dependent: :nullify
   has_many :messages, dependent: :nullify
 
   validates_by_schema

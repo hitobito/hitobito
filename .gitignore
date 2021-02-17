@@ -54,7 +54,6 @@ Wagonfile
 
 # uploaded pictures
 public/uploads
-/storage
 
 # ruby-version for multi version builds
 .ruby-version

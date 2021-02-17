@@ -72,6 +72,7 @@ describe MigrateMailLog do
       expect do
         migration.up
       end.to change { Message::BulkMail.count }.by(10)
+        .and change(MailLog, :count).by(0)
 
       legacy_mail_logs.each do |l|
         message_state = MailLog::BULK_MESSAGE_STATUS[l.status.to_sym]
@@ -98,6 +99,7 @@ describe MigrateMailLog do
       expect do
         migration.down
       end.to change { Message.count }.by(-10)
+        .and change(MailLog, :count).by(0)
 
       mails.each do |mail|
         expect(MailLog.where(mail_subject: mail[:subject])).to exist

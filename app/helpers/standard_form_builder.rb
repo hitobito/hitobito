@@ -428,6 +428,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def no_attachments?(attr)
+    return false unless @object
+
     validators = klass.validators_on(attr)
     validators.any? { |v| v.kind == :no_attachments }
   end

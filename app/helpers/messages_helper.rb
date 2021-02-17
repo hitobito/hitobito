@@ -14,8 +14,10 @@ module MessagesHelper
                   'plus')
   end
 
-  def message_placeholders
-    Export::Pdf::Messages::Letter::Content.placeholders.map { |p| "{#{p}}" }.join(', ')
+  def available_message_placeholders(editor_id)
+    safe_join([t('messages.form.available_placeholders'),
+               ' ',
+               safe_join(placeholder_links(editor_id), ', ')])
   end
 
   def format_message_type(message)
@@ -50,5 +52,17 @@ module MessagesHelper
 
   def max_text_message_length
     Message::TextMessage.validators_on(:text).first.options[:maximum]
+  end
+
+  private
+
+  def placeholder_links(editor_id)
+    placeholders = Export::Pdf::Messages::Letter::Content.placeholders
+    placeholders.map do |p|
+      content_tag(:a,
+                  "{#{p}}",
+                  { data: { 'clickable-placeholder': editor_id } },
+                  false).html_safe
+    end
   end
 end

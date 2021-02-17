@@ -68,7 +68,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render an action text input field.
   def rich_text_area(attr, html_options = {})
-    html_options[:rows] ||= 5
     super(attr, html_options)
   end
 
@@ -290,8 +289,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
     caption_or_content ||= captionize(attr, klass)
     add_css_class(html_options, 'controls')
-    css_classes = { 'control-group' => true, error: errors_on?(attr), required: required?(attr) }
-
+    css_classes = { 'control-group' => true,
+                    error: errors_on?(attr),
+                    required: required?(attr),
+                    'no-attachments': no_attachments?(attr) }
     content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(' ')) do
       label(attr, caption_or_content, class: 'control-label') +
       content_tag(:div, content, html_options)
@@ -424,6 +425,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     return false unless @object.respond_to?(:required_attributes)
 
     @object.required_attributes.include?(attr.to_s)
+  end
+
+  def no_attachments?(attr)
+    validators = klass.validators_on(attr)
+    validators.any? { |v| v.kind == :no_attachments }
   end
 
   def labeled_field_method?(name)

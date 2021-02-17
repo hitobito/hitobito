@@ -78,6 +78,8 @@ const imagePath = (name) => images(name, true);
 require("trix")
 require("@rails/actiontext")
 // prevent adding attachments via drag and drop
-document.addEventListener("trix-file-accept", function(event) {
-  event.preventDefault();
+document.addEventListener('trix-file-accept', function(event) {
+  if(event.target.parentNode.parentNode.classList.contains('no-attachments')) {
+    event.preventDefault();
+  }
 });

@@ -39,5 +39,13 @@ trix-editor + .help-block {
   margin-top: 0.25em !important;
 }
 
+.trix-content .attachment--preview, .trix-content .attachment__caption, trix-editor .attachment__caption-editor {
+  text-align: left;
+}
+
+.trix-content .attachment__caption, trix-editor .attachment__caption-editor {
+  margin: 0.5em 0;
+}
+
 // Remove the attachments button from the toolbar
-.trix-button-group--file-tools { display: none !important; }
+.no-attachments .trix-button-group--file-tools { display: none !important; }

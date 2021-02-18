@@ -11,6 +11,8 @@
 - if entry.letter? && !entry.dispatched?
   = action_button(t('.button_preview'), message_preview_path(message_id: entry.id, format: :pdf), :eye, target: :_blank)
   = button_action_edit if can?(:edit, entry)
+  - if can?(:new, entry)
+    = action_button(t('.button_duplicate'), new_polymorphic_path(path_args(entry.class), duplicate_from: entry.id, message: { type: entry.type }), 'copy')
   = button_action_destroy if can?(:destroy, entry)
 
 - if entry.text_message? && !entry.dispatched?

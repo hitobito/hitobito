@@ -854,6 +854,7 @@ de:
     actions_show:
       button_dispatch_letter: Druckauftrag erstellen
       button_show_assignment: Druckauftrag anzeigen
+      button_duplicate: Duplizieren
       button_preview: Vorschau
       button_dispatch_text_message: Senden
     letter:

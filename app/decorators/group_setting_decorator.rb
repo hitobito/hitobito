@@ -29,11 +29,16 @@ class GroupSettingDecorator < ApplicationDecorator
   end
 
   def formatted_value(attr)
-    if attr.eql?(:password)
-      '****'
-    else
-      object.send(attr)
-    end
+    return '****' if attr.eql?(:password)
+    return picture_file_name if attr.eql?(:picture)
+
+    value = object.send(attr)
+    value || '-'
+  end
+
+  def picture_file_name
+    file = object.picture&.file
+    file&.filename || '-'
   end
 
 end

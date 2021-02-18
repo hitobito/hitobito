@@ -27,9 +27,12 @@
 
 class GroupSetting < RailsSettings::SettingObject
 
+  mount_uploader :picture, GroupSetting::LogoUploader
+
   ENCRYPTED_VALUES = %w(username password).freeze
   SETTINGS = {
-    text_message_provider: { username: nil, password: nil, provider: %w(aspsms), originator: nil }
+    text_message_provider: { username: nil, password: nil, provider: %w(aspsms), originator: nil },
+    messages_letter: { picture: nil }
   }.with_indifferent_access.freeze
 
   def attrs

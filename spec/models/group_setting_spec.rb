@@ -34,8 +34,9 @@ describe GroupSetting do
 
   it 'returns all possible group settings' do
     settings = GroupSetting.settings
-    expect(settings.size).to eq(1)
+    expect(settings.size).to eq(2)
     expect(settings.keys).to include('text_message_provider')
+    expect(settings.keys).to include('messages_letter')
   end
 
   it 'returns default value if present' do

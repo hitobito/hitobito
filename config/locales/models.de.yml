@@ -574,10 +574,12 @@ de:
         var: Einstellung
         settings:
           text_message_provider: SMS Provider
+          messages_letter: Briefe
         username: Benutzername
         password: Passwort
         provider: Provider
         originator: Absender
+        picture: Logo
 
       role:
         label: Bezeichnung

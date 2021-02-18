@@ -8,7 +8,7 @@
 module ModalFormHelper
 
   # Render a generic modal form for the current entry
-  def modal_entry_form(*attrs)
+  def modal_entry_form(*attrs, &block) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     options = attrs.extract_options!
     options[:builder] ||= StandardFormBuilder
     options[:html] ||= {}
@@ -17,7 +17,11 @@ module ModalFormHelper
       content = content_tag(:div, class: 'modal-body') do
         content_tag(:div, class: 'row-fluid') do
           c = form.error_messages
-          c << form.labeled_input_fields(*attrs)
+          c << if block_given?
+                 capture(form, &block)
+               else
+                 form.labeled_input_fields(*attrs)
+               end
           c
         end
       end

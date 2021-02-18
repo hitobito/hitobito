@@ -90,7 +90,7 @@ describe GroupSettingsController do
       get :index, params: { group_id: group.id }
 
       settings = assigns(:setting_objects)
-      expect(settings.count).to eq(1)
+      expect(settings.count).to eq(2)
     end
 
     it 'cannot list settings if no permission' do

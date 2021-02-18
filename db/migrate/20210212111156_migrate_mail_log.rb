@@ -15,8 +15,13 @@ class MigrateMailLog < ActiveRecord::Migration[6.0]
     MailLog.reset_column_information
     Message.reset_column_information
 
-    create_bulk_mail_messages
-    assign_mail_logs_message_id
+    say_with_time 'creating bulk mail messages' do
+      create_bulk_mail_messages
+    end
+
+    say_with_time 'linking mail-logs to messages' do
+      assign_mail_logs_message_id
+    end
 
     remove_columns :mail_logs, :mailing_list_id, :mail_subject
     remove_columns :messages, :mail_log_id
@@ -30,7 +35,9 @@ class MigrateMailLog < ActiveRecord::Migration[6.0]
     end
     MailLog.reset_column_information
 
-    to_mail_log
+    say_with_time 'extract mail-logs from messages' do
+      to_mail_log
+    end
 
     remove_column :mail_logs, :message_id
   end

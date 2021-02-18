@@ -46,11 +46,21 @@ class MigrateMailLog < ActiveRecord::Migration[6.0]
 
   def create_bulk_mail_messages
     MailLog.find_in_batches do |logs|
-      message_rows = []
-      logs.each do |log|
-        message_rows << message_attrs(log)
-      end
-      Message.insert_all!(message_rows)
+      message_rows = logs.map { |log| message_attrs(log) }
+      create_messages(message_rows)
+    end
+  end
+
+  def create_messages(message_rows)
+    Message.insert_all!(message_rows)
+  rescue => e
+    if (row = e.message.scan(/.*row (\d+)$/).flatten.first)
+      msg = message_rows.delete_at(row.to_i - 1)
+      say "Error creating Message", :subitem
+      puts e.message
+      puts msg.inspect
+      say "skipping it and retrying the insert", :subitem
+      retry
     end
   end
 

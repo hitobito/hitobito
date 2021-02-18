@@ -28,11 +28,11 @@ namespace :db do
     puts 'Moving Groups in alphabetical order...'
 
     bar = begin
-            require 'ruby-progressbar'
-            ProgressBar.create(format: '%a |%w>%i| %c/%C | %E ', total: Group.count)
-          rescue LoadError
-            Class.new { def increment; end }.new
-          end
+      require 'ruby-progressbar'
+      ProgressBar.create(format: '%a |%w>%i| %c/%C | %E ', total: Group.count)
+    rescue LoadError
+      Class.new { def increment; end }.new
+    end
 
     Group.find_each do |group|
       group.send(:move_to_alphabetic_position)
@@ -67,5 +67,9 @@ namespace :db do
     # other things are straightforward rake-tasks
     Rake::Task['db:migrate'].invoke
     Rake::Task['wagon:migrate'].invoke
+
+    ENV['NO_ENV'] = 1
+    Rake::Task['db:seed'].invoke
+    Rake::Task['wagon:seed'].invoke
   end
 end

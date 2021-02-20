@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: events
@@ -61,7 +62,6 @@ describe Event do
     end
     its(:participant_count) { should == 2 }
   end
-
 
   context '#application_possible?' do
 
@@ -724,6 +724,66 @@ describe Event do
       end.not_to(change { group.updater_id })
     end
 
+  end
+
+  context 'globally visible' do
+    subject do
+      described_class.new(
+        type: nil,
+        groups: [groups(:bottom_layer_one)]
+      ).tap do |event|
+        event.dates.build(start_at: Time.zone.parse('2012-3-01'))
+      end
+    end
+
+    it 'is a flag on the event' do
+      is_expected.to respond_to :globally_visible
+      is_expected.to respond_to :globally_visible?
+    end
+
+    context 'has a default set by settings, which' do
+      it 'can be off by default' do
+        expect(subject.read_attribute(:globally_visible)).to be_nil
+        expect(Settings.event).to receive(:globally_visible_by_default).and_return(false)
+
+        subject.save
+
+        expect(subject.globally_visible).to be false
+        is_expected.to_not be_globally_visible
+      end
+
+      it 'can be on by default' do
+        expect(subject.read_attribute(:globally_visible)).to be_nil
+        expect(Settings.event).to receive(:globally_visible_by_default).and_return(true)
+
+        subject.save
+
+        expect(subject.globally_visible).to be true
+        is_expected.to be_globally_visible
+      end
+
+      it 'does not affect explicit true setting' do
+        subject.globally_visible = true
+        expect(subject.read_attribute(:globally_visible)).to be true
+        allow(Settings.event).to receive(:globally_visible_by_default).and_return(false)
+
+        subject.save
+
+        expect(subject.globally_visible).to be true
+        is_expected.to be_globally_visible
+      end
+
+      it 'does not affect explicit false setting' do
+        subject.globally_visible = false
+        expect(subject.read_attribute(:globally_visible)).to be false
+        allow(Settings.event).to receive(:globally_visible_by_default).and_return(true)
+
+        subject.save
+
+        expect(subject.globally_visible).to be false
+        is_expected.to_not be_globally_visible
+      end
+    end
   end
 
   def set_start_finish(event, start_at)

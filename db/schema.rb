@@ -268,6 +268,7 @@ ActiveRecord::Schema.define(version: 2021_02_25_074901) do
     t.boolean "display_booking_info", default: true, null: false
     t.boolean "participations_visible", default: false, null: false
     t.boolean "waiting_list", default: true, null: false
+    t.boolean "globally_visible"
     t.index ["kind_id"], name: "index_events_on_kind_id"
   end
 

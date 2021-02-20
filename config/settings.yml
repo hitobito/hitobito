@@ -144,6 +144,7 @@ event:
   attachments:
     file_extensions: jpg jpeg gif png pdf txt rtf doc docx xls xlsx ppt pptx odt ods odp zip
     max_file_size: 10 # MB
+  globally_visible_by_default: true
 
 downloads:
   folder: <%= Rails.root.join('tmp', 'downloads') %>

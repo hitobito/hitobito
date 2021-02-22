@@ -10,7 +10,7 @@ require 'spec_helper'
 describe EventAbility do
   let(:user)    { role.person }
   let(:group)   { role.group }
-  let(:event)   { Fabricate(:event, groups: [group]) }
+  let(:event)   { Fabricate(:event, groups: [group], globally_visible: false) }
 
   let(:participant) do
     Fabricate(Group::BottomGroup::Leader.name.to_sym,
@@ -47,7 +47,7 @@ describe EventAbility do
       end
 
       it 'may update event in lower layer' do
-        other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
+        other = Fabricate(:event, groups: [groups(:bottom_layer_one)], globally_visible: false)
         is_expected.to be_able_to(:update, other)
       end
 
@@ -70,6 +70,25 @@ describe EventAbility do
           other = Fabricate(:event, groups: [groups(:bottom_layer_two)])
           is_expected.not_to be_able_to(:index_participations, other)
         end
+      end
+
+      it 'may see lower layers events' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
+        is_expected.to be_able_to(:show, other)
+      end
+
+      it 'may not see sibling layers events' do
+        sibling_group = Fabricate(Group::TopLayer.name.to_sym, parent: nil, name: 'SecondTop')
+
+        other = Fabricate(:event, groups: [sibling_group], globally_visible: false)
+        is_expected.to_not be_able_to(:show, other)
+      end
+
+      it 'may see sibling layers globally visible events' do
+        sibling_group = Fabricate(Group::TopLayer.name.to_sym, parent: nil, name: 'SecondTop')
+
+        other = Fabricate(:event, groups: [sibling_group], globally_visible: true)
+        is_expected.to be_able_to(:show, other)
       end
     end
 
@@ -136,7 +155,6 @@ describe EventAbility do
         end
       end
     end
-
   end
 
   context :layer_full do
@@ -168,6 +186,26 @@ describe EventAbility do
       it 'may not index people for event in lower layer' do
         other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
         is_expected.not_to be_able_to(:index_participations, other)
+      end
+
+      it 'may not see lower layers events' do
+        other = Fabricate(:event, groups: [groups(:bottom_group_one_one)], globally_visible: false)
+        is_expected.not_to be_able_to(:show, other)
+      end
+
+      it 'may see lower layers globally visible events' do
+        other = Fabricate(:event, groups: [groups(:bottom_group_one_one)], globally_visible: true)
+        is_expected.to be_able_to(:show, other)
+      end
+
+      it 'may not see sibling layers events' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: false)
+        is_expected.not_to be_able_to(:show, other)
+      end
+
+      it 'may not see sibling layers globally visible events' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: true)
+        is_expected.to be_able_to(:show, other)
       end
     end
 
@@ -247,9 +285,19 @@ describe EventAbility do
         end
       end
 
-      context Event::Course do
-        it 'may not list all courses' do
-          is_expected.not_to be_able_to(:list_all, Event::Course)
+      context 'in sibling group' do
+        it 'may not see sibling group events' do
+          sibling_group = Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTop')
+
+          other = Fabricate(:event, groups: [sibling_group], globally_visible: false)
+          is_expected.to_not be_able_to(:show, other)
+        end
+
+        it 'may see sibling group globally visible events' do
+          sibling_group = Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTop')
+
+          other = Fabricate(:event, groups: [sibling_group], globally_visible: true)
+          is_expected.to be_able_to(:show, other)
         end
       end
 
@@ -271,6 +319,10 @@ describe EventAbility do
         it 'may index people for event' do
           is_expected.to be_able_to(:index_participations, event)
         end
+
+        it 'may see lower group events' do
+          is_expected.to be_able_to(:show, event)
+        end
       end
 
       context 'in below layer' do
@@ -283,6 +335,23 @@ describe EventAbility do
         it 'may not index people for event' do
           is_expected.not_to be_able_to(:index_participations, event)
         end
+
+        it 'may not see lower layer events' do
+          is_expected.not_to be_able_to(:show, event)
+        end
+
+        it 'may see lower layer globally visible events' do
+          event.update(globally_visible: true)
+          event.reload
+          is_expected.to be_able_to(:show, event)
+        end
+      end
+
+    end
+
+    context Event::Course do
+      it 'may not list all courses' do
+        is_expected.not_to be_able_to(:list_all, Event::Course)
       end
     end
 
@@ -368,6 +437,33 @@ describe EventAbility do
         other = Fabricate(:event, groups: [groups(:bottom_group_one_two)])
         is_expected.not_to be_able_to(:index_participations, other)
       end
+
+      it 'may not see sibling group events' do
+        other = Fabricate(:event, groups: [groups(:bottom_group_one_two)], globally_visible: false)
+        is_expected.not_to be_able_to(:show, other)
+      end
+
+      it 'may see sibling group globally visible events' do
+        other = Fabricate(:event, groups: [groups(:bottom_group_one_two)], globally_visible: true)
+        is_expected.to be_able_to(:show, other)
+      end
+
+      context 'below layers' do
+        let(:role) do
+          Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: groups(:toppers))
+        end
+
+        it 'may not see lower layers events' do
+          other = Fabricate(:event,
+                            groups: [groups(:bottom_group_one_one)], globally_visible: false)
+          is_expected.to_not be_able_to(:show, other)
+        end
+
+        it 'may see lower layers globally visible events' do
+          other = Fabricate(:event, groups: [groups(:bottom_group_one_one)], globally_visible: true)
+          is_expected.to be_able_to(:show, other)
+        end
+      end
     end
 
     context Event::Course do
@@ -401,7 +497,36 @@ describe EventAbility do
         is_expected.not_to be_able_to(:show, other)
       end
     end
+  end
 
+  context :group_read do
+    let(:role) do
+      Fabricate(Group::GlobalGroup::Member.name.to_sym, group: groups(:toppers))
+    end
+
+    context Event do
+      it 'may not see lower layers events' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: false)
+        is_expected.not_to be_able_to(:show, other)
+      end
+
+      it 'may see lower layers globally visible events' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: true)
+        is_expected.to be_able_to(:show, other)
+      end
+
+      it 'may not see sibling layers events' do
+        sibling_group = Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTopper')
+        other = Fabricate(:event, groups: [sibling_group], globally_visible: false)
+        is_expected.not_to be_able_to(:show, other)
+      end
+
+      it 'may see sibling layers globally visible events' do
+        sibling_group = Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTopper')
+        other = Fabricate(:event, groups: [sibling_group], globally_visible: true)
+        is_expected.to be_able_to(:show, other)
+      end
+    end
   end
 
   context :event_full do

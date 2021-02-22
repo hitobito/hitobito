@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,25 +12,27 @@ class EventAbility < AbilityDsl::Base
   on(Event) do
     class_side(:list_available, :typeahead).everybody
 
-    permission(:any).may(:show).all
+    permission(:any).may(:show).if_globally_visible
     permission(:any).may(:index_participations).
       for_participations_read_events_and_course_participants
     permission(:any).may(:update).for_leaded_events
     permission(:any).may(:qualify, :qualifications_read).for_qualify_event
 
-    permission(:group_full).may(:index_participations, :create, :update, :destroy).in_same_group
+    permission(:group_full)
+      .may(:index_participations, :create, :update, :destroy, :show)
+      .in_same_group
 
     permission(:group_and_below_full).
-      may(:index_participations, :create, :update, :destroy).
+      may(:index_participations, :create, :update, :destroy, :show).
       in_same_group_or_below
 
     permission(:layer_full).
       may(:index_participations, :update, :create, :destroy,
-          :application_market, :qualify, :qualifications_read).
+          :application_market, :qualify, :qualifications_read, :show).
       in_same_layer
 
     permission(:layer_and_below_full).
-      may(:index_participations, :update).in_same_layer_or_below
+      may(:index_participations, :update, :show).in_same_layer_or_below
     permission(:layer_and_below_full).
       may(:create, :destroy, :application_market, :qualify, :qualifications_read).in_same_layer
 
@@ -42,6 +44,10 @@ class EventAbility < AbilityDsl::Base
     class_side(:list_available).everybody
     class_side(:list_all).if_full_permission_in_course_layer
     class_side(:export_list).if_layer_and_below_full_on_root
+  end
+
+  def if_globally_visible
+    subject.is_a?(Event::Course) || subject.globally_visible?
   end
 
   def for_qualify_event

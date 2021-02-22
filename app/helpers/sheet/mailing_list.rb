@@ -22,4 +22,5 @@ module Sheet
       if: :index_subscriptions,
       params: {returning: true}
 
+  end
 end

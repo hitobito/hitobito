@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,14 +8,20 @@
 require 'spec_helper'
 
 describe EventAbility do
-
   let(:user)    { role.person }
   let(:group)   { role.group }
   let(:event)   { Fabricate(:event, groups: [group]) }
 
-  let(:participant) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person }
-  let(:participation) { Fabricate(:event_participation, person: participant, event: event, application: Fabricate(:event_application)) }
-
+  let(:participant) do
+    Fabricate(Group::BottomGroup::Leader.name.to_sym,
+              group: groups(:bottom_group_one_one)).person
+  end
+  let(:participation) do
+    Fabricate(:event_participation,
+              person: participant,
+              event: event,
+              application: Fabricate(:event_application))
+  end
 
   subject { Ability.new(user.reload) }
 
@@ -28,7 +34,8 @@ describe EventAbility do
       end
 
       it 'may create event in his layer' do
-        is_expected.to be_able_to(:create, groups(:toppers).events.new.tap { |e| e.groups << group })
+        is_expected.to be_able_to(:create,
+                                  groups(:toppers).events.new.tap { |e| e.groups << group })
       end
 
       it 'may update event in his layer' do
@@ -49,27 +56,10 @@ describe EventAbility do
         is_expected.to be_able_to(:index_participations, other)
       end
 
-      it 'may list all courses' do
-        is_expected.to be_able_to(:list_all, Event::Course)
-      end
-
-      it 'may export course list' do
-        is_expected.to be_able_to(:export_list, Event::Course)
-      end
-
-      it 'may not list all courses if not in course layer' do
-        Group::TopLayer.event_types.delete(Event::Course)
-        Group.root_types(Group::TopLayer)
-        begin
-          is_expected.not_to be_able_to(:list_all, Event::Course)
-        ensure
-          Group::TopLayer.event_types << Event::Course
-          Group.root_types(Group::TopLayer)
-        end
-      end
-
       context 'in other layer' do
-        let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
+        let(:role) do
+          Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
+        end
 
         it 'may not update event' do
           other = Fabricate(:event, groups: [groups(:bottom_layer_two)])
@@ -83,6 +73,26 @@ describe EventAbility do
       end
     end
 
+    context Event::Course do
+      it 'may list all courses' do
+        is_expected.to be_able_to(:list_all, described_class)
+      end
+
+      it 'may export course list' do
+        is_expected.to be_able_to(:export_list, described_class)
+      end
+
+      it 'may not list all courses if not in course layer' do
+        Group::TopLayer.event_types.delete(described_class)
+        Group.root_types(Group::TopLayer)
+        begin
+          is_expected.not_to be_able_to(:list_all, described_class)
+        ensure
+          Group::TopLayer.event_types << described_class
+          Group.root_types(Group::TopLayer)
+        end
+      end
+    end
 
     context Event::Participation do
       before { Fabricate(Event::Role::Participant.name.to_sym, participation: participation) }
@@ -104,7 +114,8 @@ describe EventAbility do
       end
 
       it 'may show participation in event from lower layer' do
-        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:bottom_group_one_two)]))
+        other = Fabricate(:event_participation,
+                          event: Fabricate(:event, groups: [groups(:bottom_group_one_two)]))
         is_expected.to be_able_to(:show, other)
       end
 
@@ -114,17 +125,19 @@ describe EventAbility do
       end
 
       context 'in other layer' do
-        let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
+        let(:role) do
+          Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
+        end
 
         it 'may not show participation in event' do
-          other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:bottom_layer_two)]))
+          other = Fabricate(:event_participation,
+                            event: Fabricate(:event, groups: [groups(:bottom_layer_two)]))
           is_expected.not_to be_able_to(:show, other)
         end
       end
     end
 
   end
-
 
   context :layer_full do
     let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
@@ -135,7 +148,8 @@ describe EventAbility do
       end
 
       it 'may create event in his layer' do
-        is_expected.to be_able_to(:create, groups(:toppers).events.new.tap { |e| e.groups << group })
+        is_expected.to be_able_to(:create,
+                                  groups(:toppers).events.new.tap { |e| e.groups << group })
       end
 
       it 'may update event in his layer' do
@@ -155,7 +169,9 @@ describe EventAbility do
         other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
         is_expected.not_to be_able_to(:index_participations, other)
       end
+    end
 
+    context Event::Course do
       it 'may list all courses' do
         is_expected.to be_able_to(:list_all, Event::Course)
       end
@@ -192,7 +208,7 @@ describe EventAbility do
 
       it 'may show participation on waiting list with prio_1 in event from other layer' do
         event = Fabricate(:event, groups: [groups(:bottom_group_one_two)])
-        application = Fabricate(:event_application, priority_1: event, waiting_list: true)
+        application = Fabricate(:event_application, priority_1: event, waiting_list: true) # rubocop:disable Naming/VariableNumber
         other = Fabricate(:event_participation,
                           event: event,
                           application: application)
@@ -229,7 +245,9 @@ describe EventAbility do
         it 'may index people for event' do
           is_expected.to be_able_to(:index_participations, event)
         end
+      end
 
+      context Event::Course do
         it 'may not list all courses' do
           is_expected.not_to be_able_to(:list_all, Event::Course)
         end
@@ -320,7 +338,9 @@ describe EventAbility do
   end
 
   context :group_full do
-    let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
+    let(:role) do
+      Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
+    end
 
     context Event do
       it 'may create event in his group' do
@@ -348,7 +368,9 @@ describe EventAbility do
         other = Fabricate(:event, groups: [groups(:bottom_group_one_two)])
         is_expected.not_to be_able_to(:index_participations, other)
       end
+    end
 
+    context Event::Course do
       it 'may not list all courses' do
         is_expected.not_to be_able_to(:list_all, Event::Course)
       end
@@ -374,7 +396,8 @@ describe EventAbility do
       end
 
       it 'may not show participation in event from other group' do
-        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:bottom_group_one_two)]))
+        other = Fabricate(:event_participation,
+                          event: Fabricate(:event, groups: [groups(:bottom_group_one_two)]))
         is_expected.not_to be_able_to(:show, other)
       end
     end
@@ -383,7 +406,9 @@ describe EventAbility do
 
   context :event_full do
     let(:group)  { groups(:bottom_layer_one) }
-    let(:role)   { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
+    let(:role)   do
+      Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
+    end
     let(:participation) { Fabricate(:event_participation, event: event, person: user) }
     let(:event_role) { Fabricate(Event::Role::Leader.name.to_sym, participation: participation) }
 
@@ -475,7 +500,7 @@ describe EventAbility do
 
       it 'may destroy own helper role' do
         helper = Fabricate(Event::Role::Speaker.name.to_sym,
-                          participation: participation)
+                           participation: participation)
         is_expected.to be_able_to(:destroy, helper)
       end
 
@@ -494,10 +519,12 @@ describe EventAbility do
   end
 
   context :participations_read do
-    let(:role)   { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
-    let(:event)  { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
+    let(:role) do
+      Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
+    end
+    let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
     let(:participation) { Fabricate(:event_participation, event: event, person: user) }
-    let(:event_role)    { Event::Role::Cook}
+    let(:event_role)    { Event::Role::Cook }
 
     before { Fabricate(event_role.name.to_sym, participation: participation) }
 
@@ -507,7 +534,10 @@ describe EventAbility do
       end
 
       it 'may not create events' do
-        is_expected.not_to be_able_to(:create, groups(:bottom_layer_one).events.new.tap { |e| e.groups << groups(:bottom_layer_one) })
+        is_expected.not_to be_able_to(:create,
+                                      groups(:bottom_layer_one).events.new.tap do |e|
+                                        e.groups << groups(:bottom_layer_one)
+                                      end)
       end
 
       it 'may not update his event' do
@@ -586,7 +616,8 @@ describe EventAbility do
       end
 
       it 'may not show participation in other event' do
-        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:bottom_layer_one)]))
+        other = Fabricate(:event_participation,
+                          event: Fabricate(:event, groups: [groups(:bottom_layer_one)]))
         Fabricate(Event::Role::Participant.name.to_sym, participation: other)
         is_expected.not_to be_able_to(:show, other)
       end
@@ -605,8 +636,10 @@ describe EventAbility do
   end
 
   context 'inactive participation' do
-    let(:role)   { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)) }
-    let(:event)  { Fabricate(:course, groups: [groups(:bottom_layer_one)]) }
+    let(:role) do
+      Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
+    end
+    let(:event) { Fabricate(:course, groups: [groups(:bottom_layer_one)]) }
     let(:participation) do
       Fabricate(:event_participation,
                 event: event,
@@ -651,7 +684,8 @@ describe EventAbility do
       end
 
       it 'may not show participation in other event' do
-        other = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:bottom_layer_one)]))
+        other = Fabricate(:event_participation,
+                          event: Fabricate(:event, groups: [groups(:bottom_layer_one)]))
         Fabricate(Event::Course::Role::Participant.name.to_sym, participation: other)
         is_expected.not_to be_able_to(:show, other)
       end
@@ -672,12 +706,14 @@ describe EventAbility do
       end
 
       it 'may not destroy his participation if applications cancelable and applications closed' do
-        event.update!(applications_cancelable: true, application_closing_at: Time.zone.today - 1.day)
+        event.update!(applications_cancelable: true,
+                      application_closing_at: Time.zone.today - 1.day)
         is_expected.not_to be_able_to(:destroy, participation)
       end
 
       it 'may not destroy his participation if applications not cancelable' do
-        event.update!(applications_cancelable: false, application_closing_at: Time.zone.today + 10.days)
+        event.update!(applications_cancelable: false,
+                      application_closing_at: Time.zone.today + 10.days)
         is_expected.not_to be_able_to(:destroy, participation)
       end
 
@@ -691,7 +727,9 @@ describe EventAbility do
   end
 
   context :in_same_hierarchy do
-    let(:role) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
+    let(:role) do
+      Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
+    end
     let(:participation) { Fabricate(:event_participation, person: user, event: event) }
 
     context Event::Participation do
@@ -712,7 +750,9 @@ describe EventAbility do
   end
 
   context :in_other_hierarchy do
-    let(:role)  { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_two)) }
+    let(:role) do
+      Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_two))
+    end
     let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
     let(:participation) { Fabricate(:event_participation, person: user, event: event) }
 
@@ -748,7 +788,9 @@ describe EventAbility do
 
   context :approver do
     let(:event) { Fabricate(:course, groups: [groups(:top_layer)]) }
-    let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
+    let(:role) do
+      Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
+    end
 
     context 'for his guides' do
       it 'may show participations' do
@@ -765,7 +807,9 @@ describe EventAbility do
     end
 
     context 'for other participants' do
-      let(:participant) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_two)).person }
+      let(:participant) do
+        Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_two)).person
+      end
 
       before { participation.application.priority_2 = nil }
 
@@ -821,5 +865,4 @@ describe EventAbility do
       is_expected.not_to be_able_to(:create, group.events.new.tap { |e| e.groups << group })
     end
   end
-
 end

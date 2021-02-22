@@ -27,132 +27,26 @@ AllCops:
     - app/assets/config.rb
     - node_modules/**/*
 
-# Style/RescueStandardError:
-#   Enabled: false
-
-# # we have not yet introcued ApplicationRecord as a Pattern
-# Rails/ApplicationRecord:
-#   Enabled: false
-
 # NB: these metrics are more strict than the values in .rubocop_strict.yml
-
 Metrics/AbcSize:
   Max: 20
   Severity: error
-
 Metrics/ClassLength:
   Max: 200
   Severity: error
-
 Metrics/ModuleLength:
   Max: 200
   Severity: error
-
 Metrics/CyclomaticComplexity:
   Max: 6
   Severity: error
-
 Metrics/MethodLength:
   Max: 10
   Severity: error
 
+# in specs and raks-tasks, blocks are a structure-mechanism
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
     - lib/tasks/*.rake
 
-# NB: these metrics are more strict than the values in .rubocop_strict.yml
-
-# # Keep for now, easier with superclass definitions
-# ClassAndModuleChildren:
-#   Enabled: false
-
-# # The ones we use must exist for the entire class hierarchy.
-# ClassVars:
-#   Enabled: false
-
-# # map instead of collect, reduce instead of inject.
-# # Probably later
-# CollectionMethods:
-#   Enabled: false
-
-# # Well, well, well
-# Documentation:
-#   Enabled: false
-
-# # Probably later
-# DotPosition:
-#   Enabled: false
-
-# # Keep single line bodys for if and unless
-# IfUnlessModifier:
-#   Enabled: false
-
-# # We thinks that's fine
-# HasAndBelongsToMany:
-#   Enabled: false
-
-# # We think that's the developers choice
-# Rails/Delegate:
-#   Enabled: false
-
-# # with the use of controller-abstraction via dry_crud, this is intended
-# Rails/LexicallyScopedActionFilter:
-#   Enabled: false
-
-# # That's no huge stopper
-# Layout/EmptyLines:
-#   Enabled: false
-
-# # We thinks that's fine for specs
-# Layout/EmptyLinesAroundBlockBody:
-#   Enabled: false
-
-# # We thinks that's fine
-# Layout/EmptyLinesAroundClassBody:
-#   Enabled: false
-
-# # We thinks that's fine
-# Layout/EmptyLinesAroundModuleBody:
-#   Enabled: false
-
-# # We thinks that's fine
-# Layout/MultilineOperationIndentation:
-#   Enabled: false
-
-# # We are using Ruby 2+ anyway...
-# Style/AsciiComments:
-#   Enabled: false
-
-# # For now, we keep encoding comment
-# Style/Encoding:
-#   Enabled: false
-
-# # We thinks that's fine
-# Style/RegexpLiteral:
-#   Enabled: false
-
-# # We think that's the developers choice
-# Style/SymbolProc:
-#   Enabled: false
-
-# # Probably later
-# Style/GuardClause:
-#   Enabled: false
-
-# # We think that's fine
-# Style/PercentLiteralDelimiters:
-#   PreferredDelimiters:
-#     '%w': '()'
-
-# # We think that's fine
-# Style/SymbolArray:
-#   EnforcedStyle: brackets
-
-# Style/PercentLiteralDelimiters:
-#   PreferredDelimiters:
-#     '%w': '()'
-
-# # We thinks that's fine
-# Style/SingleLineBlockParams:
-#   Enabled: false

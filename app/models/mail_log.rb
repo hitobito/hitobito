@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 # frozen_string_literal: true
 
-=======
->>>>>>> Auto-Correct according to standard/rubocop rules
-#  Copyright (c) 2018-2020, Hitobito AG. This file is part of
+#  Copyright (c) 2018-2021, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -27,18 +24,19 @@
 #  index_mail_logs_on_message_id  (message_id)
 #
 
-class MailLog < ActiveRecord::Base
-
+class MailLog < ApplicationRecord
   belongs_to :message
 
   STATES = [:retreived, :bulk_delivering, :completed, :sender_rejected, :unkown_recipient].freeze
   enum status: STATES
 
-  BULK_MESSAGE_STATUS = { bulk_delivering: :processing,
-                          retreived: :pending,
-                          completed: :finished,
-                          sender_rejected: :failed,
-                          unkown_recipient: :failed }.freeze
+  BULK_MESSAGE_STATUS = {
+    bulk_delivering: :processing,
+    retreived: :pending,
+    completed: :finished,
+    sender_rejected: :failed,
+    unkown_recipient: :failed,
+  }.freeze
 
   validates_by_schema
 

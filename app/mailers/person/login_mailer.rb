@@ -1,18 +1,15 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Person::LoginMailer < ApplicationMailer
-
-  CONTENT_LOGIN = 'send_login'.freeze
+  CONTENT_LOGIN = "send_login".freeze
 
   def login(recipient, sender, token)
     @recipient = recipient
-    @sender    = sender
-    @token     = token
+    @sender = sender
+    @token = token
 
     values = values_for_placeholders(CONTENT_LOGIN)
 
@@ -38,5 +35,4 @@ class Person::LoginMailer < ApplicationMailer
   def login_url(token)
     edit_person_password_url(reset_password_token: token)
   end
-
 end

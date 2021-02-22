@@ -1,31 +1,27 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Event::KindsController < SimpleCrudController
-
   self.permitted_attrs = [:label, :short_name, :minimum_age,
                           :general_information, :application_conditions,
-                          precondition_qualification_kinds: [{ qualification_kind_ids: [] }],
+                          precondition_qualification_kinds: [{qualification_kind_ids: []}],
                           qualification_kinds: {
                             participant: {
-                              qualification: { qualification_kind_ids: [] },
-                              prolongation: { qualification_kind_ids: [] }
+                              qualification: {qualification_kind_ids: []},
+                              prolongation: {qualification_kind_ids: []},
                             },
                             leader: {
-                              qualification: { qualification_kind_ids: [] },
-                              prolongation: { qualification_kind_ids: [] }
-                            }
-                          }]
+                              qualification: {qualification_kind_ids: []},
+                              prolongation: {qualification_kind_ids: []},
+                            },
+                          },]
 
-  self.sort_mappings = { label:      'event_kind_translations.label',
-                         short_name: 'event_kind_translations.short_name' }
+  self.sort_mappings = {label: "event_kind_translations.label",
+                        short_name: "event_kind_translations.short_name",}
 
   before_render_form :load_assocations
-
 
   private
 
@@ -67,10 +63,10 @@ class Event::KindsController < SimpleCrudController
     kinds_attrs.flat_map do |role, categories|
       categories.flat_map do |category, ids|
         ids.fetch(:qualification_kind_ids, []).collect do |id|
-          { id: find_qualification_kind_assoc_id(existing_kinds, id, role, category),
-            role: role,
-            category: category,
-            qualification_kind_id: id }
+          {id: find_qualification_kind_assoc_id(existing_kinds, id, role, category),
+           role: role,
+           category: category,
+           qualification_kind_id: id,}
         end
       end
     end
@@ -79,31 +75,31 @@ class Event::KindsController < SimpleCrudController
   def flatten_precondition_qualification_kinds(grouped_ids, existing_kinds)
     grouped_ids.each_with_index.flat_map do |(_, ids), index|
       ids.fetch(:qualification_kind_ids, []).map do |id|
-        { id: find_qualification_kind_assoc_id(existing_kinds, id,
-                                               'participant', 'precondition', index + 1),
-          role: 'participant',
-          category: 'precondition',
-          qualification_kind_id: id,
-          grouping: index + 1 }
+        {id: find_qualification_kind_assoc_id(existing_kinds, id,
+          "participant", "precondition", index + 1),
+         role: "participant",
+         category: "precondition",
+         qualification_kind_id: id,
+         grouping: index + 1,}
       end
     end
   end
 
   def find_qualification_kind_assoc_id(existing_kinds, qualification_kind_id, role,
-                                       category, grouping = nil)
-    kind = existing_kinds.find do |k|
+    category, grouping = nil)
+    kind = existing_kinds.find { |k|
       k.role == role &&
-      k.category == category &&
-      k.qualification_kind_id == qualification_kind_id &&
-      k.grouping == grouping
-    end
+        k.category == category &&
+        k.qualification_kind_id == qualification_kind_id &&
+        k.grouping == grouping
+    }
     kind.try(:id)
   end
 
   def mark_qualifikation_kinds_for_removal!(kinds_attrs, existing_kinds)
     existing_kinds.each do |kind|
       if kinds_attrs.none? { |a| a[:id] == kind.id }
-        kinds_attrs << { id: kind.id, _destroy: true }
+        kinds_attrs << {id: kind.id, _destroy: true}
       end
     end
   end
@@ -113,5 +109,4 @@ class Event::KindsController < SimpleCrudController
       Event::Kind
     end
   end
-
 end

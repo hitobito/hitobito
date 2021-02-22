@@ -7,7 +7,6 @@
 
 module Export::Pdf::Messages
   class Letter
-
     def initialize(letter, recipients, options = {})
       @letter = letter
       @recipients = recipients
@@ -30,24 +29,24 @@ module Export::Pdf::Messages
     end
 
     def filename
-      parts = [@letter.subject.parameterize(separator: '_')]
-      parts << %w(preview) if preview?
+      parts = [@letter.subject.parameterize(separator: "_")]
+      parts << %w[preview] if preview?
       yield parts if block_given?
-      [parts.join('-'), :pdf].join('.')
+      [parts.join("-"), :pdf].join(".")
     end
 
     private
 
     def render_options
       preview_option.to_h.merge(
-        page_size: 'A4',
+        page_size: "A4",
         page_layout: :portrait,
         margin: 2.cm
       )
     end
 
     def preview_option
-      { background: Settings.messages.pdf.preview } if preview?
+      {background: Settings.messages.pdf.preview} if preview?
     end
 
     def customize(pdf)
@@ -67,5 +66,4 @@ module Export::Pdf::Messages
       @options[:preview]
     end
   end
-
 end

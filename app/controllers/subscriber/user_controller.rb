@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,18 +5,17 @@
 
 module Subscriber
   class UserController < ApplicationController
-
     before_action :authorize
 
     def create
       subscription.excluded = false
       if subscription.save
         redirect_to(mailing_list_path,
-                    notice: translate(:success))
+          notice: translate(:success))
       else
         redirect_to(mailing_list_path,
-                    alert: translate(:failure,
-                                     errors: subscription.errors.full_messages.join(', ')))
+          alert: translate(:failure,
+            errors: subscription.errors.full_messages.join(", ")))
       end
     end
 
@@ -46,8 +43,8 @@ module Subscriber
 
     def find_subscription
       mailing_list.subscriptions.where(subscriber_id: current_user.id,
-                                       subscriber_type: Person.sti_name).
-                                 first
+                                       subscriber_type: Person.sti_name)
+        .first
     end
 
     def mailing_list
@@ -57,6 +54,5 @@ module Subscriber
     def mailing_list_path
       group_mailing_list_path(group_id: mailing_list.group.id, id: mailing_list.id)
     end
-
   end
 end

@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class TableDisplaysController < ApplicationController
-
   skip_authorization_check only: [:create]
 
   def create
@@ -21,5 +20,4 @@ class TableDisplaysController < ApplicationController
   def parent
     model_params[:parent_type].constantize.find(model_params[:parent_id])
   end
-
 end

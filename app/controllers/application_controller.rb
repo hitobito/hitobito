@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class ApplicationController < ActionController::Base
-
   include DecoratesBeforeRendering
   include Userstamp
   include Translatable
@@ -31,12 +28,12 @@ class ApplicationController < ActionController::Base
 
   if Rails.env.production?
     rescue_from CanCan::AccessDenied do |_exception|
-      redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
+      redirect_to root_path, alert: I18n.t("devise.failure.not_permitted_to_view_page")
     end
 
     rescue_from ActionController::UnknownFormat,
-                ActionView::MissingTemplate,
-                with: :not_found
+      ActionView::MissingTemplate,
+      with: :not_found
   end
 
   def person_home_path(person, options = {})
@@ -46,13 +43,13 @@ class ApplicationController < ActionController::Base
   private
 
   def not_found
-    raise ActionController::RoutingError, 'Not Found'
+    raise ActionController::RoutingError, "Not Found"
   end
 
   def set_no_cache
-    response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
 
   def html_request?
@@ -61,15 +58,15 @@ class ApplicationController < ActionController::Base
 
   def user_for_paper_trail
     origin_user_id = session[:origin_user]
-    origin_user_id ? origin_user_id : super
+    origin_user_id || super
   end
 
   def current_ability
     @current_ability ||= if current_user
-                           Ability.new(current_user)
-                         else
-                           TokenAbility.new(current_service_token)
-                         end
+      Ability.new(current_user)
+    else
+      TokenAbility.new(current_service_token)
+    end
   end
 
   def after_sign_in_path_for(resource)

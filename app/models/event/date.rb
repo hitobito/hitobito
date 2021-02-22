@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -21,8 +19,7 @@
 #  index_event_dates_on_event_id_and_start_at  (event_id,start_at)
 #
 
-class Event::Date < ActiveRecord::Base
-
+class Event::Date < ApplicationRecord
   include DatetimeAttribute
   datetime_attr :start_at, :finish_at
 
@@ -31,7 +28,6 @@ class Event::Date < ActiveRecord::Base
   validates_by_schema
   validates :start_at, presence: true
   validate :assert_meaningful
-
 
   def duration
     @duration ||= Duration.new(start_at, finish_at)
@@ -42,7 +38,7 @@ class Event::Date < ActiveRecord::Base
   end
 
   def label_and_location
-    [label, location].compact.reject(&:empty?).join(', ')
+    [label, location].compact.reject(&:empty?).join(", ")
   end
 
   private

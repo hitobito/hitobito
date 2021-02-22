@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 module Dropdown
   class PeopleExport < Base
-
     attr_reader :user, :params
 
     def initialize(template, user, params, options = {})
@@ -38,20 +35,24 @@ module Dropdown
 
     def tabular_links(format) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       path = params.merge(format: format)
-      item = add_item(translate(format), '#')
+      item = add_item(translate(format), "#")
       if Settings.table_displays
         item.sub_items << Item.new(translate(:selection),
-                                   path.merge(selection: true),
-                                   data: { checkable: true })
+          path.merge(selection: true),
+          data: {checkable: true})
       end
-      item.sub_items << Item.new(translate(:addresses), path, data: { checkable: true })
-      item.sub_items << Item.new(translate(:households),
-                                 path.merge(household: true),
-                                 data: { checkable: true }) if @households
+      item.sub_items << Item.new(translate(:addresses), path, data: {checkable: true})
+      if @households
+        item.sub_items << Item.new(translate(:households),
+          path.merge(household: true),
+          data: {checkable: true})
+      end
 
-      item.sub_items << Item.new(translate(:everything),
-                                 path.merge(details: true),
-                                 data: { checkable: true }) if @details
+      if @details
+        item.sub_items << Item.new(translate(:everything),
+          path.merge(details: true),
+          data: {checkable: true})
+      end
     end
 
     def vcard_link
@@ -60,7 +61,7 @@ module Dropdown
 
     def mailchimp_link
       if @mailchimp_synchronization_path
-        add_item('MailChimp', @mailchimp_synchronization_path, method: :post, remote: true)
+        add_item("MailChimp", @mailchimp_synchronization_path, method: :post, remote: true)
       end
     end
 
@@ -80,5 +81,4 @@ module Dropdown
       end
     end
   end
-
 end

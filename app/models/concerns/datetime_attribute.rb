@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -35,7 +33,7 @@ module DatetimeAttribute
     date = ActiveRecord::Type::Date.new.date_string_to_long_year(date)
     date = date.to_date
     send("#{attr}=", Time.zone.local(date.year, date.month, date.day, hour.to_i, min.to_i))
-  rescue StandardError
+  rescue
     errors.add(attr, :invalid)
   end
 
@@ -61,7 +59,6 @@ module DatetimeAttribute
   end
 
   module ClassMethods
-
     def datetime_attr(*attrs)
       attrs.each do |attr|
         datetime_attributes << attr
@@ -93,7 +90,5 @@ module DatetimeAttribute
     def datetime_accessor(attr, field)
       :"#{attr}_#{field}"
     end
-
   end
-
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -13,23 +11,22 @@ module MailRelay
   # When a receiving server bounces the mail, it is relayed again to the original sender,
   # based on the encoded return path address.
   class Lists < Base
-
-    SENDER_SUFFIX = '-bounces'
+    SENDER_SUFFIX = "-bounces"
 
     self.mail_domain = Settings.email.list_domain
 
     class << self
       def personal_return_path(list_name, sender_email, domain = nil)
-        return nil unless sender_email.present?
+        return nil if sender_email.blank?
 
         # recipient format (before @) must match regexp in #reject_not_existing
-        id_suffix = '+' + sender_email.tr('@', '=')
+        id_suffix = "+" + sender_email.tr("@", "=")
         "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{domain || mail_domain}"
       end
 
       def app_sender_name
         app_sender = Settings.email.sender
-        app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || 'noreply'
+        app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || "noreply"
       end
     end
 
@@ -84,17 +81,17 @@ module MailRelay
       return false unless valid_email?(sender_email)
 
       mailing_list.anyone_may_post ||
-      sender_is_additional_sender? ||
-      sender_is_group_email? ||
-      sender_is_list_administrator? ||
-      (mailing_list.subscribers_may_post? && sender_is_list_member?)
+        sender_is_additional_sender? ||
+        sender_is_group_email? ||
+        sender_is_list_administrator? ||
+        (mailing_list.subscribers_may_post? && sender_is_list_member?)
     end
 
     # List of receiver email addresses for the resent email.
     def receivers
       @mail_log.message.update(mailing_list: mailing_list)
       Person.mailing_emails_for(mailing_list.people.to_a,
-                                mailing_list.labels)
+        mailing_list.labels)
     end
 
     def mailing_list
@@ -113,13 +110,13 @@ module MailRelay
     def prepare_not_allowed_message
       sender = "#{envelope_receiver_name}#{SENDER_SUFFIX}@#{mail_domain}"
       message.reply do
-        body 'Du bist nicht berechtigt, auf diese Liste zu schreiben.'
+        body "Du bist nicht berechtigt, auf diese Liste zu schreiben."
         from sender
       end
     end
 
     def prepare_bounced_message(list_address, sender_address)
-      message.to = sender_address.tr('=', '@')
+      message.to = sender_address.tr("=", "@")
 
       env_sender = "#{list_address}#{SENDER_SUFFIX}@#{mail_domain}"
       message.sender = env_sender
@@ -131,21 +128,21 @@ module MailRelay
     end
 
     def sender_is_additional_sender?
-      return false unless sender_email.present?
+      return false if sender_email.blank?
 
       additional_senders = mailing_list.additional_sender.to_s
       list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
-      sender_domain = sender_email.sub(/^[^@]*@/, '*@')
+      sender_domain = sender_email.sub(/^[^@]*@/, "*@")
       # check if the domain is valid, if the sender is in the senders
       # list or if the domain is whitelisted
       list.include?(sender_email) ||
-          (valid_domain?(sender_domain) && list.include?(sender_domain))
+        (valid_domain?(sender_domain) && list.include?(sender_domain))
     end
 
     def sender_is_group_email?
       group = mailing_list.group
       group.email == sender_email ||
-      group.additional_emails.collect(&:email).include?(sender_email)
+        group.additional_emails.collect(&:email).include?(sender_email)
     end
 
     def sender_is_list_administrator?
@@ -159,10 +156,10 @@ module MailRelay
     end
 
     def potential_senders
-      Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
-                   " AND additional_emails.contactable_type = '#{Person.sti_name}'").
-             where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email).
-             distinct
+      Person.joins("LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id" \
+                   " AND additional_emails.contactable_type = '#{Person.sti_name}'")
+        .where("people.email = ? OR additional_emails.email = ?", sender_email, sender_email)
+        .distinct
     end
 
     def send_reject_message?
@@ -178,6 +175,5 @@ module MailRelay
         message.header[field.name] = nil
       end
     end
-
   end
 end

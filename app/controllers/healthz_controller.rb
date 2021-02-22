@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -9,7 +7,6 @@
 # inspect the application health without credentials.
 # If we'd return 401 the application would be treated as unhealthy.
 class HealthzController < ActionController::Base
-
   protect_from_forgery with: :exception
 
   def show

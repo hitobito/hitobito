@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::AssignmentsController < CrudController
-
   private
 
   def authorize_class

@@ -1,17 +1,14 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Event::PreconditionChecker
-
   extend Forwardable
   include Translatable
 
-  def_delegator 'course.kind', :minimum_age, :course_minimum_age
-  def_delegator 'errors', :empty?, :valid?
+  def_delegator "course.kind", :minimum_age, :course_minimum_age
+  def_delegator "errors", :empty?, :valid?
   attr_reader :course, :person, :errors
 
   def initialize(course, person)
@@ -45,7 +42,7 @@ class Event::PreconditionChecker
   end
 
   def validate_qualifications
-    grouped_ids = course.kind.grouped_qualification_kind_ids('precondition', 'participant')
+    grouped_ids = course.kind.grouped_qualification_kind_ids("precondition", "participant")
     if grouped_ids.size == 1
       validate_simple_qualifications(grouped_ids.first)
     elsif grouped_ids.size > 1
@@ -77,13 +74,13 @@ class Event::PreconditionChecker
   end
 
   def course_preconditions
-    course.kind.qualification_kinds('precondition', 'participant')
+    course.kind.qualification_kinds("precondition", "participant")
   end
 
   def reactivateable?(qualification_kind_id)
-    person_qualifications.
-      select { |q| q.qualification_kind_id == qualification_kind_id }.
-      any? { |qualification| qualification.reactivateable?(course.start_date) }
+    person_qualifications
+      .select { |q| q.qualification_kind_id == qualification_kind_id }
+      .any? { |qualification| qualification.reactivateable?(course.start_date) }
   end
 
   def old_enough?
@@ -100,7 +97,6 @@ class Event::PreconditionChecker
 
   def qualifications_error_text
     kinds = QualificationKind.includes(:translations).find(errors)
-    translate(:qualifications_missing, missing: kinds.collect(&:label).join(', '))
+    translate(:qualifications_missing, missing: kinds.collect(&:label).join(", "))
   end
-
 end

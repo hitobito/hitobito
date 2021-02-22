@@ -5,14 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 module Oauth
   class ApplicationsController < CrudController
-
     self.permitted_attrs = [
       :name, :redirect_uri, :confidential,
       :logo, :remove_logo,
-      scopes: []
+      scopes: [],
     ]
 
     def self.model_class
@@ -21,7 +19,7 @@ module Oauth
 
     def permitted_params
       super.tap do |attrs|
-        attrs[:scopes] = Array(attrs.delete(:scopes)).join(' ')
+        attrs[:scopes] = Array(attrs.delete(:scopes)).join(" ")
       end
     end
   end

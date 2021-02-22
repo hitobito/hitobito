@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class RolesController < CrudController
-
   respond_to :js
 
   self.nesting = Group
@@ -77,9 +76,9 @@ class RolesController < CrudController
   def create_entry_and_person
     created = false
     Role.transaction do
-      created = with_callbacks(:create, :save) do
+      created = with_callbacks(:create, :save) {
         (entry.person.persisted? || entry.person.save) && entry.save
-      end
+      }
       raise ActiveRecord::Rollback unless created
     end
     created
@@ -128,7 +127,7 @@ class RolesController < CrudController
   end
 
   def copy_errors(new_role)
-    entry.attributes = new_role.attributes.except('id')
+    entry.attributes = new_role.attributes.except("id")
     new_role.errors.each do |key, value|
       entry.errors.add(key, value)
     end
@@ -222,7 +221,7 @@ class RolesController < CrudController
     # only show warning if more than one group remains
     if @was_last_primary_group_role && entry.person.roles.select(:group_id).distinct.count > 1
       new_group = entry.person.primary_group
-      flash[:alert] = t('roles.role_primary_group_changed', new_group: new_group.to_s)
+      flash[:alert] = t("roles.role_primary_group_changed", new_group: new_group.to_s)
     end
   end
 
@@ -246,5 +245,4 @@ class RolesController < CrudController
   def set_person_id
     @person_id = Role.with_deleted.find(params[:role_id]).person_id if params[:role_id]
   end
-
 end

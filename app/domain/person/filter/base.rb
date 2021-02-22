@@ -1,14 +1,11 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Base
-
   # - has not to be encoded in URLs, ',' must be and thus generate a much longer string.
-  ID_URL_SEPARATOR = '-'.freeze
+  ID_URL_SEPARATOR = "-".freeze
 
   class_attribute :required_ability, :permitted_args
 
@@ -29,9 +26,7 @@ class Person::Filter::Base
     scope
   end
 
-  def blank?
-    args.blank?
-  end
+  delegate :blank?, to: :args
 
   # Returns a serializable, persistable representation of this filter.
   def to_hash
@@ -54,5 +49,4 @@ class Person::Filter::Base
     args[key] = args[key].to_s.split(ID_URL_SEPARATOR) unless args[key].is_a?(Array)
     args[key].collect!(&:to_i)
   end
-
 end

@@ -18,8 +18,7 @@
 #  index_event_answers_on_participation_id_and_question_id  (participation_id,question_id) UNIQUE
 #
 
-class Event::Answer < ActiveRecord::Base
-
+class Event::Answer < ApplicationRecord
   attr_writer :answer_required
 
   delegate :admin?, to: :question
@@ -27,12 +26,11 @@ class Event::Answer < ActiveRecord::Base
   belongs_to :participation
   belongs_to :question
 
-
   validates_by_schema
-  validates :question_id, uniqueness: { scope: :participation_id }
-  validates :answer, presence: { if: lambda do
+  validates :question_id, uniqueness: {scope: :participation_id}
+  validates :answer, presence: {if: lambda do
     question && question.required? && participation.enforce_required_answers
-  end }
+  end}
   validate :assert_answer_is_in_choice_items
 
   # override to handle array values submitted from checkboxes
@@ -54,9 +52,9 @@ class Event::Answer < ActiveRecord::Base
     # still allow answer to be nil because otherwise participations could not
     # be created without answering all questions (required to create roles for other people)
     if question_with_choices? &&
-       answer &&
-       !question.multiple_choices? &&
-       !question.choice_items.include?(answer)
+        answer &&
+        !question.multiple_choices? &&
+        !question.choice_items.include?(answer)
       errors.add(:answer, :inclusion)
     end
   end
@@ -70,12 +68,12 @@ class Event::Answer < ActiveRecord::Base
   end
 
   def valid_index_based_values(index_array, valid_range)
-    indexes = index_array.map do |index|
+    indexes = index_array.map { |index|
       if valid_range.include?(index)
         question.choice_items[index]
       end
-    end.compact
+    }.compact
 
-    indexes.present? ? indexes.join(', ') : nil
+    indexes.present? ? indexes.join(", ") : nil
   end
 end

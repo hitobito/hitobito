@@ -16,7 +16,7 @@ class ServiceTokensController < CrudController
     :events,
     :invoices,
     :event_participations,
-    :mailing_lists
+    :mailing_lists,
   ]
 
   private
@@ -34,5 +34,4 @@ class ServiceTokensController < CrudController
   def authorize_class
     authorize!(:index_service_tokens, group)
   end
-
 end

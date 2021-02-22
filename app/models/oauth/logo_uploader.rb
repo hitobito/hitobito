@@ -6,10 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class Oauth::LogoUploader < Uploader::Base
-
   MAX_DIMENSION = 8000
 
-  self.allowed_extensions = %w(jpg jpeg gif png)
+  self.allowed_extensions = %w[jpg jpeg gif png]
 
   include CarrierWave::MiniMagick
 
@@ -29,7 +28,7 @@ class Oauth::LogoUploader < Uploader::Base
   end
 
   def png_name
-    ['oauth_app', version_name].compact.join('_') + '.png'
+    ["oauth_app", version_name].compact.join("_") + ".png"
   end
 
   private
@@ -39,7 +38,7 @@ class Oauth::LogoUploader < Uploader::Base
     manipulate! do |img|
       if img.dimensions.any? { |i| i > MAX_DIMENSION }
         raise CarrierWave::ProcessingError,
-              I18n.t('errors.messages.dimensions_too_large', maximum: MAX_DIMENSION)
+          I18n.t("errors.messages.dimensions_too_large", maximum: MAX_DIMENSION)
       end
       img
     end
@@ -51,5 +50,4 @@ class Oauth::LogoUploader < Uploader::Base
       img
     end
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MessagesController < CrudController
-
   include YearBasedPaging
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze
@@ -21,9 +20,9 @@ class MessagesController < CrudController
                                         :count,
                                         :cost_center,
                                         :account,
-                                        :_destroy
-                                      ]
-                                    }].freeze
+                                        :_destroy,
+                                      ],
+                                    },].freeze
 
   self.nesting = [Group, MailingList]
   self.remember_params += [:year]

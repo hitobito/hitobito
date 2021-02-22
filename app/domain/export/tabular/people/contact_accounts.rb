@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -8,7 +6,6 @@
 module Export::Tabular::People
   module ContactAccounts
     class << self
-
       def key(model, label)
         :"#{model.model_name.to_s.underscore}_#{label.downcase}"
       end
@@ -16,7 +13,6 @@ module Export::Tabular::People
       def human(model, label)
         "#{model.model_name.human} #{label}"
       end
-
     end
   end
 end

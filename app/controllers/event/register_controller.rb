@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RegisterController < ApplicationController
-
   helper_method :resource, :entry, :group, :event
 
   before_action :assert_external_application_possible
@@ -23,16 +22,16 @@ class Event::RegisterController < ApplicationController
         # send_login_and_render_index
         Event::SendRegisterLoginJob.new(user, group, event).enqueue!
         flash.now[:notice] = translate(:person_found) + "\n\n" + translate(:email_sent)
-        render 'index'
+        render "index"
       else
         # register_new_person
         @person = Person.new(email: email)
         flash.now[:notice] = translate(:form_data_missing)
-        render 'register'
+        render "register"
       end
     else
       flash.now[:alert] = translate(:email_missing)
-      render 'index'
+      render "index"
     end
   end
 
@@ -42,7 +41,7 @@ class Event::RegisterController < ApplicationController
       flash[:notice] = translate(:registered)
       redirect_to new_group_event_participation_path(group, event)
     else
-      render 'register'
+      render "register"
     end
   end
 
@@ -85,7 +84,7 @@ class Event::RegisterController < ApplicationController
   end
 
   def params_key
-    %w(event_participation_contact_data person).find { |key| params.key?(key) }
+    %w[event_participation_contact_data person].find { |key| params.key?(key) }
   end
 
   alias resource person # used by devise-form
@@ -113,6 +112,4 @@ class Event::RegisterController < ApplicationController
   def devise_controller?
     true # hence, no login required
   end
-
-
 end

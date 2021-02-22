@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -22,16 +20,15 @@
 #  index_payment_reminders_on_invoice_id  (invoice_id)
 #
 
-class PaymentReminder < ActiveRecord::Base
-
+class PaymentReminder < ApplicationRecord
   attr_reader :ids
 
   belongs_to :invoice
 
   validate :assert_invoice_remindable
   validates :level, inclusion: (1..3)
-  validates :due_at, uniqueness: { scope: :invoice_id },
-                     timeliness: { after: :invoice_due_at, allow_blank: true, type: :date },
+  validates :due_at, uniqueness: {scope: :invoice_id},
+                     timeliness: {after: :invoice_due_at, allow_blank: true, type: :date},
                      if: :invoice_remindable?
 
   after_create :update_invoice
@@ -46,9 +43,7 @@ class PaymentReminder < ActiveRecord::Base
     I18n.l(due_at)
   end
 
-  def group
-    invoice.group
-  end
+  delegate :group, to: :invoice
 
   private
 
@@ -61,5 +56,4 @@ class PaymentReminder < ActiveRecord::Base
       errors.add(:invoice, :invalid)
     end
   end
-
 end

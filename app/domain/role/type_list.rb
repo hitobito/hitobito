@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -8,7 +6,6 @@
 class Role
   # Composes a nested hash of layer types, group types and role types.
   class TypeList
-
     attr_reader :root, :role_types
 
     def initialize(root_type)
@@ -72,11 +69,11 @@ class Role
       # global groups
       @global_group_types.each do |group|
         types = local_role_types(group)
-        @role_types['Global'][group.label] = types if types.present?
+        @role_types["Global"][group.label] = types if types.present?
       end
 
       # global roles
-      @role_types['Global']['Global'] = @global_role_types if @global_role_types.present?
+      @role_types["Global"]["Global"] = @global_role_types if @global_role_types.present?
     end
 
     # groups appearing in the possible (sub) children of more than one layer
@@ -84,7 +81,7 @@ class Role
       group_layers = {}
       find_group_layers(group, layer, group_layers)
       group_layers.select { |_, layers| layers.uniq.size > 1 }
-                  .collect(&:first)
+        .collect(&:first)
     end
 
     def find_group_layers(group, layer, group_layers)
@@ -124,6 +121,5 @@ class Role
     def local_role_type?(type)
       !@global_role_types.include?(type)
     end
-
   end
 end

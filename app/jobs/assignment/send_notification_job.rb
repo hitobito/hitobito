@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class Assignment::SendNotificationJob < BaseJob
-
   self.parameters = [:assignment_id, :locale]
 
   def initialize(assignment)
@@ -17,7 +16,7 @@ class Assignment::SendNotificationJob < BaseJob
   def perform
     set_locale
     Assignment::AssigneeNotificationMailer.assignee_notification(assignee_email,
-                                                                 assignment).deliver_now
+      assignment).deliver_now
   end
 
   def assignment

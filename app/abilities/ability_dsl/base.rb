@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -39,7 +37,6 @@ module AbilityDsl
   # BEWARE: The constraint methods only apply if you pass an instance to the #can?
   # method. If you pass a class, no constraints will be checked at all!
   class Base
-
     private
 
     attr_reader :user_context, :subject, :permission
@@ -149,6 +146,5 @@ module AbilityDsl
     def user
       user_context.user
     end
-
   end
 end

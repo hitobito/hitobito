@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
@@ -8,12 +7,11 @@
 
 module Dropdown
   class InvoiceSending < Base
-
     attr_reader :params, :path, :invoice_list_id
 
     def initialize(template, params)
       super(template, translate(:button), :envelope)
-      @params      = params
+      @params = params
       @invoice_list_id = template.invoice_list&.id
       init_items
     end
@@ -31,8 +29,7 @@ module Dropdown
 
     def add_item(key, options = {})
       path = template.group_invoice_list_path(template.parent, options)
-      super(translate(key), path, data: { method: :put, checkable: true })
+      super(translate(key), path, data: {method: :put, checkable: true})
     end
-
   end
 end

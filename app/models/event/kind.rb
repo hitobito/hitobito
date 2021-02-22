@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,8 +14,7 @@
 #  minimum_age :integer
 #
 
-class Event::Kind < ActiveRecord::Base
-
+class Event::Kind < ApplicationRecord
   include Paranoia::Globalized
   translates :label, :short_name, :general_information, :application_conditions
 
@@ -25,21 +22,18 @@ class Event::Kind < ActiveRecord::Base
 
   has_many :events
 
-  has_many :event_kind_qualification_kinds, class_name: 'Event::KindQualificationKind',
-                                            foreign_key: 'event_kind_id'
-
+  has_many :event_kind_qualification_kinds, class_name: "Event::KindQualificationKind",
+                                            foreign_key: "event_kind_id"
 
   ### VALIDATIONS
 
   validates_by_schema
   # explicitly define validations for translated attributes
   validates :label, presence: true
-  validates :label, :short_name, length: { allow_nil: true, maximum: 255 }
-  validates :minimum_age, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
-
+  validates :label, :short_name, length: {allow_nil: true, maximum: 255}
+  validates :minimum_age, numericality: {greater_than_or_equal_to: 0, allow_blank: true}
 
   accepts_nested_attributes_for :event_kind_qualification_kinds, allow_destroy: true
-
 
   before_validation :set_self_in_nested
 
@@ -55,21 +49,19 @@ class Event::Kind < ActiveRecord::Base
 
   # is this event type qualifying
   def qualifying?
-    event_kind_qualification_kinds.where('category IN (?)', %w(qualification prolongation)).exists?
+    event_kind_qualification_kinds.where("category IN (?)", %w[qualification prolongation]).exists?
   end
 
   def qualification_kinds(category, role)
-    QualificationKind.
-      includes(:translations).
-      joins(:event_kind_qualification_kinds).
-      where(event_kind_qualification_kinds: { event_kind_id: id,
+    QualificationKind
+      .includes(:translations)
+      .joins(:event_kind_qualification_kinds)
+      .where(event_kind_qualification_kinds: {event_kind_id: id,
                                               category: category,
-                                              role: role })
+                                              role: role,})
   end
 
-  def grouped_qualification_kind_ids(category, role)
-    event_kind_qualification_kinds.grouped_qualification_kind_ids(category, role)
-  end
+  delegate :grouped_qualification_kind_ids, to: :event_kind_qualification_kinds
 
   # Soft destroy if events exist, otherwise hard destroy
   def destroy
@@ -90,5 +82,4 @@ class Event::Kind < ActiveRecord::Base
       end
     end
   end
-
 end

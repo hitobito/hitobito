@@ -10,7 +10,7 @@ module Import
     include Translatable
 
     attr_reader :data, :role_type, :group, :options,
-                :failure_count, :new_count, :request_people, :errors
+      :failure_count, :new_count, :request_people, :errors
 
     attr_accessor :user_ability
 
@@ -52,7 +52,7 @@ module Import
     def save_person(import_person, _index)
       creator = request_creator(import_person)
 
-      if creator && creator.required?
+      if creator&.required?
         creator.create_request
       else
         import_person.save
@@ -98,7 +98,7 @@ module Import
       creator = request_creator(import_person)
       if import_person.new_record?
         @new_count += 1
-      elsif creator && creator.required?
+      elsif creator&.required?
         @request_people << import_person.person
       end
     end
@@ -111,6 +111,5 @@ module Import
     def duplicate_finder
       @duplicate_finder ||= PersonDuplicateFinder.new
     end
-
   end
 end

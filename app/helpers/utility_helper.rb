@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module UtilityHelper
-
   # Overridden method that takes a block that is executed for each item in array
   # before appending the results.
   def safe_join(array, sep = $OUTPUT_FIELD_SEPARATOR, &block)
@@ -16,8 +13,8 @@ module UtilityHelper
   # Returns the css class for the given flash level.
   def flash_class(level)
     case level
-    when :notice then 'success'
-    when :alert then 'error'
+    when :notice then "success"
+    when :alert then "error"
     else level.to_s
     end
   end
@@ -25,7 +22,7 @@ module UtilityHelper
   # Adds a class to the given options, even if there are already classes.
   def add_css_class(options, classes)
     if options[:class]
-      options[:class] += ' ' + classes
+      options[:class] += " " + classes
     else
       options[:class] = classes
     end
@@ -52,7 +49,7 @@ module UtilityHelper
 
   def column_for_attr(obj, attr)
     return nil unless obj.respond_to?(:column_for_attribute) && obj.has_attribute?(attr)
-    return obj.column_for_attribute(attr)
+    obj.column_for_attribute(attr)
   end
 
   # Returns the association proxy for the given attribute. The attr parameter
@@ -72,13 +69,12 @@ module UtilityHelper
   # Returns the name of the attr and it's corresponding field
   def assoc_and_id_attr(attr)
     attr = attr.to_s
-    if attr.end_with?('_id')
+    if attr.end_with?("_id")
       [attr[0..-4], attr]
-    elsif attr.end_with?('_ids')
+    elsif attr.end_with?("_ids")
       [attr[0..-5].pluralize, attr]
     else
       [attr, "#{attr}_id"]
     end
   end
-
 end

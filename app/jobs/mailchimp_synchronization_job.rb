@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailchimpSynchronizationJob < BaseJob
-
   self.parameters = [:mailing_list_id]
 
   def initialize(mailing_list_id)

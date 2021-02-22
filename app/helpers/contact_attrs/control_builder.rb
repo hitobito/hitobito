@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 module ContactAttrs
   class ControlBuilder
-
     include ActionView::Helpers::OutputSafetyHelper
 
     def initialize(form, event)
@@ -55,25 +52,25 @@ module ContactAttrs
     end
 
     def radio_buttons(attr, disabled = false, options = [:required, :optional, :hidden])
-      buttons = options.collect do |o|
+      buttons = options.collect { |o|
         checked = options.size == 1
         radio_button(attr, disabled, o, checked)
-      end
+      }
       safe_join(buttons)
     end
 
     def radio_button(attr, disabled, option, checked = false)
-      f.label("#{for_label(attr)}_#{option}", class: 'radio inline') do
+      f.label("#{for_label(attr)}_#{option}", class: "radio inline") do
         checked ||= checked?(attr, option)
-        options = { disabled: disabled, checked: checked }
+        options = {disabled: disabled, checked: checked}
         f.radio_button(for_label(attr), option, options) +
           option_label(option)
       end
     end
 
     def assoc_checkbox(assoc)
-      f.label(for_label(assoc), class: 'checkbox inline') do
-        options = { checked: assoc_hidden?(assoc) }
+      f.label(for_label(assoc), class: "checkbox inline") do
+        options = {checked: assoc_hidden?(assoc)}
         f.check_box(for_label(assoc), options, :hidden) +
           option_label(:hidden)
       end
@@ -103,6 +100,5 @@ module ContactAttrs
     def attr_label(attr)
       t("activerecord.attributes.person.#{attr}")
     end
-
   end
 end

@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Person::QueryController < ApplicationController
-
   class_attribute :serializer
   self.serializer = :as_typeahead
 
@@ -44,11 +41,8 @@ class Person::QueryController < ApplicationController
   self.search_columns = [:first_name, :last_name, :company_name, :nickname, :town]
 
   class << self
-
     def model_class
       Person
     end
-
   end
-
 end

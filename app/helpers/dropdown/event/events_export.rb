@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 module Dropdown::Event
   class EventsExport < Dropdown::Base
-
     attr_reader :user, :params
 
     def initialize(template, params)
@@ -27,7 +24,5 @@ module Dropdown::Event
     def tabular_links(format)
       add_item(translate(format), params.merge(format: format))
     end
-
   end
-
 end

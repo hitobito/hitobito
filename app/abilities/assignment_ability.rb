@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class AssignmentAbility < AbilityDsl::Base
-
   on(Assignment) do
     class_side(:index).all
 
@@ -23,9 +22,7 @@ class AssignmentAbility < AbilityDsl::Base
     attachment_can?(:create) || attachment_can?(:update)
   end
 
-  def attachment
-    subject.attachment
-  end
+  delegate :attachment, to: :subject
 
   private
 

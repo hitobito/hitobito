@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -30,7 +28,7 @@
 #  index_invoice_configs_on_group_id  (group_id)
 #
 
-class InvoiceConfig < ActiveRecord::Base
+class InvoiceConfig < ApplicationRecord
   include PaymentSlips
   include ValidatedEmail
 
@@ -38,7 +36,7 @@ class InvoiceConfig < ActiveRecord::Base
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
   PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}/
 
-  belongs_to :group, class_name: 'Group'
+  belongs_to :group, class_name: "Group"
 
   has_many :payment_reminder_configs, dependent: :destroy
 
@@ -51,15 +49,15 @@ class InvoiceConfig < ActiveRecord::Base
 
   # TODO: probably the if condition is not correct, verification needed
   validates :iban, presence: true, on: :update, if: :qr?
-  validates :iban, format: { with: IBAN_REGEX },
+  validates :iban, format: {with: IBAN_REGEX},
                    on: :update, allow_blank: true
 
-  validates :account_number, format: { with: ACCOUNT_NUMBER_REGEX },
+  validates :account_number, format: {with: ACCOUNT_NUMBER_REGEX},
                              on: :update, allow_blank: true, if: :post?
 
   validates :participant_number, presence: true, on: :update, if: :with_reference?
   validates :participant_number_internal, presence: true, on: :update, if: :bank_with_reference?
-  validates :participant_number_internal, format: { with: PARTICIPANT_NUMBER_INTERNAL_REGEX },
+  validates :participant_number_internal, format: {with: PARTICIPANT_NUMBER_INTERNAL_REGEX},
                                           on: :update, if: :bank_with_reference?
 
   validate :correct_address_wordwrap, if: :bank?
@@ -83,7 +81,7 @@ class InvoiceConfig < ActiveRecord::Base
   def correct_check_digit
     return if account_number.blank? || bank?
     payment_slip = Invoice::PaymentSlip.new
-    splitted = account_number.delete('-').split('')
+    splitted = account_number.delete("-").split("")
     check_digit = splitted.pop
     return if payment_slip.check_digit(splitted.join) == check_digit.to_i
     errors.add(:account_number, :invalid_check_digit)
@@ -92,5 +90,4 @@ class InvoiceConfig < ActiveRecord::Base
   def nullify_participant_number_internal
     self.participant_number_internal = nil
   end
-
 end

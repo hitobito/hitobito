@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -36,7 +34,7 @@ module NormalizedI18nLabels
     label_translations = I18n.t(labels_translations_key).invert
     if label_translations.key?(label)
       self.label = I18n.t("#{labels_translations_key}.#{label_translations[label]}",
-                          locale: I18n.default_locale)
+        locale: I18n.default_locale)
     end
   end
 
@@ -51,7 +49,7 @@ module NormalizedI18nLabels
       return label if label.blank?
 
       I18n.t("#{labels_translations_key}.#{label.downcase}",
-             default: label)
+        default: label)
     end
 
     private
@@ -65,5 +63,4 @@ module NormalizedI18nLabels
       "#{super()}.#{lang}"
     end
   end
-
 end

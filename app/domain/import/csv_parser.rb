@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'csv'
-
+require "csv"
 
 module Import
   class CsvParser
@@ -15,7 +12,7 @@ module Import
 
     def_delegators :csv, :size, :first, :to_csv, :[], :each
     attr_reader :csv, :error
-    POSSIBLE_SEPARATORS = [',', "\t", ':', ';']
+    POSSIBLE_SEPARATORS = [",", "\t", ":", ";"]
 
     def initialize(input)
       @input = input
@@ -55,24 +52,24 @@ module Import
       translate(:read_success, count: size)
     end
 
-    def flash_alert(filename = 'csv formular daten')
+    def flash_alert(filename = "csv formular daten")
       translate(:read_error, filename: filename, error: error)
     end
 
     private
 
     def options
-      { converters: ->(field, _info) { field && field.strip },
-        header_converters: ->(header, _info) { header.to_s.strip },
-        headers: true, skip_blanks: true }
+      {converters: ->(field, _info) { field&.strip },
+       header_converters: ->(header, _info) { header.to_s.strip },
+       headers: true, skip_blanks: true,}
     end
 
     def encode_as_utf8(input)
       raise translate(:contains_no_data) if input.nil?
       charset = CMess::GuessEncoding::Automatic.guess(input)
-      raise translate(:contains_no_data) if charset == 'UNKNOWN'
-      charset = Encoding::ISO8859_1 if charset == 'MACINTOSH'
-      input.force_encoding(charset).encode('UTF-8')
+      raise translate(:contains_no_data) if charset == "UNKNOWN"
+      charset = Encoding::ISO8859_1 if charset == "MACINTOSH"
+      input.force_encoding(charset).encode("UTF-8")
     end
 
     # removes empty lines (",,,,,\n"), happens when data is not on first line in spreadsheet
@@ -86,6 +83,5 @@ module Import
         start.count(char) > start.count(most_seen) ? char : most_seen
       end
     end
-
   end
 end

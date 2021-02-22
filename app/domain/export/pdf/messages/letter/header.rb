@@ -8,7 +8,7 @@
 class Export::Pdf::Messages::Letter
   class Header < Section
     LOGO_BOX = [200, 40]
-    ADDRESS_BOX =  [200, 40]
+    ADDRESS_BOX = [200, 40]
 
     def render(recipient)
       render_logo
@@ -38,8 +38,8 @@ class Export::Pdf::Messages::Letter
     def build_address(recipient)
       [recipient.full_name.to_s.squish,
        recipient.address.to_s.squish,
-       [recipient.zip_code, recipient.town].compact.join(' ').squish,
-       recipient.country.to_s.squish].compact.join("\n")
+       [recipient.zip_code, recipient.town].compact.join(" ").squish,
+       recipient.country.to_s.squish,].compact.join("\n")
     end
 
     def logo_path
@@ -49,7 +49,5 @@ class Export::Pdf::Messages::Letter
     def sender_address
       Settings.messages.pdf.address
     end
-
   end
-
 end

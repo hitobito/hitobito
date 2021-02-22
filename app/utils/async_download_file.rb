@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class AsyncDownloadFile
-
   DIRECTORY = Pathname.new(Settings.downloads.folder)
   PERSON_ID = /-(\w+?)\./
 
@@ -27,7 +26,7 @@ class AsyncDownloadFile
   end
 
   def downloadable?(person)
-    return false unless full_path.to_s =~ PERSON_ID
+    return false unless PERSON_ID.match?(full_path.to_s)
     File.exist?(full_path) &&
       full_path.to_s.match(PERSON_ID)[1] == person.id.to_s
   end
@@ -43,5 +42,4 @@ class AsyncDownloadFile
       f.write(data)
     end
   end
-
 end

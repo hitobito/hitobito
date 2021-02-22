@@ -4,8 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingList::Subscribers
-
-  delegate :id, :subscriptions, to: '@list'
+  delegate :id, :subscriptions, to: "@list"
 
   def initialize(mailing_list, people_scope = Person.only_public_data)
     @list = mailing_list
@@ -13,14 +12,14 @@ class MailingList::Subscribers
   end
 
   def people
-    @people_scope.
-      joins(people_joins).
-      joins(subscription_joins).
-      where(subscriptions: { mailing_list_id: id }).
-      where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})").
-      where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})").
-      where(suscriber_conditions).
-      distinct
+    @people_scope
+      .joins(people_joins)
+      .joins(subscription_joins)
+      .where(subscriptions: {mailing_list_id: id})
+      .where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})")
+      .where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})")
+      .where(suscriber_conditions)
+      .distinct
   end
 
   def people_joins
@@ -46,7 +45,7 @@ class MailingList::Subscribers
   end
 
   def subscription_joins
-    sql = ', subscriptions ' # the comma is needed because it is not a JOIN, but a second "FROM"
+    sql = ", subscriptions " # the comma is needed because it is not a JOIN, but a second "FROM"
 
     if subscriptions.groups.exists?
       sql += <<~SQL
@@ -77,11 +76,11 @@ class MailingList::Subscribers
   end
 
   def person_subscribers(condition)
-    condition.or('subscriptions.subscriber_type = ? AND ' \
-                 'subscriptions.excluded = ? AND ' \
-                 'subscriptions.subscriber_id = people.id',
-                 Person.sti_name,
-                 false)
+    condition.or("subscriptions.subscriber_type = ? AND " \
+                 "subscriptions.excluded = ? AND " \
+                 "subscriptions.subscriber_id = people.id",
+      Person.sti_name,
+      false)
   end
 
   def group_subscribers(condition)
@@ -104,32 +103,32 @@ class MailingList::Subscribers
   end
 
   def event_subscribers(condition)
-    condition.or('subscriptions.subscriber_type = ? AND ' \
-                 'subscriptions.subscriber_id = event_participations.event_id AND ' \
-                 'event_participations.active = ?',
-                 Event.sti_name,
-                 true)
+    condition.or("subscriptions.subscriber_type = ? AND " \
+                 "subscriptions.subscriber_id = event_participations.event_id AND " \
+                 "event_participations.active = ?",
+      Event.sti_name,
+      true)
   end
 
   private
 
   def tag_excluded_person_ids
     ActsAsTaggableOn::Tagging.select(:taggable_id)
-                             .where(taggable_type: Person.sti_name,
-                                    tag_id: tag_excluded_subscription_ids)
+      .where(taggable_type: Person.sti_name,
+             tag_id: tag_excluded_subscription_ids)
   end
 
   def tag_excluded_subscription_ids
     SubscriptionTag.select(:tag_id)
-                   .joins(:subscription)
-                   .where(subscription_tags: { excluded: true },
-                                             subscriptions: { mailing_list_id: id })
+      .joins(:subscription)
+      .where(subscription_tags: {excluded: true},
+             subscriptions: {mailing_list_id: id})
   end
 
   def excluded_subscriber_ids
-    Subscription.select(:subscriber_id).
-      where(mailing_list_id: id,
-            excluded: true,
-            subscriber_type: Person.sti_name)
+    Subscription.select(:subscriber_id)
+      .where(mailing_list_id: id,
+             excluded: true,
+             subscriber_type: Person.sti_name)
   end
 end

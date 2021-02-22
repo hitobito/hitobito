@@ -1,15 +1,12 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Person::PictureUploader < Uploader::Base
-
   MAX_DIMENSION = 8000
 
-  self.allowed_extensions = %w(jpg jpeg gif png)
+  self.allowed_extensions = %w[jpg jpeg gif png]
 
   include CarrierWave::MiniMagick
 
@@ -23,14 +20,13 @@ class Person::PictureUploader < Uploader::Base
     process resize_to_fill: [32, 32]
   end
 
-
   # Provide a default URL as a default if there hasn't been a file uploaded:
   def default_url
     ActionController::Base.helpers.asset_pack_path("media/images/#{png_name}")
   end
 
   def png_name
-    ['profil', version_name].compact.join('_') + '.png'
+    ["profil", version_name].compact.join("_") + ".png"
   end
 
   private
@@ -40,7 +36,7 @@ class Person::PictureUploader < Uploader::Base
     manipulate! do |img|
       if img.dimensions.any? { |i| i > MAX_DIMENSION }
         raise CarrierWave::ProcessingError,
-              I18n.t('errors.messages.dimensions_too_large', maximum: MAX_DIMENSION)
+          I18n.t("errors.messages.dimensions_too_large", maximum: MAX_DIMENSION)
       end
       img
     end
@@ -52,5 +48,4 @@ class Person::PictureUploader < Uploader::Base
       img
     end
   end
-
 end

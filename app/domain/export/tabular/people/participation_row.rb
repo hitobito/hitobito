@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 module Export::Tabular::People
   class ParticipationRow < PersonRow
-
     attr_reader :participation
 
     delegate :additional_information, to: :participation, prefix: true
@@ -20,7 +17,7 @@ module Export::Tabular::People
     end
 
     def roles
-      participation.roles.map { |role| role }.join(', ')
+      participation.roles.map { |role| role }.join(", ")
     end
 
     def created_at
@@ -28,10 +25,9 @@ module Export::Tabular::People
     end
 
     def question_attribute(attr)
-      id = attr.to_s.split('_').last
+      id = attr.to_s.split("_").last
       answer = participation.answers.find { |e| e.question_id == id.to_i }
       answer.try(:answer)
     end
-
   end
 end

@@ -8,7 +8,5 @@
 # A Crud controller for modal actions
 # except index
 class ModalCrudController < CrudController
-
   respond_to :js
-
 end

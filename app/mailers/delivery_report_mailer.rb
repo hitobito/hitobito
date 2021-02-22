@@ -1,14 +1,11 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class DeliveryReportMailer < ApplicationMailer
-
-  CONTENT_BULK_MAIL_SUCCESS = 'bulk_mail_success'.freeze
-  CONTENT_BULK_MAIL_WITH_FAILED = 'bulk_mail_with_failed'.freeze
+  CONTENT_BULK_MAIL_SUCCESS = "bulk_mail_success".freeze
+  CONTENT_BULK_MAIL_WITH_FAILED = "bulk_mail_with_failed".freeze
 
   def bulk_mail(
     report_to,
@@ -25,8 +22,8 @@ class DeliveryReportMailer < ApplicationMailer
     @delivered_at = delivered_at
     @failed_recipients = failed_recipients
     custom_content_mail(report_to,
-                        content,
-                        values_for_placeholders(content))
+      content,
+      values_for_placeholders(content))
   end
 
   private
@@ -52,9 +49,8 @@ class DeliveryReportMailer < ApplicationMailer
   end
 
   def placeholder_failed_recipients
-    @failed_recipients.collect do |r|
-      r.join(' | ')
-    end.join('<br/>')
+    @failed_recipients.collect { |r|
+      r.join(" | ")
+    }.join("<br/>")
   end
-
 end

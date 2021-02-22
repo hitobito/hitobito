@@ -18,19 +18,18 @@ module Messages
     def redirect_path
       case message
       when Message::Letter, Message::LetterWithInvoice
-        new_assignment_path(assignment: { attachment_id: message.id,
-                                          attachment_type: Message.sti_name },
+        new_assignment_path(assignment: {attachment_id: message.id,
+                                         attachment_type: Message.sti_name,},
                             return_url: group_mailing_list_message_path(message.group,
-                                                                   message.mailing_list,
-                                                                   message)
-                            )
+                              message.mailing_list,
+                              message))
       else
         message.path_args
       end
     end
 
     def flash_message
-      t('.success', model_class: message.class.model_name.human)
+      t(".success", model_class: message.class.model_name.human)
     end
 
     def update_and_enqueue

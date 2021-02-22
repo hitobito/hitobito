@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 class MessageAbility < AbilityDsl::Base
-
   on(Message) do
     permission(:layer_and_below_full)
       .may(:create, :show)
@@ -30,5 +29,4 @@ class MessageAbility < AbilityDsl::Base
   def in_layer_or_below_if_not_dispatched
     in_layer_or_below && !subject.dispatched?
   end
-
 end

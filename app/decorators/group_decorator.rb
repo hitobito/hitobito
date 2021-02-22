@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -23,31 +21,31 @@ class GroupDecorator < ApplicationDecorator
     klass.role_types.select do |type|
       # users from above cannot create non visible roles
       !type.restricted? &&
-      (type.visible_from_above? || can?(:index_local_people, model))
+        (type.visible_from_above? || can?(:index_local_people, model))
     end
   end
 
   def as_typeahead
-    { id: id, label: label_with_parent }
+    {id: id, label: label_with_parent}
   end
 
   def as_quicksearch
-    { id: id, label: label_with_parent, type: :group, icon: :users }
+    {id: id, label: label_with_parent, type: :group, icon: :users}
   end
 
   def label_with_parent
-    h.safe_join([parent.to_s.presence, to_s].compact, ' > ')
+    h.safe_join([parent.to_s.presence, to_s].compact, " > ")
   end
 
   def link_with_layer
     links = with_layer.map { |g| h.link_to_if(can?(:show, g), g, g) }
-    h.safe_join(links, ' / ')
+    h.safe_join(links, " / ")
   end
 
   # compute layers and concat group names using a '/'
   def name_with_layer
     group_names = with_layer.map { |g| g.to_s }
-    group_names.join(' / ')
+    group_names.join(" / ")
   end
 
   def possible_events
@@ -71,5 +69,4 @@ class GroupDecorator < ApplicationDecorator
   def type_name
     klass.label
   end
-
 end

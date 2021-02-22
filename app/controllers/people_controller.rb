@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class PeopleController < CrudController
-
   include RenderPeopleExports
   include AsyncDownload
 
@@ -16,19 +15,15 @@ class PeopleController < CrudController
 
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
                           :gender, :birthday, :additional_information,
-                          :picture, :remove_picture] +
-                          Contactable::ACCESSIBLE_ATTRS +
-                          [household_people_ids: []] +
-                          [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
-
-
+                          :picture, :remove_picture,] +
+    Contactable::ACCESSIBLE_ATTRS +
+    [household_people_ids: []] +
+    [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]
 
-
   decorates :group, :person, :people, :add_requests
-
 
   helper_method :index_full_ability?
 
@@ -36,7 +31,7 @@ class PeopleController < CrudController
   prepend_before_action :parent
 
   prepend_before_action :entry, only: [:show, :edit, :update, :destroy,
-                                       :send_password_instructions, :primary_group]
+                                       :send_password_instructions, :primary_group,]
 
   before_save :validate_household
   after_save :persist_household
@@ -49,23 +44,23 @@ class PeopleController < CrudController
 
   def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
     respond_to do |format|
-      format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
-      format.pdf   { render_pdf(filter_entries, group) }
-      format.csv   { render_tabular_entries_in_background(:csv) }
-      format.xlsx  { render_tabular_entries_in_background(:xlsx) }
-      format.vcf   { render_vcf(filter_entries.includes(:phone_numbers)) }
+      format.html { @people = prepare_entries(filter_entries).page(params[:page]) }
+      format.pdf { render_pdf(filter_entries, group) }
+      format.csv { render_tabular_entries_in_background(:csv) }
+      format.xlsx { render_tabular_entries_in_background(:xlsx) }
+      format.vcf { render_vcf(filter_entries.includes(:phone_numbers)) }
       format.email { render_emails(filter_entries) }
-      format.json  { render_entries_json(filter_entries) }
+      format.json { render_entries_json(filter_entries) }
     end
   end
 
   def show
     respond_to do |format|
       format.html
-      format.pdf  { render_pdf([entry], group) }
-      format.csv  { render_tabular_entry(:csv) }
+      format.pdf { render_pdf([entry], group) }
+      format.csv { render_tabular_entry(:csv) }
       format.xlsx { render_tabular_entry(:xlsx) }
-      format.vcf  { render_vcf([entry]) }
+      format.vcf { render_vcf([entry]) }
       format.json { render_entry_json }
     end
   end
@@ -78,7 +73,7 @@ class PeopleController < CrudController
       format.html { redirect_to group_person_path(group, entry), *msg }
       format.js do
         flash.now[msg.keys.first] = msg.values.first
-        render 'shared/update_flash'
+        render "shared/update_flash"
       end
     end
   end
@@ -91,8 +86,8 @@ class PeopleController < CrudController
       format.js do
         return render :primary_group if success
 
-        flash.now.alert = I18n.t('global.errors.header', count: entry.errors.size)
-        render 'shared/update_flash'
+        flash.now.alert = I18n.t("global.errors.header", count: entry.errors.size)
+        render "shared/update_flash"
       end
     end
   end
@@ -100,8 +95,8 @@ class PeopleController < CrudController
   # dont use class level accessor as expression is evaluated whenever constant is
   # loaded which might be before wagon that defines groups / roles has been loaded
   def self.sort_mappings_with_indifferent_access
-    { roles: [Person.order_by_role_statement].
-      concat(Person.order_by_name_statement) }.with_indifferent_access
+    {roles: [Person.order_by_role_statement]
+      .concat(Person.order_by_name_statement)}.with_indifferent_access
   end
 
   private
@@ -130,7 +125,7 @@ class PeopleController < CrudController
 
   def load_person_add_requests
     if can?(:update, entry)
-      @add_requests = entry.add_requests.includes(:body, requester: { roles: :group })
+      @add_requests = entry.add_requests.includes(:body, requester: {roles: :group})
       set_add_request_status_notification if show_add_request_status?
     end
   end
@@ -140,19 +135,19 @@ class PeopleController < CrudController
   end
 
   def collect_grouped_person_tags
-    tags = entry.taggings.includes(:tag).order('tags.name').each_with_object({}) do |t, memo|
+    tags = entry.taggings.includes(:tag).order("tags.name").each_with_object({}) { |t, memo|
       tag = t.tag
       tag.hitobito_tooltip = t.hitobito_tooltip
 
       memo[tag.category] ||= []
       memo[tag.category] << tag
-    end
+    }
     ActsAsTaggableOn::Tag.order_categorized(tags)
   end
 
   def show_add_request_status?
     flash[:notice].blank? && flash[:alert].blank? &&
-    params[:body_type].present? && params[:body_id].present?
+      params[:body_type].present? && params[:body_id].present?
   end
 
   def set_add_request_status_notification
@@ -214,10 +209,10 @@ class PeopleController < CrudController
 
   def render_entries_json(entries)
     render json: ListSerializer.new(prepare_entries(entries).includes(:social_accounts).decorate,
-                                    group: @group,
-                                    multiple_groups: @person_filter.multiple_groups,
-                                    serializer: PeopleSerializer,
-                                    controller: self)
+      group: @group,
+      multiple_groups: @person_filter.multiple_groups,
+      serializer: PeopleSerializer,
+      controller: self)
   end
 
   def render_entry_json
@@ -225,7 +220,7 @@ class PeopleController < CrudController
   end
 
   def index_full_ability?
-    if params[:range].blank? || params[:range] == 'group'
+    if params[:range].blank? || params[:range] == "group"
       can?(:index_full_people, @group)
     else
       can?(:index_deep_full_people, @group)
@@ -253,17 +248,16 @@ class PeopleController < CrudController
 
   def person_filter
     @person_filter ||= Person::Filter::List.new(@group,
-                                                current_user || service_token_user,
-                                                list_filter_args)
+      current_user || service_token_user,
+      list_filter_args)
   end
 
   def send_login_job(entry, current_user)
     if Truemail.valid?(entry.email)
       Person::SendLoginJob.new(entry, current_user).enqueue!
-      { notice: I18n.t("#{controller_name}.#{action_name}") }
+      {notice: I18n.t("#{controller_name}.#{action_name}")}
     else
-      { alert: I18n.t("#{controller_name}.#{action_name}_invalid_email") }
+      {alert: I18n.t("#{controller_name}.#{action_name}_invalid_email")}
     end
   end
-
 end

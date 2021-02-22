@@ -4,10 +4,8 @@
 #  https://github.com/hitobito/hitobito.
 
 module InvoiceArticlesHelper
-
   def format_invoice_article_unit_cost(invoice_article)
     currency = invoice_article.group.invoice_config.currency
     number_to_currency(invoice_article.unit_cost, unit: currency)
   end
-
 end

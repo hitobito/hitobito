@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito_jubla and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_jubla.
 
 class Event::CancelApplicationJob < BaseJob
-
   self.parameters = [:event_id, :person_id]
 
   def initialize(event, person)
@@ -25,5 +22,4 @@ class Event::CancelApplicationJob < BaseJob
   def person
     Person.find(@person_id)
   end
-
 end

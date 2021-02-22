@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 # Handles a top-level person route (/person/:id)
 class Person::TopController < ApplicationController
-
   before_action :authorize_action
 
   def show
@@ -23,13 +20,12 @@ class Person::TopController < ApplicationController
   def redirect_to_home
     flash.keep if html_request?
     redirect_to person_home_path(entry,
-                                 format: request.format.to_sym,
-                                 user_email: params[:user_email],
-                                 user_token: params[:user_token])
+      format: request.format.to_sym,
+      user_email: params[:user_email],
+      user_token: params[:user_token])
   end
 
   def authorize_action
     authorize!(:show, entry)
   end
-
 end

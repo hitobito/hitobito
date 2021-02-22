@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Group::Merger
-
   attr_reader :group1, :group2, :new_group_name, :new_group, :errors
 
   def initialize(group1, group2, new_group_name)
@@ -16,7 +13,7 @@ class Group::Merger
   end
 
   def merge!
-    raise('Cannot merge these Groups') unless group2_valid?
+    raise("Cannot merge these Groups") unless group2_valid?
 
     ::Group.transaction do
       if create_new_group
@@ -99,5 +96,4 @@ class Group::Merger
       group.reload.destroy
     end
   end
-
 end

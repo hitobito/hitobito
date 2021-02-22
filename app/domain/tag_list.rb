@@ -1,5 +1,4 @@
 class TagList
-
   def initialize(people, tags)
     @people = people
     @tags = tags

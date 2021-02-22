@@ -7,7 +7,6 @@
 
 class Export::Pdf::Messages::Letter
   class Content < Section
-
     class_attribute :placeholders
     self.placeholders = [:first_name, :last_name]
 
@@ -36,6 +35,5 @@ class Export::Pdf::Messages::Letter
     def last_name(person)
       person.last_name
     end
-
   end
 end

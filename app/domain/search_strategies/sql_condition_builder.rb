@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 module SearchStrategies
   class SqlConditionBuilder
-
     def initialize(search_string, search_tables_and_fields)
       @search_string = search_string
       @search_tables_and_fields = search_tables_and_fields
@@ -37,11 +34,10 @@ module SearchStrategies
 
     def search_column_condition(word)
       @search_tables_and_fields.map do |table_field|
-        table_name, field = table_field.split('.', 2)
+        table_name, field = table_field.split(".", 2)
         table = Arel::Table.new(table_name)
         table[field].matches(Arel::Nodes::Quoted.new("%#{word}%"))
       end
     end
-
   end
 end

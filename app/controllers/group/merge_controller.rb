@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Group::MergeController < ApplicationController
-
   decorates :group
 
   before_action :authorize
@@ -28,7 +25,7 @@ class Group::MergeController < ApplicationController
 
   def respond_success
     flash[:notice] = translate(:success, new_group_name: merger.new_group_name)
-    flash[:alert]  = translate(:invoice_config_not_merged)
+    flash[:alert] = translate(:invoice_config_not_merged)
     redirect_to group_path(merger.new_group)
   end
 
@@ -76,5 +73,4 @@ class Group::MergeController < ApplicationController
   def authorize
     authorize!(:edit, group)
   end
-
 end

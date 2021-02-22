@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class EventFeedsController < ApplicationController
-
   def show
     respond_to do |format|
       format.html { authorize!(:show, current_user) }
@@ -37,5 +34,4 @@ class EventFeedsController < ApplicationController
   def devise_controller?
     request.format.ics? # hence, no login required
   end
-
 end

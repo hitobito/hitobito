@@ -1,18 +1,14 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
 #  This file is part of hitobito and licensed under the Affero General Public
 #  License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
 module Export::Tabular
-
   # Decorator for a row entry.
   # Attribute values may be accessed with fetch(attr).
   # If a method named #attr is defined on the decorator class, return its value.
   # Otherwise, the attr is delegated to the entry.
   class Row
-
     # regexp for attribute names which are handled dynamically.
     class_attribute :dynamic_attributes
     self.dynamic_attributes = {}
@@ -46,7 +42,7 @@ module Export::Tabular
 
     def handle_dynamic_attribute(attr)
       dynamic_attributes.each do |regexp, handler|
-        if attr.to_s =~ regexp
+        if attr.to_s&.match?(regexp)
           return send(handler, attr)
         end
       end
@@ -56,9 +52,9 @@ module Export::Tabular
     # rubocop:disable Metrics/PerceivedComplexity
     def normalize(value)
       if value == true
-        I18n.t('global.yes')
+        I18n.t("global.yes")
       elsif value == false
-        I18n.t('global.no')
+        I18n.t("global.no")
       elsif value.is_a?(Time)
         format == :xlsx ? value.to_s : "#{I18n.l(value.to_date)} #{I18n.l(value, format: :time)}"
       elsif value.is_a?(Date)
@@ -67,6 +63,5 @@ module Export::Tabular
         value
       end
     end
-
   end
 end

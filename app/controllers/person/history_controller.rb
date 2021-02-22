@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Person::HistoryController < ApplicationController
-
   before_action :authorize_action
 
   decorates :group, :person
@@ -19,10 +16,10 @@ class Person::HistoryController < ApplicationController
   private
 
   def fetch_roles
-    Person::PreloadGroups.for([entry]).first.roles.
-      with_deleted.
-      includes(group: :parent).
-      sort_by { |r| GroupDecorator.new(r.group).name_with_layer }
+    Person::PreloadGroups.for([entry]).first.roles
+      .with_deleted
+      .includes(group: :parent)
+      .sort_by { |r| GroupDecorator.new(r.group).name_with_layer }
   end
 
   def fetch_participations
@@ -30,9 +27,9 @@ class Person::HistoryController < ApplicationController
   end
 
   def participations_by_event_type
-    fetch_participations.
-      group_by { |p| p.event.class.label_plural }.
-      each { |_kind, entries| entries.collect! { |e| Event::ParticipationDecorator.new(e) } }
+    fetch_participations
+      .group_by { |p| p.event.class.label_plural }
+      .each { |_kind, entries| entries.collect! { |e| Event::ParticipationDecorator.new(e) } }
   end
 
   def entry
@@ -46,5 +43,4 @@ class Person::HistoryController < ApplicationController
   def authorize_action
     authorize!(:history, entry)
   end
-
 end

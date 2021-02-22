@@ -1,21 +1,17 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, insieme Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 #
 
-require 'axlsx'
+require "axlsx"
 
 module Export::Xlsx
-
   def self.export(exportable)
     Generator.new(exportable).call
   end
 
   class Generator
-
     attr_reader :exportable, :style
 
     def initialize(exportable)
@@ -30,11 +26,11 @@ module Export::Xlsx
     private
 
     def generate
-      package = Axlsx::Package.new do |p|
+      package = Axlsx::Package.new { |p|
         p.workbook do |wb|
           build_sheets(wb)
         end
-      end
+      }
       package.to_stream.read
     end
 
@@ -78,7 +74,7 @@ module Export::Xlsx
     end
 
     def data_row_height(height)
-      height.nil? ? {} : { height: height }
+      height.nil? ? {} : {height: height}
     end
 
     def apply_column_widths(sheet)
@@ -108,12 +104,10 @@ module Export::Xlsx
     end
 
     def cell_styles(styles)
-      styles = styles.collect do |s|
+      styles = styles.collect { |s|
         style_definition(s)[:style]
-      end
-      { style: styles }
+      }
+      {style: styles}
     end
-
   end
-
 end

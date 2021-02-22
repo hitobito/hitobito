@@ -6,8 +6,8 @@
 #  https://github.com/hitobito/hitobito_cvp.
 
 namespace :address do
-  desc 'Import Post Addresses'
-  task :import => [:environment] do
+  desc "Import Post Addresses"
+  task import: [:environment] do
     Address::Importer.new.run
   end
 end

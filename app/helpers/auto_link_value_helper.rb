@@ -1,19 +1,16 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module AutoLinkValueHelper
-
   def auto_link_value(str, options = {})
     if email?(str)
       mail_to(str)
     elsif url_with_protocol?(str)
       link_to_blank(str, str, options)
     elsif url_without_protocol?(str)
-      url = 'http://' + str
+      url = "http://" + str
       link_to_blank(str, url, options)
     else
       str
@@ -39,8 +36,7 @@ module AutoLinkValueHelper
   end
 
   def link_to_blank(label, url, options = {})
-    options[:target] ||= '_blank'
+    options[:target] ||= "_blank"
     link_to(label, url, options)
   end
-
 end

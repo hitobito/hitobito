@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -29,5 +27,4 @@ class PaymentsController < CrudController
   def flash_message
     I18n.t("#{controller_name}.#{action_name}.flash.success", amount: f(entry.amount))
   end
-
 end

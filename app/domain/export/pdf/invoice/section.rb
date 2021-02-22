@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,13 +5,12 @@
 
 module Export::Pdf::Invoice
   class Section
-
     attr_reader :pdf, :invoice
 
     delegate :bounds, :text, :cursor, :font_size, :text_box,
-             :fill_and_stroke_rectangle, :fill_color,
-             :image, :group, :move_cursor_to, :float,
-             :stroke_bounds, to: :pdf
+      :fill_and_stroke_rectangle, :fill_color,
+      :image, :group, :move_cursor_to, :float,
+      :stroke_bounds, to: :pdf
 
     delegate :invoice_items, :address, :with_reference?, :participant_number, to: :invoice
 
@@ -26,9 +23,9 @@ module Export::Pdf::Invoice
     private
 
     def helper
-      @helper ||= Class.new do
+      @helper ||= Class.new {
         include ActionView::Helpers::NumberHelper
-      end.new
+      }.new
     end
 
     def receiver_address_data
@@ -49,6 +46,5 @@ module Export::Pdf::Invoice
         pdf.transparent(0.5) { stroke_bounds } if @debug
       end
     end
-
   end
 end

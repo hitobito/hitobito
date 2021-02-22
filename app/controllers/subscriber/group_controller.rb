@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 module Subscriber
   class GroupController < BaseController
-
     skip_authorize_resource # must be in leaf class
 
     before_render_form :replace_validation_errors
@@ -46,11 +43,11 @@ module Subscriber
 
     def groups_query
       possible = Subscription.new(mailing_list: @mailing_list).possible_groups
-      possible.where(search_condition('groups.name', 'parents_groups.name')).
-               includes(:parent).
-               references(:parent).
-               order("#{Group.quoted_table_name}.lft").
-               limit(10)
+      possible.where(search_condition("groups.name", "parents_groups.name"))
+        .includes(:parent)
+        .references(:parent)
+        .order("#{Group.quoted_table_name}.lft")
+        .limit(10)
     end
 
     def assign_attributes
@@ -78,27 +75,27 @@ module Subscriber
         entry.errors[:subscriber].clear
         entry.errors[:subscriber_id].clear
         entry.errors[:subscriber_type].clear
-        entry.errors.add(:base, 'Gruppe muss ausgewählt werden')
+        entry.errors.add(:base, "Gruppe muss ausgewählt werden")
       end
     end
 
     def subscription_tags
       tags = collect_included_tags + collect_excluded_tags
-      tags.map do |tag|
+      tags.map { |tag|
         next if tag[:id].empty?
 
         SubscriptionTag.new(subscription: entry,
                             tag_id: tag[:id],
                             excluded: tag[:excluded])
-      end.compact
+      }.compact
     end
 
     def collect_included_tags
-      model_params[:included_subscription_tags_ids]&.map { |id| { id: id, excluded: false } } || []
+      model_params[:included_subscription_tags_ids]&.map { |id| {id: id, excluded: false} } || []
     end
 
     def collect_excluded_tags
-      model_params[:excluded_subscription_tags_ids]&.map { |id| { id: id, excluded: true } } || []
+      model_params[:excluded_subscription_tags_ids]&.map { |id| {id: id, excluded: true} } || []
     end
   end
 end

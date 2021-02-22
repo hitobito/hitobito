@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
 #  hitobito_pbs and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
 
 class Event::ParticipationContactDatasController < ApplicationController
-
   helper_method :group, :event, :entry
 
   authorize_resource :entry, class: Event::ParticipationContactData
@@ -15,14 +12,15 @@ class Event::ParticipationContactDatasController < ApplicationController
 
   before_action :set_entry, :group
 
-  def edit; end
+  def edit
+  end
 
   def update
     if entry.save
       redirect_to new_group_event_participation_path(
         group,
         event,
-        event_role: { type: params[:event_role][:type] }
+        event_role: {type: params[:event_role][:type]}
       )
     else
       render :edit
@@ -57,11 +55,10 @@ class Event::ParticipationContactDatasController < ApplicationController
   end
 
   def model_params
-    params.require('event_participation_contact_data').permit(permitted_attrs)
+    params.require("event_participation_contact_data").permit(permitted_attrs)
   end
 
   def permitted_attrs
     PeopleController.permitted_attrs
   end
-
 end

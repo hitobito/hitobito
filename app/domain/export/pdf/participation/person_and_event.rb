@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,9 +5,7 @@
 
 module Export::Pdf::Participation
   class PersonAndEvent < Section
-
     class Person < Section
-
       def render
         render_address
         move_down_line
@@ -40,7 +36,7 @@ module Export::Pdf::Participation
       end
 
       def phone_numbers
-        person.phone_numbers.where(label: %w(Privat Mobil))[0..2]
+        person.phone_numbers.where(label: %w[Privat Mobil])[0..2]
       end
     end
 
@@ -87,11 +83,11 @@ module Export::Pdf::Participation
     def render
       heading do
         render_columns(-> { text human_participant_name, style: :bold },
-                       -> { text human_event_name, style: :bold })
+          -> { text human_event_name, style: :bold })
       end
 
       render_columns(-> { render_section(person_section) },
-                     -> { render_section(Event) })
+        -> { render_section(Event) })
     end
 
     private
@@ -100,6 +96,5 @@ module Export::Pdf::Participation
     def section_size
       super - 10
     end
-
   end
 end

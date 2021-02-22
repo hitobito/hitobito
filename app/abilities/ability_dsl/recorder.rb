@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -8,7 +6,6 @@
 module AbilityDsl
   # Helper class to compose ability configurations with a DSL.
   class Recorder
-
     def initialize(store, ability_class)
       @store = store
       @ability_class = ability_class
@@ -41,7 +38,6 @@ module AbilityDsl
     end
 
     class Base
-
       def initialize(store, ability_class, subject_class)
         @store = store
         @ability_class = ability_class
@@ -65,16 +61,14 @@ module AbilityDsl
 
       def add_config(permission, action, constraint)
         @store.add(AbilityDsl::Config.new(permission,
-                                          @subject_class,
-                                          action,
-                                          @ability_class,
-                                          constraint))
+          @subject_class,
+          action,
+          @ability_class,
+          constraint))
       end
-
     end
 
     class Permission < Base
-
       def initialize(store, ability_class, subject_class, permission)
         super(store, ability_class, subject_class)
         @permission = permission
@@ -92,11 +86,9 @@ module AbilityDsl
           add_config(@permission, action, constraint)
         end
       end
-
     end
 
     class General < Base
-
       ALL_ACTION = :_all
       PERMISSION = :_general
 
@@ -112,7 +104,6 @@ module AbilityDsl
           add_config(PERMISSION, action, constraint)
         end
       end
-
     end
 
     class ClassSide < Base

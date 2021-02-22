@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Event::Filter
-
   attr_reader :type, :filter, :group, :year, :sort_expression
 
   def initialize(group, type, filter, year, sort_expression)
@@ -32,17 +29,17 @@ class Event::Filter
   end
 
   def to_h
-    { year: year,
-      type: type,
-      filter: filter,
-      sort_expression: sort_expression }
+    {year: year,
+     type: type,
+     filter: filter,
+     sort_expression: sort_expression,}
   end
 
   private
 
   def relevant_group_ids
     case filter
-    when 'layer' then [group.id] + descendants(layer: true).pluck(:id)
+    when "layer" then [group.id] + descendants(layer: true).pluck(:id)
     else [group.id] + descendants.pluck(:id) # handles 'all' also
     end
   end

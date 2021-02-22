@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: people
@@ -79,16 +77,16 @@ class PersonSerializer < ApplicationSerializer
     property :href, h.group_person_url(context[:group], item, format: :json)
 
     map_properties :first_name,
-                   :last_name,
-                   :nickname,
-                   :company_name,
-                   :company,
-                   :email,
-                   :address,
-                   :zip_code,
-                   :town,
-                   :country,
-                   :household_key
+      :last_name,
+      :nickname,
+      :company_name,
+      :company,
+      :email,
+      :address,
+      :zip_code,
+      :town,
+      :country,
+      :household_key
 
     property :picture, item.picture_full_url
     property :tags, item.tag_list.to_s if h.can?(:index_tags, item)
@@ -99,9 +97,8 @@ class PersonSerializer < ApplicationSerializer
 
     if details
       map_properties :birthday,
-                     :gender,
-                     :additional_information
-
+        :gender,
+        :additional_information
 
       apply_extensions(:details, show_full: full)
 
@@ -109,7 +106,7 @@ class PersonSerializer < ApplicationSerializer
     end
 
     entity :primary_group, item.primary_group, GroupLinkSerializer
-    group_template_link 'people.primary_group'
+    group_template_link "people.primary_group"
 
     entities :roles, item.filtered_roles(full ? nil : context[:group]), RoleSerializer
   end

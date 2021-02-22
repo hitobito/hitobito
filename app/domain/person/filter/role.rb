@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Role < Person::Filter::Base
-
   self.permitted_args = [:role_type_ids, :role_types, :kind, :start_at, :finish_at]
 
   def initialize(attr, args)
@@ -34,8 +33,8 @@ class Person::Filter::Role < Person::Filter::Base
 
   def roles_join
     case args[:kind]
-    when 'active' then active_roles_join
-    when 'deleted' then deleted_roles_join
+    when "active" then active_roles_join
+    when "deleted" then deleted_roles_join
     end
   end
 
@@ -78,26 +77,26 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def type_conditions
-    [[:roles, { type: args[:role_types] }]].to_h if args[:role_types].present?
+    [[:roles, {type: args[:role_types]}]].to_h if args[:role_types].present?
   end
 
   def duration_conditions
     case args[:kind]
-    when 'created' then [[:roles, { created_at: time_range }]].to_h
-    when 'deleted' then [[:roles, { deleted_at: time_range }]].to_h
-    when 'active' then [active_role_condition, min: time_range.min, max: time_range.max]
+    when "created" then [[:roles, {created_at: time_range}]].to_h
+    when "deleted" then [[:roles, {deleted_at: time_range}]].to_h
+    when "active" then [active_role_condition, min: time_range.min, max: time_range.max]
     end
   end
 
   def active_role_condition
-    <<~SQL.split.map(&:strip).join(' ')
+    <<~SQL.split.map(&:strip).join(" ")
       roles.created_at <= :max AND
       (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
     SQL
   end
 
   def deleted_roles_join
-    <<~SQL.split.map(&:strip).join(' ')
+    <<~SQL.split.map(&:strip).join(" ")
       INNER JOIN roles ON
         (roles.person_id = people.id AND roles.deleted_at IS NOT NULL)
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
@@ -105,10 +104,9 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def active_roles_join
-    <<~SQL.split.map(&:strip).join(' ')
+    <<~SQL.split.map(&:strip).join(" ")
       INNER JOIN roles ON roles.person_id = people.id
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
   end
-
 end

@@ -7,16 +7,15 @@
 
 module Export::Tabular::People
   class HouseholdRow < PersonRow
-
     SHORTEN_AT = 40
 
     def name
       if entry.company?
         entry.company_name
       else
-        with_combined_first_names.collect do |last_name, combined_first_name|
-          without_blanks([combined_first_name, last_name]).join(' ')
-        end.join(', ')
+        with_combined_first_names.collect { |last_name, combined_first_name|
+          without_blanks([combined_first_name, last_name]).join(" ")
+        }.join(", ")
       end
     end
 
@@ -31,17 +30,17 @@ module Export::Tabular::People
     end
 
     def names_hash
-      @names_hash ||= first_names.zip(last_names).each_with_object({}) do |(first, last), memo|
+      @names_hash ||= first_names.zip(last_names).each_with_object({}) { |(first, last), memo|
         last = first_present_last_name if last.blank?
         memo[last] ||= []
         memo[last] << first
-      end
+      }
     end
 
     def combine(first_names)
       if first_names.count > 2
         last_first_name = first_names.pop
-        [first_names.join(', '), last_first_name].to_sentence
+        [first_names.join(", "), last_first_name].to_sentence
       elsif first_names.count == 2
         first_names.to_sentence
       else
@@ -50,15 +49,15 @@ module Export::Tabular::People
     end
 
     def first_present_last_name
-      last_names.select(&:present?).first
+      last_names.find(&:present?)
     end
 
     def first_names
-      strip(entry.first_name.to_s.split(','))
+      strip(entry.first_name.to_s.split(","))
     end
 
     def last_names
-      strip(entry.last_name.to_s.split(','))
+      strip(entry.last_name.to_s.split(","))
     end
 
     def strip(array)
@@ -76,6 +75,5 @@ module Export::Tabular::People
     def length
       names_hash.keys.uniq.join.size + names_hash.values.join.size
     end
-
   end
 end

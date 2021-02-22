@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Uploader::Base < CarrierWave::Uploader::Base
-
   class_attribute :allowed_extensions
 
   # Choose what kind of storage to use for this uploader
@@ -14,7 +11,7 @@ class Uploader::Base < CarrierWave::Uploader::Base
 
   class << self
     def accept_extensions
-      allowed_extensions.collect { |e| ".#{e}" }.join(', ')
+      allowed_extensions.collect { |e| ".#{e}" }.join(", ")
     end
   end
 
@@ -25,7 +22,7 @@ class Uploader::Base < CarrierWave::Uploader::Base
   end
 
   def base_store_dir
-    'uploads'
+    "uploads"
   end
 
   # Override the directory where uploaded files will be stored.
@@ -33,5 +30,4 @@ class Uploader::Base < CarrierWave::Uploader::Base
   def store_dir
     "#{base_store_dir}/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
-
 end

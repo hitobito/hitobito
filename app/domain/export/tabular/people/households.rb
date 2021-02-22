@@ -7,7 +7,6 @@
 
 module Export::Tabular::People
   class Households < Export::Tabular::Base
-
     self.model_class = ::Person
     self.row_class = HouseholdRow
 
@@ -31,21 +30,21 @@ module Export::Tabular::People
       list = add_household_key(list)
       people_memo = build_memo(list)
 
-      people_memo.collect do |key, people|
+      people_memo.collect { |key, people|
         next people if key.blank?
 
         first_name, last_name = join_names(people)
         [assign(people.first, first_name, last_name)]
-      end.flatten
+      }.flatten
     end
 
     def add_household_key(list)
       return list unless list.respond_to?(:unscoped)
 
       list.unscope(:select)
-          .only_public_data
-          .select('household_key')
-          .includes(:primary_group)
+        .only_public_data
+        .select("household_key")
+        .includes(:primary_group)
     end
 
     def build_memo(list)
@@ -58,7 +57,7 @@ module Export::Tabular::People
       people
         .collect { |person| [person.first_name, person.last_name] }
         .transpose
-        .collect { |list| list.join(',') }
+        .collect { |list| list.join(",") }
     end
 
     def assign(person, first_name, last_name)
@@ -66,6 +65,5 @@ module Export::Tabular::People
       person.last_name = last_name
       person
     end
-
   end
 end

@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class PeopleFilterAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Group
 
   on(::PeopleFilter) do
@@ -18,5 +15,4 @@ class PeopleFilterAbility < AbilityDsl::Base
     permission(:layer_and_below_read).may(:new).in_same_layer_or_below
     permission(:layer_and_below_full).may(:create, :destroy, :edit, :update).in_same_layer
   end
-
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -17,7 +15,7 @@ module Import
       :last_name,
       :company_name,
       :zip_code,
-      :birthday
+      :birthday,
     ]
 
     def initialize
@@ -53,7 +51,7 @@ module Import
     end
 
     def duplicate_conditions(attrs)
-      [''].tap do |conditions|
+      [""].tap do |conditions|
         append_duplicate_conditions(attrs, conditions)
         append_email_condition(attrs, conditions)
       end
@@ -61,12 +59,12 @@ module Import
 
     def append_duplicate_conditions(attrs, conditions)
       exisiting_duplicate_attrs(attrs).each do |key, value|
-        conditions.first << ' AND ' if conditions.first.present?
-        conditions.first << if %w(first_name last_name company_name).include?(key.to_s)
-                              "#{key} = ?"
-                            else
-                              "(#{key} = ? OR #{key} IS NULL)"
-                            end
+        conditions.first << " AND " if conditions.first.present?
+        conditions.first << if %w[first_name last_name company_name].include?(key.to_s)
+          "#{key} = ?"
+        else
+          "(#{key} = ? OR #{key} IS NULL)"
+        end
         value = parse_date(value) if key.to_sym == :birthday
         conditions << value
       end
@@ -77,15 +75,15 @@ module Import
         if conditions.first.present?
           conditions[0] = "(#{conditions[0]}) OR "
         end
-        conditions.first << 'email = ?'
+        conditions.first << "email = ?"
         conditions << attrs[:email]
       end
     end
 
     def exisiting_duplicate_attrs(attrs)
-      existing = attrs.select do |key, value|
+      existing = attrs.select { |key, value|
         value.present? && DUPLICATE_ATTRIBUTES.include?(key.to_sym)
-      end
+      }
       existing.delete(:birthday) unless parse_date(existing[:birthday])
       existing
     end

@@ -1,26 +1,23 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class PersonDecorator < ApplicationDecorator
-
   decorates :person
 
   include ContactableDecorator
 
   def as_typeahead
-    { id: id, label: h.h(full_label) }
+    {id: id, label: h.h(full_label)}
   end
 
   def as_quicksearch
-    { id: id, label: h.h(full_label), type: :person, icon: :user }
+    {id: id, label: h.h(full_label), type: :person, icon: :user}
   end
 
   def as_typeahead_with_address
-    { id: id, label: h.h(name_with_address) }
+    {id: id, label: h.h(name_with_address)}
   end
 
   def full_label
@@ -41,7 +38,7 @@ class PersonDecorator < ApplicationDecorator
 
   def name_with_address
     label = to_s
-    details = [zip_code, town].compact.join(' ')
+    details = [zip_code, town].compact.join(" ")
     label << " (#{details})" if details.present?
     label
   end
@@ -97,10 +94,10 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def latest_qualifications_uniq_by_kind
-    qualifications.
-      includes(:person, qualification_kind: :translations).
-      order_by_date.
-      group_by(&:qualification_kind).values.map(&:first)
+    qualifications
+      .includes(:person, qualification_kind: :translations)
+      .order_by_date
+      .group_by(&:qualification_kind).values.map(&:first)
   end
 
   def pending_applications
@@ -145,7 +142,7 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def private_address_name
-    html = ''.html_safe
+    html = "".html_safe
     if company_name.present?
       html << company_name
       html << br
@@ -169,9 +166,9 @@ class PersonDecorator < ApplicationDecorator
 
   def function_short(function, scope: nil, edit: true)
     html = [function.to_s]
-    html << h.muted(h.safe_join(function.group.with_layer, ' / ')) if scope.nil?
+    html << h.muted(h.safe_join(function.group.with_layer, " / ")) if scope.nil?
     html << popover_edit_link(function) if edit && h.can?(:update, function)
-    h.safe_join(html, ' ')
+    h.safe_join(html, " ")
   end
 
   def popover_edit_link(function)
@@ -180,11 +177,11 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def role_popover_link(path, html_id = nil)
-    content_tag(:span, style: 'padding-left: 10px', id: html_id) do
+    content_tag(:span, style: "padding-left: 10px", id: html_id) do
       h.link_to(h.icon(:edit),
-                path,
-                title: h.t('global.link.edit'),
-                remote: true)
+        path,
+        title: h.t("global.link.edit"),
+        remote: true)
     end
   end
 end

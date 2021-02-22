@@ -1,15 +1,12 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class AppStatus::Mail < AppStatus
-
-  CATCH_ALL_INBOX_OVERDUE = 'catch-all mailbox contains overdue mails. ' \
-                            'please make sure delayed job worker is running ' \
-                            'and no e-mail is blocking the queue/job.'.freeze
+  CATCH_ALL_INBOX_OVERDUE = "catch-all mailbox contains overdue mails. " \
+                            "please make sure delayed job worker is running " \
+                            "and no e-mail is blocking the queue/job.".freeze
 
   CATCH_ALL_INBOX_OVERDUE_TIME = 42.minutes
 
@@ -18,22 +15,22 @@ class AppStatus::Mail < AppStatus
   end
 
   def details
-    { catch_all_inbox: @catch_all_inbox }
+    {catch_all_inbox: @catch_all_inbox}
   end
 
   def code
-    @catch_all_inbox.eql?('ok') ? :ok : :service_unavailable
+    @catch_all_inbox.eql?("ok") ? :ok : :service_unavailable
   end
 
   private
 
   def catch_all_inbox
     update_seen_mails
-    overdue = seen_mails.any? do |m|
+    overdue = seen_mails.any? { |m|
       m.first_seen < DateTime.now - CATCH_ALL_INBOX_OVERDUE_TIME
-    end
+    }
 
-    overdue ? CATCH_ALL_INBOX_OVERDUE : 'ok'
+    overdue ? CATCH_ALL_INBOX_OVERDUE : "ok"
   end
 
   def update_seen_mails
@@ -43,9 +40,9 @@ class AppStatus::Mail < AppStatus
   end
 
   def add_new_mails
-    new_mails = current_mails.select do |m|
+    new_mails = current_mails.select { |m|
       seen_mails.exclude?(m)
-    end
+    }
     @seen_mails += new_mails
   end
 
@@ -84,7 +81,5 @@ class AppStatus::Mail < AppStatus
     def ==(other)
       mail_hash == other.mail_hash
     end
-
   end
-
 end

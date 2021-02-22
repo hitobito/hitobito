@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RolesController < CrudController
-
   self.nesting = Group, Event
 
   self.permitted_attrs = [:label]
@@ -52,8 +51,8 @@ class Event::RolesController < CrudController
     event.find_role_type!(attrs[:type])
 
     participation = event.participations
-                         .where(person_id: attrs.delete(:person_id))
-                         .first_or_initialize
+      .where(person_id: attrs.delete(:person_id))
+      .first_or_initialize
     participation.roles.build(type: attrs[:type]).tap do |role|
       role.participation = participation
     end
@@ -116,5 +115,4 @@ class Event::RolesController < CrudController
       Event::Role
     end
   end
-
 end

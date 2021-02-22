@@ -5,7 +5,6 @@
 
 module Synchronize
   module Mailchimp
-
     # Subscriber represents a single entry of our data that should be synchronized.
     # This entry always belongs to, but does not equal a Person: Depending on the mailing_list
     # configuration the Persons additional_emails should be synchronized as well, leading to
@@ -26,18 +25,18 @@ module Synchronize
                                                   contactable_id: people.collect(&:id),
                                                   mailings: true).to_a
         people.flat_map do |person|
-          additional_email_subscribers = additional_emails.select do |additional_email|
+          additional_email_subscribers = additional_emails.select { |additional_email|
             additional_email.contactable_id == person.id
-          end.map do |additional_email|
-            self.new(person, additional_email.email)
-          end
-          [self.new(person, person.email)] + additional_email_subscribers
+          }.map { |additional_email|
+            new(person, additional_email.email)
+          }
+          [new(person, person.email)] + additional_email_subscribers
         end
       end
 
       def self.default_addresses(mailing_list)
         mailing_list.people.map do |person|
-          self.new(person, person.email)
+          new(person, person.email)
         end
       end
 
@@ -74,7 +73,6 @@ module Synchronize
       def respond_to_missing?(method, *)
         person.respond_to?(method)
       end
-
     end
   end
 end

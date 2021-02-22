@@ -1,16 +1,13 @@
-# encoding: utf-8
-
 #  Copyright (c) 2014-2017, insime Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module TarantulaConfig
-
   def crawl_as(person)
-    person.password = 'foobar'
+    person.password = "foobar"
     person.save!
-    post '/users/sign_in', person: { email: person.email, password: 'foobar' }
+    post "/users/sign_in", person: {email: person.email, password: "foobar"}
     follow_redirect!
 
     t = tarantula_crawler(self)
@@ -34,7 +31,7 @@ module TarantulaConfig
     # sphinx not running
     t.skip_uri_patterns << /\/full$/
     # no modifications of user roles (and thereof its permissions)
-    group_roles = person.roles.collect(&:id).join('|')
+    group_roles = person.roles.collect(&:id).join("|")
     t.skip_uri_patterns << /groups\/\d+\/roles\/(#{group_roles})$/
     # no ajax links in application market
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/application_market\/\d+\/participant$/
@@ -49,7 +46,7 @@ module TarantulaConfig
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.email\?.*sort/
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/participations\.pdf\?.*sort/
     # do not change role type for own event roles
-    event_roles = person.event_roles.pluck(:id).join('|')
+    event_roles = person.event_roles.pluck(:id).join("|")
     t.skip_uri_patterns << /groups\/\d+\/events\/\d+\/roles\/(#{event_roles})$/
     # custom return_urls end up like that.
     t.skip_uri_patterns << /\:3000\-?\d+$/
@@ -117,8 +114,8 @@ module TarantulaConfig
   # Creates a regexp that only allows the last, current and next year
   def outside_three_years_window
     year = Time.zone.today.year
-    [year - 1, year, year + 1].collect do |d|
+    [year - 1, year, year + 1].collect { |d|
       "(?!#{d})"
-    end.join
+    }.join
   end
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2016, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -29,7 +27,7 @@ class ChangelogReader
   end
 
   def parse_changelog_lines(changelog_files_content)
-    version = ''
+    version = ""
     changelog_files_content.each_line do |l|
       if h = changelog_header_line(l)
         version = find_or_create_version(h)
@@ -40,7 +38,7 @@ class ChangelogReader
   end
 
   def read_changelog_files(files_path)
-    data = ''
+    data = ""
     files_path.each do |p|
       if File.exist?(p)
         data += File.read(p)
@@ -50,7 +48,7 @@ class ChangelogReader
   end
 
   def changelog_file_paths
-    file_paths = ['CHANGELOG.md']
+    file_paths = ["CHANGELOG.md"]
     Wagons.all.each do |w|
       file_paths << "#{w.root}/CHANGELOG.md"
     end

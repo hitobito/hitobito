@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: mailing_lists
@@ -29,7 +27,6 @@
 #  index_mailing_lists_on_group_id  (group_id)
 #
 
-
 #  Copyright (c) 2020, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -40,22 +37,22 @@ class MailingListSerializer < ApplicationSerializer
     json_api_properties
 
     map_properties :name,
-                   :description,
-                   :publisher,
-                   :mail_name,
-                   :additional_sender,
-                   :subscribable,
-                   :subscribers_may_post,
-                   :anyone_may_post,
-                   :preferred_labels,
-                   :delivery_report,
-                   :main_email
+      :description,
+      :publisher,
+      :mail_name,
+      :additional_sender,
+      :subscribable,
+      :subscribers_may_post,
+      :anyone_may_post,
+      :preferred_labels,
+      :delivery_report,
+      :main_email
 
     entity :group, item.group, GroupLinkSerializer
     entities :subscribers,
-             item.people.includes(subscribers_includes),
-             MailingListSubscriberSerializer,
-             mailing_list: item
+      item.people.includes(subscribers_includes),
+      MailingListSubscriberSerializer,
+      mailing_list: item
   end
 
   private

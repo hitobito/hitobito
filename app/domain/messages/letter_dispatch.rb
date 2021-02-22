@@ -7,7 +7,7 @@
 
 module Messages
   class LetterDispatch
-    delegate :update, :success_count, to: '@message'
+    delegate :update, :success_count, to: "@message"
 
     def initialize(message, people)
       @message = message
@@ -17,12 +17,12 @@ module Messages
 
     def run
       @people.find_in_batches do |batch|
-        rows = batch.collect do |person|
+        rows = batch.collect { |person|
           reciept_attrs.merge(
             person_id: person.id,
             address: person.address_for_letter
           )
-        end
+        }
         MessageRecipient.insert_all(rows)
         update(success_count: success_count + rows.size)
       end
@@ -31,7 +31,7 @@ module Messages
     private
 
     def reciept_attrs
-      { message_id: @message.id, created_at: @now }
+      {message_id: @message.id, created_at: @now}
     end
   end
 end

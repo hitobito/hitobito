@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module Globalized
-
   extend ActiveSupport::Concern
 
   included do
@@ -37,9 +34,9 @@ module Globalized
     end
 
     def list
-      with_translations.
-        order(translated_label_column).
-        distinct
+      with_translations
+        .order(translated_label_column)
+        .distinct
     end
 
     private
@@ -68,5 +65,4 @@ module Globalized
   def remember_translated_label
     to_s # fetches the required translations and keeps them around
   end
-
 end

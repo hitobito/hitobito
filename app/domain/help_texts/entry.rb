@@ -6,17 +6,17 @@
 #  https://github.com/hitobito/hitobito.
 
 class HelpTexts::Entry
-  attr_reader :key, :action_names,  :controller_name, :model_class
+  attr_reader :key, :action_names, :controller_name, :model_class
 
   def self.key(controller_name, model_class)
-    [controller_name, model_class.to_s.underscore].compact.join('--')
+    [controller_name, model_class.to_s.underscore].compact.join("--")
   end
 
   def initialize(controller_name, model_class, existing = nil)
     @controller_name = controller_name
-    @model_class     = model_class
-    @existing        = existing || {}
-    @key             = self.class.key(controller_name, model_class)
+    @model_class = model_class
+    @existing = existing || {}
+    @key = self.class.key(controller_name, model_class)
 
     @action_names = []
   end
@@ -26,13 +26,13 @@ class HelpTexts::Entry
   end
 
   def grouped
-    %w(action field).collect do |kind|
-      label = HelpText.human_attribute_name("#{kind}", count: 2)
-      list  = labeled_list(kind)
+    %w[action field].collect { |kind|
+      label = HelpText.human_attribute_name(kind.to_s, count: 2)
+      list = labeled_list(kind)
       next if list.empty?
 
       OpenStruct.new(label: label, list: list)
-    end.compact
+    }.compact
   end
 
   def present?
@@ -40,21 +40,21 @@ class HelpTexts::Entry
   end
 
   def translate(kind, name)
-    format('%s "%s"', HelpText.human_attribute_name("#{kind}"), send("translate_#{kind}", name))
+    format('%s "%s"', HelpText.human_attribute_name(kind.to_s), send("translate_#{kind}", name))
   end
 
   def fields
     ((used_attributes + permitted_attributes).collect(&:to_s) - existing(:field) - blacklist).uniq
   end
 
-  def actions(supported_actions = %w(index new edit show))
+  def actions(supported_actions = %w[index new edit show])
     (action_names & supported_actions) - existing(:action)
   end
 
   def labeled_list(kind)
-    send(kind.to_s.pluralize).collect do |name, _|
+    send(kind.to_s.pluralize).collect { |name, _|
       ["#{kind}.#{name}", send("translate_#{kind}", name)]
-    end.compact.sort_by(&:second)
+    }.compact.sort_by(&:second)
   end
 
   private
@@ -77,7 +77,7 @@ class HelpTexts::Entry
     end
   end
 
-  def translate_action(action, mapping = { index: :list, new: :add })
+  def translate_action(action, mapping = {index: :list, new: :add})
     I18n.t("global.link.#{mapping.fetch(action.to_sym, action)}")
   end
 
@@ -89,5 +89,3 @@ class HelpTexts::Entry
     @controller_class ||= "#{@controller_name}_controller".classify.constantize
   end
 end
-
-

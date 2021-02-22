@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module Person::DeviseOverrides
-
   def send_reset_password_instructions # from lib/devise/models/recoverable.rb
     persisted? && super
   end
@@ -19,7 +16,7 @@ module Person::DeviseOverrides
   def generate_reset_password_token!
     raw, enc = Devise.token_generator.generate(self.class, :reset_password_token)
 
-    self.reset_password_token   = enc
+    self.reset_password_token = enc
     self.reset_password_sent_at = Time.now.utc
     save!(validate: false)
 

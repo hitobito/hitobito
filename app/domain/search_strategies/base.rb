@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 module SearchStrategies
   class Base
-
     QUERY_PER_PAGE = 10
 
     def initialize(user, term, page)
@@ -72,16 +69,15 @@ module SearchStrategies
       # accessible.pluck('people.id')
 
       # rewrite query to only include id column
-      sql = accessible.to_sql.gsub(/SELECT (.+) FROM /, 'SELECT DISTINCT people.id FROM ')
+      sql = accessible.to_sql.gsub(/SELECT (.+) FROM /, "SELECT DISTINCT people.id FROM ")
       result = Person.connection.execute(sql)
       result.collect { |row| row[0] }
     end
 
     def load_deleted_people_ids
-      Person.where('NOT EXISTS (SELECT * FROM roles ' \
-                   'WHERE roles.deleted_at IS NULL AND roles.person_id = people.id)')
-            .pluck(:id)
+      Person.where("NOT EXISTS (SELECT * FROM roles " \
+                   "WHERE roles.deleted_at IS NULL AND roles.person_id = people.id)")
+        .pluck(:id)
     end
-
   end
 end

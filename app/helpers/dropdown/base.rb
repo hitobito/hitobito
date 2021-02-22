@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
@@ -20,14 +19,14 @@ module Dropdown
       @label = label
       @icon = icon
       @main_link = nil
-      @button_class = 'btn'
+      @button_class = "btn"
       @items = []
     end
 
     def to_s
       template.button_group do
         render_dropdown_button +
-        render_items
+          render_items
       end
     end
 
@@ -53,13 +52,13 @@ module Dropdown
       safe_join([
         label_with_link,
         content_tag(:a,
-                    class: "dropdown-toggle #{button_class}",
-                    href: '#',
-                    data: { toggle: 'dropdown' }) do
+          class: "dropdown-toggle #{button_class}",
+          href: "#",
+          data: {toggle: "dropdown"}) do
           safe_join([label_without_link,
-                     content_tag(:b, '', class: 'caret')].compact, ' ')
-        end
-      ].compact, ' ')
+                     content_tag(:b, "", class: "caret"),].compact, " ")
+        end,
+      ].compact, " ")
     end
 
     def label_with_link
@@ -71,7 +70,7 @@ module Dropdown
     def label_without_link
       unless main_link
         if icon
-          safe_join([template.icon(icon), label], ' ')
+          safe_join([template.icon(icon), label], " ")
         else
           label
         end
@@ -79,15 +78,13 @@ module Dropdown
     end
 
     def render_items
-      template.content_tag_nested(:ul, items, class: 'dropdown-menu', role: 'menu') do |item|
+      template.content_tag_nested(:ul, items, class: "dropdown-menu", role: "menu") do |item|
         item.render(template)
       end
     end
-
   end
 
-  Item = Struct.new(:label, :url, :sub_items, :options) do
-
+  Item = Struct.new(:label, :url, :sub_items, :options) {
     def initialize(label, url, options = {})
       super(label, url, [], options)
     end
@@ -99,7 +96,7 @@ module Dropdown
     def render(template)
       template.content_tag(:li, class: css_class) do
         template.safe_join([link(template, label, url, options),
-                            render_sub_items(template)].compact)
+                            render_sub_items(template),].compact)
       end
     end
 
@@ -113,34 +110,33 @@ module Dropdown
     end
 
     def css_class
-      'dropdown-submenu' if sub_items?
+      "dropdown-submenu" if sub_items?
     end
 
     def render_sub_items(template)
       if sub_items?
-        template.content_tag_nested(:ul, sub_items, class: 'dropdown-menu') do |sub|
+        template.content_tag_nested(:ul, sub_items, class: "dropdown-menu") do |sub|
           sub.render(template)
         end
       end
     end
-
-  end
+  }
 
   class Divider
     def render(template)
-      template.content_tag(:li, '', class: 'divider')
+      template.content_tag(:li, "", class: "divider")
     end
   end
 
-  Title = Struct.new(:label, :options) do
+  Title = Struct.new(:label, :options) {
     def initialize(label, options = {})
       super(label, options)
     end
 
     def render(template)
-      template.content_tag(:li, class: 'muted dropdown-menu-subtitle') do
+      template.content_tag(:li, class: "muted dropdown-menu-subtitle") do
         template.content_tag(:small, label, options)
       end
     end
-  end
+  }
 end

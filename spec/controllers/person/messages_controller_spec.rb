@@ -5,21 +5,20 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Person::MessagesController do
-
   let(:message) { messages(:simple) }
   let(:top_leader) { people(:top_leader) }
   let(:top_group) { groups(:top_group) }
 
   before { sign_in(top_leader) }
 
-  context 'GET index' do
-    it 'shows messages of person' do
+  context "GET index" do
+    it "shows messages of person" do
       MessageRecipient.create!(message: message, person: top_leader)
 
-      get :index, params: { id: top_leader.id, group_id: top_group.id }
+      get :index, params: {id: top_leader.id, group_id: top_group.id}
 
       expect(assigns(:messages)).to eq([message])
     end

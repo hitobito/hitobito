@@ -1,16 +1,13 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Duration
-
   attr_reader :start_at, :finish_at
 
   def initialize(start_at, finish_at)
-    @start_at  = start_at
+    @start_at = start_at
     @finish_at = finish_at
   end
 
@@ -22,7 +19,7 @@ class Duration
     elsif finish_at
       format_datetime(finish_at)
     else
-      ''
+      ""
     end
   end
 
@@ -91,6 +88,5 @@ class Duration
   end
 
   deprecate date_only?: "Don't use this private method anymore." \
-                        'Instead use the static variant `Duration.date_only?`'
-
+                        "Instead use the static variant `Duration.date_only?`"
 end

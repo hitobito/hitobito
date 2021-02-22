@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Event::Qualifier
-
   class << self
     def for(participation)
       new(participation, qualifier_role(participation))
@@ -15,7 +12,7 @@ class Event::Qualifier
     private
 
     def qualifier_role(participation)
-      leader?(participation) ? 'leader' : 'participant'
+      leader?(participation) ? "leader" : "participant"
     end
 
     def leader?(participation)
@@ -101,11 +98,10 @@ class Event::Qualifier
   end
 
   def qualification_kinds
-    event.kind.qualification_kinds('qualification', @role)
+    event.kind.qualification_kinds("qualification", @role)
   end
 
   def prolongation_kinds
-    event.kind.qualification_kinds('prolongation', @role)
+    event.kind.qualification_kinds("prolongation", @role)
   end
-
 end

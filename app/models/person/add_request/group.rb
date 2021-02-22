@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -23,8 +21,7 @@
 #
 
 class Person::AddRequest::Group < Person::AddRequest
-
-  belongs_to :body, class_name: '::Group'
+  belongs_to :body, class_name: "::Group"
 
   validates :role_type, presence: true
   validate :assert_type_is_allowed_for_group
@@ -38,5 +35,4 @@ class Person::AddRequest::Group < Person::AddRequest
       errors.add(:role_type, :type_not_allowed)
     end
   end
-
 end

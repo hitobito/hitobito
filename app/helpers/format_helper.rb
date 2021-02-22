@@ -7,8 +7,7 @@
 # tables, forms or action links. This helper is ideally defined in the
 # ApplicationController.
 module FormatHelper
-
-  EMPTY_STRING = '&nbsp;'.html_safe # non-breaking space asserts better css styling.
+  EMPTY_STRING = "&nbsp;".html_safe # non-breaking space asserts better css styling.
 
   ################  FORMATTING HELPERS  ##################################
 
@@ -18,13 +17,13 @@ module FormatHelper
     case value
     when Float, BigDecimal then
       number_with_precision(value,
-                            precision: t('number.format.precision'),
-                            delimiter: t('number.format.delimiter'))
-    when Date   then l(value)
-    when Time   then l(value, format: :time)
-    when true   then t(:"global.yes")
-    when false  then t(:"global.no")
-    when nil    then EMPTY_STRING
+        precision: t("number.format.precision"),
+        delimiter: t("number.format.delimiter"))
+    when Date then l(value)
+    when Time then l(value, format: :time)
+    when true then t(:"global.yes")
+    when false then t(:"global.no")
+    when nil then EMPTY_STRING
     else value.to_s
     end
   end
@@ -33,11 +32,11 @@ module FormatHelper
   def fnumber(value)
     case value
     when Float, BigDecimal then
-      number_with_precision(value, precision: t('number.format.precision'),
-                                   delimiter: t('number.format.delimiter'))
+      number_with_precision(value, precision: t("number.format.precision"),
+                                   delimiter: t("number.format.delimiter"))
     when nil then EMPTY_STRING
     else
-      number_with_delimiter(value.to_i, delimiter: t('number.format.delimiter'))
+      number_with_delimiter(value.to_i, delimiter: t("number.format.delimiter"))
     end
   end
 
@@ -67,23 +66,22 @@ module FormatHelper
       "format_#{obj.class.base_class.name.underscore}_#{attr}"
     else
       "format_#{obj.class.name.underscore}_#{attr}"
-    end.gsub(/\//, '_') # deal with nested models
+    end.tr("/", "_") # deal with nested models
   end
-
 
   ##############  STANDARD HTML SECTIONS  ############################
 
   # Renders an arbitrary content with the given label. Used for uniform presentation.
   def labeled(label, content = nil, &block)
     content = capture(&block) if block_given?
-    render 'shared/labeled', label: label, content: content
+    render "shared/labeled", label: label, content: content
   end
 
   # Transform the given text into a form as used by labels or table headers.
   def captionize(text, clazz = nil)
     text = text.to_s
     if clazz.respond_to?(:human_attribute_name)
-      clazz.human_attribute_name(text.end_with?('_ids') ? text[0..-5].pluralize : text)
+      clazz.human_attribute_name(text.end_with?("_ids") ? text[0..-5].pluralize : text)
     else
       text.humanize.titleize
     end
@@ -94,10 +92,10 @@ module FormatHelper
   def render_attrs(obj, *attrs)
     return if attrs.blank?
 
-    content = safe_join(attrs) do |a|
+    content = safe_join(attrs) { |a|
       labeled_attr(obj, a) if !block_given? || yield(a)
-    end
-    content_tag(:dl, content, class: 'dl-horizontal') if content.present?
+    }
+    content_tag(:dl, content, class: "dl-horizontal") if content.present?
   end
 
   # Like #render_attrs, but only for attributes with a present value.
@@ -116,10 +114,10 @@ module FormatHelper
     return EMPTY_STRING if val.nil?
 
     case type
-    when :time    then f(val.to_time) # rubocop:disable Rails/Date
-    when :date    then f(val.to_date)
+    when :time then f(val.to_time) # rubocop:disable Rails/Date
+    when :date then f(val.to_date)
     when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}" # rubocop:disable Rails/Date
-    when :text    then val.present? ? simple_format(h(val)) : EMPTY_STRING
+    when :text then val.present? ? simple_format(h(val)) : EMPTY_STRING
     when :decimal then f(val.to_s.to_f)
     else f(val)
     end
@@ -141,16 +139,16 @@ module FormatHelper
   end
 
   def toggle_link(active, url, active_title = nil, inactive_title = nil, label = nil)
-    icon, method = active ? ['ok', :delete] : ['minus', :put]
+    icon, method = active ? ["ok", :delete] : ["minus", :put]
     title = active ? active_title : inactive_title
 
     caption = icon(icon)
-    caption << '&nbsp; '.html_safe << label if label
+    caption << "&nbsp; ".html_safe << label if label
     link_to(caption,
-            url,
-            title: title,
-            remote: true,
-            method: method)
+      url,
+      title: title,
+      remote: true,
+      method: method)
   end
 
   private
@@ -197,11 +195,10 @@ module FormatHelper
   # Returns true if no link should be created when formatting the given association.
   def assoc_link?(val)
     respond_to?("#{val.class.base_class.model_name.singular_route_key}_path".to_sym) &&
-    can?(:show, val)
+      can?(:show, val)
   end
 
   def object_class(obj)
     obj.respond_to?(:klass) ? obj.klass : obj.class
   end
-
 end

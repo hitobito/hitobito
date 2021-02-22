@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: invoice_lists
@@ -26,24 +24,22 @@
 #  index_invoice_lists_on_receiver_type_and_receiver_id  (receiver_type,receiver_id)
 #
 
-
 #  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
 
-
-class InvoiceList < ActiveRecord::Base
+class InvoiceList < ApplicationRecord
   serialize :invalid_recipient_ids, Array
   belongs_to :group
   belongs_to :receiver, polymorphic: true
-  belongs_to :creator, class_name: 'Person'
+  belongs_to :creator, class_name: "Person"
   has_one :invoice, dependent: :destroy
   has_one :message, dependent: :nullify
   has_many :invoices, dependent: :destroy
 
   attr_accessor :recipient_ids, :invoice
-  validates :receiver_type, inclusion: %w(MailingList), allow_blank: true
+  validates :receiver_type, inclusion: %w[MailingList], allow_blank: true
 
   scope :list, -> { order(:created_at) }
 
@@ -72,7 +68,7 @@ class InvoiceList < ActiveRecord::Base
     if receiver
       receiver.people.unscope(:select).count
     else
-      recipient_ids.split(',').count
+      recipient_ids.split(",").count
     end
   end
 
@@ -80,7 +76,7 @@ class InvoiceList < ActiveRecord::Base
     if receiver
       receiver.people.first
     else
-      Person.find(recipient_ids.split(',').first)
+      Person.find(recipient_ids.split(",").first)
     end
   end
 
@@ -88,7 +84,7 @@ class InvoiceList < ActiveRecord::Base
     if receiver
       receiver.people
     else
-      Person.where(id: recipient_ids.split(','))
+      Person.where(id: recipient_ids.split(","))
     end
   end
 end

@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Group::MoveController < ApplicationController
-
   decorates :group
   helper_method :group
 
@@ -38,8 +35,8 @@ class Group::MoveController < ApplicationController
   end
 
   def candidates
-    @candidates = mover.candidates.select { |candidate| can?(:update, candidate) }.
-                                   group_by { |candidate| candidate.class.label }
+    @candidates = mover.candidates.select { |candidate| can?(:update, candidate) }
+      .group_by { |candidate| candidate.class.label }
     @candidates.values.each { |groups| groups.sort_by(&:name) }
 
     if @candidates.empty?
@@ -54,19 +51,18 @@ class Group::MoveController < ApplicationController
 
   def target
     @target ||= (params[:move] && params[:move][:target_group_id]) &&
-                Group.find(params[:move][:target_group_id])
+      Group.find(params[:move][:target_group_id])
   end
 
   def build_flash_messages(success)
     if success
       flash[:notice] = translate(:success, group: group, target: target)
     else
-      flash[:alert] = group.errors.full_messages.join(', ')
+      flash[:alert] = group.errors.full_messages.join(", ")
     end
   end
 
   def authorize
     authorize!(:update, group)
   end
-
 end

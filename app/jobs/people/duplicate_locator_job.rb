@@ -11,5 +11,4 @@ class People::DuplicateLocatorJob < RecurringJob
   def perform
     People::DuplicateLocator.new.run
   end
-
 end

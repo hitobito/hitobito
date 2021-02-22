@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -8,11 +6,10 @@
 module Sheet
   class Group
     class DeletedPeople < Group
-
       self.tabs = []
 
       def title
-        I18n.t('groups.global.link.deleted_person')
+        I18n.t("groups.global.link.deleted_person")
       end
 
       def active_tab
@@ -32,13 +29,12 @@ module Sheet
       end
 
       def model_name
-        'group'
+        "group"
       end
 
       def translation_prefix
-        'sheet/group'
+        "sheet/group"
       end
-
     end
   end
 end

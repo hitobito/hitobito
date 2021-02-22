@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ActsAsTaggableOnHelper
-
   # aliasing acts_as_taggable_on_tag to tag path helpers
   def new_acts_as_taggable_on_tag_path
     new_tag_path
@@ -18,5 +17,4 @@ module ActsAsTaggableOnHelper
   def acts_as_taggable_on_tags_path(options = {})
     tags_path(options)
   end
-
 end

@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class FullTextController < ApplicationController
-
   skip_authorization_check
 
   helper_method :entries, :tab_class
@@ -32,7 +29,7 @@ class FullTextController < ApplicationController
 
   def results_with_separator(*sets)
     sets.select(&:present?).inject do |memo, set|
-      memo + [{ label: '—' * 20 }] + set
+      memo + [{label: "—" * 20}] + set
     end
   end
 
@@ -69,7 +66,7 @@ class FullTextController < ApplicationController
   end
 
   def tab_class(tab)
-    'active' if @active_tab == tab
+    "active" if @active_tab == tab
   end
 
   def decorate_events(events)

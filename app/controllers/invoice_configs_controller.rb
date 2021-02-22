@@ -1,19 +1,16 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceConfigsController < CrudController
-
   self.nesting = Group
   self.permitted_attrs = [:payment_information, :address, :iban, :account_number,
                           :payment_slip, :beneficiary, :payee, :participant_number,
                           :participant_number_internal, :email, :vat_number, :currency,
                           payment_reminder_configs_attributes: [
-                            :id, :title, :text, :level, :due_days
-                          ]]
+                            :id, :title, :text, :level, :due_days,
+                          ],]
 
   before_render_form :build_payment_reminder_configs
 
@@ -40,5 +37,4 @@ class InvoiceConfigsController < CrudController
   def missing_payment_reminder_levels
     PaymentReminderConfig::LEVELS.to_a - entry.payment_reminder_configs.collect(&:level)
   end
-
 end

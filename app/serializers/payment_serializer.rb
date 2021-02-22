@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # == Schema Information
 #
 # Table name: payments
@@ -21,13 +19,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class PaymentSerializer < ApplicationSerializer
-
   schema do
     json_api_properties
 
     map_properties :amount,
-                   :received_at,
-                   :reference
+      :received_at,
+      :reference
   end
 end
-

@@ -1,5 +1,4 @@
 class Person::Subscriptions
-
   def initialize(person)
     @person = person
   end
@@ -8,10 +7,10 @@ class Person::Subscriptions
     scope = MailingList
 
     scope
-      .where(id: direct.select('mailing_list_id'))
-      .or(scope.where(id: from_events.select('mailing_list_id')))
-      .or(scope.where(id: from_groups.select('mailing_list_id')))
-      .where.not(id: exclusions.select('mailing_list_id'))
+      .where(id: direct.select("mailing_list_id"))
+      .or(scope.where(id: from_events.select("mailing_list_id")))
+      .or(scope.where(id: from_groups.select("mailing_list_id")))
+      .where.not(id: exclusions.select("mailing_list_id"))
       .distinct
   end
 
@@ -21,11 +20,11 @@ class Person::Subscriptions
 
   def exclusions
     @exclusions ||= @person.subscriptions.where(excluded: true)
-                           .or(Subscription.where(id: tag_excluded_subscription_ids))
+      .or(Subscription.where(id: tag_excluded_subscription_ids))
   end
 
   def from_events
-    event_ids = @person.event_participations.active.select('event_id')
+    event_ids = @person.event_participations.active.select("event_id")
     Subscription.events.where(subscriber_id: event_ids)
   end
 

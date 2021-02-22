@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # Copyright (c) 2012 Rob Hanlon, MIT License
 
 #  Copyright (c) 2017, Pfadibewebung Schweiz. This file is part of
@@ -83,8 +81,8 @@ module DecoratesBeforeRendering
       raise ArgumentError, "#{ivar} does not have an associated decorator"
     end
 
-    superclass_decorator_name = (superclass == Object ? 'Object' : superclass.model_name.to_s)
-    superclass_decorator_name += 'Decorator'
+    superclass_decorator_name = (superclass == Object ? "Object" : superclass.model_name.to_s)
+    superclass_decorator_name += "Decorator"
     [superclass, superclass_decorator_name]
   end
 
@@ -99,5 +97,4 @@ module DecoratesBeforeRendering
       raise ArgumentError, "#{ivar.inspect} does not have an associated model"
     end
   end
-
 end

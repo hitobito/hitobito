@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class SubscriptionsController < CrudController
-
   include RenderPeopleExports
   include AsyncDownload
 
@@ -24,10 +23,10 @@ class SubscriptionsController < CrudController
         @person_add_requests = fetch_person_add_requests
         load_grouped_subscriptions
       end
-      format.pdf   { render_pdf(ordered_people, parents.first) }
-      format.csv   { render_tabular_in_background(:csv) }
-      format.xlsx  { render_tabular_in_background(:xlsx) }
-      format.vcf   { render_vcf(ordered_people.includes(:phone_numbers, :additional_emails)) }
+      format.pdf { render_pdf(ordered_people, parents.first) }
+      format.csv { render_tabular_in_background(:csv) }
+      format.xlsx { render_tabular_in_background(:xlsx) }
+      format.vcf { render_vcf(ordered_people.includes(:phone_numbers, :additional_emails)) }
       format.email { render_emails(ordered_people.includes(:additional_emails)) }
     end
   end
@@ -48,34 +47,34 @@ class SubscriptionsController < CrudController
   # Override so we can pass preferred_labels from mailing_list
   def render_emails(people)
     emails = Person.mailing_emails_for(people, parent.labels)
-    render plain: emails.join(',')
+    render plain: emails.join(",")
   end
 
   def render_tabular_in_background(format)
     with_async_download_cookie(format, "subscriptions_#{mailing_list.id}") do |filename|
       Export::SubscriptionsJob.new(format,
-                                   current_person.id,
-                                   mailing_list.id,
-                                   params.slice(:household).merge(filename: filename)).enqueue!
+        current_person.id,
+        mailing_list.id,
+        params.slice(:household).merge(filename: filename)).enqueue!
     end
   end
 
   def group_subscriptions
-    subscriptions_for_type(Group).
-      includes(:related_role_types).
-      order("#{Group.quoted_table_name}.name")
+    subscriptions_for_type(Group)
+      .includes(:related_role_types)
+      .order("#{Group.quoted_table_name}.name")
   end
 
   def person_subscriptions(excluded = false)
-    subscriptions_for_type(Person).
-      where(excluded: excluded).
-      order('people.last_name', 'people.first_name')
+    subscriptions_for_type(Person)
+      .where(excluded: excluded)
+      .order("people.last_name", "people.first_name")
   end
 
   def event_subscriptions
     subscriptions_for_type(Event)
-      .joins('LEFT JOIN event_translations ON events.id = event_translations.event_id')
-      .order('event_translations.name')
+      .joins("LEFT JOIN event_translations ON events.id = event_translations.event_id")
+      .order("event_translations.name")
   end
 
   def subscriptions_for_type(klass)
@@ -99,5 +98,4 @@ class SubscriptionsController < CrudController
       @mailing_list.person_add_requests.list.includes(person: :primary_group)
     end
   end
-
 end

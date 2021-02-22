@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -13,11 +11,11 @@ class InvoicesController < CrudController
   self.nesting = Group
   self.optional_nesting = [InvoiceList]
 
-  self.sort_mappings = { recipient: Person.order_by_name_statement,
-                         sequence_number: Invoice.order_by_sequence_number_statement }
+  self.sort_mappings = {recipient: Person.order_by_name_statement,
+                        sequence_number: Invoice.order_by_sequence_number_statement,}
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]
 
-  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
+  self.search_columns = [:title, :sequence_number, "people.last_name", "people.email"]
   self.permitted_attrs = [:title, :description, :state, :due_at,
                           :recipient_id, :recipient_email, :recipient_address,
                           :payment_information, :payment_purpose,
@@ -30,25 +28,27 @@ class InvoicesController < CrudController
                             :count,
                             :cost_center,
                             :account,
-                            :_destroy
-                          ]]
+                            :_destroy,
+                          ],]
 
-  before_render_index :year  # sets ivar used in view
+  before_render_index :year # sets ivar used in view
 
   helper_method :group, :invoice_list
 
   def new
-    entry.attributes = { payment_information: entry.invoice_config.payment_information }
+    entry.attributes = {payment_information: entry.invoice_config.payment_information}
   end
 
   def index
     respond_to do |format|
       format.html { super }
-      format.pdf  { generate_pdf(list_entries.includes(:invoice_items)) }
-      format.csv  { render_invoices_csv(list_entries.includes(:invoice_items)) }
-      format.json { render_entries_json(list_entries.includes(:invoice_items,
-                                                              :payments,
-                                                              :payment_reminders)) }
+      format.pdf { generate_pdf(list_entries.includes(:invoice_items)) }
+      format.csv { render_invoices_csv(list_entries.includes(:invoice_items)) }
+      format.json {
+        render_entries_json(list_entries.includes(:invoice_items,
+          :payments,
+          :payment_reminders))
+      }
     end
   end
 
@@ -56,8 +56,8 @@ class InvoicesController < CrudController
     @invoice_items = InvoiceItemDecorator.decorate_collection(entry.invoice_items)
     respond_to do |format|
       format.html { build_payment }
-      format.pdf  { generate_pdf([entry]) }
-      format.csv  { render_invoices_csv([entry]) }
+      format.pdf { generate_pdf([entry]) }
+      format.csv { render_invoices_csv([entry]) }
       format.json { render_entry_json }
     end
   end
@@ -74,10 +74,10 @@ class InvoicesController < CrudController
     paged_entries = entries.page(params[:page])
     render json: [paging_properties(paged_entries),
                   ListSerializer.new(paged_entries,
-                                     group: group,
-                                     page: params[:page],
-                                     serializer: InvoiceSerializer,
-                                     controller: self)].inject(&:merge)
+                    group: group,
+                    page: params[:page],
+                    serializer: InvoiceSerializer,
+                    controller: self),].inject(&:merge)
   end
 
   def render_entry_json
@@ -109,12 +109,12 @@ class InvoicesController < CrudController
   def render_invoices_pdf(invoices)
     letter = find_letter(invoices)
     pdf = if letter
-            recipients = Person.where(id: invoices.pluck(:recipient_id))
-            Export::Pdf::Messages::LetterWithInvoice.new(letter, recipients).render
-          else
-            Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
-          end
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
+      recipients = Person.where(id: invoices.pluck(:recipient_id))
+      Export::Pdf::Messages::LetterWithInvoice.new(letter, recipients).render
+    else
+      Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
+    end
+    send_data pdf, type: :pdf, disposition: "inline", filename: filename(:pdf, invoices)
   end
 
   def find_letter(invoices)
@@ -123,7 +123,7 @@ class InvoicesController < CrudController
 
   def filename(extension, invoices)
     if invoices.size > 1
-      "#{t('activerecord.models.invoice.other').downcase}.#{extension}"
+      "#{t("activerecord.models.invoice.other").downcase}.#{extension}"
     else
       invoices.first.filename(extension)
     end
@@ -132,28 +132,28 @@ class InvoicesController < CrudController
   def render_labels(invoices)
     recipients = Invoice.to_contactables(invoices)
     pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)
-    send_data pdf, type: :pdf, disposition: 'inline'
+    send_data pdf, type: :pdf, disposition: "inline"
   rescue Prawn::Errors::CannotFit
-    redirect_back(fallback_location: group_ionvoices_path(group), alert: t('people.pdf.cannot_fit'))
+    redirect_back(fallback_location: group_ionvoices_path(group), alert: t("people.pdf.cannot_fit"))
   end
 
   def list_entries
-    scope = super.
-      includes(:payment_reminders, recipient: [:roles, :groups]).
-      references(:recipient).list
+    scope = super
+      .includes(:payment_reminders, recipient: [:roles, :groups])
+      .references(:recipient).list
 
     scope = scope.page(params[:page]).per(50) unless params[:ids]
     Invoice::Filter.new(params.reverse_merge(year: year)).apply(scope)
   end
 
   def payment_attrs
-    @payment_attrs ||= flash[:payment] || { amount: entry.amount_open }
+    @payment_attrs ||= flash[:payment] || {amount: entry.amount_open}
   end
 
   def pdf_options
     {
-      articles: params[:articles] != 'false',
-      payment_slip: params[:payment_slip] != 'false'
+      articles: params[:articles] != "false",
+      payment_slip: params[:payment_slip] != "false",
     }
   end
 
@@ -176,5 +176,4 @@ class InvoicesController < CrudController
   def invoice_list
     parent if parent.is_a?(InvoiceList)
   end
-
 end

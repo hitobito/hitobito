@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -8,7 +6,6 @@
 # The search functionality for the index table.
 # Extracted into an own module for convenience.
 module Searchable
-
   extend ActiveSupport::Concern
 
   included do
@@ -22,7 +19,6 @@ module Searchable
 
   # Prepended methods for searching.
   module Prepends
-
     private
 
     # Enhance the list entries with an optional search criteria
@@ -41,30 +37,25 @@ module Searchable
       SearchStrategies::SqlConditionBuilder.new(params[:q], fields).search_conditions
     end
 
-
     # Returns true if this controller has searchable columns.
     def search_support?
       search_columns.present?
     end
-
   end
 
   private
 
   # Class methods for Searchable.
   module ClassMethods
-
     # All search columns divided in table and field names.
     def search_tables_and_fields
-      @search_tables_and_fields ||= search_columns.map do |f|
-        if f.to_s.include?('.')
+      @search_tables_and_fields ||= search_columns.map { |f|
+        if f.to_s.include?(".")
           f
         else
           "#{model_class.table_name}.#{f}"
         end
-      end
+      }
     end
-
   end
-
 end

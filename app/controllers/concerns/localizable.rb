@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -19,11 +17,11 @@ module Localizable
       available_locale!(cookies[:locale]) ||
       guess_locale ||
       I18n.default_locale
-    cookies[:locale] = { value: I18n.locale, expires: 1.year.from_now }
+    cookies[:locale] = {value: I18n.locale, expires: 1.year.from_now}
   end
 
   def default_url_options(_options = {})
-    multiple_languages? ? { locale: I18n.locale } : {}
+    multiple_languages? ? {locale: I18n.locale} : {}
   end
 
   def available_locale!(locale)
@@ -43,5 +41,4 @@ module Localizable
   def multiple_languages?
     Array(Settings.application.languages).size > 1
   end
-
 end

@@ -1,27 +1,24 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 # A dummy model used for general testing.
-class CrudTestModel < ActiveRecord::Base #:nodoc:
-
+class CrudTestModel < ApplicationRecord #:nodoc:
   include DatetimeAttribute
   datetime_attr :last_seen
 
-  belongs_to :companion, class_name: 'CrudTestModel'
-  has_and_belongs_to_many :others, class_name: 'OtherCrudTestModel'
-  has_many :mores, class_name: 'OtherCrudTestModel', foreign_key: :more_id
+  belongs_to :companion, class_name: "CrudTestModel"
+  has_and_belongs_to_many :others, class_name: "OtherCrudTestModel"
+  has_many :mores, class_name: "OtherCrudTestModel", foreign_key: :more_id
 
   before_destroy :protect_if_companion
 
   validates :name, presence: true
-  validates :birthdate, timeliness: { type: :date, allow_blank: true }
-  validates :rating, inclusion: { in: 1..10 }
+  validates :birthdate, timeliness: {type: :date, allow_blank: true}
+  validates :rating, inclusion: {in: 1..10}
 
-  default_scope -> { order('name') }
+  default_scope -> { order("name") }
 
   def to_s
     name
@@ -39,11 +36,10 @@ class CrudTestModel < ActiveRecord::Base #:nodoc:
 
   def protect_if_companion
     if companion.present?
-      errors.add(:base, 'Cannot destroy model with companion')
+      errors.add(:base, "Cannot destroy model with companion")
       throw :abort
     end
   end
-
 end
 
 class CrudTestModelDecorator < Draper::Decorator
@@ -51,9 +47,9 @@ class CrudTestModelDecorator < Draper::Decorator
   decorates :crud_test_model
 end
 
-class OtherCrudTestModel < ActiveRecord::Base #:nodoc:
-  has_and_belongs_to_many :others, class_name: 'CrudTestModel'
-  belongs_to :more, foreign_key: :more_id, class_name: 'CrudTestModel'
+class OtherCrudTestModel < ApplicationRecord #:nodoc:
+  has_and_belongs_to_many :others, class_name: "CrudTestModel"
+  belongs_to :more, foreign_key: :more_id, class_name: "CrudTestModel"
 
   def to_s
     name
@@ -62,13 +58,13 @@ end
 
 # Controller for the dummy model.
 class CrudTestModelsController < CrudController #:nodoc:
-  HANDLE_PREFIX = 'handle_'
+  HANDLE_PREFIX = "handle_"
 
   self.search_columns = [:name, :whatever, :remarks]
-  self.sort_mappings = { chatty: 'length(remarks)' }
+  self.sort_mappings = {chatty: "length(remarks)"}
   self.permitted_attrs = [:name, :email, :password, :whatever, :children,
                           :companion_id, :rating, :income, :birthdate,
-                          :gets_up_at, :last_seen, :human, :remarks]
+                          :gets_up_at, :last_seen, :human, :remarks,]
 
   skip_authorize_resource
   skip_authorization_check
@@ -91,19 +87,19 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   def index
     super do |format|
-      format.js { render plain: 'index js' }
+      format.js { render plain: "index js" }
     end
   end
 
   def show
     super do |format|
-      format.html { render plain: 'custom html' } if entry.name == 'BBBBB'
+      format.html { render plain: "custom html" } if entry.name == "BBBBB"
     end
   end
 
   def create
     super do |format|
-      flash[:notice] = 'model got created' if entry.persisted?
+      flash[:notice] = "model got created" if entry.persisted?
     end
   end
 
@@ -112,7 +108,7 @@ class CrudTestModelsController < CrudController #:nodoc:
   def list_entries
     entries = super
     if params[:filter]
-      entries = entries.where(['rating < ?', 3]).except(:order).order('children DESC')
+      entries = entries.where(["rating < ?", 3]).except(:order).order("children DESC")
     end
     entries
   end
@@ -121,23 +117,23 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   # custom callback
   def handle_name
-    if entry.name == 'illegal'
-      flash[:alert] = 'illegal name'
+    if entry.name == "illegal"
+      flash[:alert] = "illegal name"
       throw(:abort)
     end
   end
 
   # create callback methods that record the before/after callbacks
   [:create, :update, :save, :destroy].each do |a|
-    callback = "before_#{a.to_s}"
+    callback = "before_#{a}"
     send(callback.to_sym, :"#{HANDLE_PREFIX}#{callback}")
-    callback = "after_#{a.to_s}"
+    callback = "after_#{a}"
     send(callback.to_sym, :"#{HANDLE_PREFIX}#{callback}")
   end
 
   # create callback methods that record the before_render callbacks
   [:index, :show, :new, :edit, :form].each do |a|
-    callback = "before_render_#{a.to_s}"
+    callback = "before_render_#{a}"
     send(callback.to_sym, :"#{HANDLE_PREFIX}#{callback}")
   end
 
@@ -148,7 +144,7 @@ class CrudTestModelsController < CrudController #:nodoc:
 
   # callback to redirect if @should_redirect is set
   def possibly_redirect
-    redirect_to action: 'index' if should_redirect && !performed?
+    redirect_to action: "index" if should_redirect && !performed?
     throw :abort if should_redirect
   end
 
@@ -165,7 +161,6 @@ class CrudTestModelsController < CrudController #:nodoc:
   def authorize_class
     # nada
   end
-
 end
 
 REGEXP_ROWS = /<tr.+?<\/tr>/m
@@ -173,12 +168,10 @@ REGEXP_HEADERS = /<th.+?<\/th>/m
 REGEXP_SORT_HEADERS = /<th.*?><a .*?sort_dir=asc.*?>.*?<\/a><\/th>/m
 REGEXP_ACTION_CELL = /<td class=\"action\"><a .*?href.+?<\/a><\/td>/m
 
-
 # A simple test helper to prepare the test database with a CrudTestModel model.
 # This helper is used to test the CrudController and various helpers
 # without the need for an application based model.
 module CrudTestHelper
-
   # Controller helper methods for the tests
 
   def model_class
@@ -186,11 +179,11 @@ module CrudTestHelper
   end
 
   def controller_name
-    'crud_test_models'
+    "crud_test_models"
   end
 
   def action_name
-    'index'
+    "index"
   end
 
   def params
@@ -226,18 +219,18 @@ module CrudTestHelper
 
   def create_crud_test_models_table
     ActiveRecord::Base.connection.create_table :crud_test_models, force: true do |t|
-      t.string   :name, null: false, limit: 50
-      t.string   :password
-      t.string   :whatever
-      t.integer  :children
-      t.integer  :companion_id
-      t.float    :rating
-      t.decimal  :income, precision: 14, scale: 2
-      t.date     :birthdate
-      t.time     :gets_up_at
+      t.string :name, null: false, limit: 50
+      t.string :password
+      t.string :whatever
+      t.integer :children
+      t.integer :companion_id
+      t.float :rating
+      t.decimal :income, precision: 14, scale: 2
+      t.date :birthdate
+      t.time :gets_up_at
       t.datetime :last_seen
-      t.boolean  :human, default: true
-      t.text     :remarks
+      t.boolean :human, default: true
+      t.text :remarks
 
       t.timestamps null: false
     end
@@ -245,15 +238,15 @@ module CrudTestHelper
 
   def create_other_crud_test_models_table
     ActiveRecord::Base.connection.create_table :other_crud_test_models, force: true do |t|
-      t.string   :name, null: false, limit: 50
-      t.integer  :more_id
+      t.string :name, null: false, limit: 50
+      t.integer :more_id
     end
   end
 
   def create_crud_test_models_other_crud_test_models
     ActiveRecord::Base.connection.create_table :crud_test_models_other_crud_test_models, force: true do |t|
-      t.belongs_to :crud_test_model, index: { name: 'one' }
-      t.belongs_to :other_crud_test_model, index: { name: 'other' }
+      t.belongs_to :crud_test_model, index: {name: "one"}
+      t.belongs_to :other_crud_test_model, index: {name: "other"}
     end
   end
 
@@ -262,7 +255,11 @@ module CrudTestHelper
     c = ActiveRecord::Base.connection
     [:crud_test_models, :other_crud_test_models, :crud_test_models_other_crud_test_models].each do |table|
       if c.data_source_exists?(table)
-        c.drop_table(table) rescue nil
+        begin
+          c.drop_table(table)
+        rescue
+          nil
+        end
       end
     end
   end
@@ -275,20 +272,20 @@ module CrudTestHelper
 
   # Fixture-style accessor method to get CrudTestModel instances by name
   def crud_test_models(name)
-    CrudTestModel.find_by_name(name.to_s)
+    CrudTestModel.find_by(name: name.to_s)
   end
 
   def with_test_routing
     with_routing do |set|
       set.draw { resources :crud_test_models }
       # used to define a controller in these tests
-      set.default_url_options = { controller: 'crud_test_models' }
+      set.default_url_options = {controller: "crud_test_models"}
       yield
     end
   end
 
   def special_routing
-    controller = @controller || controller  # test:unit uses instance variable, rspec the method
+    controller = @controller || controller # test:unit uses instance variable, rspec the method
     @routes = ActionDispatch::Routing::RouteSet.new
     @routes.draw { resources :crud_test_models }
 
@@ -309,8 +306,8 @@ module CrudTestHelper
                           income: 10_000_000 * index + 0.1 * index,
                           birthdate: "#{1900 + 10 * index}-#{index}-#{index}",
                           # store entire date to avoid time zone issues
-                          gets_up_at: Time.local(2000, 1, 1, index, index),
-                          last_seen: Time.local(2000 + 10 * index, index, index, 10 + index, 20 + index),
+                          gets_up_at: Time.zone.local(2000, 1, 1, index, index),
+                          last_seen: Time.zone.local(2000 + 10 * index, index, index, 10 + index, 20 + index),
                           human: index % 2 == 0,
                           remarks: "#{c} #{str(index + 1)} #{str(index + 2)}\n" * (index % 3 + 1))
   end
@@ -329,15 +326,14 @@ module CrudTestHelper
   def without_transaction
     c = ActiveRecord::Base.connection
     start_transaction = false
-    if c.adapter_name.downcase.include?('mysql') && c.open_transactions > 0
+    if c.adapter_name.downcase.include?("mysql") && c.open_transactions > 0
       # in transactional tests, we may simply rollback
-      c.execute('ROLLBACK')
+      c.execute("ROLLBACK")
       start_transaction = true
     end
 
     yield
 
-    c.execute('BEGIN') if start_transaction
+    c.execute("BEGIN") if start_transaction
   end
-
 end

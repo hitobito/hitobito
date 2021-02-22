@@ -5,16 +5,13 @@
 
 module TableDisplays
   class QuestionColumn < Column
-
     delegate :content_tag, :check_box_tag, :label_tag, to: :template
 
     def render
       super if question
     end
 
-    def label
-      question.label
-    end
+    delegate :label, to: :question
 
     def format_attr(target, _)
       target.answers.find { |answer| answer.question == @question }.try(:answer)
@@ -31,6 +28,5 @@ module TableDisplays
     def question_id
       @question_id ||= name[TableDisplay::Participations::QUESTION_REGEX, 1]
     end
-
   end
 end

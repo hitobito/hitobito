@@ -49,22 +49,21 @@
 #
 
 class EventSerializer < ApplicationSerializer
-
   schema do
     json_api_properties
 
     map_properties :name,
-                   :description,
-                   :motto,
-                   :cost,
-                   :maximum_participants,
-                   :participant_count,
-                   :location,
-                   :application_opening_at,
-                   :application_closing_at,
-                   :application_conditions,
-                   :state,
-                   :teamer_count
+      :description,
+      :motto,
+      :cost,
+      :maximum_participants,
+      :participant_count,
+      :location,
+      :application_opening_at,
+      :application_closing_at,
+      :application_conditions,
+      :state,
+      :teamer_count
 
     apply_extensions(:public)
 
@@ -74,6 +73,5 @@ class EventSerializer < ApplicationSerializer
 
     entities :dates, item.dates, EventDateSerializer
     entities :group, item.groups.decorate, GroupSerializer
-
   end
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module PersonTags::ValidationTagged
-
   extend ActiveSupport::Concern
 
   included do

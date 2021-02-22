@@ -14,7 +14,7 @@ module Api::JsonPaging
       current_page: paged_entries.current_page,
       total_pages: paged_entries.total_pages,
       next_page_link: next_page ? url_for(unsafe_params.merge(page: next_page)) : nil,
-      prev_page_link: prev_page ? url_for(unsafe_params.merge(page: prev_page)) : nil
+      prev_page_link: prev_page ? url_for(unsafe_params.merge(page: prev_page)) : nil,
     }
   end
 end

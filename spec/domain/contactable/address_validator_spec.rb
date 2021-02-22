@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Contactable::AddressValidator do
   let(:validator) { described_class.new }
   let(:person) { people(:bottom_member) }
   let(:address) { addresses(:bs_bern) }
 
-  it 'tags people with invalid address' do
-    expect do
+  it "tags people with invalid address" do
+    expect {
       validator.validate_people
-    end.to change { ActsAsTaggableOn::Tagging.count }.by(1)
+    }.to change { ActsAsTaggableOn::Tagging.count }.by(1)
 
     tagging = ActsAsTaggableOn::Tagging.find_by(taggable: person, hitobito_tooltip: person.address)
 
@@ -18,65 +18,65 @@ describe Contactable::AddressValidator do
     expect(tagging.tag).to eq(PersonTags::Validation.address_invalid)
   end
 
-  it 'does not tag person with valid address without street number' do
+  it "does not tag person with valid address without street number" do
     person.address = address.street_short
     person.zip_code = address.zip_code
     person.town = address.town
     person.save!
 
-    expect do
+    expect {
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    }.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 
-  it 'does not tag person with valid address with street number' do
+  it "does not tag person with valid address with street number" do
     person.address = "#{address.street_short} #{address.numbers.first}"
     person.zip_code = address.zip_code
     person.town = address.town
     person.save!
 
-    expect do
+    expect {
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    }.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 
-  it 'does not tag person with valid address and invalid street number' do
+  it "does not tag person with valid address and invalid street number" do
     person.address = "#{address.street_short} 1234"
     person.zip_code = address.zip_code
     person.town = address.town
     person.save!
 
-    expect do
+    expect {
       validator.validate_people
-    end.to change { ActsAsTaggableOn::Tagging.count }
+    }.to change { ActsAsTaggableOn::Tagging.count }
   end
 
-  it 'does not tag people from non imported countries' do
-    person.update!(country: 'DE')
+  it "does not tag people from non imported countries" do
+    person.update!(country: "DE")
 
-    expect do
+    expect {
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    }.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 
-  it 'does not tag people if tagged as override' do
+  it "does not tag people if tagged as override" do
     ActsAsTaggableOn::Tagging
       .create!(taggable: person,
                context: :tags,
                tag: PersonTags::Validation.invalid_address_override(create: true))
 
-    expect do
+    expect {
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    }.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 
-  it 'tags people only once' do
-    expect do
+  it "tags people only once" do
+    expect {
       validator.validate_people
-    end.to change { ActsAsTaggableOn::Tagging.count }.by(1)
+    }.to change { ActsAsTaggableOn::Tagging.count }.by(1)
 
-    expect do
+    expect {
       validator.validate_people
-    end.to_not change { ActsAsTaggableOn::Tagging.count }
+    }.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 end

@@ -22,7 +22,6 @@
 # Kursteilnehmer
 module Event::Course::Role
   class Participant < ::Event::Role::Participant
-
     class << self
       # A course participant is restricted because it may not just be added by
       # a course leader, but only over the special application market view.
@@ -30,6 +29,5 @@ module Event::Course::Role
         true
       end
     end
-
   end
 end

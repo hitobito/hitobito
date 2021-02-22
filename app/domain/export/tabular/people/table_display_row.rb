@@ -16,9 +16,8 @@ module Export::Tabular::People
 
     def value_for(attr)
       table_display.with_permission_check(entry, attr) do
-        super if entry.respond_to?(attr) || dynamic_attributes.keys.any? {|k| attr =~ k }
+        super if entry.respond_to?(attr) || dynamic_attributes.keys.any? { |k| attr =~ k }
       end
     end
-
   end
 end

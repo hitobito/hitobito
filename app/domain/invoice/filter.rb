@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::Filter
-
   attr_reader :params
 
   def initialize(params = {})
@@ -30,7 +27,7 @@ class Invoice::Filter
   end
 
   def cancelled?
-    params[:state] == 'cancelled'
+    params[:state] == "cancelled"
   end
 
   def filter_by_invoice_list_id(relation)
@@ -44,7 +41,6 @@ class Invoice::Filter
   end
 
   def invoice_ids
-    @invoice_ids = params[:ids].to_s.split(',')
+    @invoice_ids = params[:ids].to_s.split(",")
   end
-
 end

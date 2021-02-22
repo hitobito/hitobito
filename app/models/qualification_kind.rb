@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,8 +14,7 @@
 #  reactivateable :integer
 #
 
-class QualificationKind < ActiveRecord::Base
-
+class QualificationKind < ApplicationRecord
   include Paranoia::Globalized
   translates :label, :description
 
@@ -25,19 +22,17 @@ class QualificationKind < ActiveRecord::Base
 
   has_many :qualifications
 
-  has_many :event_kind_qualification_kinds, class_name: 'Event::KindQualificationKind'
+  has_many :event_kind_qualification_kinds, class_name: "Event::KindQualificationKind"
   has_many :event_kinds, through: :event_kind_qualification_kinds
-
 
   ### VALIDATES
 
   validates_by_schema
-  validates :label, presence: true, length: { maximum: 255, allow_nil: true }
-  validates :description, length: { maximum: 1023, allow_nil: true }
-  validates :reactivateable, numericality: { greater_than_or_equal_to: 1, allow_nil: true }
+  validates :label, presence: true, length: {maximum: 255, allow_nil: true}
+  validates :description, length: {maximum: 1023, allow_nil: true}
+  validates :reactivateable, numericality: {greater_than_or_equal_to: 1, allow_nil: true}
 
   validate :assert_validity_when_reactivateable
-
 
   ### INSTANCE METHODS
 
@@ -61,5 +56,4 @@ class QualificationKind < ActiveRecord::Base
       errors.add(:validity, :not_a_valid_number)
     end
   end
-
 end

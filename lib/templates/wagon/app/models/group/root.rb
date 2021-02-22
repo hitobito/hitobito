@@ -1,8 +1,5 @@
-# encoding: utf-8
-
 # TODO: rename class to specific name and change all references
 class Group::Root < ::Group
-
   self.layer = true
 
   # TODO: define actual child group types
@@ -20,5 +17,4 @@ class Group::Root < ::Group
   end
 
   roles Leader, Member
-
 end

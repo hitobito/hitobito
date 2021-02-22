@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PeopleFiltersController < CrudController
-
   self.nesting = Group
 
   decorates :group
@@ -21,7 +20,7 @@ class PeopleFiltersController < CrudController
   end
 
   def create
-    if params[:button] == 'save'
+    if params[:button] == "save"
       authorize!(:create, entry)
       super
     else
@@ -54,8 +53,8 @@ class PeopleFiltersController < CrudController
     if entry.filter_chain.present?
       search_params = {
         name: entry.name,
-        range: entry.range || 'deep',
-        filters: entry.filter_chain.to_params
+        range: entry.range || "deep",
+        filters: entry.filter_chain.to_params,
       }
     end
     people_list_path(search_params)
@@ -79,5 +78,4 @@ class PeopleFiltersController < CrudController
   def load_possible_tags
     @possible_tags ||= PersonTags::Translator.new.possible_tags
   end
-
 end

@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::SubscriptionsController < ApplicationController
-
   skip_authorization_check
 
   def index
@@ -31,7 +30,7 @@ class Person::SubscriptionsController < ApplicationController
 
   def redirect_with_notice
     group = Group.find(params[:group_id])
-    message = t('.success', mailing_list: mailing_list, person: person)
+    message = t(".success", mailing_list: mailing_list, person: person)
     redirect_to group_person_subscriptions_path(group, person), notice: message
   end
 
@@ -51,4 +50,3 @@ class Person::SubscriptionsController < ApplicationController
     mailing_list.subscriptions.create(options.merge(subscriber: person))
   end
 end
-

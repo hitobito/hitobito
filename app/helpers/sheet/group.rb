@@ -5,68 +5,68 @@
 
 module Sheet
   class Group < Base
-    tab 'global.tabs.info',
-        :group_path,
-        no_alt: true
+    tab "global.tabs.info",
+      :group_path,
+      no_alt: true
 
-    tab 'activerecord.models.person.other',
-        :group_people_path,
-        if: :index_people,
-        alt: [:group_roles_path, :new_group_csv_imports_path, :group_person_duplicates_path],
-        params: { returning: true }
+    tab "activerecord.models.person.other",
+      :group_people_path,
+      if: :index_people,
+      alt: [:group_roles_path, :new_group_csv_imports_path, :group_person_duplicates_path],
+      params: {returning: true}
 
-    tab 'activerecord.models.event.other',
-        :simple_group_events_path,
-        params: { returning: true },
-        if: (lambda do |view, group|
-          group.event_types.include?(::Event) &&
-          view.can?(:index_events, group)
-        end)
+    tab "activerecord.models.event.other",
+      :simple_group_events_path,
+      params: {returning: true},
+      if: (lambda do |view, group|
+        group.event_types.include?(::Event) &&
+        view.can?(:index_events, group)
+      end)
 
-    tab 'activerecord.models.event/course.other',
-        :course_group_events_path,
-        params: { returning: true },
-        if: (lambda do |view, group|
-          group.event_types.include?(::Event::Course) &&
-            view.can?(:'index_event/courses', group)
-        end)
+    tab "activerecord.models.event/course.other",
+      :course_group_events_path,
+      params: {returning: true},
+      if: (lambda do |view, group|
+        group.event_types.include?(::Event::Course) &&
+          view.can?(:'index_event/courses', group)
+      end)
 
-    tab 'activerecord.models.mailing_list.other',
-        :group_mailing_lists_path,
-        if: :index_mailing_lists,
-        params: { returning: true }
+    tab "activerecord.models.mailing_list.other",
+      :group_mailing_lists_path,
+      if: :index_mailing_lists,
+      params: {returning: true}
 
     tab :tab_person_add_request_label,
-        :group_person_add_requests_path,
-        if: (lambda do |view, group|
-          group.layer &&
-          view.can?(:index_person_add_requests, group)
-        end)
+      :group_person_add_requests_path,
+      if: (lambda do |view, group|
+        group.layer &&
+        view.can?(:index_person_add_requests, group)
+      end)
 
-    tab 'activerecord.models.note.other',
-        :group_notes_path,
-        if: :index_notes
+    tab "activerecord.models.note.other",
+      :group_notes_path,
+      if: :index_notes
 
-    tab 'groups.tabs.deleted',
-        :deleted_subgroups_group_path,
-        if: :deleted_subgroups
+    tab "groups.tabs.deleted",
+      :deleted_subgroups_group_path,
+      if: :deleted_subgroups
 
-    tab 'activerecord.models.group_setting.other',
-        :group_group_settings_path,
-        if: (lambda do |view, group|
-          view.can?(:update, group)
-        end)
+    tab "activerecord.models.group_setting.other",
+      :group_group_settings_path,
+      if: (lambda do |view, group|
+        view.can?(:update, group)
+      end)
 
     delegate :group_path, to: :view
 
     def render_breadcrumbs
       return FormatHelper::EMPTY_STRING unless breadcrumbs?
 
-      content_tag(:div, class: 'breadcrumb') do
+      content_tag(:div, class: "breadcrumb") do
         content_tag(:ul) do
-          crumbs = breadcrumbs.reverse.collect do |crumb|
+          crumbs = breadcrumbs.reverse.collect { |crumb|
             content_tag(:li, crumb)
-          end
+          }
 
           content_tag(:li, belongs_to) + safe_join(crumbs, divider)
         end
@@ -93,12 +93,12 @@ module Sheet
 
     def breadcrumbs
       entry.parent.hierarchy.collect do |g|
-        link_to(g.to_s, group_path(g), data: { disable_with: g.to_s })
+        link_to(g.to_s, group_path(g), data: {disable_with: g.to_s})
       end
     end
 
     def divider
-      content_tag(:li, '>', class: 'divider')
+      content_tag(:li, ">", class: "divider")
     end
 
     def breadcrumbs?
@@ -110,6 +110,5 @@ module Sheet
         FormatHelper::EMPTY_STRING +
         FormatHelper::EMPTY_STRING
     end
-
   end
 end

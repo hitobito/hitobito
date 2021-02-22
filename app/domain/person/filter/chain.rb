@@ -1,30 +1,27 @@
-# encoding: utf-8
-
 #  Copyright (c) 2017 - 2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Chain
-
   TYPES = [ # rubocop:disable Style/MutableConstant these are meant to be extended in wagons
     Person::Filter::Role,
     Person::Filter::Qualification,
     Person::Filter::Attributes,
     Person::Filter::Tag,
-    Person::Filter::TagAbsence
+    Person::Filter::TagAbsence,
   ]
 
   # Used for `serialize` method in ActiveRecord
   class << self
     def load(yaml)
-      new(YAML.safe_load(yaml || ''))
+      new(YAML.safe_load(yaml || ""))
     end
 
     def dump(obj)
       unless obj.is_a?(self)
         raise ::ActiveRecord::SerializationTypeMismatch,
-              "Attribute was supposed to be a #{self}, but was a #{obj.class}. -- #{obj.inspect}"
+          "Attribute was supposed to be a #{self}, but was a #{obj.class}. -- #{obj.inspect}"
       end
 
       YAML.dump(obj.to_hash.deep_stringify_keys)
@@ -47,12 +44,10 @@ class Person::Filter::Chain
     filters.find { |f| f.attr == attr.to_s }
   end
 
-  def blank?
-    filters.blank?
-  end
+  delegate :blank?, to: :filters
 
   def roles_join
-    first_custom_roles_join || { roles: :group }
+    first_custom_roles_join || {roles: :group}
   end
 
   def to_hash
@@ -87,7 +82,7 @@ class Person::Filter::Chain
     type = filter_type(attr)
     if type
       filter = type.new(attr, args.with_indifferent_access)
-      filter.present? ? filter : nil
+      filter.presence
     end
   end
 
@@ -100,5 +95,4 @@ class Person::Filter::Chain
     # TODO: map filter types for regular person attrs
     attr.to_s
   end
-
 end

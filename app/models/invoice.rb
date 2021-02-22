@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -47,25 +48,24 @@
 #  index_invoices_on_sequence_number  (sequence_number)
 #
 
-class Invoice < ActiveRecord::Base
+class Invoice < ApplicationRecord
   include I18nEnums
   include PaymentSlips
 
-  ROUND_TO = BigDecimal('0.05')
+  ROUND_TO = BigDecimal("0.05")
 
-  SEQUENCE_NR_SEPARATOR = '-'
+  SEQUENCE_NR_SEPARATOR = "-"
 
-  STATES = %w(draft issued sent payed reminded cancelled).freeze
-  STATES_REMINDABLE = %w(issued sent reminded).freeze
-  STATES_PAYABLE = %w(issued sent reminded).freeze
+  STATES = %w[draft issued sent payed reminded cancelled].freeze
+  STATES_REMINDABLE = %w[issued sent reminded].freeze
+  STATES_PAYABLE = %w[issued sent reminded].freeze
 
-  DUE_SINCE = %w(one_day one_week one_month).freeze
+  DUE_SINCE = %w[one_day one_week one_month].freeze
 
   belongs_to :group
-  belongs_to :recipient, class_name: 'Person'
-  belongs_to :creator, class_name: 'Person'
+  belongs_to :recipient, class_name: "Person"
+  belongs_to :creator, class_name: "Person"
   belongs_to :invoice_list, optional: true
-
 
   has_many :invoice_items, dependent: :destroy
   has_many :payments, dependent: :destroy
@@ -79,8 +79,8 @@ class Invoice < ActiveRecord::Base
   before_validation :set_self_in_nested
   before_validation :recalculate
 
-  validates :state, inclusion: { in: STATES }
-  validates :due_at, timeliness: { after: :sent_at }, presence: true, if: :sent?
+  validates :state, inclusion: {in: STATES}
+  validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
   validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_list }
   validate :assert_sendable?, unless: :recipient_id?
   validates_associated :invoice_config
@@ -88,52 +88,51 @@ class Invoice < ActiveRecord::Base
   before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
 
-
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
   i18n_enum :state, STATES, scopes: true, queries: true
 
   validates_by_schema
 
-  scope :list,           -> { order_by_sequence_number }
-  scope :one_day,        -> { where('invoices.due_at < ?', 1.day.ago.to_date) }
-  scope :one_week,       -> { where('invoices.due_at < ?', 1.week.ago.to_date) }
-  scope :one_month,      -> { where('invoices.due_at < ?', 1.month.ago.to_date) }
-  scope :visible,        -> { where.not(state: :cancelled) }
-  scope :remindable,     -> { where(state: STATES_REMINDABLE) }
+  scope :list, -> { order_by_sequence_number }
+  scope :one_day, -> { where("invoices.due_at < ?", 1.day.ago.to_date) }
+  scope :one_week, -> { where("invoices.due_at < ?", 1.week.ago.to_date) }
+  scope :one_month, -> { where("invoices.due_at < ?", 1.month.ago.to_date) }
+  scope :visible, -> { where.not(state: :cancelled) }
+  scope :remindable, -> { where(state: STATES_REMINDABLE) }
 
   class << self
     def draft_or_issued_in(year)
-      return all unless year.to_s =~ /\A\d+\z/
+      return all unless /\A\d+\z/.match?(year.to_s)
       condition = OrCondition.new
-      condition.or('EXTRACT(YEAR FROM issued_at) = ?', year)
-      condition.or('issued_at IS NULL AND EXTRACT(YEAR FROM invoices.created_at) = ?', year)
+      condition.or("EXTRACT(YEAR FROM issued_at) = ?", year)
+      condition.or("issued_at IS NULL AND EXTRACT(YEAR FROM invoices.created_at) = ?", year)
       where(condition.to_a)
     end
 
     def to_contactables(invoices)
-      invoices.collect do |invoice|
+      invoices.collect { |invoice|
         next if invoice.recipient_address.blank?
         Person.new(address: invoice.recipient_address)
-      end.compact
+      }.compact
     end
 
     def order_by_sequence_number
-      order(Arel.sql(order_by_sequence_number_statement.join(', ')))
+      order(Arel.sql(order_by_sequence_number_statement.join(", ")))
     end
 
     # Orders by first integer, second integer
     def order_by_sequence_number_statement
-      %w(sequence_number).product(%w(1 -1)).map do |field, index|
+      %w[sequence_number].product(%w[1 -1]).map do |field, index|
         "CAST(SUBSTRING_INDEX(#{field}, '-', #{index}) AS UNSIGNED)"
       end
     end
   end
 
   def calculated
-    [:total, :cost, :vat].collect do |field|
+    [:total, :cost, :vat].collect { |field|
       [field, round(invoice_items.reject(&:frozen?).sum(&field))]
-    end.to_h
+    }.to_h
   end
 
   def recalculate
@@ -160,13 +159,11 @@ class Invoice < ActiveRecord::Base
     recipient.try(:greeting_name) || recipient_name_from_recipient_address
   end
 
-  def filename(extension = 'pdf')
-    format('%s-%s.%s', self.class.model_name.human, sequence_number, extension)
+  def filename(extension = "pdf")
+    format("%s-%s.%s", self.class.model_name.human, sequence_number, extension)
   end
 
-  def invoice_config
-    group.invoice_config
-  end
+  delegate :invoice_config, to: :group
 
   def state
     ActiveSupport::StringInquirer.new(self[:state])
@@ -209,7 +206,7 @@ class Invoice < ActiveRecord::Base
   def set_payment_attributes
     [:address, :account_number, :iban, :payment_slip,
      :beneficiary, :payee, :participant_number,
-     :participant_number_internal, :vat_number, :currency].each do |at|
+     :participant_number_internal, :vat_number, :currency,].each do |at|
       assign_attributes(at => invoice_config.send(at))
     end
   end

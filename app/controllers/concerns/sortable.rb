@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -30,7 +28,7 @@ module Sortable
     # Puts null and empty strings last
     def null_safe_sort(sort_expression)
       table_attr, direction = sort_expression.split
-      null_safe = 'CASE'
+      null_safe = "CASE"
       null_safe << " WHEN #{table_attr} IS NULL THEN 1"
       null_safe << " WHEN #{table_attr} = '' THEN 1"
       null_safe << " ELSE 0 END #{direction}"
@@ -40,7 +38,6 @@ module Sortable
 
   # Prepended methods for sorting.
   module Prepends
-
     private
 
     # Enhance the list entries with an optional sort order.
@@ -55,6 +52,7 @@ module Sortable
     def sorting?
       params[:sort].present? && sortable?(params[:sort])
     end
+
     # Return sort columns from defined mappings or as null_safe_sort from parameter.
     def sort_columns
       sort_mappings_with_indifferent_access[params[:sort]] ||
@@ -63,12 +61,12 @@ module Sortable
 
     # Return the sort expression to be used in the list query.
     def sort_expression
-      Array(sort_columns).collect { |c| "#{c} #{sort_dir}" }.join(', ')
+      Array(sort_columns).collect { |c| "#{c} #{sort_dir}" }.join(", ")
     end
 
     # The sort direction, either 'asc' or 'desc'.
     def sort_dir
-      params[:sort_dir] == 'desc' ? 'desc' : 'asc'
+      params[:sort_dir] == "desc" ? "desc" : "asc"
     end
 
     # Returns true if the passed attribute is sortable.

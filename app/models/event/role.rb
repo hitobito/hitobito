@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -19,8 +17,7 @@
 #  index_event_roles_on_type              (type)
 #
 
-class Event::Role < ActiveRecord::Base
-
+class Event::Role < ApplicationRecord
   # rubocop:disable Naming/ConstantName,Style/MutableConstant
 
   Permissions = [:event_full, :participations_full, :participations_read, :qualify]
@@ -49,17 +46,14 @@ class Event::Role < ActiveRecord::Base
 
   self.demodulized_route_keys = true
 
-
   ### ASSOCIATIONS
 
   belongs_to :participation, inverse_of: :roles
-
 
   has_one :event, through: :participation
   has_one :person, through: :participation
 
   after_validation :validate_new_participation
-
 
   validates_by_schema
 
@@ -90,7 +84,6 @@ class Event::Role < ActiveRecord::Base
       kind.nil?
     end
   end
-
 
   ### INSTANCE METHODS
 
@@ -147,7 +140,7 @@ class Event::Role < ActiveRecord::Base
 
   def destroyed_by_participation?
     destroyed_by_association &&
-    destroyed_by_association.active_record == Event::Participation
+      destroyed_by_association.active_record == Event::Participation
   end
 
   def applying_participant?
@@ -156,7 +149,6 @@ class Event::Role < ActiveRecord::Base
 
   def update_participant_count
     event ||= participation.event
-    event.refresh_participant_counts! if event
+    event&.refresh_participant_counts!
   end
-
 end

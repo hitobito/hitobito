@@ -29,7 +29,7 @@
 class Message::TextMessage < Message
   self.icon = :sms
 
-  validates :text, length: { minimum: 1, maximum: 160 }
+  validates :text, length: {minimum: 1, maximum: 160}
 
   def subject
     text && text[0..20]

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -19,12 +17,11 @@
 #  index_related_role_types_on_role_type                      (role_type)
 #
 
-class RelatedRoleType < ActiveRecord::Base
-
+class RelatedRoleType < ApplicationRecord
   belongs_to :relation, polymorphic: true
 
   validates_by_schema
-  validates :role_type, inclusion: { in: ->(_) { Role.all_types.collect(&:sti_name) } }
+  validates :role_type, inclusion: {in: ->(_) { Role.all_types.collect(&:sti_name) }}
 
   def to_s(_format = :default)
     role_class.label_long
@@ -37,5 +34,4 @@ class RelatedRoleType < ActiveRecord::Base
   def group_class
     role_class.model_name.to_s.deconstantize.constantize
   end
-
 end

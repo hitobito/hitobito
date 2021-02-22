@@ -1,11 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2014, CEVI Regionalverband ZH-SH-GL. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'oat/adapters/json_api'
+require "oat/adapters/json_api"
 
 class ApplicationSerializer < Oat::Serializer
   adapter Oat::Adapters::JsonAPI
@@ -57,7 +55,7 @@ class ApplicationSerializer < Oat::Serializer
 
   # alternative to store custom link templates
   def template_link(key, type, href, options = {})
-    template_links[key] = options.merge(href: href.gsub('%7B', '{').gsub('%7D', '}'),
+    template_links[key] = options.merge(href: href.gsub("%7B", "{").gsub("%7D", "}"),
                                         type: type.to_s.pluralize)
   end
 
@@ -102,7 +100,7 @@ class ApplicationSerializer < Oat::Serializer
       objects.each do |attrs|
         type = attrs.delete(:type)
         # do not add attrs consisting only of an :id
-        next if attrs.keys.collect(&:to_s) == %w(id)
+        next if attrs.keys.collect(&:to_s) == %w[id]
         # combine linked entries by type
         list = hash[:linked][type || link]
         unless list.include?(attrs)
@@ -117,5 +115,4 @@ class ApplicationSerializer < Oat::Serializer
     hash[:links] ||= {}
     hash[:links].merge!(template_links)
   end
-
 end

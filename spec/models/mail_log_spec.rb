@@ -21,19 +21,18 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe MailLog do
-
-  let(:mail)  { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'simple.eml'))) }
-  let(:mail_log) do 
+  let(:mail) { Mail.new(File.read(Rails.root.join("spec", "fixtures", "email", "simple.eml"))) }
+  let(:mail_log) do
     log = MailLog.build(mail)
     log.save!
     log
   end
 
-  context 'mail=' do
-    it 'assigns bulk mail message' do
+  context "mail=" do
+    it "assigns bulk mail message" do
       log = MailLog.new
       log.mail = mail
 
@@ -41,13 +40,13 @@ describe MailLog do
     end
   end
 
-  context '#update' do
-    context 'changes message state' do
-      { retreived: :pending,
-        bulk_delivering: :processing,
-        completed: :finished,
-        unkown_recipient: :failed,
-        sender_rejected: :failed }.each_pair do |log_status, expected_message_state|
+  context "#update" do
+    context "changes message state" do
+      {retreived: :pending,
+       bulk_delivering: :processing,
+       completed: :finished,
+       unkown_recipient: :failed,
+       sender_rejected: :failed,}.each_pair do |log_status, expected_message_state|
         it "to #{expected_message_state} if mail_log status is #{log_status}" do
           mail_log.update!(status: log_status)
 

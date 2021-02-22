@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module TableHelper
-
   # Renders a table for the given entries. One column is rendered for each attribute passed.
   # If a block is given, the columns defined therein are appended to the attribute columns.
   # If entries is empty, an appropriate message is rendered.
@@ -12,14 +11,14 @@ module TableHelper
   def table(entries, *attrs) # rubocop:disable Metrics/MethodLength
     entries.to_a # force evaluation of relation
     if entries.present?
-      content_tag(:div, class: 'table-responsive') do
+      content_tag(:div, class: "table-responsive") do
         StandardTableBuilder.table(entries, self, attrs.extract_options!) do |t|
           t.attrs(*attrs)
           yield t if block_given?
         end
       end
     else
-      content_tag(:div, ti(:no_list_entries), class: 'table')
+      content_tag(:div, ti(:no_list_entries), class: "table")
     end
   end
 
@@ -28,7 +27,7 @@ module TableHelper
   # as the last argument.
   def list_table(*attrs)
     options = attrs.extract_options!
-    add_css_class(options, 'table table-striped table-hover')
+    add_css_class(options, "table table-striped table-hover")
     # only use default attrs if no attrs and no block are given
     attributes = block_given? || attrs.present? ? attrs : default_attrs
     table(entries, options) do |t|
@@ -78,7 +77,7 @@ module TableHelper
 
   # Defines a column with an action link.
   def action_col(table, &block)
-    table.col('', class: 'action', &block)
+    table.col("", class: "action", &block)
   end
 
   # The default attributes to use in attrs, list and form partials.
@@ -94,5 +93,4 @@ module TableHelper
     attrs = yield if attrs.blank?
     attrs << options
   end
-
 end

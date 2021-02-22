@@ -7,7 +7,6 @@
 
 module Messages
   class LetterWithInvoiceDispatch < LetterDispatch
-
     def initialize(*args)
       super
       @invoice_list = @message.invoice_list

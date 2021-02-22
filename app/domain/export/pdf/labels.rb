@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 module Export::Pdf
   class Labels
-
     attr_reader :format
 
     def initialize(format)
@@ -26,8 +23,8 @@ module Export::Pdf
         name = to_name(contactable)
 
         print_address_in_bounding_box(pdf,
-                                      address(contactable, name),
-                                      position(pdf, i))
+          address(contactable, name),
+          position(pdf, i))
       end
 
       pdf.render
@@ -46,8 +43,8 @@ module Export::Pdf
     # print with automatic line wrap
     def print_address_in_bounding_box(pdf, address, pos)
       pdf.bounding_box(pos,
-                       width: format.width.mm - min_border,
-                       height: format.height.mm - min_border) do
+        width: format.width.mm - min_border,
+        height: format.height.mm - min_border) do
         left = format.padding_left.mm
         top = format.height.mm - format.padding_top.mm - min_border
         # pdf.stroke_bounds
@@ -71,13 +68,13 @@ module Export::Pdf
     end
 
     def address(contactable, name)
-      address = ''
+      address = ""
       address << contactable.company_name << "\n" if print_company?(contactable)
       address << contactable.nickname << "\n" if print_nickname?(contactable)
       address << name << "\n" if name.present?
       address << contactable.address.to_s
-      address << "\n" unless contactable.address =~ /\n\s*$/
-      address << contactable.zip_code.to_s << ' ' << contactable.town.to_s << "\n"
+      address << "\n" unless /\n\s*$/.match?(contactable.address)
+      address << contactable.zip_code.to_s << " " << contactable.town.to_s << "\n"
       address << contactable.country_label unless contactable.ignored_country?
       address
     end
@@ -105,13 +102,12 @@ module Export::Pdf
     def print_pp_post(pdf, at)
       pdf.text_box("<u><font size='12'><b>P.P.</b></font> " \
                    "<font size='8'>#{format.pp_post}  Post CH AG</font></u>",
-                   inline_format: true,
-                   at: at)
+        inline_format: true,
+        at: at)
     end
 
     def min_border
       Settings.pdf.labels.min_border.to_i.mm
     end
-
   end
 end

@@ -4,34 +4,18 @@ AllCops:
   DisplayCopNames: true
   DisabledByDefault: true
   Exclude:
+    - Rakefile
     - db/**/*
     - config/**/*
     - bin/**/*
     - spec/**/*
     - vendor/**/*
     - tmp/**/*
-    - vendor/bundle/**/*
+    - app/assets/config.rb
     - node_modules/**/*
 
+# inherit_gem:
+#   standard: config/base.yml
 
-Metrics/CyclomaticComplexity:
-  Max: 8  # Try to reduce this value
-
-Metrics/ClassLength:
-  Max: 220  # Try to reduce this value
-
-Metrics/LineLength:
-  Max: 100
-  IgnoreCopDirectives: true
-
-Metrics/MethodLength:
-  Max: 18  # Try to reduce this value
-
-Metrics/ModuleLength:
-  Max: 200 # Try to reduce this value
-
-Metrics/ParameterLists:
-  Max: 6
-
-Metrics/AbcSize:
-  Max: 36 # Try to reduce this value
+inherit_from:
+  - .rubocop_strict.yml

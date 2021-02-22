@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class OauthAbility < AbilityDsl::Base
-
   on(Oauth::Application) do
     class_side(:index).if_admin
     permission(:admin).may(:manage).all
@@ -24,5 +23,4 @@ class OauthAbility < AbilityDsl::Base
     class_side(:index).if_admin
     permission(:admin).may(:manage).all
   end
-
 end

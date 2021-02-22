@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: help_texts
@@ -19,10 +20,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class HelpText < ActiveRecord::Base
-  COLUMN_BLACKLIST = %w(id created_at updated_at deleted_at).freeze
+class HelpText < ApplicationRecord
+  COLUMN_BLACKLIST = %w[id created_at updated_at deleted_at].freeze
 
-  validates :name, uniqueness: { scope: [:controller, :model, :kind], case_sensitive: false }
+  validates :name, uniqueness: {scope: [:controller, :model, :kind], case_sensitive: false}
   validates :body, presence: true, no_attachments: true
   before_validation :assign_combined_fields, if: :new_record?
 
@@ -35,13 +36,12 @@ class HelpText < ActiveRecord::Base
 
   attr_accessor :context, :key
 
-
   def self.list
     order(Arel.sql(HelpTexts::List.new.order_statement)).order(:kind)
   end
 
   def to_s
-    [entry.to_s, entry.translate(kind, name)].join(' - ') if persisted?
+    [entry.to_s, entry.translate(kind, name)].join(" - ") if persisted?
   end
 
   def entry
@@ -49,8 +49,8 @@ class HelpText < ActiveRecord::Base
   end
 
   def assign_combined_fields
-    assign_and_validate(:context, '--', :controller, :model)
-    assign_and_validate(:key, '.', :kind, :name)
+    assign_and_validate(:context, "--", :controller, :model)
+    assign_and_validate(:key, ".", :kind, :name)
   end
 
   private
@@ -62,5 +62,4 @@ class HelpText < ActiveRecord::Base
     end
     errors.add(attr, :invalid) if fields.any? { |field| send(field).blank? }
   end
-
 end

@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Event::QualificationsController < ApplicationController
-
   before_action :authorize_write, except: :index
   before_action :authorize_read, only: :index
 
@@ -29,7 +26,7 @@ class Event::QualificationsController < ApplicationController
     end
 
     redirect_to group_event_qualifications_path(group, event),
-                notice: t('event.qualifications.update.flash.success')
+      notice: t("event.qualifications.update.flash.success")
   end
 
   private
@@ -65,5 +62,4 @@ class Event::QualificationsController < ApplicationController
   def event_qualifying
     not_found unless event.course_kind? && event.qualifying?
   end
-
 end

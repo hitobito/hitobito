@@ -4,7 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::HouseholdsController < ApplicationController
-
   def new
     authorize!(:update, person)
     person.attributes = permitted_params
@@ -27,10 +26,9 @@ class Person::HouseholdsController < ApplicationController
 
   def permitted_params
     params.require(:person).permit(:address,
-                                   :zip_code,
-                                   :town,
-                                   :country,
-                                   household_people_ids: [])
+      :zip_code,
+      :town,
+      :country,
+      household_people_ids: [])
   end
-
 end

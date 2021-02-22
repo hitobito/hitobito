@@ -1,14 +1,11 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_relative Rails.root.join('app', 'models', 'countries')
+require_relative Rails.root.join("app", "models", "countries")
 
 module Contactable
-
   extend ActiveSupport::Concern
 
   ACCESSIBLE_ATTRS = [:email, :address, :zip_code, :town, :country, # rubocop:disable Style/MutableConstant extension point
@@ -17,17 +14,17 @@ module Contactable
                       social_accounts_attributes:
                         [:id, :name, :translated_label, :public, :_destroy],
                       additional_emails_attributes:
-                        [:id, :email, :translated_label, :public, :mailings, :_destroy]]
+                        [:id, :email, :translated_label, :public, :mailings, :_destroy],]
 
   included do
     has_many :phone_numbers, as: :contactable, dependent: :destroy
     has_many :social_accounts, as: :contactable, dependent: :destroy
     has_many :additional_emails, as: :contactable, dependent: :destroy
 
-    belongs_to :location, foreign_key: 'zip_code', primary_key: 'zip_code'
+    belongs_to :location, foreign_key: "zip_code", primary_key: "zip_code"
 
     accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails,
-                                  allow_destroy: true
+      allow_destroy: true
 
     before_validation :set_self_in_nested
 
@@ -83,5 +80,4 @@ module Contactable
       all.extending(Person::PreloadPublicAccounts)
     end
   end
-
 end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 module AbilityDsl::Constraints::Event
   module Participation
-
     def her_own_or_for_participations_full_events
       her_own || for_participations_full_events
     end
@@ -56,6 +53,5 @@ module AbilityDsl::Constraints::Event
     def course_offerers
       @course_offerers ||= Group.course_offerers.pluck(:id)
     end
-
   end
 end

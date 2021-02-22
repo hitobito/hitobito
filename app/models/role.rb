@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -23,10 +21,9 @@
 #  index_roles_on_type                    (type)
 #
 
-class Role < ActiveRecord::Base
-
-  has_paper_trail meta: { main_id: ->(r) { r.person_id },
-                          main_type: Person.sti_name },
+class Role < ApplicationRecord
+  has_paper_trail meta: {main_id: ->(r) { r.person_id },
+                         main_type: Person.sti_name,},
                   skip: [:updated_at]
 
   acts_as_paranoid
@@ -80,7 +77,7 @@ class Role < ActiveRecord::Base
     model_name = self.class.label
     string = label? ? "#{model_name} (#{label})" : model_name
     if format == :long
-      I18n.t('activerecord.attributes.role.string_long', role: string, group: group.to_s)
+      I18n.t("activerecord.attributes.role.string_long", role: string, group: group.to_s)
     else
       string
     end
@@ -107,7 +104,7 @@ class Role < ActiveRecord::Base
   # If this role was the last one with contact_data permission, remove the flag from the person
   def reset_contact_data_visible
     if permissions.include?(:contact_data) &&
-       !person.roles.collect(&:permissions).flatten.include?(:contact_data)
+        !person.roles.collect(&:permissions).flatten.include?(:contact_data)
       person.update_column :contact_data_visible, false
     end
   end

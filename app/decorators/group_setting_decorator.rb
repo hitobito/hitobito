@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupSettingDecorator < ApplicationDecorator
-
   def translated_values
-    object.attrs.collect do |a|
+    object.attrs.collect { |a|
       "#{t(a)}: #{formatted_value(a)}"
-    end.join(', ')
+    }.join(", ")
   end
 
   def to_s
@@ -24,16 +23,15 @@ class GroupSettingDecorator < ApplicationDecorator
   private
 
   def t(key)
-    prefix = 'activerecord.attributes.group_setting'
+    prefix = "activerecord.attributes.group_setting"
     I18n.t("#{prefix}.#{key}")
   end
 
   def formatted_value(attr)
     if attr.eql?(:password)
-      '****'
+      "****"
     else
       object.send(attr)
     end
   end
-
 end

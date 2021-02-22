@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -10,8 +8,8 @@ Fabricator(:person) do
   last_name { Faker::Name.last_name }
   nickname { Faker::Name.first_name }
   email do |attrs|
-    first = attrs[:first_name].downcase.gsub(/[^a-z]/, '')
-    last = attrs[:last_name].downcase.gsub(/[^a-z]/, '')
+    first = attrs[:first_name].downcase.gsub(/[^a-z]/, "")
+    last = attrs[:last_name].downcase.gsub(/[^a-z]/, "")
     "#{first}.#{last}#{sequence}@hitobito.example.com"
   end
 end

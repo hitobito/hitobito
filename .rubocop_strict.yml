@@ -1,0 +1,41 @@
+Metrics/CyclomaticComplexity:
+  Max: 8  # Try to reduce this value
+
+Metrics/ClassLength:
+  Max: 220  # Try to reduce this value
+
+Metrics/LineLength:
+  Max: 100
+  IgnoreCopDirectives: true
+
+Metrics/MethodLength:
+  Max: 18  # Try to reduce this value
+
+Metrics/ModuleLength:
+  Max: 200 # Try to reduce this value
+
+Metrics/ParameterLists:
+  Max: 6
+
+Metrics/AbcSize:
+  Max: 36 # Try to reduce this value
+
+Lint/Debugger: # don't leave binding.pry
+  Enabled: true
+  Exclude: []
+
+RSpec/Focus: # run ALL tests on CI
+  Enabled: true
+  Exclude: []
+
+Rails/Output: # Don't leave puts-debugging
+  Enabled: true
+  Exclude: []
+
+Rails/FindEach: # each could severely affect the performance, use find_each
+  Enabled: true
+  Exclude: []
+
+Rails/UniqBeforePluck: # uniq.pluck and not pluck.uniq
+  Enabled: true
+  Exclude: []

@@ -6,8 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 require_dependency Devise::Engine.root
-                                 .join('app', 'controllers', 'devise', 'sessions_controller')
-                                 .to_s
+  .join("app", "controllers", "devise", "sessions_controller")
+  .to_s
 
 class Devise::SessionsController < DeviseController
   layout :devise_layout
@@ -34,15 +34,14 @@ class Devise::SessionsController < DeviseController
     private
 
     def devise_layout
-      if params['oauth'] == 'true'
-        'oauth'
+      if params["oauth"] == "true"
+        "oauth"
       else
-        'application'
+        "application"
       end
     end
   end
 
   prepend Json
   prepend OauthSigninLayout
-
 end

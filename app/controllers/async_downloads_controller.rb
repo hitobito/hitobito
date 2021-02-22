@@ -1,12 +1,9 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class AsyncDownloadsController < ApplicationController
-
   skip_authorization_check
 
   def show
@@ -15,11 +12,11 @@ class AsyncDownloadsController < ApplicationController
       Cookies::AsyncDownload.new(cookies).remove(name: params[:id], type: file_type)
 
       data = File.read(async_download_file.full_path)
-      data = css_encoding(data) if file_type == 'csv'
+      data = css_encoding(data) if file_type == "csv"
 
       send_data data, filename: filename(file_type)
     else
-      render 'errors/404', status: 404
+      render "errors/404", status: 404
     end
   end
 
@@ -27,7 +24,7 @@ class AsyncDownloadsController < ApplicationController
     status = async_download_file.downloadable?(current_person) ? 200 : 404
 
     respond_to do |format|
-      format.json { render json: { status: status } }
+      format.json { render json: {status: status} }
     end
   end
 
@@ -44,5 +41,4 @@ class AsyncDownloadsController < ApplicationController
   def css_encoding(data)
     data.force_encoding(Settings.csv.encoding)
   end
-
 end

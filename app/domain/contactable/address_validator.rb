@@ -7,7 +7,6 @@
 
 module Contactable
   class AddressValidator
-
     def validate_people
       scope.includes(:tags).find_each do |person|
         next unless should_be_validated?(person)
@@ -23,8 +22,8 @@ module Contactable
     def scope
       Person
         .where(country: Settings.addresses.imported_countries)
-        .where.not(address: '')
-        .where.not(zip_code: '')
+        .where.not(address: "")
+        .where.not(zip_code: "")
     end
 
     private

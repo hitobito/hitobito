@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +5,6 @@
 
 module AbilityDsl::Constraints
   module Group
-
     # uses the group where the corresponding permission is defined
     def in_same_group
       group && permission_in_group?(group.id)
@@ -19,7 +16,7 @@ module AbilityDsl::Constraints
 
     def in_same_group_or_below
       group &&
-      permission_in_groups?(group.local_hierarchy.collect(&:id))
+        permission_in_groups?(group.local_hierarchy.collect(&:id))
     end
 
     # uses the layers where the corresponding permission is defined
@@ -40,6 +37,5 @@ module AbilityDsl::Constraints
     def group
       subject.group
     end
-
   end
 end

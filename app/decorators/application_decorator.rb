@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -41,14 +39,13 @@ class ApplicationDecorator < Draper::Decorator
   private
 
   def modification_info(at, person)
-    return '' if at.nil?
+    return "" if at.nil?
 
     html = I18n.localize(at, format: :date_time)
     if person.present?
-      html << ' '
+      html << " "
       html << h.link_to_if(can?(:show, person), person.to_s, h.person_path(person.id))
     end
     html.html_safe
   end
-
 end

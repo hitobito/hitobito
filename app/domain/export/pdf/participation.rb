@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,18 +5,17 @@
 
 module Export::Pdf
   module Participation
-
     class Runner
       def render(participation)
-        pdf = Prawn::Document.new(page_size: 'A4',
+        pdf = Prawn::Document.new(page_size: "A4",
                                   page_layout: :portrait,
                                   margin: 2.cm)
         customize(pdf)
         sections.each { |section| section.new(pdf, participation).render }
-        pdf.number_pages(I18n.t('event.participations.print.page_of_pages'),
-                         at: [0, 0],
-                         align: :right,
-                         size: 9)
+        pdf.number_pages(I18n.t("event.participations.print.page_of_pages"),
+          at: [0, 0],
+          align: :right,
+          size: 9)
         pdf.render
       end
 
@@ -44,7 +41,7 @@ module Export::Pdf
 
     def self.filename(participation)
       parts = [participation.event.name, participation.person.full_name]
-      "#{parts.join('-').parameterize(separator: '_')}.pdf"
+      "#{parts.join("-").parameterize(separator: "_")}.pdf"
     end
   end
 end

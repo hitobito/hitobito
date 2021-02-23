@@ -54,13 +54,13 @@ Fabricator(:invoice) do
 end
 
 Fabricator(:invoice_article) do
-  number    { Faker::Number.hexadecimal(5).to_s.upcase }
+  number    { Faker::Number.hexadecimal(digits: 5).to_s.upcase }
   name      { Faker::Commerce.product_name }
   unit_cost { (Faker::Commerce.price / 0.05).to_i * 0.05.to_d }
 end
 
 Fabricator(:payment_reminder) do
   title    { Faker::Lorem.sentence }
-  text     { Faker::Lorem.sentence(5) }
+  text     { Faker::Lorem.sentence(word_count: 5) }
   level    { 1 }
 end

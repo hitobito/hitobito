@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -58,6 +58,7 @@ class Event::Course < Event
 
   self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids,
                            :requires_approval, :display_booking_info, :waiting_list]
+  self.used_attributes -= [:globally_visible]
 
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,

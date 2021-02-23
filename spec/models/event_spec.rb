@@ -741,6 +741,10 @@ describe Event do
       is_expected.to respond_to :globally_visible?
     end
 
+    it 'is a used attribute' do
+      is_expected.to be_attr_used(:globally_visible)
+    end
+
     context 'has a default set by settings, which' do
       it 'can be off by default' do
         expect(subject.read_attribute(:globally_visible)).to be_nil

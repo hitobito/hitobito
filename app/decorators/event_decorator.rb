@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -123,6 +123,18 @@ class EventDecorator < ApplicationDecorator
     label = to_s
     label += " (#{number})" if number?
     h.safe_join([groups.first.to_s, label], ': ')
+  end
+
+  def globally_visible
+    if object.globally_visible.nil?
+      Settings.event.globally_visible_by_default
+    else
+      super
+    end
+  end
+
+  def globally_visible?
+    !!globally_visible
   end
 
   private

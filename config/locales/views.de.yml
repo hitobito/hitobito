@@ -418,6 +418,7 @@ de:
       caption_applications_cancelable: Teilnehmende können sich selbst abmelden.
       caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar.
       caption_waiting_list: Wenn keine Plätze mehr frei sind, landen neue Anmeldungen automatisch auf der Warteliste.
+      caption_globally_visible: '%{model_name} für die ganze Datenbank sichtbar machen'
     form_tabs:
       general: Allgemein
       application_questions: Anmeldeangaben

@@ -87,7 +87,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                           :external_applications, :applications_cancelable,
                           :signature, :signature_confirmation, :signature_confirmation_text,
                           :required_contact_attrs, :hidden_contact_attrs,
-                          :participations_visible]
+                          :participations_visible, :globally_visible]
 
   # All participation roles that exist for this event
   self.role_types = [Event::Role::Leader,

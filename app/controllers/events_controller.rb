@@ -14,20 +14,21 @@ class EventsController < CrudController
 
   # Respective event attrs are added in corresponding instance method.
   self.permitted_attrs = [:signature, :signature_confirmation, :signature_confirmation_text,
-                          :display_booking_info, :participations_visible,
-                          group_ids: [],
-                          dates_attributes: [
-                            :id, :label, :location, :start_at, :start_at_date,
-                            :start_at_hour, :start_at_min, :finish_at,
-                            :finish_at_date, :finish_at_hour, :finish_at_min,
-                            :_destroy
-                          ],
-                          application_questions_attributes: [
-                            :id, :question, :choices, :multiple_choices, :_destroy, :required
-                          ],
-                          admin_questions_attributes: [
-                            :id, :question, :choices, :multiple_choices, :_destroy
-                          ]]
+                          :display_booking_info, :participations_visible, {
+                            group_ids: [],
+                            dates_attributes: [
+                              :id, :label, :location, :start_at, :start_at_date,
+                              :start_at_hour, :start_at_min, :finish_at,
+                              :finish_at_date, :finish_at_hour, :finish_at_min,
+                              :_destroy
+                            ],
+                            application_questions_attributes: [
+                              :id, :question, :choices, :multiple_choices, :_destroy, :required
+                            ],
+                            admin_questions_attributes: [
+                              :id, :question, :choices, :multiple_choices, :_destroy
+                            ]
+                          }]
 
 
   self.remember_params += [:year]

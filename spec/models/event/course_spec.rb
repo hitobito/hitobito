@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -130,4 +130,10 @@ describe Event::Course do
 
   end
 
+  context 'globally visible' do
+    it 'is not used by courses, they are always globally visible' do
+      # See EventAbility for details
+      is_expected.to_not be_attr_used(:globally_visible)
+    end
+  end
 end

@@ -15,7 +15,7 @@ describe MigrateMailLog do
   before(:all) { self.use_transactional_tests = false }
   after(:all)  { self.use_transactional_tests = true }
 
-  let(:migration) { described_class.new }
+  let(:migration) { described_class.new.tap { |m| m.verbose = false } }
   let(:mailing_list) { mailing_lists(:leaders) }
 
   let(:mail_logs) do
@@ -49,7 +49,6 @@ describe MigrateMailLog do
   end
 
   context '#up' do
-
     let(:legacy_mail_logs) do
       10.times.collect do
         MailLog.create!(

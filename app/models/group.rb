@@ -109,7 +109,7 @@ class Group < ActiveRecord::Base
            dependent: :destroy
 
 
-  has_settings :text_message_provider, class_name: 'GroupSetting'
+  has_settings :text_message_provider, :messages_letter, class_name: 'GroupSetting'
 
   ### VALIDATIONS
 

@@ -4,4 +4,10 @@
 -#  https://github.com/hitobito/hitobito.
 
 = render 'modal_crud/modal' do
-  = modal_entry_form(*entry.attrs, group_setting_form_params)
+  = modal_entry_form(nil, group_setting_form_params) do |f|
+    - entry.attrs.each do |a|
+      - if a.eql?(:picture)
+        = f.labeled a do
+          = f.file_field a, type: :file, accept: GroupSetting::LogoUploader.accept_extensions
+      - else
+        = f.labeled_input_field(a)

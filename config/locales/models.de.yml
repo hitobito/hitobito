@@ -706,6 +706,7 @@ de:
 
       message/letter:
         body: Inhalt
+        heading: Briefkopf
 
       subscription:
         related_role_types: Rollen

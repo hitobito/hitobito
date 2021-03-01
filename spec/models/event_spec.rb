@@ -745,12 +745,11 @@ describe Event do
       is_expected.to be_attr_used(:globally_visible)
     end
 
+
     context 'has a default set by settings, which' do
       it 'can be off by default' do
         expect(subject.read_attribute(:globally_visible)).to be_nil
-        expect(Settings.event).to receive(:globally_visible_by_default).and_return(false)
-
-        subject.save
+        allow(Settings.event).to receive(:globally_visible_by_default).and_return(false)
 
         expect(subject.globally_visible).to be false
         is_expected.to_not be_globally_visible
@@ -758,9 +757,7 @@ describe Event do
 
       it 'can be on by default' do
         expect(subject.read_attribute(:globally_visible)).to be_nil
-        expect(Settings.event).to receive(:globally_visible_by_default).and_return(true)
-
-        subject.save
+        allow(Settings.event).to receive(:globally_visible_by_default).and_return(true)
 
         expect(subject.globally_visible).to be true
         is_expected.to be_globally_visible
@@ -771,8 +768,6 @@ describe Event do
         expect(subject.read_attribute(:globally_visible)).to be true
         allow(Settings.event).to receive(:globally_visible_by_default).and_return(false)
 
-        subject.save
-
         expect(subject.globally_visible).to be true
         is_expected.to be_globally_visible
       end
@@ -781,8 +776,6 @@ describe Event do
         subject.globally_visible = false
         expect(subject.read_attribute(:globally_visible)).to be false
         allow(Settings.event).to receive(:globally_visible_by_default).and_return(true)
-
-        subject.save
 
         expect(subject.globally_visible).to be false
         is_expected.to_not be_globally_visible

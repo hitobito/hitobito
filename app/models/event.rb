@@ -158,7 +158,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   before_validation :set_self_in_nested
   before_validation :set_signature, if: :signature_confirmation?
-  before_validation :set_globally_visible_default, if: :globally_visible_nil?
 
   accepts_nested_attributes_for :dates, :application_questions, :admin_questions,
                                 allow_destroy: true
@@ -404,14 +403,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def set_signature
     self.signature = true
-  end
-
-  def globally_visible_nil?
-    globally_visible.nil?
-  end
-
-  def set_globally_visible_default
-    self.globally_visible = Settings.event.globally_visible_by_default
   end
 
 end

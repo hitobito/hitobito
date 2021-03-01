@@ -212,6 +212,32 @@ describe MailRelay::Lists do
     end
   end
 
+  context 'unsubscribe link' do
+    let(:from) { people(:top_leader).email }
+    mail_text = "Hallo Pascal\r\n\r\nWhatup?\r\n\r\n\r\nLiebe Grüsse Tinu\r\n\r\n"
+    mail_text_with_unsubscribe = mail_text + 'Abmelden / Unsubscribe: http://localhost:3000/groups/834963567/mailing_lists/55339926'
+    unsubscribe_link = 'Abmelden / Unsubscribe: http://localhost:3000/groups/834963567/mailing_lists/55339926'
+
+    before do
+      create_individual_subscribers
+    end
+
+    it 'appends unsubscribe link if mailing list subscribable' do
+      list.update!(subscribable: true)
+      expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+      expect(last_email.body).to eq(mail_text_with_unsubscribe)
+      expect(last_email.body).not_to eq(mail_text)
+      expect(last_email.body).to include(unsubscribe_link)
+    end
+
+    it 'does not append unsubscribe link if mailing list not subscribable' do
+      list.update!(subscribable: false)
+      expect { subject.relay }.to change { ActionMailer::Base.deliveries.size }.by(1)
+      expect(last_email.body).not_to eq(mail_text_with_unsubscribe)
+      expect(last_email.body).to eq(mail_text)
+    end
+  end
+
   context 'additional wildcard sender' do
     let(:from) { 'news@example.com' }
 
@@ -253,7 +279,6 @@ describe MailRelay::Lists do
       end
     end
   end
-
 
   context 'list member' do
     before { create_individual_subscribers }

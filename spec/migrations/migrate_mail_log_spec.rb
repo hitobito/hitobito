@@ -22,9 +22,9 @@ describe MigrateMailLog do
     10.times.collect do
       MailLog.create!(
         mail_from: Faker::Internet.email,
-        mail_hash: Digest::MD5.new.hexdigest(Faker::Lorem.characters(200)),
+        mail_hash: Digest::MD5.new.hexdigest(Faker::Lorem.characters(number: 200)),
         status: MailLog.statuses.to_a.sample.first,
-        updated_at: Faker::Time.between(DateTime.now - 3.months, DateTime.now)
+        updated_at: Faker::Time.between(from: DateTime.now - 3.months, to: DateTime.now)
       )
     end
   end
@@ -55,9 +55,9 @@ describe MigrateMailLog do
           mailing_list_id: mailing_list.id,
           mail_subject: Faker::Book.title,
           mail_from: Faker::Internet.email,
-          mail_hash: Digest::MD5.new.hexdigest(Faker::Lorem.characters(200)),
+          mail_hash: Digest::MD5.new.hexdigest(Faker::Lorem.characters(number: 200)),
           status: MailLog.statuses.to_a.sample.first,
-          updated_at: Faker::Time.between(DateTime.now - 3.months, DateTime.now)
+          updated_at: Faker::Time.between(from: DateTime.now - 3.months, to: DateTime.now)
         )
       end
     end

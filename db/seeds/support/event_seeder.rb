@@ -27,7 +27,7 @@ class EventSeeder
       maximum_participants: rand(30) + 10,
       location: event_location,
       motto: Faker::Lorem.sentence,
-      description: Faker::Lorem.paragraphs(rand(1..3)).join("\n"),
+      description: Faker::Lorem.paragraphs(number: rand(1..3)).join("\n"),
       application_opening_at: date,
       application_closing_at: date + 60.days
     }

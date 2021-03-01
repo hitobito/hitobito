@@ -338,6 +338,20 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     self.class.supports_applications && attr_used?(:waiting_list) && waiting_list?
   end
 
+  def globally_visible
+    visible = read_attribute(:globally_visible)
+
+    if visible.nil?
+      Settings.event.globally_visible_by_default
+    else
+      visible
+    end
+  end
+
+  def globally_visible?
+    !!globally_visible
+  end
+
   private
 
   def application_period_open?

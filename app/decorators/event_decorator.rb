@@ -125,18 +125,6 @@ class EventDecorator < ApplicationDecorator
     h.safe_join([groups.first.to_s, label], ': ')
   end
 
-  def globally_visible
-    if object.globally_visible.nil?
-      Settings.event.globally_visible_by_default
-    else
-      super
-    end
-  end
-
-  def globally_visible?
-    !!globally_visible
-  end
-
   private
 
   def translate_issued_qualifications_info(qualis, prolongs, variables)

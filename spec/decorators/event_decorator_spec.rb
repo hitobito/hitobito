@@ -163,30 +163,5 @@ describe EventDecorator, :draper_with_helpers do
 
       it { is_expected.to match(/public_event/) }
     end
-
-  end
-
-  context 'globally visible' do
-    before do
-      allow(Settings.event)
-        .to receive(:globally_visible_by_default)
-        .and_return(true)
-    end
-
-    it 'is taken from global setting if not set' do
-      expect(event.globally_visible).to be_nil
-      expect(Settings.event.globally_visible_by_default).to be true
-
-      is_expected.to be_globally_visible
-    end
-
-    it 'is taken from event if set' do
-      event.globally_visible = false
-
-      expect(event.globally_visible).to be false
-      expect(Settings.event.globally_visible_by_default).to be true
-
-      is_expected.to_not be_globally_visible
-    end
   end
 end

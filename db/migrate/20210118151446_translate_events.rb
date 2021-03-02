@@ -1,15 +1,17 @@
 class TranslateEvents < ActiveRecord::Migration[6.0]
   def up
-    say_with_time('creating translation table for events') do
-      Event.create_translation_table!(
-        {
-          name: :string,
-          description: :text,
-          application_conditions: :text,
-          signature_confirmation_text: :string
-        },
-        { migrate_data: true, remove_source_columns: true }
-      )
+    unless ActiveRecord::Base.connection.table_exists?('event_translations')
+      say_with_time('creating translation table for events') do
+        Event.create_translation_table!(
+          {
+            name: :string,
+            description: :text,
+            application_conditions: :text,
+            signature_confirmation_text: :string
+          },
+          { migrate_data: true, remove_source_columns: true }
+        )
+      end
     end
   end
 

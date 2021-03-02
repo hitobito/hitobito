@@ -81,6 +81,10 @@ at least one wagon is required to define group types in order to use hitobito.
 See [Wagon Guidelines](doc/development/04_wagons.md) or [Wagons](http://github.com/codez/wagons)
 for more information on wagons and its available rake tasks.
 
+## Contributing
+
+You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
+Before opening any pull request or issue, please search for existing [Issues](https://github.com/hitobito/hitobito/issues) (open and closed) and read the Contributing Guidelines. If you are part of an organisation that use hitobito, please discus your intend with the responsible person of your organisation.
 
 ## Community
 hitobito made with 💙 and the incredible community:

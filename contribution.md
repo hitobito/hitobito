@@ -6,7 +6,7 @@ Following these guidelines helps to communicate that you respect the time of the
 
 hitobito is an open source project and we love to receive contributions from our community — you! There are many ways to contribute, from expand the documentation, submitting bug reports, feature requests, comment issues or writing code.
 
-Aktuell ist dieses Dokument nur in Deutsch verfügbar. Übersetzung ist willkommen :-)
+Currently, the rest of this document is only available in German. Translations are welcome :man_dancing:
 
 # Ground Rules
 

@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddPictureToSettings < ActiveRecord::Migration[6.0]
+class AddHeadingToMessages < ActiveRecord::Migration[6.0]
   def change
-    add_column :settings, :picture, :string
+    add_column :messages, :heading, :boolean, default: false
   end
 end

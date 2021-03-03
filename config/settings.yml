@@ -205,7 +205,3 @@ messages:
   pdf:
     logo: <%= Rails.root.join("app/javascript/images/logo-black.png") %>
     preview: <%= Rails.root.join("app/javascript/images/preview.png") %>
-    address: |-
-      hitobito AG
-      Belpstrasse 37
-      3007 Bern

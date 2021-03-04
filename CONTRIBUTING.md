@@ -1,4 +1,4 @@
-# How to contributing to hitobito
+# How to contribute to hitobito
 
 First off, thank you for considering contributing to hitobito. hitobito is made for and by its own community. Happy to welcome you.
 

@@ -12,7 +12,7 @@ class EventAbility < AbilityDsl::Base
   on(Event) do
     class_side(:list_available, :typeahead).everybody
 
-    permission(:any).may(:show).if_globally_visible
+    permission(:any).may(:show).if_globally_visible_or_participating
     permission(:any).may(:index_participations).
       for_participations_read_events_and_course_participants
     permission(:any).may(:update).for_leaded_events
@@ -46,10 +46,11 @@ class EventAbility < AbilityDsl::Base
     class_side(:export_list).if_layer_and_below_full_on_root
   end
 
-  def if_globally_visible
+  def if_globally_visible_or_participating
     subject.is_a?(Event::Course) ||
       subject.globally_visible? ||
-      subject.token_accessible?(user.shared_access_token)
+      subject.token_accessible?(user.shared_access_token) ||
+      participant?
   end
 
   def for_qualify_event

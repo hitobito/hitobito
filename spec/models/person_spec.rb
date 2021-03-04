@@ -705,11 +705,11 @@ describe Person do
   end
 
   it 'has a non-persisted shared_access_token' do
-    is_expected.to respond_to(:shared_access_token)
-    is_expected.to respond_to(:shared_access_token=)
-
-    token = Devise.friendly_token
     person = Fabricate(:person)
+    token = Devise.friendly_token
+
+    expect(person).to respond_to(:shared_access_token)
+    expect(person).to respond_to(:shared_access_token=)
 
     person.shared_access_token = token
     expect(person.shared_access_token).to eq token

@@ -12,5 +12,10 @@
                   new_group_event_path(@group, source_id: entry.id),
                   :book)
 = export_events_ical_button
+- if can?(:update, entry)
+  = action_button(t('.copy_share_link'),
+                  access_token_event_url(@group, entry),
+                  :copy,
+                  class: 'btn', data: { copy_to_clipboard: access_token_event_url(@group, entry) })
 
 = render_extensions :actions_show

@@ -191,7 +191,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### Scopes
 
   scope :household, -> { where.not(household_key: nil) }
-
+  
+  scope :with_address, -> { where.not(address: [nil, ''], zip_code: [nil, ''], town: [nil, ''])
+                                 .where('(last_name IS NOT NULL AND last_name <> "") OR '\
+                                        '(company_name IS NOT NULL AND company_name <> "")') }
 
   ### CLASS METHODS
 

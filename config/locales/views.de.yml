@@ -395,6 +395,8 @@ de:
         subject: 'Nachrichten Betreff:'
 
   events:
+    actions_show:
+      copy_share_link: Direktlink kopieren
     application_fields:
       caption_signature: Teilnehmer/-innen müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden

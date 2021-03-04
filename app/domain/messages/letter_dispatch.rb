@@ -16,7 +16,7 @@ module Messages
     end
 
     def run
-      @people.find_in_batches do |batch|
+      @people.with_address.find_in_batches do |batch|
         rows = batch.collect do |person|
           reciept_attrs.merge(
             person_id: person.id,

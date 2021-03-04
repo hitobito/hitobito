@@ -654,4 +654,53 @@ describe Person do
     end
   end
 
+  describe 'with_address scope' do
+    it 'lists people with last_name, address, zip_code and town' do
+      results = Person.with_address
+
+      expect(results.count).to eq(1)
+      expect(results).to include(people(:bottom_member))
+    end
+
+    it 'lists no people with blank last_name or address' do
+      people(:bottom_member).update!(last_name: '', address: '')
+
+      results = Person.with_address
+
+      expect(results.count).to eq(0)
+    end
+
+    it 'lists no people with spaces for last_name or address' do
+      people(:bottom_member).update!(last_name: '        ', address: '     ')
+
+      results = Person.with_address
+
+      expect(results.count).to eq(0)
+    end
+
+    it 'lists people with company_name, address, zip_code and town' do
+      people(:bottom_member).update!(last_name: nil, company_name: 'Puzzle ITC')
+
+      results = Person.with_address
+
+      expect(results.count).to eq(1)
+      expect(results).to include(people(:bottom_member))
+    end
+
+    it 'lists no people with blank company_name or address' do
+      people(:bottom_member).update!(last_name: nil, company_name: '', address: '')
+
+      results = Person.with_address
+
+      expect(results.count).to eq(0)
+    end
+
+    it 'lists no people with spaces for company_name or address' do
+      people(:bottom_member).update!(last_name: nil, company_name: '        ', address: '   ')
+
+      results = Person.with_address
+
+      expect(results.count).to eq(0)
+    end
+  end
 end

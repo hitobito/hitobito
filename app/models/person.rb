@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: people
@@ -166,7 +171,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
 
-  attr_accessor :household_people_ids
+  attr_accessor :household_people_ids, :shared_access_token
 
   ### VALIDATIONS
 

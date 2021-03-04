@@ -1,6 +1,6 @@
-# vim:fileencoding=utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -702,5 +702,19 @@ describe Person do
 
       expect(results.count).to eq(0)
     end
+  end
+    
+  it 'has a non-persisted shared_access_token' do
+    is_expected.to respond_to(:shared_access_token)
+    is_expected.to respond_to(:shared_access_token=)
+
+    token = Devise.friendly_token
+    person = Fabricate(:person)
+
+    person.shared_access_token = token
+    expect(person.shared_access_token).to eq token
+
+    person = Person.find(person.id)
+    expect(person.shared_access_token).to be_nil
   end
 end

@@ -4,7 +4,7 @@ First off, thank you for considering contributing to hitobito. hitobito is made 
 
 Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, they should reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests.
 
-hitobito is an open source project and we love to receive contributions from our community — you! There are many ways to contribute, from expand the documentation, submitting bug reports, feature requests, comment issues or writing code.
+hitobito is an open source project and we love to receive contributions from our community — you! There are many ways to contribute, be it expanding the documentation, submitting bug reports, feature requests, comment issues or writing code.
 
 Currently, the rest of this document is only available in German. Translations are welcome :man_dancing:
 

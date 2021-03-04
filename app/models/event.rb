@@ -340,7 +340,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def globally_visible
-    visible = read_attribute(:globally_visible)
+    visible = self[:globally_visible]
 
     if visible.nil?
       Settings.event.globally_visible_by_default
@@ -366,7 +366,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     (!application_closing_at? || application_closing_at >= Time.zone.today)
   end
 
-  def assert_type_is_allowed_for_groups
+  def assert_type_is_allowed_for_groups # rubocop:disable Metrics/CyclomaticComplexity
     master = groups.try(:first)
     return unless master
 
@@ -397,7 +397,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     ).map(&:to_s).include?(attr.to_s)
   end
 
-  def assert_required_contact_attrs_valid
+  def assert_required_contact_attrs_valid # rubocop:disable Metrics/CyclomaticComplexity
     required_contact_attrs.map(&:to_s).each do |a|
       unless valid_contact_attr?(a) &&
           ParticipationContactData.contact_associations.

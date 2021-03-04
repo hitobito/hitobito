@@ -12,7 +12,7 @@ Currently, the rest of this document is only available in German. Translations a
 
 * Nicht nur der Source Sode von hitobito ist offen, sondern auch die Menschen, welche mit und an hitobito arbeiten.
 * Damit wir alle noch lange Freude an hitobito haben, wünschen wir uns eine gute Qualität.
-* Auch kleine Anpassungen sind willkomen.
+* Auch kleine Anpassungen sind willkommen.
 
 # Your First Contribution
 

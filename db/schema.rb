@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_25_074901) do
+ActiveRecord::Schema.define(version: 2021_03_03_115635) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -269,6 +269,8 @@ ActiveRecord::Schema.define(version: 2021_02_25_074901) do
     t.boolean "participations_visible", default: false, null: false
     t.boolean "waiting_list", default: true, null: false
     t.boolean "globally_visible"
+    t.string "access_token"
+    t.index ["access_token"], name: "index_events_on_access_token", unique: true
     t.index ["kind_id"], name: "index_events_on_kind_id"
   end
 

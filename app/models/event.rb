@@ -158,6 +158,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   before_validation :set_self_in_nested
   before_validation :set_signature, if: :signature_confirmation?
+  before_validation :prefill_access_token, unless: :access_token?
 
   accepts_nested_attributes_for :dates, :application_questions, :admin_questions,
                                 allow_destroy: true
@@ -352,6 +353,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     !!globally_visible
   end
 
+  def token_accessible?(token)
+    return false if access_token.nil? || token.nil?
+
+    token == access_token
+  end
+
   private
 
   def application_period_open?
@@ -417,6 +424,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def set_signature
     self.signature = true
+  end
+
+  def prefill_access_token
+    self.access_token = Devise.friendly_token
   end
 
 end

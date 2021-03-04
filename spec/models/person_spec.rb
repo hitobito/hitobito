@@ -703,7 +703,7 @@ describe Person do
       expect(results.count).to eq(0)
     end
   end
-    
+
   it 'has a non-persisted shared_access_token' do
     is_expected.to respond_to(:shared_access_token)
     is_expected.to respond_to(:shared_access_token=)

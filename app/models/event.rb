@@ -142,6 +142,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   ### VALIDATIONS
 
   validates_by_schema
+  # name is a translated attribute and thus needs to be validated explicitly
+  validates :name, presence: true
   validates :dates, presence: { message: :must_exist }
   validates :group_ids, presence: { message: :must_exist }
   validates :application_opening_at, :application_closing_at,

@@ -1,0 +1,87 @@
+name: 'Rails Lint and Test'
+
+on:
+  push:
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    env:
+      HEADLESS: true
+      RAILS_DB_ADAPTER: mysql2
+      RAILS_DB_HOST: 127.0.0.1
+      RAILS_DB_PORT: 33066
+      RAILS_DB_USERNAME: hitobito
+      RAILS_DB_PASSWORD: hitobito
+      RAILS_DB_NAME: hitobito_test
+      RAILS_TEST_DB_NAME: hitobito_test
+
+    services:
+      mysql:
+        image: 'mysql:5.7'
+        env:
+          MYSQL_USER: 'hitobito'
+          MYSQL_PASSWORD: 'hitobito'
+          MYSQL_DATABASE: 'hitobito_test'
+          MYSQL_ROOT_PASSWORD: 'root'
+        ports:
+          - '33066:3306'
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 10
+      memcached:
+        image: 'memcached'
+        ports: [ '11211:11211' ]
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: 'Set up Ruby'
+        uses: ruby/setup-ruby@v1.59.1
+        env:
+          ImageOS: ubuntu18
+
+      - name: 'Setup OS'
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get install sphinxsearch
+          echo "ruby version: $(ruby -v)"
+          echo "bundle version: $(bundle -v)"
+          echo "node version: $(node -v)"
+          echo "yarn version: $(yarn -v)"
+
+      - name: 'Bundle install'
+        run: |
+          bundle install --jobs 4 --retry 3
+
+      - name: 'Make changes to Gemfile.lock transparent'
+        run: git diff Gemfile.lock || true
+
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: 'Yarn install'
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: 'Run Webpacker'
+        run: |
+          bundle exec rake webpacker:compile
+
+      - name: 'Run Lint and Tests'
+        run: |
+          bundle exec rake db:create ci --trace

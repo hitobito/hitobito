@@ -3,7 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= standard_form(resource, {url: person_session_path}) do |f|
+- form_url = params[:oauth] == 'true' ? person_session_path(oauth: true) : person_session_path
+
+= standard_form(resource, {url: form_url}) do |f|
   = f.error_messages
   = f.labeled_input_field(:email, autofocus: true)
   = f.labeled_input_field(:password)

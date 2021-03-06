@@ -13,7 +13,8 @@ class Group::LogoUploader < Uploader::Base
 
   # Process files as they are uploaded:
   process :validate_dimensions, if: :processable?
-  process resize_and_pad: [Settings.application.logo.width, Settings.application.logo.height], if: :processable?
+  process resize_and_pad: [Settings.application.logo.width, Settings.application.logo.height], 
+            if: :processable?
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   def default_url

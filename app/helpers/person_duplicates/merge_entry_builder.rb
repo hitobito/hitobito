@@ -63,6 +63,8 @@ module PersonDuplicates
     end
 
     def person_label(person)
+      return f.content_tag(:span, person.to_s) if person.roles.empty?
+
       link_to(person.to_s,
               group_person_path(person.primary_group, person),
               target: '_blank')
@@ -97,7 +99,7 @@ module PersonDuplicates
     def merge_hint_invalid
       f.content_tag(:div, id: 'merge-hint') do
         [WARNING_ICON, t('.merge_hint_invalid')].join(' ')
-      end
+      end.html_safe
     end
   end
 end

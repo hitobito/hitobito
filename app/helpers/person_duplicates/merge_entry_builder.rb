@@ -99,7 +99,7 @@ module PersonDuplicates
     def merge_hint_invalid
       f.content_tag(:div, id: 'merge-hint') do
         [WARNING_ICON, t('.merge_hint_invalid')].join(' ')
-      end.html_safe
+      end
     end
   end
 end

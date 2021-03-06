@@ -81,7 +81,7 @@ RSpec.describe 'GET oauth/profile', type: :request do
   end
 
   context 'with all scopes in token' do
-    let(:token)  { Fabricate(:access_token, application: application, scopes: { scopes: 'email name with_roles' }, resource_owner_id: user.id ) }
+    let(:token)  { Fabricate(:access_token, application: application, scopes: { scopes: 'email name with_roles events' }, resource_owner_id: user.id ) }
 
     context 'with scope "name" in request' do
       it 'succeeds' do
@@ -106,6 +106,22 @@ RSpec.describe 'GET oauth/profile', type: :request do
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json; charset=utf-8')
         expect(response.body).to include('"group_name":"Bottom One","role_name":"Member"')
+      end
+    end
+
+    context 'with scope "events" in request' do
+      let(:event) { events(:top_course) }
+      it 'succeeds' do
+        get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token, 'X-Scope': 'events' }
+
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+        json = JSON.parse(response.body).deep_symbolize_keys
+        expect(json[:events]).to have(1).items
+        expect(json[:events].first[:event_name]).to eq(event.name)
+        expect(json[:events].first[:event_kind]).to eq(event.kind.label)
+        expect(json[:events].first[:roles]).to have(1).items
+        expect(json[:events].first[:roles].first[:type]).to eq(event_roles(:top_leader).type)
       end
     end
   end

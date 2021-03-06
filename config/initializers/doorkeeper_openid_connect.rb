@@ -79,5 +79,35 @@ Doorkeeper::OpenidConnect.configure do
         }
       end
     end
+
+    claim(:events, scope: :events) do |resource_owner|
+      resource_owner.events.collect do |event|
+        {
+          event_id: event.id,
+          event_name: event.name,
+          event_description: event.description,
+          event_motto: event.motto,
+          event_location: event.location,
+          event_type: event.type,
+          event_number: event.number,
+          event_dates: event.dates.collect do |date|
+            {
+              label: date.label,
+              start_at: date.start_at,
+              finish_at: date.finish_at
+            }
+          end,
+          event_kind: event.course_kind? ? event.kind.label : nil,
+          roles: resource_owner.event_participations.where(event_id: event.id).collect do |participation|
+            participation.roles.collect do |role|
+              {
+                type: role.type,
+                label: role.label
+              }
+            end
+          end.flatten
+        }
+      end
+    end
   end
 end

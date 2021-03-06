@@ -909,6 +909,7 @@ de:
       with_roles: Lesen deiner Stammdaten und Rollen
       openid: Lesen deines OIDC Identity Tokens
       api: Lesen aller Personen, Gruppen, Events und Rechnungen auf die du Zugriff hast, via die JSON-Schnittstellen
+      events: Lesen all deiner Anlässe
   errors:
     messages:
       attachments_not_allowed: "darf keine Anhänge enthalten"

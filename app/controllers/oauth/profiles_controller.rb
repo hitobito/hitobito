@@ -28,6 +28,8 @@ module Oauth
         person.attributes.slice('first_name', 'last_name', 'nickname')
       when /with_roles/ then
         public_attrs_with_roles
+      when /events/ then
+        event_attrs
       end
     end
 
@@ -53,6 +55,45 @@ module Oauth
 
     def email_attrs
       { id: person.id, email: person.email }
+    end
+
+    def event_attrs
+      events = person.events.collect do |event|
+        {
+          event_id: event.id,
+          event_name: event.name,
+          event_description: event.description,
+          event_motto: event.motto,
+          event_location: event.location,
+          event_type: event.type,
+          event_number: event.number,
+          event_dates: event_dates(event),
+          event_kind: event.course_kind? ? event.kind.label : nil,
+          roles: event_roles(person.event_participations.where(event_id: event.id)),
+        }
+      end
+      { events: events }
+    end
+
+    def event_dates(event)
+      event.dates.collect do |date|
+        {
+          label: date.label,
+          start_at: date.start_at,
+          finish_at: date.finish_at
+        }
+      end
+    end
+    
+    def event_roles(participations)
+      participations.collect do |participation|
+        participation.roles.collect do |role|
+          {
+            type: role.type,
+            label: role.label
+          }
+        end
+      end.flatten
     end
   end
 end

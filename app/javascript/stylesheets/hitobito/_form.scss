@@ -133,6 +133,15 @@ fieldset {
   padding-right: $content-padding;
 }
 
+.tab-content fieldset {
+  // fieldset in tab must not draw outside its area
+  // drawing outside would trigger scrollbars
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .form-striped {
   fieldset:nth-of-type(2n) {
   background-color: $grayLighter;

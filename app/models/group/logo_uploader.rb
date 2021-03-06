@@ -7,13 +7,13 @@ class Group::LogoUploader < Uploader::Base
 
   MAX_DIMENSION = 8000
 
-  self.allowed_extensions = %w(jpg jpeg gif png)
+  self.allowed_extensions = %w(jpg jpeg gif png svg)
 
   include CarrierWave::MiniMagick
 
   # Process files as they are uploaded:
-  process :validate_dimensions
-  process resize_and_pad: [Settings.application.logo.width, Settings.application.logo.height]
+  process :validate_dimensions, if: :processable?
+  process resize_and_pad: [Settings.application.logo.width, Settings.application.logo.height], if: :processable?
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
   def default_url
@@ -21,6 +21,10 @@ class Group::LogoUploader < Uploader::Base
   end
 
   private
+
+  def processable?(file)
+    file.content_type.match?('^image/') && !(file.content_type.match?('^image/svg'))
+  end 
 
   # check for images that are larger than you probably want
   def validate_dimensions

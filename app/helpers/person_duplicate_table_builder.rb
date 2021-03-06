@@ -57,7 +57,7 @@ class PersonDuplicateTableBuilder
 
   def label(person)
     label = person.person_name
-    if can?(:show, person)
+    if can?(:show, person) && person.roles.present?
       link_to(label,
               group_person_path(person.primary_group, person),
               target: '_blank')

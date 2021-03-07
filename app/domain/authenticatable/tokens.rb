@@ -26,7 +26,7 @@ class Authenticatable::Tokens
         begin
           email = extract_request_token(:user_email)
           token = extract_request_token(:user_token)
-          Person.find_by(email: email, authentication_token: token)
+          email && token && Person.find_by(email: email, authentication_token: token)
         end
   end
 

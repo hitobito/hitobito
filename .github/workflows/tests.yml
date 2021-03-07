@@ -1,0 +1,13 @@
+name: 'Rails Lint and Test'
+
+on:
+  push:
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
+
+jobs:

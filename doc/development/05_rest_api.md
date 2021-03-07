@@ -121,7 +121,6 @@ Currently the following endpoints are provided:
 
 | Method | Path                                            | Function                                                                        |
 | ---    | ---                                             | ---                                                                             |
-| GET    | /groups                                         | Redirects to root group (only works using personal token, not service accounts) |
 | GET    | /groups/:id                                     | Group details                                                                   |
 | GET    | /groups/:id/people                              | People of a certain group                                                       |
 | GET    | /groups/:group_id/people/:id                    | Person details                                                                  |

@@ -22,11 +22,7 @@ class Event::TopController < ApplicationController
 
   def redirect_to_group_event
     flash.keep if html_request?
-    redirect_to group_event_path(entry.groups.first,
-                                 entry,
-                                 format: request.format.to_sym,
-                                 user_email: params[:user_email],
-                                 user_token: params[:user_token])
+    redirect_to group_event_path(entry.groups.first, entry, format: request.format.to_sym)
   end
 
   def authorize_action

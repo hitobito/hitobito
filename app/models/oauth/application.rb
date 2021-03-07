@@ -35,7 +35,6 @@ module Oauth
     mount_uploader :logo, Oauth::LogoUploader
 
     scope :list, -> { order(:name) }
-    scope :with_api_permission, -> { where('oauth_applications.scopes REGEXP \'(^| )api( |$)\'') }
 
     def self.human_scope(key)
       I18n.t("doorkeeper.scopes.#{key}")

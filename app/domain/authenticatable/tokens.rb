@@ -11,6 +11,10 @@ class Authenticatable::Tokens
     @params = params
   end
 
+  def oauth_token
+    @oauth_token ||= extract_doorkeeper_token
+  end
+
   def service_token
     @service_token ||= extract_request_token(:token) do |token|
       token && ServiceToken.find_by(token: token)
@@ -31,8 +35,11 @@ class Authenticatable::Tokens
   def extract_request_token(token)
     x_param = "HTTP_X_#{token.to_s.upcase}"
     token_value = params[token].presence || request.headers[x_param].presence
-    return token_value unless block_given?
-    yield token_value
+    block_given? ? yield(token_value) : token_value
+  end
+
+  def extract_doorkeeper_token
+    Doorkeeper::OAuth::Token.authenticate(request, *Doorkeeper.config.access_token_methods)
   end
 
 end

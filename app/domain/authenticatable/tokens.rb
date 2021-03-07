@@ -40,6 +40,7 @@ class Authenticatable::Tokens
 
   def extract_doorkeeper_token
     Doorkeeper::OAuth::Token.authenticate(request, *Doorkeeper.config.access_token_methods)
+        &.becomes(Oauth::AccessToken)
   end
 
 end

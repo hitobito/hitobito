@@ -101,7 +101,7 @@ module Authenticatable
   end
 
   def normalize_user_params
-    # Set the authentication token params if not already present,
+    # Set the authentication token params if not already present
     authentication_token_params = [:user_token, :user_email, :token]
     authentication_token_params.each do |param|
       x_param = param.to_s.split('_').map(&:camelize).join('-')

@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_155300) do
     t.bigint "auth_method_id"
     t.string "origin", null: false
     t.index ["auth_method_type", "auth_method_id"], name: "index_cors_origins_on_auth_method_type_and_auth_method_id"
+    t.index ["origin"], name: "index_cors_origins_on_origin"
   end
 
   create_table "custom_content_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|

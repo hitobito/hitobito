@@ -11,16 +11,14 @@ class Api::CorsCheck
   end
 
   def allowed?(source)
-    # In CORS preflight OPTIONS requests, the token headers are not sent along.
-    # So this check is as specific as it can be for these cases.
-    return false unless cors_origin_allowed?(source)
-
     if oauth_token.present?
       return false unless oauth_token_allows?(source)
-    end
-
-    if service_token.present?
+    elsif service_token.present?
       return false unless service_token_allows?(source)
+    else
+      # In CORS preflight OPTIONS requests, the token headers are not sent along.
+      # So this check is as specific as it can be for these cases.
+      return false unless cors_origin_allowed?(source)
     end
 
     true

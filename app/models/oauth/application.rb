@@ -29,10 +29,10 @@ module Oauth
   class Application < Doorkeeper::Application
     has_many :access_grants, dependent: :delete_all, class_name: 'Oauth::AccessGrant'
     has_many :access_tokens, dependent: :delete_all, class_name: 'Oauth::AccessToken'
+    has_many :cors_origins, as: :auth_method, dependent: :delete_all
+    accepts_nested_attributes_for :cors_origins, allow_destroy: true
 
     mount_uploader :logo, Oauth::LogoUploader
-
-    validate :validate_allowed_cors_origins
 
     scope :list, -> { order(:name) }
     scope :with_api_permission, -> { where('oauth_applications.scopes REGEXP \'(^| )api( |$)\'') }
@@ -59,21 +59,6 @@ module Oauth
       access_grants.select do |access_grant|
         !access_grant.expired? && access_grant.revoked_at.nil?
       end.count
-    end
-
-    private
-
-    def validate_allowed_cors_origins
-      allowed_cors_origins.split.each do |val|
-        uri = ::URI.parse(val)
-        errors.add(:allowed_cors_origins, :suffix_present) unless uri.fragment.nil?
-        errors.add(:allowed_cors_origins, :suffix_present) unless uri.query.nil?
-        errors.add(:allowed_cors_origins, :suffix_present) if uri.path.present?
-        errors.add(:allowed_cors_origins, :missing_hostname) if uri.host.nil?
-        errors.add(:allowed_cors_origins, :missing_scheme) if uri.opaque || uri.scheme.nil?
-      end
-    rescue URI::InvalidURIError
-      errors.add(:allowed_cors_origins, :invalid_host)
     end
   end
 end

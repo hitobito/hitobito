@@ -11,8 +11,8 @@ module Oauth
 
     self.permitted_attrs = [
       :name, :redirect_uri, :confidential,
-      :logo, :remove_logo, :allowed_cors_origins,
-      scopes: []
+      :logo, :remove_logo,
+      scopes: [], cors_origins_attributes: [ :id, :origin, :_destroy ]
     ]
 
     def self.model_class

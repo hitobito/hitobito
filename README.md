@@ -101,7 +101,7 @@ hitobito made with 💙 and the incredible community:
 * Digital Impact Network
 * Schweizer Blasmusikverband
 * GLP
-* CVP Schweiz
+* Die Mitte
 * Stiftung für junge Auslandschweizer
 
 Please contact [KunoKunz](https://github.com/KunoKunz) if you want to be part of our community.

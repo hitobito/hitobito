@@ -12,7 +12,7 @@ class Authenticatable::Tokens
   end
 
   def service_token
-    @service_token ||= extract_token(:token) do |token|
+    @service_token ||= extract_request_token(:token) do |token|
       token && ServiceToken.find_by(token: token)
     end
   end
@@ -20,15 +20,15 @@ class Authenticatable::Tokens
   def user_from_token
     @user_from_token ||=
         begin
-          email = extract_token(:user_email)
-          token = extract_token(:user_token)
+          email = extract_request_token(:user_email)
+          token = extract_request_token(:user_token)
           Person.find_by(email: email, authentication_token: token)
-    end
+        end
   end
 
   private
 
-  def extract_token(token)
+  def extract_request_token(token)
     x_param = "HTTP_X_#{token.to_s.upcase}"
     token_value = params[token].presence || request.headers[x_param].presence
     return token_value unless block_given?

@@ -6,7 +6,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins do |source, env|
-      Api::CorsChecker.new(ActionDispatch::Request.new(env)).allowed?(source)
+      Api::CorsCheck.new(ActionDispatch::Request.new(env)).allowed?(source)
     end
     resource '*',
              headers: :any,

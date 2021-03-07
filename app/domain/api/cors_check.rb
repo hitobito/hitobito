@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Api::CorsChecker
+class Api::CorsCheck
   attr_reader :request
 
   def initialize(request)
@@ -33,6 +33,7 @@ class Api::CorsChecker
   end
 
   def oauth_token_allows?(source)
+    oauth_token.application.oauth_token.cors_origins
     Oauth::Application
         .with_api_permission
         .joins(:cors_origins)
@@ -49,8 +50,7 @@ class Api::CorsChecker
   end
 
   def oauth_token
-    @oauth_token ||= Doorkeeper::OAuth::Token.authenticate(request,
-                                                           *Doorkeeper.config.access_token_methods)
+    token_authentication.oauth_token
   end
 
   def service_token

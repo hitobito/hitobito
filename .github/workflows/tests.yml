@@ -60,6 +60,16 @@ jobs:
           echo "node version: $(node -v)"
           echo "yarn version: $(yarn -v)"
 
+      - name: 'create cache key'
+        run: cp Gemfile.lock Gemfile.lock.backup
+
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
+          restore-keys: |
+            ${{ runner.os }}-ruby-bundle-
+
       - name: 'Bundle install'
         run: |
           bundle install --jobs 4 --retry 3 --path vendor/bundle

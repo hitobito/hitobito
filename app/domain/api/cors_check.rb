@@ -33,14 +33,15 @@ class Api::CorsCheck
   end
 
   def oauth_token_allows?(source)
-    oauth_token.application.oauth_token.cors_origins
-    Oauth::Application
-        .with_api_permission
-        .joins(:cors_origins)
-        .where(cors_origins: { origin: source })
-        .joins(:access_tokens)
-        .where(oauth_access_tokens: oauth_token)
-        .exists?
+    oauth_token_has_api_scope? && oauth_token_allows_origin?(source)
+  end
+
+  def oauth_token_has_api_scope?
+    oauth_token.application.includes_scope?(:api)
+  end
+
+  def oauth_token_allows_origin?(source)
+    oauth_token.application.cors_origins.where(origin: source).exists?
   end
 
   def service_token_allows?(source)

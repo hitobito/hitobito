@@ -11,5 +11,7 @@ class CreateCorsOrigins < ActiveRecord::Migration[6.0]
       t.references :auth_method, polymorphic: true
       t.string :origin, null: false
     end
+
+    add_index :cors_origins, :origin
   end
 end

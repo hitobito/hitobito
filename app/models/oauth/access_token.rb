@@ -28,6 +28,7 @@
 module Oauth
   class AccessToken < Doorkeeper::AccessToken
     belongs_to :person, foreign_key: :resource_owner_id
+    belongs_to :application, class_name: 'Oauth::Application'
 
     scope :list, -> { order(created_at: :desc) }
     # no need to check expires_in as refresh_token would never expire

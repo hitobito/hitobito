@@ -5,8 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddAllowedCorsOriginsToOauthApplications < ActiveRecord::Migration[6.0]
+class CreateCorsOrigins < ActiveRecord::Migration[6.0]
   def change
-    add_column :oauth_applications, :allowed_cors_origins, :mediumtext, null: false
+    create_table :cors_origins do |t|
+      t.references :auth_method, polymorphic: true
+      t.string :origin, null: false
+    end
   end
 end

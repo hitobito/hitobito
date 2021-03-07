@@ -44,6 +44,13 @@ de:
         must_exist: müssen vorhanden sein
         readonly: darf nicht verändert werden
       models:
+        cors_origin:
+          attributes:
+            origin:
+              invalid_host: enthält einen ungültigen Host
+              missing_hostname: muss einen Hostnamen enthalten
+              missing_scheme: muss ein Protokoll (http:// oder https://) enthalten
+              suffix_present: darf keinen Pfad und keinen Slash am Ende haben
         custom_content:
           attributes:
             body:
@@ -78,11 +85,6 @@ de:
               invoice_items_invalid: Mindestens ein Rechnungsposten ist ungültig.
         oauth/application:
           attributes:
-            allowed_cors_origins:
-              invalid_host: enthalten einen ungültigen Host
-              missing_hostname: müssen einen Hostnamen pro Zeile enthalten
-              missing_scheme: müssen alle ein Protokoll (http:// oder https://) enthalten
-              suffix_present: dürfen keinen Pfad und keinen Slash am Ende haben
             scopes:
               not_match_configured: "stimmen nicht mit denen am server hinterlegten überein."
         person:
@@ -346,6 +348,9 @@ de:
         state: Status
         read_at: Gelesen am
 
+      cors_origins:
+        origin: Host mit API-Zugriff
+
       person:
         first_name: Vorname
         last_name: Nachname
@@ -543,7 +548,7 @@ de:
         text: Text
 
       oauth/application:
-        allowed_cors_origins: Hosts mit API-Zugriff
+        cors_origins: Hosts mit API-Zugriff
         redirect_uri: Redirect URIs
 
       people_relation:

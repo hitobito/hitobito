@@ -8,9 +8,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     origins do |source, env|
       query = Oauth::Application
           .with_api_permission
-          .where('allowed_cors_origins REGEXP ?', "(^|[[:space:]])#{source}([[:space:]]|$)")
-      # TODO use a DB relation instead, like this:
-      # .joins(:allowed_cors_origins).where(allowed_cors_origins: { origin: source })
+          .joins(:cors_origins).where(cors_origins: { origin: source })
 
       query = with_token_condition(query, env)
 

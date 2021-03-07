@@ -13,10 +13,6 @@
                         { id: "oauth_application_scope_#{scope}" })
         = format_doorkeeper_application_scope(scope).html_safe
 
-  = f.labeled_text_area :allowed_cors_origins, rows: 5,
-    help: raw(t('.help_allowed_cors_origins')),
-    placeholder: 'https://example.com'
-
   = field_set_tag do
     = f.labeled :logo do
       = f.file_field :logo, type: :file, accept: Oauth::LogoUploader.accept_extensions
@@ -24,3 +20,8 @@
     - if entry.logo.present?
       = f.labeled :remove_logo do
         = f.boolean_field :remove_logo
+
+  = f.labeled_inline_fields_for :cors_origins do |nested_f|
+    - nested_f.input_field(:origin, placeholder: 'https://example.org')
+  = f.indented do
+    = f.help_block(t('.help_cors_origins'))

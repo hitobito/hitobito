@@ -78,6 +78,11 @@ de:
               invoice_items_invalid: Mindestens ein Rechnungsposten ist ungültig.
         oauth/application:
           attributes:
+            allowed_cors_origins:
+              invalid_host: enthalten einen ungültigen Host
+              missing_hostname: müssen einen Hostnamen pro Zeile enthalten
+              missing_scheme: müssen alle ein Protokoll (http:// oder https://) enthalten
+              suffix_present: dürfen keinen Pfad und keinen Slash am Ende haben
             scopes:
               not_match_configured: "stimmen nicht mit denen am server hinterlegten überein."
         person:
@@ -538,6 +543,7 @@ de:
         text: Text
 
       oauth/application:
+        allowed_cors_origins: Hosts mit API-Zugriff
         redirect_uri: Redirect URIs
 
       people_relation:

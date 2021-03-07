@@ -10,42 +10,38 @@ class Api::CorsCheck
     @request = request
   end
 
-  def allowed?(source)
-    if oauth_token.present?
-      return false unless oauth_token_allows?(source)
-    elsif service_token.present?
-      return false unless service_token_allows?(source)
-    else
-      # In CORS preflight OPTIONS requests, the token headers are not sent along.
-      # So this check is as specific as it can be for these cases.
-      return false unless cors_origin_allowed?(source)
-    end
+  def allowed?(origin)
+    return false if oauth_token.present? && !oauth_token_allows_origin?(origin)
+
+    return false if service_token.present? && !service_token_allows_origin?(origin)
+
+    # In CORS preflight OPTIONS requests, the token headers are not sent along.
+    # So this check is as specific as it can be for these cases.
+    return false if no_token_present? && !cors_origin_allowed?(origin)
 
     true
   end
 
   private
 
-  def cors_origin_allowed?(source)
-    CorsOrigin::where(origin: source).exists?
+  def cors_origin_allowed?(origin)
+    CorsOrigin::where(origin: origin).exists?
   end
 
-  def oauth_token_allows?(source)
-    oauth_token_has_api_scope? && oauth_token_allows_origin?(source)
+  def service_token_allows_origin?(origin)
+    allows_origin?(service_token, origin)
   end
 
-  def oauth_token_has_api_scope?
+  def oauth_token_allows_origin?(origin)
+    oauth_token_has_api_access? && allows_origin?(oauth_token.application, origin)
+  end
+
+  def oauth_token_has_api_access?
     oauth_token.application.includes_scope?(:api)
   end
 
-  def oauth_token_allows_origin?(source)
-    oauth_token.application.cors_origins.where(origin: source).exists?
-  end
-
-  def service_token_allows?(source)
-    service_token.cors_origins
-        .where(origin: source)
-        .exists?
+  def allows_origin?(auth_method, origin)
+    auth_method.cors_origins.where(origin: origin).exists?
   end
 
   def oauth_token
@@ -54,6 +50,10 @@ class Api::CorsCheck
 
   def service_token
     token_authentication.service_token
+  end
+
+  def no_token_present?
+    [:service_token, :oauth_token].none? { |token| send(token).present? }
   end
 
   def token_authentication

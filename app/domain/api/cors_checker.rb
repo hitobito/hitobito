@@ -11,23 +11,53 @@ class Api::CorsChecker
   end
 
   def allowed?(source)
-    query = Oauth::Application
-                .with_api_permission
-                .joins(:cors_origins).where(cors_origins: { origin: source })
+    # In CORS preflight OPTIONS requests, the token headers are not sent along.
+    # So this check is as specific as it can be for these cases.
+    return false unless cors_origin_allowed?(source)
 
-    query = with_token_condition(query) if oauth_token.present?
+    if oauth_token.present?
+      return false unless oauth_token_allows?(source)
+    end
 
-    query.exists?
+    if service_token.present?
+      return false unless service_token_allows?(source)
+    end
+
+    true
   end
 
   private
+
+  def cors_origin_allowed?(source)
+    CorsOrigin::where(origin: source).exists?
+  end
+
+  def oauth_token_allows?(source)
+    Oauth::Application
+        .with_api_permission
+        .joins(:cors_origins)
+        .where(cors_origins: { origin: source })
+        .joins(:access_tokens)
+        .where(oauth_access_tokens: oauth_token)
+        .exists?
+  end
+
+  def service_token_allows?(source)
+    service_token.cors_origins
+        .where(origin: source)
+        .exists?
+  end
 
   def oauth_token
     @oauth_token ||= Doorkeeper::OAuth::Token.authenticate(request,
                                                            *Doorkeeper.config.access_token_methods)
   end
 
-  def with_token_condition(query)
-    query.joins(:access_tokens).where(oauth_access_tokens: oauth_token)
+  def service_token
+    token_authentication.service_token
+  end
+
+  def token_authentication
+    @token_authentication ||= Authenticatable::Tokens.new(request, request.params)
   end
 end

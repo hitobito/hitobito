@@ -10,11 +10,12 @@ class MessagesController < CrudController
   include YearBasedPaging
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze
-  PERMITTED_LETTER_ATTRS = [:subject, :body].freeze
-  PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body,
+  PERMITTED_LETTER_ATTRS = [:subject, :body, :heading].freeze
+  PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :heading,
                                     invoice_attributes: {
                                       invoice_items_attributes: [
                                         :name,
+                                        :heading,
                                         :description,
                                         :unit_cost,
                                         :vat_rate,

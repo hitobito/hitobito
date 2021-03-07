@@ -17,6 +17,7 @@
 #  mailing_list_id :bigint
 #  sender_id       :bigint
 #  invoice_list_id :bigint
+#  heading         :boolean          default("false")
 #
 # Indexes
 #

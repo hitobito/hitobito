@@ -9,18 +9,70 @@ require 'spec_helper'
 
 describe Export::Pdf::Messages::Letter do
 
-  let(:letter) { messages(:letter) }
+  let(:letter) do
+    Message::Letter.create!(mailing_list: list,
+                            body: messages(:letter).body,
+                            subject: 'Information')
+  end
   let(:recipients) { [people(:bottom_member)] }
   let(:options) { {} }
+  let(:layer) { groups(:top_layer) }
+  let(:group) { groups(:top_group) }
+  let(:list) { Fabricate(:mailing_list, group: group) }
 
   subject { described_class.new(letter, recipients, options) }
 
-  it 'renders logo from settings' do
-    expect_any_instance_of(Prawn::Document).to receive(:image).with(
-      Settings.messages.pdf.logo.to_s,
-      fit: [200, 40]
-    )
-    subject.render
+  context 'heading' do
+
+    let(:letter_setting) do
+      GroupSetting.new(var: :messages_letter, picture: fixture_file_upload('images/logo.png'))
+    end
+
+    it 'renders no logo' do
+      expect_any_instance_of(Prawn::Document).to receive(:image).never
+      subject.render
+    end
+
+    it 'renders logo from layer setting' do
+      letter.update!(heading: true)
+      letter_setting.target = layer
+      letter_setting.save!
+
+      expect_any_instance_of(Prawn::Document).to receive(:image).with(
+        /\/picture\/#{letter_setting.id}\/logo\.png/,
+        fit: [200, 40]
+      )
+      subject.render
+    end
+
+    it 'renders logo from group setting' do
+      letter.update!(heading: true)
+      letter_setting.target = group
+      letter_setting.save!
+
+      expect_any_instance_of(Prawn::Document).to receive(:image).with(
+        /\/picture\/#{letter_setting.id}\/logo\.png/,
+        fit: [200, 40]
+      )
+      subject.render
+    end
+
+    it 'prefers group over layer logo' do
+      letter.update!(heading: true)
+      group_letter_setting = GroupSetting.create!(var: :messages_letter,
+                                                  target: group,
+                                                  picture: fixture_file_upload('images/logo.png'))
+
+      GroupSetting.create!(var: :messages_letter,
+                           target: layer,
+                           picture: fixture_file_upload('images/logo.png'))
+
+      expect_any_instance_of(Prawn::Document).to receive(:image).with(
+        /\/picture\/#{group_letter_setting.id}\/logo\.png/,
+        fit: [200, 40]
+      )
+      subject.render
+    end
   end
 
   it 'renders context via markup processor' do
@@ -54,14 +106,48 @@ describe Export::Pdf::Messages::Letter do
       PDF::Inspector::Text.analyze(pdf)
     end
 
-    it 'renders text at positions' do
-      text_with_position = subject.positions.each_with_index.collect do |p, i|
-        p.collect(&:round) + [subject.show_text[i]]
-      end
+    it 'renders text at positions without sender address' do
       expect(text_with_position).to match_array [
-        [57, 729, 'hitobito AG'],
-        [57, 718, 'Belpstrasse 37'],
-        [57, 708, '3007 Bern'],
+        [57, 669, 'Bottom Member'],
+        [57, 658, 'Greatstreet 345'],
+        [57, 648, '3456 Greattown'],
+        [57, 638, 'CH'],
+        [57, 579, 'Hallo Bottom'],
+        [57, 558, 'Wir laden '],
+        [97, 558, 'dich'],
+        [116, 558, ' ein! '],
+        [57, 537, 'Bis bald']
+      ]
+    end
+
+    it 'renders text at positions with group sender address' do
+      letter.update!(heading: true)
+      group.update!(town: 'Wanaka', address: 'Lakeview 42')
+
+      expect(text_with_position).to match_array [
+        [57, 729, 'TopGroup'],
+        [57, 718, 'Lakeview 42'],
+        [57, 708, 'Wanaka'],
+        [57, 669, 'Bottom Member'],
+        [57, 658, 'Greatstreet 345'],
+        [57, 648, '3456 Greattown'],
+        [57, 638, 'CH'],
+        [57, 579, 'Hallo Bottom'],
+        [57, 558, 'Wir laden '],
+        [97, 558, 'dich'],
+        [116, 558, ' ein! '],
+        [57, 537, 'Bis bald']
+      ]
+    end
+
+    it 'renders text at positions with layer sender address' do
+      letter.update!(heading: true)
+      layer.update!(town: 'Wanaka', address: 'Lakeview 42', zip_code: '4242')
+
+      expect(text_with_position).to match_array [
+        [57, 729, 'Top'],
+        [57, 718, 'Lakeview 42'],
+        [57, 708, '4242 Wanaka'],
         [57, 669, 'Bottom Member'],
         [57, 658, 'Greatstreet 345'],
         [57, 648, '3456 Greattown'],
@@ -75,5 +161,12 @@ describe Export::Pdf::Messages::Letter do
     end
   end
 
+  private
+
+  def text_with_position
+    subject.positions.each_with_index.collect do |p, i|
+      p.collect(&:round) + [subject.show_text[i]]
+    end
+  end
 
 end

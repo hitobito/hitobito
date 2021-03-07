@@ -103,6 +103,10 @@ Achtung: Der Symlink sollte nach dem initalen Seeden wieder entfernt werden. Ges
 werden für neu (vom Benutzer) angelegten Gruppen bei folgenden Deployements entsprechend Mitglieder 
 und Events geseeded.
 
+#### Schweizer Addressdaten
+
+Um die schweizer Addressdaten zu importieren kann der `bundle exec rake address:import` Task genutzt werden. Um die Addressdaten von der Post API zu fetchen, muss ein API Token gegeben sein (`ENV['ADDRESSES_TOKEN']`). 
+
 ### Umsysteme
 
 Hitobito benötigt für den Betrieb einige weitere Dienste die installiert und konfiguriert werden müssen. 

@@ -18,7 +18,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
   before { invoice_configs(:top_layer).update(payment_slip: :qr) }
 
   it 'renders logo from settings and qr images' do
-    expect_any_instance_of(Prawn::Document).to receive(:image).with(any_args).exactly(4).times
+    expect_any_instance_of(Prawn::Document).to receive(:image).with(any_args).exactly(3).times
     subject.render
   end
 
@@ -43,9 +43,6 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         p.collect(&:round) + [subject.show_text[i]]
       end
       expect(text_with_position).to match_array [
-        [57, 729, 'hitobito AG'],
-        [57, 718, 'Belpstrasse 37'],
-        [57, 708, '3007 Bern'],
         [57, 669, 'Bottom Member'],
         [57, 658, 'Greatstreet 345'],
         [57, 648, '3456 Greattown'],

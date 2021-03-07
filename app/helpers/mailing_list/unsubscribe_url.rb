@@ -25,7 +25,10 @@ class MailingList::UnsubscribeUrl
     private
 
     def unsubscribe_url(mailing_list)
-      group_mailing_list_url(mailing_list.group_id, mailing_list.id, host: host, protocol: protocol)
+      group_mailing_list_url(group_id: mailing_list.group_id,
+                             id: mailing_list.id,
+                             host: host,
+                             protocol: protocol)
     end
 
     def host

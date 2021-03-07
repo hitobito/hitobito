@@ -7,17 +7,23 @@
 
 class Export::Pdf::Messages::Letter
   class Header < Section
-    LOGO_BOX = [200, 40]
-    ADDRESS_BOX =  [200, 40]
+    LOGO_BOX = [200, 40].freeze
+    ADDRESS_BOX = [200, 40].freeze
+
+    delegate :group, to: '@letter'
 
     def render(recipient)
-      render_logo
-      pdf.move_down 10
+      if @letter.heading?
+        render_logo
+        pdf.move_down 10
 
-      render_address(sender_address)
-      pdf.move_down 20
+        render_address(sender_address)
+        pdf.move_down 20
+      else
+        pdf.move_down 110
+      end
+
       render_address(build_address(recipient))
-
       pdf.move_down 50
     end
 
@@ -25,7 +31,11 @@ class Export::Pdf::Messages::Letter
 
     def render_logo(width: LOGO_BOX.first, height: LOGO_BOX.second)
       bounding_box([0, cursor], width: width, height: height) do
-        image logo_path, fit: [width, height]
+        if logo_path
+          image logo_path, fit: [width, height]
+        else
+          ''
+        end
       end
     end
 
@@ -43,11 +53,32 @@ class Export::Pdf::Messages::Letter
     end
 
     def logo_path
-      Settings.messages.pdf.logo.to_s
+      logo_path_setting(group) || logo_path_setting(group.layer_group)
+    end
+
+    def logo_path_setting(group)
+      group.settings(:messages_letter).picture.path
     end
 
     def sender_address
-      Settings.messages.pdf.address
+      if address_present?(group)
+        group_address(group)
+      elsif address_present?(group.layer_group)
+        group_address(group.layer_group)
+      else
+        ''
+      end
+    end
+
+    def group_address(group)
+      [group.name.to_s.squish,
+       group.address.to_s.squish,
+       [group.zip_code, group.town].compact.join(' ').squish,
+       group.country.to_s.squish].compact.join("\n")
+    end
+
+    def address_present?(group)
+      [:address, :town].all? { |a| group.send(a)&.strip.present? }
     end
 
   end

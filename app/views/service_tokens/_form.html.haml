@@ -19,3 +19,8 @@
       = f.boolean_field(:mailing_lists, caption: model_class.human_attribute_name(:mailing_lists))
 
       = render_extensions :fields, locals: { f: f }
+
+  = f.labeled_inline_fields_for :cors_origins do |nested_f|
+    - nested_f.input_field(:origin, placeholder: 'https://example.org')
+  = f.indented do
+    = f.help_block(t('.help_cors_origins'))

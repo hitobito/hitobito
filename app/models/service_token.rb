@@ -26,6 +26,8 @@
 class ServiceToken < ActiveRecord::Base
 
   belongs_to :layer, class_name: 'Group', foreign_key: :layer_group_id
+  has_many :cors_origins, as: :auth_method, dependent: :delete_all
+  accepts_nested_attributes_for :cors_origins, allow_destroy: true
 
   before_validation :generate_token!, on: :create
 

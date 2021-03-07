@@ -62,7 +62,7 @@ jobs:
 
       - name: 'Bundle install'
         run: |
-          bundle install --jobs 4 --retry 3
+          bundle install --jobs 4 --retry 3 --path vendor/bundle
 
       - name: 'Make changes to Gemfile.lock transparent'
         run: git diff Gemfile.lock || true

@@ -68,7 +68,7 @@ namespace :db do
     Rake::Task['db:migrate'].invoke
     Rake::Task['wagon:migrate'].invoke
 
-    ENV['NO_ENV'] = 1
+    ENV['NO_ENV'] = "1"
     Rake::Task['db:seed'].invoke
     Rake::Task['wagon:seed'].invoke
   end

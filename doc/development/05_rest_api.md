@@ -1,6 +1,6 @@
 ## REST API
 
-Hitobito offers a read-only JSON REST API that gives access to the basic data stored in the database. The output format follows the conventions of [json:api](http://jsonapi.org) (although in an older version according to this issue https://github.com/hitobito/hitobito/issues/207). The API currently does not set any CORS headers, so it has to be consumed server-side (querying it in JavaScript in a browser is not possible).
+Hitobito offers a read-only JSON REST API that gives access to the basic data stored in the database. The output format follows the conventions of [json:api](http://jsonapi.org) (although in an older version according to this issue https://github.com/hitobito/hitobito/issues/207).
 
 ### Authentication
 

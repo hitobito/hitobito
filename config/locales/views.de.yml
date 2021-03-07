@@ -1424,6 +1424,9 @@ de:
     abilities:
       read: Lesen
 
+    form:
+      help_cors_origins: Webseiten auf diesen Hosts dürfen die Daten aus der JSON-Schnittstelle vom Browser aus abrufen (CORS).
+
     global:
       link:
         add: API-Key hinzufügen

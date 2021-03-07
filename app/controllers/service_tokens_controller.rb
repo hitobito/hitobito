@@ -16,7 +16,8 @@ class ServiceTokensController < CrudController
     :events,
     :invoices,
     :event_participations,
-    :mailing_lists
+    :mailing_lists,
+    cors_origins_attributes: [ :id, :origin, :_destroy ]
   ]
 
   private

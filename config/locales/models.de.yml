@@ -916,6 +916,7 @@ de:
         invoices: Rechnungen dieser Ebene
         event_participations: Teilnehmende von Anlässen dieser Ebene
         mailing_lists: Abonnent/-innen von Mailinglisten dieser Ebene
+        cors_origins: Hosts mit API-Zugriff
 
       acts_as_taggable_on/tag:
         taggings_count: Anzahl

@@ -123,14 +123,25 @@ a.green {
 }
 
 fieldset {
-  $content-padding: 20px;
   margin-bottom: 9px;
+
+  $content-padding: 10px;
   padding-top: $content-padding / 2;
   padding-bottom: $content-padding / 2;
   margin-left: - $content-padding;
   margin-right: - $content-padding;
   padding-left: $content-padding;
   padding-right: $content-padding;
+
+  @include responsive(mediaTablet){
+    $content-padding: 20px;
+    padding-top: $content-padding / 2;
+    padding-bottom: $content-padding / 2;
+    margin-left: - $content-padding;
+    margin-right: - $content-padding;
+    padding-left: $content-padding;
+    padding-right: $content-padding;
+  }
 }
 
 .form-striped {

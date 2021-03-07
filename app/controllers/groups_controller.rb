@@ -24,10 +24,7 @@ class GroupsController < CrudController
 
   def index
     flash.keep if html_request?
-    redirect_to group_path(Group.root.id,
-                           format: request.format.to_sym,
-                           user_email: params[:user_email],
-                           user_token: params[:user_token])
+    redirect_to group_path(Group.root.id, format: request.format.to_sym)
   end
 
   def show

@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-
 # == Schema Information
 #
 # Table name: events
@@ -427,7 +426,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def prefill_access_token
-    self.access_token = Devise.friendly_token
+    self.access_token ||= Devise.friendly_token
   end
 
 end

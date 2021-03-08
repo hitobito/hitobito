@@ -58,7 +58,6 @@ class Event::Course < Event
 
   self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids,
                            :requires_approval, :display_booking_info, :waiting_list]
-  self.used_attributes -= [:globally_visible]
 
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,

@@ -47,8 +47,7 @@ class EventAbility < AbilityDsl::Base
   end
 
   def if_globally_visible_or_participating
-    subject.is_a?(Event::Course) ||
-      subject.globally_visible? ||
+    subject.globally_visible? ||
       subject.token_accessible?(user.shared_access_token) ||
       participant?
   end

@@ -1,6 +1,6 @@
 # Architekur Dokumentation
 
-Diese Dokumente beschreiben die wesentlichen architekturellen Aspekte von hitobito. Die Gliederung folgt [arc42](http://www.arc42.de/template/index.html). Mit `rake doc:arch` kann die eine HTML Datei mit der gesamten Dokumentation generiert werden.
+Diese Dokumente beschreiben die wesentlichen architekturellen Aspekte von hitobito. Die Gliederung folgt [arc42](https://www.arc42.de/template). Mit `rake doc:arch` kann die eine HTML Datei mit der gesamten Dokumentation generiert werden.
 
 ## Inhalt
 

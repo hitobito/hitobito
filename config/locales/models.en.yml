@@ -62,6 +62,7 @@ en:
               not_match_configured: "do not match the ones configured on the server"
         person:
           name_missing: 'Please enter a name'
+          readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
           attributes:
             email:
               taken: >
@@ -81,6 +82,10 @@ en:
           attributes:
             qualification_kind_id:
               exists_for_timeframe: 'already exists in this period'
+        qualification_kind:
+          attributes:
+            validity:
+              not_a_valid_number: 'Must be greater than or equal to zero to make %{model} reactivatable'
         subscription:
           attributes:
             subscriber_id:
@@ -90,14 +95,24 @@ en:
           attributes:
             name:
               must_be_unique: 'already exists'
+        invoice:
+          recipient_address_or_email_required: 'Recipient address or email must be filled in'
+          attributes:
+            invoice_config:
+              invalid: 'is not valid; adjust the settings before creating an invoice'
         invoice_config:
           attributes:
             iban:
               required: 'is required'
             account_number:
               required: 'is required'
+              invalid_check_digit: 'is not valid; Incorrect check digit'
             payee:
               to_long: 'is too long, may only have 2 lines'
+        mailing_list:
+          attributes:
+            additional_sender:
+              invalid: "must contain mail addresses of the format abcd@ee.ch or *@ee.ch. Multiple addresses must be separated with ',' or ';'."
     models:
       acts_as_taggable_on/tag:
         one: Tag
@@ -105,9 +120,15 @@ en:
       additional_email:
         one: Further e-mail
         other: Further e-mails
+      assignment:
+        one: Order
+        other: Orders
       custom_content:
         one: Text
         other: Texts
+      dispatch:
+        one: Mailing
+        other: Mailing
       event:
         one: Event
         other: Events
@@ -174,12 +195,24 @@ en:
       invoice_item:
         one: Invoice Item
         other: Invoice Items
+      invoice_list:
+        one: Collective invoice
+        other: Collective invoices
       label_format:
         one: Label format
         other: Label formats
       message:
         one: Message
         other: Messages
+      message/letter:
+        one: Letter
+        other: Letters
+      message/letter_with_invoice:
+        one: Invoice letter
+        other: Invoice letters
+      message/text_message:
+        one: SMS
+        other: SMS
       mail_log:
         one: Log
         other: Logs
@@ -210,6 +243,9 @@ en:
       person/add_request:
         one: request
         other: requests
+      person_duplicate:
+        one: Duplicate
+        other: Duplicates
       people_filter:
         one: Filter
         other: Filters
@@ -268,6 +304,10 @@ en:
         vs: Valais
         zg: Zug
         zh: Zurich
+      assignment:
+        title: Title
+        description: Description
+        state: Status
       person:
         first_name: First name
         last_name: Last name
@@ -303,6 +343,10 @@ en:
         tags: Tags
         created_at: Created
         updated_at: Changed
+      person_duplicate:
+        birth_year: Year
+        roles_list: Roles
+        person_name: Prename / Name / Nickname
       person/add_request:
         person: person
         requester: request from
@@ -364,6 +408,7 @@ en:
         display_booking_info: Display number of registrations
         participations_visible: Visibility of participants
         waiting_list: Waiting list
+        requires_approval: Approval required
       event/contact_attrs:
         required: Mandatory
         optional: Optional
@@ -472,6 +517,14 @@ en:
         public: Public
       group_setting:
         var: Settings
+        settings:
+          text_message_provider: SMS provider
+          messages_letter: Letters
+        username: User name
+        password: Password
+        provider: Provider
+        originator: Sender
+        picture: Logo
       role:
         label: Description
         type: Role
@@ -494,6 +547,8 @@ en:
               contact_data: Read the contact details of all other people with contact data authorization.
               qualify: Creating qualifications for people at this level and all lower levels.
               approve_applications: Confirmation of course registrations for people at this level.
+              finance: Create and manage invoices
+              impersonation: Use Hitobito as another person
           kind:
             member:
               one: Member
@@ -541,8 +596,50 @@ en:
         subscribable: Subscribers may subscribe/unsubscribe themselves.
         mail_name: Mailing list address
         mail_address: Mailing list
+        mail_address_link: Mailing list
         subscribers_may_post: Subscribers may write to the mailing list
         additional_sender: Additional sender
+        preferred_labels: Preferred e-mail labels
+        main_email: Shipping to main e-mail
+        mailchimp_api_key: 'MailChimp API-Key'
+        mailchimp_list_id: 'MailChimp list-ID'
+        mailchimp_sync: 'MailChimp sync'
+        mailchimp_state: 'MailChimp status'
+        mailchimp_states:
+          unchanged: Unchanged
+          success: Updated
+          partial: Partly
+          failed: Failed
+        mailchimp_include_additional_emails: 'Synchronize all shipping addresses'
+      mail_log:
+        updated_at: Updated at
+        mail_from: Sender
+        mail_subject: Subject
+        status: Status
+        statuses:
+          retreived: Will be sent
+          bulk_delivering: Will be sent
+          completed: Sent
+          sender_rejected: Sender rejected
+          unkown_recipient: Error
+      message:
+        source: Recipient
+        subject: Subject
+        state: State
+        type: Type
+        states:
+          draft: Draft
+          pending: Prepared
+          processing: in process
+          finished: Finished
+          failed: Failed
+        recipient_count: Number of recipients
+        success_count: Recipient successful
+        failed_count: Recipient failed
+        sent_at: Sent at
+      message/letter:
+        body: Content
+        heading: Letterhead
       subscription:
         related_role_types: Roles
       people_filter:
@@ -551,6 +648,16 @@ en:
         label: Text
         subject: Subject
         body: Content
+      help_text:
+        context: Context
+        key: Key
+        body: Content
+        field:
+          one: Field
+          other: Fields
+        action:
+          one: Page
+          other: Pages
       label_format:
         name: Description
         page_size: Page size
@@ -566,8 +673,142 @@ en:
         nickname: Nickname on label
         pp_post: PP-Line
       invoice:
+        currency: Currency
+        title: Title
+        description: Text
+        invoice_items: Invoice item
+        invoice_item_article: Invoice article
         invoice_config: Invoice setting
         state: State
+        sequence_number: Number
+        esr_number: Reference number
+        amount_paid: Amount paid
+        payment_slips:
+          ch_es: Red payment slip Post (CH)
+          ch_bes: Red payment slip Bank (CH)
+          ch_esr: Orange payment slip Post (CH)
+          ch_besr: Orange payment slip Bank (CH)
+          no_ps: None
+          qr: QR invoice
+        states:
+          draft: Draft
+          issued: Issued
+          sent: Sent per e-mail
+          payed: Paid
+          reminded: Reminded
+          cancelled: Cancelled
+        recipient: Recipient
+        recipient_email: Recipient e-mail
+        recipient_address: Recipient address
+        due_at: Due at
+        issued_at: Issued at
+        sent_at: Sent at
+        cost: Invoice
+        total_inkl_vat: Total incl. VAT
+        total: Total incl. VAT
+        vat: VAT
+        vat_number: VAT Nr
+        payment_information: Payment information
+        payment_purpose: Payment purpose
+        address: Sender address
+        beneficiary: Beneficiary
+        payee: Name / Organization
+        account_number: Account Number
+        iban: IBAN
+        payment_slip: Payment slip
+        participant_number: Participant Nr
+        creator: Biller
+        cost_centers: Cost centers
+        accounts: Accounts
+        payments: Payments
+      invoice_article:
+        number: Article Nr
+        name: Description
+        description: Description
+        category: Category
+        unit_cost: Price
+        vat_rate: VAT
+        cost_center: Cost center
+        account: Account
+      invoice_config:
+        currency: Currency
+        payment_information: Payment information
+        address: Sender address
+        account_number: Account Number
+        iban: IBAN
+        due_days: Due days
+        contact: Contact
+        contact_id: Conctact
+        beneficiary: Beneficiary
+        email: Sender e-mail
+        payee: Deposit for
+        payment_slip: Payment slip
+        payment_slips:
+          qr: QR invoice
+          ch_es: Red payment slip Post (CH)
+          ch_bes: Red payment slip Bank (CH)
+          ch_esr: Orange payment slip Post (CH)
+          ch_besr: Orange payment slip Bank (CH)
+          no_ps: None
+        participant_number: Participant Nr
+        participant_number_internal: Participant Nr internal
+        payment_reminder_configs: Reminder
+        vat_number: VAT Nr
+      invoice_item:
+        name: Name
+        description: Description
+        vat_rate: VAT
+        unit_cost: Price
+        count: Quantity
+        cost: Invoice
+        cost_center: Cost center
+        account: Account
+      invoice_list:
+        title: Title
+        receiver: Recipient
+        recipients_total: Recipients total
+        recipients_paid: Recipient paid
+        amount_total: Amount total
+        amount_paid: Amount paid
+      invoice_items:
+        name: Name
+        description: Description
+        vat_rate: VAT
+        unit_cost: Price
+        count: Quantity
+        cost: Invoice
+        cost_center: Cost center
+        account: Account
+      payment:
+        invoice: Invoice
+        amount: Invoice
+        received_at: Received at
+        reference: Payment reference
+      payment_reminder:
+        invoice: Invoice
+        message: Message
+        due_at: Due at
+      payment_reminder_config:
+        title: Title
+        text: Text
+        due_days: Due days
+      payment_reminder_configs:
+        title: Reminder title
+        text: Reminder text
+        due_days: Due days reminder
+      service_token:
+        name: Name
+        description: Description
+        key: Key
+        abilities: Abilities
+        last_access: Last access
+        people: Persons at this level
+        people_below: Persons at this and all lower levels
+        groups: Groups at this and all lower levels
+        events: Events at this and all lower levels
+        invoices: Invoices at this level
+        event_participations: Participants of events at this level
+        mailing_lists: Subscribers of mailing lists at this level
       acts_as_taggable_on/tag:
         taggings_count: Number
         category: Category
@@ -581,6 +822,8 @@ en:
       api: Read all people, groups, events and invoices to which you have access, via the JSON-interfaces
   errors:
     messages:
+      attachments_not_allowed: "Attachments not allowed"
+      invalid_money: "must be rounded to 5 centimes"
       invalid_date: "is not a valid date"
       invalid_time: "is not a valid time"
       invalid_datetime: "is not a valid datetime"
@@ -589,6 +832,7 @@ en:
       on_or_before: "must be on or before %{restriction}"
       after: "must be after %{restriction}"
       on_or_after: "must be on or after %{restriction}"
+      extension_whitelist_error: "only accepts the following type of files: %{allowed_types}"
       dimensions_too_large: "only accepts images with a size smaller than  %{maximum} pixel"
       filesize_too_large: "can not be bigger than  %{maximum} mb"
       expired: "has expired, please request a new"

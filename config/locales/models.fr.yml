@@ -98,7 +98,7 @@ fr:
             name:
               must_be_unique: 'existe déjà'
         invoice:
-          recipient_address_or_email_required: 'l''adresse ou l''e-mail du destinataire doit être remplie'
+          recipient_address_or_email_required: 'L''adresse ou l''e-mail du destinataire doit être remplie'
           attributes:
             invoice_config:
               invalid: 'n''est pas valable ; adaptez les réglages avant de faire le calcul'
@@ -220,7 +220,7 @@ fr:
         other: Autorisations OAuth
       payment_reminder:
         one: rappel
-        other: rappels
+        other: Rappels
       person:
         one: Personne
         other: Personnes
@@ -509,8 +509,6 @@ fr:
               layer_and_below_read: 'Lecture à ce niveau et aux niveaux inférieurs. '
               layer_full: Ecriture / lecture à ce niveau. Création d'évènements et d'abonnements à ce niveau.
               layer_read: 'Lecture à ce niveau. '
-              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
-              group_and_below_read: Lesen auf der Gruppe und allen darunter liegende Gruppen (ohne Ebenen).
               group_full: Ecriture / lecture au niveau du groupe. Création d'évènements et d'abonnements au niveau du groupe.
               group_read: Lecture au niveau du groupe.
               contact_data: Lecture des données de contact de toutes les autres personnes avec des droits de données de contact.
@@ -625,14 +623,14 @@ fr:
         pp_post: Espace PP
       invoice:
         currency: Devise
-        title: titre
+        title: Titre
         description: Texte
         invoice_items: Détails de la facture
         invoice_item_article: Article à facturer
         invoice_config: Paramétrage
-        state: statut
-        sequence_number: numéro
-        esr_number: numéro de référence
+        state: Statut
+        sequence_number: Numéro
+        esr_number: Numéro de référence
         amount_paid: total payé
         payment_slips:
           ch_es: Bulletin de versement postal rouge (CH)
@@ -648,32 +646,32 @@ fr:
           payed: payé
           reminded: Rappel envoyé
           cancelled: annulé
-        recipient: destinataire
-        recipient_email: e-mail du destinataire
-        recipient_address: adresse du destinataire
+        recipient: Destinataire
+        recipient_email: E-mail du destinataire
+        recipient_address: Adresse du destinataire
         due_at: Échu(e) le
         issued_at: Établi(e) le
         sent_at: Envoyé(e) le
-        cost: montant
+        cost: Montant
         total_inkl_vat: Montant total
         total: Total (TVA incl.)
         vat: TVA
         vat_number: N° TVA
         payment_information: Information sur le paiement
-        payment_purpose: motif du paiement
-        address: adresse de l'expéditeur
+        payment_purpose: Motif du paiement
+        address: Adresse de l'expéditeur
         beneficiary: en faveur de
         payee: 'Nom / Entreprise '
-        account_number: numéro de compte
+        account_number: Numéro de compte
         iban: IBAN
-        payment_slip: bulletin de versement
-        participant_number: numéro du participant
+        payment_slip: Bulletin de versement
+        participant_number: Numéro du participant
         creator: Auteur de la facture
         cost_centers: Postes
         accounts: Comptes
         payments: Encaissements
       invoice_article:
-        number: numéro d'article
+        number: Numéro d'article
         name: désignation
         description: description
         category: catégorie
@@ -684,8 +682,8 @@ fr:
       invoice_config:
         currency: Devise
         payment_information: Information sur le paiement
-        address: adresse de l'expéditeur
-        account_number: numéro de compte
+        address: Adresse de l'expéditeur
+        account_number: Numéro de compte
         iban: IBAN
         due_days: Payable à (jours)
         contact: personne de contact
@@ -693,7 +691,7 @@ fr:
         beneficiary: en faveur de
         email: E-mail de l'expéditeur
         payee: Paiement à
-        payment_slip: bulletin de versement
+        payment_slip: Bulletin de versement
         payment_slips:
           qr: Facture QR
           ch_es: Bulletin de versement postal rouge (CH)
@@ -701,9 +699,9 @@ fr:
           ch_esr: Bulletin de versement postal orange (CH)
           ch_besr: Bulletin de versement bancaire orange (CH)
           no_ps: Aucun
-        participant_number: numéro du participant
+        participant_number: Numéro du participant
         participant_number_internal: Numéro du participant interne
-        payment_reminder_configs: rappels
+        payment_reminder_configs: Rappels
         vat_number: N° TVA
       invoice_item:
         name: Désignation
@@ -711,23 +709,23 @@ fr:
         vat_rate: TVA
         unit_cost: prix
         count: Quantité
-        cost: montant
+        cost: Montant
         cost_center: Poste
         account: Compte
       invoice_list:
-        receiver: destinataire
+        receiver: Destinataire
       invoice_items:
         name: Nom
         description: description
         vat_rate: TVA
         unit_cost: prix
         count: nombre
-        cost: montant
+        cost: Montant
         cost_center: Poste
         account: Compte
       payment:
         invoice: facture
-        amount: montant
+        amount: Montant
         received_at: Date de réception
         reference: référence de paiement
       payment_reminder:
@@ -735,11 +733,11 @@ fr:
         message: information
         due_at: Échu(e) le
       payment_reminder_config:
-        title: titre
+        title: Titre
         text: texte
         due_days: Payable à (jours)
       payment_reminder_configs:
-        title: titre du rappel
+        title: Titre du rappel
         text: texte du rappel
         due_days: durée d'échéance du rappel
       service_token:

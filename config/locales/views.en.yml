@@ -27,6 +27,7 @@ en:
       remove: Remove
     button:
       save: Save
+      add_another: Save and add more
       cancel: Cancel
       close: close
       search: Search
@@ -132,14 +133,23 @@ en:
     pdf: 'PDF'
     emails: 'E-Mail addresses'
     addresses: 'Address list'
+    households: 'Households'
     everything: 'All information'
+    household_option: 'Condense households'
     selection: 'Column selection'
   dropdown/invoices:
     download: 'export'
     print: 'print'
     labels: 'labels'
+    full: 'Invoice with payment slip'
+    esr_only: 'Payment slip separattely'
+    articles_only: 'Invoice separately'
     csv: 'CSV'
     pdf: 'PSD'
+  dropdown/invoice_sending:
+    button: 'Send invoice/reminder'
+    set_state: 'Set status (sent/reminded)'
+    send_mail: 'Set status and send per e-mail'
   devise:
     failure:
       already_authenticated: 'You are already registered.'
@@ -160,6 +170,9 @@ en:
         sign_in: Sign in
       form:
         sign_in: Sign in
+      oauth_info:
+        sign_in: 'Log in with %{name}'
+        info: 'Please sign in to proceed to %{oauth_app}'
     passwords:
       send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to reset your password.'
       updated: 'Your password has been changed. You''re now logged in.'
@@ -272,6 +285,7 @@ en:
         title: Approval
       specific_information: 'Specific information'
       application_answers: Registration details
+      admin_answers: Administration
       no_answer_given: '(not answered)'
       actions_show:
         change_contact_data_button: 'Change contact data'
@@ -304,6 +318,12 @@ en:
         explanation: You are registered for this event.
         caption: Cancel registration
         confirmation: "Are you sure, that you want to cancel your registration?"
+    qualifications:
+      index:
+        save: Update qualifications
+      update:
+        flash:
+          success: Qualifications succesfully updated
     register:
       register:
         title: Contact details of the participating person
@@ -315,10 +335,19 @@ en:
         next: Further
         enter_email: Please enter your email address so you can register for the event.
     participation_lists:
+      create:
+        success:
+          one: "One person added sucessfully to %{event_type}%{event}"
+          other: "%{count}persons added succesfully to %{event_type}%{event}"
       new:
         title: Assign persons to %{event_label}
         event_search: Search event...
         submit: add
+  assignments:
+    attachment: 'Appendix'
+    form:
+      attachment:
+        subject: 'Subject'
   events:
     application_fields:
       caption_signature: Participants must sign the application
@@ -339,10 +368,12 @@ en:
       explain_admin_questions: Here you can define further details per participant, which are only used for course administration.
       explain_contact_attrs: Here you can choose which contact details should be requested during registration.
       caption_applications_cancelable: Participants can cancel their registration.
+      caption_display_booking_info: The number of registrations/places is visible on the course list for all
       caption_waiting_list: If there are no more places available, new registrations automatically end up on the waiting list.
     form_tabs:
       general: General
       application_questions: Registration details
+      admin_questions: Administration
       contact_attrs: Contact data
     global:
       link:
@@ -356,6 +387,7 @@ en:
     preconditions: 'Required qualifications'
     tabs:
       participants: 'Participants'
+    export_enqueued: 'Export is started in the background and downloaded after completion.'
   event/applications:
     approved: 'The application was approved.'
     rejected: 'The application was declined.'
@@ -374,6 +406,8 @@ en:
   event/participations:
     full_entry_label: '%{model_label} from <i>%{person}</i> in <i>%{event}</i>'
     success: '%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary.'
+    instructions: 'For the definite registration you have to print the confirmation of participation by<i>printing</i>, sign it and send it by mail to the corresponding address.'
+    export_enqueued: 'Export is started in the background and downloaded after completion.'
     waiting_list: 'All places are currently taken, registration is on the waiting list.'
     show:
       link:
@@ -386,6 +420,7 @@ en:
     preconditions_not_fulfilled: '<b>Prerequisites for registration are not met.</ b>'
     below_minimum_age: "Age limit falls below %{course_minimum_age}"
     qualifications_missing: "The following qualifications are missing: %{missing}"
+    some_qualifications_missing: "Missing required qualifications"
   event/register:
     not_logged_in: "You must log in for the registration of the event '%{event}'. "
     person_found: 'We found you in our database.'
@@ -409,6 +444,11 @@ en:
     active_participants_info:
       one: '%{count} assigned registration'
       other: '%{count} assigned registrations'
+    issue_only: 'Grants %{model}%{issued}after %{until}(date of last course).'
+    prolong_only:
+      one: 'Prolongs existing qualification %{prolonged}after %{until}.'
+      other: 'Prolongs existing qualification %{prolonged} after %{until}.'
+    issue_and_prolong: 'Grants %{model}%{issued}and prolongs existing qualifications %{prolonged}after %{until}.'
   event_feeds:
     integrate: Integrate into calendar
     show:
@@ -506,6 +546,7 @@ en:
     group_name_missing: 'Name for new group must be defined.'
     no_group_selected: 'Please choose a group to be merged with.'
     not_allowed: 'You do not have the permission to merge these groups.'
+    invoice_config_not_merged: 'The invoice settings are not automatically applied. Please make the correct settings manually.'
   group/move:
     success: '%{group} has been moved to %{target}.'
     failure: 'This group can''t be moved or you don''t have the required persmissions.'
@@ -518,6 +559,8 @@ en:
       other: "%{count} records read succesfully."
   import/person_importer:
     row_with_error: "row %{row}: %{errors}"
+  import/person_duplicate_finder:
+    duplicates: "%{count}duplicates"
   invoices:
     filter:
       due_since: due since
@@ -525,10 +568,122 @@ en:
         one_day: yesterday
         one_week: one week
         one_month: one month
+    add: Create external invoice
+    add_payments: Capture payment
+    issued: Invoice sent
+    sent: Invoice sent per e-mail
+    reminder_sent: Reminded, due at %{date}(%{title})
     payed: paid
+    destroy:
+      flash:
+        success: Invoice cancelled
+    pdf:
+      total: Total amount
+      total_vat: VAT
+      cost: Interim amount
+      invoice_number: Invoice Nr
+      invoice_date: Invoice date
+      due_at: Due by
+      creator: Biller
+      vat_number: VAT Nr
   invoice_configs:
     form_tabs:
       general: general
+    update:
+      flash:
+        success: Invoice settings succesfully updated
+    general_fields:
+      payment: 'Payment'
+      payment_information_help: 'Listed in each invoice, can be adjusted per invoice'
+      address_help: 'Sender address on letter'
+      email_help: 'Overwrites sender e-mail'
+      payee_help: 'for the payment slip'
+      beneficiary_help: 'for the payment slip'
+      account_number_example: 'Example 01-162-5'
+      participant_number_internal_example: 'Example: 999999'
+      iban_example: 'Example: CH93 0076 2011 6238 5295 7'
+    reminder_fields:
+      third_level: 'For all following reminders'
+  invoice_lists:
+    form:
+      recipient_info:
+        one: "Invoice created for one person."
+        other: "Invoice created for %{count}person(s)"
+    create:
+      one: "Invoice <i>%{title}</i>created."
+      other: "Invoice <i>%{title}</i>created for %{count}recipients."
+    create_batch: "Invoice <i>%{title}</i>is beeing created for %{count}recipients."
+    update:
+      zero: 'Select at least one invoice.'
+      model_error: "Invoice %{number}not valid - %{error}."
+      issued:
+        one: "Invoice %{number}has been created."
+        other: "%{count}invoices created."
+      reminded:
+        one: "Invoice %{number}has been reminded."
+        other: "%{count}invoices reminded."
+      send_notification:
+        one: "Invoice %{number} will be sent by e-mail."
+        other: "%{count}invoices will be sent by e-mail."
+      invalid_state:
+        one: "Invoice %{number}has already been sent."
+        other: "%{count}invoices have already been created"
+      issued_invalid:
+        one: "Invoice %{number}has already been submitted."
+        other: "%{count}invoices have been submitted."
+      sent_invalid:
+        one: "Invoice %{number}has already been sent."
+        other: "%{count}invoices have already been sent."
+      payed_invalid:
+        one: "Invoice %{number}has already been paid."
+        other: "%{count}invoices have already been paid."
+      reminded_invalid:
+        one: "Reminder %{number}has already been sent."
+        other: "%{count}reminders have already been sent."
+      recipient_email_invalid:
+        one: "Invoice %{number} could not be sent because no recipient email is stored"
+        other: "%{count}invoices could not be sent because no recipient emails are stored."
+      payment_reminders_missing:
+        one: "Invoice %{number}could not be reminded because reminder settings are invalid."
+        other: "%{count}reminders could not be sent because reminder settings are invalid."
+    destroy:
+      zero: "Choose an invoice first."
+      one: "Invoice cancelled"
+      other: "%{count}invoices have been canceled."
+  payments:
+    create:
+      flash:
+        success: Payment of %{amount}has been registered.
+  payment_processes:
+    description:
+      header: camt.054 XML Datei
+      explain_xml_format: 'A camt.054 XML file is the collective posting resolution and debit and credit advice. This contains a number of different booking items which are automatically assigned to existing invoices based on the ESR number.'
+    invalid_file: Uploaded file is not valid.
+    parsing_error: The file could not be processed (%{error})I
+    created: '%{count}payments created.'
+    payments:
+      valid:
+        one: One valid payments has been detected.
+        other: '%{count}valid payments detected.'
+      invalid:
+        one: One valid payment has been detected.
+        other: '%{count}valid payments detected.'
+    show:
+      payments_with_invoice: Matching payments
+      payments_with_invoice_and_dates: Matching payments from %{from} to %{to}
+      payments_without_invoice: No invoice found
+      amount_open: Open
+      create:
+        zero: Import payments
+        one: Import payment
+        other: 'Import %{count} payments'
+      icon_tooltip_invoice_missing: Could not be matched to invoice
+      icon_tooltip_settles: Settles the open account
+      icon_tooltip_exceeds: Exceeds open account by %{difference}
+      icon_tooltip_undercuts: Undercuts open account by %{difference}
+    new:
+      upload_button: 'Upload'
+      xml_file: 'XML file'
   label_formats:
     global_labels: "Global label formats"
     own_labels: My label formats
@@ -550,15 +705,30 @@ en:
       available_under_license: 'licensed under the'
       developed_by: 'Developed by'
       source_code: 'Source code'
+    user_impersonation:
+      info: "You are logged in as %{user}"
+      end: "End imitation"
+    file_download:
+      wait_for_downloads: 'The downloads are being prepared, please wait.'
+      cancel_downloads: 'Cancel downloads'
+    synchronization:
+      wait_for_synchronization: 'Your data is currently being sent to MailChimp. This may take a moment. After that, the selected list will be updated with contacts from hitobito.'
+      synchronization_failed: 'Error (%{error}) occured while sending data to MailChimp.'
+      cancel_synchronization: 'Cancel export'
   mailing_lists:
     global:
       link:
         add: Create mailing list
     form:
       help_additional_sender: 'In addition to the administrators this e-mail may also send messages to the mailing list.'
+      caption_main_email: 'Shipping only to main email'
+      caption_main_email_with_preferred_labels: 'Shipping also to main email'
       caption_subscribable: 'Subscribers may subscribe/unsubscribe themselves'
       caption_subscribers_may_post: 'Subscribers may write to the mailing list'
       caption_anyone_may_post: 'Anyone may write to the mailing list'
+      caption_delivery_report: 'Send email with report to sender'
+      help_preferred_labels: 'If available, emails are only sent to email addresses with this designation. Email addresses that are not marked as a dispatch address are also used.'
+      help_mailchimp_sync: 'Subscribers can be exported to the MailChimp list. This action overwrites the MailChimp list and existing contacts are deleted.'
   mailing_list_decorator:
     may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
     may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'
@@ -566,16 +736,73 @@ en:
     subscribers_may_not_post: 'Subscribers may <strong>not</strong> write to the mailing list'
     anyone_may_post: 'Anyone may write to the mailing list'
     anyone_may_not_post: '<strong>Not</strong> anyone may write to the mailing list'
+    delivery_report: 'Sender get an email with report'
+    no_delivery_report: 'Sender gets no email confirmation'
     subscribe: 'Log in'
     unsubscribe: 'Sign out'
+  messages:
+    attrs:
+      dispatch_infos: Processing
+    previews:
+      show:
+        recipients_empty: Recipients list is empty.
+    dispatches:
+      create:
+        success: "%{model_class}prepared for printing."
+    actions_show:
+      button_dispatch_letter: Print
+      button_show_assignment: Print preview
+      button_duplicate: Duplicate
+      button_preview: Preview
+      button_dispatch_text_message: Send
+    letter:
+      fields:
+        available_placeholders: 'Placeholders: %{placeholders}'
+    text_message:
+      fields:
+        remaining_chars: Remaining characters
+    form:
+      available_placeholders: 'Available placeholders:'
+      recipient_info:
+        one: "%{model_class}created for one person."
+        other: "%{model_class}created for %{count}persons."
+    table:
+      infos:
+        sender: "Sender: %{mail}"
+        sender_rejected: Sender has been rejected
+        unkown_recipient: Sender unknown
   navigation:
+    menu: 'Menu'
     groups: 'Groups'
     events: 'Events'
     courses: 'Courses'
     admin: 'Settings'
+    admin/event_feed: 'Integrate calendar'
+    admin/oauth_authorizations: 'OAuth authentifications'
     invoices: 'Invoices'
   notes:
     new_note: Add note
+    note:
+      created: '%{time_ago} ago'
+    paginator:
+      newer_notes: Newer posts
+      older_notes: Older posts
+  oauth:
+    applications:
+      form:
+        help_native_redirect_uris: One redirect per line. Use <code class='bg-light'>%{native_redirect_uri}</code> for local tests.
+      attrs:
+        profile_endpoint_help: Profile information of the user can be obtained via this endpoint. The access token must be passed in the authorization header. The desired scope can be passed as an X-Scope header.
+        profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
+    access_grants:
+      list:
+        title: Active %{model_name} for %{uri}
+    authorizations:
+      title: My Oauth authorisations
+      revoke: "Access to <i>%{application}</i>has been canceled"
+    tabs:
+      grants: Grants
+      tokens: Tokens
   qualifications:
     in_years: '%{years} years'
     valid_until: 'to %{date}'
@@ -591,6 +818,25 @@ en:
       title: Create qualification kind
   paper_trail/version_decorator:
     by: 'from %{author}'
+  person_duplicates:
+    merge:
+      new:
+        title: Merge person
+        select_person: Which data should be kept?
+        merge_hint: When merging, the roles, phone no., additional emails as well as the social media entries are taken over. All other data of this person like notes, course registrations etc. will be deleted.
+        merge_hint_invalid: This person has invalid data.
+        irreversible: This process cannot be undone.
+        invalid_persons: The entries can only be merged when both are valid.
+        reload: Check again
+      action: Merge
+      success: Merge successful
+    ignore:
+      new:
+        title: Ignore duplicate?
+        confirm: Duplicate for %{person}?
+        irreversible: This process cannot be undone.
+      action: Ignore
+      success: Duplicate successfully removed
   person:
     confirm_delete: "All Data for %{person} will be completely deleted, including any participations and qualifications. Delete this person only, if no one needs this data anymore."
     add_requests:
@@ -628,8 +874,11 @@ en:
           approved: "The request for access for %{person} has already been granted."
           rejected: "The request for access for %{person} has already been denied."
     households:
+      form:
+        address_updated: "Address updated"
       fields:
         lives_in_household_with: "Lives in household with"
+        update_denied: "No permissions for %{other_person}"
     csv_imports:
       description:
         header: CSV files
@@ -684,6 +933,16 @@ en:
       index:
         my_subscriptions: My Subscriptions
         available_subscriptions: Available Subscriptions
+      create:
+        success: <i>%{person}</i>subscribed to <i>%{mailing_list}</i>.
+      destroy:
+        success: <i>%{person}</i> removed from <i>%{mailing_list}</i>.
+    tags:
+      tag:
+        category_validation:
+          email_primary_invalid: Main email is invalid
+          email_additional_invalid: Further email is invalid
+          address_invalid: Address not in directory
   person/csv_imports:
     invalid_file: Please select a valid CSV file.
     duplicate_keys:
@@ -717,10 +976,12 @@ en:
         other: '%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access.'
   people:
     send_password_instructions: Login information has been sent.
+    send_password_instructions_invalid_email: Login has not been sent because email is invalid.
     years_old: (%{years} years old)
     tabs:
       history: History
       log: log
+      colleagues: Colleagues
       invoices: Invoices
       subscriptions: Subscriptions
     actions_show:
@@ -729,6 +990,8 @@ en:
         new: The person does not have a login.<br><br>This action sends a link to set a password.
         resend: The person has received a link to set a password, but did not set one.<br><br>This action resends the link.
         reset: Person has a login.<br><br>This action sends a link to reset the password.
+      impersonate_user: Imitate
+      impersonate_user_tooltip: Operate hitobito as this person.
     actions_index:
       add_person: Add Person
       import_list: Import list
@@ -773,6 +1036,16 @@ en:
     tags:
       add_tag: Add tag...
       no_entry: (none)
+    export_enqueued: 'Export is started in the background and downloaded after completion.'
+    export_email_needed: 'Email needed for export.'
+    multiselect_actions:
+      remove_role: Remove roles
+      move_role: Move roles
+      add_role: Add roles
+      add_participation: Add to event
+      tag_lists: Tags
+      remove_tags: Remove tags
+      add_tags: Add tags
   participations:
     destroy:
       flash:
@@ -782,11 +1055,57 @@ en:
       save_search: Save search
       save_filter: Save filter
       save_filter_placeholder: Enter a name to save this filter
+      range:
+        deep: Current level and below
+        layer: Current level with groups
+        group: Only this group
+        group_deep: This group and below
+      filters_qualification_validity:
+        active: Only valid qualifications
+        reactivateable: Valid and reactivated qualifications
+        all: All qualifications
+      filters_role_kind:
+        active: role was active
+        created: role was made.
+        deleted: role has been deleted.
+    attributes:
+      title: Fields
+      match: contains
+      equal: is equal
+      greater: bigger than
+      smaller: smaller than
+    tag:
+      title: Tags
+      prompt_tag_selection: Include persons with at least one of these tags
+      prompt_tag_placeholder: Tag name
+    tag_absence:
+      prompt_tag_absence_selection: Exclude persons with at least one of these tags
+      prompt_tag_absence_placeholder: Tag name
+    new:
+      title: Filter persons
+    range:
+      prompt_range: In which range should be searched?
+    role:
+      title: Roles
+      prompt_role_selection: Which roles should be displayed?
+      prompt_role_duration: Period (optional)
+      prompt_role_duration_selection: Which period should be considered?
+      prompt_role_duration_until: until
     qualification:
+      title: Qualifications
       prompt_qualification_selection: Which qualifications should be displayed?
       prompt_validity: Which validity should the shown qualifications have?
+      prompt_year: Restrict qualification year
       prompt_kind: In which area should be searched?
+      start_at_year_label: Received between
+      start_at_year_infix: and
+      finish_at_year_label: Dulled between
+      finish_at_year_infix: and
+      not_enough_permissions: No permission to search persons with this filter.
     simple_radio:
+      match:
+        one: Person has at least one of these qualifications
+        all: Person has all of these qualifications
       validity:
         active: Only currently valid qualifications
         reactivateable: Valid and reactivatable qualifications
@@ -818,8 +1137,79 @@ en:
           The role %{role} in the group %{group} can only view public data (groups,
           events and subscriptions; no other people).
       only_visible_from_above: This role is visible only to people in this level, not by people from higher layers.
+  role_lists:
+    available:
+      no_entries: No roles to delete
+    access_denied: Access to %{person} denied
+    destroy:
+      success:
+        zero: No roles deleted
+        one: One role has been deleted
+        other: '%{count} roles have been deleted'
+    create:
+      success:
+        zero: No roles created
+        one: One role has been created
+        other: '%{count} roles have been created'
+      failure: Please enter a valid role
+    update:
+      success:
+        zero: No roles moved
+        one: One role has been moved
+        other: '%{count} roles have been moved'
+      failure: Please enter a valid role
+    move:
+      title: Where should these persons be moved to?
+      submit: Further
+    movable:
+      title: Which roles should be deleted?
+      submit: Move roles
+    deletable:
+      title: Which roles should be deleted?
+      submit: Delete
+    new:
+      title: Where should the new roles be created?
+      submit:
+        one: 'One role has been created'
+        other: '%{count} roles created'
+  tags:
+    multiselect_actions:
+      merge_tags: Merge
+    categories:
+      other: Other
+      validation: Validation
+  tag_lists:
+    destroy:
+      success:
+        zero: No tags removed
+        one: One tag has been removed
+        other: '%{count} tags have been removed'
+    create:
+      success:
+        zero: No tags created
+        one: One tag has been created
+        other: '%{count} tags have been created'
+    deletable:
+      title: Which tags should be deleted?
+      no_entries: Tags cannot be removed
+      submit: Delete
+    new:
+      title: Which tags should be added?
+      no_entries: Tags cannot be created
+      separate_multiple_tags_with_comma: Separate tags with comma
+      submit:
+        one: 'Tags created for one person'
+        other: 'Tags created for %{count} persons'
+  service_tokens:
+    abilities:
+      read: Read
+    global:
+      link:
+        add: Add API key
   subscriber:
     group:
+      edit:
+        title: Edit subscription
       form:
         subgroups_selectable: 'Only groups within the subscription group can be selected'
         subgroups_and_siblings_selectable: 'Only groups within the subscription group or within the adjacent groups from tye %{type} can be selected'
@@ -847,6 +1237,8 @@ en:
     belongs_to: 'belongs to'
     deleted: '(deleted)'
     layer_upwards: '< to a higher level'
+  sheet/payment_process:
+    title: Import XML payment file
   subscriptions:
     actions_index:
       add_person: Add person
@@ -859,6 +1251,7 @@ en:
     subscription:
       only_persons_with: 'Only people with:'
       persons_excluded_with: 'Exclude people with:'
+    export_enqueued: 'Export is started in the background and downloaded after completion.'
   version:
     attribute_change:
       from_to: "%{attr} has been changed from <i>%{from}</i> to <i>%{to}</i>."
@@ -872,7 +1265,19 @@ en:
         create: "Access for <i>%{label}</i> requested."
         update: "Update of request for <i>%{label}</i>: %{changeset}"
         destroy: "Request for <i>%{label}</i> has been answered."
+    impersonate: "Account took over from %{user}"
+    impersonation_done: "Account impersonation from %{user} ended."
+    append_to_household: "%{item} has been added to household %{object_changes}"
+    household_updated: "Household %{object_changes} updated."
+    remove_from_household: "%{item} removed from household %{object_changes}"
+    person_merge: "Two persons have been merged. Deleted person:"
+  tags/merge:
+    success: Tags merged successfully.
   tags_merge:
+    tags: Tags
+    title: Merge selected tags?
+    name: New name
+    submit: Merge
     category: Category
   views:
     pagination:

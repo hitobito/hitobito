@@ -33,8 +33,8 @@ class Authenticatable::Tokens
   private
 
   def extract_request_token(token)
-    x_param = "HTTP_X_#{token.to_s.upcase}"
-    token_value = params[token].presence || request.headers[x_param].presence
+    x_param = "HTTP_X_#{token.to_s.underscore.upcase}"
+    token_value = request.headers[x_param].presence || params[token].presence
     block_given? ? yield(token_value) : token_value
   end
 

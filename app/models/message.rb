@@ -3,7 +3,7 @@
 # == Schema Information
 #
 # Table name: messages
-#
+
 #  id              :bigint           not null, primary key
 #  failed_count    :integer          default(0)
 #  recipient_count :integer          default(0)
@@ -105,6 +105,18 @@ class Message < ActiveRecord::Base
 
   def exporter_class
     "Export::Pdf::Messages::#{type.demodulize}".constantize
+  end
+
+  def total_recipient_count
+    @total_recipient_count ||= mailing_list.people_count
+  end
+
+  def valid_recipient_count
+    raise 'implement in subclass'
+  end
+
+  def invalid_recipient_count
+    total_recipient_count - valid_recipient_count
   end
 
 end

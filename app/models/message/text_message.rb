@@ -34,4 +34,9 @@ class Message::TextMessage < Message
   def subject
     text && text[0..20]
   end
+
+  def valid_recipient_count
+    @valid_recipient_count ||= mailing_list.people_count(Person.with_mobile)
+  end
+
 end

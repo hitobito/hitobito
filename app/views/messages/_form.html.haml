@@ -6,8 +6,7 @@
 = standard_form(entry, url: [parent.group, parent, entry], data: { group: group_path(parent.group.layer_group)  }) do |f|
   .controls
     %p.text
-      = link_to([parent.group, parent, :subscriptions, format: :pdf], target: :_blank) do
-        =t('.recipient_info', count: @recipient_count, model_class: model_class.model_name.human)
+      = message_recipient_info(entry)
 
   = f.hidden_field :type
 

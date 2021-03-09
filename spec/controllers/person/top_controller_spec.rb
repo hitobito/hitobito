@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe Person::TopController do
-  
+
   let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
@@ -27,9 +27,7 @@ describe Person::TopController do
         get :show, params: { id: top_leader.id, user_email: 'hans@example.com', user_token: '123' }, format: :json
         is_expected.to redirect_to(group_person_path(top_leader.primary_group_id,
                                                      top_leader.id,
-                                                     format: :json,
-                                                     user_email: 'hans@example.com',
-                                                     user_token: '123'))
+                                                     format: :json))
       end
     end
 

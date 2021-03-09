@@ -59,10 +59,10 @@ module Authenticatable
 
   def doorkeeper_sign_in
     token = token_authentication.oauth_token
-    return unless token&.acceptable? :api
+    return unless token&.accessible?
+    return head(:forbidden) unless token.acceptable?(:api)
 
-    user = Person.find(token.resource_owner_id)
-    sign_in user, store: false
+    sign_in token.person, store: false
   end
 
   def authenticate_person!(*args)

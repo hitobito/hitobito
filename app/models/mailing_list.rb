@@ -117,6 +117,10 @@ class MailingList < ActiveRecord::Base
     MailingList::Subscribers.new(self, people_scope).people
   end
 
+  def people_count(people_scope = Person)
+    MailingList::Subscribers.new(self, people_scope).people.count
+  end
+
   def sync
     Synchronize::Mailchimp::Synchronizator.new(self).perform
   end
@@ -143,5 +147,4 @@ class MailingList < ActiveRecord::Base
   def schedule_mailchimp_destroy
     MailchimpDestructionJob.new(mailchimp_list_id, mailchimp_api_key, people).enqueue!
   end
-
 end

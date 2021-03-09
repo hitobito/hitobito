@@ -34,4 +34,8 @@ class Message::Letter < Message
   validates_presence_of :body
 
   self.duplicatable_attrs << 'body'
+
+  def valid_recipient_count
+    @valid_recipient_count ||= mailing_list.people_count(Person.with_address)
+  end
 end

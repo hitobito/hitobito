@@ -54,7 +54,27 @@ module MessagesHelper
     Message::TextMessage.validators_on(:text).first.options[:maximum]
   end
 
+  def message_recipient_info(message)
+    content = link_to([parent.group, parent, :subscriptions, format: :pdf], target: :_blank) do
+      t(".recipient_info.valid.#{message.type.underscore}",
+        count: message.valid_recipient_count,
+        model_class: message.model_name.human)
+    end
+    content += message_invalid_recipient_info(message)
+    content
+  end
+
   private
+
+  def message_invalid_recipient_info(message)
+    return '' if message.invalid_recipient_count.zero?
+
+    info = t(".recipient_info.invalid.#{message.type.underscore}",
+      count: message.invalid_recipient_count,
+      model_class: message.model_name.human)
+
+    " (#{info})"
+  end
 
   def placeholder_links(editor_id)
     placeholders = Export::Pdf::Messages::Letter::Content.placeholders

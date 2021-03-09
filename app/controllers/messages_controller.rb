@@ -29,8 +29,6 @@ class MessagesController < CrudController
   self.nesting = [Group, MailingList]
   self.remember_params += [:year]
 
-  before_render_form :set_recipient_count
-
   before_action :authorize_duplicate, only: :new
 
   def new
@@ -89,9 +87,5 @@ class MessagesController < CrudController
 
   def authorize_duplicate
     authorize!(:show, duplication_source) if duplication_source.present?
-  end
-
-  def set_recipient_count
-    @recipient_count = parent.people.size
   end
 end

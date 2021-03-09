@@ -36,13 +36,11 @@ describe MessagesController do
     it 'builds new Letter' do
       get :new, params: nesting.merge(message: { type: 'Message::Letter' })
       expect(assigns(:message)).to be_kind_of(Message::Letter)
-      expect(assigns(:recipient_count)).to eq 1
     end
 
     it 'builds new LetterWithInvoice' do
       get :new, params: nesting.merge(message: { type: 'Message::LetterWithInvoice' })
       expect(assigns(:message)).to be_kind_of(Message::LetterWithInvoice)
-      expect(assigns(:recipient_count)).to eq 1
     end
   end
 

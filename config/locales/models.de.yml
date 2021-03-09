@@ -86,7 +86,7 @@ de:
         oauth/application:
           attributes:
             scopes:
-              not_match_configured: "stimmen nicht mit denen am server hinterlegten überein."
+              not_match_configured: "stimmen nicht mit den auf dem Server hinterlegten überein."
         person:
           name_missing: 'Bitte geben Sie einen Namen ein'
           readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."

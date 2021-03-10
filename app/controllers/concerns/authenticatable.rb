@@ -52,8 +52,8 @@ module Authenticatable
   end
 
   def prepare_authorization_via_shared_access_token
-    if current_person && params.key?(:access_token)
-      current_person.shared_access_token = params[:access_token]
+    if current_person && params.key?(:shared_access_token)
+      current_person.shared_access_token = params[:shared_access_token]
       true
     end
   end

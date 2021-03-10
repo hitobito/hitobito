@@ -59,8 +59,8 @@ module EventsHelper
     send(path, group, options)
   end
 
-  def access_token_event_url(group, event)
-    group_event_url(group, event, access_token: event.access_token)
+  def shared_access_token_event_url(group, event)
+    group_event_url(group, event, shared_access_token: event.shared_access_token)
   end
 
   def application_approve_role_exists?

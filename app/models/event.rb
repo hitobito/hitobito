@@ -352,7 +352,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   def token_accessible?(token)
     return false if shared_access_token.nil? || token.nil?
 
-    token == shared_access_token
+    Devise.secure_compare(token, shared_access_token)
   end
 
   private

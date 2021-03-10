@@ -13,29 +13,37 @@ describe Messages::DispatchesController do
   before { sign_in(top_leader) }
 
   context 'letter' do
-    let(:message)    { messages(:letter) }
+    let(:message) { messages(:letter) }
 
-    it 'POST#creates creates dispatch and enqueues job and redirect to assignments#new' do
-      expect do
-        post :create, params: { message_id: message.id }
-      end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
-      expect(message.reload.state).to eq 'pending'
+    it 'POST#create redirects to assignments#new' do
+      post :create, params: { message_id: message.id }
       expect(response).to redirect_to new_assignment_redirect_path(message)
-      expect(flash[:notice]).to eq 'Brief wurde als Druckauftrag vorbereitet.'
+      expect(flash[:warning]).to eq 'Sobald der Druckauftrag erstellt wurde kann der Brief nicht mehr bearbeitet werden.'
     end
   end
 
   context 'letter with invoice' do
-    let(:message)    { messages(:with_invoice) }
+    let(:message) { messages(:with_invoice) }
 
-    it 'POST#creates creates dispatch and enqueues job and redirect to assignments#new' do
+    it 'POST#create redirects to assignments#new' do
+      post :create, params: { message_id: message.id }
+      expect(message.reload.invoice_list).to be_persisted
+      expect(response).to redirect_to new_assignment_redirect_path(message)
+      expect(flash[:alert]).to eq 'Sobald der Druckauftrag erstellt wurde kann der Brief nicht mehr bearbeitet werden.'
+    end
+  end
+
+  context 'text message' do
+    let(:message) { messages(:sms) }
+    let(:list) { message.mailing_list }
+
+    it 'POST#create creates dispatch and enqueues job and redirects to message#show' do
       expect do
         post :create, params: { message_id: message.id }
       end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
-      expect(message.reload.invoice_list).to be_persisted
       expect(message.reload.state).to eq 'pending'
-      expect(response).to redirect_to new_assignment_redirect_path(message)
-      expect(flash[:notice]).to eq 'Rechnungsbrief wurde als Druckauftrag vorbereitet.'
+      expect(response).to redirect_to group_mailing_list_message_path(group_id: list.group.id, mailing_list_id: list.id, id: message.id)
+      expect(flash[:notice]).to eq 'SMS wird versendet.'
     end
   end
 

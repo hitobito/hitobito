@@ -41,4 +41,13 @@ describe Assignment do
     assignment.reload
     expect(assignment.creator_id).to_not eq(bottom_member.id)
   end
+
+  context 'attachment' do
+    let(:printer) { Fabricate(:company) }
+    let(:assigment) { Assignment.new(person: printer, creator: top_leader)
+
+    it 'prepares attachment for printing after creation' do
+    end
+  end
+
 end

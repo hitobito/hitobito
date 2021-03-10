@@ -25,11 +25,16 @@
 #
 
 class Assignment < ActiveRecord::Base
+  ATTACHMENT_TYPES = [Message::Letter, Message::LetterWithInvoice].freeze
   include I18nEnums
 
   belongs_to :person
   belongs_to :creator, class_name: 'Person'
   belongs_to :attachment, polymorphic: true
+
+  validates :attachment, inclusion: { in: ATTACHMENT_TYPES }, allow_nil: true
+
+  after_create :attachment_prepare_print
 
   scope :list, -> { order(:created_at) }
 
@@ -44,5 +49,13 @@ class Assignment < ActiveRecord::Base
 
   def path_args
     [person.primary_group, person, self]
+  end
+
+  private
+
+  def attachment_prepare_print
+    if attachment && attachment.respond_to?(:prepare_print)
+      attachment.prepare_print!
+    end
   end
 end

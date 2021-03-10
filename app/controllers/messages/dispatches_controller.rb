@@ -9,7 +9,9 @@ module Messages
   class DispatchesController < ApplicationController
     def create
       authorize!(:update, message)
-      update_and_enqueue
+      if message.text_message?
+        update_and_enqueue
+      end
       redirect_to redirect_path, notice: flash_message
     end
 
@@ -30,7 +32,7 @@ module Messages
     end
 
     def flash_message
-      t('.success', model_class: message.class.model_name.human)
+      t(".success.#{message.class.model_name.to_s.underscore}")
     end
 
     def update_and_enqueue

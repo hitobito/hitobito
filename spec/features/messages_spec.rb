@@ -57,4 +57,18 @@ describe :messages, js: true do
     end
   end
 
+  context 'letter assignments' do
+
+      Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
+      42.times do
+        person = Fabricate(:person_with_address)
+        Group::TopGroup::Leader.create!(group: groups(:top_group), person: person)
+      end
+
+    it 'creates new assignment for letter' do
+    end
+
+    it 'redirects back to message#show when cancelling assigment' do
+    end
+  end
 end

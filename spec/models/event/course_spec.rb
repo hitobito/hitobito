@@ -129,11 +129,4 @@ describe Event::Course do
     end
 
   end
-
-  context 'globally visible' do
-    it 'is not used by courses, they are always globally visible' do
-      # See EventAbility for details
-      is_expected.to_not be_attr_used(:globally_visible)
-    end
-  end
 end

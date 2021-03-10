@@ -825,16 +825,12 @@ describe Event do
       subject.shared_access_token = nil
 
       expect { subject.valid? }.to change(subject, :shared_access_token).from(nil)
-
-      is_expected.to be_access_token
     end
 
     it 'is not overwritten if set' do
       subject.shared_access_token = token
 
       expect { subject.valid? }.to_not change(subject, :shared_access_token)
-
-      is_expected.to be_access_token
     end
   end
 

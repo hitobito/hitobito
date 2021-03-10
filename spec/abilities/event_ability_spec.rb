@@ -89,7 +89,7 @@ describe EventAbility do
       it 'may see sibling layers events with a token' do
         sibling_group = Fabricate(Group::TopLayer.name.to_sym, parent: nil, name: 'SecondTop')
 
-        other = Fabricate(:event, groups: [sibling_group], globally_visible: false, access_token: token)
+        other = Fabricate(:event, groups: [sibling_group], globally_visible: false, shared_access_token: token)
         user.shared_access_token = token
 
         is_expected.to be_able_to(:show, other)
@@ -133,7 +133,7 @@ describe EventAbility do
       it 'may see sibling layers events with a token' do
         sibling_group = Fabricate(Group::TopLayer.name.to_sym, parent: nil, name: 'SecondTop')
 
-        other = Fabricate(:course, groups: [sibling_group], globally_visible: false, access_token: token)
+        other = Fabricate(:course, groups: [sibling_group], globally_visible: false, shared_access_token: token)
         user.shared_access_token = token
 
         is_expected.to be_able_to(:show, other)
@@ -228,7 +228,7 @@ describe EventAbility do
       end
 
       it 'may see lower layers events with a token' do
-        other = Fabricate(:event, groups: [groups(:bottom_group_one_one)], globally_visible: false, access_token: token)
+        other = Fabricate(:event, groups: [groups(:bottom_group_one_one)], globally_visible: false, shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -244,7 +244,7 @@ describe EventAbility do
       end
 
       it 'may see sibling layers events with a token' do
-        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: false, access_token: token)
+        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: false, shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -270,7 +270,7 @@ describe EventAbility do
       end
 
       it 'may see sibling layers events with a token' do
-        other = Fabricate(:course, groups: [groups(:bottom_layer_two)], globally_visible: false, access_token: token)
+        other = Fabricate(:course, groups: [groups(:bottom_layer_two)], globally_visible: false, shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -356,7 +356,7 @@ describe EventAbility do
         end
 
         it 'may see sibling group events with a token' do
-          other = Fabricate(:event, groups: [sibling_group], globally_visible: false, access_token: token)
+          other = Fabricate(:event, groups: [sibling_group], globally_visible: false, shared_access_token: token)
           user.shared_access_token = token
           is_expected.to be_able_to(:show, other)
         end
@@ -407,7 +407,7 @@ describe EventAbility do
         end
 
         it 'may see lower layer events with a token' do
-          event.access_token = token
+          event.shared_access_token = token
           user.shared_access_token = token
           is_expected.to be_able_to(:show, event)
         end
@@ -436,7 +436,7 @@ describe EventAbility do
         end
 
         it 'may see sibling group events with a token' do
-          other = Fabricate(:course, groups: [sibling_group], globally_visible: false, access_token: token)
+          other = Fabricate(:course, groups: [sibling_group], globally_visible: false, shared_access_token: token)
           user.shared_access_token = token
           is_expected.to be_able_to(:show, other)
         end
@@ -463,7 +463,7 @@ describe EventAbility do
         end
 
         it 'may see lower layer events with a token' do
-          event.access_token = token
+          event.shared_access_token = token
           user.shared_access_token = token
           is_expected.to be_able_to(:show, event)
         end
@@ -565,7 +565,7 @@ describe EventAbility do
       end
 
       it 'may see sibling group events with a token' do
-        other = Fabricate(:event, groups: [groups(:bottom_group_one_two)], globally_visible: false, access_token: token)
+        other = Fabricate(:event, groups: [groups(:bottom_group_one_two)], globally_visible: false, shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -589,7 +589,7 @@ describe EventAbility do
         it 'may see lower layers events' do
           other = Fabricate(:event,
                             groups: [groups(:bottom_group_one_one)], globally_visible: false,
-                            access_token: token)
+                            shared_access_token: token)
           user.shared_access_token = token
           is_expected.to be_able_to(:show, other)
         end
@@ -657,7 +657,7 @@ describe EventAbility do
       end
 
       it 'may not see lower layers events' do
-        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: false, access_token: token)
+        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: false, shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -675,7 +675,7 @@ describe EventAbility do
 
       it 'may see sibling layers events' do
         sibling_group = Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTopper')
-        other = Fabricate(:event, groups: [sibling_group], globally_visible: false, access_token: token)
+        other = Fabricate(:event, groups: [sibling_group], globally_visible: false, shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -694,7 +694,7 @@ describe EventAbility do
       end
 
       it 'may not see lower layers events' do
-        other = Fabricate(:course, groups: [groups(:bottom_layer_two)], globally_visible: false, access_token: token)
+        other = Fabricate(:course, groups: [groups(:bottom_layer_two)], globally_visible: false, shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end

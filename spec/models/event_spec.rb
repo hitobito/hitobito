@@ -783,56 +783,56 @@ describe Event do
     end
   end
 
-  context 'access_token' do
+  context 'shared_access_token' do
     let(:token) { 'p3UEhxgz4Qj1d3Q3qVfy' } # Devise.friendly_token
 
     it 'is an attribute' do
-      is_expected.to respond_to(:access_token)
-      is_expected.to respond_to(:access_token=)
+      is_expected.to respond_to(:shared_access_token)
+      is_expected.to respond_to(:shared_access_token)
     end
 
     it 'can be checked' do
-      subject.access_token = token
+      subject.shared_access_token = token
 
       is_expected.to be_token_accessible(token)
     end
 
     it 'is not token accessible if unset' do
-      subject.access_token = nil
+      subject.shared_access_token = nil
 
       is_expected.to_not be_token_accessible(token)
     end
 
     it 'is not token accessible if no token provided' do
-      subject.access_token = token
+      subject.shared_access_token = token
 
       is_expected.to_not be_token_accessible(nil)
     end
 
     it 'is not token accessible if both values are nil' do
-      subject.access_token = nil
+      subject.shared_access_token = nil
 
       is_expected.to_not be_token_accessible(nil)
     end
 
     it 'is not token accessible if wrong token provided' do
-      subject.access_token = token.downcase
+      subject.shared_access_token = token.downcase
 
       is_expected.to_not be_token_accessible(token.succ.upcase)
     end
 
     it 'is set upon validation if empty' do
-      subject.access_token = nil
+      subject.shared_access_token = nil
 
-      expect { subject.valid? }.to change(subject, :access_token).from(nil)
+      expect { subject.valid? }.to change(subject, :shared_access_token).from(nil)
 
       is_expected.to be_access_token
     end
 
     it 'is not overwritten if set' do
-      subject.access_token = token
+      subject.shared_access_token = token
 
-      expect { subject.valid? }.to_not change(subject, :access_token)
+      expect { subject.valid? }.to_not change(subject, :shared_access_token)
 
       is_expected.to be_access_token
     end

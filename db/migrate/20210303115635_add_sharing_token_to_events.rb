@@ -3,6 +3,8 @@ class AddSharingTokenToEvents < ActiveRecord::Migration[6.0]
     add_column :events, :shared_access_token, :string, null: true
     add_index :events, :shared_access_token
 
+    Event.reset_column_information
+
     reversible do |dir|
       dir.up do
         Event.find_each do |e|

@@ -1,5 +1,4 @@
 # encoding: utf-8
-# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -21,7 +20,7 @@ module MailRelay
 
     class << self
       def personal_return_path(list_name, sender_email, domain = nil)
-        return nil if sender_email.blank?
+        return nil unless sender_email.present?
 
         # recipient format (before @) must match regexp in #reject_not_existing
         id_suffix = '+' + sender_email.tr('@', '=')
@@ -132,7 +131,7 @@ module MailRelay
     end
 
     def sender_is_additional_sender?
-      return false if sender_email.blank?
+      return false unless sender_email.present?
 
       additional_senders = mailing_list.additional_sender.to_s
       list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
@@ -162,8 +161,8 @@ module MailRelay
     def potential_senders
       Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
                    " AND additional_emails.contactable_type = '#{Person.sti_name}'").
-        where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email).
-        distinct
+             where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email).
+             distinct
     end
 
     def send_reject_message?
@@ -180,25 +179,5 @@ module MailRelay
       end
     end
 
-    def append_unsubscribe_link
-      if html?(message)
-        message.html_part.to_s << unsubscribe_url(html: true)
-      else
-        message.body.to_s << unsubscribe_url
-      end
-    end
-
-    def bulk_mail
-      append_unsubscribe_link if mailing_list.subscribable?
-      super
-    end
-
-    def html?(message)
-      message.multipart?
-    end
-
-    def unsubscribe_url(html: false)
-      MailingList::UnsubscribeUrl.unsubscribe_link(mailing_list, html: html)
-    end
   end
 end

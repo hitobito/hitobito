@@ -4,6 +4,7 @@ class AddSharingTokenToEvents < ActiveRecord::Migration[6.0]
     add_index :events, :shared_access_token
 
     Event.reset_column_information
+    Event::Course.reset_column_information
 
     reversible do |dir|
       dir.up do

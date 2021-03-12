@@ -525,6 +525,8 @@ de:
         create: Adresse wurde erstellt.
         reset: Adresse wurde aktualisiert.
 
+  mails:
+    manage: Mails verwalten
 
   filter_navigation/dropdown:
     additional_views: 'Weitere Ansichten'
@@ -924,6 +926,7 @@ de:
     admin: 'Einstellungen'
     admin/event_feed: 'Kalender integrieren'
     admin/oauth_authorizations: 'OAuth-Autorisierungen'
+    mails: 'Mails'
     invoices: 'Rechnungen'
 
   notes:

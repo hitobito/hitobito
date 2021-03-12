@@ -462,6 +462,10 @@ en:
       flash:
         create: Address was created.
         reset: Address has been updated.
+
+  mails:
+    manage: Manage Mails
+
   filter_navigation/dropdown:
     additional_views: 'Further views'
   filter_navigation/people:
@@ -778,6 +782,7 @@ en:
     admin: 'Settings'
     admin/event_feed: 'Integrate calendar'
     admin/oauth_authorizations: 'OAuth authentifications'
+    mails: 'Mails'
     invoices: 'Invoices'
   notes:
     new_note: Add note

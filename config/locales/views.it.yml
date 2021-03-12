@@ -453,6 +453,10 @@ it:
       flash:
         create: È stato creato l'indirizzo.
         reset: L'indirizzo è stato attualizzato.
+
+  mails:
+    manage: Gestire le mail
+
   filter_navigation/dropdown:
     additional_views: 'altre opinioni'
   filter_navigation/people:
@@ -739,6 +743,7 @@ it:
     admin: 'admin'
     admin/event_feed: 'Integrare il calendario.'
     admin/oauth_authorizations: 'Autorizzazioni OAuth'
+    mails: 'Mails'
     invoices: 'Fatture'
   notes:
     new_note: Nuova nota

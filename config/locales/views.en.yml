@@ -462,6 +462,7 @@ en:
       flash:
         create: Address was created.
         reset: Address has been updated.
+
   filter_navigation/dropdown:
     additional_views: 'Further views'
   filter_navigation/people:

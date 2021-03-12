@@ -465,6 +465,10 @@ fr:
       flash:
         create: L'adresse a été créée.
         reset: L'adresse a été actualisée.
+
+  mails:
+    manage: Gérer les mails
+
   filter_navigation/dropdown:
     additional_views: 'Autres vues'
   filter_navigation/people:
@@ -809,6 +813,7 @@ fr:
     admin: 'Paramètres'
     admin/event_feed: 'Intégrer le calendrier'
     admin/oauth_authorizations: 'Autoriser OAuth'
+    mails: 'Mails'
     invoices: 'Factures'
   notes:
     new_note: Ajouter une note

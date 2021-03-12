@@ -22,7 +22,7 @@ class ErrorsController < ActionController::Base
   private
 
   def current_user
-    false
+    nil
   end
 
   def origin_user

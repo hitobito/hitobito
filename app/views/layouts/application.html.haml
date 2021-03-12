@@ -35,10 +35,9 @@
       = link_to(header_logo, root_path, class: 'logo-image')
 
     #page
-      - if current_user
-        - if current_user.roles.present?
-          %nav.nav-left
-            = render 'layouts/nav'
+      - if current_user&.roles.present?
+        %nav.nav-left
+          = render 'layouts/nav'
       .container-fluid
         #page-header
           - if current_user
@@ -52,7 +51,7 @@
           - elsif current_user.nil? # nil without login, false on error
             = render 'layouts/unauthorized'
 
-        - if current_user && current_user.roles.present?
+        - if current_user&.roles.present?
           = render_sheets do
             .content-header
               %h1

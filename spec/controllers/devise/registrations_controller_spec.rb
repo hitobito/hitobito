@@ -63,7 +63,7 @@ describe Devise::RegistrationsController do
     end
 
     context 'user without password' do
-      before { person.update(encrypted_password: nil) }
+      before { person.update!(encrypted_password: nil) }
       before { sign_in(person) }
 
       it 'receives access denied error' do

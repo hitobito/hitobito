@@ -26,10 +26,7 @@ module SheetHelper
   end
 
   def render_sheets(&block)
-    # if current_user && current_user.roles.any?
-      sheet.root.render(&block)
-    # else
-    # end
+    sheet.root.render(&block)
   end
 
   def sheet

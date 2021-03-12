@@ -269,9 +269,9 @@ ActiveRecord::Schema.define(version: 2021_03_03_115635) do
     t.boolean "participations_visible", default: false, null: false
     t.boolean "waiting_list", default: true, null: false
     t.boolean "globally_visible"
-    t.string "access_token"
-    t.index ["access_token"], name: "index_events_on_access_token"
+    t.string "shared_access_token"
     t.index ["kind_id"], name: "index_events_on_kind_id"
+    t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end
 
   create_table "events_groups", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|

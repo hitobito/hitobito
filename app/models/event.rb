@@ -426,8 +426,4 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     self.shared_access_token ||= Devise.friendly_token
   end
 
-  def shared_access_token?
-    !!shared_access_token
-  end
-
 end

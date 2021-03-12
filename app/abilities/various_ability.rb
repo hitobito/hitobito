@@ -24,6 +24,12 @@ class VariousAbility < AbilityDsl::Base
     permission(:any).may(:create, :update, :destroy, :read).own
   end
 
+  if Settings.email.retriever.config.present?
+    on(Imap::Mail) do
+      permission(:admin).may(:manage).all
+    end
+  end
+
   if Group.course_types.present?
     on(Event::Kind) do
       class_side(:index).if_admin
@@ -44,4 +50,5 @@ class VariousAbility < AbilityDsl::Base
   def own
     subject.person_id == user.id
   end
+
 end

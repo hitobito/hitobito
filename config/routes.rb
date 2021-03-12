@@ -254,6 +254,8 @@ Hitobito::Application.routes.draw do
 
     resources :event_kinds, module: 'event', controller: 'kinds'
 
+    resources :mails
+
     resources :qualification_kinds
     resources :tags, except: :show do
       collection do

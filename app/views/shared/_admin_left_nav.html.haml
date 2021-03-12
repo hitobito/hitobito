@@ -25,5 +25,7 @@
     = nav t('navigation.admin/oauth_authorizations'), oauth_active_authorizations_path, %w(oauth_active_authorizations)
   - if can?(:index, ActsAsTaggableOn::Tag)
     = nav ActsAsTaggableOn::Tag.model_name.human(count: 2), tags_path, %w(tags)
+  - if can?(:index, CustomContent)
+    = nav 'Mails', mails_path, %w(mails)
 
   = render_extensions(:admin_nav_kinds)

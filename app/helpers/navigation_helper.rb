@@ -43,7 +43,8 @@ module NavigationHelper
                      help_texts
                      oauth/active_authorizations
                      event_feed
-                     tags),
+                     tags
+                     mkails),
       if: ->(_) { can?(:index, LabelFormat) } }
   ]
 

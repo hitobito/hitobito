@@ -337,6 +337,12 @@ describe Event do
   context 'validations' do
     subject { event }
 
+    it 'is not valid without event name' do
+      e = Event.new(groups: [groups(:top_layer)],
+                    dates: [Event::Date.new(start_at: Time.zone.now)])
+      expect(e).to have(1).error_on(:name)
+    end
+
     it 'is not valid without event_dates' do
       event.dates.clear
       expect(event.valid?).to be_falsey

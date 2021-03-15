@@ -25,7 +25,7 @@ class MailsController < SimpleCrudController
   end
 
   def mails
-    @mails ||= {inbox_mails: inbox_mails, spam_mails: spam_mails, failed_mails: failed_mails}
+    @mails ||= { inbox_mails: inbox_mails, spam_mails: spam_mails, failed_mails: failed_mails }
   end
 
   def fetch_by_uid(uid, mailbox = 'INBOX')

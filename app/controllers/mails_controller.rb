@@ -8,44 +8,77 @@
 require 'net/imap'
 
 class MailsController < SimpleCrudController
+
   def initialize
     super
-
-    configure
   end
 
   def index
-    # render mail view
+    mails
   end
 
-  def configure
+  private
+
+  def move_mails(range, from_mailbox, to_mailbox)
+    imap.select(from_mailbox)
+    imap.move(range, to_mailbox)
+  end
+
+  def mails
+    @mails ||= {inbox_mails: inbox_mails, spam_mails: spam_mails, failed_mails: failed_mails}
+  end
+
+  def fetch_by_uid(uid, mailbox = 'INBOX')
+    imap.select(mailbox)
+    imap.uid_fetch(uid, attributes)
+  end
+
+  def failed_mails
+    @failed_mails ||= entries('FAILED')
+  end
+
+  def spam_mails
+    @spam_mails ||= entries('SPAMMING')
+  end
+
+  def inbox_mails
+    @inbox_mails ||= entries
+  end
+
+  def imap
+    if @imap.present?
+      return @imap
+    end
+
     imap = Net::IMAP.new('imap.gmail.com', 993, true)
-    imap.login('test.imap.hitobito@gmail.com', 'test.imap')
-
-    imap.select('INBOX')
-
-    mails = imap.fetch(1..10, "ALL")[0].attr
-
-    imap.move(1..10, 'FAILING')
-
-    # imap.search(["ALL"]).each do |message_id|
-    #   envelope = imap.fetch(message_id, "ALL")[0]
-    #   puts envelope
-    # end
-
+    imap.login(email, password)
+    @imap ||= imap
   end
 
-  def failed
-    @failed ||= Mail.find(mailbox: 'FAIL')
+  def entry
+    @entry ||= find_entry
   end
 
-  def spam
-    @spam ||= Mail.find(mailbox: 'SPAM')
+  def entries(mailbox = 'INBOX')
+    imap.select(mailbox)
+
+    num_messages = @imap.responses['UIDNEXT'][-1]
+    @imap.fetch(1..num_messages, attributes) || []
   end
 
-  def inbox
-    @inbox ||= Mail.find(mailbox: 'INBOX')
+  def find_entry
+    fetch_by_uid(params[:uid], params[:mailbox])
   end
 
+  def email
+    ENV.fetch('USER_EMAIL', 'test.imap.hitobito@gmail.com')
+  end
 
+  def password
+    ENV.fetch('USER_PASSWORD', 'test.imap')
+  end
+
+  def attributes
+    %w(ENVELOPE UID)
+  end
 end

@@ -1410,7 +1410,7 @@ de:
       roles:
         please_choose_group: Bitte wähle eine Gruppe aus
       tags:
-        only_add_persons_with_tags: 'Hinzufügen von Person mit Tags:'
+        only_add_persons_with_tags: 'Nur Personen mit einem der folgenden Tags auswählen:'
         exclude_persons_with_tags: 'Ausschliessen von Personen mit folgenden Tags:'
 
     exclude_person:

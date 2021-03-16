@@ -465,6 +465,7 @@ en:
 
   mails:
     manage: Manage Mails
+    show: Show Mail
 
   filter_navigation/dropdown:
     additional_views: 'Further views'

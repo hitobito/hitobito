@@ -254,7 +254,11 @@ Hitobito::Application.routes.draw do
 
     resources :event_kinds, module: 'event', controller: 'kinds'
 
-    resources :mails
+    resources :mails, only: [:index]
+    put 'mails/:mailbox/:uid', to: 'mails#update'
+    delete 'mails/:mailbox/:uid', to: 'mails#destroy'
+    get 'mails/:mailbox/:uid', to: 'mails#show', as: 'mail'
+
 
     resources :qualification_kinds
     resources :tags, except: :show do

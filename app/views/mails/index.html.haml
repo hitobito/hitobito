@@ -4,3 +4,37 @@
 -#  https://github.com/hitobito/hitobito.
 
 - title t('mails.manage')
+
+
+= section_table('Inbox', @mails[:inbox_mails]) do |m|
+
+  %td
+    = link_to m.subject, mail_path(uid: m.uid, mailbox: m.mailbox)
+  %td
+    = m.sender
+  %td
+    = m.date
+  %td
+    = link_to icon(:'trash-alt', filled: false),
+            mail_path(uid: m.uid, mailbox: m.mailbox),
+            class: 'action',
+            title: ti(:"link.delete"),
+            alt: ti(:"link.delete"),
+            data: { confirm: ti(:confirm_delete),
+                    method: :delete,
+                   }
+
+%h2 Spam
+%ul
+- @mails[:spam_mails].each do |m|
+  %li
+    - subject = m.subject
+    = link_to subject, mail_path(uid: m.uid, mailbox: m.mailbox)
+
+
+%h2 Failed
+%ul
+- @mails[:failed_mails].each do |m|
+  %li
+    - subject = m.subject
+    = link_to subject, mail_path(uid: m.uid, mailbox: m.mailbox)

@@ -763,9 +763,6 @@ en:
         remaining_chars: Remaining characters
     form:
       available_placeholders: 'Available placeholders:'
-      recipient_info:
-        one: "%{model_class}created for one person."
-        other: "%{model_class}created for %{count}persons."
     table:
       infos:
         sender: "Sender: %{mail}"
@@ -1216,7 +1213,6 @@ en:
       roles:
         please_choose_group: Please select a group
       tags:
-        only_add_persons_with_tags: 'Only add people with one of the following tags:'
         exclude_persons_with_tags: 'Exclude people with one of the following tags:'
     exclude_person:
       form:

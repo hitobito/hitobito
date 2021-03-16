@@ -1166,7 +1166,6 @@ fr:
       roles:
         please_choose_group: S'il te plaît, choisis un groupe.
       tags:
-        only_add_persons_with_tags: 'Seulement ajouter les contacts aves un des tags suivants:'
         exclude_persons_with_tags: 'Exclure les contacts avec un des tags suivants:'
     exclude_person:
       form:

@@ -1161,8 +1161,6 @@ it:
         subgroups_and_siblings_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato oppure i gruppi vicini di tipo %{type}'
       roles:
         please_choose_group: prego selezionare un gruppo
-      tags:
-        only_add_persons_with_tags: 'Aggiungere solo una persona con i tags sottostanti'
     exclude_person:
       form:
         exclude_subscriber: 'Escludere abbonato/a'

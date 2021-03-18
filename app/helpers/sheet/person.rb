@@ -36,13 +36,13 @@ module Sheet
     tab 'people.tabs.history',
         :history_group_person_path,
         if: (lambda do |view, _group, person|
-          view.can?(:history, person) && person.roles.any?
+          view.can?(:history, person)
         end)
 
     tab 'people.tabs.log',
         :log_group_person_path,
         if: (lambda do |view, _group, person|
-          view.can?(:log, person) && person.roles.any?
+          view.can?(:log, person)
         end)
 
     tab 'people.tabs.colleagues',

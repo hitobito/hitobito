@@ -103,6 +103,10 @@ module AbilityDsl
       user_context.all_permissions.include?(:admin)
     end
 
+    def if_any_role
+      user.roles.present?
+    end
+
     private
 
     def role_type?(*role_types)

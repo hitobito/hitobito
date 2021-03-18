@@ -20,4 +20,3 @@ end
 Warden::Manager.prepend_before_logout do |record, warden, options|
   record.define_singleton_method(:record_timestamps, Proc.new { false } )
 end
-

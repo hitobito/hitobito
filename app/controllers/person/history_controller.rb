@@ -36,7 +36,7 @@ class Person::HistoryController < ApplicationController
   end
 
   def entry
-    @person ||= group.people.find(params[:id])
+    @person ||= fetch_person
   end
 
   def group

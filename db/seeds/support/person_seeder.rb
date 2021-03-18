@@ -61,6 +61,12 @@ class PersonSeeder
     }
   end
 
+  def assign_role_to_root(group, role_type)
+    person = Person.find_by(email: Settings.root_email)
+    role_attrs = { person_id: person.id, group_id: group.id, type: role_type.sti_name }
+    Role.seed_once(*role_attrs.keys, role_attrs)
+  end
+
   def seed_developer(name, email, group, role_type)
     first, last = name.split
     attrs = standard_attributes(first, last).merge({

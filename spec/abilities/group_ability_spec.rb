@@ -460,4 +460,17 @@ describe GroupAbility do
       end
     end
   end
+
+  context 'person without roles' do
+    let(:person_without_roles) { Fabricate(:person, primary_group: groups(:top_layer)) }
+    let(:ability) { Ability.new(person_without_roles) }
+
+    it 'may not read any group' do
+      is_expected.not_to be_able_to(:read, groups(:bottom_layer_one))
+    end
+
+    it 'may not show_details any group' do
+      is_expected.not_to be_able_to(:show_details, groups(:bottom_layer_one))
+    end
+  end
 end

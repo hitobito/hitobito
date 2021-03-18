@@ -75,8 +75,8 @@ Die Emailadresse des Root User ist in `RAILS_ROOT_USER_EMAIL` oder im `settings.
 entsprechenden Wagons definiert und wird automatisch über die Seed Daten in die Datenbank geladen. 
 Über die Passwort vergessen Funktion kann dafür ein Passwort gesetzt werden. Danach können weitere 
 Personen für den Kunden erstellt werden. Der Root User bleibt die einzige Person, mit welcher sich 
-Entwickler auf der Produktion einloggen können. Damit haben Entwickler volle Berechtigungen, sind 
-aber keiner Gruppe zugewiesen. 
+Entwickler auf der Produktion einloggen können. Auf der Produktion wird dem Root User keine Gruppe geseedet.
+Um dem Root eine Gruppe/Rolle zu geben, gibt es die `assign_role_to_root` Methode auf der `PersonSeeder` Klasse.
 
 #### No-Reply Liste
 

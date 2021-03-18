@@ -23,7 +23,7 @@
 
     = yield(:head)
 
-  %body{class: ('is-logged-out' unless current_user) }
+  %body{class: ('is-logged-out' unless current_user&.roles.present?) }
     #modal-placeholder
     %main
       = render 'layouts/file_download' if current_user
@@ -35,37 +35,58 @@
       = link_to(header_logo, root_path, class: 'logo-image')
 
     #page
-      - if current_user
+      - if current_user&.roles.present?
         %nav.nav-left
           = render 'layouts/nav'
       .container-fluid
         #page-header
           - if current_user
             = link_to(icon('bars') + t('navigation.menu'), '#', class: 'toggle-nav visible-phone')
-            = render 'layouts/quicksearch'
+            - if current_user&.roles.present?
+              = render 'layouts/quicksearch'
+            - else
+              = render 'layouts/languages'
             = link_to current_user, person_home_path(current_user), class: 'hidden-phone'
             = link_to t('layouts.nav.sign_out'), sign_out_path, method: "delete", class: 'hidden-phone'
           - elsif current_user.nil? # nil without login, false on error
             = render 'layouts/unauthorized'
 
-        = render_sheets do
-          .content-header
-            %h1
-              = title
-              = help_text_renderer.action_trigger
-            = help_text_renderer.action_text
+        - if current_user&.roles.present?
+          = render_sheets do
+            .content-header
+              %h1
+                = title
+                = help_text_renderer.action_trigger
+              = help_text_renderer.action_text
 
-            = sheet.render_main_tabs
+              = sheet.render_main_tabs
 
-          = yield :filter
-          - if content_for?(:toolbar)
-            .btn-toolbar= yield :toolbar
+            = yield :filter
+            - if content_for?(:toolbar)
+              .btn-toolbar= yield :toolbar
 
-          -# div must always exist to insert flash messages with ajax
-          #flash
-            = render partial: 'layouts/flash', collection: [:notice, :alert], as: :level
+            -# div must always exist to insert flash messages with ajax
+            #flash
+              = render partial: 'layouts/flash', collection: [:notice, :alert], as: :level
 
-          = content_for?(:content) ? yield(:content) : yield
+            = content_for?(:content) ? yield(:content) : yield
+        - else
+          = render_current_sheet do
+            .content-header
+              %h1
+                = title
+
+              = sheet.render_main_tabs
+
+            - if content_for?(:toolbar)
+              .btn-toolbar= yield :toolbar
+
+            -# div must always exist to insert flash messages with ajax
+            #flash
+              = render partial: 'layouts/flash', collection: [:notice, :alert], as: :level
+
+            = content_for?(:content) ? yield(:content) : yield
+
 
     %footer#page-footer
       .container-fluid

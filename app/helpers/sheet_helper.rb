@@ -21,6 +21,10 @@ module SheetHelper
     end
   end
 
+  def render_current_sheet(&block)
+    sheet.render(&block)
+  end
+
   def render_sheets(&block)
     sheet.root.render(&block)
   end

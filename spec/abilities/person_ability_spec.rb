@@ -1374,4 +1374,30 @@ describe PersonAbility do
     end
   end
 
+  context 'person without roles' do
+    let(:person_without_roles) do
+      person = Fabricate(Person.name.downcase.to_sym)
+      person.update!(primary_group: groups(:top_layer))
+      person
+    end
+    let(:ability) { Ability.new(person_without_roles) }
+
+    it 'may show_full himself' do
+      is_expected.to be_able_to(:show_full, person_without_roles)
+    end
+
+    it 'may not show other person' do
+      is_expected.not_to be_able_to(:show, people(:bottom_member))
+      is_expected.not_to be_able_to(:show, people(:top_leader))
+    end
+
+    it 'may update_password if already set' do
+      person_without_roles.update!(password: 'example')
+      is_expected.to be_able_to(:update_password, person_without_roles)
+    end
+
+    it 'may not update_password if not already set' do
+      is_expected.to_not be_able_to(:update_password, person_without_roles)
+    end
+  end
 end

@@ -44,7 +44,7 @@ module NavigationHelper
                      oauth/active_authorizations
                      event_feed
                      tags
-                     mails),
+                     catch_all),
       if: ->(_) { can?(:index, LabelFormat) } }
   ]
 

@@ -7,29 +7,15 @@
 
 require 'net/imap'
 
-class MailsController < ApplicationController
+class CatchAllController < ApplicationController
 
   include Imap
 
   skip_authorization_check
 
-  class Mailbox
-    def initialize(name, id)
-      @name = name
-      @id = id
-    end
-
-    attr_reader :name
-    attr_reader :id
-  end
-
-  INBOX = Mailbox.new('Inbox', 'INBOX')
-  FAILED = Mailbox.new('Failed', 'FAILED')
-  SPAM = Mailbox.new('Spam', 'SPAMMING')
-
   def initialize
     super
-    @mailboxes = [INBOX, FAILED, SPAM].freeze
+    load_mailboxes
   end
 
   def index
@@ -52,6 +38,16 @@ class MailsController < ApplicationController
 
   private
 
+  def mailboxes
+    @mailboxes ||= { INBOX: 'Inbox', SPAMMING: 'Spam', FAILED: 'Failed' }.freeze
+  end
+
+  def load_mailboxes
+    mailboxes.each do |id, mailbox|
+      instance_variable_set("@#{mailbox.to_s.downcase}_mails", map_to_catch_all_mail(fetch_all_from_mailbox(id.to_s), id.to_s))
+    end
+  end
+
   def param_uid
     params[:uid].to_i
   end
@@ -61,19 +57,7 @@ class MailsController < ApplicationController
   end
 
   def mails
-    @mails ||= { inbox_mails: inbox_mails, spam_mails: spam_mails, failed_mails: failed_mails }
-  end
-
-  def failed_mails
-    @failed_mails ||= map_to_catch_all_mail(fetch_all_from_mailbox(FAILED.id), 'FAILED')
-  end
-
-  def spam_mails
-    @spam_mails ||= map_to_catch_all_mail(fetch_all_from_mailbox(SPAM.id), 'SPAM')
-  end
-
-  def inbox_mails
-    @inbox_mails ||= map_to_catch_all_mail(fetch_all_from_mailbox(INBOX.id), 'INBOX')
+    @mails ||= { inbox_mails: @inbox_mails, spam_mails: @spam_mails, failed_mails: @failed_mails }
   end
 
   def map_to_catch_all_mail(mails, mailbox)

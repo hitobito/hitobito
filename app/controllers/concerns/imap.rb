@@ -35,8 +35,7 @@ module Imap
 
   def fetch_by_uid(uid, mailbox_id = INBOX.id)
     imap.select(mailbox_id)
-    fetch_data = imap.uid_fetch(uid, attributes)[0]
-    CatchAllMail.new(fetch_data, mailbox_id)
+    imap.uid_fetch(uid, attributes)[0]
   end
 
   def move_by_uid(uid, from_mailbox_id, to_mailbox_id)
@@ -55,14 +54,11 @@ module Imap
     imap.select(mailbox)
 
     num_messages = imap.status(mailbox, ['MESSAGES'])['MESSAGES']
-    mails = if num_messages.positive?
-              @imap.fetch(1..num_messages, attributes) || []
-            else
-              []
-            end
-
-    mails.map { |m| CatchAllMail.new(imap_fetch_data=m, mailbox=mailbox) }
-
+    if num_messages.positive?
+      @imap.fetch(1..num_messages, attributes) || []
+    else
+      []
+    end
   end
 
   def host

@@ -65,20 +65,23 @@ class MailsController < ApplicationController
   end
 
   def failed_mails
-    @failed_mails ||= fetch_all_from_mailbox(FAILED.id)
+    @failed_mails ||= map_to_catch_all_mail(fetch_all_from_mailbox(FAILED.id), 'FAILED')
   end
 
   def spam_mails
-    @spam_mails ||= fetch_all_from_mailbox(SPAM.id)
+    @spam_mails ||= map_to_catch_all_mail(fetch_all_from_mailbox(SPAM.id), 'SPAM')
   end
 
   def inbox_mails
-    @inbox_mails ||= fetch_all_from_mailbox(INBOX.id)
+    @inbox_mails ||= map_to_catch_all_mail(fetch_all_from_mailbox(INBOX.id), 'INBOX')
+  end
+
+  def map_to_catch_all_mail(mails, mailbox)
+    mails.map { |m| CatchAllMail.new(imap_fetch_data = m, mailbox = mailbox) }
   end
 
   def mail
-    @mail ||= fetch_by_uid(param_uid, param_mailbox)
+    @mail ||= CatchAllMail.new(fetch_by_uid(param_uid, param_mailbox), param_mailbox)
   end
-
 
 end

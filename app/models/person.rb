@@ -91,6 +91,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
          :recoverable,
          :rememberable,
          :trackable,
+         :timeoutable,
          :validatable
 
   include Groups

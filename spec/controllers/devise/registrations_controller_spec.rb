@@ -27,12 +27,14 @@ describe Devise::RegistrationsController do
     end
 
     context 'user without password' do
-      before { person.update_column(:encrypted_password, nil) }
+      before { person.update!(encrypted_password: nil) }
       before { sign_in(person) }
-      before { get :edit }
 
-      it { is_expected.to have_content 'Passwort setzen' }
-      it { is_expected.not_to have_content 'Altes Passwort' }
+      it 'receives access denied error' do
+        expect do
+          get :edit
+        end.to raise_error(CanCan::AccessDenied)
+      end
     end
   end
 
@@ -61,12 +63,14 @@ describe Devise::RegistrationsController do
     end
 
     context 'user without password' do
-      before { person.update_column(:encrypted_password, nil) }
+      before { person.update!(encrypted_password: nil) }
       before { sign_in(person) }
-      before { put :update, params: { person: data } }
 
-      it { is_expected.to redirect_to(root_path) }
-      it { expect(flash[:notice]).to eq 'Dein Passwort wurde aktualisiert.' }
+      it 'receives access denied error' do
+        expect do
+          put :update, params: { person: data }
+        end.to raise_error(CanCan::AccessDenied)
+      end
     end
 
     context 'with wrong confirmation' do
@@ -87,5 +91,4 @@ describe Devise::RegistrationsController do
       end
     end
   end
-
 end

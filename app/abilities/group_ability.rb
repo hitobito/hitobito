@@ -8,7 +8,9 @@ class GroupAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Group
 
   on(Group) do # rubocop:disable Metrics/BlockLength
-    permission(:any).may(:read, :index_events, :'index_event/courses', :index_mailing_lists).all
+    permission(:any).
+      may(:read, :index_events, :'index_event/courses', :index_mailing_lists).
+      if_any_role
     permission(:any).may(:deleted_subgroups).if_member
 
     permission(:contact_data).may(:index_people).all

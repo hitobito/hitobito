@@ -45,6 +45,15 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def fetch_person
+    if current_user.roles.present? 
+      group.people.find(params[:id])
+    else
+      group
+      Person.find(params[:id])
+    end
+  end
+
   def not_found
     raise ActionController::RoutingError, 'Not Found'
   end

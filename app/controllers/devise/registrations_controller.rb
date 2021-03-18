@@ -11,10 +11,15 @@ require_dependency Devise::Engine.root.
 
 class Devise::RegistrationsController < DeviseController
 
+  before_action :authorize_update_password, only: [:edit, :update]
   before_action :has_old_password, only: [:edit, :update]
   before_action :reject_non_password_params, only: [:update]
 
   private
+
+  def authorize_update_password
+    authorize!(:update_password, resource)
+  end
 
   # this controller writes all person attributes, we use it to change the password
   # therefore we reject all but the password param

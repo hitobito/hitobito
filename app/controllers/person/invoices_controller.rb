@@ -23,7 +23,7 @@ class Person::InvoicesController < ListController
   end
 
   def person
-    @person ||= group.people.find(params[:id])
+    @person ||= fetch_person
   end
 
   def group

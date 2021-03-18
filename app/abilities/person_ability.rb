@@ -79,6 +79,8 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:impersonation).may(:impersonate_user).all
 
+    permission(:any).may(:update_password).if_password_present
+
     general(:send_password_instructions).not_self
   end
 
@@ -92,6 +94,10 @@ class PersonAbility < AbilityDsl::Base
 
   def people_without_roles
     subject.roles.empty?
+  end
+
+  def if_password_present
+    user.encrypted_password.present?
   end
 
   def if_permissions_in_all_capable_groups

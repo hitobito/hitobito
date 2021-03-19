@@ -15,6 +15,7 @@ Different external applications need different types of data about their users. 
 | `email`      | id, email                                 |
 | `name`       | id, email, firstname, lastname, nickname  |
 | `with_roles` | All the profile data, roles within groups |
+| `oidc`       | OIDC identity token (userinfo endpoint)   |
 | `api`        | All REST APIs                             |
 
 The scope `with_roles` contains most of the profile information, including the fields of the name scope. Multiple scopes can be combined in a single authorization request.

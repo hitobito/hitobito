@@ -27,13 +27,15 @@ class CatchAllController < ApplicationController
   end
 
   def move
-    move_by_uid param_uid, param_mailbox, params[:move_to]
-    redirect_to mails_path
+    return unless param_mailbox != param_move_to_mailbox
+
+    move_by_uid param_uid, param_mailbox, param_move_to_mailbox
+    redirect_to mailbox_index_path
   end
 
   def destroy
     delete_by_uid(param_uid, param_mailbox)
-    redirect_to mails_path
+    redirect_to mailbox_index_path
   end
 
   private
@@ -49,10 +51,14 @@ class CatchAllController < ApplicationController
   end
 
   def param_uid
-    params[:id].to_i
+    params[:uid].to_i
   end
 
-  def param_mailbox_id
+  def param_move_to_mailbox
+    params[:move_to]
+  end
+
+  def param_mailbox
     params[:mailbox_id]
   end
 
@@ -65,7 +71,7 @@ class CatchAllController < ApplicationController
   end
 
   def mail
-    @mail ||= CatchAllMail.new(fetch_by_uid(param_uid, param_mailbox_id), param_mailbox_id)
+    @mail ||= CatchAllMail.new(fetch_by_uid(param_uid, param_mailbox), param_mailbox)
   end
 
 end

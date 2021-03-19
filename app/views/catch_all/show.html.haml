@@ -15,6 +15,5 @@
     %p= @mail.body
 
   %aside.span2.offset1
-    = action_button @mailboxes[:INBOX], catch_all_move_mail_path(catch_all_id: @mail.uid, mailbox: @mail.mailbox), nil, class: 'active'
-    -# = action_button @mailboxes[:FAILED], catch_all_path
-    -# = action_button @mailboxes[:SPAMMING], catch_all_path
+    - @mailboxes.each do |key, value|
+      = action_button value, mailbox_move_mail_path(move_to: key), nil, class: "#{'active' if key.to_s == @mail.mailbox}", method: :patch

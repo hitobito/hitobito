@@ -9,7 +9,7 @@ module Imap
   extend ActiveSupport::Concern
 
   included do
-    # after_action :disconnect
+    after_action :disconnect
   end
 
   private

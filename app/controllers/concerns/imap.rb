@@ -33,7 +33,7 @@ module Imap
     imap.disconnect
   end
 
-  def fetch_by_uid(uid, mailbox_id = INBOX.id)
+  def fetch_by_uid(uid, mailbox_id = 'INBOX')
     imap.select(mailbox_id)
     imap.uid_fetch(uid, attributes)[0]
   end

@@ -26,7 +26,7 @@ class CatchAllController < ApplicationController
     mail
   end
 
-  def update
+  def move
     move_by_uid param_uid, param_mailbox, params[:move_to]
     redirect_to mails_path
   end
@@ -49,11 +49,11 @@ class CatchAllController < ApplicationController
   end
 
   def param_uid
-    params[:uid].to_i
+    params[:id].to_i
   end
 
-  def param_mailbox
-    params[:mailbox]
+  def param_mailbox_id
+    params[:mailbox_id]
   end
 
   def mails
@@ -65,7 +65,7 @@ class CatchAllController < ApplicationController
   end
 
   def mail
-    @mail ||= CatchAllMail.new(fetch_by_uid(param_uid, param_mailbox), param_mailbox)
+    @mail ||= CatchAllMail.new(fetch_by_uid(param_uid, param_mailbox_id), param_mailbox_id)
   end
 
 end

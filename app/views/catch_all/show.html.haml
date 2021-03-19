@@ -15,6 +15,6 @@
     %p= @mail.body
 
   %aside.span2.offset1
-    = action_button @mailboxes[:INBOX], {action: catch_all_index_path(uid: @mail.uid, mailbox: @mail.mailbox), method: :put }, nil, class: 'active', method: :put
-    = action_button @mailboxes[:FAILED], catch_all_index_path
-    = action_button @mailboxes[:SPAMMING], catch_all_index_path
+    = action_button @mailboxes[:INBOX], catch_all_move_mail_path(catch_all_id: @mail.uid, mailbox: @mail.mailbox), nil, class: 'active'
+    -# = action_button @mailboxes[:FAILED], catch_all_path
+    -# = action_button @mailboxes[:SPAMMING], catch_all_path

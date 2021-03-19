@@ -9,14 +9,14 @@
 = section_table('Inbox', @mails[:inbox_mails]) do |m|
 
   %td
-    = link_to m.subject, mail_path(uid: m.uid, mailbox: m.mailbox)
+    = link_to m.subject, catch_all_path(id: m.uid, mailbox: m.mailbox)
   %td
     = m.sender
   %td
     = m.date
   %td
     = link_to icon(:'trash-alt', filled: false),
-            mail_path(uid: m.uid, mailbox: m.mailbox),
+            catch_all_path(id: m.uid, mailbox: m.mailbox),
             class: 'action',
             title: ti(:"link.delete"),
             alt: ti(:"link.delete"),
@@ -29,7 +29,7 @@
 - @mails[:spam_mails].each do |m|
   %li
     - subject = m.subject
-    = link_to subject, mail_path(uid: m.uid, mailbox: m.mailbox)
+    = link_to subject, catch_all_path(id: m.uid, mailbox: m.mailbox)
 
 
 %h2 Failed
@@ -37,4 +37,4 @@
 - @mails[:failed_mails].each do |m|
   %li
     - subject = m.subject
-    = link_to subject, mail_path(uid: m.uid, mailbox: m.mailbox)
+    = link_to subject, catch_all_path(id: m.uid, mailbox_id: m.mailbox)

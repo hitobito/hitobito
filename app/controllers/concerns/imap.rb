@@ -62,7 +62,7 @@ module Imap
   end
 
   def host
-    'imap.gmail.com'
+    ENV.fetch('RAILS_MAIL_RETRIEVER_CONFIG', 'imap.gmail.com')
   end
 
   def email

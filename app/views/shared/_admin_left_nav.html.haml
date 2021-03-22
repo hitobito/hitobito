@@ -26,6 +26,6 @@
   - if can?(:index, ActsAsTaggableOn::Tag)
     = nav ActsAsTaggableOn::Tag.model_name.human(count: 2), tags_path, %w(tags)
   - if can?(:index, current_user)
-    = nav t('navigation.mails'), mailbox_index_path, %w(catch_all)
+    = nav t('navigation.mails'), mailing_list_mails_path, %w(mailing_list_mails)
 
   = render_extensions(:admin_nav_kinds)

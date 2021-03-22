@@ -253,11 +253,9 @@ Hitobito::Application.routes.draw do
 
     resources :event_kinds, module: 'event', controller: 'kinds'
 
-    resources :catch_all, only: :index, as: :mailbox do
-      get ':uid' => 'catch_all#show', as: :show_mail
-      delete ':uid' => 'catch_all#destroy', as: :destroy_mail
-      patch ':uid/:move_to' => 'catch_all#move', as: :move_mail
-    end
+    get 'mailing_list_mails' => 'mailing_list_mails#index'
+    delete 'mailing_list_mails/:mailbox' => 'mailing_list_mails#destroy', as: :mailing_list_mail_destroy
+    patch 'mailing_list_mails/:from/:to' => 'mailing_list_mails#move', as: :mailing_list_mail_move
 
     resources :qualification_kinds
     resources :tags, except: :show do

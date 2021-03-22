@@ -527,6 +527,19 @@ de:
 
   mails:
     manage: Mails verwalten
+    mailboxes:
+      inbox: Eingang
+      spam: Spam
+      failed: Fehlgeschlagen
+    move_to:
+      inbox: in Eingang
+      spam: in Spam
+      failed: in Fehlgeschlagen
+    headers:
+      subject: Betreff
+      sender: Absender
+      date: Datum
+      preview: Vorschau
 
   filter_navigation/dropdown:
     additional_views: 'Weitere Ansichten'
@@ -926,7 +939,7 @@ de:
     admin: 'Einstellungen'
     admin/event_feed: 'Kalender integrieren'
     admin/oauth_authorizations: 'OAuth-Autorisierungen'
-    mails: 'Mails'
+    mails: 'Abo Mails'
     invoices: 'Rechnungen'
 
   notes:

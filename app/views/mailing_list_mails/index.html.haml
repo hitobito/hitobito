@@ -1,0 +1,26 @@
+-#  Copyright (c) 2012-2021, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title t('navigation.mails')
+- content_for(:filter, FilterNavigation::MailingList::Mails.new(self).to_s)
+#main
+  = mail_table(self) do |t|
+
+    - if not mail_mailbox_failed?
+      - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
+        - check_box_tag('ids[]', i.uid, false, data: { multiselect: true })
+
+    - t.attr(:subject_formatted, t(:"mails.headers.subject"))
+    - t.attr(:sender, t(:"mails.headers.sender")) do |e|
+      - safe_join([e.sender_name, content_tag(:p, mail_to(e.sender_email))], ' ')
+    - t.attr(:preview, t(:"mails.headers.preview"))
+    - t.attr(:date_formatted, t(:"mails.headers.date"))
+
+
+  - if not mail_mailbox_failed?
+    = render 'multiselect_actions'
+
+  .pagination-bar
+  = paginate @mails

@@ -465,7 +465,20 @@ en:
 
   mails:
     manage: Manage Mails
-    show: Show Mail
+    mailboxes:
+      inbox: Inbox
+      spam: Spam
+      failed: Failed
+    move_to:
+      inbox: Move to Inbox
+      spam: Move to Spam
+      failed: Move to Failed
+    headers:
+      subject: Subject
+      sender: Sender
+      date: Date
+      preview: Preview
+
 
   filter_navigation/dropdown:
     additional_views: 'Further views'
@@ -783,7 +796,7 @@ en:
     admin: 'Settings'
     admin/event_feed: 'Integrate calendar'
     admin/oauth_authorizations: 'OAuth authentifications'
-    mails: 'Mails'
+    mails: 'Subscription Mails'
     invoices: 'Invoices'
   notes:
     new_note: Add note

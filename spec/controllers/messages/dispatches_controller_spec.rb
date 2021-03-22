@@ -18,7 +18,7 @@ describe Messages::DispatchesController do
     it 'POST#create redirects to assignments#new' do
       post :create, params: { message_id: message.id }
       expect(response).to redirect_to new_assignment_redirect_path(message)
-      expect(flash[:warning]).to eq 'Sobald der Druckauftrag erstellt wurde kann der Brief nicht mehr bearbeitet werden.'
+      expect(flash[:alert]).to eq 'Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden.'
     end
   end
 
@@ -29,7 +29,7 @@ describe Messages::DispatchesController do
       post :create, params: { message_id: message.id }
       expect(message.reload.invoice_list).to be_persisted
       expect(response).to redirect_to new_assignment_redirect_path(message)
-      expect(flash[:alert]).to eq 'Sobald der Druckauftrag erstellt wurde kann der Brief nicht mehr bearbeitet werden.'
+      expect(flash[:alert]).to eq 'Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden.'
     end
   end
 

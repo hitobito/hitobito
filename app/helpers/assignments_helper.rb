@@ -1,12 +1,12 @@
 module AssignmentsHelper
-  def attachment_link_to(attachment)
+  def attachment_button(attachment)
     case attachment
-    when Message::Letter
-      link_to(t('assignments.attachment'),
-              group_mailing_list_message_path(attachment.group,
-                                              attachment.mailing_list,
-                                              attachment,
-                                              format: :pdf))
+    when Message
+      action_button(t('assignments.attachment'),
+                    group_mailing_list_message_path(entry.attachment.group,
+                                                    entry.attachment.mailing_list,
+                                                    entry.attachment),
+                                                    :eye)
     end
   end
 end

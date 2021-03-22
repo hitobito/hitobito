@@ -43,7 +43,7 @@ module MessagesHelper
     if message.respond_to?(:mail_from) && message.mail_from
       infos << t('messages.table.infos.sender', mail: message.mail_from)
     end
-    if message.failed? && message.respond_to?(:mail_log)
+    if message.failed? && message.mail_log.present?
       mail_log_error_key = message.mail_log.status.to_s
       infos <<  t("messages.table.infos.#{mail_log_error_key}")
     end

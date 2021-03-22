@@ -10,9 +10,9 @@ module Messages
     def create
       authorize!(:update, message)
       if message.text_message?
-        update_and_enqueue
+        message.prepare_print!
       end
-      redirect_to redirect_path, notice: flash_message
+      redirect_to redirect_path, flash_message
     end
 
     private
@@ -20,11 +20,12 @@ module Messages
     def redirect_path
       case message
       when Message::Letter, Message::LetterWithInvoice
-        new_assignment_path(assignment: { attachment_id: message.id,
-                                          attachment_type: Message.sti_name },
-                            return_url: group_mailing_list_message_path(message.group,
-                                                                   message.mailing_list,
-                                                                   message)
+        new_assignment_path(assignment: {
+          attachment_id: message.id,
+          attachment_type: Message.sti_name },
+          return_url: group_mailing_list_message_path(message.group,
+                                                      message.mailing_list,
+                                                      message)
                             )
       else
         message.path_args
@@ -32,16 +33,12 @@ module Messages
     end
 
     def flash_message
-      t(".success.#{message.class.model_name.to_s.underscore}")
-    end
-
-    def update_and_enqueue
-      message.update!(
-        recipient_count: message.mailing_list.people.size,
-        state: :pending,
-        sender: current_user
-      )
-      Messages::DispatchJob.new(message).enqueue!
+      case message
+      when Message::Letter, Message::LetterWithInvoice
+        { alert: t(".alert.#{message.class.model_name.to_s.underscore}") }
+      when Message::TextMessage
+        { notice: t(".success.#{message.class.model_name.to_s.underscore}") }
+      end
     end
 
     def message

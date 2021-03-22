@@ -7,8 +7,8 @@
   .control-group
     %label.control-label
       = t('.attachment.subject')
-    .controls
-      = entry.attachment.to_s
+    .controls.attachment_subject
+      = entry.attachment.subject
   - unless entry.persisted?
     = f.labeled(:person, Person.model_name.human) do
       = f.person_field(:person)

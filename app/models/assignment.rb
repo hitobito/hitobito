@@ -34,8 +34,6 @@ class Assignment < ActiveRecord::Base
   belongs_to :creator, class_name: 'Person'
   belongs_to :attachment, polymorphic: true
 
-  validates :attachment, inclusion: { in: ATTACHMENT_TYPES }, allow_nil: true
-
   after_create :attachment_prepare_print
 
   scope :list, -> { order(:created_at) }

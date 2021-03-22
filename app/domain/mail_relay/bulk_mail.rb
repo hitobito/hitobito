@@ -7,6 +7,8 @@
 
 module MailRelay
 
+  # the logic about delivering mails below is to be transferred into the dispatch
+
   class BulkMail
 
     attr_accessor :headers

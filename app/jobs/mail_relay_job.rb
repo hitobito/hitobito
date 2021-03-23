@@ -12,7 +12,7 @@ class MailRelayJob < RecurringJob
   def perform_internal
     # only run if a retriever address is defined
     if Settings.email.retriever.config.address
-      MailRelay::Lists.relay_current
+      MailRelay::BulkMailRetriever.relay_current
     end
   end
 

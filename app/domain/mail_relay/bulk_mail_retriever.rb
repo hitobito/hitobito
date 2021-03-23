@@ -7,7 +7,31 @@
 
 module MailRelay
     class BulkMailRetriever
+        # retrieves mail, checks if it can be assigned to a mailing list and points it to dispatch via FileStore, makes log entry
+        # currently in mail_relay/base.rb and mail_relay/lists.rb
 
+        # Retrieve, process and delete all mails from the mail server. 
+        def relay_current
+            loop do
+              mails, last_exception = relay_batch
+              raise(last_exception) if last_exception.present?
+              break if mails.size < retrieve_count
+            end
+        end
+
+        def relay_batch
+            last_exception = nil
+    
+            mails = Mail.find_and_delete(count: retrieve_count) do |message|
+              proccessed_error = process(message)
+              last_exception = proccessed_error if proccessed_error
+            end
+    
+            [mails || [], last_exception]
+          rescue EOFError => e
+            logger.warn(e)
+            [[], nil]
+        end
 
     end
 end

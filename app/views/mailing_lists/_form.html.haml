@@ -52,3 +52,5 @@
       = f.boolean_field(:anyone_may_post, caption: t('.caption_anyone_may_post'))
     = f.indented do
       = f.boolean_field(:delivery_report, caption: t('.caption_delivery_report'))
+
+  = render_extensions :fields, locals: { f: f }

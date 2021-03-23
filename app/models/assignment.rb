@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -54,8 +56,6 @@ class Assignment < ActiveRecord::Base
   private
 
   def attachment_prepare_print
-    if attachment && attachment.respond_to?(:prepare_print)
-      attachment.prepare_print!
-    end
+    attachment&.prepare_print!
   end
 end

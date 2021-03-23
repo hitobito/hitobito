@@ -12,6 +12,10 @@ module FeatureHelpers
     login_as(user, :scope => :person)
   end
 
+  def fill_in_trix_editor(id, with:)
+    find(:xpath, "//trix-editor[@id='#{id}']").click.set(with)
+  end
+
   private
 
   # catch some errors occuring now and then in capybara tests

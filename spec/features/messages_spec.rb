@@ -58,14 +58,31 @@ describe :messages, js: true do
   end
 
   context 'letter assignments' do
+    before do
+      assignments_settings = double
+      expect(assignments_settings).to receive(:enabled).and_return(true)
+      Settings.assignments = assignments_settings
+    end
 
-      Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
+    before do
+      Subscription.create!(mailing_list: list,
+                           subscriber: groups(:top_group),
+                           role_types: [Group::TopGroup::Leader])
       42.times do
         person = Fabricate(:person_with_address)
         Group::TopGroup::Leader.create!(group: groups(:top_group), person: person)
       end
+    end
 
-    it 'creates new assignment for letter' do
+    it 'creates new letter and assignment' do
+      click_link('Brief erstellen')
+
+      is_expected.to have_selector('a', text: 'Brief wird für 42 Personen erstellt.')
+      fill_in 'Betreff', with: 'Letter with love'
+      fill_in_trix_editor 'message_body', with: Faker::Lorem.sentences.join
+      click_button('Speichern')
+
+      is_expected.to have_selector('a', text: 'Druckauftrag erstellen')
     end
 
     it 'redirects back to message#show when cancelling assigment' do

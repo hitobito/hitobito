@@ -873,11 +873,17 @@ de:
           message/letter:
             one: "%{model_class} wird für eine Person erstellt."
             other: "%{model_class} wird für %{count} Personen erstellt."
+          message/letter_with_invoice:
+            one: "%{model_class} wird für eine Person erstellt."
+            other: "%{model_class} wird für %{count} Personen erstellt."
           message/text_message:
             one: "%{model_class} wird für eine Person erstellt."
             other: "%{model_class} wird für %{count} Personen erstellt."
         invalid:
           message/letter:
+            one: "Eine Person hat keine vollständige Addresse hinterlegt."
+            other: "%{count} weitere haben keine vollständige Addresse hinterlegt."
+          message/letter_with_invoice:
             one: "Eine Person hat keine vollständige Addresse hinterlegt."
             other: "%{count} weitere haben keine vollständige Addresse hinterlegt."
           message/text_message:

@@ -18,13 +18,16 @@ module Messages
     def run
       init_recipient_entries
       if send_text_message!
-        sleep 15 unless Rails.env.test? # give it some time to deliver messages
-        process_delivery_reports
+        enqueue_delivery_reports!
       end
       update_message_status
     end
 
     private
+
+    def enqueue_delivery_reports!
+      TextMessageDeliveryReportJob.new(@message, client).enqueue!
+    end
 
     def provider_config
       s = group.settings(:text_message_provider)
@@ -41,7 +44,7 @@ module Messages
 
       recipient_numbers.find_in_batches do |batch|
         rows = batch.collect do |phone_nr|
-          reciept_attrs(phone_nr, :pending)
+          recipient_attrs(phone_nr, :pending)
         end
         MessageRecipient.insert_all(rows)
       end
@@ -57,7 +60,7 @@ module Messages
                         contactable_id: person_ids)
     end
 
-    def reciept_attrs(phone_nr, state)
+    def recipient_attrs(phone_nr, state)
       { message_id: @message.id,
         created_at: @now,
         person_id: phone_nr.contactable_id,
@@ -103,33 +106,6 @@ module Messages
     def recipients(state:)
       recipients = @message.message_recipients
       recipients.where(state: state)
-    end
-
-    def process_delivery_reports
-      recipients = @message.message_recipients.reload
-      recipient_ids = recipients.collect(&:id)
-      report = client.delivery_reports(recipient_ids: recipient_ids)
-      if not_ok?(report)
-        abort_dispatch(report, recipients)
-      else
-        recipients.each do |r|
-          update_recipient(report[:delivery_reports], r)
-        end
-      end
-    end
-
-    def update_recipient(delivery_reports, recipient)
-      report = delivery_reports[recipient.id.to_s]
-      error = 'unkown'
-      if report
-        if report[:status].eql?(:ok)
-          state = 'sent'
-          error = nil
-        else
-          error = report[:status_message]
-        end
-      end
-      recipient.update!(state: state || 'failed', error: error)
     end
 
     def client

@@ -28,16 +28,12 @@ describe Messages::TextMessageDispatch do
         .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
         .and_return(status: :ok, message: 'OK')
 
-      delivery_reports = double(:hash)
-      allow(delivery_reports).to receive(:[]).and_return(status: :ok, status_message: 'Delivered')
-
-      expect(client_double)
-        .to receive(:delivery_reports)
-        .and_return(status: :ok, message: 'OK', delivery_reports: delivery_reports)
+      delivery_report_double = double
+      expect(Messages::TextMessageDeliveryReportJob).to receive(:new).and_return(delivery_report_double)
+      expect(delivery_report_double).to receive(:enqueue!)
 
       subject.run
 
-      expect(message.reload.success_count).to eq 2
       expect(message.failed_count).to eq 0
       expect(message.state).to eq('finished')
 
@@ -59,9 +55,6 @@ describe Messages::TextMessageDispatch do
         .to receive(:send)
         .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
         .and_return(status: :auth_error, message: 'Authorization failed.')
-
-      expect(client_double)
-        .not_to receive(:delivery_reports)
 
       subject.run
 
@@ -85,9 +78,6 @@ describe Messages::TextMessageDispatch do
         .to receive(:send)
         .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
         .and_return(status: :error, message: 'Not enough credits available. Please recharge your account to proceed.')
-
-      expect(client_double)
-        .not_to receive(:delivery_reports)
 
       subject.run
 

@@ -24,7 +24,9 @@ module Messages
     private
 
     def enqueue_delivery_reports!
-      TextMessageDeliveryReportJob.new(@message, client).enqueue!
+      TextMessageDeliveryReportJob
+        .new(@message, client)
+        .enqueue!(run_at: 15.seconds.from_now)
     end
 
     def provider_config

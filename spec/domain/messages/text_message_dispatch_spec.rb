@@ -28,11 +28,15 @@ describe Messages::TextMessageDispatch do
         .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
         .and_return(status: :ok, message: 'OK')
 
-      delivery_report_double = double
-      expect(Messages::TextMessageDeliveryReportJob).to receive(:new).and_return(delivery_report_double)
-      expect(delivery_report_double).to receive(:enqueue!)
+      freeze_time do # avoid problems with scheduling the job
+        delivery_report_double = double
+        expect(Messages::TextMessageDeliveryReportJob)
+          .to receive(:new).and_return(delivery_report_double)
+        expect(delivery_report_double).to receive(:enqueue!)
+          .with(run_at: 15.seconds.from_now)
 
-      subject.run
+        subject.run
+      end
 
       expect(message.failed_count).to eq 0
       expect(message.state).to eq('finished')

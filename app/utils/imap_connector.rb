@@ -1,16 +1,21 @@
 class ImapConnector
 
+  def initialize
+    @connected = false
+  end
+
   def fetch_by_uid(uid, mailbox = 'inbox')
     perform do
       select_mailbox(mailbox)
-      imap.uid_fetch(uid, attributes)[0]
+      mail = @imap.uid_fetch(uid, attributes)
+      mail.nil? ? nil : mail[0].attr
     end
   end
 
   def move_by_uid(uid, from_mailbox, to_mailbox)
     perform do
       select_mailbox(from_mailbox)
-      @imap.uid_move(uid, hash(to_mailbox))
+      @imap.uid_move(uid, MAILBOXES[to_mailbox])
     end
   end
 
@@ -28,13 +33,16 @@ class ImapConnector
       select_mailbox mailbox
 
       mail_count = count mailbox
-      mail_count.positive? ? @imap.fetch(1..mail_count, attributes) || [] : []
+      mails = mail_count.positive? ? @imap.fetch(1..mail_count, attributes) || [] : []
+      mails.map { |m| m.attr }
     end
   end
 
   def count(mailbox)
-    select_mailbox mailbox
-    @imap.status(hash(mailbox), ['MESSAGES'])['MESSAGES']
+    perform do
+      select_mailbox mailbox
+      @imap.status(MAILBOXES[mailbox], ['MESSAGES'])['MESSAGES']
+    end
   end
 
   def counts
@@ -43,18 +51,17 @@ class ImapConnector
       MAILBOXES.each do |m, _|
         counts[m] = count(m)
       end
-      counts
+      counts.with_indifferent_access
     end
   end
 
   private
 
-  MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.freeze
+  MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
   # MAILBOXES = { inbox: 'INBOX', spam: 'SPAMMING', failed: 'FAILED' }.freeze
 
   def perform
     already_connected = @connected
-
     connect unless already_connected
     result = yield
     disconnect unless already_connected
@@ -77,8 +84,8 @@ class ImapConnector
   end
 
   def create_if_failed(mailbox, error)
-    if (mailbox == hash(:failed)) && error.response.data.text.include?('Mailbox doesn\'t exist')
-      @imap.create(hash(:failed))
+    if (mailbox == MAILBOXES[:failed]) && error.response.data.text.include?('Mailbox doesn\'t exist')
+      @imap.create(MAILBOXES[:failed])
       @imap.select(mailbox)
     else
       raise error
@@ -86,7 +93,8 @@ class ImapConnector
   end
 
   def select_mailbox(mailbox)
-    mailbox = hash(mailbox)
+
+    mailbox = MAILBOXES[mailbox]
 
     if mailbox == @selected_mailbox
       nil
@@ -98,14 +106,6 @@ class ImapConnector
       end
       @selected_mailbox = mailbox
     end
-  end
-
-  def hash(mailbox)
-    unless mailbox.class == Symbol
-      mailbox = mailbox.to_sym
-    end
-
-    MAILBOXES[mailbox]
   end
 
   def config_present?

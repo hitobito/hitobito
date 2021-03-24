@@ -57,9 +57,9 @@ class MailingList::Mail
   end
 
   def unpack(imap_fetch_data)
-    @uid = imap_fetch_data.attr['UID']
+    @uid = imap_fetch_data['UID']
 
-    envelope = imap_fetch_data.attr['ENVELOPE']
+    envelope = imap_fetch_data['ENVELOPE']
     @subject = envelope.subject
 
     @date = Time.zone.utc_to_local(DateTime.parse(envelope.date))
@@ -67,10 +67,10 @@ class MailingList::Mail
     @sender_email = envelope.sender[0].mailbox + '@' + envelope.sender[0].host
     @sender_name = envelope.sender[0].name
 
-    if imap_fetch_data.attr['BODYSTRUCTURE'].media_type == 'TEXT'
-      @body = imap_fetch_data.attr['BODY[TEXT]']
+    if imap_fetch_data['BODYSTRUCTURE'].media_type == 'TEXT'
+      @body = imap_fetch_data['BODY[TEXT]']
     else
-      mail = Mail.read_from_string imap_fetch_data.attr['RFC822']
+      mail = Mail.read_from_string imap_fetch_data['RFC822']
       @body = mail.text_part.body.to_s
 
     end

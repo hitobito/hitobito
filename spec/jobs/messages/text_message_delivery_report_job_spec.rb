@@ -42,4 +42,44 @@ describe Messages::TextMessageDeliveryReportJob do
       expect(recipient.state).to eq('sent')
     end
   end
+
+  context 'without delivery_reports' do
+    let(:empty_ok_delivery_report) do
+      { status: :ok, delivery_reports: {} }
+    end
+
+    it 'updates recipient status as failed' do
+      expect(client_double).to receive(:delivery_reports).and_return(empty_ok_delivery_report)
+
+      subject.perform
+
+      recipient.reload
+
+      expect(recipient.state).to eq('failed')
+    end
+  end
+
+  context 'on a failed delivery' do
+    let(:no_credit_available_msg) { 'Not enough credits available.' }
+    let(:failed_delivery_report) do
+      {
+        status: :error,
+        message: no_credit_available_msg,
+        delivery_reports: {
+          recipient.id.to_s => failed_report
+        }
+      }
+    end
+
+    it 'marks message and recipients as failed if provider error' do
+      expect(client_double).to receive(:delivery_reports).and_return(failed_delivery_report)
+
+      subject.perform
+
+      recipient.reload
+
+      expect(recipient.state).to eq('failed')
+      expect(recipient.error).to eq(no_credit_available_msg)
+    end
+  end
 end

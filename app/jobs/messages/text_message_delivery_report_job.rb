@@ -44,8 +44,8 @@ module Messages
       recipient.update!(state: state, error: error)
     end
 
-    def abort_dispatch(status, recipient_list)
-      update_recipients(recipient_list, state: 'failed', error: status[:message])
+    def abort_dispatch(report, recipients)
+      recipients.update_all(state: 'failed', error: report[:message]) # rubocop:disable Rails/SkipsModelValidations Performance-Optimization
     end
 
     def not_ok?(status)

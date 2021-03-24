@@ -53,7 +53,7 @@ describe AssignmentsController do
     it 'assigns default_assignee' do
       assignments_settings = double
       expect(assignments_settings).to receive(:default_assignee_email).and_return(bottom_member.email)
-      Settings.assignments = assignments_settings
+      allow(Settings).to receive(:assignments).and_return(assignments_settings)
 
       assignment_double = double
       expect_any_instance_of(AssignmentsController).to receive(:build_entry).and_return(assignment_double)

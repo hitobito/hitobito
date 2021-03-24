@@ -64,7 +64,8 @@ class Message < ActiveRecord::Base
     def all_types
       [Message::TextMessage,
        Message::Letter,
-       Message::LetterWithInvoice]
+       Message::LetterWithInvoice,
+       Message::BulkMail]
     end
 
     def find_message_type!(sti_name)
@@ -76,7 +77,15 @@ class Message < ActiveRecord::Base
   end
 
   def to_s
-    subject ? subject.truncate(20) : super
+    subject ? "#{type.constantize.model_name.human}: #{subject.truncate(20)}" : super
+  end
+
+  def prepare_print!
+    update!(
+      recipient_count: mailing_list.people.size,
+      state: :pending
+    )
+    Messages::DispatchJob.new(self).enqueue!
   end
 
   def letter?
@@ -89,6 +98,10 @@ class Message < ActiveRecord::Base
 
   def text_message?
     is_a?(Message::TextMessage)
+  end
+
+  def bulk_mail_message?
+    is_a?(Message::BulkMail)
   end
 
   def dispatched?

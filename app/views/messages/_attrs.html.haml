@@ -6,17 +6,21 @@
 #main.row
   %article.col-lg-5
     - if entry.text_message?
-      = render_attrs entry, :type, :text
-    - else
-      = render_attrs entry, :type, :subject, :heading
+      = render_attrs entry, :text
+    - elsif entry.letter? || entry.invoice?
+      = render_attrs entry, :heading
     - if entry.letter?
       = render_attrs entry, :body
 
+    %h2=t('.dispatch_infos')
+    = render_attrs entry, :state
     - if entry.dispatched?
-      %h2=t('.dispatch_infos')
-      = render_attrs entry, :recipient_count, :state
+      = render_attrs entry, :recipient_count
       - if entry.sent_at
-        = render_attrs entry, :sent_at, :success_count, :failed_count, :sent_at
+        - if entry.letter?
+          = render_attrs entry, :sent_at
+        - else
+          = render_attrs entry, :sent_at, :success_count, :failed_count
 
   - if entry.invoice?
     %aside.col-lg-5.offset-lg-1

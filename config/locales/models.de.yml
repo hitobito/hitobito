@@ -223,6 +223,9 @@ de:
       message:
         one: Nachricht
         other: Nachrichten
+      message/bulk_mail:
+        one: Mail
+        other: Mails
       message/letter:
         one: Brief
         other: Briefe
@@ -332,6 +335,7 @@ de:
         title: Titel
         description: Beschreibung
         state: Status
+        read_at: Gelesen am
 
       person:
         first_name: Vorname

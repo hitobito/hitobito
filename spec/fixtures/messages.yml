@@ -52,5 +52,5 @@ with_invoice:
 
 sms:
   mailing_list: leaders
-  type: Message
+  type: Message::TextMessage
   text: Long live SMS!

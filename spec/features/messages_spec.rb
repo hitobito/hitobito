@@ -57,4 +57,55 @@ describe :messages, js: true do
     end
   end
 
+  context 'letter assignments' do
+    let(:printer) do
+      company = Fabricate(:company, email: 'printer@example.com')
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_two), person: company)
+      company
+    end
+
+    before do
+      assignments_settings = double(:assignments_settings)
+      allow(assignments_settings).to receive(:enabled).and_return(true)
+      allow(assignments_settings).to receive(:default_assignee_email).and_return(printer.email)
+      Settings.assignments = assignments_settings
+    end
+
+    before do
+      Subscription.create!(mailing_list: list,
+                           subscriber: groups(:top_group),
+                           role_types: [Group::TopGroup::Leader])
+      42.times do
+        person = Fabricate(:person_with_address)
+        Group::TopGroup::Leader.create!(group: groups(:top_group), person: person)
+      end
+    end
+
+    it 'creates new letter and assignment' do
+      click_link('Brief erstellen')
+
+      is_expected.to have_selector('a', text: 'Brief wird für 42 Personen erstellt.')
+      fill_in 'Betreff', with: 'Letter with love'
+      fill_in_trix_editor 'message_body', with: Faker::Lorem.sentences.join
+      expect do
+        click_button('Speichern')
+      end.to change { Message::Letter.count }.by(1)
+
+      is_expected.to have_selector('a', text: 'Druckauftrag erstellen')
+      click_link('Druckauftrag erstellen')
+
+      is_expected.to have_text('Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden.')
+      fill_in 'Titel', with: 'Print print print!'
+      fill_in 'Beschreibung', with: 'Paper: A4, portrait, extra thick'
+      expect do
+        all('button', text: 'Speichern').first.click
+      end.to change { printer.assignments.count }.by(1)
+
+      is_expected.to have_selector('a', text: 'Anhang')
+      click_link('Anhang')
+
+      is_expected.to have_selector('a', text: 'PDF anzeigen')
+      is_expected.to have_selector('a', text: 'Druckauftrag anzeigen')
+    end
+  end
 end

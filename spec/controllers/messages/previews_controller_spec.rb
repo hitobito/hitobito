@@ -9,6 +9,7 @@ require 'spec_helper'
 
 describe Messages::PreviewsController do
   let(:top_leader) { people(:top_leader) }
+  let(:bottom_member) { people(:bottom_member) }
 
   before { sign_in(top_leader) }
 
@@ -22,7 +23,7 @@ describe Messages::PreviewsController do
     end
 
     it 'renders file' do
-      Subscription.create!(mailing_list: message.mailing_list, subscriber: top_leader)
+      Subscription.create!(mailing_list: message.mailing_list, subscriber: bottom_member)
       get :show, params: { message_id: message.id }
       expect(response.header['Content-Disposition']).to match(/information-preview.pdf/)
       expect(response.media_type).to eq('application/pdf')
@@ -34,7 +35,7 @@ describe Messages::PreviewsController do
 
     it 'renders file' do
       invoice_configs(:top_layer).update(payment_slip: :qr)
-      Subscription.create!(mailing_list: message.mailing_list, subscriber: top_leader)
+      Subscription.create!(mailing_list: message.mailing_list, subscriber: bottom_member)
       get :show, params: { message_id: message.id }
       expect(response.header['Content-Disposition']).to match(/rechnung-mitgliedsbeitrag-preview.pdf/)
       expect(response.media_type).to eq('application/pdf')

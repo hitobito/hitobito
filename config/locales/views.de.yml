@@ -853,13 +853,20 @@ de:
         recipients_empty: Empfängerliste ist leer, kann keine Vorschau erstellen.
     dispatches:
       create:
-        success: "%{model_class} wurde als Druckauftrag vorbereitet."
+        success:
+          message/letter: "Brief wurde als Druckauftrag vorbereitet."
+          message/letter_with_invoice: "Rechnungsbrief wurde als Druckauftrag vorbereitet."
+          message/text_message: "SMS wird versendet."
+        alert:
+          message/letter: "Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden."
+          message/letter_with_invoice: "Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden."
     actions_show:
       button_dispatch_letter: Druckauftrag erstellen
       button_show_assignment: Druckauftrag anzeigen
       button_duplicate: Duplizieren
       button_preview: Vorschau
       button_dispatch_text_message: Senden
+      button_show_pdf: PDF anzeigen
     letter:
       fields:
         available_placeholders: 'Verfügbare Platzhalter: %{placeholders}'

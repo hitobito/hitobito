@@ -30,9 +30,10 @@ require 'spec_helper'
 
 describe Message do
 
-  it '#to_s shows truncated subject' do
+  it '#to_s shows truncated subject with type' do
     subject.subject = 'This is a very long text'
-    expect(subject.to_s).to eq 'This is a very lo...'
+    subject.type = Message::Letter.sti_name
+    expect(subject.to_s).to eq 'Brief: This is a very lo...'
   end
 
   it 'can create message without sender' do

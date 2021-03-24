@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Die Mitte Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class MessagesController < CrudController
-
+  include RenderMessagesExports
   include YearBasedPaging
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze
@@ -31,6 +31,13 @@ class MessagesController < CrudController
 
   before_action :authorize_duplicate, only: :new
 
+  def show
+    respond_to do |format|
+      format.html
+      format.pdf { render_pdf(entry, preview: false) }
+    end
+  end
+
   def new
     assign_attributes_from_duplication_source if duplication_source.present?
     super
@@ -41,7 +48,7 @@ class MessagesController < CrudController
   def assign_attributes_from_duplication_source
     # We can't simply assign .attributes because the rich text body is not included in .attributes
     duplication_source.class.duplicatable_attrs.each do |attr|
-      entry.send("#{attr}=", template.send(attr))
+      entry.send("#{attr}=", duplication_source.send(attr))
     end
   end
 
@@ -78,7 +85,7 @@ class MessagesController < CrudController
   end
 
   def duplication_source
-    @duplication_source ||= Message.find_by(id: params[:duplication_source_id])
+    @duplication_source ||= Message.find_by(id: params[:duplicate_from])
   end
 
   def authorize_class

@@ -41,4 +41,16 @@ describe Assignment do
     assignment.reload
     expect(assignment.creator_id).to_not eq(bottom_member.id)
   end
+
+  context 'attachment' do
+    let(:printer) { Fabricate(:company, email: 'printing_company@example.com') }
+    let(:new_assignment) { Assignment.new(person: printer, creator: top_leader, title: 'Printing', description: 'DIN A4') }
+
+    it 'prepares attachment for printing after creation' do
+      new_assignment.attachment = messages(:letter)
+      expect do
+        new_assignment.save!
+      end.to change { Delayed::Job.count }.by(1)
+    end
+  end
 end

@@ -36,6 +36,5 @@ class Export::Pdf::Messages::Letter
     def last_name(person)
       person.last_name
     end
-
   end
 end

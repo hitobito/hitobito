@@ -104,7 +104,22 @@ describe AssignmentsController do
             person_id: bottom_member.id
           }
         }
-      end.to change { Delayed::Job.count }.by(1)
+      end.to change { Delayed::Job.count }.by(2)
+    end
+
+    it 'enqueues message dispatch job of assignment' do
+      expect(Messages::DispatchJob).to receive(:new).and_call_original
+
+      expect do
+        post :create, params: {
+          assignment: {
+            title: 'test title',
+            description: 'test description',
+            attachment_id: messages(:letter).id,
+            person_id: bottom_member.id
+          }
+        }
+      end.to change { Delayed::Job.count }.by(2)
     end
 
     it 'can not create if attachment not writeable' do

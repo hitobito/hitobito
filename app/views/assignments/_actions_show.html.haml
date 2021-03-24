@@ -4,3 +4,4 @@
 -#  https://github.com/hitobito/hitobito.
 
 = button_action_edit if can?(:edit, entry)
+= attachment_button(entry.attachment) if can?(:show, entry.attachment)

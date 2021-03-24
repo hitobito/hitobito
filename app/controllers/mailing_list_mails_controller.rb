@@ -37,11 +37,7 @@ class MailingListMailsController < ApplicationController
   private
 
   def imap
-    if @imap.present?
-      return @imap
-    end
-
-    @imap = ImapConnector.new
+    @imap ||= ImapConnector.new
   end
 
   def default_mailbox

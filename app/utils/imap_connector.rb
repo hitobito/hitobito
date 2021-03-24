@@ -84,7 +84,7 @@ class ImapConnector
   end
 
   def create_if_failed(mailbox, error)
-    if (mailbox == MAILBOXES[:failed]) && error.response.data.text.include?('Mailbox doesn\'t exist')
+    if (mailbox == MAILBOXES[:failed]) && error.response.data.text.include?("Mailbox doesn't exist")
       @imap.create(MAILBOXES[:failed])
       @imap.select(mailbox)
     else
@@ -93,7 +93,6 @@ class ImapConnector
   end
 
   def select_mailbox(mailbox)
-
     mailbox = MAILBOXES[mailbox]
 
     if mailbox == @selected_mailbox

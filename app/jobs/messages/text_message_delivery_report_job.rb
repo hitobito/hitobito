@@ -22,25 +22,26 @@ module Messages
         abort_dispatch(report, recipients)
       else
         recipients.each do |r|
-          update_recipient(report[:delivery_reports], r)
+          update_recipient(r, *state_and_error_from_report(recipient_report(report, r)))
         end
       end
     end
 
     private
 
-    def update_recipient(delivery_reports, recipient)
-      report = delivery_reports[recipient.id.to_s]
-      error = 'unkown'
-      if report
-        if report[:status].eql?(:ok)
-          state = 'sent'
-          error = nil
-        else
-          error = report[:status_message]
-        end
-      end
-      recipient.update!(state: state || 'failed', error: error)
+    def recipient_report(report, recipient)
+      report.fetch(:delivery_reports, {})[recipient.id.to_s]
+    end
+
+    def state_and_error_from_report(report)
+      return ['failed', 'unknown'] unless report # rubocop:disable Style/WordArray the structure should match the other return values
+      return ['sent', nil] if report[:status].eql?(:ok)
+
+      ['failed', report[:status_message]]
+    end
+
+    def update_recipient(recipient, state, error)
+      recipient.update!(state: state, error: error)
     end
 
     def abort_dispatch(status, recipient_list)

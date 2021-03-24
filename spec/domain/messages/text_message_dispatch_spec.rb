@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe Messages::TextMessageDispatch do
-  let(:message)    { messages(:sms) }
+  let(:message) { messages(:sms) }
   let(:top_leader) { people(:top_leader) }
   let!(:mobile1) { Fabricate(:phone_number, contactable: top_leader, label: 'Mobil') }
   let!(:mobile2) { Fabricate(:phone_number, contactable: top_leader, label: 'Mobil') }
@@ -74,10 +74,14 @@ describe Messages::TextMessageDispatch do
     it 'marks message and recipients as failed if provider error' do
       nr1regex = Regexp.new("\\#{mobile1.number}:[0-9]+")
       nr2regex = Regexp.new("\\#{mobile2.number}:[0-9]+")
+
+      no_credit_available_msg =
+        'Not enough credits available. Please recharge your account to proceed.'
+
       expect(client_double)
         .to receive(:send)
         .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
-        .and_return(status: :error, message: 'Not enough credits available. Please recharge your account to proceed.')
+        .and_return(status: :error, message: no_credit_available_msg)
 
       subject.run
 
@@ -90,7 +94,7 @@ describe Messages::TextMessageDispatch do
 
       recipients.each do |r|
         expect(r.state).to eq('failed')
-        expect(r.error).to eq('Not enough credits available. Please recharge your account to proceed.')
+        expect(r.error).to eq(no_credit_available_msg)
       end
     end
   end

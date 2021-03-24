@@ -13,13 +13,18 @@ describe Messages::TextMessageDeliveryReportJob do
   let!(:mobile) { Fabricate(:phone_number, contactable: top_leader, label: 'Mobil') }
   let(:ok_report) { { status: :ok, status_message: '' } }
   let(:failed_report) { { status: :failed, status_message: '' } }
-  let(:ok_delivery_reports) { { status: :ok, delivery_reports: { recipient.id.to_s => ok_report } } }
+  let(:ok_delivery_reports) do
+    { status: :ok, delivery_reports: { recipient.id.to_s => ok_report } }
+  end
   let!(:recipient) do
     MessageRecipient.create!(
-      { message_id: message.id,
+      {
+        message_id: message.id,
         person_id: top_leader.id,
-        phone_number: mobile1.number,
-        state: :pending })
+        phone_number: mobile.number,
+        state: :pending
+      }
+    )
   end
 
   let(:client_double) { double(:client) }

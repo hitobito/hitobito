@@ -17,9 +17,7 @@ module Messages
 
     def run
       init_recipient_entries
-      if send_text_message!
-        enqueue_delivery_reports!
-      end
+      enqueue_delivery_reports! if send_text_message!
       update_message_status
     end
 
@@ -30,9 +28,9 @@ module Messages
     end
 
     def provider_config
-      s = group.settings(:text_message_provider)
-      s.originator = group.name if s.originator.blank?
-      s
+      group.settings(:text_message_provider).tap do |s|
+        s.originator = group.name if s.originator.blank?
+      end
     end
 
     def group

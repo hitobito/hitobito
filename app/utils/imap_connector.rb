@@ -55,10 +55,14 @@ class ImapConnector
     end
   end
 
+  def config_present?
+    !Settings.email.retriever.config.nil?
+  end
+
   private
 
   MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
-  # MAILBOXES = { inbox: 'INBOX', spam: 'SPAMMING', failed: 'FAILED' }.freeze
+  # MAILBOXES = { inbox: 'INBOX', spam: 'SPAMMING', failed: 'FAILED' }.with_indifferent_access.freeze
 
   def perform
     already_connected = @connected
@@ -105,10 +109,6 @@ class ImapConnector
       end
       @selected_mailbox = mailbox
     end
-  end
-
-  def config_present?
-    !Settings.email.retriever.config.nil?
   end
 
   def host

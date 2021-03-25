@@ -55,7 +55,7 @@ class MailingListMailsController < ApplicationController
     mails = mails.sort { |a, b| a.date.to_i <=> b.date.to_i }
     mails = mails.reverse
 
-    @mails = Kaminari.paginate_array(mails, limit: 3).page(params[:page])
+    @mails = Kaminari.paginate_array(mails).page(params[:page])
   end
 
   def counts

@@ -8,26 +8,30 @@
 module Messages
   class TextMessageDeliveryReportJob < BaseJob
 
-    def initialize(message, client)
-      super()
-      @message = message
-      @client = client
+    def initialize(message_id)
+      @message = Message::TextMessage.find(message_id)
     end
 
     def perform
-      recipients = @message.message_recipients.reload
+      recipients = @message.message_recipients
       recipient_ids = recipients.collect(&:id)
-      report = @client.delivery_reports(recipient_ids: recipient_ids)
+      report = client.delivery_reports(recipient_ids: recipient_ids)
+      process(report)
+      @message.update_message_status!
+    end
+
+    private
+
+    def process(report)
       if not_ok?(report)
         abort_dispatch(report, recipients)
       else
         recipients.each do |r|
-          update_recipient(r, *state_and_error_from_report(recipient_report(report, r)))
+          r_report = recipient_report(report, r)
+          update_recipient(r, *state_and_error_from_report(r_report))
         end
       end
     end
-
-    private
 
     def recipient_report(report, recipient)
       report.fetch(:delivery_reports, {})[recipient.id.to_s]
@@ -50,6 +54,20 @@ module Messages
 
     def not_ok?(status)
       !status[:status].eql?(:ok)
+    end
+
+    def client
+      @client ||= Messages::TextMessageProvider::Base.init(config: provider_config)
+    end
+
+    def group
+      @group ||= @message.mailing_list.group
+    end
+
+    def provider_config
+      s = group.settings(:text_message_provider)
+      s.originator = group.name if s.originator.blank?
+      s
     end
   end
 end

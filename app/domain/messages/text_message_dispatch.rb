@@ -17,16 +17,17 @@ module Messages
 
     def run
       init_recipient_entries
-      enqueue_delivery_reports! if send_text_message!
-      update_message_status
+      if send_text_message!
+        enqueue_delivery_reports!
+      end
+      @message.update_message_status!
     end
 
     private
 
     def enqueue_delivery_reports!
-      TextMessageDeliveryReportJob
-        .new(@message, client)
-        .enqueue!(run_at: 15.seconds.from_now)
+      job = TextMessageDeliveryReportJob.new(@message.id)
+      Delayed::Job.enqueue(job, run_at: 15.seconds.from_now)
     end
 
     def provider_config
@@ -66,13 +67,6 @@ module Messages
         person_id: phone_nr.contactable_id,
         phone_number: phone_nr.number,
         state: state }
-    end
-
-    def update_message_status
-      failed_count = recipients(state: 'failed').count
-      success_count = recipients(state: 'sent').count
-      state = success_count.eql?(0) && failed_count.positive? ? 'failed' : 'finished'
-      @message.update!(success_count: success_count, failed_count: failed_count, state: state)
     end
 
     def send_text_message!

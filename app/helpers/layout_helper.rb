@@ -7,6 +7,10 @@
 
 module LayoutHelper
 
+  def render_nav?
+    current_user&.roles.present? || current_user&.root?
+  end
+
   # render a single button
   def action_button(label, url, icon = nil, options = {})
     if @in_button_group || options[:in_button_group]

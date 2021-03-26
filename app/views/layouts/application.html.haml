@@ -35,7 +35,7 @@
       = link_to(header_logo, root_path, class: 'logo-image')
 
     #page
-      - if current_user&.roles.present?
+      - if render_nav?
         %nav.nav-left
           = render 'layouts/nav'
       .container-fluid

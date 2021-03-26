@@ -28,6 +28,10 @@ class VariousAbility < AbilityDsl::Base
     permission(:admin).may(:manage).if_mail_account
   end
 
+  on(MailingListMailsController) do
+    permission(:admin).may(:index, :move, :destroy).if_mail_account
+  end
+
   if Group.course_types.present?
     on(Event::Kind) do
       class_side(:index).if_admin

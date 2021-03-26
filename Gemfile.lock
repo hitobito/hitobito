@@ -1,7 +1,7 @@
 PATH
   remote: ../hitobito_generic
   specs:
-    hitobito_generic (1.26.0)
+    hitobito_generic (1.22.17)
 
 GEM
   remote: https://rubygems.org/

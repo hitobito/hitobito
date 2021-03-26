@@ -61,8 +61,8 @@ class ImapConnector
 
   private
 
-  MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
-  # MAILBOXES = { inbox: 'INBOX', spam: 'SPAMMING', failed: 'FAILED' }.with_indifferent_access.freeze
+  # MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
+  MAILBOXES = { inbox: 'INBOX', spam: 'SPAMMING', failed: 'FAILED' }.with_indifferent_access.freeze
 
   def perform
     already_connected = @connected

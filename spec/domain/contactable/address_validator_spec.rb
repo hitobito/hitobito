@@ -70,6 +70,19 @@ describe Contactable::AddressValidator do
     end.to_not change { ActsAsTaggableOn::Tagging.count }
   end
 
+  it 'does not tag people if already tagged as invalid' do
+    ActsAsTaggableOn::Tagging
+      .create!(taggable: person,
+               context: :tags,
+               tag: PersonTags::Validation.address_invalid(create: true))
+
+    expect(validator).to_not receive(:invalid?)
+
+    expect do
+      validator.validate_people
+    end.to_not change { ActsAsTaggableOn::Tagging.count }
+  end
+
   it 'tags people only once' do
     expect do
       validator.validate_people

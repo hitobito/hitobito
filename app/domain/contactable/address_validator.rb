@@ -30,7 +30,7 @@ module Contactable
     private
 
     def should_be_validated?(person)
-      person.tags.exclude?(invalid_override_tag)
+      person.tags.exclude?(invalid_override_tag) && person.tags.exclude?(invalid_tag)
     end
 
     def invalid?(person)

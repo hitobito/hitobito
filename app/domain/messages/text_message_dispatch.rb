@@ -26,8 +26,9 @@ module Messages
     private
 
     def enqueue_delivery_reports!
-      job = TextMessageDeliveryReportJob.new(@message.id)
-      Delayed::Job.enqueue(job, run_at: 15.seconds.from_now)
+      TextMessageDeliveryReportJob
+        .new(@message)
+        .enqueue!(run_at: 15.seconds.from_now)
     end
 
     def provider_config

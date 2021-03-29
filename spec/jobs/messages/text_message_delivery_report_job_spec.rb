@@ -29,7 +29,11 @@ describe Messages::TextMessageDeliveryReportJob do
 
   let(:client_double) { double(:client) }
 
-  subject { described_class.new(message, client_double) }
+  before do
+    allow(subject).to receive(:client).and_return(client_double)
+  end
+
+  subject { described_class.new(message) }
 
   context 'on successfull delivery_reports' do
     it 'updates recipient status as sent' do

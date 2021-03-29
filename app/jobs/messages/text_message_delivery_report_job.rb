@@ -7,22 +7,25 @@
 
 module Messages
   class TextMessageDeliveryReportJob < BaseJob
+    require_dependency 'message/text_message'
+    self.parameters = [:message_id]
 
-    def initialize(message_id)
-      @message = Message::TextMessage.find(message_id)
+    def initialize(message)
+      super()
+      @message_id = message.id
     end
 
     def perform
-      recipients = @message.message_recipients
+      recipients = message.message_recipients
       recipient_ids = recipients.collect(&:id)
       report = client.delivery_reports(recipient_ids: recipient_ids)
-      process(report)
-      @message.update_message_status!
+      process(report, recipients)
+      message.update_message_status!
     end
 
     private
 
-    def process(report)
+    def process(report, recipients)
       if not_ok?(report)
         abort_dispatch(report, recipients)
       else
@@ -61,13 +64,17 @@ module Messages
     end
 
     def group
-      @group ||= @message.mailing_list.group
+      @group ||= message.mailing_list.group
     end
 
     def provider_config
       s = group.settings(:text_message_provider)
       s.originator = group.name if s.originator.blank?
       s
+    end
+
+    def message
+      @message ||= Message::TextMessage.find(@message_id)
     end
   end
 end

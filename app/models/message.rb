@@ -80,7 +80,7 @@ class Message < ActiveRecord::Base
     subject ? "#{type.constantize.model_name.human}: #{subject.truncate(20)}" : super
   end
 
-  def prepare_print!
+  def dispatch!
     update!(
       recipient_count: mailing_list.people.size,
       state: :pending

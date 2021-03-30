@@ -54,6 +54,6 @@ class Assignment < ActiveRecord::Base
   private
 
   def attachment_prepare_print
-    attachment&.prepare_print!
+    attachment&.dispatch!
   end
 end

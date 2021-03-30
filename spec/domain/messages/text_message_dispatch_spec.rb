@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe Messages::TextMessageDispatch do
-  let(:message)    { messages(:sms) }
+  let(:message) { messages(:sms) }
   let(:top_leader) { people(:top_leader) }
   let!(:mobile1) { Fabricate(:phone_number, contactable: top_leader, label: 'Mobil') }
   let!(:mobile2) { Fabricate(:phone_number, contactable: top_leader, label: 'Mobil') }
@@ -28,16 +28,16 @@ describe Messages::TextMessageDispatch do
         .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
         .and_return(status: :ok, message: 'OK')
 
-      delivery_reports = double(:hash)
-      allow(delivery_reports).to receive(:[]).and_return(status: :ok, status_message: 'Delivered')
+      freeze_time do # avoid problems with scheduling the job
+        delivery_report_double = double
+        expect(Messages::TextMessageDeliveryReportJob)
+          .to receive(:new).and_return(delivery_report_double)
+        expect(delivery_report_double).to receive(:enqueue!)
+          .with(run_at: 15.seconds.from_now)
 
-      expect(client_double)
-        .to receive(:delivery_reports)
-        .and_return(status: :ok, message: 'OK', delivery_reports: delivery_reports)
+        subject.run
+      end
 
-      subject.run
-
-      expect(message.reload.success_count).to eq 2
       expect(message.failed_count).to eq 0
       expect(message.state).to eq('finished')
 
@@ -60,9 +60,6 @@ describe Messages::TextMessageDispatch do
         .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
         .and_return(status: :auth_error, message: 'Authorization failed.')
 
-      expect(client_double)
-        .not_to receive(:delivery_reports)
-
       subject.run
 
       expect(message.reload.success_count).to eq 0
@@ -81,13 +78,14 @@ describe Messages::TextMessageDispatch do
     it 'marks message and recipients as failed if provider error' do
       nr1regex = Regexp.new("\\#{mobile1.number}:[0-9]+")
       nr2regex = Regexp.new("\\#{mobile2.number}:[0-9]+")
+
+      no_credit_available_msg =
+        'Not enough credits available. Please recharge your account to proceed.'
+
       expect(client_double)
         .to receive(:send)
         .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
-        .and_return(status: :error, message: 'Not enough credits available. Please recharge your account to proceed.')
-
-      expect(client_double)
-        .not_to receive(:delivery_reports)
+        .and_return(status: :error, message: no_credit_available_msg)
 
       subject.run
 
@@ -100,7 +98,7 @@ describe Messages::TextMessageDispatch do
 
       recipients.each do |r|
         expect(r.state).to eq('failed')
-        expect(r.error).to eq('Not enough credits available. Please recharge your account to proceed.')
+        expect(r.error).to eq(no_credit_available_msg)
       end
     end
   end

@@ -10,7 +10,7 @@ module Messages
     def create
       authorize!(:update, message)
       if message.text_message?
-        message.prepare_print!
+        message.dispatch!
       end
       redirect_to redirect_path, flash_message
     end

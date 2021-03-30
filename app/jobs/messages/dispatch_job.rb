@@ -8,7 +8,7 @@
 
 module Messages
   class DispatchJob < BaseJob
-    self.parameters = [:message_id, :locale]
+    self.parameters = [:message_id]
 
     delegate :update, :sent_at?, to: :message
 

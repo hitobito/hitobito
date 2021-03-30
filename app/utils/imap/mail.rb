@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2021, Hitobito AG. This file is part of
@@ -8,7 +7,7 @@
 
 require 'net/imap'
 
-class MailingList::Mail
+class Imap::Mail
 
   attr_accessor :uid, :mailbox, :subject, :date, :sender_name, :sender_email, :body
 

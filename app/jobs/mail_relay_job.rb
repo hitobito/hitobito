@@ -7,6 +7,8 @@
 
 class MailRelayJob < RecurringJob
 
+  # won't be needed after implementation bbt epic feature 26
+
   run_every Settings.email.retriever.interval.minutes
 
   def perform_internal

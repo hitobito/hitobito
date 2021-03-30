@@ -5,13 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module MailRelay
+module MailingList
     class BulkMailRetriever
         # retrieves mail, checks if it can be assigned to a mailing list and points it to dispatch via FileStore, makes log entry
         # currently in mail_relay/base.rb and mail_relay/lists.rb
 
         # Retrieve, process and delete all mails from the mail server. 
-        def relay_current
+        def perform       # analog zu relay_current in MailRelay::Base 
             loop do
               mails, last_exception = relay_batch
               raise(last_exception) if last_exception.present?
@@ -32,6 +32,8 @@ module MailRelay
             logger.warn(e)
             [[], nil]
         end
+
+        
 
     end
 end

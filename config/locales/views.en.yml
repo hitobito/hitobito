@@ -746,9 +746,6 @@ en:
     previews:
       show:
         recipients_empty: Recipients list is empty.
-    dispatches:
-      create:
-        success: "%{model_class}prepared for printing."
     actions_show:
       button_dispatch_letter: Print
       button_show_assignment: Print preview
@@ -763,6 +760,11 @@ en:
         remaining_chars: Remaining characters
     form:
       available_placeholders: 'Available placeholders:'
+      recipient_info:
+        valid:
+          message/text_message:
+            one: "%{model_class}created for %{count}persons."
+            other: "%{model_class}created for %{count}persons."
     table:
       infos:
         sender: "Sender: %{mail}"
@@ -1213,6 +1215,7 @@ en:
       roles:
         please_choose_group: Please select a group
       tags:
+        only_add_persons_with_tags: 'Only add people with one of the following tags:'
         exclude_persons_with_tags: 'Exclude people with one of the following tags:'
     exclude_person:
       form:

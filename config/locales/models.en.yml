@@ -409,6 +409,7 @@ en:
         participations_visible: Visibility of participants
         waiting_list: Waiting list
         requires_approval: Approval required
+        globally_visible: Visibility
       event/contact_attrs:
         required: Mandatory
         optional: Optional

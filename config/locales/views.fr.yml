@@ -170,6 +170,9 @@ fr:
         sign_in: Inscription
       form:
         sign_in: Inscription
+      oauth_info:
+        sign_in: 'Se connecter avec'
+        info: 'Veuillez vous connecter pour continuer.'
     passwords:
       send_instructions: 'Dans quelques minutes, tu recevras un courriel qui t''expliquera comment réinitialiser ton mot de passe.'
       updated: 'Ton mot de passe a été modifié. Tu es maintenant authentifié(e).'
@@ -340,7 +343,14 @@ fr:
         title: 'Attribuer des personnes à %{event_label} '
         event_search: Chercher un événement
         submit: Ajouter
+  assignments:
+    attachment: 'Annex'
+    form:
+      attachment:
+        subject: 'Objet du message'
   events:
+    actions_show:
+      copy_share_link: Copier le lien direct
     application_fields:
       caption_signature: Les participants doivent signer l'inscription.
       caption_signature_confirmation: L'inscription doit être confirmée par une deuxième signature.
@@ -353,6 +363,7 @@ fr:
       caption_external_applications: 'Les personnes externes peuvent s''inscrire à cet événement.'
       caption_prioritization: 'Les participants peuvent indiquer deux autres cours alternatifs lors de l''inscription.'
       caption_requires_approval: 'Le responsable de troupe est informé et doit confirmer l''inscription.'
+      caption_participations_visible: 'Les participants peuvent se voir les uns les autres dans la liste des participants.'
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Ici, tu peux demander des informations supplémentaires pour les inscriptions.
       explain_choices: Laissez vide pour la réponse en texte libre, une ou plusieurs options de réponse (séparées par des virgules) pour la sélection.
@@ -361,6 +372,7 @@ fr:
       caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
       caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
       caption_waiting_list: S'il n'y a plus de places disponibles, les nouvelles inscriptions se retrouvent automatiquement sur la liste d'attente.
+      caption_globally_visible: 'est visible dans toute la base de données'
     form_tabs:
       general: Général
       application_questions: Données pour l'inscription
@@ -605,6 +617,7 @@ fr:
     create:
       one: "La facture a été établie pour un destinataire"
       other: "La facture <i>%{title}</i> a été établie pour%{count}  destinataires."
+    create_batch: "La facture est créée pour le destinataire en arrière-plan."
     update:
       zero: 'Choisir au moins une facture.'
       model_error: "la facture %{number} n'est pas valable - %{error}."
@@ -732,6 +745,62 @@ fr:
     no_delivery_report: 'Les expéditeurs ne reçoivent pas d''e-mail de confirmation d''envoi'
     subscribe: 'Inscription'
     unsubscribe: 'Désinscription'
+  messages:
+    attrs:
+      dispatch_infos: En cours de traitement
+    previews:
+      show:
+        recipients_empty: La liste des destinataires est vide, il est impossible de présenter un aperçu.
+    dispatches:
+      create:
+        success:
+          message/letter: "La lettre a été envoyée à l'impression."
+          message/letter_with_invoice: "La lettre de facturation a été envoyée à l'impression."
+          message/text_message: "SMS envoyé"
+        alert:
+          message/letter: "Une fois envoyée à l'impression, la lettre ne peut plus être modifiée."
+          message/letter_with_invoice: "Une fois envoyée à l'impression, la facture ne peut plus être modifiée."
+    actions_show:
+      button_dispatch_letter: Imprimer
+      button_show_assignment: Afficher l'impression
+      button_duplicate: Dupliquer
+      button_preview: Aperçu
+      button_dispatch_text_message: Envoyer
+      button_show_pdf: Afficher le PDF
+    letter:
+      fields:
+        available_placeholders: 'Espaces disponibles:'
+    text_message:
+      fields:
+        remaining_chars: Caractères restant
+    form:
+      available_placeholders: 'Titres disponibles:'
+      recipient_info:
+        valid:
+          message/letter:
+            one: "est créé pour une personne."
+            other: "est créé pour une personne."
+          message/letter_with_invoice:
+            one: "est créé pour des personnes."
+            other: "est créé pour des personnes."
+          message/text_message:
+            one: "est créé pour des personnes."
+            other: "est créé pour des personnes."
+        invalid:
+          message/letter:
+            one: "Plusieurs adresses sont incomplètes."
+            other: "Plusieurs adresses sont incomplètes."
+          message/letter_with_invoice:
+            one: "Plusieurs adresses sont incomplètes"
+            other: "Plusieurs adresses sont incomplètes."
+          message/text_message:
+            one: "Plusieurs numéros de téléphones sont manquants."
+            other: "Plusieurs numéros de téléphones sont manquants."
+    table:
+      infos:
+        sender: "Expéditeur"
+        sender_rejected: L'expéditeur a été supprimé
+        unkown_recipient: Destinataire inconnu
   navigation:
     menu: 'Menu'
     groups: 'Groupes'
@@ -783,11 +852,21 @@ fr:
     merge:
       new:
         title: Merge une personne
+        select_person: Quelles données sont prioritaires lors de la fusion?
+        merge_hint: Lors de la fusion, les rôles, les numéros de téléphones, les adresses mails supplémentaires ainsi que les entrées sur les réseaux sociaux seront récupérés. Toutes les autres données personnelles (notes, inscriptions aux cours, etc.) seront supprimées.
+        merge_hint_invalid: Cette personne a des données non-valables.
         irreversible: Cette opération est irréversible.
+        invalid_persons: Les entrées ne peuvent être fusionnées que si les deux sont valables.
+        reload: Vérifier à nouveau
       action: Merge
+      success: Les données des personnes ont été fusionnées avec succès.
     ignore:
       new:
+        title: Voulez-vous vraiment ignorer le doublon?
+        confirm: Êtes-vous certains que les deux entrées ne sont pas des doublons?
         irreversible: Cette opération est irréversible.
+      action: Ignorer
+      success: Le doublon a été supprimé avec succès.
   person:
     confirm_delete: "Toutes les données sur %{person} vont être définitivement effacées, y compris les participations et les qualifications. N'efface cette personne que si plus personne n'a besoin de ces données. "
     add_requests:
@@ -892,6 +971,7 @@ fr:
         category_validation:
           email_primary_invalid: Adresse e-mail principale non valide
           email_additional_invalid: Adresse e-mail supplémentaire non valide
+          address_invalid: L'adresse ne figure pas dans le répertoire
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:
@@ -1166,6 +1246,7 @@ fr:
       roles:
         please_choose_group: S'il te plaît, choisis un groupe.
       tags:
+        only_add_persons_with_tags: 'Ne sélectionner que les personnes qui ont l''une des étiquettes suivantes:'
         exclude_persons_with_tags: 'Exclure les contacts avec un des tags suivants:'
     exclude_person:
       form:
@@ -1219,6 +1300,7 @@ fr:
     append_to_household: "%{item} a été ajouté au ménage (%{object_changes})."
     household_updated: "Le foyer (%{object_changes}) a été actualisé."
     remove_from_household: "%{item} a été retiré du ménage (%{object_changes})."
+    person_merge: "Deux personnes ont été fusionnées sous cette entrée. Personne supprimée:"
   tags/merge:
     success: Les tags ont été fusionnés avec succès.
   tags_merge:

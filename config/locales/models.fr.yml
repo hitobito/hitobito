@@ -122,6 +122,9 @@ fr:
       additional_email:
         one: Adresse e-mail supplémentaire
         other: Adresses e-mail supplémentaires
+      assignment:
+        one: Commandes
+        other: Commandes
       custom_content:
         one: Texte
         other: Textes
@@ -194,9 +197,27 @@ fr:
       invoice_item:
         one: postes de factures
         other: Détails de la facture
+      invoice_list:
+        one: Facture collective
+        other: Facture collective
       label_format:
         one: format d'étiquette
         other: Formats d'étiquettes
+      message:
+        one: messages
+        other: messages
+      message/bulk_mail:
+        one: E-mails
+        other: E-mails
+      message/letter:
+        one: Lettres
+        other: Lettres
+      message/letter_with_invoice:
+        one: Factures
+        other: Factures
+      message/text_message:
+        one: SMS
+        other: SMS
       mail_log:
         one: Historique
         other: Historique
@@ -288,6 +309,11 @@ fr:
         vs: Valais
         zg: Zoug
         zh: Zurich
+      assignment:
+        title: Titre
+        description: Description
+        state: Statut
+        read_at: Lu le
       person:
         first_name: Prénom
         last_name: Nom
@@ -388,6 +414,8 @@ fr:
         display_booking_info: Voir l'état des inscriptions
         participations_visible: Visibilité des participants
         waiting_list: Liste d'attente
+        requires_approval: Recommandation requise
+        globally_visible: Visibilité
       event/contact_attrs:
         required: Obligatoire
         optional: Optionnel
@@ -494,6 +522,16 @@ fr:
         number: Numéro de téléphone
         label: Type de numéro de téléphone
         public: Public
+      group_setting:
+        var: Paramètres
+        settings:
+          text_message_provider: Fournisseur du service SMS
+          messages_letter: Lettres
+        username: Nom d'utilisateur
+        password: Mot de passe
+        provider: Fournisseur
+        originator: Expéditeur
+        picture: Logo
       role:
         label: Désignation
         type: ' Rôle'
@@ -509,6 +547,8 @@ fr:
               layer_and_below_read: 'Lecture à ce niveau et aux niveaux inférieurs. '
               layer_full: Ecriture / lecture à ce niveau. Création d'évènements et d'abonnements à ce niveau.
               layer_read: 'Lecture à ce niveau. '
+              group_and_below_full: Lecture et rédaction dans le groupe et dans tous les sous-groupes (sans niveaux). Y compris la création d'événements et d'abonnements.
+              group_and_below_read: Lecture et rédaction dans tous les groupes et sous-groupes (sans niveaux).
               group_full: Ecriture / lecture au niveau du groupe. Création d'évènements et d'abonnements au niveau du groupe.
               group_read: Lecture au niveau du groupe.
               contact_data: Lecture des données de contact de toutes les autres personnes avec des droits de données de contact.
@@ -589,6 +629,24 @@ fr:
           completed: Envoyé
           sender_rejected: Expéditeur refusé
           unkown_recipient: Erreur
+      message:
+        source: Récepteur
+        subject: Objet
+        state: État
+        type: Type
+        states:
+          draft: Brouillon
+          pending: Préparé
+          processing: en cours de traitement
+          finished: Achevé
+          failed: Échec de l'opération
+        recipient_count: Nombre de destinataires
+        success_count: Réception réussie
+        failed_count: Échec de l'envoi
+        sent_at: Traité le
+      message/letter:
+        body: Contenu
+        heading: En-tête
       subscription:
         related_role_types: Rôles
       people_filter:
@@ -713,7 +771,12 @@ fr:
         cost_center: Poste
         account: Compte
       invoice_list:
+        title: Titre
         receiver: Destinataire
+        recipients_total: Nombre de destinataires total
+        recipients_paid: Paiement versé
+        amount_total: Montant total
+        amount_paid: Montant payé
       invoice_items:
         name: Nom
         description: description
@@ -766,6 +829,7 @@ fr:
       api: Lecture de toutes les personnes, groupes, événements et factures auxquels vous avez accès, via les interfaces JSON
   errors:
     messages:
+      attachments_not_allowed: "ne doit pas contenir d'annexe"
       invalid_money: "doit être arrondi à 5 centimes"
       invalid_date: "n'est pas une date valable"
       invalid_time: "n'est pas une heure valable"

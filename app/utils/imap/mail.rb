@@ -9,11 +9,9 @@ require 'net/imap'
 
 class Imap::Mail
 
-  attr_accessor :uid, :mailbox, :subject, :date, :sender_name, :sender_email, :body
+  attr_accessor :uid, :subject, :date, :sender_name, :sender_email, :body
 
-  def initialize(imap_fetch_data: nil, mailbox: '')
-    @mailbox = mailbox
-
+  def initialize(imap_mail)
     if imap_fetch_data.nil?
       default_init
     else

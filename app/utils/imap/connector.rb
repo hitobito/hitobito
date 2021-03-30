@@ -9,6 +9,7 @@ class Imap::Connector
 
   def initialize
     @connected = false
+    raise 'no imap settings present' unless settings_present?
   end
 
   def fetch_by_uid(uid, mailbox = 'inbox')
@@ -35,11 +36,12 @@ class Imap::Connector
     end
   end
 
-  def fetch_all(mailbox)
+  # TODO return an array of Imap::Mail objects
+  def fetch_mails(mailbox)
     perform do
-      select_mailbox mailbox
+      select_mailbox(mailbox)
 
-      mail_count = count mailbox
+      mail_count = count(mailbox)
       mails = mail_count.positive? ? @imap.fetch(1..mail_count, attributes) || [] : []
       mails.map { |m| m.attr }
     end
@@ -55,21 +57,16 @@ class Imap::Connector
   def counts
     perform do
       counts = {}
-      MAILBOXES.each do |m, _|
+      MAILBOXES.each do |m|
         counts[m] = count(m)
       end
       counts.with_indifferent_access
     end
   end
 
-  def config_present?
-    !Settings.email.retriever.config.nil?
-  end
-
   private
 
-  # MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
-  MAILBOXES = { inbox: 'INBOX', spam: 'SPAMMING', failed: 'FAILED' }.with_indifferent_access.freeze
+  MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
 
   def perform
     already_connected = @connected
@@ -81,7 +78,7 @@ class Imap::Connector
 
   def connect
     @imap = Net::IMAP.new(host, 993, true)
-    @imap.login(email, password)
+    @imap.login(setting(:email), setting(:password))
     @connected = true
   end
 
@@ -90,11 +87,10 @@ class Imap::Connector
       @imap.close
       @imap.disconnect
       @connected = false
-      @selected_mailbox = nil
     end
   end
 
-  def create_if_failed(mailbox, error)
+  def create_if_missing(mailbox, error)
     if (mailbox == MAILBOXES[:failed]) && error.response.data.text.include?("Mailbox doesn't exist")
       @imap.create(MAILBOXES[:failed])
       @imap.select(mailbox)
@@ -106,39 +102,23 @@ class Imap::Connector
   def select_mailbox(mailbox)
     mailbox = MAILBOXES[mailbox]
 
-    if mailbox == @selected_mailbox
-      nil
-    else
-      begin
-        @imap.select(mailbox)
-      rescue Net::IMAP::NoResponseError => e
-        create_if_failed mailbox, e
-      end
-      @selected_mailbox = mailbox
+    begin
+      @imap.select(mailbox)
+    rescue Net::IMAP::NoResponseError => e
+      create_if_missing(mailbox, e)
     end
   end
 
-  def host
-    return 'imap.gmail.com' unless config_present?
-
-    Settings.email.retriever.config.address
+  def setting(key)
+    Settings.email.retriever.config.send(key)
   end
 
-  def email
-    return 'test.imap.hitobito@gmail.com' unless config_present?
-
-    Settings.email.retriever.config.user_name
-  end
-
-  def password
-    return 'test.imap' unless config_present?
-
-    Settings.email.retriever.config.password
+  def settings_present?
+    !Settings.email.retriever.config.nil?
   end
 
   def attributes
     %w(ENVELOPE UID BODYSTRUCTURE BODY[TEXT] RFC822)
   end
-
 
 end

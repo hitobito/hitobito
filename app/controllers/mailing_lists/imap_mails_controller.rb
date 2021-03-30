@@ -5,9 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class MailingListMailsController < ApplicationController
-
-  authorize_resource MailingList::Mail, instance_name: 'mails'
+class MailingLists::ImapMailsController < ApplicationController
 
   helper_method :mails, :mailbox, :mailbox_failed?, :mailboxes, :default_mailbox
 
@@ -45,17 +43,16 @@ class MailingListMailsController < ApplicationController
   end
 
   def mails
-    if @mails.present?
-      return @mails
-    end
+    @mails ||= fetch_mails
+  end
 
+  def fetch_mails
     mails = imap.fetch_all(mailbox)
-    mails = mails.map { |m| MailingList::Mail.new(imap_fetch_data: m, mailbox: mailbox) }
 
-    mails = mails.sort { |a, b| a.date.to_i <=> b.date.to_i }
+    mails.sort! { |a, b| a.date.to_i <=> b.date.to_i }
     mails = mails.reverse
 
-    @mails = Kaminari.paginate_array(mails).page(params[:page])
+    Kaminari.paginate_array(mails).page(params[:page])
   end
 
   def counts
@@ -75,7 +72,7 @@ class MailingListMailsController < ApplicationController
   end
 
   def mailbox
-    @mailbox ||= params.key?(:mailbox) ? params[:mailbox] : default_mailbox
+    params[:mailbox] || default_mailbox
   end
 
   def param_move_to_mailbox

@@ -8,6 +8,7 @@ describe People::Merger do
   let(:duplicate) { Fabricate(:person_with_address_and_phone) }
   let(:actor) { people(:root) }
   let(:person_roles) { person.roles.with_deleted }
+  let(:role_attr_keys) { [:type, :group, :created_at, :deleted_at] }
 
   let(:merger) { described_class.new(@source.reload, @target.reload, actor) }
 
@@ -118,6 +119,42 @@ describe People::Merger do
       group_ids = person_roles.with_deleted.map(&:group_id)
       expect(group_ids).to include(groups(:bottom_group_one_one).id)
       expect(group_ids).to include(groups(:bottom_group_two_one).id)
+
+      expect(Person.where(id: duplicate.id)).not_to exist
+    end
+
+    it 'merges all role attrs' do
+      @source = duplicate
+      @target = person
+
+      duplicate_two_one_role = Fabricate('Group::BottomGroup::Member',
+                               group: groups(:bottom_group_two_one),
+                               person: duplicate)
+
+      duplicate_two_one_role.delete
+      # check soft delete
+      expect(Role.with_deleted.where(id: duplicate_two_one_role.id)).to exist
+
+      # should not merge this deleted role since person has it already
+      duplicate_one_one_role = Fabricate('Group::BottomGroup::Member',
+                                         deleted_at: 2.months.ago,
+                                         group: groups(:bottom_group_one_one),
+                                         person: duplicate)
+      duplicate_one_one_role.delete
+
+      expect do
+        merger.merge!
+      end.to change(Person, :count).by(-1)
+
+      expect(person_roles.count).to eq(2)
+      group_ids = person_roles.with_deleted.map(&:group_id)
+      expect(group_ids).to include(groups(:bottom_group_one_one).id)
+      expect(group_ids).to include(groups(:bottom_group_two_one).id)
+
+      role_attr_keys.each do |key|
+        expect(person_roles.map(&key)).to include(duplicate_two_one_role.send(key))
+        expect(person_roles.map(&key)).to include(duplicate_one_one_role.send(key))
+      end
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end

@@ -12,10 +12,14 @@ class CreateEventsGroupsAndSomeFields < ActiveRecord::Migration[4.2]
       t.belongs_to :group
     end
 
-    Event.find_each do |e|
-      e.group_ids = [e.group_id]
-      e.save!
-    end
+    # this breaks applying migrations when
+    # creating new tenants on instances with appartment.
+    # since this is a pretty old migration, it's save to just
+    # comment these lines
+    # Event.find_each do |e|
+      # e.group_ids = [e.group_id]
+      # e.save!
+    # end
 
     remove_column :events, :group_id
 

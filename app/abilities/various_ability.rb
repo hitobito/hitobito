@@ -24,12 +24,11 @@ class VariousAbility < AbilityDsl::Base
     permission(:any).may(:create, :update, :destroy, :read).own
   end
 
-  on(MailingList::Mail) do
-    permission(:admin).may(:manage).if_mail_account
-  end
-
-  on(MailingListMailsController) do
-    permission(:admin).may(:index, :move, :destroy).if_mail_account
+  if Settings.email.retriever.config.present?
+    on(Imap::Mail) do
+      class_side(:index).if_admin
+      permission(:admin).may(:manage).all
+    end
   end
 
   if Group.course_types.present?
@@ -46,10 +45,6 @@ class VariousAbility < AbilityDsl::Base
 
   def own
     subject.person_id == user.id
-  end
-
-  def if_mail_account
-    !Settings.email.retriever.config.nil?
   end
 
 end

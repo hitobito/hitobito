@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+require 'net/imap'
+
 class Imap::Connector
 
   def initialize

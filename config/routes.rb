@@ -243,7 +243,7 @@ Hitobito::Application.routes.draw do
 
       resources :service_tokens
 
-    end # resources :group
+    end # resources :groupd
 
     get 'list_courses' => 'event/lists#courses', as: :list_courses
     get 'list_events' => 'event/lists#events', as: :list_events
@@ -253,9 +253,11 @@ Hitobito::Application.routes.draw do
 
     resources :event_kinds, module: 'event', controller: 'kinds'
 
-    get 'mailing_lists/imap_mails' => 'mailing_list_mails#index'
-    delete 'mailing_lists/imap_mails/:mailbox' => 'mailing_list_mails#destroy', as: :mailing_list_mail_destroy
-    patch 'mailing_lists/imap_mails/move' => 'mailing_list_mails#move', as: :mailing_list_mail_move
+    scope module: :mailing_lists do
+      get 'mailing_lists/imap_mails/:mailbox' => 'imap_mails#index', as: :imap_mails
+      delete 'mailing_lists/imap_mails/:mailbox' => 'imap_mails#destroy', as: :imap_mails_destroy
+      patch 'mailing_lists/imap_mails/:mailbox/move' => 'imap_mails#move', as: :imap_mails_move
+    end
 
     resources :qualification_kinds
     resources :tags, except: :show do

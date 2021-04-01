@@ -25,45 +25,46 @@ describe ImapConnector do
     stub_const('ImapConnector::MAILBOXES', mailboxes)
   end
 
-  context 'connection' do
-
-    it 'connects' do
-      expect_connect
-
-      imap_connector.send(:connect)
-      expect(imap_connector.instance_variable_get(:@connected)).to be_truthy
-    end
-
-    it 'disconnects' do
-      expect_connect
-
-      imap_connector.send(:connect)
-
-      expect_disconnect
-      imap_connector.send(:disconnect)
-
-      expect(imap_connector.instance_variable_get(:@connected)).to be_falsey
-      expect(imap_connector.instance_variable_get(:@selected_mailbox)).to be_nil
-    end
-
-    it 'performs' do
-      expect_perform
-
-      result = imap_connector.send(:perform) { 42 }
-      expect(result).to eq(42)
-    end
-
-    it 'connects once with nested perform' do
-      expect_perform
-
-      result = imap_connector.send(:perform) do
-        imap_connector.send(:perform) { 42 }
-      end
-      expect(result).to eq(42)
-
-    end
-
-  end
+  # TODO: remove the following block
+  # context 'connection' do
+  #
+  #   it 'connects' do
+  #     expect_connect
+  #
+  #     imap_connector.send(:connect)
+  #     expect(imap_connector.instance_variable_get(:@connected)).to be_truthy
+  #   end
+  #
+  #   it 'disconnects' do
+  #     expect_connect
+  #
+  #     imap_connector.send(:connect)
+  #
+  #     expect_disconnect
+  #     imap_connector.send(:disconnect)
+  #
+  #     expect(imap_connector.instance_variable_get(:@connected)).to be_falsey
+  #     expect(imap_connector.instance_variable_get(:@selected_mailbox)).to be_nil
+  #   end
+  #
+  #   it 'performs' do
+  #     expect_perform
+  #
+  #     result = imap_connector.send(:perform) { 42 }
+  #     expect(result).to eq(42)
+  #   end
+  #
+  #   it 'connects once with nested perform' do
+  #     expect_perform
+  #
+  #     result = imap_connector.send(:perform) do
+  #       imap_connector.send(:perform) { 42 }
+  #     end
+  #     expect(result).to eq(42)
+  #
+  #   end
+  #
+  # end
 
   describe '#select' do
 

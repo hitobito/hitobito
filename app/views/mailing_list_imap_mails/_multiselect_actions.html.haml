@@ -8,7 +8,7 @@
       = mail_move_button :failed
 
       = action_button(ti(:"link.delete"),
-      mailing_list_mail_destroy_path(mailbox: mailbox),
+      imap_mails_destroy_path(mailbox: mailbox),
       :'trash-alt',
       data: { confirm: ti(:confirm_delete),
               checkable: true, method: :delete },

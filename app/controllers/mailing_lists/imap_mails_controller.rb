@@ -21,7 +21,7 @@ class MailingLists::ImapMailsController < ApplicationController
       imap.move_by_uid id, param_move_from_mailbox, param_move_to_mailbox
     end
 
-    redirect_to mailing_list_mails_path(mailbox: param_move_from_mailbox)
+    redirect_to imap_mails_path(mailbox: mailbox)
   end
 
   def destroy
@@ -29,13 +29,13 @@ class MailingLists::ImapMailsController < ApplicationController
       imap.delete_by_uid(id, mailbox)
     end
 
-    redirect_to mailing_list_mails_path(mailbox: mailbox)
+    redirect_to imap_mails_path(mailbox: mailbox)
   end
 
   private
 
   def imap
-    @imap ||= ImapConnector.new
+    @imap ||= Imap::Connector.new
   end
 
   def default_mailbox
@@ -64,10 +64,10 @@ class MailingLists::ImapMailsController < ApplicationController
   end
 
   def param_ids
-    if params[:ids].empty?
+    if params[:mail_ids].empty?
       []
     else
-      params[:ids].split(',').map { |id| id.to_i }
+      params[:mail_ids].split(',').map { |id| id.to_i }
     end
   end
 
@@ -76,11 +76,10 @@ class MailingLists::ImapMailsController < ApplicationController
   end
 
   def param_move_to_mailbox
-    params[:to]
+    params[:mail_dst]
   end
 
   def param_move_from_mailbox
     params[:from]
   end
-
 end

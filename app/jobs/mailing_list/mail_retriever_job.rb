@@ -14,10 +14,12 @@ module MailingList
         def perform_internal
         # only run if a retriever address is defined
         if Settings.email.retriever.config.address
-            MailingList::BulkMailRetriever.perform  #perform analog zu relay_current aufbauen
+            MailingList::BulkMailRetriever.perform  #perform analog zu relay_current in MailRelay::Base aufbauen
         end
         end
-    
+        
+        # conver below logic in story error handling
+
         # def error(job, exception)
         # if exception.is_a?(MailRelay::Error)
         #     super(job, exception.original, mail: extract_mail_for_errbit(exception))

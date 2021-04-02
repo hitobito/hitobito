@@ -98,7 +98,7 @@ class Event::ListsController < ApplicationController
 
   def limited_courses_scope(scope = course_scope)
     if can?(:list_all, Event::Course)
-      group_id > 0 ? scope.with_group_id(group_id) : scope
+      group_id.positive? ? scope.with_group_id(group_id) : scope
     else
       scope.in_hierarchy(current_user)
     end

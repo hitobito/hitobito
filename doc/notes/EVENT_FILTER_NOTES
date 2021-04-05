@@ -1,0 +1,39 @@
+Personen-Filter:
+  - filter/list
+    Wrapper
+      erstellt vom controller
+      braucht:
+        - ausgangspunkt (gruppe)
+        - berechtigungskontext (user || token)
+        - filter-parameter
+      kann
+        - entries
+        - all_count
+
+  - filter/chain
+    Kann mehrere Filter verarbeiten und kombinieren
+
+  - filter/base
+    Basis/Interface für Filter-Klassen
+
+Event-Filter
+  0. [CURRENT] Event::Filter ansehen und für Implementation-Details von List/Base/Chain nutzen
+  1. umstellen auf Person::Filter-Architektur
+    0. List kopieren
+    1. Base kopieren
+    2. Chain kopieren
+    3. existierende Filter extrahieren
+      - Group
+      - Type
+      - filter -> layer
+      - Year
+    4. Sorting im Controller
+  2. Date-Filter einbauen
+
+Vereinheitlichung Event und Preson-Filter:
+1. Verschieben nach Filter::TOPIC_PLURAL::*
+  - referenzen prüfen
+  - Shim für Wagons einbauen
+    - DEPRECATION WITHIN 3 VERSIONS
+2. gemeinsame Basis finden und extrahieren
+3. gemeinsame Filter finden?

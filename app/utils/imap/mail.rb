@@ -12,11 +12,7 @@ class Imap::Mail
   attr_accessor :uid, :subject, :date, :sender_name, :sender_email, :body
 
   def initialize(imap_mail)
-    if imap_fetch_data.nil?
-      default_init
-    else
-      unpack imap_fetch_data
-    end
+    imap_mail.nil? ? default_init : unpack(imap_mail)
   end
 
   def preview
@@ -53,10 +49,10 @@ class Imap::Mail
     @body = ''
   end
 
-  def unpack(imap_fetch_data)
-    @uid = imap_fetch_data['UID']
+  def unpack(imap_mail_fetch_data)
+    @uid = imap_mail_fetch_data.attr['UID']
 
-    envelope = imap_fetch_data['ENVELOPE']
+    envelope = imap_mail_fetch_data.attr['ENVELOPE']
     @subject = envelope.subject
 
     @date = Time.zone.utc_to_local(DateTime.parse(envelope.date))
@@ -64,10 +60,10 @@ class Imap::Mail
     @sender_email = envelope.sender[0].mailbox + '@' + envelope.sender[0].host
     @sender_name = envelope.sender[0].name
 
-    if imap_fetch_data['BODYSTRUCTURE'].media_type == 'TEXT'
-      @body = imap_fetch_data['BODY[TEXT]']
+    if imap_mail_fetch_data.attr['BODYSTRUCTURE'].media_type == 'TEXT'
+      @body = imap_mail_fetch_data.attr['BODY[TEXT]']
     else
-      mail = Mail.read_from_string imap_fetch_data['RFC822']
+      mail = Mail.read_from_string imap_mail_fetch_data.attr['RFC822']
       @body = mail.text_part.body.to_s
 
     end

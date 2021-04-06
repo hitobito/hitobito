@@ -50,7 +50,7 @@ describe MailingListMailsController do
     end
 
     it 'cannot be accessed as non-admin' do
-      before { sign_in(people(:bottom_member)) }
+      sign_in(people(:bottom_member))
       expect do
         get :index
       end.to raise_error(CanCan::AccessDenied)
@@ -87,7 +87,7 @@ describe MailingListMailsController do
     end
 
     it 'cannot be deleted by non-admin' do
-      before { sign_in(people(:bottom_member)) }
+      sign_in(people(:bottom_member))
       expect do
         delete :destroy, params: params
       end.to raise_error(CanCan::AccessDenied)

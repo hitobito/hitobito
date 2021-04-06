@@ -47,7 +47,7 @@ class MailingLists::ImapMailsController < ApplicationController
   end
 
   def fetch_mails
-    mails = imap.fetch_all(mailbox)
+    mails = imap.fetch_mails(mailbox)
 
     mails.sort! { |a, b| a.date.to_i <=> b.date.to_i }
     mails = mails.reverse

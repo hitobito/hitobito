@@ -9,10 +9,10 @@ require 'spec_helper'
 
 require 'net/imap'
 
-describe ImapConnector do
+describe Imap::Connector do
 
   let(:net_imap) { double(:net_imap) }
-  let(:imap_connector) { ImapConnector.new }
+  let(:imap_connector) { Imap::Connector.new }
 
   let(:mailboxes) { { inbox: 'INBOX', failed: 'Failed' }.with_indifferent_access.freeze }
   let(:mailbox_inbox) { 'INBOX' }
@@ -185,21 +185,24 @@ describe ImapConnector do
 
     describe '#fetch_all' do
 
+
       it 'fetch all mail from a mailbox' do
         expect(net_imap).to receive(:status).with(mailbox_inbox, ['MESSAGES']).and_return({ 'MESSAGES' => 2 })
         expect(net_imap).to receive(:fetch).with(1..2, anything).and_return([imap_fetch_data, imap_fetch_data])
 
-        mails = imap_connector.fetch_all(:inbox)
+        mails = imap_connector.fetch_mails(:inbox)
+        expect(mails.first).to be_a(Imap::Mail)
 
-        expect(mails).to be_an_instance_of(Array)
-        expect(mails).to all(be_an_instance_of(Hash))
-        expect(mails).to all(eq(imap_fetch_data.attr))
+        # TODO: Auf Nachricht Inhalt prüfen
+        # expect(mails).to be_an_instance_of(Array)
+        # expect(mails).to all(be_an_instance_of(Hash))
+        # expect(mails).to all(eq(imap_fetch_data.attr))
       end
 
       it 'fetch empty array from an empty mailbox' do
         expect(net_imap).to receive(:status).with(mailbox_inbox, ['MESSAGES']).and_return({ 'MESSAGES' => 0 })
 
-        mails = imap_connector.fetch_all(:inbox)
+        mails = imap_connector.fetch_mails(:inbox)
 
         expect(mails).to eq([])
       end

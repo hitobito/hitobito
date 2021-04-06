@@ -38,21 +38,27 @@ class Imap::Connector
     end
   end
 
-  # TODO return an array of Imap::Mail objects
+  # TODO: return an array of Imap::Mail objects
   def fetch_mails(mailbox)
     perform do
       select_mailbox(mailbox)
 
       mail_count = count(mailbox)
-      mails = mail_count.positive? ? @imap.fetch(1..mail_count, attributes) || [] : []
-      mails.map { |m| m.attr }
+
+      imap_mails = if mail_count.positive?
+                     imap_mail_list_from(@imap.fetch(1..mail_count, attributes)) || []
+                   else
+                     []
+                   end
+
+      imap_mails
     end
   end
 
   def count(mailbox)
     perform do
       select_mailbox mailbox
-      @imap.status(MAILBOXES[mailbox], ['MESSAGES'])['MESSAGES']
+      @imap.status('INBOX', ['MESSAGES'])['MESSAGES']
     end
   end
 
@@ -70,6 +76,15 @@ class Imap::Connector
 
   MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
 
+  def imap_mail_list_from(fetch_data)
+    imap_mails = []
+
+    fetch_data.each do |mail|
+      imap_mails.append Imap::Mail.new(mail)
+    end
+    imap_mails
+  end
+
   def perform
     already_connected = @connected
     connect unless already_connected
@@ -79,8 +94,8 @@ class Imap::Connector
   end
 
   def connect
-    @imap = Net::IMAP.new(host, 993, true)
-    @imap.login(setting(:email), setting(:password))
+    @imap = Net::IMAP.new(setting(:address), setting(:port), setting(:enable_ssl))
+    @imap.login(setting(:user_name), setting(:password))
     @connected = true
   end
 
@@ -104,11 +119,11 @@ class Imap::Connector
   def select_mailbox(mailbox)
     mailbox = MAILBOXES[mailbox]
 
-    begin
-      @imap.select(mailbox)
-    rescue Net::IMAP::NoResponseError => e
-      create_if_missing(mailbox, e)
-    end
+    # begin
+      @imap.select('INBOX')
+    # rescue Net::IMAP::NoResponseError => e
+    #   create_if_missing(mailbox, e)
+    # end
   end
 
   def setting(key)

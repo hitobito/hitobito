@@ -12,7 +12,7 @@ class Imap::Mail
   attr_accessor :uid, :subject, :date, :sender_name, :sender_email, :body
 
   def initialize(imap_mail)
-    imap_mail.nil? ? default_init : unpack(imap_mail)
+    create_mail_from(imap_mail)
   end
 
   def preview
@@ -41,15 +41,7 @@ class Imap::Mail
 
   private
 
-  def default_init
-    @uid = 0
-    @subject = ''
-    @date = ''
-    @sender = ''
-    @body = ''
-  end
-
-  def unpack(imap_mail_fetch_data)
+  def create_mail_from(imap_mail_fetch_data)
     @uid = imap_mail_fetch_data.attr['UID']
 
     envelope = imap_mail_fetch_data.attr['ENVELOPE']

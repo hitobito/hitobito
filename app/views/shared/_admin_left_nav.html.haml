@@ -26,6 +26,6 @@
   - if can?(:index, ActsAsTaggableOn::Tag)
     = nav ActsAsTaggableOn::Tag.model_name.human(count: 2), tags_path, %w(tags)
   - if can?(:index, MailingLists::ImapMailsController)
-    = nav t('navigation.mails'), imap_mails_path(mailbox: :INBOX), %w(imap_mails)
+    = nav t('navigation.mails'), imap_mails_path(mailbox: :inbox), %w(imap_mails)
 
   = render_extensions(:admin_nav_kinds)

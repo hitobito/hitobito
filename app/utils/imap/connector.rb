@@ -38,51 +38,34 @@ class Imap::Connector
     end
   end
 
-  # TODO: return an array of Imap::Mail objects
   def fetch_mails(mailbox)
     perform do
-      select_mailbox(mailbox)
-
-      mail_count = count(mailbox)
-
-      imap_mails = if mail_count.positive?
-                     imap_mail_list_from(@imap.fetch(1..mail_count, attributes)) || []
-                   else
-                     []
-                   end
-
-      imap_mails
+      fetch_data = @imap.fetch(1..count(mailbox), attributes)
+      fetch_data.map { |mail| Imap::Mail.new(mail) }
     end
   end
 
   def count(mailbox)
     perform do
       select_mailbox mailbox
-      @imap.status('INBOX', ['MESSAGES'])['MESSAGES']
+      @imap.status(MAILBOXES[mailbox], ['MESSAGES'])['MESSAGES']
     end
   end
 
   def counts
-    perform do
-      counts = {}
-      MAILBOXES.each do |m|
-        counts[m] = count(m)
-      end
-      counts.with_indifferent_access
-    end
+    @counts ||= fetch_counts
   end
 
   private
 
   MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
 
-  def imap_mail_list_from(fetch_data)
-    imap_mails = []
-
-    fetch_data.each do |mail|
-      imap_mails.append Imap::Mail.new(mail)
+  def fetch_counts
+    counts = {}
+    MAILBOXES.each do |_, m|
+      counts[m] = count(m)
     end
-    imap_mails
+    counts.with_indifferent_access
   end
 
   def perform
@@ -117,13 +100,9 @@ class Imap::Connector
   end
 
   def select_mailbox(mailbox)
-    mailbox = MAILBOXES[mailbox]
-
-    # begin
-      @imap.select('INBOX')
-    # rescue Net::IMAP::NoResponseError => e
-    #   create_if_missing(mailbox, e)
-    # end
+    @imap.select(MAILBOXES[mailbox])
+  rescue Net::IMAP::NoResponseError => e
+    create_if_missing(mailbox, e)
   end
 
   def setting(key)

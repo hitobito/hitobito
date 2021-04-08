@@ -30,7 +30,10 @@ Event-Filter
     4. Sorting im Controller
   2. Date-Filter einbauen
 
-Vereinheitlichung Event und Preson-Filter:
+Vereinheitlichung Event und Person-Filter:
+
+evtl. sweb Ansatz mit FilteredList verwenden?
+
 1. Verschieben nach Filter::TOPIC_PLURAL::*
   - referenzen prüfen
   - Shim für Wagons einbauen

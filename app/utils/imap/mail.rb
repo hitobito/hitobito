@@ -9,10 +9,8 @@ require 'net/imap'
 
 class Imap::Mail
 
-  attr_accessor :uid, :subject, :date, :sender_name, :sender_email, :body
-
   def initialize(imap_mail)
-    create_mail_from(imap_mail)
+    @imap_mail = imap_mail
   end
 
   def preview
@@ -39,26 +37,39 @@ class Imap::Mail
     end
   end
 
+  def uid
+    @imap_mail.attr['UID']
+  end
+
+  def subject
+    envelope.subject
+  end
+
+  def date
+    Time.zone.utc_to_local(DateTime.parse(envelope.date))
+  end
+
+  def sender_email
+    envelope.sender[0].mailbox + '@' + envelope.sender[0].host
+  end
+
+  def sender_name
+    envelope.sender[0].name
+  end
+
+  def body
+    if @imap_mail.attr['BODYSTRUCTURE'].media_type == 'TEXT'
+      @imap_mail.attr['BODY[TEXT]']
+    else
+      mail = Mail.read_from_string @imap_mail.attr['RFC822']
+      mail.text_part.body.to_s
+    end
+  end
+
   private
 
-  def create_mail_from(imap_mail_fetch_data)
-    @uid = imap_mail_fetch_data.attr['UID']
-
-    envelope = imap_mail_fetch_data.attr['ENVELOPE']
-    @subject = envelope.subject
-
-    @date = Time.zone.utc_to_local(DateTime.parse(envelope.date))
-
-    @sender_email = envelope.sender[0].mailbox + '@' + envelope.sender[0].host
-    @sender_name = envelope.sender[0].name
-
-    if imap_mail_fetch_data.attr['BODYSTRUCTURE'].media_type == 'TEXT'
-      @body = imap_mail_fetch_data.attr['BODY[TEXT]']
-    else
-      mail = Mail.read_from_string imap_mail_fetch_data.attr['RFC822']
-      @body = mail.text_part.body.to_s
-
-    end
+  def envelope
+    @imap_mail.attr['ENVELOPE']
   end
 
 end

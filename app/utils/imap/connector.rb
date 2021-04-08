@@ -25,7 +25,7 @@ class Imap::Connector
   def move_by_uid(uid, from_mailbox, to_mailbox)
     perform do
       select_mailbox(from_mailbox)
-      @imap.uid_move(uid, MAILBOXES[to_mailbox])
+      @imap.uid_move(uid, to_mailbox)
     end
   end
 
@@ -45,13 +45,6 @@ class Imap::Connector
     end
   end
 
-  def count(mailbox)
-    perform do
-      select_mailbox mailbox
-      @imap.status(MAILBOXES[mailbox], ['MESSAGES'])['MESSAGES']
-    end
-  end
-
   def counts
     @counts ||= fetch_counts
   end
@@ -59,6 +52,13 @@ class Imap::Connector
   private
 
   MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
+
+  def count(mailbox)
+    perform do
+      select_mailbox mailbox
+      @imap.status(mailbox, ['MESSAGES'])['MESSAGES']
+    end
+  end
 
   def fetch_counts
     counts = {}
@@ -93,14 +93,14 @@ class Imap::Connector
   def create_if_missing(mailbox, error)
     if (mailbox == MAILBOXES[:failed]) && error.response.data.text.include?("Mailbox doesn't exist")
       @imap.create(MAILBOXES[:failed])
-      @imap.select(mailbox)
+      @imap.select(MAILBOXES[:failed])
     else
       raise error
     end
   end
 
   def select_mailbox(mailbox)
-    @imap.select(MAILBOXES[mailbox])
+    @imap.select(mailbox)
   rescue Net::IMAP::NoResponseError => e
     create_if_missing(mailbox, e)
   end

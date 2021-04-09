@@ -24,7 +24,7 @@ module MailingLists::MailsHelper
     end
 
     action_button(t(('mails.move_to.' + to.to_s).to_sym),
-                  mailing_list_mail_move_path(from: mailbox, to: to),
+                  imap_mails_move_path(from: mailbox, to: to),
                   :'arrow-right',
                   data: { checkable: true, method: :patch })
   end

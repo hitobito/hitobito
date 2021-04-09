@@ -7,7 +7,6 @@
 - content_for(:filter, FilterNavigation::MailingList::Mails.new(self).to_s)
 #main
   = mail_table(self) do |t|
-    - binding.pry
     - if not mail_mailbox_failed?
       - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
         - check_box_tag('ids[]', i.uid, false, data: { multiselect: true })

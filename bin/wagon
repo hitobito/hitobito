@@ -30,6 +30,22 @@ function existing_wagon_names() {
   uniq
 }
 
+
+function indent2 {
+    sed -u 's/^/  /'
+}
+
+function red {
+    # From http://www.andrewnoske.com/wiki/Bash_-_adding_color#Sed_-_used_to_add_color_through_string_substitution
+    sed -ure "s/.*/\x1b[31m\0\x1b[0m/g"
+}
+
+function highlight_phrases {
+    # From http://www.andrewnoske.com/wiki/Bash_-_adding_color#Sed_-_used_to_add_color_through_string_substitution
+    # sed -ure "s/unchanged/\x1b[33m\0\x1b[0m/g; s/configured/\x1b[32m\0\x1b[0m/g; s/created/\x1b[34m\0\x1b[0m/g"
+    sed -ure "s/>> grepping in .*<</\x1b[33m\0\x1b[0m/g;"
+}
+
 case $cmd in
   activate)
     require_wagon_name
@@ -69,13 +85,13 @@ case $cmd in
     set +e
 
     # grep in core
-    echo ">> grepping in hitobito <<"
+    echo ">> grepping in hitobito <<" | highlight_phrases
     git grep "$2"
 
     # grep in installed wagons
     for wagon in $(existing_wagon_names); do
-      echo ">> grepping in ../hitobito_$wagon/ <<"
-      (cd "../hitobito_$wagon/"; git grep "$2")
+      echo ">> grepping in ../hitobito_$wagon/ <<" | highlight_phrases
+      (cd "../hitobito_$wagon/"; git grep --color=always "$2")
     done
     ;;
 

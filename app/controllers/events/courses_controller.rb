@@ -37,25 +37,14 @@ class Events::CoursesController < ApplicationController
   end
 
   def course_scope
-    Event::Course.
-      includes(:groups).
-      preload(additional_course_includes).
-      joins(additional_course_includes).
-      order(course_ordering).
-      in_year(year).
-      list
+    Events::FilteredList.new(
+      current_person, params,
+      kind_used: kind_used?, year: year
+    ).to_scope
   end
 
   def course_grouping
     kind_used? ? ->(event) { event.kind.label } : DEFAULT_GROUPING
-  end
-
-  def course_ordering
-    kind_used? ? 'event_kind_translations.label, event_dates.start_at' : 'event_dates.start_at'
-  end
-
-  def additional_course_includes
-    kind_used? ? { kind: :translations } : {}
   end
 
   def kind_used?

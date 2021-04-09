@@ -5,5 +5,18 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Event::CoursesController < ApplicationController
+module Sheet
+  module Events
+    class Course < Sheet::Base
+
+      def left_nav?
+        true
+      end
+
+      def render_left_nav
+        view.render 'nav_left'
+      end
+
+    end
+  end
 end

@@ -3,10 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title t('.title')
+- title t('event.lists.courses.title')
 - manager = can?(:list_all, Event::Course)
 
-%p= t('.explanation') unless can?(:list_all, Event::Course)
+%p= t('event.lists.courses.explanation') unless can?(:list_all, Event::Course)
 
 - content_for :toolbar do
   - if manager
@@ -18,7 +18,6 @@
   - if can?(:export_list, Event::Course)
     = Dropdown::Event::EventsExport.new(self, params).to_s
     = render_extensions :buttons
-
 
 #main
   %section

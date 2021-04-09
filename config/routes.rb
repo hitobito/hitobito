@@ -303,6 +303,12 @@ Hitobito::Application.routes.draw do
     end
   end # scope locale
 
+  namespace :api do
+    resources :people, only: [] do
+      resources :event_participations, only: [:index]
+    end
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

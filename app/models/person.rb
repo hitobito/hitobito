@@ -108,6 +108,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
 
+  enum second_factor_auth: [:no_second_factor, :totp]
+
+  serialize :encrypted_totp_secret
+
   mount_uploader :picture, Person::PictureUploader
 
   model_stamper
@@ -281,6 +285,17 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def generate_totp_secret!
+    secret = EncryptionService.encrypt(People::OneTimePassword.generate_secret)
+    self.update(encrypted_totp_secret: secret)
+  end
+
+  def totp_secret
+    encrypted_value = encrypted_totp_secret[:encrypted_value]
+    iv = encrypted_totp_secret[:iv]
+    EncryptionService.decrypt(encrypted_value, iv) if encrypted_value.present?
+  end
+
   def person_name(format = :default)
     name = full_name(format)
     if PUBLIC_ATTRS.include?(:nickname) && nickname? && format != :print_list
@@ -370,6 +385,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def address_for_letter
     Person::Address.new(self).for_letter
+  end
+
+  def second_factor_required?
+    true
   end
 
   private

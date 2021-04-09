@@ -6,11 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 class FilteredList
-  attr_reader :params
+  attr_reader :user, :params, :options
 
-  def initialize(user, params = {})
+  def initialize(user, params = {}, options = {})
     @user = user
     @params = params
+    @options = options
   end
 
   def entries
@@ -18,7 +19,11 @@ class FilteredList
   end
 
   def fetch_entries
-    chain_scopes(base_scope, :list, *filter_scopes)
+    chain_scopes(base_scope, *filter_scopes)
+  end
+
+  def to_scope
+    fetch_entries
   end
 
   def empty?
@@ -43,13 +48,9 @@ class FilteredList
     filters.reduce(scope) do |result, filter|
       case filter
       when Symbol then send(filter, result) || result
-      when Class then filter.new(user, params, result).entries.presence || result
+      when Class then filter.new(user, params, options, result).entries.presence || result
       else raise "Filter-Type #{filter.inspect} not handled"
       end
     end
-  end
-
-  def list(scope)
-    scope.list # expectation that any filtered model has a list-scope
   end
 end

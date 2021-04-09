@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class FilteredList
+  attr_reader :params
 
   def initialize(user, params = {})
     @user = user
@@ -16,12 +17,39 @@ class FilteredList
     @entries ||= fetch_entries.to_a
   end
 
+  def fetch_entries
+    chain_scopes(base_scope, :list, *filter_scopes)
+  end
+
+  def empty?
+    entries.blank?
+  end
+
+  # methods intended to be overridden
+
+  def base_scope
+    raise 'Implement `base_scope` in your subclass.'
+  end
+
+  def filter_scopes
+    raise 'Implement `filter_scopes` in your subclass'
+  end
+
   private
 
+  # purely internal methods
+
   def chain_scopes(scope, *filters)
-    filters.inject(scope) do |result, filter|
-      send(filter, result) || result
+    filters.reduce(scope) do |result, filter|
+      case filter
+      when Symbol then send(filter, result) || result
+      when Class then filter.new(user, params, result).entries.presence || result
+      else raise "Filter-Type #{filter.inspect} not handled"
+      end
     end
   end
 
+  def list(scope)
+    scope.list # expectation that any filtered model has a list-scope
+  end
 end

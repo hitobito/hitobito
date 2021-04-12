@@ -16,6 +16,7 @@ class TotpController < ApplicationController
 
       unless person.totp_registered?
         person.totp_secret = session.delete(:pending_totp_secret)
+        person.second_factor_auth = :totp
       end
 
       session.delete(:pending_two_factor_person_id)
@@ -31,7 +32,7 @@ class TotpController < ApplicationController
   private
 
   def person
-    @person ||= pending_two_factor_person
+    @person ||= current_person || pending_two_factor_person
   end
 
   def authenticate?

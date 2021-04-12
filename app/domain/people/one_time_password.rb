@@ -6,14 +6,14 @@ class People::OneTimePassword
     ROTP::Base32.random
   end
 
-  def initialize(username)
-    raise 'username cant be blank' if username.blank?
+  def initialize(totp_secret)
+    raise 'totp_secret cant be blank' if totp_secret.blank?
 
-    @username = username
+    @totp_secret = totp_secret
   end
 
   def provisioning_uri
-    authenticator.provisioning_uri(username)
+    authenticator.provisioning_uri(totp_secret)
   end
 
   def provisioning_qr_code
@@ -21,17 +21,17 @@ class People::OneTimePassword
   end
 
   def verify(token)
-    return false if username.blank?
+    return false if totp_secret.blank?
 
     authenticator.verify(token)
   end
 
   private
 
-  attr_accessor :username
+  attr_accessor :totp_secret
 
   def secret
-    base = "#{base_secret}-#{username}"
+    base = "#{base_secret}-#{totp_secret}"
     sha = Digest::SHA512.hexdigest(base)
     base32_encode(sha)
   end

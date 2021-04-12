@@ -5,20 +5,26 @@
 
 - title t('navigation.mails')
 - content_for(:filter, FilterNavigation::MailingList::Mails.new(self).to_s)
+
 #main
-  = mail_table(self) do |t|
-    - if not mail_mailbox_failed?
+  = imap_mail_table(self) do |t|
+    - if not imap_mail_mailbox?(:failed)
       - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
         - check_box_tag('ids[]', i.uid, false, data: { multiselect: true })
 
-    - t.attr(:subject_formatted, t(:"mails.headers.subject"))
-    - t.attr(:sender, t(:"mails.headers.sender")) do |e|
+    - t.col(t('mails.headers.subject')) do |m|
+      - imap_mail_subject(m)
+
+    - t.attr(:sender, t('mails.headers.sender')) do |e|
       - safe_join([e.sender_name, content_tag(:p, mail_to(e.sender_email))], ' ')
-    - t.attr(:preview, t(:"mails.headers.preview"))
-    - t.attr(:date_formatted, t(:"mails.headers.date"))
 
+    - t.col(t('mails.headers.preview')) do |m|
+      - imap_mail_body(m)
 
-  - if not mail_mailbox_failed?
+    - t.col(t('mails.headers.date')) do |m|
+      - imap_mail_date(m)
+
+  - if not imap_mail_mailbox?(:failed)
     = render 'multiselect_actions'
 
   .pagination-bar

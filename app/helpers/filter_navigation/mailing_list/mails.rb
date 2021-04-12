@@ -1,11 +1,12 @@
-# encoding: utf-8
+#  frozen_string_literal: true
 
-#  Copyright (c) 2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module FilterNavigation
+  # mailing lists imap mails
   module MailingList
     class Mails < FilterNavigation::Base
 
@@ -15,15 +16,15 @@ module FilterNavigation
       end
 
       def active_label
-        label_for_filter(template.params.fetch(:mailbox, template.default_mailbox.downcase))
+        label_for_filter(template.params.fetch(:mailbox))
       end
 
       private
 
       def init_items
-        filter_item 'inbox'
-        filter_item 'spam'
-        filter_item 'failed'
+        filter_item('inbox')
+        filter_item('spam')
+        filter_item('failed')
       end
 
       def filter_item(name)
@@ -31,7 +32,7 @@ module FilterNavigation
       end
 
       def counts
-        @counts ||= template.instance_variable_get('@counts') || {}
+        template.instance_variable_get('@counts') || {}
       end
 
       def label_for_filter(filter)

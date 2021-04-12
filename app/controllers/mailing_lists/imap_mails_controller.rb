@@ -7,7 +7,9 @@
 
 class MailingLists::ImapMailsController < ApplicationController
 
-  helper_method :mails, :mailbox, :mailbox_failed?, :mailboxes, :default_mailbox
+  helper_method :mails, :mailbox
+
+  before_action :authorize_action
 
   def index
     counts
@@ -34,12 +36,12 @@ class MailingLists::ImapMailsController < ApplicationController
 
   private
 
-  def imap
-    @imap ||= Imap::Connector.new
+  def authorize_action
+    authorize!(:manage, Imap::Mail)
   end
 
-  def default_mailbox
-    'inbox'
+  def imap
+    @imap ||= Imap::Connector.new
   end
 
   def mails
@@ -56,7 +58,7 @@ class MailingLists::ImapMailsController < ApplicationController
   end
 
   def counts
-    @counts ||= imap.counts
+    imap.counts
   end
 
   def param_uid
@@ -64,15 +66,12 @@ class MailingLists::ImapMailsController < ApplicationController
   end
 
   def param_ids
-    if params[:mail_ids].empty?
-      []
-    else
-      params[:mail_ids].split(',').map { |id| id.to_i }
-    end
+    params[:mail_ids]&.split(',')&.map(&:to_i) || []
   end
 
   def mailbox
-    params[:mailbox] || default_mailbox
+    mailbox = params[:mailbox]
+    params[:mailbox] = Imap::Connector::MAILBOXES.keys.include?(mailbox) ? mailbox : 'inbox'
   end
 
   def param_move_to_mailbox

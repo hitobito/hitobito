@@ -253,10 +253,12 @@ Hitobito::Application.routes.draw do
 
     resources :event_kinds, module: 'event', controller: 'kinds'
 
-    scope module: :mailing_lists do
-      get 'mailing_lists/imap_mails/:mailbox' => 'imap_mails#index', as: :imap_mails
-      delete 'mailing_lists/imap_mails/:mailbox' => 'imap_mails#destroy', as: :imap_mails_destroy
-      patch 'mailing_lists/imap_mails/:mailbox/move' => 'imap_mails#move', as: :imap_mails_move
+    scope 'mailing_lists', module: :mailing_lists do
+      scope 'imap_mails' do
+        get ':mailbox' => 'imap_mails#index', as: :imap_mails
+        delete ':mailbox' => 'imap_mails#destroy', as: :imap_mails_destroy
+        patch ':mailbox/move' => 'imap_mails#move', as: :imap_mails_move
+      end
     end
 
     resources :qualification_kinds

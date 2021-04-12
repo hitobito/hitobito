@@ -9,40 +9,18 @@ require 'net/imap'
 
 class Imap::Mail
 
-  def initialize(imap_mail)
-    @imap_mail = imap_mail
-  end
+  attr_accessor :imap_mail
 
-  def preview
-    if body.length > 43
-      body[0..40] + '...'
-    else
-      body
-    end
-  end
+  delegate :subject, :sender, to: :envelope
 
-  def date_formatted
-    if date.today?
-      I18n.l(date, format: :time)
-    else
-      I18n.l(date.to_date) + ' ' + I18n.l(date, format: :time)
-    end
-  end
-
-  def subject_formatted
-    if subject.length > 43
-      subject[0..40] + '...'
-    else
-      subject
-    end
+  def self.build(imap_mail)
+    entry = new
+    entry.imap_mail = imap_mail
+    entry
   end
 
   def uid
     @imap_mail.attr['UID']
-  end
-
-  def subject
-    envelope.subject
   end
 
   def date

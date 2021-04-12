@@ -9,17 +9,11 @@ require 'net/imap'
 
 class Imap::Connector
 
+  MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
+
   def initialize
     @connected = false
     raise 'no imap settings present' unless settings_present?
-  end
-
-  def fetch_by_uid(uid, mailbox = 'inbox')
-    perform do
-      select_mailbox(mailbox)
-      mail = @imap.uid_fetch(uid, attributes)
-      mail.nil? ? nil : mail[0].attr
-    end
   end
 
   def move_by_uid(uid, from_mailbox, to_mailbox)
@@ -41,48 +35,50 @@ class Imap::Connector
   def fetch_mails(mailbox)
     perform do
       fetch_data = @imap.fetch(1..count(mailbox), attributes)
-      fetch_data.map { |mail| Imap::Mail.new(mail) }
+      fetch_data.map { |mail| Imap::Mail.build(mail) }
     end
   end
 
   def counts
-    @counts ||= fetch_counts
+    @counts ||= fetch_mailbox_counts
   end
 
   private
 
-  MAILBOXES = { inbox: 'INBOX', spam: 'Junk', failed: 'Failed' }.with_indifferent_access.freeze
-
   def count(mailbox)
-    perform do
-      select_mailbox mailbox
-      @imap.status(mailbox, ['MESSAGES'])['MESSAGES']
-    end
+    select_mailbox(mailbox)
+    @imap.status(mailbox, ['MESSAGES'])['MESSAGES']
   end
 
-  def fetch_counts
+  def fetch_mailbox_counts
     counts = {}
-    MAILBOXES.each do |_, m|
-      counts[m] = count(m)
+    perform do
+      MAILBOXES.values.each do |m|
+        counts[m] = count(m)
+      end
     end
     counts.with_indifferent_access
   end
 
   def perform
-    already_connected = @connected
-    connect unless already_connected
+    connect
     result = yield
-    disconnect unless already_connected
+  ensure
+    disconnect
     result
   end
 
   def connect
+    return if @connected
+
     @imap = Net::IMAP.new(setting(:address), setting(:port), setting(:enable_ssl))
     @imap.login(setting(:user_name), setting(:password))
     @connected = true
   end
 
   def disconnect
+    return unless @connected
+
     unless @imap.nil?
       @imap.close
       @imap.disconnect

@@ -3,9 +3,9 @@
     .count
     = ti('selected')
     .actions
-      = mail_move_button :inbox
-      = mail_move_button :spam
-      = mail_move_button :failed
+      = imap_mail_move_button :inbox
+      = imap_mail_move_button :spam
+      = imap_mail_move_button :failed
 
       = action_button(ti(:"link.delete"),
       imap_mails_destroy_path(mailbox: mailbox),

@@ -26,7 +26,6 @@ class VariousAbility < AbilityDsl::Base
 
   if Settings.email.retriever.config.present?
     on(Imap::Mail) do
-      class_side(:index).if_admin
       permission(:admin).may(:manage).all
     end
   end

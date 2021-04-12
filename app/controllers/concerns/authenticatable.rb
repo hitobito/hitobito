@@ -9,7 +9,7 @@ module Authenticatable
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_user, :origin_user
+    helper_method :current_user, :origin_user, :pending_two_factor_person
 
     before_action :authenticate_person!, if: :authenticate?
     check_authorization if: :authorize?
@@ -106,5 +106,15 @@ module Authenticatable
 
   def doorkeeper_controller?
     is_a?(Doorkeeper::ApplicationController)
+  end
+
+  def two_factor_authentication_pending?
+    session[:pending_two_factor_person_id].present?
+  end
+
+  def pending_two_factor_person
+    return unless session[:pending_two_factor_person_id].present?
+
+    Person.find(session[:pending_two_factor_person_id])
   end
 end

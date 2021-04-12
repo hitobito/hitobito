@@ -50,7 +50,7 @@ class People::OneTimePassword
   end
 
   def base_secret
-    Cryptopus::Application.config.secret_key_base
+    Hitobito::Application.config.secret_key_base
   end
 
 end

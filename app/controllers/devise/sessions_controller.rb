@@ -21,6 +21,8 @@ class Devise::SessionsController < DeviseController
   module Json
     def create
       super do |resource|
+        return init_two_factor_auth(resource) if resource.second_factor_required?
+
         if request.format == :json
           resource.generate_authentication_token! unless resource.authentication_token?
           render json: UserSerializer.new(resource, controller: self)
@@ -45,4 +47,19 @@ class Devise::SessionsController < DeviseController
   prepend Json
   prepend OauthSigninLayout
 
+  private
+  
+  def init_two_factor_auth(resource)
+    sign_out(resource)
+
+    session[:pending_two_factor_person_id] = resource.id
+
+    redirect_to second_factor_auth_path(resource)
+  end
+
+  def second_factor_auth_path(resource)
+    case resource.second_factor_auth.to_sym
+    when :totp then new_users_totp_path
+    end
+  end
 end

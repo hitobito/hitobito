@@ -285,15 +285,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def generate_totp_secret!
-    secret = EncryptionService.encrypt(People::OneTimePassword.generate_secret)
-    self.update(encrypted_totp_secret: secret)
-  end
-
   def totp_secret
     encrypted_value = encrypted_totp_secret[:encrypted_value]
     iv = encrypted_totp_secret[:iv]
     EncryptionService.decrypt(encrypted_value, iv) if encrypted_value.present?
+  end
+
+  def totp_secret=(value)
+    self.encrypted_totp_secret = EncryptionService.encrypt(value)
   end
 
   def person_name(format = :default)
@@ -388,7 +387,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def second_factor_required?
-    true
+    !no_second_factor?
+  end
+
+  def totp_registered?
+    encrypted_totp_secret.present?
   end
 
   private

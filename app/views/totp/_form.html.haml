@@ -1,0 +1,4 @@
+= form_tag(users_totp_path) do
+  .form-group
+    = text_field_tag :totp_code, nil, id: 'totp_code', class: 'form-control', readonly: false
+  = submit_tag('schick', class: 'btn btn-primary')

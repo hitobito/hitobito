@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -37,4 +37,9 @@ describe IdnSanitizer do
     )
   end
 
+  it 'sanitizes multiple email containing nil' do
+    expect(IdnSanitizer.sanitize(['foo@exämple.com', 'bar@exämple.com', nil])).to eq(
+      ['foo@xn--exmple-cua.com', 'bar@xn--exmple-cua.com']
+    )
+  end
 end

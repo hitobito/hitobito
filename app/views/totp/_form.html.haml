@@ -1,4 +1,8 @@
-= form_tag(users_totp_path) do
-  .form-group
-    = text_field_tag :totp_code, nil, id: 'totp_code', class: 'form-control', readonly: false
-  = submit_tag('schick', class: 'btn btn-primary')
+= form_with url: users_totp_path, method: :post, class: 'form-horizontal' do |f|
+  .control-group
+    = f.label :totp_code, t('.totp_code'), class: 'control-label'
+    .controls
+      = f.text_field :totp_code, class: 'span3', autofocus: 'autofocus', placeholder: t('.totp_code_placeholder'), required: true
+  .control-group
+    .controls
+      = f.submit(t('.submit'), class: 'btn btn-primary')

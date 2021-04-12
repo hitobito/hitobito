@@ -405,6 +405,15 @@ de:
       attachment:
         subject: 'Nachrichten Betreff:'
 
+  totp:
+    new:
+      title: Zwei Faktor Authentifizierung
+      hint_registered: Geben Sie bitte den angezeigten Code auf Ihrer freeOTP App an um Ihre Identität zu bestätigen.
+      hint_unregistered: Scannen Sie bitte den QR Code mit ihrem Smartphone mittels der freeOTP App und geben Sie den angezeigten Code an um die zwei Faktor Authentifizierung zu aktivieren.
+    form:
+      totp_code: One-Time Code
+      totp_code_placeholder: Bitte Sechsstelligen Code eingeben...
+      submit: Absenden
   events:
     courses:
       filter:

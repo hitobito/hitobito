@@ -1,8 +1,15 @@
 
--# -title t('.sign_in')
-- unless pending_two_factor_person&.totp_registered?
-  %img{src: person_otp_qr_code}
+-title t('.title')
 
-%br/
-
-= render 'form'
+#new_totp
+  %div.qr-code
+    - unless pending_two_factor_person&.totp_registered?
+      %img{src: person_otp_qr_code}
+  
+  %p.hint
+    - if pending_two_factor_person&.totp_registered?
+      = t('.hint_registered')
+    - else
+      = t('.hint_unregistered')
+  
+  = render 'form'

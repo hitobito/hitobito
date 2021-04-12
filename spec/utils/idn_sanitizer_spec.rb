@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -14,7 +14,9 @@ describe IdnSanitizer do
   end
 
   it 'sanitizes single email with name' do
-    expect(IdnSanitizer.sanitize('Mr. Foo <foo@exämple.com>')).to eq('Mr. Foo <foo@xn--exmple-cua.com>')
+    expect(IdnSanitizer.sanitize('Mr. Foo <foo@exämple.com>')).to eq(
+      'Mr. Foo <foo@xn--exmple-cua.com>'
+    )
   end
 
   it 'keeps regular email' do
@@ -31,7 +33,8 @@ describe IdnSanitizer do
 
   it 'sanitizes multiple emails' do
     expect(IdnSanitizer.sanitize(['foo@exämple.com', 'bar@exämple.com'])).to eq(
-      ['foo@xn--exmple-cua.com', 'bar@xn--exmple-cua.com'])
+      ['foo@xn--exmple-cua.com', 'bar@xn--exmple-cua.com']
+    )
   end
 
 end

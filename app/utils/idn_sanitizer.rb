@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -17,17 +17,15 @@ module IdnSanitizer
   end
 
   def sanitize_idn(email)
-    if email.strip =~ /[^\w@\.\-]/ # simple regexp to skip most unaffected addresses
-      parts = email.strip.split('@')
-      domain = parts.last
-      suffix = ''
-      if domain.ends_with?('>')
-        domain = domain[0..-2]
-        suffix = '>'
-      end
-      "#{parts.first}@#{SimpleIDN.to_ascii(domain)}#{suffix}"
-    else
-      email
+    return email unless email.strip =~ /[^\w@\.\-]/ # simple regexp, skips most unaffected addresses
+
+    parts = email.strip.split('@')
+    domain = parts.last
+    suffix = ''
+    if domain.ends_with?('>')
+      domain = domain[0..-2]
+      suffix = '>'
     end
+    "#{parts.first}@#{SimpleIDN.to_ascii(domain)}#{suffix}"
   end
 end

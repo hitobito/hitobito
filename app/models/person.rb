@@ -287,6 +287,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def totp_secret
+    return unless encrypted_totp_secret.present?
+
     encrypted_value = encrypted_totp_secret[:encrypted_value]
     iv = encrypted_totp_secret[:iv]
     EncryptionService.decrypt(encrypted_value, iv) if encrypted_value.present?

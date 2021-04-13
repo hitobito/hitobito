@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# Copyright (c) 2021, hitobito AG. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https ://github.com/hitobito/hitobito.
+
 require 'spec_helper'
 
 describe TotpController do
@@ -7,6 +12,23 @@ describe TotpController do
   let(:totp_authenticator) { People::OneTimePassword.new(@secret).send(:authenticator) }
 
   describe 'create' do
+    it 'redirects to root if no two factor authentication is pending' do
+      post :create
+
+      expect(response).to redirect_to root_path
+    end
+
+    it 'redirects to root if person locked' do
+      bottom_member.lock_access!
+
+      session[:pending_two_factor_person_id] = bottom_member.id
+
+      post :create
+
+      expect(response).to redirect_to root_path
+      expect(flash[:alert]).to include('Dein Account ist für 10 Minuten gesperrt')
+    end
+
     context 'as not signed in person' do
       context 'when registered' do
         before do
@@ -112,6 +134,7 @@ describe TotpController do
       end
 
       it 'registers TOTP with correct code' do
+        session[:pending_two_factor_person_id] = bottom_member.id
 
         post :create, params: { totp_code: totp_authenticator.now }
 
@@ -125,6 +148,7 @@ describe TotpController do
       end
 
       it 'does not register TOTP with incorrect code' do
+        session[:pending_two_factor_person_id] = bottom_member.id
 
         post :create, params: { totp_code: totp_authenticator.now.to_i - 1 }
 

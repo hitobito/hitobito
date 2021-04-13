@@ -11,12 +11,15 @@ require_dependency Devise::Engine.root
 
 class Devise::SessionsController < DeviseController
   layout :devise_layout
+  include TwoFactor
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:new, :create], prepend: true
 
   respond_to :html
   respond_to :json, only: [:new, :create]
+
+  before_action :redirect_to_two_factor_authentication, if: :two_factor_authentication_pending?
 
   module Json
     def create
@@ -54,12 +57,10 @@ class Devise::SessionsController < DeviseController
 
     session[:pending_two_factor_person_id] = resource.id
 
-    redirect_to second_factor_auth_path(resource), notice: ''
+    redirect_to_two_factor_authentication
   end
 
-  def second_factor_auth_path(resource)
-    case resource.second_factor_auth.to_sym
-    when :totp then new_users_totp_path
-    end
+  def redirect_to_two_factor_authentication
+    redirect_to two_factor_auth_path, notice: ''
   end
 end

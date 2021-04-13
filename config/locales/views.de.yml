@@ -407,13 +407,15 @@ de:
 
   totp:
     flash:
-      success: Erfolgreich eingeloggt
-      failure: One-Time Code inkorrekt
+      success:
+        registered: Zwei Faktor Authentifizierung erfolgreich aktiviert
+        signed_in: Erfolgreich eingeloggt
 
+      failure: One-Time Code inkorrekt
     new:
       title: Zwei Faktor Authentifizierung
-      hint_registered: Geben Sie bitte den angezeigten Code auf Ihrer freeOTP App an um Ihre Identität zu bestätigen.
-      hint_unregistered: Scannen Sie bitte den QR Code mit ihrem Smartphone mittels der freeOTP App und geben Sie den angezeigten Code an um die zwei Faktor Authentifizierung zu aktivieren.
+      hint_registered_html: "Geben Sie bitte den angezeigten Code auf Ihrer %{link} an um Ihre Identität zu bestätigen."
+      hint_unregistered_html: "Scannen Sie bitte den QR Code mit ihrem Smartphone mittels der %{link} und geben Sie den angezeigten Code an um die zwei Faktor Authentifizierung zu aktivieren."
     form:
       totp_code: One-Time Code
       totp_code_placeholder: Bitte Sechsstelligen Code eingeben...
@@ -1323,6 +1325,7 @@ de:
         new: Die Person hat noch kein Login.<br><br>Diese Aktion sendet ihr einen Link damit sie ihr Passwort setzen kann.
         resend: Die Person hat einen Link zum Setzen des Passworts erhalten, aber noch keines gesetzt.<br><br>Diese Aktion sendet ihr den Link erneut.
         reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
+      activate_totp: Zwei Faktor Authentifizierung aktivieren
 
       impersonate_user: Imitieren
       impersonate_user_tooltip: Du kannst hitobito so bedienen, als wärst du als diese Person eingeloggt.

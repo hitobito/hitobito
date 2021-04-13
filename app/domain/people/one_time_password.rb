@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# Copyright (c) 2021, hitobito AG. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https ://github.com/hitobito/hitobito.
+
 class People::OneTimePassword
 
   def self.generate_secret
@@ -22,8 +27,6 @@ class People::OneTimePassword
   end
 
   def verify(token)
-    return false if totp_secret.blank?
-
     authenticator.verify(token)
   end
 
@@ -38,8 +41,13 @@ class People::OneTimePassword
   end
 
   def authenticator
-    # TODO add correct issuer
-    ROTP::TOTP.new(secret, issuer: 'Hitobito')
+    ROTP::TOTP.new(secret, issuer: issuer)
+  end
+
+  def issuer
+    issuer = "#{Settings.application.name}"
+    issuer += " - #{ENV['RAILS_ENV']}" unless ENV['RAILS_ENV'] == 'production' 
+    issuer
   end
 
   def base32_encode(str)

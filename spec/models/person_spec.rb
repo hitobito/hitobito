@@ -722,7 +722,9 @@ describe Person do
     let(:person) { people(:bottom_member) }
 
     it 'is being encrypted when generated' do
-      person.generate_totp_secret!
+      person.totp_secret = People::OneTimePassword.generate_secret
+
+      person.save!
 
       person.reload
 
@@ -734,9 +736,9 @@ describe Person do
     it 'is being encrypted and correctly decrypted' do
       decrypted_secret = ROTP::Base32.random
 
-      expect(People::OneTimePassword).to receive(:generate_secret).and_return(decrypted_secret)
+      person.totp_secret = decrypted_secret
 
-      person.generate_totp_secret!
+      person.save!
 
       person.reload
 

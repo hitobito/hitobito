@@ -406,6 +406,10 @@ de:
         subject: 'Nachrichten Betreff:'
 
   totp:
+    flash:
+      success: Erfolgreich eingeloggt
+      failure: One-Time Code inkorrekt
+
     new:
       title: Zwei Faktor Authentifizierung
       hint_registered: Geben Sie bitte den angezeigten Code auf Ihrer freeOTP App an um Ihre Identität zu bestätigen.

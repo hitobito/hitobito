@@ -54,7 +54,7 @@ class Devise::SessionsController < DeviseController
 
     session[:pending_two_factor_person_id] = resource.id
 
-    redirect_to second_factor_auth_path(resource)
+    redirect_to second_factor_auth_path(resource), notice: ''
   end
 
   def second_factor_auth_path(resource)

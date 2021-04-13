@@ -4,6 +4,7 @@
 class TotpController < ApplicationController
   # before_action :redirect_to_root, unless: :two_factor_authentication_pending?
   skip_authorization_check
+  before_action :redirect_on_locked, if: :access_locked?
 
   def new
     session[:pending_totp_secret] ||= generate_secret unless person.totp_registered?
@@ -23,9 +24,15 @@ class TotpController < ApplicationController
 
       person.save!
 
-      redirect_to root_path
+      redirect_to root_path, notice: t('totp.flash.success')
     else
-      redirect_to new_users_totp_path, alert: 'wrong'
+
+      person.increment_failed_attempts
+      if person.failed_attempts > Person.maximum_attempts
+        person.lock_access!
+      end
+
+      redirect_to new_users_totp_path, alert: t('totp.flash.failure')
     end
   end
 
@@ -49,5 +56,13 @@ class TotpController < ApplicationController
 
   def secret
     person.totp_registered? ? person.totp_secret : session[:pending_totp_secret] 
+  end
+
+  def access_locked?
+    person.access_locked?
+  end
+
+  def redirect_on_locked
+    redirect_to root_path, alert: t('devise.failure.locked')
   end
 end

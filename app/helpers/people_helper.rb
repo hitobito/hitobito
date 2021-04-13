@@ -127,9 +127,9 @@ module PeopleHelper
 
   def person_otp_qr_code
     secret = current_person&.totp_secret || session[:pending_totp_secret]
+    person = current_person || pending_two_factor_person
     
-    qr_code = People::OneTimePassword.new(secret).
-              provisioning_qr_code
+    qr_code = People::OneTimePassword.new(secret, person: person).provisioning_qr_code
     base64_data = Base64.encode64(qr_code.to_blob)
     "data:image/png;base64,#{base64_data}"
   end

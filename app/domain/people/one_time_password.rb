@@ -6,14 +6,15 @@ class People::OneTimePassword
     ROTP::Base32.random
   end
 
-  def initialize(totp_secret)
+  def initialize(totp_secret, person: nil)
     raise 'totp_secret cant be blank' if totp_secret.blank?
 
     @totp_secret = totp_secret
+    @person = person
   end
 
   def provisioning_uri
-    authenticator.provisioning_uri(totp_secret)
+    authenticator.provisioning_uri(person.email)
   end
 
   def provisioning_qr_code
@@ -28,7 +29,7 @@ class People::OneTimePassword
 
   private
 
-  attr_accessor :totp_secret
+  attr_accessor :totp_secret, :person
 
   def secret
     base = "#{base_secret}-#{totp_secret}"
@@ -37,8 +38,8 @@ class People::OneTimePassword
   end
 
   def authenticator
-    # TODO: add issuer
-    ROTP::TOTP.new(secret)
+    # TODO add correct issuer
+    ROTP::TOTP.new(secret, issuer: 'Hitobito')
   end
 
   def base32_encode(str)

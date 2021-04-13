@@ -63,7 +63,7 @@ describe MessagesController do
           body: 'Bitte einzahlen',
           invoice_attributes: {
             invoice_items_attributes: {
-              '1' => { 'name' => 'Mitgliedsbeitrag', '_destroy' => 'false' }
+              '1' => { 'name' => 'Mitgliedsbeitrag', 'unit_cost' => 42, '_destroy' => 'false' }
             }
           }
         }
@@ -80,13 +80,30 @@ describe MessagesController do
           type: 'Message::LetterWithInvoice',
           invoice_attributes: {
             invoice_items_attributes: {
-              '1' => { 'name' => 'Mitgliedsbeitrag', '_destroy' => 'false' }
+              '1' => { 'name' => 'Mitgliedsbeitrag', 'unit_cost' => 42, '_destroy' => 'false' }
             }
           }
         }
       )
       expect(assigns(:message)).to be_invalid
       expect(assigns(:message).invoice.invoice_items.first.name).to eq 'Mitgliedsbeitrag'
+      expect(response).to render_template :new
+    end
+
+    it 'validates invoice_item attributes' do
+      post :create, params: nesting.merge(
+        message: {
+          subject: 'Mitgliedsbeitrag',
+          body: 'Very good price!',
+          type: 'Message::LetterWithInvoice',
+          invoice_attributes: {
+            invoice_items_attributes: {
+              '1' => { 'name' => '', 'unit_cost' => '', '_destroy' => 'false' }
+            }
+          }
+        }
+      )
+      expect(assigns(:message)).to be_invalid
       expect(response).to render_template :new
     end
 

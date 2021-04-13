@@ -7,6 +7,7 @@
 #  id              :bigint           not null, primary key
 #  failed_count    :integer          default(0)
 #  recipient_count :integer          default(0)
+#  invoice_attributes :text(16777215)
 #  sent_at         :datetime
 #  state           :string(255)      default("draft")
 #  subject         :string(1024)

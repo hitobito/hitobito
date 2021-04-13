@@ -36,7 +36,6 @@ describe Message::LetterWithInvoice do
   end
 
   context 'invoice' do
-    let(:group)     { groups(:top_layer) }
     let(:recipient) { people(:bottom_member) }
 
     subject { messages(:with_invoice) }
@@ -46,5 +45,17 @@ describe Message::LetterWithInvoice do
       expect(invoice).to be_valid
       expect(invoice.recipient_address).to be_present
     end
+  end
+
+  context 'invoice items' do
+
+    let(:letter) { messages(:with_invoice) }
+    let(:invalid_invoice_item_attrs) { { 'name' => 'Invalid Item', 'count' => nil, 'unit_cost' => nil } }
+
+    it 'validates invoice items' do
+      letter.invoice_attributes['invoice_items_attributes'][2] = invalid_invoice_item_attrs
+      expect(letter).not_to be_valid
+    end
+
   end
 end

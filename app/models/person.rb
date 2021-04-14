@@ -390,11 +390,17 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def second_factor_required?
-    !no_second_factor?
+    !no_second_factor? || totp_forced?
   end
 
   def totp_registered?
     encrypted_totp_secret.present?
+  end
+
+  def totp_forced?
+    roles.any? do |role|
+      Settings.totp&.forced_roles&.include?(role.type)
+    end
   end
 
   private

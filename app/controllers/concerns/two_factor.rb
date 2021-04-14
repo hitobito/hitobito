@@ -25,6 +25,8 @@ module TwoFactor
   end
 
   def two_factor_auth_path
+    return new_users_totp_path if pending_two_factor_person.totp_forced?
+
     case pending_two_factor_person.second_factor_auth.to_sym
     when :totp then new_users_totp_path
     end

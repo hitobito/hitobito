@@ -1,0 +1,13 @@
+= form_for(:filter, class: 'form-inline', url: list_courses_path, method: :get) do |f|
+  .control-group
+    .input-prepend
+      %span.add-on= icon(:'calendar-alt')
+      = f.text_field(:since, class: 'date span2')
+
+    .input-prepend
+      %span.add-on= icon(:'calendar-alt')
+      = f.text_field(:until, class: 'date span2')
+
+    .input-prepend
+      %span.add-on= icon(:'search')
+      = f.submit(t('global.button.search'), class: 'btn btn-primary', data: { disable_with: t('global.button.search') })

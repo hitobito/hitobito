@@ -10,6 +10,7 @@ module Events
     def base_scope
       Event::Course
         .includes(:events_groups, :groups, :translations)
+        .joins(:dates)
         .preload(additional_course_includes)
         .joins(additional_course_includes)
         .order(course_ordering)
@@ -17,7 +18,7 @@ module Events
 
     def filter_scopes
       [
-        :filter_by_year,
+        Events::Filter::DateRange,
         :list
       ]
     end

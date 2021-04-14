@@ -102,10 +102,19 @@ case $cmd in
     rspec $@
     ;;
 
+  git)
+    shift # loose the "git" argument
+    echo "hitobito" | red
+    git $@
+    for wagon in $(echo $WAGONS | tr " " "\n"); do
+      (cd "../hitobito_${wagon}" && (echo "$wagon" | red) && git $@)
+    done
+    ;;
+
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile configs test-prepare core-spec grep help'
+  echo 'activate gemfile configs test-prepare core-spec grep help git'
 }
 
 function __wagon_list() {

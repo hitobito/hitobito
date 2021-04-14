@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Events::CoursesController < ApplicationController
-  include YearBasedPaging
   include Events::CourseListing
   include Events::EventListing
 
@@ -39,7 +38,7 @@ class Events::CoursesController < ApplicationController
   def course_scope
     Events::FilteredList.new(
       current_person, params,
-      kind_used: kind_used?, year: year
+      kind_used: kind_used?
     ).to_scope
   end
 

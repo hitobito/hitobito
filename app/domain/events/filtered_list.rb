@@ -25,10 +25,6 @@ module Events
 
     private
 
-    def filter_by_year(scope)
-      scope.in_year(options[:year]) # because YearBasedPaging does some prep
-    end
-
     def list(scope)
       scope.list
     end

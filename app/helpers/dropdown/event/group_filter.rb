@@ -8,9 +8,9 @@
 module Dropdown
   module Event
     class GroupFilter < Dropdown::Base
-
       def initialize(template, group_id)
-        super(template, group_id.to_i.positive? ? Group.find(group_id).name : translate(:all_groups))
+        title = group_id.to_i.positive? ? Group.find(group_id).name : translate(:all_groups)
+        super(template, title)
         init_items
       end
 

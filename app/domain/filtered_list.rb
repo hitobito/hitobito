@@ -5,6 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# For each filtered subject-collection, you should create a dedicated subclass
+# of this FilteredList-BaseClass
+#
+# Individual filters can be implemented as methods in the FilteredList-subclass
+# or as their own filter-class. The applied filters are defined as Array in
+# #filter_scopes Symbols are interpreted as instance-methods in the class,
+# Class-Names are instantied and called:
+#
+#   Subject::Filter::SpecificFilter.new(user, params, options, result).to_scope
 class FilteredList
   attr_reader :user, :params, :options
 

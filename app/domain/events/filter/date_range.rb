@@ -7,10 +7,8 @@
 
 module Events::Filter
   class DateRange
-    def initialize(user, params, options, scope)
-      @user = user
+    def initialize(_user, params, _options, scope)
       @params = params
-      @options = options
       @scope = scope
     end
 

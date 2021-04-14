@@ -48,7 +48,7 @@ class FilteredList
     filters.reduce(scope) do |result, filter|
       case filter
       when Symbol then send(filter, result) || result
-      when Class then filter.new(user, params, options, result).entries.presence || result
+      when Class then filter.new(user, params, options, result).to_scope.presence || result
       else raise "Filter-Type #{filter.inspect} not handled"
       end
     end

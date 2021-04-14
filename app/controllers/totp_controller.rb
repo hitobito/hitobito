@@ -18,11 +18,12 @@ class TotpController < ApplicationController
     if otp.verify(params[:totp_code]).present?
       sign_in(person) unless person_signed_in?
 
+      flash_msg = notice_flash
       register_totp! unless person.totp_registered?
 
       session.delete(:pending_two_factor_person_id)
 
-      redirect_to root_path, notice: notice_flash
+      redirect_to root_path, notice: flash_msg
     else
       prevent_brute_force!
 
@@ -79,7 +80,7 @@ class TotpController < ApplicationController
   end
 
   def notice_flash
-    message = person.totp_registered? ? 'registered' : 'success'
+    message = person.totp_registered? ? 'signed_in' : 'registered' 
     t("totp.flash.success.#{message}")
   end
 

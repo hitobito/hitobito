@@ -29,6 +29,9 @@
 - if entry == current_user && can?(:update_password, entry)
   = action_button t('devise.registrations.edit.change_password'), edit_person_registration_path
 
+- if entry == current_user && !entry.totp_registered?
+  = action_button t('.activate_totp'), new_users_totp_path
+
 - if may_impersonate?(entry, parent)
   = action_button(t('.impersonate_user'),
                   group_person_impersonate_path(parent, entry),

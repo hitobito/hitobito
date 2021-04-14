@@ -1325,7 +1325,7 @@ de:
         new: Die Person hat noch kein Login.<br><br>Diese Aktion sendet ihr einen Link damit sie ihr Passwort setzen kann.
         resend: Die Person hat einen Link zum Setzen des Passworts erhalten, aber noch keines gesetzt.<br><br>Diese Aktion sendet ihr den Link erneut.
         reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
-      activate_totp: Zwei Faktor Authentifizierung aktivieren
+      activate_totp: Zwei Faktor Authentifizierung einrichten
 
       impersonate_user: Imitieren
       impersonate_user_tooltip: Du kannst hitobito so bedienen, als wärst du als diese Person eingeloggt.

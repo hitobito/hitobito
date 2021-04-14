@@ -159,6 +159,7 @@ describe TotpController do
         expect(bottom_member.second_factor_auth).to eq('no_second_factor')
         expect(bottom_member.encrypted_totp_secret).to be_nil
         expect(bottom_member.totp_registered?).to be(false)
+        expect(flash[:alert]).to include('One-Time Code inkorrekt')
       end
     end
   end

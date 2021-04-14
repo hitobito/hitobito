@@ -745,6 +745,8 @@ ActiveRecord::Schema.define(version: 2021_12_24_143925) do
     t.string "event_feed_token"
     t.string "unlock_token"
     t.string "family_key"
+    t.integer "second_factor_auth", default: 0, null: false
+    t.text "encrypted_totp_secret"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["email"], name: "index_people_on_email", unique: true
     t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true

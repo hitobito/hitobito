@@ -48,8 +48,7 @@ class Export::Pdf::Messages::Letter
     def build_address(recipient)
       [recipient.full_name.to_s.squish,
        recipient.address.to_s.squish,
-       [recipient.zip_code, recipient.town].compact.join(' ').squish,
-       recipient.country.to_s.squish].compact.join("\n")
+       [recipient.zip_code, recipient.town].compact.join(' ').squish].compact.join("\n")
     end
 
     def logo_path
@@ -73,8 +72,7 @@ class Export::Pdf::Messages::Letter
     def group_address(group)
       [group.name.to_s.squish,
        group.address.to_s.squish,
-       [group.zip_code, group.town].compact.join(' ').squish,
-       group.country.to_s.squish].compact.join("\n")
+       [group.zip_code, group.town].compact.join(' ').squish].compact.join("\n")
     end
 
     def address_present?(group)

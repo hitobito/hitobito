@@ -2,63 +2,62 @@
 
 require 'spec_helper'
 
-describe MailingListMailsController do
+require 'net/imap'
+
+describe MailingLists::ImapMailsController do
 
   let(:top_leader) { people(:top_leader) }
-  let(:params) { { uid: '20', mailbox: 'INBOX' } }
-  let(:params_invalid) { { uid: '1', mailbox: 'INBOX' } }
-  let(:params_move) { { uid: 2, from: 'INBOX', to: 'INBOX' } }
-  let(:params_delete) { { ids: '1,2', mailbox: 'INBOX' } }
-
 
   let(:imap_connector) { double(:imap_connector) }
 
-  before do
-    sign_in(top_leader)
-    allow(controller).to receive(:imap).and_return(imap_connector)
+  let(:imap_mail_1) { new_mail }
+  let(:imap_mail_2) { new_mail(false) }
+  let(:imap_fetch_data) { [imap_mail_1, imap_mail_2] }
 
-    # mocked methods, needs to be filled with arguments & return values
-    # further, this is very relaxed, add following for stricter tests:
-    # expect(imap_connector).to receive(:method).with(arguments).and_return(return_value)
-    allow(imap_connector).to receive(:fetch_all).and_return([])
-    allow(imap_connector).to receive(:fetch_by_uid).with(2, :inbox)
-    allow(imap_connector).to receive(:move_by_uid)
-    allow(imap_connector).to receive(:delete_by_uid)
-    allow(imap_connector).to receive(:count)
-    allow(imap_connector).to receive(:counts)
+  let(:now) { Time.zone.now }
 
-  end
-
-  context 'GET index' do
-    it 'can be accessed as admin' do
-      get :index
-      expect(response).to have_http_status(:success)
-    end
-
+  context 'GET #index' do
     it 'lists all mails when admin' do
-      get :index
+      # sign in
+      sign_in(top_leader)
 
-      expect(assigns(:mails)).to be_instance_of(Hash)
+      # mock imap_connector for counts and mails
+      expect(controller).to receive(:imap).twice.and_return(imap_connector)
 
-      assigns(:mails).each do |_, mails|
-        expect(mails).to be_instance_of(Array)
+      # counts
+      expect(imap_connector).to receive(:counts).and_return(2)
 
-        unless mails.empty?
-          expect(mails).to all(be_instance_of(CatchAllMail))
-        end
-      end
+      # mails
+      expect(imap_connector).to receive(:fetch_mails).and_return(imap_fetch_data)
+
+      # get #index
+      get :index, params: { mailbox: :inbox }
+
+      # success, is admin
+      expect(response).to have_http_status(:success)
+
+      mails = assigns(:mails)
+
+      expect(mails.count).to eq(2)
+
+      # length und werte
+      # assigns(:mails).each do |_, mails|
+      #   expect(mails).to be_instance_of(Array)
+      #
+      #   unless mails.empty?
+      #     expect(mails).to all(be_instance_of(CatchAllMail))
+      #   end
+      # end
     end
 
-    it 'cannot be accessed as non-admin' do
-      sign_in(people(:bottom_member))
-      expect do
-        get :index
-      end.to raise_error(CanCan::AccessDenied)
+    it 'changes mailbox param to inbox if no valid mailbox in params' do
+
     end
   end
 
   context 'PATCH move' do
-    it 'can be accessed as admin' do
+    # source und dst mailbox auf MAILBOXES checken, wenn mailbox nicht existiert -> raise error
+    it 'moves Mail to given mailbox' do
       patch :move, params: params_move
       expect(response).to have_http_status(:success)
     end
@@ -68,7 +67,7 @@ describe MailingListMailsController do
       expect(response).to redirect_to mailing_list_mail_path
     end
 
-    it 'cannot be moved as non-admin' do
+    it 'changes dst_mailbox param to valid mailbox' do
       expect do
         patch :move, params: params_move
       end.to raise_error(CanCan::AccessDenied)
@@ -92,6 +91,63 @@ describe MailingListMailsController do
         delete :destroy, params: params
       end.to raise_error(CanCan::AccessDenied)
     end
+  end
+
+  def new_mail(text_body = true)
+    imap_mail = Net::IMAP::FetchData.new(Faker::Number.number(digits: 1), text_body ? mail_attrs : mail_attrs_html)
+    Imap::Mail.build(imap_mail)
+  end
+
+  def mail_attrs
+    {
+      'UID' => '42',
+      'RFC822' => Faker::Lorem.sentences[0],
+      'ENVELOPE' => new_envelope,
+      'BODY[TEXT]' => 'SpaceX rocks!',
+      'BODYSTRUCTURE' => new_text
+    }
+  end
+
+  def mail_attrs_html
+    {
+      'UID' => '43',
+      'RFC822' => new_html_message,
+      'ENVELOPE' => new_envelope,
+      'BODY[TEXT]' => 'EMail Body',
+      'BODYSTRUCTURE' => new_html
+    }
+  end
+
+  def new_envelope
+    Net::IMAP::Envelope.new(
+      now.to_s,
+      Faker::Lorem.word,
+      [new_address('from')],
+      [new_address('sender')],
+      [new_address('reply_to')],
+      [new_address('to')]
+    )
+  end
+
+  def new_address(name)
+    Net::IMAP::Address.new(
+      name,
+      nil,
+      'john',
+      "#{name}.example.com"
+    )
+  end
+
+  def new_text
+    Net::IMAP::BodyTypeText.new('TEXT')
+  end
+
+  def new_html
+    Net::IMAP::BodyTypeMultipart.new('MULTIPART')
+  end
+
+  def new_html_message
+    Mail::Message.new("<h1>#{Faker::Lorem.sentences[0]}</h1>")
   end
 
 end

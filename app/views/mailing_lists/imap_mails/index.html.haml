@@ -7,25 +7,29 @@
 - content_for(:filter, FilterNavigation::MailingList::Mails.new(self).to_s)
 
 #main
-  = imap_mail_table(self) do |t|
+  - if imap_mails_present?(@mails)
+    = imap_mail_table(self) do |t|
+      - if not imap_mail_mailbox?(:failed)
+        - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
+          - check_box_tag('ids[]', i.uid, false, data: { multiselect: true })
+
+      - t.col(t('mails.headers.subject')) do |m|
+        - imap_mail_subject(m)
+
+      - t.attr(:sender, t('mails.headers.sender')) do |e|
+        - safe_join([e.sender_name, content_tag(:p, mail_to(e.sender_email))], ' ')
+
+      - t.col(t('mails.headers.preview')) do |m|
+        - imap_mail_body(m)
+
+      - t.col(t('mails.headers.date')) do |m|
+        - imap_mail_date(m)
+
     - if not imap_mail_mailbox?(:failed)
-      - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
-        - check_box_tag('ids[]', i.uid, false, data: { multiselect: true })
+      = render 'multiselect_actions'
 
-    - t.col(t('mails.headers.subject')) do |m|
-      - imap_mail_subject(m)
+    .pagination-bar
+    = paginate @mails
 
-    - t.attr(:sender, t('mails.headers.sender')) do |e|
-      - safe_join([e.sender_name, content_tag(:p, mail_to(e.sender_email))], ' ')
-
-    - t.col(t('mails.headers.preview')) do |m|
-      - imap_mail_body(m)
-
-    - t.col(t('mails.headers.date')) do |m|
-      - imap_mail_date(m)
-
-  - if not imap_mail_mailbox?(:failed)
-    = render 'multiselect_actions'
-
-  .pagination-bar
-  = paginate @mails
+  - else
+    = t('mails.not_available')

@@ -51,6 +51,8 @@ class MailingLists::ImapMailsController < ApplicationController
   def fetch_mails
     mails = imap.fetch_mails(mailbox)
 
+    return [] if mails == []
+
     mails.sort! { |a, b| a.date.to_i <=> b.date.to_i }
     mails = mails.reverse
 
@@ -66,12 +68,14 @@ class MailingLists::ImapMailsController < ApplicationController
   end
 
   def param_ids
-    params[:mail_ids]&.split(',')&.map(&:to_i) || []
+    params[:ids]&.split(',')&.map(&:to_i) || []
   end
 
   def mailbox
-    mailbox = params[:mailbox]
-    params[:mailbox] = Imap::Connector::MAILBOXES.keys.include?(mailbox) ? mailbox : 'inbox'
+    mailbox = params[:mailbox].downcase
+    mailbox = Imap::Connector::MAILBOXES.keys.include?(mailbox) ? mailbox : 'inbox'
+    params[:mailbox] = mailbox
+    mailbox
   end
 
   def param_move_to_mailbox

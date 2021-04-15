@@ -28,14 +28,14 @@ describe Imap::Connector do
       expect(net_imap).to receive(:login)
 
       # move
-      expect(net_imap).to receive(:select).with('INBOX')
-      expect(net_imap).to receive(:uid_move).with('42', 'FAILED')
+      expect(net_imap).to receive(:select).with("INBOX")
+      expect(net_imap).to receive(:uid_move).with('42', "Failed")
 
       # disconnect
       expect(net_imap).to receive(:disconnect)
       expect(net_imap).to receive(:close)
 
-      imap_connector.move_by_uid('42', 'INBOX', 'FAILED')
+      imap_connector.move_by_uid('42', :inbox, :failed)
     end
 
     it 'moves mail to not existing mailbox' do
@@ -44,8 +44,8 @@ describe Imap::Connector do
       expect(net_imap).to receive(:login)
 
       # move
-      expect(net_imap).to receive(:select).with('INBOX').and_raise(no_mailbox_error)
-      expect(net_imap).to receive(:uid_move).with('42', :invalid)
+      expect(net_imap).to receive(:select).with("INBOX").and_raise(no_mailbox_error)
+      expect(net_imap).to receive(:uid_move).with('42', nil)
 
       expect(imap_connector).to receive(:create_if_missing)
 
@@ -53,7 +53,7 @@ describe Imap::Connector do
       expect(net_imap).to receive(:disconnect)
       expect(net_imap).to receive(:close)
 
-      imap_connector.move_by_uid('42', 'INBOX', :invalid)
+      imap_connector.move_by_uid('42', :inbox, :invalid)
     end
   end
 
@@ -64,7 +64,7 @@ describe Imap::Connector do
       expect(net_imap).to receive(:login)
 
       # select
-      expect(net_imap).to receive(:select).with('INBOX')
+      expect(net_imap).to receive(:select).with(nil)
 
       # expect(net_imap).to receive(:uid_copy).with(uid, 'TRASH')
       expect(net_imap).to receive(:uid_store).with('42', '+FLAGS', [:Deleted])
@@ -95,7 +95,7 @@ describe Imap::Connector do
       expect(net_imap).to receive(:close)
       expect(net_imap).to receive(:disconnect)
 
-      mails = imap_connector.fetch_mails('INBOX')
+      mails = imap_connector.fetch_mails(:inbox)
 
       mail1 = mails.first
 
@@ -114,17 +114,14 @@ describe Imap::Connector do
       expect(net_imap).to receive(:login)
 
       # count
-      expect(net_imap).to receive(:select).with('INBOX')
-      expect(net_imap).to receive(:status).with('INBOX', array_including('MESSAGES')).and_return('MESSAGES' => 0)
-
-      # fetch
-      expect(net_imap).to receive(:fetch).with(1..2, fetch_attributes).and_return([])
+      expect(net_imap).to receive(:select).with("INBOX")
+      expect(net_imap).to receive(:status).with("INBOX", array_including('MESSAGES')).and_return('MESSAGES' => 0)
 
       # disconnect
       expect(net_imap).to receive(:close)
       expect(net_imap).to receive(:disconnect)
 
-      mails = imap_connector.fetch_mails('INBOX')
+      mails = imap_connector.fetch_mails(:inbox)
       expect(mails).to eq([])
     end
 
@@ -143,14 +140,11 @@ describe Imap::Connector do
       expect(net_imap).to receive(:select).with('Failed')
       expect(net_imap).to receive(:status).with('Failed', array_including('MESSAGES')).and_return('MESSAGES' => 0)
 
-      # fetch
-      expect(net_imap).to receive(:fetch).with(1..2, fetch_attributes).and_return(imap_fetch_data)
-
       # disconnect
       expect(net_imap).to receive(:close)
       expect(net_imap).to receive(:disconnect)
 
-      imap_connector.fetch_mails('Failed')
+      imap_connector.fetch_mails(:failed)
     end
 
     it 'raises error if junk mailbox does not exist' do
@@ -166,7 +160,7 @@ describe Imap::Connector do
       expect(net_imap).to receive(:disconnect)
 
       expect do
-        imap_connector.fetch_mails('Junk')
+        imap_connector.fetch_mails(:spam)
       end.to raise_error(Net::IMAP::NoResponseError)
     end
   end
@@ -193,8 +187,8 @@ describe Imap::Connector do
 
       counts = imap_connector.counts
 
-      expect(counts).to eq('Failed' => 1, 'INBOX' => 1, 'Junk' => 1)
-      expect(imap_connector.counts['Failed']).to eq(1)
+      expect(counts).to eq('failed' => 1, 'inbox' => 1, 'spam' => 1)
+      expect(imap_connector.counts['failed']).to eq(1)
     end
   end
 
@@ -222,7 +216,7 @@ describe Imap::Connector do
       'UID' => '43',
       'RFC822' => new_html_message,
       'ENVELOPE' => new_envelope,
-      'BODY[TEXT]' => 'EMail Body',
+      'BODY[TEXT]' => 'SpaceX rocks!',
       'BODYSTRUCTURE' => new_html
     }
   end

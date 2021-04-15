@@ -46,7 +46,6 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         [57, 669, 'Bottom Member'],
         [57, 658, 'Greatstreet 345'],
         [57, 648, '3456 Greattown'],
-        [57, 638, 'CH'],
         [57, 579, 'Hallo Bottom'],
         [57, 558, 'Dein '],
         [78, 558, 'Mitgliedsbeitrag'],

@@ -28,32 +28,38 @@ describe Export::Pdf::Messages::Letter do
       GroupSetting.new(var: :messages_letter, picture: fixture_file_upload('images/logo.png'))
     end
 
-    it 'renders no logo' do
-      expect_any_instance_of(Prawn::Document).to receive(:image).never
-      subject.render
-    end
-
-    it 'renders logo from layer setting' do
-      letter.update!(heading: true)
-      letter_setting.target = layer
-      letter_setting.save!
-
-      expect_any_instance_of(Prawn::Document).to receive(:image).with(
-        /\/picture\/#{letter_setting.id}\/logo\.png/,
-        fit: [200, 40]
-      )
-      subject.render
-    end
-
-    it 'renders logo from group setting' do
+    def expect_renders_logo_from_layer_settings(group = layer, options = {})
       letter.update!(heading: true)
       letter_setting.target = group
       letter_setting.save!
 
       expect_any_instance_of(Prawn::Document).to receive(:image).with(
         /\/picture\/#{letter_setting.id}\/logo\.png/,
-        fit: [200, 40]
+        options.merge(fit: [200, 40])
       )
+    end
+
+    it 'renders no logo' do
+      expect_any_instance_of(Prawn::Document).to receive(:image).never
+      subject.render
+    end
+
+    it 'renders logo from layer setting' do
+      expect_renders_logo_from_layer_settings
+
+      subject.render
+    end
+
+    it 'renders logo from layer setting where setting is set on group' do
+      expect_renders_logo_from_layer_settings(group)
+
+      subject.render
+    end
+
+    it 'renders logo from layer setting where setting on right side' do
+      expect(Settings.messages.pdf).to receive(:logo).and_return(:right)
+      expect_renders_logo_from_layer_settings(group, position: :right)
+
       subject.render
     end
 

@@ -14,10 +14,16 @@ class Export::Pdf::Messages::Letter
 
     def render(recipient)
       if @letter.heading?
-        render_logo
-        pdf.move_down 10
+        if right?
+          render_logo_right
+          pdf.move_up 40
+        else
+          render_logo
+          pdf.move_down 10
+        end
 
         render_address(sender_address)
+
         pdf.move_down 20
       else
         pdf.move_down 110
@@ -29,10 +35,18 @@ class Export::Pdf::Messages::Letter
 
     private
 
-    def render_logo(width: LOGO_BOX.first, height: LOGO_BOX.second)
-      bounding_box([0, cursor], width: width, height: height) do
+    def right?
+      Settings.messages.pdf.logo.to_s == 'right'
+    end
+
+    def render_logo_right
+      render_logo(left: bounds.width - LOGO_BOX.first, options: { position: :right })
+    end
+
+    def render_logo(left: 0, options: {}, width: LOGO_BOX.first, height: LOGO_BOX.second)
+      bounding_box([left, cursor], width: width, height: height) do
         if logo_path
-          image logo_path, fit: [width, height]
+          image(logo_path, options.merge(fit: [width, height]))
         else
           ''
         end

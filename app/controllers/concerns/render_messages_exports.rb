@@ -9,6 +9,9 @@ module RenderMessagesExports
   extend ActiveSupport::Concern
 
   def render_pdf(message, preview:)
+    raise "cannot create pdf for #{message.type}" unless message.is_a?(Message::Letter)
+
+    @preview = preview
     @message = message
     pdf = generate_pdf(preview)
     send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename
@@ -21,18 +24,11 @@ module RenderMessagesExports
   end
 
   def recipients
-    person_ids = params[:person_id].to_s.split(',')
-    people.where(id: person_ids).exists? ?
-      people.where(id: person_ids) :
-      people
+    @recipients ||= fetch_recipients
   end
 
-  def people
-    @people ||= case @message
-                when Message::LetterWithInvoice, Message::Letter
-                  @message.mailing_list.people(Person.with_address)
-                when Message::TextMessage
-                  @message.mailing_list.people(Person.with_mobile)
-                end
+  def fetch_recipients
+    recipients = @message.mailing_list.people(Person.with_address)
+    @preview ? recipients.limit(1) : recipients
   end
 end

@@ -34,7 +34,7 @@ class MessagesController < CrudController
   def show
     respond_to do |format|
       format.html
-      format.pdf { render_pdf(entry, preview: false) }
+      format.pdf { render_pdf(entry, preview: preview?) }
     end
   end
 
@@ -65,6 +65,10 @@ class MessagesController < CrudController
     message.mailing_list = parent
     message.sender = current_user
     message
+  end
+
+  def preview?
+    true?(params[:preview])
   end
 
   def permitted_params

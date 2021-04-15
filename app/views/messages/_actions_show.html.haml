@@ -12,7 +12,7 @@
   - if entry.dispatched?
     = action_button(t('.button_show_pdf'), group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf), :eye)
   - else
-    = action_button(t('.button_preview'), message_preview_path(message_id: entry.id, format: :pdf), :eye, target: :_blank)
+    = action_button(t('.button_preview'), group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf, preview: true), :eye, target: :_blank)
     = button_action_edit if can?(:edit, entry)
     - if can?(:new, entry)
       = action_button(t('.button_duplicate'), new_polymorphic_path(path_args(entry.class), duplicate_from: entry.id, message: { type: entry.type }), 'copy')

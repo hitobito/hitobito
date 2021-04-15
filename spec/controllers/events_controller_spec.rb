@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,6 +12,53 @@ describe EventsController do
   let(:group) { groups(:top_group) }
   let(:group2) { Fabricate(Group::TopGroup.name.to_sym, name: 'CCC', parent: groups(:top_layer)) }
   let(:group3) { Fabricate(Group::TopGroup.name.to_sym, name: 'AAA', parent: groups(:top_layer)) }
+
+  context 'event' do
+
+    before { group2 }
+
+    context 'POST create' do
+      let(:date)  do
+        { label: 'foo', start_at_date: Time.zone.today, finish_at_date: Time.zone.today }
+      end
+      let(:question)  { { question: 'foo?', choices: '1,2,3,4' } }
+
+      it 'creates new event course with dates' do
+        sign_in(people(:top_leader))
+
+        # simulate wagon-extension
+        described_class.permitted_attrs += [
+          wagon_course_speciality_attributes: [:id, :name, :desc, :goal]
+        ]
+
+        post :create, params: {
+          event: {  group_ids: [group.id, group2.id],
+                    name: 'foo',
+                    kind_id: event_kinds(:slk).id,
+                    dates_attributes: [date],
+                    application_questions_attributes: [question],
+                    wagon_course_speciality_attributes: [
+                      name: 'Special',
+                      desc: 'Course-Stuff',
+                      goal: 'filter me out'
+                    ],
+                    contact_id: people(:top_leader).id,
+                    type: 'Event' },
+          group_id: group.id
+        }
+
+        event = assigns(:event)
+        is_expected.to redirect_to(group_event_path(group, event))
+        expect(event).to be_persisted
+        expect(event.dates.size).to eq(1)
+        expect(event.dates.first).to be_persisted
+        expect(event.questions.size).to eq(1)
+        expect(event.questions.first).to be_persisted
+
+        expect(event.group_ids).to match_array([group.id, group2.id])
+      end
+    end
+  end
 
   context 'event_course' do
 
@@ -438,7 +485,12 @@ describe EventsController do
   describe 'with valid OAuth token' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: true, accessible?: true, resource_owner_id: people(:top_leader).id) }
+    let(:token) do
+      instance_double('Doorkeeper::AccessToken',
+                      acceptable?: true,
+                      accessible?: true,
+                      resource_owner_id: people(:top_leader).id)
+    end
 
     before do
       allow(controller).to receive(:doorkeeper_token) { token }
@@ -458,7 +510,12 @@ describe EventsController do
   describe 'with invalid OAuth token (expired or revoked)' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: true, accessible?: false, resource_owner_id: people(:top_leader).id) }
+    let(:token) do
+      instance_double('Doorkeeper::AccessToken',
+                      acceptable?: true,
+                      accessible?: false,
+                      resource_owner_id: people(:top_leader).id)
+    end
 
     before do
       allow(controller).to receive(:doorkeeper_token) { token }
@@ -478,7 +535,12 @@ describe EventsController do
   describe 'without acceptable OAuth token (missing scope)' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: false, accessible?: true, resource_owner_id: people(:top_leader).id) }
+    let(:token) do
+      instance_double('Doorkeeper::AccessToken',
+                      acceptable?: false,
+                      accessible?: true,
+                      resource_owner_id: people(:top_leader).id)
+    end
 
     before do
       allow(controller).to receive(:doorkeeper_token) { token }
@@ -512,7 +574,12 @@ describe EventsController do
     end
 
     context 'oauth' do
-      let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: true, accessible?: true, resource_owner_id: people(:top_leader).id) }
+      let(:token) do
+        instance_double('Doorkeeper::AccessToken',
+                        acceptable?: true,
+                        accessible?: true,
+                        resource_owner_id: people(:top_leader).id)
+      end
 
       before do
         allow(controller).to receive(:doorkeeper_token) { token }

@@ -1311,6 +1311,7 @@ de:
     send_password_instructions: Login Informationen wurden verschickt.
     send_password_instructions_invalid_email: Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist.
     years_old: (%{years} Jahre alt)
+    totp_reset: Zwei Faktor Authentifizierung erfolgreich zurückgesetzt
 
     tabs:
       history: Verlauf
@@ -1326,6 +1327,7 @@ de:
         resend: Die Person hat einen Link zum Setzen des Passworts erhalten, aber noch keines gesetzt.<br><br>Diese Aktion sendet ihr den Link erneut.
         reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
       activate_totp: Zwei Faktor Authentifizierung einrichten
+      reset_totp: Zwei Faktor Authentifizierung zurücksetzen
 
       impersonate_user: Imitieren
       impersonate_user_tooltip: Du kannst hitobito so bedienen, als wärst du als diese Person eingeloggt.

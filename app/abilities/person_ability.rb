@@ -14,6 +14,7 @@ class PersonAbility < AbilityDsl::Base
     class_side(:index_people_without_role).if_admin
 
     permission(:admin).may(:destroy).not_self
+    permission(:admin).may(:totp_reset).all
 
     permission(:any).
       may(:show, :show_details, :show_full, :history, :update, :update_email, :primary_group, :log,

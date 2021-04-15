@@ -92,6 +92,8 @@ Hitobito::Application.routes.draw do
           post :send_password_instructions
           put :primary_group
 
+          patch :totp_reset
+
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
           get 'colleagues' => 'person/colleagues#index'

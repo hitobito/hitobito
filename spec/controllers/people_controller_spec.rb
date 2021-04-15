@@ -695,6 +695,30 @@ describe PeopleController do
       end
     end
 
+    describe 'PATCH #totp_reset' do
+      let(:top_leader) { people(:top_leader) }
+      let(:bottom_member) { people(:bottom_member) }
+      let(:bottom_layer) { groups(:bottom_layer_one) }
+
+      before do
+        sign_in(top_leader)
+        bottom_member.second_factor_auth = :totp
+        bottom_member.totp_secret = People::OneTimePassword.generate_secret
+        bottom_member.save!
+      end
+
+      it 'resets totp of bottom_member' do
+        patch :totp_reset, params: { group_id: bottom_layer.id, id: bottom_member.id }
+
+        bottom_member.reload
+
+        expect(response).to redirect_to(group_person_path(bottom_layer, bottom_member))
+        expect(flash[:notice]).to include('Zwei Faktor Authentifizierung erfolgreich zurückgesetzt')
+        expect(bottom_member.second_factor_auth).to eq('totp')
+        expect(bottom_member.totp_secret).to be_nil
+      end
+    end
+
   end
 
   context 'json' do

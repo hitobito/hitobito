@@ -180,8 +180,27 @@ class EventsController < CrudController
   end
 
   def permitted_attrs
-    attrs = entry.class.used_attributes
-    attrs + self.class.permitted_attrs
+    remove_unused_nested_attributes(
+      entry.class.used_attributes +
+      self.class.permitted_attrs
+    )
+  end
+
+  def remove_unused_nested_attributes(attrs)
+    # something like %w(dates application_questions admin_questions)
+    possible_nested_attributes = entry.nested_attributes_options.keys.map(&:to_s)
+
+    attrs.map do |attr|
+      # attr is either a Symbol or a Hash
+      next attr unless attr.is_a?(Hash)
+
+      attr.keep_if do |key, _value|
+        next true if key == :group_ids
+
+        # key is something like :dates_attributes or :wagon_course_speciality_attributes
+        possible_nested_attributes.include?(key.to_s.remove('_attributes'))
+      end
+    end
   end
 
   def authorize_class

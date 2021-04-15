@@ -4,7 +4,7 @@
 -# https ://github.com/hitobito/hitobito.
 
 = form_with url: users_totp_path, method: :post, class: 'form-horizontal' do |f|
-  .control-group
+  .control-group.required
     = f.label :totp_code, t('.totp_code'), class: 'control-label'
     .controls
       = f.text_field :totp_code, class: 'span3', autofocus: 'autofocus', placeholder: t('.totp_code_placeholder'), required: true

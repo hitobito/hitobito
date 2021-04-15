@@ -93,6 +93,7 @@ Hitobito::Application.routes.draw do
           put :primary_group
 
           patch :totp_reset
+          patch :totp_disable
 
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'

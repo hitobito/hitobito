@@ -1392,6 +1392,33 @@ describe PersonAbility do
     end
   end
 
+  context :totp_disable do
+    context 'as admin' do
+      let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+
+      it 'can not disable other person when forced' do
+        totp = double
+        expect(Settings).to receive(:totp).and_return(totp)
+        forced_roles = [people(:bottom_member).roles.sample.type, Role.first.type]
+        expect(totp).to receive(:forced_roles).and_return(forced_roles)
+
+        is_expected.to_not be_able_to(:totp_disable, people(:bottom_member))
+      end
+
+      it 'can disable other person' do
+        is_expected.to be_able_to(:totp_disable, people(:bottom_member))
+      end
+    end
+
+    context 'as non admin' do
+      let(:role) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
+
+      it 'can not disable other person' do
+        is_expected.to_not be_able_to(:totp_disable, people(:bottom_member))
+      end
+    end
+  end
+
   context 'person without roles' do
     let(:person_without_roles) do
       person = Fabricate(Person.name.downcase.to_sym)

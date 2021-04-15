@@ -107,6 +107,23 @@ und Events geseeded.
 
 Um die schweizer Addressdaten zu importieren kann der `bundle exec rake address:import` Task genutzt werden. Um die Addressdaten von der Post API zu fetchen, muss ein API Token gegeben sein (`ENV['ADDRESSES_TOKEN']`). 
 
+#### 2FA mit TOTP
+
+Die Zwei Faktor Authentifizierung wurde mit der [freeOTP](https://freeotp.github.io/) getestet und entwickelt.
+
+Zur Inbetriebnahme werden keine Konfigurationen zwingend benötigt. Die 2FA kann ohne Konfiguration aktiviert und verwendet werden.
+
+Mittles der Rolle kann die 2FA erzwungen werden. Erzwingen der 2FA erfolgt über das `settings.yml` indem der `role.type` unter `totp.forced_roles` eingetragen wird.
+
+Beispiel:
+
+```
+totp:
+  forced_roles:
+    - Group::TopLayer::Administrator
+    - Group::RegionBoard::President
+```
+
 ### Umsysteme
 
 Hitobito benötigt für den Betrieb einige weitere Dienste die installiert und konfiguriert werden müssen. 

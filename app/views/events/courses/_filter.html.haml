@@ -1,13 +1,11 @@
 = form_for(:filter, class: 'form-inline', url: list_courses_path, method: :get) do |f|
-  .control-group
-    .input-prepend
+  .control-group.d-flex.align-items-start
+    .input-prepend{style: 'margin-right: 0.5rem'}
       %span.add-on= icon(:'calendar-alt')
       = f.text_field(:since, class: 'date span2')
 
-    .input-prepend
+    .input-prepend.mr-2{style: 'margin-right: 0.5rem'}
       %span.add-on= icon(:'calendar-alt')
       = f.text_field(:until, class: 'date span2')
 
-    .input-prepend
-      %span.add-on= icon(:'search')
-      = f.submit(t('global.button.search'), class: 'btn btn-primary', data: { disable_with: t('global.button.search') })
+    = submit_button(f, safe_join([icon(:search), ' ', t('global.button.search')]))

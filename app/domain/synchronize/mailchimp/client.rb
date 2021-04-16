@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 #  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3

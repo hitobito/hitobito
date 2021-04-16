@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -28,11 +28,11 @@ namespace :db do
     puts 'Moving Groups in alphabetical order...'
 
     bar = begin
-      require 'ruby-progressbar'
-      ProgressBar.create(format: '%a |%w>%i| %c/%C | %E ', total: Group.count)
-    rescue LoadError
-      Class.new { def increment; end }.new
-    end
+            require 'ruby-progressbar'
+            ProgressBar.create(format: '%a |%w>%i| %c/%C | %E ', total: Group.count)
+          rescue LoadError
+            Class.new { def increment; end }.new
+          end
 
     Group.find_each do |group|
       group.send(:move_to_alphabetic_position)
@@ -76,7 +76,7 @@ namespace :db do
     Rake::Task['db:migrate'].invoke
     Rake::Task['wagon:migrate'].invoke
 
-    ENV['NO_ENV'] = "1"
+    ENV['NO_ENV'] = '1'
     Rake::Task['db:seed'].invoke
     Rake::Task['wagon:seed'].invoke
   end

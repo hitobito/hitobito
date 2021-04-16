@@ -13,7 +13,7 @@ class Events::CoursesController < ApplicationController
 
   def index
     authorize_courses
-    set_group_vars
+    set_filter_vars
 
     respond_to do |format|
       format.html { @grouped_events = sorted(grouped(limited_courses_scope, course_grouping)) }

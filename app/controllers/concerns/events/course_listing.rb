@@ -9,11 +9,16 @@ module Events::CourseListing
   extend ActiveSupport::Concern
 
   included do
-    attr_reader :group_id
-    helper_method :group_id
+    attr_reader :group_id, :since_date, :until_date
+    helper_method :group_id, :since_date, :until_date
   end
 
   private
+
+  def set_filter_vars
+    set_group_vars
+    set_date_vars
+  end
 
   def set_group_vars
     if can?(:list_all, Event::Course)
@@ -22,6 +27,11 @@ module Events::CourseListing
       end
       @group_id = params[:group_id].to_i
     end
+  end
+
+  def set_date_vars
+    @since_date = params.dig(:filter, :since).to_s
+    @until_date = params.dig(:filter, :until).to_s
   end
 
   def default_user_course_group

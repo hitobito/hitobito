@@ -4,10 +4,10 @@
 -#  https://github.com/hitobito/hitobito.
 
 - title t('navigation.mails')
-- content_for(:filter, FilterNavigation::MailingList::Mails.new(self).to_s)
+- content_for(:filter, FilterNavigation::MailingLists::ImapMails.new(self).to_s)
 
 #main
-  - if imap_mails_present?(@mails)
+  - if imap_mails_present?(mails) || @connected
     = imap_mail_table(self) do |t|
       - if not imap_mail_mailbox?(:failed)
         - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
@@ -29,7 +29,7 @@
       = render 'multiselect_actions'
 
     .pagination-bar
-    = paginate @mails
+    = paginate mails
 
   - else
-    = t('mails.not_available')
+    = imap_mails_present?(mails) ? t('mails.not_available') : "Mailserver nicht verfügbar. Versuche es später erneut."

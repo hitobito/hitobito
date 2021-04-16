@@ -7,17 +7,17 @@
 
 include MailingLists::ImapMails
 
-class MailingLists::ImapMailsController < ApplicationController
-
-  helper_method :mails, :mailbox
+class MailingLists::ImapMailsMoveController < ApplicationController
 
   before_action :authorize_action
 
   delegate :imap, :valid_mailbox, to: MailingLists::ImapMails
 
-  def destroy
+  def create
+    raise Net::IMAP::BadResponseError unless param_from_mailbox != param_dst_mailbox
+
     param_ids.each do |id|
-      imap.delete_by_uid(id, mailbox)
+      imap.move_by_uid id, param_from_mailbox, param_dst_mailbox
     end
 
     redirect_to imap_mails_path(mailbox: mailbox)
@@ -29,24 +29,24 @@ class MailingLists::ImapMailsController < ApplicationController
     authorize!(:manage, Imap::Mail)
   end
 
-  def mails
-    @mails ||= fetch_mails
-  end
-
-  def fetch_mails
-    mails = imap.fetch_mails(mailbox)
-
-    return [] if mails == []
-
-    mails.sort! { |a, b| a.date.to_i <=> b.date.to_i }
-    mails = mails.reverse
-
-    Kaminari.paginate_array(mails).page(params[:page])
+  def param_ids
+    params[:ids]&.split(',')&.map(&:to_i) || []
   end
 
   def mailbox
-    mailbox = params[:mailbox]
-    params[:mailbox] = valid_mailbox(mailbox)
+    validated_mailbox
   end
 
+  def param_dst_mailbox
+    validated_mailbox(:mail_dst)
+  end
+
+  def param_from_mailbox
+    validated_mailbox(:from)
+  end
+
+  def validated_mailbox(mailbox_sym = :mailbox)
+    mailbox = params[mailbox_sym]
+    params[mailbox_sym] = valid_mailbox(mailbox)
+  end
 end

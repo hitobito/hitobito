@@ -64,7 +64,11 @@ class Imap::Connector
   end
 
   def perform
-    connect
+    begin
+      connect
+    rescue Net::IMAP::NoResponseError
+      return []
+    end
     result = yield
   ensure
     disconnect

@@ -257,7 +257,7 @@ Hitobito::Application.routes.draw do
       scope 'imap_mails' do
         get ':mailbox' => 'imap_mails#index', as: :imap_mails
         delete ':mailbox' => 'imap_mails#destroy', as: :imap_mails_destroy
-        patch ':mailbox/move' => 'imap_mails#move', as: :imap_mails_move
+        patch ':mailbox/move' => 'imap_mails_move#create', as: :imap_mails_move
       end
     end
 

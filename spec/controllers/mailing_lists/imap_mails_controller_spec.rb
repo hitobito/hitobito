@@ -12,7 +12,7 @@ describe MailingLists::ImapMailsController do
 
   let(:imap_mail_1) { new_mail }
   let(:imap_mail_2) { new_mail(false) }
-  let(:imap_fetch_data) { [imap_mail_1, imap_mail_2] }
+  let(:imap_mail_data) { [imap_mail_1, imap_mail_2] }
 
   let(:now) { Time.zone.now }
 
@@ -22,65 +22,84 @@ describe MailingLists::ImapMailsController do
       sign_in(top_leader)
 
       # mock imap_connector for counts and mails
-      expect(controller).to receive(:imap).twice.and_return(imap_connector)
-
-      # counts
-      expect(imap_connector).to receive(:counts).and_return(2)
+      expect(controller).to receive(:imap).and_return(imap_connector)
 
       # mails
-      expect(imap_connector).to receive(:fetch_mails).and_return(imap_fetch_data)
+      expect(imap_connector).to receive(:fetch_mails).with('inbox').and_return(imap_mail_data)
 
-      # get #index
-      get :index, params: { mailbox: :inbox }
+      get :index, params: { mailbox: 'inbox' }
 
-      # success, is admin
       expect(response).to have_http_status(:success)
 
-      mails = assigns(:mails)
+      mails = controller.view_context.mails
+
+      expect(mails).to eq(imap_mail_data.reverse)
 
       expect(mails.count).to eq(2)
 
-      # length und werte
-      # assigns(:mails).each do |_, mails|
-      #   expect(mails).to be_instance_of(Array)
-      #
-      #   unless mails.empty?
-      #     expect(mails).to all(be_instance_of(CatchAllMail))
-      #   end
-      # end
+      mail1 = mails.last
+      expect(mail1.uid).to eq('42')
+      expect(mail1.subject).to be(imap_mail_1.subject)
+      expect(mail1.date).to eq(Time.zone.utc_to_local(DateTime.parse(now.to_s)))
+      expect(mail1.sender_email).to eq('john@sender.example.com')
+      expect(mail1.sender_name).to eq('sender')
+      expect(mail1.body).to eq('SpaceX rocks!')
+
+      mail2 = mails.first
+      expect(mail2.uid).to eq('43')
+      expect(mail2.subject).to be(imap_mail_2.subject)
+      expect(mail2.date).to eq(Time.zone.utc_to_local(DateTime.parse(now.to_s)))
+      expect(mail2.sender_email).to eq('john@sender.example.com')
+      expect(mail2.sender_name).to eq('sender')
+      expect(mail2.body).to eq('<h1>Starship flies!</h1>')
     end
 
     it 'changes mailbox param to inbox if no valid mailbox in params' do
+      # sign in
+      sign_in(top_leader)
 
+      # mock imap_connector for counts and mails
+      expect(controller).to receive(:imap).and_return(imap_connector)
+
+      # mails
+      expect(imap_connector).to receive(:fetch_mails).with('inbox').and_return(imap_mail_data)
+
+      get :index, params: { mailbox: 'invalid_mailbox' }
+
+      mails = controller.view_context.mails
+
+      expect(mails.count).to eq(2)
+      expect(mails).to eq(imap_mail_data.reverse)
     end
-  end
 
-  context 'PATCH move' do
-    # source und dst mailbox auf MAILBOXES checken, wenn mailbox nicht existiert -> raise error
-    it 'moves Mail to given mailbox' do
-      patch :move, params: params_move
+    it 'raises error when mailserver not reachable' do
+      # sign in
+      sign_in(top_leader)
+
+      # mock imap_connector for counts and mails
+      expect(controller).to receive(:imap).and_return(imap_connector)
+
+      # return no mails
+      expect(imap_connector).to receive(:fetch_mails).with('inbox').and_return([])
+
+      get :index, params: { mailbox: 'inbox' }
+
       expect(response).to have_http_status(:success)
-    end
 
-    xit 'redirects to index afterwards' do
-      get :show, params: params
-      expect(response).to redirect_to mailing_list_mail_path
-    end
+      mails = controller.view_context.mails
 
-    it 'changes dst_mailbox param to valid mailbox' do
-      expect do
-        patch :move, params: params_move
-      end.to raise_error(CanCan::AccessDenied)
+      expect(assigns(:connected)).to eq(nil)
+      expect(mails).to eq([])
     end
   end
 
-  context 'DELETE destroy' do
+  context 'DELETE #destroy' do
     it 'can be accessed as admin' do
       delete :destroy, params: params_delete
       expect(response).to have_http_status(:success)
     end
 
-    xit 'redirects to index afterwards' do
+    it 'redirects to index afterwards' do
       delete :destroy, params: params_delete
       expect(response).to redirect_to mailing_list_mail_path
     end
@@ -91,37 +110,47 @@ describe MailingLists::ImapMailsController do
         delete :destroy, params: params
       end.to raise_error(CanCan::AccessDenied)
     end
+
+    it 'raises error when mailserver not reachable' do
+      # sign in
+      sign_in(top_leader)
+
+      # mock imap_connector for counts and mails
+      expect(controller).to receive(:imap).and_return(imap_connector)
+
+      # return delete ids
+      expect(controller).to receive(:imap).and_return(imap_connector)
+
+      get :destroy, params: { mailbox: 'inbox', ids: '5' }
+
+      expect(response).to have_http_status(:success)
+
+      mails = controller.view_context.mails
+
+      expect(assigns(:connected)).to eq(nil)
+      expect(mails).to eq([])
+    end
   end
 
   def new_mail(text_body = true)
-    imap_mail = Net::IMAP::FetchData.new(Faker::Number.number(digits: 1), text_body ? mail_attrs : mail_attrs_html)
+    imap_mail = Net::IMAP::FetchData.new(Faker::Number.number(digits: 1), mail_attrs(text_body))
     Imap::Mail.build(imap_mail)
   end
 
-  def mail_attrs
+  def mail_attrs(text_body)
     {
-      'UID' => '42',
-      'RFC822' => Faker::Lorem.sentences[0],
+      'UID' => text_body ? '42' : '43',
+      'RFC822' => text_body ? '' : new_html_message,
       'ENVELOPE' => new_envelope,
-      'BODY[TEXT]' => 'SpaceX rocks!',
-      'BODYSTRUCTURE' => new_text
-    }
-  end
-
-  def mail_attrs_html
-    {
-      'UID' => '43',
-      'RFC822' => new_html_message,
-      'ENVELOPE' => new_envelope,
-      'BODY[TEXT]' => 'EMail Body',
-      'BODYSTRUCTURE' => new_html
+      'BODY[TEXT]' => text_body ? 'SpaceX rocks!' : 'Tesla rocks!',
+      'BODYSTRUCTURE' => text_body ? new_text_body : new_html_body_type
     }
   end
 
   def new_envelope
     Net::IMAP::Envelope.new(
       now.to_s,
-      Faker::Lorem.word,
+      'Testflight from 24.4.2021',
       [new_address('from')],
       [new_address('sender')],
       [new_address('reply_to')],
@@ -138,16 +167,19 @@ describe MailingLists::ImapMailsController do
     )
   end
 
-  def new_text
+  def new_text_body
     Net::IMAP::BodyTypeText.new('TEXT')
   end
 
-  def new_html
+  def new_html_body_type
     Net::IMAP::BodyTypeMultipart.new('MULTIPART')
   end
 
   def new_html_message
-    Mail::Message.new("<h1>#{Faker::Lorem.sentences[0]}</h1>")
+    html_message = Mail::Message.new
+    html_message.body('<h1>Starship flies!</h1>')
+    html_message.text_part = ''
+    html_message
   end
 
 end

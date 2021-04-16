@@ -15,8 +15,8 @@ describe Imap::Connector do
   let(:imap_connector) { Imap::Connector.new }
   let(:now) { Time.zone.now }
 
-  let(:imap_mail_1) { new_mail }
-  let(:imap_mail_2) { new_mail(false) }
+  let(:imap_mail_1) { new_mail(1) }
+  let(:imap_mail_2) { new_mail(2, false) }
   let(:imap_fetch_data) { [imap_mail_1, imap_mail_2] }
 
   let(:fetch_attributes) { %w(ENVELOPE UID BODYSTRUCTURE BODY[TEXT] RFC822) }
@@ -197,34 +197,24 @@ describe Imap::Connector do
     Net::IMAP::NoResponseError.new(Net::IMAP::TaggedResponse.new(nil, nil, response_text, nil))
   end
 
-  def new_mail(text_body = true)
-    Net::IMAP::FetchData.new(Faker::Number.number(digits: 1), text_body ? mail_attrs : mail_attrs_html)
+  def new_mail(id, text_body = true)
+    Net::IMAP::FetchData.new(id, mail_attrs(text_body))
   end
 
-  def mail_attrs
+  def mail_attrs(text_body)
     {
-      'UID' => '42',
-      'RFC822' => Faker::Lorem.sentences[0],
+      'UID' => text_body ? '42' : '43',
+      'RFC822' => text_body ? '' : new_html_message,
       'ENVELOPE' => new_envelope,
-      'BODY[TEXT]' => 'SpaceX rocks!',
-      'BODYSTRUCTURE' => new_text
-    }
-  end
-
-  def mail_attrs_html
-    {
-      'UID' => '43',
-      'RFC822' => new_html_message,
-      'ENVELOPE' => new_envelope,
-      'BODY[TEXT]' => 'SpaceX rocks!',
-      'BODYSTRUCTURE' => new_html
+      'BODY[TEXT]' => text_body ? 'SpaceX rocks!' : 'Tesla rocks!',
+      'BODYSTRUCTURE' => text_body ? new_text_body : new_html_body_type
     }
   end
 
   def new_envelope
     Net::IMAP::Envelope.new(
       now.to_s,
-      Faker::Lorem.word,
+      'Testflight from 24.4.2021',
       [new_address('from')],
       [new_address('sender')],
       [new_address('reply_to')],
@@ -241,11 +231,11 @@ describe Imap::Connector do
     )
   end
 
-  def new_text
+  def new_text_body
     Net::IMAP::BodyTypeText.new('TEXT')
   end
 
-  def new_html
+  def new_html_body_type
     Net::IMAP::BodyTypeMultipart.new('MULTIPART')
   end
 

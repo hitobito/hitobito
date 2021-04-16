@@ -48,6 +48,7 @@ namespace :db do
   task :import, [:backup_filename] do |_t, args| # rubocop:disable Rails/RakeEnvironment
     args.with_defaults(backup_filename: 'tmp/backup.sql.gz')
     backup = Pathname.new(args[:backup_filename]).expand_path
+    decompressed = Pathname.new('tmp/decompressed-backup.sql').expand_path
 
     cat = if backup.extname == '.gz'
             if Gem::Platform.local.os == 'darwin'
@@ -59,10 +60,17 @@ namespace :db do
             'cat'
           end
 
+    pv = if `which pv | wc -l`.chomp.to_i.positive?
+           'pv' # pipeviewer, `apt install pv`, provides a progressbar
+         else
+           'cat'
+         end
 
     # some things are more stable and understandable when expressed as a shell-command
     sh 'rails db:drop db:create'
-    sh "#{cat} #{backup} | rails db -p"
+    sh "#{cat} #{backup} > #{decompressed}"
+    sh "#{pv} #{decompressed} | rails db -p"
+    rm decompressed.to_s # output what is done
 
     # other things are straightforward rake-tasks
     Rake::Task['db:migrate'].invoke

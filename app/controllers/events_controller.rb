@@ -186,6 +186,8 @@ class EventsController < CrudController
     )
   end
 
+  # If this breaks in this generic place, move into the model-layer and have
+  # more fine-grained (wagon-based) control over it.
   def remove_unused_nested_attributes(attrs)
     # something like %w(dates application_questions admin_questions)
     possible_nested_attributes = entry.nested_attributes_options.keys.map(&:to_s)
@@ -195,7 +197,7 @@ class EventsController < CrudController
       next attr unless attr.is_a?(Hash)
 
       attr.keep_if do |key, _value|
-        next true if key == :group_ids
+        next true unless key.to_s =~ /_attributes$/
 
         # key is something like :dates_attributes or :wagon_course_speciality_attributes
         possible_nested_attributes.include?(key.to_s.remove('_attributes'))

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2021, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,7 +12,7 @@ class Export::Pdf::Messages::Letter
 
     delegate :group, to: '@letter'
 
-    def render(recipient)
+    def render(recipient) # rubocop:disable Metrics/MethodLength
       if @letter.heading?
         if right?
           render_logo_right
@@ -36,7 +36,7 @@ class Export::Pdf::Messages::Letter
     private
 
     def right?
-      Settings.messages.pdf.logo.to_s == 'right'
+      Settings.messages.pdf.logo_position.to_s == 'right'
     end
 
     def render_logo_right

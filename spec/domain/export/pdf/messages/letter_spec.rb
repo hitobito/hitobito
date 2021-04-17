@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2021, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -57,7 +57,7 @@ describe Export::Pdf::Messages::Letter do
     end
 
     it 'renders logo from layer setting where setting on right side' do
-      expect(Settings.messages.pdf).to receive(:logo).and_return(:right)
+      expect(Settings.messages.pdf).to receive(:logo_position).and_return(:right)
       expect_renders_logo_from_layer_settings(group, position: :right)
 
       subject.render

@@ -769,7 +769,7 @@ fr:
       button_show_pdf: Afficher le PDF
     letter:
       fields:
-        available_placeholders: 'Espaces disponibles:'
+        available_placeholders: 'Espaces disponibles: %{placeholders}'
     text_message:
       fields:
         remaining_chars: Caractères restant
@@ -798,7 +798,7 @@ fr:
             other: "Plusieurs numéros de téléphones sont manquants."
     table:
       infos:
-        sender: "Expéditeur"
+        sender: "Expéditeur: %{mail}"
         sender_rejected: L'expéditeur a été supprimé
         unkown_recipient: Destinataire inconnu
   navigation:

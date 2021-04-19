@@ -63,7 +63,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         [71, 89, 'Betrag'],
         [14, 78, 'CHF'],
         [71, 78, '10.00'],
-        [105, 49, 'Annahmestelle'],
+        [105, 39, 'Annahmestelle'],
         [190, 276, 'Zahlteil'],
         [190, 89, 'Währung'],
         [247, 89, 'Betrag'],

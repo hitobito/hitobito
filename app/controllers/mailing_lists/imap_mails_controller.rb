@@ -13,17 +13,13 @@ class MailingLists::ImapMailsController < ApplicationController
 
   before_action :authorize_action
 
-  # delegate :imap, :valid_mailbox, to: MailingLists::ImapMails
-
   def destroy
     list_param(:ids).each do |id|
       require 'pry'; binding.pry
-      #check if id exists
       imap.delete_by_uid(id, mailbox)
     end
 
-    redirect_to imap_mails_path(mailbox: mailbox)
-    set_success_notice
+    redirect_to imap_mails_path(mailbox: mailbox), notice: translate(:success)
   end
 
   private

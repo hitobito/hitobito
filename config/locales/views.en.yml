@@ -478,6 +478,8 @@ en:
       sender: Sender
       date: Date
       preview: Preview
+    flash:
+      deleted: Mail successfully deleted
 
 
   filter_navigation/dropdown:

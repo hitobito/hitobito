@@ -11,12 +11,10 @@ class MailingLists::ImapMailsMoveController < ApplicationController
 
   before_action :authorize_action
 
-  # delegate :imap, :valid_mailbox, to: MailingLists::ImapMails
-
   def create
     raise Net::IMAP::BadResponseError unless param_from_mailbox != param_dst_mailbox
 
-    param_ids.each do |id|
+    list_param(:ids).each do |id|
       imap.move_by_uid id, param_from_mailbox, param_dst_mailbox
     end
 
@@ -27,10 +25,6 @@ class MailingLists::ImapMailsMoveController < ApplicationController
 
   def authorize_action
     authorize!(:manage, Imap::Mail)
-  end
-
-  def param_ids
-    params[:ids]&.split(',')&.map(&:to_i) || []
   end
 
   def mailbox

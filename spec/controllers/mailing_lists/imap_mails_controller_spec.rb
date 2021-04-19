@@ -100,12 +100,12 @@ describe MailingLists::ImapMailsController do
       expect(controller).to receive(:imap).and_return(imap_connector)
 
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
-      expect(response).to redirect_to mailing_list_mail_path
+      expect(response).to redirect_to mailing_list_mails_path
 
       delete :destroy, params: { mailbox: 'inbox', id: 42 }
 
       expect(mails.count).to eq(mails.count - 1)
-      expect(response).to have_http_status(:success)
+      # expect(response).to have_http_status(:success)
     end
 
     it 'cannot be deleted by non-admin' do
@@ -125,8 +125,8 @@ describe MailingLists::ImapMailsController do
       expect(imap_connector).to receive(:delete_by_uid).with('inbox').and_return([])
 
       expect do
-      get :destroy, params: { mailbox: 'inbox', ids: '5' }
-      end.to raise_error(CanCan::NoResponseError)
+      get :destroy, params: { mailbox: 'mail', ids: ['42', '43'] }
+      end.to raise_error(Net::IMAP::BadResponseError)
 
       expect(response).to have_http_status(:success)
 
@@ -135,15 +135,6 @@ describe MailingLists::ImapMailsController do
       expect(assigns(:connected)).to eq(nil)
       expect(mails).to eq([])
     end
-
-    it 'raises error if uid does not exist' do
-      sign_in(top_leader)
-
-      expect do
-        delete :destroy, params: { mailbox: 'inbox', id: 44 }
-      end.to raise_error(CanCan::AccessDenied.new("Invalid id"))
-
-    end  
 
   end
 

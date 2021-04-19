@@ -67,7 +67,7 @@ class PeopleFiltersController < CrudController
   end
 
   def assign_attributes
-    entry.name = params[:name] || params.fetch(:people_filter, nil)&.fetch(:name, nil)
+    entry.name = params[:name] || params.dig(:people_filter, :name)
     entry.range = params[:range]
     entry.filter_chain = params.fetch(:filters, nil)&.except(:host)&.to_unsafe_hash
   end

@@ -11,9 +11,9 @@
 # Individual filters can be implemented as methods in the FilteredList-subclass
 # or as their own filter-class. The applied filters are defined as Array in
 # #filter_scopes Symbols are interpreted as instance-methods in the class,
-# Class-Names are instantied and called:
+# Class-Names are instantiated and called:
 #
-#   Subject::Filter::SpecificFilter.new(user, params, options, result).to_scope
+#   Subject::Filter::SpecificFilter.new(user, params, options, scope).to_scope
 class FilteredList
   attr_reader :user, :params, :options
 

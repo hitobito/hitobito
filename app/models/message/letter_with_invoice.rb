@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: messages
@@ -5,6 +7,7 @@
 #  id              :bigint           not null, primary key
 #  failed_count    :integer          default(0)
 #  recipient_count :integer          default(0)
+#  invoice_attributes :text(16777215)
 #  sent_at         :datetime
 #  state           :string(255)      default("draft")
 #  subject         :string(1024)     not null
@@ -32,6 +35,7 @@ class Message::LetterWithInvoice < Message::Letter
 
   belongs_to :invoice_list
   serialize :invoice_attributes, Hash
+  validate :assert_valid_invoice_items
 
   self.icon = :'file-invoice'
 
@@ -62,4 +66,13 @@ class Message::LetterWithInvoice < Message::Letter
       raise 'invoice invalid' unless invoice.valid?
     end
   end
+
+  private
+
+  def assert_valid_invoice_items
+    unless invoice.invoice_items.all?(&:valid?)
+      errors.add(:base, :invoice_items_invalid)
+    end
+  end
+
 end

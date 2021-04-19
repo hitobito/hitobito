@@ -72,6 +72,10 @@ de:
             mail_name:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
             mail_name_not_allowed:
+        message/letter_with_invoice:
+          attributes:
+            base:
+              invoice_items_invalid: Mindestens ein Rechnungsposten ist ungültig.
         oauth/application:
           attributes:
             scopes:

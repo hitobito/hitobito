@@ -16,7 +16,7 @@ describe MailingLists::ImapMailsMoveController do
 
   let(:now) { Time.zone.now }
 
-  context 'CREATE #move' do
+  context 'PATCH #create' do
     # source und dst mailbox auf MAILBOXES checken, wenn mailbox nicht existiert -> raise error
     it 'moves Mail to given mailbox' do
       # sign in

@@ -73,7 +73,6 @@ describe MailingLists::ImapMailsController do
     end
 
     it 'raises error when mailserver not reachable' do
-      # sign in
       sign_in(top_leader)
 
       # mock imap_connector for counts and mails
@@ -94,34 +93,40 @@ describe MailingLists::ImapMailsController do
   end
 
   context 'DELETE #destroy' do
-    it 'can be accessed as admin' do
-      delete :destroy, params: params_delete
-      expect(response).to have_http_status(:success)
-    end
+    it 'deletes specific mail from inbox' do
+      sign_in(top_leader)
 
-    it 'redirects to index afterwards' do
-      delete :destroy, params: params_delete
+      # mock imap_connector for counts and mails
+      expect(controller).to receive(:imap).and_return(imap_connector)
+
+      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
       expect(response).to redirect_to mailing_list_mail_path
+
+      delete :destroy, params: { mailbox: 'inbox', id: 42 }
+
+      expect(mails.count).to eq(mails.count - 1)
+      expect(response).to have_http_status(:success)
     end
 
     it 'cannot be deleted by non-admin' do
       sign_in(people(:bottom_member))
       expect do
-        delete :destroy, params: params
+        delete :destroy, params: { mailbox: 'inbox', id: 42 }
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it 'raises error when mailserver not reachable' do
-      # sign in
       sign_in(top_leader)
 
       # mock imap_connector for counts and mails
       expect(controller).to receive(:imap).and_return(imap_connector)
 
       # return delete ids
-      expect(controller).to receive(:imap).and_return(imap_connector)
+      expect(imap_connector).to receive(:delete_by_uid).with('inbox').and_return([])
 
+      expect do
       get :destroy, params: { mailbox: 'inbox', ids: '5' }
+      end.to raise_error(CanCan::NoResponseError)
 
       expect(response).to have_http_status(:success)
 
@@ -130,6 +135,16 @@ describe MailingLists::ImapMailsController do
       expect(assigns(:connected)).to eq(nil)
       expect(mails).to eq([])
     end
+
+    it 'raises error if uid does not exist' do
+      sign_in(top_leader)
+
+      expect do
+        delete :destroy, params: { mailbox: 'inbox', id: 44 }
+      end.to raise_error(CanCan::AccessDenied.new("Invalid id"))
+
+    end  
+
   end
 
   def new_mail(text_body = true)

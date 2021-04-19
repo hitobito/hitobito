@@ -11,7 +11,7 @@ class MailingLists::ImapMailsMoveController < ApplicationController
 
   before_action :authorize_action
 
-  delegate :imap, :valid_mailbox, to: MailingLists::ImapMails
+  # delegate :imap, :valid_mailbox, to: MailingLists::ImapMails
 
   def create
     raise Net::IMAP::BadResponseError unless param_from_mailbox != param_dst_mailbox

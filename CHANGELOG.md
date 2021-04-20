@@ -1,12 +1,9 @@
 # Hitobito Changelog
 
 ## Version 1.26
-
-## Version 1.23
-
 *  Layout der OAuth-Dialoge angepasst und Logos ermöglicht (#1044)
 
-## Version 1.22
+## Version 1.23
 
 *  Anlässe und deren Anmeldeangaben können übersetzt werden (#1135, hitobito_sjas#28)
 *  automatische Warteliste für Anlässe (hitobito_sjas#27)
@@ -17,6 +14,9 @@
 *  Anlässe können den Teilnehmern erlauben, sich gegenseitig in der Teilnehmerliste zu sehen (#878)
 *  Personen / Duplikate zusammenführen (hitobito_cvp#23)
 *  Erstellen von Rechungen für Abonnenten von Abos
+
+## Version 1.22
+
 *  Bugfix: Vergangene Anlässe werden nicht mehr auf der Person angezeigt (#847)
 *  Verbesserung der Mailchimp Integration und am Rechnungsmodul
 *  Liste "Meine Abos" auf der Person (optional für jede hitobito-Instanz)

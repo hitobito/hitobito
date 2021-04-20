@@ -14,12 +14,13 @@ class MailingLists::ImapMailsController < ApplicationController
   before_action :authorize_action
 
   def destroy
-    list_param(:ids).each do |id|
-      require 'pry'; binding.pry
-      imap.delete_by_uid(id, mailbox)
-    end
-
-    redirect_to imap_mails_path(mailbox: mailbox), notice: translate(:success)
+    # perform_imap do
+      list_param(:ids).each do |id|
+        # require 'pry'; binding.pry
+        imap.delete_by_uid(id.to_i, mailbox)
+      end
+    # end
+    redirect_to imap_mails_path(mailbox: mailbox), notice: destroy_flash_message
   end
 
   private
@@ -33,8 +34,9 @@ class MailingLists::ImapMailsController < ApplicationController
   end
 
   def fetch_mails
-    mails = imap.fetch_mails(mailbox)
-
+    # perform_imap do
+      mails = imap.fetch_mails(mailbox)
+    # end
     return [] if mails == []
 
     mails.sort! { |a, b| a.date.to_i <=> b.date.to_i }
@@ -48,4 +50,18 @@ class MailingLists::ImapMailsController < ApplicationController
     params[:mailbox] = valid_mailbox(mailbox)
   end
 
+  def destroy_flash_message
+    I18n.t('mails.flash.deleted')
+  end
+
+  # catch mail server down exception
+  def perform_imap(&block)
+    begin
+      yield
+    rescue Net::IMAP::BadResponseError
+      flash.notice('mails.flash.server_down')
+    end
+  end
+
 end
+

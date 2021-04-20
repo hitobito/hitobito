@@ -481,7 +481,6 @@ en:
     flash:
       deleted: Mail successfully deleted
 
-
   filter_navigation/dropdown:
     additional_views: 'Further views'
   filter_navigation/people:

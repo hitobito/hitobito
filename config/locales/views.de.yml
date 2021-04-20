@@ -541,6 +541,9 @@ de:
       date: Datum
       preview: Vorschau
     not_available: Keine Mails in dieser Mailbox vorhanden.
+    flash:
+      deleted: Mail erfolgreich gelöscht
+      server_down: Mail server nicht verfügbar, bitte versuchen Sie es später erneut.
 
   filter_navigation/dropdown:
     additional_views: 'Weitere Ansichten'

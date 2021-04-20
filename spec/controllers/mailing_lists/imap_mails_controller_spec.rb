@@ -99,23 +99,22 @@ describe MailingLists::ImapMailsController do
       # mock imap_connector for counts and mails
       expect(controller).to receive(:imap).and_return(imap_connector)
 
-      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+      expect(imap_connector).to receive(:delete_by_uid).with('42', :inbox)
+
+      delete :destroy, params: { mailbox: 'inbox', id: '42' }
+
       expect(response).to redirect_to mailing_list_mails_path
-
-      delete :destroy, params: { mailbox: 'inbox', id: 42 }
-
-      expect(mails.count).to eq(mails.count - 1)
       # expect(response).to have_http_status(:success)
     end
 
     it 'cannot be deleted by non-admin' do
       sign_in(people(:bottom_member))
       expect do
-        delete :destroy, params: { mailbox: 'inbox', id: 42 }
+        delete :destroy, params: { mailbox: 'inbox', id: '42' }
       end.to raise_error(CanCan::AccessDenied)
     end
 
-    it 'raises error when mailserver not reachable' do
+    it 'catches mail server error and displays flash notice' do
       sign_in(top_leader)
 
       # mock imap_connector for counts and mails
@@ -125,8 +124,13 @@ describe MailingLists::ImapMailsController do
       expect(imap_connector).to receive(:delete_by_uid).with('inbox').and_return([])
 
       expect do
-      get :destroy, params: { mailbox: 'mail', ids: ['42', '43'] }
-      end.to raise_error(Net::IMAP::BadResponseError)
+        delete :destroy, params: { mailbox: 'unavailable_mailbox' }
+      end.to_not raise_error # rescue_error(Net::IMAP::BadResponseError)
+
+      # subject.stub(:delete_by_uid) { raise "boom" }
+      # expect { subject.destroy }.to_not raise_error
+
+      expect(flash[:notice]).to include 'Mailserver nicht verfügbar'
 
       expect(response).to have_http_status(:success)
 

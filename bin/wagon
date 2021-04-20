@@ -152,8 +152,9 @@ COMPLETION
 
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
-    echo "       $0 [test-prepare|test-core|gemfile|configs]"
+    echo "       $0 [test-prepare|core-spec|gemfile|configs]"
     echo "       $0 [grep] <TERM>"
+    echo "       $0 [git] <ARGS>"
     echo
     echo "Enable bash-completion with \"source <($0 completion)\""
     ;;

@@ -1,5 +1,7 @@
 language: ruby
-cache: bundler
+cache:
+  bundler: true
+  yarn: true
 addons:
   firefox: 60.0
 services:
@@ -20,7 +22,7 @@ before_install:
   - mysql -e 'CREATE DATABASE hitobito_test;'
 install:
   - bundle install --path vendor/bundle
-  - nvm install node
+  - nvm install v15.14.0
   - node -v
   - npm i -g yarn
   - yarn install

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -17,7 +17,7 @@ module Sheet
 
     tab 'global.tabs.settings',
         :group_mailing_list_path,
-        no_alt: true
+        alt: [:edit_group_mailing_list_path]
 
     tab 'activerecord.models.subscription.other',
         :group_mailing_list_subscriptions_path,

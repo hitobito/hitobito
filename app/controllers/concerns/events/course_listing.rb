@@ -44,7 +44,7 @@ module Events::CourseListing
   end
 
   def set_kind_category_vars
-    @kind_category_id = params.try(:category)
+    @kind_category_id = params.dig(:category).to_i
   end
 
   def default_user_course_group

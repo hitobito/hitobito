@@ -16,13 +16,18 @@ class Events::CoursesController < ApplicationController
     set_filter_vars
 
     respond_to do |format|
-      format.html { @grouped_events = sorted(grouped(limited_courses_scope, course_grouping)) }
+      format.html { prepare_sidebar }
       format.csv { render_tabular(:csv, limited_courses_scope) }
       format.xlsx { render_tabular(:xlsx, limited_courses_scope) }
     end
   end
 
   private
+
+  def prepare_sidebar
+    @grouped_events = sorted(grouped(limited_courses_scope, course_grouping))
+    @categories = Event::KindCategory.list
+  end
 
   def sorted(courses)
     courses.values.each do |entries|

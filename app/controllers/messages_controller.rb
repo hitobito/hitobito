@@ -8,6 +8,7 @@
 class MessagesController < CrudController
   include RenderMessagesExports
   include YearBasedPaging
+  include AsyncDownload
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze
   PERMITTED_LETTER_ATTRS = [:subject, :body, :heading].freeze
@@ -34,7 +35,13 @@ class MessagesController < CrudController
   def show
     respond_to do |format|
       format.html
-      format.pdf { render_pdf(entry, preview: preview?) }
+      format.pdf do
+        if preview?
+          render_pdf(entry, preview: preview?)
+        else
+          render_pdf_in_background(entry)
+        end
+      end
     end
   end
 

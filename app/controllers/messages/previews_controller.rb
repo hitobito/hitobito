@@ -11,11 +11,9 @@ module Messages
 
     def show
       authorize!(:show, message)
-      if recipients.present?
-        render_pdf(message, preview: true)
-      else
-        redirect_to  message.path_args, alert: t('.recipients_empty')
-      end
+      render_pdf(message, preview: true)
+      # TODO handle case with no recipients
+      # redirect_to  message.path_args, alert: t('.recipients_empty')
     end
 
     private

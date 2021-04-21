@@ -9,26 +9,34 @@ module RenderMessagesExports
   extend ActiveSupport::Concern
 
   def render_pdf(message, preview:)
-    raise "cannot create pdf for #{message.type}" unless message.is_a?(Message::Letter)
+    assert_type(message)
+    assert_recipients(message)
 
-    @preview = preview
-    @message = message
-    pdf = generate_pdf(preview)
+    pdf = message.exporter_class.new(message, preview: preview)
     send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename
+  end
+
+  def render_pdf_in_background(message)
+    assert_type(message)
+    assert_recipients(message)
+
+    base_name = message.exporter_class.new(message, preview: false).filename
+    with_async_download_cookie(:pdf, base_name) do |filename|
+      Export::MessageJob.new(current_person.id, message.id, filename).enqueue!
+    end
   end
 
   private
 
-  def generate_pdf(preview)
-    @message.exporter_class.new(@message, recipients, preview: preview)
+  def assert_type(message)
+    raise "cannot create pdf for #{message.type}" unless message.is_a?(Message::Letter)
   end
 
-  def recipients
-    @recipients ||= fetch_recipients
+  def assert_recipients(message)
+    if message.mailing_list.people(Person.with_address).count == 0
+      # TODO raise catchable error
+      raise "no recipients"
+    end
   end
 
-  def fetch_recipients
-    recipients = @message.mailing_list.people(Person.with_address)
-    @preview ? recipients.limit(1) : recipients
-  end
 end

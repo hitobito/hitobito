@@ -8,15 +8,20 @@
 module Export::Pdf::Messages
   class Letter
 
-    def initialize(letter, recipients, options = {})
+    class << self
+      def export(_format, letter)
+        new(letter).render
+      end
+    end
+
+    def initialize(letter, options = {})
       @letter = letter
-      @recipients = recipients
       @options = options
     end
 
     def render
       pdf = customize(Prawn::Document.new(render_options))
-      @recipients.each do |recipient|
+      recipients.each do |recipient|
         render_sections(pdf, recipient)
         pdf.start_new_page unless last?(recipient)
       end
@@ -38,6 +43,13 @@ module Export::Pdf::Messages
 
     private
 
+    def recipients
+      @recipients ||= begin
+        recipients = @letter.mailing_list.people(Person.with_address)
+        preview? ? recipients.limit(1) : recipients
+      end
+    end
+
     def render_options
       preview_option.to_h.merge(
         page_size: 'A4',
@@ -56,7 +68,7 @@ module Export::Pdf::Messages
     end
 
     def last?(recipient)
-      @recipients.last == recipient
+      recipients.last == recipient
     end
 
     def sections

@@ -20,8 +20,12 @@ class Export::MessageJob < Export::ExportBaseJob
     @message ||= Message.find(@message_id)
   end
 
+  def recipients
+    @recipients ||= message.mailing_list.people(Person.with_address)
+  end
+
   def data
-    message.exporter_class.new(message).render
+    message.exporter_class.new(message, recipients).render
   end
 
 end

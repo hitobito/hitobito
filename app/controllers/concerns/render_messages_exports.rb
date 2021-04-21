@@ -12,7 +12,7 @@ module RenderMessagesExports
     assert_type(message)
     assert_recipients(message)
 
-    pdf = message.exporter_class.new(message, preview: preview)
+    pdf = message.exporter_class.new(message, recipients(message), preview: preview)
     send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename
   end
 
@@ -20,7 +20,7 @@ module RenderMessagesExports
     assert_type(message)
     assert_recipients(message)
 
-    base_name = message.exporter_class.new(message, preview: false).filename
+    base_name = message.exporter_class.new(message, [], preview: false).filename
     with_async_download_cookie(:pdf, base_name) do |filename|
       Export::MessageJob.new(current_person.id, message.id, filename).enqueue!
     end
@@ -33,9 +33,13 @@ module RenderMessagesExports
   end
 
   def assert_recipients(message)
-    if message.mailing_list.people(Person.with_address).count == 0
+    if recipients(message).count == 0
       raise Messages::NoRecipientsError
     end
+  end
+
+  def recipients(message)
+    message.mailing_list.people(Person.with_address)
   end
 
 end

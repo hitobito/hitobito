@@ -8,13 +8,28 @@
 module MailingLists::ImapMails
   extend ActiveSupport::Concern
 
+  private
+
+  def mailbox
+    mailbox = params[:mailbox]
+    mailboxes.include?(mailbox) ? mailbox.to_sym : :inbox
+  end
+
   def imap
     @imap ||= Imap::Connector.new
   end
 
-  def valid_mailbox(mailbox)
-    mailbox = mailbox.downcase
-    Imap::Connector::MAILBOXES.keys.include?(mailbox) ? mailbox : 'inbox'
+  def mailboxes
+    Imap::Connector::MAILBOXES.keys
+  end
+
+  def perform_imap
+    yield
+  rescue Net::IMAP::ResponseError
+    @server_error = true
+  end
+
+  def i18n_prefix
+    'mailing_lists.imap_mails'
   end
 end
-

@@ -16,24 +16,28 @@ describe MailingLists::ImapMailsController do
 
   let(:now) { Time.zone.now }
 
+  before do
+    email = double
+    retriever = double
+    config = 'address: imap.example.com, port: 995, user_name: catch-all@example.com, password: holly-secret'
+    allow(Settings).to receive(:email).and_return(email)
+    allow(email).to receive(:retriever).and_return(retriever)
+    allow(retriever).to receive(:config).and_return(config)
+  end
+
   context 'GET #index' do
     it 'lists all mails when admin' do
-      # sign in
       sign_in(top_leader)
 
-      # mock imap_connector for counts and mails
+      # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
-
-      # mails
-      expect(imap_connector).to receive(:fetch_mails).with('inbox').and_return(imap_mail_data)
+      expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mail_data)
 
       get :index, params: { mailbox: 'inbox' }
 
       expect(response).to have_http_status(:success)
 
-      mails = controller.view_context.mails
-
-      expect(mails).to eq(imap_mail_data.reverse)
+      mails = assigns(:mails)
 
       expect(mails.count).to eq(2)
 
@@ -54,41 +58,48 @@ describe MailingLists::ImapMailsController do
       expect(mail2.body).to eq('<h1>Starship flies!</h1>')
     end
 
-    it 'changes mailbox param to inbox if no valid mailbox in params' do
+    it 'returns inbox mails if invalid mailbox given' do
       # sign in
       sign_in(top_leader)
 
-      # mock imap_connector for counts and mails
+      # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
-
-      # mails
-      expect(imap_connector).to receive(:fetch_mails).with('inbox').and_return(imap_mail_data)
+      expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mail_data)
 
       get :index, params: { mailbox: 'invalid_mailbox' }
 
-      mails = controller.view_context.mails
-
+      expect(response).to have_http_status(:success)
+      mails = assigns(:mails)
       expect(mails.count).to eq(2)
-      expect(mails).to eq(imap_mail_data.reverse)
     end
 
-    it 'raises error when mailserver not reachable' do
+    it 'displays alert if mail server not reachable' do
       sign_in(top_leader)
 
-      # mock imap_connector for counts and mails
+      # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
-
-      # return no mails
-      expect(imap_connector).to receive(:fetch_mails).with('inbox').and_return([])
+      expect(imap_connector)
+        .to receive(:fetch_mails)
+        .with(:inbox)
+        .and_raise(Net::IMAP::NoResponseError, ImapErrorDataDouble)
 
       get :index, params: { mailbox: 'inbox' }
 
       expect(response).to have_http_status(:success)
 
-      mails = controller.view_context.mails
+      mails = controller.send(:mails)
 
-      expect(assigns(:connected)).to eq(nil)
-      expect(mails).to eq([])
+      expect(mails.count).to eq(0)
+      expect(flash[:alert])
+        .to eq('Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut')
+    end
+
+    it 'denies access for non admin' do
+      sign_in(people(:bottom_member))
+
+      expect do
+        get :index, params: { mailbox: 'inbox' }
+      end.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -121,7 +132,7 @@ describe MailingLists::ImapMailsController do
       expect(controller).to receive(:imap).and_return(imap_connector)
 
       # return delete ids
-      expect(imap_connector).to receive(:delete_by_uid).with('inbox').and_return([])
+      expect(imap_connector).to receive(:delete_by_uid).with(:inbox).and_return([])
 
       expect do
         delete :destroy, params: { mailbox: 'unavailable_mailbox' }
@@ -141,6 +152,8 @@ describe MailingLists::ImapMailsController do
     end
 
   end
+
+  private
 
   def new_mail(text_body = true)
     imap_mail = Net::IMAP::FetchData.new(Faker::Number.number(digits: 1), mail_attrs(text_body))
@@ -190,6 +203,16 @@ describe MailingLists::ImapMailsController do
     html_message.body('<h1>Starship flies!</h1>')
     html_message.text_part = ''
     html_message
+  end
+
+  # and_raise only accepts either String or Module
+  # so creating a double with a Module
+  module ImapErrorDataDouble
+    Data = Struct.new(:text)
+    def self.data
+      data = Data.new('failure!')
+      data
+    end
   end
 
 end

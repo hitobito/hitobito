@@ -43,6 +43,8 @@ class MessagesController < CrudController
         end
       end
     end
+  rescue Messages::NoRecipientsError
+    redirect_to entry.path_args, alert: t('.recipients_empty')
   end
 
   def new

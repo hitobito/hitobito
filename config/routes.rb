@@ -298,7 +298,6 @@ Hitobito::Application.routes.draw do
     resources :assignments, only: [:new, :create]
     resources :table_displays, only: [:create]
     resources :messages, only: [:show] do
-      resource :preview, only: [:show], module: :messages
       resource :dispatch, only: [:create, :show], module: :messages
     end
   end # scope locale

@@ -3,4 +3,4 @@
 set -eo pipefail
 
 echo 'Integration build: Pulling transifex translations.'
-bundle exec rake tx:pull tx:wagon:pull tx:push tx:wagon:push -t
+scl enable rh-python38 'bundle exec rake tx:pull tx:wagon:pull tx:push tx:wagon:push -t'

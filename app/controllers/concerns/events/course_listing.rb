@@ -18,6 +18,7 @@ module Events::CourseListing
   def set_filter_vars
     set_group_vars
     set_date_vars
+    set_kind_category_vars
   end
 
   def set_group_vars
@@ -40,6 +41,10 @@ module Events::CourseListing
     Date.parse(date)
   rescue
     default
+  end
+
+  def set_kind_category_vars
+    @kind_category_id = params.try(:category)
   end
 
   def default_user_course_group

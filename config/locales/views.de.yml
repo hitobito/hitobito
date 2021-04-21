@@ -848,9 +848,6 @@ de:
   messages:
     attrs:
       dispatch_infos: Verabeitung
-    previews:
-      show:
-        recipients_empty: Empfängerliste ist leer, kann keine Vorschau erstellen.
     dispatches:
       create:
         success:
@@ -902,6 +899,8 @@ de:
         sender_rejected: Absender wurde abgelehnt
         unkown_recipient: Empfänger unbekannt
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    show:
+      recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
 
   navigation:
     menu: 'Menü'

@@ -116,4 +116,37 @@ describe MessagesController do
     end
 
   end
+
+  context 'preview' do
+    let(:bottom_member) { people(:bottom_member) }
+
+    context 'letter' do
+      let(:message) { messages(:letter) }
+
+      it 'redirects to message when recipients are empty' do
+        get :show, format: :pdf, params: { preview: true, id: message.id, mailing_list_id: message.mailing_list.id, group_id: message.mailing_list.group.id }
+        expect(response).to redirect_to message.path_args
+        expect(flash[:alert]).to eq 'Empfängerliste ist leer, kann kein PDF erstellen.'
+      end
+
+      it 'renders file' do
+        Subscription.create!(mailing_list: message.mailing_list, subscriber: bottom_member)
+        get :show, format: :pdf, params: { preview: true, id: message.id, mailing_list_id: message.mailing_list.id, group_id: message.mailing_list.group.id }
+        expect(response.header['Content-Disposition']).to match(/information-preview.pdf/)
+        expect(response.media_type).to eq('application/pdf')
+      end
+    end
+
+    context 'letter_with_invoice' do
+      let(:message) { messages(:with_invoice) }
+
+      it 'renders file' do
+        invoice_configs(:top_layer).update(payment_slip: :qr)
+        Subscription.create!(mailing_list: message.mailing_list, subscriber: bottom_member)
+        get :show, format: :pdf, params: { preview: true, id: message.id, mailing_list_id: message.mailing_list.id, group_id: message.mailing_list.group.id }
+        expect(response.header['Content-Disposition']).to match(/rechnung-mitgliedsbeitrag-preview.pdf/)
+        expect(response.media_type).to eq('application/pdf')
+      end
+    end
+  end
 end

@@ -34,8 +34,7 @@ module RenderMessagesExports
 
   def assert_recipients(message)
     if message.mailing_list.people(Person.with_address).count == 0
-      # TODO raise catchable error
-      raise "no recipients"
+      raise Messages::NoRecipientsError
     end
   end
 

@@ -12,7 +12,7 @@ class Event::KindCategory < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  has_many :event_kinds, class_name: 'Event::Kind'
+  has_many :kinds, dependent: :nullify
 
   ### VALIDATIONS
 
@@ -29,11 +29,7 @@ class Event::KindCategory < ActiveRecord::Base
 
   # Soft destroy if events exist, otherwise hard destroy
   def destroy
-    if event_kinds.exists?
-      delete
-    else
-      really_destroy!
-    end
+    really_destroy!
   end
 
 end

@@ -38,6 +38,7 @@ module NavigationHelper
       active_for: %w(label_formats
                      custom_contents
                      event_kinds
+                     event_kind_categories
                      qualification_kinds
                      oauth/applications
                      help_texts

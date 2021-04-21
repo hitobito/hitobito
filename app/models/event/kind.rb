@@ -9,11 +9,12 @@
 #
 # Table name: event_kinds
 #
-#  id          :integer          not null, primary key
-#  created_at  :datetime
-#  updated_at  :datetime
-#  deleted_at  :datetime
-#  minimum_age :integer
+#  id                     :integer          not null, primary key
+#  created_at             :datetime
+#  updated_at             :datetime
+#  deleted_at             :datetime
+#  minimum_age            :integer
+#  event_kind_category_id :integer
 #
 
 class Event::Kind < ActiveRecord::Base
@@ -24,6 +25,7 @@ class Event::Kind < ActiveRecord::Base
   ### ASSOCIATIONS
 
   has_many :events
+  belongs_to :kind_category
 
   has_many :event_kind_qualification_kinds, class_name: 'Event::KindQualificationKind',
                                             foreign_key: 'event_kind_id'

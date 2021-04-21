@@ -14,8 +14,9 @@ module Export::Pdf::Messages
       end
     end
 
-    def initialize(letter, options = {})
+    def initialize(letter, recipients, options = {})
       @letter = letter
+      @recipients = recipients
       @options = options
     end
 
@@ -44,10 +45,7 @@ module Export::Pdf::Messages
     private
 
     def recipients
-      @recipients ||= begin
-        recipients = @letter.mailing_list.people(Person.with_address)
-        preview? ? recipients.limit(1) : recipients
-      end
+      preview? ? [@recipients.first] : @recipients
     end
 
     def render_options

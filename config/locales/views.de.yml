@@ -389,7 +389,7 @@ de:
         submit: Hinzufügen
 
   assignments:
-    attachment: 'Anhang'
+    attachment: 'Anhang anzeigen'
     form:
       attachment:
         subject: 'Nachrichten Betreff:'
@@ -901,6 +901,7 @@ de:
         sender: "Absender: %{mail}"
         sender_rejected: Absender wurde abgelehnt
         unkown_recipient: Empfänger unbekannt
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
 
   navigation:
     menu: 'Menü'

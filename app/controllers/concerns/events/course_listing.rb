@@ -30,8 +30,16 @@ module Events::CourseListing
   end
 
   def set_date_vars
-    @since_date = params.dig(:filter, :since).to_s
-    @until_date = params.dig(:filter, :until).to_s
+    @since_date = date_or_default(params.dig(:filter, :since), Time.zone.today.to_date)
+    @until_date = date_or_default(params.dig(:filter, :until), @since_date.advance(years: 1))
+    @since_date = I18n.l(@since_date)
+    @until_date = I18n.l(@until_date)
+  end
+
+  def date_or_default(date, default)
+    Date.parse(date)
+  rescue
+    default
   end
 
   def default_user_course_group

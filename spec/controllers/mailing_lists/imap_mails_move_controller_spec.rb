@@ -31,7 +31,7 @@ describe MailingLists::ImapMailsMoveController do
       # mails
       expect(imap_connector).to receive(:fetch_mails).and_return(imap_mail_data)
 
-      get :index, params: { mailbox: 'invalid_mailbox' }
+      patch :create, params: { mailbox: 'invalid_mailbox', ids: '42, 43' }
 
       mails = assigns(:mails)
 
@@ -39,18 +39,20 @@ describe MailingLists::ImapMailsMoveController do
       expect(mails).to eq(imap_mail_data.reverse)
 
 
-      patch :move, params: params_move
+      patch :create, params: params_move
       expect(response).to have_http_status(:success)
-    end
-
-    it 'redirects to index afterwards' do
-      get :show, params: params
       expect(response).to redirect_to mailing_list_mail_path
     end
 
+    # it 'redirects to index afterwards' do
+    #   get :show, params: { }
+    #   expect(response).to redirect_to mailing_list_mail_path
+    # end
+
     it 'permission check' do
+      sign_in(people(:bottom_member))
       expect do
-        patch :move, params: params_move
+        patch :create, params: { mailbox: 'inbox', ids: '42' }
       end.to raise_error(CanCan::AccessDenied)
     end
 

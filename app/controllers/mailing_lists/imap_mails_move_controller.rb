@@ -11,17 +11,22 @@ class MailingLists::ImapMailsMoveController < ApplicationController
 
   before_action :authorize_action
 
+  helper_method :mails
+
   def create
-    raise Net::IMAP::BadResponseError unless param_from_mailbox != param_dst_mailbox
-
-    list_param(:ids).each do |id|
-      imap.move_by_uid id, param_from_mailbox, param_dst_mailbox
+    perform_imap do
+      list_param(:ids).each do |id|
+        imap.move_by_uid id.to_i, param_from_mailbox, param_dst_mailbox
+      end
     end
-
-    redirect_to imap_mails_path(mailbox: mailbox)
+    redirect_to imap_mails_path(mailbox: mailbox), notice: moved_flash_message
   end
 
   private
+
+  def mails
+    @mails || []
+  end
 
   def authorize_action
     authorize!(:manage, Imap::Mail)
@@ -43,4 +48,9 @@ class MailingLists::ImapMailsMoveController < ApplicationController
     mailbox = params[mailbox_sym]
     params[mailbox_sym] = valid_mailbox(mailbox)
   end
+
+  def moved_flash_message
+    server_error_message || I18n.t("#{i18n_prefix}.flash.moved")
+  end
 end
+

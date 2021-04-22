@@ -846,7 +846,8 @@ de:
         preview: Vorschau
       not_available: Keine Mails in dieser Mailbox vorhanden.
       flash:
-        deleted: Mail erfolgreich gelöscht
+        deleted: Mail(s) erfolgreich gelöscht
+        moved: Mail(s) erfolgreich verschoben
         server_error: Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut
 
   mailing_list_decorator:

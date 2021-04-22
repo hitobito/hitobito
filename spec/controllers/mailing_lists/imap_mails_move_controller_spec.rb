@@ -31,25 +31,50 @@ describe MailingLists::ImapMailsMoveController do
       # mails
       expect(imap_connector).to receive(:fetch_mails).and_return(imap_mail_data)
 
-      patch :create, params: { mailbox: 'invalid_mailbox', ids: '42, 43' }
+      patch :create, params: { ids: '42, 43' }
 
       mails = assigns(:mails)
 
       expect(mails.count).to eq(2)
       expect(mails).to eq(imap_mail_data.reverse)
 
+      expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :inbox)
+      expect(imap_connector).to receive(:move_by_uid).with(43, :inbox, :inbox)
 
-      patch :create, params: params_move
+      patch :create, params: { ids: '42, 43' }
+
+      expect(flash[:notice]).to include 'Mail(s) erfolgreich verschoben'
       expect(response).to have_http_status(:success)
       expect(response).to redirect_to mailing_list_mail_path
     end
 
-    # it 'redirects to index afterwards' do
-    #   get :show, params: { }
-    #   expect(response).to redirect_to mailing_list_mail_path
-    # end
+    it 'raises error if given mailbox is invalid' do
 
-    it 'permission check' do
+    end
+
+    it 'displays flash notice if mail server not reachable' do
+      sign_in(top_leader)
+
+      # mock imap_connector
+      expect(controller).to receive(:imap).and_return(imap_connector)
+
+      expect(imap_connector)
+        .to receive(:move_by_uid)
+        .with(42, :inbox, :inbox)
+        .and_raise(Net::IMAP::NoResponseError, ImapErrorDataDouble)
+
+      patch :create, params: { mailbox: 'inbox', ids: '42' }
+
+      expect(response).to have_http_status(:redirect)
+
+      mails = controller.view_context.mails
+
+      expect(mails.count).to eq(0)
+      expect(flash[:notice])
+        .to eq('Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut')
+    end 
+
+    it 'does not allow non-admins to move mails' do
       sign_in(people(:bottom_member))
       expect do
         patch :create, params: { mailbox: 'inbox', ids: '42' }
@@ -110,6 +135,16 @@ describe MailingLists::ImapMailsMoveController do
     html_message.body('<h1>Starship flies!</h1>')
     html_message.text_part = ''
     html_message
+  end
+
+  # and_raise only accepts either String or Module
+  # so creating a double with a Module
+  module ImapErrorDataDouble
+    Data = Struct.new(:text)
+    def self.data
+      data = Data.new('failure!')
+      data
+    end
   end
 
 end

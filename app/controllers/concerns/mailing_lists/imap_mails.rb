@@ -23,6 +23,11 @@ module MailingLists::ImapMails
     Imap::Connector::MAILBOXES.keys
   end
 
+  def valid_mailbox(mailbox)
+    mailbox = mailbox.to_s.downcase
+    Imap::Connector::MAILBOXES.keys.include?(mailbox) ? mailbox : 'inbox'
+  end
+
   def perform_imap
     yield
   rescue Net::IMAP::ResponseError
@@ -32,4 +37,11 @@ module MailingLists::ImapMails
   def i18n_prefix
     'mailing_lists.imap_mails'
   end
+
+  def server_error_message
+    if @server_error
+      I18n.t("#{i18n_prefix}.flash.server_error")
+    end
+  end
+
 end

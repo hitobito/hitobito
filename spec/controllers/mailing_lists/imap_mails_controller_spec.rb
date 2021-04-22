@@ -115,6 +115,7 @@ describe MailingLists::ImapMailsController do
 
       delete :destroy, params: { mailbox: 'inbox', ids: '42, 43'}
 
+      expect(flash[:notice]).to include 'Mail(s) erfolgreich gelöscht'
       expect(response).to redirect_to imap_mails_path(:inbox)
     end
 
@@ -125,30 +126,26 @@ describe MailingLists::ImapMailsController do
       end.to raise_error(CanCan::AccessDenied)
     end
 
-    it 'catches mail server error and displays flash notice' do
-      imap_response = double
-      imap_response_data = double
+    it 'displays flash notice if mail server not reachable' do
       sign_in(top_leader)
 
-      # mock imap_connector for counts and mails
+      # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
 
-      expect(imap_response).to receive(:data).and_return(imap_response_data)
-      expect(imap_response_data).to receive(:text).and_return('failure')
-      
-      # return delete ids
-      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox).and_raise(Net::IMAP::BadResponseError.new(imap_response))
+      expect(imap_connector)
+        .to receive(:delete_by_uid)
+        .with(42, :inbox)
+        .and_raise(Net::IMAP::NoResponseError, ImapErrorDataDouble)
 
-      delete :destroy, params: { mailbox: 'unavailable_mailbox', ids: '42' }
-
-      expect(flash[:notice]).to include 'Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut'
+      delete :destroy, params: { mailbox: 'inbox', ids: '42' }
 
       expect(response).to have_http_status(:redirect)
 
       mails = controller.view_context.mails
 
-      expect(assigns(:connected)).to eq(nil)
-      expect(mails).to eq([])
+      expect(mails.count).to eq(0)
+      expect(flash[:notice])
+        .to eq('Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut')
     end
 
   end

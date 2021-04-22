@@ -51,12 +51,6 @@ class MailingLists::ImapMailsController < ApplicationController
     server_error_message || I18n.t("#{i18n_prefix}.flash.deleted")
   end
 
-  def server_error_message
-    if @server_error
-      I18n.t("#{i18n_prefix}.flash.server_error")
-    end
-  end
-
   def authorize_action
     authorize!(:manage, Imap::Mail)
   end

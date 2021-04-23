@@ -16,6 +16,8 @@ module Synchronize
       self.member_fields = []
 
       self.merge_fields = [
+        ['FNAME', 'text', {}, ->(p) { p.first_name.to_s.strip }],
+        ['LNAME', 'text', {}, ->(p) { p.last_name.to_s.strip }],
         ['Gender', 'dropdown', { choices: %w(m w) }, ->(p) { p.gender }]
       ]
 

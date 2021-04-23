@@ -262,7 +262,7 @@ describe Synchronize::Mailchimp::Synchronizator do
 
   context '#perform' do
     before do
-      sync.merge_fields  = []
+      sync.merge_fields = []
 
       allow(client).to receive(:fetch_merge_fields).and_return([])
       allow(client).to receive(:fetch_segments).and_return([])
@@ -352,6 +352,12 @@ describe Synchronize::Mailchimp::Synchronizator do
     end
 
     context 'subscriptions' do
+      before do
+        sync.merge_fields = Synchronize::Mailchimp::Synchronizator.merge_fields
+        client.instance_variable_set(:@merge_fields, Synchronize::Mailchimp::Synchronizator.merge_fields)
+        allow(client).to receive(:create_merge_fields)
+      end
+
       it 'calls operations with empty lists' do
         expect(client).to receive(:subscribe_members).with([])
         expect(client).to receive(:unsubscribe_members).with([])

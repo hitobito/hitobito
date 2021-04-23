@@ -8,7 +8,7 @@ require 'spec_helper'
 describe Synchronize::Mailchimp::Client do
   let(:mailing_list) { MailingList.new(mailchimp_api_key: '1234567890d66d25cc5c9285ab5a5552-us12', mailchimp_list_id: 2) }
   let(:top_leader)   { people(:top_leader) }
-  let(:client)       { described_class.new(mailing_list) }
+  let(:client)       { described_class.new(mailing_list, merge_fields: Synchronize::Mailchimp::Synchronizator.merge_fields) }
 
 
   def stub_collection(path, offset, count = client.count, body: )
@@ -56,15 +56,6 @@ describe Synchronize::Mailchimp::Client do
       expect(body[:email_address]).to eq 'top@example.com'
       expect(body[:merge_fields][:FNAME]).to eq 'top'
       expect(body[:merge_fields][:LNAME]).to eq 'leader'
-    end
-
-    it 'handles nil values' do
-      top_leader.update(first_name: nil, last_name: nil, email: ' top@example.com ')
-      body = client.subscriber_body(top_leader)
-
-      expect(body[:email_address]).to eq 'top@example.com'
-      expect(body[:merge_fields][:FNAME]).to eq ''
-      expect(body[:merge_fields][:LNAME]).to eq ''
     end
 
     context 'merge_fields' do

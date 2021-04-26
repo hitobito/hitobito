@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2016, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -31,9 +31,9 @@ class ChangelogReader
   def parse_changelog_lines(changelog_files_content)
     version = ''
     changelog_files_content.each_line do |l|
-      if h = changelog_header_line(l)
+      if (h = changelog_header_line(l))
         version = find_or_create_version(h)
-      elsif e = changelog_entry_line(l)
+      elsif (e = changelog_entry_line(l))
         add_changelog_entry(version, e) if version.present?
       end
     end
@@ -57,14 +57,14 @@ class ChangelogReader
     file_paths
   end
 
-  def changelog_header_line(h)
-    h.strip!
-    h[/^## [^\s]+ ((\d+\.)?(\*|x|\d+))$/i, 1]
+  def changelog_header_line(header)
+    header.strip!
+    header[/^## [^\s]+ ((\d+\.)?(\*|x|\d+))$/i, 1]
   end
 
-  def changelog_entry_line(e)
-    e.strip!
-    e[/^\*\s*(.*)/, 1]
+  def changelog_entry_line(entry)
+    entry.strip!
+    entry[/^\*\s*(.*)/, 1]
   end
 
   def find_or_create_version(header_line)

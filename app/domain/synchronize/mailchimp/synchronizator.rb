@@ -16,9 +16,9 @@ module Synchronize
       self.member_fields = []
 
       self.merge_fields = [
-        ['FNAME', 'text', {}, ->(p) { p.first_name.to_s.strip }],
-        ['LNAME', 'text', {}, ->(p) { p.last_name.to_s.strip }],
-        ['Gender', 'dropdown', { choices: %w(m w) }, ->(p) { p.gender }]
+        ['FNAME', 'text', { flag_name: :first_name }, ->(p) { p.first_name.to_s.strip }],
+        ['LNAME', 'text', { flag_name: :last_name }, ->(p) { p.last_name.to_s.strip }],
+        ['Gender', 'dropdown', { flag_name: :gender, choices: %w(m w) }, ->(p) { p.gender }]
       ]
 
       def initialize(mailing_list)

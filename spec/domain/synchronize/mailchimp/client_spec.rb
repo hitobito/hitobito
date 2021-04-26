@@ -99,6 +99,18 @@ describe Synchronize::Mailchimp::Client do
         expect(body[:company]).to eq true
       end
     end
+
+    it 'respects synchronization flags' do
+      top_leader.update(gender: 'w')
+      mailing_list.mailchimp_sync_first_name = false
+      mailing_list.mailchimp_sync_last_name = false
+      mailing_list.mailchimp_sync_gender = false
+
+      body = client.subscriber_body(top_leader)
+      expect(body[:merge_fields]).not_to have_key :FNAME
+      expect(body[:merge_fields]).not_to have_key :LNAME
+      expect(body[:merge_fields]).not_to have_key :GENDER
+    end
   end
 
   context '#merge_fields' do

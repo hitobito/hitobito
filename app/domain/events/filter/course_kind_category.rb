@@ -15,8 +15,7 @@ module Events::Filter
     def to_scope
       return @scope unless kind_category_id.present?
 
-      scope = @scope
-          .joins(kind: :kind_category)
+      scope = @scope.joins(kind: :kind_category)
 
       return scope.where('event_kind_categories.id IS NULL') if kind_category_id == '0'
 

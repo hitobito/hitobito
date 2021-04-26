@@ -100,16 +100,28 @@ describe Synchronize::Mailchimp::Client do
       end
     end
 
-    it 'respects synchronization flags' do
-      top_leader.update(gender: 'w')
-      mailing_list.mailchimp_sync_first_name = false
-      mailing_list.mailchimp_sync_last_name = false
-      mailing_list.mailchimp_sync_gender = false
+    context 'synchronization flags' do
+      before { top_leader.update(gender: 'w', nickname: 'Nick') }
+      subject { client.subscriber_body(top_leader)[:merge_fields] }
 
-      body = client.subscriber_body(top_leader)
-      expect(body[:merge_fields]).not_to have_key :FNAME
-      expect(body[:merge_fields]).not_to have_key :LNAME
-      expect(body[:merge_fields]).not_to have_key :GENDER
+      it 'includes all fields by default' do
+        expect(subject).to have_key :FNAME
+        expect(subject).to have_key :LNAME
+        expect(subject).to have_key :NICKNAME
+        expect(subject).to have_key :GENDER
+      end
+
+      it 'excludes when flags are set to false' do
+        mailing_list.mailchimp_sync_first_name = false
+        mailing_list.mailchimp_sync_last_name = false
+        mailing_list.mailchimp_sync_nickname = false
+        mailing_list.mailchimp_sync_gender = false
+
+        expect(subject).not_to have_key :FNAME
+        expect(subject).not_to have_key :LNAME
+        expect(subject).not_to have_key :NICKNAME
+        expect(subject).not_to have_key :GENDER
+      end
     end
   end
 

@@ -494,6 +494,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_144148) do
     t.boolean "mailchimp_include_additional_emails", default: false
     t.boolean "mailchimp_sync_first_name", default: true
     t.boolean "mailchimp_sync_last_name", default: true
+    t.boolean "mailchimp_sync_nickname", default: true
     t.boolean "mailchimp_sync_gender", default: true
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end

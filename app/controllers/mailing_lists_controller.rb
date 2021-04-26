@@ -14,7 +14,8 @@ class MailingListsController < CrudController
                           :anyone_may_post, :main_email, :delivery_report,
                           :mailchimp_list_id, :mailchimp_api_key,
                           :mailchimp_include_additional_emails, :mailchimp_sync_first_name,
-                          :mailchimp_sync_last_name, :mailchimp_sync_gender, preferred_labels: []]
+                          :mailchimp_sync_last_name, :mailchimp_sync_nickname,
+                          :mailchimp_sync_gender, preferred_labels: []]
 
   decorates :group, :mailing_list
 

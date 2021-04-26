@@ -9,6 +9,7 @@ class AddMailchimpSynchingFlags < ActiveRecord::Migration[6.0]
   def change
     add_column :mailing_lists, :mailchimp_sync_first_name, :boolean, default: true
     add_column :mailing_lists, :mailchimp_sync_last_name, :boolean, default: true
+    add_column :mailing_lists, :mailchimp_sync_nickname, :boolean, default: true
     add_column :mailing_lists, :mailchimp_sync_gender, :boolean, default: true
   end
 end

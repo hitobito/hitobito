@@ -18,6 +18,7 @@ module Synchronize
       self.merge_fields = [
         ['FNAME', 'text', { flag_name: :first_name }, ->(p) { p.first_name.to_s.strip }],
         ['LNAME', 'text', { flag_name: :last_name }, ->(p) { p.last_name.to_s.strip }],
+        ['Nickname', 'text', { flag_name: :nickname }, ->(p) { p.nickname }],
         ['Gender', 'dropdown', { flag_name: :gender, choices: %w(m w) }, ->(p) { p.gender }]
       ]
 

@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title t('event.lists.courses.title')
+- title course_list_title.presence || t('event.lists.courses.title')
 - manager = can?(:list_all, Event::Course)
 
 %p= t('event.lists.courses.explanation') unless can?(:list_all, Event::Course)

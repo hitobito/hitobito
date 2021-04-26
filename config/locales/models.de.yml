@@ -680,6 +680,7 @@ de:
           partial: Teilweise
           failed: Fehlgeschlagen
         mailchimp_include_additional_emails: 'Alle Versandadressen synchronisieren'
+        mailchimp_synchronization_flags: 'Mailchimp-Felder'
 
       mail_log:
         updated_at: Bearbeitet am

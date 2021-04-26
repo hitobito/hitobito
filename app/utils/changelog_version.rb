@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2016, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -12,7 +12,7 @@ class ChangelogVersion
     values         = header_line.split('.')
     @version       = header_line
     @major_version = values.first.to_i
-    @minor_version = values.second.casecmp('x') == 0 ? Float::INFINITY : values.second.to_i
+    @minor_version = values.second.downcase == 'x' ? Float::INFINITY : values.second.to_i
     @log_entries   = []
   end
 

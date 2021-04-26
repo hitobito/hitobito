@@ -1,4 +1,9 @@
-# frozen_string_literal: true
+#  frozen_string_literal: true
+
+#  Copyright (c) 2012-2021, Hitobito AG. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
 
@@ -17,39 +22,36 @@ describe MailingLists::ImapMailsMoveController do
   let(:now) { Time.zone.now }
 
   context 'PATCH #create' do
-    # source und dst mailbox auf MAILBOXES checken, wenn mailbox nicht existiert -> raise error
     it 'moves Mail to given mailbox' do
       # sign in
       sign_in(top_leader)
 
-      # mock imap_connector for counts and mails
-      expect(controller).to receive(:imap).twice.and_return(imap_connector)
+      # mock imap_connector
+      expect(controller).to receive(:imap).and_return(imap_connector)
 
-      # counts
-      expect(imap_connector).to receive(:counts).and_return(2)
+      expect(imap_connector).to receive(:move_by_uid).with(42, 'inbox', 'failed')
 
-      # mails
-      expect(imap_connector).to receive(:fetch_mails).and_return(imap_mail_data)
-
-      patch :create, params: { ids: '42, 43' }
-
-      mails = assigns(:mails)
-
-      expect(mails.count).to eq(2)
-      expect(mails).to eq(imap_mail_data.reverse)
-
-      expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :inbox)
-      expect(imap_connector).to receive(:move_by_uid).with(43, :inbox, :inbox)
-
-      patch :create, params: { ids: '42, 43' }
+      patch :create, params: { mailbox: 'inbox', ids: '42', mail_dst: 'failed' }
 
       expect(flash[:notice]).to include 'Mail(s) erfolgreich verschoben'
-      expect(response).to have_http_status(:success)
-      expect(response).to redirect_to mailing_list_mail_path
+      expect(response).to have_http_status(:found)
+      expect(response).to redirect_to imap_mails_path
     end
 
-    it 'raises error if given mailbox is invalid' do
+    it 'returns inbox if given mailbox is invalid' do
+      # sign in
+      sign_in(top_leader)
 
+      # mock imap_connector
+      expect(controller).to receive(:imap).and_return(imap_connector)
+
+      expect(imap_connector).to receive(:move_by_uid).with(42, 'inbox', 'failed')
+
+      patch :create, params: { mailbox: :failed, ids: '42', mail_dst: :invalid }
+
+      expect(flash[:notice]).to include 'Mail(s) erfolgreich verschoben'
+      expect(response).to have_http_status(:found)
+      expect(response.location).to eq('http://test.host/mailing_lists/imap_mails/inbox')
     end
 
     it 'displays flash notice if mail server not reachable' do
@@ -60,10 +62,10 @@ describe MailingLists::ImapMailsMoveController do
 
       expect(imap_connector)
         .to receive(:move_by_uid)
-        .with(42, :inbox, :inbox)
+        .with(42, 'inbox', 'failed')
         .and_raise(Net::IMAP::NoResponseError, ImapErrorDataDouble)
 
-      patch :create, params: { mailbox: 'inbox', ids: '42' }
+      patch :create, params: { mailbox: :inbox, ids: '42', mail_dst: :failed }
 
       expect(response).to have_http_status(:redirect)
 
@@ -72,7 +74,7 @@ describe MailingLists::ImapMailsMoveController do
       expect(mails.count).to eq(0)
       expect(flash[:notice])
         .to eq('Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut')
-    end 
+    end
 
     it 'does not allow non-admins to move mails' do
       sign_in(people(:bottom_member))
@@ -82,8 +84,6 @@ describe MailingLists::ImapMailsMoveController do
     end
 
     # bereits gelöschtes Email sollte nicht verschoben werden können
-    #
-    # checken ob mailserver aktiv ist.
 
   end
 

@@ -7,6 +7,8 @@
 
 include MailingLists::ImapMails
 
+require 'net/imap'
+
 class MailingLists::ImapMailsMoveController < ApplicationController
 
   before_action :authorize_action
@@ -14,11 +16,14 @@ class MailingLists::ImapMailsMoveController < ApplicationController
   helper_method :mails
 
   def create
+    raise mailbox_error unless param_from_mailbox != param_dst_mailbox
+
     perform_imap do
       list_param(:ids).each do |id|
         imap.move_by_uid id.to_i, param_from_mailbox, param_dst_mailbox
       end
     end
+
     redirect_to imap_mails_path(mailbox: mailbox), notice: moved_flash_message
   end
 
@@ -41,7 +46,7 @@ class MailingLists::ImapMailsMoveController < ApplicationController
   end
 
   def param_from_mailbox
-    validated_mailbox(:from)
+    validated_mailbox(:mailbox)
   end
 
   def validated_mailbox(mailbox_sym = :mailbox)

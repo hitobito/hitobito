@@ -71,6 +71,49 @@ describe Events::CoursesController, type: :controller do
     end
   end
 
+  context 'course category filters' do
+
+    let(:navigation) { dom.find('.nav-left-section.active ul.nav-left-list') }
+    let(:slk_ev) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk), maximum_participants: 20, state: 'Geplant') }
+    let(:glk_ev) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:glk), maximum_participants: 20) }
+
+    context 'no course categories defined' do
+      it 'displays nothing if there are no filtered courses' do
+        get :index
+        expect(navigation.all('li').size).to eq 0
+      end
+
+      it 'displays only course kinds' do
+        set_start_dates(slk_ev, '2010-02-2')
+        set_start_dates(glk_ev, '2010-01-2')
+        get :index
+        expect(navigation.all('li').size).to eq 2
+      end
+    end
+
+    context 'course categories defined' do
+      let!(:category) { Fabricate(:event_kind_category, label: 'Vorbasiskurse', kinds: [event_kinds(:glk)]) }
+
+      it 'displays course categories' do
+        get :index
+        expect(navigation.all('li').size).to eq 1
+        expect(navigation.all('li')[0].text.strip).to eq 'Vorbasiskurse'
+        expect(navigation.all('li a')[0][:href]).to eq list_courses_path(category: category.id, group_id: top_layer.id)
+      end
+
+      it 'displays available course kinds when filtering by course category' do
+        set_start_dates(slk_ev, '2010-02-2')
+        set_start_dates(glk_ev, '2010-01-2')
+
+        get :index, params: { category: category.id }
+        expect(navigation.all('li ul li').size).to eq 1
+        expect(navigation.all('li ul li')[0].text.strip).to eq 'Gruppenleiterkurs'
+        expect(navigation.all('li ul li a')[0][:href]).to eq list_courses_path(category: category.id, group_id: top_layer.id, anchor: 'Gruppenleiterkurs')
+      end
+    end
+
+  end
+
   context 'courses content' do
     let(:slk) { event_kinds(:slk) }
     let(:main) { dom.find('#main') }

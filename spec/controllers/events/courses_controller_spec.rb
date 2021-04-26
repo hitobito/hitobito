@@ -17,7 +17,7 @@ describe Events::CoursesController do
 
   context 'filters by date' do
 
-    it 'defaults to courses a year from today' do
+    it 'defaults to courses within a year from today' do
       get :index
       expect(assigns(:since_date)).to eq '01.01.2020'
       expect(assigns(:until_date)).to eq '01.01.2021'
@@ -50,7 +50,7 @@ describe Events::CoursesController do
     end
   end
 
-  context 'filter per group' do
+  context 'filters per group' do
     before { sign_in(people(:top_leader)) }
 
     it 'defaults to layer of primary group' do

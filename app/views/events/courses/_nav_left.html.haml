@@ -2,12 +2,13 @@
   - if kind_used?
     - if kind_categories_used?
       - @categories.each do |category|
-        %li= link_to(category.to_s, set_filter(category: category.id), data: { turbolinks: false })
+        %li
+          = link_to(category.to_s, set_filter(category: category.id), data: { turbolinks: false })
 
-        - if @kind_category_id == category.id
-          %ul
-            - category.kinds.each do |kind|
-              %li= link_to(kind.label, set_filter(category: category.id, anchor: CGI.escape(kind.label)), data: { turbolinks: false })
+          - if @kind_category_id == category.id
+            %ul
+              - category.kinds.each do |kind|
+                %li= link_to(kind.label, set_filter(category: category.id, anchor: CGI.escape(kind.label)), data: { turbolinks: false })
     - else
       - @grouped_events.keys.each do |kind|
         %li= link_to(kind, "##{CGI.escape(kind)}", data: { turbolinks: false })

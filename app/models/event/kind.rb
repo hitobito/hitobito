@@ -14,7 +14,7 @@
 #  updated_at             :datetime
 #  deleted_at             :datetime
 #  minimum_age            :integer
-#  event_kind_category_id :integer
+#  kind_category_id       :integer
 #
 
 class Event::Kind < ActiveRecord::Base

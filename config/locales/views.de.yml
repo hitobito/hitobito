@@ -270,6 +270,7 @@ de:
     lists:
       courses:
         title: 'Verfügbare Kurse'
+        no_category: Andere Kurse
         explanation: 'Hier werden Kurse deiner Gruppe, sowie deren Übergruppen angezeigt. Andere Kurse findest du bei der organisierenden Gruppe.'
         csv_export_button: 'CSV Export'
         ical_export_button: 'Kalender Export'

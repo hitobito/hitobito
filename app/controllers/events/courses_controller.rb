@@ -27,6 +27,7 @@ class Events::CoursesController < ApplicationController
   def prepare_sidebar
     @grouped_events = sorted(grouped(limited_courses_scope, course_grouping))
     @categories = Event::KindCategory.list
+    @kinds_without_category = Event::Kind.where(kind_category_id: nil)
   end
 
   def sorted(courses)

@@ -7,7 +7,7 @@
 
 class Event::KindCategory < ActiveRecord::Base
 
-  include Paranoia::Globalized
+  include Globalized
   translates :label
 
   ### ASSOCIATIONS
@@ -25,11 +25,6 @@ class Event::KindCategory < ActiveRecord::Base
 
   def to_s(_format = :default)
     label
-  end
-
-  # Soft destroy if events exist, otherwise hard destroy
-  def destroy
-    really_destroy!
   end
 
 end

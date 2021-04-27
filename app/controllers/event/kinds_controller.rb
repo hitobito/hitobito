@@ -21,9 +21,11 @@ class Event::KindsController < SimpleCrudController
                             }
                           }]
 
-  self.sort_mappings = { label:         'event_kind_translations.label',
-                         short_name:    'event_kind_translations.short_name',
-                         kind_category: 'event_kind_category_translations.label' }
+  self.sort_mappings = {
+    label: 'event_kind_translations.label',
+    short_name: 'event_kind_translations.short_name',
+    kind_category: 'event_kind_category_translations.label'
+  }
 
   before_render_form :load_assocations
 

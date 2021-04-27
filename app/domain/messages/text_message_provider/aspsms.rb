@@ -28,6 +28,7 @@ module Messages
         params[:Originator] = @config.originator
         params[:MessageText] = text[0..MAX_CHARS - 1]
         params[:Recipients] = recipients[0..MAX_RECIPIENTS - 1]
+        params[:AffiliateID] = affiliate_id if affiliate_id.present?
         response = RestClient.post(SEND_URL, params.to_json)
         result(response)
       end
@@ -75,6 +76,10 @@ module Messages
       def default_params
         { UserName: @config.username,
           Password: @config.password }
+      end
+
+      def affiliate_id
+        '259956' # Hardcoded Puzzle affiliate id. Self-hosted wagons can override this.
       end
 
     end

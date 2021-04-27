@@ -19,7 +19,7 @@ module Dropdown
       def init_items
         add_item('Alle Gruppen', template.list_courses_path)
         Group.course_offerers.each do |group|
-          link = template.list_courses_path(group_id: group.id)
+          link = template.set_filter(group_id: group.id)
           add_item(group.name, link)
         end
       end

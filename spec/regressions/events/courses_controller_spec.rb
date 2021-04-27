@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2021, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -69,6 +69,61 @@ describe Events::CoursesController, type: :controller do
       expect(form.all('input.date')[0][:value]).to eq '22.04.2021'
       expect(form.all('input.date')[1][:value]).to eq '21.04.2022'
     end
+  end
+
+  context 'course category filters' do
+
+    let(:navigation) { dom.find('.nav-left-section.active ul.nav-left-list') }
+    let(:slk_ev) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk), maximum_participants: 20, state: 'Geplant') }
+    let(:glk_ev) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:glk), maximum_participants: 20) }
+
+    context 'no course categories defined' do
+      it 'displays nothing if there are no filtered courses' do
+        get :index
+        expect(navigation.all('li').size).to eq 0
+      end
+
+      it 'displays only course kinds' do
+        set_start_dates(slk_ev, '2010-02-2')
+        set_start_dates(glk_ev, '2010-01-2')
+        get :index
+        expect(navigation.all('li').size).to eq 2
+      end
+    end
+
+    context 'course categories defined' do
+      let!(:category) { Fabricate(:event_kind_category, label: 'Vorbasiskurse', kinds: [event_kinds(:glk)]) }
+
+      it 'displays course categories' do
+        get :index
+        expect(navigation.all('li').size).to eq 2
+        expect(navigation.all('li')[0].text.strip).to eq 'Vorbasiskurse'
+        expect(navigation.all('li a')[0][:href]).to eq list_courses_path(category: category.id, group_id: top_layer.id)
+        expect(navigation.all('li')[1].text.strip).to eq 'Andere Kurse'
+        expect(navigation.all('li a')[1][:href]).to eq list_courses_path(category: 0, group_id: top_layer.id)
+      end
+
+      it 'displays available course kinds when filtering by course category' do
+        set_start_dates(slk_ev, '2010-02-2')
+        set_start_dates(glk_ev, '2010-01-2')
+
+        get :index, params: { category: category.id }
+        expect(navigation.all('li ul li').size).to eq 1
+        expect(navigation.all('li ul li')[0].text.strip).to eq 'Gruppenleiterkurs'
+        expect(navigation.all('li ul li a')[0][:href]).to eq list_courses_path(category: category.id, group_id: top_layer.id, anchor: 'Gruppenleiterkurs')
+      end
+
+      it 'displays other course kinds when filtering for kinds without category' do
+        set_start_dates(slk_ev, '2010-02-2')
+        set_start_dates(glk_ev, '2010-01-2')
+
+        get :index, params: { category: 0 }
+        expect(navigation.all('li ul li').size).to eq 3
+        expect(navigation.all('li ul li')[1].text.strip).to eq 'Scharleiterkurs'
+        expect(navigation.all('li ul li a')[1][:href]).to eq list_courses_path(category: 0, group_id: top_layer.id, anchor: 'Scharleiterkurs')
+      end
+    end
+
   end
 
   context 'courses content' do

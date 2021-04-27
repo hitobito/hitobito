@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2021, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -15,9 +15,9 @@ describe Events::CoursesController do
   end
   let(:person) { people(:bottom_member) }
 
-  context 'filters by date' do
+  context 'filters by date, it' do
 
-    it 'defaults to courses a year from today' do
+    it 'defaults to courses within a year from today' do
       get :index
       expect(assigns(:since_date)).to eq '01.01.2020'
       expect(assigns(:until_date)).to eq '01.01.2021'
@@ -50,7 +50,7 @@ describe Events::CoursesController do
     end
   end
 
-  context 'filter per group' do
+  context 'filters per group, it' do
     before { sign_in(people(:top_leader)) }
 
     it 'defaults to layer of primary group' do
@@ -80,7 +80,7 @@ describe Events::CoursesController do
     end
   end
 
-  context 'exports to csv' do
+  context 'exports to csv, it' do
     let(:rows) { response.body.split("\n") }
     let(:course) { Fabricate(:course) }
     before { Fabricate(:event_date, event: course)  }
@@ -94,7 +94,7 @@ describe Events::CoursesController do
     end
   end
 
-  context 'without kind_id' do
+  context 'without kind_id, it' do
     before { Event::Course.used_attributes -= [:kind_id] }
 
     it 'groups by month' do

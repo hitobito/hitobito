@@ -28,4 +28,15 @@ module FilterHelper
                                                         params[attr])
     direct_filter(attr, label) { select_tag(attr, select_options, options) }
   end
+
+  def set_filter(filter_params = {})
+    params.to_unsafe_h.merge(filter_params)
+  end
+
+  def hidden_filter_inputs(f, except:)
+    except << :controller << :action << :locale << :user_token << :user_email << :token
+    safe_join(params.to_unsafe_h.except(*except).map do |param, value|
+      f.hidden_field param, value: value, name: param
+    end)
+  end
 end

@@ -8,4 +8,6 @@
       %span.add-on= icon(:'calendar-alt')
       = f.text_field(:until, value: until_date, class: 'date span2')
 
-    = submit_button(f, safe_join([icon(:search), ' ', t('global.button.search')]))
+    = hidden_filter_inputs(f, except: [:filter])
+
+    = submit_button(f, safe_join([icon(:search), ' ', t('global.button.search')]), name: nil)

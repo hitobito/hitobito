@@ -56,9 +56,9 @@ class FilteredList
   def chain_scopes(scope, *filters)
     filters.reduce(scope) do |result, filter|
       case filter
-      when Symbol then send(filter, result) || result
-      when Class then filter.new(user, params, options, result).to_scope.presence || result
-      else raise "Filter-Type #{filter.inspect} not handled"
+      when Symbol then send(filter, result)
+      when Class then filter.new(user, params, options, result).to_scope
+      else raise "Filter type #{filter.inspect} not handled"
       end
     end
   end

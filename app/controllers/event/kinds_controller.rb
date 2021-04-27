@@ -7,7 +7,7 @@
 
 class Event::KindsController < SimpleCrudController
 
-  self.permitted_attrs = [:label, :short_name, :minimum_age,
+  self.permitted_attrs = [:label, :short_name, :kind_category_id, :minimum_age,
                           :general_information, :application_conditions,
                           precondition_qualification_kinds: [{ qualification_kind_ids: [] }],
                           qualification_kinds: {
@@ -21,16 +21,18 @@ class Event::KindsController < SimpleCrudController
                             }
                           }]
 
-  self.sort_mappings = { label:      'event_kind_translations.label',
-                         short_name: 'event_kind_translations.short_name' }
+  self.sort_mappings = {
+    label: 'event_kind_translations.label',
+    short_name: 'event_kind_translations.short_name',
+    kind_category: 'event_kind_category_translations.label'
+  }
 
   before_render_form :load_assocations
-
 
   private
 
   def list_entries
-    super.list
+    super.includes(kind_category: :translations).list
   end
 
   def load_assocations

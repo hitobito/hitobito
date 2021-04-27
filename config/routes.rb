@@ -258,6 +258,7 @@ Hitobito::Application.routes.draw do
     get 'query' => 'full_text#query'
 
     resources :event_kinds, module: 'event', controller: 'kinds'
+    resources :event_kind_categories, module: 'event', controller: 'kind_categories'
 
     resources :qualification_kinds
     resources :tags, except: :show do

@@ -35,4 +35,8 @@ module EventKindsHelper
     end
   end
 
+  def kind_categories_used?
+    Event::KindCategory.exists?
+  end
+
 end

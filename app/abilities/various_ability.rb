@@ -34,6 +34,11 @@ class VariousAbility < AbilityDsl::Base
       class_side(:index).if_admin
       permission(:admin).may(:manage).all
     end
+
+    on(Event::KindCategory) do
+      class_side(:index).if_admin
+      permission(:admin).may(:manage).all
+    end
   end
 
   def own

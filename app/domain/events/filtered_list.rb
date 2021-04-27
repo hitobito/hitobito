@@ -17,10 +17,12 @@ module Events
     end
 
     def filter_scopes
-      [
+      filters = [
         Events::Filter::DateRange,
         :list
       ]
+      filters.prepend(Events::Filter::CourseKindCategory) if kind_used?
+      filters
     end
 
     private

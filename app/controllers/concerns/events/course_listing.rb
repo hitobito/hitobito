@@ -10,7 +10,7 @@ module Events::CourseListing
 
   included do
     attr_reader :group_id, :since_date, :until_date
-    helper_method :group_id, :since_date, :until_date
+    helper_method :course_list_title, :group_id, :since_date, :until_date
   end
 
   private
@@ -18,6 +18,14 @@ module Events::CourseListing
   def set_filter_vars
     set_group_vars
     set_date_vars
+    set_kind_category_vars
+  end
+
+  def course_list_title
+    @course_list_title ||= begin
+                 return I18n.t('event.lists.courses.no_category') if @kind_category_id == '0'
+                 Event::KindCategory.find_by(id: @kind_category_id)&.label
+               end
   end
 
   def set_group_vars
@@ -40,6 +48,10 @@ module Events::CourseListing
     Date.parse(date)
   rescue
     default
+  end
+
+  def set_kind_category_vars
+    @kind_category_id = params.dig(:category)
   end
 
   def default_user_course_group

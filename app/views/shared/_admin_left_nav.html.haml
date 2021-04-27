@@ -17,6 +17,8 @@
 
   - if can?(:index, Event::Kind)
     = nav Event::Kind.model_name.human(count: 2), event_kinds_path, %w(event_kinds)
+  - if can?(:index, Event::KindCategory)
+    = nav Event::KindCategory.model_name.human(count: 2), event_kind_categories_path, %w(event_kind_categories)
   - if can?(:index, QualificationKind)
     = nav QualificationKind.model_name.human(count: 2), qualification_kinds_path, %w(qualification_kinds)
   - if can?(:index, Oauth::Application)

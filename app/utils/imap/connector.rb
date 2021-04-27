@@ -26,7 +26,6 @@ class Imap::Connector
   def delete_by_uid(uid, mailbox)
     perform do
       select_mailbox(mailbox)
-      # imap.uid_copy(uid, 'TRASH')
       @imap.uid_store(uid, '+FLAGS', [:Deleted])
       @imap.expunge
     end

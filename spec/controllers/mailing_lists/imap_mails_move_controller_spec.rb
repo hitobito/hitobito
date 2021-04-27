@@ -23,15 +23,15 @@ describe MailingLists::ImapMailsMoveController do
 
   context 'PATCH #create' do
     it 'moves Mail to given mailbox' do
-      # sign in
       sign_in(top_leader)
 
       # mock imap_connector
-      expect(controller).to receive(:imap).and_return(imap_connector)
+      expect(controller).to receive(:imap).and_return(imap_connector).twice
 
-      expect(imap_connector).to receive(:move_by_uid).with(42, 'inbox', 'failed')
+      expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
+      expect(imap_connector).to receive(:move_by_uid).with(43, :inbox, :failed)
 
-      patch :create, params: { mailbox: 'inbox', ids: '42', mail_dst: 'failed' }
+      patch :create, params: { mailbox: 'inbox', ids: '42,43', dst_mailbox: 'failed' }
 
       expect(flash[:notice]).to include 'Mail(s) erfolgreich verschoben'
       expect(response).to have_http_status(:found)
@@ -39,19 +39,25 @@ describe MailingLists::ImapMailsMoveController do
     end
 
     it 'returns inbox if given mailbox is invalid' do
-      # sign in
       sign_in(top_leader)
 
       # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
 
-      expect(imap_connector).to receive(:move_by_uid).with(42, 'inbox', 'failed')
+      expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :inbox)
 
-      patch :create, params: { mailbox: :failed, ids: '42', mail_dst: :invalid }
+      patch :create, params: { mailbox: 'inbox', ids: '42', dst_mailbox: 'invalid_mailbox' }
 
       expect(flash[:notice]).to include 'Mail(s) erfolgreich verschoben'
       expect(response).to have_http_status(:found)
       expect(response.location).to eq('http://test.host/mailing_lists/imap_mails/inbox')
+    end
+
+    it 'does not allow non-admins to move mails' do
+      sign_in(people(:bottom_member))
+      expect do
+        patch :create, params: { mailbox: 'inbox', ids: '42' }
+      end.to raise_error(CanCan::AccessDenied)
     end
 
     it 'displays flash notice if mail server not reachable' do
@@ -62,28 +68,27 @@ describe MailingLists::ImapMailsMoveController do
 
       expect(imap_connector)
         .to receive(:move_by_uid)
-        .with(42, 'inbox', 'failed')
+        .with(42, :inbox, :failed)
         .and_raise(Net::IMAP::NoResponseError, ImapErrorDataDouble)
 
-      patch :create, params: { mailbox: :inbox, ids: '42', mail_dst: :failed }
+      patch :create, params: { mailbox: 'inbox', ids: '42', dst_mailbox: 'failed' }
 
       expect(response).to have_http_status(:redirect)
 
-      mails = controller.view_context.mails
-
-      expect(mails.count).to eq(0)
       expect(flash[:notice])
         .to eq('Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut')
     end
 
-    it 'does not allow non-admins to move mails' do
-      sign_in(people(:bottom_member))
-      expect do
-        patch :create, params: { mailbox: 'inbox', ids: '42' }
-      end.to raise_error(CanCan::AccessDenied)
-    end
+    it 'cannot move mails from failed mailbox' do
+      sign_in(top_leader)
 
-    # bereits gelöschtes Email sollte nicht verschoben werden können
+      # mock imap_connector
+      expect(controller).to receive(:imap).and_return(imap_connector).never
+
+      expect do
+        patch :create, params: { mailbox: 'failed', ids: '42', mail_dst: 'inbox' }
+      end.to raise_error('failed mails cannot be moved')
+    end  
 
   end
 

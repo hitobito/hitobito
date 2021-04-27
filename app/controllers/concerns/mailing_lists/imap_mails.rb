@@ -10,13 +10,14 @@ module MailingLists::ImapMails
 
   private
 
-  def mailbox
-    mailbox = params[:mailbox]
+  def mailbox(param_name = :mailbox)
+    mailbox = params[param_name]
+    mailbox = mailbox.to_s.downcase
     mailboxes.include?(mailbox) ? mailbox.to_sym : :inbox
   end
 
-  def mailbox_error
-    raise 'Cannot move mail to same mailbox!'
+  def dst_mailbox
+    mailbox(:dst_mailbox)
   end
 
   def imap
@@ -25,11 +26,6 @@ module MailingLists::ImapMails
 
   def mailboxes
     Imap::Connector::MAILBOXES.keys
-  end
-
-  def valid_mailbox(mailbox)
-    mailbox = mailbox.to_s.downcase
-    mailboxes.include?(mailbox) ? mailbox : 'inbox'
   end
 
   def perform_imap

@@ -16,7 +16,7 @@ module FilterNavigation::MailingLists
     end
 
     def active_label
-      label_for_filter(valid_mailbox(template.params.fetch(:mailbox)))
+      label_for_filter(template.mailbox)
     end
 
     private

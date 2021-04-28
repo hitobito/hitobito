@@ -5,8 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# encoding:  utf-8
-
 require 'spec_helper'
 
 describe Events::CoursesController, type: :controller do
@@ -14,7 +12,7 @@ describe Events::CoursesController, type: :controller do
   render_views
 
   before do
-    travel_to Time.zone.local(2010,1,1,12)
+    travel_to Time.zone.local(2010, 1, 1, 12)
     sign_in(people(:top_leader))
   end
 
@@ -153,7 +151,7 @@ describe Events::CoursesController, type: :controller do
       expect(main.find('table tr:eq(1) td:eq(1) a').text).to eq 'Eventus'
       expect(main.find('table tr:eq(1) td:eq(1)').text.strip).to eq 'EventusSLK 123 Top'
       expect(main.find('table tr:eq(1) td:eq(1) a')[:href]).to eq group_event_path(slk_ev.groups.first, slk_ev)
-      expect(main.find('table tr:eq(1) td:eq(2)').native.to_xml).to eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
+      expect(main.find('table tr:eq(1) td:eq(2)').native.to_xml).to eq '<td>02.01.2009 <span class="muted"/><br/>02.01.2010 <span class="muted"/><br/>02.01.2010 <span class="muted"/><br/>02.01.2011 <span class="muted"/></td>'
       expect(main.find('table tr:eq(1) td:eq(3)').text).to eq '0 Anmeldungen für 20 Plätze'
       expect(main.find('table tr:eq(1) td:eq(4)').text).to eq 'Geplant'
     end
@@ -165,7 +163,7 @@ describe Events::CoursesController, type: :controller do
       expect(main.find('table tr:eq(1) td:eq(1) a').text).to eq 'Eventus'
       expect(main.find('table tr:eq(1) td:eq(1)').text.strip).to eq 'EventusSLK 123 Top'
       expect(main.find('table tr:eq(1) td:eq(1) a')[:href]).to eq group_event_path(slk_ev.groups.first, slk_ev)
-      expect(main.find('table tr:eq(1) td:eq(2)').native.to_xml).to eq "<td>02.01.2009 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2010 <span class=\"muted\"/><br/>02.01.2011 <span class=\"muted\"/></td>"
+      expect(main.find('table tr:eq(1) td:eq(2)').native.to_xml).to eq '<td>02.01.2009 <span class="muted"/><br/>02.01.2010 <span class="muted"/><br/>02.01.2010 <span class="muted"/><br/>02.01.2011 <span class="muted"/></td>'
       expect(main).to have_no_selector('table tr:eq(2) td:eq(4)')
     end
 

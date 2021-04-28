@@ -67,6 +67,22 @@ module EventsHelper
     Role.types_with_permission(:approve_applications).present?
   end
 
+  def course_states_used?
+    Event::Course.possible_states.present?
+  end
+
+  def course_state_collection
+    Event::Course.possible_states.map { |state| [course_state_translated(state), state] }
+  end
+
+  def course_state_translated(state = nil)
+    if course_states_used? && state
+      t("activerecord.attributes.event/course.states.#{state}")
+    else
+      state
+    end
+  end
+
   def format_training_days(event)
     number_with_precision(event.training_days, precision: 1)
   end

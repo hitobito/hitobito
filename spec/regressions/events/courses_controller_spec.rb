@@ -71,6 +71,16 @@ describe Events::CoursesController, type: :controller do
     end
   end
 
+  context 'state filter' do
+    let(:form) { dom.find('form#course-filter') }
+
+    it 'is not shown because no states are configure in the core' do
+      get :index
+      expect(form).to_not have_css('select#filter_state')
+      expect(form).to_not have_css('select#filter_state option')
+    end
+  end
+
   context 'course category filters' do
 
     let(:navigation) { dom.find('.nav-left-section.active ul.nav-left-list') }

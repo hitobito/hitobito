@@ -55,7 +55,7 @@ describe Events::CoursesController, type: :controller do
 
   context 'date filters' do
     before { get :index }
-    let(:form) { dom.find('form#date-filter') }
+    let(:form) { dom.find('form#course-filter') }
 
     it 'form contains default date fields' do
       expect(form).to have_css('input.date', count: 2)

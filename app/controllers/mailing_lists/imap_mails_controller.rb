@@ -9,7 +9,7 @@ class MailingLists::ImapMailsController < ApplicationController
 
   include MailingLists::ImapMails
 
-  helper_method :mails, :mailbox
+  helper_method :mails, :mailbox, :counts
 
   before_action :authorize_action
 
@@ -39,12 +39,15 @@ class MailingLists::ImapMailsController < ApplicationController
 
   def fetch_mails
     mails = imap.fetch_mails(mailbox)
-    return [] if mails.empty?
 
     mails.sort! { |a, b| a.date.to_i <=> b.date.to_i }
     mails = mails.reverse
 
     Kaminari.paginate_array(mails).page(params[:page].to_i)
+  end
+
+  def counts
+    imap.counts
   end
 
   def destroy_flash_message

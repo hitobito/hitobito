@@ -77,7 +77,7 @@ class Imap::Connector
   def connect
     return if @connected
 
-    @imap = Net::IMAP.new(setting(:address), setting(:port), setting(:enable_ssl))
+    @imap = Net::IMAP.new(setting(:address), setting(:port) || 993, setting(:enable_ssl) || true)
     @imap.login(setting(:user_name), setting(:password))
     @connected = true
   end
@@ -93,7 +93,8 @@ class Imap::Connector
   end
 
   def create_if_missing(mailbox, error)
-    if (MAILBOXES[mailbox] == MAILBOXES[:failed]) && error.response.data.text.include?("Mailbox doesn't exist")
+    if (MAILBOXES[mailbox] == MAILBOXES[:failed]) &&
+        error.response.data.text.include?("Mailbox doesn't exist")
       @imap.create(MAILBOXES[:failed])
       @imap.select(MAILBOXES[:failed])
     else

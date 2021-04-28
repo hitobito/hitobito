@@ -29,10 +29,6 @@ module MailingLists::ImapMailsHelper
                   data: { checkable: true, method: :patch })
   end
 
-  def imap_mails_present?(mails)
-    mails != []
-  end
-
   def imap_mail_subject(mail)
     subject = mail.subject
     if subject.length > 43

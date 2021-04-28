@@ -5,8 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-include MailingLists::ImapMails
-
 module FilterNavigation::MailingLists
   class ImapMails < FilterNavigation::Base
 
@@ -32,7 +30,7 @@ module FilterNavigation::MailingLists
     end
 
     def counts
-      template.instance_variable_get('@counts') || {}
+      template.counts
     end
 
     def label_for_filter(filter)
@@ -41,7 +39,7 @@ module FilterNavigation::MailingLists
     end
 
     def filter_path(name)
-      template.url_for({ mailbox: name.downcase, only_path: true })
+      template.url_for(mailbox: name.downcase, only_path: true)
     end
 
   end

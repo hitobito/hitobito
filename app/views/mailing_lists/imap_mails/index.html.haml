@@ -7,29 +7,25 @@
 - content_for(:filter, FilterNavigation::MailingLists::ImapMails.new(self).to_s)
 
 #main
-  - if imap_mails_present?(mails) || @connected
-    = imap_mail_table(self) do |t|
-      - if not imap_mail_mailbox?(:failed)
-        - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
-          - check_box_tag('ids[]', i.uid, false, data: { multiselect: true })
-
-      - t.col(t('mails.headers.subject')) do |m|
-        - imap_mail_subject(m)
-
-      - t.attr(:sender, t('mails.headers.sender')) do |e|
-        - safe_join([e.sender_name, content_tag(:p, mail_to(e.sender_email))], ' ')
-
-      - t.col(t('mails.headers.preview')) do |m|
-        - imap_mail_body(m)
-
-      - t.col(t('mails.headers.date')) do |m|
-        - imap_mail_date(m)
-
+  = imap_mail_table(self) do |t|
     - if not imap_mail_mailbox?(:failed)
-      = render 'multiselect_actions'
+      - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
+        - check_box_tag('ids[]', i.uid, false, data: { multiselect: true })
 
-    .pagination-bar
-    = paginate mails
+    - t.col(t('mails.headers.subject')) do |m|
+      - imap_mail_subject(m)
 
-  - else
-    = imap_mails_present?(mails) ? t('mails.not_available') : "Mailserver nicht verfügbar. Versuche es später erneut."
+    - t.attr(:sender, t('mails.headers.sender')) do |e|
+      - safe_join([e.sender_name, content_tag(:p, mail_to(e.sender_email))], ' ')
+
+    - t.col(t('mails.headers.preview')) do |m|
+      - imap_mail_body(m)
+
+    - t.col(t('mails.headers.date')) do |m|
+      - imap_mail_date(m)
+
+  - if not imap_mail_mailbox?(:failed)
+    = render 'multiselect_actions'
+
+  .pagination-bar
+  = paginate mails

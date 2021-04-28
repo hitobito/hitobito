@@ -19,6 +19,7 @@ module Events
     def filter_scopes
       filters = [
         Events::Filter::DateRange,
+        Events::Filter::State,
         :list
       ]
       filters.prepend(Events::Filter::CourseKindCategory) if kind_used?

@@ -25,6 +25,7 @@ describe Events::FilteredList do
     expect(subject.filter_scopes).to match_array [
       Events::Filter::DateRange,
       Events::Filter::CourseKindCategory,
+      Events::Filter::State,
       :list
     ]
   end

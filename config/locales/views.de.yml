@@ -943,7 +943,7 @@ de:
     admin: 'Einstellungen'
     admin/event_feed: 'Kalender integrieren'
     admin/oauth_authorizations: 'OAuth-Autorisierungen'
-    mails: 'Abo Mails'
+    imap_mails: 'Abo Mails'
     invoices: 'Rechnungen'
 
   notes:

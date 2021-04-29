@@ -463,24 +463,6 @@ en:
         create: Address was created.
         reset: Address has been updated.
 
-  mails:
-    manage: Manage Mails
-    mailboxes:
-      inbox: Inbox
-      spam: Spam
-      failed: Failed
-    move_to:
-      inbox: Move to Inbox
-      spam: Move to Spam
-      failed: Move to Failed
-    headers:
-      subject: Subject
-      sender: Sender
-      date: Date
-      preview: Preview
-    flash:
-      deleted: Mail successfully deleted
-
   filter_navigation/dropdown:
     additional_views: 'Further views'
   filter_navigation/people:
@@ -797,7 +779,6 @@ en:
     admin: 'Settings'
     admin/event_feed: 'Integrate calendar'
     admin/oauth_authorizations: 'OAuth authentifications'
-    mails: 'Subscription Mails'
     invoices: 'Invoices'
   notes:
     new_note: Add note

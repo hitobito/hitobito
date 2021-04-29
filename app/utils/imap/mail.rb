@@ -9,18 +9,18 @@ require 'net/imap'
 
 class Imap::Mail
 
-  attr_accessor :imap_mail
+  attr_accessor :net_imap_mail
 
   delegate :subject, :sender, to: :envelope
 
-  def self.build(imap_mail)
+  def self.build(net_imap_mail)
     entry = new
-    entry.imap_mail = imap_mail
+    entry.net_imap_mail = net_imap_mail
     entry
   end
 
   def uid
-    @imap_mail.attr['UID']
+    @net_imap_mail.attr['UID']
   end
 
   def date
@@ -36,10 +36,10 @@ class Imap::Mail
   end
 
   def body
-    if @imap_mail.attr['BODYSTRUCTURE'].media_type == 'TEXT'
-      @imap_mail.attr['BODY[TEXT]']
+    if @net_imap_mail.attr['BODYSTRUCTURE'].media_type == 'TEXT'
+      @net_imap_mail.attr['BODY[TEXT]']
     else
-      mail = Mail.read_from_string @imap_mail.attr['RFC822']
+      mail = Mail.read_from_string @net_imap_mail.attr['RFC822']
       mail.text_part.body.to_s
     end
   end
@@ -47,7 +47,7 @@ class Imap::Mail
   private
 
   def envelope
-    @imap_mail.attr['ENVELOPE']
+    @net_imap_mail.attr['ENVELOPE']
   end
 
 end

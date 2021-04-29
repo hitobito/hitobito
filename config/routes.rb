@@ -243,7 +243,7 @@ Hitobito::Application.routes.draw do
 
       resources :service_tokens
 
-    end # resources :groupd
+    end # resources :group
 
     get 'list_courses' => 'event/lists#courses', as: :list_courses
     get 'list_events' => 'event/lists#events', as: :list_events

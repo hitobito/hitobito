@@ -10,8 +10,7 @@ Hitobito::Application.routes.draw do
   get '/healthz/mail', to: 'healthz/mail#show'
 
   use_doorkeeper_openid_connect
-  use_doorkeeper do
-    # we only use tokens and authorizations
+  use_doorkeeper do # we only use tokens and authorizations
     skip_controllers :applications, :token_info, :authorized_applications
   end
 
@@ -30,6 +29,7 @@ Hitobito::Application.routes.draw do
     %w(404 500 503).each do |code|
       get code, to: 'errors#show', code: code
     end
+
 
     get '/addresses/query' => 'addresses#query'
 
@@ -116,9 +116,9 @@ Hitobito::Application.routes.draw do
 
       resource :role_list, only: [:destroy, :create, :new] do
         get 'deletable' => 'role_lists#deletable'
-        get 'move' => 'role_lists#move'
-        get 'movable' => 'role_lists#movable'
-        put 'move' => 'role_lists#update'
+        get 'move'      => 'role_lists#move'
+        get 'movable'   => 'role_lists#movable'
+        put 'move'      => 'role_lists#update'
       end
       resources :roles, except: [:index, :show] do
         collection do
@@ -131,6 +131,7 @@ Hitobito::Application.routes.draw do
 
       resources :people_filters, only: [:new, :create, :edit, :update, :destroy]
       get 'people_filters' => 'people_filters#new' # route required for language switch
+
 
       get 'deleted_people' => 'group/deleted_people#index'
 
@@ -155,23 +156,23 @@ Hitobito::Application.routes.draw do
         scope module: 'event' do
 
           member do
-            get 'register' => 'register#index'
+            get  'register' => 'register#index'
             post 'register' => 'register#check'
-            put 'register' => 'register#register'
+            put  'register' => 'register#register'
           end
 
           resources :application_market, only: :index do
             member do
-              put 'waiting_list' => 'application_market#put_on_waiting_list'
+              put    'waiting_list' => 'application_market#put_on_waiting_list'
               delete 'waiting_list' => 'application_market#remove_from_waiting_list'
-              put 'participant' => 'application_market#add_participant'
+              put    'participant' => 'application_market#add_participant'
               delete 'participant' => 'application_market#remove_participant'
             end
           end
 
           resources :applications, only: [] do
             member do
-              put :approve
+              put    :approve
               delete :reject
             end
           end
@@ -237,7 +238,7 @@ Hitobito::Application.routes.draw do
           post :define_mapping
           post :preview
           get 'define_mapping' => 'person/csv_imports#new' # route required for language switch
-          get 'preview' => 'person/csv_imports#new' # route required for language switch
+          get 'preview'        => 'person/csv_imports#new' # route required for language switch
         end
       end
 
@@ -305,6 +306,7 @@ Hitobito::Application.routes.draw do
     resources :assignments, only: [:new, :create]
     resources :table_displays, only: [:create]
     resources :messages, only: [:show] do
+      resource :preview, only: [:show], module: :messages
       resource :dispatch, only: [:create, :show], module: :messages
     end
   end # scope locale

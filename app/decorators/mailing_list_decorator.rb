@@ -53,5 +53,10 @@ class MailingListDecorator < ApplicationDecorator
     html << h.tag(:br)
   end
 
+  def mailchimp_synchronization_flags
+    %w(first_name last_name gender nickname).select { |key| self["mailchimp_sync_#{key}"] }
+                                            .map { |key| Person.human_attribute_name(key) }
+                                            .join(', ')
+  end
 
 end

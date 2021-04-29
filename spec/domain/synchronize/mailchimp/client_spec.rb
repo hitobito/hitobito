@@ -8,7 +8,7 @@ require 'spec_helper'
 describe Synchronize::Mailchimp::Client do
   let(:mailing_list) { MailingList.new(mailchimp_api_key: '1234567890d66d25cc5c9285ab5a5552-us12', mailchimp_list_id: 2) }
   let(:top_leader)   { people(:top_leader) }
-  let(:client)       { described_class.new(mailing_list) }
+  let(:client)       { described_class.new(mailing_list, merge_fields: Synchronize::Mailchimp::Synchronizator.merge_fields) }
 
 
   def stub_collection(path, offset, count = client.count, body: )
@@ -58,15 +58,6 @@ describe Synchronize::Mailchimp::Client do
       expect(body[:merge_fields][:LNAME]).to eq 'leader'
     end
 
-    it 'handles nil values' do
-      top_leader.update(first_name: nil, last_name: nil, email: ' top@example.com ')
-      body = client.subscriber_body(top_leader)
-
-      expect(body[:email_address]).to eq 'top@example.com'
-      expect(body[:merge_fields][:FNAME]).to eq ''
-      expect(body[:merge_fields][:LNAME]).to eq ''
-    end
-
     context 'merge_fields' do
       let(:merge_field) {
         [ 'Gender', 'dropdown', { choices: %w(m) },  ->(p) { p.gender } ]
@@ -106,6 +97,30 @@ describe Synchronize::Mailchimp::Client do
         top_leader.update!(company: true, company_name: 'acme')
         body = client.subscriber_body(top_leader)
         expect(body[:company]).to eq true
+      end
+    end
+
+    context 'synchronization flags' do
+      before { top_leader.update(gender: 'w', nickname: 'Nick') }
+      subject { client.subscriber_body(top_leader)[:merge_fields] }
+
+      it 'includes all fields by default' do
+        expect(subject).to have_key :FNAME
+        expect(subject).to have_key :LNAME
+        expect(subject).to have_key :NICKNAME
+        expect(subject).to have_key :GENDER
+      end
+
+      it 'excludes when flags are set to false' do
+        mailing_list.mailchimp_sync_first_name = false
+        mailing_list.mailchimp_sync_last_name = false
+        mailing_list.mailchimp_sync_nickname = false
+        mailing_list.mailchimp_sync_gender = false
+
+        expect(subject).not_to have_key :FNAME
+        expect(subject).not_to have_key :LNAME
+        expect(subject).not_to have_key :NICKNAME
+        expect(subject).not_to have_key :GENDER
       end
     end
   end

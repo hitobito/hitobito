@@ -15,7 +15,9 @@ module Synchronize
       def initialize(mailing_list, member_fields: [], merge_fields: [], count: 50, debug: false)
         @list_id = mailing_list.mailchimp_list_id
         @count   = count
-        @merge_fields = merge_fields
+        @merge_fields = merge_fields.select do |_, _, options, _|
+          !options.key?(:flag_name) || mailing_list["mailchimp_sync_#{options[:flag_name]}"]
+        end
         @member_fields = member_fields
         @max_attempts = Settings.mailchimp.max_attempts
 
@@ -145,11 +147,8 @@ module Synchronize
 
       def subscriber_body(person)
         {
-          email_address: person.email.strip,
-          merge_fields: {
-            FNAME: person.first_name.to_s.strip,
-            LNAME: person.last_name.to_s.strip,
-          }.merge(merge_field_values(person))
+          email_address: person.email.to_s.strip,
+          merge_fields: merge_field_values(person)
         }.merge(member_field_values(person))
       end
 

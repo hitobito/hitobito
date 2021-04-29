@@ -42,6 +42,11 @@
     = f.labeled_input_fields(:mailchimp_list_id, help: t('.help_mailchimp_sync'))
     = f.labeled_input_fields(:mailchimp_api_key)
     = f.labeled_boolean_field(:mailchimp_include_additional_emails)
+    = f.labeled(:mailchimp_synchronization_flags) do
+      = f.boolean_field(:mailchimp_sync_first_name, caption: Person.human_attribute_name('first_name'))
+      = f.boolean_field(:mailchimp_sync_last_name, caption: Person.human_attribute_name('last_name'))
+      = f.boolean_field(:mailchimp_sync_nickname, caption: Person.human_attribute_name('nickname'))
+      = f.boolean_field(:mailchimp_sync_gender, caption: Person.human_attribute_name('gender'))
 
   %fieldset
     = f.indented do

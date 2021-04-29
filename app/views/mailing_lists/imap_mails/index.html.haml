@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title t('navigation.mails')
+- title t('mailing_lists.imap_mails.manage')
 - content_for(:filter, FilterNavigation::MailingLists::ImapMails.new(self).to_s)
 
 #main
@@ -12,16 +12,16 @@
       - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
         - check_box_tag('ids[]', i.uid, false, data: { multiselect: true })
 
-    - t.col(t('mails.headers.subject')) do |m|
+    - t.col(t('mailing_lists.imap_mails.headers.subject')) do |m|
       - imap_mail_subject(m)
 
-    - t.attr(:sender, t('mails.headers.sender')) do |e|
+    - t.attr(:sender, t('mailing_lists.imap_mails.headers.sender')) do |e|
       - safe_join([e.sender_name, content_tag(:p, mail_to(e.sender_email))], ' ')
 
-    - t.col(t('mails.headers.preview')) do |m|
+    - t.col(t('mailing_lists.imap_mails.headers.preview')) do |m|
       - imap_mail_body(m)
 
-    - t.col(t('mails.headers.date')) do |m|
+    - t.col(t('mailing_lists.imap_mails.headers.date')) do |m|
       - imap_mail_date(m)
 
   - if not imap_mail_mailbox?(:failed)

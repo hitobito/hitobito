@@ -35,7 +35,7 @@ module FilterNavigation::MailingLists
 
     def label_for_filter(filter)
       count_str = counts[filter.to_sym].to_s
-      template.t("mails.mailboxes.#{filter.downcase}") + " (#{count_str})"
+      template.t("mailing_lists.imap_mails.mailboxes.#{filter.downcase}") + " (#{count_str})"
     end
 
     def filter_path(name)

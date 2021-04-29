@@ -19,12 +19,10 @@ module MailingLists::ImapMailsHelper
   end
 
   def imap_mail_move_button(to)
-    if mailbox == to.to_s
-      return
-    end
+    return if to == mailbox
 
-    action_button(t(('mails.move_to.' + to.to_s).to_sym),
-                  imap_mails_move_path(mail_dst: to),
+    action_button(t(('mailing_lists.imap_mails.move_to.' + to.to_s).to_sym),
+                  imap_mails_move_path(dst_mailbox: to),
                   :'arrow-right',
                   data: { checkable: true, method: :patch })
   end

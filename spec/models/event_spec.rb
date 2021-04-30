@@ -209,8 +209,7 @@ describe Event do
     end
   end
 
-  context 'finders' do
-
+  context 'finders and scopes' do
     context '.in_year' do
       context 'one date' do
         before { set_start_finish(event, '2000-01-02') }
@@ -331,6 +330,23 @@ describe Event do
 
       end
 
+    end
+
+    context 'places_available' do
+      let(:where_condition) do
+        described_class.places_available.
+          to_sql.sub(/.*(WHERE.*)$/, '\1')
+      end
+
+      it 'checks the maximum_participants' do
+        expect(where_condition)
+          .to match(/COALESCE\(maximum_participants, 0\) = 0/)
+      end
+
+      it 'compares the participant_count to the maximum_participants' do
+        expect(where_condition)
+          .to match('participant_count < maximum_participants')
+      end
     end
   end
 

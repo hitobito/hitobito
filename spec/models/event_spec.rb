@@ -281,7 +281,6 @@ describe Event do
     end
 
     context 'between' do
-
       it 'finds nothing if params nil' do
         event.dates.create(start_at: 1.year.ago, finish_at: 1.year.from_now)
         expect(Event.between(nil, nil)).to be_blank
@@ -470,7 +469,7 @@ describe Event do
   context 'participant and application counts' do
     def create_participation(prio, attrs = { active: true })
       participation_attrs = prio == :prio1 ? { event: event } : { event: another_event }
-      application_attrs = prio == :prio1 ? { priority_1: event } : { priority_1: another_event, priority_2: event }
+      application_attrs = prio == :prio1 ? { priority_1: event } : { priority_1: another_event, priority_2: event } # rubocop:disable Metrics/LineLength
 
       participation = Fabricate(:event_participation, participation_attrs.merge(attrs))
       participation.create_application!(application_attrs)

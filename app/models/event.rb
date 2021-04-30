@@ -348,6 +348,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     visible = self[:globally_visible]
 
     return Settings.event.globally_visible_by_default if visible.nil?
+
     visible
   end
 

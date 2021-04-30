@@ -26,6 +26,7 @@ describe Events::FilteredList do
       Events::Filter::DateRange,
       Events::Filter::CourseKindCategory,
       Events::Filter::State,
+      Events::Filter::PlacesAvailable,
       :list
     ]
   end

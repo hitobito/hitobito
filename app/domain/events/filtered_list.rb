@@ -20,6 +20,7 @@ module Events
       filters = [
         Events::Filter::DateRange,
         Events::Filter::State,
+        Events::Filter::PlacesAvailable,
         :list
       ]
       filters.prepend(Events::Filter::CourseKindCategory) if kind_used?

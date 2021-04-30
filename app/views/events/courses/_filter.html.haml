@@ -13,6 +13,10 @@
         %span.add-on= Event::Course.human_attribute_name(:state)
         = f.select(:state, course_state_collection, prompt: true)
 
+    .input-prepend{style: 'margin-right: 0.5rem'}
+      %span.add-on= Event::Application.model_name.human
+      = f.select(:places_available, [['Alle', 0], ['nur mit verfügbaren Plätzen', 1]], prompt: true)
+
     = hidden_filter_inputs(f, except: [:filter])
 
     = submit_button(f, safe_join([icon(:search), ' ', t('global.button.search')]), name: nil)

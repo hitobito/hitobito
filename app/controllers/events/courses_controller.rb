@@ -17,15 +17,15 @@ class Events::CoursesController < ApplicationController
 
     respond_to do |format|
       format.html { prepare_sidebar }
-      format.csv { render_tabular(:csv, limited_courses_scope) }
-      format.xlsx { render_tabular(:xlsx, limited_courses_scope) }
+      format.csv { render_tabular(:csv, courses_scope) }
+      format.xlsx { render_tabular(:xlsx, courses_scope) }
     end
   end
 
   private
 
   def prepare_sidebar
-    @grouped_events = sorted(grouped(limited_courses_scope, course_grouping))
+    @grouped_events = sorted(grouped(courses_scope, course_grouping))
     @categories = Event::KindCategory.list
     @kinds_without_category = Event::Kind.where(kind_category_id: nil)
   end
@@ -41,11 +41,16 @@ class Events::CoursesController < ApplicationController
     send_data Export::Tabular::Events::List.export(format, courses), type: format
   end
 
-  def course_scope
+  def courses_scope
+    course_filters.to_scope
+  end
+
+  def course_filters
     Events::FilteredList.new(
       current_person, params,
-      kind_used: kind_used?
-    ).to_scope
+      kind_used: kind_used?,
+      list_all_courses: can?(:list_all, Event::Course)
+    )
   end
 
   def course_grouping

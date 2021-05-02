@@ -64,22 +64,6 @@ describe Events::CoursesController do
     end
   end
 
-  context 'finds course offerer' do
-    it 'via primary group' do
-      sign_in(people(:top_leader))
-      get :index
-      expect(controller.send(:course_group_from_primary_layer)).to eq groups(:top_layer)
-    end
-
-    it 'via hierarchy' do
-      group = groups(:bottom_group_one_one)
-      user = Fabricate(Group::BottomGroup::Leader.name.to_s, label: 'foo', group: group).person
-      sign_in(user)
-      get :index
-      expect(controller.send(:course_group_from_hierarchy).id).to eq groups(:bottom_layer_one).id
-    end
-  end
-
   context 'exports to csv, it' do
     let(:rows) { response.body.split("\n") }
     let(:course) { Fabricate(:course) }

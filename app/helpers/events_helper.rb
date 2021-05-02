@@ -83,6 +83,10 @@ module EventsHelper
     end
   end
 
+  def course_group_collection
+    Group.course_offerers.map { |group| [group.name, group.id] }
+  end
+
   def format_training_days(event)
     number_with_precision(event.training_days, precision: 1)
   end

@@ -8,10 +8,6 @@
 
 %p= t('event.lists.courses.explanation') unless can?(:list_all, Event::Course)
 
-- content_for :toolbar do
-  - if manager
-    = pill_dropdown_button(Dropdown::Event::GroupFilter.new(self, group_id))
-
 = render "filter"
 
 %p

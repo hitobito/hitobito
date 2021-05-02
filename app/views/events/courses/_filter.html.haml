@@ -1,5 +1,5 @@
 = form_for(:filter, html: { class: 'form-inline', id: 'course-filter' }, url: list_courses_path, method: :get) do |f|
-  .control-group.d-flex.align-items-start
+  .control-group
     .input-prepend{style: 'margin-right: 0.5rem'}
       %span.add-on= icon(:'calendar-alt')
       = f.text_field(:since, value: since_date, class: 'date span2')
@@ -11,12 +11,19 @@
     - if course_states_used?
       .input-prepend{style: 'margin-right: 0.5rem'}
         %span.add-on= Event::Course.human_attribute_name(:state)
-        = f.select(:state, course_state_collection, prompt: true)
+        = f.select(:state, course_state_collection, { prompt: true }, { class: 'span2' })
 
     .input-prepend{style: 'margin-right: 0.5rem'}
       %span.add-on= Event::Application.model_name.human
-      = f.select(:places_available, [['Alle', 0], ['nur mit verfügbaren Plätzen', 1]], prompt: true)
+      = f.select(:places_available, [['Alle', 0], ['nur mit verfügbaren Plätzen', 1]], {}, { class: 'span2' })
+
+    - if can?(:list_all, Event::Course)
+      .input-prepend{style: 'margin-right: 0.5rem'}
+        %span.add-on= Group.model_name.human
+        -# = f.select(:group_ids, course_group_collection, { prompt: true }, { class: 'span2', multiple: true })
+        = f.select(:group_ids, course_group_collection, { prompt: true }, { class: 'span2' })
 
     = hidden_filter_inputs(f, except: [:filter])
 
+  .control-group
     = submit_button(f, safe_join([icon(:search), ' ', t('global.button.search')]), name: nil)

@@ -27,6 +27,7 @@ describe Events::FilteredList do
       Events::Filter::CourseKindCategory,
       Events::Filter::State,
       Events::Filter::PlacesAvailable,
+      Events::Filter::Groups,
       :list
     ]
   end

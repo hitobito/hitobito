@@ -100,7 +100,9 @@ describe Events::CoursesController, type: :controller do
     end
 
     context 'course categories defined' do
-      let!(:category) { Fabricate(:event_kind_category, label: 'Vorbasiskurse', kinds: [event_kinds(:glk)]) }
+      let!(:category) do
+        Fabricate(:event_kind_category, label: 'Vorbasiskurse', kinds: [event_kinds(:glk)])
+      end
 
       it 'displays course categories' do
         get :index
@@ -131,7 +133,6 @@ describe Events::CoursesController, type: :controller do
         expect(navigation.all('li ul li a')[1][:href]).to eq list_courses_path(category: 0, group_id: top_layer.id, anchor: 'Scharleiterkurs')
       end
     end
-
   end
 
   context 'courses content' do

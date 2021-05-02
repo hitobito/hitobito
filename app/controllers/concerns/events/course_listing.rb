@@ -23,9 +23,10 @@ module Events::CourseListing
 
   def course_list_title
     @course_list_title ||= begin
-                 return I18n.t('event.lists.courses.no_category') if @kind_category_id == '0'
-                 Event::KindCategory.find_by(id: @kind_category_id)&.label
-               end
+      return I18n.t('event.lists.courses.no_category') if @kind_category_id == '0'
+
+      Event::KindCategory.find_by(id: @kind_category_id)&.label
+    end
   end
 
   def set_group_vars

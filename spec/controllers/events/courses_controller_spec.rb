@@ -10,13 +10,12 @@ require 'spec_helper'
 describe Events::CoursesController do
   render_views
   before do
-    travel_to Time.zone.local(2020,1,1,12)
+    travel_to Time.zone.local(2020, 1, 1, 12)
     sign_in(person)
   end
   let(:person) { people(:bottom_member) }
 
   context 'filters by date, it' do
-
     it 'defaults to courses within a year from today' do
       get :index
       expect(assigns(:since_date)).to eq '01.01.2020'
@@ -42,7 +41,8 @@ describe Events::CoursesController do
     end
 
     it 'groups by course kind' do
-      course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk), maximum_participants: 20)
+      course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk),
+                                  maximum_participants: 20)
       course.dates.build(start_at: '02.01.2020')
       course.save
       get :index
@@ -67,7 +67,7 @@ describe Events::CoursesController do
   context 'exports to csv, it' do
     let(:rows) { response.body.split("\n") }
     let(:course) { Fabricate(:course) }
-    before { Fabricate(:event_date, event: course)  }
+    before { Fabricate(:event_date, event: course) }
 
     it 'renders csv headers' do
       allow(controller).to receive_messages(current_user: people(:root))

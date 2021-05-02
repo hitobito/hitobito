@@ -21,6 +21,14 @@ module Events::CourseListing
     set_kind_category_vars
   end
 
+  def course_filters
+    Events::FilteredList.new(
+      current_person, params,
+      kind_used: kind_used?,
+      list_all_courses: can?(:list_all, Event::Course)
+    )
+  end
+
   def course_list_title
     @course_list_title ||= begin
       return I18n.t('event.lists.courses.no_category') if @kind_category_id == '0'
@@ -30,25 +38,24 @@ module Events::CourseListing
   end
 
   def set_group_vars
-    if can?(:list_all, Event::Course)
-      if params[:year].blank?
-        params[:filter] = {}
-        params[:filter][:group_ids] = [
-          Events::Filter::Groups.new(
-            course_filters.user, course_filters.params,
-            course_filters.options, course_filters.to_scope
-          ).default_user_course_group.try(:id)
-        ]
-      end
-      @group_id = params.dig(:filter, :group_ids).to_a.first.to_i
-    end
+    return nil unless can?(:list_all, Event::Course)
+
+    params[:filter] ||= {}
+    params[:filter][:group_ids] ||= [
+      Events::Filter::Groups.new(
+        course_filters.user, course_filters.params,
+        course_filters.options, course_filters.to_scope
+      ).default_user_course_group.try(:id)
+    ]
+    @group_id = params.dig(:filter, :group_ids).first.to_i
   end
 
   def set_date_vars
-    @since_date = date_or_default(params.dig(:filter, :since), Time.zone.today.to_date)
-    @until_date = date_or_default(params.dig(:filter, :until), @since_date.advance(years: 1))
-    @since_date = I18n.l(@since_date)
-    @until_date = I18n.l(@until_date)
+    since_date = date_or_default(params.dig(:filter, :since), Time.zone.today.to_date)
+    until_date = date_or_default(params.dig(:filter, :until), since_date.advance(years: 1))
+
+    @since_date = I18n.l(since_date)
+    @until_date = I18n.l(until_date)
   end
 
   def date_or_default(date, default)

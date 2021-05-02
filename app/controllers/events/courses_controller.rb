@@ -45,14 +45,6 @@ class Events::CoursesController < ApplicationController
     course_filters.to_scope
   end
 
-  def course_filters
-    Events::FilteredList.new(
-      current_person, params,
-      kind_used: kind_used?,
-      list_all_courses: can?(:list_all, Event::Course)
-    )
-  end
-
   def course_grouping
     kind_used? ? ->(event) { event.kind.label } : DEFAULT_GROUPING
   end

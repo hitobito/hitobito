@@ -50,7 +50,7 @@ module Export::Pdf::Messages
     private
 
     def reporter
-      @reporter ||= Export::ProgressReporter.new(filename, @recipients.size)
+      @reporter ||= Export::ProgressReporter.new(Pathname.new(filename), @recipients.size)
     end
 
     def total

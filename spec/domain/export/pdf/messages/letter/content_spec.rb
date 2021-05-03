@@ -35,7 +35,6 @@ describe Export::Pdf::Messages::Letter::Content do
 
     it "creates two sections" do
       body = letter.body
-      binding.pry
 
     end
 

@@ -26,17 +26,18 @@ module Export::Pdf
       private
 
       def invoice_page(pdf, invoice, options) # rubocop:disable Metrics/MethodLength
+        section_options = options.slice(:debug, :stamped)
         if options[:articles]
           sections.each do |section|
-            section.new(pdf, invoice, options[:debug]).render
+            section.new(pdf, invoice, section_options).render
           end
         end
 
         if options[:payment_slip]
           if invoice.payment_slip == 'qr'
-            PaymentSlipQr.new(pdf, invoice, options[:debug]).render
+            PaymentSlipQr.new(pdf, invoice, section_options).render
           else
-            PaymentSlip.new(pdf, invoice, options[:debug]).render
+            PaymentSlip.new(pdf, invoice, section_options).render
           end
         end
       end

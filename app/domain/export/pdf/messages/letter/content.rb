@@ -14,7 +14,7 @@ class Export::Pdf::Messages::Letter
     def render(recipient)
       text = replace_placeholders(@letter.body.to_s, recipient)
       if placeholders.none? { |placeholder| text.include?(placeholder.to_s) }
-        exporter.stamped("content") { pdf.markup(text) }
+        stamped("content") { pdf.markup(text) }
       else
         pdf.markup(text)
       end

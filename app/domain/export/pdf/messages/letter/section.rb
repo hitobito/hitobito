@@ -9,20 +9,18 @@ class Export::Pdf::Messages::Letter
   class Section
     include ActionView::Helpers::SanitizeHelper
 
-    attr_reader :pdf, :message, :exporter
+    attr_reader :pdf, :message
 
-    class_attribute :model_class
-
-    delegate :bounds, :bounding_box, :table, :cursor, :font_size, :text_box,
+    delegate :bounds, :table, :cursor, :font_size, :text_box,
              :fill_and_stroke_rectangle, :fill_color, :image, :group, to: :pdf
 
     delegate :recipients, :content, to: :message
 
 
-    def initialize(pdf, letter, exporter)
+    def initialize(pdf, letter, options = {})
       @pdf = pdf
       @letter = letter
-      @exporter = exporter
+      @stamped = options.delete(:stamped)
     end
 
     private
@@ -39,5 +37,22 @@ class Export::Pdf::Messages::Letter
       pdf.text args.join(' '), options
     end
 
+    def bounding_box(top_left, attrs = {})
+      pdf.bounding_box(top_left, attrs) do
+        yield
+        pdf.transparent(0.5) { pdf.stroke_bounds } if true
+      end
+    end
+
+    def stamped(key, &block)
+      return block.call unless @stamped
+
+      pdf.create_stamp(key) { block.call } unless stamped?(key)
+      pdf.stamp key
+    end
+
+    def stamped?(key)
+      pdf.instance_variable_get('@stamp_dictionary_registry').to_h.key?(key)
+    end
   end
 end

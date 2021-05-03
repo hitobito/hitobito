@@ -22,7 +22,7 @@ class Export::Pdf::Messages::Letter
     private
 
     def render_stamped
-      exporter.stamped("header") do
+      stamped("header") do
         if @letter.heading?
           if right?
             render_logo_right

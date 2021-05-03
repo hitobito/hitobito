@@ -17,10 +17,11 @@ module Export::Pdf::Invoice
 
     delegate :invoice_items, :address, :with_reference?, :participant_number, to: :invoice
 
-    def initialize(pdf, invoice, debug = false)
+    def initialize(pdf, invoice, options = {})
       @pdf = pdf
       @invoice = invoice
-      @debug = debug
+      @debug = options[:debug]
+      @stamped = options[:stamped]
     end
 
     private
@@ -50,5 +51,15 @@ module Export::Pdf::Invoice
       end
     end
 
+    def stamped(key, &block)
+      return block.call unless @stamped
+
+      pdf.create_stamp(key) { block.call } unless stamped?(key)
+      pdf.stamp key
+    end
+
+    def stamped?(key)
+      pdf.instance_variable_get('@stamp_dictionary_registry').to_h.key?(key)
+    end
   end
 end

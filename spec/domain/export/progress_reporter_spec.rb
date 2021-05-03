@@ -21,7 +21,7 @@ describe Export::ProgressReporter do
         subject.report(index)
         values << subject.file.read if subject.file.exist?
       end
-      expect(values.uniq).to eq (0..95).step(5).to_a.collect(&:to_s)
+      expect(values.uniq).to eq (0..99).to_a.collect(&:to_s)
     end
   end
 end

@@ -16,7 +16,7 @@ module Export::Pdf::Messages
 
     def render_sections(recipient)
       super
-      # render_payment_slip(pdf, recipient)
+      render_payment_slip(pdf, recipient)
     end
 
     def customize
@@ -29,9 +29,9 @@ module Export::Pdf::Messages
     def render_payment_slip(pdf, recipient)
       invoice = @letter.invoice_for(recipient)
       if invoice.qr?
-        Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice).render
+        Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, @options).render
       else
-        Export::Pdf::Invoice::PaymentSlip.new(pdf, invoice).render
+        Export::Pdf::Invoice::PaymentSlip.new(pdf, invoice, @options).render
       end
     end
   end

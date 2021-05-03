@@ -7,13 +7,11 @@
 
 module Export
   class ProgressReporter
-    def initialize(file, total)
-      @basename = File.basename(file,File.extname(file))
-      @total = total
-    end
+    attr_reader :file
 
-    def file
-      @file ||= Pathname.new(@basename << ".progress")
+    def initialize(file, total)
+      @file = file.parent.join(file.basename(".*").to_s << ".progress")
+      @total = total
     end
 
     def report(position)
@@ -27,7 +25,7 @@ module Export
     private
 
     def update_file(value)
-      file.write(value.to_i)
+      @file.write(value.to_i)
       FileUtils.rm_rf(@file) if steps.empty?
     end
 

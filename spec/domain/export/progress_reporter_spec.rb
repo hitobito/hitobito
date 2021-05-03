@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Export::ProgressReporter do
-  let(:file)   { Pathname.new(Tempfile.create('progress_report', Rails.root.join('tmp'))) }
+  let(:file)   { Pathname.new(Tempfile.create.path) }
   let(:values) { [] }
 
   subject { described_class.new(file, list.size) }

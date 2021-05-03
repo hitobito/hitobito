@@ -29,6 +29,7 @@ class app.AsyncDownloads
         url: "/downloads/#{download['name']}/exists",
         data: "file_type=#{download['type']}",
         success: (data) ->
+          console.log(data['status'])
           return if data['status'] != 200
           download_file("/downloads/#{download['name']}?file_type=#{download['type']}")
       )

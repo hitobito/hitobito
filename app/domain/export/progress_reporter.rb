@@ -17,6 +17,7 @@ module Export
     def report(position)
       value = percentage(position)
       if steps.first <= value
+        p [file, value]
         steps.delete_if { |step| step <= value }
         update_file(value)
       end

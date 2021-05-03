@@ -18,6 +18,7 @@ module Export::Pdf::Messages
       @letter = letter
       @recipients = recipients
       @options = options
+      @async_download_file = options.delete(:async_download_file)
     end
 
     def pdf
@@ -27,7 +28,6 @@ module Export::Pdf::Messages
     def render
       customize
       recipients.each_with_index do |recipient, position|
-        puts position
         reporter.report(position)
         render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
@@ -51,7 +51,10 @@ module Export::Pdf::Messages
     private
 
     def reporter
-      @reporter ||= Export::ProgressReporter.new(AsyncDownloadFile::DIRECTORY.join(filename), @recipients.size)
+      @reporter ||= Export::ProgressReporter.new(
+        AsyncDownloadFile::DIRECTORY.join(@async_download_file),
+        @recipients.size
+      )
     end
 
     def recipients

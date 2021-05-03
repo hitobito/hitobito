@@ -7,5 +7,8 @@
   .info-bar
     .alert-info
       = image_pack_tag('spinner.gif', size: '16x16', class: 'spinner')
-      = t('.wait_for_downloads')
+      %span= t('.wait_for_downloads')
+      %span.progress.hidden
+        %span.value 0%
+
       = link_to(t('.cancel_downloads'), '#', id: 'cancel_async_downloads')

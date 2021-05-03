@@ -13,7 +13,7 @@ class Export::Pdf::Messages::Letter
     delegate :group, to: '@letter'
 
     def render(recipient) # rubocop:disable Metrics/MethodLength
-      render_stamped
+      render_header
 
       render_address(build_address(recipient))
       pdf.move_down 50
@@ -21,7 +21,7 @@ class Export::Pdf::Messages::Letter
 
     private
 
-    def render_stamped
+    def render_header
       stamped("header") do
         if @letter.heading?
           if right?
@@ -39,6 +39,9 @@ class Export::Pdf::Messages::Letter
           pdf.move_down 110
         end
       end
+
+      # TODO: manuell offset when rendering stamped content
+      pdf.move_down 60 if cursor.to_i == 728
     end
 
     def right?

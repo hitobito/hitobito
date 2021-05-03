@@ -18,18 +18,33 @@ module Export::Pdf::Messages
       @letter = letter
       @recipients = recipients
       @options = options
+      @stamped = options.delete(:stamped)
+    end
+
+    def pdf
+      @pdf ||= Prawn::Document.new(render_options)
+    end
+
+    def stamped(key, &block)
+      return block.call unless @stamped
+
+      @stamped ||= {}
+      @stamped[key] ||= true.tap do
+        pdf.create_stamp(key) { block.call }
+      end
+      pdf.stamp key
     end
 
     def render
-      pdf = customize(Prawn::Document.new(render_options))
+      customize
       recipients.each do |recipient|
-        render_sections(pdf, recipient)
+        render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
       end
       pdf.render
     end
 
-    def render_sections(pdf, recipient)
+    def render_sections(recipient)
       sections.each do |section|
         section.new(pdf, @letter, self).render(recipient)
       end
@@ -61,9 +76,8 @@ module Export::Pdf::Messages
       { background: Settings.messages.pdf.preview } if preview?
     end
 
-    def customize(pdf)
+    def customize
       pdf.font_size 9
-      pdf
     end
 
     def last?(recipient)

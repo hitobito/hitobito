@@ -14,9 +14,16 @@ module Export::Pdf::Messages
       end
     end
 
-    def render_sections(pdf, recipient)
+    def render_sections(recipient)
       super
-      render_payment_slip(pdf, recipient)
+      # render_payment_slip(pdf, recipient)
+    end
+
+    def customize
+      super.tap do
+        ocrb_path = Rails.root.join('app', 'javascript', 'fonts', 'OCRB.ttf')
+        pdf.font_families.update('ocrb' => { normal: ocrb_path })
+      end
     end
 
     def render_payment_slip(pdf, recipient)
@@ -24,8 +31,6 @@ module Export::Pdf::Messages
       if invoice.qr?
         Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice).render
       else
-        ocrb_path = Rails.root.join('app', 'javascript', 'fonts', 'OCRB.ttf')
-        pdf.font_families.update('ocrb' => { normal: ocrb_path })
         Export::Pdf::Invoice::PaymentSlip.new(pdf, invoice).render
       end
     end

@@ -13,27 +13,33 @@ class Export::Pdf::Messages::Letter
     delegate :group, to: '@letter'
 
     def render(recipient) # rubocop:disable Metrics/MethodLength
-      if @letter.heading?
-        if right?
-          render_logo_right
-          pdf.move_up 40
-        else
-          render_logo
-          pdf.move_down 10
-        end
-
-        render_address(sender_address)
-
-        pdf.move_down 20
-      else
-        pdf.move_down 110
-      end
+      render_stamped
 
       render_address(build_address(recipient))
       pdf.move_down 50
     end
 
     private
+
+    def render_stamped
+      exporter.stamped("header") do
+        if @letter.heading?
+          if right?
+            render_logo_right
+            pdf.move_up 40
+          else
+            render_logo
+            pdf.move_down 10
+          end
+
+          render_address(sender_address)
+
+          pdf.move_down 20
+        else
+          pdf.move_down 110
+        end
+      end
+    end
 
     def right?
       Settings.messages.pdf.logo_position.to_s == 'right'

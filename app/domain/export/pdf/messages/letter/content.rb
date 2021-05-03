@@ -12,7 +12,12 @@ class Export::Pdf::Messages::Letter
     self.placeholders = [:first_name, :last_name]
 
     def render(recipient)
-      pdf.markup(replace_placeholders(@letter.body.to_s, recipient))
+      text = replace_placeholders(@letter.body.to_s, recipient)
+      if placeholders.none? { |placeholder| text.include?(placeholder.to_s) }
+        exporter.stamped("content") { pdf.markup(text) }
+      else
+        pdf.markup(text)
+      end
     end
 
     private

@@ -10,7 +10,7 @@ require "spec_helper"
 describe Export::Pdf::Messages::Letter::Content do
 
   let(:top_leader) { people(:top_leader) }
-  let(:letter)     { double(:letter, body: "Lieber {first_name} {last_name}") }
+  let(:letter)     { Message::Letter.new(body: "Lieber {first_name} {last_name}") }
   let(:exporter)   { double(:exporter) }
   let(:pdf)        { double(:pdf) }
 
@@ -28,5 +28,16 @@ describe Export::Pdf::Messages::Letter::Content do
   it "does not fail on nil values" do
     expect(pdf).to receive(:markup).with("Lieber  ")
     described_class.new(pdf, letter, exporter).render(Person.new)
+  end
+
+  context "letter with multiple sections" do
+    let(:letter) { messages(:letter) }
+
+    it "creates two sections" do
+      body = letter.body
+      binding.pry
+
+    end
+
   end
 end

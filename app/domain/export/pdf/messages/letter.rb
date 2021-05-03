@@ -52,7 +52,8 @@ module Export::Pdf::Messages
       preview_option.to_h.merge(
         page_size: 'A4',
         page_layout: :portrait,
-        margin: 2.cm
+        margin: 2.cm,
+        compress: true
       )
     end
 

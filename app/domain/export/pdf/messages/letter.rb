@@ -26,7 +26,8 @@ module Export::Pdf::Messages
 
     def render
       customize
-      recipients.each do |recipient|
+      recipients.each_with_index do |recipient, position|
+        reporter.report(position)
         render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
       end
@@ -47,6 +48,14 @@ module Export::Pdf::Messages
     end
 
     private
+
+    def reporter
+      @reporter ||= Export::ProgressReporter.new(filename, @recipients.size)
+    end
+
+    def total
+      @recipients.count
+    end
 
     def recipients
       preview? ? [@recipients.first] : @recipients

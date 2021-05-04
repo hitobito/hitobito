@@ -10,10 +10,19 @@ class Export::Pdf::Messages::Letter
     LOGO_BOX = [200, 40].freeze
     ADDRESS_BOX = [200, 40].freeze
 
-    delegate :group, to: '@letter'
+    delegate :group, to: 'letter'
 
     def render(recipient) # rubocop:disable Metrics/MethodLength
-      if @letter.heading?
+      stamped :render_header
+
+      render_address(build_address(recipient))
+      pdf.move_down 50
+    end
+
+    private
+
+    def render_header
+      if letter.heading?
         if right?
           render_logo_right
           pdf.move_up 40
@@ -28,12 +37,7 @@ class Export::Pdf::Messages::Letter
       else
         pdf.move_down 110
       end
-
-      render_address(build_address(recipient))
-      pdf.move_down 50
     end
-
-    private
 
     def right?
       Settings.messages.pdf.logo_position.to_s == 'right'

@@ -9,24 +9,34 @@ require "spec_helper"
 
 describe Export::Pdf::Messages::Letter::Content do
 
+  let(:options)   { {} }
   let(:top_leader) { people(:top_leader) }
   let(:letter)     { double(:letter, body: "Lieber {first_name} {last_name}") }
-  let(:exporter)   { double(:exporter) }
   let(:pdf)        { double(:pdf) }
 
   it "replaces defined placeholders" do
     expect(pdf).to receive(:markup).with("Lieber Top Leader")
-    described_class.new(pdf, letter, exporter).render(top_leader)
+    described_class.new(pdf, letter, options).render(top_leader)
   end
 
   it "ignores undefined placeholders" do
     letter = double(:letter, body: "Lieber {unsupported}")
     expect(pdf).to receive(:markup).with("Lieber {unsupported}")
-    described_class.new(pdf, letter, exporter).render(top_leader)
+    described_class.new(pdf, letter, options).render(top_leader)
   end
 
   it "does not fail on nil values" do
     expect(pdf).to receive(:markup).with("Lieber  ")
-    described_class.new(pdf, letter, exporter).render(Person.new)
+    described_class.new(pdf, letter, options).render(Person.new)
+  end
+
+  context "letter with multiple sections" do
+    let(:letter) { messages(:letter) }
+
+    it "creates two sections" do
+      body = letter.body
+
+    end
+
   end
 end

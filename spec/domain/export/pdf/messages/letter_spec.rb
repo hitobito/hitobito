@@ -22,70 +22,6 @@ describe Export::Pdf::Messages::Letter do
 
   subject { described_class.new(letter, recipients, options) }
 
-  context 'heading' do
-
-    let(:letter_setting) do
-      GroupSetting.new(var: :messages_letter, picture: fixture_file_upload('images/logo.png'))
-    end
-
-    def expect_renders_logo_from_layer_settings(group = layer, options = {})
-      letter.update!(heading: true)
-      letter_setting.target = group
-      letter_setting.save!
-
-      expect_any_instance_of(Prawn::Document).to receive(:image).with(
-        /\/picture\/#{letter_setting.id}\/logo\.png/,
-        options.merge(fit: [200, 40])
-      )
-    end
-
-    it 'renders no logo' do
-      expect_any_instance_of(Prawn::Document).to receive(:image).never
-      subject.render
-    end
-
-    it 'renders logo from layer setting' do
-      expect_renders_logo_from_layer_settings
-
-      subject.render
-    end
-
-    it 'renders logo from layer setting where setting is set on group' do
-      expect_renders_logo_from_layer_settings(group)
-
-      subject.render
-    end
-
-    it 'renders logo from layer setting where setting on right side' do
-      expect(Settings.messages.pdf).to receive(:logo_position).and_return(:right)
-      expect_renders_logo_from_layer_settings(group, position: :right)
-
-      subject.render
-    end
-
-    it 'prefers group over layer logo' do
-      letter.update!(heading: true)
-      group_letter_setting = GroupSetting.create!(var: :messages_letter,
-                                                  target: group,
-                                                  picture: fixture_file_upload('images/logo.png'))
-
-      GroupSetting.create!(var: :messages_letter,
-                           target: layer,
-                           picture: fixture_file_upload('images/logo.png'))
-
-      expect_any_instance_of(Prawn::Document).to receive(:image).with(
-        /\/picture\/#{group_letter_setting.id}\/logo\.png/,
-        fit: [200, 40]
-      )
-      subject.render
-    end
-  end
-
-  it 'renders context via markup processor' do
-    expect(Prawn::Markup::Processor).to receive_message_chain(:new, :parse)
-    subject.render
-  end
-
   it 'sanitizes filename' do
     letter.subject = 'Liebe Mitglieder'
     expect(subject.filename).to eq 'liebe_mitglieder.pdf'
@@ -107,68 +43,113 @@ describe Export::Pdf::Messages::Letter do
   end
 
   context 'text' do
-    subject do
-      pdf = described_class.new(letter, recipients).render
-      PDF::Inspector::Text.analyze(pdf)
+    let(:analyzer) { PDF::Inspector::Text.analyze(subject.render) }
+
+    context "single recipient" do
+
+      it 'renders text at positions without sender address' do
+        expect(text_with_position).to match_array [
+          [57, 669, 'Bottom Member'],
+          [57, 658, 'Greatstreet 345'],
+          [57, 648, '3456 Greattown'],
+          [57, 579, 'Hallo'],
+          [57, 558, 'Wir laden '],
+          [97, 558, 'dich'],
+          [116, 558, ' ein! '],
+          [57, 537, 'Bis bald']
+        ]
+      end
+
+      it 'renders text at positions with group sender address' do
+        letter.update!(heading: true)
+        group.update!(town: 'Wanaka', address: 'Lakeview 42')
+
+        expect(text_with_position).to match_array [
+          [57, 729, 'TopGroup'],
+          [57, 718, 'Lakeview 42'],
+          [57, 708, 'Wanaka'],
+          [57, 669, 'Bottom Member'],
+          [57, 658, 'Greatstreet 345'],
+          [57, 648, '3456 Greattown'],
+          [57, 579, 'Hallo'],
+          [57, 558, 'Wir laden '],
+          [97, 558, 'dich'],
+          [116, 558, ' ein! '],
+          [57, 537, 'Bis bald']
+        ]
+      end
+
+      it 'renders text at positions with layer sender address' do
+        letter.update!(heading: true)
+        layer.update!(town: 'Wanaka', address: 'Lakeview 42', zip_code: '4242')
+
+        expect(text_with_position).to match_array [
+          [57, 729, 'Top'],
+          [57, 718, 'Lakeview 42'],
+          [57, 708, '4242 Wanaka'],
+          [57, 669, 'Bottom Member'],
+          [57, 658, 'Greatstreet 345'],
+          [57, 648, '3456 Greattown'],
+          [57, 579, 'Hallo'],
+          [57, 558, 'Wir laden '],
+          [97, 558, 'dich'],
+          [116, 558, ' ein! '],
+          [57, 537, 'Bis bald']
+        ]
+      end
     end
 
-    it 'renders text at positions without sender address' do
-      expect(text_with_position).to match_array [
-        [57, 669, 'Bottom Member'],
-        [57, 658, 'Greatstreet 345'],
-        [57, 648, '3456 Greattown'],
-        [57, 579, 'Hallo Bottom'],
-        [57, 558, 'Wir laden '],
-        [97, 558, 'dich'],
-        [116, 558, ' ein! '],
-        [57, 537, 'Bis bald']
-      ]
-    end
+    context "stamping" do
+      let(:recipients) { [people(:bottom_member), people(:top_leader)] }
+      let(:stamps) { subject.pdf.instance_variable_get('@stamp_dictionary_registry') }
 
-    it 'renders text at positions with group sender address' do
-      letter.update!(heading: true)
-      group.update!(town: 'Wanaka', address: 'Lakeview 42')
+      it "renders addresses and content" do
+        expect(text_with_position).to eq [
+        [57, 669, "Bottom Member"],
+         [57, 658, "Greatstreet 345"],
+         [57, 648, "3456 Greattown"],
+         [57, 579, "Hallo"],
+         [57, 558, "Wir laden "],
+         [97, 558, "dich"],
+         [116, 558, " ein! "],
+         [57, 537, "Bis bald"],
+         [57, 669, "Top Leader"],
+         [57, 648, "Supertown"],
+         [57, 579, "Hallo"],
+         [57, 558, "Wir laden "],
+         [97, 558, "dich"],
+         [116, 558, " ein! "],
+         [57, 537, "Bis bald"]
+        ]
+        expect(stamps).to be_nil
+      end
 
-      expect(text_with_position).to match_array [
-        [57, 729, 'TopGroup'],
-        [57, 718, 'Lakeview 42'],
-        [57, 708, 'Wanaka'],
-        [57, 669, 'Bottom Member'],
-        [57, 658, 'Greatstreet 345'],
-        [57, 648, '3456 Greattown'],
-        [57, 579, 'Hallo Bottom'],
-        [57, 558, 'Wir laden '],
-        [97, 558, 'dich'],
-        [116, 558, ' ein! '],
-        [57, 537, 'Bis bald']
-      ]
-    end
+      it "renders only addresses has stamps" do
+        options[:stamped] = true
+        expect(text_with_position).to eq [
+          [57, 669, "Bottom Member"],
+          [57, 658, "Greatstreet 345"],
+          [57, 648, "3456 Greattown"],
+          [57, 669, "Top Leader"],
+          [57, 648, "Supertown"]
+        ]
+        expect(stamps.keys).to eq [:render_header, :render_content]
+      end
 
-    it 'renders text at positions with layer sender address' do
-      letter.update!(heading: true)
-      layer.update!(town: 'Wanaka', address: 'Lakeview 42', zip_code: '4242')
-
-      expect(text_with_position).to match_array [
-        [57, 729, 'Top'],
-        [57, 718, 'Lakeview 42'],
-        [57, 708, '4242 Wanaka'],
-        [57, 669, 'Bottom Member'],
-        [57, 658, 'Greatstreet 345'],
-        [57, 648, '3456 Greattown'],
-        [57, 579, 'Hallo Bottom'],
-        [57, 558, 'Wir laden '],
-        [97, 558, 'dich'],
-        [116, 558, ' ein! '],
-        [57, 537, 'Bis bald']
-      ]
+      it "falls back to normal rending if stamping fails because content is to big" do
+        letter.body = Faker::Lorem.paragraphs(number: 100)
+        options[:stamped] = true
+        expect(text_with_position).to be_present
+        expect(stamps).to be_nil
+      end
     end
   end
 
   private
 
   def text_with_position
-    subject.positions.each_with_index.collect do |p, i|
-      p.collect(&:round) + [subject.show_text[i]]
+    analyzer.positions.each_with_index.collect do |p, i|
+      p.collect(&:round) + [analyzer.show_text[i]]
     end
   end
 

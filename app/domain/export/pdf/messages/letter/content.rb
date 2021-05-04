@@ -12,10 +12,24 @@ class Export::Pdf::Messages::Letter
     self.placeholders = [:first_name, :last_name]
 
     def render(recipient)
-      pdf.markup(replace_placeholders(@letter.body.to_s, recipient))
+      if dynamic?
+        render_content recipient
+      else
+        stamped :render_content
+      end
     end
 
     private
+
+    def dynamic?
+      @dynamic ||= placeholders.any? { |key| letter.body.to_s.include?(key.to_s) }
+    end
+
+    def render_content(recipient = nil)
+      text = letter.body.to_s
+      text = replace_placeholders(text, recipient) if recipient
+      pdf.markup(text)
+    end
 
     def replace_placeholders(text, recipient)
       placeholders.each do |placeholder|

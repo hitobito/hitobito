@@ -6,24 +6,14 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::Pdf::Messages::Letter
-  class Section
+  class Section < Export::Pdf::Section
     include ActionView::Helpers::SanitizeHelper
 
-    attr_reader :pdf, :message, :exporter
-
-    class_attribute :model_class
-
-    delegate :bounds, :bounding_box, :table, :cursor, :font_size, :text_box,
-             :fill_and_stroke_rectangle, :fill_color, :image, :group, to: :pdf
 
     delegate :recipients, :content, to: :message
 
+    alias_method :letter, :model
 
-    def initialize(pdf, letter, exporter)
-      @pdf = pdf
-      @letter = letter
-      @exporter = exporter
-    end
 
     private
 

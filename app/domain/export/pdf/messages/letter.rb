@@ -20,18 +20,28 @@ module Export::Pdf::Messages
       @options = options
     end
 
+    def pdf
+      @pdf ||= Prawn::Document.new(render_options)
+    end
+
     def render
-      pdf = customize(Prawn::Document.new(render_options))
-      recipients.each do |recipient|
-        render_sections(pdf, recipient)
+      customize
+      recipients.each_with_index do |recipient, position|
+        render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
       end
       pdf.render
+    rescue PDF::Core::Errors::EmptyGraphicStateStack
+      Rails.logger.warn "Unable to stamp content for letter: #{@letter.id}"
+      @options[:stamped] = false
+      @sections = nil
+      @pdf = nil
+      retry
     end
 
-    def render_sections(pdf, recipient)
+    def render_sections(recipient)
       sections.each do |section|
-        section.new(pdf, @letter, self).render(recipient)
+        section.render(recipient)
       end
     end
 
@@ -52,7 +62,8 @@ module Export::Pdf::Messages
       preview_option.to_h.merge(
         page_size: 'A4',
         page_layout: :portrait,
-        margin: 2.cm
+        margin: 2.cm,
+        compress: true
       )
     end
 
@@ -60,9 +71,8 @@ module Export::Pdf::Messages
       { background: Settings.messages.pdf.preview } if preview?
     end
 
-    def customize(pdf)
+    def customize
       pdf.font_size 9
-      pdf
     end
 
     def last?(recipient)
@@ -70,7 +80,9 @@ module Export::Pdf::Messages
     end
 
     def sections
-      [Header, Content]
+      @sections ||= [Header, Content].collect do |section|
+        section.new(pdf, @letter, @options.slice(:debug, :stamped))
+      end
     end
 
     def preview?

@@ -39,7 +39,7 @@ module RenderMessagesExports
   end
 
   def recipients(message)
-    message.mailing_list.people(Person.with_address)
+    message.mailing_list.people(Person.with_address).limit(5) # no need to query all recipients
   end
 
 end

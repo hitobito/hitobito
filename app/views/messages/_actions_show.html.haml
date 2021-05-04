@@ -9,23 +9,20 @@
   - else
     = action_button(t('.button_show_assignment'), group_person_assignment_path(*entry.assignments.first.path_args), :paper_plane, method: :get)
 - if entry.letter?
-  - if entry.dispatched?
-    = with_recipient_tooltip(entry) do
+  .btn-group
+    - if entry.dispatched?
       = action_button(t('.button_show_pdf'),
                       group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf),
                       :eye,
-                      disabled: no_letter_recipients(entry),
                       in_button_group: true)
-  - else
-    = with_recipient_tooltip(entry) do
+    - else
       = action_button(t('.button_preview'),
-                      group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf, preview: true),
-                      :eye,
-                      target: :_blank,
-                      disabled: no_letter_recipients(entry),
-                      in_button_group: true)
+                    group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf, preview: true),
+                    :eye,
+                    target: :_blank,
+                    in_button_group: true)
 
-    = button_action_edit if can?(:edit, entry)
+      = button_action_edit if can?(:edit, entry)
   - if can?(:new, entry)
     = action_button(t('.button_duplicate'), new_polymorphic_path(path_args(entry.class), duplicate_from: entry.id, message: { type: entry.type }), 'copy')
   = button_action_destroy if can?(:destroy, entry)

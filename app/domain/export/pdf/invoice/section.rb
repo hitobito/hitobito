@@ -8,8 +8,6 @@
 module Export::Pdf::Invoice
   class Section < Export::Pdf::Section
 
-
-
     delegate :invoice_items, :address, :with_reference?, :participant_number, to: :invoice
 
     alias_method :invoice, :model
@@ -32,24 +30,6 @@ module Export::Pdf::Invoice
 
     def table(table, options)
       pdf.table(table, options) if table.present?
-    end
-
-    def bounding_box(top_left, attrs = {})
-      pdf.bounding_box(top_left, attrs) do
-        yield
-        pdf.transparent(0.5) { stroke_bounds } if @debug
-      end
-    end
-
-    def stamped(key, &block)
-      return block.call unless @stamped
-
-      pdf.create_stamp(key) { block.call } unless stamped?(key)
-      pdf.stamp key
-    end
-
-    def stamped?(key)
-      pdf.instance_variable_get('@stamp_dictionary_registry').to_h.key?(key)
     end
   end
 end

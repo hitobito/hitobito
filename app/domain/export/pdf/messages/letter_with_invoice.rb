@@ -29,10 +29,14 @@ module Export::Pdf::Messages
     def render_payment_slip(pdf, recipient)
       invoice = @letter.invoice_for(recipient)
       if invoice.qr?
-        Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, @options).render
+        Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, @options.merge(cursors: cursors)).render
       else
-        Export::Pdf::Invoice::PaymentSlip.new(pdf, invoice, @options).render
+        Export::Pdf::Invoice::PaymentSlip.new(pdf, invoice, @options.merge(cursors: cursors)).render
       end
+    end
+
+    def cursors
+      @cursors ||= {}
     end
   end
 end

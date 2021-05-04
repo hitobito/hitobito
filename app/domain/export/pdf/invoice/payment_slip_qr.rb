@@ -26,7 +26,7 @@ module Export::Pdf::Invoice
     def render # rubocop:disable Metrics/MethodLength
       start_new_page if cursor < HEIGHT + MARGIN
 
-      separators
+      stamped :separators
 
       receipt do
         receipt_titel
@@ -36,9 +36,9 @@ module Export::Pdf::Invoice
       end
 
       payment do
-        payment_titel
+        stamped :payment_titel
         payment_qrcode
-        payment_amount
+        stamped :payment_amount
         payment_infos
         payment_extra_infos
       end

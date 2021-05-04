@@ -26,7 +26,7 @@ module Export::Pdf
 
       @debug = options[:debug]
       @stamped = options[:stamped]
-      @cursors = {}
+      @cursors = options.fetch(:cursors, {})
     end
 
     private

@@ -26,6 +26,7 @@ class Export::MessageJob < Export::ExportBaseJob
 
   def data
     message.exporter_class.new(message, recipients, {
+      async_download_file: filename,
       stamped: true
     }).render
   end

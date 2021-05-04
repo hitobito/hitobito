@@ -43,12 +43,20 @@ class AsyncDownloadFile
     DIRECTORY.join("#{filename}.#{filetype}")
   end
 
+  def progress
+    progress_file.exist? ? progress_file.read : nil
+  end
+
   private
 
   def write_csv(data)
     File.open(full_path, "w:#{Settings.csv.encoding}") do |f|
       f.write(data)
     end
+  end
+
+  def progress_file
+    @progress_file ||= DIRECTORY.join("#{filename}.progress")
   end
 
 end

@@ -20,7 +20,10 @@ class Export::Pdf::Messages::Letter
     def initialize(pdf, letter, options = {})
       @pdf = pdf
       @letter = letter
-      @stamped = options.delete(:stamped)
+
+      @debug = options[:debug]
+      @stamped = options[:stamped]
+      @cursors = {}
     end
 
     private
@@ -40,19 +43,26 @@ class Export::Pdf::Messages::Letter
     def bounding_box(top_left, attrs = {})
       pdf.bounding_box(top_left, attrs) do
         yield
-        pdf.transparent(0.5) { pdf.stroke_bounds } if true
+        pdf.transparent(0.5) { pdf.stroke_bounds } if @debug
       end
     end
 
     def stamped(key, &block)
       return block.call unless @stamped
 
-      pdf.create_stamp(key) { block.call } unless stamped?(key)
+      if stamp_missing?(key)
+        pdf.create_stamp(key) { block.call }
+        @cursors[key] = cursor
+      end
       pdf.stamp key
+
+      if cursor != @cursors[key]
+        pdf.move_cursor_to @cursors[key]
+      end
     end
 
-    def stamped?(key)
-      pdf.instance_variable_get('@stamp_dictionary_registry').to_h.key?(key)
+    def stamp_missing?(key)
+      !@cursors.key?(key)
     end
   end
 end

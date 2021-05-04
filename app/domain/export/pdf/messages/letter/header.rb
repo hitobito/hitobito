@@ -39,9 +39,6 @@ class Export::Pdf::Messages::Letter
           pdf.move_down 110
         end
       end
-
-      # TODO: manuell offset when rendering stamped content
-      pdf.move_down 60 if cursor.to_i == 728
     end
 
     def right?

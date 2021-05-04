@@ -28,17 +28,13 @@ module Export::Pdf::Messages
     def render
       customize
       recipients.each_with_index do |recipient, position|
-        reporter.report(position)
-        render_sections(recipient)
+        reporter&.report(position)
+        sections.each do |section|
+          section.render(recipient)
+        end
         pdf.start_new_page unless last?(recipient)
       end
       pdf.render
-    end
-
-    def render_sections(recipient)
-      sections.each do |section|
-        section.new(pdf, @letter, @options.slice(:stamped)).render(recipient)
-      end
     end
 
     def filename
@@ -54,7 +50,7 @@ module Export::Pdf::Messages
       @reporter ||= Export::ProgressReporter.new(
         AsyncDownloadFile::DIRECTORY.join(@async_download_file),
         @recipients.size
-      )
+      ) if @async_download_file
     end
 
     def recipients
@@ -83,7 +79,9 @@ module Export::Pdf::Messages
     end
 
     def sections
-      [Header, Content]
+      @sections ||= [Header, Content].collect do |section|
+        section.new(pdf, @letter, @options.slice(:debug, :stamped))
+      end
     end
 
     def preview?

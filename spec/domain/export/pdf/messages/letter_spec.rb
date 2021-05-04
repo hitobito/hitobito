@@ -107,60 +107,86 @@ describe Export::Pdf::Messages::Letter do
   end
 
   context 'text' do
+    let(:options) { { stamped: false } }
     subject do
-      pdf = described_class.new(letter, recipients).render
+      pdf = described_class.new(letter, recipients, options).render
       PDF::Inspector::Text.analyze(pdf)
     end
 
-    it 'renders text at positions without sender address' do
-      expect(text_with_position).to match_array [
-        [57, 669, 'Bottom Member'],
-        [57, 658, 'Greatstreet 345'],
-        [57, 648, '3456 Greattown'],
-        [57, 579, 'Hallo Bottom'],
-        [57, 558, 'Wir laden '],
-        [97, 558, 'dich'],
-        [116, 558, ' ein! '],
-        [57, 537, 'Bis bald']
-      ]
+    context "single recipient" do
+
+      it 'renders text at positions without sender address' do
+        expect(text_with_position).to match_array [
+          [57, 669, 'Bottom Member'],
+          [57, 658, 'Greatstreet 345'],
+          [57, 648, '3456 Greattown'],
+          [57, 579, 'Hallo Bottom'],
+          [57, 558, 'Wir laden '],
+          [97, 558, 'dich'],
+          [116, 558, ' ein! '],
+          [57, 537, 'Bis bald']
+        ]
+      end
+
+      it 'renders text at positions with group sender address' do
+        letter.update!(heading: true)
+        group.update!(town: 'Wanaka', address: 'Lakeview 42')
+
+        expect(text_with_position).to match_array [
+          [57, 729, 'TopGroup'],
+          [57, 718, 'Lakeview 42'],
+          [57, 708, 'Wanaka'],
+          [57, 669, 'Bottom Member'],
+          [57, 658, 'Greatstreet 345'],
+          [57, 648, '3456 Greattown'],
+          [57, 579, 'Hallo Bottom'],
+          [57, 558, 'Wir laden '],
+          [97, 558, 'dich'],
+          [116, 558, ' ein! '],
+          [57, 537, 'Bis bald']
+        ]
+      end
+
+      it 'renders text at positions with layer sender address' do
+        letter.update!(heading: true)
+        layer.update!(town: 'Wanaka', address: 'Lakeview 42', zip_code: '4242')
+
+        expect(text_with_position).to match_array [
+          [57, 729, 'Top'],
+          [57, 718, 'Lakeview 42'],
+          [57, 708, '4242 Wanaka'],
+          [57, 669, 'Bottom Member'],
+          [57, 658, 'Greatstreet 345'],
+          [57, 648, '3456 Greattown'],
+          [57, 579, 'Hallo Bottom'],
+          [57, 558, 'Wir laden '],
+          [97, 558, 'dich'],
+          [116, 558, ' ein! '],
+          [57, 537, 'Bis bald']
+        ]
+      end
     end
 
-    it 'renders text at positions with group sender address' do
-      letter.update!(heading: true)
-      group.update!(town: 'Wanaka', address: 'Lakeview 42')
+    context "two reciepients with stamped content" do
+      let(:options) { { stamped: true, debug: true } }
+      let(:recipients) { [people(:bottom_member), people(:top_leader)] }
 
-      expect(text_with_position).to match_array [
-        [57, 729, 'TopGroup'],
-        [57, 718, 'Lakeview 42'],
-        [57, 708, 'Wanaka'],
-        [57, 669, 'Bottom Member'],
-        [57, 658, 'Greatstreet 345'],
-        [57, 648, '3456 Greattown'],
-        [57, 579, 'Hallo Bottom'],
-        [57, 558, 'Wir laden '],
-        [97, 558, 'dich'],
-        [116, 558, ' ein! '],
-        [57, 537, 'Bis bald']
-      ]
-    end
+      it 'includes dynamic content' do
+        letter.update!(heading: true)
+        group.update!(town: 'Wanaka', address: 'Lakeview 42')
 
-    it 'renders text at positions with layer sender address' do
-      letter.update!(heading: true)
-      layer.update!(town: 'Wanaka', address: 'Lakeview 42', zip_code: '4242')
+        # stamped content cannot be ready by inspector
+        # https://github.com/prawnpdf/pdf-inspector/issues/25
+        expect(text_with_position).to match_array [
+          [57, 669, "Bottom Member"],
+          [57, 658, "Greatstreet 345"],
+          [57, 648, "3456 Greattown"],
+          [57, 669, "Top Leader"],
+          [57, 648, "Supertown"]
+        ]
 
-      expect(text_with_position).to match_array [
-        [57, 729, 'Top'],
-        [57, 718, 'Lakeview 42'],
-        [57, 708, '4242 Wanaka'],
-        [57, 669, 'Bottom Member'],
-        [57, 658, 'Greatstreet 345'],
-        [57, 648, '3456 Greattown'],
-        [57, 579, 'Hallo Bottom'],
-        [57, 558, 'Wir laden '],
-        [97, 558, 'dich'],
-        [116, 558, ' ein! '],
-        [57, 537, 'Bis bald']
-      ]
+      end
+
     end
   end
 

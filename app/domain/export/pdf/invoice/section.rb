@@ -6,23 +6,13 @@
 #  https://github.com/hitobito/hitobito.
 
 module Export::Pdf::Invoice
-  class Section
+  class Section < Export::Pdf::Section
 
-    attr_reader :pdf, :invoice
 
-    delegate :bounds, :text, :cursor, :font_size, :text_box,
-             :fill_and_stroke_rectangle, :fill_color,
-             :image, :group, :move_cursor_to, :float,
-             :stroke_bounds, to: :pdf
 
     delegate :invoice_items, :address, :with_reference?, :participant_number, to: :invoice
 
-    def initialize(pdf, invoice, options = {})
-      @pdf = pdf
-      @invoice = invoice
-      @debug = options[:debug]
-      @stamped = options[:stamped]
-    end
+    alias_method :invoice, :model
 
     private
 

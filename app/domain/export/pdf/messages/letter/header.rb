@@ -10,7 +10,7 @@ class Export::Pdf::Messages::Letter
     LOGO_BOX = [200, 40].freeze
     ADDRESS_BOX = [200, 40].freeze
 
-    delegate :group, to: '@letter'
+    delegate :group, to: 'letter'
 
     def render(recipient) # rubocop:disable Metrics/MethodLength
       render_header
@@ -23,7 +23,7 @@ class Export::Pdf::Messages::Letter
 
     def render_header
       stamped("header") do
-        if @letter.heading?
+        if letter.heading?
           if right?
             render_logo_right
             pdf.move_up 40

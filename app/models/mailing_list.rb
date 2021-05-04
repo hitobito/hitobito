@@ -100,10 +100,11 @@ class MailingList < ActiveRecord::Base
   end
 
   def exclude_person(person)
-    subscriptions.where(subscriber_id: person.id,
-                        subscriber_type: Person.sti_name,
-                        excluded: false).
-      destroy_all
+    subscriptions
+      .where(subscriber_id: person.id,
+             subscriber_type: Person.sti_name,
+             excluded: false)
+      .destroy_all
 
     if subscribed?(person)
       sub = subscriptions.new

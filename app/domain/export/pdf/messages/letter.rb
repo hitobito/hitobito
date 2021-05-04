@@ -29,12 +29,16 @@ module Export::Pdf::Messages
       customize
       recipients.each_with_index do |recipient, position|
         reporter&.report(position)
-        sections.each do |section|
-          section.render(recipient)
-        end
+        render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
       end
       pdf.render
+    end
+
+    def render_sections(recipient)
+      sections.each do |section|
+        section.render(recipient)
+      end
     end
 
     def filename

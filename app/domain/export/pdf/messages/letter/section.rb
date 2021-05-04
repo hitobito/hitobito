@@ -49,6 +49,7 @@ class Export::Pdf::Messages::Letter
 
     def stamped(key, &block)
       return block.call unless @stamped
+      puts "stamping"
 
       if stamp_missing?(key)
         pdf.create_stamp(key) { block.call }

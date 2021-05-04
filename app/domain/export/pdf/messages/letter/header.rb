@@ -13,7 +13,7 @@ class Export::Pdf::Messages::Letter
     delegate :group, to: 'letter'
 
     def render(recipient) # rubocop:disable Metrics/MethodLength
-      render_header
+      stamped :render_header
 
       render_address(build_address(recipient))
       pdf.move_down 50
@@ -22,22 +22,20 @@ class Export::Pdf::Messages::Letter
     private
 
     def render_header
-      stamped("header") do
-        if letter.heading?
-          if right?
-            render_logo_right
-            pdf.move_up 40
-          else
-            render_logo
-            pdf.move_down 10
-          end
-
-          render_address(sender_address)
-
-          pdf.move_down 20
+      if letter.heading?
+        if right?
+          render_logo_right
+          pdf.move_up 40
         else
-          pdf.move_down 110
+          render_logo
+          pdf.move_down 10
         end
+
+        render_address(sender_address)
+
+        pdf.move_down 20
+      else
+        pdf.move_down 110
       end
     end
 

@@ -39,17 +39,27 @@ module Export::Pdf
     end
 
     def stamped(key, &block)
-      return block.call unless @stamped
+      if @stamped
+        with_stamp(key) do
+          render_block_or_method(key, &block)
+        end
+      else
+        render_block_or_method(key, &block)
+      end
+    end
 
+    def with_stamp(key)
       if stamp_missing?(key)
-        create_stamp(key) { block.call }
+        create_stamp(key) { yield }
         @cursors[key] = cursor
       end
-      stamp key
 
-      if cursor != @cursors[key]
-        move_cursor_to @cursors[key]
-      end
+      stamp key
+      move_cursor_to @cursors[key] if cursor != @cursors[key]
+    end
+
+    def render_block_or_method(key, &block)
+      block ? block.call : send(key)
     end
 
     def stamp_missing?(key)

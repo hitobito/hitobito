@@ -178,15 +178,40 @@ describe Export::Pdf::Messages::Letter do
         # stamped content cannot be ready by inspector
         # https://github.com/prawnpdf/pdf-inspector/issues/25
         expect(text_with_position).to match_array [
+
+          [57, 669, "Bottom Member"],
+          [57, 658, "Greatstreet 345"],
+          [57, 648, "3456 Greattown"],
+          [57, 579, "Hallo Bottom"],
+          [57, 558, "Wir laden "],
+          [97, 558, "dich"],
+          [116, 558, " ein! "],
+          [57, 537, "Bis bald"],
+          [57, 669, "Top Leader"],
+          [57, 648, "Supertown"],
+          [57, 579, "Hallo Top"],
+          [57, 558, "Wir laden "],
+          [97, 558, "dich"],
+          [116, 558, " ein! "],
+          [57, 537, "Bis bald"]
+        ]
+      end
+
+    it "uses stamp when no placeholders are set in text" do
+        letter.update!(heading: true)
+        letter.update!(body: "No placeholders here")
+        group.update!(town: 'Wanaka', address: 'Lakeview 42')
+
+        # stamped content cannot be ready by inspector
+        # https://github.com/prawnpdf/pdf-inspector/issues/25
+        expect(text_with_position).to match_array [
           [57, 669, "Bottom Member"],
           [57, 658, "Greatstreet 345"],
           [57, 648, "3456 Greattown"],
           [57, 669, "Top Leader"],
           [57, 648, "Supertown"]
         ]
-
-      end
-
+    end
     end
   end
 

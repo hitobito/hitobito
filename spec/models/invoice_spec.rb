@@ -40,14 +40,6 @@ describe Invoice do
       to include('Empfänger Addresse oder E-Mail muss ausgefüllt werden')
   end
 
-  it 'validates that the invoice_config is valid' do
-    other = Group::BottomLayer.create!(name: 'x', parent: group)
-
-    invoice = Invoice.create(group: other, title: 'fuu')
-    expect(invoice).not_to be_valid
-    expect(invoice.errors.full_messages).to include(/Rechnungseinstellung ist nicht gültig/)
-  end
-
   it 'validates that an invoice in state issued or sent has at least has one invoice_item' do
     invoice = create_invoice
     invoice.update(state: :issued)

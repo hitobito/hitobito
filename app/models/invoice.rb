@@ -86,7 +86,6 @@ class Invoice < ActiveRecord::Base
   validates :due_at, timeliness: { after: :sent_at }, presence: true, if: :sent?
   validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_list }
   validate :assert_sendable?, unless: :recipient_id?
-  validates_associated :invoice_config
 
   before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number

@@ -10,8 +10,8 @@
   = invoices_export_dropdown
   = invoices_print_dropdown
 
-  - unless @invoice_list
+  - unless @invoice_list || !parent.invoice_config.valid?
     = action_button(t('invoices.add_payments'), new_group_payment_process_path(parent), :plus)
 
-- unless @invoice_list
+- unless @invoice_list || !parent.invoice_config.valid?
   = action_button(t('invoices.add'), new_group_invoice_path(parent), :plus)

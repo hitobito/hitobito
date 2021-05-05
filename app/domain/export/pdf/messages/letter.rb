@@ -27,7 +27,7 @@ module Export::Pdf::Messages
 
     def render
       customize
-      recipients.each_with_index do |recipient, position|
+      @recipients.each_with_index do |recipient, position|
         reporter&.report(position)
         render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
@@ -62,10 +62,6 @@ module Export::Pdf::Messages
       ) if @async_download_file
     end
 
-    def recipients
-      preview? ? [@recipients.first] : @recipients
-    end
-
     def render_options
       @options.to_h.merge(
         page_size: 'A4',
@@ -80,7 +76,7 @@ module Export::Pdf::Messages
     end
 
     def last?(recipient)
-      recipients.last == recipient
+      @recipients.last == recipient
     end
 
     def sections

@@ -37,18 +37,27 @@ Events können Abonnenten sein.
 * Über einen [Cron Job](https://github.com/hitobito/hitobito/blob/master/app/jobs/mail_relay_job.rb) wird in einem definierten Intervall (Standardmässigässig jede Minute) dies Postfach auf neue Mails gecheckt. 
 * Kann ein E-Mail einer Mailingliste zugeordnet werden, nehmen wir dieses E-Mail wie es ist entgegen und passen vor dem Versand an die Empfänger des Abos einige Headers an:
 
+[Mail Gem](https://rubygems.org/gems/mail)
+
 ### 1. Precendence und List
+
 - ['Precedence'] = 'list'
 - ['List-Id'] = list_id
 
 [Code](https://github.com/hitobito/hitobito/blob/master/app/domain/mail_relay/bulk_mail.rb#L67)
 
 ### 2. Sender
+
 Setzen von Sender auf Bounce Adresse (abo_name-bounces+hans.muster=example.com@db.hitobito.com)
 
-[Code](https://github.com/hitobito/hitobito/blob/master/app/domain/mail_relay/bulk_mail.rb#L67)
+Da wir die E-Mail in Hitobito entgegen nehmen und dann wieder an alle Empfänger eines Abos versenden ist es wichtig das wir die Domain der Hitobito Instanz verwenden. Aus diesem Grund generieren wir eine spezielle Bounce Adresse welche den Abonamen und die E-Mail des Absenders enthält.
+
+- [Sender Rewriting Scheme](https://de.wikipedia.org/wiki/Sender_Rewriting_Scheme)
+- [Sender Policy Framework](https://de.wikipedia.org/wiki/Sender_Policy_Framework)
+- [Code](https://github.com/hitobito/hitobito/blob/master/app/domain/mail_relay/bulk_mail.rb#L67)
 
 ### 3. SMTP Envelope From (smtp MAIL FROM beim Senden der E-Mail)
+
 Setzen von smtp_envelope_from auf Bounce Adresse (abo_name-bounces+hans.muster=example.com@db.hitobito.com)
 
 [Code](https://github.com/hitobito/hitobito/blob/master/app/domain/mail_relay/bulk_mail.rb#L72)
@@ -56,7 +65,9 @@ Setzen von smtp_envelope_from auf Bounce Adresse (abo_name-bounces+hans.muster=e
 [Envelope Sender](https://de.wikipedia.org/wiki/Envelope_Sender)
 
 ### Mail Headers
-Headers im Mail das im Postfach des Empfängers ist:
+
+E-Mail Headers einer Nachricht die beim Empfänger angekommen ist:
+
 ```
 ...
 From: hans.muser@example.com

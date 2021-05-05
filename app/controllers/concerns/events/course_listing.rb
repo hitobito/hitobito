@@ -47,7 +47,7 @@ module Events::CourseListing
         course_filters.options, course_filters.to_scope
       ).default_user_course_group.try(:id)
     ]
-    @group_id = params.dig(:filter, :group_ids).first.to_i
+    @group_ids = params.dig(:filter, :group_ids).to_a
   end
 
   def set_date_vars

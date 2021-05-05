@@ -396,6 +396,10 @@ de:
         subject: 'Nachrichten Betreff:'
 
   events:
+    courses:
+      filter:
+        filter_by_layer: Nach Veranstalter filtern
+        select_layers: Gruppen suchen...
     actions_show:
       copy_share_link: Direktlink kopieren
     application_fields:

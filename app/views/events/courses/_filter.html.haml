@@ -20,5 +20,18 @@
     - if @kind_category_id.present?
       = f.hidden_field :category, value: @kind_category_id
 
+  %div
+    .control-group
+      .shown
+        = f.label(:group_ids, t('.filter_by_layer'), class: 'control-label')
+        = f.select(:group_ids,
+                 options_from_collection_for_select(course_group_collection, :second, :first, @group_ids),
+                 {},
+                 { class: 'chosen-select',
+                   multiple: true,
+                   data: { chosen_no_results: t('global.chosen_no_results'),
+                           placeholder: t('.select_layers') } })
+
+
   .control-group
     = submit_button(f, safe_join([icon(:search), ' ', t('global.button.search')]), name: nil)

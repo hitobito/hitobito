@@ -60,9 +60,8 @@ Da wir die E-Mail in Hitobito entgegen nehmen und dann wieder an alle Empfänger
 
 Setzen von smtp_envelope_from auf Bounce Adresse (abo_name-bounces+hans.muster=example.com@db.hitobito.com)
 
-[Code](https://github.com/hitobito/hitobito/blob/master/app/domain/mail_relay/bulk_mail.rb#L72)
-
-[Envelope Sender](https://de.wikipedia.org/wiki/Envelope_Sender)
+- [Envelope Sender](https://de.wikipedia.org/wiki/Envelope_Sender)
+- [Code](https://github.com/hitobito/hitobito/blob/master/app/domain/mail_relay/bulk_mail.rb#L72)
 
 ### Mail Headers
 

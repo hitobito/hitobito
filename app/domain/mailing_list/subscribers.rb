@@ -19,7 +19,7 @@ class MailingList::Subscribers
       where(subscriptions: { mailing_list_id: id }).
       where("people.id NOT IN (#{excluded_subscriber_ids.to_sql})").
       where("people.id NOT IN (#{tag_excluded_person_ids.to_sql})").
-      where(suscriber_conditions).
+      where(subscriber_conditions).
       distinct
   end
 
@@ -61,14 +61,14 @@ class MailingList::Subscribers
     if subscriptions.groups.any?(&:subscription_tags)
       sql += <<~SQL
         LEFT JOIN subscription_tags
-          ON subscription_tags.subscription_id = subscriptions.id
+          ON subscription_tags.subscription_id = subscriptions.id AND subscription_tags.excluded = false
       SQL
     end
 
     sql
   end
 
-  def suscriber_conditions
+  def subscriber_conditions
     condition = OrCondition.new
     person_subscribers(condition) if subscriptions.people.exists?
     event_subscribers(condition) if subscriptions.events.exists?
@@ -104,32 +104,36 @@ class MailingList::Subscribers
   end
 
   def event_subscribers(condition)
-    condition.or('subscriptions.subscriber_type = ? AND ' \
-                 'subscriptions.subscriber_id = event_participations.event_id AND ' \
-                 'event_participations.active = ?',
-                 Event.sti_name,
-                 true)
+    condition
+      .or('subscriptions.subscriber_type = ? AND ' \
+          'subscriptions.subscriber_id = event_participations.event_id AND ' \
+          'event_participations.active = ?',
+          Event.sti_name,
+          true)
   end
 
   private
 
   def tag_excluded_person_ids
-    ActsAsTaggableOn::Tagging.select(:taggable_id)
-                             .where(taggable_type: Person.sti_name,
-                                    tag_id: tag_excluded_subscription_ids)
+    ActsAsTaggableOn::Tagging
+      .select(:taggable_id)
+      .where(taggable_type: Person.sti_name,
+             tag_id: tag_excluded_subscription_ids)
   end
 
   def tag_excluded_subscription_ids
-    SubscriptionTag.select(:tag_id)
-                   .joins(:subscription)
-                   .where(subscription_tags: { excluded: true },
-                                             subscriptions: { mailing_list_id: id })
+    SubscriptionTag
+      .select(:tag_id)
+      .joins(:subscription)
+      .where(subscription_tags: { excluded: true },
+             subscriptions: { mailing_list_id: id })
   end
 
   def excluded_subscriber_ids
-    Subscription.select(:subscriber_id).
-      where(mailing_list_id: id,
-            excluded: true,
-            subscriber_type: Person.sti_name)
+    Subscription
+      .select(:subscriber_id)
+      .where(mailing_list_id: id,
+             excluded: true,
+             subscriber_type: Person.sti_name)
   end
 end

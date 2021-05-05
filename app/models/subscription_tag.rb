@@ -11,7 +11,7 @@
 #  id               :bigint           not null, primary key
 #  subscription_id  :integer      not null
 #  tag_id           :integer      not null
-#  excluded         :boolean      not null
+#  excluded         :boolean      not null, default: false
 #
 
 class SubscriptionTag < ActiveRecord::Base

@@ -504,6 +504,55 @@ describe MailingList do
         expect(list.subscribed?(pe1)).to be_falsey
       end
     end
+
+    context 'tags' do
+      it 'excludes people with given tag' do
+        group = groups(:bottom_layer_one)
+        group.roles.destroy_all
+        sub = create_subscription(group, false, Group::BottomLayer::Member.sti_name)
+        sub_tag = subscription_tags(%w(vegi)).first
+        sub_tag.subscription = sub
+        sub_tag.excluded = true
+        sub_tag.save!
+
+        100.times do
+          Fabricate(Group::BottomLayer::Member.name.to_sym, group: group)
+        end
+
+        expect(group.people.count).to eq(100)
+
+        vegi = group.people.last
+        vegi.tag_list.add('vegi')
+        vegi.first_name = 'Vegi'
+        vegi.save!
+
+        expect(list.subscribed?(vegi)).to eq(false)
+        expect(list.people.size).to eq(99)
+      end
+
+      it 'includes people with given tag' do
+        group = groups(:bottom_layer_one)
+        group.roles.destroy_all
+        sub = create_subscription(group, false, Group::BottomLayer::Member.sti_name)
+        sub_tag = subscription_tags(%w(vegi)).first
+        sub_tag.subscription = sub
+        sub_tag.save!
+
+        100.times do
+          Fabricate(Group::BottomLayer::Member.name.to_sym, group: group)
+        end
+
+        expect(group.people.count).to eq(100)
+
+        vegi = group.people.last
+        vegi.tag_list.add('vegi')
+        vegi.first_name = 'Vegi'
+        vegi.save!
+
+        expect(list.subscribed?(vegi)).to eq(true)
+        expect(list.people.size).to eq(1)
+      end
+    end
   end
 
   context 'mailchimp' do

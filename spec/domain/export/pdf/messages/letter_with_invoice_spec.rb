@@ -33,6 +33,11 @@ describe Export::Pdf::Messages::LetterWithInvoice do
     subject.render
   end
 
+  it 'filename includes invoice model name' do
+    expect(subject.filename).to eq 'rechnung-mitgliedsbeitrag.pdf'
+    expect(subject.filename(:preview)).to eq 'preview-rechnung-mitgliedsbeitrag.pdf'
+  end
+
   context 'text' do
     subject { PDF::Inspector::Text.analyze(pdf.render) }
 

@@ -130,9 +130,10 @@ describe MessagesController do
       end
 
       it 'renders file' do
+        expect(Export::Pdf::Messages::Letter).to receive(:new).with(anything, anything, background: Settings.messages.pdf.preview).and_call_original
         Subscription.create!(mailing_list: message.mailing_list, subscriber: bottom_member)
         get :show, format: :pdf, params: { preview: true, id: message.id, mailing_list_id: message.mailing_list.id, group_id: message.mailing_list.group.id }
-        expect(response.header['Content-Disposition']).to match(/information-preview.pdf/)
+        expect(response.header['Content-Disposition']).to match(/preview-information.pdf/)
         expect(response.media_type).to eq('application/pdf')
       end
     end
@@ -144,7 +145,7 @@ describe MessagesController do
         invoice_configs(:top_layer).update(payment_slip: :qr)
         Subscription.create!(mailing_list: message.mailing_list, subscriber: bottom_member)
         get :show, format: :pdf, params: { preview: true, id: message.id, mailing_list_id: message.mailing_list.id, group_id: message.mailing_list.group.id }
-        expect(response.header['Content-Disposition']).to match(/rechnung-mitgliedsbeitrag-preview.pdf/)
+        expect(response.header['Content-Disposition']).to match(/preview-rechnung-mitgliedsbeitrag.pdf/)
         expect(response.media_type).to eq('application/pdf')
       end
     end

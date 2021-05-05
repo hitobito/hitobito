@@ -8,10 +8,8 @@
 module Export::Pdf::Messages
   class LetterWithInvoice < Letter
 
-    def filename
-      super do |parts|
-        parts.prepend Invoice.model_name.human.downcase
-      end
+    def filename(*args)
+      super(*args, Invoice.model_name.human.downcase)
     end
 
     def render_sections(recipient)
@@ -28,10 +26,11 @@ module Export::Pdf::Messages
 
     def render_payment_slip(pdf, recipient)
       invoice = @letter.invoice_for(recipient)
+      options = @options.merge(cursors: cursors)
       if invoice.qr?
-        Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, @options.merge(cursors: cursors)).render
+        Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, options).render
       else
-        Export::Pdf::Invoice::PaymentSlip.new(pdf, invoice, @options.merge(cursors: cursors)).render
+        Export::Pdf::Invoice::PaymentSlip.new(pdf, invoice, options).render
       end
     end
 

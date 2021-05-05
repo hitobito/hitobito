@@ -47,9 +47,8 @@ module Export::Pdf::Messages
       end
     end
 
-    def filename
-      parts = [@letter.subject.parameterize(separator: '_')]
-      parts << %w(preview) if preview?
+    def filename(*parts)
+      parts += [@letter.subject.parameterize(separator: '_')]
       yield parts if block_given?
       [parts.join('-'), :pdf].join('.')
     end
@@ -68,16 +67,12 @@ module Export::Pdf::Messages
     end
 
     def render_options
-      preview_option.to_h.merge(
+      @options.to_h.merge(
         page_size: 'A4',
         page_layout: :portrait,
         margin: 2.cm,
         compress: true
       )
-    end
-
-    def preview_option
-      { background: Settings.messages.pdf.preview } if preview?
     end
 
     def customize
@@ -93,10 +88,5 @@ module Export::Pdf::Messages
         section.new(pdf, @letter, @options.slice(:debug, :stamped))
       end
     end
-
-    def preview?
-      @options[:preview]
-    end
   end
-
 end

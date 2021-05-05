@@ -11,9 +11,9 @@ module RenderMessagesExports
   def render_pdf(message, preview:)
     assert_type(message)
     assert_recipients(message)
-
-    pdf = message.exporter_class.new(message, recipients(message), preview: preview)
-    send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename
+    options = { background: Settings.messages.pdf.preview }
+    pdf = message.exporter_class.new(message, recipients(message), options)
+    send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename(:preview)
   end
 
   def render_pdf_in_background(message)

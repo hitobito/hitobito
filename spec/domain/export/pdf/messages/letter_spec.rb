@@ -27,19 +27,9 @@ describe Export::Pdf::Messages::Letter do
     expect(subject.filename).to eq 'liebe_mitglieder.pdf'
   end
 
-  context 'preview' do
-    let(:options) { { preview: true } }
-
-    it 'renders extra background image' do
-      expect(Prawn::Document).to receive(:new).with(
-        hash_including(background: Settings.messages.pdf.preview)
-      ).and_call_original
-      subject.render
-    end
-
-    it 'includes preview in filename' do
-      expect(subject.filename).to eq 'information-preview.pdf'
-    end
+  it 'prepends arguments passed' do
+    letter.subject = 'Liebe Mitglieder'
+    expect(subject.filename(:preview)).to eq 'preview-liebe_mitglieder.pdf'
   end
 
   context 'text' do

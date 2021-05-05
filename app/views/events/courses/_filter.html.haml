@@ -17,12 +17,6 @@
       %span.add-on= Event::Application.model_name.human
       = f.select(:places_available, [['Alle', 0], ['nur mit verfügbaren Plätzen', 1]], {}, { class: 'span2' })
 
-    - if can?(:list_all, Event::Course)
-      .input-prepend{style: 'margin-right: 0.5rem'}
-        %span.add-on= Group.model_name.human
-        -# = f.select(:group_ids, course_group_collection, { prompt: true }, { class: 'span2', multiple: true })
-        = f.select(:group_ids, course_group_collection, { prompt: true }, { class: 'span2' })
-
     - if @kind_category_id.present?
       = f.hidden_field :category, value: @kind_category_id
 

@@ -69,7 +69,7 @@ E-Mail Headers einer Nachricht die beim Empfänger angekommen ist:
 
 ```
 ...
-From: hans.muser@example.com
+From: hans.muster@example.com
 Sender: abo_name-bounces+hans.muster=example.com@db.hitobito.com
 To: abo_name@db.hitobito.com
 Subject: Besprechung vom 31.03.2021 - Einladung & Traktanden

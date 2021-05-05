@@ -30,13 +30,7 @@ module FilterHelper
   end
 
   def set_filter(filter_params = {})
-    params.to_unsafe_h.merge(filter_params)
-  end
-
-  def hidden_filter_inputs(f, except:)
-    except << :controller << :action << :locale << :user_token << :user_email << :token
-    safe_join(params.to_unsafe_h.except(*except).map do |param, value|
-      f.hidden_field param, value: value, name: param
-    end)
+    anchor = filter_params.delete :anchor
+    params.to_unsafe_h.deep_merge(filter: filter_params, anchor: anchor)
   end
 end

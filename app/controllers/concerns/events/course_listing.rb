@@ -65,7 +65,7 @@ module Events::CourseListing
   end
 
   def set_kind_category_vars
-    @kind_category_id = params.dig(:category)
+    @kind_category_id = params.dig(:filter, :category)
   end
 
 end

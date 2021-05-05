@@ -25,7 +25,7 @@ module Events::Filter
     private
 
     def kind_category_id
-      @params.fetch(:category, nil)
+      @params.dig(:filter, :category)
     end
   end
 end

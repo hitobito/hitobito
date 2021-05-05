@@ -23,7 +23,8 @@
         -# = f.select(:group_ids, course_group_collection, { prompt: true }, { class: 'span2', multiple: true })
         = f.select(:group_ids, course_group_collection, { prompt: true }, { class: 'span2' })
 
-    = hidden_filter_inputs(f, except: [:filter])
+    - if @kind_category_id.present?
+      = f.hidden_field :category, value: @kind_category_id
 
   .control-group
     = submit_button(f, safe_join([icon(:search), ' ', t('global.button.search')]), name: nil)

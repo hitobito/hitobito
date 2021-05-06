@@ -878,9 +878,6 @@ de:
             zero: "Keine Personen mit Mobiltelefonnummer vorhanden."
             one: "%{model_class} wird für eine Person mit Mobiltelefonnummer erstellt."
             other: "%{model_class} wird für %{count} Personen mit Mobiltelefonnummer erstellt."
-    letter:
-      fields:
-        available_placeholders: 'Verfügbare Platzhalter: %{placeholders}'
     text_message:
       fields:
         remaining_chars: Verbleibende Zeichen

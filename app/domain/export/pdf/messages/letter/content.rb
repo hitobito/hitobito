@@ -8,47 +8,29 @@
 class Export::Pdf::Messages::Letter
   class Content < Section
 
-    class_attribute :placeholders
-    self.placeholders = [:first_name, :last_name]
-
     def render(recipient)
-      if dynamic?
-        render_content recipient
-      else
-        stamped :render_content
-      end
+      render_salutation(recipient) if letter.salutation?
+      stamped :render_content
     end
 
     private
 
-    def dynamic?
-      @dynamic ||= placeholders.any? { |key| letter.body.to_s.include?(key.to_s) }
+    def render_content
+      pdf.markup(letter.body.to_s)
     end
 
-    def render_content(recipient = nil)
-      text = letter.body.to_s
-      text = replace_placeholders(text, recipient) if recipient
-      pdf.markup(text)
-    end
-
-    def replace_placeholders(text, recipient)
-      placeholders.each do |placeholder|
-        placeholder_regex = Regexp.new("\\{#{placeholder}\\}")
-        text = text.gsub(placeholder_regex, replacement(placeholder, recipient))
+    def render_salutation(recipient)
+      salutation = Salutation.new(recipient, letter.salutation)
+      if generic?(salutation)
+        stamped(:salutation_generic) { pdf.text salutation.value }
+      else
+        pdf.text salutation.value
       end
-      text
+      pdf.move_down pdf.font_size * 2
     end
 
-    def replacement(placeholder, recipient)
-      sanitize(send(placeholder, recipient)).to_s
-    end
-
-    def first_name(person)
-      person.first_name
-    end
-
-    def last_name(person)
-      person.last_name
+    def generic?(salutation)
+      salutation.attributes.values.none?(&:present?) && letter.salutation == 'default'
     end
   end
 end

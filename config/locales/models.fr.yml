@@ -647,6 +647,7 @@ fr:
       message/letter:
         body: Contenu
         heading: En-tête
+        salutation: Adresse
       subscription:
         related_role_types: Rôles
       people_filter:
@@ -803,6 +804,25 @@ fr:
         title: Titre du rappel
         text: texte du rappel
         due_days: durée d'échéance du rappel
+      salutation:
+        one: Adresse
+        other: Adresses
+        personal:
+          label: adresse personelle
+        default:
+          label: "Salut [nom]"
+          value:
+            m: "Salut %{greeting_name}"
+            w: "Salut %{greeting_name}"
+            other: "Salut %{greeting_name}"
+        available:
+          lieber_vorname:
+            label: "Cher/chère [prénom]"
+            value:
+              m: "Cher %{first_name}"
+              w: "Chère %{first_name}"
+              other: "Cher %{first_name}"
+
       service_token:
         name: Nom
         description: Description

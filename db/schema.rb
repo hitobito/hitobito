@@ -535,6 +535,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_155300) do
     t.bigint "invoice_list_id"
     t.text "text"
     t.boolean "heading", default: false
+    t.string "salutation"
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"

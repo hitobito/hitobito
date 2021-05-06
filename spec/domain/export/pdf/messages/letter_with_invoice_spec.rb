@@ -47,7 +47,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         [57, 669, 'Bottom Member'],
         [57, 658, 'Greatstreet 345'],
         [57, 648, '3456 Greattown'],
-        [57, 579, 'Hallo Bottom'],
+        [57, 579, 'Hallo'],
         [57, 558, 'Dein '],
         [78, 558, 'Mitgliedsbeitrag'],
         [147, 558, ' ist fällig! '],
@@ -86,16 +86,11 @@ describe Export::Pdf::Messages::LetterWithInvoice do
       context "stamped"do
         let(:options) { { stamped: true } }
         it 'renders only some texts positions' do
-          expect(text_with_position.count).to eq 53
-          expect(text_with_position).to match_array [
+          expect(text_with_position.count).to eq 43
+          expect(text_with_position).to eq [
             [57, 669, "Bottom Member"],
             [57, 658, "Greatstreet 345"],
             [57, 648, "3456 Greattown"],
-            [57, 579, "Hallo Bottom"],
-            [57, 558, "Dein "],
-            [78, 558, "Mitgliedsbeitrag"],
-            [147, 558, " ist fällig! "],
-            [57, 537, "Bis bald"],
             [14, 276, "Empfangsschein"],
             [14, 251, "Konto / Zahlbar an"],
             [14, 239, "CH93 0076 2011 6238 5295 7"],
@@ -118,11 +113,6 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [346, 165, "3456 Greattown"],
             [57, 669, "Top Leader"],
             [57, 648, "Supertown"],
-            [57, 579, "Hallo Top"],
-            [57, 558, "Dein "],
-            [78, 558, "Mitgliedsbeitrag"],
-            [147, 558, " ist fällig! "],
-            [57, 537, "Bis bald"],
             [14, 276, "Empfangsschein"],
             [14, 251, "Konto / Zahlbar an"],
             [14, 239, "CH93 0076 2011 6238 5295 7"],
@@ -151,7 +141,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [57, 669, "Bottom Member"],
           [57, 658, "Greatstreet 345"],
           [57, 648, "3456 Greattown"],
-          [57, 579, "Hallo Bottom"],
+          [57, 579, "Hallo"],
           [57, 558, "Dein "],
           [78, 558, "Mitgliedsbeitrag"],
           [147, 558, " ist fällig! "],
@@ -183,7 +173,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [346, 165, "3456 Greattown"],
           [57, 669, "Top Leader"],
           [57, 648, "Supertown"],
-          [57, 579, "Hallo Top"],
+          [57, 579, "Hallo"],
           [57, 558, "Dein "],
           [78, 558, "Mitgliedsbeitrag"],
           [147, 558, " ist fällig! "],

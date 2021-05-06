@@ -9,7 +9,6 @@ class Export::Pdf::Messages::Letter
   class Section < Export::Pdf::Section
     include ActionView::Helpers::SanitizeHelper
 
-
     delegate :recipients, :content, to: :message
 
     alias_method :letter, :model

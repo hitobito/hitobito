@@ -8,7 +8,7 @@
     - if entry.text_message?
       = render_attrs entry, :text
     - elsif entry.letter? || entry.invoice?
-      = render_attrs entry, :heading
+      = render_attrs entry, :heading, :salutation
     - if entry.letter?
       = render_attrs entry, :body
 

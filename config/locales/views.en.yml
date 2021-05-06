@@ -747,9 +747,6 @@ en:
       button_duplicate: Duplicate
       button_preview: Preview
       button_dispatch_text_message: Send
-    letter:
-      fields:
-        available_placeholders: 'Placeholders: %{placeholders}'
     text_message:
       fields:
         remaining_chars: Remaining characters

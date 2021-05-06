@@ -56,6 +56,10 @@ it:
           attributes:
             person_id:
               taken: è già iscritto
+        message/letter_with_invoice:
+          attributes:
+            base:
+              invoice_items_invalid: Almeno una voce di un conto non è valida.
         oauth/application:
           attributes:
             scopes:
@@ -121,9 +125,15 @@ it:
       additional_email:
         one: altro email
         other: Altre email
+      assignment:
+        one: Ordine
+        other: Ordini
       custom_content:
         one: testo
         other: Osservazioni
+      dispatch:
+        one: Spedizione
+        other: Spedizioni
       event:
         one: evento
         other: Eventi
@@ -190,9 +200,27 @@ it:
       invoice_item:
         one: Voce contabile
         other: Voci contabili
+      invoice_list:
+        one: Fattura collettiva
+        other: Fatture collettive
       label_format:
         one: formato delle etichette
         other: Formati delle etichette
+      message:
+        one: Notizia
+        other: Notizie
+      message/bulk_mail:
+        one: e-mail
+        other: e-mails
+      message/letter:
+        one: Lettera
+        other: Lettere
+      message/letter_with_invoice:
+        one: Lettera di fatturazione
+        other: Lettere di fatturazione
+      message/text_message:
+        one: SMS
+        other: SMS
       mail_log:
         one: Corso
         other: Corso
@@ -284,6 +312,11 @@ it:
         vs: Vallese
         zg: Zugo
         zh: Zurigo
+      assignment:
+        title: Titolo
+        description: Descrizione
+        state: Stato
+        read_at: Letto il
       person:
         first_name: Nome
         last_name: Cognome
@@ -384,6 +417,8 @@ it:
         display_booking_info: Visualizza stato iscrizioni
         participations_visible: Visibilità dei partecipanti
         waiting_list: Lista d'attesa
+        requires_approval: Raccomandazione necessaria
+        globally_visible: Visibilità
       event/contact_attrs:
         required: Obbligatorio
         optional: Facoltativo
@@ -490,6 +525,16 @@ it:
         number: Numero di telefono
         label: Tipo di numero di telefono
         public: Pubblico
+      group_setting:
+        var: Assunzione
+        settings:
+          text_message_provider: Provider SMS
+          messages_letter: Lettere
+        username: Nome utilizzatore
+        password: Password
+        provider: Provider
+        originator: Mittente
+        picture: Logo
       role:
         label: Definizione
         type: Ruolo
@@ -587,6 +632,24 @@ it:
           completed: Spedito
           sender_rejected: Mittente rifiutato
           unkown_recipient: Errore
+      message:
+        source: Destinatario
+        subject: Concerne
+        state: Condizione
+        type: Tipo
+        states:
+          draft: Bozza
+          pending: Preparato
+          processing: In elaborazione
+          finished: Concluso
+          failed: Fallito
+        recipient_count: Numero di destinatari
+        success_count: Destinatario con successo
+        failed_count: Destinatario errato
+        sent_at: Elaborato il
+      message/letter:
+        body: Contenuto
+        heading: Intestazione
       subscription:
         related_role_types: Ruoli
       people_filter:
@@ -710,6 +773,13 @@ it:
         cost: Importo
         cost_center: Centro di costo
         account: Conto
+      invoice_list:
+        title: Titolo
+        receiver: Destinatario
+        recipients_total: Destinatario complessivo
+        recipients_paid: Destinatario pagato
+        amount_total: Importo complessivo
+        amount_paid: Importo pagato
       invoice_items:
         name: Nome
         description: Descrizione
@@ -762,6 +832,7 @@ it:
       api: Leggi tutte le persone, i gruppi, gli eventi e le fatture a cui si ha accesso, tramite le interfacce JSON
   errors:
     messages:
+      attachments_not_allowed: "Non può contenere allegati"
       invalid_money: "Deve essere arrotondato ai 5 centesimi"
       invalid_date: "non è una data valida"
       invalid_time: "non è un orario valido"

@@ -171,8 +171,8 @@ fr:
       form:
         sign_in: Inscription
       oauth_info:
-        sign_in: 'Se connecter avec'
-        info: 'Veuillez vous connecter pour continuer.'
+        sign_in: 'Se connecter avec %{name}'
+        info: 'Veuillez vous connecter sur %{oauth_app}pour continuer.'
     passwords:
       send_instructions: 'Dans quelques minutes, tu recevras un courriel qui t''expliquera comment réinitialiser ton mot de passe.'
       updated: 'Ton mot de passe a été modifié. Tu es maintenant authentifié(e).'
@@ -315,7 +315,7 @@ fr:
       list:
         incomplete: des indications obligatoires manquent
       cancel_application:
-        explanation: Tu es déjà inscrit(e) à cet évènement.
+        explanation: Tu es déjà inscrit-e à cet évènement.
         caption: Désinscrire
         confirmation: "Es-tu sûr/sure de vouloir annuler ton inscription à cet évènement?"
     qualifications:
@@ -344,7 +344,6 @@ fr:
         event_search: Chercher un événement
         submit: Ajouter
   assignments:
-    attachment: 'Annex'
     form:
       attachment:
         subject: 'Objet du message'
@@ -372,7 +371,7 @@ fr:
       caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
       caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
       caption_waiting_list: S'il n'y a plus de places disponibles, les nouvelles inscriptions se retrouvent automatiquement sur la liste d'attente.
-      caption_globally_visible: 'est visible dans toute la base de données'
+      caption_globally_visible: '%{model_name} est visible dans toute la base de données'
     form_tabs:
       general: Général
       application_questions: Données pour l'inscription
@@ -568,7 +567,7 @@ fr:
     duplicates: "%{count} emplacements trouvés lors de la recherche de doublons."
   invoices:
     filter:
-      due_since: Échu(e) dès
+      due_since: Échu le
       due_since_list:
         one_day: hier
         one_week: une semaine
@@ -616,8 +615,8 @@ fr:
         other: "La facture est établie pour %{count} personnes"
     create:
       one: "La facture a été établie pour un destinataire"
-      other: "La facture <i>%{title}</i> a été établie pour%{count}  destinataires."
-    create_batch: "La facture est créée pour le destinataire en arrière-plan."
+      other: "La facture<i>%{title}</i> a été établie pour %{count} destinataires."
+    create_batch: "La facture <i>%{title}</i>est créée pour %{count} destinataire-s en arrière-plan."
     update:
       zero: 'Choisir au moins une facture.'
       model_error: "la facture %{number} n'est pas valable - %{error}."
@@ -669,10 +668,10 @@ fr:
     payments:
       valid:
         one: '%{count} de paiements valables ont été reconnus'
-        other: '%{count} de paiements valables ont été reconnus.'
+        other: '%{count} paiements ont été reconnus valables.'
       invalid:
         one: '%{count} de paiements non-valables ont été reconnus'
-        other: '%{count} de paiements non-valables ont été reconnus'
+        other: '%{count} paiements ont été reconnus non-valables.'
     show:
       payments_with_invoice: Paiements allouables
       payments_with_invoice_and_dates: Paiements allouables du %{from} au %{to}
@@ -748,9 +747,6 @@ fr:
   messages:
     attrs:
       dispatch_infos: En cours de traitement
-    previews:
-      show:
-        recipients_empty: La liste des destinataires est vide, il est impossible de présenter un aperçu.
     dispatches:
       create:
         success:
@@ -779,23 +775,23 @@ fr:
         valid:
           message/letter:
             one: "est créé pour une personne."
-            other: "est créé pour une personne."
+            other: "%{model_class}est créé pour %{count} personnes."
           message/letter_with_invoice:
             one: "est créé pour des personnes."
-            other: "est créé pour des personnes."
+            other: "%{model_class} est créé pour %{count} personnes."
           message/text_message:
             one: "est créé pour des personnes."
-            other: "est créé pour des personnes."
+            other: "%{model_class} est créé pour %{count} personnes."
         invalid:
           message/letter:
             one: "Plusieurs adresses sont incomplètes."
-            other: "Plusieurs adresses sont incomplètes."
+            other: "%{count} adresses sont incomplètes."
           message/letter_with_invoice:
             one: "Plusieurs adresses sont incomplètes"
-            other: "Plusieurs adresses sont incomplètes."
+            other: "%{count} adresses sont incomplètes."
           message/text_message:
             one: "Plusieurs numéros de téléphones sont manquants."
-            other: "Plusieurs numéros de téléphones sont manquants."
+            other: "%{count} numéros de téléphones sont manquants."
     table:
       infos:
         sender: "Expéditeur: %{mail}"
@@ -853,7 +849,7 @@ fr:
       new:
         title: Merge une personne
         select_person: Quelles données sont prioritaires lors de la fusion?
-        merge_hint: Lors de la fusion, les rôles, les numéros de téléphones, les adresses mails supplémentaires ainsi que les entrées sur les réseaux sociaux seront récupérés. Toutes les autres données personnelles (notes, inscriptions aux cours, etc.) seront supprimées.
+        merge_hint: Lors de la fusion, les rôles, les numéros de téléphones, les adresses mails supplémentaires ainsi que les entrées sur les réseaux sociaux seront récupérés. Toutes les autres données personnelles par ex. notes, inscriptions aux cours, seront supprimées.
         merge_hint_invalid: Cette personne a des données non-valables.
         irreversible: Cette opération est irréversible.
         invalid_persons: Les entrées ne peuvent être fusionnées que si les deux sont valables.
@@ -863,7 +859,7 @@ fr:
     ignore:
       new:
         title: Voulez-vous vraiment ignorer le doublon?
-        confirm: Êtes-vous certains que les deux entrées ne sont pas des doublons?
+        confirm: Êtes-vous certains que les deux entrées pour %{person} ne sont pas des doublons?
         irreversible: Cette opération est irréversible.
       action: Ignorer
       success: Le doublon a été supprimé avec succès.

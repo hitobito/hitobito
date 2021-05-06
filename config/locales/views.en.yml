@@ -344,7 +344,6 @@ en:
         event_search: Search event...
         submit: add
   assignments:
-    attachment: 'Appendix'
     form:
       attachment:
         subject: 'Subject'
@@ -743,9 +742,6 @@ en:
   messages:
     attrs:
       dispatch_infos: Processing
-    previews:
-      show:
-        recipients_empty: Recipients list is empty.
     actions_show:
       button_dispatch_letter: Print
       button_show_assignment: Print preview

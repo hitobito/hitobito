@@ -5,14 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Pdf::Messages::Letter do
 
   let(:letter) do
     Message::Letter.create!(mailing_list: list,
                             body: messages(:letter).body,
-                            subject: 'Information')
+                            subject: "Information")
   end
   let(:recipients) { [people(:bottom_member)] }
   let(:options) { {} }
@@ -22,94 +22,107 @@ describe Export::Pdf::Messages::Letter do
 
   subject { described_class.new(letter, recipients, options) }
 
-  it 'sanitizes filename' do
-    letter.subject = 'Liebe Mitglieder'
-    expect(subject.filename).to eq 'liebe_mitglieder.pdf'
+  it "sanitizes filename" do
+    letter.subject = "Liebe Mitglieder"
+    expect(subject.filename).to eq "liebe_mitglieder.pdf"
   end
 
-  it 'prepends arguments passed' do
-    letter.subject = 'Liebe Mitglieder'
-    expect(subject.filename(:preview)).to eq 'preview-liebe_mitglieder.pdf'
+  it "prepends arguments passed" do
+    letter.subject = "Liebe Mitglieder"
+    expect(subject.filename(:preview)).to eq "preview-liebe_mitglieder.pdf"
   end
 
-  context 'text' do
+  context "text" do
     let(:analyzer) { PDF::Inspector::Text.analyze(subject.render) }
 
     context "single recipient" do
-
-      it 'renders text at positions without sender address' do
+      it "renders text at positions without sender address" do
         expect(text_with_position).to match_array [
-          [57, 669, 'Bottom Member'],
-          [57, 658, 'Greatstreet 345'],
-          [57, 648, '3456 Greattown'],
-          [57, 579, 'Hallo'],
-          [57, 558, 'Wir laden '],
-          [97, 558, 'dich'],
-          [116, 558, ' ein! '],
-          [57, 537, 'Bis bald']
+          [71, 687, "Bottom Member"],
+          [71, 676, "Greatstreet 345"],
+          [71, 666, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"]
         ]
       end
 
-      it 'renders text at positions with group sender address' do
+      it "renders text at positions with group sender address" do
         letter.update!(heading: true)
-        group.update!(town: 'Wanaka', address: 'Lakeview 42')
+        group.update!(town: "Wanaka", address: "Lakeview 42")
 
         expect(text_with_position).to match_array [
-          [57, 729, 'TopGroup'],
-          [57, 718, 'Lakeview 42'],
-          [57, 708, 'Wanaka'],
-          [57, 669, 'Bottom Member'],
-          [57, 658, 'Greatstreet 345'],
-          [57, 648, '3456 Greattown'],
-          [57, 579, 'Hallo'],
-          [57, 558, 'Wir laden '],
-          [97, 558, 'dich'],
-          [116, 558, ' ein! '],
-          [57, 537, 'Bis bald']
+          [71, 765, "TopGroup"],
+          [71, 754, "Lakeview 42"],
+          [71, 744, "Wanaka"],
+          [71, 687, "Bottom Member"],
+          [71, 676, "Greatstreet 345"],
+          [71, 666, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"]
         ]
       end
 
-      it 'renders text at positions with layer sender address' do
+      it "renders text at positions with layer sender address" do
         letter.update!(heading: true)
-        layer.update!(town: 'Wanaka', address: 'Lakeview 42', zip_code: '4242')
+        layer.update!(town: "Wanaka", address: "Lakeview 42", zip_code: "4242")
 
         expect(text_with_position).to match_array [
-          [57, 729, 'Top'],
-          [57, 718, 'Lakeview 42'],
-          [57, 708, '4242 Wanaka'],
-          [57, 669, 'Bottom Member'],
-          [57, 658, 'Greatstreet 345'],
-          [57, 648, '3456 Greattown'],
-          [57, 579, 'Hallo'],
-          [57, 558, 'Wir laden '],
-          [97, 558, 'dich'],
-          [116, 558, ' ein! '],
-          [57, 537, 'Bis bald']
+          [71, 765, "Top"],
+          [71, 754, "Lakeview 42"],
+          [71, 744, "4242 Wanaka"],
+          [71, 687, "Bottom Member"],
+          [71, 676, "Greatstreet 345"],
+          [71, 666, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"]
         ]
+      end
+
+      it "renders example letter" do
+        options[:debug] = true
+        image = fixture_file_upload("images/logo.png")
+        GroupSetting.create!(target: groups(:top_group), var: :messages_letter, picture: image).id
+        letter.update!(heading: true, group: groups(:top_group))
+        layer.update!(town: "Wanaka", address: "Lakeview 42", zip_code: "4242", town: "Bern")
+        IO.binwrite("/tmp/file.pdf", subject.render)
       end
     end
 
     context "stamping" do
       let(:recipients) { [people(:bottom_member), people(:top_leader)] }
-      let(:stamps) { subject.pdf.instance_variable_get('@stamp_dictionary_registry') }
+      let(:stamps) { subject.pdf.instance_variable_get("@stamp_dictionary_registry") }
 
       it "renders addresses and content" do
         expect(text_with_position).to eq [
-        [57, 669, "Bottom Member"],
-         [57, 658, "Greatstreet 345"],
-         [57, 648, "3456 Greattown"],
-         [57, 579, "Hallo"],
-         [57, 558, "Wir laden "],
-         [97, 558, "dich"],
-         [116, 558, " ein! "],
-         [57, 537, "Bis bald"],
-         [57, 669, "Top Leader"],
-         [57, 648, "Supertown"],
-         [57, 579, "Hallo"],
-         [57, 558, "Wir laden "],
-         [97, 558, "dich"],
-         [116, 558, " ein! "],
-         [57, 537, "Bis bald"]
+          [71, 687, "Bottom Member"],
+          [71, 676, "Greatstreet 345"],
+          [71, 666, "3456 Greattown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"],
+          [71, 687, "Top Leader"],
+          [71, 666, "Supertown"],
+          [71, 531, "Information"],
+          [71, 502, "Hallo"],
+          [71, 481, "Wir laden "],
+          [111, 481, "dich"],
+          [130, 481, " ein! "],
+          [71, 460, "Bis bald"]
         ]
         expect(stamps).to be_nil
       end
@@ -117,13 +130,13 @@ describe Export::Pdf::Messages::Letter do
       it "renders only addresses has stamps" do
         options[:stamped] = true
         expect(text_with_position).to eq [
-          [57, 669, "Bottom Member"],
-          [57, 658, "Greatstreet 345"],
-          [57, 648, "3456 Greattown"],
-          [57, 669, "Top Leader"],
-          [57, 648, "Supertown"]
+          [71, 687, "Bottom Member"],
+          [71, 676, "Greatstreet 345"],
+          [71, 666, "3456 Greattown"],
+          [71, 687, "Top Leader"],
+          [71, 666, "Supertown"],
         ]
-        expect(stamps.keys).to eq [:render_header, :render_content]
+        expect(stamps.keys).to eq [:render_header, :render_subject, :render_content]
       end
 
       it "falls back to normal rending if stamping fails because content is to big" do
@@ -142,5 +155,4 @@ describe Export::Pdf::Messages::Letter do
       p.collect(&:round) + [analyzer.show_text[i]]
     end
   end
-
 end

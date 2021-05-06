@@ -18,28 +18,37 @@ describe Export::Pdf::Messages::Letter::Header do
 
   subject { described_class.new(pdf, letter, options) }
 
+  def assign_image(group)
+    GroupSetting.create!(target: group, var: :messages_letter, picture: image).id
+  end
+
   describe "image source" do
+    def expects_image(id)
+      path = %r{/picture/#{id}/logo\.png}
+      image_options = options.merge(fit: [200, 40], position: :right)
+      expect_any_instance_of(Prawn::Document).to receive(:image).with(path, image_options)
+    end
     it "has no image" do
       expect_any_instance_of(Prawn::Document).not_to receive(:image)
       subject.render(top_leader)
     end
 
     it "has image from group" do
-      id = GroupSetting.create!(target: top_group, var: :messages_letter, picture: image).id
-      expect_any_instance_of(Prawn::Document).to receive(:image).with(%r{/picture/#{id}/logo\.png}, options.merge(fit: [200, 40]))
+      id = assign_image(top_group)
+      expects_image(id)
       subject.render(top_leader)
     end
 
     it "has image from layer" do
-      id = GroupSetting.create!(target: top_group.layer_group, var: :messages_letter, picture: image).id
-      expect_any_instance_of(Prawn::Document).to receive(:image).with(%r{/picture/#{id}/logo\.png}, options.merge(fit: [200, 40]))
+      id = assign_image(top_group.layer_group)
+      expects_image(id)
       subject.render(top_leader)
     end
 
     it "has image from group if layer and group have an image " do
-      GroupSetting.create!(target: top_group.layer_group, var: :messages_letter, picture: image)
-      group_id = GroupSetting.create!(target: top_group, var: :messages_letter, picture: image).id
-      expect_any_instance_of(Prawn::Document).to receive(:image).with(%r{/picture/#{group_id}/logo\.png}, options.merge(fit: [200, 40]))
+      _layer_id = assign_image(top_group.layer_group)
+      group_id = assign_image(top_group)
+      expects_image(group_id)
       subject.render(top_leader)
     end
   end
@@ -53,89 +62,56 @@ describe Export::Pdf::Messages::Letter::Header do
     it "is present" do
       subject.render(top_leader)
       expect(text_with_position).to eq [
-        [36, 697, "TopGroup"],
-        [36, 684, "Belpstrasse 37"],
-        [36, 670, "Bern"],
-        [36, 637, "Top Leader"],
-        [36, 610, "Supertown"]
+        [36, 747, "TopGroup"],
+        [36, 734, "Belpstrasse 37"],
+        [36, 720, "Bern"],
+        [36, 669, "Top Leader"],
+        [36, 642, "Supertown"]
       ]
     end
 
-    context "position relating to image" do
-      it "same position when logo is present" do
-        GroupSetting.create!(target: top_group, var: :messages_letter, picture: image)
-        subject.render(top_leader)
+    it "same position when logo is present" do
+      assign_image(top_group)
+      subject.render(top_leader)
 
-        expect(text_with_position).to eq [
-          [36, 697, "TopGroup"],
-          [36, 684, "Belpstrasse 37"],
-          [36, 670, "Bern"],
-          [36, 637, "Top Leader"],
-          [36, 610, "Supertown"]
-        ]
-      end
-
-      it "moves up when when logo is placed on right side" do
-        expect(Settings.messages.pdf).to receive(:logo_position).and_return(:right)
-        GroupSetting.create!(target: top_group, var: :messages_letter, picture: image)
-        subject.render(top_leader)
-
-        expect(text_with_position).to eq [
-          [36, 747, "TopGroup"],
-          [36, 734, "Belpstrasse 37"],
-          [36, 720, "Bern"],
-          [36, 687, "Top Leader"],
-          [36, 660, "Supertown"]
-        ]
-      end
+      expect(text_with_position).to eq [
+        [36, 747, "TopGroup"],
+        [36, 734, "Belpstrasse 37"],
+        [36, 720, "Bern"],
+        [36, 669, "Top Leader"],
+        [36, 642, "Supertown"]
+      ]
     end
 
     context "stamping" do
       let(:stamps) { pdf.instance_variable_get('@stamp_dictionary_registry') }
       let(:options) { { stamped: true } }
 
-      it "has stamp for header" do
+      it "includes only receiver address" do
         subject.render(top_leader)
         pdf.start_new_page
         subject.render(top_leader)
         expect(stamps.keys).to eq [:render_header]
         expect(text_with_position).to eq [
-          [36, 637, "Top Leader"],
-          [36, 610, "Supertown"],
-          [36, 637, "Top Leader"],
-          [36, 610, "Supertown"]
+          [36, 669, "Top Leader"],
+          [36, 642, "Supertown"],
+          [36, 669, "Top Leader"],
+          [36, 642, "Supertown"]
         ]
       end
 
-      context "position relating to image" do
-        it "same position when logo is present" do
-          GroupSetting.create!(target: top_group, var: :messages_letter, picture: image)
-          subject.render(top_leader)
-          pdf.start_new_page
-          subject.render(top_leader)
-
-          expect(text_with_position).to eq [
-            [36, 637, "Top Leader"],
-            [36, 610, "Supertown"],
-            [36, 637, "Top Leader"],
-            [36, 610, "Supertown"],
-          ]
-        end
-
-        it "moves up when when logo is placed on right side" do
-          expect(Settings.messages.pdf).to receive(:logo_position).and_return(:right)
-          GroupSetting.create!(target: top_group, var: :messages_letter, picture: image)
-          subject.render(top_leader)
-          pdf.start_new_page
-          subject.render(top_leader)
-
-          expect(text_with_position).to eq [
-            [36, 687, "Top Leader"],
-            [36, 660, "Supertown"],
-            [36, 687, "Top Leader"],
-            [36, 660, "Supertown"],
-          ]
-        end
+      it "same position when image is present" do
+        assign_image(top_group)
+        subject.render(top_leader)
+        pdf.start_new_page
+        subject.render(top_leader)
+        expect(stamps.keys).to eq [:render_header]
+        expect(text_with_position).to eq [
+          [36, 669, "Top Leader"],
+          [36, 642, "Supertown"],
+          [36, 669, "Top Leader"],
+          [36, 642, "Supertown"]
+        ]
       end
     end
   end
@@ -145,32 +121,19 @@ describe Export::Pdf::Messages::Letter::Header do
       subject.render(top_leader)
 
       expect(text_with_position).to eq [
-        [36, 637, "Top Leader"],
-        [36, 610, "Supertown"]
+        [36, 669, "Top Leader"],
+        [36, 642, "Supertown"]
       ]
     end
 
-    context "position relating to image" do
-      it "same position when logo is present" do
-        GroupSetting.create!(target: top_group, var: :messages_letter, picture: image)
-        subject.render(top_leader)
+    it "same position when image is present" do
+      assign_image(top_group)
+      subject.render(top_leader)
 
-        expect(text_with_position).to eq [
-          [36, 637, "Top Leader"],
-          [36, 610, "Supertown"]
-        ]
-      end
-
-      it "moves up when when logo is placed on right side" do
-        expect(Settings.messages.pdf).to receive(:logo_position).and_return(:right)
-        GroupSetting.create!(target: top_group, var: :messages_letter, picture: image)
-        subject.render(top_leader)
-
-        expect(text_with_position).to eq [
-          [36, 687, "Top Leader"],
-          [36, 660, "Supertown"]
-        ]
-      end
+      expect(text_with_position).to eq [
+        [36, 669, "Top Leader"],
+        [36, 642, "Supertown"]
+      ]
     end
 
     it "does not render town if not set" do
@@ -178,11 +141,11 @@ describe Export::Pdf::Messages::Letter::Header do
       subject.render(top_leader)
 
       expect(text_with_position).to eq [
-        [36, 637, "Top Leader"],
+        [36, 669, "Top Leader"],
       ]
     end
 
-    it "does not anything if name is not set" do
+    it "does not render anything for blank values" do
       top_leader.first_name = nil
       top_leader.last_name = nil
       top_leader.town = nil

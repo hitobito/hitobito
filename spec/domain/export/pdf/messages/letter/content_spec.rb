@@ -20,15 +20,15 @@ describe Export::Pdf::Messages::Letter::Content do
   context "salutation" do
     it "renders body" do
       subject.render(top_leader)
-      expect(text_with_position).to eq [[36, 747, "simple text"]]
+      expect(text_with_position).to eq [[36, 485, "simple text"]]
     end
 
     it "prepends salutation if set" do
       letter.salutation = "default"
       subject.render(top_leader)
       expect(text_with_position).to eq [
-        [36, 747, "Hallo Top"],
-        [36, 710, "simple text"],
+        [36, 485, "Hallo Top"],
+        [36, 447, "simple text"]
       ]
     end
 
@@ -37,8 +37,8 @@ describe Export::Pdf::Messages::Letter::Content do
       top_leader.gender = "m"
       subject.render(top_leader)
       expect(text_with_position).to eq [
-        [36, 747, "Lieber Top"],
-        [36, 710, "simple text"],
+        [36, 485, "Lieber Top"],
+        [36, 447, "simple text"]
       ]
     end
   end
@@ -56,10 +56,10 @@ describe Export::Pdf::Messages::Letter::Content do
       pdf.start_new_page
       subject.render(top_leader)
       expect(text_with_position).to eq [
-        [36, 747, "Hallo Top"],
-        [36, 710, "simple text"],
-        [36, 747, "Hallo Top"],
-        [36, 710, "simple text"]
+        [36, 485, "Hallo Top"],
+        [36, 447, "simple text"],
+        [36, 485, "Hallo Top"],
+        [36, 447, "simple text"]
       ]
       expect(stamps).to be_nil
     end
@@ -70,8 +70,8 @@ describe Export::Pdf::Messages::Letter::Content do
       pdf.start_new_page
       subject.render(top_leader)
       expect(text_with_position).to eq [
-        [36, 747, "Hallo Top"],
-        [36, 747, "Hallo Top"],
+        [36, 485, "Hallo Top"],
+        [36, 485, "Hallo Top"],
       ]
       expect(stamps.keys).to eq [:render_content]
     end

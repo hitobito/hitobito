@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Pdf::Messages::LetterWithInvoice do
 
@@ -18,65 +18,66 @@ describe Export::Pdf::Messages::LetterWithInvoice do
 
   before { invoice_configs(:top_layer).update(payment_slip: :qr) }
 
-  it 'renders logo from settings and qr images' do
+  it "renders logo from settings and qr images" do
     expect_any_instance_of(Prawn::Document).to receive(:image).with(any_args).exactly(3).times
     subject.render
   end
 
-  it 'renders context via markup processor' do
+  it "renders context via markup processor" do
     expect(Prawn::Markup::Processor).to receive_message_chain(:new, :parse)
     subject.render
   end
 
-  it 'does not raise for other payment slip' do
+  it "does not raise for other payment slip" do
     invoice_configs(:top_layer).update(payment_slip: :ch_esr)
     subject.render
   end
 
-  it 'filename includes invoice model name' do
-    expect(subject.filename).to eq 'rechnung-mitgliedsbeitrag.pdf'
-    expect(subject.filename(:preview)).to eq 'preview-rechnung-mitgliedsbeitrag.pdf'
+  it "filename includes invoice model name" do
+    expect(subject.filename).to eq "rechnung-mitgliedsbeitrag.pdf"
+    expect(subject.filename(:preview)).to eq "preview-rechnung-mitgliedsbeitrag.pdf"
   end
 
-  context 'text' do
+  context "text" do
     subject { PDF::Inspector::Text.analyze(pdf.render) }
 
-    it 'renders text at positions' do
+    it "renders text at positions" do
       pdf = described_class.new(letter, recipients).render
       expect(text_with_position).to match_array [
-        [57, 669, 'Bottom Member'],
-        [57, 658, 'Greatstreet 345'],
-        [57, 648, '3456 Greattown'],
-        [57, 579, 'Hallo'],
-        [57, 558, 'Dein '],
-        [78, 558, 'Mitgliedsbeitrag'],
-        [147, 558, ' ist fällig! '],
-        [57, 537, 'Bis bald'],
-        [14, 276, 'Empfangsschein'],
-        [14, 251, 'Konto / Zahlbar an'],
-        [14, 239, 'CH93 0076 2011 6238 5295 7'],
-        [14, 228, 'Hans Gerber'],
-        [14, 173, 'Zahlbar durch'],
-        [14, 161, 'Bottom Member'],
-        [14, 150, 'Greatstreet 345'],
-        [14, 138, '3456 Greattown'],
-        [14, 89, 'Währung'],
-        [71, 89, 'Betrag'],
-        [14, 78, 'CHF'],
-        [71, 78, '10.00'],
-        [105, 39, 'Annahmestelle'],
-        [190, 276, 'Zahlteil'],
-        [190, 89, 'Währung'],
-        [247, 89, 'Betrag'],
-        [190, 78, 'CHF'],
-        [247, 78, '10.00'],
-        [346, 278, 'Konto / Zahlbar an'],
-        [346, 266, 'CH93 0076 2011 6238 5295 7'],
-        [346, 255, 'Hans Gerber'],
-        [346, 200, 'Zahlbar durch'],
-        [346, 188, 'Bottom Member'],
-        [346, 177, 'Greatstreet 345'],
-        [346, 165, '3456 Greattown']
+        [71, 687, "Bottom Member"],
+        [71, 676, "Greatstreet 345"],
+        [71, 666, "3456 Greattown"],
+        [71, 531, "Mitgliedsbeitrag"],
+        [71, 502, "Hallo"],
+        [71, 481, "Dein "],
+        [92, 481, "Mitgliedsbeitrag"],
+        [161, 481, " ist fällig! "],
+        [71, 460, "Bis bald"],
+        [28, 290, "Empfangsschein"],
+        [28, 265, "Konto / Zahlbar an"],
+        [28, 254, "CH93 0076 2011 6238 5295 7"],
+        [28, 242, "Hans Gerber"],
+        [28, 187, "Zahlbar durch"],
+        [28, 175, "Bottom Member"],
+        [28, 164, "Greatstreet 345"],
+        [28, 152, "3456 Greattown"],
+        [28, 103, "Währung"],
+        [85, 103, "Betrag"],
+        [28, 92, "CHF"],
+        [85, 92, "10.00"],
+        [119, 53, "Annahmestelle"],
+        [204, 290, "Zahlteil"],
+        [204, 103, "Währung"],
+        [261, 103, "Betrag"],
+        [204, 92, "CHF"],
+        [261, 92, "10.00"],
+        [360, 292, "Konto / Zahlbar an"],
+        [360, 280, "CH93 0076 2011 6238 5295 7"],
+        [360, 269, "Hans Gerber"],
+        [360, 214, "Zahlbar durch"],
+        [360, 202, "Bottom Member"],
+        [360, 191, "Greatstreet 345"],
+        [360, 179, "3456 Greattown"]
       ]
     end
 
@@ -85,122 +86,124 @@ describe Export::Pdf::Messages::LetterWithInvoice do
 
       context "stamped"do
         let(:options) { { stamped: true } }
-        it 'renders only some texts positions' do
+        it "renders only some texts positions" do
           expect(text_with_position.count).to eq 43
           expect(text_with_position).to eq [
-            [57, 669, "Bottom Member"],
-            [57, 658, "Greatstreet 345"],
-            [57, 648, "3456 Greattown"],
-            [14, 276, "Empfangsschein"],
-            [14, 251, "Konto / Zahlbar an"],
-            [14, 239, "CH93 0076 2011 6238 5295 7"],
-            [14, 228, "Hans Gerber"],
-            [14, 173, "Zahlbar durch"],
-            [14, 161, "Bottom Member"],
-            [14, 150, "Greatstreet 345"],
-            [14, 138, "3456 Greattown"],
-            [14, 89, "Währung"],
-            [71, 89, "Betrag"],
-            [14, 78, "CHF"],
-            [71, 78, "10.00"],
-            [105, 39, "Annahmestelle"],
-            [346, 278, "Konto / Zahlbar an"],
-            [346, 266, "CH93 0076 2011 6238 5295 7"],
-            [346, 255, "Hans Gerber"],
-            [346, 200, "Zahlbar durch"],
-            [346, 188, "Bottom Member"],
-            [346, 177, "Greatstreet 345"],
-            [346, 165, "3456 Greattown"],
-            [57, 669, "Top Leader"],
-            [57, 648, "Supertown"],
-            [14, 276, "Empfangsschein"],
-            [14, 251, "Konto / Zahlbar an"],
-            [14, 239, "CH93 0076 2011 6238 5295 7"],
-            [14, 228, "Hans Gerber"],
-            [14, 173, "Zahlbar durch"],
-            [14, 161, "Top Leader"],
-            [14, 138, "Supertown"],
-            [14, 89, "Währung"],
-            [71, 89, "Betrag"],
-            [14, 78, "CHF"],
-            [71, 78, "10.00"],
-            [105, 39, "Annahmestelle"],
-            [346, 278, "Konto / Zahlbar an"],
-            [346, 266, "CH93 0076 2011 6238 5295 7"],
-            [346, 255, "Hans Gerber"],
-            [346, 200, "Zahlbar durch"],
-            [346, 188, "Top Leader"],
-            [346, 165, "Supertown"]
+            [71, 687, "Bottom Member"],
+            [71, 676, "Greatstreet 345"],
+            [71, 666, "3456 Greattown"],
+            [28, 290, "Empfangsschein"],
+            [28, 265, "Konto / Zahlbar an"],
+            [28, 254, "CH93 0076 2011 6238 5295 7"],
+            [28, 242, "Hans Gerber"],
+            [28, 187, "Zahlbar durch"],
+            [28, 175, "Bottom Member"],
+            [28, 164, "Greatstreet 345"],
+            [28, 152, "3456 Greattown"],
+            [28, 103, "Währung"],
+            [85, 103, "Betrag"],
+            [28, 92, "CHF"],
+            [85, 92, "10.00"],
+            [119, 53, "Annahmestelle"],
+            [360, 292, "Konto / Zahlbar an"],
+            [360, 280, "CH93 0076 2011 6238 5295 7"],
+            [360, 269, "Hans Gerber"],
+            [360, 214, "Zahlbar durch"],
+            [360, 202, "Bottom Member"],
+            [360, 191, "Greatstreet 345"],
+            [360, 179, "3456 Greattown"],
+            [71, 687, "Top Leader"],
+            [71, 666, "Supertown"],
+            [28, 290, "Empfangsschein"],
+            [28, 265, "Konto / Zahlbar an"],
+            [28, 254, "CH93 0076 2011 6238 5295 7"],
+            [28, 242, "Hans Gerber"],
+            [28, 187, "Zahlbar durch"],
+            [28, 175, "Top Leader"],
+            [28, 152, "Supertown"],
+            [28, 103, "Währung"],
+            [85, 103, "Betrag"],
+            [28, 92, "CHF"],
+            [85, 92, "10.00"],
+            [119, 53, "Annahmestelle"],
+            [360, 292, "Konto / Zahlbar an"],
+            [360, 280, "CH93 0076 2011 6238 5295 7"],
+            [360, 269, "Hans Gerber"],
+            [360, 214, "Zahlbar durch"],
+            [360, 202, "Top Leader"],
+            [360, 179, "Supertown"]
           ]
         end
       end
 
-      it 'renders all texts at positions' do
-        expect(text_with_position.count).to eq 63
+      it "renders all texts at positions" do
+        expect(text_with_position.count).to eq 65
         expect(text_with_position).to match_array [
-          [57, 669, "Bottom Member"],
-          [57, 658, "Greatstreet 345"],
-          [57, 648, "3456 Greattown"],
-          [57, 579, "Hallo"],
-          [57, 558, "Dein "],
-          [78, 558, "Mitgliedsbeitrag"],
-          [147, 558, " ist fällig! "],
-          [57, 537, "Bis bald"],
-          [14, 276, "Empfangsschein"],
-          [14, 251, "Konto / Zahlbar an"],
-          [14, 239, "CH93 0076 2011 6238 5295 7"],
-          [14, 228, "Hans Gerber"],
-          [14, 173, "Zahlbar durch"],
-          [14, 161, "Bottom Member"],
-          [14, 150, "Greatstreet 345"],
-          [14, 138, "3456 Greattown"],
-          [14, 89, "Währung"],
-          [71, 89, "Betrag"],
-          [14, 78, "CHF"],
-          [71, 78, "10.00"],
-          [105, 39, "Annahmestelle"],
-          [190, 276, "Zahlteil"],
-          [190, 89, "Währung"],
-          [247, 89, "Betrag"],
-          [190, 78, "CHF"],
-          [247, 78, "10.00"],
-          [346, 278, "Konto / Zahlbar an"],
-          [346, 266, "CH93 0076 2011 6238 5295 7"],
-          [346, 255, "Hans Gerber"],
-          [346, 200, "Zahlbar durch"],
-          [346, 188, "Bottom Member"],
-          [346, 177, "Greatstreet 345"],
-          [346, 165, "3456 Greattown"],
-          [57, 669, "Top Leader"],
-          [57, 648, "Supertown"],
-          [57, 579, "Hallo"],
-          [57, 558, "Dein "],
-          [78, 558, "Mitgliedsbeitrag"],
-          [147, 558, " ist fällig! "],
-          [57, 537, "Bis bald"],
-          [14, 276, "Empfangsschein"],
-          [14, 251, "Konto / Zahlbar an"],
-          [14, 239, "CH93 0076 2011 6238 5295 7"],
-          [14, 228, "Hans Gerber"],
-          [14, 173, "Zahlbar durch"],
-          [14, 161, "Top Leader"],
-          [14, 138, "Supertown"],
-          [14, 89, "Währung"],
-          [71, 89, "Betrag"],
-          [14, 78, "CHF"],
-          [71, 78, "10.00"],
-          [105, 39, "Annahmestelle"],
-          [190, 276, "Zahlteil"],
-          [190, 89, "Währung"],
-          [247, 89, "Betrag"],
-          [190, 78, "CHF"],
-          [247, 78, "10.00"],
-          [346, 278, "Konto / Zahlbar an"],
-          [346, 266, "CH93 0076 2011 6238 5295 7"],
-          [346, 255, "Hans Gerber"],
-          [346, 200, "Zahlbar durch"],
-          [346, 188, "Top Leader"],
-          [346, 165, "Supertown"]
+          [71, 687, "Bottom Member"],
+          [71, 676, "Greatstreet 345"],
+          [71, 666, "3456 Greattown"],
+          [71, 531, "Mitgliedsbeitrag"],
+          [71, 502, "Hallo"],
+          [71, 481, "Dein "],
+          [92, 481, "Mitgliedsbeitrag"],
+          [161, 481, " ist fällig! "],
+          [71, 460, "Bis bald"],
+          [28, 290, "Empfangsschein"],
+          [28, 265, "Konto / Zahlbar an"],
+          [28, 254, "CH93 0076 2011 6238 5295 7"],
+          [28, 242, "Hans Gerber"],
+          [28, 187, "Zahlbar durch"],
+          [28, 175, "Bottom Member"],
+          [28, 164, "Greatstreet 345"],
+          [28, 152, "3456 Greattown"],
+          [28, 103, "Währung"],
+          [85, 103, "Betrag"],
+          [28, 92, "CHF"],
+          [85, 92, "10.00"],
+          [119, 53, "Annahmestelle"],
+          [204, 290, "Zahlteil"],
+          [204, 103, "Währung"],
+          [261, 103, "Betrag"],
+          [204, 92, "CHF"],
+          [261, 92, "10.00"],
+          [360, 292, "Konto / Zahlbar an"],
+          [360, 280, "CH93 0076 2011 6238 5295 7"],
+          [360, 269, "Hans Gerber"],
+          [360, 214, "Zahlbar durch"],
+          [360, 202, "Bottom Member"],
+          [360, 191, "Greatstreet 345"],
+          [360, 179, "3456 Greattown"],
+          [71, 687, "Top Leader"],
+          [71, 666, "Supertown"],
+          [71, 531, "Mitgliedsbeitrag"],
+          [71, 502, "Hallo"],
+          [71, 481, "Dein "],
+          [92, 481, "Mitgliedsbeitrag"],
+          [161, 481, " ist fällig! "],
+          [71, 460, "Bis bald"],
+          [28, 290, "Empfangsschein"],
+          [28, 265, "Konto / Zahlbar an"],
+          [28, 254, "CH93 0076 2011 6238 5295 7"],
+          [28, 242, "Hans Gerber"],
+          [28, 187, "Zahlbar durch"],
+          [28, 175, "Top Leader"],
+          [28, 152, "Supertown"],
+          [28, 103, "Währung"],
+          [85, 103, "Betrag"],
+          [28, 92, "CHF"],
+          [85, 92, "10.00"],
+          [119, 53, "Annahmestelle"],
+          [204, 290, "Zahlteil"],
+          [204, 103, "Währung"],
+          [261, 103, "Betrag"],
+          [204, 92, "CHF"],
+          [261, 92, "10.00"],
+          [360, 292, "Konto / Zahlbar an"],
+          [360, 280, "CH93 0076 2011 6238 5295 7"],
+          [360, 269, "Hans Gerber"],
+          [360, 214, "Zahlbar durch"],
+          [360, 202, "Top Leader"],
+          [360, 179, "Supertown"]
         ]
       end
     end

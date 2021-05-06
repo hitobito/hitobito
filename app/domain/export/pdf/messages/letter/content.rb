@@ -9,6 +9,7 @@ class Export::Pdf::Messages::Letter
   class Content < Section
 
     def render(recipient)
+      offset_cursor_from_top 117.5.mm
       render_salutation(recipient) if letter.salutation?
       stamped :render_content
     end

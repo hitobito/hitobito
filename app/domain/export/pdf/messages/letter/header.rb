@@ -15,42 +15,35 @@ class Export::Pdf::Messages::Letter
     def render(recipient) # rubocop:disable Metrics/MethodLength
       stamped :render_header
 
+      offset_cursor_from_top 52.5.mm
       render_address(build_address(recipient))
-      pdf.move_down 50
+
+      stamped :render_subject if letter.subject.present?
     end
 
     private
 
     def render_header
       if letter.heading?
-        if right?
-          render_logo_right
-          pdf.move_up 40
-        else
-          render_logo
-          pdf.move_down 10
-        end
+        render_logo_right
+        pdf.move_up 40
 
         render_address(sender_address)
-
-        pdf.move_down 20
-      else
-        pdf.move_down 110
       end
     end
 
-    def right?
-      Settings.messages.pdf.logo_position.to_s == 'right'
+    def render_subject
+      offset_cursor_from_top 107.5.mm
+
+      pdf.text(letter.subject, style: :bold)
+      pdf.move_down pdf.font_size * 2
     end
 
-    def render_logo_right
-      render_logo(left: bounds.width - LOGO_BOX.first, options: { position: :right })
-    end
-
-    def render_logo(left: 0, options: {}, width: LOGO_BOX.first, height: LOGO_BOX.second)
+    def render_logo_right(width: LOGO_BOX.first, height: LOGO_BOX.second)
+      left = bounds.width - width
       bounding_box([left, cursor], width: width, height: height) do
         if logo_path
-          image(logo_path, options.merge(fit: [width, height]))
+          image(logo_path, position: :right, fit: [width, height])
         else
           ''
         end
@@ -96,7 +89,5 @@ class Export::Pdf::Messages::Letter
     def address_present?(group)
       [:address, :town].all? { |a| group.send(a)&.strip.present? }
     end
-
   end
-
 end

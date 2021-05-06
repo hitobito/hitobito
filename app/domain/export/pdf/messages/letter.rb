@@ -8,6 +8,8 @@
 module Export::Pdf::Messages
   class Letter
 
+    MARGIN = 2.5.cm
+
     class << self
       def export(_format, letter)
         new(letter).render
@@ -66,7 +68,7 @@ module Export::Pdf::Messages
       @options.to_h.merge(
         page_size: 'A4',
         page_layout: :portrait,
-        margin: 2.cm,
+        margin: MARGIN,
         compress: true
       )
     end

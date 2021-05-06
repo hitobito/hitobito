@@ -26,7 +26,7 @@ class Export::Pdf::Messages::Letter
     end
 
     def replacement(placeholder, recipient)
-      sanitize(send(placeholder, recipient))
+      sanitize(send(placeholder, recipient)).to_s
     end
 
     def first_name(person)

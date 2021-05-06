@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -11,29 +13,31 @@ class Api::CorsCheck
   end
 
   def allowed?(origin)
-    return false if oauth_token.present? && !oauth_token_allows_origin?(origin)
-
-    return false if service_token.present? && !service_token_allows_origin?(origin)
-
-    # In CORS preflight OPTIONS requests, the token headers are not sent along.
-    # So this check is as specific as it can be for these cases.
-    return false if no_token_present? && !cors_origin_allowed?(origin)
+    if oauth_token_declines?(origin) ||
+        service_token_declines?(origin) ||
+        no_token_declines?(origin)
+      return false
+    end
 
     true
   end
 
   private
 
-  def cors_origin_allowed?(origin)
-    CorsOrigin::where(origin: origin).exists?
+  def no_token_declines?(origin)
+    # In CORS preflight OPTIONS requests, the token headers are not sent along.
+    # So this check is as specific as it can be for these cases.
+    no_token_present? && !CorsOrigin.where(origin: origin).exists?
   end
 
-  def service_token_allows_origin?(origin)
-    allows_origin?(service_token, origin)
+  def service_token_declines?(origin)
+    service_token.present? && !allows_origin?(service_token, origin)
   end
 
-  def oauth_token_allows_origin?(origin)
-    oauth_token_has_api_access? && allows_origin?(oauth_token.application, origin)
+  def oauth_token_declines?(origin)
+    return false if oauth_token.blank?
+
+    !(oauth_token_has_api_access? && allows_origin?(oauth_token.application, origin))
   end
 
   def oauth_token_has_api_access?

@@ -1,5 +1,7 @@
 # Hitobito Changelog
 
+## unreleased
+
 ## Version 1.26
 
 ## Version 1.23

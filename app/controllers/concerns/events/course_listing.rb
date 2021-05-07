@@ -18,6 +18,7 @@ module Events::CourseListing
   def set_filter_vars
     set_group_vars
     set_date_vars
+    set_course_state_vars
     set_kind_category_vars
   end
 
@@ -60,6 +61,11 @@ module Events::CourseListing
     Date.parse(date)
   rescue
     default
+  end
+
+  def set_course_state_vars
+    @state = params.dig(:filter, :state)
+    @places_available = params.dig(:filter, :places_available)
   end
 
   def set_kind_category_vars

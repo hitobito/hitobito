@@ -11,11 +11,11 @@
     - if course_states_used?
       .input-prepend{style: 'margin: 0 0.5rem 0.5rem 0'}
         %span.add-on= Event::Course.human_attribute_name(:state)
-        = f.select(:state, course_state_collection, { prompt: true }, { class: 'span2' })
+        = f.select(:state, course_state_collection, { selected: @state, prompt: true }, { class: 'span2' })
 
     .input-prepend{style: 'margin: 0 0.5rem 0.5rem 0'}
       %span.add-on= Event::Application.model_name.human
-      = f.select(:places_available, [['Alle', 0], ['nur mit verfügbaren Plätzen', 1]], {}, { class: 'span2' })
+      = f.select(:places_available, [['Alle', 0], ['nur mit verfügbaren Plätzen', 1]], { selected: @places_available }, { class: 'span2' })
 
     - if @kind_category_id.present?
       = f.hidden_field :category, value: @kind_category_id

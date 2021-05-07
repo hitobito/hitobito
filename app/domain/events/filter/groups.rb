@@ -15,11 +15,9 @@ module Events::Filter
     end
 
     def to_scope
-      if complete_course_list_allowed?
-        group_ids.any? ? @scope.with_group_id(group_ids) : @scope
-      else
-        @scope.in_hierarchy(@user)
-      end
+      scope = @scope
+      scope = scope.in_hierarchy(@user) unless complete_course_list_allowed?
+      group_ids.any? ? scope.with_group_id(group_ids) : scope
     end
 
     def default_user_course_group

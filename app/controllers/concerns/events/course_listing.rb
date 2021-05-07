@@ -38,8 +38,6 @@ module Events::CourseListing
   end
 
   def set_group_vars
-    return nil unless can?(:list_all, Event::Course)
-
     params[:filter] ||= {}
     params[:filter][:group_ids] ||= [
       Events::Filter::Groups.new(

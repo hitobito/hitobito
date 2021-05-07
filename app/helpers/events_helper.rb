@@ -83,8 +83,10 @@ module EventsHelper
     end
   end
 
-  def course_group_collection
-    Group.course_offerers.map { |group| [group.name, group.id] }
+  def course_groups
+    return Group.course_offerers if can?(:list_all, Event::Course)
+
+    Group.course_offerers.where(id: current_user.groups_hierarchy_ids)
   end
 
   def format_training_days(event)

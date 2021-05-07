@@ -15,7 +15,7 @@ app.MultiselectAddChips = {
     select.val(currentValue.concat([value])).trigger("chosen:updated")
 
   showUnselected: (e) ->
-    selectId = e?.target.id
+    selectId = e.target.id
     selected = $(e.target).val() || []
     chips = $("button[data-add-to=#{selectId}]")
     chips.hide()

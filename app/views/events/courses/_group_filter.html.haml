@@ -14,6 +14,6 @@
 
       .group-filter-quick-add-tags
         - hierarchy_course_groups.each do |group|
-          %button.chip.chip-add.group-filter-add{id: "group-filter-add-#{group.id}", type: :button, 'data-add-value': group.id, 'data-add-to': 'group-filter-select'}
+          %button.chip.chip-add.group-filter-add{id: "group-filter-add-#{group.id}", type: :button, style: 'display: none', data: {'add-value': group.id, 'add-to': 'group-filter-select'} }
             = group.name
             = icon(:plus)

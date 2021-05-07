@@ -31,7 +31,7 @@ module Events::Filter
     end
 
     def group_ids
-      @params.dig(:filter, :group_ids).to_a.compact
+      @params.dig(:filter, :group_ids).to_a.reject(&:blank?)
     end
 
     def course_group_from_primary_layer

@@ -1,0 +1,19 @@
+.course-group-filter
+  = f.label(:group_ids, t('.filter_by_layer'), class: 'control-label')
+  .control-group
+    .controls
+      .select.shown
+        = f.select(:group_ids,
+                 options_from_collection_for_select(course_groups, :id, :name, @group_ids),
+                 {},
+                 { id: 'group-filter-select',
+                   class: 'chosen-select',
+                   multiple: true,
+                   data: { chosen_no_results: t('global.chosen_no_results'),
+                           placeholder: t('.select_layers') } })
+
+      .group-filter-quick-add-tags
+        - hierarchy_course_groups.each do |group|
+          %button.chip.chip-add.group-filter-add{id: "group-filter-add-#{group.id}", type: :button, 'data-add-value': group.id, 'data-add-to': 'group-filter-select'}
+            = group.name
+            = icon(:plus)

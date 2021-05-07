@@ -588,3 +588,31 @@ input.switcher {
 .chosen-container-multi .chosen-choices .search-field input {
   margin: 4px 0 !important;
 }
+
+.course-group-filter .control-group {
+  width: 100%;
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .select {
+    max-width: 370px;
+    flex-grow: 1;
+    margin-right: 0.5rem;
+  }
+
+  .group-filter-quick-add-tags {
+    margin: 0;
+    flex-grow: 1;
+
+    button {
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+}

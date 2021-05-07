@@ -397,8 +397,8 @@ de:
 
   events:
     courses:
-      filter:
-        filter_by_layer: Nach Veranstalter filtern
+      group_filter:
+        filter_by_layer: Veranstalter
         select_layers: Gruppen suchen...
     actions_show:
       copy_share_link: Direktlink kopieren

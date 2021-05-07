@@ -20,14 +20,9 @@ app.MultiselectAddChips = {
     chips = $("button[data-add-to=#{selectId}]")
     chips.hide()
     chips.filter(-> !selected.includes(this.dataset.addValue)).show()
-
-  initialize: ->
-    $('.chosen-select').each ->
-      app.MultiselectAddChips.showUnselected({ target: this })
-
 }
 
 $(document).on('click', 'button[data-add-to]', app.MultiselectAddChips.selectValue)
 $(document).on('change', '.chosen-select', app.MultiselectAddChips.showUnselected)
 $(document).on('chosen:updated', '.chosen-select', app.MultiselectAddChips.showUnselected)
-$(document).on('turbolinks:load', app.MultiselectAddChips.initialize)
+$(document).on('chosen:ready', app.MultiselectAddChips.showUnselected)

@@ -33,6 +33,10 @@ module Authenticatable
     current_ability.token.dynamic_user if current_ability.is_a?(TokenAbility)
   end
 
+  def oauth_token_user
+    Person.find(token_authentication.oauth_token.person) if current_ability.is_a?(DoorkeeperTokenAbility)
+  end
+
   def origin_user
     return unless session[:origin_user]
 

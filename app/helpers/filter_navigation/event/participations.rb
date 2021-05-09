@@ -74,7 +74,7 @@ module FilterNavigation
 
       def participation_filter
         @participation_filter ||=
-          ::Event::ParticipationFilter.new(event, template.current_user, template.params)
+          ::Event::ParticipationFilter.new(event, template.params)
       end
     end
   end

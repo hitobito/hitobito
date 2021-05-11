@@ -589,6 +589,50 @@ describe EventsController do
         expect(assigns(:events)).to have(1).entries
       end
     end
+
+    context '#typeahead' do
+      before { sign_in(people(:top_leader)) }
+
+      let(:top_layer) { groups(:top_layer) }
+      let!(:course_de) do
+        dates = [Fabricate(:event_date, start_at: 10.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
+        Fabricate(:course, name: 'Kurs 42', groups: [top_layer], dates: dates)
+      end
+
+      let!(:course_fr) do
+        dates = [Fabricate(:event_date, start_at: 10.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
+        Fabricate(:course, name: 'Château 42', groups: [top_layer], locale: :fr, dates: dates)
+      end
+
+      # should not be returned because past course
+      let!(:course_past) do
+        dates = [Fabricate(:event_date, start_at: 30.days.ago.to_date, finish_at: 18.days.ago.to_date)]
+        Fabricate(:course, name: 'Past 42', groups: [top_layer], locale: :fr, dates: dates)
+      end
+
+      # should not be returned because search term does not match
+      let!(:course_other) do
+        dates = [Fabricate(:event_date, start_at: 10.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
+        Fabricate(:course, name: 'Kurs Other', groups: [top_layer], dates: dates)
+      end
+
+      it 'finds events by given term in all locales and excludes past events' do
+        get :typeahead, params: { group_id: top_layer.id, q: '42', type: 'Event::Course', format: :json }
+
+        typeahead_entries = JSON.parse(response.body)
+        expect(typeahead_entries.count).to eq(2)
+        cde = typeahead_entries.first
+        cfr = typeahead_entries.last
+
+        expect(cde['id']).to eq(course_de.id)
+        expect(cde['label']).to eq('Kurs 42')
+        expect(cde['types'].count).to eq(7)
+
+        expect(cfr['id']).to eq(course_fr.id)
+        expect(cfr['label']).to eq('Château 42')
+        expect(cfr['types'].count).to eq(7)
+      end
+    end
   end
 
 end

@@ -86,11 +86,22 @@ describe Event::RegisterController do
   end
 
   context 'POST check' do
+
+    before { allow(Truemail).to receive(:valid?).and_call_original }
+
     context 'without email' do
       it 'displays form again' do
         post :check, params: { group_id: group.id, id: event.id, person: { email: '' } }
         is_expected.to render_template('index')
-        expect(flash[:alert]).to eq 'Bitte gib eine E-Mail ein'
+        expect(flash[:alert]).to eq 'Bitte gib eine gültige E-Mail ein'
+      end
+    end
+
+    context 'with invalid email' do
+      it 'displays form again' do
+        post :check, params: { group_id: group.id, id: event.id, person: { email: 'no@email.haha' } }
+        is_expected.to render_template('index')
+        expect(flash[:alert]).to eq 'Bitte gib eine gültige E-Mail ein'
       end
     end
 

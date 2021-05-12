@@ -17,7 +17,7 @@ class Event::RegisterController < ApplicationController
 
   def check # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     email = params[:person][:email].to_s
-    if email.present?
+    if Truemail.valid?(email)
       # check_mail
       if (user = Person.find_by(email: email))
         # send_login_and_render_index
@@ -31,7 +31,7 @@ class Event::RegisterController < ApplicationController
         render 'register'
       end
     else
-      flash.now[:alert] = translate(:email_missing)
+      flash.now[:alert] = translate(:email_invalid)
       render 'index'
     end
   end

@@ -484,7 +484,7 @@ de:
     not_logged_in: "Du musst dich einloggen um dich für den Anlass '%{event}' anzumelden."
     person_found: 'Wir haben dich in unserer Datenbank gefunden.'
     email_sent: 'Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich direkt für den Anlass anmelden kannst.'
-    email_missing: 'Bitte gib eine E-Mail ein'
+    email_invalid: 'Bitte gib eine gültige E-Mail ein'
     form_data_missing: 'Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest.'
     registered: 'Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben für die Anmeldung.'
     application_window_closed: 'Das Anmeldefenster für diesen Anlass ist geschlossen.'

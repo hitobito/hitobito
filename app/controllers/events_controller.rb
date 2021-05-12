@@ -37,7 +37,7 @@ class EventsController < CrudController
                          dates_full: 'event_dates.start_at',
                          group_ids: "#{Group.quoted_table_name}.name" }
 
-  self.search_columns = [:name]
+  self.search_columns = ['event_translations.name']
 
   decorates :event, :events, :group
 
@@ -61,6 +61,9 @@ class EventsController < CrudController
   end
 
   def typeahead
+    # only return current/upcoming events
+    params[:start_date] = Time.zone.today
+
     respond_to do |format|
       format.json { render json: for_typeahead(entries.where(search_conditions)) }
     end

@@ -25,6 +25,10 @@ describe Events::Filter::State do
     )
   end
 
+  after do
+    Event::Course.possible_states = []
+  end
+
 
   context 'has assumptions' do
     let(:params) { {} } # dummy, not needed

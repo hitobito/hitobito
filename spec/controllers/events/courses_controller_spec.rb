@@ -41,7 +41,7 @@ describe Events::CoursesController do
     end
 
     it 'groups by course kind' do
-      course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk),
+      course = Fabricate(:course, groups: [groups(:bottom_layer_one)], kind: event_kinds(:slk),
                                   maximum_participants: 20)
       course.dates.build(start_at: '02.01.2020')
       course.save
@@ -55,22 +55,22 @@ describe Events::CoursesController do
 
     it 'defaults to layer of primary group' do
       get :index
-      expect(assigns(:group_id)).to eq groups(:top_group).layer_group_id
+      expect(assigns(:group_ids)).to eq [groups(:top_layer).layer_group_id]
     end
 
     it 'can be set via param' do
-      get :index, params: { group_id: groups(:top_layer).id }
-      expect(assigns(:group_id)).to eq groups(:top_layer).id
+      get :index, params: { filter: { group_ids: [groups(:bottom_layer_one).id] } }
+      expect(assigns(:group_ids)).to eq [groups(:bottom_layer_one).id]
     end
   end
 
   context 'exports to csv, it' do
     let(:rows) { response.body.split("\n") }
-    let(:course) { Fabricate(:course) }
-    before { Fabricate(:event_date, event: course) }
+    let(:course) { Fabricate(:course, groups: [groups(:bottom_layer_one)]) }
+    before { Fabricate(:event_date, event: course, start_at: Date.new(2020, 01, 02)) }
 
     it 'renders csv headers' do
-      allow(controller).to receive_messages(current_user: people(:root))
+      allow(controller).to receive_messages(current_user: people(:top_leader))
       get :index, format: :csv
       expect(response).to be_successful
       expect(rows.first).to match(/^Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$/)
@@ -82,7 +82,10 @@ describe Events::CoursesController do
     before { Event::Course.used_attributes -= [:kind_id] }
 
     it 'groups by month' do
-      course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk), maximum_participants: 20)
+      course = Fabricate(:course,
+                         groups: [groups(:bottom_layer_one)],
+                         kind: event_kinds(:slk),
+                         maximum_participants: 20)
       course.dates.clear
       course.dates.build(start_at: '02.03.2020')
       course.save
@@ -95,13 +98,17 @@ describe Events::CoursesController do
 
   context 'booking info' do
     before do
-      course = Fabricate(:course, display_booking_info: false)
-      Fabricate(:event_date, event: course, start_at: Date.new(2012, 1, 23))
+      course1 = Fabricate(:course, display_booking_info: false, groups: [groups(:top_layer)])
+      Fabricate(:event_date, event: course1, start_at: Date.new(2012, 1, 13))
+      course2 = Fabricate(:course, display_booking_info: true, groups: [groups(:top_layer)])
+      Fabricate(:event_date, event: course2, start_at: Date.new(2012, 1, 23))
     end
 
     it 'is visible for manager' do
       sign_in(people(:top_leader))
-      get :index, params: { filter: { since: '01.01.2012' } }
+      get :index, params: { filter: { since: '01.01.2012',
+                                      until: '01.02.2012',
+                                      group_ids: [groups(:top_layer).id] } }
       expect(response.body).to have_selector('tbody tr', count: 2)
       expect(response.body).to have_selector('tbody tr:nth-child(1) td:nth-child(3)',
                                              text: '0 Anmeldungen')
@@ -111,7 +118,9 @@ describe Events::CoursesController do
 
     it 'is only visible for member where allowed by course' do
       sign_in(people(:bottom_member))
-      get :index, params: { filter: { since: '01.01.2012' } }
+      get :index, params: { filter: { since: '01.01.2012',
+                                      until: '01.02.2012',
+                                      group_ids: [groups(:top_layer).id] } }
       expect(response.body).to have_selector('tbody tr', count: 2)
       expect(response.body).not_to have_selector('tbody tr:nth-child(1) td:nth-child(3)',
                                                  text: '0 Anmeldungen')

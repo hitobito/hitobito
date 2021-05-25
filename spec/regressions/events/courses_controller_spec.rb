@@ -18,34 +18,31 @@ describe Events::CoursesController, type: :controller do
 
   let(:dom) { Capybara::Node::Simple.new(response.body) }
 
-  let(:dropdown) { dom.find('.nav .dropdown-menu') }
+  let(:multiselect) { dom.find('#course-filter .select.shown') }
   let(:top_layer) { groups(:top_layer) }
   let(:top_group) { groups(:top_group) }
 
-  context 'filter dropdown' do
+  context 'group filter multiselect' do
     before { get :index }
-    let(:items) { dropdown.all('a') }
-    let(:first) { items.first }
-    let(:middle) { items[1] }
-    let(:last) { items.last }
+    let(:options) { multiselect.all('option') }
+    let(:first) { options.first }
+    let(:middle) { options[1] }
+    let(:last) { options.last }
 
     it 'contains links that filter event data' do
-      expect(items.size).to eq 5
+      expect(options.size).to eq 4
 
-      expect(items[0].text).to eq 'Alle Gruppen'
-      expect(items[0][:href]).to eq list_courses_path
+      expect(options[0].text).to eq top_layer.name
+      expect(options[0][:value]).to eq top_layer.id.to_s
 
-      expect(items[1].text).to eq top_layer.name
-      expect(items[1][:href]).to eq list_courses_path(group_id: top_layer.id)
+      expect(options[1].text).to eq groups(:bottom_layer_one).name
+      expect(options[1][:value]).to eq groups(:bottom_layer_one).id.to_s
 
-      expect(items[2].text).to eq groups(:bottom_layer_one).name
-      expect(items[2][:href]).to eq list_courses_path(group_id: groups(:bottom_layer_one).id)
+      expect(options[2].text).to eq groups(:bottom_layer_two).name
+      expect(options[2][:value]).to eq groups(:bottom_layer_two).id.to_s
 
-      expect(items[3].text).to eq groups(:bottom_layer_two).name
-      expect(items[3][:href]).to eq list_courses_path(group_id: groups(:bottom_layer_two).id)
-
-      expect(items[4].text).to eq top_group.name
-      expect(items[4][:href]).to eq list_courses_path(group_id: top_group.id)
+      expect(options[3].text).to eq top_group.name
+      expect(options[3][:value]).to eq top_group.id.to_s
 
       expect(dom.find('body nav .nav-left-section.active > a').text.strip).to eq 'Kurse'
     end
@@ -160,7 +157,7 @@ describe Events::CoursesController, type: :controller do
     it 'does not show details for users who cannot manage course' do
       person = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
       sign_in(person)
-      get :index
+      get :index, params: { filter: { group_ids: [slk_ev.groups.first.id] } }
       expect(main.find('table tr:eq(1) td:eq(1) a').text).to eq 'Eventus'
       expect(main.find('table tr:eq(1) td:eq(1)').text.strip).to eq 'EventusSLK 123 Top'
       expect(main.find('table tr:eq(1) td:eq(1) a')[:href]).to eq group_event_path(slk_ev.groups.first, slk_ev)
@@ -178,12 +175,6 @@ describe Events::CoursesController, type: :controller do
     it 'filters with group param' do
       get :index, params: { group_id: glk_ev.group_ids.first }
       expect(main.all('h2').size).to eq 1
-    end
-
-    it 'filters by date, keeps date in dropdown' do
-      get :index, params: { filter: { since: '01.01.2010', until: '01.01.2011' } }
-      expect(main.all('h2').size).to eq 1
-      expect(dropdown.find('li:eq(5) a')[:href]).to eq list_courses_path(filter: { since: '01.01.2010', until: '01.01.2011' }, group_id: top_group.id)
     end
 
   end

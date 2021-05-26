@@ -10,14 +10,16 @@ module Export
     attr_reader :file
 
     def initialize(file, total)
-      @file = file.parent.join(file.basename(".*").to_s << ".progress")
+      @file = file.parent.join(file.basename('.*').to_s << '.progress')
       @total = total
+      @current_percentage = 0
+      update_file(@current_percentage)
     end
 
     def report(position)
       value = percentage(position)
-      if steps.first <= value
-        steps.delete_if { |step| step <= value }
+      if @current_percentage < value
+        @current_percentage = value
         update_file(value)
       end
     end
@@ -26,12 +28,8 @@ module Export
 
     def update_file(value)
       FileUtils.mkdir_p(@file.dirname) unless @file.dirname.exist?
-      @file.write(value.to_i)
-      FileUtils.rm_rf(@file) if steps.empty?
-    end
-
-    def steps
-      @steps ||= (0..100).to_a
+      @file.write(value)
+      FileUtils.rm_rf(@file) if @current_percentage >= 100
     end
 
     def percentage(position)

@@ -344,6 +344,7 @@ fr:
         event_search: Chercher un événement
         submit: Ajouter
   assignments:
+    attachment: 'afficher les pièces jointes'
     form:
       attachment:
         subject: 'Objet du message'
@@ -427,7 +428,6 @@ fr:
     not_logged_in: "Tu dois t'authentifier afin de pouvoir t'inscrire à l'événement '%{event}'."
     person_found: 'Nous t''avons trouvé(e) dans notre base de données.'
     email_sent: 'Nous t''avons envoyer un courriel. Dans ce courriel il y a un lien avec lequel tu pourras t''inscrire directement à cet événement.'
-    email_missing: 'Indique une adresse e-mail, s''il te plaît.'
     form_data_missing: 'Prière de remplir le formulaire suivant avant de t''inscrire à cet événement.'
     registered: 'Tes données personnelles ont été enregistrées. Prière d''apporter les indications complémentaires suivantes en vue de l''inscription.'
     application_window_closed: 'La fenêtre d''inscription pour cet événement est close.'
@@ -763,6 +763,20 @@ fr:
       button_preview: Aperçu
       button_dispatch_text_message: Envoyer
       button_show_pdf: Afficher le PDF
+      recipient_info:
+        valid:
+          message/letter:
+            zero: "Il n'existe aucune personne avec adresse."
+            one: "%{model_class} est créé pour une personne avec adresse."
+            other: "%{model_class} est créé pour %{count} personnes avec adresse."
+          message/letter_with_invoice:
+            zero: "Il n'existe aucune personne avec adresse."
+            one: "%{model_class} est créé pour une personne avec adresse."
+            other: "%{model_class} est créé pour %{count} personnes avec adresse."
+          message/text_message:
+            zero: "Il n'existe aucune personne avec numéro de portable."
+            one: "%{model_class} est créé pour une personne avec numéro de portable."
+            other: "%{model_class} est créé pour %{count} personnes avec numéro de portable."
     letter:
       fields:
         available_placeholders: 'Espaces disponibles: %{placeholders}'
@@ -797,6 +811,9 @@ fr:
         sender: "Expéditeur: %{mail}"
         sender_rejected: L'expéditeur a été supprimé
         unkown_recipient: Destinataire inconnu
+    export_enqueued: 'L''export est démarré en arrière-plan et sera téléchargé après complétion.'
+    show:
+      recipients_empty: La liste de distribution est vide, aucun PDF ne peut être créé.
   navigation:
     menu: 'Menu'
     groups: 'Groupes'

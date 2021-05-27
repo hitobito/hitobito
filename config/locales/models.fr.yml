@@ -56,10 +56,10 @@ fr:
           attributes:
             person_id:
               taken: est déjà annoncé
-        oauth/application:
+        message/letter_with_invoice:
           attributes:
-            scopes:
-              not_match_configured: "ne correspondent pas à celles du serveur."
+            base:
+              invoice_items_invalid: Au moins un poste budgétaire est invalide.
         person:
           name_missing: 'Veuillez entrer votre nom'
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."

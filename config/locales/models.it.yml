@@ -60,10 +60,6 @@ it:
           attributes:
             base:
               invoice_items_invalid: Almeno una voce di un conto non è valida.
-        oauth/application:
-          attributes:
-            scopes:
-              not_match_configured: "non coincidono con quelle depositate sul server."
         person:
           name_missing: 'Inserire un nome'
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."

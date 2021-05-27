@@ -428,7 +428,6 @@ it:
     not_logged_in: "Devi effettuare l'accesso per poterti iscrivere all'evento '%{event}'."
     person_found: 'ti abbiamo trovato all''interno della nostra banca dati.'
     email_sent: 'ti abbiamo inviato un''email con un link, da cui potrai iscriverti direttamente all''evento'
-    email_missing: 'digitare l''indirzzo email'
     form_data_missing: 'Compila per favore il formulario seguente prima di iscriverti all''evento.'
     registered: 'I tuoi dati personali sono stati registrati. Completa ancora solo i dati per l''iscrizione.'
     application_window_closed: 'il periodo per l''iscrizione per questo evento è terminato.'

@@ -10,11 +10,11 @@ class AsyncDownloadsController < ApplicationController
   skip_authorization_check
 
   def show
-    if async_download_file.downloadable?(current_person)
+    if file.downloadable?(current_person)
       file_type = params[:file_type]
       Cookies::AsyncDownload.new(cookies).remove(name: params[:id], type: file_type)
 
-      data = File.read(async_download_file.full_path)
+      data = File.read(file.full_path)
       data = css_encoding(data) if file_type == 'csv'
 
       send_data data, filename: filename(file_type)
@@ -24,21 +24,21 @@ class AsyncDownloadsController < ApplicationController
   end
 
   def exists?
-    status = async_download_file.downloadable?(current_person) ? 200 : 404
+    status = file.downloadable?(current_person) ? 200 : 404
 
     respond_to do |format|
-      format.json { render json: { status: status } }
+      format.json { render json: { status: status, progress: file.progress } }
     end
   end
 
   private
 
-  def async_download_file
-    AsyncDownloadFile.new(params[:id], params[:file_type])
+  def file
+    @file ||= AsyncDownloadFile.new(params[:id], params[:file_type])
   end
 
   def filename(type)
-    "#{async_download_file.filename}.#{type}"
+    "#{file.filename}.#{type}"
   end
 
   def css_encoding(data)

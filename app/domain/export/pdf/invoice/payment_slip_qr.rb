@@ -13,7 +13,7 @@ module Export::Pdf::Invoice
     delegate :start_new_page, :move_cursor_to, :horizontal_line, :vertical_line,
       :stroke, :bounds, :font, :text_box, :move_down, to: :pdf
 
-    delegate :creditor_values, :debitor_values, to: '@invoice.qrcode'
+    delegate :creditor_values, :debitor_values, to: 'invoice.qrcode'
 
     HEIGHT = 105.mm
     WIDTH_PAYMENT = 148.mm
@@ -26,7 +26,7 @@ module Export::Pdf::Invoice
     def render # rubocop:disable Metrics/MethodLength
       start_new_page if cursor < HEIGHT + MARGIN
 
-      separators
+      stamped :separators
 
       receipt do
         receipt_titel
@@ -36,9 +36,9 @@ module Export::Pdf::Invoice
       end
 
       payment do
-        payment_titel
+        stamped :payment_titel
         payment_qrcode
-        payment_amount
+        stamped :payment_amount
         payment_infos
         payment_extra_infos
       end
@@ -55,7 +55,7 @@ module Export::Pdf::Invoice
     end
 
     def scissor_image(kind, at:)
-      image @invoice.qrcode.scissor(kind), at: at, scale: 0.1
+      image invoice.qrcode.scissor(kind), at: at, scale: 0.1
     end
 
     def receipt
@@ -79,7 +79,7 @@ module Export::Pdf::Invoice
 
     def payment_qrcode
       padded_bounding_box(0.6, width: 60.mm, pad_right: true) do
-        @invoice.qrcode.generate do |path|
+        invoice.qrcode.generate do |path|
           image path, fit: [46.mm, 46.mm], position: :center, vposition: :center
         end
       end
@@ -148,11 +148,11 @@ module Export::Pdf::Invoice
         text_box 'Betrag', at: [20.mm, cursor]
       end
       content do
-        text_box @invoice.currency, at: [0, cursor]
-        if @invoice.total.zero?
+        text_box invoice.currency, at: [0, cursor]
+        if invoice.total.zero?
           blank_amount_rectangle
         else
-          amount = number_with_precision(@invoice.total, precision: 2, delimiter: ' ')
+          amount = number_with_precision(invoice.total, precision: 2, delimiter: ' ')
           text_box amount, at: [20.mm, cursor]
         end
       end

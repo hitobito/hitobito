@@ -83,6 +83,10 @@ module MessagesHelper
       model_class: message.model_name.human)
   end
 
+  def format_message_salutation(message)
+    Salutation.all[message.salutation] || I18n.t('global.associations.no_entry')
+  end
+
   private
 
   def message_invalid_recipient_info(message)

@@ -13,8 +13,7 @@ describe :messages, js: true do
   let(:list) { mailing_lists(:leaders) }
 
   before do
-    messages = double
-    allow(messages).to receive(:enable_writing).and_return(true)
+    messages = double(:settings, enable_writing: true, personal_salutation: false)
     allow(Settings).to receive(:messages).and_return(messages)
   end
 
@@ -26,7 +25,7 @@ describe :messages, js: true do
   context 'letter' do
     before do
       Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
-      42.times do
+      3.times do
         person = Fabricate(:person_with_address)
         Group::TopGroup::Leader.create!(group: groups(:top_group), person: person)
       end
@@ -35,7 +34,7 @@ describe :messages, js: true do
     it 'displays recipient info' do
       click_link('Brief erstellen')
 
-      is_expected.to have_selector('a', text: 'Brief wird für 42 Personen erstellt.')
+      is_expected.to have_selector('a', text: 'Brief wird für 3 Personen erstellt.')
       is_expected.to have_text('(Eine Person hat keine vollständige Addresse hinterlegt.)')
     end
   end
@@ -43,7 +42,7 @@ describe :messages, js: true do
   context 'text message' do
     before do
       Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
-      42.times do
+      3.times do
         person = Fabricate(:phone_number, label: 'Mobil').contactable
         Group::TopGroup::Leader.create!(group: groups(:top_group), person: person)
       end
@@ -52,7 +51,7 @@ describe :messages, js: true do
     it 'displays recipient info' do
       click_link('SMS erstellen')
 
-      is_expected.to have_selector('a', text: 'SMS wird für 42 Personen erstellt.')
+      is_expected.to have_selector('a', text: 'SMS wird für 3 Personen erstellt.')
       is_expected.to have_text('(Eine Person hat keine vollständige Mobiltelefonnummer hinterlegt.)')
     end
   end
@@ -75,7 +74,7 @@ describe :messages, js: true do
       Subscription.create!(mailing_list: list,
                            subscriber: groups(:top_group),
                            role_types: [Group::TopGroup::Leader])
-      42.times do
+      3.times do
         person = Fabricate(:person_with_address)
         Group::TopGroup::Leader.create!(group: groups(:top_group), person: person)
       end
@@ -84,7 +83,7 @@ describe :messages, js: true do
     it 'creates new letter and assignment' do
       click_link('Brief erstellen')
 
-      is_expected.to have_selector('a', text: 'Brief wird für 42 Personen erstellt.')
+      is_expected.to have_selector('a', text: 'Brief wird für 3 Personen erstellt.')
       fill_in 'Betreff', with: 'Letter with love'
       fill_in_trix_editor 'message_body', with: Faker::Lorem.sentences.join
       expect do

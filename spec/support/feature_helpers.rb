@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -9,7 +9,7 @@ module FeatureHelpers
 
   def sign_in(user = nil)
     user ||= people(:top_leader)
-    login_as(user, :scope => :person)
+    login_as(user, scope: :person)
   end
 
   def fill_in_trix_editor(id, with:)
@@ -20,14 +20,12 @@ module FeatureHelpers
 
   # catch some errors occuring now and then in capybara tests
   def obsolete_node_safe
-    begin
-      yield
-    rescue Errno::ECONNREFUSED,
-           Timeout::Error,
-           Capybara::FrozenInTime,
-           Capybara::ElementNotFound => e
-      skip e.message
-    end
+    yield
+  rescue Errno::ECONNREFUSED,
+         Timeout::Error,
+         Capybara::FrozenInTime,
+         Capybara::ElementNotFound => e
+    skip e.message
   end
 
   # due to concurrent requests in js specs, it happens that

@@ -11,16 +11,16 @@ module RenderMessagesExports
   def render_pdf(message, preview:)
     assert_type(message)
     assert_recipients(message)
-
-    pdf = message.exporter_class.new(message, recipients(message), preview: preview)
-    send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename
+    options = { background: Settings.messages.pdf.preview }
+    pdf = message.exporter_class.new(message, recipients(message), options)
+    send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename(:preview)
   end
 
   def render_pdf_in_background(message)
     assert_type(message)
     assert_recipients(message)
 
-    base_name = message.exporter_class.new(message, [], preview: false).filename
+    base_name = message.exporter_class.new(message, Person.none, preview: false).filename
     with_async_download_cookie(:pdf, base_name) do |filename|
       Export::MessageJob.new(current_person.id, message.id, filename).enqueue!
     end
@@ -39,7 +39,7 @@ module RenderMessagesExports
   end
 
   def recipients(message)
-    message.mailing_list.people(Person.with_address)
+    message.mailing_list.people(Person.with_address).limit(5) # no need to query all recipients
   end
 
 end

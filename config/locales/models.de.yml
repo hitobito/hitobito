@@ -297,6 +297,25 @@ de:
       role:
         one: Rolle
         other: Rollen
+      salutation:
+        one: Anrede
+        other: Anreden
+        personal:
+          label: persönliche Anrede
+        default:
+          label: Hallo [Name]
+          value:
+            m: Hallo %{greeting_name}
+            w: Hallo %{greeting_name}
+            other: Hallo %{greeting_name}
+        available:
+          lieber_vorname:
+            label: Liebe*r [Vorname]
+            value:
+              m: Lieber %{first_name}
+              w: Liebe %{first_name}
+              other: Liebe*r %{first_name}
+
       service_token:
         one: API-Key
         other: API-Keys
@@ -727,6 +746,7 @@ de:
       message/letter:
         body: Inhalt
         heading: Briefkopf
+        salutation: Anrede
 
       subscription:
         related_role_types: Rollen

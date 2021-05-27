@@ -8,22 +8,17 @@
     = action_button(t('.button_dispatch_letter'), message_dispatch_path(message_id: entry.id), :paper_plane, method: :post)
   - else
     = action_button(t('.button_show_assignment'), group_person_assignment_path(*entry.assignments.first.path_args), :paper_plane, method: :get)
+
 - if entry.letter?
   - if entry.dispatched?
-    = with_recipient_tooltip(entry) do
-      = action_button(t('.button_show_pdf'),
-                      group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf),
-                      :eye,
-                      disabled: no_letter_recipients(entry),
-                      in_button_group: true)
+    = action_button(t('.button_show_pdf'),
+                    group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf),
+                    :eye)
   - else
-    = with_recipient_tooltip(entry) do
-      = action_button(t('.button_preview'),
-                      group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf, preview: true),
-                      :eye,
-                      target: :_blank,
-                      disabled: no_letter_recipients(entry),
-                      in_button_group: true)
+    = action_button(t('.button_preview'),
+                  group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf, preview: true),
+                  :eye,
+                  target: :_blank)
 
     = button_action_edit if can?(:edit, entry)
   - if can?(:new, entry)

@@ -6,13 +6,15 @@
 #
 #  id                 :bigint           not null, primary key
 #  failed_count       :integer          default(0)
-#  invoice_attributes :text(16777215)
+#  heading            :boolean          default(FALSE)
+#  invoice_attributes :text(65535)
 #  recipient_count    :integer          default(0)
+#  salutation         :string(255)
 #  sent_at            :datetime
 #  state              :string(255)      default("draft")
 #  subject            :string(256)
 #  success_count      :integer          default(0)
-#  text               :text(16777215)
+#  text               :text(65535)
 #  type               :string(255)      not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null

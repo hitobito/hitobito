@@ -2,10 +2,6 @@
 
 ## unreleased
 
-## Version 1.26
-
-## Version 1.26
-
 ## Version 1.23
 
 *  Layout der OAuth-Dialoge angepasst und Logos ermöglicht (#1044)

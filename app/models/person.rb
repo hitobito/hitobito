@@ -36,8 +36,10 @@
 #  remember_created_at       :datetime
 #  reset_password_sent_at    :datetime
 #  reset_password_token      :string(255)
+#  salutation                :string(255)
 #  show_global_label_formats :boolean          default(TRUE), not null
 #  sign_in_count             :integer          default(0)
+#  title                     :string(255)
 #  town                      :string(255)
 #  unlock_token              :string(255)
 #  zip_code                  :string(255)

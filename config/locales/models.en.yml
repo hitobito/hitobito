@@ -637,6 +637,7 @@ en:
       message/letter:
         body: Content
         heading: Letterhead
+        salutation: Salutation
       subscription:
         related_role_types: Roles
       people_filter:
@@ -793,6 +794,25 @@ en:
         title: Reminder title
         text: Reminder text
         due_days: Due days reminder
+      salutation:
+        one: Salutation
+        other: Salutations
+        personal:
+          label: personel salutation
+        default:
+          label: "Hi [name]"
+          value:
+            m: "Hi %{greeting_name}"
+            w: "Hi %{greeting_name}"
+            other: "Hi %{greeting_name}"
+        available:
+          lieber_vorname:
+            label: "Dear [first_name]"
+            value:
+              m: "Dear %{first_name}"
+              w: "Dear %{first_name}"
+              other: "Dear %{first_name}"
+
       service_token:
         name: Name
         description: Description

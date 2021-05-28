@@ -30,7 +30,7 @@ module Sheet
     tab 'activerecord.models.message.other',
         :messages_group_person_path,
         if: (lambda do |view, _group, person|
-          view.can?(:show_details, person) && person.roles.any?
+          view.can?(:show_details, person) && (person.roles.any? || person.root?)
         end)
 
     tab 'people.tabs.history',

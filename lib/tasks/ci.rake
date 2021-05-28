@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
@@ -38,11 +37,12 @@ namespace :ci do
 
   desc 'Run the tasks for a wagon commit build'
   task :wagon do
-
     Rake::Task['log:clear'].invoke
+    Rake::Task['db:migrate'].invoke
+    Rake::Task['wagon:migrate'].invoke
 
     wagon_exec('DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ' \
-               'bundle exec rake app:rubocop app:db:migrate app:wagon:migrate app:ci:setup:rspec spec:all')
+               'bundle exec rake app:rubocop app:ci:setup:rspec spec:all')
   end
 
   namespace :setup do

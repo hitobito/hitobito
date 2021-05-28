@@ -42,7 +42,7 @@ namespace :ci do
     Rake::Task['log:clear'].invoke
 
     wagon_exec('DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ' \
-               'bundle exec rake app:rubocop app:wagon:migrate app:ci:setup:rspec spec:all')
+               'bundle exec rake app:rubocop app:db:migrate app:wagon:migrate app:ci:setup:rspec spec:all')
   end
 
   namespace :setup do

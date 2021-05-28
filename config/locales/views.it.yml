@@ -776,9 +776,6 @@ it:
             zero: "Non ci sono persone con un numero di telefonino."
             one: "%{model_class} viene creato per una persona con numero di telefonino."
             other: "%{model_class} viene creato per %{count} persone con numero di telefonino."
-    letter:
-      fields:
-        available_placeholders: 'Segnaposto disponibili: %{placeholders}'
     text_message:
       fields:
         remaining_chars: Caratteri rimanenti

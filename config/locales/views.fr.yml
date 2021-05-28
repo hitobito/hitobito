@@ -777,9 +777,6 @@ fr:
             zero: "Il n'existe aucune personne avec numéro de portable."
             one: "%{model_class} est créé pour une personne avec numéro de portable."
             other: "%{model_class} est créé pour %{count} personnes avec numéro de portable."
-    letter:
-      fields:
-        available_placeholders: 'Espaces disponibles: %{placeholders}'
     text_message:
       fields:
         remaining_chars: Caractères restant

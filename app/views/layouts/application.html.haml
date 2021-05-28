@@ -23,7 +23,7 @@
 
     = yield(:head)
 
-  %body{class: ('is-logged-out' unless current_user&.roles.present?) }
+  %body{class: ('is-logged-out' unless person_signed_in?) }
     #modal-placeholder
     %main
       = render 'layouts/file_download' if current_user
@@ -42,7 +42,7 @@
         #page-header
           - if current_user
             = link_to(icon('bars') + t('navigation.menu'), '#', class: 'toggle-nav visible-phone')
-            - if current_user&.roles.present?
+            - if current_person&.roles.present? || current_person&.root?
               = render 'layouts/quicksearch'
             - else
               = render 'layouts/languages'
@@ -51,7 +51,7 @@
           - elsif current_user.nil? # nil without login, false on error
             = render 'layouts/unauthorized'
 
-        - if current_user&.roles.present?
+        - if current_person&.roles.present? || current_person&.root?
           = render_sheets do
             .content-header
               %h1

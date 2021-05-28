@@ -14,7 +14,7 @@
 
 = dropdown_people_export(can?(:show_full, entry), false, true, false)
 
-- if entry.email && entry.roles.any?
+- if entry.email && (entry.roles.any? || entry.root?)
   = action_button(t('.send_login'),
                   send_password_instructions_group_person_path(parent, entry),
                   :envelope,

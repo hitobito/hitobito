@@ -11,8 +11,11 @@ describe 'layouts/application.html.haml' do
   subject { Capybara::Node::Simple.new(rendered) }
 
   before do
+    allow(controller).to receive(:current_person).and_return(person)
     allow(controller).to receive(:current_user).and_return(person)
     allow(controller).to receive(:origin_user).and_return(person)
+    allow(view).to receive(:person_signed_in?).and_return(true)
+    allow(view).to receive(:current_person).and_return(person)
     allow(view).to receive(:current_user).and_return(person)
     allow(view).to receive(:origin_user).and_return(person)
     allow(view).to receive(:person_home_path).and_return('')

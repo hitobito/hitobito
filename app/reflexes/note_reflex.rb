@@ -7,4 +7,8 @@ class NoteReflex < ApplicationReflex
     puts 'asdfasdfa'
   end
 
+  def haha
+    puts 'asdfasdf 42 42 42'
+  end
+
 end

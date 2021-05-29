@@ -17,6 +17,7 @@
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import 'channels';
 
 /**
  * Dependencies
@@ -84,4 +85,5 @@ document.addEventListener('trix-file-accept', function(event) {
   }
 });
 
+import '../controllers/index'
 import "controllers"

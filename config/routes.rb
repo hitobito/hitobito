@@ -7,6 +7,8 @@
 
 Hitobito::Application.routes.draw do
 
+  mount ActionCable.server => '/cable'
+
   extend LanguageRouteScope
 
   root to: 'dashboard#index'

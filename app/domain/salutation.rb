@@ -32,7 +32,7 @@ class Salutation
 
   def initialize(person, salutation = nil)
     @person = person
-    @salutation = salutation
+    @salutation = salutation || person&.salutation
   end
 
   def label

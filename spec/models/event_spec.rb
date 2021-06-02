@@ -209,8 +209,7 @@ describe Event do
     end
   end
 
-  context 'finders' do
-
+  context 'finders and scopes' do
     context '.in_year' do
       context 'one date' do
         before { set_start_finish(event, '2000-01-02') }
@@ -282,7 +281,6 @@ describe Event do
     end
 
     context 'between' do
-
       it 'finds nothing if params nil' do
         event.dates.create(start_at: 1.year.ago, finish_at: 1.year.from_now)
         expect(Event.between(nil, nil)).to be_blank
@@ -331,6 +329,23 @@ describe Event do
 
       end
 
+    end
+
+    context 'places_available' do
+      let(:where_condition) do
+        described_class.places_available.
+          to_sql.sub(/.*(WHERE.*)$/, '\1')
+      end
+
+      it 'checks the maximum_participants' do
+        expect(where_condition)
+          .to match(/COALESCE\(maximum_participants, 0\) = 0/)
+      end
+
+      it 'compares the participant_count to the maximum_participants' do
+        expect(where_condition)
+          .to match('participant_count < maximum_participants')
+      end
     end
   end
 
@@ -454,7 +469,7 @@ describe Event do
   context 'participant and application counts' do
     def create_participation(prio, attrs = { active: true })
       participation_attrs = prio == :prio1 ? { event: event } : { event: another_event }
-      application_attrs = prio == :prio1 ? { priority_1: event } : { priority_1: another_event, priority_2: event }
+      application_attrs = prio == :prio1 ? { priority_1: event } : { priority_1: another_event, priority_2: event } # rubocop:disable Metrics/LineLength
 
       participation = Fabricate(:event_participation, participation_attrs.merge(attrs))
       participation.create_application!(application_attrs)

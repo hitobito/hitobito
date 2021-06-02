@@ -28,4 +28,9 @@ module FilterHelper
                                                         params[attr])
     direct_filter(attr, label) { select_tag(attr, select_options, options) }
   end
+
+  def set_filter(filter_params = {})
+    anchor = filter_params.delete :anchor
+    params.to_unsafe_h.deep_merge(filter: filter_params, anchor: anchor)
+  end
 end

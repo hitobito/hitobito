@@ -22,6 +22,12 @@ class Person::Filter::List
     default_order(filtered_accessibles.preload_groups.distinct)
   end
 
+  def all_count
+    @all_count ||= filter.distinct.count
+  end
+
+  private
+
   def filtered_accessibles
     return filter unless user
 
@@ -33,12 +39,6 @@ class Person::Filter::List
       accessibles.merge(filter)
     end
   end
-
-  def all_count
-    @all_count ||= filter.distinct.count
-  end
-
-  private
 
   def filter
     chain.present? ? chain.filter(list_range) : list_range

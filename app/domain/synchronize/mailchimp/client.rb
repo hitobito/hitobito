@@ -108,7 +108,7 @@ module Synchronize
       def destroy_segment_operation(segment_id)
         {
           method: 'DELETE',
-          path: "lists/#{list_id}/segments/#{segment_id}",
+          path: "lists/#{list_id}/segments/#{segment_id}"
         }
       end
 
@@ -148,7 +148,7 @@ module Synchronize
           email_address: person.email.strip,
           merge_fields: {
             FNAME: person.first_name.to_s.strip,
-            LNAME: person.last_name.to_s.strip,
+            LNAME: person.last_name.to_s.strip
           }.merge(merge_field_values(person))
         }.merge(member_field_values(person))
       end
@@ -159,7 +159,7 @@ module Synchronize
         Digest::MD5.hexdigest(email.downcase)
       end
 
-      def paged(key, fields, list: [], offset: 0, &block)
+      def paged(key, fields, list: [], offset: 0, &block) # rubocop:disable Metrics/MethodLength
         body = block.call(list).retrieve(params: { count: count, offset: offset }).body.to_h
 
         body[key].each do |entry|
@@ -197,7 +197,7 @@ module Synchronize
         attempt = 0 if status != prev_status
 
         log "batch #{batch_id}, status: #{status}, attempt: #{attempt}"
-        fail "Batch #{batch_id} exeeded max_attempts, status: #{status}" if attempt > @max_attempts
+        raise "Batch #{batch_id} exeeded max_attempts, status: #{status}" if attempt > @max_attempts
 
         if status != 'finished'
           wait_for_finish(batch_id, status, attempt + 1)
@@ -210,7 +210,7 @@ module Synchronize
       end
 
       def merge_field_values(person)
-        merge_fields.collect do |field, type, options, evaluator|
+        merge_fields.collect do |field, _type, options, evaluator|
           value = evaluator.call(person)
           next if value.blank?
           next if options.key?(:choices) && !options[:choices].include?(value)
@@ -222,7 +222,7 @@ module Synchronize
       def member_field_values(person)
         member_fields.collect do |field, evaluator|
           value = evaluator.call(person)
-          next unless value.present?
+          next if value.blank?
 
           [field, value]
         end.compact.to_h.deep_symbolize_keys

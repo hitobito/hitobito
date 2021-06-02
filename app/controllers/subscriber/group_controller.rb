@@ -12,7 +12,7 @@ module Subscriber
 
     before_render_form :replace_validation_errors
     before_render_form :load_role_types
-    before_render_form :load_possible_tags
+    before_render_form :possible_tags
 
     # GET query queries available groups via ajax
     def query
@@ -65,7 +65,7 @@ module Subscriber
       @role_types = Role::TypeList.new(subscriber.class) if subscriber
     end
 
-    def load_possible_tags
+    def possible_tags
       @possible_tags ||= PersonTags::Translator.new.possible_tags
     end
 

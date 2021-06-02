@@ -67,6 +67,34 @@ module EventsHelper
     Role.types_with_permission(:approve_applications).present?
   end
 
+  def course_states_used?
+    Event::Course.possible_states.present?
+  end
+
+  def course_state_collection
+    Event::Course.possible_states.map { |state| [course_state_translated(state), state] }
+  end
+
+  def course_state_translated(state = nil)
+    if course_states_used? && state
+      t("activerecord.attributes.event/course.states.#{state}")
+    else
+      state
+    end
+  end
+
+  def course_groups
+    return Group.course_offerers if can?(:list_all, Event::Course)
+
+    Group.course_offerers.where(id: current_user.groups_hierarchy_ids)
+  end
+
+  def hierarchy_course_groups
+    current_user.primary_group.present? ?
+        current_user.primary_group.hierarchy.course_offerers :
+        Group.find_by(id: current_user.groups_hierarchy_ids)
+  end
+
   def format_training_days(event)
     number_with_precision(event.training_days, precision: 1)
   end

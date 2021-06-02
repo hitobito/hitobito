@@ -1,0 +1,10 @@
+-#  Copyright (c) 2021, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= crud_table do |t|
+  - t.sortable_attrs :label
+  - render_extensions 'list_attrs', locals: { t: t }
+  - t.sortable_attrs :kinds, :updated_at
+  - add_table_actions(t)

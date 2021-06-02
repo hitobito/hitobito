@@ -1,6 +1,8 @@
 # Hitobito Changelog
 
-## Version 1.26
+## unreleased
+
+*  Überarbeitete Kursfilterung, mit wählbarem Datum statt nur jahresbasiert (#1153)
 
 ## Version 1.23
 

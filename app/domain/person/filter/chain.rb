@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2017 - 2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -87,7 +87,7 @@ class Person::Filter::Chain
     type = filter_type(attr)
     if type
       filter = type.new(attr, args.with_indifferent_access)
-      filter.present? ? filter : nil
+      filter.presence
     end
   end
 

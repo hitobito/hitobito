@@ -3,22 +3,17 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title t('.title')
+- title course_list_title.presence || t('event.lists.courses.title')
 - manager = can?(:list_all, Event::Course)
 
-%p= t('.explanation') unless can?(:list_all, Event::Course)
+%p= t('event.lists.courses.explanation') unless can?(:list_all, Event::Course)
 
-- content_for :toolbar do
-  - if manager
-    = pill_dropdown_button(Dropdown::Event::GroupFilter.new(self, year, group_id))
-
-= render 'shared/page_per_year', paging_params: group_id.to_i > 0 ? { group_id: group_id } : {}
+= render "filter"
 
 %p
   - if can?(:export_list, Event::Course)
     = Dropdown::Event::EventsExport.new(self, params).to_s
     = render_extensions :buttons
-
 
 #main
   %section

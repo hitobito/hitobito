@@ -229,6 +229,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
             'events.participant_count < events.maximum_participants')
     end
 
+    def places_available
+      where('(COALESCE(maximum_participants, 0) = 0) OR (participant_count < maximum_participants)')
+    end
+
     # Is the given attribute used in the current STI class
     def attr_used?(attr)
       used_attributes.include?(attr)
@@ -343,6 +347,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     visible = self[:globally_visible]
 
     return Settings.event.globally_visible_by_default if visible.nil?
+
     visible
   end
 

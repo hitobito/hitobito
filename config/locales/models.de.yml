@@ -177,6 +177,9 @@ de:
       event/kind:
         one: Kursart
         other: Kursarten
+      event/kind_category:
+        one: Kurskategorie
+        other: Kurskategorien
       event/role:
         one: Anlass Rolle
         other: Anlass Rollen
@@ -521,12 +524,21 @@ de:
       event/kind:
         label: Verbandsbezeichnung
         short_name: Kurzname
+        kind_category: Kurskategorie
+        kind_category_id: Kurskategorie
         minimum_age: Mindestalter
         preconditions: Vorbedingungen
         prolongations: Verlängert
         qualification_kinds: Qualifiziert für
         general_information: Standardbeschreibung
         application_conditions: Aufnahmebedingungen
+        created_at: Erstellt
+        updated_at: Geändert
+        deleted_at: Gelöscht
+
+      event/kind_category:
+        label: Bezeichnung
+        kinds: Kursarten
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht

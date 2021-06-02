@@ -270,6 +270,7 @@ de:
     lists:
       courses:
         title: 'Verfügbare Kurse'
+        no_category: Andere Kurse
         explanation: 'Hier werden Kurse deiner Gruppe, sowie deren Übergruppen angezeigt. Andere Kurse findest du bei der organisierenden Gruppe.'
         csv_export_button: 'CSV Export'
         ical_export_button: 'Kalender Export'
@@ -395,6 +396,10 @@ de:
         subject: 'Nachrichten Betreff:'
 
   events:
+    courses:
+      group_filter:
+        filter_by_layer: Veranstalter
+        select_layers: Gruppen suchen...
     actions_show:
       copy_share_link: Direktlink kopieren
     application_fields:

@@ -1,7 +1,0 @@
-%ul.nav-left-list
-  - if kind_used?
-    - @grouped_events.keys.each do |kind|
-      %li= link_to(kind, "##{CGI.escape(kind)}", data: { turbolinks: false })
-  - else
-    = render 'nav_left_events'
-

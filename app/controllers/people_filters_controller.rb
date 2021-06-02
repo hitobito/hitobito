@@ -11,7 +11,7 @@ class PeopleFiltersController < CrudController
   # load group before authorization
   prepend_before_action :parent
 
-  before_render_form :compose_role_lists, :load_possible_tags
+  before_render_form :compose_role_lists, :possible_tags
 
   helper_method :people_list_path
 
@@ -67,16 +67,16 @@ class PeopleFiltersController < CrudController
   end
 
   def assign_attributes
-    entry.name = params[:name] || (params[:people_filter] && params[:people_filter][:name])
+    entry.name = params[:name] || params.dig(:people_filter, :name)
     entry.range = params[:range]
-    entry.filter_chain = params[:filters].except(:host).to_unsafe_hash if params[:filters]
+    entry.filter_chain = params.fetch(:filters, nil)&.except(:host)&.to_unsafe_hash
   end
 
   def people_list_path(options = {})
     group_people_path(group, options)
   end
 
-  def load_possible_tags
+  def possible_tags
     @possible_tags ||= PersonTags::Translator.new.possible_tags
   end
 

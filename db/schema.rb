@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_06_155300) do
+ActiveRecord::Schema.define(version: 2021_04_21_120000) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -160,6 +160,22 @@ ActiveRecord::Schema.define(version: 2021_03_06_155300) do
     t.index ["event_id"], name: "index_event_dates_on_event_id"
   end
 
+  create_table "event_kind_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+  end
+
+  create_table "event_kind_category_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "kind_category_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "label"
+    t.index ["kind_category_id"], name: "index_bef985968be46182fb95e23ef7afbbeaddf1dd11"
+    t.index ["locale"], name: "index_event_kind_category_translations_on_locale"
+  end
+
   create_table "event_kind_qualification_kinds", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.integer "event_kind_id", null: false
     t.integer "qualification_kind_id", null: false
@@ -188,6 +204,7 @@ ActiveRecord::Schema.define(version: 2021_03_06_155300) do
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.integer "minimum_age"
+    t.integer "kind_category_id"
   end
 
   create_table "event_participations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|

@@ -59,7 +59,7 @@ module Events::CourseListing
 
   def date_or_default(date, default)
     Date.parse(date)
-  rescue
+  rescue ArgumentError
     default
   end
 

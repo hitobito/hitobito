@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe AssignmentsController do
-  let(:nesting)    { { group_id: bottom_member.primary_group.id, person_id: bottom_member.id } }
+  let(:nesting) { { group_id: bottom_member.primary_group.id, person_id: bottom_member.id } }
   let(:bottom_member) { people(:bottom_member) }
   let(:top_leader) { people(:top_leader) }
   let(:assignment) { assignments(:printing) }
@@ -52,17 +52,22 @@ describe AssignmentsController do
   context 'GET#new' do
     it 'assigns default_assignee' do
       assignments_settings = double
-      expect(assignments_settings).to receive(:default_assignee_email).and_return(bottom_member.email)
+      allow(assignments_settings)
+        .to receive(:default_assignee_email)
+        .and_return(bottom_member.email)
       allow(Settings).to receive(:assignments).and_return(assignments_settings)
 
-      assignment_double = double
-      expect_any_instance_of(AssignmentsController).to receive(:build_entry).and_return(assignment_double)
-      expect(assignment_double).to receive(:attachment).and_return(assignment)
+      get :new, params: { assignment: { attachment_id: assignment.attachment.id } }
 
-      expect(assignment_double).to receive(:class).and_return(Assignment).at_least(:once)
-      expect(assignment_double).to receive(:person=).with(bottom_member)
+      assignment = assigns(:assignment)
+      expect(assignment.person).to eq(bottom_member)
+    end
 
-      get :new
+    it 'does not assign assigne if no default_assignee setting' do
+      get :new, params: { assignment: { attachment_id: assignment.attachment.id } }
+
+      assignment = assigns(:assignment)
+      expect(assignment.person).to be(nil)
     end
 
     it 'can not new if attachment not writable' do

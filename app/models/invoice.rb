@@ -1,7 +1,10 @@
 # frozen_string_literal: true
-#
+
+#  Copyright (c) 20212-2021, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: invoices
@@ -83,7 +86,6 @@ class Invoice < ActiveRecord::Base
   validates :due_at, timeliness: { after: :sent_at }, presence: true, if: :sent?
   validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_list }
   validate :assert_sendable?, unless: :recipient_id?
-  validates_associated :invoice_config
 
   before_create :set_recipient_fields, if: :recipient
   after_create :increment_sequence_number
@@ -105,6 +107,7 @@ class Invoice < ActiveRecord::Base
   class << self
     def draft_or_issued_in(year)
       return all unless year.to_s =~ /\A\d+\z/
+
       condition = OrCondition.new
       condition.or('EXTRACT(YEAR FROM issued_at) = ?', year)
       condition.or('issued_at IS NULL AND EXTRACT(YEAR FROM invoices.created_at) = ?', year)
@@ -114,6 +117,7 @@ class Invoice < ActiveRecord::Base
     def to_contactables(invoices)
       invoices.collect do |invoice|
         next if invoice.recipient_address.blank?
+
         Person.new(address: invoice.recipient_address)
       end.compact
     end
@@ -131,9 +135,9 @@ class Invoice < ActiveRecord::Base
   end
 
   def calculated
-    [:total, :cost, :vat].collect do |field|
-      [field, round(invoice_items.reject(&:frozen?).sum(&field))]
-    end.to_h
+    [:total, :cost, :vat].index_with do |field|
+      round(invoice_items.reject(&:frozen?).sum(&field))
+    end
   end
 
   def recalculate
@@ -141,7 +145,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def recalculate!
-    update_attribute(:total, calculated[:total] || 0)
+    update_attribute(:total, calculated[:total] || 0) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def to_s

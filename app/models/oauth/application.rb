@@ -29,6 +29,8 @@ module Oauth
   class Application < Doorkeeper::Application
     has_many :access_grants, dependent: :delete_all, class_name: 'Oauth::AccessGrant'
     has_many :access_tokens, dependent: :delete_all, class_name: 'Oauth::AccessToken'
+    has_many :cors_origins, as: :auth_method, dependent: :delete_all
+    accepts_nested_attributes_for :cors_origins, allow_destroy: true
 
     mount_uploader :logo, Oauth::LogoUploader
 

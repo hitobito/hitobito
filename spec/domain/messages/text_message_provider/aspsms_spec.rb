@@ -112,7 +112,8 @@ describe Messages::TextMessageProvider::Aspsms do
       Password: 'max42',
       Originator: 'Acme',
       MessageText: 'Hi Mickey! how are you today?',
-      Recipients: recipients[0..999] }.to_json
+      Recipients: recipients[0..999],
+      AffiliateID: '259956' }.to_json
   end
 
   def delivery_report_body

@@ -9,5 +9,8 @@ module ParamConverters
     param.to_s.split(',').map(&:strip)
   end
 
-end
+  def true?(value)
+    %w(1 yes true).include?(value.to_s.downcase)
+  end
 
+end

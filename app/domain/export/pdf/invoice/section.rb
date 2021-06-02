@@ -6,22 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 module Export::Pdf::Invoice
-  class Section
-
-    attr_reader :pdf, :invoice
-
-    delegate :bounds, :text, :cursor, :font_size, :text_box,
-             :fill_and_stroke_rectangle, :fill_color,
-             :image, :group, :move_cursor_to, :float,
-             :stroke_bounds, to: :pdf
+  class Section < Export::Pdf::Section
 
     delegate :invoice_items, :address, :with_reference?, :participant_number, to: :invoice
 
-    def initialize(pdf, invoice, debug = false)
-      @pdf = pdf
-      @invoice = invoice
-      @debug = debug
-    end
+    alias_method :invoice, :model
 
     private
 
@@ -42,13 +31,5 @@ module Export::Pdf::Invoice
     def table(table, options)
       pdf.table(table, options) if table.present?
     end
-
-    def bounding_box(top_left, attrs = {})
-      pdf.bounding_box(top_left, attrs) do
-        yield
-        pdf.transparent(0.5) { stroke_bounds } if @debug
-      end
-    end
-
   end
 end

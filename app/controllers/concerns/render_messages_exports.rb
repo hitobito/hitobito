@@ -9,30 +9,37 @@ module RenderMessagesExports
   extend ActiveSupport::Concern
 
   def render_pdf(message, preview:)
-    @message = message
-    pdf = generate_pdf(preview)
-    send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename
+    assert_type(message)
+    assert_recipients(message)
+    options = { background: Settings.messages.pdf.preview }
+    pdf = message.exporter_class.new(message, recipients(message), options)
+    send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename(:preview)
+  end
+
+  def render_pdf_in_background(message)
+    assert_type(message)
+    assert_recipients(message)
+
+    base_name = message.exporter_class.new(message, Person.none, preview: false).filename
+    with_async_download_cookie(:pdf, base_name) do |filename|
+      Export::MessageJob.new(current_person.id, message.id, filename).enqueue!
+    end
   end
 
   private
 
-  def generate_pdf(preview)
-    @message.exporter_class.new(@message, recipients, preview: preview)
+  def assert_type(message)
+    raise "cannot create pdf for #{message.type}" unless message.is_a?(Message::Letter)
   end
 
-  def recipients
-    person_ids = params[:person_id].to_s.split(',')
-    people.where(id: person_ids).exists? ?
-      people.where(id: person_ids) :
-      people
+  def assert_recipients(message)
+    if recipients(message).count == 0
+      raise Messages::NoRecipientsError
+    end
   end
 
-  def people
-    @people ||= case @message
-                when Message::LetterWithInvoice, Message::Letter
-                  @message.mailing_list.people(Person.with_address)
-                when Message::TextMessage
-                  @message.mailing_list.people(Person.with_mobile)
-                end
+  def recipients(message)
+    message.mailing_list.people(Person.with_address).limit(5) # no need to query all recipients
   end
+
 end

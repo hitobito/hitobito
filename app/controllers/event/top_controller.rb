@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2017, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2017-2021, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -22,11 +22,7 @@ class Event::TopController < ApplicationController
 
   def redirect_to_group_event
     flash.keep if html_request?
-    redirect_to group_event_path(entry.groups.first,
-                                 entry,
-                                 format: request.format.to_sym,
-                                 user_email: params[:user_email],
-                                 user_token: params[:user_token])
+    redirect_to group_event_path(entry.groups.first, entry, format: request.format.to_sym)
   end
 
   def authorize_action

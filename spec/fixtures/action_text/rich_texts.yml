@@ -136,7 +136,7 @@ letter_body:
   record: letter (Message)
   name: body
   body: |
-    Hallo {first_name}<br/><br/>
+    Hallo<br/><br/>
     Wir laden <strong>dich</strong> ein!
     <br/><br/>
     Bis bald
@@ -144,7 +144,7 @@ letter_invoice:
   record: with_invoice (Message)
   name: body
   body: |
-    Hallo {first_name}<br/><br/>
+    Hallo<br/><br/>
     Dein <strong>Mitgliedsbeitrag</strong> ist fällig!
     <br/><br/>
     Bis bald

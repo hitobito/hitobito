@@ -32,6 +32,7 @@ Rails.application.config.after_initialize do
       ActionText::Attachment::TAG_NAME,
       "figure",
       "figcaption",
+      "img",
       "br"
   ]
 

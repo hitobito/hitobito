@@ -18,6 +18,7 @@ module SearchStrategies
 
     def list_people
       return Person.none.page(1) if @term.blank?
+
       query_accessible_people do |ids|
         entries = fetch_people(ids)
         entries = Person::PreloadGroups.for(entries)
@@ -51,6 +52,7 @@ module SearchStrategies
     def query_accessible_people
       ids = accessible_people_ids
       return Person.none.page(1) if ids.blank?
+
       yield ids
     end
 

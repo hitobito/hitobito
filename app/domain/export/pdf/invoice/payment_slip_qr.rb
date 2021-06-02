@@ -13,7 +13,7 @@ module Export::Pdf::Invoice
     delegate :start_new_page, :move_cursor_to, :horizontal_line, :vertical_line,
       :stroke, :bounds, :font, :text_box, :move_down, to: :pdf
 
-    delegate :creditor_values, :debitor_values, to: '@invoice.qrcode'
+    delegate :creditor_values, :debitor_values, to: 'invoice.qrcode'
 
     HEIGHT = 105.mm
     WIDTH_PAYMENT = 148.mm
@@ -26,7 +26,7 @@ module Export::Pdf::Invoice
     def render # rubocop:disable Metrics/MethodLength
       start_new_page if cursor < HEIGHT + MARGIN
 
-      separators
+      stamped :separators
 
       receipt do
         receipt_titel
@@ -36,9 +36,9 @@ module Export::Pdf::Invoice
       end
 
       payment do
-        payment_titel
+        stamped :payment_titel
         payment_qrcode
-        payment_amount
+        stamped :payment_amount
         payment_infos
         payment_extra_infos
       end
@@ -55,7 +55,7 @@ module Export::Pdf::Invoice
     end
 
     def scissor_image(kind, at:)
-      image @invoice.qrcode.scissor(kind), at: at, scale: 0.1
+      image invoice.qrcode.scissor(kind), at: at, scale: 0.1
     end
 
     def receipt
@@ -79,7 +79,7 @@ module Export::Pdf::Invoice
 
     def payment_qrcode
       padded_bounding_box(0.6, width: 60.mm, pad_right: true) do
-        @invoice.qrcode.generate do |path|
+        invoice.qrcode.generate do |path|
           image path, fit: [46.mm, 46.mm], position: :center, vposition: :center
         end
       end
@@ -118,6 +118,7 @@ module Export::Pdf::Invoice
     def receipt_receiving_office
       padded_bounding_box(0.15, pad_right: true) do
         heading do
+          move_down 10
           pdf.text 'Annahmestelle', align: :right
         end
       end
@@ -142,15 +143,39 @@ module Export::Pdf::Invoice
     end
 
     def amount_box
-      amount = number_with_precision(@invoice.total, precision: 2, delimiter: ' ')
-
       heading do
         text_box 'Währung', at: [0, cursor]
         text_box 'Betrag', at: [20.mm, cursor]
       end
       content do
-        text_box @invoice.currency, at: [0, cursor]
-        text_box amount, at: [20.mm, cursor]
+        text_box invoice.currency, at: [0, cursor]
+        if invoice.total.zero?
+          blank_amount_rectangle
+        else
+          amount = number_with_precision(invoice.total, precision: 2, delimiter: ' ')
+          text_box amount, at: [20.mm, cursor]
+        end
+      end
+    end
+
+    # rubocop:disable Metrics/AbcSize
+    def blank_amount_rectangle(width: 90, height: 30, length: 10)
+      pdf.translate 20.mm, cursor do
+        pdf.stroke do
+          pdf.line_width = 0.5
+          # top left
+          pdf.line [0, 0], [length, 0] # right
+          pdf.line [0, 0], [0, -length] # down
+          # top right
+          pdf.line [width, 0], [width - length, 0] # left
+          pdf.line [width, 0], [width, -length] # down
+          # bottom left
+          pdf.line [0, -height], [length, -height] # right
+          pdf.line [0, -height], [0, -(height -length)] # up
+          # bottom right
+          pdf.line [width, -height], [width - length, -height] # left
+          pdf.line [width, -height], [width, -(height - length)] # down
+        end
       end
     end
 

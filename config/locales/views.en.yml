@@ -344,7 +344,6 @@ en:
         event_search: Search event...
         submit: add
   assignments:
-    attachment: 'Appendix'
     form:
       attachment:
         subject: 'Subject'
@@ -425,7 +424,6 @@ en:
     not_logged_in: "You must log in for the registration of the event '%{event}'. "
     person_found: 'We found you in our database.'
     email_sent: 'We have sent you an e-mail with a link where you can sign up directly for the event.'
-    email_missing: 'Please enter an e-mail'
     form_data_missing: 'Please fill out the form below before signing up for the event.'
     registered: 'Your personal data are recorded. Please set now the information for the application.'
     application_window_closed: 'The login window for this event is closed.'
@@ -743,18 +741,12 @@ en:
   messages:
     attrs:
       dispatch_infos: Processing
-    previews:
-      show:
-        recipients_empty: Recipients list is empty.
     actions_show:
       button_dispatch_letter: Print
       button_show_assignment: Print preview
       button_duplicate: Duplicate
       button_preview: Preview
       button_dispatch_text_message: Send
-    letter:
-      fields:
-        available_placeholders: 'Placeholders: %{placeholders}'
     text_message:
       fields:
         remaining_chars: Remaining characters

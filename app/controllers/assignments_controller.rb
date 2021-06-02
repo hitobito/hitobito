@@ -59,6 +59,12 @@ class AssignmentsController < CrudController
   end
 
   def default_assignee
-    Person.find_by(email: Settings.assignments.default_assignee_email)
+    if default_assignee_email
+      Person.find_by(email: default_assignee_email)
+    end
+  end
+
+  def default_assignee_email
+    Settings.assignments&.default_assignee_email
   end
 end

@@ -12,6 +12,7 @@ module SearchStrategies
 
     def query_people
       return Person.none.page(1) if @term.blank?
+
       query_accessible_people do |ids|
         Person.search(Riddle::Query.escape(@term),
                       default_search_options.merge(
@@ -22,12 +23,14 @@ module SearchStrategies
 
     def query_groups
       return Group.none.page(1) if @term.blank?
+
       Group.search(Riddle::Query.escape(@term),
                    default_search_options)
     end
 
     def query_events
       return Event.none.page(1) if @term.blank?
+
       sql = { include: [:groups, :dates] }
       Event.search(Riddle::Query.escape(@term),
                    default_search_options.merge(sql: sql))
@@ -35,6 +38,7 @@ module SearchStrategies
 
     def query_addresses
       return Address.none.page(1) if @term.blank?
+
       Address.search(Riddle::Query.escape(@term), default_search_options.merge(match_mode: :phrase))
     end
 

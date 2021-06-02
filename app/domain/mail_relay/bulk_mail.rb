@@ -29,7 +29,7 @@ module MailRelay
       @retry = 0
     end
 
-    def deliver # rubocop:disable Metrics/MethodLength
+    def deliver # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
       return if @recipients.blank?
 
       prepare_message
@@ -127,9 +127,8 @@ module MailRelay
     def reject_failing(error, recipients)
       failed_email = recipients.find { |r| error.message.include?(r) }
       # if we cannot extract email from error message, raise
-      unless failed_email.present? && recipients.include?(failed_email)
-        raise error
-      end
+      raise error unless failed_email.present? && recipients.include?(failed_email)
+
       log_info "Rejected recipient #{failed_email} with #{error}"
       @failed_recipients << [failed_email, error.message]
       recipients.reject { |r| r =~ /#{failed_email}/ }
@@ -142,8 +141,7 @@ module MailRelay
     def abort_delivery(error_message)
       @abort = true
       failed = @recipients - @succeeded_recipients
-      log_info("aborting delivery for remaining #{failed.count} " \
-               "recipients: #{error_message}")
+      log_info("aborting delivery for remaining #{failed.count} recipients: #{error_message}")
       failed.each do |r|
         @failed_recipients << [r, error_message]
       end
@@ -157,10 +155,10 @@ module MailRelay
     end
 
     def delivery_report_mail
-      DeliveryReportMailer.
-        bulk_mail(@delivery_report_to, @envelope_sender, @message,
-                  @success_count, Time.zone.now,
-                  @failed_recipients).deliver_now
+      DeliveryReportMailer
+        .bulk_mail(@delivery_report_to, @envelope_sender, @message,
+                   @success_count, Time.zone.now, @failed_recipients)
+        .deliver_now
     rescue => e
       log_info('Delivery report for bulk mail to ' \
                "#{@delivery_report_to} could not be delivered: #{e.message}")

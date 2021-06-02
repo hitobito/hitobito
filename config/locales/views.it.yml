@@ -170,6 +170,9 @@ it:
         sign_in: Login
       form:
         sign_in: Login
+      oauth_info:
+        sign_in: 'Entrato come %{name}'
+        info: 'Fai il login per arrivare a %{oauth_app}.'
     passwords:
       send_instructions: 'riceverai nei prossimi minuti un''e-mail con le istruzioni su come reimpostare la tua password.'
       updated: 'la tua passwort è stata cambiata. Sei ora registrato.'
@@ -340,7 +343,14 @@ it:
         title: Assegnare le persone a
         event_search: Cercare evento
         submit: Aggiungere
+  assignments:
+    attachment: 'Mostrare l''allegato.'
+    form:
+      attachment:
+        subject: 'Il messaggio riguarda:'
   events:
+    actions_show:
+      copy_share_link: Copiare il link diretto
     application_fields:
       caption_signature: I partecipanti devono firmare l'iscrizione
       caption_signature_confirmation: L'iscrizione deve essere confermata da una seconda firma
@@ -353,6 +363,7 @@ it:
       caption_external_applications: 'Esterni possono iscriversi a questo evento.'
       caption_prioritization: 'I partecipanti possono dare durante l''iscrizione due ulteriori corsi come alternative.'
       caption_requires_approval: 'Il responsabile verrà informato e dovrà confermare l''iscrizione.'
+      caption_participations_visible: 'I partecipanti possono vedersi a vicenda nella lista dei partecipanti.'
       times_are_optional: Gli orari sono opzionali
       explain_application_questions: Qui potete richiedere ulteriori informazioni per la registrazione.
       explain_choices: Lasciare vuoto per la risposta di testo libero, una o più opzioni di risposta (separate da virgole) per la selezione.
@@ -361,6 +372,7 @@ it:
       caption_applications_cancelable: I partecipanti si possono disiscrivere personalmente.
       caption_display_booking_info: Il numero di iscrizioni/posti è visibile a tutti sulla lista del corso.
       caption_waiting_list: Se non ci sono più posti disponibili, le nuove iscrizioni finiscono automaticamente nella lista d'attesa.
+      caption_globally_visible: '%{model_name} è visibile per l''intera banca dati.'
     form_tabs:
       general: In generale
       application_questions: Dati per l'iscrizione
@@ -416,7 +428,6 @@ it:
     not_logged_in: "Devi effettuare l'accesso per poterti iscrivere all'evento '%{event}'."
     person_found: 'ti abbiamo trovato all''interno della nostra banca dati.'
     email_sent: 'ti abbiamo inviato un''email con un link, da cui potrai iscriverti direttamente all''evento'
-    email_missing: 'digitare l''indirzzo email'
     form_data_missing: 'Compila per favore il formulario seguente prima di iscriverti all''evento.'
     registered: 'I tuoi dati personali sono stati registrati. Completa ancora solo i dati per l''iscrizione.'
     application_window_closed: 'il periodo per l''iscrizione per questo evento è terminato.'
@@ -604,6 +615,7 @@ it:
     create:
       one: "La fattura %{title} viene redatta per una persona"
       other: "La fattura %{title} viene redatta per %{count} persone"
+    create_batch: "La fattura <i>%{title}</i> viene creata in sottofonto per  %{count} destinatari."
     update:
       zero: 'Deve venir selezionata almeno una fattura.'
       model_error: "La fattura %{number} non è valida - %{error}"
@@ -731,6 +743,73 @@ it:
     no_delivery_report: 'I mittenti non ricevono nessun e-mail a conferma dell''invio.'
     subscribe: 'Iscriversi'
     unsubscribe: 'scollegarsi'
+  messages:
+    attrs:
+      dispatch_infos: Elaborazione
+    dispatches:
+      create:
+        success:
+          message/letter: "La lettera è stata preparata per la stampa."
+          message/letter_with_invoice: "La lettera con la fattura è stata preparata per la stampa."
+          message/text_message: "L'SMS viene inviato."
+        alert:
+          message/letter: "Appena sarà creato l'ordine di stampa la lettera non potrà più venir rielaborata."
+          message/letter_with_invoice: "Appena sarà creato l'ordine di stampa la lettera con la fattura non potrà più venir rielaborata."
+    actions_show:
+      button_dispatch_letter: Creare l'ordine di stampa
+      button_show_assignment: Mostrare l'ordine di stampa
+      button_duplicate: Duplicare
+      button_preview: Anteprima
+      button_dispatch_text_message: Inviare
+      button_show_pdf: Mostrare il PDF
+      recipient_info:
+        valid:
+          message/letter:
+            zero: "Non ci sono persone con indirizzo."
+            one: "%{model_class} viene creato per una persona con indirizzo."
+            other: "%{model_class} viene creato per %{count} persone con indirizzo."
+          message/letter_with_invoice:
+            zero: "Non ci sono persone con indirizzo."
+            one: "%{model_class} viene creato per una persona con indirizzo."
+            other: "%{model_class} viene creato per %{count} persone con indirizzo."
+          message/text_message:
+            zero: "Non ci sono persone con un numero di telefonino."
+            one: "%{model_class} viene creato per una persona con numero di telefonino."
+            other: "%{model_class} viene creato per %{count} persone con numero di telefonino."
+    text_message:
+      fields:
+        remaining_chars: Caratteri rimanenti
+    form:
+      available_placeholders: 'Segnaposto disponibili:'
+      recipient_info:
+        valid:
+          message/letter:
+            one: "%{model_class} viene creato per una persona."
+            other: "%{model_class} viene creato per %{count} persone."
+          message/letter_with_invoice:
+            one: "%{model_class} viene creato per una persona."
+            other: "%{model_class} viene creato per %{count} personen."
+          message/text_message:
+            one: "%{model_class} viene creato per una persona."
+            other: "%{model_class} viene creato per %{count} persone."
+        invalid:
+          message/letter:
+            one: "Una persona non ha lasciato l'indirizzo completo."
+            other: "%{count} altri non hanno lasciato un indirizzo completo."
+          message/letter_with_invoice:
+            one: "Una persona non ha lasciato l'indirizzo completo."
+            other: "%{count} altri non hanno lasciato un indirizzo completo."
+          message/text_message:
+            one: "Una persona non ha lasciato il numero di natel."
+            other: "%{count} altri non hanno lasciato il numero di natel."
+    table:
+      infos:
+        sender: "Mittente: %{mail}"
+        sender_rejected: Il mittente è stato respinto
+        unkown_recipient: Destinatario sconosciuto
+    export_enqueued: 'L''esportazione viene iniziata in retroscena e verrà scaricata al termine.'
+    show:
+      recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
   navigation:
     menu: 'Menu'
     groups: 'gruppi'
@@ -780,10 +859,23 @@ it:
     by: 'da %{author}'
   person_duplicates:
     merge:
+      new:
+        title: Unire persone
+        select_person: Quali dati devono avere la precedenza nell'unione?
+        merge_hint: Nell'unione vengono mantenuti i ruoli, il no di telefono, ulteriori e-mails così come l'iscrizione ai social media. Tutti gli altri dati di questa persona, come per esempio gli appunti, l'iscrizione ai corsi ecc. vengono cancellati.
+        merge_hint_invalid: Questa persona ha dati non valevoli.
+        irreversible: Quest'operazione non potrà venir annullata.
+        invalid_persons: Le registrazioni possono venir unite solo quando entrambe sono valevoli.
+        reload: Verificare nuovamente
       action: Merge
+      success: Le registrazioni delle persone sono state unite con successo.
     ignore:
       new:
+        title: Ignorare realmente il duplicato?
+        confirm: Si tratta veramente nel caso delle due registrazioni per %{person} di un duplicato?
         irreversible: Questo processo non può essere annullato!
+      action: Ignorare
+      success: La registrazione duplicata è stata eliminata con successo.
   person:
     confirm_delete: "Tutti i dati relativi a %{person} vengono cancellati definitivamente, incl. partecipazioni e qualifiche. Cancella questa persona solo se nessuno ha ancora bisogno di queste informazioni."
     add_requests:
@@ -891,6 +983,7 @@ it:
         category_validation:
           email_primary_invalid: Email principale non valida
           email_additional_invalid: Altre email non valida
+          address_invalid: Gli indirizzi non si trovano nell'indirizzario
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
     duplicate_keys:
@@ -1156,11 +1249,16 @@ it:
         add: Aggiungere API Key
   subscriber:
     group:
+      edit:
+        title: Elaborare gli abbonati
       form:
         subgroups_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato'
         subgroups_and_siblings_selectable: 'Possono essere selezionati unicamente i gruppi all''interno del gruppo abbonato oppure i gruppi vicini di tipo %{type}'
       roles:
         please_choose_group: prego selezionare un gruppo
+      tags:
+        only_add_persons_with_tags: 'Scegliere solo le persone con i tags seguenti:'
+        exclude_persons_with_tags: 'Escludere le persone con i tags seguenti:'
     exclude_person:
       form:
         exclude_subscriber: 'Escludere abbonato/a'
@@ -1193,6 +1291,7 @@ it:
       export_not_allowed: 'Non è possibiie esportare gli abbonati di questo abbonamento perché contengono anche ruoli e/o eventi del tuo ambito di autorizzazioni.'
     subscription:
       only_persons_with: 'Solo persone con'
+      persons_excluded_with: 'Escludere le persone con:'
     export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
   version:
     attribute_change:
@@ -1212,6 +1311,7 @@ it:
     append_to_household: "è stato aggiunto all'economia domestica"
     household_updated: "L'economia domestica (%{object_changes}) è stata aggiornata"
     remove_from_household: "è stato rimosso dall'economia domestica"
+    person_merge: "Unite due persone in questa registrazione. Persona cancellata:"
   tags/merge:
     success: Le tag sono state fuse con successo.
   tags_merge:

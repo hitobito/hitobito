@@ -23,7 +23,6 @@
 #  location                    :text(16777215)
 #  maximum_participants        :integer
 #  motto                       :string(255)
-#  name                        :string(255)      not null
 #  number                      :string(255)
 #  participant_count           :integer          default(0)
 #  participations_visible      :boolean          default(FALSE), not null

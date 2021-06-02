@@ -56,10 +56,6 @@ en:
           attributes:
             person_id:
               taken: is already registered
-        oauth/application:
-          attributes:
-            scopes:
-              not_match_configured: "do not match the ones configured on the server"
         person:
           name_missing: 'Please enter a name'
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."

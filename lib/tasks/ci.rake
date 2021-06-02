@@ -1,7 +1,6 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,8 +37,9 @@ namespace :ci do
 
   desc 'Run the tasks for a wagon commit build'
   task :wagon do
-
     Rake::Task['log:clear'].invoke
+    Rake::Task['db:migrate'].invoke
+    Rake::Task['wagon:migrate'].invoke
 
     wagon_exec('DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ' \
                'bundle exec rake app:rubocop app:ci:setup:rspec spec:all')

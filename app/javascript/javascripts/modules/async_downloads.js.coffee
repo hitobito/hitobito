@@ -29,6 +29,9 @@ class app.AsyncDownloads
         url: "/downloads/#{download['name']}/exists",
         data: "file_type=#{download['type']}",
         success: (data) ->
+          if data['progress']
+            $('#file-download-spinner .progress').removeClass('hidden').html("#{data['progress']}%")
+
           return if data['status'] != 200
           download_file("/downloads/#{download['name']}?file_type=#{download['type']}")
       )

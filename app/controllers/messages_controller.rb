@@ -8,9 +8,10 @@
 class MessagesController < CrudController
   include RenderMessagesExports
   include YearBasedPaging
+  include AsyncDownload
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze
-  PERMITTED_LETTER_ATTRS = [:subject, :body, :heading].freeze
+  PERMITTED_LETTER_ATTRS = [:subject, :body, :heading, :salutation].freeze
   PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :heading,
                                     invoice_attributes: {
                                       invoice_items_attributes: [
@@ -34,8 +35,16 @@ class MessagesController < CrudController
   def show
     respond_to do |format|
       format.html
-      format.pdf { render_pdf(entry, preview: false) }
+      format.pdf do
+        if preview?
+          render_pdf(entry, preview: preview?)
+        else
+          render_pdf_in_background(entry)
+        end
+      end
     end
+  rescue Messages::NoRecipientsError
+    redirect_to entry.path_args, alert: t('.recipients_empty')
   end
 
   def new
@@ -65,6 +74,10 @@ class MessagesController < CrudController
     message.mailing_list = parent
     message.sender = current_user
     message
+  end
+
+  def preview?
+    true?(params[:preview])
   end
 
   def permitted_params

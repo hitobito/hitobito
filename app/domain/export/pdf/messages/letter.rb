@@ -8,51 +8,73 @@
 module Export::Pdf::Messages
   class Letter
 
+    MARGIN = 2.5.cm
+
+    class << self
+      def export(_format, letter)
+        new(letter).render
+      end
+    end
+
     def initialize(letter, recipients, options = {})
       @letter = letter
       @recipients = recipients
       @options = options
+      @async_download_file = options.delete(:async_download_file)
+    end
+
+    def pdf
+      @pdf ||= Prawn::Document.new(render_options)
     end
 
     def render
-      pdf = customize(Prawn::Document.new(render_options))
-      @recipients.each do |recipient|
-        render_sections(pdf, recipient)
+      customize
+      @recipients.each_with_index do |recipient, position|
+        reporter&.report(position)
+        render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
       end
       pdf.render
+    rescue PDF::Core::Errors::EmptyGraphicStateStack
+      Rails.logger.warn "Unable to stamp content for letter: #{@letter.id}"
+      @options[:stamped] = false
+      @sections = nil
+      @pdf = nil
+      retry
     end
 
-    def render_sections(pdf, recipient)
+    def render_sections(recipient)
       sections.each do |section|
-        section.new(pdf, @letter, self).render(recipient)
+        section.render(recipient)
       end
     end
 
-    def filename
-      parts = [@letter.subject.parameterize(separator: '_')]
-      parts << %w(preview) if preview?
+    def filename(*parts)
+      parts += [@letter.subject.parameterize(separator: '_')]
       yield parts if block_given?
       [parts.join('-'), :pdf].join('.')
     end
 
     private
 
+    def reporter
+      @reporter ||= Export::ProgressReporter.new(
+        AsyncDownloadFile::DIRECTORY.join(@async_download_file),
+        @recipients.size
+      ) if @async_download_file
+    end
+
     def render_options
-      preview_option.to_h.merge(
+      @options.to_h.merge(
         page_size: 'A4',
         page_layout: :portrait,
-        margin: 2.cm
+        margin: MARGIN,
+        compress: true
       )
     end
 
-    def preview_option
-      { background: Settings.messages.pdf.preview } if preview?
-    end
-
-    def customize(pdf)
+    def customize
       pdf.font_size 9
-      pdf
     end
 
     def last?(recipient)
@@ -60,12 +82,9 @@ module Export::Pdf::Messages
     end
 
     def sections
-      [Header, Content]
-    end
-
-    def preview?
-      @options[:preview]
+      @sections ||= [Header, Content].collect do |section|
+        section.new(pdf, @letter, @options.slice(:debug, :stamped))
+      end
     end
   end
-
 end

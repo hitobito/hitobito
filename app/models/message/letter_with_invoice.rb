@@ -1,20 +1,26 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: messages
 #
-#  id              :bigint           not null, primary key
-#  failed_count    :integer          default(0)
-#  recipient_count :integer          default(0)
-#  sent_at         :datetime
-#  state           :string(255)      default("draft")
-#  subject         :string(1024)     not null
-#  success_count   :integer          default(0)
-#  type            :string(255)      not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  mailing_list_id :bigint
-#  sender_id       :bigint
-#  invoice_list_id :bigint
+#  id                 :bigint           not null, primary key
+#  failed_count       :integer          default(0)
+#  heading            :boolean          default(FALSE)
+#  invoice_attributes :text(65535)
+#  recipient_count    :integer          default(0)
+#  salutation         :string(255)
+#  sent_at            :datetime
+#  state              :string(255)      default("draft")
+#  subject            :string(256)
+#  success_count      :integer          default(0)
+#  text               :text(65535)
+#  type               :string(255)      not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  invoice_list_id    :bigint
+#  mailing_list_id    :bigint
+#  sender_id          :bigint
 #
 # Indexes
 #
@@ -32,6 +38,7 @@ class Message::LetterWithInvoice < Message::Letter
 
   belongs_to :invoice_list
   serialize :invoice_attributes, Hash
+  validate :assert_valid_invoice_items
 
   self.icon = :'file-invoice'
 
@@ -62,4 +69,13 @@ class Message::LetterWithInvoice < Message::Letter
       raise 'invoice invalid' unless invoice.valid?
     end
   end
+
+  private
+
+  def assert_valid_invoice_items
+    unless invoice.invoice_items.all?(&:valid?)
+      errors.add(:base, :invoice_items_invalid)
+    end
+  end
+
 end

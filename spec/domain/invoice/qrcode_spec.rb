@@ -69,6 +69,12 @@ describe Invoice::Qrcode do
       expect(subject[19]).to eq 'CHF'
     end
 
+    it 'has blank amount if invoice has no total' do
+      invoice.total = 0
+      expect(subject[18]).to be_blank
+      expect(subject[19]).to eq 'CHF'
+    end
+
     it 'has final payment recipient of combined type' do
       expect(subject[20]).to eq 'K'
       expect(subject[21]).to eq 'Max Mustermann'

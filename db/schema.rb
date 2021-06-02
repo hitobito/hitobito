@@ -79,6 +79,14 @@ ActiveRecord::Schema.define(version: 2021_04_21_120000) do
     t.index ["person_id"], name: "index_assignments_on_person_id"
   end
 
+  create_table "cors_origins", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+    t.string "auth_method_type"
+    t.bigint "auth_method_id"
+    t.string "origin", null: false
+    t.index ["auth_method_type", "auth_method_id"], name: "index_cors_origins_on_auth_method_type_and_auth_method_id"
+    t.index ["origin"], name: "index_cors_origins_on_origin"
+  end
+
   create_table "custom_content_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.integer "custom_content_id", null: false
     t.string "locale", null: false
@@ -544,6 +552,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_120000) do
     t.bigint "invoice_list_id"
     t.text "text"
     t.boolean "heading", default: false
+    t.string "salutation"
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"

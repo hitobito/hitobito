@@ -12,7 +12,7 @@ module Oauth
     self.permitted_attrs = [
       :name, :redirect_uri, :confidential,
       :logo, :remove_logo,
-      scopes: []
+      scopes: [], cors_origins_attributes: [ :id, :origin, :_destroy ]
     ]
 
     def self.model_class

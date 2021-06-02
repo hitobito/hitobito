@@ -10,9 +10,9 @@ module Export::Pdf::Invoice
 
     def render
       pdf.start_new_page if cursor < 225
-      invoice_address
-      account_number
-      amount if invoice_items.present?
+      stamped(:invoice_address) { invoice_address }
+      stamped(:account_number) { account_number }
+      stamped(:amount) { amount } if invoice_items.present?
       invoice.with_reference? ? esr_number : payment_purpose
       left_receiver_address
       right_receiver_address

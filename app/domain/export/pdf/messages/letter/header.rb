@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2021, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,29 +10,40 @@ class Export::Pdf::Messages::Letter
     LOGO_BOX = [200, 40].freeze
     ADDRESS_BOX = [200, 40].freeze
 
-    delegate :group, to: '@letter'
+    delegate :group, to: 'letter'
 
-    def render(recipient)
-      if @letter.heading?
-        render_logo
-        pdf.move_down 10
+    def render(recipient) # rubocop:disable Metrics/MethodLength
+      stamped :render_header
 
-        render_address(sender_address)
-        pdf.move_down 20
-      else
-        pdf.move_down 110
-      end
-
+      offset_cursor_from_top 52.5.mm
       render_address(build_address(recipient))
-      pdf.move_down 50
+
+      stamped :render_subject if letter.subject.present?
     end
 
     private
 
-    def render_logo(width: LOGO_BOX.first, height: LOGO_BOX.second)
-      bounding_box([0, cursor], width: width, height: height) do
+    def render_header
+      if letter.heading?
+        render_logo_right
+        pdf.move_up 40
+
+        render_address(sender_address)
+      end
+    end
+
+    def render_subject
+      offset_cursor_from_top 107.5.mm
+
+      pdf.text(letter.subject, style: :bold)
+      pdf.move_down pdf.font_size * 2
+    end
+
+    def render_logo_right(width: LOGO_BOX.first, height: LOGO_BOX.second)
+      left = bounds.width - width
+      bounding_box([left, cursor], width: width, height: height) do
         if logo_path
-          image logo_path, fit: [width, height]
+          image(logo_path, position: :right, fit: [width, height])
         else
           ''
         end
@@ -48,8 +59,7 @@ class Export::Pdf::Messages::Letter
     def build_address(recipient)
       [recipient.full_name.to_s.squish,
        recipient.address.to_s.squish,
-       [recipient.zip_code, recipient.town].compact.join(' ').squish,
-       recipient.country.to_s.squish].compact.join("\n")
+       [recipient.zip_code, recipient.town].compact.join(' ').squish].compact.join("\n")
     end
 
     def logo_path
@@ -73,14 +83,11 @@ class Export::Pdf::Messages::Letter
     def group_address(group)
       [group.name.to_s.squish,
        group.address.to_s.squish,
-       [group.zip_code, group.town].compact.join(' ').squish,
-       group.country.to_s.squish].compact.join("\n")
+       [group.zip_code, group.town].compact.join(' ').squish].compact.join("\n")
     end
 
     def address_present?(group)
       [:address, :town].all? { |a| group.send(a)&.strip.present? }
     end
-
   end
-
 end

@@ -58,27 +58,20 @@ module Authenticatable
   end
 
   def doorkeeper_sign_in
-    return unless doorkeeper_token.present? && doorkeeper_token.accessible?
+    token = token_authentication.oauth_token
+    return unless token&.accessible?
+    return head(:forbidden) unless token.acceptable?(:api)
 
-    doorkeeper_authorize! :api
-
-    user = Person.find(doorkeeper_token.resource_owner_id)
-    sign_in user, store: false
+    sign_in token.person, store: false
   end
 
   def authenticate_person!(*args)
-    normalize_user_params
-
     user_sign_in || service_token_sign_in || doorkeeper_sign_in || super(*args)
   end
 
   def user_sign_in
-    user = params[:user_email] && Person.find_by(email: params[:user_email])
-
-    # Notice how we use Devise.secure_compare to compare the token
-    # in the database with the token given in the params, mitigating
-    # timing attacks
-    return unless user && Devise.secure_compare(user.authentication_token, params[:user_token])
+    user = token_authentication.user_from_token
+    return unless user
 
     # Sign in using token should not be tracked by Devise trackable
     # See https://github.com/plataformatec/devise/issues/953
@@ -92,7 +85,7 @@ module Authenticatable
   end
 
   def service_token_sign_in
-    service_token = params[:token] && ServiceToken.find_by(token: params[:token])
+    service_token = token_authentication.service_token
     return unless service_token
 
     request.env['devise.skip_trackable'] = true
@@ -100,13 +93,8 @@ module Authenticatable
     sign_in service_token, store: false
   end
 
-  def normalize_user_params
-    # Set the authentication token params if not already present,
-    authentication_token_params = [:user_token, :user_email, :token]
-    authentication_token_params.each do |param|
-      x_param = param.to_s.split('_').map(&:camelize).join('-')
-      params[param] = params[param].presence || request.headers["X-#{x_param}"].presence
-    end
+  def token_authentication
+    @token_authentication ||= Authenticatable::Tokens.new(request, params)
   end
 
   def authorize?

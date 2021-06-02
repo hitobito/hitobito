@@ -1,4 +1,4 @@
-#  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2018 - 2021, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -26,6 +26,8 @@
 class ServiceToken < ActiveRecord::Base
 
   belongs_to :layer, class_name: 'Group', foreign_key: :layer_group_id
+  has_many :cors_origins, as: :auth_method, dependent: :delete_all
+  accepts_nested_attributes_for :cors_origins, allow_destroy: true
 
   before_validation :generate_token!, on: :create
 

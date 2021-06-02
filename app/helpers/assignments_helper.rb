@@ -6,7 +6,7 @@ module AssignmentsHelper
                     group_mailing_list_message_path(entry.attachment.group,
                                                     entry.attachment.mailing_list,
                                                     entry.attachment),
-                                                    :eye)
+                                                    :paperclip)
     end
   end
 end

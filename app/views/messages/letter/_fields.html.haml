@@ -5,4 +5,5 @@
 
 = f.labeled_input_field :subject
 = f.labeled_input_field :heading
-= f.labeled_rich_text_area :body, style: 'min-height: 250px', help: available_message_placeholders('message_body')
+= f.labeled_collection_select :salutation, Salutation.all, :first, :last, include_blank: I18n.t('global.associations.no_entry')
+= f.labeled_rich_text_area :body, style: 'min-height: 250px'

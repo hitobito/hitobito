@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -172,10 +172,10 @@ describe GroupsController do
 
   describe 'with valid OAuth token' do
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: true, accessible?: true, resource_owner_id: people(:top_leader).id) }
+    let(:token) { instance_double('Oauth::AccessToken', acceptable?: true, accessible?: true, person: people(:top_leader)) }
 
     before do
-      allow(controller).to receive(:doorkeeper_token) { token }
+      allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
     end
 
     it 'GET index shows page' do
@@ -186,10 +186,10 @@ describe GroupsController do
 
   describe 'with invalid OAuth token (expired or revoked)' do
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: true, accessible?: false, resource_owner_id: people(:top_leader).id) }
+    let(:token) { instance_double('Oauth::AccessToken', acceptable?: true, accessible?: false, person: people(:top_leader)) }
 
     before do
-      allow(controller).to receive(:doorkeeper_token) { token }
+      allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
     end
 
     it 'GET index redirect to login' do
@@ -200,10 +200,10 @@ describe GroupsController do
 
   describe 'without acceptable OAuth token (missing scope)' do
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Doorkeeper::AccessToken', acceptable?: false, accessible?: true, resource_owner_id: people(:top_leader).id) }
+    let(:token) { instance_double('Oauth::AccessToken', acceptable?: false, accessible?: true, person: people(:top_leader)) }
 
     before do
-      allow(controller).to receive(:doorkeeper_token) { token }
+      allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
     end
 
     it 'GET index fails with HTTP 403 (forbidden)' do

@@ -10,12 +10,15 @@
 #  error        :text(65535)
 #  failed_at    :datetime
 #  phone_number :string(255)
+#  state        :string(255)
 #  created_at   :datetime
+#  invoice_id   :bigint
 #  message_id   :bigint           not null
 #  person_id    :bigint           not null
 #
 # Indexes
 #
+#  index_message_recipients_on_invoice_id  (invoice_id)
 #  index_message_recipients_on_message_id  (message_id)
 #  index_message_recipients_on_person_id   (person_id)
 #

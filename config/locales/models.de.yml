@@ -44,6 +44,13 @@ de:
         must_exist: müssen vorhanden sein
         readonly: darf nicht verändert werden
       models:
+        cors_origin:
+          attributes:
+            origin:
+              invalid_host: enthält einen ungültigen Host
+              missing_hostname: muss einen Hostnamen enthalten
+              missing_scheme: muss ein Protokoll (http:// oder https://) enthalten
+              suffix_present: darf keinen Pfad und keinen Slash am Ende haben
         custom_content:
           attributes:
             body:
@@ -72,10 +79,14 @@ de:
             mail_name:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
             mail_name_not_allowed:
+        message/letter_with_invoice:
+          attributes:
+            base:
+              invoice_items_invalid: Mindestens ein Rechnungsposten ist ungültig.
         oauth/application:
           attributes:
             scopes:
-              not_match_configured: "stimmen nicht mit denen am server hinterlegten überein."
+              not_match_configured: "stimmen nicht mit den auf dem Server hinterlegten überein."
         person:
           name_missing: 'Bitte geben Sie einen Namen ein'
           readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
@@ -289,6 +300,25 @@ de:
       role:
         one: Rolle
         other: Rollen
+      salutation:
+        one: Anrede
+        other: Anreden
+        personal:
+          label: persönliche Anrede
+        default:
+          label: Hallo [Name]
+          value:
+            m: Hallo %{greeting_name}
+            w: Hallo %{greeting_name}
+            other: Hallo %{greeting_name}
+        available:
+          lieber_vorname:
+            label: Liebe*r [Vorname]
+            value:
+              m: Lieber %{first_name}
+              w: Liebe %{first_name}
+              other: Liebe*r %{first_name}
+
       service_token:
         one: API-Key
         other: API-Keys
@@ -339,6 +369,9 @@ de:
         description: Beschreibung
         state: Status
         read_at: Gelesen am
+
+      cors_origins:
+        origin: Host mit API-Zugriff
 
       person:
         first_name: Vorname
@@ -546,6 +579,7 @@ de:
         text: Text
 
       oauth/application:
+        cors_origins: Hosts mit API-Zugriff
         redirect_uri: Redirect URIs
 
       people_relation:
@@ -724,6 +758,7 @@ de:
       message/letter:
         body: Inhalt
         heading: Briefkopf
+        salutation: Anrede
 
       subscription:
         related_role_types: Rollen
@@ -913,6 +948,7 @@ de:
         invoices: Rechnungen dieser Ebene
         event_participations: Teilnehmende von Anlässen dieser Ebene
         mailing_lists: Abonnent/-innen von Mailinglisten dieser Ebene
+        cors_origins: Hosts mit API-Zugriff
 
       acts_as_taggable_on/tag:
         taggings_count: Anzahl

@@ -21,3 +21,7 @@
       = f.labeled :remove_logo do
         = f.boolean_field :remove_logo
 
+  = f.labeled_inline_fields_for :cors_origins do |nested_f|
+    - nested_f.input_field(:origin, placeholder: 'https://example.org')
+  = f.indented do
+    = f.help_block(t('.help_cors_origins'))

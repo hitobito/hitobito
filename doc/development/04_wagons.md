@@ -46,7 +46,7 @@ The basic structure of a new wagon can be easily generated in the main project, 
 Afterwards you need to make the following adjustments:
 
 * Move files from `hitobito/vendor/wagons/[name]` to `hitobito_[name]`
-* Initiate a new Git Repo for the wagon
+* Initialize a new Git Repo for the wagon
 * Copy `.tool-versions` from the core into the wagon. (or use `wagon activate [name]`)
 * Copy `Gemfile.lock` from the core into the wagon. (or use `wagon gemfile`)
 * Optional: Copy local config from the core into the wagon. (or use `wagon config`)

@@ -49,10 +49,6 @@ class Events::CoursesController < ApplicationController
     kind_used? ? ->(event) { event.kind.label } : DEFAULT_GROUPING
   end
 
-  def kind_used?
-    Event::Course.attr_used?(:kind_id)
-  end
-
   def display_any_booking_info?
     @grouped_events.values.flatten.any? { |e| e.display_booking_info? }
   end

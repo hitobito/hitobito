@@ -72,4 +72,8 @@ module Events::CourseListing
     @kind_category_id = params.dig(:filter, :category)
   end
 
+  def kind_used?
+    Event::Course.attr_used?(:kind_id)
+  end
+
 end

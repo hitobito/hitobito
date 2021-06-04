@@ -5,13 +5,21 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# Disabled Checks:
+# SC2068: Double quote array expansions to avoid re-splitting elements.
+#
+# shellcheck disable=SC2068
+
+# strict mode
 set -euo pipefail
 IFS=$'\n\t'
 
 
+# args
 cmd=${1:-'help'}
 wagon_name=${2-'no wagon selected'}
 
+# helpers
 function require_wagon_name() {
   if [[ $wagon_name = 'no wagon selected' ]]; then
     echo "you must select a wagon to manage"
@@ -46,6 +54,7 @@ function highlight_phrases {
     sed -ure "s/>> grepping in .*<</\x1b[33m\0\x1b[0m/g;"
 }
 
+# commands
 case $cmd in
   activate)
     require_wagon_name

@@ -49,7 +49,7 @@ Afterwards you need to make the following adjustments:
 * Initialize a new Git Repo for the wagon
 * Copy `.tool-versions` from the core into the wagon. (or use `wagon activate [name]`)
 * Copy `Gemfile.lock` from the core into the wagon. (or use `wagon gemfile`)
-* Optional: Copy local config from the core into the wagon. (or use `wagon config`)
+* Optional: Copy local config from the core into the wagon. (or use `wagon configs`)
 * Adjust Organisation in the license generator (`lib/tasks/license.rake`)  and add the licence everywhere with `rake app:license:insert`.
 * Add the customer organization in `COPYING`.
 * Put you name into `AUTHORS`

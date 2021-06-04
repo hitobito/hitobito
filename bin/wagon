@@ -120,10 +120,35 @@ case $cmd in
     done
     ;;
 
+  create)
+    echo "THIS IS WORK IN PROGRESS"
+    require_wagon_name
+    rails generate wagon "$wagon_name"
+
+    new_wagon_dir="../hitobito_$wagon_name"
+
+    mv -nv "vendor/wagons/$wagon_name" "$new_wagon_dir"
+
+    pushd "$new_wagon_dir"
+      git init
+      git ci -m "Create $wagon_name Wagon"
+    popd
+
+    $0 activate "$wagon_name"
+    if [[ -x $(command -v direnv) ]]; then direnv allow; fi
+    $0 gemfile
+    $0 configs
+
+    pushd "$new_wagon_dir"
+      git ci -a -m "Add common configs"
+    popd
+    ;;
+
+
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile configs test-prepare core-spec grep help git'
+  echo 'activate gemfile configs test-prepare core-spec grep help git create'
 }
 
 function __wagon_list() {

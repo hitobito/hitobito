@@ -1,9 +1,7 @@
 top_event:
-  name: Top Event
   groups: root
 
 top_course:
-  name: Top Course
   groups: root
   type: Event::Course
   kind: dummy

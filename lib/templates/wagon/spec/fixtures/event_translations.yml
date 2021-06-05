@@ -1,0 +1,15 @@
+top_event_de:
+  event_id: <%= ActiveRecord::FixtureSet.identify(:top_event) %>
+  locale: de
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+  name: Top Event
+
+top_course_de:
+  event_id: <%= ActiveRecord::FixtureSet.identify(:top_course) %>
+  locale: de
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+  name: Top Course

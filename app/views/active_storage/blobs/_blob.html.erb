@@ -1,6 +1,6 @@
 <figure class="attachment attachment--<%= blob.representable? ? "preview" : "file" %> attachment--<%= blob.filename.extension %>">
   <% if blob.representable? %>
-    <%= image_tag blob.representation(resize_to_limit: local_assigns[:in_gallery] ? [ 800, 600 ] : [ 1024, 768 ]) %>
+    <%= image_tag polymorphic_url(blob.representation(resize_to_limit: local_assigns[:in_gallery] ? [ 800, 600 ] : [ 1024, 768 ]), host: ENV.fetch('RAILS_HOST_NAME', 'localhost:3000')) %>
   <% end %>
 
   <% if caption = blob.try(:caption) %>

@@ -27,6 +27,11 @@ if [[ -d '.bundle' ]]; then
   rm -rf .bundle
 fi
 
+# /opt/app-root/src must be empty, otherwise assemble fails
+if [[ -d './bin' ]]; then
+  echo "Removing bin directory from `pwd`"
+  rm -rf ./bin
+fi
 
 # Call original builder script
 "$scripts/assemble-base"

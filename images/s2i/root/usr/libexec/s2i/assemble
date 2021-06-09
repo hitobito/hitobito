@@ -6,6 +6,8 @@ scripts="$(dirname $0)"
 
 export RAILS_HOST_NAME=build.hitobito.com
 
+gem install bundler -v 1.17.3
+
 if [ -d /tmp/artifacts/bundle ]; then
     echo "Restoring bundle from artifacts"
     mv /tmp/artifacts/bundle /tmp/src/bundle

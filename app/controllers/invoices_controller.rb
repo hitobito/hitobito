@@ -138,7 +138,8 @@ class InvoicesController < CrudController
   end
 
   def list_entries
-    scope = super.includes(:recipient).references(:recipient).list
+    scope = super.list
+    scope = scope.includes(:recipient).references(:recipient)
     scope = scope.page(params[:page]).per(50) unless params[:ids]
     Invoice::Filter.new(params.reverse_merge(year: year)).apply(scope)
   end

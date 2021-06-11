@@ -48,6 +48,11 @@ module Dropdown
           finance_group,
           filter: @filter, invoice_list: { recipient_ids: '' }
         )
+      elsif @people.one?
+        template.new_group_invoice_path(
+          finance_group,
+          invoice: { recipient_id: @people.first.id }
+        )
       else
         template.new_group_invoice_list_path(
           finance_group,

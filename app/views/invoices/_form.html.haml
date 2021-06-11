@@ -4,6 +4,8 @@
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form(data: { group: group_path(parent) }) do |f|
+  = f.hidden_field :recipient_id
+
   = field_set_tag do
     = f.labeled_input_fields :title, :description, rows: 3
     = f.labeled_input_field :issued_at

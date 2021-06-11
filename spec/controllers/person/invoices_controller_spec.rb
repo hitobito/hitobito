@@ -25,6 +25,4 @@ describe Person::InvoicesController do
     get :index, params: { group_id: groups(:top_group).id, id: top_leader.id }
     expect(assigns(:invoices)).to have(2).items
   end
-
 end
-

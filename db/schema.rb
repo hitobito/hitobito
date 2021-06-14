@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_120000) do
+ActiveRecord::Schema.define(version: 2021_05_05_084529) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -167,12 +167,12 @@ ActiveRecord::Schema.define(version: 2021_04_21_120000) do
   end
 
   create_table "event_kind_category_translations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "kind_category_id", null: false
+    t.bigint "event_kind_category_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "label"
-    t.index ["kind_category_id"], name: "index_bef985968be46182fb95e23ef7afbbeaddf1dd11"
+    t.index ["event_kind_category_id"], name: "index_bef985968be46182fb95e23ef7afbbeaddf1dd11"
     t.index ["locale"], name: "index_event_kind_category_translations_on_locale"
   end
 

@@ -141,7 +141,7 @@ body {
   .is-logged-out & {
     justify-content: flex-end;
     a {
-      color: white;
+      color: $white;
     }
   }
 }
@@ -170,7 +170,7 @@ body {
 
 #content {
   box-shadow: 0 2px 8px $shadowColor;
-  background: white;
+  background: $white;
   padding: 10px 10px 20px;
   @include responsive(mediaTablet){
     padding: 16px 20px 20px;

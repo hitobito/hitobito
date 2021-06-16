@@ -4,18 +4,16 @@ require 'spec_helper'
 
 describe People::Merger do
 
-  let(:person) { Fabricate(:person) }
-  let(:duplicate) { Fabricate(:person_with_address_and_phone) }
+  let!(:person) { Fabricate(:person) }
+  let!(:duplicate) { Fabricate(:person_with_address_and_phone) }
   let(:actor) { people(:root) }
   let(:person_roles) { person.roles.with_deleted }
-  let(:role_attr_keys) { [:type, :group, :created_at, :deleted_at] }
 
   let(:merger) { described_class.new(@source.reload, @target.reload, actor) }
 
   before do
-    Fabricate('Group::BottomGroup::Member',
-              group: groups(:bottom_group_one_one),
-              person: duplicate)
+    Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
+                                       person: duplicate)
   end
 
   context 'merge people' do
@@ -56,9 +54,8 @@ describe People::Merger do
       @source = duplicate
       @target = person
 
-      Fabricate('Group::BottomGroup::Member',
-                group: groups(:bottom_group_two_one),
-                person: person)
+      Group::BottomGroup::Member.create!(group: groups(:bottom_group_two_one),
+                                         person: person)
 
       expect do
         merger.merge!
@@ -78,9 +75,8 @@ describe People::Merger do
       @source = duplicate
       @target = person
 
-      Fabricate('Group::BottomGroup::Member',
-                group: groups(:bottom_group_one_one),
-                person: person)
+      Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
+                                         person: person)
 
       expect do
         merger.merge!
@@ -97,64 +93,33 @@ describe People::Merger do
       @source = duplicate
       @target = person
 
-      duplicate_two_one_role = Fabricate('Group::BottomGroup::Member',
-                               group: groups(:bottom_group_two_one),
-                               person: duplicate)
+      Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
+                                         person: person)
+
+      duplicate_two_one_role =
+        Group::BottomGroup::Member.create!(group: groups(:bottom_group_two_one),
+                                           person: duplicate)
 
       duplicate_two_one_role.delete
       # check soft delete
       expect(Role.with_deleted.where(id: duplicate_two_one_role.id)).to exist
 
       # should not merge this deleted role since person has it already
-      Fabricate('Group::BottomGroup::Member',
-                deleted_at: 2.months.ago,
-                group: groups(:bottom_group_one_one),
-                person: duplicate)
-
-      expect do
-        merger.merge!
-      end.to change(Person, :count).by(-1)
-
-      expect(person_roles.count).to eq(2)
-      group_ids = person_roles.with_deleted.map(&:group_id)
-      expect(group_ids).to include(groups(:bottom_group_one_one).id)
-      expect(group_ids).to include(groups(:bottom_group_two_one).id)
-
-      expect(Person.where(id: duplicate.id)).not_to exist
-    end
-
-    it 'merges all role attrs' do
-      @source = duplicate
-      @target = person
-
-      duplicate_two_one_role = Fabricate('Group::BottomGroup::Member',
-                               group: groups(:bottom_group_two_one),
-                               person: duplicate)
-
-      duplicate_two_one_role.delete
-      # check soft delete
-      expect(Role.with_deleted.where(id: duplicate_two_one_role.id)).to exist
-
-      # should not merge this deleted role since person has it already
-      duplicate_one_one_role = Fabricate('Group::BottomGroup::Member',
-                                         deleted_at: 2.months.ago,
-                                         group: groups(:bottom_group_one_one),
-                                         person: duplicate)
+      duplicate_one_one_role =
+        Group::BottomGroup::Member.create!(group: groups(:bottom_group_one_one),
+                                           person: duplicate)
       duplicate_one_one_role.delete
+      # check soft delete
+      expect(Role.with_deleted.where(id: duplicate_one_one_role.id)).to exist
 
       expect do
         merger.merge!
       end.to change(Person, :count).by(-1)
 
-      expect(person_roles.count).to eq(2)
-      group_ids = person_roles.with_deleted.map(&:group_id)
+      expect(person_roles.reload.count).to eq(2)
+      group_ids = person_roles.map(&:group_id)
       expect(group_ids).to include(groups(:bottom_group_one_one).id)
       expect(group_ids).to include(groups(:bottom_group_two_one).id)
-
-      role_attr_keys.each do |key|
-        expect(person_roles.map(&key)).to include(duplicate_two_one_role.send(key))
-        expect(person_roles.map(&key)).to include(duplicate_one_one_role.send(key))
-      end
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end
@@ -163,9 +128,7 @@ describe People::Merger do
       @source = duplicate
       @target = person
 
-      5.times do
-        Fabricate(:additional_email, contactable: duplicate)
-      end
+      duplicate.additional_emails.create!(email: 'first@example.com', label: 'Privat')
       duplicate.additional_emails.create!(email: 'myadditional@example.com', label: 'Other')
       person.additional_emails.create!(email: 'myadditional@example.com', label: 'Business')
 
@@ -175,7 +138,7 @@ describe People::Merger do
 
       person.reload
 
-      expect(person.additional_emails.reload.count).to eq(6)
+      expect(person.additional_emails.reload.count).to eq(2)
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end
@@ -191,7 +154,9 @@ describe People::Merger do
       person.phone_numbers.create!(number: '0900 42 42 42', label: 'Mobile')
 
       # does not merge invalid contactable
-      invalid_contactable = PhoneNumber.new(contactable: duplicate, number: 'abc 123', label: 'Holiday')
+      invalid_contactable = PhoneNumber.new(contactable: duplicate,
+                                            number: 'abc 123',
+                                            label: 'Holiday')
       invalid_contactable.save!(validate: false)
 
       expect do
@@ -200,7 +165,7 @@ describe People::Merger do
 
       person.reload
 
-      expect(person.phone_numbers.reload.count).to eq(7)
+      expect(person.phone_numbers.count).to eq(7)
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end
@@ -221,7 +186,7 @@ describe People::Merger do
 
       person.reload
 
-      expect(person.social_accounts.reload.count).to eq(3)
+      expect(person.social_accounts.count).to eq(3)
 
       expect(Person.where(id: duplicate.id)).not_to exist
     end

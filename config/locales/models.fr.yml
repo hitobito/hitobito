@@ -205,7 +205,7 @@ fr:
         other: Formats d'étiquettes
       message:
         one: messages
-        other: messages
+        other: Messages
       message/bulk_mail:
         one: E-mails
         other: E-mails

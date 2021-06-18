@@ -4,5 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 - @sheet = Sheet::Base.with_parent(self, Sheet::Group, @group.parent)
+- @original_sheet = @sheet
 
 = render template: 'crud/new'

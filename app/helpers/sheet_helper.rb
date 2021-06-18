@@ -33,4 +33,8 @@ module SheetHelper
     @sheet ||= Sheet::Base.current(self)
   end
 
+  def original_sheet
+    @original_sheet ||= Sheet::Base.original(self)
+  end
+
 end

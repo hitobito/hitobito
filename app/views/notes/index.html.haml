@@ -4,6 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 - @sheet = Sheet::Group.new(self)
+- @original_sheet = @sheet
 
 #notes-index
   = render 'list', notes: @notes, show_subject: true

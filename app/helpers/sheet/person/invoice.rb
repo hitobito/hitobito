@@ -11,6 +11,14 @@ module Sheet
 
       self.parent_sheet = Sheet::Person
 
+      def left_nav?
+        true
+      end
+
+      def render_left_nav
+        view.render('invoices/nav_left')
+      end
+
     end
   end
 end

@@ -112,7 +112,7 @@ class InvoicesController < CrudController
 
   def render_invoices_pdf(invoices)
     letter = find_letter(invoices)
-    pdf = if letter
+    pdf = if letter&.mailing_list
             recipients = Person.where(id: invoices.pluck(:recipient_id))
             Export::Pdf::Messages::LetterWithInvoice.new(letter, recipients).render
           else

@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class FullTextController < ApplicationController
+  include FullTextSearchStrategy
 
   skip_authorization_check
 
@@ -34,22 +35,6 @@ class FullTextController < ApplicationController
     sets.select(&:present?).inject do |memo, set|
       memo + [{ label: '—' * 20 }] + set
     end
-  end
-
-  def search_strategy
-    @search_strategy ||= search_strategy_class.new(current_user, params[:q], params[:page])
-  end
-
-  def search_strategy_class
-    if sphinx?
-      SearchStrategies::Sphinx
-    else
-      SearchStrategies::Sql
-    end
-  end
-
-  def sphinx?
-    Hitobito::Application.sphinx_present?
   end
 
   def entries

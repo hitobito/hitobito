@@ -42,7 +42,7 @@ class FullTextController < ApplicationController
   end
 
   def with_query
-    params[:q].to_s.size >= 2 ? yield : []
+    query_param.to_s.size >= 2 ? yield : []
   end
 
   def active_tab

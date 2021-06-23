@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
-#  hitobito_cvp and licensed under the Affero General Public License version 3
+#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_cvp.
+#  https://github.com/hitobito/hitobito.
 
 class Address::FullTextSearch
 
   attr_reader :query, :search_strategy
 
-  ADDRESS_WITH_NUMBER_REGEX = /^.*[^\d](\d+[A-Z]?$)/.freeze
+  ADDRESS_WITH_NUMBER_REGEX = /^.*[^\d](\d+[A-Za-z]?$)/.freeze
 
   def initialize(query, search_strategy)
     @query = query

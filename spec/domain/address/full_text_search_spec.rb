@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2021, Die Mitte Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require 'spec_helper'
 
 describe Address::FullTextSearch do
@@ -54,6 +59,46 @@ describe Address::FullTextSearch do
         numbers.each do |number|
           expect(labels).to include(bs_bern.label_with_number(number))
         end
+      end
+
+      it 'finds typeahead results from street query with street number with a lowercase letter' do
+        bs_bern = addresses(:bs_bern)
+        query = 'lpstra 5a'
+
+        search = Address::FullTextSearch.new(query, strategy.new(person, query, ''))
+        results = search.typeahead_results
+
+        # we found one street/number combination
+        expect(results.size).to eq(1)
+
+        # we found the right street
+        expect(results.first[:id]).to eq(bs_bern.id)
+
+        # we detected the right number
+        expect(results.map { |r| r[:number] }).to include('5a')
+
+        # with the right label
+        expect(results.map { |r| r[:label] }).to include(bs_bern.label_with_number('5a'))
+      end
+
+      it 'finds typeahead results from street query with street number with a uppercase letter' do
+        bs_bern = addresses(:bs_bern)
+        query = 'lpstra 6B'
+
+        search = Address::FullTextSearch.new(query, strategy.new(person, query, ''))
+        results = search.typeahead_results
+
+        # we found one street/number combination
+        expect(results.size).to eq(1)
+
+        # we found the right street
+        expect(results.first[:id]).to eq(bs_bern.id)
+
+        # we detected the right number
+        expect(results.map { |r| r[:number] }).to include('6B')
+
+        # with the right label
+        expect(results.map { |r| r[:label] }).to include(bs_bern.label_with_number('6B'))
       end
     end
   end

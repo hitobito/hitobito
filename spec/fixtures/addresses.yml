@@ -32,7 +32,7 @@ bs_bern:
   town: Bern
   state: BE
   zip_code: 3007
-  numbers: ['36', '37', '38', '40', '41']
+  numbers: ['36', '37', '38', '40', '41', '5a', '5b', '6A', '6B']
 
 bs_muri:
   street_short: Belpstrasse

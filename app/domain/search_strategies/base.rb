@@ -42,6 +42,11 @@ module SearchStrategies
       Event.none.page(1)
     end
 
+    def query_addresses
+      # override
+      Address.none.page(1)
+    end
+
     protected
 
     def fetch_people(_ids)

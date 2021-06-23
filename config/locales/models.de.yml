@@ -125,7 +125,7 @@ de:
               must_be_unique: 'existiert bereits'
 
         invoice:
-          recipient_address_or_email_required: 'Empfänger Addresse oder E-Mail muss ausgefüllt werden'
+          recipient_address_or_email_required: 'Empfänger Adresse oder E-Mail muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'ist nicht gültig; passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'

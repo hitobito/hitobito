@@ -7,7 +7,7 @@
 
 namespace :address do
   desc 'Import Post Addresses'
-  task :import => [:environment] do
+  task import: [:environment] do
     Address::Importer.new.run
   end
 end

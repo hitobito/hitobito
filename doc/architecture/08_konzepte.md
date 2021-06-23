@@ -110,7 +110,7 @@ All the actions a User can do will be derived from these role permissions, depen
       self.kind = :external
     end
 
-Permission can also be empty, but a user will always be able to chnage his own contact details.
+Permission can also be empty, but a user will always be able to change his own contact details.
 
 You can reduce the visiblity of roles from layers above by using `self.visible_from_above = false`.
 This means that this role is not visible to peple from above layers, 

@@ -37,7 +37,7 @@ describe Invoice do
     invoice = Invoice.create(title: 'invoice', group: group)
     expect(invoice).not_to be_valid
     expect(invoice.errors.full_messages).
-      to include('Empfänger Addresse oder E-Mail muss ausgefüllt werden')
+      to include('Empfänger Adresse oder E-Mail muss ausgefüllt werden')
   end
 
   it 'validates that an invoice in state issued or sent has at least has one invoice_item' do

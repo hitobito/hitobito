@@ -901,11 +901,11 @@ de:
             other: "%{model_class} wird für %{count} Personen erstellt."
         invalid:
           message/letter:
-            one: "Eine Person hat keine vollständige Addresse hinterlegt."
-            other: "%{count} weitere haben keine vollständige Addresse hinterlegt."
+            one: "Eine Person hat keine vollständige Adresse hinterlegt."
+            other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
           message/letter_with_invoice:
-            one: "Eine Person hat keine vollständige Addresse hinterlegt."
-            other: "%{count} weitere haben keine vollständige Addresse hinterlegt."
+            one: "Eine Person hat keine vollständige Adresse hinterlegt."
+            other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
           message/text_message:
             one: "Eine Person hat keine vollständige Mobiltelefonnummer hinterlegt."
             other: "%{count} weitere haben keine Mobiltelefonnummer hinterlegt."
@@ -1120,7 +1120,7 @@ de:
         category_validation:
           email_primary_invalid: Haupt-E-Mail ungültig
           email_additional_invalid: Weitere E-Mail ungültig
-          address_invalid: Addresse befindet sich nicht im Verzeichnis
+          address_invalid: Adresse befindet sich nicht im Verzeichnis
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
@@ -1237,7 +1237,7 @@ de:
       add_tag: Tag hinzufügen…
       no_entry: (keine)
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
-    export_email_needed: 'Für den Export wird eine Email Adresse benötigt.'
+    export_email_needed: 'Für den Export wird eine E-Mail Adresse benötigt.'
 
     multiselect_actions:
       remove_role: Rollen entfernen

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2017, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -39,7 +39,8 @@ module SearchStrategies
     def query_addresses
       return Address.none.page(1) if @term.blank?
 
-      Address.search(Riddle::Query.escape(@term), default_search_options.merge(match_mode: :phrase))
+      Address.search(Riddle::Query.escape(@term),
+                     default_search_options.merge(match_mode: :phrase))
     end
 
     protected

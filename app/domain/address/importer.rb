@@ -11,11 +11,12 @@ class Address::Importer
   # Imports Swiss addresses
   # see https://service.post.ch/zopa/dlc/app/#/main
 
-  RECORDS = %w(01-zip_codes
-               03-locations
-               04-streets
-               06-house_numbers
-              ).freeze
+  RECORDS = %w(
+    01-zip_codes
+    03-locations
+    04-streets
+    06-house_numbers
+  ).freeze
 
   delegate :url, :token, to: 'Settings.addresses'
 
@@ -86,7 +87,7 @@ class Address::Importer
     end
   end
 
-  def parse_streets
+  def parse_streets # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     parse(:streets).collect do |row|
       zip_code = zip_codes.fetch(row[2])
       numbers = house_numbers.fetch(row[1], []).to_a.compact.sort.uniq
@@ -117,6 +118,7 @@ class Address::Importer
   def parse_house_numbers
     parse(:house_numbers).each_with_object({}) do |row, hash|
       next if row[3].blank?
+
       hash[row[2]] ||= []
       hash[row[2]] << [row[3].to_i, row[4].presence&.downcase].join
     end

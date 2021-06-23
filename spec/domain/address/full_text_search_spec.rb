@@ -4,9 +4,10 @@ require 'spec_helper'
 
 describe Address::FullTextSearch do
 
-  let(:person)   { people(:bottom_member) }
+  let(:person) { people(:bottom_member) }
 
-    [SearchStrategies::Sphinx, SearchStrategies::Sql].each do |strategy|
+  [SearchStrategies::Sphinx, SearchStrategies::Sql].each do |strategy|
+    context "with #{strategy}" do
       before do
         allow_any_instance_of(strategy).to receive(:query_addresses)
           .and_return(Address.where(id: addresses(:bs_bern)))
@@ -55,4 +56,5 @@ describe Address::FullTextSearch do
         end
       end
     end
+  end
 end

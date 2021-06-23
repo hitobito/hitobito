@@ -35,7 +35,7 @@ describe :messages, js: true do
       click_link('Brief erstellen')
 
       is_expected.to have_selector('a', text: 'Brief wird für 3 Personen erstellt.')
-      is_expected.to have_text('(Eine Person hat keine vollständige Addresse hinterlegt.)')
+      is_expected.to have_text('(Eine Person hat keine vollständige Adresse hinterlegt.)')
     end
   end
 

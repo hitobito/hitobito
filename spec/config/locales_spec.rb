@@ -32,7 +32,7 @@ describe 'locales' do
     end
   end
 
-  it 'do not contain wrong spellings of "Adresss":' do
+  context 'do not contain wrong spellings of "Adresss":' do
     it 'Address' do
       expect(`grep Address config/locales/*.de.yml | wc -l`.chomp.to_i).to be_zero
     end

@@ -55,8 +55,8 @@ class EventsController < CrudController
       format.html { @events = entries_page(params[:page]) }
       format.csv  { render_tabular_in_background(:csv) }
       format.xlsx { render_tabular_in_background(:xlsx) }
-      format.ics  { render_ical(entries) }
-      format.json { render_entries_json(entries) }
+      format.ics  { render_ical(visible_entries) }
+      format.json { render_entries_json(entries_page(params[:page])) }
     end
   end
 
@@ -163,8 +163,7 @@ class EventsController < CrudController
     end
   end
 
-  def render_entries_json(entries)
-    paged_entries = entries.page(params[:page])
+  def render_entries_json(paged_entries)
     render json: [paging_properties(paged_entries),
                   ListSerializer.new(paged_entries.decorate,
                                      group: group,
@@ -250,13 +249,20 @@ class EventsController < CrudController
   end
 
   def entries_page(page_param)
-    page_scope = entries.page(page_param)
+    page_scope = visible_entries.page(page_param)
 
     if page_scope.out_of_range?
-      entries.page(page_scope.total_pages)
+      visible_entries.page(page_scope.total_pages)
     else
       page_scope
     end
   end
 
+  def visible_entries
+    @visible_entries ||= begin
+      invisible_entry_ids = entries.select { |entry| cannot?(:show, entry) }.map(&:id)
+
+      entries.where.not(id: invisible_entry_ids)
+    end
+  end
 end

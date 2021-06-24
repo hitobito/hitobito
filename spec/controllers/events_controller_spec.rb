@@ -588,6 +588,13 @@ describe EventsController do
         get :index, params: { group_id: top_layer.id, year: 2012 }
         expect(assigns(:events)).to have(1).entries
       end
+
+      it 'in 2012, but without permission' do
+        sign_in(people(:bottom_member))
+
+        get :index, params: { group_id: top_layer.id, year: 2012 }
+        expect(assigns(:events)).to have(0).entries
+      end
     end
 
     context '#typeahead' do

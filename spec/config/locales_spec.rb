@@ -8,20 +8,33 @@
 require 'spec_helper'
 
 describe 'locales' do
-  it 'do not contain wrong spellings of E-Mail' do
-    expect(`grep 'Email' config/locales/*.de.yml | wc -l`.chomp.to_i).to be_zero
-    expect(`grep 'e-mail' config/locales/*.de.yml | wc -l`.chomp.to_i).to be_zero
-    expect(`grep 'e-Mail' config/locales/*.de.yml | wc -l`.chomp.to_i).to be_zero
+  context 'do not contain wrong spellings of "E-Mail":' do
+    it 'Email' do
+      expect(`grep 'Email' config/locales/*.de.yml | wc -l`.chomp.to_i).to be_zero
+    end
 
-    # the spelling "email" has a few false positives :-)
-    email_lines = `grep -e ':.*email' config/locales/*.de.yml`
-                  .split("\n").map(&:chomp)
-                  .reject { |line| line =~ /.*Scope: email.*/ }
-                  .reject { |line| line =~ /.*%{email}.*/ }
-    expect(email_lines).to be_empty
+    it 'e-mail' do
+      expect(`grep 'e-mail' config/locales/*.de.yml | wc -l`.chomp.to_i).to be_zero
+    end
+
+    it 'e-Mail' do
+      expect(`grep 'e-Mail' config/locales/*.de.yml | wc -l`.chomp.to_i).to be_zero
+    end
+
+    it 'email' do
+      # the spelling "email" has a few false positives :-)
+      email_lines = `grep -e ':.*email' config/locales/*.de.yml`
+                    .split("\n").map(&:chomp)
+                    .reject { |line| line =~ /.*Scope: email.*/ }
+                    .reject { |line| line =~ /.*%{email}.*/ }
+
+      expect(email_lines).to be_empty
+    end
   end
 
-  it 'do not contain wrong spellings of Adress' do
-    expect(`grep Address config/locales/*.de.yml | wc -l`.chomp.to_i).to be_zero
+  it 'do not contain wrong spellings of "Adresss":' do
+    it 'Address' do
+      expect(`grep Address config/locales/*.de.yml | wc -l`.chomp.to_i).to be_zero
+    end
   end
 end

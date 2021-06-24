@@ -7,7 +7,7 @@
 It is possible to provide an auto-complete and a validation for addresses.
 The Addresses are read from the Address model.
 
-Currently, address entries are swiss addresses imported from the Swiss Post.
+Currently, address entries are swiss addresses imported from Swiss Post.
 
 ## Import
 
@@ -34,4 +34,4 @@ addresses-table. If Sphinx is present, sphinx indexes that table and answers
 queries. Otherwise, the table is queried by the database.
 
 The search-strategy is determined the same way as for the
-people/group/event-full-text search.
+people/group/event-full-text search. (See `app/controllers/concerns/full_text_search_strategy.rb`)

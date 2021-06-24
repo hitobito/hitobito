@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::Filter
-
   attr_reader :type, :filter, :group, :year, :sort_expression
 
   def initialize(group, type, filter, year, sort_expression)

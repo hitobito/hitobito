@@ -49,6 +49,7 @@
 
 top_event:
   groups: top_layer
+  globally_visible: false
   type:
 
 top_course:

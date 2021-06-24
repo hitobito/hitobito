@@ -38,6 +38,11 @@ environment variables to that wagons can be activated with a single statement.
 
 ### Instructions: create wagon
 
+As a "Work in Progress" the wagon-creation is automated with 
+
+    ./bin/wagon create [name]
+    
+This covers the first few steps (up until copying the configs) of the following instructions:
 
 The basic structure of a new wagon can be easily generated in the main project, the templates for it are in `lib/templates/wagon`):
 

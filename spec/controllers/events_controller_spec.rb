@@ -607,7 +607,7 @@ describe EventsController do
       end
 
       let!(:course_fr) do
-        dates = [Fabricate(:event_date, start_at: 10.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
+        dates = [Fabricate(:event_date, start_at: 11.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
         Fabricate(:course, name: 'Château 42', groups: [top_layer], locale: :fr, dates: dates)
       end
 
@@ -619,7 +619,7 @@ describe EventsController do
 
       # should not be returned because search term does not match
       let!(:course_other) do
-        dates = [Fabricate(:event_date, start_at: 10.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
+        dates = [Fabricate(:event_date, start_at: 12.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
         Fabricate(:course, name: 'Kurs Other', groups: [top_layer], dates: dates)
       end
 

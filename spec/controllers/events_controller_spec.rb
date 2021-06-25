@@ -485,7 +485,11 @@ describe EventsController do
   describe 'with valid OAuth token' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Oauth::AccessToken', acceptable?: true, accessible?: true, person: people(:top_leader)) }
+    let(:token) do
+      instance_double('Oauth::AccessToken', acceptable?: true,
+                                            accessible?: true,
+                                            person: people(:top_leader))
+    end
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
@@ -505,7 +509,11 @@ describe EventsController do
   describe 'with invalid OAuth token (expired or revoked)' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Oauth::AccessToken', acceptable?: true, accessible?: false, person: people(:top_leader)) }
+    let(:token) do
+      instance_double('Oauth::AccessToken', acceptable?: true,
+                                            accessible?: false,
+                                            person: people(:top_leader))
+    end
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
@@ -525,7 +533,11 @@ describe EventsController do
   describe 'without acceptable OAuth token (missing scope)' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Oauth::AccessToken', acceptable?: false, accessible?: true, person: people(:top_leader)) }
+    let(:token) do
+      instance_double('Oauth::AccessToken', acceptable?: false,
+                                            accessible?: true,
+                                            person: people(:top_leader))
+    end
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
@@ -559,7 +571,11 @@ describe EventsController do
     end
 
     context 'oauth' do
-      let(:token) { instance_double('Oauth::AccessToken', acceptable?: true, accessible?: true, person: people(:top_leader)) }
+      let(:token) do
+        instance_double('Oauth::AccessToken', acceptable?: true,
+                                              accessible?: true,
+                                              person: people(:top_leader))
+      end
 
       before do
         allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
@@ -603,29 +619,35 @@ describe EventsController do
 
       let(:top_layer) { groups(:top_layer) }
       let!(:course_de) do
-        dates = [Fabricate(:event_date, start_at: 10.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
+        dates = [Fabricate(:event_date, start_at: 10.days.from_now.to_date,
+                                        finish_at: 18.days.from_now.to_date)]
         Fabricate(:course, name: 'Kurs 42', groups: [top_layer], dates: dates)
       end
 
       let!(:course_fr) do
-        dates = [Fabricate(:event_date, start_at: 11.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
+        dates = [Fabricate(:event_date, start_at: 11.days.from_now.to_date,
+                                        finish_at: 18.days.from_now.to_date)]
         Fabricate(:course, name: 'Château 42', groups: [top_layer], locale: :fr, dates: dates)
       end
 
       # should not be returned because past course
       let!(:course_past) do
-        dates = [Fabricate(:event_date, start_at: 30.days.ago.to_date, finish_at: 18.days.ago.to_date)]
+        dates = [
+          Fabricate(:event_date, start_at: 30.days.ago.to_date, finish_at: 18.days.ago.to_date)
+        ]
         Fabricate(:course, name: 'Past 42', groups: [top_layer], locale: :fr, dates: dates)
       end
 
       # should not be returned because search term does not match
       let!(:course_other) do
-        dates = [Fabricate(:event_date, start_at: 12.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
+        dates = [Fabricate(:event_date, start_at: 12.days.from_now.to_date,
+                                        finish_at: 18.days.from_now.to_date)]
         Fabricate(:course, name: 'Kurs Other', groups: [top_layer], dates: dates)
       end
 
       it 'finds events by given term in all locales and excludes past events' do
-        get :typeahead, params: { group_id: top_layer.id, q: '42', type: 'Event::Course', format: :json }
+        get :typeahead, params: { group_id: top_layer.id, q: '42', type: 'Event::Course',
+                                  format: :json }
 
         typeahead_entries = JSON.parse(response.body)
         expect(typeahead_entries.count).to eq(2)

@@ -591,6 +591,7 @@ describe EventsController do
 
       it 'in 2012, but without permission' do
         sign_in(people(:bottom_member))
+        events(:top_event).update_column(:globally_visible, false) # rubocop:disable Rails/SkipsModelValidations
 
         get :index, params: { group_id: top_layer.id, year: 2012 }
         expect(assigns(:events)).to have(0).entries

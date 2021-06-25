@@ -260,9 +260,9 @@ class EventsController < CrudController
 
   def visible_entries
     @visible_entries ||= begin
-      invisible_entry_ids = entries.select { |entry| cannot?(:show, entry) }.map(&:id)
+      visible_entry_ids = entries.select { |entry| can?(:show, entry) }.map(&:id)
 
-      entries.where.not(id: invisible_entry_ids)
+      entries.where(id: visible_entry_ids)
     end
   end
 end

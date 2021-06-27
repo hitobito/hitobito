@@ -40,10 +40,11 @@ class GroupAbility < AbilityDsl::Base
 
     permission(:layer_full).may(:create).with_parent_in_same_layer
     permission(:layer_full).may(:destroy).in_same_layer_except_permission_giving
+    permission(:layer_full).may(:index_service_tokens).service_token_core_constraints
     permission(:layer_full).
       may(:update, :reactivate, :index_person_add_requests, :index_notes,
           :manage_person_tags, :activate_person_add_requests, :deactivate_person_add_requests,
-          :index_deleted_people, :index_service_tokens).
+          :index_deleted_people).
       in_same_layer
 
     permission(:layer_and_below_read).
@@ -58,8 +59,9 @@ class GroupAbility < AbilityDsl::Base
       may(:update, :reactivate, :index_person_add_requests, :index_notes,
           :manage_person_tags, :index_deleted_people).in_same_layer_or_below
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers
+    permission(:layer_and_below_full).may(:index_service_tokens).service_token_core_constraints
     permission(:layer_and_below_full).
-      may(:activate_person_add_requests, :deactivate_person_add_requests, :index_service_tokens).
+      may(:activate_person_add_requests, :deactivate_person_add_requests).
       in_same_layer
 
     permission(:finance).may(:index_invoices).in_layer_group
@@ -128,6 +130,10 @@ class GroupAbility < AbilityDsl::Base
   # Member is a general role kind. Return true if user has any member role anywhere.
   def if_member
     user.roles.any? { |r| r.class.member? }
+  end
+
+  def service_token_core_constraints
+    in_same_layer
   end
 
   private

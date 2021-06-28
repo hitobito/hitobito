@@ -10,6 +10,8 @@ module SearchStrategies
 
     QUERY_PER_PAGE = 10
 
+    attr_accessor :term
+
     def initialize(user, term, page)
       @user = user
       @term = term
@@ -45,6 +47,10 @@ module SearchStrategies
     def query_addresses
       # override
       Address.none.page(1)
+    end
+
+    def inspect
+      "<#{self.class.name}: term: #{@term.inspect}>"
     end
 
     protected

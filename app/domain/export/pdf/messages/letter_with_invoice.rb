@@ -25,7 +25,10 @@ module Export::Pdf::Messages
     end
 
     def render_payment_slip(pdf, recipient)
-      invoice = @letter.invoice_for(recipient)
+      invoice = Invoice.find_by(invoice_list: @letter.invoice_list, recipient: recipient)
+      invoice ||= @letter.invoice_for(recipient)
+      invoice.save
+
       options = @options.merge(cursors: cursors)
       if invoice.qr?
         Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, options).render

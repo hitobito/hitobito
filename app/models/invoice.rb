@@ -169,7 +169,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def invoice_config
-    group.invoice_config
+    group.layer_group.invoice_config
   end
 
   def state

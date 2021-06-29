@@ -26,7 +26,7 @@ module Dropdown
     end
 
     def main_label_link
-      if user.last_label_format_id
+      if user&.last_label_format_id
         export_label_format_path(user.last_label_format_id)
       else
         '#'
@@ -45,7 +45,7 @@ module Dropdown
     end
 
     def last_label_format?
-      user.last_label_format_id? && LabelFormat.for_person(user).exists?
+      user&.last_label_format_id? && LabelFormat.for_person(user).exists?
     end
 
     def add_label_format_items(parent)

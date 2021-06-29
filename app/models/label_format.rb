@@ -56,6 +56,8 @@ class LabelFormat < ActiveRecord::Base
   scope :for_user, ->(user) { where('user_id = ? OR user_id IS null', user.id) }
 
   def self.for_person(person)
+    return none unless person
+
     if person.show_global_label_formats?
       where('person_id = ? OR person_id IS NULL', person.id)
     else

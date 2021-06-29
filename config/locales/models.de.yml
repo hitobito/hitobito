@@ -869,7 +869,7 @@ de:
         contact: Kontaktperson
         contact_id: Kontaktperson
         beneficiary: Zugunsten von
-        email: Absender E-Mail
+        email: Antwort an E-Mail Adresse
         payee: Einzahlung für
         payment_slip: Einzahlungsschein
         payment_slips:

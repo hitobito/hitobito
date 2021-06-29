@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 
@@ -35,8 +34,8 @@ describe InvoiceMailer do
 
   it 'uses invoice_config.email in mail headers' do
     invoice.invoice_config.update(email: 'invoices@example.com')
-    expect(mail.from).to eq %w(invoices@example.com)
-    expect(mail.sender).to eq 'invoices@example.com'
+    expect(mail.from).to eq %w(noreply@localhost)
+    expect(mail.sender).to match(/^noreply-bounces\+invoices=example\.com@/)
     expect(mail.reply_to).to eq %w(invoices@example.com)
   end
 
@@ -59,5 +58,4 @@ describe InvoiceMailer do
       expect(pdf.content_type).to match(/filename=#{invoice.filename}/)
     end
   end
-
 end

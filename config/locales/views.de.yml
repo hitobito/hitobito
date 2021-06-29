@@ -686,7 +686,8 @@ de:
       payment: 'Einzahlung'
       payment_information_help: 'Wird in jeder Rechnung aufgeführt, kann pro Rechnung angepasst werden'
       address_help: 'Erscheint auf dem Brief als Absenderadresse'
-      email_help: 'Wird als E-Mail Absender anstelle des aktuellen Benutzers verwendet'
+      email_help: Antworten auf Rechnungs-E-Mails sollen entweder an die Adresse des aktuellen
+        Benutzers oder an die hier konfigurierte Adresse gesendet werden.
       payee_help: 'Erscheint auf dem Einzahlungsschein'
       beneficiary_help: 'Erscheint auf dem Einzahlungsschein'
       account_number_example: 'Beispiel: 01-162-5'

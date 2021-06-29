@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
@@ -84,8 +83,8 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def mail_headers(person, email)
-    return with_personal_sender(person) if email.blank?
-    { return_path: email, sender: email, reply_to: email, from: email }
+    sender = email.blank? ? person : Person.new(email: email)
+    with_personal_sender(sender)
   end
 
 end

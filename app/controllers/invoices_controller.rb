@@ -115,7 +115,7 @@ class InvoicesController < CrudController
     pdf = if letter
             Export::Pdf::Messages::LetterWithInvoice.new(letter, [invoice.recipient]).render
           else
-            Export::Pdf::Invoice.render_multiple([invoice], pdf_options)
+            Export::Pdf::Invoice.render(invoice, pdf_options)
           end
     send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, [invoice])
   end

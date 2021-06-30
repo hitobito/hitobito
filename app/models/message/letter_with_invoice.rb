@@ -42,6 +42,13 @@ class Message::LetterWithInvoice < Message::Letter
 
   self.icon = :'file-invoice'
 
+  def recipients
+    Person.with_address.where(id: InvoiceList
+                                      .where(id: invoice_list_id)
+                                      .joins(:invoices)
+                                      .select('invoices.recipient_id'))
+  end
+
   def invoice_list
     @invoice_list ||= InvoiceList.create!(
       title: subject,

@@ -21,7 +21,7 @@ class Export::MessageJob < Export::ExportBaseJob
   end
 
   def recipients
-    @recipients ||= message.mailing_list.people(Person.with_address)
+    @recipients ||= message.recipients
   end
 
   def data
@@ -30,6 +30,5 @@ class Export::MessageJob < Export::ExportBaseJob
       stamped: true
     }).render
   end
-
 
 end

@@ -37,7 +37,7 @@ class MessagesController < CrudController
       format.html
       format.pdf do
         if preview?
-          render_pdf(entry, preview: preview?)
+          render_pdf_preview(entry)
         else
           render_pdf_in_background(entry)
         end

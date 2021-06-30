@@ -45,7 +45,7 @@ class Message::LetterWithInvoice < Message::Letter
   def invoice_list
     @invoice_list ||= InvoiceList.create!(
       title: subject,
-      group: group,
+      group: group.layer_group,
       receiver: mailing_list,
       invoice: invoice
     )
@@ -53,7 +53,6 @@ class Message::LetterWithInvoice < Message::Letter
 
   def invoice
     @invoice ||= Invoice.new.tap do |invoice|
-      invoice.group = group
       invoice.group = group.layer_group
       invoice.title = subject
       invoice_attributes.to_h.fetch('invoice_items_attributes', {}).values.each do |v|

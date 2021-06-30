@@ -259,12 +259,6 @@ describe SearchStrategies::Sphinx, sphinx: true do
         expect(result).to include(addresses(:bs_muri))
       end
 
-      it 'finds single streets by name and number' do
-        result = strategy('Belpst 36').query_addresses
-        expect(result).to include(addresses(:bs_bern))
-        expect(result).not_to include(addresses(:bs_muri))
-      end
-
       it 'finds single streets by name and town' do
         result = strategy('Belpst Muri').query_addresses
         expect(result).not_to include(addresses(:bs_bern))

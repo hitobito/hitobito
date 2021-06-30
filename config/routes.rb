@@ -260,6 +260,14 @@ Hitobito::Application.routes.draw do
     resources :event_kinds, module: 'event', controller: 'kinds'
     resources :event_kind_categories, module: 'event', controller: 'kind_categories'
 
+    scope 'mailing_lists', module: :mailing_lists do
+      scope 'imap_mails' do
+        get ':mailbox' => 'imap_mails#index', as: :imap_mails
+        delete ':mailbox' => 'imap_mails#destroy', as: :imap_mails_destroy
+        patch ':mailbox/move' => 'imap_mails_move#create', as: :imap_mails_move
+      end
+    end
+
     resources :qualification_kinds
     resources :tags, except: :show do
       collection do
@@ -304,6 +312,7 @@ Hitobito::Application.routes.draw do
     resources :assignments, only: [:new, :create]
     resources :table_displays, only: [:create]
     resources :messages, only: [:show] do
+      resource :preview, only: [:show], module: :messages
       resource :dispatch, only: [:create, :show], module: :messages
     end
   end # scope locale

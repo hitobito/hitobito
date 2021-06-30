@@ -63,7 +63,7 @@ module NavigationHelper
     active = section_active?(url, options[:active_for], options[:inactive_for])
     nav(I18n.t("navigation.#{options[:label]}"), url, options[:icon_name], active,
         class: 'nav-left-section', active_class: 'active') do
-      concat(original_sheet.render_left_nav) if original_sheet.left_nav?
+      concat(sheet.render_left_nav) if sheet.left_nav?
     end
   end
 

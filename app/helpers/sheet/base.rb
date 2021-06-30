@@ -35,11 +35,6 @@ module Sheet
         sheet_class.new(view_context)
       end
 
-      def original(view_context)
-        sheet_class = controller_sheet_class(view_context.controller)
-        sheet_class.new(view_context)
-      end
-
       private
 
       def current_sheet_class(view_context)

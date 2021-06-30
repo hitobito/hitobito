@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -16,7 +16,7 @@ module Export::Tabular::People
     end
 
     def person_attributes
-      [:name, :address, :zip_code, :town, :country, :layer_group]
+      [:salutation, :name, :address, :zip_code, :town, :country, :layer_group]
     end
 
     def build_attribute_labels

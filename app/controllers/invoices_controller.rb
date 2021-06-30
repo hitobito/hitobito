@@ -135,7 +135,9 @@ class InvoicesController < CrudController
   end
 
   def render_labels(invoices)
-    return redirect_back(fallback_location: group_invoices_path(group)) unless params[:label_format_id]
+    unless params[:label_format_id]
+      return redirect_back(fallback_location: group_invoices_path(group))
+    end
 
     recipients = Invoice.to_contactables(invoices)
     pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)

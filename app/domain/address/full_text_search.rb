@@ -9,10 +9,12 @@ class Address::FullTextSearch
 
   attr_reader :query, :search_strategy
 
-  ADDRESS_WITH_NUMBER_REGEX = /^.*[^\d](\d+[A-Za-z]?$)/.freeze
+  ADDRESS_WITH_NUMBER_REGEX = /^(.*)[^\d](\d+[A-Za-z]?$)/.freeze
 
   def initialize(query, search_strategy)
     @query = query
+
+    search_strategy.term = street_name_from_query
     @search_strategy = search_strategy
   end
 
@@ -62,7 +64,15 @@ class Address::FullTextSearch
     query.match?(ADDRESS_WITH_NUMBER_REGEX)
   end
 
+  def street_name_from_query
+    if query_ends_with_number?
+      query.match(ADDRESS_WITH_NUMBER_REGEX)[1]
+    else
+      query
+    end
+  end
+
   def street_number_from_query
-    query.match(ADDRESS_WITH_NUMBER_REGEX)[1]
+    query.match(ADDRESS_WITH_NUMBER_REGEX)[2]
   end
 end

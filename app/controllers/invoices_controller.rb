@@ -48,7 +48,7 @@ class InvoicesController < CrudController
   def index
     respond_to do |format|
       format.html { super }
-      format.pdf  { generate_pdf(list_entries.includes(:invoice_items)) }
+      format.pdf  { render_labels(list_entries.includes(:invoice_items)) }
       format.csv  { render_invoices_csv(list_entries.includes(:invoice_items)) }
       format.json { render_entries_json(list_entries.includes(:invoice_items,
                                                               :payments,
@@ -60,7 +60,7 @@ class InvoicesController < CrudController
     @invoice_items = InvoiceItemDecorator.decorate_collection(entry.invoice_items)
     respond_to do |format|
       format.html { build_payment }
-      format.pdf  { generate_pdf([entry]) }
+      format.pdf  { generate_pdf(entry) }
       format.csv  { render_invoices_csv([entry]) }
       format.json { render_entry_json }
     end
@@ -97,11 +97,11 @@ class InvoicesController < CrudController
     super.merge(creator_id: current_user.id)
   end
 
-  def generate_pdf(invoices)
+  def generate_pdf(invoice)
     if params[:label_format_id]
-      render_labels(invoices)
+      render_labels([invoice])
     else
-      render_invoices_pdf(invoices)
+      render_invoice_pdf(invoice)
     end
   end
 
@@ -110,19 +110,20 @@ class InvoicesController < CrudController
     send_data csv, type: :csv, filename: filename(:csv, invoices)
   end
 
-  def render_invoices_pdf(invoices)
-    letter = find_letter(invoices)
-    pdf = if letter&.mailing_list
-            recipients = Person.where(id: invoices.pluck(:recipient_id))
-            Export::Pdf::Messages::LetterWithInvoice.new(letter, recipients).render
+  def render_invoice_pdf(invoice)
+    letter = find_letter(invoice)
+    pdf = if letter
+            Export::Pdf::Messages::LetterWithInvoice.new(letter, [invoice.recipient]).render
           else
-            Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
+            Export::Pdf::Invoice.render_multiple([invoice], pdf_options)
           end
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
+    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, [invoice])
   end
 
-  def find_letter(invoices)
-    Message::LetterWithInvoice.find_by(invoice_list_id: invoices.first.invoice_list_id)
+  def find_letter(invoice)
+    return nil unless invoice.invoice_list_id
+
+    Message::LetterWithInvoice.find_by(invoice_list_id: invoice.invoice_list_id)
   end
 
   def filename(extension, invoices)
@@ -134,11 +135,13 @@ class InvoicesController < CrudController
   end
 
   def render_labels(invoices)
+    redirect_back(fallback_location: group_invoices_path(group)) unless params[:label_format_id]
+
     recipients = Invoice.to_contactables(invoices)
     pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)
     send_data pdf, type: :pdf, disposition: 'inline'
   rescue Prawn::Errors::CannotFit
-    redirect_back(fallback_location: group_ionvoices_path(group), alert: t('people.pdf.cannot_fit'))
+    redirect_back(fallback_location: group_invoices_path(group), alert: t('people.pdf.cannot_fit'))
   end
 
   def list_entries

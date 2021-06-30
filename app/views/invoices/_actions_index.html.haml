@@ -8,7 +8,6 @@
   = invoice_sending_dropdown
   = action_button ti('link.delete'), group_invoice_list_path(group, invoice_list_id: invoice_list&.id), :'trash-alt', method: :delete, data: { checkable: true }
   = invoices_export_dropdown
-  = invoices_print_dropdown
 
   - if @invoice_list.blank? && parent.invoice_config.valid?
     = action_button(t('invoices.add_payments'), new_group_payment_process_path(parent), :plus)

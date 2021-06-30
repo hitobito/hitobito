@@ -12,7 +12,7 @@ module NavigationHelper
       url: :groups_path,
       icon_name: 'users',
       active_for: %w(groups people),
-      inactive_for: %w(invoices invoice_articles invoice_config payment_process invoice_lists) },
+      inactive_for: %w(/invoices invoice_articles invoice_config payment_process invoice_lists) },
 
     { label: :events,
       url: :list_events_path,
@@ -30,7 +30,7 @@ module NavigationHelper
       url: :first_group_invoices_or_root_path,
       icon_name: 'money-bill-alt',
       if: ->(_) { current_user.finance_groups.any? },
-      active_for: %w(invoices invoice_articles invoice_config payment_process invoice_lists) },
+      active_for: %w(/invoices invoice_articles invoice_config payment_process invoice_lists) },
 
     { label: :admin,
       url: :label_formats_path,

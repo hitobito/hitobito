@@ -1,4 +1,6 @@
-#  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -16,8 +18,9 @@ class Person::Household
   def valid?
     same_address?(person).tap do
       address_attrs(person).each do |attr, value|
-        readonly = readonly_people.select { |p| p.send(attr).presence != value.presence }.first
+        readonly = readonly_people.reject { |p| p.send(attr).presence == value.presence }.first
         next unless readonly
+
         person.errors.add(attr, :readonly, name: "#{readonly.first_name} #{readonly.last_name}")
       end
     end
@@ -50,6 +53,7 @@ class Person::Household
 
   def save
     raise 'invalid' unless valid?
+
     if any_change?
       household_log(person, people, person.household_key?)
       person.update(household_key: key)
@@ -131,7 +135,7 @@ class Person::Household
 
   def address_attrs(person)
     person.attributes.slice(*Person::ADDRESS_ATTRS).transform_values do |val|
-      val.blank? ? nil : val
+      val.presence
     end
   end
 
@@ -158,7 +162,8 @@ class Person::Household
   end
 
   def household_log(housemate, _household, existing_household_key, options = {})
-    item = options[:item] ? options[:item] : housemate
+    item = options[:item] || housemate
+
     if existing_household_key
       household_log_entry(housemate, people, :household_updated, item: item)
     else
@@ -167,7 +172,8 @@ class Person::Household
   end
 
   def household_log_entry(housemate, household, event, options = {})
-    item = options[:item] ? options[:item] : housemate
+    item = options[:item] || housemate
+
     PaperTrail::Version.create(main: housemate,
                                item: item,
                                whodunnit: current_user.id,

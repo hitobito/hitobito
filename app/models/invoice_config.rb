@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -34,9 +34,9 @@ class InvoiceConfig < ActiveRecord::Base
   include PaymentSlips
   include ValidatedEmail
 
-  IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/
-  ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
-  PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}/
+  IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/.freeze
+  ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/.freeze
+  PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}/.freeze
 
   belongs_to :group, class_name: 'Group'
 
@@ -77,15 +77,19 @@ class InvoiceConfig < ActiveRecord::Base
 
   def correct_address_wordwrap
     return if payee.to_s.split(/\n/).length <= 2
+
     errors.add(:payee, :to_long)
   end
 
   def correct_check_digit
     return if account_number.blank? || bank?
+
     payment_slip = Invoice::PaymentSlip.new
     splitted = account_number.delete('-').split('')
     check_digit = splitted.pop
+
     return if payment_slip.check_digit(splitted.join) == check_digit.to_i
+
     errors.add(:account_number, :invalid_check_digit)
   end
 

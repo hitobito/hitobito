@@ -21,7 +21,10 @@ module Export::Tabular::People
     end
 
     def salutation
-      nil
+      return nil unless entry.respond_to? :salutation # not nil, just w/o salutation
+      return nil if entry.household_key.present?
+
+      Salutation.new(entry).value
     end
 
     private

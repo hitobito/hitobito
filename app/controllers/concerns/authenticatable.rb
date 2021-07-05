@@ -15,7 +15,6 @@ module Authenticatable
     check_authorization if: :authorize?
   end
 
-
   private
 
   def current_person

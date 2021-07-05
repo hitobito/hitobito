@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,6 +38,14 @@ class MailingListAbility < AbilityDsl::Base
       in_same_layer
 
     general.group_not_deleted
+  end
+
+  on(Imap::Mail) do
+    permission(:admin).may(:manage).if_mail_config_present
+  end
+
+  def if_mail_config_present
+    Settings.email.retriever.config.present?
   end
 
   def in_same_group_if_no_subscriptions_in_below_groups

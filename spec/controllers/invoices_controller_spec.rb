@@ -116,17 +116,37 @@ describe InvoicesController do
       expect(response.media_type).to eq('application/pdf')
     end
 
-    it 'exports pdf for invoice with letter' do
-      update_issued_at_to_current_year
-      invoice_list = messages(:with_invoice).create_invoice_list(title: 'test')
-      invoices(:sent).update(invoice_list: invoice_list)
-      expect(Export::Pdf::Messages::LetterWithInvoice).to receive(:new).with(
-        messages(:with_invoice),
-        [invoices(:sent).recipient]
-      ).and_call_original
-      get :index, params: { group_id: group.id }, format: :pdf
-      expect(response.header['Content-Disposition']).to match(/rechnungen.pdf/)
-      expect(response.media_type).to eq('application/pdf')
+    context 'invoice list' do
+      let(:sent)         { invoices(:sent) }
+      let(:letter)       { messages(:with_invoice) }
+      let(:invoice_list) { messages(:with_invoice).create_invoice_list(title: 'test', group_id: group.id) }
+
+      before do
+        update_issued_at_to_current_year
+        sent.update(invoice_list: invoice_list)
+      end
+
+      it 'does not include invoice when viewing group invoices' do
+        get :index, params: { group_id: group.id }
+        expect(assigns(:invoices)).not_to include sent
+      end
+
+      it 'does include invoice when viewing invoice list invoices' do
+        get :index, params: { group_id: group.id, invoice_list_id: invoice_list.id }
+        expect(assigns(:invoices)).to include sent
+      end
+
+      it 'does render pdf using invoice renderer' do
+        expect(Export::Pdf::Invoice).to receive(:render_multiple).with([sent], anything)
+        get :index, params: { group_id: group.id, invoice_list_id: invoice_list.id }, format: :pdf
+      end
+
+      it 'does render pdf Letter renderer renderer' do
+        invoice_list.update(message: letter)
+        expect(Export::Pdf::Messages::LetterWithInvoice).to receive(:new)
+          .with(letter, letter.recipients).and_call_original
+        get :index, params: { group_id: group.id, invoice_list_id: invoice_list.id }, format: :pdf
+      end
     end
 
     it 'exports labels pdf' do

@@ -66,5 +66,9 @@ module Export::Pdf
     def self.render(invoice, options)
       runner.new.render([invoice], options)
     end
+
+    def self.render_multiple(invoices, options)
+      runner.new.render(invoices, options)
+    end
   end
 end

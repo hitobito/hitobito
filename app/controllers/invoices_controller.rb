@@ -49,7 +49,7 @@ class InvoicesController < CrudController
   def index
     respond_to do |format|
       format.html { super }
-      format.pdf  { render_labels(list_entries.includes(:invoice_items)) }
+      format.pdf  { generate_pdf(list_entries.includes(:invoice_items)) }
       format.csv  { render_invoices_csv(list_entries.includes(:invoice_items)) }
       format.json { render_entries_json(list_entries.includes(:invoice_items,
                                                               :payments,
@@ -61,7 +61,7 @@ class InvoicesController < CrudController
     @invoice_items = InvoiceItemDecorator.decorate_collection(entry.invoice_items)
     respond_to do |format|
       format.html { build_payment }
-      format.pdf  { generate_pdf(entry) }
+      format.pdf  { generate_pdf([entry]) }
       format.csv  { render_invoices_csv([entry]) }
       format.json { render_entry_json }
     end
@@ -98,11 +98,11 @@ class InvoicesController < CrudController
     super.merge(creator_id: current_user.id)
   end
 
-  def generate_pdf(invoice)
+  def generate_pdf(invoices)
     if params[:label_format_id]
-      render_labels([invoice])
+      render_labels(invoices)
     else
-      render_invoice_pdf(invoice)
+      render_invoices_pdf(invoices)
     end
   end
 
@@ -111,20 +111,14 @@ class InvoicesController < CrudController
     send_data csv, type: :csv, filename: filename(:csv, invoices)
   end
 
-  def render_invoice_pdf(invoice)
-    letter = find_letter(invoice)
+  def render_invoices_pdf(invoices)
+    letter = parent.message if parent.is_a?(InvoiceList)
     pdf = if letter
-            Export::Pdf::Messages::LetterWithInvoice.new(letter, [invoice.recipient]).render
+            Export::Pdf::Messages::LetterWithInvoice.new(letter, letter.recipients).render
           else
-            Export::Pdf::Invoice.render(invoice, pdf_options)
+            Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
           end
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, [invoice])
-  end
-
-  def find_letter(invoice)
-    return nil unless invoice.invoice_list_id
-
-    Message::LetterWithInvoice.find_by(invoice_list_id: invoice.invoice_list_id)
+    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
   end
 
   def filename(extension, invoices)
@@ -150,6 +144,7 @@ class InvoicesController < CrudController
   def list_entries
     scope = super.list
     scope = scope.includes(:recipient).references(:recipient)
+    scope = scope.standalone if parent.is_a?(Group)
     scope = scope.page(params[:page]).per(50) unless params[:ids]
     Invoice::Filter.new(params.reverse_merge(year: year)).apply(scope)
   end

@@ -948,6 +948,7 @@ de:
     admin/oauth_authorizations: 'OAuth-Autorisierungen'
     imap_mails: 'Abo Mails'
     invoices: 'Rechnungen'
+    invoices/single: 'Einzelrechnungen'
 
   notes:
     new_note: Neue Notiz

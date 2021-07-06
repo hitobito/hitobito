@@ -38,8 +38,9 @@ class InvoicesController < CrudController
   helper_method :group, :invoice_list
 
   def new
-    if model_params[:recipient_id] && can?(:update, Person.find(model_params[:recipient_id]))
-      entry.recipient_id = model_params[:recipient_id]
+    recipient = model_params && Person.find(model_params[:recipient_id])
+    if recipient && can?(:update, recipient)
+      entry.recipient_id = recipient.id
       entry.send(:set_recipient_fields)
     end
     entry.attributes = { payment_information: entry.invoice_config.payment_information }

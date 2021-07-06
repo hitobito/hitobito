@@ -39,6 +39,22 @@ describe InvoicesController do
     end
   end
 
+  context 'new' do
+    it 'GET#new supports creating invoice for without recipient_id' do
+      get :new, params: { group_id: group.id }
+      expect(response).to be_successful
+      expect(assigns(:invoice).recipient_id).to be_nil
+      expect(assigns(:invoice).recipient_address).to be_nil
+    end
+
+    it 'GET#new creating invoice for with recipient_id' do
+      get :new, params: { group_id: group.id, invoice: { recipient_id: person.id } }
+      expect(response).to be_successful
+      expect(assigns(:invoice).recipient).to be_present
+      expect(assigns(:invoice).recipient_address).to be_present
+    end
+  end
+
   context 'index' do
     it 'GET#index finds invoices by title' do
       update_issued_at_to_current_year

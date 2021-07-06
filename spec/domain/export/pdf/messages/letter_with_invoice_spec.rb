@@ -81,6 +81,28 @@ describe Export::Pdf::Messages::LetterWithInvoice do
       ]
     end
 
+    context "persisted invoice list" do
+
+      let(:group) { groups(:top_layer) }
+      let(:recipient) { recipients.first }
+
+      it 'renders iban from invoice config when no persisted invoice exists' do
+        group.invoice_config.update(iban: 'CH84 0221 1981 6169 5329 8')
+        pdf = described_class.new(letter, recipients).render
+        expect(text_with_position).to include([360, 280, "CH84 0221 1981 6169 5329 8"])
+      end
+
+      it 'renders iban from invoice when persisted invoice exists' do
+        list = InvoiceList.create(group: group, title: "title")
+        invoice = list.invoices.create!(title: :title, recipient_id: recipient.id, total: 10, group: group)
+        letter.invoice_list_id = list.id
+
+        group.invoice_config.update(iban: 'CH84 0221 1981 6169 5329 8')
+        pdf = described_class.new(letter, recipients).render
+        expect(text_with_position).to include([360, 280, "CH93 0076 2011 6238 5295 7"])
+      end
+    end
+
     context "dynamic" do
       let(:recipients) { [people(:bottom_member), people(:top_leader)] }
 

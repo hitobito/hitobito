@@ -42,13 +42,6 @@ class Message::LetterWithInvoice < Message::Letter
 
   self.icon = :'file-invoice'
 
-  def recipients
-    Person.with_address.where(id: InvoiceList
-                                      .where(id: invoice_list_id)
-                                      .joins(:invoices)
-                                      .select('invoices.recipient_id'))
-  end
-
   def invoice_list
     @invoice_list ||= InvoiceList.create!(
       title: subject,
@@ -69,14 +62,38 @@ class Message::LetterWithInvoice < Message::Letter
   end
 
   def invoice_for(receiver)
+    invoice_list_id ? load_invoice_for(receiver) : build_invoice_for(receiver)
+  end
+
+  def recipients
+    recipients = invoice_list_id ? recipients_from_invoices : recipients_from_mailing_list
+    recipients.merge(Person.with_address)
+  end
+
+  private
+
+  def recipients_from_invoices
+    invoices = Invoice.joins(:invoice_list).where(invoice_list_id: invoice_list_id)
+    Person.where(id: invoices.select("recipient_id"))
+  end
+
+  def recipients_from_mailing_list
+    mailing_list.people
+  end
+
+  def load_invoice_for(receiver)
+    Invoice.find_by(invoice_list_id: invoice_list_id, recipient: receiver).tap do |invoice|
+      raise 'Didn\'t find invoice for recipient ' + receiver.inspect unless invoice
+    end
+  end
+
+  def build_invoice_for(receiver)
     invoice.tap do |invoice|
       invoice.recipient = receiver
       invoice.send(:set_recipient_fields)
       raise 'invoice invalid' unless invoice.valid?
     end
   end
-
-  private
 
   def assert_valid_invoice_items
     unless invoice.invoice_items.all?(&:valid?)

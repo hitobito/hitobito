@@ -25,10 +25,7 @@ module Export::Pdf::Messages
     end
 
     def render_payment_slip(pdf, recipient)
-      # All invoices should have been generated in advance by the Invoice::BatchCreateJob
-      invoice = Invoice.find_by(invoice_list_id: @letter.invoice_list_id, recipient: recipient)
-      raise 'Didn\'t find invoice for recipient ' + recipient.inspect unless invoice
-
+      invoice = @letter.invoice_for(recipient)
       options = @options.merge(cursors: cursors)
       if invoice.qr?
         Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, options).render

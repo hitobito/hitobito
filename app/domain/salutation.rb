@@ -7,7 +7,7 @@
 
 class Salutation
 
-  I18N_KEY_PREFIX = 'activerecord.models.salutation'.freeze
+  I18N_KEY_PREFIX = 'activerecord.models.salutation'
 
   attr_reader :person
 
@@ -17,8 +17,9 @@ class Salutation
     end
 
     def for_letters
-      [[ :default,  I18n.t("#{I18N_KEY_PREFIX}.default.label") ]].tap do |values|
+      [[:default, I18n.t("#{I18N_KEY_PREFIX}.default.label")]].tap do |values|
         next unless Settings.messages.personal_salutation
+
         values.append([:personal, I18n.t("#{I18N_KEY_PREFIX}.personal.label")])
       end.reverse.to_h
     end
@@ -32,7 +33,7 @@ class Salutation
 
   def initialize(person, salutation = nil)
     @person = person
-    @salutation = salutation || person.try(:salutation)
+    @salutation = (salutation || person.try(:salutation)).to_s
   end
 
   def label
@@ -49,7 +50,7 @@ class Salutation
       first_name: person.first_name,
       last_name: person.last_name,
       greeting_name: person.greeting_name,
-      company_name: person.company_name,
+      company_name: person.company_name
     }.tap do |attrs|
       next unless person.attributes.key?('title')
 

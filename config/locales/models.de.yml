@@ -374,6 +374,7 @@ de:
         origin: Host mit API-Zugriff
 
       person:
+        salutation: Anrede
         first_name: Vorname
         last_name: Nachname
         name: Name

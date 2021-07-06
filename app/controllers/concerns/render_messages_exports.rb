@@ -23,7 +23,7 @@ module RenderMessagesExports
     assert_type(message)
     assert_recipients(message)
 
-    base_name = message.exporter_class.new(message, Person.none, preview: false).filename
+    base_name = message.exporter_class.new(message, Person.none).filename
     with_async_download_cookie(:pdf, base_name) do |filename|
       Export::MessageJob.new(current_person.id, message.id, filename).enqueue!
     end

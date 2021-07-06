@@ -8,12 +8,14 @@
 module RenderMessagesExports
   extend ActiveSupport::Concern
 
+  PREVIEW_LIMIT = 5
+
   def render_pdf_preview(message)
     assert_type(message)
     assert_recipients(message)
 
     options = { background: Settings.messages.pdf.preview }
-    pdf = message.exporter_class.new(message, limited_recipients(message), options)
+    pdf = message.exporter_class.new(message, message.recipients.limit(PREVIEW_LIMIT), options)
     send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename(:preview)
   end
 
@@ -34,13 +36,8 @@ module RenderMessagesExports
   end
 
   def assert_recipients(message)
-    if limited_recipients(message).count == 0
-      raise Messages::NoRecipientsError
+    unless message.recipients.exists?
+      redirect_to message.path_args, alert: t('.recipients_empty')
     end
   end
-
-  def limited_recipients(message)
-    message.recipients.limit(5) # no need to query all recipients
-  end
-
 end

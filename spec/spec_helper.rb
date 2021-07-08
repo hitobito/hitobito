@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -7,7 +9,7 @@ DB_CLEANER_STRATEGY = :truncation
 
 ENV['RAILS_ENV'] = 'test'
 ENV['RAILS_GROUPS'] = 'assets'
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
@@ -54,11 +56,12 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include FeatureHelpers, type: :feature
   config.include Warden::Test::Helpers, type: :feature
+  config.include ActiveSupport::Testing::TimeHelpers
 
   config.filter_run_excluding type: 'feature', performance: true
   config.filter_run_excluding type: 'sphinx', sphinx: true
 
-  if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2' # rubocop:disable Performance/Casecmp
+  if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
     config.filter_run_excluding :mysql
   end
 
@@ -80,7 +83,7 @@ RSpec.configure do |config|
     Draper::ViewContext.current = c.view_context
   end
 
-  config.before(:each,  file_path: %r{\bspec/views/}) do
+  config.before(:each, file_path: %r{\bspec/views/}) do
     view.extend(FormHelper,
                 TableHelper,
                 UtilityHelper,
@@ -115,10 +118,6 @@ RSpec.configure do |config|
     FileUtils.mkdir_p(dir)
     printer = RubyProf::CallStackPrinter.new(result)
     printer.print(File.open(filename, 'w'))
-  end
-
-  RSpec.configure do |config|
-    config.include ActiveSupport::Testing::TimeHelpers
   end
 
   unless RSpec.configuration.exclusion_filter[:type] == 'feature'

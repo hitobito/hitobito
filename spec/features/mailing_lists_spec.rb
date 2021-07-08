@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -33,7 +35,7 @@ describe MailingListsController, js: true do
 
     find('.chip-add').click
     fill_in id: 'label', with: 'Vater'
-    page.find("body").click # blur
+    page.find('body').click # blur
     expect(page).to have_content 'Vater'
 
     find('.btn-toolbar.top button[type=submit]').click
@@ -46,12 +48,12 @@ describe MailingListsController, js: true do
 
     find('.chip-add').click
     fill_in id: 'label', with: 'Vater'
-    page.find("body").click # blur
+    page.find('body').click # blur
     expect(page).to have_content 'Vater'
 
     find('.chip-add').click
     fill_in id: 'label', with: 'Mutter'
-    page.find("body").click # blur
+    page.find('body').click # blur
     expect(page).to have_content 'Mutter'
 
     find('.btn-toolbar.top button[type=submit]').click

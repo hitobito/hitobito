@@ -143,3 +143,7 @@ Style/PercentLiteralDelimiters:
 # We thinks that's fine
 Style/SingleLineBlockParams:
   Enabled: false
+
+# separated arguments allow for ruby to determine the right separator, making it more portable
+Rails/FilePath:
+  EnforcedStyle: arguments

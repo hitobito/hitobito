@@ -38,6 +38,11 @@ class InvoicesController < CrudController
   helper_method :group, :invoice_list
 
   def new
+    recipient = model_params && Person.find(model_params[:recipient_id])
+    if recipient && can?(:update, recipient)
+      entry.recipient_id = recipient.id
+      entry.send(:set_recipient_fields)
+    end
     entry.attributes = { payment_information: entry.invoice_config.payment_information }
   end
 
@@ -107,18 +112,13 @@ class InvoicesController < CrudController
   end
 
   def render_invoices_pdf(invoices)
-    letter = find_letter(invoices)
+    letter = parent.message if parent.is_a?(InvoiceList)
     pdf = if letter
-            recipients = Person.where(id: invoices.pluck(:recipient_id))
-            Export::Pdf::Messages::LetterWithInvoice.new(letter, recipients).render
+            Export::Pdf::Messages::LetterWithInvoice.new(letter, letter.recipients).render
           else
             Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
           end
     send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
-  end
-
-  def find_letter(invoices)
-    Message::LetterWithInvoice.find_by(invoice_list_id: invoices.first.invoice_list_id)
   end
 
   def filename(extension, invoices)
@@ -130,18 +130,21 @@ class InvoicesController < CrudController
   end
 
   def render_labels(invoices)
+    unless params[:label_format_id]
+      return redirect_back(fallback_location: group_invoices_path(group))
+    end
+
     recipients = Invoice.to_contactables(invoices)
     pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)
     send_data pdf, type: :pdf, disposition: 'inline'
   rescue Prawn::Errors::CannotFit
-    redirect_back(fallback_location: group_ionvoices_path(group), alert: t('people.pdf.cannot_fit'))
+    redirect_back(fallback_location: group_invoices_path(group), alert: t('people.pdf.cannot_fit'))
   end
 
   def list_entries
-    scope = super.
-      includes(:payment_reminders, recipient: [:roles, :groups]).
-      references(:recipient).list
-
+    scope = super.list
+    scope = scope.includes(:recipient).references(:recipient)
+    scope = scope.standalone if parent.is_a?(Group)
     scope = scope.page(params[:page]).per(50) unless params[:ids]
     Invoice::Filter.new(params.reverse_merge(year: year)).apply(scope)
   end

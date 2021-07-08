@@ -85,7 +85,7 @@ Hitobito::Application.routes.draw do
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
           get 'colleagues' => 'person/colleagues#index'
-          get 'invoices' => 'person/invoices#index'
+          get 'personal_invoices' => 'person/invoices#index'
           get 'messages' => 'person/messages#index'
         end
 

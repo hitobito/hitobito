@@ -63,15 +63,48 @@ describe Message::LetterWithInvoice do
     expect(message.invoice_list).to be_persisted
   end
 
-  context 'invoice' do
+  describe "reading recipients and invoices", focus: true do
+
     let(:recipient) { people(:bottom_member) }
+    let(:group) { groups(:top_layer) }
 
     subject { messages(:with_invoice) }
 
-    it '#invoice_for returns valid invoice' do
-      invoice = subject.invoice_for(recipient)
-      expect(invoice).to be_valid
-      expect(invoice.recipient_address).to be_present
+    context "without invoice list" do
+      it '#invoice_for builds valid invoice' do
+        invoice = subject.invoice_for(recipient)
+        expect(invoice).to be_valid
+        expect(invoice).to be_new_record
+        expect(invoice.recipient_address).to be_present
+      end
+
+      it '#recipients uses recipients from mailing_list' do
+        Fabricate(:subscription, subscriber: recipient, mailing_list: subject.mailing_list)
+        expect(subject.recipients).to have(1).items
+      end
+    end
+
+    context "with invoice list" do
+      before do
+        list = InvoiceList.create(group: group, title: "title")
+        invoice = list.invoices.create!(title: :title, recipient_id: recipient.id, total: 10, group: group)
+        subject.invoice_list_id = list.id
+      end
+
+      it '#invoice_for loads persisted invoice' do
+        invoice = subject.invoice_for(recipient)
+        expect(invoice).to be_persisted
+        expect(invoice.recipient_address).to be_present
+      end
+
+      it '#recipients uses invoice recipients' do
+        expect(subject.recipients).to have(1).item
+      end
+
+      it '#recipients only considers Person.with_address' do
+        recipient.update(address: nil)
+        expect(subject.recipients).to be_empty
+      end
     end
   end
 

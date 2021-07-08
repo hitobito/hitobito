@@ -8,13 +8,12 @@
 class Person::InvoicesController < ListController
 
   self.sort_mappings = { recipient: Person.order_by_name_statement }
-  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
+  self.search_columns = [:title, :sequence_number]
 
   private
 
   def list_entries
-    scope = Invoice.
-      includes(:group, recipient: [:groups, :roles]).
+    scope = Invoice.includes(:group).
       where(search_conditions).
       joins(:recipient).where(recipient: person).list
 

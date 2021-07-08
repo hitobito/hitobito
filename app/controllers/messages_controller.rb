@@ -12,7 +12,7 @@ class MessagesController < CrudController
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze
   PERMITTED_LETTER_ATTRS = [:subject, :body, :heading, :salutation].freeze
-  PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :heading,
+  PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :heading, :salutation,
                                     invoice_attributes: {
                                       invoice_items_attributes: [
                                         :name,
@@ -37,14 +37,12 @@ class MessagesController < CrudController
       format.html
       format.pdf do
         if preview?
-          render_pdf(entry, preview: preview?)
+          render_pdf_preview(entry)
         else
           render_pdf_in_background(entry)
         end
       end
     end
-  rescue Messages::NoRecipientsError
-    redirect_to entry.path_args, alert: t('.recipients_empty')
   end
 
   def new

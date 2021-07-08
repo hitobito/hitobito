@@ -21,7 +21,7 @@ module Sheet
     end
 
     tab 'people.tabs.invoices',
-        :invoices_group_person_path,
+        :personal_invoices_group_person_path,
         if: (lambda do |view, group, person|
           person.finance_groups.present? &&
             (view.can?(:index_invoices, group) || view.can?(:index_invoices, person))

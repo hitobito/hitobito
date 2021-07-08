@@ -103,6 +103,7 @@ class Invoice < ActiveRecord::Base
   scope :one_month,      -> { where('invoices.due_at < ?', 1.month.ago.to_date) }
   scope :visible,        -> { where.not(state: :cancelled) }
   scope :remindable,     -> { where(state: STATES_REMINDABLE) }
+  scope :standalone,     -> { where(invoice_list_id: nil) }
 
   class << self
     def draft_or_issued_in(year)
@@ -169,7 +170,7 @@ class Invoice < ActiveRecord::Base
   end
 
   def invoice_config
-    group.invoice_config
+    group.layer_group.invoice_config
   end
 
   def state

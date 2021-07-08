@@ -8,11 +8,14 @@
 module RenderMessagesExports
   extend ActiveSupport::Concern
 
-  def render_pdf(message, preview:)
+  PREVIEW_LIMIT = 5
+
+  def render_pdf_preview(message)
     assert_type(message)
     assert_recipients(message)
+
     options = { background: Settings.messages.pdf.preview }
-    pdf = message.exporter_class.new(message, recipients(message), options)
+    pdf = message.exporter_class.new(message, message.recipients.limit(PREVIEW_LIMIT), options)
     send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename(:preview)
   end
 
@@ -20,7 +23,7 @@ module RenderMessagesExports
     assert_type(message)
     assert_recipients(message)
 
-    base_name = message.exporter_class.new(message, Person.none, preview: false).filename
+    base_name = message.exporter_class.new(message, Person.none).filename
     with_async_download_cookie(:pdf, base_name) do |filename|
       Export::MessageJob.new(current_person.id, message.id, filename).enqueue!
     end
@@ -33,13 +36,8 @@ module RenderMessagesExports
   end
 
   def assert_recipients(message)
-    if recipients(message).count == 0
-      raise Messages::NoRecipientsError
+    unless message.recipients.exists?
+      redirect_to message.path_args, alert: t('.recipients_empty')
     end
   end
-
-  def recipients(message)
-    message.mailing_list.people(Person.with_address).limit(5) # no need to query all recipients
-  end
-
 end

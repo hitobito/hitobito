@@ -154,7 +154,6 @@ de:
     pdf: 'PDF'
     emails: 'E-Mail Adressen'
     addresses: 'Adressliste'
-    addresses: 'Adressliste'
     households: 'Haushaltsliste'
     everything: 'Alle Angaben'
     household_option: 'Haushalte zusammenfassen'
@@ -174,6 +173,10 @@ de:
     button: 'Rechnung stellen / mahnen'
     set_state: 'Status setzen (Gestellt/Gemahnt)'
     send_mail: 'Status setzen (Gestellt/Gemahnt) und per E-Mail verschicken'
+
+  dropdown/letter_with_invoice:
+    print: Drucken
+    letters_with_invoice: Rechnungsbriefe
 
   devise:
     failure:
@@ -948,6 +951,7 @@ de:
     admin/oauth_authorizations: 'OAuth-Autorisierungen'
     imap_mails: 'Abo Mails'
     invoices: 'Rechnungen'
+    invoices/single: 'Einzelrechnungen'
 
   notes:
     new_note: Neue Notiz

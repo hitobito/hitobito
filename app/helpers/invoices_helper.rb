@@ -64,7 +64,11 @@ module InvoicesHelper
   end
 
   def invoices_print_dropdown
-    Dropdown::Invoices.new(self, params, :print).print
+    if parent.is_a?(InvoiceList) && Message::LetterWithInvoice.where(invoice_list: parent).exists?
+      Dropdown::LetterWithInvoice.new(self, params, :print).print
+    else
+      Dropdown::Invoices.new(self, params, :print).print
+    end
   end
 
   def invoice_sending_dropdown

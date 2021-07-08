@@ -55,7 +55,8 @@ class InvoiceList < ActiveRecord::Base
   end
 
   def update_paid
-    update(amount_paid: invoices.sum(&:amount_paid), recipients_paid: invoices.payed.count)
+    update(amount_paid: invoices.joins(:payments).sum('payments.amount'),
+           recipients_paid: invoices.payed.count)
   end
 
   def update_total

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -16,8 +16,13 @@ require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 
 # Needed for feature specs
-WebMock.disable_net_connect!(allow_localhost: true, allow: %w(chromedriver.storage.googleapis.com))
-
+WebMock.disable_net_connect!(
+  allow_localhost: true,
+  allow: %w(
+    chromedriver.storage.googleapis.com
+    github.com github-releases.githubusercontent.com
+  )
+)
 
 ActiveRecord::Migration.maintain_test_schema!
 

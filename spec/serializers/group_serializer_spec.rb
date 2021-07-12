@@ -1,4 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
+
+#  Copyright (c) 2014-2021, CEVI Regionalverband ZH-SH-GL. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: groups
@@ -35,25 +41,21 @@
 #  index_groups_on_type            (type)
 #
 
-#  Copyright (c) 2014, CEVI Regionalverband ZH-SH-GL. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
 require 'spec_helper'
 
 describe GroupSerializer do
 
   let(:group) { groups(:top_group).decorate }
-  let(:controller) { double().as_null_object }
+  let(:controller) { double.as_null_object }
 
-  let(:serializer) { GroupSerializer.new(group, controller: controller)}
+  let(:serializer) { GroupSerializer.new(group, controller: controller) }
   let(:hash) { serializer.to_hash }
 
   subject { hash[:groups].first }
 
+  let(:links) { subject[:links] }
+
   it 'has different entities' do
-    links = subject[:links]
     expect(links[:parent]).to eq(group.parent_id.to_s)
     expect(links).not_to have_key(:children)
     expect(links[:layer_group]).to eq(group.parent_id.to_s)
@@ -61,10 +63,10 @@ describe GroupSerializer do
   end
 
   it 'does not include deleted children' do
-    a = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
+    _ = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
     b = Fabricate(Group::GlobalGroup.name.to_sym, parent: group)
     b.update!(deleted_at: 1.month.ago)
 
-    expect(subject[:links][:children].size).to eq(1)
+    expect(links[:children].size).to eq(1)
   end
 end

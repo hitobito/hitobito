@@ -37,5 +37,4 @@ class RoleSerializer < ApplicationSerializer
     entity :group, item.group, GroupLinkSerializer
     entity :layer_group, item.group.layer_group, GroupLinkSerializer
   end
-
 end

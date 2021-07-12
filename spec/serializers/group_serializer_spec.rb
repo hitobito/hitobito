@@ -69,4 +69,17 @@ describe GroupSerializer do
 
     expect(links[:children].size).to eq(1)
   end
+
+  it 'does include allowed roles' do
+    expect(subject).to have_key(:allowed_roles)
+    expect(subject[:allowed_roles]).to have(6).items
+    expect(subject[:allowed_roles]).to match_array [
+      'External',
+      'Leader',
+      'Local Guide',
+      'Local Secretary',
+      'Member',
+      'Secretary'
+    ]
+  end
 end

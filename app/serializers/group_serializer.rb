@@ -75,7 +75,7 @@ class GroupSerializer < ApplicationSerializer
 
     property :available_roles, (item.model.class.roles.map do |role_class|
       {
-        role_type: role_class.label,
+        name: role_class.label, # translated class-name
         role_class: role_class.name
       }
     end)

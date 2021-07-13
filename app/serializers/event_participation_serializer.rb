@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -27,7 +27,13 @@ class EventParticipationSerializer < ApplicationSerializer
     end
 
     property :birthday, item.person.birthday.try(:iso8601)
-    property :roles, item.roles.collect { |role| { type: role.class.name, name: role.to_s } }
+    property :roles, (item.roles.collect do |role|
+      {
+        type: role.class.name, # existing style
+        role_class: role.class.name, # new style, consistent with other serializers
+        name: role.to_s
+      }
+    end)
 
     entity :person, item.person_id, PersonIdSerializer
 

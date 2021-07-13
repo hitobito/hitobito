@@ -73,7 +73,12 @@ class GroupSerializer < ApplicationSerializer
       modification_properties
     end
 
-    property :allowed_roles, item.model.class.roles.map(&:label)
+    property :available_roles, (item.model.class.roles.map do |role_class|
+      {
+        role_type: role_class.label,
+        role_class: role_class.name
+      }
+    end)
 
     entity :parent, item.parent, GroupLinkSerializer
     entity :layer_group, item.layer_group, GroupLinkSerializer

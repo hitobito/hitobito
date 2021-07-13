@@ -70,16 +70,16 @@ describe GroupSerializer do
     expect(links[:children].size).to eq(1)
   end
 
-  it 'does include allowed roles' do
-    expect(subject).to have_key(:allowed_roles)
-    expect(subject[:allowed_roles]).to have(6).items
-    expect(subject[:allowed_roles]).to match_array [
-      'External',
-      'Leader',
-      'Local Guide',
-      'Local Secretary',
-      'Member',
-      'Secretary'
+  it 'does include available roles' do
+    expect(subject).to have_key(:available_roles)
+    expect(subject[:available_roles]).to have(6).items
+    expect(subject[:available_roles]).to match_array [
+      { role_type: 'External',        role_class: 'Role::External' },
+      { role_type: 'Leader',          role_class: 'Group::TopGroup::Leader' },
+      { role_type: 'Local Guide',     role_class: 'Group::TopGroup::LocalGuide' },
+      { role_type: 'Local Secretary', role_class: 'Group::TopGroup::LocalSecretary' },
+      { role_type: 'Member',          role_class: 'Group::TopGroup::Member' },
+      { role_type: 'Secretary',       role_class: 'Group::TopGroup::Secretary' }
     ]
   end
 end

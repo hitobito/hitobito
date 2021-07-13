@@ -74,12 +74,12 @@ describe GroupSerializer do
     expect(subject).to have_key(:available_roles)
     expect(subject[:available_roles]).to have(6).items
     expect(subject[:available_roles]).to match_array [
-      { role_type: 'External',        role_class: 'Role::External' },
-      { role_type: 'Leader',          role_class: 'Group::TopGroup::Leader' },
-      { role_type: 'Local Guide',     role_class: 'Group::TopGroup::LocalGuide' },
-      { role_type: 'Local Secretary', role_class: 'Group::TopGroup::LocalSecretary' },
-      { role_type: 'Member',          role_class: 'Group::TopGroup::Member' },
-      { role_type: 'Secretary',       role_class: 'Group::TopGroup::Secretary' }
+      { name: 'External',        role_class: 'Role::External' },
+      { name: 'Leader',          role_class: 'Group::TopGroup::Leader' },
+      { name: 'Local Guide',     role_class: 'Group::TopGroup::LocalGuide' },
+      { name: 'Local Secretary', role_class: 'Group::TopGroup::LocalSecretary' },
+      { name: 'Member',          role_class: 'Group::TopGroup::Member' },
+      { name: 'Secretary',       role_class: 'Group::TopGroup::Secretary' }
     ]
   end
 end

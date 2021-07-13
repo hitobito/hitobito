@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,7 +21,7 @@
 require 'spec_helper'
 
 describe EventParticipationSerializer do
-  let(:controller)    { double().as_null_object }
+  let(:controller)    { double.as_null_object }
   let(:participation) { event_participations(:top) }
   let(:serializer)    { EventParticipationSerializer.new(participation, controller) }
 
@@ -53,7 +53,11 @@ describe EventParticipationSerializer do
   end
 
   it 'includes event roles' do
-    expect(subject[:roles]).to eq([{ 'type' => 'Event::Role::Leader', 'name' => 'Hauptleitung' }])
+    expect(subject[:roles]).to eq([{
+                                    'type' => 'Event::Role::Leader',
+                                    'role_class' => 'Event::Role::Leader',
+                                    'name' => 'Hauptleitung'
+                                  }])
   end
 
   it 'includes person template link' do

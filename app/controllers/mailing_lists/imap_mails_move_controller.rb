@@ -34,8 +34,11 @@ class MailingLists::ImapMailsMoveController < ApplicationController
   end
 
   def moved_flash_message
-    server_error_message || I18n.t("#{i18n_prefix}.flash.moved")
+    server_error_message || I18n.t("#{i18n_prefix}.flash.moved", count: mails_move_count)
   end
 
+  def mails_move_count
+    list_param(:ids).count
+  end
 end
 

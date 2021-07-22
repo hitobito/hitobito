@@ -60,7 +60,7 @@ module MailingLists::ImapMailsHelper
   private
 
   def mail_log_state(mail)
-    mail_log_entry = MailLog.find_by(mail_hash: mail.mail_hash)
+    mail_log_entry = MailLog.find_by(mail_hash: mail.hash)
     return 'state_unavailable' if mail_log_entry.nil?
 
     mail_log_entry.status

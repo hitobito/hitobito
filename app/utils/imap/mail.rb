@@ -36,16 +36,13 @@ class Imap::Mail
   end
 
   def body
-    if @net_imap_mail.attr['BODYSTRUCTURE'].media_type == 'TEXT'
-      @net_imap_mail.attr['BODY[TEXT]']
-    else
-      mail = Mail.read_from_string @net_imap_mail.attr['RFC822']
-      mail.text_part.body.to_s
-    end
+    mail = Mail.read_from_string @net_imap_mail.attr['RFC822']
+    mail.text_part.body.to_s
   end
 
-  def mail_hash
-    Digest::MD5.new.hexdigest(body)
+  def hash
+    mail_raw_source = Mail.new(@net_imap_mail.attr['RFC822']).raw_source
+    Digest::MD5.new.hexdigest(mail_raw_source)
   end
 
   private
@@ -53,5 +50,4 @@ class Imap::Mail
   def envelope
     @net_imap_mail.attr['ENVELOPE']
   end
-
 end

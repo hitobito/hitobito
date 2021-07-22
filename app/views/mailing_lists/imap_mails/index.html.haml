@@ -18,7 +18,7 @@
     - t.attr(:sender, t('mailing_lists.imap_mails.headers.sender')) do |e|
       - safe_join([e.sender_name, content_tag(:p, mail_to(e.sender_email))], ' ')
 
-    - t.col('Status') do |m|
+    - t.col(t('mailing_lists.imap_mails.headers.state')) do |m|
       - imap_mail_state(m)
 
     - t.col(t('mailing_lists.imap_mails.headers.date')) do |m|

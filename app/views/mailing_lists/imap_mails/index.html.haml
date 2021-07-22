@@ -18,8 +18,8 @@
     - t.attr(:sender, t('mailing_lists.imap_mails.headers.sender')) do |e|
       - safe_join([e.sender_name, content_tag(:p, mail_to(e.sender_email))], ' ')
 
-    - t.col(t('mailing_lists.imap_mails.headers.preview')) do |m|
-      - imap_mail_body(m)
+    - t.col('Status') do |m|
+      - imap_mail_state(m)
 
     - t.col(t('mailing_lists.imap_mails.headers.date')) do |m|
       - imap_mail_date(m)

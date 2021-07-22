@@ -44,6 +44,10 @@ class Imap::Mail
     end
   end
 
+  def mail_hash
+    Digest::MD5.new.hexdigest(body)
+  end
+
   private
 
   def envelope

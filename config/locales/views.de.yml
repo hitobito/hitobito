@@ -246,6 +246,10 @@ de:
         subject: 'Anleitung für das Setzen Deines Passworts'
       unlock_instructions:
         subject: 'Anleitung um Deinen Account freizuschalten'
+        body:
+          greeting: 'Hallo %{name}!'
+          information_html: 'Dein Account wurde aufgrund von zu vielen Fehlversuchen gesperrt.<br>Klicken Sie auf folgenden Link um Ihren Account zu entsperren:'
+          link_text: 'Meinen Account entsperren'
 
   errors:
     link_to_main: 'Hauptseite'

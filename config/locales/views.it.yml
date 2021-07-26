@@ -187,7 +187,7 @@ it:
       confirmed: 'grazie per la tua registrazione. Ora sei registrato.'
     unlocks:
       send_instructions: 'riceverai tra pochi minuti un''email con le istruzioni su come puoi sbloccare il tuo account.'
-      unlocked: 'il tuo account è stato sbloccato.'
+      unlocked: 'il tuo account è stato sbloccato. Ora sei registrato.'
       send_paranoid_instructions: "se il tuo indirizzo e-mail esiste nella nostra banca dati riceverai tra pochi minuti u'e-mail con le istruzioni su come puoi sbloccare il tuo account."
     omniauth_callbacks:
       success: 'ti sei registrato con successo con il tuo %{kind}-account.'

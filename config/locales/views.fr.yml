@@ -187,7 +187,7 @@ fr:
       confirmed: 'Merci de t''être enregistré(e) ! Tu es maintenant authentifié(e).'
     unlocks:
       send_instructions: 'Dans quelques minutes tu recevras un courriel t''expliquant comment débloquer ton compte.'
-      unlocked: 'Ton compte a été débloqué. Tu es maintenant authentifié(e).'
+      unlocked: 'Ton compte a été débloqué.'
       send_paranoid_instructions: "Si ton adresse e-mail est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment débloquer ton compte."
     omniauth_callbacks:
       success: 'Ton authentification avec ton compte %{kind} est réussie.'

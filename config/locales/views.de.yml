@@ -224,7 +224,7 @@ de:
       destroyed: 'Dein Account wurde gelöscht.'
     unlocks:
       send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Deinen Account entsperren können.'
-      unlocked: 'Dein Account wurde entsperrt. Du bist jetzt angemeldet.'
+      unlocked: 'Dein Account wurde erfolgreich entsperrt.'
       send_paranoid_instructions: "Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Deinen Account entsperren kannst."
     omniauth_callbacks:
       success: 'Du hast Dich erfolgreich mit Deinem %{kind}-Account angemeldet.'

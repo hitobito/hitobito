@@ -187,7 +187,7 @@ en:
       confirmed: 'Thank you for your registration. You''re now logged in.'
     unlocks:
       send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to unlock your account.'
-      unlocked: 'Your account has been unlocked. You''re now logged in.'
+      unlocked: 'Your account has successfully been unlocked.'
       send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to unlock your account."
     omniauth_callbacks:
       success: 'You have successfully logged in to your %{kind} account.'

@@ -248,7 +248,7 @@ de:
         subject: 'Anleitung um Deinen Account freizuschalten'
         body:
           greeting: 'Hallo %{name}!'
-          information_html: 'Dein Account wurde aufgrund von zu vielen Fehlversuchen gesperrt.<br>Klicken Sie auf folgenden Link um Ihren Account zu entsperren:'
+          information_html: 'Dein Account wurde aufgrund von zu vielen Fehlversuchen beim Login gesperrt.<br>Klicke auf den folgenden Link um Deinen Account zu entsperren:'
           link_text: 'Meinen Account entsperren'
 
   errors:

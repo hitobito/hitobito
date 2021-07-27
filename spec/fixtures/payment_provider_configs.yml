@@ -1,0 +1,27 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2021, Die Mitte Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+# == Schema Information
+#
+# Table name: payment_provider_configs
+#
+#  id                        :integer          not null, primary key
+#  payment_provider          :string(255)
+#  invoice_config_id         :integer
+#  status                    :integer          default(0)
+#  partner_identifier        :string(255)
+#  user_identifier           :string(255)
+#  encrypted_password        :string(255)
+#  encrypted_keys            :text(16777215)
+#  synced_at                 :datetime
+#  created_at                :datetime
+#  updated_at                :datetime
+#
+
+postfinance:
+  payment_provider: 'postfinance'
+  invoice_config: bottom_layer_one

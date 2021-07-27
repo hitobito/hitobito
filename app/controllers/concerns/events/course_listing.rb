@@ -40,12 +40,11 @@ module Events::CourseListing
 
   def set_group_vars
     params[:filter] ||= {}
-    params[:filter][:group_ids] ||= [
+    params[:filter][:group_ids] ||=
       Events::Filter::Groups.new(
         course_filters.user, course_filters.params,
         course_filters.options, course_filters.to_scope
-      ).default_user_course_group.try(:id)
-    ]
+      ).default_user_course_group.map(&:id)
     @group_ids = params.dig(:filter, :group_ids).to_a.reject(&:blank?).map(&:to_i)
   end
 

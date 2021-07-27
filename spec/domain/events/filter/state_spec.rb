@@ -46,7 +46,7 @@ describe Events::Filter::State do
     let(:params) do
       {
         filter: {
-          state: 'confirmed'
+          states: ['confirmed']
         }
       }
     end
@@ -60,7 +60,7 @@ describe Events::Filter::State do
     let(:params) do
       {
         filter: {
-          state: 'blørbaël'
+          states: ['blørbaël']
         }
       }
     end

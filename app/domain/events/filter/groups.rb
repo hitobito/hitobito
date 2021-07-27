@@ -48,7 +48,6 @@ module Events::Filter
         course_offerers.
         where(id: @user.groups_hierarchy_ids).
         where('groups.id <> ?', Group.root.id).
-        select(:id).
         first.
         hierarchy.
         course_offerers

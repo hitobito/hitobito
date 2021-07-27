@@ -13,6 +13,9 @@
                            placeholder: t('.select_layers') } })
 
       .group-filter-quick-add-tags
+        %button.chip.chip-add.group-filter-clear{id: "group-filter-clear", type: :button, data: {'clear-values': 'group-filter-select'} }
+          = t('.all_layers')
+          = icon(:times)
         - quick_select_course_groups.each do |group|
           %button.chip.chip-add.group-filter-add{id: "group-filter-add-#{group.id}", type: :button, style: 'display: none', data: {'add-value': group.id, 'add-to': 'group-filter-select'} }
             = group.name

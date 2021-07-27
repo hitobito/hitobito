@@ -408,6 +408,7 @@ de:
         time_period: Im Zeitraum (optional)
         until: bis
       group_filter:
+        all_layers: Alle Gruppen
         filter_by_layer: Veranstalter
         select_layers: Gruppen suchen...
     actions_show:

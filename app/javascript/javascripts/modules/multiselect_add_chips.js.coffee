@@ -14,15 +14,25 @@ app.MultiselectAddChips = {
     currentValue = select.val() || []
     select.val(currentValue.concat([value])).trigger("chosen:updated")
 
+  clearValues: (e) ->
+    e.preventDefault()
+    select = $("##{e.target.dataset.clearValues}")
+    select.val([]).trigger("chosen:updated")
+
   showUnselected: (e) ->
     selectId = e.target.id
     selected = $(e.target).val() || []
     chips = $("button[data-add-to=#{selectId}]")
     chips.hide()
     chips.filter(-> !selected.includes(this.dataset.addValue)).show()
+    if selected.length == 0
+      $("button[data-clear-values=#{selectId}]").hide()
+    else
+      $("button[data-clear-values=#{selectId}]").show()
 }
 
 $(document).on('click', 'button[data-add-to]', app.MultiselectAddChips.selectValue)
+$(document).on('click', 'button[data-clear-values]', app.MultiselectAddChips.clearValues)
 $(document).on('change', '.chosen-select', app.MultiselectAddChips.showUnselected)
 $(document).on('chosen:updated', '.chosen-select', app.MultiselectAddChips.showUnselected)
 $(document).on('chosen:ready', app.MultiselectAddChips.showUnselected)

@@ -41,6 +41,7 @@ class InvoiceConfig < ActiveRecord::Base
   belongs_to :group, class_name: 'Group'
 
   has_many :payment_reminder_configs, dependent: :destroy
+  has_many :payment_provider_configs, dependent: :destroy
 
   before_validation :nullify_participant_number_internal, unless: :bank_with_reference?
 

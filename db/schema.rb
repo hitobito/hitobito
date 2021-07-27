@@ -618,7 +618,21 @@ ActiveRecord::Schema.define(version: 2021_05_05_084529) do
     t.index ["access_grant_id"], name: "fk_rails_77114b3b09"
   end
 
-  create_table "payment_reminder_configs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
+  create_table "payment_provider_configs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "payment_provider"
+    t.bigint "invoice_config_id"
+    t.integer "status", default: 0
+    t.string "partner_identifier"
+    t.string "user_identifier"
+    t.string "encrypted_password"
+    t.text "encrypted_keys", size: :medium
+    t.datetime "synced_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["invoice_config_id"], name: "index_payment_provider_configs_on_invoice_config_id"
+  end
+
+  create_table "payment_reminder_configs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "invoice_config_id", null: false
     t.string "title", null: false
     t.string "text", null: false

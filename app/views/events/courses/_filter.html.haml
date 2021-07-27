@@ -28,7 +28,8 @@
   .control-group
     = f.label :places_available, Event::Application.model_name.human
     %div{style: 'margin: 0 0.5rem 0.5rem 0; display: inline-block; vertical-align: middle'}
-      = f.select(:places_available, [['Alle', 0], ['nur mit verfügbaren Plätzen', 1]], { selected: @places_available }, { style: 'margin-bottom: 0 !important' })
+      = f.select(:places_available, [[t('.places_available.all'), 0], [t('.places_available.only_with_places_available'), 1]], { selected: @places_available }, { style: 'margin-bottom: 0 !important' })
+
 
     - if @kind_category_id.present?
       = f.hidden_field :category, value: @kind_category_id

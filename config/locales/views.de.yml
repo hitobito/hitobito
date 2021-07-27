@@ -401,6 +401,9 @@ de:
   events:
     courses:
       filter:
+        places_available:
+          all: Alle
+          only_with_places_available: Nur mit verfügbaren Plätzen
         select_states: Nach Status filtern
         time_period: Im Zeitraum (optional)
         until: bis

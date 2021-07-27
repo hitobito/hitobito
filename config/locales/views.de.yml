@@ -401,6 +401,7 @@ de:
   events:
     courses:
       filter:
+        select_states: Nach Status filtern
         time_period: Im Zeitraum (optional)
         until: bis
       group_filter:

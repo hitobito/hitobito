@@ -9,8 +9,8 @@ module Events::CourseListing
   extend ActiveSupport::Concern
 
   included do
-    attr_reader :group_id, :since_date, :until_date
-    helper_method :course_list_title, :group_id, :since_date, :until_date
+    attr_reader :since_date, :until_date
+    helper_method :course_list_title, :since_date, :until_date
   end
 
   private
@@ -64,7 +64,7 @@ module Events::CourseListing
   end
 
   def set_course_state_vars
-    @state = params.dig(:filter, :state)
+    @states = params.dig(:filter, :states) || Event::Course.possible_states.without('canceled')
     @places_available = params.dig(:filter, :places_available)
   end
 

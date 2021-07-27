@@ -13,9 +13,17 @@
 
   - if course_states_used?
     .control-group
-      = f.label :state, Event::Course.human_attribute_name(:state), class: 'control-label'
+      = f.label :states, Event::Course.human_attribute_name(:state), class: 'control-label'
       %div{style: 'margin: 0 0.5rem 0.5rem 0; display: inline-block; vertical-align: middle'}
-        = f.select(:state, course_state_collection, { selected: @state, prompt: true }, { class: 'span2 control-group', style: 'margin-bottom: 0 !important' })
+        .select.shown.chosen-no-margin
+          = f.select(:states,
+                   options_from_collection_for_select(course_state_collection, :second, :first, @states),
+                   {},
+                   { id: 'state-filter-select',
+                     class: 'chosen-select',
+                     multiple: true,
+                     data: { chosen_no_results: t('global.chosen_no_results'),
+                             placeholder: t('.select_states') } })
 
   .control-group
     = f.label :places_available, Event::Application.model_name.human

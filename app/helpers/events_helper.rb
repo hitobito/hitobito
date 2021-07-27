@@ -89,10 +89,9 @@ module EventsHelper
     Group.course_offerers.where(id: current_user.groups_hierarchy_ids)
   end
 
-  def hierarchy_course_groups
-    current_user.primary_group.present? ?
-        current_user.primary_group.hierarchy.course_offerers :
-        Group.find_by(id: current_user.groups_hierarchy_ids)
+  def quick_select_course_groups
+    (current_user.groups.course_offerers + current_user.primary_group&.hierarchy&.course_offerers).
+        uniq
   end
 
   def format_training_days(event)

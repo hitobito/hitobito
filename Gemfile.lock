@@ -229,6 +229,10 @@ GEM
       dry-equalizer (~> 0.2)
       dry-initializer (~> 3.0)
       dry-schema (~> 1.0, >= 1.3.1)
+    epics (1.7.2)
+      faraday
+      nokogiri (>= 1.8.5)
+      rubyzip (>= 1.2.1)
     erubi (1.10.0)
     fabrication (2.16.1)
     faker (2.16.0)
@@ -636,6 +640,7 @@ DEPENDENCIES
   doorkeeper-openid_connect
   draper
   draper-cancancan
+  epics
   fabrication
   faker
   faraday

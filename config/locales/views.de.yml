@@ -400,6 +400,9 @@ de:
 
   events:
     courses:
+      filter:
+        time_period: Im Zeitraum (optional)
+        until: bis
       group_filter:
         filter_by_layer: Veranstalter
         select_layers: Gruppen suchen...

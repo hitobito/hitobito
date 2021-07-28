@@ -47,7 +47,7 @@ module Sheet
                   active_path(parent),
                   class: 'nav-left-back')
         else
-          ''
+          ''.html_safe
         end
       end
 
@@ -57,15 +57,15 @@ module Sheet
       end
 
       def render_layer_groups
-        out = []
+        out = ''.html_safe
         stack = []
         Array(groups[1..-1]).each do |group|
           render_stacked_group(group, stack, out)
         end
         stack.size.times do
-          out << "</ul>\n</li>\n"
+          out << "</ul>\n</li>\n".html_safe
         end
-        sanitize(out.join(''), tags: %w(ul li a), attributes: %w(class id title href))
+        out
       end
 
       def render_stacked_group(group, stack, out)
@@ -74,7 +74,7 @@ module Sheet
           group.use_hierarchy_from_parent(last || layer)
           render_group_item(group, stack, out)
         else
-          out << "</ul>\n</li>\n"
+          out << "</ul>\n</li>\n".html_safe
           stack.pop
           render_stacked_group(group, stack, out)
         end
@@ -83,19 +83,26 @@ module Sheet
       def render_group_item(group, stack, out)
         if view.can?(:show, group) && visible?(group)
           if group.leaf?
-            out << group_link(group) << "</li>\n"
+            out << group_link(group) << "</li>\n".html_safe
           else
-            out << group_link(group) << "\n<ul>\n"
+            out << group_link(group) << "\n<ul>\n".html_safe
             stack.push(group)
           end
         end
       end
 
       def group_link(group)
-        cls = ' class=" is-active"' if group == entry
-        "<li#{cls}>" +
-        link_to(group.display_name,
-                active_path(group), title: group.to_s, data: { disable_with: group.display_name })
+        li = if group == entry
+               '<li class="is-active">'.html_safe
+             else
+               '<li>'.html_safe
+             end
+
+        display_name = sanitize(group.display_name, tags: %w(i))
+        group_name   = sanitize(group.to_s, tags: %w(i))
+
+        li + link_to(display_name, active_path(group),
+                     title: group_name, data: { disable_with: display_name })
       end
 
       def render_deleted_people_link

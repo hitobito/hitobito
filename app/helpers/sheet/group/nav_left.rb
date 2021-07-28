@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2014 Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2014-2021 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,7 +10,7 @@ module Sheet
     class NavLeft
 
       attr_reader :entry, :sheet, :view
-      delegate :content_tag, :link_to, :safe_join, to: :view
+      delegate :content_tag, :link_to, :safe_join, :sanitize, to: :view
 
       def initialize(sheet)
         @sheet = sheet
@@ -44,7 +44,7 @@ module Sheet
                   active_path(parent),
                   class: 'nav-left-back')
         else
-          ''.html_safe
+          ''
         end
       end
 
@@ -54,15 +54,15 @@ module Sheet
       end
 
       def render_layer_groups
-        out = ''.html_safe
+        out = ''
         stack = []
         Array(groups[1..-1]).each do |group|
           render_stacked_group(group, stack, out)
         end
         stack.size.times do
-          out << "</ul>\n</li>\n".html_safe
+          out << "</ul>\n</li>\n"
         end
-        out
+        sanitize(out, tags: %w(ul li a), attributes: %w(class id title href))
       end
 
       def render_stacked_group(group, stack, out)
@@ -71,7 +71,7 @@ module Sheet
           group.use_hierarchy_from_parent(last || layer)
           render_group_item(group, stack, out)
         else
-          out << "</ul>\n</li>\n".html_safe
+          out << "</ul>\n</li>\n"
           stack.pop
           render_stacked_group(group, stack, out)
         end
@@ -80,9 +80,9 @@ module Sheet
       def render_group_item(group, stack, out)
         if view.can?(:show, group) && visible?(group)
           if group.leaf?
-            out << group_link(group) << "</li>\n".html_safe
+            out << group_link(group) << "</li>\n"
           else
-            out << group_link(group) << "\n<ul>\n".html_safe
+            out << group_link(group) << "\n<ul>\n"
             stack.push(group)
           end
         end
@@ -90,7 +90,7 @@ module Sheet
 
       def group_link(group)
         cls = ' class=" is-active"' if group == entry
-        "<li#{cls}>".html_safe +
+        "<li#{cls}>" +
         link_to(group.display_name,
                 active_path(group), title: group.to_s, data: { disable_with: group.display_name })
       end

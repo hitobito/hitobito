@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -7,7 +8,7 @@
 
 module NavigationHelper
 
-  MAIN = [
+  MAIN = [ # rubocop:disable Style/MutableConstant extended in wagons
     { label: :groups,
       url: :groups_path,
       icon_name: 'users',
@@ -69,6 +70,7 @@ module NavigationHelper
 
   def first_group_invoices_or_root_path
     return root_path if current_user.finance_groups.blank?
+
     group_invoices_path(current_user.finance_groups.first)
   end
 

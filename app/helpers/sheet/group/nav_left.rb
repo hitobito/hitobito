@@ -6,6 +6,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# rubocop:disable Rails/HelperInstanceVariable this domain-class is in the wrong directory
+
 module Sheet
   class Group
     class NavLeft
@@ -148,3 +150,5 @@ module Sheet
     end
   end
 end
+
+# rubocop:enable Rails/HelperInstanceVariable

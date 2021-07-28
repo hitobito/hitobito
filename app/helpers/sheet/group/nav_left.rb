@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2014-2021 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -50,11 +51,11 @@ module Sheet
 
       def render_header
         active = layer == entry && view.request.path !~ /\/deleted_people$/
-        link_to(layer, active_path(layer), class: "nav-left-title #{'is-active' if active}")
+        link_to(layer, active_path(layer), class: "nav-left-title#{' is-active' if active}")
       end
 
       def render_layer_groups
-        out = ''
+        out = []
         stack = []
         Array(groups[1..-1]).each do |group|
           render_stacked_group(group, stack, out)
@@ -62,7 +63,7 @@ module Sheet
         stack.size.times do
           out << "</ul>\n</li>\n"
         end
-        sanitize(out, tags: %w(ul li a), attributes: %w(class id title href))
+        sanitize(out.join(''), tags: %w(ul li a), attributes: %w(class id title href))
       end
 
       def render_stacked_group(group, stack, out)
@@ -125,15 +126,15 @@ module Sheet
 
       def sub_layers
         sub_layer_types = layer.possible_children.select(&:layer).map(&:sti_name)
-        layer.children.
-              without_deleted.
-              where(type: sub_layer_types).
-              order_by_type(layer)
+        layer.children
+             .without_deleted
+             .where(type: sub_layer_types)
+             .order_by_type(layer)
       end
 
       def active_path(group)
         renderer = sheet.active_tab.try(:renderer, view, [group])
-        if renderer && renderer.show?
+        if renderer&.show?
           renderer.path
         else
           view.group_path(group)

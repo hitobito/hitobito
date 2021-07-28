@@ -184,7 +184,7 @@ de:
       unauthenticated: 'Du musst Dich anmelden oder registrieren, bevor Du fortfahren kannst.'
       unconfirmed: 'Du musst Deinen Account bestätigen, bevor Du fortfahren kannst.'
       last_attempt: 'Du hast noch einen Versuch bevor Dein Account gesperrt wird.'
-      locked: 'Dein Account ist für 10 Minuten gesperrt.'
+      locked: 'Dein Account ist für 1 Stunde gesperrt.'
       invalid: 'Ungültige Anmeldedaten.'
       invalid_token: 'Der Anmelde-Token ist ungültig.'
       timeout: 'Deine Sitzung ist abgelaufen, bitte melde Dich erneut an.'
@@ -250,6 +250,7 @@ de:
           greeting: 'Hallo %{name}!'
           information_html: 'Dein Account wurde aufgrund von zu vielen Fehlversuchen beim Login gesperrt.<br>Klicke auf den folgenden Link um Deinen Account zu entsperren:'
           link_text: 'Meinen Account entsperren'
+          footer: 'Dieses E-Mail wurde von Hitobito gesendet'
 
   errors:
     link_to_main: 'Hauptseite'

@@ -210,6 +210,12 @@ payment_providers:
   - name: postfinance
     url: https://ebics.postfinance.ch/ebics/ebics.aspx
     host_id: PFEBICS
-    encryption_hash: E00248 CD A5 55 35 E1 1B 44 61 8C C1 80 FD E1 B4 5CB9 58 AD 6B 98 08 8A CC 9C 3D 99 B0 A2 98 FA 34
-    authentication_hash: X002AB 2E ED 68 85 A6 E6 A2 67 00 D6 C4 AB 68 79 B45C D2 AF C9 30 01 D4 E7 91 50 E3 31 46 D8 4D 6C
+    <%# These have to be the ones with the keys. PF calls them "EBICS 2.5 und EBICS 3.0 mit Schlüsseln" in the test environment %>
+    encryption_hash: 48 CD A5 55 35 E1 1B 44 61 8C C1 80 FD E1 B4 5CB9 58 AD 6B 98 08 8A CC 9C 3D 99 B0 A2 98 FA 34
+    authentication_hash: AB 2E ED 68 85 A6 E6 A2 67 00 D6 C4 AB 68 79 B45C D2 AF C9 30 01 D4 E7 91 50 E3 31 46 D8 4D 6C
+
+    <%# Test environment: %>
+    <%# url: https://isotest.postfinance.ch/ebicsweb/ebicsweb %>
+    <%# encryption_hash: F6 D1 D2 3E B7 1A 49 19 69 CF 13 09 76 00 C2 4C D8 95 E1 BC 26 33 77 FA E4 5A 04 E1 E5 B3 FA 16 %>
+    <%# authentication_hash: F6 D1 D2 3E B7 1A 49 19 69 CF 13 09 76 00 C2 4C D8 95 E1 BC 26 33 77 FA E4 5A 04 E1 E5 B3 FA 16 %>
 

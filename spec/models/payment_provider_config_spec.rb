@@ -33,4 +33,10 @@ describe PaymentProviderConfig do
 
     expect(postfinance_config.save).to be(true)
   end
+
+  it 'sets status to draft as default' do
+    payment_provider_config = described_class.new
+
+    expect(payment_provider_config.status).to eq('draft')
+  end
 end

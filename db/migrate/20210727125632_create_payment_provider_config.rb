@@ -8,7 +8,7 @@ class CreatePaymentProviderConfig < ActiveRecord::Migration[6.0]
     create_table :payment_provider_configs do |t|
       t.string :payment_provider
       t.belongs_to :invoice_config
-      t.integer :status, default: 0
+      t.integer :status, default: 0, null: false
       t.string :partner_identifier
       t.string :user_identifier
       t.string :encrypted_password

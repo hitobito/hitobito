@@ -13,9 +13,16 @@ class InvoiceConfigsController < CrudController
                           :participant_number_internal, :email, :vat_number, :currency,
                           payment_reminder_configs_attributes: [
                             :id, :title, :text, :level, :due_days
+                          ],
+                          payment_provider_configs_attributes: [
+                            :id, :payment_provider, :user_identifier, :partner_identifier, :password
                           ]]
 
   before_render_form :build_payment_reminder_configs
+  before_render_form :build_payment_provider_configs
+
+  before_save :define_changed_payment_provider_configs
+  after_save :initialize_payment_providers
 
   private
 
@@ -37,8 +44,45 @@ class InvoiceConfigsController < CrudController
     end
   end
 
+  def build_payment_provider_configs
+    missing_payment_providers.each do |provider|
+      entry.payment_provider_configs.build.with_payment_provider(provider)
+    end
+  end
+
   def missing_payment_reminder_levels
     PaymentReminderConfig::LEVELS.to_a - entry.payment_reminder_configs.collect(&:level)
   end
 
+  def missing_payment_providers
+    Settings.payment_providers.map(&:name) - entry.payment_provider_configs.map(&:payment_provider)
+  end
+
+  def define_changed_payment_provider_configs
+    @changed_payment_provider_configs = entry.payment_provider_configs.select do |config|
+      config.changed? &&
+        config.ebics_required_fields_present?
+    end
+  end
+
+  def initialize_payment_providers
+    @changed_payment_provider_configs.each do |config|
+      provider = PaymentProvider.new(config)
+
+      provider.initial_setup
+
+      begin
+        provider.INI
+        provider.HIA
+
+        config.update!(status: :pending)
+
+        flash[:notice] = t('.flash.provider_initialization_succeeded',
+                          payment_provider: config.payment_provider)
+      rescue Epics::Error::TechnicalError
+        flash[:alert] = t('.flash.provider_initialization_failed',
+                          payment_provider: config.payment_provider)
+      end
+    end
+  end
 end

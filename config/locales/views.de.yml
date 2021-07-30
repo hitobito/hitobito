@@ -698,6 +698,8 @@ de:
     update:
       flash:
         success: Rechnungseinstellungen wurden erfolgreich aktualisiert
+        provider_initialization_failed: Einrichten der Zahlungsschnittstelle %{payment_provider} ist fehlgeschlagen
+        provider_initialization_succeeded: Einrichten der Zahlungsschnittstelle %{payment_provider} war erfolgreich
     general_fields:
       payment: 'Einzahlung'
       payment_information_help: 'Wird in jeder Rechnung aufgeführt, kann pro Rechnung angepasst werden'

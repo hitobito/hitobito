@@ -68,6 +68,12 @@ Hitobito::Application.routes.draw do
       resources :invoice_articles
       resource :invoice_config, only: [:edit, :show, :update]
 
+      resources :payment_provider_configs, only: [] do
+        member do
+          get 'ini_letter' => 'payment_provider_configs/ini_letter#show'
+        end
+      end
+
       resource :invoice_list, except: [:edit, :show]
       resources :invoice_lists, only: [:index] do
         resources :invoices, only: [:index]

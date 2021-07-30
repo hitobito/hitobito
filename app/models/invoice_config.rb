@@ -67,6 +67,7 @@ class InvoiceConfig < ActiveRecord::Base
   validate :correct_check_digit
 
   accepts_nested_attributes_for :payment_reminder_configs
+  accepts_nested_attributes_for :payment_provider_configs
 
   validates_by_schema
 

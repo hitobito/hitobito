@@ -273,6 +273,9 @@ de:
       payment_reminder:
         one: Mahnung
         other: Mahnungen
+      payment_provider_config:
+        one: Zahlungsschnittstelle
+        other: Zahlungsschnittstellen
       person:
         one: Person
         other: Personen
@@ -935,6 +938,13 @@ de:
         title: Titel der Mahnung
         text: Text der Mahnung
         due_days: Fälligkeitszeitraum der Mahnung
+
+      payment_provider_config:
+        payment_provider: Zahlungsschnittstelle
+        partner_identifier: Kunden-ID
+        user_identifier: Teilnehmer-ID
+        password: Passwort
+        ini_letter: INI-Brief
 
       service_token:
         name: Name

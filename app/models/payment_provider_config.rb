@@ -33,4 +33,14 @@ class PaymentProviderConfig < ActiveRecord::Base
   serialize :encrypted_password
 
   attr_encrypted :keys, :password
+
+  def with_payment_provider(provider)
+    self.payment_provider = provider
+  end
+
+  def ebics_required_fields_present?
+    user_identifier.present? &&
+      partner_identifier.present? &&
+      password.present?
+  end
 end

@@ -1,3 +1,4 @@
 %ul.nav.nav-tabs
   %li.active= link_to(t('.general'), '#general', data: { toggle: 'tab' })
   %li= link_to(PaymentReminder.model_name.human(count: 2), '#reminders', data: { toggle: 'tab' })
+  %li= link_to(PaymentProviderConfig.model_name.human(count: 2), '#payment_provider_configs', data: { toggle: 'tab' })

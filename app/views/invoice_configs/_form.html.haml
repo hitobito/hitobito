@@ -14,4 +14,9 @@
     #reminders.tab-pane
       = f.fields_for(:payment_reminder_configs) do |ff|
         = render 'reminder_fields', f: ff
+
+    #payment_provider_configs.tab-pane
+      = f.fields_for(:payment_provider_configs) do |ff|
+        = render 'provider_fields', f: ff
+
   = form_buttons(f, submit_label: nil, cancel_url: group_invoice_config_path(parent))

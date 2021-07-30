@@ -1,0 +1,6 @@
+= field_set_tag "#{PaymentProviderConfig.model_name.human(count: 1)} - #{f.object.payment_provider}", style: 'margin-right: 0px' do
+  = f.hidden_field :id
+  = f.hidden_field :payment_provider
+  = f.labeled_input_field :user_identifier
+  = f.labeled_input_field :partner_identifier
+  = f.labeled_password_field :password

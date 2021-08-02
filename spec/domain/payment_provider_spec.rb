@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-#
 
 require 'spec_helper'
 
@@ -53,7 +52,7 @@ describe PaymentProvider do
 
       expect do
         subject.INI
-      end.to raise_error('INI request failed')
+      end.to raise_error(PaymentProviders::EbicsError, 'INI request failed')
     end
   end
 
@@ -69,7 +68,7 @@ describe PaymentProvider do
 
       expect do
         subject.HIA
-      end.to raise_error('HIA request failed')
+      end.to raise_error(PaymentProviders::EbicsError, 'HIA request failed')
     end
   end
 
@@ -102,7 +101,7 @@ describe PaymentProvider do
 
       expect do
         subject.HPB
-      end.to raise_error('Authentication public key does not match')
+      end.to raise_error(PaymentProviders::EbicsError, 'Authentication public key does not match')
     end
 
     it 'raises if HPB returns wrong encryption key' do
@@ -113,7 +112,7 @@ describe PaymentProvider do
 
       expect do
         subject.HPB
-      end.to raise_error('Encryption public key does not match')
+      end.to raise_error(PaymentProviders::EbicsError, 'Encryption public key does not match')
     end
 
     it 'raises if HPB returns wrong authentication and encryption key' do
@@ -124,7 +123,7 @@ describe PaymentProvider do
 
       expect do
         subject.HPB
-      end.to raise_error('Authentication and encryption public keys do not match')
+      end.to raise_error(PaymentProviders::EbicsError, 'Authentication and encryption public keys do not match')
     end
   end
 

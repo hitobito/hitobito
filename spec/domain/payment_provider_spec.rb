@@ -15,7 +15,7 @@ describe PaymentProvider do
   let(:payment_provider_setting) { subject.send(:payment_provider_setting) }
 
   before do
-    expect(subject).to receive(:client).and_return(epics_client)
+    allow(subject).to receive(:client).and_return(epics_client)
   end
 
   context 'initial_setup' do
@@ -124,6 +124,45 @@ describe PaymentProvider do
       expect do
         subject.HPB
       end.to raise_error(PaymentProviders::EbicsError, 'Authentication and encryption public keys do not match')
+    end
+  end
+
+  context 'XTC' do
+    it 'sends XTC order' do
+      response = ["01DC75AB6551FC250D84AE3298EC7C1C", "N031"]
+
+      expect(epics_client).to receive(:upload).with(PaymentProviders::Xtc, 'qr invoice csv').exactly(:once).and_return(response)
+
+      expect(subject.XTC('qr invoice csv')).to eq(response)
+    end
+
+    it 'raises if document is empty' do
+      expect do
+        subject.XTC('')
+      end.to raise_error(ArgumentError, 'document is empty')
+
+      expect do
+        subject.XTC(nil)
+      end.to raise_error(ArgumentError, 'document is empty')
+    end
+  end
+
+  context 'Z54' do
+    it 'sends Z54 order' do
+      response = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>'
+
+      expect(epics_client).to receive(:download).with(PaymentProviders::Z54, nil, nil).exactly(:once).and_return(response)
+
+      expect(subject.Z54).to eq(response)
+    end
+
+    it 'raises if no download data available' do
+      expect(epics_client).to receive(:download).with(PaymentProviders::Z54, nil, nil).exactly(:once).and_raise(Epics::Error::BusinessError.new('090005'))
+
+      expect do
+        subject.Z54
+      end.to raise_error(Epics::Error::BusinessError,
+                         'EBICS_NO_DOWNLOAD_DATA_AVAILABLE - No data are available at present for the selected download order type')
     end
   end
 

@@ -42,6 +42,16 @@ class PaymentProvider
     check_bank_public_keys!(bank_x, bank_e)
   end
 
+  def XTC(document)
+    raise ArgumentError.new('document is empty') if document.nil? || document.empty?
+
+    client.send(:upload, PaymentProviders::Xtc, document)
+  end
+
+  def Z54(from = nil, to = nil)
+    client.send(:download, PaymentProviders::Z54, from, to)
+  end
+
   private
 
   def check_bank_public_keys!(bank_x, bank_e)

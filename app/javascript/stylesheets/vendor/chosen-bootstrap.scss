@@ -142,6 +142,10 @@ $chosen-sprite-path: '~chosen-js/chosen-sprite.png';
   }
 }
 
+.chosen-no-margin .chosen-container {
+  margin-bottom: 0 !important;
+}
+
 .chosen-container-single {
   .chosen-single {
     background: $chosen-background;

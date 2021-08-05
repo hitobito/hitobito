@@ -38,7 +38,9 @@ module Events::Filter
       Group.
         course_offerers.
         where(id: @user.primary_group.try(:layer_group_id)).
-        first
+        first.
+        hierarchy.
+        course_offerers
     end
 
     def course_group_from_hierarchy
@@ -46,8 +48,9 @@ module Events::Filter
         course_offerers.
         where(id: @user.groups_hierarchy_ids).
         where('groups.id <> ?', Group.root.id).
-        select(:id).
-        first
+        first.
+        hierarchy.
+        course_offerers
     end
   end
 end

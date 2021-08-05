@@ -13,19 +13,19 @@ module Events::Filter
     end
 
     def to_scope
-      return @scope if valid_state.blank?
+      return @scope if valid_states.blank?
 
-      @scope.where(state: valid_state)
+      @scope.where(state: valid_states)
     end
 
     private
 
-    def requested_state
-      @params.dig(:filter, :state).to_s
+    def requested_states
+      @params.dig(:filter, :states).to_a.map(&:to_s)
     end
 
-    def valid_state
-      @valid_state ||= ([requested_state] & possible_states).first
+    def valid_states
+      @valid_states ||= (requested_states & possible_states)
     end
 
     def possible_states

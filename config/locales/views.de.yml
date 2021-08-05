@@ -405,7 +405,15 @@ de:
 
   events:
     courses:
+      filter:
+        places_available:
+          all: Alle
+          only_with_places_available: Nur mit verfügbaren Plätzen
+        select_states: Nach Status filtern
+        time_period: Im Zeitraum (optional)
+        until: bis
       group_filter:
+        all_layers: Alle Gruppen
         filter_by_layer: Veranstalter
         select_layers: Gruppen suchen...
     actions_show:

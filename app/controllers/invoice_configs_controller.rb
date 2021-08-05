@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceConfigsController < CrudController
+  include PaymentProviderConfigsHelper
 
   self.nesting = Group
   self.permitted_attrs = [:payment_information, :address, :iban, :account_number,
@@ -78,10 +79,10 @@ class InvoiceConfigsController < CrudController
         config.update!(status: :pending)
 
         flash[:notice] = t('.flash.provider_initialization_succeeded',
-                          payment_provider: config.payment_provider)
+                           payment_provider: format_payment_provider(config))
       rescue Epics::Error::TechnicalError
         flash[:alert] = t('.flash.provider_initialization_failed',
-                          payment_provider: config.payment_provider)
+                          payment_provider: format_payment_provider(config))
       end
     end
   end

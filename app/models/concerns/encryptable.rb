@@ -12,7 +12,7 @@ module Encryptable
     def attr_encrypted(*attributes)
       attributes.each do |attribute|
         define_method("#{attribute}=".to_sym) do |value|
-          return if value.nil? || value.try(:empty?) || value == self.send(attribute)
+          return if value.nil? || value == self.send(attribute)
 
           self.send(
             "encrypted_#{attribute}=".to_sym,

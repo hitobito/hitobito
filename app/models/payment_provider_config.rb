@@ -39,7 +39,8 @@ class PaymentProviderConfig < ActiveRecord::Base
   end
 
   def ebics_required_fields_present?
-    user_identifier.present? &&
+    payment_provider.present? &&
+      user_identifier.present? &&
       partner_identifier.present? &&
       password.present?
   end

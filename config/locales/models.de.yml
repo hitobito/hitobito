@@ -945,6 +945,8 @@ de:
         user_identifier: Teilnehmer-ID
         password: Passwort
         ini_letter: INI-Brief
+        payment_providers:
+          postfinance: Postfinance
 
       service_token:
         name: Name

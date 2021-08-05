@@ -64,7 +64,7 @@ describe InvoiceConfigsController  do
       end.to_h
 
       expect do
-        put :update, params: { group_id: group.id, invoice_config: {
+        patch :update, params: { group_id: group.id, invoice_config: {
           payment_reminder_configs_attributes: attrs
         } }
       end.to change { entry.reload.payment_reminder_configs.size }.by(3)
@@ -120,7 +120,7 @@ describe InvoiceConfigsController  do
           payment_provider_configs_attributes: attrs
         } }
       end.to change { entry.reload.payment_provider_configs.size }.by(1)
-      expect(flash[:alert]).to match(/Einrichten der Zahlungsschnittstelle postfinance ist fehlgeschlagen/)
+      expect(flash[:alert]).to match(/Einrichten der Zahlungsschnittstelle Postfinance ist fehlgeschlagen/)
     end
   end
 end

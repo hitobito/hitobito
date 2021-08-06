@@ -37,9 +37,14 @@ class TokenAbility
   def define_person_abilities
     groups = token.people_below? ? token_layer_and_below : [token.layer]
 
-    can :show, Person do |p|
+    can :show, [Person, PersonDecorator] do |p|
       Role.where(person: p, group: groups).present? &&
         Ability.new(token.dynamic_user).can?(:show, p)
+    end
+
+    can :show_full, [Person, PersonDecorator] do |p|
+      Role.where(person: p, group: groups).present? &&
+        Ability.new(token.dynamic_user).can?(:show_full, p)
     end
 
     can :index_people, Group do |g|

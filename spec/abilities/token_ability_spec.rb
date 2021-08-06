@@ -21,13 +21,18 @@ describe TokenAbility do
 
     context 'authorized' do
 
-      it 'may index on group' do
+      it 'may index on people' do
         is_expected.to be_able_to(:index_people, token.layer)
       end
 
-      it 'may show on group' do
+      it 'may show on person' do
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.to be_able_to(:show, person)
+      end
+
+      it 'may show_full on person' do
+        person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
+        is_expected.to be_able_to(:show_full, person)
       end
     end
 

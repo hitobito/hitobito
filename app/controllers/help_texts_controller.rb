@@ -31,4 +31,10 @@ class HelpTextsController < SimpleCrudController
       memo[entry.key] = entry.grouped
     end
   end
+  
+  def save_entry
+    entry.save!
+    entry.translation.help_text_id = entry.id
+    entry.body.save!
+  end
 end

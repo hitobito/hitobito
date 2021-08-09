@@ -46,6 +46,9 @@ class GroupSettingsController < ModalCrudController
   end
 
   def assign_attributes
+    # prevents raising if no picture was chosen
+    return if model_params.nil?
+
     entry.attrs.each do |a|
       value = model_params[a]
       # set password only if value provided

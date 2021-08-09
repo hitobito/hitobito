@@ -12,6 +12,8 @@ class InvoiceConfigsController < CrudController
   self.permitted_attrs = [:payment_information, :address, :iban, :account_number,
                           :payment_slip, :beneficiary, :payee, :participant_number,
                           :participant_number_internal, :email, :vat_number, :currency,
+                          :due_days,
+                          :donation_calculation_year_amount, :donation_increase_percentage,
                           payment_reminder_configs_attributes: [
                             :id, :title, :text, :level, :due_days
                           ],

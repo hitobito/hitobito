@@ -713,6 +713,8 @@ de:
       iban_example: 'Beispiel: CH93 0076 2011 6238 5295 7'
     reminder_fields:
       third_level: 'Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt.'
+    provider_fields:
+      reset_payment_provider_warning: 'Sollten Daten hier geändert werden, muss der Initialisierungsprozess der Rechnungsschnittstelle neu ausgeführt werden.'
 
   invoice_lists:
     form:

@@ -1,4 +1,7 @@
 = field_set_tag "#{PaymentProviderConfig.model_name.human(count: 1)} - #{f.object.payment_provider}", style: 'margin-right: 0px' do
+  -if !f.object.draft?
+    .alert.alert-warning
+      = t('.reset_payment_provider_warning')
   = f.hidden_field :id
   = f.hidden_field :payment_provider
   = f.labeled_input_field :user_identifier

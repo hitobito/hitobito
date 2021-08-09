@@ -726,6 +726,29 @@ describe PeopleController do
       end
     end
 
+    context 'as service token' do
+      let(:token) { service_tokens(:permitted_bottom_group_token) }
+      let(:bottom_member) { people(:bottom_member) }
+
+      before do
+        Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group), person: bottom_member)
+      end
+
+      it 'GET show contains all roles and person data' do
+        get :show, params: { group_id: group.id, id: bottom_member.id, token: token.token }, format: :json
+
+        json = JSON.parse(response.body)
+        person = json['people'].first
+        roles = json['linked']['roles']
+        role_classes = roles.map { |role| role['role_class'] }
+        expect(person['email']).to eq('bottom_member@example.com')
+        expect(person['first_name']).to eq('Bottom')
+        expect(person['last_name']).to eq('Member')
+        expect(role_classes).to include('Group::BottomLayer::Member')
+        expect(role_classes).to include('Group::TopGroup::Secretary')
+      end
+    end
+
     context 'with contact data' do
 
       let(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }

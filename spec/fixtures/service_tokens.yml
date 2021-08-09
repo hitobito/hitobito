@@ -39,6 +39,20 @@ permitted_top_group_token:
   event_participations: true
   mailing_lists: true
 
+permitted_bottom_group_token:
+  layer: bottom_layer_one
+  name: PermittedBottomGroupToken
+  description: MyText
+  token: PermittedBottomGroupToken
+  last_access: 2018-11-01 11:11:11
+  people: true
+  people_below: true
+  groups: true
+  events: true
+  invoices: true
+  event_participations: true
+  mailing_lists: true
+
 rejected_top_group_token:
   layer: top_layer
   name: Rejected

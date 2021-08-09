@@ -17,3 +17,6 @@
 = f.labeled_input_field :participant_number, help: t('.account_number_example')
 = f.labeled_input_field :participant_number_internal, help: t('.participant_number_internal_example')
 
+%h3.form-subtitle= t('.variable_donation_appeal')
+= f.labeled_input_field :donation_calculation_year_amount
+= f.labeled_input_field :donation_increase_percentage

@@ -711,6 +711,7 @@ de:
       account_number_example: 'Beispiel: 01-162-5'
       participant_number_internal_example: 'Beispiel: 999999'
       iban_example: 'Beispiel: CH93 0076 2011 6238 5295 7'
+      variable_donation_appeal: 'Variabler Spendenaufruf'
     reminder_fields:
       third_level: 'Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt.'
     provider_fields:

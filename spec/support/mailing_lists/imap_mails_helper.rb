@@ -8,6 +8,13 @@ module MailingLists::ImapMailsHelper
     Imap::Mail.build(imap_mail)
   end
 
+  def new_imap_fetch_data(text_body = true)
+    fetch_data_id = text_body ? 1 : 2
+    Net::IMAP::FetchData.new(fetch_data_id, mail_attrs(text_body))
+  end
+
+  private
+
   def new_plain_text_mail
     Mail.new do
       from    'from@example.com'

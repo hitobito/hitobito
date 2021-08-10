@@ -28,7 +28,7 @@ module MailingLists::ImapMailsHelper
   end
 
   def imap_mail_subject(mail)
-    subject = mail.subject
+    subject = mail.subject_utf8_encoded
     if subject.length > 43
       subject = subject[0..40] + '...'
     end

@@ -15,8 +15,8 @@ describe MailingLists::ImapMailsMoveController do
 
   let(:imap_connector) { double(:imap_connector) }
 
-  let(:imap_mail_1) { new_mail }
-  let(:imap_mail_2) { new_mail(false) }
+  let(:imap_mail_1) { new_imap_mail }
+  let(:imap_mail_2) { new_imap_mail(false) }
   let(:imap_mail_data) { [imap_mail_1, imap_mail_2] }
 
   let(:now) { Time.zone.now }
@@ -47,7 +47,7 @@ describe MailingLists::ImapMailsMoveController do
 
       patch :create, params: { mailbox: 'inbox', ids: '42,43', dst_mailbox: 'failed' }
 
-      expect(flash[:notice]).to include 'Mail(s) erfolgreich verschoben'
+      expect(flash[:notice]).to include '2 Mails erfolgreich verschoben'
       expect(response).to have_http_status(:found)
       expect(response).to redirect_to imap_mails_path
     end
@@ -62,7 +62,7 @@ describe MailingLists::ImapMailsMoveController do
 
       patch :create, params: { mailbox: 'inbox', ids: '42', dst_mailbox: 'invalid_mailbox' }
 
-      expect(flash[:notice]).to include 'Mail(s) erfolgreich verschoben'
+      expect(flash[:notice]).to include 'Mail erfolgreich verschoben'
       expect(response).to have_http_status(:found)
       expect(response.location).to eq('http://test.host/mailing_lists/imap_mails/inbox')
     end
@@ -93,7 +93,7 @@ describe MailingLists::ImapMailsMoveController do
       expect(response).to have_http_status(:redirect)
 
       expect(flash[:notice])
-        .to eq(["Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut", "Authentication failed."])
+        .to eq(["Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.", "Authentication failed."])
     end
 
     it 'cannot move mails from failed mailbox' do
@@ -111,18 +111,48 @@ describe MailingLists::ImapMailsMoveController do
 
   private
 
-  def new_mail(text_body = true)
-    imap_mail = Net::IMAP::FetchData.new(Faker::Number.number(digits: 1), mail_attrs(text_body))
+
+  def new_imap_mail(text_body = true)
+    fetch_data_id = text_body ? 1 : 2
+    imap_mail = Net::IMAP::FetchData.new(fetch_data_id, mail_attrs(text_body))
     Imap::Mail.build(imap_mail)
   end
 
+  def new_plain_text_mail
+    Mail.new do
+      from    'from@example.com'
+      to      'to@example.com'
+      subject 'Testflight from 24.4.2021'
+      body    'SpaceX rocks!'
+    end
+  end
+
+  def new_multipart_mail
+    Mail.new do
+      from    'from@example.com'
+      to      'to@example.com'
+      subject 'Testflight from 24.4.2021'
+
+      text_part do
+        body 'This is just plain text!'
+      end
+
+      html_part do
+        content_type 'text/html; charset=UTF-8'
+        body '<h1>This is some Html</h1>'
+      end
+    end
+  end
+
   def mail_attrs(text_body)
+    mail = text_body ? new_plain_text_mail : new_multipart_mail
+
     {
       'UID' => text_body ? '42' : '43',
-      'RFC822' => text_body ? '' : new_html_message,
+      'RFC822' => mail.to_s,
       'ENVELOPE' => new_envelope,
-      'BODY[TEXT]' => text_body ? 'SpaceX rocks!' : 'Tesla rocks!',
-      'BODYSTRUCTURE' => text_body ? new_text_body : new_html_body_type
+      'BODYSTRUCTURE' => text_body ? new_text_body : new_html_body_type,
+      'BODY[TEXT]' => mail.body.to_s
     }
   end
 
@@ -152,13 +182,6 @@ describe MailingLists::ImapMailsMoveController do
 
   def new_html_body_type
     Net::IMAP::BodyTypeMultipart.new('MULTIPART')
-  end
-
-  def new_html_message
-    html_message = Mail::Message.new
-    html_message.body('<h1>Starship flies!</h1>')
-    html_message.text_part = ''
-    html_message
   end
 
   # and_raise only accepts either String or Module

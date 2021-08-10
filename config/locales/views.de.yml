@@ -878,6 +878,13 @@ de:
         sender: Absender
         date: Datum
         state: Status
+        states:
+          unkown_recipient: Empfänger unbekannt
+          retreived: Empfangen
+          bulk_delivering: Wird gesendet
+          completed: Abgeschlossen
+          sender_rejected: Sender abgelehnt
+          state_unavailable: Kein Status vorhanden
       not_available: Keine Mails in dieser Mailbox vorhanden.
       flash:
         deleted:

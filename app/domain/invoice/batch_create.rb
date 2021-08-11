@@ -46,7 +46,11 @@ class Invoice::BatchCreate
   end
 
   def create_invoice(recipient)
-    invoice_list.group.invoices.build(attributes(recipient)).save
+    begin
+      invoice_list.group.invoices.build(attributes(recipient)).save
+    rescue NoDonationsPresentError
+      false
+    end
   end
 
   private
@@ -76,10 +80,38 @@ class Invoice::BatchCreate
 
   def attributes(recipient)
     invoice.attributes.merge(
-      invoice_items_attributes: invoice.invoice_items.collect(&:attributes),
+      invoice_items_attributes: invoice_items_attributes(recipient),
       recipient_id: recipient.id,
       invoice_list_id: invoice_list.id,
       creator_id: invoice_list.creator_id
     )
   end
+
+  def invoice_items_attributes(recipient)
+    invoice.invoice_items.collect do |item|
+      begin
+        if item.variable_donation?
+          item.unit_cost = variable_donation_amount(recipient)
+
+          raise NoDonationsPresentError.new(invoice_item_id: item.id) if item.unit_cost.zero?
+        end
+
+        item.attributes
+      rescue NoDonationsPresentError
+        raise NoDonationsPresentError if invoice.invoice_items.size == 1
+
+        next
+      end
+    end.compact
+  end
+
+  def variable_donation_amount(recipient)
+    Donation.new
+      .in_layer(invoice_list.group)
+      .in_last(invoice_list.group.invoice_config.donation_calculation_year_amount.years)
+      .of_person(recipient)
+      .previous_amount(increased_by: invoice_list.group.invoice_config.donation_increase_percentage)
+  end
+
+  class NoDonationsPresentError < StandardError; end
 end

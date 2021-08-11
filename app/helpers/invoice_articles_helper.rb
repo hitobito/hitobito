@@ -10,4 +10,14 @@ module InvoiceArticlesHelper
     number_to_currency(invoice_article.unit_cost, unit: currency)
   end
 
+  def group_dropdown_invoice_articles(group)
+    group.invoice_articles + [{ id: 'variable_donation',
+                                name: translated_variable_donation_attr(:name),
+                                number: translated_variable_donation_attr(:number),
+                                description: translated_variable_donation_attr(:description) }]
+  end
+
+  def translated_variable_donation_attr(attr)
+    I18n.t("invoice_lists.form.invoice_articles.variable_donation.#{attr.to_s}")
+  end
 end

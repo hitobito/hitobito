@@ -8,5 +8,10 @@
 = f.input_field(:cost_center, class: 'span2', data: { provide: :typeahead, source: InvoiceArticle.cost_centers }, placeholder: InvoiceItem.human_attribute_name(:cost_center) )
 = f.input_field(:account,  class: 'span2',  data: { provide: :typeahead, source: InvoiceArticle.accounts }, placeholder: InvoiceItem.human_attribute_name(:account) )
 = f.input_field(:vat_rate, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:vat_rate))
-= f.input_field(:unit_cost, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:unit_cost))
-= f.input_field(:count, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:count))
+- if f.object.variable_donation?
+  = f.hidden_field(:unit_cost)
+  = f.hidden_field(:count)
+- else
+  = f.input_field(:unit_cost, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:unit_cost))
+  = f.input_field(:count, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:count))
+= f.hidden_field(:variable_donation)

@@ -39,6 +39,81 @@ describe Invoice::BatchCreate do
     expect(list.amount_paid).to eq 0
   end
 
+  it '#call creates invoices for abo with variable donation amount' do
+    Subscription.create!(mailing_list: mailing_list,
+                         subscriber: group,
+                         role_types: [Group::TopGroup::Leader])
+
+    list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
+
+    group.invoice_config.update!(donation_increase_percentage: 5, donation_calculation_year_amount: 2)
+
+    fabricate_donation(50, 1.year.ago)
+    fabricate_donation(150, 2.year.ago)
+
+    invoice = Invoice.new(title: 'invoice', group: group)
+    invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)
+    invoice.invoice_items.build(name: 'variable donation', unit_cost: 0, variable_donation: true)
+    list.invoice = invoice
+
+    Invoice::BatchCreate.call(list)
+
+    expect(list.reload).to have(1).invoices
+    expect(list.receiver).to eq mailing_list
+    expect(list.recipients_total).to eq 1
+    expect(list.recipients_paid).to eq 0
+    
+    # donation sum is 200, raise by 5%: 200 * 1.05 = 210, add other invoice_item: 210 + 1.5 = 211.5
+    expect(list.amount_total).to eq 211.5
+    expect(list.amount_paid).to eq 0
+  end
+
+  it '#call deletes invoice if variable donation with amount 0 is the only invoice item' do
+    Subscription.create!(mailing_list: mailing_list,
+                         subscriber: group,
+                         role_types: [Group::TopGroup::Leader])
+
+    list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
+
+    group.invoice_config.update!(donation_increase_percentage: 5, donation_calculation_year_amount: 2)
+
+    invoice = Invoice.new(title: 'invoice', group: group)
+    invoice.invoice_items.build(name: 'variable donation', unit_cost: 0, variable_donation: true)
+    list.invoice = invoice
+
+    Invoice::BatchCreate.call(list)
+
+    expect(list.reload).to have(0).invoices
+    expect(list.receiver).to eq mailing_list
+  end
+
+  it '#call deletes variable donation invoice item with amount 0' do
+    Subscription.create!(mailing_list: mailing_list,
+                         subscriber: group,
+                         role_types: [Group::TopGroup::Leader])
+
+    list = InvoiceList.new(receiver: mailing_list, group: group, title: :title)
+
+    group.invoice_config.update!(donation_increase_percentage: 5, donation_calculation_year_amount: 2)
+
+    invoice = Invoice.new(title: 'invoice', group: group)
+    invoice.invoice_items.build(name: 'pens', unit_cost: 15.5)
+    invoice.invoice_items.build(name: 'variable donation', unit_cost: 0, variable_donation: true)
+    list.invoice = invoice
+
+    expect do
+      Invoice::BatchCreate.call(list)
+    end.to change { group.invoice_items.count }.by(1)
+
+    expect(list.reload).to have(1).invoices
+    expect(list.receiver).to eq mailing_list
+    expect(list.recipients_total).to eq 1
+    expect(list.recipients_paid).to eq 0
+    
+    expect(list.amount_total).to eq 15.5
+    expect(list.amount_paid).to eq 0
+  end
+
   it '#call offloads to job when recipients exceed limit' do
     Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group))
     Subscription.create!(mailing_list: mailing_list,
@@ -99,5 +174,12 @@ describe Invoice::BatchCreate do
       Invoice::BatchCreate.new(list).call
     end.to change { [group.invoices.count, group.invoice_items.count] }.by([1, 1])
     expect((list.invalid_recipient_ids)).to have(1).item
+  end
+
+  private
+
+  def fabricate_donation(amount, received_at = 1.year.ago)
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: other_person, recipient: person, group: group, state: :payed)
+    Payment.create!(amount: amount, received_at: received_at, invoice: invoice)
   end
 end

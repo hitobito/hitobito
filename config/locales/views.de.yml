@@ -721,6 +721,11 @@ de:
 
   invoice_lists:
     form:
+      invoice_articles:
+        variable_donation:
+          name: Variabler Spendenaufruf
+          number: Spenden
+          description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
       recipient_info:
         one: "Rechnung wird für eine Person erstellt."
         other: "Rechnung wird für %{count} Personen erstellt."

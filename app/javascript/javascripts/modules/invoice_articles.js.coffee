@@ -3,8 +3,13 @@ app = window.App ||= {}
 app.InvoiceArticles = {
   add: (e) ->
     url = $('form[data-group').data('group')
-    articleAction = "#{url}/invoice_articles/#{e.target.value}.json"
-    $.ajax(url: articleAction, dataType: 'json', success: app.InvoiceArticles.updateForm)
+    if e.target.value == 'variable_donation'
+      selectedOption = e.target.options[e.target.selectedIndex]
+      variableDonationObj = { name: selectedOption.dataset.name, description: selectedOption.dataset.description, variable_donation: true }
+      app.InvoiceArticles.updateForm(variableDonationObj)
+    else if e.target.value
+      articleAction = "#{url}/invoice_articles/#{e.target.value}.json"
+      $.ajax(url: articleAction, dataType: 'json', success: app.InvoiceArticles.updateForm)
     e.target.value = undefined # reset field as preparation for next addition
 
   updateForm: (data, status, req) ->
@@ -13,6 +18,13 @@ app.InvoiceArticles = {
     fields.each (idx, elm) ->
       name = elm.name.match(/\d\]\[(.*)\]$/)[1]
       elm.value = data[name] if data[name]
+
+      if data.variable_donation and ['unit_cost', 'count', 'vat_rate'].includes(name)
+        elm.style.visibility = 'hidden'
+        elm.value = 0
+
+      if data.variable_donation and name == 'variable_donation'
+        elm.value = 'true'
     app.Invoices.recalculate()
 
 }

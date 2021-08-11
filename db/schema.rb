@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_05_084529) do
+ActiveRecord::Schema.define(version: 2021_08_12_111610) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -394,6 +394,7 @@ ActiveRecord::Schema.define(version: 2021_05_05_084529) do
     t.integer "count", default: 1, null: false
     t.string "cost_center"
     t.string "account"
+    t.boolean "variable_donation", default: false
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
   end
 

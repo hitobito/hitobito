@@ -32,6 +32,7 @@ class InvoiceItem < ActiveRecord::Base
   scope :list, -> { order(:name) }
 
   validates :unit_cost, money: true, allow_nil: true
+  validates :variable_donation, uniqueness: { scope: :invoice_id }
   delegate :recalculate!, to: :invoice
 
   validates_by_schema

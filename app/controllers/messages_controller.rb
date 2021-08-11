@@ -23,6 +23,7 @@ class MessagesController < CrudController
                                         :count,
                                         :cost_center,
                                         :account,
+                                        :variable_donation,
                                         :_destroy
                                       ]
                                     }].freeze

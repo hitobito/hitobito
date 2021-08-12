@@ -8,18 +8,18 @@
           - if @kind_category_id == category.id.to_s
             %ul
               - category.kinds.each do |kind|
-                %li= link_to(kind.label, set_filter(category: category.id, anchor: CGI.escape(kind.label)), data: { turbolinks: false })
+                %li= link_to(kind.label, set_filter(category: category.id, anchor: kind.label.parameterize), data: { turbolinks: false })
       %li
         = link_to(t('event.lists.courses.no_category'), set_filter(category: 0), data: { turbolinks: false })
 
         - if @kind_category_id == '0'
           %ul
             - @kinds_without_category.each do |kind|
-              %li= link_to(kind.label, set_filter(category: 0, anchor: CGI.escape(kind.label)), data: { turbolinks: false })
+              %li= link_to(kind.label, set_filter(category: 0, anchor: kind.label.parameterize), data: { turbolinks: false })
 
     - else
       - @grouped_events.keys.each do |kind|
-        %li= link_to(kind, "##{CGI.escape(kind)}", data: { turbolinks: false })
+        %li= link_to(kind, "##{kind.parameterize}", data: { turbolinks: false })
   - else
     = render 'event/lists/nav_left_events'
 

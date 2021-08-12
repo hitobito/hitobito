@@ -117,7 +117,7 @@ describe Events::CoursesController, type: :controller do
         get :index, params: { filter: { category: category.id } }
         expect(navigation.all('li ul li').size).to eq 1
         expect(navigation.all('li ul li')[0].text.strip).to eq 'Gruppenleiterkurs'
-        expect(navigation.all('li ul li a')[0][:href]).to eq list_courses_path(filter: { category: category.id, group_ids: [top_layer.id] }, anchor: 'Gruppenleiterkurs')
+        expect(navigation.all('li ul li a')[0][:href]).to eq list_courses_path(filter: { category: category.id, group_ids: [top_layer.id] }, anchor: 'gruppenleiterkurs')
       end
 
       it 'displays other course kinds when filtering for kinds without category' do
@@ -127,7 +127,7 @@ describe Events::CoursesController, type: :controller do
         get :index, params: { filter: { category: 0 } }
         expect(navigation.all('li ul li').size).to eq 3
         expect(navigation.all('li ul li')[1].text.strip).to eq 'Scharleiterkurs'
-        expect(navigation.all('li ul li a')[1][:href]).to eq list_courses_path(filter: { category: 0, group_ids: [top_layer.id] }, anchor: 'Scharleiterkurs')
+        expect(navigation.all('li ul li a')[1][:href]).to eq list_courses_path(filter: { category: 0, group_ids: [top_layer.id] }, anchor: 'scharleiterkurs')
       end
     end
   end

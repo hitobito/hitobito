@@ -9,7 +9,7 @@
       %tr
         %th{colspan: column_count}
           %h2
-            %a.anchor{name: CGI.escape(title.to_s)}= title
+            %a.anchor{name: title.to_s.parameterize}= title
     %tbody
       - list.each do |item|
         %tr= yield item, title

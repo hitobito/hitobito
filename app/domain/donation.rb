@@ -13,8 +13,8 @@ class Donation
   def in_last(duration)
     raise 'Has to be at least one year in the past' if duration.ago.year >= Time.zone.now.year
 
-    from = Date.new(duration.ago.year, 1, 1)
-    to = Date.new(1.year.ago.year, 12, 31)
+    from = duration.ago.beginning_of_year
+    to = 1.year.ago.end_of_year
     @donations = @donations.where('payments.received_at >= ?' \
                                   'AND payments.received_at <= ?', from, to)
 

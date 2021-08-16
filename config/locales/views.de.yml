@@ -712,6 +712,8 @@ de:
       participant_number_internal_example: 'Beispiel: 999999'
       iban_example: 'Beispiel: CH93 0076 2011 6238 5295 7'
       variable_donation_appeal: 'Variabler Spendenaufruf'
+      donation_calculation_year_amount_explanation: Anzahl verganenen Jahre, die für die Spendenberechnung beachtet werden.
+      donation_increase_percentage_explanation: Prozentsatz, für die Spendenberechnung
     reminder_fields:
       third_level: 'Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt.'
     provider_fields:

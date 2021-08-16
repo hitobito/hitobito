@@ -65,6 +65,11 @@ class InvoiceConfig < ActiveRecord::Base
   validates :participant_number_internal, presence: true, on: :update, if: :bank_with_reference?
   validates :participant_number_internal, format: { with: PARTICIPANT_NUMBER_INTERNAL_REGEX },
                                           on: :update, if: :bank_with_reference?
+  validates :donation_calculation_year_amount, numericality: { only_integer: true,
+                                                               greater_than: 0,
+                                                               allow_nil: true }
+  validates :donation_increase_percentage, numericality: { greater_than: 0,
+                                                           allow_nil: true }
 
   validate :correct_address_wordwrap, if: :bank?
   validate :correct_check_digit

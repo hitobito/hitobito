@@ -44,6 +44,8 @@ class Donation
       else
         round_to_nearest(50.0, increased_amount)
       end
+    else
+      donation_sum
     end
   end
 

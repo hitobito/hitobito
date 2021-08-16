@@ -19,7 +19,7 @@
       - safe_join([e.sender_name, content_tag(:p, mail_to(e.sender_email))], ' ')
 
     - t.col(t('mailing_lists.imap_mails.headers.state')) do |m|
-      - t('mailing_lists.imap_mails.headers.states.' + imap_mail_state(m))
+      - t('mailing_lists.imap_mails.headers.states.' + imap_mail_state(m), default: imap_mail_state(m))
 
     - t.col(t('mailing_lists.imap_mails.headers.date')) do |m|
       - imap_mail_date(m)

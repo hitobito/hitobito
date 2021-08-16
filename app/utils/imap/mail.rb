@@ -41,13 +41,13 @@ class Imap::Mail
   end
 
   def plain_text_body
-    (self.mail.text_part || self.mail).body.decoded
+    (mail.text_part || mail).body.decoded
   end
 
   def multipart_body
-    return nil unless self.mail.multipart?
+    return nil unless mail.multipart?
 
-    self.mail.html_part.body.decoded
+    mail.html_part.body.decoded
   end
 
   def hash

@@ -19,7 +19,7 @@ describe Donation do
         Donation.new.in_last(1.second)
       end.to raise_error('Has to be at least one year in the past')
     end
-    
+
     it 'considers whole year' do
       fabricated_donation1 = fabricate_donation(50.0, Date.new(1.year.ago.year, 1, 1))
       fabricated_donation2 = fabricate_donation(50.0, Date.new(1.year.ago.year, 7, 20))
@@ -32,7 +32,7 @@ describe Donation do
       expect(donations).to include(fabricated_donation2)
       expect(donations).to include(fabricated_donation3)
     end
-    
+
     it 'considers multiple whole years' do
       fabricated_donation1 = fabricate_donation(50.0, Date.new(3.years.ago.year, 1, 1))
       fabricated_donation2 = fabricate_donation(50.0, Date.new(2.years.ago.year, 3, 20))
@@ -45,7 +45,7 @@ describe Donation do
       expect(donations).to include(fabricated_donation2)
       expect(donations).to include(fabricated_donation3)
     end
-    
+
     it 'does not find donation outside of duration' do
       fabricate_donation(50.0, Date.new(2.year.ago.year, 3, 20))
 
@@ -56,6 +56,17 @@ describe Donation do
   end
 
   context 'previous_amount' do
+    context 'with no options given' do
+      it 'returns donation sum' do
+        fabricate_donation(100.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_donation(50.0, Date.new(1.year.ago.year, 12, 31))
+
+        amount = Donation.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount
+
+        expect(amount).to eq(50)
+      end
+    end
+
     context 'previous_amount below 100' do
       it 'calculates increased amount' do
         fabricate_donation(50.0)

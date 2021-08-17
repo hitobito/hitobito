@@ -982,6 +982,16 @@ de:
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     show:
       recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
+    export:
+      section:
+        donation_confirmation:
+          header: "Spenden an %{organisation}"
+          title: "Spendenbestätigung %{year}"
+          received_amount: "Spenden erhalten in der Höhe von"
+          received_from: "%{year} haben wir von"
+          acknowledgement: "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"
+
+
 
   navigation:
     menu: 'Menü'

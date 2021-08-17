@@ -14,6 +14,7 @@ module Export::Pdf::Messages
 
     def render_sections(recipient)
       super
+      render_donation_confirmation(pdf, recipient) if @letter.donation_confirmation?
       render_payment_slip(pdf, recipient)
     end
 
@@ -36,6 +37,13 @@ module Export::Pdf::Messages
 
     def cursors
       @cursors ||= {}
+    end
+
+    private
+
+    def render_donation_confirmation(pdf, recipient)
+      options = @options.merge(cursors: cursors)
+      LetterWithInvoice::DonationConfirmation.new(pdf, @letter, recipient, options).render
     end
   end
 end

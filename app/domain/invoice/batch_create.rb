@@ -46,11 +46,9 @@ class Invoice::BatchCreate
   end
 
   def create_invoice(recipient)
-    begin
-      invoice_list.group.invoices.build(attributes(recipient)).save
-    rescue NoDonationsPresentError
-      false
-    end
+    invoice_list.group.invoices.build(attributes(recipient)).save
+  rescue NoDonationsPresentError
+    false
   end
 
   private
@@ -89,19 +87,17 @@ class Invoice::BatchCreate
 
   def invoice_items_attributes(recipient)
     invoice.invoice_items.collect do |item|
-      begin
-        if item.variable_donation?
-          item.unit_cost = variable_donation_amount(recipient)
+      if item.variable_donation?
+        item.unit_cost = variable_donation_amount(recipient)
 
-          raise NoDonationsPresentError.new(invoice_item_id: item.id) if item.unit_cost.zero?
-        end
-
-        item.attributes
-      rescue NoDonationsPresentError
-        raise NoDonationsPresentError if invoice.invoice_items.size == 1
-
-        next
+        raise NoDonationsPresentError.new(invoice_item_id: item.id) if item.unit_cost.zero?
       end
+
+      item.attributes
+    rescue NoDonationsPresentError
+      raise NoDonationsPresentError if invoice.invoice_items.size == 1
+
+      next
     end.compact
   end
 

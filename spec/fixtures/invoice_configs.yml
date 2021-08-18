@@ -1,7 +1,5 @@
 # == Schema Information
 #
-# == Schema Information
-#
 # Table name: invoice_configs
 #
 #  id                               :integer          not null, primary key

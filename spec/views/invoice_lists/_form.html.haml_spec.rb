@@ -21,6 +21,7 @@ describe 'invoice_lists/_form.html.haml' do
   end
 
   it 'only renders invoice articles of group' do
+    group.invoice_config.update(donation_calculation_year_amount: 1, donation_increase_percentage: 5)
     expect(group.invoice_articles).to have(3).items
     groups(:top_layer).invoice_articles.create!(number: 1, name: 'test')
 

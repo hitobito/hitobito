@@ -10,22 +10,30 @@ module RenderMessagesExports
 
   PREVIEW_LIMIT = 5
 
-  def render_pdf_preview(message)
-    assert_type(message)
-    assert_recipients(message)
+  def render_pdf_preview
+    assert_type(entry)
+    assert_recipients(entry)
 
     options = { background: Settings.messages.pdf.preview }
-    pdf = message.exporter_class.new(message, message.recipients.limit(PREVIEW_LIMIT), options)
+    pdf = entry.exporter_class.new(entry, entry.recipients.limit(PREVIEW_LIMIT), options)
     send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename(:preview)
   end
 
-  def render_pdf_in_background(message)
-    assert_type(message)
-    assert_recipients(message)
+  def render_pdf_in_background
+    assert_type(entry)
+    assert_recipients(entry)
 
-    base_name = message.exporter_class.new(message, Person.none).filename
-    with_async_download_cookie(:pdf, base_name) do |filename|
-      Export::MessageJob.new(current_person.id, message.id, filename).enqueue!
+    base_name = entry.exporter_class.new(entry, Person.none).filename
+    render_in_background(:pdf, base_name)
+  end
+
+  def render_tabular_in_background(format)
+    render_in_background(format, "message_#{entry.id}")
+  end
+
+  def render_in_background(format, name)
+    with_async_download_cookie(format, name) do |filename|
+      Export::MessageJob.new(format, current_person.id, entry.id, { filename: filename }).enqueue!
     end
   end
 

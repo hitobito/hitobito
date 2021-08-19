@@ -925,6 +925,7 @@ de:
       button_dispatch_letter: Druckauftrag erstellen
       button_show_assignment: Druckauftrag anzeigen
       button_duplicate: Duplizieren
+      button_export_csv: Export CSV
       button_preview: Vorschau
       button_dispatch_text_message: Senden
       button_show_pdf: PDF anzeigen

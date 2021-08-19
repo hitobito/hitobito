@@ -410,6 +410,9 @@ de:
         remove_picture: Aktuelles Foto entfernen
         roles: Rollen
         tags: Tags
+        title: Titel
+        correspondence_language: Korrespondenzsprache
+        household_key: Haushalts-ID
         created_at: Erstellt
         updated_at: Geändert
 
@@ -812,6 +815,7 @@ de:
         state: Status
         sequence_number: Nummer
         esr_number: Referenz Nummer
+        reference: Referenz
         amount_paid: Total bezahlt
         payment_slips:
           ch_es: Roter Einzahlungsschein Post (CH)

@@ -38,11 +38,12 @@ class MessagesController < CrudController
       format.html
       format.pdf do
         if preview?
-          render_pdf_preview(entry)
+          render_pdf_preview
         else
-          render_pdf_in_background(entry)
+          render_pdf_in_background
         end
       end
+      format.csv { render_tabular_in_background(:csv) }
     end
   end
 

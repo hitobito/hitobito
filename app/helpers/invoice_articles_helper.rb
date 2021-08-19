@@ -11,6 +11,8 @@ module InvoiceArticlesHelper
   end
 
   def group_dropdown_invoice_articles(group)
+    return group.invoice_articles unless group.invoice_config&.variable_donation_configured?
+
     group.invoice_articles + [{ id: 'variable_donation',
                                 name: translated_variable_donation_attr(:name),
                                 number: translated_variable_donation_attr(:number),

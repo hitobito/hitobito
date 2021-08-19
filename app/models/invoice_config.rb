@@ -83,6 +83,11 @@ class InvoiceConfig < ActiveRecord::Base
     model_name.human
   end
 
+  def variable_donation_configured?
+    self.donation_calculation_year_amount.present? &
+      self.donation_increase_percentage.present?
+  end
+
   private
 
   def correct_address_wordwrap
@@ -106,5 +111,4 @@ class InvoiceConfig < ActiveRecord::Base
   def nullify_participant_number_internal
     self.participant_number_internal = nil
   end
-
 end

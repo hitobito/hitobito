@@ -3,9 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.labeled(:invoice_item_article) do
-  = select("temp", "invoice_article_id", nil,
-    { include_blank: true },
-    { id: "invoice_item_article" }) do
-    = group_dropdown_invoice_articles(group).pluck(:number, :name, :id, :description).each do |ia| 
-      = content_tag(:option, "#{ia[0]} - #{ia[1]}", value: ia[2], data: { name: ia[0], description: ia[3] })
+- unless group_dropdown_invoice_articles(group).empty?
+  = f.labeled(:invoice_item_article) do
+    = select("temp", "invoice_article_id", nil,
+      { include_blank: true },
+      { id: "invoice_item_article" }) do
+      = group_dropdown_invoice_articles(group).pluck(:number, :name, :id, :description).each do |ia| 
+        = content_tag(:option, "#{ia[0]} - #{ia[1]}", value: ia[2], data: { name: ia[0], description: ia[3] })

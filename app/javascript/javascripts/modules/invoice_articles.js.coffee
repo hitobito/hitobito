@@ -19,12 +19,17 @@ app.InvoiceArticles = {
       name = elm.name.match(/\d\]\[(.*)\]$/)[1]
       elm.value = data[name] if data[name]
 
-      if data.variable_donation and ['unit_cost', 'count', 'vat_rate'].includes(name)
-        elm.style.visibility = 'hidden'
-        elm.value = 0
+      if data.variable_donation
+        switch name
+          when 'unit_cost', 'var_rate'
+            elm.style.visibility = 'hidden'
+            elm.value = 0
+          when 'count'
+            elm.style.visibility = 'hidden'
+            elm.value = 1
+          when 'variable_donation'
+            elm.value = 'true'
 
-      if data.variable_donation and name == 'variable_donation'
-        elm.value = 'true'
     app.Invoices.recalculate()
 
 }

@@ -9,11 +9,12 @@
 #
 # Table name: payments
 #
-#  id          :integer          not null, primary key
-#  amount      :decimal(12, 2)   not null
-#  received_at :date             not null
-#  reference   :string(255)
-#  invoice_id  :integer          not null
+#  id                       :integer          not null, primary key
+#  amount                   :decimal(12, 2)   not null
+#  received_at              :date             not null
+#  reference                :string(255)
+#  transaction_identifier   :string(255)
+#  invoice_id               :integer          not null
 #
 # Indexes
 #
@@ -25,6 +26,7 @@ class Payment < ActiveRecord::Base
   belongs_to :invoice
 
   validates :reference, uniqueness: { scope: :invoice_id, allow_nil: true, case_sensitive: false }
+  validates :transaction_identifier, uniqueness: { allow_nil: true, case_sensitive: false }
 
   before_validation :set_received_at
   after_create :update_invoice

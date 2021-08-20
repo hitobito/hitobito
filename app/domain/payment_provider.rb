@@ -41,6 +41,9 @@ class PaymentProvider
     bank_x, bank_e = client.HPB
 
     check_bank_public_keys!(bank_x, bank_e)
+    @config.update(status: :registered)
+
+    true
   end
 
   def XTC(document)
@@ -50,7 +53,9 @@ class PaymentProvider
   end
 
   def Z54(since_date = nil, until_date = nil)
-    client.send(:download, PaymentProviders::Z54, since_date, until_date)
+    order_data = client.send(:download, PaymentProviders::Z54, since_date, until_date)
+
+    xml_from_order_data(order_data)
   end
   # rubocop:enable Naming/MethodName
 
@@ -90,5 +95,10 @@ class PaymentProvider
 
   def correct_public_key?(epics_key, hash)
     hash.gsub(' ', '').downcase == Base64.decode64(epics_key.public_digest).unpack('H*').join
+  end
+
+  def xml_from_order_data(order_data)
+    order_data.sub(/^.*\s.*\<\?xml version=/, '<?xml version=')
+              .sub(/<\/Document>\s*.*\s.*\s.*$/, '</Document>')
   end
 end

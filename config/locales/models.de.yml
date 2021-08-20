@@ -954,6 +954,7 @@ de:
         ini_letter: INI-Brief
         payment_providers:
           postfinance: Postfinance
+          postfinance-test: Postfinance Testumgebung
 
       service_token:
         name: Name

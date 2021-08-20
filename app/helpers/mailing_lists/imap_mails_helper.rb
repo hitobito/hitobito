@@ -28,7 +28,7 @@ module MailingLists::ImapMailsHelper
   end
 
   def imap_mail_subject(mail)
-    subject = mail.subject
+    subject = mail.subject_utf8_encoded
     if subject.length > 43
       subject = subject[0..40] + '...'
     end
@@ -43,6 +43,11 @@ module MailingLists::ImapMailsHelper
     sanitize(body)
   end
 
+  def imap_mail_state(mail)
+    state = mail_log_state(mail)
+    sanitize(state)
+  end
+
   def imap_mail_date(mail)
     date = mail.date
     if date.today?
@@ -50,5 +55,14 @@ module MailingLists::ImapMailsHelper
     else
       I18n.l(date.to_date) + ' ' + I18n.l(date, format: :time)
     end
+  end
+
+  private
+
+  def mail_log_state(mail)
+    mail_log_entry = MailLog.find_by(mail_hash: mail.hash)
+    return 'state_unavailable' if mail_log_entry.nil?
+
+    mail_log_entry.status
   end
 end

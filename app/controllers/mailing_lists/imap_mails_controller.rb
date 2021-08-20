@@ -57,7 +57,11 @@ class MailingLists::ImapMailsController < ApplicationController
   end
 
   def destroy_flash_message
-    server_error_message || I18n.t("#{i18n_prefix}.flash.deleted")
+    server_error_message || I18n.t("#{i18n_prefix}.flash.deleted", count: mails_delete_count)
+  end
+
+  def mails_delete_count
+    list_param(:ids).count
   end
 
   def authorize_action

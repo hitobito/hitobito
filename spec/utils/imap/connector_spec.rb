@@ -10,14 +10,15 @@ require 'spec_helper'
 require 'net/imap'
 
 describe Imap::Connector do
+  include MailingLists::ImapMailsHelper
 
   let(:net_imap) { double(:net_imap) }
   let(:imap_connector) { Imap::Connector.new }
   let(:now) { Time.zone.now }
 
-  let(:imap_mail_1) { new_mail(1) }
-  let(:imap_mail_2) { new_mail(2, false) }
-  let(:imap_fetch_data) { [imap_mail_1, imap_mail_2] }
+  let(:imap_fetch_data_1) { new_imap_fetch_data() }
+  let(:imap_fetch_data_2) { new_imap_fetch_data(false) }
+  let(:imap_fetch_data) { [imap_fetch_data_1, imap_fetch_data_2] }
 
   let(:fetch_attributes) { %w(ENVELOPE UID BODYSTRUCTURE BODY[TEXT] RFC822) }
 
@@ -115,11 +116,11 @@ describe Imap::Connector do
 
       # check mail content
       expect(mail1.uid).to eq('42')
-      expect(mail1.subject).to be(imap_mail_1.attr['ENVELOPE'].subject)
+      expect(mail1.subject).to be(imap_fetch_data_1.attr['ENVELOPE'].subject)
       expect(mail1.date).to eq(Time.zone.utc_to_local(DateTime.parse(now.to_s)))
       expect(mail1.sender_email).to eq('john@sender.example.com')
       expect(mail1.sender_name).to eq('sender')
-      expect(mail1.body).to eq('SpaceX rocks!')
+      expect(mail1.plain_text_body).to eq('SpaceX rocks!')
     end
 
     it 'fetch empty array from an empty mailbox' do
@@ -211,52 +212,6 @@ describe Imap::Connector do
   def no_mailbox_error(text = '')
     response_text = Net::IMAP::ResponseText.new(nil, text)
     Net::IMAP::NoResponseError.new(Net::IMAP::TaggedResponse.new(nil, nil, response_text, nil))
-  end
-
-  def new_mail(id, text_body = true)
-    Net::IMAP::FetchData.new(id, mail_attrs(text_body))
-  end
-
-  def mail_attrs(text_body)
-    {
-      'UID' => text_body ? '42' : '43',
-      'RFC822' => text_body ? '' : new_html_message,
-      'ENVELOPE' => new_envelope,
-      'BODY[TEXT]' => text_body ? 'SpaceX rocks!' : 'Tesla rocks!',
-      'BODYSTRUCTURE' => text_body ? new_text_body : new_html_body_type
-    }
-  end
-
-  def new_envelope
-    Net::IMAP::Envelope.new(
-      now.to_s,
-      'Testflight from 24.4.2021',
-      [new_address('from')],
-      [new_address('sender')],
-      [new_address('reply_to')],
-      [new_address('to')]
-    )
-  end
-
-  def new_address(name)
-    Net::IMAP::Address.new(
-      name,
-      nil,
-      'john',
-      "#{name}.example.com"
-    )
-  end
-
-  def new_text_body
-    Net::IMAP::BodyTypeText.new('TEXT')
-  end
-
-  def new_html_body_type
-    Net::IMAP::BodyTypeMultipart.new('MULTIPART')
-  end
-
-  def new_html_message
-    Mail::Message.new("<h1>#{Faker::Lorem.sentences[0]}</h1>")
   end
 
 end

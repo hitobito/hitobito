@@ -3,7 +3,8 @@
 ## unreleased
 
 *  Service Tokens haben show_full Berechtigung auf Personen (#1355)
-*  Variable Spendenaufre können mittels Rechnungsbrief erstellt werden (hitobito_die_mitte#181)
+*  Variable Spendenaufrufe können mittels Rechnungsbrief erstellt werden (hitobito_die_mitte#181)
+*  Mail Client zum verwalten der Mails von Mailing Listen (#1320)
 
 ## Version 1.26
 

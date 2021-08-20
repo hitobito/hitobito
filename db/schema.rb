@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_12_111610) do
+ActiveRecord::Schema.define(version: 2021_08_20_123613) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -382,6 +382,8 @@ ActiveRecord::Schema.define(version: 2021_08_12_111610) do
     t.string "participant_number_internal"
     t.string "vat_number"
     t.string "currency", default: "CHF", null: false
+    t.integer "donation_calculation_year_amount"
+    t.integer "donation_increase_percentage"
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 
@@ -394,7 +396,7 @@ ActiveRecord::Schema.define(version: 2021_08_12_111610) do
     t.integer "count", default: 1, null: false
     t.string "cost_center"
     t.string "account"
-    t.boolean "variable_donation", default: false
+    t.boolean "variable_donation", default: false, null: false
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
   end
 
@@ -658,6 +660,7 @@ ActiveRecord::Schema.define(version: 2021_08_12_111610) do
     t.decimal "amount", precision: 12, scale: 2, null: false
     t.date "received_at", null: false
     t.string "reference"
+    t.string "transaction_identifier"
     t.index ["invoice_id"], name: "index_payments_on_invoice_id"
   end
 

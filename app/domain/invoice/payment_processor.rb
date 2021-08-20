@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+#
 #  Copyright (c) 2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -61,6 +63,7 @@ class Invoice::PaymentProcessor
                   esr_number: reference(s),
                   received_at: to_datetime(fetch('RltdDts', 'AccptncDtTm', s)),
                   invoice: invoices[reference(s)],
+                  transaction_identifier: fetch('Refs', 'Prtry', 'Ref', s),
                   reference: fetch('Refs', 'AcctSvcrRef', s))
     end
   end
@@ -107,6 +110,8 @@ class Invoice::PaymentProcessor
 
   def reference(transaction)
     fetch('RmtInf', 'Strd', 'CdtrRefInf', 'Ref', transaction)
+  rescue KeyError
+    ''
   end
 
   def to_datetime(string)

@@ -48,8 +48,8 @@ class PaymentProvider
     client.send(:upload, PaymentProviders::Xtc, document)
   end
 
-  def Z54(from = nil, to = nil)
-    client.send(:download, PaymentProviders::Z54, from, to)
+  def Z54(since_date = nil, until_date = nil)
+    client.send(:download, PaymentProviders::Z54, since_date, until_date)
   end
 
   private

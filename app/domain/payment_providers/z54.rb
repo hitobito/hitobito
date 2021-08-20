@@ -29,7 +29,7 @@ class PaymentProviders::Z54 < Epics::GenericRequest
           xml.OrderDetails {
             xml.OrderType 'Z54'
             xml.OrderAttribute 'DZHNN'
-            if !!from && !!to
+            if from && to
               xml.StandardOrderParams {
                 xml.DateRange {
                   xml.Start from

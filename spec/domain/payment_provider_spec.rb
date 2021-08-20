@@ -129,11 +129,13 @@ describe PaymentProvider do
 
   context 'XTC' do
     it 'sends XTC order' do
-      response = ["01DC75AB6551FC250D84AE3298EC7C1C", "N031"]
+      transaction_id = '01DC75AB6551FC250D84AE3298EC7C1C'
+      order_id = 'N031'
+      ok_response = [transaction_id, order_id]
 
-      expect(epics_client).to receive(:upload).with(PaymentProviders::Xtc, 'qr invoice csv').exactly(:once).and_return(response)
+      expect(epics_client).to receive(:upload).with(PaymentProviders::Xtc, 'qr invoice csv').exactly(:once).and_return(ok_response)
 
-      expect(subject.XTC('qr invoice csv')).to eq(response)
+      expect(subject.XTC('qr invoice csv')).to eq(ok_response)
     end
 
     it 'raises if document is empty' do

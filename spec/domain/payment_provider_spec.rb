@@ -159,7 +159,8 @@ describe PaymentProvider do
     end
 
     it 'raises if no download data available' do
-      expect(epics_client).to receive(:download).with(PaymentProviders::Z54, nil, nil).exactly(:once).and_raise(Epics::Error::BusinessError.new('090005'))
+      expect(epics_client).to receive(:download).with(PaymentProviders::Z54, nil, nil).exactly(:once)
+        .and_raise(Epics::Error::BusinessError.new('090005'))
 
       expect do
         subject.Z54

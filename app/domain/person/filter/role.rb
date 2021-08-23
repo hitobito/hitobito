@@ -36,6 +36,7 @@ class Person::Filter::Role < Person::Filter::Base
     case args[:kind]
     when 'active' then active_roles_join
     when 'deleted' then deleted_roles_join
+    when 'with_deleted' then with_deleted_roles_join
     end
   end
 
@@ -100,6 +101,14 @@ class Person::Filter::Role < Person::Filter::Base
     <<~SQL.split.map(&:strip).join(' ')
       INNER JOIN roles ON
         (roles.person_id = people.id AND roles.deleted_at IS NOT NULL)
+      INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
+    SQL
+  end
+
+  def with_deleted_roles_join
+    <<~SQL.split.map(&:strip).join(' ')
+      INNER JOIN roles ON
+        (roles.person_id = people.id)
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
   end

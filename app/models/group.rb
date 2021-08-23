@@ -81,7 +81,9 @@ class Group < ActiveRecord::Base
   belongs_to :contact, class_name: 'Person'
 
   has_many :roles, dependent: :destroy, inverse_of: :group
+  has_many :roles_with_deleted, -> { with_deleted }, class_name: 'Role', dependent: :destroy
   has_many :people, through: :roles
+  has_many :people_with_deleted, through: :roles_with_deleted, source: :person
 
   has_many :people_filters, dependent: :destroy
 

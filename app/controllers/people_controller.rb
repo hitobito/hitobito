@@ -253,7 +253,8 @@ class PeopleController < CrudController
   def person_filter
     @person_filter ||= Person::Filter::List.new(@group,
                                                 current_user || service_token_user,
-                                                list_filter_args)
+                                                list_filter_args,
+                                                can?(:show_past_members, @group))
   end
 
   def send_login_job(entry, current_user)

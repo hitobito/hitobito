@@ -86,7 +86,7 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def filtered_roles(group = nil)
-    filtered_functions(roles.to_a, :group, group)
+    filtered_functions(roles_with_deleted.to_a, :group, group)
   end
 
   # returns roles grouped by their group
@@ -158,7 +158,7 @@ class PersonDecorator < ApplicationDecorator
       functions.select { |r| r.send("#{scope_method}_id") == scope.id }
     else
       functions
-    end
+    end.select { |role| !role.deleted? || can?(:show_past_members, role.group) }
   end
 
   def functions_short(functions, scope: nil, edit: true)

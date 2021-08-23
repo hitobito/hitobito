@@ -122,6 +122,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### ASSOCIATIONS
 
   has_many :roles, inverse_of: :person
+  has_many :roles_with_deleted, -> { with_deleted }, class_name: 'Role', dependent: :destroy
   has_many :groups, through: :roles
 
   has_many :event_participations, class_name: 'Event::Participation',

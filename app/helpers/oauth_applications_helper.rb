@@ -22,7 +22,7 @@ module OauthApplicationsHelper
   end
 
   def format_doorkeeper_application_scope(key)
-    Oauth::Application.human_scope(key) << " " << muted("(#{key})")
+    Oauth::Application.human_scope(key) + " " + muted("(#{key})")
   end
 
 end

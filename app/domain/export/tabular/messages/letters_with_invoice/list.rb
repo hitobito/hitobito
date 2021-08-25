@@ -8,7 +8,7 @@
 module Export::Tabular::Messages::LettersWithInvoice
   class List < Export::Tabular::Base
     INCLUDED_ATTRS = %w(esr_number recipient_email recipient_address reference total).freeze
-    PERSON_ATTRS = %w(first_name last_name company_name company email
+    PERSON_ATTRS = %w(id first_name last_name company_name company email
                       address zip_code town country gender birthday
                       salutation title correspondence_language household_key).freeze
 

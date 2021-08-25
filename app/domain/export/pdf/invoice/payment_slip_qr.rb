@@ -38,7 +38,7 @@ module Export::Pdf::Invoice
       payment do
         stamped :payment_titel
         payment_qrcode
-        stamped :payment_amount
+        render_payment_amount
         payment_infos
         payment_extra_infos
       end
@@ -82,6 +82,14 @@ module Export::Pdf::Invoice
         invoice.qrcode.generate do |path|
           image path, fit: [46.mm, 46.mm], position: :center, vposition: :center
         end
+      end
+    end
+
+    def render_payment_amount
+      if invoice.includes_variable_donation?
+        payment_amount
+      else
+        stamped :payment_amount 
       end
     end
 

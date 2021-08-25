@@ -161,6 +161,10 @@ class Invoice < ActiveRecord::Base
     STATES_PAYABLE.include?(state)
   end
 
+  def includes_variable_donation?
+    invoice_items.any?(&:variable_donation?)
+  end
+
   def recipient_name
     recipient.try(:greeting_name) || recipient_name_from_recipient_address
   end

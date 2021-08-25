@@ -12,7 +12,7 @@ module Export::Pdf::Invoice
       pdf.start_new_page if cursor < 225
       stamped(:invoice_address) { invoice_address }
       stamped(:account_number) { account_number }
-      stamped(:amount) { amount } if invoice_items.present?
+      render_payment_amount
       invoice.with_reference? ? esr_number : payment_purpose
       left_receiver_address
       right_receiver_address
@@ -20,6 +20,16 @@ module Export::Pdf::Invoice
     end
 
     private
+
+    def render_payment_amount
+      if invoice_items.present?
+        if invoice.includes_variable_donation?
+          amount
+        else
+          stamped :amount
+        end
+      end
+    end
 
     def invoice_address
       if invoice.bank?

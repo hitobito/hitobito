@@ -7,12 +7,24 @@
 
 module Export::Tabular::Messages::LettersWithInvoice
   class Row < Export::Tabular::Row
-    self.dynamic_attributes = List::PERSON_ATTRS.each_with_object({}) do |attr, dynamic_attributes|
+    person_entry_attrs = List::PERSON_ATTRS - ['salutation']
+
+    self.dynamic_attributes = person_entry_attrs.each_with_object({}) do |attr, dynamic_attributes|
       dynamic_attributes[Regexp.new("^(#{attr})")] = :person_attribute
     end
 
+    private
+
     def person_attribute(attr)
       entry.recipient.try(attr)
+    end
+
+    def salutation
+      Salutation.new(entry.recipient, message&.salutation).value
+    end
+
+    def message
+      Message::LetterWithInvoice.find_by(invoice_list: entry.invoice_list)
     end
   end
 end

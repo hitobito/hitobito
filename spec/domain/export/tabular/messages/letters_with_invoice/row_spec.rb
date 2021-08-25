@@ -41,7 +41,7 @@ describe Export::Tabular::Messages::LettersWithInvoice::Row do
       expect(subject.fetch(:country)).to eq(bottom_member.country)
       expect(subject.fetch(:gender)).to eq(bottom_member.gender)
       expect(subject.fetch(:birthday)).to eq(bottom_member.birthday)
-      expect(subject.fetch(:salutation)).to eq(nil)
+      expect(subject.fetch(:salutation)).to eq('Hallo Top')
       expect(subject.fetch(:title)).to eq(nil)
       expect(subject.fetch(:correspondence_language)).to eq(nil)
       expect(subject.fetch(:household_key)).to eq(bottom_member.household_key)

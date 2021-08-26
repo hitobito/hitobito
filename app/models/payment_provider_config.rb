@@ -32,6 +32,8 @@ class PaymentProviderConfig < ActiveRecord::Base
   serialize :encrypted_keys
   serialize :encrypted_password
 
+  scope :initialized, -> { where(status: [:pending, :registered]) }
+
   attr_encrypted :keys, :password
 
   def with_payment_provider(provider)

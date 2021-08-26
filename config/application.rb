@@ -91,6 +91,7 @@ module Hitobito
         Address::CheckValidityJob.new.schedule
         Address::ImportJob.new.schedule if Settings.addresses.token
         People::DuplicateLocatorJob.new.schedule
+        Payments::EbicsImportJob.new.schedule
       end
     end
 

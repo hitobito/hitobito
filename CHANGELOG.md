@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.26
 
 *  Service Tokens haben show_full Berechtigung auf Personen (#1355)
 *  Variable Spendenaufrufe können mittels Rechnungsbrief erstellt werden (hitobito_die_mitte#181)

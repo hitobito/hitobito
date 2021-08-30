@@ -20,10 +20,11 @@ class PaymentProvider
     @config.update(keys: client.send(:dump_keys))
   end
 
+  # rubocop:disable Naming/MethodName the uppercase-method match the client and the spec
   def INI
     ok = client.INI
 
-    raise PaymentProviders::EbicsError.new('INI request failed') unless ok
+    raise PaymentProviders::EbicsError, 'INI request failed' unless ok
   end
 
   def ini_letter
@@ -33,7 +34,7 @@ class PaymentProvider
   def HIA
     ok = client.HIA
 
-    raise PaymentProviders::EbicsError.new('HIA request failed') unless ok
+    raise PaymentProviders::EbicsError, 'HIA request failed' unless ok
   end
 
   def HPB
@@ -43,7 +44,7 @@ class PaymentProvider
   end
 
   def XTC(document)
-    raise ArgumentError.new('document is empty') if document.nil? || document.empty?
+    raise ArgumentError, 'document is empty' if document.blank?
 
     client.send(:upload, PaymentProviders::Xtc, document)
   end
@@ -51,6 +52,7 @@ class PaymentProvider
   def Z54(since_date = nil, until_date = nil)
     client.send(:download, PaymentProviders::Z54, since_date, until_date)
   end
+  # rubocop:enable Naming/MethodName
 
   private
 
@@ -60,14 +62,14 @@ class PaymentProvider
     encryption_key_ok = correct_public_key?(bank_e,
                                             payment_provider_setting.encryption_hash)
     return true if authentication_key_ok && encryption_key_ok
-    
+
     if !authentication_key_ok && encryption_key_ok
-      raise PaymentProviders::EbicsError.new('Authentication public key does not match')
+      raise PaymentProviders::EbicsError, 'Authentication public key does not match'
     elsif authentication_key_ok && !encryption_key_ok
-      raise PaymentProviders::EbicsError.new('Encryption public key does not match')
+      raise PaymentProviders::EbicsError, 'Encryption public key does not match'
     else
-      raise PaymentProviders::EbicsError.new('Authentication and encryption ' \
-                                             'public keys do not match')
+      raise PaymentProviders::EbicsError, 'Authentication and encryption ' \
+                                             'public keys do not match'
     end
   end
 
@@ -87,6 +89,6 @@ class PaymentProvider
   end
 
   def correct_public_key?(epics_key, hash)
-    hash.gsub(' ', '').downcase == Base64.decode64(epics_key.public_digest).unpack("H*").join
+    hash.gsub(' ', '').downcase == Base64.decode64(epics_key.public_digest).unpack('H*').join
   end
 end

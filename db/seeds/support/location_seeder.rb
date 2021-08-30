@@ -23,7 +23,7 @@ class LocationSeeder
   def seed
     raise 'Currently, this only works with MySQL' unless mysql?
 
-    Location.truncate
+    truncate_locations
     bulk_insert
   end
 
@@ -31,6 +31,10 @@ class LocationSeeder
 
   def mysql?
     Location.connection.adapter_name.downcase =~ /mysql/
+  end
+
+  def truncate_locations
+    Location.connection.truncate(Location.table_name, 'Truncate Location')
   end
 
   def bulk_insert

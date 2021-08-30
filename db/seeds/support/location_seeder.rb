@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -16,23 +16,21 @@ require 'csv'
 # * Add a header for zip_code, town and canton
 # * Save with separator ; encoded as UTF-8 (Libre Office: Save as > Edit Filter Settings)
 class LocationSeeder
-
   FILE = Rails.root.join('db', 'seeds', 'support', 'locations.csv')
   SEPARATOR = ';'
   ENCODING = 'UTF-8'
 
   def seed
-    Location.delete_all
-    reset_primary_key
+    raise 'Currently, this only works with MySQL' unless mysql?
+
+    Location.truncate
     bulk_insert
   end
 
   private
 
-  def reset_primary_key
-    if Location.connection.adapter_name.downcase =~ /mysql/
-      Location.connection.execute('ALTER TABLE locations AUTO_INCREMENT = 1')
-    end
+  def mysql?
+    Location.connection.adapter_name.downcase =~ /mysql/
   end
 
   def bulk_insert
@@ -52,6 +50,4 @@ class LocationSeeder
   def csv
     CSV.read(FILE, headers: true, col_sep: SEPARATOR, encoding: ENCODING)
   end
-
 end
-

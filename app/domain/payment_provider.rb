@@ -96,7 +96,7 @@ class PaymentProvider
   end
 
   def xml_from_order_data(order_data)
-    order_data.sub(/^.*\s.*\<\?xml version=/, '<?xml version=')
-              .sub(/<\/Document>\s*.*\s.*\s.*$/, '</Document>')
+    order_data.sub(/^.*\<\?xml version=/m, '<?xml version=')
+      .sub(/<\/Document>.*$/m, '</Document>')
   end
 end

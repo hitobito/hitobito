@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-#  Copyright (c) 2020, Puzzle ITC. This file is part of
+#  Copyright (c) 2020-2021, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -18,7 +18,7 @@ class Setup
     write_and_copy('.envrc', environment)
     write_and_copy('.tool-versions', <<~TOOL_VERSION)
       ruby #{USED_RUBY_VERSION}
-      nodejs 10.19.0
+      nodejs 12.16.2
       yarn 1.22.10
     TOOL_VERSION
     write_and_copy('.ruby-version', USED_RUBY_VERSION)

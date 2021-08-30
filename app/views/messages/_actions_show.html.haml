@@ -28,4 +28,4 @@
   = button_action_destroy if can?(:destroy, entry)
 
 - if entry.text_message? && !entry.dispatched?
-  = action_button(t('.button_dispatch_text_message'), messaue_dispatch_path(message_id: entry.id), :paper_plane, method: :post, data: { disable_with: '...' })
+  = action_button(t('.button_dispatch_text_message'), message_dispatch_path(message_id: entry.id), :paper_plane, method: :post, data: { disable_with: '...' })

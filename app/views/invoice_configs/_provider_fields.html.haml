@@ -6,4 +6,4 @@
   = f.hidden_field :payment_provider
   = f.labeled_input_field :user_identifier
   = f.labeled_input_field :partner_identifier
-  = f.labeled_password_field :password
+  = f.labeled_password_field :password, value: f.object.password

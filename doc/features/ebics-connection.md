@@ -47,3 +47,9 @@ These are the order types implemented by the `app/domain/payment_provider.rb` cl
 - Z54 (receives invoice data in camt.54 format)
 
 IMPORTANT: The order types have to be supported by the payment provider to work!
+
+### Bank public keys change
+
+When the bank changes their public keys, the HPB request will fail and throw a `PaymentProviders::EbicsError` error.
+
+At this point, check the `encryption_hash` and `authentication_hash` values in the Settings and whether they're still up to date.

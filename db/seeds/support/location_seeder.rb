@@ -20,14 +20,31 @@ class LocationSeeder
   SEPARATOR = ';'
   ENCODING = 'UTF-8'
 
+  SEED_MARKER = 'locations seeded'
+
   def seed
+    return true if marked_as_seeded?
     raise 'Currently, this only works with MySQL' unless mysql?
 
     truncate_locations
     bulk_insert
+
+    mark_as_seeded! if seeded?
   end
 
   private
+
+  def marked_as_seeded?
+    ActiveRecord::InternalMetadata[SEED_MARKER].present?
+  end
+
+  def mark_as_seeded!
+    ActiveRecord::InternalMetadata[SEED_MARKER] = Location.count
+  end
+
+  def seeded?
+    Location.count == csv.count
+  end
 
   def mysql?
     Location.connection.adapter_name.downcase =~ /mysql/

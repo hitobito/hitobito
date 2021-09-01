@@ -80,4 +80,13 @@ namespace :db do
     Rake::Task['db:seed'].invoke
     Rake::Task['wagon:seed'].invoke
   end
+
+  desc 'Remove "seeded"-markers'
+  task remove_seed_markers: [:environment] do
+    puts 'Remove "locations seeded"-marker'
+    require Rails.root.join('db', 'seeds', 'support', 'location_seeder')
+    ActiveRecord::InternalMetadata[LocationSeeder::SEED_MARKER] = nil
+
+    puts 'Done.'
+  end
 end

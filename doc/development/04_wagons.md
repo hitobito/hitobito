@@ -98,7 +98,7 @@ Entwicklungsumgebung noch vorgenommen werden müssen:
 * In `db/seed/development/0_groups.rb` Seed Daten für die definierten Gruppentypen definieren.
 * In `spec/fixtures/groups.yml` Fixtures für die definierten Gruppentypen definieren. Es empfielt
   sich, die selben Gruppen wie in den Development Seeds zu verwenden.
-* `README.md` mit Output von `rake app:hitobito:roles` ergänzen.
+* `README.md` mit Output von `rails hitobito:roles` ergänzen.
 
 
 ### Anleitung: Einzelne Methode anpassen

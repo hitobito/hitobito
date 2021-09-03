@@ -141,9 +141,9 @@ The events and the course endpoints have some query parameters, as explained bel
 | Name       | Type     | Description                                                          | Default               | Available Values                           | Example                 |
 | ---        | ---      | ---                                                                  | ---                   | ---                                        | ---                     |
 | type       | `string` | Specify class type                                                   | Nil (normal event)    | `Event::Course` and wagon specific classes | `type=Event::Course`    |
-| filter     | `string` | Specify whether to only display events from the current layer        | `all`                 | `all`, `layer`                             | `filter=layer`          |
-| start_date | `date`   | Filter events ending after or at start_date (not working right now)  | Today                 | Any date                                   | `start_date=31-10-2018` |
-| end_date   | `date`   | Filter events starting before or at end_date (not working right now) | Nil (upcoming events) | Any date                                   | `end_date=28-02-2019`   |
+| filter     | `string` | Specify whether to only display events from the current layer | `all`                 | `all`, `layer`                             | `filter=layer`          |
+| start_date | `date`   | Filter events ending after or at start_date                   | Today                 | Any date                                   | `start_date=31-10-2018` |
+| end_date   | `date`   | Filter events starting before or at end_date                  | Nil (upcoming events) | Any date                                   | `end_date=28-02-2019`   |
 
 An example query with its response (formatted here for readability) can be seen below.
 

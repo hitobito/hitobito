@@ -44,7 +44,7 @@ module Events::CourseListing
       Events::Filter::Groups.new(
         course_filters.user, course_filters.params,
         course_filters.options, course_filters.to_scope
-      ).default_user_course_group.map(&:id)
+      ).default_user_course_groups.map(&:id)
     @group_ids = params.dig(:filter, :group_ids).to_a.reject(&:blank?).map(&:to_i)
   end
 

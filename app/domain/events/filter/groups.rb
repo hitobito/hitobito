@@ -20,8 +20,8 @@ module Events::Filter
       group_ids.any? ? scope.with_group_id(group_ids) : scope
     end
 
-    def default_user_course_group
-      course_group_from_primary_layer || course_group_from_hierarchy
+    def default_user_course_groups
+      course_groups_from_primary_layer || course_groups_from_hierarchy || Group.none
     end
 
     private
@@ -34,23 +34,23 @@ module Events::Filter
       @params.dig(:filter, :group_ids).to_a.reject(&:blank?)
     end
 
-    def course_group_from_primary_layer
+    def course_groups_from_primary_layer
       Group.
         course_offerers.
         where(id: @user.primary_group.try(:layer_group_id)).
         first.
-        hierarchy.
-        course_offerers
+        try(:hierarchy).
+        try(:course_offerers)
     end
 
-    def course_group_from_hierarchy
+    def course_groups_from_hierarchy
       Group.
         course_offerers.
         where(id: @user.groups_hierarchy_ids).
         where('groups.id <> ?', Group.root.id).
         first.
-        hierarchy.
-        course_offerers
+        try(:hierarchy).
+        try(:course_offerers)
     end
   end
 end

@@ -29,7 +29,7 @@ To use the API, the provided access token is required to have the `api` scope, s
 
 > :bangbang: As of September 2021, personal API tokens are **deprecated**. This way of accessing the API will be removed in the future. Please don't create any new client applications using this means of API access. Any third-party applications using personal API tokens will need to migrate to OAuth access tokens. These cover the same use-cases but are much more secure: the user doesn't have to give their hitobito password to the third-party application, and the tokens have a limited lifespan.
 
-The documentation for personal API tokens has been removed from here, because they should not be used anymore. If you still need to refer to that documentation, you can read the old version of the docs [here](https://github.com/hitobito/hitobito/blob/master/doc/development/05_rest_api.md).
+The documentation for personal API tokens has been removed from here, because they should not be used anymore. If you still need to refer to that documentation, you can read the old version of the docs [here](https://github.com/hitobito/hitobito/blob/68bb038977bdc5ff22b8110e482becb9396aede3/doc/development/05_rest_api.md).
 
 ### Endpoints
 

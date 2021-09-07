@@ -6,9 +6,9 @@ Hitobito offers a read-only JSON REST API that gives access to the basic data st
 
 To use the API you need a valid authentication token, this can be one of the following
 
-* Service token
-* Personal OAuth access token
-* Personal API token
+* Service tokens
+* Personal OAuth access tokens
+* Personal API tokens **(deprecated)**
 
 #### Service token
 
@@ -27,93 +27,9 @@ To use the API, the provided access token is required to have the `api` scope, s
 
 #### Personal API token
 
-* Every user account can create personal tokens.
-* The tokens have the same permissions as the corresponding user.
-* Tokens have no expiration date, but can be actively deleted by the user.
+> :bangbang: As of September 2021, personal API tokens are **deprecated**. This way of accessing the API will be removed in the future. Please don't create any new client applications using this means of API access. Any third-party applications using personal API tokens will need to migrate to OAuth access tokens. These cover the same use-cases but are much more secure: the user doesn't have to give their hitobito password to the third-party application, and the tokens have a limited lifespan.
 
-> :bangbang: If you have an application that needs to read data from hitobito, you'll probably
-want to use personal OAuth access tokens or [service accounts](07_service_accounts.md), depending
-on permission requirements.
-
-If you still want to use personal tokens, they can be managed using the following HTTP endpoints:
-
-| Method  | Path                | Function             |
-| ---     | ---                 | ---                  |
-| POST    | /users/sign_in.json | read/generate token  |
-| POST    | /users/token.json   | generate a new token |
-| DELETE  | /users/token.json   | delete token         |
-
-You have to pass `person[email]` and `person[password]` in the request body. Also, you have to set the `Content-Type: application/x-www-form-urlencoded` HTTP header.
-
-With `curl` it looks like this (it sets the `Content-Type` header automatically):
-```bash
-curl -d "person[email]=mitglied@hitobito.ch" \
-     -d "person[password]=demo" \
-     https://demo.hitobito.com/users/sign_in.json
-```
-
-The response will contain the personal token (`authentication_token`) in the JSON response (formatted here for readability):
-```json
-{
-    "people": [
-        {
-            "id": "164",
-            "type": "people",
-            "href": "https://demo.hitobito.com/de/groups/17/people/164.json",
-            "first_name": "Boris",
-            "last_name": "Becker",
-            "nickname": "Eaque",
-            "company_name": "",
-            "company": false,
-            "gender": "w",
-            "email": "mitglied@hitobito.ch",
-            "authentication_token": "yhFrXcydFwisXYLEUFyV",
-            "last_sign_in_at": "2019-06-19T13:24:11.000+02:00",
-            "current_sign_in_at": "2019-01-01T12:00:00.000+02:00",
-            "links": {
-                "primary_group": "17"
-            }
-        }
-    ],
-    "linked": {
-        "groups": [
-            {
-                "id": "17",
-                "name": "Abos Stadt Bern",
-                "group_type": "Lokalgruppe/Sektion"
-            }
-        ]
-    },
-    "links": {
-        "token.regenerate": {
-            "method": "POST",
-            "href": "https://demo.hitobito.com/de/users/token.json",
-            "type": "tokens"
-        },
-        "token.delete": {
-            "method": "DELETE",
-            "href": "https://demo.hitobito.com/de/users/token.json",
-            "type": "tokens"
-        }
-    }
-}
-```
-
-To use the API with the personal token, there are two possibilities:
-
-* **Query parameter**: Send `user_email` and `user_token` as query parameters in the URL, and append `.json` to the URL path
-```bash
-curl "https://demo.hitobito.com/groups/1.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV"
-```
-
-* **Request headers**: Set the following headers on the HTTP request: `X-User-Email`, `X-User-Token` and `Accept` (set this to `application/json`)
-```bash
-curl -H "X-User-Email: mitglied@hitobito.ch" \
-     -H "X-User-Token: yhFrXcydFwisXYLEUFyV" \
-     -H "Accept: application/json" \
-     https://demo.hitobito.com/groups/1
-```
-
+The documentation for personal API tokens has been removed from here, because they should not be used anymore. If you still need to refer to that documentation, you can read the old version of the docs [here](https://github.com/hitobito/hitobito/blob/master/doc/development/05_rest_api.md).
 
 ### Endpoints
 

@@ -39,7 +39,7 @@ https://demo.hitobito.com/oauth/authorize?response_type=code&client_id=df57d8858
 
 If the user accepts the request, the user's browser will be redirected to the specified redirect URL, with the authorization code in the `code` query parameter. Make sure this is a valid URL in your application. In our example this could be `https://my-external-application.ch/callback?code=2dd87982736ffbd2b68820a2dbcc1f3bd59c5653c5d166339ce68c320f8d83c5`
 
-#### Aquire an access token
+#### Acquire an access token
 The code returned by the authorization request can be used in your application to acquire an access token.
 
 ```bash
@@ -92,7 +92,7 @@ An example response could be (formatted here for readability):
 
 ### Accessing the JSON-API
 
-All endpoints except for the root group endpoint (`/groups`) from the [JSON API](05_rest_api.md) can be used with a personal OAuth access token (if the token has the `api` scope). As with personal tokens, there are two possibilities to use the API:
+All endpoints except for the root group endpoint (`/groups`) from the [JSON API](05_rest_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. There are two possibilities to use the API:
 
 * **Query parameter**: Send `access_token` as query parameter in the URL, and append `.json` to the URL path
 ```bash

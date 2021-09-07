@@ -97,7 +97,6 @@ it:
             name:
               must_be_unique: 'già existe'
         invoice:
-          recipient_address_or_email_required: 'L''indirizzo del destinatario oppure l''email deve essere compilato'
           attributes:
             invoice_config:
               invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'
@@ -268,6 +267,22 @@ it:
       role:
         one: ruolo
         other: Ruoli
+      salutation:
+        one: Appellativo
+        other: Appellativi
+        default:
+          label: Ciao [Name]
+          value:
+            m: Ciao %{greeting_name}
+            w: Ciao %{greeting_name}
+            other: Ciao %{greeting_name}
+        available:
+          lieber_vorname:
+            label: Caro/a [nome]
+            value:
+              m: Caro %{first_name}
+              w: Cara %{first_name}
+              other: Caro %{first_name}
       service_token:
         one: Chi
         other: Chiavi API
@@ -314,6 +329,7 @@ it:
         state: Stato
         read_at: Letto il
       person:
+        salutation: Appellativo
         first_name: Nome
         last_name: Cognome
         name: Nome
@@ -455,6 +471,12 @@ it:
         qualification_kinds: Qualificato per
         general_information: Informazioni generali
         application_conditions: Condizioni di ammissione
+        created_at: Salvato
+        updated_at: Modificato
+        deleted_at: Cancellato
+      event/kind_category:
+        label: Denominazione
+        kinds: Tipi di corso
         created_at: Salvato
         updated_at: Modificato
         deleted_at: Cancellato
@@ -646,6 +668,7 @@ it:
       message/letter:
         body: Contenuto
         heading: Intestazione
+        salutation: Appellativo
       subscription:
         related_role_types: Ruoli
       people_filter:
@@ -746,7 +769,6 @@ it:
         contact: Persona di contatto
         contact_id: Persona di contatto
         beneficiary: A favore di
-        email: E-mail del mittente
         payee: Versamento per
         payment_slip: Polizza di versamento
         payment_slips:

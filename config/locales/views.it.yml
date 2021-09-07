@@ -150,13 +150,15 @@ it:
     button: 'Emettere/Sollecitare fattura'
     set_state: 'Determinare lo stato (emessa/sollecitata)'
     send_mail: 'Determinare lo stato (emessa/sollecitata) e inviare per e-mail'
+  dropdown/letter_with_invoice:
+    print: Stampare
+    letters_with_invoice: Lettere di fatturazione
   devise:
     failure:
       already_authenticated: 'sei già iscritto.'
       unauthenticated: 'devi iscriverti o registrarti prima di poter continuare.'
       unconfirmed: 'devi confermare il tuo account prima di poter continuare.'
       last_attempt: 'hai ancora un tentativo prima che il tuo account venga bloccato.'
-      locked: 'il tuo account è bloccato per 10 minuti.'
       invalid: 'dati d''accesso non validi.'
       invalid_token: 'token per l''autenticazione non è valido'
       timeout: 'questa sessione è scaduto, per favore registrati nuovamente.'
@@ -187,7 +189,6 @@ it:
       confirmed: 'grazie per la tua registrazione. Ora sei registrato.'
     unlocks:
       send_instructions: 'riceverai tra pochi minuti un''email con le istruzioni su come puoi sbloccare il tuo account.'
-      unlocked: 'il tuo account è stato sbloccato. Ora sei registrato.'
       send_paranoid_instructions: "se il tuo indirizzo e-mail esiste nella nostra banca dati riceverai tra pochi minuti u'e-mail con le istruzioni su come puoi sbloccare il tuo account."
     omniauth_callbacks:
       success: 'ti sei registrato con successo con il tuo %{kind}-account.'
@@ -208,6 +209,8 @@ it:
         subject: 'istruzioni per impostare la tua password'
       unlock_instructions:
         subject: 'istruzioni per attivare il tuo account'
+        body:
+          greeting: 'Ciao %{name}!'
   errors:
     link_to_main: 'pagina principale'
     '404':
@@ -464,10 +467,6 @@ it:
       flash:
         create: È stato creato l'indirizzo.
         reset: L'indirizzo è stato attualizzato.
-
-  mails:
-    manage: Gestire le mail
-
   filter_navigation/dropdown:
     additional_views: 'altre opinioni'
   filter_navigation/people:
@@ -603,7 +602,6 @@ it:
       payment: 'Versamento'
       payment_information_help: 'Viene indicato su ogni fattura, può essere modificato in ogni fattura'
       address_help: 'Compare sulla lettera come indirizzo del mittente'
-      email_help: 'Viene utilizzato come mittente dell''e-mail al posto dell''utente corrente'
       payee_help: 'Compare sulla polizza di versamento'
       beneficiary_help: 'Compare sulla polizza di versamento'
       account_number_example: 'Esempio: 01-162-5'
@@ -705,7 +703,7 @@ it:
       title: Creare un formato delle etichette
   layouts:
     nav:
-      sign_out: 'logout'
+      sign_out: 'Logout'
     unauthorized:
       forgot_password: 'Password dimenticata?'
     application:
@@ -736,6 +734,13 @@ it:
       caption_delivery_report: 'Spedire l''e-mail con conferma al mittente'
       help_preferred_labels: 'Se ci sono e-mails questi verranno spediti solo ad indirizzi e-mail con questa denominazione. Nel far questo verranno utilizzati anche indirizzi e-mail che non sono marcati come indirizzo di spedizione. '
       help_mailchimp_sync: 'Gli abbonati possono venir esportati alla lista MailChimp. Quest''azione sovrascrive la lista MailChimp ed i contatti esistenti vengono eliminati.'
+    imap_mails:
+      mailboxes:
+        failed: Fallito
+      headers:
+        subject: Concerne
+        sender: Mittente
+        date: Data
   mailing_list_decorator:
     may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
     may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'
@@ -797,12 +802,6 @@ it:
             one: "%{model_class} viene creato per una persona."
             other: "%{model_class} viene creato per %{count} persone."
         invalid:
-          message/letter:
-            one: "Una persona non ha lasciato l'indirizzo completo."
-            other: "%{count} altri non hanno lasciato un indirizzo completo."
-          message/letter_with_invoice:
-            one: "Una persona non ha lasciato l'indirizzo completo."
-            other: "%{count} altri non hanno lasciato un indirizzo completo."
           message/text_message:
             one: "Una persona non ha lasciato il numero di natel."
             other: "%{count} altri non hanno lasciato il numero di natel."
@@ -816,13 +815,12 @@ it:
       recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
   navigation:
     menu: 'Menu'
-    groups: 'gruppi'
-    events: 'eventi'
-    courses: 'corsi'
-    admin: 'admin'
+    groups: 'Gruppi'
+    events: 'Eventi'
+    courses: 'Corsi'
+    admin: 'Admin'
     admin/event_feed: 'Integrare il calendario.'
     admin/oauth_authorizations: 'Autorizzazioni OAuth'
-    mails: 'Mails'
     invoices: 'Fatture'
   notes:
     new_note: Nuova nota
@@ -988,7 +986,6 @@ it:
         category_validation:
           email_primary_invalid: Email principale non valida
           email_additional_invalid: Altre email non valida
-          address_invalid: Gli indirizzi non si trovano nell'indirizzario
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
     duplicate_keys:

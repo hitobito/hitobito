@@ -98,7 +98,6 @@ fr:
             name:
               must_be_unique: 'existe déjà'
         invoice:
-          recipient_address_or_email_required: 'L''adresse ou l''e-mail du destinataire doit être remplie'
           attributes:
             invoice_config:
               invalid: 'n''est pas valable ; adaptez les réglages avant de faire le calcul'
@@ -269,6 +268,22 @@ fr:
       role:
         one: Rôle
         other: Rôles
+      salutation:
+        one: Formule de politesse
+        other: Formules de politesse
+        default:
+          label: Bonjour [nom]
+          value:
+            m: Bonjour %{greeting_name}
+            w: Bonjour %{greeting_name}
+            other: Bonjour %{greeting_name}
+        available:
+          lieber_vorname:
+            label: Cher·Chère [prénom]
+            value:
+              m: Cher %{first_name}
+              w: Chère  %{first_name}
+              other: Cher %{first_name}
       service_token:
         one: API-Key
         other: API-Keys
@@ -315,6 +330,7 @@ fr:
         state: Statut
         read_at: Lu le
       person:
+        salutation: Formule de politesse
         first_name: Prénom
         last_name: Nom
         name: Nom
@@ -456,6 +472,12 @@ fr:
         qualification_kinds: Qualifié pour
         general_information: Informations générales
         application_conditions: Conditions d'inscription
+        created_at: Créé
+        updated_at: Modifié
+        deleted_at: Supprimé
+      event/kind_category:
+        label: Désignation
+        kinds: Types de cours
         created_at: Créé
         updated_at: Modifié
         deleted_at: Supprimé
@@ -647,6 +669,7 @@ fr:
       message/letter:
         body: Contenu
         heading: En-tête
+        salutation: Formule de politesse
       subscription:
         related_role_types: Rôles
       people_filter:
@@ -747,7 +770,6 @@ fr:
         contact: personne de contact
         contact_id: ' personne de contact '
         beneficiary: en faveur de
-        email: E-mail de l'expéditeur
         payee: Paiement à
         payment_slip: Bulletin de versement
         payment_slips:

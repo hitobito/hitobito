@@ -92,7 +92,6 @@ en:
             name:
               must_be_unique: 'already exists'
         invoice:
-          recipient_address_or_email_required: 'Recipient address or email must be filled in'
           attributes:
             invoice_config:
               invalid: 'is not valid; adjust the settings before creating an invoice'
@@ -737,7 +736,6 @@ en:
         contact: Contact
         contact_id: Conctact
         beneficiary: Beneficiary
-        email: Sender e-mail
         payee: Deposit for
         payment_slip: Payment slip
         payment_slips:

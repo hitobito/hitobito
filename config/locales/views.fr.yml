@@ -150,13 +150,15 @@ fr:
     button: 'Établir une facture / un rappel'
     set_state: 'Saisir le statut (facture/rappel)'
     send_mail: 'Saisir le statut (facture/rappel) et envoyer par mail'
+  dropdown/letter_with_invoice:
+    print: Imprimer
+    letters_with_invoice: Factures
   devise:
     failure:
       already_authenticated: 'Tu es déjà inscrit(e).'
       unauthenticated: 'Tu dois t''authentifier ou t''enregistrer avant de pouvoir continuer.'
       unconfirmed: 'Tu dois confirmer ton compte avant de pouvoir continuer.'
       last_attempt: 'Tu as encore une tentative avant que ton compte ne soit bloqué.'
-      locked: 'Ton compte est bloqué pour 10 minutes.'
       invalid: 'Données d''authentification incorrectes.'
       invalid_token: 'Le jeton d''authentification n''est pas valable.'
       timeout: 'Ta session est arrivée à échéance, merci de d''authentifier à nouveau.'
@@ -187,7 +189,6 @@ fr:
       confirmed: 'Merci de t''être enregistré(e) ! Tu es maintenant authentifié(e).'
     unlocks:
       send_instructions: 'Dans quelques minutes tu recevras un courriel t''expliquant comment débloquer ton compte.'
-      unlocked: 'Ton compte a été débloqué. Tu es maintenant authentifié(e).'
       send_paranoid_instructions: "Si ton adresse e-mail est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment débloquer ton compte."
     omniauth_callbacks:
       success: 'Ton authentification avec ton compte %{kind} est réussie.'
@@ -208,6 +209,8 @@ fr:
         subject: 'Instructions pour initialiser ton mot de passe'
       unlock_instructions:
         subject: 'Instructions pour débloquer ton compte'
+        body:
+          greeting: 'Bonjour %{name}!'
   errors:
     link_to_main: 'Page principale'
     '404':
@@ -464,10 +467,6 @@ fr:
       flash:
         create: L'adresse a été créée.
         reset: L'adresse a été actualisée.
-
-  mails:
-    manage: Gérer les mails
-
   filter_navigation/dropdown:
     additional_views: 'Autres vues'
   filter_navigation/people:
@@ -604,7 +603,6 @@ fr:
       payment: 'Paiement'
       payment_information_help: 'Apparaît sur chaque facture, mais peut être adapté pour une facture'
       address_help: 'Adresse de l''expéditeur qui apparaît sur la lettre'
-      email_help: 'Est utilisé comme mail de l''expéditeur au lieu de celui de l''utilisateur actuel'
       payee_help: 'apparaît sur le bulletin de versement'
       beneficiary_help: 'apparaît sur le bulletin de versement'
       account_number_example: 'exemple : 01-162-5'
@@ -737,6 +735,13 @@ fr:
       caption_delivery_report: 'Envoyer l''e-mail avec confirmation à l''expéditeur'
       help_preferred_labels: 'Si disponibles, les e-mails ne sont envoyés qu''aux adresses e-mails avec cette désignation. Ce faisant, les adresses e-mail qui ne sont pas marquées comme adresses d''envoi seront également utilisées.'
       help_mailchimp_sync: 'Les personnes abonnées peuvent être exportées vers la liste MailChimp. Cette action écrase la liste MailChimp et les contacts actuels sont effacés.'
+    imap_mails:
+      mailboxes:
+        failed: Échec de l'opération
+      headers:
+        subject: Objet
+        sender: Expéditeur
+        date: Date
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
     may_not_subscribe: 'Les abonnés <strong>ne peuvent pas</strong> s''inscrire / se désinscrire eux-même'
@@ -798,12 +803,6 @@ fr:
             one: "est créé pour des personnes."
             other: "%{model_class} est créé pour %{count} personnes."
         invalid:
-          message/letter:
-            one: "Plusieurs adresses sont incomplètes."
-            other: "%{count} adresses sont incomplètes."
-          message/letter_with_invoice:
-            one: "Plusieurs adresses sont incomplètes"
-            other: "%{count} adresses sont incomplètes."
           message/text_message:
             one: "Plusieurs numéros de téléphones sont manquants."
             other: "%{count} numéros de téléphones sont manquants."
@@ -823,7 +822,6 @@ fr:
     admin: 'Paramètres'
     admin/event_feed: 'Intégrer le calendrier'
     admin/oauth_authorizations: 'Autoriser OAuth'
-    mails: 'Mails'
     invoices: 'Factures'
   notes:
     new_note: Ajouter une note
@@ -986,7 +984,6 @@ fr:
         category_validation:
           email_primary_invalid: Adresse e-mail principale non valide
           email_additional_invalid: Adresse e-mail supplémentaire non valide
-          address_invalid: L'adresse ne figure pas dans le répertoire
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:

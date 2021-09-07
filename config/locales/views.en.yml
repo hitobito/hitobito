@@ -156,7 +156,6 @@ en:
       unauthenticated: 'You need to login or register before you can continue.'
       unconfirmed: 'You need to confirm your account before you can proceed.'
       last_attempt: 'You have one more try before your account is blocked.'
-      locked: 'Your account is locked for 10 minutes.'
       invalid: 'Invalid login credentials.'
       invalid_token: 'The logon token is invalid.'
       timeout: 'Your session has expired, please log in again.'
@@ -187,7 +186,6 @@ en:
       confirmed: 'Thank you for your registration. You''re now logged in.'
     unlocks:
       send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to unlock your account.'
-      unlocked: 'Your account has been unlocked. You''re now logged in.'
       send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to unlock your account."
     omniauth_callbacks:
       success: 'You have successfully logged in to your %{kind} account.'
@@ -460,7 +458,6 @@ en:
       flash:
         create: Address was created.
         reset: Address has been updated.
-
   filter_navigation/dropdown:
     additional_views: 'Further views'
   filter_navigation/people:
@@ -595,7 +592,6 @@ en:
       payment: 'Payment'
       payment_information_help: 'Listed in each invoice, can be adjusted per invoice'
       address_help: 'Sender address on letter'
-      email_help: 'Overwrites sender e-mail'
       payee_help: 'for the payment slip'
       beneficiary_help: 'for the payment slip'
       account_number_example: 'Example 01-162-5'
@@ -934,7 +930,6 @@ en:
         category_validation:
           email_primary_invalid: Main email is invalid
           email_additional_invalid: Further email is invalid
-          address_invalid: Address not in directory
   person/csv_imports:
     invalid_file: Please select a valid CSV file.
     duplicate_keys:
@@ -1029,7 +1024,6 @@ en:
       add_tag: Add tag...
       no_entry: (none)
     export_enqueued: 'Export is started in the background and downloaded after completion.'
-    export_email_needed: 'Email needed for export.'
     multiselect_actions:
       remove_role: Remove roles
       move_role: Move roles

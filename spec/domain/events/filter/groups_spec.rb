@@ -42,7 +42,7 @@ describe Events::Filter::Groups do
     let(:params) { {} } # dummy, not really needed
 
     it 'via primary group' do
-      expect(subject.send(:course_group_from_primary_layer).to_a).to eq [groups(:top_layer)]
+      expect(subject.send(:course_groups_from_primary_layer).to_a).to eq [groups(:top_layer)]
     end
 
     it 'via hierarchy' do
@@ -51,7 +51,7 @@ describe Events::Filter::Groups do
 
       other_filter = described_class.new(user, params, options, scope)
 
-      expect(other_filter.send(:course_group_from_hierarchy).map(&:id)).to eq groups(:bottom_layer_one).hierarchy.map(&:id)
+      expect(other_filter.send(:course_groups_from_hierarchy).map(&:id)).to eq groups(:bottom_layer_one).hierarchy.map(&:id)
     end
   end
 

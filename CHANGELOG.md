@@ -5,9 +5,6 @@
 *  Service Tokens haben show_full Berechtigung auf Personen (#1355)
 *  Variable Spendenaufrufe können mittels Rechnungsbrief erstellt werden (hitobito_die_mitte#181)
 *  Mail Client zum verwalten der Mails von Mailing Listen (#1320)
-
-## Version 1.26
-
 *  Überarbeitete Kursfilterung, mit wählbarem Datum statt nur jahresbasiert (#1153)
 
 ## Version 1.23

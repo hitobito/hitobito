@@ -13,3 +13,8 @@ p.assign_attributes(
     birthday: '1999-09-09'
 )
 p.save!(validate: false)
+
+# The stamper is needed for some wagon seeds, specifically some mail notification jobs
+# which mention the stamper (user that changed something) in the mail. During normal requests,
+# the stamper is set to current_user, but during seeding this would be null.
+Person.stamper = p

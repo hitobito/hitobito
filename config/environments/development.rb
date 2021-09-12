@@ -44,6 +44,7 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = {
     host: ENV.fetch('RAILS_HOST_NAME', 'localhost:3000'),
+    locale: nil,
   }
 
   # Print deprecation notices to the Rails logger.

@@ -147,7 +147,7 @@ Doorkeeper.configure do
   #
   # force_ssl_in_redirect_uri { |uri| uri.host != 'localhost' }
   force_ssl_in_redirect_uri do |uri|
-    development_env        = (Rails.env == 'development')
+    development_env        = Rails.env.development?
     integration_stage      = (ENV.fetch('RAILS_STAGE', 'production') == 'integration')
     request_from_localhost = (uri.host == 'localhost')
 

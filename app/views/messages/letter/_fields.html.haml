@@ -4,6 +4,14 @@
 / #  https://github.com/hitobito/hitobito.
 
 = f.labeled_input_field :subject
+= f.labeled_collection_select :shipping_method, message_letter_shipping_methods(entry), :first, :last
+= f.labeled(:pp_post) do
+  .input-prepend.input-append
+    %span.add-on
+      = 'P.P.'
+    = f.input_field :pp_post, :placeholder => 'CH-3030 Bern'
+    %span.add-on
+      = 'Post CH AG'
 = f.labeled_input_field :heading
 = f.labeled_collection_select :salutation, Salutation.all, :first, :last, include_blank: I18n.t('global.associations.no_entry')
 = f.labeled_rich_text_area :body, style: 'min-height: 250px'

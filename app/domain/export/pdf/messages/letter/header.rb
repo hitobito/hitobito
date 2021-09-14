@@ -9,6 +9,7 @@ class Export::Pdf::Messages::Letter
   class Header < Section
     LOGO_BOX = [200, 40].freeze
     ADDRESS_BOX = [200, 40].freeze
+    SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 18].freeze
 
     delegate :group, to: 'letter'
 
@@ -16,6 +17,8 @@ class Export::Pdf::Messages::Letter
       stamped :render_header
 
       offset_cursor_from_top 52.5.mm
+
+      stamped :render_shipping_info unless letter.own?
       render_address(build_address(recipient))
 
       stamped :render_subject if letter.subject.present?
@@ -56,9 +59,24 @@ class Export::Pdf::Messages::Letter
       end
     end
 
+    def render_shipping_info(width: SHIPPING_INFO_BOX.first, height: SHIPPING_INFO_BOX.second)
+      bounding_box([0, cursor], width: width, height: height) do
+        shipping_method = { normal: 'P.P.',
+                            priority: 'A-PRIORITY' }[letter.shipping_method]
+        pdf.move_up 2
+        text('Post CH AG', align: :center, size: 6.pt)
+        pdf.move_down 2
+        text("<u><font size='12pt'><b>#{shipping_method}</b></font>" \
+             "<font size='8pt'>#{letter.pp_post},</font>" \
+             "<font size='5pt'>#{group.layer_group.name}, #{group.layer_group.address}</font></u>",
+             inline_format: true)
+      end
+    end
+
     def build_address(recipient)
-      [recipient.full_name.to_s.squish,
-       recipient.address.to_s.squish,
+      [recipient.company? ? recipient.company_name : nil,
+       recipient.full_name.to_s.squish,
+       recipient.address.to_s,
        [recipient.zip_code, recipient.town].compact.join(' ').squish].compact.join("\n")
     end
 

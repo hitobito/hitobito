@@ -11,10 +11,12 @@ describe Export::Pdf::Messages::Letter::Header do
   let(:options)    { {} }
   let(:top_group)  { groups(:top_group) }
   let(:top_leader) { people(:top_leader) }
-  let(:letter)     { Message::Letter.new(body: "simple text", group: top_group, heading: true) }
+  let(:letter)     { Message::Letter.new(body: "simple text", group: top_group, heading: true,
+                                         shipping_method: 'normal', pp_post: 'CH-3030 Bern') }
   let(:pdf)        { Prawn::Document.new }
   let(:analyzer) { PDF::Inspector::Text.analyze(pdf.render) }
   let(:image)    { fixture_file_upload('images/logo.png') }
+  let(:shipping_info_with_position) { [[120, 676, 'Post CH AG'], [36, 665, 'CH-3030 Bern,'], [90, 665, 'Top,']] }
 
   subject { described_class.new(pdf, letter, options) }
 
@@ -61,12 +63,12 @@ describe Export::Pdf::Messages::Letter::Header do
 
     it "is present" do
       subject.render(top_leader)
-      expect(text_with_position).to eq [
+      expect(text_with_position_without_shipping_info).to eq [
         [36, 747, "TopGroup"],
         [36, 734, "Belpstrasse 37"],
         [36, 720, "Bern"],
-        [36, 669, "Top Leader"],
-        [36, 642, "Supertown"]
+        [36, 651, "Top Leader"],
+        [36, 624, "Supertown"]
       ]
     end
 
@@ -74,12 +76,12 @@ describe Export::Pdf::Messages::Letter::Header do
       assign_image(top_group)
       subject.render(top_leader)
 
-      expect(text_with_position).to eq [
+      expect(text_with_position_without_shipping_info).to eq [
         [36, 747, "TopGroup"],
         [36, 734, "Belpstrasse 37"],
         [36, 720, "Bern"],
-        [36, 669, "Top Leader"],
-        [36, 642, "Supertown"]
+        [36, 651, "Top Leader"],
+        [36, 624, "Supertown"]
       ]
     end
 
@@ -91,12 +93,12 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(top_leader)
         pdf.start_new_page
         subject.render(top_leader)
-        expect(stamps.keys).to eq [:render_header]
-        expect(text_with_position).to eq [
-          [36, 669, "Top Leader"],
-          [36, 642, "Supertown"],
-          [36, 669, "Top Leader"],
-          [36, 642, "Supertown"]
+        expect(stamps.keys).to eq [:render_header, :render_shipping_info]
+        expect(text_with_position_without_shipping_info).to eq [
+          [36, 651, "Top Leader"],
+          [36, 624, "Supertown"],
+          [36, 651, "Top Leader"],
+          [36, 624, "Supertown"]
         ]
       end
 
@@ -105,12 +107,12 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(top_leader)
         pdf.start_new_page
         subject.render(top_leader)
-        expect(stamps.keys).to eq [:render_header]
-        expect(text_with_position).to eq [
-          [36, 669, "Top Leader"],
-          [36, 642, "Supertown"],
-          [36, 669, "Top Leader"],
-          [36, 642, "Supertown"]
+        expect(stamps.keys).to eq [:render_header, :render_shipping_info]
+        expect(text_with_position_without_shipping_info).to eq [
+          [36, 651, "Top Leader"],
+          [36, 624, "Supertown"],
+          [36, 651, "Top Leader"],
+          [36, 624, "Supertown"]
         ]
       end
     end
@@ -120,9 +122,9 @@ describe Export::Pdf::Messages::Letter::Header do
     it "is present" do
       subject.render(top_leader)
 
-      expect(text_with_position).to eq [
-        [36, 669, "Top Leader"],
-        [36, 642, "Supertown"]
+      expect(text_with_position_without_shipping_info).to eq [
+        [36, 651, "Top Leader"],
+        [36, 624, "Supertown"]
       ]
     end
 
@@ -130,9 +132,9 @@ describe Export::Pdf::Messages::Letter::Header do
       assign_image(top_group)
       subject.render(top_leader)
 
-      expect(text_with_position).to eq [
-        [36, 669, "Top Leader"],
-        [36, 642, "Supertown"]
+      expect(text_with_position_without_shipping_info).to eq [
+        [36, 651, "Top Leader"],
+        [36, 624, "Supertown"]
       ]
     end
 
@@ -140,8 +142,8 @@ describe Export::Pdf::Messages::Letter::Header do
       top_leader.town = nil
       subject.render(top_leader)
 
-      expect(text_with_position).to eq [
-        [36, 669, "Top Leader"],
+      expect(text_with_position_without_shipping_info).to eq [
+        [36, 651, "Top Leader"],
       ]
     end
 
@@ -151,7 +153,17 @@ describe Export::Pdf::Messages::Letter::Header do
       top_leader.town = nil
       subject.render(top_leader)
 
-      expect(text_with_position).to be_empty
+      expect(text_with_position_without_shipping_info).to be_empty
+    end
+  end
+
+  describe "shipping_info" do
+    it "is present" do
+      subject.render(top_leader)
+
+      shipping_info_with_position.each do |shipping_info|
+        expect(text_with_position).to include(shipping_info)
+      end
     end
   end
 
@@ -159,5 +171,9 @@ describe Export::Pdf::Messages::Letter::Header do
     analyzer.positions.each_with_index.collect do |p, i|
       p.collect(&:round) + [analyzer.show_text[i]]
     end
+  end
+
+  def text_with_position_without_shipping_info
+    text_with_position - shipping_info_with_position
   end
 end

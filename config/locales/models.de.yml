@@ -767,6 +767,12 @@ de:
         body: Inhalt
         heading: Briefkopf
         salutation: Anrede
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
+        shipping_methods:
+          own: Eigener Versand
+          normal: B-Post
+          priority: A-Post
 
       subscription:
         related_role_types: Rollen

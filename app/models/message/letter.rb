@@ -36,6 +36,10 @@ class Message::Letter < Message
   has_rich_text :body
   self.icon = :'envelope-open-text'
 
+  SHIPPING_METHODS = %w(own normal priority).freeze
+  i18n_enum :shipping_method, SHIPPING_METHODS, scopes: true, queries: true
+  validates :shipping_method, inclusion: { in: SHIPPING_METHODS }
+
   validates_presence_of :body
 
   self.duplicatable_attrs << 'body' << 'heading' << 'salutation'

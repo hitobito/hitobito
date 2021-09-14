@@ -8,7 +8,7 @@
     - if entry.text_message?
       = render_attrs entry, :text
     - elsif entry.letter? || entry.invoice?
-      = render_attrs entry, :subject, :heading, :salutation
+      = render_attrs entry, :subject, :heading, :salutation, :shipping_method, :pp_post
     - if entry.letter?
       = render_attrs entry, :body
 

@@ -87,6 +87,16 @@ module MessagesHelper
     Salutation.all[message.salutation] || I18n.t('global.associations.no_entry')
   end
 
+  def format_message_shipping_method(message)
+    message.shipping_method_label
+  end
+
+  def message_letter_shipping_methods(message)
+    Message::Letter::SHIPPING_METHODS.map do |shipping_method|
+      [shipping_method, message.shipping_method_label(shipping_method)]
+    end
+  end
+
   private
 
   def message_invalid_recipient_info(message)

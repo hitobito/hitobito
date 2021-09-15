@@ -2,7 +2,7 @@
 
 ## Overview
 
-It is possible to receive invoice data from a specified bank using the [Ebics Standard](https://www.ebics.org/en/home)
+It is possible to receive invoice payment data from a specified bank using the [Ebics Standard](https://www.ebics.org/en/home)
 
 ## Gem
 
@@ -44,7 +44,7 @@ These are the order types implemented by the `app/domain/payment_provider.rb` cl
 - HIA (submits certificates to establish transactions)
 - HPB (receives bank public keys and matches them to encryption_hash & authentication_hash in `config/settings.yml`)
 - XTC (uploads csv data)
-- Z54 (receives invoice data in camt.54 format)
+- Z54 (receives invoice payment data in camt.54 format)
 
 IMPORTANT: The order types have to be supported by the payment provider to work!
 

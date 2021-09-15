@@ -41,7 +41,7 @@ class PaymentProvider
     bank_x, bank_e = client.HPB
 
     check_bank_public_keys!(bank_x, bank_e)
-    @config.update(status: :registered)
+    @config.update!(status: :registered)
 
     true
   end
@@ -94,7 +94,11 @@ class PaymentProvider
   end
 
   def correct_public_key?(epics_key, hash)
-    hash.gsub(' ', '').downcase == Base64.decode64(epics_key.public_digest).unpack('H*').join
+    hash.gsub(' ', '').downcase == decoded_key_digest(epics_key)
+  end
+
+  def decoded_key_digest(key)
+    Base64.decode64(key.public_digest).unpack('H*').join
   end
 
   def xml_from_order_data(order_data)

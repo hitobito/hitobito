@@ -24,7 +24,7 @@ import 'regenerator-runtime/runtime';
 import 'jquery';
 import Rails from 'jquery-ujs';
 // Rails.start();
-import 'moment';
+import 'moment'; // used by events/date_period_validator.js.coffee
 import 'jquery.turbolinks/vendor/assets/javascripts/jquery.turbolinks';
 
 // jQuery UI

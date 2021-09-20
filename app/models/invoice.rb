@@ -170,7 +170,10 @@ class Invoice < ActiveRecord::Base
   end
 
   def filename(extension = 'pdf')
-    format('%s-%s.%s', self.class.model_name.human, sequence_number, extension)
+    format('%<type>s-%<number>s.%<ext>s',
+           type: self.class.model_name.human,
+           number: sequence_number,
+           ext: extension)
   end
 
   def invoice_config

@@ -211,11 +211,11 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def role_type
-    role_type = params[:event_role] && params[:event_role][:type].presence
+    role_type = params_role_type
     role_type ||= event.class.participant_types.first.sti_name
 
     type = event.class.find_role_type!(role_type)
-    unless type.participant?
+    unless invited? || type.participant?
       raise ActiveRecord::RecordNotFound, "No participant role '#{role_type}' found"
     end
 
@@ -224,6 +224,16 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def set_active
     entry.active = !entry.applying_participant? || params[:for_someone_else].present?
+  end
+
+  def invited?
+    Event::Invitation.exists?(person: current_user,
+                              event: event,
+                              participation_type: params_role_type)
+  end
+
+  def params_role_type
+    params[:event_role] && params[:event_role][:type].presence
   end
 
   def assign_attributes

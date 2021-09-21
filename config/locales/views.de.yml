@@ -424,6 +424,11 @@ de:
       signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
     attachments:
       add: "hinzufügen"
+    banner_open_invitation:
+      explanation: Du wurdest zu diesem Anlass eingeladen.
+      buttons:
+        accept: Anmelden
+        decline: Abmelden
     default_description_link:
       insert_general_information: Standardbeschreibung einsetzen
     form:
@@ -1314,6 +1319,14 @@ de:
     destroy:
       flash:
         success: Anmeldung wurde erfolgreich gelöscht.
+
+  event_invitations:
+    create:
+      flash:
+        success: 'Einladung für %{recipient_name} als %{participation_type} wurde erstellt.'
+    decline:
+      flash:
+        success: Einladung wurde abgelehnt.
 
   people_filters:
     form:

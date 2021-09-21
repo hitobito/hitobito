@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if !@user_participation && event_user_application_possible?(entry)
+- if !@user_participation && !@open_invitation && event_user_application_possible?(entry)
   = Dropdown::Event::ParticipantAdd.for_user(self, @group, entry, current_user)
 = button_action_edit if can?(:update, entry)
 = button_action_destroy if can?(:destroy, entry)

@@ -45,6 +45,12 @@ module Sheet
             can_view_qualifications?(view, event)
         end)
 
+    tab 'activerecord.models.event/invitation.other',
+        :group_event_invitations_path,
+        if: (lambda do |view, _group, event|
+          view.can?(:index_invitations, event)
+        end)
+
     def link_url
       view.group_event_path(parent_sheet.entry.id, entry.id)
     end

@@ -134,6 +134,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                          through: :event_participations,
                          source: :roles
   has_many :events, through: :event_participations
+  has_many :event_invitations, class_name: 'Event::Invitation', dependent: :destroy
 
   has_many :event_responsibilities, class_name: 'Event',
                                     foreign_key: :contact_id,

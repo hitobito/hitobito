@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_24_205310) do
+ActiveRecord::Schema.define(version: 2021_09_29_064827) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -158,6 +158,18 @@ ActiveRecord::Schema.define(version: 2021_09_24_205310) do
     t.string "location"
     t.index ["event_id", "start_at"], name: "index_event_dates_on_event_id_and_start_at"
     t.index ["event_id"], name: "index_event_dates_on_event_id"
+  end
+
+  create_table "event_invitations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "participation_type", null: false
+    t.datetime "declined_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "event_id", null: false
+    t.bigint "person_id", null: false
+    t.index ["event_id", "person_id"], name: "index_event_invitations_on_event_id_and_person_id", unique: true
+    t.index ["event_id"], name: "index_event_invitations_on_event_id"
+    t.index ["person_id"], name: "index_event_invitations_on_person_id"
   end
 
   create_table "event_kind_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

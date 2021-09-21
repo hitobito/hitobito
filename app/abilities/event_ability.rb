@@ -20,20 +20,22 @@ class EventAbility < AbilityDsl::Base
     permission(:any).may(:qualify, :qualifications_read).for_qualify_event
 
     permission(:group_full)
-      .may(:index_participations, :create, :update, :destroy, :show)
+      .may(:index_participations, :index_invitations, :create, :update, :destroy, :show)
       .in_same_group
 
     permission(:group_and_below_full).
-      may(:index_participations, :create, :update, :destroy, :show).
+      may(:index_participations, :index_invitations, :create, :update, :destroy, :show).
       in_same_group_or_below
 
     permission(:layer_full).
-      may(:index_participations, :update, :create, :destroy,
-          :application_market, :qualify, :qualifications_read, :show).
+      may(:index_participations, :index_invitations, :update,
+          :create, :destroy, :application_market,
+          :qualify, :qualifications_read, :show).
       in_same_layer
 
     permission(:layer_and_below_full).
-      may(:index_participations, :update, :show).in_same_layer_or_below
+      may(:index_participations, :index_invitations, :update, :show)
+      .in_same_layer_or_below
     permission(:layer_and_below_full).
       may(:create, :destroy, :application_market, :qualify, :qualifications_read).in_same_layer
 

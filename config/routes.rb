@@ -181,6 +181,12 @@ Hitobito::Application.routes.draw do
             end
           end
 
+          resources :invitations, only: [:index, :new, :create, :edit, :destroy] do
+            member do
+              post 'decline' => 'invitations/decline#create'
+            end
+          end
+
           resources :applications, only: [] do
             member do
               put    :approve

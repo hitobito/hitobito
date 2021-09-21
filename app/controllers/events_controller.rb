@@ -47,6 +47,7 @@ class EventsController < CrudController
   prepend_before_action :parent
 
   before_render_show :load_user_participation
+  before_render_show :load_open_invitation
   before_render_form :load_sister_groups
   before_render_form :load_kinds
 
@@ -138,7 +139,16 @@ class EventsController < CrudController
 
   def load_user_participation
     if current_user
-      @user_participation = current_user.event_participations.where(event_id: entry.id).first
+      @user_participation = current_user.event_participations.find_by(event_id: entry.id)
+    end
+  end
+
+  def load_open_invitation
+    if current_user
+      invitation = current_user.event_invitations.find_by(event_id: entry.id)
+      if invitation.present? && invitation.open?
+        @open_invitation = invitation
+      end
     end
   end
 

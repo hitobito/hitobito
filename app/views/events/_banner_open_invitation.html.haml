@@ -1,0 +1,16 @@
+-#  Copyright (c) 2021, CEVI ZH SH GL. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+.alert.alert-warning
+  = t('.explanation')
+  .d-inline-block.offset-sm-1
+    = form_with method: :post, url: decline_group_event_invitation_path(@group, entry, @open_invitation), class: 'no-margin' do |f|
+      .btn-group
+        = link_to(contact_data_group_event_participations_path(@group, entry, event_role: { type: @open_invitation.participation_type }), class: 'btn', role: 'button') do
+          = icon(:check)
+          = t('.buttons.accept') 
+        = button_tag type: :submit , class: 'btn' do
+          = icon(:times)
+          = t('.buttons.decline')

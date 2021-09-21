@@ -1,0 +1,10 @@
+-#  Copyright (c) 2021, CEVI ZH SH GL. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= entry_form(entry, submit_label: t('global.button.save')) do |f|
+
+  = f.labeled_person_field(:person)
+  = f.hidden_field(:event_id)
+  = f.hidden_field(:participation_type, value: params[:event_role]['type'])

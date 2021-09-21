@@ -127,6 +127,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_many :admin_questions, -> { where(admin: true) },
            class_name: 'Event::Question', inverse_of: :event
 
+  has_many :invitations, dependent: :destroy
+
   has_many :participations, dependent: :destroy
   has_many :people, through: :participations
 

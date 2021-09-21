@@ -16,6 +16,7 @@ class Ability
   store.register AssignmentAbility,
                  EventAbility,
                  Event::ApplicationAbility,
+                 Event::InvitationAbility,
                  Event::ParticipationAbility,
                  Event::ParticipationContactDataAbility,
                  Event::RoleAbility,

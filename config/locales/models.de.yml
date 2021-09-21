@@ -180,6 +180,9 @@ de:
       event/kind_category:
         one: Kurskategorie
         other: Kurskategorien
+      event/invitation:
+        one: Einladung
+        other: Einladungen
       event/role:
         one: Anlass Rolle
         other: Anlass Rollen
@@ -550,6 +553,16 @@ de:
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
+
+      event/invitation:
+        participation_type: Teilnahmerolle
+        created_at: Erstellungsdatum
+        declined_at: Ablehnungsdatum
+        status: Status
+        statuses:
+          open: Eingeladen
+          accepted: Angenommen
+          declined: Abgelehnt
 
       event/participation:
         person_id: Person

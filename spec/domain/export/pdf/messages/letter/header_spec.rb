@@ -16,7 +16,7 @@ describe Export::Pdf::Messages::Letter::Header do
   let(:pdf)        { Prawn::Document.new }
   let(:analyzer) { PDF::Inspector::Text.analyze(pdf.render) }
   let(:image)    { fixture_file_upload('images/logo.png') }
-  let(:shipping_info_with_position) { [[120, 676, 'Post CH AG'], [36, 665, 'CH-3030 Bern,'], [90, 665, 'Top,']] }
+  let(:shipping_info_with_position) { [[36, 662, "P.P. "], [120, 676, 'Post CH AG'], [59, 662, 'CH-3030 Bern, '], [115, 662, 'Top,']] }
 
   subject { described_class.new(pdf, letter, options) }
 
@@ -67,8 +67,8 @@ describe Export::Pdf::Messages::Letter::Header do
         [36, 747, "TopGroup"],
         [36, 734, "Belpstrasse 37"],
         [36, 720, "Bern"],
-        [36, 651, "Top Leader"],
-        [36, 624, "Supertown"]
+        [36, 649, "Top Leader"],
+        [36, 622, "Supertown"]
       ]
     end
 
@@ -80,8 +80,8 @@ describe Export::Pdf::Messages::Letter::Header do
         [36, 747, "TopGroup"],
         [36, 734, "Belpstrasse 37"],
         [36, 720, "Bern"],
-        [36, 651, "Top Leader"],
-        [36, 624, "Supertown"]
+        [36, 649, "Top Leader"],
+        [36, 622, "Supertown"]
       ]
     end
 
@@ -95,10 +95,10 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(top_leader)
         expect(stamps.keys).to eq [:render_header, :render_shipping_info]
         expect(text_with_position_without_shipping_info).to eq [
-          [36, 651, "Top Leader"],
-          [36, 624, "Supertown"],
-          [36, 651, "Top Leader"],
-          [36, 624, "Supertown"]
+          [36, 649, "Top Leader"],
+          [36, 622, "Supertown"],
+          [36, 649, "Top Leader"],
+          [36, 622, "Supertown"]
         ]
       end
 
@@ -109,10 +109,10 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(top_leader)
         expect(stamps.keys).to eq [:render_header, :render_shipping_info]
         expect(text_with_position_without_shipping_info).to eq [
-          [36, 651, "Top Leader"],
-          [36, 624, "Supertown"],
-          [36, 651, "Top Leader"],
-          [36, 624, "Supertown"]
+          [36, 649, "Top Leader"],
+          [36, 622, "Supertown"],
+          [36, 649, "Top Leader"],
+          [36, 622, "Supertown"]
         ]
       end
     end
@@ -123,8 +123,8 @@ describe Export::Pdf::Messages::Letter::Header do
       subject.render(top_leader)
 
       expect(text_with_position_without_shipping_info).to eq [
-        [36, 651, "Top Leader"],
-        [36, 624, "Supertown"]
+        [36, 649, "Top Leader"],
+        [36, 622, "Supertown"]
       ]
     end
 
@@ -133,8 +133,8 @@ describe Export::Pdf::Messages::Letter::Header do
       subject.render(top_leader)
 
       expect(text_with_position_without_shipping_info).to eq [
-        [36, 651, "Top Leader"],
-        [36, 624, "Supertown"]
+        [36, 649, "Top Leader"],
+        [36, 622, "Supertown"]
       ]
     end
 
@@ -143,7 +143,7 @@ describe Export::Pdf::Messages::Letter::Header do
       subject.render(top_leader)
 
       expect(text_with_position_without_shipping_info).to eq [
-        [36, 651, "Top Leader"],
+        [36, 649, "Top Leader"],
       ]
     end
 

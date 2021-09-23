@@ -281,7 +281,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   delegate :participant_types, :find_role_type!, to: :singleton_class
 
   def to_s(_format = :default)
-    name
+    name || "#{self.class.model_name.human} #{label_detail}"
   end
 
   def label_detail

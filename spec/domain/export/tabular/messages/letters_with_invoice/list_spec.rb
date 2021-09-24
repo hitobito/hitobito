@@ -22,7 +22,7 @@ describe Export::Tabular::Messages::LettersWithInvoice::List do
 
     its(:labels) do
       should == ['Referenz Nummer', 'Empfänger E-Mail', 'Empfänger Adresse', 'Referenz',
-                 'Total inkl. MwSt.', 'Person-ID', 'Vorname', 'Nachname', 'Firmenname', 'Firma',
+                 'Total inkl. MwSt.', 'Id', 'Vorname', 'Nachname', 'Firmenname', 'Firma',
                  'Haupt-E-Mail', 'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht',
                  'Geburtstag', 'Anrede', 'Titel', 'Korrespondenzsprache', 'Haushalts-ID']
     end

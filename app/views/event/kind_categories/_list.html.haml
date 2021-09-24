@@ -5,6 +5,7 @@
 
 = crud_table do |t|
   - t.sortable_attrs :label
+  - t.attrs :order
   - render_extensions 'list_attrs', locals: { t: t }
   - t.sortable_attrs :kinds, :updated_at
   - add_table_actions(t)

@@ -546,6 +546,7 @@ de:
 
       event/kind_category:
         label: Bezeichnung
+        order: Sortierschlüssel
         kinds: Kursarten
         created_at: Erstellt
         updated_at: Geändert

@@ -20,7 +20,7 @@ class Event::KindCategory < ActiveRecord::Base
   # explicitly define validations for translated attributes
   validates :label, presence: true
   validates :label, length: { allow_nil: true, maximum: 255 }
-  validates :order, numericality: { only_integer: true }
+  validates :order, numericality: { only_integer: true }, allow_nil: true
 
   ### INSTANCE METHODS
 

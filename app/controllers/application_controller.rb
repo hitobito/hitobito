@@ -78,8 +78,8 @@ class ApplicationController < ActionController::Base
                            Ability.new(current_user)
                          elsif current_service_token
                            TokenAbility.new(current_service_token)
-                         else
-                           DoorkeeperTokenAbility.new(doorkeeper_token)
+                         elsif current_oauth_token
+                           DoorkeeperTokenAbility.new(current_oauth_token)
                          end
   end
 

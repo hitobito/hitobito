@@ -296,6 +296,7 @@ Hitobito::Application.routes.draw do
 
     devise_for :service_tokens, only: [:sessions]
     devise_for :people, skip: [:registrations], path: "users"
+    devise_for :oauth_tokens, skip: :all, class_name: 'Oauth::AccessToken'
     as :person do
       get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
       put 'users' => 'devise/registrations#update', :as => 'person_registration'

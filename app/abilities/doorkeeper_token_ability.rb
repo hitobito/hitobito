@@ -22,9 +22,9 @@ class DoorkeeperTokenAbility
   private
 
   def define_token_abilities
-    define_group_abilities if token.acceptable?(:groups)
-    define_event_abilities if token.acceptable?(:events)
-    define_person_abilities if token.acceptable?(:people)
+    define_group_abilities if (token.acceptable?(:groups) || token.acceptable?(:api))
+    define_event_abilities if (token.acceptable?(:events) || token.acceptable?(:api))
+    define_person_abilities if (token.acceptable?(:people) || token.acceptable?(:api))
   end
 
   def define_group_abilities

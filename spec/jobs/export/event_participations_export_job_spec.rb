@@ -17,7 +17,7 @@ describe Export::EventParticipationsExportJob do
   let(:event)                      { participation.event }
 
   let(:params)                     { { filter: 'all' } }
-  let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, user, params) }
+  let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, params) }
   let(:filepath)      { AsyncDownloadFile::DIRECTORY.join('event_participation_export') }
 
   before do

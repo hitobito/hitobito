@@ -941,10 +941,12 @@ describe PeopleController do
   end
 
   context 'with valid oauth token' do
-    let(:token) { instance_double('Oauth::AccessToken', acceptable?: true, accessible?: true, person: top_leader) }
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { true }
+      allow(token).to receive(:accessible?) { true }
     end
 
     it 'shows page' do
@@ -984,10 +986,12 @@ describe PeopleController do
   end
 
   context 'without acceptable oauth token (required scope is missing)' do
-    let(:token) { instance_double('Oauth::AccessToken', acceptable?: false, accessible?: true, person: top_leader) }
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { false }
+      allow(token).to receive(:accessible?) { true }
     end
 
     it 'fails with HTTP 403 (forbidden) when trying to show page' do
@@ -1026,14 +1030,12 @@ describe PeopleController do
   end
 
   context 'with invalid oauth token (expired or revoked)' do
-    let(:token) {
-      instance_double(
-        'Oauth::AccessToken', :acceptable? => true,
-        :accessible? => false, :resource_owner_id => top_leader.id)
-    }
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { true }
+      allow(token).to receive(:accessible?) { false }
     end
 
     it 'redirects to login when trying to show page' do

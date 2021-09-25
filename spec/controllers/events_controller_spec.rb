@@ -485,14 +485,12 @@ describe EventsController do
   describe 'with valid OAuth token' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) do
-      instance_double('Oauth::AccessToken', acceptable?: true,
-                                            accessible?: true,
-                                            person: people(:top_leader))
-    end
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { true }
+      allow(token).to receive(:accessible?) { true }
     end
 
     it 'GET index indexes page' do
@@ -509,14 +507,12 @@ describe EventsController do
   describe 'with invalid OAuth token (expired or revoked)' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) do
-      instance_double('Oauth::AccessToken', acceptable?: true,
-                                            accessible?: false,
-                                            person: people(:top_leader))
-    end
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { true }
+      allow(token).to receive(:accessible?) { false }
     end
 
     it 'GET index redirects to login' do
@@ -533,14 +529,12 @@ describe EventsController do
   describe 'without acceptable OAuth token (missing scope)' do
     let(:event) { events(:top_event) }
     let(:group) { groups(:top_layer) }
-    let(:token) do
-      instance_double('Oauth::AccessToken', acceptable?: false,
-                                            accessible?: true,
-                                            person: people(:top_leader))
-    end
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { false }
+      allow(token).to receive(:accessible?) { true }
     end
 
     it 'GET index fails with HTTP 403 (forbidden)' do
@@ -571,14 +565,12 @@ describe EventsController do
     end
 
     context 'oauth' do
-      let(:token) do
-        instance_double('Oauth::AccessToken', acceptable?: true,
-                                              accessible?: true,
-                                              person: people(:top_leader))
-      end
+      let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
       before do
         allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+        allow(token).to receive(:acceptable?) { true }
+        allow(token).to receive(:accessible?) { true }
       end
 
       it 'in current year' do

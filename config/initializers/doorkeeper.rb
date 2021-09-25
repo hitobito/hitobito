@@ -93,7 +93,7 @@ Doorkeeper.configure do
   # (disabled by default)
   #
   default_scopes :email
-  optional_scopes :name, :with_roles, :openid, :api
+  optional_scopes :name, :with_roles, :openid, :api, :events, :groups, :people
 
   enforce_configured_scopes
 

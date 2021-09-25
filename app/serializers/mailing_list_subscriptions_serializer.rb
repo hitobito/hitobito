@@ -13,21 +13,11 @@ class MailingListSubscriptionsSerializer < ApplicationSerializer
   schema do
     json_api_properties
 
-    #map_properties :id
     map_properties :id,
                :mailing_list_id,
                :subscriber_type,
                :subscriber_id,
-               :excluded
-
-    #TODO: write Serializer?
-    #entities :subscription_tags, item.subscription_tags, SubscriptionTagSerializer
-
-  #has_many :related_role_types, as: :relation, dependent: :destroy
-
-    #entities :subscriptions,
-    #         item.subscriptions,
-    #         SubscriptionSerializer,
-    #         mailing_list: item
+               :excluded,
+               :related_role_types
   end
 end

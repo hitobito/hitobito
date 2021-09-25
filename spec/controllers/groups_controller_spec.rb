@@ -170,7 +170,7 @@ describe GroupsController do
     end
   end
 
-  describe 'with valid OAuth token' do
+  describe 'with valid oauth token' do
     let(:group) { groups(:top_layer) }
     let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
@@ -186,7 +186,7 @@ describe GroupsController do
     end
   end
 
-  describe 'with invalid OAuth token (expired or revoked)' do
+  describe 'with invalid oauth token (expired or revoked)' do
     let(:group) { groups(:top_layer) }
     let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
@@ -202,7 +202,7 @@ describe GroupsController do
     end
   end
 
-  describe 'without acceptable OAuth token (missing scope)' do
+  describe 'without acceptable oauth token (missing scope)' do
     let(:group) { groups(:top_layer) }
     let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 

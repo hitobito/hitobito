@@ -1096,10 +1096,7 @@ fr:
             Les personnes suivantes vont être importées avec le <strong>rôle %{role}</strong>
             dans le <strong>groupe %{group}</strong>.
     add_request_mailer:
-      ask_person_to_add:
-        request_link: Répondre à la requête
-      ask_responsibles:
-        request_link: 'Répondre à la requête '
+      request_link: Répondre à la requête
     subscriptions:
       index:
         my_subscriptions: Mes abonnements

@@ -1099,10 +1099,7 @@ it:
             Le persone seguenti sono importate con il ruolo<strong>%{role}</strong>
             nel gruppo<strong> %{group}</strong>.
     add_request_mailer:
-      ask_person_to_add:
-        request_link: Rispondere alla richiesta
-      ask_responsibles:
-        request_link: Rispondere alla richiesta
+      request_link: Rispondere alla richiesta
     subscriptions:
       index:
         my_subscriptions: I miei abbonamenti

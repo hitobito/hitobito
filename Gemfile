@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '= 6.0.3.4'
+gem 'rails', '= 6.1.4.1'
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on'
@@ -77,7 +77,7 @@ gem 'sqlite3' # required for asset generation
 gem 'thinking-sphinx'
 gem 'truemail'
 gem 'validates_by_schema'
-gem 'validates_timeliness', '< 4.0'
+gem 'validates_timeliness'
 gem 'vcard'
 gem 'wagons', '0.6.1'
 gem 'webpacker'
@@ -92,7 +92,7 @@ group :development, :test do
   gem 'parallel_tests'
   gem 'pry-byebug'
   gem 'pry-doc'
-  gem 'rspec-rails', '4.0.0.beta3' # see https://github.com/rspec/rspec-rails/issues/2177
+  gem 'rspec-rails', '~> 5.0'
 end
 
 group :development do

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2014 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -31,7 +31,11 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
         update_attributes
       end
 
-      it { is_expected.to match(/^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>von <a href=".+">#{person.to_s}<\/a>$/) }
+      it do
+        is_expected.to match(
+          /^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>von <a href=".+">#{person}<\/a>$/
+        )
+      end
     end
   end
 
@@ -52,7 +56,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
       context 'and permission to link' do
         it do
           expect(decorator.h).to receive(:can?).with(:show, person).and_return(true)
-          is_expected.to match(/^<a href=".+">#{person.to_s}<\/a>$/)
+          is_expected.to match(/^<a href=".+">#{person}<\/a>$/)
         end
       end
 
@@ -149,7 +153,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
 
     it 'formats according to column info' do
-      now = Time.local(2014, 6, 21, 18)
+      now = Time.zone.local(2014, 6, 21, 18)
       string = decorator.attribute_change(:updated_at, nil, now)
       expect(string).to eq 'Geändert wurde auf <i>21.06.2014 18:00</i> gesetzt.'
     end
@@ -190,7 +194,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
       role = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', person: person,
                                                              group: groups(:bottom_layer_one))
       role.destroy!
-      hide_const("Group::BottomLayer::Leader")
+      hide_const('Group::BottomLayer::Leader')
       is_expected.to eq('Rolle <i>Group::BottomLayer::Leader</i> wurde gelöscht.')
     end
   end

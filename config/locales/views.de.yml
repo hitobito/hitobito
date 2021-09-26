@@ -1230,10 +1230,7 @@ de:
           in die <strong>Gruppe %{group}</strong> importiert.
 
     add_request_mailer:
-      ask_person_to_add:
-        request_link: Anfrage beantworten
-      ask_responsibles:
-        request_link: Anfrage beantworten
+      request_link: Anfrage beantworten
 
     subscriptions:
       index:

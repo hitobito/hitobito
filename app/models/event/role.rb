@@ -112,8 +112,8 @@ class Event::Role < ActiveRecord::Base
   def validate_new_participation
     if participation.validate_associated_records_for_roles != true
       unless participation.valid?
-        participation.errors.each do |attr, msg|
-          errors.add(attr, msg)
+        participation.errors.each do |error|
+          errors.add(error.attribute, error.message)
         end
       end
     end

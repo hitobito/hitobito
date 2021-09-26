@@ -129,8 +129,8 @@ class RolesController < CrudController
 
   def copy_errors(new_role)
     entry.attributes = new_role.attributes.except('id')
-    new_role.errors.each do |key, value|
-      entry.errors.add(key, value)
+    new_role.errors.each do |error|
+      entry.errors.add(error.attribute, error.message)
     end
   end
 

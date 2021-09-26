@@ -2,7 +2,7 @@
 :plain
   var el = #{id ? "'##{id}'".html_safe : "$('body').data('popover')"};
   $($('body').data('popover')).popover('destroy');
-  $(el).popover({content: '#{j(render('popover.html', group: entry.group))}',
+  $(el).popover({content: '#{j(render('modal', group: entry.group))}',
                  title: "#{t(title_key, person: entry.person)}",
                  container: 'body',
                  placement: 'bottom',

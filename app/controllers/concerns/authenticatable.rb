@@ -34,7 +34,8 @@ module Authenticatable
   end
 
   def oauth_token_user
-    Person.find(token_authentication.oauth_token.resource_owner_id) if current_ability.is_a?(DoorkeeperTokenAbility)
+    Person.find(token_authentication.oauth_token.resource_owner_id) if
+      current_ability.is_a?(DoorkeeperTokenAbility)
   end
 
   def origin_user

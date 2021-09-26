@@ -10,7 +10,8 @@ class ApplicationDecorator < Draper::Decorator
 
   delegate_all
   delegate :to_s, to: :model
-  delegate :can?, :content_tag, :safe_join, :current_user, :current_service_token, :current_oauth_token, to: :h
+  delegate :can?, :content_tag, :safe_join, :current_user,
+    :current_service_token, :current_oauth_token, to: :h
 
   ## custom access to model class
   # model_class from draper does not play well with STI

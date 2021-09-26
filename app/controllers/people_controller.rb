@@ -252,7 +252,9 @@ class PeopleController < CrudController
 
   def person_filter
     @person_filter ||= Person::Filter::List.new(@group,
-                                                current_user || service_token_user || oauth_token_user,
+                                                current_user ||
+                                                  service_token_user ||
+                                                  oauth_token_user,
                                                 list_filter_args)
   end
 

@@ -21,14 +21,14 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     subject { decorator.header }
 
     context 'without current user' do
-      before { update_attributes }
+      before { update }
       it { is_expected.to match(/^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr$/) }
     end
 
     context 'with current user' do
       before do
         PaperTrail.request.whodunnit = person.id.to_s
-        update_attributes
+        update
       end
 
       it do
@@ -43,14 +43,14 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     subject { decorator.author }
 
     context 'without current user' do
-      before { update_attributes }
+      before { update }
       it { is_expected.to be_nil }
     end
 
     context 'with current user' do
       before do
         PaperTrail.request.whodunnit = person.id.to_s
-        update_attributes
+        update
       end
 
       context 'and permission to link' do
@@ -74,7 +74,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     subject { decorator.changes }
 
     context 'with attribute changes' do
-      before { update_attributes }
+      before { update }
 
       it { is_expected.to match(/<div>Ort wurde/) }
       it { is_expected.to match(/<div>PLZ wurde/) }
@@ -122,7 +122,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
   end
 
   context '#attribute_change' do
-    before { update_attributes }
+    before { update }
 
     it 'contains from and to attributes' do
       string = decorator.attribute_change(:first_name, 'Hans', 'Fritz')
@@ -199,7 +199,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
   end
 
-  def update_attributes
+  def update
     person.update!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
   end
 

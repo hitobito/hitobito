@@ -75,9 +75,9 @@ module Subscriber
 
     def replace_validation_errors
       if entry.errors[:subscriber_type].present?
-        entry.errors[:subscriber].clear
-        entry.errors[:subscriber_id].clear
-        entry.errors[:subscriber_type].clear
+        entry.errors.delete(:subscriber)
+        entry.errors.delete(:subscriber_id)
+        entry.errors.delete(:subscriber_type)
         entry.errors.add(:base, 'Gruppe muss ausgewählt werden')
       end
     end

@@ -25,7 +25,7 @@ describe Event::ParticipationContactDatasController do
         event_participation_contact_data: {},
       }
       expect(entry).to have(3).errors
-      expect(entry.errors.keys).to match_array([:email, :first_name, :last_name])
+      expect(entry.errors.attribute_names).to match_array([:email, :first_name, :last_name])
     end
 
     it 'validates phone_number' do
@@ -45,7 +45,7 @@ describe Event::ParticipationContactDatasController do
         }
       }
       expect(entry).to have(1).errors
-      expect(entry.errors.keys).to match_array([:phone_numbers])
+      expect(entry.errors.attribute_names).to match_array([:phone_numbers])
     end
 
     it 'stores attributes on person if valid' do

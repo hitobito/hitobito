@@ -154,12 +154,12 @@ describe 'StandardFormBuilder' do
 
     it 'sets changed valid date value' do
       entry.birthdate = '1.1.00'
-      expect(form.date_field(:birthdate)).to match /value="1.1.00"/
+      expect(form.date_field(:birthdate)).to match /value="01.01.2000"/
     end
 
     it 'sets changed invalid date value' do
-      entry.birthdate = '33.33.33'
-      expect(form.date_field(:birthdate)).to match /value="33.33.33"/
+      entry.birthdate = '31.12.10000'
+      expect(form.date_field(:birthdate)).to match /value="31.12.10000"/
     end
   end
 

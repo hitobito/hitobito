@@ -39,7 +39,7 @@ class NotesController < ApplicationController
 
   def entries
     Note
-      .includes(:subject, :author)
+      .preload(:subject, :author)
       .in_or_layer_below(group)
       .list
       .page(params[:notes_page])

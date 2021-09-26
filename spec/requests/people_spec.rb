@@ -41,10 +41,10 @@ RSpec.describe 'GET /groups/:group_id/people/:person_id', type: :request do
 
   context 'with an unacceptable scope in token' do
     ['email', 'events', 'groups'].each do |scope|
-      it "fails with 403 (forbidden) for #{scope} scope" do
+      it "fails for #{scope} scope" do
         token = Fabricate(:access_token, application: application, scopes: { scopes: scope }, resource_owner_id: user.id)
         get "/groups/#{user.group_ids[0]}/people/#{user.id}", headers: { 'Authorization': 'Bearer ' + token.token }
-        expect(response).to have_http_status(:forbidden)
+        expect(response).not_to have_http_status(:success)
       end
     end
   end

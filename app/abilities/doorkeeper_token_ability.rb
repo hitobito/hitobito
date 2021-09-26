@@ -16,16 +16,27 @@ class DoorkeeperTokenAbility
     @token = doorkeeper_token
     @user_ability = Ability.new(Person.find(doorkeeper_token.resource_owner_id))
 
-    define_token_abilities
+    if token.acceptable?(:api)
+      define_all_abilities
+    else
+      define_token_abilities
+    end
   end
 
   private
 
   def define_token_abilities
-    define_group_abilities if (token.acceptable?(:groups) || token.acceptable?(:api))
-    define_event_abilities if (token.acceptable?(:events) || token.acceptable?(:api))
-    define_person_abilities if (token.acceptable?(:people) || token.acceptable?(:api))
-    define_invoice_abilities if (token.acceptable?(:invoices) || token.acceptable?(:api))
+    define_group_abilities if token.acceptable?(:groups)
+    define_event_abilities if token.acceptable?(:events)
+    define_person_abilities if token.acceptable?(:people)
+    define_invoice_abilities if token.acceptable?(:invoices)
+  end
+
+  def define_all_abilities
+    define_group_abilities
+    define_event_abilities
+    define_person_abilities
+    define_invoice_abilities
   end
 
   def define_group_abilities

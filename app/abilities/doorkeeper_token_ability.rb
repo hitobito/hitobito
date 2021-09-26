@@ -25,6 +25,7 @@ class DoorkeeperTokenAbility
     define_group_abilities if (token.acceptable?(:groups) || token.acceptable?(:api))
     define_event_abilities if (token.acceptable?(:events) || token.acceptable?(:api))
     define_person_abilities if (token.acceptable?(:people) || token.acceptable?(:api))
+    define_invoice_abilities if (token.acceptable?(:invoices) || token.acceptable?(:api))
   end
 
   def define_group_abilities
@@ -66,6 +67,16 @@ class DoorkeeperTokenAbility
 
     can :index_people, Group do |g|
       user_ability.can?(:index_people, g)
+    end
+  end
+
+  def define_invoice_abilities
+    can :show, Invoice do |i|
+      user_ability.can?(:show, i)
+    end
+
+    can :index_invoices, Group do |g|
+      user_ability.can?(:index_invoices, g)
     end
   end
 

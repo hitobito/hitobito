@@ -991,6 +991,7 @@ de:
       events: Lesen aller Events auf die du Zugriff hast
       groups: Lesen aller Gruppen auf die du Zugriff hast
       people: Lesen aller Personen auf die du Zugriff hast
+      invoices: Lesen aller Rechnungen auf die du Zugriff hast
   errors:
     messages:
       attachments_not_allowed: "darf keine Anhänge enthalten"

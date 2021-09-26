@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -125,20 +125,23 @@ describe PeopleController, type: :controller do
     let(:section) { dom.all('aside section')[2] }
 
     it 'contains requests' do
-      r1 = Person::AddRequest::Group.create!(
+      _r1 = Person::AddRequest::Group.create!(
         person: top_leader,
         requester: Fabricate(:person),
         body: groups(:bottom_layer_one),
-        role_type: Group::BottomLayer::Member.sti_name)
-      r2 = Person::AddRequest::Event.create!(
+        role_type: Group::BottomLayer::Member.sti_name
+      )
+      _r2 = Person::AddRequest::Event.create!(
         person: top_leader,
         requester: Fabricate(:person),
         body: events(:top_course),
-        role_type: Event::Role::Cook.sti_name)
-      r3 = Person::AddRequest::MailingList.create!(
+        role_type: Event::Role::Cook.sti_name
+      )
+      _r3 = Person::AddRequest::MailingList.create!(
         person: top_leader,
         requester: Fabricate(:person),
-        body: mailing_lists(:leaders))
+        body: mailing_lists(:leaders)
+      )
       get :show, params: { group_id: top_group.id, id: top_leader.id }
 
       expect(section.find('h2').text).to eq 'Anfragen'
@@ -152,7 +155,8 @@ describe PeopleController, type: :controller do
         person: Fabricate(:person),
         requester: Fabricate(:person),
         body: groups(:bottom_layer_one),
-        role_type: Group::BottomLayer::Member.sti_name)
+        role_type: Group::BottomLayer::Member.sti_name
+      )
       get :show, params: { group_id: top_group.id, id: top_leader.id }
 
       expect(section.find('h2').text).to eq 'Qualifikationen Erstellen'
@@ -180,7 +184,9 @@ describe PeopleController, type: :controller do
         appl = create_application(date)
         get :show, params: params
         expect(header).to eq 'Anmeldungen'
-        expect(label_link[:href]).to eq "/groups/#{course.group_ids.first}/events/#{course.id}/participations/#{appl.participation.id}"
+        expect(label_link[:href]).to eq(<<~URL.chomp)
+          /groups/#{course.group_ids.first}/events/#{course.id}/participations/#{appl.participation.id}
+        URL
         expect(label_link.text).to match(/Eventus/)
         expect(label.text).to match(/Top/)
         expect(dates).to eq "#{I18n.l(date)} - #{I18n.l(date + 5.days)}"
@@ -190,7 +196,9 @@ describe PeopleController, type: :controller do
     context 'upcoming events' do
       let(:section) { dom.all('aside section')[2] }
       let(:date) { 2.days.from_now }
-      let(:pretty_date) { date.strftime('%d.%m.%Y %H:%M') + ' - ' + (date + 5.days).strftime('%d.%m.%Y %H:%M') }
+      let(:pretty_date) do
+        "#{date.strftime('%d.%m.%Y %H:%M')} - #{(date + 5.days).strftime('%d.%m.%Y %H:%M')}"
+      end
 
       it 'is missing if we have no events' do
         get :show, params: params
@@ -198,13 +206,13 @@ describe PeopleController, type: :controller do
       end
 
       it 'is missing if we have no upcoming events' do
-        create_participation(10.days.ago, true)
+        create_participation(10.days.ago, active_participation: true)
         get :show, params: params
         expect(dom).to have_css('aside section', count: 3) # only tags, roles and qualification
       end
 
       it 'lists event label, link and dates' do
-        create_participation(date, true)
+        create_participation(date, active_participation: true)
         get :show, params: params
         expect(header).to eq 'Meine nächsten Anlässe'
         expect(label_link[:href]).to eq group_event_path(course.groups.first, course)

@@ -64,7 +64,7 @@ The events and the course endpoints have some query parameters, as explained bel
 An example query with its response (formatted here for readability) can be seen below.
 
 ```bash
-curl "https://demo.hitobito.com/groups/1/events.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+curl "https://demo.hitobito.com/groups/1/events.json?token=yhFrXcydFwisXYLEUFyV&filter=layer"
 ```
 
 ```json
@@ -237,7 +237,7 @@ The participations associated with a single evnt
 An example query with its response (formatted here for readability) can be seen below.
 
 ```bash
-curl "https://demo.hitobito.com/groups/1/events/1/participations.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+curl "https://demo.hitobito.com/groups/1/events/1/participations.json?token=yhFrXcydFwisXYLEUFyV&filter=layer"
 ```
 
 ```json
@@ -388,7 +388,7 @@ The invoices have query parameters similar to ui, the list endpoint is paged.
 An example query with its response (formatted here for readability) can be seen below.
 
 ```bash
-curl "https://demo.hitobito.com/groups/1/invoices.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+curl "https://demo.hitobito.com/groups/1/invoices.json?token=yhFrXcydFwisXYLEUFyV&filter=layer"
 ```
 
 ```json

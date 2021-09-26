@@ -89,19 +89,29 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
         let(:list) { mailing_lists(:leaders) }
 
         it 'new add request' do
-          Person::AddRequest::MailingList.create!(person: person, body: list, requester: people(:top_leader))
-          expect(subject).to eq "<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde gestellt.</div>"
+          Person::AddRequest::MailingList.create!(
+            person: person, body: list, requester: people(:top_leader)
+          )
+          expect(subject).to eq(
+            '<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde gestellt.</div>'
+          )
         end
 
         it 'destroyed add request' do
-          Person::AddRequest::MailingList.create!(person: person, body: list, requester: people(:top_leader)).destroy!
-          expect(subject).to eq "<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde beantwortet.</div>"
+          Person::AddRequest::MailingList.create!(
+            person: person, body: list, requester: people(:top_leader)
+          ).destroy!
+          expect(subject).to eq(
+            '<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde beantwortet.</div>'
+          )
         end
 
         it 'destroyed mailing list' do
-          Person::AddRequest::MailingList.create!(person: person, body: list, requester: people(:top_leader))
+          Person::AddRequest::MailingList.create!(
+            person: person, body: list, requester: people(:top_leader)
+          )
           list.destroy
-          expect(subject).to eq "<div>Zugriffsanfrage für <i>unbekannt</i> wurde beantwortet.</div>"
+          expect(subject).to eq '<div>Zugriffsanfrage für <i>unbekannt</i> wurde beantwortet.</div>'
         end
       end
     end
@@ -155,7 +165,8 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
 
     it 'sanitizes html' do
-      Fabricate(:social_account, contactable: person, label: 'Foo', name: '<script>alert("test")</script>')
+      Fabricate(:social_account, contactable: person, label: 'Foo',
+                                 name: '<script>alert("test")</script>')
 
       is_expected.to eq('Social Media Adresse <i>alert("test") (Foo)</i> wurde hinzugefügt.')
     end
@@ -164,7 +175,8 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
       account = Fabricate(:social_account, contactable: person, label: 'Foo', name: 'Bar')
       account.update!(name: 'Boo')
 
-      is_expected.to eq('Social Media Adresse <i>Bar (Foo)</i> wurde aktualisiert: Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.')
+      is_expected.to eq('Social Media Adresse <i>Bar (Foo)</i> wurde aktualisiert: '\
+                        'Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.')
     end
 
     it 'builds destroy text' do
@@ -175,7 +187,8 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
 
     it 'builds destroy text for non existing Role class' do
-      role = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', person: person, group: groups(:bottom_layer_one))
+      role = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', person: person,
+                                                             group: groups(:bottom_layer_one))
       role.destroy!
       hide_const("Group::BottomLayer::Leader")
       is_expected.to eq('Rolle <i>Group::BottomLayer::Leader</i> wurde gelöscht.')

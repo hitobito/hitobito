@@ -32,7 +32,7 @@ gem 'doorkeeper-i18n'
 gem 'doorkeeper-openid_connect'
 gem 'draper'
 gem 'draper-cancancan'
-gem 'epics' # client for EBICS-connections to banks 
+gem 'epics' # client for EBICS-connections to banks
 gem 'faker'
 gem 'faraday'
 gem 'gibbon', '~> 3.2'

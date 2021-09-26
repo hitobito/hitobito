@@ -16,7 +16,7 @@ describe PeopleController, type: :controller do
   let(:bottom_group) { groups(:bottom_group_one_one) }
   let(:test_entry) { top_leader }
   let(:test_entry_attrs) { { first_name: 'foo', last_name: 'bar' } }
-  let(:other) { Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group).person  }
+  let(:other) { Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group).person }
   let(:dom) { Capybara::Node::Simple.new(response.body) }
 
   before { sign_in(top_leader) }
@@ -24,7 +24,8 @@ describe PeopleController, type: :controller do
 
   def scope_params
     return { group_id: top_group.id } unless RSpec.current_example.metadata[:action] == :new
-    {  group_id: top_group.id, role: { type: 'Group::TopGroup::Member', group_id: top_group.id }  }
+
+    { group_id: top_group.id, role: { type: 'Group::TopGroup::Member', group_id: top_group.id } }
   end
 
 
@@ -42,14 +43,14 @@ describe PeopleController, type: :controller do
 
     it 'renders my own page' do
       get :show, params: { group_id: top_group.id, id: top_leader.id }
-      page_content.each { |text|  expect(response.body).to match(/#{text}/) }
+      page_content.each { |text| expect(response.body).to match(/#{text}/) }
     end
 
     it 'renders page of other group member' do
       sign_in(Fabricate(Group::TopGroup::Member.name.to_sym, group: top_group).person)
       get :show, params: { group_id: top_group.id, id: other.id }
-      page_content.grep(/Info/).each { |text|  expect(response.body).to match(/#{text}/) }
-      page_content.grep(/[^Info]/).each { |text|  expect(response.body).not_to match(/#{text}/) }
+      page_content.grep(/Info/).each { |text| expect(response.body).to match(/#{text}/) }
+      page_content.grep(/[^Info]/).each { |text| expect(response.body).not_to match(/#{text}/) }
       expect(dom).not_to have_selector('a[data-method="delete"] i.fa-trash-alt')
     end
 
@@ -66,8 +67,10 @@ describe PeopleController, type: :controller do
     end
 
     it 'member without permission to see details cannot see created or updated info' do
-      person1 = (Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person)
-      person2 = (Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)).person)
+      person1 = Fabricate(Group::BottomLayer::Leader.name.to_sym,
+                          group: groups(:bottom_layer_one)).person
+      person2 = Fabricate(Group::TopGroup::Secretary.name.to_sym,
+                          group: groups(:top_group)).person
       sign_in(person1)
       get :show, params: { group_id: person2.primary_group_id, id: person2 }
       expect(dom).not_to have_selector('dt', text: 'Erstellt')
@@ -113,7 +116,8 @@ describe PeopleController, type: :controller do
       expect(section).to have_css('.btn-small')
       expect(section.find('tr:eq(1) table tr:eq(1)').text).to include('Leader')
       edit_role_path = edit_group_role_path(top_group, top_leader.roles.first)
-      expect(section.find('tr:eq(1) table tr:eq(1) td:eq(2)').native.to_xml).to include edit_role_path
+      expect(section.find('tr:eq(1) table tr:eq(1) td:eq(2)').native.to_xml)
+        .to include edit_role_path
     end
   end
 
@@ -161,7 +165,7 @@ describe PeopleController, type: :controller do
     let(:dates) { section.find('tr:eq(1) td:eq(2)').text.strip }
     let(:label) { section.find('tr:eq(1) td:eq(1)') }
     let(:label_link) { label.find('a') }
-    let(:course) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))  }
+    let(:course) { Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk)) }
 
     context 'pending applications' do
       let(:section) { dom.all('aside section')[2] }
@@ -211,32 +215,38 @@ describe PeopleController, type: :controller do
     end
 
     def create_application(date)
-      Fabricate(:event_application, priority_1: course, participation: create_participation(date, false))
+      Fabricate(:event_application,
+                priority_1: course, # rubocop:disable Naming/VariableNumber
+                participation: create_participation(date, active_participation: false))
     end
 
-    def create_participation(date, active_participation = false)
+    def create_participation(date, active_participation: false)
       set_start_finish(course, date, date + 5.days)
-      Fabricate(:event_participation, person: top_leader, event: course, active: active_participation)
+      Fabricate(:event_participation, person: top_leader, event: course,
+                                      active: active_participation)
     end
 
   end
 
   describe_action :put, :update, id: true do
-    let(:params) { { person: { birthday: '33.33.33' } } }
+    let(:params) { { person: { birthday: '02.01.10000' } } }
 
     it 'displays old value again' do
       is_expected.to render_template('edit')
-      expect(dom).to have_selector('.error input[value="33.33.33"]')
+      expect(dom).to have_selector('.error')
+      expect(dom).to have_selector('.error input')
+      expect(dom).to have_selector('.error input#person_birthday')
+      expect(dom).to have_selector('.error input[value="02.01.10000"]')
     end
   end
 
   describe 'redirect_url' do
     it 'should adjust url if param redirect_url is given' do
       get :edit, params: {
-                   group_id: top_group.id,
-                   id: top_leader.id,
-                   return_url: 'foo'
-                 }
+        group_id: top_group.id,
+        id: top_leader.id,
+        return_url: 'foo'
+      }
 
       expect(dom.all('a', text: 'Abbrechen').first[:href]).to eq 'foo'
       expect(dom.find('input#return_url', visible: false).value).to eq 'foo'

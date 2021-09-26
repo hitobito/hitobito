@@ -112,5 +112,4 @@ describe NotesController do
       is_expected.to redirect_to(person_path(top_leader))
     end
   end
-
 end

@@ -19,11 +19,12 @@ class PersonReadables < PersonFetchables
 
   delegate :permission_group_ids, :permission_layer_ids, to: :user_context
 
-  def initialize(user, group = nil, roles_join = nil)
+  def initialize(user, group = nil, roles_join = nil, with_deleted = false)
     super(user)
 
     @roles_join = roles_join || { roles: :group }
     @group = group
+    @with_deleted = with_deleted
 
     if @group.nil?
       can :index, Person, accessible_people { |_| true }
@@ -37,16 +38,20 @@ class PersonReadables < PersonFetchables
   def group_accessible_people
     if read_permission_for_this_group?
       can :index, Person,
-          group.people.only_public_data { |_| true }
+          group_people.only_public_data { |_| true }
 
     elsif layer_and_below_read_in_above_layer?
       can :index, Person,
-          group.people.only_public_data.visible_from_above(group) { |_| true }
+          group_people.only_public_data.visible_from_above(group) { |_| true }
 
     elsif contact_data_visible?
       can :index, Person,
-          group.people.only_public_data.contact_data_visible { |_| true }
+          group_people.only_public_data.contact_data_visible { |_| true }
     end
+  end
+
+  def group_people
+    @with_deleted ? group.people_with_deleted : group.people
   end
 
   def accessible_people

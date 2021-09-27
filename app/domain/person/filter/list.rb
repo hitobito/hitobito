@@ -9,13 +9,14 @@ class Person::Filter::List
 
   attr_reader :group, :user, :chain, :range, :name, :multiple_groups
 
-  def initialize(group, user, params = {})
+  def initialize(group, user, params = {}, show_deleted = false)
     @group = group
     @user = user
     @chain = Person::Filter::Chain.new(params[:filters])
     @range = params[:range]
     @name = params[:name]
     @ids = params[:ids].to_s.split(',')
+    @show_deleted = show_deleted
   end
 
   def entries
@@ -45,7 +46,8 @@ class Person::Filter::List
   end
 
   def accessibles
-    ability = accessibles_class.new(user, group_range? ? @group : nil, chain.roles_join)
+    ability = accessibles_class.new(user, group_range? ? @group : nil, chain.roles_join,
+                                    @show_deleted)
     Person.accessible_by(ability)
   end
 

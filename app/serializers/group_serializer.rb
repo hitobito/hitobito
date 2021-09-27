@@ -53,6 +53,7 @@ class GroupSerializer < ApplicationSerializer
 
     property :href, h.group_url(item, format: :json)
     property :group_type, item.klass.label
+    property :group_type_class, item.klass.name
 
     map_properties :layer, :name, :short_name, :email
 

@@ -44,7 +44,9 @@ module Oauth
         {
           group_id: role.group_id,
           group_name: role.group.name,
+          group_type: role.group.type,
           role_name: role.class.model_name.human,
+          role_type: role.class.model_name,
           permissions: role.class.permissions
         }
       end

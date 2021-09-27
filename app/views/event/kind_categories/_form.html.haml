@@ -5,5 +5,6 @@
 
 = entry_form(buttons_bottom: false) do |f|
   = f.labeled_input_fields :label
+  = f.labeled_input_fields :order
 
   = render_extensions 'fields', locals: { f: f }

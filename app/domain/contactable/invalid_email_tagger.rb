@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 #  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -16,7 +16,7 @@ module Contactable
     end
 
     def tag!
-      tag = send("invalid_tag_#{email_kind}")
+      tag = send(:"invalid_tag_#{email_kind}")
       ActsAsTaggableOn::Tagging
         .find_or_create_by!(taggable: person,
                             hitobito_tooltip: email,

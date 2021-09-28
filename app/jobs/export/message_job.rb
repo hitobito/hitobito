@@ -29,7 +29,8 @@ class Export::MessageJob < Export::ExportBaseJob
   end
 
   def invoices
-    Invoice.where(invoice_list_id: message.invoice_list_id)
+    # only return invoices with still existing recipients
+    Invoice.joins(:recipient).where(invoice_list_id: message.invoice_list_id)
   end
 
   def data

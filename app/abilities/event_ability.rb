@@ -14,33 +14,34 @@ class EventAbility < AbilityDsl::Base
 
     permission(:any).may(:show).if_globally_visible_or_participating
 
-    permission(:any).may(:index_participations).
-      for_participations_read_events_and_course_participants
+    permission(:any).may(:index_participations)
+                    .for_participations_read_events_and_course_participants
     permission(:any).may(:update).for_leaded_events
     permission(:any).may(:qualify, :qualifications_read).for_qualify_event
 
-    permission(:group_full)
-      .may(:index_participations, :index_invitations, :create, :update, :destroy, :show)
-      .in_same_group
+    permission(:group_full).may(:index_participations, :index_invitations, :show).in_same_group
+    permission(:group_full).may(:create, :update, :destroy).in_same_group_if_active
 
-    permission(:group_and_below_full).
-      may(:index_participations, :index_invitations, :create, :update, :destroy, :show).
-      in_same_group_or_below
+    permission(:group_and_below_full).may(:index_participations, :index_invitations, :show)
+                                     .in_same_group_or_below
+    permission(:group_and_below_full).may(:create, :update, :destroy)
+                                     .in_same_group_or_below_if_active
 
-    permission(:layer_full).
-      may(:index_participations, :index_invitations, :update,
-          :create, :destroy, :application_market,
-          :qualify, :qualifications_read, :show).
-      in_same_layer
+    permission(:layer_full).may(:index_participations, :index_invitations,
+                                :qualifications_read, :show)
+                           .in_same_layer
+    permission(:layer_full).may(:update, :create, :destroy, :application_market, :qualify)
+                           .in_same_layer_if_active
 
-    permission(:layer_and_below_full).
-      may(:index_participations, :index_invitations, :update, :show)
-      .in_same_layer_or_below
-    permission(:layer_and_below_full).
-      may(:create, :destroy, :application_market, :qualify, :qualifications_read).in_same_layer
+    permission(:layer_and_below_full).may(:index_participations, :index_invitations, :show)
+                                     .in_same_layer_or_below
+    permission(:layer_and_below_full).may(:update).in_same_layer_or_below_if_active
+    permission(:layer_and_below_full).may(:qualifications_read).in_same_layer
+    permission(:layer_and_below_full).may(:create, :destroy, :application_market, :qualify)
+                                     .in_same_layer_if_active
 
-    general(:create, :destroy, :application_market, :qualify, :qualifications_read).
-      at_least_one_group_not_deleted
+    general(:create, :destroy, :application_market, :qualify, :qualifications_read)
+      .at_least_one_group_not_deleted
   end
 
   on(Event::Course) do

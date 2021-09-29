@@ -7,22 +7,24 @@ class OauthAbility < AbilityDsl::Base
 
   on(Oauth::Application) do
     class_side(:index).if_admin
+
     permission(:admin).may(:manage).all
   end
 
   on(Oauth::AccessGrant) do
     class_side(:index).if_admin
+
     permission(:admin).may(:manage).all
     permission(:any).may(:destroy).own_access_grants
-  end
-
-  def own_access_grants
-    subject.resource_owner_id == user.id
   end
 
   on(Oauth::AccessToken) do
     class_side(:index).if_admin
     permission(:admin).may(:manage).all
+  end
+
+  def own_access_grants
+    subject.resource_owner_id == user.id
   end
 
 end

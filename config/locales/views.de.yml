@@ -144,6 +144,7 @@ de:
   dropdown/group_edit:
     move: 'Verschieben'
     merge: 'Fusionieren'
+    archive: 'Archivieren'
 
   dropdown/people_export:
     button: 'Export'
@@ -577,10 +578,16 @@ de:
       incomplete_search_request: 'Bitte geben Sie mindestens zwei Zeichen ein.'
 
   group:
+    archive:
+      flash:
+        success: Gruppe wurde erfolgreich archiviert.
+        failure: Es ist ein Fehler beim Archivieren der Gruppe aufgetreten.
+
     merge:
       select:
         title: '%{group} fusionieren'
-        explanation: Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Anlässe und Personen
+        explanation: >
+          Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Anlässe und Personen
           samt Rollen beider Gruppen zusammengeführt.  Abos werden nicht übernommen.
           Die bisherigen Gruppen werden danach unter 'Gelöscht' weiterhin einsehbar sein.
         merge_is_irreversible:  Dieser Vorgang kann nicht mehr rückgängig gemacht werden!
@@ -619,6 +626,9 @@ de:
     actions_show:
       export_subgroups: 'CSV Untergruppen'
       reactivate: 'Reaktivieren'
+      confirm_archive: >
+        Wollen Sie diese Gruppe wirklich archivieren? Sie kann dann nicht mehr
+        bearbeitet werden und sämtliche Rollen werden ebenfalls archiviert.
     attrs:
       contact_details: 'Kontaktangaben'
       additional_information: 'Weitere Angaben'
@@ -647,16 +657,23 @@ de:
   group/merge:
     success: 'Die gewählten Gruppen wurden zur neuen Gruppe %{new_group_name} fusioniert.'
     failure: 'Die gewählten Gruppen können nicht fusioniert werden.'
-    no_candidates: 'Es sind keine gleichen Gruppen zum Fusionieren vorhanden oder Du verfügst dort nicht über die nötigen Berechtigungen.'
+    no_candidates: >
+      Es sind keine gleichen Gruppen zum Fusionieren vorhanden oder Du verfügst
+      dort nicht über die nötigen Berechtigungen.
     group_name_missing: 'Name für neue Gruppe muss definiert werden.'
     no_group_selected: 'Bitte wähle eine Gruppe mit der fusioniert werden soll.'
     not_allowed: 'Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren.'
-    invoice_config_not_merged: 'Die Rechnungseinstellungen werden nicht automatisch übernommen. Bitte nimm hierfür die jetzt korrekten Einstellungen manuell vor.'
+    invoice_config_not_merged: >
+      Die Rechnungseinstellungen werden nicht automatisch übernommen. Bitte
+      nimm hierfür die jetzt korrekten Einstellungen manuell vor.
 
   group/move:
     success: '%{group} wurde nach %{target} verschoben.'
     failure: 'Diese Gruppe kann nicht verschoben werden oder Du verfügst nicht über die nötigen Berechtigungen.'
     choose_group: 'Bitte wähle eine Gruppe aus.'
+
+  group_decorator:
+    archived_suffix: ' (archiviert)'
 
   import/csv_parser:
     read_error: "Fehler beim Lesen von %{filename}: %{error}"

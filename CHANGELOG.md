@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Gruppen können archiviert werden (#1275)
+
 ## Version 1.26
 
 *  Die API unterstützt jetzt, die Gruppen/Rollen, Anlässe und Einzelpersonen auszulesen, welche bei Abos abonniert sind. (#1398, danke @Michael-Schaer!)

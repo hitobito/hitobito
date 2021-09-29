@@ -1,21 +1,23 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: roles
 #
-#  id         :integer          not null, primary key
-#  person_id  :integer          not null
-#  group_id   :integer          not null
-#  type       :string           not null
-#  label      :string
-#  created_at :datetime
-#  updated_at :datetime
-#  deleted_at :datetime
+#  id          :integer          not null, primary key
+#  person_id   :integer          not null
+#  group_id    :integer          not null
+#  type        :string           not null
+#  label       :string
+#  created_at  :datetime
+#  updated_at  :datetime
+#  deleted_at  :datetime
+#  archived_at :datetime
 #
 
 require 'spec_helper'
@@ -23,7 +25,7 @@ require 'spec_helper'
 describe Role do
 
   context 'class' do
-    subject { Role }
+    subject { described_class }
 
     its(:all_types) { should have(14).items }
 
@@ -32,19 +34,20 @@ describe Role do
     its(:visible_types) { should_not include(Group::BottomGroup::Member) }
 
     it 'should have two types with permission :layer_and_below_full' do
-      expect(Role.types_with_permission(:layer_and_below_full).to_set).to eq([Group::TopGroup::Leader, Group::BottomLayer::Leader].to_set)
+      expect(described_class.types_with_permission(:layer_and_below_full).to_set)
+        .to eq([Group::TopGroup::Leader, Group::BottomLayer::Leader].to_set)
     end
 
     it 'should have no types with permission :not_existing' do
-      expect(Role.types_with_permission(:not_existing)).to be_empty
+      expect(described_class.types_with_permission(:not_existing)).to be_empty
     end
   end
 
- context 'regular' do
+  context 'regular' do
     let(:person) { Fabricate(:person) }
     let(:group) { groups(:bottom_layer_one) }
     subject do
-      r = Role.new # Group::BottomLayer::Leader.new
+      r = described_class.new # Group::BottomLayer::Leader.new
       r.type = 'Group::BottomLayer::Leader'
       r.person = person
       r.group = group
@@ -102,9 +105,11 @@ describe Role do
 
       it 'is reset to newest remaining role if role is destroyed' do
         subject.save
-        role2 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers))
-        role3 = Fabricate(Group::TopGroup::Leader.name.to_s, person: person, group: groups(:top_group))
-        role3.update_attribute(:updated_at, Date.today - 10.days)
+        role2 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person,
+                                                                group: groups(:toppers))
+        role3 = Fabricate(Group::TopGroup::Leader.name.to_s, person: person,
+                                                             group: groups(:top_group))
+        role3.update_attribute(:updated_at, Time.zone.today - 10.days)
         expect(subject.destroy).to be_truthy
         expect(person.primary_group).to eq role2.group
       end
@@ -145,7 +150,7 @@ describe Role do
         subject.type = 'Group::BottomLayer::Leader'
         subject.save!
 
-        role = Role.find(subject.id)  # reload from db to get the correct class
+        role = described_class.find(subject.id)  # reload from db to get the correct class
         role.destroy
 
         expect(person.reload).not_to be_contact_data_visible
@@ -156,7 +161,7 @@ describe Role do
         subject.type = 'Group::BottomLayer::Leader'
         subject.save!
 
-        role = Role.find(subject.id)  # reload from db to get the correct class
+        role = described_class.find(subject.id)  # reload from db to get the correct class
         role.destroy
 
         expect(person.reload).to be_contact_data_visible
@@ -166,41 +171,49 @@ describe Role do
 
   context '.normalize_label' do
     it 'reuses existing label' do
-      a1 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
-      a2 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'fOO', group: groups(:bottom_layer_one))
+      a1 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
+                                                           group: groups(:bottom_layer_one))
+      a2 = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'fOO',
+                                                           group: groups(:bottom_layer_one))
       expect(a2.label).to eq(a1.label)
     end
   end
 
   context '#available_labels' do
-    before { Role.sweep_available_labels }
+    before { described_class.sweep_available_labels }
     subject { Group::BottomLayer::Leader.available_labels }
 
     it 'includes labels from database' do
-      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
-      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'FOo', group: groups(:bottom_layer_one))
+      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
+                                                      group: groups(:bottom_layer_one))
+      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'FOo',
+                                                      group: groups(:bottom_layer_one))
       is_expected.to eq(['foo'])
     end
 
     it 'includes labels from all types' do
-      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
-      Fabricate(Group::BottomLayer::Member.name.to_s, label: 'Bar', group: groups(:bottom_layer_one))
+      Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
+                                                      group: groups(:bottom_layer_one))
+      Fabricate(Group::BottomLayer::Member.name.to_s, label: 'Bar',
+                                                      group: groups(:bottom_layer_one))
       is_expected.to eq(%w(Bar foo))
     end
   end
 
   context '#destroy' do
     it 'deleted young roles from database' do
-      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
+                                                          group: groups(:bottom_layer_one))
       a.destroy
-      expect(Role.with_deleted.where(id: a.id)).not_to be_exists
+      expect(described_class.with_deleted.where(id: a.id)).not_to be_exists
     end
 
     it 'flags old roles' do
-      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', group: groups(:bottom_layer_one))
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
+                                                          group: groups(:bottom_layer_one))
       a.created_at = Time.zone.now - Settings.role.minimum_days_to_archive.days - 1.day
       a.destroy
-      expect(Role.only_deleted.find(a.id)).to be_present
+      expect(described_class.only_deleted.find(a.id)).to be_present
     end
   end
 
@@ -254,6 +267,57 @@ describe Role do
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq('destroy')
       expect(version.main).to eq(person)
+    end
+  end
+
+  context 'archived:' do
+    around do |spec|
+      previous = Settings.role.minimum_days_to_archive
+      Settings.role.minimum_days_to_archive = 0
+
+      spec.run
+
+      Settings.role.minimum_days_to_archive = previous || 7
+    end
+
+    subject(:archived_role) do
+      roles(:bottom_member).tap { |r| r.update(archived_at: 1.day.ago) }
+    end
+
+    context 'archived? is' do
+      subject { roles(:bottom_member) }
+
+      it 'false without a date' do
+        expect(subject.archived_at).to be_falsey
+
+        is_expected.not_to be_archived
+      end
+
+      it 'true with an archived_at date' do
+        expect(archived_role.archived_at).to be_truthy
+
+        expect(archived_role).to be_archived
+      end
+
+      it 'making the role read-only' do
+        expect(archived_role).to be_archived
+
+        expect do
+          archived_role.update!(label: 'Follower of Blørbaël')
+        end.to raise_error(ActiveRecord::ReadOnlyRecord)
+      end
+    end
+
+    context 'soft-deletion' do
+      it 'is supported' do
+        expect(archived_role.class.ancestors).to include(Paranoia)
+
+        expect do
+          archived_role.destroy!
+        end.to change { described_class.without_deleted.count }.by(-1)
+
+        expect(archived_role.reload.deleted_at).to_not be_nil
+      end
     end
   end
 end

@@ -35,7 +35,9 @@
 		border-left: 3px solid $linkColor;
 	}
 
-
+	a.is-archived, li.is-archived > a {
+		color: desaturate(lighten($linkColor, 20%), 80%);
+	}
 
 	.nav-left-section {
 		background-color: $grayLighter;

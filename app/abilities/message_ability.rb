@@ -9,11 +9,17 @@ class MessageAbility < AbilityDsl::Base
 
   on(Message) do
     permission(:layer_and_below_full)
-      .may(:create, :show)
+      .may(:create)
+      .in_layer_or_below_if_active
+
+    permission(:layer_and_below_full)
+      .may(:show)
       .in_layer_or_below
+
     permission(:layer_and_below_full)
       .may(:edit, :update, :destroy)
       .in_layer_or_below_if_not_dispatched
+
     permission(:any)
       .may(:show)
       .if_assignment_assignee_or_creator
@@ -27,8 +33,12 @@ class MessageAbility < AbilityDsl::Base
     permission_in_layers?(subject.group.layer_hierarchy.collect(&:id))
   end
 
+  def in_layer_or_below_if_active
+    in_layer_or_below && !subject.group.archived?
+  end
+
   def in_layer_or_below_if_not_dispatched
-    in_layer_or_below && !subject.dispatched?
+    in_layer_or_below_if_active && !subject.dispatched?
   end
 
 end

@@ -786,6 +786,7 @@ de:
           own: Eigener Versand
           normal: B-Post
           priority: A-Post
+        send_to_households: Haushalte
 
       subscription:
         related_role_types: Rollen

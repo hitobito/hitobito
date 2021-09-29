@@ -951,6 +951,11 @@ de:
     text_message:
       fields:
         remaining_chars: Verbleibende Zeichen
+    letter:
+      fields:
+        send_to_households_options:
+          true: Ein Brief pro Haushalt
+          false: Ein Brief pro Person
     form:
       available_placeholders: 'Verfügbare Platzhalter:'
       recipient_info:

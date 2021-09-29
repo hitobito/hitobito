@@ -3,6 +3,7 @@
 / #  or later. See the COPYING file at the top-level directory or at
 / #  https://github.com/hitobito/hitobito.
 
+= f.labeled_collection_select :send_to_households, message_send_to_household_options, :first, :last, include_blank: false
 = f.labeled_input_field :subject
 = f.labeled_collection_select :shipping_method, message_letter_shipping_methods(entry), :first, :last
 = f.labeled(:pp_post) do

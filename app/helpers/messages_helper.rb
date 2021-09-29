@@ -97,6 +97,11 @@ module MessagesHelper
     end
   end
 
+  def message_send_to_household_options
+    [[false, t('.send_to_households_options.false')],
+     [true, t('.send_to_households_options.true')]]
+  end
+
   private
 
   def message_invalid_recipient_info(message)

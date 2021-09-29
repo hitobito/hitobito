@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -27,6 +27,14 @@ class GroupDecorator < ApplicationDecorator
     end
   end
 
+  def to_s(*args)
+    model.to_s(*args) + archived_suffix
+  end
+
+  def display_name
+    model.display_name + archived_suffix
+  end
+
   def as_typeahead
     { id: id, label: label_with_parent }
   end
@@ -40,13 +48,17 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def link_with_layer
-    links = with_layer.map { |g| h.link_to_if(can?(:show, g), g, g) }
+    links = with_layer
+            .map { |g| GroupDecorator.new(g) }
+            .map { |g| h.link_to_if(can?(:show, g), g, g) }
     h.safe_join(links, ' / ')
   end
 
   # compute layers and concat group names using a '/'
   def name_with_layer
-    group_names = with_layer.map { |g| g.to_s }
+    group_names = with_layer
+                  .map { |g| GroupDecorator.new(g) }
+                  .map { |g| g.to_s }
     group_names.join(' / ')
   end
 
@@ -78,4 +90,17 @@ class GroupDecorator < ApplicationDecorator
                            .pluck(:id)
   end
 
+  def archived_class
+    return nil unless model.archived?
+
+    'is-archived'
+  end
+
+  private
+
+  def archived_suffix
+    return '' unless model.archived?
+
+    I18n.t('group_decorator.archived_suffix')
+  end
 end

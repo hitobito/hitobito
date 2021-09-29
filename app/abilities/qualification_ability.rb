@@ -24,8 +24,8 @@ class QualificationAbility < AbilityDsl::Base
 
   def in_course_layer_with(permission, person_layer_ids)
     layers = user.groups_with_permission(permission).collect(&:layer_group).uniq
-    qualify_layer_ids = layers.select { |g| g.event_types.include?(Event::Course) }.
-                               collect(&:id)
+    qualify_layer_ids = layers.select { |g| g.event_types.include?(Event::Course) }
+                              .collect(&:id)
 
     qualify_layer_ids.present? &&
     contains_any?(qualify_layer_ids, person_layer_ids)

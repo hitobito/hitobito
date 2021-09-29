@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -10,7 +10,7 @@ module Person::Groups
 
   # Uniq set of all group ids in hierarchy.
   def groups_hierarchy_ids
-    @hierarchy_ids ||= groups.collect(&:hierarchy).flatten.collect(&:id).uniq
+    @groups_hierarchy_ids ||= groups.collect(&:hierarchy).flatten.collect(&:id).uniq
   end
 
   # All layers this person belongs to.
@@ -31,12 +31,11 @@ module Person::Groups
   # All groups where this person has the given permission.
   def groups_with_permission(permission)
     @groups_with_permission ||= {}
-    @groups_with_permission[permission] ||= begin
-      roles_with_groups.to_a.
-        select { |r| r.permissions.include?(permission) }.
-        collect(&:group).
-        uniq
-    end
+    @groups_with_permission[permission] ||=
+      roles_with_groups.to_a
+                       .select { |r| r.permissions.include?(permission) }
+                       .collect(&:group)
+                       .uniq
     @groups_with_permission[permission].dup
   end
 
@@ -71,7 +70,6 @@ module Person::Groups
     roles
   end
 
-
   module ClassMethods
     # Scope listing only people that have roles that are visible from above.
     # If group is given, only visible roles from this group are considered.
@@ -88,19 +86,18 @@ module Person::Groups
 
     # Scope listing all people with a role in the given layer.
     def in_layer(*groups)
-      joins(groups.extract_options![:join] || { roles: :group }).
-        where(groups: { layer_group_id: groups.collect(&:layer_group_id),
-                        deleted_at: nil }).
-        distinct
+      joins(groups.extract_options![:join] || { roles: :group })
+        .where(groups: { layer_group_id: groups.collect(&:layer_group_id), deleted_at: nil })
+        .distinct
     end
 
     # Scope listing all people with a role in or below the given group.
     def in_or_below(group, join = { roles: :group })
-      joins(join).
-        where(groups: { deleted_at: nil }).
-        where("#{Group.quoted_table_name}.lft >= :lft AND #{Group.quoted_table_name}.rgt <= :rgt",
-              lft: group.lft, rgt: group.rgt).
-        distinct
+      joins(join)
+        .where(groups: { deleted_at: nil })
+        .where("#{Group.quoted_table_name}.lft >= :lft AND #{Group.quoted_table_name}.rgt <= :rgt",
+               lft: group.lft, rgt: group.rgt)
+        .distinct
     end
 
     # Load people with member roles.
@@ -116,11 +113,13 @@ module Person::Groups
     end
 
     def order_by_role_statement
-      statement = 'CASE roles.type '
+      statement = ['CASE roles.type']
       Role.all_types.each_with_index do |t, i|
-        statement << "WHEN '#{t.sti_name}' THEN #{i} "
+        statement << "WHEN '#{t.sti_name}' THEN #{i}"
       end
       statement << 'END'
+
+      statement.join(' ')
     end
 
   end

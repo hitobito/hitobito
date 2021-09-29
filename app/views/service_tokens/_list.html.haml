@@ -12,5 +12,6 @@
     - service_token.abilities
   - t.attr(:last_access)
 
-  - add_table_actions(t)
+  - unless @group.archived?
+    - add_table_actions(t)
 

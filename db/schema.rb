@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_14_200000) do
+ActiveRecord::Schema.define(version: 2021_10_19_153543) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -341,6 +341,7 @@ ActiveRecord::Schema.define(version: 2021_10_14_200000) do
     t.boolean "require_person_add_requests", default: false, null: false
     t.text "description", size: :medium
     t.string "logo"
+    t.datetime "archived_at"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
@@ -832,6 +833,7 @@ ActiveRecord::Schema.define(version: 2021_10_14_200000) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.datetime "archived_at"
     t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
     t.index ["type"], name: "index_roles_on_type"
   end

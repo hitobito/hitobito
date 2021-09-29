@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: groups
@@ -57,7 +58,7 @@ class Group < ActiveRecord::Base
   # This must contain the superior attributes as well.
   class_attribute :used_attributes
   self.used_attributes = [:name, :short_name, :email, :contact_id,
-                          :email, :address, :zip_code, :town, :country, :description]
+                          :address, :zip_code, :town, :country, :description]
 
   # Attributes that may only be modified by people from superior layers.
   class_attribute :superior_attributes
@@ -68,10 +69,10 @@ class Group < ActiveRecord::Base
   ### CALLBACKS
 
   before_save :reset_contact_info
+  before_save :prevent_changes, if: ->(g) { g.archived? }
   after_create :create_invoice_config, if: :layer?
 
-  # Root group may not be destroyed
-  protect_if :root?
+  protect_if :root? # Root group may not be destroyed
   protect_if :children_without_deleted
 
   stampable stamper_class_name: :person, deleter: true
@@ -162,7 +163,6 @@ class Group < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-
   def to_s(_format = :default)
     name
   end
@@ -222,6 +222,14 @@ class Group < ActiveRecord::Base
     GroupSetting.list(id)
   end
 
+  def archived?
+    archived_at.present?
+  end
+
+  def archivable?
+    !archived? && children_without_deleted.none?
+  end
+
   private
 
   def layer_person_duplicates
@@ -265,4 +273,12 @@ class Group < ActiveRecord::Base
     create_invoice_config!
   end
 
+  def prevent_changes
+    allowed = %w(archived_at updater_id)
+    only_archival = changes
+                    .reject { |_attr, (from, to)| from.blank? && to.blank? }
+                    .keys.all? { |key| allowed.include? key }
+
+    raise ActiveRecord::ReadOnlyRecord unless new_record? || only_archival
+  end
 end

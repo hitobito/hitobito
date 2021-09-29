@@ -53,9 +53,7 @@ module Sheet
 
     tab 'activerecord.models.group_setting.other',
         :group_group_settings_path,
-        if: (lambda do |view, group|
-          view.can?(:update, group)
-        end)
+        if: :update
 
     delegate :group_path, to: :view
 

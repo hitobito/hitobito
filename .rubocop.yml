@@ -147,3 +147,7 @@ Style/SingleLineBlockParams:
 # separated arguments allow for ruby to determine the right separator, making it more portable
 Rails/FilePath:
   EnforcedStyle: arguments
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - spec/**/*

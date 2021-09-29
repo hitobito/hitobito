@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -20,10 +20,10 @@ module MailRelay
 
     class << self
       def personal_return_path(list_name, sender_email, domain = nil)
-        return nil unless sender_email.present?
+        return nil if sender_email.blank?
 
         # recipient format (before @) must match regexp in #reject_not_existing
-        id_suffix = '+' + sender_email.tr('@', '=')
+        id_suffix = "+#{sender_email.tr('@', '=')}"
         "#{list_name}#{SENDER_SUFFIX}#{id_suffix}@#{domain || mail_domain}"
       end
 
@@ -53,7 +53,7 @@ module MailRelay
 
     # If the email is sent to an address that is not a valid relay, this method is called.
     # Forwards bounce messages to the original sender
-    def reject_not_existing
+    def reject_not_existing # rubocop:disable Metrics/AbcSize
       data = envelope_receiver_name.match(/^(.+)#{SENDER_SUFFIX}\+(.+=.+)$/)
       if data && valid_address?(data[1])
         prepare_bounced_message(data[1], data[2])
@@ -71,7 +71,7 @@ module MailRelay
 
     # Is the mail sent to a valid relay address?
     def relay_address?
-      mailing_list.present?
+      mailing_list.present? && !mailing_list.group.archived?
     end
 
     # Sends a delivery_report to sender_email if flag is set
@@ -131,7 +131,7 @@ module MailRelay
     end
 
     def sender_is_additional_sender?
-      return false unless sender_email.present?
+      return false if sender_email.blank?
 
       additional_senders = mailing_list.additional_sender.to_s
       list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
@@ -139,7 +139,7 @@ module MailRelay
       # check if the domain is valid, if the sender is in the senders
       # list or if the domain is whitelisted
       list.include?(sender_email) ||
-          (valid_domain?(sender_domain) && list.include?(sender_domain))
+        (valid_domain?(sender_domain) && list.include?(sender_domain))
     end
 
     def sender_is_group_email?
@@ -160,9 +160,9 @@ module MailRelay
 
     def potential_senders
       Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
-                   " AND additional_emails.contactable_type = '#{Person.sti_name}'").
-             where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email).
-             distinct
+                   " AND additional_emails.contactable_type = '#{Person.sti_name}'")
+            .where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email)
+            .distinct
     end
 
     def send_reject_message?
@@ -173,10 +173,9 @@ module MailRelay
     # strip spam headers because they might produce encoding issues
     # (Encoding::UndefinedConversionError)
     def strip_spam_headers(message)
-      spam_headers = message.header.select { |field| field.name =~ /^X-DSPAM/i }
-      spam_headers.each do |field|
-        message.header[field.name] = nil
-      end
+      message.header
+             .select { |field| field.name =~ /^X-DSPAM/i }
+             .each { |field| message.header[field.name] = nil }
     end
 
   end

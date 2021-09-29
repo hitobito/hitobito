@@ -12,30 +12,28 @@ class MailingListAbility < AbilityDsl::Base
   on(::MailingList) do
     permission(:any).may(:show).subscribable
 
-    permission(:group_full).
-      may(:show, :index_subscriptions, :create, :update, :destroy).
-      in_same_group
+    permission(:group_full).may(:show, :index_subscriptions).in_same_group
+    permission(:group_full).may(:create, :update, :destroy).in_same_group_if_active
     permission(:group_full).
       may(:export_subscriptions).
       in_same_group_if_no_subscriptions_in_below_groups
 
-    permission(:group_and_below_full).
-      may(:show, :index_subscriptions, :create, :update, :destroy).
-      in_same_group_or_below
+    permission(:group_and_below_full).may(:show, :index_subscriptions).in_same_group_or_below
+    permission(:group_and_below_full).may(:create, :update, :destroy)
+                                     .in_same_group_or_below_if_active
     permission(:group_and_below_full).
       may(:export_subscriptions).
       in_same_group_or_below_if_no_subscriptions_in_below_layers
 
-    permission(:layer_full).
-      may(:show, :index_subscriptions, :create, :update, :destroy).
-      in_same_layer
+    permission(:layer_full).may(:show, :index_subscriptions).in_same_layer
+    permission(:layer_full).may(:create, :update, :destroy).in_same_layer_if_active
     permission(:layer_full).
       may(:export_subscriptions).
       in_same_layer_if_no_subscriptions_in_below_layers
 
-    permission(:layer_and_below_full).
-      may(:show, :index_subscriptions, :export_subscriptions, :create, :update, :destroy).
-      in_same_layer
+    permission(:layer_and_below_full).may(:show, :index_subscriptions, :export_subscriptions)
+                                     .in_same_layer
+    permission(:layer_and_below_full).may(:create, :update, :destroy).in_same_layer_if_active
 
     general.group_not_deleted
   end

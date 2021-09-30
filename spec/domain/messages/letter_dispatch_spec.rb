@@ -42,7 +42,9 @@ describe Messages::LetterDispatch do
       Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: housemate1)
       Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: housemate2)
       fake_ability = instance_double('aby', cannot?: false)
-      Person::Household.new(housemate1, fake_ability, housemate2).assign
+      household = Person::Household.new(housemate1, fake_ability, housemate2, top_leader)
+      household.assign
+      household.save
     end
 
     it 'does not concern household addresses' do
@@ -57,6 +59,12 @@ describe Messages::LetterDispatch do
       subject.run
 
       expect(recipient_entries.count).to eq(3)
+      household_address =
+        "#{housemate1.full_name}\n" \
+        "#{housemate2.full_name}\n" \
+        "#{housemate1.address}\n" \
+        "#{housemate1.zip_code} #{housemate1.town}\n" \
+        "#{housemate1.country}"
     end
   end
 end

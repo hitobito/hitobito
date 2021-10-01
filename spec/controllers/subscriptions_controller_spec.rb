@@ -107,6 +107,21 @@ describe SubscriptionsController do
 
       expect(assigns(:person_add_requests)).to eq([r1])
     end
+
+    it 'renders json' do
+      get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:subscriptions]).to have(4).items
+    end
+
+    it 'renders json for service token user' do
+      allow(controller).to receive_messages(current_user: nil)
+
+      get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id, token: 'PermittedToken' },
+                  format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:subscriptions]).to have(4).items
+    end
   end
 
   def create_group_subscription(mailing_list)

@@ -34,17 +34,20 @@ describe Messages::LetterDispatch do
 
   context 'household addresses' do
 
-    let(:housemate1) { Fabricate(:person_with_address) }
-    let(:housemate2) { Fabricate(:person_with_address) }
+    let(:housemate1) { Fabricate(:person_with_address, first_name: 'Anton', last_name: 'Abraham') }
+    let(:housemate2) { Fabricate(:person_with_address, first_name: 'Zora', last_name: 'Zaugg') }
+    let(:other_housemate) { Fabricate(:person_with_address, first_name: 'Altra', last_name: 'Mates') }
     let(:list_members) { Person.where(id: [top_leader, bottom_member, housemate1, housemate2]) }
 
     before do
-      Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: housemate1)
-      Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: housemate2)
-      fake_ability = instance_double('aby', cannot?: false)
-      household = Person::Household.new(housemate1, fake_ability, housemate2, top_leader)
-      household.assign
-      household.save
+      # Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: housemate1)
+      # Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: housemate2)
+      create_household(housemate1, housemate2)
+
+      # other housemate is not part of group, so only bottom member should be included without household address
+      create_household(people(:bottom_member), other_housemate)
+
+      top_leader.update!(address: 'Fantasia 42', zip_code: '4242', town: 'Melmac')
     end
 
     it 'does not concern household addresses' do
@@ -58,13 +61,36 @@ describe Messages::LetterDispatch do
 
       subject.run
 
-      expect(recipient_entries.count).to eq(3)
+      expect(recipient_entries.count).to eq(4)
       household_address =
         "#{housemate1.full_name}\n" \
         "#{housemate2.full_name}\n" \
         "#{housemate1.address}\n" \
         "#{housemate1.zip_code} #{housemate1.town}\n" \
         "#{housemate1.country}"
+
+      expect(recipient_entry(housemate1).address).to eq(household_address)
+      expect(recipient_entry(housemate2).address).to eq(household_address)
+
+      bottom_member_address =
+        "#{bottom_member.full_name}\n" \
+        "#{bottom_member.address}\n" \
+        "#{bottom_member.zip_code} #{bottom_member.town}\n" \
+        "#{bottom_member.country}"
+      expect(recipient_entry(bottom_member).address).to eq(bottom_member_address)
     end
+  end
+
+  private
+
+  def create_household(person1, person2)
+    fake_ability = instance_double('aby', cannot?: false)
+    household = Person::Household.new(person1, fake_ability, person2, top_leader)
+    household.assign
+    household.save
+  end
+
+  def recipient_entry(person)
+    recipient_entries.find { |e| e.person_id == person.id }
   end
 end

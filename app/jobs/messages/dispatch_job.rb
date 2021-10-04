@@ -10,7 +10,7 @@ module Messages
   class DispatchJob < BaseJob
     self.parameters = [:message_id]
 
-    delegate :update, :sent_at?, to: :message
+    delegate :update!, :sent_at?, to: :message
 
     def initialize(message)
       super()
@@ -18,15 +18,15 @@ module Messages
     end
 
     def perform
-      return update(state: :finished) if sent_at?
+      return update!(state: :finished) if sent_at?
 
-      update(sent_at: Time.current, state: :processing)
+      update!(sent_at: Time.current, state: :processing)
       message.dispatcher_class.new(message, recipients).run
-      update(state: :finished) unless message.text_message?
+      update!(state: :finished) unless message.text_message?
     end
 
     def error(job, exception)
-      update(state: :failed)
+      update!(state: :failed)
       super
     end
 

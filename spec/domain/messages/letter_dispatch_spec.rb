@@ -40,11 +40,9 @@ describe Messages::LetterDispatch do
     let(:list_members) { Person.where(id: [top_leader, bottom_member, housemate1, housemate2]) }
 
     before do
-      # Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: housemate1)
-      # Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: housemate2)
       create_household(housemate1, housemate2)
 
-      # other housemate is not part of group, so only bottom member should be included without household address
+      # other housemate is not part of member list, so only bottom member should be included without household address
       create_household(people(:bottom_member), other_housemate)
 
       top_leader.update!(address: 'Fantasia 42', zip_code: '4242', town: 'Melmac')
@@ -53,7 +51,36 @@ describe Messages::LetterDispatch do
     it 'does not concern household addresses' do
       subject.run
 
-      recipient = recipient_entries.first
+      expect(recipient_entries.count).to eq(4)
+      housemate1_address =
+        "#{housemate1.full_name}\n" \
+        "#{housemate1.address}\n" \
+        "#{housemate1.zip_code} #{housemate1.town}\n" \
+        "#{housemate1.country}"
+
+      expect(recipient_entry(housemate1).address).to eq(housemate1_address)
+
+      housemate2_address =
+        "#{housemate2.full_name}\n" \
+        "#{housemate2.address}\n" \
+        "#{housemate2.zip_code} #{housemate2.town}\n" \
+        "#{housemate2.country}"
+
+      expect(recipient_entry(housemate2).address).to eq(housemate2_address)
+
+      bottom_member_address =
+        "#{bottom_member.full_name}\n" \
+        "#{bottom_member.address}\n" \
+        "#{bottom_member.zip_code} #{bottom_member.town}\n" \
+        "#{bottom_member.country}"
+      expect(recipient_entry(bottom_member).address).to eq(bottom_member_address)
+
+      top_leader_address =
+        "#{top_leader.full_name}\n" \
+        "#{top_leader.address}\n" \
+        "#{top_leader.zip_code} #{top_leader.town}\n" \
+        "#{top_leader.country}"
+      expect(recipient_entry(top_leader).address).to eq(top_leader_address)
     end
 
     it 'creates recipient entries with household addresses' do
@@ -78,6 +105,13 @@ describe Messages::LetterDispatch do
         "#{bottom_member.zip_code} #{bottom_member.town}\n" \
         "#{bottom_member.country}"
       expect(recipient_entry(bottom_member).address).to eq(bottom_member_address)
+
+      top_leader_address =
+        "#{top_leader.full_name}\n" \
+        "#{top_leader.address}\n" \
+        "#{top_leader.zip_code} #{top_leader.town}\n" \
+        "#{top_leader.country}"
+      expect(recipient_entry(top_leader).address).to eq(top_leader_address)
     end
   end
 

@@ -16,7 +16,7 @@ module Messages
 
     def run
       super
-      @message.update(invoice_list_id: @invoice_list.id)
+      @message.update!(invoice_list_id: @invoice_list.id)
       batch_create
       Invoice::BatchUpdate.new(@invoice_list.reload.invoices).call
     end
@@ -25,8 +25,8 @@ module Messages
       batch_create = Invoice::BatchCreate.new(@invoice_list, @people)
       batch_create.call
 
-      update(success_count: batch_create.results.count(true),
-             failed_count: batch_create.results.count(false))
+      update!(success_count: batch_create.results.count(true),
+              failed_count: batch_create.results.count(false))
     end
   end
 end

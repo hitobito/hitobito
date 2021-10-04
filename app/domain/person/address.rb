@@ -11,9 +11,18 @@ class Person::Address
   end
 
   def for_letter
-    [@person.full_name.to_s.squish,
-     @person.address.to_s.squish,
+    ([@person.full_name.to_s.squish] + address).join("\n")
+  end
+
+  def for_household_letter(names)
+    (names + address).join("\n")
+  end
+
+  private
+
+  def address
+    [@person.address.to_s.squish,
      [@person.zip_code, @person.town].compact.join(' ').squish,
-     @person.country.to_s.squish].compact.join("\n")
+     @person.country.to_s.squish]
   end
 end

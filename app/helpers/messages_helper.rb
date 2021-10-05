@@ -24,6 +24,11 @@ module MessagesHelper
     icon(message.class.icon, title: message.type.constantize.model_name.human)
   end
 
+  def format_send_to_households(message)
+    base_key = 'messages.letter.fields.send_to_households_options.'
+    t(base_key + message.send_to_households.to_s)
+  end
+
   def format_message_recipients_total(message)
     message.recipients_total.to_s
   end

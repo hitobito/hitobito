@@ -15,5 +15,7 @@
         = message
 
   - t.sortable_attrs(:type, :state)
+  - t.col(t('activerecord.attributes.person.address')) do |message|
+    = oneline_address(message)
 
 = paginate @messages

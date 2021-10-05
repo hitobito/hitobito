@@ -148,6 +148,14 @@ describe Export::Pdf::Messages::Letter do
     end
   end
 
+  context 'household addresses' do
+
+    let(:recipients) { [people(:bottom_member)] }
+
+    it 'creates only one letter per household' do
+    end
+  end
+
   private
 
   def text_with_position

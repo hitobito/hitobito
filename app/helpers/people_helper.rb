@@ -112,4 +112,9 @@ module PeopleHelper
     event_feed_url(token: current_user.event_feed_token, format: :ics)
   end
 
+  def oneline_address(message)
+    address = message.message_recipients.find_by(person_id: @person.id).address
+    address.split("\n").join(', ')
+  end
+
 end

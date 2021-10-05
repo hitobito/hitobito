@@ -1,11 +1,8 @@
 # Hitobito Changelog
 
-## unreleased
-
-* Teilnehmer können zu Anlässen eingeladen werden (#1276)
-
 ## Version 1.26
 
+* Teilnehmer können zu Anlässen eingeladen werden (#1276)
 *  Personal Access Tokens für die API sind jetzt deprecated. Alle bestehenden Drittapplikationen sollten auf OAuth API Tokens migrieren (siehe https://github.com/hitobito/hitobito/blob/master/doc/development/05_rest_api.md). Diese Entscheidung wurde zusammen mit der hitobito-Community, insbesondere Jubla, CEVI, PBS und SBV gefällt.
 *  Service Tokens haben show_full Berechtigung auf Personen (#1355)
 *  Variable Spendenaufrufe können mittels Rechnungsbrief erstellt werden (hitobito_die_mitte#181)

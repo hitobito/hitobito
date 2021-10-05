@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
-#  hitobito_die_mitte and licensed under the Affero General Public License version 3
+#  Copyright (c) 2012-2021, Die Mitte. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
@@ -12,9 +12,15 @@ describe Messages::LetterDispatch do
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
   let(:recipient_entries) { message.message_recipients }
-  let(:list_members) { Person.where(id: [top_leader.id, bottom_member.id]) }
 
-  subject { described_class.new(message, list_members) }
+  subject { described_class.new(message) }
+
+  before do
+    Subscription.create!(mailing_list: mailing_lists(:leaders),
+                         subscriber: groups(:bottom_layer_one),
+                         role_types: [Group::BottomLayer::Member])
+    Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: top_leader)
+  end
 
   it 'updates success count' do
     subject.run
@@ -24,6 +30,7 @@ describe Messages::LetterDispatch do
   it 'creates recipient entries with address' do
     subject.run
 
+    # does not include top leader because no address present
     expect(message.message_recipients).to_not include(top_leader)
 
     recipient = recipient_entries.first
@@ -37,7 +44,11 @@ describe Messages::LetterDispatch do
     let(:housemate1) { Fabricate(:person_with_address, first_name: 'Anton', last_name: 'Abraham') }
     let(:housemate2) { Fabricate(:person_with_address, first_name: 'Zora', last_name: 'Zaugg') }
     let(:other_housemate) { Fabricate(:person_with_address, first_name: 'Altra', last_name: 'Mates') }
-    let(:list_members) { Person.where(id: [top_leader, bottom_member, housemate1, housemate2]) }
+
+    before do
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate1)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate2)
+    end
 
     before do
       create_household(housemate1, housemate2)

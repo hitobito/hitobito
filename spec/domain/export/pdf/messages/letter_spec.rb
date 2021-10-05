@@ -14,13 +14,19 @@ describe Export::Pdf::Messages::Letter do
                             body: messages(:letter).body,
                             subject: "Information")
   end
-  let(:recipients) { [people(:bottom_member)] }
   let(:options) { {} }
   let(:layer) { groups(:top_layer) }
   let(:group) { groups(:top_group) }
-  let(:list) { Fabricate(:mailing_list, group: group) }
+  let(:list) { Fabricate(:mailing_list, group: groups(:bottom_layer_one)) }
 
-  subject { described_class.new(letter, recipients, options) }
+  before do
+    Messages::LetterDispatch.new(letter).run
+    Subscription.create!(mailing_list: list,
+                         subscriber: groups(:bottom_layer_one),
+                         role_types: [Group::BottomLayer::Member])
+  end
+
+  subject { described_class.new(letter, options) }
 
   it "sanitizes filename" do
     letter.subject = "Liebe Mitglieder"

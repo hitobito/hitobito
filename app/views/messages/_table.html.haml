@@ -10,7 +10,7 @@
   - t.sortable_attrs(:type)
   - t.col(Message.human_attribute_name(:subject)) do |message|
     %strong
-      = link_to(message, message.path_args)
+      = link_t(message, message.path_args)
   - t.sortable_attrs(:state, :sent_at)
   - t.col('') do |message|
     = format_message_infos(message)

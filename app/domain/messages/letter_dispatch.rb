@@ -9,9 +9,9 @@ module Messages
   class LetterDispatch
     delegate :update!, :success_count, :send_to_households?, to: '@message'
 
-    def initialize(message, people)
+    def initialize(message)
       @message = message
-      @people = people
+      @people = message.mailing_list.people
       @now = Time.current
     end
 

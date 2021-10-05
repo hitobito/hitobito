@@ -16,9 +16,9 @@ module Export::Pdf::Messages
       end
     end
 
-    def initialize(letter, recipients, options = {})
+    def initialize(letter, options = {})
       @letter = letter
-      @recipients = recipients
+      @recipients = letter.message_recipients
       @options = options
       @async_download_file = options.delete(:async_download_file)
     end

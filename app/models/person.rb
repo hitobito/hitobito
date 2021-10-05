@@ -275,6 +275,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def full_name(format = :default)
+    return company_name if company?
+
     case format
     when :list, :print_list then "#{last_name} #{first_name}".strip
     else "#{first_name} #{last_name}".strip

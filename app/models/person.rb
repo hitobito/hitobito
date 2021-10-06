@@ -202,10 +202,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   scope :household, -> { where.not(household_key: nil) }
   scope :with_address, -> {
     where.not(address: [nil, '']).
-    where.not(zip_code: [nil, '']).
-    where.not(town: [nil, '']).
-    where('(last_name IS NOT NULL AND last_name <> "") OR '\
-          '(company_name IS NOT NULL AND company_name <> "")')
+      where.not(zip_code: [nil, '']).
+      where.not(town: [nil, '']).
+      where('(last_name IS NOT NULL AND last_name <> "") OR '\
+            '(company_name IS NOT NULL AND company_name <> "")')
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: { label: 'Mobil' }) }
 
@@ -348,7 +348,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def person_duplicates
-    PersonDuplicate.where(person_1: id).or(PersonDuplicate.where(person_2: id))
+    PersonDuplicate.where(person_1: id).or(PersonDuplicate.where(person_2: id)) # rubocop:disable Naming/VariableNumber
   end
 
   def address_for_letter
@@ -363,8 +363,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def remove_blank_relations
     relations_to_tails.each do |e|
-      unless e.frozen?
-        e.mark_for_destruction if e.tail_id.blank?
+      if !e.frozen? && e.tail_id.blank?
+        e.mark_for_destruction
       end
     end
   end

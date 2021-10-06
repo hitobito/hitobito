@@ -21,7 +21,7 @@ class Export::Pdf::Messages::Letter
     end
 
     def render_salutation(recipient)
-      salutation = Salutation.new(recipient, letter.salutation)
+      salutation = Salutation.new(recipient.person, letter.salutation)
       if generic?(salutation)
         stamped(:salutation_generic) { pdf.text salutation.value }
       else

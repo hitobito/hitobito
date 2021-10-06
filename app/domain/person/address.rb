@@ -11,11 +11,11 @@ class Person::Address
   end
 
   def for_letter
-    ([@person.full_name.to_s.squish] + address).join("\n")
+    ([@person.full_name.to_s.squish] + address).compact.join("\n")
   end
 
   def for_household_letter(names)
-    (names + address).join("\n")
+    (names + address).compact.join("\n")
   end
 
   private
@@ -23,6 +23,13 @@ class Person::Address
   def address
     [@person.address.to_s.squish,
      [@person.zip_code, @person.town].compact.join(' ').squish,
-     @person.country.to_s.squish]
+     country]
+  end
+
+  def country
+    country = @person.country.to_s.squish
+    return if country.eql?('CH')
+
+    country
   end
 end

@@ -39,6 +39,9 @@ describe Messages::LetterDispatch do
     expect(recipient.address).to eq "Bottom Member\nGreatstreet 345\n3456 Greattown\nCH"
   end
 
+  it 'does not duplicate entries if run is called a second time' do
+  end
+
   context 'household addresses' do
 
     let(:housemate1) { Fabricate(:person_with_address, first_name: 'Anton', last_name: 'Abraham') }

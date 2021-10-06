@@ -18,7 +18,6 @@ module Export::Pdf::Messages
 
     def initialize(letter, options = {})
       @letter = letter
-      @recipients = letter.message_recipients
       @options = options
       @async_download_file = options.delete(:async_download_file)
     end
@@ -29,7 +28,7 @@ module Export::Pdf::Messages
 
     def render
       customize
-      @recipients.each_with_index do |recipient, position|
+      recipients.each_with_index do |recipient, position|
         reporter&.report(position)
         render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
@@ -85,6 +84,18 @@ module Export::Pdf::Messages
       @sections ||= [Header, Content].collect do |section|
         section.new(pdf, @letter, @options.slice(:debug, :stamped))
       end
+    end
+
+    def recipients
+      @recipients ||= message_recipients
+    end
+
+    def message_recipients
+      recipients = @letter.message_recipients
+      if @letter.send_to_households?
+        recipients.group(:household_key)
+      end
+      recipients
     end
   end
 end

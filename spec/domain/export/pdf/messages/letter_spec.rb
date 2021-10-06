@@ -15,18 +15,15 @@ describe Export::Pdf::Messages::Letter do
                             subject: "Information")
   end
   let(:options) { {} }
-  let(:layer) { groups(:top_layer) }
-  let(:group) { groups(:top_group) }
-  let(:list) { Fabricate(:mailing_list, group: groups(:bottom_layer_one)) }
-
-  before do
-    Messages::LetterDispatch.new(letter).run
-    Subscription.create!(mailing_list: list,
-                         subscriber: groups(:bottom_layer_one),
-                         role_types: [Group::BottomLayer::Member])
-  end
+  let(:layer) { groups(:bottom_layer_one) }
+  let(:group) { groups(:bottom_group_one_one) }
+  let(:list) { Fabricate(:mailing_list, group: group) }
 
   subject { described_class.new(letter, options) }
+
+  before do
+    people(:top_leader).update!(address: 'Funkystreet 42', zip_code: '4242')
+  end
 
   it "sanitizes filename" do
     letter.subject = "Liebe Mitglieder"
@@ -39,9 +36,20 @@ describe Export::Pdf::Messages::Letter do
   end
 
   context "text" do
+
     let(:analyzer) { PDF::Inspector::Text.analyze(subject.render) }
 
     context "single recipient" do
+
+      before do
+        people(:top_leader).update!(address: 'Funkystreet 42', zip_code: '4242')
+        Subscription.create!(mailing_list: list,
+                             subscriber: group,
+                             role_types: [Group::BottomGroup::Member])
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:bottom_member))
+        Messages::LetterDispatch.new(letter).run
+      end
+
       it "renders text at positions without sender address" do
         expect(text_with_position).to match_array [
           [71, 687, "Bottom Member"],
@@ -58,12 +66,14 @@ describe Export::Pdf::Messages::Letter do
 
       it "renders text at positions with group sender address" do
         letter.update!(heading: true)
-        group.update!(town: "Wanaka", address: "Lakeview 42")
+        group_contact = Fabricate(Group::BottomGroup::Member.name, group: group).person
+        group_contact.update!(address: 'Lakeview 42', zip_code: '4242', town: 'Wanaka')
+        group.update!(contact: group_contact)
 
         expect(text_with_position).to match_array [
-          [71, 765, "TopGroup"],
+          [71, 765, "Group 11"],
           [71, 754, "Lakeview 42"],
-          [71, 744, "Wanaka"],
+          [71, 744, "4242 Wanaka"],
           [71, 687, "Bottom Member"],
           [71, 676, "Greatstreet 345"],
           [71, 666, "3456 Greattown"],
@@ -78,10 +88,11 @@ describe Export::Pdf::Messages::Letter do
 
       it "renders text at positions with layer sender address" do
         letter.update!(heading: true)
-        layer.update!(town: "Wanaka", address: "Lakeview 42", zip_code: "4242")
+        group.contact.destroy!
+        layer.update!(town: "Wanaka", zip_code: '4242', address: "Lakeview 42")
 
         expect(text_with_position).to match_array [
-          [71, 765, "Top"],
+          [71, 765, "Bottom One"],
           [71, 754, "Lakeview 42"],
           [71, 744, "4242 Wanaka"],
           [71, 687, "Bottom Member"],
@@ -107,8 +118,17 @@ describe Export::Pdf::Messages::Letter do
     end
 
     context "stamping" do
-      let(:recipients) { [people(:bottom_member), people(:top_leader)] }
       let(:stamps) { subject.pdf.instance_variable_get("@stamp_dictionary_registry") }
+
+      before do
+        Subscription.create!(mailing_list: list,
+                             subscriber: group,
+                             role_types: [Group::BottomGroup::Member])
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:bottom_member))
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:top_leader))
+        Messages::LetterDispatch.new(letter).run
+      end
+
 
       it "renders addresses and content" do
         expect(text_with_position).to eq [
@@ -122,7 +142,8 @@ describe Export::Pdf::Messages::Letter do
           [130, 481, " ein! "],
           [71, 460, "Bis bald"],
           [71, 687, "Top Leader"],
-          [71, 666, "Supertown"],
+          [71, 676, "Funkystreet 42"],
+          [71, 666, "4242 Supertown"],
           [71, 531, "Information"],
           [71, 502, "Hallo"],
           [71, 481, "Wir laden "],
@@ -140,7 +161,8 @@ describe Export::Pdf::Messages::Letter do
           [71, 676, "Greatstreet 345"],
           [71, 666, "3456 Greattown"],
           [71, 687, "Top Leader"],
-          [71, 666, "Supertown"],
+          [71, 676, "Funkystreet 42"],
+          [71, 666, "4242 Supertown"],
         ]
         expect(stamps.keys).to eq [:render_header, :render_subject, :render_content]
       end

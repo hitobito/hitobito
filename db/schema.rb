@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_04_073131) do
+ActiveRecord::Schema.define(version: 2021_10_06_122741) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -549,6 +549,7 @@ ActiveRecord::Schema.define(version: 2021_10_04_073131) do
     t.string "state"
     t.index ["invoice_id"], name: "index_message_recipients_on_invoice_id"
     t.index ["message_id"], name: "index_message_recipients_on_message_id"
+    t.index ["person_id", "message_id"], name: "index_message_recipients_on_person_id_and_message_id", unique: true
     t.index ["person_id"], name: "index_message_recipients_on_person_id"
   end
 
@@ -571,7 +572,11 @@ ActiveRecord::Schema.define(version: 2021_10_04_073131) do
     t.string "salutation"
     t.string "pp_post"
     t.string "shipping_method", default: "own"
+<<<<<<< HEAD
     t.boolean "donation_confirmation", default: false, null: false
+=======
+    t.boolean "send_to_households", default: false
+>>>>>>> Send one letter per household
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require "spec_helper"
+require 'spec_helper'
 
 describe Export::Pdf::Messages::Letter do
 
@@ -18,6 +18,7 @@ describe Export::Pdf::Messages::Letter do
   let(:layer) { groups(:bottom_layer_one) }
   let(:group) { groups(:bottom_group_one_one) }
   let(:list) { Fabricate(:mailing_list, group: group) }
+  let(:analyzer) { PDF::Inspector::Text.analyze(subject.render) }
 
   subject { described_class.new(letter, options) }
 
@@ -36,8 +37,6 @@ describe Export::Pdf::Messages::Letter do
   end
 
   context "text" do
-
-    let(:analyzer) { PDF::Inspector::Text.analyze(subject.render) }
 
     context "single recipient" do
 
@@ -178,9 +177,58 @@ describe Export::Pdf::Messages::Letter do
 
   context 'household addresses' do
 
-    let(:recipients) { [people(:bottom_member)] }
+    let(:housemate1) { Fabricate(:person_with_address, first_name: 'Anton', last_name: 'Abraham') }
+    let(:housemate2) { Fabricate(:person_with_address, first_name: 'Zora', last_name: 'Zaugg') }
+    let(:other_housemate) { Fabricate(:person_with_address, first_name: 'Altra', last_name: 'Mates') }
+
+    before do
+      Subscription.create!(mailing_list: list,
+                           subscriber: group,
+                           role_types: [Group::BottomGroup::Member])
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: housemate1)
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: housemate2)
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:bottom_member))
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:top_leader))
+
+      create_household(housemate1, housemate2)
+      create_household(other_housemate, people(:top_leader))
+
+      letter.update!(send_to_households: true)
+
+      Messages::LetterDispatch.new(letter).run
+    end
 
     it 'creates only one letter per household' do
+      expect(text_with_position).to eq [
+        [71, 687, "Anton Abraham"],
+         [71, 676, "Zora Zaugg"],
+         [71, 666, housemate1.address],
+         [71, 655, "#{housemate1.zip_code} #{housemate1.town}"],
+         [71, 687, "DE"],
+         [71, 531, "Information"],
+         [71, 502, "Hallo"],
+         [71, 481, "Wir laden "],
+         [111, 481, "dich"],
+         [130, 481, " ein! "],
+         [71, 460, "Bis bald"],
+         [71, 687, "Bottom Member"],
+         [71, 676, "Greatstreet 345"],
+         [71, 666, "3456 Greattown"],
+         [71, 531, "Information"],
+         [71, 502, "Hallo"],
+         [71, 481, "Wir laden "],
+         [111, 481, "dich"],
+         [130, 481, " ein! "],
+         [71, 460, "Bis bald"],
+         [71, 687, "Top Leader"],
+         [71, 676, "Funkystreet 42"],
+         [71, 666, "4242 Supertown"],
+         [71, 531, "Information"],
+         [71, 502, "Hallo"],
+         [71, 481, "Wir laden "],
+         [111, 481, "dich"],
+         [130, 481, " ein! "],
+         [71, 460, "Bis bald"]]
     end
   end
 
@@ -190,5 +238,12 @@ describe Export::Pdf::Messages::Letter do
     analyzer.positions.each_with_index.collect do |p, i|
       p.collect(&:round) + [analyzer.show_text[i]]
     end
+  end
+
+  def create_household(person1, person2)
+    fake_ability = instance_double('aby', cannot?: false)
+    household = Person::Household.new(person1, fake_ability, person2, people(:top_leader))
+    household.assign
+    household.save
   end
 end

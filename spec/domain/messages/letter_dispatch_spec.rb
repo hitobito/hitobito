@@ -36,10 +36,13 @@ describe Messages::LetterDispatch do
     recipient = recipient_entries.first
     expect(recipient.message).to eq message
     expect(recipient.person).to eq bottom_member
-    expect(recipient.address).to eq "Bottom Member\nGreatstreet 345\n3456 Greattown\nCH"
+    expect(recipient.address).to eq "Bottom Member\nGreatstreet 345\n3456 Greattown"
   end
 
   it 'does not duplicate entries if run is called a second time' do
+    2.times { subject.run }
+
+    expect(recipient_entries.count).to eq(1)
   end
 
   context 'household addresses' do

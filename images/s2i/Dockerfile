@@ -40,6 +40,7 @@ RUN \
     find ./ -type d -exec chmod g+x {} + && \
     chown -R 1001:0 ./ && \
     yum install ImageMagick ImageMagick-devel -y && \
+    yum install cacerts ca-certificates -y && update-ca-trust && \
     yum clean all -y
 
 # BUNDLE_WITHOUT is a workaround for the base image:

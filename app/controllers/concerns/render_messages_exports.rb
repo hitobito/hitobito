@@ -8,15 +8,13 @@
 module RenderMessagesExports
   extend ActiveSupport::Concern
 
-  PREVIEW_LIMIT = 5
-
   def render_pdf_preview
     assert_type(entry)
     assert_recipients(entry)
 
     options = { background: Settings.messages.pdf.preview }
-    pdf = entry.exporter_class.new(entry, entry.recipients.limit(PREVIEW_LIMIT), options)
-    send_data pdf.render, type: :pdf, disposition: :inline, filename: pdf.filename(:preview)
+    pdf = entry.exporter_class.new(entry, options)
+    send_data pdf.render_preview, type: :pdf, disposition: :inline, filename: pdf.filename(:preview)
   end
 
   def render_pdf_in_background

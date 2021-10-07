@@ -230,6 +230,33 @@ describe Export::Pdf::Messages::Letter do
          [130, 481, " ein! "],
          [71, 460, "Bis bald"]]
     end
+
+  end
+
+  context 'preview' do
+    let(:analyzer) { PDF::Inspector::Text.analyze(subject.render_preview) }
+
+    before do
+      Subscription.create!(mailing_list: list,
+                           subscriber: group,
+                           role_types: [Group::BottomGroup::Member])
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:bottom_member))
+    end
+
+    it 'creates preview without persisted message recipients' do
+      expect(text_with_position).to match_array [
+        [71, 687, "Bottom Member"],
+        [71, 676, "Greatstreet 345"],
+        [71, 666, "3456 Greattown"],
+        [71, 531, "Information"],
+        [71, 502, "Hallo"],
+        [71, 481, "Wir laden "],
+        [111, 481, "dich"],
+        [130, 481, " ein! "],
+        [71, 460, "Bis bald"]
+      ]
+      expect(letter.message_recipients.reload.count).to eq(0)
+    end
   end
 
   private

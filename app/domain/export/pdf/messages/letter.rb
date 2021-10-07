@@ -9,11 +9,16 @@ module Export::Pdf::Messages
   class Letter
 
     MARGIN = 2.5.cm
+    PREVIEW_LIMIT = 5
 
     class << self
       def export(_format, letter)
         new(letter).render
       end
+
+      def preview(_format, letter)
+        new(letter).render_preview
+      end 
     end
 
     def initialize(letter, options = {})
@@ -24,6 +29,15 @@ module Export::Pdf::Messages
 
     def pdf
       @pdf ||= Prawn::Document.new(render_options)
+    end
+
+    def render_preview
+      ActiveRecord::Base.transaction do
+        ::Messages::LetterDispatch.new(@letter, recipient_limit: PREVIEW_LIMIT).run
+        @output = render
+        raise ActiveRecord::Rollback
+        return @output
+      end
     end
 
     def render

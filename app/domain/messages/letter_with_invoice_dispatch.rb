@@ -29,7 +29,7 @@ module Messages
               failed_count: batch_create.results.count(false))
     end
 
-    # disable household addresses for letter with invoice 
+    # disable household addresses for letter with invoice
     def send_to_households?
       false
     end

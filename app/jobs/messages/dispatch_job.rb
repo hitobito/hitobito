@@ -20,7 +20,7 @@ module Messages
       return update!(state: :finished) if sent_at?
 
       update!(sent_at: Time.current, state: :processing)
-      message.dispatcher_class.new(message, recipients).run
+      message.dispatcher_class.new(message).run
       update!(state: :finished) unless message.text_message?
     end
 

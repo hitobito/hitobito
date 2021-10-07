@@ -28,8 +28,12 @@ class Person::Address
 
   def country
     country = @person.country.to_s.squish
-    return if country.eql?('CH')
+    return if country.eql?(default_country)
 
     country
+  end
+
+  def default_country
+    Settings.countries.prioritized.first
   end
 end

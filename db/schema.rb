@@ -549,7 +549,10 @@ ActiveRecord::Schema.define(version: 2021_10_06_122741) do
     t.string "state"
     t.index ["invoice_id"], name: "index_message_recipients_on_invoice_id"
     t.index ["message_id"], name: "index_message_recipients_on_message_id"
-    t.index ["person_id", "message_id"], name: "index_message_recipients_on_person_id_and_message_id", unique: true
+    t.index ["person_id", "message_id", "address"], name: "index_message_recipients_on_person_id_and_message_id_and_address", unique: true
+    t.index ["person_id", "message_id", "address"], name: "index_message_recipients_on_person_message_address", unique: true
+    t.index ["person_id", "message_id", "email"], name: "index_message_recipients_on_person_message_email", unique: true
+    t.index ["person_id", "message_id", "phone_number"], name: "index_message_recipients_on_person_message_phone_number", unique: true
     t.index ["person_id"], name: "index_message_recipients_on_person_id"
   end
 

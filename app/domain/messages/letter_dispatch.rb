@@ -64,9 +64,11 @@ module Messages
 
     def create_recipient_entries(people_batch)
       rows = people_batch.collect do |person|
+        address, household = address_for_letter(person, people_batch)
         reciept_attrs.merge(
           person_id: person.id,
-          address: address_for_letter(person, people_batch)
+          address: address,
+          household_address: household
         )
       end
       MessageRecipient.insert_all(rows)
@@ -75,10 +77,16 @@ module Messages
 
     def address_for_letter(person, people)
       address = person.address_for_letter
+      household = false
+
       if send_to_households? && person.household_key?
-        address = household_address(person, people) || address
+        household_addr = household_address(person, people)
+        if household_addr.present?
+          address = household_addr
+          household = true
+        end
       end
-      address
+      [address, household]
     end
 
     def household_address(person, people)

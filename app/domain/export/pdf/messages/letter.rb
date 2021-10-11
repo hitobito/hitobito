@@ -13,7 +13,7 @@ module Export::Pdf::Messages
 
     class << self
       def export(_format, letter)
-        new(letter).render
+        new(letter).render_pdf
       end
 
       def preview(_format, letter)
@@ -34,19 +34,18 @@ module Export::Pdf::Messages
     def render_preview
       ActiveRecord::Base.transaction do
         ::Messages::LetterDispatch.new(@letter, recipient_limit: PREVIEW_LIMIT).run
-        @output = render
+        build_pdf
         raise ActiveRecord::Rollback
-        return @output
       end
+      render
+    end
+
+    def render_pdf
+      build_pdf
+      render
     end
 
     def render
-      customize
-      recipients.each_with_index do |recipient, position|
-        reporter&.report(position)
-        render_sections(recipient)
-        pdf.start_new_page unless last?(recipient)
-      end
       pdf.render
     rescue PDF::Core::Errors::EmptyGraphicStateStack
       Rails.logger.warn "Unable to stamp content for letter: #{@letter.id}"
@@ -54,6 +53,15 @@ module Export::Pdf::Messages
       @sections = nil
       @pdf = nil
       retry
+    end
+
+    def build_pdf
+      customize
+      recipients.each_with_index do |recipient, position|
+        reporter&.report(position)
+        render_sections(recipient)
+        pdf.start_new_page unless last?(recipient)
+      end
     end
 
     def render_sections(recipient)

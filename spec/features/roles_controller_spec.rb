@@ -134,4 +134,26 @@ describe RolesController, js: true do
       is_expected.to have_content 'Rolle Member für Top Leader in Toppers wurde erfolgreich erstellt.'
     end
   end
+
+  it 'updates person role with popupmenu' do
+    obsolete_node_safe do
+      sign_in
+      visit group_person_path(group_id: group.id)
+
+      # Expect to people table
+
+
+      # Click first row to alter role of person and expect role popup
+
+
+      # Change role
+
+
+      # Click save
+
+
+      # Expect role field to have no more roles than person has in db
+
+    end
+  end
 end

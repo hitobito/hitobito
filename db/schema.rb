@@ -575,11 +575,8 @@ ActiveRecord::Schema.define(version: 2021_10_06_122741) do
     t.string "salutation"
     t.string "pp_post"
     t.string "shipping_method", default: "own"
-<<<<<<< HEAD
-    t.boolean "donation_confirmation", default: false, null: false
-=======
     t.boolean "send_to_households", default: false
->>>>>>> Send one letter per household
+    t.boolean "donation_confirmation", default: false, null: false
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"

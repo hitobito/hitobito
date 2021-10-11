@@ -5,27 +5,31 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require "spec_helper"
+require 'spec_helper'
 
 describe Export::Pdf::Messages::Letter::Content do
 
-  let(:options)    { {} }
+  let(:options) { {} }
   let(:top_leader) { people(:top_leader) }
-  let(:letter)     { Message::Letter.new(body: "simple text") }
-  let(:pdf)        { Prawn::Document.new }
-  let(:analyzer)   { PDF::Inspector::Text.analyze(pdf.render) }
+  let(:recipient) do
+    MessageRecipient
+      .new(message: letter, person: top_leader)
+  end
+  let(:letter) { Message::Letter.new(body: 'simple text') }
+  let(:pdf) { Prawn::Document.new }
+  let(:analyzer) { PDF::Inspector::Text.analyze(pdf.render) }
 
   subject { described_class.new(pdf, letter, options) }
 
   context "salutation" do
     it "renders body" do
-      subject.render(top_leader)
+      subject.render(recipient)
       expect(text_with_position).to eq [[36, 485, "simple text"]]
     end
 
     it "prepends salutation if set" do
       letter.salutation = "default"
-      subject.render(top_leader)
+      subject.render(recipient)
       expect(text_with_position).to eq [
         [36, 485, "Hallo Top"],
         [36, 447, "simple text"]
@@ -35,7 +39,7 @@ describe Export::Pdf::Messages::Letter::Content do
     it "prepends personal salutation applicable" do
       letter.salutation = :lieber_vorname
       top_leader.gender = "m"
-      subject.render(top_leader)
+      subject.render(recipient)
       expect(text_with_position).to eq [
         [36, 485, "Lieber Top"],
         [36, 447, "simple text"]
@@ -52,9 +56,9 @@ describe Export::Pdf::Messages::Letter::Content do
     let(:stamps) { pdf.instance_variable_get('@stamp_dictionary_registry') }
 
     it "has positions for salutation and text" do
-      subject.render(top_leader)
+      subject.render(recipient)
       pdf.start_new_page
-      subject.render(top_leader)
+      subject.render(recipient)
       expect(text_with_position).to eq [
         [36, 485, "Hallo Top"],
         [36, 447, "simple text"],
@@ -66,9 +70,9 @@ describe Export::Pdf::Messages::Letter::Content do
 
     it "has stamps for content" do
       options[:stamped] = true
-      subject.render(top_leader)
+      subject.render(recipient)
       pdf.start_new_page
-      subject.render(top_leader)
+      subject.render(recipient)
       expect(text_with_position).to eq [
         [36, 485, "Hallo Top"],
         [36, 485, "Hallo Top"],
@@ -78,9 +82,9 @@ describe Export::Pdf::Messages::Letter::Content do
 
     it "has stamps for different salutations and content" do
       options[:stamped] = true
-      subject.render(top_leader)
+      subject.render(recipient)
       pdf.start_new_page
-      subject.render(Person.new)
+      subject.render(MessageRecipient.new(person: Person.new))
       expect(stamps.keys).to eq [:render_content, :salutation_generic]
       # TODO: Unsure why in this case font in analyzer is empty
       # expect(text_with_position).to be_empty #

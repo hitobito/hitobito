@@ -18,7 +18,7 @@ module Export::Pdf::Messages
 
       def preview(_format, letter)
         new(letter).render_preview
-      end 
+      end
     end
 
     def initialize(letter, options = {})
@@ -54,10 +54,14 @@ module Export::Pdf::Messages
       end
     rescue PDF::Core::Errors::EmptyGraphicStateStack
       Rails.logger.warn "Unable to stamp content for letter: #{@letter.id}"
+      prepare_retry
+      retry
+    end
+
+    def prepare_retry
       @options[:stamped] = false
       @sections = nil
       @pdf = nil
-      retry
     end
 
     def render_sections(recipient)
@@ -75,10 +79,16 @@ module Export::Pdf::Messages
     private
 
     def reporter
-      @reporter ||= Export::ProgressReporter.new(
+      return unless @async_download_file
+
+      @reporter ||= init_reporter
+    end
+
+    def init_reporter
+      Export::ProgressReporter.new(
         AsyncDownloadFile::DIRECTORY.join(@async_download_file),
         @recipients.size
-      ) if @async_download_file
+      )
     end
 
     def render_options

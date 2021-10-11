@@ -65,4 +65,17 @@ describe GroupDecorator, :draper_with_helpers do
     end
   end
 
+  describe 'subgroups' do
+    let(:model) { groups(:bottom_layer_one) }
+
+    its(:subgroup_ids) do
+      should match_array(
+        [ groups(:bottom_layer_one),
+          groups(:bottom_group_one_one),
+          groups(:bottom_group_one_one_one),
+          groups(:bottom_group_one_two)
+        ].collect(&:id))
+    end
+  end
+
 end

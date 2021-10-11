@@ -72,4 +72,10 @@ class GroupDecorator < ApplicationDecorator
     klass.label
   end
 
+  def subgroup_ids
+    @subgroup_ids ||= Group.where('lft >= :lft AND rgt <= :rgt',
+                                  lft: group.lft, rgt: group.rgt)
+                           .pluck(:id)
+  end
+
 end

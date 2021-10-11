@@ -1,16 +1,18 @@
-- group ||= defined?(@group) ? @group : nil
 - oldRoleId = dom_id(@old_role || @role)
+
 parentEl = $('##{oldRoleId}').parent().hide()
 multiple_groups = $('##{oldRoleId}').children('span.muted').length > 0
-if (!#{(@old_role || @role).group_id == entry.group_id} && !multiple_groups) {
-$('##{oldRoleId}').popover('destroy').remove()
-parentEl.children('p').length === 0 ? $('tr##{dom_id(entry.person)}').remove() : parentEl.toggle('highlight', {duration: 1000})
-} else {
-rolesWithSubgroups = $($.parseHTML('#{j(PersonDecorator.new(entry.person).roles_short(group, true))}'))
-rolesWithoutSubgroups = $($.parseHTML('#{j(PersonDecorator.new(entry.person).roles_short(group))}'))
-roles = multiple_groups ? rolesWithSubgroups : rolesWithoutSubgroups
-filteredRoles = roles.filter(function() {return this.id !== '#{dom_id(entry)}' && this.id !== '#{oldRoleId}'})
-filteredRoles.each(function() { $('#' + this.id).remove() })
-$('##{oldRoleId}').popover('destroy').replaceWith(roles)
-parentEl.toggle('highlight', {duration: 1000})
-}
+
+- if !(@old_role || @role).group_id == entry.group_id && multiple_groups
+  $('##{oldRoleId}').popover('destroy').remove()
+  parentEl.children('p').length === 0 ? $('tr##{dom_id(entry.person)}').remove() : parentEl.toggle('highlight', {duration: 1000})
+- else
+  rolesWithSubgroups = '#{j(PersonDecorator.new(entry.person).roles_short(@group, true))}'
+  rolesWithoutSubgroups = '#{j(PersonDecorator.new(entry.person).roles_short(@group))}'
+  roles = $($.parseHTML(multiple_groups ? rolesWithSubgroups : rolesWithoutSubgroups ))
+
+  filteredRoles = roles.filter(function() { return this.id !== '#{dom_id(entry)}' && this.id !== '#{oldRoleId}' })
+  filteredRoles.each(function() { $('#' + this.id).remove() })
+
+  $('##{oldRoleId}').popover('destroy').replaceWith(roles)
+  parentEl.toggle('highlight', {duration: 1000})

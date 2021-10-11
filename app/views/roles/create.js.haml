@@ -1,7 +1,6 @@
-- group ||= defined?(@group) ? @group : nil
 - if entry.persisted?
   $($('body').data('popover')).parent().hide()
-  $($('body').data('popover')).popover('destroy').replaceWith('#{j(PersonDecorator.new(entry.person).roles_short(group, true))}')
+  $($('body').data('popover')).popover('destroy').replaceWith('#{j(PersonDecorator.new(entry.person).roles_short(@group, true))}')
   $('##{dom_id(entry)}').parent().toggle('highlight', {duration: 1000})
 - else
   - @person_id = entry.person_id

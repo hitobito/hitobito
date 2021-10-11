@@ -11,7 +11,7 @@ class Export::Pdf::Messages::LetterWithInvoice
     def initialize(pdf, letter, recipient, options)
       super(pdf, letter, options)
       pdf.start_new_page
-      @recipient = recipient
+      @recipient = recipient.person
       @letter = letter
     end
 

@@ -9,7 +9,11 @@ require "spec_helper"
 
 describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
 
-  let(:top_leader)              { people(:top_leader) }
+  let(:top_leader) { people(:top_leader) }
+  let(:recipient) do
+    MessageRecipient
+      .new(message: letter_with_invoice, person: bottom_member)
+  end
   let(:top_layer)               { groups(:top_layer) }
   let(:bottom_member)           { people(:bottom_member) }
 
@@ -18,7 +22,7 @@ describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
   let(:pdf)                     { Prawn::Document.new }
   let(:analyzer)                { PDF::Inspector::Text.analyze(pdf.render) }
 
-  subject { described_class.new(pdf, letter_with_invoice, bottom_member, options) }
+  subject { described_class.new(pdf, letter_with_invoice, recipient, options) }
 
   context "donation confirmation" do
     let(:stamps) { pdf.instance_variable_get('@donation_confirmation_text') }

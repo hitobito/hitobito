@@ -36,7 +36,7 @@ class Export::MessageJob < Export::ExportBaseJob
   def data
     case @format
     when :pdf
-      message.exporter_class.new(message, recipients, {
+      message.exporter_class.new(message, {
         async_download_file: filename,
         stamped: true
       }).render

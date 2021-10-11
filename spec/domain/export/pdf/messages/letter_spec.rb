@@ -166,7 +166,7 @@ describe Export::Pdf::Messages::Letter do
         expect(stamps.keys).to eq [:render_header, :render_subject, :render_content]
       end
 
-      it "falls back to normal rending if stamping fails because content is to big" do
+      it "falls back to normal rendering if stamping fails because content is to big" do
         letter.body = Faker::Lorem.paragraphs(number: 100)
         options[:stamped] = true
         expect(text_with_position).to be_present

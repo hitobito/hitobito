@@ -30,7 +30,7 @@ class MailingLists::RecipientCountsController < ListController
   end
 
   def households
-    !!params[:households].presence
+    params.dig(:message, :send_to_households) == 'true'
   end
 
   def message_type

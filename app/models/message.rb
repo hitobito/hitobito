@@ -121,16 +121,4 @@ class Message < ActiveRecord::Base
     "Export::Pdf::Messages::#{type.demodulize}".constantize
   end
 
-  def total_recipient_count
-    @total_recipient_count ||= mailing_list.people_count
-  end
-
-  def valid_recipient_count
-    raise 'implement in subclass'
-  end
-
-  def invalid_recipient_count
-    total_recipient_count - valid_recipient_count
-  end
-
 end

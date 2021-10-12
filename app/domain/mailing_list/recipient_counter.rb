@@ -12,8 +12,16 @@ class MailingList::RecipientCounter
   end
 
   def valid
-    sleep 0.5
-    @valid ||= rand(1000) # TODO
+    @valid ||= case @message_type
+               when Message::Letter.name, Message::LetterWithInvoice.name
+                 @households ?
+                     @mailing_list.household_count(Person.with_address) :
+                     @mailing_list.people_count(Person.with_address)
+               when Message::TextMessage.name
+                 @mailing_list.people_count(Person.with_mobile)
+               else
+                 @mailing_list.people_count
+               end
   end
 
   def invalid
@@ -21,6 +29,15 @@ class MailingList::RecipientCounter
   end
 
   def total
-    @total ||= valid + rand(100) # TODO
+    @total ||= case @message_type
+               when Message::Letter.name, Message::LetterWithInvoice.name
+                 @households ?
+                     @mailing_list.household_count :
+                     @mailing_list.people_count
+               when Message::TextMessage.name
+                 @mailing_list.people_count
+               else
+                 @mailing_list.people_count
+               end
   end
 end

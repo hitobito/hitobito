@@ -54,11 +54,6 @@ describe Message::Letter do
       # person without address
       add_to_group(Fabricate(:person))
     end
-
-    it 'calculates number of people with complete address' do
-      expect(entry.total_recipient_count).to eq(44)
-      expect(entry.valid_recipient_count).to eq(42)
-    end
   end
 
   private

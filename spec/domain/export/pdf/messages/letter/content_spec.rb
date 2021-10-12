@@ -45,6 +45,48 @@ describe Export::Pdf::Messages::Letter::Content do
         [36, 447, "simple text"]
       ]
     end
+
+    context 'households' do
+      let(:household_key) { 'household-abcd42' }
+      let(:housemate1) { Fabricate(:person_with_address, household_key: household_key) }
+      let(:letter) { messages(:letter) }
+      let!(:recipient2) do
+        MessageRecipient.create!(message: letter,
+                                 person: housemate1,
+                                 household_address: true)
+      end
+
+      before do
+        letter.update!(send_to_households: true, body: 'Lorem ipsum')
+        recipient.update!(household_address: true)
+        recipient.person.update!(household_key: household_key)
+      end
+
+      it 'renders saluation for all household members' do
+        letter.update!(salutation: 'lieber_vorname')
+
+        subject.render(recipient)
+        expect(text_with_position).to eq [
+          [36, 485, "Liebe*r #{housemate1.first_name}"],
+          [36, 470, 'Liebe*r Top'],
+          [36, 431, 'Lorem ipsum']
+        ]
+      end
+
+      it 'does not render other household members salutation if not in recipients' do
+        letter.update!(salutation: 'lieber_vorname')
+        recipient2.destroy!
+
+        subject.render(recipient)
+        expect(text_with_position).to eq [
+          [36, 485, 'Liebe*r Top'],
+          [36, 446, 'Lorem ipsum']
+        ]
+      end
+
+      it "does not render personal salutation for letter with generic salutation" do
+      end
+    end
   end
 
   context "stamping" do

@@ -119,7 +119,7 @@ module Export::Pdf::Messages
     end
 
     def message_recipients
-      recipients = @letter.message_recipients
+      recipients = @letter.message_recipients.includes(:person)
       if @letter.send_to_households?
         recipients = recipients.group(:address)
       end

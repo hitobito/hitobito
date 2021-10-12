@@ -8,22 +8,25 @@ app = window.App ||= {}
 # Shows/hides a spinner when a button triggers an ajax request.
 class app.Spinner
 
-  show: (button) ->
+  show: (button, spinnerSelector) ->
     $(button).
       prop('disable', true).
-      addClass('disabled').
-      siblings('.spinner').show()
+      addClass('disabled')
+    this.findSpinner($(button), spinnerSelector).show()
 
-  hide: (button) ->
+  hide: (button, spinnerSelector) ->
     $(button).
       prop('disable', false).
-      removeClass('disabled').
-      siblings('.spinner').hide()
+      removeClass('disabled')
+    this.findSpinner($(button), spinnerSelector).hide()
+
+  findSpinner: (button, selector) ->
+    if selector then $(selector) else button.siblings('.spinner')
 
   bind: ->
     self = this
-    $(document).on('ajax:beforeSend', '[data-spin]', () -> self.show(this))
-    $(document).on('ajax:complete', '[data-spin]', () -> self.hide(this))
+    $(document).on('ajax:beforeSend', '[data-spin]', (e) -> self.show(this, $(e.target).data('spin')))
+    $(document).on('ajax:complete', '[data-spin]', (e) -> self.hide(this, $(e.target).data('spin')))
 
 
 new app.Spinner().bind()

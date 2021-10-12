@@ -96,8 +96,8 @@ module FormHelper
     link_to(ti(:"button.cancel"), url, class: 'link cancel')
   end
 
-  def spinner
-    image_pack_tag('spinner.gif', size: '16x16', class: 'spinner', style: 'display: none;')
+  def spinner(visible = false)
+    image_pack_tag('spinner.gif', size: '16x16', class: 'spinner', style: visible ? '' : 'display: none;')
   end
 
   private

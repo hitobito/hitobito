@@ -6,7 +6,9 @@
 = standard_form(entry, url: [parent.group, parent, entry], data: { group: group_path(parent.group.layer_group) }) do |f|
   = f.error_messages
   .controls
-    %p.text#recipient-count{'data-spin': true}
+    %span.text#recipient-count-spinner
+      = spinner(true)
+    %p.text#recipient-count
       = '&nbsp;'.html_safe
 
   = f.hidden_field :type

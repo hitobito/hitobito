@@ -38,7 +38,8 @@ class MailingLists::RecipientCountsController < ListController
   end
 
   def human_message_type
-    # TODO message.model_name.human
+    message_type.constantize.model_name.human
+  rescue
     message_type
   end
 

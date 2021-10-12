@@ -124,10 +124,14 @@ class MailingList < ActiveRecord::Base
 
   def household_count(people_scope = Person)
     people = Person.quoted_table_name
+    # group by household, keep NULLs separate
+    group_by = "IFNULL(#{people}.`household_key`, #{people}.`id`)"
     subselect = MailingList::Subscribers.new(self, people_scope).
         people.
-        # group by household, keep NULLs separate
-        group("IFNULL(#{people}.`household_key`, #{people}.`id`)")
+        # remove previously added selects, very important to make this query scale
+        unscope(:select).
+        select("(#{group_by}) as households").
+        group(group_by)
 
     # count total rows after grouping, instead of adding a count to each grouped row
     Person.from(subselect).count

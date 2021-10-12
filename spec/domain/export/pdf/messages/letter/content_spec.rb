@@ -46,6 +46,9 @@ describe Export::Pdf::Messages::Letter::Content do
       ]
     end
 
+    it 'handles company?' do
+    end
+
     context 'households' do
       let(:household_key) { 'household-abcd42' }
       let(:housemate1) { Fabricate(:person_with_address, household_key: household_key) }
@@ -70,24 +73,23 @@ describe Export::Pdf::Messages::Letter::Content do
       end
 
       it 'renders saluation for all household members' do
-        letter.update!(salutation: 'lieber_vorname')
+        letter.update!(salutation: :lieber_vorname)
 
         subject.render(recipient)
         expect(text_with_position).to eq [
-          [36, 485, "Liebe*r #{housemate1.first_name}"],
-          [36, 470, 'Liebe*r Top'],
-          [36, 431, 'Lorem ipsum']
+          [36, 485, "Liebe*r Top, Liebe*r #{housemate1.first_name}"],
+          [36, 447, 'Lorem ipsum']
         ]
       end
 
       it 'does not render other household members salutation if not in recipients' do
-        letter.update!(salutation: 'lieber_vorname')
+        letter.update!(salutation: :lieber_vorname)
         recipient2.destroy!
 
         subject.render(recipient)
         expect(text_with_position).to eq [
           [36, 485, 'Liebe*r Top'],
-          [36, 446, 'Lorem ipsum']
+          [36, 447, 'Lorem ipsum']
         ]
       end
     end

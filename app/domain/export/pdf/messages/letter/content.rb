@@ -21,11 +21,17 @@ class Export::Pdf::Messages::Letter
     end
 
     def render_salutation(recipient)
+      salutation = salutation(recipient.person)
+
       if recipient.household_address
-        render_household_salutations(recipient)
+        salutation_text = household_salutations(recipient)
+      elsif generic?(salutation)
+        stamped(:salutation_generic) { pdf.text salutation.value }
       else
-        render_single_salutation(recipient.person)
+        salutation_text = salutation.value
       end
+
+      pdf.text salutation_text if salutation_text.present?
       pdf.move_down pdf.font_size * 2
     end
 
@@ -33,24 +39,14 @@ class Export::Pdf::Messages::Letter
       salutation.attributes.values.none?(&:present?) && letter.salutation == 'default'
     end
 
-    def render_single_salutation(person)
-      pdf.text salutation(person)
-    end
-
     def salutation(person)
-      salutation = Salutation.new(person, letter.salutation)
-      if generic?(salutation)
-        stamped(:salutation_generic) { pdf.text salutation.value }
-      else
-        salutation.value
-      end
+      Salutation.new(person, letter.salutation)
     end
 
-    def render_household_salutations(recipient)
-      household_people(recipient).each do |r|
-        render_single_salutation(r.person)
-        pdf.move_down(1)
-      end
+    def household_salutations(recipient)
+      household_people(recipient).collect do |r|
+        salutation(r.person).value
+      end.join(', ')
     end
 
     def household_people(recipient)

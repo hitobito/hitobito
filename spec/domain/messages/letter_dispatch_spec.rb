@@ -134,6 +134,29 @@ describe Messages::LetterDispatch do
       expect(recipient_entry(top_leader).address).to eq(top_leader_address)
       expect(recipient_entry(top_leader).household_address).to eq(false)
     end
+
+    it 'adds all names from household address to address box' do
+      message.update!(send_to_households: true)
+      housemate3 = Fabricate(:person_with_address, first_name: 'Mark', last_name: 'Hols')
+      housemate4 = Fabricate(:person_with_address, first_name: 'Jana', last_name: 'Nicks')
+      housemate5 = Fabricate(:person_with_address, first_name: 'Olivia', last_name: 'Berms')
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate3)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate4)
+      Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one), person: housemate5)
+
+      create_household(housemate1, housemate3)
+      create_household(housemate1, housemate4)
+      create_household(housemate1, housemate5)
+
+      subject.run
+
+      address = recipient_entry(housemate2).address.split("\n")
+      expect(address).to include('Anton Abraham')
+      expect(address).to include('Zora Zaugg')
+      expect(address).to include('Mark Hols')
+      expect(address).to include('Olivia Berms')
+      expect(address).to include('Jana Nicks')
+    end
   end
 
   private

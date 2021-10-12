@@ -44,7 +44,7 @@ class MailingLists::RecipientCountsController < ListController
   end
 
   def valid_recipient_info
-    t(".recipient_info.valid.#{message_type.underscore}",
+    t(".recipient_info.#{translation_key}.valid",
       count: recipient_counter.valid,
       model_class: human_message_type)
   end
@@ -52,11 +52,16 @@ class MailingLists::RecipientCountsController < ListController
   def invalid_recipient_info
     return '' if recipient_counter.invalid.zero?
 
-    info = t(".recipient_info.invalid.#{message_type.underscore}",
+    info = t(".recipient_info.#{translation_key}.invalid",
              count: recipient_counter.invalid,
              model_class: human_message_type)
 
     "(#{info})"
+  end
+
+  def translation_key
+    return "#{message_type.underscore}.households" if households
+    "#{message_type.underscore}.people"
   end
 
   def recipient_counter

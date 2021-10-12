@@ -19,4 +19,6 @@
     message_text.keyup(function() {
       counter.text(maxLength - $(this).val().length);
     });
+
+    $.rails.ajax('#{group_mailing_list_recipient_counts_path(message_type: entry.type)}')
   });

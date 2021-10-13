@@ -8,7 +8,7 @@
 class MailingLists::RecipientCountsController < ListController
   skip_authorization_check
 
-  helper_method :mailing_list, :group, :valid_recipient_info, :invalid_recipient_info
+  helper_method :mailing_list, :group, :households, :valid_recipient_info, :invalid_recipient_info
 
   def index
     respond_to :js

@@ -87,7 +87,7 @@ describe Export::Pdf::Messages::Letter do
 
       it "renders text at positions with layer sender address" do
         letter.update!(heading: true)
-        group.contact.destroy!
+        group.update!(contact: nil, zip_code: '4243', town: 'No-Where')
         layer.update!(town: "Wanaka", zip_code: '4242', address: "Lakeview 42")
 
         expect(text_with_position).to match_array [

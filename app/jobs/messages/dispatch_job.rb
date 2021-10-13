@@ -31,10 +31,6 @@ module Messages
 
     private
 
-    def recipients
-      message.mailing_list.people
-    end
-
     def sender
       message.sender
     end

@@ -7,21 +7,16 @@
 
 class People::HouseholdList
 
-  def initialize(people_ids)
-    @people_ids = people_ids
+  def initialize(people)
+    @people = people
   end
 
   def people_without_household
-    Person.where(household_key: nil, id: @people_ids)
+    Person.where(household_key: nil, id: @people)
   end
 
   def household_people
-    Person.where.not(household_key: nil).where(id: @people_ids)
+    Person.where.not(household_key: nil).where(id: @people)
   end
-
-  def household_count
-  end
-
-  private
 
 end

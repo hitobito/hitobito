@@ -49,8 +49,7 @@ module Messages
     end
 
     def people_with_household_addresses
-      people_ids = people.pluck(:id)
-      household_list = People::HouseholdList.new(people_ids)
+      household_list = People::HouseholdList.new(people)
 
       # batch run for people without household
       household_list.people_without_household.with_address.find_in_batches do |batch|

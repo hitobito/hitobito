@@ -231,6 +231,30 @@ describe Export::Pdf::Messages::Letter do
          [71, 460, "Bis bald"]]
     end
 
+    it 'adds all household peoples names to address' do
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: other_housemate)
+      create_household(housemate1, other_housemate)
+      create_household(housemate1, people(:bottom_member))
+
+      letter.message_recipients.destroy_all
+      Messages::LetterDispatch.new(letter).run
+
+      expect(text_with_position).to match_array [
+        [71, 687, "Bottom Member"],
+        [71, 676, "Top Leader"],
+        [71, 666, "Anton Abraham"],
+        [71, 655, "Zora Zaugg"],
+        [71, 687, "Altra Mates"],
+        [71, 676, "Greatstreet 345"],
+        [71, 666, "3456 Greattown"],
+        [71, 531, "Information"],
+        [71, 502, "Hallo"],
+        [71, 481, "Wir laden "],
+        [111, 481, "dich"],
+        [130, 481, " ein! "],
+        [71, 460, "Bis bald"]]
+    end
+
   end
 
   context 'preview' do

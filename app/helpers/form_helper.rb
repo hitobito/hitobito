@@ -97,7 +97,10 @@ module FormHelper
   end
 
   def spinner(visible = false)
-    image_pack_tag('spinner.gif', size: '16x16', class: 'spinner', style: visible ? '' : 'display: none;')
+    image_pack_tag('spinner.gif',
+                   size: '16x16',
+                   class: 'spinner',
+                   style: visible ? '' : 'display: none;')
   end
 
   private

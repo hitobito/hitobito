@@ -9,7 +9,7 @@ module Export::Pdf::Messages
   class Letter
 
     MARGIN = 2.5.cm
-    PREVIEW_LIMIT = 5
+    PREVIEW_LIMIT = 4
 
     class << self
       def export(_format, letter)

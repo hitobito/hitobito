@@ -13,6 +13,11 @@ module Messages
       @message = message
       @options = options
       @now = Time.current
+
+      if send_to_households? && @options[:recipient_limit]
+        # In household exports, half of the preview should be normal, half households
+        @options[:recipient_limit] /= 2
+      end
     end
 
     def run

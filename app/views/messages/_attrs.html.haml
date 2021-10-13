@@ -15,7 +15,10 @@
     %h2=t('.dispatch_infos')
     = render_attrs entry, :state
     - if entry.dispatched?
-      = render_attrs entry, :recipient_count
+      - if entry.state == 'processing'
+        = render_attrs entry, :recipient_progress
+      - else
+        = render_attrs entry, :recipient_count
       - if entry.sent_at
         - if entry.letter?
           = render_attrs entry, :sent_at

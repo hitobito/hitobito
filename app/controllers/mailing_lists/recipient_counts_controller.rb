@@ -7,7 +7,6 @@
 
 class MailingLists::RecipientCountsController < ListController
   skip_authorization_check
-  before_action :authorize_action
 
   helper_method :mailing_list, :group, :valid_recipient_info, :invalid_recipient_info
 
@@ -68,7 +67,7 @@ class MailingLists::RecipientCountsController < ListController
     @recipient_counter ||= MailingList::RecipientCounter.new(mailing_list, message_type, households)
   end
 
-  def authorize_action
+  def authorize_class
     authorize!(:update, mailing_list)
   end
 

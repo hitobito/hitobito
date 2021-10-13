@@ -21,7 +21,7 @@ class app.Spinner
     this.findSpinner($(button), spinnerSelector).hide()
 
   findSpinner: (button, selector) ->
-    if selector then $(selector) else button.siblings('.spinner')
+    if typeof selector is 'string' then $(selector) else button.siblings('.spinner')
 
   bind: ->
     self = this

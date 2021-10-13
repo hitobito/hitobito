@@ -12,11 +12,22 @@ class People::HouseholdList
   end
 
   def people_without_household
-    Person.where(household_key: nil, id: @people)
+    @people.unscope(:select).where(household_key: nil)
   end
 
-  def household_people
-    Person.where.not(household_key: nil).where(id: @people)
+  def grouped_households
+    people = Person.quoted_table_name
+    # group by household, keep NULLs separate
+    group_by = "IFNULL(#{people}.`household_key`, #{people}.`id`)"
+
+    # remove previously added selects, very important to make this query scale
+    @people.unscope(:select).
+        select("(#{group_by}) as `key`, MIN(#{people}.`id`) as `id`").
+        group("#{group_by}")
+  end
+
+  def only_households
+    grouped_households.where.not(household_key: nil)
   end
 
 end

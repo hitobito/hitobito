@@ -56,14 +56,21 @@ module Messages
     def people_with_household_addresses
       household_list = People::HouseholdList.new(people)
 
-      # batch run for people without household
-      household_list.people_without_household.with_address.find_in_batches do |batch|
-        create_recipient_entries(batch)
+      # first, run a separate batch for people that are grouped in households, because that's slower
+      household_list.only_households.find_in_batches do |batch|
+        household_keys = batch.map(&:key)
+        household_members = @message.mailing_list.people
+                                .select(:household_key)
+                                .where(household_key: household_keys)
+        create_recipient_entries(household_members)
+        update!(success_count: success_count + batch.size)
       end
 
-      # run sep. batch for people with household
-      household_people = household_list.household_people.with_address
-      create_recipient_entries(household_people)
+      # batch run for people without household
+      household_list.people_without_household.with_address.find_in_batches do |batch|
+        count = create_recipient_entries(batch)
+        update!(success_count: success_count + count)
+      end
     end
 
     def create_recipient_entries(people_batch)
@@ -76,7 +83,7 @@ module Messages
         )
       end
       MessageRecipient.insert_all(rows)
-      update!(success_count: success_count + rows.size)
+      rows.size
     end
 
     def address_for_letter(person, people)
@@ -94,10 +101,11 @@ module Messages
     end
 
     def household_address(person, people)
-      household_people = people.select { |p| p.household_key == person.household_key }
+      household_people = people.
+          select { |p| p.household_key == person.household_key }.
+          sort_by(&:last_name) # sort alphabetically
       if household_people.count > 1
-        names = household_people.collect { |p| p.full_name }
-        Person::Address.new(person).for_household_letter(names)
+        Person::Address.new(person).for_household_letter(household_people)
       end
     end
   end

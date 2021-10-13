@@ -49,7 +49,8 @@ module Messages
 
     def people_addresses
       people.with_address.find_in_batches do |batch|
-        create_recipient_entries(batch)
+        count = create_recipient_entries(batch)
+        update!(success_count: count)
       end
     end
 

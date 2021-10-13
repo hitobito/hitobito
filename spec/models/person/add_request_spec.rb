@@ -110,14 +110,12 @@ describe Person::AddRequest do
         body: group,
         role_type: Group::TopGroup::Leader.sti_name)
 
-      event.update_column(:id, group.id) # set same id for strong test
       @re = Person::AddRequest::Event.create!(
         person: people(:bottom_member),
         requester: people(:top_leader),
         body: event,
         role_type: Event::Role::Leader.sti_name)
 
-      abo.update_column(:id, group.id) # set same id for strong test
       @rm = Person::AddRequest::MailingList.create!(
         person: people(:bottom_member),
         requester: people(:top_leader),

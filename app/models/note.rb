@@ -32,6 +32,7 @@ class Note < ActiveRecord::Base
 
   validates_by_schema
   validates :text, presence: true
+  validates :subject_type, inclusion: %w(Person Group)
 
   scope :list, -> { order(created_at: :desc) }
 

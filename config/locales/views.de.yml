@@ -1040,6 +1040,8 @@ de:
     paginator:
       newer_notes: Neuere Beiträge
       older_notes: Altere Beiträge
+    destroy:
+      failure: "Löschen der Notiz fehlgeschlagen: %{errors}."
 
   oauth:
     applications:

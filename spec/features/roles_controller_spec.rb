@@ -13,6 +13,9 @@ describe RolesController, js: true do
 
   subject { page }
   let(:group) { groups(:top_group) }
+  let!(:role1)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
+  let!(:role2)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
+  let!(:leader) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group) }
 
   it 'toggles people fields' do
     obsolete_node_safe do
@@ -138,22 +141,53 @@ describe RolesController, js: true do
   it 'updates person role with popupmenu' do
     obsolete_node_safe do
       sign_in
-      visit group_person_path(group_id: group.id)
 
-      # Expect to people table
+      # Add additional role to first person
+      visit group_people_path(group_id: group.id)
+      find(:css, "#ids_[value='#{role1.person.id}']").set(true)
+      find(:css, "#ids_[value='#{role2.person.id}']").set(true)
 
+      click_link('Rolle hinzufügen')
 
-      # Click first row to alter role of person and expect role popup
+      select('Leader', from: 'role_type')
+      expect(page).to have_button '2 Rollen erstellen'
+      find('button', text: '2 Rollen erstellen').click
 
+      is_expected.to have_content('2 Rollen wurden erstellt')
+      is_expected.to have_css("tr#person_#{role1.person.id} td p", text: 'Leader')
+      is_expected.to have_css("tr#person_#{role2.person.id} td p", text: 'Leader')
+
+      person_with_two_roles = role1.person
+      person_with_two_roles_row = find("tr#person_#{person_with_two_roles.id}")
+
+      # Expect to have people table with person above
+      is_expected.to have_selector('div.table-responsive')
+      is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: 'Leader')
+      is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: 'Member')
+
+      # Click person row to alter role of person and expect role popup
+      person_with_two_roles_row.find_all("a[title=\"Bearbeiten\"]").first.click
+      is_expected.to have_css("div.popover")
 
       # Change role
+      find("div.popover div#role_type_select").click
+      is_expected.to have_css("div.popover div.chosen-drop", visible: true)
 
+      role_select_menu = find("div.popover div.chosen-drop", visible: true)
+      expect(role_select_menu).to have_content('Leader')
+
+      role_select_menu.find_all("li").last.click
 
       # Click save
+      find("button[data-disable-with=\"Speichern\"]").click
 
+      # Expect role Leader and External
+      is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: 'Leader')
+      is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: 'External')
 
       # Expect role field to have no more roles than person has in db
-
+      person_db_role_count = person_with_two_roles.roles.count
+      expect(person_with_two_roles_row.find_all("td[style=\"display: table-cell;\"] > p").count).to eq(person_db_role_count)
     end
   end
 end

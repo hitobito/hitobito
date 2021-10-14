@@ -22,9 +22,9 @@ module Messages
 
     def run
       if send_to_households?
-        people_with_household_addresses
+        create_for_households!
       else
-        people_addresses
+        create_for_people!
       end
     end
 
@@ -36,7 +36,7 @@ module Messages
 
     def fetch_people
       recipient_limit = @options[:recipient_limit]
-      people = @message.mailing_list.people
+      people = @message.mailing_list.people.with_address
       if recipient_limit
         people = people.limit(recipient_limit)
       end
@@ -47,28 +47,24 @@ module Messages
       { message_id: @message.id, created_at: @now }
     end
 
-    def people_addresses
-      people.with_address.find_in_batches do |batch|
+    def create_for_people!
+      people.find_in_batches do |batch|
         count = create_recipient_entries(batch)
         update!(success_count: count)
       end
     end
 
-    def people_with_household_addresses
+    def create_for_households!
       household_list = People::HouseholdList.new(people)
 
       # first, run a separate batch for people that are grouped in households, because that's slower
-      household_list.only_households.find_in_batches do |batch|
-        household_keys = batch.map(&:key)
-        household_members = @message.mailing_list.people
-                                .select(:household_key)
-                                .where(household_key: household_keys)
-        create_recipient_entries(household_members)
+      household_list.households_in_batches(exclude_non_households: true) do |batch|
+        create_recipient_entries(batch.flatten)
         update!(success_count: success_count + batch.size)
       end
 
       # batch run for people without household
-      household_list.people_without_household.with_address.find_in_batches do |batch|
+      household_list.people_without_household.find_in_batches do |batch|
         count = create_recipient_entries(batch)
         update!(success_count: success_count + count)
       end

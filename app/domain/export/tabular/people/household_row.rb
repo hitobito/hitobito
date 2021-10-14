@@ -10,6 +10,14 @@ module Export::Tabular::People
 
     SHORTEN_AT = 40
 
+    def entry
+      household.first
+    end
+
+    def household
+      @entry
+    end
+
     def name
       if entry.company?
         entry.company_name
@@ -61,15 +69,11 @@ module Export::Tabular::People
     end
 
     def first_names
-      strip(entry.first_name.to_s.split(','))
+      household.map {|person| person.first_name.strip }
     end
 
     def last_names
-      strip(entry.last_name.to_s.split(','))
-    end
-
-    def strip(array)
-      array.collect { |string| string.strip }
+      household.map {|person| person.last_name.strip }
     end
 
     def without_blanks(array)

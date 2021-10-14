@@ -65,7 +65,7 @@ describe Export::Pdf::Messages::Letter::Content do
         recipient.person.update!(household_key: household_key)
       end
 
-      it "does not render personal salutation for letter with generic salutation" do
+      it "does not render personal salutation for letter with no salutation" do
         subject.render(recipient)
         expect(text_with_position).to eq [
           [36, 485, 'Lorem ipsum']

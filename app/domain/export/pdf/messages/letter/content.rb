@@ -21,33 +21,9 @@ class Export::Pdf::Messages::Letter
     end
 
     def render_salutation(recipient)
-      salutation = salutation(recipient.person)
-
-      if recipient.household_address
-        salutation_text = household_salutations(recipient)
-      else
-        salutation_text = salutation.value
-      end
-
-      pdf.text salutation_text if salutation_text.present?
+      pdf.text recipient.salutation if recipient.salutation.present?
       pdf.move_down pdf.font_size * 2
     end
 
-    def salutation(person)
-      Salutation.new(person, letter.salutation)
-    end
-
-    def household_salutations(recipient)
-      household_people(recipient).collect do |r|
-        salutation(r.person).value
-      end.join(', ')
-    end
-
-    def household_people(recipient)
-      letter
-        .message_recipients
-        .joins(:person)
-        .where('people.household_key': recipient.person.household_key)
-    end
   end
 end

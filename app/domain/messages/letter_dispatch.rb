@@ -7,7 +7,7 @@
 
 module Messages
   class LetterDispatch
-    delegate :update!, :success_count, :send_to_households?, to: '@message'
+    delegate :update!, :success_count, :send_to_households?, :salutation, to: '@message'
 
     def initialize(message, options = {})
       @message = message
@@ -44,7 +44,7 @@ module Messages
     end
 
     def reciept_attrs
-      { message_id: @message.id, created_at: @now }
+      @receipt_attrs ||= { message_id: @message.id, created_at: @now }
     end
 
     def create_for_people!
@@ -72,37 +72,37 @@ module Messages
 
     def create_recipient_entries(people_batch)
       rows = people_batch.collect do |person|
-        address, household = address_for_letter(person, people_batch)
+        housemates = from_same_household_as(person, people_batch)
         reciept_attrs.merge(
           person_id: person.id,
-          address: address,
-          household_address: household
+          address: address_for_letter(person, housemates),
+          salutation: salutation_for_letter(person, housemates)
         )
       end
       MessageRecipient.insert_all(rows)
       rows.size
     end
 
-    def address_for_letter(person, people)
-      address = person.address_for_letter
-      household = false
+    def from_same_household_as(person, candidates)
+      return [person] unless person.household_key.present?
 
-      if send_to_households? && person.household_key?
-        household_addr = household_address(person, people)
-        if household_addr.present?
-          address = household_addr
-          household = true
-        end
-      end
-      [address, household]
+      candidates.select{ |candidate| candidate.household_key == person.household_key }.
+          sort_by(&:last_name) # sort alphabetically
     end
 
-    def household_address(person, people)
-      household_people = people.
-          select { |p| p.household_key == person.household_key }.
-          sort_by(&:last_name) # sort alphabetically
-      if household_people.count > 1
-        Person::Address.new(person).for_household_letter(household_people)
+    def address_for_letter(person, housemates)
+      if send_to_households? && housemates.count > 1
+        Person::Address.new(person).for_household_letter(housemates)
+      else
+        person.address_for_letter
+      end
+    end
+
+    def salutation_for_letter(person, housemates)
+      if send_to_households? && housemates.count > 1
+        Salutation.new(person, salutation).value_for_household(housemates)
+      else
+        Salutation.new(person, salutation).value
       end
     end
   end

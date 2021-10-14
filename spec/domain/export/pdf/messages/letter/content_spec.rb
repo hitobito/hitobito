@@ -127,16 +127,6 @@ describe Export::Pdf::Messages::Letter::Content do
       ]
       expect(stamps.keys).to eq [:render_content]
     end
-
-    it "has stamps for different salutations and content" do
-      options[:stamped] = true
-      subject.render(recipient)
-      pdf.start_new_page
-      subject.render(MessageRecipient.new(person: Person.new))
-      expect(stamps.keys).to eq [:render_content, :salutation_generic]
-      # TODO: Unsure why in this case font in analyzer is empty
-      # expect(text_with_position).to be_empty #
-    end
   end
 
   def text_with_position

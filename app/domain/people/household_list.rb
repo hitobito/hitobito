@@ -13,7 +13,7 @@ class People::HouseholdList
   end
 
   def people_without_household
-    @people_scope.unscope(:select).where(household_key: nil)
+    @people_scope.where(household_key: nil)
   end
 
   def grouped_households
@@ -23,8 +23,9 @@ class People::HouseholdList
     @people_scope.unscope(:select, :includes).
         # group by household, but keep NULLs separate
         select("IFNULL(#{people}.`household_key`, #{people}.`id`) as `key`").
-        # Must select the primary key column because find_in_batches needs it for sorting
+        # Must select the primary key column because find_in_batches needs it for sorting.
         select("MIN(#{Person.quoted_table_name}.`id`) as `id`").
+        select("COUNT(#{people}.`household_key`) as `count`").
         group(:key)
   end
 
@@ -32,7 +33,14 @@ class People::HouseholdList
     return unless block_given?
     base_scope = exclude_non_households ? only_households : grouped_households
 
-    base_scope.find_in_batches do |batch|
+    # When limiting the number of rows, make sure to always show some households.
+    # For this, we override the order that find_in_batches uses. By default, it
+    # always orders by the primary key column ascendingly.
+    def base_scope.batch_order
+      [Arel::Nodes::SqlLiteral.new('`count`').desc, super]
+    end
+
+    base_scope.find_in_batches(batch_size: 300) do |batch|
       involved_people = fetch_people_with_id_or_household_key(batch.map(&:key))
       grouped_people = batch.map do |household|
         involved_people.select do |person|
@@ -59,7 +67,8 @@ class People::HouseholdList
   end
 
   def fetch_people_with_id_or_household_key(keys_or_ids)
-    base_scope = @people_scope.select(:household_key)
+    # Search for any number of housemates, regardless of preview limit
+    base_scope = @people_scope.unscope(:limit).select(:household_key)
 
     base_scope.where(household_key: keys_or_ids).
         or(base_scope.where(id: keys_or_ids)).

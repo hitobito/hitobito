@@ -13,11 +13,6 @@ module Messages
       @message = message
       @options = options
       @now = Time.current
-
-      if send_to_households? && @options[:recipient_limit]
-        # In household exports, half of the preview should be normal, half households
-        @options[:recipient_limit] /= 2
-      end
     end
 
     def run
@@ -31,16 +26,7 @@ module Messages
     private
 
     def people
-      @people ||= fetch_people
-    end
-
-    def fetch_people
-      recipient_limit = @options[:recipient_limit]
-      people = @message.mailing_list.people.with_address
-      if recipient_limit
-        people = people.limit(recipient_limit)
-      end
-      people
+      @people ||= @message.mailing_list.people.with_address.select(:household_key)
     end
 
     def reciept_attrs
@@ -48,14 +34,15 @@ module Messages
     end
 
     def create_for_people!
-      people.find_in_batches do |batch|
+      limit(people, @options[:recipient_limit]).find_in_batches do |batch|
         count = create_recipient_entries(batch)
         update!(success_count: count)
       end
     end
 
     def create_for_households!
-      household_list = People::HouseholdList.new(people)
+      # In household exports, half of the preview should be normal, half households
+      household_list = People::HouseholdList.new(limit(people, @options[:recipient_limit]&.div(2)))
 
       # first, run a separate batch for people that are grouped in households, because that's slower
       household_list.households_in_batches(exclude_non_households: true) do |batch|
@@ -81,6 +68,10 @@ module Messages
       end
       MessageRecipient.insert_all(rows)
       rows.size
+    end
+
+    def limit(scope, limit)
+      limit.present? ? scope.limit(limit) : scope
     end
 
     def from_same_household_as(person, candidates)

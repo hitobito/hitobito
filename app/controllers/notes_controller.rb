@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2019, Dachverband Schweizer Jugendparlamente. This file is part of
+#  Copyright (c) 2012-2021, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -54,7 +54,7 @@ class NotesController < ApplicationController
   end
 
   def person
-    @person ||= group.people.find(params[:person_id])
+    @person ||= Person.find(params[:person_id])
   end
 
   def note
@@ -74,10 +74,9 @@ class NotesController < ApplicationController
   end
 
   def subject_path
-    if @note.subject_type == Group.name
-      group_path(id: group.id)
-    else
-      group_person_path(group_id: group.id, id: subject.id)
+    case note.subject
+    when Group then group_path(id: group.id)
+    when Person then person_path(id: person.id)
     end
   end
 

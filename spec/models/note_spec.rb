@@ -1,21 +1,9 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
+#  Copyright (c) 2012-2021, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
-# == Schema Information
-#
-# Table name: person_notes
-#
-#  id         :integer          not null, primary key
-#  person_id  :integer          not null
-#  author_id  :integer          not null
-#  text       :text
-#  created_at :datetime
-#  updated_at :datetime
-#
 
 require 'spec_helper'
 
@@ -31,7 +19,7 @@ describe Note do
       n4 = create_group_note(groups(:top_layer))
       n5 = create_group_note(groups(:top_group))
       _n6 = create_group_note(groups(:bottom_layer_one))
-      expect(Note.in_or_layer_below(groups(:top_layer))).to match_array([n1, n2, n4,n5])
+      expect(Note.in_or_layer_below(groups(:top_layer))).to match_array([n1, n2, n4, n5])
     end
 
     it 'includes only notes from children for non-layer group' do
@@ -42,7 +30,7 @@ describe Note do
       n5 = create_group_note(groups(:bottom_group_one_one_one))
       _n6 = create_group_note(groups(:bottom_group_one_two))
       _n7 = create_group_note(groups(:bottom_layer_two))
-      expect(Note.in_or_layer_below(groups(:bottom_group_one_one))).to match_array([n1, n2, n4,n5])
+      expect(Note.in_or_layer_below(groups(:bottom_group_one_one))).to match_array([n1, n2, n4, n5])
     end
 
     def create_person_note(role, group)

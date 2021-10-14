@@ -197,7 +197,7 @@ module FormatHelper
   # Returns true if no link should be created when formatting the given association.
   def assoc_link?(val)
     respond_to?("#{val.class.base_class.model_name.singular_route_key}_path".to_sym) &&
-    can?(:show, val)
+      can?(:show, val)
   end
 
   def object_class(obj)

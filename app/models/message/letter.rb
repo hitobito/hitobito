@@ -44,10 +44,6 @@ class Message::Letter < Message
 
   self.duplicatable_attrs << 'body' << 'heading' << 'salutation'
 
-  def valid_recipient_count
-    @valid_recipient_count ||= mailing_list.people_count(Person.with_address)
-  end
-
   def recipients
     @recipients ||= mailing_list.people(Person.with_address)
   end

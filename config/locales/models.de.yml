@@ -775,6 +775,7 @@ de:
         success_count: Empfänger erfolgreich
         failed_count: Empfänger fehlerhaft
         sent_at: Verarbeitet um
+        recipient_progress: Verarbeitungsfortschritt
 
       message/letter:
         body: Inhalt
@@ -786,6 +787,7 @@ de:
           own: Eigener Versand
           normal: B-Post
           priority: A-Post
+        send_to_households: Haushalte
 
       subscription:
         related_role_types: Rollen

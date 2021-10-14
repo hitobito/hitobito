@@ -103,7 +103,6 @@ describe :messages, js: true do
       is_expected.to have_selector('a', text: 'Anhang')
       click_link('Anhang')
 
-      is_expected.to have_selector('a', text: 'PDF anzeigen')
       is_expected.to have_selector('a', text: 'Druckauftrag anzeigen')
     end
   end

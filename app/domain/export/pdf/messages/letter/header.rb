@@ -8,7 +8,7 @@
 class Export::Pdf::Messages::Letter
   class Header < Section
     LOGO_BOX = [200, 40].freeze
-    ADDRESS_BOX = [200, 40].freeze
+    ADDRESS_BOX = [200, 60].freeze
     SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 20].freeze
 
     delegate :group, to: 'letter'
@@ -19,7 +19,7 @@ class Export::Pdf::Messages::Letter
       offset_cursor_from_top 52.5.mm
 
       stamped :render_shipping_info unless letter.own?
-      render_address(build_address(recipient))
+      render_address(recipient.address)
 
       stamped :render_subject if letter.subject.present?
     end
@@ -71,13 +71,6 @@ class Export::Pdf::Messages::Letter
              "<font size='5pt'>#{group.layer_group.name}, #{group.layer_group.address}</font></u>",
              inline_format: true)
       end
-    end
-
-    def build_address(recipient)
-      [recipient.company? ? recipient.company_name : nil,
-       recipient.full_name.to_s.squish,
-       recipient.address.to_s,
-       [recipient.zip_code, recipient.town].compact.join(' ').squish].compact.join("\n")
     end
 
     def logo_path

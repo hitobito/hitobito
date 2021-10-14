@@ -11,7 +11,7 @@ class MessagesController < CrudController
   include AsyncDownload
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze
-  PERMITTED_LETTER_ATTRS = [:subject, :body, :heading, :salutation,
+  PERMITTED_LETTER_ATTRS = [:subject, :body, :heading, :salutation, :send_to_households,
                             :pp_post, :shipping_method].freeze
   PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :heading, :salutation, :donation_confirmation,
                                     :pp_post, :shipping_method,

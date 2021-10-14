@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_04_073131) do
+ActiveRecord::Schema.define(version: 2021_10_11_173626) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -547,8 +547,12 @@ ActiveRecord::Schema.define(version: 2021_10_04_073131) do
     t.text "error", size: :medium
     t.bigint "invoice_id"
     t.string "state"
+    t.boolean "household_address", default: false
     t.index ["invoice_id"], name: "index_message_recipients_on_invoice_id"
     t.index ["message_id"], name: "index_message_recipients_on_message_id"
+    t.index ["person_id", "message_id", "address"], name: "index_message_recipients_on_person_message_address", unique: true
+    t.index ["person_id", "message_id", "email"], name: "index_message_recipients_on_person_message_email", unique: true
+    t.index ["person_id", "message_id", "phone_number"], name: "index_message_recipients_on_person_message_phone_number", unique: true
     t.index ["person_id"], name: "index_message_recipients_on_person_id"
   end
 
@@ -571,6 +575,7 @@ ActiveRecord::Schema.define(version: 2021_10_04_073131) do
     t.string "salutation"
     t.string "pp_post"
     t.string "shipping_method", default: "own"
+    t.boolean "send_to_households", default: false, null: false
     t.boolean "donation_confirmation", default: false, null: false
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"

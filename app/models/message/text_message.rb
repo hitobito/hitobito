@@ -41,10 +41,6 @@ class Message::TextMessage < Message
     text && text[0..20]
   end
 
-  def valid_recipient_count
-    @valid_recipient_count ||= mailing_list.people_count(Person.with_mobile)
-  end
-
   def update_message_status!
     failed_count = message_recipients.where(state: 'failed').count
     success_count = message_recipients.where(state: 'sent').count

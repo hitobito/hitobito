@@ -122,6 +122,14 @@ class MailingList < ActiveRecord::Base
     MailingList::Subscribers.new(self, people_scope).people.count
   end
 
+  def household_count(people_scope = Person)
+    subscribers_scope = MailingList::Subscribers.new(self, people_scope).people
+    households = People::HouseholdList.new(subscribers_scope)
+
+    # count total rows after grouping, instead of adding a count to each grouped row
+    Person.from(households.grouped_households).count
+  end
+
   def sync
     Synchronize::Mailchimp::Synchronizator.new(self).perform
   end

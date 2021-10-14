@@ -15,7 +15,7 @@ module Export::Pdf::Messages
     def render_sections(recipient)
       super
       render_donation_confirmation(pdf, recipient) if @letter.donation_confirmation?
-      render_payment_slip(pdf, recipient)
+      render_payment_slip(pdf, recipient.person)
     end
 
     def customize

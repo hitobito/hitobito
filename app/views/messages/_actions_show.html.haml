@@ -11,9 +11,10 @@
 
 - if entry.letter?
   - if entry.dispatched?
-    = action_button(t('.button_show_pdf'),
-                    group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf),
-                    :eye)
+    - if entry.state == 'finished'
+      = action_button(t('.button_show_pdf'),
+                      group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf),
+                      :eye)
   - else
     = action_button(t('.button_preview'),
                   group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf, preview: true),

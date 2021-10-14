@@ -173,6 +173,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                            foreign_key: :resource_owner_id,
                            dependent: :delete_all
 
+  has_many :message_recipients, dependent: :nullify
+
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
 
   attr_accessor :household_people_ids, :shared_access_token

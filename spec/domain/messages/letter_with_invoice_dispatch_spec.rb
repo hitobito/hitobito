@@ -10,25 +10,34 @@ require 'spec_helper'
 describe Messages::LetterWithInvoiceDispatch do
   let(:message)    { messages(:with_invoice) }
   let(:top_leader) { people(:top_leader) }
+  let(:recipient_entries) { message.message_recipients }
 
-  subject { described_class.new(message, Person.where(id: top_leader.id)) }
+  let(:dispatch) { described_class.new(message) }
+
+  before do
+    Subscription.create!(mailing_list: mailing_lists(:leaders),
+                         subscriber: groups(:top_group),
+                         role_types: [Group::TopGroup::Leader])
+    top_leader.update!(address: 'Fantasia 42', zip_code: '4242', town: 'Melmac')
+  end
 
   it 'updates message invoice_list and invoices' do
-    subject.run
+    dispatch.run
     expect(message.reload.success_count).to eq 1
     expect(message.reload.invoice_list).to be_present
   end
 
   it 'creates invoice_list and invoices' do
-    expect { subject.run }.to change { InvoiceList.count }.by(1)
+    expect { dispatch.run }.to change { InvoiceList.count }.by(1)
 
+    expect(recipient_entries.count).to eq(1)
     expect(message.invoice_list.reload.invoices).to have(1).item
     expect(message.invoice_list.recipients_processed).to eq 1
     expect(message.invoice_list.invalid_recipient_ids).to eq []
   end
 
   it 'creates and issues invoice' do
-    expect { subject.run }.to change { Invoice.count }.by(1)
+    expect { dispatch.run }.to change { Invoice.count }.by(1)
 
     invoice = message.invoice_list.reload.invoices.first
     expect(invoice.state).to eq 'issued'
@@ -38,7 +47,7 @@ describe Messages::LetterWithInvoiceDispatch do
 
   it 'tracks error during invoice creation' do
     expect_any_instance_of(Invoice).to receive(:save).and_return(false)
-    expect { subject.run }.not_to change { Invoice.count }
+    expect { dispatch.run }.not_to change { Invoice.count }
     expect(message.reload.success_count).to eq 0
     expect(message.reload.failed_count).to eq 1
     expect(message.invoice_list.recipients_processed).to eq 0

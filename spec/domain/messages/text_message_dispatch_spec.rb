@@ -14,10 +14,13 @@ describe Messages::TextMessageDispatch do
   let!(:mobile2) { Fabricate(:phone_number, contactable: top_leader, label: 'Mobil') }
   let!(:fixnet) { Fabricate(:phone_number, contactable: top_leader, label: 'Festnetz') }
 
-  subject { described_class.new(message, Person.where(id: top_leader.id)) }
-
+  let(:dispatch) { described_class.new(message) }
   let(:client_double) { double(:client) }
-  before { allow(subject).to receive(:client).and_return(client_double) }
+
+  before do
+    Subscription.create!(mailing_list: mailing_lists(:leaders), subscriber: top_leader)
+    allow(dispatch).to receive(:client).and_return(client_double)
+  end
 
   context '#run' do
     it 'sends text messages to people\'s mobil numbers' do
@@ -35,7 +38,7 @@ describe Messages::TextMessageDispatch do
         expect(delivery_report_double).to receive(:enqueue!)
           .with(run_at: 15.seconds.from_now)
 
-        subject.run
+        dispatch.run
       end
 
       expect(message.failed_count).to eq 0
@@ -60,7 +63,7 @@ describe Messages::TextMessageDispatch do
         .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
         .and_return(status: :auth_error, message: 'Authorization failed.')
 
-      subject.run
+      dispatch.run
 
       expect(message.reload.success_count).to eq 0
       expect(message.failed_count).to eq 2
@@ -87,7 +90,7 @@ describe Messages::TextMessageDispatch do
         .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
         .and_return(status: :error, message: no_credit_available_msg)
 
-      subject.run
+      dispatch.run
 
       expect(message.reload.success_count).to eq 0
       expect(message.failed_count).to eq 2
@@ -106,7 +109,7 @@ describe Messages::TextMessageDispatch do
   context '#init_recipient_entries' do
     it 'creates recipient entries with state pending' do
       expect do
-        subject.send(:init_recipient_entries)
+        dispatch.send(:init_recipient_entries)
       end.to change { MessageRecipient.count }.by(2)
 
       recipient1 = message.message_recipients.find_by(phone_number: mobile1.number)
@@ -124,7 +127,7 @@ describe Messages::TextMessageDispatch do
                                state: :pending)
 
       expect do
-        subject.send(:init_recipient_entries)
+        dispatch.send(:init_recipient_entries)
       end.to change { MessageRecipient.count }.by(0)
     end
   end

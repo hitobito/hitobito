@@ -10,18 +10,38 @@
     - elsif entry.letter? || entry.invoice?
       = render_attrs entry, :subject, :heading, :salutation, :donation_confirmation, :shipping_method, :pp_post
     - if entry.letter?
-      = render_attrs entry, :body
+      = render_attrs entry, :body, :send_to_households
 
     %h2=t('.dispatch_infos')
     = render_attrs entry, :state
     - if entry.dispatched?
-      = render_attrs entry, :recipient_count
+      - if entry.state == 'processing'
+        = render_attrs entry, :recipient_progress
+      - else
+        = render_attrs entry, :recipient_count
       - if entry.sent_at
         - if entry.letter?
           = render_attrs entry, :sent_at
         - else
           = render_attrs entry, :sent_at, :success_count, :failed_count
+    - else
+      %dl.dl-horizontal
+        = labeled(t('activerecord.attributes.message.recipient_count')) do
+          %span#recipient-count-spinner
+            = spinner(true)
+          %p#recipient-count
+            = '&nbsp;'.html_safe
 
   - if entry.invoice?
     %aside.col-lg-5.offset-lg-1
       = render "invoice_aside", invoice: entry.invoice
+
+:javascript
+  $(document).ready(function() {
+    $.rails.ajax({
+      url: '#{group_mailing_list_recipient_counts_path(message_type: entry.type, message: { send_to_households: entry.send_to_households })}',
+      success: function(data, status, xhr) {
+        $('#recipient-count-spinner').hide();
+      }
+    })
+  });

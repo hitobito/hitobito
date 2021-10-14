@@ -64,4 +64,26 @@ describe Note do
     end
   end
 
+  context 'validates' do
+    context 'subject_type to be one of' do
+      it 'Person' do
+        note = Fabricate(:note, subject: Fabricate(:person))
+
+        expect(note).to be_valid
+      end
+
+      it 'Group' do
+        note = Fabricate(:note, subject: groups(:toppers))
+
+        expect(note).to be_valid
+      end
+    end
+
+    it 'subject_type to not be an Event' do
+      note = Fabricate.build(:note, subject: Fabricate(:event))
+
+      expect(note).to_not be_valid
+    end
+  end
+
 end

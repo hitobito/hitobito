@@ -107,8 +107,7 @@ describe Messages::LetterDispatch do
 
       expect(recipient_entries.count).to eq(4)
       household_address =
-        "#{housemate1.full_name}\n" \
-        "#{housemate2.full_name}\n" \
+        "#{housemate1.full_name}, #{housemate2.full_name}\n" \
         "#{housemate1.address}\n" \
         "#{housemate1.zip_code} #{housemate1.town}\n" \
         "#{housemate1.country}"
@@ -135,7 +134,7 @@ describe Messages::LetterDispatch do
       expect(recipient_entry(top_leader).household_address).to eq(false)
     end
 
-    it 'adds all names from household address to address box' do
+    it 'adds all names from household address to address box and sorts them alphabetically' do
       message.update!(send_to_households: true)
       housemate3 = Fabricate(:person_with_address, first_name: 'Mark', last_name: 'Hols')
       housemate4 = Fabricate(:person_with_address, first_name: 'Jana', last_name: 'Nicks')
@@ -151,11 +150,7 @@ describe Messages::LetterDispatch do
       subject.run
 
       address = recipient_entry(housemate2).address.split("\n")
-      expect(address).to include('Anton Abraham')
-      expect(address).to include('Zora Zaugg')
-      expect(address).to include('Mark Hols')
-      expect(address).to include('Olivia Berms')
-      expect(address).to include('Jana Nicks')
+      expect(address).to include('Anton Abraham, Olivia Berms, Mark Hols, Jana Nicks, Zora Zaugg')
     end
   end
 

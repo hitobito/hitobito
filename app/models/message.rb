@@ -82,8 +82,11 @@ class Message < ActiveRecord::Base
   end
 
   def dispatch!
+    recipients = MailingList::RecipientCounter.new(mailing_list,
+                                                   self.class.name,
+                                                   send_to_households?)
     update!(
-      recipient_count: mailing_list.people.size,
+      recipient_count: recipients.valid,
       state: :pending
     )
     Messages::DispatchJob.new(self).enqueue!
@@ -121,16 +124,8 @@ class Message < ActiveRecord::Base
     "Export::Pdf::Messages::#{type.demodulize}".constantize
   end
 
-  def total_recipient_count
-    @total_recipient_count ||= mailing_list.people_count
-  end
-
-  def valid_recipient_count
-    raise 'implement in subclass'
-  end
-
-  def invalid_recipient_count
-    total_recipient_count - valid_recipient_count
+  def recipient_progress
+    [success_count, recipient_count].join(' / ')
   end
 
 end

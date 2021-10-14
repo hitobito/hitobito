@@ -8,7 +8,7 @@
 class Export::Pdf::Messages::Letter
   class Header < Section
     LOGO_BOX = [200, 40].freeze
-    ADDRESS_BOX = [200, 40].freeze
+    ADDRESS_BOX = [200, 60].freeze
     SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 20].freeze
 
     delegate :group, to: 'letter'

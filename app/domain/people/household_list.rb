@@ -7,21 +7,27 @@
 
 class People::HouseholdList
 
-  def initialize(people_ids)
-    @people_ids = people_ids
+  def initialize(people)
+    @people = people
   end
 
   def people_without_household
-    Person.where(household_key: nil, id: @people_ids)
+    @people.unscope(:select).where(household_key: nil)
   end
 
-  def household_people
-    Person.where.not(household_key: nil).where(id: @people_ids)
+  def grouped_households
+    people = Person.quoted_table_name
+    # group by household, keep NULLs separate
+    group_by = "IFNULL(#{people}.`household_key`, #{people}.`id`)"
+
+    # remove previously added selects, very important to make this query scale
+    @people.unscope(:select).
+        select("(#{group_by}) as `key`, MIN(#{people}.`id`) as `id`").
+        group(group_by)
   end
 
-  def household_count
+  def only_households
+    grouped_households.where.not(household_key: nil)
   end
-
-  private
 
 end

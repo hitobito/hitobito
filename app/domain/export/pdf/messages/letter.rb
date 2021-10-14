@@ -9,7 +9,7 @@ module Export::Pdf::Messages
   class Letter
 
     MARGIN = 2.5.cm
-    PREVIEW_LIMIT = 5
+    PREVIEW_LIMIT = 4
 
     class << self
       def export(_format, letter)
@@ -87,7 +87,7 @@ module Export::Pdf::Messages
     def init_reporter
       Export::ProgressReporter.new(
         AsyncDownloadFile::DIRECTORY.join(@async_download_file),
-        @recipients.size
+        recipients.size
       )
     end
 
@@ -105,7 +105,7 @@ module Export::Pdf::Messages
     end
 
     def last?(recipient)
-      @recipients.last == recipient
+      recipients.last == recipient
     end
 
     def sections

@@ -59,33 +59,8 @@ module MessagesHelper
     Message::TextMessage.validators_on(:text).first.options[:maximum]
   end
 
-  def message_recipient_info(message)
-    content = link_to([parent.group, parent, :subscriptions, format: :pdf], target: :_blank) do
-      message_valid_recipient_info(message)
-    end
-    content += message_invalid_recipient_info(message)
-    content
-  end
-
-  def with_recipient_tooltip(message)
-    content_tag(:div,
-                class: 'btn-group',
-                rel: :tooltip,
-                'data-placement': :bottom,
-                'data-html': true,
-                title: message_valid_recipient_info(message)) do
-      yield
-    end
-  end
-
   def no_letter_recipients(message)
     message.mailing_list.people(Person.with_address).count == 0
-  end
-
-  def message_valid_recipient_info(message)
-    t(".recipient_info.valid.#{message.type.underscore}",
-      count: message.valid_recipient_count,
-      model_class: message.model_name.human)
   end
 
   def format_message_salutation(message)
@@ -108,16 +83,6 @@ module MessagesHelper
   end
 
   private
-
-  def message_invalid_recipient_info(message)
-    return '' if message.invalid_recipient_count.zero?
-
-    info = t(".recipient_info.invalid.#{message.type.underscore}",
-      count: message.invalid_recipient_count,
-      model_class: message.model_name.human)
-
-    " (#{info})"
-  end
 
   def placeholder_links(editor_id)
     placeholders = Export::Pdf::Messages::Letter::Content.placeholders

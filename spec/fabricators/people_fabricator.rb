@@ -27,6 +27,10 @@ Fabricator(:person_with_address_and_phone, from: :person_with_address) do
   phone_numbers { [Fabricate(:phone_number)] }
 end
 
+Fabricator(:person_with_phone, from: :person) do
+  phone_numbers { [Fabricate(:phone_number, label: 'Mobil')] }
+end
+
 Fabricator(:company, from: :person) do
   company_name { Faker::Company.name }
   first_name { Faker::Name.first_name }

@@ -111,7 +111,7 @@ describe Export::Pdf::Messages::Letter do
         image = fixture_file_upload("images/logo.png")
         GroupSetting.create!(target: groups(:top_group), var: :messages_letter, picture: image).id
         letter.update!(heading: true, group: groups(:top_group))
-        layer.update!(town: "Wanaka", address: "Lakeview 42", zip_code: "4242", town: "Bern")
+        layer.update!(address: "Lakeview 42", zip_code: "4242", town: "Bern")
         IO.binwrite("/tmp/file.pdf", subject.render)
       end
     end
@@ -200,11 +200,10 @@ describe Export::Pdf::Messages::Letter do
 
     it 'creates only one letter per household' do
       expect(text_with_position).to eq [
-        [71, 687, "Anton Abraham"],
-         [71, 676, "Zora Zaugg"],
-         [71, 666, housemate1.address],
-         [71, 655, "#{housemate1.zip_code} #{housemate1.town}"],
-         [71, 687, "DE"],
+        [71, 687, "Anton Abraham, Zora Zaugg"],
+         [71, 676, housemate1.address],
+         [71, 666, "#{housemate1.zip_code} #{housemate1.town}"],
+         [71, 655, "DE"],
          [71, 531, "Information"],
          [71, 502, "Hallo"],
          [71, 481, "Wir laden "],
@@ -231,7 +230,7 @@ describe Export::Pdf::Messages::Letter do
          [71, 460, "Bis bald"]]
     end
 
-    it 'adds all household peoples names to address' do
+    it 'adds all household peoples names to address and sorts them alphabetically' do
       Fabricate(Group::BottomGroup::Member.name, group: group, person: other_housemate)
       create_household(housemate1, other_housemate)
       create_household(housemate1, people(:bottom_member))
@@ -240,13 +239,10 @@ describe Export::Pdf::Messages::Letter do
       Messages::LetterDispatch.new(letter).run
 
       expect(text_with_position).to match_array [
-        [71, 687, "Bottom Member"],
-        [71, 676, "Top Leader"],
-        [71, 666, "Anton Abraham"],
-        [71, 655, "Zora Zaugg"],
-        [71, 687, "Altra Mates"],
-        [71, 676, "Greatstreet 345"],
-        [71, 666, "3456 Greattown"],
+        [71, 687, "Anton Abraham, Top Leader, Altra Mates, Bottom"],
+        [71, 676, "Member, Zora Zaugg"],
+        [71, 666, "Greatstreet 345"],
+        [71, 655, "3456 Greattown"],
         [71, 531, "Information"],
         [71, 502, "Hallo"],
         [71, 481, "Wir laden "],

@@ -8,7 +8,6 @@ class ClearInput
     if input.val() == ''
       group.addClass('has-empty-value')
     else
-      console.log input.val()
       group.removeClass('has-empty-value')
 
   _input: (cross) ->

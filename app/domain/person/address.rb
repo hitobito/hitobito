@@ -14,11 +14,15 @@ class Person::Address
     ([@person.full_name.to_s.squish] + address).compact.join("\n")
   end
 
-  def for_household_letter(names)
-    (names + address).compact.join("\n")
+  def for_household_letter(members)
+    [combine_household_names(members), address].compact.join("\n")
   end
 
   private
+
+  def combine_household_names(members)
+    members.map(&:full_name).compact.join(', ')
+  end
 
   def address
     [@person.address.to_s.squish,

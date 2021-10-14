@@ -899,6 +899,52 @@ de:
           one: Mail erfolgreich verschoben
           other: '%{count} Mails erfolgreich verschoben'
         server_error: Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.
+    recipient_counts:
+      index:
+        recipient_info:
+          message/letter:
+            households:
+              valid:
+                zero: "Keine Haushalte mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für einen Haushalt erstellt."
+                other: "%{model_class} wird für %{count} Haushalte erstellt."
+              invalid:
+                one: "Ein Haushalt hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+            people:
+              valid:
+                zero: "Keine Personen mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für eine Person erstellt."
+                other: "%{model_class} wird für %{count} Personen erstellt."
+              invalid:
+                one: "Eine Person hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+          message/letter_with_invoice:
+            households:
+              valid:
+                zero: "Keine Haushalte mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für einen Haushalt erstellt."
+                other: "%{model_class} wird für %{count} Haushalte erstellt."
+              invalid:
+                one: "Ein Haushalt hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+            people:
+              valid:
+                zero: "Keine Personen mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für eine Person erstellt."
+                other: "%{model_class} wird für %{count} Personen erstellt."
+              invalid:
+                one: "Eine Person hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+          message/text_message:
+            people:
+              valid:
+                zero: "Keine Personen mit Mobiltelefonnummer vorhanden."
+                one: "%{model_class} wird für eine Person erstellt."
+                other: "%{model_class} wird für %{count} Personen erstellt."
+              invalid:
+                one: "Eine Person hat keine vollständige Mobiltelefonnummer hinterlegt."
+                other: "%{count} weitere haben keine Mobiltelefonnummer hinterlegt."
 
   mailing_list_decorator:
     may_subscribe: 'Abonnenten dürfen sich selbst an/abmelden'
@@ -956,29 +1002,6 @@ de:
         send_to_households_options:
           true: Ein Brief pro Haushalt
           false: Ein Brief pro Person
-    form:
-      available_placeholders: 'Verfügbare Platzhalter:'
-      recipient_info:
-        valid:
-          message/letter:
-            one: "%{model_class} wird für eine Person erstellt."
-            other: "%{model_class} wird für %{count} Personen erstellt."
-          message/letter_with_invoice:
-            one: "%{model_class} wird für eine Person erstellt."
-            other: "%{model_class} wird für %{count} Personen erstellt."
-          message/text_message:
-            one: "%{model_class} wird für eine Person erstellt."
-            other: "%{model_class} wird für %{count} Personen erstellt."
-        invalid:
-          message/letter:
-            one: "Eine Person hat keine vollständige Adresse hinterlegt."
-            other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
-          message/letter_with_invoice:
-            one: "Eine Person hat keine vollständige Adresse hinterlegt."
-            other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
-          message/text_message:
-            one: "Eine Person hat keine vollständige Mobiltelefonnummer hinterlegt."
-            other: "%{count} weitere haben keine Mobiltelefonnummer hinterlegt."
     table:
       infos:
         sender: "Absender: %{mail}"

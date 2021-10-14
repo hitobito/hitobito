@@ -4,7 +4,7 @@
 / #  https://github.com/hitobito/hitobito.
 
 - if entry.class.sti_name == Message::Letter.sti_name
-  = f.labeled_collection_select :send_to_households, message_send_to_household_options, :first, :last, include_blank: false
+  = f.labeled_collection_select :send_to_households, message_send_to_household_options, :first, :last, {}, { data: { remote: true, url: group_mailing_list_recipient_counts_path(message_type: entry.type), 'on-page-load': true, spin: '#recipient-count-spinner .spinner' } }
 = f.labeled_input_field :subject
 = f.labeled_collection_select :shipping_method, message_letter_shipping_methods(entry), :first, :last
 = f.labeled(:pp_post) do

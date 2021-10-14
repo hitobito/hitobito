@@ -3,11 +3,13 @@
 / #  or later. See the COPYING file at the top-level directory or at
 / #  https://github.com/hitobito/hitobito.
 
-= standard_form(entry, url: [parent.group, parent, entry], data: { group: group_path(parent.group.layer_group)  }) do |f|
+= standard_form(entry, url: [parent.group, parent, entry], data: { group: group_path(parent.group.layer_group) }) do |f|
   = f.error_messages
   .controls
-    %p.text
-      = message_recipient_info(entry)
+    %span.text#recipient-count-spinner
+      = spinner(true)
+    %p.text#recipient-count
+      = '&nbsp;'.html_safe
 
   = f.hidden_field :type
 

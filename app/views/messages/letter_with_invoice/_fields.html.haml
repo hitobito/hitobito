@@ -14,3 +14,12 @@
   / calculation dependant on invoice_list, change first
   / = render "invoice_lists/calculated", invoice: fi.object.decorate
 
+:javascript
+  $(document).ready(function() {
+    $.rails.ajax({
+      url: '#{group_mailing_list_recipient_counts_path(message_type: entry.type, message: { send_to_households: entry.send_to_households })}',
+      success: function(data, status, xhr) {
+        $('#recipient-count-spinner').hide();
+      }
+    })
+  });

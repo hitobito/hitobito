@@ -65,11 +65,6 @@ describe Message::TextMessage do
       # make sure people are only counted once
       Group::TopLayer::TopAdmin.create!(group: groups(:top_layer), person: person4)
     end
-
-    it 'calculates number of people with mobile phone number' do
-      expect(entry.total_recipient_count).to eq(46)
-      expect(entry.valid_recipient_count).to eq(43)
-    end
   end
 
   private

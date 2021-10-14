@@ -111,7 +111,7 @@ describe Export::Pdf::Messages::Letter do
         image = fixture_file_upload("images/logo.png")
         GroupSetting.create!(target: groups(:top_group), var: :messages_letter, picture: image).id
         letter.update!(heading: true, group: groups(:top_group))
-        layer.update!(town: "Wanaka", address: "Lakeview 42", zip_code: "4242", town: "Bern")
+        layer.update!(address: "Lakeview 42", zip_code: "4242", town: "Bern")
         IO.binwrite("/tmp/file.pdf", subject.render)
       end
     end

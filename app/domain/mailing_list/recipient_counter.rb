@@ -29,15 +29,8 @@ class MailingList::RecipientCounter
   end
 
   def total
-    @total ||= case @message_type
-               when Message::Letter.name, Message::LetterWithInvoice.name
-                 @households ?
-                     @mailing_list.household_count :
-                     @mailing_list.people_count
-               when Message::TextMessage.name
-                 @mailing_list.people_count
-               else
-                 @mailing_list.people_count
-               end
+    @total ||= @households ?
+                   @mailing_list.household_count :
+                   @mailing_list.people_count
   end
 end

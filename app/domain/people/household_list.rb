@@ -23,7 +23,7 @@ class People::HouseholdList
     # remove previously added selects, very important to make this query scale
     @people.unscope(:select).
         select("(#{group_by}) as `key`, MIN(#{people}.`id`) as `id`").
-        group("#{group_by}")
+        group(group_by)
   end
 
   def only_households

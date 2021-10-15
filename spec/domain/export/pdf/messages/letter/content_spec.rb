@@ -29,6 +29,7 @@ describe Export::Pdf::Messages::Letter::Content do
 
     it "prepends salutation if set" do
       letter.salutation = "default"
+      recipient.salutation = 'Hallo Top'
       subject.render(recipient)
       expect(text_with_position).to eq [
         [36, 485, "Hallo Top"],
@@ -38,6 +39,7 @@ describe Export::Pdf::Messages::Letter::Content do
 
     it "prepends personal salutation applicable" do
       letter.salutation = :lieber_vorname
+      recipient.salutation = 'Lieber Top'
       top_leader.gender = "m"
       subject.render(recipient)
       expect(text_with_position).to eq [
@@ -56,12 +58,12 @@ describe Export::Pdf::Messages::Letter::Content do
       let!(:recipient2) do
         MessageRecipient.create!(message: letter,
                                  person: housemate1,
-                                 household_address: true)
+                                 salutation: "Liebe*r #{housemate1.first_name}")
       end
 
       before do
         letter.update!(send_to_households: true, body: 'Lorem ipsum')
-        recipient.update!(household_address: true)
+        recipient.update!(salutation: "Liebe*r #{recipient.person.first_name}")
         recipient.person.update!(household_key: household_key)
       end
 
@@ -74,10 +76,11 @@ describe Export::Pdf::Messages::Letter::Content do
 
       it 'renders saluation for all household members' do
         letter.update!(salutation: :lieber_vorname)
+        recipient.update!(salutation: "Liebe*r Top, liebe*r #{housemate1.first_name}")
 
         subject.render(recipient)
         expect(text_with_position).to eq [
-          [36, 485, "Liebe*r Top, Liebe*r #{housemate1.first_name}"],
+          [36, 485, "Liebe*r Top, liebe*r #{housemate1.first_name}"],
           [36, 447, 'Lorem ipsum']
         ]
       end
@@ -99,6 +102,7 @@ describe Export::Pdf::Messages::Letter::Content do
     before do
       top_leader.gender = "m"
       letter.salutation = "default"
+      recipient.salutation = "Hallo Top"
     end
 
     let(:stamps) { pdf.instance_variable_get('@stamp_dictionary_registry') }

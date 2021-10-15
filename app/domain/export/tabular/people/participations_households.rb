@@ -12,7 +12,7 @@ module Export::Tabular::People
     end
 
     def people(list)
-      list.map(&:person)
+      Person.where(id: list.map(&:person))
     end
   end
 end

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 # == Schema Information
 #
@@ -17,7 +17,10 @@ class MailingListSubscriptionsSerializer < ApplicationSerializer
                :mailing_list_id,
                :subscriber_type,
                :subscriber_id,
-               :excluded,
-               :related_role_types
+               :excluded
+
+    entities :related_role_types,
+             item.related_role_types,
+             RelatedRoleTypeSerializer
   end
 end

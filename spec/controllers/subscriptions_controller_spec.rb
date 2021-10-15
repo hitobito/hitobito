@@ -120,23 +120,17 @@ describe SubscriptionsController do
         {
             id: group_subscription.id,
             mailing_list_id: mailing_list.id,
-            related_role_types: group_subscription.related_role_types.map do |role_type|
-              {
-                  id: role_type.id,
-                  relation_id: group_subscription.id,
-                  relation_type: 'Subscription',
-                  role_type: role_type.role_type
-              }
-            end,
             subscriber_id: group_subscription.subscriber.id,
             subscriber_type: 'Group',
             type: 'subscriptions',
-            excluded: false
+            excluded: false,
+            links: {
+                related_role_types: [ group_subscription.related_role_types[0].id.to_s ]
+            },
         },
         {
             id: event_subscription.id,
             mailing_list_id: mailing_list.id,
-            related_role_types: [],
             subscriber_id: event_subscription.subscriber.id,
             subscriber_type: 'Event',
             type: 'subscriptions',
@@ -145,7 +139,6 @@ describe SubscriptionsController do
         {
             id: person_subscription.id,
             mailing_list_id: mailing_list.id,
-            related_role_types: [],
             subscriber_id: person_subscription.subscriber.id,
             subscriber_type: 'Person',
             type: 'subscriptions',
@@ -154,19 +147,23 @@ describe SubscriptionsController do
         {
             id: excluded_subscription.id,
             mailing_list_id: mailing_list.id,
-            related_role_types: [],
             subscriber_id: excluded_subscription.subscriber.id,
             subscriber_type: 'Person',
             type: 'subscriptions',
             excluded: true
         },
     ]}
+    let(:expected_related_role_types) {[{
+        id: group_subscription.related_role_types[0].id.to_s,
+        role_type: 'Group::BottomLayer::Member'
+    }]}
 
     it 'renders json' do
       get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :json
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:subscriptions]).to have(4).items
       expect(json[:subscriptions]).to eq(expected)
+      expect(json[:linked][:related_role_types]).to eq(expected_related_role_types)
     end
 
     it 'renders json for service token user' do
@@ -177,6 +174,7 @@ describe SubscriptionsController do
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:subscriptions]).to have(4).items
       expect(json[:subscriptions]).to match_array(expected)
+      expect(json[:linked][:related_role_types]).to eq(expected_related_role_types)
     end
   end
 

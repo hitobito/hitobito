@@ -116,6 +116,9 @@ describe SubscriptionsController do
     let!(:event_subscription) { create_event_subscription(mailing_list) }
     let!(:person_subscription) { create_person_subscription(mailing_list) }
     let!(:excluded_subscription) { create_person_subscription(mailing_list, true) }
+    let!(:included_tag) { SubscriptionTag.create!(excluded: false, subscription: group_subscription, tag: ActsAsTaggableOn::Tag.create!(name: 'to_include')) }
+    let!(:excluded_tag) { SubscriptionTag.create!(excluded: true, subscription: group_subscription, tag: ActsAsTaggableOn::Tag.create!(name: 'to_exclude')) }
+    let(:tag_to_include) {  }
     let(:expected) {[
         {
             id: group_subscription.id,
@@ -123,7 +126,8 @@ describe SubscriptionsController do
             subscriber_id: group_subscription.subscriber.id,
             subscriber_type: 'Group',
             type: 'subscriptions',
-            excluded: false,
+            included_tags: [ 'to_include' ],
+            excluded_tags: [ 'to_exclude' ],
             links: {
                 related_role_types: [ group_subscription.related_role_types[0].id.to_s ]
             },
@@ -133,8 +137,7 @@ describe SubscriptionsController do
             mailing_list_id: mailing_list.id,
             subscriber_id: event_subscription.subscriber.id,
             subscriber_type: 'Event',
-            type: 'subscriptions',
-            excluded: false
+            type: 'subscriptions'
         },
         {
             id: person_subscription.id,

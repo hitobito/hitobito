@@ -16,8 +16,15 @@ class MailingListSubscriptionsSerializer < ApplicationSerializer
     map_properties :id,
                :mailing_list_id,
                :subscriber_type,
-               :subscriber_id,
-               :excluded
+               :subscriber_id
+
+    properties do |props|
+      if item.subscriber_type == 'Group'
+        props.included_tags item.subscription_tags.included.map(&:tag).map(&:name)
+        props.excluded_tags item.subscription_tags.excluded.map(&:tag).map(&:name)
+      end
+      props.excluded item.excluded if item.subscriber_type == 'Person'
+    end
 
     entities :related_role_types,
              item.related_role_types,

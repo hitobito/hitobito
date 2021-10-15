@@ -74,7 +74,7 @@ class Salutation
   def salutation
     if self.class.available.keys.include?(@salutation)
       "available.#{@salutation}"
-    elsif @salutation == 'personal' && @person.salutation?
+    elsif @salutation == 'personal' && @person.try(:salutation?)
       "available.#{@person.salutation}"
     else
       'default'

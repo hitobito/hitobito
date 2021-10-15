@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Unreleased
+
+*  Die API unterstützt jetzt, die Gruppen/Rollen, Anlässe und Einzelpersonen auszulesen, welche bei Abos abonniert sind. (#1398, danke @Michael-Schaer!)
+
 ## Version 1.26
 
 * Teilnehmer können zu Anlässen eingeladen werden (#1276)

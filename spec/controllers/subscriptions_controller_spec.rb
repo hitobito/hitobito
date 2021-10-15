@@ -109,6 +109,78 @@ describe SubscriptionsController do
     end
   end
 
+  context 'json API' do
+
+    let(:list) { MailingList.create!(group: group, name: 'bottom_layer') }
+    let!(:group_subscription) { create_group_subscription(mailing_list) }
+    let!(:event_subscription) { create_event_subscription(mailing_list) }
+    let!(:person_subscription) { create_person_subscription(mailing_list) }
+    let!(:excluded_subscription) { create_person_subscription(mailing_list, true) }
+    let!(:included_tag) { SubscriptionTag.create!(excluded: false, subscription: group_subscription, tag: ActsAsTaggableOn::Tag.create!(name: 'to_include')) }
+    let!(:excluded_tag) { SubscriptionTag.create!(excluded: true, subscription: group_subscription, tag: ActsAsTaggableOn::Tag.create!(name: 'to_exclude')) }
+    let(:tag_to_include) {  }
+    let(:expected) {[
+        {
+            id: group_subscription.id,
+            mailing_list_id: mailing_list.id,
+            subscriber_id: group_subscription.subscriber.id,
+            subscriber_type: 'Group',
+            type: 'subscriptions',
+            included_tags: [ 'to_include' ],
+            excluded_tags: [ 'to_exclude' ],
+            links: {
+                related_role_types: [ group_subscription.related_role_types[0].id.to_s ]
+            },
+        },
+        {
+            id: event_subscription.id,
+            mailing_list_id: mailing_list.id,
+            subscriber_id: event_subscription.subscriber.id,
+            subscriber_type: 'Event',
+            type: 'subscriptions'
+        },
+        {
+            id: person_subscription.id,
+            mailing_list_id: mailing_list.id,
+            subscriber_id: person_subscription.subscriber.id,
+            subscriber_type: 'Person',
+            type: 'subscriptions',
+            excluded: false
+        },
+        {
+            id: excluded_subscription.id,
+            mailing_list_id: mailing_list.id,
+            subscriber_id: excluded_subscription.subscriber.id,
+            subscriber_type: 'Person',
+            type: 'subscriptions',
+            excluded: true
+        },
+    ]}
+    let(:expected_related_role_types) {[{
+        id: group_subscription.related_role_types[0].id.to_s,
+        role_type: 'Group::BottomLayer::Member'
+    }]}
+
+    it 'renders json' do
+      get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:subscriptions]).to have(4).items
+      expect(json[:subscriptions]).to eq(expected)
+      expect(json[:linked][:related_role_types]).to eq(expected_related_role_types)
+    end
+
+    it 'renders json for service token user' do
+      allow(controller).to receive_messages(current_user: nil)
+
+      get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id, token: 'PermittedToken' },
+                  format: :json
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:subscriptions]).to have(4).items
+      expect(json[:subscriptions]).to match_array(expected)
+      expect(json[:linked][:related_role_types]).to eq(expected_related_role_types)
+    end
+  end
+
   def create_group_subscription(mailing_list)
     group = groups(:bottom_layer_one)
     Fabricate(:subscription,

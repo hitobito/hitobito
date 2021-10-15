@@ -35,18 +35,20 @@ The documentation for personal API tokens has been removed from here, because th
 
 Currently the following endpoints are provided:
 
-| Method | Path                                            | Function                                                                        |
-| ---    | ---                                             | ---                                                                             |
-| GET    | /groups/:id                                     | Group details                                                                   |
-| GET    | /groups/:id/people                              | People of a certain group                                                       |
-| GET    | /groups/:group_id/people/:id                    | Person details                                                                  |
-| GET    | /groups/:group_id/events                        | Events of a certain group                                                       |
-| GET    | /groups/:group_id/events/:id                    | Event details                                                                   |
-| GET    | /groups/:group_id/events/:id/participations     | Participations of certain event                                                 |
-| GET    | /groups/:group_id/events/:id/participations/:id | Participation details                                                           |
-| GET    | /groups/:group_id/events/course                 | Courses of a certain group                                                      |
-| GET    | /groups/:group_id/invoices                      | Invoices of a certain group                                                     |
-| GET    | /groups/:group_id/invoices/:id                  | Invoice details                                                                 |
+| Method | Path                                              | Function                                                                        |
+| ---    | ---                                               | ---                                                                             |
+| GET    | /groups/:id                                       | Group details                                                                   |
+| GET    | /groups/:id/people                                | People of a certain group                                                       |
+| GET    | /groups/:group_id/people/:id                      | Person details                                                                  |
+| GET    | /groups/:group_id/events                          | Events of a certain group                                                       |
+| GET    | /groups/:group_id/events/:id                      | Event details                                                                   |
+| GET    | /groups/:group_id/events/:id/participations       | Participations of certain event                                                 |
+| GET    | /groups/:group_id/events/:id/participations/:id   | Participation details                                                           |
+| GET    | /groups/:group_id/events/course                   | Courses of a certain group                                                      |
+| GET    | /groups/:group_id/invoices                        | Invoices of a certain group                                                     |
+| GET    | /groups/:group_id/invoices/:id                    | Invoice details                                                                 |
+| GET    | /groups/:group_id/mailing_lists/:id               | Mailing list details and subscribers (actual people subscribed to the list)     |
+| GET    | /groups/:group_id/mailing_lists/:id/subscriptions | Details on the groups / roles, events and single people which are subscribed    |
 
 
 

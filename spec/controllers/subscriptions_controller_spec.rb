@@ -107,11 +107,66 @@ describe SubscriptionsController do
 
       expect(assigns(:person_add_requests)).to eq([r1])
     end
+  end
+
+  context 'json API' do
+
+    let(:list) { MailingList.create!(group: group, name: 'bottom_layer') }
+    let!(:group_subscription) { create_group_subscription(mailing_list) }
+    let!(:event_subscription) { create_event_subscription(mailing_list) }
+    let!(:person_subscription) { create_person_subscription(mailing_list) }
+    let!(:excluded_subscription) { create_person_subscription(mailing_list, true) }
+    let(:expected) {[
+        {
+            id: group_subscription.id,
+            mailing_list_id: mailing_list.id,
+            related_role_types: group_subscription.related_role_types.map do |role_type|
+              {
+                  id: role_type.id,
+                  relation_id: group_subscription.id,
+                  relation_type: 'Subscription',
+                  role_type: role_type.role_type
+              }
+            end,
+            subscriber_id: group_subscription.subscriber.id,
+            subscriber_type: 'Group',
+            type: 'subscriptions',
+            excluded: false
+        },
+        {
+            id: event_subscription.id,
+            mailing_list_id: mailing_list.id,
+            related_role_types: [],
+            subscriber_id: event_subscription.subscriber.id,
+            subscriber_type: 'Event',
+            type: 'subscriptions',
+            excluded: false
+        },
+        {
+            id: person_subscription.id,
+            mailing_list_id: mailing_list.id,
+            related_role_types: [],
+            subscriber_id: person_subscription.subscriber.id,
+            subscriber_type: 'Person',
+            type: 'subscriptions',
+            excluded: false
+        },
+        {
+            id: excluded_subscription.id,
+            mailing_list_id: mailing_list.id,
+            related_role_types: [],
+            subscriber_id: excluded_subscription.subscriber.id,
+            subscriber_type: 'Person',
+            type: 'subscriptions',
+            excluded: true
+        },
+    ]}
 
     it 'renders json' do
       get :index, params: { group_id: group.id, mailing_list_id: mailing_list.id }, format: :json
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:subscriptions]).to have(4).items
+      expect(json[:subscriptions]).to eq(expected)
     end
 
     it 'renders json for service token user' do
@@ -121,6 +176,7 @@ describe SubscriptionsController do
                   format: :json
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:subscriptions]).to have(4).items
+      expect(json[:subscriptions]).to match_array(expected)
     end
   end
 

@@ -94,7 +94,7 @@ class SubscriptionsController < CrudController
   end
 
   def authorize_class
-    if html_request? or json_request?
+    if html_request? || request.format.json?
       authorize!(:index_subscriptions, mailing_list)
     else
       authorize!(:export_subscriptions, mailing_list)

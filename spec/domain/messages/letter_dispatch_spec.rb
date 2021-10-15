@@ -130,6 +130,27 @@ describe Messages::LetterDispatch do
       expect(recipient_entry(top_leader).address).to eq(top_leader_address)
     end
 
+    it 'creates recipient entries with pre-calculated salutations' do
+      message.update!(send_to_households: true)
+
+      subject.run
+
+      expect(recipient_entries.count).to eq(4)
+
+      expect(recipient_entry(housemate1).salutation).to eq('Hallo Anton, hallo Zora')
+      expect(recipient_entry(housemate2).salutation).to eq('Hallo Anton, hallo Zora')
+      expect(recipient_entry(bottom_member).salutation).to eq('Hallo Bottom')
+      expect(recipient_entry(top_leader).salutation).to eq('Hallo Top')
+    end
+
+    it 'counts households instead of individual people' do
+      message.update!(send_to_households: true)
+
+      subject.run
+
+      expect(message.reload.success_count).to eq(3)
+    end
+
     it 'adds all names from household address to address box and sorts them alphabetically' do
       message.update!(send_to_households: true)
       housemate3 = Fabricate(:person_with_address, first_name: 'Mark', last_name: 'Hols')

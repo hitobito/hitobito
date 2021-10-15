@@ -68,7 +68,9 @@ class People::HouseholdList
 
   def fetch_people_with_id_or_household_key(keys_or_ids)
     # Search for any number of housemates, regardless of preview limit
-    base_scope = @people_scope.unscope(:limit).select(:household_key)
+    base_scope = @people_scope.unscope(:limit)
+    # Make sure to select household_key if we aren't selecting specific columns
+    base_scope = base_scope.select(:household_key) if base_scope.select_values.present?
 
     base_scope.where(household_key: keys_or_ids).
         or(base_scope.where(id: keys_or_ids)).

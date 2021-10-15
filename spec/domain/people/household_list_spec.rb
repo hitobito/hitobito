@@ -94,9 +94,9 @@ describe People::HouseholdList do
         yielded_batch = []
         subject.households_in_batches { |batch| yielded_batch = batch }
         expect(yielded_batch.map{ |household| household.map(&:id) }).to eq([
-                                                                               [person3.id, person4.id, person6.id, person7.id],
-                                                                               [person5.id]
-                                                                           ])
+            [person3.id, person4.id, person6.id, person7.id],
+            [person5.id]
+        ])
       end
     end
 

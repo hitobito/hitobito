@@ -638,6 +638,10 @@ de:
       deleted: 'Gelöscht'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
 
+  group/deleted_people:
+    list:
+      confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
+
   group/person_add_requests:
     deactivated: Manuelle Freigabe deaktiviert
     activated: Manuelle Freigabe aktiviert

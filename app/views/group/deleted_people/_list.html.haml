@@ -32,5 +32,10 @@
       - p.all_phone_numbers(true)
     - sortable_grouped_person_attr(t, address: false, zip_code: false, town: false) do |p|
       - p.complete_address
+    - t.col(nil) do |p|
+      - if can?(:destroy, p)
+        - link_to icon(:'trash-alt', filled: false), group_person_path(@group, p),
+                  class: 'action', title: ti(:"link.delete"), alt: ti(:"link.delete"),
+                  data: { confirm: ti(:confirm_delete, person: p), method: :delete }
 
 = paginate @people

@@ -46,7 +46,7 @@ module Messages
 
       # first, run a separate batch for people that are grouped in households, because that's slower
       household_list.households_in_batches(exclude_non_households: true) do |batch|
-        create_recipient_entries(batch.flatten)
+        create_recipient_entries(batch)
         update!(success_count: success_count + batch.size)
       end
 
@@ -57,16 +57,17 @@ module Messages
       end
     end
 
-    def create_recipient_entries(people_batch)
-      rows = people_batch.collect do |person|
-        housemates = from_same_household_as(person, people_batch)
-        reciept_attrs.merge(
-          person_id: person.id,
-          address: address_for_letter(person, housemates),
-          salutation: salutation_for_letter(person, housemates)
-        )
+    def create_recipient_entries(people_or_households_batch)
+      rows = people_or_households_batch.collect do |person_or_household|
+        collect_household(person_or_household) do |person, housemates|
+          reciept_attrs.merge(
+            person_id: person.id,
+            address: address_for_letter(person, housemates),
+            salutation: salutation_for_letter(person, housemates)
+          )
+        end
       end
-      MessageRecipient.insert_all(rows)
+      MessageRecipient.insert_all(rows.flatten)
       rows.size
     end
 
@@ -74,11 +75,12 @@ module Messages
       limit.present? ? scope.limit(limit) : scope
     end
 
-    def from_same_household_as(person, candidates)
-      return [person] unless person.household_key.present?
+    def collect_household(person_or_household)
+      housemates = Array.wrap(person_or_household).sort_by(&:last_name)
 
-      candidates.select{ |candidate| candidate.household_key == person.household_key }.
-          sort_by(&:last_name) # sort alphabetically
+      housemates.collect do |person|
+        yield person, housemates
+      end
     end
 
     def address_for_letter(person, housemates)

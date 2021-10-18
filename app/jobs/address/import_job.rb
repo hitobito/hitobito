@@ -9,6 +9,6 @@ class Address::ImportJob < RecurringJob
   run_every 6.months
 
   def perform
-    Address::Import.new.run
+    Address::Importer.new.run
   end
 end

@@ -113,9 +113,7 @@ describe Messages::LetterDispatch do
         "#{housemate1.country}"
 
       expect(recipient_entry(housemate1).address).to eq(household_address)
-      expect(recipient_entry(housemate1).household_address).to eq(true)
       expect(recipient_entry(housemate2).address).to eq(household_address)
-      expect(recipient_entry(housemate2).household_address).to eq(true)
 
       bottom_member_address =
         "#{bottom_member.full_name}\n" \
@@ -123,7 +121,6 @@ describe Messages::LetterDispatch do
         "#{bottom_member.zip_code} #{bottom_member.town}\n" \
         "#{bottom_member.country}"
       expect(recipient_entry(bottom_member).address).to eq(bottom_member_address)
-      expect(recipient_entry(bottom_member).household_address).to eq(false)
 
       top_leader_address =
         "#{top_leader.full_name}\n" \
@@ -131,7 +128,27 @@ describe Messages::LetterDispatch do
         "#{top_leader.zip_code} #{top_leader.town}\n" \
         "#{top_leader.country}"
       expect(recipient_entry(top_leader).address).to eq(top_leader_address)
-      expect(recipient_entry(top_leader).household_address).to eq(false)
+    end
+
+    it 'creates recipient entries with pre-calculated salutations' do
+      message.update!(send_to_households: true)
+
+      subject.run
+
+      expect(recipient_entries.count).to eq(4)
+
+      expect(recipient_entry(housemate1).salutation).to eq('Hallo Anton, hallo Zora')
+      expect(recipient_entry(housemate2).salutation).to eq('Hallo Anton, hallo Zora')
+      expect(recipient_entry(bottom_member).salutation).to eq('Hallo Bottom')
+      expect(recipient_entry(top_leader).salutation).to eq('Hallo Top')
+    end
+
+    it 'counts households instead of individual people' do
+      message.update!(send_to_households: true)
+
+      subject.run
+
+      expect(message.reload.success_count).to eq(3)
     end
 
     it 'adds all names from household address to address box and sorts them alphabetically' do

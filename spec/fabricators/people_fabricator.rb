@@ -10,8 +10,8 @@ Fabricator(:person) do
   last_name { Faker::Name.last_name }
   nickname { Faker::Name.first_name }
   email do |attrs|
-    first = attrs[:first_name].downcase.gsub(/[^a-z]/, '')
-    last = attrs[:last_name].downcase.gsub(/[^a-z]/, '')
+    first = attrs[:first_name]&.downcase&.gsub(/[^a-z]/, '')
+    last = attrs[:last_name]&.downcase&.gsub(/[^a-z]/, '')
     "#{first}.#{last}#{sequence}@hitobito.example.com"
   end
 end

@@ -277,6 +277,88 @@ describe Export::Pdf::Messages::Letter do
       ]
       expect(letter.message_recipients.reload.count).to eq(0)
     end
+
+    context 'household addresses' do
+
+      let(:housemate1) { Fabricate(:person_with_address, first_name: 'Anton', last_name: 'Abraham') }
+      let(:housemate2) { Fabricate(:person_with_address, first_name: 'Zora', last_name: 'Zaugg') }
+      let(:housemate3) { Fabricate(:person_with_address, first_name: 'Bettina', last_name: 'Büttel') }
+      let(:housemate4) { Fabricate(:person_with_address, first_name: 'Carlo', last_name: 'Colorado') }
+      let(:other_housemate) { Fabricate(:person_with_address, first_name: 'Altra', last_name: 'Mates') }
+      let(:top_leader) { people(:top_leader) }
+      let(:bottom_member) { people(:bottom_member) }
+      let(:single_person) { Fabricate(:person_with_address, first_name: 'Dominik', last_name: 'Dachs') }
+
+      before do
+        Subscription.create!(mailing_list: list,
+                             subscriber: group,
+                             role_types: [Group::BottomGroup::Member])
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: housemate1)
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: housemate2)
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: housemate3)
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: housemate4)
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: top_leader)
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: bottom_member)
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: single_person)
+
+        create_household(housemate1, housemate2)
+        create_household(housemate3, housemate4)
+        create_household(other_housemate, people(:top_leader))
+
+        letter.update!(send_to_households: true, body: 'Hallo', subject: nil)
+      end
+
+      it 'creates preview with half normal half household recipients' do
+        expect(text_with_position).to match_array [
+          [71, 687, "Anton Abraham, Zora Zaugg"],
+          [71, 676, housemate1.address],
+          [71, 666, "#{housemate1.zip_code} #{housemate1.town}"],
+          [71, 502, "Hallo"],
+          [71, 655, "DE"],
+          [71, 687, "Bettina Büttel, Carlo Colorado"],
+          [71, 676, housemate3.address],
+          [71, 666, "#{housemate3.zip_code} #{housemate3.town}"],
+          [71, 655, "DE"],
+          [71, 502, "Hallo"],
+          [71, 687, "Bottom Member"],
+          [71, 676, bottom_member.address],
+          [71, 666, "#{bottom_member.zip_code} #{bottom_member.town}"],
+          [71, 502, "Hallo"],
+          [71, 687, "Dominik Dachs"],
+          [71, 676, single_person.address],
+          [71, 666, "#{single_person.zip_code} #{single_person.town}"],
+          [71, 655, "DE"],
+          [71, 502, "Hallo"],
+        ]
+      end
+
+      it 'includes all housemates, even when the underlying people scope is limited for previewing' do
+        create_household(housemate1, housemate3)
+        create_household(housemate1, housemate4)
+
+        expect(text_with_position).to match_array [
+          [71, 687, "Anton Abraham, Bettina Büttel, Carlo Colorado,"],
+          [71, 676, "Zora Zaugg"],
+          [71, 666, housemate1.address],
+          [71, 655, "#{housemate1.zip_code} #{housemate1.town}"],
+          [71, 645, "DE"],
+          [71, 502, "Hallo"],
+          [71, 687, "Bottom Member"],
+          [71, 676, bottom_member.address],
+          [71, 666, "#{bottom_member.zip_code} #{bottom_member.town}"],
+          [71, 502, "Hallo"],
+          [71, 687, "Top Leader"],
+          [71, 676, top_leader.address],
+          [71, 666, "#{top_leader.zip_code} #{top_leader.town}"],
+          [71, 502, "Hallo"],
+          [71, 687, "Dominik Dachs"],
+          [71, 676, single_person.address],
+          [71, 666, "#{single_person.zip_code} #{single_person.town}"],
+          [71, 655, "DE"],
+          [71, 502, "Hallo"],
+        ]
+      end
+    end
   end
 
   private

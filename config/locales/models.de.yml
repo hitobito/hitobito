@@ -789,6 +789,14 @@ de:
           priority: A-Post
         send_to_households: Haushalte
 
+      message_recipient:
+        address: Adresse
+        country: Land
+        printed_address: Briefadresse
+        salutation: Briefanrede
+        town: Ort
+        zip_code: PLZ
+
       subscription:
         related_role_types: Rollen
         subscriber_id: '' # not used, error messages require different labels

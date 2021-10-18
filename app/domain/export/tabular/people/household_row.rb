@@ -10,6 +10,15 @@ module Export::Tabular::People
 
     SHORTEN_AT = 40
 
+    def entry
+      household.first
+    end
+
+    def household
+      # Make sure it is an array, in case someone passes in a plain non-household list
+      Array.wrap(@entry)
+    end
+
     def name
       if entry.company?
         entry.company_name
@@ -22,9 +31,8 @@ module Export::Tabular::People
 
     def salutation
       return nil unless entry.respond_to? :salutation # not nil, just w/o salutation
-      return nil if entry.household_key.present?
 
-      Salutation.new(entry).value
+      Salutation.new(entry).value_for_household(household)
     end
 
     private
@@ -61,15 +69,11 @@ module Export::Tabular::People
     end
 
     def first_names
-      strip(entry.first_name.to_s.split(','))
+      household.map {|person| person.first_name&.strip }
     end
 
     def last_names
-      strip(entry.last_name.to_s.split(','))
-    end
-
-    def strip(array)
-      array.collect { |string| string.strip }
+      household.map {|person| person.last_name&.strip }
     end
 
     def without_blanks(array)

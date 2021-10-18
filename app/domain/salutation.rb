@@ -45,6 +45,18 @@ class Salutation
     I18n.translate("#{I18N_KEY_PREFIX}.#{salutation}.value.#{gender}", attributes)
   end
 
+  def value_for_household(housemates)
+    join_salutations(housemates.map { |housemate| Salutation.new(housemate, @salutation).value })
+  end
+
+  def join_salutations(salutations)
+    salutations.
+        map { |salutation| salutation.sub(/^./, &:downcase) }.
+        reject(&:blank?).
+        join(', ').
+        sub(/^./, &:upcase)
+  end
+
   def attributes
     {
       first_name: person.first_name,
@@ -62,7 +74,7 @@ class Salutation
   def salutation
     if self.class.available.keys.include?(@salutation)
       "available.#{@salutation}"
-    elsif @salutation == 'personal' && @person.salutation?
+    elsif @salutation == 'personal' && @person.try(:salutation?)
       "available.#{@person.salutation}"
     else
       'default'

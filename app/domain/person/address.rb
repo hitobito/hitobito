@@ -25,7 +25,7 @@ class Person::Address
   end
 
   def address
-    [@person.address.to_s.squish,
+    [@person.address.to_s.strip,
      [@person.zip_code, @person.town].compact.join(' ').squish,
      country]
   end

@@ -21,15 +21,20 @@ class Export::MessageJob < Export::ExportBaseJob
   end
 
   def recipients
-    @recipients ||= message.recipients
+    # only return recipients with still existing person
+    recipients = message.message_recipients.joins(:person)
+    if message.send_to_households?
+      recipients = recipients.group(:address)
+    end
+    recipients
   end
 
   def entries
-    message.mailing_list.people.preload_public_accounts.includes(:primary_group).order_by_name
+    @entries ||= recipients
   end
 
   def invoices
-    # only return invoices with still existing recipients
+    # only return invoices with still existing person
     Invoice.joins(:recipient).where(invoice_list_id: message.invoice_list_id)
   end
 
@@ -45,7 +50,7 @@ class Export::MessageJob < Export::ExportBaseJob
       when Message::LetterWithInvoice
         Export::Tabular::Messages::LettersWithInvoice::List.export(@format, invoices)
       else
-        Export::Tabular::People::Households.export(@format, entries)
+        Export::Tabular::Messages::Letters.export(@format, entries)
       end
     end
   end

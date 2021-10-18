@@ -21,7 +21,7 @@ module Messages
 
       update!(sent_at: Time.current, state: :processing)
       message.dispatcher_class.new(message).run
-      update!(recipient_count: message.message_recipients.count)
+      update!(recipient_count: message.success_count)
       update!(state: :finished) unless message.text_message? || state == :failed
     end
 

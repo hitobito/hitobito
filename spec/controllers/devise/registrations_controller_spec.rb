@@ -39,7 +39,7 @@ describe Devise::RegistrationsController do
   end
 
   describe 'put #update' do
-    let(:data) { { password: 'foofoo', password_confirmation: 'foofoo' } }
+    let(:data) { { password: 'foofoofoofoo', password_confirmation: 'foofoofoofoo' } }
 
     context 'with old password' do
       before { put :update, params: { person: data.merge(current_password: 'foobar') } }
@@ -74,7 +74,7 @@ describe Devise::RegistrationsController do
     end
 
     context 'with wrong confirmation' do
-      before { put :update, params: { person: { current_password: 'foobar', passsword: 'foofoo', password_confirmation: 'barfoo' } } }
+      before { put :update, params: { person: { current_password: 'foobar', passsword: 'foofoofoofoo', password_confirmation: 'barfoobarfoo' } } }
 
       it { is_expected.to render_template('edit') }
       it { is_expected.to have_content 'Passwort Bestätigung stimmt nicht mit Passwort überein' }

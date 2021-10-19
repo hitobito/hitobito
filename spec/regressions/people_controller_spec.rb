@@ -93,7 +93,7 @@ describe PeopleController, type: :controller do
       end
 
       it 'should hint for persons with login' do
-        other.password = '123456'
+        other.password = '123456123456'
         other.save!
         get :show, params: { group_id: top_group.id, id: other.id }
         tooltip_includes('sendet ihr einen Link, damit sie ihr Passwort neu setzen kann')

@@ -11,7 +11,8 @@
 - without_relations ||= false
 
 = field_set_tag do
-  = f.labeled_input_fields :first_name, :last_name, :nickname
+  = f.labeled_input_fields :first_name, :last_name
+  = f.labeled_input_field(:nickname) if Person::PUBLIC_ATTRS.include?(:nickname)
   = f.labeled_string_field(:company_name,
                            placeholder: I18n.t('global.search.placeholder_company_name'),
                            data: { provide: 'entity',

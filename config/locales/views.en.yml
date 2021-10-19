@@ -747,13 +747,6 @@ en:
     text_message:
       fields:
         remaining_chars: Remaining characters
-    form:
-      available_placeholders: 'Available placeholders:'
-      recipient_info:
-        valid:
-          message/text_message:
-            one: "%{model_class}created for %{count}persons."
-            other: "%{model_class}created for %{count}persons."
     table:
       infos:
         sender: "Sender: %{mail}"

@@ -788,23 +788,6 @@ it:
     text_message:
       fields:
         remaining_chars: Caratteri rimanenti
-    form:
-      available_placeholders: 'Segnaposto disponibili:'
-      recipient_info:
-        valid:
-          message/letter:
-            one: "%{model_class} viene creato per una persona."
-            other: "%{model_class} viene creato per %{count} persone."
-          message/letter_with_invoice:
-            one: "%{model_class} viene creato per una persona."
-            other: "%{model_class} viene creato per %{count} personen."
-          message/text_message:
-            one: "%{model_class} viene creato per una persona."
-            other: "%{model_class} viene creato per %{count} persone."
-        invalid:
-          message/text_message:
-            one: "Una persona non ha lasciato il numero di natel."
-            other: "%{count} altri non hanno lasciato il numero di natel."
     table:
       infos:
         sender: "Mittente: %{mail}"

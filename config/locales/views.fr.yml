@@ -789,23 +789,6 @@ fr:
     text_message:
       fields:
         remaining_chars: Caractères restant
-    form:
-      available_placeholders: 'Titres disponibles:'
-      recipient_info:
-        valid:
-          message/letter:
-            one: "est créé pour une personne."
-            other: "%{model_class}est créé pour %{count} personnes."
-          message/letter_with_invoice:
-            one: "est créé pour des personnes."
-            other: "%{model_class} est créé pour %{count} personnes."
-          message/text_message:
-            one: "est créé pour des personnes."
-            other: "%{model_class} est créé pour %{count} personnes."
-        invalid:
-          message/text_message:
-            one: "Plusieurs numéros de téléphones sont manquants."
-            other: "%{count} numéros de téléphones sont manquants."
     table:
       infos:
         sender: "Expéditeur: %{mail}"

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -31,7 +31,11 @@ module RolesHelper
   end
 
   def format_role_deleted_at(role)
-    f(role.deleted_at.to_date) if role.deleted_at
+    if role.archived?
+      f(role.archived_at.to_date)
+    elsif role.deleted_at
+      f(role.deleted_at.to_date)
+    end
   end
 
   def format_role_group_id(role)

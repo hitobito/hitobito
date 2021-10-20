@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -73,6 +73,10 @@ class PersonDecorator < ApplicationDecorator
   def layer_group_label
     group = person.layer_group
     h.link_to(group, h.group_path(group)) if group
+  end
+
+  def roles
+    super.without_archived
   end
 
   def roles_list(group = nil, multiple_groups = false)

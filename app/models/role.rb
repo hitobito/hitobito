@@ -67,6 +67,11 @@ class Role < ActiveRecord::Base
   after_destroy :reset_primary_group
   before_save :prevent_changes, if: ->(r) { r.archived? }
 
+  ### SCOPES
+
+  scope :without_archived, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
+
   ### CLASS METHODS
 
   class << self

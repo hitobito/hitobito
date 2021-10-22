@@ -1,11 +1,8 @@
 # Hitobito Changelog
 
-## unreleased
-
-*  Gruppen können archiviert werden (#1275)
-
 ## Version 1.26
 
+*  Gruppen können archiviert werden (#1275)
 *  Die API unterstützt jetzt, die Gruppen/Rollen, Anlässe und Einzelpersonen auszulesen, welche bei Abos abonniert sind. (#1398, danke @Michael-Schaer!)
 * Teilnehmer können zu Anlässen eingeladen werden (#1276)
 *  Personal Access Tokens für die API sind jetzt deprecated. Alle bestehenden Drittapplikationen sollten auf OAuth API Tokens migrieren (siehe https://github.com/hitobito/hitobito/blob/master/doc/development/05_rest_api.md). Diese Entscheidung wurde zusammen mit der hitobito-Community, insbesondere Jubla, CEVI, PBS und SBV gefällt.

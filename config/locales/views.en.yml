@@ -482,7 +482,6 @@ en:
     merge:
       select:
         title: 'Merge %{group} '
-        explanation: When merging two groups all the subgroups, events and people including their roles will be merged. Subscriptions will not be merged. All former groups will still be visible under 'Deleted'.
         merge_is_irreversible: This process cannot be undone!
         new_group_name: 'Name of the merged group'
         merge_group_with: 'Merge %{group} with'
@@ -538,11 +537,9 @@ en:
   group/merge:
     success: 'The selected groups were merged to form the new group %{new_group_name}.'
     failure: 'The selected groups can''t be merged.'
-    no_candidates: 'There are no equal groups for merging or you don''t have the required permissions.'
     group_name_missing: 'Name for new group must be defined.'
     no_group_selected: 'Please choose a group to be merged with.'
     not_allowed: 'You do not have the permission to merge these groups.'
-    invoice_config_not_merged: 'The invoice settings are not automatically applied. Please make the correct settings manually.'
   group/move:
     success: '%{group} has been moved to %{target}.'
     failure: 'This group can''t be moved or you don''t have the required persmissions.'

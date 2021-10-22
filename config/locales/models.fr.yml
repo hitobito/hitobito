@@ -22,6 +22,7 @@ fr:
     created_info: Créé
     updated_info: Modifié
     deleted_info: Supprimé
+    archived_info: Archivé
   activerecord:
     errors:
       messages:
@@ -33,6 +34,13 @@ fr:
         must_exist: Doivent exister
         readonly: ne peut pas être modifié
       models:
+        cors_origin:
+          attributes:
+            origin:
+              invalid_host: contient un serveur invalide
+              missing_hostname: doit contenir le nom d'un serveur
+              missing_scheme: doit contenir un protocole (http:// ou https://)
+              suffix_present: Ne peut pas contenir de chemin de fichier ni finir par un backslash 
         custom_content:
           attributes:
             body:
@@ -60,6 +68,10 @@ fr:
           attributes:
             base:
               invoice_items_invalid: Au moins un poste budgétaire est invalide.
+        oauth/application:
+          attributes:
+            scopes:
+              not_match_configured: "Ne correspond pas à ce qui est enregistré dans le serveur."
         person:
           name_missing: 'Veuillez entrer votre nom'
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
@@ -98,6 +110,7 @@ fr:
             name:
               must_be_unique: 'existe déjà'
         invoice:
+          recipient_address_or_email_required: 'L''adresse ou l''adresse e-mail du destinataire doit être remplie.'
           attributes:
             invoice_config:
               invalid: 'n''est pas valable ; adaptez les réglages avant de faire le calcul'
@@ -148,6 +161,12 @@ fr:
       event/kind:
         one: Type de cours
         other: Types de cours
+      event/kind_category:
+        one: Catégorie de cours
+        other: Catégories de cours
+      event/invitation:
+        one: Invitation
+        other: Invitations
       event/role:
         one: rôles de l'évènement
         other: rôles de l'évènement
@@ -241,6 +260,9 @@ fr:
       payment_reminder:
         one: rappel
         other: Rappels
+      payment_provider_config:
+        one: Interface pour le paiment
+        other: Interfaces pour le paiment
       person:
         one: Personne
         other: Personnes
@@ -271,6 +293,8 @@ fr:
       salutation:
         one: Formule de politesse
         other: Formules de politesse
+        personal:
+          label: Titre
         default:
           label: Bonjour [nom]
           value:
@@ -329,6 +353,8 @@ fr:
         description: Description
         state: Statut
         read_at: Lu le
+      cors_origins:
+        origin: ordinateur hôte avec accès via une interface
       person:
         salutation: Formule de politesse
         first_name: Prénom
@@ -363,6 +389,9 @@ fr:
         remove_picture: Supprimer la photo actuelle
         roles: Rôles
         tags: Tags
+        title: titre
+        correspondence_language: langue de correspondance
+        household_key: ID du foyer
         created_at: Créé
         updated_at: Modifié
       person_duplicate:
@@ -466,6 +495,8 @@ fr:
       event/kind:
         label: Dénomination de l'association
         short_name: Abréviation
+        kind_category: catégorie de cours
+        kind_category_id: catégorie de cours
         minimum_age: Age minimum requis
         preconditions: Conditions préalables
         prolongations: Prolongé
@@ -477,10 +508,20 @@ fr:
         deleted_at: Supprimé
       event/kind_category:
         label: Désignation
+        order: clé pour le classement
         kinds: Types de cours
         created_at: Créé
         updated_at: Modifié
         deleted_at: Supprimé
+      event/invitation:
+        participation_type: rôle de participation
+        created_at: date de création
+        declined_at: date du refus
+        status: statut
+        statuses:
+          open: Invité.e.s
+          accepted: accepté
+          declined: refusé
       event/participation:
         person_id: Personne
         event_id: Evénement
@@ -511,6 +552,7 @@ fr:
       note:
         text: Texte
       oauth/application:
+        cors_origins: ordinateurs hôte avec accès via une interface
         redirect_uri: Rediriger les URIs
       people_relation:
         head_id: Personne
@@ -666,10 +708,25 @@ fr:
         success_count: Réception réussie
         failed_count: Échec de l'envoi
         sent_at: Traité le
+        recipient_progress: progession du traitement
       message/letter:
         body: Contenu
         heading: En-tête
         salutation: Formule de politesse
+        pp_post: ligne PP
+        shipping_method: Méthode de livraison
+        shipping_methods:
+          own: Propre envoi
+          normal: courrier B
+          priority: courrier A
+        send_to_households: foyers
+      message_recipient:
+        address: adresse
+        country: pays
+        printed_address: adresse postale
+        salutation: titre
+        town: lieu
+        zip_code: NPA
       subscription:
         related_role_types: Rôles
       people_filter:
@@ -712,6 +769,7 @@ fr:
         state: Statut
         sequence_number: Numéro
         esr_number: Numéro de référence
+        reference: référence
         amount_paid: total payé
         payment_slips:
           ch_es: Bulletin de versement postal rouge (CH)
@@ -770,6 +828,7 @@ fr:
         contact: personne de contact
         contact_id: ' personne de contact '
         beneficiary: en faveur de
+        email: réponse à l'adresse e-mail
         payee: Paiement à
         payment_slip: Bulletin de versement
         payment_slips:
@@ -783,6 +842,8 @@ fr:
         participant_number_internal: Numéro du participant interne
         payment_reminder_configs: Rappels
         vat_number: N° TVA
+        donation_increase_percentage: augmentation en %
+        donation_calculation_year_amount: nombre d'années
       invoice_item:
         name: Désignation
         description: description
@@ -825,6 +886,15 @@ fr:
         title: Titre du rappel
         text: texte du rappel
         due_days: durée d'échéance du rappel
+      payment_provider_config:
+        payment_provider: interface pour le paiment
+        partner_identifier: ID du client
+        user_identifier: ID du participant
+        password: mot de passe
+        ini_letter: lettre pour l'initialisation
+        payment_providers:
+          postfinance: Postfinance
+          postfinance-test: environnement de test de PostFinance
       service_token:
         name: Nom
         description: Description
@@ -838,6 +908,7 @@ fr:
         invoices: Factures de ce niveau
         event_participations: Participants d'évènements de ce niveau
         mailing_lists: Abonné-e-s des mailing listes de ce niveau
+        cors_origins: ordinateurs hôte avec accès via une interface
       acts_as_taggable_on/tag:
         taggings_count: Nombre
         category: catégorie

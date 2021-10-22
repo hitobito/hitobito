@@ -491,7 +491,6 @@ it:
     merge:
       select:
         title: 'raggruppare %{group}'
-        explanation: Raggruppando due gruppi, tutti i sottogruppi, gli eventi e le persone unitamente ai ruoli di entrambi i gruppi vengono uniti. Gli abbonamenti non vengono rilevati. I gruppi distinti esistenti fino a questo momento potranno essere ancora visualizzati sotto "cancellati".
         merge_is_irreversible: Questo processo non può essere annullato!
         new_group_name: 'Nome del nuovo gruppo'
         merge_group_with: 'Raggruppare %{group} con'
@@ -548,11 +547,9 @@ it:
   group/merge:
     success: 'I gruppi selezionati sono stati raggruppati nel nuovo gruppo %{new_group_name}.'
     failure: 'I gruppi selezionati non possono venir raggruppati.'
-    no_candidates: 'Non esiste nessun gruppo uguale da raggruppare oppure non hai l''autorizzazione necessaria per farlo.'
     group_name_missing: 'il nome per il nuovo gruppo deve essere definito'
     no_group_selected: 'scegliere un gruppo che deve essere raggruppato.'
     not_allowed: 'purtroppo manca l''autorizzazione per raggruppare questo gruppo.'
-    invoice_config_not_merged: 'Le impostazioni per la fatturazione non vengono adottate automaticamente. Correggere quindi per cortesia le impostazioni manualmente.'
   group/move:
     success: '%{group} è stato spostato in %{target}.'
     failure: 'questo gruppo non può venir spostato oppure tu non hai l''autorizzazione necessaria per farlo.'

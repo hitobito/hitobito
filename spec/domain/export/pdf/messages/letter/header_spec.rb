@@ -20,7 +20,7 @@ describe Export::Pdf::Messages::Letter::Header do
   let(:pdf)        { Prawn::Document.new }
   let(:analyzer) { PDF::Inspector::Text.analyze(pdf.render) }
   let(:image)    { fixture_file_upload('images/logo.png') }
-  let(:shipping_info_with_position) { [[36, 662, "P.P. "], [120, 676, 'Post CH AG'], [59, 662, 'CH-3030 Bern, '], [115, 662, 'Top,']] }
+  let(:shipping_info_with_position) { [[36, 662, "P.P. "], [120, 676, 'Post CH AG'], [59, 662, 'CH-3030 Bern']] }
 
   subject { described_class.new(pdf, letter, options) }
 

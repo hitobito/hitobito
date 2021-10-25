@@ -20,6 +20,8 @@ class Export::Pdf::Messages::Letter
 
       stamped :render_shipping_info
 
+      pdf.move_down 3.mm # According to post factsheet
+
       render_address(recipient.address)
 
       stamped :render_subject if letter.subject.present?

@@ -18,7 +18,8 @@ class Export::Pdf::Messages::Letter
 
       offset_cursor_from_top 52.5.mm
 
-      stamped :render_shipping_info unless letter.own?
+      stamped :render_shipping_info
+
       render_address(recipient.address)
 
       stamped :render_subject if letter.subject.present?
@@ -61,10 +62,11 @@ class Export::Pdf::Messages::Letter
 
     def render_shipping_info(width: SHIPPING_INFO_BOX.first, height: SHIPPING_INFO_BOX.second)
       bounding_box([0, cursor], width: width, height: height) do
-        shipping_method = { normal: 'P.P.',
-                            priority: 'A-PRIORITY' }[letter.shipping_method.to_sym]
+        shipping_method = { own: '',
+                            normal: 'P.P.',
+                            priority: 'P.P. A' }[letter.shipping_method.to_sym]
         pdf.move_up 2
-        text('Post CH AG', align: :center, size: 6.pt)
+        text('Post CH AG', align: :center, size: 7.pt)
         pdf.move_down 2
         text("<u><font size='12pt'><b>#{shipping_method} </b></font>" \
              "<font size='8pt'>#{letter.pp_post}</font></u>",

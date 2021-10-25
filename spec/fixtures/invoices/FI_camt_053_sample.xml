@@ -27,7 +27,7 @@ camt.053.001.02.xsd">
 				<ToDtTm>2009-10-29T21:00:00+02:00</ToDtTm>
 			</FrToDt>
 			<!-- Optional to indicate possible reporduction of the statement, not used at all if a "normal" one delivered statement -->
-			<!--	COPY is used for parallel statement delivered for two different customer id for same statement, DUPL is used if statement is reporduced by the request of the customer 
+			<!--	COPY is used for parallel statement delivered for two different customer id for same statement, DUPL is used if statement is reporduced by the request of the customer
 			<CpyDplctInd>COPY</CpyDplctInd>
 			-->
 			<!-- Bank Account of which statement is reported -->
@@ -201,7 +201,7 @@ camt.053.001.02.xsd">
 				<!-- reporting transaction code based summaries if service is considered useful-->
 				<!--
 				<TtlNtriesPerBkTxCd>
-				</TtlNtriesPerBkTxCd> 
+				</TtlNtriesPerBkTxCd>
 				-->
 			</TxsSummry>
 			<!-- Here is the begiining of the transactions for the booking date 29.5.2009-->

@@ -783,6 +783,7 @@ de:
         heading: Briefkopf
         salutation: Anrede
         pp_post: PP-Zeile
+        donation_confirmation: Spendenbestätigung
         shipping_method: Liefermethode
         shipping_methods:
           own: Eigener Versand

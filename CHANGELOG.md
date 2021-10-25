@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-*  Es wurde neu eine minimale Passwortlänge von 11-Zeichen für neue Passwörter eingeführt, dies entspricht den Vorschlägen von OWASP (#1429)
+*  Es wurde neu eine minimale Passwortlänge von 12 Zeichen für neue Passwörter eingeführt, dies entspricht den Empfehlungen von OWASP (#1429)
 *  Die API unterstützt jetzt, die Gruppen/Rollen, Anlässe und Einzelpersonen auszulesen, welche bei Abos abonniert sind. (#1398, danke @Michael-Schaer!)
 
 ## Version 1.26

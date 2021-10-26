@@ -864,10 +864,16 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, other)
       end
 
-      it 'may not index people for other event' do
-        other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
+      it 'may not index people for other event, without visible participations' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_one)], participations_visible: false)
         is_expected.not_to be_able_to(:index_participations, other)
       end
+
+      it 'may not index people for other event, with visible participations' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_one)], participations_visible: true)
+        is_expected.not_to be_able_to(:index_participations, other)
+      end
+
     end
 
     context Event::Role::Participant do
@@ -895,6 +901,16 @@ describe EventAbility do
         let(:event) { Fabricate(:course) }
 
         it 'may index people for his event' do
+          # ... regardless of participations_visible-flag
+
+          event.update(participations_visible: true)
+          expect(event).to be_participations_visible
+
+          is_expected.to be_able_to(:index_participations, event)
+
+          event.update(participations_visible: false)
+          expect(event).to_not be_participations_visible
+
           is_expected.to be_able_to(:index_participations, event)
         end
       end
@@ -934,7 +950,6 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, other)
       end
     end
-
   end
 
   context 'inactive participation' do

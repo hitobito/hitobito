@@ -24,7 +24,12 @@ WebMock.disable_net_connect!(
   )
 )
 
-ActiveRecord::Migration.maintain_test_schema!
+ActiveRecord::Migration.suppress_messages do
+  if ActiveRecord::Base.maintain_test_schema
+    Wagons.all.each(&:migrate)
+    ActiveRecord::Migration.load_schema_if_pending!
+  end
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

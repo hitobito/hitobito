@@ -130,6 +130,7 @@ case $cmd in
     mv -nv "vendor/wagons/$wagon_name" "$new_wagon_dir"
 
     pushd "$new_wagon_dir"
+      mv github .github
       git init
       git ci -m "Create $wagon_name Wagon"
     popd

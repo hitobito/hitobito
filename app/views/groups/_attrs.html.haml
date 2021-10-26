@@ -12,7 +12,7 @@
     = render_attrs(entry, :type_name)
     = render_present_attrs(entry, *entry.used_attributes(:description))
     = render_extensions :attrs
-    = render_present_attrs(entry, :created_info, :updated_info, :deleted_info) if can?(:show_details, @group)
+    = render_present_attrs(entry, :created_info, :updated_info, :deleted_info, :archived_info) if can?(:show_details, @group)
 
     - if can?(:index_notes, entry)
       = render 'notes/section', create_path: group_notes_path(@group)

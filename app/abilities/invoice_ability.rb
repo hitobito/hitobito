@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,19 +8,23 @@
 class InvoiceAbility < AbilityDsl::Base
 
   on(Invoice) do
-    permission(:finance).may(:create, :show, :edit, :update, :destroy).in_layer
+    permission(:finance).may(:show).in_layer
+    permission(:finance).may(:create, :edit, :update, :destroy).in_layer_if_active
   end
 
   on(InvoiceList) do
-    permission(:finance).may(:create, :index_invoices).in_layer_with_receiver
+    permission(:finance).may(:create).in_layer_with_receiver
+    permission(:finance).may(:index_invoices).in_layer_with_receiver_if_active
   end
 
   on(InvoiceArticle) do
-    permission(:finance).may(:new, :create, :show, :edit, :update, :destroy).in_layer
+    permission(:finance).may(:show).in_layer
+    permission(:finance).may(:new, :create, :edit, :update, :destroy).in_layer_if_active
   end
 
   on(InvoiceConfig) do
-    permission(:finance).may(:show, :edit, :update).in_layer
+    permission(:finance).may(:show).in_layer
+    permission(:finance).may(:edit, :update).in_layer_if_active
   end
 
   on(Payment) do
@@ -28,7 +32,7 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   on(PaymentReminder) do
-    permission(:finance).may(:create).in_layer
+    permission(:finance).may(:create).in_layer_if_active
   end
 
   def any_finance_group
@@ -41,7 +45,16 @@ class InvoiceAbility < AbilityDsl::Base
 
   def in_layer_with_receiver
     return in_layer unless subject.receiver
+
     in_layer && in_layer(subject.receiver.group.layer_group)
+  end
+
+  def in_layer_if_active
+    in_layer && !subject.group&.archived?
+  end
+
+  def in_layer_with_receiver_if_active
+    in_layer_with_receiver && !subject.receiver.group.archived?
   end
 
 end

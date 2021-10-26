@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -53,7 +53,8 @@ describe Group do
         group = Group::BottomLayer.new(name: 'AAA', parent_id: parent.id)
         group.save!
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-          'AAA', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers']
+          'AAA', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers'
+        ]
         # :updated_at should not change, tests patch from config/awesome_nested_set_patch.rb
         expect(groups(:top_layer).reload.updated_at.to_date).to eq(updated)
         expect(groups(:bottom_layer_one).reload.updated_at.to_date).to eq(updated)
@@ -65,7 +66,8 @@ describe Group do
         group = Group::BottomLayer.new(name: 'Bottom One', parent_id: parent.id)
         group.save!
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-          'Bottom One', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers']
+          'Bottom One', 'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers'
+        ]
       end
 
       it 'in the middle' do
@@ -73,7 +75,8 @@ describe Group do
         group = Group::BottomLayer.new(name: 'Frosch', parent_id: parent.id)
         group.save!
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'Bottom Two', 'Frosch', 'TopGroup', 'Toppers']
+          'Bottom One', 'Bottom Two', 'Frosch', 'TopGroup', 'Toppers'
+        ]
       end
 
       it 'in the middle with same name' do
@@ -81,7 +84,8 @@ describe Group do
         group = Group::BottomLayer.new(name: 'Bottom Two', parent_id: parent.id)
         group.save!
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'Bottom Two', 'Bottom Two', 'TopGroup', 'Toppers']
+          'Bottom One', 'Bottom Two', 'Bottom Two', 'TopGroup', 'Toppers'
+        ]
       end
 
       it 'at the end' do
@@ -89,7 +93,8 @@ describe Group do
         group = Group::TopGroup.new(name: 'ZZ Top', parent_id: parent.id)
         group.save!
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers', 'ZZ Top']
+          'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers', 'ZZ Top'
+        ]
       end
 
       it 'at the end with same name' do
@@ -97,16 +102,19 @@ describe Group do
         group = Group::TopGroup.new(name: 'Toppers', parent_id: parent.id)
         group.save!
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers', 'Toppers']
+          'Bottom One', 'Bottom Two', 'TopGroup', 'Toppers', 'Toppers'
+        ]
       end
 
       context 'with short_name' do
         it 'in the middle' do
           parent = groups(:top_layer)
-          group = Group::TopGroup.new(name: 'Bottom A', short_name: 'Bottom X', parent_id: parent.id)
+          group = Group::TopGroup.new(name: 'Bottom A', short_name: 'Bottom X',
+                                      parent_id: parent.id)
           group.save!
-          expect = expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-           'Bottom One', 'Bottom Two','Bottom A', 'TopGroup', 'Toppers']
+          expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
+            'Bottom One', 'Bottom Two', 'Bottom A', 'TopGroup', 'Toppers'
+          ]
         end
       end
 
@@ -115,8 +123,9 @@ describe Group do
           parent = groups(:top_layer)
           group = Group::TopGroup.new(name: 'bottom x', parent_id: parent.id)
           group.save!
-          expect = expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-           'Bottom One', 'Bottom Two', 'bottom x', 'TopGroup', 'Toppers']
+          expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
+            'Bottom One', 'Bottom Two', 'bottom x', 'TopGroup', 'Toppers'
+          ]
         end
       end
     end
@@ -125,62 +134,75 @@ describe Group do
       it 'at the beginning' do
         groups(:bottom_layer_two).update!(name: 'AAA')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-          'AAA', 'Bottom One', 'TopGroup', 'Toppers']
+          'AAA', 'Bottom One', 'TopGroup', 'Toppers'
+        ]
       end
 
       it 'at the beginning with same name' do
         groups(:bottom_layer_two).update!(name: 'Bottom One')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-          'Bottom One', 'Bottom One', 'TopGroup', 'Toppers']
+          'Bottom One', 'Bottom One', 'TopGroup', 'Toppers'
+        ]
       end
 
       it 'in the middle keeping position right' do
         groups(:bottom_layer_two).update!(name: 'Frosch')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'Frosch', 'TopGroup', 'Toppers']
+          'Bottom One', 'Frosch', 'TopGroup', 'Toppers'
+        ]
       end
 
       it 'in the middle keeping position left' do
         groups(:bottom_layer_two).update!(name: 'Bottom P')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'Bottom P', 'TopGroup', 'Toppers']
+          'Bottom One', 'Bottom P', 'TopGroup', 'Toppers'
+        ]
       end
 
       it 'in the middle moving right' do
         groups(:bottom_layer_two).update!(name: 'TopGzzz')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'TopGroup', 'TopGzzz', 'Toppers']
+          'Bottom One', 'TopGroup', 'TopGzzz', 'Toppers'
+        ]
       end
 
       it 'in the middle moving left' do
         groups(:top_group).update!(name: 'Bottom P')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'Bottom P', 'Bottom Two', 'Toppers']
+          'Bottom One', 'Bottom P', 'Bottom Two', 'Toppers'
+        ]
       end
 
       it 'in the middle with same name' do
         groups(:bottom_layer_two).update!(name: 'TopGroup')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'TopGroup', 'TopGroup', 'Toppers']
+          'Bottom One', 'TopGroup', 'TopGroup', 'Toppers'
+        ]
       end
 
       it 'at the end' do
         groups(:bottom_layer_two).update!(name: 'ZZ Top')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'TopGroup', 'Toppers', 'ZZ Top']
+          'Bottom One', 'TopGroup', 'Toppers', 'ZZ Top'
+        ]
       end
 
       it 'at the end with same name' do
         groups(:bottom_layer_two).update!(name: 'Toppers')
         expect(groups(:top_layer).children.order(:lft).collect(&:name)).to eq [
-         'Bottom One', 'TopGroup', 'Toppers', 'Toppers']
+          'Bottom One', 'TopGroup', 'Toppers', 'Toppers'
+        ]
       end
 
       context 'with short_name' do
         it 'at the end' do
-          groups(:bottom_layer_two).update!(short_name: 'XXX')
+          groups(:bottom_layer_two).update!(short_name: 'ZZZ')
           expect(groups(:top_layer).children.order(:lft).collect(&:display_name)).to eq [
-           'Bottom One', 'TopGroup', 'Toppers', "XXX"]
+            'Bottom One',
+            'TopGroup',
+            'Toppers',
+            'ZZZ'
+          ]
         end
       end
 
@@ -188,7 +210,8 @@ describe Group do
         it 'in the middle' do
           groups(:bottom_layer_two).update!(name: 'topGroupX')
           expect(groups(:top_layer).children.order(:lft).collect(&:display_name)).to eq [
-           'Bottom One', 'TopGroup', 'topGroupX', 'Toppers']
+            'Bottom One', 'TopGroup', 'topGroupX', 'Toppers'
+          ]
         end
       end
 
@@ -201,7 +224,13 @@ describe Group do
     end
 
     it 'contains all ancestors' do
-      expect(groups(:bottom_group_one_one).hierarchy).to eq([groups(:top_layer), groups(:bottom_layer_one), groups(:bottom_group_one_one)])
+      expect(groups(:bottom_group_one_one).hierarchy).to eq(
+        [
+          groups(:top_layer),
+          groups(:bottom_layer_one),
+          groups(:bottom_group_one_one)
+        ]
+      )
     end
   end
 
@@ -215,7 +244,8 @@ describe Group do
     end
 
     it 'is all upper layers for regular layer' do
-      expect(groups(:bottom_layer_one).layer_hierarchy).to eq([groups(:top_layer), groups(:bottom_layer_one)])
+      expect(groups(:bottom_layer_one).layer_hierarchy).to eq([groups(:top_layer),
+                                                               groups(:bottom_layer_one)])
     end
   end
 
@@ -288,7 +318,8 @@ describe Group do
       let(:group) { groups(:bottom_layer_one) }
 
       it 'contains other layers and their descendants' do
-        is_expected.to match_array([group.self_and_descendants, groups(:bottom_layer_two).self_and_descendants].flatten)
+        is_expected.to match_array([group.self_and_descendants,
+                                    groups(:bottom_layer_two).self_and_descendants].flatten)
       end
     end
 
@@ -296,7 +327,8 @@ describe Group do
       let(:group) { groups(:bottom_group_one_one) }
 
       it 'contains other groups and their descendants' do
-        is_expected.to match_array([group, groups(:bottom_group_one_one_one), groups(:bottom_group_one_two)])
+        is_expected.to match_array([group, groups(:bottom_group_one_one_one),
+                                    groups(:bottom_group_one_two)])
       end
     end
   end
@@ -304,7 +336,8 @@ describe Group do
   context '.all_types' do
     it 'lists all types' do
       expect(Group.all_types.count).to eq(5)
-      [Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup, Group::GlobalGroup].each do |t|
+      [Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup,
+       Group::GlobalGroup].each do |t|
         expect(Group.all_types).to include(t)
       end
     end
@@ -313,23 +346,23 @@ describe Group do
   context '.order_by_type' do
     it 'has correct ordering without group' do
       expect(Group.order_by_type).to eq([groups(:top_layer),
-                                     groups(:top_group),
-                                     groups(:bottom_layer_one),
-                                     groups(:bottom_layer_two),
-                                     groups(:bottom_group_one_one),
-                                     groups(:bottom_group_one_one_one),
-                                     groups(:bottom_group_one_two),
-                                     groups(:bottom_group_two_one),
-                                     groups(:toppers)])
+                                         groups(:top_group),
+                                         groups(:bottom_layer_one),
+                                         groups(:bottom_layer_two),
+                                         groups(:bottom_group_one_one),
+                                         groups(:bottom_group_one_one_one),
+                                         groups(:bottom_group_one_two),
+                                         groups(:bottom_group_two_one),
+                                         groups(:toppers)])
     end
 
     it 'has correct ordering with parent group' do
       parent = groups(:top_layer)
       expect(parent.children.order_by_type(parent)).to eq(
-          [groups(:top_group),
-           groups(:bottom_layer_one),
-           groups(:bottom_layer_two),
-           groups(:toppers)]
+        [groups(:top_group),
+         groups(:bottom_layer_one),
+         groups(:bottom_layer_two),
+         groups(:toppers)]
       )
     end
 
@@ -338,7 +371,6 @@ describe Group do
       expect(parent.children.order_by_type(parent)).to be_empty
     end
   end
-
 
   context '#set_layer_group_id' do
     it 'sets layer_group_id on group' do
@@ -373,7 +405,7 @@ describe Group do
 
     it 'destroys self' do
       expect { bottom_group.destroy }.to change { Group.without_deleted.count }.by(-1)
-      expect(Group.only_deleted.collect(&:id)).to  match_array([bottom_group.id])
+      expect(Group.only_deleted.collect(&:id)).to match_array([bottom_group.id])
       expect(Group).to be_valid
     end
 
@@ -383,17 +415,17 @@ describe Group do
     end
 
     it 'protects group with children' do
-      expect { bottom_layer.destroy }.not_to change { Group.without_deleted.count }
+      expect { bottom_layer.destroy }.not_to(change { Group.without_deleted.count })
     end
 
     it 'does not destroy anything for root group' do
-      expect { top_layer.destroy }.not_to change { Group.count }
+      expect { top_layer.destroy }.not_to(change { Group.count })
     end
 
     context 'role assignments'  do
       it 'terminates own roles' do
-        role = Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
-        deleted_ids = bottom_group.roles.collect(&:id)
+        _role = Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
+        _deleted_ids = bottom_group.roles.collect(&:id)
         # role is deleted permanantly as it is less than Settings.role.minimum_days_to_archive old
         expect { bottom_group.destroy }.to change { Role.with_deleted.count }.by(-1)
       end
@@ -404,7 +436,7 @@ describe Group do
 
       it 'does not destroy exclusive events on soft destroy' do
         Fabricate(:event, groups: [group])
-        expect { group.destroy }.not_to change { Event.count }
+        expect { group.destroy }.not_to change(Event, :count)
       end
 
       it 'destroys exclusive events on hard destroy' do
@@ -414,7 +446,7 @@ describe Group do
 
       it 'does not destroy events belonging to other groups as well' do
         Fabricate(:event, groups: [group, groups(:bottom_group_one_one)])
-        expect { group.really_destroy! }.not_to change { Event.count }
+        expect { group.really_destroy! }.not_to change(Event, :count)
       end
 
       it 'destroys event when removed from association' do
@@ -430,7 +462,7 @@ describe Group do
     subject { group }
     before { group.update!(contactable) }
 
-    context 'no contactable but contact info'  do
+    context 'no contactable but contact info' do
       its(:contact)   { should be_blank }
       its(:address)   { should eq 'foobar' }
       its(:town)      { should eq 'thun' }
@@ -444,15 +476,15 @@ describe Group do
 
       before { group.update_attribute(:contact, contact) }
 
-      its(:address)   { should eq 'barfoo' }
-      its(:address?)   { should be_truthy }
-      its(:zip_code?)   { should be_falsey }
+      its(:address) { should eq 'barfoo' }
+      its(:address?) { should be_truthy }
+      its(:zip_code?) { should be_falsey }
     end
 
   end
 
   context 'invoice_config' do
-    let (:parent) { groups(:top_layer) }
+    let(:parent) { groups(:top_layer) }
 
     it 'is created for layer group' do
       group = Fabricate(Group::BottomLayer.sti_name, name: 'g', parent: parent)
@@ -508,6 +540,73 @@ describe Group do
       group.email = 'group42@puzzle.ch'
 
       expect(group).to be_valid
+    end
+  end
+
+  context 'archived: ' do
+    subject(:archived_group) do
+      groups(:bottom_group_one_two).tap { |g| g.update(archived_at: 1.day.ago) }
+    end
+
+    context 'archived? is' do
+      subject { groups(:bottom_group_one_two) }
+
+      it 'false without a date' do
+        expect(subject.archived_at).to be_falsey
+
+        is_expected.not_to be_archived
+      end
+
+      it 'true with an archived_at date' do
+        expect(archived_group.archived_at).to be_truthy
+
+        expect(archived_group).to be_archived
+      end
+
+      it 'making the group read-only' do
+        expect(archived_group).to be_archived
+
+        expect do
+          archived_group.update!(name: 'Followers of Blørbaël')
+        end.to raise_error(ActiveRecord::ReadOnlyRecord)
+      end
+    end
+
+    context 'archivable? is' do
+      it 'false when there are sub-groups' do
+        group = groups(:top_layer)
+        expect(group.children).to be_present
+
+        expect(group).not_to be_archivable
+      end
+
+      it 'false when already archived' do
+        group = groups(:toppers).tap do |g|
+          g.update(archived_at: 1.day.ago)
+        end
+        expect(group.children).to_not be_present
+
+        expect(group).not_to be_archivable
+      end
+
+      it 'true if there are no children' do
+        group = groups(:toppers)
+        expect(group.children).to_not be_present
+
+        expect(group).to be_archivable
+      end
+    end
+
+    context 'soft-deletion' do
+      it 'is supported' do
+        expect(archived_group.class.ancestors).to include(Paranoia)
+
+        expect do
+          archived_group.destroy!
+        end.to change { Group.without_deleted.count }.by(-1)
+
+        expect(archived_group.reload.deleted_at).to_not be_nil
+      end
     end
   end
 end

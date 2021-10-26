@@ -32,6 +32,7 @@ de:
     created_info: Erstellt
     updated_info: Geändert
     deleted_info: Gelöscht
+    archived_info: Archiviert
 
   activerecord:
     errors:

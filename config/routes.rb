@@ -58,6 +58,7 @@ Hitobito::Application.routes.draw do
         get 'move' => 'group/move#select'
         post 'move' => 'group/move#perform'
 
+        post 'archive' => 'group/archive#create'
       end
 
       resources :settings, only: [:index, :edit, :update], controller: 'group_settings', as: 'group_settings'

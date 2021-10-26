@@ -23,17 +23,17 @@ class GroupAbility < AbilityDsl::Base
       may(:show_details, :index_people, :index_local_people).
       in_same_group_or_below
 
-    permission(:group_full).
-      may(:index_full_people, :update, :reactivate, :export_events, :'export_event/courses').
-      in_same_group
+    permission(:group_full)
+      .may(:index_full_people, :export_events, :'export_event/courses', :reactivate)
+      .in_same_group
+    permission(:group_full).may(:update).in_same_group_if_active
 
-    permission(:group_and_below_full).
-      may(:index_full_people, :update, :reactivate, :export_events, :'export_event/courses').
-      in_same_group_or_below
+    permission(:group_and_below_full)
+      .may(:index_full_people, :reactivate, :export_events, :'export_event/courses')
+      .in_same_group_or_below
+    permission(:group_and_below_full).may(:update).in_same_group_or_below_if_active
     permission(:group_and_below_full).may(:create).with_parent_in_same_group_hierarchy
-    permission(:group_and_below_full).
-      may(:destroy).
-      in_below_group
+    permission(:group_and_below_full).may(:destroy).in_below_group
 
     permission(:layer_read).
       may(:show_details, :index_people, :index_local_people, :index_full_people,
@@ -43,11 +43,13 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_full).may(:create).with_parent_in_same_layer
     permission(:layer_full).may(:destroy).in_same_layer_except_permission_giving
     permission(:layer_full).may(:index_service_tokens).service_token_in_same_layer
-    permission(:layer_full).
-      may(:update, :reactivate, :index_person_add_requests, :index_notes,
-          :manage_person_tags, :activate_person_add_requests, :deactivate_person_add_requests,
-          :index_deleted_people).
-      in_same_layer
+    permission(:layer_full)
+      .may(:index_person_add_requests, :index_notes, :index_deleted_people)
+      .in_same_layer
+    permission(:layer_full)
+      .may(:update, :reactivate,
+           :manage_person_tags, :activate_person_add_requests, :deactivate_person_add_requests)
+      .in_same_layer_if_active
 
     permission(:layer_and_below_read).
       may(:show_details, :index_people, :index_full_people, :index_deep_full_people,
@@ -60,16 +62,16 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_and_below_full).
       may(:update, :reactivate, :index_person_add_requests, :index_notes,
           :manage_person_tags, :index_deleted_people).in_same_layer_or_below
-    permission(:layer_and_below_full).may(:modify_superior).in_below_layers
+    permission(:layer_and_below_full).may(:modify_superior).in_below_layers_if_active
     permission(:layer_and_below_full).may(:index_service_tokens).service_token_in_same_layer
     permission(:layer_and_below_full).
       may(:activate_person_add_requests, :deactivate_person_add_requests).
-      in_same_layer
+      in_same_layer_if_active
 
     permission(:finance).may(:index_invoices).in_layer_group
-    permission(:finance).may(:create_invoices_from_list).in_same_layer_or_below
+    permission(:finance).may(:create_invoices_from_list).in_same_layer_or_below_if_active
 
-    permission(:admin).may(:manage_person_duplicates).if_layer_group
+    permission(:admin).may(:manage_person_duplicates).if_layer_group_if_active
     permission(:layer_and_below_full).may(:manage_person_duplicates).if_permission_in_layer
 
     general(:update).group_not_deleted
@@ -127,6 +129,10 @@ class GroupAbility < AbilityDsl::Base
 
   def in_below_layers
     permission_in_layers?(group.upper_layer_hierarchy.collect(&:id))
+  end
+
+  def in_below_layers_if_active
+    in_below_layers && in_active_group
   end
 
   # Member is a general role kind. Return true if user has any member role anywhere.

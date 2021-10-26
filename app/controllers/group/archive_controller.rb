@@ -28,7 +28,9 @@ class Group::ArchiveController < ApplicationController
   end
 
   def authorize_action
-    authorize!(:destroy, entry) # not exactly the same, but close enough
+    raise CanCan::AccessDenied # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
+
+    # authorize!(:destroy, entry) # not exactly the same, but close enough
   end
 
   def archive_roles(archival_timestamp)

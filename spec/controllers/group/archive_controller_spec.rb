@@ -9,7 +9,22 @@ require 'spec_helper'
 
 describe Group::ArchiveController, type: :controller do
 
-  describe 'POST #create' do
+  describe 'POST #create' do # delete this, once GROUP_ARCHIVE_DISABLED is over
+    let(:bottom_group) { groups(:bottom_group_one_two) }
+    let(:group_id) { bottom_group.id }
+
+    before do
+      sign_in(people(:top_leader))
+    end
+
+    it 'is forbidden' do
+      expect do
+        post :create, params: { id: group_id }
+      end.to raise_error CanCan::AccessDenied
+    end
+  end
+
+  xdescribe 'POST #create' do # reactivate once GROUP_ARCHIVE_DISABLED is over
     let(:bottom_group) { groups(:bottom_group_one_two) }
     let(:group_id) { bottom_group.id }
 

@@ -573,14 +573,18 @@ describe Group do
     end
 
     context 'archivable? is' do
-      it 'false when there are sub-groups' do
+      it 'currently always false, feature is deactivated' do # delete after GROUP_ARCHIVE_DISABLED
+        expect(groups(:toppers)).to_not be_archivable
+      end
+
+      xit 'false when there are sub-groups' do # reactivate after GROUP_ARCHIVE_DISABLED
         group = groups(:top_layer)
         expect(group.children).to be_present
 
         expect(group).not_to be_archivable
       end
 
-      it 'false when already archived' do
+      xit 'false when already archived' do # reactivate after GROUP_ARCHIVE_DISABLED
         group = groups(:toppers).tap do |g|
           g.update(archived_at: 1.day.ago)
         end
@@ -589,7 +593,7 @@ describe Group do
         expect(group).not_to be_archivable
       end
 
-      it 'true if there are no children' do
+      xit 'true if there are no children' do # reactivate after GROUP_ARCHIVE_DISABLED
         group = groups(:toppers)
         expect(group.children).to_not be_present
 

@@ -76,12 +76,19 @@ class EventAbility < AbilityDsl::Base
   end
 
   def for_participations_read_events_and_course_participants
-    return for_participations_read_events unless subject.is_a?(::Event::Course)
-
-    for_participations_read_events || participant?
+    for_participations_read_events || participations_of_event_type_visible
   end
 
   private
+
+  def participations_of_event_type_visible
+    case subject
+    when ::Event::Course
+      participant?
+    else
+      event.participations_visible? && participant?
+    end
+  end
 
   def event
     subject

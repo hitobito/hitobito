@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -45,7 +45,7 @@ class Event::ParticipationAbility < AbilityDsl::Base
   end
 
   def her_own_or_for_participations_read_events
-    her_own || for_participations_read_events
+    her_own || (event.participations_visible? && participating?) || for_participations_read_events
   end
 
   def her_own_if_application_possible
@@ -56,6 +56,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
     her_own &&
       event.applications_cancelable? &&
       (!event.application_closing_at? || event.application_closing_at >= Time.zone.today)
+  end
+
+  def participating?
+    event.participations.map(&:person_id).include? user.id
   end
 
   private

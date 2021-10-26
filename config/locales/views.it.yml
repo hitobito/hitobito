@@ -124,6 +124,7 @@ it:
   dropdown/group_edit:
     move: 'spostare'
     merge: 'raggruppare'
+    archive: 'archiviare'
   dropdown/people_export:
     button: 'esportare'
     csv: 'CSV'
@@ -159,6 +160,7 @@ it:
       unauthenticated: 'devi iscriverti o registrarti prima di poter continuare.'
       unconfirmed: 'devi confermare il tuo account prima di poter continuare.'
       last_attempt: 'hai ancora un tentativo prima che il tuo account venga bloccato.'
+      locked: 'il tuo account è bloccato per 1 ora'
       invalid: 'dati d''accesso non validi.'
       invalid_token: 'token per l''autenticazione non è valido'
       timeout: 'questa sessione è scaduto, per favore registrati nuovamente.'
@@ -189,6 +191,7 @@ it:
       confirmed: 'grazie per la tua registrazione. Ora sei registrato.'
     unlocks:
       send_instructions: 'riceverai tra pochi minuti un''email con le istruzioni su come puoi sbloccare il tuo account.'
+      unlocked: 'il tuo accout è stato sbloccato con successo'
       send_paranoid_instructions: "se il tuo indirizzo e-mail esiste nella nostra banca dati riceverai tra pochi minuti u'e-mail con le istruzioni su come puoi sbloccare il tuo account."
     omniauth_callbacks:
       success: 'ti sei registrato con successo con il tuo %{kind}-account.'
@@ -211,6 +214,9 @@ it:
         subject: 'istruzioni per attivare il tuo account'
         body:
           greeting: 'Ciao %{name}!'
+          information_html: 'Iltuo account è stato bloccato a causa di troppi tentativi di login sbagliati.<br>Clicca sul link seguente per sbloccare il tuo account:'
+          link_text: 'Sbloccare il mio account'
+          footer: 'Questa e-mail è  stata mandata da Hitobito'
   errors:
     link_to_main: 'pagina principale'
     '404':
@@ -235,6 +241,7 @@ it:
     lists:
       courses:
         title: 'corsi disponibili'
+        no_category: Altri corsi
         explanation: 'Qui vengono mostrati i corsi per il tuo gruppo così come per i gruppi superiori. Puoi trovare altri corsi tra i gruppi che li organizzano.'
         csv_export_button: 'esportazione CSV'
         ical_export_button: 'Esportazione del calendario'
@@ -352,6 +359,17 @@ it:
       attachment:
         subject: 'Il messaggio riguarda:'
   events:
+    courses:
+      filter:
+        places_available:
+          all: tutti
+          only_with_places_available: Solo con posti disponibili
+        select_states: Filtrare secondo lo stato
+        time_period: Nel periodo di tempo (opzionale)
+        until: fino a
+      group_filter:
+        all_layers: Tutti i gruppi
+        filter_by_layer: organizzatore
     actions_show:
       copy_share_link: Copiare il link diretto
     application_fields:

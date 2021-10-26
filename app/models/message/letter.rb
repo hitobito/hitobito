@@ -2,23 +2,28 @@
 #
 # Table name: messages
 #
-#  id                 :bigint           not null, primary key
-#  failed_count       :integer          default(0)
-#  heading            :boolean          default(FALSE)
-#  invoice_attributes :text(65535)
-#  recipient_count    :integer          default(0)
-#  salutation         :string(255)
-#  sent_at            :datetime
-#  state              :string(255)      default("draft")
-#  subject            :string(256)
-#  success_count      :integer          default(0)
-#  text               :text(65535)
-#  type               :string(255)      not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  invoice_list_id    :bigint
-#  mailing_list_id    :bigint
-#  sender_id          :bigint
+#  id                    :bigint           not null, primary key
+#  failed_count          :integer          default(0)
+#  heading               :boolean          default(FALSE)
+#  invoice_attributes    :text(65535)
+#  recipient_count       :integer          default(0)
+#  salutation            :string(255)
+#  sent_at               :datetime
+#  state                 :string(255)      default("draft")
+#  subject               :string(256)
+#  success_count         :integer          default(0)
+#  text                  :text(65535)
+#  type                  :string(255)      not null
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  invoice_list_id       :bigint
+#  mailing_list_id       :bigint
+#  sender_id             :bigint
+#  heading               :boolean          default("false")
+#  pp_post               :string
+#  shipping_method       :string           default("own")
+#  send_to_households    :boolean          default(FALSE)
+#  donation_confirmation :boolean          default(FALSE)
 #
 # Indexes
 #
@@ -42,7 +47,7 @@ class Message::Letter < Message
 
   validates_presence_of :body
 
-  self.duplicatable_attrs << 'body' << 'heading' << 'salutation'
+  self.duplicatable_attrs << 'body' << 'heading' << 'salutation' << 'pp_post' << 'shipping_method'
 
   def recipients
     @recipients ||= mailing_list.people(Person.with_address)

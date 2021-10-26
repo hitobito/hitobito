@@ -67,8 +67,7 @@ class Export::Pdf::Messages::Letter
         text('Post CH AG', align: :center, size: 6.pt)
         pdf.move_down 2
         text("<u><font size='12pt'><b>#{shipping_method} </b></font>" \
-             "<font size='8pt'>#{letter.pp_post}, </font>" \
-             "<font size='5pt'>#{group.layer_group.name}, #{group.layer_group.address}</font></u>",
+             "<font size='8pt'>#{letter.pp_post}</font></u>",
              inline_format: true)
       end
     end

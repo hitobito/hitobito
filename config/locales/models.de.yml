@@ -780,7 +780,6 @@ de:
 
       message/letter:
         body: Inhalt
-        heading: Briefkopf
         salutation: Anrede
         pp_post: PP-Zeile
         donation_confirmation: Spendenbestätigung

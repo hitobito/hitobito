@@ -635,7 +635,6 @@ en:
         sent_at: Sent at
       message/letter:
         body: Content
-        heading: Letterhead
       subscription:
         related_role_types: Roles
       people_filter:

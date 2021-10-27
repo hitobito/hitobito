@@ -11,7 +11,6 @@
 
 #  id                    :bigint           not null, primary key
 #  failed_count          :integer          default(0)
-#  heading               :boolean          default(FALSE)
 #  invoice_attributes    :text(65535)
 #  recipient_count       :integer          default(0)
 #  salutation            :string(255)
@@ -26,7 +25,6 @@
 #  invoice_list_id       :bigint
 #  mailing_list_id       :bigint
 #  sender_id             :bigint
-#  heading               :boolean          default("false")
 #  pp_post               :string
 #  shipping_method       :string           default("own")
 #  send_to_households    :boolean          default(FALSE)

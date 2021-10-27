@@ -710,7 +710,6 @@ it:
         recipient_progress: avanzamento dell'elaborazione
       message/letter:
         body: Contenuto
-        heading: Intestazione
         salutation: Appellativo
         pp_post: riga PP
         shipping_method: metodo di spedizione

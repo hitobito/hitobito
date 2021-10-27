@@ -14,7 +14,7 @@ class Export::Pdf::Messages::Letter
     delegate :group, to: 'letter'
 
     def render(recipient) # rubocop:disable Metrics/MethodLength
-      stamped :render_header
+      render_logo_right
 
       offset_cursor_from_top 52.5.mm
 
@@ -28,15 +28,6 @@ class Export::Pdf::Messages::Letter
     end
 
     private
-
-    def render_header
-      if letter.heading?
-        render_logo_right
-        pdf.move_up 40
-
-        render_address(sender_address)
-      end
-    end
 
     def render_subject
       offset_cursor_from_top 107.5.mm

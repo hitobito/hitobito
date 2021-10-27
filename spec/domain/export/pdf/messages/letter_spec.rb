@@ -66,40 +66,12 @@ describe Export::Pdf::Messages::Letter do
       end
 
       it "renders text at positions with group sender address" do
-        letter.update!(heading: true)
-        group_contact = Fabricate(Group::BottomGroup::Member.name, group: group).person
-        group_contact.update!(address: 'Lakeview 42', zip_code: '4242', town: 'Wanaka')
-        group.update!(contact: group_contact)
+        letter.update!(pp_post: 'Group 11, Lakeview 42, 4242 Wanaka')
 
         expect(text_with_position).to match_array [
           [152, 690, "Post CH AG"],
           [71, 676, ""],
-          [71, 765, "Group 11"],
-          [71, 754, "Lakeview 42"],
-          [71, 744, "4242 Wanaka"],
-          [71, 658, "Bottom Member"],
-          [71, 648, "Greatstreet 345"],
-          [71, 637, "3456 Greattown"],
-          [71, 531, "Information"],
-          [71, 502, "Hallo"],
-          [71, 481, "Wir laden "],
-          [111, 481, "dich"],
-          [130, 481, " ein! "],
-          [71, 460, "Bis bald"]
-        ]
-      end
-
-      it "renders text at positions with layer sender address" do
-        letter.update!(heading: true)
-        group.update!(contact: nil, zip_code: '4243', town: 'No-Where')
-        layer.update!(town: "Wanaka", zip_code: '4242', address: "Lakeview 42")
-
-        expect(text_with_position).to match_array [
-          [152, 690, "Post CH AG"],
-          [71, 676, ""],
-          [71, 765, "Bottom One"],
-          [71, 754, "Lakeview 42"],
-          [71, 744, "4242 Wanaka"],
+          [71, 676, "Group 11, Lakeview 42, 4242 Wanaka"],
           [71, 658, "Bottom Member"],
           [71, 648, "Greatstreet 345"],
           [71, 637, "3456 Greattown"],
@@ -116,7 +88,7 @@ describe Export::Pdf::Messages::Letter do
         options[:debug] = true
         image = fixture_file_upload("images/logo.png")
         GroupSetting.create!(target: groups(:top_group), var: :messages_letter, picture: image).id
-        letter.update!(heading: true, group: groups(:top_group))
+        letter.update!(group: groups(:top_group))
         layer.update!(address: "Lakeview 42", zip_code: "4242", town: "Bern")
         IO.binwrite("/tmp/file.pdf", subject.render)
       end
@@ -173,7 +145,7 @@ describe Export::Pdf::Messages::Letter do
           [71, 648, "Funkystreet 42"],
           [71, 637, "4242 Supertown"],
         ]
-        expect(stamps.keys).to eq [:render_header, :render_shipping_info, :render_subject, :render_content]
+        expect(stamps.keys).to eq [:render_shipping_info, :render_subject, :render_content]
       end
 
       it "falls back to normal rendering if stamping fails because content is to big" do

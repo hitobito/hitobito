@@ -370,6 +370,7 @@ it:
       group_filter:
         all_layers: Tutti i gruppi
         filter_by_layer: organizzatore
+        select_layers: cercare gruppi
     actions_show:
       copy_share_link: Copiare il link diretto
     application_fields:
@@ -378,6 +379,11 @@ it:
       signature_confirmation_text_default: Rappresentante legale (per i minorenni)
     attachments:
       add: "aggiungere"
+    banner_open_invitation:
+      explanation: Sei stato invitato a questo evento
+      buttons:
+        accept: log in
+        decline: log out
     default_description_link:
       insert_general_information: Inserire informazioni generali
     form:
@@ -449,6 +455,7 @@ it:
     not_logged_in: "Devi effettuare l'accesso per poterti iscrivere all'evento '%{event}'."
     person_found: 'ti abbiamo trovato all''interno della nostra banca dati.'
     email_sent: 'ti abbiamo inviato un''email con un link, da cui potrai iscriverti direttamente all''evento'
+    email_invalid: 'Inserisci un''e-mail valevole'
     form_data_missing: 'Compila per favore il formulario seguente prima di iscriverti all''evento.'
     registered: 'I tuoi dati personali sono stati registrati. Completa ancora solo i dati per l''iscrizione.'
     application_window_closed: 'il periodo per l''iscrizione per questo evento è terminato.'
@@ -506,9 +513,18 @@ it:
       title: 'Risultati'
       incomplete_search_request: 'prego digitare almeno due caratteri'
   group:
+    archive:
+      flash:
+        success: Il gruppo è stato archiviato con successo.
+        failure: Si è verificato un errore nell'achiviazione del gruppo
     merge:
       select:
         title: 'raggruppare %{group}'
+        explanation: >
+            Nel fusionare due gruppi vengono uniti tutti i sottogruppi, gli eventi
+            e le persone inclusi i ruoli di entrambi i gruppi. Gli abbonamenti non
+            vengono ripresi. I gruppi pre-esistenti saranno poi visualizzabili sotto
+            "cancellato".
         merge_is_irreversible: Questo processo non può essere annullato!
         new_group_name: 'Nome del nuovo gruppo'
         merge_group_with: 'Raggruppare %{group} con'
@@ -539,6 +555,9 @@ it:
     actions_show:
       export_subgroups: 'Sottogruppi CSV'
       reactivate: 'Riattivare'
+      confirm_archive: >
+          Vuole veramente archiviare questo gruppo? Dopo l'archiviazione non può più
+          venire elaborato e vengono archiviati anche i relativi ruoli.
     attrs:
       contact_details: 'Dati di contatto'
       additional_information: 'Altri dati'
@@ -557,6 +576,9 @@ it:
     tabs:
       deleted: 'Cancellato'
     export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
+  group/deleted_people:
+    list:
+      confirm_delete: "Tutti i dati relativi a %{person} verranno cancellati definitivamente,  incluse le partecipazioni e le qualifiche. Cancella questa persona solo se nessuno ha più bisogno di questi dati."
   group/person_add_requests:
     deactivated: Autorizzazione manuale disattivata
     activated: Autorizzazione manuale attivata
@@ -565,13 +587,21 @@ it:
   group/merge:
     success: 'I gruppi selezionati sono stati raggruppati nel nuovo gruppo %{new_group_name}.'
     failure: 'I gruppi selezionati non possono venir raggruppati.'
+    no_candidates: >
+        Non ci sono gruppi uguali che possano venire fusionati oppure non possiedi
+        i diritti necessari per farlo.
     group_name_missing: 'il nome per il nuovo gruppo deve essere definito'
     no_group_selected: 'scegliere un gruppo che deve essere raggruppato.'
     not_allowed: 'purtroppo manca l''autorizzazione per raggruppare questo gruppo.'
+    invoice_config_not_merged: >
+        Le impostazioni di fatturazione non vengono riprese automaticamente. Per favore
+        prendi manualmente ora le imposttazioni corrette.
   group/move:
     success: '%{group} è stato spostato in %{target}.'
     failure: 'questo gruppo non può venir spostato oppure tu non hai l''autorizzazione necessaria per farlo.'
     choose_group: 'prego selezionare un gruppo'
+  group_decorator:
+    archived_suffix: '(archiviato)'
   import/csv_parser:
     read_error: "errore nella lettura di %{filename}: %{error}"
     contains_no_data: "non contiene nessun dato"
@@ -613,19 +643,32 @@ it:
     update:
       flash:
         success: Le impostazioni per le fatture sono state aggiornate con successo
+        provider_initialization_failed: L'impostazione dell'interfaccia per il pagameno %{payment_provider} non è riuscita
+        provider_initialization_succeeded: L'impostazione dell'interfaccia per il pagamento %{payment_provider} è riuscita
     general_fields:
       payment: 'Versamento'
       payment_information_help: 'Viene indicato su ogni fattura, può essere modificato in ogni fattura'
       address_help: 'Compare sulla lettera come indirizzo del mittente'
+      email_help: Le risposte per gli e-mails con fatture devono venir inviate all'indirizzo dell'utilizzatore attuale oppure all'indrizzo qui configurato.
       payee_help: 'Compare sulla polizza di versamento'
       beneficiary_help: 'Compare sulla polizza di versamento'
       account_number_example: 'Esempio: 01-162-5'
       participant_number_internal_example: 'Esempio: 999999'
       iban_example: 'Esempio: CH93 0076 2011 6238 5295 7'
+      variable_donation_appeal: 'Appello per donazioni variabili'
+      donation_calculation_year_amount_explanation: Numero di anni trascorsi che vengono considerati per il calcolo delle donazioni.
+      donation_increase_percentage_explanation: Percento per il calcolo delle donazioni
     reminder_fields:
       third_level: 'Per tutti i prossimi solleciti, verrà ripetuto il terzo livello di sollecito'
+    provider_fields:
+      reset_payment_provider_warning: 'Se i dati dovessero venir cambiati qui il processo di inizializzazione dell''interfaccia di fatturazione dovrà venir rifatto.'
   invoice_lists:
     form:
+      invoice_articles:
+        variable_donation:
+          name: Appello per donazioni variabili
+          number: Donazioni
+          description: Appello per donazioni sulla base di donazioni esistenti
       recipient_info:
         one: "La fattura viene redatta per 1 persona"
         other: "La fattura viene redatta per %{count} persone"
@@ -750,12 +793,82 @@ it:
       help_preferred_labels: 'Se ci sono e-mails questi verranno spediti solo ad indirizzi e-mail con questa denominazione. Nel far questo verranno utilizzati anche indirizzi e-mail che non sono marcati come indirizzo di spedizione. '
       help_mailchimp_sync: 'Gli abbonati possono venir esportati alla lista MailChimp. Quest''azione sovrascrive la lista MailChimp ed i contatti esistenti vengono eliminati.'
     imap_mails:
+      manage: Mails
       mailboxes:
+        inbox: Entrata
+        spam: Spam
         failed: Fallito
+      move_to:
+        inbox: nell'entrata
+        spam: nello spam
+        failed: nei non riusciti
       headers:
         subject: Concerne
         sender: Mittente
         date: Data
+        state: Stato
+        states:
+          unkown_recipient: Destinatario sconosciuto
+          retreived: Ricevere
+          bulk_delivering: Viene inviato
+          completed: Concluso
+          sender_rejected: Mittente non accettato
+          state_unavailable: Non è presente nessuno stato
+      not_available: In questo mailbox non ci sono mails
+      flash:
+        deleted:
+          one: 'Mail cancellata con successo'
+          other: '%{count} mails cancellate con successo'
+        moved:
+          one: 'Mail spostata con successo'
+          other: '%{count} mails spostate con successo'
+        server_error: Non è possibile collegarsi al server per le mails, per favore riprova più tardi.
+    recipient_counts:
+      index:
+        recipient_info:
+          message/letter:
+            households:
+              valid:
+                zero: "Non sono presenti economie domestiche con indirizzo completo."
+                one: "%{model_class} viene creato per un'economia domestica."
+                other: "%{model_class} viene creato per %{count} economie domestiche."
+              invalid:
+                one: "Un'economia domestica non ha lasciato un indrizzo completo."
+                other: "Altre %{count} non hanno lasciato un indirizzo completo."
+            people:
+              valid:
+                zero: "Nessuna persona con un indirizzo completo presente."
+                one: "%{model_class} viene creato per una persona."
+                other: "%{model_class} viene creato per %{count} persone."
+              invalid:
+                one: "Una persona non ha lasciato l'indirizzo completo."
+                other: "Ulteriori %{count} non hanno lasciato un indirizzo completo."
+          message/letter_with_invoice:
+            households:
+              valid:
+                zero: "Non sono presenti economie domestiche con un indirizzo completo."
+                one: "%{model_class} viene creato per un'economia domestica."
+                other: "%{model_class} viene creato per %{count} economie domestiche."
+              invalid:
+                one: "Un'economiqa domestica non ha lasciato l'indirizzo completo."
+                other: "Ulteriori %{count} non hanno lasciato un indirizzo completo."
+            people:
+              valid:
+                zero: "Non ci sono persone con un indirizzo completo."
+                one: "%{model_class} viene creato per una persona."
+                other: "%{model_class} viene creato per %{count} persone."
+              invalid:
+                one: "Una persona non ha lasciato l'indirizzo completo."
+                other: "Ulteriori %{count} non hanno lasciato un indirizzoo completo."
+          message/text_message:
+            people:
+              valid:
+                zero: "Non ci sono persone con il nummero di natel."
+                one: "%{model_class} viene creato per una persona."
+                other: "%{model_class} viene creato per %{count} persone."
+              invalid:
+                one: "Una persona non ha lasciato il numero di natel completo."
+                other: "Ulteriori %{count} non hanno lasciato un numero di natel."
   mailing_list_decorator:
     may_subscribe: 'abbonati possono iscrivere/disiscrivere sé stessi'
     may_not_subscribe: 'abbonati <strong>non</strong> possono iscrivere/disiscrivere sé stessi'
@@ -783,6 +896,7 @@ it:
       button_dispatch_letter: Creare l'ordine di stampa
       button_show_assignment: Mostrare l'ordine di stampa
       button_duplicate: Duplicare
+      button_export_csv: Export CSV
       button_preview: Anteprima
       button_dispatch_text_message: Inviare
       button_show_pdf: Mostrare il PDF
@@ -803,6 +917,11 @@ it:
     text_message:
       fields:
         remaining_chars: Caratteri rimanenti
+    letter:
+      fields:
+        send_to_households_options:
+          'true': Una lettera per economia domestica.
+          'false': Una lettera per persona.
     table:
       infos:
         sender: "Mittente: %{mail}"
@@ -811,6 +930,14 @@ it:
     export_enqueued: 'L''esportazione viene iniziata in retroscena e verrà scaricata al termine.'
     show:
       recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
+    export:
+      section:
+        donation_confirmation:
+          header: "Donare a %{organisation}"
+          title: "Conferma della donazione %{year}"
+          received_amount: "Ricevuta una donazione per il totale di "
+          received_from: "%{year} abbiamo da"
+          acknowledgement: "La ringraziamo per la sua fiducia e per il suo impegno apprezzato!"
   navigation:
     menu: 'Menu'
     groups: 'Gruppi'
@@ -819,7 +946,9 @@ it:
     admin: 'Admin'
     admin/event_feed: 'Integrare il calendario.'
     admin/oauth_authorizations: 'Autorizzazioni OAuth'
+    imap_mails: 'Mails'
     invoices: 'Fatture'
+    invoices/single: 'Singole fatture'
   notes:
     new_note: Nuova nota
     note:
@@ -827,9 +956,12 @@ it:
     paginator:
       newer_notes: Contributi più recenti
       older_notes: Contributi più vecchi
+    destroy:
+      failure: "Non si è potuto cancellare la nota: %{errors}."
   oauth:
     applications:
       form:
+        help_cors_origins: Se è attivo lo scope "api" le pagine web possono chiamare su questo host i dati dell'interfaccia JSON dal browser (CORS).
         help_native_redirect_uris: Una registrazione per riga. Per tests locali utilizzare <code class='bg-light'>%{native_redirect_uri}</code>.
       attrs:
         profile_endpoint_help: Si può fare riferimento alle informazioni di profilo dell'utilizzatore  tramite questo endpoint. Nel far questo deve venir consegnato l'access token nell'authorization header. Lo scope desiderato può venir consegnato quale x-scope header.
@@ -984,6 +1116,7 @@ it:
         category_validation:
           email_primary_invalid: Email principale non valida
           email_additional_invalid: Altre email non valida
+          address_invalid: L'idirizzo non si trova nell'indirizzario
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
     duplicate_keys:
@@ -1091,6 +1224,13 @@ it:
     destroy:
       flash:
         success: L'iscrizione è stata cancellata con successo.
+  event_invitations:
+    create:
+      flash:
+        success: 'È stato creato l''invito per %{recipient_name} quale %{participation_type}.'
+    decline:
+      flash:
+        success: L'invito è stato rifiutato.
   people_filters:
     form:
       save_search: Salvare la ricerca
@@ -1244,6 +1384,8 @@ it:
   service_tokens:
     abilities:
       read: Leggere
+    form:
+      help_cors_origins: Le pagine web su questo hosts possono richiamare i dati dall'interfaccia JSON a partire dal browser (CORS).
     global:
       link:
         add: Aggiungere API Key

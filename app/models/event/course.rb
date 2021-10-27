@@ -112,6 +112,6 @@ class Event::Course < Event
   private
 
   def make_participations_visible_to_participants
-    self.participations_visible = true if new_record? && participations_visible.nil?
+    self.participations_visible = true if new_record?
   end
 end

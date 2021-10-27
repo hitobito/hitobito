@@ -76,7 +76,7 @@ class Event::Course < Event
 
   validates :kind_id, presence: true, if: -> { used_attributes.include?(:kind_id) }
 
-  before_create :make_participations_visible_to_participants
+  after_initialize :make_participations_visible_to_participants
 
   def label_detail
     label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ''
@@ -111,6 +111,6 @@ class Event::Course < Event
   private
 
   def make_participations_visible_to_participants
-    self.participations_visible ||= true
+    self.participations_visible = true if new_record? && participations_visible.nil?
   end
 end

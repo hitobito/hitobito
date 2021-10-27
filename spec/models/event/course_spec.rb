@@ -129,4 +129,8 @@ describe Event::Course do
     end
 
   end
+
+  it 'makes participations visible to all participants by default' do
+    is_expected.to be_participations_visible
+  end
 end

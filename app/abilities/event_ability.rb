@@ -15,7 +15,7 @@ class EventAbility < AbilityDsl::Base
     permission(:any).may(:show).if_globally_visible_or_participating
 
     permission(:any).may(:index_participations)
-                    .for_participations_read_events_and_course_participants
+                    .for_participations_read_events_or_visible_fellow_participants
     permission(:any).may(:update).for_leaded_events
     permission(:any).may(:qualify, :qualifications_read).for_qualify_event
 
@@ -75,7 +75,7 @@ class EventAbility < AbilityDsl::Base
     user_context.permission_layer_ids(:layer_and_below_full).include?(Group.root.id)
   end
 
-  def for_participations_read_events_and_course_participants
+  def for_participations_read_events_or_visible_fellow_participants
     for_participations_read_events || (event.participations_visible? && participant?)
   end
 

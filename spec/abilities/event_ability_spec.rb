@@ -916,18 +916,18 @@ describe EventAbility do
       context Event::Course do
         let(:event) { Fabricate(:course) }
 
-        it 'may index people for his event' do
-          # ... regardless of participations_visible-flag
-
+        it 'may index people for his event if participations are visible' do
           event.update(participations_visible: true)
           expect(event).to be_participations_visible
 
           is_expected.to be_able_to(:index_participations, event)
+        end
 
+        it 'may not index people for his event if participations are not visible' do
           event.update(participations_visible: false)
           expect(event).to_not be_participations_visible
 
-          is_expected.to be_able_to(:index_participations, event)
+          is_expected.to_not be_able_to(:index_participations, event)
         end
       end
     end
@@ -972,7 +972,11 @@ describe EventAbility do
     let(:role) do
       Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
     end
-    let(:event) { Fabricate(:course, groups: [groups(:bottom_layer_one)]) }
+    let(:event) do
+      Fabricate(:course, groups: [groups(:bottom_layer_one)]).tap do |course|
+        course.participations_visible = false
+      end
+    end
     let(:participation) do
       Fabricate(:event_participation,
                 event: event,

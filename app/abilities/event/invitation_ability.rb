@@ -6,26 +6,22 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::InvitationAbility < AbilityDsl::Base
-  include AbilityDsl::Constraints::Event
+  include AbilityDsl::Constraints::Event::Invitation
 
   on(Event::Invitation) do
     permission(:group_full).
       may(:new, :create, :edit).
-      in_same_group
+      in_same_group_and_invitations_supported
     permission(:group_and_below_full).
       may(:new, :create, :edit).
-      in_same_group_or_below
+      in_same_group_or_below_and_invitations_supported
     permission(:layer_full).
       may(:new, :create, :edit).
-      in_same_group
+      in_same_group_and_invitations_supported
     permission(:layer_and_below_full).
       may(:new, :create, :edit).
-      in_same_group_or_below
+      in_same_group_or_below_and_invitations_supported
 
     permission(:any).may(:decline).own_invitation
-  end
-
-  def own_invitation
-    subject.person_id == user_context.user.id
   end
 end

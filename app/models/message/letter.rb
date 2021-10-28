@@ -4,7 +4,6 @@
 #
 #  id                    :bigint           not null, primary key
 #  failed_count          :integer          default(0)
-#  heading               :boolean          default(FALSE)
 #  invoice_attributes    :text(65535)
 #  recipient_count       :integer          default(0)
 #  salutation            :string(255)
@@ -19,7 +18,6 @@
 #  invoice_list_id       :bigint
 #  mailing_list_id       :bigint
 #  sender_id             :bigint
-#  heading               :boolean          default("false")
 #  pp_post               :string
 #  shipping_method       :string           default("own")
 #  send_to_households    :boolean          default(FALSE)
@@ -47,7 +45,7 @@ class Message::Letter < Message
 
   validates_presence_of :body
 
-  self.duplicatable_attrs << 'body' << 'heading' << 'salutation' << 'pp_post' << 'shipping_method'
+  self.duplicatable_attrs << 'body' << 'salutation' << 'pp_post' << 'shipping_method'
 
   def recipients
     @recipients ||= mailing_list.people(Person.with_address)

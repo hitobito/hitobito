@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_153543) do
+ActiveRecord::Schema.define(version: 2021_10_27_074423) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -572,7 +572,6 @@ ActiveRecord::Schema.define(version: 2021_10_19_153543) do
     t.text "invoice_attributes", size: :medium
     t.bigint "invoice_list_id"
     t.text "text", size: :medium
-    t.boolean "heading", default: false
     t.string "salutation"
     t.string "pp_post"
     t.string "shipping_method", default: "own"

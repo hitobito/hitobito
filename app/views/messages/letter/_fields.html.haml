@@ -14,7 +14,6 @@
     = f.input_field :pp_post, :placeholder => 'CH-3030 Bern'
     %span.add-on
       = 'Post CH AG'
-= f.labeled_input_field :heading
-= f.labeled_input_field :donation_confirmation if entry.class.sti_name == Message::LetterWithInvoice.sti_name
+= f.labeled_input_field :donation_confirmation if entry.invoice?
 = f.labeled_collection_select :salutation, Salutation.all, :first, :last, include_blank: I18n.t('global.associations.no_entry')
 = f.labeled_rich_text_area :body, style: 'min-height: 250px'

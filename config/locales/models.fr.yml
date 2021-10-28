@@ -711,7 +711,6 @@ fr:
         recipient_progress: progession du traitement
       message/letter:
         body: Contenu
-        heading: En-tête
         salutation: Formule de politesse
         pp_post: ligne PP
         shipping_method: Méthode de livraison

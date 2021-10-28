@@ -51,11 +51,9 @@ describe Export::Pdf::Messages::LetterWithInvoice do
     it "renders text at positions" do
       pdf = described_class.new(letter).render
       expect(text_with_position).to match_array [
-        [152, 690, "Post CH AG"],
-        [71, 676, ""],
-        [71, 658, "Bottom Member"],
-        [71, 648, "Greatstreet 345"],
-        [71, 637, "3456 Greattown"],
+        [71, 654, "Bottom Member"],
+        [71, 644, "Greatstreet 345"],
+        [71, 633, "3456 Greattown"],
         [71, 531, "Mitgliedsbeitrag"],
         [71, 502, "Hallo"],
         [71, 481, "Dein "],
@@ -116,7 +114,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         letter.message_recipients.first.update!(address: "Foo Member\nGreatstreet 345\n3456 Greattown")
 
         pdf = described_class.new(letter).render
-        expect(text_with_position).to include([71, 658, "Foo Member"])
+        expect(text_with_position).to include([71, 654, "Foo Member"])
         expect(text_with_position).to include([28, 175, "Bottom Member"])
         expect(text_with_position).to include([360, 202, "Bottom Member"])
       end
@@ -134,9 +132,9 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         it "renders only some texts positions" do
           expect(text_with_position.count).to eq 46
           expect(text_with_position).to eq [
-            [71, 658, "Bottom Member"],
-            [71, 648, "Greatstreet 345"],
-            [71, 637, "3456 Greattown"],
+            [71, 654, "Bottom Member"],
+            [71, 644, "Greatstreet 345"],
+            [71, 633, "3456 Greattown"],
             [28, 290, "Empfangsschein"],
             [28, 265, "Konto / Zahlbar an"],
             [28, 254, "CH93 0076 2011 6238 5295 7"],
@@ -157,9 +155,9 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [360, 202, "Bottom Member"],
             [360, 191, "Greatstreet 345"],
             [360, 179, "3456 Greattown"],
-            [71, 658, "Top Leader"],
-            [71, 648, "Funkystreet 42"],
-            [71, 637, "4242 Supertown"],
+            [71, 654, "Top Leader"],
+            [71, 644, "Funkystreet 42"],
+            [71, 633, "4242 Supertown"],
             [28, 290, "Empfangsschein"],
             [28, 265, "Konto / Zahlbar an"],
             [28, 254, "CH93 0076 2011 6238 5295 7"],
@@ -185,13 +183,11 @@ describe Export::Pdf::Messages::LetterWithInvoice do
       end
 
       it "renders all texts at positions" do
-        expect(text_with_position.count).to eq 72
+        expect(text_with_position.count).to eq 68
         expect(text_with_position).to match_array [
-          [152, 690, "Post CH AG"],
-          [71, 676, ""],
-          [71, 658, "Bottom Member"],
-          [71, 648, "Greatstreet 345"],
-          [71, 637, "3456 Greattown"],
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 633, "3456 Greattown"],
           [71, 531, "Mitgliedsbeitrag"],
           [71, 502, "Hallo"],
           [71, 481, "Dein "],
@@ -223,11 +219,9 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [360, 202, "Bottom Member"],
           [360, 191, "Greatstreet 345"],
           [360, 179, "3456 Greattown"],
-          [152, 690, "Post CH AG"],
-          [71, 676, ""],
-          [71, 658, "Top Leader"],
-          [71, 648, "Funkystreet 42"],
-          [71, 637, "4242 Supertown"],
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 633, "4242 Supertown"],
           [71, 531, "Mitgliedsbeitrag"],
           [71, 502, "Hallo"],
           [71, 481, "Dein "],

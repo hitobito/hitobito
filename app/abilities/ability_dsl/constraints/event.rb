@@ -13,7 +13,6 @@ module AbilityDsl::Constraints
     end
 
     def for_participations_read_events
-      event.participations_visible? ||
       permission_in_event?(:participations_read) ||
       for_participations_full_events
     end

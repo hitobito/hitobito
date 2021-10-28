@@ -1,9 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: events
@@ -57,7 +58,7 @@ describe Event::Course do
       add_date('2011-01-02')
     end
 
-    its(:qualification_date) { should == Date.new(2011, 02, 20) }
+    its(:qualification_date) { should == Date.new(2011, 2, 20) }
 
     def add_date(start_at, event = subject)
       start_at = Time.zone.parse(start_at)
@@ -89,7 +90,7 @@ describe Event::Course do
   end
 
   it 'sets signtuare to true when signature confirmation is required' do
-    course = Event::Course.new(signature_confirmation:true)
+    course = Event::Course.new(signature_confirmation: true)
     expect(course.signature).to be_falsy
     expect(course.signature_confirmation).to be_truthy
     course.valid?
@@ -128,5 +129,9 @@ describe Event::Course do
       end.to change { Event::Question.count }.by(3)
     end
 
+  end
+
+  it 'makes participations visible to all participants by default' do
+    is_expected.to be_participations_visible
   end
 end

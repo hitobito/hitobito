@@ -4,6 +4,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: events
@@ -76,6 +77,7 @@ class Event::Course < Event
 
   validates :kind_id, presence: true, if: -> { used_attributes.include?(:kind_id) }
 
+  after_initialize :make_participations_visible_to_participants
 
   def label_detail
     label = used_attributes.include?(:kind_id) ? "#{kind.short_name} " : ''
@@ -107,4 +109,9 @@ class Event::Course < Event
     end
   end
 
+  private
+
+  def make_participations_visible_to_participants
+    self.participations_visible = true if new_record?
+  end
 end

@@ -227,7 +227,9 @@ class Group < ActiveRecord::Base
   end
 
   def archivable?
-    !archived? && children_without_deleted.none?
+    false # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
+
+    # !archived? && children_without_deleted.none?
   end
 
   private

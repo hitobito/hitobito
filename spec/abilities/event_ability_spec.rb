@@ -89,7 +89,8 @@ describe EventAbility do
       it 'may see sibling layers events with a token' do
         sibling_group = Fabricate(Group::TopLayer.name.to_sym, parent: nil, name: 'SecondTop')
 
-        other = Fabricate(:event, groups: [sibling_group], globally_visible: false, shared_access_token: token)
+        other = Fabricate(:event, groups: [sibling_group], globally_visible: false,
+                                  shared_access_token: token)
         user.shared_access_token = token
 
         is_expected.to be_able_to(:show, other)
@@ -133,7 +134,8 @@ describe EventAbility do
       it 'may see sibling layers events with a token' do
         sibling_group = Fabricate(Group::TopLayer.name.to_sym, parent: nil, name: 'SecondTop')
 
-        other = Fabricate(:course, groups: [sibling_group], globally_visible: false, shared_access_token: token)
+        other = Fabricate(:course, groups: [sibling_group], globally_visible: false,
+                                   shared_access_token: token)
         user.shared_access_token = token
 
         is_expected.to be_able_to(:show, other)
@@ -228,7 +230,8 @@ describe EventAbility do
       end
 
       it 'may see lower layers events with a token' do
-        other = Fabricate(:event, groups: [groups(:bottom_group_one_one)], globally_visible: false, shared_access_token: token)
+        other = Fabricate(:event, groups: [groups(:bottom_group_one_one)], globally_visible: false,
+                                  shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -244,7 +247,8 @@ describe EventAbility do
       end
 
       it 'may see sibling layers events with a token' do
-        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: false, shared_access_token: token)
+        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: false,
+                                  shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -270,7 +274,8 @@ describe EventAbility do
       end
 
       it 'may see sibling layers events with a token' do
-        other = Fabricate(:course, groups: [groups(:bottom_layer_two)], globally_visible: false, shared_access_token: token)
+        other = Fabricate(:course, groups: [groups(:bottom_layer_two)], globally_visible: false,
+                                   shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -348,7 +353,9 @@ describe EventAbility do
       end
 
       context 'in sibling group' do
-        let(:sibling_group) { Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTop') }
+        let(:sibling_group) do
+          Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTop')
+        end
 
         it 'may not see sibling group events' do
           other = Fabricate(:event, groups: [sibling_group], globally_visible: false)
@@ -356,7 +363,8 @@ describe EventAbility do
         end
 
         it 'may see sibling group events with a token' do
-          other = Fabricate(:event, groups: [sibling_group], globally_visible: false, shared_access_token: token)
+          other = Fabricate(:event, groups: [sibling_group], globally_visible: false,
+                                    shared_access_token: token)
           user.shared_access_token = token
           is_expected.to be_able_to(:show, other)
         end
@@ -421,14 +429,16 @@ describe EventAbility do
     end
 
     context Event::Course do
-      let(:event)   { Fabricate(:course, groups: [group], globally_visible: false) }
+      let(:event) { Fabricate(:course, groups: [group], globally_visible: false) }
 
       it 'may not list all courses' do
         is_expected.not_to be_able_to(:list_all, Event::Course)
       end
 
       context 'in sibling group' do
-        let(:sibling_group) { Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTop') }
+        let(:sibling_group) do
+          Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTop')
+        end
 
         it 'may not see sibling group events' do
           other = Fabricate(:course, groups: [sibling_group], globally_visible: false)
@@ -436,7 +446,8 @@ describe EventAbility do
         end
 
         it 'may see sibling group events with a token' do
-          other = Fabricate(:course, groups: [sibling_group], globally_visible: false, shared_access_token: token)
+          other = Fabricate(:course, groups: [sibling_group], globally_visible: false,
+                                     shared_access_token: token)
           user.shared_access_token = token
           is_expected.to be_able_to(:show, other)
         end
@@ -565,7 +576,8 @@ describe EventAbility do
       end
 
       it 'may see sibling group events with a token' do
-        other = Fabricate(:event, groups: [groups(:bottom_group_one_two)], globally_visible: false, shared_access_token: token)
+        other = Fabricate(:event, groups: [groups(:bottom_group_one_two)], globally_visible: false,
+                                  shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -657,7 +669,8 @@ describe EventAbility do
       end
 
       it 'may not see lower layers events' do
-        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: false, shared_access_token: token)
+        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], globally_visible: false,
+                                  shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -675,7 +688,8 @@ describe EventAbility do
 
       it 'may see sibling layers events' do
         sibling_group = Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTopper')
-        other = Fabricate(:event, groups: [sibling_group], globally_visible: false, shared_access_token: token)
+        other = Fabricate(:event, groups: [sibling_group], globally_visible: false,
+                                  shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -694,7 +708,8 @@ describe EventAbility do
       end
 
       it 'may not see lower layers events' do
-        other = Fabricate(:course, groups: [groups(:bottom_layer_two)], globally_visible: false, shared_access_token: token)
+        other = Fabricate(:course, groups: [groups(:bottom_layer_two)], globally_visible: false,
+                                   shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
@@ -864,10 +879,17 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, other)
       end
 
-      it 'may not index people for other event' do
-        other = Fabricate(:event, groups: [groups(:bottom_layer_one)])
+      it 'may not index people for other event, without visible participations' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_one)],
+                                  participations_visible: false)
         is_expected.not_to be_able_to(:index_participations, other)
       end
+
+      it 'may not index people for other event, with visible participations' do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_one)], participations_visible: true)
+        is_expected.not_to be_able_to(:index_participations, other)
+      end
+
     end
 
     context Event::Role::Participant do
@@ -894,8 +916,18 @@ describe EventAbility do
       context Event::Course do
         let(:event) { Fabricate(:course) }
 
-        it 'may index people for his event' do
+        it 'may index people for his event if participations are visible' do
+          event.update(participations_visible: true)
+          expect(event).to be_participations_visible
+
           is_expected.to be_able_to(:index_participations, event)
+        end
+
+        it 'may not index people for his event if participations are not visible' do
+          event.update(participations_visible: false)
+          expect(event).to_not be_participations_visible
+
+          is_expected.to_not be_able_to(:index_participations, event)
         end
       end
     end
@@ -934,14 +966,17 @@ describe EventAbility do
         is_expected.not_to be_able_to(:update, other)
       end
     end
-
   end
 
   context 'inactive participation' do
     let(:role) do
       Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
     end
-    let(:event) { Fabricate(:course, groups: [groups(:bottom_layer_one)]) }
+    let(:event) do
+      Fabricate(:course, groups: [groups(:bottom_layer_one)]).tap do |course|
+        course.participations_visible = false
+      end
+    end
     let(:participation) do
       Fabricate(:event_participation,
                 event: event,

@@ -9,31 +9,25 @@ class Export::Pdf::Messages::Letter
   class Header < Section
     LOGO_BOX = [200, 40].freeze
     ADDRESS_BOX = [200, 60].freeze
-    SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 20].freeze
+    SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 24].freeze
 
     delegate :group, to: 'letter'
 
     def render(recipient) # rubocop:disable Metrics/MethodLength
-      stamped :render_header
+      stamped :render_logo_right
 
       offset_cursor_from_top 52.5.mm
 
-      stamped :render_shipping_info unless letter.own?
+      stamped :render_shipping_info
+
+      pdf.move_down 3.mm # According to post factsheet
+
       render_address(recipient.address)
 
       stamped :render_subject if letter.subject.present?
     end
 
     private
-
-    def render_header
-      if letter.heading?
-        render_logo_right
-        pdf.move_up 40
-
-        render_address(sender_address)
-      end
-    end
 
     def render_subject
       offset_cursor_from_top 107.5.mm
@@ -61,14 +55,13 @@ class Export::Pdf::Messages::Letter
 
     def render_shipping_info(width: SHIPPING_INFO_BOX.first, height: SHIPPING_INFO_BOX.second)
       bounding_box([0, cursor], width: width, height: height) do
-        shipping_method = { normal: 'P.P.',
-                            priority: 'A-PRIORITY' }[letter.shipping_method.to_sym]
+        shipping_method = shipping_methods[letter.shipping_method.to_sym]
         pdf.move_up 2
-        text('Post CH AG', align: :center, size: 6.pt)
+        text('Post CH AG', align: :center, size: 7.pt) unless letter.own?
         pdf.move_down 2
-        text("<u><font size='12pt'><b>#{shipping_method} </b></font>" \
-             "<font size='8pt'>#{letter.pp_post}</font></u>",
-             inline_format: true)
+        text_box("<u>#{shipping_method}<font size='8pt'>#{letter.pp_post}</font></u>",
+                 inline_format: true, overflow: :truncate, single_line: true,
+                 width: width, height: height, at: [0, cursor])
       end
     end
 
@@ -98,6 +91,12 @@ class Export::Pdf::Messages::Letter
 
     def address_present?(group)
       [:address, :town].all? { |a| group.send(a)&.strip.present? }
+    end
+
+    def shipping_methods
+      { own: '',
+        normal: "<b><font size='12pt'>P.P.</font></b> ",
+        priority: "<b><font size='12pt'>P.P.</font> <font size='24pt'>A</font></b> " }
     end
   end
 end

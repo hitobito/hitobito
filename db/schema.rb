@@ -572,7 +572,6 @@ ActiveRecord::Schema.define(version: 2021_10_27_135850) do
     t.text "invoice_attributes", size: :medium
     t.bigint "invoice_list_id"
     t.text "text", size: :medium
-    t.boolean "heading", default: false
     t.string "salutation"
     t.string "pp_post"
     t.string "shipping_method", default: "own"

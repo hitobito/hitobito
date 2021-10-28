@@ -4,7 +4,6 @@
 #
 #  id                 :bigint           not null, primary key
 #  failed_count       :integer          default(0)
-#  heading            :boolean          default(FALSE)
 #  invoice_attributes :text(65535)
 #  recipient_count    :integer          default(0)
 #  salutation         :string(255)      default("none"), not null

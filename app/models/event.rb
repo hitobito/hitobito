@@ -76,7 +76,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                   :role_types,
                   :supports_applications,
                   :possible_states,
-                  :kind_class
+                  :kind_class,
+                  :supports_invitations
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
@@ -105,6 +106,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   # The class used for the kind_id
   self.kind_class = nil
 
+  # Are Event::Invitations possible for this event type
+  self.supports_invitations = true
 
   model_stamper
   stampable stamper_class_name: :person,

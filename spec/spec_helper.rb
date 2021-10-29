@@ -26,7 +26,18 @@ WebMock.disable_net_connect!(
 
 ActiveRecord::Migration.suppress_messages do
   if ActiveRecord::Base.maintain_test_schema
-    Wagons.all.each(&:migrate)
+    begin
+      previous_seed_quietness = SeedFu.quiet
+      SeedFu.quiet = true
+
+      Wagons.all.each do |wagon|
+        wagon.migrate
+        wagon.load_seed
+      end
+    ensure
+      SeedFu.quiet = previous_seed_quietness
+    end
+
     ActiveRecord::Migration.load_schema_if_pending!
   end
 end

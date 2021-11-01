@@ -11,6 +11,12 @@ class Person::HouseholdsController < ApplicationController
     @invalid = !household.assign
   end
 
+  protected
+
+  def permitted_address_fields
+    %i[address zip_code town country]
+  end
+
   private
 
   def household
@@ -26,10 +32,7 @@ class Person::HouseholdsController < ApplicationController
   end
 
   def permitted_params
-    params.require(:person).permit(:address,
-                                   :zip_code,
-                                   :town,
-                                   :country,
+    params.require(:person).permit(permitted_address_fields,
                                    household_people_ids: [])
   end
 

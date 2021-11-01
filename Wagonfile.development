@@ -1,0 +1,26 @@
+# This Wagonfile reads from the environment variable WAGONS
+# or falls back to loading all present wagons.
+#
+# E.g `WAGONS="pbs youth" bundle exec rails c`
+group :development do
+  # Loading the application wagons when we are testing a single wagon
+  # leads to tets failing with
+  #
+  #   ActionView::Template::Error:                                                                         #     Webpacker can't find
+  #
+  # and `log/test.log` saying
+  #
+  #   You specified that hitobito_pbs (>= 0) should come from source at `.` and source at `/usr/src/app/hitobito_pbs`  
+  next if ENV["RAILS_ENV"] == 'test'
+
+  ENV["WAGONS"]
+    .yield_self do |config|
+      if config.nil?
+        Dir["../hitobito_*/*.gemspec"].to_a # Load all wagons by default
+      else
+        config.split.map { |wagon| "../hitobito_#{wagon}/hitobito_#{wagon}.gemspec" }
+      end
+    end
+    .map { |path| File.expand_path(path, __dir__) }
+    .each { |spec| gem File.basename(spec, ".gemspec"), path: File.expand_path("..", spec) }
+end

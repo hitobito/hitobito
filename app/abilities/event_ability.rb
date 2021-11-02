@@ -40,7 +40,7 @@ class EventAbility < AbilityDsl::Base
 
     permission(:layer_and_below_full).may(:index_participations, :show)
                                      .in_same_layer_or_below
-    permission(:layer_and_below_full).may(:index_participations, :index_invitations, :show)
+    permission(:layer_and_below_full).may(:index_invitations)
                                      .in_same_layer_or_below_and_invitations_supported
     permission(:layer_and_below_full).may(:update).in_same_layer_or_below_if_active
     permission(:layer_and_below_full).may(:qualifications_read).in_same_layer

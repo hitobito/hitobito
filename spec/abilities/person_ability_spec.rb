@@ -106,7 +106,7 @@ describe PersonAbility do
     it 'may modify any public role in same layer' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym,
                         group: groups(:bottom_layer_one),
-                        person: Fabricate(:person, password: 'foobar', password_confirmation: 'foobar'))
+                        person: Fabricate(:person, password: 'foobarfoobar', password_confirmation: 'foobarfoobar'))
       is_expected.to be_able_to(:update, other.person.reload)
       is_expected.to be_able_to(:update_email, other.person)
       is_expected.to be_able_to(:update, other)
@@ -416,7 +416,7 @@ describe PersonAbility do
     it 'may modify any public role in same layer' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym,
                         group: groups(:bottom_layer_one),
-                        person: Fabricate(:person, password: 'foobar', password_confirmation: 'foobar'))
+                        person: Fabricate(:person, password: 'foobarfoobar', password_confirmation: 'foobarfoobar'))
       is_expected.to be_able_to(:update, other.person.reload)
       is_expected.to be_able_to(:update_email, other.person)
       is_expected.to be_able_to(:update, other)
@@ -767,7 +767,7 @@ describe PersonAbility do
     end
 
     it 'may view and update others in same group' do
-      other = Fabricate(:person, password: 'foobar', password_confirmation: 'foobar')
+      other = Fabricate(:person, password: 'foobarfoobar', password_confirmation: 'foobarfoobar')
       Fabricate(Role::External.name.to_sym, group: groups(:top_layer), person: other)
       is_expected.to be_able_to(:show, other.reload)
       is_expected.to be_able_to(:update, other)
@@ -990,7 +990,7 @@ describe PersonAbility do
     end
 
     it 'may view and update others in same group' do
-      other = Fabricate(:person, password: 'foobar', password_confirmation: 'foobar')
+      other = Fabricate(:person, password: 'foobarfoobar', password_confirmation: 'foobarfoobar')
       Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: other)
       is_expected.to be_able_to(:show, other.reload)
       is_expected.to be_able_to(:update, other)
@@ -1392,7 +1392,7 @@ describe PersonAbility do
     end
 
     it 'may update_password if already set' do
-      person_without_roles.update!(password: 'example')
+      person_without_roles.update!(password: 'exampleexample')
       is_expected.to be_able_to(:update_password, person_without_roles)
     end
 

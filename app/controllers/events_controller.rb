@@ -261,8 +261,8 @@ class EventsController < CrudController
   def entries_page(page_param)
     page_scope = visible_entries.page(page_param)
 
-    if page_scope.out_of_range?
-      visible_entries.page(page_scope.total_pages)
+    if page_scope.count.zero?
+      visible_entries.page(1)
     else
       page_scope
     end

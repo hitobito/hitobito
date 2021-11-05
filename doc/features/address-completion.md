@@ -14,9 +14,12 @@ Currently, address entries are swiss addresses imported from Swiss Post.
 If you have configured an API token, the addresses are imported every 6 months.
 You can import manually with a rake-task:
 
-  bundle exec rake address:import
+    bundle exec rake address:import
 
 The API-Token can be provided as environment variable `ADDRESSES_TOKEN`.
+
+The first time, this should be done manually as the automatic scheduling
+schedules the job in 6 months (the first refresh).
 
 ## Configuration
 

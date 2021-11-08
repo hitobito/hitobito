@@ -20,19 +20,20 @@ class People::HouseholdList
     people = Person.quoted_table_name
 
     @people_scope.
-        # remove previously added selects, very important to make this query scale
-        unscope(:select, :includes).
-        # group by household, but keep NULLs separate
-        select("IFNULL(#{people}.`household_key`, #{people}.`id`) as `key`").
-        group(:key).
-        # Primary sorting criterion
-        select("COUNT(#{people}.`household_key`) as `member_count`").
-        # Secondary, unique sorting criterion
-        select("MIN(#{people}.`id`) as `id`")
+      # remove previously added selects, very important to make this query scale
+      unscope(:select, :includes).
+      # group by household, but keep NULLs separate
+      select("IFNULL(#{people}.`household_key`, #{people}.`id`) as `key`").
+      group(:key).
+      # Primary sorting criterion
+      select("COUNT(#{people}.`household_key`) as `member_count`").
+      # Secondary, unique sorting criterion
+      select("MIN(#{people}.`id`) as `id`")
   end
 
-  def households_in_batches(exclude_non_households: false)
+  def households_in_batches(exclude_non_households: false) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
     return unless block_given?
+
     base_scope = exclude_non_households ? only_households : grouped_households
 
     in_batches(base_scope, batch_size: 300) do |batch|
@@ -68,8 +69,8 @@ class People::HouseholdList
     base_scope = base_scope.select(:household_key) if base_scope.select_values.present?
 
     base_scope.where(household_key: keys_or_ids).
-        or(base_scope.where(id: keys_or_ids)).
-        load
+      or(base_scope.where(id: keys_or_ids)).
+      load
   end
 
   # Copied and adapted from ActiveRecord::Batches#in_batches
@@ -77,8 +78,7 @@ class People::HouseholdList
   # activerecord doesn't support natively. Activerecord only supports ordering by the
   # primary key column and doesn't use SQL OFFSET internally, for performance reasons:
   # https://github.com/rails/rails/pull/20933
-  # rubocop:disable Metrics/MethodLength this is a close copy of a rails method
-  def in_batches(base_scope, batch_size: 1000)
+  def in_batches(base_scope, batch_size: 1000) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize,Metrics/PerceivedComplexity this is a close copy of a rails method
     relation = base_scope
 
     batch_limit = batch_size
@@ -110,7 +110,7 @@ class People::HouseholdList
       if base_scope.limit_value
         remaining -= ids.length
 
-        if remaining == 0
+        if remaining.zero?
           # Saves a useless iteration when the limit is a multiple of the batch size.
           break
         elsif remaining < batch_limit

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -74,6 +74,7 @@ gem 'sentry-raven'
 gem 'simpleidn'
 gem 'sprockets', '~> 3.7.2' # pinned to older version to avoid having an empty manifest.js
 gem 'sqlite3' # required for asset generation
+gem 'strip_attributes' # strip whitespace of attributes
 gem 'thinking-sphinx'
 gem 'truemail'
 gem 'validates_by_schema'

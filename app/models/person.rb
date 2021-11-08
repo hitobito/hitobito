@@ -119,6 +119,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   acts_as_taggable
 
+  strip_attributes except: [:zip_code]
+
   ### ASSOCIATIONS
 
   has_many :roles, inverse_of: :person

@@ -83,14 +83,14 @@ describe EventsController do
         expect(assigns(:events)).to have(2).entries
       end
 
-      it 'does show the last filled page if page-number is too high' do
+      it 'does show the first filled page if page-number is too high' do
         expect(Kaminari.config).to receive(:default_per_page).and_return(2).at_least(:once)
 
         # there are 3 events, with the paging-limit of 2, the pages 1 and 2 are
         # filled, page 42 is not
 
         get :index, params: { group_id: group.id, year: 2012, filter: 'all', page: 42 }
-        expect(assigns(:events)).to have(1).entries
+        expect(assigns(:events)).to have(2).entries
       end
 
       it 'lists events of descendant groups by default' do

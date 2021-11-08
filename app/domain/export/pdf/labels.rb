@@ -25,8 +25,10 @@ module Export::Pdf
       rows.each_with_index do |contactable, i|
         name = to_name(contactable)
 
+        address = household ? household_address(contactable, name) : address(contactable, name)
+
         print_address_in_bounding_box(pdf,
-                                      address(contactable, name),
+                                      address,
                                       position(pdf, i))
       end
 
@@ -68,6 +70,18 @@ module Export::Pdf
         top -= 7.mm
       end
       pdf.text_box(address, at: [left, top], overflow: :shrink_to_fit)
+    end
+
+    def household_address(contactable, name)
+      contactable = contactable.first
+
+      address = ''
+      address << name << "\n" if name.present?
+      address << contactable.address.to_s
+      address << "\n" unless contactable.address =~ /\n\s*$/
+      address << contactable.zip_code.to_s << ' ' << contactable.town.to_s << "\n"
+      address << contactable.country_label unless contactable.ignored_country?
+      address
     end
 
     def address(contactable, name)

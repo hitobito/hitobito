@@ -2,11 +2,14 @@ require 'spec_helper'
 
 describe Export::Pdf::Labels do
 
-  let(:contactables) { [people(:top_leader).tap{ |u| u.update(nickname: 'Funny Name') }] }
+  let(:top_leader) { people(:top_leader) }
+  let(:bottom_member) { people(:bottom_member) }
+  let(:contactables) { [top_leader.tap{ |u| u.update(nickname: 'Funny Name') }] }
   let(:label_format) { label_formats(:standard) }
-  let(:pdf) { Export::Pdf::Labels.new(label_format).generate(contactables) }
+  let(:household) { false }
+  let(:pdf) { Export::Pdf::Labels.new(label_format).generate(contactables, household) }
 
-  let(:subject) { PDF::Inspector::Text.analyze(pdf) }
+  subject { PDF::Inspector::Text.analyze(pdf) }
 
   context 'for nickname' do
     it 'renders pp_post if pp_post given' do
@@ -28,6 +31,23 @@ describe Export::Pdf::Labels do
     it 'ignores pp_post if not given' do
       label_format.update!(pp_post: '  ')
       expect(subject.strings.join(' ')).not_to include("Post CH AG")
+    end
+  end
+
+  context 'with households' do
+    let(:household) { true }
+    before do
+      [top_leader, bottom_member].each do |p|
+        p.update(household_key: 1)
+      end
+    end
+
+    let(:contactables) { Person.where(id: [top_leader.id, bottom_member.id]) }
+
+    it 'renders separated names' do
+      expect(subject.strings).to include("Bottom Member, Top Leader")
+      expect(subject.strings).to include("Greatstreet 345")
+      expect(subject.strings).to include("3456 Greattown")
     end
   end
 

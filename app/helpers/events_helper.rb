@@ -91,7 +91,7 @@ module EventsHelper
 
   def quick_select_course_groups
     (current_user.groups.course_offerers +
-     current_user.primary_group&.hierarchy&.course_offerers&.to_a).
+     current_user.primary_group&.hierarchy&.course_offerers.to_a).
         uniq
   end
 

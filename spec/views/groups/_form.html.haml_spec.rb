@@ -26,7 +26,6 @@ describe 'groups/_form.html.haml' do
     expect(view).to receive(:render_extensions).with(:address_fields, anything)
     expect(view).to receive(:render_extensions).with(:additional_fields, anything)
     expect(view).to receive(:render_extensions).with(:fields, anything)
-    expect(view).to receive(:render_extensions).with(:custom_fields, anything)
     render partial: 'groups/form'
     partials.each do |partial|
       expect(view).to render_template(partial: partial)

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,6 +9,12 @@ class Person::HouseholdsController < ApplicationController
     authorize!(:update, person)
     person.attributes = permitted_params
     @invalid = !household.assign
+  end
+
+  protected
+
+  def permitted_address_fields
+    %i[address zip_code town country]
   end
 
   private
@@ -26,10 +32,7 @@ class Person::HouseholdsController < ApplicationController
   end
 
   def permitted_params
-    params.require(:person).permit(:address,
-                                   :zip_code,
-                                   :town,
-                                   :country,
+    params.require(:person).permit(permitted_address_fields,
                                    household_people_ids: [])
   end
 

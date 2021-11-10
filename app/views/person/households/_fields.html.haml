@@ -3,6 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+= render_extensions :custom_fields, locals: { f: f }
+
 = f.labeled(:household_key, '&nbsp;'.html_safe) do
   %label.checkbox
     = check_box_tag(:household, 1, f.object.household_people.present?, class: 'inline')

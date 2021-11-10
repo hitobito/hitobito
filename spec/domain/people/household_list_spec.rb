@@ -77,13 +77,6 @@ describe People::HouseholdList do
       ])
     end
 
-    it 'uses find_in_batches for iterating' do
-      expect_any_instance_of(ActiveRecord::Relation).to receive(:find_in_batches)
-
-      subject.households_in_batches do |household_batch|
-      end
-    end
-
     context 'limited people scope' do
       let(:scope) { Person.where(id: [person1, person2, person3, person4, person5, person6, person7]).limit(2) }
       let(:person6) { Fabricate(:person, household_key: '1234-1234-1234-1234') }
@@ -125,13 +118,6 @@ describe People::HouseholdList do
     it 'is enumerable' do
       expect(subject).to be_an Enumerable
       expect(subject.each).to be_an Enumerator
-    end
-
-    it 'uses find_in_batches for enumerating' do
-      expect_any_instance_of(ActiveRecord::Relation).to receive(:find_in_batches)
-
-      subject.each do |person|
-      end
     end
   end
 end

@@ -77,6 +77,7 @@ class People::HouseholdList
   # activerecord doesn't support natively. Activerecord only supports ordering by the
   # primary key column and doesn't use SQL OFFSET internally, for performance reasons:
   # https://github.com/rails/rails/pull/20933
+  # rubocop:disable Metrics/MethodLength this is a close copy of a rails method
   def in_batches(base_scope, batch_size: 1000)
     relation = base_scope
 

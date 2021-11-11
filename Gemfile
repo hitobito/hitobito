@@ -52,7 +52,7 @@ gem 'mysql2'
 gem 'nested_form'
 gem 'nokogiri'
 gem 'oat'
-gem 'paper_trail'
+gem 'paper_trail', '~> 11.1' # 11.1 adds Rails 6.1-support, 12 breaks for now
 gem 'paranoia'
 gem 'phonelib'
 gem 'prawn'

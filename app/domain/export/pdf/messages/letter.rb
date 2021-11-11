@@ -115,7 +115,7 @@ module Export::Pdf::Messages
     end
 
     def recipients
-      @recipients ||= message_recipients
+      @recipients ||= message_recipients.where('person_id IS NOT NULL')
     end
 
     def message_recipients

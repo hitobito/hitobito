@@ -4,6 +4,8 @@
 #  https://github.com/hitobito/hitobito.
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  require_dependency 'api/cors_check'
+
   allow do
     origins do |origin, env|
       Api::CorsCheck.new(ActionDispatch::Request.new(env)).allowed?(origin)

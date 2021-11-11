@@ -4,7 +4,12 @@ on:
   workflow_call:
     inputs:
       wagon_repository:
-        description: "Wagon repository, e.g. hitobito_*"
+        description: "Wagon repository, e.g. hitobito_pbs"
+        type: string
+      wagon_dependency_repository:
+        description: A wagon this wagon depends on, e.g. hitobito_youth
+        required: false
+        default: ''
         type: string
 
 defaults:
@@ -85,6 +90,14 @@ jobs:
         with:
           working-directory: hitobito
 
+      - name: 'Checkout dependency ${{ inputs.wagon_dependency_repository }}'
+        uses: actions/checkout@v2
+        if: ${{ inputs.wagon_dependency_repository != '' }}
+        with:
+          repository: hitobito/${{ inputs.wagon_dependency_repository }}
+          ref: '${{ env.HITOBITO_BRANCH }}'
+          path: ${{ inputs.wagon_dependency_repository }}
+
       - name: Checkout ${{ inputs.wagon_repository }}
         uses: actions/checkout@v2
         with:
@@ -96,6 +109,14 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: hitobito/vendor/bundle
+          key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
+          restore-keys: |
+            ${{ runner.os }}-ruby-bundle-
+
+      - uses: actions/cache@v2
+        if: ${{ inputs.wagon_dependency_repository != '' }}
+        with:
+          path: ${{ inputs.wagon_dependency_repository }}/vendor/bundle
           key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
           restore-keys: |
             ${{ runner.os }}-ruby-bundle-

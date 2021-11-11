@@ -114,7 +114,7 @@ module PeopleHelper
 
   def oneline_address(message)
     address = message.message_recipients.find_by(person_id: @person.id).address
-    address.split("\n").join(', ')
+    address.to_s.split("\n").join(', ')
   end
 
 end

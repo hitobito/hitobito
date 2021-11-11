@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_153543) do
+ActiveRecord::Schema.define(version: 2021_11_11_102338) do
 
   create_table "action_text_rich_texts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -539,7 +539,7 @@ ActiveRecord::Schema.define(version: 2021_10_19_153543) do
 
   create_table "message_recipients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "message_id", null: false
-    t.bigint "person_id", null: false
+    t.bigint "person_id"
     t.string "phone_number"
     t.string "email"
     t.string "address"

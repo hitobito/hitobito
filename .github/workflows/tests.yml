@@ -22,6 +22,7 @@ jobs:
       RAILS_DB_PASSWORD: hitobito
       RAILS_DB_NAME: hitobito_test
       RAILS_TEST_DB_NAME: hitobito_test
+      TZ: Europe/Berlin
 
     services:
       mysql:

@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+require_dependency 'cors_origin'
+
 class Api::CorsCheck
   attr_reader :request
 
@@ -27,7 +29,7 @@ class Api::CorsCheck
   def no_token_declines?(origin)
     # In CORS preflight OPTIONS requests, the token headers are not sent along.
     # So this check is as specific as it can be for these cases.
-    no_token_present? && !CorsOrigin.where(origin: origin).exists?
+    no_token_present? && !::CorsOrigin.where(origin: origin).exists?
   end
 
   def service_token_declines?(origin)

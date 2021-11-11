@@ -10,7 +10,7 @@ Violations sind unmittelbar zu korrigieren.
 
     rubocop [files]
 
-Das selbe gilt für Warnungen, welche im Jenkins auftreten (Brakeman, ...).
+Das selbe gilt für Warnungen, welche im CI auftreten (Brakeman, ...).
 
 
 ### Spezifische Guidelines

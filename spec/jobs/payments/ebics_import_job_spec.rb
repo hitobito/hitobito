@@ -10,8 +10,8 @@ require 'spec_helper'
 describe Payments::EbicsImportJob do
   include ActiveJob::TestHelper
 
-  let(:invoice_file) {
-    read('camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923')
+  let(:invoice_files) {
+    [read('camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923')]
   }
   let(:config) { payment_provider_configs(:postfinance) }
   let(:epics_client) { double(:epics_client) }
@@ -40,7 +40,7 @@ describe Payments::EbicsImportJob do
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
 
-    expect(payment_provider).to receive(:Z54).and_return(invoice_file)
+    expect(payment_provider).to receive(:Z54).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
     InvoiceList.create(title: 'membership fee' ,invoices: [invoice])

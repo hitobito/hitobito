@@ -53,9 +53,9 @@ class PaymentProvider
   end
 
   def Z54(since_date = nil, until_date = nil)
-    order_data = client.send(:download, PaymentProviders::Z54, since_date, until_date)
+    xml_files = client.send(:download_and_unzip, PaymentProviders::Z54, since_date, until_date)
 
-    xml_from_order_data(order_data)
+    xml_files.map { |order_data| xml_from_order_data(order_data) }
   end
   # rubocop:enable Naming/MethodName
 

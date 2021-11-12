@@ -151,15 +151,15 @@ describe PaymentProvider do
 
   context 'Z54' do
     it 'sends Z54 order' do
-      response = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>'
+      response = ['<?xml version=\"1.0\" encoding=\"UTF-8\"?>']
 
-      expect(epics_client).to receive(:download).with(PaymentProviders::Z54, nil, nil).exactly(:once).and_return(response)
+      expect(epics_client).to receive(:download_and_unzip).with(PaymentProviders::Z54, nil, nil).exactly(:once).and_return(response)
 
       expect(subject.Z54).to eq(response)
     end
 
     it 'raises if no download data available' do
-      expect(epics_client).to receive(:download).with(PaymentProviders::Z54, nil, nil).exactly(:once)
+      expect(epics_client).to receive(:download_and_unzip).with(PaymentProviders::Z54, nil, nil).exactly(:once)
         .and_raise(Epics::Error::BusinessError.new('090005'))
 
       expect do

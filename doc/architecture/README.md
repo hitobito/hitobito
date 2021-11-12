@@ -15,6 +15,14 @@ Diese Dokumente beschreiben die wesentlichen architekturellen Aspekte von hitobi
 
 Alle Diagramme werden mit [Draw.io](http://draw.io) erstellt und jeweils als Original .xml sowie als .svg abgespeichert.
 
+## Module
+Module definieren einzelne Teilobjekte der Applikation. Issues enthalten den Typ des zu verändernden Moduls im Namen.
+
+* [Messages](modules/01_messages.md)
+* [People](modules/undefined)
+* [Groups](modules/undefined)
+
+
 ## Techstack
 Der aktuelle Techstack von hitobito sieht wie folgt aus:
 

@@ -42,13 +42,14 @@ class ServiceToken < ActiveRecord::Base
     name
   end
 
-  # Required so PeopleFilter can use PersonFetchables
+  # Required as a substitute user for PeopleFilter with PersonFetchables and in other places
   def dynamic_user
     Person.new do |p|
       role = Role.new
       role.group = layer
       role.permissions = [:layer_and_below_full]
       p.roles = [role]
+      p.groups = [layer]
     end
   end
 

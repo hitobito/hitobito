@@ -23,9 +23,9 @@ class Payments::EbicsImport
 
     payment_provider.HPB
 
-    invoice_xml = payment_provider.Z54
+    invoice_xmls = payment_provider.Z54
 
-    payments_from_xml(invoice_xml)
+    invoice_xmls.flat_map { |xml| payments_from_xml(xml) }
   rescue Epics::Error::BusinessError => e
     case e.code
     when '090005'

@@ -1,20 +1,53 @@
 # Messages
-Das Messages Modul beinhaltet alle Teile der Kommunikation via Briefen und SMS.
 
 ![Aktueller Mailversand](../diagrams/modules/messages.svg)
 
 _Systemübersicht. (Mailclient -> Dispatch to be implemented)_
 
+Mit Hitobito können Nachrichten (Briefe, SMS, Mails) an verschiedene Empfänger gesendet werden. Die Messages werden innerhalb von Hitobito erstellt, danach können diese an externe Dienste weitergegeben werden, oder für den eigengebrauch verwendet werden.
+
+## Abo
+Das Model definiert die Empfänger einer Message. Die `MailingList` Objekte werden auch Abos genannt und sind so im UI zu finden. Die Abos lassen auch eine Konfiguration eines Mailchimp dienstes zu. Die `MailingList` wird auf einer Gruppe erstellt, dabei ist konfigurierbar, wie stark mitglieder dieser Gruppe das Abo bearbeiten dürfen.
+
+## Message
+Das Message Model definiert die verschiedenen Messages von Hitobito und ist eine Single Table Inheritance ([STI](https://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html)).
+
+| STI Model              | Beschreibung |
+|------------------------|-------------------|
+| `Message::TextMessage` | Dieses Model definiert eine Nachricht, welche per SMS versendet wird. |         
+| `Message::Letter`      | Dieses Model definiert einen Brief, welcher beispielsweise an eine Druckerei gesendet werden kann. |         
+| `Message::LetterWithInvoice` | Dieses Model ist ähnlich dem Brief, jedoch ist dies ein Rechnungsbrief. Rechnungsbriefe können verwendet werden um Spendenaufrufe zu erstellen. |         
+| `Message::BulkMail` | Das `BulkMail` Model wird für Mails verwendet, dies kann als besipiel für einen Newsletter verwendet werden. |         
+
+### 
+
+## Dispatch
+
+
+
+
+
+
+
+
+
+
+
+
+
+#OLD
+
+------------------------------------------------------------------
 ## Empfänger
 ### Modules
 #### `People`
-Die `People` können einerseits Personen, andererseits auch Unternehmen sein. Das Model hierzu ist das `Person`. Der sprechende Unterschied der beiden ist das Flag `company` welches bei Unternehmen auf `true` gesetzt ist und das Attribut `company_name`.
+Die `People` können einerseits Personen, andererseits auch Unternehmen sein. Das Model hierzu ist das `Person`. Die Unterschiede der beiden sind das Flag `company` welches bei Unternehmen auf `true` gesetzt ist sowie das Attribut `company_name`.
 
 ### Models
 #### `Person`
-Das Model definiert alle Personen welche in Hitobito vorhanden sind. Messages erhalten immer eine Person als Sender, dabei wird immer eine, oder mehrere Personen empfänger sein.
+Das Model definiert alle Personen/Unternehmen welche in Hitobito vorhanden sind. Messages erhalten immer eine Person als Sender, dabei sind immer eine, oder mehrere Personen, Empfänger.
 
-TODO: Tabelle anpassen
+_Die wichtigsten Attribute des `Person` Models._
 
 | Attribut | Beschreibung |
 |----------|-------------------|
@@ -36,7 +69,7 @@ TODO: Tabelle anpassen
 | updater_id | Das ist die beschreibung |
 
 #### `MailingList`
-Das Model definiert die Empfänger einer Message. Auch Abos genannt und so im UI zu finden. Die Abos lassen auch eine Konfiguration eines Mailchimp dienstes zu.
+Das Model definiert die Empfänger einer Message. Die `MailingList` Objekte werden auch Abos genannt und sind so im UI zu finden. Die Abos lassen auch eine Konfiguration eines Mailchimp dienstes zu. Die `MailingList` wird auf einer Gruppe erstellt, dabei ist konfigurierbar, wie stark mitglieder dieser Gruppe das Abo bearbeiten dürfen.
 
 TODO: Tabelle anpassen
 
@@ -54,29 +87,58 @@ TODO: Tabelle anpassen
 | subscribers_may_post | Das ist die beschreibung |
 
 #### `MessageRecipient`
+Der `MessageRecipient` wird im `Dispatch` erstellt, sobald eine Message versendet wird. Dieser besteht aus den Personen und der Nachricht welche versendet werden. Jeder `MessageRecipient` erhält zudem einen Status, in welchem man den jeweiligen Status des versands einsehen kann. Sollte ein Versand abrupt gestoppt werden, kann mithilfe des Status eingesehen werden, welche Personen einen Nachricht noch nicht erhalten haben. Folglich kann der Versand bei diesen Personen wiederaufgenommen werden. 
+
+| Attribut | Beschreibung |
+|----------|-------------------|
+| id | Das ist die beschreibung |         
+| group_id | Das ist die beschreibung |         
+| additional_sender | Das ist die beschreibung |
+| anyone_may_post | Das ist die beschreibung |
+| delivery_report | Das ist die beschreibung |          
+| description | Das ist die beschreibung |
+| main_email | Das ist die beschreibung |
+| name | Das ist die beschreibung |
+| publisher | Das ist die beschreibung |
+| subscribers_may_post | Das ist die beschreibung |
 
 ## Versand
-### Message
-
 ### Dispatch
 
 ### Klassen
 ### `TextMessageDispatch`
+Diese Klasse wird für den Versand von SMS Messages verwendet. Der folgende Ablauf wiederspiegelt den Ablauf der `run` Methode innerhalb dieser Klasse.
+
+1. Die `MessageRecipient` Einträge werden erstellt.
+2. Die SMS werden versendet. Diese werden in sogenannten Batches* abgearbeitet.
+3. Den Status der Message auf `sent` aktualisieren.
 
 ### `LetterDispatch`
-Diese Klasse versendet Briefe. Bevor dies geschieht werden die MessageRecipients der des Briefes erstellt, danach werden Batches* erstellt.
+Diese Klasse versendet Briefe, änhlich wie der SMS dispatch.
 
 ### `Messages::DispatchJob`
 
 ### Models
 ### `Message`
-Dieses Model ist eine Single Table Inheritance.
+Das Message Model definiert die verschiedenen Messages von Hitobito und ist eine Single Table Inheritance ([STI](https://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html)).
 
+| STI Model | Beschreibung |
+|----------|-------------------|
+| `Message::TextMessage` | Dieses Model definiert eine Nachricht, welche per SMS versendet wird. |         
+| `Message::Letter` | Dieses Model definiert einen Brief, welcher beispielsweise an eine Druckerei gesendet werden kann. |         
+| `Message::LetterWithInvoice` | Dieses Model ist ähnlich dem Brief, jedoch ist dies ein Rechnungsbrief. Rechnungsbriefe können verwendet werden um Spendenaufrufe zu erstellen. |         
+| `Message::BulkMail` | Das `BulkMail` Model wird für Mails verwendet, dies kann als besipiel für einen Newsletter verwendet werden. |         
 
 ## Verarbeitung
 ### Klassen
-### `LetterWithInvoice`
-Der Rechnungsbrief wird in dieser Klasse erstellt.
+
+
+
+### `Message::TextMessage`
+Diese Klasse ist die Baseclass für alle weiteren Text Nachrichten Schnittstellen (`TextMessageProvider`).
+
+### `Message::TextMessage`
+Diese Klasse ist die Baseclass für alle weiteren Text Nachrichten Schnittstellen (`TextMessageProvider`).
 
 ### `TextMessageProvider::Base`
 Diese Klasse ist die Baseclass für alle weiteren Text Nachrichten Schnittstellen (`TextMessageProvider`).

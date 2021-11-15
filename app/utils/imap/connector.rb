@@ -115,7 +115,7 @@ class Imap::Connector
   end
 
   def attributes
-    %w(ENVELOPE UID BODYSTRUCTURE BODY[TEXT] RFC822)
+    %w(ENVELOPE UID RFC822)
   end
 
 end

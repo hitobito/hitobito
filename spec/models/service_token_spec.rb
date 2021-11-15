@@ -9,7 +9,7 @@ describe ServiceToken do
 
   it '#dynamic user returns user model with top_admin role' do
     token = ServiceToken.new(layer: groups(:top_layer))
-    expect(token.dynamic_user.roles).to have(1).item
+    expect(token.dynamic_user.roles).to have(2).item
     expect(token.dynamic_user.roles.first.group).to eq groups(:top_layer)
     expect(token.dynamic_user.roles.first.permissions).to eq [:layer_and_below_full]
   end

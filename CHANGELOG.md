@@ -3,9 +3,6 @@
 ## Version 1.26
 
 *  Es wurde neu eine minimale Passwortlänge von 12 Zeichen für neue Passwörter eingeführt, dies entspricht den Empfehlungen von OWASP (#1429)
-
-## Version 1.26
-
 *  Gruppen können archiviert werden (#1275)
 *  Die API unterstützt jetzt, die Gruppen/Rollen, Anlässe und Einzelpersonen auszulesen, welche bei Abos abonniert sind. (#1398, danke @Michael-Schaer!)
 *  Teilnehmer können zu Anlässen eingeladen werden (#1276)

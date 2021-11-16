@@ -44,7 +44,7 @@ describe Payments::EbicsImportJob do
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
     InvoiceList.create(title: 'membership fee' ,invoices: [invoice])
-    invoice.update!(reference: '20180314001221000006905084508206')
+    invoice.update!(reference: '000000000000100000000000800')
 
     expect do
       perform_enqueued_jobs do

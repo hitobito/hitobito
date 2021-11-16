@@ -37,7 +37,24 @@ describe Payments::EbicsImport do
     end.to_not change { Payment.count }
   end
   
-  it 'creates received payment' do
+  it 'does not save if invoice not in payment provider config layer' do
+    expect(epics_client).to receive(:HPB)
+
+    expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
+
+    expect(payment_provider).to receive(:Z54).and_return(invoice_files)
+
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:top_layer))
+    list = InvoiceList.create(title: 'membership fee', invoices: [invoice])
+
+    invoice.update(reference: '000000000000100000000000800')
+    expect(list.amount_paid).to eq(0)
+    expect do
+      subject.run
+    end.to_not change { Payment.count }
+  end
+  
+  it 'creates payment' do
     expect(epics_client).to receive(:HPB)
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
@@ -45,10 +62,10 @@ describe Payments::EbicsImport do
     expect(payment_provider).to receive(:Z54).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+
     list = InvoiceList.create(title: 'membership fee', invoices: [invoice])
 
-    invoice.update!(reference: '20180314001221000006905084508206')
-
+    invoice.update(reference: '000000000000100000000000800')
     expect(list.amount_paid).to eq(0)
     expect do
       payments = subject.run
@@ -57,7 +74,7 @@ describe Payments::EbicsImport do
 
       payment = payments.first
       expect(payment.invoice).to eq(invoice)
-      expect(payment.transaction_identifier).to eq("20180314001221000006905")
+      expect(payment.transaction_identifier).to eq("20180314001221000006915")
       expect(list.reload.amount_paid.to_s).to eq('710.82')
     end.to change { Payment.count }.by(1)
   end

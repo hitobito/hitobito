@@ -37,15 +37,15 @@ class Payments::EbicsImport
 
   def payments_from_xml(xml)
     Invoice::PaymentProcessor.new(xml).payments.map do |payment|
-      invoice = Invoice.find_by(reference: payment.reference,
-                                group: @payment_provider_config.invoice_config.group)
-      payment.invoice = invoice
+      next unless in_payment_provider_config_layer?(payment.invoice&.group) && payment.save
 
-      next unless payment.save
-
-      invoice.invoice_list&.update_paid
+      payment.invoice.invoice_list&.update_paid
 
       payment
     end.compact
+  end
+
+  def in_payment_provider_config_layer?(group)
+    group == @payment_provider_config.invoice_config.group
   end
 end

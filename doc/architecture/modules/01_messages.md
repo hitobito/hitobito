@@ -23,7 +23,7 @@ Das Abo (MailingList) ist eines der zentralen Elemente im Messages Modul. Mit Su
 
 
 ### `MessageRecipient` Model
-Der `MessageRecipient` wird im `Dispatch` erstellt, sobald eine Message versendet wird. Dieser besteht aus den Personen und der Nachricht welche versendet werden. Jeder `MessageRecipient` erhält zudem einen Status, in welchem man den jeweiligen Status des Versands einsehen kann. Sollte ein Versand fehlschlagen, kann mithilfe des Status eingesehen werden, welche Personen einen Nachricht noch nicht erhalten haben.
+Der `MessageRecipient` wird im `Dispatch` erstellt, sobald eine Message versendet wird. Dieser besteht aus den Personen und der Nachricht welche versendet werden. Jeder `MessageRecipient` erhält zudem einen Status, in welchem man den jeweiligen Status des Versands einsehen kann. Sollte ein Versand fehlschlagen, kann mithilfe des Status eingesehen werden, welche Personen eine Nachricht noch nicht erhalten haben.
 
 ## Message
 ![Systemübersicht](../diagrams/modules/messages.svg)
@@ -34,7 +34,7 @@ Das Message Model definiert die verschiedenen Message Typen von Hitobito (Single
 
 | STI Model              | Beschreibung |
 |------------------------|-------------------|
-| `Message::TextMessage` | Textnachricht |         
+| `Message::TextMessage` | Textnachricht (SMS) |         
 | `Message::Letter`      | Brief |         
 | `Message::LetterWithInvoice` | Rechnungsbrief |         
 | `Message::BulkMail` | Mail |         

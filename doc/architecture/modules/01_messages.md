@@ -66,14 +66,14 @@ Mailnachricht welche über ein externes Mailprogramm an ein Abo gesendet wird.
 ## Versand (Dispatch)
 Der Dispatcher ist dafür zuständig den entsprechenden Nachrichtentyp zu versenden.
 
+### `Messages::DispatchJob`
+Der für alle Message Typen generische DispatchJob (DelayedJob) wird für den Versand der Nachrichten verwendet.
+
 ### `TextMessageDispatch`
 Beim Versand via SMS werden als erstes alle Empfängernummern gesammelt und in den MessageRecipients abgelegt. Danach erfolgt der Versand über eine HTTP Api von Aspsms. Kurze Zeit später werden die Empfangsbestätigungen via einem seperaten HTTP Api Aufruf geholt und die MessageRecipient entsprechend mit Status aktualisiert.
 
 ### `LetterDispatch`
 Generiert alle MessageRecipient Einträge mit der Post Adresse der Empfänger. Auf Basis dieser Einträge wird dann ein entsprechendes PDF generiert.
-
-### `Messages::DispatchJob`
-Der DispatchJob wird regelmässig ausgeführt und überprüft ob die Message des jeweiligen Message typ bereits versandt/generiert wurde. Danach wird der Status der Message aktualisiert.
 
 ### Druckerei
 Eine Druckerei hat einen eigenen Zugang zu Hitobito und somit die Möglichkeit Briefe für den Versand als PDF herunterzuladen.

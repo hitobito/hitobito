@@ -15,6 +15,16 @@ Diese Dokumente beschreiben die wesentlichen architekturellen Aspekte von hitobi
 
 Alle Diagramme werden mit [Draw.io](http://draw.io) erstellt und jeweils als Original .xml sowie als .svg abgespeichert.
 
+## Module
+Hitobito kann funktionell in verschiedene Module unterteilt werden:
+
+* [Message](modules/01_messages.md)
+* [People](modules/undefined)
+* [Groups](modules/undefined)
+* [Events](modules/undefined)
+* [Invoices](modules/undefined)
+
+
 ## Techstack
 Der aktuelle Techstack von hitobito sieht wie folgt aus:
 

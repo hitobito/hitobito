@@ -16,11 +16,17 @@ Diese Dokumente beschreiben die wesentlichen architekturellen Aspekte von hitobi
 Alle Diagramme werden mit [Draw.io](http://draw.io) erstellt und jeweils als Original .xml sowie als .svg abgespeichert.
 
 ## Module
-Module definieren einzelne Teilobjekte der Applikation. Issues enthalten den Typ des zu verändernden Moduls im Namen.
+Hitobito kann funktionell in verschiedene Module unterteilt werden:
 
-* [Messages](modules/01_messages.md)
+* [Message](modules/01_messages.md)
 * [People](modules/undefined)
 * [Groups](modules/undefined)
+* [Events](modules/undefined)
+* [Groups](modules/undefined)
+* [Mailer](modules/undefined)
+* [Ebics](modules/undefined)
+* [Rechnungen](modules/undefined)
+* [Rollen](modules/undefined)
 
 
 ## Techstack

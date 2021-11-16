@@ -4,34 +4,29 @@
 
 _Systemübersicht._
 
-Mit Hitobito können Nachrichten (Briefe, SMS, Mails, usw...) an verschiedene Empfänger gesendet werden.
+Mit Hitobito können Nachrichten (Briefe, SMS, Mails, usw...) via Abos an verschiedene Empfänger gesendet werden.
 
 ## Abo
 ![Systemübersicht](../diagrams/modules/messages-abo.svg)
 
 _Klassendiagramm des Abos._
 
-Damit Nachrichten Empfängern gesendet und zugeordnet werden können, verwendet man in Hitobito sogenannte Subscriptions, also Abonnements. Mit diesen wird sichergestellt, dass Personen oder Gruppen Abos haben können.
-
-
 ### `Person` Model
-Das Model definiert alle Personen/Unternehmen welche in Hitobito vorhanden sind. 
-
-### `Group` Model
-Das Group Model definiert alle Gruppen welche in Hitobito existieren. Jede Gruppe enthält mehere, eine oder keine Person/Rolle.
+Person ist das zentrale Model in Hitobito für Personen und Firmen. Auf der Person sind auch die für das Message Modul relevanten Kontaktdaten wie E-Mail, Telefonnummer oder Postadresse gespeichert.
 
 ### `MailingList` Model
-Das Model ist eines der zentralsten Elemente in den Messages, denn mithilfe der Subscriptions können so den Personen/Rollen die Abonnemente zugewiesen werden. Die `MailingList` Objekte werden auch Abos genannt und sind so im UI zu finden. Die Abos lassen auch eine Konfiguration eines Mailchimp dienstes zu. Die `MailingList` wird auf einer Gruppe erstellt, dabei ist konfigurierbar, wie stark mitglieder dieser Gruppe das Abo bearbeiten dürfen.
+Das Abo (MailingList) ist eines der zentralen Elemente im Messages Modul. Mit Subscriptions werden die Empfänger auf einem Abo definiert. Subscribers können Gruppen und spezifische Rollen aber auch einzelne Personen sein.
+
 
 ### `MessageRecipient` Model
-Der `MessageRecipient` wird im `Dispatch` erstellt, sobald eine Message versendet wird. Dieser besteht aus den Personen und der Nachricht welche versendet werden. Jeder `MessageRecipient` erhält zudem einen Status, in welchem man den jeweiligen Status des versands einsehen kann. Sollte ein Versand abrupt gestoppt werden, kann mithilfe des Status eingesehen werden, welche Personen einen Nachricht noch nicht erhalten haben. Folglich kann der Versand bei diesen Personen wiederaufgenommen werden.
+Der `MessageRecipient` wird im `Dispatch` erstellt, sobald eine Message versendet wird. Dieser besteht aus den Personen und der Nachricht welche versendet werden. Jeder `MessageRecipient` erhält zudem einen Status, in welchem man den jeweiligen Status des Versands einsehen kann. Sollte ein Versand fehlschlagen, kann mithilfe des Status eingesehen werden, welche Personen einen Nachricht noch nicht erhalten haben.
 
 ## Message
 ![Systemübersicht](../diagrams/modules/messages.svg)
 
 _Klassendiagramm der Messagetypen_
 
-Das Message Model definiert die verschiedenen Messages von Hitobito und ist eine Single Table Inheritance ([STI](https://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html)).
+Das Message Model definiert die verschiedenen Message Typen von Hitobito (Single Table Inheritance [STI](https://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html)):
 
 | STI Model              | Beschreibung |
 |------------------------|-------------------|
@@ -41,42 +36,28 @@ Das Message Model definiert die verschiedenen Messages von Hitobito und ist eine
 | `Message::BulkMail` | Mail |         
 
 ### `Message::TextMessage`
-Dieser Typ ist eine SMS (Textnachricht)
+Dieser Typ ist eine SMS (Textnachricht) und wird an eine Person versandt wenn diese eine Nummer vom Typ Mobil hat.
 
 ### `Message::Letter`
-Der Message::Letter ist ein Brief 
+Brief für den Postversand welcher als PDF gerendert wird.
 
 ### `Message::LetterWithInvoice`
-Ein Brief, an welchem man zusätzlich noch Rechnungen beifügen kann.
+Briefe mit zusätzlichen Rechnungsoptionen.
 
 ### `Message::BulkMail`
-Eine Mail Nachricht. Muss zum versenden an eine spezifische Emailadresse gesendet werden, welche an ein Abo angebunden ist. Das Mail landet danach in einem Catch-all Konto, bis es versendet wird.
-
-### `TextMessageProvider::Base`
-Diese Klasse ist die Baseclass für alle weiteren Textnachricht-Schnittstellen.
-
-### `TextMessageProvider::Aspsms`
-Aspsms ist ein Dienst welcher eine API bietet mit welcher man SMS an viele Empfänger senden kann. Diese Schnittstelle verwendet Hitobito zum versenden von SMS an Gruppenmitglieder. Die Aspsms Klasse vererbt die `TextMessageProvider::Base` Klasse.
-
+Mailnachricht welche über ein externes Mailprogramm an ein Abo gesendet wird.
 
 ## Dispatch
-Der Dispatch erstellt für jede Message die `MessageRecipients`. Danach wird die Nachricht gesendet und die Status auf den `MessageRecipients` aktualisiert.
+Der Dispatcher ist dafür zuständig den entsprechenden Nachrichtentyp zu versenden.
 
 ### `TextMessageDispatch`
-Der Versand der SMS erfolgt mittels HTTP-API von ASPSMS. 
+Beim Versand via SMS werden als erstes alle Empfängernummern gesammelt und in den MessageRecipients abgelegt. Danach erfolgt der Versand über eine HTTP Api von Aspsms. Kurze Zeit später werden die Empfangsbestätigungen via einem seperaten HTTP Api Aufruf geholt und die MessageRecipient entsprechend mit Status aktualisiert.
 
 ### `LetterDispatch`
-Diese Klasse versendet Briefe, änhlich wie der SMS dispatch.
+Generiert alle MessageRecipient Einträge mit der Post Adresse der Empfänger. Auf Basis dieser Einträge wird dann ein entsprechendes PDF generiert.
 
 ### `Messages::DispatchJob`
+Der DispatchJob wird regelmässig ausgeführt und überprüft ob die Message des jeweiligen Message typ bereits versandt/generiert wurde. Danach wird der Status der Message aktualisiert.
 
 ### Druckerei
-Die Druckerei hat den Auftrag Digitale Serienbriefe welche von Hitobito erstellt werden, auf Papier auszudrucken. Dabei werden die Briefe von Hitobito erstellt, die Druckerei erhält den link von welchem sie das PDF oder wahlweise eine CSV Datei beziehen kann. Der Benutzer kann im UI den Druckauftrag aktivieren indem die Druckerei aus den Personen auswählt wird. 
-
-## Glossar
-Mit *-versehene Wörter, werden in diesem Glossar genauer erklärt.
-
-| Ausdruck | Erklärung |
-|----------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| Batches  | Vordefinierte Menge von Messages welche versendet werden müssen. Messages werden in Batches von z.b. 15 Nachrichten abgearbeitet/versendet.   |
-
+Eine Druckerei hat einen eigenen Zugang zu Hitobito und somit die Möglichkeit Briefe für den Versand als PDF herunterzuladen.

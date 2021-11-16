@@ -22,11 +22,7 @@ Hitobito kann funktionell in verschiedene Module unterteilt werden:
 * [People](modules/undefined)
 * [Groups](modules/undefined)
 * [Events](modules/undefined)
-* [Groups](modules/undefined)
-* [Mailer](modules/undefined)
-* [Ebics](modules/undefined)
-* [Rechnungen](modules/undefined)
-* [Rollen](modules/undefined)
+* [Invoices](modules/undefined)
 
 
 ## Techstack

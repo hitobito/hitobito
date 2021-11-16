@@ -11,6 +11,10 @@ Mit Hitobito können Nachrichten (Briefe, SMS, Mails, usw...) via Abos an versch
 
 _Klassendiagramm des Abos._
 
+![Systemübersicht](../diagrams/modules/screenshots/mailing-lists.png)
+
+_Ansicht der Abos einer Gruppe_
+
 ### `Person` Model
 Person ist das zentrale Model in Hitobito für Personen und Firmen. Auf der Person sind auch die für das Message Modul relevanten Kontaktdaten wie E-Mail, Telefonnummer oder Postadresse gespeichert.
 
@@ -36,18 +40,30 @@ Das Message Model definiert die verschiedenen Message Typen von Hitobito (Single
 | `Message::BulkMail` | Mail |         
 
 ### `Message::TextMessage`
+![Systemübersicht](../diagrams/modules/screenshots/text-message.png)
+
+_Ansicht der einer neuen SMS Nachricht_
+
 Dieser Typ ist eine SMS (Textnachricht) und wird an eine Person versandt wenn diese eine Nummer vom Typ Mobil hat.
 
 ### `Message::Letter`
+![Systemübersicht](../diagrams/modules/screenshots/letter.png)
+
+_Ansicht eines neuen Briefes_
+
 Brief für den Postversand welcher als PDF gerendert wird.
 
 ### `Message::LetterWithInvoice`
-Briefe mit zusätzlichen Rechnungsoptionen.
+![Systemübersicht](../diagrams/modules/screenshots/letter-with-invoice.png)
+
+_Ansicht eines neuen Rechnungsbriefes_
+
+Briefe mit zusätzlichen Rechnungsoptionen (Rechnungsposten).
 
 ### `Message::BulkMail`
 Mailnachricht welche über ein externes Mailprogramm an ein Abo gesendet wird.
 
-## Dispatch
+## Versand (Dispatch)
 Der Dispatcher ist dafür zuständig den entsprechenden Nachrichtentyp zu versenden.
 
 ### `TextMessageDispatch`

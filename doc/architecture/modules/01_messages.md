@@ -42,7 +42,7 @@ Das Message Model definiert die verschiedenen Message Typen von Hitobito (Single
 ### `Message::TextMessage`
 ![Systemübersicht](../diagrams/modules/screenshots/text-message.png)
 
-_Ansicht der einer neuen SMS Nachricht_
+_Ansicht einer neuen SMS Nachricht_
 
 Dieser Typ ist eine SMS (Textnachricht) und wird an eine Person versandt wenn diese eine Nummer vom Typ Mobil hat.
 

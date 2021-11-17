@@ -9,7 +9,7 @@ Mit Hitobito können Nachrichten (Briefe, SMS, Mails, usw...) via Abos an versch
 ## Abo
 ![Systemübersicht](../diagrams/modules/messages-abo.svg)
 
-_Klassendiagramm des Abos._
+_Klassendiagramm Messagesmodul._
 
 ![Systemübersicht](../diagrams/modules/screenshots/mailing-lists.png)
 

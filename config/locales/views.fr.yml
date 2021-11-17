@@ -896,7 +896,6 @@ fr:
       button_dispatch_letter: Imprimer
       button_show_assignment: Afficher l'impression
       button_duplicate: Dupliquer
-      button_export_csv: exporter au format csv
       button_preview: Aperçu
       button_dispatch_text_message: Envoyer
       button_show_pdf: Afficher le PDF

@@ -896,7 +896,6 @@ it:
       button_dispatch_letter: Creare l'ordine di stampa
       button_show_assignment: Mostrare l'ordine di stampa
       button_duplicate: Duplicare
-      button_export_csv: Export CSV
       button_preview: Anteprima
       button_dispatch_text_message: Inviare
       button_show_pdf: Mostrare il PDF

@@ -25,10 +25,6 @@ module RenderMessagesExports
     render_in_background(:pdf, base_name)
   end
 
-  def render_tabular_in_background(format)
-    render_in_background(format, "message_#{entry.id}")
-  end
-
   def render_in_background(format, name)
     with_async_download_cookie(format, name) do |filename|
       Export::MessageJob.new(format, current_person.id, entry.id, { filename: filename }).enqueue!

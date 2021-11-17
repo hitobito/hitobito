@@ -45,7 +45,6 @@ class MessagesController < CrudController
           render_pdf_in_background
         end
       end
-      format.csv { render_tabular_in_background(:csv) }
     end
   end
 

@@ -22,9 +22,9 @@
                   target: :_blank)
 
     = button_action_edit if can?(:edit, entry)
-  - unless entry.invoice? && !entry.dispatched?
-    - if entry.state == 'finished'
-      = action_button(t('.button_export_csv'), group_mailing_list_message_path(*entry.path_args, format: :csv), :download)
+
+  = render_extensions 'actions_show'
+
   - if can?(:new, entry)
     = action_button(t('.button_duplicate'), new_polymorphic_path(path_args(entry.class), duplicate_from: entry.id, message: { type: entry.type }), 'copy')
   = button_action_destroy if can?(:destroy, entry)

@@ -70,8 +70,8 @@ module Hitobito
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
-    config.cache_store = :dalli_store, { compress: true,
-                                         namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
+    config.cache_store = :mem_cache_store, { compress: true,
+                                             namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true

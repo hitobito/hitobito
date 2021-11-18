@@ -85,7 +85,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   GENDERS = %w(m w).freeze
 
-  ADDRESS_ATTRS = %w(address zip_code town country).freeze
+  ADDRESS_ATTRS = %w(address zip_code town country)
 
   # define devise before other modules
   devise :database_authenticatable,

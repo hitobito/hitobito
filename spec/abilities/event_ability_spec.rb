@@ -570,20 +570,28 @@ describe EventAbility do
         is_expected.not_to be_able_to(:index_participations, other)
       end
 
-      it 'may not see sibling group events' do
+      it 'may see sibling group events' do
         other = Fabricate(:event, groups: [groups(:bottom_group_one_two)], globally_visible: false)
+        is_expected.to be_able_to(:show, other)
+      end
+
+      it 'may not see sibling layer events' do
+        sibling_layer = Fabricate(group.layer_group.type.to_sym, parent: group.layer_group.parent, name: 'SecondTopper')
+        other = Fabricate(:event, groups: [sibling_layer], globally_visible: false)
         is_expected.not_to be_able_to(:show, other)
       end
 
-      it 'may see sibling group events with a token' do
-        other = Fabricate(:event, groups: [groups(:bottom_group_one_two)], globally_visible: false,
+      it 'may see sibling layer events with a token' do
+        sibling_layer = Fabricate(group.layer_group.type.to_sym, parent: group.layer_group.parent, name: 'SecondTopper')
+        other = Fabricate(:event, groups: [sibling_layer], globally_visible: false,
                                   shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
 
-      it 'may see sibling group globally visible events' do
-        other = Fabricate(:event, groups: [groups(:bottom_group_one_two)], globally_visible: true)
+      it 'may see sibling layer\'s globally visible events' do
+        sibling_layer = Fabricate(group.layer_group.type.to_sym, parent: group.layer_group.parent, name: 'SecondTopper')
+        other = Fabricate(:event, groups: [sibling_layer], globally_visible: true)
         is_expected.to be_able_to(:show, other)
       end
 
@@ -680,23 +688,29 @@ describe EventAbility do
         is_expected.to be_able_to(:show, other)
       end
 
-      it 'may not see sibling layers events' do
+      it 'may see sibling group events' do
         sibling_group = Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTopper')
         other = Fabricate(:event, groups: [sibling_group], globally_visible: false)
+        is_expected.to be_able_to(:show, other)
+      end
+
+      it 'may not see sibling layer events' do
+        sibling_layer = Fabricate(group.layer_group.type.to_sym, parent: group.layer_group.parent, name: 'SecondTopper')
+        other = Fabricate(:event, groups: [sibling_layer], globally_visible: false)
         is_expected.not_to be_able_to(:show, other)
       end
 
-      it 'may see sibling layers events' do
-        sibling_group = Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTopper')
-        other = Fabricate(:event, groups: [sibling_group], globally_visible: false,
+      it 'may see sibling layers events with access token' do
+        sibling_layer = Fabricate(group.layer_group.type.to_sym, parent: group.layer_group.parent, name: 'SecondTopper')
+        other = Fabricate(:event, groups: [sibling_layer], globally_visible: false,
                                   shared_access_token: token)
         user.shared_access_token = token
         is_expected.to be_able_to(:show, other)
       end
 
       it 'may see sibling layers globally visible events' do
-        sibling_group = Fabricate(group.type.to_sym, parent: group.parent, name: 'SecondTopper')
-        other = Fabricate(:event, groups: [sibling_group], globally_visible: true)
+        sibling_layer = Fabricate(group.layer_group.type.to_sym, parent: group.layer_group.parent, name: 'SecondTopper')
+        other = Fabricate(:event, groups: [sibling_layer], globally_visible: true)
         is_expected.to be_able_to(:show, other)
       end
     end

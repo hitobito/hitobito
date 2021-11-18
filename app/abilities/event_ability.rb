@@ -13,7 +13,7 @@ class EventAbility < AbilityDsl::Base
   on(Event) do
     class_side(:list_available, :typeahead).if_any_role
 
-    permission(:any).may(:show).if_globally_visible_or_participating
+    permission(:any).may(:show).in_same_layer_or_globally_visible_or_participating
 
     permission(:any).may(:index_participations)
                     .for_participations_read_events_or_visible_fellow_participants
@@ -55,6 +55,11 @@ class EventAbility < AbilityDsl::Base
     class_side(:list_available).everybody
     class_side(:list_all).if_full_permission_in_course_layer
     class_side(:export_list).if_layer_and_below_full_on_root
+  end
+
+  def in_same_layer_or_globally_visible_or_participating
+    if_globally_visible_or_participating ||
+      contains_any?(user.groups.map(&:layer_group_id), subject.groups.map(&:layer_group_id))
   end
 
   def if_globally_visible_or_participating

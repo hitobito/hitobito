@@ -55,7 +55,7 @@ module MailingLists::ImapMailsHelper
 
   def new_envelope
     Net::IMAP::Envelope.new(
-      now.to_s,
+      Time.now.to_s,
       'Testflight from 24.4.2021',
       [new_address('from')],
       [new_address('sender')],

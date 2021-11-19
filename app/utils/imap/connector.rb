@@ -73,9 +73,9 @@ class Imap::Connector
   def connect
     return if @connected
 
-    # rubocop:disable LineLength
-    @imap = Net::IMAP.new(setting(:address), setting(:imap_port) || 993, setting(:enable_ssl) || true)
-    # rubocop:enable LineLength
+    @imap = Net::IMAP.new(
+      setting(:address), setting(:imap_port) || 993, setting(:enable_ssl) || true
+    )
     @imap.login(setting(:user_name), setting(:password))
     @connected = true
   end

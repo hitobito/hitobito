@@ -64,7 +64,7 @@ class ChangelogReader
 
   def changelog_entry_line(entry)
     entry.strip!
-    entry[/^\*\s*(.*)/, 1]
+    entry[/^[-*]\s*(.*)/, 1]
   end
 
   def find_or_create_version(header_line)

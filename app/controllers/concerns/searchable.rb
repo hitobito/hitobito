@@ -49,8 +49,6 @@ module Searchable
 
   end
 
-  private
-
   # Class methods for Searchable.
   module ClassMethods
 

@@ -5,27 +5,36 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
 
+class MailingList::BulkMailRetriever
 
-module MailingList
-    class BulkMailRetriever
+  include MailingLists::ImapMails
 
-      attr_accessor :retrieve_count, :imap_connector
-      @retrieve_count = 5  
-      @imap_connector = IMAP::Connector.new
-  
-      def perform
-        # retrieve mail
-        mails = []
-        mails << imap_connector.fetch_mails(inbox)
-      end
+  attr_accessor :retrieve_count, :imap_connector
 
-      def reject_not_existing
-        # mail abozugehörig?
-      end 
-      
-      private
+  RETRIEVE_COUNT = 5
 
-      # MAILBOX = { inbox: 'INBOX' }.with_indifferent_access.freeze
+  def perform
+    create_bulk_mail_messages
 
+  end
+
+  def reject_not_existing
+    # mail abozugehörig?
+  end
+
+  private
+
+  def mails
+    @mails ||= imap.fetch_mails(:inbox)
+  end
+
+  def create_bulk_mail_messages
+    mails.each do |mail|
+      Message::BulkMail.create!(
+        subject: Faker::Book.genre,
+        mail_log: log
+      )
     end
   end
+
+end

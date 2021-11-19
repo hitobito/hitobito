@@ -41,6 +41,29 @@ class Imap::Connector
     end
   end
 
+  def fetch_mails_in_batches(mailbox, batch_size)
+    batch = []
+
+    perform do
+      mails_count = count(mailbox)
+      return [] if mails_count.zero?
+
+      current_batch_start = 1
+      current_batch_end = current_batch_start + batch_size
+
+      if exceeds_mails_count?(current_batch_start, current_batch_end, mails_count)
+        current_batch_end = batch_size - mails_count
+      else
+        current_batch_end += batch_size
+      end
+
+      fetch_data = @imap.fetch(current_batch_start..current_batch_end, attributes)
+      batch << fetch_data.map { |mail| Imap::Mail.build(mail) }
+    end
+
+    batch
+  end
+
   def counts
     @counts ||= fetch_mailbox_counts
   end
@@ -118,4 +141,7 @@ class Imap::Connector
     %w(ENVELOPE UID RFC822)
   end
 
+  def exceeds_mails_count?(current_start, current_end, mails_count)
+    current_end + current_start <= mails_count
+  end
 end

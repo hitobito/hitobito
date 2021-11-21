@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -34,7 +34,7 @@ class Event::Participation < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
-  belongs_to :event
+  belongs_to :event, -> { includes(:translations) }, inverse_of: :participations
   belongs_to :person
 
   belongs_to :application, inverse_of: :participation, dependent: :destroy, validate: true

@@ -8,6 +8,8 @@
     %div{data: { household: true }}
       = render 'contactable/address_fields', f: f
       = render 'person/households/fields', f: f
+    %div{data: { family: true}}
+      = render 'person/family/fields', f: f
   - else
     = render 'contactable/address_fields', f: f
 

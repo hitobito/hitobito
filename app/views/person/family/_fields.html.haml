@@ -1,0 +1,30 @@
+-#  Copyright (c) 2021, Katholische Landjugendbewegung Paderborn. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= render_extensions :custom_fields, locals: { f: f }
+
+= f.labeled(:family_key, '&nbsp;'.html_safe) do
+  %label.checkbox
+    = check_box_tag(:family, 1, f.object.family_members.present?, class: 'inline')
+    %span= t('.is_in_family_with')
+
+  .family_key_members
+    = render_family(f.object)
+    - f.object.family_members.each do |person|
+      = hidden_field_tag 'person[family_members_ids][]', person.id
+
+
+  - display_style = 'display: none' unless f.object.family_members.present?
+
+  = text_field_tag('family_query', nil,
+                  placeholder: I18n.t('global.search.placeholder_person'),
+                  style: display_style,
+                  data: { provide: 'entity',
+                          updater: 'Family.update',
+                          url: query_people_path(person_id: f.object.id) })
+
+  - if @invalid
+    .alert.alert-error= t('.update_denied', other_person: @other_person)
+

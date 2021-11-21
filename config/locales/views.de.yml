@@ -1171,6 +1171,10 @@ de:
         lives_in_household_with: "Wohnt im Haushalt mit"
         update_denied: "Keine Schreibrechte für %{other_person}."
 
+    family:
+      fields:
+        is_in_family_with: 'Ist Teil der Familie von'
+
     csv_imports:
       description:
         header: CSV Dateien

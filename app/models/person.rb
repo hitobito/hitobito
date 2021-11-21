@@ -151,6 +151,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                                 dependent: :destroy,
                                 foreign_key: :head_id
 
+  has_many :family_members, dependent: :destroy
+
   has_many :add_requests, dependent: :destroy
 
   has_many :notes, dependent: :destroy, as: :subject
@@ -178,6 +180,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :message_recipients, dependent: :nullify
 
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
+  accepts_nested_attributes_for :family_members, allow_destroy: true
 
   attr_accessor :household_people_ids, :shared_access_token
 
@@ -371,6 +374,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     relations_to_tails.each do |e|
       if !e.frozen? && e.tail_id.blank?
         e.mark_for_destruction
+      end
+    end
+
+    family_members.each do |family_member|
+      if !family_member.frozen? && family_member.other_id.blank?
+        family_member.mark_for_destruction
       end
     end
   end

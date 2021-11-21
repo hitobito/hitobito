@@ -18,7 +18,7 @@
 
   - display_style = 'display: none' unless f.object.household_people.present?
 
-  = text_field_tag('q', nil,
+  = text_field_tag('household_query', nil,
                   placeholder: I18n.t('global.search.placeholder_person'),
                   style: display_style,
                   data: { provide: 'entity',

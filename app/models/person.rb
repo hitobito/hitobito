@@ -274,7 +274,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def person_name(format = :default)
     name = full_name(format)
-    name << " / #{nickname}" if nickname? && format != :print_list
+    name << " / #{nickname}" if PUBLIC_ATTRS.include?(:nickname) && nickname? && format != :print_list
     name
   end
 

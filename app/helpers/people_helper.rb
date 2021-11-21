@@ -72,6 +72,14 @@ module PeopleHelper
     end, "\n")
   end
 
+  def render_family(person)
+    safe_join(person.family_members.map do |p|
+      content_tag(:li, class: 'chip') do
+        can?(:show, p) ? link_to(p, p) : p.to_s
+      end
+    end)
+  end
+
   def may_impersonate?(user, group)
     can?(:impersonate_user, user) &&
       user != current_user &&

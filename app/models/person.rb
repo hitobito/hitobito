@@ -85,7 +85,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   GENDERS = %w(m w).freeze
 
-  ADDRESS_ATTRS = %w(address zip_code town country)
+  ADDRESS_ATTRS = %w(address zip_code town country) # rubocop:disable Style/MutableConstant meant to be extended in wagons
 
   # define devise before other modules
   devise :database_authenticatable,
@@ -274,7 +274,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def person_name(format = :default)
     name = full_name(format)
-    name << " / #{nickname}" if PUBLIC_ATTRS.include?(:nickname) && nickname? && format != :print_list
+    if PUBLIC_ATTRS.include?(:nickname) && nickname? && format != :print_list
+      name << " / #{nickname}"
+    end
     name
   end
 

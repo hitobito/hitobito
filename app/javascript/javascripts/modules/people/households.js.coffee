@@ -8,7 +8,7 @@ app = window.App ||= {}
 app.HouseHolds = {
   showPeopleTypeAhead: (e) ->
     form = $(e.target).closest('form')
-    form.find(':input[name=q]').toggle()
+    form.find(':input[name=household_query]').toggle()
     elem = form.find('.household_key_people')
     inputs = elem.find(":input[name='person[household_people_ids][]']")
 

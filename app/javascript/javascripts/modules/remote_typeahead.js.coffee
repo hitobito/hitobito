@@ -59,8 +59,8 @@ setupRemoteTypeahead = (input, items, updater) ->
          items: items,
          highlighter: typeaheadHighlighter)
 
-queryForTypeAhead = (query, process, url)->
-  app.request = $.get(url, { q: query }, (data) ->
+queryForTypeAhead = (queryData, process, url)->
+  app.request = $.get(url, queryData, (data) ->
     json = $.map(data, (item) -> JSON.stringify(item))
     $('#quicksearch').removeClass('input-loading')
     process(json)
@@ -79,7 +79,11 @@ delayedQueryForTypeahead = (query, process, delay = 450) ->
   url = this.$element.data('url')
   $('#quicksearch').addClass('input-loading')
 
-  delayedQuery = -> queryForTypeAhead(query, process, url)
+  queryKey = this.$element.data('param') || 'q'
+  queryData = {}
+  queryData[queryKey] = query
+
+  delayedQuery = -> queryForTypeAhead(queryData, process, url)
   app.scheduledTypeahead = setTimeout(delayedQuery, delay)
 
 typeaheadHighlighter = (item) ->

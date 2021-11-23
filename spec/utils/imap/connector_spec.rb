@@ -123,7 +123,7 @@ describe Imap::Connector do
       expect(mail1.plain_text_body).to eq('SpaceX rocks!')
     end
 
-    it 'fetch empty array from an empty mailbox' do
+    it 'returns empty array if mailbox empty' do
       # connect
       expect(Net::IMAP).to receive(:new).and_return(net_imap)
       expect(net_imap).to receive(:login)

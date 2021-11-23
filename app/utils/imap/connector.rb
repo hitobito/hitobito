@@ -135,8 +135,4 @@ class Imap::Connector
   def attributes
     %w(ENVELOPE UID RFC822)
   end
-
-  def exceeds_mails_count?(current_start, current_end, mails_count)
-    current_end + current_start <= mails_count
-  end
 end

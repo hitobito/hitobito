@@ -9,7 +9,7 @@ class MailingLists::BulkMailRetriever
   include MailingLists::ImapMails
   include MailingLists::BulkMail::RetrieverValidation
 
-  attr_accessor :retrieve_count, :imap_connector
+  attr_accessor :retrieve_count
 
   RETRIEVE_COUNT = 5
 
@@ -24,8 +24,14 @@ class MailingLists::BulkMailRetriever
     @inbox_mail_uids ||= imap.fetch_mail_uids(:inbox)
   end
 
+  def fetch_mail(uid)
+    imap.fetch_mail_by_uid(uid, :inbox)
+  end
+
   def create_bulk_mail_messages
-    mails.each do |mail|
+    inbox_mail_uids.each do |uid|
+      mail = fetch_mail(uid)
+
       next reject_mail if sender_id.nil? || !mailing_list_existent(mail)
 
       Message::BulkMail.create!(
@@ -44,9 +50,5 @@ class MailingLists::BulkMailRetriever
 
   def enqueue_dispatch
     # MailingLists::MailDispatchJob.new.enqueue!
-  end
-
-  def sender_id_from_mail(mail)
-
   end
 end

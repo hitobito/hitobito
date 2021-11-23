@@ -20,7 +20,7 @@ describe MailingLists::BulkMailRetriever do
 
     # mock imap_connector calls
     expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return([imap_mail])
-    expect(imap_connector).to receive(:delete_by_uid).with(:inbox, :mail_uid).once
+    expect(imap_connector).to receive(:delete_by_uid).with(:inbox, 42).once
 
     expect do
       retriever.perform
@@ -41,6 +41,8 @@ describe MailingLists::BulkMailRetriever do
     # expect error to be thrown
     expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(Net::IMAP::NoResponseError)
 
+
+    # TODO: Maybe ignore some execptions and create log entries instead. (hitobito#1493)
     expect do
       retriever.perform
     end.to raise { Net::IMAP::NoResponseError }
@@ -60,8 +62,8 @@ describe MailingLists::BulkMailRetriever do
     expect do
       retriever.perform
     end.to change { mailing_list.messages.count }.by(0)
-                                                 .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
-    # TODO: check that notification mail has been sent
+           .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
+
     expect(retriever).to receive(:reject_mail)
 
     message = mailing_list.messages.first
@@ -69,12 +71,16 @@ describe MailingLists::BulkMailRetriever do
     expect(message.sender).to eq('superman')
   end
 
-  it 'sends mail to sender if not allowed to send from mailing list' do
+  it 'replies with error mail if sender not allowed to send to mailing list' do
     imap_mails = []
     expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mails)
     expect(imap_connector).to receive(:delete).with(:mail_id)
 
-    retriever.perform
+    expect do
+      retriever.perform
+    end.to change { mailing_list.messages.count }.by(0)
+                 .and change { MailLog.count }.by(1)
+                 .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
     expect(retriever).to receive(:unallowed_sender)
   end
 

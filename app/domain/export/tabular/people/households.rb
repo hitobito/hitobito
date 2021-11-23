@@ -24,9 +24,7 @@ module Export::Tabular::People
     end
 
     def list
-      @household_list ||= People::HouseholdList.new(
-          Person.where(id: super).only_public_data.includes(:primary_group)
-      )
+      @household_list ||= People::HouseholdList.new(super.only_public_data.includes(:primary_group))
     end
 
   end

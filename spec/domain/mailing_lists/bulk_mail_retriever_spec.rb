@@ -13,6 +13,7 @@ describe MailingLists::BulkMailRetriever do
   let(:retriever) { described_class.new }
   let(:imap_connector) { instance_double(Imap::Connector) }
   let(:mailing_list) { mailing_lists(:leaders) }
+  let(:mailing_list) { mailing_lists(:leaders) }
 
   it 'receives mail and enqueues dispatch' do
     # mock fetched mails
@@ -28,12 +29,17 @@ describe MailingLists::BulkMailRetriever do
     expect do
       retriever.perform
     end.to change { mailing_list.messages.count }.by(1)
-       .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+                 .and change { MailLog.count }.by(1)
+                 .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
 
+    # check message values
     message = mailing_list.messages.first
-    expect(message.subject).to eq('Supermail report')
-    expect(message.sender).to eq('superman')
+    expect(message.subject).to eq('Testflight from 24.4.2021')
+    expect(message.sender).to eq('from@example.com')
+    expect(message.state).to eq('pending')
   end
+
+  # TODO: Adjust the following test cases
 
   it 'terminates if imap server not reachable' do
     imap_mails = []

@@ -13,19 +13,15 @@ describe MailingLists::BulkMailRetriever do
   let(:retriever) { described_class.new }
   let(:imap_connector) { instance_double(Imap::Connector) }
   let(:mailing_list) { mailing_lists(:leaders) }
-  let(:mailing_list) { mailing_lists(:leaders) }
 
   it 'receives mail and enqueues dispatch' do
     # mock fetched mails
-    imap_mails = [
-      new_imap_mail
-    ]
+    imap_mail = new_imap_mail
 
     # mock imap_connector calls
-    expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mails)
+    expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return([imap_mail])
     expect(imap_connector).to receive(:delete_by_uid).with(:inbox, :mail_uid).once
 
-    # execute 'job'
     expect do
       retriever.perform
     end.to change { mailing_list.messages.count }.by(1)
@@ -42,11 +38,8 @@ describe MailingLists::BulkMailRetriever do
   # TODO: Adjust the following test cases
 
   it 'terminates if imap server not reachable' do
-    imap_mails = []
-
     # expect error to be thrown
-    expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mails)
-    expect(imap_connector).to receive(:delete_by_uid).with(:inbox, :mail_uid).and_return(Net::IMAP::NoResponseError)
+    expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(Net::IMAP::NoResponseError)
 
     expect do
       retriever.perform

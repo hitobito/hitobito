@@ -16,7 +16,6 @@ class MailingLists::ImapMailsController < ApplicationController
   def index
     perform_imap do
       @mails = fetch_mails
-      binding.pry
     end
 
     flash.now[:alert] = server_error_message

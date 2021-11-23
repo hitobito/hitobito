@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class MailingList::RecipientCounter
+class MailingLists::RecipientCounter
 
   def initialize(mailing_list, message_type, households = false)
     @mailing_list = mailing_list

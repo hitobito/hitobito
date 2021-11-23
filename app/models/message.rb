@@ -87,7 +87,7 @@ class Message < ActiveRecord::Base
   end
 
   def dispatch!
-    recipients = MailingList::RecipientCounter.new(mailing_list,
+    recipients = MailingLists::RecipientCounter.new(mailing_list,
                                                    self.class.name,
                                                    send_to_households?)
     update!(

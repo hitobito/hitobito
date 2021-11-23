@@ -41,27 +41,22 @@ class Imap::Connector
     end
   end
 
-  def fetch_mails_in_batches(mailbox, batch_size)
-    batch = []
-
+  def fetch_mail_uids(mailbox)
     perform do
-      mails_count = count(mailbox)
-      return [] if mails_count.zero?
-
-      current_batch_start = 1
-      current_batch_end = current_batch_start + batch_size
-
-      if exceeds_mails_count?(current_batch_start, current_batch_end, mails_count)
-        current_batch_end = batch_size - mails_count
-      else
-        current_batch_end += batch_size
-      end
-
-      fetch_data = @imap.fetch(current_batch_start..current_batch_end, attributes)
-      batch << fetch_data.map { |mail| Imap::Mail.build(mail) }
+      select_mailbox(mailbox)
+      @imap.uid_search(["ALL"])
     end
+  end
 
-    batch
+  def fetch_mail_by_uid(uid, mailbox)
+    perform do
+      select_mailbox(mailbox)
+
+      fetch_data = @imap.uid_fetch(uid, attributes)
+      return nil if fetch_data.nil?
+
+      Imap::Mail.build(fetch_data.first)
+    end
   end
 
   def counts

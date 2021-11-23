@@ -20,8 +20,8 @@ class MailingLists::BulkMailRetriever
 
   private
 
-  def mails
-    @mails ||= imap.fetch_mails(:inbox)
+  def inbox_mail_uids
+    @inbox_mail_uids ||= imap.fetch_mail_uids(:inbox)
   end
 
   def create_bulk_mail_messages

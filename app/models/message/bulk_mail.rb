@@ -8,8 +8,4 @@
 class Message::BulkMail < Message
   delegate :mail_from, to: :mail_log
 
-  def save_as_file
-    binding.pry
-    File.open('/rails/mailing_list/bulk_mail/' + self.id + '.yaml', 'wb') { |f| f.write(YAML.dump(self)) }
-  end
 end

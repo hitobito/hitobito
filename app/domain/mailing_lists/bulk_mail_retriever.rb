@@ -5,9 +5,9 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
 
-class MailingList::BulkMailRetriever
-
+class MailingLists::BulkMailRetriever
   include MailingLists::ImapMails
+  include MailingLists::BulkMail::RetrieverValidation
 
   attr_accessor :retrieve_count, :imap_connector
 
@@ -18,10 +18,6 @@ class MailingList::BulkMailRetriever
 
   end
 
-  def reject_not_existing
-    # mail abozugehörig?
-  end
-
   private
 
   def mails
@@ -30,11 +26,27 @@ class MailingList::BulkMailRetriever
 
   def create_bulk_mail_messages
     mails.each do |mail|
+      next reject_mail if sender_id.nil? || !mailing_list_existent(mail)
+
       Message::BulkMail.create!(
-        subject: Faker::Book.genre,
-        mail_log: log
+        subject: mail.subject_utf8_encoded,
+        text: mail.net_imap_mail.to_json,
+        sender_id: sender_id
       )
+
+      enqueue_dispatch
     end
   end
 
+  def reject_mail
+    # notify sender
+  end
+
+  def enqueue_dispatch
+    # MailingLists::MailDispatchJob.new.enqueue!
+  end
+
+  def sender_id_from_mail(mail)
+
+  end
 end

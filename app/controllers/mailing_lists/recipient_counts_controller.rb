@@ -64,7 +64,7 @@ class MailingLists::RecipientCountsController < ListController
   end
 
   def recipient_counter
-    @recipient_counter ||= MailingList::RecipientCounter.new(mailing_list, message_type, households)
+    @recipient_counter ||= MailingLists::RecipientCounter.new(mailing_list, message_type, households)
   end
 
   def authorize_class

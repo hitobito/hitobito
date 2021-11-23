@@ -7,11 +7,11 @@
 
 require 'spec_helper'
 
-describe MailingList::BulkMailRetriever do
+describe MailingLists::BulkMailRetriever do
   include MailingLists::ImapMailsHelper
 
-  let(:connector) { described_class.new }
-  let(:imap_connector) { double(:imap_connector) }
+  let(:retriever) { described_class.new }
+  let(:imap_connector) { instance_double(Imap::Connector) }
   let(:mailing_list) { mailing_lists(:leaders) }
 
   it 'receives mail and enqueues dispatch' do
@@ -22,15 +22,13 @@ describe MailingList::BulkMailRetriever do
 
     # mock imap_connector calls
     expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mails)
-    expect(imap_connector).to receive(:delete).with(:mail_id).once
+    expect(imap_connector).to receive(:delete_by_uid).with(:inbox, :mail_uid).once
 
     # execute 'job'
     expect do
-      connector.perform
-    end
-    .to change { mailing_list.messages.count }.by(1)
-    .and exist('rails/store/mailing_list/bulk_mail' + imap_mails.first.uid.to_s + '.yaml')
-    .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+      retriever.perform
+    end.to change { mailing_list.messages.count }.by(1)
+       .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
 
     message = mailing_list.messages.first
     expect(message.subject).to eq('Supermail report')
@@ -42,37 +40,43 @@ describe MailingList::BulkMailRetriever do
 
     # expect error to be thrown
     expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mails)
-    expect(imap_connector).to receive(:delete).with(:mail_id).and_return(Net::IMAP::NoResponseError)
+    expect(imap_connector).to receive(:delete_by_uid).with(:inbox, :mail_uid).and_return(Net::IMAP::NoResponseError)
 
     expect do
-      connector.perform
+      retriever.perform
     end.to raise { Net::IMAP::NoResponseError }
   end
 
   it 'drops mail if cannot be assigned to mailing list' do
-    imap_mails = []
-    expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mails)
-    expect(imap_connector).to receive(:delete).with(:mail_id)
+    # mock fetched mails
+    imap_mails = [
+      new_imap_mail
+    ]
 
+    # mock imap_connector calls
+    expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mails)
+    expect(imap_connector).to receive(:delete_by_uid).with(:inbox, :mail_uid).once
+
+    # execute 'job'
     expect do
-      connector.perform
-    end
-      .to change { mailing_list.messages.count }.by(1)
-                                                .and exist('rails/store/' + :mail_id.to_s)
-                                                       .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+      retriever.perform
+    end.to change { mailing_list.messages.count }.by(0)
+                                                 .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
+    # TODO: check that notification mail has been sent
+    expect(retriever).to receive(:reject_mail)
 
     message = mailing_list.messages.first
     expect(message.subject).to eq('Supermail report')
     expect(message.sender).to eq('superman')
   end
 
-  it 'sends mail to sender if not allowed to send form mailing list' do
+  it 'sends mail to sender if not allowed to send from mailing list' do
     imap_mails = []
     expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mails)
     expect(imap_connector).to receive(:delete).with(:mail_id)
 
-    connector.perform
-    expect(connector).to receive(:unallowed_sender)
+    retriever.perform
+    expect(retriever).to receive(:unallowed_sender)
   end
 
   it 'skips if no new mail in mailbox available' do
@@ -81,7 +85,7 @@ describe MailingList::BulkMailRetriever do
     expect(imap_connector).to receive(:delete).with(:mail_id)
 
     expect do
-      connector.perform
+      retriever.perform
     end
     .to change { mailing_list.messages.count }.by(1)
     .and exist('rails/store/' + :mail_id.to_s)
@@ -98,7 +102,7 @@ describe MailingList::BulkMailRetriever do
     expect(imap_connector).to receive(:delete).with(:mail_id)
 
     expect do
-      connector.perform
+      retriever.perform
     end.to raise { Net::IMAP::NoResponseError }
   end
 end

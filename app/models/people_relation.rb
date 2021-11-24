@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2014, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -52,11 +52,9 @@ class PeopleRelation < ActiveRecord::Base
   scope :list, -> { includes(:tail).references(:tail).merge(Person.order_by_name) }
 
   class << self
-
     def possible_kinds
       kind_opposites.keys
     end
-
   end
 
   def translated_kind

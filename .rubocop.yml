@@ -151,3 +151,6 @@ Rails/FilePath:
 Rails/SkipsModelValidations:
   Exclude:
     - spec/**/*
+
+Style/Lambda:
+  Enabled: false

@@ -149,9 +149,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :relations_to_tails, class_name: 'PeopleRelation',
                                 dependent: :destroy,
-                                foreign_key: :head_id
+                                foreign_key: :head_id,
+                                inverse_of: :head
 
-  has_many :family_members, dependent: :destroy
+  has_many :family_members, -> { includes(:person, :other) },
+           inverse_of: :person,
+           dependent: :destroy
 
   has_many :add_requests, dependent: :destroy
 
@@ -159,6 +162,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :authored_notes, class_name: 'Note',
                             foreign_key: 'author_id',
+                            inverse_of: :author,
                             dependent: :destroy
 
   belongs_to :primary_group, class_name: 'Group'
@@ -171,10 +175,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :access_grants, class_name: 'Oauth::AccessGrant',
                            foreign_key: :resource_owner_id,
+                           inverse_of: :person,
                            dependent: :delete_all
 
   has_many :access_tokens, class_name: 'Oauth::AccessToken',
                            foreign_key: :resource_owner_id,
+                           inverse_of: :person,
                            dependent: :delete_all
 
   has_many :message_recipients, dependent: :nullify

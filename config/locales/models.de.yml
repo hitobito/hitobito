@@ -211,6 +211,9 @@ de:
       event/date:
         one: Datum
         other: Daten
+      family_member:
+        one: Familienmitglied
+        other: Familienmitglieder
       group:
         one: Gruppe
         other: Gruppen
@@ -410,6 +413,7 @@ de:
         phone_numbers: Telefonnummern
         social_accounts: Social Media
         additional_emails: Weitere E-Mails
+        family_members: Familienmitglieder
         picture: Neues Foto hochladen
         remove_picture: Aktuelles Foto entfernen
         roles: Rollen
@@ -596,6 +600,11 @@ de:
         person: Person
         type: Rolle
         participation: Person
+
+      family_member:
+        kind: Verwandschaftsverhältnis
+        kinds:
+          sibling: Geschwister
 
       note:
         text: Text

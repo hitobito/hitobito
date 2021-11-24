@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class PeopleController < CrudController
-
   include RenderPeopleExports
   include AsyncDownload
 
@@ -93,6 +92,15 @@ class PeopleController < CrudController
         flash.now.alert = I18n.t('global.errors.header', count: entry.errors.size)
         render 'shared/update_flash'
       end
+    end
+  end
+
+  # public for serializer
+  def index_full_ability?
+    if params[:range].blank? || params[:range] == 'group'
+      can?(:index_full_people, @group)
+    else
+      can?(:index_deep_full_people, @group)
     end
   end
 
@@ -222,15 +230,6 @@ class PeopleController < CrudController
   def render_entry_json
     render json: PersonSerializer.new(entry.decorate, group: @group, controller: self)
   end
-
-  def index_full_ability?
-    if params[:range].blank? || params[:range] == 'group'
-      can?(:index_full_people, @group)
-    else
-      can?(:index_deep_full_people, @group)
-    end
-  end
-  public :index_full_ability? # for serializer
 
   def authorize_class
     authorize!(:index_people, group)

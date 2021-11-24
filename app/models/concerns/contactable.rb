@@ -24,7 +24,7 @@ module Contactable
     has_many :social_accounts, as: :contactable, dependent: :destroy
     has_many :additional_emails, as: :contactable, dependent: :destroy
 
-    belongs_to :location, foreign_key: 'zip_code', primary_key: 'zip_code'
+    belongs_to :location, foreign_key: 'zip_code', primary_key: 'zip_code', inverse_of: false
 
     accepts_nested_attributes_for :phone_numbers, :social_accounts, :additional_emails,
                                   allow_destroy: true
@@ -41,7 +41,6 @@ module Contactable
 
   def country=(value)
     super(Countries.normalize(value))
-    value
   end
 
   def ignored_country?

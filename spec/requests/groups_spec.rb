@@ -48,7 +48,7 @@ RSpec.describe 'GET /groups/:id', type: :request do
         expect(response.redirect_url).to eq('http://www.example.com/users/sign_in')
       end
     end
-  
+
     context 'with valid token' do
       it 'succeeds' do
         get "/groups/#{user.group_ids[0]}", headers: { 'Authorization': 'Bearer ' + token.token, 'Accept': 'application/json' }

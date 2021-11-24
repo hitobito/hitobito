@@ -18,7 +18,7 @@ describe Export::EventParticipationsExportJob do
 
   let(:params)                     { { filter: 'all' } }
   let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, user, params) }
-  let(:filepath)      { AsyncDownloadFile::DIRECTORY.join('event_participation_export') }
+  let(:filepath)                   { AsyncDownloadFile::DIRECTORY.join('event_participation_export') }
 
   before do
     SeedFu.quiet = true

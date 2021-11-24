@@ -76,7 +76,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
     :locked_at, :remember_created_at, :reset_password_token, :unlock_token,
     :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
-    :show_global_label_formats, :household_key, :event_feed_token
+    :show_global_label_formats, :household_key, :event_feed_token, :family_key
   ]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons

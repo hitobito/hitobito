@@ -179,6 +179,7 @@ help_text_blacklist:
     - household_people_ids
     - relations_to_tails_attributes
     - phone_numbers_attributes
+    - family_members_attributes
 
 worker_heartbeats:
   check_job:

@@ -7,7 +7,7 @@
 
 class MailingLists::BulkMailRetriever
   include MailingLists::ImapMails
-  include MailingLists::BulkMail::RetrieverValidation
+  include MailingLists::BulkMail::RetrieverValidations
 
   attr_accessor :retrieve_count
 
@@ -49,6 +49,10 @@ class MailingLists::BulkMailRetriever
   end
 
   def enqueue_dispatch
-    # MailingLists::MailDispatchJob.new.enqueue!
+    # Messages::DispatchJob.new.enqueue!
+  end
+
+  def enqueue_bulk_mail_response
+    # Messages::BulkMailResponseJob.new.enqueue!
   end
 end

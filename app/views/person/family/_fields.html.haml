@@ -3,13 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.hidden_field(:other_id)
-= text_field_tag('family_query', nil,
-                  class: 'span4',
-                  placeholder: I18n.t('global.search.placeholder_person'),
-                  value: f.object.other&.full_name,
-                  data: { provide: 'entity',
-                          id_field: "#{f.object_name}_other_id",
-                          url: query_people_path })
-
-= f.collection_select(:kind, FamilyMember.kind_labels, :first, :second, {}, class: 'span2')
+- if f.object.new_record?
+  = f.person_field(:other, class: 'span4')
+  = f.collection_select(:kind, FamilyMember.kind_labels, :first, :second, {}, class: 'span2')
+- else
+  .span4
+    = f.object.other&.full_name
+    %i
+      = f.object.kind_label

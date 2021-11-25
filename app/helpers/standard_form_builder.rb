@@ -229,11 +229,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                       html_options)
   end
 
-  def person_field(attr, _html_options = {})
+  def person_field(attr, html_options = {})
     attr, attr_id = assoc_and_id_attr(attr)
+    klass = html_options[:class]
     hidden_field(attr_id) +
     string_field(attr,
                  placeholder: I18n.t('global.search.placeholder_person'),
+                 class: klass,
                  data: { provide: 'entity',
                          id_field: "#{object_name}_#{attr_id}",
                          url: @template.query_people_path })

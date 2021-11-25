@@ -10,3 +10,21 @@ payment_providers:
     <%# These have to be the ones with the keys. PF calls them "EBICS 2.5 und EBICS 3.0 mit Schlüsseln" in the test environment %>
     encryption_hash: 48 CD A5 55 35 E1 1B 44 61 8C C1 80 FD E1 B4 5CB9 58 AD 6B 98 08 8A CC 9C 3D 99 B0 A2 98 FA 34
     authentication_hash: AB 2E ED 68 85 A6 E6 A2 67 00 D6 C4 AB 68 79 B45C D2 AF C9 30 01 D4 E7 91 50 E3 31 46 D8 4D 6C
+
+  - name: creditsuisse
+    url: ebics.credit-suisse.com
+    host_id: CSEBICS
+    encryption_hash: 1C F9 D6 B2 D5 D5 49 CE 49 E1 EA BB D0 EB AA 0D CA 21 B0 34 E0 F6 0B BE D9 D9 EA CA CC A6 B8 BB
+    authentication_hash: 1C F9 D6 B2 D5 D5 49 CE 49 E1 EA BB D0 EB AA 0D CA 21 B0 34 E0 F6 0B BE D9 D9 EA CA CC A6 B8 BB
+
+  - name: raiffeisen
+    url: https://econnect.raiffeisen.ch/ebicsweb/ebicsweb
+    host_id: RAIFCHEC
+    encryption_hash: 99 08 AF B5 E1 E7 EB 27 DC A6 7D EC C9 5B 22 85 F8 78 BF 61 BA D6 40 AB 29 70 4D 77 CD E7 67 56
+    authentication_hash: 12 3A AF D3 58 9D 3D 64 ED E7 24 10 34 73 84 26 2A 38 25 03 5D 42 1E F1 FO 1B B4 DA FO 33 57 6D
+
+  - name: ubs
+    url: https://ebics.ubs.com/ebicsweb/ebicsweb
+    host_id: EBXUBSCH
+    encryption_hash: F6 94 9A 17 8E 60 B0 C8 0B 28 9E F9 AD D8 6B A1 E9 DF 47 17 5A CB 0E 69 7C 88 FC E0 7E CF 9C BF
+    authentication_hash: 2F 8F B6 B8 6D 8F 42 09 E0 9A BF 1F 37 76 9B 7B ED C8 B5 35 0D C1 6B 81 85 36 8E 57 C4 2B 18 7B

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -32,7 +32,7 @@ class InvoiceItem < ActiveRecord::Base
   scope :list, -> { order(:name) }
 
   validates :unit_cost, money: true, allow_nil: true
-  validates :variable_donation, uniqueness: { scope: :invoice_id }
+  validates :variable_donation, uniqueness: { allow_blank: true, scope: :invoice_id }
   delegate :recalculate!, to: :invoice
 
   validates_by_schema

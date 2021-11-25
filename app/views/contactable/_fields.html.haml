@@ -26,7 +26,7 @@
 = field_set_tag do
   = f.labeled_inline_fields_for :social_accounts, 'contactable/social_account_fields'
 
-- if entry.is_a?(Person)
+- if entry.is_a?(Person) && PeopleRelation.none?
   = field_set_tag do
     = f.labeled_inline_fields_for :family_members, 'person/family/fields'
 

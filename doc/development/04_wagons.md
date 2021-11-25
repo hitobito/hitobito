@@ -65,7 +65,11 @@ If the wagon is the main wagon for a new organization structure, you can additio
 
 * Add Developer and Client Accounts in the seed files: `db/seed/development/1_people.rb` under `devs`.
 * Configure e-mail-adress for the root account in `config/settings.yml`.
-* If the application is multilingual, we reccommend to create a project in [https://www.transifex.com/](Transifex)
+* If the application is multilingual:
+  * create a project in [Transifex](https://www.transifex.com/) (e.g. hitobito_pbs)
+  * make sure there is all required locale files in the wagon's config/locales folder (all non default language files can be empty on init)
+  * create .tx/config and add all files (you might copy it from [here](https://github.com/hitobito/hitobito_die_mitte/blob/master/.tx/config) or use rake tx:init)
+*  
 * Also see the guidelines for internationalization
 
 If the wagon is not for a specific organisation and does not define a group structure, you should delete the following files:

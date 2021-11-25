@@ -124,7 +124,6 @@ group :console do
   gem 'hirb'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
-  gem 'rdoc-tags'
   gem 'spring-commands-rspec'
   gem 'wirble'
 end

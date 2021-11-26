@@ -26,7 +26,7 @@
   - t.col('')  { |c| "#{c.level}. #{PaymentReminder.model_name.human}" }
   - t.attrs(:title, :text, :due_days)
 
-- if PaymentProviderConfig.any?
+- if entry.payment_provider_configs.reject(&:empty?).any?
   %h2= PaymentProviderConfig.model_name.human(count: 2)
   %dl.dl-horizontal
     - entry.payment_provider_configs.reject(&:empty?).each do |provider_config|

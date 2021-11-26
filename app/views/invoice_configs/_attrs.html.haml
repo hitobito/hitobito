@@ -29,7 +29,7 @@
 - if PaymentProviderConfig.any?
   %h2= PaymentProviderConfig.model_name.human(count: 2)
   %dl.dl-horizontal
-    - entry.payment_provider_configs.each do |provider_config|
+    - entry.payment_provider_configs.reject(&:empty?).each do |provider_config|
       = labeled_attr(provider_config, :payment_provider)
       = labeled_attr(provider_config, :user_identifier)
       = labeled_attr(provider_config, :partner_identifier)

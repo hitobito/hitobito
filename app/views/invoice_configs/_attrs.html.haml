@@ -26,11 +26,12 @@
   - t.col('')  { |c| "#{c.level}. #{PaymentReminder.model_name.human}" }
   - t.attrs(:title, :text, :due_days)
 
-%h2= PaymentProviderConfig.model_name.human(count: 2)
-%dl.dl-horizontal
-  - entry.payment_provider_configs.each do |provider_config|
-    = labeled_attr(provider_config, :payment_provider)
-    = labeled_attr(provider_config, :user_identifier)
-    = labeled_attr(provider_config, :partner_identifier)
-    -if provider_config.pending?
-      %dd= action_button(t('activerecord.attributes.payment_provider_config.ini_letter'), ini_letter_group_payment_provider_config_path(@group, provider_config), :eye, { target: :_blank })
+- if PaymentProviderConfig.any?
+  %h2= PaymentProviderConfig.model_name.human(count: 2)
+  %dl.dl-horizontal
+    - entry.payment_provider_configs.each do |provider_config|
+      = labeled_attr(provider_config, :payment_provider)
+      = labeled_attr(provider_config, :user_identifier)
+      = labeled_attr(provider_config, :partner_identifier)
+      -if provider_config.pending?
+        %dd= action_button(t('activerecord.attributes.payment_provider_config.ini_letter'), ini_letter_group_payment_provider_config_path(@group, provider_config), :eye, { target: :_blank })

@@ -114,7 +114,8 @@ class FamilyMember < ApplicationRecord
 
     # create links between siblings (given a scope)
     siblings.pluck(:person_id).each do |sibling_id|
-      self.class.find_or_create_by!(person: person, other_id: sibling_id, kind: :sibling)
+      attrs = { person: person, other_id: sibling_id, kind: :sibling }
+      self.class.create!(attrs.merge(family_key: family_key)) unless self.class.exists?(attrs)
     end
   end
 
@@ -138,7 +139,11 @@ class FamilyMember < ApplicationRecord
 
   def copy_family_key(from, *to_people)
     to_people.each do |to|
-      to.update_attribute(:family_key, from.family_key) # rubocop:disable Rails/SkipsModelValidations
+      if to.new_record?
+        to.family_key = from.family_key
+      else
+        to.update_column(:family_key, from.family_key) # rubocop:disable Rails/SkipsModelValidations
+      end
     end
   end
 

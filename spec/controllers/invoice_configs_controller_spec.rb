@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -49,8 +49,14 @@ describe InvoiceConfigsController  do
     end
 
     it "initializes payment provider config if none is present" do
+      configured_payment_providers = Settings.payment_providers
+      expect(configured_payment_providers.size).to be_positive
+
       get :edit, params: { group_id: group.id, id: entry.id }
-      expect(assigns(:invoice_config).payment_provider_configs.size).to eq(1)
+
+      expect(assigns(:invoice_config).payment_provider_configs.size)
+        .to eq(configured_payment_providers.size)
+
       assigns(:invoice_config).payment_provider_configs.each do |config|
         expect(config).to be_valid
       end
@@ -78,7 +84,7 @@ describe InvoiceConfigsController  do
       expect do
         patch :update, params: { group_id: group.id, invoice_config: {
           payment_provider_configs_attributes: attrs }
-        } 
+        }
       end.to change { entry.reload.payment_provider_configs.size }.by(1)
     end
 

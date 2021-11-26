@@ -5,10 +5,8 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
 
-class Messages::BulkMailNotificationJob
+require 'spec_helper'
 
-  def perform
-    # send notifications to mailing list mail senders
-  end
+describe MailingLists::BulkMail::MailValidator do
 
 end

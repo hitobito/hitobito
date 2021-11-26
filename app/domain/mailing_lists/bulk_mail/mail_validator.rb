@@ -1,0 +1,60 @@
+# frozen_string_literal: true
+
+# Copyright (c) 2012-2021, Hitobito AG. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https://github.com/hitobito/hitobito.
+
+
+
+module MailingLists::BulkMail
+  class MailValidator
+
+    def initialize(mail, mailing_list)
+      @mail = mail
+      @mailing_list = mailing_list
+    end
+
+
+    def mail_valid?(mail)
+      # code here
+    end
+
+    private
+
+    def sender_allowed?
+      return false unless valid_email?(sender_email)
+
+      # drop is from method names
+      mailing_list.anyone_may_post? ||
+        additional_sender? ||
+        sender_group_email? ||
+        sender_list_administrator? ||
+        (mailing_list.subscribers_may_post? && sender_is_list_member?)
+    end
+
+    def valid_email?(email)
+      email.present? && Truemail.valid?(email)
+    end
+
+    def additional_sender?
+      return false if sender_email.blank?
+
+      additional_senders = mailing_list.additional_sender.to_s
+      list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
+      sender_domain = sender_email.sub(/^[^@]*@/, '*@')
+      # check if the domain is valid, if the sender is in the senders
+      # list or if the domain is whitelisted
+      list.include?(sender_email) ||
+        (valid_domain?(sender_domain) && list.include?(sender_domain))
+    end
+
+    def valid_domain?(domain)
+      domain !~ /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/
+    end
+
+    def sender_email
+      @mail.sender_email
+    end
+  end
+end

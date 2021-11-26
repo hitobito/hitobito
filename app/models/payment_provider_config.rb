@@ -24,8 +24,10 @@
 
 class PaymentProviderConfig < ActiveRecord::Base
   include Encryptable
+  include I18nEnums
 
   enum status: [:draft, :pending, :registered]
+  i18n_enum :payment_provider, Settings.payment_providers.map(&:name)
 
   belongs_to :invoice_config
 

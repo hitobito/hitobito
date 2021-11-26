@@ -7,6 +7,7 @@ class CreateFamilyMembers < ActiveRecord::Migration[6.0]
       t.string :family_key, null: false
 
       t.index :family_key
+      t.index [:person_id, :other_id], unique: true
     end
 
     add_column :people, :family_key, :string, null: true

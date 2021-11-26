@@ -20,7 +20,7 @@ module MailingLists
     private
 
     def retriever
-      MailingLists::BulkMailRetriever.new
+      MailingLists::BulkMail::Retriever.new
     end
   end
 end

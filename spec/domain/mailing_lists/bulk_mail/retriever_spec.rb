@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe MailingLists::BulkMailRetriever do
+describe MailingLists::BulkMail::Retriever do
   include MailingLists::ImapMailsHelper
 
   let(:retriever) { described_class.new }
@@ -19,7 +19,8 @@ describe MailingLists::BulkMailRetriever do
     imap_mail = new_imap_mail
 
     # mock imap_connector calls
-    expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return([imap_mail])
+    expect(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
+    expect(imap_connector).to receive(:fetch_mail_by_uid).with(:inbox, 42).and_return([imap_mail])
     expect(imap_connector).to receive(:delete_by_uid).with(:inbox, 42).once
 
     expect do
@@ -34,7 +35,7 @@ describe MailingLists::BulkMailRetriever do
     expect(message.sender).to eq('from@example.com')
     expect(message.state).to eq('pending')
 
-    mail_log = MailLog.first
+    mail_log = message.mail_log
     mail_hash = Digest::MD5.new.hexdigest(imap_mail.mail.raw_source)
     expect(mail_log.mail_hash).to eq(mail_hash)
     expect(mail_log.mailing_list_name).to eq(mailing_list.name)
@@ -43,7 +44,7 @@ describe MailingLists::BulkMailRetriever do
 
   it 'terminates if imap server not reachable' do
     # expect error to be thrown
-    expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(Net::IMAP::NoResponseError)
+    expect(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
 
     # TODO: Maybe ignore some exceptions and create log entries instead. (hitobito#1493)
     expect do
@@ -56,10 +57,9 @@ describe MailingLists::BulkMailRetriever do
     imap_mail = new_imap_mail
 
     # mock imap_connector calls
-    expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return([imap_mail])
+    expect(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
+    expect(imap_connector).to receive(:fetch_mail_by_uid).with(:inbox, 42).and_return([imap_mail])
     expect(imap_connector).to receive(:delete_by_uid).with(:inbox, 42).once
-
-    expect(retriever).to receive(:reject_mail).with(42).once
 
     expect do
       retriever.perform
@@ -71,7 +71,7 @@ describe MailingLists::BulkMailRetriever do
     expect(message.subject).to eq('Supermail report')
     expect(message.sender).to eq('superman')
 
-    mail_log = MailLog.first
+    mail_log = message.mail_log
     mail_hash = Digest::MD5.new.hexdigest(imap_mail.mail.raw_source)
     expect(mail_log.mail_hash).to eq(mail_hash)
     expect(mail_log.mailing_list_name).to eq(mailing_list.name)
@@ -80,10 +80,11 @@ describe MailingLists::BulkMailRetriever do
 
   it 'replies with error mail if sender not allowed to send to mailing list' do
     imap_mails = []
-    expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mails)
-    expect(imap_connector).to receive(:delete).with(:mail_id)
+    expect(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
+    expect(imap_connector).to receive(:fetch_mail_by_uid).with(:inbox, 42).and_return(imap_mails)
+    expect(imap_connector).to receive(:delete_by_uid).with(:inbox, 42).once
 
-    expect(retriever).to receive(:unallowed_sender).once
+    expect(retriever).to receive(:reject_not_allowed).once
 
     expect do
       retriever.perform
@@ -92,7 +93,8 @@ describe MailingLists::BulkMailRetriever do
                  .and change { Delayed::Job.where('handler like "%Messages::BulkMailNotificationJob%"').count }.by(1)
                  .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
 
-    mail_log = MailLog.first
+    message = mailing_list.messages.first
+    mail_log = message.mail_log
     mail_hash = Digest::MD5.new.hexdigest(imap_mail.mail.raw_source)
     expect(mail_log.mail_hash).to eq(mail_hash)
     expect(mail_log.mailing_list_name).to eq(mailing_list.name)
@@ -138,8 +140,8 @@ describe MailingLists::BulkMailRetriever do
       .and change { MailLog.count }.by(0)
       .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
 
-
-    mail_log = MailLog.first
+    message = mailing_list.messages.first
+    mail_log = message.mail_log
     mail_hash = Digest::MD5.new.hexdigest(imap_mail.mail.raw_source)
     expect(mail_log.mail_hash).to eq(mail_hash)
     expect(mail_log.mailing_list_name).to eq(mailing_list.name)

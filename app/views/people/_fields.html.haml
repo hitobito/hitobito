@@ -8,7 +8,7 @@
 -#         Make sure not to use relative partial paths here or in any extensions
 -#         unless these partials also exist in all folders referencing this file here.
 
-- has_relations ||= PeopleRelation.possible_kinds.any?
+- has_relations ||= PeopleRelation.any?
 
 = field_set_tag do
   = f.labeled_input_fields :first_name, :last_name

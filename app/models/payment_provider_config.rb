@@ -38,6 +38,10 @@ class PaymentProviderConfig < ActiveRecord::Base
 
   attr_encrypted :keys, :password
 
+  def empty?
+    partner_identifier.blank? && user_identifier.blank?
+  end
+
   def with_payment_provider(provider)
     self.payment_provider = provider
   end

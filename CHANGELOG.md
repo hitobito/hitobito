@@ -3,6 +3,7 @@
 ## unreleased
 
 *  Personen können neu als Geschwister angegeben werden (hitobito_kljb#5)
+*  Liste der vordefinierten Banken für EBICS-Import erweitert (#1427)
 
 ## Version 1.26
 
@@ -10,6 +11,7 @@
 *  Gruppen können archiviert werden (#1275)
 *  Die API unterstützt jetzt, die Gruppen/Rollen, Anlässe und Einzelpersonen auszulesen, welche bei Abos abonniert sind. (#1398, danke @Michael-Schaer!)
 *  Teilnehmer können zu Anlässen eingeladen werden (#1276)
+*  Zahlungen können direkt von Finanzinstitut via EBICS bezogen werden (#1131)
 *  Personal Access Tokens für die API sind jetzt deprecated. Alle bestehenden Drittapplikationen sollten auf OAuth API Tokens migrieren (siehe https://github.com/hitobito/hitobito/blob/master/doc/development/05_rest_api.md). Diese Entscheidung wurde zusammen mit der hitobito-Community, insbesondere Jubla, CEVI, PBS und SBV gefällt.
 *  Service Tokens haben show_full Berechtigung auf Personen (#1355)
 *  Variable Spendenaufrufe können mittels Rechnungsbrief erstellt werden (hitobito_die_mitte#181)

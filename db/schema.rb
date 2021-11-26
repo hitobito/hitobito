@@ -332,6 +332,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.string "family_key", null: false
     t.index ["family_key"], name: "index_family_members_on_family_key"
     t.index ["other_id"], name: "index_family_members_on_other_id"
+    t.index ["person_id", "other_id"], name: "index_family_members_on_person_id_and_other_id", unique: true
     t.index ["person_id"], name: "index_family_members_on_person_id"
   end
 

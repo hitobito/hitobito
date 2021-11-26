@@ -992,8 +992,17 @@ de:
         password: Passwort
         ini_letter: INI-Brief
         payment_providers:
-          postfinance: Postfinance
+          bancastato: BancaStato
+          bekb: BEKB | BCBE
+          creditsuisse: Credit Suisse
+          lukb: Luzerner Kantonalbank
           postfinance-test: Postfinance Testumgebung
+          postfinance: Postfinance
+          raiffeisen: Raiffeisen Schweiz
+          sgkb: St.Galler Kantonalbank
+          tkb: Thurgauer Kantonalbank
+          ubs: UBS
+          zugerkb: Zuger Kantonalbank
 
       service_token:
         name: Name

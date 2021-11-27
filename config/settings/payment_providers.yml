@@ -51,6 +51,12 @@ payment_providers:
     encryption_hash: FE D7 DA 4E B5 00 71 37 F7 69 4E CC D0 55 A3 78 E8 7C 4B D0 B3 33 BC 75 69 99 4D 9D C2 B1 E5 BE
     authentication_hash: 1E 94 BA 95 5D 47 53 A6 25 22 CB 09 A1 A5 53 36 30 D5 04 99 F7 C3 05 2F 95 88 C6 5F 7F 52 EB DC
 
+  - name: zkb
+    url: https://ebicsweb.zkb.ch/ebicsweb
+    host_id: ZKBKCHZZ
+    encryption_hash: 03 B1 E7 F5 99 3A 0F AD 07 0A 63 59 AC 47 8F F9 86 86 89 4D A0 EF 45 94 17 DC 9B 02 A0 5E D6 42
+    authentication_hash: 03 B1 E7 F5 99 3A 0F AD 07 0A 63 59 AC 47 8F F9 86 86 89 4D A0 EF 45 94 17 DC 9B 02 A0 5E D6 42
+
   # nur C54 statt Z54? Stand 2018?
   - name: bancastato
     url: https://ebics.bancastato.ch

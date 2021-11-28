@@ -69,7 +69,7 @@ describe RoleListsController, js: true do
   end
 
   it 'moves multiple roles' do
-    skip 'expected not to find visible css "tr#person_572408343 td p" with text "Member", found 1 match: "Member"'
+    # skip 'expected not to find visible css "tr#person_572408343 td p" with text "Member", found 1 match: "Member"'
     find(:css, "#ids_[value='#{role1.person.id}']").set(true)
     find(:css, "#ids_[value='#{role2.person.id}']").set(true)
     find(:css, "#ids_[value='#{leader.person.id}']").set(true)

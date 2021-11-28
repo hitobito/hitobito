@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
 #  This file is part of hitobito and licensed under the Affero General Public
 #  License version 3 or later. See the COPYING file at the top-level
 #  directory or at https://github.com/hitobito/hitobito.
@@ -96,10 +96,12 @@ describe PeopleController, js: true do
       expect(page).to have_no_content 'Beziehungen'
     end
 
-    context 'with kinds' do
+    context 'with kinds and existing relations' do
+      let(:relations) { Person.find(user.id).relations_to_tails }
 
       before do
         PeopleRelation.kind_opposites['sibling'] = 'sibling'
+        relations.create!(tail_id: people(:bottom_member).id, kind: 'sibling')
         sign_in(user)
       end
 
@@ -112,15 +114,15 @@ describe PeopleController, js: true do
           visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
           is_expected.to have_content 'Beziehungen'
 
-          find('a[data-association="relations_to_tails"]', text: 'Eintrag hinzufügen').click
-          find('#relations_to_tails_fields input[data-provide=entity]').set('Bottom')
-          find('#relations_to_tails_fields ul.typeahead li').click
+          expect do
+            find('a[data-association="relations_to_tails"]', text: 'Eintrag hinzufügen').click
+            find('#relations_to_tails_fields input[data-provide=entity]').set('Bottom')
+            find('#relations_to_tails_fields ul.typeahead li').click
 
-          all('button', text: 'Speichern').first.click
-          expect(page).to have_content('erfolgreich aktualisiert')
+            all('button', text: 'Speichern').first.click
+            expect(page).to have_content('erfolgreich aktualisiert')
+          end.to change { relations.size }.by(1)
 
-          relations = Person.find(user.id).relations_to_tails
-          expect(relations.size).to eq(1)
           expect(relations.first.opposite.tail_id).to eq(user.id)
         end
       end
@@ -132,14 +134,13 @@ describe PeopleController, js: true do
           visit edit_group_person_path(group_id: groups(:top_group), id: user.id)
           is_expected.to have_content 'Beziehungen'
 
-          find('#relations_to_tails_fields .remove_nested_fields').click
+          expect do
+            find('#relations_to_tails_fields .remove_nested_fields').first.click
 
-          all('button', text: 'Speichern').first.click
-          expect(page).to have_content('erfolgreich aktualisiert')
+            all('button', text: 'Speichern').first.click
+            expect(page).to have_content('erfolgreich aktualisiert')
 
-          relations = Person.find(user.id).relations_to_tails
-          expect(relations.size).to eq(0)
-          expect(PeopleRelation.count).to eq(0)
+          end.to change { relations.size }.by(-1)
         end
       end
     end

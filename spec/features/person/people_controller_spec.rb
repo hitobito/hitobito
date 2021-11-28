@@ -35,7 +35,12 @@ describe PeopleController, js: true do
 
     context 'with permission' do
       let(:user) { people(:top_leader) }
-      before { within(cell) { skip "Unable to find Bearbeiten"; click_link 'Bearbeiten' } }
+      before do
+        within(cell) do
+          skip 'Unable to find Bearbeiten' # reason seems to be changed markup
+          click_link 'Bearbeiten'
+        end
+      end
 
       it 'cancel closes popover' do
         obsolete_node_safe do

@@ -24,7 +24,7 @@ class Imap::Mail
     @net_imap_mail.attr['UID']
   end
 
-  def subject_utf8_encoded
+  def subject
     Mail::Encodings.value_decode(envelope.subject)
   end
 
@@ -59,7 +59,11 @@ class Imap::Mail
   end
 
   def hash
-    Digest::MD5.new.hexdigest(self.mail.raw_source)
+    Digest::MD5.new.hexdigest(raw_source)
+  end
+
+  def raw_source
+    mail.raw_source
   end
 
   def mail

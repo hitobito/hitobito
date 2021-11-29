@@ -19,6 +19,9 @@ module MailingLists::BulkMail
       # is sender email valid?
     end
 
+    def processed_before?
+    end
+
     def sender_allowed?(mailing_list)
       return false unless valid_email?(sender_email)
 

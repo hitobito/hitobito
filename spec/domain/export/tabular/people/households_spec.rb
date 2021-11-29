@@ -36,20 +36,8 @@ describe Export::Tabular::People::Households do
     expect(data[0]).to eq [nil, 'Top Leader', nil, nil, 'Supertown', nil, 'Top']
   end
 
-  it 'accepts a list of non household people' do
-    data = households(Person.where(id: leader).to_a).data_rows.to_a
-    expect(data).to have(1).item
-    expect(data[0]).to eq [nil, 'Top Leader', nil, nil, 'Supertown', nil, 'Top']
-  end
-
   it 'accepts single person array' do
     data = households(Person.where(id: people(:top_leader))).data_rows.to_a
-    expect(data).to have(1).item
-    expect(data[0]).to eq [nil, 'Top Leader', nil, nil, 'Supertown', nil, 'Top']
-  end
-
-  it 'accepts a list of a single person' do
-    data = households(Person.where(id: people(:top_leader)).to_a).data_rows.to_a
     expect(data).to have(1).item
     expect(data[0]).to eq [nil, 'Top Leader', nil, nil, 'Supertown', nil, 'Top']
   end

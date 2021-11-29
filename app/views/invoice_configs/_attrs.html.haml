@@ -28,10 +28,7 @@
 
 - if entry.payment_provider_configs.reject(&:empty?).any?
   %h2= PaymentProviderConfig.model_name.human(count: 2)
-  %dl.dl-horizontal
-    - entry.payment_provider_configs.reject(&:empty?).each do |provider_config|
-      = labeled_attr(provider_config, :payment_provider)
-      = labeled_attr(provider_config, :user_identifier)
-      = labeled_attr(provider_config, :partner_identifier)
-      -if provider_config.pending?
-        %dd= action_button(t('activerecord.attributes.payment_provider_config.ini_letter'), ini_letter_group_payment_provider_config_path(@group, provider_config), :eye, { target: :_blank })
+  - entry.payment_provider_configs.reject(&:empty?).each do |provider_config|
+    = render_attrs(provider_config, :payment_provider, :user_identifier, :partner_identifier)
+    -if provider_config.pending?
+      %dd= action_button(t('activerecord.attributes.payment_provider_config.ini_letter'), ini_letter_group_payment_provider_config_path(@group, provider_config), :eye, { target: :_blank })

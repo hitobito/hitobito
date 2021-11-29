@@ -36,6 +36,7 @@ class MailingLists::BulkMail::Retriever
   end
 
   def process_valid_mail(mail, validator)
+    create_mail_log(mail)
     mailing_list = assign_mailing_list(mail)
     if mailing_list
       process_mailing_list_mail(mail, validator, mailing_list)
@@ -46,7 +47,6 @@ class MailingLists::BulkMail::Retriever
 
   def process_mailing_list_mail(mail, validator, mailing_list)
     bulk_mail_entry = create_bulk_mail_entry(mail, mailing_list)
-    create_mail_log(mail)
     if validator.sender_allowed?(mailing_list)
       bulk_mail_entry.update!(raw_source: mail.raw_source)
       enqueue_dispatch(bulk_mail)

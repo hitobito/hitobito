@@ -66,7 +66,7 @@ class MailLog < ActiveRecord::Base
   end
 
   def mail=(mail)
-    self.mail_from = Array(mail.from).first
+    self.mail_from = mail.sender_email
     self.mail_hash = md5_hash(mail)
     self.message = Message::BulkMail.new(subject: mail.subject, state: :pending)
   end

@@ -23,7 +23,7 @@ class MailingLists::BulkMail::Retriever
     validator = validator(mail)
 
     if validator.processed_before?
-      mail_processed_before!
+      mail_processed_before!(mail)
     end
 
     if validator.valid_mail?
@@ -91,9 +91,11 @@ class MailingLists::BulkMail::Retriever
     # Messages::BulkMailResponseJob.new.enqueue!
   end
 
-  def mail_processed_before!
-    # TODO move mail to failed folder
-    raise MailProcessedBefore
+  def mail_processed_before!(mail)
+    move_mail_to_failed(mail.uid)
+    mail_log = MailLog.find_by(mail_hash: mail.hash)
+    mail_log.mail = mail
+    raise MailingLists::BulkMail::MailProcessedBeforeError, mail_log
   end
 
   # IMAP CONNECTOR

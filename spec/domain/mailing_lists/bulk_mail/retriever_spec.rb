@@ -26,10 +26,11 @@ describe MailingLists::BulkMail::Retriever do
     expect(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(mail42)
     expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
     expect(imap_mail_validator).to receive(:processed_before?).and_return(true)
+    MailLog.create!(mail_hash: 'abcd42')
 
     expect do
       retriever.perform
-    end.to raise_error(MailingLists::BulkMail::MailProcessedBefore)
+    end.to raise_error(MailingLists::BulkMail::MailProcessedBeforeError)
   end
 
   # it 'receives mail and enqueues dispatch' do
@@ -168,7 +169,11 @@ describe MailingLists::BulkMail::Retriever do
   private
 
   def mock_mail(uid)
-    instance_double(Imap::Mail, uid: uid)
+    instance_double(Imap::Mail, uid: uid,
+                    hash: 'abcd42',
+                    subject: 'Mail 42',
+                    sender_email: 'dude@42.example.com',
+                    raw_source: 'add some raw source')
   end
 
 end

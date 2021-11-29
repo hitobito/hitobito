@@ -29,7 +29,7 @@ class MailingLists::BulkMail::Retriever
     if validator.valid_mail?
       process_valid_mail(mail, validator)
     else
-      # TODO maybe log entry?
+      # TODO: maybe log entry?
     end
 
     delete_mail(mail)
@@ -91,7 +91,7 @@ class MailingLists::BulkMail::Retriever
     # Messages::BulkMailResponseJob.new.enqueue!
   end
 
-  def abort_mail_processed_before
+  def mail_processed_before!
     # TODO move mail to failed folder
     raise MailProcessedBefore
   end
@@ -112,5 +112,9 @@ class MailingLists::BulkMail::Retriever
 
   def fetch_mail(uid)
     imap.fetch_mail_by_uid(uid, :inbox)
+  end
+
+  def move_mail_to_failed(uid)
+    imap.move_by_uid(uid, :inbox, :failed)
   end
 end

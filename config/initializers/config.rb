@@ -65,7 +65,7 @@ end
 # additional config-files
 # use add_source for extend-only files
 # and prepend_source for files with overwritable settings
-Rails.application.config.after_initialize do
+Rails.application.config.to_prepare do
   Settings.add_source!(Rails.root.join('config/settings/payment_providers.yml').to_s)
   Settings.reload!
 end

@@ -8,30 +8,28 @@
 
 
 module MailingLists::BulkMail
-  class MailValidator
+  class ImapMailValidator
 
-    def initialize(mail, mailing_list)
+    def initialize(mail)
       @mail = mail
-      @mailing_list = mailing_list
     end
 
-
-    def mail_valid?(mail)
-      # code here
+    def valid_mail?
+      # does the mail have required header
+      # is sender email valid?
     end
 
-    private
-
-    def sender_allowed?
+    def sender_allowed?(mailing_list)
       return false unless valid_email?(sender_email)
 
-      # drop is from method names
       mailing_list.anyone_may_post? ||
         additional_sender? ||
         sender_group_email? ||
         sender_list_administrator? ||
         (mailing_list.subscribers_may_post? && sender_is_list_member?)
     end
+
+    private
 
     def valid_email?(email)
       email.present? && Truemail.valid?(email)

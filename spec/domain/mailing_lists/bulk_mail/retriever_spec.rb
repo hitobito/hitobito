@@ -22,15 +22,17 @@ describe MailingLists::BulkMail::Retriever do
     allow(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
   end
 
-  it 'moves mail to failed and raises exception if processed before' do
-    expect(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(mail42)
-    expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
-    expect(imap_mail_validator).to receive(:processed_before?).and_return(true)
-    MailLog.create!(mail_hash: 'abcd42')
+  context 'mail processed before' do
+    it 'moves mail to failed imap folder and raises exception' do
+      expect(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(mail42)
+      expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
+      expect(imap_mail_validator).to receive(:processed_before?).and_return(true)
+      MailLog.create!(mail_hash: 'abcd42')
 
-    expect do
-      retriever.perform
-    end.to raise_error(MailingLists::BulkMail::MailProcessedBeforeError)
+      expect do
+        retriever.perform
+      end.to raise_error(MailingLists::BulkMail::MailProcessedBeforeError)
+    end
   end
 
   # it 'receives mail and enqueues dispatch' do

@@ -19,19 +19,31 @@ describe MailingLists::BulkMail::Retriever do
   before do
     allow(retriever).to receive(:validator).and_return(imap_mail_validator)
     allow(retriever).to receive(:imap).and_return(imap_connector)
+    allow(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(mail42)
     allow(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
+    allow(imap_mail_validator).to receive(:valid_mail?).and_return(true)
+    allow(imap_mail_validator).to receive(:processed_before?).and_return(false)
   end
 
   context 'mail processed before' do
     it 'moves mail to failed imap folder and raises exception' do
-      expect(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(mail42)
-      expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
       expect(imap_mail_validator).to receive(:processed_before?).and_return(true)
+      expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
+      expect(imap_mail_validator).to receive(:valid_mail?).never
       MailLog.create!(mail_hash: 'abcd42')
 
       expect do
         retriever.perform
       end.to raise_error(MailingLists::BulkMail::MailProcessedBeforeError)
+    end
+  end
+
+  context 'invalid mail' do
+    it 'does not process invalid email and deletes it from imap inbox' do
+      expect(imap_mail_validator).to receive(:valid_mail?).and_return(false)
+      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+
+      retriever.perform
     end
   end
 

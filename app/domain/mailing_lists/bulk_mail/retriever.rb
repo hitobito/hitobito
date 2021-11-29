@@ -32,7 +32,7 @@ class MailingLists::BulkMail::Retriever
       # TODO: maybe log entry?
     end
 
-    delete_mail(mail)
+    delete_mail(mail.uid)
   end
 
   def process_valid_mail(mail, validator)
@@ -109,7 +109,7 @@ class MailingLists::BulkMail::Retriever
   end
 
   def delete_mail(uid)
-    imap.delete_by_uid(uid)
+    imap.delete_by_uid(uid, :inbox)
   end
 
   def fetch_mail(uid)

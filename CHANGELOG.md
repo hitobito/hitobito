@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Personen können neu als Geschwister angegeben werden (hitobito_kljb#5)
+
 ## Version 1.26
 
 *  Es wurde neu eine minimale Passwortlänge von 12 Zeichen für neue Passwörter eingeführt, dies entspricht den Empfehlungen von OWASP (#1429)

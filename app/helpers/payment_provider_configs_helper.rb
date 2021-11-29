@@ -7,11 +7,6 @@
 
 module PaymentProviderConfigsHelper
   def format_payment_provider(config)
-    begin
-      prefix = 'activerecord.attributes.payment_provider_config.payment_providers'
-      t("#{prefix}.#{config.payment_provider}")
-    rescue I18n::MissingTranslationData
-      config.payment_provider
-    end
+    config.payment_provider_label
   end
 end

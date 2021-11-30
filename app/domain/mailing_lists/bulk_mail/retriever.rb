@@ -49,8 +49,9 @@ class MailingLists::BulkMail::Retriever
 
   def process_mailing_list_mail(mail, validator, mailing_list)
     if validator.sender_allowed?(mailing_list)
-      bulk_mail_entry.update!(raw_source: mail.raw_source)
-      enqueue_dispatch(bulk_mail)
+      bulk_mail = mail.mail_log.message
+      bulk_mail.update!(raw_source: mail.raw_source)
+      Messages::DispatchJob.new(bulk_mail).enqueue!
     else
       sender_not_allowed(mail)
     end
@@ -84,10 +85,6 @@ class MailingLists::BulkMail::Retriever
       subject: mail.subject,
       state: :pending
     )
-  end
-
-  def enqueue_bulk_mail_response
-    # Messages::BulkMailResponseJob.new.enqueue!
   end
 
   def mail_processed_before!(mail)

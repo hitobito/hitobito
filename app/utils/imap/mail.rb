@@ -10,7 +10,7 @@ require 'mail'
 
 class Imap::Mail
 
-  attr_accessor :net_imap_mail
+  attr_accessor :net_imap_mail, :mail_log
 
   delegate :subject, :sender, to: :envelope
 
@@ -64,6 +64,10 @@ class Imap::Mail
 
   def raw_source
     mail.raw_source
+  end
+
+  def original_to
+    # TODO: get it from mail header
   end
 
   def mail

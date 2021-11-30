@@ -15,11 +15,13 @@ module MailingLists::BulkMail
     end
 
     def valid_mail?
+      required_header_valid? && sender_email_valid?
       # does the mail have required header
       # is sender email valid?
     end
 
     def processed_before?
+
     end
 
     def sender_allowed?(mailing_list)
@@ -30,6 +32,10 @@ module MailingLists::BulkMail
         sender_group_email? ||
         sender_list_administrator? ||
         (mailing_list.subscribers_may_post? && sender_is_list_member?)
+    end
+
+    def valid_mailing_list_mail?
+      mailing_list.present? && !mailing_list.group.archived?
     end
 
     private

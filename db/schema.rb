@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_13_221149) do
+ActiveRecord::Schema.define(version: 2021_11_30_123141) do
 
-  create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "action_text_rich_texts", charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
     t.string "record_type", null: false
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
-  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "active_storage_attachments", charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8mb4", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -44,13 +44,13 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "active_storage_variant_records", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "additional_emails", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "additional_emails", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false
     t.string "email", null: false
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
   end
 
-  create_table "addresses", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "addresses", charset: "utf8mb4", force: :cascade do |t|
     t.string "street_short", limit: 128, null: false
     t.string "street_short_old", limit: 128, null: false
     t.string "street_long", limit: 128, null: false
@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["zip_code", "street_short"], name: "index_addresses_on_zip_code_and_street_short"
   end
 
-  create_table "assignments", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "assignments", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "person_id", null: false
     t.bigint "creator_id", null: false
     t.string "title", null: false
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["person_id"], name: "index_assignments_on_person_id"
   end
 
-  create_table "cors_origins", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "cors_origins", charset: "utf8mb4", force: :cascade do |t|
     t.string "auth_method_type"
     t.bigint "auth_method_id"
     t.string "origin", null: false
@@ -94,7 +94,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["origin"], name: "index_cors_origins_on_origin"
   end
 
-  create_table "custom_content_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "custom_content_translations", charset: "utf8mb4", force: :cascade do |t|
     t.integer "custom_content_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -105,13 +105,13 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["locale"], name: "index_custom_content_translations_on_locale"
   end
 
-  create_table "custom_contents", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "custom_contents", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "key", null: false
     t.string "placeholders_required"
     t.string "placeholders_optional"
   end
 
-  create_table "delayed_jobs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "delayed_jobs", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "priority", default: 0
     t.integer "attempts", default: 0
     t.text "handler"
@@ -126,7 +126,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "delayed_workers", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "delayed_workers", charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
     t.string "version"
     t.datetime "last_heartbeat_at"
@@ -134,14 +134,14 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.string "label"
   end
 
-  create_table "event_answers", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_answers", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "participation_id", null: false
     t.integer "question_id", null: false
     t.string "answer"
     t.index ["participation_id", "question_id"], name: "index_event_answers_on_participation_id_and_question_id", unique: true
   end
 
-  create_table "event_applications", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_applications", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "priority_1_id", null: false
     t.integer "priority_2_id"
     t.integer "priority_3_id"
@@ -151,13 +151,13 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.text "waiting_list_comment"
   end
 
-  create_table "event_attachments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_attachments", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "event_id", null: false
     t.string "file", null: false
     t.index ["event_id"], name: "index_event_attachments_on_event_id"
   end
 
-  create_table "event_dates", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_dates", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "event_id", null: false
     t.string "label"
     t.datetime "start_at"
@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["event_id"], name: "index_event_dates_on_event_id"
   end
 
-  create_table "event_invitations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_invitations", charset: "utf8mb4", force: :cascade do |t|
     t.string "participation_type", null: false
     t.datetime "declined_at"
     t.datetime "created_at", precision: 6, null: false
@@ -179,14 +179,14 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["person_id"], name: "index_event_invitations_on_person_id"
   end
 
-  create_table "event_kind_categories", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_kind_categories", charset: "utf8mb4", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
     t.integer "order"
   end
 
-  create_table "event_kind_category_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_kind_category_translations", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "event_kind_category_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -196,7 +196,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["locale"], name: "index_event_kind_category_translations_on_locale"
   end
 
-  create_table "event_kind_qualification_kinds", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_kind_qualification_kinds", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "event_kind_id", null: false
     t.integer "qualification_kind_id", null: false
     t.string "category", null: false
@@ -206,7 +206,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["role"], name: "index_event_kind_qualification_kinds_on_role"
   end
 
-  create_table "event_kind_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_kind_translations", charset: "utf8mb4", force: :cascade do |t|
     t.integer "event_kind_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -219,7 +219,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["locale"], name: "index_event_kind_translations_on_locale"
   end
 
-  create_table "event_kinds", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_kinds", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
@@ -227,7 +227,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.integer "kind_category_id"
   end
 
-  create_table "event_participations", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_participations", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "event_id", null: false
     t.integer "person_id", null: false
     t.text "additional_information"
@@ -242,7 +242,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["person_id"], name: "index_event_participations_on_person_id"
   end
 
-  create_table "event_question_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_question_translations", charset: "utf8mb4", force: :cascade do |t|
     t.integer "event_question_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -253,7 +253,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["locale"], name: "index_event_question_translations_on_locale"
   end
 
-  create_table "event_questions", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_questions", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "event_id"
     t.boolean "multiple_choices", default: false, null: false
     t.boolean "required", default: false, null: false
@@ -261,7 +261,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["event_id"], name: "index_event_questions_on_event_id"
   end
 
-  create_table "event_roles", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_roles", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "type", null: false
     t.integer "participation_id", null: false
     t.string "label"
@@ -269,7 +269,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["type"], name: "index_event_roles_on_type"
   end
 
-  create_table "event_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "event_translations", charset: "utf8mb4", force: :cascade do |t|
     t.integer "event_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -282,7 +282,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["locale"], name: "index_event_translations_on_locale"
   end
 
-  create_table "events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "events", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "type"
     t.string "number"
     t.string "motto"
@@ -319,13 +319,13 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end
 
-  create_table "events_groups", id: false, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "events_groups", id: false, charset: "utf8mb4", force: :cascade do |t|
     t.integer "event_id"
     t.integer "group_id"
     t.index ["event_id", "group_id"], name: "index_events_groups_on_event_id_and_group_id", unique: true
   end
 
-  create_table "family_members", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "family_members", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "person_id", null: false
     t.string "kind", null: false
     t.bigint "other_id", null: false
@@ -336,7 +336,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["person_id"], name: "index_family_members_on_person_id"
   end
 
-  create_table "groups", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "groups", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "parent_id"
     t.integer "lft"
     t.integer "rgt"
@@ -366,7 +366,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["type"], name: "index_groups_on_type"
   end
 
-  create_table "help_text_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "help_text_translations", charset: "utf8mb4", force: :cascade do |t|
     t.integer "help_text_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -375,7 +375,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["locale"], name: "index_help_text_translations_on_locale"
   end
 
-  create_table "help_texts", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "help_texts", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "controller", limit: 100, null: false
     t.string "model", limit: 100
     t.string "kind", limit: 100, null: false
@@ -383,7 +383,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["controller", "model", "kind", "name"], name: "index_help_texts_fields", unique: true
   end
 
-  create_table "invoice_articles", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "invoice_articles", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "number"
     t.string "name", null: false
     t.text "description"
@@ -398,7 +398,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["number", "group_id"], name: "index_invoice_articles_on_number_and_group_id", unique: true
   end
 
-  create_table "invoice_configs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "invoice_configs", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "sequence_number", default: 1, null: false
     t.integer "due_days", default: 30, null: false
     t.integer "group_id", null: false
@@ -419,7 +419,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 
-  create_table "invoice_items", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "invoice_items", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "invoice_id", null: false
     t.string "name", null: false
     t.text "description"
@@ -432,7 +432,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
   end
 
-  create_table "invoice_lists", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "invoice_lists", charset: "utf8mb4", force: :cascade do |t|
     t.string "receiver_type"
     t.bigint "receiver_id"
     t.bigint "group_id"
@@ -451,7 +451,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["receiver_type", "receiver_id"], name: "index_invoice_lists_on_receiver_type_and_receiver_id"
   end
 
-  create_table "invoices", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "invoices", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "title", null: false
     t.string "sequence_number", null: false
     t.string "state", default: "draft", null: false
@@ -489,7 +489,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["sequence_number"], name: "index_invoices_on_sequence_number"
   end
 
-  create_table "label_format_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "label_format_translations", charset: "utf8mb4", force: :cascade do |t|
     t.integer "label_format_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -499,7 +499,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["locale"], name: "index_label_format_translations_on_locale"
   end
 
-  create_table "label_formats", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "label_formats", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "page_size", default: "A4", null: false
     t.boolean "landscape", default: false, null: false
     t.float "font_size", default: 11.0, null: false
@@ -514,14 +514,14 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.string "pp_post", limit: 23
   end
 
-  create_table "locations", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "locations", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.string "canton", limit: 2, null: false
     t.string "zip_code", null: false
     t.index ["zip_code", "canton", "name"], name: "index_locations_on_zip_code_and_canton_and_name", unique: true
   end
 
-  create_table "mail_logs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "mail_logs", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "mail_from"
     t.string "mail_hash"
     t.integer "status", default: 0
@@ -533,7 +533,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["message_id"], name: "index_mail_logs_on_message_id"
   end
 
-  create_table "mailing_lists", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "mailing_lists", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.integer "group_id", null: false
     t.text "description"
@@ -555,7 +555,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
 
-  create_table "message_recipients", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "message_recipients", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "message_id", null: false
     t.bigint "person_id"
     t.string "phone_number"
@@ -575,7 +575,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["person_id"], name: "index_message_recipients_on_person_id"
   end
 
-  create_table "messages", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "messages", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "mailing_list_id"
     t.bigint "sender_id"
     t.string "type", null: false
@@ -595,12 +595,13 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.string "shipping_method", default: "own"
     t.boolean "send_to_households", default: false, null: false
     t.boolean "donation_confirmation", default: false, null: false
+    t.text "raw_source", size: :medium
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
 
-  create_table "notes", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "notes", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "subject_id", null: false
     t.integer "author_id", null: false
     t.text "text"
@@ -610,7 +611,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["subject_id"], name: "index_notes_on_subject_id"
   end
 
-  create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "resource_owner_id", null: false
     t.integer "application_id", null: false
     t.string "token", null: false
@@ -625,7 +626,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
 
-  create_table "oauth_access_tokens", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "oauth_access_tokens", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "resource_owner_id"
     t.integer "application_id"
     t.string "token", null: false
@@ -641,7 +642,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
   end
 
-  create_table "oauth_applications", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "oauth_applications", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.string "uid", null: false
     t.string "secret", null: false
@@ -654,13 +655,13 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
-  create_table "oauth_openid_requests", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "oauth_openid_requests", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "access_grant_id", null: false
     t.string "nonce", null: false
     t.index ["access_grant_id"], name: "fk_rails_77114b3b09"
   end
 
-  create_table "payment_provider_configs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "payment_provider_configs", charset: "utf8mb4", force: :cascade do |t|
     t.string "payment_provider"
     t.bigint "invoice_config_id"
     t.integer "status", default: 0, null: false
@@ -674,7 +675,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["invoice_config_id"], name: "index_payment_provider_configs_on_invoice_config_id"
   end
 
-  create_table "payment_reminder_configs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "payment_reminder_configs", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "invoice_config_id", null: false
     t.string "title", null: false
     t.string "text", null: false
@@ -683,7 +684,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["invoice_config_id"], name: "index_payment_reminder_configs_on_invoice_config_id"
   end
 
-  create_table "payment_reminders", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "payment_reminders", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "invoice_id", null: false
     t.date "due_at", null: false
     t.datetime "created_at", null: false
@@ -694,7 +695,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["invoice_id"], name: "index_payment_reminders_on_invoice_id"
   end
 
-  create_table "payments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "payments", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "invoice_id", null: false
     t.decimal "amount", precision: 12, scale: 2, null: false
     t.date "received_at", null: false
@@ -703,7 +704,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["invoice_id"], name: "index_payments_on_invoice_id"
   end
 
-  create_table "people", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "people", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
     t.string "company_name"
@@ -752,7 +753,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["unlock_token"], name: "index_people_on_unlock_token", unique: true
   end
 
-  create_table "people_filters", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "people_filters", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "name", null: false
     t.integer "group_id"
     t.string "group_type"
@@ -763,7 +764,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["group_id", "group_type"], name: "index_people_filters_on_group_id_and_group_type"
   end
 
-  create_table "people_relations", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "people_relations", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "head_id", null: false
     t.integer "tail_id", null: false
     t.string "kind", null: false
@@ -771,24 +772,24 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["tail_id"], name: "index_people_relations_on_tail_id"
   end
 
-  create_table "person_add_request_ignored_approvers", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "person_add_request_ignored_approvers", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "group_id", null: false
     t.integer "person_id", null: false
     t.index ["group_id", "person_id"], name: "person_add_request_ignored_approvers_index", unique: true
   end
 
-  create_table "person_add_requests", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "person_add_requests", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "person_id", null: false
     t.integer "requester_id", null: false
     t.string "type", null: false
     t.integer "body_id", null: false
     t.string "role_type"
-    t.timestamp "created_at", null: false
+    t.timestamp "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["person_id"], name: "index_person_add_requests_on_person_id"
     t.index ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
   end
 
-  create_table "person_duplicates", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "person_duplicates", charset: "utf8mb4", force: :cascade do |t|
     t.integer "person_1_id", null: false
     t.integer "person_2_id", null: false
     t.boolean "ignore", default: false, null: false
@@ -797,7 +798,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["person_1_id", "person_2_id"], name: "index_person_duplicates_on_person_1_id_and_person_2_id", unique: true
   end
 
-  create_table "phone_numbers", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "phone_numbers", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false
     t.string "number", null: false
@@ -806,7 +807,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["contactable_id", "contactable_type"], name: "index_phone_numbers_on_contactable_id_and_contactable_type"
   end
 
-  create_table "qualification_kind_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "qualification_kind_translations", charset: "utf8mb4", force: :cascade do |t|
     t.integer "qualification_kind_id", null: false
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -817,7 +818,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["qualification_kind_id"], name: "index_qualification_kind_translations_on_qualification_kind_id"
   end
 
-  create_table "qualification_kinds", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "qualification_kinds", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "validity"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -825,7 +826,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.integer "reactivateable"
   end
 
-  create_table "qualifications", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "qualifications", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "person_id", null: false
     t.integer "qualification_kind_id", null: false
     t.date "start_at", null: false
@@ -835,7 +836,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["qualification_kind_id"], name: "index_qualifications_on_qualification_kind_id"
   end
 
-  create_table "related_role_types", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "related_role_types", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "relation_id"
     t.string "role_type", null: false
     t.string "relation_type"
@@ -843,7 +844,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["role_type"], name: "index_related_role_types_on_role_type"
   end
 
-  create_table "roles", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "roles", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "person_id", null: false
     t.integer "group_id", null: false
     t.string "type", null: false
@@ -856,7 +857,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["type"], name: "index_roles_on_type"
   end
 
-  create_table "service_tokens", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "service_tokens", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "layer_group_id", null: false
     t.string "name", null: false
     t.text "description"
@@ -873,7 +874,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.boolean "mailing_lists", default: false, null: false
   end
 
-  create_table "sessions", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "sessions", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
     t.datetime "created_at"
@@ -882,7 +883,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
-  create_table "settings", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "settings", charset: "utf8mb4", force: :cascade do |t|
     t.string "var", null: false
     t.text "value"
     t.string "target_type", null: false
@@ -894,7 +895,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["target_type", "target_id"], name: "index_settings_on_target_type_and_target_id"
   end
 
-  create_table "social_accounts", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "social_accounts", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false
     t.string "name", null: false
@@ -903,7 +904,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["contactable_id", "contactable_type"], name: "index_social_accounts_on_contactable_id_and_contactable_type"
   end
 
-  create_table "subscription_tags", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "subscription_tags", charset: "utf8mb4", force: :cascade do |t|
     t.boolean "excluded", default: false
     t.integer "subscription_id", null: false
     t.integer "tag_id", null: false
@@ -911,7 +912,7 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["tag_id"], name: "index_subscription_tags_on_tag_id"
   end
 
-  create_table "subscriptions", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "subscriptions", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "mailing_list_id", null: false
     t.string "subscriber_type", null: false
     t.integer "subscriber_id", null: false
@@ -920,14 +921,14 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["subscriber_id", "subscriber_type"], name: "index_subscriptions_on_subscriber_id_and_subscriber_type"
   end
 
-  create_table "table_displays", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "table_displays", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "type", null: false
     t.integer "person_id", null: false
     t.text "selected"
     t.index ["person_id", "type"], name: "index_table_displays_on_person_id_and_type", unique: true
   end
 
-  create_table "taggings", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "taggings", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "tag_id"
     t.string "taggable_type"
     t.integer "taggable_id"
@@ -949,13 +950,13 @@ ActiveRecord::Schema.define(version: 2021_11_13_221149) do
     t.index ["tenant"], name: "index_taggings_on_tenant"
   end
 
-  create_table "tags", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "tags", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "versions", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "versions", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.string "item_type", null: false
     t.integer "item_id", null: false
     t.string "event", null: false

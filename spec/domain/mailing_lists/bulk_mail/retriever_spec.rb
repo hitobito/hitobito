@@ -63,9 +63,32 @@ describe MailingLists::BulkMail::Retriever do
       mail_log = MailLog.find_by(mail_hash: 'abcd42')
       expect(mail_log.status).to eq('unknown_recipient')
       expect(mail_log.mail_from).to eq('dude@hitobito.example.com')
+
+      message = mail_log.message
+      expect(message.subject).to eq('Mail 42')
+      expect(message.state).to eq('failed')
+      expect(message.state).to eq('failed')
     end
 
     it 'does not process mail if sender is not allowed to send to list' do
+      expect(mail42).to receive(:original_to).and_return('leaders@localhost:3000')
+      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+      expect(imap_mail_validator).to receive(:sender_allowed?).and_return(false)
+
+      expect do
+        retriever.perform
+      end.to change { Message::BulkMail.count }.by(1)
+        .and change { MailLog.count }.by(1)
+        .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
+        .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::ResponseMessageJob%"').count }.by(1)
+
+      mail_log = MailLog.find_by(mail_hash: 'abcd42')
+      expect(mail_log.status).to eq('sender_rejected')
+      expect(mail_log.mail_from).to eq('dude@hitobito.example.com')
+
+      message = mail_log.message
+      expect(message.subject).to eq('Mail 42')
+      expect(message.state).to eq('failed')
     end
 
     it 'does process mail and enqueues job for mail delivery' do

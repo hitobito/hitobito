@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.26
 
 *  Personen können neu als Geschwister angegeben werden (hitobito_kljb#5)
 *  Liste der vordefinierten Banken für EBICS-Import erweitert (#1427)

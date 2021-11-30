@@ -67,7 +67,7 @@ class Imap::Mail
   end
 
   def original_to
-    # TODO: get it from mail header
+    mail.header['X-Original-To'].value
   end
 
   def mail

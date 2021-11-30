@@ -14,7 +14,7 @@ describe MailingLists::BulkMail::Retriever do
   let(:imap_connector) { instance_double(Imap::Connector) }
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:imap_mail_validator) { instance_double(MailingLists::BulkMail::ImapMailValidator) }
-  let(:mail42) { mock_mail(42) }
+  let(:mail42) { imap_mail(42) }
 
   before do
     allow(retriever).to receive(:validator).and_return(imap_mail_validator)
@@ -30,6 +30,7 @@ describe MailingLists::BulkMail::Retriever do
       expect(imap_mail_validator).to receive(:processed_before?).and_return(true)
       expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
       expect(imap_mail_validator).to receive(:valid_mail?).never
+      expect(imap_connector).to receive(:delete_by_uid).never
       MailLog.create!(mail_hash: 'abcd42')
 
       expect do
@@ -42,8 +43,32 @@ describe MailingLists::BulkMail::Retriever do
     it 'does not process invalid email and deletes it from imap inbox' do
       expect(imap_mail_validator).to receive(:valid_mail?).and_return(false)
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+      # TODO: check for log entry
 
       retriever.perform
+    end
+  end
+
+  context 'process mail' do
+    it 'does not process mail if no mailing list can be assigned' do
+      expect(mail42).to receive(:original_to).and_return('nolist@localhost:3000')
+      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+
+      expect do
+        retriever.perform
+      end.to change { Message::BulkMail.count }.by(1)
+        .and change { MailLog.count }.by(1)
+        .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
+
+      mail_log = MailLog.find_by(mail_hash: 'abcd42')
+      expect(mail_log.status).to eq('unknown_recipient')
+      expect(mail_log.mail_from).to eq('dude@hitobito.example.com')
+    end
+
+    it 'does not process mail if sender is not allowed to send to list' do
+    end
+
+    it 'does process mail and enqueues job for mail delivery' do
     end
   end
 
@@ -182,12 +207,15 @@ describe MailingLists::BulkMail::Retriever do
   # end
   private
 
-  def mock_mail(uid)
-    instance_double(Imap::Mail, uid: uid,
-                    hash: 'abcd42',
-                    subject: 'Mail 42',
-                    sender_email: 'dude@42.example.com',
-                    raw_source: 'add some raw source')
+  def imap_mail(uid)
+    mail = Imap::Mail.new
+    allow(mail).to receive(:uid).and_return(uid)
+    allow(mail).to receive(:subject).and_return('Mail 42')
+    allow(mail).to receive(:original_to).and_return('leaders@localhost:3000')
+    allow(mail).to receive(:hash).and_return('abcd42')
+    allow(mail).to receive(:sender_email).and_return('dude@hitobito.example.com')
+    allow(mail).to receive(:raw_source).and_return('raw-source')
+    mail
   end
 
 end

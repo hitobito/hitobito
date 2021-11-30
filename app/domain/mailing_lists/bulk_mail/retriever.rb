@@ -26,21 +26,23 @@ class MailingLists::BulkMail::Retriever
       mail_processed_before!(mail)
     end
 
+    mail.mail_log = create_entries(mail)
+
     if validator.valid_mail?
       process_valid_mail(mail, validator)
     else
       # TODO: maybe log entry?
     end
 
-    delete_mail(mail.uid)
+    delete_mail(mail_uid)
   end
 
   def process_valid_mail(mail, validator)
-    create_mail_log(mail)
     mailing_list = assign_mailing_list(mail)
     if mailing_list
       process_mailing_list_mail(mail, validator, mailing_list)
     else
+      mail.mail_log.update!(status: :unknown_recipient)
       # TODO maybe log entry?
     end
   end
@@ -64,22 +66,23 @@ class MailingLists::BulkMail::Retriever
   end
 
   def assign_mailing_list(mail)
-    # MailingList.find_by
+    mail_name = mail.original_to.split('@', 2).first
+    MailingList.find_by(mail_name: mail_name)
+  end
+
+  def create_entries(mail)
+    MailLog.create!(
+      mail_hash: mail.hash,
+      status: :retrieved,
+      mail_from: mail.sender_email,
+      message: create_bulk_mail_entry(mail)
+    )
   end
 
   def create_bulk_mail_entry(mail)
     Message::BulkMail.create!(
-      subject: mail.subject_utf8_encoded,
-      text: mail.net_imap_mail.to_json,
-      sender_id: sender_id)
-  end
-
-  def create_mail_log(mail)
-    mail_log = MailLog.find_by(mail_hash: mail.hash)
-
-    MailLog.create!(
-      mail_hash: mail.hash,
-      status: :retreived
+      subject: mail.subject,
+      state: :pending
     )
   end
 

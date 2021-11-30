@@ -44,6 +44,16 @@ describe Invoice::PaymentProcessor do
     expect(list.reload.recipients_paid).to eq 1
   end
 
+  it 'creates payment and marks scor referenced invoice as payed' do
+    invoice.update_columns(reference: Invoice::ScorReference.create('000000100000000000905'),
+                           esr_number: '00 00000 00000 10000 00000 00905',
+                           total: 710.82)
+    expect do
+      expect(parser.process).to eq 1
+    end.to change { Payment.count }.by(1)
+    expect(invoice.reload).to be_payed
+  end
+
 
   it 'invalid payments only produce set alert' do
     expect(parser.alert).to be_present

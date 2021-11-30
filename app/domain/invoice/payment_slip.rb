@@ -13,12 +13,16 @@ class Invoice::PaymentSlip
 
   attr_reader :invoice
 
+  def self.format_as_esr(string)
+    string.reverse.gsub(/(.{5})/, '\1 ').reverse
+  end
+
   def initialize(invoice = nil)
     @invoice = invoice
   end
 
   def esr_number
-    format_as_esr(number_string_with_check)
+    Invoice::PaymentSlip.format_as_esr(number_string_with_check)
   end
 
   def check_digit(string)
@@ -82,10 +86,6 @@ class Invoice::PaymentSlip
 
   def zero_padded(string, length)
     format("%0#{length}d", string[0..(length - 1)].to_i)
-  end
-
-  def format_as_esr(string)
-    string.reverse.gsub(/(.{5})/, '\1 ').reverse
   end
 
 end

@@ -79,6 +79,32 @@ describe Payments::EbicsImport do
     end.to change { Payment.count }.by(1)
   end
   
+  it 'creates payment by scor reference' do
+    expect(epics_client).to receive(:HPB)
+
+    expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
+
+    expect(payment_provider).to receive(:Z54).and_return(invoice_files)
+
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+
+    list = InvoiceList.create(title: 'membership fee', invoices: [invoice])
+
+    invoice.update(reference: Invoice::ScorReference.create('000000100000000000800'),
+                   esr_number: '00 00000 00000 10000 00000 00800')
+    expect(list.amount_paid).to eq(0)
+    expect do
+      payments = subject.run
+
+      expect(payments.size).to eq(1)
+
+      payment = payments.first
+      expect(payment.invoice).to eq(invoice)
+      expect(payment.transaction_identifier).to eq("20180314001221000006915")
+      expect(list.reload.amount_paid.to_s).to eq('710.82')
+    end.to change { Payment.count }.by(1)
+  end
+  
   it 'does not save if invoice not found' do
     expect(epics_client).to receive(:HPB)
 

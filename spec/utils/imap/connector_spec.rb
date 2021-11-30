@@ -15,9 +15,9 @@ describe Imap::Connector do
   let(:net_imap) { double(:net_imap) }
   let(:imap_connector) { Imap::Connector.new }
 
-  let(:imap_fetch_data_1) { new_imap_fetch_data }
-  let(:imap_fetch_data_2) { new_imap_fetch_data(false) }
-  let(:imap_fetch_data) { [imap_fetch_data_1, imap_fetch_data_2] }
+  let(:imap_fetch_data_1) { imap_fetch_data }
+  let(:imap_fetch_data_2) { imap_fetch_data(plain_body: false) }
+  let(:imap_fetch_data_array) { [imap_fetch_data_1, imap_fetch_data_2] }
   let(:imap_fetched_uids) { [42, 43] }
 
   let(:fetch_attributes) { %w(ENVELOPE UID RFC822) }
@@ -104,7 +104,7 @@ describe Imap::Connector do
       expect(net_imap).to receive(:status).with('INBOX', array_including('MESSAGES')).and_return({ 'MESSAGES' => 2 })
 
       # fetch
-      expect(net_imap).to receive(:fetch).with(1..2, fetch_attributes).and_return(imap_fetch_data)
+      expect(net_imap).to receive(:fetch).with(1..2, fetch_attributes).and_return(imap_fetch_data_array)
 
       # disconnect
       expect(net_imap).to receive(:close)

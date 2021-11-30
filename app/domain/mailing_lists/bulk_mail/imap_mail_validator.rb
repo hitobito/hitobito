@@ -15,7 +15,8 @@ module MailingLists::BulkMail
     end
 
     def valid_mail?
-      required_header_valid? && sender_email_valid?
+      # required_header_valid? && sender_email_valid?
+
       # does the mail have required header
       # is sender email valid?
     end

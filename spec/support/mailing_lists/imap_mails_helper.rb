@@ -2,20 +2,18 @@
 
 module MailingLists::ImapMailsHelper
 
-  def new_imap_mail(text_body = true)
-    fetch_data_id = text_body ? 1 : 2
-    imap_mail = Net::IMAP::FetchData.new(fetch_data_id, mail_attrs(text_body))
-    Imap::Mail.build(imap_mail)
+  def imap_mail(plain_body: true)
+    Imap::Mail.build(imap_fetch_data(plain_body: plain_body))
   end
 
-  def new_imap_fetch_data(text_body = true)
-    fetch_data_id = text_body ? 1 : 2
-    Net::IMAP::FetchData.new(fetch_data_id, mail_attrs(text_body))
+  def imap_fetch_data(plain_body: true)
+    fetch_data_id = plain_body ? 1 : 2
+    Net::IMAP::FetchData.new(fetch_data_id, mail_attrs(plain_body))
   end
 
   private
 
-  def new_plain_text_mail
+  def plain_text_mail
     Mail.new do
       from    'from@example.com'
       to      'to@example.com'
@@ -24,7 +22,7 @@ module MailingLists::ImapMailsHelper
     end
   end
 
-  def new_multipart_mail
+  def multipart_mail
     Mail.new do
       from    'from@example.com'
       to      'to@example.com'
@@ -41,14 +39,14 @@ module MailingLists::ImapMailsHelper
     end
   end
 
-  def mail_attrs(text_body)
-    mail = text_body ? new_plain_text_mail : new_multipart_mail
+  def mail_attrs(plain_body)
+    mail = plain_body ? plain_text_mail : multipart_mail
 
     {
-      'UID' => text_body ? '42' : '43',
+      'UID' => plain_body ? '42' : '43',
       'RFC822' => mail.to_s,
       'ENVELOPE' => new_envelope,
-      'BODYSTRUCTURE' => text_body ? new_text_body : new_html_body_type,
+      'BODYSTRUCTURE' => plain_body ? text_body : html_body,
       'BODY[TEXT]' => mail.body.to_s
     }
   end
@@ -73,11 +71,11 @@ module MailingLists::ImapMailsHelper
     )
   end
 
-  def new_text_body
+  def text_body
     Net::IMAP::BodyTypeText.new('TEXT')
   end
 
-  def new_html_body_type
+  def html_body
     Net::IMAP::BodyTypeMultipart.new('MULTIPART')
   end
 end

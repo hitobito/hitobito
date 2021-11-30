@@ -1097,8 +1097,6 @@ it:
         import_details_html: >
             Le persone seguenti sono importate con il ruolo<strong>%{role}</strong>
             nel gruppo<strong> %{group}</strong>.
-    add_request_mailer:
-      request_link: Rispondere alla richiesta
     subscriptions:
       index:
         my_subscriptions: I miei abbonamenti

@@ -902,8 +902,6 @@ en:
         import_details_html: >
             The following persons will be importet with the <strong>role %{role}</strong>
             into the <strong>group %{group}</strong>.
-    add_request_mailer:
-      request_link: Answer request
     subscriptions:
       index:
         my_subscriptions: My Subscriptions

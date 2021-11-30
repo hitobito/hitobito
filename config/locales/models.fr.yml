@@ -892,8 +892,8 @@ fr:
         password: mot de passe
         ini_letter: lettre pour l'initialisation
         payment_providers:
-          postfinance: Postfinance
           postfinance-test: environnement de test de PostFinance
+          postfinance: Postfinance
       service_token:
         name: Nom
         description: Description

@@ -891,8 +891,8 @@ it:
         password: password
         ini_letter: INI lettera
         payment_providers:
-          postfinance: Postfinance
           postfinance-test: ambiente test Postfinance
+          postfinance: Postfinance
       service_token:
         name: Cognome
         description: Descrizione

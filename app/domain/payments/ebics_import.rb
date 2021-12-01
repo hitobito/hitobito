@@ -23,7 +23,7 @@ class Payments::EbicsImport
 
     payment_provider.HPB
 
-    invoice_xmls = payment_provider.Z54
+    invoice_xmls = payment_provider.Z54(Time.zone.yesterday, Time.zone.today)
 
     invoice_xmls.flat_map { |xml| payments_from_xml(xml) }
   rescue Epics::Error::BusinessError => e

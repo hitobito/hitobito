@@ -23,7 +23,7 @@ class Event::Filter
   def scope
     Event # nesting restricts to parent, we want more
       .where(type: type)
-      .includes(:groups)
+      .includes(:groups, :translations, :events_groups)
       .left_joins(:translations)
       .with_group_id(relevant_group_ids)
       .in_year(year)

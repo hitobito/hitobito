@@ -19,10 +19,8 @@ jobs:
       
       - name: Install security scanners
         run: |
-          gem install bundler-audit
           gem install brakeman
 
       - name: Run security checks
         run: |
-          bundler-audit --update
           brakeman -q -w2

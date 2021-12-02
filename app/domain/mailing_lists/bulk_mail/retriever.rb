@@ -68,7 +68,7 @@ class MailingLists::BulkMail::Retriever
 
   def assign_mailing_list(mail)
     mail_name = mail.original_to.split('@', 2).first
-    MailingList.find_by(mail_name: mail_name)
+    MailingList.joins(:group).where(group: { archived_at: nil }).find_by(mail_name: mail_name)
   end
 
   def create_entries(mail)

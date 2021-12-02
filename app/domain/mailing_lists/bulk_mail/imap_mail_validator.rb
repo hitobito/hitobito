@@ -15,10 +15,7 @@ module MailingLists::BulkMail
     end
 
     def valid_mail?
-      # required_header_valid? && sender_email_valid?
-
-      # does the mail have required header
-      # is sender email valid?
+      required_header_present? && sender_email_valid?
     end
 
     def processed_before?
@@ -41,13 +38,8 @@ module MailingLists::BulkMail
 
     private
 
-    def valid_email?(email)
-      email.present? && Truemail.valid?(email)
-    end
-
+    # TODO: adjust method
     def additional_sender?
-      return false if sender_email.blank?
-
       additional_senders = mailing_list.additional_sender.to_s
       list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
       sender_domain = sender_email.sub(/^[^@]*@/, '*@')
@@ -57,12 +49,45 @@ module MailingLists::BulkMail
         (valid_domain?(sender_domain) && list.include?(sender_domain))
     end
 
+    # VALIDATORS
+
+    def required_header_present?
+      valid_email?(receiver_from_header || receiver_from_mail)
+    end
+
+    def sender_email_valid?
+      valid_email?(@mail.sender_email)
+    end
+
+    def valid_email?(email)
+      email.present? && Truemail.valid?(email)
+    end
+
     def valid_domain?(domain)
       domain !~ /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/
     end
 
+    # GETTERS
+
+    def receiver_from_mail
+      @mail.email_to.presence
+    end
+
+    def receiver_from_header
+      binding.pry
+      first_header('X-Original-To').presence
+    end
+
     def sender_email
       @mail.sender_email
+    end
+
+    def first_header(header_name)
+      first_header = Array(@mail.mail.header[header_name]).first
+
+      return nil if first_header.nil?
+
+      first_header.value
     end
   end
 end

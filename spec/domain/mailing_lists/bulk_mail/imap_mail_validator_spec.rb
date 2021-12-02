@@ -13,11 +13,14 @@ describe MailingLists::BulkMail::ImapMailValidator do
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:mail_log) { class_double(MailLog) }
 
+  before do
+    allow(Truemail).to receive(:valid?).and_call_original
+  end
+
   describe '#valid_mail?' do
     context 'validating headers' do
+      let(:plain_body_mail) { imap_mail(plain_body: false) }
       it 'return true if X-Original-To header present' do
-        plain_body_mail = imap_mail(plain_body: false)
-
         plain_body_mail.mail.header['X-Original-To'] = 'spacex@to.example.com'
 
         validator = described_class.new(plain_body_mail)
@@ -26,8 +29,13 @@ describe MailingLists::BulkMail::ImapMailValidator do
       end
 
       it 'return true if email recipient header present' do
-        plain_body_mail = imap_mail(plain_body: false)
+        # email_to is already mocked
+        validator = described_class.new(plain_body_mail)
 
+        expect(validator.valid_mail?).to eq(true)
+      end
+
+      it 'return true if multiple email recipient header present' do
         # email_to is already mocked
         validator = described_class.new(plain_body_mail)
 
@@ -35,8 +43,6 @@ describe MailingLists::BulkMail::ImapMailValidator do
       end
 
       it 'returns false if mandatory headers not present' do
-        plain_body_mail = imap_mail(plain_body: false)
-
         # remove mandatory headers
         plain_body_mail.mail.header['X-Original-To'] = ''
         plain_body_mail.net_imap_mail.attr['ENVELOPE'].to[0].mailbox = ''
@@ -49,7 +55,6 @@ describe MailingLists::BulkMail::ImapMailValidator do
     end
 
     context 'sender validation' do
-      # TODO: ignore truemail mock. I found no easy solution for this @mtnstar
       it 'returns false if sender invalid' do
         plain_body_mail = imap_mail(plain_body: false)
 

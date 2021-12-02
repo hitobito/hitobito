@@ -11,16 +11,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
-      - name: Install security scanners
-        run: |
-          gem install bundler-audit
-          gem install brakeman
 
       - name: Setup Ruby and install gems
         uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
         with:
           bundler-cache: true
+      
+      - name: Install security scanners
+        run: |
+          gem install bundler-audit
+          gem install brakeman
 
       - name: Run security checks
         run: |

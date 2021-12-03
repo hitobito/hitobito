@@ -39,7 +39,7 @@ class InvoiceConfig < ActiveRecord::Base
 
   IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/.freeze
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/.freeze
-  PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}/.freeze
+  PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}\z/.freeze
 
   belongs_to :group, class_name: 'Group'
 

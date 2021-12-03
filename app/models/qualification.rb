@@ -64,15 +64,12 @@ class Qualification < ActiveRecord::Base
         where('qualifications.finish_at IS NULL OR ' \
               '(qualification_kinds.reactivateable IS NULL AND ' \
               ' qualifications.finish_at >= ?) OR ' \
-              "#{add_reactivateable_years_to_finish_at} >= ?",
+              'DATE_ADD(qualifications.finish_at, ' \
+                'INTERVAL qualification_kinds.reactivateable YEAR) >= ?',
               date, date)
     end
 
     private
-
-    def add_reactivateable_years_to_finish_at
-      'DATE_ADD(qualifications.finish_at, INTERVAL qualification_kinds.reactivateable YEAR)'
-    end
 
   end
 

@@ -13,10 +13,11 @@ class ErrorsController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  def show
-    status_code = params[:code] || 500
-    formats = request.format.json? ? [:json] : [:html]
-    render status_code.to_s, status: status_code, formats: formats
+  %w(404 500 503).each do |code|
+    define_method("show#{code}") do
+      formats = request.format.json? ? [:json] : [:html]
+      render code, status: code, formats: formats
+    end
   end
 
   private

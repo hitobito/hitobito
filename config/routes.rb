@@ -32,7 +32,7 @@ Hitobito::Application.routes.draw do
     end
 
     %w(404 500 503).each do |code|
-      get code, to: 'errors#show', code: code
+      get code, to: "errors#show#{code}"
     end
 
 

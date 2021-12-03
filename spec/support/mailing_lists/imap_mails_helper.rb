@@ -67,7 +67,7 @@ module MailingLists::ImapMailsHelper
       name,
       nil,
       'john',
-      "#{name}.example.com"
+      "#{name}.com"
     )
   end
 

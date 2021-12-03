@@ -5,8 +5,6 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
 
-
-
 module MailingLists::BulkMail
   class ImapMailValidator
 
@@ -19,35 +17,17 @@ module MailingLists::BulkMail
     end
 
     def processed_before?
-
+      mail_log = MailLog.find_by(mail_hash: @mail.hash)
+      mail_log.present?
     end
 
     def sender_allowed?(mailing_list)
-      return false unless valid_email?(sender_email)
-
-      mailing_list.anyone_may_post? ||
-        additional_sender? ||
-        sender_group_email? ||
-        sender_list_administrator? ||
-        (mailing_list.subscribers_may_post? && sender_is_list_member?)
-    end
-
-    def valid_mailing_list_mail?
-      mailing_list.present? && !mailing_list.group.archived?
+      sender_included?(mailing_list) ||
+      sender_list_administrator?     ||
+      mailing_list_allowed?(mailing_list)
     end
 
     private
-
-    # TODO: adjust method
-    def additional_sender?
-      additional_senders = mailing_list.additional_sender.to_s
-      list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
-      sender_domain = sender_email.sub(/^[^@]*@/, '*@')
-      # check if the domain is valid, if the sender is in the senders
-      # list or if the domain is whitelisted
-      list.include?(sender_email) ||
-        (valid_domain?(sender_domain) && list.include?(sender_domain))
-    end
 
     # VALIDATORS
 
@@ -67,6 +47,47 @@ module MailingLists::BulkMail
       domain !~ /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/
     end
 
+    def sender_included?(mailing_list)
+      additional_sender?(mailing_list) || sender_is_group_member?(mailing_list)
+    end
+
+    def mailing_list_allowed?(mailing_list)
+      mailing_list.anyone_may_post? || (mailing_list.subscribers_may_post? && sender_is_list_member?(mailing_list))
+    end
+
+    def sender_is_group_member?(mailing_list)
+      group = mailing_list.group
+      sender_email_is_group_email?(group) || sender_additional_group_sender?(group)
+    end
+
+    def sender_email_is_group_email?(group)
+      group.email == @mail.sender_email
+    end
+
+    def sender_additional_group_sender?(group)
+      group.additional_emails.collect(&:email).include?(@mail.sender_email)
+    end
+
+    def sender_is_list_member?(mailing_list)
+      mailing_list.people.where(id: potential_senders.select(:id)).exists?
+    end
+
+    def sender_list_administrator?
+      possible_senders.any? do |sender|
+        Ability.new(sender).can?(:update, mailing_list)
+      end
+    end
+
+    def additional_sender?(mailing_list)
+      additional_senders = mailing_list.additional_sender.to_s
+      list = additional_senders.split(/[,;]/).collect(&:strip).select(&:present?)
+      sender_domain = sender_email.sub(/^[^@]*@/, '*@')
+      # check if the domain is valid, if the sender is in the senders
+      # list or if the domain is whitelisted
+      list.include?(sender_email) ||
+        (valid_domain?(sender_domain) && list.include?(sender_domain))
+    end
+
     # GETTERS
 
     def receiver_from_mail
@@ -74,7 +95,6 @@ module MailingLists::BulkMail
     end
 
     def receiver_from_header
-      binding.pry
       first_header('X-Original-To').presence
     end
 
@@ -88,6 +108,15 @@ module MailingLists::BulkMail
       return nil if first_header.nil?
 
       first_header.value
+    end
+
+    def possible_senders
+      sender_email = @mail.sender_email
+
+      @possible_senders ||= Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
+                   " AND additional_emails.contactable_type = '#{Person.sti_name}'")
+                                  .where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email)
+                                  .distinct
     end
   end
 end

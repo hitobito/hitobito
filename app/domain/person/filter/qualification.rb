@@ -93,8 +93,8 @@ class Person::Filter::Qualification < Person::Filter::Base
     untils = args["#{attr}_year_until"].to_i
 
     scope = ::Qualification.all
-    scope = scope.where("#{attr} >= ?", Date.new(from, 1, 1)) if from > 0
-    scope = scope.where("#{attr} <= ?", Date.new(untils, 12, 31)) if untils > 0
+    scope = scope.where(Qualification.arel_table[attr].gteq(Date.new(from, 1, 1))) if from > 0
+    scope = scope.where(Qualification.arel_table[attr].lteq(Date.new(untils, 12, 31))) if untils > 0
     scope
   end
 

@@ -1,16 +1,27 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Cross Site Scripting",
+      "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "4000ff73f6b8ea02cc258bc13979b5f086367affcae15ec82e7fd38d32825bac",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/devise/sessions/_info.html.haml",
       "line": 3,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "CustomContent.get(\"views/devise/sessions/info\").body.to_s",
-      "render_path": [{"type":"template","name":"devise/sessions/new","line":8,"file":"app/views/devise/sessions/new.html.haml"}],
+      "render_path": [
+        {
+          "type": "template",
+          "name": "devise/sessions/new",
+          "line": 11,
+          "file": "app/views/devise/sessions/new.html.haml",
+          "rendered": {
+            "name": "devise/sessions/_info",
+            "file": "app/views/devise/sessions/_info.html.haml"
+          }
+        }
+      ],
       "location": {
         "type": "template",
         "template": "devise/sessions/_info"
@@ -18,8 +29,28 @@
       "user_input": null,
       "confidence": "Medium",
       "note": "HTML Tags ARE allowed here"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "b216097a885c4749beec71b32c00a8da56ce498c519675a10a03a28b3eaf73a0",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/mail_relay/lists.rb",
+      "line": 117,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "from(\"#{envelope_receiver_name}#{\"-bounces\"}@#{mail_domain}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "MailRelay::Lists",
+        "method": "prepare_not_allowed_message"
+      },
+      "user_input": "envelope_receiver_name",
+      "confidence": "Medium",
+      "note": "This from() is not part of an SQL query builder, but rather an email builder"
     }
   ],
-  "updated": "2018-07-10 16:55:10 +0200",
-  "brakeman_version": "3.5.0"
+  "updated": "2021-12-03 16:47:00 +0000",
+  "brakeman_version": "5.1.2"
 }

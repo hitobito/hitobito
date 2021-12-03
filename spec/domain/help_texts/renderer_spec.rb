@@ -123,27 +123,22 @@ describe HelpTexts::Renderer do
     subject { HelpTexts::Renderer.new(template) }
     let(:controller) { EventsController.new }
 
-    it 'derives from type param' do
-      expect(template).to receive(:params).and_return(type: 'Event::Course').twice
-      expect(subject.entry).to be_instance_of(Event::Course)
-    end
-
     it 'derives from controller.model_class for index action ' do
       allow(template).to receive(:action_name).and_return('index')
-      expect(template).to receive(:params).and_return(group_id: groups(:top_group).id)
+      allow(template).to receive(:params).and_return(group_id: groups(:top_group).id)
       expect(subject.entry).to be_instance_of(Event)
     end
 
     it 'derives from controller#entry' do
       allow(template).to receive(:action_name).and_return('show')
-      expect(template).to receive(:params).and_return(group_id: groups(:top_group).id)
+      allow(template).to receive(:params).and_return(group_id: groups(:top_group).id)
       expect(template.controller).to receive(:entry).and_return(events(:top_course))
       expect(subject.entry).to eq events(:top_course)
     end
 
     it 'unwraps decorated entry from controller#entry' do
       allow(template).to receive(:action_name).and_return('show')
-      expect(template).to receive(:params).and_return(group_id: groups(:top_group).id)
+      allow(template).to receive(:params).and_return(group_id: groups(:top_group).id)
       expect(template.controller).to receive(:entry).and_return(events(:top_course).decorate)
       expect(subject.entry).to eq events(:top_course)
     end

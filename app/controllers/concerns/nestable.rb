@@ -64,8 +64,8 @@ module Nestable
     parent = nil
     Array(optional_nesting).each do |clazz|
       key = parent_key_name(clazz)
-      id = params["#{key}_id"]
-      if id && request.path =~ /\/#{key.pluralize}\/#{id}\//
+      id = params["#{key}_id"].to_i
+      if id && request.path.include?("/#{key.pluralize}/#{id}/")
         parent = [parent_entry(clazz)]
         break
       end

@@ -8,6 +8,10 @@
 
 module Oauth
   class ProfilesController < ActionController::Base
+
+    # Make brakeman happy, even though we don't have any POST actions in this controller
+    protect_from_forgery with: :exception
+
     before_action do
       doorkeeper_authorize! :with_roles, :email, :name
     end

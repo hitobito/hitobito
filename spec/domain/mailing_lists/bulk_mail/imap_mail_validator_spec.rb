@@ -10,9 +10,9 @@ require 'spec_helper'
 describe MailingLists::BulkMail::ImapMailValidator do
   include MailingLists::ImapMailsHelper
 
-  let(:mailing_list) { mailing_lists(:leaders) }
-  let(:imap_mail) { built_imap_mail(plain_body: false) }
   let(:validator) { described_class.new(imap_mail) }
+  let(:imap_mail) { built_imap_mail(plain_body: false) }
+  let(:mailing_list) { mailing_lists(:leaders) }
   let(:top_leader) { people(:top_leader) }
 
   before do
@@ -21,26 +21,25 @@ describe MailingLists::BulkMail::ImapMailValidator do
 
   describe '#valid_mail?' do
     context 'validating headers' do
-      it 'return true if X-Original-To header present' do
+      it 'is valid if X-Original-To header present' do
         imap_mail.mail.header['X-Original-To'] = 'spacex@example.com'
 
         expect(validator.valid_mail?).to eq(true)
       end
 
-      it 'return true if email recipient header present' do
-        # email_to is already mocked
+      it 'is valid if email recipient header present' do
         expect(validator.valid_mail?).to eq(true)
       end
 
-      it 'return true if multiple email recipient header present' do
+      it 'is valid if multiple email recipient header present' do
         imap_mail.mail.header['X-Original-To'] = 'spacex@example.com'
         imap_mail.mail.header['X-Original-To'] = 'spacey@example.com'
 
         expect(validator.valid_mail?).to eq(true)
       end
 
-      it 'returns false if mandatory headers not present' do
-        # remove mandatory headers
+      it 'is not valid if mandatory headers not present' do
+        # remove all mandatory headers
         imap_mail.mail.header['X-Original-To'] = ''
         imap_mail.net_imap_mail.attr['ENVELOPE'].to[0].mailbox = ''
         imap_mail.net_imap_mail.attr['ENVELOPE'].to[0].host = ''
@@ -50,23 +49,21 @@ describe MailingLists::BulkMail::ImapMailValidator do
     end
 
     context 'sender validation' do
-      it 'returns false if sender invalid' do
-        # set invalid sender
+      it 'is not valid if no sender present' do
         imap_mail.net_imap_mail.attr['ENVELOPE'].sender[0].mailbox = ''
         imap_mail.net_imap_mail.attr['ENVELOPE'].sender[0].host = ''
 
         expect(validator.valid_mail?).to eq(false)
       end
 
-      it 'returns true if sender valid' do
-        # already mocked
+      it 'is valid if valid sender present' do
         expect(validator.valid_mail?).to eq(true)
       end
     end
   end
 
   describe '#processed_before?' do
-    it 'returns true if already processed' do
+    it 'returns true if imap mail processed before' do
       MailLog.create!(
         mail_hash: imap_mail.hash,
         status: :retrieved
@@ -75,8 +72,7 @@ describe MailingLists::BulkMail::ImapMailValidator do
       expect(validator.processed_before?).to eq(true)
     end
 
-    it 'returns false if mail was not processed before' do
-      # no mail log mock needec, hence not present
+    it 'returns false if imap mail was not processed before' do
       expect(validator.processed_before?).to eq(false)
     end
   end
@@ -105,7 +101,7 @@ describe MailingLists::BulkMail::ImapMailValidator do
       expect(validator.sender_allowed?(mailing_list)).to eq(true)
     end
 
-    it 'validates that sender is list admin' do
+    it 'validates that sender is allowed if list admin' do
       imap_mail.net_imap_mail.attr['ENVELOPE'].sender[0].mailbox = 'top_leader'
       imap_mail.net_imap_mail.attr['ENVELOPE'].sender[0].host = 'example.com'
 
@@ -130,8 +126,7 @@ describe MailingLists::BulkMail::ImapMailValidator do
       expect(validator.sender_allowed?(mailing_list)).to eq(true)
     end
 
-    it 'validates that sender is unallowed when none of the above validates' do
-      # unallowed sender already mocked
+    it 'validates that sender not allowed' do
       expect(validator.sender_allowed?(mailing_list)).to eq(false)
     end
   end

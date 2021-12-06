@@ -10,7 +10,9 @@ def github_releases
 end
 
 def most_recent_version
-  github_releases.scan(/#{MAJOR_NODEJS_VERSION}\.\d+\.\d+/).last
+  github_releases
+    .scan(/#{MAJOR_NODEJS_VERSION}\.\d+\.\d+/)
+    .max_by { |v| Gem::Version.new(v) }
 end
 
 def version

@@ -22,9 +22,7 @@ module MailingLists::BulkMail
     end
 
     def sender_allowed?(mailing_list)
-      sender_included?(mailing_list) ||
-      sender_list_administrator?     ||
-      mailing_list_allowed?(mailing_list)
+      sender_allowed_for?(mailing_list) || allowed_by_group?(mailing_list)
     end
 
     private
@@ -47,32 +45,36 @@ module MailingLists::BulkMail
       domain !~ /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/
     end
 
-    def sender_included?(mailing_list)
-      additional_sender?(mailing_list) || sender_is_group_member?(mailing_list)
+    def sender_allowed_for?(mailing_list)
+      additional_sender?(mailing_list) || allowed_for?(mailing_list) || list_administrator?(mailing_list)
     end
 
-    def mailing_list_allowed?(mailing_list)
-      mailing_list.anyone_may_post? || (mailing_list.subscribers_may_post? && sender_is_list_member?(mailing_list))
+    def allowed_for?(mailing_list)
+      mailing_list.anyone_may_post? || (mailing_list.subscribers_may_post? && sender_list_member?(mailing_list))
     end
 
-    def sender_is_group_member?(mailing_list)
+    def sender_group_member?(mailing_list)
       group = mailing_list.group
-      sender_email_is_group_email?(group) || sender_additional_group_sender?(group)
+      sender_group_email?(group) || additional_sender_for?(group)
     end
 
-    def sender_email_is_group_email?(group)
+    def sender_group_email?(group)
       group.email == @mail.sender_email
     end
 
-    def sender_additional_group_sender?(group)
+    def additional_sender_for?(group)
       group.additional_emails.collect(&:email).include?(@mail.sender_email)
     end
 
-    def sender_is_list_member?(mailing_list)
-      mailing_list.people.where(id: potential_senders.select(:id)).exists?
+    def sender_list_member?(mailing_list)
+      mailing_list.people.where(id: possible_senders.select(:id)).exists?
     end
 
-    def sender_list_administrator?
+    def allowed_by_group?(mailing_list)
+      sender_group_member?(mailing_list)
+    end
+
+    def list_administrator?(mailing_list)
       possible_senders.any? do |sender|
         Ability.new(sender).can?(:update, mailing_list)
       end
@@ -105,18 +107,16 @@ module MailingLists::BulkMail
     def first_header(header_name)
       first_header = Array(@mail.mail.header[header_name]).first
 
-      return nil if first_header.nil?
-
-      first_header.value
+      first_header.try(:value)
     end
 
     def possible_senders
       sender_email = @mail.sender_email
 
-      @possible_senders ||= Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
-                   " AND additional_emails.contactable_type = '#{Person.sti_name}'")
-                                  .where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email)
-                                  .distinct
+      Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
+            " AND additional_emails.contactable_type = '#{Person.sti_name}'")
+            .where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email)
+            .distinct
     end
   end
 end

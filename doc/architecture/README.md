@@ -1,4 +1,4 @@
-# Architekur Dokumentation
+# Architektur Dokumentation
 
 Diese Dokumente beschreiben die wesentlichen architekturellen Aspekte von hitobito. Die Gliederung folgt [arc42](https://www.arc42.de/template). Mit `rake doc:arch` kann die eine HTML Datei mit der gesamten Dokumentation generiert werden.
 
@@ -23,7 +23,7 @@ Hitobito kann funktionell in verschiedene Module unterteilt werden:
 * [Groups](modules/undefined)
 * [Events](modules/undefined)
 * [Invoices](modules/undefined)
-
+* [Tech](modules/tech)
 
 ## Techstack
 Der aktuelle Techstack von hitobito sieht wie folgt aus:

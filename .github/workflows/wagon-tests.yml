@@ -54,6 +54,23 @@ jobs:
           mkdir hitobito
         working-directory: .
 
+      - name: 'Extract branch name'
+        run: |
+          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+
+      - name: 'Choose branch for dependencies'
+        run: |
+          echo "BRANCH_NAME: $BRANCH_NAME"
+          HITOBITO_BRANCH=$([[ $BRANCH_NAME = 'stable' ]] && echo 'stable' || echo 'master')
+          echo "HITOBITO_BRANCH=$HITOBITO_BRANCH" >> $GITHUB_ENV
+
+      - name: 'Checkout hitobito'
+        uses: actions/checkout@v2
+        with:
+          repository: 'hitobito/hitobito'
+          ref: '${{ env.HITOBITO_BRANCH }}'
+          path: 'hitobito'
+
       - name: 'Set up Ruby'
         env:
           ImageOS: ubuntu20
@@ -73,23 +90,6 @@ jobs:
           echo "ruby version: $(ruby -v)"
           echo "node version: $(node -v)"
           echo "yarn version: $(yarn -v)"
-
-      - name: 'Extract branch name'
-        run: |
-          echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-
-      - name: 'Choose branch for dependencies'
-        run: |
-          echo "BRANCH_NAME: $BRANCH_NAME"
-          HITOBITO_BRANCH=$([[ $BRANCH_NAME = 'stable' ]] && echo 'stable' || echo 'master')
-          echo "HITOBITO_BRANCH=$HITOBITO_BRANCH" >> $GITHUB_ENV
-
-      - name: 'Checkout hitobito'
-        uses: actions/checkout@v2
-        with:
-          repository: 'hitobito/hitobito'
-          ref: '${{ env.HITOBITO_BRANCH }}'
-          path: 'hitobito'
 
       - name: 'Copy Wagonfile.ci'
         run: |

@@ -54,6 +54,18 @@ jobs:
           mkdir hitobito
         working-directory: .
 
+      - name: 'Set up Ruby'
+        env:
+          ImageOS: ubuntu20
+        uses: ruby/setup-ruby@v1.66.0
+        with:
+          working-directory: hitobito
+
+      - name: 'Set up Node'
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: 'Setup OS'
         run: |
           sudo apt-get -qq update
@@ -82,13 +94,6 @@ jobs:
       - name: 'Copy Wagonfile.ci'
         run: |
           cp -v Wagonfile.ci Wagonfile
-
-      - name: 'Set up Ruby'
-        env:
-          ImageOS: ubuntu20
-        uses: ruby/setup-ruby@v1.66.0
-        with:
-          working-directory: hitobito
 
       - name: 'Checkout dependency ${{ inputs.wagon_dependency_repository }}'
         uses: actions/checkout@v2

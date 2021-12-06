@@ -18,7 +18,7 @@ class Setup
     write_and_copy('.envrc', environment)
     write_and_copy('.tool-versions', <<~TOOL_VERSION)
       ruby #{USED_RUBY_VERSION}
-      node 14.18.1
+      nodejs 14.18.1
       yarn 1.22.17
     TOOL_VERSION
     write_and_copy('.ruby-version', USED_RUBY_VERSION)

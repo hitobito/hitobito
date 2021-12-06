@@ -27,8 +27,6 @@ module MailingLists::BulkMail
 
     private
 
-    # VALIDATORS
-
     def required_header_present?
       valid_email?(receiver_from_header || receiver_from_mail)
     end
@@ -46,14 +44,21 @@ module MailingLists::BulkMail
     end
 
     def sender_allowed_for?(mailing_list)
-      additional_sender?(mailing_list) || allowed_for?(mailing_list) || list_administrator?(mailing_list)
+      mailing_list.anyone_may_post? ||
+        may_post_as_subscriber?(mailing_list) ||
+        additional_sender?(mailing_list) ||
+        list_administrator?(mailing_list)
     end
 
-    def allowed_for?(mailing_list)
-      mailing_list.anyone_may_post? || (mailing_list.subscribers_may_post? && sender_list_member?(mailing_list))
+    def may_post_as_subscriber?(mailing_list)
+      mailing_list.subscribers_may_post? && sender_list_member?(mailing_list)
     end
 
-    def sender_group_member?(mailing_list)
+    def sender_list_member?(mailing_list)
+      mailing_list.people.where(id: possible_senders.select(:id)).exists?
+    end
+
+    def allowed_by_group?(mailing_list)
       group = mailing_list.group
       sender_group_email?(group) || additional_sender_for?(group)
     end
@@ -64,14 +69,6 @@ module MailingLists::BulkMail
 
     def additional_sender_for?(group)
       group.additional_emails.collect(&:email).include?(@mail.sender_email)
-    end
-
-    def sender_list_member?(mailing_list)
-      mailing_list.people.where(id: possible_senders.select(:id)).exists?
-    end
-
-    def allowed_by_group?(mailing_list)
-      sender_group_member?(mailing_list)
     end
 
     def list_administrator?(mailing_list)
@@ -89,8 +86,6 @@ module MailingLists::BulkMail
       list.include?(sender_email) ||
         (valid_domain?(sender_domain) && list.include?(sender_domain))
     end
-
-    # GETTERS
 
     def receiver_from_mail
       @mail.email_to.presence
@@ -111,12 +106,12 @@ module MailingLists::BulkMail
     end
 
     def possible_senders
-      sender_email = @mail.sender_email
-
-      Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
-            " AND additional_emails.contactable_type = '#{Person.sti_name}'")
-            .where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email)
-            .distinct
+      Person
+        .joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
+               " AND additional_emails.contactable_type = '#{Person.sti_name}'")
+        .where('people.email = :email OR additional_emails.email = :email',
+               email: @mail.sender_email)
+        .distinct
     end
   end
 end

@@ -134,46 +134,27 @@ describe MailingLists::BulkMail::Retriever do
     end
   end
 
-  # it 'terminates if imap server not reachable' do
+  context 'imap mail server errors' do
+    # it 'terminates without error if imap server temporarly unreachable' do
     # # expect error to be thrown
     # expect(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
 
     # # TODO: Maybe ignore some exceptions and create log entries instead. (hitobito#1493)
     # expect do
-      # retriever.perform
+    # retriever.perform
     # end.to raise { Net::IMAP::NoResponseError }
-  # end
+    # end
 
-  # it 'raises exception if unknown error' do
+    # it 'raises exception if unknown error' do
     # # raise unexpected EOFError
     # expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(EOFError)
 
     # expect do
-      # retriever.perform
+    # retriever.perform
     # end.to raise { EOFError }
-  # end
+    # end
+  end
 
-  # it 'moves mail to failed if MailLog for Mail exists' do
-    # # mock fetched mails
-    # imap_mail = new_imap_mail
-
-    # expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return([imap_mail])
-    # expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
-
-    # expect do
-      # retriever.perform
-    # end.to raise { Messages::Errors::MailProcessedBefore }
-      # .to change { mailing_list.messages.count }.by(0)
-      # .and change { MailLog.count }.by(0)
-      # .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
-
-    # message = mailing_list.messages.first
-    # mail_log = message.mail_log
-    # mail_hash = Digest::MD5.new.hexdigest(imap_mail.mail.raw_source)
-    # expect(mail_log.mail_hash).to eq(mail_hash)
-    # expect(mail_log.mailing_list_name).to eq(mailing_list.name)
-    # expect(mail_log.state).to eq('retrieved')
-  # end
   private
 
   def imap_mail(uid)

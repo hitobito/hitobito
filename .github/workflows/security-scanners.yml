@@ -19,4 +19,4 @@ jobs:
 
       - name: Run security checks
         run: |
-          bin/bundle exec brakeman -q --exit-on-warn
+          bin/bundle exec brakeman -q --exit-on-warn --ensure-ignore-notes

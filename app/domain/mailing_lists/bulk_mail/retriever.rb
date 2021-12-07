@@ -35,25 +35,50 @@ class MailingLists::BulkMail::Retriever
     delete_mail(mail_uid)
   end
 
-  def process_valid_mail(mail, validator)
-    mailing_list = assign_mailing_list(mail)
-    if mailing_list
-      process_mailing_list_mail(mail, validator, mailing_list)
-    else
-      mail.mail_log.update!(status: :unknown_recipient)
-      # TODO maybe log entry?
-    end
-  end
+  # def process_valid_mail(mail, validator)
+  #   mailing_list = assign_mailing_list(mail)
+  #   if mailing_list
+  #     process_mailing_list_mail(mail, validator, mailing_list)
+  #   else
+  #     mail.mail_log.update!(status: :unknown_recipient)
+  #     handle_bounce(mail)
+  #     # TODO maybe log entry?
+  #   end
+  # end
+  #
+  # def process_bounce_mail(mail)
+  #   mail.mail_log.update!(status: :bounce_mail)
+  #   update_raw_source(mail)
+  #   Messages::BulkMailNotificationJob.new(mail.mail_log).enqueue!
+  # end
+  #
+  # def process_mailing_list_mail(mail, validator, mailing_list)
+  #   if validator.sender_allowed?(mailing_list)
+  #     update_raw_source(mail)
+  #     Messages::DispatchJob.new(mail.mail_log.message).enqueue!
+  #   else
+  #     sender_not_allowed(mail)
+  #   end
+  # end
 
-  def process_mailing_list_mail(mail, validator, mailing_list)
-    if validator.sender_allowed?(mailing_list)
-      bulk_mail = mail.mail_log.message
-      bulk_mail.update!(raw_source: mail.raw_source)
-      Messages::DispatchJob.new(bulk_mail).enqueue!
-    else
-      sender_not_allowed(mail)
-    end
-  end
+
+  # def handle_bounce(mail)
+  #   if validator.bounce_mail?
+  #     process_bounce_mail(mail)
+  #   end
+  # end
+  #
+  # def reject_not_existing # rubocop:disable Metrics/AbcSize
+  #   data = envelope_receiver_name.match(/^(.+)#{SENDER_SUFFIX}\+(.+=.+)$/)
+  #   if data && valid_address?(data[1])
+  #     prepare_bounced_message(data[1], data[2])
+  #     logger.info("Relaying bounce from #{message.from} for list #{data[1]} to #{message.to}")
+  #     deliver(message)
+  #   else
+  #     logger.info("Ignored email from #{sender_email} " \
+  #                   "for unknown list #{envelope_receiver_name}")
+  #   end
+  # end
 
   def validator(mail)
     MailingLists::BulkMail::ImapMailValidator.new(mail)
@@ -62,6 +87,11 @@ class MailingLists::BulkMail::Retriever
   def sender_not_allowed(mail)
     mail.mail_log.update!(status: :sender_rejected)
     MailingLists::BulkMail::ResponseMessageJob.new(mail, :sender_rejected).enqueue!
+  end
+
+  def update_raw_source(mail)
+    bulk_mail = mail.mail_log.message
+    bulk_mail.update!(raw_source: mail.raw_source)
   end
 
   def assign_mailing_list(mail)

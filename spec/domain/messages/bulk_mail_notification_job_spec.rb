@@ -5,16 +5,8 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
 
-class Messages::BulkMailNotificationJob
-  self.parameters = [:message, :reason]
+require 'spec_helper'
 
-  def initialize(message, reason)
-    @message = message
-    @reason = reason
-  end
-
-  def perform
-
-  end
+describe Messages::BulkMailNotificationJob do
 
 end

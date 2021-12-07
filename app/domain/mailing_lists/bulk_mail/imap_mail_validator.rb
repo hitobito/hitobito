@@ -7,6 +7,7 @@
 
 module MailingLists::BulkMail
   class ImapMailValidator
+    SENDER_SUFFIX = '-bounces'
 
     def initialize(mail)
       @mail = mail
@@ -23,6 +24,9 @@ module MailingLists::BulkMail
 
     def sender_allowed?(mailing_list)
       sender_allowed_for?(mailing_list) || allowed_by_group?(mailing_list)
+    end
+
+    def bounce_mail?
     end
 
     private
@@ -74,6 +78,18 @@ module MailingLists::BulkMail
     def list_administrator?(mailing_list)
       possible_senders.any? do |sender|
         Ability.new(sender).can?(:update, mailing_list)
+      end
+    end
+
+    def sender_bounce_address?
+      data = envelope_receiver_name.match(/^(.+)#{SENDER_SUFFIX}\+(.+=.+)$/)
+      if data && valid_address?(data[1])
+        prepare_bounced_message(data[1], data[2])
+        logger.info("Relaying bounce from #{message.from} for list #{data[1]} to #{message.to}")
+        deliver(message)
+      else
+        logger.info("Ignored email from #{sender_email} " \
+                    "for unknown list #{envelope_receiver_name}")
       end
     end
 

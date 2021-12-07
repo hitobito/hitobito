@@ -26,7 +26,7 @@ class MailingLists::BulkMail::Retriever
       mail_processed_before!(mail)
     end
 
-    mail.mail_log = create_entries(mail)
+    mail.mail_log = create_mail_log(mail)
 
     if validator.valid_mail?
       process_valid_mail(mail, validator)
@@ -71,7 +71,7 @@ class MailingLists::BulkMail::Retriever
     MailingList.joins(:group).where(group: { archived_at: nil }).find_by(mail_name: mail_name)
   end
 
-  def create_entries(mail)
+  def create_mail_log(mail)
     MailLog.create!(
       mail_hash: mail.hash,
       status: :retrieved,
@@ -90,7 +90,6 @@ class MailingLists::BulkMail::Retriever
   def mail_processed_before!(mail)
     move_mail_to_failed(mail.uid)
     mail_log = MailLog.find_by(mail_hash: mail.hash)
-    mail_log.mail = mail
     raise MailingLists::BulkMail::MailProcessedBeforeError, mail_log
   end
 

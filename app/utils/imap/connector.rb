@@ -41,6 +41,24 @@ class Imap::Connector
     end
   end
 
+  def fetch_mail_uids(mailbox)
+    perform do
+      select_mailbox(mailbox)
+      @imap.uid_search(["ALL"])
+    end
+  end
+
+  def fetch_mail_by_uid(uid, mailbox)
+    perform do
+      select_mailbox(mailbox)
+
+      fetch_data = @imap.uid_fetch(uid, attributes)
+      return nil if fetch_data.nil?
+
+      Imap::Mail.build(fetch_data.first)
+    end
+  end
+
   def counts
     @counts ||= fetch_mailbox_counts
   end
@@ -117,5 +135,4 @@ class Imap::Connector
   def attributes
     %w(ENVELOPE UID RFC822)
   end
-
 end

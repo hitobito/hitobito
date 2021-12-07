@@ -31,7 +31,7 @@ describe MailingLists::BulkMail::Retriever do
       expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
       expect(imap_mail_validator).to receive(:valid_mail?).never
       expect(imap_connector).to receive(:delete_by_uid).never
-      MailLog.create!(mail_hash: 'abcd42')
+      MailLog.create!(mail_hash: 'abcd42', message: Message::BulkMail.create!(subject: '42 is the Answer'))
 
       expect do
         retriever.perform

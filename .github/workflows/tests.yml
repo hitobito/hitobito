@@ -51,7 +51,7 @@ jobs:
         uses: ruby/setup-ruby@v1.66.0
         env:
           ImageOS: ubuntu20
-      
+
       - name: 'Set up Node'
         uses: actions/setup-node@v2
         with:

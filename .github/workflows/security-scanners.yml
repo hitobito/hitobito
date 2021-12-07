@@ -13,7 +13,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Ruby and install gems
-        uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+        uses: ruby/setup-ruby@v1.66.0
+        env:
+          ImageOS: ubuntu20
         with:
           bundler-cache: true
 

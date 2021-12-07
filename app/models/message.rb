@@ -29,6 +29,7 @@
 #  shipping_method       :string           default("own")
 #  send_to_households    :boolean          default(FALSE)
 #  donation_confirmation :boolean          default(FALSE)
+#  date_location_text    :string
 #
 # Indexes
 #

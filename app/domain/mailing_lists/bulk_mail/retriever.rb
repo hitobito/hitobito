@@ -7,8 +7,6 @@
 
 class MailingLists::BulkMail::Retriever
 
-  attr_accessor :retrieve_count
-
   def perform
     mail_uids.each do |mail_uid|
       process_mail(mail_uid)

@@ -11,11 +11,11 @@ class MailRelayJob < RecurringJob
 
   def perform_internal
     # only run if a retriever address is defined
-    # MailRelay::Lists.relay_current if configured?
+    MailRelay::Lists.relay_current if configured?
   end
 
   def schedule
-    # super if configured?
+    super if configured?
   end
 
   def error(job, exception)

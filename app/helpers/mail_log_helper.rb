@@ -10,7 +10,7 @@ module MailLogHelper
   def format_mail_log_status(mail_log)
     type = case mail_log.status
            when /retreived|bulk_delivering/ then 'info'
-           when /sender_rejected|unkown_recipient/ then 'important'
+           when /sender_rejected|unknown_recipient/ then 'important'
            when /completed/ then 'success'
            end
     badge(mail_log_status_label(mail_log), type)

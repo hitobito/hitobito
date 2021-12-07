@@ -171,7 +171,7 @@ describe MailRelay::Base do
       expect(mail_log.message.state).to eq('failed')
       expect(mail_log.message.sent_at).to eq(mail_log.updated_at)
       expect(mail_log.mail_from).to eq(simple.from.first)
-      expect(mail_log.status).to eq('unkown_recipient')
+      expect(mail_log.status).to eq('unknown_recipient')
     end
 
     it 'skips already processed mail and sends airbrake notification' do

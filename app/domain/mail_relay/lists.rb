@@ -159,8 +159,7 @@ module MailRelay
     end
 
     def potential_senders
-      Person.joins('LEFT JOIN additional_emails ON people.id = additional_emails.contactable_id' \
-                   " AND additional_emails.contactable_type = '#{Person.sti_name}'")
+      Person.left_joins(:additional_emails)
             .where('people.email = ? OR additional_emails.email = ?', sender_email, sender_email)
             .distinct
     end

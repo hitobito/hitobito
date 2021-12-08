@@ -798,6 +798,7 @@ de:
           normal: B-Post
           priority: A-Post
         send_to_households: Haushalte
+        date_location_text: Datum und Ort
 
       message_recipient:
         address: Adresse

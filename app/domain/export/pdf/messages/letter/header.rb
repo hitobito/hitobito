@@ -24,14 +24,19 @@ class Export::Pdf::Messages::Letter
 
       render_address(recipient.address)
 
+      stamped :render_date_location_text if letter.date_location_text.present?
       stamped :render_subject if letter.subject.present?
     end
 
     private
 
+    def render_date_location_text
+      offset_cursor_from_top 102.5.mm
+      pdf.text(letter.date_location_text)
+    end
+
     def render_subject
       offset_cursor_from_top 107.5.mm
-
       pdf.text(letter.subject, style: :bold)
       pdf.move_down pdf.font_size * 2
     end

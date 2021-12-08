@@ -5,6 +5,7 @@
 *  Personen können neu als Geschwister angegeben werden (hitobito_kljb#5)
 *  Liste der vordefinierten Banken für EBICS-Import erweitert (#1427)
 *  Es wurde neu eine minimale Passwortlänge von 12 Zeichen für neue Passwörter eingeführt, dies entspricht den Empfehlungen von OWASP (#1429)
+*  Gruppen können archiviert werden (#1275)
 *  Die API unterstützt jetzt, die Gruppen/Rollen, Anlässe und Einzelpersonen auszulesen, welche bei Abos abonniert sind. (#1398, danke @Michael-Schaer!)
 *  Teilnehmer können zu Anlässen eingeladen werden (#1276)
 *  Zahlungen können direkt von Finanzinstitut via EBICS bezogen werden (#1131)

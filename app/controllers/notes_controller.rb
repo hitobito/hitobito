@@ -40,7 +40,7 @@ class NotesController < ApplicationController
   def entries
     Note
       .preload(:subject, :author)
-      .in_or_layer_below(group)
+      .below_in_layer(group)
       .list
       .page(params[:notes_page])
       .tap do |notes|

@@ -86,12 +86,20 @@ class Person::Filter::Role < Person::Filter::Base
     when 'created' then [[:roles, { created_at: time_range }]].to_h
     when 'deleted' then [[:roles, { deleted_at: time_range }]].to_h
     when 'active' then [active_role_condition, min: time_range.min, max: time_range.max]
+    else [not_archived_condition]
     end
+  end
+
+  def not_archived_condition
+    <<~SQL.split.map(&:strip).join(' ')
+      roles.archived_at IS NULL
+    SQL
   end
 
   def active_role_condition
     <<~SQL.split.map(&:strip).join(' ')
       roles.created_at <= :max AND
+      (roles.archived_at >= :min OR roles.archived_At IS NULL) AND
       (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
     SQL
   end
@@ -99,7 +107,10 @@ class Person::Filter::Role < Person::Filter::Base
   def deleted_roles_join
     <<~SQL.split.map(&:strip).join(' ')
       INNER JOIN roles ON
-        (roles.person_id = people.id AND roles.deleted_at IS NOT NULL)
+        (
+          roles.person_id = people.id AND
+          (roles.deleted_at IS NOT NULL AND roles.archived_at IS NOT NULL)
+        )
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
   end

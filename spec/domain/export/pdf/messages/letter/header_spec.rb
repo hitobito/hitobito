@@ -113,6 +113,15 @@ describe Export::Pdf::Messages::Letter::Header do
           [36, 609, "Supertown"]
         ]
       end
+
+      it 'renders date location text above subject' do
+        letter.update!(subject: 'Then answer is 42!', date_location_text: 'Magrathea, 21.12.2042')
+        subject.render(recipient)
+        pdf.start_new_page
+        subject.render(recipient)
+        expect(stamps.keys).to include(:render_subject)
+        expect(stamps.keys).to include(:render_date_location_text)
+      end
     end
   end
 

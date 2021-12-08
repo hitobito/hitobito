@@ -13,7 +13,7 @@ class Export::Pdf::Messages::Letter
 
     delegate :group, to: 'letter'
 
-    def render(recipient) # rubocop:disable Metrics/MethodLength
+    def render(recipient)
       stamped :render_logo_right
 
       offset_cursor_from_top 52.5.mm

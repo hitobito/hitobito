@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+* Personen mit layer_and_below_full Berechtigung dürfen Personenfilter auf tieferen Layern bearbeiten, erstellen & löschen
+
 ## Version 1.26
 
 *  Personen können neu als Geschwister angegeben werden (hitobito_kljb#5)

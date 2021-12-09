@@ -1249,8 +1249,8 @@ describe PersonAbility do
       context 'in group from lower layer' do
         let(:group) { groups(:bottom_layer_one) }
 
-        it 'may not create people filters' do
-          is_expected.not_to be_able_to(:create, group.people_filters.new)
+        it 'may create people filters' do
+          is_expected.to be_able_to(:create, group.people_filters.new)
         end
 
         it 'may define new people filters' do

@@ -8,7 +8,7 @@
 module MailingLists
   class MailRetrieverJob < RecurringJob
 
-    run_every 1.minute
+    run_every 20.second
 
     def perform_internal
       # only run if a retriever address is defined

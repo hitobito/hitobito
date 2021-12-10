@@ -69,7 +69,7 @@ module Export::Tabular
       return enum_for(:data_rows) unless block_given?
 
       list.each do |entry|
-        yield values(entry, format)
+        yield values(entry, format) if entry.present?
       end
     end
 

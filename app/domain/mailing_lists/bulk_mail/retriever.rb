@@ -41,7 +41,19 @@ class MailingLists::BulkMail::Retriever
       process_mailing_list_mail(mail, validator, mailing_list)
     else
       mail.mail_log.update!(status: :unknown_recipient)
+      handle_bounce(mail)
       # TODO maybe log entry?
+    end
+  end
+
+  def process_bounce_mail(mail)
+    mail.mail_log.update!(status: :bounce_mail)
+    MailingLists::BulkMail::ForwardBounceMailJob.new(mail.mail_log).enqueue!
+  end
+
+  def handle_bounce(mail)
+    if validator.bounce_mail?
+      process_bounce_mail(mail)
     end
   end
 

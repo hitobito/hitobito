@@ -15,9 +15,7 @@ class MailingLists::BulkMail::SenderRejectedMessageJob < BaseJob
   end
 
   def perform
-    list_address = @message.mailing_list.mail_address
-    reply = create_reply(list_address)
-    send(reply)
+    send(reply_message)
   end
 
   private
@@ -32,7 +30,7 @@ class MailingLists::BulkMail::SenderRejectedMessageJob < BaseJob
     mail.deliver
   end
 
-  def create_reply(list_address)
+  def reply_message
     sender = app_sender_email
 
     source_mail.reply do
@@ -53,5 +51,9 @@ class MailingLists::BulkMail::SenderRejectedMessageJob < BaseJob
 
   def source_mail
     Mail.new(@message.raw_source)
+  end
+
+  def list_address
+    @message.mailing_list.mail_address
   end
 end

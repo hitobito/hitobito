@@ -53,7 +53,7 @@ class MailingLists::BulkMail::Retriever
       Messages::DispatchJob.new(bulk_mail).enqueue!
     else
       mail.mail_log.update!(status: :sender_rejected)
-      sender_not_allowed(bulk_mail)
+      sender_rejected(bulk_mail)
     end
   end
 
@@ -61,9 +61,9 @@ class MailingLists::BulkMail::Retriever
     MailingLists::BulkMail::ImapMailValidator.new(mail)
   end
 
-  def sender_not_allowed(message)
-    # TODO: log that sender is unallowed
-    MailingLists::BulkMail::UnallowedSenderResponseJob.new(message).enqueue!
+  def sender_rejected(message)
+    # TODO: log that sender has been rejected
+    MailingLists::BulkMail::SenderRejectedMessageJob.new(message).enqueue!
   end
 
   def assign_mailing_list(mail)

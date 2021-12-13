@@ -7,7 +7,6 @@
 
 module MailingLists::BulkMail
   class ImapMailValidator
-    SENDER_SUFFIX = '-bounces'
 
     def initialize(mail)
       @mail = mail

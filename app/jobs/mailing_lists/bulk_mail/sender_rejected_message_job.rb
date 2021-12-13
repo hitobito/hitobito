@@ -5,7 +5,7 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
 
-class MailingLists::BulkMail::UnallowedSenderResponseJob < BaseJob
+class MailingLists::BulkMail::SenderRejectedMessageJob < BaseJob
 
   self.parameters = [:message]
 
@@ -15,15 +15,14 @@ class MailingLists::BulkMail::UnallowedSenderResponseJob < BaseJob
   end
 
   def perform
-    sender = app_sender_email
     list_address = @message.mailing_list.mail_address
-    reply = not_allowed_reply(sender, list_address)
-    send_response(reply)
+    reply = create_reply(list_address)
+    send(reply)
   end
 
   private
 
-  def send_response(mail)
+  def send(mail)
     if defined?(ActionMailer::Base)
       ActionMailer::Base.wrap_delivery_behavior(mail)
     end
@@ -33,16 +32,23 @@ class MailingLists::BulkMail::UnallowedSenderResponseJob < BaseJob
     mail.deliver
   end
 
-  def not_allowed_reply(sender, list_address)
+  def create_reply(list_address)
+    sender = app_sender_email
+
     source_mail.reply do
-      body "Du bist nicht berechtigt, auf die Liste #{list_address} zu schreiben."
+      body "Du bist leider nicht berechtigt auf die Liste #{list_address} zu schreiben."
       from sender
     end
   end
 
   def app_sender_email
     app_sender = Settings.email.sender
-    app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || 'noreply'
+    sender = app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || 'noreply'
+    "#{sender}@#{app_sender_domain}"
+  end
+
+  def app_sender_domain
+    Settings.email.list_domain || 'localhost'
   end
 
   def source_mail

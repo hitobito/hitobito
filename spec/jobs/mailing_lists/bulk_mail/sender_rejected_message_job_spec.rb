@@ -8,7 +8,7 @@
 
 require 'spec_helper'
 
-describe MailingLists::BulkMail::UnallowedSenderResponseJob do
+describe MailingLists::BulkMail::SenderRejectedMessageJob do
   include MailingLists::ImapMailsHelper
 
   let(:mailing_list) { mailing_lists(:leaders) }
@@ -21,13 +21,14 @@ describe MailingLists::BulkMail::UnallowedSenderResponseJob do
 
     it 'replies' do
       Settings.email.retriever.config = Config::Options.new(address: 'localhost')
+      Settings.email.list_domain = 'hitobito.example.com'
 
       subject.perform
 
       expect(last_email.to).to eq(["from@example.com"])
-      expect(last_email.from).to eq(["noreply"])
+      expect(last_email.from).to eq(["noreply@hitobito.example.com"])
       expect(last_email.subject).to eq("RE: Testflight from 24.4.2021")
-      expect(last_email.body.decoded).to eq("Du bist nicht berechtigt, auf die Liste leaders@localhost zu schreiben.")
+      expect(last_email.body.decoded).to eq("Du bist leider nicht berechtigt auf die Liste leaders@hitobito.example.com zu schreiben.")
     end
   end
 end

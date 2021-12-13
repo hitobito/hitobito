@@ -7,7 +7,7 @@
 
 class Export::Pdf::Messages::Letter
   class Header < Section
-    LOGO_BOX = [200, 40].freeze
+    LOGO_BOX = [450, 40].freeze
     ADDRESS_BOX = [200, 60].freeze
     SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 24].freeze
 
@@ -45,11 +45,29 @@ class Export::Pdf::Messages::Letter
       left = bounds.width - width
       bounding_box([left, cursor], width: width, height: height) do
         if logo_path
-          image(logo_path, position: :right, fit: [width, height])
+          image(logo_path, logo_options(width, height))
         else
           ''
         end
       end
+    end
+
+    def logo_options(box_width, box_height)
+      opts = { position: :right }
+      if logo_exceeds_box?(box_width, box_height)
+        opts[:fit] = [box_width, box_height]
+      end
+      opts
+    end
+
+    def logo_exceeds_box?(box_width, box_height)
+      width, height = logo_dimensions
+      width > box_width || height > box_height
+    end
+
+    def logo_dimensions
+      image = MiniMagick::Image.open(logo_path)
+      [image[:width], image[:height]]
     end
 
     def render_address(address, width: ADDRESS_BOX.first, height: ADDRESS_BOX.second)

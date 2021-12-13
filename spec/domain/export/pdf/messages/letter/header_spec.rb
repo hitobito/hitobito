@@ -24,38 +24,70 @@ describe Export::Pdf::Messages::Letter::Header do
 
   subject { described_class.new(pdf, letter, options) }
 
-  def assign_image(group)
-    GroupSetting.create!(target: group, var: :messages_letter, picture: image).id
-  end
+  describe 'logo' do
 
-  describe "image source" do
     def expects_image(id)
       path = %r{/picture/#{id}/logo\.png}
-      image_options = options.merge(fit: [200, 40], position: :right)
+      image_options = options.merge(position: :right)
       expect_any_instance_of(Prawn::Document).to receive(:image).with(path, image_options)
     end
-    it "has no image" do
+
+    it 'has no logo' do
       expect_any_instance_of(Prawn::Document).not_to receive(:image)
       subject.render(recipient)
     end
 
-    it "has image from group" do
+    it 'has logo from group' do
       id = assign_image(top_group)
       expects_image(id)
       subject.render(recipient)
     end
 
-    it "has image from layer" do
+    it 'has logo from layer' do
       id = assign_image(top_group.layer_group)
       expects_image(id)
       subject.render(recipient)
     end
 
-    it "has image from group if layer and group have an image " do
+    it 'has logo from group if layer and group have a logo' do
       _layer_id = assign_image(top_group.layer_group)
       group_id = assign_image(top_group)
       expects_image(group_id)
       subject.render(recipient)
+    end
+
+    context 'image scaling' do
+
+      let(:image) { @image }
+      let(:image_group_id) { assign_image(top_group) }
+      let(:image_path) { %r{/picture/#{image_group_id}/logo.*\.png} }
+
+      it 'does not scale if image smaller than logo box' do
+        @image = fixture_file_upload('images/logo.png') # 230x30px
+
+        image_options = options.merge(position: :right)
+        expect_any_instance_of(Prawn::Document).to receive(:image).with(image_path, image_options)
+
+        subject.render(recipient)
+      end
+
+      it 'scales down image if image width exceeds logo box' do
+        @image = fixture_file_upload('images/logo_1000x40.png')
+
+        image_options = options.merge(fit: [450, 40], position: :right)
+        expect_any_instance_of(Prawn::Document).to receive(:image).with(image_path, image_options)
+
+        subject.render(recipient)
+      end
+
+      it 'scales down image if image height exceeds logo box' do
+        @image = fixture_file_upload('images/logo_200x100.png')
+
+        image_options = options.merge(fit: [450, 40], position: :right)
+        expect_any_instance_of(Prawn::Document).to receive(:image).with(image_path, image_options)
+
+        subject.render(recipient)
+      end
     end
   end
 
@@ -172,6 +204,8 @@ describe Export::Pdf::Messages::Letter::Header do
     end
   end
 
+  private
+
   def text_with_position
     analyzer.positions.each_with_index.collect do |p, i|
       p.collect(&:round) + [analyzer.show_text[i]]
@@ -181,4 +215,9 @@ describe Export::Pdf::Messages::Letter::Header do
   def text_with_position_without_shipping_info
     text_with_position - shipping_info_with_position
   end
+
+  def assign_image(group)
+    GroupSetting.create!(target: group, var: :messages_letter, picture: image).id
+  end
+
 end

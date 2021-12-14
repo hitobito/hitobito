@@ -10,6 +10,8 @@ class Address::CheckValidityJob < RecurringJob
   run_every 1.day
 
   def perform
+    return unless addresses_imported?
+
     invalid_people = Contactable::AddressValidator.new.validate_people
 
     return if invalid_people.empty? || Settings.addresses.validity_job_notification_emails.blank?
@@ -18,5 +20,9 @@ class Address::CheckValidityJob < RecurringJob
     Settings.addresses.validity_job_notification_emails.each do |mail_address|
       Address::ValidationChecksMailer.validation_checks(mail_address, invalid_names).deliver_later
     end
+  end
+
+  def addresses_imported?
+    Address.any?
   end
 end

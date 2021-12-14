@@ -14,61 +14,80 @@ describe Address::CheckValidityJob do
   let(:person) { people(:bottom_member) }
   let(:address) { addresses(:bs_bern) }
 
-  it 'sends email if invalid people are found and mail address is defined' do
-    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(['mail@example.com'])
+  context 'without addresses imported' do
+    before do
+      Address.delete_all
+    end
 
-    expect do
+    it 'does not run' do
+      expect(Contactable::AddressValidator).to_not receive(:new)
+
+      expect do
+        perform_enqueued_jobs do
+          job.perform
+        end
+      end.to_not change { ActionMailer::Base.deliveries.size }
+      expect(ActsAsTaggableOn::Tagging.count).to eq(0)
+    end
+  end
+
+  context 'with addresses imported' do
+    it 'sends email if invalid people are found and mail address is defined' do
+      allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(['mail@example.com'])
+
+      expect do
+        perform_enqueued_jobs do
+          job.perform
+        end
+      end.to change { ActionMailer::Base.deliveries.size }.by(1)
+      expect(ActsAsTaggableOn::Tagging.count).to eq(1)
+    end
+
+    it 'sends multiple emails if invalid people are found and multiple mail addresses is defined' do
+      allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(['mail@example.com', 'addresses@example.com'])
+
       perform_enqueued_jobs do
-        job.perform
+        expect do
+          job.perform
+        end.to change { ActionMailer::Base.deliveries.size }.by(2)
+        expect(ActsAsTaggableOn::Tagging.count).to eq(1)
       end
-    end.to change { ActionMailer::Base.deliveries.size }.by(1)
-    expect(ActsAsTaggableOn::Tagging.count).to eq(1)
-  end
-
-  it 'sends multiple emails if invalid people are found and multiple mail addresses is defined' do
-    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(['mail@example.com', 'addresses@example.com'])
-
-    perform_enqueued_jobs do
-      expect do
-        job.perform
-      end.to change { ActionMailer::Base.deliveries.size }.by(2)
-      expect(ActsAsTaggableOn::Tagging.count).to eq(1)
     end
-  end
 
-  it 'sends no emails if no invalid people are found' do
-    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(['mail@example.com', 'addresses@example.com'])
-    person.update!(address: address.street_short, zip_code: address.zip_code, town: address.town)
+    it 'sends no emails if no invalid people are found' do
+      allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return(['mail@example.com', 'addresses@example.com'])
+      person.update!(address: address.street_short, zip_code: address.zip_code, town: address.town)
 
-    perform_enqueued_jobs do
-      expect do
-        job.perform
-      end.to_not change { ActionMailer::Base.deliveries.size }
-      expect(ActsAsTaggableOn::Tagging.count).to eq(0)
+      perform_enqueued_jobs do
+        expect do
+          job.perform
+        end.to_not change { ActionMailer::Base.deliveries.size }
+        expect(ActsAsTaggableOn::Tagging.count).to eq(0)
+      end
     end
-  end
 
-  it 'sends no emails if no mail address is defined' do
-    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return([])
+    it 'sends no emails if no mail address is defined' do
+      allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return([])
 
-    perform_enqueued_jobs do
-      expect do
-        job.perform
-      end.to_not change { ActionMailer::Base.deliveries.size }
-      expect(ActsAsTaggableOn::Tagging.count).to eq(1)
+      perform_enqueued_jobs do
+        expect do
+          job.perform
+        end.to_not change { ActionMailer::Base.deliveries.size }
+        expect(ActsAsTaggableOn::Tagging.count).to eq(1)
+      end
     end
-  end
 
-  it 'sends no emails if no invalid people are found and no mail address is defined' do
-    allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return([])
+    it 'sends no emails if no invalid people are found and no mail address is defined' do
+      allow(Settings.addresses).to receive(:validity_job_notification_emails).and_return([])
 
-    person.update!(address: address.street_short, zip_code: address.zip_code, town: address.town)
+      person.update!(address: address.street_short, zip_code: address.zip_code, town: address.town)
 
-    perform_enqueued_jobs do
-      expect do
-        job.perform
-      end.to_not change { ActionMailer::Base.deliveries.size }
-      expect(ActsAsTaggableOn::Tagging.count).to eq(0)
+      perform_enqueued_jobs do
+        expect do
+          job.perform
+        end.to_not change { ActionMailer::Base.deliveries.size }
+        expect(ActsAsTaggableOn::Tagging.count).to eq(0)
+      end
     end
   end
 end

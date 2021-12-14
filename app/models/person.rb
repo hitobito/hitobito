@@ -312,11 +312,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     primary_group_id || groups.first.try(:id) || Group.root.id
   end
 
-  def years(now = Time.zone.now.to_date)
+  def years(comparison = Time.zone.now.to_date)
     return unless birthday?
 
-    extra = now.month > birthday.month || (now.month == birthday.month && now.day >= birthday.day)
-    now.year - birthday.year - (extra ? 0 : 1)
+    birthday_has_passed =
+      (comparison.month > birthday.month) ||
+      (comparison.month == birthday.month && comparison.day >= birthday.day)
+
+    comparison.year - birthday.year - (birthday_has_passed ? 0 : 1)
   end
 
   ### AUTHENTICATION INSTANCE METHODS

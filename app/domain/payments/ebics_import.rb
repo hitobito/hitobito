@@ -30,7 +30,7 @@ class Payments::EbicsImport
     case e.code
     when '090005'
       []
-    else 
+    else
       raise e
     end
   end

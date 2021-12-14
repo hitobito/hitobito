@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -7,7 +7,6 @@
 
 module Export::Tabular::Groups
   class Row < Export::Tabular::Row
-
     def type
       entry.class.label
     end
@@ -15,6 +14,5 @@ module Export::Tabular::Groups
     def country
       entry.country_label
     end
-
   end
 end

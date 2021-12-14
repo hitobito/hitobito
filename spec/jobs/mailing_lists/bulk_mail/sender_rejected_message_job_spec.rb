@@ -12,23 +12,21 @@ describe MailingLists::BulkMail::SenderRejectedMessageJob do
   include MailingLists::ImapMailsHelper
 
   let(:mailing_list) { mailing_lists(:leaders) }
-  let(:imap_mail)       { built_imap_mail(plain_body: true) }
+  let(:imap_mail) { built_imap_mail(plain_body: true) }
   let(:mail_log) { MailLog.new(mail_hash: imap_mail.hash, status: :retrieved, mail_from: imap_mail.sender_email) }
   let(:bulk_mail) { Message::BulkMail.new(subject: imap_mail.subject, state: :pending, raw_source: imap_mail.raw_source, mailing_list: mailing_list, mail_log: mail_log) }
 
-  context 'send unallowed message to sender' do
-    subject { described_class.new(bulk_mail) }
+  subject { described_class.new(bulk_mail) }
 
-    it 'replies' do
-      Settings.email.retriever.config = Config::Options.new(address: 'localhost')
-      Settings.email.list_domain = 'hitobito.example.com'
+  it 'sends sender rejected message' do
+    Settings.email.retriever.config = Config::Options.new(address: 'localhost')
+    Settings.email.list_domain = 'hitobito.example.com'
 
-      subject.perform
+    subject.perform
 
-      expect(last_email.to).to eq(["from@example.com"])
-      expect(last_email.from).to eq(["noreply@hitobito.example.com"])
-      expect(last_email.subject).to eq("RE: Testflight from 24.4.2021")
-      expect(last_email.body.decoded).to eq("Du bist leider nicht berechtigt auf die Liste leaders@hitobito.example.com zu schreiben.")
-    end
+    expect(last_email.to).to eq(["from@example.com"])
+    expect(last_email.from).to eq(["noreply@hitobito.example.com"])
+    expect(last_email.subject).to eq("RE: Testflight from 24.4.2021")
+    expect(last_email.body.decoded).to eq("Du bist leider nicht berechtigt auf die Liste leaders@hitobito.example.com zu schreiben.")
   end
 end

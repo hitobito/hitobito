@@ -7,6 +7,9 @@
 
 class MailingLists::BulkMail::SenderRejectedMessageJob < BaseJob
 
+  EMAIL_LOCAL_PART_BRACKETS = /^.*<(.+)@.+\..+>$/.freeze
+  EMAIL_LOCAL_PART = /^(.+)@.+\..+$/.freeze
+
   self.parameters = [:message]
 
   def initialize(message)
@@ -31,17 +34,20 @@ class MailingLists::BulkMail::SenderRejectedMessageJob < BaseJob
   end
 
   def reply_message
-    sender = app_sender_email
-
+    list = list_address
+    from = no_reply_address
     source_mail.reply do
-      body "Du bist leider nicht berechtigt auf die Liste #{list_address} zu schreiben."
-      from sender
+      body "Du bist leider nicht berechtigt auf die Liste #{list} zu schreiben."
+      from from
     end
   end
 
-  def app_sender_email
+  def no_reply_address
     app_sender = Settings.email.sender
-    sender = app_sender[/^.*<(.+)@.+\..+>$/, 1] || app_sender[/^(.+)@.+\..+$/, 1] || 'noreply'
+    sender =
+      app_sender[EMAIL_LOCAL_PART_BRACKETS, 1] ||
+      app_sender[EMAIL_LOCAL_PART, 1] ||
+      'noreply'
     "#{sender}@#{app_sender_domain}"
   end
 

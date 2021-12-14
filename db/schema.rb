@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_25_155817) do
+ActiveRecord::Schema.define(version: 2021_12_07_124846) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -40,14 +40,7 @@ ActiveRecord::Schema.define(version: 2021_11_25_155817) do
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
     t.datetime "created_at", null: false
-    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
-  end
-
-  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-    t.bigint "blob_id", null: false
-    t.string "variation_digest", null: false
-    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "additional_emails", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -590,11 +583,13 @@ ActiveRecord::Schema.define(version: 2021_11_25_155817) do
     t.text "invoice_attributes"
     t.bigint "invoice_list_id"
     t.text "text"
+    t.boolean "heading", default: false
     t.string "salutation"
     t.string "pp_post"
     t.string "shipping_method", default: "own"
     t.boolean "send_to_households", default: false, null: false
     t.boolean "donation_confirmation", default: false, null: false
+    t.string "date_location_text"
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
@@ -783,7 +778,7 @@ ActiveRecord::Schema.define(version: 2021_11_25_155817) do
     t.string "type", null: false
     t.integer "body_id", null: false
     t.string "role_type"
-    t.timestamp "created_at", null: false
+    t.timestamp "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["person_id"], name: "index_person_add_requests_on_person_id"
     t.index ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
   end
@@ -936,7 +931,6 @@ ActiveRecord::Schema.define(version: 2021_11_25_155817) do
     t.string "context", limit: 128
     t.datetime "created_at"
     t.string "hitobito_tooltip"
-    t.string "tenant", limit: 128
     t.index ["context"], name: "index_taggings_on_context"
     t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
@@ -946,7 +940,6 @@ ActiveRecord::Schema.define(version: 2021_11_25_155817) do
     t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
     t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
     t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
-    t.index ["tenant"], name: "index_taggings_on_tenant"
   end
 
   create_table "tags", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
@@ -970,7 +963,6 @@ ActiveRecord::Schema.define(version: 2021_11_25_155817) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade

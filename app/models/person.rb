@@ -312,10 +312,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     primary_group_id || groups.first.try(:id) || Group.root.id
   end
 
-  def years
+  def years(now = Time.zone.now.to_date)
     return unless birthday?
 
-    now = Time.zone.now.to_date
     extra = now.month > birthday.month || (now.month == birthday.month && now.day >= birthday.day)
     now.year - birthday.year - (extra ? 0 : 1)
   end

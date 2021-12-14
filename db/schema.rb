@@ -595,10 +595,7 @@ ActiveRecord::Schema.define(version: 2021_12_07_124846) do
     t.string "shipping_method", default: "own"
     t.boolean "send_to_households", default: false, null: false
     t.boolean "donation_confirmation", default: false, null: false
-<<<<<<< HEAD
-=======
     t.text "raw_source", size: :medium
->>>>>>> Implement sender rejected message job
     t.string "date_location_text"
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"

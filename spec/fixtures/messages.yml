@@ -57,3 +57,8 @@ sms:
   mailing_list: leaders
   type: Message::TextMessage
   text: Long live SMS!
+
+mail:
+  mailing_list: leaders
+  type: Message::BulkMail
+  raw_source: <%= File.open("#{Rails.root}/spec/fixtures/email/bulk_mail.eml", 'rb') { |f| f.read } %>

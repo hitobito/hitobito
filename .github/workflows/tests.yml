@@ -51,11 +51,15 @@ jobs:
         uses: ruby/setup-ruby@v1.66.0
         env:
           ImageOS: ubuntu20
-
-      - name: 'Set up Node'
+      
+      - name: Read .tool-versions
+        uses: marocchino/tool-versions-action@v1
+        id: readToolVersions
+        
+      - name: Set up Node.js ${{ steps.readToolVersions.outputs.nodejs }}
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: ${{ steps.readToolVersions.outputs.nodejs }}
 
       - name: 'Setup OS'
         run: |

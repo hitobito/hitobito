@@ -8,61 +8,78 @@
 require 'spec_helper'
 
 describe Messages::BulkMailDispatch do
-  let(:message) { messages(:sms) }
+  let(:message) { messages(:mail) }
   let(:top_leader) { people(:top_leader) }
-  let!(:fixnet) { Fabricate(:phone_number, contactable: top_leader, label: 'Festnetz') }
-
   let(:dispatch) { described_class.new(message) }
-  let(:client_double) { double(:client) }
+
+  let(:address_list) {
+    [
+      { person_id: top_leader.id, email: 'recipient1@example.com' },
+      { person_id: top_leader.id, email: 'recipient2@example.com' }
+    ]
+  }
+
+  let(:recipients) {
+    [
+      MessageRecipient.new(message_id: message.id, person_id: top_leader.id, state: :pending, email: 'recipient1@example.com'),
+      MessageRecipient.new(message_id: message.id, person_id: top_leader.id, state: :pending, email: 'recipient2@example.com')
+    ]
+  }
 
   before do
+    allow(Truemail).to receive(:valid?).and_call_original
     Subscription.create!(mailing_list: mailing_lists(:leaders), subscriber: top_leader)
-    allow(dispatch).to receive(:client).and_return(client_double)
   end
 
   context '#run' do
-    it 'sends mail to mailing list subscribers' do
-      expect(client_double)
-        .to receive(:send)
-              .with(text: message.text, recipients: array_including(nr1regex, nr2regex))
-              .and_return(status: :ok, message: 'OK')
+    it 'delivers mail if message recipients do exist' do
+      message.message_recipients = recipients
 
-      freeze_time do # avoid problems with scheduling the job
-        delivery_report_double = double
-        expect(Messages::TextMessageDeliveryReportJob)
-          .to receive(:new).and_return(delivery_report_double)
-        expect(delivery_report_double).to receive(:enqueue!)
-                                            .with(run_at: 15.seconds.from_now)
+      expect(dispatch).to receive(:deliver_mails)
 
-        dispatch.run
-      end
+      dispatch.run
+    end
 
-      expect(message.failed_count).to eq 0
-      expect(message.state).to eq('finished')
+    it 'creates message recipients if not existing' do
+      expect(dispatch).to receive(:init_recipient_entries)
 
-      recipients = message.message_recipients
-      expect(recipients.count).to eq(2)
-
-      recipients.each do |r|
-        nrs = [mobile1.number, mobile2.number]
-        expect(nrs).to include(r.phone_number)
-        expect(r.state).to eq('sent')
-        expect(r.error).to be_blank
-      end
+      dispatch.run
     end
   end
 
   context '#init_recipient_entries' do
     it 'creates recipient entries with state pending' do
+      expect(Messages::BulkMail::AddressList).to receive_message_chain(:new, :entries).and_return(address_list)
+
       expect do
         dispatch.send(:init_recipient_entries)
       end.to change { MessageRecipient.count }.by(2)
 
+      message.reload
+
       recipient1 = message.message_recipients.first
       expect(recipient1.state).to eq('pending')
+      expect(recipient1.error).to eq(nil)
       expect(recipient1.person_id).to eq(top_leader.id)
+
       recipient2 = message.message_recipients.second
       expect(recipient2.state).to eq('pending')
+      expect(recipient2.error).to eq(nil)
+      expect(recipient2.person_id).to eq(top_leader.id)
+    end
+
+    it 'creates recipient with state failed when email invalid' do
+      expect(Messages::BulkMail::AddressList).to receive_message_chain(:new, :entries).and_return([{ person_id: top_leader.id, email: 'invalid.com' }])
+
+      expect do
+        dispatch.send(:init_recipient_entries)
+      end.to change { MessageRecipient.count }.by(1)
+
+      message.reload
+
+      recipient1 = message.message_recipients.first
+      expect(recipient1.state).to eq('failed')
+      expect(recipient1.error).to eq('Invalid email')
       expect(recipient1.person_id).to eq(top_leader.id)
     end
 

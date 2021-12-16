@@ -10,55 +10,55 @@ module Messages
     delegate :update, :success_count, to: '@message'
 
     def initialize(message)
+      mailing_list = message.mailing_list
+
       @message = message
-      @people = message.mailing_list.people
+      @people = mailing_list.people
+      @labels = mailing_list.labels
       @now = Time.current
     end
 
     def run
-      init_recipient_entries
+      if @message.message_recipients.exists?
+        deliver_mails
+      else
+        init_recipient_entries
+      end
     end
 
     private
 
-    def group
-      @group ||= @message.mailing_list.group
+    def deliver_mails
+      # TODO: implement delivery
     end
 
     def init_recipient_entries
-      return if @message.message_recipients.present?
+      recipients = []
+      address_list.each do |address|
+        recipient_attrs = { message_id: @message.id,
+                            created_at: @now,
+                            person_id: address[:person_id],
+                            email: address[:email] }
 
-      emails.find_in_batches do |batch|
-        rows = batch.collect do |person|
-          recipient_attrs(person.id, person.email, :pending)
+        if valid?(address[:email])
+          recipient_attrs.merge!(state: :pending)
+          else
+            recipient_attrs.merge!(state: :failed,
+                                   error: "Invalid email")
         end
-        MessageRecipient.insert_all(rows)
+
+        recipients << recipient_attrs
       end
+
+      MessageRecipient.insert_all(recipients)
     end
 
-    def person_ids
-      @people.collect(&:id)
+    def valid?(email)
+      Truemail.valid?(email)
     end
 
-    def recipient_emails
-
-    end
-
-    def recipient_attrs(person_id, email, state)
-      { message_id: @message.id,
-        created_at: @now,
-        person_id: person_id,
-        email: email,
-        state: state }
-    end
-
-    def emails
-      # TODO: get person emails aswell as additional emails
-    end
-
-    def recipients(state:)
-      recipients = @message.message_recipients
-      recipients.where(state: state)
+    def address_list
+      Messages::BulkMail::AddressList.new(@people, @labels).entries
     end
   end
 end

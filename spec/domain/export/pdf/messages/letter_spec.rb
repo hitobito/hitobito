@@ -67,7 +67,7 @@ describe Export::Pdf::Messages::Letter do
         letter.update!(pp_post: 'Group 11, Lakeview 42, 4242 Wanaka')
 
         expect(text_with_position).to match_array [
-          [71, 687, 'Group 11, Lakeview 42, 4242 Wanaka'],
+          [71, 672, 'Group 11, Lakeview 42, 4242 Wanaka'],
           [71, 654, 'Bottom Member'],
           [71, 644, 'Greatstreet 345'],
           [71, 633, '3456 Greattown'],
@@ -217,8 +217,8 @@ describe Export::Pdf::Messages::Letter do
       Messages::LetterDispatch.new(letter).run
 
       expect(text_with_position).to match_array [
-        [71, 654, 'Anton Abraham, Top Leader, Altra Mates, Bottom'],
-        [71, 644, 'Member, Zora Zaugg'],
+        [71, 654, 'Anton Abraham, Top Leader, Altra Mates, Bottom Member, Zora'],
+        [71, 644, 'Zaugg'],
         [71, 633, 'Greatstreet 345'],
         [71, 623, '3456 Greattown'],
         [71, 531, 'Information'],
@@ -326,11 +326,10 @@ describe Export::Pdf::Messages::Letter do
         create_household(housemate1, housemate4)
 
         expect(text_with_position).to match_array [
-          [71, 654, 'Anton Abraham, Bettina Büttel, Carlo Colorado,'],
-          [71, 644, 'Zora Zaugg'],
-          [71, 633, housemate1.address],
-          [71, 623, "#{housemate1.zip_code} #{housemate1.town}"],
-          [71, 612, 'DE'],
+          [71, 654, 'Anton Abraham, Bettina Büttel, Carlo Colorado, Zora Zaugg'],
+          [71, 644, housemate1.address],
+          [71, 633, "#{housemate1.zip_code} #{housemate1.town}"],
+          [71, 623, 'DE'],
           [71, 502, 'Hallo'],
           [71, 654, 'Bottom Member'],
           [71, 644, bottom_member.address],

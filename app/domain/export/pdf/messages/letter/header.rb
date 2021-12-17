@@ -102,7 +102,7 @@ class Export::Pdf::Messages::Letter
     end
 
     def shipping_info_empty?
-      letter.own? && letter.pp_post.strip.blank?
+      letter.own? && letter.pp_post.to_s.strip.blank?
     end
 
     def logo_path

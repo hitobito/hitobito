@@ -30,7 +30,7 @@ class Export::Pdf::Messages::Letter
     private
 
     def render_date_location_text
-      offset_cursor_from_top 102.5.mm
+      offset_cursor_from_top 97.5.mm
       pdf.text(letter.date_location_text)
     end
 

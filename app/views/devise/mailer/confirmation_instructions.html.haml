@@ -1,0 +1,8 @@
+%p= t('.body.greeting', name: @resource.full_name)
+
+%p= t('.body.information_html')
+
+%p= link_to t('.body.link_text', email: @email), confirmation_url(@resource, confirmation_token: @token)
+
+%br
+%p= t('.body.footer')

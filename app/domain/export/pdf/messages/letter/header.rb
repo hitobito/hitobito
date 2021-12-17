@@ -8,7 +8,7 @@
 class Export::Pdf::Messages::Letter
   class Header < Section
     LOGO_BOX = [450, 40].freeze
-    ADDRESS_BOX = [200, 60].freeze
+    ADDRESS_BOX = [90.mm, 60].freeze
     SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 24].freeze
 
     delegate :group, to: 'letter'
@@ -16,11 +16,10 @@ class Export::Pdf::Messages::Letter
     def render(recipient)
       stamped :render_logo_right
 
-      offset_cursor_from_top 52.5.mm
-
+      offset_cursor_from_top 60.mm
       stamped :render_shipping_info
 
-      pdf.move_down 3.mm # According to post factsheet
+      pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
 
       render_address(recipient.address)
 
@@ -77,15 +76,33 @@ class Export::Pdf::Messages::Letter
     end
 
     def render_shipping_info(width: SHIPPING_INFO_BOX.first, height: SHIPPING_INFO_BOX.second)
-      bounding_box([0, cursor], width: width, height: height) do
-        shipping_method = shipping_methods[letter.shipping_method.to_sym]
-        pdf.move_up 2
-        text('Post CH AG', align: :center, size: 7.pt) unless letter.own?
-        pdf.move_down 2
-        text_box("<u>#{shipping_method}<font size='8pt'>#{letter.pp_post}</font></u>",
-                 inline_format: true, overflow: :truncate, single_line: true,
-                 width: width, height: height, at: [0, cursor])
+      render_shipping_info_post_logo(width) unless letter.own?
+      render_shipping_info_text(width, height)
+      render_shipping_info_line unless shipping_info_empty?
+    end
+
+    def render_shipping_info_post_logo(width)
+      text_box('Post CH AG', align: :center, size: 7.pt, width: width, at: [0, cursor + 18.pt])
+    end
+
+    def render_shipping_info_text(width, height)
+      shipping_method, text_height = shipping_methods[letter.shipping_method.to_sym]
+      text_box("#{shipping_method}<font size='8pt'>#{letter.pp_post}</font>",
+               inline_format: true, overflow: :truncate, single_line: true,
+               width: width, height: height, at: [0, cursor + text_height * 0.75])
+    end
+
+    def render_shipping_info_line
+      pdf.stroke do
+        pdf.move_down 1.mm
+        # post factsheet: max. 11 cm, start and end of the line MUST be visible in the window
+        pdf.horizontal_line 0, 80.mm
+        pdf.move_up 1.mm
       end
+    end
+
+    def shipping_info_empty?
+      letter.own? && letter.pp_post.strip.blank?
     end
 
     def logo_path
@@ -117,9 +134,9 @@ class Export::Pdf::Messages::Letter
     end
 
     def shipping_methods
-      { own: '',
-        normal: "<b><font size='12pt'>P.P.</font></b> ",
-        priority: "<b><font size='12pt'>P.P.</font> <font size='24pt'>A</font></b> " }
+      { own: ['', 8.pt],
+        normal: ["<b><font size='12pt'>P.P.</font></b> ", 12.pt],
+        priority: ["<b><font size='12pt'>P.P.</font> <font size='24pt'>A</font></b> ", 24.pt] }
     end
   end
 end

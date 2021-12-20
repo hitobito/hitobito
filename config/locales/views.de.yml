@@ -39,6 +39,7 @@ de:
       please_select: Bitte auswählen
       add: Eintrag hinzufügen
       remove: Entfernen
+      not_allowed: Nicht erlaubt
 
     button:
       save: Speichern
@@ -651,6 +652,10 @@ de:
   group/deleted_people:
     list:
       confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
+
+  group/register:
+    new:
+      title: "Registrierung zu %{group_name}"
 
   group/person_add_requests:
     deactivated: Manuelle Freigabe deaktiviert
@@ -1464,6 +1469,11 @@ de:
         layer: In der aktuellen Ebene und allen ihren Gruppen
         group: Nur in der aktuellen Gruppe
         group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+
+  register:
+    create:
+      flash:
+        success: Du wurdest erfolgreich registriert
 
   roles:
     full_entry_label: '%{model_label} <i>%{role}</i> für <i>%{person}</i> in <i>%{group}</i>'

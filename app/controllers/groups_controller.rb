@@ -10,7 +10,9 @@ class GroupsController < CrudController
   include AsyncDownload
 
   # Respective group attrs are added in corresponding instance method.
-  self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup + [:logo, :remove_logo]
+  self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup + [:logo,
+                                                              :remove_logo,
+                                                              :self_registration_role_type]
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]

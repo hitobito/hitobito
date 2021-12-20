@@ -1,30 +1,18 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, CVP Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+# Copyright (c) 2012-2021, Hitobito AG. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
 
 describe Messages::BulkMailDispatch do
   let(:message) { messages(:mail) }
-  let(:top_leader) { people(:top_leader) }
   let(:dispatch) { described_class.new(message) }
 
-  let(:address_list) {
-    [
-      { person_id: top_leader.id, email: 'recipient1@example.com' },
-      { person_id: top_leader.id, email: 'recipient2@example.com' }
-    ]
-  }
-
-  let(:recipients) {
-    [
-      MessageRecipient.new(message_id: message.id, person_id: top_leader.id, state: :pending, email: 'recipient1@example.com'),
-      MessageRecipient.new(message_id: message.id, person_id: top_leader.id, state: :pending, email: 'recipient2@example.com')
-    ]
-  }
+  let(:top_leader) { people(:top_leader) }
+  let(:bottom_member) { people(:bottom_member)}
 
   before do
     allow(Truemail).to receive(:valid?).and_call_original
@@ -33,14 +21,15 @@ describe Messages::BulkMailDispatch do
 
   context '#run' do
     it 'delivers mail if message recipients do exist' do
-      message.message_recipients = recipients
+      MessageRecipient.create!(message_id: message.id, person_id: top_leader.id, state: :pending, email: 'recipient1@example.com')
+      MessageRecipient.create!(message_id: message.id, person_id: top_leader.id, state: :pending, email: 'recipient2@example.com')
 
       expect(dispatch).to receive(:deliver_mails)
 
       dispatch.run
     end
 
-    it 'creates message recipients if not existing' do
+    it 'initializes message recipients on first run' do
       expect(dispatch).to receive(:init_recipient_entries)
 
       dispatch.run
@@ -49,7 +38,7 @@ describe Messages::BulkMailDispatch do
 
   context '#init_recipient_entries' do
     it 'creates recipient entries with state pending' do
-      expect(Messages::BulkMail::AddressList).to receive_message_chain(:new, :entries).and_return(address_list)
+      top_leader.additional_emails << AdditionalEmail.new(label: 'second', email: 'second@example.com', mailings: true)
 
       expect do
         dispatch.send(:init_recipient_entries)

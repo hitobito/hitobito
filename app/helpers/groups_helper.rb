@@ -14,4 +14,9 @@ module GroupsHelper
     label.html_safe
   end
 
+  def format_self_registration_link(group)
+    url = group_register_url(group)
+    link_to(url, url)
+  end
+
 end

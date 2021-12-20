@@ -1,15 +1,19 @@
 # Messages Dispatch
-Die Aufgabe der Dispatch Klassen ist der versand von Messages.
+
+Die Aufgabe der Dispatch Klassen ist der Versand von Messages.
 
 ## BulkMail Dispatch
-Versendet Mails an MailingListen Empfänger. Damit diese Ordentlich zugestellt werden können, müssen Folgende Headers gesetzt werden:
+
+Versendet Mails an Abo (MailingList) Empfänger.
+
+Folgende Mail Headers werden für den Versand gesetzt:
 
 | Header      | Definiton                                          | Wert                                |
 | ----------- |:-------------------------------------------------- |:----------------------------------- |
-| sender      | Absenderadresse von hitobito                       | lists-asdf42@hitobito.example.com            |
-| to          | Adresse der MailingList                            | asdf42@hitobito.example.com                  |
-| from        | Absenderadresse Original Mail                      | luca@example.com                    |
-| Reply-To    | Antwortadresse (falls unterschiedlich zu from)     | luca@example.com                     |
+| sender      | Absenderadresse Hitobito Abo                       | lists-asdf42@hitobito.example.com            |
+| to          | Adresse der MailingList (aus original Mail)                           | asdf42@hitobito.example.com                  |
+| from        | Absenderadresse (aus Original Mail)                      | luca@example.com                    |
+| Reply-To    | Antwortadresse     | luca@example.com                     |
 | Return-Path | Wenn unzustellbar zurück an die definierte adresse | luca@example.com                     |
 
-Desweiteren müssen die Empfänger im SMTP Teil `RCPT TO` gesetzt werden. `RCPT TO` steht für `recipient to`.
+Empfänger werden via SMTP `RCPT TO` gesetzt. (BCC)

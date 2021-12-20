@@ -11,8 +11,8 @@ Folgende Mail Headers werden für den Versand gesetzt:
 | Header      | Definiton                                          | Wert                                |
 | ----------- |:-------------------------------------------------- |:----------------------------------- |
 | sender      | Absenderadresse Hitobito Abo                       | lists-asdf42@hitobito.example.com            |
-| to          | Adresse der MailingList (aus original Mail)                           | asdf42@hitobito.example.com                  |
-| from        | Absenderadresse (aus Original Mail)                      | luca@example.com                    |
+| to          | Adresse der MailingList (aus Source/Original Mail)                           | asdf42@hitobito.example.com                  |
+| from        | Absenderadresse (aus Source/Original Mail)                      | luca@example.com                    |
 | Reply-To    | Antwortadresse     | luca@example.com                     |
 | Return-Path | Wenn unzustellbar zurück an die definierte adresse | luca@example.com                     |
 

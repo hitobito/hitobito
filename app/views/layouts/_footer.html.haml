@@ -1,0 +1,32 @@
+-# Copyright (c) 2012-2021, Schweizerischer Kanu-Verband. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+%footer#page-footer
+  .container-fluid
+    .row
+      - footer = Settings.application.footer
+      .span3
+        - if footer.logo_image.present?
+          = link_to wagon_image_pack_tag(footer.logo_image), footer.logo_url, target: '_blank'
+      .footer_content.span9
+        %p
+          - footer.links.to_hash.fetch(I18n.locale, footer.links.to_hash).each do |label, url|
+            = link_to label, url, target: '_blank'
+            %br/
+        %p
+          - if Wagons.app_version.to_s > '0.0'
+            = link_to "Version #{Wagons.app_version}", changelog_path
+
+            %br/
+          = app_version_links
+
+          = link_to t('.source_code'), 'https://github.com/hitobito', target: '_blank'
+          = t('.available_under_license')
+          = link_to 'GNU Affero General Public License', 'http://www.gnu.org/licenses/agpl-3.0.html', target: '_blank'
+          %br/
+          = t('.developed_by')
+          = link_to 'Hitobito', 'http://hitobito.ch', target: '_blank'
+          2012 -
+          = Time.zone.now.year

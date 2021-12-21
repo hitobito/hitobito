@@ -693,7 +693,7 @@ en:
       sign_out: 'Sign out'
     unauthorized:
       forgot_password: 'Forgot your password?'
-    application:
+    footer:
       available_under_license: 'licensed under the'
       developed_by: 'Developed by'
       source_code: 'Source code'

@@ -764,7 +764,7 @@ fr:
       sign_out: 'Déconnexion'
     unauthorized:
       forgot_password: 'Mot de passe oublié?'
-    application:
+    footer:
       available_under_license: 'Disponible au numéro '
       developed_by: 'Développé par'
       source_code: 'Code source'

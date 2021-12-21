@@ -857,7 +857,7 @@ de:
     unauthorized:
       forgot_password: 'Passwort vergessen?'
 
-    application:
+    footer:
       available_under_license: 'verfügbar unter der'
       developed_by: 'Entwickelt von'
       source_code: 'Quellcode'

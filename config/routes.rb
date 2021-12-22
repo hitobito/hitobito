@@ -61,8 +61,8 @@ Hitobito::Application.routes.draw do
         post 'archive' => 'group/archive#create'
       end
 
-      get 'register' => 'group/register#new'
-      post 'register' => 'group/register#create'
+      get 'self_register' => 'groups/self_register#new'
+      post 'self_register' => 'groups/self_register#create'
 
       resources :settings, only: [:index, :edit, :update], controller: 'group_settings', as: 'group_settings'
 

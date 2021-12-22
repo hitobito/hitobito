@@ -653,7 +653,7 @@ de:
     list:
       confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
 
-  group/register:
+  groups/self_register:
     new:
       title: "Registrierung zu %{group_name}"
 
@@ -1470,7 +1470,7 @@ de:
         group: Nur in der aktuellen Gruppe
         group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
 
-  register:
+  self_register:
     create:
       flash:
         success: Du wurdest erfolgreich registriert

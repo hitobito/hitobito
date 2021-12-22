@@ -9,7 +9,7 @@
     = render 'contact_data', group: entry, only_public: cannot?(:show_details, @group)
 
     %h2= t('.additional_information')
-    - if entry.self_registration_role_type.present? && Settings.groups&.self_registration&.activated
+    - if entry.self_registration_active?
       = render_attrs(entry, :self_registration_link)
     = render_attrs(entry, :type_name)
     = render_present_attrs(entry, *entry.used_attributes(:description))

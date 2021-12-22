@@ -206,3 +206,7 @@ messages:
   enable_writing: false
   pdf:
     preview: <%= Rails.root.join("app/javascript/images/preview.png") %>
+
+groups:
+  self_registration:
+    enabled: true

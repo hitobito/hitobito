@@ -23,7 +23,7 @@
       - else
         %p.text= ta(:none_available)
 
-    - if Settings.groups&.self_registration&.activated
+    - if Settings.groups&.self_registration&.enabled
       = f.labeled(:self_registration_role_type) do
         = f.select(:self_registration_role_type,
           entry.possible_roles.map { |r| [r.label, r.sti_name ] },

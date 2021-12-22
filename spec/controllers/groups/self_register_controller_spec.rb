@@ -15,7 +15,6 @@ describe Groups::SelfRegisterController do
 
   context 'with feature disabled' do
     before do
-      expect(Settings.groups.self_registration).to receive(:enabled).and_return(false)
       group.update(self_registration_role_type: Group::TopGroup::Member.sti_name)
     end
 

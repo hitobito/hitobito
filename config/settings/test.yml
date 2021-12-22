@@ -14,7 +14,3 @@ email:
   sender: "hitobito <noreply@localhost>"
   mass_recipient: "hitobito <noreply@localhost>"
   list_domain: localhost
-
-groups:
-  self_registration:
-    activated: true

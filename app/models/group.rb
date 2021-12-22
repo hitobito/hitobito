@@ -233,6 +233,10 @@ class Group < ActiveRecord::Base
     # !archived? && children_without_deleted.none?
   end
 
+  def self_registration_active?
+    self_registration_role_type.present? && Settings.groups&.self_registration&.enabled
+  end
+
   private
 
   def layer_person_duplicates

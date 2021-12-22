@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 module Messages
+  # TODO: maybe rename to BulkMail::MailAddressCollector or so ...
+  # TODO: do some refinement, check specs ... was just copied from mail relay address list
   class BulkMail::AddressList
 
     attr_reader :people, :labels

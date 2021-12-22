@@ -40,17 +40,22 @@ module Messages
                             person_id: address[:person_id],
                             email: address[:email] }
 
-        if valid?(address[:email])
-          recipient_attrs.merge!(state: :pending)
-          else
-            recipient_attrs.merge!(state: :failed,
-                                   error: "Invalid email")
-        end
+        recipient_attrs = validate_email(recipient_attrs, address)
 
         recipients << recipient_attrs
       end
 
       MessageRecipient.insert_all(recipients)
+    end
+
+    def validate_email(attrs, address)
+      if Truemail.valid?(address[:email])
+        attrs.merge!(state: :pending)
+      else
+        attrs.merge!(state: :failed, error: 'Invalid email')
+      end
+
+      attrs
     end
 
     def valid?(email)

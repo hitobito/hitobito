@@ -5,15 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Group::RegisterController < CrudController
+class Groups::SelfRegisterController < CrudController
   skip_authorization_check
   skip_authorize_resource
 
   after_create :sign_in_person
 
-  before_action :assert_honeypot_is_empty, only: [:create]
+  before_action :assert_empty_honeypot, only: [:create]
 
-  before_action :redirect_to_group, unless: :registration_active?
+  before_action :redirect_to_group, unless: :self_registration_active?
+  before_action :redirect_to_group, if: :signed_in?
 
   private
 
@@ -37,7 +38,7 @@ class Group::RegisterController < CrudController
     sign_in(entry.person)
   end
 
-  def assert_honeypot_is_empty
+  def assert_empty_honeypot
     if params.delete(:verification).present?
       redirect_to new_person_session_path
     end
@@ -47,9 +48,12 @@ class Group::RegisterController < CrudController
     redirect_to group_path(group)
   end
 
-  def registration_active?
-    group.self_registration_role_type.present? &&
-      Settings.groups&.self_registration&.activated
+  def self_registration_active?
+    group.self_registration_active?
+  end
+
+  def signed_in?
+    current_user.present?
   end
 
   def valid?

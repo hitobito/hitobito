@@ -1,13 +1,13 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2021, Efficiency-Club Bern. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
 
-describe Group::RegisterController do
+describe Groups::SelfRegisterController do
 
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
@@ -15,7 +15,7 @@ describe Group::RegisterController do
 
   context 'with feature disabled' do
     before do
-      expect(Settings.groups.self_registration).to receive(:activated).and_return(false)
+      expect(Settings.groups.self_registration).to receive(:enabled).and_return(false)
       group.update(self_registration_role_type: Group::TopGroup::Member.sti_name)
     end
 
@@ -45,7 +45,7 @@ describe Group::RegisterController do
 
   context 'with feature enabled' do
     before do
-      allow(Settings.groups.self_registration).to receive(:activated).and_return(true)
+      allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
     end
 
     context 'GET new' do
@@ -59,17 +59,17 @@ describe Group::RegisterController do
           it 'renders page' do
             get :new, params: { group_id: group.id }
 
-            is_expected.to render_template('group/register/new')
+            is_expected.to render_template('groups/self_register/new')
           end
         end
 
         context 'when autorized' do
-          it 'renders page' do
+          it 'redirects to group' do
             sign_in(person)
 
             get :new, params: { group_id: group.id }
 
-            is_expected.to render_template('group/register/new')
+            is_expected.to redirect_to(group_path(group.id))
           end
         end
       end
@@ -92,16 +92,14 @@ describe Group::RegisterController do
           group.update(self_registration_role_type: Group::TopGroup::Member.sti_name)
         end
 
-        context 'with honeypot filled' do
-          it 'redirects to login' do
-            post :create, params: {
-              group_id: group.id,
-              verification: 'foo',
-              new_person: { email: 'foo@example.com' }
-            }
+        it 'redirects to login if honeypot filled' do
+          post :create, params: {
+            group_id: group.id,
+            verification: 'foo',
+            new_person: { email: 'foo@example.com' }
+          }
 
-            is_expected.to redirect_to(new_person_session_path)
-          end
+          is_expected.to redirect_to(new_person_session_path)
         end
 
         it 'creates person and role' do
@@ -110,7 +108,6 @@ describe Group::RegisterController do
               group_id: group.id,
               role: {
                 group_id: group.id,
-                type: Group::TopGroup::Member.sti_name,
                 new_person: { first_name: 'Bob', last_name: 'Miller', email: 'foo@example.com' }
               }
             }

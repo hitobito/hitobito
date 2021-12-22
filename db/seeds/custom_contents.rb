@@ -5,75 +5,64 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-CustomContent.seed_once(:key,
-  {key: Person::LoginMailer::CONTENT_LOGIN,
-   placeholders_required: 'login-url',
-   placeholders_optional: 'recipient-name, sender-name'},
-
-  {key: Event::ParticipationMailer::CONTENT_CONFIRMATION,
-   placeholders_required: 'event-details, application-url',
-   placeholders_optional: 'recipient-name'},
-
-  {key: Event::ParticipationMailer::CONTENT_APPROVAL,
-   placeholders_required: 'participant-name, event-details, application-url',
-   placeholders_optional: 'recipient-names'},
-
-  {key: Event::ParticipationMailer::CONTENT_CANCEL,
-   placeholders_required: 'event-details',
-   placeholders_optional: 'recipient-name'},
-
-  {key: Event::RegisterMailer::CONTENT_REGISTER_LOGIN,
-   placeholders_required: 'event-url',
-   placeholders_optional: 'recipient-name, event-name'},
-
-  {key: 'views/devise/sessions/info',
-   placeholders_required: nil,
-   placeholders_optional: nil},
-
+CustomContent.seed_once(
+  :key,
+  { key: Person::LoginMailer::CONTENT_LOGIN,
+    placeholders_required: 'login-url',
+    placeholders_optional: 'recipient-name, sender-name' },
+  { key: Event::ParticipationMailer::CONTENT_CONFIRMATION,
+    placeholders_required: 'event-details, application-url',
+    placeholders_optional: 'recipient-name' },
+  { key: Event::ParticipationMailer::CONTENT_NOTIFICATION,
+    placeholders_required: 'event-name, participant-name',
+    placeholders_optional: 'application-url, participation-details' },
+  { key: Event::ParticipationMailer::CONTENT_APPROVAL,
+    placeholders_required: 'participant-name, event-details, application-url',
+    placeholders_optional: 'recipient-names' },
+  { key: Event::ParticipationMailer::CONTENT_CANCEL,
+    placeholders_required: 'event-details',
+    placeholders_optional: 'recipient-name' },
+  { key: Event::RegisterMailer::CONTENT_REGISTER_LOGIN,
+    placeholders_required: 'event-url',
+    placeholders_optional: 'recipient-name, event-name' },
+  { key: 'views/devise/sessions/info',
+    placeholders_required: nil,
+    placeholders_optional: nil },
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_PERSON,
     placeholders_required: 'request-body, answer-request-url',
     placeholders_optional: 'recipient-name, requester-name, requester-roles' },
-
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_RESPONSIBLES,
     placeholders_required: 'person-name, request-body, answer-request-url',
     placeholders_optional: 'recipient-names, requester-name, requester-roles' },
-
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_APPROVED,
     placeholders_required: 'person-name, request-body',
     placeholders_optional: 'recipient-name, approver-name, approver-roles' },
-
   { key: Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED,
     placeholders_required: 'person-name, request-body',
     placeholders_optional: 'recipient-name, rejecter-name, rejecter-roles' },
-
   { key: InvoiceMailer::CONTENT_INVOICE_NOTIFICATION,
     placeholders_required: '',
     placeholders_optional: 'recipient-name, group-name, group-address, invoice-number, invoice-items, invoice-total, payment-information' },
-
   { key: Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION,
     placeholders_required: 'taker-name',
     placeholders_optional: 'recipient-name' },
-
-  {key: DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS,
-   placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients',
-   placeholders_optional: nil},
-
-  {key: DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED,
-   placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients, total-succeeded-recipients, failed-recipients',
-   placeholders_optional: nil},
-
-  {key: Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS,
-   placeholders_required: 'invalid-people',
-   placeholders_optional: nil},
-
-  {key: Assignment::AssigneeNotificationMailer::CONTENT_ASSIGNMENT_ASSIGNEE_NOTIFICATION,
-   placeholders_required: 'assignment-title',
-   placeholders_optional: nil}
-
+  { key: DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS,
+    placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients',
+    placeholders_optional: nil },
+  { key: DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED,
+    placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients, total-succeeded-recipients, failed-recipients',
+    placeholders_optional: nil },
+  { key: Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS,
+    placeholders_required: 'invalid-people',
+    placeholders_optional: nil },
+  { key: Assignment::AssigneeNotificationMailer::CONTENT_ASSIGNMENT_ASSIGNEE_NOTIFICATION,
+    placeholders_required: 'assignment-title',
+    placeholders_optional: nil }
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
 participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
+participation_notification_id = CustomContent.get(Event::ParticipationMailer::CONTENT_NOTIFICATION).id
 participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTENT_APPROVAL).id
 cancel_application_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CANCEL).id
 temp_login_id = CustomContent.get(Event::RegisterMailer::CONTENT_REGISTER_LOGIN).id
@@ -155,6 +144,26 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: participation_confirmation_id,
    locale: 'it',
    label: "Evento: E-mail per l'affermazione della inscrizione"},
+
+  {custom_content_id: participation_notification_id,
+   locale: 'de',
+   label: 'Anlass: E-Mail Teilnehmer-/in hat sich angemeldet',
+   subject: 'Anlass: Teilnehmer-/in hat sich angemeldet',
+   body: 'Hallo<br><br>' \
+         '{participant-name} hat sich für den Anlass "{event-name}" angemeldet:<br><br>' \
+         '{application-url}<br>' },
+
+  {custom_content_id: participation_notification_id,
+   locale: 'fr',
+   label: 'Événement: E-Mail Participant/-e a enregistré' },
+
+  {custom_content_id: participation_notification_id,
+   locale: 'en',
+   label: 'Event: E-Mail Participant has applied' },
+
+  {custom_content_id: participation_notification_id,
+   locale: 'it',
+   label: 'Evento: E-Mail Participante ha registrato'},
 
   {custom_content_id: cancel_application_id,
    locale: 'de',

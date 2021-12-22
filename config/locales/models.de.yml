@@ -471,6 +471,7 @@ de:
         motto: Motto
         cost: Kosten
         contact: Kontaktperson
+        notify_contact_on_participations: Kontaktperson über neue Anmeldung per Mail benachrichtigen
         maximum_participants: Maximale Teilnehmerzahl
         contact_id: Kontaktperson
         description: Beschreibung

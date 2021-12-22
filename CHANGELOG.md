@@ -1,5 +1,8 @@
 # Hitobito Changelog
 
+## Unreleased
+
+* Anlässe: Die Kontaktperson wird auf Wunsch per E-Mail über neue Anmeldungen benachrichtigt. Die Benachrichtigung wird auf dem Anlass aktiviert (#1540).
 ## Version 1.26
 
 * Personen mit layer_and_below_full Berechtigung dürfen Personenfilter auf tieferen Layern bearbeiten, erstellen & löschen

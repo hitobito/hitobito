@@ -14,7 +14,8 @@ class EventsController < CrudController
 
   # Respective event attrs are added in corresponding instance method.
   self.permitted_attrs = [:signature, :signature_confirmation, :signature_confirmation_text,
-                          :display_booking_info, :participations_visible, {
+                          :display_booking_info, :participations_visible, :notify_contact_on_participations,
+                          {
                             group_ids: [],
                             dates_attributes: [
                               :id, :label, :location, :start_at, :start_at_date,

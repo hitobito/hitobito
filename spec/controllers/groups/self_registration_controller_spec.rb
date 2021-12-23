@@ -7,15 +7,15 @@
 
 require 'spec_helper'
 
-describe Groups::SelfRegisterController do
+describe Groups::SelfRegistrationController do
 
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
 
-
   context 'with feature disabled' do
     before do
-      group.update(self_registration_role_type: Group::TopGroup::Member.sti_name)
+      group.update!(self_registration_role_type: Group::TopGroup::Member.sti_name)
+      allow(Settings.groups.self_registration).to receive(:enabled).and_return(false)
     end
 
     describe 'GET new' do
@@ -58,11 +58,11 @@ describe Groups::SelfRegisterController do
           it 'renders page' do
             get :new, params: { group_id: group.id }
 
-            is_expected.to render_template('groups/self_register/new')
+            is_expected.to render_template('groups/self_registration/new')
           end
         end
 
-        context 'when autorized' do
+        context 'when authorized' do
           it 'redirects to group' do
             sign_in(person)
 
@@ -88,7 +88,7 @@ describe Groups::SelfRegisterController do
       context 'when registration active' do
 
         before do
-          group.update(self_registration_role_type: Group::TopGroup::Member.sti_name)
+          group.update!(self_registration_role_type: Group::TopGroup::Member.sti_name)
         end
 
         it 'redirects to login if honeypot filled' do

@@ -73,11 +73,11 @@ module Hitobito
     config.cache_store = :mem_cache_store, { compress: true,
                                              namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
 
-    if ENV["RAILS_LOG_TO_STDOUT"].present?
+    if ENV["RAILS_LOG_TO_STDOUT"].present? && !Rails.env.test?
       logger = ActiveSupport::Logger.new(STDOUT)
       logger.formatter = config.log_formatter
       config.logger = ActiveSupport::TaggedLogging.new(logger)
-    end                                                                                     
+    end
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true
@@ -131,7 +131,7 @@ module Hitobito
 
     def self.build_info
       @build_info ||= File.read("#{Rails.root}/BUILD_INFO").strip rescue ''
-    end 
+    end
   end
 end
 

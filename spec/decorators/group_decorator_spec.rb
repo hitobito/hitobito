@@ -26,6 +26,14 @@ describe GroupDecorator, :draper_with_helpers do
     end
   end
 
+  describe 'possible roles_without_writing_permissions' do
+    its(:possible_roles_without_writing_permissions) do
+      should eq [Group::TopGroup::LocalSecretary,
+                 Group::TopGroup::Member,
+                 Role::External]
+    end
+  end
+
   describe 'selecting attributes' do
 
     class DummyGroup < Group

@@ -637,6 +637,7 @@ de:
       no_deleted_sub_groups: 'Keine gelöschten Gruppen vorhanden.'
     form:
       help_contact: 'Adresse und öffentliche Telefonnummern dieser Person verwenden.'
+      hint_external_registration: 'Es sind keine Rollen mit Schreibrechten auswählbar'
     global:
       link:
         add: Gruppe erstellen

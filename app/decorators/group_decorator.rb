@@ -27,6 +27,21 @@ class GroupDecorator < ApplicationDecorator
     end
   end
 
+  def possible_roles_without_writing_permissions
+    excluded_permissions = [
+      :layer_and_below_full,
+      :layer_full,
+      :group_and_below_full,
+      :group_full,
+      :admin,
+      :finance
+    ]
+
+    possible_roles.reject do |r| 
+      r.permissions.any? { |p| excluded_permissions.include?(p) }
+    end
+  end
+
   def to_s(*args)
     model.to_s(*args) + archived_suffix
   end

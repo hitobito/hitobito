@@ -24,6 +24,17 @@ module Role::Types
 
   Kinds = [:member, :passive, :external]
 
+  # All possible permissions with writing permission
+  WritingPermissions = [
+      :layer_and_below_full,
+      :layer_full,
+      :group_and_below_full,
+      :group_full,
+      :admin,
+      :finance
+    ]
+
+
   # rubocop:enable Naming/ConstantName,Style/MutableConstant
 
   included do

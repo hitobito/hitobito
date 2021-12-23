@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Groups::SelfRegisterController < CrudController
+class Groups::SelfRegistrationController < CrudController
   skip_authorization_check
   skip_authorize_resource
 
@@ -15,6 +15,8 @@ class Groups::SelfRegisterController < CrudController
 
   before_action :redirect_to_group, unless: :self_registration_active?
   before_action :redirect_to_group, if: :signed_in?
+
+  delegate :self_registration_active?, to: :group
 
   private
 
@@ -46,10 +48,6 @@ class Groups::SelfRegisterController < CrudController
 
   def redirect_to_group
     redirect_to group_path(group)
-  end
-
-  def self_registration_active?
-    group.self_registration_active?
   end
 
   def signed_in?

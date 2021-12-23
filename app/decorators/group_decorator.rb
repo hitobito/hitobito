@@ -29,7 +29,7 @@ class GroupDecorator < ApplicationDecorator
 
   def possible_roles_without_writing_permissions
     possible_roles.reject do |r| 
-      r.permissions.any? { |p| Role::Types::WritingPermissions.include?(p) }
+      r.permissions.any? { |p| Role::Types::WRITING_PERMISSIONS.include?(p) }
     end
   end
 

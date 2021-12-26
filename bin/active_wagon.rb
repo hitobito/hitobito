@@ -12,7 +12,7 @@ require 'pathname'
 # Allows switching wagons quickly (depends on https://direnv.net/)
 class Setup
 
-  USED_RUBY_VERSION = '2.5.5'
+  USED_RUBY_VERSION = '2.7.3'
 
   def run
     write_and_copy('.envrc', environment)

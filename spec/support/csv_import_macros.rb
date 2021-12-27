@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -7,7 +7,7 @@
 
 module CsvImportMacros
 
-  FILES = [:utf8, :iso88591, :utf8_with_spaces]
+  FILES = [:utf8, :iso88591, :utf8_with_spaces].freeze
 
   def path(name, extension = :csv)
     Rails.root.join('spec', 'fixtures', 'csv', "#{name}.#{extension}")
@@ -18,11 +18,11 @@ module CsvImportMacros
   end
 
   def headers_mapping(parser)
-    parser.headers.inject({}) { |hash, header|  hash[header] = header; hash }
+    parser.headers.each_with_object({}) { |header, hash| hash[header] = header }
   end
 
   def generate_csv(*args)
-    CSV.generate { |csv| args.each { |arg| csv << arg }  }
+    CSV.generate { |csv| args.each { |arg| csv << arg } }
   end
 
 end

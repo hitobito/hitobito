@@ -79,7 +79,7 @@ describe Import::CsvParser do
 
   context 'error when parsing' do
     let(:data) { File.read(path(:utf8, :ods)) }
-    its(:error) { should eq 'Unquoted fields do not allow \\r or \\n (line 2).' }
+    its(:error) { should eq 'Unquoted fields do not allow new line <"\\n"> in line 2.' }
   end
 
   context 'mapping rows' do

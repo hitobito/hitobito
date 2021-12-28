@@ -2,8 +2,9 @@
 
 class UpgradeSessionsToSecureStorage < ActiveRecord::Migration[6.1]
   def up
-    say_with_time('securing sessions...') do
-      ActionDispatch::Session::ActiveRecordStore.session_class.find_each(&:secure!)
-    end
+    session_class = ActionDispatch::Session::ActiveRecordStore.session_class
+
+    say_with_time('deleting sessions...') { session_class.delete_all }
+    say_with_time('securing sessions...') { session_class.find_each(&:secure!) }
   end
 end

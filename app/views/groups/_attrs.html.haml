@@ -19,6 +19,9 @@
     - if can?(:index_notes, entry)
       = render 'notes/section', create_path: group_notes_path(@group)
 
+    = @text
+    %button{data: { reflex: 'click->ExampleReflex#hello' }}= 'Haha'
+
   %aside.span5.offset1
     = render 'child_groups'
     = render_extensions :aside

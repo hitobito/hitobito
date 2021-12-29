@@ -30,6 +30,7 @@ class GroupsController < CrudController
   end
 
   def show
+    @text ||= 'from controller'
     super do |format|
       format.json do
         render json: GroupSerializer.new(entry.decorate, controller: self)

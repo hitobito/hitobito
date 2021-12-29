@@ -32,4 +32,8 @@ class ExampleReflex < ApplicationReflex
   #
   # Learn more at: https://docs.stimulusreflex.com/reflexes#reflex-classes
 
+  def hello
+    puts 'hi!!!!!!!'
+    @text = 'from reflex!!!'
+  end
 end

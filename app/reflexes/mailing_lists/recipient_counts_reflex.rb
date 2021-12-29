@@ -12,27 +12,25 @@ class MailingLists::RecipientCountsReflex < ApplicationReflex
   # skip_authorization_check
 
   def count
-    @household = true?(element.value)
-    @recipient_count = recipient_counter.valid
+    @recipient_count = recipient_counter(send_to_households: true?(element.value)).valid
   end
 
-  def init_count(household)
-    @household = household
-    @recipient_count = recipient_counter.valid
+  def init_count(send_to_households)
+    @recipient_count = recipient_counter(send_to_households: send_to_households).valid
   end
 
   private
 
   def mailing_list
-    @mailing_list ||= MailingList.find(element.dataset[:id])
+    MailingList.find(element.dataset[:id])
   end
 
   def message_type
     element.dataset[:message_type]
   end
 
-  def recipient_counter
-    @recipient_counter ||= MailingList::RecipientCounter.new(mailing_list, message_type, @households)
+  def recipient_counter(send_to_households:)
+    MailingList::RecipientCounter.new(mailing_list, message_type, send_to_households)
   end
 
 end

@@ -20,8 +20,8 @@
 
     %button{data: { reflex: 'click->NoteReflex#hello' }}= 'Haha'
 
-    %div{'data-controller': 'hello'}
-      %h1{'data-target': 'hello.output'}
+    = @text
+
 
     - if can?(:index_notes, entry)
       = render 'notes/section', create_path: group_notes_path(@group)

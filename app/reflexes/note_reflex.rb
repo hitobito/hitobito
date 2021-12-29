@@ -8,7 +8,8 @@ class NoteReflex < ApplicationReflex
   end
 
   def hello
-    puts 'asdfasdf 42 42 42'
+    puts 'hello reflex ...'
+    @text = 'Reflex text 423 ...' + SecureRandom.hex(20)
   end
 
 end

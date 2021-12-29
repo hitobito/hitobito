@@ -6,11 +6,13 @@
 = standard_form(entry, url: [parent.group, parent, entry], data: { group: group_path(parent.group.layer_group) }) do |f|
   = f.error_messages
   .controls
-    %span.text#recipient-count2
-      - if @recipient_count.nil?
+    %span.text#recipient-count
+      - if @valid_recipient_info.nil?
         = spinner(true)
       - else
-        = @recipient_count
+        = link_to([entry.mailing_list.group, entry.mailing_list, :subscriptions, format: (entry.send_to_households? ? :html : :pdf)], target: :_blank) do
+          = @valid_recipient_info
+        = @invalid_recipient_info
 
   = f.hidden_field :type
 

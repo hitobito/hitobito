@@ -203,7 +203,7 @@ addresses:
     - CH
 
 messages:
-  enable_writing: false
+  enable_writing: true
   pdf:
     preview: <%= Rails.root.join("app/javascript/images/preview.png") %>
 

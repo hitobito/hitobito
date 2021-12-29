@@ -10,7 +10,7 @@
   - if current_user.event_feed_token
     %p
       = t('.url', url: link_to(person_event_feed_url, person_event_feed_url)).html_safe
-      = action_button(t('global.button.copy'), '#', :copy, class: 'btn-small', data: { copy_to_clipboard: person_event_feed_url }, in_button_group: true)
+      = action_button(t('global.button.copy'), '#', :copy, class: 'btn-small', data: { controller: 'clipboard', action: 'clipboard#copy', clipboard_text_param: person_event_feed_url }, in_button_group: true)
     %br
     %p= t('.url_description')
     %p= t('.reset_url_description')

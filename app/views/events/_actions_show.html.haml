@@ -16,6 +16,6 @@
   = action_button(t('.copy_share_link'),
                   shared_access_token_event_url(@group, entry),
                   :copy,
-                  class: 'btn', data: { copy_to_clipboard: shared_access_token_event_url(@group, entry) })
+                  class: 'btn', data: { controller: 'clipboard', action: 'clipboard#copy', clipboard_text_param: shared_access_token_event_url(@group, entry) })
 
 = render_extensions :actions_show

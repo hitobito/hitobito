@@ -13,8 +13,25 @@ import StimulusReflex from 'stimulus_reflex'
  * Learn more at: https://docs.stimulusreflex.com
  */
 export default class extends Controller {
+  connected = false
+
   connect () {
+    window.addEventListener('stimulus-reflex:connected', () => {
+      this.connected = true
+    })
+    window.addEventListener('stimulus-reflex:disconnected', () => {
+      this.connected = false
+    })
+    window.addEventListener('stimulus-reflex:rejected', () => {
+      this.connected = false
+    })
+
     StimulusReflex.register(this)
+
+    const originalIsActionCableConnectionOpen = this.isActionCableConnectionOpen.bind(this)
+    this.isActionCableConnectionOpen = () => {
+      return this.connected && originalIsActionCableConnectionOpen()
+    }
   }
 
   /* Application-wide lifecycle methods

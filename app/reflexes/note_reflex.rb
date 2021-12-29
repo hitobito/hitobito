@@ -7,7 +7,7 @@ class NoteReflex < ApplicationReflex
     puts 'asdfasdfa'
   end
 
-  def haha
+  def hello
     puts 'asdfasdf 42 42 42'
   end
 

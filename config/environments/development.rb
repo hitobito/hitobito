@@ -73,5 +73,5 @@ Rails.application.configure do
 
   config.hosts.clear
 
-  config.action_cable.url = "ws://localhost:3000/cable"
+  config.action_cable.url = "ws://#{ENV.fetch('RAILS_HOST_NAME', 'localhost:3000')}/cable"
 end

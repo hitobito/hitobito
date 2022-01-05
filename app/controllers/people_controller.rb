@@ -39,6 +39,7 @@ class PeopleController < CrudController
 
   before_save :validate_household
   after_save :persist_household
+  after_save :show_email_change_info
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
   before_render_show :load_grouped_person_tags, if: -> { html_request? }
@@ -263,6 +264,12 @@ class PeopleController < CrudController
     else
       { alert: I18n.t("#{controller_name}.#{action_name}_invalid_email") }
     end
+  end
+
+  def show_email_change_info
+    return unless entry.show_email_change_info?
+
+    flash[:notice] = I18n.t("#{controller_name}.#{action_name}_email_must_be_confirmed")
   end
 
 end

@@ -11,6 +11,27 @@ module Person::DeviseOverrides
     persisted? && super
   end
 
+  def confirmation_required?
+    password? && super
+  end
+
+  def reconfirmation_required?
+    password? && super
+  end
+
+  def postpone_email_change?
+    password? && super
+  end
+
+  def postpone_email_change_until_confirmation_and_regenerate_confirmation_token
+    super
+    @show_email_change_info = true
+  end
+
+  def show_email_change_info?
+    @show_email_change_info.present?
+  end
+
   def clear_reset_password_token!
     clear_reset_password_token
     save(validate: false)

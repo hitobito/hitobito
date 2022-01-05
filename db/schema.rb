@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_07_124846) do
+ActiveRecord::Schema.define(version: 2021_12_22_102417) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -40,12 +40,10 @@ ActiveRecord::Schema.define(version: 2021_12_07_124846) do
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
     t.datetime "created_at", null: false
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-<<<<<<< Updated upstream
-  create_table "additional_emails", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
-=======
   create_table "active_storage_variant_records", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
@@ -53,7 +51,6 @@ ActiveRecord::Schema.define(version: 2021_12_07_124846) do
   end
 
   create_table "additional_emails", id: :integer, charset: "utf8mb4", force: :cascade do |t|
->>>>>>> Stashed changes
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false
     t.string "email", null: false
@@ -318,6 +315,7 @@ ActiveRecord::Schema.define(version: 2021_12_07_124846) do
     t.boolean "waiting_list", default: true, null: false
     t.boolean "globally_visible"
     t.string "shared_access_token"
+    t.boolean "notify_contact_on_participations", default: false, null: false
     t.index ["kind_id"], name: "index_events_on_kind_id"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end
@@ -593,7 +591,6 @@ ActiveRecord::Schema.define(version: 2021_12_07_124846) do
     t.text "invoice_attributes"
     t.bigint "invoice_list_id"
     t.text "text"
-    t.boolean "heading", default: false
     t.string "salutation"
     t.string "pp_post"
     t.string "shipping_method", default: "own"
@@ -747,11 +744,6 @@ ActiveRecord::Schema.define(version: 2021_12_07_124846) do
     t.string "event_feed_token"
     t.string "unlock_token"
     t.string "family_key"
-    t.string "title"
-    t.string "nationality"
-    t.string "correspondence_language"
-    t.string "additional_languages"
-    t.string "advertising"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["email"], name: "index_people_on_email", unique: true
     t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true
@@ -946,6 +938,7 @@ ActiveRecord::Schema.define(version: 2021_12_07_124846) do
     t.string "context", limit: 128
     t.datetime "created_at"
     t.string "hitobito_tooltip"
+    t.string "tenant", limit: 128
     t.index ["context"], name: "index_taggings_on_context"
     t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
@@ -955,6 +948,7 @@ ActiveRecord::Schema.define(version: 2021_12_07_124846) do
     t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
     t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
     t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+    t.index ["tenant"], name: "index_taggings_on_tenant"
   end
 
   create_table "tags", id: :integer, charset: "utf8mb4", force: :cascade do |t|
@@ -978,6 +972,7 @@ ActiveRecord::Schema.define(version: 2021_12_07_124846) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade

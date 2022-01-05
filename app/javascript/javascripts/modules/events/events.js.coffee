@@ -16,7 +16,7 @@ app.Events = {
       row.hide()
 }
 
-hasContact = (input) -> $(input).val() != ""
+hasContact = (input) -> $(input).val().trim() != ""
 notificationCheckbox = (input) ->
     $(input).closest('form')
         .find('input[type="checkbox"][name="event[notify_contact_on_participations]"]')

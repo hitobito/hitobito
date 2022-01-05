@@ -8,7 +8,8 @@
 Person.seed(:email,
   {company_name: 'Puzzle ITC',
    company: true,
-   email: Settings.root_email}
+   email: Settings.root_email,
+   confirmed_at: Time.now}
 )
 
 

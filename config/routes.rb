@@ -61,6 +61,9 @@ Hitobito::Application.routes.draw do
         post 'archive' => 'group/archive#create'
       end
 
+      get 'self_registration' => 'groups/self_registration#new'
+      post 'self_registration' => 'groups/self_registration#create'
+
       resources :settings, only: [:index, :edit, :update], controller: 'group_settings', as: 'group_settings'
 
       resources :invoices do

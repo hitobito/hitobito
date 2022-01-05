@@ -461,6 +461,8 @@ de:
         type: Gruppentyp
         type_name: Gruppentyp
         description: Beschreibung
+        self_registration_role_type: Externe Registrierung
+        self_registration_link: Externe Registrierung
 
       event:
         group_ids: Gruppen

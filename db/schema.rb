@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_22_102417) do
+ActiveRecord::Schema.define(version: 2021_12_24_143925) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -361,6 +361,7 @@ ActiveRecord::Schema.define(version: 2021_12_22_102417) do
     t.text "description"
     t.string "logo"
     t.datetime "archived_at"
+    t.string "self_registration_role_type"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"

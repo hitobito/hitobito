@@ -16,3 +16,7 @@ hier folgt ein Mockup ...
 # Tech-Spec
 
 - https://github.com/hitobito/hitobito
+
+# ToDo
+
+- [ ] Schritte für Umsetzung

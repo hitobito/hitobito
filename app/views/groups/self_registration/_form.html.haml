@@ -1,0 +1,18 @@
+-#  Copyright (c) 2021, Efficieny-Club Bern. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= entry_form(url: group_self_registration_path, cancel_url: '') do |f|
+  = f.hidden_field :group_id
+  = f.hidden_field :type
+  = f.honeypot(:verification)
+
+  = f.fields_for(:new_person, entry.person) do |fields|
+    = render('shared/error_messages', errors: entry.person.errors, object: entry.person)
+    = field_set_tag do
+      = fields.labeled_input_fields :first_name, :last_name
+      = fields.labeled_input_field :nickname if Person::PUBLIC_ATTRS.include?(:nickname)
+      = fields.labeled_input_fields :company_name, :company
+      = fields.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
+      = render_extensions :additional_person_fields, locals: { fields: fields }

@@ -27,6 +27,12 @@ class GroupDecorator < ApplicationDecorator
     end
   end
 
+  def possible_roles_without_writing_permissions
+    possible_roles.reject do |r| 
+      r.permissions.any? { |p| Role::Types::WRITING_PERMISSIONS.include?(p) }
+    end
+  end
+
   def to_s(*args)
     model.to_s(*args) + archived_suffix
   end

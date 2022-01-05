@@ -15,30 +15,67 @@ describe EventsController, js: true do
     event
   end
 
+  context 'contacts' do
+    NOTIFICATION_CHECKBOX_SELECTOR = '#event_notify_contact_on_participations'
 
-  it 'may set and remove contact from event' do
-    obsolete_node_safe do
+    let(:edit_path) { edit_group_event_path(event.group_ids.first, event.id) }
+
+    def notification_checkbox_visible(visible)
+      have_checkbox = have_selector(NOTIFICATION_CHECKBOX_SELECTOR)
+      visible ? expect(page).to(have_checkbox) : expect(page).not_to(have_checkbox)
+    end
+
+    def notification_checkbox
+      find(NOTIFICATION_CHECKBOX_SELECTOR)
+    end
+
+    def click_save
+      all('form .btn-toolbar').first.click_button 'Speichern'
+    end
+
+    it 'may set and remove contact from event' do
+      obsolete_node_safe do
+        sign_in
+        visit edit_path
+
+        notification_checkbox_visible(false)
+
+        # set contact
+        fill_in 'Kontaktperson', with: 'Top'
+        expect(find('.typeahead.dropdown-menu')).to have_content 'Top Leader'
+        find('.typeahead.dropdown-menu').click
+        notification_checkbox_visible(true)
+        click_save
+
+        # show event
+        expect(find('aside')).to have_content 'Kontakt'
+        expect(find('aside')).to have_content 'Top Leader'
+        click_link 'Bearbeiten'
+        notification_checkbox_visible(true)
+
+        # remove contact
+        expect(find('#event_contact').value).to eq('Top Leader')
+        fill_in 'Kontaktperson', with: ''
+        notification_checkbox_visible(false)
+        click_save
+
+        # show event again
+        expect(page).to have_no_selector('.contactable')
+      end
+    end
+
+    it 'toggles participation notifications' do
+      event.update(contact: people(:top_leader))
+
       sign_in
-      visit edit_group_event_path(event.group_ids.first, event.id)
+      visit edit_path
 
-      # set contact
-      fill_in 'Kontaktperson', with: 'Top'
-      expect(find('.typeahead.dropdown-menu')).to have_content 'Top Leader'
-      find('.typeahead.dropdown-menu').click
-      all('form .btn-toolbar').first.click_button 'Speichern'
+      expect(notification_checkbox).not_to be_checked
+      notification_checkbox.click
+      click_save
 
-      # show event
-      expect(find('aside')).to have_content 'Kontakt'
-      expect(find('aside')).to have_content 'Top Leader'
-      click_link 'Bearbeiten'
-
-      # remove contact
-      expect(find('#event_contact').value).to eq('Top Leader')
-      fill_in 'Kontaktperson', with: ''
-      all('form .btn-toolbar').first.click_button 'Speichern'
-
-      # show event again
-      expect(page).to have_no_selector('.contactable')
+      visit edit_path
+      expect(notification_checkbox).to be_checked
     end
   end
 

@@ -28,6 +28,10 @@
 
   - entry.used?(:contact_id) do
     = f.labeled_person_field :contact
+    .display-wrapper{style: element_visible(entry.contact.present?)}
+      = f.labeled_boolean_field :notify_contact_on_participations,
+        label: t('events.form.label_notify_contact_on_participations'),
+        caption: Event.human_attribute_name(:notify_contact_on_participations)
 
   = render 'location_fields', f: f
 

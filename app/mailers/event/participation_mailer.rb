@@ -8,6 +8,7 @@
 class Event::ParticipationMailer < ApplicationMailer
 
   CONTENT_CONFIRMATION = 'event_application_confirmation'
+  CONTENT_NOTIFICATION = 'event_application_notification'
   CONTENT_APPROVAL     = 'event_application_approval'
   CONTENT_CANCEL       = 'event_cancel_application'
 
@@ -39,6 +40,12 @@ class Event::ParticipationMailer < ApplicationMailer
     custom_content_mail(@person, CONTENT_CANCEL, values_for_placeholders(CONTENT_CANCEL))
   end
 
+  def notify_contact(participation, recipient)
+    @participation = participation
+
+    compose([recipient], CONTENT_NOTIFICATION)
+  end
+
   private
 
   def placeholder_recipient_name
@@ -53,12 +60,21 @@ class Event::ParticipationMailer < ApplicationMailer
     @recipients.collect(&:greeting_name).join(', ')
   end
 
+  def placeholder_event_name
+    event.name
+  end
+
   def placeholder_event_details
     if participation.nil?
       event_without_participation
     else
       event_details
     end
+  end
+
+  def placeholder_participation_details
+    ["#{Event::Role::Participant.model_name.human}:",
+     person.decorate.complete_contact].join('<br/>')
   end
 
   def placeholder_application_url
@@ -102,7 +118,7 @@ class Event::ParticipationMailer < ApplicationMailer
     infos << labeled(:contact) { "#{event.contact}<br/>#{event.contact.email}" }
     infos << answers_details
     infos << additional_information_details
-    infos << participation_details
+    infos << placeholder_participation_details
     infos.compact.join('<br/><br/>')
   end
 
@@ -146,11 +162,6 @@ class Event::ParticipationMailer < ApplicationMailer
       ':<br/>' +
       participation.additional_information.gsub("\n", '<br/>')
     end
-  end
-
-  def participation_details
-    ["#{Event::Role::Participant.model_name.human}:",
-     person.decorate.complete_contact].join('<br/>')
   end
 
   def person

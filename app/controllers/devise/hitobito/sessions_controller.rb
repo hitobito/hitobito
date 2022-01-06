@@ -5,11 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_dependency Devise::Engine.root
-                                 .join('app', 'controllers', 'devise', 'sessions_controller')
-                                 .to_s
-
-class Devise::SessionsController < DeviseController
+class Devise::Hitobito::SessionsController < Devise::SessionsController
   layout :devise_layout
   include ::TwoFactor
 

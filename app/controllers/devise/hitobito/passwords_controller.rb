@@ -5,11 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_dependency Devise::Engine.root.
-                                  join('app', 'controllers', 'devise', 'passwords_controller').
-                                  to_s
-
-class Devise::PasswordsController < DeviseController
+class Devise::Hitobito::PasswordsController < Devise::PasswordsController
 
   def successfully_sent?(resource)
     if resource.login?
@@ -20,3 +16,4 @@ class Devise::PasswordsController < DeviseController
   end
 
 end
+

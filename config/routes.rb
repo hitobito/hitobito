@@ -309,7 +309,11 @@ Hitobito::Application.routes.draw do
     resources :help_texts, except: [:show]
 
     devise_for :service_tokens, only: [:sessions]
-    devise_for :people, skip: [:registrations], path: "users"
+    devise_for :people, skip: [:registrations], path: "users", controllers: {
+        passwords: 'devise/hitobito/passwords',
+        registrations: 'devise/hitobito/registrations',
+        sessions: 'devise/hitobito/sessions'
+    }
     as :person do
       get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
       put 'users' => 'devise/registrations#update', :as => 'person_registration'

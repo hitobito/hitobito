@@ -693,10 +693,6 @@ en:
       sign_out: 'Sign out'
     unauthorized:
       forgot_password: 'Forgot your password?'
-    footer:
-      available_under_license: 'licensed under the'
-      developed_by: 'Developed by'
-      source_code: 'Source code'
     user_impersonation:
       info: "You are logged in as %{user}"
       end: "End imitation"

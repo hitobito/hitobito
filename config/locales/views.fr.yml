@@ -764,10 +764,6 @@ fr:
       sign_out: 'Déconnexion'
     unauthorized:
       forgot_password: 'Mot de passe oublié?'
-    footer:
-      available_under_license: 'Disponible au numéro '
-      developed_by: 'Développé par'
-      source_code: 'Code source'
     user_impersonation:
       info: "Tu es maintenant enregistré en tant que %{user}"
       end: "Terminer l'imitation"

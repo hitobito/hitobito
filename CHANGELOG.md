@@ -1,11 +1,10 @@
 # Hitobito Changelog
 
-## Unreleased
-* Jede Person kann jetzt Zwei-Faktor-Authentifizierung mit einer TOTP-App aktivieren. Für einzelne Rollen kann die Zwei-Faktor-Authentifizierung obligatorisch gemacht werden.
-
 ## Version 1.26
 
 * Anlässe: Die Kontaktperson wird auf Wunsch per E-Mail über neue Anmeldungen benachrichtigt. Die Benachrichtigung wird auf dem Anlass aktiviert (#1540).
+* Jede Person kann jetzt Zwei-Faktor-Authentifizierung mit einer TOTP-App aktivieren. Für einzelne Rollen kann die Zwei-Faktor-Authentifizierung obligatorisch gemacht werden.
+* Die Haupt-Mailadresse von Personen mit Login muss neu bestätigt werden nachdem sie geändert wurde (#957).
 
 ## Version 1.26
 

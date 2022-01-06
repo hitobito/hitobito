@@ -21,6 +21,8 @@ module Messages
       else
         create_for_people!
       end
+
+      DispatchResult.finished
     end
 
     private

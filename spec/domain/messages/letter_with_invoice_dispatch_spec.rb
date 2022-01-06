@@ -27,6 +27,10 @@ describe Messages::LetterWithInvoiceDispatch do
     expect(message.reload.invoice_list).to be_present
   end
 
+  it 'returns a result' do
+    expect(dispatch.run.finished?).to be_truthy
+  end
+
   it 'creates invoice_list and invoices' do
     expect { dispatch.run }.to change { InvoiceList.count }.by(1)
 

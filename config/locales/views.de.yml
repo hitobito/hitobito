@@ -220,6 +220,9 @@ de:
       new:
         reset_password_button: 'Passwort zurücksetzen'
     confirmations:
+      new:
+        resend_confirmation_instructions: 'E-Mail-Adresse bestätigen'
+        submit: 'Bestätigungs-E-Mail senden'
       send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail, mit der Du Deine E-Mail-Adresse bestätigen kannst.'
       send_paranoid_instructions: 'Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Du sie bestätigen kannst.'
       confirmed: 'Vielen Dank für die Bestätigung deiner E-Mail-Adresse. Du kannst dich jetzt anmelden.'
@@ -890,6 +893,7 @@ de:
 
     unauthorized:
       forgot_password: 'Passwort vergessen?'
+      need_confirmation_email: 'Keine Bestätigungs-E-Mail bekommen?'
 
     footer:
       available_under_license: 'verfügbar unter der'

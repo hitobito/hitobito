@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Unreleased
+## Version 1.26
 
 * Anlässe: Die Kontaktperson wird auf Wunsch per E-Mail über neue Anmeldungen benachrichtigt. Die Benachrichtigung wird auf dem Anlass aktiviert (#1540).
 ## Version 1.26

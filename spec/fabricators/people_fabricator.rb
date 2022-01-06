@@ -14,6 +14,7 @@ Fabricator(:person) do
     last = attrs[:last_name]&.downcase&.gsub(/[^a-z]/, '')
     "#{first}.#{last}#{sequence}@hitobito.example.com"
   end
+  confirmed_at { 1.hour.ago }
 end
 
 Fabricator(:person_with_address, from: :person) do

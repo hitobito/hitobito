@@ -89,6 +89,8 @@ RSpec.configure do |config|
   config.before :all do
     # load all fixtures
     self.class.fixtures :all
+    Person.update_all(confirmed_at: Time.now)
+
     FileUtils.rm_rf(Dir.glob(AsyncDownloadFile::DIRECTORY.join('*')))
   end
 

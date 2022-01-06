@@ -18,6 +18,7 @@ module MailRelay
                             'Recipient address rejected',
                             'Bad sender address syntax'].freeze
 
+    # @param [Mail::Message] message
     def initialize(message, envelope_sender, delivery_report_to, recipients)
       @message = message
       @envelope_sender = envelope_sender

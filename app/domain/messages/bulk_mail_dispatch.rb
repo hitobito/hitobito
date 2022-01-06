@@ -9,110 +9,73 @@ module Messages
   class BulkMailDispatch
     delegate :update, :success_count, to: '@message'
 
+    DELIVERY_RETRIES = 2
     BULK_SIZE = Settings.email.bulk_mail.bulk_size
     BATCH_TIMEOUT = Settings.email.bulk_mail.batch_timeout
     RETRY_AFTER_ERROR = [5.minutes, 10.minutes].freeze
-    INVALID_EMAIL_ERRORS = ['Domain not found',
-                            'Recipient address rejected',
-                            'Bad sender address syntax'].freeze
 
-    def initialize(message)
-      mailing_list = message.mailing_list
-
+    # @param [Message] message
+    # @param [BulkMail::MailFactory] mail_factory
+    def initialize(message, mail_factory = nil)
       @message = message
-      @people = mailing_list.people
-      @labels = mailing_list.labels
-      @now = Time.current
+      @mail_factory = mail_factory || BulkMail::MailFactory.new(message)
     end
 
     def run
-      if @message.message_recipients.exists?
-        deliver_mails
+      if recipients_generated?(@message)
+        recipients = pending_recipients(@message).limit(BULK_SIZE)
+        deliver_mails(@mail_factory, recipients, DELIVERY_RETRIES)
       else
-        init_recipient_entries
+        BulkMail::CreateRecipients.new.create!(@message)
       end
+
+      reschedule_unless_none_pending(@message)
     end
 
     private
 
-    def deliver_mails
-      @message.smtp_envelope_to = next_recipients
+    def deliver_mails(mail_factory, recipients, retries)
+      delivery = BulkMail::Delivery.new(mail_factory, recipients.map(&:email), retries)
 
       begin
-        @message.deliver
-        update_recipients_state(:sent)
-      rescue => e
-        if invalid_email?(e)
-          reject_failing_recipients(error)
-        else
-          retry_delivery
-        end
+        delivery.deliver
+        succeeded, failed = recipient_ids(recipients, [delivery.succeeded, delivery.failed])
+
+        Rails.logger.info "Sent mails, #{succeeded.length} OK, #{failed.length} failed."
+
+        MessageRecipient.where(id: succeeded).update_all(state: :sent)
+        MessageRecipient.where(id: failed).update_all(state: :failed)
+      rescue BulkMail::Delivery::RetriesExceeded => e
+        # TODO fail cleanly
+        raise e
       end
     end
 
-    def init_recipient_entries
-      recipients = []
-      address_list.each do |address|
-        recipient_attrs = { message_id: @message.id,
-                            created_at: @now,
-                            person_id: address[:person_id],
-                            email: address[:email] }
-
-        if valid?(address[:email])
-          recipient_attrs.merge!(state: :pending)
-        else
-          recipient_attrs.merge!(state: :failed,
-                                 error: "Invalid email")
-        end
-
-        recipients << recipient_attrs
-      end
-
-      MessageRecipient.insert_all(recipients)
-    end
-
-    def retry_delivery
-      if @retry >= 2
-        failed_count = @message.message_recipients.where(state: :failed).count
-
-        # TODO: Where to display or log failed recipients for initial sender?
-        # log_info("aborting delivery for remaining #{failed_count} recipients: #{error_message}")
-
-        return
+    def reschedule_unless_none_pending(message)
+      if pending = pending_recipient_count(message) > 0
+        Rails.logger.info "#{pending} recipients pending, rescheduling dispatch job."
+        DispatchResult.needs_reenqueue
       else
-
+        Rails.logger.info "All mails sent, BulkMailDispatch complete."
+        DispatchResult.finished
       end
     end
 
-
-    def update_recipients_state(state)
-      next_recipients.update_all(state: state)
+    def recipients_generated?(message)
+      message.message_recipients.exists?
     end
 
-    def invalid_email?(error)
-      INVALID_EMAIL_ERRORS.any? { |msg| error.message =~ Regexp.new(msg) }
+    def pending_recipients(message)
+      message.message_recipients.where(state: :pending)
     end
 
-    def valid?(email)
-      Truemail.valid?(email)
+    def pending_recipient_count(message)
+      pending_recipients(message).count
     end
 
-    def address_list
-      Messages::BulkMail::AddressList.new(@people, @labels).entries
-    end
-
-    def next_recipients
-      @message.message_recipients.where(state: :pending).limit(BULK_SIZE)
-    end
-
-    def reject_failing_recipients(error)
-      failed_recipients = next_recipients.find { |r| error.message.include?(r) }
-      # if we cannot extract email from error message, raise
-      raise error unless failed_recipients.present?
-
-      failed_recipients.update_all(state: :failed, error: error.message)
-
-      next_recipients.reload
+    def recipient_ids(recipients, email_groups)
+      by_email = recipients.index_by(&:email)
+      email_groups.map { |emails| by_email.values_at(*emails).map(&:id) }
     end
   end
 end

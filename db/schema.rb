@@ -597,6 +597,7 @@ ActiveRecord::Schema.define(version: 2022_01_13_064557) do
     t.string "shipping_method", default: "own"
     t.boolean "send_to_households", default: false, null: false
     t.boolean "donation_confirmation", default: false, null: false
+    t.text "raw_source", size: :medium
     t.string "date_location_text"
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"

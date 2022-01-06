@@ -125,6 +125,12 @@ describe PaymentProvider do
         subject.HPB
       end.to raise_error(PaymentProviders::EbicsError, 'Authentication and encryption public keys do not match')
     end
+
+    it 'returns false when authentication fails' do
+      expect(epics_client).to receive(:HPB).exactly(:once).and_raise(Epics::Error::TechnicalError.new('061001'))
+
+      expect(subject.HPB).to be(false)
+    end
   end
 
   context 'XTC' do

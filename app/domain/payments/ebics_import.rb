@@ -28,7 +28,7 @@ class Payments::EbicsImport
     invoice_xmls.flat_map { |xml| payments_from_xml(xml) }
   rescue Epics::Error::BusinessError => e
     case e.code
-    when '090005'
+    when '090005' # EBICS_NO_DOWNLOAD_DATA_AVAILABLE
       []
     else
       raise e

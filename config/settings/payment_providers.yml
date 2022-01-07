@@ -57,6 +57,13 @@ payment_providers:
     encryption_hash: 03 B1 E7 F5 99 3A 0F AD 07 0A 63 59 AC 47 8F F9 86 86 89 4D A0 EF 45 94 17 DC 9B 02 A0 5E D6 42
     authentication_hash: 03 B1 E7 F5 99 3A 0F AD 07 0A 63 59 AC 47 8F F9 86 86 89 4D A0 EF 45 94 17 DC 9B 02 A0 5E D6 42
 
+  # nur C54 statt Z54? Nur ESR per C54?
+  - name: valiant
+    url: https://www.ebics.swisscom.com/ebics-server/ebics.aspx
+    host_id: VABEBICS
+    encryption_hash: 50 37 82 9a 2b 87 c9 7b 22 a4 58 33 3e ab ab 18 df f8 48 2d ff 1f 6e 03 1f 99 8c 06 06 0b d3 3b
+    authentication_hash: 62 9e 27 44 44 c1 96 c0 4d c8 19 12 21 da 48 28 77 e1 91 d0 7a 16 95 24 cf 0b ce 41 6c 18 64 8a
+
   # nur C54 statt Z54? Stand 2018?
   - name: bancastato
     url: https://ebics.bancastato.ch

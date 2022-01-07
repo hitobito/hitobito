@@ -34,7 +34,7 @@
     %header.logo
       = link_to(header_logo, root_path, class: 'logo-image')
 
-    #page
+    #page{class: ('is-nav-not-rendered' unless render_nav?)}
       - if render_nav?
         %nav.nav-left
           = render 'layouts/nav'

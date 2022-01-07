@@ -101,7 +101,8 @@ body {
     }
   }
 
-  .is-logged-out & {
+  .is-logged-out &,
+  &.is-nav-not-rendered {
     padding-top: 7rem;
   }
 }

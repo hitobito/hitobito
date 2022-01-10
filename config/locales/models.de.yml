@@ -473,6 +473,7 @@ de:
         motto: Motto
         cost: Kosten
         contact: Kontaktperson
+        notify_contact_on_participations: Kontaktperson über neue Anmeldung per Mail benachrichtigen
         maximum_participants: Maximale Teilnehmerzahl
         contact_id: Kontaktperson
         description: Beschreibung
@@ -1005,6 +1006,7 @@ de:
           sgkb: St.Galler Kantonalbank
           tkb: Thurgauer Kantonalbank
           ubs: UBS
+          valiant: Valiant
           zkb: Zürcher Kantonalbank
           zugerkb: Zuger Kantonalbank
 

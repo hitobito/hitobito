@@ -764,10 +764,6 @@ it:
       sign_out: 'Logout'
     unauthorized:
       forgot_password: 'Password dimenticata?'
-    footer:
-      available_under_license: 'disponibile in'
-      developed_by: 'sviluppato da'
-      source_code: 'codice sorgente'
     user_impersonation:
       info: "Sei ora registrato come %{user}"
       end: "Finire l'imitazione"

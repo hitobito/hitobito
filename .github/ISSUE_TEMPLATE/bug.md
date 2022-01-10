@@ -24,3 +24,7 @@ Beim Erfassen einer Person wird ...
 
 - ...
 - https://github.com/hitobito/hitobito/
+
+# ToDo
+
+- [ ] Schritte für Umsetzung

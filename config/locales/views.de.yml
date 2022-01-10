@@ -449,6 +449,7 @@ de:
       caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar.
       caption_waiting_list: Wenn keine Plätze mehr frei sind, landen neue Anmeldungen automatisch auf der Warteliste.
       caption_globally_visible: '%{model_name} ist für die ganze Datenbank sichtbar'
+      label_notify_contact_on_participations: Benachrichtigung
     form_tabs:
       general: Allgemein
       application_questions: Anmeldeangaben

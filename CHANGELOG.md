@@ -2,6 +2,9 @@
 
 ## Version 1.26
 
+* Anlässe: Die Kontaktperson wird auf Wunsch per E-Mail über neue Anmeldungen benachrichtigt. Die Benachrichtigung wird auf dem Anlass aktiviert (#1540).
+## Version 1.26
+
 *  Gruppen können externe Registrierung aktivieren (Optional, hitobito#1441)
 *  Personen mit layer_and_below_full Berechtigung dürfen Personenfilter auf tieferen Layern bearbeiten, erstellen & löschen
 *  Personen können neu als Geschwister angegeben werden (hitobito_kljb#5)

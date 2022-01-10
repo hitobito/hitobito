@@ -1,4 +1,4 @@
-class SecondFactorAuthentications::Totp < SecondFactorAuthentication
+class Authenticatable::SecondFactors::Totp < Authenticatable::SecondFactor
   def verify?(code)
     otp.verify(code).present?
   end

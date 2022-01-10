@@ -1,4 +1,4 @@
-class SecondFactorAuthentication
+class Authenticatable::SecondFactor
   attr_reader :person, :session
 
   def initialize(person, session)

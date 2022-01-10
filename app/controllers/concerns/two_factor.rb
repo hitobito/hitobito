@@ -28,6 +28,8 @@ module TwoFactor
     factor = :totp if pending_two_factor_person.totp_forced?
     factor ||= pending_two_factor_person.second_factor_auth.to_sym
 
-    new_users_second_factor_path(second_factor: factor)
+    session[:pending_second_factor_authentication] = factor
+
+    new_users_second_factor_path
   end
 end

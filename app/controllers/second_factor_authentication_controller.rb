@@ -16,12 +16,13 @@ class SecondFactorAuthenticationController < ApplicationController
 
   def create
     if authenticator.verify?(params[:second_factor_code])
+      authenticator.register! unless authenticator.registered?
+
+      reset_session
+
       sign_in(person) unless person_signed_in?
 
       flash_msg = notice_flash
-      authenticator.register! unless authenticator.registered?
-
-      session.delete(:pending_two_factor_person_id)
 
       redirect_to root_path, notice: flash_msg
     else
@@ -34,10 +35,9 @@ class SecondFactorAuthenticationController < ApplicationController
   private
 
   def authenticator
-    @authenticator ||= case authentication_factor
-                       when :totp
-                         SecondFactorAuthentications::Totp.new(person, session)
-                       end
+    @authenticator = {
+      totp: Authenticatable::SecondFactors::Totp
+    }[authentication_factor].new(person, session)
   end
 
   def person
@@ -45,7 +45,7 @@ class SecondFactorAuthenticationController < ApplicationController
   end
 
   def authentication_factor
-    @authentication_factor ||= params[:second_factor].to_sym
+    @authentication_factor ||= session[:pending_second_factor_authentication].to_sym
   end
 
   def redirect_to_root

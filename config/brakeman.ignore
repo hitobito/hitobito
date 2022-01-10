@@ -31,22 +31,6 @@
       "note": "HTML Tags ARE allowed here"
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 121,
-      "fingerprint": "9a3951031616a07c8e02c86652f537e92c08685da97f5ec2b12d5d3602b55bb8",
-      "check_name": "EOLRuby",
-      "message": "Support for Ruby 2.5.5 ended on 2021-03-31",
-      "file": "Gemfile.lock",
-      "line": 407,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "High",
-      "note": "We have a PR waiting to be merged"
-    },
-    {
       "warning_type": "Remote Code Execution",
       "warning_code": 110,
       "fingerprint": "9ae68e59cfee3e5256c0540dadfeb74e6b72c91997fdb60411063a6e8518144a",
@@ -83,6 +67,6 @@
       "note": "This from() is not part of an SQL query builder, but rather an email builder"
     }
   ],
-  "updated": "2022-01-10 10:49:34 +0100",
+  "updated": "2022-01-10 12:14:00 +0100",
   "brakeman_version": "5.2.0"
 }

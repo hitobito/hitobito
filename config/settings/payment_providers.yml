@@ -24,8 +24,8 @@ payment_providers:
   - name: raiffeisen
     url: https://econnect.raiffeisen.ch/ebicsweb/ebicsweb
     host_id: RAIFCHEC
-    encryption_hash: 99 08 AF B5 E1 E7 EB 27 DC A6 7D EC C9 5B 22 85 F8 78 BF 61 BA D6 40 AB 29 70 4D 77 CD E7 67 56
-    authentication_hash: 12 3A AF D3 58 9D 3D 64 ED E7 24 10 34 73 84 26 2A 38 25 03 5D 42 1E F1 FO 1B B4 DA FO 33 57 6D
+    encryption_hash: 99 08 AF B5 E1 E7 EB 27 DC A6 7D EC C9 5B 22 85 F8 7B BF 61 BA D6 40 AB 29 70 4D 77 CD E7 67 56
+    authentication_hash: 12 3A AF D3 58 9D 3D 64 ED E7 24 10 34 73 84 26 2A 38 25 03 5D 42 1E F1 F0 1B B4 DA F0 33 57 6D
 
   - name: ubs
     url: https://ebics.ubs.com/ebicsweb/ebicsweb
@@ -56,6 +56,13 @@ payment_providers:
     host_id: ZKBKCHZZ
     encryption_hash: 03 B1 E7 F5 99 3A 0F AD 07 0A 63 59 AC 47 8F F9 86 86 89 4D A0 EF 45 94 17 DC 9B 02 A0 5E D6 42
     authentication_hash: 03 B1 E7 F5 99 3A 0F AD 07 0A 63 59 AC 47 8F F9 86 86 89 4D A0 EF 45 94 17 DC 9B 02 A0 5E D6 42
+
+  # nur C54 statt Z54? Nur ESR per C54?
+  - name: valiant
+    url: https://www.ebics.swisscom.com/ebics-server/ebics.aspx
+    host_id: VABEBICS
+    encryption_hash: 50 37 82 9a 2b 87 c9 7b 22 a4 58 33 3e ab ab 18 df f8 48 2d ff 1f 6e 03 1f 99 8c 06 06 0b d3 3b
+    authentication_hash: 62 9e 27 44 44 c1 96 c0 4d c8 19 12 21 da 48 28 77 e1 91 d0 7a 16 95 24 cf 0b ce 41 6c 18 64 8a
 
   # nur C54 statt Z54? Stand 2018?
   - name: bancastato

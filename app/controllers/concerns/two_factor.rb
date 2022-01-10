@@ -25,7 +25,7 @@ module TwoFactor
   end
 
   def two_factor_auth_path
-    factor = 'totp' if pending_two_factor_person.totp_forced?
+    factor = 'totp' if pending_two_factor_person.totp_enforced?
     factor ||= pending_two_factor_person.second_factor_auth
 
     session[:pending_second_factor_authentication] = factor

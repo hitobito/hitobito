@@ -99,7 +99,7 @@ class PersonAbility < AbilityDsl::Base
   end
 
   def if_totp_not_forced
-    !subject.totp_forced?
+    !subject.totp_enforced?
   end
 
   def if_password_present

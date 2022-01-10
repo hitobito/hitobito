@@ -35,6 +35,7 @@ describe DashboardController do
 
       it 'redirects to user home if logged in' do
         person = people(:top_leader)
+        person.confirm
         person.generate_authentication_token!
         get :index, params: { user_email: person.email, user_token: person.authentication_token }, format: :json
         is_expected.to redirect_to(group_person_path(person.groups.first, person, format: :json))

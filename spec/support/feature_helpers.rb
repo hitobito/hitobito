@@ -7,8 +7,9 @@
 
 module FeatureHelpers
 
-  def sign_in(user = nil)
+  def sign_in(user = nil, confirm: true)
     user ||= people(:top_leader)
+    user.confirm if confirm
     login_as(user, scope: :person)
   end
 

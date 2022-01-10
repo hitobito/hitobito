@@ -7,8 +7,11 @@
 
 class SecondFactorAuthenticationController < ApplicationController
   skip_authorization_check
-  before_action :redirect_to_root, unless: :two_factor_authentication_pending_or_signed_in?
+
   before_action :redirect_on_locked, if: :access_locked?
+  before_action :redirect_to_root, unless: :two_factor_authentication_pending_or_signed_in?
+  before_action :redirect_to_root, if: :second_factor_registered_and_signed_in?
+  before_action :redirect_to_root, unless: :authenticator_present?
 
   def new
     authenticator.prepare_registration! unless authenticator.registered?
@@ -39,7 +42,7 @@ class SecondFactorAuthenticationController < ApplicationController
   def authenticator
     @authenticator ||= {
       'totp' => Authenticatable::SecondFactors::Totp
-    }[authentication_factor].new(person, session)
+    }[authentication_factor]&.new(person, session)
   end
 
   def person
@@ -74,5 +77,13 @@ class SecondFactorAuthenticationController < ApplicationController
 
   def two_factor_authentication_pending_or_signed_in?
     two_factor_authentication_pending? || person_signed_in?
+  end
+
+  def second_factor_registered_and_signed_in?
+    authenticator.registered? && person_signed_in?
+  end
+
+  def authenticator_present?
+    authenticator.present?
   end
 end

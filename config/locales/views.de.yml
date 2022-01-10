@@ -405,7 +405,7 @@ de:
       attachment:
         subject: 'Nachrichten Betreff:'
 
-  totp:
+  second_factor_authentication:
     flash:
       success:
         registered: Zwei Faktor Authentifizierung erfolgreich aktiviert

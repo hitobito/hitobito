@@ -30,7 +30,7 @@
   = action_button t('devise.registrations.edit.change_password'), edit_person_registration_path
 
 - if entry == current_user && !entry.totp_registered?
-  = action_button t('.activate_totp'), new_users_totp_path
+  = action_button t('.activate_totp'), new_users_second_factor_path
 
 - if entry.totp_registered? && can?(:totp_reset, entry)
   = action_button t('.reset_totp'), totp_reset_group_person_path, nil, method: :patch

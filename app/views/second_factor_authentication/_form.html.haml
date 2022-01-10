@@ -3,11 +3,11 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https ://github.com/hitobito/hitobito.
 
-= form_with url: users_totp_path, method: :post, class: 'form-horizontal' do |f|
+= form_with url: users_second_factor_path(second_factor: @authentication_factor), method: :post, class: 'form-horizontal' do |f|
   .control-group.required
-    = f.label :totp_code, t('.totp_code'), class: 'control-label'
+    = f.label :second_factor_code, t('.totp_code'), class: 'control-label'
     .controls
-      = f.text_field :totp_code, class: 'span3', autofocus: 'autofocus', placeholder: t('.totp_code_placeholder'), required: true
+      = f.text_field :second_factor_code, class: 'span3', autofocus: 'autofocus', placeholder: t('.totp_code_placeholder'), required: true
   .control-group
     .controls
       = f.submit(t('.submit'), class: 'btn btn-primary')

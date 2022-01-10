@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe TotpController do
+describe SecondFactorAuthenticationController do
   let(:bottom_member) { people(:bottom_member) }
   let(:totp_authenticator) { People::OneTimePassword.new(@secret).send(:authenticator) }
 
@@ -26,7 +26,7 @@ describe TotpController do
       post :create
 
       expect(response).to redirect_to root_path
-      expect(flash[:alert]).to include('Dein Account ist für 10 Minuten gesperrt')
+      expect(flash[:alert]).to include('Dein Account ist für 1 Stunde gesperrt')
     end
 
     context 'as not signed in person' do
@@ -48,7 +48,7 @@ describe TotpController do
 
         it 'signs in with correct TOTP code' do
 
-          post :create, params: { totp_code: totp_authenticator.now }
+          post :create, params: { second_factor_code: totp_authenticator.now }
 
           expect(response).to redirect_to root_path
 
@@ -62,9 +62,9 @@ describe TotpController do
 
         it 'does not sign in with incorrect TOTP code' do
 
-          post :create, params: { totp_code: totp_authenticator.now.to_i - 1 }
+          post :create, params: { second_factor_code: totp_authenticator.now.to_i - 1 }
 
-          expect(response).to redirect_to new_users_totp_path
+          expect(response).to redirect_to new_users_second_factor_path
 
           bottom_member.reload
 
@@ -93,7 +93,7 @@ describe TotpController do
 
         it 'registers TOTP with correct code and signs in' do
 
-          post :create, params: { totp_code: totp_authenticator.now }
+          post :create, params: { second_factor_code: totp_authenticator.now }
 
           expect(response).to redirect_to root_path
 
@@ -107,9 +107,9 @@ describe TotpController do
 
         it 'does not register TOTP with incorrect code and does not sign in' do
 
-          post :create, params: { totp_code: totp_authenticator.now.to_i - 1 }
+          post :create, params: { second_factor_code: totp_authenticator.now.to_i - 1 }
 
-          expect(response).to redirect_to new_users_totp_path
+          expect(response).to redirect_to new_users_second_factor_path
 
           bottom_member.reload
 
@@ -136,7 +136,7 @@ describe TotpController do
       it 'registers TOTP with correct code' do
         session[:pending_two_factor_person_id] = bottom_member.id
 
-        post :create, params: { totp_code: totp_authenticator.now }
+        post :create, params: { second_factor_code: totp_authenticator.now }
 
         bottom_member.reload
 
@@ -150,11 +150,11 @@ describe TotpController do
       it 'does not register TOTP with incorrect code' do
         session[:pending_two_factor_person_id] = bottom_member.id
 
-        post :create, params: { totp_code: totp_authenticator.now.to_i - 1 }
+        post :create, params: { second_factor_code: totp_authenticator.now.to_i - 1 }
 
         bottom_member.reload
 
-        expect(response).to redirect_to new_users_totp_path
+        expect(response).to redirect_to new_users_second_factor_path
 
         expect(bottom_member.second_factor_auth).to eq('no_second_factor')
         expect(bottom_member.encrypted_totp_secret).to be_nil

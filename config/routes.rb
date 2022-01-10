@@ -315,8 +315,8 @@ Hitobito::Application.routes.draw do
       put 'users' => 'devise/registrations#update', :as => 'person_registration'
       get 'users' => 'devise/registrations#edit' # route required for language switch
 
-      get 'users/totp' => 'totp#new', as: 'new_users_totp'
-      post 'users/totp' => 'totp#create', as: 'users_totp'
+      get 'users/second_factor' => 'second_factor_authentication#new', as: 'new_users_second_factor'
+      post 'users/second_factor' => 'second_factor_authentication#create', as: 'users_second_factor'
 
       post 'users/token' => 'devise/tokens#create'
       delete 'users/token' => 'devise/tokens#destroy'

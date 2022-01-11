@@ -1272,6 +1272,7 @@ de:
           email_additional_invalid: Weitere E-Mail ungültig
           address_invalid: Adresse befindet sich nicht im Verzeichnis
 
+
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 
@@ -1311,8 +1312,6 @@ de:
     send_password_instructions: Login Informationen wurden verschickt.
     send_password_instructions_invalid_email: Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist.
     years_old: (%{years} Jahre alt)
-    totp_reset: Zwei Faktor Authentifizierung erfolgreich zurückgesetzt
-    totp_disable: Zwei Faktor Authentifizierung erfolgreich deaktiviert
 
     tabs:
       history: Verlauf
@@ -1402,6 +1401,14 @@ de:
       tag_lists: Tags
       remove_tags: Tags entfernen
       add_tags: Tags hinzufügen
+
+    totp_reset:
+      flashes:
+        success: Zwei Faktor Authentifizierung erfolgreich zurückgesetzt
+
+    totp_disable:
+      flashes:
+        success: Zwei Faktor Authentifizierung erfolgreich deaktiviert
 
   participations:
     destroy:

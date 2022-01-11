@@ -92,8 +92,8 @@ Hitobito::Application.routes.draw do
           post :send_password_instructions
           put :primary_group
 
-          patch :totp_reset
-          patch :totp_disable
+          post 'totp_reset' => 'people/totp_reset#create', as: 'totp_reset'
+          post 'totp_disable' => 'people/totp_disable#create', as: 'totp_disable'
 
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'

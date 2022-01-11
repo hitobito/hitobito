@@ -105,20 +105,6 @@ class PeopleController < CrudController
     end
   end
 
-  # PATCH button, totp_reset
-  def totp_reset
-    authorize!(:totp_reset, entry)
-    entry.update!(encrypted_totp_secret: nil)
-    redirect_to group_person_path(group, entry), notice: t('.totp_reset')
-  end
-
-  # PATCH button, totp_disable
-  def totp_disable
-    authorize!(:totp_disable, entry)
-    entry.update!(encrypted_totp_secret: nil, second_factor_auth: :no_second_factor)
-    redirect_to group_person_path(group, entry), notice: t('.totp_disable')
-  end
-
   # dont use class level accessor as expression is evaluated whenever constant is
   # loaded which might be before wagon that defines groups / roles has been loaded
   def self.sort_mappings_with_indifferent_access

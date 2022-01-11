@@ -17,6 +17,14 @@ class Authenticatable::SecondFactor
   def prepare_setup!
     raise 'implement in subclass'
   end
+  
+  def reset!
+    person.update!(encrypted_totp_secret: nil)
+  end
+  
+  def disable!
+    person.update!(encrypted_totp_secret: nil, second_factor_auth: :no_second_factor)
+  end
 
   def prevent_brute_force!
     person.increment_failed_attempts

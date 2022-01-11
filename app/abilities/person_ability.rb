@@ -15,7 +15,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:admin).may(:destroy).not_self
     permission(:admin).may(:totp_reset).all
-    permission(:admin).may(:totp_disable).if_totp_not_forced
+    permission(:admin).may(:totp_disable).if_totp_not_enforced
 
     permission(:any).
       may(:show, :show_details, :show_full, :history, :update, :update_email, :primary_group, :log,
@@ -98,7 +98,7 @@ class PersonAbility < AbilityDsl::Base
     subject.roles.empty?
   end
 
-  def if_totp_not_forced
+  def if_totp_not_enforced
     !subject.totp_enforced?
   end
 

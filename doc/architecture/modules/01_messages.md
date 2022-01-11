@@ -1,32 +1,30 @@
 # Messages
 
-![Systemübersicht](../diagrams/modules/messages-overview.svg)
-
-_Systemübersicht._
+![Modulübersicht](../diagrams/modules/messages-overview.svg)
 
 Mit Hitobito können Nachrichten (Briefe, SMS, Mails, usw...) via Abos an verschiedene Empfänger gesendet werden.
 
 ## Abo
-![Systemübersicht](../diagrams/modules/messages-abo.svg)
+![Klassendiagramm](../diagrams/modules/messages-abo.svg)
 
 _Klassendiagramm Messagesmodul._
 
-![Systemübersicht](../diagrams/modules/screenshots/mailing-lists.png)
+![Ansicht Gruppe](../diagrams/modules/screenshots/mailing-lists.png)
 
 _Ansicht der Abos einer Gruppe_
 
-### `Person` Model
+### `Person`
 Person ist das zentrale Model in Hitobito für Personen und Firmen. Auf der Person sind auch die für das Message Modul relevanten Kontaktdaten wie E-Mail, Telefonnummer oder Postadresse gespeichert.
 
-### `MailingList` Model
+### `MailingList`
 Das Abo (MailingList) ist eines der zentralen Elemente im Messages Modul. Mit Subscriptions werden die Empfänger auf einem Abo definiert. Subscribers können Gruppen und spezifische Rollen aber auch einzelne Personen sein.
 
 
-### `MessageRecipient` Model
+### `MessageRecipient`
 Der `MessageRecipient` wird im `Dispatch` erstellt, sobald eine Message versendet wird. Dieser besteht aus den Personen und der Nachricht welche versendet werden. Jeder `MessageRecipient` erhält zudem einen Status, in welchem man den jeweiligen Status des Versands einsehen kann. Sollte ein Versand fehlschlagen, kann mithilfe des Status eingesehen werden, welche Personen eine Nachricht noch nicht erhalten haben.
 
 ## Message
-![Systemübersicht](../diagrams/modules/messages.svg)
+![Message Types](../diagrams/modules/messages.svg)
 
 _Klassendiagramm der Messagetypen_
 

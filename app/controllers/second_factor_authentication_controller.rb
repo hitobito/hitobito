@@ -31,7 +31,8 @@ class SecondFactorAuthenticationController < ApplicationController
     else
       authenticator.prevent_brute_force!
 
-      redirect_to new_users_second_factor_path, alert: t('second_factor_authentication.flash.failure')
+      redirect_to new_users_second_factor_path,
+                  alert: t('second_factor_authentication.flash.failure')
     end
   end
 
@@ -48,7 +49,8 @@ class SecondFactorAuthenticationController < ApplicationController
   end
 
   def authentication_factor
-    @authentication_factor ||= session[:pending_second_factor_authentication] || params[:second_factor]
+    @authentication_factor ||= session[:pending_second_factor_authentication] ||
+                                 params[:second_factor]
   end
 
   def redirect_to_root

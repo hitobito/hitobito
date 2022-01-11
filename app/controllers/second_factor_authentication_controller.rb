@@ -9,9 +9,7 @@ class SecondFactorAuthenticationController < ApplicationController
   skip_authorization_check
 
   before_action :redirect_on_locked, if: :access_locked?
-  before_action :redirect_to_root, unless: :two_factor_authentication_pending_or_signed_in?
-  before_action :redirect_to_root, if: :second_factor_registered_and_signed_in?
-  before_action :redirect_to_root, unless: :authenticator_present?
+  before_action :redirect_to_root, unless: :allowed?
 
   def new
     authenticator.prepare_registration! unless authenticator.registered?
@@ -19,6 +17,8 @@ class SecondFactorAuthenticationController < ApplicationController
 
   def create
     if authenticator.verify?(params[:second_factor_code])
+      flash_msg = notice_flash
+
       authenticator.register! unless authenticator.registered?
 
       unless person_signed_in?
@@ -26,8 +26,6 @@ class SecondFactorAuthenticationController < ApplicationController
 
         sign_in(person)
       end
-
-      flash_msg = notice_flash
 
       redirect_to root_path, notice: flash_msg
     else
@@ -68,7 +66,7 @@ class SecondFactorAuthenticationController < ApplicationController
   end
 
   def access_locked?
-    person.access_locked?
+    person&.access_locked?
   end
 
   def authenticate?
@@ -82,8 +80,12 @@ class SecondFactorAuthenticationController < ApplicationController
   def second_factor_registered_and_signed_in?
     authenticator.registered? && person_signed_in?
   end
+  
+  def allowed?
+    authenticator.present? &&
+      !second_factor_registered_and_signed_in? &&
+      two_factor_authentication_pending_or_signed_in?
+    
 
-  def authenticator_present?
-    authenticator.present?
   end
 end

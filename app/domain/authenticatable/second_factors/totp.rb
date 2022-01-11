@@ -22,7 +22,7 @@ class Authenticatable::SecondFactors::Totp < Authenticatable::SecondFactor
   end
 
   def registered?
-    person.totp_registered?
+    person&.totp_registered?
   end
 
   private

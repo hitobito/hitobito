@@ -13,10 +13,28 @@ describe SecondFactorAuthenticationController do
 
   describe 'TOTP' do
     before do
-      session[:pending_second_factor_authentication] = :totp
+      session[:pending_second_factor_authentication] = 'totp'
     end
 
     describe 'create' do
+      it 'redirects to root if no second factor given' do
+        session[:pending_two_factor_person_id] = bottom_member.id
+        session.delete(:pending_second_factor_authentication)
+
+        post :create
+
+        expect(response).to redirect_to root_path
+      end
+
+      it 'redirects to root if an invalid second factor given' do
+        session[:pending_two_factor_person_id] = bottom_member.id
+        session.delete(:pending_second_factor_authentication)
+
+        post :create, params: { second_factor: 'trust-me-bro' }
+
+        expect(response).to redirect_to root_path
+      end
+
       it 'redirects to root if no two factor authentication is pending' do
         post :create
 

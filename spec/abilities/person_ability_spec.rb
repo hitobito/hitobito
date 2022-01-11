@@ -1397,10 +1397,7 @@ describe PersonAbility do
       let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
       it 'can not disable other person when forced' do
-        totp = double
-        expect(Settings).to receive(:totp).and_return(totp)
-        forced_roles = [people(:bottom_member).roles.sample.type, Role.first.type]
-        expect(totp).to receive(:forced_roles).and_return(forced_roles)
+        expect(people(:bottom_member).roles.first.class).to receive(:totp_enforced).and_return(true)
 
         is_expected.to_not be_able_to(:totp_disable, people(:bottom_member))
       end

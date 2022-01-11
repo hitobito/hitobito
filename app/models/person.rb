@@ -398,9 +398,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def totp_enforced?
-    roles.any? do |role|
-      Settings.totp&.forced_roles&.include?(role.type)
-    end
+    roles.any?(&:totp_enforced)
   end
 
   private

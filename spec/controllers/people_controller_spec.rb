@@ -743,10 +743,7 @@ describe PeopleController do
       end
 
       it 'does not disable totp of bottom_member when forced' do
-        totp = double
-        expect(Settings).to receive(:totp).and_return(totp)
-        forced_roles = [bottom_member.roles.sample.type, Role.first.type]
-        expect(totp).to receive(:forced_roles).and_return(forced_roles)
+        expect(bottom_member.roles.first.class).to receive(:totp_enforced).and_return(true)
 
         expect do
           patch :totp_disable, params: { group_id: bottom_layer.id, id: bottom_member.id }

@@ -65,7 +65,9 @@ class Role < ActiveRecord::Base
   after_create :set_first_primary_group
   after_destroy :reset_contact_data_visible
   after_destroy :reset_primary_group
-  before_save :prevent_changes, if: ->(r) { r.archived? }
+  
+  # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
+  # before_save :prevent_changes, if: ->(r) { r.archived? }
 
   ### SCOPES
 

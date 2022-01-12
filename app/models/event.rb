@@ -90,6 +90,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                           :participations_visible, :globally_visible]
 
   # All participation roles that exist for this event
+  # Customize in wagons using .register_role_type / .disable_role_type
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
                      Event::Role::Cook,
@@ -281,8 +282,24 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
       type
     end
-  end
 
+    # Used by wagons to register additional event roles
+    def register_role_type(type)
+      ensure_role_type!(type)
+      self.role_types << type
+    end
+
+    # Used by wagons to register additional event roles
+    def disable_role_type(type)
+      ensure_role_type!(type)
+      self.role_types -= [type]
+    end
+
+    def ensure_role_type!(type)
+      return if type < Event::Role
+      raise ArgumentError, "#{type} must be a subclass of Event::Role"
+    end
+  end
 
   ### INSTANCE METHODS
 

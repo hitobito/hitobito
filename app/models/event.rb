@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -77,7 +77,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                   :supports_applications,
                   :possible_states,
                   :kind_class,
-                  :supports_invitations
+                  :supports_invitations,
+                  :uses_form_tabs
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
@@ -108,6 +109,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # Are Event::Invitations possible for this event type
   self.supports_invitations = true
+
+  self.uses_form_tabs = true
 
   model_stamper
   stampable stamper_class_name: :person,

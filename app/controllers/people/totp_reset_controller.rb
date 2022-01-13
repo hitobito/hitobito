@@ -22,7 +22,7 @@ class People::TotpResetController < ApplicationController
   end
 
   def authenticator
-    @authenticator ||= Authenticatable::SecondFactors::Totp.new(person,
-                                                                session)
+    @authenticator ||= Authenticatable::TwoFactors::Totp.new(person,
+                                                             session)
   end
 end

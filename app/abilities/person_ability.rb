@@ -15,7 +15,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:admin).may(:destroy).not_self
     permission(:admin).may(:totp_reset).all
-    permission(:admin).may(:totp_disable).if_totp_not_enforced
+    permission(:admin).may(:totp_disable).if_two_factor_authentication_not_enforced
 
     permission(:any).
       may(:show, :show_details, :show_full, :history, :update, :update_email, :primary_group, :log,
@@ -98,8 +98,8 @@ class PersonAbility < AbilityDsl::Base
     subject.roles.empty?
   end
 
-  def if_totp_not_enforced
-    !subject.totp_enforced?
+  def if_two_factor_authentication_not_enforced
+    !subject.two_factor_authentication_enforced?
   end
 
   def if_password_present

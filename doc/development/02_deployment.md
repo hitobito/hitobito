@@ -109,20 +109,11 @@ Um die schweizer Addressdaten zu importieren kann der `bundle exec rake address:
 
 #### 2FA mit TOTP
 
-Die Zwei Faktor Authentifizierung wurde mit der [freeOTP](https://freeotp.github.io/) getestet und entwickelt.
+Die Zwei Faktor Authentifizierung wurde mit der [freeOTP App](https://freeotp.github.io/) getestet und entwickelt.
 
 Zur Inbetriebnahme werden keine Konfigurationen zwingend benötigt. Die 2FA kann ohne Konfiguration aktiviert und verwendet werden.
 
-Mittles der Rolle kann die 2FA erzwungen werden. Erzwingen der 2FA erfolgt über das `settings.yml` indem der `role.type` unter `totp.forced_roles` eingetragen wird.
-
-Beispiel:
-
-```
-totp:
-  forced_roles:
-    - Group::TopLayer::Administrator
-    - Group::RegionBoard::President
-```
+Mittles der Rolle kann die 2FA erzwungen werden. Erzwingen der 2FA erfolgt über das `class_attribute` `two_factor_authentication_enforced` auf der Rolle. Default: `false`
 
 ### Umsysteme
 

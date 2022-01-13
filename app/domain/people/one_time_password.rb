@@ -46,7 +46,7 @@ class People::OneTimePassword
 
   def issuer
     issuer = "#{Settings.application.name}"
-    issuer += " - #{ENV['RAILS_ENV']}" unless ENV['RAILS_ENV'] == 'production' 
+    issuer += " - #{Rails.env}" unless Rails.env.production?
     issuer
   end
 

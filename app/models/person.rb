@@ -77,7 +77,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :locked_at, :remember_created_at, :reset_password_token, :unlock_token,
     :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
     :show_global_label_formats, :household_key, :event_feed_token, :family_key,
-    :second_factor_auth, :encrypted_totp_secret
+    :two_factor_authentication, :encrypted_2fa_secret
   ]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -109,9 +109,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
 
-  enum second_factor_auth: [:no_second_factor, :totp]
+  enum two_factor_authentication: [:totp]
 
-  serialize :encrypted_totp_secret
+  serialize :encrypted_2fa_secret
 
   mount_uploader :picture, Person::PictureUploader
 
@@ -286,16 +286,16 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def totp_secret
-    return unless encrypted_totp_secret.present?
+  def two_factor_authentication_secret
+    return unless encrypted_2fa_secret.present?
 
-    encrypted_value = encrypted_totp_secret[:encrypted_value]
-    iv = encrypted_totp_secret[:iv]
+    encrypted_value = encrypted_2fa_secret[:encrypted_value]
+    iv = encrypted_2fa_secret[:iv]
     EncryptionService.decrypt(encrypted_value, iv) if encrypted_value.present?
   end
 
-  def totp_secret=(value)
-    self.encrypted_totp_secret = EncryptionService.encrypt(value)
+  def two_factor_authentication_secret=(value)
+    self.encrypted_2fa_secret = EncryptionService.encrypt(value)
   end
 
   def person_name(format = :default)
@@ -390,15 +390,15 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def second_factor_required?
-    !no_second_factor? || totp_enforced?
+    two_factor_authentication.present? || two_factor_authentication_enforced?
   end
 
   def totp_registered?
-    encrypted_totp_secret.present?
+    encrypted_2fa_secret.present?
   end
 
-  def totp_enforced?
-    roles.any?(&:totp_enforced)
+  def two_factor_authentication_enforced?
+    roles.any?(&:two_factor_authentication_enforced)
   end
 
   private

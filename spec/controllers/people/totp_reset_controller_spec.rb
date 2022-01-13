@@ -15,8 +15,8 @@ describe People::TotpResetController do
   describe 'POST #create' do
     before do
       sign_in(top_leader)
-      bottom_member.second_factor_auth = :totp
-      bottom_member.totp_secret = People::OneTimePassword.generate_secret
+      bottom_member.two_factor_authentication = :totp
+      bottom_member.two_factor_authentication_secret = People::OneTimePassword.generate_secret
       bottom_member.save!
     end
 
@@ -27,8 +27,8 @@ describe People::TotpResetController do
 
       expect(response).to redirect_to(group_person_path(bottom_layer, bottom_member))
       expect(flash[:notice]).to include('Zwei Faktor Authentifizierung erfolgreich zurückgesetzt')
-      expect(bottom_member.second_factor_auth).to eq('totp')
-      expect(bottom_member.totp_secret).to be_nil
+      expect(bottom_member.two_factor_authentication).to eq('totp')
+      expect(bottom_member.two_factor_authentication_secret).to be_nil
     end
   end
 end

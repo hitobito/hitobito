@@ -126,7 +126,7 @@ module PeopleHelper
   end
 
   def person_otp_qr_code
-    secret = current_person&.totp_secret || session[:pending_totp_secret]
+    secret = current_person&.two_factor_authentication_secret || session[:pending_totp_secret]
     person = current_person || pending_two_factor_person
     
     qr_code = People::OneTimePassword.new(secret, person: person).provisioning_qr_code

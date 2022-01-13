@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   include Stampable
   include Localizable
   include Authenticatable
-  include TwoFactor
+  include ::TwoFactor
   include ERB::Util
   include Sentry
   include ParamConverters

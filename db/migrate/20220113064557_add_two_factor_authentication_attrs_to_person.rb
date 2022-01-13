@@ -5,9 +5,9 @@
 # or later. See the COPYING file at the top-level directory or at
 # https ://github.com/hitobito/hitobito.
 
-class AddTotpAttrsToPerson < ActiveRecord::Migration[6.0]
+class AddTwoFactorAuthenticationAttrsToPerson < ActiveRecord::Migration[6.0]
   def change
-    add_column :people, :second_factor_auth, :integer, default: 0, null: false
-    add_column :people, :encrypted_totp_secret, :text, limit: 300, null: true
+    add_column :people, :two_factor_authentication, :integer, null: true
+    add_column :people, :encrypted_2fa_secret, :text, limit: 300, null: true
   end
 end

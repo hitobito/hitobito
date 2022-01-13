@@ -40,7 +40,7 @@ class SecondFactorAuthenticationController < ApplicationController
 
   def authenticator
     @authenticator ||= {
-      'totp' => Authenticatable::SecondFactors::Totp
+      'totp' => Authenticatable::TwoFactors::Totp
     }[authentication_factor]&.new(person, session)
   end
 

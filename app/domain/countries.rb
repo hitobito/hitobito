@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2015, insieme Schweiz. This file is part of
+#  Copyright (c) 2012-2022, insieme Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,7 +38,12 @@ module Countries
   end
 
   def swiss?(country)
-    ['', 'ch'].include?(country.to_s.strip.downcase)
+    normalized_country = normalize(country)
+    normalized_country == 'ch' || (normalized_country.blank? && default == 'ch')
+  end
+
+  def default
+    @default ||= normalize(Settings.countries.prioritized.first)
   end
 
 end

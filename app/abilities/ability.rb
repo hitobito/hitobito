@@ -60,6 +60,9 @@ class Ability
     cannot :update_email, Person do |p|
       p.root?
     end
+    cannot :update_email, Event::ParticipationContactData do |c|
+      cannot? :update_email, c.person
+    end
   end
 
   def define_user_abilities

@@ -5,7 +5,7 @@
 = render 'event/participation_contact_datas/address_fields', f: f
 
 - if entry.show_attr?(:email)
-  = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
+  = render partial: 'people/email_field', locals: { f: f }
 
 - Event::ParticipationContactData.contact_associations.each do |a|
   = field_set_tag do

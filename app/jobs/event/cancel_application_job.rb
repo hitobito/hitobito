@@ -10,6 +10,8 @@ class Event::CancelApplicationJob < BaseJob
   self.parameters = [:event_id, :person_id]
 
   def initialize(event, person)
+    super()
+
     @event_id = event.id
     @person_id = person.id
   end

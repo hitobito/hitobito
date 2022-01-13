@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2021-2022, Die Mitte Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# Setup for github.com/rubyconfig/config
+# Setup for https://github.com/rubyconfig/config
 Config.setup do |config|
   # Name of the constant exposing loaded settings
   config.const_name = 'Settings'
 
   # Ability to remove elements of the array set in earlier loaded settings file. For example value: '--'.
   #
-  # config.knockout_prefix = nil
+  config.knockout_prefix = '--'
 
   # Overwrite an existing value when merging a `nil` value.
   # When set to `false`, the existing value is retained after merge.

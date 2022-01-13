@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_relative Rails.root.join('app', 'domain', 'countries') # take precedence over a gem of the same name
+require_relative Rails.root.join('app', 'domain', 'countries') # take precedence over a gem
 
 module Contactable
 

@@ -38,12 +38,12 @@ module Countries
   end
 
   def swiss?(country)
-    normalized_country = normalize(country)
+    normalized_country = normalize(country).strip.downcase
     normalized_country == 'ch' || (normalized_country.blank? && default == 'ch')
   end
 
   def default
-    @default ||= normalize(Settings.countries.prioritized.first)
+    @default ||= normalize(Settings.countries.prioritized.first).strip.downcase
   end
 
 end

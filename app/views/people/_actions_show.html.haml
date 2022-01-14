@@ -14,29 +14,7 @@
 
 = dropdown_people_export(can?(:show_full, entry), false, true, false)
 
-- if entry.email && (entry.roles.any? || entry.root?)
-  = action_button(t('.send_login'),
-                  send_password_instructions_group_person_path(parent, entry),
-                  :envelope,
-                  remote: true,
-                  method: :post,
-                  rel: :tooltip,
-                  'data-container' => 'body',
-                  'data-html' => 'true',
-                  'data-placement' => 'bottom',
-                  title: send_login_tooltip_text)
-
-- if entry == current_user && can?(:update_password, entry)
-  = action_button t('devise.registrations.edit.change_password'), edit_person_registration_path
-
-- if entry == current_user && !entry.totp_registered?
-  = action_button t('.activate_totp'), new_users_second_factor_path(second_factor: 'totp')
-
-- if entry.totp_registered? && can?(:totp_reset, entry)
-  = action_button t('.reset_totp'), totp_reset_group_person_path, nil, method: :post
-
-- if entry.totp_registered? && can?(:totp_disable, entry)
-  = action_button t('.disable_totp'), totp_disable_group_person_path, nil, method: :post
+= dropdown_people_login
 
 - if may_impersonate?(entry, parent)
   = action_button(t('.impersonate_user'),

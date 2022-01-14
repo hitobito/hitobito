@@ -81,7 +81,7 @@ describe PeopleController, type: :controller do
       before { sign_in(top_leader) }
 
       def tooltip_includes(text)
-        expect(dom.all('.btn[rel^=tooltip]')[0][:title]).to include(text)
+        expect(dom.all('a[rel^=tooltip]')[0][:title]).to include(text)
       end
 
       it 'should hint for persons without login and token' do

@@ -22,6 +22,10 @@ module PeopleHelper
                                                            households: households).to_s
   end
 
+  def dropdown_people_login
+    Dropdown::PeopleLogin.new(self, current_user, params).to_s
+  end
+
   def format_birthday(person)
     if person.birthday?
       f(person.birthday) << ' ' << t('people.years_old', years: person.years)

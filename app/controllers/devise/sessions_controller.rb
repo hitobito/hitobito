@@ -11,7 +11,7 @@ require_dependency Devise::Engine.root
 
 class Devise::SessionsController < DeviseController
   layout :devise_layout
-  include TwoFactor
+  include ::TwoFactor
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:new, :create], prepend: true

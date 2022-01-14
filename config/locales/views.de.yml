@@ -161,6 +161,13 @@ de:
     household_option: 'Haushalte zusammenfassen'
     selection: 'Spaltenauswahl'
 
+  dropdown/people_login:
+    button: 'Login'
+    send_login: Login schicken
+    activate_totp: Zwei Faktor Authentifizierung einrichten
+    reset_totp: Zwei Faktor Authentifizierung zurücksetzen
+    disable_totp: Zwei Faktor Authentifizierung deaktivieren
+
   dropdown/invoices:
     download: 'Export'
     print: 'Drucken'
@@ -1321,14 +1328,10 @@ de:
       subscriptions: Abos
 
     actions_show:
-      send_login: Login schicken
       send_login_tooltip:
         new: Die Person hat noch kein Login.<br><br>Diese Aktion sendet ihr einen Link damit sie ihr Passwort setzen kann.
         resend: Die Person hat einen Link zum Setzen des Passworts erhalten, aber noch keines gesetzt.<br><br>Diese Aktion sendet ihr den Link erneut.
         reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
-      activate_totp: Zwei Faktor Authentifizierung einrichten
-      reset_totp: Zwei Faktor Authentifizierung zurücksetzen
-      disable_totp: Zwei Faktor Authentifizierung deaktivieren
 
       impersonate_user: Imitieren
       impersonate_user_tooltip: Du kannst hitobito so bedienen, als wärst du als diese Person eingeloggt.

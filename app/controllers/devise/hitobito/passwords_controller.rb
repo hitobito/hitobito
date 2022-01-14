@@ -29,13 +29,16 @@ class Devise::Hitobito::PasswordsController < Devise::PasswordsController
   def should_confirm_email?(resource)
     return false if resource.errors.present?
 
+    confirmable_email = resource.pending_reconfirmation? ?
+                            resource.unconfirmed_email.presence : resource.email
+
     # We may only confirm the email address which the reset password email was sent to.
     # If the email has been changed since sending the password reset email,
     # this would be an attack vector: An attacker could...
     # 1. request a password reset email to their owned address, but not click it yet
     # 2. change their email or have it changed to some address they don't own and can't confirm
     # 3. click the password reset link -> their new email address would mistakenly get confirmed
-    return false if resource.reset_password_sent_to != resource.email
+    return false if resource.reset_password_sent_to != confirmable_email
 
     true
   end

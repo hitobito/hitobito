@@ -121,7 +121,7 @@ describe Groups::SelfRegistrationController do
           expect(role.type).to eq(Group::TopGroup::Member.sti_name)
           expect(role.group).to eq(group)
 
-          is_expected.to redirect_to(edit_group_person_path(group.id, person.id))
+          is_expected.to redirect_to(new_person_session_path)
         end
       end
     end

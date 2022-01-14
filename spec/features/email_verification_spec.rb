@@ -10,6 +10,7 @@ require 'spec_helper'
 describe 'Email verification', js: true do
 
   subject { page }
+  let(:person) { people(:bottom_member) }
   let(:group) { person.groups.first }
   let(:password) { 'asdfasdfasdfasdf' }
 
@@ -113,8 +114,6 @@ describe 'Email verification', js: true do
   end
 
   context 'self-service password reset' do
-    let(:person) { people(:bottom_member) }
-
     it 'should auto-confirm email' do
       expect {
         token = person.generate_reset_password_token!
@@ -138,22 +137,48 @@ describe 'Email verification', js: true do
   end
 
   context 'self-service event registration' do
-    it 'should auto-confirm email' do
-      # TODO
+    let(:event) { events(:top_event) }
+
+    before do
+      event.update(external_applications: true, )
     end
 
-    it 'should not auto-confirm email which has changed in the meantime' do
-      # TODO
+    it 'should not confirm email' do
+      visit register_group_event_path(group_id: event.groups.first.id, id: event.id)
+      first('#new_person #person_email').fill_in with: 'newguy@puzzle.ch'
+      click_button 'Weiter'
+      is_expected.to have_text 'Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest.'
+
+      fill_in 'Vorname', with: 'New'
+      fill_in 'Nachname', with: 'Guy'
+      fill_in 'Haupt-E-Mail', with: 'newguy@puzzle.ch'
+      first(:button, 'Speichern').click
+      is_expected.to have_text 'Deine persönlichen Daten wurden aufgenommen.'
+
+      click_button 'Anmelden'
+      is_expected.to have_text 'newguy@puzzle.ch'
+      expect(Person.find_by(email: 'newguy@puzzle.ch').confirmed?).to be_falsey
     end
   end
 
   context 'self-service group registration' do
-    it 'should auto-confirm email' do
-      # TODO
+    let(:group) { groups(:bottom_group_one_one) }
+
+    before do
+      group.update(self_registration_role_type: Group::BottomGroup::Member.sti_name)
     end
 
-    it 'should not auto-confirm email which has changed in the meantime' do
-      # TODO
+    it 'should not auto-confirm email' do
+      visit group_self_registration_path(group_id: group.id)
+      fill_in 'Vorname', with: 'New'
+      fill_in 'Nachname', with: 'Guy'
+      fill_in 'Haupt-E-Mail', with: 'newguy@puzzle.ch'
+      first(:button, 'Speichern').click
+      is_expected.to have_text 'Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.'
+      expect(Person.find_by(email: 'newguy@puzzle.ch').confirmed?).to be_falsey
+
+      mail = find_mail_to('newguy@puzzle.ch')
+      expect(mail.subject).to eq('Anleitung für das Setzen Deines Passworts')
     end
   end
 

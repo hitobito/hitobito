@@ -113,7 +113,13 @@ describe 'Email verification', js: true do
     end
   end
 
-  context 'self-service password reset' do
+  context 'self-service password reset when unconfirmed' do
+    let(:person) do
+      person = people(:bottom_member)
+      person.update_columns(confirmed_at: nil, unconfirmed_email: nil)
+      person
+    end
+
     it 'should auto-confirm email' do
       expect {
         token = person.generate_reset_password_token!
@@ -133,6 +139,42 @@ describe 'Email verification', js: true do
         fill_in 'Neues Passwort bestätigen', with: password
         click_button 'Passwort ändern'
       }.not_to change { person.reload.confirmed_at }.from(nil)
+    end
+  end
+
+  context 'self-service password reset when pending reconfirmation' do
+    let(:person) do
+      person = people(:bottom_member)
+      person.confirm
+      person.update(email: 'newmail@puzzle.ch')
+      person.reload
+    end
+
+    # Prevents the following scenario:
+    # 1. Attacker has a verified email address which they control
+    # 2. Attacher changes email to an address which they don't own. Change is postponed, reconfirmation is pending
+    # 3. Attacker receives reconfirmation email but never clicks it
+    # 4. Attacker requests a password reset email, which is still sent to the old confirmed email
+    # 5. Attacker changes password. The new email address must not be auto-confirmed.
+    it 'should not auto-confirm email for security reasons' do
+      expect {
+        token = person.generate_reset_password_token!
+        visit edit_person_password_path(reset_password_token: token)
+        fill_in 'Neues Passwort', with: password
+        fill_in 'Neues Passwort bestätigen', with: password
+        click_button 'Passwort ändern'
+      }.not_to change { person.reload.email }
+    end
+
+    it 'should not auto-confirm email which has changed again in the meantime' do
+      expect {
+        token = person.generate_reset_password_token!
+        person.update(email: 'other-email@puzzle.ch')
+        visit edit_person_password_path(reset_password_token: token)
+        fill_in 'Neues Passwort', with: password
+        fill_in 'Neues Passwort bestätigen', with: password
+        click_button 'Passwort ändern'
+      }.not_to change { person.reload.email }
     end
   end
 

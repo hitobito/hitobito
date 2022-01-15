@@ -30,7 +30,7 @@ class Devise::Hitobito::PasswordsController < Devise::PasswordsController
     return false if resource.errors.present?
 
     confirmable_email = resource.pending_reconfirmation? ?
-                            resource.unconfirmed_email.presence : resource.email
+                            resource.unconfirmed_email : resource.email
 
     # We may only confirm the email address which the reset password email was sent to.
     # If the email has been changed since sending the password reset email,

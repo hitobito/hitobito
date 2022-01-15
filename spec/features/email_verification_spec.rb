@@ -75,7 +75,7 @@ describe 'Email verification', js: true do
 
     it 'should prevent logging in' do
       visit new_person_session_path
-      fill_in 'Haupt-E-Mail', with: person.email
+      fill_in 'person_email', with: person.email
       fill_in 'person_password', with: password
       click_button 'Anmelden'
 
@@ -130,6 +130,12 @@ describe 'Email verification', js: true do
       }.to change { person.reload.confirmed_at }.from(nil)
     end
 
+    # Prevents the following scenario:
+    # 1. Attacker has an email address which they control, but have never confirmed before
+    # 2. Attacker requests a password reset email, but doesn't click the link yet
+    # 3. Attacker has someone else change their email to one they don't control (or use a second account for it)
+    # 4. The email change is effective immediately because no previous email was ever confirmed
+    # 5. Attacker clicks the link from the password reset email and changes password. The new email must not be auto-confirmed.
     it 'should not auto-confirm email which has changed in the meantime' do
       expect {
         token = person.generate_reset_password_token!
@@ -153,7 +159,7 @@ describe 'Email verification', js: true do
     # Prevents the following scenario:
     # 1. Attacker has a verified email address which they control
     # 2. Attacher changes email to an address which they don't own. Change is postponed, reconfirmation is pending
-    # 3. Attacker receives reconfirmation email but never clicks it
+    # 3. Reconfirmation email is sent, but the attacker cannot receive it
     # 4. Attacker requests a password reset email, which is still sent to the old confirmed email
     # 5. Attacker changes password. The new email address must not be auto-confirmed.
     it 'should not auto-confirm email for security reasons' do
@@ -166,6 +172,14 @@ describe 'Email verification', js: true do
       }.not_to change { person.reload.email }
     end
 
+    # Prevents the following scenario:
+    # 1. Attacker has a verified email address which they control
+    # 2. Attacker changes email to an address which they own. Change is postponed, reconfirmation is pending
+    # 3. Attacker receives confirmation email, but doesn't click the link
+    # 4. Attacker requests a password reset email, which is still sent to the old confirmed email
+    # 5. Attacker changes email to an address which they don't own. Change is postponed, reconfirmation is pending
+    # 6. Reconfirmation email is sent, but the attacker cannot receive it
+    # 7. Attacker clicks the link from the password reset email and changes password. The new email must not be auto-confirmed.
     it 'should not auto-confirm email which has changed again in the meantime' do
       expect {
         token = person.generate_reset_password_token!

@@ -1,0 +1,77 @@
+name: Bug
+description: Create a report to help us improve
+title: 'MODULE: Neuer Bug'
+labels:
+  - bug
+  - needs-confirmation
+body:
+  - type: textarea
+    id: current
+    attributes:
+      label: Aktuelles Verhalten
+      description: Wie äußert sich der Fehler?
+      placeholder: |
+        Wird eine neue Person erfasst, ...
+    validations:
+      required: true
+  - type: textarea
+    id: desired
+    attributes:
+      label: Gewünschtes Verhalten
+      description: Wie sollte sich hitobito Verhalten?
+      placeholder: |
+        Beim Erfassen einer Person wird ...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Schritte zu reproduzieren
+      description: Wie können wir den Fehler nachstellen?
+      placeholder: |
+        1. Nach dem Login auf das Personen-Tab einer beliebigen Gruppe
+        2. ...
+        3. Link, wo der Fehler auftritt
+    validations:
+      required: true
+  - type: input
+    id: when
+    attributes:
+      label: Wann ist der Fehler aufgetreten?
+      description: Dies hilft uns sehr, um weitere Informationen zu bekommen.
+    validations:
+      required: false
+  - type: input
+    id: version
+    attributes:
+      label: hitobito version
+      placeholder: 1.27.0
+    validations:
+      required: false
+  - type: input
+    id: instance
+    attributes:
+      label: Organisation
+      placeholder: JuBla, PBS/MiData, Cevi, Insieme...
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Screenshots, weiterer Kontext
+      description: Wenn es mehr ist, als nur eine normale Fehlerseite, kann auch gerne ein Screenshot hinzugefügt werden. Hier wäre auch Platz für eine Technische Spezifikation oder ähnliches.
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        Vielen Dank für die Fehlermeldung. Wir haben hier schonmal unsere ToDos vorbereitet:
+
+        ToDo
+        ----
+
+        - [ ] Issue aufbereiten
+        - [ ] ggf. Sentry-Issues dazu heraussuchen
+        - [ ] Labels für `interest-xyz` setzen
+        - [ ] Schritte für Fehlerbehebung erfassen
+        - [ ] Team informieren, um es einzuplanen

@@ -6,10 +6,14 @@
 # https ://github.com/hitobito/hitobito.
 
 class SecondFactorAuthenticationController < ApplicationController
+  include ::TwoFactor
+
   skip_authorization_check
 
   before_action :redirect_on_locked, if: :access_locked?
   before_action :redirect_to_root, unless: :allowed?
+
+  helper_method :authentication_factor, :person, :secret
 
   def new
     authenticator.prepare_registration! unless authenticator.registered?
@@ -17,9 +21,12 @@ class SecondFactorAuthenticationController < ApplicationController
 
   def create
     if authenticator.verify?(params[:second_factor_code])
-      flash_msg = notice_flash
+      unless authenticator.registered?
+        authenticator.register!
+        flash_msg = registered_flash
+      end
 
-      authenticator.register! unless authenticator.registered?
+      return_path = after_sign_in_path_for(person)
 
       unless person_signed_in?
         reset_session
@@ -27,7 +34,7 @@ class SecondFactorAuthenticationController < ApplicationController
         sign_in(person)
       end
 
-      redirect_to root_path, notice: flash_msg
+      redirect_to return_path || root_path, notice: flash_msg
     else
       authenticator.prevent_brute_force!
 
@@ -48,6 +55,10 @@ class SecondFactorAuthenticationController < ApplicationController
     @person ||= current_person || pending_two_factor_person
   end
 
+  def secret
+    @secret ||= authenticator.secret
+  end
+
   def authentication_factor
     @authentication_factor ||= session[:pending_second_factor_authentication] ||
                                  params[:second_factor]
@@ -62,9 +73,8 @@ class SecondFactorAuthenticationController < ApplicationController
     redirect_to root_path, alert: t('devise.failure.locked')
   end
 
-  def notice_flash
-    message = authenticator.registered? ? 'signed_in' : 'registered' 
-    t("second_factor_authentication.flash.success.#{message}")
+  def registered_flash
+    t('second_factor_authentication.flash.success.registered')
   end
 
   def access_locked?
@@ -87,7 +97,5 @@ class SecondFactorAuthenticationController < ApplicationController
     authenticator.present? &&
       !second_factor_registered_and_signed_in? &&
       two_factor_authentication_pending_or_signed_in?
-    
-
   end
 end

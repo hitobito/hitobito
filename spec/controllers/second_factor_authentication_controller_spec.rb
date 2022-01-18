@@ -58,14 +58,14 @@ describe SecondFactorAuthenticationController do
             @secret = People::OneTimePassword.generate_secret
 
             bottom_member.two_factor_authentication = :totp
-            bottom_member.two_factor_authentication_secret = @secret
+            bottom_member.two_fa_secret = @secret
             bottom_member.save!
 
             session[:pending_two_factor_person_id] = bottom_member.id
 
             expect(bottom_member.two_factor_authentication).to eq('totp')
-            expect(bottom_member.two_factor_authentication_secret).to eq(@secret)
-            expect(bottom_member.totp_registered?).to be(true)
+            expect(bottom_member.two_fa_secret).to eq(@secret)
+            expect(bottom_member.two_factor_authentication_registered?).to be(true)
             expect(controller.send(:current_person)).to be_nil
           end
 
@@ -78,8 +78,8 @@ describe SecondFactorAuthenticationController do
             bottom_member.reload
 
             expect(bottom_member.two_factor_authentication).to eq('totp')
-            expect(bottom_member.two_factor_authentication_secret).to eq(@secret)
-            expect(bottom_member.totp_registered?).to be(true)
+            expect(bottom_member.two_fa_secret).to eq(@secret)
+            expect(bottom_member.two_factor_authentication_registered?).to be(true)
             expect(controller.send(:current_person)).to eq(bottom_member)
           end
 
@@ -92,8 +92,8 @@ describe SecondFactorAuthenticationController do
             bottom_member.reload
 
             expect(bottom_member.two_factor_authentication).to eq('totp')
-            expect(bottom_member.two_factor_authentication_secret).to eq(@secret)
-            expect(bottom_member.totp_registered?).to be(true)
+            expect(bottom_member.two_fa_secret).to eq(@secret)
+            expect(bottom_member.two_factor_authentication_registered?).to be(true)
             expect(controller.send(:current_person)).to be_nil
           end
         end
@@ -109,8 +109,8 @@ describe SecondFactorAuthenticationController do
             session[:pending_totp_secret] = @secret
 
             expect(bottom_member.two_factor_authentication).to eq('totp')
-            expect(bottom_member.encrypted_2fa_secret).to be_nil
-            expect(bottom_member.totp_registered?).to be(false)
+            expect(bottom_member.encrypted_two_fa_secret).to be_nil
+            expect(bottom_member.two_factor_authentication_registered?).to be(false)
             expect(controller.send(:current_person)).to be_nil
           end
 
@@ -123,8 +123,8 @@ describe SecondFactorAuthenticationController do
             bottom_member.reload
 
             expect(bottom_member.two_factor_authentication).to eq('totp')
-            expect(bottom_member.two_factor_authentication_secret).to eq(@secret)
-            expect(bottom_member.totp_registered?).to be(true)
+            expect(bottom_member.two_fa_secret).to eq(@secret)
+            expect(bottom_member.two_factor_authentication_registered?).to be(true)
             expect(controller.send(:current_person)).to eq(bottom_member)
           end
 
@@ -137,8 +137,8 @@ describe SecondFactorAuthenticationController do
             bottom_member.reload
 
             expect(bottom_member.two_factor_authentication).to eq('totp')
-            expect(bottom_member.encrypted_2fa_secret).to be_nil
-            expect(bottom_member.totp_registered?).to be(false)
+            expect(bottom_member.encrypted_two_fa_secret).to be_nil
+            expect(bottom_member.two_factor_authentication_registered?).to be(false)
             expect(controller.send(:current_person)).to be_nil
           end
         end
@@ -153,7 +153,7 @@ describe SecondFactorAuthenticationController do
           session[:pending_totp_secret] = @secret
 
           expect(bottom_member.two_factor_authentication).to be_nil
-          expect(bottom_member.encrypted_2fa_secret).to be_nil
+          expect(bottom_member.encrypted_two_fa_secret).to be_nil
         end
 
         it 'registers TOTP with correct code' do
@@ -166,8 +166,8 @@ describe SecondFactorAuthenticationController do
           expect(response).to redirect_to root_path
 
           expect(bottom_member.two_factor_authentication).to eq('totp')
-          expect(bottom_member.two_factor_authentication_secret).to eq(@secret)
-          expect(bottom_member.totp_registered?).to be(true)
+          expect(bottom_member.two_fa_secret).to eq(@secret)
+          expect(bottom_member.two_factor_authentication_registered?).to be(true)
         end
 
         it 'does not register TOTP with incorrect code' do
@@ -180,8 +180,8 @@ describe SecondFactorAuthenticationController do
           expect(response).to redirect_to new_users_second_factor_path
 
           expect(bottom_member.two_factor_authentication).to be_nil
-          expect(bottom_member.encrypted_2fa_secret).to be_nil
-          expect(bottom_member.totp_registered?).to be(false)
+          expect(bottom_member.encrypted_two_fa_secret).to be_nil
+          expect(bottom_member.two_factor_authentication_registered?).to be(false)
           expect(flash[:alert]).to include('One-Time Code inkorrekt')
         end
       end

@@ -51,11 +51,7 @@ class People::OneTimePassword
   end
 
   def base32_encode(str)
-    b32 = ''
-    str.each_byte do |b|
-      b32 += ROTP::Base32::CHARS[b % 32]
-    end
-    b32
+    ROTP::Base32.encode(str)
   end
 
   def base_secret

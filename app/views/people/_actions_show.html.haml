@@ -14,7 +14,7 @@
 
 = dropdown_people_export(can?(:show_full, entry), false, true, false)
 
-= dropdown_people_login
+= dropdown_people_login(entry)
 
 - if may_impersonate?(entry, parent)
   = action_button(t('.impersonate_user'),

@@ -19,12 +19,14 @@ class Devise::SessionsController < DeviseController
   respond_to :html
   respond_to :json, only: [:new, :create]
 
-  before_action :redirect_to_two_factor_authentication, if: :two_factor_authentication_pending?
+  before_action :reset_two_factor_authentication,
+                if: :two_factor_authentication_pending?,
+                only: [:new]
 
   module Json
     def create
       super do |resource|
-        return init_two_factor_auth(resource) if resource.second_factor_required?
+        return init_two_factor_auth(resource) if second_factor_required?(resource)
 
         if request.format == :json
           resource.generate_authentication_token! unless resource.authentication_token?
@@ -32,6 +34,10 @@ class Devise::SessionsController < DeviseController
           return
         end
       end
+    end
+
+    def second_factor_required?(resource)
+      resource.is_a?(Person) && resource.second_factor_required?
     end
   end
 
@@ -49,18 +55,4 @@ class Devise::SessionsController < DeviseController
 
   prepend Json
   prepend OauthSigninLayout
-
-  private
-  
-  def init_two_factor_auth(resource)
-    sign_out(resource)
-
-    session[:pending_two_factor_person_id] = resource.id
-
-    redirect_to_two_factor_authentication
-  end
-
-  def redirect_to_two_factor_authentication
-    redirect_to two_factor_auth_path, notice: ''
-  end
 end

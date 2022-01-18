@@ -7,11 +7,11 @@
 
 #new_totp
   %div.qr-code
-    - unless pending_two_factor_person&.totp_registered?
-      %img{src: person_otp_qr_code}
+    - unless pending_two_factor_person&.two_factor_authentication_registered?
+      %img{src: person_otp_qr_code(person, secret)}
   
   %p.hint
-    - if pending_two_factor_person&.totp_registered?
+    - if pending_two_factor_person&.two_factor_authentication_registered?
       = t('.hint_registered_html', link: link_to('freeOTP App', 'https://freeotp.github.io/'))
     - else
       = t('.hint_unregistered_html', link: link_to('freeOTP App', 'https://freeotp.github.io/'))

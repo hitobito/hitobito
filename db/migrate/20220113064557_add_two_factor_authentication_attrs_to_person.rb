@@ -8,6 +8,6 @@
 class AddTwoFactorAuthenticationAttrsToPerson < ActiveRecord::Migration[6.0]
   def change
     add_column :people, :two_factor_authentication, :integer, null: true
-    add_column :people, :encrypted_2fa_secret, :text, limit: 300, null: true
+    add_column :people, :encrypted_two_fa_secret, :text, limit: 300, null: true
   end
 end

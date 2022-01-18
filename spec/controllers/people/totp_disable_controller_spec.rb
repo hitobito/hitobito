@@ -16,7 +16,7 @@ describe People::TotpDisableController do
     before do
       sign_in(top_leader)
       bottom_member.two_factor_authentication = :totp
-      bottom_member.two_factor_authentication_secret = People::OneTimePassword.generate_secret
+      bottom_member.two_fa_secret = People::OneTimePassword.generate_secret
       bottom_member.save!
     end
 
@@ -28,7 +28,7 @@ describe People::TotpDisableController do
       expect(response).to redirect_to(group_person_path(bottom_layer, bottom_member))
       expect(flash[:notice]).to include('Zwei Faktor Authentifizierung erfolgreich deaktiviert')
       expect(bottom_member.two_factor_authentication).to be_nil
-      expect(bottom_member.two_factor_authentication_secret).to be_nil
+      expect(bottom_member.two_fa_secret).to eq('')
     end
 
     it 'does not disable totp of bottom_member when forced' do

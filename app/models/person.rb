@@ -77,7 +77,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :locked_at, :remember_created_at, :reset_password_token, :unlock_token,
     :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
     :show_global_label_formats, :household_key, :event_feed_token, :family_key,
-    :two_factor_authentication, :encrypted_2fa_secret
+    :two_factor_authentication, :encrypted_two_fa_secret
   ]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -100,18 +100,16 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include Groups
   include Contactable
   include DeviseOverrides
+  include Encryptable
   include I18nSettable
   include I18nEnums
   include ValidatedEmail
+  include TwoFactorAuthenticatable
   include PersonTags::ValidationTagged
 
   i18n_enum :gender, GENDERS
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
-
-  enum two_factor_authentication: [:totp]
-
-  serialize :encrypted_2fa_secret
 
   mount_uploader :picture, Person::PictureUploader
 
@@ -286,18 +284,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def two_factor_authentication_secret
-    return unless encrypted_2fa_secret.present?
-
-    encrypted_value = encrypted_2fa_secret[:encrypted_value]
-    iv = encrypted_2fa_secret[:iv]
-    EncryptionService.decrypt(encrypted_value, iv) if encrypted_value.present?
-  end
-
-  def two_factor_authentication_secret=(value)
-    self.encrypted_2fa_secret = EncryptionService.encrypt(value)
-  end
-
   def person_name(format = :default)
     name = full_name(format)
     if PUBLIC_ATTRS.include?(:nickname) && nickname? && format != :print_list
@@ -387,18 +373,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def address_for_letter
     Person::Address.new(self).for_letter
-  end
-
-  def second_factor_required?
-    two_factor_authentication.present? || two_factor_authentication_enforced?
-  end
-
-  def totp_registered?
-    encrypted_2fa_secret.present?
-  end
-
-  def two_factor_authentication_enforced?
-    roles.any?(&:two_factor_authentication_enforced)
   end
 
   private

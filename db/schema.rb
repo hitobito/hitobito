@@ -746,7 +746,7 @@ ActiveRecord::Schema.define(version: 2022_01_13_064557) do
     t.string "unlock_token"
     t.string "family_key"
     t.integer "two_factor_authentication"
-    t.text "encrypted_2fa_secret"
+    t.text "encrypted_two_fa_secret"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["email"], name: "index_people_on_email", unique: true
     t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true

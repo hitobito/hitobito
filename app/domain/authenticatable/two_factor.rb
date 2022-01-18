@@ -21,22 +21,22 @@ class Authenticatable::TwoFactor
     raise 'implement in subclass'
   end
   
-  def prepare_setup!
+  def prepare_registration!
     raise 'implement in subclass'
   end
   
   def reset!
-    person.update!(encrypted_2fa_secret: nil)
+    person.update!(encrypted_two_fa_secret: nil)
   end
   
   def disable!
-    person.update!(encrypted_2fa_secret: nil, two_factor_authentication: nil)
+    person.update!(encrypted_two_fa_secret: nil, two_factor_authentication: nil)
   end
 
   def prevent_brute_force!
     person.increment_failed_attempts
     if person.failed_attempts > Person.maximum_attempts
-      person.lock_access!
+      person.lock_access! unless person.access_locked?
     end
   end
 

@@ -8,12 +8,11 @@
 module Dropdown
   class PeopleLogin < Base
 
-    attr_reader :user, :params
+    attr_reader :user
 
-    def initialize(template, user, params, options = {})
+    def initialize(template, user, options = {})
       super(template, translate(:button), :lock)
       @user = user
-      @params = params
 
       init_items
     end
@@ -49,21 +48,21 @@ module Dropdown
     end
 
     def activate_totp
-      if @user == template.current_user && !@user.totp_registered?
+      if @user == template.current_user && !@user.two_factor_authentication_registered?
         add_item(translate('.activate_totp'),
                  template.new_users_second_factor_path(second_factor: 'totp'))
       end
     end
 
     def reset_totp
-      if @user.totp_registered? && template.can?(:totp_reset, @user)
+      if @user.two_factor_authentication_registered? && template.can?(:totp_reset, @user)
         add_item(translate('.reset_totp'),
                  template.totp_reset_group_person_path, method: :post)
       end
     end
 
     def disable_totp
-      if @user.totp_registered? && template.can?(:totp_disable, @user)
+      if @user.two_factor_authentication_registered? && template.can?(:totp_disable, @user)
         add_item(translate('.disable_totp'),
                  template.totp_disable_group_person_path, method: :post)
       end

@@ -18,14 +18,30 @@ module TwoFactor
     session[:pending_two_factor_person_id].present?
   end
 
+  def reset_two_factor_authentication
+    session.delete(:pending_two_factor_person_id)
+  end
+
   def pending_two_factor_person
     return unless two_factor_authentication_pending?
 
     Person.find(session[:pending_two_factor_person_id])
   end
+  
+  def init_two_factor_auth(resource)
+    sign_out(resource)
+
+    session[:pending_two_factor_person_id] = resource.id
+
+    redirect_to_two_factor_authentication
+  end
+
+  def redirect_to_two_factor_authentication
+    redirect_to two_factor_auth_path, notice: ''
+  end
 
   def two_factor_auth_path
-    factor = 'totp' if pending_two_factor_person.totp_enforced?
+    factor = 'totp' if pending_two_factor_person.two_factor_authentication_enforced?
     factor ||= pending_two_factor_person.two_factor_authentication
 
     session[:pending_second_factor_authentication] = factor

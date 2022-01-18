@@ -22,8 +22,8 @@ module PeopleHelper
                                                            households: households).to_s
   end
 
-  def dropdown_people_login
-    Dropdown::PeopleLogin.new(self, current_user, params).to_s
+  def dropdown_people_login(person)
+    Dropdown::PeopleLogin.new(self, person).to_s
   end
 
   def format_birthday(person)
@@ -129,10 +129,7 @@ module PeopleHelper
     address.to_s.split("\n").join(', ')
   end
 
-  def person_otp_qr_code
-    secret = current_person&.two_factor_authentication_secret || session[:pending_totp_secret]
-    person = current_person || pending_two_factor_person
-    
+  def person_otp_qr_code(person, secret)
     qr_code = People::OneTimePassword.new(secret, person: person).provisioning_qr_code
     base64_data = Base64.encode64(qr_code.to_blob)
     "data:image/png;base64,#{base64_data}"

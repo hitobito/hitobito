@@ -15,28 +15,28 @@ class Authenticatable::TwoFactors::Totp < Authenticatable::TwoFactor
   end
 
   def register!
-    person.two_factor_authentication_secret = session.delete(:pending_totp_secret)
+    person.two_fa_secret = session.delete(:pending_totp_secret)
     person.two_factor_authentication = :totp
-    person.save!
-  end
-
-  def otp
-    @otp ||= People::OneTimePassword.new(secret)
-  end
-
-  def secret
-    person.totp_registered? ?
-      person.two_factor_authentication_secret :
-      session[:pending_totp_secret] 
+    person.save!(validate: false)
   end
 
   def registered?
-    person&.totp_registered?
+    person&.two_factor_authentication_registered?
+  end
+
+  def secret
+    person.two_factor_authentication_registered? ?
+      person.two_fa_secret :
+      session[:pending_totp_secret] 
   end
 
   private
 
   def generate_secret
     People::OneTimePassword.generate_secret
+  end
+
+  def otp
+    @otp ||= People::OneTimePassword.new(secret)
   end
 end

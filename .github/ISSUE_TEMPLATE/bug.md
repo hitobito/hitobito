@@ -17,13 +17,13 @@ Beim Erfassen einer Person wird ...
 
 ## Schritte zum reproduzieren
 
-1. Nach dem Login auf das Personen Tab einer beliebigen Gruppe
+1. Nach dem Login auf das Personen-Tab einer beliebigen Gruppe
 2. ...
 
 # Tech-Spec
 
 - ...
-- https://github.com/hitobito/hitobito/
+- https://demo.hitobito.com/pfad/zur/fehlerseite
 
 # ToDo
 

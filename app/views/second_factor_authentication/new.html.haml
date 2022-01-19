@@ -6,8 +6,8 @@
 -title t('.title')
 
 #new_totp
-  %div.qr-code
-    - unless pending_two_factor_person&.two_factor_authentication_registered?
+  - unless pending_two_factor_person&.two_factor_authentication_registered?
+    %div.qr-code
       %img{src: person_otp_qr_code(person, secret)}
   
   %p.hint

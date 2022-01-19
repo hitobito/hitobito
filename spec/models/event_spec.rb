@@ -869,6 +869,9 @@ describe Event do
       }.by(1)
       expect(Event.role_types).to include(role_type)
 
+      # should not raise, two wagons might register the same role
+      Event.register_role_type(role_type)
+
       other = Class.new
       expect { Event.register_role_type(other) }.to raise_error(ArgumentError)
     end

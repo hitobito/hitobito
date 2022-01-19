@@ -113,7 +113,7 @@ Die Zwei Faktor Authentifizierung wurde mit der [freeOTP App](https://freeotp.gi
 
 Zur Inbetriebnahme werden keine Konfigurationen zwingend benötigt. Die 2FA kann ohne Konfiguration aktiviert und verwendet werden.
 
-Mittles der Rolle kann die 2FA erzwungen werden. Erzwingen der 2FA erfolgt über das `class_attribute` `two_factor_authentication_enforced` auf der Rolle. Default: `false`
+Mittels der Rolle kann die 2FA erzwungen werden. Erzwingen der 2FA erfolgt über das `class_attribute` `two_factor_authentication_enforced` auf der Rolle. Default: `false`
 
 ### Umsysteme
 

@@ -26,7 +26,7 @@ describe People::TotpResetController do
       bottom_member.reload
 
       expect(response).to redirect_to(group_person_path(bottom_layer, bottom_member))
-      expect(flash[:notice]).to include('Zwei Faktor Authentifizierung erfolgreich zurückgesetzt')
+      expect(flash[:notice]).to include('Zwei-Faktor-Authentifizierung erfolgreich zurückgesetzt')
       expect(bottom_member.two_factor_authentication).to eq('totp')
       expect(bottom_member.two_fa_secret).to eq('')
     end

@@ -26,7 +26,7 @@ describe People::TotpDisableController do
       bottom_member.reload
 
       expect(response).to redirect_to(group_person_path(bottom_layer, bottom_member))
-      expect(flash[:notice]).to include('Zwei Faktor Authentifizierung erfolgreich deaktiviert')
+      expect(flash[:notice]).to include('Zwei-Faktor-Authentifizierung erfolgreich deaktiviert')
       expect(bottom_member.two_factor_authentication).to be_nil
       expect(bottom_member.two_fa_secret).to eq('')
     end

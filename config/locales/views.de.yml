@@ -164,9 +164,9 @@ de:
   dropdown/people_login:
     button: 'Login'
     send_login: Login schicken
-    activate_totp: Zwei Faktor Authentifizierung einrichten
-    reset_totp: Zwei Faktor Authentifizierung zurücksetzen
-    disable_totp: Zwei Faktor Authentifizierung deaktivieren
+    activate_totp: Zwei-Faktor-Authentifizierung einrichten
+    reset_totp: Zwei-Faktor-Authentifizierung zurücksetzen
+    disable_totp: Zwei-Faktor-Authentifizierung deaktivieren
 
   dropdown/invoices:
     download: 'Export'
@@ -415,17 +415,17 @@ de:
   second_factor_authentication:
     flash:
       success:
-        registered: Zwei Faktor Authentifizierung erfolgreich aktiviert
+        registered: Zwei-Faktor-Authentifizierung erfolgreich aktiviert
         signed_in: Erfolgreich eingeloggt
 
       failure: One-Time Code inkorrekt
     new:
-      title: Zwei Faktor Authentifizierung
+      title: Zwei-Faktor-Authentifizierung
       hint_registered_html: "Geben Sie bitte den angezeigten Code auf Ihrer %{link} an um Ihre Identität zu bestätigen."
-      hint_unregistered_html: "Scannen Sie bitte den QR Code mit ihrem Smartphone mittels der %{link} und geben Sie den angezeigten Code an um die zwei Faktor Authentifizierung zu aktivieren."
+      hint_unregistered_html: "Scannen Sie bitte den QR Code mit ihrem Smartphone mittels der %{link} und geben Sie den angezeigten Code an um die Zwei-Faktor-Authentifizierung zu aktivieren."
     form:
       totp_code: One-Time Code
-      totp_code_placeholder: Bitte Sechsstelligen Code eingeben...
+      totp_code_placeholder: Bitte sechsstelligen Code eingeben...
       submit: Absenden
   events:
     courses:
@@ -1407,11 +1407,11 @@ de:
 
     totp_reset:
       flashes:
-        success: Zwei Faktor Authentifizierung erfolgreich zurückgesetzt
+        success: Zwei-Faktor-Authentifizierung erfolgreich zurückgesetzt
 
     totp_disable:
       flashes:
-        success: Zwei Faktor Authentifizierung erfolgreich deaktiviert
+        success: Zwei-Faktor-Authentifizierung erfolgreich deaktiviert
 
   participations:
     destroy:

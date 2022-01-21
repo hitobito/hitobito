@@ -7,6 +7,6 @@
     = content_tag(:strong) do
       = link_to(item.title, group_invoice_list_invoices_path(item.group, item))
   - t.col(t.sort_header(:receiver)) do |item|
-    = link_to(item.receiver_label, [item.group, item.receiver]) if item.receiver
+    = link_to(item.receiver_label, item.receiver.path_args) if item.receiver
 
   - t.sortable_attrs(:recipients_total, :recipients_paid, :amount_total, :amount_paid)

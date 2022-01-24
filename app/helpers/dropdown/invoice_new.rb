@@ -7,13 +7,13 @@
 
 module Dropdown
   class InvoiceNew < Base
-    def initialize(template, people: [], mailing_list: nil, filter: nil)
+    def initialize(template, people: [], mailing_list: nil, filter: nil, group: nil)
       super(template, label, :plus)
       @people = people
+      @group = group
       @mailing_list = mailing_list
-      @filter = filter
-      if @filter.is_a?(ActionController::Parameters)
-        @filter = filter.to_unsafe_h.slice(:group_id, :range, :filters)
+      if filter.is_a?(ActionController::Parameters)
+        @filter = filter.to_unsafe_h.slice(:range, :filters).compact.presence
       end
       init_items
     end
@@ -46,7 +46,12 @@ module Dropdown
       elsif @filter
         template.new_group_invoice_list_path(
           finance_group,
-          filter: @filter, invoice_list: { recipient_ids: '' }
+          filter: @filter.merge(group_id: @group.id), invoice_list: { recipient_ids: '' }
+        )
+      elsif @group
+        template.new_group_invoice_list_path(
+          finance_group,
+          invoice_list: { receiver_id: @group.id, receiver_type: @group.class.base_class }
         )
       elsif @people.one?
         template.new_group_invoice_path(

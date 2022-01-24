@@ -43,7 +43,7 @@ class InvoiceList < ActiveRecord::Base
   has_many :invoices, dependent: :destroy
 
   attr_accessor :recipient_ids, :invoice
-  validates :receiver_type, inclusion: %w(MailingList), allow_blank: true
+  validates :receiver_type, inclusion: %w(MailingList Group), allow_blank: true
 
   scope :list, -> { order(:created_at) }
 

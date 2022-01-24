@@ -51,10 +51,11 @@ module InvoicesHelper
     end
   end
 
-  def invoice_button(people: [], mailing_list: nil, filter: nil)
+  def invoice_button(people: [], mailing_list: nil, filter: nil, group: nil)
     Dropdown::InvoiceNew.new(self, {
       people: people,
       mailing_list: mailing_list,
+      group: group,
       filter: filter
     }).button_or_dropdown
   end

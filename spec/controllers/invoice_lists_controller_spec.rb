@@ -207,7 +207,7 @@ describe InvoiceListsController do
       expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
     end
 
-    it 'POST#create for receiver redirects to invoice_lists page' do
+    it 'POST#create for mailing list receiver redirects to invoice_lists page' do
       Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
       expect do
         post :create, params: { group_id: group.id, invoice_list: { receiver_id: list.id, receiver_type: list.class, invoice: invoice_attrs.merge(title: 'test') } }
@@ -215,6 +215,15 @@ describe InvoiceListsController do
       expect(assigns(:invoice_list).receiver).to eq list
       expect(response).to redirect_to group_invoice_lists_path(group)
     end
+
+    it 'POST#create for group receiver redirects to invoice_lists page' do
+      expect do
+        post :create, params: { group_id: group.id, invoice_list: { receiver_id: group.id, receiver_type: group.class.base_class, invoice: invoice_attrs.merge(title: 'test') } }
+      end.to change { group.invoices.count }.by(1)
+      expect(assigns(:invoice_list).receiver).to eq group
+      expect(response).to redirect_to group_invoice_lists_path(group)
+    end
+
 
     it 'POST#create an invoice in background' do
       stub_const("InvoiceListsController::LIMIT_CREATE", 2)

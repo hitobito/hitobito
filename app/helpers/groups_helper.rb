@@ -19,4 +19,12 @@ module GroupsHelper
     link_to(url, url)
   end
 
+  def maybe_value(value)
+    value || t('global.unknown')
+  end
+
+  def distribution_bar_width(count, count_max)
+    normalized = count / count_max
+    "#{normalized * 100}%"
+  end
 end

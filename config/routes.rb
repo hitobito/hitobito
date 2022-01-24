@@ -49,6 +49,9 @@ Hitobito::Application.routes.draw do
     resources :groups do
       member do
         get :deleted_subgroups
+        FeatureGate.if('groups.statistics') do
+          get :statistics
+        end
         get :export_subgroups
         post :reactivate
 

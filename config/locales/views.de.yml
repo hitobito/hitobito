@@ -679,7 +679,14 @@ de:
     subgroups: 'Untergruppen'
     tabs:
       deleted: 'Gelöscht'
+      statistics: 'Statistiken'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    statistics:
+      description: "%{subject} in %{groups}"
+      year: Jahrgang
+      age: Alter
+      count: Anzahl
+      distribution: Verteilung
 
   group/deleted_people:
     list:

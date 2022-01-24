@@ -20,17 +20,20 @@ class Authenticatable::TwoFactor
   def register!
     raise 'implement in subclass'
   end
-  
+
   def prepare_registration!
     raise 'implement in subclass'
   end
-  
+
   def reset!
-    person.update!(encrypted_two_fa_secret: nil)
+    person.encrypted_two_fa_secret = nil
+    person.save!(validate: false)
   end
-  
+
   def disable!
-    person.update!(encrypted_two_fa_secret: nil, two_factor_authentication: nil)
+    person.encrypted_two_fa_secret = nil
+    person.two_factor_authentication = nil
+    person.save!(validate: false)
   end
 
   def prevent_brute_force!

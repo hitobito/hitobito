@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 2022_01_13_064557) do
     t.string "email", null: false
     t.string "label"
     t.boolean "public", default: true, null: false
-    t.boolean "mailings", default: false, null: false
+    t.boolean "mailings", default: true, null: false
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
   end
 

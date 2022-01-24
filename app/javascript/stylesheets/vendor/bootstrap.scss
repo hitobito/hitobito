@@ -37,6 +37,9 @@
 @import "~bootstrap-sass/lib/button-groups";
 @import "~bootstrap-sass/lib/alerts"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
 
+// Components: Progress Bars
+@import "~bootstrap-sass/lib/progress-bars";
+
 // Components: Nav
 @import "~bootstrap-sass/lib/navs";
 @import "~bootstrap-sass/lib/navbar";

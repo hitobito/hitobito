@@ -210,3 +210,5 @@ messages:
 groups:
   self_registration:
     enabled: true
+  statistics:
+    enabled: true

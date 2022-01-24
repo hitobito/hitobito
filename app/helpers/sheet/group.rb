@@ -47,6 +47,12 @@ module Sheet
         :group_notes_path,
         if: :index_notes
 
+    FeatureGate.if('groups.statistics') do
+      tab 'groups.tabs.statistics',
+        :statistics_group_path,
+        if: :show_statistics
+    end
+
     tab 'groups.tabs.deleted',
         :deleted_subgroups_group_path,
         if: :deleted_subgroups

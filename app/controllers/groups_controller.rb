@@ -18,12 +18,12 @@ class GroupsController < CrudController
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]
 
+  skip_authorize_resource only: :statistics
 
   decorates :group, :groups, :contact
 
   before_render_show :active_sub_groups, if: -> { html_request? }
   before_render_form :load_contacts
-
 
   def index
     flash.keep if html_request?
@@ -44,6 +44,18 @@ class GroupsController < CrudController
 
   def deleted_subgroups
     load_sub_groups(entry.children.only_deleted)
+  end
+
+  def statistics
+    FeatureGate.assert!('groups.statistics')
+
+    authorize!(:show_statistics, entry)
+
+    statistic = Group::Demographic.new(entry)
+    @age_groups = statistic.age_groups
+    @total_count = statistic.total_count
+    @max_relative_count = statistic.max_relative_count
+    @group_names = entry.groups_in_same_layer.map(&:to_s)
   end
 
   def reactivate

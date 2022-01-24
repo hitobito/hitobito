@@ -19,8 +19,9 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:any).
       may(:show, :show_details, :show_full, :history, :update, :update_email, :primary_group, :log,
-          :update_settings).
+          :update_settings, :totp_reset).
       herself
+    permission(:any).may(:totp_disable).herself_if_two_factor_authentication_not_enforced
 
     permission(:contact_data).may(:show).other_with_contact_data
 
@@ -100,6 +101,10 @@ class PersonAbility < AbilityDsl::Base
 
   def if_two_factor_authentication_not_enforced
     !subject.two_factor_authentication_enforced?
+  end
+
+  def herself_if_two_factor_authentication_not_enforced
+    herself && if_two_factor_authentication_not_enforced
   end
 
   def if_password_present

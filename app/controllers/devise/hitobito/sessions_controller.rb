@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,36 +19,29 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
                 if: :two_factor_authentication_pending?,
                 only: [:new]
 
-  module Json
-    def create
-      super do |resource|
-        return init_two_factor_auth(resource) if second_factor_required?(resource)
+  def create
+    super do |resource|
+      return init_two_factor_auth(resource) if second_factor_required?(resource)
 
-        if request.format == :json
-          resource.generate_authentication_token! unless resource.authentication_token?
-          render json: UserSerializer.new(resource, controller: self)
-          return
-        end
-      end
-    end
-
-    def second_factor_required?(resource)
-      resource.is_a?(Person) && resource.second_factor_required?
-    end
-  end
-
-  module OauthSigninLayout
-    private
-
-    def devise_layout
-      if params['oauth'] == 'true'
-        'oauth'
-      else
-        'application'
+      if request.format == :json
+        resource.generate_authentication_token! unless resource.authentication_token?
+        render json: UserSerializer.new(resource, controller: self)
+        return
       end
     end
   end
 
-  prepend Json
-  prepend OauthSigninLayout
+  private
+
+  def second_factor_required?(resource)
+    resource.is_a?(Person) && resource.second_factor_required?
+  end
+
+  def devise_layout
+    if params['oauth'] == 'true'
+      'oauth'
+    else
+      'application'
+    end
+  end
 end

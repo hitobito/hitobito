@@ -240,6 +240,10 @@ class Group < ActiveRecord::Base
               .include?(self_registration_role_type.constantize)
   end
 
+  def path_args
+    [self]
+  end
+
   private
 
   def layer_person_duplicates

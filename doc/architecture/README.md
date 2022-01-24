@@ -19,10 +19,10 @@ Alle Diagramme werden mit [Draw.io](http://draw.io) erstellt und jeweils als Ori
 Hitobito kann funktionell in verschiedene Module unterteilt werden:
 
 * [Messages](modules/01_messages.md)
+* [Invoices](modules/02_invoices.md)
 * [People](modules/undefined)
 * [Groups](modules/undefined)
 * [Events](modules/undefined)
-* [Invoices](modules/undefined)
 * [Tech](modules/tech)
 
 ## Techstack

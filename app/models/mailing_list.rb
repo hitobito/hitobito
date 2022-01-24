@@ -138,6 +138,10 @@ class MailingList < ActiveRecord::Base
     Synchronize::Mailchimp::Client.new(self)
   end
 
+  def path_args
+    [group, self]
+  end
+
   private
 
   def assert_mail_name_is_not_protected

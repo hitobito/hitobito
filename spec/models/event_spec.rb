@@ -855,6 +855,42 @@ describe Event do
     end
   end
 
+  context 'role types' do
+    around(:example) do |example|
+      types = Event.role_types
+      example.run
+      Event.role_types = types
+    end
+
+    it '.register_role_type' do
+      role_type = Class.new(Event::Role)
+      expect { Event.register_role_type(role_type) }.to change {
+        Event.role_types.length
+      }.by(1)
+      expect(Event.role_types).to include(role_type)
+
+      # should not raise, two wagons might register the same role
+      Event.register_role_type(role_type)
+
+      other = Class.new
+      expect { Event.register_role_type(other) }.to raise_error(ArgumentError)
+    end
+
+    it '.disable_role_type' do
+      role_type = Event.role_types.first
+      expect { Event.disable_role_type(role_type) }.to change {
+        Event.role_types.length
+      }.by(-1)
+      expect(Event.role_types).not_to include(role_type)
+
+      # should not raise, two wagons might disable the same role
+      Event.disable_role_type(role_type)
+
+      other = Class.new
+      expect { Event.register_role_type(other) }.to raise_error(ArgumentError)
+    end
+  end
+
   def set_start_finish(event, start_at)
     start_at = Time.zone.parse(start_at)
     event.dates.create!(start_at: start_at, finish_at: start_at + 5.days)

@@ -161,6 +161,13 @@ de:
     household_option: 'Haushalte zusammenfassen'
     selection: 'Spaltenauswahl'
 
+  dropdown/people_login:
+    button: 'Login'
+    send_login: Login schicken
+    activate_totp: Zwei-Faktor-Authentifizierung einrichten
+    reset_totp: Zwei-Faktor-Authentifizierung zurücksetzen
+    disable_totp: Zwei-Faktor-Authentifizierung deaktivieren
+
   dropdown/invoices:
     download: 'Export'
     print: 'Drucken'
@@ -405,6 +412,21 @@ de:
       attachment:
         subject: 'Nachrichten Betreff:'
 
+  second_factor_authentication:
+    flash:
+      success:
+        registered: Zwei-Faktor-Authentifizierung erfolgreich aktiviert
+        signed_in: Erfolgreich eingeloggt
+
+      failure: One-Time Code inkorrekt
+    new:
+      title: Zwei-Faktor-Authentifizierung
+      hint_registered_html: "Geben Sie bitte den angezeigten Code auf Ihrer %{link} an um Ihre Identität zu bestätigen."
+      hint_unregistered_html: "Scannen Sie bitte den QR Code mit ihrem Smartphone mittels der %{link} und geben Sie den angezeigten Code an um die Zwei-Faktor-Authentifizierung zu aktivieren."
+    form:
+      totp_code: One-Time Code
+      totp_code_placeholder: Bitte sechsstelligen Code eingeben...
+      submit: Absenden
   events:
     courses:
       filter:
@@ -1257,6 +1279,7 @@ de:
           email_additional_invalid: Weitere E-Mail ungültig
           address_invalid: Adresse befindet sich nicht im Verzeichnis
 
+
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 
@@ -1305,7 +1328,6 @@ de:
       subscriptions: Abos
 
     actions_show:
-      send_login: Login schicken
       send_login_tooltip:
         new: Die Person hat noch kein Login.<br><br>Diese Aktion sendet ihr einen Link damit sie ihr Passwort setzen kann.
         resend: Die Person hat einen Link zum Setzen des Passworts erhalten, aber noch keines gesetzt.<br><br>Diese Aktion sendet ihr den Link erneut.
@@ -1382,6 +1404,14 @@ de:
       tag_lists: Tags
       remove_tags: Tags entfernen
       add_tags: Tags hinzufügen
+
+    totp_reset:
+      flashes:
+        success: Zwei-Faktor-Authentifizierung erfolgreich zurückgesetzt
+
+    totp_disable:
+      flashes:
+        success: Zwei-Faktor-Authentifizierung erfolgreich deaktiviert
 
   participations:
     destroy:

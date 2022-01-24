@@ -46,6 +46,10 @@ class Role < ActiveRecord::Base
   class_attribute :superior_attributes
   self.superior_attributes = []
 
+  # TOTP as 2FA is enforced on this role.
+  class_attribute :two_factor_authentication_enforced
+  self.two_factor_authentication_enforced = false
+
   # If these attributes should change, create a new role instance instead.
   attr_readonly :person_id, :group_id, :type
 

@@ -1,0 +1,19 @@
+-# Copyright (c) 2021, hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https ://github.com/hitobito/hitobito.
+
+-title t('.title')
+
+#new_totp
+  - unless pending_two_factor_person&.two_factor_authentication_registered?
+    %div.qr-code
+      %img{src: person_otp_qr_code(person, secret)}
+  
+  %p.hint
+    - if pending_two_factor_person&.two_factor_authentication_registered?
+      = t('.hint_registered_html', link: link_to('freeOTP App', 'https://freeotp.github.io/'))
+    - else
+      = t('.hint_unregistered_html', link: link_to('freeOTP App', 'https://freeotp.github.io/'))
+  
+  = render 'form'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_24_143925) do
+ActiveRecord::Schema.define(version: 2022_01_13_064557) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 2021_12_24_143925) do
     t.string "email", null: false
     t.string "label"
     t.boolean "public", default: true, null: false
-    t.boolean "mailings", default: false, null: false
+    t.boolean "mailings", default: true, null: false
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
   end
 
@@ -745,6 +745,8 @@ ActiveRecord::Schema.define(version: 2021_12_24_143925) do
     t.string "event_feed_token"
     t.string "unlock_token"
     t.string "family_key"
+    t.integer "two_factor_authentication"
+    t.text "encrypted_two_fa_secret"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["email"], name: "index_people_on_email", unique: true
     t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true

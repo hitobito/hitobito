@@ -1,0 +1,15 @@
+#new_totp {
+  .qr-code img {
+    margin-left: 165px;
+  }
+
+  div.qr-code {
+    min-height: 250px;
+  }
+
+  p.hint {
+    text-align: center;
+    width: 500px;
+    margin-left: 20px;
+  }
+}

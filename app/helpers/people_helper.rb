@@ -22,6 +22,10 @@ module PeopleHelper
                                                            households: households).to_s
   end
 
+  def dropdown_people_login(person)
+    Dropdown::PeopleLogin.new(self, person).to_s
+  end
+
   def format_birthday(person)
     if person.birthday?
       f(person.birthday) << ' ' << t('people.years_old', years: person.years)
@@ -125,4 +129,9 @@ module PeopleHelper
     address.to_s.split("\n").join(', ')
   end
 
+  def person_otp_qr_code(person, secret)
+    qr_code = People::OneTimePassword.new(secret, person: person).provisioning_qr_code
+    base64_data = Base64.encode64(qr_code.to_blob)
+    "data:image/png;base64,#{base64_data}"
+  end
 end

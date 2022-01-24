@@ -857,7 +857,7 @@ describe Event do
 
   context 'role types' do
     around(:example) do |example|
-      types = Event.role_types
+      types = Event.role_types.clone
       example.run
       Event.role_types = types
     end

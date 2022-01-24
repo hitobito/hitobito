@@ -11,6 +11,7 @@ require_dependency Devise::Engine.root
 
 class Devise::SessionsController < DeviseController
   layout :devise_layout
+  include ::TwoFactor
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:new, :create], prepend: true
@@ -18,15 +19,25 @@ class Devise::SessionsController < DeviseController
   respond_to :html
   respond_to :json, only: [:new, :create]
 
+  before_action :reset_two_factor_authentication,
+                if: :two_factor_authentication_pending?,
+                only: [:new]
+
   module Json
     def create
       super do |resource|
+        return init_two_factor_auth(resource) if second_factor_required?(resource)
+
         if request.format == :json
           resource.generate_authentication_token! unless resource.authentication_token?
           render json: UserSerializer.new(resource, controller: self)
           return
         end
       end
+    end
+
+    def second_factor_required?(resource)
+      resource.is_a?(Person) && resource.second_factor_required?
     end
   end
 
@@ -44,5 +55,4 @@ class Devise::SessionsController < DeviseController
 
   prepend Json
   prepend OauthSigninLayout
-
 end

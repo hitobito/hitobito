@@ -11,7 +11,7 @@ In unserer hitobito-Instanz und täglichen Arbeit ist uns aufgefallen, ...
 
 Daher haben wir überlegt, ...
 
-Was meinte die Community dazu?
+Was meint die Community dazu?
 
 # ToDo, um die Diskussion zu starten
 

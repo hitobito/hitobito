@@ -20,7 +20,7 @@ hier folgt ein Mockup ...
 # Tech-Spec
 
 - sinngebende Zielrichtung
-- besondere/bekannten Bedingungen und Grenzfälle
+- besondere/bekannte Bedingungen und Grenzfälle
 - technische Einschränkungen
 - Ein- und Ausgabeformate
 

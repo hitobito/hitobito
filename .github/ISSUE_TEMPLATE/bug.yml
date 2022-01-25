@@ -18,7 +18,7 @@ body:
     id: desired
     attributes:
       label: Gewünschtes Verhalten
-      description: Wie sollte sich hitobito Verhalten?
+      description: Wie sollte sich hitobito verhalten?
       placeholder: |
         Beim Erfassen einer Person wird ...
     validations:
@@ -52,7 +52,7 @@ body:
     id: instance
     attributes:
       label: Organisation
-      placeholder: JuBla, PBS/MiData, Cevi, Insieme...
+      placeholder: Jubla, PBS/MiData, Cevi, Insieme...
     validations:
       required: false
   - type: textarea

@@ -19,5 +19,3 @@ Neu soll ...
 - [ ] ggf. Mockup erstellen
 - [ ] Tech-Spec ergänzen
 - [ ] ToDo für Umsetzung definieren
-
-

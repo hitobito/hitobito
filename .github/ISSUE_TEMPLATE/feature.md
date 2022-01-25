@@ -22,7 +22,8 @@ hier folgt ein Mockup ...
 - sinngebende Zielrichtung
 - besondere/bekannte Bedingungen und Grenzfälle
 - technische Einschränkungen
-- Ein- und Ausgabeformate
+- Ein- und Ausgabeformate beschreiben
+- Umsetzungsplan ergänzen oder anpassen
 
 # ToDo
 
@@ -31,4 +32,5 @@ hier folgt ein Mockup ...
 - [ ] Model/View/Controller anpassen
 - [ ] Specs schreiben
 - [ ] Kunde wegen Übersetzungen informieren
+- [ ] Mit angemessener Rolle "durchklicken"
 - [ ] CHANGELOG-Eintrag hinzufügen

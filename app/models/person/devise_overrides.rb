@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -7,7 +7,8 @@
 
 module Person::DeviseOverrides
 
-  def send_reset_password_instructions # from lib/devise/models/recoverable.rb
+  # from lib/devise/models/recoverable.rb
+  def send_reset_password_instructions
     persisted? && super
   end
 
@@ -42,7 +43,7 @@ module Person::DeviseOverrides
   end
 
   def set_reset_password_token
-    self.reset_password_sent_to = self.email
+    self.reset_password_sent_to = email
     super
   end
 

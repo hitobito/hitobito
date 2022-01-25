@@ -1,10 +1,9 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
-# Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
-# hitobito and licensed under the Affero General Public License version 3
-# or later. See the COPYING file at the top-level directory or at
-# https://github.com/hitobito/hitobito.
+#  Copyright (c) 2022, Hitobito AG. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
 
@@ -63,20 +62,20 @@ describe Messages::BulkMail::Delivery do
     end
 
     context 'too many retries' do
-        let(:retries) { 1 }
+      let(:retries) { 1 }
 
-        it '#deliver' do
-          expect(mail_factory).to receive(:to)
-            .once
-            .ordered
-            .with(emails)
-            .and_return(error_mail('second@example.com'))
+      it '#deliver' do
+        expect(mail_factory).to receive(:to)
+          .once
+          .ordered
+          .with(emails)
+          .and_return(error_mail('second@example.com'))
 
-          expect do
-            delivery.deliver
-          end.to raise_error(Messages::BulkMail::Delivery::RetriesExceeded)
-        end
+        expect do
+          delivery.deliver
+        end.to raise_error(Messages::BulkMail::Delivery::RetriesExceeded)
       end
+    end
   end
 
   context 'with errors' do

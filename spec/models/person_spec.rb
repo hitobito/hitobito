@@ -578,8 +578,7 @@ describe Person do
     before { allow(Truemail).to receive(:valid?).and_call_original }
 
     before do
-      person.email = 'not-an-email'
-      person.save!(validate: false)
+      person.update_columns(email: 'not-an-email')
     end
 
     before do

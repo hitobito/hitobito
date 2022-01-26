@@ -106,6 +106,8 @@ describe Event::ParticipationContactDatasController, type: :controller do
 
       person.reload
       expect(person.nickname).to eq('Jojo')
+
+      person.confirm
       expect(person.email).to eq('dude@example.com')
 
     end

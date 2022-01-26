@@ -309,11 +309,15 @@ Hitobito::Application.routes.draw do
     resources :help_texts, except: [:show]
 
     devise_for :service_tokens, only: [:sessions]
-    devise_for :people, skip: [:registrations], path: "users"
+    devise_for :people, skip: [:registrations], path: "users", controllers: {
+        passwords: 'devise/hitobito/passwords',
+        registrations: 'devise/hitobito/registrations',
+        sessions: 'devise/hitobito/sessions'
+    }
     as :person do
-      get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
-      put 'users' => 'devise/registrations#update', :as => 'person_registration'
-      get 'users' => 'devise/registrations#edit' # route required for language switch
+      get 'users/edit' => 'devise/hitobito/registrations#edit', :as => 'edit_person_registration'
+      put 'users' => 'devise/hitobito/registrations#update', :as => 'person_registration'
+      get 'users' => 'devise/hitobito/registrations#edit' # route required for language switch
 
       get 'users/second_factor' => 'second_factor_authentication#new', as: 'new_users_second_factor'
       post 'users/second_factor' => 'second_factor_authentication#create', as: 'users_second_factor'

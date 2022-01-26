@@ -341,7 +341,7 @@ describe PeopleController do
     end
 
     context 'PUT update' do
-      let(:person) { people(:bottom_member) }
+      let(:person) { people(:bottom_member).tap { |p| p.update_columns(encrypted_password: nil) } }
       let(:group) { person.groups.first }
 
       it 'as admin updates email with password' do
@@ -669,7 +669,7 @@ describe PeopleController do
       end
 
       it 'does not send instructions if e-mail invalid' do
-        person.update_attribute(:email, 'dude@domainungueltig42.ch')
+        person.update_column(:email, 'dude@domainungueltig42.ch')
 
         expect do
           post :send_password_instructions, params: { group_id: groups(:bottom_layer_one).id, id: person.id }, format: :js
@@ -800,6 +800,8 @@ describe PeopleController do
   context 'as api user' do
 
     describe 'GET #show' do
+      before { top_leader.confirm }
+
       it 'redirects when token is nil' do
         get :show, params: { group_id: group.id, id: top_leader.id, user_token: '', user_email: top_leader.email }
         is_expected.to redirect_to new_person_session_path
@@ -941,6 +943,7 @@ describe PeopleController do
   end
 
   context 'with valid oauth token' do
+    before { top_leader.confirm }
     let(:token) { instance_double('Oauth::AccessToken', acceptable?: true, accessible?: true, person: top_leader) }
 
     before do

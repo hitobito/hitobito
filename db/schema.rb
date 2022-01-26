@@ -747,7 +747,13 @@ ActiveRecord::Schema.define(version: 2022_01_13_064557) do
     t.string "family_key"
     t.integer "two_factor_authentication"
     t.text "encrypted_two_fa_secret"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.string "reset_password_sent_to"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
+    t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true
     t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true
     t.index ["first_name"], name: "index_people_on_first_name"

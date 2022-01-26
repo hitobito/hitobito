@@ -9,7 +9,8 @@ class Groups::SelfRegistrationController < CrudController
   skip_authorization_check
   skip_authorize_resource
 
-  after_create :sign_in_person
+  after_create :success_but_no_email, unless: :email_present?
+  after_create :send_password_reset_email, if: :email_present?
 
   before_action :assert_empty_honeypot, only: [:create]
 
@@ -33,11 +34,16 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def return_path
-    super.presence || edit_group_person_path(entry.group_id, entry.person_id) if valid?
+    super.presence || new_person_session_path if valid?
   end
 
-  def sign_in_person
-    sign_in(entry.person)
+  def success_but_no_email
+    flash[:notice] = I18n.t('devise.registrations.signed_up_but_no_email')
+  end
+
+  def send_password_reset_email
+    Person.send_reset_password_instructions(email: entry.person.email)
+    flash[:notice] = I18n.t('devise.registrations.signed_up_but_unconfirmed')
   end
 
   def assert_empty_honeypot
@@ -56,6 +62,10 @@ class Groups::SelfRegistrationController < CrudController
 
   def valid?
     entry.valid? && entry.person.valid?
+  end
+
+  def email_present?
+    entry.person.email.present?
   end
 
   def person_attrs

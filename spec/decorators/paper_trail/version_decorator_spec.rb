@@ -78,7 +78,6 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
       it { is_expected.to match(/<div>Ort wurde/) }
       it { is_expected.to match(/<div>PLZ wurde/) }
-      it { is_expected.to match(/<div>Haupt-E-Mail wurde/) }
     end
 
     context 'with association changes' do
@@ -200,7 +199,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
   end
 
   def update
-    person.update!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
+    person.update!(town: 'Bern', zip_code: '3007')
   end
 
 end

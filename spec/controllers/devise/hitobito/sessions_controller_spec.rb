@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Devise::SessionsController do
+describe Devise::Hitobito::SessionsController do
   let(:bottom_group) { groups(:bottom_group_one_one) }
   let(:role) { Fabricate('Group::BottomGroup::Member', group: bottom_group) }
   let(:person) do

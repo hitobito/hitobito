@@ -35,8 +35,7 @@ describe PeopleFiltersController do
 
       it 'translates invalid e-mail tags' do
         allow(Truemail).to receive(:valid?).and_call_original
-        user.email = 'not-an-email'
-        user.save!(validate: false)
+        user.update_columns(email: 'not-an-email')
         AdditionalEmail
           .new(contactable: user,
                email: 'mail@nodomain')

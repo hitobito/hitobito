@@ -627,3 +627,7 @@ input.switcher {
     }
   }
 }
+
+.hide-last:last-child {
+  display: none;
+}

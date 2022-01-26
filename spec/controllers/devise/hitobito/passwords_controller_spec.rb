@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Devise::PasswordsController do
+describe Devise::Hitobito::PasswordsController do
   let(:bottom_group) { groups(:bottom_group_one_one) }
 
   before do

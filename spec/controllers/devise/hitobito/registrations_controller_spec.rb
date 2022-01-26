@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Devise::RegistrationsController do
+describe Devise::Hitobito::RegistrationsController do
   before { request.env['devise.mapping'] = Devise.mappings[:person] }
   render_views
 

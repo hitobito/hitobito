@@ -220,17 +220,12 @@ de:
       new:
         reset_password_button: 'Passwort zurücksetzen'
     confirmations:
-      send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail, mit der Du Deine Registrierung bestätigen kannst.'
-      send_paranoid_instructions: 'Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Du Deine Registrierung bestätigen kannst.'
-      confirmed: 'Vielen Dank für Deine Registrierung. Du bist jetzt angemeldet.'
-    registrations:
-      signed_up: 'Du hast dich erfolgreich registriert.'
-      signed_up_but_unconfirmed: 'Du hast Dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account noch nicht bestätigt ist. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.'
-      signed_up_but_inactive: 'Du hast dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account inaktiv ist.'
-      signed_up_but_locked: 'Du hast dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account gesperrt ist.'
-      updated: 'Dein Passwort wurde aktualisiert.'
-      update_needs_confirmation: "Deine Daten wurden aktualisiert, aber Du musst Deine neue E-Mail-Adresse bestätigen. Du erhälsts in wenigen Minuten eine E-Mail, mit der Du die Änderung Deiner E-Mail-Adresse abschließen kannst."
-      destroyed: 'Dein Account wurde gelöscht.'
+      new:
+        resend_confirmation_instructions: 'E-Mail-Adresse bestätigen'
+        submit: 'Bestätigungs-E-Mail senden'
+      send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail, mit der Du Deine E-Mail-Adresse bestätigen kannst.'
+      send_paranoid_instructions: 'Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Du sie bestätigen kannst.'
+      confirmed: 'Vielen Dank für die Bestätigung deiner E-Mail-Adresse. Du kannst dich jetzt anmelden.'
     unlocks:
       send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Deinen Account entsperren können.'
       unlocked: 'Dein Account wurde erfolgreich entsperrt.'
@@ -239,6 +234,14 @@ de:
       success: 'Du hast Dich erfolgreich mit Deinem %{kind}-Account angemeldet.'
       failure: 'Du konntest nicht Deinem %{kind}-Account angemeldet werden, weil "%{reason}".'
     registrations:
+      signed_up: 'Du hast dich erfolgreich registriert.'
+      signed_up_but_unconfirmed: 'Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.'
+      signed_up_but_inactive: 'Du hast dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account inaktiv ist.'
+      signed_up_but_locked: 'Du hast dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account gesperrt ist.'
+      signed_up_but_no_email: 'Du hast dich erfolgreich registriert. Wir konnten Dich nicht anmelden, da du keine Mailadresse angegeben hast.'
+      updated: 'Dein Passwort wurde aktualisiert.'
+      update_needs_confirmation: "Deine Daten wurden aktualisiert, aber Du musst Deine neue E-Mail-Adresse bestätigen. Du erhältst in wenigen Minuten eine E-Mail, mit der Du die Änderung Deiner E-Mail-Adresse abschließen kannst."
+      destroyed: 'Dein Account wurde gelöscht.'
       edit:
         change_password: "Passwort ändern"
         set_password: "Passwort setzen"
@@ -250,7 +253,12 @@ de:
 
     mailer:
       confirmation_instructions:
-        subject: 'Anleitung zur Bestätigung Deines Accounts'
+        subject: 'Anleitung zur Bestätigung Deiner E-Mail-Adresse'
+        body:
+          greeting: 'Hallo %{name}!'
+          information_html: 'Du kannst deine E-Mail-Adresse mit dem folgenden Link bestätigen:'
+          link_text: '%{email} bestätigen'
+          footer: 'Diese E-Mail wurde von Hitobito gesendet'
       reset_password_instructions:
         subject: 'Anleitung für das Setzen Deines Passworts'
       unlock_instructions:
@@ -259,7 +267,7 @@ de:
           greeting: 'Hallo %{name}!'
           information_html: 'Dein Account wurde aufgrund von zu vielen Fehlversuchen beim Login gesperrt.<br>Klicke auf den folgenden Link um Deinen Account zu entsperren:'
           link_text: 'Meinen Account entsperren'
-          footer: 'Dieses E-Mail wurde von Hitobito gesendet'
+          footer: 'Diese E-Mail wurde von Hitobito gesendet'
 
   errors:
     link_to_main: 'Hauptseite'
@@ -885,6 +893,7 @@ de:
 
     unauthorized:
       forgot_password: 'Passwort vergessen?'
+      need_confirmation_email: 'Keine Bestätigungs-E-Mail bekommen?'
 
     footer:
       available_under_license: 'verfügbar unter der'
@@ -1319,6 +1328,8 @@ de:
     send_password_instructions: Login Informationen wurden verschickt.
     send_password_instructions_invalid_email: Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist.
     years_old: (%{years} Jahre alt)
+
+    update_email_must_be_confirmed: Die geänderte E-Mail-Adresse muss noch bestätigt werden, bevor sie aktiv wird.
 
     tabs:
       history: Verlauf

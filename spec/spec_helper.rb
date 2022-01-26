@@ -89,6 +89,8 @@ RSpec.configure do |config|
   config.before :all do
     # load all fixtures
     self.class.fixtures :all
+    Person.update_all(confirmed_at: Time.now)
+
     FileUtils.rm_rf(Dir.glob(AsyncDownloadFile::DIRECTORY.join('*')))
   end
 
@@ -182,3 +184,11 @@ unless RSpec.configuration.exclusion_filter[:type] == 'feature'
 
   puts "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
 end
+
+Devise::Test::ControllerHelpers.prepend(Module.new do
+  # Make sure the email address is confirmed before logging in
+  def sign_in(resource, deprecated = nil, scope: nil, confirm: true)
+    resource.confirm if confirm
+    super(resource, deprecated, scope: scope)
+  end
+end)

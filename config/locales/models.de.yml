@@ -463,6 +463,7 @@ de:
         description: Beschreibung
         self_registration_role_type: Externe Registrierung
         self_registration_link: Externe Registrierung
+        self_registration_notification_email: Externe Registrierung Benachrichtigungs-E-Mail
 
       event:
         group_ids: Gruppen

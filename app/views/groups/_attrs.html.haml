@@ -10,7 +10,7 @@
 
     %h2= t('.additional_information')
     - if entry.self_registration_active?
-      = render_attrs(entry, :self_registration_link)
+      = render_attrs(entry, :self_registration_link, :self_registration_notification_email)
     = render_attrs(entry, :type_name)
     = render_present_attrs(entry, *entry.used_attributes(:description))
     = render_extensions :attrs

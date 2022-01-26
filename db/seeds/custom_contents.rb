@@ -57,6 +57,9 @@ CustomContent.seed_once(
     placeholders_optional: nil },
   { key: Assignment::AssigneeNotificationMailer::CONTENT_ASSIGNMENT_ASSIGNEE_NOTIFICATION,
     placeholders_required: 'assignment-title',
+    placeholders_optional: nil },
+  { key: Groups::SelfRegistrationNotificationMailer::CONTENT_SELF_REGISTRATION_NOTIFICATION,
+    placeholders_required: 'person-name, group-name, person-url',
     placeholders_optional: nil }
 )
 
@@ -77,8 +80,19 @@ bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL
 bulk_mail_with_failed_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED).id
 address_validation_checks_id = CustomContent.get(Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS).id
 assignment_assignee_notification_id = CustomContent.get(Assignment::AssigneeNotificationMailer::CONTENT_ASSIGNMENT_ASSIGNEE_NOTIFICATION).id
+self_registration_notification_id = CustomContent.get(Groups::SelfRegistrationNotificationMailer::CONTENT_SELF_REGISTRATION_NOTIFICATION).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
+
+  {custom_content_id: self_registration_notification_id,
+   locale: 'de',
+   label: 'Benachrichtigung Selbstregistrierung',
+   subject: 'Benachrichtigung Selbstregistrierung',
+   body: "Die Person {person-name} hat sich auf der Gruppe {group-name} per Selbstregistrierung angemeldet:<br/><br/>{person-url}" },
+
+  {custom_content_id: self_registration_notification_id,
+   locale: 'en',
+   label: 'Self Registration Notification' },
 
   {custom_content_id: assignment_assignee_notification_id,
    locale: 'de',

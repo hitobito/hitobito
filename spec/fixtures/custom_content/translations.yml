@@ -97,3 +97,11 @@ assignment_assignee_notification:
   subject: Druckauftrag erhalten
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+self_registration_notification:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:self_registration_notification) %>
+  locale: de
+  label: 'Benachrichtigung Selbstregistrierung'
+  subject: 'Benachrichtigung Selbstregistrierung'
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

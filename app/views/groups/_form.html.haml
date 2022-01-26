@@ -30,6 +30,7 @@
             { include_blank: ta(:not_allowed) },
               class: 'span6')
         = f.help_inline(t('.hint_external_registration'))
+      = f.labeled_input_fields(:self_registration_notification_email)
 
   = render 'contactable/fields', f: f
 

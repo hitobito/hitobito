@@ -107,13 +107,14 @@ describe Groups::SelfRegistrationController do
               group_id: group.id,
               role: {
                 group_id: group.id,
-                new_person: { first_name: 'Bob', last_name: 'Miller', email: 'foo@example.com' }
+                new_person: { first_name: 'Bob', last_name: 'Miller' }
               }
             }
           end.to change { Person.count }.by(1)
             .and change { Role.count }.by(1)
+            .and change { ActionMailer::Base.deliveries.count }.by(0)
 
-          person = Person.find_by(email: 'foo@example.com')
+          person = Person.find_by(first_name: 'Bob', last_name: 'Miller')
           role = person.roles.first
 
           expect(person.primary_group).to eq(group)
@@ -122,6 +123,44 @@ describe Groups::SelfRegistrationController do
           expect(role.group).to eq(group)
 
           is_expected.to redirect_to(new_person_session_path)
+        end
+
+        it 'does not send any emails when no email provided' do
+          expect do
+            post :create, params: {
+                group_id: group.id,
+                role: {
+                    group_id: group.id,
+                    new_person: { first_name: 'Bob', last_name: 'Miller' }
+                }
+            }
+          end.not_to change { ActionMailer::Base.deliveries.count }
+        end
+
+        it 'sends password reset instructions' do
+          expect do
+            post :create, params: {
+                group_id: group.id,
+                role: {
+                    group_id: group.id,
+                    new_person: { first_name: 'Bob', last_name: 'Miller', email: 'foo@example.com' }
+                }
+            }
+          end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+
+        it 'sends notification mail' do
+          group.update(self_registration_notification_email: 'notification@example.com')
+
+          expect do
+            post :create, params: {
+                group_id: group.id,
+                role: {
+                    group_id: group.id,
+                    new_person: { first_name: 'Bob', last_name: 'Miller' }
+                }
+            }
+          end.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
       end
     end

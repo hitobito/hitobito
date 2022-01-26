@@ -125,14 +125,26 @@ describe Groups::SelfRegistrationController do
           is_expected.to redirect_to(new_person_session_path)
         end
 
+        it 'does not send any emails when no email provided' do
+          expect do
+            post :create, params: {
+                group_id: group.id,
+                role: {
+                    group_id: group.id,
+                    new_person: { first_name: 'Bob', last_name: 'Miller' }
+                }
+            }
+          end.not_to change { ActionMailer::Base.deliveries.count }
+        end
+
         it 'sends password reset instructions' do
           expect do
             post :create, params: {
-              group_id: group.id,
-              role: {
                 group_id: group.id,
-                new_person: { first_name: 'Bob', last_name: 'Miller', email: 'foo@example.com' }
-              }
+                role: {
+                    group_id: group.id,
+                    new_person: { first_name: 'Bob', last_name: 'Miller', email: 'foo@example.com' }
+                }
             }
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
@@ -142,11 +154,11 @@ describe Groups::SelfRegistrationController do
 
           expect do
             post :create, params: {
-              group_id: group.id,
-              role: {
                 group_id: group.id,
-                new_person: { first_name: 'Bob', last_name: 'Miller' }
-              }
+                role: {
+                    group_id: group.id,
+                    new_person: { first_name: 'Bob', last_name: 'Miller' }
+                }
             }
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
         end

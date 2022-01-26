@@ -237,7 +237,7 @@ class Group < ActiveRecord::Base
 
   def self_registration_active?
     Settings.groups&.self_registration&.enabled &&
-      self_registration_role_type.present? && 
+      self_registration_role_type.present? &&
       decorate.possible_roles_without_writing_permissions
               .include?(self_registration_role_type.constantize)
   end
@@ -251,7 +251,7 @@ class Group < ActiveRecord::Base
     return unless self_registration_notification_email
 
     unless valid_email?(self_registration_notification_email)
-      errors.add(:email, :invalid)
+      errors.add(:self_registration_notification_email, :invalid)
     end
   end
 

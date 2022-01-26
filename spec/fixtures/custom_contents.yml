@@ -63,3 +63,7 @@ address_validation_checks:
 assignment_assignee_notification:
   key: assignment_assignee_notification
   placeholders_required: assignment-title
+
+self_registration_notification:
+  key: self_registration_notification
+  placeholders_required: group-name, person-name, person-url

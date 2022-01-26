@@ -17,9 +17,19 @@ class Groups::SelfRegistrationController < CrudController
   before_action :redirect_to_group, unless: :self_registration_active?
   before_action :redirect_to_group, if: :signed_in?
 
+  after_create :send_notification_email
+
   delegate :self_registration_active?, to: :group
 
   private
+
+  def send_notification_email
+    return if group.self_registration_notification_email.blank?
+
+    Groups::SelfRegistrationNotificationMailer
+      .self_registration_notification(group.self_registration_notification_email,
+                                      entry).deliver_now
+  end
 
   def build_entry
     role = super

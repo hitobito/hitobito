@@ -10,7 +10,8 @@ module Export::Tabular::Groups
 
     EXCLUDED_ATTRS = %w(lft rgt contact_id require_person_add_requests logo
                         created_at updated_at deleted_at archived_at
-                        creator_id updater_id deleter_id self_registration_role_type).freeze
+                        creator_id updater_id deleter_id self_registration_role_type
+                        self_registration_notification_email).freeze
 
     self.model_class = Group
     self.row_class = Export::Tabular::Groups::Row

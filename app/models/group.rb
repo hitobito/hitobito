@@ -120,6 +120,8 @@ class Group < ActiveRecord::Base
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validates :address, length: { allow_nil: true, maximum: 1024 }
 
+  validate :assert_valid_self_registration_notification_email
+
   ### CLASS METHODS
 
   class << self
@@ -242,6 +244,15 @@ class Group < ActiveRecord::Base
 
   def path_args
     [self]
+  end
+
+  def assert_valid_self_registration_notification_email
+    self.self_registration_notification_email = self_registration_notification_email.presence
+    return unless self_registration_notification_email
+
+    unless valid_email?(self_registration_notification_email)
+      errors.add(:email, :invalid)
+    end
   end
 
   private

@@ -89,8 +89,6 @@ RSpec.configure do |config|
   config.before :all do
     # load all fixtures
     self.class.fixtures :all
-    Person.update_all(confirmed_at: Time.now)
-
     FileUtils.rm_rf(Dir.glob(AsyncDownloadFile::DIRECTORY.join('*')))
   end
 
@@ -192,3 +190,14 @@ Devise::Test::ControllerHelpers.prepend(Module.new do
     super(resource, deprecated, scope: scope)
   end
 end)
+
+module ActiveRecordFixture
+  def initialize(fixture, model_class)
+    if model_class == Person
+      fixture['confirmed_at'] = 1.day.ago unless fixture.key?('confirmed_at')
+    end
+
+    super(fixture, model_class)
+  end
+end
+ActiveRecord::Fixture.prepend(ActiveRecordFixture)

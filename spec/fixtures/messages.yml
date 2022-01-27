@@ -61,4 +61,13 @@ sms:
 mail:
   mailing_list: leaders
   type: Message::BulkMail
-  raw_source: <%= File.open("#{Rails.root}/spec/fixtures/email/bulk_mail.eml", 'rb') { |f| f.read } %>
+  raw_source: |
+    Subject: Newsletter
+    From: Mike Sender <sender@example.com>
+    Content-Type: text/plain; charset=utf-8
+    Message-Id: <61bafad911d45_652aef27733958500d1@81e9aca06315.mail>
+    X-Original-To: zumkehr@puzzle.ch
+    Date: Thu, 24 Dec 2021 08:00:00 +0000
+    To: <list@hitobito.example.com>
+
+    Hi!

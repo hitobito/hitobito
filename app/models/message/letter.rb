@@ -11,6 +11,7 @@ class Message::Letter < Message
 
   SHIPPING_METHODS = %w(own normal priority).freeze
   i18n_enum :shipping_method, SHIPPING_METHODS, scopes: true, queries: true
+  validates :subject, presence: true
   validates :shipping_method, inclusion: { in: SHIPPING_METHODS }
 
   validates_presence_of :body

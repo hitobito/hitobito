@@ -90,6 +90,25 @@ describe MessagesController do
       expect(response).to render_template :new
     end
 
+    it 'validates presence of subject' do
+      Subscription.create!(mailing_list: list, subscriber: top_leader)
+
+      post :create, params: nesting.merge(
+        message: {
+          subject: '',
+          type: 'Message::LetterWithInvoice',
+          body: 'Bitte einzahlen',
+          invoice_attributes: {
+            invoice_items_attributes: {
+              '1' => { 'name' => 'Mitgliedsbeitrag', 'unit_cost' => 42, '_destroy' => 'false' }
+            }
+          }
+        }
+      )
+      expect(assigns(:message)).to be_invalid
+      expect(response).to render_template :new
+    end
+
     it 'validates invoice_item attributes' do
       post :create, params: nesting.merge(
         message: {

@@ -14,8 +14,6 @@ module Messages
     BATCH_TIMEOUT = Settings.email.bulk_mail.batch_timeout
     RETRY_AFTER_ERROR = [5.minutes, 10.minutes].freeze
 
-    # @param [Message] message
-    # @param [BulkMail::MailFactory] mail_factory
     def initialize(message, mail_factory = nil)
       @message = message
       @mail_factory = mail_factory || BulkMail::MailFactory.new(message)

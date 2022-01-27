@@ -38,12 +38,12 @@ module Messages
         end
       end
 
-      def try_to_send_mail(mail_factory, emails)
-        mail_factory.to(emails).deliver
+      def try_to_send_mail(mail_factory, recipient_emails)
+        mail_factory.to(recipient_emails).deliver
         []
       rescue => error
         if invalid_email?(error)
-          invalid_emails(error, emails)
+          invalid_emails(error, recipient_emails)
         else
           # We might want to retry again in this case instead,
           # but let's find out which exception class to catch

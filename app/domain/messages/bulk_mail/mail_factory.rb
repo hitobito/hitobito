@@ -8,15 +8,29 @@
 module Messages
     module BulkMail
       class MailFactory
-        # @param [Message] message
-        def initialize(message)
-          @message = message
+        def initialize(bulk_mail_message)
+          # ruby mail: https://rubygems.org/gems/mail
+          @mail = Mail.new(bulk_mail_message.raw_source)
+          set_headers
         end
 
-        # @param [[String]] receivers Receiver E-Mails
-        # @return [Mail::Message]
-        def to(receivers)
-          raise "Implement me"
+        def deliver
+          @mail.deliver
+        end
+
+        def to(recipient_emails)
+          @mail.smtp_envelope_to = recipient_emails
+        end
+
+        private
+
+        def set_headers
+          @mail['Reply-To'] = sender_from
+          @mail['Return-Path'] = sender_from
+        end
+
+        def sender_from
+          @mail.from
         end
       end
     end

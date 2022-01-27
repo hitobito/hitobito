@@ -294,7 +294,7 @@ describe Export::Pdf::Messages::Letter do
         create_household(housemate3, housemate4)
         create_household(other_housemate, people(:top_leader))
 
-        letter.update!(send_to_households: true, body: 'Hallo', subject: nil)
+        letter.update!(send_to_households: true, body: 'Hallo', subject: 'Brief')
       end
 
       it 'creates preview with half normal half household recipients' do
@@ -303,20 +303,24 @@ describe Export::Pdf::Messages::Letter do
           [71, 644, housemate1.address],
           [71, 633, "#{housemate1.zip_code} #{housemate1.town}"],
           [71, 623, 'DE'],
+          [71, 531, "Brief"],
           [71, 502, 'Hallo'],
           [71, 654, 'Bettina Büttel, Carlo Colorado'],
           [71, 644, housemate3.address],
           [71, 633, "#{housemate3.zip_code} #{housemate3.town}"],
           [71, 623, 'DE'],
+          [71, 531, "Brief"],
           [71, 502, 'Hallo'],
           [71, 654, 'Bottom Member'],
           [71, 644, bottom_member.address],
           [71, 633, "#{bottom_member.zip_code} #{bottom_member.town}"],
+          [71, 531, "Brief"],
           [71, 502, 'Hallo'],
           [71, 654, 'Dominik Dachs'],
           [71, 644, single_person.address],
           [71, 633, "#{single_person.zip_code} #{single_person.town}"],
           [71, 623, 'DE'],
+          [71, 531, "Brief"],
           [71, 502, 'Hallo']
         ]
       end
@@ -330,19 +334,23 @@ describe Export::Pdf::Messages::Letter do
           [71, 644, housemate1.address],
           [71, 633, "#{housemate1.zip_code} #{housemate1.town}"],
           [71, 623, 'DE'],
+          [71, 531, "Brief"],
           [71, 502, 'Hallo'],
           [71, 654, 'Bottom Member'],
           [71, 644, bottom_member.address],
           [71, 633, "#{bottom_member.zip_code} #{bottom_member.town}"],
+          [71, 531, "Brief"],
           [71, 502, 'Hallo'],
           [71, 654, 'Top Leader'],
           [71, 644, top_leader.address],
           [71, 633, "#{top_leader.zip_code} #{top_leader.town}"],
+          [71, 531, "Brief"],
           [71, 502, 'Hallo'],
           [71, 654, 'Dominik Dachs'],
           [71, 644, single_person.address],
           [71, 633, "#{single_person.zip_code} #{single_person.town}"],
           [71, 623, 'DE'],
+          [71, 531, "Brief"],
           [71, 502, 'Hallo']
         ]
       end

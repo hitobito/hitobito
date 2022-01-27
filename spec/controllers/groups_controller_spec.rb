@@ -103,6 +103,36 @@ describe GroupsController do
       end
     end
 
+    describe 'PUT update' do
+      let(:attrs) {  { type: 'Group::TopGroup', parent_id: group.id } }
+      let(:top_leader_role) { roles(:top_leader) }
+      let(:person) { top_leader_role.person }
+      let(:group) { top_leader_role.group }
+
+      before do
+        group.update_columns(contact_id: 1)
+      end
+
+      it 'allows nil contact' do
+        expect do
+          put :update, params: { id: group, group: attrs.merge(name: 'foobar', contact_id: nil) }
+        end.to change { group.reload.contact_id }.to(nil)
+      end
+
+      it 'allows member contact' do
+        expect do
+          put :update, params: { id: group, group: attrs.merge(name: 'foobar', contact_id: person.id ) }
+        end.to change { group.reload.contact_id }.to(person.id)
+      end
+
+      it 'does not allow non-member contact' do
+        non_member = people(:bottom_member)
+        expect do
+          put :update, params: { id: group, group: attrs.merge(name: 'foobar', contact_id: non_member.id) }
+        end.not_to change { group.reload.contact_id }
+      end
+    end
+
     describe '#destroy' do
       it 'leader cannot destroy his group' do
         expect { post :destroy, params: { id: group.id } }.to raise_error(CanCan::AccessDenied)

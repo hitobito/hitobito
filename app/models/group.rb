@@ -119,6 +119,7 @@ class Group < ActiveRecord::Base
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validates :address, length: { allow_nil: true, maximum: 1024 }
+  validates :contact, inclusion: { in: ->(group) { group.people.members } }, allow_nil: true
 
   validate :assert_valid_self_registration_notification_email
 

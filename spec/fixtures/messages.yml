@@ -61,6 +61,7 @@ sms:
 mail:
   mailing_list: leaders
   type: Message::BulkMail
+  state: pending
   raw_source: |
     Subject: Newsletter
     From: Mike Sender <sender@example.com>

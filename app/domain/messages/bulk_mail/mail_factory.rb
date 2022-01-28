@@ -6,32 +6,38 @@
 #  https://github.com/hitobito/hitobito.
 
 module Messages
-    module BulkMail
-      class MailFactory
-        def initialize(bulk_mail_message)
-          # ruby mail: https://rubygems.org/gems/mail
-          @mail = Mail.new(bulk_mail_message.raw_source)
-          set_headers
-        end
+  module BulkMail
+    class MailFactory
+      def initialize(bulk_mail_message)
+        @bulk_mail_message = bulk_mail_message
+        # ruby mail: https://rubygems.org/gems/mail
+        @mail = Mail.new(@bulk_mail_message.raw_source)
+        set_headers
+      end
 
-        def deliver
-          @mail.deliver
-        end
+      def deliver
+        @mail.deliver
+      end
 
-        def to(recipient_emails)
-          @mail.smtp_envelope_to = recipient_emails
-        end
+      def to(recipient_emails)
+        @mail.smtp_envelope_to = recipient_emails
+      end
 
-        private
+      private
 
-        def set_headers
-          @mail['Reply-To'] = sender_from
-          @mail['Return-Path'] = sender_from
-        end
+      def set_headers
+        @mail['Reply-To'] = source_mail_sender
+        @mail['Return-Path'] = source_mail_sender
+        @mail.smtp_envelope_from = mailing_list_address
+      end
 
-        def sender_from
-          @mail.from
-        end
+      def source_mail_sender
+        @source_mail_sender ||= @mail.from
+      end
+
+      def mailing_list_address
+        @bulk_mail_message.mailing_list.mail_address
       end
     end
   end
+end

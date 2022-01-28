@@ -39,7 +39,7 @@ Events können Abonnenten sein.
 
 Die Source Mail wird für die Weiterverarbeitung in ein [Mail](https://rubygems.org/gems/mail) Objekt instanziert.
 
-### 1. Sender Attribute
+### Sender Attribute
 
 [Envelope Sender](https://de.wikipedia.org/wiki/Envelope_Sender) wird auf die Mailadresse des Abos gesetzt. (abo_name@db.hitobito.com)
 

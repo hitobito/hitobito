@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -119,6 +119,7 @@ class Group < ActiveRecord::Base
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validates :address, length: { allow_nil: true, maximum: 1024 }
+  validates :contact, permission: :show_full, allow_blank: true, if: :contact_id_changed?
   validates :contact, inclusion: { in: ->(group) { group.people.members } }, allow_nil: true
 
   validate :assert_valid_self_registration_notification_email

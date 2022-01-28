@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,6 +24,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_no_cache
   before_action :set_paper_trail_whodunnit
+  around_action :store_current_person
 
   class_attribute :skip_translate_inheritable
 
@@ -71,6 +72,13 @@ class ApplicationController < ActionController::Base
   def user_for_paper_trail
     origin_user_id = session[:origin_user]
     origin_user_id ? origin_user_id : super
+  end
+
+  def store_current_person
+    Auth.current_person = current_person
+    yield
+  ensure
+    Auth.current_person = nil
   end
 
   def current_ability

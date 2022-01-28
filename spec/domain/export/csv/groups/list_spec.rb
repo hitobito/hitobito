@@ -26,7 +26,9 @@ describe Export::Tabular::Groups::List do
      expect(subject.size).to eq(4)
    end
 
-   context 'first row' do
+   context 'first row with contact' do
+
+     let(:contact) { people(:bottom_member) }
 
      subject { csv[0] }
 
@@ -36,25 +38,25 @@ describe Export::Tabular::Groups::List do
      its(['Kurzname']) { should == group.short_name }
      its(['Gruppentyp']) { should == 'Bottom Layer' }
      its(['Haupt-E-Mail']) { should == group.email }
-     its(['Adresse']) { should == group.address }
-     its(['PLZ']) { should == group.zip_code.to_s }
-     its(['Ort']) { should == group.town }
-     its(['Land']) { should == group.country_label }
+     its(['Adresse']) { should == contact.address }
+     its(['PLZ']) { should == contact.zip_code.to_s }
+     its(['Ort']) { should == contact.town }
+     its(['Land']) { should == contact.country_label }
      its(['Ebene']) { should == group.id.to_s }
    end
 
-   context 'group with contact' do
+   context 'second row' do
 
-     let(:contact) { people(:bottom_member) }
+     let(:second_group) { groups(:bottom_group_one_one) }
 
      subject { csv[1] }
 
      its(['Elterngruppe']) { should == group.id.to_s }
      its(['Ebene']) { should == group.id.to_s }
-     its(['Haupt-E-Mail']) { should == groups(:bottom_group_one_one).email }
-     its(['Adresse']) { should == contact.address }
-     its(['PLZ']) { should == contact.zip_code.to_s }
-     its(['Ort']) { should == contact.town }
-     its(['Land']) { should == contact.country_label }
+     its(['Haupt-E-Mail']) { should == second_group.email }
+     its(['Adresse']) { should == second_group.address }
+     its(['PLZ']) { should == second_group.zip_code.to_s }
+     its(['Ort']) { should == second_group.town }
+     its(['Land']) { should == second_group.country_label }
    end
 end

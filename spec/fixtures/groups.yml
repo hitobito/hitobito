@@ -67,6 +67,7 @@ bottom_layer_one:
   name: Bottom One
   type: Group::BottomLayer
   parent: top_layer
+  contact: bottom_member
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>
   lft: 2
   rgt: 9
@@ -79,11 +80,10 @@ bottom_group_one_one:
   name: Group 11
   type: Group::BottomGroup
   parent: bottom_layer_one
-  contact: bottom_member
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>
   lft: 3
   rgt: 6
-  zip_code: 0020
+  zip_code: 3020
   town: Churchfield
   email: bottom_one@hitobito.example.ch
 

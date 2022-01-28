@@ -225,7 +225,7 @@ describe 'Email verification', js: true do
     let(:group) { groups(:bottom_group_one_one) }
 
     before do
-      group.update(self_registration_role_type: Group::BottomGroup::Member.sti_name)
+      group.update!(self_registration_role_type: Group::BottomGroup::Member.sti_name)
     end
 
     it 'should not auto-confirm email' do

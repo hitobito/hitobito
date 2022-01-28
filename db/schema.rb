@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_13_064557) do
+ActiveRecord::Schema.define(version: 2022_01_24_071649) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -362,6 +362,7 @@ ActiveRecord::Schema.define(version: 2022_01_13_064557) do
     t.string "logo"
     t.datetime "archived_at"
     t.string "self_registration_role_type"
+    t.string "self_registration_notification_email"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
@@ -745,13 +746,13 @@ ActiveRecord::Schema.define(version: 2022_01_13_064557) do
     t.string "event_feed_token"
     t.string "unlock_token"
     t.string "family_key"
-    t.integer "two_factor_authentication"
-    t.text "encrypted_two_fa_secret"
     t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.string "reset_password_sent_to"
+    t.integer "two_factor_authentication"
+    t.text "encrypted_two_fa_secret"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

@@ -29,7 +29,9 @@ module TwoFactor
   end
   
   def init_two_factor_auth(resource)
-    sign_out(resource)
+    # Two sign_out statements are required for live deployments for some reason.
+    # Locally it works with just one sign_out
+    sign_out(resource) && sign_out
 
     session[:pending_two_factor_person_id] = resource.id
 

@@ -146,7 +146,7 @@ describe MailRelay::Base do
         MailRelay::Base.relay_current
       end.to change { MailLog.count }.by(1)
 
-      mail_log = MailLog.find_by(mail_hash: 'e63f22f5d97d8030174951265555794f')
+      mail_log = MailLog.find_by(mail_hash: 'e51cd4643a6b4f537a93a97fd7c5e8b3')
       expect(mail_log.message.subject).to eq(simple.subject)
       expect(mail_log.message.state).to eq('failed')
       expect(mail_log.message.sent_at).to eq(mail_log.updated_at)
@@ -166,7 +166,7 @@ describe MailRelay::Base do
         MailRelay::Base.relay_current
       end.to change { MailLog.count }.by(1)
 
-      mail_log = MailLog.find_by(mail_hash: 'e63f22f5d97d8030174951265555794f')
+      mail_log = MailLog.find_by(mail_hash: 'e51cd4643a6b4f537a93a97fd7c5e8b3')
       expect(mail_log.message.subject).to eq(simple.subject)
       expect(mail_log.message.state).to eq('failed')
       expect(mail_log.message.sent_at).to eq(mail_log.updated_at)
@@ -186,7 +186,7 @@ describe MailRelay::Base do
         expect(exception.message).to match(
           /Mail with subject 'Re: Jubla Gruppen' has already been processed before and is skipped/)
         expect(exception.message).to match(
-          /e63f22f5d97d8030174951265555794f$/)
+          /e51cd4643a6b4f537a93a97fd7c5e8b3$/)
       end
 
       MailRelay::Base.relay_current
@@ -206,7 +206,7 @@ describe MailRelay::Base do
         expect(exception.message).to match(
           /Mail with subject 'Re: Jubla Gruppen' has already been processed before and is skipped/)
         expect(exception.message).to match(
-          /e63f22f5d97d8030174951265555794f$/)
+          /e51cd4643a6b4f537a93a97fd7c5e8b3$/)
       end
 
       MailRelay::Base.relay_current
@@ -223,7 +223,7 @@ describe MailRelay::Base do
         MailRelay::Base.relay_current
       end.to change { MailLog.count }.by(1)
 
-      mail_log = MailLog.find_by(mail_hash: 'e63f22f5d97d8030174951265555794f')
+      mail_log = MailLog.find_by(mail_hash: 'e51cd4643a6b4f537a93a97fd7c5e8b3')
       expect(mail_log.message.subject).to eq(simple.subject)
       expect(mail_log.message.state).to eq('finished')
       expect(mail_log.message.sent_at).to eq(mail_log.updated_at)
@@ -243,7 +243,7 @@ describe MailRelay::Base do
         MailRelay::Base.relay_current
       end.to change { MailLog.count }.by(1)
 
-      mail_log = MailLog.find_by(mail_hash: 'e63f22f5d97d8030174951265555794f')
+      mail_log = MailLog.find_by(mail_hash: 'e51cd4643a6b4f537a93a97fd7c5e8b3')
       expect(mail_log.message.subject).to eq("⛴ Unvergessliche Erlebnisse")
       expect(mail_log.mail_from).to eq(simple.from.first)
       expect(mail_log.status).to eq('completed')
@@ -282,7 +282,7 @@ describe MailRelay::Base do
         MailRelay::Base.relay_current
       end.not_to change { MailLog.count }
 
-      mail_log = MailLog.find_by(mail_hash: 'e63f22f5d97d8030174951265555794f')
+      mail_log = MailLog.find_by(mail_hash: 'e51cd4643a6b4f537a93a97fd7c5e8b3')
       expect(mail_log).not_to be_present
     end
   end

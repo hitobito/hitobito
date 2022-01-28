@@ -4,8 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form(url: group_self_registration_path, cancel_url: '') do |f|
-  = f.hidden_field :group_id
-  = f.hidden_field :type
   = f.honeypot(:verification)
 
   = f.fields_for(:new_person, entry.person) do |fields|

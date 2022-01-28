@@ -52,10 +52,17 @@ module Messages
         message_recipients.where(id: succeeded).update_all(state: :sent)
         message_recipients.where(id: failed).update_all(state: :failed)
       rescue BulkMail::Delivery::RetriesExceeded => e
-        message_recipients.where.not(state: :sent).update_all(state: :failed, error: 'SMTP server error')
-        @message.update!(state: 'failed')
-        log 'SMTP server error, BulkMailDispatch aborted.'
+        abort_smtp_error
       end
+    end
+
+    def abort_smtp_error
+      message_recipients
+        .where
+        .not(state: :sent)
+        .update_all(state: :failed, error: 'SMTP server error')
+      @message.update!(state: 'failed')
+      log 'SMTP server error, BulkMailDispatch aborted.'
     end
 
     def reschedule_unless_none_pending

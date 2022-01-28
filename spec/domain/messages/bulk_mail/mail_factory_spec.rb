@@ -27,6 +27,10 @@ describe Messages::BulkMail::MailFactory do
     expect(recipients).to include('two@example.com')
   end
 
+  it 'sets smtp envelope from to mailing list mail address' do
+    expect(mail.smtp_envelope_from).to eq('leaders@localhost')
+  end
+
   private
 
   def mail

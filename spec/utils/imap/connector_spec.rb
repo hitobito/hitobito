@@ -22,18 +22,22 @@ describe Imap::Connector do
 
   let(:fetch_attributes) { %w(ENVELOPE UID RFC822) }
 
+  let(:imap_config) do
+    {
+      address: 'imap.example.com',
+      imap_port: 42993,
+      enable_ssl: true,
+      user_name: 'catch-all@example.com',
+      password: 'holly-secret'
+    }
+  end
+
   before do
     email = double
     retriever = double
-    config = double('config',
-                    address: 'imap.example.com',
-                    imap_port: 995,
-                    enable_ssl: true,
-                    user_name: 'catch-all@example.com',
-                    password: 'holly-secret')
     allow(Settings).to receive(:email).and_return(email)
     allow(email).to receive(:retriever).and_return(retriever)
-    allow(retriever).to receive(:config).and_return(config)
+    allow(retriever).to receive(:config).and_return(imap_config)
   end
 
   describe '#move_by_uid' do
@@ -352,6 +356,33 @@ describe Imap::Connector do
 
       expect(counts).to eq('failed' => 1, 'inbox' => 1, 'spam' => 1)
       expect(imap_connector.counts['failed']).to eq(1)
+    end
+  end
+
+  describe 'imap config by mail.yml' do
+
+    before do
+      mail_config_file = { imap: imap_config }
+      mail_config_file[:imap][:password] = 'cGFzc3dvcmQ=' # base64
+      allow(MailConfig).to receive(:config_file).and_return(mail_config_file)
+    end
+
+    it 'retrieves config by config file if present' do
+      expect(Net::IMAP).to receive(:new).and_return(net_imap)
+      expect(net_imap).to receive(:login).with('catch-all@example.com', 'password')
+
+      # select
+      expect(net_imap).to receive(:select).with(nil)
+
+      # expect(net_imap).to receive(:uid_copy).with(uid, 'TRASH')
+      expect(net_imap).to receive(:uid_store).with('42', '+FLAGS', [:Deleted])
+      expect(net_imap).to receive(:expunge)
+
+      # disconnect
+      expect(net_imap).to receive(:close)
+      expect(net_imap).to receive(:disconnect)
+
+      imap_connector.delete_by_uid('42', 'INBOX')
     end
   end
 

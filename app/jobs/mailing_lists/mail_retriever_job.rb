@@ -8,7 +8,16 @@
 module MailingLists
   class MailRetrieverJob < RecurringJob
 
-    run_every 1.minute
+    run_every interval
+
+    class << self
+      private
+
+      def interval
+        value = MailConfig.retriever_imap[:interval] || 1
+        value.minutes
+      end
+    end
 
     def perform_internal
       # only run if a retriever address is defined
@@ -22,5 +31,6 @@ module MailingLists
     def retriever
       MailingLists::BulkMail::Retriever.new
     end
+
   end
 end

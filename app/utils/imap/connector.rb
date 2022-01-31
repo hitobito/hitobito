@@ -13,7 +13,7 @@ class Imap::Connector
 
   def initialize
     @connected = false
-    raise 'no imap settings present' unless settings_present?
+    raise 'no imap settings present' unless imap_config.present?
   end
 
   def move_by_uid(uid, from_mailbox, to_mailbox)
@@ -92,9 +92,9 @@ class Imap::Connector
     return if @connected
 
     @imap = Net::IMAP.new(
-      setting(:address), setting(:imap_port) || 993, setting(:enable_ssl) || true
+      config(:address), config(:imap_port) || 993, config(:enable_ssl) || true
     )
-    @imap.login(setting(:user_name), setting(:password))
+    @imap.login(config(:user_name), config(:password))
     @connected = true
   end
 
@@ -124,12 +124,20 @@ class Imap::Connector
     create_if_missing(mailbox, e)
   end
 
-  def setting(key)
-    Settings.email.retriever.config.send(key)
+  def config(key)
+    imap_config[key]
   end
 
-  def settings_present?
-    Settings.email&.retriever&.config.present?
+  def imap_config
+    @imap_config ||= read_imap_config
+  end
+
+  def read_imap_config
+    if MailConfig.legacy?
+      Settings.email.retriever.config
+    else
+      MailConfig.retriever_imap
+    end
   end
 
   def attributes

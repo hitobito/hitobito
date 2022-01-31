@@ -11,12 +11,23 @@ class MailConfig
     end
 
     def retriever_imap
-      config = config_file[:imap]
-      config[:password] = Base64.decode64(config[:password])
-      config
+      @retriever_imap ||= retriever_imap_config
     end
 
     private
+
+    def retriever_imap_config
+      config = config_file[:imap]
+      config = decode_password(config)
+      config
+    end
+
+    def decode_password(config)
+      if config[:password].present?
+        config[:password] = Base64.decode64(config[:password])
+      end
+      config
+    end
 
     def config_file
       @config_file ||= load_file.freeze

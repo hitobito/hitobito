@@ -80,7 +80,7 @@ class Export::Pdf::Messages::LetterWithInvoice
 
       donation_amount = Donation.new.
                                 in_last(1.year).
-                                in_layer(letter.group).
+                                in_layer(letter.group.layer_group).
                                 of_person(@recipient).
                                 previous_amount.
                                 to_s

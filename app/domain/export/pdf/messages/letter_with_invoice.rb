@@ -44,6 +44,7 @@ module Export::Pdf::Messages
     def render_donation_confirmation(pdf, recipient)
       options = @options.merge(cursors: cursors)
       LetterWithInvoice::DonationConfirmation.new(pdf, @letter, recipient, options).render
+      pdf.start_new_page
     end
   end
 end

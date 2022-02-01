@@ -10,12 +10,14 @@ class Export::Pdf::Messages::LetterWithInvoice
 
     def initialize(pdf, letter, recipient, options)
       super(pdf, letter, options)
-      pdf.start_new_page
       @recipient = recipient.person
       @letter = letter
     end
 
     def render
+      return if donation_amount.zero?
+
+      pdf.start_new_page
       header
       title
       pdf.move_down 14
@@ -78,23 +80,26 @@ class Export::Pdf::Messages::LetterWithInvoice
     def last_year_donation_amount
       currency = letter.invoice.currency
 
-      donation_amount = Donation.new.
-                                in_last(1.year).
-                                in_layer(letter.group.layer_group).
-                                of_person(@recipient).
-                                previous_amount.
-                                to_s
-
-      "#{currency} #{donation_amount}"
+      "#{currency} #{sprintf('%.2f', donation_amount)}"
     end
 
     def recipient_address
-      name = "#{@recipient.first_name}, #{@recipient.last_name} \n"
-      name + "#{@recipient.address}, #{@recipient.zip_code} #{@recipient.town}"
+      ["#{@recipient.first_name}, #{@recipient.last_name}",
+       @recipient.address,
+       "#{@recipient.zip_code} #{@recipient.town}"].join("\n")
     end
 
     def break_line
       "\n\n"
+    end
+
+    def donation_amount
+      @donation_amount ||= Donation.new
+                             .in_last(1.year)
+                             .in_layer(letter.group.layer_group)
+                             .of_person(@recipient)
+                             .previous_amount
+
     end
   end
 end

@@ -1,7 +1,7 @@
-imap:
-  retriever_interval: 1
-  address: mail.puzzle.ch
-  user_name: hitobito-dev.mailinglists@puzzle.ch
-  password: d2VjaE1hYnlha0J5Y3NJcGhA
-  enable_ssl: true
-  imap_port: 993
+#imap:
+#  retriever_interval: 1
+#  address: mail-server.example.com
+#  user_name: mr-fetcher
+#  pascword: cGFzc3dvcmQ= # base64 encoded # echo -n 'password' | base64
+#  enable_ssl: true
+#  imap_port: 993

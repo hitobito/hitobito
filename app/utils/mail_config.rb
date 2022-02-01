@@ -34,6 +34,8 @@ class MailConfig
     end
 
     def load_file
+      return nil unless File.exist?(MAIL_CONFIG_PATH)
+
       YAML.safe_load(File.read(MAIL_CONFIG_PATH)).try(:deep_symbolize_keys)
     end
 

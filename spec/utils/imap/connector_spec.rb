@@ -38,6 +38,9 @@ describe Imap::Connector do
     allow(Settings).to receive(:email).and_return(email)
     allow(email).to receive(:retriever).and_return(retriever)
     allow(retriever).to receive(:config).and_return(imap_config)
+
+    # use legacy config for now
+    allow(MailConfig).to receive(:legacy?).and_return(true)
   end
 
   describe '#move_by_uid' do
@@ -365,6 +368,10 @@ describe Imap::Connector do
       mail_config_file = { imap: imap_config }
       mail_config_file[:imap][:password] = 'cGFzc3dvcmQ=' # base64
       allow(MailConfig).to receive(:config_file).and_return(mail_config_file)
+      # avoid global caching of retriever_imap config during this spec
+      allow(MailConfig).to receive(:retriever_imap)
+        .and_return(MailConfig.send(:retriever_imap_config))
+      allow(MailConfig).to receive(:legacy?).and_call_original
     end
 
     it 'retrieves config by config file if present' do

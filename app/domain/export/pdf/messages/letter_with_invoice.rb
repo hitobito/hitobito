@@ -14,8 +14,8 @@ module Export::Pdf::Messages
 
     def render_sections(recipient)
       super
-      render_donation_confirmation(pdf, recipient) if @letter.donation_confirmation?
       render_payment_slip(pdf, recipient.person)
+      render_donation_confirmation(pdf, recipient) if @letter.donation_confirmation?
     end
 
     def customize
@@ -44,7 +44,6 @@ module Export::Pdf::Messages
     def render_donation_confirmation(pdf, recipient)
       options = @options.merge(cursors: cursors)
       LetterWithInvoice::DonationConfirmation.new(pdf, @letter, recipient, options).render
-      pdf.start_new_page
     end
   end
 end

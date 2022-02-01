@@ -12,6 +12,11 @@ module Messages
         @bulk_mail_message = bulk_mail_message
         # ruby mail: https://rubygems.org/gems/mail
         @mail = Mail.new(@bulk_mail_message.raw_source)
+
+        if defined?(ActionMailer::Base)
+          ActionMailer::Base.wrap_delivery_behavior(@mail)
+        end
+
         set_headers
       end
 
@@ -21,6 +26,7 @@ module Messages
 
       def to(recipient_emails)
         @mail.smtp_envelope_to = recipient_emails
+        self
       end
 
       private

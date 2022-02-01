@@ -47,7 +47,7 @@ class MailingLists::BulkMail::Retriever
 
   def process_mailing_list_mail(mail, validator, mailing_list)
     bulk_mail = mail.mail_log.message
-    bulk_mail.update!(raw_source: mail.raw_source)
+    bulk_mail.update!(raw_source: mail.raw_source, mailing_list: mailing_list)
 
     if validator.sender_allowed?(mailing_list)
       Messages::DispatchJob.new(bulk_mail).enqueue!

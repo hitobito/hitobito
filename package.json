@@ -22,6 +22,7 @@
     "jquery.turbolinks": "~2.1.0",
     "js-cookie": "~2.2.0",
     "moment": "~2.19.3",
+    "node-sass": "^4.14.1",
     "rails-erb-loader": "^5.5.2",
     "resolve-url-loader": "^3.1.1",
     "trix": "^1.2.0",

@@ -81,10 +81,12 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         [360, 292, "Konto / Zahlbar an"],
         [360, 280, "CH93 0076 2011 6238 5295 7"],
         [360, 269, "Hans Gerber"],
-        [360, 214, "Zahlbar durch"],
-        [360, 202, "Bottom Member"],
-        [360, 191, "Greatstreet 345"],
-        [360, 179, "3456 Greattown"]
+        [360, 225, "Referenznummer"],
+        [360, 214, "00 00834 96356 70000 00000 00019"],
+        [360, 193, "Zahlbar durch"],
+        [360, 181, "Bottom Member"],
+        [360, 170, "Greatstreet 345"],
+        [360, 158, "3456 Greattown"]
       ]
     end
 
@@ -116,7 +118,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         pdf = described_class.new(letter).render
         expect(text_with_position).to include([71, 654, "Foo Member"])
         expect(text_with_position).to include([28, 175, "Bottom Member"])
-        expect(text_with_position).to include([360, 202, "Bottom Member"])
+        expect(text_with_position).to include([360, 181, "Bottom Member"])
       end
     end
 
@@ -130,7 +132,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
       context "stamped"do
         let(:options) { { stamped: true } }
         it "renders only some texts positions" do
-          expect(text_with_position.count).to eq 46
+          expect(text_with_position.count).to eq 50
           expect(text_with_position).to eq [
             [71, 654, "Bottom Member"],
             [71, 644, "Greatstreet 345"],
@@ -151,10 +153,12 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [360, 292, "Konto / Zahlbar an"],
             [360, 280, "CH93 0076 2011 6238 5295 7"],
             [360, 269, "Hans Gerber"],
-            [360, 214, "Zahlbar durch"],
-            [360, 202, "Bottom Member"],
-            [360, 191, "Greatstreet 345"],
-            [360, 179, "3456 Greattown"],
+            [360, 225, "Referenznummer"],
+            [360, 214, "00 00834 96356 70000 00000 00019"],
+            [360, 193, "Zahlbar durch"],
+            [360, 181, "Bottom Member"],
+            [360, 170, "Greatstreet 345"],
+            [360, 158, "3456 Greattown"],
             [71, 654, "Top Leader"],
             [71, 644, "Funkystreet 42"],
             [71, 633, "4242 Supertown"],
@@ -174,16 +178,18 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [360, 292, "Konto / Zahlbar an"],
             [360, 280, "CH93 0076 2011 6238 5295 7"],
             [360, 269, "Hans Gerber"],
-            [360, 214, "Zahlbar durch"],
-            [360, 202, "Top Leader"],
-            [360, 191, "Funkystreet 42"],
-            [360, 179, "4242 Supertown"]
+            [360, 225, "Referenznummer"],
+            [360, 214, "00 00834 96356 70000 00000 00019"],
+            [360, 193, "Zahlbar durch"],
+            [360, 181, "Top Leader"],
+            [360, 170, "Funkystreet 42"],
+            [360, 158, "4242 Supertown"]
           ]
         end
       end
 
       it "renders all texts at positions" do
-        expect(text_with_position.count).to eq 68
+        expect(text_with_position.count).to eq 72
         expect(text_with_position).to match_array [
           [71, 654, "Bottom Member"],
           [71, 644, "Greatstreet 345"],
@@ -215,10 +221,12 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [360, 292, "Konto / Zahlbar an"],
           [360, 280, "CH93 0076 2011 6238 5295 7"],
           [360, 269, "Hans Gerber"],
-          [360, 214, "Zahlbar durch"],
-          [360, 202, "Bottom Member"],
-          [360, 191, "Greatstreet 345"],
-          [360, 179, "3456 Greattown"],
+          [360, 225, "Referenznummer"],
+          [360, 214, "00 00834 96356 70000 00000 00019"],
+          [360, 193, "Zahlbar durch"],
+          [360, 181, "Bottom Member"],
+          [360, 170, "Greatstreet 345"],
+          [360, 158, "3456 Greattown"],
           [71, 654, "Top Leader"],
           [71, 644, "Funkystreet 42"],
           [71, 633, "4242 Supertown"],
@@ -249,10 +257,12 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [360, 292, "Konto / Zahlbar an"],
           [360, 280, "CH93 0076 2011 6238 5295 7"],
           [360, 269, "Hans Gerber"],
-          [360, 214, "Zahlbar durch"],
-          [360, 202, "Top Leader"],
-          [360, 191, "Funkystreet 42"],
-          [360, 179, "4242 Supertown"]
+          [360, 225, "Referenznummer"],
+          [360, 214, "00 00834 96356 70000 00000 00019"],
+          [360, 193, "Zahlbar durch"],
+          [360, 181, "Top Leader"],
+          [360, 170, "Funkystreet 42"],
+          [360, 158, "4242 Supertown"]
         ]
       end
     end

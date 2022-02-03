@@ -105,7 +105,7 @@ module Export::Pdf::Invoice
       @padded_percent = 0
       width = bounds.width - 60.mm
       padded_bounding_box(0.85, x: 60.mm, width: width, pad_right: false) do
-        info_box
+        info_box(render_esr_number: true)
       end
     end
 
@@ -132,7 +132,7 @@ module Export::Pdf::Invoice
       end
     end
 
-    def info_box # rubocop:disable Metrics/MethodLength
+    def info_box(render_esr_number: false) # rubocop:disable Metrics/MethodLength
       heading do
         text_box 'Konto / Zahlbar an', at: [0, cursor]
       end
@@ -140,13 +140,28 @@ module Export::Pdf::Invoice
         text_box creditor_values, at: [0, cursor]
       end
 
-      move_down 24.mm
+      move_down (render_esr_number ? 20.mm : 24.mm)
+
+      if render_esr_number
+        esr_number
+
+        move_down 8.mm
+      end
 
       heading do
         text_box 'Zahlbar durch', at: [0, cursor]
       end
       content do
         text_box debitor_values, at: [0, cursor]
+      end
+    end
+
+    def esr_number
+      heading do
+        text_box 'Referenznummer', at: [0, cursor]
+      end
+      content do
+        text_box invoice.esr_number, at: [0, cursor]
       end
     end
 

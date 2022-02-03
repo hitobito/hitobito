@@ -180,10 +180,6 @@ en:
       no_token: 'You can only access this page by clicking the link provided in a password reset email. If you have copied the link from a password reset email, please make sure you copied the entire URL provided.'
       new:
         reset_password_button: 'Reset password'
-    confirmations:
-      send_instructions: 'In a few minutes you will receive an e-mail with instructions for you to confirm your registration.'
-      send_paranoid_instructions: 'If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to confirm your registration.'
-      confirmed: 'Thank you for your registration. You''re now logged in.'
     unlocks:
       send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to unlock your account.'
       send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to unlock your account."
@@ -200,8 +196,6 @@ en:
       person:
         updated: 'Your password has been updated.'
     mailer:
-      confirmation_instructions:
-        subject: 'Instructions to confirm your account'
       reset_password_instructions:
         subject: 'Instructions for setting your password'
       unlock_instructions:
@@ -953,7 +947,6 @@ en:
       invoices: Invoices
       subscriptions: Subscriptions
     actions_show:
-      send_login: Send login
       send_login_tooltip:
         new: The person does not have a login.<br><br>This action sends a link to set a password.
         resend: The person has received a link to set a password, but did not set one.<br><br>This action resends the link.

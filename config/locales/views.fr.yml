@@ -185,10 +185,6 @@ fr:
       no_token: 'Vous ne pouvez accéder à cette page qu''en cliquant sur le lien indiqué dans un courriel de récupération de mot de passe. Si vous avez copié le lien dans un courriel de récupération de mot de passe, veuillez vous assurer que vous avez copié l''URL en entier.'
       new:
         reset_password_button: 'Réinitialiser le mot de passe'
-    confirmations:
-      send_instructions: 'Dans quelques minutes, tu recevras un courriel te permettant de confirmer ton enregistrement.'
-      send_paranoid_instructions: 'Si ton adresse e-mail est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel te permettant de confirmer ton enregistrement.'
-      confirmed: 'Merci de t''être enregistré(e) ! Tu es maintenant authentifié(e).'
     unlocks:
       send_instructions: 'Dans quelques minutes tu recevras un courriel t''expliquant comment débloquer ton compte.'
       unlocked: 'Ton compte a été dévérouillé avec succès.'
@@ -206,8 +202,6 @@ fr:
       person:
         updated: 'Ton mot de passe a été actualisé.'
     mailer:
-      confirmation_instructions:
-        subject: 'Instructions pour confirmer ton compte'
       reset_password_instructions:
         subject: 'Instructions pour initialiser ton mot de passe'
       unlock_instructions:
@@ -216,7 +210,6 @@ fr:
           greeting: 'Bonjour %{name}!'
           information_html: 'Ton compte a été bloqué à cause d''un trop grand nombre de fausses tentatives. <br> Appuie sur le lien suivant pour le dévérouiller:'
           link_text: 'Dévérouiller mon compte'
-          footer: 'Cet e-mail a été envoyé par Hitobito.'
   errors:
     link_to_main: 'Page principale'
     '404':
@@ -1146,7 +1139,6 @@ fr:
       invoices: Factures
       subscriptions: Abonnements
     actions_show:
-      send_login: Envoyer les données d'identification
       send_login_tooltip:
         new: 'La personne ne possède pas de Login.<br><br>Cette action lui envoie un lien afin qu’il puisse créer un mot de passe. '
         resend: La personne a reçu un lien pour créer son mot de passe, mais ne l’a pas encore fait.<br><br> Cette action lui envoie à nouveau le lien.

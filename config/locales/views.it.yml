@@ -185,10 +185,6 @@ it:
       no_token: 'Non puoi accedere a questa pagina se non accedendovi direttamente dall''email per reinserire la password. Se vi stai accedendo da tale email, allora controlla per favore che tu stia utilizzando l''URL completo.'
       new:
         reset_password_button: 'reimpostare la password'
-    confirmations:
-      send_instructions: 'riceverai tra pochi minuti un''e-mail con la quale potrai confermare la tua registrazione.'
-      send_paranoid_instructions: 'se il tuo indirizzo e-mail esiste nella nostra banca dati riceverai tra pochi minuti u''e-mail con la quale potrai confermare la tua registrazione.'
-      confirmed: 'grazie per la tua registrazione. Ora sei registrato.'
     unlocks:
       send_instructions: 'riceverai tra pochi minuti un''email con le istruzioni su come puoi sbloccare il tuo account.'
       unlocked: 'il tuo accout è stato sbloccato con successo'
@@ -206,8 +202,6 @@ it:
       person:
         updated: 'la tua password è stata attualizzata.'
     mailer:
-      confirmation_instructions:
-        subject: 'istruzioni per confermare il tuo account'
       reset_password_instructions:
         subject: 'istruzioni per impostare la tua password'
       unlock_instructions:
@@ -216,7 +210,6 @@ it:
           greeting: 'Ciao %{name}!'
           information_html: 'Iltuo account è stato bloccato a causa di troppi tentativi di login sbagliati.<br>Clicca sul link seguente per sbloccare il tuo account:'
           link_text: 'Sbloccare il mio account'
-          footer: 'Questa e-mail è  stata mandata da Hitobito'
   errors:
     link_to_main: 'pagina principale'
     '404':
@@ -1149,7 +1142,6 @@ it:
       invoices: Fatture
       subscriptions: Abbonamenti
     actions_show:
-      send_login: Inviare login
       send_login_tooltip:
         new: La persona non ha ancora nessun accesso. <br><br> Questa operazione invierà un link dove potrete impostare la vostra password.
         resend: La persona ha ricevuto un link per impostare la password, ma non l'ha ancora fatto. <br><br> Questa operazione invierà nuovamente il link.

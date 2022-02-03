@@ -6,8 +6,6 @@
 # https://github.com/hitobito/hitobito.
 
 class FeatureGate
-  SEPARATOR = '.'
-
   class FeatureGateError < StandardError; end
 
   class << self
@@ -29,11 +27,12 @@ class FeatureGate
   end
 
   def assert!(feature)
-    return if enabled?(feature)
+    return true if enabled?(feature)
+
     raise FeatureGateError, "Feature #{feature} is not enabled"
   end
 
-  def if(feature, &block)
+  def if(feature)
     yield if enabled?(feature)
   end
 
@@ -44,15 +43,12 @@ class FeatureGate
   private
 
   def read_config(feature, settings)
-    config = feature.split(SEPARATOR).inject(settings) do |acc, property|
-      acc.nil? ? nil : acc.send(property)
+    config = feature.split('.').reduce(settings) do |acc, property|
+      acc.try(property)
     end
 
-    if config.nil?
-        raise FeatureGateError, "No configuration found for feature #{feature}"
-    elsif config.enabled.nil?
-        raise FeatureGateError, "No key 'enabled' found for feature #{feature}"
-    end
+    raise FeatureGateError, "No configuration found for feature #{feature}" if config.nil?
+    raise FeatureGateError, "No key 'enabled' found for feature #{feature}" if config.enabled.nil?
 
     config
   end

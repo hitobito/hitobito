@@ -8,6 +8,10 @@
 class FeatureGate
   class FeatureGateError < StandardError; end
 
+  def initialize(settings = Settings)
+    @settings = settings
+  end
+
   class << self
     def assert!(feature)
       new.assert!(feature)
@@ -20,10 +24,6 @@ class FeatureGate
     def enabled?(feature)
       new.enabled?(feature)
     end
-  end
-
-  def initialize(settings = Settings)
-    @settings = settings
   end
 
   def assert!(feature)

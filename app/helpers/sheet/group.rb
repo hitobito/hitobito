@@ -1,4 +1,6 @@
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -49,8 +51,8 @@ module Sheet
 
     FeatureGate.if('groups.statistics') do
       tab 'groups.tabs.statistics',
-        :statistics_group_path,
-        if: :show_statistics
+          :group_statistics_path,
+          if: :show_statistics
     end
 
     tab 'groups.tabs.deleted',

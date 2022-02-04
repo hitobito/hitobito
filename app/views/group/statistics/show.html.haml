@@ -3,6 +3,8 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
+- title(t('groups.statistics.title'))
+
 %p
   =t("groups.statistics.description", subject: Person.model_name.human(count: 2), groups: @group_names.join(', '))
 

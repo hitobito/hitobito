@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -49,9 +49,6 @@ Hitobito::Application.routes.draw do
     resources :groups do
       member do
         get :deleted_subgroups
-        FeatureGate.if('groups.statistics') do
-          get :statistics
-        end
         get :export_subgroups
         post :reactivate
 
@@ -68,6 +65,10 @@ Hitobito::Application.routes.draw do
       post 'self_registration' => 'groups/self_registration#create'
 
       resources :settings, only: [:index, :edit, :update], controller: 'group_settings', as: 'group_settings'
+
+      FeatureGate.if('groups.statistics') do
+        resource :statistics, only: [:show], module: :group
+      end
 
       resources :invoices do
         resources :payments, only: :create

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -17,8 +17,6 @@ class GroupsController < CrudController
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]
-
-  skip_authorize_resource only: :statistics
 
   decorates :group, :groups, :contact
 
@@ -44,18 +42,6 @@ class GroupsController < CrudController
 
   def deleted_subgroups
     load_sub_groups(entry.children.only_deleted)
-  end
-
-  def statistics
-    FeatureGate.assert!('groups.statistics')
-
-    authorize!(:show_statistics, entry)
-
-    statistic = Group::Demographic.new(entry)
-    @age_groups = statistic.age_groups
-    @total_count = statistic.total_count
-    @max_relative_count = statistic.max_relative_count
-    @group_names = entry.groups_in_same_layer.map(&:to_s)
   end
 
   def reactivate

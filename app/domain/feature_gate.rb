@@ -5,6 +5,12 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
 
+# Restrict code-execution depending on settings-level feature-switches
+#
+# Provides the following class-level methods
+#   - assert!(feature)
+#   - if(feature) { ... }
+#   - enabled?(feature)
 class FeatureGate
   class FeatureGateError < StandardError; end
 
@@ -13,10 +19,12 @@ class FeatureGate
   end
 
   class << self
+    # Raise unless the feature is enabled
     def assert!(feature)
       new.assert!(feature)
     end
 
+    # Execute the block if the feature is enabled
     def if(feature, &block)
       new.if(feature, &block)
     end

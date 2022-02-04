@@ -5,29 +5,42 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Group::StatisticsController < CrudController
-  skip_authorize_resource only: :show
+class Group::StatisticsController < ApplicationController
+
+  before_action :authorize_action
+  before_action :gate_feature
+  before_action :redirect_to_layer
+  prepend_before_action :entry
+
   decorates :group
 
   def show
-    FeatureGate.assert!('groups.statistics')
-
-    authorize!(:show_statistics, entry)
-
     statistic = Group::Demographic.new(entry)
+
     @age_groups = statistic.age_groups
     @total_count = statistic.total_count
     @max_relative_count = statistic.max_relative_count
     @group_names = entry.groups_in_same_layer.map(&:to_s)
   end
 
-  def self.model_class
-    Group
-  end
-
   private
 
-  def entry
-    @entry = @group ||= model_scope.find(params[:group_id])
+  def authorize_action
+    authorize!(:"#{action_name}_statistics", entry)
   end
+
+  def gate_feature
+    FeatureGate.assert!('groups.statistics')
+  end
+
+  def redirect_to_layer
+    unless entry.layer?
+      redirect_to group_statistics_path(entry.layer_group_id)
+    end
+  end
+
+  def entry
+    @entry = @group ||= Group.find(params[:group_id])
+  end
+
 end

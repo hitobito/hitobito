@@ -1,12 +1,13 @@
--#  Copyright (c) 2012-2016, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
 - title 'Changelog'
 
-- ChangelogReader.changelog.each do |changelog_entry|
-  %h2 #{changelog_entry.label}
+- ChangelogReader.changelog.each do |changelog_version|
+  %h2 #{changelog_version.label}
   %ul
-    - changelog_entry.log_entries.each do |change|
-      %li #{change}
+    - changelog_version.log_entries.each do |change|
+      %li
+        != CommonMarker.render_html(change.to_s, :DEFAULT)

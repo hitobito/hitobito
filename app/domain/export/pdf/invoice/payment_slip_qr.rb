@@ -29,14 +29,14 @@ module Export::Pdf::Invoice
       stamped :separators
 
       receipt do
-        receipt_titel
+        receipt_title
         receipt_infos
         receipt_amount
         receipt_receiving_office
       end
 
       payment do
-        stamped :payment_titel
+        stamped :payment_title
         payment_qrcode
         render_payment_amount
         payment_infos
@@ -69,10 +69,10 @@ module Export::Pdf::Invoice
       bounding_box(box, width: width, height: HEIGHT) { yield }
     end
 
-    def payment_titel
+    def payment_title
       padded_bounding_box(0.1, width: 60.mm, pad_right: false) do
         font 'Helvetica', size: 11, style: :bold do
-          text 'Zahlteil'
+          text t('payment_title')
         end
       end
     end
@@ -109,9 +109,9 @@ module Export::Pdf::Invoice
       end
     end
 
-    def receipt_titel
+    def receipt_title
       padded_bounding_box(0.1, pad_right: true) do
-        heading(size: 11) { text 'Empfangsschein' }
+        heading(size: 11) { text t('receipt_title') }
       end
     end
 
@@ -127,14 +127,14 @@ module Export::Pdf::Invoice
       padded_bounding_box(0.15, pad_right: true) do
         heading do
           move_down 10
-          pdf.text 'Annahmestelle', align: :right
+          pdf.text t('receiving_office'), align: :right
         end
       end
     end
 
     def info_box(render_esr_number: false) # rubocop:disable Metrics/MethodLength
       heading do
-        text_box 'Konto / Zahlbar an', at: [0, cursor]
+        text_box t('creditor_heading'), at: [0, cursor]
       end
       content do
         text_box creditor_values, at: [0, cursor]
@@ -149,7 +149,7 @@ module Export::Pdf::Invoice
       end
 
       heading do
-        text_box 'Zahlbar durch', at: [0, cursor]
+        text_box t('debitor_heading'), at: [0, cursor]
       end
       content do
         text_box debitor_values, at: [0, cursor]
@@ -158,7 +158,7 @@ module Export::Pdf::Invoice
 
     def esr_number
       heading do
-        text_box 'Referenznummer', at: [0, cursor]
+        text_box t('esr_number_heading'), at: [0, cursor]
       end
       content do
         text_box invoice.esr_number, at: [0, cursor]
@@ -167,8 +167,8 @@ module Export::Pdf::Invoice
 
     def amount_box
       heading do
-        text_box 'Währung', at: [0, cursor]
-        text_box 'Betrag', at: [20.mm, cursor]
+        text_box t('currency'), at: [0, cursor]
+        text_box t('amount'), at: [20.mm, cursor]
       end
       content do
         text_box invoice.currency, at: [0, cursor]
@@ -236,5 +236,10 @@ module Export::Pdf::Invoice
       @padded_percent += percent
     end
 
+    private
+
+    def t(key)
+      I18n.t("invoices.pdf.payment_slip_qr.#{key}")
+    end
   end
 end

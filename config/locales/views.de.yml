@@ -762,7 +762,15 @@ de:
       due_at: Fällig bis
       creator: Rechnungssteller
       vat_number: MwSt. Nummer
-
+      payment_slip_qr:
+        receipt_title: Empfangsschein
+        payment_title: Zahlteil
+        receiving_office: Annahmestelle
+        creditor_heading: Konto / Zahlbar an
+        debitor_heading: Zahlbar durch
+        esr_number_heading: Referenznummer
+        currency: Währung
+        amount: Betrag
   invoice_configs:
     form_tabs:
       general: Allgemein

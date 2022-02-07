@@ -66,6 +66,13 @@ describe Invoice::PaymentProcessor do
     expect(parser.notice).to be_present
   end
 
+  it 'falls back to more general dates if no payment date is included' do
+    expect(parser('camt.054-without-payment-dates').payments.first.received_at)
+        .to eq(Time.zone.parse('2022-01-26T00:00:00+01:00').to_date)
+    expect(parser('camt.054-without-any-optional-dates').payments.first.received_at)
+        .to eq(Time.zone.parse('2022-01-26T18:43:27+01:00').to_date)
+  end
+
   private
 
   def parser(file = 'camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923')

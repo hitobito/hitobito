@@ -61,9 +61,9 @@ class Invoice::PaymentProcessor
     @payments ||= credit_statements.collect do |s|
       Payment.new(amount: fetch('Amt', s),
                   esr_number: reference(s),
-                  received_at: to_datetime(fetch('RltdDts', 'AccptncDtTm', s)),
+                  received_at: received_at(s),
                   invoice: invoice(s),
-                  transaction_identifier: fetch('Refs', 'Prtry', 'Ref', s),
+                  transaction_identifier: transaction_identifier(s),
                   reference: fetch('Refs', 'AcctSvcrRef', s))
     end
   end
@@ -131,6 +131,17 @@ class Invoice::PaymentProcessor
     fetch('RmtInf', 'Strd', 'CdtrRefInf', 'Ref', transaction)
   rescue KeyError
     ''
+  end
+
+  def received_at(transaction)
+    datetime = transaction.dig('RltdDts', 'AccptncDtTm') ||
+        from.to_s ||
+        fetch('Ntfctn').fetch('CreDtTm')
+    to_datetime(datetime)
+  end
+
+  def transaction_identifier(transaction)
+    transaction.dig('Refs', 'AcctSvcrRef') || transaction.dig('Refs', 'Prtry', 'Ref')
   end
 
   def esr_number(transaction)

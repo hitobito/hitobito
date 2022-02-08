@@ -2,13 +2,15 @@
 
 ## unreleased
 
-*  Gruppen verfügen nun über eine einfache Mitgliederstatistik (Reiter "Statistiken" auf der Gruppe).
-
-## Version 1.26
+## Version 1.27
 
 *  Anlässe: Die Kontaktperson wird auf Wunsch per E-Mail über neue Anmeldungen benachrichtigt. Die Benachrichtigung wird auf dem Anlass aktiviert (#1540).
 *  Jede Person kann jetzt Zwei-Faktor-Authentifizierung mit einer TOTP-App aktivieren. Für einzelne Rollen kann die Zwei-Faktor-Authentifizierung obligatorisch gemacht werden.
 *  Die Haupt-Mailadresse von Personen mit Login muss neu bestätigt werden nachdem sie geändert wurde (#957).
+*  Gruppen verfügen nun über eine einfache Mitgliederstatistik (Reiter "Statistiken" auf der Gruppe).
+
+## Version 1.26
+
 *  Gruppen können externe Registrierung aktivieren (Optional, hitobito#1441)
 *  Personen mit layer_and_below_full Berechtigung dürfen Personenfilter auf tieferen Layern bearbeiten, erstellen & löschen
 *  Personen können neu als Geschwister angegeben werden (hitobito_kljb#5)

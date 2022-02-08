@@ -23,7 +23,7 @@ describe Payments::EbicsImport do
     allow(PaymentProvider).to receive(:new).and_return(payment_provider)
     allow(payment_provider).to receive(:client).and_return(epics_client)
   end
-  
+
   it 'returns empty array if payment provider config is not initialized' do
     config.update(status: :draft)
 
@@ -36,7 +36,7 @@ describe Payments::EbicsImport do
       expect(payments).to be_empty
     end.to_not change { Payment.count }
   end
-  
+
   it 'does not save if invoice not in payment provider config layer' do
     expect(epics_client).to receive(:HPB)
 
@@ -53,7 +53,7 @@ describe Payments::EbicsImport do
       subject.run
     end.to_not change { Payment.count }
   end
-  
+
   it 'creates payment' do
     expect(epics_client).to receive(:HPB)
 
@@ -74,11 +74,11 @@ describe Payments::EbicsImport do
 
       payment = payments.first
       expect(payment.invoice).to eq(invoice)
-      expect(payment.transaction_identifier).to eq("20180314001221000006915")
+      expect(payment.transaction_identifier).to eq("20180314001221000006915084508216")
       expect(list.reload.amount_paid.to_s).to eq('710.82')
     end.to change { Payment.count }.by(1)
   end
-  
+
   it 'creates payment by scor reference' do
     expect(epics_client).to receive(:HPB)
 
@@ -100,11 +100,11 @@ describe Payments::EbicsImport do
 
       payment = payments.first
       expect(payment.invoice).to eq(invoice)
-      expect(payment.transaction_identifier).to eq("20180314001221000006915")
+      expect(payment.transaction_identifier).to eq("20180314001221000006915084508216")
       expect(list.reload.amount_paid.to_s).to eq('710.82')
     end.to change { Payment.count }.by(1)
   end
-  
+
   it 'does not save if invoice not found' do
     expect(epics_client).to receive(:HPB)
 
@@ -121,7 +121,7 @@ describe Payments::EbicsImport do
       expect(payments).to be_empty
     end.to_not change { Payment.count }
   end
-  
+
   it 'returns empty array if no download data available' do
     expect(epics_client).to receive(:HPB)
 

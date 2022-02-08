@@ -11,12 +11,11 @@
 
 ## Version 1.26
 
-*  Gruppen können externe Registrierung aktivieren (Optional, hitobito#1441)
 *  Personen mit layer_and_below_full Berechtigung dürfen Personenfilter auf tieferen Layern bearbeiten, erstellen & löschen
 *  Personen können neu als Geschwister angegeben werden (hitobito_kljb#5)
 *  Liste der vordefinierten Banken für EBICS-Import erweitert (#1427)
 *  Es wurde neu eine minimale Passwortlänge von 12 Zeichen für neue Passwörter eingeführt, dies entspricht den Empfehlungen von OWASP (#1429)
-*  Die API unterstützt jetzt, die Gruppen/Rollen, Anlässe und Einzelpersonen auszulesen, welche bei Abos abonniert sind. (#1398, danke @Michael-Schaer!)
+*  Die API unterstützt jetzt, die Gruppen/Rollen, Anlässe und Einzelpersonen auszulesen, welche bei Abos abonniert sind. (danke @Michael-Schaer!) (#1398)
 *  Teilnehmer können zu Anlässen eingeladen werden (#1276)
 *  Zahlungen können direkt von Finanzinstitut via EBICS bezogen werden (#1131)
 *  Personal Access Tokens für die API sind jetzt deprecated. Alle bestehenden Drittapplikationen sollten auf OAuth API Tokens migrieren (siehe https://github.com/hitobito/hitobito/blob/master/doc/development/05_rest_api.md). Diese Entscheidung wurde zusammen mit der hitobito-Community, insbesondere Jubla, CEVI, PBS und SBV gefällt.
@@ -31,7 +30,7 @@
 
 ## Version 1.22
 
-*  Anlässe und deren Anmeldeangaben können übersetzt werden (#1135, hitobito_sjas#28)
+*  Anlässe und deren Anmeldeangaben können übersetzt werden (#1135) (hitobito_sjas#28)
 *  automatische Warteliste für Anlässe (hitobito_sjas#27)
 *  Tag Verwaltung unter Einstellungen
 *  Anmeldungsfragen können auch nur eine Antwort haben (#1079)

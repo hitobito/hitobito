@@ -57,6 +57,31 @@ describe EventsController do
 
         expect(event.group_ids).to match_array([group.id, group2.id])
       end
+
+      it 'validates permission to read contact person' do
+        invisible_person = Fabricate(:person)
+        person = people(:bottom_member)
+        group = groups(:bottom_layer_one)
+        Fabricate(:role, type: 'Group::BottomLayer::Leader', person: person, group: group)
+        sign_in(person)
+
+        post :create, params: {
+            event: {  group_ids: [group.id],
+                      name: 'foo',
+                      kind_id: event_kinds(:slk).id,
+                      dates_attributes: [date],
+                      application_questions_attributes: [question],
+                      contact_id: invisible_person.id,
+                      type: 'Event' },
+            group_id: group.id
+        }
+
+        Auth.current_person = person
+        event = assigns(:event)
+        expect(event).not_to be_valid
+        expect(event.errors.messages[:contact]).to include('Zugriff verweigert')
+        Auth.current_person = nil
+      end
     end
   end
 
@@ -278,7 +303,7 @@ describe EventsController do
         expect(event.group_ids).to match_array([group.id, group2.id])
       end
 
-      it "does not create event course if the user hasn't permission" do
+      it 'does not create event course if the user does not have permission' do
         user = Fabricate(Group::BottomGroup::Leader.name.to_s, group: groups(:bottom_group_one_one))
         sign_in(user.person)
 
@@ -374,6 +399,27 @@ describe EventsController do
         third = questions.third
         expect(third.question).to eq 'Whoo?'
         expect(third.admin).to eq false
+      end
+
+      it 'validates permission to read contact person' do
+        invisible_person = Fabricate(:person)
+        person = people(:bottom_member)
+        group = groups(:bottom_layer_one)
+        Fabricate(:role, type: 'Group::BottomLayer::Leader', person: person, group: group)
+        event.update!(groups: [group])
+        sign_in(person)
+
+        put :update, params: {
+            group_id: group.id,
+            id: event.id,
+            event: { name: 'testevent', contact_id: invisible_person.id }
+        }
+
+        Auth.current_person = person
+        event = assigns(:event)
+        expect(event).not_to be_valid
+        expect(event.errors.messages[:contact]).to include('Zugriff verweigert')
+        Auth.current_person = nil
       end
     end
 

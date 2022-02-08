@@ -101,6 +101,21 @@ describe GroupsController do
         get :edit, params: { id: groups(:top_group) }
         expect(assigns(:contacts)).to be_present
       end
+
+      it 'validates permission to read contact person' do
+        invisible_person = Fabricate(:person)
+        person = people(:bottom_member)
+        group = groups(:bottom_layer_one)
+        Fabricate(:role, type: 'Group::BottomLayer::Leader', person: person, group: group)
+        sign_in(person)
+        post :create, params: { group: { type: 'Group::BottomGroup', parent_id: group.id, contact_id: invisible_person.id, name: 'foobar' } }
+
+        Auth.current_person = person
+        group = assigns(:group)
+        expect(group).not_to be_valid
+        expect(group.errors.messages[:contact]).to include('Zugriff verweigert')
+        Auth.current_person = nil
+      end
     end
 
     describe 'PUT update' do

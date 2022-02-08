@@ -9,7 +9,7 @@ assignees: ''
 
 Als PERSON_DIE_DAMIT_ZU_TUN_HAT,
 möchte ich EIN_FEATURE_HABEN,
-um EIN_ZIEL_ZU ERREICHEN
+um EIN_ZIEL_ZU_ERREICHEN
 
 Neu soll ...
 

@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class ChangelogEntry
+  # rubocop:disable Metrics/LineLength
   GITHUB_BASE_URL = 'https://github.com/'
   GITHUB_CORE_ISSUE_BASE_URL = GITHUB_BASE_URL + 'hitobito/hitobito/issues/'
 
@@ -15,18 +16,19 @@ class ChangelogEntry
   GITHUB_USERNAME_REGEX = /(@([a-zA-Z0-9-]*))/
 
   URL_REGEX =  /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9(!@:%_\+.~#?&\/\/=]*))/
+  # rubocop:enable Metrics/LineLength
 
   def initialize(entry_line)
     @content = entry_line
   end
 
   def to_s
-    formatted_entry
+    to_markdown
   end
 
   private
 
-  def formatted_entry
+  def to_markdown
     text = @content
     text = formatted_urls(text)
     text = formatted_issue_urls(text)

@@ -43,19 +43,19 @@ describe ChangelogReader do
       version11 = changelogs[0]
       expect(version11.log_entries.count).to eq(3)
       expect(version11.version).to eq('1.1')
-      expect(version11.log_entries[0]).to eq('change')
-      expect(version11.log_entries[1]).to eq('change two')
-      expect(version11.log_entries[2]).to eq('another change')
+      expect(version11.log_entries[0].to_s).to eq('* change')
+      expect(version11.log_entries[1].to_s).to eq('* change two')
+      expect(version11.log_entries[2].to_s).to eq('* another change')
 
       version1x = changelogs[1]
       expect(version1x.log_entries.count).to eq(1)
       expect(version1x.version).to eq('1.X')
-      expect(version1x.log_entries[0]).to eq('far future change')
+      expect(version1x.log_entries[0].to_s).to eq('* far future change')
 
       version23 = changelogs[2]
       expect(version23.log_entries.count).to eq(1)
       expect(version23.version).to eq('2.3')
-      expect(version23.log_entries[0]).to eq('change')
+      expect(version23.log_entries[0].to_s).to eq('* change')
     end
   end
 
@@ -66,7 +66,7 @@ describe ChangelogReader do
 
   it 'parses entry line' do
     line = subject.send(:changelog_entry_line, '* change')
-    expect(line).to eq('change')
+    expect(line.to_s).to eq('* change')
   end
 
   it 'doesnt parse if invalide line' do

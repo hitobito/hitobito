@@ -8,7 +8,7 @@
 class PermissionValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     unless ability.can?(permission, value)
-      record.errors[attribute] << I18n.t('errors.messages.no_permission')
+      record.errors.add(attribute, I18n.t('errors.messages.no_permission'))
     end
   end
 

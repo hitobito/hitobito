@@ -7,6 +7,10 @@
 
 class PermissionValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
+    # We cannot validate permission if no person is logged in.
+    # Other mechanisms such as authorize_resource should be used to prevent this case.
+    return unless current_person
+
     unless ability.can?(permission, value)
       record.errors.add(attribute, I18n.t('errors.messages.no_permission'))
     end
@@ -26,7 +30,10 @@ class PermissionValidator < ActiveModel::EachValidator
   end
 
   def ability
-    @ability ||= Ability.new(current_person)
+    # This must not be cached, because the same validator is re-used between tests.
+    # If we cached this, the tests would become inter-dependent:
+    # ability.user would potentially be an old value from another test
+    Ability.new(current_person)
   end
 
   def current_person

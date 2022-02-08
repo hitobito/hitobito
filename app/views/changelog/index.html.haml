@@ -5,9 +5,4 @@
 
 - title 'Changelog'
 
-- ChangelogReader.changelog.each do |changelog_version|
-  %h2 #{changelog_version.label}
-  %ul
-    - changelog_version.log_entries.each do |change|
-      %li
-        != CommonMarker.render_html(change.to_s, :DEFAULT)
+!= CommonMarker.render_html(ChangelogReader.changelog_markdown, :DEFAULT)

@@ -10,6 +10,10 @@ class ChangelogReader
     def changelog
       ChangelogReader.new.changelogs
     end
+
+    def changelog_markdown
+      changelog.map(&:to_markdown).join("\n")
+    end
   end
 
   def initialize
@@ -64,7 +68,7 @@ class ChangelogReader
 
   def changelog_entry_line(entry)
     entry.strip!
-    text = entry[/^[-*]\s*(.*)/, 1]
+    text = entry[/(^[-*]\s*(.*))/, 1]
     return unless text
 
     ChangelogEntry.new(text)

@@ -66,6 +66,7 @@ class ChangelogReader
     entry.strip!
     text = entry[/^[-*]\s*(.*)/, 1]
     return unless text
+
     ChangelogEntry.new(text)
   end
 

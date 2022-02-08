@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2016, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -18,14 +18,14 @@ describe ChangelogReader do
         '## Version 1.1',
         'foo', # invalid line
         '* change',
-        '* change two',
+        '* change two (#1484)',
         '', # invalid line
         '## Version 1.X',
-        '* far future change',
+        '* far future change (for any questions, contact @TheWalkingLeek)',
         '## Version 2.3',
         '* change',
         '## Version 1.1',
-        '* another change',
+        '* another change (hitobito_sjas#42)',
       ].join("\n")
     end
     before do
@@ -44,13 +44,13 @@ describe ChangelogReader do
       expect(version11.log_entries.count).to eq(3)
       expect(version11.version).to eq('1.1')
       expect(version11.log_entries[0].to_s).to eq('* change')
-      expect(version11.log_entries[1].to_s).to eq('* change two')
-      expect(version11.log_entries[2].to_s).to eq('* another change')
+      expect(version11.log_entries[1].to_s).to eq('* change two [(#1484)](https://github.com/hitobito/hitobito/issues/1484)')
+      expect(version11.log_entries[2].to_s).to eq('* another change [(hitobito_sjas#42)](https://github.com/hitobito/hitobito_sjas/issues/42)')
 
       version1x = changelogs[1]
       expect(version1x.log_entries.count).to eq(1)
       expect(version1x.version).to eq('1.X')
-      expect(version1x.log_entries[0].to_s).to eq('* far future change')
+      expect(version1x.log_entries[0].to_s).to eq('* far future change (for any questions, contact [@TheWalkingLeek](https://github.com/TheWalkingLeek))')
 
       version23 = changelogs[2]
       expect(version23.log_entries.count).to eq(1)
@@ -67,6 +67,21 @@ describe ChangelogReader do
   it 'parses entry line' do
     line = subject.send(:changelog_entry_line, '* change')
     expect(line.to_s).to eq('* change')
+  end
+
+  it 'parses entry line with core issue' do
+    line = subject.send(:changelog_entry_line, '* change (#42)')
+    expect(line.to_s).to eq('* change [(#42)](https://github.com/hitobito/hitobito/issues/42)')
+  end
+
+  it 'parses entry line with wagon issue' do
+    line = subject.send(:changelog_entry_line, '* change (hitobito_sjas#42)')
+    expect(line.to_s).to eq('* change [(hitobito_sjas#42)](https://github.com/hitobito/hitobito_sjas/issues/42)')
+  end
+
+  it 'parses entry line with github username' do
+    line = subject.send(:changelog_entry_line, '* change (@TheWalkingLeek)')
+    expect(line.to_s).to eq('* change ([@TheWalkingLeek](https://github.com/TheWalkingLeek))')
   end
 
   it 'doesnt parse if invalide line' do

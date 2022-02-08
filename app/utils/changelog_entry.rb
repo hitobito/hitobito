@@ -6,11 +6,15 @@
 #  https://github.com/hitobito/hitobito.
 
 class ChangelogEntry
-  GITHUB_BASE_URL = 'https://github.com/hitobito/'
-  GITHUB_CORE_ISSUE_BASE_URL = GITHUB_BASE_URL + 'hitobito/issues/'
+  GITHUB_BASE_URL = 'https://github.com/'
+  GITHUB_CORE_ISSUE_BASE_URL = GITHUB_BASE_URL + 'hitobito/hitobito/issues/'
 
-  CORE_ISSUE_HASH_REGEX = /(\(#(\d*)\)).?$/
-  WAGON_ISSUE_HASH_REGEX = /(\((hitobito_\w*)#(\d*)\)).?$/
+  CORE_ISSUE_HASH_REGEX = /(\(#(\d*)\))\S?/
+  WAGON_ISSUE_HASH_REGEX = /(\((hitobito_\w*)#(\d*)\))\S?/
+
+  GITHUB_USERNAME_REGEX = /(@([a-zA-Z0-9-]*))/
+
+  URL_REGEX =  /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9(!@:%_\+.~#?&\/\/=]*))/
 
   def initialize(entry_line)
     @content = entry_line
@@ -24,12 +28,22 @@ class ChangelogEntry
 
   def formatted_entry
     text = @content
+    text = formatted_urls(text)
     text = formatted_issue_urls(text)
+    text = formatted_user_urls(text)
     text
   end
 
   def formatted_issue_urls(text)
-    text.sub(CORE_ISSUE_HASH_REGEX, '[' + '\1' + ']' + '(' + GITHUB_CORE_ISSUE_BASE_URL + '\2)')
-        .sub(WAGON_ISSUE_HASH_REGEX, '[' + '\1' + ']' + '(' + GITHUB_BASE_URL + '\2/issues/\3)')
+    text.sub(CORE_ISSUE_HASH_REGEX, '[\1]' + '(' + GITHUB_CORE_ISSUE_BASE_URL + '\2)')
+        .sub(WAGON_ISSUE_HASH_REGEX, '[\1]' + '(' + GITHUB_BASE_URL + 'hitobito/\2/issues/\3)')
+  end
+
+  def formatted_user_urls(text)
+    text.sub(GITHUB_USERNAME_REGEX, '[\1]' + '(' + GITHUB_BASE_URL + '\2)')
+  end
+
+  def formatted_urls(text)
+    text.sub(URL_REGEX, '<\1>')
   end
 end

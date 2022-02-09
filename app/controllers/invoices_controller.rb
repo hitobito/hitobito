@@ -114,7 +114,7 @@ class InvoicesController < CrudController
   def render_invoices_pdf(invoices)
     letter = parent.message if parent.is_a?(InvoiceList)
     pdf = if letter
-            Export::Pdf::Messages::LetterWithInvoice.new(letter, letter.recipients).render
+            Export::Pdf::Messages::LetterWithInvoice.new(letter, pdf_options).render
           else
             Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
           end

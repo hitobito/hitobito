@@ -11,6 +11,7 @@
 
 ## Version 1.26
 
+*  Gruppen können externe Registrierung aktivieren (Optional) (#1441)
 *  Personen mit layer_and_below_full Berechtigung dürfen Personenfilter auf tieferen Layern bearbeiten, erstellen & löschen
 *  Personen können neu als Geschwister angegeben werden (hitobito_kljb#5)
 *  Liste der vordefinierten Banken für EBICS-Import erweitert (#1427)

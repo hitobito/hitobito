@@ -40,9 +40,5 @@ if [[ "$INTEGRATION_BUILD" == 1 ]]; then
     "$scripts/pull-push-transifex-translations"
 fi
 
-if [[ "$DEMO_BUILD" == 1 ]]; then
-    "$scripts/enable-demo-seeds"
-fi
-
 BUILD_DATE=$(date '+%Y-%m-%d %H:%M:%S')
 echo "(built at: $BUILD_DATE)" > /opt/app-root/src/BUILD_INFO

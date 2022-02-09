@@ -771,6 +771,7 @@ de:
         esr_number_heading: Referenznummer
         currency: Währung
         amount: Betrag
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
   invoice_configs:
     form_tabs:
       general: Allgemein

@@ -8,26 +8,26 @@
 module RenderMessagesExports
   extend ActiveSupport::Concern
 
-  def render_pdf_preview
-    assert_type(entry)
-    assert_recipients(entry)
+  def render_pdf_preview(letter = entry)
+    assert_type(letter)
+    assert_recipients(letter)
 
     options = { background: Settings.messages.pdf.preview }
-    pdf = entry.exporter_class.new(entry, options)
+    pdf = letter.exporter_class.new(letter, options)
     send_data pdf.render_preview, type: :pdf, disposition: :inline, filename: pdf.filename(:preview)
   end
 
-  def render_pdf_in_background
-    assert_type(entry)
-    assert_recipients(entry)
+  def render_pdf_in_background(letter = entry)
+    assert_type(letter)
+    assert_recipients(letter)
 
-    base_name = entry.exporter_class.new(entry, Person.none).filename
-    render_in_background(:pdf, base_name)
+    base_name = letter.exporter_class.new(letter, Person.none).filename
+    render_in_background(letter, :pdf, base_name)
   end
 
-  def render_in_background(format, name)
+  def render_in_background(letter, format, name)
     with_async_download_cookie(format, name) do |filename|
-      Export::MessageJob.new(format, current_person.id, entry.id, { filename: filename }).enqueue!
+      Export::MessageJob.new(format, current_person.id, letter.id, { filename: filename }).enqueue!
     end
   end
 

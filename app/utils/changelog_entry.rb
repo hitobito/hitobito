@@ -22,26 +22,22 @@ class ChangelogEntry
     @content = entry_line
   end
 
-  def to_s
-    to_markdown
+  def to_markdown
+    markdown = @content
+    markdown = formatted_urls(markdown)
+    markdown = formatted_issue_links(markdown)
+    markdown = formatted_user_links(markdown)
+    markdown
   end
 
   private
 
-  def to_markdown
-    text = @content
-    text = formatted_urls(text)
-    text = formatted_issue_urls(text)
-    text = formatted_user_urls(text)
-    text
-  end
-
-  def formatted_issue_urls(text)
+  def formatted_issue_links(text)
     text.sub(CORE_ISSUE_HASH_REGEX, '[\1]' + '(' + GITHUB_CORE_ISSUE_BASE_URL + '\2)')
         .sub(WAGON_ISSUE_HASH_REGEX, '[\1]' + '(' + GITHUB_BASE_URL + 'hitobito/\2/issues/\3)')
   end
 
-  def formatted_user_urls(text)
+  def formatted_user_links(text)
     text.sub(GITHUB_USERNAME_REGEX, '[\1]' + '(' + GITHUB_BASE_URL + '\2)')
   end
 

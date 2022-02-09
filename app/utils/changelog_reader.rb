@@ -37,7 +37,7 @@ class ChangelogReader
     changelog_files_content.each_line do |l|
       if (h = changelog_header_line(l))
         version = find_or_create_version(h)
-      elsif (e = changelog_entry_line(l))
+      elsif (e = changelog_entry(l))
         add_changelog_entry(version, e) if version.present?
       end
     end
@@ -66,12 +66,11 @@ class ChangelogReader
     header[/^## [^\s]+ ((\d+\.)?(\*|x|\d+))$/i, 1]
   end
 
-  def changelog_entry_line(entry)
+  def changelog_entry(entry)
     entry.strip!
-    text = entry[/(^[-*]\s*(.*))/, 1]
-    return unless text
+    return unless entry.match?(/^[-*]\s*.*/)
 
-    ChangelogEntry.new(text)
+    ChangelogEntry.new(entry)
   end
 
   def find_or_create_version(header_line)

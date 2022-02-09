@@ -20,11 +20,13 @@ class ChangelogVersion
     [major_version, minor_version] <=> [other.major_version, other.minor_version]
   end
 
-  def label_markdown
-    "## Version #{version}"
+  def to_markdown
+    [label_markdown, log_entries.map(&:to_markdown)].flatten.join("\n")
   end
 
-  def to_markdown
-    [label_markdown, log_entries].flatten.join("\n")
+  private
+
+  def label_markdown
+    "## Version #{version}"
   end
 end

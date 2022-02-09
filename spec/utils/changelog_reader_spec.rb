@@ -43,19 +43,19 @@ describe ChangelogReader do
       version11 = changelogs[0]
       expect(version11.log_entries.count).to eq(3)
       expect(version11.version).to eq('1.1')
-      expect(version11.log_entries[0].to_s).to eq('* change')
-      expect(version11.log_entries[1].to_s).to eq('* change two [(#1484)](https://github.com/hitobito/hitobito/issues/1484)')
-      expect(version11.log_entries[2].to_s).to eq('* another change [(hitobito_sjas#42)](https://github.com/hitobito/hitobito_sjas/issues/42)')
+      expect(version11.log_entries[0].to_markdown).to eq('* change')
+      expect(version11.log_entries[1].to_markdown).to eq('* change two [(#1484)](https://github.com/hitobito/hitobito/issues/1484)')
+      expect(version11.log_entries[2].to_markdown).to eq('* another change [(hitobito_sjas#42)](https://github.com/hitobito/hitobito_sjas/issues/42)')
 
       version1x = changelogs[1]
       expect(version1x.log_entries.count).to eq(1)
       expect(version1x.version).to eq('1.X')
-      expect(version1x.log_entries[0].to_s).to eq('* far future change (for any questions, contact [@TheWalkingLeek](https://github.com/TheWalkingLeek))')
+      expect(version1x.log_entries[0].to_markdown).to eq('* far future change (for any questions, contact [@TheWalkingLeek](https://github.com/TheWalkingLeek))')
 
       version23 = changelogs[2]
       expect(version23.log_entries.count).to eq(1)
       expect(version23.version).to eq('2.3')
-      expect(version23.log_entries[0].to_s).to eq('* change')
+      expect(version23.log_entries[0].to_markdown).to eq('* change')
     end
   end
 
@@ -65,27 +65,27 @@ describe ChangelogReader do
   end
 
   it 'parses entry line' do
-    line = subject.send(:changelog_entry_line, '* change')
-    expect(line.to_s).to eq('* change')
+    line = subject.send(:changelog_entry, '* change')
+    expect(line.to_markdown).to eq('* change')
   end
 
   it 'parses entry line with core issue' do
-    line = subject.send(:changelog_entry_line, '* change (#42)')
-    expect(line.to_s).to eq('* change [(#42)](https://github.com/hitobito/hitobito/issues/42)')
+    line = subject.send(:changelog_entry, '* change (#42)')
+    expect(line.to_markdown).to eq('* change [(#42)](https://github.com/hitobito/hitobito/issues/42)')
   end
 
   it 'parses entry line with wagon issue' do
-    line = subject.send(:changelog_entry_line, '* change (hitobito_sjas#42)')
-    expect(line.to_s).to eq('* change [(hitobito_sjas#42)](https://github.com/hitobito/hitobito_sjas/issues/42)')
+    line = subject.send(:changelog_entry, '* change (hitobito_sjas#42)')
+    expect(line.to_markdown).to eq('* change [(hitobito_sjas#42)](https://github.com/hitobito/hitobito_sjas/issues/42)')
   end
 
   it 'parses entry line with github username' do
-    line = subject.send(:changelog_entry_line, '* change (@TheWalkingLeek)')
-    expect(line.to_s).to eq('* change ([@TheWalkingLeek](https://github.com/TheWalkingLeek))')
+    line = subject.send(:changelog_entry, '* change (@TheWalkingLeek)')
+    expect(line.to_markdown).to eq('* change ([@TheWalkingLeek](https://github.com/TheWalkingLeek))')
   end
 
   it 'doesnt parse if invalide line' do
-    line = subject.send(:changelog_entry_line, 'invalid')
+    line = subject.send(:changelog_entry, 'invalid')
     expect(line).to be_falsey
 
     line = subject.send(:changelog_header_line, 'invalid')

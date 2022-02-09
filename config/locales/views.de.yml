@@ -772,6 +772,7 @@ de:
         currency: Währung
         amount: Betrag
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
   invoice_configs:
     form_tabs:
       general: Allgemein

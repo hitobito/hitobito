@@ -115,13 +115,13 @@ class InvoicesController < CrudController
   end
 
   def render_invoices_pdf(invoices)
-    letter = Message.find(parent.message.id) if parent.is_a?(InvoiceList)
-    pdf = if letter
-            render_pdf_in_background(letter)
-          else
-            Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
-          end
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
+    letter = parent.message if parent.is_a?(InvoiceList)
+    if letter
+      render_pdf_in_background(letter)
+    else
+      pdf = Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
+      send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
+    end
   end
 
   def filename(extension, invoices)

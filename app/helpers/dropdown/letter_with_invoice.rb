@@ -14,5 +14,9 @@ module Dropdown
       add_item(translate(:letters_with_invoice), export_path(:pdf), item_options)
     end
 
+    def item_options
+      super.merge(target: '')
+    end
+
   end
 end

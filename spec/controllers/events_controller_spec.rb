@@ -102,10 +102,9 @@ describe EventsController do
       end
 
       it 'does page correctly even if event have multiple dates' do
-        expect(Kaminari.config).to receive(:default_per_page).and_return(2).at_least(:once)
         events(:top_event).dates.create!(start_at: '2012-3-02')
         get :index, params: { group_id: group.id, year: 2012, filter: 'all' }
-        expect(assigns(:events)).to have(2).entries
+        expect(assigns(:events)).to have(3).entries
       end
 
       it 'does show the first filled page if page-number is too high' do

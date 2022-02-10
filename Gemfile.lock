@@ -143,6 +143,7 @@ GEM
     codez-tarantula (0.5.5)
       hpricot (~> 0.8.4)
       htmlentities (~> 4.3.0)
+    commonmarker (0.23.2)
     concurrent-ruby (1.1.9)
     config (3.1.0)
       deep_merge (~> 1.2, >= 1.2.1)
@@ -625,6 +626,7 @@ DEPENDENCIES
   ci_reporter_rspec
   cmess
   codez-tarantula
+  commonmarker
   config
   country_select
   daemons

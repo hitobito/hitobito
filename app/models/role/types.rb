@@ -26,12 +26,12 @@ module Role::Types
 
   # All possible permissions with writing permission
   WRITING_PERMISSIONS = [
-      :layer_and_below_full,
-      :layer_full,
-      :group_and_below_full,
-      :group_full,
-      :admin,
-      :finance
+    :layer_and_below_full,
+    :layer_full,
+    :group_and_below_full,
+    :group_full,
+    :admin,
+    :finance
   ].freeze
 
 

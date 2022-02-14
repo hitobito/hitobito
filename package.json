@@ -14,7 +14,6 @@
     "chosen-js": "~1.8.7",
     "coffee-loader": "^1.0.0",
     "coffeescript": "1.12.7",
-    "compass-mixins": "^0.12.10",
     "expose-loader": "^1.0.0",
     "jquery": "~1.12.4",
     "jquery-ui": "~1.12.1",

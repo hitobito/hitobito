@@ -198,5 +198,6 @@ a.anchor {
 }
 
 .animated-highlight {
-  @include animation(highlight 2.5s);
+  -webkit-animation: highlight 2.5s;
+  animation: highlight 2.5s;
 }

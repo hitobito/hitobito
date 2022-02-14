@@ -10,6 +10,8 @@ class Payments::EbicsImportJob < RecurringJob
   def perform_internal
     payment_provider_configs.find_each do |provider_config|
       Payments::EbicsImport.new(provider_config).run
+    rescue StandardError => e
+      error(self, e, payment_provider_config: provider_config)
     end
   end
 

@@ -126,6 +126,25 @@ case $cmd in
     existing_wagon_names | xargs -d' ' -n 1 echo | grep -v '^$'
     ;;
 
+  # update-copyright)
+  #   git_range="..master"
+  #   for repo in $(repos); do
+  #       cd $repo
+  #       files=$(git diff --name-only "$git_range")
+  #       if [ ! -z "$files" ]; then
+  #           git diff --name-only "$git_range" | xargs realpath
+  #       fi
+  #       cd - >/dev/null
+  #   done
+  #   year=$(date +%Y)
+  #   # Copyright (c) 2018,
+  #   # Copyright (c) 2018-2021,
+  #   sed -i -r "
+  #     s/Copyright \(c\) (([[:digit:]]{4})(-[[:digit:]]{4})?),/Copyright \(c\) \2-$year,/g
+  #     s/Copyright \(c\) $year-$year,/Copyright \(c\) $year,/g
+  #   " "$files"
+  #   ;;
+
   create)
     echo "THIS IS WORK IN PROGRESS"
     require_wagon_name

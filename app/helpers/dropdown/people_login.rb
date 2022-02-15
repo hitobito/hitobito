@@ -17,6 +17,12 @@ module Dropdown
       init_items
     end
 
+    def to_s
+      return '' if items.blank?
+
+      super
+    end
+
     private
 
     def init_items
@@ -29,7 +35,7 @@ module Dropdown
 
     def send_login
       if @user.email && (@user.roles.any? || @user.root?)
-        add_item(translate('.send_login'), 
+        add_item(translate('.send_login'),
                  template.send_password_instructions_group_person_path(template.parent, @user),
                  method: :post,
                  rel: :tooltip,

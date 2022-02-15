@@ -16,7 +16,7 @@
     "coffeescript": "1.12.7",
     "expose-loader": "^1.0.0",
     "jquery": "~1.12.4",
-    "jquery-ui": "~1.12.1",
+    "jquery-ui": "~1.13.0",
     "jquery-ujs": "~1.2.2",
     "jquery.turbolinks": "~2.1.0",
     "js-cookie": "~2.2.0",

@@ -28,6 +28,7 @@ class Devise::Hitobito::PasswordsController < Devise::PasswordsController
 
   def should_confirm_email?(resource)
     return false if resource.errors.present?
+    return false if resource.confirmed? && !resource.pending_reconfirmation?
 
     confirmable_email = resource.pending_reconfirmation? ?
                             resource.unconfirmed_email : resource.email

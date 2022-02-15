@@ -45,6 +45,27 @@ describe 'Email verification', js: true do
     end
   end
 
+  context 'person without login but confirmed email' do
+    let(:me) { people(:top_leader) }
+    let(:person) do
+      person = people(:bottom_member)
+      person.update_columns(encrypted_password: nil)
+      person
+    end
+
+    it 'send_login should allow to set password even when email is already confirmed' do
+      person.update_columns(confirmed_at: 1.day.ago)
+      link = click_send_login_button(person, me)
+      expect do
+        visit link
+        fill_in 'Neues Passwort', with: password
+        fill_in 'Neues Passwort bestätigen', with: password
+        click_button 'Passwort ändern'
+        is_expected.not_to have_text('Haupt-E-Mail wurde bereits bestätigt')
+      end.not_to change { person.reload.confirmed_at }
+    end
+  end
+
   context 'person with login' do
     let(:me) { people(:top_leader) }
     let(:person) do

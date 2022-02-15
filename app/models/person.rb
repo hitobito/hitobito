@@ -327,6 +327,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     comparison.year - birthday.year - (birthday_has_passed ? 0 : 1)
   end
 
+  def login_status
+    return :two_factors if two_factor_authentication
+    return :login if email? && password?
+    return :password_email_sent if reset_password_period_valid?
+
+    :no_login
+  end
+
   ### AUTHENTICATION INSTANCE METHODS
 
   # Is this person allowed to login?

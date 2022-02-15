@@ -15,6 +15,14 @@ module PeopleHelper
     mail_to(person.email)
   end
 
+  def format_person_login_status(person)
+    status = person.login_status
+    icon(
+        I18n.t("people.login_status.#{status}.icon"),
+        title: I18n.t("people.login_status.#{status}.title")
+    )
+  end
+
   def dropdown_people_export(details = false, emails = true, labels = true, households = true)
     Dropdown::PeopleExport.new(self, current_user, params, details: details,
                                                            emails: emails,

@@ -423,6 +423,7 @@ de:
         household_key: Haushalts-ID
         created_at: Erstellt
         updated_at: Geändert
+        login_status: Login
 
       person_duplicate:
         birth_year: Jahrgang

@@ -35,7 +35,11 @@ module TableDisplays
     end
 
     def header
-      table.sort_header(name, Person.human_attribute_name(name))
+      if template.sortable?(name)
+        table.sort_header(name, Person.human_attribute_name(name))
+      else
+        Person.human_attribute_name(name)
+      end
     end
 
     def name

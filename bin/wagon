@@ -35,7 +35,7 @@ function existing_wagon_names() {
   sed 's!../hitobito_!!' |\
   cut -d/ -f 1 |\
   grep -v '\.\.' |\
-  uniq
+  uniq | sort
 }
 
 
@@ -121,6 +121,10 @@ case $cmd in
     done
     ;;
 
+  list)
+    echo $(existing_wagon_names);
+    ;;
+
   create)
     echo "THIS IS WORK IN PROGRESS"
     require_wagon_name
@@ -150,7 +154,7 @@ case $cmd in
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile configs test-prepare core-spec grep help git create'
+  echo 'activate gemfile configs test-prepare core-spec grep help git list create'
 }
 
 function __wagon_list() {
@@ -188,7 +192,7 @@ COMPLETION
 
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
-    echo "       $0 [test-prepare|core-spec|gemfile|configs]"
+    echo "       $0 [test-prepare|core-spec|gemfile|configs|list]"
     echo "       $0 [grep] <TERM>"
     echo "       $0 [git] <ARGS>"
     echo

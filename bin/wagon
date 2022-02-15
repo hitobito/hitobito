@@ -122,7 +122,7 @@ case $cmd in
     ;;
 
   list)
-    echo $(existing_wagon_names);
+    existing_wagon_names | xargs -d' ' -n 1 echo | grep -v '^$'
     ;;
 
   create)

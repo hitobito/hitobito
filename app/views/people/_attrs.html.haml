@@ -13,7 +13,10 @@
 
         = render_extensions :details, locals: { show_full: can?(:show_full, entry) }
 
-        = render_attrs(entry, :created_info, :updated_info)
+        - if can?(:update, entry)
+          = render_attrs(entry, :created_info, :updated_info, :login_status)
+        - else
+          = render_attrs(entry, :created_info, :updated_info)
 
         = render 'people_relations'
 

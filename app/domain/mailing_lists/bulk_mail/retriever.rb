@@ -7,6 +7,8 @@
 
 class MailingLists::BulkMail::Retriever
 
+  LOG_PREFIX = 'BulkMail Retriever: '
+
   def perform
     mail_uids.each do |mail_uid|
       process_mail(mail_uid)
@@ -47,13 +49,14 @@ class MailingLists::BulkMail::Retriever
 
   def process_mailing_list_mail(mail, validator, mailing_list)
     bulk_mail = mail.mail_log.message
-    bulk_mail.update!(raw_source: mail.raw_source, mailing_list: mailing_list)
+    bulk_mail.update!(mailing_list: mailing_list)
 
     if validator.sender_allowed?(mailing_list)
+      bulk_mail.update!(raw_source: mail.raw_source)
       Messages::DispatchJob.new(bulk_mail).enqueue!
     else
       mail.mail_log.update!(status: :sender_rejected)
-      sender_rejected(bulk_mail)
+      sender_rejected(mail, bulk_mail)
     end
   end
 
@@ -61,9 +64,10 @@ class MailingLists::BulkMail::Retriever
     MailingLists::BulkMail::ImapMailValidator.new(mail)
   end
 
-  def sender_rejected(message)
-    # TODO: log that sender has been rejected
-    MailingLists::BulkMail::SenderRejectedMessageJob.new(message).enqueue!
+  def sender_rejected(mail, bulk_mail)
+    list_email = bulk_mail.mailing_list.mail_address
+    log_info("Rejecting email from #{mail.sender_email} for list #{list_email}")
+    MailingLists::BulkMail::SenderRejectedMessageJob.new(bulk_mail).enqueue!
   end
 
   def assign_mailing_list(mail)
@@ -91,6 +95,14 @@ class MailingLists::BulkMail::Retriever
     move_mail_to_failed(mail.uid)
     mail_log = MailLog.find_by(mail_hash: mail.hash)
     raise MailingLists::BulkMail::MailProcessedBeforeError, mail_log
+  end
+
+  def log_info(text)
+    logger.info LOG_PREFIX + text
+  end
+
+  def logger
+    Delayed::Worker.logger || Rails.logger
   end
 
   # IMAP CONNECTOR

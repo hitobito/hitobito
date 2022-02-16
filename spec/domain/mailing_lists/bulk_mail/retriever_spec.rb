@@ -96,6 +96,8 @@ describe MailingLists::BulkMail::Retriever do
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
       expect(imap_mail_validator).to receive(:sender_allowed?).and_return(false)
 
+      Rails.logger.should_receive(:info).with('BulkMail Retriever: Rejecting email from dude@hitobito.example.com for list leaders@localhost')
+
       expect do
         retriever.perform
       end.to change { Message::BulkMail.count }.by(1)

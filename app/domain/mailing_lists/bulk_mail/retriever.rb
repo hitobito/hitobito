@@ -31,7 +31,7 @@ class MailingLists::BulkMail::Retriever
     if validator.valid_mail?
       process_valid_mail(mail, validator)
     else
-      # TODO: maybe log entry?
+      log_info("Ignored invalid email from #{mail.sender_email}")
     end
 
     delete_mail(mail_uid)
@@ -43,7 +43,7 @@ class MailingLists::BulkMail::Retriever
       process_mailing_list_mail(mail, validator, mailing_list)
     else
       mail.mail_log.update!(status: :unknown_recipient)
-      # TODO maybe log entry?
+      log_info("Ignored email from #{mail.sender_email} for unknown list #{mail.original_to}")
     end
   end
 

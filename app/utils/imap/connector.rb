@@ -63,6 +63,10 @@ class Imap::Connector
     @counts ||= fetch_mailbox_counts
   end
 
+  def config(key)
+    imap_config[key]
+  end
+
   private
 
   def count(mailbox)
@@ -122,10 +126,6 @@ class Imap::Connector
     @imap.select(MAILBOXES[mailbox])
   rescue Net::IMAP::NoResponseError => e
     create_if_missing(mailbox, e)
-  end
-
-  def config(key)
-    imap_config[key]
   end
 
   def imap_config

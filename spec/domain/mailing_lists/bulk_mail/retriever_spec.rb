@@ -44,7 +44,7 @@ describe MailingLists::BulkMail::Retriever do
       expect(imap_mail_validator).to receive(:valid_mail?).and_return(false)
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
 
-      Rails.logger.should_receive(:info)
+      expect(Rails.logger).to receive(:info)
         .with('BulkMail Retriever: Ignored invalid email from dude@hitobito.example.com')
 
       retriever.perform
@@ -56,7 +56,7 @@ describe MailingLists::BulkMail::Retriever do
       allow(mail42).to receive(:original_to).and_return('nolist@localhost')
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
 
-      Rails.logger.should_receive(:info)
+      expect(Rails.logger).to receive(:info)
         .with('BulkMail Retriever: Ignored email from dude@hitobito.example.com for unknown list nolist@localhost')
 
       expect do
@@ -100,7 +100,8 @@ describe MailingLists::BulkMail::Retriever do
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
       expect(imap_mail_validator).to receive(:sender_allowed?).and_return(false)
 
-      Rails.logger.should_receive(:info).with('BulkMail Retriever: Rejecting email from dude@hitobito.example.com for list leaders@localhost')
+      expect(Rails.logger).to receive(:info)
+        .with('BulkMail Retriever: Rejecting email from dude@hitobito.example.com for list leaders@localhost')
 
       expect do
         retriever.perform
@@ -141,24 +142,24 @@ describe MailingLists::BulkMail::Retriever do
   end
 
   context 'imap mail server errors' do
-    # it 'terminates without error if imap server temporarly unreachable' do
-    # # expect error to be thrown
-    # expect(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
 
-    # # TODO: Maybe ignore some exceptions and create log entries instead. (hitobito#1493)
-    # expect do
-    # retriever.perform
-    # end.to raise { Net::IMAP::NoResponseError }
-    # end
+    it 'terminates without error if imap server temporarly unreachable' do
+      expect(imap_connector).to receive(:config).with(:address).and_return('imap.example.com')
+      expect(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_raise(Errno::EADDRNOTAVAIL)
 
-    # it 'raises exception if unknown error' do
-    # # raise unexpected EOFError
-    # expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(EOFError)
+      expect(Rails.logger).to receive(:info)
+        .with('BulkMail Retriever: cannot connect to IMAP server imap.example.com, terminating.')
 
-    # expect do
-    # retriever.perform
-    # end.to raise { EOFError }
-    # end
+      retriever.perform
+    end
+
+    it 'raises exception if non connection error' do
+      expect(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_raise(Net::IMAP::NoResponseError)
+
+      expect do
+        retriever.perform
+      end.to raise_error { Net::IMAP::NoResponseError }
+    end
   end
 
   private

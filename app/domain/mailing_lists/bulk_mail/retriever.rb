@@ -10,6 +10,8 @@ class MailingLists::BulkMail::Retriever
   LOG_PREFIX = 'BulkMail Retriever: '
 
   def perform
+    return abort_imap_unavailable unless imap_server_available?
+
     mail_uids.each do |mail_uid|
       process_mail(mail_uid)
     end
@@ -58,6 +60,11 @@ class MailingLists::BulkMail::Retriever
       mail.mail_log.update!(status: :sender_rejected)
       sender_rejected(mail, bulk_mail)
     end
+  end
+
+  def abort_imap_unavailable
+    imap_address = imap.config(:address)
+    log_info("cannot connect to IMAP server #{imap_address}, terminating.")
   end
 
   def validator(mail)
@@ -111,8 +118,18 @@ class MailingLists::BulkMail::Retriever
     @imap ||= Imap::Connector.new
   end
 
+  def imap_server_available?
+    mail_uids != :connection_error
+  end
+
   def mail_uids
-    @mail_uids ||= imap.fetch_mail_uids(:inbox)
+    @mail_uids ||= fetch_mail_uids
+  end
+
+  def fetch_mail_uids
+    imap.fetch_mail_uids(:inbox)
+  rescue Errno::EADDRNOTAVAIL
+    :connection_error
   end
 
   def delete_mail(uid)

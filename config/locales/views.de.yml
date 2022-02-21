@@ -429,8 +429,8 @@ de:
       failure: One-Time Code inkorrekt
     new:
       title: Zwei-Faktor-Authentifizierung
-      hint_registered_html: "Geben Sie bitte den angezeigten Code auf Ihrer %{link} an um Ihre Identität zu bestätigen."
-      hint_unregistered_html: "Scannen Sie bitte den QR Code mit ihrem Smartphone mittels der %{link} und geben Sie den angezeigten Code an um die Zwei-Faktor-Authentifizierung zu aktivieren."
+      hint_registered_html: "Bitte gib den angezeigten Code aus deiner Authenticator-App an, um deine Identität zu bestätigen."
+      hint_unregistered_html: "Bitte scanne den QR-Code mit deinem Smartphone mittels Authenticator-App und gib den angezeigten Code an, um die Zwei-Faktor-Authentifizierung zu aktivieren. Noch keine Authenticator-App installiert? Wir empfehlen dir %{link} "
     form:
       totp_code: One-Time Code
       totp_code_placeholder: Bitte sechsstelligen Code eingeben...

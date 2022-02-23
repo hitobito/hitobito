@@ -14,7 +14,11 @@
 
 class TableDisplay::People < TableDisplay
   def available
-    Person.column_names - excluded
+    Person.column_names + calculated - excluded
+  end
+
+  def calculated
+    %w(login_status)
   end
 
   def excluded

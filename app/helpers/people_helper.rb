@@ -15,6 +15,20 @@ module PeopleHelper
     mail_to(person.email)
   end
 
+  def format_person_login_status(person)
+    icons = {
+        no_login: 'user-slash',
+        password_email_sent: 'user-clock',
+        login: 'user-check',
+        two_factors: 'user-shield'
+    }
+    status = person.login_status
+    icon(
+        icons.fetch(status),
+        title: I18n.t("people.login_status.#{status}")
+    )
+  end
+
   def dropdown_people_export(details = false, emails = true, labels = true, households = true)
     Dropdown::PeopleExport.new(self, current_user, params, details: details,
                                                            emails: emails,

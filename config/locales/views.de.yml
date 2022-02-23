@@ -1442,6 +1442,12 @@ de:
       flashes:
         success: Zwei-Faktor-Authentifizierung erfolgreich deaktiviert
 
+    login_status:
+      no_login: Kein Login
+      password_email_sent: Einladung wurde verschickt
+      login: Login ist aktiv
+      two_factors: Login mit 2FA ist aktiv
+
   participations:
     destroy:
       flash:

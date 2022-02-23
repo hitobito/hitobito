@@ -14,6 +14,9 @@ describe Export::Tabular::People::TableDisplays do
     let(:table_display) { TableDisplay::People.new(person: person) }
     let(:list)          { [person] }
 
+    before  { TableDisplay::People.register_permission(Person,:update,:login_status) }
+    after   { TableDisplay.class_variable_set('@@permissions', {}) }
+
     subject { people_list }
 
     its(:attributes) do

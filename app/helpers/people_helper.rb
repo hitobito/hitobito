@@ -16,10 +16,16 @@ module PeopleHelper
   end
 
   def format_person_login_status(person)
+    icons = {
+        no_login: 'user-slash',
+        password_email_sent: 'user-clock',
+        login: 'user-check',
+        two_factors: 'user-shield'
+    }
     status = person.login_status
     icon(
-        I18n.t("people.login_status.#{status}.icon"),
-        title: I18n.t("people.login_status.#{status}.title")
+        icons.fetch(status),
+        title: I18n.t("people.login_status.#{status}")
     )
   end
 

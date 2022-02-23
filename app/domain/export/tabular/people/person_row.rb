@@ -40,7 +40,7 @@ module Export::Tabular::People
 
     def login_status
       status = entry.login_status
-      I18n.t("people.login_status.#{status}.title")
+      I18n.t("people.login_status.#{status}")
     end
 
     private

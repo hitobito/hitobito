@@ -33,6 +33,7 @@ module TwoFactor
     # Locally it works with just one sign_out
     sign_out(resource) && sign_out
 
+    session[:remember_me] = true?(resource_params[:remember_me])
     session[:pending_two_factor_person_id] = resource.id
 
     redirect_to_two_factor_authentication
@@ -49,5 +50,9 @@ module TwoFactor
     session[:pending_second_factor_authentication] = factor
 
     new_users_second_factor_path
+  end
+
+  def remember_me?
+    session[:remember_me]
   end
 end

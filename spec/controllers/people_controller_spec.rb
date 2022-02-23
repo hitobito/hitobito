@@ -646,6 +646,67 @@ describe PeopleController do
         end
       end
 
+      context 'login status' do
+        render_views
+        let(:dom) { Capybara::Node::Simple.new(response.body) }
+        let(:role) { roles(:bottom_member) }
+        let(:person) { role.person }
+        let(:person2) { Fabricate(Group::BottomLayer::Member.name, group: role.group).person }
+
+        it 'shows active login status for self' do
+          get :show, params: { group_id: group.id, id: people(:top_leader).id }
+
+          expect(dom).to have_selector 'dd i.fa.fa-user-check'
+          expect(dom.find('dd i.fa.fa-user-check')['title']).to eq 'Login ist aktiv'
+        end
+
+        it 'shows active login status for other person who can be written' do
+          get :show, params: { group_id: role.group.id, id: person.id }
+
+          expect(dom).to have_selector 'dd i.fa.fa-user-check'
+          expect(dom.find('dd i.fa.fa-user-check')['title']).to eq 'Login ist aktiv'
+        end
+
+        it 'does not show login status for other person who cannot be written' do
+          sign_in(person2)
+          get :show, params: { group_id: role.group.id, id: person.id }
+
+          expect(dom).not_to have_selector 'dd i.fa.fa-user-check'
+        end
+
+        it 'shows 2fa login status' do
+          person.update(two_factor_authentication: :totp)
+          get :show, params: { group_id: role.group.id, id: person.id }
+
+          expect(dom).to have_selector 'dd i.fa.fa-user-shield'
+          expect(dom.find('dd i.fa.fa-user-shield')['title']).to eq 'Login mit 2FA ist aktiv'
+        end
+
+        it 'shows password email sent login status' do
+          person.update(encrypted_password: nil)
+          person.send_reset_password_instructions
+          get :show, params: { group_id: role.group.id, id: person.id }
+
+          expect(dom).to have_selector 'dd i.fa.fa-user-clock'
+          expect(dom.find('dd i.fa.fa-user-clock')['title']).to eq 'Einladung wurde verschickt'
+        end
+
+        it 'shows active login status when password reset was sent but user already had login' do
+          person.send_reset_password_instructions
+          get :show, params: { group_id: role.group.id, id: person.id }
+
+          expect(dom).to have_selector 'dd i.fa.fa-user-check'
+          expect(dom.find('dd i.fa.fa-user-check')['title']).to eq 'Login ist aktiv'
+        end
+
+        it 'shows "no login" status' do
+          person.update(encrypted_password: nil)
+          get :show, params: { group_id: role.group.id, id: person.id }
+
+          expect(dom).to have_selector 'dd i.fa.fa-user-slash'
+          expect(dom.find('dd i.fa.fa-user-slash')['title']).to eq 'Kein Login'
+        end
+      end
     end
 
     describe 'POST #send_password_instructions' do
@@ -1077,6 +1138,7 @@ describe PeopleController do
   context 'table_displays'do
     render_views
     let(:dom) { Capybara::Node::Simple.new(response.body) }
+    let!(:bottom_member) { people(:bottom_member) }
 
     before { sign_in(top_leader) }
     after  { TableDisplay.class_variable_set('@@permissions', {}) }
@@ -1087,6 +1149,14 @@ describe PeopleController do
       get :index, params: { group_id: group.id }
       expect(dom).to have_checked_field 'Geschlecht'
       expect(dom.find('table tbody tr')).to have_content 'unbekannt'
+    end
+
+    it 'GET#index lists login_status column' do
+      top_leader.table_display_for(group).update(selected: %w(login_status))
+
+      get :index, params: { group_id: group.id }
+      expect(dom).to have_checked_field 'Login'
+      expect(dom.find('table tbody tr i.fa.fa-user-check')['title']).to eq 'Login ist aktiv'
     end
 
     it 'GET#index lists extra column without content if permission check fails' do

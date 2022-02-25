@@ -83,6 +83,17 @@ describe SecondFactorAuthenticationController do
             expect(controller.send(:current_person)).to eq(bottom_member)
           end
 
+          it 'generates remember me cookie when remember me is active' do
+
+            session[:remember_me] = true
+
+            post :create, params: { second_factor_code: totp_authenticator.now }
+
+            expect(response).to redirect_to root_path
+
+            expect(cookies[:remember_person_token]).to be_a String
+          end
+
           it 'does not sign in with incorrect TOTP code' do
 
             post :create, params: { second_factor_code: totp_authenticator.now.to_i - 1 }
@@ -95,6 +106,15 @@ describe SecondFactorAuthenticationController do
             expect(bottom_member.two_fa_secret).to eq(@secret)
             expect(bottom_member.two_factor_authentication_registered?).to be(true)
             expect(controller.send(:current_person)).to be_nil
+          end
+
+          it 'does not generate remember me cookie when remember me is inactive' do
+
+            post :create, params: { second_factor_code: totp_authenticator.now.to_i - 1 }
+
+            expect(response).to redirect_to new_users_second_factor_path
+
+            expect(cookies[:remember_person_token]).to be_nil
           end
         end
 

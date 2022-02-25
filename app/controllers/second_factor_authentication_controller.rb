@@ -6,6 +6,7 @@
 # https ://github.com/hitobito/hitobito.
 
 class SecondFactorAuthenticationController < ApplicationController
+  include Devise::Controllers::Rememberable
   include ::TwoFactor
 
   skip_authorization_check
@@ -29,6 +30,8 @@ class SecondFactorAuthenticationController < ApplicationController
       return_path = after_sign_in_path_for(person)
 
       unless person_signed_in?
+        remember_me(person) if remember_me?
+
         reset_session
 
         sign_in(person)

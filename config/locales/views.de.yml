@@ -455,6 +455,7 @@ de:
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
       signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
     attachments:
+      public_attachments_hint: Anhänge sind öffentlich, da der Anlass externe Anmeldungen erlaubt
       add: "hinzufügen"
     banner_open_invitation:
       explanation: Du wurdest zu diesem Anlass eingeladen.

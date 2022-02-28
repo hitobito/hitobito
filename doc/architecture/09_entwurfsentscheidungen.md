@@ -176,6 +176,35 @@ die Dateien nicht mehr lokal verfügbar sind und ein weiterer Service
 Bestandteil des Setups ist. Die S3-Anbindung erfordert mehrere neue Gems als
 dependencies.
 
+### Kosten bei Cloudscale (Stand 2022-02-28)
+
+- Speicherplatz:     0.09 CHF / GB / 30 Tage
+- Traffic eingehend: 0
+- Traffic ausgehend: 0.02 CHF / GB
+- API-Request:       0.005 / 1000 Requests
+
+Für Backups ist damit nur der Speicherplatz relevant.
+Für die Useruploads haben wir noch keine Trafficzahlen.
+
+Aktuell ist der Datenverbrauch für Uploads und kurzfristigen Datenaustauschen
+zwischen Rails und DelayedJob zwischen 150 MB und 3.2 GB, die meisten sind
+deutlich unterhalb 1 GB. Backups sind zwischen 100MB und 2.4 GB, die meisten
+sind deutlich unterhalb 1 GB.
+
+Die Speicherplatzkosten wären damit zwischen 0.09 und 5.79 CHF / 30 Tage
+Die meisten würde deutlich näher an 0.10 CHF / 30 Tage.
+
+Beim größten Datenvolumen beobachten wir derzeit
+durchschnittlich etwa 5000 Requests pro Tag.
+
+Wenn jeder Download 1 API-Request ist, wären das 0.75 CHF / 30 Tage
+
+Ansonsten sind nennenswerte Requestvolumen eher im Bereich 1000 pro Tag
+
+Bei gleicher Annahme wären das 0.15 CHF / 30 Tage
+
+Die laufenden Kosten sind damit insgesamt eher überschaubar.
+
 ## Kommentare/Advice
 
 ### tbu 2022-02-18

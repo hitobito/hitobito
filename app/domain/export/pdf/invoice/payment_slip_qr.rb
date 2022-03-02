@@ -24,7 +24,7 @@ module Export::Pdf::Invoice
     HEIGHT_WITHOUT_MARGIN = HEIGHT - MARGIN
 
     def render # rubocop:disable Metrics/MethodLength
-      start_new_page if cursor < HEIGHT + MARGIN
+      start_new_page if cursor < HEIGHT_WITHOUT_MARGIN
 
       stamped :separators
 
@@ -89,7 +89,7 @@ module Export::Pdf::Invoice
       if invoice.includes_variable_donation?
         payment_amount
       else
-        stamped :payment_amount 
+        stamped :payment_amount
       end
     end
 

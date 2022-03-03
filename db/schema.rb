@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_24_071649) do
+ActiveRecord::Schema.define(version: 2022_03_03_100050) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -753,6 +753,7 @@ ActiveRecord::Schema.define(version: 2022_01_24_071649) do
     t.string "reset_password_sent_to"
     t.integer "two_factor_authentication"
     t.text "encrypted_two_fa_secret"
+    t.string "language", default: "de", null: false
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

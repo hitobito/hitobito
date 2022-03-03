@@ -52,7 +52,7 @@ describe Export::EventParticipationsExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Firmenname;Übername.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
-      expect(lines[0].split(';').count).to match(21)
+      expect(lines[0].split(';').count).to match(22)
     end
   end
 

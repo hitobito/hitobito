@@ -80,12 +80,23 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :two_factor_authentication, :encrypted_two_fa_secret,
     :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email
   ]
+  if PUBLIC_ATTRS.include?(:correspondence_language)
+    INTERNAL_ATTRS += [:language]
+  else
+    PUBLIC_ATTRS += [:language]
+  end
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country
   ]
 
   GENDERS = %w(m w).freeze
+
+  LANGUAGES = Settings.application
+                      .languages
+                      .to_hash
+                      .merge(Settings.application
+                                     .additional_languages&.to_hash || {}).freeze
 
   ADDRESS_ATTRS = %w(address zip_code town country) # rubocop:disable Style/MutableConstant meant to be extended in wagons
 
@@ -265,6 +276,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
     def tags
       Person.tags_on(:tags).order(:name).pluck(:name)
+    end
+
+    def language_active?
+      !has_attribute?(:correspondence_language)
     end
 
     private

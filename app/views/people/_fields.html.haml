@@ -32,6 +32,14 @@
                            value: f.date_value(:birthday),
                            help_inline: t('.format_birthday'),
                            class: 'span2')
+  - if Person.language_active?
+    = f.labeled_collection_select(:language,
+                                  Person::LANGUAGES,
+                                  :first,
+                                  :last,
+                                  { prompt: true },
+                                  class: 'span6')
+
 
 = render_extensions :fields, locals: { f: f }
 

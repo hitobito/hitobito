@@ -17,6 +17,8 @@
           = render_attrs(entry, :created_info, :updated_info, :login_status)
         - else
           = render_attrs(entry, :created_info, :updated_info)
+        - if Person.language_active?
+          = render_attrs(entry, :language)
 
         = render 'people_relations'
 

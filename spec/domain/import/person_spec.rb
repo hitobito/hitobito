@@ -306,7 +306,7 @@ describe Import::Person do
 
     it 'all protected attributes are filtered via blacklist' do
       public_attributes = person.attributes.reject { |key, value| ::Person::INTERNAL_ATTRS.include?(key.to_sym) }
-      expect(public_attributes.size).to eq 16  # lists tag_list
+      expect(public_attributes.size).to eq 17  # lists tag_list
       expect do
         Import::Person.new(person, public_attributes).populate
       end.not_to raise_error

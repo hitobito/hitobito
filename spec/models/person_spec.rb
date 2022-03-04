@@ -746,4 +746,16 @@ describe Person do
       expect(person.two_fa_secret).to eq(decrypted_secret)
     end
   end
+
+  describe 'language' do
+    let(:person) { Person.new(last_name: 'Foo') }
+
+    it 'is not valid with valid outside defined languages' do
+      expect(person).to be_valid
+
+      person.language = 'rm'
+
+      expect(person).to_not be_valid
+    end
+  end
 end

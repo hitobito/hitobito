@@ -80,11 +80,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :two_factor_authentication, :encrypted_two_fa_secret,
     :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email
   ]
-  if PUBLIC_ATTRS.include?(:correspondence_language)
-    INTERNAL_ATTRS += [:language]
-  else
-    PUBLIC_ATTRS += [:language]
-  end
+  
+  PUBLIC_ATTRS += [:language] unless PUBLIC_ATTRS.include?(:correspondence_language)
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country
@@ -211,6 +208,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates_by_schema except: [:email, :picture, :address]
   validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
   validates :company_name, presence: { if: :company? }
+  validates :language, inclusion: { in: LANGUAGES.keys.map(&:to_s) }
   validates :birthday,
             timeliness: { type: :date, allow_blank: true, before: Date.new(10_000, 1, 1) }
   validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }

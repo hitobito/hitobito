@@ -276,10 +276,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       Person.tags_on(:tags).order(:name).pluck(:name)
     end
 
-    def language_active?
-      !has_attribute?(:correspondence_language)
-    end
-
     private
 
     def company_case_column(if_company, otherwise)

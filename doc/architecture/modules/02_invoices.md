@@ -4,6 +4,11 @@
 
 Mit dem Rechnungsfeature von Hitobito können Rechnungen an Personen und Firmen gestellt werden. 
 
+Wording:
+Rechnung: Einfache Rechnung mit einer oder mehreren Positionen. Kann auf einer Person, einem Event, einer Gruppe oder via Abo erstellt werden
+Brief: Ein einfacher Brief, ohne Rechnungsteil. Wird über das Abo erstellt. Siehe https://github.com/hitobito/hitobito/blob/master/doc/architecture/modules/01_messages.md
+Rechnungsbrief: Ein Brief mit einer Rechnung kombiniert. Wird über das Abo erstellt.
+
 ## Benutzer
 
 Damit eine Person das Rechnungsfeature nutzen kann, muss sie auf einem Layer/Gruppe eine Rolle mit :finance Permission haben. In einigen Wagons wird diese Rolle 'Kassier/In' genannt.

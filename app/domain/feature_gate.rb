@@ -45,6 +45,8 @@ class FeatureGate
   end
 
   def enabled?(feature)
+    return send("#{feature}_enabled?") if respond_to?("#{feature}_enabled?", true)
+
     read_config(feature, @settings)[:enabled]
   end
 
@@ -59,5 +61,9 @@ class FeatureGate
     raise FeatureGateError, "No key 'enabled' found for feature #{feature}" if config.enabled.nil?
 
     config
+  end
+
+  def person_language_enabled?
+    !Person.has_attribute?(:correspondence_language)
   end
 end

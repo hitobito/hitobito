@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -86,6 +86,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ]
 
   GENDERS = %w(m w).freeze
+
+  LANGUAGES = Settings.application
+                      .languages
+                      .to_hash
+                      .merge(Settings.application
+                                     .additional_languages&.to_hash || {}).freeze
 
   ADDRESS_ATTRS = %w(address zip_code town country) # rubocop:disable Style/MutableConstant meant to be extended in wagons
 
@@ -200,6 +206,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates_by_schema except: [:email, :picture, :address]
   validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
   validates :company_name, presence: { if: :company? }
+  validates :language, inclusion: { in: LANGUAGES.keys.map(&:to_s) }
   validates :birthday,
             timeliness: { type: :date, allow_blank: true, before: Date.new(10_000, 1, 1) }
   validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }

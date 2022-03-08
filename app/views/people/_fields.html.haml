@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -32,6 +32,14 @@
                            value: f.date_value(:birthday),
                            help_inline: t('.format_birthday'),
                            class: 'span2')
+  - FeatureGate.if(:person_language) do
+    = f.labeled_collection_select(:language,
+                                  Person::LANGUAGES,
+                                  :first,
+                                  :last,
+                                  { prompt: true },
+                                  class: 'span6')
+
 
 = render_extensions :fields, locals: { f: f }
 

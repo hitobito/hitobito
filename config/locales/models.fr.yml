@@ -394,6 +394,7 @@ fr:
         household_key: ID du foyer
         created_at: Créé
         updated_at: Modifié
+        language: Langue
       person_duplicate:
         birth_year: Année
         roles_list: Rôles

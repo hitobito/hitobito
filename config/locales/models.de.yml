@@ -424,6 +424,7 @@ de:
         created_at: Erstellt
         updated_at: Geändert
         login_status: Login
+        language: Sprache
 
       person_duplicate:
         birth_year: Jahrgang

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -80,6 +80,10 @@ module PeopleHelper
 
   def format_person_layer_group(person)
     person.layer_group_label
+  end
+
+  def format_person_language(person)
+    Person::LANGUAGES[person.language.to_sym]
   end
 
   def render_household(person)

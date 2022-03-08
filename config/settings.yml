@@ -19,6 +19,7 @@ application:
 
   # The languages available in the menu
   languages:
+    # first entry is considered the default language
     de: Deutsch
 
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||

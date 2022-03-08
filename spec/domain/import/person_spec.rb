@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -306,7 +306,7 @@ describe Import::Person do
 
     it 'all protected attributes are filtered via blacklist' do
       public_attributes = person.attributes.reject { |key, value| ::Person::INTERNAL_ATTRS.include?(key.to_sym) }
-      expect(public_attributes.size).to eq 16  # lists tag_list
+      expect(public_attributes.size).to eq 17  # lists tag_list
       expect do
         Import::Person.new(person, public_attributes).populate
       end.not_to raise_error

@@ -8,7 +8,6 @@
 require 'spec_helper'
 
 describe FeatureGate do
-  subject { described_class }
 
   context 'person language' do
     it 'toggles language feature by given person attributes' do

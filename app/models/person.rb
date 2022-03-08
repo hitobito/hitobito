@@ -81,8 +81,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email
   ]
 
-  PUBLIC_ATTRS += [:language] if FeatureGate.enabled?(:person_language)
-
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country
   ]

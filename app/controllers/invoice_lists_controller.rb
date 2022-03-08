@@ -24,6 +24,8 @@ class InvoiceListsController < CrudController
       invoice_items_attributes: [
         :name,
         :description,
+        :cost_center,
+        :account,
         :unit_cost,
         :vat_rate,
         :count,

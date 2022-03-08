@@ -58,6 +58,11 @@ jobs:
         run: |
           echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
 
+      - name: 'Extract wagon name'
+        run: |
+          repository=${{github.repository}}
+          echo "WAGON_NAME=${repository##*/}" >> $GITHUB_ENV
+
       - name: 'Choose branch for dependencies'
         run: |
           echo "BRANCH_NAME: $BRANCH_NAME"
@@ -103,10 +108,10 @@ jobs:
           ref: '${{ env.HITOBITO_BRANCH }}'
           path: ${{ inputs.wagon_dependency_repository }}
 
-      - name: Checkout ${{ inputs.wagon_repository }}
+      - name: Checkout ${{ env.WAGON_NAME }}
         uses: actions/checkout@v2
         with:
-          path: ${{ inputs.wagon_repository }}
+          path: ${{ env.WAGON_NAME }}
 
       - name: 'Create cache key'
         run: cp Gemfile.lock Gemfile.lock.backup
@@ -128,7 +133,7 @@ jobs:
 
       - uses: actions/cache@v2
         with:
-          path: ${{ inputs.wagon_repository }}/vendor/bundle
+          path: ${{ env.WAGON_NAME }}/vendor/bundle
           key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
           restore-keys: |
             ${{ runner.os }}-ruby-bundle-

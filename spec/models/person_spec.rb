@@ -747,7 +747,7 @@ describe Person do
     end
   end
 
-  describe 'language' do
+  describe '#language' do
     let(:person) { Person.new(last_name: 'Foo') }
 
     it 'is not valid with valid outside defined languages' do

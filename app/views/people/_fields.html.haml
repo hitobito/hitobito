@@ -32,7 +32,7 @@
                            value: f.date_value(:birthday),
                            help_inline: t('.format_birthday'),
                            class: 'span2')
-  - FeatureGate.if(:language) do
+  - FeatureGate.if(:person_language) do
     = f.labeled_collection_select(:language,
                                   Person::LANGUAGES,
                                   :first,

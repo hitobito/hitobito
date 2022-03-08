@@ -20,7 +20,7 @@ class PeopleController < CrudController
                           [household_people_ids: []] +
                           [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
 
-  FeatureGate.if(:language) do
+  FeatureGate.if(:person_language) do
     self.permitted_attrs << [:language]
   end
 

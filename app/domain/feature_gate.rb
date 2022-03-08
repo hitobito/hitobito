@@ -63,7 +63,7 @@ class FeatureGate
     config
   end
 
-  def language_enabled?
+  def person_language_enabled?
     !Person.has_attribute?(:correspondence_language)
   end
 end

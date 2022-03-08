@@ -17,7 +17,7 @@
           = render_attrs(entry, :created_info, :updated_info, :login_status)
         - else
           = render_attrs(entry, :created_info, :updated_info)
-        - FeatureGate.if(:language) do
+        - FeatureGate.if(:person_language) do
           = render_attrs(entry, :language)
 
         = render 'people_relations'

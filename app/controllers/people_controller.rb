@@ -20,12 +20,9 @@ class PeopleController < CrudController
                           [family_members_attributes: [:id, :kind, :other_id, :_destroy]] +
                           [household_people_ids: []] +
                           [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
-
   FeatureGate.if(:person_language) do
     self.permitted_attrs << [:language]
   end
-
-
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]

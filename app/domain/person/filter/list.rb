@@ -41,7 +41,7 @@ class Person::Filter::List
   end
 
   def filter
-    chain.present? ? chain.filter(list_range) : list_range
+    chain.present? ? chain.filter(list_range) : list_range.members
   end
 
   def accessibles
@@ -61,14 +61,11 @@ class Person::Filter::List
   def list_range
     case range
     when 'deep'
-      @multiple_groups = true
       Person.in_or_below(group, chain.roles_join)
     when 'layer'
-      @multiple_groups = true
       Person.in_layer(group, join: chain.roles_join)
     else
-      group_scope = Person.in_group(group, chain.roles_join)
-      chain.blank? ? group_scope.members(group) : group_scope
+      Person.in_group(group, chain.roles_join)
     end
   end
 

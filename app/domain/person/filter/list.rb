@@ -29,15 +29,18 @@ class Person::Filter::List
   private
 
   def filtered_accessibles
-    return filter unless user
+    return filter_with_selection unless user
 
     if group_range?
-      filtered = filter.unscope(:select).select(:id).distinct
-      filtered = filtered.where(id: @ids) if @ids.present?
+      filtered = filter_with_selection.unscope(:select).select(:id).distinct
       accessibles.unscope(:select).where(id: filtered)
     else
-      accessibles.merge(filter)
+      accessibles.merge(filter_with_selection)
     end
+  end
+
+  def filter_with_selection
+    @ids.present? ? filter.where(id: @ids) : filter
   end
 
   def filter

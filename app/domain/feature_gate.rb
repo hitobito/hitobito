@@ -64,6 +64,9 @@ class FeatureGate
   end
 
   def person_language_enabled?
-    !Person.has_attribute?(:correspondence_language)
+    # some rake tasks run without db present, so make sure
+    # this doesn't fail in those cases
+    ActiveRecord::Base.connection.table_exists?('people') &&
+      !Person.has_attribute?(:correspondence_language)
   end
 end

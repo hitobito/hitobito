@@ -31,12 +31,7 @@ class Person::Filter::List
   def filtered_accessibles
     return filter_with_selection unless user
 
-    if group_range?
-      filtered = filter_with_selection.unscope(:select).select(:id).distinct
-      accessibles.unscope(:select).where(id: filtered)
-    else
-      accessibles.merge(filter_with_selection)
-    end
+    accessibles.merge(filter_with_selection)
   end
 
   def filter_with_selection
@@ -45,6 +40,17 @@ class Person::Filter::List
 
   def filter
     chain.present? ? chain.filter(list_range) : list_range.members
+  end
+
+  def list_range
+    case range
+    when 'deep'
+      Person.in_or_below(group, chain.roles_join)
+    when 'layer'
+      Person.in_layer(group, join: chain.roles_join)
+    else
+      Person.in_group(group, chain.roles_join)
+    end
   end
 
   def accessibles
@@ -58,17 +64,6 @@ class Person::Filter::List
       PersonFullReadables
     else
       PersonReadables
-    end
-  end
-
-  def list_range
-    case range
-    when 'deep'
-      Person.in_or_below(group, chain.roles_join)
-    when 'layer'
-      Person.in_layer(group, join: chain.roles_join)
-    else
-      Person.in_group(group, chain.roles_join)
     end
   end
 

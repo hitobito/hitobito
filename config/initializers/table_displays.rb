@@ -6,5 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 Rails.application.config.to_prepare do
+  TableDisplay::People.register_permission(Person,:show, Person::PUBLIC_ATTRS)
   TableDisplay::People.register_permission(Person,:update,:login_status)
 end

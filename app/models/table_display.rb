@@ -42,7 +42,7 @@ class TableDisplay < ActiveRecord::Base
 
     target, name = resolve(object, path)
     permission = lookup_permission(target, name)
-    yield target, name if permission.blank? || ability.can?(permission.to_sym, target)
+    yield target, name if ability.can?(permission.to_sym, target)
   end
 
   def selected?(path)

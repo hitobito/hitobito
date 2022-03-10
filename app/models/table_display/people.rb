@@ -13,7 +13,11 @@
 #
 
 class TableDisplay::People < TableDisplay
+
+  protected
+
   def table_model_class
     Person
   end
+
 end

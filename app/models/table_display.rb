@@ -37,10 +37,6 @@ class TableDisplay < ActiveRecord::Base
     end.find_or_initialize_by(person: person).allow_only_known_attributes!
   end
 
-  def table_model_class
-    raise 'implement in subclass'
-  end
-
   def with_permission_check(object, path)
     return yield unless selected?(path)
 
@@ -71,11 +67,15 @@ class TableDisplay < ActiveRecord::Base
     @@permissions.fetch(table_model_class.model_name.singular, {}).keys
   end
 
-  protected
-
   def allow_only_known_attributes!
     selected.select! { |attr| known?(attr) }
     self
+  end
+
+  protected
+
+  def table_model_class
+    raise 'implement in subclass'
   end
 
   def known?(attr)

@@ -16,10 +16,6 @@ class TableDisplay::Participations < TableDisplay
 
   QUESTION_REGEX = /^event_question_(\d+)$/
 
-  def table_model_class
-    Event::Participation
-  end
-
   def with_permission_check(object, path)
     return super unless path =~ QUESTION_REGEX
 
@@ -53,6 +49,10 @@ class TableDisplay::Participations < TableDisplay
   end
 
   protected
+
+  def table_model_class
+    Event::Participation
+  end
 
   def known?(attr)
     super || attr =~ QUESTION_REGEX

@@ -16,14 +16,8 @@ class TableDisplay::Participations < TableDisplay
 
   QUESTION_REGEX = /^event_question_(\d+)$/
 
-  def available
-    people_columns
-  end
-
-  def people_columns
-    TableDisplay::People.new.available.collect do |column|
-      "person.#{column}"
-    end
+  def table_model_class
+    Event::Participation
   end
 
   def with_permission_check(object, path)
@@ -56,5 +50,11 @@ class TableDisplay::Participations < TableDisplay
     selected_questions(question_ids).collect do |column, id|
       [column, "CASE event_questions.id WHEN #{id} THEN 0 ELSE 1 END, TRIM(event_answers.answer)"]
     end.to_h
+  end
+
+  protected
+
+  def known?(attr)
+    super || attr =~ QUESTION_REGEX
   end
 end

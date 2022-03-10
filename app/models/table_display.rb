@@ -22,7 +22,7 @@ class TableDisplay < ActiveRecord::Base
   belongs_to :person
 
   serialize :selected, Array
-  before_save :reject_internal_attributes
+  before_save :allow_only_known_attributes!
 
   def self.register_permission(model_class, permission, *attrs)
     @@permissions ||= {}
@@ -34,7 +34,11 @@ class TableDisplay < ActiveRecord::Base
     case parent
     when Group then TableDisplay::People
     when Event then TableDisplay::Participations
-    end.find_or_initialize_by(person: person)
+    end.find_or_initialize_by(person: person).allow_only_known_attributes!
+  end
+
+  def table_model_class
+    raise 'implement in subclass'
   end
 
   def with_permission_check(object, path)
@@ -63,11 +67,18 @@ class TableDisplay < ActiveRecord::Base
     @@permissions.fetch(object.class.model_name.singular, {})[name.to_s]
   end
 
-  private
+  def available
+    @@permissions.fetch(table_model_class.model_name.singular, {}).keys
+  end
 
-  def reject_internal_attributes
-    selected.reject! do |attr|
-      Person::INTERNAL_ATTRS.include?(attr.split('.').last.to_sym)
-    end
+  protected
+
+  def allow_only_known_attributes!
+    selected.select! { |attr| known?(attr) }
+    self
+  end
+
+  def known?(attr)
+    available.include?(attr.to_s)
   end
 end

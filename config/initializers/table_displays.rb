@@ -6,6 +6,14 @@
 #  https://github.com/hitobito/hitobito.
 
 Rails.application.config.to_prepare do
-  TableDisplay::People.register_permission(Person,:show, Person::PUBLIC_ATTRS)
-  TableDisplay::People.register_permission(Person,:update,:login_status)
+  public_person_attrs = Person::PUBLIC_ATTRS -
+      %i(first_name last_name nickname zip_code town address picture primary_group_id) -
+      Person::INTERNAL_ATTRS
+
+  TableDisplay.register_permission(Person, :show, *public_person_attrs)
+  TableDisplay.register_permission(Person,:update,:login_status)
+
+  TableDisplay.register_permission(Event::Participation, :show,
+      *(public_person_attrs.collect { |column| "person.#{column}" })
+  )
 end

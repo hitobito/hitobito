@@ -7,13 +7,15 @@
 
 Rails.application.config.to_prepare do
   public_person_attrs = Person::PUBLIC_ATTRS -
-      %i(first_name last_name nickname zip_code town address picture primary_group_id) -
+      %i(first_name last_name nickname zip_code town address picture) -
       Person::INTERNAL_ATTRS
 
   TableDisplay.register_permission(Person, :show, *public_person_attrs)
+  TableDisplay.register_permission(Person, :show, :layer_group_label)
   TableDisplay.register_permission(Person,:update,:login_status)
 
   TableDisplay.register_permission(Event::Participation, :show,
       *(public_person_attrs.collect { |column| "person.#{column}" })
   )
+  TableDisplay.register_permission(Event::Participation, :show, "person.layer_group_label")
 end

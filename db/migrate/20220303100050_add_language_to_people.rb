@@ -7,6 +7,8 @@
 
 class AddLanguageToPeople < ActiveRecord::Migration[6.1]
   def change
+    return if ActiveRecord::Base.connection.column_exists?(:people, :language)
+
     add_column :people, :language, :string, default: default_language, null: false
   end
 

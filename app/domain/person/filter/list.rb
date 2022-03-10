@@ -29,8 +29,6 @@ class Person::Filter::List
   private
 
   def filtered_accessibles
-    return filter_with_selection unless user
-
     accessibles.merge(filter_with_selection)
   end
 

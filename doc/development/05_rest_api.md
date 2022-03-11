@@ -49,7 +49,7 @@ Currently the following endpoints are provided:
 | GET    | /groups/:group_id/invoices/:id                    | Invoice details                                                                 |
 | GET    | /groups/:group_id/mailing_lists/:id               | Mailing list details and subscribers (actual people subscribed to the list)     |
 | GET    | /groups/:group_id/mailing_lists/:id/subscriptions | Details on the groups / roles, events and single people which are subscribed    |
-
+| GET    | /groups/:group_id/available_roles | List allowed roles of a group    |
 
 
 #### Events endpoint

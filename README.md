@@ -1,9 +1,9 @@
 ![hitobito logo](https://hitobito.com/images/logo.svg)
 
 #
-# Welcome to hitobito 人人
+# Welcome to Hitobito 人人
 
-hitobito is an open source web application to manage organisation and communities with complex group hierarchies with members, events, courses, mailings, communication and a lot more.
+Hitobito is an open source web application to manage organisation and communities with complex group hierarchies with members, events, courses, mailings, communication and a lot more.
 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/hitobito/hitobito/graphs/commit-activity)
 [![Documentation Status](https://readthedocs.org/projects/hitobito/badge/?version=latest)](https://hitobito.readthedocs.io/?badge=latest)
@@ -13,7 +13,7 @@ hitobito is an open source web application to manage organisation and communitie
 
 ## User Guide
 
-A [user guide in German](https://hitobito.readthedocs.io/de/latest/) is available.
+A generic [user guide in German](https://hitobito.readthedocs.io/de/latest/) is available.
 
 ## Development
 
@@ -23,6 +23,8 @@ More detailed development documentation can be found in [doc/development](doc/de
 
 This is where you also find some [Deployment Instructions](doc/development/02_deployment.md).
 
+More information about [interfaces, api, oauth and oidc](doc/development/README.md#interfaces) is also avaible.
+
 ## Architecture
 
 The architecture documentation in German can be found in [doc/architecture](doc/architecture).
@@ -31,11 +33,11 @@ Two topics shall be mentioned here explicitly:
 
 ### Group Hierarchy
 
-hitobito provides a powerful meta-model to describe group structures.
+Hitobito provides a powerful meta-model to describe group structures.
 Groups are always of a specific type and are arranged in a tree.
 Each group type may have several different role types.
 
-This core part of hitobito does not provide any specific group or role types.
+This core part of Hitobito does not provide any specific group or role types.
 They have to be defined in a separate plugin, specific to your organization structure.
 
 An example group type definition might look like this:
@@ -77,10 +79,10 @@ structure.
 
 ### Plugin architecture
 
-hitobito is built on the plugin framework [Wagons](http://github.com/codez/wagons).
-With Wagons, arbitrary features and extensions may be created for hitobito.
-As mentioned above, as there are no group types coming from hitobito itself,
-at least one wagon is required to define group types in order to use hitobito.
+Hitobito is built on the plugin framework [Wagons](http://github.com/codez/wagons).
+With Wagons, arbitrary features and extensions may be created for Hitobito.
+As mentioned above, as there are no group types coming from Hitobito itself,
+at least one wagon is required to define group types in order to use Hitobito.
 
 See [Wagon Guidelines](doc/development/04_wagons.md) or [Wagons](http://github.com/codez/wagons)
 for more information on wagons and its available rake tasks.
@@ -88,15 +90,15 @@ for more information on wagons and its available rake tasks.
 ## Contributing
 
 You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
-Before opening any pull request or issue, please search for existing [issues](https://github.com/hitobito/hitobito/issues) (open and closed) and read the [contributing guidelines](CONTRIBUTING.md). If you are part of an organisation that uses hitobito, please discuss your intent with the responsible person of your organisation.
+Before opening any pull request or issue, please search for existing [issues](https://github.com/hitobito/hitobito/issues) (open and closed) and read the [contributing guidelines](CONTRIBUTING.md). If you are part of an organisation that uses Hitobito, please discuss your intent with the responsible person of your organisation.
 
 ## Community
-hitobito made with 💙 and the incredible community:
+Hitobito made with 💙 and the incredible community:
 
 * Jungwacht Blauring Schweiz
 * [Puzzle ITC GmbH](https://www.puzzle.ch)
 * Pfadibewegung Schweiz
-* hitobito AG
+* Hitobito AG
 * CEVI Regionalverband ZH-SH-GL / CEVI Schweiz
 * Dachverband Schweizer Jugendparlamente DSJ
 * Insieme Schweiz
@@ -104,18 +106,21 @@ hitobito made with 💙 and the incredible community:
 * CH Open
 * Digital Impact Network
 * Schweizer Blasmusikverband
-* GLP
+* Grünliberale Partei Schweiz
 * Die Mitte
 * Stiftung für junge Auslandschweizer
+* Swiss Canoe
+* Schweizerischer Sportverband öffentlicher Verkehr (SVSE) 
+* Schweizer Wanderwege
 
-Please contact [KunoKunz](https://github.com/KunoKunz) if you want to be part of our community.
+Please contact [Hitobito](https://hitobito.com) if you want to be part of our community.
 
 ## License
 
-hitobito is released under the [GNU Affero General Public License](LICENSE).
+Hitobito is released under the [GNU Affero General Public License](LICENSE).
 
-The hitobito logo is a registered trademark of hitobito LTD, Switzerland.
+The Hitobito logo is a registered trademark of Hitobito LTD, Switzerland.
 
 ---
 
-btw: hitobito 人人 [means](https://www.wordsense.eu/%E4%BA%BA%E4%BA%BA/) "everyone"
+btw: Hitobito 人人 [means](https://www.wordsense.eu/%E4%BA%BA%E4%BA%BA/) "everyone"

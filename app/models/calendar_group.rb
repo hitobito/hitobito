@@ -11,4 +11,8 @@ class CalendarGroup < ActiveRecord::Base
 
   scope :excluded, -> { where(excluded: true) }
   scope :included, -> { where(excluded: false) }
+
+  validates :event_type, allow_blank: true, inclusion: { in: ->(entry) do
+    entry.group.layer_group.event_types.map(&:to_s)
+  end }
 end

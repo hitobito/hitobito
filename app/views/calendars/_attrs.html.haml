@@ -9,4 +9,25 @@
 
     = render_extensions :attrs
 
-    -# TODO render included and excluded groups and tags
+    %h3
+      = t('.included_groups')
+
+    - entry.included_calendar_groups.each do |group|
+      %p
+        = format_calendar_group(group)
+
+    %h3
+      = t('.excluded_groups')
+
+    - entry.excluded_calendar_groups.each do |group|
+      %p
+        = format_calendar_group(group)
+
+    %h3
+      = t('.tags')
+
+    %p
+      = format_calendar_tags(entry, excluded: false)
+
+    %p
+      = format_calendar_tags(entry, excluded: true)

@@ -1737,6 +1737,14 @@ de:
     submit: Zusammenführen
     category: Kategorie
 
+  calendars:
+    actions_show:
+      copy_url: Kalender-Feed URL kopieren
+    form:
+      include_subgroups: Auch Untergruppen einschliessen
+      exclude_subgroups: Auch Untergruppen ausschliessen
+      all_event_types: Alle
+
   views:
     pagination:
       next: '>>'

@@ -154,6 +154,9 @@ de:
       assignment:
         one: Auftrag
         other: Aufträge
+      calendar:
+        one: Kalender
+        other: Kalender
       custom_content:
         one: Text
         other: Texte
@@ -1032,6 +1035,14 @@ de:
         taggings_count: Anzahl
         category: Kategorie
         name: Name
+
+      calendar:
+        name: Name
+        description: Beschreibung
+        included_calendar_groups: Aus den Gruppen
+        excluded_calendar_groups: Ausgeschlossene Gruppen
+        included_calendar_tags: Nur mit Tags
+        excluded_calendar_tags: Ausgeschlossene Tags
 
   doorkeeper:
     scopes:

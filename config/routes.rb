@@ -266,6 +266,10 @@ Hitobito::Application.routes.draw do
         resources :recipient_counts, controller: 'mailing_lists/recipient_counts', only: [:index]
       end
 
+      resources :calendars do
+        get 'feed' => 'calendars#feed'
+      end
+
       resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do
         member do
           post :define_mapping

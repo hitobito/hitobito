@@ -30,6 +30,7 @@ class DoorkeeperTokenAbility
     define_event_abilities if token.acceptable?(:events)
     define_person_abilities if token.acceptable?(:people)
     define_invoice_abilities if token.acceptable?(:invoices)
+    define_mailing_list_abilities if token.acceptable?(:mailing_lists)
   end
 
   def define_all_abilities
@@ -37,6 +38,7 @@ class DoorkeeperTokenAbility
     define_event_abilities
     define_person_abilities
     define_invoice_abilities
+    define_mailing_list_abilities
   end
 
   def define_group_abilities
@@ -45,8 +47,8 @@ class DoorkeeperTokenAbility
     end
 
     can :index, Group do |g|
-        user_ability.can?(:index, g)
-      end
+      user_ability.can?(:index, g)
+    end
   end
 
   def define_event_abilities
@@ -88,6 +90,28 @@ class DoorkeeperTokenAbility
 
     can :index_invoices, Group do |g|
       user_ability.can?(:index_invoices, g)
+    end
+  end
+
+  def define_mailing_list_abilities
+    can :show, MailingList do |m|
+      user_ability.can?(:show, m)
+    end
+
+    can :index_subscriptions, MailingList do |m|
+      user_ability.can?(:index_subscriptions, m)
+    end
+
+    can :index_mailing_lists, Group do |g|
+      user_ability.can?(:index_mailing_lists, g)
+    end
+
+    # the index action shows a mailing list if it's either subscribable
+    # or the user has write permissions on the parent group, therefoe we also
+    # need to map the :update ability from the user corresponding to the
+    # oauth token in order to support that logic
+    can :update, Group do |g|
+      user_ability.can?(:update, g)
     end
   end
 

@@ -1039,11 +1039,12 @@ de:
       name: Lesen deiner E-Mail Adresse und Name
       with_roles: Lesen deiner Stammdaten und Rollen
       openid: Lesen deines OIDC Identity Tokens
-      api: Lesen aller Personen, Gruppen, Events und Rechnungen auf die du Zugriff hast, via die JSON-Schnittstellen
+      api: Lesen aller Personen, Gruppen, Events, Abos und Rechnungen auf die du Zugriff hast, via die JSON-Schnittstellen
       events: Lesen aller Events, auf die du Zugriff hast
       groups: Lesen aller Gruppen, auf die du Zugriff hast
       people: Lesen aller Personen, auf die du Zugriff hast
       invoices: Lesen aller Rechnungen, auf die du Zugriff hast
+      mailing_lists: Lesen aller Abos, auf die du Zugriff hast
   errors:
     messages:
       attachments_not_allowed: "darf keine Anhänge enthalten"

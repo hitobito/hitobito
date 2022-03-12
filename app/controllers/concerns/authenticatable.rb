@@ -67,6 +67,8 @@ module Authenticatable
     acceptable = token.acceptable?(:people) ||
       token.acceptable?(:groups) ||
       token.acceptable?(:events) ||
+      token.acceptable?(:invoices) ||
+      token.acceptable?(:mailing_lists) ||
       token.acceptable?(:api)
     return head(:forbidden) unless acceptable
     sign_in token, store: false

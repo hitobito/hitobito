@@ -1051,12 +1051,9 @@ describe PeopleController do
     context 'layer' do
       render_views
       let(:group) { groups(:bottom_layer_one) }
-
-      before do
-        let!(:bl_leader) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
-        let!(:bg_leader) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person }
-        let!(:bg_member) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person }
-      end
+      let!(:bl_leader) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
+      let!(:bg_leader) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person }
+      let!(:bg_member) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person }
 
       it 'loads visible people in layer' do
         get :index, params: { group_id: group.id, range: 'layer' }, format: :json
@@ -1064,8 +1061,8 @@ describe PeopleController do
 
         expect(json[:people].collect{|person| person[:id]}).to match_array(
           [ people(:bottom_member),
-          @bl_leader,
-          @bg_leader,
+          bl_leader,
+          bg_leader,
           ].collect{|person| person.id.to_s}
         )
       end

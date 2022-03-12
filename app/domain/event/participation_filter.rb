@@ -18,8 +18,9 @@ class Event::ParticipationFilter
 
   attr_reader :params, :counts
 
-  def initialize(event_id, params = {})
+  def initialize(event_id, user_id, params = {})
     @event_id = event_id
+    @user_id = user_id
     @params = params
   end
 
@@ -35,6 +36,10 @@ class Event::ParticipationFilter
 
   def event
     Event.find_by(id: @event_id)
+  end
+
+  def user
+    Person.find_by(id: @user_id)
   end
 
   private

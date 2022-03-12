@@ -457,18 +457,6 @@ li.form {
   }
 }
 
-@media screen and (max-width: 768px) {
-.input-append-fix{
-  .input-append{
-    white-space: normal;
-    width:calc(100vw - 230px);
-    input{
-      width:60%;
-    }
-  }
-}
-}
-
 
 input.switcher {
   max-height: 0;

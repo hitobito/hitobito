@@ -20,7 +20,8 @@ class InvoicesController < CrudController
                          sequence_number: Invoice.order_by_sequence_number_statement }
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]
 
-  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.first_name', 'people.email']
+  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.first_name',
+                         'people.email']
   self.permitted_attrs = [:title, :description, :state, :due_at,
                           :recipient_id, :recipient_email, :recipient_address,
                           :payment_information, :payment_purpose,

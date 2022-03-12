@@ -8,9 +8,10 @@
     = f.labeled_input_fields(:name, :description, :publisher)
 
     = f.labeled(:mail_name) do
-      .input-append
-        = f.input_field(:mail_name, class: 'span3')
-        %span.add-on= "@#{entry.mail_domain}"
+      .input-append-fix
+        .input-append
+          = f.input_field(:mail_name, class: 'span3')
+          %span.add-on= "@#{entry.mail_domain}"
 
     = f.labeled_input_field(:additional_sender, help: t('.help_additional_sender'), placeholder: "hans.muster@pfadi-beispiel.ch; *@pfadi-muster.ch")
 

@@ -30,6 +30,12 @@ class CalendarsController < CrudController
     # TODO check token, find events, output them in ics format
   end
 
+  def new(&block)
+    assign_attributes if model_params
+    entry.included_calendar_groups.build(group: group) if entry.included_calendar_groups.blank?
+    respond_with(entry, &block)
+  end
+
   private
 
   alias group parent

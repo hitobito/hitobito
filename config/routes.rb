@@ -224,6 +224,10 @@ Hitobito::Application.routes.draw do
 
           get 'qualifications' => 'qualifications#index'
           put 'qualifications' => 'qualifications#update'
+
+          post 'tags' => 'tags#create'
+          delete 'tags' => 'tags#destroy'
+          get 'tags/query' => 'tags#query'
         end
 
       end

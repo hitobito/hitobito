@@ -499,6 +499,7 @@ de:
     tabs:
       participants: 'Teilnehmende'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    add_tag: Tag hinzufügen
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'

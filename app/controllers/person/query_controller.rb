@@ -28,7 +28,9 @@ class Person::QueryController < ApplicationController
     
     json = if include_groups?
       people.collect do |p|
-        group = p.groups.find { |g| search_param_split.any? { |s| g.name.downcase.include? s.downcase } }
+        group = p.groups.find do |g|
+          search_param_split.any? { |s| g.name.downcase.include? s.downcase }
+        end
 
         p.public_send(serializer, group: group)
       end
@@ -55,7 +57,7 @@ class Person::QueryController < ApplicationController
 
   include Searchable
 
-  # override default search_columns to dynamically update them based on current request
+  # dynamically update search_columns based on current request
   def search_columns
     columns = [:first_name, :last_name, :company_name, :nickname, :town]
     if include_groups?

@@ -8,7 +8,7 @@
 class Person::QueryController < ApplicationController
 
   class_attribute :serializer
-  self.serializer = :as_typeahead
+  self.serializer = :as_typeahead # method to call on person when serializing
 
   before_action :authorize_action
 
@@ -18,11 +18,25 @@ class Person::QueryController < ApplicationController
   def index
     people = []
     if search_param.size >= 3
-      people = list_entries.limit(10)
+      people = if include_groups?
+        list_entries.joins(:groups).limit(10)
+      else
+        list_entries.limit(10)
+      end
       people = decorate(people)
     end
+    
+    json = if include_groups?
+      people.collect do |p|
+        group = p.groups.find { |g| search_param_split.any? { |s| g.name.downcase.include? s.downcase } }
 
-    render json: people.collect { |p| p.public_send(serializer) }
+        p.public_send(serializer, group: group)
+      end
+    else
+      people.collect { |p| p.public_send(serializer) }
+    end
+    
+    render json: json
   end
 
   private
@@ -41,7 +55,24 @@ class Person::QueryController < ApplicationController
 
   include Searchable
 
-  self.search_columns = [:first_name, :last_name, :company_name, :nickname, :town]
+  # override default search_columns to dynamically update them based on current request
+  def search_columns
+    columns = [:first_name, :last_name, :company_name, :nickname, :town]
+    if include_groups?
+      columns << :'groups.name'
+    end
+    
+    columns
+  end
+
+  def include_groups?
+    # prevent people from just searching for a group, two terms required
+    search_param_split.size >= 2
+  end
+    
+  def search_param_split
+    @search_param_split ||= search_param.split(/\s+/)
+  end
 
   class << self
 

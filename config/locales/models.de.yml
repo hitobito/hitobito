@@ -606,6 +606,7 @@ de:
         person: Person
         type: Rolle
         participation: Person
+        remove_participant_role: Allfällige Teilnehmer*Innen-Rolle entfernen
 
       family_member:
         kind: Verwandschaftsverhältnis

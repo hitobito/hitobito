@@ -989,9 +989,9 @@ describe PeopleController do
       let(:group) { groups(:bottom_layer_one) }
 
       before do
-        @bl_leader = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
-        @bg_leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person
-        @bg_member = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
+        let!(:bl_leader) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
+        let!(:bg_leader) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person }
+        let!(:bg_member) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person }
       end
 
       it 'loads visible people in layer' do

@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 #main.row
-  %article.col-lg
+  %article.col-xl
     = render 'contact_data', person: entry, only_public: cannot?(:show_details, entry)
     - if can?(:show_details, entry)
       %h2= t('.additional_data')
@@ -32,7 +32,7 @@
       = render 'notes/section', create_path: group_person_notes_path(@group, entry)
 
   - if can?(:show_full, entry)
-    %aside.col-lg-5.offset-lg-1
+    %aside.col-xl-5.offset-xl-1
       = render 'tags'
       = render 'roles'
       = render 'add_requests'

@@ -109,6 +109,20 @@ describe Event::RolesController do
         expect(participation.answers.size).to eq(2)
         is_expected.to redirect_to(group_event_participations_path(group, course))
       end
+      
+      it 'creates role and if participant removes participant' do
+        participation = Fabricate(:event_participation, event: course, person: user)
+        participant_role = Fabricate(Event::Role::Participant.name, participation: participation)
+        expect do
+          post :create, params: { group_id: group.id, event_id: course.id, event_role: { type: Event::Role::Leader.sti_name, person_id: user.id }, remove_participant_role: 1 }
+        end.to change { Event::Role.count }.by(0)
+
+        expect(participation.roles.count).to eq(1)
+        expect(participation.roles).to_not include(participant_role)
+        participation.roles.each do |role|
+          expect(role.class).to_not be_participant
+        end
+      end
 
       it 'creates role if person add request' do
         groups(:bottom_layer_two).update_column(:require_person_add_requests, true)

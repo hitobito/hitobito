@@ -72,6 +72,12 @@ describe InvoicesController do
       get :index, params: { group_id: group.id, q: people(:top_leader).last_name }
       expect(assigns(:invoices)).to have(2).item
     end
+    
+    it 'GET#index finds invoices by recipient.first_name' do
+      update_issued_at_to_current_year
+      get :index, params: { group_id: group.id, q: people(:top_leader).first_name }
+      expect(assigns(:invoices)).to have(2).item
+    end
 
     it 'GET#index finds nothing for dummy' do
       get :index, params: { group_id: group.id, q: 'dummy' }

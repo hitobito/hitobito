@@ -1,3 +1,8 @@
+PATH
+  remote: ../hitobito_generic
+  specs:
+    hitobito_generic (1.27.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -649,6 +654,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_generic!
   http_accept_language
   icalendar
   image_processing (~> 1.2)

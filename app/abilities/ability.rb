@@ -14,6 +14,7 @@ class Ability
   @@store = AbilityDsl::Store.new
 
   store.register AssignmentAbility,
+                 CalendarAbility,
                  EventAbility,
                  Event::ApplicationAbility,
                  Event::InvitationAbility,

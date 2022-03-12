@@ -7,6 +7,6 @@
 
 module Sheet
   class Calendar < Base
-    self.parent_sheet = Sheet::Group
+    self.parent_sheet = Sheet::GroupSetting
   end
 end

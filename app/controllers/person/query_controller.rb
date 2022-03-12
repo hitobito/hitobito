@@ -25,20 +25,8 @@ class Person::QueryController < ApplicationController
       end
       people = decorate(people)
     end
-    
-    json = if include_groups?
-      people.collect do |p|
-        group = p.groups.find do |g|
-          search_param_split.any? { |s| g.name.downcase.include? s.downcase }
-        end
-
-        p.public_send(serializer, group: group)
-      end
-    else
-      people.collect { |p| p.public_send(serializer) }
-    end
-    
-    render json: json
+        
+    render json: serialize_people(people)
   end
 
   private
@@ -53,6 +41,21 @@ class Person::QueryController < ApplicationController
 
   def authorize_action
     authorize!(:query, Person)
+  end
+  
+  # serialize people and include matched group if present
+  def serialize_people(people)
+    if include_groups?
+      people.collect do |p|
+        group = p.groups.find do |g|
+          search_param_split.any? { |s| g.name.downcase.include? s.downcase }
+        end
+
+        p.public_send(serializer, group: group)
+      end
+    else
+      people.collect { |p| p.public_send(serializer) }
+    end
   end
 
   include Searchable

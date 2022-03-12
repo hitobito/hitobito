@@ -34,7 +34,7 @@ module Oauth
     # no need to check expires_in as refresh_token would never expire
     scope :active, -> { where(revoked_at: nil) }
 
-    devise :timeoutable
+    devise
 
     def to_s
       token

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -26,7 +26,7 @@ describe Export::Tabular::People::PeopleFull do
 
   its(:attributes) do should eq [:first_name, :last_name, :company_name, :nickname, :company,
                                  :email, :address, :zip_code, :town, :country, :gender, :birthday,
-                                 :additional_information, :layer_group, :roles, :tags] end
+                                 :additional_information, :language, :layer_group, :roles, :tags] end
 
   context '#attribute_labels' do
     subject { people_list.attribute_labels }

@@ -92,7 +92,7 @@ An example response could be (formatted here for readability):
 
 ### Accessing the JSON-API
 
-All endpoints except for the root group endpoint (`/groups`) from the [JSON API](05_rest_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. There are two possibilities to use the API:
+All endpoints from the [JSON API](05_rest_api.md) can be used with a personal OAuth access token, if the token has the `api` scope. There are two possibilities to use the API:
 
 * **Query parameter**: Send `access_token` as query parameter in the URL, and append `.json` to the URL path
 ```bash

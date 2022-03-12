@@ -35,18 +35,20 @@ The documentation for personal API tokens has been removed from here, because th
 
 Currently the following endpoints are provided:
 
-| Method | Path                                            | Function                                                                        |
-| ---    | ---                                             | ---                                                                             |
-| GET    | /groups/:id                                     | Group details                                                                   |
-| GET    | /groups/:id/people                              | People of a certain group                                                       |
-| GET    | /groups/:group_id/people/:id                    | Person details                                                                  |
-| GET    | /groups/:group_id/events                        | Events of a certain group                                                       |
-| GET    | /groups/:group_id/events/:id                    | Event details                                                                   |
-| GET    | /groups/:group_id/events/:id/participations     | Participations of certain event                                                 |
-| GET    | /groups/:group_id/events/:id/participations/:id | Participation details                                                           |
-| GET    | /groups/:group_id/events/course                 | Courses of a certain group                                                      |
-| GET    | /groups/:group_id/invoices                      | Invoices of a certain group                                                     |
-| GET    | /groups/:group_id/invoices/:id                  | Invoice details                                                                 |
+| Method | Path                                              | Function                                                                        |
+| ---    | ---                                               | ---                                                                             |
+| GET    | /groups/:id                                       | Group details                                                                   |
+| GET    | /groups/:id/people                                | People of a certain group                                                       |
+| GET    | /groups/:group_id/people/:id                      | Person details                                                                  |
+| GET    | /groups/:group_id/events                          | Events of a certain group                                                       |
+| GET    | /groups/:group_id/events/:id                      | Event details                                                                   |
+| GET    | /groups/:group_id/events/:id/participations       | Participations of certain event                                                 |
+| GET    | /groups/:group_id/events/:id/participations/:id   | Participation details                                                           |
+| GET    | /groups/:group_id/events/course                   | Courses of a certain group                                                      |
+| GET    | /groups/:group_id/invoices                        | Invoices of a certain group                                                     |
+| GET    | /groups/:group_id/invoices/:id                    | Invoice details                                                                 |
+| GET    | /groups/:group_id/mailing_lists/:id               | Mailing list details and subscribers (actual people subscribed to the list)     |
+| GET    | /groups/:group_id/mailing_lists/:id/subscriptions | Details on the groups / roles, events and single people which are subscribed    |
 
 
 
@@ -64,7 +66,7 @@ The events and the course endpoints have some query parameters, as explained bel
 An example query with its response (formatted here for readability) can be seen below.
 
 ```bash
-curl "https://demo.hitobito.com/groups/1/events.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+curl "https://demo.hitobito.com/groups/1/events.json?token=yhFrXcydFwisXYLEUFyV&filter=layer"
 ```
 
 ```json
@@ -237,7 +239,7 @@ The participations associated with a single evnt
 An example query with its response (formatted here for readability) can be seen below.
 
 ```bash
-curl "https://demo.hitobito.com/groups/1/events/1/participations.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+curl "https://demo.hitobito.com/groups/1/events/1/participations.json?token=yhFrXcydFwisXYLEUFyV&filter=layer"
 ```
 
 ```json
@@ -388,7 +390,7 @@ The invoices have query parameters similar to ui, the list endpoint is paged.
 An example query with its response (formatted here for readability) can be seen below.
 
 ```bash
-curl "https://demo.hitobito.com/groups/1/invoices.json?user_email=mitglied@hitobito.ch&user_token=yhFrXcydFwisXYLEUFyV&filter=layer"
+curl "https://demo.hitobito.com/groups/1/invoices.json?token=yhFrXcydFwisXYLEUFyV&filter=layer"
 ```
 
 ```json

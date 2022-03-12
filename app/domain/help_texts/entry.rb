@@ -27,7 +27,7 @@ class HelpTexts::Entry
 
   def grouped
     %w(action field).collect do |kind|
-      label = HelpText.human_attribute_name("#{kind}", count: 2)
+      label = HelpText.human_attribute_name(kind.to_s, count: 2)
       list  = labeled_list(kind)
       next if list.empty?
 
@@ -40,7 +40,7 @@ class HelpTexts::Entry
   end
 
   def translate(kind, name)
-    format('%s "%s"', HelpText.human_attribute_name("#{kind}"), send("translate_#{kind}", name))
+    format('%s "%s"', HelpText.human_attribute_name(kind.to_s), send("translate_#{kind}", name))
   end
 
   def fields

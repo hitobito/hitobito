@@ -70,9 +70,7 @@ class HelpTexts::Renderer
   end
 
   def derive_entry
-    if params[:type]
-      params[:type].constantize.new
-    elsif action_name == 'index'
+    if action_name == 'index'
       model_class.new
     else
       entry = template.controller.send(:entry)

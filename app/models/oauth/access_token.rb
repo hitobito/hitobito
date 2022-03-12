@@ -27,7 +27,7 @@
 
 module Oauth
   class AccessToken < Doorkeeper::AccessToken
-    belongs_to :person, foreign_key: :resource_owner_id
+    belongs_to :person, foreign_key: :resource_owner_id, inverse_of: :access_tokens
     belongs_to :application, class_name: 'Oauth::Application'
 
     scope :list, -> { order(created_at: :desc) }

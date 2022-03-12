@@ -11,6 +11,10 @@ hitobito is an open source web application to manage organisation and communitie
 [![Open Source Helpers](https://www.codetriage.com/hitobito/hitobito/badges/users.svg)](https://www.codetriage.com/hitobito/hitobito)
 [![Rails Lint and Test](https://github.com/hitobito/hitobito/actions/workflows/tests.yml/badge.svg)](https://github.com/hitobito/hitobito/actions/workflows/tests.yml)
 
+## User Guide
+
+A [user guide in German](https://hitobito.readthedocs.io/de/latest/) is available.
+
 ## Development
 
 Check out our [development kit](https://github.com/hitobito/development/)

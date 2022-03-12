@@ -102,6 +102,12 @@ assignment_assignee_notification_body:
   name: body
   body: 'Sie haben einen neuen Druckauftrag: {assignment-title} erhalten. Login Sie sich bitte ein, um diesen einzusehen.'
 
+self_registration_notification_body:
+  record: self_registration_notification (CustomContent::Translation)
+  name: body
+  body: 'Die Person {person-name} hat sich auf der Gruppe {group-name} per Selbstregistrierung angemeldet:<br/><br/>{person-url}'
+
+
 people_action_index_de_body:
   record: people_action_index_de (HelpText::Translation)
   name: body

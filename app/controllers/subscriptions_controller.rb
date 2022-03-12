@@ -29,6 +29,7 @@ class SubscriptionsController < CrudController
       format.xlsx  { render_tabular_in_background(:xlsx) }
       format.vcf   { render_vcf(ordered_people.includes(:phone_numbers, :additional_emails)) }
       format.email { render_emails(ordered_people.includes(:additional_emails)) }
+      format.json  { render_entry_json }
     end
   end
 
@@ -86,8 +87,14 @@ class SubscriptionsController < CrudController
              "ON #{klass.quoted_table_name}.id = subscriptions.subscriber_id")
   end
 
+  def render_entry_json
+    render json: ListSerializer.new(mailing_list.subscriptions,
+                                    serializer: MailingListSubscriptionsSerializer,
+                                    controller: self)
+  end
+
   def authorize_class
-    if html_request?
+    if html_request? || request.format.json?
       authorize!(:index_subscriptions, mailing_list)
     else
       authorize!(:export_subscriptions, mailing_list)

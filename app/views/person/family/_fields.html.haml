@@ -1,0 +1,13 @@
+-#  Copyright (c) 2021, Katholische Landjugendbewegung Paderborn. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- if f.object.new_record?
+  = f.person_field(:other, class: 'span4')
+  = f.collection_select(:kind, FamilyMember.kind_labels, :first, :second, {}, class: 'span2')
+- else
+  .span4
+    = f.object.other&.full_name
+    %i
+      = f.object.kind_label

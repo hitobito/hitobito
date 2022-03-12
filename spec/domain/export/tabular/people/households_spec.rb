@@ -31,13 +31,25 @@ describe Export::Tabular::People::Households do
   end
 
   it 'accepts non household people' do
-    data = households([leader]).data_rows.to_a
+    data = households(Person.where(id: leader)).data_rows.to_a
+    expect(data).to have(1).item
+    expect(data[0]).to eq [nil, 'Top Leader', nil, nil, 'Supertown', nil, 'Top']
+  end
+
+  it 'accepts a list of non household people' do
+    data = households(Person.where(id: leader).to_a).data_rows.to_a
     expect(data).to have(1).item
     expect(data[0]).to eq [nil, 'Top Leader', nil, nil, 'Supertown', nil, 'Top']
   end
 
   it 'accepts single person array' do
-    data = households([people(:top_leader)]).data_rows.to_a
+    data = households(Person.where(id: people(:top_leader))).data_rows.to_a
+    expect(data).to have(1).item
+    expect(data[0]).to eq [nil, 'Top Leader', nil, nil, 'Supertown', nil, 'Top']
+  end
+
+  it 'accepts a list of a single person' do
+    data = households(Person.where(id: people(:top_leader)).to_a).data_rows.to_a
     expect(data).to have(1).item
     expect(data[0]).to eq [nil, 'Top Leader', nil, nil, 'Supertown', nil, 'Top']
   end
@@ -46,7 +58,7 @@ describe Export::Tabular::People::Households do
     leader.update(household_key: 1)
     member.update(household_key: 1)
 
-    data = households([member, leader]).data_rows.to_a
+    data = households(Person.where(id: [member, leader])).data_rows.to_a
     expect(data).to have(1).item
     expect(data[0].shift(2)).to eq [nil, 'Bottom Member, Top Leader']
     expect(data[0]).to eq ['Greatstreet 345', '3456', 'Greattown', 'Schweiz', 'Bottom One']

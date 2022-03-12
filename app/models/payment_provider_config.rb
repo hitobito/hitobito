@@ -24,8 +24,10 @@
 
 class PaymentProviderConfig < ActiveRecord::Base
   include Encryptable
+  include I18nEnums
 
   enum status: [:draft, :pending, :registered]
+  i18n_enum :payment_provider, Settings.payment_providers.map(&:name)
 
   belongs_to :invoice_config
 
@@ -35,6 +37,10 @@ class PaymentProviderConfig < ActiveRecord::Base
   scope :initialized, -> { where(status: [:pending, :registered]) }
 
   attr_encrypted :keys, :password
+
+  def empty?
+    partner_identifier.blank? && user_identifier.blank?
+  end
 
   def with_payment_provider(provider)
     self.payment_provider = provider

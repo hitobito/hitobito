@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -32,7 +32,7 @@ Hitobito::Application.routes.draw do
     end
 
     %w(404 500 503).each do |code|
-      get code, to: 'errors#show', code: code
+      get code, to: "errors#show#{code}"
     end
 
 
@@ -58,9 +58,17 @@ Hitobito::Application.routes.draw do
         get 'move' => 'group/move#select'
         post 'move' => 'group/move#perform'
 
+        post 'archive' => 'group/archive#create'
       end
 
+      get 'self_registration' => 'groups/self_registration#new'
+      post 'self_registration' => 'groups/self_registration#create'
+
       resources :settings, only: [:index, :edit, :update], controller: 'group_settings', as: 'group_settings'
+
+      FeatureGate.if('groups.statistics') do
+        resource :statistics, only: [:show], module: :group
+      end
 
       resources :invoices do
         resources :payments, only: :create
@@ -87,6 +95,9 @@ Hitobito::Application.routes.draw do
         member do
           post :send_password_instructions
           put :primary_group
+
+          post 'totp_reset' => 'people/totp_reset#create', as: 'totp_reset'
+          post 'totp_disable' => 'people/totp_disable#create', as: 'totp_disable'
 
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
@@ -181,6 +192,12 @@ Hitobito::Application.routes.draw do
             end
           end
 
+          resources :invitations, only: [:index, :new, :create, :edit, :destroy] do
+            member do
+              post 'decline' => 'invitations/decline#create'
+            end
+          end
+
           resources :applications, only: [] do
             member do
               put    :approve
@@ -242,6 +259,7 @@ Hitobito::Application.routes.draw do
         end
 
         resources :mailchimp_synchronizations, only: [:create]
+        resources :recipient_counts, controller: 'mailing_lists/recipient_counts', only: [:index]
       end
 
       resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do
@@ -295,12 +313,19 @@ Hitobito::Application.routes.draw do
     resources :help_texts, except: [:show]
 
     devise_for :service_tokens, only: [:sessions]
-    devise_for :people, skip: [:registrations], path: "users"
+    devise_for :people, skip: [:registrations], path: "users", controllers: {
+        passwords: 'devise/hitobito/passwords',
+        registrations: 'devise/hitobito/registrations',
+        sessions: 'devise/hitobito/sessions'
+    }
     devise_for :oauth_tokens, skip: :all, class_name: 'Oauth::AccessToken'
     as :person do
-      get 'users/edit' => 'devise/registrations#edit', :as => 'edit_person_registration'
-      put 'users' => 'devise/registrations#update', :as => 'person_registration'
-      get 'users' => 'devise/registrations#edit' # route required for language switch
+      get 'users/edit' => 'devise/hitobito/registrations#edit', :as => 'edit_person_registration'
+      put 'users' => 'devise/hitobito/registrations#update', :as => 'person_registration'
+      get 'users' => 'devise/hitobito/registrations#edit' # route required for language switch
+
+      get 'users/second_factor' => 'second_factor_authentication#new', as: 'new_users_second_factor'
+      post 'users/second_factor' => 'second_factor_authentication#create', as: 'users_second_factor'
 
       post 'users/token' => 'devise/tokens#create'
       delete 'users/token' => 'devise/tokens#destroy'

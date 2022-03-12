@@ -1,0 +1,11 @@
+-#  Copyright (c) 2021, CEVI ZH SH GL. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= crud_table do |t|
+  - t.sortable_attr(:person)
+  - t.col(Event::Invitation.human_attribute_name(:participation_type)) do |invitation|
+    %strong
+      = invitation.participation_type.constantize.model_name.human
+  - t.sortable_attrs :status, :declined_at, :created_at

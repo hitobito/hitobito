@@ -11,9 +11,33 @@ class Person::Address
   end
 
   def for_letter
-    [@person.full_name.to_s.squish,
-     @person.address.to_s.squish,
+    ([@person.full_name.to_s.squish] + address).compact.join("\n")
+  end
+
+  def for_household_letter(members)
+    [combine_household_names(members), address].compact.join("\n")
+  end
+
+  private
+
+  def combine_household_names(members)
+    members.map(&:full_name).compact.join(', ')
+  end
+
+  def address
+    [@person.address.to_s.strip,
      [@person.zip_code, @person.town].compact.join(' ').squish,
-     @person.country.to_s.squish].compact.join("\n")
+     country]
+  end
+
+  def country
+    country = @person.country.to_s.squish
+    return if country.eql?(default_country)
+
+    country
+  end
+
+  def default_country
+    Settings.countries.prioritized.first
   end
 end

@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -8,10 +8,11 @@
 -#         Make sure not to use relative partial paths here or in any extensions
 -#         unless these partials also exist in all folders referencing this file here.
 
-- without_relations ||= false
+- has_relations ||= PeopleRelation.any?
 
 = field_set_tag do
-  = f.labeled_input_fields :first_name, :last_name, :nickname
+  = f.labeled_input_fields :first_name, :last_name
+  = f.labeled_input_field(:nickname) if Person::PUBLIC_ATTRS.include?(:nickname)
   = f.labeled_string_field(:company_name,
                            placeholder: I18n.t('global.search.placeholder_company_name'),
                            data: { provide: 'entity',
@@ -31,10 +32,18 @@
                            value: f.date_value(:birthday),
                            help_inline: t('.format_birthday'),
                            class: 'span2')
+  - FeatureGate.if(:person_language) do
+    = f.labeled_collection_select(:language,
+                                  Person::LANGUAGES,
+                                  :first,
+                                  :last,
+                                  { prompt: true },
+                                  class: 'span6')
+
 
 = render_extensions :fields, locals: { f: f }
 
-- if !without_relations && PeopleRelation.possible_kinds.present?
+- if has_relations && PeopleRelation.possible_kinds.present?
   = field_set_tag do
     = f.labeled_inline_fields_for :relations_to_tails,
                                   'people_relation_fields',

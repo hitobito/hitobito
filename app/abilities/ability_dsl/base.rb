@@ -115,6 +115,7 @@ module AbilityDsl
 
     # Check whether the permission for which the check is made is defined in the given group_id.
     def permission_in_group?(group_id)
+      # contains_any?(user_group_ids, [group_id])
       user_group_ids.include?(group_id)
     end
 

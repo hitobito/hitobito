@@ -57,6 +57,31 @@ describe EventsController do
 
         expect(event.group_ids).to match_array([group.id, group2.id])
       end
+
+      it 'validates permission to read contact person' do
+        invisible_person = Fabricate(:person)
+        person = people(:bottom_member)
+        group = groups(:bottom_layer_one)
+        Fabricate(:role, type: 'Group::BottomLayer::Leader', person: person, group: group)
+        sign_in(person)
+
+        post :create, params: {
+            event: {  group_ids: [group.id],
+                      name: 'foo',
+                      kind_id: event_kinds(:slk).id,
+                      dates_attributes: [date],
+                      application_questions_attributes: [question],
+                      contact_id: invisible_person.id,
+                      type: 'Event' },
+            group_id: group.id
+        }
+
+        Auth.current_person = person
+        event = assigns(:event)
+        expect(event).not_to be_valid
+        expect(event.errors.messages[:contact]).to include('Zugriff verweigert')
+        Auth.current_person = nil
+      end
     end
   end
 
@@ -77,20 +102,19 @@ describe EventsController do
       end
 
       it 'does page correctly even if event have multiple dates' do
-        expect(Kaminari.config).to receive(:default_per_page).and_return(2).at_least(:once)
         events(:top_event).dates.create!(start_at: '2012-3-02')
         get :index, params: { group_id: group.id, year: 2012, filter: 'all' }
-        expect(assigns(:events)).to have(2).entries
+        expect(assigns(:events)).to have(3).entries
       end
 
-      it 'does show the last filled page if page-number is too high' do
+      it 'does show the first filled page if page-number is too high' do
         expect(Kaminari.config).to receive(:default_per_page).and_return(2).at_least(:once)
 
         # there are 3 events, with the paging-limit of 2, the pages 1 and 2 are
         # filled, page 42 is not
 
         get :index, params: { group_id: group.id, year: 2012, filter: 'all', page: 42 }
-        expect(assigns(:events)).to have(1).entries
+        expect(assigns(:events)).to have(2).entries
       end
 
       it 'lists events of descendant groups by default' do
@@ -278,7 +302,7 @@ describe EventsController do
         expect(event.group_ids).to match_array([group.id, group2.id])
       end
 
-      it "does not create event course if the user hasn't permission" do
+      it 'does not create event course if the user does not have permission' do
         user = Fabricate(Group::BottomGroup::Leader.name.to_s, group: groups(:bottom_group_one_one))
         sign_in(user.person)
 
@@ -374,6 +398,27 @@ describe EventsController do
         third = questions.third
         expect(third.question).to eq 'Whoo?'
         expect(third.admin).to eq false
+      end
+
+      it 'validates permission to read contact person' do
+        invisible_person = Fabricate(:person)
+        person = people(:bottom_member)
+        group = groups(:bottom_layer_one)
+        Fabricate(:role, type: 'Group::BottomLayer::Leader', person: person, group: group)
+        event.update!(groups: [group])
+        sign_in(person)
+
+        put :update, params: {
+            group_id: group.id,
+            id: event.id,
+            event: { name: 'testevent', contact_id: invisible_person.id }
+        }
+
+        Auth.current_person = person
+        event = assigns(:event)
+        expect(event).not_to be_valid
+        expect(event.errors.messages[:contact]).to include('Zugriff verweigert')
+        Auth.current_person = nil
       end
     end
 
@@ -599,7 +644,7 @@ describe EventsController do
 
       it 'in 2012, but without permission' do
         sign_in(people(:bottom_member))
-        events(:top_event).update_column(:globally_visible, false) # rubocop:disable Rails/SkipsModelValidations
+        events(:top_event).update_column(:globally_visible, false)
 
         get :index, params: { group_id: top_layer.id, year: 2012 }
         expect(assigns(:events)).to have(0).entries

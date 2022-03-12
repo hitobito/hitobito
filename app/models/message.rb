@@ -9,21 +9,27 @@
 #
 # Table name: messages
 
-#  id              :bigint           not null, primary key
-#  failed_count    :integer          default(0)
-#  recipient_count :integer          default(0)
-#  invoice_attributes :text(16777215)
-#  sent_at         :datetime
-#  state           :string(255)      default("draft")
-#  subject         :string(1024)
-#  success_count   :integer          default(0)
-#  type            :string(255)      not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  mailing_list_id :bigint
-#  sender_id       :bigint
-#  invoice_list_id :bigint
-#  heading         :boolean          default("false")
+#  id                    :bigint           not null, primary key
+#  failed_count          :integer          default(0)
+#  invoice_attributes    :text(65535)
+#  recipient_count       :integer          default(0)
+#  salutation            :string(255)
+#  sent_at               :datetime
+#  state                 :string(255)      default("draft")
+#  subject               :string(256)
+#  success_count         :integer          default(0)
+#  text                  :text(65535)
+#  type                  :string(255)      not null
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  invoice_list_id       :bigint
+#  mailing_list_id       :bigint
+#  sender_id             :bigint
+#  pp_post               :string
+#  shipping_method       :string           default("own")
+#  send_to_households    :boolean          default(FALSE)
+#  donation_confirmation :boolean          default(FALSE)
+#  date_location_text    :string
 #
 # Indexes
 #
@@ -82,8 +88,11 @@ class Message < ActiveRecord::Base
   end
 
   def dispatch!
+    recipients = MailingList::RecipientCounter.new(mailing_list,
+                                                   self.class.name,
+                                                   send_to_households?)
     update!(
-      recipient_count: mailing_list.people.size,
+      recipient_count: recipients.valid,
       state: :pending
     )
     Messages::DispatchJob.new(self).enqueue!
@@ -121,16 +130,8 @@ class Message < ActiveRecord::Base
     "Export::Pdf::Messages::#{type.demodulize}".constantize
   end
 
-  def total_recipient_count
-    @total_recipient_count ||= mailing_list.people_count
-  end
-
-  def valid_recipient_count
-    raise 'implement in subclass'
-  end
-
-  def invalid_recipient_count
-    total_recipient_count - valid_recipient_count
+  def recipient_progress
+    [success_count, recipient_count].join(' / ')
   end
 
 end

@@ -17,6 +17,7 @@ base: &generic
     - Event
     - Group
     - Person
+    - Address
 
 development:
   <<: *generic

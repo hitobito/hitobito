@@ -11,5 +11,5 @@ app.Invoices = {
     $.ajax(url: "#{form.data('group')}/invoice_list/new?#{form.serialize()}", dataType: 'script')
 }
 
-$(document).on('input', '#invoice_items_fields :input[data-recalculate]', app.Invoices.recalculate)
-$(document).on('click', '#invoice_items_fields .remove_nested_fields', app.Invoices.recalculate)
+$(document).on('input', 'form#new_invoice_list #invoice_items_fields :input[data-recalculate]', app.Invoices.recalculate)
+$(document).on('click', 'form#new_invoice_list #invoice_items_fields .remove_nested_fields', app.Invoices.recalculate)

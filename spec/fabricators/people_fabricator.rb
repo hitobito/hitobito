@@ -10,10 +10,11 @@ Fabricator(:person) do
   last_name { Faker::Name.last_name }
   nickname { Faker::Name.first_name }
   email do |attrs|
-    first = attrs[:first_name].downcase.gsub(/[^a-z]/, '')
-    last = attrs[:last_name].downcase.gsub(/[^a-z]/, '')
+    first = attrs[:first_name]&.downcase&.gsub(/[^a-z]/, '')
+    last = attrs[:last_name]&.downcase&.gsub(/[^a-z]/, '')
     "#{first}.#{last}#{sequence}@hitobito.example.com"
   end
+  confirmed_at { 1.hour.ago }
 end
 
 Fabricator(:person_with_address, from: :person) do
@@ -25,6 +26,10 @@ end
 
 Fabricator(:person_with_address_and_phone, from: :person_with_address) do
   phone_numbers { [Fabricate(:phone_number)] }
+end
+
+Fabricator(:person_with_phone, from: :person) do
+  phone_numbers { [Fabricate(:phone_number, label: 'Mobil')] }
 end
 
 Fabricator(:company, from: :person) do

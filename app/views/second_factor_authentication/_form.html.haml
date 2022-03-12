@@ -1,0 +1,13 @@
+-# Copyright (c) 2021, hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https ://github.com/hitobito/hitobito.
+
+= form_with url: users_second_factor_path(second_factor: authentication_factor), method: :post, class: 'form-horizontal' do |f|
+  .control-group.required
+    = f.label :second_factor_code, t('.totp_code'), class: 'control-label'
+    .controls
+      = f.text_field :second_factor_code, class: 'span3', autofocus: 'autofocus', autocomplete: 'one-time-code', placeholder: t('.totp_code_placeholder'), required: true
+  .control-group
+    .controls
+      = f.submit(t('.submit'), class: 'btn btn-primary')

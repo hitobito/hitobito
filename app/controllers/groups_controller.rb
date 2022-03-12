@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,17 +10,18 @@ class GroupsController < CrudController
   include AsyncDownload
 
   # Respective group attrs are added in corresponding instance method.
-  self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup + [:logo, :remove_logo]
+  self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup + [:logo,
+                                                              :remove_logo,
+                                                              :self_registration_role_type,
+                                                              :self_registration_notification_email]
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]
-
 
   decorates :group, :groups, :contact
 
   before_render_show :active_sub_groups, if: -> { html_request? }
   before_render_form :load_contacts
-
 
   def index
     flash.keep if html_request?

@@ -25,3 +25,7 @@
 postfinance:
   payment_provider: 'postfinance'
   invoice_config: bottom_layer_one
+
+ubs:
+  payment_provider: 'ubs'
+  invoice_config: bottom_layer_one

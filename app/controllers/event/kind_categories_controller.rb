@@ -7,7 +7,7 @@
 
 class Event::KindCategoriesController < SimpleCrudController
 
-  self.permitted_attrs = [:label, kinds: []]
+  self.permitted_attrs = [:label, :order, kinds: []]
 
   self.sort_mappings = { label: 'event_kind_category_translations.label' }
 

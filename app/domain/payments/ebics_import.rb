@@ -23,29 +23,29 @@ class Payments::EbicsImport
 
     payment_provider.HPB
 
-    invoice_xml = payment_provider.Z54
+    invoice_xmls = payment_provider.Z54(Time.zone.yesterday, Time.zone.today)
 
-    payments_from_xml(invoice_xml)
+    invoice_xmls.flat_map { |xml| payments_from_xml(xml) }
   rescue Epics::Error::BusinessError => e
     case e.code
-    when '090005'
+    when '090005' # EBICS_NO_DOWNLOAD_DATA_AVAILABLE
       []
-    else 
+    else
       raise e
     end
   end
 
   def payments_from_xml(xml)
     Invoice::PaymentProcessor.new(xml).payments.map do |payment|
-      invoice = Invoice.find_by(reference: payment.reference,
-                                group: @payment_provider_config.invoice_config.group)
-      payment.invoice = invoice
+      next unless in_payment_provider_config_layer?(payment.invoice&.group) && payment.save
 
-      next unless payment.save
-
-      invoice.invoice_list&.update_paid
+      payment.invoice.invoice_list&.update_paid
 
       payment
     end.compact
+  end
+
+  def in_payment_provider_config_layer?(group)
+    group == @payment_provider_config.invoice_config.group
   end
 end

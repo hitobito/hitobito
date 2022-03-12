@@ -1,0 +1,86 @@
+#  Copyright (c) 2020-2021, Die Mitte Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+# Notes and Remarks:
+# These have to be the ones with the keys. PF calls them "EBICS 2.5 und EBICS 3.0 mit Schlüsseln" in the test environment
+#   authentication_hash (A002)
+#   encryption_hash (X002)
+
+payment_providers:
+  - name: postfinance
+    url: https://ebics.postfinance.ch/ebics/ebics.aspx
+    host_id: PFEBICS
+    encryption_hash: 48 CD A5 55 35 E1 1B 44 61 8C C1 80 FD E1 B4 5CB9 58 AD 6B 98 08 8A CC 9C 3D 99 B0 A2 98 FA 34
+    authentication_hash: AB 2E ED 68 85 A6 E6 A2 67 00 D6 C4 AB 68 79 B45C D2 AF C9 30 01 D4 E7 91 50 E3 31 46 D8 4D 6C
+
+  - name: creditsuisse
+    url: ebics.credit-suisse.com
+    host_id: CSEBICS
+    encryption_hash: 1C F9 D6 B2 D5 D5 49 CE 49 E1 EA BB D0 EB AA 0D CA 21 B0 34 E0 F6 0B BE D9 D9 EA CA CC A6 B8 BB
+    authentication_hash: 1C F9 D6 B2 D5 D5 49 CE 49 E1 EA BB D0 EB AA 0D CA 21 B0 34 E0 F6 0B BE D9 D9 EA CA CC A6 B8 BB
+
+  - name: raiffeisen
+    url: https://econnect.raiffeisen.ch/ebicsweb/ebicsweb
+    host_id: RAIFCHEC
+    encryption_hash: 99 08 AF B5 E1 E7 EB 27 DC A6 7D EC C9 5B 22 85 F8 7B BF 61 BA D6 40 AB 29 70 4D 77 CD E7 67 56
+    authentication_hash: 12 3A AF D3 58 9D 3D 64 ED E7 24 10 34 73 84 26 2A 38 25 03 5D 42 1E F1 F0 1B B4 DA F0 33 57 6D
+
+  - name: ubs
+    url: https://ebics.ubs.com/ebicsweb/ebicsweb
+    host_id: EBXUBSCH
+    encryption_hash: F6 94 9A 17 8E 60 B0 C8 0B 28 9E F9 AD D8 6B A1 E9 DF 47 17 5A CB 0E 69 7C 88 FC E0 7E CF 9C BF
+    authentication_hash: 2F 8F B6 B8 6D 8F 42 09 E0 9A BF 1F 37 76 9B 7B ED C8 B5 35 0D C1 6B 81 85 36 8E 57 C4 2B 18 7B
+
+  - name: lukb
+    url: https://ebics.lukb.ch/ebicsweb/ebicsweb
+    host_id: LUKBEBIX
+    encryption_hash: 77 79 98 D1 C0 5B 1D 57 CF 65 71 1D CC C3 19 EC 81 C2 D4 56 79 75 DE 04 E9 C0 82 03 05 A8 5C C7
+    authentication_hash: 16 66 0C AE 8B 53 B2 11 C4 CB 9A 1A FF 36 2D 42 D9 D6 E7 2B 62 C8 4E 2D 4D BB 49 E9 5D F1 24 63
+
+  - name: sgkb
+    url: https://www.onba.ch/ebics/EBICS.aspx
+    host_id: SGKB
+    encryption_hash: C1 F7 56 3B 2D 68 64 E4 7C 94 56 86 24 A9 2F B8 32 A7 C7 D2 34 BE 7B A9 2E 50 69 B4 38 00 66 F1
+    authentication_hash: CC 32 D1 64 B9 2A 2B 6B 2C 9D FE 3D 1A D7 E4 79 86 A6 97 00 07 88 61 0E 9A ED EA 5D 72 30 49 20
+
+  - name: tkb
+    url: https://www.ebics.swisscom.com/ebics-server/EBICS.aspx
+    host_id: TGKBEBICS
+    encryption_hash: FE D7 DA 4E B5 00 71 37 F7 69 4E CC D0 55 A3 78 E8 7C 4B D0 B3 33 BC 75 69 99 4D 9D C2 B1 E5 BE
+    authentication_hash: 1E 94 BA 95 5D 47 53 A6 25 22 CB 09 A1 A5 53 36 30 D5 04 99 F7 C3 05 2F 95 88 C6 5F 7F 52 EB DC
+
+  - name: zkb
+    url: https://ebicsweb.zkb.ch/ebicsweb
+    host_id: ZKBKCHZZ
+    encryption_hash: 03 B1 E7 F5 99 3A 0F AD 07 0A 63 59 AC 47 8F F9 86 86 89 4D A0 EF 45 94 17 DC 9B 02 A0 5E D6 42
+    authentication_hash: 03 B1 E7 F5 99 3A 0F AD 07 0A 63 59 AC 47 8F F9 86 86 89 4D A0 EF 45 94 17 DC 9B 02 A0 5E D6 42
+
+  # nur C54 statt Z54? Nur ESR per C54?
+  - name: valiant
+    url: https://www.ebics.swisscom.com/ebics-server/ebics.aspx
+    host_id: VABEBICS
+    encryption_hash: 50 37 82 9a 2b 87 c9 7b 22 a4 58 33 3e ab ab 18 df f8 48 2d ff 1f 6e 03 1f 99 8c 06 06 0b d3 3b
+    authentication_hash: 62 9e 27 44 44 c1 96 c0 4d c8 19 12 21 da 48 28 77 e1 91 d0 7a 16 95 24 cf 0b ce 41 6c 18 64 8a
+
+  # nur C54 statt Z54? Stand 2018?
+  - name: bancastato
+    url: https://ebics.bancastato.ch
+    host_id: BANCASTATOEBICS
+    encryption_hash: 2B 90 E2 04 88 F5 A6 E9 DA F5 AF FB 71 59 71 08 E6 87 6B A3 1B C1 FC 9B B9 1E 86 1A 59 57 E3 7B
+    authentication_hash: 8A 55 03 72 B7 CB 8F D3 5E 10 15 62 AB 46 E4 38 4C DF 66 CA C4 BE BB 33 3B 2B BC D0 6F 3F 99 C7
+
+  # Z54? Format camt.054 wird unterstützt
+  - name: bekb
+    url: https://ebics.bekb.ch/EBICS-Server/EBICS.aspx
+    host_id: BEKBEBICS
+    encryption_hash: 88 28 E6 C8 AE 74 B1 91 82 4B 72 F5 A5 3D 8C 2B 78 76 DD 6B 85 0E 33 FC AE BE 71 59 4A 94 02 B4
+    authentication_hash: 22 0C 96 A6 3A BE 7A 22 25 1A 31 92 43 DE 99 DB 6B 49 DD 62 85 56 B2 AB CD BE 24 EA 0C AF FA D8
+
+  # nur C54 statt Z54? Stand 2020
+  - name: zugerkb
+    url: https://www.ebics.swisscom.com/ebics-server/ebics.aspx
+    host_id: ZGKBEBICS
+    encryption_hash: 78 8F 17 44 38 46 94 77 CD 98 F0 DC D4 EA C6 B0 0E 75 D9 B9 8F 1B 0F 9B B8 5D 2B 5D A1 89 36 10
+    authentication_hash: 03 50 12 3E 9C BF C1 BB 95 5E 0C E2 0B A2 B1 28 18 EC CD 56 15 11 22 17 81 8C 76 E4 A4 D3 37 75

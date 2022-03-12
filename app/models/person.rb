@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -75,8 +75,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :current_sign_in_at, :current_sign_in_ip, :encrypted_password, :id,
     :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
     :locked_at, :remember_created_at, :reset_password_token, :unlock_token,
-    :reset_password_sent_at, :sign_in_count, :updated_at, :updater_id,
-    :show_global_label_formats, :household_key, :event_feed_token
+    :reset_password_sent_at, :reset_password_sent_to, :sign_in_count, :updated_at, :updater_id,
+    :show_global_label_formats, :household_key, :event_feed_token, :family_key,
+    :two_factor_authentication, :encrypted_two_fa_secret,
+    :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email
   ]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -85,7 +87,13 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   GENDERS = %w(m w).freeze
 
-  ADDRESS_ATTRS = %w(address zip_code town country).freeze
+  LANGUAGES = Settings.application
+                      .languages
+                      .to_hash
+                      .merge(Settings.application
+                                     .additional_languages&.to_hash || {}).freeze
+
+  ADDRESS_ATTRS = %w(address zip_code town country) # rubocop:disable Style/MutableConstant meant to be extended in wagons
 
   # define devise before other modules
   devise :database_authenticatable,
@@ -94,14 +102,17 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
          :rememberable,
          :trackable,
          :timeoutable,
-         :validatable
+         :validatable,
+         :confirmable
 
   include Groups
   include Contactable
   include DeviseOverrides
+  include Encryptable
   include I18nSettable
   include I18nEnums
   include ValidatedEmail
+  include TwoFactorAuthenticatable
   include PersonTags::ValidationTagged
 
   i18n_enum :gender, GENDERS
@@ -119,6 +130,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   acts_as_taggable
 
+  strip_attributes except: [:zip_code]
+
   ### ASSOCIATIONS
 
   has_many :roles, inverse_of: :person
@@ -134,6 +147,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
                          through: :event_participations,
                          source: :roles
   has_many :events, through: :event_participations
+  has_many :event_invitations, class_name: 'Event::Invitation', dependent: :destroy
 
   has_many :event_responsibilities, class_name: 'Event',
                                     foreign_key: :contact_id,
@@ -146,7 +160,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :relations_to_tails, class_name: 'PeopleRelation',
                                 dependent: :destroy,
-                                foreign_key: :head_id
+                                foreign_key: :head_id,
+                                inverse_of: :head
+
+  has_many :family_members, -> { includes(:person, :other) },
+           inverse_of: :person,
+           dependent: :destroy
 
   has_many :add_requests, dependent: :destroy
 
@@ -154,6 +173,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :authored_notes, class_name: 'Note',
                             foreign_key: 'author_id',
+                            inverse_of: :author,
                             dependent: :destroy
 
   belongs_to :primary_group, class_name: 'Group'
@@ -166,13 +186,18 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :access_grants, class_name: 'Oauth::AccessGrant',
                            foreign_key: :resource_owner_id,
+                           inverse_of: :person,
                            dependent: :delete_all
 
   has_many :access_tokens, class_name: 'Oauth::AccessToken',
                            foreign_key: :resource_owner_id,
+                           inverse_of: :person,
                            dependent: :delete_all
 
+  has_many :message_recipients, dependent: :nullify
+
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
+  accepts_nested_attributes_for :family_members, allow_destroy: true
 
   attr_accessor :household_people_ids, :shared_access_token
 
@@ -181,6 +206,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates_by_schema except: [:email, :picture, :address]
   validates :email, length: { allow_nil: true, maximum: 255 } # other email validations by devise
   validates :company_name, presence: { if: :company? }
+  validates :language, inclusion: { in: LANGUAGES.keys.map(&:to_s) }
   validates :birthday,
             timeliness: { type: :date, allow_blank: true, before: Date.new(10_000, 1, 1) }
   validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
@@ -201,10 +227,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   scope :household, -> { where.not(household_key: nil) }
   scope :with_address, -> {
     where.not(address: [nil, '']).
-    where.not(zip_code: [nil, '']).
-    where.not(town: [nil, '']).
-    where('(last_name IS NOT NULL AND last_name <> "") OR '\
-          '(company_name IS NOT NULL AND company_name <> "")')
+      where.not(zip_code: [nil, '']).
+      where.not(town: [nil, '']).
+      where('(last_name IS NOT NULL AND last_name <> "") OR '\
+            '(company_name IS NOT NULL AND company_name <> "")')
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: { label: 'Mobil' }) }
 
@@ -269,7 +295,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def person_name(format = :default)
     name = full_name(format)
-    name << " / #{nickname}" if nickname? && format != :print_list
+    if PUBLIC_ATTRS.include?(:nickname) && nickname? && format != :print_list
+      name << " / #{nickname}"
+    end
     name
   end
 
@@ -296,12 +324,22 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     primary_group_id || groups.first.try(:id) || Group.root.id
   end
 
-  def years
+  def years(comparison = Time.zone.now.to_date)
     return unless birthday?
 
-    now = Time.zone.now.to_date
-    extra = now.month > birthday.month || (now.month == birthday.month && now.day >= birthday.day)
-    now.year - birthday.year - (extra ? 0 : 1)
+    birthday_has_passed =
+      (comparison.month > birthday.month) ||
+      (comparison.month == birthday.month && comparison.day >= birthday.day)
+
+    comparison.year - birthday.year - (birthday_has_passed ? 0 : 1)
+  end
+
+  def login_status
+    return :two_factors if two_factor_authentication
+    return :login if email? && password?
+    return :password_email_sent if reset_password_period_valid?
+
+    :no_login
   end
 
   ### AUTHENTICATION INSTANCE METHODS
@@ -347,7 +385,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def person_duplicates
-    PersonDuplicate.where(person_1: id).or(PersonDuplicate.where(person_2: id))
+    PersonDuplicate.where(person_1: id).or(PersonDuplicate.where(person_2: id)) # rubocop:disable Naming/VariableNumber
   end
 
   def address_for_letter
@@ -362,8 +400,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def remove_blank_relations
     relations_to_tails.each do |e|
-      unless e.frozen?
-        e.mark_for_destruction if e.tail_id.blank?
+      if !e.frozen? && e.tail_id.blank?
+        e.mark_for_destruction
+      end
+    end
+
+    family_members.each do |family_member|
+      if !family_member.frozen? && family_member.other_id.blank?
+        family_member.mark_for_destruction
       end
     end
   end

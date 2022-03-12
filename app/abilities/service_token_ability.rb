@@ -15,7 +15,7 @@ class ServiceTokenAbility < AbilityDsl::Base
   end
 
   def service_token_in_same_layer
-    in_same_layer
+    in_same_layer_if_active
   end
 
   private

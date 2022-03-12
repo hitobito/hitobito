@@ -9,6 +9,12 @@ class Address::ImportJob < RecurringJob
   run_every 6.months
 
   def perform
-    Address::Import.new.run
+    return unless configured?
+
+    Address::Importer.new.run
+  end
+
+  def configured?
+    Settings.addresses.url.present? && Settings.addresses.token.present?
   end
 end

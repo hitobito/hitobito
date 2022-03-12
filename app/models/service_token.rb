@@ -2,6 +2,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: service_tokens
@@ -41,13 +42,14 @@ class ServiceToken < ActiveRecord::Base
     name
   end
 
-  # Required so PeopleFilter can use PersonFetchables
+  # Required as a substitute user for PeopleFilter with PersonFetchables and in other places
   def dynamic_user
     Person.new do |p|
       role = Role.new
       role.group = layer
       role.permissions = [:layer_and_below_full]
       p.roles = [role]
+      p.groups = [layer]
     end
   end
 

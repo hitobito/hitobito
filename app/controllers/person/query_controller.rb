@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -17,7 +17,7 @@ class Person::QueryController < ApplicationController
   # GET ajax, for auto complete fields, without @group
   def index
     people = []
-    if params.key?(:q) && params[:q].size >= 3
+    if search_param.size >= 3
       people = list_entries.limit(10)
       people = decorate(people)
     end

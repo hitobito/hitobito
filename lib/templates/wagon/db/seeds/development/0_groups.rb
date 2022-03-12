@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require Rails.root.join('db', 'seeds', 'support', 'group_seeder')
 
@@ -8,9 +8,9 @@ root = Group.roots.first
 srand(42)
 
 if root.address.blank?
-  root.update_attributes(seeder.group_attributes)
+  root.update(seeder.group_attributes)
   root.default_children.each do |child_class|
-    child_class.first.update_attributes(seeder.group_attributes)
+    child_class.first.update(seeder.group_attributes)
   end
 end
 

@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -39,6 +39,10 @@ class ApplicationDecorator < Draper::Decorator
     modification_info(deleted_at, deleter)
   end
 
+  def archived_info
+    modification_info(archived_at, nil)
+  end
+
   private
 
   def modification_info(at, person)
@@ -49,7 +53,7 @@ class ApplicationDecorator < Draper::Decorator
       html << ' '
       html << h.link_to_if(can?(:show, person), person.to_s, h.person_path(person.id))
     end
-    html.html_safe
+    h.sanitize(html)
   end
 
 end

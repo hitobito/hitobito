@@ -10,5 +10,6 @@
     = s.name
   - t.col('') do |s|
     = s.translated_values
-  - action_col(t) do |s|
-    = link_action_edit(edit_group_group_setting_path(@group, s.var), remote: true)
+  - unless @group.archived?
+    - action_col(t) do |s|
+      = link_action_edit(edit_group_group_setting_path(@group, s.var), remote: true)

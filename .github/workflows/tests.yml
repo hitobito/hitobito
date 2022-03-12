@@ -22,6 +22,7 @@ jobs:
       RAILS_DB_PASSWORD: hitobito
       RAILS_DB_NAME: hitobito_test
       RAILS_TEST_DB_NAME: hitobito_test
+      TZ: Europe/Berlin
 
     services:
       mysql:
@@ -47,9 +48,18 @@ jobs:
         uses: actions/checkout@v2
 
       - name: 'Set up Ruby'
-        uses: ruby/setup-ruby@v1.66.0
+        uses: ruby/setup-ruby@v1
         env:
           ImageOS: ubuntu20
+      
+      - name: Read .tool-versions
+        uses: marocchino/tool-versions-action@v1
+        id: readToolVersions
+        
+      - name: Set up Node.js ${{ steps.readToolVersions.outputs.nodejs }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ steps.readToolVersions.outputs.nodejs }}
 
       - name: 'Setup OS'
         run: |
@@ -94,4 +104,6 @@ jobs:
 
       - name: 'Run Lint and Tests'
         run: |
-          bundle exec rake db:create ci --trace
+          bundle exec rake db:create --trace
+          bundle exec bin/rails db:environment:set RAILS_ENV=test
+          bundle exec rake ci --trace

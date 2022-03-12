@@ -1,4 +1,4 @@
-= field_set_tag "#{PaymentProviderConfig.model_name.human(count: 1)} - #{f.object.payment_provider}", style: 'margin-right: 0px' do
+= field_set_tag "#{PaymentProviderConfig.model_name.human(count: 1)} - #{f.object.payment_provider_label}", style: 'margin-right: 0px' do
   -if !f.object.draft?
     .alert.alert-warning
       = t('.reset_payment_provider_warning')

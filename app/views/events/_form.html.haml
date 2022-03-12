@@ -8,15 +8,17 @@
   - if entry.new_record?
     = f.hidden_field :type
 
-  = render 'form_tabs'
+  - if entry.uses_form_tabs
+    = render 'form_tabs'
 
   .tab-content
     #general.tab-pane.active
       = render 'general_fields', f: f
       = render 'group_fields', f: f
 
-    #dates.tab-pane
-      = render 'date_fields', f: f
+    - if entry.uses_form_tabs
+      #dates.tab-pane
+        = render 'date_fields', f: f
 
     - if entry.supports_application_details?
       #application.tab-pane

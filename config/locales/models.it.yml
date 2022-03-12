@@ -22,6 +22,7 @@ it:
     created_info: Inserito
     updated_info: Modificato
     deleted_info: Cancellato
+    archived_info: Archiviato
   activerecord:
     errors:
       messages:
@@ -33,6 +34,13 @@ it:
         must_exist: non può essere lasciato vuoto
         readonly: non può venir cambiato
       models:
+        cors_origin:
+          attributes:
+            origin:
+              invalid_host: contiente un Host non valido
+              missing_hostname: deve contenere un nome dell'host
+              missing_scheme: deve contenere un protocollo (http:// oppure https://)
+              suffix_present: alla fine non può avere ne un indirizzo ne un slash
         custom_content:
           attributes:
             body:
@@ -60,6 +68,10 @@ it:
           attributes:
             base:
               invoice_items_invalid: Almeno una voce di un conto non è valida.
+        oauth/application:
+          attributes:
+            scopes:
+              not_match_configured: "non concordano con ciò che è salvato sul server"
         person:
           name_missing: 'Inserire un nome'
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
@@ -97,6 +109,7 @@ it:
             name:
               must_be_unique: 'già existe'
         invoice:
+          recipient_address_or_email_required: 'deve essere riempito l''indirizzo del ricevente oppure l''e-mail'
           attributes:
             invoice_config:
               invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'
@@ -147,6 +160,12 @@ it:
       event/kind:
         one: tipo di corso
         other: Tipi di corso
+      event/kind_category:
+        one: categorie dei corsi
+        other: categorie dei corsi
+      event/invitation:
+        one: inviti
+        other: inviti
       event/role:
         one: Ruoli evento
         other: Ruoli evento
@@ -240,6 +259,9 @@ it:
       payment_reminder:
         one: Sollecito
         other: Solleciti
+      payment_provider_config:
+        one: interfacce per i pagamenti
+        other: interfacce per i pagamenti
       person:
         one: persona
         other: Persone
@@ -270,6 +292,8 @@ it:
       salutation:
         one: Appellativo
         other: Appellativi
+        personal:
+          label: titolo personale
         default:
           label: Ciao [Name]
           value:
@@ -328,6 +352,8 @@ it:
         description: Descrizione
         state: Stato
         read_at: Letto il
+      cors_origins:
+        origin: host con accesso API
       person:
         salutation: Appellativo
         first_name: Nome
@@ -362,6 +388,9 @@ it:
         remove_picture: Elimina la foto attuale
         roles: Ruoli
         tags: Tags
+        title: titolo
+        correspondence_language: lingua per la corrispondenza
+        household_key: ID domestico
         created_at: Salvato
         updated_at: Modificato
       person_duplicate:
@@ -465,6 +494,8 @@ it:
       event/kind:
         label: Definizione dell'associazione
         short_name: Nome del corso
+        kind_category: categoria di corso
+        kind_category_id: categoria di corso
         minimum_age: Età minima
         preconditions: Requisiti per la partecipazione
         prolongations: Prolungato
@@ -476,10 +507,20 @@ it:
         deleted_at: Cancellato
       event/kind_category:
         label: Denominazione
+        order: chiave per ordinare
         kinds: Tipi di corso
         created_at: Salvato
         updated_at: Modificato
         deleted_at: Cancellato
+      event/invitation:
+        participation_type: ruolo del partecipante
+        created_at: data di creazione
+        declined_at: data in cui è stato rifiutato
+        status: stato
+        statuses:
+          open: invitato
+          accepted: accettato
+          declined: rifiutato
       event/participation:
         person_id: Persona
         event_id: Evento
@@ -510,6 +551,7 @@ it:
       note:
         text: Testo
       oauth/application:
+        cors_origins: host con accesso API
         redirect_uri: Redirect URIs
       people_relation:
         head_id: Persona
@@ -665,10 +707,24 @@ it:
         success_count: Destinatario con successo
         failed_count: Destinatario errato
         sent_at: Elaborato il
+        recipient_progress: avanzamento dell'elaborazione
       message/letter:
         body: Contenuto
-        heading: Intestazione
         salutation: Appellativo
+        pp_post: riga PP
+        shipping_method: metodo di spedizione
+        shipping_methods:
+          own: spedizione propria
+          normal: posta B
+          priority: posta A
+        send_to_households: nucleo famigliare
+      message_recipient:
+        address: indirizzo
+        country: nazione
+        printed_address: indirizzo postale
+        salutation: intestazione per le lettere
+        town: luogo
+        zip_code: NAP
       subscription:
         related_role_types: Ruoli
       people_filter:
@@ -711,6 +767,7 @@ it:
         state: Stato
         sequence_number: Numero
         esr_number: Numero di referenza
+        reference: referenza
         amount_paid: Totale pagato
         payment_slips:
           ch_es: Polizza di versamento postale rossa (CH)
@@ -769,6 +826,7 @@ it:
         contact: Persona di contatto
         contact_id: Persona di contatto
         beneficiary: A favore di
+        email: risposta all'indirizzo e-mail
         payee: Versamento per
         payment_slip: Polizza di versamento
         payment_slips:
@@ -782,6 +840,8 @@ it:
         participant_number_internal: Numero interno del partecipante
         payment_reminder_configs: Solleciti
         vat_number: Numero IVA
+        donation_increase_percentage: aumento in %
+        donation_calculation_year_amount: numero di anni
       invoice_item:
         name: Nome
         description: Descrizione
@@ -824,6 +884,15 @@ it:
         title: Titolo del sollecito
         text: Testo del sollecito
         due_days: Data di scadenza del sollecito
+      payment_provider_config:
+        payment_provider: interfaccia per il pagamento
+        partner_identifier: ID cliente
+        user_identifier: ID partecipante
+        password: password
+        ini_letter: INI lettera
+        payment_providers:
+          postfinance-test: ambiente test Postfinance
+          postfinance: Postfinance
       service_token:
         name: Cognome
         description: Descrizione
@@ -837,6 +906,7 @@ it:
         invoices: Fatture di questo livello
         event_participations: Partecipanti ad eventi di questo livello
         mailing_lists: Abbonati a liste mail di questo livello
+        cors_origins: host con accesso API
       acts_as_taggable_on/tag:
         taggings_count: Numero
         category: Categoria

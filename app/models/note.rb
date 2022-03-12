@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2016, Dachverband Schweizer Jugendparlamente. This file is part of
+#  Copyright (c) 2012-2021, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -32,22 +32,21 @@ class Note < ActiveRecord::Base
 
   validates_by_schema
   validates :text, presence: true
+  validates :subject_type, inclusion: %w(Person Group)
 
   scope :list, -> { order(created_at: :desc) }
 
   class << self
-    def in_or_layer_below(group)
-      joins('LEFT JOIN roles ' \
-            "ON roles.person_id = notes.subject_id AND notes.subject_type = '#{Person.sti_name}'").
-        joins("INNER JOIN #{Group.quoted_table_name} " \
-              "ON (#{Group.quoted_table_name}.id = notes.subject_id "\
-                  "AND notes.subject_type = '#{Group.sti_name}') " \
-              "OR (#{Group.quoted_table_name}.id = roles.group_id)").
-        where(roles: { deleted_at: nil },
-              groups: { deleted_at: nil, layer_group_id: group.layer_group_id }).
-        where("#{Group.quoted_table_name}.lft >= :lft AND #{Group.quoted_table_name}.rgt <= :rgt",
-              lft: group.lft, rgt: group.rgt).
-        distinct
+    def below_in_layer(group)
+      groups = Group.where(layer_group_id: group.layer_group_id, deleted_at: nil).
+          where('lft >= ?', group.lft).where('rgt <= ?', group.rgt)
+      person_ids = groups.left_joins(:roles).select(Role.arel_table[:person_id])
+
+      # All notes that belong to one of the groups...
+      where(subject_type: Group.sti_name, subject_id: groups.select(:id)).
+          # ... or to a person in one of the groups
+          or(where(subject_type: Person.sti_name, subject_id: person_ids)).
+          distinct
     end
   end
 

@@ -81,7 +81,6 @@ config.after_initialize do
   # remove other loggers
   if Rails.application.config.lograge.enabled
     require 'lograge/sql/extension'
-    ActiveJob::Base.logger = Delayed::Worker.logger = Lograge::SilentLogger.new(Rails.logger)
 
     # flush stdout after each log statement for immediate downstream processing
     if ENV['RAILS_LOG_TO_STDOUT'].present?

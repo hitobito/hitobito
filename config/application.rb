@@ -70,8 +70,14 @@ module Hitobito
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
-    config.cache_store = :dalli_store, { compress: true,
-                                         namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
+    config.cache_store = :mem_cache_store, { compress: true,
+                                             namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
+
+    if ENV["RAILS_LOG_TO_STDOUT"].present? && !Rails.env.test?
+      logger = ActiveSupport::Logger.new(STDOUT)
+      logger.formatter = config.log_formatter
+      config.logger = ActiveSupport::TaggedLogging.new(logger)
+    end
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true
@@ -88,7 +94,7 @@ module Hitobito
         SessionsCleanerJob.new.schedule
         WorkerHeartbeatCheckJob.new.schedule
         ReoccuringMailchimpSynchronizationJob.new.schedule
-        Address::CheckValidityJob.new.schedule
+        Address::CheckValidityJob.new.schedule if Settings.addresses.token
         Address::ImportJob.new.schedule if Settings.addresses.token
         People::DuplicateLocatorJob.new.schedule
         Payments::EbicsImportJob.new.schedule
@@ -126,7 +132,6 @@ module Hitobito
     def self.build_info
       @build_info ||= File.read("#{Rails.root}/BUILD_INFO").strip rescue ''
     end
-
   end
 end
 

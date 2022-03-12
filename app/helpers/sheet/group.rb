@@ -1,4 +1,6 @@
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -47,15 +49,19 @@ module Sheet
         :group_notes_path,
         if: :index_notes
 
+    FeatureGate.if('groups.statistics') do
+      tab 'groups.tabs.statistics',
+          :group_statistics_path,
+          if: :show_statistics
+    end
+
     tab 'groups.tabs.deleted',
         :deleted_subgroups_group_path,
         if: :deleted_subgroups
 
     tab 'activerecord.models.group_setting.other',
         :group_group_settings_path,
-        if: (lambda do |view, group|
-          view.can?(:update, group)
-        end)
+        if: :update
 
     delegate :group_path, to: :view
 

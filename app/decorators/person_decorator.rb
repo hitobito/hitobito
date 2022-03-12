@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -75,18 +75,26 @@ class PersonDecorator < ApplicationDecorator
     h.link_to(group, h.group_path(group)) if group
   end
 
-  def roles_list(group = nil)
-    roles_short(group, edit: false)
+  def roles
+    super.without_archived
+  end
+
+  def roles_list(group = nil, multiple_groups = false)
+    roles_short(group, multiple_groups, edit: false)
   end
 
   # render a list of all roles
   # if a group is given, only render the roles of this group
-  def roles_short(group = nil, edit: true)
-    functions_short(filtered_roles(group), scope: group, edit: edit)
+  def roles_short(group = nil, multiple_groups = false, edit: true)
+    functions_short(filtered_roles(group, multiple_groups), multiple_groups, edit: edit)
   end
 
-  def filtered_roles(group = nil)
-    filtered_functions(roles.to_a, :group, group)
+  def filtered_roles(group = nil, multiple_groups = false)
+    if multiple_groups
+      filtered_functions(roles.to_a, :group).select { |r| group.subgroup_ids.include? r.group_id }
+    else
+      filtered_functions(roles.to_a, :group, group)
+    end
   end
 
   # returns roles grouped by their group
@@ -161,15 +169,15 @@ class PersonDecorator < ApplicationDecorator
     end
   end
 
-  def functions_short(functions, scope: nil, edit: true)
+  def functions_short(functions, multiple_groups, edit: true)
     h.safe_join(functions) do |f|
-      content_tag(:p, function_short(f, scope: scope, edit: edit), id: h.dom_id(f))
+      content_tag(:p, function_short(f, multiple_groups, edit: edit), id: h.dom_id(f))
     end
   end
 
-  def function_short(function, scope: nil, edit: true)
+  def function_short(function, multiple_groups, edit: true)
     html = [function.to_s]
-    html << h.muted(h.safe_join(function.group.with_layer, ' / ')) if scope.nil?
+    html << h.muted(h.safe_join(function.group.with_layer, ' / ')) if multiple_groups
     html << popover_edit_link(function) if edit && h.can?(:update, function)
     h.safe_join(html, ' ')
   end

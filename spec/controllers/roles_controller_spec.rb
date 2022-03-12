@@ -326,20 +326,6 @@ describe RolesController do
     end
   end
 
-  describe 'XHR PATCH inline update' do
-
-    before { role } # create it
-    render_views
-
-    it 'displays only roles in group after updating' do
-      patch :update, xhr: true, params: { group_id: group.id, id: role.id,
-                                          role: { type: role.type, group_id: group.id, label: 'label' } }
-
-      expect(response.body).not_to include('muted')
-    end
-
-  end
-
   describe 'DELETE destroy' do
     let(:notice) { "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht." }
 
@@ -529,6 +515,31 @@ describe RolesController do
                     }
       is_expected.to redirect_to group_person_path(group, person)
     end
+  end
+
+  describe 'XHR PATCH inline update' do
+
+    before do
+      role
+    end
+
+    render_views
+
+    it 'displays only roles in group after updating' do
+      patch :update, xhr: true, params: { group_id: group.id, id: role.id,
+                                          role: { type: role.type, group_id: group.id, label: 'label' } }
+
+      # Expect js response
+      expect(response.headers["Content-Type"]).to eq "text/javascript; charset=utf-8"
+
+      # Check types of instance variables
+      expect(assigns[:group]).to be_an_instance_of GroupDecorator
+      expect(assigns[:role]).to be_an_instance_of RoleDecorator
+
+      # Check for
+      expect(response).to render_template('update')
+    end
+
   end
 
 end

@@ -47,61 +47,74 @@ describe Export::Tabular::People::HouseholdRow do
   end
 
   describe 'for households' do
-    def household(first_names = [], last_names = [])
-      person = Person.new(
-        first_name: first_names.join(','),
-        last_name: last_names.join(','),
-        household_key: SecureRandom.uuid
-      ).tap do |p|
-        allow(p).to receive(:salutation).and_return('lieber_vorname')
-      end
-
-      described_class.new(person)
+    def person(first_name, last_name)
+      Fabricate(:person, first_name: first_name, last_name: last_name, household_key: SecureRandom.uuid)
     end
 
     it 'treats blank last name as first present lastname' do
-      expect(household(%w(Andreas Mara), ['Mäder', '']).name)
+      expect(described_class.new([person('Andreas', 'Mäder'), person('Mara', '')]).name)
         .to eq 'Andreas und Mara Mäder'
 
-      expect(household(%w(Andreas Mara Blunsch), ['Mäder', '', 'Wyss']).name)
+      expect(described_class.new([
+                                     person('Andreas', 'Mäder'),
+                                     person('Mara', ''),
+                                     person('Blunsch', 'Wyss')
+                                 ]).name)
         .to eq 'Andreas und Mara Mäder, Blunsch Wyss'
 
-      expect(household(%w(Andreas Mara Rahel Blunsch), ['Mäder', '', 'Emmenegger', '']).name)
+      expect(described_class.new([
+                                     person('Andreas', 'Mäder'),
+                                     person('Mara', ''),
+                                     person('Rahel', 'Emmenegger'),
+                                     person('Blunsch', '')
+                                 ]).name)
         .to eq 'Andreas, Mara und Blunsch Mäder, Rahel Emmenegger'
 
-      expect(household(%w(Andreas Mara), ['', '']).name)
+      expect(described_class.new([person('Andreas', ''), person('Mara', '')]).name)
         .to eq 'Andreas und Mara'
     end
 
     it 'does not output anything if first and last names are blank' do
-      expect(household([''], ['']).name).to be_blank
-      expect(household([nil, nil], [nil]).name).to be_blank
+      expect(described_class.new([person('', '')]).name).to be_blank
+      expect(described_class.new([person(nil, nil)]).name).to be_blank
     end
 
     it 'combines two people with same last_name' do
-      expect(household(%w(Andreas Mara), %w(Mäder Mäder)).name).to eq 'Andreas und Mara Mäder'
+      expect(described_class.new([person('Andreas', 'Mäder'), person('Mara', 'Mäder')]).name)
+          .to eq 'Andreas und Mara Mäder'
     end
 
     it 'combines multiple people with same last_name' do
-      expect(household(%w(Andreas Mara Ruedi), %w(Mäder Mäder Mäder)).name)
+      expect(described_class.new([
+                                     person('Andreas', 'Mäder'),
+                                     person('Mara', 'Mäder'),
+                                     person('Ruedi', 'Mäder'),
+                                 ]).name)
         .to eq 'Andreas, Mara und Ruedi Mäder'
     end
 
     it 'joins two different names by SEPARATOR' do
-      expect(household(%w(Andreas Rahel), %w(Mäder Steiner)).name)
+      expect(described_class.new([person('Andreas', 'Mäder'), person('Rahel', 'Steiner')]).name)
         .to eq 'Andreas Mäder, Rahel Steiner'
     end
 
     it 'reduces first names to initial if line is too long' do
-      expect(household(
-        %w(Andreas Rahel Rahel Blunsch),
-        %w(Mäder Steiner Emmenegger Wyss)
-      ).name)
+      expect(described_class.new([
+                                     person('Andreas', 'Mäder'),
+                                     person('Rahel', 'Steiner'),
+                                     person('Rahel', 'Emmenegger'),
+                                     person('Blunsch', 'Wyss'),
+                                 ]).name)
         .to eq 'A. Mäder, R. Steiner, R. Emmenegger, B. Wyss'
     end
 
-    it 'shows no salution' do
-      expect(household(%w(Andreas Rahel), %w(Mäder Steiner)).salutation).to be_nil
+    it 'shows household salution' do
+      person1 = person('Andreas', 'Mäder')
+      allow(person1).to receive(:salutation).and_return(:lieber_vorname)
+      person2 = person('Mara', 'Mäder')
+      allow(person2).to receive(:salutation).and_return(:lieber_vorname)
+      expect(described_class.new([person1, person2]).salutation)
+          .to eq('Liebe*r Andreas, liebe*r Mara')
     end
   end
 end

@@ -50,6 +50,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
+      it 'may show statistics' do
+        is_expected.to be_able_to(:show_statistics, group)
+      end
+
       it 'may show service_tokens' do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
@@ -88,6 +92,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
+      it 'may show statistics' do
+        is_expected.to be_able_to(:show_statistics, group)
+      end
+
       it 'may not index service tokens' do
         is_expected.not_to be_able_to(:index_service_tokens, group)
       end
@@ -116,6 +124,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
+      it 'may show statistics' do
+        is_expected.to be_able_to(:show_statistics, group)
+      end
+
       it 'may show service tokens' do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
@@ -127,6 +139,10 @@ describe GroupAbility do
 
     context 'in top layer' do
       let(:group) { groups(:top_group) }
+
+      it 'may not show statistics' do
+        is_expected.not_to be_able_to(:show_statistics, group)
+      end
 
       it 'may not show person notes' do
         is_expected.not_to be_able_to(:index_notes, group)
@@ -178,6 +194,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
+      it 'may show statistics' do
+        is_expected.to be_able_to(:show_statistics, group)
+      end
+
       it 'may show service tokens' do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
@@ -206,6 +226,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_notes, group)
       end
 
+      it 'may show statistics' do
+        is_expected.to be_able_to(:show_statistics, group)
+      end
+
       it 'may show service tokens' do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
@@ -232,6 +256,10 @@ describe GroupAbility do
 
       it 'may not show person notes' do
         is_expected.not_to be_able_to(:index_notes, group)
+      end
+
+      it 'may not show statistics' do
+        is_expected.not_to be_able_to(:show_statistics, group)
       end
 
       it 'may not show service tokens' do
@@ -289,6 +317,10 @@ describe GroupAbility do
         is_expected.not_to be_able_to(:index_notes, group)
       end
 
+      it 'may not show statistics' do
+        is_expected.not_to be_able_to(:show_statistics, group)
+      end
+
       it 'mayi not show service tokens' do
         is_expected.not_to be_able_to(:index_service_tokens, group)
       end
@@ -342,6 +374,10 @@ describe GroupAbility do
 
       it 'may not show person notes' do
         is_expected.not_to be_able_to(:index_notes, group)
+      end
+
+      it 'may not show statistics' do
+        is_expected.not_to be_able_to(:show_statistics, group)
       end
 
       it 'may not show service tokens' do

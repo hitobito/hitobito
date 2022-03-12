@@ -10,8 +10,8 @@ require 'spec_helper'
 describe Payments::EbicsImportJob do
   include ActiveJob::TestHelper
 
-  let(:invoice_file) {
-    read('camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923')
+  let(:invoice_files) {
+    [read('camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923')]
   }
   let(:config) { payment_provider_configs(:postfinance) }
   let(:epics_client) { double(:epics_client) }
@@ -30,6 +30,14 @@ describe Payments::EbicsImportJob do
     end.to_not change { Payment.count }
   end
 
+  it 'reschedules to tomorrow at midnight' do
+    perform_enqueued_jobs do
+      subject.perform
+    end
+
+    expect(subject.delayed_jobs.last.run_at).to eq(Time.zone.tomorrow.beginning_of_day.in_time_zone)
+  end
+
   it 'initializes payments' do
     config.update(status: :registered)
 
@@ -40,11 +48,52 @@ describe Payments::EbicsImportJob do
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
 
-    expect(payment_provider).to receive(:Z54).and_return(invoice_file)
+    expect(payment_provider).to receive(:Z54).and_return(invoice_files)
+
+    invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+    InvoiceList.create(title: 'membership fee', invoices: [invoice])
+    invoice.update!(reference: '000000000000100000000000800')
+
+    expect do
+      perform_enqueued_jobs do
+        subject.perform
+      end
+    end.to change { Payment.count }.by(1)
+  end
+
+  it 'continues after error is raised on provider' do
+    failing_config = payment_provider_configs(:ubs)
+
+    config.update(status: :registered)
+    failing_config.update( status: :registered)
+
+    failing_provider = double
+
+    expect(PaymentProvider).to receive(:new).with(config).exactly(:once).and_call_original
+    expect(PaymentProvider).to receive(:new).with(failing_config).exactly(:once).and_return(failing_provider)
+
+    error = Epics::Error::TechnicalError.new('091010')
+    expect(failing_provider).to receive(:HPB).and_raise(error)
+
+    expect(Airbrake).to receive(:notify)
+                    .exactly(:once)
+                    .with(error, hash_including(parameters: { payment_provider_config: failing_config }))
+    expect(Raven).to receive(:capture_exception)
+                 .exactly(:once)
+                 .with(error, logger: 'delayed_job')
+
+    expect(PaymentProvider).to receive(:new).and_return(payment_provider)
+    expect(payment_provider).to receive(:client).and_return(epics_client)
+
+    expect(epics_client).to receive(:HPB)
+
+    expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
+
+    expect(payment_provider).to receive(:Z54).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
     InvoiceList.create(title: 'membership fee' ,invoices: [invoice])
-    invoice.update!(reference: '20180314001221000006905084508206')
+    invoice.update!(reference: '000000000000100000000000800')
 
     expect do
       perform_enqueued_jobs do

@@ -38,10 +38,10 @@ environment variables to that wagons can be activated with a single statement.
 
 ### Instructions: create wagon
 
-As a "Work in Progress" the wagon-creation is automated with 
+As a "Work in Progress" the wagon-creation is automated with
 
     ./bin/wagon create [name]
-    
+
 This covers the first few steps (up until copying the configs) of the following instructions:
 
 The basic structure of a new wagon can be easily generated in the main project, the templates for it are in `lib/templates/wagon`):
@@ -51,6 +51,7 @@ The basic structure of a new wagon can be easily generated in the main project, 
 Afterwards you need to make the following adjustments:
 
 * Move files from `hitobito/vendor/wagons/[name]` to `hitobito_[name]`
+* Rename `github` to `.github` to enable GH-Actions
 * Initialize a new Git Repo for the wagon
 * Copy `.tool-versions` from the core into the wagon. (or use `wagon activate [name]`)
 * Copy `Gemfile.lock` from the core into the wagon. (or use `wagon gemfile`)
@@ -64,7 +65,11 @@ If the wagon is the main wagon for a new organization structure, you can additio
 
 * Add Developer and Client Accounts in the seed files: `db/seed/development/1_people.rb` under `devs`.
 * Configure e-mail-adress for the root account in `config/settings.yml`.
-* If the application is multilingual, we reccommend to create a project in [https://www.transifex.com/](Transifex)
+* If the application is multilingual:
+  * create a project in [Transifex](https://www.transifex.com/) (e.g. hitobito_pbs)
+  * make sure there is all required locale files in the wagon's config/locales folder (all non default language files can be empty on init)
+  * create .tx/config and add all files (you might copy it from [here](https://github.com/hitobito/hitobito_die_mitte/blob/master/.tx/config) or use rake tx:init)
+*  
 * Also see the guidelines for internationalization
 
 If the wagon is not for a specific organisation and does not define a group structure, you should delete the following files:

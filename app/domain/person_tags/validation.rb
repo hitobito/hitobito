@@ -3,10 +3,10 @@
 module PersonTags
   class Validation
 
-    EMAIL_PRIMARY_INVALID='category_validation:email_primary_invalid'.freeze
-    EMAIL_ADDITIONAL_INVALID='category_validation:email_additional_invalid'.freeze
-    ADDRESS_INVALID='category_validation:address_invalid'.freeze
-    INVALID_ADDRESS_OVERRIDE='category_validation:invalid_address_override'.freeze
+    EMAIL_PRIMARY_INVALID = 'category_validation:email_primary_invalid'
+    EMAIL_ADDITIONAL_INVALID = 'category_validation:email_additional_invalid'
+    ADDRESS_INVALID = 'category_validation:address_invalid'
+    INVALID_ADDRESS_OVERRIDE = 'category_validation:invalid_address_override'
 
     class << self
 
@@ -15,10 +15,12 @@ module PersonTags
       end
 
       def list
-        [email_primary_invalid,
-         email_additional_invalid,
-         address_invalid,
-         invalid_address_override].compact
+        [
+          email_primary_invalid,
+          email_additional_invalid,
+          address_invalid,
+          invalid_address_override
+        ].compact
       end
 
       def email_primary_invalid(create: false)

@@ -32,6 +32,7 @@ de:
     created_info: Erstellt
     updated_info: Geändert
     deleted_info: Gelöscht
+    archived_info: Archiviert
 
   activerecord:
     errors:
@@ -180,6 +181,9 @@ de:
       event/kind_category:
         one: Kurskategorie
         other: Kurskategorien
+      event/invitation:
+        one: Einladung
+        other: Einladungen
       event/role:
         one: Anlass Rolle
         other: Anlass Rollen
@@ -207,6 +211,9 @@ de:
       event/date:
         one: Datum
         other: Daten
+      family_member:
+        one: Familienmitglied
+        other: Familienmitglieder
       group:
         one: Gruppe
         other: Gruppen
@@ -406,6 +413,7 @@ de:
         phone_numbers: Telefonnummern
         social_accounts: Social Media
         additional_emails: Weitere E-Mails
+        family_members: Familienmitglieder
         picture: Neues Foto hochladen
         remove_picture: Aktuelles Foto entfernen
         roles: Rollen
@@ -415,6 +423,8 @@ de:
         household_key: Haushalts-ID
         created_at: Erstellt
         updated_at: Geändert
+        login_status: Login
+        language: Sprache
 
       person_duplicate:
         birth_year: Jahrgang
@@ -453,6 +463,9 @@ de:
         type: Gruppentyp
         type_name: Gruppentyp
         description: Beschreibung
+        self_registration_role_type: Externe Registrierung
+        self_registration_link: Externe Registrierung
+        self_registration_notification_email: Externe Registrierung Benachrichtigungs-E-Mail
 
       event:
         group_ids: Gruppen
@@ -463,6 +476,7 @@ de:
         motto: Motto
         cost: Kosten
         contact: Kontaktperson
+        notify_contact_on_participations: Kontaktperson über neue Anmeldung per Mail benachrichtigen
         maximum_participants: Maximale Teilnehmerzahl
         contact_id: Kontaktperson
         description: Beschreibung
@@ -545,10 +559,21 @@ de:
 
       event/kind_category:
         label: Bezeichnung
+        order: Sortierschlüssel
         kinds: Kursarten
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
+
+      event/invitation:
+        participation_type: Teilnahmerolle
+        created_at: Erstellungsdatum
+        declined_at: Ablehnungsdatum
+        status: Status
+        statuses:
+          open: Eingeladen
+          accepted: Angenommen
+          declined: Abgelehnt
 
       event/participation:
         person_id: Person
@@ -581,6 +606,11 @@ de:
         person: Person
         type: Rolle
         participation: Person
+
+      family_member:
+        kind: Verwandschaftsverhältnis
+        kinds:
+          sibling: Geschwister
 
       note:
         text: Text
@@ -761,17 +791,28 @@ de:
         success_count: Empfänger erfolgreich
         failed_count: Empfänger fehlerhaft
         sent_at: Verarbeitet um
+        recipient_progress: Verarbeitungsfortschritt
 
       message/letter:
         body: Inhalt
-        heading: Briefkopf
         salutation: Anrede
         pp_post: PP-Zeile
+        donation_confirmation: Spendenbestätigung
         shipping_method: Liefermethode
         shipping_methods:
           own: Eigener Versand
           normal: B-Post
           priority: A-Post
+        send_to_households: Haushalte
+        date_location_text: Datum und Ort
+
+      message_recipient:
+        address: Adresse
+        country: Land
+        printed_address: Briefadresse
+        salutation: Briefanrede
+        town: Ort
+        zip_code: PLZ
 
       subscription:
         related_role_types: Rollen
@@ -958,8 +999,19 @@ de:
         password: Passwort
         ini_letter: INI-Brief
         payment_providers:
-          postfinance: Postfinance
+          bancastato: BancaStato
+          bekb: BEKB | BCBE
+          creditsuisse: Credit Suisse
+          lukb: Luzerner Kantonalbank
           postfinance-test: Postfinance Testumgebung
+          postfinance: Postfinance
+          raiffeisen: Raiffeisen Schweiz
+          sgkb: St.Galler Kantonalbank
+          tkb: Thurgauer Kantonalbank
+          ubs: UBS
+          valiant: Valiant
+          zkb: Zürcher Kantonalbank
+          zugerkb: Zuger Kantonalbank
 
       service_token:
         name: Name
@@ -996,6 +1048,7 @@ de:
     messages:
       attachments_not_allowed: "darf keine Anhänge enthalten"
       invalid_money: "muss auf 5 Rappen gerundet werden"
+      no_permission: "Zugriff verweigert"
       # timeliness
       invalid_date: "ist kein gültiges Datum"
       invalid_time: "ist keine gültige Zeit"

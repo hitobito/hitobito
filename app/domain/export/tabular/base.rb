@@ -56,7 +56,7 @@ module Export::Tabular
       @attribute_labels ||= build_attribute_labels
     end
 
-    # List of all lables.
+    # List of all labels.
     def labels
       attribute_labels.values
     end

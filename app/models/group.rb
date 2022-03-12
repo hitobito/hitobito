@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: groups
@@ -57,7 +58,7 @@ class Group < ActiveRecord::Base
   # This must contain the superior attributes as well.
   class_attribute :used_attributes
   self.used_attributes = [:name, :short_name, :email, :contact_id,
-                          :email, :address, :zip_code, :town, :country, :description]
+                          :address, :zip_code, :town, :country, :description]
 
   # Attributes that may only be modified by people from superior layers.
   class_attribute :superior_attributes
@@ -68,10 +69,10 @@ class Group < ActiveRecord::Base
   ### CALLBACKS
 
   before_save :reset_contact_info
+  before_save :prevent_changes, if: ->(g) { g.archived? }
   after_create :create_invoice_config, if: :layer?
 
-  # Root group may not be destroyed
-  protect_if :root?
+  protect_if :root? # Root group may not be destroyed
   protect_if :children_without_deleted
 
   stampable stamper_class_name: :person, deleter: true
@@ -85,7 +86,8 @@ class Group < ActiveRecord::Base
 
   has_many :people_filters, dependent: :destroy
 
-  has_and_belongs_to_many :events, after_remove: :destroy_orphaned_event
+  has_and_belongs_to_many :events, -> { includes(:translations) },
+                          after_remove: :destroy_orphaned_event
 
   has_many :mailing_lists, dependent: :destroy
   has_many :subscriptions, as: :subscriber, dependent: :destroy
@@ -117,6 +119,10 @@ class Group < ActiveRecord::Base
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validates :address, length: { allow_nil: true, maximum: 1024 }
+  validates :contact, permission: :show_full, allow_blank: true, if: :contact_id_changed?
+  validates :contact, inclusion: { in: ->(group) { group.people.members } }, allow_nil: true
+
+  validate :assert_valid_self_registration_notification_email
 
   ### CLASS METHODS
 
@@ -161,7 +167,6 @@ class Group < ActiveRecord::Base
 
 
   ### INSTANCE METHODS
-
 
   def to_s(_format = :default)
     name
@@ -222,6 +227,36 @@ class Group < ActiveRecord::Base
     GroupSetting.list(id)
   end
 
+  def archived?
+    archived_at.present?
+  end
+
+  def archivable?
+    false # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
+
+    # !archived? && children_without_deleted.none?
+  end
+
+  def self_registration_active?
+    Settings.groups&.self_registration&.enabled &&
+      self_registration_role_type.present? &&
+      decorate.possible_roles_without_writing_permissions
+              .include?(self_registration_role_type.constantize)
+  end
+
+  def path_args
+    [self]
+  end
+
+  def assert_valid_self_registration_notification_email
+    self.self_registration_notification_email = self_registration_notification_email.presence
+    return unless self_registration_notification_email
+
+    unless valid_email?(self_registration_notification_email)
+      errors.add(:self_registration_notification_email, :invalid)
+    end
+  end
+
   private
 
   def layer_person_duplicates
@@ -265,4 +300,12 @@ class Group < ActiveRecord::Base
     create_invoice_config!
   end
 
+  def prevent_changes
+    allowed = %w(archived_at updater_id)
+    only_archival = changes
+                    .reject { |_attr, (from, to)| from.blank? && to.blank? }
+                    .keys.all? { |key| allowed.include? key }
+
+    raise ActiveRecord::ReadOnlyRecord unless new_record? || only_archival
+  end
 end

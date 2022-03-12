@@ -23,7 +23,7 @@ describe CustomContent do
 
   context '.list' do
     it 'contains one entry per main item' do
-      expect(CustomContent.list.size).to eq(11)
+      expect(CustomContent.list.size).to eq(12)
     end
   end
 

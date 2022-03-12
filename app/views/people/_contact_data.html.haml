@@ -6,7 +6,6 @@
 .contactable.well
   .profil-big.pull-right
     = image_tag(person.picture_url, size: '72x72')
-  
   .contact-marker.pull-right
     =  link_to_address person
 
@@ -16,6 +15,7 @@
            only_public: only_public
 
   - if person.household_people.present?
+    = render_extensions 'household_attrs'
     %div
       %small= t('.lives_in_household_with')
       %br

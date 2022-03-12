@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2016, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -20,7 +20,13 @@ class ChangelogVersion
     [major_version, minor_version] <=> [other.major_version, other.minor_version]
   end
 
-  def label
-    "Version #{version}"
+  def to_markdown
+    [label_markdown, log_entries.map(&:to_markdown)].flatten.join("\n")
+  end
+
+  private
+
+  def label_markdown
+    "## Version #{version}"
   end
 end

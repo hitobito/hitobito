@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2014 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -21,17 +21,21 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     subject { decorator.header }
 
     context 'without current user' do
-      before { update_attributes }
+      before { update }
       it { is_expected.to match(/^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr$/) }
     end
 
     context 'with current user' do
       before do
         PaperTrail.request.whodunnit = person.id.to_s
-        update_attributes
+        update
       end
 
-      it { is_expected.to match(/^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>von <a href=".+">#{person.to_s}<\/a>$/) }
+      it do
+        is_expected.to match(
+          /^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>von <a href=".+">#{person}<\/a>$/
+        )
+      end
     end
   end
 
@@ -39,20 +43,20 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     subject { decorator.author }
 
     context 'without current user' do
-      before { update_attributes }
+      before { update }
       it { is_expected.to be_nil }
     end
 
     context 'with current user' do
       before do
         PaperTrail.request.whodunnit = person.id.to_s
-        update_attributes
+        update
       end
 
       context 'and permission to link' do
         it do
           expect(decorator.h).to receive(:can?).with(:show, person).and_return(true)
-          is_expected.to match(/^<a href=".+">#{person.to_s}<\/a>$/)
+          is_expected.to match(/^<a href=".+">#{person}<\/a>$/)
         end
       end
 
@@ -70,11 +74,10 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     subject { decorator.changes }
 
     context 'with attribute changes' do
-      before { update_attributes }
+      before { update }
 
       it { is_expected.to match(/<div>Ort wurde/) }
       it { is_expected.to match(/<div>PLZ wurde/) }
-      it { is_expected.to match(/<div>Haupt-E-Mail wurde/) }
     end
 
     context 'with association changes' do
@@ -89,26 +92,36 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
         let(:list) { mailing_lists(:leaders) }
 
         it 'new add request' do
-          Person::AddRequest::MailingList.create!(person: person, body: list, requester: people(:top_leader))
-          expect(subject).to eq "<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde gestellt.</div>"
+          Person::AddRequest::MailingList.create!(
+            person: person, body: list, requester: people(:top_leader)
+          )
+          expect(subject).to eq(
+            '<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde gestellt.</div>'
+          )
         end
 
         it 'destroyed add request' do
-          Person::AddRequest::MailingList.create!(person: person, body: list, requester: people(:top_leader)).destroy!
-          expect(subject).to eq "<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde beantwortet.</div>"
+          Person::AddRequest::MailingList.create!(
+            person: person, body: list, requester: people(:top_leader)
+          ).destroy!
+          expect(subject).to eq(
+            '<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde beantwortet.</div>'
+          )
         end
 
         it 'destroyed mailing list' do
-          Person::AddRequest::MailingList.create!(person: person, body: list, requester: people(:top_leader))
+          Person::AddRequest::MailingList.create!(
+            person: person, body: list, requester: people(:top_leader)
+          )
           list.destroy
-          expect(subject).to eq "<div>Zugriffsanfrage für <i>unbekannt</i> wurde beantwortet.</div>"
+          expect(subject).to eq '<div>Zugriffsanfrage für <i>unbekannt</i> wurde beantwortet.</div>'
         end
       end
     end
   end
 
   context '#attribute_change' do
-    before { update_attributes }
+    before { update }
 
     it 'contains from and to attributes' do
       string = decorator.attribute_change(:first_name, 'Hans', 'Fritz')
@@ -139,7 +152,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
 
     it 'formats according to column info' do
-      now = Time.local(2014, 6, 21, 18)
+      now = Time.zone.local(2014, 6, 21, 18)
       string = decorator.attribute_change(:updated_at, nil, now)
       expect(string).to eq 'Geändert wurde auf <i>21.06.2014 18:00</i> gesetzt.'
     end
@@ -155,7 +168,8 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
 
     it 'sanitizes html' do
-      Fabricate(:social_account, contactable: person, label: 'Foo', name: '<script>alert("test")</script>')
+      Fabricate(:social_account, contactable: person, label: 'Foo',
+                                 name: '<script>alert("test")</script>')
 
       is_expected.to eq('Social Media Adresse <i>alert("test") (Foo)</i> wurde hinzugefügt.')
     end
@@ -164,7 +178,8 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
       account = Fabricate(:social_account, contactable: person, label: 'Foo', name: 'Bar')
       account.update!(name: 'Boo')
 
-      is_expected.to eq('Social Media Adresse <i>Bar (Foo)</i> wurde aktualisiert: Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.')
+      is_expected.to eq('Social Media Adresse <i>Bar (Foo)</i> wurde aktualisiert: '\
+                        'Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.')
     end
 
     it 'builds destroy text' do
@@ -175,15 +190,16 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
     end
 
     it 'builds destroy text for non existing Role class' do
-      role = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', person: person, group: groups(:bottom_layer_one))
+      role = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo', person: person,
+                                                             group: groups(:bottom_layer_one))
       role.destroy!
-      hide_const("Group::BottomLayer::Leader")
+      hide_const('Group::BottomLayer::Leader')
       is_expected.to eq('Rolle <i>Group::BottomLayer::Leader</i> wurde gelöscht.')
     end
   end
 
-  def update_attributes
-    person.update!(town: 'Bern', zip_code: '3007', email: 'new@hito.example.com')
+  def update
+    person.update!(town: 'Bern', zip_code: '3007')
   end
 
 end

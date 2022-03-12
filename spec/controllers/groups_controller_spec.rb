@@ -101,6 +101,51 @@ describe GroupsController do
         get :edit, params: { id: groups(:top_group) }
         expect(assigns(:contacts)).to be_present
       end
+
+      it 'validates permission to read contact person' do
+        invisible_person = Fabricate(:person)
+        person = people(:bottom_member)
+        group = groups(:bottom_layer_one)
+        Fabricate(:role, type: 'Group::BottomLayer::Leader', person: person, group: group)
+        sign_in(person)
+        post :create, params: { group: { type: 'Group::BottomGroup', parent_id: group.id, contact_id: invisible_person.id, name: 'foobar' } }
+
+        Auth.current_person = person
+        group = assigns(:group)
+        expect(group).not_to be_valid
+        expect(group.errors.messages[:contact]).to include('Zugriff verweigert')
+        Auth.current_person = nil
+      end
+    end
+
+    describe 'PUT update' do
+      let(:attrs) {  { type: 'Group::TopGroup', parent_id: group.id } }
+      let(:top_leader_role) { roles(:top_leader) }
+      let(:person) { top_leader_role.person }
+      let(:group) { top_leader_role.group }
+
+      before do
+        group.update_columns(contact_id: 1)
+      end
+
+      it 'allows nil contact' do
+        expect do
+          put :update, params: { id: group, group: attrs.merge(name: 'foobar', contact_id: nil) }
+        end.to change { group.reload.contact_id }.to(nil)
+      end
+
+      it 'allows member contact' do
+        expect do
+          put :update, params: { id: group, group: attrs.merge(name: 'foobar', contact_id: person.id ) }
+        end.to change { group.reload.contact_id }.to(person.id)
+      end
+
+      it 'does not allow non-member contact' do
+        non_member = people(:bottom_member)
+        expect do
+          put :update, params: { id: group, group: attrs.merge(name: 'foobar', contact_id: non_member.id) }
+        end.not_to change { group.reload.contact_id }
+      end
     end
 
     describe '#destroy' do

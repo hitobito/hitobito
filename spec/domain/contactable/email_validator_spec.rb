@@ -22,8 +22,7 @@ describe Contactable::EmailValidator do
   end
 
   it 'tags people with invalid primary e-mail' do
-    top_leader.email = 'not-an-email'
-    top_leader.save!(validate: false)
+    top_leader.update_columns(email: 'not-an-email')
 
     validator.validate_people
 
@@ -35,8 +34,7 @@ describe Contactable::EmailValidator do
   end
 
   it 'keeps existing invalid e-mail tag' do
-    top_leader.email = 'not-an-email'
-    top_leader.save!(validate: false)
+    top_leader.update_columns(email: 'not-an-email')
     create_invalid_additional_email(top_leader, 'not-an-email')
 
     validator.validate_people
@@ -66,8 +64,7 @@ describe Contactable::EmailValidator do
   end
 
   it 'tags people with invalid primary and additional e-mail' do
-    top_leader.email = 'not-an-email'
-    top_leader.save!(validate: false)
+    top_leader.update_columns(email: 'not-an-email')
     create_invalid_additional_email(top_leader, 'not-an-email')
 
     validator.validate_people

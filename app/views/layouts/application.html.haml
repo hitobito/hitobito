@@ -34,7 +34,7 @@
     %header.logo
       = link_to(header_logo, root_path, class: 'logo-image')
 
-    #page
+    #page{class: ('is-nav-not-rendered' unless render_nav?)}
       - if render_nav?
         %nav.nav-left
           = render 'layouts/nav'
@@ -67,7 +67,7 @@
 
             -# div must always exist to insert flash messages with ajax
             #flash
-              = render partial: 'layouts/flash', collection: [:notice, :alert], as: :level
+              = render partial: 'layouts/flash', collection: [:notice, :warn, :alert], as: :level
 
             = content_for?(:content) ? yield(:content) : yield
         - else
@@ -87,33 +87,6 @@
 
             = content_for?(:content) ? yield(:content) : yield
 
-
-    %footer#page-footer
-      .container-fluid
-        .row
-          - footer = Settings.application.footer
-          .span3
-            - if footer.logo_image.present?
-              = link_to wagon_image_pack_tag(footer.logo_image), footer.logo_url, target: '_blank'
-          .footer_content.span9
-            %p
-              - footer.links.to_hash.fetch(I18n.locale, footer.links.to_hash).each do |label, url|
-                = link_to label, url, target: '_blank'
-                %br/
-            %p
-              - if Wagons.app_version.to_s > '0.0'
-                = link_to "Version #{Wagons.app_version}", changelog_path
-
-                %br/
-              = app_version_links
-
-              = link_to t('.source_code'), 'https://github.com/hitobito', target: '_blank'
-              = t('.available_under_license')
-              = link_to 'GNU Affero General Public License', 'http://www.gnu.org/licenses/agpl-3.0.html', target: '_blank'
-              %br/
-              = t('.developed_by')
-              = link_to 'Hitobito', 'http://hitobito.ch', target: '_blank'
-              2012 -
-              = Time.zone.now.year
+  = render 'layouts/footer'
 
   = javascript_tag yield(:javascripts) if content_for?(:javascripts)

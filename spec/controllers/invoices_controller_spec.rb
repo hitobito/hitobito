@@ -120,6 +120,7 @@ describe InvoicesController do
       let(:sent)         { invoices(:sent) }
       let(:letter)       { messages(:with_invoice) }
       let(:invoice_list) { messages(:with_invoice).create_invoice_list(title: 'test', group_id: group.id) }
+      let(:top_leader) { people(:top_leader) }
 
       before do
         update_issued_at_to_current_year
@@ -142,10 +143,21 @@ describe InvoicesController do
       end
 
       it 'does render pdf Letter renderer renderer' do
+        top_leader.update(
+          address: 'Greatstreet 345',
+          zip_code: 3456,
+          town: 'Greattown',
+          country: 'CH'
+        )
+
         invoice_list.update(message: letter)
-        expect(Export::Pdf::Messages::LetterWithInvoice).to receive(:new)
-          .with(letter, letter.recipients).and_call_original
-        get :index, params: { group_id: group.id, invoice_list_id: invoice_list.id }, format: :pdf
+
+        expect(Export::MessageJob).to receive(:new)
+          .with(:pdf, person.id, letter.id, Hash)
+          .and_call_original
+        expect do
+          get :index, params: { group_id: group.id, invoice_list_id: invoice_list.id }, format: :pdf
+        end.to change { Delayed::Job.count }.by(1)
       end
     end
 

@@ -13,7 +13,7 @@
 # (Using the CLI, you can achieve this by running
 # `oc start-build rails-sti-base`)
 
-FROM centos/ruby-25-centos7
+FROM centos/ruby-27-centos7
 
 USER root
 
@@ -26,7 +26,7 @@ ADD ./root /
 RUN \
     yum localinstall -y \
       "https://github.com/sphinxsearch/sphinx/releases/download/2.2.11-release/sphinx-2.2.11-1.rhel7.x86_64.rpm" && \
-    scl enable rh-ruby25 /opt/bin/install-nodejs && \
+    scl enable rh-ruby27 /opt/bin/install-nodejs && \
     yum install rh-python38 -y && \
     scl enable rh-python38 'pip install transifex-client' && \
     wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-devel-3.8.11-1.fc21.x86_64.rpm &&  \
@@ -40,6 +40,7 @@ RUN \
     find ./ -type d -exec chmod g+x {} + && \
     chown -R 1001:0 ./ && \
     yum install ImageMagick ImageMagick-devel -y && \
+    yum install cacerts ca-certificates -y && update-ca-trust && \
     yum clean all -y
 
 # BUNDLE_WITHOUT is a workaround for the base image:

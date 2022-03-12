@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2014-2021 Pfadibewegung Schweiz. This file is part of
@@ -13,6 +12,7 @@ module Sheet
     class NavLeft
 
       attr_reader :entry, :sheet, :view
+
       delegate :content_tag, :link_to, :safe_join, :sanitize, to: :view
 
       def initialize(sheet)
@@ -92,14 +92,15 @@ module Sheet
       end
 
       def group_link(group)
-        li = if group == entry
-               '<li class="is-active">'.html_safe
-             else
-               '<li>'.html_safe
-             end
+        decorated = GroupDecorator.new(group)
 
-        display_name = sanitize(group.display_name, tags: %w(i))
-        group_name   = sanitize(group.to_s, tags: %w(i))
+        li = opening_li([
+          ('is-active' if group == entry),
+          decorated.archived_class
+        ].compact)
+
+        display_name = sanitize(decorated.display_name, tags: %w(i))
+        group_name   = sanitize(decorated.to_s, tags: %w(i))
 
         li + link_to(display_name, active_path(group),
                      title: group_name, data: { disable_with: display_name })
@@ -118,12 +119,12 @@ module Sheet
       def render_sub_layers
         safe_join(grouped_sub_layers) do |type, layers|
           content_tag(:li, content_tag(:span, type, class: 'divider')) +
-          safe_join(layers) do |l|
+          safe_join(layers.map { |l| GroupDecorator.new(l) }) do |l|
             l.use_hierarchy_from_parent(layer)
-            content_tag(:li, link_to(l.display_name,
-                                     active_path(l),
-                                     title: l.to_s,
-                                     data: { disable_with: l.display_name }))
+            content_tag(:li, class: l.archived_class) do
+              link_to(l.display_name, active_path(l),
+                      title: l.to_s, data: { disable_with: l.display_name })
+            end
           end
         end
       end
@@ -152,6 +153,16 @@ module Sheet
 
       def visible?(group)
         @entry.hierarchy.any? { |g| g.id == group.parent_id }
+      end
+
+      def opening_li(css_classes)
+        li_tag = if css_classes.any?
+                   %(<li class="#{css_classes.join(' ')}">)
+                 else
+                   '<li>'.html_safe
+                 end
+
+        sanitize(li_tag, tags: %w(li), attributes: %w(class))
       end
 
     end

@@ -8,6 +8,10 @@
 
 module Oauth
   class ProfilesController < ActionController::Base
+
+    # Make brakeman happy, even though we don't have any POST actions in this controller
+    protect_from_forgery with: :exception
+
     before_action do
       doorkeeper_authorize! :with_roles, :email, :name
     end
@@ -16,7 +20,7 @@ module Oauth
       if scope.blank? || doorkeeper_token.acceptable?(scope)
         render json: email_attrs.merge(scope_attrs || {})
       else
-        render json: { error: "invalid scope: #{scope}" }, status: 403
+        render json: { error: "invalid scope: #{scope}" }, status: :forbidden
       end
     end
 
@@ -24,9 +28,9 @@ module Oauth
 
     def scope_attrs
       case scope
-      when /name/ then
+      when /name/
         person.attributes.slice('first_name', 'last_name', 'nickname')
-      when /with_roles/ then
+      when /with_roles/
         public_attrs_with_roles
       end
     end

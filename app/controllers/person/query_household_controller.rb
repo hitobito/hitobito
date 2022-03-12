@@ -12,7 +12,7 @@ class Person::QueryHouseholdController < Person::QueryController
   private
 
   def scope
-    scope = Person.accessible_by(PersonWritables.new(current_user))
+    scope = Person.accessible_by(PersonWritables.new(current_user)).distinct.joins(roles: :group)
     scope = scope.or(same_address_query) if address_attrs.present?
     scope
   end

@@ -11,4 +11,7 @@
   = f.labeled_input_field(:password)
   = f.labeled_boolean_field(:remember_me)
   = f.indented(submit_button(f, t('.sign_in')))
-  = f.indented(link_to t('layouts.unauthorized.forgot_password'), new_person_password_path)
+  = f.indented do
+    = link_to t('layouts.unauthorized.forgot_password'), new_person_password_path
+    |
+    = link_to t('layouts.unauthorized.need_confirmation_email'), new_person_confirmation_path

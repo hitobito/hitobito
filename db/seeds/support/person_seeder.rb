@@ -43,6 +43,7 @@ class PersonSeeder
     else
       attrs[:nickname] = Faker::Lorem.words(number: 1).first.capitalize
     end
+    attrs[:confirmed_at] = Time.now
 
     attrs
   end
@@ -63,6 +64,8 @@ class PersonSeeder
 
   def assign_role_to_root(group, role_type)
     person = Person.find_by(email: Settings.root_email)
+    raise "No root-user found. 'rake db:seed' should fix it" unless person
+
     role_attrs = { person_id: person.id, group_id: group.id, type: role_type.sti_name }
     Role.seed_once(*role_attrs.keys, role_attrs)
   end
@@ -71,7 +74,8 @@ class PersonSeeder
     first, last = name.split
     attrs = standard_attributes(first, last).merge({
       email: email,
-      encrypted_password: encrypted_password
+      encrypted_password: encrypted_password,
+      confirmed_at: Time.now
     }).reject do |key, _value|
       %i(
         address

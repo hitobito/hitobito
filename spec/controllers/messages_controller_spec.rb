@@ -90,6 +90,25 @@ describe MessagesController do
       expect(response).to render_template :new
     end
 
+    it 'validates presence of subject' do
+      Subscription.create!(mailing_list: list, subscriber: top_leader)
+
+      post :create, params: nesting.merge(
+        message: {
+          subject: '',
+          type: 'Message::LetterWithInvoice',
+          body: 'Bitte einzahlen',
+          invoice_attributes: {
+            invoice_items_attributes: {
+              '1' => { 'name' => 'Mitgliedsbeitrag', 'unit_cost' => 42, '_destroy' => 'false' }
+            }
+          }
+        }
+      )
+      expect(assigns(:message)).to be_invalid
+      expect(response).to render_template :new
+    end
+
     it 'validates invoice_item attributes' do
       post :create, params: nesting.merge(
         message: {
@@ -130,7 +149,7 @@ describe MessagesController do
       end
 
       it 'renders file' do
-        expect(Export::Pdf::Messages::Letter).to receive(:new).with(anything, anything, background: Settings.messages.pdf.preview).and_call_original
+        expect(Export::Pdf::Messages::Letter).to receive(:new).with(anything, background: Settings.messages.pdf.preview).and_call_original
         Subscription.create!(mailing_list: message.mailing_list, subscriber: bottom_member)
         get :show, format: :pdf, params: { preview: true, id: message.id, mailing_list_id: message.mailing_list.id, group_id: message.mailing_list.group.id }
         expect(response.header['Content-Disposition']).to match(/preview-information.pdf/)

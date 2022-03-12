@@ -106,7 +106,7 @@ describe PersonAbility do
     it 'may modify any public role in same layer' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym,
                         group: groups(:bottom_layer_one),
-                        person: Fabricate(:person, password: 'foobar', password_confirmation: 'foobar'))
+                        person: Fabricate(:person, password: 'foobarfoobar', password_confirmation: 'foobarfoobar'))
       is_expected.to be_able_to(:update, other.person.reload)
       is_expected.to be_able_to(:update_email, other.person)
       is_expected.to be_able_to(:update, other)
@@ -416,7 +416,7 @@ describe PersonAbility do
     it 'may modify any public role in same layer' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym,
                         group: groups(:bottom_layer_one),
-                        person: Fabricate(:person, password: 'foobar', password_confirmation: 'foobar'))
+                        person: Fabricate(:person, password: 'foobarfoobar', password_confirmation: 'foobarfoobar'))
       is_expected.to be_able_to(:update, other.person.reload)
       is_expected.to be_able_to(:update_email, other.person)
       is_expected.to be_able_to(:update, other)
@@ -767,7 +767,7 @@ describe PersonAbility do
     end
 
     it 'may view and update others in same group' do
-      other = Fabricate(:person, password: 'foobar', password_confirmation: 'foobar')
+      other = Fabricate(:person, password: 'foobarfoobar', password_confirmation: 'foobarfoobar')
       Fabricate(Role::External.name.to_sym, group: groups(:top_layer), person: other)
       is_expected.to be_able_to(:show, other.reload)
       is_expected.to be_able_to(:update, other)
@@ -990,7 +990,7 @@ describe PersonAbility do
     end
 
     it 'may view and update others in same group' do
-      other = Fabricate(:person, password: 'foobar', password_confirmation: 'foobar')
+      other = Fabricate(:person, password: 'foobarfoobar', password_confirmation: 'foobarfoobar')
       Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one), person: other)
       is_expected.to be_able_to(:show, other.reload)
       is_expected.to be_able_to(:update, other)
@@ -1249,8 +1249,8 @@ describe PersonAbility do
       context 'in group from lower layer' do
         let(:group) { groups(:bottom_layer_one) }
 
-        it 'may not create people filters' do
-          is_expected.not_to be_able_to(:create, group.people_filters.new)
+        it 'may create people filters' do
+          is_expected.to be_able_to(:create, group.people_filters.new)
         end
 
         it 'may define new people filters' do
@@ -1374,6 +1374,50 @@ describe PersonAbility do
     end
   end
 
+  context :totp_reset do
+    context 'as admin' do
+      let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+
+      it 'can reset other person' do
+        is_expected.to be_able_to(:totp_reset, people(:bottom_member))
+      end
+    end
+
+    context 'as non admin' do
+      let(:role) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
+
+      it 'can not reset other person' do
+        is_expected.to_not be_able_to(:totp_reset, people(:bottom_member))
+      end
+    end
+  end
+
+  context :totp_disable do
+    context 'as admin' do
+      let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+
+      it 'can not disable other person when forced' do
+        expect(people(:bottom_member).roles.first.class)
+          .to receive(:two_factor_authentication_enforced)
+          .and_return(true)
+
+        is_expected.to_not be_able_to(:totp_disable, people(:bottom_member))
+      end
+
+      it 'can disable other person' do
+        is_expected.to be_able_to(:totp_disable, people(:bottom_member))
+      end
+    end
+
+    context 'as non admin' do
+      let(:role) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
+
+      it 'can not disable other person' do
+        is_expected.to_not be_able_to(:totp_disable, people(:bottom_member))
+      end
+    end
+  end
+
   context 'person without roles' do
     let(:person_without_roles) do
       person = Fabricate(Person.name.downcase.to_sym)
@@ -1392,7 +1436,7 @@ describe PersonAbility do
     end
 
     it 'may update_password if already set' do
-      person_without_roles.update!(password: 'example')
+      person_without_roles.update!(password: 'exampleexample')
       is_expected.to be_able_to(:update_password, person_without_roles)
     end
 

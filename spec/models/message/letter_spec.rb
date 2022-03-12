@@ -6,7 +6,6 @@
 #
 #  id                 :bigint           not null, primary key
 #  failed_count       :integer          default(0)
-#  heading            :boolean          default(FALSE)
 #  invoice_attributes :text(65535)
 #  recipient_count    :integer          default(0)
 #  salutation         :string(255)      default("none"), not null
@@ -53,11 +52,6 @@ describe Message::Letter do
 
       # person without address
       add_to_group(Fabricate(:person))
-    end
-
-    it 'calculates number of people with complete address' do
-      expect(entry.total_recipient_count).to eq(44)
-      expect(entry.valid_recipient_count).to eq(42)
     end
   end
 

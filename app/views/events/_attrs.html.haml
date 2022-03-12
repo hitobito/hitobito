@@ -5,6 +5,8 @@
 
 - if @user_participation
   = render 'banner_participating'
+- elsif @open_invitation && event_user_application_possible?(entry)
+  = render 'banner_open_invitation'
 
 #main.row-fluid
   %article.span7

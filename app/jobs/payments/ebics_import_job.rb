@@ -6,15 +6,21 @@
 #  https://github.com/hitobito/hitobito_die_mitte.
 
 class Payments::EbicsImportJob < RecurringJob
-  run_every 1.day
 
   def perform_internal
     payment_provider_configs.find_each do |provider_config|
       Payments::EbicsImport.new(provider_config).run
+    rescue StandardError => e
+      error(self, e, payment_provider_config: provider_config)
     end
   end
 
   def payment_provider_configs
     PaymentProviderConfig.initialized
+  end
+
+  def next_run
+    # Sets next run to 00:00 of next day
+    Time.zone.tomorrow.at_beginning_of_day.in_time_zone
   end
 end

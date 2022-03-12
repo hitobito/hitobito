@@ -578,8 +578,7 @@ describe Person do
     before { allow(Truemail).to receive(:valid?).and_call_original }
 
     before do
-      person.email = 'not-an-email'
-      person.save!(validate: false)
+      person.update_columns(email: 'not-an-email')
     end
 
     before do
@@ -716,5 +715,47 @@ describe Person do
 
     person = Person.find(person.id)
     expect(person.shared_access_token).to be_nil
+  end
+
+  describe 'encrypted_two_fa_secret' do
+    let(:person) { people(:bottom_member) }
+
+    it 'is being encrypted when generated' do
+      person.two_fa_secret = People::OneTimePassword.generate_secret
+
+      person.save!
+
+      person.reload
+
+      expect(person.encrypted_two_fa_secret).to_not be_nil
+      expect(person.encrypted_two_fa_secret[:iv]).to_not be_nil
+      expect(person.encrypted_two_fa_secret[:encrypted_value]).to_not be_nil
+    end
+
+    it 'is being encrypted and correctly decrypted' do
+      decrypted_secret = ROTP::Base32.random
+
+      person.two_fa_secret = decrypted_secret
+
+      person.save!
+
+      person.reload
+
+      expect(person.encrypted_two_fa_secret).to_not be_nil
+
+      expect(person.two_fa_secret).to eq(decrypted_secret)
+    end
+  end
+
+  describe '#language' do
+    let(:person) { Person.new(last_name: 'Foo') }
+
+    it 'is not valid with valid outside defined languages' do
+      expect(person).to be_valid
+
+      person.language = 'rm'
+
+      expect(person).to_not be_valid
+    end
   end
 end

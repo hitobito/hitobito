@@ -96,6 +96,10 @@ class TokenAbility
     can :show, MailingList do |mailing_list|
       token.layer.layer_group == mailing_list.group.layer_group
     end
+
+    can :index_subscriptions, MailingList do |mailing_list|
+      token.layer.layer_group == mailing_list.group.layer_group
+    end
   end
 
   def token_layer_and_below

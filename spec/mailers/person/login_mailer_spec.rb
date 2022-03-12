@@ -29,8 +29,8 @@ describe Person::LoginMailer do
 
   context 'with internationalized domain names' do
     before do
-     recipient.update!(email: 'member@exämple.com')
-     sender.update!(email: 'leader@exämple.com')
+     recipient.update_columns(email: 'member@exämple.com')
+     sender.update_columns(email: 'leader@exämple.com')
    end
 
     its(:to) { should == %w(member@xn--exmple-cua.com) }

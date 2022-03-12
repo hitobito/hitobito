@@ -60,6 +60,43 @@ describe PersonDecorator, :draper_with_helpers do
     end
   end
 
+  context 'roles short' do
+    before do
+      Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer), person: person)
+      Fabricate(Group::BottomLayer::LocalGuide.name.to_sym, group: groups(:bottom_layer_one), person: person)
+    end
+
+    it 'displays only roles of the group without group name' do
+      roles_short = PersonDecorator.new(person).roles_short(groups(:top_layer))
+      expect(roles_short).to include('Admin')
+      expect(roles_short).not_to include('<span class="muted">Top</span>')
+      expect(roles_short).not_to include('Leader')
+      expect(roles_short).not_to include('<span class="muted">Top / TopGroup</span>')
+      expect(roles_short).not_to include('Local Guide')
+      expect(roles_short).not_to include('<span class="muted">Bottom One</span>')
+    end
+
+    it 'displays roles of the group and its subgroups including the group name' do
+      roles_short = PersonDecorator.new(person).roles_short(groups(:top_layer).decorate, true)
+      expect(roles_short).to include('Admin')
+      expect(roles_short).to include('<span class="muted">Top</span>')
+      expect(roles_short).to include('Leader')
+      expect(roles_short).to include('<span class="muted">Top / TopGroup</span>')
+      expect(roles_short).to include('Local Guide')
+      expect(roles_short).to include('<span class="muted">Bottom One</span>')
+    end
+
+    it 'does not display roles in groups which are not subgroups' do
+      roles_short = PersonDecorator.new(person).roles_short(groups(:bottom_layer_one).decorate, true)
+      expect(roles_short).not_to include('Admin')
+      expect(roles_short).not_to include('<span class="muted">Top</span>')
+      expect(roles_short).not_to include('Leader')
+      expect(roles_short).not_to include('<span class="muted">Top / TopGroup</span>')
+      expect(roles_short).to include('Local Guide')
+      expect(roles_short).to include('<span class="muted">Bottom One</span>')
+    end
+  end
+
 
   context 'participations' do
     it 'pending_applications returns participations that are not active' do

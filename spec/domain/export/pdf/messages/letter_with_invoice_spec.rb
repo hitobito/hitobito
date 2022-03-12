@@ -10,14 +10,21 @@ require "spec_helper"
 describe Export::Pdf::Messages::LetterWithInvoice do
 
   let(:letter) { messages(:with_invoice) }
-  let(:recipients) { [people(:bottom_member)] }
   let(:options) { {} }
+  let(:group) { groups(:top_layer) }
+  let(:bottom_member) { people(:bottom_member) }
 
-  let(:pdf) { described_class.new(letter, recipients, options) }
+  let(:pdf) { described_class.new(letter, options) }
   subject { pdf }
 
   before { invoice_configs(:top_layer).update(payment_slip: :qr) }
-
+  before do
+    Subscription.create!(mailing_list: letter.mailing_list,
+                         subscriber: group,
+                         role_types: [Group::BottomGroup::Member])
+    Fabricate(Group::BottomGroup::Member.name, group: groups(:bottom_group_one_one), person: bottom_member)
+    Messages::LetterDispatch.new(letter).run
+  end
   it "renders logo from settings and qr images" do
     expect_any_instance_of(Prawn::Document).to receive(:image).with(any_args).exactly(3).times
     subject.render
@@ -42,11 +49,11 @@ describe Export::Pdf::Messages::LetterWithInvoice do
     subject { PDF::Inspector::Text.analyze(pdf.render) }
 
     it "renders text at positions" do
-      pdf = described_class.new(letter, recipients).render
+      pdf = described_class.new(letter).render
       expect(text_with_position).to match_array [
-        [71, 687, "Bottom Member"],
-        [71, 676, "Greatstreet 345"],
-        [71, 666, "3456 Greattown"],
+        [71, 654, "Bottom Member"],
+        [71, 644, "Greatstreet 345"],
+        [71, 633, "3456 Greattown"],
         [71, 531, "Mitgliedsbeitrag"],
         [71, 502, "Hallo"],
         [71, 481, "Dein "],
@@ -74,60 +81,62 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         [360, 292, "Konto / Zahlbar an"],
         [360, 280, "CH93 0076 2011 6238 5295 7"],
         [360, 269, "Hans Gerber"],
-        [360, 214, "Zahlbar durch"],
-        [360, 202, "Bottom Member"],
-        [360, 191, "Greatstreet 345"],
-        [360, 179, "3456 Greattown"]
+        [360, 225, "Referenznummer"],
+        [360, 214, "00 00834 96356 70000 00000 00019"],
+        [360, 193, "Zahlbar durch"],
+        [360, 181, "Bottom Member"],
+        [360, 170, "Greatstreet 345"],
+        [360, 158, "3456 Greattown"]
       ]
     end
 
     context "persisted invoice list" do
 
-      let(:group) { groups(:top_layer) }
-      let(:recipient) { recipients.first }
-
       it 'renders iban from invoice config when no persisted invoice exists' do
         group.invoice_config.update(iban: 'CH84 0221 1981 6169 5329 8')
-        pdf = described_class.new(letter, recipients).render
+        pdf = described_class.new(letter).render
         expect(text_with_position).to include([360, 280, "CH84 0221 1981 6169 5329 8"])
       end
 
       it 'renders iban from invoice when persisted invoice exists' do
         list = InvoiceList.create(group: group, title: "title")
-        invoice = list.invoices.create!(title: :title, recipient_id: recipient.id, total: 10, group: group)
+        invoice = list.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
         letter.invoice_list_id = list.id
 
-        group.invoice_config.update(iban: 'CH84 0221 1981 6169 5329 8')
-        pdf = described_class.new(letter, recipients).render
+        group.invoice_config.update!(iban: 'CH84 0221 1981 6169 5329 8')
+        pdf = described_class.new(letter).render
         expect(text_with_position).to include([360, 280, "CH93 0076 2011 6238 5295 7"])
       end
 
       it 'mixes person and invoice address' do
-        list = InvoiceList.create(group: group, title: "title")
-        invoice = list.invoices.create!(title: :title, recipient_id: recipient.id, total: 10, group: group)
+        list = InvoiceList.create!(group: group, title: "title")
+        invoice = list.invoices.create!(title: :title, recipient_id: bottom_member.id, total: 10, group: group)
         letter.invoice_list_id = list.id
 
-        recipient.update(first_name: "Foo")
+        letter.message_recipients.first.update!(address: "Foo Member\nGreatstreet 345\n3456 Greattown")
 
-        pdf = described_class.new(letter, recipients).render
-        expect(text_with_position).to include([71, 687, "Foo Member"])
-        expect(text_with_position).to include([71, 687, "Foo Member"])
+        pdf = described_class.new(letter).render
+        expect(text_with_position).to include([71, 654, "Foo Member"])
         expect(text_with_position).to include([28, 175, "Bottom Member"])
-        expect(text_with_position).to include([360, 202, "Bottom Member"])
+        expect(text_with_position).to include([360, 181, "Bottom Member"])
       end
     end
 
     context "dynamic" do
-      let(:recipients) { [people(:bottom_member), people(:top_leader)] }
+      before do
+        people(:top_leader).update!(address: 'Funkystreet 42', zip_code: '4242')
+        Fabricate(Group::BottomGroup::Member.name, group: groups(:bottom_group_one_one), person: people(:top_leader))
+        Messages::LetterDispatch.new(letter).run
+      end
 
       context "stamped"do
         let(:options) { { stamped: true } }
         it "renders only some texts positions" do
-          expect(text_with_position.count).to eq 43
+          expect(text_with_position.count).to eq 50
           expect(text_with_position).to eq [
-            [71, 687, "Bottom Member"],
-            [71, 676, "Greatstreet 345"],
-            [71, 666, "3456 Greattown"],
+            [71, 654, "Bottom Member"],
+            [71, 644, "Greatstreet 345"],
+            [71, 633, "3456 Greattown"],
             [28, 290, "Empfangsschein"],
             [28, 265, "Konto / Zahlbar an"],
             [28, 254, "CH93 0076 2011 6238 5295 7"],
@@ -144,19 +153,23 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [360, 292, "Konto / Zahlbar an"],
             [360, 280, "CH93 0076 2011 6238 5295 7"],
             [360, 269, "Hans Gerber"],
-            [360, 214, "Zahlbar durch"],
-            [360, 202, "Bottom Member"],
-            [360, 191, "Greatstreet 345"],
-            [360, 179, "3456 Greattown"],
-            [71, 687, "Top Leader"],
-            [71, 666, "Supertown"],
+            [360, 225, "Referenznummer"],
+            [360, 214, "00 00834 96356 70000 00000 00019"],
+            [360, 193, "Zahlbar durch"],
+            [360, 181, "Bottom Member"],
+            [360, 170, "Greatstreet 345"],
+            [360, 158, "3456 Greattown"],
+            [71, 654, "Top Leader"],
+            [71, 644, "Funkystreet 42"],
+            [71, 633, "4242 Supertown"],
             [28, 290, "Empfangsschein"],
             [28, 265, "Konto / Zahlbar an"],
             [28, 254, "CH93 0076 2011 6238 5295 7"],
             [28, 242, "Hans Gerber"],
             [28, 187, "Zahlbar durch"],
             [28, 175, "Top Leader"],
-            [28, 152, "Supertown"],
+            [28, 164, "Funkystreet 42"],
+            [28, 152, "4242 Supertown"],
             [28, 103, "Währung"],
             [85, 103, "Betrag"],
             [28, 92, "CHF"],
@@ -165,19 +178,22 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [360, 292, "Konto / Zahlbar an"],
             [360, 280, "CH93 0076 2011 6238 5295 7"],
             [360, 269, "Hans Gerber"],
-            [360, 214, "Zahlbar durch"],
-            [360, 202, "Top Leader"],
-            [360, 179, "Supertown"]
+            [360, 225, "Referenznummer"],
+            [360, 214, "00 00834 96356 70000 00000 00019"],
+            [360, 193, "Zahlbar durch"],
+            [360, 181, "Top Leader"],
+            [360, 170, "Funkystreet 42"],
+            [360, 158, "4242 Supertown"]
           ]
         end
       end
 
       it "renders all texts at positions" do
-        expect(text_with_position.count).to eq 65
+        expect(text_with_position.count).to eq 72
         expect(text_with_position).to match_array [
-          [71, 687, "Bottom Member"],
-          [71, 676, "Greatstreet 345"],
-          [71, 666, "3456 Greattown"],
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 633, "3456 Greattown"],
           [71, 531, "Mitgliedsbeitrag"],
           [71, 502, "Hallo"],
           [71, 481, "Dein "],
@@ -205,12 +221,15 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [360, 292, "Konto / Zahlbar an"],
           [360, 280, "CH93 0076 2011 6238 5295 7"],
           [360, 269, "Hans Gerber"],
-          [360, 214, "Zahlbar durch"],
-          [360, 202, "Bottom Member"],
-          [360, 191, "Greatstreet 345"],
-          [360, 179, "3456 Greattown"],
-          [71, 687, "Top Leader"],
-          [71, 666, "Supertown"],
+          [360, 225, "Referenznummer"],
+          [360, 214, "00 00834 96356 70000 00000 00019"],
+          [360, 193, "Zahlbar durch"],
+          [360, 181, "Bottom Member"],
+          [360, 170, "Greatstreet 345"],
+          [360, 158, "3456 Greattown"],
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 633, "4242 Supertown"],
           [71, 531, "Mitgliedsbeitrag"],
           [71, 502, "Hallo"],
           [71, 481, "Dein "],
@@ -223,7 +242,8 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [28, 242, "Hans Gerber"],
           [28, 187, "Zahlbar durch"],
           [28, 175, "Top Leader"],
-          [28, 152, "Supertown"],
+          [28, 164, "Funkystreet 42"],
+          [28, 152, "4242 Supertown"],
           [28, 103, "Währung"],
           [85, 103, "Betrag"],
           [28, 92, "CHF"],
@@ -237,9 +257,12 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [360, 292, "Konto / Zahlbar an"],
           [360, 280, "CH93 0076 2011 6238 5295 7"],
           [360, 269, "Hans Gerber"],
-          [360, 214, "Zahlbar durch"],
-          [360, 202, "Top Leader"],
-          [360, 179, "Supertown"]
+          [360, 225, "Referenznummer"],
+          [360, 214, "00 00834 96356 70000 00000 00019"],
+          [360, 193, "Zahlbar durch"],
+          [360, 181, "Top Leader"],
+          [360, 170, "Funkystreet 42"],
+          [360, 158, "4242 Supertown"]
         ]
       end
     end

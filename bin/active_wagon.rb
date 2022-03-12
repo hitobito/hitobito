@@ -12,14 +12,14 @@ require 'pathname'
 # Allows switching wagons quickly (depends on https://direnv.net/)
 class Setup
 
-  USED_RUBY_VERSION = '2.5.5'
+  USED_RUBY_VERSION = '2.7.3'
 
   def run
     write_and_copy('.envrc', environment)
     write_and_copy('.tool-versions', <<~TOOL_VERSION)
       ruby #{USED_RUBY_VERSION}
-      nodejs 12.16.2
-      yarn 1.22.10
+      nodejs 14.18.1
+      yarn 1.22.17
     TOOL_VERSION
     write_and_copy('.ruby-version', USED_RUBY_VERSION)
     write('Wagonfile', gemfile)
@@ -83,7 +83,7 @@ class Setup
   end
 
   def dependencies
-    %w(pbs cevi pro_natura jubla).product([%w(youth)]).to_h.merge({
+    %w(pbs cevi pro_natura jubla sjas).product([%w(youth)]).to_h.merge({
       'tenants' => %w(generic),
     })
   end

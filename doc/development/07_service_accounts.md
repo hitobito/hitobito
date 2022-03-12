@@ -22,7 +22,7 @@ During creation, the permissions of a service account and its corresponding serv
 
 ### Accessing the JSON-API
 
-All endpoints except for the root group endpoint (`/groups`) from the [JSON API](05_rest_api.md) can be used with service accounts. There are two possibilities to use the API:
+All endpoints from the [JSON API](05_rest_api.md) can be used with service accounts. There are two possibilities to use the API:
 
 * **Query parameter**: Send `token` as query parameter in the URL, and append `.json` to the URL path
 ```bash

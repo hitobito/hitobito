@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -39,6 +39,7 @@ de:
       please_select: Bitte auswählen
       add: Eintrag hinzufügen
       remove: Entfernen
+      not_allowed: Nicht erlaubt
 
     button:
       save: Speichern
@@ -144,6 +145,7 @@ de:
   dropdown/group_edit:
     move: 'Verschieben'
     merge: 'Fusionieren'
+    archive: 'Archivieren'
 
   dropdown/people_export:
     button: 'Export'
@@ -158,6 +160,13 @@ de:
     everything: 'Alle Angaben'
     household_option: 'Haushalte zusammenfassen'
     selection: 'Spaltenauswahl'
+
+  dropdown/people_login:
+    button: 'Login'
+    send_login: Login schicken
+    activate_totp: Zwei-Faktor-Authentifizierung einrichten
+    reset_totp: Zwei-Faktor-Authentifizierung zurücksetzen
+    disable_totp: Zwei-Faktor-Authentifizierung deaktivieren
 
   dropdown/invoices:
     download: 'Export'
@@ -211,17 +220,12 @@ de:
       new:
         reset_password_button: 'Passwort zurücksetzen'
     confirmations:
-      send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail, mit der Du Deine Registrierung bestätigen kannst.'
-      send_paranoid_instructions: 'Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Du Deine Registrierung bestätigen kannst.'
-      confirmed: 'Vielen Dank für Deine Registrierung. Du bist jetzt angemeldet.'
-    registrations:
-      signed_up: 'Du hast dich erfolgreich registriert.'
-      signed_up_but_unconfirmed: 'Du hast Dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account noch nicht bestätigt ist. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.'
-      signed_up_but_inactive: 'Du hast dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account inaktiv ist.'
-      signed_up_but_locked: 'Du hast dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account gesperrt ist.'
-      updated: 'Dein Passwort wurde aktualisiert.'
-      update_needs_confirmation: "Deine Daten wurden aktualisiert, aber Du musst Deine neue E-Mail-Adresse bestätigen. Du erhälsts in wenigen Minuten eine E-Mail, mit der Du die Änderung Deiner E-Mail-Adresse abschließen kannst."
-      destroyed: 'Dein Account wurde gelöscht.'
+      new:
+        resend_confirmation_instructions: 'E-Mail-Adresse bestätigen'
+        submit: 'Bestätigungs-E-Mail senden'
+      send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail, mit der Du Deine E-Mail-Adresse bestätigen kannst.'
+      send_paranoid_instructions: 'Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Du sie bestätigen kannst.'
+      confirmed: 'Vielen Dank für die Bestätigung deiner E-Mail-Adresse. Du kannst dich jetzt anmelden.'
     unlocks:
       send_instructions: 'Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Deinen Account entsperren können.'
       unlocked: 'Dein Account wurde erfolgreich entsperrt.'
@@ -230,6 +234,14 @@ de:
       success: 'Du hast Dich erfolgreich mit Deinem %{kind}-Account angemeldet.'
       failure: 'Du konntest nicht Deinem %{kind}-Account angemeldet werden, weil "%{reason}".'
     registrations:
+      signed_up: 'Du hast dich erfolgreich registriert.'
+      signed_up_but_unconfirmed: 'Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.'
+      signed_up_but_inactive: 'Du hast dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account inaktiv ist.'
+      signed_up_but_locked: 'Du hast dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account gesperrt ist.'
+      signed_up_but_no_email: 'Du hast dich erfolgreich registriert. Wir konnten Dich nicht anmelden, da du keine Mailadresse angegeben hast.'
+      updated: 'Dein Passwort wurde aktualisiert.'
+      update_needs_confirmation: "Deine Daten wurden aktualisiert, aber Du musst Deine neue E-Mail-Adresse bestätigen. Du erhältst in wenigen Minuten eine E-Mail, mit der Du die Änderung Deiner E-Mail-Adresse abschließen kannst."
+      destroyed: 'Dein Account wurde gelöscht.'
       edit:
         change_password: "Passwort ändern"
         set_password: "Passwort setzen"
@@ -241,7 +253,12 @@ de:
 
     mailer:
       confirmation_instructions:
-        subject: 'Anleitung zur Bestätigung Deines Accounts'
+        subject: 'Anleitung zur Bestätigung Deiner E-Mail-Adresse'
+        body:
+          greeting: 'Hallo %{name}!'
+          information_html: 'Du kannst deine E-Mail-Adresse mit dem folgenden Link bestätigen:'
+          link_text: '%{email} bestätigen'
+          footer: 'Diese E-Mail wurde von Hitobito gesendet'
       reset_password_instructions:
         subject: 'Anleitung für das Setzen Deines Passworts'
       unlock_instructions:
@@ -250,7 +267,7 @@ de:
           greeting: 'Hallo %{name}!'
           information_html: 'Dein Account wurde aufgrund von zu vielen Fehlversuchen beim Login gesperrt.<br>Klicke auf den folgenden Link um Deinen Account zu entsperren:'
           link_text: 'Meinen Account entsperren'
-          footer: 'Dieses E-Mail wurde von Hitobito gesendet'
+          footer: 'Diese E-Mail wurde von Hitobito gesendet'
 
   errors:
     link_to_main: 'Hauptseite'
@@ -403,6 +420,21 @@ de:
       attachment:
         subject: 'Nachrichten Betreff:'
 
+  second_factor_authentication:
+    flash:
+      success:
+        registered: Zwei-Faktor-Authentifizierung erfolgreich aktiviert
+        signed_in: Erfolgreich eingeloggt
+
+      failure: One-Time Code inkorrekt
+    new:
+      title: Zwei-Faktor-Authentifizierung
+      hint_registered_html: "Bitte gib den angezeigten Code aus deiner Authenticator-App an, um deine Identität zu bestätigen."
+      hint_unregistered_html: "Bitte scanne den QR-Code mit deinem Smartphone mittels Authenticator-App und gib den angezeigten Code an, um die Zwei-Faktor-Authentifizierung zu aktivieren. Noch keine Authenticator-App installiert? Wir empfehlen dir %{link} "
+    form:
+      totp_code: One-Time Code
+      totp_code_placeholder: Bitte sechsstelligen Code eingeben...
+      submit: Absenden
   events:
     courses:
       filter:
@@ -423,7 +455,13 @@ de:
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
       signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
     attachments:
+      public_attachments_hint: Anhänge sind öffentlich, da der Anlass externe Anmeldungen erlaubt
       add: "hinzufügen"
+    banner_open_invitation:
+      explanation: Du wurdest zu diesem Anlass eingeladen.
+      buttons:
+        accept: Anmelden
+        decline: Abmelden
     default_description_link:
       insert_general_information: Standardbeschreibung einsetzen
     form:
@@ -442,6 +480,7 @@ de:
       caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar.
       caption_waiting_list: Wenn keine Plätze mehr frei sind, landen neue Anmeldungen automatisch auf der Warteliste.
       caption_globally_visible: '%{model_name} ist für die ganze Datenbank sichtbar'
+      label_notify_contact_on_participations: Benachrichtigung
     form_tabs:
       general: Allgemein
       application_questions: Anmeldeangaben
@@ -572,10 +611,16 @@ de:
       incomplete_search_request: 'Bitte geben Sie mindestens zwei Zeichen ein.'
 
   group:
+    archive:
+      flash:
+        success: Gruppe wurde erfolgreich archiviert.
+        failure: Es ist ein Fehler beim Archivieren der Gruppe aufgetreten.
+
     merge:
       select:
         title: '%{group} fusionieren'
-        explanation: Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Anlässe und Personen
+        explanation: >
+          Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Anlässe und Personen
           samt Rollen beider Gruppen zusammengeführt.  Abos werden nicht übernommen.
           Die bisherigen Gruppen werden danach unter 'Gelöscht' weiterhin einsehbar sein.
         merge_is_irreversible:  Dieser Vorgang kann nicht mehr rückgängig gemacht werden!
@@ -614,6 +659,9 @@ de:
     actions_show:
       export_subgroups: 'CSV Untergruppen'
       reactivate: 'Reaktivieren'
+      confirm_archive: >
+        Wollen Sie diese Gruppe wirklich archivieren? Sie kann dann nicht mehr
+        bearbeitet werden und sämtliche Rollen werden ebenfalls archiviert.
     attrs:
       contact_details: 'Kontaktangaben'
       additional_information: 'Weitere Angaben'
@@ -621,6 +669,7 @@ de:
       no_deleted_sub_groups: 'Keine gelöschten Gruppen vorhanden.'
     form:
       help_contact: 'Adresse und öffentliche Telefonnummern dieser Person verwenden.'
+      hint_external_registration: 'Es sind keine Rollen mit Schreibrechten auswählbar'
     global:
       link:
         add: Gruppe erstellen
@@ -631,7 +680,23 @@ de:
     subgroups: 'Untergruppen'
     tabs:
       deleted: 'Gelöscht'
+      statistics: 'Statistiken'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    statistics:
+      title: Statistiken
+      description: "%{subject} in %{groups}"
+      year: Jahrgang
+      age: Alter
+      count: Anzahl
+      distribution: Verteilung
+
+  group/deleted_people:
+    list:
+      confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
+
+  groups/self_registration:
+    new:
+      title: "Registrierung zu %{group_name}"
 
   group/person_add_requests:
     deactivated: Manuelle Freigabe deaktiviert
@@ -642,16 +707,23 @@ de:
   group/merge:
     success: 'Die gewählten Gruppen wurden zur neuen Gruppe %{new_group_name} fusioniert.'
     failure: 'Die gewählten Gruppen können nicht fusioniert werden.'
-    no_candidates: 'Es sind keine gleichen Gruppen zum Fusionieren vorhanden oder Du verfügst dort nicht über die nötigen Berechtigungen.'
+    no_candidates: >
+      Es sind keine gleichen Gruppen zum Fusionieren vorhanden oder Du verfügst
+      dort nicht über die nötigen Berechtigungen.
     group_name_missing: 'Name für neue Gruppe muss definiert werden.'
     no_group_selected: 'Bitte wähle eine Gruppe mit der fusioniert werden soll.'
     not_allowed: 'Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren.'
-    invoice_config_not_merged: 'Die Rechnungseinstellungen werden nicht automatisch übernommen. Bitte nimm hierfür die jetzt korrekten Einstellungen manuell vor.'
+    invoice_config_not_merged: >
+      Die Rechnungseinstellungen werden nicht automatisch übernommen. Bitte
+      nimm hierfür die jetzt korrekten Einstellungen manuell vor.
 
   group/move:
     success: '%{group} wurde nach %{target} verschoben.'
     failure: 'Diese Gruppe kann nicht verschoben werden oder Du verfügst nicht über die nötigen Berechtigungen.'
     choose_group: 'Bitte wähle eine Gruppe aus.'
+
+  group_decorator:
+    archived_suffix: ' (archiviert)'
 
   import/csv_parser:
     read_error: "Fehler beim Lesen von %{filename}: %{error}"
@@ -691,7 +763,17 @@ de:
       due_at: Fällig bis
       creator: Rechnungssteller
       vat_number: MwSt. Nummer
-
+      payment_slip_qr:
+        receipt_title: Empfangsschein
+        payment_title: Zahlteil
+        receiving_office: Annahmestelle
+        creditor_heading: Konto / Zahlbar an
+        debitor_heading: Zahlbar durch
+        esr_number_heading: Referenznummer
+        currency: Währung
+        amount: Betrag
+    export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
   invoice_configs:
     form_tabs:
       general: Allgemein
@@ -830,8 +912,9 @@ de:
 
     unauthorized:
       forgot_password: 'Passwort vergessen?'
+      need_confirmation_email: 'Keine Bestätigungs-E-Mail bekommen?'
 
-    application:
+    footer:
       available_under_license: 'verfügbar unter der'
       developed_by: 'Entwickelt von'
       source_code: 'Quellcode'
@@ -894,6 +977,52 @@ de:
           one: Mail erfolgreich verschoben
           other: '%{count} Mails erfolgreich verschoben'
         server_error: Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.
+    recipient_counts:
+      index:
+        recipient_info:
+          message/letter:
+            households:
+              valid:
+                zero: "Keine Haushalte mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für einen Haushalt erstellt."
+                other: "%{model_class} wird für %{count} Haushalte erstellt."
+              invalid:
+                one: "Ein Haushalt hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+            people:
+              valid:
+                zero: "Keine Personen mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für eine Person erstellt."
+                other: "%{model_class} wird für %{count} Personen erstellt."
+              invalid:
+                one: "Eine Person hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+          message/letter_with_invoice:
+            households:
+              valid:
+                zero: "Keine Haushalte mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für einen Haushalt erstellt."
+                other: "%{model_class} wird für %{count} Haushalte erstellt."
+              invalid:
+                one: "Ein Haushalt hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+            people:
+              valid:
+                zero: "Keine Personen mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für eine Person erstellt."
+                other: "%{model_class} wird für %{count} Personen erstellt."
+              invalid:
+                one: "Eine Person hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+          message/text_message:
+            people:
+              valid:
+                zero: "Keine Personen mit Mobiltelefonnummer vorhanden."
+                one: "%{model_class} wird für eine Person erstellt."
+                other: "%{model_class} wird für %{count} Personen erstellt."
+              invalid:
+                one: "Eine Person hat keine vollständige Mobiltelefonnummer hinterlegt."
+                other: "%{count} weitere haben keine Mobiltelefonnummer hinterlegt."
 
   mailing_list_decorator:
     may_subscribe: 'Abonnenten dürfen sich selbst an/abmelden'
@@ -925,7 +1054,6 @@ de:
       button_dispatch_letter: Druckauftrag erstellen
       button_show_assignment: Druckauftrag anzeigen
       button_duplicate: Duplizieren
-      button_export_csv: Export CSV
       button_preview: Vorschau
       button_dispatch_text_message: Senden
       button_show_pdf: PDF anzeigen
@@ -946,29 +1074,11 @@ de:
     text_message:
       fields:
         remaining_chars: Verbleibende Zeichen
-    form:
-      available_placeholders: 'Verfügbare Platzhalter:'
-      recipient_info:
-        valid:
-          message/letter:
-            one: "%{model_class} wird für eine Person erstellt."
-            other: "%{model_class} wird für %{count} Personen erstellt."
-          message/letter_with_invoice:
-            one: "%{model_class} wird für eine Person erstellt."
-            other: "%{model_class} wird für %{count} Personen erstellt."
-          message/text_message:
-            one: "%{model_class} wird für eine Person erstellt."
-            other: "%{model_class} wird für %{count} Personen erstellt."
-        invalid:
-          message/letter:
-            one: "Eine Person hat keine vollständige Adresse hinterlegt."
-            other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
-          message/letter_with_invoice:
-            one: "Eine Person hat keine vollständige Adresse hinterlegt."
-            other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
-          message/text_message:
-            one: "Eine Person hat keine vollständige Mobiltelefonnummer hinterlegt."
-            other: "%{count} weitere haben keine Mobiltelefonnummer hinterlegt."
+    letter:
+      fields:
+        send_to_households_options:
+          true: Ein Brief pro Haushalt
+          false: Ein Brief pro Person
     table:
       infos:
         sender: "Absender: %{mail}"
@@ -977,6 +1087,16 @@ de:
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     show:
       recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
+    export:
+      section:
+        donation_confirmation:
+          header: "Spenden an %{organisation}"
+          title: "Spendenbestätigung %{year}"
+          received_amount: "Spenden erhalten in der Höhe von"
+          received_from: "%{year} haben wir von"
+          acknowledgement: "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"
+
+
 
   navigation:
     menu: 'Menü'
@@ -997,6 +1117,8 @@ de:
     paginator:
       newer_notes: Neuere Beiträge
       older_notes: Altere Beiträge
+    destroy:
+      failure: "Löschen der Notiz fehlgeschlagen: %{errors}."
 
   oauth:
     applications:
@@ -1106,6 +1228,10 @@ de:
         lives_in_household_with: "Wohnt im Haushalt mit"
         update_denied: "Keine Schreibrechte für %{other_person}."
 
+    family:
+      fields:
+        is_in_family_with: 'Ist Teil der Familie von'
+
     csv_imports:
       description:
         header: CSV Dateien
@@ -1164,10 +1290,7 @@ de:
           in die <strong>Gruppe %{group}</strong> importiert.
 
     add_request_mailer:
-      ask_person_to_add:
-        request_link: Anfrage beantworten
-      ask_responsibles:
-        request_link: Anfrage beantworten
+      request_link: Anfrage beantworten
 
     subscriptions:
       index:
@@ -1183,6 +1306,7 @@ de:
           email_primary_invalid: Haupt-E-Mail ungültig
           email_additional_invalid: Weitere E-Mail ungültig
           address_invalid: Adresse befindet sich nicht im Verzeichnis
+
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
@@ -1224,6 +1348,8 @@ de:
     send_password_instructions_invalid_email: Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist.
     years_old: (%{years} Jahre alt)
 
+    update_email_must_be_confirmed: Die geänderte E-Mail-Adresse muss noch bestätigt werden, bevor sie aktiv wird.
+
     tabs:
       history: Verlauf
       log: Log
@@ -1232,7 +1358,6 @@ de:
       subscriptions: Abos
 
     actions_show:
-      send_login: Login schicken
       send_login_tooltip:
         new: Die Person hat noch kein Login.<br><br>Diese Aktion sendet ihr einen Link damit sie ihr Passwort setzen kann.
         resend: Die Person hat einen Link zum Setzen des Passworts erhalten, aber noch keines gesetzt.<br><br>Diese Aktion sendet ihr den Link erneut.
@@ -1310,10 +1435,32 @@ de:
       remove_tags: Tags entfernen
       add_tags: Tags hinzufügen
 
+    totp_reset:
+      flashes:
+        success: Zwei-Faktor-Authentifizierung erfolgreich zurückgesetzt
+
+    totp_disable:
+      flashes:
+        success: Zwei-Faktor-Authentifizierung erfolgreich deaktiviert
+
+    login_status:
+      no_login: Kein Login
+      password_email_sent: Einladung wurde verschickt
+      login: Login ist aktiv
+      two_factors: Login mit 2FA ist aktiv
+
   participations:
     destroy:
       flash:
         success: Anmeldung wurde erfolgreich gelöscht.
+
+  event_invitations:
+    create:
+      flash:
+        success: 'Einladung für %{recipient_name} als %{participation_type} wurde erstellt.'
+    decline:
+      flash:
+        success: Einladung wurde abgelehnt.
 
   people_filters:
     form:
@@ -1390,6 +1537,11 @@ de:
         layer: In der aktuellen Ebene und allen ihren Gruppen
         group: Nur in der aktuellen Gruppe
         group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+
+  self_register:
+    create:
+      flash:
+        success: Du wurdest erfolgreich registriert
 
   roles:
     full_entry_label: '%{model_label} <i>%{role}</i> für <i>%{person}</i> in <i>%{group}</i>'

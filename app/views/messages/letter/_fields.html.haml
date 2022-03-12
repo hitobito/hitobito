@@ -3,7 +3,9 @@
 / #  or later. See the COPYING file at the top-level directory or at
 / #  https://github.com/hitobito/hitobito.
 
-= f.labeled_input_field :subject
+- if entry.class.sti_name == Message::Letter.sti_name
+  = f.labeled_collection_select :send_to_households, message_send_to_household_options, :first, :last, {}, { data: { remote: true, url: group_mailing_list_recipient_counts_path(message_type: entry.type), 'on-page-load': true, spin: '#recipient-count-spinner .spinner' } }
+= f.labeled_input_fields :date_location_text, :subject
 = f.labeled_collection_select :shipping_method, message_letter_shipping_methods(entry), :first, :last
 = f.labeled(:pp_post) do
   .input-prepend.input-append
@@ -12,6 +14,6 @@
     = f.input_field :pp_post, :placeholder => 'CH-3030 Bern'
     %span.add-on
       = 'Post CH AG'
-= f.labeled_input_field :heading
+= f.labeled_input_field :donation_confirmation if entry.invoice?
 = f.labeled_collection_select :salutation, Salutation.all, :first, :last, include_blank: I18n.t('global.associations.no_entry')
 = f.labeled_rich_text_area :body, style: 'min-height: 250px'

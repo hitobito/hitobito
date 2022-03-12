@@ -11,10 +11,6 @@ module Export::Tabular::People
     self.model_class = ::Person
     self.row_class = HouseholdRow
 
-    def initialize(list)
-      @list = aggregate(list)
-    end
-
     def person_attributes
       [:salutation, :name, :address, :zip_code, :town, :country, :layer_group]
     end
@@ -27,44 +23,13 @@ module Export::Tabular::People
       person_attributes.index_with { |attr| attribute_label(attr) }
     end
 
-    def aggregate(list)
-      list = add_household_key(list)
-      people_memo = build_memo(list)
+    def list
+      @household_list ||= begin # rubocop:disable Naming/MemoizedInstanceVariableName @list is already used in the base-class, which shadows this extension
+        people = super
+        people = Person.where(id: people) unless people.respond_to?(:only_public_data)
 
-      people_memo.collect do |key, people|
-        next people if key.blank?
-
-        first_name, last_name = join_names(people)
-        [assign(people.first, first_name, last_name)]
-      end.flatten
-    end
-
-    def add_household_key(list)
-      return list unless list.respond_to?(:unscoped)
-
-      list.unscope(:select)
-          .only_public_data
-          .select('household_key')
-          .includes(:primary_group)
-    end
-
-    def build_memo(list)
-      list.each_with_object(Hash.new { |h, k| h[k] = [] }) do |person, memo|
-        memo[person.household_key] << person
+        People::HouseholdList.new(people.only_public_data.includes(:primary_group))
       end
-    end
-
-    def join_names(people)
-      people
-        .collect { |person| [person.first_name, person.last_name] }
-        .transpose
-        .collect { |list| list.join(',') }
-    end
-
-    def assign(person, first_name, last_name)
-      person.first_name = first_name
-      person.last_name = last_name
-      person
     end
 
   end

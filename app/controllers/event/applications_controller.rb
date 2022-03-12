@@ -11,22 +11,18 @@ class Event::ApplicationsController < ApplicationController
   authorize_resource
 
   def approve
-    toggle_approval(true, translate(:approved))
+    application.toggle_approval(true)
+    flash[:notice] = translate(:approved)
+    redirect_to group_event_participation_path(group, participation.event_id, participation)
   end
 
   def reject
-    toggle_approval(false, translate(:rejected))
+    application.toggle_approval(false)
+    flash[:notice] = translate(:rejected)
+    redirect_to group_event_participation_path(group, participation.event_id, participation)
   end
 
   private
-
-  def toggle_approval(approved, message)
-    application.approved = approved
-    application.rejected = !approved
-    application.save!
-    flash[:notice] = message
-    redirect_to group_event_participation_path(group, participation.event_id, participation)
-  end
 
   def application
     @application ||= Event::Application.find(params[:id])

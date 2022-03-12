@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class PeopleController < CrudController
-
   include RenderPeopleExports
   include AsyncDownload
 
@@ -17,8 +16,13 @@ class PeopleController < CrudController
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
                           :gender, :birthday, :additional_information, :picture, :remove_picture] +
                           Contactable::ACCESSIBLE_ATTRS +
+                          [family_members_attributes: [:id, :kind, :other_id, :_destroy]] +
                           [household_people_ids: []] +
                           [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
+
+  FeatureGate.if(:person_language) do
+    self.permitted_attrs << [:language]
+  end
 
 
 
@@ -39,6 +43,7 @@ class PeopleController < CrudController
 
   before_save :validate_household
   after_save :persist_household
+  after_save :show_email_change_info
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
   before_render_show :load_grouped_person_tags, if: -> { html_request? }
@@ -93,6 +98,15 @@ class PeopleController < CrudController
         flash.now.alert = I18n.t('global.errors.header', count: entry.errors.size)
         render 'shared/update_flash'
       end
+    end
+  end
+
+  # public for serializer
+  def index_full_ability?
+    if params[:range].blank? || params[:range] == 'group'
+      can?(:index_full_people, @group)
+    else
+      can?(:index_deep_full_people, @group)
     end
   end
 
@@ -223,15 +237,6 @@ class PeopleController < CrudController
     render json: PersonSerializer.new(entry.decorate, group: @group, controller: self)
   end
 
-  def index_full_ability?
-    if params[:range].blank? || params[:range] == 'group'
-      can?(:index_full_people, @group)
-    else
-      can?(:index_deep_full_people, @group)
-    end
-  end
-  public :index_full_ability? # for serializer
-
   def authorize_class
     authorize!(:index_people, group)
   end
@@ -265,6 +270,12 @@ class PeopleController < CrudController
     else
       { alert: I18n.t("#{controller_name}.#{action_name}_invalid_email") }
     end
+  end
+
+  def show_email_change_info
+    return unless entry.show_email_change_info?
+
+    flash[:notice] = I18n.t("#{controller_name}.#{action_name}_email_must_be_confirmed")
   end
 
 end

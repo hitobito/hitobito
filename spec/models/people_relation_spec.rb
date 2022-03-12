@@ -1,13 +1,4 @@
-# encoding: utf-8
-# == Schema Information
-#
-# Table name: people_relations
-#
-#  id      :integer          not null, primary key
-#  head_id :integer          not null
-#  tail_id :integer          not null
-#  kind    :string           not null
-#
+# frozen_string_literal: true
 
 #  Copyright (c) 2014, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -64,7 +55,8 @@ describe PeopleRelation do
       p = Fabricate(:person)
       expect do
         r.update(tail_id: p.id)
-      end.not_to change { PeopleRelation.count }
+      end.not_to change(PeopleRelation, :count)
+
       o = r.opposite
       expect(o.head_id).to eq(r.tail_id)
       expect(o.tail_id).to eq(r.head_id)
@@ -75,7 +67,7 @@ describe PeopleRelation do
       r = PeopleRelation.create!(head_id: person.id, tail_id: other.id, kind: 'parent')
       expect do
         r.update(kind: 'child')
-      end.not_to change { PeopleRelation.count }
+      end.not_to change(PeopleRelation, :count)
       o = r.opposite
       expect(o.head_id).to eq(r.tail_id)
       expect(o.tail_id).to eq(r.head_id)

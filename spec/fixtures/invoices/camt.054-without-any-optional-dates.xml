@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:camt.054.001.04"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <BkToCstmrDbtCdtNtfctn>
+    <GrpHdr>
+      <MsgId>QZ99999999999999</MsgId>
+      <CreDtTm>2022-01-26T18:43:27+01:00</CreDtTm>
+      <MsgRcpt>
+        <Id>
+          <OrgId>
+            <AnyBIC>UBSWCHZHREB</AnyBIC>
+          </OrgId>
+        </Id>
+      </MsgRcpt>
+      <MsgPgntn>
+        <PgNb>1</PgNb>
+        <LastPgInd>true</LastPgInd>
+      </MsgPgntn>
+      <AddtlInf>SPS/1.7</AddtlInf>
+    </GrpHdr>
+    <Ntfctn>
+      <Id>QZ99999999999999</Id>
+      <CreDtTm>2022-01-26T18:43:27+01:00</CreDtTm>
+      <RptgSrc>
+        <Prtry>OTHR</Prtry>
+      </RptgSrc>
+      <Acct>
+        <Id>
+          <IBAN>CH000000000000000000N</IBAN>
+        </Id>
+        <Ccy>CHF</Ccy>
+        <Ownr>
+          <Nm>Test organization</Nm>
+        </Ownr>
+        <Svcr>
+          <FinInstnId>
+            <BICFI>UBSWCHZH80A</BICFI>
+            <Nm>UBS Switzerland AG</Nm>
+            <Othr>
+              <Id>CHE-116.303.292 MWST</Id>
+              <Issr>VAT-ID</Issr>
+            </Othr>
+          </FinInstnId>
+        </Svcr>
+      </Acct>
+      <Ntry>
+        <NtryRef>CH000000000000000000N</NtryRef>
+        <Amt Ccy="CHF">20</Amt>
+        <CdtDbtInd>CRDT</CdtDbtInd>
+        <Sts>BOOK</Sts>
+        <BookgDt>
+          <Dt>2022-01-26</Dt>
+        </BookgDt>
+        <ValDt>
+          <Dt>2022-01-26</Dt>
+        </ValDt>
+        <AcctSvcrRef>2022026PH0000000</AcctSvcrRef>
+        <BkTxCd>
+          <Domn>
+            <Cd>PMNT</Cd>
+            <Fmly>
+              <Cd>RCDT</Cd>
+              <SubFmlyCd>VCOM</SubFmlyCd>
+            </Fmly>
+          </Domn>
+          <Prtry>
+            <Cd>A89</Cd>
+          </Prtry>
+        </BkTxCd>
+        <NtryDtls>
+          <Btch>
+            <MsgId>2222222222222222</MsgId>
+            <NbOfTxs>2</NbOfTxs>
+            <TtlAmt Ccy="CHF">20</TtlAmt>
+            <CdtDbtInd>CRDT</CdtDbtInd>
+          </Btch>
+          <TxDtls>
+            <Refs>
+              <AcctSvcrRef>9999999999999999</AcctSvcrRef>
+              <EndToEndId>NOTPROVIDED</EndToEndId>
+            </Refs>
+            <Amt Ccy="CHF">20</Amt>
+            <CdtDbtInd>CRDT</CdtDbtInd>
+            <AmtDtls>
+              <InstdAmt>
+                <Amt Ccy="CHF">20</Amt>
+              </InstdAmt>
+              <TxAmt>
+                <Amt Ccy="CHF">20</Amt>
+              </TxAmt>
+            </AmtDtls>
+            <BkTxCd>
+              <Domn>
+                <Cd>PMNT</Cd>
+                <Fmly>
+                  <Cd>RCDT</Cd>
+                  <SubFmlyCd>VCOM</SubFmlyCd>
+                </Fmly>
+              </Domn>
+              <Prtry>
+                <Cd>A89</Cd>
+              </Prtry>
+            </BkTxCd>
+            <RltdPties>
+              <Dbtr>
+                <Nm>John Doe</Nm>
+                <PstlAdr>
+                  <StrtNm>Doestrasse</StrtNm>
+                  <BldgNb>1</BldgNb>
+                  <PstCd>8000</PstCd>
+                  <TwnNm>Zürich</TwnNm>
+                  <Ctry>CH</Ctry>
+                </PstlAdr>
+              </Dbtr>
+              <UltmtDbtr>
+                <Nm>John Doe</Nm>
+                <PstlAdr>
+                  <StrtNm>Doestrasse</StrtNm>
+                  <PstCd>8000</PstCd>
+                  <TwnNm>Zürich</TwnNm>
+                  <Ctry>CH</Ctry>
+                </PstlAdr>
+              </UltmtDbtr>
+            </RltdPties>
+            <RmtInf>
+              <Strd>
+                <CdtrRefInf>
+                  <Tp>
+                    <CdOrPrtry>
+                      <Prtry>QRR</Prtry>
+                    </CdOrPrtry>
+                  </Tp>
+                  <Ref>000000000000000000000000001</Ref>
+                </CdtrRefInf>
+              </Strd>
+            </RmtInf>
+            <AddtlTxInf>Credit QR reference</AddtlTxInf>
+          </TxDtls>
+        </NtryDtls>
+        <AddtlNtryInf>Credit QR reference</AddtlNtryInf>
+      </Ntry>
+    </Ntfctn>
+  </BkToCstmrDbtCdtNtfctn>
+</Document>

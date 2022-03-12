@@ -102,6 +102,31 @@ describe Event::ParticipationMailer do
 
   end
 
+  describe '#notify_contact' do
+    let(:recipient) { people(:bottom_member) }
+    let(:mail) { Event::ParticipationMailer.notify_contact(participation, recipient) }
+
+    subject { mail.body }
+
+    it 'renders the headers' do
+      expect(mail.subject).to eq 'Anlass: Teilnehmer-/in hat sich angemeldet'
+      expect(mail.to).to eq(['bottom_member@example.com'])
+      expect(mail.from).to eq(['noreply@localhost'])
+    end
+
+    it { is_expected.to match(/Hallo/) }
+
+    it 'contains participation url' do
+      is_expected.to match(%r{test.host/groups/#{event.groups.first.id}/events/#{event.id}/participations/#{participation.id}})
+    end
+
+    it 'sends to all email addresses of recipient' do
+      recipient.update!(email: nil)
+      e1 = Fabricate(:additional_email, contactable: recipient, mailings: true, public: true)
+      expect(mail.to).to eq [e1.email]
+    end
+  end
+
   describe '#approval' do
     subject { mail.body }
 

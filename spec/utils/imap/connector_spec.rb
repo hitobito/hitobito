@@ -20,7 +20,7 @@ describe Imap::Connector do
   let(:imap_fetch_data_2) { new_imap_fetch_data(false) }
   let(:imap_fetch_data) { [imap_fetch_data_1, imap_fetch_data_2] }
 
-  let(:fetch_attributes) { %w(ENVELOPE UID BODYSTRUCTURE BODY[TEXT] RFC822) }
+  let(:fetch_attributes) { %w(ENVELOPE UID RFC822) }
 
   before do
     email = double

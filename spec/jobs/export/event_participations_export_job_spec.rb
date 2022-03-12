@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -18,7 +18,7 @@ describe Export::EventParticipationsExportJob do
 
   let(:params)                     { { filter: 'all' } }
   let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, user, params) }
-  let(:filepath)      { AsyncDownloadFile::DIRECTORY.join('event_participation_export') }
+  let(:filepath)                   { AsyncDownloadFile::DIRECTORY.join('event_participation_export') }
 
   before do
     SeedFu.quiet = true
@@ -52,7 +52,7 @@ describe Export::EventParticipationsExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Firmenname;Übername.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
-      expect(lines[0].split(';').count).to match(21)
+      expect(lines[0].split(';').count).to match(22)
     end
   end
 

@@ -5,7 +5,7 @@
 
 /* Typo */
 // -------------------------
-#{headings(2)} {
+h1, h2 {
   font-family: $headingFontFamily;
   margin-top: 0;
 }
@@ -198,5 +198,6 @@ a.anchor {
 }
 
 .animated-highlight {
-  @include animation(highlight 2.5s);
+  -webkit-animation: highlight 2.5s;
+  animation: highlight 2.5s;
 }

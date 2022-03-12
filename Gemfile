@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 source 'https://rubygems.org'
 
-gem 'rails', '= 6.0.3.4'
+gem 'rails', '= 6.1.4.1'
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on'
@@ -20,6 +20,7 @@ gem 'bootsnap', require: false
 gem 'cancancan'
 gem 'carrierwave'
 gem 'cmess'
+gem 'commonmarker'
 gem 'config'
 gem 'country_select'
 gem 'daemons'
@@ -32,7 +33,7 @@ gem 'doorkeeper-i18n'
 gem 'doorkeeper-openid_connect'
 gem 'draper'
 gem 'draper-cancancan'
-gem 'epics' # client for EBICS-connections to banks 
+gem 'epics' # client for EBICS-connections to banks
 gem 'faker'
 gem 'faraday'
 gem 'gibbon', '~> 3.2'
@@ -43,8 +44,8 @@ gem 'icalendar'
 gem 'image_processing', '~> 1.2'
 gem 'ledermann-rails-settings'
 gem 'lograge'
-gem 'lograge_activejob'
 gem 'lograge-sql'
+gem 'lograge_activejob'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mime-types'
 gem 'mini_magick'
@@ -52,7 +53,7 @@ gem 'mysql2'
 gem 'nested_form'
 gem 'nokogiri'
 gem 'oat'
-gem 'paper_trail'
+gem 'paper_trail', '~> 11.1' # 11.1 adds Rails 6.1-support, 12 breaks for now
 gem 'paranoia'
 gem 'phonelib'
 gem 'prawn'
@@ -63,10 +64,11 @@ gem 'protective'
 gem 'pry-rails'
 gem 'puma'
 gem 'rack-cors'
-gem 'rails_autolink'
 gem 'rails-i18n'
+gem 'rails_autolink'
 gem 'remotipart'
 gem 'rest-client'
+gem 'rotp'
 gem 'rqrcode'
 gem 'rubyzip', '~> 1.3.0'
 gem 'seed-fu'
@@ -74,10 +76,11 @@ gem 'sentry-raven'
 gem 'simpleidn'
 gem 'sprockets', '~> 3.7.2' # pinned to older version to avoid having an empty manifest.js
 gem 'sqlite3' # required for asset generation
+gem 'strip_attributes' # strip whitespace of attributes
 gem 'thinking-sphinx'
 gem 'truemail'
 gem 'validates_by_schema'
-gem 'validates_timeliness', '< 4.0'
+gem 'validates_timeliness'
 gem 'vcard'
 gem 'wagons', '0.6.1'
 gem 'webpacker'
@@ -91,8 +94,8 @@ group :development, :test do
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'parallel_tests'
   gem 'pry-byebug'
-  gem 'pry-doc'
-  gem 'rspec-rails', '4.0.0.beta3' # see https://github.com/rspec/rspec-rails/issues/2177
+  gem 'pry-doc' # provides show-source/$ in the pry-console
+  gem 'rspec-rails', '~> 5.0'
 end
 
 group :development do
@@ -123,7 +126,6 @@ group :console do
   gem 'hirb'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
-  gem 'rdoc-tags'
   gem 'spring-commands-rspec'
   gem 'wirble'
 end

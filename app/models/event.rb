@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -76,7 +76,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                   :role_types,
                   :supports_applications,
                   :possible_states,
-                  :kind_class
+                  :kind_class,
+                  :supports_invitations,
+                  :uses_form_tabs
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
@@ -88,6 +90,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                           :participations_visible, :globally_visible]
 
   # All participation roles that exist for this event
+  # Customize in wagons using .register_role_type / .disable_role_type
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
                      Event::Role::Cook,
@@ -105,6 +108,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   # The class used for the kind_id
   self.kind_class = nil
 
+  # Are Event::Invitations possible for this event type
+  self.supports_invitations = true
+
+  self.uses_form_tabs = true
 
   model_stamper
   stampable stamper_class_name: :person,
@@ -127,6 +134,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_many :admin_questions, -> { where(admin: true) },
            class_name: 'Event::Question', inverse_of: :event
 
+  has_many :invitations, dependent: :destroy
+
   has_many :participations, dependent: :destroy
   has_many :people, through: :participations
 
@@ -144,6 +153,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   # name is a translated attribute and thus needs to be validated explicitly
   validates :name, presence: true
   validates :dates, presence: { message: :must_exist }
+  validates :contact, permission: :show_full, allow_blank: true, if: :contact_id_changed?
   validates :group_ids, presence: { message: :must_exist }
   validates :application_opening_at, :application_closing_at,
             timeliness: { type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31) }
@@ -175,7 +185,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     def list
       order_by_date.
         includes(:translations).
-        order(:name).
         preload_all_dates.
         distinct
     end
@@ -273,8 +282,24 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
       type
     end
-  end
 
+    # Used by wagons to register additional event roles
+    def register_role_type(type)
+      ensure_role_type!(type)
+      self.role_types << type
+    end
+
+    # Used by wagons to register additional event roles
+    def disable_role_type(type)
+      ensure_role_type!(type)
+      self.role_types -= [type]
+    end
+
+    def ensure_role_type!(type)
+      return if type < Event::Role
+      raise ArgumentError, "#{type} must be a subclass of Event::Role"
+    end
+  end
 
   ### INSTANCE METHODS
 
@@ -431,5 +456,4 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   def prefill_shared_access_token
     self.shared_access_token ||= Devise.friendly_token
   end
-
 end

@@ -19,6 +19,7 @@ application:
 
   # The languages available in the menu
   languages:
+    # first entry is considered the default language
     de: Deutsch
 
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
@@ -179,6 +180,7 @@ help_text_blacklist:
     - household_people_ids
     - relations_to_tails_attributes
     - phone_numbers_attributes
+    - family_members_attributes
 
 worker_heartbeats:
   check_job:
@@ -206,11 +208,8 @@ messages:
   pdf:
     preview: <%= Rails.root.join("app/javascript/images/preview.png") %>
 
-payment_providers:
-  - name: postfinance
-    url: https://ebics.postfinance.ch/ebics/ebics.aspx
-    host_id: PFEBICS
-    <%# These have to be the ones with the keys. PF calls them "EBICS 2.5 und EBICS 3.0 mit Schlüsseln" in the test environment %>
-    encryption_hash: 48 CD A5 55 35 E1 1B 44 61 8C C1 80 FD E1 B4 5CB9 58 AD 6B 98 08 8A CC 9C 3D 99 B0 A2 98 FA 34
-    authentication_hash: AB 2E ED 68 85 A6 E6 A2 67 00 D6 C4 AB 68 79 B45C D2 AF C9 30 01 D4 E7 91 50 E3 31 46 D8 4D 6C
-
+groups:
+  self_registration:
+    enabled: true
+  statistics:
+    enabled: true

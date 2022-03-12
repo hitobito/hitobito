@@ -11,8 +11,11 @@ describe Export::Tabular::People::TableDisplays do
 
   context 'people' do
     let(:people_list)   { Export::Tabular::People::TableDisplays.new(list, table_display) }
-    let(:table_display) { TableDisplay::People.new }
+    let(:table_display) { TableDisplay::People.new(person: person) }
     let(:list)          { [person] }
+
+    before  { TableDisplay::People.register_permission(Person,:update,:login_status) }
+    after   { TableDisplay.class_variable_set('@@permissions', {}) }
 
     subject { people_list }
 
@@ -26,6 +29,21 @@ describe Export::Tabular::People::TableDisplays do
       expect(people_list.labels.last).to eq 'Zusätzliche Angaben'
       expect(people_list.attributes.last).to eq :additional_information
       expect(people_list.data_rows.first.last).to eq 'bla bla'
+    end
+
+    it 'includes login status if configured' do
+      table_display.selected = %w(login_status)
+      expect(people_list.labels.last).to eq 'Login'
+      expect(people_list.attributes.last).to eq :login_status
+      expect(people_list.data_rows.first.last).to eq 'Login ist aktiv'
+    end
+
+    it 'does not include login status if no access' do
+      table_display.person = people(:bottom_member)
+      table_display.selected = %w(login_status)
+      expect(people_list.labels.last).to eq 'Login'
+      expect(people_list.attributes.last).to eq :login_status
+      expect(people_list.data_rows.first.last).to be_nil
     end
 
     it 'does not include the same attribute twice' do

@@ -7,37 +7,35 @@
 
 class Export::Pdf::Messages::Letter
   class Header < Section
-    LOGO_BOX = [200, 40].freeze
-    ADDRESS_BOX = [200, 40].freeze
-    SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 20].freeze
+    LOGO_BOX = [450, 40].freeze
+    ADDRESS_BOX = [90.mm, 60].freeze
+    SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 24].freeze
 
     delegate :group, to: 'letter'
 
-    def render(recipient) # rubocop:disable Metrics/MethodLength
-      stamped :render_header
+    def render(recipient)
+      stamped :render_logo_right
 
-      offset_cursor_from_top 52.5.mm
+      offset_cursor_from_top 60.mm
+      stamped :render_shipping_info
 
-      stamped :render_shipping_info unless letter.own?
-      render_address(build_address(recipient))
+      pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
 
+      render_address(recipient.address)
+
+      stamped :render_date_location_text if letter.date_location_text.present?
       stamped :render_subject if letter.subject.present?
     end
 
     private
 
-    def render_header
-      if letter.heading?
-        render_logo_right
-        pdf.move_up 40
-
-        render_address(sender_address)
-      end
+    def render_date_location_text
+      offset_cursor_from_top 97.5.mm
+      pdf.text(letter.date_location_text)
     end
 
     def render_subject
       offset_cursor_from_top 107.5.mm
-
       pdf.text(letter.subject, style: :bold)
       pdf.move_down pdf.font_size * 2
     end
@@ -46,11 +44,29 @@ class Export::Pdf::Messages::Letter
       left = bounds.width - width
       bounding_box([left, cursor], width: width, height: height) do
         if logo_path
-          image(logo_path, position: :right, fit: [width, height])
+          image(logo_path, logo_options(width, height))
         else
           ''
         end
       end
+    end
+
+    def logo_options(box_width, box_height)
+      opts = { position: :right }
+      if logo_exceeds_box?(box_width, box_height)
+        opts[:fit] = [box_width, box_height]
+      end
+      opts
+    end
+
+    def logo_exceeds_box?(box_width, box_height)
+      width, height = logo_dimensions
+      width > box_width || height > box_height
+    end
+
+    def logo_dimensions
+      image = MiniMagick::Image.open(logo_path)
+      [image[:width], image[:height]]
     end
 
     def render_address(address, width: ADDRESS_BOX.first, height: ADDRESS_BOX.second)
@@ -60,24 +76,33 @@ class Export::Pdf::Messages::Letter
     end
 
     def render_shipping_info(width: SHIPPING_INFO_BOX.first, height: SHIPPING_INFO_BOX.second)
-      bounding_box([0, cursor], width: width, height: height) do
-        shipping_method = { normal: 'P.P.',
-                            priority: 'A-PRIORITY' }[letter.shipping_method.to_sym]
-        pdf.move_up 2
-        text('Post CH AG', align: :center, size: 6.pt)
-        pdf.move_down 2
-        text("<u><font size='12pt'><b>#{shipping_method} </b></font>" \
-             "<font size='8pt'>#{letter.pp_post}, </font>" \
-             "<font size='5pt'>#{group.layer_group.name}, #{group.layer_group.address}</font></u>",
-             inline_format: true)
+      render_shipping_info_post_logo(width) unless letter.own?
+      render_shipping_info_text(width, height)
+      render_shipping_info_line unless shipping_info_empty?
+    end
+
+    def render_shipping_info_post_logo(width)
+      text_box('Post CH AG', align: :center, size: 7.pt, width: width, at: [0, cursor + 18.pt])
+    end
+
+    def render_shipping_info_text(width, height)
+      shipping_method, text_height = shipping_methods[letter.shipping_method.to_sym]
+      text_box("#{shipping_method}<font size='8pt'>#{letter.pp_post}</font>",
+               inline_format: true, overflow: :truncate, single_line: true,
+               width: width, height: height, at: [0, cursor + text_height * 0.75])
+    end
+
+    def render_shipping_info_line
+      pdf.stroke do
+        pdf.move_down 1.mm
+        # post factsheet: max. 11 cm, start and end of the line MUST be visible in the window
+        pdf.horizontal_line 0, 80.mm
+        pdf.move_up 1.mm
       end
     end
 
-    def build_address(recipient)
-      [recipient.company? ? recipient.company_name : nil,
-       recipient.full_name.to_s.squish,
-       recipient.address.to_s,
-       [recipient.zip_code, recipient.town].compact.join(' ').squish].compact.join("\n")
+    def shipping_info_empty?
+      letter.own? && letter.pp_post.to_s.strip.blank?
     end
 
     def logo_path
@@ -106,6 +131,12 @@ class Export::Pdf::Messages::Letter
 
     def address_present?(group)
       [:address, :town].all? { |a| group.send(a)&.strip.present? }
+    end
+
+    def shipping_methods
+      { own: ['', 8.pt],
+        normal: ["<b><font size='12pt'>P.P.</font></b> ", 12.pt],
+        priority: ["<b><font size='12pt'>P.P.</font> <font size='24pt'>A</font></b> ", 24.pt] }
     end
   end
 end

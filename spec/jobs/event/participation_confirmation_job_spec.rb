@@ -9,6 +9,8 @@ require 'spec_helper'
 
 describe Event::ParticipationConfirmationJob do
 
+  CONFIRMATION_SUBJECT = 'Bestätigung der Anmeldung'
+
   let(:course) { Fabricate(:course, groups: [groups(:top_layer)], priorization: true) }
 
   let(:participation) do
@@ -35,7 +37,6 @@ describe Event::ParticipationConfirmationJob do
 
   subject { Event::ParticipationConfirmationJob.new(participation) }
 
-
   context 'without approvers' do
     let(:participant) { people(:top_leader) }
 
@@ -45,7 +46,7 @@ describe Event::ParticipationConfirmationJob do
         subject.perform
 
         expect(ActionMailer::Base.deliveries.size).to eq(1)
-        expect(last_email.subject).to eq('Bestätigung der Anmeldung')
+        expect(last_email.subject).to eq(CONFIRMATION_SUBJECT)
       end
     end
 
@@ -55,7 +56,7 @@ describe Event::ParticipationConfirmationJob do
         subject.perform
 
         expect(ActionMailer::Base.deliveries.size).to eq(1)
-        expect(last_email.subject).to eq('Bestätigung der Anmeldung')
+        expect(last_email.subject).to eq(CONFIRMATION_SUBJECT)
       end
     end
   end
@@ -69,7 +70,7 @@ describe Event::ParticipationConfirmationJob do
         subject.perform
 
         expect(ActionMailer::Base.deliveries.size).to eq(1)
-        expect(last_email.subject).to eq('Bestätigung der Anmeldung')
+        expect(last_email.subject).to eq(CONFIRMATION_SUBJECT)
       end
     end
 
@@ -83,7 +84,7 @@ describe Event::ParticipationConfirmationJob do
         first_email = ActionMailer::Base.deliveries.first
         expect(last_email.to.to_set).to eq([app1.email, app2.email].to_set)
         expect(last_email.subject).to eq('Freigabe einer Kursanmeldung')
-        expect(first_email.subject).to eq('Bestätigung der Anmeldung')
+        expect(first_email.subject).to eq(CONFIRMATION_SUBJECT)
       end
 
       context 'with external role in different group with own approvers' do
@@ -103,4 +104,39 @@ describe Event::ParticipationConfirmationJob do
     end
   end
 
+  context 'with event contact' do
+    let(:participant) { people(:top_leader) }
+    let(:receiver) { people(:bottom_member) }
+
+    before do
+      course.update(
+        contact: receiver,
+        notify_contact_on_participations: notify
+      )
+    end
+
+    context 'when notifying' do
+      let(:notify) { true }
+
+      it 'sends confirmation and notification email' do
+        subject.perform
+
+        expect(ActionMailer::Base.deliveries.size).to eq(2)
+        expect(ActionMailer::Base.deliveries.map(&:subject)).to eq(
+          [CONFIRMATION_SUBJECT, 'Anlass: Teilnehmer-/in hat sich angemeldet']
+        )
+      end
+    end
+
+    context 'when not notifying' do
+      let(:notify) { false }
+
+      it 'sends confirmation email' do
+        subject.perform
+
+        expect(ActionMailer::Base.deliveries.size).to eq(1)
+        expect(last_email.subject).to eq(CONFIRMATION_SUBJECT)
+      end
+    end
+  end
 end

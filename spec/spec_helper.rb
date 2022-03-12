@@ -24,7 +24,23 @@ WebMock.disable_net_connect!(
   )
 )
 
-ActiveRecord::Migration.maintain_test_schema!
+ActiveRecord::Migration.suppress_messages do
+  if ActiveRecord::Base.maintain_test_schema
+    begin
+      previous_seed_quietness = SeedFu.quiet
+      SeedFu.quiet = true
+
+      Wagons.all.each do |wagon|
+        wagon.migrate
+        wagon.load_seed
+      end
+    ensure
+      SeedFu.quiet = previous_seed_quietness
+    end
+
+    ActiveRecord::Migration.load_schema_if_pending!
+  end
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -166,3 +182,22 @@ unless RSpec.configuration.exclusion_filter[:type] == 'feature'
 
   puts "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
 end
+
+Devise::Test::ControllerHelpers.prepend(Module.new do
+  # Make sure the email address is confirmed before logging in
+  def sign_in(resource, deprecated = nil, scope: nil, confirm: true)
+    resource.confirm if confirm
+    super(resource, deprecated, scope: scope)
+  end
+end)
+
+module ActiveRecordFixture
+  def initialize(fixture, model_class)
+    if model_class == Person
+      fixture['confirmed_at'] = 1.day.ago unless fixture.key?('confirmed_at')
+    end
+
+    super(fixture, model_class)
+  end
+end
+ActiveRecord::Fixture.prepend(ActiveRecordFixture)

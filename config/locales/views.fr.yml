@@ -124,6 +124,7 @@ fr:
   dropdown/group_edit:
     move: 'Déplacer'
     merge: 'Fusionner'
+    archive: 'Archiver'
   dropdown/people_export:
     button: 'Exporter'
     csv: 'CSV'
@@ -159,6 +160,7 @@ fr:
       unauthenticated: 'Tu dois t''authentifier ou t''enregistrer avant de pouvoir continuer.'
       unconfirmed: 'Tu dois confirmer ton compte avant de pouvoir continuer.'
       last_attempt: 'Tu as encore une tentative avant que ton compte ne soit bloqué.'
+      locked: 'Ton compte est bloqué pour 1 heure.'
       invalid: 'Données d''authentification incorrectes.'
       invalid_token: 'Le jeton d''authentification n''est pas valable.'
       timeout: 'Ta session est arrivée à échéance, merci de d''authentifier à nouveau.'
@@ -183,12 +185,9 @@ fr:
       no_token: 'Vous ne pouvez accéder à cette page qu''en cliquant sur le lien indiqué dans un courriel de récupération de mot de passe. Si vous avez copié le lien dans un courriel de récupération de mot de passe, veuillez vous assurer que vous avez copié l''URL en entier.'
       new:
         reset_password_button: 'Réinitialiser le mot de passe'
-    confirmations:
-      send_instructions: 'Dans quelques minutes, tu recevras un courriel te permettant de confirmer ton enregistrement.'
-      send_paranoid_instructions: 'Si ton adresse e-mail est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel te permettant de confirmer ton enregistrement.'
-      confirmed: 'Merci de t''être enregistré(e) ! Tu es maintenant authentifié(e).'
     unlocks:
       send_instructions: 'Dans quelques minutes tu recevras un courriel t''expliquant comment débloquer ton compte.'
+      unlocked: 'Ton compte a été dévérouillé avec succès.'
       send_paranoid_instructions: "Si ton adresse e-mail est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment débloquer ton compte."
     omniauth_callbacks:
       success: 'Ton authentification avec ton compte %{kind} est réussie.'
@@ -203,14 +202,14 @@ fr:
       person:
         updated: 'Ton mot de passe a été actualisé.'
     mailer:
-      confirmation_instructions:
-        subject: 'Instructions pour confirmer ton compte'
       reset_password_instructions:
         subject: 'Instructions pour initialiser ton mot de passe'
       unlock_instructions:
         subject: 'Instructions pour débloquer ton compte'
         body:
           greeting: 'Bonjour %{name}!'
+          information_html: 'Ton compte a été bloqué à cause d''un trop grand nombre de fausses tentatives. <br> Appuie sur le lien suivant pour le dévérouiller:'
+          link_text: 'Dévérouiller mon compte'
   errors:
     link_to_main: 'Page principale'
     '404':
@@ -235,6 +234,7 @@ fr:
     lists:
       courses:
         title: 'Cours enregistrés'
+        no_category: les autres cours
         explanation: 'Les cours de ton groupe ainsi que des groupes hiérarchiquement supérieurs sont indiqués ici. Tu trouveras d''autres cours auprès des groupes qui les organisent.'
         csv_export_button: 'Export CSV'
         ical_export_button: 'Export du calendrier'
@@ -352,6 +352,18 @@ fr:
       attachment:
         subject: 'Objet du message'
   events:
+    courses:
+      filter:
+        places_available:
+          all: Tous
+          only_with_places_available: Seulement avec des places disponibles
+        select_states: Filtrer d'après le statut
+        time_period: Sur la période (optionnel)
+        until: au
+      group_filter:
+        all_layers: Tous les groupes
+        filter_by_layer: Organisateur
+        select_layers: Chercher les groupes...
     actions_show:
       copy_share_link: Copier le lien direct
     application_fields:
@@ -360,6 +372,11 @@ fr:
       signature_confirmation_text_default: Autorité parentale (pour les mineurs)
     attachments:
       add: "ajouter"
+    banner_open_invitation:
+      explanation: Tu as été invité à cet évènement.
+      buttons:
+        accept: Inscription
+        decline: Désinscription
     default_description_link:
       insert_general_information: Placer une description standard
     form:
@@ -431,6 +448,7 @@ fr:
     not_logged_in: "Tu dois t'authentifier afin de pouvoir t'inscrire à l'événement '%{event}'."
     person_found: 'Nous t''avons trouvé(e) dans notre base de données.'
     email_sent: 'Nous t''avons envoyer un courriel. Dans ce courriel il y a un lien avec lequel tu pourras t''inscrire directement à cet événement.'
+    email_invalid: 'Indique une adresse e-mail valide, s''il te plaît'
     form_data_missing: 'Prière de remplir le formulaire suivant avant de t''inscrire à cet événement.'
     registered: 'Tes données personnelles ont été enregistrées. Prière d''apporter les indications complémentaires suivantes en vue de l''inscription.'
     application_window_closed: 'La fenêtre d''inscription pour cet événement est close.'
@@ -488,10 +506,17 @@ fr:
       title: 'Résultats'
       incomplete_search_request: 'Prière d''entrer au moins deux caractères.'
   group:
+    archive:
+      flash:
+        success: Le groupe a été archivé avec succès.
+        failure: Une erreur est survenu lors de l'archivage du groupe.
     merge:
       select:
         title: 'fusionner %{group}'
-        explanation: Lorsqu'on fusionne deux groupes, tous les sous-groupes, événements et personnes ainsi que les rôles des deux groupes sont fusionnés. Les abonnements ne sont pas sauvegardés. On pourra continuer à accéder aux groupes préexistants sous "effacés".
+        explanation: >
+            En fusionnant deux groupes, tous les sous-groupes, évènements et personnes
+            (rôles inclus) des deux groupes seront réunis. Les abonnements ne seront
+            pas repris. Les groupes actuels seront encore visibles sous 'effacés'.
         merge_is_irreversible: Cette opération est irréversible!
         new_group_name: 'Nom du nouveau groupe'
         merge_group_with: 'fusionner avec %{group}'
@@ -523,6 +548,9 @@ fr:
     actions_show:
       export_subgroups: 'Sous-groupes CSV'
       reactivate: 'Réactiver'
+      confirm_archive: >
+          Voulez-vous vraiment archiver ce groupe? Le groupe ne pourra plus être modifié
+          et les rôles attribués seront aussi archivés.
     attrs:
       contact_details: 'Contacts'
       additional_information: 'Informations supplémentaires'
@@ -541,6 +569,9 @@ fr:
     tabs:
       deleted: 'Eléments effacés'
     export_enqueued: 'L''exportation est lancée en arrière-plan et téléchargée une fois terminée.'
+  group/deleted_people:
+    list:
+      confirm_delete: "Toutes les données sur %{person} vont être définitivement effacées, y compris les participations et les qualifications. N'efface cette personne que si personne n'aura jamais plus besoin de ces données. "
   group/person_add_requests:
     deactivated: Déblocage manuel désactivé
     activated: Déblocage manuel activé
@@ -549,15 +580,21 @@ fr:
   group/merge:
     success: 'Les groupes sélectionnés ont été fusionnés dans le nouveau groupe %{new_group_name}.'
     failure: 'Les groupes sélectionnés ne peuvent pas être fusionnés.'
-    no_candidates: 'Il n''y a pas de groupes similaires avec lesquels fusionner ou tu n''as pas les autorisations nécessaires.'
+    no_candidates: >
+        Il n'y a pas de groupes similaires avec lesquels fusionner ou tu n'as pas
+        les autorisations nécessaires.
     group_name_missing: 'Le nom du nouveau groupe doit être défini.'
     no_group_selected: 'Sélectionne un groupe avec lequel fusionner.'
     not_allowed: 'Tu n''as pas les autorisations nécessaires pour fusionner ces groupes.'
-    invoice_config_not_merged: 'Les réglages de la factures ne sont pas repris automatiquement. Prière de rentrer pour cela les réglages corrects manuellement.'
+    invoice_config_not_merged: >
+        Les réglages de la factures ne seront pas repris automatiquement. Procède
+        aux réglages corrects manuellement stp.
   group/move:
     success: '%{group} a été déplacé vers %{target}.'
     failure: 'Ce groupe ne peut pas être déplacé ou tu n''as pas les autorisations nécessaires.'
     choose_group: 'Sélectionne un groupe, s''il-te-plaît.'
+  group_decorator:
+    archived_suffix: '(archivé)'
   import/csv_parser:
     read_error: "Erreur lors de la lecture de %{filename}: %{error}"
     contains_no_data: "Ne contient pas de données"
@@ -599,19 +636,32 @@ fr:
     update:
       flash:
         success: les réglages de la factures mis à jour avec succès
+        provider_initialization_failed: La mise en place de l'interface pour le paiment %{payment_provider}a échoué.
+        provider_initialization_succeeded: La mise en place de l'interface pour le paiment %{payment_provider} a réussi.
     general_fields:
       payment: 'Paiement'
       payment_information_help: 'Apparaît sur chaque facture, mais peut être adapté pour une facture'
       address_help: 'Adresse de l''expéditeur qui apparaît sur la lettre'
+      email_help: Les réponses à des e-mails concernant les factures doivent être envoyées à l'adresse de l'utilisateur.rice actuel.le ou à l'adresse configurée ici.
       payee_help: 'apparaît sur le bulletin de versement'
       beneficiary_help: 'apparaît sur le bulletin de versement'
       account_number_example: 'exemple : 01-162-5'
       participant_number_internal_example: 'Exemple: 999999'
       iban_example: 'exemple : CH93 2011 0076 6238 5295 7'
+      variable_donation_appeal: 'demande de dons variable'
+      donation_calculation_year_amount_explanation: Nombre d'années précédentes prises en compte pour le calcul des dons.
+      donation_increase_percentage_explanation: pourcentage pour le calcul des dons
     reminder_fields:
       third_level: 'Pour tous les rappels suivants, les données du troisième rappel sont reprises.'
+    provider_fields:
+      reset_payment_provider_warning: 'En cas de modification de données ici, il est nécessaire de refaire le processus d''initialisation de l''interface de facturation.'
   invoice_lists:
     form:
+      invoice_articles:
+        variable_donation:
+          name: demande de dons variable
+          number: dons
+          description: demande de dons basée sur les sommes de dons existant déjà
       recipient_info:
         one: "La facture est établie pour und personne"
         other: "La facture est établie pour %{count} personnes"
@@ -707,10 +757,6 @@ fr:
       sign_out: 'Déconnexion'
     unauthorized:
       forgot_password: 'Mot de passe oublié?'
-    application:
-      available_under_license: 'Disponible au numéro '
-      developed_by: 'Développé par'
-      source_code: 'Code source'
     user_impersonation:
       info: "Tu es maintenant enregistré en tant que %{user}"
       end: "Terminer l'imitation"
@@ -736,12 +782,82 @@ fr:
       help_preferred_labels: 'Si disponibles, les e-mails ne sont envoyés qu''aux adresses e-mails avec cette désignation. Ce faisant, les adresses e-mail qui ne sont pas marquées comme adresses d''envoi seront également utilisées.'
       help_mailchimp_sync: 'Les personnes abonnées peuvent être exportées vers la liste MailChimp. Cette action écrase la liste MailChimp et les contacts actuels sont effacés.'
     imap_mails:
+      manage: e-mails
       mailboxes:
+        inbox: entrée
+        spam: spam
         failed: Échec de l'opération
+      move_to:
+        inbox: dans les entrées
+        spam: dans les spams
+        failed: dans les échecs
       headers:
         subject: Objet
         sender: Expéditeur
         date: Date
+        state: statut
+        states:
+          unkown_recipient: destinataire inconnu
+          retreived: recevoir
+          bulk_delivering: est envoyé
+          completed: terminé
+          sender_rejected: destinataire refusé.e
+          state_unavailable: aucun statut disponible
+      not_available: Aucun e-mail ne se trouve dans cette boîte mail.
+      flash:
+        deleted:
+          one: 'l''email a été effacé avec succès'
+          other: '%{count} e-mails ont été effacés avec succès'
+        moved:
+          one: 'un e-mail déplacé avec succès'
+          other: '%{count} e-mails déplacés avec succès'
+        server_error: La liaison avec le serveur mail est impossible pour l'instant, veuillez réessayer plus tard svp.
+    recipient_counts:
+      index:
+        recipient_info:
+          message/letter:
+            households:
+              valid:
+                zero: "Il n'existe aucun foyer avec une adresse complète."
+                one: "%{model_class} est créé pour un foyer."
+                other: "%{model_class} est créé pour %{count}foyers."
+              invalid:
+                one: "Il existe un foyer sans adresse complète."
+                other: "Il reste %{count} sans adresse complète."
+            people:
+              valid:
+                zero: "Il n'existe aucune personne avec une adresse complète."
+                one: "%{model_class} est créé pour une personne."
+                other: "%{model_class} est créé pour %{count} personnes."
+              invalid:
+                one: "Une personne n'a pas enregistré d'adresse complète."
+                other: "Il reste %{count} sans adresse complète."
+          message/letter_with_invoice:
+            households:
+              valid:
+                zero: "Il n'existe aucun foyer avec une adresse complète."
+                one: "%{model_class} est créé pour un foyer."
+                other: "%{model_class} est créé pour %{count} foyers."
+              invalid:
+                one: "Il existe un foyer sans adresse complète."
+                other: "Il reste %{count} sans adresse complète."
+            people:
+              valid:
+                zero: "Il n'existe aucune personne avec une adresse complète."
+                one: "%{model_class} est créé pour une personne."
+                other: "%{model_class} est créé pour %{count} personnes."
+              invalid:
+                one: "Une personne n'a pas enregistré d'adresse complète."
+                other: "Il reste %{count} sans adresse complète."
+          message/text_message:
+            people:
+              valid:
+                zero: "Il n'existe aucune personne avec un numéro de téléphone portable."
+                one: "%{model_class} est créé pour une personne."
+                other: "%{model_class} est créé pour %{count} personnes."
+              invalid:
+                one: "Une personne n'a pas enregistré de numéro de portable complet."
+                other: "Il reste %{count} sans numéros de portables complets."
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
     may_not_subscribe: 'Les abonnés <strong>ne peuvent pas</strong> s''inscrire / se désinscrire eux-même'
@@ -789,23 +905,11 @@ fr:
     text_message:
       fields:
         remaining_chars: Caractères restant
-    form:
-      available_placeholders: 'Titres disponibles:'
-      recipient_info:
-        valid:
-          message/letter:
-            one: "est créé pour une personne."
-            other: "%{model_class}est créé pour %{count} personnes."
-          message/letter_with_invoice:
-            one: "est créé pour des personnes."
-            other: "%{model_class} est créé pour %{count} personnes."
-          message/text_message:
-            one: "est créé pour des personnes."
-            other: "%{model_class} est créé pour %{count} personnes."
-        invalid:
-          message/text_message:
-            one: "Plusieurs numéros de téléphones sont manquants."
-            other: "%{count} numéros de téléphones sont manquants."
+    letter:
+      fields:
+        send_to_households_options:
+          'true': une lettre par foyer
+          'false': une lettre par personne
     table:
       infos:
         sender: "Expéditeur: %{mail}"
@@ -814,6 +918,14 @@ fr:
     export_enqueued: 'L''export est démarré en arrière-plan et sera téléchargé après complétion.'
     show:
       recipients_empty: La liste de distribution est vide, aucun PDF ne peut être créé.
+    export:
+      section:
+        donation_confirmation:
+          header: "faire un don à %{organisation}"
+          title: "confirmation des dons %{year}"
+          received_amount: "Le don a bien été reçu"
+          received_from: "nous avons en %{year} "
+          acknowledgement: "Nous vous remercions pour votre confiance et votre engagement!"
   navigation:
     menu: 'Menu'
     groups: 'Groupes'
@@ -822,7 +934,9 @@ fr:
     admin: 'Paramètres'
     admin/event_feed: 'Intégrer le calendrier'
     admin/oauth_authorizations: 'Autoriser OAuth'
+    imap_mails: 'e-mails'
     invoices: 'Factures'
+    invoices/single: 'factures individuelles'
   notes:
     new_note: Ajouter une note
     note:
@@ -830,9 +944,12 @@ fr:
     paginator:
       newer_notes: Nouvelles contributions
       older_notes: Anciennes contributions
+    destroy:
+      failure: "Échec de la suppression de la notice: %{errors}."
   oauth:
     applications:
       form:
+        help_cors_origins: En cas d'activation de la portée "api", les sites webs sur cet hôte pourront consulter les données de l'interface JSON depuis le navigateur web (CORS).
         help_native_redirect_uris: Une entrée par ligne. Pour les tests locaux, utiliser %{native_redirect_uri}.
       attrs:
         profile_endpoint_help: Les informations profil de l'utilisateur peuvent être prises au-delà ce Endpoint. Pour ce faire, il faut rendre le Access Token dans le Authorization Header. Le Scope souhaité peut être rendu en tant que X-Scope.
@@ -966,11 +1083,6 @@ fr:
         import_details_html: >
             Les personnes suivantes vont être importées avec le <strong>rôle %{role}</strong>
             dans le <strong>groupe %{group}</strong>.
-    add_request_mailer:
-      ask_person_to_add:
-        request_link: Répondre à la requête
-      ask_responsibles:
-        request_link: 'Répondre à la requête '
     subscriptions:
       index:
         my_subscriptions: Mes abonnements
@@ -984,6 +1096,7 @@ fr:
         category_validation:
           email_primary_invalid: Adresse e-mail principale non valide
           email_additional_invalid: Adresse e-mail supplémentaire non valide
+          address_invalid: L'adresse ne se trouve pas dans la liste.
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:
@@ -1026,7 +1139,6 @@ fr:
       invoices: Factures
       subscriptions: Abonnements
     actions_show:
-      send_login: Envoyer les données d'identification
       send_login_tooltip:
         new: 'La personne ne possède pas de Login.<br><br>Cette action lui envoie un lien afin qu’il puisse créer un mot de passe. '
         resend: La personne a reçu un lien pour créer son mot de passe, mais ne l’a pas encore fait.<br><br> Cette action lui envoie à nouveau le lien.
@@ -1092,6 +1204,13 @@ fr:
     destroy:
       flash:
         success: L'inscription a été effacée avec succès.
+  event_invitations:
+    create:
+      flash:
+        success: 'L''invitation de %{recipient_name} en tant que %{participation_type} a été créé.'
+    decline:
+      flash:
+        success: L'invitation a été rejetée.
   people_filters:
     form:
       save_search: Sauvegarder cette recherche
@@ -1245,6 +1364,8 @@ fr:
   service_tokens:
     abilities:
       read: Lecture
+    form:
+      help_cors_origins: Les sites webs sur cet hôte peuvent consulter les données de l'interface JSON depuis le navigateur web (CORS).
     global:
       link:
         add: Ajouter API-Key

@@ -44,6 +44,16 @@ class PaymentProvider
     @config.update!(status: :registered)
 
     true
+  rescue Epics::Error::TechnicalError => e
+    case e.code
+    # Using the HPB request we're also checking
+    # whether the client is registered (which is the case once the bank accepts the ini letter)
+    # However, as long as the letter isn't accepted an EBICS_AUTHENTICATION_FAILED Error gets raised
+    when '061001' #EBICS_AUTHENTICATION_FAILED
+      false
+    else
+      raise e
+    end
   end
 
   def XTC(document)
@@ -53,9 +63,9 @@ class PaymentProvider
   end
 
   def Z54(since_date = nil, until_date = nil)
-    order_data = client.send(:download, PaymentProviders::Z54, since_date, until_date)
+    xml_files = client.send(:download_and_unzip, PaymentProviders::Z54, since_date, until_date)
 
-    xml_from_order_data(order_data)
+    xml_files.map { |order_data| xml_from_order_data(order_data) }
   end
   # rubocop:enable Naming/MethodName
 

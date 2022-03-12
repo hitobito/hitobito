@@ -35,7 +35,7 @@ function existing_wagon_names() {
   sed 's!../hitobito_!!' |\
   cut -d/ -f 1 |\
   grep -v '\.\.' |\
-  uniq
+  uniq | sort
 }
 
 
@@ -108,6 +108,7 @@ case $cmd in
     export WAGONS=''
     export RAILS_TEST_DB_NAME=hit_core_test
     shift # loose the "core-spec" argument
+    rake db:migrate # ensure that schema.rb is current for the test-db to load
     rspec $@
     ;;
 
@@ -120,6 +121,10 @@ case $cmd in
     done
     ;;
 
+  list)
+    existing_wagon_names | xargs -d' ' -n 1 echo | grep -v '^$'
+    ;;
+
   create)
     echo "THIS IS WORK IN PROGRESS"
     require_wagon_name
@@ -130,6 +135,7 @@ case $cmd in
     mv -nv "vendor/wagons/$wagon_name" "$new_wagon_dir"
 
     pushd "$new_wagon_dir"
+      mv github .github
       git init
       git ci -m "Create $wagon_name Wagon"
     popd
@@ -148,7 +154,7 @@ case $cmd in
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile configs test-prepare core-spec grep help git create'
+  echo 'activate gemfile configs test-prepare core-spec grep help git list create'
 }
 
 function __wagon_list() {
@@ -186,7 +192,7 @@ COMPLETION
 
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
-    echo "       $0 [test-prepare|core-spec|gemfile|configs]"
+    echo "       $0 [test-prepare|core-spec|gemfile|configs|list]"
     echo "       $0 [grep] <TERM>"
     echo "       $0 [git] <ARGS>"
     echo

@@ -18,7 +18,7 @@
   &:active {
     color: $white;
     background: $purple;
-    @include single-text-shadow($purpleDark, 0, -1px, 1px);
+    text-shadow: 0 -1px 1px false $purpleDark;
     border-color: $purpleDark;
 
     .icon,
@@ -63,7 +63,7 @@
   color: $white;
   background: $blue;
   border-color: $blue;
-  @include single-text-shadow($blueDark, 0, -1px, 1px);
+  text-shadow: 0 -1px 1px false $blueDark;
 }
 
 .btn-group.open .btn.dropdown-toggle {
@@ -117,7 +117,11 @@ a.green {
 
 }
 
-@include keyframes(highlight) {
+@-webkit-keyframes highlight {
+  0%   { background: $green; }
+  100% { background: none; }
+}
+@keyframes highlight {
   0%   { background: $green; }
   100% { background: none; }
 }
@@ -626,4 +630,8 @@ input.switcher {
       margin-bottom: 0.5rem;
     }
   }
+}
+
+.hide-last:last-child {
+  display: none;
 }

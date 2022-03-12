@@ -61,26 +61,45 @@ class Invoice::PaymentProcessor
     @payments ||= credit_statements.collect do |s|
       Payment.new(amount: fetch('Amt', s),
                   esr_number: reference(s),
-                  received_at: to_datetime(fetch('RltdDts', 'AccptncDtTm', s)),
-                  invoice: invoices[reference(s)],
-                  transaction_identifier: fetch('Refs', 'Prtry', 'Ref', s),
+                  received_at: received_at(s),
+                  invoice: invoice(s),
+                  transaction_identifier: transaction_identifier(s),
                   reference: fetch('Refs', 'AcctSvcrRef', s))
     end
+  end
+
+  def invoice(s)
+    invoices_by_reference[reference(s)] || invoices_by_esr_number[esr_number(s)]
+  end
+
+  def invoices
+    @invoices ||= invoices_by_reference
   end
 
   def invoice_lists
     InvoiceList.where(id: invoices.values.collect(&:invoice_list_id))
   end
 
-  def invoices
-    @invoices ||= Invoice
-                  .includes(:group, :recipient)
-                  .where(reference: references)
-                  .index_by(&:reference)
+  def invoices_by_reference
+    @invoices_by_reference ||= Invoice
+                               .includes(:group, :recipient)
+                               .where(reference: references)
+                               .index_by(&:reference)
+  end
+
+  def invoices_by_esr_number
+    @invoice_by_esr_number ||= Invoice
+      .includes(:group, :recipient)
+      .where(esr_number: esr_numbers)
+      .index_by(&:esr_number)
   end
 
   def references
     credit_statements.collect { |s| reference(s) }
+  end
+
+  def esr_numbers
+    references.map { |r| Invoice::PaymentSlip.format_as_esr(r) }
   end
 
   def credit_statements
@@ -112,6 +131,21 @@ class Invoice::PaymentProcessor
     fetch('RmtInf', 'Strd', 'CdtrRefInf', 'Ref', transaction)
   rescue KeyError
     ''
+  end
+
+  def received_at(transaction)
+    datetime = transaction.dig('RltdDts', 'AccptncDtTm') ||
+        from.to_s ||
+        fetch('Ntfctn').fetch('CreDtTm')
+    to_datetime(datetime)
+  end
+
+  def transaction_identifier(transaction)
+    transaction.dig('Refs', 'AcctSvcrRef') || transaction.dig('Refs', 'Prtry', 'Ref')
+  end
+
+  def esr_number(transaction)
+    Invoice::PaymentSlip.format_as_esr(reference(transaction))
   end
 
   def to_datetime(string)

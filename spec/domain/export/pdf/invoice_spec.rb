@@ -129,6 +129,7 @@ describe Export::Pdf::Invoice do
         total: 1500,
         iban: 'CH93 0076 2011 6238 5295 7',
         reference: 'RF561A',
+        esr_number: '00 00834 96356 70000 00000 00019',
         payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing\nCH",
         recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland\nCH"
       )
@@ -172,10 +173,12 @@ describe Export::Pdf::Invoice do
         [346, 255, 'Acme Corp'],
         [346, 243, 'Hallesche Str. 37'],
         [346, 232, '3007 Hinterdupfing'],
-        [346, 200, 'Zahlbar durch'],
-        [346, 188, 'Max Mustermann'],
-        [346, 177, 'Musterweg 2'],
-        [346, 165, '8000 Alt Tylerland']
+        [346, 211, 'Referenznummer'],
+        [346, 200, '00 00834 96356 70000 00000 00019'],
+        [346, 178, 'Zahlbar durch'],
+        [346, 167, 'Max Mustermann'],
+        [346, 155, 'Musterweg 2'],
+        [346, 144, '8000 Alt Tylerland']
       ]
     end
 
@@ -205,10 +208,12 @@ describe Export::Pdf::Invoice do
         [346, 255, 'Acme Corp'],
         [346, 243, 'Hallesche Str. 37'],
         [346, 232, '3007 Hinterdupfing'],
-        [346, 200, 'Zahlbar durch'],
-        [346, 188, 'Max Mustermann'],
-        [346, 177, 'Musterweg 2'],
-        [346, 165, '8000 Alt Tylerland']
+        [346, 211, 'Referenznummer'],
+        [346, 200, '00 00834 96356 70000 00000 00019'],
+        [346, 178, 'Zahlbar durch'],
+        [346, 167, 'Max Mustermann'],
+        [346, 155, 'Musterweg 2'],
+        [346, 144, '8000 Alt Tylerland']
       ]
     end
   end

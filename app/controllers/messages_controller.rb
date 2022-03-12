@@ -11,10 +11,10 @@ class MessagesController < CrudController
   include AsyncDownload
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text].freeze
-  PERMITTED_LETTER_ATTRS = [:subject, :body, :heading, :salutation,
-                            :pp_post, :shipping_method].freeze
-  PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :heading, :salutation,
-                                    :pp_post, :shipping_method,
+  PERMITTED_LETTER_ATTRS = [:subject, :body, :salutation, :send_to_households,
+                            :pp_post, :shipping_method, :date_location_text].freeze
+  PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :salutation, :donation_confirmation,
+                                    :pp_post, :shipping_method, :date_location_text,
                                     invoice_attributes: {
                                       invoice_items_attributes: [
                                         :name,
@@ -45,7 +45,6 @@ class MessagesController < CrudController
           render_pdf_in_background
         end
       end
-      format.csv { render_tabular_in_background(:csv) }
     end
   end
 

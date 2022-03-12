@@ -50,7 +50,7 @@ describe Synchronize::Mailchimp::Client do
   context '#subscriber_body' do
 
     it 'strips whitespace from fields' do
-      top_leader.update(first_name: ' top ', last_name: ' leader ', email: ' top@example.com ')
+      top_leader.update_columns(first_name: ' top ', last_name: ' leader ', email: ' top@example.com ')
       body = client.subscriber_body(top_leader)
 
       expect(body[:email_address]).to eq 'top@example.com'

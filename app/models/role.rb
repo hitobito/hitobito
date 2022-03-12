@@ -1,9 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: roles
@@ -45,6 +46,10 @@ class Role < ActiveRecord::Base
   class_attribute :superior_attributes
   self.superior_attributes = []
 
+  # TOTP as 2FA is enforced on this role.
+  class_attribute :two_factor_authentication_enforced
+  self.two_factor_authentication_enforced = false
+
   # If these attributes should change, create a new role instance instead.
   attr_readonly :person_id, :group_id, :type
 
@@ -64,6 +69,14 @@ class Role < ActiveRecord::Base
   after_create :set_first_primary_group
   after_destroy :reset_contact_data_visible
   after_destroy :reset_primary_group
+
+  # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
+  # before_save :prevent_changes, if: ->(r) { r.archived? }
+
+  ### SCOPES
+
+  scope :without_archived, -> { where(archived_at: nil) }
+  scope :archived, -> { where.not(archived_at: nil) }
 
   ### CLASS METHODS
 
@@ -87,12 +100,16 @@ class Role < ActiveRecord::Base
   end
 
   # Soft destroy if older than certain amount of days, hard if younger
-  def destroy
+  def destroy # rubocop:disable Rails/ActiveRecordOverride
     if old_enough_to_archive?
       super
     else
       really_destroy!
     end
+  end
+
+  def archived?
+    archived_at.present?
   end
 
   private
@@ -119,7 +136,8 @@ class Role < ActiveRecord::Base
   end
 
   def reset_primary_group
-    if person.primary_group_id == group_id && person.roles.where(group_id: group_id).count == 0
+    if person.primary_group_id == group_id &&
+        person.roles.where(group_id: group_id).count.zero?
       person.update_column :primary_group_id, alternative_primary_group.try(:id)
     end
   end
@@ -136,5 +154,14 @@ class Role < ActiveRecord::Base
 
   def old_enough_to_archive?
     (Time.zone.now - created_at) > Settings.role.minimum_days_to_archive.days
+  end
+
+  def prevent_changes
+    allowed = %w(archived_at updater_id)
+    only_archival = changes
+                    .reject { |_attr, (from, to)| from.blank? && to.blank? }
+                    .keys.all? { |key| allowed.include? key }
+
+    raise ActiveRecord::ReadOnlyRecord unless new_record? || only_archival
   end
 end

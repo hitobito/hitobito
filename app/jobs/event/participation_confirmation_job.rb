@@ -19,13 +19,23 @@ class Event::ParticipationConfirmationJob < BaseJob
 
     set_locale
     send_confirmation
+    send_notification
     send_approval
   end
 
+  private
+
   def send_confirmation
-    if participation.person.valid_email?
-      Event::ParticipationMailer.confirmation(participation).deliver_now
-    end
+    return unless participation.person.valid_email?
+
+    Event::ParticipationMailer.confirmation(participation).deliver_now
+  end
+
+  def send_notification
+    return unless notify_contact?(participation.event)
+
+    Event::ParticipationMailer
+      .notify_contact(participation, participation.event.contact).deliver_now
   end
 
   def send_approval
@@ -54,4 +64,7 @@ class Event::ParticipationConfirmationJob < BaseJob
     @participation ||= Event::Participation.find_by(id: @participation_id)
   end
 
+  def notify_contact?(event)
+    event.notify_contact_on_participations? && event.contact.present?
+  end
 end

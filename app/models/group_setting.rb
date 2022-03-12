@@ -33,7 +33,7 @@ class GroupSetting < RailsSettings::SettingObject
   SETTINGS = {
     text_message_provider: { username: nil, password: nil, provider: %w(aspsms), originator: nil },
     messages_letter: { picture: nil }
-  }.with_indifferent_access.freeze
+  }.with_indifferent_access
 
   def attrs
     SETTINGS[var].symbolize_keys.keys

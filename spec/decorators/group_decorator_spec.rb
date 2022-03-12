@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,6 +21,14 @@ describe GroupDecorator, :draper_with_helpers do
                  Group::TopGroup::LocalGuide,
                  Group::TopGroup::Secretary,
                  Group::TopGroup::LocalSecretary,
+                 Group::TopGroup::Member,
+                 Role::External]
+    end
+  end
+
+  describe 'possible roles_without_writing_permissions' do
+    its(:possible_roles_without_writing_permissions) do
+      should eq [Group::TopGroup::LocalSecretary,
                  Group::TopGroup::Member,
                  Role::External]
     end
@@ -65,4 +73,60 @@ describe GroupDecorator, :draper_with_helpers do
     end
   end
 
+  describe 'subgroups' do
+    let(:model) { groups(:bottom_layer_one) }
+
+    its(:subgroup_ids) do
+      should match_array(
+        [ groups(:bottom_layer_one),
+          groups(:bottom_group_one_one),
+          groups(:bottom_group_one_one_one),
+          groups(:bottom_group_one_two)
+        ].collect(&:id))
+    end
+  end
+
+  context 'archived groups' do
+    let(:model) do
+      groups(:bottom_group_one_two).tap { |g| g.update(archived_at: 1.day.ago) }
+    end
+
+    it 'suffix to_s' do
+      expect(subject.to_s).to end_with(' (archiviert)')
+    end
+
+    it 'suffix to_s with argument' do
+      expect(subject.to_s(:default)).to end_with(' (archiviert)')
+    end
+
+    it 'suffix to_s with argument' do
+      expect(subject.to_s(:long_format)).to end_with(' (archiviert)')
+    end
+
+    it 'suffix display_name' do
+      expect(subject.display_name).to end_with(' (archiviert)')
+    end
+  end
+
+  context 'not archived groups' do
+    let(:model) do
+      groups(:bottom_group_one_two).tap { |g| g.update(archived_at: nil) }
+    end
+
+    it 'suffix to_s' do
+      expect(subject.to_s).to_not end_with(' (archiviert)')
+    end
+
+    it 'suffix to_s with argument' do
+      expect(subject.to_s(:default)).to_not end_with(' (archiviert)')
+    end
+
+    it 'suffix to_s with argument' do
+      expect(subject.to_s(:long_format)).to_not end_with(' (archiviert)')
+    end
+
+    it 'suffix display_name' do
+      expect(subject.display_name).to_not end_with(' (archiviert)')
+    end
+  end
 end

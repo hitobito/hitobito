@@ -19,37 +19,37 @@ describe InvoiceConfig do
     it 'qr' do
       subject.payment_slip = 'qr'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :iban]
+      expect(subject.errors.attribute_names).to eq [:payee, :iban]
     end
 
     it 'no_ps' do
       subject.payment_slip = 'no_ps'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee]
+      expect(subject.errors.attribute_names).to eq [:payee]
     end
 
     it 'ch_es' do
       subject.payment_slip = 'ch_es'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee]
+      expect(subject.errors.attribute_names).to eq [:payee]
     end
 
     it 'ch_esr' do
       subject.payment_slip = 'ch_esr'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :participant_number]
+      expect(subject.errors.attribute_names).to eq [:payee, :participant_number]
     end
 
     it 'ch_bes' do
       subject.payment_slip = 'ch_bes'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :beneficiary]
+      expect(subject.errors.attribute_names).to eq [:payee, :beneficiary]
     end
 
     it 'ch_besr' do
       subject.payment_slip = 'ch_besr'
       expect(subject).not_to be_valid
-      expect(subject.errors.keys).to eq [:payee, :beneficiary, :participant_number, :participant_number_internal]
+      expect(subject.errors.attribute_names).to eq [:payee, :beneficiary, :participant_number, :participant_number_internal]
     end
 
   end

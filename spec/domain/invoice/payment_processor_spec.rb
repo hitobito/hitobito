@@ -44,6 +44,16 @@ describe Invoice::PaymentProcessor do
     expect(list.reload.recipients_paid).to eq 1
   end
 
+  it 'creates payment and marks scor referenced invoice as payed' do
+    invoice.update_columns(reference: Invoice::ScorReference.create('000000100000000000905'),
+                           esr_number: '00 00000 00000 10000 00000 00905',
+                           total: 710.82)
+    expect do
+      expect(parser.process).to eq 1
+    end.to change { Payment.count }.by(1)
+    expect(invoice.reload).to be_payed
+  end
+
 
   it 'invalid payments only produce set alert' do
     expect(parser.alert).to be_present
@@ -54,6 +64,13 @@ describe Invoice::PaymentProcessor do
     invoice.update_columns(reference: '000000000000100000000000905')
     expect(parser.alert).to be_present
     expect(parser.notice).to be_present
+  end
+
+  it 'falls back to more general dates if no payment date is included' do
+    expect(parser('camt.054-without-payment-dates').payments.first.received_at)
+        .to eq(Time.zone.parse('2022-01-26T00:00:00+01:00').to_date)
+    expect(parser('camt.054-without-any-optional-dates').payments.first.received_at)
+        .to eq(Time.zone.parse('2022-01-26T18:43:27+01:00').to_date)
   end
 
   private

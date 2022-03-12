@@ -1,16 +1,27 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Cross Site Scripting",
+      "warning_type": "Cross-Site Scripting",
       "warning_code": 2,
       "fingerprint": "4000ff73f6b8ea02cc258bc13979b5f086367affcae15ec82e7fd38d32825bac",
       "check_name": "CrossSiteScripting",
       "message": "Unescaped model attribute",
       "file": "app/views/devise/sessions/_info.html.haml",
       "line": 3,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
       "code": "CustomContent.get(\"views/devise/sessions/info\").body.to_s",
-      "render_path": [{"type":"template","name":"devise/sessions/new","line":8,"file":"app/views/devise/sessions/new.html.haml"}],
+      "render_path": [
+        {
+          "type": "template",
+          "name": "devise/sessions/new",
+          "line": 11,
+          "file": "app/views/devise/sessions/new.html.haml",
+          "rendered": {
+            "name": "devise/sessions/_info",
+            "file": "app/views/devise/sessions/_info.html.haml"
+          }
+        }
+      ],
       "location": {
         "type": "template",
         "template": "devise/sessions/_info"
@@ -20,106 +31,42 @@
       "note": "HTML Tags ARE allowed here"
     },
     {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "55a2a1a88c96d96da0fe4bd2cc475861693ba901df6357d323bb71ef5d1d0500",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/note.rb",
-      "line": 37,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "joins(\"LEFT JOIN roles ON roles.person_id = notes.subject_id AND notes.subject_type = '#{Person.sti_name}'\")",
+      "warning_type": "Remote Code Execution",
+      "warning_code": 110,
+      "fingerprint": "9ae68e59cfee3e5256c0540dadfeb74e6b72c91997fdb60411063a6e8518144a",
+      "check_name": "CookieSerialization",
+      "message": "Use of unsafe cookie serialization strategy `:hybrid` might lead to remote code execution",
+      "file": "config/initializers/cookies_serializer.rb",
+      "line": 5,
+      "link": "https://brakemanscanner.org/docs/warning_types/unsafe_deserialization",
+      "code": "Rails.application.config.action_dispatch.cookies_serializer = :hybrid",
       "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Note",
-        "method": "in_or_layer_below"
-      },
-      "user_input": "Person.sti_name",
-      "confidence": "High",
-      "note": "#sti_name is not prone to sql injection"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "56def8ae9cd3909d50d642cd1b136a32add68b1b8619c1d81afc9907e7eb61a1",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/qualification.rb",
-      "line": 61,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "joins(:qualification_kind).where(\"qualifications.start_at <= ?\", Time.zone.today).where(\"qualifications.finish_at IS NULL OR (qualification_kinds.reactivateable IS NULL AND  qualifications.finish_at >= ?) OR #{add_reactivateable_years_to_finish_at} >= ?\", Time.zone.today, Time.zone.today)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Qualification",
-        "method": "reactivateable"
-      },
-      "user_input": "add_reactivateable_years_to_finish_at",
-      "confidence": "Weak",
-      "note": "cannot be done in another way"
-    },
-    {
-      "warning_type": "Cross Site Scripting",
-      "warning_code": 84,
-      "fingerprint": "5a7b39c4285def2dc7188ab558aa70cb09143b90987c7f74783fad59ca4ca8c1",
-      "check_name": "RenderInline",
-      "message": "Unescaped model attribute rendered inline",
-      "file": "app/controllers/subscriptions_controller.rb",
-      "line": 50,
-      "link": "http://brakemanscanner.org/docs/warning_types/cross_site_scripting/",
-      "code": "render(text => Person.mailing_emails_for(people, parent.labels).join(\",\"), {})",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "SubscriptionsController",
-        "method": "render_emails"
-      },
-      "user_input": "Person.mailing_emails_for(people, parent.labels).join(\",\")",
+      "location": null,
+      "user_input": null,
       "confidence": "Medium",
-      "note": "rendering text is not prone to injection"
+      "note": "This is a transitionary setting, it should be switched to :json sometime in 2022"
     },
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "b5ba7582a3ff0bf447a41a24c287cb72296eeb151a4cd09f9ff74864db59db88",
+      "fingerprint": "b216097a885c4749beec71b32c00a8da56ce498c519675a10a03a28b3eaf73a0",
       "check_name": "SQL",
       "message": "Possible SQL injection",
-      "file": "app/controllers/subscriber/event_controller.rb",
-      "line": 42,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Subscription.new(:mailing_list => (@mailing_list)).possible_events.joins(\"LEFT JOIN event_kinds ON events.kind_id = event_kinds.id AND events.type = '#{Event::Course.sti_name}' LEFT JOIN event_kind_translations ON event_kinds.id  = event_kind_translations.event_kind_id\")",
+      "file": "app/domain/mail_relay/lists.rb",
+      "line": 117,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "from(\"#{envelope_receiver_name}#{\"-bounces\"}@#{mail_domain}\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "Subscriber::EventController",
-        "method": "matching_events"
+        "class": "MailRelay::Lists",
+        "method": "prepare_not_allowed_message"
       },
-      "user_input": "Event::Course.sti_name",
-      "confidence": "High",
-      "note": "#sti_name is not prone to sql injection"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
-      "fingerprint": "e158e1df83e3ab734b79ddeaf462102fcd74e13b87e8b1c01133f1cf66d7de7a",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/models/group.rb",
-      "line": 127,
-      "link": "http://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "reorder(\"#{\"CASE groups.type WHEN '#{t.sti_name}' THEN #{i} END, \"} lft\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Group",
-        "method": "order_by_type"
-      },
-      "user_input": "t.sti_name",
+      "user_input": "envelope_receiver_name",
       "confidence": "Medium",
-      "note": "#sti_name is not prone to injection"
+      "note": "This from() is not part of an SQL query builder, but rather an email builder"
     }
   ],
-  "updated": "2018-07-10 16:55:10 +0200",
-  "brakeman_version": "3.5.0"
+  "updated": "2022-01-10 12:14:00 +0100",
+  "brakeman_version": "5.2.0"
 }

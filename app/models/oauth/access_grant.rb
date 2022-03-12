@@ -26,7 +26,7 @@
 
 module Oauth
   class AccessGrant < Doorkeeper::AccessGrant
-    belongs_to :person, foreign_key: :resource_owner_id
+    belongs_to :person, foreign_key: :resource_owner_id, inverse_of: :access_grants
 
     scope :list, -> { order(created_at: :desc) }
     scope :for,  ->(uri) { where(redirect_uri: uri) }

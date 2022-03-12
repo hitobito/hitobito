@@ -10,7 +10,7 @@ Diese Dokumente beschreiben verschiedene Aspekte, welche bei der Entwicklung zu 
 * [Deployment](02_deployment.md)
 * [Guidelines](03_guidelines.md)
 * [Wagons](04_wagons.md)
-* [Jenkins Setup](06_jenkins_setup.md)
+* [CI/CD](06_ci_cd.md)
 * [Frontend & Assets](09_webpacker.md)
 
 Alle Diagramme werden mit [Draw.io](https://draw.io) erstellt und jeweils als Original .xml sowie als .svg abgespeichert.
@@ -43,7 +43,7 @@ These documents describe different aspects that need to be considered when devel
 * [Deployment](02_deployment.md)
 * [Guidelines](03_guidelines.md)
 * [Wagons](04_wagons.md)
-* [Jenkins Setup](06_jenkins_setup.md)
+* [CI/CD](06_ci_cd.md)
 
 All graphics are created using [Draw.io](https://draw.io) and are stored as original .xml as well as .svg files.
 

@@ -8,6 +8,9 @@
 class InvoicesController < CrudController
   include YearBasedPaging
   include Api::JsonPaging
+  include RenderMessagesExports
+  include AsyncDownload
+
   decorates :invoice
 
   self.nesting = Group
@@ -113,12 +116,12 @@ class InvoicesController < CrudController
 
   def render_invoices_pdf(invoices)
     letter = parent.message if parent.is_a?(InvoiceList)
-    pdf = if letter
-            Export::Pdf::Messages::LetterWithInvoice.new(letter, letter.recipients).render
-          else
-            Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
-          end
-    send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
+    if letter
+      render_pdf_in_background(letter)
+    else
+      pdf = Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
+      send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
+    end
   end
 
   def filename(extension, invoices)

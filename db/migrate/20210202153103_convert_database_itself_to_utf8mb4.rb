@@ -21,9 +21,20 @@ class ConvertDatabaseItselfToUtf8mb4 < ActiveRecord::Migration[6.0]
   private
 
   def table_is_not_utf8mb4(conn, table)
-    conn.table_options(table)[:options]
-        .match(/CHARSET=(?<charset>\w+)/)
-       &.named_captures.to_h
-        .fetch('charset', 'latin1') != 'utf8mb4'
+    options = conn.table_options(table)
+
+    charset =
+      options[:charset] || # AR 6.1
+      charset_from_options(options) || # AR 6.0
+      'latin1'
+
+    charset != 'utf8mb4'
+  end
+
+  def charset_from_options(options)
+    options[:options]
+      .match(/CHARSET=(?<charset>\w+)/)
+     &.named_captures.to_h
+      .fetch('charset', nil)
   end
 end

@@ -24,7 +24,8 @@ puzzlers = [
   'Pascal Simon',
   'Pascal Zumkehr',
   'Roland Studer',
-  'Tobias Hinderling'
+  'Tobias Hinderling',
+  'Severin Raez'
 ]
 
 devs = {

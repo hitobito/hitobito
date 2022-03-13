@@ -155,8 +155,8 @@ de:
         one: Auftrag
         other: Aufträge
       calendar:
-        one: Kalender
-        other: Kalender
+        one: Kalender-Feed
+        other: Kalender-Feeds
       custom_content:
         one: Text
         other: Texte

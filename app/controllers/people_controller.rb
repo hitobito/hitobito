@@ -8,6 +8,7 @@
 class PeopleController < CrudController
   include RenderPeopleExports
   include AsyncDownload
+  include Tags
 
   self.nesting = Group
 
@@ -46,7 +47,6 @@ class PeopleController < CrudController
   after_save :show_email_change_info
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
-  before_render_show :load_grouped_person_tags, if: -> { html_request? }
   before_render_index :load_people_add_requests, if: -> { html_request? }
 
   helper_method :list_filter_args
@@ -146,21 +146,6 @@ class PeopleController < CrudController
       @add_requests = entry.add_requests.includes(:body, requester: { roles: :group })
       set_add_request_status_notification if show_add_request_status?
     end
-  end
-
-  def load_grouped_person_tags
-    @tags = collect_grouped_person_tags
-  end
-
-  def collect_grouped_person_tags
-    tags = entry.taggings.includes(:tag).order('tags.name').each_with_object({}) do |t, memo|
-      tag = t.tag
-      tag.hitobito_tooltip = t.hitobito_tooltip
-
-      memo[tag.category] ||= []
-      memo[tag.category] << tag
-    end
-    ActsAsTaggableOn::Tag.order_categorized(tags)
   end
 
   def show_add_request_status?

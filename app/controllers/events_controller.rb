@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,6 +9,7 @@ class EventsController < CrudController
   include YearBasedPaging
   include AsyncDownload
   include Api::JsonPaging
+  include Tags
 
   self.nesting = Group
 
@@ -50,7 +51,6 @@ class EventsController < CrudController
 
   before_render_show :load_user_participation
   before_render_show :load_open_invitation
-  before_render_show :load_grouped_event_tags, if: -> { html_request? }
   before_render_form :load_sister_groups
   before_render_form :load_kinds
 
@@ -153,21 +153,6 @@ class EventsController < CrudController
         @open_invitation = invitation
       end
     end
-  end
-
-  def load_grouped_event_tags
-    @tags = collect_grouped_event_tags
-  end
-
-  def collect_grouped_event_tags
-    tags = entry.taggings.includes(:tag).order('tags.name').each_with_object({}) do |t, memo|
-      tag = t.tag
-      tag.hitobito_tooltip = t.hitobito_tooltip
-
-      memo[tag.category] ||= []
-      memo[tag.category] << tag
-    end
-    ActsAsTaggableOn::Tag.order_categorized(tags)
   end
 
   def render_tabular_in_background(format, name = :events_export)

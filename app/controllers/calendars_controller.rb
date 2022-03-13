@@ -26,20 +26,6 @@ class CalendarsController < CrudController
   prepend_before_action :parent
   before_render_form :possible_tags
 
-  def feed
-    respond_to do |format|
-      format.ics do
-        calendar = nil
-        if params[:token].present?
-          calendar = Calendar.find_by(id: params[:calendar_id], token: params[:token])
-        end
-        return head :not_found unless calendar
-        events = Calendars::Events.new(calendar).events
-        send_data Export::Ics::Events.new.generate(events), type: :ics, disposition: :inline
-      end
-    end
-  end
-
   def new(&block)
     assign_attributes if model_params
     entry.included_calendar_groups.build(group: group) if entry.included_calendar_groups.blank?

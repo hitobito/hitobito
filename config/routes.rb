@@ -267,7 +267,7 @@ Hitobito::Application.routes.draw do
       end
 
       resources :calendars do
-        get 'feed' => 'calendars#feed'
+        get 'feed' => 'calendars/feeds#index'
       end
 
       resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do

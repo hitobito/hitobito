@@ -6,4 +6,4 @@
 = button_action_edit if can?(:edit, entry)
 = button_action_destroy if can?(:destroy, entry)
 
-= action_button(t('.copy_url'), '#', :copy, data: { copy_to_clipboard: group_calendar_feed_url(entry.group, entry, token: entry.token, format: :ics) })
+= action_button(t('.copy_url'), '#', :copy, data: { copy_to_clipboard: group_calendar_feed_url(entry.group, entry, calendar_token: entry.token, format: :ics) })

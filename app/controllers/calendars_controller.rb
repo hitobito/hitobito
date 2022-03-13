@@ -27,7 +27,17 @@ class CalendarsController < CrudController
   before_render_form :possible_tags
 
   def feed
-    # TODO check token, find events, output them in ics format
+    respond_to do |format|
+      format.ics do
+        calendar = nil
+        if params[:token].present?
+          calendar = Calendar.find_by(id: params[:calendar_id], token: params[:token])
+        end
+        return head :not_found unless calendar
+        events = Calendars::Events.new(calendar).events
+        send_data Export::Ics::Events.new.generate(events), type: :ics, disposition: :inline
+      end
+    end
   end
 
   def new(&block)
@@ -70,6 +80,10 @@ class CalendarsController < CrudController
 
   def excluded_tags
     model_params[:excluded_calendar_tags_ids]&.reject(&:empty?) || []
+  end
+
+  def devise_controller?
+    request.format.ics? # hence, no login required
   end
 
 end

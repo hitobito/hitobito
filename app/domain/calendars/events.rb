@@ -18,8 +18,10 @@ class Calendars::Events
   end
 
   def events
+    query = Event.includes([:dates, :translations, :contact])
+
     # Inclusion and exclusion of events based on groups
-    query = Event.joins(:groups).distinct.where(groups_conditions(included_calendar_groups))
+    query = query.joins(:groups).distinct.where(groups_conditions(included_calendar_groups))
     query = query.where(groups_conditions(excluded_calendar_groups).not) if excluded_groups_exist?
 
     # Inclusion and exclusion of events based on tags

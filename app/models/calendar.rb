@@ -35,10 +35,6 @@ class Calendar < ActiveRecord::Base
     name
   end
 
-  def events(events_scope = Event.only_public_data)
-    Calendars::Events.new(self, events_scope).events
-  end
-
   def included_calendar_tags_ids
     included_calendar_tags.map(&:tag).pluck(:id)
   end

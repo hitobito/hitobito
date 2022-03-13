@@ -1311,6 +1311,21 @@ de:
           email_additional_invalid: Weitere E-Mail ungültig
           address_invalid: Adresse befindet sich nicht im Verzeichnis
 
+    security_tools:
+      index:
+        account: Account
+        last_sign_in_at: 'Letztes Login: '
+        no_last_sign_in: 'Bisher kein Login aufgezeichnet'
+        person_has_2FA: Diese Person hat die Zwei-Faktor-Authentifizierung aktiviert
+        person_no_2FA: Diese Person hat die Zwei-Faktor-Authentifizierung nicht aktiviert
+        person_has_login: Diese Person hat eine Haupt-E-Mail-Adresse und somit Zugang zum System
+        person_no_login: Diese Person hat keine Haupt-E-Mail-Adresse und somit keinen Zugang zum System
+        security_and_privacy: Sicherheit und Datenschutz
+        override_password: "Passwort überschreiben"
+        confirm_reset: "Achtung: Damit wird das Passwort überschrieben. Willst du das wirklich?"
+      password_override:
+        flashes:
+          success: Das Passwort wurde überschrieben. Die Person wurde informiert und kann über die Funktion "Passwort vergessen" jederzeit ein neues Passwort anfordern.
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
@@ -1357,6 +1372,7 @@ de:
     tabs:
       history: Verlauf
       log: Log
+      security_tools: Sicherheit
       colleagues: Mitarbeiter/-innen
       invoices: Rechnungen
       subscriptions: Abos
@@ -1452,6 +1468,7 @@ de:
       password_email_sent: Einladung wurde verschickt
       login: Login ist aktiv
       two_factors: Login mit 2FA ist aktiv
+      status_off: Nicht vorhanden
 
   participations:
     destroy:
@@ -1724,6 +1741,7 @@ de:
 
     impersonate: "Account wurde von %{user} übernommen."
     impersonation_done: "Account wird nicht mehr von %{user} verwendet."
+    password_override: "Passwort wurde von %{user} auf null gesetzt und das Login verhindert, bis ein neues Passwort gesetzt wird."
 
     append_to_household: "%{item} wurde zum Haushalt (%{object_changes}) hinzugefügt."
     household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."

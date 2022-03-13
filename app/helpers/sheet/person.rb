@@ -45,6 +45,12 @@ module Sheet
           view.can?(:log, person)
         end)
 
+    tab 'people.tabs.security_tools',
+        :security_tools_group_person_path,
+        if: (lambda do |view, _group, person|
+          view.can?(:show_details, person)
+        end)
+
     tab 'people.tabs.colleagues',
         :colleagues_group_person_path,
         if: (lambda do |_view, _group, person|

@@ -10,6 +10,30 @@ CustomContent.seed_once(
   { key: Person::LoginMailer::CONTENT_LOGIN,
     placeholders_required: 'login-url',
     placeholders_optional: 'recipient-name, sender-name' },
+  { key: Person::SecurityToolsController::PASSWORD_COMPROMISED_SITUATION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::PASSWORD_COMPROMISED_SOLUTION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::EMAIL_COMPROMISED_SITUATION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::EMAIL_COMPROMISED_SOLUTION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::DATALEAK_SITUATION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::DATALEAK_SOLUTION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::SUSPEND_PERSON_SITUATION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
+  { key: Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION,
+    placeholders_required: 'person-name',
+    placeholders_optional: nil },
   { key: Event::ParticipationMailer::CONTENT_CONFIRMATION,
     placeholders_required: 'event-details, application-url',
     placeholders_optional: 'recipient-name' },
@@ -46,6 +70,9 @@ CustomContent.seed_once(
   { key: Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION,
     placeholders_required: 'taker-name',
     placeholders_optional: 'recipient-name' },
+  { key: Person::UserPasswordOverrideMailer::CONTENT_USER_PASSWORD_OVERRIDE,
+    placeholders_required: 'taker-name',
+    placeholders_optional: 'recipient-name' },
   { key: DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS,
     placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients',
     placeholders_optional: nil },
@@ -64,6 +91,14 @@ CustomContent.seed_once(
 )
 
 send_login_id = CustomContent.get(Person::LoginMailer::CONTENT_LOGIN).id
+password_compromised_situation_id = CustomContent.get(Person::SecurityToolsController::PASSWORD_COMPROMISED_SITUATION).id
+password_compromised_solution_id = CustomContent.get(Person::SecurityToolsController::PASSWORD_COMPROMISED_SOLUTION).id
+email_compromised_situation_id = CustomContent.get(Person::SecurityToolsController::EMAIL_COMPROMISED_SITUATION).id
+email_compromised_solution_id = CustomContent.get(Person::SecurityToolsController::EMAIL_COMPROMISED_SOLUTION).id
+dataleak_situation_id = CustomContent.get(Person::SecurityToolsController::DATALEAK_SITUATION).id
+dataleak_solution_id = CustomContent.get(Person::SecurityToolsController::DATALEAK_SOLUTION).id
+suspend_person_situation_id = CustomContent.get(Person::SecurityToolsController::SUSPEND_PERSON_SITUATION).id
+suspend_person_solution_id = CustomContent.get(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION).id
 participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
 participation_notification_id = CustomContent.get(Event::ParticipationMailer::CONTENT_NOTIFICATION).id
 participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTENT_APPROVAL).id
@@ -76,6 +111,7 @@ add_request_approved_id = CustomContent.get(Person::AddRequestMailer::CONTENT_AD
 add_request_rejected_id = CustomContent.get(Person::AddRequestMailer::CONTENT_ADD_REQUEST_REJECTED).id
 invoice_notification_id = CustomContent.get(InvoiceMailer::CONTENT_INVOICE_NOTIFICATION).id
 user_impersonation_id = CustomContent.get(Person::UserImpersonationMailer::CONTENT_USER_IMPERSONATION).id
+user_password_override_id = CustomContent.get(Person::UserPasswordOverrideMailer::CONTENT_USER_PASSWORD_OVERRIDE).id
 bulk_mail_success_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS).id
 bulk_mail_with_failed_id = CustomContent.get(DeliveryReportMailer::CONTENT_BULK_MAIL_WITH_FAILED).id
 address_validation_checks_id = CustomContent.get(Address::ValidationChecksMailer::CONTENT_ADDRESS_VALIDATION_CHECKS).id
@@ -136,6 +172,54 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: send_login_id,
    locale: 'it',
    label: 'Inviare il login'},
+
+  {custom_content_id: password_compromised_situation_id,
+   locale: 'de',
+   label: 'Passwort nicht sicher',
+   subject: 'Sicherheitsübersicht: Account wurde übernommen?',
+   body: "Vermutest du, dass jemand den Account von {person-name} übernommen hat? Oder ist das Passwort nicht mehr sicher?"},
+
+  {custom_content_id: password_compromised_solution_id,
+   locale: 'de',
+   label: 'Passwort absichern',
+   subject: 'Sichheitsübersicht: Lösung zu Account wurde übernommen',
+   body: "Bitte überschreibe das Passwort über den folgenden Button. {person-name} kann sich ein neues Passwort über die Funktion \"Passwort zurücksetzen\" zusenden lassen." },
+
+  {custom_content_id: email_compromised_situation_id,
+   locale: 'de',
+   label: 'E-Mail-Adresse nicht sicher',
+   subject: 'Sicherheitsübersicht: E-Mail-Adresse wurde übernommen?',
+   body: "Vermutest du, dass jemand die Kontrolle über die E-Mail-Adresse von {person-name} unerlaubt übernommen hat?"},
+
+  {custom_content_id: email_compromised_solution_id,
+   locale: 'de',
+   label: 'Login über E-Mail verhindern',
+   subject: 'Sichheitsübersicht: Lösung zu E-Mail-Adresse wurde übernommen',
+   body: "Bitte lösche die Haupt-E-Mail von {person-name} und kläre die Situation ab. Wenn du sicher bist, dass keine unbefugte Person auf diesen Account zugreifen kann, kannst du die Haupt-E-Mail wieder eintragen. Du kannst die Haupt-E-Mail auch temporär als Weitere E-Mail abspeichern, damit du sie später wieder findest." },
+
+  {custom_content_id: dataleak_situation_id,
+   locale: 'de',
+   label: 'Daten geleaked',
+   subject: 'Sicherheitsübersicht: Daten geleaked?',
+   body: "Gab es einen Datenmissbrauch oder hat {person-name} unerlaubt weitergegeben?"},
+
+  {custom_content_id: dataleak_solution_id,
+   locale: 'de',
+   label: 'Daten geleaked',
+   subject: 'Sichheitsübersicht: Lösung zu Datenmissbrauch',
+   body: "Dann solltest du {person-name} temporär alle Rollen in deiner Gruppe entfernen." },
+
+  {custom_content_id: suspend_person_situation_id,
+   locale: 'de',
+   label: 'Person ausschliessen',
+   subject: 'Sicherheitsübersicht: Person ausschliessen?',
+   body: "Möchtest du {person-name} ganz aus Hitobito ausschliessen?"},
+
+  {custom_content_id: suspend_person_solution_id,
+   locale: 'de',
+   label: 'Person ausschliessen',
+   subject: 'Sicherheitsübersicht: Lösung bei Person ausschliessen',
+   body: "Dafür kannst du die Haupt-E-Mail von {person-name} löschen. Bitte informiere weitere zuständige Personen von diesem Vorfall. Besonders wenn {person-name} noch weitere Rollen ausserhalb deiner Ebene hat." },
 
   {custom_content_id: participation_confirmation_id,
    locale: 'de',
@@ -394,6 +478,28 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: user_impersonation_id,
    locale: 'it',
    label: 'Benutzer impersonierung' },
+
+  {custom_content_id: user_password_override_id,
+   locale: 'de',
+   label: 'Login verhindert',
+   subject: "Login für [#{Settings.application.name}] von {taker-name} verhindert",
+   body: "Hallo {recipient-name}, <br/>" \
+   "{taker-name} hat auf [#{Settings.application.name}] das Passwort deines Accounts zurückgesetzt. " \
+   "Dies geschieht häufig, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. <br/>" \
+   "Im Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\" "\
+   "ein neues Passwort anfordern"},
+
+  {custom_content_id: user_password_override_id,
+   locale: 'en',
+   label: 'Login verhindert' },
+
+  {custom_content_id: user_password_override_id,
+   locale: 'fr',
+   label: 'Login verhindert' },
+
+  {custom_content_id: user_password_override_id,
+   locale: 'it',
+   label: 'Login verhindert' },
 
   {custom_content_id: bulk_mail_success_id,
    locale: 'de',

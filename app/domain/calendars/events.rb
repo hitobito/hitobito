@@ -34,15 +34,15 @@ class Calendars::Events
   private
 
   def excluded_groups_exist?
-    @excluded_calendar_groups_exist = excluded_calendar_groups.exists?
+    @excluded_groups_exist ||= excluded_calendar_groups.exists?
   end
 
   def included_tags_exist?
-    @included_calendar_tags_exist = included_calendar_tags.exists?
+    @included_tags_exist ||= included_calendar_tags.exists?
   end
 
   def excluded_tags_exist?
-    @excluded_calendar_tags_exist = excluded_calendar_tags.exists?
+    @excluded_tags_exist ||= excluded_calendar_tags.exists?
   end
 
   def groups_conditions(calendar_groups)

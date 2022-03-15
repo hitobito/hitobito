@@ -72,14 +72,14 @@ class Calendars::Events
   end
 
   def included_tags_condition
-    { taggings: { tag_id: included_calendar_tags.pluck(:tag_id) } }
+    { taggings: { tag_id: included_calendar_tags.select(:tag_id) } }
   end
 
   def excluded_tags_condition
     ActsAsTaggableOn::Tagging
         .where(taggable_type: 'Event')
         .where('taggable_id = events.id')
-        .where(tag_id: excluded_calendar_tags.pluck(:tag_id))
+        .where(tag_id: excluded_calendar_tags.select(:tag_id))
         .arel.exists.not
   end
 end

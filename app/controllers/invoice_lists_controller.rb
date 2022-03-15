@@ -30,8 +30,6 @@ class InvoiceListsController < CrudController
       ]
     ]]
 
-  skip_authorize_resource
-  before_action :authorize
   respond_to :js, only: [:new]
 
   helper_method :cancel_url
@@ -57,6 +55,8 @@ class InvoiceListsController < CrudController
   end
 
   def update
+    authorize!(:update, entry)
+
     batch_update = Invoice::BatchUpdate.new(invoices.includes(:recipient), sender)
     batch_result = batch_update.call
     redirect_to return_path, batch_result.to_options
@@ -74,6 +74,14 @@ class InvoiceListsController < CrudController
   end
 
   private
+
+  def entry
+    model_ivar_get || model_ivar_set(params[:invoice_list_id] ? find_entry : build_entry)
+  end
+
+  def find_entry
+    parent.invoice_lists.find(params[:invoice_list_id])
+  end
 
   def list_entries
     super.includes(:receiver).list.where(created_at: Date.new(year, 1, 1).all_year)
@@ -107,10 +115,6 @@ class InvoiceListsController < CrudController
   def flash_message_create(count:, title:)
     action_name = count < LIMIT_CREATE ? :create : :create_batch
     flash_message(action: action_name, count: count, title: title)
-  end
-
-  def authorize
-    authorize!(:create, parent.invoices.build)
   end
 
   def cancel_url

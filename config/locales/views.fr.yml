@@ -25,6 +25,7 @@ fr:
       please_select: sélectionner s.v.p.
       add: Article supplémentaire
       remove: Supprimer
+      not_allowed: Non autorisé
     button:
       save: Enregistrer
       add_another: Sauver et saisir d'autres
@@ -138,6 +139,12 @@ fr:
     everything: 'Toutes les informations'
     household_option: 'Rassembler les foyers'
     selection: 'Colonnes choisies'
+  dropdown/people_login:
+    button: 'Login'
+    send_login: Envoyer login
+    activate_totp: Configurer la validation en deux étapes
+    reset_totp: Réinitialiser la validation en deux étapes
+    disable_totp: Désactiver la validation en deux étapes
   dropdown/invoices:
     download: 'Exporter'
     print: 'Imprimer'
@@ -185,6 +192,10 @@ fr:
       no_token: 'Vous ne pouvez accéder à cette page qu''en cliquant sur le lien indiqué dans un courriel de récupération de mot de passe. Si vous avez copié le lien dans un courriel de récupération de mot de passe, veuillez vous assurer que vous avez copié l''URL en entier.'
       new:
         reset_password_button: 'Réinitialiser le mot de passe'
+    confirmations:
+      new:
+        resend_confirmation_instructions: 'Confirmer l''adresse e-mail'
+        submit: 'Envoyer un message de confirmation'
     unlocks:
       send_instructions: 'Dans quelques minutes tu recevras un courriel t''expliquant comment débloquer ton compte.'
       unlocked: 'Ton compte a été dévérouillé avec succès.'
@@ -202,6 +213,11 @@ fr:
       person:
         updated: 'Ton mot de passe a été actualisé.'
     mailer:
+      confirmation_instructions:
+        body:
+          greeting: 'Salut %{name} !'
+          link_text: 'Confirmer %{email} '
+          footer: 'Ce message a été envoyé par Hitobito'
       reset_password_instructions:
         subject: 'Instructions pour initialiser ton mot de passe'
       unlock_instructions:
@@ -210,6 +226,7 @@ fr:
           greeting: 'Bonjour %{name}!'
           information_html: 'Ton compte a été bloqué à cause d''un trop grand nombre de fausses tentatives. <br> Appuie sur le lien suivant pour le dévérouiller:'
           link_text: 'Dévérouiller mon compte'
+          footer: 'Ce message a été envoyé par Hitobito'
   errors:
     link_to_main: 'Page principale'
     '404':
@@ -351,6 +368,18 @@ fr:
     form:
       attachment:
         subject: 'Objet du message'
+  second_factor_authentication:
+    flash:
+      success:
+        registered: Validation en deux étapes activée correctement
+        signed_in: Connexion réussie
+      failure: Code à usage unique incorrect
+    new:
+      title: Validation en deux étapes
+    form:
+      totp_code: Code à usage unique
+      totp_code_placeholder: Saisir le code à 6 chiffres
+      submit: Envoyer
   events:
     courses:
       filter:
@@ -393,6 +422,7 @@ fr:
       caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
       caption_waiting_list: S'il n'y a plus de places disponibles, les nouvelles inscriptions se retrouvent automatiquement sur la liste d'attente.
       caption_globally_visible: '%{model_name} est visible dans toute la base de données'
+      label_notify_contact_on_participations: Notification
     form_tabs:
       general: Général
       application_questions: Données pour l'inscription
@@ -558,6 +588,7 @@ fr:
       no_deleted_sub_groups: 'Pas de groupes effacés.'
     form:
       help_contact: 'Utiliser l''adresse et le numéro de téléphone public de cette personne'
+      hint_external_registration: 'Aucun rôle avec droit d''écriture ne peut être choisi'
     global:
       link:
         add: Créer un groupe
@@ -568,10 +599,21 @@ fr:
     subgroups: 'Sous-groupes'
     tabs:
       deleted: 'Eléments effacés'
+      statistics: 'Statistiques'
     export_enqueued: 'L''exportation est lancée en arrière-plan et téléchargée une fois terminée.'
+    statistics:
+      title: Statistiques
+      description: "%{subject} in %{groups}"
+      year: Année de naissance
+      age: Âge
+      count: Nombre
+      distribution: Répartition
   group/deleted_people:
     list:
       confirm_delete: "Toutes les données sur %{person} vont être définitivement effacées, y compris les participations et les qualifications. N'efface cette personne que si personne n'aura jamais plus besoin de ces données. "
+  groups/self_registration:
+    new:
+      title: "Enregistrement à %{group_name}"
   group/person_add_requests:
     deactivated: Déblocage manuel désactivé
     activated: Déblocage manuel activé
@@ -630,6 +672,15 @@ fr:
       due_at: Échue le
       creator: Auteur de la facture
       vat_number: No TVA
+      payment_slip_qr:
+        receipt_title: Récépissé
+        creditor_heading: Compte/payable à
+        debitor_heading: Payable par
+        esr_number_heading: Numéro de référence
+        currency: Devise
+        amount: Montant
+    export_enqueued: 'L''exportation a commencé en tâche de fond et sera téléchargée une fois terminée.'
+    recipients_empty: La liste des destinataires est vide. Impossible de créer un PDF.
   invoice_configs:
     form_tabs:
       general: général
@@ -757,6 +808,11 @@ fr:
       sign_out: 'Déconnexion'
     unauthorized:
       forgot_password: 'Mot de passe oublié?'
+      need_confirmation_email: 'Pas reçu de message de confirmation ?'
+    footer:
+      available_under_license: 'disponible sous'
+      developed_by: 'Développé par'
+      source_code: 'Code source'
     user_impersonation:
       info: "Tu es maintenant enregistré en tant que %{user}"
       end: "Terminer l'imitation"
@@ -1039,6 +1095,9 @@ fr:
       fields:
         lives_in_household_with: "Habite dans le foyer avec"
         update_denied: "Pas de droits d'écriture pour %{other_person}"
+    family:
+      fields:
+        is_in_family_with: 'Fait partie de la famille de'
     csv_imports:
       description:
         header: Fichiers CSV
@@ -1083,6 +1142,8 @@ fr:
         import_details_html: >
             Les personnes suivantes vont être importées avec le <strong>rôle %{role}</strong>
             dans le <strong>groupe %{group}</strong>.
+    add_request_mailer:
+      request_link: Répondre à la demande
     subscriptions:
       index:
         my_subscriptions: Mes abonnements
@@ -1132,6 +1193,7 @@ fr:
     send_password_instructions: Les données d'authentification ont été envoyées.
     send_password_instructions_invalid_email: Les informations de login n'ont pas été envoyées étant donné que l'adresse e-mail indiquée n'est pas valable.
     years_old: (%{years} ans)
+    update_email_must_be_confirmed: 'La nouvelle adresse e-mail doit être confirmée avant qu''elle soit active. '
     tabs:
       history: Historique
       log: Journal
@@ -1200,6 +1262,17 @@ fr:
       tag_lists: Tags
       remove_tags: Enlever les tags
       add_tags: Rajouter des tags
+    totp_reset:
+      flashes:
+        success: Validation en deux étapes réinitialisée correctement
+    totp_disable:
+      flashes:
+        success: Validation en deux étapes désactivée correctement
+    login_status:
+      no_login: Pas de login
+      password_email_sent: L'invitation a été envoyée
+      login: Le login est activé
+      two_factors: Le login avec 2FA est activé
   participations:
     destroy:
       flash:

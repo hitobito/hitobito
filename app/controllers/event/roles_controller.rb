@@ -23,6 +23,9 @@ class Event::RolesController < CrudController
     with_person_add_request do
       new_participation = entry.participation.new_record?
       created = with_callbacks(:create, :save) { save_entry }
+      if true?(params[:remove_participant_role])
+        destroy_participant_roles!
+      end
       respond_with(entry, success: created, location: after_create_url(new_participation, created))
     end
   end
@@ -56,6 +59,16 @@ class Event::RolesController < CrudController
                          .first_or_initialize
     participation.roles.build(type: attrs[:type]).tap do |role|
       role.participation = participation
+    end
+  end
+
+  def destroy_participant_roles!
+    Event::Role.joins(:participation)
+               .where(participation: {
+                        person: entry.person,
+                        event: parent
+                      }).each do |role|
+      role.destroy! if role.class.participant?
     end
   end
 

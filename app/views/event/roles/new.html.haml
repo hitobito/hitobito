@@ -13,3 +13,7 @@
   = f.labeled_person_field :person
 
   = f.labeled_input_field(:label, data: {provide: :typeahead, source: @event.participation_role_labels})
+
+  - unless entry.class.participant?
+    = f.labeled :remove_participant_role, for: :remove_participant_role do 
+      = check_box_tag(:remove_participant_role)

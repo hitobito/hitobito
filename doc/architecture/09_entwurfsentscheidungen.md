@@ -192,7 +192,7 @@ deutlich unterhalb 1 GB. Backups sind zwischen 100MB und 2.4 GB, die meisten
 sind deutlich unterhalb 1 GB.
 
 Die Speicherplatzkosten wären damit zwischen 0.09 und 5.79 CHF / 30 Tage
-Die meisten würde deutlich näher an 0.10 CHF / 30 Tage.
+Die meisten lägen deutlich näher an 0.10 CHF / 30 Tage.
 
 Beim größten Datenvolumen beobachten wir derzeit
 durchschnittlich etwa 5000 Requests pro Tag.

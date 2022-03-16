@@ -98,10 +98,10 @@ ActiveRecord::Schema.define(version: 2022_03_12_160000) do
 
   create_table "calendar_tags", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "calendar_id", null: false
-    t.bigint "tag_id", null: false
+    t.integer "tag_id", null: false
     t.boolean "excluded", default: false
     t.index ["calendar_id"], name: "index_calendar_tags_on_calendar_id"
-    t.index ["tag_id"], name: "index_calendar_tags_on_tag_id"
+    t.index ["tag_id"], name: "fk_rails_b4e7ba0100"
   end
 
   create_table "calendars", charset: "utf8mb4", force: :cascade do |t|
@@ -1010,6 +1010,7 @@ ActiveRecord::Schema.define(version: 2022_03_12_160000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "calendar_tags", "tags", on_delete: :cascade
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade

@@ -93,6 +93,7 @@ class Group < ActiveRecord::Base
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
   has_many :calendars, inverse_of: :group, dependent: :destroy
+  has_many :calendar_groups, inverse_of: :group, dependent: :destroy
 
   has_many :notes, as: :subject, dependent: :destroy
 

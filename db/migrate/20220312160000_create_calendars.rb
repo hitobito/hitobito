@@ -9,9 +9,12 @@ class CreateCalendars < ActiveRecord::Migration[6.1]
 
     create_table :calendar_tags do |t|
       t.belongs_to :calendar, null: false
-      t.belongs_to :tag, null: false
+      t.integer :tag_id, null: false
       t.boolean :excluded, default: false
     end
+
+    # Necessary to auto-delete calendar_tags when the corresponding tag is deleted
+    add_foreign_key :calendar_tags, :tags, on_delete: :cascade
 
     create_table :calendar_groups do |t|
       t.belongs_to :calendar, null: false

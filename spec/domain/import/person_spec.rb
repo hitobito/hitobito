@@ -9,7 +9,7 @@ require 'spec_helper'
 describe Import::Person do
 
   context 'keys' do
-    subject { Import::Person.fields.map { |entry| entry[:key] }  }
+    subject { Import::Person.fields.map { |entry| entry[:key] } }
     it 'contains social media' do
       is_expected.to include('social_account_skype')
     end
@@ -24,7 +24,7 @@ describe Import::Person do
   end
 
   context 'labels' do
-    subject { Import::Person.fields.map { |entry| entry[:value] }  }
+    subject { Import::Person.fields.map { |entry| entry[:value] } }
 
     it 'contains social media' do
       is_expected.to include('Social Media Adresse Skype')
@@ -82,7 +82,7 @@ describe Import::Person do
     subject { person }
 
     context 'can manage' do
-      let (:can_manage_tags) { true }
+      let(:can_manage_tags) { true }
 
       its('tag_list') { should eq ['de', 'responsible:jack', 'foo bar'] }
       its('tags.count') { should eq 0 }
@@ -94,7 +94,7 @@ describe Import::Person do
     end
 
     context 'cannot manage' do
-      let (:can_manage_tags) { false }
+      let(:can_manage_tags) { false }
 
       its('tag_list') { should eq [] }
     end
@@ -116,11 +116,11 @@ describe Import::Person do
       end
 
       let(:data) do
-         { first_name: 'foo',
-           last_name: '',
-           email: 'foo@example.com',
-           town: 'Bern',
-           birthday: '-' }
+        { first_name: 'foo',
+          last_name: '',
+          email: 'foo@example.com',
+          town: 'Bern',
+          birthday: '-' }
       end
 
       its('first_name') { should eq 'Peter' }
@@ -143,13 +143,13 @@ describe Import::Person do
       end
 
       let(:data) do
-         { first_name: 'foo',
-           email: 'foo@example.com',
-           social_account_skype: 'foo',
-           social_account_msn: 'bar',
-           phone_number_mobil: '+41 77 789 01 23',
-           additional_email_mutter: 'bar@example.com',
-           additional_email_privat: 'privat@example.com' }
+        { first_name: 'foo',
+          email: 'foo@example.com',
+          social_account_skype: 'foo',
+          social_account_msn: 'bar',
+          phone_number_mobil: '+41 77 789 01 23',
+          additional_email_mutter: 'bar@example.com',
+          additional_email_privat: 'privat@example.com' }
       end
 
       its('phone_numbers.first.label') { should eq 'Privat' }
@@ -219,10 +219,10 @@ describe Import::Person do
       end
 
       let(:data) do
-         { first_name: 'foo',
-           last_name: '',
-           email: 'foo@example.com',
-           town: 'Bern' }
+        { first_name: 'foo',
+          last_name: '',
+          email: 'foo@example.com',
+          town: 'Bern' }
       end
 
       its('first_name') { should eq 'foo' }
@@ -244,13 +244,13 @@ describe Import::Person do
       end
 
       let(:data) do
-         { first_name: 'foo',
-           email: 'foo@example.com',
-           social_account_skype: 'foo',
-           social_account_msn: 'bar',
-           phone_number_mobil: '+41 77 789 01 23',
-           additional_email_mutter: 'bar@example.com',
-           additional_email_privat: 'privat@example.com' }
+        { first_name: 'foo',
+          email: 'foo@example.com',
+          social_account_skype: 'foo',
+          social_account_msn: 'bar',
+          phone_number_mobil: '+41 77 789 01 23',
+          additional_email_mutter: 'bar@example.com',
+          additional_email_privat: 'privat@example.com' }
       end
 
       its('phone_numbers.first.label') { should eq 'Privat' }
@@ -305,8 +305,10 @@ describe Import::Person do
     let(:person) { Fabricate(:person) }
 
     it 'all protected attributes are filtered via blacklist' do
-      public_attributes = person.attributes.reject { |key, value| ::Person::INTERNAL_ATTRS.include?(key.to_sym) }
-      expect(public_attributes.size).to eq 17  # lists tag_list
+      public_attributes = person.attributes.reject do |key, _value|
+        ::Person::INTERNAL_ATTRS.include?(key.to_sym)
+      end
+      expect(public_attributes.size).to eq 17 # lists tag_list
       expect do
         Import::Person.new(person, public_attributes).populate
       end.not_to raise_error
@@ -319,7 +321,9 @@ describe Import::Person do
     let(:import_people) do
       emails_tracker = {}
       emails.map do |email|
-        person_attrs = Fabricate.build(:person, email: email).attributes.select { |attr| attr =~ /name|email/ }
+        person_attrs = Fabricate.build(:person, email: email).attributes.select do |attr|
+          attr =~ /name|email/
+        end
         import_person = Import::Person.new(Person.new, person_attrs)
         import_person.populate
         import_person.email_unique?(emails_tracker)

@@ -78,14 +78,9 @@ class Event::TagsController < ApplicationController
   def available_tags(query)
     ActsAsTaggableOn::Tag
       .where('name LIKE ?', "%#{query}%")
-      .where.not(name: excluded_tags)
       .order(:name)
       .limit(10)
       .pluck(:name)
-  end
-
-  def excluded_tags
-    []
   end
 
   def load_group

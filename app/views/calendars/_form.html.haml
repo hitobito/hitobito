@@ -1,0 +1,49 @@
+-#  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= entry_form do |f|
+  = f.labeled_input_fields(:name, :description)
+
+  = render_extensions :fields, locals: { f: f }
+
+  = f.labeled_inline_fields_for :included_calendar_groups do |g|
+    = g.hidden_field(:excluded, value: false)
+    = g.select(:group_id, group_options_with_level(group.groups_in_same_layer.to_a), {}, { style: 'margin-right: 20px' })
+    = g.label(:with_subgroups, class: 'checkbox', style: 'padding: 5px 20px 10px 20px; vertical-align: top') do
+      = g.check_box(:with_subgroups)
+      = t('.include_subgroups')
+    = g.select(:event_type, event_type_options(group.layer_group), include_blank: t('.all_event_types'))
+
+  = f.labeled_inline_fields_for :excluded_calendar_groups do |g|
+    = g.hidden_field(:excluded, value: true)
+    = g.select(:group_id, group_options_with_level(group.groups_in_same_layer.to_a), {}, { style: 'margin-right: 20px' })
+    = g.label(:with_subgroups, class: 'checkbox', style: 'padding: 5px 20px 10px 20px; vertical-align: top') do
+      = g.check_box(:with_subgroups)
+      = t('.exclude_subgroups')
+    = g.select(:event_type, event_type_options(group.layer_group), include_blank: t('.all_event_types'))
+
+  .shown
+    = f.labeled :included_calendar_tags do
+      = f.collection_select(:included_calendar_tags_ids,
+                            @possible_tags,
+                            :second,
+                            :first,
+                            { },
+                            { class: 'chosen-select',
+                              multiple: true,
+                              data: { chosen_no_results: t('global.chosen_no_results'),
+                                      placeholder: ' ' } })
+
+    .shown
+    = f.labeled :excluded_calendar_tags do
+      = f.collection_select(:excluded_calendar_tags_ids,
+                            @possible_tags,
+                            :second,
+                            :first,
+                            { },
+                            { class: 'chosen-select',
+                              multiple: true,
+                              data: { chosen_no_results: t('global.chosen_no_results'),
+                                      placeholder: ' ' } })

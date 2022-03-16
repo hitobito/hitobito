@@ -5,3 +5,4 @@
 
 - if can?(:index_service_tokens, @group)
   = action_button(t('activerecord.models.service_token.other'), group_service_tokens_path(@group), :key)
+  = action_button(Calendar.model_name.human(count: 2), group_calendars_path(@group), :'calendar-alt')

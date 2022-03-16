@@ -499,6 +499,7 @@ de:
     tabs:
       participants: 'Teilnehmende'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    add_tag: Tag hinzufügen
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'
@@ -1735,6 +1736,34 @@ de:
     name: Neuer Name
     submit: Zusammenführen
     category: Kategorie
+
+  calendars:
+    actions_show:
+      copy_url: Kalender-Feed URL kopieren
+    attrs:
+      included_groups: Eingeschlossene Gruppen
+      excluded_groups: Ausgeschlossene Gruppen
+      tags: Ein- und ausgeschlossene Tags
+    form:
+      include_subgroups: Auch Untergruppen einschliessen
+      exclude_subgroups: Auch Untergruppen ausschliessen
+      all_event_types: Alle
+    tags:
+      or: ' oder '
+      explanation_included:
+        zero: ''
+        one: 'Nur %{events} mit dem Tag %{tags} sind eingeschlossen.'
+        other: 'Nur %{events} mit einem der Tags %{tags} sind eingeschlossen.'
+      explanation_excluded:
+        zero: ''
+        one: '%{events} mit dem Tag %{tags} sind ausgeschlossen.'
+        other: '%{events} mit einem der Tags %{tags} sind ausgeschlossen.'
+
+  calendar_groups:
+    explanation_included_with_subgroups: '%{events} von %{group_name} und Untergruppen sind eingeschlossen.'
+    explanation_included: '%{events} von %{group_name} sind eingeschlossen.'
+    explanation_excluded_with_subgroups: 'Alle %{events} von %{group_name} und Untergruppen sind ausgeschlossen.'
+    explanation_excluded: 'Alle %{events} von %{group_name} sind ausgeschlossen.'
 
   views:
     pagination:

@@ -224,6 +224,10 @@ Hitobito::Application.routes.draw do
 
           get 'qualifications' => 'qualifications#index'
           put 'qualifications' => 'qualifications#update'
+
+          post 'tags' => 'tags#create'
+          delete 'tags' => 'tags#destroy'
+          get 'tags/query' => 'tags#query'
         end
 
       end
@@ -260,6 +264,10 @@ Hitobito::Application.routes.draw do
 
         resources :mailchimp_synchronizations, only: [:create]
         resources :recipient_counts, controller: 'mailing_lists/recipient_counts', only: [:index]
+      end
+
+      resources :calendars do
+        get 'feed' => 'calendars/feeds#index'
       end
 
       resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do

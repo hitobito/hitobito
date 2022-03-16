@@ -8,6 +8,8 @@
 *  Gruppen verfügen nun über eine einfache Mitgliederstatistik (Reiter "Statistiken" auf der Gruppe) (hitobito_kljb#4).
 *  Der Login-Status (hat kein Login, hat Login, 2FA, E-Mail versendet aber noch nicht akzeptiert) von Personen auf die man Schreibrechte hat kann jetzt als zusätzliche Spalte angezeigt werden (#1296).
 *  Sprache als Standardattribut auf Person (#1663)
+*  Anlässe, Kurse, etc. können neu getaggt werden (#1687)
+*  Es können neu Kalender-Feeds in jeder Gruppe eingerichtet werden. Damit können Anlässe, Kurse, Jahrespläne etc. einer Gruppe in einen externen Kalender (z.B. Google Kalender) eingebunden werden (#1687)
 
 ## Version 1.26
 

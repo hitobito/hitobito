@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_03_100050) do
+ActiveRecord::Schema.define(version: 2022_03_12_160000) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -84,6 +84,32 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["creator_id"], name: "index_assignments_on_creator_id"
     t.index ["person_id"], name: "index_assignments_on_person_id"
+  end
+
+  create_table "calendar_groups", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "calendar_id", null: false
+    t.bigint "group_id", null: false
+    t.boolean "excluded", default: false
+    t.boolean "with_subgroups", default: false
+    t.string "event_type"
+    t.index ["calendar_id"], name: "index_calendar_groups_on_calendar_id"
+    t.index ["group_id"], name: "index_calendar_groups_on_group_id"
+  end
+
+  create_table "calendar_tags", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "calendar_id", null: false
+    t.integer "tag_id", null: false
+    t.boolean "excluded", default: false
+    t.index ["calendar_id"], name: "index_calendar_tags_on_calendar_id"
+    t.index ["tag_id"], name: "fk_rails_b4e7ba0100"
+  end
+
+  create_table "calendars", charset: "utf8mb4", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "group_id", null: false
+    t.text "description"
+    t.string "token", null: false
+    t.index ["group_id"], name: "index_calendars_on_group_id"
   end
 
   create_table "cors_origins", charset: "utf8mb4", force: :cascade do |t|
@@ -984,6 +1010,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "calendar_tags", "tags", on_delete: :cascade
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade

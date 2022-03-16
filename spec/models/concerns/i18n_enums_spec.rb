@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2014, Insieme Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -23,11 +23,11 @@ describe I18nEnums do
   it 'returns translated label in french' do
     I18n.locale = :fr
     person.gender = 'm'
-    expect(person.gender_label).to eq 'Masculin'
+    expect(person.gender_label).to eq 'masculin'
     person.gender = 'w'
-    expect(person.gender_label).to eq 'Féminin'
+    expect(person.gender_label).to eq 'féminin'
     person.gender = ''
-    expect(person.gender_label).to eq 'Inconnu'
+    expect(person.gender_label).to eq 'inconnu'
     I18n.locale = :de
   end
 
@@ -43,6 +43,6 @@ describe I18nEnums do
   end
 
   it 'has class side method to return all labels' do
-    expect(Person.gender_labels).to eq({ m: 'männlich', w: 'weiblich' })
+    expect(Person.gender_labels).to eq(m: 'männlich', w: 'weiblich')
   end
 end

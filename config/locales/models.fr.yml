@@ -395,6 +395,7 @@ fr:
         tags: Tags
         title: Titre
         correspondence_language: Langue de correspondance
+        language: Langue
         household_key: ID du foyer
         created_at: Créé
         updated_at: Modifié

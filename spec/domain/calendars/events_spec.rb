@@ -10,13 +10,9 @@ require 'spec_helper'
 describe Calendars::Events do
 
   around(:each) do |example|
-    layer_previous, layer.class.event_types = layer.class.event_types, [Event, Event::Course]
-    subgroup_previous, subgroup.class.event_types = subgroup.class.event_types, [Event, Event::Course]
-    subsubgroup_previous, subsubgroup.class.event_types = subsubgroup.class.event_types, [Event, Event::Course]
+    subgroup_previous, subgroup.class.event_types = subgroup.class.event_types.clone, [Event, Event::Course]
     example.run
-    layer.class.event_types = layer_previous
     subgroup.class.event_types = subgroup_previous
-    subsubgroup.class.event_types = subsubgroup_previous
   end
 
   let(:layer) { groups(:bottom_layer_one) }

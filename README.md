@@ -100,6 +100,7 @@ Hitobito made with 💙 and the incredible community:
 * Pfadibewegung Schweiz
 * Hitobito AG
 * CEVI Regionalverband ZH-SH-GL / CEVI Schweiz
+* Pro Natura Jugend
 * Dachverband Schweizer Jugendparlamente DSJ
 * Insieme Schweiz
 * Forschungstelle Digitale Nachhaltigkeit

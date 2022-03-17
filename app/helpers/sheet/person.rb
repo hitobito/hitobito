@@ -48,7 +48,7 @@ module Sheet
     tab 'people.tabs.security_tools',
         :security_tools_group_person_path,
         if: (lambda do |view, _group, person|
-          view.can?(:show_details, person)
+          view.can?(:update, person)
         end)
 
     tab 'people.tabs.colleagues',

@@ -14,7 +14,7 @@ class Person::SecurityToolsController < ApplicationController
   SUSPEND_PERSON_SITUATION = 'suspend_person_situation_id'
   SUSPEND_PERSON_SOLUTION = 'suspend_person_solution_id'
 
-  before_action :authorize_action
+  before_action :authorize_action, :load_info_texts
 
   decorates :group, :person, :security_tools
 
@@ -30,19 +30,11 @@ class Person::SecurityToolsController < ApplicationController
     person.encrypted_password = nil
     person.save
     notify
-    if herself
+    if herself?
       sign_out_and_redirect(current_user)
     else
       redirect_to group_person_path(group, person), notice: t('.flashes.success')
     end
-  end
-
-  def person_has_two_factor
-    return person.two_factor_authentication
-  end
-
-  def person_has_login
-    return person.email?
   end
 
   private
@@ -51,7 +43,7 @@ class Person::SecurityToolsController < ApplicationController
     @person ||= fetch_person
   end
 
-  def herself
+  def herself?
     person.id == current_user.id
   end
 
@@ -63,40 +55,8 @@ class Person::SecurityToolsController < ApplicationController
     PaperTrail::Version.create(main: person, item: person, whodunnit: current_user, event: :password_override)
 
     if person.email?
-      Person::UserPasswordOverrideMailer.completed(person, current_user.full_name).deliver
+      Person::UserPasswordOverrideMailer.send_mail(person, current_user.full_name).deliver
     end
-  end
-
-  def password_compromised_situation_text
-    get_content(Person::SecurityToolsController::PASSWORD_COMPROMISED_SITUATION)
-  end
-
-  def password_compromised_solution_text
-    get_content(Person::SecurityToolsController::PASSWORD_COMPROMISED_SOLUTION)
-  end
-
-  def email_compromised_situation_text
-    get_content(Person::SecurityToolsController::EMAIL_COMPROMISED_SITUATION)
-  end
-
-  def email_compromised_solution_text
-    get_content(Person::SecurityToolsController::EMAIL_COMPROMISED_SOLUTION)
-  end
-
-  def dataleak_situation_text
-    get_content(Person::SecurityToolsController::DATALEAK_SITUATION)
-  end
-
-  def dataleak_solution_text
-    get_content(Person::SecurityToolsController::DATALEAK_SOLUTION)
-  end
-
-  def suspend_person_situation_text
-    get_content(Person::SecurityToolsController::SUSPEND_PERSON_SITUATION)
-  end
-
-  def suspend_person_solution_text
-    get_content(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION)
   end
 
   def get_content(key)
@@ -108,7 +68,18 @@ class Person::SecurityToolsController < ApplicationController
   end
 
   def authorize_action
-    authorize!(:show, person)
+    authorize!(:update, person)
+  end
+
+  def load_info_texts
+    @password_compromised_situation_text = get_content(Person::SecurityToolsController::PASSWORD_COMPROMISED_SITUATION)
+    @password_compromised_solution_text= get_content(Person::SecurityToolsController::PASSWORD_COMPROMISED_SOLUTION)
+    @email_compromised_situation_text = get_content(Person::SecurityToolsController::EMAIL_COMPROMISED_SITUATION)
+    @email_compromised_solution_text = get_content(Person::SecurityToolsController::EMAIL_COMPROMISED_SOLUTION)
+    @dataleak_situation_text = get_content(Person::SecurityToolsController::DATALEAK_SITUATION)
+    @dataleak_solution_text = get_content(Person::SecurityToolsController::DATALEAK_SOLUTION)
+    @suspend_person_situation_text = get_content(Person::SecurityToolsController::SUSPEND_PERSON_SITUATION)
+    @suspend_person_solution_text = get_content(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION)
   end
 
   def model_class

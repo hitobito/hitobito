@@ -71,8 +71,8 @@ CustomContent.seed_once(
     placeholders_required: 'taker-name',
     placeholders_optional: 'recipient-name' },
   { key: Person::UserPasswordOverrideMailer::CONTENT_USER_PASSWORD_OVERRIDE,
-    placeholders_required: 'taker-name',
-    placeholders_optional: 'recipient-name' },
+    placeholders_required: 'taker-name, recipient-name',
+    placeholders_optional: nil },
   { key: DeliveryReportMailer::CONTENT_BULK_MAIL_SUCCESS,
     placeholders_required: 'mail-subject, delivered-at, mail-to, total-recipients',
     placeholders_optional: nil },
@@ -179,11 +179,35 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: 'Sicherheitsübersicht: Account wurde übernommen?',
    body: "Vermutest du, dass jemand den Account von {person-name} übernommen hat? Oder ist das Passwort nicht mehr sicher?"},
 
+  {custom_content_id: password_compromised_situation_id,
+   locale: 'fr',
+   label: 'Mot de passe non sécurisé'},
+
+  {custom_content_id: password_compromised_situation_id,
+   locale: 'it',
+   label: 'Password non sicura'},
+
+  {custom_content_id: password_compromised_situation_id,
+   locale: 'en',
+   label: 'Password not secure'},
+
   {custom_content_id: password_compromised_solution_id,
    locale: 'de',
    label: 'Passwort absichern',
    subject: 'Sichheitsübersicht: Lösung zu Account wurde übernommen',
-   body: "Bitte überschreibe das Passwort über den folgenden Button. {person-name} kann sich ein neues Passwort über die Funktion \"Passwort zurücksetzen\" zusenden lassen." },
+   body: "Bitte überschreibe das Passwort mit dem folgenden Button. {person-name} kann sich ein neues Passwort über die Funktion \"Passwort zurücksetzen\" zusenden lassen." },
+
+  {custom_content_id: password_compromised_solution_id,
+   locale: 'fr',
+   label: 'Sécuriser le mot de passe'},
+
+  {custom_content_id: password_compromised_solution_id,
+   locale: 'it',
+   label: 'Password sicura'},
+
+  {custom_content_id: password_compromised_solution_id,
+   locale: 'en',
+   label: 'Secure the password'},
 
   {custom_content_id: email_compromised_situation_id,
    locale: 'de',
@@ -191,23 +215,71 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: 'Sicherheitsübersicht: E-Mail-Adresse wurde übernommen?',
    body: "Vermutest du, dass jemand die Kontrolle über die E-Mail-Adresse von {person-name} unerlaubt übernommen hat?"},
 
+  {custom_content_id: email_compromised_situation_id,
+   locale: 'fr',
+   label: 'Adresse e-mail non sécurisée'},
+
+  {custom_content_id: email_compromised_situation_id,
+   locale: 'it',
+   label: 'Indirizzo e-mail non sicuro'},
+
+  {custom_content_id: email_compromised_situation_id,
+   locale: 'en',
+   label: 'E-mail address not secure'},
+
   {custom_content_id: email_compromised_solution_id,
    locale: 'de',
    label: 'Login über E-Mail verhindern',
    subject: 'Sichheitsübersicht: Lösung zu E-Mail-Adresse wurde übernommen',
    body: "Bitte lösche die Haupt-E-Mail von {person-name} und kläre die Situation ab. Wenn du sicher bist, dass keine unbefugte Person auf diesen Account zugreifen kann, kannst du die Haupt-E-Mail wieder eintragen. Du kannst die Haupt-E-Mail auch temporär als Weitere E-Mail abspeichern, damit du sie später wieder findest." },
 
+  {custom_content_id: email_compromised_solution_id,
+   locale: 'fr',
+   label: 'Empêcher la connexion par e-mail'},
+
+  {custom_content_id: email_compromised_solution_id,
+   locale: 'it',
+   label: 'Impedire il login via e-mail'},
+
+  {custom_content_id: email_compromised_solution_id,
+   locale: 'en',
+   label: 'Prevent login via e-mail'},
+
   {custom_content_id: dataleak_situation_id,
    locale: 'de',
    label: 'Daten geleaked',
    subject: 'Sicherheitsübersicht: Daten geleaked?',
-   body: "Gab es einen Datenmissbrauch oder hat {person-name} unerlaubt weitergegeben?"},
+   body: "Gab es einen Datenmissbrauch oder hat {person-name} unerlaubt Daten weitergegeben?"},
+
+  {custom_content_id: dataleak_situation_id,
+   locale: 'fr',
+   label: 'Fuite de données'},
+
+  {custom_content_id: dataleak_situation_id,
+   locale: 'it',
+   label: 'Dati trapelati'},
+
+  {custom_content_id: dataleak_situation_id,
+   locale: 'en',
+   label: 'Data leaked'},
 
   {custom_content_id: dataleak_solution_id,
    locale: 'de',
-   label: 'Daten geleaked',
+   label: 'Alle Rollen entfernen',
    subject: 'Sichheitsübersicht: Lösung zu Datenmissbrauch',
    body: "Dann solltest du {person-name} temporär alle Rollen in deiner Gruppe entfernen." },
+
+  {custom_content_id: dataleak_solution_id,
+   locale: 'fr',
+   label: 'Retirer tous les rôles'},
+
+  {custom_content_id: dataleak_solution_id,
+   locale: 'it',
+   label: 'Rimuovere tutti i ruoli'},
+
+  {custom_content_id: dataleak_solution_id,
+   locale: 'en',
+   label: 'Remove all rolls'},
 
   {custom_content_id: suspend_person_situation_id,
    locale: 'de',
@@ -215,11 +287,35 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: 'Sicherheitsübersicht: Person ausschliessen?',
    body: "Möchtest du {person-name} ganz aus Hitobito ausschliessen?"},
 
+  {custom_content_id: suspend_person_situation_id,
+   locale: 'fr',
+   label: 'Exclure la personne'},
+
+  {custom_content_id: suspend_person_situation_id,
+   locale: 'it',
+   label: 'Escludere la persona'},
+
+  {custom_content_id: suspend_person_situation_id,
+   locale: 'en',
+   label: 'Exclude person'},
+
   {custom_content_id: suspend_person_solution_id,
    locale: 'de',
-   label: 'Person ausschliessen',
+   label: 'Haupt-E-Mail löschen',
    subject: 'Sicherheitsübersicht: Lösung bei Person ausschliessen',
    body: "Dafür kannst du die Haupt-E-Mail von {person-name} löschen. Bitte informiere weitere zuständige Personen von diesem Vorfall. Besonders wenn {person-name} noch weitere Rollen ausserhalb deiner Ebene hat." },
+
+  {custom_content_id: suspend_person_solution_id,
+   locale: 'fr',
+   label: 'Supprimer l\'e-mail principal'},
+
+  {custom_content_id: suspend_person_solution_id,
+   locale: 'it',
+   label: 'Cancellare l\'e-mail principale'},
+
+  {custom_content_id: suspend_person_solution_id,
+   locale: 'en',
+   label: 'Delete main email'},
 
   {custom_content_id: participation_confirmation_id,
    locale: 'de',
@@ -485,21 +581,21 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: "Login für [#{Settings.application.name}] von {taker-name} verhindert",
    body: "Hallo {recipient-name}, <br/>" \
    "{taker-name} hat auf [#{Settings.application.name}] das Passwort deines Accounts zurückgesetzt. " \
-   "Dies geschieht häufig, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. <br/>" \
+   "Dies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. <br/>" \
    "Im Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\" "\
    "ein neues Passwort anfordern"},
 
   {custom_content_id: user_password_override_id,
-   locale: 'en',
-   label: 'Login verhindert' },
-
-  {custom_content_id: user_password_override_id,
    locale: 'fr',
-   label: 'Login verhindert' },
+   label: 'Connexion empêchée'},
 
   {custom_content_id: user_password_override_id,
    locale: 'it',
-   label: 'Login verhindert' },
+   label: 'Accesso impedito'},
+
+  {custom_content_id: user_password_override_id,
+   locale: 'en',
+   label: 'Login prevented'},
 
   {custom_content_id: bulk_mail_success_id,
    locale: 'de',

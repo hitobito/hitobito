@@ -10,7 +10,9 @@ class Person::UserPasswordOverrideMailer < ApplicationMailer
 
   CONTENT_USER_PASSWORD_OVERRIDE = 'content_user_password_override'.freeze
 
-  def completed(recipient, taker_name)
+  delegate :body, :person, :requester, to: :password_override
+
+  def send_mail(recipient, taker_name)
     @recipient = recipient
     @taker_name = taker_name
 

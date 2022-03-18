@@ -22,6 +22,7 @@ en:
     created_info: Created
     updated_info: Changed
     deleted_info: Deleted
+    archived_info: Archived
   activerecord:
     errors:
       messages:
@@ -142,6 +143,12 @@ en:
       event/kind:
         one: Course type
         other: Course types
+      event/kind_category:
+        one: Course Category
+        other: Course Categories
+      event/invitation:
+        one: Invitation
+        other: Invitations
       event/role:
         one: Role
         other: Roles
@@ -169,6 +176,9 @@ en:
       event/date:
         one: Date
         other: Dates
+      family_member:
+        one: Family Member
+        other: Family Members
       group:
         one: Group
         other: Groups
@@ -199,6 +209,9 @@ en:
       message:
         one: Message
         other: Messages
+      message/bulk_mail:
+        one: Mail
+        other: Mails
       message/letter:
         one: Letter
         other: Letters
@@ -259,6 +272,13 @@ en:
       role:
         one: Role
         other: Roles
+      salutation:
+        default:
+          label: Hello [Name]
+          value:
+            m: Hello %{greeting_name}
+            w: Hello %{greeting_name}
+            other: Hello %{greeting_name}
       service_token:
         one: API-Key
         other: API-Keys
@@ -304,6 +324,7 @@ en:
         description: Description
         state: Status
       person:
+        salutation: Salutation
         first_name: First name
         last_name: Last name
         name: Name
@@ -332,12 +353,18 @@ en:
         phone_numbers: Phone numbers
         social_accounts: Social Media
         additional_emails: Further e-mails
+        family_members: Family Members
         picture: Upload new picture
         remove_picture: Remove current image
         roles: Roles
         tags: Tags
+        title: Title
+        correspondence_language: Correspondence Language
+        household_key: Household-ID
         created_at: Created
         updated_at: Changed
+        login_status: Login
+        language: Language
       person_duplicate:
         birth_year: Year
         roles_list: Roles
@@ -790,6 +817,13 @@ en:
         title: Reminder title
         text: Reminder text
         due_days: Due days reminder
+      payment_provider_config:
+        ini_letter: INI-Letter
+        payment_providers:
+          creditsuisse: Credit Suisse
+          postfinance: Postfinance
+          ubs: UBS
+          valiant: Valiant
       service_token:
         name: Name
         description: Description

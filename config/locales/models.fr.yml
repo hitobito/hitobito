@@ -395,11 +395,11 @@ fr:
         tags: Tags
         title: Titre
         correspondence_language: Langue de correspondance
-        language: Langue
         household_key: ID du foyer
         created_at: Créé
         updated_at: Modifié
         login_status: Login
+        language: Langue
       person_duplicate:
         birth_year: Année de naissance
         roles_list: Rôles

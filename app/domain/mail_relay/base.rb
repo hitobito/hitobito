@@ -160,7 +160,11 @@ module MailRelay
     end
 
     def sender_valid?
-      valid_email?(sender_email)
+      valid_email?(sender_email).tap do |valid|
+        Rails.logger.info <<~MESSAGE unless valid
+          MailRelay: #{sender_email} is not valid. See MailLog #{@mail_log.mail_hash}
+        MESSAGE
+      end
     end
 
     # List of receiver email addresses for the resent email.

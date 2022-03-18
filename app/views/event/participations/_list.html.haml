@@ -20,7 +20,7 @@
   .pagination-info
 
   - if @participations.present?
-    = Dropdown::TableDisplays.new(self).to_s
+    = Dropdown::TableDisplays.new(self, @participations).to_s
 - if @person_add_requests.present?
   = render 'person/add_requests/body_list'
 
@@ -39,6 +39,6 @@
   - sortable_grouped_person_attr(t, address: false, zip_code: true, town: true) { |p| p.complete_address }
 
   = render_extensions :list, locals: { table: t }
-  - render_table_display_columns(t)
+  - render_table_display_columns(Event::Participation, t)
 
 = paginate entries

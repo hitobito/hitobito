@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -35,7 +35,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
   def data
     return super unless table_display?
 
-    table_display = TableDisplay::Participations.find_or_initialize_by(person_id: @user_id)
+    table_display = TableDisplay.for(@user_id, Event::Participation)
     Export::Tabular::People::TableDisplays.export(@format, entries, table_display)
   end
 

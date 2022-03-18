@@ -1,10 +1,10 @@
-#  Copyright (c) 2012-2022, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Tabular::People
-  class TableDisplays < PeopleAddress
+module Export::Tabular::Event::Participations
+  class TableDisplays < Export::Tabular::People::PeopleAddress
     self.model_class = ::Person
     self.row_class = TableDisplayRow
 

@@ -975,7 +975,8 @@ ActiveRecord::Schema.define(version: 2022_05_04_211119) do
     t.string "type", null: false
     t.integer "person_id", null: false
     t.text "selected"
-    t.index ["person_id", "type"], name: "index_table_displays_on_person_id_and_type", unique: true
+    t.string "table_model_class", null: false
+    t.index ["person_id", "table_model_class"], name: "index_table_displays_on_person_id_and_table_model_class", unique: true
   end
 
   create_table "taggings", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|

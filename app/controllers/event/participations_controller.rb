@@ -134,7 +134,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def sort_mappings_with_indifferent_access
-    super.merge(current_person.table_display_for(parent).sort_statements(parent.question_ids))
+    super.merge(current_person.table_display_for(Event::Participation).sort_statements)
   end
 
   def with_person_add_request(&block)

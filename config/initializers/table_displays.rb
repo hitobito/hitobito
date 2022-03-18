@@ -10,12 +10,22 @@ Rails.application.config.to_prepare do
       %i(first_name last_name nickname zip_code town address picture) -
       Person::INTERNAL_ATTRS
 
-  TableDisplay.register_permission(Person, :show, *public_person_attrs)
-  TableDisplay.register_permission(Person, :show, :layer_group_label)
-  TableDisplay.register_permission(Person,:update,:login_status)
+  TableDisplay.register_column(Person,
+                               TableDisplays::PublicColumn,
+                               public_person_attrs)
+  TableDisplay.register_column(Person,
+                               TableDisplays::People::LayerGroupLabelColumn,
+                               :layer_group_label)
+  TableDisplay.register_column(Person,
+                               TableDisplays::People::LoginStatusColumn,
+                               :login_status)
 
-  TableDisplay.register_permission(Event::Participation, :show,
-      *(public_person_attrs.collect { |column| "person.#{column}" })
-  )
-  TableDisplay.register_permission(Event::Participation, :show, "person.layer_group_label")
+  TableDisplay.register_column(Event::Participation,
+                               TableDisplays::PublicColumn,
+                               public_person_attrs.map { |column| "person.#{column}" })
+  TableDisplay.register_column(Event::Participation,
+                               TableDisplays::People::LayerGroupLabelColumn,
+                               "person.layer_group_label")
+  TableDisplay.register_multi_column(Event::Participation,
+                                     TableDisplays::Event::Participations::QuestionColumn)
 end

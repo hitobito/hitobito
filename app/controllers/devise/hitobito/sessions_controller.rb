@@ -21,7 +21,13 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
 
   def create
     super do |resource|
-      return init_two_factor_auth(resource) if second_factor_required?(resource)
+      if second_factor_required?(resource)
+        # we pass the value of after_sign_in_path_for to init_two_factor_auth
+        # so that we can save it to the session again after sign_out is performed
+        # there
+        after_2fa_path = after_sign_in_path_for(resource)
+        return init_two_factor_auth(resource, after_2fa_path)
+      end
 
       if request.format == :json
         resource.generate_authentication_token! unless resource.authentication_token?

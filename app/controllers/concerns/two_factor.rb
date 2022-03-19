@@ -27,14 +27,15 @@ module TwoFactor
 
     Person.find(session[:pending_two_factor_person_id])
   end
-  
-  def init_two_factor_auth(resource)
+
+  def init_two_factor_auth(resource, after_2fa_path)
     # Two sign_out statements are required for live deployments for some reason.
     # Locally it works with just one sign_out
     sign_out(resource) && sign_out
 
     session[:remember_me] = true?(resource_params[:remember_me])
     session[:pending_two_factor_person_id] = resource.id
+    session[:after_2fa_path] = after_2fa_path
 
     redirect_to_two_factor_authentication
   end

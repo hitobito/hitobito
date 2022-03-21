@@ -19,13 +19,27 @@ describe Groups::SelfRegistrationController do
     end
 
     describe 'GET new' do
-      it 'redirects to group' do
+      it 'redirects to group if signed in' do
         sign_in(person)
 
         get :new, params: { group_id: group.id }
 
         is_expected.to redirect_to(group_path(group.id))
       end
+    end
+
+    it 'redirects to group if group has registration disabled' do
+      group.update!(self_registration_role_type: '')
+
+      get :new, params: { group_id: group.id }
+
+      is_expected.to redirect_to(group_path(group.id))
+    end
+
+    it 'redirects to group if group has registration enabled' do
+      get :new, params: { group_id: group.id }
+
+      is_expected.to redirect_to(group_path(group.id))
     end
 
     describe 'POST create' do
@@ -59,6 +73,14 @@ describe Groups::SelfRegistrationController do
             get :new, params: { group_id: group.id }
 
             is_expected.to render_template('groups/self_registration/new')
+          end
+
+          it 'redirects to group if group has registration disabled' do
+            group.update!(self_registration_role_type: '')
+
+            get :new, params: { group_id: group.id }
+
+            is_expected.to redirect_to(group_path(group.id))
           end
         end
 

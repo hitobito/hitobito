@@ -14,8 +14,7 @@ class Groups::SelfRegistrationController < CrudController
 
   before_action :assert_empty_honeypot, only: [:create]
 
-  before_action :redirect_to_group, unless: :self_registration_active?
-  before_action :redirect_to_group, if: :signed_in?
+  before_action :redirect_to_group_if_necessary
 
   after_create :send_notification_email
 
@@ -40,7 +39,10 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def save_entry
-    entry.person.save && entry.save
+    ActiveRecord::Base.transaction do
+      entry.person.save!
+      entry.save!
+    end
   end
 
   def return_path
@@ -62,8 +64,9 @@ class Groups::SelfRegistrationController < CrudController
     end
   end
 
-  def redirect_to_group
-    redirect_to group_path(group)
+  def redirect_to_group_if_necessary
+    return redirect_to group_path(group) unless self_registration_active?
+    redirect_to group_path(group) if signed_in?
   end
 
   def signed_in?

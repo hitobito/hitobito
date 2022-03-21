@@ -55,6 +55,12 @@ module SearchStrategies
       'Address' => {
         attrs: ['addresses.street_short', 'addresses.town', 'addresses.state',
                 'addresses.zip_code', 'addresses.numbers']
+      },
+      'Invoice' => {
+        attrs: ['invoices.title', 'invoices.reference',
+                'invoices.sequence_number', 'groups.id'],
+        joins: ["LEFT JOIN #{Group.quoted_table_name} ON " \
+                "invoices.group_id = #{Group.quoted_table_name}.id"]
       }
     }.freeze
 
@@ -88,6 +94,12 @@ module SearchStrategies
       return Address.none.page(1) unless term_present?
 
       query_entities(Address.list).page(1).per(QUERY_PER_PAGE)
+    end
+
+    def query_invoices
+      return Invoice.none.page(1) unless term_present?
+
+      query_entities(Invoice.list).page(1).per(QUERY_PER_PAGE)
     end
 
     protected

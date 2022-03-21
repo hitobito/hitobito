@@ -42,6 +42,12 @@ module SearchStrategies
       Address.search(Riddle::Query.escape(@term), default_search_options)
     end
 
+    def query_invoices
+      return Invoice.none.page(1) if @term.blank?
+
+      Invoice.search(Riddle::Query.escape(@term), default_search_options)
+    end
+
     protected
 
     def default_search_options

@@ -37,4 +37,8 @@ class InvoiceDecorator < ApplicationDecorator
     model.new_record? ? model.invoice_config.currency : model.currency
   end
 
+  def as_quicksearch
+    { id: id, label: h.h(model.to_s), type: :invoice, icon: :'file-invoice' }
+  end
+
 end

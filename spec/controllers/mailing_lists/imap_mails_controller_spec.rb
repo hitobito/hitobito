@@ -168,6 +168,27 @@ describe MailingLists::ImapMailsController do
       expect(flash[:alert])
         .to eq(['Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.', 'Authentication failed.'])
     end
+
+    context 'invalid email envelopes' do
+      render_views
+
+      it 'renders when an envelope has no date header' do
+        # sign in
+        sign_in(top_leader)
+
+        # Date header in the envelope is empty
+        imap_mail_1.send(:envelope).date = ''
+
+        # mock imap_connector
+        allow(controller).to receive(:imap).and_return(imap_connector)
+        expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mail_data)
+        allow(imap_connector).to receive(:counts).and_return(inbox: 2)
+
+        get :index, params: { mailbox: 'inbox' }
+
+        expect(response).to have_http_status(:success)
+      end
+    end
   end
 
   context 'DELETE #destroy' do

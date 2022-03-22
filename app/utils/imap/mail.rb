@@ -29,7 +29,7 @@ class Imap::Mail
   end
 
   def date
-    Time.zone.utc_to_local(DateTime.parse(envelope.date))
+    Time.zone.utc_to_local(DateTime.parse(envelope.date.presence || DateTime.now.to_s))
   end
 
   def sender_email

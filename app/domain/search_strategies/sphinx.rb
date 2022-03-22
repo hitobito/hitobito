@@ -45,7 +45,8 @@ module SearchStrategies
     def query_invoices
       return Invoice.none.page(1) if @term.blank?
 
-      Invoice.search(Riddle::Query.escape(@term), default_search_options)
+      scope = Invoice.where(group_id: @user.finance_groups.pluck(:id))
+      scope.search(Riddle::Query.escape(@term), default_search_options)
     end
 
     protected

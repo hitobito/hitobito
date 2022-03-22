@@ -18,7 +18,8 @@ describe FullTextController, type: :controller do
         [[:list_people, Person.where(id: people(:bottom_member).id)],
          [:query_people, Person.where(id: people(:bottom_member).id)],
          [:query_groups, Group.where(id: groups(:bottom_layer_one).id)],
-         [:query_events, Event.where(id: events(:top_course).id)]].each do |stub, value|
+         [:query_events, Event.where(id: events(:top_course).id)],
+         [:query_invoices, Invoice.where(id: invoices(:invoice).id)]].each do |stub, value|
           allow_any_instance_of(strategy).to receive(stub).and_return(value)
         end
 
@@ -79,6 +80,30 @@ describe FullTextController, type: :controller do
           expect(@response.body).to include(events(:top_course).to_s)
         end
 
+        it 'finds invoices' do
+          get :query, params: { q: invoices(:invoice).title[1..5] }
+
+          expect(@response.body).to include(invoices(:invoice).title)
+        end
+
+        it 'only finds invoices with permissions' do
+          invoice = Fabricate(:invoice, group: groups(:top_layer), recipient: people(:bottom_member))
+
+          expect_any_instance_of(strategy).to receive(:query_invoices).and_call_original
+
+          if strategy == SearchStrategies::Sphinx
+            result = double
+
+            expect(Invoice).to receive(:where).with(group_id: [groups(:top_layer).id]).and_return(result)
+
+            expect(result).to receive(:search).and_return([invoice])
+          end
+
+          get :query, params: { q: invoice.title[1..5] }
+
+          expect(@response.body).to include(invoice.title)
+        end
+
       end
     end
 
@@ -100,6 +125,12 @@ describe FullTextController, type: :controller do
         allow(@controller.send :search_strategy).to receive(:query_events).and_return(Event.where(id: events(:top_course).id))
         get :index, params: { q: 'query with event results' }
         expect(assigns(:active_tab)).to eq(:events)
+      end
+
+      it 'displays invoices tab' do
+        allow(@controller.send :search_strategy).to receive(:query_invoices).and_return(Invoice.where(id: invoices(:invoice).id))
+        get :index, params: { q: 'query with invoice results' }
+        expect(assigns(:active_tab)).to eq(:invoices)
       end
 
       it 'displays people tab by default' do

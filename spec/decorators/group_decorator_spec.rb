@@ -26,11 +26,21 @@ describe GroupDecorator, :draper_with_helpers do
     end
   end
 
-  describe 'possible roles_without_writing_permissions' do
-    its(:possible_roles_without_writing_permissions) do
+  describe 'roles_without_writing_permissions' do
+    its(:roles_without_writing_permissions) do
       should eq [Group::TopGroup::LocalSecretary,
                  Group::TopGroup::Member,
                  Role::External]
+    end
+
+    describe 'roles_without_writing_permissions in a bottom group' do
+      let(:model) { groups(:bottom_group_one_one) }
+
+      it 'should include roles which are not visible_from_above' do
+        expect(subject.roles_without_writing_permissions).to eq [
+          Group::BottomGroup::Member, Role::External
+        ]
+      end
     end
   end
 

@@ -26,7 +26,7 @@
     - if Settings.groups&.self_registration&.enabled
       = f.labeled(:self_registration_role_type) do
         = f.select(:self_registration_role_type,
-          entry.possible_roles_without_writing_permissions.map { |r| [r.label, r.sti_name ] },
+          entry.roles_without_writing_permissions.map { |r| [r.label, r.sti_name ] },
             { include_blank: ta(:not_allowed) },
               class: 'span6')
         = f.help_inline(t('.hint_external_registration'))

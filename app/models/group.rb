@@ -243,7 +243,7 @@ class Group < ActiveRecord::Base
   def self_registration_active?
     Settings.groups&.self_registration&.enabled &&
       self_registration_role_type.present? &&
-      decorate.possible_roles_without_writing_permissions
+      decorate.roles_without_writing_permissions
               .include?(self_registration_role_type.constantize)
   end
 

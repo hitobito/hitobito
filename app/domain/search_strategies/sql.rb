@@ -99,7 +99,8 @@ module SearchStrategies
     def query_invoices
       return Invoice.none.page(1) unless term_present?
 
-      query_entities(Invoice.list).page(1).per(QUERY_PER_PAGE)
+      scope = Invoice.list.where(group_id: @user.finance_groups.pluck(:id))
+      query_entities(scope).page(1).per(QUERY_PER_PAGE)
     end
 
     protected

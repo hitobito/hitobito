@@ -43,6 +43,7 @@ Hitobito::Application.routes.draw do
     get '/people/company_name' => 'person/company_name#index', as: :query_company_name
     get '/people/:id' => 'person/top#show', as: :person
     get '/events/:id' => 'event/top#show', as: :event
+    get '/invoices/:id' => 'invoices/top#show', as: :invoices
 
     get 'list_groups' => 'group/lists#index', as: :list_groups
 

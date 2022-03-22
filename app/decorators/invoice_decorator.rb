@@ -38,7 +38,13 @@ class InvoiceDecorator < ApplicationDecorator
   end
 
   def as_quicksearch
-    { id: id, label: h.h(model.to_s), type: :invoice, icon: :'file-invoice' }
+    { id: id, label: label_with_group, type: :invoice, icon: :'file-invoice' }
+  end
+
+  def label_with_group
+    label = title
+    label += " (#{sequence_number})" if sequence_number
+    h.safe_join([group.to_s, label], ': ')
   end
 
 end

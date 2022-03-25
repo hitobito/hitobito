@@ -458,20 +458,32 @@ li.form {
 }
 
 
-@media screen and (max-width: 768px) {
-  .input-append-fix{
-    .input-append{
-      white-space: normal;
-      width:calc(100vw - 230px);
-      input{
-        width:60%;
+@media screen and (max-width: 480px) {
+  .input-append-fix {
+    .input-append {
+      width: calc(100vw - 120px);
+      input {
+        width: 100%;
       }
     }
   }
 }
 
-@media screen and (min-width: 768px) and (max-width:980px) {
-  input.span6, textarea.span6 {
+@media screen and (min-width: 480px) and (max-width: 768px) {
+  .input-append-fix {
+    .input-append {
+      white-space: normal;
+      width: 80vw;
+      input {
+        width: 60%;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 980px) {
+  input.span6,
+  textarea.span6 {
     width: calc(100vw - 550px);
   }
 }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -81,7 +81,7 @@ module MailRelay
       end
 
       def valid_email?(email)
-        email.present? && Truemail.valid?(email)
+        email.present? && Truemail.valid?(email, with: :regex)
       end
     end
 
@@ -160,9 +160,12 @@ module MailRelay
     end
 
     def sender_valid?
-      valid_email?(sender_email).tap do |valid|
-        Rails.logger.info <<~MESSAGE unless valid
-          MailRelay: #{sender_email} is not valid. See MailLog #{@mail_log.mail_hash}
+      return true if valid_email?(sender_email)
+
+      # try again AND log if the error persists
+      Truemail.validate(sender_email).tap do |validator|
+        Rails.logger.info <<~MESSAGE unless validator.result.valid?
+          MailRelay: #{sender_email} is not valid: #{validator.result.errors.map { |k, v| "[#{k}] #{v}" }.join(',')}, see MailLog #{@mail_log.mail_hash}.
         MESSAGE
       end
     end

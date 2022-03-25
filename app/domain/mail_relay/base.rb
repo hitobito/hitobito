@@ -163,11 +163,11 @@ module MailRelay
       return true if valid_email?(sender_email)
 
       # try again AND log if the error persists
-      Truemail.validate(sender_email).tap do |validator|
+      Truemail.validate(sender_email.to_s).tap do |validator|
         Rails.logger.info <<~MESSAGE unless validator.result.valid?
           MailRelay: #{sender_email} is not valid: #{validator.result.errors.map { |k, v| "[#{k}] #{v}" }.join(',')}, see MailLog #{@mail_log.mail_hash}.
         MESSAGE
-      end
+      end.result.valid?
     end
 
     # List of receiver email addresses for the resent email.

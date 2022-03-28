@@ -18,6 +18,57 @@ describe Contactable::AddressValidator do
     expect(tagging.tag).to eq(PersonTags::Validation.address_invalid)
   end
 
+  it 'removes tagging from people with valid address' do
+    expect do
+      validator.validate_people
+    end.to change { ActsAsTaggableOn::Tagging.count }.by(1)
+
+    tagging = ActsAsTaggableOn::Tagging.find_by(taggable: person, hitobito_tooltip: person.address)
+
+    expect(tagging).to be_present
+    expect(tagging.tag).to eq(PersonTags::Validation.address_invalid)
+
+    street, number = Address::Parser.new(person.address).parse
+    street_attrs = [:street_short,
+                    :street_short_old,
+                    :street_long,
+                    :street_long_old].each_with_object({}) { |k, o| o[k] = street }
+
+    Address.create!(street_attrs.merge(zip_code: person.zip_code,
+                                       town: person.town,
+                                       state: 'BE',
+                                       numbers: [number]))
+
+    expect do
+      validator.validate_people
+    end.to change { ActsAsTaggableOn::Tagging.count }.by(-1)
+
+    tagging = ActsAsTaggableOn::Tagging.find_by(taggable: person, hitobito_tooltip: person.address)
+
+    expect(tagging).to_not be_present
+  end
+
+  it 'does not remove nonexistent tagging from people with valid address' do
+    street, number = Address::Parser.new(person.address).parse
+    street_attrs = [:street_short,
+                    :street_short_old,
+                    :street_long,
+                    :street_long_old].each_with_object({}) { |k, o| o[k] = street }
+
+    Address.create!(street_attrs.merge(zip_code: person.zip_code,
+                                       town: person.town,
+                                       state: 'BE',
+                                       numbers: [number]))
+
+    expect do
+      validator.validate_people
+    end.to change { ActsAsTaggableOn::Tagging.count }.by(0)
+
+    tagging = ActsAsTaggableOn::Tagging.find_by(taggable: person, hitobito_tooltip: person.address)
+
+    expect(tagging).to_not be_present
+  end
+
   it 'does not tag person with valid address without street number' do
     person.address = address.street_short
     person.zip_code = address.zip_code
@@ -74,9 +125,8 @@ describe Contactable::AddressValidator do
     ActsAsTaggableOn::Tagging
       .create!(taggable: person,
                context: :tags,
+               hitobito_tooltip: person.address,
                tag: PersonTags::Validation.address_invalid(create: true))
-
-    expect(validator).to_not receive(:invalid?)
 
     expect do
       validator.validate_people

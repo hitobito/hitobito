@@ -19,7 +19,7 @@ describe Export::Tabular::Groups::List do
   subject { csv }
 
    its(:headers) do
-     should == %w(Id Elterngruppe Name Kurzname Gruppentyp Haupt-E-Mail Adresse PLZ Ort Land Ebene Beschreibung)
+     should == ['Id', 'Elterngruppe', 'Name', 'Kurzname', 'Gruppentyp', 'Haupt-E-Mail', 'Adresse', 'PLZ', 'Ort', 'Land', 'Geändert', 'Ebene', 'Beschreibung', 'Telefonnummern', 'Anzahl Mitglieder', 'Social Media']
    end
 
    it 'has 4 items' do
@@ -43,6 +43,10 @@ describe Export::Tabular::Groups::List do
      its(['Ort']) { should == contact.town }
      its(['Land']) { should == contact.country_label }
      its(['Ebene']) { should == group.id.to_s }
+     its(['Geändert']) { should == "#{I18n.l(group.updated_at.to_date)} #{I18n.l(group.updated_at, format: :time)}" }
+     its(['Anzahl Mitglieder']) { should == '1' }
+     its(['Telefonnummern']) { should == '' }
+     its(['Social Media']) { should == '' }
    end
 
    context 'second row' do

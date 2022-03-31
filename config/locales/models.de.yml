@@ -466,6 +466,8 @@ de:
         type: Gruppentyp
         type_name: Gruppentyp
         description: Beschreibung
+        member_count: Anzahl Mitglieder
+        updated_at: Geändert
         self_registration_role_type: Externe Registrierung
         self_registration_link: Externe Registrierung
         self_registration_notification_email: Externe Registrierung Benachrichtigungs-E-Mail

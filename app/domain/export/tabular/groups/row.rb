@@ -14,5 +14,17 @@ module Export::Tabular::Groups
     def country
       entry.country_label
     end
+
+    def phone_numbers
+      entry.phone_numbers.map(&:to_s).join(', ')
+    end
+
+    def social_accounts
+      entry.social_accounts.map(&:to_s).join(', ')
+    end
+
+    def member_count
+      entry.people.distinct.count
+    end
   end
 end

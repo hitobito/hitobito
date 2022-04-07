@@ -11,6 +11,4 @@ ThinkingSphinx::Index.define_partial :invoice do
   indexes title, sortable: true
   indexes reference, sortable: true
   indexes sequence_number, sortable: true
-
-  indexes groups.id, as: :group_id
 end

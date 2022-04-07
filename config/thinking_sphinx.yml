@@ -18,6 +18,7 @@ base: &generic
     - Group
     - Person
     - Address
+    - Invoice
 
 development:
   <<: *generic

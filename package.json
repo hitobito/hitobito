@@ -20,7 +20,7 @@
     "jquery-ujs": "~1.2.2",
     "jquery.turbolinks": "~2.1.0",
     "js-cookie": "~2.2.0",
-    "moment": "~2.19.3",
+    "moment": "~2.29.2",
     "rails-erb-loader": "^5.5.2",
     "resolve-url-loader": "^3.1.1",
     "sass": "^1.49.7",

@@ -92,11 +92,14 @@ describe FullTextController, type: :controller do
           expect_any_instance_of(strategy).to receive(:query_invoices).and_call_original
 
           if strategy == SearchStrategies::Sphinx
-            result = double
-
-            expect(Invoice).to receive(:where).with(group_id: [groups(:top_layer).id]).and_return(result)
-
-            expect(result).to receive(:search).and_return([invoice])
+            expect(Invoice).to receive(:search)
+                           .with(anything,
+                                 {
+                                   star: false,
+                                   per_page: SearchStrategies::Base::QUERY_PER_PAGE,
+                                   with: { group_id: [groups(:top_layer).id] }
+                                 })
+                          .and_return([invoice])
           end
 
           get :query, params: { q: invoice.title[1..5] }

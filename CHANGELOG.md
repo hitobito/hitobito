@@ -5,7 +5,7 @@
 *  Anlässe: Die Kontaktperson wird auf Wunsch per E-Mail über neue Anmeldungen benachrichtigt. Die Benachrichtigung wird auf dem Anlass aktiviert (#1540).
 *  Jede Person kann jetzt Zwei-Faktor-Authentifizierung mit einer TOTP-App aktivieren. Für einzelne Rollen kann die Zwei-Faktor-Authentifizierung obligatorisch gemacht werden.
 *  Die Haupt-Mailadresse von Personen mit Login muss neu bestätigt werden nachdem sie geändert wurde (#957).
-*  Gruppen verfügen nun über eine einfache Mitgliederstatistik (Reiter "Statistiken" auf der Gruppe) (hitobito_kljb#4).
+*  Gruppen verfügen nun über eine einfache Mitgliederstatistik (Reiter "Statistiken" auf der Gruppe). Wird bei den Jugendverbänden nicht eingesetzt (hitobito_kljb#4).
 *  Der Login-Status (hat kein Login, hat Login, 2FA, E-Mail versendet aber noch nicht akzeptiert) von Personen auf die man Schreibrechte hat kann jetzt als zusätzliche Spalte angezeigt werden (#1296).
 *  Sprache als Standardattribut auf Person (#1663)
 *  Anlässe, Kurse, etc. können neu getaggt werden (#1687)

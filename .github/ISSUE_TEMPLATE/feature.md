@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-Als PERSON_DIE_DAMIT_ZU_TUN_HAT,
+Als PERSON_DIE_DAMIT_ZU_TUN_HAT
 möchte ich EIN_FEATURE_HABEN,
 um EIN_ZIEL_ZU_ERREICHEN
 
@@ -33,4 +33,4 @@ hier folgt ein Mockup ...
 - [ ] Specs schreiben
 - [ ] Kunde wegen Übersetzungen informieren
 - [ ] Mit angemessener Rolle "durchklicken"
-- [ ] CHANGELOG-Eintrag hinzufügen
+- [ ] CHANGELOG-Eintrag unter "unreleased" unten hinzufügen

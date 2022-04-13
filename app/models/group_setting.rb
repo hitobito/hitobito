@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2022, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -27,7 +27,21 @@
 
 class GroupSetting < RailsSettings::SettingObject
 
-  mount_uploader :picture, GroupSetting::LogoUploader
+  mount_uploader :carrierwave_picture, GroupSetting::LogoUploader, mount_on: 'picture'
+  has_one_attached :picture
+
+  if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
+    validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
+                        content_type: ['image/jpeg', 'image/gif', 'image/png']
+  end
+
+  def remove_picture
+    false
+  end
+
+  def remove_picture=(delete_it)
+    picture.purge_later if delete_it
+  end
 
   ENCRYPTED_VALUES = %w(username password).freeze
   SETTINGS = {

@@ -50,7 +50,16 @@ class Group < ActiveRecord::Base
   acts_as_paranoid
   extend Paranoia::RegularScope
 
-  mount_uploader :logo, Group::LogoUploader
+  mount_uploader :carrierwave_logo, Group::LogoUploader, mount_on: 'logo'
+  has_one_attached :logo
+
+  def remove_logo
+    false
+  end
+
+  def remove_logo=(delete_it)
+    logo.purge_later if delete_it
+  end
 
   ### ATTRIBUTES
 
@@ -126,6 +135,12 @@ class Group < ActiveRecord::Base
   validates :contact, inclusion: { in: ->(group) { group.people.members } }, allow_nil: true
 
   validate :assert_valid_self_registration_notification_email
+
+  if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
+    validates :logo, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
+                     content_type: ['image/jpeg', 'image/gif', 'image/png']
+  end
+
 
   ### CLASS METHODS
 

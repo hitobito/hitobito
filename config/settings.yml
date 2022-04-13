@@ -4,6 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 # All settings may be overriden in wagons!
+# See https://github.com/rubyconfig/config
 
 application:
   name: hitobito  # set same name in email.sender and email.mass_recipient

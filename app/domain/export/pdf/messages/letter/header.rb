@@ -13,7 +13,7 @@ class Export::Pdf::Messages::Letter
 
     delegate :group, to: 'letter'
 
-    def render(recipient)
+    def render(recipient, font_size: 9)
       stamped :render_logo_right
 
       offset_cursor_from_top 60.mm
@@ -23,8 +23,10 @@ class Export::Pdf::Messages::Letter
 
       render_address(recipient.address)
 
-      stamped :render_date_location_text if letter.date_location_text.present?
-      stamped :render_subject if letter.subject.present?
+      pdf.font_size font_size do
+        stamped :render_date_location_text if letter.date_location_text.present?
+        stamped :render_subject if letter.subject.present?
+      end
     end
 
     private

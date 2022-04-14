@@ -8,10 +8,12 @@
 class Export::Pdf::Messages::Letter
   class Content < Section
 
-    def render(recipient)
+    def render(recipient, font_size: 9)
       offset_cursor_from_top 117.5.mm
-      render_salutation(recipient) if letter.salutation?
-      stamped :render_content
+      pdf.font_size font_size do
+        render_salutation(recipient) if letter.salutation?
+        stamped :render_content
+      end
     end
 
     private

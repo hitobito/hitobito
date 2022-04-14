@@ -10,6 +10,7 @@ module Export::Pdf::Messages
 
     MARGIN = 2.5.cm
     PREVIEW_LIMIT = 4
+    BODY_FONT_SIZE = 9 # meant to be overridden in wagons
 
     class << self
       def export(_format, letter)
@@ -66,7 +67,7 @@ module Export::Pdf::Messages
 
     def render_sections(recipient)
       sections.each do |section|
-        section.render(recipient)
+        section.render(recipient, font_size: BODY_FONT_SIZE)
       end
     end
 

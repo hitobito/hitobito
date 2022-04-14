@@ -130,8 +130,8 @@ describe Export::Pdf::Invoice do
         iban: 'CH93 0076 2011 6238 5295 7',
         reference: 'RF561A',
         esr_number: '00 00834 96356 70000 00000 00019',
-        payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing\nCH",
-        recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland\nCH"
+        payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
+        recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland"
       )
     end
 

@@ -11,7 +11,7 @@ class Person::Address
   end
 
   def for_letter
-    ([@person.full_name.to_s.squish] + address).compact.join("\n")
+    (person_and_company_name + address).compact.join("\n")
   end
 
   def for_household_letter(members)
@@ -19,6 +19,15 @@ class Person::Address
   end
 
   private
+
+  def person_and_company_name
+    if @person.company?
+      [@person.company_name.to_s.squish, @person.full_name.to_s.squish].reject(&:blank?)
+    else
+      [@person.full_name.to_s.squish]
+    end
+
+  end
 
   def combine_household_names(members)
     members.map(&:full_name).compact.join(', ')

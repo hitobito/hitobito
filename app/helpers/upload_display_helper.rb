@@ -76,6 +76,8 @@ module UploadDisplayHelper
   end
 
   def upload_default(png_name = 'profil')
+    png_name = 'profil' if png_name.include?('..')
+
     ActionController::Base.helpers.asset_pack_path("media/images/#{png_name}.png")
   end
 

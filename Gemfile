@@ -88,10 +88,9 @@ gem 'webpacker'
 # load after others because of active record inherited alias chain.
 gem 'kaminari'
 
-gem 'active_storage_validations' # validate filesize, dimensions and content-type of uploads
+gem 'active_storage_validations', github: 'igorkasyanchuk/active_storage_validations' # validate filesize, dimensions and content-type of uploads
 gem 'active_storage_variant' # variants for Rails < 7
 gem 'nochmal', github: 'puzzle/nochmal', branch: 'support-reading-from-carrierwave' # migrate into or between ActiveStorage-Backends
-gem 'vips' # needed because it is mentioned by name in active_storage_validations
 
 group :development, :test do
   gem 'better_errors'

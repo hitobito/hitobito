@@ -5,6 +5,16 @@ GIT
   specs:
     nochmal (0.1.0)
 
+GIT
+  remote: https://github.com/igorkasyanchuk/active_storage_validations.git
+  revision: 4f555917583c3b226ef922515804cdd11eede31f
+  specs:
+    active_storage_validations (0.9.7)
+      activejob (>= 5.2.0)
+      activemodel (>= 5.2.0)
+      activestorage (>= 5.2.0)
+      activesupport (>= 5.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -47,11 +57,6 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_storage_validations (0.9.7)
-      activejob (>= 5.2.0)
-      activemodel (>= 5.2.0)
-      activestorage (>= 5.2.0)
-      activesupport (>= 5.2.0)
     active_storage_variant (1.0.0)
       rails (~> 6.0)
     activejob (6.1.4.1)
@@ -585,8 +590,6 @@ GEM
     validates_timeliness (5.0.0)
       timeliness (>= 0.3.10, < 1)
     vcard (0.2.15)
-    vips (8.12.1)
-      ffi (~> 1.12)
     wagons (0.6.1)
       bundler (>= 1.1)
       rails (>= 4.2)
@@ -621,7 +624,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_storage_validations
+  active_storage_validations!
   active_storage_variant
   activerecord-session_store
   acts-as-taggable-on
@@ -734,7 +737,6 @@ DEPENDENCIES
   validates_by_schema
   validates_timeliness
   vcard
-  vips
   wagons (= 0.6.1)
   webdrivers
   webmock

@@ -45,6 +45,20 @@ describe Messages::LetterDispatch do
     expect(recipient_entries.count).to eq(1)
   end
 
+  context 'company address' do
+    it 'shows company name first' do
+      bottom_member.update(company: true, company_name: 'Hitobito AG')
+
+      subject.run
+
+      recipient = recipient_entries.first
+
+      expect(recipient.message).to eq message
+      expect(recipient.person).to eq bottom_member
+      expect(recipient.address).to eq "Hitobito AG\nBottom Member\nGreatstreet 345\n3456 Greattown"
+    end
+  end
+
   context 'household addresses' do
 
     let(:housemate1) { Fabricate(:person_with_address, first_name: 'Anton', last_name: 'Abraham') }

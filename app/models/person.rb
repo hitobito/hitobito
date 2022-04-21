@@ -124,14 +124,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     attachable.variant :thumb, resize_to_fill: [32, 32]
   end
 
-  def remove_picture
-    false
-  end
-
-  def remove_picture=(delete_it)
-    picture.purge_later if delete_it
-  end
-
   model_stamper
   stampable stamper_class_name: :person,
             deleter: false
@@ -375,6 +367,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     email == Settings.root_email
   end
 
+  ### OTHER INSTANCE METHODS
+
   def save(*args) # rubocop:disable Rails/ActiveRecordOverride Overwritten to handle uniqueness validation race conditions
     super
   rescue ActiveRecord::RecordNotUnique
@@ -406,6 +400,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def address_for_letter
     Person::Address.new(self).for_letter
+  end
+
+  def remove_picture
+    false
+  end
+
+  def remove_picture=(delete_it)
+    picture.purge_later if delete_it
   end
 
   private

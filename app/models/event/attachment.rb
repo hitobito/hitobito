@@ -34,18 +34,18 @@ class Event::Attachment < ActiveRecord::Base
                      content_type: CONTENT_TYPES
   end
 
+  scope :list, -> { order(:file) }
+
+  def to_s
+    file
+  end
+
   def remove_file
     false
   end
 
   def remove_file=(delete_it)
     file.purge_later if delete_it
-  end
-
-  scope :list, -> { order(:file) }
-
-  def to_s
-    file
   end
 
 end

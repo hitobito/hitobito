@@ -35,14 +35,6 @@ class GroupSetting < RailsSettings::SettingObject
                         content_type: ['image/jpeg', 'image/gif', 'image/png']
   end
 
-  def remove_picture
-    false
-  end
-
-  def remove_picture=(delete_it)
-    picture.purge_later if delete_it
-  end
-
   ENCRYPTED_VALUES = %w(username password).freeze
   SETTINGS = {
     text_message_provider: { username: nil, password: nil, provider: %w(aspsms), originator: nil },
@@ -51,6 +43,14 @@ class GroupSetting < RailsSettings::SettingObject
 
   def attrs
     SETTINGS[var].symbolize_keys.keys
+  end
+
+  def remove_picture
+    false
+  end
+
+  def remove_picture=(delete_it)
+    picture.purge_later if delete_it
   end
 
   private
@@ -117,5 +117,4 @@ class GroupSetting < RailsSettings::SettingObject
       where(target_id: group_id, target_type: Group.sti_name)
     end
   end
-
 end

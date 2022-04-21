@@ -41,14 +41,6 @@ module Oauth
                        content_type: ['image/jpeg', 'image/gif', 'image/png']
     end
 
-    def remove_logo
-      false
-    end
-
-    def remove_logo=(delete_it)
-      logo.purge_later if delete_it
-    end
-
     scope :list, -> { order(:name) }
 
     def self.human_scope(key)
@@ -74,5 +66,14 @@ module Oauth
         !access_grant.expired? && access_grant.revoked_at.nil?
       end.count
     end
+
+    def remove_logo
+      false
+    end
+
+    def remove_logo=(delete_it)
+      logo.purge_later if delete_it
+    end
+
   end
 end

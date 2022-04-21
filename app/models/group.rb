@@ -53,14 +53,6 @@ class Group < ActiveRecord::Base
   mount_uploader :carrierwave_logo, Group::LogoUploader, mount_on: 'logo'
   has_one_attached :logo, service: ENV['RAILS_ACTIVE_STORAGE_BACKEND']
 
-  def remove_logo
-    false
-  end
-
-  def remove_logo=(delete_it)
-    logo.purge_later if delete_it
-  end
-
   ### ATTRIBUTES
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
@@ -273,6 +265,14 @@ class Group < ActiveRecord::Base
     unless valid_email?(self_registration_notification_email)
       errors.add(:self_registration_notification_email, :invalid)
     end
+  end
+
+  def remove_logo
+    false
+  end
+
+  def remove_logo=(delete_it)
+    logo.purge_later if delete_it
   end
 
   private

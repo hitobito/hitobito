@@ -244,14 +244,14 @@ describe FormatHelper do
     it 'should format texts' do
       string = format_type(model, :remarks)
       expect(string).to be_html_safe
-      expect(string).to eq("<p>AAAAA BBBBB CCCCC\n<br />AAAAA BBBBB CCCCC\n</p>")
+      expect(string).to eq("AAAAA BBBBB CCCCC\nAAAAA BBBBB CCCCC\n")
     end
 
     it 'should escape texts' do
       model.remarks = '<unsecure>bla'
       string = format_type(model, :remarks)
       expect(string).to be_html_safe
-      expect(string).to eq('<p>&lt;unsecure&gt;bla</p>')
+      expect(string).to eq('&lt;unsecure&gt;bla')
     end
 
     it 'should format empty texts' do
@@ -304,6 +304,22 @@ describe FormatHelper do
 
     it 'should render human attribute name' do
       expect(captionize(:gets_up_at, CrudTestModel)).to eq('Gets up at')
+    end
+  end
+
+  describe '#safe_auto_link' do
+    it 'should render only a tags from inline urls' do
+      input = ['<a href="https://www.hitobito.com">Do not render as link</a>',
+               '<strong>do not render as strong</strong>',
+               'https://www.hitobito.com'].join(' ')
+      expect(safe_auto_link(input)).to eq ['Do not render as link',
+                                           'do not render as strong',
+                                           '<a href="https://www.hitobito.com">https://www.hitobito.com</a>'].join(' ')
+    end
+
+    it 'renders inline urls with given options' do
+      input = 'https://www.hitobito.com'
+      expect(safe_auto_link(input, html: { target: '_blank' })).to eq '<a target="_blank" href="https://www.hitobito.com">https://www.hitobito.com</a>'
     end
   end
 

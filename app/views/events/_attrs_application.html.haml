@@ -10,7 +10,8 @@
 
   %dl.dl-horizontal
     - entry.used?(:application_conditions) do
-      = labeled_attr(entry, :application_conditions)
+      = labeled(entry.class.human_attribute_name(:application_conditions)) do
+        %p.multiline= format_event_application_conditions(entry)
 
     - if entry.course_kind?
       = labeled(Event::Kind.human_attribute_name(:minimum_age),

@@ -24,7 +24,7 @@
 
       - if entry.additional_information?
         %h2= Person.human_attribute_name(:additional_information)
-        = auto_link(entry.additional_information)
+        %p.multiline= safe_auto_link(entry.additional_information)
 
     = render_extensions :show_left
 

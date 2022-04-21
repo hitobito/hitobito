@@ -17,8 +17,8 @@ module Export::Tabular::Groups
     self.row_class = Export::Tabular::Groups::Row
 
     def attributes
-      (model_class.column_names - EXCLUDED_ATTRS).collect(&:to_sym) +
-        [:phone_numbers, :member_count, :social_accounts]
+      attrs = model_class.column_names + [:phone_numbers, :member_count, :social_accounts]
+      (attrs - EXCLUDED_ATTRS).collect(&:to_sym)
     end
 
   end

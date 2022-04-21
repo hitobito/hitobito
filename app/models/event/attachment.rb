@@ -25,7 +25,8 @@ class Event::Attachment < ActiveRecord::Base
   belongs_to :event
 
   mount_uploader :carrierwave_file, Event::AttachmentUploader, mount_on: 'file'
-  has_one_attached :file
+  # this could become a has_many_attached on Event
+  has_one_attached :file, service: ENV['RAILS_ACTIVE_STORAGE_BACKEND']
 
   validates_by_schema except: :file
   if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case

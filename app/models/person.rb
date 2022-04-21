@@ -120,7 +120,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   i18n_boolean_setter :company
 
   mount_uploader :carrierwave_picture, Person::PictureUploader, mount_on: 'picture'
-  has_one_attached :picture do |attachable|
+  has_one_attached :picture, service: ENV['RAILS_ACTIVE_STORAGE_BACKEND'] do |attachable|
     attachable.variant :thumb, resize_to_fill: [32, 32]
   end
 

@@ -204,4 +204,8 @@ module FormatHelper
     obj.respond_to?(:klass) ? obj.klass : obj.class
   end
 
+  def safe_auto_link(content, options = {})
+    auto_link(strip_tags(content), options)
+  end
+
 end

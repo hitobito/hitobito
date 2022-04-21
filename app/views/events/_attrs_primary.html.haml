@@ -26,7 +26,11 @@
     - entry.used?(:state) do
       = labeled_attr(entry, :state_translated)
 
-  = render_present_attrs(entry, :description, :location)
+  %dl.dl-horizontal
+    = labeled(entry.class.human_attribute_name(:description)) do
+      %p.multiline= safe_auto_link(entry.description, html: { target: '_blank' })
+
+  = render_present_attrs(entry, :location)
 
   = render_extensions :attrs_primary, folder: 'events'
 

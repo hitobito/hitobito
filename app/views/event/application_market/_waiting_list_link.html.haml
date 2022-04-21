@@ -7,7 +7,7 @@
               method: :delete)
     - if p.application.waiting_list_comment?
       &nbsp;
-      = badge(icon('comment', class: 'icon-white'), 'info', simple_format(p.application.waiting_list_comment))
+      = badge(icon('comment', class: 'icon-white'), 'info', p.application.waiting_list_comment)
 
   - else
     .popover-small

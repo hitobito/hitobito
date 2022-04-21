@@ -5,4 +5,4 @@
 
 - if @precondition_warnings.present?
   .alert.alert-warning
-    %p= simple_format(@precondition_warnings.flatten.join("\n"))
+    %p= @precondition_warnings.flatten.join("\n")

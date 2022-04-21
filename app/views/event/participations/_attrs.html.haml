@@ -26,7 +26,7 @@
                  title: t('event.participations.admin_answers')
 
       = section t('activerecord.attributes.event/participation.additional_information') do
-        = simple_format(entry.additional_information || '-')
+        = entry.additional_information || '-'
 
   %aside.span5.offset1
     = render 'apply_to'

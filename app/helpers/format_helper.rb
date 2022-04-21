@@ -119,7 +119,7 @@ module FormatHelper
     when :time    then f(val.to_time) # rubocop:disable Rails/Date
     when :date    then f(val.to_date)
     when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}" # rubocop:disable Rails/Date
-    when :text    then val.present? ? simple_format(h(val)) : EMPTY_STRING
+    when :text    then val.present? ? h(val) : EMPTY_STRING
     when :decimal then f(val.to_s.to_f)
     else f(val)
     end

@@ -90,7 +90,7 @@ gem 'kaminari'
 
 gem 'active_storage_validations' # validate filesize, dimensions and content-type of uploads
 gem 'active_storage_variant' # variants for Rails < 7
-gem 'nochmal', github: 'puzzle/nochmal', branch: 'support-reading-from-carrierwave' # migrate into or between ActiveStorage-Backends
+gem 'nochmal' # migrate into or between ActiveStorage-Backends
 
 group :development, :test do
   gem 'better_errors'

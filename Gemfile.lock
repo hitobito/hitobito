@@ -5,15 +5,6 @@ GIT
   specs:
     nochmal (0.1.0)
 
-GIT
-  remote: https://github.com/igorkasyanchuk/active_storage_validations.git
-  revision: 4f555917583c3b226ef922515804cdd11eede31f
-  specs:
-    active_storage_validations (0.9.7)
-      activejob (>= 5.2.0)
-      activemodel (>= 5.2.0)
-      activestorage (>= 5.2.0)
-      activesupport (>= 5.2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -57,6 +48,11 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_storage_validations (0.9.8)
+      activejob (>= 5.2.0)
+      activemodel (>= 5.2.0)
+      activestorage (>= 5.2.0)
+      activesupport (>= 5.2.0)
     active_storage_variant (1.0.0)
       rails (~> 6.0)
     activejob (6.1.4.1)
@@ -624,7 +620,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_storage_validations!
+  active_storage_validations
   active_storage_variant
   activerecord-session_store
   acts-as-taggable-on

@@ -54,7 +54,7 @@ class PeopleController < CrudController
   def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
     respond_to do |format|
       format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
-      format.pdf   { render_pdf(filter_entries, group) }
+      format.pdf   { render_pdf_in_background(filter_entries, group, "people_#{group.id}") }
       format.csv   { render_tabular_entries_in_background(:csv) }
       format.xlsx  { render_tabular_entries_in_background(:xlsx) }
       format.vcf   { render_vcf(filter_entries.includes(:phone_numbers)) }

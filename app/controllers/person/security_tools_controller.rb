@@ -52,7 +52,10 @@ class Person::SecurityToolsController < ApplicationController
   end
 
   def notify
-    PaperTrail::Version.create(main: person, item: person, whodunnit: current_user, event: :password_override)
+    PaperTrail::Version.create(main: person,
+                               item: person,
+                               whodunnit: current_user,
+                               event: :password_override)
 
     if person.email?
       Person::UserPasswordOverrideMailer.send_mail(person, current_user.full_name).deliver
@@ -71,6 +74,7 @@ class Person::SecurityToolsController < ApplicationController
     authorize!(:update, person)
   end
 
+  # rubocop:disable Metrics/LineLength
   def load_info_texts
     @password_compromised_situation_text = get_content(Person::SecurityToolsController::PASSWORD_COMPROMISED_SITUATION)
     @password_compromised_solution_text= get_content(Person::SecurityToolsController::PASSWORD_COMPROMISED_SOLUTION)
@@ -81,6 +85,7 @@ class Person::SecurityToolsController < ApplicationController
     @suspend_person_situation_text = get_content(Person::SecurityToolsController::SUSPEND_PERSON_SITUATION)
     @suspend_person_solution_text = get_content(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION)
   end
+  # rubocop:enable Metrics/LineLength
 
   def model_class
     Person

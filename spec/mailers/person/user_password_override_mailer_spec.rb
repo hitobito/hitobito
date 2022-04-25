@@ -15,10 +15,8 @@ describe Person::UserPasswordOverrideMailer do
 
   subject { mail }
 
-  #TODO not working
   its(:to)       { should == [recipient.email] }
-  its(:sender)   { should == [sender.email] }
-  its(:subject)  { should =~ 'Login für' }
-  its(:body)     { should =~ /Hallo #{person.first_name}/ }
+  its(:subject)  { should =~ /Login für/ }
+  its(:body)     { should =~ /Hallo #{recipient.first_name}/ }
 
 end

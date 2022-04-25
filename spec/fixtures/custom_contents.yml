@@ -67,3 +67,35 @@ assignment_assignee_notification:
 self_registration_notification:
   key: self_registration_notification
   placeholders_required: group-name, person-name, person-url
+
+password_compromised_situation:
+  key: password_compromised_situation
+  placeholders_required: person-name
+
+password_compromised_solution:
+  key: password_compromised_solution
+  placeholders_required: person-name
+
+email_compromised_situation:
+  key: email_compromised_situation
+  placeholders_required: person-name
+
+email_compromised_solution:
+  key: email_compromised_solution
+  placeholders_required: person-name
+
+dataleak_situation_id:
+  key: dataleak_situation_id
+  placeholders_required: person-name
+
+dataleak_solution_id:
+  key: dataleak_solution_id
+  placeholders_required: person-name
+
+suspend_person_situation_id:
+  key: suspend_person_situation_id
+  placeholders_required: person-name
+
+suspend_person_solution_id:
+  key: suspend_person_solution_id
+  placeholders_required: person-name

@@ -9,13 +9,12 @@ require 'spec_helper'
 
 describe Person::SecurityToolsController do
 
-  let(:nesting)    { { group_id: @user.primary_group.id, person_id: @user.id } }
+  let(:nesting)    { { group_id: @user.primary_group.id, id: @user.id } }
   let(:bottom_member) { people(:bottom_member) }
   let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
 
-  #TODO not working yet
   context 'GET#index' do
     it 'can show security overview if able to edit person' do
       sign_in(top_leader)

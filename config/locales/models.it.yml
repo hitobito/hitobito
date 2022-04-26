@@ -193,6 +193,9 @@ it:
       event/date:
         one: data
         other: Date
+      family_member:
+        one: Membri della famiglia
+        other: Membri della famiglia
       group:
         one: gruppo
         other: Gruppi
@@ -384,6 +387,7 @@ it:
         phone_numbers: Numeri di telefono
         social_accounts: Social media
         additional_emails: Altre email
+        family_members: Membri della famiglia
         picture: Carica una nuova foto
         remove_picture: Elimina la foto attuale
         roles: Ruoli
@@ -393,6 +397,8 @@ it:
         household_key: ID domestico
         created_at: Salvato
         updated_at: Modificato
+        login_status: Login
+        language: Lingua
       person_duplicate:
         birth_year: Anno di nascita
         roles_list: Ruoli
@@ -548,6 +554,10 @@ it:
         person: Persona
         type: Ruolo
         participation: Persona
+      family_member:
+        kind: Relazione
+        kinds:
+          sibling: Fratelli
       note:
         text: Testo
       oauth/application:
@@ -712,12 +722,14 @@ it:
         body: Contenuto
         salutation: Appellativo
         pp_post: riga PP
+        donation_confirmation: Conferma della donazione
         shipping_method: metodo di spedizione
         shipping_methods:
           own: spedizione propria
           normal: posta B
           priority: posta A
         send_to_households: nucleo famigliare
+        date_location_text: Data e luogo
       message_recipient:
         address: indirizzo
         country: nazione
@@ -891,8 +903,19 @@ it:
         password: password
         ini_letter: INI lettera
         payment_providers:
+          bancastato: BancaStato
+          bekb: BEKB | BCBE
+          creditsuisse: Credit Suisse
+          lukb: Luzerner Kantonalbank
           postfinance-test: ambiente test Postfinance
           postfinance: Postfinance
+          raiffeisen: Raiffeisen Schweiz
+          sgkb: St.Galler Kantonalbank
+          tkb: Thurgauer Kantonalbank
+          ubs: UBS
+          valiant: Valiant
+          zkb: Zürcher Kantonalbank
+          zugerkb: Zuger Kantonalbank
       service_token:
         name: Cognome
         description: Descrizione
@@ -911,6 +934,9 @@ it:
         taggings_count: Numero
         category: Categoria
         name: Nome
+      calendar:
+        name: Nome
+        description: Descrizione
   doorkeeper:
     scopes:
       email: Leggono il tuo indirizzo e-mail

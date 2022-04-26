@@ -204,6 +204,7 @@ fr:
       success: 'Ton authentification avec ton compte %{kind} est réussie.'
       failure: 'Ton authentification avec ton compte %{kind} n''a pas fonctionné car "%{reason}".'
     registrations:
+      updated: 'Ton mot de passe a été actualisé.'
       edit:
         change_password: "Modifier le mot de passe"
         set_password: "Initialiser le mot de passe"
@@ -441,6 +442,7 @@ fr:
     tabs:
       participants: 'Participants'
     export_enqueued: 'l''exportation débute en arrière-plan et est téléchargée quand elle est terminée'
+    add_tag: Rajouter tag
   event/applications:
     approved: 'L''inscription a été autorisée.'
     rejected: 'L''inscription a été refusée.'
@@ -592,7 +594,7 @@ fr:
     global:
       link:
         add: Créer un groupe
-        deleted_person: Personnes effacées
+        deleted_person: Sans Rôle
     new:
       title: 'Créer un %{model}'
     reactivated: "Le groupe <i>%{group}</i> a été réactivé avec succès."
@@ -674,6 +676,8 @@ fr:
       vat_number: No TVA
       payment_slip_qr:
         receipt_title: Récépissé
+        payment_title: Section paiement
+        receiving_office: Point de dépôt
         creditor_heading: Compte/payable à
         debitor_heading: Payable par
         esr_number_heading: Numéro de référence
@@ -1515,6 +1519,11 @@ fr:
     name: Nouveau nom
     submit: Merge
     category: catégorie
+  calendars:
+    form:
+      all_event_types: Tous
+    tags:
+      or: 'ou'
   views:
     pagination:
       next: '>>'

@@ -137,6 +137,9 @@ fr:
       assignment:
         one: Commandes
         other: Commandes
+      calendar:
+        one: Feed du calendrier
+        other: Feed du calendrier
       custom_content:
         one: Texte
         other: Textes
@@ -559,6 +562,7 @@ fr:
         person: Personne
         type: Rôle
         participation: Personne
+        remove_participant_role: Supprimer le rôle éventuel de participant.
       family_member:
         kind: Lien de parenté
         kinds:
@@ -939,6 +943,13 @@ fr:
         taggings_count: Nombre
         category: Catégorie
         name: Nom
+      calendar:
+        name: Nom
+        description: Description
+        included_calendar_groups: A partir des groupes
+        excluded_calendar_groups: Groups exclues
+        included_calendar_tags: Seulement avec tags
+        excluded_calendar_tags: Tags exclues
   doorkeeper:
     scopes:
       email: Lecture de ton adresse e-mail

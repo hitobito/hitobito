@@ -100,6 +100,26 @@ describe Address::FullTextSearch do
         # with the right label
         expect(results.map { |r| r[:label] }).to include(bs_bern.label_with_number('6B'))
       end
+
+      it 'finds typeahead results from street query with street number and town' do
+        bs_bern = addresses(:bs_bern)
+        query = 'Belpstra 6B be'
+
+        search = Address::FullTextSearch.new(query, strategy.new(person, query, ''))
+        results = search.typeahead_results
+
+        # we found one street/number combination
+        expect(results.size).to eq(1)
+
+        # we found the right street
+        expect(results.first[:id]).to eq(bs_bern.id)
+
+        # we detected the right number
+        expect(results.map { |r| r[:number] }).to include('6B')
+
+        # with the right label
+        expect(results.map { |r| r[:label] }).to eq(['Belpstrasse 6B Bern'])
+      end
     end
   end
 end

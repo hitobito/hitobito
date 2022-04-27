@@ -9,12 +9,11 @@ class Address::FullTextSearch
 
   attr_reader :query, :search_strategy
 
-  ADDRESS_WITH_NUMBER_REGEX = /^(.*)[^\d](\d+[A-Za-z]?$)/.freeze
+  ADDRESS_WITH_NUMBER_REGEX = /^(.*)[^\d](\d+[A-Za-z]?)/.freeze
 
   def initialize(query, search_strategy)
     @query = query
 
-    search_strategy.term = street_name_from_query
     @search_strategy = search_strategy
   end
 
@@ -27,7 +26,7 @@ class Address::FullTextSearch
   def results
     addresses = with_query { search_strategy.query_addresses }
 
-    addresses = addresses_with_numbers(addresses).map(&:first) if query_ends_with_number?
+    addresses = addresses_with_numbers(addresses).map(&:first) if query_with_number?
 
     addresses
   end
@@ -35,7 +34,7 @@ class Address::FullTextSearch
   private
 
   def typeahead_entries(addresses)
-    results = typeahead_results_with_numbers(addresses) if query_ends_with_number?
+    results = typeahead_results_with_numbers(addresses) if query_with_number?
 
     results ||= addresses.map { |a| a.as_typeahead }
 
@@ -60,12 +59,12 @@ class Address::FullTextSearch
     query.to_s.size >= 2 ? yield : []
   end
 
-  def query_ends_with_number?
+  def query_with_number?
     query.match?(ADDRESS_WITH_NUMBER_REGEX)
   end
 
   def street_name_from_query
-    if query_ends_with_number?
+    if query_with_number?
       query.match(ADDRESS_WITH_NUMBER_REGEX)[1]
     else
       query

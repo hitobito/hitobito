@@ -7,6 +7,8 @@
 
 class Person::QueryController < ApplicationController
 
+  include FullTextSearchStrategy
+
   class_attribute :serializer
   self.serializer = :as_typeahead
 
@@ -18,8 +20,9 @@ class Person::QueryController < ApplicationController
   def index
     people = []
     if search_param.size >= 3
-      people = list_entries.limit(10)
-      people = decorate(people)
+      people = search_strategy.list_people.limit(10)
+      # people = list_entries.limit(10)
+      people = people.map { |p| decorate(p) }
     end
 
     render json: people.collect { |p| p.public_send(serializer) }

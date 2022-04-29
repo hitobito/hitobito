@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2015, Pro Natura Schweiz. This file is part of
+#  Copyright (c) 2015-2022, Pro Natura Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,7 +38,9 @@ describe Event::AttachmentsController do
 
   it 'destroys existing file', js: true do
     file = Tempfile.new(['foo', '.png'])
-    a = event.attachments.create!(file: file)
+    a = event.attachments.build
+    a.file.attach(io: file, filename: 'foo.png')
+    a.save!
     sign_in
     visit group_event_path(group.id, event.id)
 

@@ -49,7 +49,7 @@ describe InvoiceMailer do
     end
 
     it 'has calculated total' do
-      expect(html).to match(/Total inkl\. MwSt\..*5\.35 CHF/)
+      expect(html).to match(/Rechnungsbetrag.*5\.35 CHF/)
     end
   end
 

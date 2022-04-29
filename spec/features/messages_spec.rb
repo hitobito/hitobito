@@ -70,6 +70,10 @@ describe :messages, js: true do
       Settings.assignments = assignments_settings
     end
 
+    after do
+      Settings.assignments = nil
+    end
+
     before do
       Subscription.create!(mailing_list: list,
                            subscriber: groups(:top_group),

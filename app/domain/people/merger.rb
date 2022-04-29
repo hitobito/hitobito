@@ -50,7 +50,7 @@ module People
     def merge_roles
       @source.roles.with_deleted.each do |src_role|
         dst_role = Role.find_or_initialize_by(
-          role_attrs(src_role).merge({ person: @target })
+          role_attrs(src_role).merge(person: @target)
         )
 
         next unless dst_role.new_record?
@@ -112,8 +112,8 @@ module People
     end
 
     def role_attrs(src_role)
-      role_attr_keys(src_role).each_with_object({}) do |key, attrs|
-        attrs[key] = src_role.send(key)
+      role_attr_keys(src_role).index_with do |key|
+        src_role.send(key)
       end
     end
 

@@ -63,7 +63,7 @@ class EventDecorator < ApplicationDecorator
 
   def description_short
     if model.description?
-      h.simple_format(h.truncate(model.description, length: 60))
+      h.truncate(h.strip_tags(model.description), length: 60)
     end
   end
 

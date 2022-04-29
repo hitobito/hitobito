@@ -143,7 +143,7 @@ GEM
     codez-tarantula (0.5.5)
       hpricot (~> 0.8.4)
       htmlentities (~> 4.3.0)
-    commonmarker (0.23.2)
+    commonmarker (0.23.4)
     concurrent-ruby (1.1.10)
     config (3.1.0)
       deep_merge (~> 1.2, >= 1.2.1)
@@ -235,7 +235,7 @@ GEM
       i18n (>= 1.6, < 2)
     faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
-    ffi (1.12.2)
+    ffi (1.15.5)
     gibbon (3.2.0)
       faraday (>= 0.9.1)
       multi_json (>= 1.11.0)
@@ -262,7 +262,7 @@ GEM
       concurrent-ruby (~> 1.0)
     i18n_data (0.8.0)
     icalendar (2.4.1)
-    image_processing (1.12.1)
+    image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
     innertube (1.1.0)
@@ -324,7 +324,7 @@ GEM
       rake
     mini_magick (4.9.5)
     mini_mime (1.1.1)
-    mini_portile2 (2.7.1)
+    mini_portile2 (2.8.0)
     minitest (5.15.0)
     msgpack (1.4.2)
     multi_json (1.15.0)
@@ -333,8 +333,8 @@ GEM
     nested_form (0.3.2)
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.13.1)
-      mini_portile2 (~> 2.7.0)
+    nokogiri (1.13.4)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     nuggets (1.5.0)
     oat (0.5.0)
@@ -510,8 +510,8 @@ GEM
     ruby-prof (0.16.2)
     ruby-progressbar (1.10.1)
     ruby-rc4 (0.1.5)
-    ruby-vips (2.0.17)
-      ffi (~> 1.9)
+    ruby-vips (2.1.4)
+      ffi (~> 1.12)
     ruby_dep (1.5.0)
     rubyzip (1.3.0)
     safe_yaml (1.0.5)
@@ -651,7 +651,7 @@ DEPENDENCIES
   hirb
   http_accept_language
   icalendar
-  image_processing (~> 1.2)
+  image_processing (~> 1.12)
   kaminari
   launchy
   ledermann-rails-settings

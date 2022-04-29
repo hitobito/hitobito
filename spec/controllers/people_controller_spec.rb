@@ -117,16 +117,16 @@ describe PeopleController do
           expect(assigns(:person_add_requests)).to eq([r1])
         end
 
-        context '.pdf' do
-          it 'generates pdf labels' do
-            get :index, params: { group_id: group, label_format_id: label_formats(:standard).id }, format: :pdf
-
-            expect(@response.media_type).to eq('application/pdf')
-            expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
-          end
-        end
-
         context 'background job' do
+          it 'generates pdf labels' do
+            expect do
+              get :index, params: { group_id: group, label_format_id: label_formats(:standard).id }, format: :pdf
+            end.to change(Delayed::Job, :count).by(1)
+
+            expect(response).to redirect_to(returning: true)
+            expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+          end
+
           it 'exports csv' do
             expect do
               get :index, params: { group_id: group }, format: :csv

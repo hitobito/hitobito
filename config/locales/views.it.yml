@@ -138,6 +138,9 @@ it:
     everything: 'tutti i dati'
     household_option: 'Riassumere i nuclei famigliari'
     selection: 'Scelta della colonna'
+  dropdown/people_login:
+    button: 'Login'
+    send_login: Inviare login
   dropdown/invoices:
     download: 'Esportare'
     print: 'Stampare'
@@ -202,6 +205,9 @@ it:
       person:
         updated: 'la tua password è stata attualizzata.'
     mailer:
+      confirmation_instructions:
+        body:
+          greeting: 'Ciao %{name}!'
       reset_password_instructions:
         subject: 'istruzioni per impostare la tua password'
       unlock_instructions:
@@ -568,7 +574,15 @@ it:
     subgroups: 'Sottogruppi'
     tabs:
       deleted: 'Cancellato'
+      statistics: 'Statistica'
     export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
+    statistics:
+      title: Statistica
+      description: "%{subject} in %{groups}"
+      year: Anno di nascita
+      age: Età
+      count: Numero
+      distribution: Distribuzione
   group/deleted_people:
     list:
       confirm_delete: "Tutti i dati relativi a %{person} verranno cancellati definitivamente,  incluse le partecipazioni e le qualifiche. Cancella questa persona solo se nessuno ha più bisogno di questi dati."
@@ -630,6 +644,17 @@ it:
       due_at: Scade il
       creator: Emittente della fattura
       vat_number: Numero IVA
+      payment_slip_qr:
+        receipt_title: Ricevuta
+        payment_title: Sezione pagamento
+        receiving_office: Punto di accettazione
+        creditor_heading: Conto / Pagabile a
+        debitor_heading: Pagabile da
+        esr_number_heading: Riferimento
+        currency: Valuta
+        amount: Importo
+    export_enqueued: 'L''esportazione viene iniziata in retroscena e verrà scaricata al termine.'
+    recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
   invoice_configs:
     form_tabs:
       general: In generale
@@ -757,6 +782,10 @@ it:
       sign_out: 'Logout'
     unauthorized:
       forgot_password: 'Password dimenticata?'
+    footer:
+      available_under_license: 'disponibile in'
+      developed_by: 'sviluppato da'
+      source_code: 'codice sorgente'
     user_impersonation:
       info: "Sei ora registrato come %{user}"
       end: "Finire l'imitazione"
@@ -1086,6 +1115,8 @@ it:
         import_details_html: >
             Le persone seguenti sono importate con il ruolo<strong>%{role}</strong>
             nel gruppo<strong> %{group}</strong>.
+    add_request_mailer:
+      request_link: Rispondere alla richiesta
     subscriptions:
       index:
         my_subscriptions: I miei abbonamenti
@@ -1444,6 +1475,11 @@ it:
     name: Nuovo nome
     submit: Merge
     category: Categoria
+  calendars:
+    form:
+      all_event_types: Tutti
+    tags:
+      or: 'oppure'
   views:
     pagination:
       next: '>>'

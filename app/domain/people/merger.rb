@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2022, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -64,6 +64,7 @@ module People
       person_attrs.each do |a|
         assign(a)
       end
+      attach_picture
       @target.save!
     end
 
@@ -73,6 +74,13 @@ module People
 
       src_value = @source.send(attr)
       @target.send("#{attr}=", src_value)
+    end
+
+    def attach_picture
+      return if @target.picture.attached?
+      return unless @source.picture.attached?
+
+      @target.picture.attach(@source.picture)
     end
 
     def create_log_entry
@@ -88,7 +96,7 @@ module People
     end
 
     def person_attrs
-      Person::PUBLIC_ATTRS - [:id, :primary_group_id]
+      Person::PUBLIC_ATTRS - [:id, :primary_group_id, :picture]
     end
 
     def source_attrs

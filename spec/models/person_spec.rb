@@ -508,7 +508,7 @@ describe Person do
 
     describe 'default' do
       it "scales down an image to be exactly 32 by 32 pixels" do
-        expect(person.picture.thumb).to be_no_larger_than(32, 32)
+        expect(person.picture.variant(:thumb)).to be_no_larger_than(32, 32)
       end
     end
 

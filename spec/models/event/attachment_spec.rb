@@ -25,7 +25,7 @@ describe Event::Attachment do
       a = event.attachments.new
       file = Tempfile.new(['x', '.png'])
       File.write(file, 'x' * 12.megabytes)
-      a.file = file
+      a.file.attach(io: file, filename: 'foo.png')
       expect(a).not_to be_valid
       expect(a.errors.full_messages.join).to match(/nicht grösser als 2 MB/)
     end

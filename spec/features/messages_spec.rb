@@ -11,6 +11,7 @@ describe :messages, js: true do
 
   subject { page }
   let(:list) { mailing_lists(:leaders) }
+  let!(:settings_clone) { Settings.clone }
 
   before do
     messages = double(:settings, enable_writing: true, personal_salutation: false)
@@ -20,6 +21,10 @@ describe :messages, js: true do
   before do
     sign_in
     visit group_mailing_list_messages_path(group_id: list.group.id, mailing_list_id: list.id)
+  end
+
+  after do
+    Settings = settings_clone
   end
 
   context 'letter' do

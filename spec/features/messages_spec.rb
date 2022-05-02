@@ -11,6 +11,7 @@ describe :messages, js: true do
 
   subject { page }
   let(:list) { mailing_lists(:leaders) }
+  let!(:settings_clone) { Settings.clone }
 
   before do
     messages = double(:settings, enable_writing: true, personal_salutation: false)
@@ -20,6 +21,10 @@ describe :messages, js: true do
   before do
     sign_in
     visit group_mailing_list_messages_path(group_id: list.group.id, mailing_list_id: list.id)
+  end
+
+  after do
+    Settings = settings_clone
   end
 
   context 'letter' do
@@ -68,10 +73,6 @@ describe :messages, js: true do
       allow(assignments_settings).to receive(:enabled).and_return(true)
       allow(assignments_settings).to receive(:default_assignee_email).and_return(printer.email)
       Settings.assignments = assignments_settings
-    end
-
-    after do
-      Settings.assignments = nil
     end
 
     before do

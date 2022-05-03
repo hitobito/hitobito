@@ -10,7 +10,7 @@ require 'spec_helper'
 require 'net/imap'
 
 describe MailingLists::ImapMailsMoveController do
-  include MailingLists::ImapMailsHelper
+  include MailingLists::ImapMailsSpecHelper
 
   let(:top_leader) { people(:top_leader) }
 

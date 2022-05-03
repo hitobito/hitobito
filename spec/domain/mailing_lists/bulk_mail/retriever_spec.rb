@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe MailingLists::BulkMail::Retriever do
-  include MailingLists::ImapMailsHelper
+  include MailingLists::ImapMailsSpecHelper
 
   let(:retriever) { described_class.new }
   let(:imap_connector) { instance_double(Imap::Connector) }

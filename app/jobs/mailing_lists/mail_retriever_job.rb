@@ -19,7 +19,7 @@ module MailingLists
 
     def perform_internal
       # only run if a retriever address is defined
-      if MailConfig.retriever_imap[:address].present?
+      if MailConfig.retriever_imap?
         retriever.perform
       end
     end

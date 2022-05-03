@@ -10,6 +10,11 @@ class MailConfig
       config_file.blank?
     end
 
+    def retriever_imap?
+      config_file.present? &&
+        retriever_imap_config[:address].present?
+    end
+
     def retriever_imap
       @retriever_imap ||= retriever_imap_config
     end

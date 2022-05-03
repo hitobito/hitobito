@@ -10,6 +10,8 @@ module MailingLists
 
     class << self
       def retrieve_interval
+        return unless MailConfig.retriever_imap?
+
         value = MailConfig.retriever_imap[:interval] || 1
         value.minutes
       end
@@ -31,4 +33,5 @@ module MailingLists
     end
 
   end
+
 end

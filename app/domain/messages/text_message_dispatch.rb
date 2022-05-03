@@ -21,6 +21,7 @@ module Messages
         enqueue_delivery_reports!
       end
       @message.update_message_status!
+      DispatchResult.finishes_asynchronously
     end
 
     private

@@ -5,14 +5,14 @@ require 'spec_helper'
 require 'net/imap'
 
 describe MailingLists::ImapMailsController do
-  include MailingLists::ImapMailsHelper
+  include MailingLists::ImapMailsSpecHelper
 
   let(:top_leader) { people(:top_leader) }
 
   let(:imap_connector) { double(:imap_connector) }
 
-  let(:imap_mail_1) { new_imap_mail }
-  let(:imap_mail_2) { new_imap_mail(false) }
+  let(:imap_mail_1) { built_imap_mail }
+  let(:imap_mail_2) { built_imap_mail(plain_body: false) }
   let(:imap_mail_data) { [imap_mail_1, imap_mail_2] }
 
   let(:now) { Time.zone.now }
@@ -50,8 +50,8 @@ describe MailingLists::ImapMailsController do
       mail1 = mails.last
       expect(mail1.uid).to eq('42')
       expect(mail1.subject).to be(imap_mail_1.subject)
-      expect(mail1.date).to eq(Time.zone.utc_to_local(DateTime.parse(now.to_s)))
-      expect(mail1.sender_email).to eq('john@sender.example.com')
+      expect(mail1.date).to eq(Time.zone.utc_to_local(DateTime.parse(Time.now.to_s)))
+      expect(mail1.sender_email).to eq('john@sender.com')
       expect(mail1.sender_name).to eq('sender')
       expect(mail1.plain_text_body).to eq('SpaceX rocks!')
       expect(mail1.multipart_body).to eq(nil)
@@ -60,8 +60,8 @@ describe MailingLists::ImapMailsController do
       mail2 = mails.first
       expect(mail2.uid).to eq('43')
       expect(mail2.subject).to be(imap_mail_2.subject)
-      expect(mail2.date).to eq(Time.zone.utc_to_local(DateTime.parse(now.to_s)))
-      expect(mail2.sender_email).to eq('john@sender.example.com')
+      expect(mail2.date).to eq(Time.zone.utc_to_local(DateTime.parse(Time.now.to_s)))
+      expect(mail2.sender_email).to eq('john@sender.com')
       expect(mail2.sender_name).to eq('sender')
       expect(mail2.plain_text_body).to eq('This is just plain text!')
       expect(mail2.multipart_body).to eq('<h1>This is some Html</h1>')

@@ -9,7 +9,7 @@
 require 'spec_helper'
 
 describe MailingLists::BulkMail::SenderRejectedMessageJob do
-  include MailingLists::ImapMailsHelper
+  include MailingLists::ImapMailsSpecHelper
 
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:imap_mail) { built_imap_mail(plain_body: true) }

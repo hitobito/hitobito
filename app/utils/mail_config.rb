@@ -12,7 +12,7 @@ class MailConfig
 
     def retriever_imap?
       config_file.present? &&
-        retriever_imap_config[:address].present?
+        retriever_imap[:address].present?
     end
 
     def retriever_imap

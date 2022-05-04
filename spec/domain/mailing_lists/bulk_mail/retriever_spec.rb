@@ -57,7 +57,7 @@ describe MailingLists::BulkMail::Retriever do
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
 
       expect(Rails.logger).to receive(:info)
-        .with("BulkMail Retriever: Ignored email from dude@hitobito.example.com for unknown list nolist@#{Settings.email.list_domain}")
+        .with('BulkMail Retriever: Ignored email from dude@hitobito.example.com for unknown list nolist@localhost')
 
       expect do
         retriever.perform

@@ -117,6 +117,7 @@ describe MailingLists::BulkMail::Retriever do
       message = mail_log.message
       expect(message.subject).to eq('Mail 42')
       expect(message.state).to eq('failed')
+      expect(message.raw_source).to be_present
     end
 
     it 'does process mail and enqueues job for mail delivery' do

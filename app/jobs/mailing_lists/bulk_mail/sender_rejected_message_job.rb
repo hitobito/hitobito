@@ -31,6 +31,7 @@ class MailingLists::BulkMail::SenderRejectedMessageJob < BaseJob
     # set Return-Path as recommended in: https://stackoverflow.com/a/154794
     mail.header['Return-Path'] = '<>'
     mail.deliver
+    @message.update!(raw_source: nil)
   end
 
   def reply_message

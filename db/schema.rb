@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_12_160000) do
+ActiveRecord::Schema.define(version: 2022_05_03_090050) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -511,6 +511,7 @@ ActiveRecord::Schema.define(version: 2022_03_12_160000) do
     t.string "currency", default: "CHF", null: false
     t.bigint "invoice_list_id"
     t.string "reference", null: false
+    t.boolean "hide_total", default: false, null: false
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_list_id"], name: "index_invoices_on_invoice_list_id"

@@ -151,7 +151,7 @@ fr:
     labels: 'Etiquettes'
     full: 'Facture avec bulletin de versement'
     esr_only: 'bulletin de versement séparé'
-    articles_only: 'facture séparée'
+    articles_only: 'Facture séparée'
     csv: 'CSV'
     pdf: 'PDF'
   dropdown/invoice_sending:
@@ -658,13 +658,13 @@ fr:
         one_month: un mois
     add: Établir une facture externe
     add_payments: Saisir un paiement
-    issued: facture établie
+    issued: Facture établie
     sent: Facture envoyé par courriel
     reminder_sent: rappel établi, échu le %{date} (%{title})
     payed: payé
     destroy:
       flash:
-        success: facture annulée
+        success: Facture annulée
     pdf:
       total: montant total
       total_vat: TVA
@@ -690,7 +690,7 @@ fr:
       general: général
     update:
       flash:
-        success: les réglages de la factures mis à jour avec succès
+        success: Les réglages de la factures mis à jour avec succès
         provider_initialization_failed: La mise en place de l'interface pour le paiment %{payment_provider}a échoué.
         provider_initialization_succeeded: La mise en place de l'interface pour le paiment %{payment_provider} a réussi.
     general_fields:
@@ -705,7 +705,7 @@ fr:
       iban_example: 'exemple : CH93 2011 0076 6238 5295 7'
       variable_donation_appeal: 'demande de dons variable'
       donation_calculation_year_amount_explanation: Nombre d'années précédentes prises en compte pour le calcul des dons.
-      donation_increase_percentage_explanation: pourcentage pour le calcul des dons
+      donation_increase_percentage_explanation: Pourcentage pour le calcul des dons
     reminder_fields:
       third_level: 'Pour tous les rappels suivants, les données du troisième rappel sont reprises.'
     provider_fields:
@@ -721,27 +721,27 @@ fr:
         one: "La facture est établie pour und personne"
         other: "La facture est établie pour %{count} personnes"
     create:
-      one: "La facture a été établie pour un destinataire"
+      one: "La facture <i>%{title}</i> a été établie pour un destinataire"
       other: "La facture<i>%{title}</i> a été établie pour %{count} destinataires."
     create_batch: "La facture <i>%{title}</i>est créée pour %{count} destinataire-s en arrière-plan."
     update:
       zero: 'Choisir au moins une facture.'
-      model_error: "la facture %{number} n'est pas valable - %{error}."
+      model_error: "La facture %{number} n'est pas valable - %{error}."
       issued:
         one: "%{count} les factures ont été établies."
         other: "%{count} les factures ont été établies."
       reminded:
         one: "des rappels ont été établis pour %{count} factures"
-        other: "des rappels ont été établis pour %{count}  factures"
+        other: "Des rappels ont été établis pour %{count}  factures"
       send_notification:
         one: "%{count} factures sont envoyées en arrière-plan par e-mail."
         other: "%{count} factures sont envoyées en arrière-plan par e-mail."
       invalid_state:
         one: "%{count} factures ont déjà été établies."
-        other: "%{count}"
+        other: "%{count} factures ont déjà été établies."
       issued_invalid:
         one: "%{count} factures ont déjà été établies."
-        other: "%{count} "
+        other: "%{count}  factures ont déjà été établies."
       sent_invalid:
         one: "%{count} factures ont déjà été envoyées."
         other: "%{count} factures ont déjà été"
@@ -760,7 +760,7 @@ fr:
     destroy:
       zero: "Choisir d'abord une facture"
       one: "La facture a été annulée."
-      other: "{count} Les factures ont été annulées."
+      other: "%{count} factures ont été annulées."
   payments:
     create:
       flash:
@@ -788,10 +788,10 @@ fr:
         zero: importer le paiement
         one: importer le paiement
         other: 'importer %{count} paiements.'
-      icon_tooltip_invoice_missing: ne peut être attribué à aucune facture
-      icon_tooltip_settles: règle la facture ouverte
-      icon_tooltip_exceeds: dépasse la facture ouverte %{difference}
-      icon_tooltip_undercuts: est en-dessous de la facture ouverte de %{difference}
+      icon_tooltip_invoice_missing: Ne peut être attribué à aucune facture
+      icon_tooltip_settles: Règle la facture ouverte
+      icon_tooltip_exceeds: Dépasse la facture ouverte %{difference}
+      icon_tooltip_undercuts: Est en-dessous de la facture ouverte de %{difference}
     new:
       upload_button: 'télécharger'
       xml_file: 'Fichier XML'
@@ -996,7 +996,7 @@ fr:
     admin/oauth_authorizations: 'Autoriser OAuth'
     imap_mails: 'e-mails'
     invoices: 'Factures'
-    invoices/single: 'factures individuelles'
+    invoices/single: 'Factures individuelles'
   notes:
     new_note: Ajouter une note
     note:

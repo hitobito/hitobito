@@ -436,6 +436,8 @@ fr:
         type: Type de groupe
         type_name: Type de groupe
         description: Description
+        member_count: Nombre de membres
+        updated_at: Modification
         self_registration_role_type: Enregistrement externe
         self_registration_link: Enregistrement externe
         self_registration_notification_email: Email de notification d'enregistrement externe
@@ -636,7 +638,7 @@ fr:
               contact_data: Lecture des données de contact de toutes les autres personnes avec des droits de données de contact.
               qualify: Saisie de qualifications pour les personnes à ce niveau et aux niveaux inférieurs.
               approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
-              finance: création et gestion de factures
+              finance: Création et gestion de factures
               impersonation: Se servir de hitobito comme autre personne.
           kind:
             member:

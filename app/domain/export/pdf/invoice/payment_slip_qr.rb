@@ -31,14 +31,14 @@ module Export::Pdf::Invoice
       receipt do
         receipt_title
         receipt_infos
-        receipt_amount
+        receipt_amount unless invoice.hide_total?
         receipt_receiving_office
       end
 
       payment do
         stamped :payment_title
         payment_qrcode
-        render_payment_amount
+        render_payment_amount unless invoice.hide_total?
         payment_infos
         payment_extra_infos
       end

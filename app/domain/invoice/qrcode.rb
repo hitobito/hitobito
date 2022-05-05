@@ -49,6 +49,7 @@ class Invoice::Qrcode
   end
 
   def payment
+    return { currency: @invoice.currency } if @invoice.hide_total?
     amount = format('%<total>.2f', total: @invoice.total) unless @invoice.total.zero?
     { amount: amount, currency: @invoice.currency }
   end

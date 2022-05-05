@@ -20,6 +20,7 @@
     = fi.labeled_input_field :description
     = fi.labeled_input_field :payment_information
     = fi.labeled_input_field :payment_purpose
+    = fi.labeled_input_field :hide_total
 
     = field_set_tag do
       = render "invoice_articles", f: fi, group: parent

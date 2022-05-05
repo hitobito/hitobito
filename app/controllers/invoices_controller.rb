@@ -24,7 +24,7 @@ class InvoicesController < CrudController
                          'people.email']
   self.permitted_attrs = [:title, :description, :state, :due_at,
                           :recipient_id, :recipient_email, :recipient_address,
-                          :payment_information, :payment_purpose,
+                          :payment_information, :payment_purpose, :hide_total,
                           invoice_items_attributes: [
                             :id,
                             :name,

@@ -99,6 +99,18 @@ describe Invoice::Qrcode do
     it 'has blank alternative payment method' do
       expect(subject[32]).to be_blank
     end
+
+    it 'has total if total is not hidden' do
+      invoice.hide_total = false
+
+      expect(subject[18]).to eq('1500.00')
+    end
+
+    it 'has no total if total is hidden' do
+      invoice.hide_total = true
+
+      expect(subject[18]).to be_blank
+    end
   end
 
   describe :additional_infos do

@@ -870,7 +870,7 @@ de:
         esr_number: Referenz Nummer
         reference: Referenz
         amount_paid: Total bezahlt
-        hide_total: ohne Total
+        hide_total: Ohne Total
         payment_slips:
           ch_es: Roter Einzahlungsschein Post (CH)
           ch_bes: Roter Einzahlungsschein Bank (CH)

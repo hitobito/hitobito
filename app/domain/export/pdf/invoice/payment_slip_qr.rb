@@ -31,14 +31,14 @@ module Export::Pdf::Invoice
       receipt do
         receipt_title
         receipt_infos
-        receipt_amount unless invoice.hide_total?
+        receipt_amount
         receipt_receiving_office
       end
 
       payment do
         stamped :payment_title
         payment_qrcode
-        render_payment_amount unless invoice.hide_total?
+        render_payment_amount
         payment_infos
         payment_extra_infos
       end
@@ -172,7 +172,7 @@ module Export::Pdf::Invoice
       end
       content do
         text_box invoice.currency, at: [0, cursor]
-        if invoice.total.zero?
+        if invoice.total.zero? || invoice.hide_total?
           blank_amount_rectangle
         else
           amount = number_with_precision(invoice.total, precision: 2, delimiter: ' ')

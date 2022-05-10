@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -110,6 +110,6 @@ describe AsyncDownloadsController do
   private
 
   def generate_test_file(filename, filetype = :txt)
-    AsyncDownloadFile.new(filename, filetype).write('this is a testfile')
+    AsyncDownloadFile.from_filename(filename, filetype).write('this is a testfile')
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,10 +14,7 @@ class AsyncDownloadsController < ApplicationController
       file_type = params[:file_type]
       Cookies::AsyncDownload.new(cookies).remove(name: params[:id], type: file_type)
 
-      data = File.read(file.full_path)
-      data = css_encoding(data) if file_type == 'csv'
-
-      send_data data, filename: filename(file_type)
+      send_data file.read, filename: file.filename
     else
       render 'errors/404', status: 404
     end
@@ -34,15 +31,7 @@ class AsyncDownloadsController < ApplicationController
   private
 
   def file
-    @file ||= AsyncDownloadFile.new(params[:id], params[:file_type])
-  end
-
-  def filename(type)
-    "#{file.filename}.#{type}"
-  end
-
-  def css_encoding(data)
-    data.force_encoding(Settings.csv.encoding)
+    @file ||= AsyncDownloadFile.from_filename(params[:id], params[:file_type])
   end
 
 end

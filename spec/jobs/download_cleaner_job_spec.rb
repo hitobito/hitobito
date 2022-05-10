@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,7 +24,7 @@ describe DownloadCleanerJob do
     generate_test_file(now_file)
     generate_test_file(one_day_file)
     generate_test_file(two_days_file)
-    
+
     subject.perform_internal
 
     expect(File.exist?("#{AsyncDownloadFile::DIRECTORY}/#{now_file}.txt")).to be true
@@ -35,7 +35,7 @@ describe DownloadCleanerJob do
   private
 
   def generate_test_file(filename)
-    AsyncDownloadFile.new(filename).write('testfile')
+    AsyncDownloadFile.from_filename(filename).write('testfilecontent')
   end
 
   def download_filename(filename, time)

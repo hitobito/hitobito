@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2018-2019, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2018-2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -36,7 +36,7 @@ class Export::ExportBaseJob < BaseJob
   end
 
   def export_file
-    AsyncDownloadFile.new(filename, @format).write(data)
+    AsyncDownloadFile.from_filename(filename, @format).write(data)
   end
 
   def data

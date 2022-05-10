@@ -86,9 +86,14 @@ module Hitobito
     config.to_prepare do
       ActionMailer::Base.default from: Settings.email.sender
 
-      # Assert the mail relay job is scheduled on every restart.
       if ActiveRecord::Base.connection.data_source_exists?('delayed_jobs')
-        MailRelayJob.new.schedule if Settings.email.retriever.config.present?
+
+        if MailConfig.legacy?
+          MailRelayJob.new.schedule
+        else
+          MailingLists::MailRetrieverJob.new.schedule
+        end
+
         SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
         DownloadCleanerJob.new.schedule
         SessionsCleanerJob.new.schedule

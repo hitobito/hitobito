@@ -1085,6 +1085,7 @@ de:
         sender: "Absender: %{mail}"
         sender_rejected: Absender wurde abgelehnt
         unkown_recipient: Empfänger unbekannt
+        retrieved: Empfangen
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     show:
       recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.

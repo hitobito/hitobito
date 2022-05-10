@@ -123,6 +123,23 @@ describe Messages::BulkMailDispatch do
         expect(message.reload.raw_source).to be_nil
       end
 
+      it 'should send delivery report if enabled on mailing list' do
+        setup_delivery
+        message.mailing_list.update!(delivery_report: true)
+
+        expect do
+          dispatch.run
+        end.to change { Delayed::Job.where('handler like "%MailingLists::BulkMail::DeliveryReportMessageJob%"').count }.by(1)
+      end
+
+      it 'does not send delivery report if not enabled' do
+        setup_delivery
+
+        expect do
+          dispatch.run
+        end.to change { Delayed::Job.where('handler like "%MailingLists::BulkMail::DeliveryReportMessageJob%"').count }.by(0)
+      end
+
       context 'on smtp server error' do
 
         before do

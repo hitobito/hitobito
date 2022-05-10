@@ -81,6 +81,7 @@ module Messages
         log 'All mails sent, BulkMailDispatch complete.'
         @message.update!(state: 'finished', raw_source: nil)
       end
+      send_delivery_report if send_delivery_report?
       DispatchResult.finished
     end
 
@@ -105,6 +106,14 @@ module Messages
     def recipient_ids(recipients, emails_by_delivery_status)
       by_email = recipients.index_by(&:email)
       emails_by_delivery_status.map { |emails| by_email.values_at(*emails).map(&:id) }
+    end
+
+    def send_delivery_report
+      MailingLists::BulkMail::DeliveryReportMessageJob.new(@message).enqueue!
+    end
+
+    def send_delivery_report?
+      @message.mailing_list.delivery_report?
     end
 
     def log(info)

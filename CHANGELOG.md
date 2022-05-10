@@ -11,6 +11,7 @@
 *  Anlässe, Kurse, etc. können neu getaggt werden (#1687)
 *  Es können neu Kalender-Feeds in jeder Gruppe eingerichtet werden. Damit können Anlässe, Kurse, Jahrespläne etc. einer Gruppe in einen externen Kalender (z.B. Google Kalender) eingebunden werden (#1687)
 *  Es kann neu nach Rechnungen gesucht werden (#1672)
+*  Introduce new bulk mail stack
 
 ## Version 1.26
 

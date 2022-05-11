@@ -11,9 +11,7 @@ class AsyncDownloadsController < ApplicationController
 
   def show
     if file.downloadable?(current_person)
-      Cookies::AsyncDownload.new(cookies).remove(
-        name: params[:id], type: params[:file_type]
-      )
+      Cookies::AsyncDownload.new(cookies).remove(name: params[:id], type: params[:file_type])
 
       redirect_to rails_blob_path(
         file.generated_file,

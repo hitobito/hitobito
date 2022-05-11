@@ -6,8 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class AsyncDownloadFile < ApplicationRecord
-  DIRECTORY = Pathname.new(Settings.downloads.folder)
-
   class << self
     def create_name(filename, person_id)
       "#{filename.to_s.parameterize}_#{Time.now.to_i}-#{person_id}"
@@ -35,13 +33,13 @@ class AsyncDownloadFile < ApplicationRecord
   end
 
   def filename
-    Pathname.new("#{name}_#{timestamp}-#{person_id}.#{filetype}")
+    "#{name}.#{filetype}"
   end
 
   def to_s
     partial = " (#{progress}%)" if progress.present?
 
-    "<AsyncDownloadFile: #{filename}#{partial}>"
+    "<AsyncDownloadFile##{id}: #{filename}#{partial}>"
   end
 
   def downloadable?(person)

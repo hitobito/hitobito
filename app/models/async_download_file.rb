@@ -28,40 +28,37 @@ class AsyncDownloadFile < ApplicationRecord
     end
   end
 
+  has_one_attached :generated_file
+
+  before_destroy do
+    generated_file.purge if generated_file.attached?
+  end
+
   def filename
     Pathname.new("#{name}_#{timestamp}-#{person_id}.#{filetype}")
   end
 
-  def full_path
-    DIRECTORY.join(filename)
-  end
+  def to_s
+    partial = " (#{progress}%)" if progress.present?
 
-  def write(data)
-    DIRECTORY.mkpath unless File.directory?(DIRECTORY)
-
-    case filetype.to_sym
-    when :csv
-      File.open(full_path, "w:#{Settings.csv.encoding}") do |f|
-        f.write(data)
-      end
-    when :pdf
-      File.binwrite(full_path, data)
-    else
-      File.write(full_path, data)
-    end
+    "<AsyncDownloadFile: #{filename}#{partial}>"
   end
 
   def downloadable?(person)
-    (person_id == person.id) && File.exist?(full_path)
+    (person_id == person.id) && generated_file.attached?
   end
 
-  def read
-    data = File.read(full_path)
+  def write(data)
+    io = StringIO.new
 
-    if filetype == 'csv'
-      data = data.force_encoding(Settings.csv.encoding)
+    case filetype.to_sym
+    when :csv then io.set_encoding(Settings.csv.encoding)
+    when :pdf then io.binmode
     end
 
-    data
+    io.write(data)
+    io.rewind # make ActiveStorage's checksum-calculation deterministic
+
+    generated_file.attach(io: io, filename: filename.to_s)
   end
 end

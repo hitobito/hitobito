@@ -11,12 +11,17 @@ class AsyncDownloadsController < ApplicationController
 
   def show
     if file.downloadable?(current_person)
-      file_type = params[:file_type]
-      Cookies::AsyncDownload.new(cookies).remove(name: params[:id], type: file_type)
+      Cookies::AsyncDownload.new(cookies).remove(
+        name: params[:id], type: params[:file_type]
+      )
 
-      send_data file.read, filename: file.filename
+      redirect_to rails_blob_path(
+        file.generated_file,
+        filename: file.filename,
+        disposition: 'attachment'
+      )
     else
-      render 'errors/404', status: 404
+      render 'errors/404', status: :not_found
     end
   end
 

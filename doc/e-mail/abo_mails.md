@@ -6,7 +6,7 @@ geschieht in den Modellen `MailingList` und `Subscription`.
 
 Alle E-Mails an die Applikationsdomain (z.B `news@db.jubla.ch`) werden über
 einen [Catch-All](https://de.wikipedia.org/wiki/Catch-All) Mail Account gesammelt. Von der Applikation wird dieser Account
-in einem Background Job über POP3 regelmässig gepollt. Die eingetroffenen
+in einem Background Job über IMAP regelmässig gepollt. Die eingetroffenen
 E-Mails werden danach wie folgt verarbeitet:
 
 1. Verwerfe das Email, falls der Empfänger keine definierte Mailing Liste ist.
@@ -30,6 +30,11 @@ Jede Gruppe kann beliebig viele Abos haben, welche optional eine E-Mail Adresse
 haben und dadurch ebenfalls als E-Mail Liste verwendet werden können. Einzelne
 Personen, jedoch auch bestimmte Rollen einer Gruppe oder Teilnehmende eines
 Events können Abonnenten sein.
+
+## Konfiguration
+
+Mit Release 1.27 (Frühling 2022) wurde ein neuer Mail Stack eingeführt. Die Konfiguration für eingehende Mails erfolgt über die datei `config/mail.yml`. Als Vorlage dient `config/mail.yml.example`. Ist die `config/mail.yml` vorhanden, wird der neue Mail Stack aktiviert. 
+Der alte Mail Stack ist immer noch vorhanden und wird aktiviert wenn der Mailempfang via die Umgebungsvariable `RAILS_MAIL_RETRIEVER_CONFIG` konfiguriert ist. 
 
 ## Mail-Versand
 

@@ -25,7 +25,7 @@ describe Person::AddRequest::IgnoredApprover do
       r1 = Fabricate(Group::BottomLayer::Leader.name, group: layer).person
       r2 = Fabricate(Group::BottomLayer::LocalGuide.name, group: layer).person
       Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_one), person: r1)
-      r3 = Fabricate(Group::BottomLayer::LocalGuide.name, group: layer, deleted_at: 1.year.ago).person
+      r3 = Fabricate(Group::BottomLayer::LocalGuide.name, group: layer, created_at: 2.years.ago, deleted_at: 1.year.ago).person
 
       list = Person::AddRequest::IgnoredApprover.possible_approvers(layer)
       expect(list).to match_array([r1, r2])
@@ -48,7 +48,7 @@ describe Person::AddRequest::IgnoredApprover do
     it 'clears up entries' do
       r1 = Fabricate(Group::BottomLayer::Leader.name, group: layer).person
       Fabricate(Group::BottomLayer::Member.name, group: layer, person: r1)
-      r2 = Fabricate(Group::BottomLayer::LocalGuide.name, group: layer, deleted_at: 1.year.ago).person
+      r2 = Fabricate(Group::BottomLayer::LocalGuide.name, group: layer, created_at: 2.year.ago, deleted_at: 1.year.ago).person
       r3 = Fabricate(Group::BottomLayer::Member.name, group: layer).person
       r4 = Fabricate(Group::TopGroup::Leader.name, group: groups(:top_group)).person
       Person::AddRequest::IgnoredApprover.create!(group: layer, person: r1)

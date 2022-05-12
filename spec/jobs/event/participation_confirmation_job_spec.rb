@@ -90,7 +90,7 @@ describe Event::ParticipationConfirmationJob do
       context 'with external role in different group with own approvers' do
         it 'only sends to group approvers where role is non-external' do
           Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two))
-          Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_two_one), deleted_at: 1.year.ago)
+          Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_two_one), created_at: 2.years.ago, deleted_at: 1.year.ago)
           Fabricate(Role::External.name.to_sym, person: person, group: groups(:bottom_group_two_one))
 
           course.update_column(:requires_approval, true)

@@ -336,12 +336,7 @@ describe Person::Filter::Role do
         let(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
 
         it 'does not find role deleted before timeframe' do
-          role.update(deleted_at: 1.day.ago)
-          expect(filter(start_at: now).entries).to be_empty
-        end
-
-        it 'does not find role created after timeframe' do
-          role.update(created_at: 1.day.from_now)
+          role.update(created_at: 2.days.ago, deleted_at: 1.day.ago)
           expect(filter(start_at: now).entries).to be_empty
         end
 

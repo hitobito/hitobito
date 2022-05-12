@@ -298,7 +298,7 @@ describe MailingList do
         p3 = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person
         Fabricate(role, group: groups(:bottom_group_two_one), person: p3)
         # deleted role in the same hierarchy
-        p4 = Fabricate(role, group: groups(:bottom_group_one_one), deleted_at: 1.year.ago).person
+        p4 = Fabricate(role, group: groups(:bottom_group_one_one), created_at: 2.years.ago, deleted_at: 1.year.ago).person
 
         is_expected.to include(p1)
         is_expected.to include(p2)

@@ -44,6 +44,8 @@ de:
         greater_than_or_equal_to: muss grösser oder gleich %{count} sein
         must_exist: müssen vorhanden sein
         readonly: darf nicht verändert werden
+        cannot_be_later_than_today: kann nicht später als heute sein
+        cannot_be_later_than_deleted_at: muss vor oder am selben Tag wie der Austritt sein
       models:
         cors_origin:
           attributes:
@@ -682,6 +684,9 @@ de:
         person: Person
         person_id: Person
         string_long: '%{role} in %{group}'
+        dates: Daten
+        created_at: Von
+        deleted_at: Bis
         class:
           permission:
             description:

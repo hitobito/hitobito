@@ -623,6 +623,9 @@ fr:
         person: Personne
         person_id: Personne
         string_long: '%{role} dans %{group}'
+        dates: Dates
+        created_at: De
+        deleted_at: Jusqu'à
         class:
           permission:
             description:

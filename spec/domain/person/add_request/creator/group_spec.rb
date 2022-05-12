@@ -29,7 +29,7 @@ describe Person::AddRequest::Creator::Group do
     end
 
     it 'is true if deleted role already exists' do
-      Fabricate(Group::BottomGroup::Member.name, group: group, person: person, deleted_at: 1.year.ago)
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: person, created_at: 2.years.ago, deleted_at: 1.year.ago)
       expect(subject).to be_required
     end
 
@@ -89,7 +89,7 @@ describe Person::AddRequest::Creator::Group do
     end
 
     it 'creates group request if deleted role already exists' do
-      Fabricate(Group::BottomGroup::Member.name, group: group, person: person, deleted_at: 1.year.ago)
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: person, created_at: 2.years.ago, deleted_at: 1.year.ago)
 
       expect do
         subject.create_request

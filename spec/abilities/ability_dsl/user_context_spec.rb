@@ -52,7 +52,7 @@ describe AbilityDsl::UserContext do
       Fabricate(Group::BottomLayer::Leader.sti_name.to_sym, group: groups(:bottom_layer_one), person: p)
       Fabricate(Group::BottomGroup::Member.sti_name.to_sym, group: groups(:bottom_group_one_two), person: p)
       Fabricate(Role::External.sti_name.to_sym, group: groups(:bottom_group_one_two), person: p)
-      Fabricate(Group::TopGroup::Leader.sti_name.to_sym, group: groups(:top_group), person: p, deleted_at: 2.years.ago)
+      Fabricate(Group::TopGroup::Leader.sti_name.to_sym, group: groups(:top_group), person: p, created_at: 3.years.ago, deleted_at: 2.years.ago)
       p
     end
 

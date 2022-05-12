@@ -87,6 +87,8 @@ class Role < ActiveRecord::Base
 
   ### SCOPES
 
+  include Paranoia::FutureDeletedAtScope
+
   scope :without_archived, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
 

@@ -612,6 +612,9 @@ it:
         person: Persona
         person_id: Persona
         string_long: '%{role} in %{group}'
+        dates: Date
+        created_at: Da
+        deleted_at: A
         class:
           permission:
             description:

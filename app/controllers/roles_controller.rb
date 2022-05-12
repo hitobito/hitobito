@@ -24,8 +24,9 @@ class RolesController < CrudController
   before_render_create :set_group_selection
 
   before_action :set_person_id, only: [:new] # rubocop:disable Rails/LexicallyScopedActionFilter
-  before_action :remember_primary_group, only: [:destroy]
+  before_action :remember_primary_group, only: [:destroy, :update]
   after_destroy :last_primary_group_role_deleted
+  after_update :last_primary_group_role_deleted
 
   def create
     assign_attributes
@@ -41,6 +42,7 @@ class RolesController < CrudController
     if change_type?
       change_type
     else
+      assign_attributes
       super(location: after_update_location)
     end
   end
@@ -209,7 +211,9 @@ class RolesController < CrudController
   end
 
   def after_update_location
-    group_person_path(entry.group_id, entry.person_id)
+    return group_person_path(entry.group_id, entry.person_id) unless entry.deleted?
+
+    can?(:show, entry.person) ? person_path(entry.person_id) : group_path(parent)
   end
 
   def set_group_selection

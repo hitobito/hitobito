@@ -6,15 +6,7 @@
 module TableDisplaysHelper
 
   def render_table_display_columns(model_class, table)
-    return unless Settings.table_displays
-
-    table_display = current_person.table_display_for(parent)
-    available = table_display.available(table.entries)
-    table_display.selected.each do |column|
-      # Exclude columns which are selected but not available
-      # This prevents showing the event questions of event A in the participants list of event B
-      next unless available.include? column
-
+    TableDisplay.active_columns(current_person, model_class, table.entries).each do |column|
       render_table_display_column(model_class, table, column)
     end
   end

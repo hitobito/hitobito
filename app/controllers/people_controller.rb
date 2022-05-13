@@ -9,6 +9,7 @@ class PeopleController < CrudController
   include RenderPeopleExports
   include AsyncDownload
   include Tags
+  prepend RenderTableDisplays
 
   self.nesting = Group
 
@@ -162,7 +163,7 @@ class PeopleController < CrudController
   end
 
   def filter_entries
-    entries = person_filter.entries
+    entries = add_table_display_selects(person_filter.entries)
     entries = entries.reorder(Arel.sql(sort_expression)) if sorting?
     entries
   end

@@ -47,6 +47,21 @@ class TableDisplay < ActiveRecord::Base
         .allow_only_known_attributes!
   end
 
+  def self.active_columns(person, model_class, list = nil)
+    return [] unless Settings.table_displays
+
+    table_display = self.for(person, model_class)
+
+    if list.nil?
+      table_display.selected
+    else
+      # Exclude columns which are selected but not available
+      # This prevents showing the event questions of event A in the participants list of event B
+      available = table_display.available(list)
+      table_display.selected.select { |col| available.include? col }
+    end
+  end
+
   def column_for(attr, table: nil)
     column = relevant_columns.fetch(attr, nil) ||
         relevant_multi_columns.find { |col| col.can_display?(attr) }

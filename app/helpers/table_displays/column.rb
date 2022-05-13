@@ -68,5 +68,13 @@ module TableDisplays
       relation, relation_path = path.to_s.split('.', 2)
       resolve(object.try(relation), relation_path)
     end
+
+    def resolve_database_column(path, model_class = @model_class)
+      return "#{model_class.table_name}.#{path}" unless path.include? '.'
+
+      relation, relation_path = path.to_s.split('.', 2)
+      relation_class = model_class.reflect_on_association(relation).class_name.constantize
+      resolve_database_column(relation_path, relation_class)
+    end
   end
 end

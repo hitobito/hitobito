@@ -11,7 +11,7 @@ module TableDisplays
     end
 
     def required_model_attrs(attr)
-      attr
+      [resolve_database_column(attr)]
     end
 
     def value_for(object, attr)

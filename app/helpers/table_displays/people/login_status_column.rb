@@ -11,7 +11,8 @@ module TableDisplays::People
     end
 
     def required_model_attrs(attr)
-      attr
+      %w(people.two_factor_authentication people.email people.encrypted_password
+         people.reset_password_sent_at)
     end
 
     def value_for(object, attr)

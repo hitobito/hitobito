@@ -11,7 +11,7 @@ module TableDisplays::People
     end
 
     def required_model_attrs(attr)
-      attr
+      []
     end
 
     def value_for(object, attr)

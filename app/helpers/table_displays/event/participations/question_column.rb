@@ -20,7 +20,7 @@ module TableDisplays::Event::Participations
     end
 
     def required_model_attrs(attr)
-      nil
+      []
     end
 
     def value_for(object, attr)

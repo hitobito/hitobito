@@ -11,6 +11,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   include AsyncDownload
   include Api::JsonPaging
   include ActionView::Helpers::SanitizeHelper
+  prepend RenderTableDisplays
 
   self.nesting = Group, Event
 

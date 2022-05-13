@@ -8,12 +8,12 @@
 require 'spec_helper'
 
 describe Export::ProgressReporter do
-  let(:file) { AsyncDownloadFile.from_filename("subscriptions_1234-42") }
+  let(:file) { AsyncDownloadFile.from_filename('subscriptions_1234-42') }
   let(:values) { [] }
 
   subject! do
     described_class.new(file, list.size).tap do |reporter|
-      reporter.instance_eval {  def file; @file end }
+      reporter.instance_eval { def file; @file end } # rubocop:disable Style/SingleLineMethods
     end
   end
 
@@ -28,7 +28,7 @@ describe Export::ProgressReporter do
         values << subject.file.progress
       end
 
-      expect(values.uniq).to eq (0..99).to_a
+      expect(values.uniq).to eq((0..99).to_a)
     end
   end
 

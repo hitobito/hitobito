@@ -17,29 +17,23 @@ describe DownloadCleanerJob do
   end
 
   it 'removes files older then one day' do
-    now_file = download_filename('now', Time.now.to_i)
-    one_day_file = download_filename('one_day', 1.day.ago.to_i)
-    two_days_file = download_filename('one_day', 2.days.ago.to_i)
+    download_file('file', Time.now.to_i)
+    download_file('file', 23.hours.ago.to_i)
 
-    generate_test_file(now_file)
-    generate_test_file(one_day_file)
-    generate_test_file(two_days_file)
+    download_file('file', 25.hours.ago.to_i)
+    download_file('file', 36.hours.ago.to_i)
 
-    subject.perform_internal
-
-    expect(File.exist?("#{AsyncDownloadFile::DIRECTORY}/#{now_file}.txt")).to be true
-    expect(File.exist?("#{AsyncDownloadFile::DIRECTORY}/#{one_day_file}.txt")).to be false
-    expect(File.exist?("#{AsyncDownloadFile::DIRECTORY}/#{two_days_file}.txt")).to be false
+    expect do
+      subject.perform_internal
+    end.to change(AsyncDownloadFile, :count).from(4).to(2)
   end
 
   private
 
-  def generate_test_file(filename)
-    AsyncDownloadFile.from_filename(filename).write('testfilecontent')
-  end
-
-  def download_filename(filename, time)
-    "#{filename}_#{time}-1234"
+  def download_file(filename, time)
+    file = AsyncDownloadFile.from_filename("#{filename}_#{time}-1234")
+    file.write('testfilecontent')
+    file
   end
 
 end

@@ -10,7 +10,7 @@ class AsyncDownloadsController < ApplicationController
   skip_authorization_check
 
   def show
-    if file.downloadable?(current_person)
+    if file&.downloadable?(current_person)
       Cookies::AsyncDownload.new(cookies).remove(name: params[:id], type: params[:file_type])
 
       redirect_to rails_blob_path(
@@ -24,10 +24,10 @@ class AsyncDownloadsController < ApplicationController
   end
 
   def exists?
-    status = file.downloadable?(current_person) ? 200 : 404
+    status = file&.downloadable?(current_person) ? 200 : 404
 
     respond_to do |format|
-      format.json { render json: { status: status, progress: file.progress } }
+      format.json { render json: { status: status, progress: file&.progress } }
     end
   end
 

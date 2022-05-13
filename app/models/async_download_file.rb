@@ -7,15 +7,19 @@
 
 class AsyncDownloadFile < ApplicationRecord
   class << self
+    FILENAME_REGEX = /\A(.*)_(\d+)-(\d+)\z/.freeze
+
     def create_name(filename, person_id)
       "#{filename.to_s.parameterize}_#{Time.now.to_i}-#{person_id}"
     end
 
     def parse_filename(filename)
-      filename.match(/\A(.*)_(\d+)-(\d+)\z/)[1..-1]
+      filename.match(FILENAME_REGEX)[1..-1]
     end
 
     def from_filename(filename, filetype = :txt)
+      return unless parseable?(filename)
+
       name, timestamp, person_id = parse_filename(filename)
 
       file = find_or_create_by(
@@ -23,6 +27,18 @@ class AsyncDownloadFile < ApplicationRecord
       )
       file.update!(filetype: filetype)
       file
+    end
+
+    def maybe_from_filename(filename, person_id, filetype)
+      if parseable?(filename)
+        from_filename(filename, filetype)
+      else
+        from_filename(create_name(filename, person_id), filetype)
+      end
+    end
+
+    def parseable?(filename)
+      filename =~ FILENAME_REGEX
     end
   end
 

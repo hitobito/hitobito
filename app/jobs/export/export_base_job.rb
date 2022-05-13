@@ -36,7 +36,7 @@ class Export::ExportBaseJob < BaseJob
   end
 
   def export_file
-    AsyncDownloadFile.from_filename(filename, @format).write(data)
+    async_download_file.write(data)
   end
 
   def data
@@ -45,6 +45,12 @@ class Export::ExportBaseJob < BaseJob
 
   def filename
     @options.fetch(:filename)
+  end
+
+  private
+
+  def async_download_file
+    @async_download_file ||= AsyncDownloadFile.maybe_from_filename(filename, @user_id, @format)
   end
 
 end

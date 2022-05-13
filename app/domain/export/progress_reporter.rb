@@ -8,7 +8,7 @@
 module Export
   class ProgressReporter
     def initialize(file, total)
-      @file = AsyncDownloadFile.from_filename(file.filename.basename('.*').to_s)
+      @file = file
       @total = total
 
       @file.update(progress: 0)

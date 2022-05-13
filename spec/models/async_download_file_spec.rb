@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022-2022, Puzzle ITC. This file is part of
+#  Copyright (c) 2022, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,24 +24,24 @@ describe AsyncDownloadFile do
     it 'creates filenames' do
       expect(
         subject.create_name(raw_filename, 42)
-      ).to match /^subscriptions-to-blorbaels-rants_\d+-42$/
+      ).to match(/^subscriptions-to-blorbaels-rants_\d+-42$/)
     end
 
     it 'parses created filenames' do
       parts = subject.parse_filename(
-        "subscriptions_to-blorbaels-rants_1651700845-42"
+        'subscriptions_to-blorbaels-rants_1651700845-42'
       )
 
       expect(parts).to eql [
-        "subscriptions_to-blorbaels-rants",
-        "1651700845",
-        "42"
+        'subscriptions_to-blorbaels-rants',
+        '1651700845',
+        '42'
       ]
     end
 
     it 'returns an instance from a filename' do
       result = subject.from_filename(
-        "subscriptions_to-blorbaels-rants_1651700845-42", :txt
+        'subscriptions_to-blorbaels-rants_1651700845-42', :txt
       )
 
       expect(result).to be_a described_class
@@ -49,30 +49,25 @@ describe AsyncDownloadFile do
     end
   end
 
-  context 'keeps the AR-less interface, it' do
+  context 'keep some parts of the AR-less interface, it' do
     subject { described_class.from_filename(filename, filetype) }
 
     it 'knows the passed filename' do
-      expect(subject.filename)
-        .to eql Pathname.new("#{filename}.#{filetype}")
-    end
-
-    it 'knows the full path' do
-      expect(subject.full_path)
-        .to eql folder.join("#{filename}.#{filetype}")
+      expect(subject.filename).to eql "subscriptions_to-blorbaels-rants.#{filetype}"
     end
 
     it 'knows if the file is downloadable for a person' do
-      expect(File).to receive(:exist?).with(subject.full_path)
-                                      .and_return(true)
+      file_double = double('attachement')
+      expect(subject).to receive(:generated_file).and_return(file_double)
+      expect(file_double).to receive(:attached?).and_return(true)
 
       expect(subject.downloadable?(person)).to be true
     end
 
     it 'allows write data to the filename' do
-      expect(File).to receive(:write).with(subject.full_path, data)
-
-      subject.write(data)
+      expect do
+        subject.write(data)
+      end.to change(subject.generated_file, :attached?).from(false).to(true)
     end
   end
 

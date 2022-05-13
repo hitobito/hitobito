@@ -30,10 +30,10 @@ class GroupSetting < RailsSettings::SettingObject
   mount_uploader :carrierwave_picture, GroupSetting::LogoUploader, mount_on: 'picture'
   has_one_attached :picture, service: ENV['RAILS_ACTIVE_STORAGE_BACKEND']
 
-  if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
-    validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
-                        content_type: ['image/jpeg', 'image/gif', 'image/png']
-  end
+  # rubocop:disable Metrics/LineLength
+  validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 }, unless: :skip_validation },
+                      content_type: { in: ['image/jpeg', 'image/gif', 'image/png'], unless: :skip_validation }
+  # rubocop:enable Metrics/LineLength
 
   ENCRYPTED_VALUES = %w(username password).freeze
   SETTINGS = {
@@ -54,6 +54,11 @@ class GroupSetting < RailsSettings::SettingObject
   end
 
   private
+
+  def skip_validation
+    Rails.env.test? ||
+      ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
+  end
 
   def _get_value(name)
     if encrypted?(name)

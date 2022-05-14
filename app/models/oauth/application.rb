@@ -33,7 +33,7 @@ module Oauth
     accepts_nested_attributes_for :cors_origins, allow_destroy: true
 
     mount_uploader :carrierwave_logo, Oauth::LogoUploader, mount_on: 'logo'
-    has_one_attached :logo, service: ENV['RAILS_ACTIVE_STORAGE_BACKEND'] do |attachable|
+    has_one_attached :logo do |attachable|
       attachable.variant :thumb, resize_to_fill: [64, 64]
     end
     if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case

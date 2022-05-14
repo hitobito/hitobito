@@ -95,6 +95,22 @@ GEM
     awesome_nested_set (3.2.0)
       activerecord (>= 4.0.0, < 7.0)
     awesome_print (1.7.0)
+    aws-eventstream (1.2.0)
+    aws-partitions (1.587.0)
+    aws-sdk-core (3.130.2)
+      aws-eventstream (~> 1, >= 1.0.2)
+      aws-partitions (~> 1, >= 1.525.0)
+      aws-sigv4 (~> 1.1)
+      jmespath (~> 1.0)
+    aws-sdk-kms (1.56.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.114.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.4)
+    aws-sigv4 (1.5.0)
+      aws-eventstream (~> 1, >= 1.0.2)
     axlsx (3.0.0.pre)
       htmlentities (~> 4.3, >= 4.3.4)
       mimemagic (~> 0.3)
@@ -274,6 +290,7 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     innertube (1.1.0)
     jaro_winkler (1.5.4)
+    jmespath (1.6.1)
     joiner (0.6.0)
       activerecord (>= 6.1.0)
     json-jwt (1.11.0)
@@ -626,6 +643,7 @@ DEPENDENCIES
   annotate
   awesome_nested_set
   awesome_print
+  aws-sdk-s3
   axlsx (>= 3.0.0.pre)
   bcrypt
   better_errors

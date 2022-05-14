@@ -28,7 +28,7 @@
 class GroupSetting < RailsSettings::SettingObject
 
   mount_uploader :carrierwave_picture, GroupSetting::LogoUploader, mount_on: 'picture'
-  has_one_attached :picture, service: ENV['RAILS_ACTIVE_STORAGE_BACKEND']
+  has_one_attached :picture
 
   # rubocop:disable Metrics/LineLength
   validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 }, unless: :skip_validation },

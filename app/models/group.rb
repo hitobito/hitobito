@@ -51,7 +51,7 @@ class Group < ActiveRecord::Base
   extend Paranoia::RegularScope
 
   mount_uploader :carrierwave_logo, Group::LogoUploader, mount_on: 'logo'
-  has_one_attached :logo, service: ENV['RAILS_ACTIVE_STORAGE_BACKEND']
+  has_one_attached :logo
 
   ### ATTRIBUTES
 

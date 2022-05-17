@@ -175,7 +175,9 @@ class RolesController < CrudController
   end
 
   def permitted_params(role_type = entry.class)
-    model_params.permit(role_type.used_attributes)
+    permitted_attrs = role_type.used_attributes 
+    permitted_attrs -= [:deleted_at] unless can?(:destroy, @role)
+    model_params.permit(permitted_attrs)
   end
 
   def find_group

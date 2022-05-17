@@ -14,7 +14,9 @@ module RenderTableDisplays
   private
 
   def add_table_display_selects(scope)
-    scope.select((scope.select_values + table_display_selects).uniq)
+    # preserve previously selected columns
+    previous = scope.select_values.presence || [scope.model.arel_table[Arel.star]]
+    scope.select((previous + table_display_selects).uniq)
   end
 
   def table_display_selects

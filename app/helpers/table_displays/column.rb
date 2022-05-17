@@ -21,10 +21,9 @@ module TableDisplays
     end
 
     def value_for(object, attr)
-      raise 'implement in subclass, using `super do ... end`' unless block_given?
-
       target, target_attr = resolve(object, attr)
       if target.present? && target_attr.present? && allowed?(target, target_attr)
+        return target, target_attr unless block_given?
         yield target, target_attr
       end
     end
@@ -40,7 +39,13 @@ module TableDisplays
     end
 
     def render(attr)
-      table.col(header(attr)) { |object| value_for(object, attr) }
+      raise 'implement in subclass, using `super do ... end`' unless block_given?
+
+      table.col(header(attr)) do |object|
+        value_for(object, attr) do |target, target_attr|
+          yield target, target_attr, object, attr
+        end
+      end
     end
 
     def header(attr)

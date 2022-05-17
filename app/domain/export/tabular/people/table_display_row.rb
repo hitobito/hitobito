@@ -12,11 +12,23 @@ module Export::Tabular::People
       super(entry, format)
     end
 
+    def login_status
+      status = entry.login_status
+      I18n.t("people.login_status.#{status}")
+    end
+
     private
 
     def value_for(attr)
-      table_display.with_permission_check(entry, attr) do
-        super if entry.respond_to?(attr) || dynamic_attributes.keys.any? {|k| attr =~ k }
+      column = table_display.column_for(attr)
+      return super unless column.present?
+
+      column.value_for(entry, attr) do |target, target_attr|
+        if respond_to?(target_attr, true)
+          send(target_attr)
+        elsif target.respond_to?(target_attr)
+          target.public_send(target_attr)
+        end
       end
     end
 

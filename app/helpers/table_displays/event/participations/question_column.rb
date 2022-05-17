@@ -23,8 +23,10 @@ module TableDisplays::Event::Participations
       []
     end
 
-    def value_for(object, attr)
-      format_attr(object, attr)
+    def render(attr)
+      super do |object|
+        format_attr(object, attr)
+      end
     end
 
     def sort_by(attr)

@@ -8,20 +8,20 @@
 module RenderTableDisplays
 
   def list_entries
-    add_table_display_selects(super)
+    add_table_display_selects(super, current_person)
   end
 
   private
 
-  def add_table_display_selects(scope)
+  def add_table_display_selects(scope, person)
     # preserve previously selected columns
     previous = scope.select_values.presence || [scope.model.arel_table[Arel.star]]
-    scope.select((previous + table_display_selects).uniq)
+    scope.select((previous + table_display_selects(person)).uniq)
   end
 
-  def table_display_selects
-    TableDisplay.active_columns(current_person, model_class).flat_map do |column|
-      current_person
+  def table_display_selects(person)
+    TableDisplay.active_columns_for(person, model_class).flat_map do |column|
+      person
           .table_display_for(model_class)
           .column_for(column)
           .required_model_attrs(column)

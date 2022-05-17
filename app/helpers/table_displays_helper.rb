@@ -6,7 +6,7 @@
 module TableDisplaysHelper
 
   def render_table_display_columns(model_class, table)
-    TableDisplay.active_columns(current_person, model_class, table.entries).each do |column|
+    TableDisplay.active_columns_for(current_person, model_class, table.entries).each do |column|
       render_table_display_column(model_class, table, column)
     end
   end

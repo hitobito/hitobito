@@ -38,11 +38,6 @@ module Export::Tabular::People
       entry.layer_group.to_s
     end
 
-    def login_status
-      status = entry.login_status
-      I18n.t("people.login_status.#{status}")
-    end
-
     private
 
     def phone_number_attribute(attr)

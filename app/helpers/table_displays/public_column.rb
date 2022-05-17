@@ -14,9 +14,11 @@ module TableDisplays
       [resolve_database_column(attr)]
     end
 
-    def value_for(object, attr)
-      super do |target, target_attr|
-        template.format_attr(target, target_attr) if target.respond_to?(target_attr)
+    def render(attr)
+      super do |object, attr|
+        value_for(object, attr) do |target, target_attr|
+          template.format_attr(target, target_attr) if target.respond_to?(target_attr)
+        end
       end
     end
 

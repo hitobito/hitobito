@@ -16,15 +16,16 @@ module Paranoia
           .where("#{table_name}": { "#{paranoia_column}": nil })
           .or(unscoped.where(arel_table[:"#{paranoia_column}"].gt(Time.zone.now)))
       }
-
+      
+      # https://github.com/ActsAsParanoid/acts_as_paranoid/blob/v0.8.1/lib/acts_as_paranoid/core.rb#L22
       scope :with_deleted, -> { unscope(where: :"#{table_name}.#{paranoia_column}") }
 
+      # https://github.com/ActsAsParanoid/acts_as_paranoid/blob/v0.8.1/lib/acts_as_paranoid/core.rb#L26
       scope :only_deleted, -> { 
         unscope(where: :"#{table_name}.#{paranoia_column}")
           .where.not("#{table_name}": { "#{paranoia_column}": nil })
           .where("#{table_name}": { "#{paranoia_column}": ..Time.zone.now })
       }
-
 
       def deleted?
         return false if send(paranoia_column).nil?

@@ -16,11 +16,7 @@ class DownloadCleanerJob < RecurringJob
   private
 
   def remove_old_downloads
-    AsyncDownloadFile.where(older_than_a_day).find_each do |file|
-      next unless file.generated_file.attached?
-
-      file.destroy
-    end
+    AsyncDownloadFile.where(older_than_a_day).find_each(&:destroy)
   end
 
   def older_than_a_day

@@ -14,6 +14,12 @@ module TableDisplays
       @template = table&.template
     end
 
+    # Allows a column class to specify which database tables need to be joined for calculating the
+    # value
+    def required_model_joins(attr)
+      resolve_database_joins(attr)
+    end
+
     # Allows a column class to specify which database columns need to be fetched for calculating the
     # value
     def required_model_attrs(attr)
@@ -72,6 +78,14 @@ module TableDisplays
 
       relation, relation_path = path.to_s.split('.', 2)
       resolve(object.try(relation), relation_path)
+    end
+
+    def resolve_database_joins(path, model_class = @model_class)
+      return {} unless path.include? '.'
+
+      relation, relation_path = path.to_s.split('.', 2)
+      relation_class = model_class.reflect_on_association(relation).class_name.constantize
+      { relation => resolve_database_column(relation_path, relation_class) }
     end
 
     def resolve_database_column(path, model_class = @model_class)

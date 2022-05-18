@@ -163,7 +163,7 @@ class PeopleController < CrudController
   end
 
   def filter_entries
-    entries = add_table_display_selects(person_filter.entries, current_person)
+    entries = add_table_display_to_query(person_filter.entries, current_person)
     entries = entries.reorder(Arel.sql(sort_expression)) if sorting?
     entries
   end

@@ -26,7 +26,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
     elsif household?
       Export::Tabular::People::ParticipationsHouseholds
     elsif table_display?
-      Export::Tabular::People::TableDisplays
+      Export::Tabular::Event::Participations::TableDisplays
     else
       Export::Tabular::People::ParticipationsAddress
     end
@@ -36,7 +36,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
     return super unless table_display?
 
     table_display = TableDisplay.for(@user_id, Event::Participation)
-    Export::Tabular::People::TableDisplays.export(@format, entries, table_display)
+    exporter.export(@format, entries, table_display)
   end
 
   def full_export?

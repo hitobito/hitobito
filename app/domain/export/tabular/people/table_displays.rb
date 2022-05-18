@@ -13,7 +13,7 @@ module Export::Tabular::People
     attr_reader :table_display
 
     def initialize(list, table_display)
-      super(add_table_display_selects(list, table_display.person))
+      super(add_table_display_to_query(list, table_display.person))
       @table_display = table_display
     end
 

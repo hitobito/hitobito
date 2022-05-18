@@ -8,10 +8,28 @@
 module RenderTableDisplays
 
   def list_entries
-    add_table_display_selects(super, current_person)
+    add_table_display_to_query(super, current_person)
   end
 
   private
+
+  def add_table_display_to_query(scope, person)
+    add_table_display_joins(scope, person)
+    add_table_display_selects(scope, person)
+  end
+
+  def add_table_display_joins(scope, person)
+    scope.joins(table_display_joins(person))
+  end
+
+  def table_display_joins(person)
+    TableDisplay.active_columns_for(person, model_class).map do |column|
+      person
+          .table_display_for(model_class)
+          .column_for(column)
+          .required_model_joins(column)
+    end
+  end
 
   def add_table_display_selects(scope, person)
     # preserve previously selected columns

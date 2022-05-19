@@ -60,6 +60,13 @@ namespace :dev do
       me.confirmation_token = nil
       me.save!(validate: false)
 
+      puts <<~MESSAGE
+
+        Created or updated the user #{username} to now have the password
+        #{password.inspect}
+
+      MESSAGE
+
       root = Group.roots.first
 
       admins = root.class.roles.select { |r| r.permissions.include?(:admin) }
@@ -72,9 +79,9 @@ namespace :dev do
       me.roles << Role.new(type: role_type, group: root)
 
       puts <<~MESSAGE
+        The User has hopefully useful roles:
 
-        Created or updated the user #{username} to now have the password
-        #{password.inspect}
+        - #{me.roles.join("\n-")}
 
       MESSAGE
     end

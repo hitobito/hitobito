@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2022, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 Faker::Config.locale = I18n.locale
 
 class PersonSeeder
@@ -5,7 +12,21 @@ class PersonSeeder
   attr_accessor :encrypted_password
 
   def initialize
-    @encrypted_password = BCrypt::Password.create("hito42bito", cost: 1)
+    @encrypted_password = if (dev_pw = ENV['HITOBITO_DEV_PASSWORD'])
+                            BCrypt::Password.create(dev_pw, cost: 1)
+                          else
+                            nil
+                          end
+
+    warn <<~MESSAGE if @encrypted_password.nil?
+      NO PASSWORD SET FOR SEEDED PEOPLE.
+      ==================================
+
+      All people need to use the password-reset to create a password for themselves.
+
+      A default password can be passed in ENV['HITOBITO_DEV_PASSWORD'].
+      This also silences this message.
+    MESSAGE
   end
 
   def seed_all_roles

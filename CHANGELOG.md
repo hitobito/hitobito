@@ -13,6 +13,7 @@
 *  Es kann neu nach Rechnungen gesucht werden (#1672)
 *  Introduce new bulk mail stack
 *  Rechnungen können neu das Total ausblenden (hitobito_sww#26)
+*  Rollen können beim Erstellen und Editieren ein Start- und Enddatum gesetzt werden (#1714)
 
 ## Version 1.26
 

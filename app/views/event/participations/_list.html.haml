@@ -27,7 +27,7 @@
 = crud_table do |t|
   - t.col('') do |p|
     .profil
-      = image_tag(p.person.picture.thumb.url, size: '32x32')
+      = image_tag(upload_url(p.person, :picture, variant: :thumb), size: '32x32')
   - sortable_grouped_person_attr(t, last_name: true, first_name: true, nickname: true) do |p|
     %strong
       -# Any person listed can be shown

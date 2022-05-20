@@ -50,7 +50,8 @@ class Group < ActiveRecord::Base
   acts_as_paranoid
   extend Paranoia::RegularScope
 
-  mount_uploader :logo, Group::LogoUploader
+  mount_uploader :carrierwave_logo, Group::LogoUploader, mount_on: 'logo'
+  has_one_attached :logo
 
   ### ATTRIBUTES
 
@@ -119,6 +120,12 @@ class Group < ActiveRecord::Base
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validates :address, length: { allow_nil: true, maximum: 1024 }
+
+  if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
+    validates :logo, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
+                     content_type: ['image/jpeg', 'image/gif', 'image/png']
+  end
+
 
   ### CLASS METHODS
 
@@ -238,6 +245,27 @@ class Group < ActiveRecord::Base
       self_registration_role_type.present? && 
       decorate.possible_roles_without_writing_permissions
               .include?(self_registration_role_type.constantize)
+  end
+
+  def path_args
+    [self]
+  end
+
+  def assert_valid_self_registration_notification_email
+    self.self_registration_notification_email = self_registration_notification_email.presence
+    return unless self_registration_notification_email
+
+    unless valid_email?(self_registration_notification_email)
+      errors.add(:self_registration_notification_email, :invalid)
+    end
+  end
+
+  def remove_logo
+    false
+  end
+
+  def remove_logo=(delete_it)
+    logo.purge_later if delete_it
   end
 
   private

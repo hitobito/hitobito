@@ -27,7 +27,7 @@ class TableDisplay < ActiveRecord::Base
   cattr_accessor :table_display_columns, :multi_columns
 
   def self.register_column(model_class, column_class, attrs = nil)
-    if attrs.kind_of? Array
+    if attrs.is_a? Array
       return attrs.each { |attr| register_column(model_class, column_class, attr) }
     end
 

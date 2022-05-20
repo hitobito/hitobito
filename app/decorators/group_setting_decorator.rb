@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2021-2022, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class GroupSettingDecorator < ApplicationDecorator
+  include UploadDisplayHelper
 
   def translated_values
     object.attrs.collect do |a|
@@ -37,8 +38,7 @@ class GroupSettingDecorator < ApplicationDecorator
   end
 
   def picture_file_name
-    file = object.picture&.file
-    file&.filename || '-'
+    upload_name(object, :picture) || '-'
   end
 
 end

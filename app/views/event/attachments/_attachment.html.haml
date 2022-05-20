@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 %li{id: dom_id(attachment)}
-  = link_to(attachment.file_identifier, attachment.file_url, target: :blank)
+  = link_to(upload_name(attachment, :file), upload_url(attachment, :file), target: :blank)
 
   - if can?(:update, @event)
     &nbsp;

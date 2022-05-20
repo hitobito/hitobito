@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -113,7 +113,7 @@ module LayoutHelper
   def header_logo
     logo_group = closest_group_with_logo
 
-    return image_tag(logo_group.logo.to_s) if logo_group
+    return image_tag(upload_url(logo_group, :logo)) if logo_group
 
     wagon_image_pack_tag(Settings.application.logo.image, alt: Settings.application.name)
   end
@@ -124,7 +124,7 @@ module LayoutHelper
     return unless @group
 
     @group.self_and_ancestors.reverse.find do |group|
-      group.logo.present?
+      upload_exists?(group, :logo)
     end
   end
 

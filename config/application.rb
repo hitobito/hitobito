@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -72,6 +72,14 @@ module Hitobito
 
     config.cache_store = :mem_cache_store, { compress: true,
                                              namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
+
+    config.active_storage.variant_processor = :mini_magick
+
+    if ENV["RAILS_LOG_TO_STDOUT"].present? && !Rails.env.test?
+      logger = ActiveSupport::Logger.new(STDOUT)
+      logger.formatter = config.log_formatter
+      config.logger = ActiveSupport::TaggedLogging.new(logger)
+    end
 
     config.generators do |g|
       g.test_framework :rspec, fixture: true

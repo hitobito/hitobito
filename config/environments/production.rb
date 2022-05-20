@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,7 +38,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  config.active_storage.service = ENV.fetch('RAILS_STORAGE_SERVICE', 'local').to_sym
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil

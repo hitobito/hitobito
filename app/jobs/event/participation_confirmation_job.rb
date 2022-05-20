@@ -65,6 +65,8 @@ class Event::ParticipationConfirmationJob < BaseJob
   end
 
   def notify_contact?(event)
-    event.notify_contact_on_participations? && event.contact.present?
+    event.respond_to?(:notify_contact_on_participations?) &&
+      event.notify_contact_on_participations? &&
+      event.contact.present?
   end
 end

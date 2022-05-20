@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2021, Die Mitte. This file is part of
+#  Copyright (c) 2020-2022, Die Mitte. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -86,7 +86,7 @@ module Export::Pdf::Messages
 
     def init_reporter
       Export::ProgressReporter.new(
-        AsyncDownloadFile::DIRECTORY.join(@async_download_file),
+        @async_download_file,
         recipients.size
       )
     end

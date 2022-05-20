@@ -17,7 +17,7 @@
     = f.labeled :logo do
       = f.file_field :logo, type: :file, accept: Oauth::LogoUploader.accept_extensions
 
-    - if entry.logo.present?
+    - if upload_exists?(entry, :logo)
       = f.labeled :remove_logo do
         = f.boolean_field :remove_logo
 

@@ -950,7 +950,11 @@ describe PeopleController do
       file = Tempfile.new(['foo', '.exe'])
       picture = Rack::Test::UploadedFile.new(file, 'application/exe')
       put :update, params: { group_id: member.primary_group_id, id: member.id, person: { picture: picture } }
-      expect(assigns(:person)).to have(1).error_on(:picture)
+      expect(assigns(:person)).to have(2).error_on(:picture)
+      expect(assigns(:person).errors.group_by_attribute[:picture].map(&:type)).to match_array [
+        :image_metadata_missing,
+        :content_type_invalid
+      ]
     end
   end
 

@@ -18,7 +18,11 @@ describe Export::EventParticipationsExportJob do
 
   let(:params)                     { { filter: 'all' } }
   let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, user, params) }
-  let(:filepath)                   { AsyncDownloadFile::DIRECTORY.join('event_participation_export') }
+
+  let(:file) do
+    AsyncDownloadFile
+      .maybe_from_filename(subject.filename, user.id, format)
+  end
 
   before do
     SeedFu.quiet = true
@@ -34,7 +38,8 @@ describe Export::EventParticipationsExportJob do
     it 'and saves it' do
       subject.perform
 
-      lines = File.readlines("#{filepath}.#{format}")
+      lines = file.read.lines
+
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0].split(';').count).to match(15)
@@ -48,7 +53,7 @@ describe Export::EventParticipationsExportJob do
     it 'and saves it' do
       subject.perform
 
-      lines = File.readlines("#{filepath}.#{format}")
+      lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Firmenname;Übername.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
@@ -66,7 +71,7 @@ describe Export::EventParticipationsExportJob do
 
       subject.perform
 
-      lines = File.readlines("#{filepath}.#{format}")
+      lines = file.read.lines
       expect(lines.size).to eq(2)
       expect(lines[0]).to match(/Name;Adresse;PLZ;.*/)
       expect(lines[1]).to match(/Bottom und Other Member.*/)
@@ -78,7 +83,7 @@ describe Export::EventParticipationsExportJob do
 
     it 'and saves it' do
       subject.perform
-      expect(File.exist?("#{filepath}.#{format}")).to be true
+      expect(file.generated_file).to be_attached
     end
   end
 

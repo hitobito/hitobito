@@ -17,7 +17,7 @@
 - if @people.total_count > 0
   = crud_table do |t|
     - t.col('') do |p|
-      .profil= image_tag(p.picture.thumb.url, size: '32x32')
+      .profil= image_tag(upload_url(p, :picture, variant: :thumb), size: '32x32')
     - sortable_grouped_person_attr(t, last_name: false, first_name: false, nickname: false) do |p|
       %strong
         = p.to_s(:list)

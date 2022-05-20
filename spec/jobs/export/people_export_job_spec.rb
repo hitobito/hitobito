@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,7 +15,7 @@ describe Export::PeopleExportJob do
   let(:group)     { groups(:bottom_layer_one) }
   let(:household) { false }
   let(:selection) { false }
-  let(:filepath)  { AsyncDownloadFile::DIRECTORY.join('people_export') }
+  let(:file)      { AsyncDownloadFile.maybe_from_filename('people_export', user.id, format) }
 
   before do
     SeedFu.quiet = true
@@ -29,7 +29,7 @@ describe Export::PeopleExportJob do
     it 'and saves it' do
       subject.perform
 
-      lines = File.readlines("#{filepath}.#{format}")
+      lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
       expect(lines[0].split(';').count).to match(15)
@@ -45,14 +45,14 @@ describe Export::PeopleExportJob do
 
       it 'and saves it with single line per household' do
         subject.perform
-        lines = File.readlines("#{filepath}.#{format}")
+        lines = file.read.lines
         expect(lines.size).to eq(2)
       end
     end
 
     context 'table_display' do
       let(:selection) { true }
-      let(:csv) { CSV.read("#{filepath}.#{format}", col_sep: Settings.csv.separator.strip, headers: true) }
+      let(:csv) { CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true) }
 
       it 'renders standard columns' do
         subject.perform
@@ -76,7 +76,7 @@ describe Export::PeopleExportJob do
     it 'and saves it' do
       subject.perform
 
-      lines = File.readlines("#{filepath}.#{format}")
+      lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
       expect(lines[0]).to match(/Zusätzliche Angaben;.*/)
@@ -90,7 +90,7 @@ describe Export::PeopleExportJob do
 
     it 'and saves it' do
       subject.perform
-      expect(File.exist?("#{filepath}.#{format}")).to be true
+      expect(file.generated_file).to be_attached
     end
   end
 

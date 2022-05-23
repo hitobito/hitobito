@@ -395,11 +395,11 @@ describe Event::ParticipationsController do
                                            qualification_kind: qualification_kinds(:sl))
       end
 
-      it 'creates confirmation job' do
+      it 'creates confirmation and notification job' do
         expect do
           post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
           expect(assigns(:participation)).to be_valid
-        end.to change { Delayed::Job.count }.by(1)
+        end.to change { Delayed::Job.count }.by(2) # Event::ParticipationConfirmationJob, Event::ParticipationNotificationJob
         expect(flash[:notice]).not_to include 'Für die definitive Anmeldung musst du diese ' \
           'Seite über <i>Drucken</i> ausdrucken, '
       end

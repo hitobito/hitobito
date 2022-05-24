@@ -28,15 +28,18 @@ class Event::ParticipationNotificationJob < BaseJob
 
     Event::ParticipationMailer.notify_contact(participation,
                                               participation.event.contact).deliver_now
-  rescue StandardError
+  rescue StandardError => exception
     # Log more explicitly here to help debugging NoMethodError
     Raven.capture_exception(exception,
                             logger: 'participation_notification',
-                            extra: { event: event.attributes.to_s })
+                            extra: { event: participation.event.attributes.to_s })
+    raise exception
   end
 
   def notify_contact?(event)
-    event.notify_contact_on_participations? && event.contact.present?
+    event.notify_contact_on_participations? &&
+      event.contact.present? &&
+      MailRelay::AddressList.new(event.contact).entries.any?
   end
 
   def participation

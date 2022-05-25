@@ -7,7 +7,7 @@
 
 class Person::Filter::List
 
-  attr_reader :group, :user, :chain, :range, :name, :multiple_groups
+  attr_reader :group, :user, :chain, :range, :name
 
   def initialize(group, user, params = {})
     @group = group
@@ -24,6 +24,10 @@ class Person::Filter::List
 
   def all_count
     @all_count ||= filter.distinct.count
+  end
+
+  def multiple_groups
+    range == 'deep' || range == 'layer'
   end
 
   private

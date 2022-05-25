@@ -21,15 +21,24 @@ module Export::Tabular::People
 
     def value_for(attr)
       column = table_display.column_for(attr)
-      return super unless column.present?
+      unless column.present?
+        if entry.respond_to?(attr) || dynamic_attribute?(attr.to_s)
+          return super
+        end
+        return nil
+      end
 
-      column.value_for(entry, attr) do |target, target_attr|
+      column.value_for(column_entry, attr) do |target, target_attr|
         if respond_to?(target_attr, true)
           send(target_attr)
         elsif target.respond_to?(target_attr)
           target.public_send(target_attr)
         end
       end
+    end
+
+    def column_entry
+      entry
     end
 
   end

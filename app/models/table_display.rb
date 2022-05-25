@@ -47,23 +47,19 @@ class TableDisplay < ActiveRecord::Base
         .allow_only_known_attributes!
   end
 
-  def self.active_columns_for(person, model_class, list = nil)
+  def self.active_columns_for(person, model_class, list = [])
     return [] unless Settings.table_displays
 
     self.for(person, model_class).active_columns(list)
   end
 
-  def active_columns(list = nil)
+  def active_columns(list)
     return [] unless Settings.table_displays
 
-    if list.nil?
-      selected
-    else
-      # Exclude columns which are selected but not available
-      # This prevents showing the event questions of event A in the participants list of event B
-      available = available(list)
-      selected.select { |col| available.include? col }
-    end
+    # Exclude columns which are selected but not available
+    # This prevents showing the event questions of event A in the participants list of event B
+    available = available(list).map(&:to_sym)
+    selected.map(&:to_sym).select { |col| available.include? col }
   end
 
   def column_for(attr, table: nil)
@@ -85,8 +81,8 @@ class TableDisplay < ActiveRecord::Base
     end
   end
 
-  def sort_statements
-    selected.map { |attr| [attr, column_for(attr).sort_by(attr)] }.to_h
+  def sort_statements(list)
+    active_columns(list).map { |attr| [attr, column_for(attr)&.sort_by(attr)] }.to_h
   end
 
   def allow_only_known_attributes!
@@ -107,7 +103,7 @@ class TableDisplay < ActiveRecord::Base
   end
 
   def relevant_columns
-    table_display_columns.fetch(table_model_class, {})
+    table_display_columns.fetch(table_model_class, {}).with_indifferent_access
   end
 
   def relevant_multi_columns

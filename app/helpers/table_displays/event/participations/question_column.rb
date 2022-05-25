@@ -23,6 +23,23 @@ module TableDisplays::Event::Participations
       []
     end
 
+    def value_for(object, attr)
+      target, target_attr = resolve(object, attr)
+      if target.present? && target_attr.present? && allowed?(target, target_attr)
+        target = target.answers.find do |answer|
+          answer.question_id.to_s == question_id(target_attr)
+        end
+        target_attr = :answer
+
+        return target, target_attr unless block_given?
+        yield target, target_attr
+      end
+    end
+
+    def label(attr)
+      Event::Question.find(question_id(attr)).label
+    end
+
     def render(attr)
       super do |object|
         format_attr(object, attr)
@@ -32,15 +49,6 @@ module TableDisplays::Event::Participations
     def sort_by(attr)
       id = question_id(attr)
       "CASE event_questions.id WHEN #{id} THEN 0 ELSE 1 END, TRIM(event_answers.answer)" if id
-    end
-
-    def format_attr(target, target_attr)
-      target.answers.find { |answer| answer.question_id.to_s == question_id(target_attr) }
-          .try(:answer)
-    end
-
-    def label(attr)
-      Event::Question.find(question_id(attr)).label
     end
 
     protected

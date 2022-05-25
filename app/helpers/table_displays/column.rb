@@ -74,14 +74,14 @@ module TableDisplays
 
     # Recursively resolve nested attrs
     def resolve(object, path)
-      return object, path unless path.include? '.'
+      return object, path unless path.to_s.include? '.'
 
       relation, relation_path = path.to_s.split('.', 2)
       resolve(object.try(relation), relation_path)
     end
 
     def resolve_database_joins(path, model_class = @model_class)
-      return {} unless path.include? '.'
+      return {} unless path.to_s.include? '.'
 
       relation, relation_path = path.to_s.split('.', 2)
       relation_class = model_class.reflect_on_association(relation).class_name.constantize
@@ -89,7 +89,7 @@ module TableDisplays
     end
 
     def resolve_database_column(path, model_class = @model_class)
-      return "#{model_class.table_name}.#{path}" unless path.include? '.'
+      return "#{model_class.table_name}.#{path}" unless path.to_s.include? '.'
 
       relation, relation_path = path.to_s.split('.', 2)
       relation_class = model_class.reflect_on_association(relation).class_name.constantize

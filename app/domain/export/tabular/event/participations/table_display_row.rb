@@ -17,17 +17,8 @@ module Export::Tabular::Event::Participations
 
     private
 
-    def value_for(attr)
-      column = table_display.column_for(attr)
-      return super unless column.present?
-
-      column.value_for(participation, attr) do |target, target_attr|
-        if respond_to?(target_attr, true)
-          send(target_attr)
-        elsif target.respond_to?(target_attr)
-          target.public_send(target_attr)
-        end
-      end
+    def column_entry
+      participation
     end
 
   end

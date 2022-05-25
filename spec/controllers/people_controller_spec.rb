@@ -1144,11 +1144,24 @@ describe PeopleController do
     let(:dom) { Capybara::Node::Simple.new(response.body) }
     let!(:bottom_member) { people(:bottom_member) }
 
+    let!(:registered_columns) { TableDisplay.table_display_columns.clone }
+    let!(:registered_multi_columns) { TableDisplay.multi_columns.clone }
+
+    before do
+      TableDisplay.table_display_columns = {}
+      TableDisplay.multi_columns = {}
+    end
+
+    after do
+      TableDisplay.table_display_columns = registered_columns
+      TableDisplay.multi_columns = registered_multi_columns
+    end
+
     before { sign_in(top_leader) }
-    after  { TableDisplay.class_variable_set('@@permissions', {}) }
 
     it 'GET#index lists extra column' do
-      top_leader.table_display_for(group).update(selected: %w(gender))
+      TableDisplay.register_column(Person, TableDisplays::PublicColumn, :gender)
+      top_leader.table_display_for(Person).update!(selected: %w(gender))
 
       get :index, params: { group_id: group.id }
       expect(dom).to have_checked_field 'Geschlecht'
@@ -1156,7 +1169,8 @@ describe PeopleController do
     end
 
     it 'GET#index lists login_status column' do
-      top_leader.table_display_for(group).update(selected: %w(login_status))
+      TableDisplay.register_column(Person, TableDisplays::People::LoginStatusColumn, :login_status)
+      top_leader.table_display_for(Person).update(selected: %w(login_status))
 
       get :index, params: { group_id: group.id }
       expect(dom).to have_checked_field 'Login'
@@ -1164,8 +1178,8 @@ describe PeopleController do
     end
 
     it 'GET#index lists extra column without content if permission check fails' do
-      TableDisplay.register_permission(Person, :missing_permission, :gender)
-      top_leader.table_display_for(group).update(selected: %w(gender))
+      TableDisplay.register_column(Person, TestImpossibleColumn, :gender)
+      top_leader.table_display_for(Person).update(selected: %w(gender))
 
       get :index, params: { group_id: group.id }
       expect(dom).to have_checked_field 'Geschlecht'
@@ -1173,7 +1187,8 @@ describe PeopleController do
     end
 
     it 'GET#index sorts by extra column' do
-      top_leader.table_display_for(group).update(selected: %w(gender))
+      TableDisplay.register_column(Person, TableDisplays::PublicColumn, :gender)
+      top_leader.table_display_for(Person).update(selected: %w(gender))
       Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person.update(gender: 'm')
       get :index, params: { group_id: group.id, sort: :gender, sort_dir: :desc }
       expect(assigns(:people).first).to eq top_leader
@@ -1194,5 +1209,11 @@ describe PeopleController do
       tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
       context: 'tags'
     )
+  end
+end
+
+class TestImpossibleColumn < TableDisplays::PublicColumn
+  def required_permission(attr)
+    :missing_permission
   end
 end

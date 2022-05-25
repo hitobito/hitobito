@@ -23,7 +23,7 @@ module TableDisplays
     end
 
     def sort_by(attr)
-      attr
+      resolve_database_column(attr)
     end
   end
 end

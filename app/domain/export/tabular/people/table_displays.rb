@@ -22,7 +22,7 @@ module Export::Tabular::People
     end
 
     def selected_labels
-      table_display.active_columns.each_with_object({}) do |attr, hash|
+      table_display.active_columns(list).each_with_object({}) do |attr, hash|
         hash[attr] = attribute_label(attr)
       end
     end

@@ -232,7 +232,6 @@ describe PeopleController do
             expect(assigns(:people).collect(&:id)).to match_array(
               [ people(:bottom_member),
                 @bl_leader,
-                @bl_extern,
                 @bg_leader,
                 @bg_member,
                 @tg_member # also has Group::BottomGroup::Leader role
@@ -289,7 +288,6 @@ describe PeopleController do
           expect(assigns(:people).collect(&:id)).to match_array([people(:top_leader),
                                                                  people(:bottom_member),
                                                                  @tg_member,
-                                                                 @tg_extern,
                                                                  @bl_leader,
                                                                  @bg_leader].collect(&:id))
         end

@@ -63,5 +63,7 @@ http://github.com/alxlit/bootstrap-chosen
 
 https://github.com/hitobito/hitobito/blob/master/app/javascript/stylesheets/vendor/bootstrap-grid.css
 
+wurde von hier kopiert: https://github.com/dmhendricks/bootstrap-grid-css
+
 ## Jquery
 

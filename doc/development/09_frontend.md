@@ -49,7 +49,11 @@ bootstrap-modal
 
 ### bootstrap-chosen
 
-http://harvesthq.github.com/chosen/
+bootstrap compatibility for chosen-js: https://github.com/harvesthq/chosen
+
+`Chosen is a jQuery plugin that makes long, unwieldy select boxes much more user-friendly.`
+
+http://github.com/alxlit/bootstrap-chosen
 
 [CSS]([https://github.com/hitobito/hitobito/blob/master/app/javascript/stylesheets/vendor/chosen-bootstrap.scss](http://github.com/alxlit/bootstrap-chosen)
 

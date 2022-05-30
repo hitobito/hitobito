@@ -49,12 +49,13 @@ bootstrap-modal
 
 ### bootstrap-chosen
 
+http://harvesthq.github.com/chosen/
 
+[CSS](https://github.com/hitobito/hitobito/blob/master/app/javascript/stylesheets/vendor/chosen-bootstrap.scss)
 
 ### Bootstrap Grid v4.1.3
 
 https://github.com/hitobito/hitobito/blob/master/app/javascript/stylesheets/vendor/bootstrap-grid.css
-
 
 ## Jquery
 

@@ -12,6 +12,7 @@ cloudscale:
   access_key_id: <%= ENV['RAILS_S3_ACCESS_KEY'] %>
   secret_access_key: <%= ENV['RAILS_S3_SECRET_KEY'] %>
   bucket: <%= ENV['RAILS_S3_BUCKETNAME'] %>
+  region: <%= ENV['AWS_REGION'] || 'none' %> # cloudscale does not use regions like this
 
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:

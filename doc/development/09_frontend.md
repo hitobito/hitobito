@@ -55,7 +55,7 @@ bootstrap compatibility for chosen-js: https://github.com/harvesthq/chosen
 
 http://github.com/alxlit/bootstrap-chosen
 
-[CSS](https://github.com/hitobito/hitobito/blob/master/app/javascript/stylesheets/vendor/chosen-bootstrap.scss](http://github.com/alxlit/bootstrap-chosen)
+[CSS](https://github.com/hitobito/hitobito/blob/master/app/javascript/stylesheets/vendor/chosen-bootstrap.scss)
 
 `chosen-select` wird in diversen Formularen verwendet. z.B. Personen Filter -> Tags
 

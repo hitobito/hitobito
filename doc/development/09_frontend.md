@@ -65,5 +65,7 @@ https://github.com/hitobito/hitobito/blob/master/app/javascript/stylesheets/vend
 
 wurde von hier kopiert: https://github.com/dmhendricks/bootstrap-grid-css
 
+wird nur wenig verwendet (geprüft im core): people/_attrs sowie messages/_attrs
+
 ## Jquery
 

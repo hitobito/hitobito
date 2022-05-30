@@ -51,7 +51,7 @@ bootstrap-modal
 
 http://harvesthq.github.com/chosen/
 
-[CSS](https://github.com/hitobito/hitobito/blob/master/app/javascript/stylesheets/vendor/chosen-bootstrap.scss)
+[CSS]([https://github.com/hitobito/hitobito/blob/master/app/javascript/stylesheets/vendor/chosen-bootstrap.scss](http://github.com/alxlit/bootstrap-chosen)
 
 ### Bootstrap Grid v4.1.3
 

@@ -129,168 +129,227 @@ it:
     models:
       acts_as_taggable_on/tag:
         one: Tag
+        many: Tags
         other: Tags
       additional_email:
         one: altro email
+        many: Altre email
         other: Altre email
       assignment:
         one: Ordine
+        many: Ordini
         other: Ordini
+      calendar:
+        one: Registrazione nel calendario
+        many: Registrazioni nel calendario
+        other: Registrazioni nel calendario
       custom_content:
         one: testo
+        many: Osservazioni
         other: Osservazioni
       dispatch:
         one: Spedizione
+        many: Spedizioni
         other: Spedizioni
       event:
         one: evento
+        many: Eventi
         other: Eventi
       event/course:
         one: corso
+        many: Corsi
         other: Corsi
       event/participation:
         one: partecipazione
+        many: Partecipanti
         other: Partecipanti
       event/application:
         one: iscrizione
+        many: Iscrizioni
         other: Iscrizioni
       event/attachment:
         one: 'Allegato'
+        many: 'Allegati'
         other: 'Allegati'
       event/kind:
         one: tipo di corso
+        many: Tipi di corso
         other: Tipi di corso
       event/kind_category:
         one: categorie dei corsi
+        many: categorie dei corsi
         other: categorie dei corsi
       event/invitation:
         one: inviti
+        many: inviti
         other: inviti
       event/role:
         one: Ruoli evento
+        many: Ruoli evento
         other: Ruoli evento
       event/role/assistant_leader:
         one: Responsabile
+        many: Responsabile
         other: Responsabile
       event/role/leader:
         one: Responsabile
+        many: Responsabile
         other: Responsabile
       event/role/cook:
         one: Cucina
+        many: Cucina
         other: Cucina
       event/role/helper:
         one: Aiutante
+        many: Aiutanti
         other: Aiutanti
       event/role/participant:
         one: Partecipante
+        many: Partecipante
         other: Partecipante
       event/role/treasurer:
         one: Cassiere
+        many: Cassiere
         other: Cassiere
       event/role/speaker:
         one: Conferenziere
+        many: Conferenziere
         other: Conferenziere
       event/date:
         one: data
+        many: Date
         other: Date
       family_member:
         one: Membri della famiglia
+        many: Membri della famiglia
         other: Membri della famiglia
       group:
         one: gruppo
+        many: Gruppi
         other: Gruppi
       group_setting:
         one: Admin
+        many: Admin
         other: Admin
       help_text:
         one: Testi ausiliari
+        many: Testi ausiliari
         other: Testi ausiliari
       invoice:
         one: Fattura
+        many: Fatture
         other: Fatture
       invoice_article:
         one: L'articolo della fattura
+        many: Gli articoli della fattura
         other: Gli articoli della fattura
       invoice_config:
         one: Le impostazioni per la fattura
+        many: Le impostazioni per la fattura
         other: Le impostazioni per la fattura
       invoice_item:
         one: Voce contabile
+        many: Voci contabili
         other: Voci contabili
       invoice_list:
         one: Fattura collettiva
+        many: Fatture collettive
         other: Fatture collettive
       label_format:
         one: formato delle etichette
+        many: Formati delle etichette
         other: Formati delle etichette
       message:
         one: Notizia
+        many: Notizie
         other: Notizie
       message/bulk_mail:
         one: e-mail
+        many: e-mails
         other: e-mails
       message/letter:
         one: Lettera
+        many: Lettere
         other: Lettere
       message/letter_with_invoice:
         one: Lettera di fatturazione
+        many: Lettere di fatturazione
         other: Lettere di fatturazione
       message/text_message:
         one: SMS
+        many: SMS
         other: SMS
       mail_log:
         one: Corso
+        many: Corso
         other: Corso
       mailing_list:
         one: abbonamento
+        many: Abbonamenti
         other: Abbonamenti
       note:
         one: Nota
+        many: Note
         other: Note
       payment:
         one: Pagamento
+        many: Pagamenti
         other: Pagamenti
       oauth/application:
         one: Applicazioni OAuth
+        many: Applicazioni OAuth
         other: Applicazioni OAuth
       oauth/access_token:
         one: Tokens d'accesso OAuth
+        many: Tokens di accesso OAuth
         other: Tokens di accesso OAuth
       oauth/access_grant:
         one: Autorizzazioni OAuth
+        many: Autorizzazioni OAuth
         other: Autorizzazioni OAuth
       payment_reminder:
         one: Sollecito
+        many: Solleciti
         other: Solleciti
       payment_provider_config:
         one: interfacce per i pagamenti
+        many: interfacce per i pagamenti
         other: interfacce per i pagamenti
       person:
         one: persona
+        many: Persone
         other: Persone
       person/add_request:
         one: Richiesta di accesso
+        many: Richieste
         other: Richieste
       person_duplicate:
         one: Duplicare
+        many: Duplicati
         other: Duplicati
       people_filter:
         one: filtro
+        many: Filtri
         other: Filtri
       people_relation:
         one: relazione
+        many: Relazioni
         other: Relazioni
       phone_number:
         one: numero di telefono
+        many: Numeri di telefono
         other: Numeri di telefono
       qualification:
         one: qualifica
+        many: Qualifiche
         other: Qualifiche
       qualification_kind:
         one: tipo di qualifica
+        many: Tipi di qualifiche
         other: Tipi di qualifiche
       role:
         one: ruolo
+        many: Ruoli
         other: Ruoli
       salutation:
         one: Appellativo
@@ -312,15 +371,19 @@ it:
               other: Caro %{first_name}
       service_token:
         one: Chi
+        many: Chiavi API
         other: Chiavi API
       social_account:
         one: indirizzo nei social media
+        many: Indirizzi nei social media
         other: Indirizzi nei social media
       subscription:
         one: abbonato
+        many: Abbonati
         other: Abbonati
       tag:
         one: Tags
+        many: Tags
         other: Tags
     attributes:
       cantons:
@@ -432,6 +495,11 @@ it:
         type: Tipo di gruppo
         type_name: Tipo di gruppi
         description: Descrizione
+        member_count: Numero di membri
+        updated_at: Cambiato
+        self_registration_role_type: Registrazione esterna
+        self_registration_link: Registrazione esterna
+        self_registration_notification_email: E-mail di notifica della registrazione esterna
       event:
         group_ids: Gruppi
         groups: Gruppi
@@ -441,6 +509,7 @@ it:
         motto: Motto
         cost: Costi
         contact: Persona di contatto
+        notify_contact_on_participations: Avvisare della nuova registrazione via e-mail la persona di contatto
         maximum_participants: Numero massimo di partecipanti
         contact_id: Persona di contatto
         description: Descrizione
@@ -554,6 +623,7 @@ it:
         person: Persona
         type: Ruolo
         participation: Persona
+        remove_participant_role: Rimuovere qualsiasi ruolo partecipante
       family_member:
         kind: Relazione
         kinds:
@@ -612,9 +682,6 @@ it:
         person: Persona
         person_id: Persona
         string_long: '%{role} in %{group}'
-        dates: Date
-        created_at: Da
-        deleted_at: A
         class:
           permission:
             description:
@@ -635,12 +702,15 @@ it:
           kind:
             member:
               one: Membro
+              many: Membri
               other: Membri
             passive:
               one: Passivo
+              many: Passivi
               other: Passivi
             external:
               one: Esterno
+              many: Esterni
               other: Esterni
       contact_account:
         predefined_labels:
@@ -754,9 +824,11 @@ it:
         body: Contenuto
         field:
           one: Campo
+          many: Campo
           other: Campo
         action:
           one: Pagine
+          many: Pag
           other: Pag
       label_format:
         name: Definizione
@@ -940,6 +1012,10 @@ it:
       calendar:
         name: Nome
         description: Descrizione
+        included_calendar_groups: Dai gruppi
+        excluded_calendar_groups: Gruppi esclusi
+        included_calendar_tags: Solo con tags
+        excluded_calendar_tags: Tags esclusi
   doorkeeper:
     scopes:
       email: Leggono il tuo indirizzo e-mail
@@ -951,6 +1027,7 @@ it:
     messages:
       attachments_not_allowed: "Non può contenere allegati"
       invalid_money: "Deve essere arrotondato ai 5 centesimi"
+      no_permission: "Accesso negato"
       invalid_date: "non è una data valida"
       invalid_time: "non è un orario valido"
       invalid_datetime: "non è una data valida"
@@ -968,6 +1045,7 @@ it:
       not_locked: "non è bloccato"
       not_saved:
         one: "non si è potuto salvare %{resource}: errore."
+        many: "non si è potuto salvare %{resource}: %{count} errori."
         other: "non si è potuto salvare %{resource}: %{count} errori."
   validates_timeliness:
     error_value_formats:

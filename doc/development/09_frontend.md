@@ -69,3 +69,8 @@ wird nur wenig verwendet (geprüft im core): people/_attrs sowie messages/_attrs
 
 ## Jquery
 
+aktuell verwenden wir Jquery in der Version 1.12.4
+
+längerfristig soll Jquery komplett aus Hitobito entfernt werden. Die aktuelle Bootstrap Version benötigt Jquery.
+
+Jquery UI ist in der Version 1.12.1 vorhanden. Auch diese Abhängigkeit soll komplett ersetzt werden. (z.B. mit Bootstrap 5)

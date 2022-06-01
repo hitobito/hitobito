@@ -28,7 +28,9 @@ class People::HouseholdList
       # Primary sorting criterion
       select("COUNT(#{people}.`household_key`) as `member_count`").
       # Secondary, unique sorting criterion
-      select("MIN(#{people}.`id`) as `id`")
+      select("MIN(#{people}.`id`) as `id`").
+      where("people.id > ?", @lower_limit).
+      where("people.id < ?", @upper_limit)
   end
 
   def households_in_batches(exclude_non_households: false) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
@@ -51,8 +53,32 @@ class People::HouseholdList
   def each(exclude_non_households: false, &block)
     return to_enum(:each) unless block_given?
 
+    @lower_limit = 0
+    @upper_limit = 160000
+    debug_households(exclude_non_households: exclude_non_households, lower_limit: 0, upper_limit: 16000)
+    # households_in_batches(exclude_non_households: exclude_non_households) do |batch|
+    #   batch.each(&block)
+    # end
+  end
+
+  def debug_households(exclude_non_households: false, lower_limit: 0, upper_limit: 100)
+    # @lower_limit = lower_limit
+    # @upper_limit = upper_limit
+
+    failed = false
     households_in_batches(exclude_non_households: exclude_non_households) do |batch|
-      batch.each(&block)
+      break if failed
+      batch.each_with_index do |household, index|
+        if household.first.nil?
+          puts "##############################################################################################"
+          puts "FIRST OF BATCH: #{batch.first.id}"
+          puts "HOUSEHOLD CHLEPFT"
+          puts "INDEX IN BATCH: #{index}"
+          puts "##############################################################################################"
+          failed = true
+          break
+        end
+      end
     end
   end
 

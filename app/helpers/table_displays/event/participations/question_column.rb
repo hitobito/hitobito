@@ -41,8 +41,8 @@ module TableDisplays::Event::Participations
     end
 
     def render(attr)
-      super do |object|
-        template.format_attr(object, attr)
+      super do |answer, answer_attr|
+        answer.send(answer_attr)
       end
     end
 

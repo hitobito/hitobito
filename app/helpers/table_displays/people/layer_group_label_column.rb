@@ -15,10 +15,8 @@ module TableDisplays::People
     end
 
     def render(attr)
-      super do |object, attr|
-        value_for(object, attr) do |target, target_attr|
-          template.format_attr(target, target_attr) if object.respond_to?(attr)
-        end
+      super do |target, target_attr|
+        template.format_attr(target, target_attr) if target.respond_to?(target_attr)
       end
     end
 

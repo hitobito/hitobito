@@ -135,7 +135,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def sort_mappings_with_indifferent_access
-    super.merge(current_person.table_display_for(Event::Participation).sort_statements(entries))
+    list = event_participation_filter.list_entries.page(params[:page])
+    super.merge(current_person.table_display_for(Event::Participation).sort_statements(list))
   end
 
   def with_person_add_request(&block)

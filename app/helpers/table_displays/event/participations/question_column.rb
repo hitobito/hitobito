@@ -42,7 +42,7 @@ module TableDisplays::Event::Participations
 
     def render(attr)
       super do |object|
-        format_attr(object, attr)
+        template.format_attr(object, attr)
       end
     end
 

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2017-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -9,7 +9,11 @@ require 'spec_helper'
 
 describe Export::PeopleExportJob do
 
-  subject { Export::PeopleExportJob.new(format, user.id, group.id, {}, { household: household, full: full, selection: selection, filename: 'people_export' }) }
+  subject do
+    Export::PeopleExportJob.new(format, user.id, group.id, {},
+                                household: household, full: full,
+                                selection: selection, filename: 'people_export')
+  end
 
   let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
   let(:group)     { groups(:bottom_layer_one) }

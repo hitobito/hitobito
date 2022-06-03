@@ -399,8 +399,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def remove_picture=(delete_it)
-    picture.purge_later if delete_it
+  def remove_picture=(deletion_param)
+    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+      picture.purge_later
+    end
   end
 
   private

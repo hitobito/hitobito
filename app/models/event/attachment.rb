@@ -44,8 +44,10 @@ class Event::Attachment < ActiveRecord::Base
     false
   end
 
-  def remove_file=(delete_it)
-    file.purge_later if delete_it
+  def remove_file=(deletion_param)
+    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+      file.purge_later
+    end
   end
 
 end

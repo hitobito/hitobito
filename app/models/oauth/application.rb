@@ -71,8 +71,10 @@ module Oauth
       false
     end
 
-    def remove_logo=(delete_it)
-      logo.purge_later if delete_it
+    def remove_logo=(deletion_param)
+      if %w(1 yes true).include?(deletion_param.to_s.downcase)
+        logo.purge_later
+      end
     end
 
   end

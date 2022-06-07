@@ -8,7 +8,7 @@
 
 = table(@colleagues, class: 'table table-striped table-hover') do |t|
   - t.col('') do |p|
-    .profil= image_tag(p.picture.thumb.url, size: '32x32')
+    .profil= image_tag(upload_url(p, :picture, variant: :thumb), size: '32x32')
   - sortable_grouped_person_attr(t, last_name: true, first_name: true, nickname: true) do |p|
     - @showable = can?(:show, p)
     %strong

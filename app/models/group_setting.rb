@@ -58,8 +58,7 @@ class GroupSetting < RailsSettings::SettingObject
   private
 
   def skip_validation
-    Rails.env.test? ||
-      ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
+    Rails.env.test? || ENV['NOCHMAL_MIGRATION'].present? # if migrating RIGHT NOW
   end
 
   def _get_value(name)

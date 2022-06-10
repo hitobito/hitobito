@@ -40,7 +40,7 @@ class Role < ActiveRecord::Base
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   class_attribute :used_attributes
-  self.used_attributes = [:label]
+  self.used_attributes = [:label, :created_at, :deleted_at]
 
   # Attributes that may only be modified by people from superior layers.
   class_attribute :superior_attributes
@@ -63,17 +63,31 @@ class Role < ActiveRecord::Base
   validates_by_schema
   validate :assert_type_is_allowed_for_group, on: :create
 
+  validates :created_at, presence: true, if: :deleted_at
+  validates_date :created_at,
+                 if: :deleted_at,
+                 on_or_before: :deleted_at,
+                 on_or_before_message: :cannot_be_later_than_deleted_at
+
+  validates_date :created_at,
+                 allow_nil: true,
+                 on_or_before: -> { Time.zone.today },
+                 on_or_before_message: :cannot_be_later_than_today
+
   ### CALLBACKS
 
   after_create :set_contact_data_visible
   after_create :set_first_primary_group
   after_destroy :reset_contact_data_visible
   after_destroy :reset_primary_group
+  after_update :reset_primary_group
 
   # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
   # before_save :prevent_changes, if: ->(r) { r.archived? }
 
   ### SCOPES
+
+  include Paranoia::FutureDeletedAtScope
 
   scope :without_archived, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }

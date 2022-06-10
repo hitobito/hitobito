@@ -119,7 +119,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
 
-  mount_uploader :picture, Person::PictureUploader
+  mount_uploader :carrierwave_picture, Person::PictureUploader, mount_on: 'picture'
+  has_one_attached :picture do |attachable|
+    attachable.variant :thumb, resize_to_fill: [32, 32]
+  end
 
   model_stamper
   stampable stamper_class_name: :person,
@@ -212,6 +215,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_has_any_name
   validates :address, length: { allow_nil: true, maximum: 1024 }
+
+  if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
+    validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
+                        content_type: ['image/jpeg', 'image/gif', 'image/png']
+  end
   # more validations defined by devise
 
 
@@ -359,6 +367,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     email == Settings.root_email
   end
 
+  ### OTHER INSTANCE METHODS
+
   def save(*args) # rubocop:disable Rails/ActiveRecordOverride Overwritten to handle uniqueness validation race conditions
     super
   rescue ActiveRecord::RecordNotUnique
@@ -390,6 +400,16 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def address_for_letter
     Person::Address.new(self).for_letter
+  end
+
+  def remove_picture
+    false
+  end
+
+  def remove_picture=(deletion_param)
+    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+      picture.purge_later
+    end
   end
 
   private

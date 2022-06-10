@@ -57,3 +57,19 @@ sms:
   mailing_list: leaders
   type: Message::TextMessage
   text: Long live SMS!
+
+mail:
+  mailing_list: leaders
+  type: Message::BulkMail
+  state: pending
+  subject: Newsletter
+  raw_source: |
+    Subject: Newsletter
+    From: Mike Sender <sender@example.com>
+    Content-Type: text/plain; charset=utf-8
+    Message-Id: <61bafad911d45_652aef27733958500d1@81e9aca06315.mail>
+    X-Original-To: leaders@localhost
+    Date: Thu, 24 Dec 2021 08:00:00 +0000
+    To: <leaders@localhost>
+
+    Hi!

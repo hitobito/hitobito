@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2022, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
@@ -40,6 +40,50 @@ namespace :dev do
         -H 'X-Scope: #{args[:scope]}' \
         http://localhost:3000/oauth/profile
       BASH
+    end
+  end
+
+  namespace :local do
+    desc 'Create a local user with admin-permissions'
+    task :admin, [:username] => :environment do |_, args|
+      username = args.fetch(:username, 'tester@example.net')
+      password = 'hitobito is the best software to manage people in complex group hierachies'
+
+      me = Person.find_by(email: username) ||
+        Person.new(first_name: 'Tom', last_name: 'Tester',
+                   email: username, birthday: '1970-01-01')
+
+      me.password = me.password_confirmation = password
+      me.save!(validate: false)
+
+      me.confirmed_at = Time.zone.now
+      me.confirmation_token = nil
+      me.save!(validate: false)
+
+      puts <<~MESSAGE
+
+        Created or updated the user #{username} to now have the password
+        #{password.inspect}
+
+      MESSAGE
+
+      root = Group.roots.first
+
+      admins = root.class.roles.select { |r| r.permissions.include?(:admin) }
+      impersonators = root.class.roles.select { |r| r.permissions.include?(:impersonation) }
+      accessors = root.class.roles.select { |r| r.permissions.include?(:layer_and_below_full) }
+
+      best = (admins & impersonators & accessors)
+      role_type = best.first || admins.first
+
+      me.roles << Role.new(type: role_type, group: root)
+
+      puts <<~MESSAGE
+        The User has hopefully useful roles:
+
+        - #{me.roles.join("\n-")}
+
+      MESSAGE
     end
   end
 

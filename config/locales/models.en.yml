@@ -34,6 +34,12 @@ en:
         must_exist: must exist
         readonly: can't be changed
       models:
+        cors_origin:
+          attributes:
+            origin:
+              invalid_host: contains an invalid host
+              missing_hostname: has to contain hostname
+              missing_scheme: has to contain a protocol-scheme (http:// or https://)
         custom_content:
           attributes:
             body:
@@ -64,7 +70,7 @@ en:
             email:
               taken: >
                   is already taken. This address must be unique for every person,
-                  because it is used when logging in. Under 'Further e-mail" you may
+                  because it is used when logging in. Under 'Further e-mail' you may
                   specify addresses, which are assigned to other people as main e-mail
                   (the main e-mail can be left blank).
         person/add_request:

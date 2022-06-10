@@ -40,6 +40,13 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_storage_validations (0.9.8)
+      activejob (>= 5.2.0)
+      activemodel (>= 5.2.0)
+      activestorage (>= 5.2.0)
+      activesupport (>= 5.2.0)
+    active_storage_variant (1.0.0)
+      rails (~> 6.0)
     activejob (6.1.4.1)
       activesupport (= 6.1.4.1)
       globalid (>= 0.3.6)
@@ -88,6 +95,22 @@ GEM
     awesome_nested_set (3.2.0)
       activerecord (>= 4.0.0, < 7.0)
     awesome_print (1.7.0)
+    aws-eventstream (1.2.0)
+    aws-partitions (1.587.0)
+    aws-sdk-core (3.130.2)
+      aws-eventstream (~> 1, >= 1.0.2)
+      aws-partitions (~> 1, >= 1.525.0)
+      aws-sigv4 (~> 1.1)
+      jmespath (~> 1.0)
+    aws-sdk-kms (1.56.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.114.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.4)
+    aws-sigv4 (1.5.0)
+      aws-eventstream (~> 1, >= 1.0.2)
     axlsx (3.0.0.pre)
       htmlentities (~> 4.3, >= 4.3.4)
       mimemagic (~> 0.3)
@@ -104,7 +127,7 @@ GEM
     bleib (0.0.10)
     bootsnap (1.7.7)
       msgpack (~> 1.0)
-    brakeman (5.2.2)
+    brakeman (5.2.3)
     builder (3.2.4)
     bullet (6.1.5)
       activesupport (>= 3.0.0)
@@ -267,6 +290,7 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     innertube (1.1.0)
     jaro_winkler (1.5.4)
+    jmespath (1.6.1)
     joiner (0.6.0)
       activerecord (>= 6.1.0)
     json-jwt (1.11.0)
@@ -333,7 +357,10 @@ GEM
     nested_form (0.3.2)
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.13.4)
+    nochmal (0.2.1)
+      pastel
+      rails (>= 6.0)
+    nokogiri (1.13.6)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     nuggets (1.5.0)
@@ -350,6 +377,8 @@ GEM
       activerecord (>= 5.1, < 7.1)
     parser (2.6.5.0)
       ast (~> 2.4.0)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
     pdf-core (0.4.0)
     pdf-inspector (1.2.1)
       pdf-reader (~> 1.0)
@@ -393,7 +422,7 @@ GEM
     puma (4.3.12)
       nio4r (~> 2.0)
     racc (1.6.0)
-    rack (2.2.3)
+    rack (2.2.3.1)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-proxy (0.7.2)
@@ -526,7 +555,8 @@ GEM
     semantic_range (3.0.0)
     sentry-raven (2.11.0)
       faraday (>= 0.7.6, < 1.0)
-    simpleidn (0.0.7)
+    simpleidn (0.2.1)
+      unf (~> 0.1.4)
     sixarm_ruby_unaccent (1.2.0)
     slop (3.6.0)
     sort_alphabetical (1.1.0)
@@ -556,8 +586,10 @@ GEM
     thor (1.2.1)
     tilt (2.0.10)
     timeliness (0.4.4)
-    truemail (1.4.2)
+    truemail (2.7.2)
+      simpleidn (~> 0.2.1)
     ttfunk (1.4.0)
+    tty-color (0.6.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -605,12 +637,15 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_storage_validations
+  active_storage_variant
   activerecord-session_store
   acts-as-taggable-on
   airbrake
   annotate
   awesome_nested_set
   awesome_print
+  aws-sdk-s3
   axlsx (>= 3.0.0.pre)
   bcrypt
   better_errors
@@ -664,6 +699,7 @@ DEPENDENCIES
   mini_magick
   mysql2
   nested_form
+  nochmal
   nokogiri
   oat
   paper_trail (~> 11.1)

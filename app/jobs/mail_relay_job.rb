@@ -39,7 +39,8 @@ class MailRelayJob < RecurringJob
   end
 
   def configured?
-    Settings.email.retriever.config&.address.present?
+    MailConfig.legacy? &&
+      Settings.email.retriever.config&.address.present?
   end
 
 end

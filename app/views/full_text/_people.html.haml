@@ -1,6 +1,6 @@
 = crud_table do |t|
   - t.col('') do |p|
-    .profil= image_tag(p.picture.thumb.url, size: '32x32')
+    .profil= image_tag(upload_url(p, :picture, variant: :thumb), size: '32x32')
   - t.col(Person.human_attribute_name(:name))    do |p|
     %strong
       -# Any person listed can be shown

@@ -56,6 +56,10 @@ describe Messages::DispatchJob do
       expect(letter.recipient_count).to eq 1
       expect(letter.success_count).to eq 1
     end
+
+    it 'does not reschedule' do
+      expect { subject.perform }.not_to change { Delayed::Job.count }
+    end
   end
 
   context :with_invoice do
@@ -66,6 +70,31 @@ describe Messages::DispatchJob do
     pending 'creates reciepts invoices and invoice_list ' do
       expect_any_instance_of(Messages::LetterWithInvoiceDispatch).to receive(:perform)
       subject.perform
+    end
+
+    it 'does not reschedule' do
+      expect { subject.perform }.not_to change { Delayed::Job.count }
+    end
+  end
+
+  context :bulk_mail do
+    let(:message) { messages(:mail) }
+
+    subject { Messages::DispatchJob.new(message) }
+
+    before do
+      expect(Messages::BulkMail::AddressList).to receive_message_chain(:new, :entries)
+        .and_return([{ person_id: top_leader.id, email: 'recipient@example.com' }])
+
+      # Simulate all mails being correctly sent
+      allow_any_instance_of(Messages::BulkMail::MailFactory).to receive_message_chain(:to, :deliver)
+    end
+
+    it 'does reschedule' do
+      # Create recipients, should reschedule to send mails
+      expect { subject.perform }.to change { Delayed::Job.count }.by(1)
+      # All mails are sent in first batch, no rescheduling necessary
+      expect { subject.perform }.to change { Delayed::Job.count }.by(0)
     end
   end
 end

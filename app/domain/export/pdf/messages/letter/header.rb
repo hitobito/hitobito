@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2022, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -46,7 +46,8 @@ class Export::Pdf::Messages::Letter
       left = bounds.width - width
       bounding_box([left, cursor], width: width, height: height) do
         if logo_path
-          image(logo_path, logo_options(width, height))
+          image(StringIO.open(logo_path.download),
+                logo_options(width, height))
         else
           ''
         end
@@ -67,8 +68,10 @@ class Export::Pdf::Messages::Letter
     end
 
     def logo_dimensions
-      image = MiniMagick::Image.open(logo_path)
-      [image[:width], image[:height]]
+      logo_path.analyze unless logo_path.analyzed?
+      metadata = logo_path.blob.metadata
+
+      [metadata[:width], metadata[:height]]
     end
 
     def render_address(address, width: ADDRESS_BOX.first, height: ADDRESS_BOX.second)
@@ -112,7 +115,9 @@ class Export::Pdf::Messages::Letter
     end
 
     def logo_path_setting(group)
-      group.settings(:messages_letter).picture.path
+      setting = group.settings(:messages_letter)
+
+      setting.picture if setting.picture.attached?
     end
 
     def sender_address

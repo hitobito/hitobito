@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -16,7 +16,7 @@ describe Export::SubscriptionsJob do
 
   let(:group)        { groups(:top_layer) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
-  let(:filepath)     { AsyncDownloadFile::DIRECTORY.join('subscription_export') }
+  let(:file)         { AsyncDownloadFile.maybe_from_filename('subscription_export', user.id, format) }
 
   before do
     SeedFu.quiet = true
@@ -33,7 +33,7 @@ describe Export::SubscriptionsJob do
       subject.perform
 
 
-      lines = File.readlines("#{filepath}.#{format}")
+      lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Name;Adresse;.*/)
     end
@@ -45,7 +45,7 @@ describe Export::SubscriptionsJob do
     it 'and saves it' do
       subject.perform
 
-      expect(File.exist?("#{filepath}.#{format}"))
+      expect(file.generated_file).to be_attached
     end
   end
 

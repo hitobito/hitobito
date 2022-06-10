@@ -106,6 +106,7 @@ case $cmd in
 
   core-spec)
     export WAGONS=''
+    export RAILS_ENV=test
     export RAILS_TEST_DB_NAME=hit_core_test
     shift # loose the "core-spec" argument
     rake db:migrate # ensure that schema.rb is current for the test-db to load

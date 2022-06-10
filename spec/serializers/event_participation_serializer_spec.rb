@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -49,7 +49,7 @@ describe EventParticipationSerializer do
     expect(subject[:nickname]).to eq('Nick')
     expect(subject[:birthday]).to eq('2000-12-31')
     expect(subject[:gender]).to eq('m')
-    expect(subject.keys).to include(*Person::PUBLIC_ATTRS.map(&:to_s))
+    expect(subject.keys).to include(*(Person::PUBLIC_ATTRS - [:picture]).map(&:to_s))
   end
 
   it 'includes event roles' do

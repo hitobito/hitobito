@@ -9,6 +9,7 @@
       = render_attrs entry, :text
     - elsif entry.letter? || entry.invoice?
       = render_attrs entry, :subject, :salutation, :donation_confirmation, :shipping_method, :pp_post
+      = render_extensions(:attrs, folder: 'messages/letter')
     - if entry.letter?
       = render_attrs entry, :body, :send_to_households
 

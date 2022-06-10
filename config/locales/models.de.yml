@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -44,6 +44,8 @@ de:
         greater_than_or_equal_to: muss grösser oder gleich %{count} sein
         must_exist: müssen vorhanden sein
         readonly: darf nicht verändert werden
+        cannot_be_later_than_today: kann nicht später als heute sein
+        cannot_be_later_than_deleted_at: muss vor oder am selben Tag wie der Austritt sein
       models:
         cors_origin:
           attributes:
@@ -471,6 +473,7 @@ de:
         self_registration_role_type: Externe Registrierung
         self_registration_link: Externe Registrierung
         self_registration_notification_email: Externe Registrierung Benachrichtigungs-E-Mail
+        remove_logo: Aktuelles Gruppenlogo entfernen
 
       event:
         group_ids: Gruppen
@@ -682,6 +685,9 @@ de:
         person: Person
         person_id: Person
         string_long: '%{role} in %{group}'
+        dates: Daten
+        created_at: Von
+        deleted_at: Bis
         class:
           permission:
             description:
@@ -870,6 +876,7 @@ de:
         esr_number: Referenz Nummer
         reference: Referenz
         amount_paid: Bezahlt
+        hide_total: Ohne Total
         payment_slips:
           ch_es: Roter Einzahlungsschein Post (CH)
           ch_bes: Roter Einzahlungsschein Bank (CH)
@@ -1079,6 +1086,26 @@ de:
       not_saved:
         one: "Konnte %{resource} nicht speichern: ein Fehler."
         other: "Konnte %{resource} nicht speichern: %{count} Fehler."
+      # active_storage_validations
+      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_types}"
+      file_size_out_of_range: "darf nicht grösser als %{max_size} sein"
+      limit_out_of_range: "Anzahl ist ausserhalb des gültigen Bereichs (%{min} - %{max})"
+      image_metadata_missing: "ist kein gültiges Bild"
+      dimension_min_inclusion: "muss grösser oder gleich %{width} x %{height} Pixel sein"
+      dimension_max_inclusion: "muss kleiner oder gleich %{width} x %{height} Pixel sein"
+      dimension_width_inclusion: "Bildbreite muss zwischen %{min} und %{max} Pixel liegen"
+      dimension_height_inclusion: "Bildhöhe muss zwischen %{min} und %{max} Pixel liegen"
+      dimension_width_greater_than_or_equal_to: "Bildbreite muss grösser oder gleich %{length} Pixel sein"
+      dimension_height_greater_than_or_equal_to: "Bildhöhe muss grösser oder gleich %{length} Pixel sein"
+      dimension_width_less_than_or_equal_to: "Breite muss kleiner oder gleich %{length} Pixel sein"
+      dimension_height_less_than_or_equal_to: "Höhe muss kleiner oder gleich %{length} Pixel sein"
+      dimension_width_equal_to: "Bildbreite muss genau %{length} Pixel sein"
+      dimension_height_equal_to: "Bildhöhe muss genau %{length} Pixel sein"
+      aspect_ratio_not_square: "muss quadratisch sein"
+      aspect_ratio_not_portrait: "muss Hochformat sein"
+      aspect_ratio_not_landscape: "muss Querformat sein"
+      aspect_ratio_is_not: "muss ein Bildseitenverhältnis von %{aspect_ratio} haben"
+      aspect_ratio_unknown: "hat ein unbekanntes Bildseitenverhältnis"
 
   validates_timeliness:
     error_value_formats:

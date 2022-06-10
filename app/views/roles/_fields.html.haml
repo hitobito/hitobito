@@ -19,4 +19,10 @@
                         data: { provide: :typeahead, source: entry.klass.available_labels },
                         help: t('.help_optional_label'))
 
+= field_set_tag Role.human_attribute_name(:dates) do
+  = f.labeled(:created_at) do
+    = f.date_field(:created_at, class: 'date span6', value: f(@role.created_at.try(:to_date) || Time.zone.today))
+  = f.labeled(:deleted_at) do
+    = f.date_field(:deleted_at, disabled: !can?(:destroy, @role), class: 'date span6', value: f(@role.deleted_at.try(:to_date)))
+
 = render_extensions :fields, locals: { f: f }

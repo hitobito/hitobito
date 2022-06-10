@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2017, Hitobito AG. This file is part of
+#  Copyright (c) 2017-2022, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,7 +9,8 @@ class AppStatus::Mail < AppStatus
 
   CATCH_ALL_INBOX_OVERDUE = 'catch-all mailbox contains overdue mails. ' \
                             'please make sure delayed job worker is running ' \
-                            'and no e-mail is blocking the queue/job.'.freeze
+                            'and no e-mail is blocking the queue/job.'
+  CATCH_ALL_INBOX_OK = 'ok'
 
   CATCH_ALL_INBOX_OVERDUE_TIME = 42.minutes
 
@@ -22,7 +23,7 @@ class AppStatus::Mail < AppStatus
   end
 
   def code
-    @catch_all_inbox.eql?('ok') ? :ok : :service_unavailable
+    @catch_all_inbox.eql?(CATCH_ALL_INBOX_OK) ? :ok : :service_unavailable
   end
 
   private
@@ -33,7 +34,7 @@ class AppStatus::Mail < AppStatus
       m.first_seen < DateTime.now - CATCH_ALL_INBOX_OVERDUE_TIME
     end
 
-    overdue ? CATCH_ALL_INBOX_OVERDUE : 'ok'
+    overdue ? CATCH_ALL_INBOX_OVERDUE : CATCH_ALL_INBOX_OK
   end
 
   def update_seen_mails

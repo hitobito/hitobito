@@ -48,6 +48,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   before_render_show :load_precondition_warnings
 
   after_create :send_confirmation_email
+  after_create :send_notification_email
   after_destroy :send_cancel_email
 
   # new and create are only invoked by people who wish to
@@ -291,6 +292,12 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def send_confirmation_email
     if entry.person_id == current_user.id
       Event::ParticipationConfirmationJob.new(entry).enqueue!
+    end
+  end
+
+  def send_notification_email
+    if entry.person_id == current_user.id
+      Event::ParticipationNotificationJob.new(entry).enqueue!
     end
   end
 

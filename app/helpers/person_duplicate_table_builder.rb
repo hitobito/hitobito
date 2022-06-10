@@ -49,6 +49,8 @@ class PersonDuplicateTableBuilder
         action_col(entry, p_nr) if p_nr == :person_1
       elsif c == :person_name
         content_tag(:td, label(person))
+      elsif c == :company_name
+        content_tag(:td, label_company_name(person))     
       else
         content_tag(:td, person.send(c))
       end
@@ -63,6 +65,17 @@ class PersonDuplicateTableBuilder
               target: '_blank')
     else
       label
+    end
+  end
+
+  def label_company_name(person)
+    label_company_name = person.company_name
+    if can?(:show, person) && person.primary_group.present? && person.company_name
+      link_to(label_company_name,
+              group_person_path(person.primary_group, person),
+              target: '_blank')
+    else
+      label_company_name
     end
   end
 

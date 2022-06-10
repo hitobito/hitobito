@@ -875,7 +875,7 @@ de:
         sequence_number: Nummer
         esr_number: Referenz Nummer
         reference: Referenz
-        amount_paid: Total bezahlt
+        amount_paid: Bezahlt
         hide_total: Ohne Total
         payment_slips:
           ch_es: Roter Einzahlungsschein Post (CH)
@@ -898,9 +898,8 @@ de:
         issued_at: Gestellt am
         sent_at: Verschickt am
         cost: Betrag
-        total: Total
+        total: Rechnungsbetrag
         total_inkl_vat: Total inkl. MwSt.
-        total: Total inkl. MwSt.
         vat: MwSt.
         vat_number: MwSt. Nummer
         payment_information: Zahlungsinformation

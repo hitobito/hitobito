@@ -19,7 +19,7 @@ class Event::ParticipationContactData
 
   self.contact_attrs = [:first_name, :last_name, :nickname, :company_name,
                         :email, :address, :zip_code, :town,
-                        :country, :gender, :birthday, :phone_numbers]
+                        :country, :gender, :birthday, :phone_numbers, :language]
 
   self.contact_associations = [:additional_emails, :social_accounts]
 

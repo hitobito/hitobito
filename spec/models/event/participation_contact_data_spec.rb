@@ -79,6 +79,23 @@ describe Event::ParticipationContactData do
       expect(person.last_name).to eq('Gonzales')
     end
 
+    it 'updates person language' do
+      person.language = 'en'
+      person.save(validate: false) # there's only german in core
+
+      person.reload
+
+      expect(person.language).to eq('en')
+
+      contact_data = participation_contact_data(attributes.merge({ language: 'de' }))
+
+      contact_data.save
+
+      person.reload
+
+      expect(person.language).to eq('de')
+    end
+
   end
 
   private

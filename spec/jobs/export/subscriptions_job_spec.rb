@@ -11,15 +11,16 @@ describe Export::SubscriptionsJob do
 
   subject do
     Export::SubscriptionsJob.new(format, user.id, mailing_list.id,
-                                 household: true, filename: 'subscription_export')
+                                 household: true, filename: filename)
   end
 
   let(:mailing_list) { mailing_lists(:info) }
   let(:user) { people(:top_leader) }
+  let(:filename) { AsyncDownloadFile.create_name('subscription_export', user.id) }
 
   let(:group) { groups(:top_layer) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
-  let(:file) { AsyncDownloadFile.maybe_from_filename('subscription_export', user.id, format) }
+  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
 
   before do
     SeedFu.quiet = true
@@ -34,7 +35,6 @@ describe Export::SubscriptionsJob do
 
     it 'and saves it' do
       subject.perform
-
 
       lines = file.read.lines
       expect(lines.size).to eq(3)

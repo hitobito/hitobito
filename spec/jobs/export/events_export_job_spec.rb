@@ -9,13 +9,14 @@ require 'spec_helper'
 
 describe Export::EventsExportJob do
 
-  subject { Export::EventsExportJob.new(format, user.id, group.id, event_filter.to_h, filename: 'event_export') }
+  subject { Export::EventsExportJob.new(format, user.id, group.id, event_filter.to_h, filename: filename) }
+  let(:filename) { AsyncDownloadFile.create_name('event_export', user.id) }
 
   let(:user)         { people(:top_leader) }
   let(:group)        { groups(:top_layer) }
   let(:year)         { 2012 }
   let(:event_filter) { Event::Filter.new(group, nil, 'all', year, false) }
-  let(:file) { AsyncDownloadFile.maybe_from_filename('event_export', user.id, format) }
+  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
 
   before do
     SeedFu.quiet = true

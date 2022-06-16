@@ -12,14 +12,15 @@ describe Export::PeopleExportJob do
   subject do
     Export::PeopleExportJob.new(format, user.id, group.id, {},
                                 household: household, full: full,
-                                selection: selection, filename: 'people_export')
+                                selection: selection, filename: filename)
   end
 
   let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
   let(:group)     { groups(:bottom_layer_one) }
   let(:household) { false }
   let(:selection) { false }
-  let(:file)      { AsyncDownloadFile.maybe_from_filename('people_export', user.id, format) }
+  let(:file)      { AsyncDownloadFile.from_filename(filename, format) }
+  let(:filename) { AsyncDownloadFile.create_name('people_export', user.id) }
 
   before do
     SeedFu.quiet = true
@@ -49,17 +50,18 @@ describe Export::PeopleExportJob do
 
       it 'and saves it with single line per household' do
         subject.perform
+
         lines = file.read.lines
         expect(lines.size).to eq(2)
       end
     end
-
     context 'table_display' do
       let(:selection) { true }
       let(:csv) { CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true) }
 
       it 'renders standard columns' do
         subject.perform
+
         expect(csv.headers.last).not_to eq 'Zusätzliche Angaben'
       end
 
@@ -67,6 +69,7 @@ describe Export::PeopleExportJob do
         user.table_display_for(group).update(selected: %w(additional_information))
         Person.update_all(additional_information: 'bla bla')
         subject.perform
+
         expect(csv.headers.last).to eq 'Zusätzliche Angaben'
         expect(csv.first['Zusätzliche Angaben']).to eq 'bla bla'
       end
@@ -94,6 +97,7 @@ describe Export::PeopleExportJob do
 
     it 'and saves it' do
       subject.perform
+
       expect(file.generated_file).to be_attached
     end
   end

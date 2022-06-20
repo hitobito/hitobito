@@ -9,14 +9,20 @@ require 'spec_helper'
 
 describe Export::Pdf::Messages::Letter::Content do
 
-  let(:options) { {} }
+  let(:options) { {
+    margin: Export::Pdf::Messages::Letter::MARGIN,
+    page_size: 'A4',
+    page_layout: :portrait,
+    compress: true
+  } }
+
   let(:top_leader) { people(:top_leader) }
   let(:recipient) do
     MessageRecipient
       .new(message: letter, person: top_leader)
   end
   let(:letter) { Message::Letter.new(body: 'simple text') }
-  let(:pdf) { Prawn::Document.new }
+  let(:pdf) { Prawn::Document.new(options) }
   let(:analyzer) { PDF::Inspector::Text.analyze(pdf.render) }
 
   subject { described_class.new(pdf, letter, options) }
@@ -24,7 +30,7 @@ describe Export::Pdf::Messages::Letter::Content do
   context "salutation" do
     it "renders body" do
       subject.render(recipient)
-      expect(text_with_position).to eq [[36, 487, "simple text"]]
+      expect(text_with_position).to eq [[71, 502, "simple text"]]
     end
 
     it "prepends salutation if set" do
@@ -32,8 +38,8 @@ describe Export::Pdf::Messages::Letter::Content do
       recipient.salutation = 'Hallo Top'
       subject.render(recipient)
       expect(text_with_position).to eq [
-        [36, 487, "Hallo Top"],
-        [36, 459, "simple text"]
+        [71, 502, "Hallo Top"],
+        [71, 474, "simple text"]
       ]
     end
 
@@ -43,8 +49,8 @@ describe Export::Pdf::Messages::Letter::Content do
       top_leader.gender = "m"
       subject.render(recipient)
       expect(text_with_position).to eq [
-        [36, 487, "Lieber Top"],
-        [36, 459, "simple text"]
+        [71, 502, "Lieber Top"],
+        [71, 474, "simple text"]
       ]
     end
 
@@ -70,7 +76,7 @@ describe Export::Pdf::Messages::Letter::Content do
       it "does not render personal salutation for letter with no salutation" do
         subject.render(recipient)
         expect(text_with_position).to eq [
-          [36, 487, 'Lorem ipsum']
+          [71, 502, 'Lorem ipsum']
         ]
       end
 
@@ -80,8 +86,8 @@ describe Export::Pdf::Messages::Letter::Content do
 
         subject.render(recipient)
         expect(text_with_position).to eq [
-          [36, 487, "Liebe*r Top, liebe*r #{housemate1.first_name}"],
-          [36, 459, 'Lorem ipsum']
+          [71, 502, "Liebe*r Top, liebe*r #{housemate1.first_name}"],
+          [71, 474, 'Lorem ipsum']
         ]
       end
 
@@ -91,8 +97,8 @@ describe Export::Pdf::Messages::Letter::Content do
 
         subject.render(recipient)
         expect(text_with_position).to eq [
-          [36, 487, 'Liebe*r Top'],
-          [36, 459, 'Lorem ipsum']
+          [71, 502, 'Liebe*r Top'],
+          [71, 474, 'Lorem ipsum']
         ]
       end
     end
@@ -112,10 +118,10 @@ describe Export::Pdf::Messages::Letter::Content do
       pdf.start_new_page
       subject.render(recipient)
       expect(text_with_position).to eq [
-        [36, 487, "Hallo Top"],
-        [36, 459, "simple text"],
-        [36, 487, "Hallo Top"],
-        [36, 459, "simple text"]
+        [71, 502, "Hallo Top"],
+        [71, 474, "simple text"],
+        [71, 502, "Hallo Top"],
+        [71, 474, "simple text"]
       ]
       expect(stamps).to be_nil
     end
@@ -126,8 +132,8 @@ describe Export::Pdf::Messages::Letter::Content do
       pdf.start_new_page
       subject.render(recipient)
       expect(text_with_position).to eq [
-        [36, 487, "Hallo Top"],
-        [36, 487, "Hallo Top"],
+        [71, 502, "Hallo Top"],
+        [71, 502, "Hallo Top"],
       ]
       expect(stamps.keys).to eq [:render_content]
     end

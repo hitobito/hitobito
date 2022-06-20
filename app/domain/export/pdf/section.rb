@@ -13,7 +13,7 @@ module Export::Pdf
     delegate :bounds, :text, :cursor, :font_size, :text_box,
              :fill_and_stroke_rectangle, :fill_color,
              :image, :group, :move_cursor_to, :float,
-             :stroke_bounds, :stamp, :create_stamp,
+             :stroke_bounds, :stamp, :create_stamp, :page,
              :bounds, :table, :cursor, :font_size, :text_box,
              :fill_and_stroke_rectangle, :fill_color, :image,
              to: :pdf
@@ -30,6 +30,11 @@ module Export::Pdf
     end
 
     private
+
+    def offset_cursor_from_top(offset)
+      position = pdf.bounds.top - (offset - page.margins[:top])
+      pdf.move_cursor_to position
+    end
 
     def bounding_box(top_left, attrs = {})
       pdf.bounding_box(top_left, attrs) do

@@ -781,7 +781,7 @@ fr:
           bulk_delivering: En cours d'envoi
           completed: Envoyé
           sender_rejected: Expéditeur refusé
-          unkown_recipient: Erreur
+          unknown_recipient: Erreur
       message:
         source: Récepteur
         subject: Objet

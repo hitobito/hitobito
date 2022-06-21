@@ -893,7 +893,7 @@ fr:
         date: Date
         state: statut
         states:
-          unkown_recipient: destinataire inconnu
+          unknown_recipient: destinataire inconnu
           retreived: recevoir
           bulk_delivering: est envoyé
           completed: terminé
@@ -1017,7 +1017,7 @@ fr:
       infos:
         sender: "Expéditeur: %{mail}"
         sender_rejected: L'expéditeur a été supprimé
-        unkown_recipient: Destinataire inconnu
+        unknown_recipient: Destinataire inconnu
         retrieved: Recevoir
     export_enqueued: 'L''export est démarré en arrière-plan et sera téléchargé après complétion.'
     show:

@@ -774,7 +774,7 @@ it:
           bulk_delivering: Viene spedito
           completed: Spedito
           sender_rejected: Mittente rifiutato
-          unkown_recipient: Errore
+          unknown_recipient: Errore
       message:
         source: Destinatario
         subject: Concerne

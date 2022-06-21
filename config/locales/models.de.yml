@@ -786,7 +786,7 @@ de:
           bulk_delivering: Wird gesendet
           completed: Gesendet
           sender_rejected: Absender abgelehnt
-          unkown_recipient: Fehler
+          unknown_recipient: Fehler
 
       message:
         source: Empfänger

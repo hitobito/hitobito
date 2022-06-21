@@ -670,7 +670,7 @@ en:
           bulk_delivering: Will be sent
           completed: Sent
           sender_rejected: Sender rejected
-          unkown_recipient: Error
+          unknown_recipient: Error
       message:
         source: Recipient
         subject: Subject

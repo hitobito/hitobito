@@ -963,7 +963,7 @@ de:
         date: Datum
         state: Status
         states:
-          unkown_recipient: Empfänger unbekannt
+          unknown_recipient: Empfänger unbekannt
           retreived: Empfangen
           bulk_delivering: Wird gesendet
           completed: Abgeschlossen
@@ -1084,7 +1084,7 @@ de:
       infos:
         sender: "Absender: %{mail}"
         sender_rejected: Absender wurde abgelehnt
-        unkown_recipient: Empfänger unbekannt
+        unknown_recipient: Empfänger unbekannt
         retrieved: Empfangen
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     show:

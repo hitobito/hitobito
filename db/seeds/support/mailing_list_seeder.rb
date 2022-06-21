@@ -37,7 +37,7 @@ class MailingListSeeder
   end
 
   def random_mail_log_status
-    statuses = MailLog.statuses.to_a - [:unkown_recipient]
+    statuses = MailLog.statuses.to_a - [:unknown_recipient]
     statuses.sample.first
   end
 end

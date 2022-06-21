@@ -31,6 +31,18 @@ describe Invoice::PaymentProcessor do
     expect(invoice.reload).to be_payed
   end
 
+  it 'builds transaction identifier' do
+    identifiers = parser.payments.map(&:transaction_identifier)
+
+    expect(identifiers).to eq([
+      "20180314001221000006905084508206710.822018-03-14 20:00:00 +0100CH6309000000250097798",
+      "20180314001221000006915084508216710.822018-03-14 20:00:00 +0100CH6309000000250097798",
+      "20180314001221000006925084508226710.822018-03-14 20:00:00 +0100CH6309000000250097798",
+      "20180314001221000006935084508236710.822018-03-14 20:00:00 +0100CH6309000000250097798",
+      "20180314001221000006945084508246710.822018-03-14 20:00:00 +0100CH6309000000250097798"
+    ])
+  end
+
   it 'creates payment and marks invoice as payed and updates invoice_list' do
     list = InvoiceList.create!(title: :title, group: invoice.group)
     invoice.update_columns(reference: '000000000000100000000000905',

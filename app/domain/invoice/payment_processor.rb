@@ -141,7 +141,31 @@ class Invoice::PaymentProcessor
   end
 
   def transaction_identifier(transaction)
-    transaction.dig('Refs', 'AcctSvcrRef') || transaction.dig('Refs', 'Prtry', 'Ref')
+    [
+      transaction.dig('Refs', 'AcctSvcrRef'),
+      qr_reference(transaction),
+      transaction.dig('Amt'),
+      received_at(transaction),
+      debitor_iban(transaction)
+    ].join
+  end
+
+  def qr_reference(transaction)
+    return reference(transaction) if qr?(transaction)
+
+    ''
+  end
+
+  def qr?(transaction)
+    transaction.dig('RmtInf,' 'Strd', 'CdtrRefInf', 'Tp', 'CdOrPrtry', 'Prtry') == 'QRR'
+  rescue KeyError
+    false
+  end
+
+  def debitor_iban(transaction)
+    transaction.dig('RltdPties', 'DbtrAcct', 'Id', 'IBAN')
+  rescue KeyError
+    ''
   end
 
   def esr_number(transaction)

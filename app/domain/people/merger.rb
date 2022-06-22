@@ -126,7 +126,9 @@ module People
     end
 
     def role_attr_keys(src_role)
-      attributes = src_role.used_attributes + [:type, :group, :created_at]
+      attributes = src_role.used_attributes +
+        [:type, :group, :created_at] -
+        src_role.merge_excluded_attributes
       attributes.uniq
     end
   end

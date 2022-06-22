@@ -74,7 +74,7 @@ describe Payments::EbicsImport do
 
       payment = payments.first
       expect(payment.invoice).to eq(invoice)
-      expect(payment.transaction_identifier).to eq("20180314001221000006915084508216710.822018-03-14 20:00:00 +0100CH6309000000250097798")
+      expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-14 20:00:00 +0100CH6309000000250097798")
       expect(list.reload.amount_paid.to_s).to eq('710.82')
     end.to change { Payment.count }.by(1)
   end
@@ -100,7 +100,7 @@ describe Payments::EbicsImport do
 
       payment = payments.first
       expect(payment.invoice).to eq(invoice)
-      expect(payment.transaction_identifier).to eq("20180314001221000006915084508216710.822018-03-14 20:00:00 +0100CH6309000000250097798")
+      expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-14 20:00:00 +0100CH6309000000250097798")
       expect(list.reload.amount_paid.to_s).to eq('710.82')
     end.to change { Payment.count }.by(1)
   end

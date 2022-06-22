@@ -50,6 +50,10 @@ class Role < ActiveRecord::Base
   class_attribute :two_factor_authentication_enforced
   self.two_factor_authentication_enforced = false
 
+  # Attributes that are ignored when merging roles
+  class_attribute :merge_excluded_attributes
+  self.merge_excluded_attributes = []
+
   # If these attributes should change, create a new role instance instead.
   attr_readonly :person_id, :group_id, :type
 

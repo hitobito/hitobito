@@ -741,6 +741,8 @@ de:
 
   invoices:
     filter:
+      from: Von
+      to: Bis
       due_since: Fällig seit
       due_since_list:
         one_day: Gestern

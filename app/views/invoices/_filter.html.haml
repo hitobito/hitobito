@@ -1,5 +1,5 @@
 = content_for(:filter) do
-  = form_tag(nil, { method: :get, class: 'form-inline-search', role: 'search', remote: true, data: { spin: true } }) do
+  = form_tag(nil, { method: :get, class: 'form-inline-search invoices-filter', role: 'search', remote: true, data: { spin: true } }) do |f|
     = hidden_field_tag :returning, true
     = hidden_field_tag :page, 1
 
@@ -14,7 +14,8 @@
     - if params[:state].blank? || params[:state] == 'reminded'
       = direct_filter_select(:due_since, invoice_due_since_options, t('.due_since'))
 
-  - if @year
-    .pull-right
-      = render 'shared/page_per_year', paging_params: { returning: true }
+  .pull-right
+    = form_tag(nil, { method: :get, class: 'form-inline-search', role: 'search', remote: true, data: { spin: true } }) do |f|
+      = direct_filter_date(:from, t('.from'), value: params[:from] || "1.1.#{@year}", data: { submit: true })
+      = direct_filter_date(:to, t('.to'), value: params[:to] || "31.12.#{@year}", data: { submit: true })
 - params[:q] = nil # Reset param so quicksearch filter does not get populated

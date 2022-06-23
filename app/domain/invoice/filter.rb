@@ -18,7 +18,9 @@ class Invoice::Filter
     scope = apply_scope(scope, params[:due_since], Invoice::DUE_SINCE)
     scope = filter_by_ids(scope)
     scope = filter_by_invoice_list_id(scope)
-    scope = scope.draft_or_issued_in(params[:year])
+    scope = scope.draft_or_issued(from: params[:from],
+                                  to: params[:to])
+
     cancelled? ? scope : scope.visible
   end
 

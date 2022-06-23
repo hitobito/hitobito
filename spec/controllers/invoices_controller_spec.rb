@@ -89,10 +89,13 @@ describe InvoicesController do
       expect(assigns(:invoices)).to have(1).item
     end
 
-    it 'filters invoices by year' do
+    it 'filters invoices by daterange' do
       invoice.update(issued_at: Date.today)
-      get :index, params: { group_id: group.id, year: 1.year.ago.year }
+      get :index, params: { group_id: group.id,
+                            from: 1.year.ago.beginning_of_year,
+                            to: 1.year.ago.end_of_year  }
       expect(assigns(:invoices)).not_to include invoice
+
     end
 
     it 'filters invoices by year with default set to current year' do

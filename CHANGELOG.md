@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Einzelrechnungen können neu mittels Start- und Enddatum gefiltert werden (hitobito_sww#58)
+
 ## Version 1.27
 
 *  Anlässe: Die Kontaktperson wird auf Wunsch per E-Mail über neue Anmeldungen benachrichtigt. Die Benachrichtigung wird auf dem Anlass aktiviert (#1540).

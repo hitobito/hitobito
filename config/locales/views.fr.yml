@@ -45,6 +45,7 @@ fr:
     errors:
       header:
         one: 'Un erreur est apparu'
+        many: '%{count} erreurs sont apparues, l''entrée suivante n''a pas pu être enregistrée :'
         other: '%{count} erreurs sont apparues, l''entrée suivante n''a pas pu être enregistrée :'
     tabs:
       info: Informations
@@ -151,7 +152,7 @@ fr:
     labels: 'Etiquettes'
     full: 'Facture avec bulletin de versement'
     esr_only: 'bulletin de versement séparé'
-    articles_only: 'facture séparée'
+    articles_only: 'Facture séparée'
     csv: 'CSV'
     pdf: 'PDF'
   dropdown/invoice_sending:
@@ -196,6 +197,9 @@ fr:
       new:
         resend_confirmation_instructions: 'Confirmer l''adresse e-mail'
         submit: 'Envoyer un message de confirmation'
+      send_instructions: 'Tu recevras dans quelques minutes un courriel qui te permettra de confirmer ton adresse e-mail.'
+      send_paranoid_instructions: 'Si ton adresse e-mail existe déjà dans notre base de données, tu recevras dans quelques minutes un courriel qui te permettra de la confirmer.'
+      confirmed: 'Merci d''avoir confirmé ton adresse e-mail. Tu peux maintenant t''inscrire.'
     unlocks:
       send_instructions: 'Dans quelques minutes tu recevras un courriel t''expliquant comment débloquer ton compte.'
       unlocked: 'Ton compte a été dévérouillé avec succès.'
@@ -204,7 +208,14 @@ fr:
       success: 'Ton authentification avec ton compte %{kind} est réussie.'
       failure: 'Ton authentification avec ton compte %{kind} n''a pas fonctionné car "%{reason}".'
     registrations:
+      signed_up: 'Tu t''es inscrit·e avec succès.'
+      signed_up_but_unconfirmed: 'Tu t''es inscrit·e avec succès. Tu recevras dans quelques instants un courriel contenant les instructions pour activer ton compte.'
+      signed_up_but_inactive: 'Tu t''es inscrit·e avec succès. Mais nous n''avons pas encore pu t''enregistrer car ton compte est inactif.'
+      signed_up_but_locked: 'Tu t''es inscrit·e avec succès. Mais nous n''avons pas encore pu t''enregistrer car ton compte est bloqué.'
+      signed_up_but_no_email: 'Tu t''es inscrit·e avec succès. Mais nous n''avons pas pu t''enregistrer car tu n''as pas indiqué d''adresse e-mail.'
       updated: 'Ton mot de passe a été actualisé.'
+      update_needs_confirmation: "Tes données ont été mises à jour, mais tu dois confirmer ta nouvelle adresse e-mail. Tu recevras dans quelques minutes un courriel qui te permettra de finaliser la modification de ton adresse e-mail."
+      destroyed: 'Ton compte a été supprimé.'
       edit:
         change_password: "Modifier le mot de passe"
         set_password: "Initialiser le mot de passe"
@@ -215,8 +226,10 @@ fr:
         updated: 'Ton mot de passe a été actualisé.'
     mailer:
       confirmation_instructions:
+        subject: 'Instructions pour confirmer ton adresse e-mail'
         body:
           greeting: 'Salut %{name} !'
+          information_html: 'Tu peux confirmer ton adresse e-mail en cliquant sur le lien suivant :'
           link_text: 'Confirmer %{email} '
           footer: 'Ce message a été envoyé par Hitobito'
       reset_password_instructions:
@@ -359,6 +372,7 @@ fr:
       create:
         success:
           one: "Une Personne a été ajouté au %{event_type} '%{event}'"
+          many: "%{count} personnes ont été ajouté au %{event_type} '%{event}'"
           other: "%{count} personnes ont été ajouté au %{event_type} '%{event}'"
       new:
         title: 'Attribuer des personnes à %{event_label} '
@@ -377,6 +391,8 @@ fr:
       failure: Code à usage unique incorrect
     new:
       title: Validation en deux étapes
+      hint_registered_html: "Saisis le code affiché dans ton application Authenticator pour confirmer ton identité."
+      hint_unregistered_html: "Scanne le QR code avec ton smartphone à l'aide de l'application Authenticator et saisis le code affiché pour activer l'authentification à double facteur. Tu n'as pas encore installé l'application Authenticator ? Nous te le recommandons %{link}"
     form:
       totp_code: Code à usage unique
       totp_code_placeholder: Saisir le code à 6 chiffres
@@ -401,6 +417,7 @@ fr:
       caption_signature_confirmation: L'inscription doit être confirmée par une deuxième signature.
       signature_confirmation_text_default: Autorité parentale (pour les mineurs)
     attachments:
+      public_attachments_hint: Les pièces jointes sont publiques, car l'événement permet des inscriptions externes
       add: "ajouter"
     banner_open_invitation:
       explanation: Tu as été invité à cet évènement.
@@ -492,16 +509,20 @@ fr:
     not_possible: 'impossible'
     participants_info:
       one: '%{count} inscription'
+      many: '%{count} inscriptions'
       other: '%{count} inscriptions'
     participants_info_with_limit:
       one: '%{count} inscription pour %{limit} places'
+      many: '%{count} inscriptions pour %{limit} places'
       other: '%{count} inscriptions pour %{limit} places'
     active_participants_info:
       one: '%{count} inscription attribuée'
+      many: '%{count} inscriptions attribuées'
       other: '%{count} inscriptions attribuées'
     issue_only: 'Attribue la %{model} %{issued} à la date du %{until} (dernier jour du cours).'
     prolong_only:
       one: 'Prolonge la qualification existante %{prolonged} à la date du %{until} (dernier jour du cours).'
+      many: 'Prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
       other: 'Prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
     issue_and_prolong: 'Attribue la %{model} %{issued} et prolonge les qualifications existantes %{prolonged} à la date du %{until} (dernier jour du cours).'
   event_feeds:
@@ -644,6 +665,7 @@ fr:
     contains_no_data: "Ne contient pas de données"
     read_success:
       one: "%{count} entrée lue avec succès."
+      many: "%{count} entrées lues avec succès."
       other: "%{count} entrées lues avec succès."
   import/person_importer:
     row_with_error: "Ligne %{row}: %{errors}"
@@ -658,13 +680,13 @@ fr:
         one_month: un mois
     add: Établir une facture externe
     add_payments: Saisir un paiement
-    issued: facture établie
+    issued: Facture établie
     sent: Facture envoyé par courriel
     reminder_sent: rappel établi, échu le %{date} (%{title})
     payed: payé
     destroy:
       flash:
-        success: facture annulée
+        success: Facture annulée
     pdf:
       total: montant total
       total_vat: TVA
@@ -690,7 +712,7 @@ fr:
       general: général
     update:
       flash:
-        success: les réglages de la factures mis à jour avec succès
+        success: Les réglages de la factures mis à jour avec succès
         provider_initialization_failed: La mise en place de l'interface pour le paiment %{payment_provider}a échoué.
         provider_initialization_succeeded: La mise en place de l'interface pour le paiment %{payment_provider} a réussi.
     general_fields:
@@ -705,7 +727,7 @@ fr:
       iban_example: 'exemple : CH93 2011 0076 6238 5295 7'
       variable_donation_appeal: 'demande de dons variable'
       donation_calculation_year_amount_explanation: Nombre d'années précédentes prises en compte pour le calcul des dons.
-      donation_increase_percentage_explanation: pourcentage pour le calcul des dons
+      donation_increase_percentage_explanation: Pourcentage pour le calcul des dons
     reminder_fields:
       third_level: 'Pour tous les rappels suivants, les données du troisième rappel sont reprises.'
     provider_fields:
@@ -719,48 +741,60 @@ fr:
           description: demande de dons basée sur les sommes de dons existant déjà
       recipient_info:
         one: "La facture est établie pour und personne"
+        many: "La facture est établie pour %{count} personnes"
         other: "La facture est établie pour %{count} personnes"
     create:
-      one: "La facture a été établie pour un destinataire"
+      one: "La facture <i>%{title}</i> a été établie pour un destinataire"
+      many: "La facture<i>%{title}</i> a été établie pour %{count} destinataires."
       other: "La facture<i>%{title}</i> a été établie pour %{count} destinataires."
     create_batch: "La facture <i>%{title}</i>est créée pour %{count} destinataire-s en arrière-plan."
     update:
       zero: 'Choisir au moins une facture.'
-      model_error: "la facture %{number} n'est pas valable - %{error}."
+      model_error: "La facture %{number} n'est pas valable - %{error}."
       issued:
         one: "%{count} les factures ont été établies."
+        many: "%{count} les factures ont été établies."
         other: "%{count} les factures ont été établies."
       reminded:
         one: "des rappels ont été établis pour %{count} factures"
-        other: "des rappels ont été établis pour %{count}  factures"
+        many: "Des rappels ont été établis pour %{count}  factures"
+        other: "Des rappels ont été établis pour %{count}  factures"
       send_notification:
         one: "%{count} factures sont envoyées en arrière-plan par e-mail."
+        many: "%{count} factures sont envoyées en arrière-plan par e-mail."
         other: "%{count} factures sont envoyées en arrière-plan par e-mail."
       invalid_state:
         one: "%{count} factures ont déjà été établies."
-        other: "%{count}"
+        many: "%{count} factures ont déjà été établies."
+        other: "%{count} factures ont déjà été établies."
       issued_invalid:
         one: "%{count} factures ont déjà été établies."
-        other: "%{count} "
+        many: "%{count}  factures ont déjà été établies."
+        other: "%{count}  factures ont déjà été établies."
       sent_invalid:
         one: "%{count} factures ont déjà été envoyées."
+        many: "%{count} factures ont déjà été"
         other: "%{count} factures ont déjà été"
       payed_invalid:
         one: "%{count} factures ont déjà été payées"
+        many: "%{count} ont déjà été payées."
         other: "%{count} ont déjà été payées."
       reminded_invalid:
         one: "%{count} rappels ont déjà été établis."
+        many: "%{count} rappels ont déjà été établis."
         other: "%{count} rappels ont déjà été établis."
       recipient_email_invalid:
         one: "%{count} factures n'ont pas pu être envoyées car il n'y a pas d'e-mail de destinataire."
+        many: "%{count} factures n'ont pas pu être envoyées car il n'y a pas d'e-mail de destinataire."
         other: "%{count} factures n'ont pas pu être envoyées car il n'y a pas d'e-mail de destinataire."
       payment_reminders_missing:
         one: "%{count} rappels de factures n'"
+        many: "%{count} rappels de factures n'ont pas pu être établis car les réglages de rappel ne sont pas valables."
         other: "%{count} rappels de factures n'ont pas pu être établis car les réglages de rappel ne sont pas valables."
     destroy:
       zero: "Choisir d'abord une facture"
       one: "La facture a été annulée."
-      other: "{count} Les factures ont été annulées."
+      other: "%{count} factures ont été annulées."
   payments:
     create:
       flash:
@@ -775,9 +809,11 @@ fr:
     payments:
       valid:
         one: '%{count} de paiements valables ont été reconnus'
+        many: '%{count} paiements ont été reconnus valables.'
         other: '%{count} paiements ont été reconnus valables.'
       invalid:
         one: '%{count} de paiements non-valables ont été reconnus'
+        many: '%{count} paiements ont été reconnus non-valables.'
         other: '%{count} paiements ont été reconnus non-valables.'
     show:
       payments_with_invoice: Paiements allouables
@@ -788,10 +824,10 @@ fr:
         zero: importer le paiement
         one: importer le paiement
         other: 'importer %{count} paiements.'
-      icon_tooltip_invoice_missing: ne peut être attribué à aucune facture
-      icon_tooltip_settles: règle la facture ouverte
-      icon_tooltip_exceeds: dépasse la facture ouverte %{difference}
-      icon_tooltip_undercuts: est en-dessous de la facture ouverte de %{difference}
+      icon_tooltip_invoice_missing: Ne peut être attribué à aucune facture
+      icon_tooltip_settles: Règle la facture ouverte
+      icon_tooltip_exceeds: Dépasse la facture ouverte %{difference}
+      icon_tooltip_undercuts: Est en-dessous de la facture ouverte de %{difference}
     new:
       upload_button: 'télécharger'
       xml_file: 'Fichier XML'
@@ -857,7 +893,6 @@ fr:
         date: Date
         state: statut
         states:
-          unkown_recipient: destinataire inconnu
           retreived: recevoir
           bulk_delivering: est envoyé
           completed: terminé
@@ -867,9 +902,11 @@ fr:
       flash:
         deleted:
           one: 'l''email a été effacé avec succès'
+          many: '%{count} e-mails ont été effacés avec succès'
           other: '%{count} e-mails ont été effacés avec succès'
         moved:
           one: 'un e-mail déplacé avec succès'
+          many: '%{count} e-mails déplacés avec succès'
           other: '%{count} e-mails déplacés avec succès'
         server_error: La liaison avec le serveur mail est impossible pour l'instant, veuillez réessayer plus tard svp.
     recipient_counts:
@@ -883,6 +920,7 @@ fr:
                 other: "%{model_class} est créé pour %{count}foyers."
               invalid:
                 one: "Il existe un foyer sans adresse complète."
+                many: "Il reste %{count} sans adresse complète."
                 other: "Il reste %{count} sans adresse complète."
             people:
               valid:
@@ -891,6 +929,7 @@ fr:
                 other: "%{model_class} est créé pour %{count} personnes."
               invalid:
                 one: "Une personne n'a pas enregistré d'adresse complète."
+                many: "Il reste %{count} sans adresse complète."
                 other: "Il reste %{count} sans adresse complète."
           message/letter_with_invoice:
             households:
@@ -900,6 +939,7 @@ fr:
                 other: "%{model_class} est créé pour %{count} foyers."
               invalid:
                 one: "Il existe un foyer sans adresse complète."
+                many: "Il reste %{count} sans adresse complète."
                 other: "Il reste %{count} sans adresse complète."
             people:
               valid:
@@ -908,6 +948,7 @@ fr:
                 other: "%{model_class} est créé pour %{count} personnes."
               invalid:
                 one: "Une personne n'a pas enregistré d'adresse complète."
+                many: "Il reste %{count} sans adresse complète."
                 other: "Il reste %{count} sans adresse complète."
           message/text_message:
             people:
@@ -917,6 +958,7 @@ fr:
                 other: "%{model_class} est créé pour %{count} personnes."
               invalid:
                 one: "Une personne n'a pas enregistré de numéro de portable complet."
+                many: "Il reste %{count} sans numéros de portables complets."
                 other: "Il reste %{count} sans numéros de portables complets."
   mailing_list_decorator:
     may_subscribe: 'Les abonnés peuvent s''inscrire / se désinscrire eux-même'
@@ -974,7 +1016,7 @@ fr:
       infos:
         sender: "Expéditeur: %{mail}"
         sender_rejected: L'expéditeur a été supprimé
-        unkown_recipient: Destinataire inconnu
+        retrieved: Recevoir
     export_enqueued: 'L''export est démarré en arrière-plan et sera téléchargé après complétion.'
     show:
       recipients_empty: La liste de distribution est vide, aucun PDF ne peut être créé.
@@ -996,7 +1038,7 @@ fr:
     admin/oauth_authorizations: 'Autoriser OAuth'
     imap_mails: 'e-mails'
     invoices: 'Factures'
-    invoices/single: 'factures individuelles'
+    invoices/single: 'Factures individuelles'
   notes:
     new_note: Ajouter une note
     note:
@@ -1063,6 +1105,7 @@ fr:
       body_list:
         open_requests:
           one: "1 requête ouverte"
+          many: "%{count} requêtes ouvertes. "
           other: "%{count} requêtes ouvertes. "
         request_to: Requête à
         cancel: Retirer une demande d'autorisation
@@ -1166,32 +1209,41 @@ fr:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:
       one: '%{list} a été attribué plusieurs fois.'
+      many: '%{list} ont été attribués plusieurs fois.'
       other: '%{list} ont été attribués plusieurs fois.'
     preview:
       new:
         one: '%{count} %{role} va être importé à nouveau.'
+        many: '%{count} %{role} vont être importés à nouveau. '
         other: '%{count} %{role} vont être importés à nouveau. '
       updated:
         one: '%{count} %{role} va être actualisé.'
+        many: '%{count} %{role} vont être actualisés.'
         other: '%{count} %{role} vont être actualisés.'
       failed:
         one: '%{count} %{role} ne va pas être importé.'
+        many: '%{count} %{role} ne vont pas être importés.'
         other: '%{count} %{role} ne vont pas être importés.'
       requests:
         one: '%{count} %{role} va recevoir une demande d''accès pour ses données personnelles, les données ne seront pas importées.'
+        many: '%{count} %{role} vont recevoir une demande d''accès pour leurs données personnelles, les données ne seront pas importées.'
         other: '%{count} %{role} vont recevoir une demande d''accès pour leurs données personnelles, les données ne seront pas importées.'
     create:
       new:
         one: '%{count} %{role} a été importé avec succès.'
+        many: '%{count} %{role} ont été importés avec succès.'
         other: '%{count} %{role} ont été importés avec succès.'
       updated:
         one: '%{count} %{role} a été actualisé avec succès.'
+        many: '%{count} %{role} ont été actualisés avec succès. '
         other: '%{count} %{role} ont été actualisés avec succès. '
       failed:
         one: '%{count} %{role} n''a pas été importé.'
+        many: '%{count} %{role} n''ont pas été importés.'
         other: '%{count} %{role} n''ont pas été importés.'
       requests:
         one: '%{count} %{role} a reçu une demande d''accès pour ses données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation.'
+        many: '%{count} %{role} ont reçu une demande d''accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation.'
         other: '%{count} %{role} ont reçu une demande d''accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation.'
   people:
     send_password_instructions: Les données d'authentification ont été envoyées.
@@ -1234,9 +1286,11 @@ fr:
     list:
       number_of_people_shown:
         one: "%{count} personne affichées."
+        many: "%{count} personnes affichées."
         other: "%{count} personnes affichées."
       number_of_people_hidden:
         one: "%{count} autre personne n'est pas visible pour toi."
+        many: "%{count} autres personnes ne sont pas visibles pour toi."
         other: "%{count} autres personnes ne sont pas visibles pour toi."
     log:
       no_changes: Aucun changement enregistré jusqu'à présent.
@@ -1353,6 +1407,10 @@ fr:
         layer: Dans le niveau actuel et tous les groupes
         group: Uniquement dans le groupe actuel
         group_deep: Dans le groupe actuel et tous les groupes sous-jacents
+  self_register:
+    create:
+      flash:
+        success: Tu as été enregistré·e avec succès
   roles:
     full_entry_label: '%{model_label} <i>%{role}</i> pour <i>%{person}</i> dans <i>%{group}</i>'
     role_changed: '%{full_entry_label} modifié en <i>%{new_role}</i>.'
@@ -1409,6 +1467,7 @@ fr:
       title: 'Où les nouveaux rôles devraient-ils être créés? '
       submit:
         one: 'Créer un rôle'
+        many: 'Créer %{count} rôles'
         other: 'Créer %{count} rôles'
   tags:
     multiselect_actions:
@@ -1437,6 +1496,7 @@ fr:
       separate_multiple_tags_with_comma: Séparez les tags par des virgules
       submit:
         one: 'Créer des tags sur une personne'
+        many: 'Créer des tags sur %{count} personnes'
         other: 'Créer des tags sur %{count} personnes'
   service_tokens:
     abilities:
@@ -1520,10 +1580,29 @@ fr:
     submit: Merge
     category: catégorie
   calendars:
+    actions_show:
+      copy_url: Copier l'URL du flux du calendrier
+    attrs:
+      included_groups: Groupes inclus
+      excluded_groups: Groupes exclus
+      tags: Tags inclus et exclus
     form:
+      include_subgroups: Aussi inclure les sous-groupes
+      exclude_subgroups: Aussi exclure les sous-groupes
       all_event_types: Tous
     tags:
       or: 'ou'
+      explanation_included:
+        one: 'Seuls les %{events} dont le tag est %{tags} sont inclus.'
+        other: 'Seuls les %{events} dont les tags sont %{tags} sont inclus.'
+      explanation_excluded:
+        one: '%{events} dont le tag est %{tags} sont exclus. '
+        other: '%{events} dont les tags sont %{tags} sont exclus.'
+  calendar_groups:
+    explanation_included_with_subgroups: '%{events} de %{group_name} et sous-groupes sont inclus. '
+    explanation_included: '%{events} de %{group_name} sont inclus.'
+    explanation_excluded_with_subgroups: 'Tous les %{events} de %{group_name} et sous-groupes sont exclus. '
+    explanation_excluded: 'Tous les %{events} de %{group_name} sont exclus.'
   views:
     pagination:
       next: '>>'

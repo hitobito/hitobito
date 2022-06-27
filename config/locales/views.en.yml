@@ -793,7 +793,6 @@ en:
         date: Date
         state: State
         states:
-          unkown_recipient: Sender unknown
           retreived: Recipient
           bulk_delivering: Will be sent
           completed: Finished
@@ -826,7 +825,6 @@ en:
       infos:
         sender: "Sender: %{mail}"
         sender_rejected: Sender has been rejected
-        unkown_recipient: Sender unknown
   navigation:
     menu: 'Menu'
     groups: 'Groups'

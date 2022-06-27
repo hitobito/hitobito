@@ -34,6 +34,12 @@ en:
         must_exist: must exist
         readonly: can't be changed
       models:
+        cors_origin:
+          attributes:
+            origin:
+              invalid_host: contains an invalid host
+              missing_hostname: has to contain hostname
+              missing_scheme: has to contain a protocol-scheme (http:// or https://)
         custom_content:
           attributes:
             body:
@@ -64,7 +70,7 @@ en:
             email:
               taken: >
                   is already taken. This address must be unique for every person,
-                  because it is used when logging in. Under 'Further e-mail" you may
+                  because it is used when logging in. Under 'Further e-mail' you may
                   specify addresses, which are assigned to other people as main e-mail
                   (the main e-mail can be left blank).
         person/add_request:
@@ -664,7 +670,6 @@ en:
           bulk_delivering: Will be sent
           completed: Sent
           sender_rejected: Sender rejected
-          unkown_recipient: Error
       message:
         source: Recipient
         subject: Subject
@@ -731,7 +736,6 @@ en:
         sequence_number: Number
         esr_number: Reference number
         reference: Reference
-        amount_paid: Amount paid
         payment_slips:
           ch_es: Red payment slip Post (CH)
           ch_bes: Red payment slip Bank (CH)
@@ -754,7 +758,6 @@ en:
         sent_at: Sent at
         cost: Invoice
         total_inkl_vat: Total incl. VAT
-        total: Total incl. VAT
         vat: VAT
         vat_number: VAT Nr
         payment_information: Payment information

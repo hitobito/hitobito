@@ -34,6 +34,12 @@ en:
         must_exist: must exist
         readonly: can't be changed
       models:
+        cors_origin:
+          attributes:
+            origin:
+              invalid_host: contains an invalid host
+              missing_hostname: has to contain hostname
+              missing_scheme: has to contain a protocol-scheme (http:// or https://)
         custom_content:
           attributes:
             body:
@@ -64,7 +70,7 @@ en:
             email:
               taken: >
                   is already taken. This address must be unique for every person,
-                  because it is used when logging in. Under 'Further e-mail" you may
+                  because it is used when logging in. Under 'Further e-mail' you may
                   specify addresses, which are assigned to other people as main e-mail
                   (the main e-mail can be left blank).
         person/add_request:
@@ -139,7 +145,7 @@ en:
         other: Registrations
       event/attachment:
         one: 'attachment'
-        other: 'attachments'
+        other: 'Attachments'
       event/kind:
         one: Course type
         other: Course types
@@ -244,13 +250,16 @@ en:
         other: OAuth access grants
       payment_reminder:
         one: payment reminder
-        other: payment reminders
+        other: Payment reminders
+      payment_provider_config:
+        one: Payment interface
+        other: Payment interfaces
       person:
         one: Person
         other: People
       person/add_request:
         one: request
-        other: requests
+        other: Requests
       person_duplicate:
         one: Duplicate
         other: Duplicates
@@ -273,6 +282,7 @@ en:
         one: Role
         other: Roles
       salutation:
+        one: Salutation
         default:
           label: Hello [Name]
           value:
@@ -332,7 +342,7 @@ en:
         company: Company
         nickname: Nickname
         email: Main e-mail
-        emails: e-mails
+        emails: E-mails
         layer_group: Main layer
         password: Password
         password_confirmation: Password confirmation
@@ -370,10 +380,10 @@ en:
         roles_list: Roles
         person_name: Prename / Name / Nickname
       person/add_request:
-        person: person
-        requester: request from
-        body: request for
-        created_at: date
+        person: Person
+        requester: Request from
+        body: Request for
+        created_at: Date
       person/add_request/event:
         label: "%{body} in %{group}"
         deleted_event: Deleted event
@@ -400,8 +410,8 @@ en:
         description: Description
       event:
         group_ids: Groups
-        groups: groups
-        state: state
+        groups: Groups
+        state: State
         name: Name
         number: Number
         motto: Motto
@@ -446,7 +456,7 @@ en:
         priority_3_id: "2. Alternative course"
         waiting_list_comment: 'Remarks'
       event/attachment:
-        file: file
+        file: File
       event/course:
         kind_id: Course type
         state: State
@@ -466,6 +476,8 @@ en:
       event/kind:
         label: Association name
         short_name: Short name
+        kind_category: Course Category
+        kind_category_id: Course Category
         minimum_age: Minimum age
         preconditions: Preconditions
         prolongations: Extended
@@ -475,6 +487,16 @@ en:
         created_at: Created
         updated_at: Changed
         deleted_at: Deleted
+      event/kind_category:
+        label: Description
+        kinds: Course types
+        created_at: Created
+        updated_at: Changed
+        deleted_at: Deleted
+      event/invitation:
+        status: Status
+        statuses:
+          declined: Declined
       event/participation:
         person_id: Person
         event_id: Event
@@ -502,10 +524,14 @@ en:
         person: Person
         type: Role
         participation: Person
+      family_member:
+        kind: Relationship
+        kinds:
+          sibling: Siblings
       note:
         text: Text
       oauth/application:
-        redirect_uri: redirect URIs
+        redirect_uri: Redirect URIs
       people_relation:
         head_id: Person
         tail_id: Other person
@@ -644,7 +670,6 @@ en:
           bulk_delivering: Will be sent
           completed: Sent
           sender_rejected: Sender rejected
-          unkown_recipient: Error
       message:
         source: Recipient
         subject: Subject
@@ -660,8 +685,14 @@ en:
         success_count: Recipient successful
         failed_count: Recipient failed
         sent_at: Sent at
+        recipient_progress: Processing progress
       message/letter:
         body: Content
+      message_recipient:
+        address: Address
+        country: Country
+        town: Place
+        zip_code: Postal Code
       subscription:
         related_role_types: Roles
       people_filter:
@@ -704,7 +735,7 @@ en:
         state: State
         sequence_number: Number
         esr_number: Reference number
-        amount_paid: Amount paid
+        reference: Reference
         payment_slips:
           ch_es: Red payment slip Post (CH)
           ch_bes: Red payment slip Bank (CH)
@@ -727,7 +758,6 @@ en:
         sent_at: Sent at
         cost: Invoice
         total_inkl_vat: Total incl. VAT
-        total: Total incl. VAT
         vat: VAT
         vat_number: VAT Nr
         payment_information: Payment information
@@ -775,6 +805,8 @@ en:
         participant_number_internal: Participant Nr internal
         payment_reminder_configs: Reminder
         vat_number: VAT Nr
+        donation_increase_percentage: Increase in %
+        donation_calculation_year_amount: Number of years
       invoice_item:
         name: Name
         description: Description
@@ -818,12 +850,25 @@ en:
         text: Reminder text
         due_days: Due days reminder
       payment_provider_config:
+        payment_provider: Payment interface
+        partner_identifier: Customer-ID
+        user_identifier: Participants-ID
+        password: Password
         ini_letter: INI-Letter
         payment_providers:
+          bancastato: BancaStato
+          bekb: BEKB | BCBE
           creditsuisse: Credit Suisse
+          lukb: Luzerner Kantonalbank
+          postfinance-test: Postfinance Testumgebung
           postfinance: Postfinance
+          raiffeisen: Raiffeisen Schweiz
+          sgkb: St.Galler Kantonalbank
+          tkb: Thurgauer Kantonalbank
           ubs: UBS
           valiant: Valiant
+          zkb: Zürcher Kantonalbank
+          zugerkb: Zuger Kantonalbank
       service_token:
         name: Name
         description: Description
@@ -841,6 +886,9 @@ en:
         taggings_count: Number
         category: Category
         name: name
+      calendar:
+        name: Name
+        description: Description
   doorkeeper:
     scopes:
       email: Read your e-mail address

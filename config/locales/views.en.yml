@@ -25,6 +25,7 @@ en:
       please_select: Please select
       add: Add an entry
       remove: Remove
+      not_allowed: Not allowed
     button:
       save: Save
       add_another: Save and add more
@@ -124,6 +125,7 @@ en:
   dropdown/group_edit:
     move: 'Move'
     merge: 'Merge'
+    archive: 'Archive'
   dropdown/people_export:
     button: 'Export'
     csv: 'CSV'
@@ -137,6 +139,12 @@ en:
     everything: 'All information'
     household_option: 'Condense households'
     selection: 'Column selection'
+  dropdown/people_login:
+    button: 'Login'
+    send_login: Send login
+    activate_totp: Set up two-factor authentication
+    reset_totp: Reset two-factor authentication
+    disable_totp: Disable two-factor authentication
   dropdown/invoices:
     download: 'export'
     print: 'print'
@@ -150,12 +158,16 @@ en:
     button: 'Send invoice/reminder'
     set_state: 'Set status (sent/reminded)'
     send_mail: 'Set status and send per e-mail'
+  dropdown/letter_with_invoice:
+    print: Print
+    letters_with_invoice: Invoice letters
   devise:
     failure:
       already_authenticated: 'You are already registered.'
       unauthenticated: 'You need to login or register before you can continue.'
       unconfirmed: 'You need to confirm your account before you can proceed.'
       last_attempt: 'You have one more try before your account is blocked.'
+      locked: 'Your account is locked for 1 hour.'
       invalid: 'Invalid login credentials.'
       invalid_token: 'The logon token is invalid.'
       timeout: 'Your session has expired, please log in again.'
@@ -181,9 +193,9 @@ en:
       new:
         reset_password_button: 'Reset password'
     confirmations:
-      send_instructions: 'In a few minutes you will receive an e-mail with instructions for you to confirm your registration.'
-      send_paranoid_instructions: 'If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to confirm your registration.'
-      confirmed: 'Thank you for your registration. You''re now logged in.'
+      new:
+        resend_confirmation_instructions: 'Confirm email address'
+        submit: 'Send confirmation email'
     unlocks:
       send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to unlock your account.'
       send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to unlock your account."
@@ -191,6 +203,8 @@ en:
       success: 'You have successfully logged in to your %{kind} account.'
       failure: 'You couldn''t login to your %{kind} account because "%{reason}".'
     registrations:
+      updated: 'Your password has been updated.'
+      destroyed: 'Your account has been deleted.'
       edit:
         change_password: "Change password"
         set_password: "Set password"
@@ -201,11 +215,14 @@ en:
         updated: 'Your password has been updated.'
     mailer:
       confirmation_instructions:
-        subject: 'Instructions to confirm your account'
+        body:
+          greeting: 'Hello %{name}!'
       reset_password_instructions:
         subject: 'Instructions for setting your password'
       unlock_instructions:
         subject: 'Instruction for unlocking your account.'
+        body:
+          greeting: 'Hello %{name}!'
   errors:
     link_to_main: 'Main page'
     '404':
@@ -342,16 +359,35 @@ en:
         event_search: Search event...
         submit: add
   assignments:
+    attachment: 'Show attachment'
     form:
       attachment:
         subject: 'Subject'
+  second_factor_authentication:
+    flash:
+      success:
+        registered: Two-factor authentication successfully activated
+        signed_in: Successfully logged in
+      failure: One-Time Code incorrect
+    new:
+      title: Two-factor authentication
+    form:
+      totp_code: One-Time Code
   events:
+    courses:
+      filter:
+        places_available:
+          all: All
     application_fields:
       caption_signature: Participants must sign the application
       caption_signature_confirmation: Application must be confirmed with a second signature
       signature_confirmation_text_default: Legal guardian (for minors)
     attachments:
       add: "add"
+    banner_open_invitation:
+      buttons:
+        accept: Register
+        decline: Cancel registration
     default_description_link:
       insert_general_information: Insert standard description
     form:
@@ -367,6 +403,8 @@ en:
       caption_applications_cancelable: Participants can cancel their registration.
       caption_display_booking_info: The number of registrations/places is visible on the course list for all
       caption_waiting_list: If there are no more places available, new registrations automatically end up on the waiting list.
+      caption_globally_visible: '%{model_name} is visible for the whole database'
+      label_notify_contact_on_participations: Notification
     form_tabs:
       general: General
       application_questions: Registration details
@@ -385,6 +423,7 @@ en:
     tabs:
       participants: 'Participants'
     export_enqueued: 'Export is started in the background and downloaded after completion.'
+    add_tag: Add tag
   event/applications:
     approved: 'The application was approved.'
     rejected: 'The application was declined.'
@@ -422,6 +461,7 @@ en:
     not_logged_in: "You must log in for the registration of the event '%{event}'. "
     person_found: 'We found you in our database.'
     email_sent: 'We have sent you an e-mail with a link where you can sign up directly for the event.'
+    email_invalid: 'Please enter a valid e-mail'
     form_data_missing: 'Please fill out the form below before signing up for the event.'
     registered: 'Your personal data are recorded. Please set now the information for the application.'
     application_window_closed: 'The login window for this event is closed.'
@@ -528,7 +568,15 @@ en:
     subgroups: 'Subgroups'
     tabs:
       deleted: 'Deleted'
+      statistics: 'Statistics'
     export_enqueued: 'Export is started in the background and downloaded after completion.'
+    statistics:
+      title: Statistics
+      description: "%{subject}in %{groups} "
+      year: Year
+      age: Age
+      count: Number
+      distribution: Distribution
   group/person_add_requests:
     deactivated: Manual approval deactivated
     activated: Manual approval activated
@@ -544,6 +592,8 @@ en:
     success: '%{group} has been moved to %{target}.'
     failure: 'This group can''t be moved or you don''t have the required persmissions.'
     choose_group: 'Please select a group.'
+  group_decorator:
+    archived_suffix: '(archived)'
   import/csv_parser:
     read_error: "Error while reading from "
     contains_no_data: "Contains no data"
@@ -579,6 +629,16 @@ en:
       due_at: Due by
       creator: Biller
       vat_number: VAT Nr
+      payment_slip_qr:
+        receipt_title: Receipt
+        payment_title: Payment part
+        receiving_office: Acceptance point
+        creditor_heading: Account / Payable to
+        debitor_heading: Payable by
+        esr_number_heading: Reference
+        currency: Currency
+        amount: Invoice
+    export_enqueued: 'Export is started in the background and downloaded after completion.'
   invoice_configs:
     form_tabs:
       general: general
@@ -693,7 +753,7 @@ en:
       sign_out: 'Sign out'
     unauthorized:
       forgot_password: 'Forgot your password?'
-    application:
+    footer:
       available_under_license: 'licensed under the'
       developed_by: 'Developed by'
       source_code: 'Source code'
@@ -721,6 +781,23 @@ en:
       caption_delivery_report: 'Send email with report to sender'
       help_preferred_labels: 'If available, emails are only sent to email addresses with this designation. Email addresses that are not marked as a dispatch address are also used.'
       help_mailchimp_sync: 'Subscribers can be exported to the MailChimp list. This action overwrites the MailChimp list and existing contacts are deleted.'
+    imap_mails:
+      manage: Mails
+      mailboxes:
+        inbox: Inbox
+        spam: Spam
+        failed: Failed
+      headers:
+        subject: Subject
+        sender: Sender
+        date: Date
+        state: State
+        states:
+          retreived: Recipient
+          bulk_delivering: Will be sent
+          completed: Finished
+          sender_rejected: Sender rejected
+          state_unavailable: No state available
   mailing_list_decorator:
     may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
     may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'
@@ -748,7 +825,6 @@ en:
       infos:
         sender: "Sender: %{mail}"
         sender_rejected: Sender has been rejected
-        unkown_recipient: Sender unknown
   navigation:
     menu: 'Menu'
     groups: 'Groups'
@@ -757,6 +833,7 @@ en:
     admin: 'Settings'
     admin/event_feed: 'Integrate calendar'
     admin/oauth_authorizations: 'OAuth authentifications'
+    imap_mails: 'Mails'
     invoices: 'Invoices'
   notes:
     new_note: Add note
@@ -902,6 +979,8 @@ en:
         import_details_html: >
             The following persons will be importet with the <strong>role %{role}</strong>
             into the <strong>group %{group}</strong>.
+    add_request_mailer:
+      request_link: Answer request
     subscriptions:
       index:
         my_subscriptions: My Subscriptions
@@ -915,6 +994,7 @@ en:
         category_validation:
           email_primary_invalid: Main email is invalid
           email_additional_invalid: Further email is invalid
+          address_invalid: Address not in directory
   person/csv_imports:
     invalid_file: Please select a valid CSV file.
     duplicate_keys:
@@ -957,7 +1037,6 @@ en:
       invoices: Invoices
       subscriptions: Subscriptions
     actions_show:
-      send_login: Send login
       send_login_tooltip:
         new: The person does not have a login.<br><br>This action sends a link to set a password.
         resend: The person has received a link to set a password, but did not set one.<br><br>This action resends the link.
@@ -1250,6 +1329,11 @@ en:
     name: New name
     submit: Merge
     category: Category
+  calendars:
+    form:
+      all_event_types: All
+    tags:
+      or: 'or'
   views:
     pagination:
       next: '>>'

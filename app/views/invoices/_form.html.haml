@@ -20,11 +20,12 @@
   - if parent.invoice_config.with_reference? || entry.qr?
     = f.labeled_input_field :payment_purpose, rows: 2
 
+  = render_extensions :form, locals: { f: f }
+
   = field_set_tag do
     = render "invoice_lists/invoice_articles", f: f, group: parent
 
   = field_set_tag do
     = f.labeled_inline_fields_for :invoice_items, 'invoice_lists/invoice_items'
-
 
   = render "invoice_lists/calculated", invoice: entry.decorate

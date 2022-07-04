@@ -670,7 +670,6 @@ en:
           bulk_delivering: Will be sent
           completed: Sent
           sender_rejected: Sender rejected
-          unknown_recipient: Error
       message:
         source: Recipient
         subject: Subject
@@ -737,7 +736,6 @@ en:
         sequence_number: Number
         esr_number: Reference number
         reference: Reference
-        amount_paid: Amount paid
         payment_slips:
           ch_es: Red payment slip Post (CH)
           ch_bes: Red payment slip Bank (CH)
@@ -760,7 +758,6 @@ en:
         sent_at: Sent at
         cost: Invoice
         total_inkl_vat: Total incl. VAT
-        total: Total incl. VAT
         vat: VAT
         vat_number: VAT Nr
         payment_information: Payment information

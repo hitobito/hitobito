@@ -774,7 +774,6 @@ it:
           bulk_delivering: Viene spedito
           completed: Spedito
           sender_rejected: Mittente rifiutato
-          unknown_recipient: Errore
       message:
         source: Destinatario
         subject: Concerne
@@ -855,7 +854,6 @@ it:
         sequence_number: Numero
         esr_number: Numero di referenza
         reference: referenza
-        amount_paid: Totale pagato
         payment_slips:
           ch_es: Polizza di versamento postale rossa (CH)
           ch_bes: Polizza di versamento bancaria rossa (CH)
@@ -878,7 +876,6 @@ it:
         sent_at: 'Spedito il '
         cost: Importo
         total_inkl_vat: Totale IVA incl.
-        total: Totale IVA incl.
         vat: IVA
         vat_number: Numero IVA
         payment_information: Informazioni sul pagamento

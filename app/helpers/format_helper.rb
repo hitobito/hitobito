@@ -119,7 +119,7 @@ module FormatHelper
     when :time    then f(val.to_time) # rubocop:disable Rails/Date
     when :date    then f(val.to_date)
     when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}" # rubocop:disable Rails/Date
-    when :text    then val.present? ? h(val) : EMPTY_STRING
+    when :text    then val.present? ? multiline_safe_auto_link(val) : EMPTY_STRING
     when :decimal then f(val.to_s.to_f)
     else f(val)
     end
@@ -202,6 +202,10 @@ module FormatHelper
 
   def object_class(obj)
     obj.respond_to?(:klass) ? obj.klass : obj.class
+  end
+
+  def multiline_safe_auto_link(content, options = {})
+    content_tag(:p, safe_auto_link(content, options), class: :multiline)
   end
 
   def safe_auto_link(content, options = {})

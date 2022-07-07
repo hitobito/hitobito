@@ -22,7 +22,7 @@ module TableDisplays
     end
 
     def render
-      table.col(header) do |object|
+      table.col(header, data: { attribute_name: name }) do |object|
         table_display.with_permission_check(object, name) do |target, attr|
           format_attr(target, attr)
         end

@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.27
 
 *  Einzelrechnungen können neu mittels Start- und Enddatum gefiltert werden (hitobito_sww#58)
 

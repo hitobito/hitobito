@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_04_211119) do
+ActiveRecord::Schema.define(version: 2022_06_23_100519) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -189,7 +189,7 @@ ActiveRecord::Schema.define(version: 2022_05_04_211119) do
 
   create_table "event_attachments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "event_id", null: false
-    t.string "file", null: false
+    t.string "file"
     t.index ["event_id"], name: "index_event_attachments_on_event_id"
   end
 
@@ -283,7 +283,7 @@ ActiveRecord::Schema.define(version: 2022_05_04_211119) do
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "question"
+    t.text "question"
     t.string "choices"
     t.index ["event_question_id"], name: "index_event_question_translations_on_event_question_id"
     t.index ["locale"], name: "index_event_question_translations_on_locale"
@@ -834,7 +834,7 @@ ActiveRecord::Schema.define(version: 2022_05_04_211119) do
     t.string "type", null: false
     t.integer "body_id", null: false
     t.string "role_type"
-    t.timestamp "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.timestamp "created_at", null: false
     t.index ["person_id"], name: "index_person_add_requests_on_person_id"
     t.index ["type", "body_id"], name: "index_person_add_requests_on_type_and_body_id"
   end

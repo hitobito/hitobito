@@ -37,7 +37,7 @@ gem 'draper-cancancan'
 gem 'epics' # client for EBICS-connections to banks
 gem 'faker'
 gem 'faraday'
-gem 'gibbon', '~> 3.2'
+gem 'gibbon', '~> 3.4'
 gem 'globalize'
 gem 'haml'
 gem 'http_accept_language'

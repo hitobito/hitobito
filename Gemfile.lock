@@ -256,11 +256,11 @@ GEM
     fabrication (2.16.1)
     faker (2.16.0)
       i18n (>= 1.6, < 2)
-    faraday (0.15.3)
+    faraday (0.17.5)
       multipart-post (>= 1.2, < 3)
     ffi (1.15.5)
-    gibbon (3.2.0)
-      faraday (>= 0.9.1)
+    gibbon (3.4.0)
+      faraday (>= 0.16.0)
       multi_json (>= 1.11.0)
     globalid (0.5.2)
       activesupport (>= 5.0)
@@ -268,6 +268,8 @@ GEM
       activemodel (>= 4.2, < 7.0)
       activerecord (>= 4.2, < 7.0)
       request_store (~> 1.0)
+    globalize-accessors (0.3.0)
+      globalize (>= 5.0.0)
     haml (5.1.2)
       temple (>= 0.8.0)
       tilt
@@ -352,7 +354,7 @@ GEM
     minitest (5.15.0)
     msgpack (1.4.2)
     multi_json (1.15.0)
-    multipart-post (2.0.0)
+    multipart-post (2.2.3)
     mysql2 (0.5.3)
     nested_form (0.3.2)
     netrc (0.11.0)
@@ -679,7 +681,7 @@ DEPENDENCIES
   fabrication
   faker
   faraday
-  gibbon (~> 3.2)
+  gibbon (~> 3.4)
   globalize
   haml
   headless

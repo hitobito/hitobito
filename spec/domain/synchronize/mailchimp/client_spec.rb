@@ -19,7 +19,7 @@ describe Synchronize::Mailchimp::Client do
           'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
           'Authorization'=>'Basic YXBpa2V5OjEyMzQ1Njc4OTBkNjZkMjVjYzVjOTI4NWFiNWE1NTUyLXVzMTI=',
           'Content-Type'=>'application/json',
-          'User-Agent'=>'Faraday v0.15.3'
+          'User-Agent'=>'Faraday v0.17.5'
 
         }
     ).

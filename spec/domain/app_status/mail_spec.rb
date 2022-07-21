@@ -9,15 +9,23 @@ require 'spec_helper'
 require_dependency 'app_status/mail'
 
 describe AppStatus::Mail do
+  include MailingLists::ImapMailsSpecHelper
 
   let(:app_status) { AppStatus::Mail.new }
   let(:cache) { Rails.cache }
-  let(:mail1) { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'simple.eml'))) }
-  let(:mail2) { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'regular.eml'))) }
+  let(:imap_mail1) { built_imap_mail }
+  let(:imap_mail2) { built_imap_mail(plain_body: false) }
+
   let(:seen_mails) do
-    [mail1, mail2].collect do |m|
+    [imap_mail1, imap_mail2].collect do |m|
       AppStatus::Mail::SeenMail.build(m)
     end
+  end
+
+  let(:imap_connector) { double(:imap_connector) }
+
+  before do
+    allow_any_instance_of(AppStatus::Mail).to receive(:imap).and_return(imap_connector)
   end
 
   before { cache.write(:app_status, nil) }
@@ -28,7 +36,10 @@ describe AppStatus::Mail do
     it 'has no overdue mails in inbox' do
       cache.write(:app_status, { seen_mails: seen_mails})
 
-      expect(Mail).to receive(:all).and_return([mail1, mail2])
+      expect(imap_connector)
+        .to receive(:fetch_mails)
+        .with(:inbox)
+        .and_return([imap_mail1, imap_mail2])
 
       expect(app_status.code).to eq(:ok)
 
@@ -38,7 +49,10 @@ describe AppStatus::Mail do
     it 'has no mails at all in inbox' do
       cache.write(:app_status, { seen_mails: seen_mails})
 
-      expect(Mail).to receive(:all).and_return([])
+      expect(imap_connector)
+        .to receive(:fetch_mails)
+        .with(:inbox)
+        .and_return([])
 
       expect(app_status.code).to eq(:ok)
 
@@ -53,12 +67,22 @@ describe AppStatus::Mail do
       seen_mails.last.first_seen = DateTime.now - 52.minutes
       cache.write(:app_status, { seen_mails: seen_mails})
 
-      expect(Mail).to receive(:all).and_return([mail1, mail2])
+      expect(imap_connector)
+        .to receive(:fetch_mails)
+        .with(:inbox)
+        .and_return([imap_mail1, imap_mail2])
 
       expect(app_status.code).to eq(:service_unavailable)
 
       expect(cache.read(:app_status)[:seen_mails]).to eq(seen_mails)
     end
 
+  end
+
+  private
+  
+  def imap_mail(fixture)
+    mail = Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', fixture)))
+    Imap::Mail.build(mail)
   end
 end

@@ -61,7 +61,11 @@ class AppStatus::Mail < AppStatus
   end
 
   def fetch_mails
-    ::Mail.all
+    imap.fetch_mails(:inbox)
+  end
+
+  def imap
+    @imap ||= Imap::Connector.new
   end
 
   def seen_mails

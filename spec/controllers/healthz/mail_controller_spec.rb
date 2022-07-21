@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2017, Hitobito AG. This file is part of
+#  Copyright (c) 2022, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,17 +8,24 @@
 require 'spec_helper'
 
 describe Healthz::MailController do
+  include MailingLists::ImapMailsSpecHelper
 
   describe 'GET show' do
 
     let(:json) { JSON.parse(response.body) }
     let(:token) { '43b3297d893f7d97e3dd60c1' }
-    let(:mail)  { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'simple.eml'))) }
+    let(:imap_mail) { built_imap_mail }
     let(:cache) { Rails.cache }
-    let(:seen_mail) { AppStatus::Mail::SeenMail.build(mail) }
+    let(:seen_mail) { AppStatus::Mail::SeenMail.build(imap_mail) }
 
     before { cache.write(:app_status, nil) }
     after { cache.write(:app_status, nil) }
+
+    let(:imap_connector) { double(:imap_connector) }
+
+    before do
+      allow_any_instance_of(AppStatus::Mail).to receive(:imap).and_return(imap_connector)
+    end
 
     context 'when there is no problem with mail services' do
 
@@ -30,7 +37,10 @@ describe Healthz::MailController do
         app_status = { seen_mails: [ seen_mail ] }
         cache.write(:app_status, app_status)
 
-        expect(Mail).to receive(:all).and_return([mail])
+        expect(imap_connector)
+          .to receive(:fetch_mails)
+          .with(:inbox)
+          .and_return([imap_mail])
 
         get :show, params: { token: token }
 
@@ -52,7 +62,10 @@ describe Healthz::MailController do
         app_status = { seen_mails: [ seen_mail ] }
         cache.write(:app_status, app_status)
 
-        expect(Mail).to receive(:all).and_return([mail])
+        expect(imap_connector)
+          .to receive(:fetch_mails)
+          .with(:inbox)
+          .and_return([imap_mail])
 
         get :show, params: { token: token }
 

@@ -99,6 +99,7 @@ en:
             name:
               must_be_unique: 'already exists'
         invoice:
+          recipient_address_or_email_required: 'Recipient address or email must be provided'
           attributes:
             invoice_config:
               invalid: 'is not valid; adjust the settings before creating an invoice'
@@ -283,12 +284,22 @@ en:
         other: Roles
       salutation:
         one: Salutation
+        other: Salutations
+        personal:
+          label: personal salutation
         default:
           label: Hello [Name]
           value:
             m: Hello %{greeting_name}
             w: Hello %{greeting_name}
             other: Hello %{greeting_name}
+        available:
+          lieber_vorname:
+            label: Dear [First Name]
+            value:
+              m: Dear %{first_name}
+              w: Dear %{first_name}
+              other: Dear %{first_name}
       service_token:
         one: API-Key
         other: API-Keys
@@ -333,6 +344,8 @@ en:
         title: Title
         description: Description
         state: Status
+      cors_origins:
+        origin: Host with API access
       person:
         salutation: Salutation
         first_name: First name
@@ -408,6 +421,7 @@ en:
         type: Group type
         type_name: Group type
         description: Description
+        updated_at: Changed
       event:
         group_ids: Groups
         groups: Groups
@@ -531,6 +545,7 @@ en:
       note:
         text: Text
       oauth/application:
+        cors_origins: Hosts with API access
         redirect_uri: Redirect URIs
       people_relation:
         head_id: Person
@@ -581,6 +596,9 @@ en:
         person: Person
         person_id: Person
         string_long: '%{role} in %{group}'
+        dates: Dates
+        created_at: From
+        deleted_at: To
         class:
           permission:
             description:
@@ -670,6 +688,7 @@ en:
           bulk_delivering: Will be sent
           completed: Sent
           sender_rejected: Sender rejected
+          unknown_recipient: Error
       message:
         source: Recipient
         subject: Subject
@@ -688,6 +707,7 @@ en:
         recipient_progress: Processing progress
       message/letter:
         body: Content
+        salutation: Salutation
       message_recipient:
         address: Address
         country: Country
@@ -736,6 +756,7 @@ en:
         sequence_number: Number
         esr_number: Reference number
         reference: Reference
+        amount_paid: Paid
         payment_slips:
           ch_es: Red payment slip Post (CH)
           ch_bes: Red payment slip Bank (CH)
@@ -757,6 +778,7 @@ en:
         issued_at: Issued at
         sent_at: Sent at
         cost: Invoice
+        total: Invoice amount
         total_inkl_vat: Total incl. VAT
         vat: VAT
         vat_number: VAT Nr
@@ -792,6 +814,7 @@ en:
         contact: Contact
         contact_id: Conctact
         beneficiary: Beneficiary
+        email: Reply to email-address
         payee: Deposit for
         payment_slip: Payment slip
         payment_slips:
@@ -882,6 +905,7 @@ en:
         invoices: Invoices at this level
         event_participations: Participants of events at this level
         mailing_lists: Subscribers of mailing lists at this level
+        cors_origins: Hosts with API access
       acts_as_taggable_on/tag:
         taggings_count: Number
         category: Category

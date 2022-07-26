@@ -781,6 +781,7 @@ fr:
           bulk_delivering: En cours d'envoi
           completed: Envoyé
           sender_rejected: Expéditeur refusé
+          unknown_recipient: Erreur
       message:
         source: Récepteur
         subject: Objet
@@ -861,6 +862,7 @@ fr:
         sequence_number: Numéro
         esr_number: Numéro de référence
         reference: Référence
+        amount_paid: Payé
         hide_total: Sans total
         payment_slips:
           ch_es: Bulletin de versement postal rouge (CH)
@@ -883,6 +885,7 @@ fr:
         issued_at: Établie le
         sent_at: Envoyée le
         cost: Montant
+        total: Montant facturé
         total_inkl_vat: Montant total
         vat: TVA
         vat_number: N° TVA

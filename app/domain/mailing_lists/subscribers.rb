@@ -85,16 +85,17 @@ class MailingLists::Subscribers
   end
 
   def group_subscribers(condition)
-    sql = <<~SQL
+    sql = <<~SQL.split.join(' ')
       subscriptions.subscriber_type = ? AND
       #{Group.quoted_table_name}.lft >= sub_groups.lft AND
       #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND
       roles.type = related_role_types.role_type AND
-      roles.deleted_at IS NULL
+      (roles.deleted_at IS NULL OR
+       roles.deleted_at > '#{Time.now.utc.to_s(:db)}')
     SQL
 
     if subscriptions.groups.any?(&:subscription_tags)
-      sql += <<~SQL
+      sql += <<~SQL.split.join(' ')
         AND (subscription_tags.tag_id IS NULL OR
         subscription_tags.tag_id = people_taggings.tag_id)
       SQL

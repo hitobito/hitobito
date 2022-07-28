@@ -19,4 +19,9 @@ describe Person::UserPasswordOverrideMailer do
   its(:subject)  { should =~ /Login für/ }
   its(:body)     { should =~ /Hallo #{recipient.first_name}/ }
 
+  it 'sends mail to all emails of recipient' do
+    AdditionalEmail.create(contactable: recipient, label: 'Privat', email: 'privat@example.com')
+
+    expect(subject.to).to eq([recipient.email, 'privat@example.com'])
+  end
 end

@@ -9,5 +9,9 @@
       - if a.eql?(:picture)
         = f.labeled a do
           = f.file_field a, type: :file, accept: GroupSetting::LogoUploader.accept_extensions
+      - elsif entry.possible_values(a).present?
+        = f.labeled(a) do
+          - entry.possible_values(a).each do |value|
+            = f.inline_radio_button(a, value, t("activerecord.attributes.group_setting.address_positions.#{value}"))
       - else
         = f.labeled_input_field(a)

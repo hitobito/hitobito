@@ -17,12 +17,14 @@ class Export::Pdf::Messages::Letter
       stamped :render_logo_right
 
       offset_cursor_from_top 60.mm
-      stamped :render_shipping_info
+      bounding_box(address_position, width: ADDRESS_BOX.first) do
+        stamped :render_shipping_info
 
-      pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
+        pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
+        render_address(recipient.address)
 
-      render_address(recipient.address)
 
+      end
       pdf.font_size font_size do
         stamped :render_date_location_text if letter.date_location_text.present?
         stamped :render_subject if letter.subject.present?
@@ -75,7 +77,7 @@ class Export::Pdf::Messages::Letter
     end
 
     def render_address(address, width: ADDRESS_BOX.first, height: ADDRESS_BOX.second)
-      bounding_box([0, cursor], width: width, height: height) do
+      bounding_box([0, 0], width: width, height: height) do
         text sanitize(address)
       end
     end
@@ -101,7 +103,7 @@ class Export::Pdf::Messages::Letter
       pdf.stroke do
         pdf.move_down 1.mm
         # post factsheet: max. 11 cm, start and end of the line MUST be visible in the window
-        pdf.horizontal_line 0, 80.mm
+        pdf.horizontal_line 0, ADDRESS_BOX.first
         pdf.move_up 1.mm
       end
     end
@@ -144,6 +146,15 @@ class Export::Pdf::Messages::Letter
       { own: ['', 8.pt],
         normal: ["<b><font size='12pt'>P.P.</font></b> ", 12.pt],
         priority: ["<b><font size='12pt'>P.P.</font> <font size='24pt'>A</font></b> ", 24.pt] }
+    end
+
+    def address_position
+      x_coords = {
+        left: 0,
+        right: bounds.width - ADDRESS_BOX.first
+      }[group.settings(:messages_letter).address_position&.to_sym]
+      x_coords ||= 0
+      [x_coords, cursor]
     end
   end
 end

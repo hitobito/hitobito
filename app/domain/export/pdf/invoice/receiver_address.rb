@@ -10,10 +10,21 @@ module Export::Pdf::Invoice
 
     def render
       float do
-        bounding_box([290, 640], width: bounds.width, height: 80) do
+        bounding_box(address_position, width: bounds.width, height: 80) do
           table(receiver_address_data, cell_style: { borders: [], padding: [0, 0, 0, 0] })
         end
       end
+    end
+
+    private
+
+    def address_position
+      x_coords = {
+        left: 0,
+        right: 290
+      }[invoice.group.settings(:messages_letter).address_position&.to_sym]
+      x_coords ||= 0
+      [x_coords, 640]
     end
   end
 end

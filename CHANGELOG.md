@@ -1,11 +1,12 @@
 # Hitobito Changelog
 
+## Version 1.28
+
+*  Neuer Personentab "Sicherheit", welcher Informationen und Vorgänge zu Sicherheitsmassnahmen aufzeigt und das Passwort einer Person zurücksetzen lässt (benötigt :update Permission auf Person) (#1688)
+
 ## Version 1.27
 
 *  Einzelrechnungen können neu mittels Start- und Enddatum gefiltert werden (hitobito_sww#58)
-
-## Version 1.27
-
 *  Anlässe: Die Kontaktperson wird auf Wunsch per E-Mail über neue Anmeldungen benachrichtigt. Die Benachrichtigung wird auf dem Anlass aktiviert (#1540).
 *  Jede Person kann jetzt Zwei-Faktor-Authentifizierung mit einer TOTP-App aktivieren. Für einzelne Rollen kann die Zwei-Faktor-Authentifizierung obligatorisch gemacht werden.
 *  Die Haupt-Mailadresse von Personen mit Login muss neu bestätigt werden nachdem sie geändert wurde (#957).

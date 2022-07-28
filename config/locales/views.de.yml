@@ -777,6 +777,22 @@ de:
         amount: Betrag
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
+    evaluations:
+      show:
+        title: Buchungsbeleg
+        deficit: Teilzahlung
+        excess: Überzahlung
+        table:
+          name: Produktbezeichnung
+          count: Anzahl
+          amount_payed: Betrag bezahlt
+          vat: MwSt.
+          account: Konto
+          cost_center: Kostenstelle
+          total: 'Total:'
+        filter:
+          from: Von
+          to: Bis
   invoice_configs:
     form_tabs:
       general: Allgemein
@@ -1113,6 +1129,7 @@ de:
     imap_mails: 'Mails'
     invoices: 'Rechnungen'
     invoices/single: 'Einzelrechnungen'
+    invoices/evaluations: 'Buchungsbeleg'
 
   notes:
     new_note: Neue Notiz

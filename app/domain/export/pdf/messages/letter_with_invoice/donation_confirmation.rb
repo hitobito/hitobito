@@ -94,7 +94,7 @@ class Export::Pdf::Messages::LetterWithInvoice
     end
 
     def donation_amount
-      @donation_amount ||= Donation.new
+      @donation_amount ||= PaymentCollector.new
                              .in_last(1.year)
                              .in_layer(letter.group.layer_group)
                              .of_person(@recipient)

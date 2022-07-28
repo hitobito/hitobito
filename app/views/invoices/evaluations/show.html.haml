@@ -1,0 +1,29 @@
+-# Copyright (c) 2022, Schweizer Wanderwege. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+= form_tag(nil, { method: :get, class: 'form-inline-search', role: 'search', remote: true, data: { spin: true } }) do |f|
+  = direct_filter_date(:from, t('.filter.from'), value: params[:from] || f(1.month.ago.to_date), data: { submit: true })
+  = direct_filter_date(:to, t('.filter.to'), value: params[:to] || f(Time.zone.today), data: { submit: true })
+
+%table.table.table-striped.table-hover
+  - cols = [:name, :vat, :count, :amount_payed, :account, :cost_center]
+  %thead
+    %tr
+      - cols.each do |col|
+        %th=t(".table.#{col}")
+  %tbody
+    - @entries.each do |entry|
+      %tr
+        - cols.each do |col|
+          %td= entry[col]
+    %tr
+      %td
+        %strong= t('.table.total')
+      %td 
+      %td 
+      %td
+        %strong= @total
+      %td 
+      %td 

@@ -677,6 +677,10 @@ de:
         provider: Provider
         originator: Absender
         picture: Logo
+        address_position: Adressposition
+        address_positions:
+          left: Links
+          right: Rechts
 
       role:
         label: Bezeichnung

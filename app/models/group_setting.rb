@@ -38,11 +38,19 @@ class GroupSetting < RailsSettings::SettingObject
   ENCRYPTED_VALUES = %w(username password).freeze
   SETTINGS = {
     text_message_provider: { username: nil, password: nil, provider: %w(aspsms), originator: nil },
-    messages_letter: { picture: nil }
+    messages_letter: { picture: nil, address_position: :left }
   }.with_indifferent_access
+
+  POSSIBLE_VALUES = {
+    messages_letter: { address_position: [:left, :right] }
+  }
 
   def attrs
     SETTINGS[var].symbolize_keys.keys
+  end
+
+  def possible_values(attr)
+    POSSIBLE_VALUES[var.to_sym].try(:[], attr)
   end
 
   def remove_picture

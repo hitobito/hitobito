@@ -47,4 +47,3 @@ class Devise::Hitobito::PasswordsController < Devise::PasswordsController
   end
 
 end
-

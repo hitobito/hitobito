@@ -350,3 +350,12 @@ body {
     opacity: 1;
   }
 }
+
+td.column-with-min-width {
+  min-width:28px;
+}
+
+strong.bigger-title div.trix-content {
+  font-size: 15px;
+  margin-bottom: 5px;
+}

@@ -154,3 +154,13 @@ letter_invoice:
     Dein <strong>Mitgliedsbeitrag</strong> ist fällig!
     <br/><br/>
     Bis bald
+
+content_user_password_override_body:
+  record: content_user_password_override (CustomContent::Translation)
+  name: body
+  body: |
+    Hallo {recipient-name}, <br/>
+    {taker-name} hat auf [#{Settings.application.name}] das Passwort deines Accounts zurückgesetzt.
+    Dies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. <br/>
+    Im Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\"
+    ein neues Passwort anfordern

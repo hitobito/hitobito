@@ -3,6 +3,7 @@
 ## Version 1.28
 
 *  Neuer Personentab "Sicherheit", welcher Informationen und Vorgänge zu Sicherheitsmassnahmen aufzeigt und das Passwort einer Person zurücksetzen lässt (benötigt :update Permission auf Person) (#1688)
+*  Neu können mittels "Buchungsbeleg" Tab bei den Rechnungen die Zahlungen in einem definierbaren Zeitrahmen ausgewertet werden. So werden die Zahlungen ihren Rechnungsartikeln zugeordnet und aufsummiert (#hitobito_sww#39)
 
 ## Version 1.27
 

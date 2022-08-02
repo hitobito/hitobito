@@ -104,7 +104,7 @@ class Invoice::BatchCreate
   def variable_donation_amount(recipient)
     return 0 unless invoice_list.group.invoice_config.variable_donation_configured?
 
-    PaymentCollector.new
+    Payments::Collection.new
       .in_layer(invoice_list.group)
       .in_last(invoice_list.group.invoice_config.donation_calculation_year_amount.years)
       .of_person(recipient)

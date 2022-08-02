@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe PaymentCollector do
+describe Payments::Collection do
   let(:top_leader) { people(:top_leader) }
   let(:top_layer) { groups(:top_layer) }
   let(:bottom_member) { people(:bottom_member) }
@@ -287,4 +287,3 @@ describe PaymentCollector do
   end
 
 end
-

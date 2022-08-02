@@ -5,7 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_die_mitte.
 
-class PaymentCollector
+# Payments is already a namespace, therefore I went with the Javaism to name
+# this class Payments::Collection.
+class Payments::Collection
   attr_reader :payments
 
   class_attribute :invoice_item_group_attrs

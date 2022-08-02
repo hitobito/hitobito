@@ -7,6 +7,8 @@
 
 require 'spec_helper'
 
+# rubocop:disable Naming/VariableNumber,Metrics/LineLength
+
 describe Invoice::ItemEvaluation do
   let(:top_layer) { groups(:top_layer) }
 
@@ -160,7 +162,7 @@ describe Invoice::ItemEvaluation do
                                    cost_center: 'Merch',
                                    account: '08-76543-2' },
                                  { name: 'Überzahlung',
-                                   amount_payed: 250, # 2 payments with amount 100
+                                   amount_payed: 250, # 2 payments with excess amounts of 100 and 150
                                    count: '',
                                    vat: '',
                                    cost_center: '',
@@ -195,7 +197,7 @@ describe Invoice::ItemEvaluation do
       invoice_1 = Invoice.create(invoice_attrs)
 
       Payment.create(amount: 100, invoice: invoice_1, received_at: 2.months.ago)
-      Payment.create(amount: 66, invoice: invoice_1, received_at: 1.months.ago)
+      Payment.create(amount: 66, invoice: invoice_1, received_at: 1.month.ago)
 
       evaluations = described_class.new(top_layer, 3.months.ago, Time.zone.now).fetch_evaluations
       expect(evaluations).to eq([{ name: 'Membership',
@@ -209,8 +211,7 @@ describe Invoice::ItemEvaluation do
                                    count: 2,
                                    vat: 6,
                                    cost_center: 'Merch',
-                                   account: '08-76543-2' }
-                                 ])
+                                   account: '08-76543-2' }])
     end
 
     it 'returns sum of deficit if not all payments are in daterange' do
@@ -240,9 +241,9 @@ describe Invoice::ItemEvaluation do
 
       invoice_1 = Invoice.create(invoice_attrs)
 
-      Payment.create(amount: 30, invoice: invoice_1, received_at: 3.month.ago)
+      Payment.create(amount: 30, invoice: invoice_1, received_at: 3.months.ago)
       Payment.create(amount: 33, invoice: invoice_1, received_at: 2.months.ago)
-      Payment.create(amount: 100, invoice: invoice_1, received_at: 1.months.ago)
+      Payment.create(amount: 100, invoice: invoice_1, received_at: 1.month.ago)
 
       evaluations = described_class.new(top_layer, 2.months.ago, Time.zone.now).fetch_evaluations
       expect(evaluations).to eq([{ name: 'Teilzahlung',
@@ -254,3 +255,5 @@ describe Invoice::ItemEvaluation do
     end
   end
 end
+
+# rubocop:enable Naming/VariableNumber,Metrics/LineLength

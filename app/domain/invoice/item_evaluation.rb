@@ -58,10 +58,10 @@ class Invoice::ItemEvaluation
   end
 
   def relevant_payments
-    PaymentCollector.new
-                    .in_layer(@group)
-                    .from(@from)
-                    .to(@to)
+    Payments::Collection.new
+                        .in_layer(@group)
+                        .from(@from)
+                        .to(@to)
   end
 
   def sum_of_deficitary_payments
@@ -121,6 +121,6 @@ class Invoice::ItemEvaluation
   def invoice_article_identifiers
     # Used for the group statement, thus being identifiers/key when doing calculation
     # Is used to get all identifiers and then loop to calculate/fetch the values for each article
-    payments_of_payed_invoices.pluck(*PaymentCollector.invoice_item_group_attrs)
+    payments_of_payed_invoices.pluck(*Payments::Collection.invoice_item_group_attrs)
   end
 end

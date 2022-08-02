@@ -14,31 +14,30 @@ class Invoice::ItemEvaluation
 
   def fetch_evaluations
     rows = []
-
     rows += rows_by_invoice_article
 
-    rows << deficit_row if deficit_amount.nonzero?
-
-    rows << excess_row if excess_amount.nonzero?
+    rows << deficit_row if sum_of_deficitary_payments.nonzero?
+    rows << excess_row  if excess_amount.nonzero?
 
     rows
   end
-  
+
   def total
     relevant_payments.payments.sum(:amount)
   end
 
   private
 
-  def rows_by_invoice_article
+  def rows_by_invoice_article # rubocop:disable Metrics/MethodLength
     @rows_by_invoice_article ||= invoice_article_identifiers.collect do |ids|
-      name, account, cost_center = ids
+      name, account, cost_center = *ids
       invoice_item = InvoiceItem.find_by(name: name, account: account, cost_center: cost_center)
+
       {
         name: name,
         vat: invoice_item_vats[ids],
-        count: count(ids),
-        amount_payed: count(ids) * invoice_item.unit_cost + invoice_item_vats[ids],
+        count: count(*ids),
+        amount_payed: count(*ids) * invoice_item.unit_cost + invoice_item_vats[ids],
         account: account,
         cost_center: cost_center
       }
@@ -50,41 +49,39 @@ class Invoice::ItemEvaluation
   end
 
   def payments_of_payed_invoices
-    @payments_of_payed_invoices ||= relevant_payments
-      .of_fully_payed_invoices
-      .grouped_by_invoice_items
+    @payments_of_payed_invoices ||=
+      relevant_payments.of_fully_payed_invoices.grouped_by_invoice_items
   end
 
-  def deficit_payments
-    @deficit_payments = relevant_payments
-      .of_non_fully_payed_invoices
-      .payments
+  def deficitary_payments
+    @deficit_payments = relevant_payments.of_non_fully_payed_invoices.payments
   end
 
   def relevant_payments
-    PaymentCollector.new.in_layer(@group)
-      .from(@from)
-      .to(@to)
+    PaymentCollector.new
+                    .in_layer(@group)
+                    .from(@from)
+                    .to(@to)
   end
 
-  def deficit_amount
-    deficit_payments.sum(:amount)
+  def sum_of_deficitary_payments
+    deficitary_payments.sum(:amount)
   end
 
   def deficit_row
     {
       name: I18n.t('invoices.evaluations.show.deficit'),
       vat: '',
-      count: deficit_payments.count,
-      amount_payed: deficit_amount,
+      count: deficitary_payments.count,
+      amount_payed: sum_of_deficitary_payments,
       account: '',
       cost_center: ''
     }
   end
 
   def excess_amount
-    # total of all payments - (the amount assigned to articles + the deficit)
-    total - (invoice_article_total_amount + deficit_amount)
+    # total of all payments - (the amount assigned to articles + partial/deficitary payments)
+    total - (invoice_article_total_amount + sum_of_deficitary_payments)
   end
 
   def excess_row
@@ -98,10 +95,7 @@ class Invoice::ItemEvaluation
     }
   end
 
-  def count(ids)
-    # Get the individual identifiers
-    name, account, cost_center = ids
-
+  def count(name, account, cost_center)
     # Get the relevant invoices
     relevant_invoice_ids = relevant_payments.of_fully_payed_invoices.payments.pluck(:invoice_id)
 

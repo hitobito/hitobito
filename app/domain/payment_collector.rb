@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Die Mitte. This file is part of
+#  Copyright (c) 2021-2022, Die Mitte. This file is part of
 #  hitobito_die_mitte and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_die_mitte.
@@ -49,27 +49,29 @@ class PaymentCollector
 
   def grouped_by_invoice_items
     @payments.joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
-              .joins('INNER JOIN invoice_items ON invoice.id = invoice_items.invoice_id')
-              .group(invoice_item_group_attrs)
+             .joins('INNER JOIN invoice_items ON invoice.id = invoice_items.invoice_id')
+             .group(invoice_item_group_attrs)
   end
 
   def of_fully_payed_invoices
-    invoice_ids = @payments.select(:'invoice.total', :invoice_id)
-      .joins("INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id")
-                            .having("SUM(payments.amount) >= invoice.total")
-                            .group(:invoice_id)
-                            .map(&:invoice_id)
+    invoice_ids =
+      @payments.select(:'invoice.total', :invoice_id)
+               .joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
+               .having('SUM(payments.amount) >= invoice.total')
+               .group(:invoice_id)
+               .map(&:invoice_id)
     @payments = @payments.where(invoice_id: invoice_ids)
 
     self
   end
 
   def of_non_fully_payed_invoices
-    invoice_ids = @payments.select(:'invoice.total', :invoice_id)
-      .joins("INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id")
-                            .having("SUM(payments.amount) < invoice.total")
-                            .group(:invoice_id)
-                            .map(&:invoice_id)
+    invoice_ids =
+      @payments.select(:'invoice.total', :invoice_id)
+               .joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
+               .having('SUM(payments.amount) < invoice.total')
+               .group(:invoice_id)
+               .map(&:invoice_id)
     @payments = @payments.where(invoice_id: invoice_ids)
 
     self
@@ -83,19 +85,18 @@ class PaymentCollector
 
   def previous_amount(options = {})
     if options[:increased_by]
-      increased_amount = payment_sum * (1.0 + options[:increased_by].to_f/100.0)
+      increased_amount = payment_sum * (1.0 + options[:increased_by].to_f / 100.0)
       case payment_sum
-      when 0..99
-        round_to_nearest(5.0, increased_amount)
-      when 100..999
-        round_to_nearest(10.0, increased_amount)
-      else
-        round_to_nearest(50.0, increased_amount)
+      when   0..99  then round_to_nearest(5.0, increased_amount)
+      when 100..999 then round_to_nearest(10.0, increased_amount)
+      else               round_to_nearest(50.0, increased_amount)
       end
     else
       payment_sum
     end
   end
+
+  private
 
   def payment_sum
     @payments.sum(:amount)

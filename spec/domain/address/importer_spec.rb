@@ -1,4 +1,6 @@
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2022, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
@@ -66,8 +68,7 @@ describe Address::Importer do
     headers = {
       'Accept' => '*/*',
       'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Authorization' => 'Basic foo',
-      'User-Agent' => 'Faraday v0.17.5'
+      'Authorization' => 'Basic foo'
     }
     stub_request(:get, 'https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway').
       with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
@@ -114,8 +115,7 @@ describe Address::Importer do
     headers = {
       'Accept' => '*/*',
       'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Authorization' => 'Basic foo',
-      'User-Agent' => 'Faraday v0.17.5'
+      'Authorization' => 'Basic foo'
     }
     stub_request(:get, 'https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway').
       with(headers: headers).to_return(status: 200, body: zip.string, headers: {})
@@ -143,8 +143,7 @@ describe Address::Importer do
     headers = {
       'Accept' => '*/*',
       'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-      'Authorization' => 'Basic foo',
-      'User-Agent' => 'Faraday v0.17.5'
+      'Authorization' => 'Basic foo'
     }
     stub_request(:get, 'https://webservices.post.ch:17017/IN_ZOPAxFILES/v1/groups/1062/versions/latest/file/gateway').
       with(headers: headers).to_return(status: 200, body: zip.string, headers: {})

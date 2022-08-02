@@ -1,4 +1,4 @@
-#  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
+#  Copyright (c) 2018-2022, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -18,9 +18,7 @@ describe Synchronize::Mailchimp::Client do
           'Accept'=>'*/*',
           'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
           'Authorization'=>'Basic YXBpa2V5OjEyMzQ1Njc4OTBkNjZkMjVjYzVjOTI4NWFiNWE1NTUyLXVzMTI=',
-          'Content-Type'=>'application/json',
-          'User-Agent'=>'Faraday v0.17.5'
-
+          'Content-Type'=>'application/json'
         }
     ).
     to_return(status: 200, body: body.to_json, headers: {})

@@ -23,15 +23,19 @@
 
 class Payment < ActiveRecord::Base
 
-  belongs_to :invoice
+  belongs_to :invoice, optional: true
 
   validates :reference, uniqueness: { scope: :invoice_id, allow_nil: true, case_sensitive: false }
   validates :transaction_identifier, uniqueness: { allow_nil: true, case_sensitive: false }
 
   before_validation :set_received_at
-  after_create :update_invoice
+  after_create :update_invoice, if: :invoice
 
   scope :list, -> { order(received_at: :desc) }
+
+  STATES = %w(ebics_imported xml_imported manually_created without_invoice).freeze
+  enum status: STATES
+  validates :status, inclusion: { in: STATES, allow_nil: true }
 
   attr_writer :esr_number
 

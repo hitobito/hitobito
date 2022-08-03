@@ -38,7 +38,7 @@ class GroupSetting < RailsSettings::SettingObject
   ENCRYPTED_VALUES = %w(username password).freeze
   SETTINGS = {
     text_message_provider: { username: nil, password: nil, provider: %w(aspsms), originator: nil },
-    messages_letter: { picture: nil, address_position: :left }
+    messages_letter: { picture: nil, address_position: [:left, :right] }
   }.with_indifferent_access
 
   POSSIBLE_VALUES = {

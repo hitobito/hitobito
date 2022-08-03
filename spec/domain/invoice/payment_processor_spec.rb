@@ -11,9 +11,6 @@ describe Invoice::PaymentProcessor do
 
   it 'builds payments for each credit statement' do
     expect(parser.payments).to have(5).items
-    parser.payments.each do |payment|
-      expect(payment).not_to be_valid
-    end
   end
 
   it 'first payment is marked as valid' do

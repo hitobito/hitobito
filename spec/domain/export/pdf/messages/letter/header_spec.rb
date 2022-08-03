@@ -28,12 +28,20 @@ describe Export::Pdf::Messages::Letter::Header do
   let(:pdf)      { Prawn::Document.new(options) }
   let(:analyzer) { PDF::Inspector::Text.analyze(pdf.render) }
   let(:image)    { Rails.root.join('spec/fixtures/files/images/logo.png') }
-  let(:shipping_info_with_position) do
+  let(:shipping_info_with_position_left) do
     [
       [71, 672, 'P.P.'],
       [91, 672, ' '],
       [180, 685, 'Post CH AG'],
-      [94, 672, 'CH-3030 Bern, Belpstrasse 37']
+      [94, 672, 'CH-3030 Bern, Belpstrasse 37'],
+    ]
+  end
+  let(:shipping_info_with_position_right) do
+    [
+      [378, 685, 'Post CH AG'],
+      [269, 672, 'P.P.'],
+      [289, 672, ' '],
+      [292, 672, 'CH-3030 Bern, Belpstrasse 37']
     ]
   end
 
@@ -176,48 +184,115 @@ describe Export::Pdf::Messages::Letter::Header do
   end
 
   describe 'recipient address' do
-    it 'is present' do
-      subject.render(recipient)
 
-      expect(text_with_position_without_shipping_info).to eq [
-        [71, 652, 'Top Leader'],
-        [71, 624, 'Supertown']
-      ]
+    context 'rendered left' do
+      before do
+        top_group.settings(:messages_letter).address_position = :left
+        top_group.save!
+      end
+
+      it 'is present' do
+        subject.render(recipient)
+
+        expect(text_with_position_without_shipping_info).to eq [
+          [71, 652, 'Top Leader'],
+          [71, 624, 'Supertown']
+        ]
+      end
+
+      it 'same position when image is present' do
+        assign_image(top_group)
+        subject.render(recipient)
+
+        expect(text_with_position_without_shipping_info).to eq [
+          [71, 652, 'Top Leader'],
+          [71, 624, 'Supertown']
+        ]
+      end
+
+      it 'does not render town if not set' do
+        recipient.address = 'Top Leader'
+        subject.render(recipient)
+
+        expect(text_with_position_without_shipping_info).to eq [
+          [71, 652, 'Top Leader']
+        ]
+      end
+
+      it 'does not render anything for blank values' do
+        recipient.address = nil
+        subject.render(recipient)
+
+        expect(text_with_position_without_shipping_info).to be_empty
+      end
     end
 
-    it 'same position when image is present' do
-      assign_image(top_group)
-      subject.render(recipient)
+    context 'rendered right' do
+      before do
+        top_group.settings(:messages_letter).address_position = :right
+        top_group.save!
+      end
 
-      expect(text_with_position_without_shipping_info).to eq [
-        [71, 652, 'Top Leader'],
-        [71, 624, 'Supertown']
-      ]
-    end
+      it 'is present' do
+        subject.render(recipient)
 
-    it 'does not render town if not set' do
-      recipient.address = 'Top Leader'
-      subject.render(recipient)
+        expect(text_with_position_without_shipping_info).to eq [
+          [269, 652, 'Top Leader'],
+          [269, 624, 'Supertown']
+        ]
+      end
 
-      expect(text_with_position_without_shipping_info).to eq [
-        [71, 652, 'Top Leader']
-      ]
-    end
+      it 'same position when image is present' do
+        assign_image(top_group)
+        subject.render(recipient)
 
-    it 'does not render anything for blank values' do
-      recipient.address = nil
-      subject.render(recipient)
+        expect(text_with_position_without_shipping_info).to eq [
+          [269, 652, 'Top Leader'],
+          [269, 624, 'Supertown']
+        ]
+      end
 
-      expect(text_with_position_without_shipping_info).to be_empty
+      it 'does not render town if not set' do
+        recipient.address = 'Top Leader'
+        subject.render(recipient)
+
+        expect(text_with_position_without_shipping_info).to eq [
+          [269, 652, 'Top Leader']
+        ]
+      end
+
+      it 'does not render anything for blank values' do
+        recipient.address = nil
+        subject.render(recipient)
+
+        expect(text_with_position_without_shipping_info).to be_empty
+      end
     end
   end
 
   describe 'shipping_info' do
-    it 'is present' do
-      subject.render(recipient)
+    context 'rendered left' do
+      it 'is present' do
+        subject.render(recipient)
 
-      shipping_info_with_position.each do |shipping_info|
-        expect(text_with_position).to include(shipping_info)
+        shipping_info_with_position_left.each do |shipping_info|
+          expect(text_with_position).to include(shipping_info)
+        end
+      end
+    end
+
+    context 'rendered right' do
+      before do
+        top_group.settings(:messages_letter).address_position = :right
+        top_group.save!
+      end
+
+      it 'is present' do
+        subject.render(recipient)
+
+        shipping_info_with_position_right.each do |shipping_info|
+          expect(text_with_position).to include(shipping_info)
+        end
       end
     end
   end
@@ -231,11 +306,11 @@ describe Export::Pdf::Messages::Letter::Header do
   end
 
   def text_with_position_without_shipping_info
-    text_with_position - shipping_info_with_position
+    text_with_position - (shipping_info_with_position_left + shipping_info_with_position_right)
   end
 
   def assign_image(group)
-    gs = GroupSetting.create!(target: group, var: :messages_letter)
+    gs = GroupSetting.find_or_create_by!(target: group, var: :messages_letter)
     gs.picture.attach(io: StringIO.new(image.read), filename: image.basename.to_s)
 
     gs.id

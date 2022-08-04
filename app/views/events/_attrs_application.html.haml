@@ -8,15 +8,18 @@
     - entry.used?(:external_applications) do
       = labeled(Event.human_attribute_name(:external_applications), entry.external_application_link(@group))
 
-  %dl.dl-horizontal
-    - entry.used?(:application_conditions) do
-      = labeled(entry.class.human_attribute_name(:application_conditions)) do
-        %p.multiline= format_event_application_conditions(entry)
+  - if entry.any_conditions_present?
+    %dl.dl-horizontal
 
-    - if entry.course_kind?
-      = labeled(Event::Kind.human_attribute_name(:minimum_age),
-                entry.kind.minimum_age? ? t('events.minimum_age_with_years', minimum_age: entry.kind.minimum_age) : '')
-      = labeled(t('events.preconditions'), grouped_qualification_kinds_string(entry.kind, 'precondition', 'participant'))
+      - entry.used?(:application_conditions) do
+        - if attr_present?(entry, :application_conditions)
+          = labeled(entry.class.human_attribute_name(:application_conditions)) do
+            %p.multiline= format_event_application_conditions(entry)
+
+      - if entry.course_kind?
+        = labeled(Event::Kind.human_attribute_name(:minimum_age),
+                  entry.kind.minimum_age? ? t('events.minimum_age_with_years', minimum_age: entry.kind.minimum_age) : '')
+        = labeled(t('events.preconditions'), grouped_qualification_kinds_string(entry.kind, 'precondition', 'participant'))
 
   - if entry.course_kind?
     %dl.dl-horizontal

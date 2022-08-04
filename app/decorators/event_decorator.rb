@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -123,6 +123,12 @@ class EventDecorator < ApplicationDecorator
     label = to_s
     label += " (#{number})" if number?
     h.safe_join([groups.first.to_s, label], ': ')
+  end
+
+  def any_conditions_present?
+    course_kind? ||
+      (used_attributes.include?(:application_conditions) &&
+       attr_present?(self, :application_conditions))
   end
 
   private

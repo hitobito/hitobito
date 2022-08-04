@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 = render 'layouts/languages'
-- unless current_page?(new_person_session_path)
-  %a= link_to t('devise.sessions.new.sign_in'), new_person_session_path
-- unless current_page?(new_person_password_path)
-  %a= link_to t('.forgot_password'), new_person_password_path
+
+- unless hide_signup_links?
+  = link_to t('devise.sessions.new.sign_in'), new_person_session_path
+  = link_to t('.forgot_password'), new_person_password_path

@@ -42,7 +42,7 @@ describe Address::Importer do
   let(:dir) { @dir }
 
   around do |example|
-    Dir.mktmpdir("post-test") do |dir|
+    Dir.mktmpdir('post-test') do |dir|
       @dir = Pathname.new(dir)
       example.run
     end
@@ -60,10 +60,7 @@ describe Address::Importer do
   it 'fetches and updates addresses' do
     Address.delete_all
     allow(Settings.addresses).to receive(:token).and_return('foo')
-    zip = Zip::OutputStream.write_buffer(StringIO.new('sample.zip')) do |out|
-      out.put_next_entry('sample.csv')
-      out.write csv
-    end
+    zip = create_zip(csv)
 
     headers = {
       'Accept' => '*/*',
@@ -107,10 +104,7 @@ describe Address::Importer do
     CSV
 
     allow(Settings.addresses).to receive(:token).and_return('foo')
-    zip = Zip::OutputStream.write_buffer(StringIO.new('sample.zip')) do |out|
-      out.put_next_entry('sample.csv')
-      out.write csv
-    end
+    zip = create_zip(csv)
 
     headers = {
       'Accept' => '*/*',
@@ -135,10 +129,7 @@ describe Address::Importer do
     CSV
 
     allow(Settings.addresses).to receive(:token).and_return('foo')
-    zip = Zip::OutputStream.write_buffer(StringIO.new('sample.zip')) do |out|
-      out.put_next_entry('sample.csv')
-      out.write csv
-    end
+    zip = create_zip(csv)
 
     headers = {
       'Accept' => '*/*',
@@ -150,5 +141,14 @@ describe Address::Importer do
 
     subject.prepare_files
     expect(subject.streets.to_h.values.first[:numbers]).to eq []
+  end
+
+  def create_zip(csv)
+    stringio = Zip::OutputStream.write_buffer do |out|
+      out.put_next_entry('sample.csv')
+      out.write(csv)
+    end
+    stringio.rewind # reposition buffer pointer to the beginning
+    stringio
   end
 end

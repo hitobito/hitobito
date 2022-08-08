@@ -10,9 +10,20 @@ module UnauthorizedHelper
     [
       new_person_session_path,
       new_person_password_path,
-      new_person_confirmation_path
-    ].one? do |path|
+      new_person_confirmation_path,
+
+      maybe_group_public_event_path
+    ].compact.any? do |path|
       current_page?(path)
     end
+  end
+
+  private
+
+  def maybe_group_public_event_path
+    parameters = request.path_parameters.keys
+    return nil unless parameters.include?(:group_id) && parameters.include?(:id)
+
+    group_public_event_path # with implied parameters from the current request
   end
 end

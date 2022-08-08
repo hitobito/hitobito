@@ -20,6 +20,12 @@ class PublicEventsController < ApplicationController
   helper_method :entry
   decorates :entry
 
+  # enable login-form
+  helper_method :resource
+
+  # enable external login
+  helper_method :group, :event
+
   private
 
   def assert_external_application_possible
@@ -42,4 +48,11 @@ class PublicEventsController < ApplicationController
   def entry
     @entry ||= group.events.find(params[:id])
   end
+
+  def person
+    @person ||= Person.new
+  end
+
+  alias resource person # used by devise-form
+  alias event entry # used by check-email-form
 end

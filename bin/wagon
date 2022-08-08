@@ -126,24 +126,14 @@ case $cmd in
     existing_wagon_names | xargs -d' ' -n 1 echo | grep -v '^$'
     ;;
 
-  # update-copyright)
-  #   git_range="..master"
-  #   for repo in $(repos); do
-  #       cd $repo
-  #       files=$(git diff --name-only "$git_range")
-  #       if [ ! -z "$files" ]; then
-  #           git diff --name-only "$git_range" | xargs realpath
-  #       fi
-  #       cd - >/dev/null
-  #   done
-  #   year=$(date +%Y)
-  #   # Copyright (c) 2018,
-  #   # Copyright (c) 2018-2021,
-  #   sed -i -r "
-  #     s/Copyright \(c\) (([[:digit:]]{4})(-[[:digit:]]{4})?),/Copyright \(c\) \2-$year,/g
-  #     s/Copyright \(c\) $year-$year,/Copyright \(c\) $year,/g
-  #   " "$files"
-  #   ;;
+  update-copyright)
+    # git_range="..master"
+    # git diff --name-only "$git_range" |\
+    git diff --staged --name-only |\
+      xargs -L1 bin/single-file-update-copyright
+
+    git diff --staged --name-only | xargs
+    ;;
 
   create)
     echo "THIS IS WORK IN PROGRESS"
@@ -174,7 +164,7 @@ case $cmd in
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile configs test-prepare core-spec grep help git list create'
+  echo 'activate gemfile configs test-prepare core-spec grep help git list create update-copyright'
 }
 
 function __wagon_list() {
@@ -212,7 +202,7 @@ COMPLETION
 
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
-    echo "       $0 [test-prepare|core-spec|gemfile|configs|list]"
+    echo "       $0 [test-prepare|core-spec|gemfile|configs|list|update-copyright]"
     echo "       $0 [grep] <TERM>"
     echo "       $0 [git] <ARGS>"
     echo

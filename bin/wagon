@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#  Copyright (c) 2019-2021, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2019-2022, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -126,6 +126,15 @@ case $cmd in
     existing_wagon_names | xargs -d' ' -n 1 echo | grep -v '^$'
     ;;
 
+  update-copyright)
+    # git_range="..master"
+    # git diff --name-only "$git_range" |\
+    git diff --staged --name-only |\
+      xargs -L1 bin/single-file-update-copyright
+
+    git diff --staged --name-only | xargs
+    ;;
+
   create)
     echo "THIS IS WORK IN PROGRESS"
     require_wagon_name
@@ -155,7 +164,7 @@ case $cmd in
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile configs test-prepare core-spec grep help git list create'
+  echo 'activate gemfile configs test-prepare core-spec grep help git list create update-copyright'
 }
 
 function __wagon_list() {
@@ -193,7 +202,7 @@ COMPLETION
 
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
-    echo "       $0 [test-prepare|core-spec|gemfile|configs|list]"
+    echo "       $0 [test-prepare|core-spec|gemfile|configs|list|update-copyright]"
     echo "       $0 [grep] <TERM>"
     echo "       $0 [git] <ARGS>"
     echo

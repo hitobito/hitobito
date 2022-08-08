@@ -5,20 +5,31 @@
 
 - title entry.to_s
 
-- content_for(:toolbar, button_action_public_event_apply(entry, @group))
+#main
+  .row-fluid
+    %article.span7
+      = render 'attrs_primary'
 
-#main.row-fluid
-  %article.span7
-    = render 'attrs_primary'
+      = render 'events/attachments'
 
-    = render 'events/attachments'
+      = render_extensions 'show_left'
 
-    = render_extensions 'show_left'
+    %aside.span5
+      = render 'events/attrs_contact'
 
-  %aside.span5
-    = render 'events/attrs_contact'
+      - if entry.participant_types.present?
+        = render 'events/attrs_application'
 
-    - if entry.participant_types.present?
-      = render 'events/attrs_application'
+      = render_extensions 'show_right'
 
-    = render_extensions 'show_right'
+  %h1
+    = t('event.register.index.sign_in')
+
+  .row-fluid
+    %article.span6
+      %h3= t('event.register.index.login')
+      = render 'devise/sessions/form'
+
+    %article.span6
+      %h3= t('event.register.index.no_login')
+      = render 'event/register/email_check'

@@ -50,11 +50,11 @@ class Invoice::PaymentProcessor
   end
 
   def alert
-    translate(:invalid, payments.reject(&:valid?).count)
+    translate(:invalid, payments_with_invoice.count + payments_without_invoice.count)
   end
 
   def notice
-    translate(:valid, payments.count(&:valid?))
+    translate(:valid, valid_payments.count)
   end
 
   def payments
@@ -64,7 +64,8 @@ class Invoice::PaymentProcessor
                   received_at: received_at(s),
                   invoice: invoice(s),
                   transaction_identifier: transaction_identifier(s),
-                  reference: fetch('Refs', 'AcctSvcrRef', s))
+                  reference: fetch('Refs', 'AcctSvcrRef', s),
+                  status: :xml_imported)
     end
   end
 

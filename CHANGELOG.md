@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+* Anmeldungen für öffentlich sichtbare Anlässe verbessert (#1775)
+
 ## Version 1.28
 
 *  Neuer Personentab "Sicherheit", welcher Informationen und Vorgänge zu Sicherheitsmassnahmen aufzeigt und das Passwort einer Person zurücksetzen lässt (benötigt :update Permission auf Person) (#1688)

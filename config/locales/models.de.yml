@@ -988,6 +988,8 @@ de:
         amount: Betrag
         received_at: Eingangsdatum
         reference: Zahlungsreferenz
+        transaction_identifier: Transaktionsidentifikator
+        status: Status
 
       payment_reminder:
         invoice: Rechnung

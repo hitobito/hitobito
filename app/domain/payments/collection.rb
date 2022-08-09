@@ -98,6 +98,12 @@ class Payments::Collection
     end
   end
 
+  def without_invoices
+    @payments = @payments.where(invoice_id: nil)
+
+    self
+  end
+
   private
 
   def payment_sum

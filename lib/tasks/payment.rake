@@ -5,6 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# documented under doc/features/ebics-connection.md
 namespace :payment do
   desc 'Exports payments without invoices'
   task :export_without_invoice, [:from, :to] => :environment do |_t, args|
@@ -25,6 +26,7 @@ namespace :payment do
     export(path, payments)
   end
 
+  desc 'Exports payments imported via ebics'
   task :export_ebics_imported, [:from, :to] => :environment do |_t, args|
     from, to = daterange_args(args)
 

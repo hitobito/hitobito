@@ -168,7 +168,20 @@ case $cmd in
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile configs test-prepare core-spec grep help git list create update-copyright overwritten-in-wagon'
+  echo '
+    activate
+    configs
+    core-spec
+    create
+    gemfile
+    git
+    grep
+    help
+    list
+    overwritten-in-wagon
+    test-prepare
+    update-copyright
+  ' | xargs
 }
 
 function __wagon_list() {

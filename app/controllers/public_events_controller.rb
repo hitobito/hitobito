@@ -16,15 +16,10 @@ class PublicEventsController < ApplicationController
   skip_before_action :authenticate_person!
   before_action :assert_public_access, :assert_external_application_possible
 
-  # behave like most hitobito-controllers
-  helper_method :entry
+  helper_method :entry, # behave like most hitobito-controllers
+                :resource, # enable login-form
+                :group, :event # enable external login
   decorates :entry
-
-  # enable login-form
-  helper_method :resource
-
-  # enable external login
-  helper_method :group, :event
 
   private
 

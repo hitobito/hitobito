@@ -160,11 +160,15 @@ case $cmd in
     popd
     ;;
 
+  overwritten-in-wagon)
+    git diff master.. --name-only app/views/ |\
+      xargs -L1 -I% find ../ -path "*/%" -a \! -regex ".*\(ose_composition\|hitobito-development\).*"
+    ;;
 
   completion)
     cat <<"COMPLETION"
 function __wagon_commands() {
-  echo 'activate gemfile configs test-prepare core-spec grep help git list create update-copyright'
+  echo 'activate gemfile configs test-prepare core-spec grep help git list create update-copyright overwritten-in-wagon'
 }
 
 function __wagon_list() {

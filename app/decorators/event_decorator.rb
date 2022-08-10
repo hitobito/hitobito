@@ -127,8 +127,8 @@ class EventDecorator < ApplicationDecorator
 
   def any_conditions_present?
     course_kind? ||
-      (used_attributes.include?(:application_conditions) &&
-       attr_present?(self, :application_conditions))
+      (object.used_attributes.include?(:application_conditions) &&
+       application_conditions.present?)
   end
 
   private

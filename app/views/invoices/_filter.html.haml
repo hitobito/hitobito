@@ -16,6 +16,6 @@
 
   .pull-right
     = form_tag(nil, { method: :get, class: 'form-inline-search', role: 'search', remote: true, data: { spin: true } }) do |f|
-      = direct_filter_date(:from, t('.from'), value: params[:from] || "1.1.#{@year}", data: { submit: true })
-      = direct_filter_date(:to, t('.to'), value: params[:to] || "31.12.#{@year}", data: { submit: true })
+      = direct_filter_date(:from, t('.from'), value: params[:from] || "1.1.#{@year || Time.zone.today.year}", data: { submit: true })
+      = direct_filter_date(:to, t('.to'), value: params[:to] || "31.12.#{@year || Time.zone.today.year}", data: { submit: true })
 - params[:q] = nil # Reset param so quicksearch filter does not get populated

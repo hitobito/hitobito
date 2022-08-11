@@ -20,14 +20,18 @@ describe People::HouseholdList do
     let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]) }
 
     it 'returns only people with nil household_key' do
-      expect(subject.people_without_household).to eq([person1, person2])
+      list = []
+      subject.people_without_household_in_batches { |batch| list.concat(batch) }
+      expect(list).to eq([[person1], [person2]])
     end
 
     context 'limited people scope' do
       let(:scope) { Person.where(id: [person1, person2, person3, person4, person5]).limit(1) }
 
       it 'respects limit' do
-        expect(subject.people_without_household).to eq([person1])
+        list = []
+        subject.people_without_household_in_batches { |batch| list.concat(batch) }
+        expect(list).to eq([[person1]])
       end
     end
 
@@ -62,15 +66,15 @@ describe People::HouseholdList do
       subject.households_in_batches { |batch| yielded_batch = batch }
       expect(yielded_batch.map{ |household| household.map(&:id) }).to eq([
           [person3.id, person4.id],
-          [person5.id],
           [person1.id],
-          [person2.id]
+          [person2.id],
+          [person5.id]
       ])
     end
 
-    it 'yields only rows with household_key when told to exclude_non_households' do
+    it 'yields only rows with household_key when queried for only_households' do
       yielded_batch = []
-      subject.households_in_batches(exclude_non_households: true) { |batch| yielded_batch = batch }
+      subject.only_households_in_batches { |batch| yielded_batch = batch }
       expect(yielded_batch.map{ |household| household.map(&:id) }).to eq([
           [person3.id, person4.id],
           [person5.id]
@@ -88,7 +92,7 @@ describe People::HouseholdList do
         subject.households_in_batches { |batch| yielded_batch = batch }
         expect(yielded_batch.map{ |household| household.map(&:id) }).to eq([
             [person3.id, person4.id, person6.id, person7.id],
-            [person5.id]
+            [person1.id]
         ])
       end
     end
@@ -104,9 +108,9 @@ describe People::HouseholdList do
         subject.households_in_batches { |batch| yielded_batch = batch }
         expect(yielded_batch.map{ |household| household.map(&:id) }).to eq([
             [person3.id, person4.id, person6.id, person7.id],
-            [person5.id],
             [person1.id],
-            [person2.id]
+            [person2.id],
+            [person5.id]
         ])
       end
     end

@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.28
 
 * Anmeldungen für öffentlich sichtbare Anlässe verbessert (#1775)
 

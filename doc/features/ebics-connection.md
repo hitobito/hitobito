@@ -67,6 +67,6 @@ There are two rake tasks for exporting payments. Used when importing payments vi
 
 Both these tasks have optional arguments for the start and end date of the export.
 
-E.g `rake payment:export_without_invoice[2022.01.01, 2022.12.01]`
+E.g `rake payment:export_without_invoice[2022.01.01,2022.12.01]`
 
 **Default**: from: `1.month.ago` to: `Time.zone.today`

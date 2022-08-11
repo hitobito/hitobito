@@ -9,7 +9,7 @@
 namespace :payment do
   desc 'Exports payments without invoices'
   task :export_without_invoice, [:from, :to] => :environment do |_t, args|
-    from, to = daterange_args(args)
+    from, to = PaymentExportHelper.daterange_args(args)
 
     payments = Payments::Collection.new
                                    .from(from)
@@ -23,12 +23,12 @@ namespace :payment do
     end
 
     path = "/tmp/non_assigned_payments_#{from}-#{to}.csv"
-    export(path, payments)
+    PaymentExportHelper.export(path, payments)
   end
 
   desc 'Exports payments imported via ebics'
   task :export_ebics_imported, [:from, :to] => :environment do |_t, args|
-    from, to = daterange_args(args)
+    from, to = PaymentExportHelper.daterange_args(args)
 
     payments = Payments::Collection.new
                                    .from(from)
@@ -42,23 +42,25 @@ namespace :payment do
     end
 
     path = "/tmp/ebics_imported_payments_#{from}-#{to}.csv"
-    export(path, payments)
+    PaymentExportHelper.export(path, payments)
   end
 
-  private
+  class PaymentExportHelper
+    class << self
+      def daterange_args(args)
+        from = args[:from].present? ? Date.parse(args[:from]) : 1.month.ago.to_date
+        to = args[:to].present? ? Date.parse(args[:to]) : Time.zone.today
 
-  def daterange_args(args)
-    from = args[:from].present? ? Date.parse(args[:from]) : 1.month.ago.to_date
-    to = args[:to].present? ? Date.parse(args[:to]) : Time.zone.today
+        [from, to]
+      end
 
-    [from, to]
-  end
+      def export(filepath, payments)
+        File.open(filepath, 'w') do |f|
+          f.write Export::Tabular::Payments::List.csv(payments)
+        end
 
-  def export(filepath, payments)
-    File.open(filepath, 'w') do |f|
-      f.write Export::Tabular::Payments::List.csv(payments)
+        puts "Saved payments to #{filepath}"
+      end
     end
-
-    puts "Saved payments to #{filepath}"
   end
 end

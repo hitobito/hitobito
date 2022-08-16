@@ -12,8 +12,4 @@ module GroupSettingsHelper
       method: :patch }
   end
 
-  def format_group_setting_value(value)
-    value
-  end
-
 end

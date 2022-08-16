@@ -197,7 +197,7 @@ describe Invoice::ItemEvaluation do
       invoice_1 = Invoice.create(invoice_attrs)
 
       Payment.create(amount: 100, invoice: invoice_1, received_at: 2.months.ago)
-      Payment.create(amount: 66, invoice: invoice_1, received_at: 1.month.ago)
+      Payment.create(amount: 63, invoice: invoice_1, received_at: 1.month.ago)
 
       evaluations = described_class.new(top_layer, 3.months.ago, Time.zone.now).fetch_evaluations
       expect(evaluations).to eq([{ name: 'Membership',
@@ -207,9 +207,9 @@ describe Invoice::ItemEvaluation do
                                    cost_center: 'Members',
                                    account: '01-23456-7' },
                                  { name: 'Shirt',
-                                   amount_payed: 66,
+                                   amount_payed: 63,
                                    count: 2,
-                                   vat: 6,
+                                   vat: 3,
                                    cost_center: 'Merch',
                                    account: '08-76543-2' }])
     end

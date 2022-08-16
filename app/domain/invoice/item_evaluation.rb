@@ -30,14 +30,12 @@ class Invoice::ItemEvaluation
 
   def rows_by_invoice_article # rubocop:disable Metrics/MethodLength
     @rows_by_invoice_article ||= invoice_article_identifiers.collect do |ids|
-      name, account, cost_center = *ids
-      invoice_item = InvoiceItem.find_by(name: name, account: account, cost_center: cost_center)
-
+      name, account, cost_center = ids
       {
         name: name,
-        vat: invoice_item_vats[ids],
+        vat: invoice_item_vats(*ids),
         count: count(*ids),
-        amount_payed: count(*ids) * invoice_item.unit_cost + invoice_item_vats[ids],
+        amount_payed: amount_payed_without_vat(*ids) + invoice_item_vats(*ids),
         account: account,
         cost_center: cost_center
       }
@@ -111,11 +109,27 @@ class Invoice::ItemEvaluation
     invoice_items.first.count * amount_of_invoices
   end
 
-  def invoice_item_vats
-    # First convert the vat_rate to decimal,
-    # multiply with the total cost to get the absolute payed vats.
-    # Then sum those grouped by invoice item
-    payments_of_payed_invoices.sum('(IFNULL(vat_rate, 0) / 100) * (count * unit_cost)')
+  def invoice_item_vats(name, account, cost_center)
+    # Get the relevant invoices
+    relevant_invoice_ids = relevant_payments.of_fully_payed_invoices.payments.pluck(:invoice_id)
+
+    # Search invoice item which fits the identifiers and are attached to relevant payments
+    invoice_item = InvoiceItem.find_by(name: name,
+                                       account: account,
+                                       cost_center: cost_center,
+                                       invoice_id: relevant_invoice_ids)
+
+    # Invoice items with an empty vat_rate will be 0
+    return 0 unless invoice_item.vat_rate&.nonzero?
+
+    # We get the vat by multiplying the vat_rate with the payed amount excluding vat
+    invoice_item.vat_rate / 100 * amount_payed_without_vat(name, account, cost_center)
+  end
+
+  def amount_payed_without_vat(name, account, cost_center)
+    invoice_item = InvoiceItem.find_by(name: name, account: account, cost_center: cost_center)
+
+    count(name, account, cost_center) * invoice_item.unit_cost
   end
 
   def invoice_article_identifiers

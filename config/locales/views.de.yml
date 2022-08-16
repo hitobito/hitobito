@@ -785,7 +785,7 @@ de:
         table:
           name: Produktbezeichnung
           count: Anzahl
-          amount_payed: Betrag bezahlt
+          amount_paid: Betrag bezahlt
           vat: MwSt.
           account: Konto
           cost_center: Kostenstelle

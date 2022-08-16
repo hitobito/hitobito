@@ -8,7 +8,7 @@
   = direct_filter_date(:to, t('.filter.to'), value: params[:to] || f(Time.zone.today), data: { submit: true })
 
 %table.table.table-striped.table-hover
-  - cols = [:name, :vat, :count, :amount_payed, :account, :cost_center]
+  - cols = [:name, :vat, :count, :amount_paid, :account, :cost_center]
   %thead
     %tr
       - cols.each do |col|

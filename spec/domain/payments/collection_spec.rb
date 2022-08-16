@@ -55,8 +55,8 @@ describe Payments::Collection do
     end
   end
 
-  context 'of_fully_payed_invoices' do
-    it 'lists payments to fully payed invoices' do
+  context 'of_fully_paid_invoices' do
+    it 'lists payments to fully paid invoices' do
       invoice_item_attrs = [{
         name: 'Shirt',
         description: 'Good quality',
@@ -72,7 +72,7 @@ describe Payments::Collection do
       fabricated_payment2.invoice.update(invoice_items_attributes: invoice_item_attrs)
       fabricated_payment3.invoice.update(invoice_items_attributes: invoice_item_attrs)
 
-      payments = described_class.new.of_fully_payed_invoices.instance_variable_get(:@payments)
+      payments = described_class.new.of_fully_paid_invoices.instance_variable_get(:@payments)
 
       expect(payments.size).to eq(3)
       expect(payments).to include(fabricated_payment1)
@@ -80,7 +80,7 @@ describe Payments::Collection do
       expect(payments).to include(fabricated_payment3)
     end
 
-    it 'does not list payments to non payed invoices' do
+    it 'does not list payments to non paid invoices' do
       invoice_item_attrs = [{
         name: 'Membership',
         description: 'You member, you pay',
@@ -101,7 +101,7 @@ describe Payments::Collection do
       fabricated_payment2.invoice.update(invoice_items_attributes: [invoice_item_attrs.last])
       fabricated_payment3.invoice.update(invoice_items_attributes: [invoice_item_attrs.last])
 
-      payments = described_class.new.of_fully_payed_invoices.instance_variable_get(:@payments)
+      payments = described_class.new.of_fully_paid_invoices.instance_variable_get(:@payments)
 
       expect(payments.size).to eq(2)
       expect(payments).to_not include(fabricated_payment1)

@@ -55,7 +55,7 @@ class Payments::Collection
              .group(invoice_item_group_attrs)
   end
 
-  def of_fully_payed_invoices
+  def of_fully_paid_invoices
     invoice_ids =
       @payments.select(:'invoice.total', :invoice_id)
                .joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
@@ -67,7 +67,7 @@ class Payments::Collection
     self
   end
 
-  def of_non_fully_payed_invoices
+  def of_non_fully_paid_invoices
     invoice_ids =
       @payments.select(:'invoice.total', :invoice_id)
                .joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')

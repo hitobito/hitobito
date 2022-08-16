@@ -17,7 +17,7 @@ describe Invoice::ItemEvaluation do
 
   context 'fetch_evaluations' do
 
-    it 'returns item totals of payed invoices' do
+    it 'returns item totals of paid invoices' do
       invoice_attrs = {
         title: 'Membership',
         creator: top_leader,
@@ -50,13 +50,13 @@ describe Invoice::ItemEvaluation do
 
       evaluations = described_class.new(top_layer, 1.year.ago, Time.zone.now + 1.month).fetch_evaluations
       expect(evaluations).to eq([{ name: 'Membership',
-                                   amount_payed: 200, # 100 * 2
+                                   amount_paid: 200, # 100 * 2
                                    count: 2,
                                    vat: 0,
                                    cost_center: 'Members',
                                    account: '01-23456-7' },
                                  { name: 'Shirt',
-                                   amount_payed: 126, # 30 * 4 + 6
+                                   amount_paid: 126, # 30 * 4 + 6
                                    count: 4,
                                    vat: 6, # 30 * 4 * 0.05 (5%)
                                    cost_center: 'Merch',
@@ -98,19 +98,19 @@ describe Invoice::ItemEvaluation do
 
       evaluations = described_class.new(top_layer, 1.year.ago, Time.zone.now + 1.month).fetch_evaluations
       expect(evaluations).to eq([{ name: 'Membership',
-                                   amount_payed: 100, # 1 fully payed invoice with count 1 and unit_cost 100
+                                   amount_paid: 100, # 1 fully paid invoice with count 1 and unit_cost 100
                                    count: 1,
                                    vat: 0,
                                    cost_center: 'Members',
                                    account: '01-23456-7' },
                                  { name: 'Shirt',
-                                   amount_payed: 63, # 1 fully payed invoice with count 2 and unit_cost 30, vat 5%
+                                   amount_paid: 63, # 1 fully paid invoice with count 2 and unit_cost 30, vat 5%
                                    count: 2,
                                    vat: 3,
                                    cost_center: 'Merch',
                                    account: '08-76543-2' },
                                  { name: 'Teilzahlung',
-                                   amount_payed: 200, # 2 payments with amount 100
+                                   amount_paid: 200, # 2 payments with amount 100
                                    count: 2,
                                    vat: '',
                                    cost_center: '',
@@ -150,26 +150,26 @@ describe Invoice::ItemEvaluation do
 
       evaluations = described_class.new(top_layer, 1.year.ago, Time.zone.now + 1.month).fetch_evaluations
       expect(evaluations).to eq([{ name: 'Membership',
-                                   amount_payed: 200, # 100 * 2
+                                   amount_paid: 200, # 100 * 2
                                    count: 2,
                                    vat: 0,
                                    cost_center: 'Members',
                                    account: '01-23456-7' },
                                  { name: 'Shirt',
-                                   amount_payed: 126, # 30 * 4 + 6
+                                   amount_paid: 126, # 30 * 4 + 6
                                    count: 4,
                                    vat: 6, # 30 * 4 * 0.05 (5%)
                                    cost_center: 'Merch',
                                    account: '08-76543-2' },
                                  { name: 'Überzahlung',
-                                   amount_payed: 250, # 2 payments with excess amounts of 100 and 150
+                                   amount_paid: 250, # 2 payments with excess amounts of 100 and 150
                                    count: '',
                                    vat: '',
                                    cost_center: '',
                                    account: '' }])
     end
 
-    it 'returns item totals of payed invoices if all payments are in daterange' do
+    it 'returns item totals of paid invoices if all payments are in daterange' do
       invoice_attrs = {
         title: 'Membership',
         creator: top_leader,
@@ -201,13 +201,13 @@ describe Invoice::ItemEvaluation do
 
       evaluations = described_class.new(top_layer, 3.months.ago, Time.zone.now).fetch_evaluations
       expect(evaluations).to eq([{ name: 'Membership',
-                                   amount_payed: 100,
+                                   amount_paid: 100,
                                    count: 1,
                                    vat: 0,
                                    cost_center: 'Members',
                                    account: '01-23456-7' },
                                  { name: 'Shirt',
-                                   amount_payed: 63,
+                                   amount_paid: 63,
                                    count: 2,
                                    vat: 3,
                                    cost_center: 'Merch',
@@ -247,7 +247,7 @@ describe Invoice::ItemEvaluation do
 
       evaluations = described_class.new(top_layer, 2.months.ago, Time.zone.now).fetch_evaluations
       expect(evaluations).to eq([{ name: 'Teilzahlung',
-                                   amount_payed: 133,
+                                   amount_paid: 133,
                                    count: 2,
                                    vat: '',
                                    cost_center: '',

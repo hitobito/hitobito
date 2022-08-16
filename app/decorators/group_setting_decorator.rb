@@ -32,7 +32,7 @@ class GroupSettingDecorator < ApplicationDecorator
   def formatted_value(attr)
     return '****' if attr.eql?(:password)
     return picture_file_name if attr.eql?(:picture)
-    return translated_multiselect_value(attr) if possible_values(attr).present?
+    return translated_multiselect_value(attr) if multiselect_attr?(attr)
 
     value = object.send(attr)
     value || '-'

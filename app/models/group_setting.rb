@@ -43,7 +43,7 @@ class GroupSetting < RailsSettings::SettingObject
 
   POSSIBLE_VALUES = {
     messages_letter: { address_position: [:left, :right] }
-  }
+  }.with_indifferent_access
 
   def attrs
     SETTINGS[var].symbolize_keys.keys
@@ -51,6 +51,10 @@ class GroupSetting < RailsSettings::SettingObject
 
   def possible_values(attr)
     POSSIBLE_VALUES[var.to_sym].try(:[], attr)
+  end
+
+  def multiselect_attr?(attr)
+    possible_values(attr).present?
   end
 
   def remove_picture

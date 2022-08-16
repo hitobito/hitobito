@@ -7,24 +7,17 @@
 
 module Export::Pdf::Invoice
   class ReceiverAddress < Section
+    include Export::Pdf::AddressRenderers
+    LEFT_ADDRESS_X = 0
+    RIGHT_ADDRESS_X = 290
 
     def render
       float do
-        bounding_box(address_position, width: bounds.width, height: 80) do
+        offset_cursor_from_top 5.1.cm
+        bounding_box(address_position(invoice.group), width: bounds.width, height: 80) do
           table(receiver_address_data, cell_style: { borders: [], padding: [0, 0, 0, 0] })
         end
       end
-    end
-
-    private
-
-    def address_position
-      x_coords = {
-        left: 0,
-        right: 290
-      }[invoice.group.settings(:messages_letter).address_position&.to_sym]
-      x_coords ||= 0
-      [x_coords, 640]
     end
   end
 end

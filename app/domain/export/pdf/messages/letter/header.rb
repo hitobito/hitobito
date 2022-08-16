@@ -7,6 +7,10 @@
 
 class Export::Pdf::Messages::Letter
   class Header < Section
+    include Export::Pdf::AddressRenderers
+    LEFT_ADDRESS_X = 0
+    RIGHT_ADDRESS_X = 7.cm
+
     LOGO_BOX = [450, 40].freeze
     ADDRESS_BOX = [90.mm, 60].freeze
     SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 24].freeze
@@ -17,7 +21,7 @@ class Export::Pdf::Messages::Letter
       stamped :render_logo_right
 
       offset_cursor_from_top 60.mm
-      bounding_box(address_position, width: ADDRESS_BOX.first) do
+      bounding_box(address_position(group), width: ADDRESS_BOX.first) do
         stamped :render_shipping_info
 
         pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
@@ -146,15 +150,6 @@ class Export::Pdf::Messages::Letter
       { own: ['', 8.pt],
         normal: ["<b><font size='12pt'>P.P.</font></b> ", 12.pt],
         priority: ["<b><font size='12pt'>P.P.</font> <font size='24pt'>A</font></b> ", 24.pt] }
-    end
-
-    def address_position
-      x_coords = {
-        left: 0,
-        right: bounds.width - ADDRESS_BOX.first
-      }[group.settings(:messages_letter).address_position&.to_sym]
-      x_coords ||= 0
-      [x_coords, cursor]
     end
   end
 end

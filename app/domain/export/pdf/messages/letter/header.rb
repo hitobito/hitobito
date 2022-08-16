@@ -77,7 +77,7 @@ class Export::Pdf::Messages::Letter
     end
 
     def render_address(address, width: ADDRESS_BOX.first, height: ADDRESS_BOX.second)
-      bounding_box([0, 0], width: width, height: height) do
+      bounding_box([0, cursor], width: width, height: height) do
         text sanitize(address)
       end
     end

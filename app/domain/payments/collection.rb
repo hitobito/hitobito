@@ -85,17 +85,8 @@ class Payments::Collection
     self
   end
 
-  def previous_amount(options = {})
-    if options[:increased_by]
-      increased_amount = payment_sum * (1.0 + options[:increased_by].to_f / 100.0)
-      case payment_sum
-      when   0..99  then round_to_nearest(5.0, increased_amount)
-      when 100..999 then round_to_nearest(10.0, increased_amount)
-      else               round_to_nearest(50.0, increased_amount)
-      end
-    else
-      payment_sum
-    end
+  def payments_amount
+    @payments.sum(:amount)
   end
 
   def median_amount(options = {})
@@ -120,15 +111,5 @@ class Payments::Collection
     @payments = @payments.where(invoice_id: nil)
 
     self
-  end
-
-  private
-
-  def payment_sum
-    @payments.sum(:amount)
-  end
-
-  def round_to_nearest(target, value)
-    (value / target.to_f).round * target.to_f
   end
 end

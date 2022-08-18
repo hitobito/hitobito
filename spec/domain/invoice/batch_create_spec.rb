@@ -49,7 +49,10 @@ describe Invoice::BatchCreate do
     group.invoice_config.update!(donation_increase_percentage: 5, donation_calculation_year_amount: 2)
 
     fabricate_donation(50, 1.year.ago)
-    fabricate_donation(150, 2.year.ago)
+    fabricate_donation(150, 2.years.ago)
+    fabricate_donation(2000, 2.years.ago)
+    fabricate_donation(300, 2.years.ago)
+    fabricate_donation(100, 2.years.ago)
 
     invoice = Invoice.new(title: 'invoice', group: group)
     invoice.invoice_items.build(name: 'pens', unit_cost: 1.5)
@@ -63,8 +66,8 @@ describe Invoice::BatchCreate do
     expect(list.recipients_total).to eq 1
     expect(list.recipients_paid).to eq 0
     
-    # donation sum is 200, raise by 5%: 200 * 1.05 = 210, add other invoice_item: 210 + 1.5 = 211.5
-    expect(list.amount_total).to eq 211.5
+    # median amount is 150, raise by 5%: 150 * 1.05 = 157.5, add other invoice_item: 157.5 + 1.5 = 159
+    expect(list.amount_total).to eq 159
     expect(list.amount_paid).to eq 0
   end
 

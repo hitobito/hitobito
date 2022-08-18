@@ -98,6 +98,24 @@ class Payments::Collection
     end
   end
 
+  def median_amount(options = {})
+    amounts = @payments.order(amount: :asc).pluck(:amount)
+
+    return 0 if amounts.empty?
+
+    count = @payments.count
+
+    # With an uneven count because of integer calculations (3 / 2 = 1)
+    # it will get the same amount twice out of the list.
+    # With an even count it will get the two middle amounts
+    median = (amounts[(count - 1) / 2] + amounts[count / 2]) / 2.0
+    if options[:increased_by]
+      median * (1.0 + options[:increased_by].to_f / 100.0)
+    else
+      median
+    end
+  end
+
   def without_invoices
     @payments = @payments.where(invoice_id: nil)
 

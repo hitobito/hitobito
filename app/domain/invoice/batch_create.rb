@@ -102,13 +102,14 @@ class Invoice::BatchCreate
   end
 
   def variable_donation_amount(recipient)
-    return 0 unless invoice_list.group.invoice_config.variable_donation_configured?
+    invoice_config = invoice_list.group.invoice_config
+    return 0 unless invoice_config.variable_donation_configured?
 
     Payments::Collection.new
-      .in_layer(invoice_list.group)
-      .in_last(invoice_list.group.invoice_config.donation_calculation_year_amount.years)
-      .of_person(recipient)
-      .previous_amount(increased_by: invoice_list.group.invoice_config.donation_increase_percentage)
+                        .in_layer(invoice_list.group)
+                        .in_last(invoice_config.donation_calculation_year_amount.years)
+                        .of_person(recipient)
+                        .median_amount(increased_by: invoice_config.donation_increase_percentage)
   end
 
   class NoDonationsPresentError < StandardError; end

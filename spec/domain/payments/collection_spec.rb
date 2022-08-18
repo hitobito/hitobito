@@ -182,6 +182,62 @@ describe Payments::Collection do
     end
   end
 
+  context 'median_amount' do
+    context 'with no options' do
+      it 'returns median for uneven list' do
+        fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount
+
+        expect(amount).to eq(50.0)
+      end
+
+      it 'returns median for even list' do
+        fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(100.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(2000.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(10.0, Date.new(1.year.ago.year, 12, 31))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount
+
+        expect(amount).to eq(75.0)
+      end
+    end
+
+    context 'with increased_by option' do
+      it 'returns increased amount for uneven list' do
+        fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(200.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(15000.0, Date.new(3.years.ago.year, 1, 1))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+        # median is 100, times 10% (100 * 1.1 = 110)
+        expect(amount).to eq(110.0)
+      end
+
+      it 'returns increased amount for even list' do
+        fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(200.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(15000.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(300.0, Date.new(3.years.ago.year, 1, 1))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+        # median is 150 ((200 + 100) / 2), times 10% (150 * 1.1 = 165)
+        expect(amount).to eq(165.0)
+      end
+    end
+  end
+
   context 'previous_amount' do
     context 'with no options given' do
       it 'returns payment sum' do

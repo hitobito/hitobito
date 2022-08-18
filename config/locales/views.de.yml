@@ -187,6 +187,11 @@ de:
     print: Drucken
     letters_with_invoice: Rechnungsbriefe
 
+  dropdown/invoices/evaluation:
+    download: 'Export'
+    csv: 'CSV'
+    xlsx: 'XLSX'
+
   devise:
     failure:
       already_authenticated: 'Du bist bereits angemeldet.'

@@ -66,8 +66,9 @@ describe Invoice::BatchCreate do
     expect(list.recipients_total).to eq 1
     expect(list.recipients_paid).to eq 0
     
-    # median amount is 150, raise by 5%: 150 * 1.05 = 157.5, add other invoice_item: 157.5 + 1.5 = 159
-    expect(list.amount_total).to eq 159
+    # median amount is 150, raise by 5%: 150 * 1.05 = 157.5, rounded up to next 5 = 160, add other invoice_item: 160 + 1.5 = 161.5
+
+    expect(list.amount_total).to eq 161.5
     expect(list.amount_paid).to eq 0
   end
 

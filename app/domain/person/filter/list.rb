@@ -33,7 +33,8 @@ class Person::Filter::List
   private
 
   def filtered_accessibles
-    accessibles.merge(filter_with_selection)
+    filtered = filter_with_selection.unscope(:select).select(:id).distinct
+    accessibles.where(id: filtered)
   end
 
   def filter_with_selection

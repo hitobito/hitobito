@@ -113,10 +113,9 @@ describe Person::Filter::Role do
         it 'loads people in layer when no types given' do
           expect(entries.collect(&:id)).to match_array([people(:bottom_member),
                                                         @bl_leader,
-                                                        @bl_extern,
                                                         @bg_leader,
                                                         @bg_member].collect(&:id))
-          expect(list_filter.all_count).to eq(5)
+          expect(list_filter.all_count).to eq(4)
         end
 
         context 'with specific types' do
@@ -139,11 +138,10 @@ describe Person::Filter::Role do
         expect(entries.collect(&:id)).to match_array([people(:top_leader),
                                                       people(:bottom_member),
                                                       @tg_member,
-                                                      @tg_extern,
                                                       @bl_leader,
                                                       @bg_leader,
                                                       ].collect(&:id))
-        expect(list_filter.all_count).to eq(8)
+        expect(list_filter.all_count).to eq(6)
       end
 
       context 'with specific types' do

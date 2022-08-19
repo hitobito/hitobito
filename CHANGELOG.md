@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.28
 
 *  Für variable Spendenaufrufe wird neu der Median über alle Zahlungen im definierten Zeitraum verwendet (hitobito_die_mitte#204)
 

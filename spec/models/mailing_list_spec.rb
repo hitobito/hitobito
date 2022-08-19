@@ -155,6 +155,14 @@ describe MailingList do
         expect(list.subscribed?(p)).to be_truthy
       end
 
+      it 'is true with role with future deleted_at' do
+        create_subscription(groups(:bottom_layer_one), false,
+                                  Group::BottomGroup::Leader.sti_name)
+        p = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), created_at: Time.now.utc, deleted_at: Time.now.utc + 2.hours).person
+
+        expect(list.subscribed?(p)).to be_truthy
+      end
+
       it 'is false if different role in group' do
         create_subscription(groups(:bottom_layer_one), false,
                                   Group::BottomGroup::Leader.sti_name)

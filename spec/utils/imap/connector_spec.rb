@@ -1,6 +1,6 @@
 #  frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Hitobito AG. This file is part of
+#  Copyright (c) 2012-2022, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -124,7 +124,7 @@ describe Imap::Connector do
       # check mail content
       expect(mail1.uid).to eq('42')
       expect(mail1.subject).to be(imap_fetch_data_1.attr['ENVELOPE'].subject)
-      expect(mail1.date).to eq(Time.zone.utc_to_local(DateTime.parse(Time.now.to_s)))
+      expect(mail1.date).to be_within(2.seconds).of(Time.zone.utc_to_local(Time.now))
       expect(mail1.sender_email).to eq('john@sender.com')
       expect(mail1.sender_name).to eq('sender')
       expect(mail1.plain_text_body).to eq('SpaceX rocks!')

@@ -14,7 +14,7 @@ module Paranoia
       scope :without_deleted, -> {      
         unscope(where: :"#{table_name}.#{paranoia_column}")
           .where("#{table_name}": { "#{paranoia_column}": nil })
-          .or(unscoped.where(arel_table[:"#{paranoia_column}"].gt(Time.zone.now)))
+          .or(unscoped.where(arel_table[:"#{paranoia_column}"].gt(Time.now.utc)))
       }
       
       # https://github.com/ActsAsParanoid/acts_as_paranoid/blob/v0.8.1/lib/acts_as_paranoid/core.rb#L22
@@ -24,13 +24,13 @@ module Paranoia
       scope :only_deleted, -> { 
         unscope(where: :"#{table_name}.#{paranoia_column}")
           .where.not("#{table_name}": { "#{paranoia_column}": nil })
-          .where("#{table_name}": { "#{paranoia_column}": ..Time.zone.now })
+          .where("#{table_name}": { "#{paranoia_column}": ..Time.now.utc })
       }
 
       def deleted?
         return false if send(paranoia_column).nil?
 
-        send(paranoia_column) <= Time.zone.now
+        send(paranoia_column) <= Time.now.utc
       end
     end
 

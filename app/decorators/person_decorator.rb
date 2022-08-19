@@ -67,7 +67,9 @@ class PersonDecorator < ApplicationDecorator
       include UploadDisplayHelper
     end.new.upload_url(self, :picture, default: 'profil')
 
-    if h.request
+    if pic_url.respond_to?(:url)
+      pic_url.url
+    elsif h.request
       h.request.protocol + h.request.host_with_port + pic_url
     else
       pic_url

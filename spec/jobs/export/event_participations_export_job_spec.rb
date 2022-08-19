@@ -9,19 +9,20 @@ require 'spec_helper'
 
 describe Export::EventParticipationsExportJob do
 
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, params.merge(filename: 'event_participation_export')) }
+  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, params.merge(filename: filename)) }
 
   let(:participation)              { event_participations(:top) }
   let(:user)                       { participation.person }
   let(:other_user)                 { Fabricate(:person, first_name: 'Other', last_name: 'Member', household_key: 1) }
   let(:event)                      { participation.event }
+  let(:filename) { AsyncDownloadFile.create_name('event_participation_export', user.id) }
 
   let(:params)                     { { filter: 'all' } }
   let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, user, params) }
 
   let(:file) do
     AsyncDownloadFile
-      .maybe_from_filename(subject.filename, user.id, format)
+      .from_filename(filename, format)
   end
 
   before do
@@ -83,6 +84,7 @@ describe Export::EventParticipationsExportJob do
 
     it 'and saves it' do
       subject.perform
+
       expect(file.generated_file).to be_attached
     end
   end

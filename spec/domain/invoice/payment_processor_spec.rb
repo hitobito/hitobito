@@ -11,9 +11,6 @@ describe Invoice::PaymentProcessor do
 
   it 'builds payments for each credit statement' do
     expect(parser.payments).to have(5).items
-    parser.payments.each do |payment|
-      expect(payment).not_to be_valid
-    end
   end
 
   it 'first payment is marked as valid' do
@@ -29,6 +26,18 @@ describe Invoice::PaymentProcessor do
       expect(parser.process).to eq 1
     end.to change { Payment.count }.by(1)
     expect(invoice.reload).to be_payed
+  end
+
+  it 'builds transaction identifier' do
+    identifiers = parser.payments.map(&:transaction_identifier)
+
+    expect(identifiers).to eq([
+      "20180314001221000006905084508206000000000000100000000000905710.822018-03-14 20:00:00 +0100CH6309000000250097798",
+      "20180314001221000006915084508216000000000000100000000000800710.822018-03-14 20:00:00 +0100CH6309000000250097798",
+      "20180314001221000006925084508226000000000000100000000001165710.822018-03-14 20:00:00 +0100CH6309000000250097798",
+      "20180314001221000006935084508236000000000000100000000001069710.822018-03-14 20:00:00 +0100CH6309000000250097798",
+      "20180314001221000006945084508246000000000000100000000000750710.822018-03-14 20:00:00 +0100CH6309000000250097798"
+    ])
   end
 
   it 'creates payment and marks invoice as payed and updates invoice_list' do

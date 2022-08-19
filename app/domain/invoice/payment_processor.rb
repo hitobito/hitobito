@@ -50,11 +50,11 @@ class Invoice::PaymentProcessor
   end
 
   def alert
-    translate(:invalid, payments.reject(&:valid?).count)
+    translate(:invalid, payments_with_invoice.count + payments_without_invoice.count)
   end
 
   def notice
-    translate(:valid, payments.count(&:valid?))
+    translate(:valid, valid_payments.count)
   end
 
   def payments
@@ -64,7 +64,8 @@ class Invoice::PaymentProcessor
                   received_at: received_at(s),
                   invoice: invoice(s),
                   transaction_identifier: transaction_identifier(s),
-                  reference: fetch('Refs', 'AcctSvcrRef', s))
+                  reference: fetch('Refs', 'AcctSvcrRef', s),
+                  status: :xml_imported)
     end
   end
 
@@ -141,7 +142,19 @@ class Invoice::PaymentProcessor
   end
 
   def transaction_identifier(transaction)
-    transaction.dig('Refs', 'AcctSvcrRef') || transaction.dig('Refs', 'Prtry', 'Ref')
+    [
+      transaction.dig('Refs', 'AcctSvcrRef'),
+      reference(transaction),
+      transaction.dig('Amt'),
+      received_at(transaction),
+      debitor_iban(transaction)
+    ].join
+  end
+
+  def debitor_iban(transaction)
+    transaction.dig('RltdPties', 'DbtrAcct', 'Id', 'IBAN')
+  rescue KeyError
+    ''
   end
 
   def esr_number(transaction)

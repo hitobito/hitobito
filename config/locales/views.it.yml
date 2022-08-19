@@ -673,6 +673,8 @@ it:
     duplicates: "%{count} risultati nel riconoscimento di duplicati."
   invoices:
     filter:
+      from: Da
+      to: Al
       due_since: Scaduto da
       due_since_list:
         one_day: Ieri
@@ -893,7 +895,7 @@ it:
         date: Data
         state: Stato
         states:
-          unkown_recipient: Destinatario sconosciuto
+          unknown_recipient: Destinatario sconosciuto
           retreived: Ricevere
           bulk_delivering: Viene inviato
           completed: Concluso
@@ -1017,7 +1019,7 @@ it:
       infos:
         sender: "Mittente: %{mail}"
         sender_rejected: Il mittente è stato respinto
-        unkown_recipient: Destinatario sconosciuto
+        unknown_recipient: Destinatario sconosciuto
         retrieved: Ricevere
     export_enqueued: 'L''esportazione viene iniziata in retroscena e verrà scaricata al termine.'
     show:

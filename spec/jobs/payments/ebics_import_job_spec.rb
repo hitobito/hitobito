@@ -54,11 +54,11 @@ describe Payments::EbicsImportJob do
     InvoiceList.create(title: 'membership fee', invoices: [invoice])
     invoice.update!(reference: '000000000000100000000000800')
 
-    expect do
-      perform_enqueued_jobs do
-        subject.perform
-      end
-    end.to change { Payment.count }.by(1)
+    perform_enqueued_jobs do
+      subject.perform
+    end
+
+    expect(invoice.payments.size).to eq(1)
   end
 
   it 'continues after error is raised on provider' do
@@ -95,11 +95,11 @@ describe Payments::EbicsImportJob do
     InvoiceList.create(title: 'membership fee' ,invoices: [invoice])
     invoice.update!(reference: '000000000000100000000000800')
 
-    expect do
-      perform_enqueued_jobs do
-        subject.perform
-      end
-    end.to change { Payment.count }.by(1)
+    perform_enqueued_jobs do
+      subject.perform
+    end
+
+    expect(invoice.payments.size).to eq(1)
   end
 
   private

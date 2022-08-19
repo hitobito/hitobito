@@ -196,8 +196,12 @@ en:
       new:
         resend_confirmation_instructions: 'Confirm email address'
         submit: 'Send confirmation email'
+      send_instructions: 'You will receive an email in a few minutes to confirm your email address.'
+      send_paranoid_instructions: 'If your email address exists in our database, you will receive an email in a few minutes to confirm it.'
+      confirmed: 'Thank you for confirming your email address. You can register now.'
     unlocks:
       send_instructions: 'In a few minutes, you''ll receive an e-mail with instructions how to unlock your account.'
+      unlocked: 'Your account has been successfully unlocked.'
       send_paranoid_instructions: "If your e-mail address exist in our database, you will receive in a few minutes an e-mail with instructions on how to unlock your account."
     omniauth_callbacks:
       success: 'You have successfully logged in to your %{kind} account.'
@@ -215,6 +219,7 @@ en:
         updated: 'Your password has been updated.'
     mailer:
       confirmation_instructions:
+        subject: 'Instructions for confirming your email address'
         body:
           greeting: 'Hello %{name}!'
       reset_password_instructions:
@@ -223,6 +228,9 @@ en:
         subject: 'Instruction for unlocking your account.'
         body:
           greeting: 'Hello %{name}!'
+          information_html: 'Your account has been locked due to too many failed login attempts.<br>Click on the following link to unlock your account:</br>'
+          link_text: 'Unlock my account'
+          footer: 'This email was sent by Hitobito'
   errors:
     link_to_main: 'Main page'
     '404':
@@ -247,6 +255,7 @@ en:
     lists:
       courses:
         title: 'Available courses'
+        no_category: Other courses
         explanation: 'Courses of your group and their top groups are shown here. Other courses you''ll find in the organizing group.'
         csv_export_button: 'CSV export'
         ical_export_button: 'calendar export'
@@ -378,6 +387,13 @@ en:
       filter:
         places_available:
           all: All
+        select_states: Filter by status
+        time_period: Period (optional)
+        until: To
+      group_filter:
+        all_layers: All groups
+        filter_by_layer: Organizer
+        select_layers: Search groups...
     application_fields:
       caption_signature: Participants must sign the application
       caption_signature_confirmation: Application must be confirmed with a second signature
@@ -522,6 +538,10 @@ en:
     merge:
       select:
         title: 'Merge %{group} '
+        explanation: >
+            When merging two groups, all the subgroups, events and people including
+            their roles will be merged. Subscriptions will not be merged. All former
+            groups will still be visible under 'Deleted'.
         merge_is_irreversible: This process cannot be undone!
         new_group_name: 'Name of the merged group'
         merge_group_with: 'Merge %{group} with'
@@ -585,9 +605,14 @@ en:
   group/merge:
     success: 'The selected groups were merged to form the new group %{new_group_name}.'
     failure: 'The selected groups can''t be merged.'
+    no_candidates: >
+        There are no equal groups for merging, or you don't have the required permissions.
     group_name_missing: 'Name for new group must be defined.'
     no_group_selected: 'Please choose a group to be merged with.'
     not_allowed: 'You do not have the permission to merge these groups.'
+    invoice_config_not_merged: >
+        The invoice settings are not automatically applied. Please make the correct
+        settings manually.
   group/move:
     success: '%{group} has been moved to %{target}.'
     failure: 'This group can''t be moved or you don''t have the required persmissions.'
@@ -606,6 +631,8 @@ en:
     duplicates: "%{count}duplicates"
   invoices:
     filter:
+      from: From
+      to: To
       due_since: due since
       due_since_list:
         one_day: yesterday
@@ -645,6 +672,8 @@ en:
     update:
       flash:
         success: Invoice settings succesfully updated
+        provider_initialization_failed: Set up of the payment interface %{payment_provider} failed
+        provider_initialization_succeeded: Setting up the payment interface %{payment_provider} was successful
     general_fields:
       payment: 'Payment'
       payment_information_help: 'Listed in each invoice, can be adjusted per invoice'
@@ -654,8 +683,13 @@ en:
       account_number_example: 'Example 01-162-5'
       participant_number_internal_example: 'Example: 999999'
       iban_example: 'Example: CH93 0076 2011 6238 5295 7'
+      variable_donation_appeal: 'Variable donation call'
+      donation_calculation_year_amount_explanation: Number of past years taken into account for the calculation of donations.
+      donation_increase_percentage_explanation: Percentage, for the donation calculation
     reminder_fields:
       third_level: 'For all following reminders'
+    provider_fields:
+      reset_payment_provider_warning: 'If data is changed here, the initialization process of the invoice interface must be executed again.'
   invoice_lists:
     form:
       recipient_info:
@@ -787,18 +821,31 @@ en:
         inbox: Inbox
         spam: Spam
         failed: Failed
+      move_to:
+        inbox: in inbox
+        spam: in spam
+        failed: in Failed
       headers:
         subject: Subject
         sender: Sender
         date: Date
         state: State
         states:
-          unkown_recipient: Sender unknown
+          unknown_recipient: Sender unknown
           retreived: Recipient
           bulk_delivering: Will be sent
           completed: Finished
           sender_rejected: Sender rejected
           state_unavailable: No state available
+      not_available: No mails available in this mailbox.
+      flash:
+        deleted:
+          one: 'Mail successfully deleted'
+          other: '%{count} mails successfully deleted'
+        moved:
+          one: 'Mail successfully moved'
+          other: '%{count} mails successfully moved'
+        server_error: Unable to connect to mail server, please try again later.
   mailing_list_decorator:
     may_subscribe: 'Subscribers may subscribe/unsubscribe themselves'
     may_not_subscribe: 'Subscribers may  <strong>not</strong> subscribe/unsubscribe themselves'
@@ -826,7 +873,7 @@ en:
       infos:
         sender: "Sender: %{mail}"
         sender_rejected: Sender has been rejected
-        unkown_recipient: Sender unknown
+        unknown_recipient: Sender unknown
   navigation:
     menu: 'Menu'
     groups: 'Groups'
@@ -837,6 +884,7 @@ en:
     admin/oauth_authorizations: 'OAuth authentifications'
     imap_mails: 'Mails'
     invoices: 'Invoices'
+    invoices/single: 'Individual invoices'
   notes:
     new_note: Add note
     note:
@@ -1090,6 +1138,7 @@ en:
       add_tag: Add tag...
       no_entry: (none)
     export_enqueued: 'Export is started in the background and downloaded after completion.'
+    export_email_needed: 'Email needed for export.'
     multiselect_actions:
       remove_role: Remove roles
       move_role: Move roles

@@ -105,3 +105,11 @@ self_registration_notification:
   subject: 'Benachrichtigung Selbstregistrierung'
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+content_user_password_override:
+  custom_content_id: <%= ActiveRecord::FixtureSet.identify(:content_user_password_override) %>
+  locale: de
+  label: Login verhindert,
+  subject: Login für hitobito von Top Leader verhindert,
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

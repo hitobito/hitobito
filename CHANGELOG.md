@@ -1,11 +1,22 @@
 # Hitobito Changelog
 
+## Version 1.28
+
+*  Für variable Spendenaufrufe wird neu der Median über alle Zahlungen im definierten Zeitraum verwendet (hitobito_die_mitte#204)
+
+## Version 1.28
+
+*  Neuer Personentab "Sicherheit", welcher Informationen und Vorgänge zu Sicherheitsmassnahmen aufzeigt und das Passwort einer Person zurücksetzen lässt (benötigt :update Permission auf Person) (#1688)
+*  Neu können mittels "Buchungsbeleg" Tab bei den Rechnungen die Zahlungen in einem definierbaren Zeitrahmen ausgewertet werden. So werden die Zahlungen ihren Rechnungsartikeln zugeordnet und aufsummiert (#hitobito_sww#39)
+*  Anmeldungen für öffentlich sichtbare Anlässe verbessert (#1775)
+
 ## Version 1.27
 
+*  Einzelrechnungen können neu mittels Start- und Enddatum gefiltert werden (hitobito_sww#58)
 *  Anlässe: Die Kontaktperson wird auf Wunsch per E-Mail über neue Anmeldungen benachrichtigt. Die Benachrichtigung wird auf dem Anlass aktiviert (#1540).
 *  Jede Person kann jetzt Zwei-Faktor-Authentifizierung mit einer TOTP-App aktivieren. Für einzelne Rollen kann die Zwei-Faktor-Authentifizierung obligatorisch gemacht werden.
 *  Die Haupt-Mailadresse von Personen mit Login muss neu bestätigt werden nachdem sie geändert wurde (#957).
-*  Gruppen verfügen nun über eine einfache Mitgliederstatistik auf dem Reiter "Statistiken" auf der Gruppe (hitobito_kljb#4). (Nur bei Verbänden die das bisher noch nicht hatten) 
+*  Gruppen verfügen nun über eine einfache Mitgliederstatistik auf dem Reiter "Statistiken" auf der Gruppe (hitobito_kljb#4). (Nur bei Verbänden die das bisher noch nicht hatten)
 *  Der Login-Status (hat kein Login, hat Login, 2FA, E-Mail versendet aber noch nicht akzeptiert) von Personen auf die man Schreibrechte hat kann jetzt als zusätzliche Spalte angezeigt werden (#1296).
 *  Sprache als Standardattribut auf Person (#1663)
 *  Anlässe, Kurse, etc. können neu getaggt werden (#1687)

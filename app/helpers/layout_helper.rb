@@ -123,7 +123,7 @@ module LayoutHelper
   def closest_group_with_logo
     return unless @group
 
-    @group.self_and_ancestors.reverse.find do |group|
+    @group.self_and_ancestors.includes([:logo_attachment]).reverse.find do |group|
       upload_exists?(group, :logo)
     end
   end

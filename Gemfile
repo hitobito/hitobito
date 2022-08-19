@@ -7,14 +7,14 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '= 6.1.4.1'
+gem 'rails', '= 6.1.6.1'
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on'
 gem 'airbrake'
 gem 'awesome_nested_set'
 gem 'aws-sdk-s3', require: false
-gem 'axlsx', '>= 3.0.0.pre'
+gem 'caxlsx', '~>3.0.0'
 gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
 gem 'bootsnap', require: false
@@ -37,7 +37,7 @@ gem 'draper-cancancan'
 gem 'epics' # client for EBICS-connections to banks
 gem 'faker'
 gem 'faraday'
-gem 'gibbon', '~> 3.2'
+gem 'gibbon', '~> 3.4'
 gem 'globalize'
 gem 'haml'
 gem 'http_accept_language'
@@ -71,7 +71,7 @@ gem 'remotipart'
 gem 'rest-client'
 gem 'rotp'
 gem 'rqrcode'
-gem 'rubyzip', '~> 1.3.0'
+gem 'rubyzip'
 gem 'seed-fu'
 gem 'sentry-raven'
 gem 'simpleidn'

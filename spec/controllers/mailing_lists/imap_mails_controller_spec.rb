@@ -50,7 +50,8 @@ describe MailingLists::ImapMailsController do
       mail1 = mails.last
       expect(mail1.uid).to eq('42')
       expect(mail1.subject).to be(imap_mail_1.subject)
-      expect(mail1.date).to eq(Time.zone.utc_to_local(DateTime.parse(Time.now.to_s)))
+      # allow some leeway to not run into timing errors
+      expect(mail1.date).to be_within(2.seconds).of(Time.zone.utc_to_local(DateTime.parse(Time.now.to_s)))
       expect(mail1.sender_email).to eq('john@sender.com')
       expect(mail1.sender_name).to eq('sender')
       expect(mail1.plain_text_body).to eq('SpaceX rocks!')
@@ -60,7 +61,8 @@ describe MailingLists::ImapMailsController do
       mail2 = mails.first
       expect(mail2.uid).to eq('43')
       expect(mail2.subject).to be(imap_mail_2.subject)
-      expect(mail2.date).to eq(Time.zone.utc_to_local(DateTime.parse(Time.now.to_s)))
+      # allow some leeway to not run into timing errors
+      expect(mail2.date).to be_within(2.seconds).of(Time.zone.utc_to_local(DateTime.parse(Time.now.to_s)))
       expect(mail2.sender_email).to eq('john@sender.com')
       expect(mail2.sender_name).to eq('sender')
       expect(mail2.plain_text_body).to eq('This is just plain text!')

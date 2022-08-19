@@ -289,6 +289,42 @@ describe Invoice do
     end
   end
 
+  context '.draft_or_issued' do
+    let(:today)   { Time.zone.parse('2019-12-16 10:00:00') }
+    let(:invoice) { invoices(:invoice) }
+    let(:issued)  { invoices(:sent) }
+
+    around do |example|
+      travel_to(today) do
+        Invoice.update_all(created_at: 2.months.ago)
+        issued.update(
+          issued_at: 1.month.ago,
+          sent_at: 1.week.ago
+        )
+        example.call
+      end
+    end
+
+    it 'lists invoices sent or drafted in 2019' do
+      expect(Invoice.draft_or_issued(from: Date.new(2019, 1, 1), to: Date.new(2019, 12, 31))).to have(2).items
+    end
+
+    it 'lists no invoices sent or drafted in other years' do
+      expect(Invoice.draft_or_issued(from: Date.new(2018, 1, 1), to: Date.new(2018, 12, 31))).to be_empty
+      expect(Invoice.draft_or_issued(from: Date.new(2020, 1, 1), to: Date.new(2020, 12, 31))).to be_empty
+    end
+
+    it 'excludes invoice if issued in previous year' do
+      issued.update(issued_at: 1.year.ago)
+      expect(Invoice.draft_or_issued(from: Date.new(2019, 1, 1), to: Date.new(2019, 12, 31))).to eq([invoice])
+    end
+
+    it 'excludes invoice if created in previous year' do
+      invoice.update(created_at: 1.year.ago)
+      expect(Invoice.draft_or_issued(from: Date.new(2019, 1, 1), to: Date.new(2019, 12, 31))).to eq([issued])
+    end
+  end
+
   private
 
   def contactables(*args)

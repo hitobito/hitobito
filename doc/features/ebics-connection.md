@@ -53,3 +53,20 @@ IMPORTANT: The order types have to be supported by the payment provider to work!
 When the bank changes their public keys, the HPB request will fail and throw a `PaymentProviders::EbicsError` error.
 
 At this point, check the `encryption_hash` and `authentication_hash` values in the Settings and whether they're still up to date.
+
+## Exporting payments
+
+### Rake Tasks
+
+There are two rake tasks for exporting payments. Used when importing payments via EBICS:
+
+`rake payment:export_without_invoice`: Exports payments without assigned invoice
+`rake payment:export_ebics_imported`: Exports payments that were imported via EBICS
+
+#### Usage
+
+Both these tasks have optional arguments for the start and end date of the export.
+
+E.g `rake payment:export_without_invoice[2022.01.01,2022.12.01]`
+
+**Default**: from: `1.month.ago` to: `Time.zone.today`

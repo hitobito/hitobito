@@ -9,12 +9,13 @@ require 'spec_helper'
 
 describe Export::SubgroupsExportJob do
 
-  subject { Export::SubgroupsExportJob.new(user.id, group.id, filename: 'subgroups_export') }
+  subject { Export::SubgroupsExportJob.new(user.id, group.id, filename: filename) }
 
   let(:user)  { people(:top_leader) }
   let(:group) { groups(:top_layer) }
   let(:year)  { 2012 }
-  let(:file)  { AsyncDownloadFile.maybe_from_filename('subgroups_export', user.id, :csv) }
+  let(:file)  { AsyncDownloadFile.from_filename(filename, :csv) }
+  let(:filename) { AsyncDownloadFile.create_name('subgroups_export', user.id) }
 
   context 'creates a CSV-Export' do
 

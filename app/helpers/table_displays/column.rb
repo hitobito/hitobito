@@ -47,7 +47,7 @@ module TableDisplays
     def render(attr)
       raise 'implement in subclass, using `super do ... end`' unless block_given?
 
-      table.col(header(attr)) do |object|
+      table.col(header(attr), data: { attribute_name: attr }) do |object|
         value_for(object, attr) do |target, target_attr|
           yield target, target_attr, object, attr
         end

@@ -33,6 +33,8 @@ it:
         greater_than_or_equal_to: deve essere più grande o uguale a %{count}
         must_exist: non può essere lasciato vuoto
         readonly: non può venir cambiato
+        cannot_be_later_than_today: non può essere più tardi di oggi
+        cannot_be_later_than_deleted_at: Deve avvenire prima o nello stesso giorno delle dimissioni.
       models:
         cors_origin:
           attributes:
@@ -500,6 +502,7 @@ it:
         self_registration_role_type: Registrazione esterna
         self_registration_link: Registrazione esterna
         self_registration_notification_email: E-mail di notifica della registrazione esterna
+        remove_logo: Rimuovere il logo attuale del gruppo
       event:
         group_ids: Gruppi
         groups: Gruppi
@@ -682,6 +685,9 @@ it:
         person: Persona
         person_id: Persona
         string_long: '%{role} in %{group}'
+        dates: Date
+        created_at: Da
+        deleted_at: Al
         class:
           permission:
             description:
@@ -774,7 +780,7 @@ it:
           bulk_delivering: Viene spedito
           completed: Spedito
           sender_rejected: Mittente rifiutato
-          unkown_recipient: Errore
+          unknown_recipient: Errore
       message:
         source: Destinatario
         subject: Concerne
@@ -855,7 +861,8 @@ it:
         sequence_number: Numero
         esr_number: Numero di referenza
         reference: referenza
-        amount_paid: Totale pagato
+        amount_paid: Pagato
+        hide_total: Senza totale
         payment_slips:
           ch_es: Polizza di versamento postale rossa (CH)
           ch_bes: Polizza di versamento bancaria rossa (CH)
@@ -877,8 +884,8 @@ it:
         issued_at: Emesso il
         sent_at: 'Spedito il '
         cost: Importo
+        total: Importo della fattura
         total_inkl_vat: Totale IVA incl.
-        total: Totale IVA incl.
         vat: IVA
         vat_number: Numero IVA
         payment_information: Informazioni sul pagamento

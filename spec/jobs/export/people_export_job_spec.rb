@@ -59,6 +59,19 @@ describe Export::PeopleExportJob do
       let(:selection) { true }
       let(:csv) { CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true) }
 
+      let!(:registered_columns) { TableDisplay.table_display_columns.clone }
+      let!(:registered_multi_columns) { TableDisplay.multi_columns.clone }
+
+      before do
+        TableDisplay.table_display_columns = {}
+        TableDisplay.multi_columns = {}
+      end
+
+      after do
+        TableDisplay.table_display_columns = registered_columns
+        TableDisplay.multi_columns = registered_multi_columns
+      end
+
       it 'renders standard columns' do
         subject.perform
 
@@ -66,6 +79,8 @@ describe Export::PeopleExportJob do
       end
 
       it 'appends selected column and renders value' do
+        TableDisplay.register_column(Person, TableDisplays::PublicColumn, 'additional_information')
+        user.table_display_for(Person).save!
         user.table_display_for(group).update(selected: %w(additional_information))
         Person.update_all(additional_information: 'bla bla')
         subject.perform

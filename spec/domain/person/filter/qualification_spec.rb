@@ -118,7 +118,6 @@ describe Person::Filter::Qualification do
             people(:top_leader),
             people(:bottom_member),
             @tg_member,
-            @tg_extern,
             @bl_leader,
             @bg_leader
           ])

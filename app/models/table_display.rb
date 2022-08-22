@@ -43,7 +43,8 @@ class TableDisplay < ActiveRecord::Base
   end
 
   def self.for(person, table_model_class = nil)
-    self.find_or_initialize_by(person: person, table_model_class: table_model_class.to_s)
+    person_id = person.try(:id) || person
+    self.find_or_initialize_by(person_id: person_id, table_model_class: table_model_class.to_s)
         .allow_only_known_attributes!
   end
 

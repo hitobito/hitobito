@@ -85,16 +85,30 @@ class Payments::Collection
     self
   end
 
-  def previous_amount(options = {})
+  def payments_amount
+    @payments.sum(:amount)
+  end
+
+  def median_amount(options = {})
+    return 0 if @payments.empty?
+
+    amounts = @payments.order(amount: :asc).pluck(:amount)
+
+    count = @payments.count
+
+    # With an uneven count because of integer calculations (3 / 2 = 1)
+    # it will get the same amount twice out of the list.
+    # With an even count it will get the two middle amounts
+    median = (amounts[(count - 1) / 2] + amounts[count / 2]) / 2.0
     if options[:increased_by]
-      increased_amount = payment_sum * (1.0 + options[:increased_by].to_f / 100.0)
-      case payment_sum
+      increased_amount = median * (1.0 + options[:increased_by].to_f / 100.0)
+      case increased_amount
       when   0..99  then round_to_nearest(5.0, increased_amount)
       when 100..999 then round_to_nearest(10.0, increased_amount)
       else               round_to_nearest(50.0, increased_amount)
       end
     else
-      payment_sum
+      median
     end
   end
 
@@ -105,10 +119,6 @@ class Payments::Collection
   end
 
   private
-
-  def payment_sum
-    @payments.sum(:amount)
-  end
 
   def round_to_nearest(target, value)
     (value / target.to_f).round * target.to_f

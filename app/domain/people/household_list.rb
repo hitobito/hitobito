@@ -12,64 +12,94 @@ class People::HouseholdList
     @people_scope = people_scope
   end
 
-  def people_without_household
-    @people_scope.where(household_key: nil)
+  def only_households_in_batches
+    return unless block_given?
+
+    fetch_in_batches(only_households) { |batch| yield batch }
+  end
+
+  def people_without_household_in_batches
+    return unless block_given?
+
+    fetch_in_batches(people_without_household) { |batch| yield batch }
+  end
+
+  def households_in_batches
+    return unless block_given?
+
+    fetch_in_batches(grouped_households) { |batch| yield batch }
   end
 
   def grouped_households
-    people = Person.quoted_table_name
-
-    @people_scope.
-      # remove previously added selects, very important to make this query scale
-      unscope(:select, :includes).
-      # group by household, but keep NULLs separate
-      select("IFNULL(#{people}.`household_key`, #{people}.`id`) as `key`").
-      group(:key).
-      # Primary sorting criterion
-      select("COUNT(#{people}.`household_key`) as `member_count`").
-      # Secondary, unique sorting criterion
-      select("MIN(#{people}.`id`) as `id`")
+    Person.from("((#{only_households.unscope(:limit).to_sql}) " +
+                    "UNION ALL (#{people_without_household.unscope(:limit).to_sql})) "+
+                    "#{people_table}").limit(@people_scope.limit_value.presence)
   end
 
-  def households_in_batches(exclude_non_households: false) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
-    return unless block_given?
-
-    base_scope = exclude_non_households ? only_households : grouped_households
-
-    in_batches(base_scope, batch_size: 300) do |batch|
-      involved_people = fetch_people_with_id_or_household_key(batch.map(&:key))
-      grouped_people = batch.map do |household|
-        involved_people.select do |person|
-          # the 'key' is either a household key or a single person id
-          person.household_key == household.key || person.id.to_s == household.key
-        end
-      end
-      yield grouped_people
-    end
-  end
-
-  def each(exclude_non_households: false, &block)
+  def each(&block)
     return to_enum(:each) unless block_given?
 
-    households_in_batches(exclude_non_households: exclude_non_households) do |batch|
+    households_in_batches do |batch|
       batch.each(&block)
     end
   end
 
   private
 
-  def only_households
-    grouped_households.where.not(household_key: nil)
+  def fetch_in_batches(scope) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
+    in_batches(scope, batch_size: 300) do |batch|
+      involved_people = fetch_involved_people(batch.map(&:key))
+      grouped_people = batch.map do |household|
+        involved_people.select do |person|
+          # the 'key' is either a household key or a single person id
+          person.household_key == household.key || person.id.to_s == household.key.to_s
+        end
+      end
+      yield grouped_people
+    end
   end
 
-  def fetch_people_with_id_or_household_key(keys_or_ids)
+  def only_households
+    base_scope.
+        select(:household_key).
+        select("MIN(#{people_table}.`id`) as `id`").
+        select("COUNT(#{people_table}.`household_key`) as `member_count`").
+        select("#{people_table}.`household_key` as `key`").
+        where.not(household_key: nil).
+        group(:household_key)
+  end
+
+  def people_without_household
+    base_scope.
+        select(:household_key).
+        select(:id).
+        select('1 as `member_count`').
+        select("#{people_table}.`id` as `key`").
+        where(household_key: nil).
+        order(:id)
+  end
+
+  def people_table
+    Person.quoted_table_name
+  end
+
+  def base_scope
+    # Remove preview limit for fetching all candidate ids, and re-apply it afterwards.
+    # This way, we can add more conditions to the query builder while keeping the performance
+    # benefits of pre-calculating the candidate id list.
+    @base_scope ||= Person
+                        .where(id: @people_scope.unscope(:select, :includes, :limit).pluck(:id))
+                        .limit(@people_scope.limit_value.presence)
+  end
+
+  def fetch_involved_people(ids_or_household_keys)
     # Search for any number of housemates, regardless of preview limit
     base_scope = @people_scope.unscope(:limit)
     # Make sure to select household_key if we aren't selecting specific columns
     base_scope = base_scope.select(:household_key) if base_scope.select_values.present?
 
-    base_scope.where(household_key: keys_or_ids).
-      or(base_scope.where(id: keys_or_ids)).
+    base_scope.where(household_key: ids_or_household_keys).
+      or(base_scope.where(id: ids_or_household_keys)).
       load
   end
 
@@ -118,8 +148,8 @@ class People::HouseholdList
         end
       end
 
-      batch_relation = relation.having('`member_count` < ? OR (`member_count` = ? AND `id` > ?)',
-                                       member_count_offset, member_count_offset, id_offset)
+      batch_relation = relation.where('`member_count` < ? OR (`member_count` = ? AND `id` > ?)',
+                                      member_count_offset, member_count_offset, id_offset)
     end
   end
 

@@ -99,7 +99,7 @@ class Export::Pdf::Messages::LetterWithInvoice
                             .in_last(1.year)
                             .in_layer(letter.group.layer_group)
                             .of_person(@recipient)
-                            .previous_amount
+                            .payments_amount
     end
   end
 end

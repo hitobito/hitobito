@@ -182,99 +182,115 @@ describe Payments::Collection do
     end
   end
 
-  context 'previous_amount' do
+  context 'median_amount' do
+    context 'with no options' do
+      it 'returns median for uneven list' do
+        fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount
+
+        expect(amount).to eq(50.0)
+      end
+
+      it 'returns median for even list' do
+        fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(100.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(2000.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(10.0, Date.new(1.year.ago.year, 12, 31))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount
+
+        expect(amount).to eq(75.0)
+      end
+    end
+
+    context 'with increased_by option' do
+      it 'returns increased amount for uneven list' do
+        fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(200.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(15000.0, Date.new(3.years.ago.year, 1, 1))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+        # median is 100, times 10% (100 * 1.1 = 110)
+        expect(amount).to eq(110.0)
+      end
+
+      it 'returns increased amount for even list' do
+        fabricate_payment(110.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(90.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(15000.0, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(300.0, Date.new(3.years.ago.year, 1, 1))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+        # median is 100 ((110 + 90) / 2), times 10% (100 * 1.1 = 110)
+        expect(amount).to eq(110.0)
+      end
+
+      context 'previous_amount below 100' do
+        it 'calculates increased amount and rounds up to 5' do
+          fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
+          fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(300.0, Date.new(3.years.ago.year, 1, 1))
+
+          amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+          # median is 75 ((50 + 100) / 2), times 10% (75 * 1.1 = 82.5), rounded up to next 5 = 85
+          expect(amount).to eq(85.0)
+        end
+      end
+
+      context 'previous_amount below 1000' do
+        it 'calculates increased amount and rounds up to 10' do
+          fabricate_payment(180.0, Date.new(3.years.ago.year, 1, 1))
+          fabricate_payment(150.0, Date.new(3.years.ago.year, 1, 1))
+          fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(20.0, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(300.0, Date.new(3.years.ago.year, 1, 1))
+
+          amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+          # median is 150, times 10% (150 * 1.1 = 165), rounded up to next 10 = 170
+          expect(amount).to eq(170.0)
+        end
+      end
+
+      context 'previous_amount above 1000' do
+        it 'calculates increased amount and rounds up to 50' do
+          fabricate_payment(1280.0, Date.new(3.years.ago.year, 1, 1))
+          fabricate_payment(1250.0, Date.new(3.years.ago.year, 1, 1))
+          fabricate_payment(150.0, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(120.0, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(1300.0, Date.new(3.years.ago.year, 1, 1))
+
+          amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+          # median is 1250, times 10% (1250 * 1.1 = 1365), rounded up to next 50 = 1400
+          expect(amount).to eq(1400.0)
+        end
+      end
+    end
+  end
+
+  context 'payments_amount' do
     context 'with no options given' do
       it 'returns payment sum' do
         fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
         fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
 
-        amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount
+        amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).payments_amount
 
         expect(amount).to eq(50)
-      end
-    end
-
-    context 'previous_amount below 100' do
-      it 'calculates increased amount' do
-        fabricate_payment(50.0)
-
-        increased_amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount(increased_by: 10)
-
-        expect(increased_amount).to eq(55)
-      end
-
-      it 'calculates increased amount and rounds up to 5' do
-        fabricate_payment(50)
-
-        increased_amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount(increased_by: 5)
-
-        # 52.5 gets round up to 55
-        expect(increased_amount).to eq(55)
-      end
-
-      it 'calculates increased amount and rounds down to 5' do
-        fabricate_payment(50)
-
-        increased_amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount(increased_by: 4)
-
-        # 52 gets round down to 50
-        expect(increased_amount).to eq(50)
-      end
-    end
-
-    context 'previous_amount below 1000' do
-      it 'calculates increased amount' do
-        fabricate_payment(100)
-
-        increased_amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount(increased_by: 10)
-
-        expect(increased_amount).to eq(110)
-      end
-
-      it 'calculates increased amount and rounds up to 10' do
-        fabricate_payment(100)
-
-        increased_amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount(increased_by: 5)
-
-        # 105 gets round up to 110
-        expect(increased_amount).to eq(110)
-      end
-
-      it 'calculates increased amount and rounds down to 10' do
-        fabricate_payment(100)
-
-        increased_amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount(increased_by: 4)
-
-        # 104 gets round down to 100
-        expect(increased_amount).to eq(100)
-      end
-    end
-
-    context 'previous_amount above 1000' do
-      it 'calculates increased amount' do
-        fabricate_payment(1000)
-
-        increased_amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount(increased_by: 5)
-
-        expect(increased_amount).to eq(1050)
-      end
-
-      it 'calculates increased amount and rounds up to 50' do
-        fabricate_payment(1000)
-
-        increased_amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount(increased_by: 13)
-
-        # 1130 gets round up to 1150
-        expect(increased_amount).to eq(1150)
-      end
-
-      it 'calculates increased amount and rounds down to 50' do
-        fabricate_payment(1000)
-
-        increased_amount = described_class.new.in_last(1.year).in_layer(top_layer).of_person(bottom_member).previous_amount(increased_by: 12)
-
-        # 1120 gets round down to 1100
-        expect(increased_amount).to eq(1100)
       end
     end
   end

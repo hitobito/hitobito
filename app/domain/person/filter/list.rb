@@ -42,6 +42,8 @@ class Person::Filter::List
   end
 
   def filter
+    # When not filtering, the default is to exclude all passive and external people,
+    # i.e. include only members
     chain.present? ? chain.filter(list_range) : list_range.members
   end
 

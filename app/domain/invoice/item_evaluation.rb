@@ -30,14 +30,12 @@ class Invoice::ItemEvaluation
 
   def rows_by_invoice_article # rubocop:disable Metrics/MethodLength
     @rows_by_invoice_article ||= invoice_article_identifiers.collect do |ids|
-      name, account, cost_center = *ids
-      invoice_item = InvoiceItem.find_by(name: name, account: account, cost_center: cost_center)
-
+      name, account, cost_center = ids
       {
         name: name,
-        vat: invoice_item_vats[ids],
+        vat: invoice_item_vats(*ids),
         count: count(*ids),
-        amount_payed: count(*ids) * invoice_item.unit_cost + invoice_item_vats[ids],
+        amount_paid: amount_paid_without_vat(*ids) + invoice_item_vats(*ids),
         account: account,
         cost_center: cost_center
       }
@@ -45,16 +43,16 @@ class Invoice::ItemEvaluation
   end
 
   def invoice_article_total_amount
-    rows_by_invoice_article.sum { |article| article[:amount_payed] }
+    rows_by_invoice_article.sum { |article| article[:amount_paid] }
   end
 
-  def payments_of_payed_invoices
-    @payments_of_payed_invoices ||=
-      relevant_payments.of_fully_payed_invoices.grouped_by_invoice_items
+  def payments_of_paid_invoices
+    @payments_of_paid_invoices ||=
+      relevant_payments.of_fully_paid_invoices.grouped_by_invoice_items
   end
 
   def deficitary_payments
-    @deficit_payments = relevant_payments.of_non_fully_payed_invoices.payments
+    @deficit_payments = relevant_payments.of_non_fully_paid_invoices.payments
   end
 
   def relevant_payments
@@ -73,7 +71,7 @@ class Invoice::ItemEvaluation
       name: I18n.t('invoices.evaluations.show.deficit'),
       vat: '',
       count: deficitary_payments.count,
-      amount_payed: sum_of_deficitary_payments,
+      amount_paid: sum_of_deficitary_payments,
       account: '',
       cost_center: ''
     }
@@ -89,7 +87,7 @@ class Invoice::ItemEvaluation
       name: I18n.t('invoices.evaluations.show.excess'),
       vat: '',
       count: '',
-      amount_payed: excess_amount,
+      amount_paid: excess_amount,
       account: '',
       cost_center: ''
     }
@@ -97,7 +95,7 @@ class Invoice::ItemEvaluation
 
   def count(name, account, cost_center)
     # Get the relevant invoices
-    relevant_invoice_ids = relevant_payments.of_fully_payed_invoices.payments.pluck(:invoice_id)
+    relevant_invoice_ids = relevant_payments.of_fully_paid_invoices.payments.pluck(:invoice_id)
 
     # Search invoice items which fit the identifiers and are attached to relevant payments
     invoice_items = InvoiceItem.where(name: name,
@@ -111,16 +109,32 @@ class Invoice::ItemEvaluation
     invoice_items.first.count * amount_of_invoices
   end
 
-  def invoice_item_vats
-    # First convert the vat_rate to decimal,
-    # multiply with the total cost to get the absolute payed vats.
-    # Then sum those grouped by invoice item
-    payments_of_payed_invoices.sum('(IFNULL(vat_rate, 0) / 100) * (count * unit_cost)')
+  def invoice_item_vats(name, account, cost_center)
+    # Get the relevant invoices
+    relevant_invoice_ids = relevant_payments.of_fully_paid_invoices.payments.pluck(:invoice_id)
+
+    # Search invoice item which fits the identifiers and are attached to relevant payments
+    invoice_item = InvoiceItem.find_by(name: name,
+                                       account: account,
+                                       cost_center: cost_center,
+                                       invoice_id: relevant_invoice_ids)
+
+    # Invoice items with an empty vat_rate will be 0
+    return 0 unless invoice_item.vat_rate&.nonzero?
+
+    # We get the vat by multiplying the vat_rate with the paid amount excluding vat
+    invoice_item.vat_rate / 100 * amount_paid_without_vat(name, account, cost_center)
+  end
+
+  def amount_paid_without_vat(name, account, cost_center)
+    invoice_item = InvoiceItem.find_by(name: name, account: account, cost_center: cost_center)
+
+    count(name, account, cost_center) * invoice_item.unit_cost
   end
 
   def invoice_article_identifiers
     # Used for the group statement, thus being identifiers/key when doing calculation
     # Is used to get all identifiers and then loop to calculate/fetch the values for each article
-    payments_of_payed_invoices.pluck(*Payments::Collection.invoice_item_group_attrs)
+    payments_of_paid_invoices.pluck(*Payments::Collection.invoice_item_group_attrs)
   end
 end

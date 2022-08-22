@@ -15,10 +15,37 @@ class Invoices::EvaluationsController < ApplicationController
   prepend_before_action :group
   prepend_before_action :total
 
+  def show
+    respond_to do |format|
+      format.html { render }
+      format.csv { render_tabular(:csv) }
+      format.xlsx { render_tabular(:xlsx) }
+    end
+  end
+
   private
+
+  def render_tabular(format)
+    exported_data = case format
+                    when :csv then Export::Tabular::Invoices::EvaluationList.csv(table_rows)
+                    when :xlsx then Export::Tabular::Invoices::EvaluationList.xlsx(table_rows)
+                    end
+    send_data exported_data, type: format, filename: "invoices_evaluation_#{from}-#{to}.#{format}"
+  end
 
   def group
     @group ||= Group.find(params[:group_id])
+  end
+
+  def table_rows
+    @table_rows ||= @entries + total_row
+  end
+
+  def total_row
+    [{
+      name: t('.table.total'),
+      amount_paid: total
+    }]
   end
 
   def entries

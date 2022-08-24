@@ -9,6 +9,7 @@ class PeopleController < CrudController
   include RenderPeopleExports
   include AsyncDownload
   include Tags
+  prepend RenderTableDisplays
 
   self.nesting = Group
 
@@ -20,12 +21,9 @@ class PeopleController < CrudController
                           [family_members_attributes: [:id, :kind, :other_id, :_destroy]] +
                           [household_people_ids: []] +
                           [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
-
   FeatureGate.if(:person_language) do
     self.permitted_attrs << [:language]
   end
-
-
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]
@@ -165,7 +163,7 @@ class PeopleController < CrudController
   end
 
   def filter_entries
-    entries = person_filter.entries
+    entries = add_table_display_to_query(person_filter.entries, current_person)
     entries = entries.reorder(Arel.sql(sort_expression)) if sorting?
     entries
   end

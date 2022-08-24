@@ -385,8 +385,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       flat_map(&:layer_group)
   end
 
-  def table_display_for(parent)
-    @table_display ||= TableDisplay.for(self, parent)
+  def table_display_for(table_model_class)
+    @table_display ||= TableDisplay.for(self, table_model_class)
   end
 
   def oauth_applications

@@ -430,6 +430,8 @@ de:
         updated_at: Geändert
         login_status: Login
         language: Sprache
+        primary_group_id: Hauptgruppe
+        layer_group_label: Hauptebene
 
       person_duplicate:
         birth_year: Jahrgang

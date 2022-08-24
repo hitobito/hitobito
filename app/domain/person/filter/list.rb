@@ -7,7 +7,7 @@
 
 class Person::Filter::List
 
-  attr_reader :group, :user, :chain, :range, :name, :multiple_groups
+  attr_reader :group, :user, :chain, :range, :name
 
   def initialize(group, user, params = {})
     @group = group
@@ -26,22 +26,36 @@ class Person::Filter::List
     @all_count ||= filter.distinct.count
   end
 
+  def multiple_groups
+    range == 'deep' || range == 'layer'
+  end
+
   private
 
   def filtered_accessibles
-    return filter unless user
+    filtered = filter_with_selection.unscope(:select).select(:id).distinct
+    accessibles.where(id: filtered)
+  end
 
-    if group_range?
-      filtered = filter.unscope(:select).select(:id).distinct
-      filtered = filtered.where(id: @ids) if @ids.present?
-      accessibles.unscope(:select).where(id: filtered)
-    else
-      accessibles.merge(filter)
-    end
+  def filter_with_selection
+    @ids.present? ? filter.where(id: @ids) : filter
   end
 
   def filter
-    chain.present? ? chain.filter(list_range) : list_range
+    # When not filtering, the default is to exclude all passive and external people,
+    # i.e. include only members
+    chain.present? ? chain.filter(list_range) : list_range.members
+  end
+
+  def list_range
+    case range
+    when 'deep'
+      Person.in_or_below(group, chain.roles_join)
+    when 'layer'
+      Person.in_layer(group, join: chain.roles_join)
+    else
+      Person.in_group(group, chain.roles_join)
+    end
   end
 
   def accessibles
@@ -55,20 +69,6 @@ class Person::Filter::List
       PersonFullReadables
     else
       PersonReadables
-    end
-  end
-
-  def list_range
-    case range
-    when 'deep'
-      @multiple_groups = true
-      Person.in_or_below(group, chain.roles_join)
-    when 'layer'
-      @multiple_groups = true
-      Person.in_layer(group, join: chain.roles_join)
-    else
-      group_scope = Person.in_group(group, chain.roles_join)
-      chain.blank? ? group_scope.members(group) : group_scope
     end
   end
 

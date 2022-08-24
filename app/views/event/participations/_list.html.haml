@@ -20,7 +20,7 @@
   .pagination-info
 
   - if @participations.present?
-    = Dropdown::TableDisplays.new(self).to_s
+    = Dropdown::TableDisplays.new(self, @participations).to_s
 - if @person_add_requests.present?
   = render 'person/add_requests/body_list'
 
@@ -37,11 +37,8 @@
   - t.col(Person.human_attribute_name(:emails))                  { |p| p.all_emails(cannot?(:show_details, p)) }
   - t.col(PhoneNumber.model_name.human(count: 2))                { |p| p.all_phone_numbers(cannot?(:show_details, p)) }
   - sortable_grouped_person_attr(t, address: false, zip_code: true, town: true) { |p| p.complete_address }
-  - t.col(t.sort_header(:birthday, Person.human_attribute_name(:birthday))) do |p|
-    = format_attr(p.person, :birthday)
-  - t.col(Person.human_attribute_name(:layer_group))             { |p| p.layer_group_label }
 
   = render_extensions :list, locals: { table: t }
-  - render_table_display_columns(t)
+  - render_table_display_columns(Event::Participation, t)
 
 = paginate entries

@@ -7,7 +7,7 @@
 
 class RefactorTableDisplays < ActiveRecord::Migration[6.1]
   def change
-    TableDisplay.destroy_all
+    TableDisplay.delete_all
 
     add_column :table_displays, :table_model_class, :string, null: false
     add_index :table_displays, [:person_id, :table_model_class], unique: true

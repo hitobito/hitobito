@@ -27,6 +27,10 @@ describe Messages::LetterDispatch do
     expect(message.reload.success_count).to eq 1
   end
 
+  it 'returns a result' do
+    expect(subject.run.finished?).to be_truthy
+  end
+
   it 'creates recipient entries with address' do
     subject.run
 

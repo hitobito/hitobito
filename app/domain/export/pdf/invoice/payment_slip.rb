@@ -12,7 +12,7 @@ module Export::Pdf::Invoice
       pdf.start_new_page if cursor < 225
       stamped(:invoice_address) { invoice_address }
       stamped(:account_number) { account_number }
-      render_payment_amount
+      render_payment_amount unless invoice.hide_total?
       invoice.with_reference? ? esr_number : payment_purpose
       left_receiver_address
       right_receiver_address

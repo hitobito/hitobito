@@ -22,14 +22,14 @@
       = render 'person/add_requests/body_list'
 
   - if @people.present?
-    = Dropdown::TableDisplays.new(self).to_s
+    = Dropdown::TableDisplays.new(self, @people).to_s
 
 - if @people.total_count > 0
   = crud_table(data: { checkable: true }) do |t|
     - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
       - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
     - t.col('') do |p|
-      .profil= image_tag(p.picture.thumb.url, size: '32x32')
+      .profil= image_tag(upload_url(p, :picture, variant: :thumb, default: :profil), size: '32x32')
     - sortable_grouped_person_attr(t, last_name: true, first_name: true, nickname: true) do |p|
       %strong
         -# Any person listed can be shown
@@ -45,7 +45,7 @@
       = p.all_phone_numbers(!index_full_ability?)
     - sortable_grouped_person_attr(t, address: false, zip_code: true, town: true) do |p|
       = p.complete_address
-    - render_table_display_columns(t)
+    - render_table_display_columns(Person, t)
 
 = paginate @people
 = render 'multiselect_actions'

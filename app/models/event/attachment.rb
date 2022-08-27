@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2015, Pro Natura Schweiz. This file is part of
+#  Copyright (c) 2015-2022, Pro Natura Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -20,13 +20,19 @@
 class Event::Attachment < ActiveRecord::Base
 
   MAX_FILE_SIZE = Settings.event.attachments.max_file_size.megabytes
+  CONTENT_TYPES = Settings.event.attachments.content_types
 
   belongs_to :event
 
-  mount_uploader :file, Event::AttachmentUploader
+  mount_uploader :carrierwave_file, Event::AttachmentUploader, mount_on: 'file'
+  # this could become a has_many_attached on Event
+  has_one_attached :file
 
   validates_by_schema except: :file
-  validate :assert_file_size
+  if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
+    validates :file, size: { less_than_or_equal_to: MAX_FILE_SIZE },
+                     content_type: CONTENT_TYPES
+  end
 
   scope :list, -> { order(:file) }
 
@@ -34,11 +40,13 @@ class Event::Attachment < ActiveRecord::Base
     file
   end
 
-  private
+  def remove_file
+    false
+  end
 
-  def assert_file_size
-    if file.size.to_f > MAX_FILE_SIZE
-      errors.add(:file, :filesize_too_large, maximum: MAX_FILE_SIZE / 1.megabyte)
+  def remove_file=(deletion_param)
+    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+      file.purge_later
     end
   end
 

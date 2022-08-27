@@ -1,6 +1,5 @@
-![hitobito logo](https://hitobito.com/images/logo.svg)
+![hitobito logo](https://user-images.githubusercontent.com/9592347/184715060-351453d4-d066-4ff6-8f82-95d3b524b62f.svg)
 
-#
 # Welcome to Hitobito 人人
 
 Hitobito is an open source web application to manage organisation and communities with complex group hierarchies with members, events, courses, mailings, communication and a lot more.

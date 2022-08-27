@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2022, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Export::Pdf::Messages::Letter
   class Header < Section
+    include Export::Pdf::AddressRenderers
+    LEFT_ADDRESS_X = 0
+    RIGHT_ADDRESS_X = 7.cm
+
     LOGO_BOX = [450, 40].freeze
     ADDRESS_BOX = [90.mm, 60].freeze
     SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 24].freeze
@@ -17,12 +21,14 @@ class Export::Pdf::Messages::Letter
       stamped :render_logo_right
 
       offset_cursor_from_top 60.mm
-      stamped :render_shipping_info
+      bounding_box(address_position(group), width: ADDRESS_BOX.first) do
+        stamped :render_shipping_info
 
-      pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
+        pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
+        render_address(recipient.address)
 
-      render_address(recipient.address)
 
+      end
       pdf.font_size font_size do
         stamped :render_date_location_text if letter.date_location_text.present?
         stamped :render_subject if letter.subject.present?
@@ -46,7 +52,8 @@ class Export::Pdf::Messages::Letter
       left = bounds.width - width
       bounding_box([left, cursor], width: width, height: height) do
         if logo_path
-          image(logo_path, logo_options(width, height))
+          image(StringIO.open(logo_path.download),
+                logo_options(width, height))
         else
           ''
         end
@@ -67,8 +74,10 @@ class Export::Pdf::Messages::Letter
     end
 
     def logo_dimensions
-      image = MiniMagick::Image.open(logo_path)
-      [image[:width], image[:height]]
+      logo_path.analyze unless logo_path.analyzed?
+      metadata = logo_path.blob.metadata
+
+      [metadata[:width], metadata[:height]]
     end
 
     def render_address(address, width: ADDRESS_BOX.first, height: ADDRESS_BOX.second)
@@ -98,7 +107,7 @@ class Export::Pdf::Messages::Letter
       pdf.stroke do
         pdf.move_down 1.mm
         # post factsheet: max. 11 cm, start and end of the line MUST be visible in the window
-        pdf.horizontal_line 0, 80.mm
+        pdf.horizontal_line 0, ADDRESS_BOX.first
         pdf.move_up 1.mm
       end
     end
@@ -112,7 +121,9 @@ class Export::Pdf::Messages::Letter
     end
 
     def logo_path_setting(group)
-      group.settings(:messages_letter).picture.path
+      setting = group.settings(:messages_letter)
+
+      setting.picture if setting.picture.attached?
     end
 
     def sender_address

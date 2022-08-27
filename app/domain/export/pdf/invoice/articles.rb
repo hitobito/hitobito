@@ -25,7 +25,7 @@ module Export::Pdf::Invoice
       pdf.move_down 10
       pdf.font_size(8) { articles_table }
 
-      total_box
+      total_box unless invoice.hide_total?
       pdf.move_down 4
       font_size(8) { text invoice.payment_information }
     end

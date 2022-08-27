@@ -8,18 +8,20 @@ class TableDisplaysController < ApplicationController
   skip_authorization_check only: [:create]
 
   def create
-    model = current_person.table_display_for(parent)
+    return unless TableDisplay.table_display_columns.keys.include? table_model_class
+
+    model = current_person.table_display_for(table_model_class.constantize)
     model.update!(selected: model_params.fetch(:selected, []))
   end
 
   private
 
   def model_params
-    @model_params ||= params.permit(:parent_id, :parent_type, selected: [])
+    @model_params ||= params.permit(:table_model_class, selected: [])
   end
 
-  def parent
-    model_params[:parent_type].constantize.find(model_params[:parent_id])
+  def table_model_class
+    @table_model_class ||= model_params[:table_model_class]
   end
 
 end

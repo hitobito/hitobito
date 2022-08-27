@@ -15,11 +15,6 @@ class Export::Pdf::Messages::Letter
 
     private
 
-    def offset_cursor_from_top(offset)
-      position = pdf.bounds.top - (offset - Export::Pdf::Messages::Letter::MARGIN)
-      pdf.move_cursor_to position
-    end
-
     def with_settings(opts = {})
       before = opts.map { |key, _value| [key, pdf.send(key)] }
       opts.each { |key, value| pdf.send(:"#{key}=", value) }

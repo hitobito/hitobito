@@ -7,4 +7,5 @@
 
 class Message::BulkMail < Message
   delegate :mail_from, to: :mail_log
+
 end

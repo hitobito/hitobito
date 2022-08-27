@@ -102,7 +102,7 @@ module MailRelay
           reject_not_allowed
         end
       else
-        @mail_log.update(status: :unkown_recipient)
+        @mail_log.update(status: :unknown_recipient)
         reject_not_existing
       end
       nil

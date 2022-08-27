@@ -43,10 +43,10 @@ describe MailLog do
 
   context '#update' do
     context 'changes message state' do
-      { retreived: :pending,
+      { retrieved: :pending,
         bulk_delivering: :processing,
         completed: :finished,
-        unkown_recipient: :failed,
+        unknown_recipient: :failed,
         sender_rejected: :failed }.each_pair do |log_status, expected_message_state|
         it "to #{expected_message_state} if mail_log status is #{log_status}" do
           mail_log.update!(status: log_status)

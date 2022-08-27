@@ -115,15 +115,15 @@ class MailingList < ActiveRecord::Base
   end
 
   def people(people_scope = Person.only_public_data)
-    MailingList::Subscribers.new(self, people_scope).people
+    MailingLists::Subscribers.new(self, people_scope).people
   end
 
   def people_count(people_scope = Person)
-    MailingList::Subscribers.new(self, people_scope).people.count
+    MailingLists::Subscribers.new(self, people_scope).people.count
   end
 
   def household_count(people_scope = Person)
-    subscribers_scope = MailingList::Subscribers.new(self, people_scope).people
+    subscribers_scope = MailingLists::Subscribers.new(self, people_scope).people
     households = People::HouseholdList.new(subscribers_scope)
 
     # count total rows after grouping, instead of adding a count to each grouped row

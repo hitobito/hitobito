@@ -9,16 +9,21 @@ require 'spec_helper'
 
 describe Export::EventParticipationsExportJob do
 
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, params.merge(filename: 'event_participation_export')) }
+  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, params.merge(filename: filename)) }
 
   let(:participation)              { event_participations(:top) }
   let(:user)                       { participation.person }
   let(:other_user)                 { Fabricate(:person, first_name: 'Other', last_name: 'Member', household_key: 1) }
   let(:event)                      { participation.event }
+  let(:filename) { AsyncDownloadFile.create_name('event_participation_export', user.id) }
 
   let(:params)                     { { filter: 'all' } }
   let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, user, params) }
-  let(:filepath)                   { AsyncDownloadFile::DIRECTORY.join('event_participation_export') }
+
+  let(:file) do
+    AsyncDownloadFile
+      .from_filename(filename, format)
+  end
 
   before do
     SeedFu.quiet = true
@@ -34,7 +39,8 @@ describe Export::EventParticipationsExportJob do
     it 'and saves it' do
       subject.perform
 
-      lines = File.readlines("#{filepath}.#{format}")
+      lines = file.read.lines
+
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0].split(';').count).to match(15)
@@ -48,7 +54,7 @@ describe Export::EventParticipationsExportJob do
     it 'and saves it' do
       subject.perform
 
-      lines = File.readlines("#{filepath}.#{format}")
+      lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Firmenname;Übername.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
@@ -66,7 +72,7 @@ describe Export::EventParticipationsExportJob do
 
       subject.perform
 
-      lines = File.readlines("#{filepath}.#{format}")
+      lines = file.read.lines
       expect(lines.size).to eq(2)
       expect(lines[0]).to match(/Name;Adresse;PLZ;.*/)
       expect(lines[1]).to match(/Bottom und Other Member.*/)
@@ -78,7 +84,8 @@ describe Export::EventParticipationsExportJob do
 
     it 'and saves it' do
       subject.perform
-      expect(File.exist?("#{filepath}.#{format}")).to be true
+
+      expect(file.generated_file).to be_attached
     end
   end
 

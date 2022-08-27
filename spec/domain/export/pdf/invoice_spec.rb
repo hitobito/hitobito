@@ -216,5 +216,40 @@ describe Export::Pdf::Invoice do
         [346, 144, '8000 Alt Tylerland']
       ]
     end
+
+    it 'does not render receipt and payment amount if total is hidden' do
+      invoice.hide_total = true
+      expect(text_with_position).to eq [
+        [14, 276, "Empfangsschein"],
+        [14, 251, "Konto / Zahlbar an"],
+        [14, 239, "CH93 0076 2011 6238 5295 7"],
+        [14, 228, "Acme Corp"],
+        [14, 216, "Hallesche Str. 37"],
+        [14, 205, "3007 Hinterdupfing"],
+        [14, 173, "Zahlbar durch"],
+        [14, 161, "Max Mustermann"],
+        [14, 150, "Musterweg 2"],
+        [14, 138, "8000 Alt Tylerland"],
+        [14, 89, "Währung"],
+        [71, 89, "Betrag"],
+        [14, 78, "CHF"],
+        [105, 39, "Annahmestelle"],
+        [190, 276, "Zahlteil"],
+        [190, 89, "Währung"],
+        [247, 89, "Betrag"],
+        [190, 78, "CHF"],
+        [346, 278, "Konto / Zahlbar an"],
+        [346, 266, "CH93 0076 2011 6238 5295 7"],
+        [346, 255, "Acme Corp"],
+        [346, 243, "Hallesche Str. 37"],
+        [346, 232, "3007 Hinterdupfing"],
+        [346, 211, "Referenznummer"],
+        [346, 200, "00 00834 96356 70000 00000 00019"],
+        [346, 178, "Zahlbar durch"],
+        [346, 167, "Max Mustermann"],
+        [346, 155, "Musterweg 2"],
+        [346, 144, "8000 Alt Tylerland"]
+      ]
+    end
   end
 end

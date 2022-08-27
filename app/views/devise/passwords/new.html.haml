@@ -9,3 +9,6 @@
   = f.error_messages
   = f.labeled(:email) { f.input_field(:email) }
   = f.indented submit_button(f,t('.reset_password_button'))
+
+  = f.indented do
+    = link_to t('devise.sessions.new.sign_in'), new_person_session_path

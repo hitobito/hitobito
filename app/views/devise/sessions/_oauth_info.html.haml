@@ -12,7 +12,7 @@
 .fields-separation
   - if oauth_app.present?
     .oauth-application-logo
-      = image_tag(oauth_app.logo_url, size: '64x64')
+      = image_tag(upload_url(oauth_app, :logo, variant: :thumb, default: 'oauth_app'), size: '64x64')
 
   %p
     = t('.info', oauth_app: oauth_app&.name)

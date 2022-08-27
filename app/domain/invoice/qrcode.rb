@@ -49,7 +49,7 @@ class Invoice::Qrcode
   end
 
   def payment
-    amount = format('%<total>.2f', total: @invoice.total) unless @invoice.total.zero?
+    amount = format('%<total>.2f', total: @invoice.total) if show_total?
     { amount: amount, currency: @invoice.currency }
   end
 
@@ -144,6 +144,10 @@ class Invoice::Qrcode
 
   def image(filename)
     Rails.root.join("app/domain/invoice/assets/#{filename}")
+  end
+
+  def show_total?
+    !@invoice.hide_total? && @invoice.total.nonzero?
   end
 end
 

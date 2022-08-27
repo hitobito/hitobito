@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2022, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -27,19 +27,51 @@
 
 class GroupSetting < RailsSettings::SettingObject
 
-  mount_uploader :picture, GroupSetting::LogoUploader
+  mount_uploader :carrierwave_picture, GroupSetting::LogoUploader, mount_on: 'picture'
+  has_one_attached :picture
+
+  # rubocop:disable Metrics/LineLength
+  validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 }, unless: :skip_validation },
+                      content_type: { in: ['image/jpeg', 'image/gif', 'image/png'], unless: :skip_validation }
+  # rubocop:enable Metrics/LineLength
 
   ENCRYPTED_VALUES = %w(username password).freeze
   SETTINGS = {
     text_message_provider: { username: nil, password: nil, provider: %w(aspsms), originator: nil },
-    messages_letter: { picture: nil }
+    messages_letter: { picture: nil, address_position: [:left, :right] }
+  }.with_indifferent_access
+
+  POSSIBLE_VALUES = {
+    messages_letter: { address_position: [:left, :right] }
   }.with_indifferent_access
 
   def attrs
     SETTINGS[var].symbolize_keys.keys
   end
 
+  def possible_values(attr)
+    POSSIBLE_VALUES[var.to_sym].try(:[], attr)
+  end
+
+  def multiselect_attr?(attr)
+    possible_values(attr).present?
+  end
+
+  def remove_picture
+    false
+  end
+
+  def remove_picture=(deletion_param)
+    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+      picture.purge_later
+    end
+  end
+
   private
+
+  def skip_validation
+    Rails.env.test? || ENV['NOCHMAL_MIGRATION'].present? # if migrating RIGHT NOW
+  end
 
   def _get_value(name)
     if encrypted?(name)
@@ -103,5 +135,4 @@ class GroupSetting < RailsSettings::SettingObject
       where(target_id: group_id, target_type: Group.sti_name)
     end
   end
-
 end

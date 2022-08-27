@@ -46,8 +46,12 @@ class RoleAbility < AbilityDsl::Base
   # A role giving the current user the permission required to edit/destroy this very role.
   # Should not be removed because this cannot be undone by the user.
   def not_permission_giving
-    subject.person_id != user.id ||
-    ([:layer_and_below_full, :layer_full, :group_full] & subject.permissions).blank?
+    not_own_role? ||
+      ([:layer_and_below_full, :layer_full, :group_full] & subject.permissions).blank?
+  end
+
+  def not_own_role?
+    subject.person_id != user.id
   end
 
   private

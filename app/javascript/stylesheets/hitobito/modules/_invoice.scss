@@ -13,21 +13,31 @@
       font-weight: normal;
       text-align: left;
     }
-    tr td, tr th{
+    tr td,
+    tr th {
       padding-right: 30px;
     }
   }
 
-  .invoice-history{
+  .invoice-history {
     table {
       float: left;
       margin-left: 30px;
 
-      td:first-child { font-size: 6px; padding-right: 5px; }
-      td.red:first-child { color: $red; }
-      td.blue:first-child { color: $blue; }
-      td.green:first-child { color: $green; }
-      td:nth-child(2) { 
+      td:first-child {
+        font-size: 6px;
+        padding-right: 5px;
+      }
+      td.red:first-child {
+        color: $red;
+      }
+      td.blue:first-child {
+        color: $blue;
+      }
+      td.green:first-child {
+        color: $green;
+      }
+      td:nth-child(2) {
         padding-right: 20px;
         color: $gray;
         font-weight: normal;
@@ -37,7 +47,6 @@
 }
 
 .invoice {
-
   .invoice-info {
     margin-top: 20px;
     width: 100%;
@@ -45,11 +54,10 @@
       float: right;
     }
 
-    .invoice-recipient-address{
+    .invoice-recipient-address {
       float: left;
     }
   }
-
 
   .invoice-articles-table {
     table.header {
@@ -68,12 +76,32 @@
       margin-top: -15px;
       height: 60px;
 
-      table{
+      table {
         float: right;
         width: 250px;
-        tr{ border-bottom: 1px solid $grayLight; }
-        tr:first-child{ border-bottom: none; }
+        tr {
+          border-bottom: 1px solid $grayLight;
+        }
+        tr:first-child {
+          border-bottom: none;
+        }
       }
     }
   }
+}
+
+.invoices-filter {
+  margin-bottom: 0;
+}
+
+.invoices-daterange-filter {
+  margin-top: -2rem;
+}
+
+.invoices-filter + div + div {
+  margin-top: 20px;
+}
+
+.invoice-evaluation-actions > div {
+  margin-bottom: 1.2rem;
 }

@@ -54,7 +54,7 @@ class Invoice::PaymentSlip
   def code_line_prefix
     block = ''
     block << BCS[calculate_bc.to_sym]
-    block << format('%011.2f', invoice.total).delete('.') if calculate_bc == 'esr'
+    block << format('%011.2f', invoice.total).delete('.') if calculate_bc == 'esr' && show_total?
     block << check_digit(block).to_s
   end
 
@@ -86,6 +86,10 @@ class Invoice::PaymentSlip
 
   def zero_padded(string, length)
     format("%0#{length}d", string[0..(length - 1)].to_i)
+  end
+
+  def show_total?
+    !@invoice.hide_total?
   end
 
 end

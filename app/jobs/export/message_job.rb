@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Die Mitte. This file is part of
+#  Copyright (c) 2021-2022, Die Mitte. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,7 +24,7 @@ class Export::MessageJob < Export::ExportBaseJob
     case @format
     when :pdf
       message.exporter_class.new(message, {
-        async_download_file: filename,
+        async_download_file: async_download_file,
         stamped: true
       }).render
     end

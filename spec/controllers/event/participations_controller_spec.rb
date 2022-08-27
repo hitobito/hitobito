@@ -395,11 +395,11 @@ describe Event::ParticipationsController do
                                            qualification_kind: qualification_kinds(:sl))
       end
 
-      it 'creates confirmation job' do
+      it 'creates confirmation and notification job' do
         expect do
           post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
           expect(assigns(:participation)).to be_valid
-        end.to change { Delayed::Job.count }.by(1)
+        end.to change { Delayed::Job.count }.by(2) # Event::ParticipationConfirmationJob, Event::ParticipationNotificationJob
         expect(flash[:notice]).not_to include 'Für die definitive Anmeldung musst du diese ' \
           'Seite über <i>Drucken</i> ausdrucken, '
       end
@@ -800,10 +800,25 @@ describe Event::ParticipationsController do
     let(:participation) { event_participations(:top) }
     let(:question)      { event_questions(:top_ov) }
 
-    before { sign_in(top_leader) }
+    let!(:registered_columns) { TableDisplay.table_display_columns.clone }
+    let!(:registered_multi_columns) { TableDisplay.multi_columns.clone }
+
+    before do
+      TableDisplay.table_display_columns = {}
+      TableDisplay.multi_columns = {}
+      sign_in(top_leader)
+    end
+
+    after do
+      TableDisplay.table_display_columns = registered_columns
+      TableDisplay.multi_columns = registered_multi_columns
+    end
 
     it 'GET#index lists extra person column' do
-      top_leader.table_display_for(course).update(selected: %w(person.gender))
+      TableDisplay.register_column(Event::Participation, TableDisplays::PublicColumn, 'person.gender')
+      table_display = top_leader.table_display_for(Event::Participation)
+      table_display.selected = %w(person.gender)
+      table_display.save!
 
       get :index, params: { group_id: group.id, event_id: course.id }
       expect(dom).to have_checked_field 'Geschlecht'
@@ -811,7 +826,10 @@ describe Event::ParticipationsController do
     end
 
     it 'GET#index lists extra event application question' do
-      top_leader.table_display_for(course).update!(selected: %W[event_question_#{question.id}])
+      TableDisplay.register_multi_column(Event::Participation, TableDisplays::Event::Participations::QuestionColumn)
+      table_display = top_leader.table_display_for(Event::Participation)
+      table_display.selected = %W[event_question_#{question.id}]
+      table_display.save!
       participation.answers.create!(question: question, answer: 'GA')
 
       get :index, params: { group_id: group.id, event_id: course.id }
@@ -820,7 +838,10 @@ describe Event::ParticipationsController do
     end
 
     it 'GET#index sorts by extra event application question' do
-      top_leader.table_display_for(course).update!(selected: %W[event_question_#{question.id}])
+      TableDisplay.register_multi_column(Event::Participation, TableDisplays::Event::Participations::QuestionColumn)
+      table_display = top_leader.table_display_for(Event::Participation)
+      table_display.selected = %W[event_question_#{question.id}]
+      table_display.save!
       role = Fabricate(:event_role, type: participation.roles.first.type)
       other = Fabricate(:event_participation, event: course, roles: [role], active: true)
 
@@ -838,7 +859,7 @@ describe Event::ParticipationsController do
         /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
       )
       expect(Delayed::Job.last.payload_object.send(:exporter))
-        .to eq Export::Tabular::People::TableDisplays
+        .to eq Export::Tabular::Event::Participations::TableDisplays
     end
 
   end

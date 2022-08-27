@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -7,20 +7,20 @@
 
 class DeliveryReportMailer < ApplicationMailer
 
-  CONTENT_BULK_MAIL_SUCCESS = 'bulk_mail_success'.freeze
-  CONTENT_BULK_MAIL_WITH_FAILED = 'bulk_mail_with_failed'.freeze
+  CONTENT_BULK_MAIL_SUCCESS = 'bulk_mail_success'
+  CONTENT_BULK_MAIL_WITH_FAILED = 'bulk_mail_with_failed'
 
   def bulk_mail(
     report_to,
     envelope_sender,
-    sent_message,
+    mail_subject,
     total_recipients,
     delivered_at,
-    failed_recipients = nil
-  )
+    failed_recipients = nil)
+
     content = failed_recipients.present? ? CONTENT_BULK_MAIL_WITH_FAILED : CONTENT_BULK_MAIL_SUCCESS
     @envelope_sender = envelope_sender
-    @sent_message = sent_message
+    @mail_subject = mail_subject
     @total_recipients = total_recipients
     @delivered_at = delivered_at
     @failed_recipients = failed_recipients
@@ -36,7 +36,7 @@ class DeliveryReportMailer < ApplicationMailer
   end
 
   def placeholder_mail_subject
-    @sent_message.subject.to_s
+    @mail_subject
   end
 
   def placeholder_delivered_at

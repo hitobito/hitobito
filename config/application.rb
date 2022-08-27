@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -62,6 +62,8 @@ module Hitobito
 
     config.active_record.time_zone_aware_types = [:datetime, :time]
 
+    config.active_record.yaml_column_permitted_classes = [Symbol, ActiveSupport::HashWithIndifferentAccess]
+
     # Deviate from default here for now, revisit later
     config.active_record.belongs_to_required_by_default = false
     config.action_controller.per_form_csrf_tokens = true
@@ -72,6 +74,8 @@ module Hitobito
 
     config.cache_store = :mem_cache_store, { compress: true,
                                              namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
+
+    config.active_storage.variant_processor = :mini_magick
 
     if ENV["RAILS_LOG_TO_STDOUT"].present? && !Rails.env.test?
       logger = ActiveSupport::Logger.new(STDOUT)
@@ -86,9 +90,14 @@ module Hitobito
     config.to_prepare do
       ActionMailer::Base.default from: Settings.email.sender
 
-      # Assert the mail relay job is scheduled on every restart.
       if ActiveRecord::Base.connection.data_source_exists?('delayed_jobs')
-        MailRelayJob.new.schedule if Settings.email.retriever.config.present?
+
+        if MailConfig.legacy?
+          MailRelayJob.new.schedule
+        else
+          MailingLists::MailRetrieverJob.new.schedule
+        end
+
         SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
         DownloadCleanerJob.new.schedule
         SessionsCleanerJob.new.schedule

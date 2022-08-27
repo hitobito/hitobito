@@ -7,6 +7,6 @@
   = f.labeled :picture do
     = f.file_field :picture, type: :file, accept: Person::PictureUploader.accept_extensions
 
-  - if entry.picture.present?
+  - if upload_exists?(entry, :picture)
     = f.labeled :remove_picture do
       = f.boolean_field :remove_picture

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2021, Die Mitte Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -14,7 +14,7 @@ class MailingLists::RecipientCountsController < ListController
     respond_to :js
   end
 
-  self.nesting = [ Group, MailingList ]
+  self.nesting = [Group, MailingList]
 
   def self.model_class
     MailingList
@@ -60,11 +60,14 @@ class MailingLists::RecipientCountsController < ListController
 
   def translation_key
     return "#{message_type.underscore}.households" if households
+
     "#{message_type.underscore}.people"
   end
 
   def recipient_counter
-    @recipient_counter ||= MailingList::RecipientCounter.new(mailing_list, message_type, households)
+    @recipient_counter ||= MailingLists::RecipientCounter.new(mailing_list,
+                                                              message_type,
+                                                              households)
   end
 
   def authorize_class

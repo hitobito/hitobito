@@ -31,7 +31,12 @@ module NavigationHelper
       url: :first_group_invoices_or_root_path,
       icon_name: 'money-bill-alt',
       if: ->(_) { current_user.finance_groups.any? },
-      active_for: %w(/invoices invoice_articles invoice_config payment_process invoice_lists) },
+      active_for: %w(/invoices
+                     invoices/evaluations
+                     invoice_articles
+                     invoice_config
+                     payment_process
+                     invoice_lists) },
 
     { label: :admin,
       url: :label_formats_path,

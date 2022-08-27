@@ -225,7 +225,7 @@ describe 'Email verification', js: true do
     end
 
     it 'should not confirm email' do
-      visit register_group_event_path(group_id: event.groups.first.id, id: event.id)
+      visit group_public_event_path(group_id: event.groups.first.id, id: event.id)
       first('#new_person #person_email').fill_in with: 'newguy@example.com'
       click_button 'Weiter'
       is_expected.to have_text 'Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest.'

@@ -13,7 +13,7 @@
 #  mail_from         :string(255)
 #  mail_hash         :string(255)
 #  mailing_list_name :string(255)
-#  status            :integer          default("retreived")
+#  status            :integer          default("retrieved")
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  message_id        :bigint
@@ -28,14 +28,14 @@ class MailLog < ActiveRecord::Base
 
   belongs_to :message
 
-  STATES = [:retreived, :bulk_delivering, :completed, :sender_rejected, :unkown_recipient].freeze
+  STATES = [:retrieved, :bulk_delivering, :completed, :sender_rejected, :unknown_recipient].freeze
   enum status: STATES
 
   BULK_MESSAGE_STATUS = { bulk_delivering: :processing,
-                          retreived: :pending,
+                          retrieved: :pending,
                           completed: :finished,
                           sender_rejected: :failed,
-                          unkown_recipient: :failed }.freeze
+                          unknown_recipient: :failed }.freeze
 
   validates_by_schema
 

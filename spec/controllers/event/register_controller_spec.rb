@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
+require 'deprecation_helper'
 
 describe Event::RegisterController do
 

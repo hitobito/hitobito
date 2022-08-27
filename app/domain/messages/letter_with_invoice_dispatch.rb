@@ -19,6 +19,7 @@ module Messages
       @message.update!(invoice_list_id: @invoice_list.id)
       batch_create
       Invoice::BatchUpdate.new(@invoice_list.reload.invoices).call
+      DispatchResult.finished
     end
 
     def batch_create

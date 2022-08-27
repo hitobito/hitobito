@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2017, hitobito AG. This file is part of
+#  Copyright (c) 2012-2022, hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -31,7 +31,12 @@ class Uploader::Base < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "#{base_store_dir}/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    [
+      base_store_dir,
+      model.class.to_s.underscore,
+      mounted_as.to_s.delete_prefix('carrierwave_'),
+      model.id
+    ].map(&:to_s).join('/')
   end
 
 end

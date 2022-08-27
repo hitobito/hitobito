@@ -1,17 +1,24 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class PublicEventsController < ApplicationController
+  # show event-tags if they are provided
+  include DryCrud::RenderCallbacks
+  define_render_callbacks :show
+  include Tags
+
+  # handle authorization
   skip_authorization_check
   skip_before_action :authenticate_person!
   before_action :assert_public_access, :assert_external_application_possible
 
-  helper_method :entry
-
+  helper_method :entry, # behave like most hitobito-controllers
+                :resource, # enable login-form
+                :group, :event # enable external login
   decorates :entry
 
   private
@@ -36,4 +43,11 @@ class PublicEventsController < ApplicationController
   def entry
     @entry ||= group.events.find(params[:id])
   end
+
+  def person
+    @person ||= Person.new
+  end
+
+  alias resource person # used by devise-form
+  alias event entry # used by check-email-form
 end

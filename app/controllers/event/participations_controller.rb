@@ -11,6 +11,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   include AsyncDownload
   include Api::JsonPaging
   include ActionView::Helpers::SanitizeHelper
+  prepend RenderTableDisplays
 
   self.nesting = Group, Event
 
@@ -48,6 +49,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   before_render_show :load_precondition_warnings
 
   after_create :send_confirmation_email
+  after_create :send_notification_email
   after_destroy :send_cancel_email
 
   # new and create are only invoked by people who wish to
@@ -133,7 +135,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def sort_mappings_with_indifferent_access
-    super.merge(current_person.table_display_for(parent).sort_statements(parent.question_ids))
+    list = event_participation_filter.list_entries.page(params[:page])
+    super.merge(current_person.table_display_for(Event::Participation).sort_statements(list))
   end
 
   def with_person_add_request(&block)
@@ -291,6 +294,12 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def send_confirmation_email
     if entry.person_id == current_user.id
       Event::ParticipationConfirmationJob.new(entry).enqueue!
+    end
+  end
+
+  def send_notification_email
+    if entry.person_id == current_user.id
+      Event::ParticipationNotificationJob.new(entry).enqueue!
     end
   end
 

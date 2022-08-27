@@ -37,7 +37,7 @@ class Export::PeopleExportJob < Export::ExportBaseJob
   def data
     return super unless @options[:selection]
 
-    table_display = TableDisplay::People.find_or_initialize_by(person_id: @user_id)
+    table_display = TableDisplay.for(@user_id, Person)
     Export::Tabular::People::TableDisplays.export(@format, entries, table_display)
   end
 

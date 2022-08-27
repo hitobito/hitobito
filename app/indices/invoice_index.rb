@@ -14,3 +14,9 @@ ThinkingSphinx::Index.define_partial :invoice do
 
   has group_id, type: :integer
 end
+
+ThinkingSphinx::Index.define_partial :invoice_item do
+  indexes name, sortable: true
+  indexes account, sortable: true
+  indexes cost_center, sortable: true
+end

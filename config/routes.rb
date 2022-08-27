@@ -73,6 +73,9 @@ Hitobito::Application.routes.draw do
 
       resources :invoices do
         resources :payments, only: :create
+        collection do
+          resource :evaluations, only: [:show], module: :invoices, as: 'invoices_evaluations'
+        end
       end
       resources :invoice_articles
       resource :invoice_config, only: [:edit, :show, :update]
@@ -99,9 +102,11 @@ Hitobito::Application.routes.draw do
 
           post 'totp_reset' => 'people/totp_reset#create', as: 'totp_reset'
           post 'totp_disable' => 'people/totp_disable#create', as: 'totp_disable'
+          post 'password_override' => 'person/security_tools#password_override'
 
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
+          get 'security_tools' => 'person/security_tools#index'
           get 'colleagues' => 'person/colleagues#index'
           get 'personal_invoices' => 'person/invoices#index'
           get 'messages' => 'person/messages#index'

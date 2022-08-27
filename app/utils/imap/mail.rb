@@ -10,7 +10,7 @@ require 'mail'
 
 class Imap::Mail
 
-  attr_accessor :net_imap_mail
+  attr_accessor :net_imap_mail, :mail_log
 
   delegate :subject, :sender, to: :envelope
 
@@ -24,7 +24,7 @@ class Imap::Mail
     @net_imap_mail.attr['UID']
   end
 
-  def subject_utf8_encoded
+  def subject
     Mail::Encodings.value_decode(envelope.subject)
   end
 
@@ -36,8 +36,16 @@ class Imap::Mail
     envelope.sender[0].mailbox + '@' + envelope.sender[0].host
   end
 
+  def email_to
+    envelope.to[0].mailbox + '@' + envelope.to[0].host
+  end
+
   def sender_name
     envelope.sender[0].name
+  end
+
+  def name_to
+    envelope.to[0].name
   end
 
   def plain_text_body
@@ -51,7 +59,15 @@ class Imap::Mail
   end
 
   def hash
-    Digest::MD5.new.hexdigest(self.mail.raw_source)
+    Digest::MD5.new.hexdigest(raw_source)
+  end
+
+  def raw_source
+    mail.raw_source
+  end
+
+  def original_to
+    mail.header['X-Original-To'].value
   end
 
   def mail

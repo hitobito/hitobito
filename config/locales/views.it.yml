@@ -539,7 +539,7 @@ it:
         create: È stato creato l'indirizzo.
         reset: L'indirizzo è stato attualizzato.
   filter_navigation/dropdown:
-    additional_views: 'altre opinioni'
+    additional_views: 'altre opzioni'
   filter_navigation/people:
     custom_filter: 'filtro personale'
     entire_layer: 'livello intero'

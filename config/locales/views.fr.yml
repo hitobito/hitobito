@@ -709,6 +709,9 @@ fr:
         amount: Montant
     export_enqueued: 'L''exportation a commencé en tâche de fond et sera téléchargée une fois terminée.'
     recipients_empty: La liste des destinataires est vide. Impossible de créer un PDF.
+    evaluations:
+      show:
+        deficit: Paiement partiel
   invoice_configs:
     form_tabs:
       general: général

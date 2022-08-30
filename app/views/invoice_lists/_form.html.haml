@@ -22,6 +22,8 @@
     = fi.labeled_input_field :payment_purpose
     = fi.labeled_input_field :hide_total
 
+    = render_extensions :form_invoice_fields, locals: { f: fi }
+
     = field_set_tag do
       = render "invoice_articles", f: fi, group: parent
 

@@ -27,10 +27,13 @@ app.EventKindPreconditions = {
     e.preventDefault()
     obj = app.EventKindPreconditions
     ids = $('#event_kind_precondition_kind_ids').val()
+    validity $('#event_kind_precondition_kind_validity').val()
+
     if ids.length
       grouping = $('.precondition-grouping').length
       html = '<div class="precondition-grouping">' +
         ids.map((id) -> obj.buildHiddenField(grouping, id)).join(' ') +
+        ids.map((id) -> obj.buildHiddenValidityField(grouping, id, validity)).join(' ') +
         obj.buildConjunction(grouping) +
         obj.buildSentence() +
         obj.buildRemoveLink() +
@@ -42,6 +45,10 @@ app.EventKindPreconditions = {
   buildHiddenField: (grouping, id) ->
     '<input name="event_kind[precondition_qualification_kinds][' + grouping +
       '][qualification_kind_ids][]" type="hidden" value="' + id + '" />'
+
+  buildHiddenValidityField: (grouping, id, validityValue) ->
+    '<input name="event_kind[precondition_qualification_kinds][' + grouping +
+      '][qualification_kind_validity][' + id + ']" type="hidden" value="' + validityValue + '" />'
 
   buildConjunction: (grouping) ->
     if grouping

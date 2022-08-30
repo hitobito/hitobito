@@ -13,7 +13,6 @@ class Event::KindCategoriesController < SimpleCrudController
 
   before_render_form :load_assocations
 
-
   private
 
   def load_assocations

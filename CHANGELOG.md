@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+* Fonts werden direkt von Hitobito ausgeliefert (#1632)
+
 ## Version 1.28
 
 *  Neuer Personentab "Sicherheit", welcher Informationen und Vorgänge zu Sicherheitsmassnahmen aufzeigt und das Passwort einer Person zurücksetzen lässt (benötigt :update Permission auf Person) (#1688)

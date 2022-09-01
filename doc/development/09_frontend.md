@@ -12,6 +12,8 @@ Längerfristig wollen wir aber auf Vanilla JS (Default Javascript) setzen und Co
 
 ### 2.3.2
 
+> **TODO: update documentation**
+
 Aktuell verwenden wir einige Komponenten aus Bootstrap 2.3.2:
 
 npm package: bootstrap-sass: 2.3.2

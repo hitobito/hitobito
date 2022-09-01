@@ -35,19 +35,18 @@ import 'jquery-ui/ui/i18n/datepicker-it';
 import 'jquery-ui/ui/effects/effect-highlight';
 
 // Bootstrap
-import 'bootstrap-sass/js/bootstrap-transition';
-import 'bootstrap-sass/js/bootstrap-alert';
-import 'bootstrap-sass/js/bootstrap-button';
-import 'bootstrap-sass/js/bootstrap-collapse';
-import 'bootstrap-sass/js/bootstrap-dropdown';
-import 'bootstrap-sass/js/bootstrap-tooltip';
-import 'bootstrap-sass/js/bootstrap-popover';
-import 'bootstrap-sass/js/bootstrap-typeahead';
-import 'bootstrap-sass/js/bootstrap-tab';
-import 'bootstrap-sass/js/bootstrap-modal';
-
-// UI Components
-import 'chosen-js';
+import 'bootstrap/js/src/alert'
+import 'bootstrap/js/src/button'
+// import 'bootstrap/js/src/carousel'
+import 'bootstrap/js/src/collapse'
+import 'bootstrap/js/src/dropdown'
+import 'bootstrap/js/src/modal'
+import 'bootstrap/js/src/popover'
+import 'bootstrap/js/src/scrollspy'
+import 'bootstrap/js/src/tab'
+// import 'bootstrap/js/src/toast'
+import 'bootstrap/js/src/tooltip'
+// import 'bootstrap-sass/js/bootstrap-typeahead'; // TODO replacement needed? e.g. https://github.com/TarekRaafat/autoComplete.js
 
 // Gems without NPM package
 import '../javascripts/vendor/gems';

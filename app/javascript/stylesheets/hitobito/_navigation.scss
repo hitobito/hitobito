@@ -170,10 +170,10 @@
   }
   &:first-child > a {
     border-left: 1px solid $grayLight;
-    @include border-left-radius(6px);
+    @include border-start-radius(6px);
   }
   &:last-child > a {
-    @include border-right-radius(6px);
+    @include border-end-radius(6px);
     margin-right: 5px;
   }
 }

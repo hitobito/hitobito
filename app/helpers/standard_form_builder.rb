@@ -36,6 +36,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def input_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
     type = column_type(@object, attr.to_sym)
     custom_field_method = :"#{type}_field"
+    html_options[:class] = html_options[:class].to_s + ' form-control'
+    html_options[:class] += ' is-invalid' if errors_on?(attr)
+    html_options[:required] ||= 'required' if required?(attr)
     if type == :text
       text_area(attr, html_options)
     elsif association_kind?(attr, type, :belongs_to)
@@ -55,13 +58,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a password field
   def password_field(attr, html_options = {})
-    html_options[:class] ||= 'span6'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
     super(attr, html_options)
   end
 
   # Render a text_area.
   def text_area(attr, html_options = {})
-    html_options[:class] ||= 'span6'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
     html_options[:rows] ||= 5
     super(attr, html_options)
   end
@@ -74,7 +77,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a number field.
   def number_field(attr, html_options = {})
     html_options[:size] ||= 10
-    html_options[:class] ||= 'span2'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-15ch'
     text_field(attr, html_options)
   end
   alias integer_field number_field
@@ -84,12 +87,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a standard string field with column contraints.
   def string_field(attr, html_options = {})
     html_options[:maxlength] ||= column_property(@object, attr, :limit)
-    html_options[:class] ||= 'span6'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
     text_field(attr, html_options)
   end
 
   def email_field(attr, html_options = {})
-    html_options[:class] ||= 'span6'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
     super(attr, html_options)
   end
 
@@ -104,16 +107,18 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
     checked   = html_options.delete(:checked_value) { '1' }
     unchecked = html_options.delete(:unchecked_value) { '0' }
+    html_options[:class] = html_options[:class].to_s + 'form-check-input'
 
-    label(attr, class: 'checkbox') do
-      check_box(attr, html_options, checked, unchecked) + caption.html_safe # rubocop:disable Rails/OutputSafety
+    content_tag(:div, class: 'form-check') do
+      check_box(attr, html_options, checked, unchecked) +
+          label(attr, class: 'form-check-label') { caption }
     end
   end
 
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
     html_options[:value] ||= date_value(attr)
-    html_options[:class] ||= 'span2 date'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-15ch date'
     content_tag(:div, class: 'input-prepend') do
       content_tag(:span, icon(:'calendar-alt'), class: 'add-on') +
       text_field(attr, html_options)
@@ -154,7 +159,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to enter a date and time.
   # Include DatetimeAttribute in the model to use this.
   def datetime_field(attr, html_options = {})
-    html_options[:class] ||= 'span6'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
 
     date_field("#{attr}_date") +
     ' ' +
@@ -206,7 +211,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # To pass a custom element list, specify the list with the :list key or
   # define an instance variable with the pluralized name of the association.
   def belongs_to_field(attr, html_options = {})
-    html_options[:class] ||= 'span6'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
     list = association_entries(attr, html_options)
     if list.present?
       collection_select(attr, list, :id, :to_s,
@@ -224,13 +229,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # define an instance variable with the pluralized name of the association.
   def has_many_field(attr, html_options = {}) # rubocop:disable Naming/PredicateName
     html_options[:multiple] = true
-    html_options[:class] ||= 'span6'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
     add_css_class(html_options, 'multiselect')
     belongs_to_field(attr, html_options)
   end
 
   def i18n_enum_field(attr, labels, html_options = {})
-    html_options[:class] ||= 'span6'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
     collection_select(attr, labels, :first, :last,
                       collection_prompt(attr, html_options),
                       html_options)
@@ -297,22 +302,21 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       caption_or_content = nil
     end
     caption_or_content ||= captionize(attr, klass)
-    add_css_class(html_options, 'controls')
-    css_classes = { 'control-group' => true,
-                    error: errors_on?(attr),
-                    required: html_options[:required] || required?(attr),
-                    'no-attachments': no_attachments?(attr) }
+    add_css_class(html_options, 'labeled col-md')
+    css_classes = { 'no-attachments': no_attachments?(attr),
+                    row: true, 'mb-2': true }
+    label_classes = 'col-form-label col-md-3 col-xl-2 pb-1 text-md-end'
+    label_classes += ' required' if required?(attr)
     content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(' ')) do
-      label(attr, caption_or_content, class: 'control-label') +
+      label(attr, caption_or_content, class: label_classes) +
       content_tag(:div, content, html_options)
     end
   end
 
   def indented(content = nil, &block)
     content = capture(&block) if block_given?
-    content_tag(:div, class: 'control-group') do
-      content_tag(:label, '', class: 'control-label') +
-      content_tag(:div, content, class: 'controls')
+    content_tag(:div, class: 'row mb-2') do
+      content_tag(:div, content, class: 'offset-md-3 offset-xl-2')
     end
   end
 

@@ -1,4 +1,4 @@
-//  Copyright (c) 2012-2018, hitobito AG. This file is part of
+//  Copyright (c) 2012-2022, hitobito AG. This file is part of
 //  hitobito and licensed under the Affero General Public License version 3
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
@@ -6,3 +6,20 @@
 .no-margin {
   margin: 0;
 }
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "max-width": (
+      property: max-width,
+      class: mw,
+      values: (
+        100: 100%,
+        50: 50%,
+        15ch: 15ch, // use .mw-100.mw-md-15ch as a replacement for span2
+        60ch: 60ch, // use .mw-100.mw-md-60ch as a replacement for span6
+      ),
+      responsive: true,
+    ),
+  ),
+);

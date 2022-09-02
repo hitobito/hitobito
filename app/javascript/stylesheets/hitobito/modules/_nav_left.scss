@@ -31,12 +31,12 @@
 	}
 
 	a.is-active, li.is-active > a {
-		background-color: desaturate(lighten($linkColor, 50%), 20%);
-		border-left: 3px solid $linkColor;
+		background-color: desaturate(lighten($link-color, 50%), 20%);
+		border-left: 3px solid $link-color;
 	}
 
 	a.is-archived, li.is-archived > a {
-		color: desaturate(lighten($linkColor, 20%), 80%);
+		color: desaturate(lighten($link-color, 20%), 80%);
 	}
 
 	.nav-left-section {

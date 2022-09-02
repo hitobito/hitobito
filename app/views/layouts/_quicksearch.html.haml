@@ -3,10 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= form_tag full_path, class: 'form-inline', method: :get do
-  .input-append.quicksearch
+= form_tag full_path, class: 'w-100', method: :get do
+  .input-group.quicksearch
     = search_field_tag :q, params[:q],
-                       class: 'quicksearch-input',
+                       class: 'quicksearch-input form-control',
                        id: 'quicksearch',
                        placeholder: t('global.search.placeholder'),
                        data: { url: query_path,
@@ -14,4 +14,4 @@
                                group_url: groups_path,
                                event_url: event_path(1).gsub(/\/1$/, ''),
                                invoice_url: invoices_path(1).gsub(/\/1$/, '') }
-    = button_tag icon(:search), class: 'btn quicksearch-button'
+    = button_tag icon(:search), class: 'btn btn-primary quicksearch-button'

@@ -36,7 +36,7 @@
   label.selected,
   label:hover {
     border-color: $blue;
-    background: desaturate(lighten($linkColor, 50%), 20%);
+    background: desaturate(lighten($link-color, 50%), 20%);
   }
 
   #merge-hint {

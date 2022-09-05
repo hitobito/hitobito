@@ -23,6 +23,7 @@
 #
 
 class Event::KindQualificationKind < ActiveRecord::Base
+  include I18nEnums
 
   CATEGORIES = %w(qualification precondition prolongation).freeze
   ROLES = %w(participant leader).freeze
@@ -50,5 +51,7 @@ class Event::KindQualificationKind < ActiveRecord::Base
   validates_by_schema
   validates :category, inclusion: { in: CATEGORIES }
   validates :role, inclusion: { in: ROLES }
+
+  i18n_enum :validity, %w(valid valid_or_expired)
 
 end

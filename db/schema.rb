@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_19_100000) do
+ActiveRecord::Schema.define(version: 2022_08_31_081000) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -238,6 +238,7 @@ ActiveRecord::Schema.define(version: 2022_08_19_100000) do
     t.string "category", null: false
     t.string "role", null: false
     t.integer "grouping"
+    t.string "validity", default: "valid_or_expired", null: false
     t.index ["category"], name: "index_event_kind_qualification_kinds_on_category"
     t.index ["role"], name: "index_event_kind_qualification_kinds_on_role"
   end

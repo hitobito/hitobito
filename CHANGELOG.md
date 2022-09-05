@@ -3,6 +3,7 @@
 ## Version 1.28
 
 * Fonts werden direkt von Hitobito ausgeliefert (#1632)
+* Die Vorbedingungen einer Kursart können neu als "Muss gültig sein" oder "Muss gültig oder weggefallen sein" deklariert werden. Wenn die Vorbedingung gültig sein muss verhaltet es sich wie bisher, bei gültig oder weggefallen muss der Teilnehmer die Qualifikation der Vorbedingung besitzen oder jemals besessen haben. Unabhängig von der Gültigkeit oder Reaktivierbarkeit der besagten Qualifikation. (#1640)
 
 ## Version 1.28
 

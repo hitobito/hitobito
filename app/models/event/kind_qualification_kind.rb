@@ -37,6 +37,13 @@ class Event::KindQualificationKind < ActiveRecord::Base
         map { |_, v| v.map(&:last) }
     end
 
+    def grouped_qualification_kind_ids_and_validity(category, role)
+      where(category: category, role: role).
+        pluck(:grouping, :qualification_kind_id, :validity).
+        group_by(&:first).
+        map { |_, v| v.map { |a| a[1..2] } }
+    end
+
   end
 
 

@@ -575,6 +575,11 @@ de:
         updated_at: Geändert
         deleted_at: Gelöscht
 
+      event/kind_qualification_kinds:
+        validities:
+          valid: Muss gültig sein
+          valid_or_expired: Muss gültig oder weggefallen sein
+
       event/invitation:
         participation_type: Teilnahmerolle
         created_at: Erstellungsdatum

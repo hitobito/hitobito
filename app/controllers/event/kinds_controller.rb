@@ -9,7 +9,8 @@ class Event::KindsController < SimpleCrudController
 
   self.permitted_attrs = [:label, :short_name, :kind_category_id, :minimum_age,
                           :general_information, :application_conditions,
-                          precondition_qualification_kinds: [{ qualification_kind_ids: [] }],
+                          precondition_qualification_kinds: [:validity,
+                                                             { qualification_kind_ids: [] }],
                           qualification_kinds: {
                             participant: {
                               qualification: { qualification_kind_ids: [] },
@@ -86,6 +87,7 @@ class Event::KindsController < SimpleCrudController
           role: 'participant',
           category: 'precondition',
           qualification_kind_id: id,
+          validity: ids['validity'],
           grouping: index + 1 }
       end
     end

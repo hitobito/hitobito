@@ -73,6 +73,10 @@ class Event::Kind < ActiveRecord::Base
     event_kind_qualification_kinds.grouped_qualification_kind_ids(category, role)
   end
 
+  def grouped_qualification_kind_ids_and_validity(category, role)
+    event_kind_qualification_kinds.grouped_qualification_kind_ids_and_validity(category, role)
+  end
+
   # Soft destroy if events exist, otherwise hard destroy
   def destroy
     if events.exists?

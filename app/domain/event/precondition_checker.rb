@@ -45,29 +45,31 @@ class Event::PreconditionChecker
   end
 
   def validate_qualifications
-    grouped_ids = course.kind.grouped_qualification_kind_ids('precondition', 'participant')
-    if grouped_ids.size == 1
-      validate_simple_qualifications(grouped_ids.first)
-    elsif grouped_ids.size > 1
-      validate_grouped_qualifications(grouped_ids)
+    grouped_ids_and_validity = course.kind
+                                     .grouped_qualification_kind_ids_and_validity('precondition',
+                                                                                  'participant')
+    if grouped_ids_and_validity.size == 1
+      validate_simple_qualifications(grouped_ids_and_validity.first)
+    elsif grouped_ids_and_validity.size > 1
+      validate_grouped_qualifications(grouped_ids_and_validity)
     end
   end
 
-  def validate_simple_qualifications(precondition_ids)
-    precondition_ids.each do |id|
-      errors << id unless reactivateable?(id)
+  def validate_simple_qualifications(precondition_ids_and_validity)
+    precondition_ids_and_validity.each do |id, validity|
+      errors << id unless reactivateable?(id) || expired?(id, validity)
     end
   end
 
-  def validate_grouped_qualifications(grouped_ids)
-    unless any_grouped_qualifications?(grouped_ids)
+  def validate_grouped_qualifications(grouped_ids_and_validity)
+    unless any_grouped_qualifications?(grouped_ids_and_validity)
       errors << :some_qualifications
     end
   end
 
-  def any_grouped_qualifications?(grouped_ids)
-    grouped_ids.any? do |ids|
-      ids.all? { |id| reactivateable?(id) }
+  def any_grouped_qualifications?(grouped_ids_and_validity)
+    grouped_ids_and_validity.any? do |ids|
+      ids.all? { |id, validity| reactivateable?(id) || expired?(id, validity) }
     end
   end
 
@@ -84,6 +86,11 @@ class Event::PreconditionChecker
     person_qualifications.
       select { |q| q.qualification_kind_id == qualification_kind_id }.
       any? { |qualification| qualification.reactivateable?(course.start_date) }
+  end
+
+  def expired?(qualification_kind_id, validity)
+    validity.to_sym == :valid_or_expired &&
+      person_qualifications.any? { |q| q.qualification_kind_id == qualification_kind_id }
   end
 
   def old_enough?

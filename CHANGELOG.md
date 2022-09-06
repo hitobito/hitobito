@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.28
 
 * Fonts werden direkt von Hitobito ausgeliefert (#1632)
 

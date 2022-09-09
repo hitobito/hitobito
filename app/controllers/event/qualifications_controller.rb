@@ -37,7 +37,8 @@ class Event::QualificationsController < ApplicationController
   def entries
     types = event.role_types
     @leaders ||= participations(*types.select(&:leader?))
-    @participants ||= participations(*types.select(&:participant?))
+    @participants ||= participations(*types.select(&:participant?)) +
+                      participations(Event::Role::Helper) # According to https://github.com/hitobito/hitobito_jubla/issues/33
   end
 
   def event

@@ -113,6 +113,15 @@ case $cmd in
     rspec $@
     ;;
 
+  git-all)
+    shift # loose the "git-all" argument
+    echo "hitobito" | red
+    git $@
+    for wagon in $(existing_wagon_names); do
+      (cd "../hitobito_${wagon}" && (echo "$wagon" | red) && git $@)
+    done
+    ;;
+
   git)
     shift # loose the "git" argument
     echo "hitobito" | red
@@ -175,6 +184,7 @@ function __wagon_commands() {
     create
     gemfile
     git
+    git-all
     grep
     help
     list
@@ -221,7 +231,7 @@ COMPLETION
     echo "USAGE: $0 [activate] <PROJECT>"
     echo "       $0 [test-prepare|core-spec|gemfile|configs|list|update-copyright]"
     echo "       $0 [grep] <TERM>"
-    echo "       $0 [git] <ARGS>"
+    echo "       $0 [git|git-all] <ARGS>"
     echo
     echo "Enable bash-completion with \"source <($0 completion)\""
     ;;

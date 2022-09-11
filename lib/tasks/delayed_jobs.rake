@@ -10,8 +10,6 @@ namespace :delayed_job do
   task :schedule => [:environment, :'db:abort_if_pending_migrations'] do
     next if Rails.env.test?
 
-    ActionMailer::Base.default from: Settings.email.sender
-
     if ActiveRecord::Base.connection.data_source_exists?('delayed_jobs')
 
       if MailConfig.legacy?

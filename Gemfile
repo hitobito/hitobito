@@ -14,12 +14,12 @@ gem 'acts-as-taggable-on'
 gem 'airbrake'
 gem 'awesome_nested_set'
 gem 'aws-sdk-s3', require: false
-gem 'caxlsx', '~>3.0.0'
 gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
 gem 'bootsnap', require: false
 gem 'cancancan'
 gem 'carrierwave'
+gem 'caxlsx', '~>3.0.0'
 gem 'cmess'
 gem 'commonmarker'
 gem 'config'

@@ -87,29 +87,6 @@ module Hitobito
       g.test_framework :rspec, fixture: true
     end
 
-    config.to_prepare do
-      ActionMailer::Base.default from: Settings.email.sender
-
-      if ActiveRecord::Base.connection.data_source_exists?('delayed_jobs')
-
-        if MailConfig.legacy?
-          MailRelayJob.new.schedule
-        else
-          MailingLists::MailRetrieverJob.new.schedule
-        end
-
-        SphinxIndexJob.new.schedule if Application.sphinx_present? && Application.sphinx_local?
-        DownloadCleanerJob.new.schedule
-        SessionsCleanerJob.new.schedule
-        WorkerHeartbeatCheckJob.new.schedule
-        ReoccuringMailchimpSynchronizationJob.new.schedule
-        Address::CheckValidityJob.new.schedule if Settings.addresses.token
-        Address::ImportJob.new.schedule if Settings.addresses.token
-        People::DuplicateLocatorJob.new.schedule
-        Payments::EbicsImportJob.new.schedule
-      end
-    end
-
     initializer :define_sphinx_indizes, before: :add_to_prepare_blocks do |app|
       # only add here to be the last one
       app.config.to_prepare do

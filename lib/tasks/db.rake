@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,6 +15,10 @@ task :mysql do # rubocop:disable Rails/RakeEnvironment
 end
 
 namespace :db do
+  task :migrate do # rubocop:disable Rails/RakeEnvironment This task is only extended here and has all needed preconditions set
+    Rake::Task['delayed_job:schedule'].invoke
+  end
+
   desc 'Rebuild Nested-Set'
   task rebuild_nested_set: [:environment] do
     puts 'Rebuilding nested set...'

@@ -85,6 +85,25 @@ namespace :dev do
 
       MESSAGE
     end
+
+    task clear_attached: [:environment] do
+      cleaner = proc do |model, type|
+        model
+          .where("#{type} IS NOT NULL")
+          .find_each
+          .select { |p| p.send(:"carrierwave_#{type}").present? && p.send(type.to_sym).attached? }
+          .map do |g|
+            g[type] = nil
+            g.save!(validate: false)
+          end
+      end
+
+      cleaner.call(Group, 'logo')
+      cleaner.call(Person, 'picture')
+      cleaner.call(GroupSetting, 'picture')
+      cleaner.call(Oauth::Application, 'logo')
+      cleaner.call(Event::Attachment, 'file')
+    end
   end
 
   namespace :help_texts do

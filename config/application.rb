@@ -94,6 +94,10 @@ module Hitobito
       end
     end
 
+    config.to_prepare do
+      ActionMailer::Base.default from: Settings.email.sender
+    end
+
     def self.sphinx_version
       @sphinx_version ||= ThinkingSphinx::Configuration.instance.controller.sphinx_version.presence ||
         ENV['RAILS_SPHINX_VERSION']

@@ -20,7 +20,7 @@ namespace :dev do
     end
 
     desc 'Introspect oauth token'
-    task :introspect, [:access_token, :token] do |_, args|
+    task :introspect, [:access_token, :token] do |_, args| # rubocop:disable Rails/RakeEnvironment curl-convenience
       access_token = args.fetch(:access_token)
       token = args.fetch(:token, access_token)
       sh <<-BASH.strip_heredoc
@@ -32,7 +32,7 @@ namespace :dev do
     end
 
     desc 'Obtain profile information'
-    task :profile, [:access_token, :scope] do |_, args|
+    task :profile, [:access_token, :scope] do |_, args| # rubocop:disable Rails/RakeEnvironment curl-convenience
       access_token = args.fetch(:access_token)
       sh <<-BASH.strip_heredoc
         curl -v -H 'Accept: application/json' \

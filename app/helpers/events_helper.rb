@@ -84,9 +84,7 @@ module EventsHelper
   end
 
   def course_groups
-    return Group.course_offerers if can?(:list_all, Event::Course)
-
-    Group.course_offerers.where(id: current_user.groups_hierarchy_ids)
+    Group.course_offerers
   end
 
   def quick_select_course_groups

@@ -2,18 +2,19 @@
 
 ## unreleased
 
-* Rechnungen können mit Firmennamen gefiltert werden (#1773)
+*  Rechnungen können mit Firmennamen gefiltert werden (#1773)
+*  Personen mit `:finance` Berechtigung können neu bei allen Personen in und unterhalb ihrer Ebene die Rechnungen der Person mittels "Rechnungen" Tab auf dem Profil anzeigen lassen. (hitobito_die_mitte#205)
+*  In der Kursansicht können neu alle Kurse welche "Anlass ist für die ganze Datenbank sichtbar" aktiviert haben, gefunden werden. (#1813)
 
 ## Version 1.28
 
-* Fonts werden direkt von Hitobito ausgeliefert (#1632)
-* Die Vorbedingungen einer Kursart können neu als "Muss gültig sein" oder "Muss gültig oder weggefallen sein" deklariert werden. Wenn die Vorbedingung gültig sein muss verhält es sich wie bisher, bei gültig oder weggefallen muss der Teilnehmer die Qualifikation der Vorbedingung besitzen oder jemals besessen haben. Dies gilt unabhängig von der Gültigkeit oder Reaktivierbarkeit der besagten Qualifikation. (#1640)
+*  Fonts werden direkt von Hitobito ausgeliefert (#1632)
+*  Die Vorbedingungen einer Kursart können neu als "Muss gültig sein" oder "Muss gültig oder weggefallen sein" deklariert werden. Wenn die Vorbedingung gültig sein muss verhält es sich wie bisher, bei gültig oder weggefallen muss der Teilnehmer die Qualifikation der Vorbedingung besitzen oder jemals besessen haben. Dies gilt unabhängig von der Gültigkeit oder Reaktivierbarkeit der besagten Qualifikation. (#1640)
 *  Neuer Personentab "Sicherheit", welcher Informationen und Vorgänge zu Sicherheitsmassnahmen aufzeigt und das Passwort einer Person zurücksetzen lässt (benötigt :update Permission auf Person) (#1688)
 *  Neu können mittels "Buchungsbeleg" Tab bei den Rechnungen die Zahlungen in einem definierbaren Zeitrahmen ausgewertet werden. So werden die Zahlungen ihren Rechnungsartikeln zugeordnet und aufsummiert (hitobito_sww#39)
 *  Anmeldungen für öffentlich sichtbare Anlässe verbessert (#1775)
 *  Für variable Spendenaufrufe wird neu der Median über alle Zahlungen im definierten Zeitraum verwendet (hitobito_die_mitte#204)
 *  Der Buchungsbeleg kann neu zu XLSX oder CSV exportiert werden (hitobito_sww#61)
-*  Personen mit `:finance` Berechtigung können neu bei allen Personen in und unterhalb ihrer Ebene die Rechnungen der Person mittels "Rechnungen" Tab auf dem Profil anzeigen lassen. (hitobito_die_mitte#205)
 
 ## Version 1.27
 

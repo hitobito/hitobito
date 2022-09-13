@@ -65,6 +65,7 @@ class Invoice::PaymentProcessor
                   invoice: invoice(s),
                   transaction_identifier: transaction_identifier(s),
                   reference: fetch('Refs', 'AcctSvcrRef', s),
+                  transaction_xml: s.to_xml(root: :TxDtls, skip_instruct: true).squish,
                   status: :xml_imported)
     end
   end

@@ -53,6 +53,24 @@ describe Invoice::PaymentProcessor do
     expect(list.reload.recipients_paid).to eq 1
   end
 
+  it 'creates payment and saves transaction xml' do
+    list = InvoiceList.create!(title: :title, group: invoice.group)
+    invoice.update_columns(reference: '000000000000100000000000905',
+                           invoice_list_id: list.id,
+                           total: 710.82)
+    expect do
+      expect(parser.process).to eq 1
+    end.to change { Payment.count }.by(1)
+    payment = invoice.payments.first
+    xml = payment.transaction_xml
+    data = Hash.from_xml(xml)['TxDtls']
+    expect(data['Refs']['AcctSvcrRef']).to eq('20180314001221000006905084508206')
+    expect(data['Refs']['Prtry']['Ref']).to eq('20180314001221000006905')
+    expect(data['Amt']).to eq('710.82')
+    expect(data['RltdPties']['Dbtr']['Nm']).to eq('Maria Bernasconi')
+    expect(data['RltdPties']['Dbtr']['PstlAdr']).to be_present
+  end
+
   it 'creates payment and marks scor referenced invoice as payed' do
     invoice.update_columns(reference: Invoice::ScorReference.create('000000100000000000905'),
                            esr_number: '00 00000 00000 10000 00000 00905',

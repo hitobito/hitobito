@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_31_081000) do
+ActiveRecord::Schema.define(version: 2022_09_13_111000) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -744,6 +744,7 @@ ActiveRecord::Schema.define(version: 2022_08_31_081000) do
     t.string "reference"
     t.string "transaction_identifier"
     t.string "status"
+    t.text "transaction_xml", size: :medium
     t.index ["invoice_id"], name: "index_payments_on_invoice_id"
   end
 

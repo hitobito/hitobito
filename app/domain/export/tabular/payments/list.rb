@@ -11,7 +11,7 @@ module Export::Tabular::Payments
     self.model_class = Payment
     self.row_class = Export::Tabular::Payments::Row
 
-    EXCLUDED_ATTRS = %w(invoice_id)
+    EXCLUDED_ATTRS = %w(invoice_id transaction_xml)
 
     def attributes
       model_class.column_names - EXCLUDED_ATTRS

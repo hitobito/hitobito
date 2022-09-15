@@ -75,6 +75,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def number_field(attr, html_options = {})
     html_options[:size] ||= 10
     html_options[:class] ||= 'span2'
+    html_options[:pattern] ||= '([0-9]*[.])?[0-9]+'
     text_field(attr, html_options)
   end
   alias integer_field number_field

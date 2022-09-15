@@ -37,6 +37,8 @@ module UtilityHelper
 
   # Returns the ActiveRecord column type or nil.
   def column_type(obj, attr)
+    return obj.send("#{attr}_type") if obj.respond_to?("#{attr}_type")
+
     column_property(obj, attr, :type)
   end
 

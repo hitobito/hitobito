@@ -7,7 +7,11 @@
 
 module MessagesHelper
 
-  def add_message_button(type, path = path_args(model_class))
+  def add_message_button(type, path = path_args(model_class), disabled_msg: nil)
+    label = [type.model_name.human, ti(:"link.add").downcase].join(' ')
+
+    return action_button(label, path, :plus, disabled: disabled_msg) if disabled_msg
+
     label = [type.model_name.human, ti(:"link.add").downcase].join(' ')
     action_button(label,
                   new_polymorphic_path(path, message: { type: type }),

@@ -35,8 +35,8 @@ module Dropdown
       @items << Divider.new
     end
 
-    def add_item(label, url, options = {})
-      item = Item.new(label, url, options)
+    def add_item(label, url, disabled_msg: nil, **options)
+      item = Item.new(label, url, disabled_msg: disabled_msg, **options)
       @items << item
       item
     end
@@ -86,10 +86,10 @@ module Dropdown
 
   end
 
-  Item = Struct.new(:label, :url, :sub_items, :options) do
+  Item = Struct.new(:label, :url, :disabled_msg, :sub_items, :options) do
 
-    def initialize(label, url, options = {})
-      super(label, url, [], options)
+    def initialize(label, url, disabled_msg: nil, **options)
+      super(label, url, disabled_msg, [], options)
     end
 
     def sub_items?
@@ -98,18 +98,27 @@ module Dropdown
 
     def render(template)
       template.content_tag(:li, class: css_class) do
-        template.safe_join([link(template, label, url, options),
+        template.safe_join([link(template),
                             render_sub_items(template)].compact)
       end
     end
 
-    def link(template, label, url, options)
+    def link(template)
+      return disabled_link(template) if disabled_msg
+
       new_url = case url
       when ActionController::Parameters then url.to_unsafe_h.merge(only_path: true)
       when Hash then url.merge(only_path: true)
       else url
       end
-      template.link_to(label, new_url, options)
+
+      return template.link_to(label, new_url, options) unless disabled_msg
+    end
+
+    def disabled_link(template)
+      template.content_tag(:a, class: 'disabled', title: disabled_msg) do
+        label
+      end
     end
 
     def css_class

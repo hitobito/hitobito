@@ -8,7 +8,8 @@
   - if can?(:new, parent.messages.build)
     = add_message_button(Message::Letter)
 
-    - if can?(:index_invoices, parent.group.layer_group) && parent.group.layer_group.invoice_config.valid?
-      = add_message_button(Message::LetterWithInvoice)
+    - if can?(:index_invoices, parent.group.layer_group)
+      - disabled_msg = I18n.t('activerecord.errors.models.invoice_config.not_valid') if parent.group.layer_group.invoice_config.not_valid?
+      = add_message_button(Message::LetterWithInvoice, disabled_msg: disabled_msg)
 
     = add_message_button(Message::TextMessage)

@@ -137,14 +137,29 @@ module LayoutHelper
   end
 
   def button(label, url, icon_name = nil, options = {})
+    disabled_msg = options.delete(:disabled)
+    return disabled_button(label, disabled_msg, icon_name, options) if disabled_msg
+
     add_css_class options, 'btn'
     url = url.is_a?(ActionController::Parameters) ? url.to_unsafe_h.merge(only_path: true) : url
 
     link_to(url, options) do
-      html = [label]
-      html.unshift icon(icon_name) if icon_name
-      safe_join(html, ' ')
+      button_content(label, icon_name)
     end
+  end
+
+  def disabled_button(label, disabled_msg, icon_name = nil, options = {})
+    content_tag(:div, title: disabled_msg) do
+      content_tag(:a, class: 'btn disabled', **options) do
+        button_content(label, icon_name)
+      end
+    end
+  end
+
+  def button_content(label, icon_name = nil)
+    html = [label]
+    html.unshift icon(icon_name) if icon_name
+    safe_join(html, ' ')
   end
 
 end

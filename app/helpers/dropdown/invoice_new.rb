@@ -33,8 +33,11 @@ module Dropdown
     end
 
     def single_button
-      data = { checkable: true } if template.action_name == 'index'
-      template.action_button(label, path(finance_groups.first), :plus, data: data)
+      finance_group = finance_groups.first
+      options = {}
+      options[:data] = { checkable: true } if template.action_name == 'index'
+      options[:disabled] = invalid_config_error_msg if finance_group&.invoice_config&.invalid?
+      template.action_button(label, path(finance_group), :plus, options)
     end
 
     def path(finance_group) # rubocop:disable Metrics/MethodLength
@@ -68,12 +71,17 @@ module Dropdown
 
     def init_items
       finance_groups.each do |finance_group|
-        add_item(finance_group.name, path(finance_group))
+        disabled_msg = invalid_config_error_msg if finance_group.invoice_config&.invalid?
+        add_item(finance_group.name, path(finance_group), disabled_msg: disabled_msg)
       end
     end
 
     def finance_groups
       template.current_user.finance_groups
+    end
+
+    def invalid_config_error_msg
+      I18n.t('activerecord.errors.models.invoice_config.not_valid')
     end
   end
 end

@@ -115,7 +115,7 @@ class Group < ActiveRecord::Base
            dependent: :destroy
 
 
-  has_settings :text_message_provider, :messages_letter, class_name: 'GroupSetting'
+  has_settings *GroupSetting::SETTINGS.symbolize_keys.keys, class_name: 'GroupSetting'
 
   ### VALIDATIONS
 

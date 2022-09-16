@@ -127,7 +127,12 @@ class Invoice::ItemEvaluation
   end
 
   def amount_paid_without_vat(name, account, cost_center)
-    invoice_item = InvoiceItem.find_by(name: name, account: account, cost_center: cost_center)
+    relevant_invoice_ids = relevant_payments.of_fully_paid_invoices.payments.pluck(:invoice_id)
+
+    invoice_item = InvoiceItem.find_by(name: name,
+                                       account: account,
+                                       cost_center: cost_center,
+                                       invoice_id: relevant_invoice_ids)
 
     count(name, account, cost_center) * invoice_item.unit_cost
   end

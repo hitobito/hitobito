@@ -70,13 +70,10 @@ class PersonAbility < AbilityDsl::Base
       if_permissions_in_all_capable_groups_or_layer_or_above
     permission(:layer_and_below_full).may(:create).all # restrictions are on Roles
 
-    permission(:finance).may(:index_invoices).in_layer_group
+    permission(:finance).may(:index_invoices).in_same_layer_or_below
     permission(:finance).may(:create_invoice).in_same_layer_or_below
 
-    # TODO: Remove this once all wagons have been released with invoices
-    if Role.subclasses.collect(&:permissions).flatten.include?(:finance)
-      permission(:any).may(:index_invoices).herself
-    end
+    permission(:any).may(:index_invoices).herself
 
     permission(:admin).may(:show).people_without_roles
 

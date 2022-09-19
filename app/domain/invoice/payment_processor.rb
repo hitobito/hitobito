@@ -58,15 +58,17 @@ class Invoice::PaymentProcessor
   end
 
   def payments
-    @payments ||= credit_statements.collect do |s|
-      Payment.new(amount: fetch('Amt', s),
-                  esr_number: reference(s),
-                  received_at: received_at(s),
-                  invoice: invoice(s),
-                  transaction_identifier: transaction_identifier(s),
-                  reference: fetch('Refs', 'AcctSvcrRef', s),
-                  transaction_xml: s.to_xml(root: :TxDtls, skip_instruct: true).squish,
-                  status: :xml_imported)
+    @payments ||= net_entries.flat_map do |n|
+      credit_statements(n).collect do |s|
+        Payment.new(amount: fetch('Amt', s),
+                    esr_number: reference(s),
+                    received_at: received_at(n, s),
+                    invoice: invoice(s),
+                    transaction_identifier: transaction_identifier(n, s),
+                    reference: fetch('Refs', 'AcctSvcrRef', s),
+                    transaction_xml: s.to_xml(root: :TxDtls, skip_instruct: true).squish,
+                    status: :xml_imported)
+      end
     end
   end
 
@@ -104,14 +106,18 @@ class Invoice::PaymentProcessor
     references.map { |r| Invoice::PaymentSlip.format_as_esr(r) }
   end
 
-  def credit_statements
-    transaction_details
+  def net_entries
+    Array.wrap(fetch('Ntfctn', 'Ntry'))
+  end
+
+  def credit_statements(net_entry = fetch('Ntfctn', 'Ntry'))
+    transaction_details(net_entry)
       .select  { |s| fetch('CdtDbtInd', s) == 'CRDT' }
       .reject  { |s| fetch('RmtInf', s)['AddtlRmtInf'] =~ /REJECT/i }
   end
 
-  def transaction_details
-    Array.wrap(fetch('Ntfctn', 'Ntry'))
+  def transaction_details(net_entry = fetch('Ntfctn', 'Ntry'))
+    Array.wrap(net_entry)
          .collect { |s| fetch('NtryDtls', 'TxDtls', s) }
          .flatten
   end
@@ -135,19 +141,20 @@ class Invoice::PaymentProcessor
     ''
   end
 
-  def received_at(transaction)
-    datetime = transaction.dig('RltdDts', 'AccptncDtTm') ||
-        from.to_s ||
-        fetch('Ntfctn').fetch('CreDtTm')
+  def received_at(net_entry, transaction)
+    datetime = net_entry.dig('ValDt', 'Dt') ||
+      transaction.dig('RltdDts', 'AccptncDtTm') ||
+      from.to_s ||
+      fetch('Ntfctn').fetch('CreDtTm')
     to_datetime(datetime)
   end
 
-  def transaction_identifier(transaction)
+  def transaction_identifier(net_entry, transaction)
     [
       transaction.dig('Refs', 'AcctSvcrRef'),
       reference(transaction),
       transaction.dig('Amt'),
-      received_at(transaction),
+      received_at(net_entry, transaction),
       debitor_iban(transaction)
     ].join
   end

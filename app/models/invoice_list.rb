@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 # == Schema Information
 #
@@ -27,10 +27,10 @@
 #
 
 
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2022, Die Mitte Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_cvp.
+#  https://github.com/hitobito/hitobito_die_mitte.
 
 
 class InvoiceList < ActiveRecord::Base
@@ -60,8 +60,8 @@ class InvoiceList < ActiveRecord::Base
   end
 
   def update_total
-    total_sum = invoices.sum(&:total)
-    total_count = invoices.pluck(:recipient_id).count
+    total_sum = invoices.visible.sum(&:total)
+    total_count = invoices.visible.pluck(:recipient_id).count
     update(amount_total: total_sum, recipients_total: total_count)
   end
 

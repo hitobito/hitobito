@@ -41,6 +41,8 @@ class InvoicesController < CrudController
 
   helper_method :group, :invoice_list
 
+  after_destroy :update_invoice_list_total
+
   def new
     recipient = model_params && Person.find(model_params[:recipient_id])
     if recipient && can?(:update, recipient)
@@ -182,6 +184,10 @@ class InvoicesController < CrudController
 
   def invoice_list
     parent if parent.is_a?(InvoiceList)
+  end
+
+  def update_invoice_list_total
+    entry.invoice_list&.update_total
   end
 
 end

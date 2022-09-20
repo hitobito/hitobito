@@ -25,7 +25,7 @@ describe Imap::Connector do
   let(:imap_config) do
     {
       address: 'imap.example.com',
-      imap_port: 42993,
+      imap_port: 42_993,
       enable_ssl: true,
       user_name: 'catch-all@example.com',
       password: 'holly-secret'
@@ -50,8 +50,8 @@ describe Imap::Connector do
       expect(net_imap).to receive(:login)
 
       # move
-      expect(net_imap).to receive(:select).with("INBOX")
-      expect(net_imap).to receive(:uid_move).with('42', "Failed")
+      expect(net_imap).to receive(:select).with('INBOX')
+      expect(net_imap).to receive(:uid_move).with('42', 'Failed')
 
       # disconnect
       expect(net_imap).to receive(:disconnect)
@@ -66,7 +66,7 @@ describe Imap::Connector do
       expect(net_imap).to receive(:login)
 
       # move
-      expect(net_imap).to receive(:select).with("INBOX").and_raise(no_mailbox_error)
+      expect(net_imap).to receive(:select).with('INBOX').and_raise(no_mailbox_error)
       expect(net_imap).to receive(:uid_move).with('42', nil)
 
       expect(imap_connector).to receive(:create_if_missing)
@@ -108,10 +108,12 @@ describe Imap::Connector do
 
       # count
       expect(net_imap).to receive(:select).with('INBOX')
-      expect(net_imap).to receive(:status).with('INBOX', array_including('MESSAGES')).and_return({ 'MESSAGES' => 2 })
+      expect(net_imap).to receive(:status).with('INBOX', array_including('MESSAGES'))
+                                          .and_return('MESSAGES' => 2)
 
       # fetch
-      expect(net_imap).to receive(:fetch).with(1..2, fetch_attributes).and_return(imap_fetch_data_array)
+      expect(net_imap).to receive(:fetch).with(1..2, fetch_attributes)
+                                         .and_return(imap_fetch_data_array)
 
       # disconnect
       expect(net_imap).to receive(:close)
@@ -136,8 +138,9 @@ describe Imap::Connector do
       expect(net_imap).to receive(:login)
 
       # count
-      expect(net_imap).to receive(:select).with("INBOX")
-      expect(net_imap).to receive(:status).with("INBOX", array_including('MESSAGES')).and_return('MESSAGES' => 0)
+      expect(net_imap).to receive(:select).with('INBOX')
+      expect(net_imap).to receive(:status).with('INBOX', array_including('MESSAGES'))
+                                          .and_return('MESSAGES' => 0)
 
       # disconnect
       expect(net_imap).to receive(:close)
@@ -153,14 +156,16 @@ describe Imap::Connector do
       expect(net_imap).to receive(:login)
 
       # select mailbox
-      expect(net_imap).to receive(:select).with('Failed').and_raise(no_mailbox_error("Mailbox doesn't exist")).once
+      expect(net_imap).to receive(:select).with('Failed')
+                                          .and_raise(no_mailbox_error("Mailbox doesn't exist")).once
 
       # create mailbox
       expect(net_imap).to receive(:create).with('Failed')
 
       # count mails and select mailbox again
       expect(net_imap).to receive(:select).with('Failed')
-      expect(net_imap).to receive(:status).with('Failed', array_including('MESSAGES')).and_return('MESSAGES' => 0)
+      expect(net_imap).to receive(:status).with('Failed', array_including('MESSAGES'))
+                                          .and_return('MESSAGES' => 0)
 
       # disconnect
       expect(net_imap).to receive(:close)
@@ -175,7 +180,8 @@ describe Imap::Connector do
       expect(net_imap).to receive(:login)
 
       # select
-      expect(net_imap).to receive(:select).with('Junk').and_raise(no_mailbox_error("Mailbox doesn't exist"))
+      expect(net_imap).to receive(:select).with('Junk')
+                                          .and_raise(no_mailbox_error("Mailbox doesn't exist"))
 
       # disconnect
       expect(net_imap).to receive(:close)
@@ -197,7 +203,8 @@ describe Imap::Connector do
       expect(net_imap).to receive(:select).with('INBOX')
 
       # fetch
-      expect(net_imap).to receive(:uid_fetch).with(42, fetch_attributes).and_return([imap_fetch_data_1])
+      expect(net_imap).to receive(:uid_fetch).with(42, fetch_attributes)
+                                             .and_return([imap_fetch_data_1])
 
       # disconnect
       expect(net_imap).to receive(:close)
@@ -285,7 +292,7 @@ describe Imap::Connector do
       expect(net_imap).to receive(:select).with('INBOX')
 
       # fetch
-      expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return(imap_fetched_uids)
+      expect(net_imap).to receive(:uid_search).with(['ALL']).and_return(imap_fetched_uids)
 
       # disconnect
       expect(net_imap).to receive(:close)
@@ -307,7 +314,7 @@ describe Imap::Connector do
       expect(net_imap).to receive(:select).with('INBOX')
 
       # fetch
-      expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return([])
+      expect(net_imap).to receive(:uid_search).with(['ALL']).and_return([])
 
       # disconnect
       expect(net_imap).to receive(:close)
@@ -323,7 +330,7 @@ describe Imap::Connector do
       expect(net_imap).to receive(:login)
 
       # select
-      expect(net_imap).to receive(:select).with("Junk").and_raise(no_mailbox_error("Mailbox doesn't exist"))
+      expect(net_imap).to receive(:select).with('Junk').and_raise(no_mailbox_error("Mailbox doesn't exist"))
 
       # disconnect
       expect(net_imap).to receive(:close)

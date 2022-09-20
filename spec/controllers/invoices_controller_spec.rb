@@ -72,11 +72,33 @@ describe InvoicesController do
       get :index, params: { group_id: group.id, q: people(:top_leader).last_name }
       expect(assigns(:invoices)).to have(2).item
     end
-    
+
     it 'GET#index finds invoices by recipient.first_name' do
       update_issued_at_to_current_year
       get :index, params: { group_id: group.id, q: people(:top_leader).first_name }
       expect(assigns(:invoices)).to have(2).item
+    end
+
+    it 'GET#index finds invoices by recipient.email' do
+      update_issued_at_to_current_year
+      get :index, params: { group_id: group.id, q: people(:top_leader).email }
+      expect(assigns(:invoices)).to have(2).item
+    end
+
+    it 'GET#index finds invoices by recipient.company_name' do
+      update_issued_at_to_current_year
+      people(:top_leader).update!(company_name: 'Hitobito Fanclub')
+      get :index, params: { group_id: group.id, q: 'hitobito' }
+      expect(assigns(:invoices)).to have(2).item
+    end
+
+    it 'GET#index finds nothing by owner.company_name' do
+      update_issued_at_to_current_year
+      creator = people(:bottom_member)
+      creator.update!(company_name: 'Greedy Ltd')
+      Invoice.update_all(creator_id: creator.id)
+      get :index, params: { group_id: group.id, q: creator.company_name }
+      expect(assigns(:invoices)).to be_empty
     end
 
     it 'GET#index finds nothing for dummy' do

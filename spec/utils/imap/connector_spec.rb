@@ -126,7 +126,7 @@ describe Imap::Connector do
       # check mail content
       expect(mail1.uid).to eq('42')
       expect(mail1.subject).to be(imap_fetch_data_1.attr['ENVELOPE'].subject)
-      expect(mail1.date).to be_within(2.seconds).of(Time.zone.utc_to_local(Time.now))
+      expect(mail1.date).to be_within(2.seconds).of(Time.zone.utc_to_local(Time.zone.now))
       expect(mail1.sender_email).to eq('john@sender.com')
       expect(mail1.sender_name).to eq('sender')
       expect(mail1.plain_text_body).to eq('SpaceX rocks!')
@@ -215,7 +215,7 @@ describe Imap::Connector do
       # check mail content
       expect(mail.uid).to eq('42')
       expect(mail.subject).to be(imap_fetch_data_1.attr['ENVELOPE'].subject)
-      expect(mail.date).to eq(Time.zone.utc_to_local(DateTime.parse(Time.now.to_s)))
+      expect(mail.date).to be_within(2.seconds).of(Time.zone.utc_to_local(Time.zone.now))
       expect(mail.sender_email).to eq('john@sender.com')
       expect(mail.sender_name).to eq('sender')
       expect(mail.plain_text_body).to eq('SpaceX rocks!')

@@ -110,9 +110,9 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def correct_payee_qr_format
-    return if payee&.lines&.select(&:present?)&.size&.>= 3
+    return if payee&.lines&.select(&:present?)&.size&.== 3
 
-    errors.add(:payee, :must_have_gteq_3_lines)
+    errors.add(:payee, :must_have_3_lines)
   end
 
   def nullify_participant_number_internal

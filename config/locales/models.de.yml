@@ -142,7 +142,7 @@ de:
               invalid_check_digit: 'ist nicht gültig; Inkorrekte Prüfziffer'
             payee:
               to_long: 'darf höchstens 2 Zeilen enthalten'
-              must_have_gteq_3_lines: 'muss mindestens 3 Zeilen enthalten'
+              must_have_3_lines: 'muss genau 3 Zeilen enthalten'
         mailing_list:
             attributes:
                 additional_sender:

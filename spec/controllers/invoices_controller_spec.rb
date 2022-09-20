@@ -261,14 +261,36 @@ describe InvoicesController do
       expect(json[:links][:'invoices.recipient'][:href]).to eq 'http://test.host/people/{invoices.recipient}.json'
     end
   end
+  
+  context 'DELETE#destroy' do
+    it 'moves invoice to cancelled state' do
+      expect do
+        delete :destroy, params: { group_id: group.id, id: invoice.id }
+      end.not_to change { group.invoices.count }
+      expect(invoice.reload.state).to eq 'cancelled'
+      expect(response).to redirect_to group_invoices_path(group)
+      expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
+    end
 
-  it 'DELETE#destroy moves invoice to cancelled state' do
-    expect do
-      delete :destroy, params: { group_id: group.id, id: invoice.id }
-    end.not_to change { group.invoices.count }
-    expect(invoice.reload.state).to eq 'cancelled'
-    expect(response).to redirect_to group_invoices_path(group)
-    expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
+    it 'updates invoice_list' do
+      list = InvoiceList.create(title: 'List', group: group, invoices: [invoice, invoices(:sent)])
+
+      list.update_total
+      expect(list.recipients_total).to eq(2)
+      expect(list.amount_total).to eq(5.85)
+
+      invoice.reload
+
+      expect do
+        delete :destroy, params: { group_id: group.id, id: invoice.id }
+      end.not_to change { group.invoices.count }
+      expect(invoice.reload.state).to eq 'cancelled'
+
+      list.reload
+
+      expect(list.recipients_total).to eq(1)
+      expect(list.amount_total).to eq(0.5)
+    end
   end
 
   context 'post' do

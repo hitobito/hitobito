@@ -47,12 +47,6 @@ describe InvoiceListsController do
 
     before { sign_in(people(:top_leader)) }
 
-    it 'renders processed and total Empfänger count' do
-      InvoiceList.create!(group: group, title: 'title', recipients_processed: 10, recipients_total: 20)
-      get :index, params: { group_id: group.id }
-      expect(column).to have_text("10 / 20")
-    end
-
     it 'renders final Empfänger count' do
       InvoiceList.create!(group: group, title: 'title', recipients_processed: 20, recipients_total: 20)
       get :index, params: { group_id: group.id }

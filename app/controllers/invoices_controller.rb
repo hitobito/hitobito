@@ -21,7 +21,7 @@ class InvoicesController < CrudController
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]
 
   self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.first_name',
-                         'people.email']
+                         'people.email', 'people.company_name']
   self.permitted_attrs = [:title, :description, :state, :due_at,
                           :recipient_id, :recipient_email, :recipient_address,
                           :payment_information, :payment_purpose, :hide_total,

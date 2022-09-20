@@ -6,7 +6,7 @@ describe Invoice::PaymentProcessor do
   let(:invoice_config) { invoice.invoice_config }
 
   it 'parses 5 credit statements' do
-    expect(parser.credit_statements).to have(5).items
+    expect(parser.send(:credit_statements)).to have(5).items
   end
 
   it 'builds payments for each credit statement' do
@@ -31,13 +31,12 @@ describe Invoice::PaymentProcessor do
   it 'builds transaction identifier' do
     identifiers = parser.payments.map(&:transaction_identifier)
 
-    expect(identifiers).to eq([
-      "20180314001221000006905084508206000000000000100000000000905710.822018-03-14 20:00:00 +0100CH6309000000250097798",
-      "20180314001221000006915084508216000000000000100000000000800710.822018-03-14 20:00:00 +0100CH6309000000250097798",
-      "20180314001221000006925084508226000000000000100000000001165710.822018-03-14 20:00:00 +0100CH6309000000250097798",
-      "20180314001221000006935084508236000000000000100000000001069710.822018-03-14 20:00:00 +0100CH6309000000250097798",
-      "20180314001221000006945084508246000000000000100000000000750710.822018-03-14 20:00:00 +0100CH6309000000250097798"
-    ])
+    expect(identifiers).to eq(
+      ['20180314001221000006905084508206000000000000100000000000905710.822018-03-15 00:00:00 +0100CH6309000000250097798',
+       '20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798',
+       '20180314001221000006925084508226000000000000100000000001165710.822018-03-15 00:00:00 +0100CH6309000000250097798',
+       '20180314001221000006935084508236000000000000100000000001069710.822018-03-15 00:00:00 +0100CH6309000000250097798',
+       '20180314001221000006945084508246000000000000100000000000750710.822018-03-15 00:00:00 +0100CH6309000000250097798'])
   end
 
   it 'creates payment and marks invoice as payed and updates invoice_list' do
@@ -71,6 +70,12 @@ describe Invoice::PaymentProcessor do
     expect(data['RltdPties']['Dbtr']['PstlAdr']).to be_present
   end
 
+  it 'uses ValDat as received_at' do
+    received_ats = parser.payments.map(&:received_at)
+
+    expect(received_ats).to all(eq(Date.new(2018, 3, 15)))
+  end
+
   it 'creates payment and marks scor referenced invoice as payed' do
     invoice.update_columns(reference: Invoice::ScorReference.create('000000100000000000905'),
                            esr_number: '00 00000 00000 10000 00000 00905',
@@ -95,9 +100,9 @@ describe Invoice::PaymentProcessor do
 
   it 'falls back to more general dates if no payment date is included' do
     expect(parser('camt.054-without-payment-dates').payments.first.received_at)
-        .to eq(Time.zone.parse('2022-01-26T00:00:00+01:00').to_date)
+      .to eq(Time.zone.parse('2022-01-26T00:00:00+01:00').to_date)
     expect(parser('camt.054-without-any-optional-dates').payments.first.received_at)
-        .to eq(Time.zone.parse('2022-01-26T18:43:27+01:00').to_date)
+      .to eq(Time.zone.parse('2022-01-26T18:43:27+01:00').to_date)
   end
 
   private

@@ -98,12 +98,12 @@ module Dropdown
 
     def render(template)
       template.content_tag(:li, class: css_class) do
-        template.safe_join([link(template),
+        template.safe_join([link(template, label, url, options),
                             render_sub_items(template)].compact)
       end
     end
 
-    def link(template)
+    def link(template, label, url, options)
       return disabled_link(template) if disabled_msg
 
       new_url = case url

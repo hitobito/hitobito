@@ -73,6 +73,7 @@ class InvoiceConfig < ActiveRecord::Base
 
   validate :correct_address_wordwrap, if: :bank?
   validate :correct_check_digit
+  validate :correct_payee_qr_format, if: :qr?
 
   accepts_nested_attributes_for :payment_reminder_configs
   accepts_nested_attributes_for :payment_provider_configs
@@ -106,6 +107,12 @@ class InvoiceConfig < ActiveRecord::Base
     return if payment_slip.check_digit(splitted.join) == check_digit.to_i
 
     errors.add(:account_number, :invalid_check_digit)
+  end
+
+  def correct_payee_qr_format
+    return if payee&.lines&.select(&:present?)&.size&.== 3
+
+    errors.add(:payee, :must_have_3_lines)
   end
 
   def nullify_participant_number_internal

@@ -133,6 +133,7 @@ de:
             invoice_config:
               invalid: 'ist nicht gültig; passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
         invoice_config:
+          not_valid: 'Rechnungseinstellungen sind ungültig. Passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
           attributes:
             iban:
               required: 'muss ausgefüllt werden'
@@ -141,6 +142,7 @@ de:
               invalid_check_digit: 'ist nicht gültig; Inkorrekte Prüfziffer'
             payee:
               to_long: 'darf höchstens 2 Zeilen enthalten'
+              must_have_3_lines: 'muss genau 3 Zeilen enthalten'
         mailing_list:
             attributes:
                 additional_sender:

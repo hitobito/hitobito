@@ -5,6 +5,7 @@
 *  Rechnungen können mit Firmennamen gefiltert werden (#1773)
 *  Personen mit `:finance` Berechtigung können neu bei allen Personen in und unterhalb ihrer Ebene die Rechnungen der Person mittels "Rechnungen" Tab auf dem Profil anzeigen lassen. (hitobito_die_mitte#205)
 *  In der Kursansicht können neu alle Kurse welche "Anlass ist für die ganze Datenbank sichtbar" aktiviert haben, gefunden werden. (#1813)
+*  Rechnungsempfänger auf QR Rechnungen wird validiert: muss genau 3 Zeilen enthalten (#1825) 
 
 ## Version 1.28
 

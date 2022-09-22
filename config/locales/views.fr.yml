@@ -162,6 +162,10 @@ fr:
   dropdown/letter_with_invoice:
     print: Imprimer
     letters_with_invoice: Factures
+  dropdown/invoices/evaluation:
+    download: 'Exporter'
+    csv: 'CSV'
+    xlsx: 'XLSX'
   devise:
     failure:
       already_authenticated: 'Tu es déjà inscrit(e).'
@@ -712,6 +716,8 @@ fr:
     evaluations:
       show:
         deficit: Paiement partiel
+        table:
+          total: 'Total:'
   invoice_configs:
     form_tabs:
       general: général

@@ -34,7 +34,7 @@ jobs:
           curl -v $HEARTBEAT_URL/signal \
             -d application=$HEARTBEAT_APPLICATION \
             -d token=$HEARTBEAT_TOKEN \
-            -d status=ok | jq .
+            -d status=fail | jq .
 
       # - name: 'Send failure'
       #   if: ${{ github.event.workflow_run.conclusion == 'success' }}

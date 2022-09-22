@@ -13,12 +13,13 @@ jobs:
     env:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
-      HEARTBEAT_APPLICATION: ${{ env.GITHUB_REPOSITORY }}-tests
 
     steps:
       - name: 'Check Configuration'
         run: |
-          echo "HEARTBEAT_APPLICATION is $(basename "$HEARTBEAT_APPLICATION" | tr _ -)"
+          HEARTBEAT_APPLICATION="$(basename "${GITHUB_REPOSITORY}-tests" | tr _ -)"
+          echo "HEARTBEAT_APPLICATION=${HEARTBEAT_APPLICATION}" >> $GITHUB_ENV
+          echo "HEARTBEAT_APPLICATION is $HEARTBEAT_APPLICATION"
           (
             [[ "$HEARTBEAT_URL" != '' ]] &&
             [[ "$HEARTBEAT_TOKEN" != '' ]] &&
@@ -31,7 +32,7 @@ jobs:
       - name: 'Send notification'
         run: |
           curl -v $HEARTBEAT_URL/signal \
-            -d application=$(basename "$HEARTBEAT_APPLICATION" | tr _ -) \
+            -d application=$HEARTBEAT_APPLICATION \
             -d token=$HEARTBEAT_TOKEN \
             -d status=ok | jq .
 
@@ -39,7 +40,7 @@ jobs:
       #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
       #   run: >
       #     curl -v $HEARTBEAT_URL/signal \
-      #       -d application=$(basename "$HEARTBEAT_APPLICATION" | tr _ -) \
+      #       -d application=$HEARTBEAT_APPLICATION \
       #       -d token=$HEARTBEAT_TOKEN \
       #       -d status=fail | jq .
 
@@ -47,7 +48,7 @@ jobs:
       #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
       #   run: >
       #     curl -v $HEARTBEAT_URL/signal \
-      #       -d application=$(basename "$HEARTBEAT_APPLICATION" | tr _ -) \
+      #       -d application=$HEARTBEAT_APPLICATION \
       #       -d token=$HEARTBEAT_TOKEN \
       #       -d status=ok | jq .
 

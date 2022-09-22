@@ -22,6 +22,7 @@
 #
 
 class Payment < ActiveRecord::Base
+  include I18nEnums
 
   belongs_to :invoice, optional: true
 
@@ -34,7 +35,7 @@ class Payment < ActiveRecord::Base
   scope :list, -> { order(received_at: :desc) }
 
   STATES = %w(ebics_imported xml_imported manually_created without_invoice).freeze
-  enum status: STATES
+  i18n_enum :status, STATES
   validates :status, inclusion: { in: STATES, allow_nil: true }
 
   attr_writer :esr_number

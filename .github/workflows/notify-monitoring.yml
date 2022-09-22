@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: 'Check Configuration'
-        run: |
+        run: >
           HEARTBEAT_APPLICATION="$(basename "${GITHUB_REPOSITORY}-tests" | tr _ -)"
           echo "HEARTBEAT_APPLICATION=${HEARTBEAT_APPLICATION}" >> $GITHUB_ENV
           echo "HEARTBEAT_APPLICATION is $HEARTBEAT_APPLICATION"
@@ -37,7 +37,7 @@ jobs:
           curl -v $HEARTBEAT_URL/signal \
             -d application=$HEARTBEAT_APPLICATION \
             -d token=$HEARTBEAT_TOKEN \
-            -d status=fail | jq .
+            -d status=ok | jq .
 
       - name: 'Send failure'
         if: ${{ github.event.workflow_run.conclusion == 'failure' }}

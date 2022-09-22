@@ -1,0 +1,53 @@
+name: 'Notify Statuscope'
+
+on:
+  # workflow_run:
+  #   workflows: [build]
+  #   types: [completed]
+  #   branches: [master]
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: 'ubuntu-latest'
+    env:
+      HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
+      HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
+      HEARTBEAT_APPLICATION: ${{ env.GITHUB_REPOSITORY }}-tests
+
+    steps:
+      - name: 'Check Configuration'
+        run: |
+          echo "HEARTBEAT_APPLICATION is $(basename "$HEARTBEAT_APPLICATION" | tr _ -)"
+          (
+            [[ "$HEARTBEAT_URL" != '' ]] &&
+            [[ "$HEARTBEAT_TOKEN" != '' ]] &&
+            echo "HEARTBEAT_URL and HEARTBEAT_TOKEN are present."
+          ) || (
+            echo "Please ensure that you have HEARTBEAT_URL and HEARTBEAT_TOKEN set as secrets"
+            exit 1
+          )
+
+      - name: 'Send notification'
+        run: |
+          curl -v $HEARTBEAT_URL/signal \
+            -d application=$(basename "$HEARTBEAT_APPLICATION" | tr _ -) \
+            -d token=$HEARTBEAT_TOKEN \
+            -d status=ok | jq .
+
+      # - name: 'Send failure'
+      #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      #   run: >
+      #     curl -v $HEARTBEAT_URL/signal \
+      #       -d application=$(basename "$HEARTBEAT_APPLICATION" | tr _ -) \
+      #       -d token=$HEARTBEAT_TOKEN \
+      #       -d status=fail | jq .
+
+      # - name: 'Send success'
+      #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      #   run: >
+      #     curl -v $HEARTBEAT_URL/signal \
+      #       -d application=$(basename "$HEARTBEAT_APPLICATION" | tr _ -) \
+      #       -d token=$HEARTBEAT_TOKEN \
+      #       -d status=ok | jq .
+

@@ -1,11 +1,13 @@
 name: 'Notify Statuscope'
 
 on:
-  # workflow_run:
-  #   workflows: [build]
-  #   types: [completed]
-  #   branches: [master]
-  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - Rails Lint and Test
+    types:
+      - completed
+    branches:
+      - master
 
 jobs:
   notify:
@@ -29,26 +31,19 @@ jobs:
             exit 1
           )
 
-      - name: 'Send notification'
-        run: |
+      - name: 'Send success'
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        run: >
           curl -v $HEARTBEAT_URL/signal \
             -d application=$HEARTBEAT_APPLICATION \
             -d token=$HEARTBEAT_TOKEN \
             -d status=fail | jq .
 
-      # - name: 'Send failure'
-      #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
-      #   run: >
-      #     curl -v $HEARTBEAT_URL/signal \
-      #       -d application=$HEARTBEAT_APPLICATION \
-      #       -d token=$HEARTBEAT_TOKEN \
-      #       -d status=fail | jq .
-
-      # - name: 'Send success'
-      #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
-      #   run: >
-      #     curl -v $HEARTBEAT_URL/signal \
-      #       -d application=$HEARTBEAT_APPLICATION \
-      #       -d token=$HEARTBEAT_TOKEN \
-      #       -d status=ok | jq .
+      - name: 'Send failure'
+        if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+        run: >
+          curl -v $HEARTBEAT_URL/signal \
+            -d application=$HEARTBEAT_APPLICATION \
+            -d token=$HEARTBEAT_TOKEN \
+            -d status=fail | jq .
 

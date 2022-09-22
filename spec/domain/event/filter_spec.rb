@@ -9,18 +9,18 @@ require 'spec_helper'
 
 describe Event::Filter do
 
-  let(:group) { groups(:top_layer) }
+  let(:layer) { groups(:top_layer) }
+  let(:group) { Fabricate(Group::TopGroup.name.to_sym, name: 'g1', parent: groups(:top_group)) }
   let(:year)  { 2012 }
   let(:type)  { nil }
 
   before do
-    @g1 = Fabricate(Group::TopGroup.name.to_sym, name: 'g1', parent: groups(:top_group))
-    Fabricate(:event, groups: [@g1])
+    Fabricate(:event, groups: [group])
     Fabricate(:event, groups: [groups(:bottom_group_one_one)])
   end
 
   def filter(filter = nil, sort_expression = nil)
-    described_class.new(group, type, filter, year, sort_expression)
+    described_class.new(layer, type, filter, year, sort_expression)
   end
 
   it 'lists events of descendant groups by default' do
@@ -38,6 +38,16 @@ describe Event::Filter do
   it 'sorts according to sort_expression' do
     expect(filter('layer', 'event_translations.name').list_entries.first.name).to eq 'Eventus'
     expect(filter('layer', 'event_translations.name desc').list_entries.first.name).to eq 'Top Event'
+  end
+
+  it 'does not beak with pagination' do
+    expect(filter(nil, 'event_dates.start_at' => 'asc').list_entries).to have(3).entries
+
+    Fabricate.times(20, :event, groups: [group])
+
+    expect(filter.list_entries).to have(23).entries
+    expect(filter.list_entries.page(1).per(20)).to have(20).entries
+    expect(filter.list_entries.page(2).per(20)).to have(3).entries
   end
 
 end

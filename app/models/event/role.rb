@@ -36,7 +36,7 @@ class Event::Role < ActiveRecord::Base
 
   ### ATTRIBUTES
 
-  class_attribute :permissions, :kind
+  class_attribute :permissions, :kind, :qualifiable
 
   # The permissions this role has in the corresponding event.
   self.permissions = []
@@ -46,6 +46,8 @@ class Event::Role < ActiveRecord::Base
   # If the value is nil, the role does not actually participate in the event,
   # but is an external supervisor.
   self.kind = :helper
+
+  self.qualifiable = false
 
   self.demodulized_route_keys = true
 

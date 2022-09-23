@@ -12,6 +12,89 @@ describe Export::Pdf::Invoice do
   let(:invoice) { invoices(:invoice) }
   let(:sent)    { invoices(:sent) }
 
+  context 'with articles' do
+    subject do
+      invoice = Invoice.new(
+        sequence_number: '1-1',
+        payment_slip: :qr,
+        total: 1500,
+        iban: 'CH93 0076 2011 6238 5295 7',
+        reference: 'RF561A',
+        esr_number: '00 00834 96356 70000 00000 00019',
+        payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
+        recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
+        issued_at: Date.new(2022, 9, 26),
+        due_at: Date.new(2022, 10, 26),
+        creator: people(:top_leader),
+        vat_number: 'CH 1234',
+        sequence_number: '1-10',
+        group: groups(:top_layer)
+      )
+      pdf = described_class.render(invoice, payment_slip: true, articles: true)
+      PDF::Inspector::Text.analyze(pdf)
+    end
+
+    it 'renders full invoice' do
+      expect(text_with_position).to eq([
+        [347, 687, "Rechnungsnummer:"],
+        [457, 687, "1-10"],
+        [347, 674, "Rechnungsdatum:"],
+        [457, 674, "26.09.2022"],
+        [347, 662, "Fällig bis:"],
+        [457, 662, "26.10.2022"],
+        [347, 649, "Rechnungssteller:"],
+        [457, 649, "Top Leader"],
+        [347, 637, "MwSt. Nummer:"],
+        [457, 637, "CH 1234"],
+        [57, 688, "Max Mustermann"],
+        [57, 676, "Musterweg 2"],
+        [57, 665, "8000 Alt Tylerland"],
+        [57, 539, "Rechnungsartikel"],
+        [363, 539, "Anzahl"],
+        [419, 539, "Preis"],
+        [464, 539, "Betrag"],
+        [515, 539, "MwSt."],
+        [420, 526, "Zwischenbetrag"],
+        [505, 526, "0.00 CHF"],
+        [420, 513, "MwSt."],
+        [505, 513, "0.00 CHF"],
+        [420, 496, "Gesamtbetrag"],
+        [490, 496, "1'500.00 CHF"],
+        [14, 276, "Empfangsschein"],
+        [14, 251, "Konto / Zahlbar an"],
+        [14, 239, "CH93 0076 2011 6238 5295 7"],
+        [14, 228, "Acme Corp"],
+        [14, 216, "Hallesche Str. 37"],
+        [14, 205, "3007 Hinterdupfing"],
+        [14, 173, "Zahlbar durch"],
+        [14, 161, "Max Mustermann"],
+        [14, 150, "Musterweg 2"],
+        [14, 138, "8000 Alt Tylerland"],
+        [14, 89, "Währung"],
+        [71, 89, "Betrag"],
+        [14, 78, "CHF"],
+        [71, 78, "1 500.00"],
+        [105, 39, "Annahmestelle"],
+        [190, 276, "Zahlteil"],
+        [190, 89, "Währung"],
+        [247, 89, "Betrag"],
+        [190, 78, "CHF"],
+        [247, 78, "1 500.00"],
+        [346, 278, "Konto / Zahlbar an"],
+        [346, 266, "CH93 0076 2011 6238 5295 7"],
+        [346, 255, "Acme Corp"],
+        [346, 243, "Hallesche Str. 37"],
+        [346, 232, "3007 Hinterdupfing"],
+        [346, 211, "Referenznummer"],
+        [346, 200, "00 00834 96356 70000 00000 00019"],
+        [346, 178, "Zahlbar durch"],
+        [346, 167, "Max Mustermann"],
+        [346, 155, "Musterweg 2"],
+        [346, 144, "8000 Alt Tylerland"]
+      ])
+    end
+  end
+
   it 'renders invoice with articles and payment_slip' do
     described_class.render(invoice, articles: true, payment_slip: true)
   end
@@ -140,12 +223,6 @@ describe Export::Pdf::Invoice do
       PDF::Inspector::Text.analyze(pdf)
     end
 
-    def text_with_position
-      subject.positions.each_with_index.collect do |p, i|
-        p.collect(&:round) + [subject.show_text[i]]
-      end
-    end
-
     it 'renders qrcode' do
       expect(text_with_position).to eq [
         [14, 276, 'Empfangsschein'],
@@ -250,6 +327,14 @@ describe Export::Pdf::Invoice do
         [346, 155, "Musterweg 2"],
         [346, 144, "8000 Alt Tylerland"]
       ]
+    end
+  end
+
+  private
+
+  def text_with_position
+    subject.positions.each_with_index.collect do |p, i|
+      p.collect(&:round) + [subject.show_text[i]]
     end
   end
 end

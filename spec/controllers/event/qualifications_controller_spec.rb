@@ -42,8 +42,20 @@ describe Event::QualificationsController do
         get :index, params: { group_id: group.id, event_id: event.id }
       end
 
-      it { expect(assigns(:participants).size).to eq(3) }
+      it { expect(assigns(:participants).size).to eq(2) }
       it { expect(assigns(:leaders).size).to eq(1) }
+
+      context 'with qualifiable helpers' do
+        before do
+          Event::Role::Helper.qualifiable = true
+        end
+        after do
+          Event::Role::Helper.qualifiable = false
+        end
+
+        it { expect(assigns(:participants).size).to eq(2) }
+        it { expect(assigns(:leaders).size).to eq(2) }
+      end
     end
 
     context 'for regular event' do

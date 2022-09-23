@@ -110,8 +110,18 @@ jobs:
 
       - uses: hitobito/hitobito/.github/actions/statuscope.yml@master
         # uses: actions/statuscope@master
+        if: success()
         with:
           repository: ${{ github.event.repository.name }}
           url: ${{ secrets.HEARTBEAT_URL }}
           token: ${{ secrets.HEARTBEAT_TOKEN }}
-          test_result: ${{ success() }}
+          test_result: true
+
+      - uses: hitobito/hitobito/.github/actions/statuscope.yml@master
+        # uses: actions/statuscope@master
+        if: failure()
+        with:
+          repository: ${{ github.event.repository.name }}
+          url: ${{ secrets.HEARTBEAT_URL }}
+          token: ${{ secrets.HEARTBEAT_TOKEN }}
+          test_result: false

@@ -108,7 +108,7 @@ jobs:
           bundle exec bin/rails db:environment:set RAILS_ENV=test
           bundle exec rake ci --trace
 
-      - uses: hitobito/hitobito/statuscope.yml@master
+      - uses: puzzle/statuscope@master
         if: success()
         with:
           repository: ${{ github.event.repository.name }}
@@ -116,7 +116,7 @@ jobs:
           token: ${{ secrets.HEARTBEAT_TOKEN }}
           test_result: true
 
-      - uses: hitobito/hitobito/statuscope.yml@master
+      - uses: puzzle/statuscope@master
         if: failure()
         with:
           repository: ${{ github.event.repository.name }}

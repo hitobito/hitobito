@@ -108,8 +108,10 @@ jobs:
           bundle exec bin/rails db:environment:set RAILS_ENV=test
           bundle exec rake ci --trace
 
-      - uses: hitobito/hitobito/.github/workflows/notify-statuscope.yml@master
+      - uses: hitobito/hitobito/.github/actions/statuscope.yml@master
+        # uses: actions/statuscope@master
         with:
           repository: ${{ github.event.repository.name }}
+          url: ${{ secrets.HEARTBEAT_URL }}
+          token: ${{ secrets.HEARTBEAT_TOKEN }}
           test_result: ${{ success() }}
-        secrets: inherit

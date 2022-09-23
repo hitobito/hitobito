@@ -107,19 +107,3 @@ jobs:
           bundle exec rake db:create --trace
           bundle exec bin/rails db:environment:set RAILS_ENV=test
           bundle exec rake ci --trace
-
-      - uses: puzzle/statuscope@master
-        if: success()
-        with:
-          repository: ${{ github.event.repository.name }}
-          url: ${{ secrets.HEARTBEAT_URL }}
-          token: ${{ secrets.HEARTBEAT_TOKEN }}
-          test_result: true
-
-      - uses: puzzle/statuscope@master
-        if: failure()
-        with:
-          repository: ${{ github.event.repository.name }}
-          url: ${{ secrets.HEARTBEAT_URL }}
-          token: ${{ secrets.HEARTBEAT_TOKEN }}
-          test_result: false

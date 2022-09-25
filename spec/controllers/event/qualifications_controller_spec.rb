@@ -46,11 +46,13 @@ describe Event::QualificationsController do
       it { expect(assigns(:leaders).size).to eq(1) }
 
       context 'with qualifiable helpers' do
-        before do
+        around do |spec|
+          previous = Event::Role::Helper.qualifiable
           Event::Role::Helper.qualifiable = true
-        end
-        after do
-          Event::Role::Helper.qualifiable = false
+
+          spec.run
+
+          Event::Role::Helper.qualifiable = previous
         end
 
         it { expect(assigns(:participants).size).to eq(2) }

@@ -102,9 +102,9 @@ describe Export::Pdf::Messages::Letter do
         analyzer = PDF::Inspector::Text.analyze(described_class.new(letter, options).render)
 
         expect(text_with_position(analyzer)).to eq [
-          [71, 654, "Top Leader"],
-          [71, 644, "Funkystreet 42"],
-          [71, 633, "4242 Supertown"],
+          [71, 654, 'Top Leader'],
+          [71, 644, 'Funkystreet 42'],
+          [71, 633, '4242 Supertown'],
           [71, 531, 'Information'],
           [71, 502, 'Hallo'],
           [71, 481, 'Wir laden '],
@@ -125,8 +125,8 @@ describe Export::Pdf::Messages::Letter do
         people(:bottom_member).update!(last_name: 'First')
 
         letter2 = Message::Letter.create!(mailing_list: list,
-                                body: messages(:letter).body,
-                                subject: 'Information')
+                                          body: messages(:letter).body,
+                                          subject: 'Information')
         Messages::LetterDispatch.new(letter2).run
         analyzer = PDF::Inspector::Text.analyze(described_class.new(letter2, options).render)
 
@@ -140,9 +140,9 @@ describe Export::Pdf::Messages::Letter do
           [111, 481, 'dich'],
           [130, 481, ' ein! '],
           [71, 460, 'Bis bald'],
-          [71, 654, "Top Leader"],
-          [71, 644, "Funkystreet 42"],
-          [71, 633, "4242 Supertown"],
+          [71, 654, 'Top Leader'],
+          [71, 644, 'Funkystreet 42'],
+          [71, 633, '4242 Supertown'],
           [71, 531, 'Information'],
           [71, 502, 'Hallo'],
           [71, 481, 'Wir laden '],
@@ -168,9 +168,9 @@ describe Export::Pdf::Messages::Letter do
 
       it 'renders addresses and content' do
         expect(text_with_position).to eq [
-          [71, 654, "Top Leader"],
-          [71, 644, "Funkystreet 42"],
-          [71, 633, "4242 Supertown"],
+          [71, 654, 'Top Leader'],
+          [71, 644, 'Funkystreet 42'],
+          [71, 633, '4242 Supertown'],
           [71, 531, 'Information'],
           [71, 502, 'Hallo'],
           [71, 481, 'Wir laden '],
@@ -193,12 +193,12 @@ describe Export::Pdf::Messages::Letter do
       it 'renders only addresses has stamps' do
         options[:stamped] = true
         expect(text_with_position).to eq [
-          [71, 654, "Top Leader"],
-          [71, 644, "Funkystreet 42"],
-          [71, 633, "4242 Supertown"],
-          [71, 654, "Bottom Member"],
-          [71, 644, "Greatstreet 345"],
-          [71, 633, "3456 Greattown"]
+          [71, 654, 'Top Leader'],
+          [71, 644, 'Funkystreet 42'],
+          [71, 633, '4242 Supertown'],
+          [71, 654, 'Bottom Member'],
+          [71, 644, 'Greatstreet 345'],
+          [71, 633, '3456 Greattown']
         ]
         expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info, :render_subject,
                                    :render_content]
@@ -366,29 +366,29 @@ describe Export::Pdf::Messages::Letter do
           [71, 644, housemate1.address],
           [71, 633, "#{housemate1.zip_code} #{housemate1.town}"],
           [71, 623, 'DE'],
-          [71, 531, "Brief"],
+          [71, 531, 'Brief'],
           [71, 502, 'Hallo'],
           [71, 654, 'Bettina Büttel, Carlo Colorado'],
           [71, 644, housemate3.address],
           [71, 633, "#{housemate3.zip_code} #{housemate3.town}"],
           [71, 623, 'DE'],
-          [71, 531, "Brief"],
+          [71, 531, 'Brief'],
           [71, 502, 'Hallo'],
           [71, 654, 'Bottom Member'],
           [71, 644, bottom_member.address],
           [71, 633, "#{bottom_member.zip_code} #{bottom_member.town}"],
-          [71, 531, "Brief"],
+          [71, 531, 'Brief'],
           [71, 502, 'Hallo'],
           [71, 654, 'Dominik Dachs'],
           [71, 644, single_person.address],
           [71, 633, "#{single_person.zip_code} #{single_person.town}"],
           [71, 623, 'DE'],
-          [71, 531, "Brief"],
+          [71, 531, 'Brief'],
           [71, 502, 'Hallo']
         ]
       end
 
-      it 'includes all housemates, even when the underlying people scope is limited for previewing' do
+      it 'includes all housemates even when underlying people scope is limited for previewing' do
         create_household(housemate1, housemate3)
         create_household(housemate1, housemate4)
 
@@ -397,23 +397,23 @@ describe Export::Pdf::Messages::Letter do
           [71, 644, housemate1.address],
           [71, 633, "#{housemate1.zip_code} #{housemate1.town}"],
           [71, 623, 'DE'],
-          [71, 531, "Brief"],
+          [71, 531, 'Brief'],
           [71, 502, 'Hallo'],
           [71, 654, 'Bottom Member'],
           [71, 644, bottom_member.address],
           [71, 633, "#{bottom_member.zip_code} #{bottom_member.town}"],
-          [71, 531, "Brief"],
+          [71, 531, 'Brief'],
           [71, 502, 'Hallo'],
           [71, 654, 'Top Leader'],
           [71, 644, top_leader.address],
           [71, 633, "#{top_leader.zip_code} #{top_leader.town}"],
-          [71, 531, "Brief"],
+          [71, 531, 'Brief'],
           [71, 502, 'Hallo'],
           [71, 654, 'Dominik Dachs'],
           [71, 644, single_person.address],
           [71, 633, "#{single_person.zip_code} #{single_person.town}"],
           [71, 623, 'DE'],
-          [71, 531, "Brief"],
+          [71, 531, 'Brief'],
           [71, 502, 'Hallo']
         ]
       end

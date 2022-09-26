@@ -1,5 +1,11 @@
 # Hitobito Changelog
 
+# Unreleased
+
+* Erweiterung Personenfilter (#295) 
+  - Filterung nach Attribute "Alter" und "Geschlecht"
+  - Neue Filterbedingung "Enthält nicht"
+
 ## Version 1.28
 
 *  Fonts werden direkt von Hitobito ausgeliefert (#1632)

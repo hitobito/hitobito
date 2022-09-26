@@ -35,12 +35,12 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def persisted_attribute_condition_sql(key, value, constraint)
-    sql_array = case constraint
-                when /match/
-                  escaped_value = ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)
-                  ["people.#{key} LIKE ?", "%#{escaped_value}%"]
-                when /greater/ then ["people.#{key} > ?", value]
-                when /smaller/ then ["people.#{key} < ?", value]
+    escaped_value = -> { ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip) }
+    sql_array = case constraint.to_s
+                when 'match' then ["people.#{key} LIKE ?", "%#{escaped_value.call}%"]
+                when 'not_match' then ["people.#{key} NOT LIKE ?", "%#{escaped_value.call}%"]
+                when 'greater' then ["people.#{key} > ?", value]
+                when 'smaller' then ["people.#{key} < ?", value]
                 else ["people.#{key} = ?", value]
                 end
     ActiveRecord::Base.send(:sanitize_sql_array, sql_array)
@@ -60,9 +60,10 @@ class Person::Filter::Attributes < Person::Filter::Base
 
   def matching_attribute?(attribute, value, constraint)
     case constraint
-    when /match/ then attribute.to_s =~ /#{value}/
-    when /greater/ then attribute && attribute.to_i > value.to_i
-    when /smaller/ then attribute && attribute.to_i < value.to_i
+    when 'match' then attribute.to_s =~ /#{value}/
+    when 'not_match' then attribute.to_s !~ /#{value}/
+    when 'greater' then attribute && attribute.to_i > value.to_i
+    when 'smaller' then attribute && attribute.to_i < value.to_i
     else attribute.to_s == value
     end
   end

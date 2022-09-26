@@ -30,7 +30,7 @@ module PeopleFilterHelper
     type = Person.filter_attrs[key.to_sym][:type] if key
     time = (Time.zone.now.to_f * 1000).to_i + count
 
-    filters = [[t('.match'), :match], [t('.equal'), :equal]]
+    filters = [[t('.match'), :match], [t('.not_match'), :not_match], [t('.equal'), :equal]]
     if key.blank? || type == :integer
       filters += [[t('.smaller'), :smaller], [t('.greater'), :greater]]
     end

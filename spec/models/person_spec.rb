@@ -487,6 +487,8 @@ describe Person do
     expect(attrs[:zip_code]).to eq(label: 'PLZ', type: :string)
     expect(attrs[:town]).to eq(label: 'Ort', type: :string)
     expect(attrs[:country]).to eq(label: 'Land', type: :string)
+    expect(attrs[:gender]).to eq(label: 'Geschlecht', type: :string)
+    expect(attrs[:years]).to eq(label: 'Alter', type: :integer)
 
     expect(Person.filter_attrs.count).to eq(Person::FILTER_ATTRS.count)
   end

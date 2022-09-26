@@ -414,6 +414,7 @@ de:
           w: weiblich
           _nil: unbekannt
         birthday: Geburtstag
+        years: Alter
         additional_information: Zusätzliche Angaben
         remember_me: Angemeldet bleiben
         relations_to_tails: Beziehungen

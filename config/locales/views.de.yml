@@ -1527,6 +1527,7 @@ de:
     attributes:
       title: Felder
       match: enthält
+      not_match: enthält nicht
       equal: ist genau
       greater: grösser als
       smaller: kleiner als

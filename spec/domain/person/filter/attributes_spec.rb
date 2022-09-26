@@ -111,6 +111,18 @@ describe Person::Filter::Attributes do
             expect(entries).to include(@tg_member3)
           end
         end
+
+        context 'not_match' do
+          let(:key) { 'last_name' }
+          let(:constraint) { 'not_match' }
+          let(:value) { 'sam' }
+
+          it 'returns people with not matching attribute' do
+            expect(entries).not_to include(@tg_member1)
+            expect(entries).not_to include(@tg_member2)
+            expect(entries).to include(@tg_member3)
+          end
+        end
       end
 
       context 'integer attributes' do
@@ -203,6 +215,17 @@ describe Person::Filter::Attributes do
         end
       end
 
+      context 'not_match'  do
+        let(:constraint) { 'not_match' }
+        let(:value) { '7' }
+
+        it 'returns people without matching attribute' do
+          expect(entries).to include(@tg_member2)
+          expect(entries).not_to include(@tg_member1)
+          expect(entries).not_to include(@tg_member3)
+        end
+      end
+
         context 'smaller'  do
           let(:constraint) { 'smaller' }
           let(:value) { 32 }
@@ -237,33 +260,56 @@ describe Person::Filter::Attributes do
         }
       end
 
-      context 'match' do
-        let(:constraint) { 'match' }
-        let(:value) { 'same' }
+      context 'fulfilled' do
+        context 'match' do
+          let(:constraint) { 'match' }
+          let(:value) { 'sam' }
 
-        it 'returns all where booth attributes are matching' do
-          expect(entries.size).to eq(2)
-          expect(entries).to include(@tg_member1)
-          expect(entries).to include(@tg_member2)
+          it 'returns all where both attributes are matching' do
+            expect(entries.size).to eq(2)
+            expect(entries).to include(@tg_member1)
+            expect(entries).to include(@tg_member2)
+          end
+        end
+
+        context 'not_match' do
+          let(:constraint) { 'not_match' }
+          let(:value) { 'sam' }
+
+          it 'returns all where both attributes are matching' do
+            expect(entries.size).to eq(1)
+            expect(entries).to include(@tg_member3)
+          end
+        end
+
+        context 'equal' do
+          let(:constraint) { 'equal' }
+          let(:value) { 'test3' }
+
+          it 'returns all where booth attributes are matching' do
+            expect(entries.size).to eq(1)
+            expect(entries).to include(@tg_member3)
+          end
         end
       end
 
-      context 'equal' do
-        let(:constraint) { 'equal' }
-        let(:value) { 'test3' }
+      context 'unfulfilled' do
+        context 'match' do
+          let(:constraint) { 'match' }
+          let(:value) { 'unknown' }
 
-        it 'returns all where booth attributes are matching' do
-          expect(entries.size).to eq(1)
-          expect(entries).to include(@tg_member3)
+          it 'returns nobody if not both are matching' do
+            expect(entries.size).to be_zero
+          end
         end
-      end
 
-      context do
-        let(:constraint) { 'match' }
-        let(:value) { 'unknown' }
+        context 'not_match' do
+          let(:constraint) { 'not_match' }
+          let(:value) { 'e' }
 
-        it 'returns nobody if not booth are matching' do
-          expect(entries.size).to be_zero
+          it 'returns nobody if not both are matching' do
+            expect(entries.size).to eq 0
+          end
         end
       end
     end

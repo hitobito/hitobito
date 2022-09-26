@@ -121,11 +121,11 @@ module Export::Pdf::Messages
 
     def message_recipients
       recipients = @letter.
-        message_recipients.
-        where('person_id IS NOT NULL').
-        joins(:person).
-        order('people.last_name' => :asc).
-        distinct
+                   message_recipients.
+                   where('person_id IS NOT NULL').
+                   joins(:person).
+                   order('people.last_name' => :asc).
+                   distinct
 
       if @letter.send_to_households?
         recipients = recipients.group(:address)

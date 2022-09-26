@@ -116,11 +116,17 @@ module Export::Pdf::Messages
     end
 
     def recipients
-      @recipients ||= message_recipients.where('person_id IS NOT NULL')
+      @recipients ||= message_recipients
     end
 
     def message_recipients
-      recipients = @letter.message_recipients.includes(:person)
+      recipients = @letter.
+        message_recipients.
+        where('person_id IS NOT NULL').
+        joins(:person).
+        order('people.last_name' => :asc).
+        distinct
+
       if @letter.send_to_households?
         recipients = recipients.group(:address)
       end

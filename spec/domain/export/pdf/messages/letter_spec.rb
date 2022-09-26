@@ -90,6 +90,69 @@ describe Export::Pdf::Messages::Letter do
       end
     end
 
+    context 'multiple recipients' do
+      it 'renders pages ordered by recipient last_name' do
+        Subscription.create!(mailing_list: list,
+                             subscriber: group,
+                             role_types: [Group::BottomGroup::Member])
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:bottom_member))
+        Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:top_leader))
+
+        Messages::LetterDispatch.new(letter).run
+        analyzer = PDF::Inspector::Text.analyze(described_class.new(letter, options).render)
+
+        expect(text_with_position(analyzer)).to eq [
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 633, "4242 Supertown"],
+          [71, 531, 'Information'],
+          [71, 502, 'Hallo'],
+          [71, 481, 'Wir laden '],
+          [111, 481, 'dich'],
+          [130, 481, ' ein! '],
+          [71, 460, 'Bis bald'],
+          [71, 654, 'Bottom Member'],
+          [71, 644, 'Greatstreet 345'],
+          [71, 633, '3456 Greattown'],
+          [71, 531, 'Information'],
+          [71, 502, 'Hallo'],
+          [71, 481, 'Wir laden '],
+          [111, 481, 'dich'],
+          [130, 481, ' ein! '],
+          [71, 460, 'Bis bald']
+        ]
+
+        people(:bottom_member).update!(last_name: 'First')
+
+        letter2 = Message::Letter.create!(mailing_list: list,
+                                body: messages(:letter).body,
+                                subject: 'Information')
+        Messages::LetterDispatch.new(letter2).run
+        analyzer = PDF::Inspector::Text.analyze(described_class.new(letter2, options).render)
+
+        expect(text_with_position(analyzer)).to eq [
+          [71, 654, 'Bottom First'],
+          [71, 644, 'Greatstreet 345'],
+          [71, 633, '3456 Greattown'],
+          [71, 531, 'Information'],
+          [71, 502, 'Hallo'],
+          [71, 481, 'Wir laden '],
+          [111, 481, 'dich'],
+          [130, 481, ' ein! '],
+          [71, 460, 'Bis bald'],
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 633, "4242 Supertown"],
+          [71, 531, 'Information'],
+          [71, 502, 'Hallo'],
+          [71, 481, 'Wir laden '],
+          [111, 481, 'dich'],
+          [130, 481, ' ein! '],
+          [71, 460, 'Bis bald']
+        ]
+      end
+    end
+
     context 'stamping' do
       let(:stamps) { subject.pdf.instance_variable_get('@stamp_dictionary_registry') }
 
@@ -105,18 +168,18 @@ describe Export::Pdf::Messages::Letter do
 
       it 'renders addresses and content' do
         expect(text_with_position).to eq [
-          [71, 654, 'Bottom Member'],
-          [71, 644, 'Greatstreet 345'],
-          [71, 633, '3456 Greattown'],
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 633, "4242 Supertown"],
           [71, 531, 'Information'],
           [71, 502, 'Hallo'],
           [71, 481, 'Wir laden '],
           [111, 481, 'dich'],
           [130, 481, ' ein! '],
           [71, 460, 'Bis bald'],
-          [71, 654, 'Top Leader'],
-          [71, 644, 'Funkystreet 42'],
-          [71, 633, '4242 Supertown'],
+          [71, 654, 'Bottom Member'],
+          [71, 644, 'Greatstreet 345'],
+          [71, 633, '3456 Greattown'],
           [71, 531, 'Information'],
           [71, 502, 'Hallo'],
           [71, 481, 'Wir laden '],
@@ -130,12 +193,12 @@ describe Export::Pdf::Messages::Letter do
       it 'renders only addresses has stamps' do
         options[:stamped] = true
         expect(text_with_position).to eq [
-          [71, 654, 'Bottom Member'],
-          [71, 644, 'Greatstreet 345'],
-          [71, 633, '3456 Greattown'],
-          [71, 654, 'Top Leader'],
-          [71, 644, 'Funkystreet 42'],
-          [71, 633, '4242 Supertown']
+          [71, 654, "Top Leader"],
+          [71, 644, "Funkystreet 42"],
+          [71, 633, "4242 Supertown"],
+          [71, 654, "Bottom Member"],
+          [71, 644, "Greatstreet 345"],
+          [71, 633, "3456 Greattown"]
         ]
         expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info, :render_subject,
                                    :render_content]
@@ -359,9 +422,9 @@ describe Export::Pdf::Messages::Letter do
 
   private
 
-  def text_with_position
-    analyzer.positions.each_with_index.collect do |p, i|
-      p.collect(&:round) + [analyzer.show_text[i]]
+  def text_with_position(a = analyzer)
+    a.positions.each_with_index.collect do |p, i|
+      p.collect(&:round) + [a.show_text[i]]
     end
   end
 

@@ -21,7 +21,8 @@ class Event::Filter
   end
 
   def scope
-    # This must run as an explicite separate query. If you merge this in the following relation, activerecord+kaminari
+    # This must run as an explicite separate query.
+    # If you merge this in the following relation, activerecord+kaminari
     # will mess up the queries (pagination is run on the wrong query).
     event_ids_for_relevant_groups = Event.with_group_id(relevant_group_ids).pluck(:id)
 

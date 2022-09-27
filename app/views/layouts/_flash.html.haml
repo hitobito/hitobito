@@ -4,6 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if flash[level].present?
-  %div{:class => "alert alert-#{flash_class(level)}"}
-    %a.close{:'data-dismiss' => 'alert', :href => '#'} &times;
+  %div{class: "alert alert-#{flash_class(level)} alert-dismissible fade show"}
+    %button.btn-close{type: :button, 'data-bs-dismiss': :alert, 'aria-label': t('global.button.close')}
     = simple_format([flash[level]].flatten.join("\n"))

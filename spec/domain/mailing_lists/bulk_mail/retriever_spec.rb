@@ -185,6 +185,34 @@ describe MailingLists::BulkMail::Retriever do
     end
   end
 
+  context 'bounce message' do
+
+    it 'stores bounce message assinged to mailing list' do
+      expect(mail42).to receive(:original_to).and_return('leaders@localhost:3000')
+      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+      expect(imap_mail_validator).to receive(:sender_allowed?).and_return(true)
+
+      expect do
+        retriever.perform
+      end.to change { Message::BulkMail.count }.by(1)
+        .and change { MailLog.count }.by(1)
+        .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+        .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::SenderRejectedMessageJob%"').count }.by(0)
+
+      mail_log = MailLog.find_by(mail_hash: 'abcd42')
+      expect(mail_log.status).to eq('retrieved')
+      expect(mail_log.mail_from).to eq('dude@hitobito.example.com')
+
+      message = mail_log.message
+      expect(message.subject).to eq('Mail 42')
+      expect(message.state).to eq('pending')
+    end
+
+    it 'ignores bounce message if non existent message uid' do
+    end
+
+  end
+
   private
 
   def imap_mail(uid)
@@ -195,6 +223,17 @@ describe MailingLists::BulkMail::Retriever do
     allow(mail).to receive(:hash).and_return('abcd42')
     allow(mail).to receive(:sender_email).and_return('dude@hitobito.example.com')
     allow(mail).to receive(:raw_source).and_return('raw-source')
+    mail
+  end
+
+  def imap_bounce_mail(uid)
+    mail = Imap::Mail.new
+    allow(mail).to receive(:uid).and_return(uid)
+    allow(mail).to receive(:subject).and_return('Undelivered Mail Returned to Sender')
+    allow(mail).to receive(:original_to).and_return('leaders@localhost')
+    allow(mail).to receive(:hash).and_return('abcd42')
+    allow(mail).to receive(:sender_email).and_return('dude@hitobito.example.com')
+    allow(mail).to receive(:raw_source).and_return('bounced !')
     mail
   end
 

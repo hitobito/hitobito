@@ -45,7 +45,7 @@ describe MailingLists::BulkMail::Retriever do
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
 
       expect(Rails.logger).to receive(:info)
-        .with('BulkMail Retriever: Ignored invalid email from dude@hitobito.example.com')
+        .with('BulkMail Retriever: Ignored invalid email from dude@hitobito.example.com (invalid sender e-mail or no sender name present)')
 
       retriever.perform
     end
@@ -140,6 +140,28 @@ describe MailingLists::BulkMail::Retriever do
       expect(message.subject).to eq('Mail 42')
       expect(message.state).to eq('pending')
     end
+
+    it 'does not process mail if no sender name' do
+      expect(mail42).to receive(:original_to).and_return('leaders@localhost:3000')
+      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+      expect(imap_mail_validator).to receive(:sender_allowed?).and_return(true)
+
+      expect do
+        retriever.perform
+      end.to change { Message::BulkMail.count }.by(1)
+        .and change { MailLog.count }.by(1)
+        .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+        .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::SenderRejectedMessageJob%"').count }.by(0)
+
+      mail_log = MailLog.find_by(mail_hash: 'abcd42')
+      expect(mail_log.status).to eq('retrieved')
+      expect(mail_log.mail_from).to eq('dude@hitobito.example.com')
+
+      message = mail_log.message
+      expect(message.subject).to eq('Mail 42')
+      expect(message.state).to eq('pending')
+    end
+
   end
 
   context 'imap mail server errors' do

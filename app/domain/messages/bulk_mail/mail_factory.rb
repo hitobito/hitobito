@@ -32,13 +32,15 @@ module Messages
       private
 
       def set_headers
-        @mail['Reply-To'] = source_mail_sender
-        @mail['Return-Path'] = source_mail_sender
+        @mail['Reply-To'] = @mail.from
+        @mail['X-Hitobito-Message-UID'] = @bulk_mail_message.uid
+        @mail.from = sender_via_mailinglist
         @mail.smtp_envelope_from = mailing_list_address
       end
 
-      def source_mail_sender
-        @source_mail_sender ||= @mail.from
+      def sender_via_mailinglist
+        name = @mail['from'].display_names.first
+        "#{name} via #{mailing_list_address} <#{mailing_list_address}>"
       end
 
       def mailing_list_address

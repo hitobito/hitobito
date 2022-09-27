@@ -13,7 +13,6 @@ describe Messages::BulkMail::MailFactory do
   let(:factory) { described_class.new(bulk_mail_message) }
 
   it 'sets original sender to reply headers' do
-    expect(mail['Return-Path'].value.first).to eq('sender@example.com')
     expect(mail['Reply-To'].value.first).to eq('sender@example.com')
   end
 
@@ -27,7 +26,9 @@ describe Messages::BulkMail::MailFactory do
     expect(recipients).to include('two@example.com')
   end
 
-  it 'sets smtp envelope from to mailing list mail address' do
+  it 'sets smtp envelope from and headers' do
+    expect(mail['X-Hitobito-Message-UID'].value).to eq('a15816bbd204ba20')
+    expect(mail['from'].value).to eq("Mike Sender via leaders@#{Settings.email.list_domain} <leaders@#{Settings.email.list_domain}>")
     expect(mail.smtp_envelope_from).to eq("leaders@#{Settings.email.list_domain}")
   end
 

@@ -33,7 +33,7 @@ class MailingLists::BulkMail::Retriever
     if validator.valid_mail?
       process_valid_mail(mail, validator)
     else
-      log_info("Ignored invalid email from #{mail.sender_email}")
+      log_info("Ignored invalid email from #{mail.sender_email} (invalid sender e-mail or no sender name present)")
     end
 
     delete_mail(mail_uid)

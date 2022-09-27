@@ -36,6 +36,10 @@ class Imap::Mail
     envelope.sender[0].mailbox + '@' + envelope.sender[0].host
   end
 
+  def sender_name
+    envelope.sender[0].name
+  end
+
   def email_to
     envelope.to[0].mailbox + '@' + envelope.to[0].host
   end

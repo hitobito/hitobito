@@ -13,7 +13,7 @@ module MailingLists::BulkMail
     end
 
     def valid_mail?
-      required_header_present? && sender_email_valid?
+      required_header_present? && sender_valid?
     end
 
     def processed_before?
@@ -31,8 +31,16 @@ module MailingLists::BulkMail
       valid_email?(receiver_from_header || receiver_from_mail)
     end
 
+    def sender_valid?
+      sender_email_valid? && sender_name_present?
+    end
+
     def sender_email_valid?
       valid_email?(@mail.sender_email)
+    end
+
+    def sender_name_present?
+      @mail.sender_name.present?
     end
 
     def valid_email?(email)

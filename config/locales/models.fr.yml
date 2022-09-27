@@ -465,6 +465,8 @@ fr:
         updated_at: Modifié
         login_status: Login
         language: Langue
+        primary_group_id: Groupe principal
+        layer_group_label: Niveau
       person_duplicate:
         birth_year: Année de naissance
         roles_list: Rôles
@@ -967,6 +969,7 @@ fr:
         amount: Montant
         received_at: Date de réception
         reference: Référence de paiement
+        status: Statut
       payment_reminder:
         invoice: Facture
         message: Information

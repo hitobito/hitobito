@@ -717,7 +717,15 @@ fr:
       show:
         deficit: Paiement partiel
         table:
+          count: Nombre
+          amount_paid: Montant payé
+          vat: TVA
+          account: Compte
+          cost_center: Centre de coûts
           total: 'Total:'
+        filter:
+          from: De
+          to: Au
   invoice_configs:
     form_tabs:
       general: général

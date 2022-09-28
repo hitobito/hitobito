@@ -1,0 +1,86 @@
+Return-Path: <MAILER-DAEMON>
+X-Original-To: list@hitobito.example.com
+Received: from mx01.hitobito.example.com (mx01.example.com [IPv6:2a04:c11:1:1103::42])
+	by mailstore01.cloud.hitobito.example.com (Postfix) with ESMTPS id 728D41E0
+	for <list@hitobito.example.com>; Tue, 27 Sep 2022 07:48:58 +0200 (CEST)
+Received: by mx01.hitobito.example.com (Postfix)
+	id 68C01971; Tue, 27 Sep 2022 07:48:58 +0200 (CEST)
+Date: Tue, 27 Sep 2022 07:48:58 +0200 (CEST)
+From: MAILER-DAEMON@example.com (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: list@hitobito.example.com
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="811B8369.1664257738/mx01.example.com"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20220927054858.68C01971@mx01.example.com>
+
+This is a MIME-encapsulated message.
+
+--811B8369.1664257738/mx01.example2.com
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at host mx01.example2.com.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<nothing@example2.com>: host mx.example.com[212.42.190.35] said: 550 5.1.1
+    <nothing@example2.com>: Recipient address rejected: undeliverable address:
+    unknown user: "nothing@example2.com" (in reply to RCPT TO command)
+
+--811B8369.1664257738/mx01.example2.com
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; mx01.example2.com
+X-Postfix-Queue-ID: 811B8369
+X-Postfix-Sender: rfc822; list@hitobito.example.com
+Arrival-Date: Tue, 27 Sep 2022 07:48:54 +0200 (CEST)
+
+Final-Recipient: rfc822; nothing@example2.com
+Original-Recipient: rfc822;nothing@example2.com
+Action: failed
+Status: 5.1.1
+Remote-MTA: dns; mx.example2.com
+Diagnostic-Code: smtp; 550 5.1.1 <nothing@example2.com>: Recipient address
+    rejected: undeliverable address: unknown user: "nothing@example2.com"
+
+--811B8369.1664257738/mx01.example.com
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 8bit
+
+Return-Path: <list@hitobito.example.com>
+Received: from mailstore01.cloud.example.com (mail.example.com [IPv6:2a06:c03:1:1104::210])
+	by mx01.example.com (Postfix) with ESMTPS id 842B8369
+	for <sender@example.com>; Tue, 27 Sep 2022 07:48:54 +0200 (CEST)
+Received: from [10.10.249.26] (unknown [85.195.222.81])
+	(Authenticated sender: sender@example.com)
+	by mailstore01.cloud.example.com (Postfix) with ESMTPSA id 654E41E0
+	for <nothing@example2.com>; Tue, 27 Sep 2022 07:48:54 +0200 (CEST)
+Message-ID: <7f1fcad1-cadf-12ae-e157-2edca065d2b5@example.com>
+Date: Tue, 27 Sep 2022 07:48:54 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To: nothing@example2.com
+From: Bruce Miller via <list@hitobito.example.com>
+Subject: Test 42
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+haha
+
+
+--811B8345.1664257738/mx01.hitobito.example.com--

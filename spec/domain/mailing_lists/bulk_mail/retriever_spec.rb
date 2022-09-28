@@ -186,6 +186,8 @@ describe MailingLists::BulkMail::Retriever do
   end
 
   context 'bounce message' do
+    let(:raw_bounce)  { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list_bounce.eml'))) }
+    let(:bounce_mail) { Imap::Mail.build(raw_bounce) }
 
     it 'stores bounce message assinged to mailing list' do
       expect(mail42).to receive(:original_to).and_return('leaders@localhost:3000')
@@ -223,17 +225,6 @@ describe MailingLists::BulkMail::Retriever do
     allow(mail).to receive(:hash).and_return('abcd42')
     allow(mail).to receive(:sender_email).and_return('dude@hitobito.example.com')
     allow(mail).to receive(:raw_source).and_return('raw-source')
-    mail
-  end
-
-  def imap_bounce_mail(uid)
-    mail = Imap::Mail.new
-    allow(mail).to receive(:uid).and_return(uid)
-    allow(mail).to receive(:subject).and_return('Undelivered Mail Returned to Sender')
-    allow(mail).to receive(:original_to).and_return('leaders@localhost')
-    allow(mail).to receive(:hash).and_return('abcd42')
-    allow(mail).to receive(:sender_email).and_return('dude@hitobito.example.com')
-    allow(mail).to receive(:raw_source).and_return('bounced !')
     mail
   end
 

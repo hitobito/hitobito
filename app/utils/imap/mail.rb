@@ -74,6 +74,14 @@ class Imap::Mail
     mail.header['X-Original-To'].value
   end
 
+  def return_path
+    mail.header['Return-Path'].value
+  end
+
+  def bounce_hitobito_message_uid
+    mail.body.raw_source[/X-Hitobito-Message-UID: ([a-z0-9]*)/,1]
+  end
+
   def mail
     @mail ||= Mail.read_from_string(@net_imap_mail.attr['RFC822'])
   end

@@ -20,49 +20,55 @@ class MailingLists::BulkMail::Retriever
   private
 
   def process_mail(mail_uid)
-    mail = fetch_mail(mail_uid)
+    imap_mail = fetch_mail(mail_uid)
 
-    validator = validator(mail)
+    validator = validator(imap_mail)
 
     if validator.processed_before?
-      mail_processed_before!(mail)
+      mail_processed_before!(imap_mail)
     end
 
-    mail.mail_log = create_mail_log(mail)
+    mail_log = create_mail_log(imap_mail)
 
-    validate_and_process(mail, validator)
+    validate_and_process(imap_mail, mail_log, validator)
 
     delete_mail(mail_uid)
   end
 
-  def validate_and_process(mail, validator)
+  def validate_and_process(imap_mail, mail_log, validator)
     if validator.valid_mail?
-      process_valid_mail(mail, validator)
+      process_valid_mail(imap_mail, mail_log, validator)
     else
-      log_info("Ignored invalid email from #{mail.sender_email} " \
+      log_info("Ignored invalid email from #{imap_mail.sender_email} " \
                "(invalid sender e-mail or no sender name present)")
     end
   end
 
-  def process_valid_mail(mail, validator)
-    mailing_list = assign_mailing_list(mail)
+  def process_valid_mail(imap_mail, mail_log, validator)
+    mailing_list = assign_mailing_list(imap_mail)
     if mailing_list
-      process_mailing_list_mail(mail, validator, mailing_list)
+      process_mailing_list_mail(imap_mail, mail_log, validator, mailing_list)
     else
-      mail.mail_log.update!(status: :unknown_recipient)
-      log_info("Ignored email from #{mail.sender_email} for unknown list #{mail.original_to}")
+      mail_log.update!(status: :unknown_recipient)
+      log_info("Ignored email from #{imap_mail.sender_email} for unknown list #{imap_mail.original_to}")
     end
   end
 
-  def process_mailing_list_mail(mail, validator, mailing_list)
-    bulk_mail = mail.mail_log.message
-    bulk_mail.update!(mailing_list: mailing_list, raw_source: mail.raw_source)
+  def process_mailing_list_mail(imap_mail, mail_log, validator, mailing_list)
+    bulk_mail = mail_log.message
+
+    if imap_mail.list_bounce?
+      bounce_handler.process
+      return
+    end
+
+    bulk_mail.update!(mailing_list: mailing_list, raw_source: imap_mail.raw_source)
 
     if validator.sender_allowed?(mailing_list)
       Messages::DispatchJob.new(bulk_mail).enqueue!
     else
-      mail.mail_log.update!(status: :sender_rejected)
-      sender_rejected(mail, bulk_mail)
+      mail_log.update!(status: :sender_rejected)
+      sender_rejected(imap_mail, bulk_mail)
     end
   end
 
@@ -73,6 +79,10 @@ class MailingLists::BulkMail::Retriever
 
   def validator(mail)
     MailingLists::BulkMail::ImapMailValidator.new(mail)
+  end
+
+  def bounce_handler(imap_mail, bulk_mail, mailing_list)
+    MailingLists::BulkMail::BounceHandler.new(mail, bulk_mail, mailing_list)
   end
 
   def sender_rejected(mail, bulk_mail)
@@ -86,20 +96,27 @@ class MailingLists::BulkMail::Retriever
     MailingList.joins(:group).where(group: { archived_at: nil }).find_by(mail_name: mail_name)
   end
 
-  def create_mail_log(mail)
+  def create_mail_log(imap_mail)
     MailLog.create!(
-      mail_hash: mail.hash,
+      mail_hash: imap_mail.hash,
       status: :retrieved,
-      mail_from: mail.sender_email,
-      message: create_bulk_mail_entry(mail)
+      mail_from: imap_mail.sender_email,
+      message: create_bulk_mail_entry(imap_mail)
     )
   end
 
-  def create_bulk_mail_entry(mail)
-    Message::BulkMail.create!(
-      subject: mail.subject,
-      state: :pending
-    )
+  def create_bulk_mail_entry(imap_mail)
+    bulk_mail_class(imap_mail).create!(
+      subject: imap_mail.subject,
+      state: :pending)
+  end
+
+  def bulk_mail_class(imap_mail)
+    if imap_mail.list_bounce?
+      Message::BulkMailBounce
+    else
+      Message::BulkMail
+    end
   end
 
   def mail_processed_before!(mail)

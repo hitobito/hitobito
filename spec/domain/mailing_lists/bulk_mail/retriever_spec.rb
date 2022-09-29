@@ -189,25 +189,28 @@ describe MailingLists::BulkMail::Retriever do
     let(:raw_bounce)  { Mail.new(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list_bounce.eml'))) }
     let(:bounce_mail) { Imap::Mail.build(raw_bounce) }
 
-    it 'stores bounce message assinged to mailing list' do
-      expect(mail42).to receive(:original_to).and_return('leaders@localhost:3000')
+    it 'forwards bounce message to sender' do
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
-      expect(imap_mail_validator).to receive(:sender_allowed?).and_return(true)
+      expect(imap_mail_validator).to receive(:sender_allowed?).and_return(false)
+
+      expect(Rails.logger).to receive(:info)
+        .with("BulkMail Retriever: Rejecting email from dude@hitobito.example.com for list leaders@#{Settings.email.list_domain}")
 
       expect do
         retriever.perform
-      end.to change { Message::BulkMail.count }.by(1)
+      end.to change { Message::BulkMailBounce.count }.by(1)
         .and change { MailLog.count }.by(1)
-        .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
-        .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::SenderRejectedMessageJob%"').count }.by(0)
+        .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
+        .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::BounceMessageForwardJob%"').count }.by(1)
 
       mail_log = MailLog.find_by(mail_hash: 'abcd42')
       expect(mail_log.status).to eq('retrieved')
-      expect(mail_log.mail_from).to eq('dude@hitobito.example.com')
+      expect(mail_log.mail_from).to eq('MAILER-DAEMON@example.com')
 
       message = mail_log.message
       expect(message.subject).to eq('Mail 42')
-      expect(message.state).to eq('pending')
+      expect(message.state).to eq('failed')
+      expect(message.raw_source).to be_present
     end
 
     it 'ignores bounce message if non existent message uid' do

@@ -1,0 +1,40 @@
+# frozen_string_literal: true
+
+# Copyright (c) 2012-2022, Hitobito AG. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https://github.com/hitobito/hitobito.
+
+module MailingLists
+  module BulkMail
+    class BounceMessageForwardJob < BaseMessageJob
+
+      def perform
+        send(bounce_message)
+      end
+
+      private
+
+      def send(mail)
+        if defined?(ActionMailer::Base)
+          ActionMailer::Base.wrap_delivery_behavior(mail)
+        end
+
+        mail.deliver
+
+        clear body
+        # @message.
+      end
+
+      def bounce_message
+        from = no_reply_address
+        logger.info("Relaying bounce from #{message.from} for list #{data[1]} to #{message.to}")
+        source_mail.reply do
+          body "Du bist leider nicht berechtigt auf die Liste #{list} zu schreiben."
+          from from
+        end
+      end
+
+    end
+  end
+end

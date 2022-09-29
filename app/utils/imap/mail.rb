@@ -10,7 +10,7 @@ require 'mail'
 
 class Imap::Mail
 
-  attr_accessor :net_imap_mail, :mail_log
+  attr_accessor :net_imap_mail
 
   delegate :subject, :sender, to: :envelope
 
@@ -74,8 +74,9 @@ class Imap::Mail
     mail.header['X-Original-To'].value
   end
 
-  def return_path
-    mail.header['Return-Path'].value
+  def list_bounce?
+    bounce_return_path? &&
+      bounce_hitobito_message_uid.present?
   end
 
   def bounce_hitobito_message_uid
@@ -91,4 +92,14 @@ class Imap::Mail
   def envelope
     @net_imap_mail.attr['ENVELOPE']
   end
+
+  def bounce_return_path?
+    return_path.eql?('') ||
+      return_path.include?('MAILER-DAEMON')
+  end
+
+  def return_path
+    mail.header['Return-Path'].value
+  end
+
 end

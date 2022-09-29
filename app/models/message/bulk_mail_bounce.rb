@@ -7,6 +7,6 @@
 
 class Message::BulkMailBounce < Message
 
-  validates :bounce_parent_id, presence: true
+  belongs_to :bounce_parent, class_name: 'Message::BulkMail'
 
 end

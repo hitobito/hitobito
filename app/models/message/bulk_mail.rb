@@ -8,7 +8,7 @@
 class Message::BulkMail < Message
   delegate :mail_from, to: :mail_log
 
-  validates :uid, presence: true
+  validates :uid, presence: true, uniqueness: true
 
   attr_readonly :uid
 

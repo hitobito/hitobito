@@ -8,28 +8,50 @@
 module MailingLists::BulkMail
   class BounceHandler
 
-    def initialize(mail, mailing_list)
-      @mail = mail
+    MAX_BOUNCE_AGE = 24.hours
+
+    def initialize(imap_mail, bulk_mail_bounce, mailing_list)
+      @bulk_mail_bounce = bulk_mail_bounce
+      @imap_mail = imap_mail
       @mailing_list = mailing_list
     end
 
-    def bounce_mail?
-      bounce_return_path? &&
-        @mail.bounce_hitobito_message_uid.present?
-    end
-
     def process
+      if !source_message || outdated?
+        reject_bounce
+        return
+      end
+
+      @bulk_mail_bounce.update!(bounce_parent: source_message, mailing_list: @mailing_list, raw_source: @imap_mail.raw_source)
+      log_info("Forwarding bounce message for list #{@mailing_list.mail_address} to #{source_message.mail_from}")
+      MailingLists::BulkMail::BounceMessageForwardJob.new(@bulk_mail_bounce).enqueue!
     end
 
     private
 
-    def bounce_return_path?
-      return_path.eql?('') ||
-        return_path.include?('MAILER-DAEMON')
+    def source_message
+      parent_uid = @imap_mail.bounce_hitobito_message_uid
+      Message::BulkMail.find_by(uid: parent_uid)
     end
 
-    def return_path
-      @mail.return_path
+    def outdated?
+      outdated_at = DateTime.now - MAX_BOUNCE_AGE
+      source_message.created_at < outdated_at
+    end
+
+    def log_info(text)
+      logger.info Retriever::LOG_PREFIX + text
+    end
+
+    def logger
+      Delayed::Worker.logger || Rails.logger
+    end
+
+    def reject_bounce
+      log_info("Ignoring unkown or outdated bounce message for list #{@mailing_list.mail_address}")
+
+      @bulk_mail_bounce.mail_log.update!(status: :bounce_rejected)
+      @bulk_mail_bounce.destroy!
     end
 
   end

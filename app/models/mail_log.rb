@@ -28,7 +28,7 @@ class MailLog < ActiveRecord::Base
 
   belongs_to :message
 
-  STATES = [:retrieved, :bulk_delivering, :completed, :sender_rejected, :unknown_recipient].freeze
+  STATES = [:retrieved, :bulk_delivering, :completed, :sender_rejected, :unknown_recipient, :bounce_rejected].freeze
   enum status: STATES
 
   BULK_MESSAGE_STATUS = { bulk_delivering: :processing,
@@ -54,6 +54,8 @@ class MailLog < ActiveRecord::Base
   end
 
   def update_message_state
+    return if bounce_rejected?
+
     message.state = BULK_MESSAGE_STATUS[status.to_sym]
     message.sent_at = updated_at
     message.save!

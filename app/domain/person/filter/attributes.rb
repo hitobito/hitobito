@@ -11,15 +11,37 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def apply(scope)
-    scope.where(attributes_condition(scope))
+    scope.where(raw_sql_condition(scope)).merge(years_scope)
   end
 
   private
 
-  def attributes_condition(scope)
-    args.values.map do |v|
+  def constraints
+    @args.values.select {|tuple| tuple[:key].present? && tuple[:value].present? }
+  end
+
+  def years_constraint
+    @years_constraint ||= constraints.find {|tuple| 'years' == tuple[:key] }
+  end
+
+  def generic_constraints
+    @generic_constraints ||= constraints - [years_constraint]
+  end
+
+  def years_scope
+    return Person.all unless years_constraint
+
+    value, constraint = years_constraint.values_at('value', 'constraint')
+    Person.where(
+      "TIMESTAMPDIFF(YEAR, birthday, :reference_date) #{sql_comparator(constraint)} :value",
+      value: sql_value(value, constraint),
+      reference_date: Time.zone.now.to_date
+    )
+  end
+
+  def raw_sql_condition(scope)
+    generic_constraints.map do |v|
       key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
-      next unless key && value
       next unless Person.filter_attrs.key?(key.to_sym)
 
       attribute_condition_sql(key, value, constraint, scope)
@@ -27,23 +49,32 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def attribute_condition_sql(key, value, constraint, scope)
-    if Person.column_names.include?(key)
-      persisted_attribute_condition_sql(key, value, constraint)
-    else
-      unpersisted_attribute_condition_sql(key, value, constraint, scope)
-    end
+    return persisted_attribute_condition_sql(key, value, constraint) if Person.column_names.include?(key)
+    unpersisted_attribute_condition_sql(key, value, constraint, scope)
   end
 
   def persisted_attribute_condition_sql(key, value, constraint)
-    escaped_value = -> { ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip) }
-    sql_array = case constraint.to_s
-                when 'match' then ["people.#{key} LIKE ?", "%#{escaped_value.call}%"]
-                when 'not_match' then ["people.#{key} NOT LIKE ?", "%#{escaped_value.call}%"]
-                when 'greater' then ["people.#{key} > ?", value]
-                when 'smaller' then ["people.#{key} < ?", value]
-                else ["people.#{key} = ?", value]
-                end
-    ActiveRecord::Base.send(:sanitize_sql_array, sql_array)
+    sql_array = ["people.#{key} #{sql_comparator(constraint)} ?", sql_value(value, constraint)]
+    ActiveRecord::Base.sanitize_sql_array(sql_array)
+  end
+
+  def sql_comparator(constraint)
+    case constraint.to_s
+    when 'match' then 'LIKE'
+    when 'not_match' then 'NOT LIKE'
+    when 'greater' then '>'
+    when 'smaller' then '<'
+    when 'equal' then '='
+    else raise("unexpected constraint: #{constraint.inspect}")
+    end
+  end
+
+  def sql_value(value, constraint)
+    case constraint.to_s
+    when 'match', 'not_match' then "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
+    when 'equal', 'greater', 'smaller' then value
+    else raise("unexpected constraint: #{constraint.inspect}")
+    end
   end
 
   def unpersisted_attribute_condition_sql(key, value, constraint, scope)

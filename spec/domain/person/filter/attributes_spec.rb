@@ -42,13 +42,13 @@ describe Person::Filter::Attributes do
   context 'filtering' do
 
     before do
-      @tg_member1 = Fabricate(:person, first_name: 'test1', last_name: 'same')
+      @tg_member1 = Fabricate(:person, first_name: 'test1', last_name: 'same', birthday: 27.years.ago)
       Fabricate(Group::TopGroup::Member.name.to_sym, group: group, person: @tg_member1)
 
-      @tg_member2 = Fabricate(:person, first_name: 'test2', last_name: 'same')
+      @tg_member2 = Fabricate(:person, first_name: 'test2', last_name: 'same', birthday: 30.years.ago)
       Fabricate(Group::TopGroup::Member.name.to_sym, group: group, person: @tg_member2)
 
-      @tg_member3 = Fabricate(:person, first_name: 'test3', last_name: 'test3')
+      @tg_member3 = Fabricate(:person, first_name: 'test3', last_name: 'test3', birthday: 47.years.ago)
       Fabricate(Group::TopGroup::Member.name.to_sym, group: group, person: @tg_member3)
     end
 
@@ -75,7 +75,7 @@ describe Person::Filter::Attributes do
       end
     end
 
-    context 'persisted' do
+    context 'persisted attribute' do
       context 'string attributes' do
         let(:key) { 'first_name' }
 
@@ -169,12 +169,80 @@ describe Person::Filter::Attributes do
       end
     end
 
-    context 'unpersisted' do
+    context 'years calculated attribute' do
       let(:key) { 'years' }
 
+      context 'equal' do
+        let(:constraint) { 'equal' }
+
+        context do
+          let(:value) { '27' }
+
+          it 'returns people with exact attribute' do
+            expect(entries.size).to eq(1)
+            expect(entries.first).to eq(@tg_member1)
+          end
+        end
+
+        context do
+          let(:value) { '55' }
+
+          it 'returns nobody if no exact attribute' do
+            expect(entries.size).to be_zero
+          end
+        end
+      end
+
+      context 'match'  do
+        let(:constraint) { 'match' }
+        let(:value) { '7' }
+
+        it 'returns people with matching attribute' do
+          expect(entries.size).to eq(2)
+          expect(entries).to include(@tg_member1)
+          expect(entries).to include(@tg_member3)
+        end
+      end
+
+      context 'not_match'  do
+        let(:constraint) { 'not_match' }
+        let(:value) { '7' }
+
+        it 'returns people without matching attribute' do
+          expect(entries).to include(@tg_member2)
+          expect(entries).not_to include(@tg_member1)
+          expect(entries).not_to include(@tg_member3)
+        end
+      end
+
+      context 'smaller'  do
+        let(:constraint) { 'smaller' }
+        let(:value) { 32 }
+
+        it 'returns people with matching attribute' do
+          expect(entries.size).to eq(2)
+          expect(entries).to include(@tg_member1)
+          expect(entries).to include(@tg_member2)
+        end
+      end
+
+      context 'greater'  do
+        let(:constraint) { 'greater' }
+        let(:value) { 32 }
+
+        it 'returns people with matching attribute' do
+          expect(entries.size).to eq(1)
+          expect(entries).to include(@tg_member3)
+        end
+      end
+    end
+
+    context 'unpersisted attribute' do
+      let(:key) { 'coolness_factor' }
+
       before do
-        expect(Person).to receive(:filter_attrs).and_return(years: { type: :integer })
-        allow_any_instance_of(Person).to receive(:years) do |person|
+        expect(Person).to receive(:filter_attrs).and_return(coolness_factor: { type: :integer })
+        allow_any_instance_of(Person).to receive(:coolness_factor) do |person|
           case person.first_name
           when 'test1' then 27
           when 'test2' then 30

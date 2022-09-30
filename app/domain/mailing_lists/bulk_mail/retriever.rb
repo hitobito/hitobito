@@ -58,7 +58,7 @@ class MailingLists::BulkMail::Retriever
     bulk_mail = mail_log.message
 
     if imap_mail.list_bounce?
-      bounce_handler.process
+      bounce_handler(imap_mail, bulk_mail, mailing_list).process
       return
     end
 
@@ -82,7 +82,7 @@ class MailingLists::BulkMail::Retriever
   end
 
   def bounce_handler(imap_mail, bulk_mail, mailing_list)
-    MailingLists::BulkMail::BounceHandler.new(mail, bulk_mail, mailing_list)
+    MailingLists::BulkMail::BounceHandler.new(imap_mail, bulk_mail, mailing_list)
   end
 
   def sender_rejected(mail, bulk_mail)

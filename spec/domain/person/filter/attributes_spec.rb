@@ -129,7 +129,7 @@ describe Person::Filter::Attributes do
         let(:key) { 'id' }
 
         before do
-          expect(Person).to receive(:filter_attrs).and_return(id: { type: :integer })
+          expect(Person).to receive(:filter_attrs).twice.and_return(id: { type: :integer })
         end
 
         context do
@@ -237,11 +237,57 @@ describe Person::Filter::Attributes do
       end
     end
 
+    context 'birthday date attribute' do
+      let(:key) { 'birthday' }
+
+      context 'equal' do
+        let(:constraint) { 'equal' }
+
+        context do
+          let(:value) { 27.years.ago.to_date.to_s }
+
+          it 'returns people with exact attribute' do
+            expect(entries.size).to eq(1)
+            expect(entries.first).to eq(@tg_member1)
+          end
+        end
+
+        context do
+          let(:value) { 55.years.ago.to_date.to_s }
+
+          it 'returns nobody if no exact attribute' do
+            expect(entries.size).to be_zero
+          end
+        end
+      end
+
+      context 'smaller'  do
+        let(:constraint) { 'smaller' }
+        let(:value) { 32.years.ago.to_date.to_s }
+
+        it 'returns people with matching attribute' do
+          expect(entries.size).to eq(1)
+          expect(entries).to include(@tg_member3)
+        end
+      end
+
+      context 'greater'  do
+        let(:constraint) { 'greater' }
+        let(:value) { 32.years.ago.to_date.to_s }
+
+        it 'returns people with matching attribute' do
+          expect(entries.size).to eq(2)
+          expect(entries).to include(@tg_member1)
+          expect(entries).to include(@tg_member2)
+        end
+      end
+    end
+
     context 'unpersisted attribute' do
       let(:key) { 'coolness_factor' }
 
       before do
-        expect(Person).to receive(:filter_attrs).and_return(coolness_factor: { type: :integer })
+        expect(Person).to receive(:filter_attrs).twice.and_return(coolness_factor: { type: :integer })
         allow_any_instance_of(Person).to receive(:coolness_factor) do |person|
           case person.first_name
           when 'test1' then 27

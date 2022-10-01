@@ -30,8 +30,11 @@ module PeopleFilterHelper
     type = Person.filter_attrs[key.to_sym][:type] if key
     time = (Time.zone.now.to_f * 1000).to_i + count
 
-    filters = [[t('.match'), :match], [t('.not_match'), :not_match], [t('.equal'), :equal]]
-    if key.blank? || type == :integer
+    filters = [[t('.equal'), :equal]]
+    if type != :date
+      filters += [[t('.match'), :match], [t('.not_match'), :not_match]]
+    end
+    if key.blank? || type == :integer || type == :date
       filters += [[t('.smaller'), :smaller], [t('.greater'), :greater]]
     end
 
@@ -51,9 +54,10 @@ module PeopleFilterHelper
                         { selected: constraint },
                         html_options.merge(class: 'span2 attribute_constraint_dropdown'))
 
+      attribute_value_class = "span2 attribute_value_input#{type == :date ? ' date' : ''}"
       content << text_field_tag("filters[attributes][#{time}][value]",
                                 value,
-                                html_options.merge(class: 'span2 attribute_value_input'))
+                                html_options.merge(class: attribute_value_class))
 
       content << link_to(icon(:'trash-alt', filled: false), '#',
                          class: 'remove_filter_attribute',

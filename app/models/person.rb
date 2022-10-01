@@ -83,7 +83,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :first_name, :last_name, :nickname, :company_name, :email, :address, :zip_code, :town, :country,
-    :gender, [:years, :integer]
+    :gender, [:years, :integer], :birthday
   ]
 
   GENDERS = %w(m w).freeze

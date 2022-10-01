@@ -36,15 +36,19 @@ app.PeopleFilterAttribute = {
   renameAttributeName: (selector, time) ->
     regex = /\[\d{13}\]/
     selector.attr('name', selector.attr('name').replace(regex, "[#{time}]"))
+    # jquery datepicker needs a unique id to function properly
+    selector.attr('id', selector.attr('id').replace(/_\d{13}_/, "_#{time}_"))
 
   enableForm: (form) ->
     field = form.find('.attribute_key_hidden_field').attr('value')
     type  = form.closest('[data-types]').data('types')[field]
 
-    form.find('option[value=greater], option[value=smaller]').remove() unless type == 'integer'
+    form.find('option[value=greater], option[value=smaller]').remove() unless (type == 'integer' || type == 'date')
+    form.find('option[value=match], option[value=not_match]').remove() unless type != 'date'
     form.find('.attribute_key_hidden_field').removeAttr('disabled')
     form.find('.attribute_constraint_dropdown').removeAttr('disabled')
     form.find('.attribute_value_input').removeAttr('disabled')
+    form.find('.attribute_value_input').addClass('date') unless type!= 'date'
 
 
 }

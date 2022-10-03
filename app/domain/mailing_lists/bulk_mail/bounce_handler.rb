@@ -23,7 +23,6 @@ module MailingLists::BulkMail
       end
 
       @bulk_mail_bounce.update!(bounce_parent: source_message,
-                                mailing_list: @mailing_list,
                                 raw_source: @imap_mail.raw_source)
       log_info("Forwarding bounce message for list #{@mailing_list.mail_address} " \
                "to #{source_message.mail_from}")

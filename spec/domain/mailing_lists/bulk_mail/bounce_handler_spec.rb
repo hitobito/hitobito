@@ -82,7 +82,8 @@ describe MailingLists::BulkMail::BounceHandler do
       message = mail_log.message
       expect(message.state).to eq('pending')
       expect(message.raw_source).to eq(bounce_imap_mail.raw_source)
-      expect(message.mailing_list).to eq(mailing_list)
+      expect(message.mailing_list).to be_nil
+      expect(message.bounce_parent).to eq(messages(:mail))
     end
   end
 end

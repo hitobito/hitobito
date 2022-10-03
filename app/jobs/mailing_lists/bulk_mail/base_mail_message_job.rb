@@ -5,7 +5,7 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
 
-class MailingLists::BulkMail::BaseMessageJob < BaseJob
+class MailingLists::BulkMail::BaseMailMessageJob < BaseJob
 
   EMAIL_LOCAL_PART_BRACKETS = /^.*<(.+)@.+\..+>$/.freeze
   EMAIL_LOCAL_PART = /^(.+)@.+\..+$/.freeze
@@ -37,7 +37,7 @@ class MailingLists::BulkMail::BaseMessageJob < BaseJob
   end
 
   def source_mail
-    Mail.new(@message.raw_source)
+    @source_mail ||= Mail.new(@message.raw_source)
   end
 
   def list_address

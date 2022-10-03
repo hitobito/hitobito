@@ -12,22 +12,41 @@ describe MailingLists::BulkMail::BounceMessageForwardJob do
   include MailingLists::ImapMailsSpecHelper
 
   let(:mailing_list) { mailing_lists(:leaders) }
-  let(:imap_mail) { built_imap_mail(plain_body: true) }
-  let(:mail_log) { MailLog.new(mail_hash: imap_mail.hash, status: :retrieved, mail_from: imap_mail.sender_email) }
-  let(:bulk_mail) { Message::BulkMail.new(subject: imap_mail.subject, state: :pending, raw_source: imap_mail.raw_source, mailing_list: mailing_list, mail_log: mail_log) }
+  let(:raw_bounce_mail) { Mail.read_from_string(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list_bounce.eml'))) }
 
-  subject { described_class.new(bulk_mail) }
+  let(:bulk_mail_bounce) do
+    Message::BulkMailBounce.create!(
+      state: :pending,
+      bounce_parent: messages(:mail),
+      raw_source: raw_bounce_mail,
+      subject: 'Undelivered Mail Returned to Sender')
+  end
 
-  it 'sends sender rejected message' do
+  let!(:mail_log) do
+    MailLog.create!(
+      mail_from: 'MAILER-DAEMON@example.com',
+      message: bulk_mail_bounce,
+      mail_hash: 'abcd42')
+  end
+
+  subject { described_class.new(bulk_mail_bounce) }
+
+  it 'forwards bounce message' do
     Settings.email.retriever.config = Config::Options.new(address: 'localhost')
     Settings.email.list_domain = 'hitobito.example.com'
 
+    expect(Rails.logger).to receive(:info)
+      .with("Bounce Message Forwarding: Forwarding bounce message for list leaders@#{Settings.email.list_domain} to sender@example.com")
+    allow(Rails.logger).to receive(:info)
+
     subject.perform
 
-    expect(last_email.to).to eq(["from@example.com"])
+    expect(last_email.to).to eq(["sender@example.com"])
     expect(last_email.from).to eq(["noreply@hitobito.example.com"])
-    expect(last_email.subject).to eq("RE: Testflight from 24.4.2021")
-    expect(last_email.body.decoded).to eq("Du bist leider nicht berechtigt auf die Liste leaders@hitobito.example.com zu schreiben.")
-    expect(bulk_mail.reload.raw_source).to be_nil
+    expect(last_email.subject).to eq("Undelivered Mail Returned to Sender")
+
+    expect(mail_log.reload.status).to eq('completed')
+    expect(bulk_mail_bounce.reload.raw_source).to be_nil
+    expect(bulk_mail_bounce.state).to eq('finished')
   end
 end

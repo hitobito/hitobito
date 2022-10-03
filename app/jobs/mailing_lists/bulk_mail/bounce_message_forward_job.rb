@@ -7,10 +7,10 @@
 
 module MailingLists
   module BulkMail
-    class BounceMessageForwardJob < BaseMessageJob
+    class BounceMessageForwardJob < BaseMailMessageJob
 
       def perform
-        send(bounce_message)
+        send(bounce_mail)
       end
 
       private
@@ -20,19 +20,37 @@ module MailingLists
           ActionMailer::Base.wrap_delivery_behavior(mail)
         end
 
+        logger.info("Bounce Message Forwarding: Forwarding bounce message for list " \
+                    "#{list_address} to #{bounce_parent_sender_email}")
+
         mail.deliver
 
-        clear body
-        # @message.
+        @message.mail_log.update!(status: 'completed')
+        @message.update!(raw_source: nil)
       end
 
-      def bounce_message
-        from = no_reply_address
-        logger.info("Relaying bounce from #{message.from} for list #{data[1]} to #{message.to}")
-        source_mail.reply do
-          body "Du bist leider nicht berechtigt auf die Liste #{list} zu schreiben."
-          from from
-        end
+      def bounce_mail
+        source_mail.to = bounce_parent_sender_email
+        source_mail.sender = no_reply_address
+        source_mail.smtp_envelope_from = no_reply_address
+        source_mail.from = no_reply_address
+        source_mail
+      end
+
+      def list_address
+        mailing_list.mail_address
+      end
+
+      def bounce_parent_sender_email
+        bounce_parent.mail_from
+      end
+
+      def bounce_parent
+        @message.bounce_parent
+      end
+
+      def mailing_list
+        bounce_parent.mailing_list
       end
 
     end

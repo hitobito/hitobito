@@ -7,7 +7,7 @@
 
 module MailingLists
   module BulkMail
-    class DeliveryReportMessageJob < BaseMessageJob
+    class DeliveryReportMessageJob < BaseMailMessageJob
 
       delegate :message_recipients, to: '@message'
 

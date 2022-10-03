@@ -1,14 +1,14 @@
 Return-Path: <MAILER-DAEMON>
-X-Original-To: list@hitobito.example.com
+X-Original-To: leaders@hitobito.example.com
 Received: from mx01.hitobito.example.com (mx01.example.com [IPv6:2a04:c11:1:1103::42])
 	by mailstore01.cloud.hitobito.example.com (Postfix) with ESMTPS id 728D41E0
-	for <list@hitobito.example.com>; Tue, 27 Sep 2022 07:48:58 +0200 (CEST)
+	for <leaders@hitobito.example.com>; Tue, 27 Sep 2022 07:48:58 +0200 (CEST)
 Received: by mx01.hitobito.example.com (Postfix)
 	id 68C01971; Tue, 27 Sep 2022 07:48:58 +0200 (CEST)
 Date: Tue, 27 Sep 2022 07:48:58 +0200 (CEST)
 From: MAILER-DAEMON@example.com (Mail Delivery System)
 Subject: Undelivered Mail Returned to Sender
-To: list@hitobito.example.com
+To: leaders@hitobito.example.com
 Auto-Submitted: auto-replied
 MIME-Version: 1.0
 Content-Type: multipart/report; report-type=delivery-status;
@@ -44,7 +44,7 @@ Content-Type: message/delivery-status
 
 Reporting-MTA: dns; mx01.example2.com
 X-Postfix-Queue-ID: 811B8369
-X-Postfix-Sender: rfc822; list@hitobito.example.com
+X-Postfix-Sender: rfc822; leaders@hitobito.example.com
 Arrival-Date: Tue, 27 Sep 2022 07:48:54 +0200 (CEST)
 
 Final-Recipient: rfc822; nothing@example2.com
@@ -60,7 +60,7 @@ Content-Description: Undelivered Message
 Content-Type: message/rfc822
 Content-Transfer-Encoding: 8bit
 
-Return-Path: <list@hitobito.example.com>
+Return-Path: <leaders@hitobito.example.com>
 Received: from mailstore01.cloud.example.com (mail.example.com [IPv6:2a06:c03:1:1104::210])
 	by mx01.example.com (Postfix) with ESMTPS id 842B8369
 	for <sender@example.com>; Tue, 27 Sep 2022 07:48:54 +0200 (CEST)
@@ -75,7 +75,7 @@ User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
 Content-Language: en-US
 To: nothing@example2.com
-From: Bruce Miller via <list@hitobito.example.com>
+From: Bruce Miller via <leaders@hitobito.example.com>
 Subject: Test 42
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit

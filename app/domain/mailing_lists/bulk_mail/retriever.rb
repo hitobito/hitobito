@@ -50,7 +50,8 @@ class MailingLists::BulkMail::Retriever
       process_mailing_list_mail(imap_mail, mail_log, validator, mailing_list)
     else
       mail_log.update!(status: :unknown_recipient)
-      log_info("Ignored email from #{imap_mail.sender_email} for unknown list #{imap_mail.original_to}")
+      log_info("Ignored email from #{imap_mail.sender_email} " \
+               "for unknown list #{imap_mail.original_to}")
     end
   end
 

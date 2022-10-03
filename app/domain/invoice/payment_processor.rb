@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2018-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -69,7 +69,7 @@ class Invoice::PaymentProcessor
                 received_at: received_at(net_entry, statement),
                 invoice: invoice(statement),
                 transaction_identifier: transaction_identifier(net_entry, statement),
-                reference: fetch('Refs', 'AcctSvcrRef', statement),
+                reference: esr_reference(statement),
                 transaction_xml: statement.to_xml(root: :TxDtls, skip_instruct: true).squish,
                 status: :xml_imported)
   end
@@ -147,6 +147,12 @@ class Invoice::PaymentProcessor
     ''
   end
 
+  def esr_reference(transaction)
+    fetch('Refs', 'AcctSvcrRef', transaction)
+  rescue KeyError
+    nil
+  end
+
   def received_at(net_entry, transaction)
     datetime = net_entry.dig('ValDt', 'Dt') ||
       transaction.dig('RltdDts', 'AccptncDtTm') ||
@@ -157,7 +163,7 @@ class Invoice::PaymentProcessor
 
   def transaction_identifier(net_entry, transaction)
     [
-      transaction.dig('Refs', 'AcctSvcrRef'),
+      esr_reference(transaction),
       reference(transaction),
       transaction.dig('Amt'),
       received_at(net_entry, transaction),

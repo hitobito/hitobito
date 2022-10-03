@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2022, CEVI ZH SH GL. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require 'spec_helper'
 
 describe Invoice::PaymentProcessor do
@@ -90,6 +97,17 @@ describe Invoice::PaymentProcessor do
   it 'invalid payments only produce set alert' do
     expect(parser.alert).to be_present
     expect(parser.notice).to be_blank
+  end
+
+  it 'creates valid payment although esr reference is not found' do
+    payments = parser('camt.054-without-esr-reference').payments
+
+    expect(payments.size).to eq(1)
+
+    payment = payments.first
+
+    expect(payment).to be_valid
+    expect(payment.reference).to be_nil
   end
 
   it 'invalid and valid payments set alert and notice' do

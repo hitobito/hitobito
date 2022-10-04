@@ -20,9 +20,6 @@ module MailingLists
           ActionMailer::Base.wrap_delivery_behavior(mail)
         end
 
-        logger.info("Bounce Message Forwarding: Forwarding bounce message for list " \
-                    "#{list_address} to #{bounce_parent_sender_email}")
-
         mail.deliver
 
         @message.mail_log.update!(status: 'completed')

@@ -37,6 +37,7 @@ class MailLog < ActiveRecord::Base
                           retrieved: :pending,
                           completed: :finished,
                           sender_rejected: :failed,
+                          bounce_rejected: :failed,
                           unknown_recipient: :failed }.freeze
 
   validates_by_schema
@@ -56,8 +57,6 @@ class MailLog < ActiveRecord::Base
   end
 
   def update_message_state
-    return if bounce_rejected?
-
     message.state = BULK_MESSAGE_STATUS[status.to_sym]
     message.sent_at = updated_at
     message.save!

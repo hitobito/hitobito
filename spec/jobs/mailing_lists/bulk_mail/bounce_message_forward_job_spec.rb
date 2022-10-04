@@ -11,7 +11,6 @@ require 'spec_helper'
 describe MailingLists::BulkMail::BounceMessageForwardJob do
   include MailingLists::ImapMailsSpecHelper
 
-  let(:mailing_list) { mailing_lists(:leaders) }
   let(:raw_bounce_mail) { Mail.read_from_string(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list_bounce.eml'))) }
 
   let(:bulk_mail_bounce) do
@@ -32,17 +31,14 @@ describe MailingLists::BulkMail::BounceMessageForwardJob do
   subject { described_class.new(bulk_mail_bounce) }
 
   it 'forwards bounce message' do
-    Settings.email.retriever.config = Config::Options.new(address: 'localhost')
     Settings.email.list_domain = 'hitobito.example.com'
-
-    expect(Rails.logger).to receive(:info)
-      .with("Bounce Message Forwarding: Forwarding bounce message for list leaders@#{Settings.email.list_domain} to sender@example.com")
-    allow(Rails.logger).to receive(:info)
 
     subject.perform
 
     expect(last_email.to).to eq(["sender@example.com"])
     expect(last_email.from).to eq(["noreply@hitobito.example.com"])
+    expect(last_email.smtp_envelope_from).to eq("noreply@hitobito.example.com")
+    expect(last_email.sender).to eq("noreply@hitobito.example.com")
     expect(last_email.subject).to eq("Undelivered Mail Returned to Sender")
 
     expect(mail_log.reload.status).to eq('completed')

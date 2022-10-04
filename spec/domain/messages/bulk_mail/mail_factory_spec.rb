@@ -32,6 +32,14 @@ describe Messages::BulkMail::MailFactory do
     expect(mail.smtp_envelope_from).to eq("leaders@#{Settings.email.list_domain}")
   end
 
+  it 'sets from to sender e-mail if no sender name given' do
+    raw_mail = bulk_mail_message.raw_source
+    raw_mail.gsub!('From: Mike Sender <sender@example.com>', 'From: <sender@example.com>')
+    bulk_mail_message.raw_source = raw_mail
+
+    expect(mail['from'].value).to eq("sender@example.com via leaders@#{Settings.email.list_domain} <leaders@#{Settings.email.list_domain}>")
+  end
+
   private
 
   def mail

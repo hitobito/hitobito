@@ -28,6 +28,10 @@ module MailingLists
         raise e unless Rails.env.production?
       end
 
+      def log_info(text)
+        logger.info Retriever::LOG_PREFIX + text
+      end
+
       def failed_recipients
         message_recipients.where(state: :failed).pluck(:email, :error)
       end

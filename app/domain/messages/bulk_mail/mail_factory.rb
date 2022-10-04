@@ -39,8 +39,9 @@ module Messages
       end
 
       def sender_via_mailinglist
-        name = @mail['from'].display_names.first
-        "#{name} via #{mailing_list_address} <#{mailing_list_address}>"
+        name = @mail['from'].display_names.try(:first)
+        sender_name = name || @mail.from.first
+        "#{sender_name} via #{mailing_list_address} <#{mailing_list_address}>"
       end
 
       def mailing_list_address

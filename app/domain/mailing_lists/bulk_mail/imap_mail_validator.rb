@@ -32,15 +32,7 @@ module MailingLists::BulkMail
     end
 
     def sender_valid?
-      sender_email_valid? && sender_name_present?
-    end
-
-    def sender_email_valid?
       valid_email?(@mail.sender_email)
-    end
-
-    def sender_name_present?
-      @mail.sender_name.present?
     end
 
     def valid_email?(email)

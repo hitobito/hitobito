@@ -47,25 +47,6 @@ describe MailingLists::BulkMail::ImapMailValidator do
         expect(validator.valid_mail?).to eq(false)
       end
     end
-
-    context 'sender validation' do
-      it 'is not valid if no sender present' do
-        imap_mail.net_imap_mail.attr['ENVELOPE'].sender[0].mailbox = ''
-        imap_mail.net_imap_mail.attr['ENVELOPE'].sender[0].host = ''
-
-        expect(validator.valid_mail?).to eq(false)
-      end
-
-      it 'is not valid if blank sender name' do
-        imap_mail.net_imap_mail.attr['ENVELOPE'].sender[0].name = ''
-
-        expect(validator.valid_mail?).to eq(false)
-      end
-
-      it 'is valid if valid sender present' do
-        expect(validator.valid_mail?).to eq(true)
-      end
-    end
   end
 
   describe '#processed_before?' do

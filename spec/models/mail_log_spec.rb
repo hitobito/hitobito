@@ -47,6 +47,7 @@ describe MailLog do
         bulk_delivering: :processing,
         completed: :finished,
         unknown_recipient: :failed,
+        bounce_rejected: :failed,
         sender_rejected: :failed }.each_pair do |log_status, expected_message_state|
         it "to #{expected_message_state} if mail_log status is #{log_status}" do
           mail_log.update!(status: log_status)

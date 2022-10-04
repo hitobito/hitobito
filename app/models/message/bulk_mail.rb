@@ -8,4 +8,16 @@
 class Message::BulkMail < Message
   delegate :mail_from, to: :mail_log
 
+  validates :uid, presence: true, uniqueness: true
+
+  attr_readonly :uid
+
+  before_validation :generate_uid, unless: :uid
+
+  private
+
+  def generate_uid
+    self.uid = SecureRandom.hex(8)
+  end
+
 end

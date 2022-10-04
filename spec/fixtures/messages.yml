@@ -63,6 +63,7 @@ mail:
   type: Message::BulkMail
   state: pending
   subject: Newsletter
+  uid: a15816bbd204ba20
   raw_source: |
     Subject: Newsletter
     From: Mike Sender <sender@example.com>

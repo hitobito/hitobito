@@ -7,7 +7,7 @@
 
 module MailingLists
   module BulkMail
-    class SenderRejectedMessageJob < BaseMessageJob
+    class SenderRejectedMessageJob < BaseMailMessageJob
 
       def perform
         send(reply_message)
@@ -20,8 +20,6 @@ module MailingLists
           ActionMailer::Base.wrap_delivery_behavior(mail)
         end
 
-        # set Return-Path as recommended in: https://stackoverflow.com/a/154794
-        mail.header['Return-Path'] = '<>'
         mail.deliver
         @message.update!(raw_source: nil)
       end

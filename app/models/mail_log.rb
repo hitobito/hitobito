@@ -28,13 +28,16 @@ class MailLog < ActiveRecord::Base
 
   belongs_to :message
 
-  STATES = [:retrieved, :bulk_delivering, :completed, :sender_rejected, :unknown_recipient].freeze
+  STATES = [:retrieved, :bulk_delivering, :completed,
+            :sender_rejected, :unknown_recipient,
+            :bounce_rejected].freeze
   enum status: STATES
 
   BULK_MESSAGE_STATUS = { bulk_delivering: :processing,
                           retrieved: :pending,
                           completed: :finished,
                           sender_rejected: :failed,
+                          bounce_rejected: :failed,
                           unknown_recipient: :failed }.freeze
 
   validates_by_schema

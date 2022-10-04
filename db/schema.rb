@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_22_112119) do
+ActiveRecord::Schema.define(version: 2022_09_26_091803) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -638,6 +638,8 @@ ActiveRecord::Schema.define(version: 2022_09_22_112119) do
     t.boolean "donation_confirmation", default: false, null: false
     t.text "raw_source", size: :medium
     t.string "date_location_text"
+    t.string "uid"
+    t.integer "bounce_parent_id"
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"

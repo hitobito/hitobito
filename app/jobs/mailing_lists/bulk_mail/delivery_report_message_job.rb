@@ -7,7 +7,7 @@
 
 module MailingLists
   module BulkMail
-    class DeliveryReportMessageJob < BaseMessageJob
+    class DeliveryReportMessageJob < BaseMailMessageJob
 
       delegate :message_recipients, to: '@message'
 
@@ -26,6 +26,10 @@ module MailingLists
         log_info('Delivery report for bulk mail to ' \
                  "#{@delivery_report_to} could not be delivered: #{e.message}")
         raise e unless Rails.env.production?
+      end
+
+      def log_info(text)
+        logger.info Retriever::LOG_PREFIX + text
       end
 
       def failed_recipients

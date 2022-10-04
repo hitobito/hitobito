@@ -10,7 +10,7 @@ require 'mail'
 
 class Imap::Mail
 
-  attr_accessor :net_imap_mail, :mail_log
+  attr_accessor :net_imap_mail
 
   delegate :subject, :sender, to: :envelope
 
@@ -34,6 +34,10 @@ class Imap::Mail
 
   def sender_email
     envelope.sender[0].mailbox + '@' + envelope.sender[0].host
+  end
+
+  def sender_name
+    envelope.sender[0].name
   end
 
   def email_to
@@ -70,6 +74,15 @@ class Imap::Mail
     mail.header['X-Original-To'].value
   end
 
+  def list_bounce?
+    bounce_return_path? &&
+      bounce_hitobito_message_uid.present?
+  end
+
+  def bounce_hitobito_message_uid
+    mail.body.raw_source[/X-Hitobito-Message-UID: ([a-z0-9]*)/,1]
+  end
+
   def mail
     @mail ||= Mail.read_from_string(@net_imap_mail.attr['RFC822'])
   end
@@ -79,4 +92,14 @@ class Imap::Mail
   def envelope
     @net_imap_mail.attr['ENVELOPE']
   end
+
+  def bounce_return_path?
+    return_path.eql?('') ||
+      return_path.include?('MAILER-DAEMON')
+  end
+
+  def return_path
+    mail.header['Return-Path'].value
+  end
+
 end

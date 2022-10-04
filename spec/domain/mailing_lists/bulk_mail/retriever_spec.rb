@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2012-2021, Hitobito AG. This file is part of
+# Copyright (c) 2012-2022, Hitobito AG. This file is part of
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
@@ -14,12 +14,12 @@ describe MailingLists::BulkMail::Retriever do
   let(:imap_connector) { instance_double(Imap::Connector) }
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:imap_mail_validator) { instance_double(MailingLists::BulkMail::ImapMailValidator) }
-  let(:mail42) { imap_mail(42) }
+  let(:imap_mail) { build_imap_mail(42) }
 
   before do
     allow(retriever).to receive(:validator).and_return(imap_mail_validator)
     allow(retriever).to receive(:imap).and_return(imap_connector)
-    allow(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(mail42)
+    allow(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(imap_mail)
     allow(imap_connector).to receive(:fetch_mail_uids).with(:inbox).and_return([42])
     allow(imap_mail_validator).to receive(:valid_mail?).and_return(true)
     allow(imap_mail_validator).to receive(:processed_before?).and_return(false)
@@ -45,7 +45,7 @@ describe MailingLists::BulkMail::Retriever do
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
 
       expect(Rails.logger).to receive(:info)
-        .with('BulkMail Retriever: Ignored invalid email from dude@hitobito.example.com')
+        .with('BulkMail Retriever: Ignored invalid email from dude@hitobito.example.com (invalid sender e-mail or no sender name present)')
 
       retriever.perform
     end
@@ -53,7 +53,7 @@ describe MailingLists::BulkMail::Retriever do
 
   context 'process mail' do
     it 'does not process mail if no mailing list can be assigned' do
-      allow(mail42).to receive(:original_to).and_return('nolist@localhost')
+      allow(imap_mail).to receive(:original_to).and_return('nolist@localhost')
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
 
       expect(Rails.logger).to receive(:info)
@@ -77,7 +77,7 @@ describe MailingLists::BulkMail::Retriever do
 
     it 'does not process mail for mailing list of archived group' do
       groups(:top_layer).update!(archived_at: 30.days.ago)
-      expect(mail42).to receive(:original_to).and_return('leaders@localhost:3000')
+      expect(imap_mail).to receive(:original_to).and_return('leaders@localhost:3000')
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
 
       expect do
@@ -121,7 +121,7 @@ describe MailingLists::BulkMail::Retriever do
     end
 
     it 'does process mail and enqueues job for mail delivery' do
-      expect(mail42).to receive(:original_to).and_return('leaders@localhost:3000')
+      expect(imap_mail).to receive(:original_to).and_return('leaders@localhost:3000')
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
       expect(imap_mail_validator).to receive(:sender_allowed?).and_return(true)
 
@@ -140,6 +140,28 @@ describe MailingLists::BulkMail::Retriever do
       expect(message.subject).to eq('Mail 42')
       expect(message.state).to eq('pending')
     end
+
+    it 'does not process mail if no sender name' do
+      expect(imap_mail).to receive(:original_to).and_return('leaders@localhost:3000')
+      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+      expect(imap_mail_validator).to receive(:sender_allowed?).and_return(true)
+
+      expect do
+        retriever.perform
+      end.to change { Message::BulkMail.count }.by(1)
+        .and change { MailLog.count }.by(1)
+        .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+        .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::SenderRejectedMessageJob%"').count }.by(0)
+
+      mail_log = MailLog.find_by(mail_hash: 'abcd42')
+      expect(mail_log.status).to eq('retrieved')
+      expect(mail_log.mail_from).to eq('dude@hitobito.example.com')
+
+      message = mail_log.message
+      expect(message.subject).to eq('Mail 42')
+      expect(message.state).to eq('pending')
+    end
+
   end
 
   context 'imap mail server errors' do
@@ -163,16 +185,43 @@ describe MailingLists::BulkMail::Retriever do
     end
   end
 
+  context 'bounce message' do
+    let(:imap_mail) { Imap::Mail.new }
+    let(:bounce_mail) { Mail.read_from_string(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list_bounce.eml'))) }
+
+    before do
+      allow(imap_mail).to receive(:original_to).and_return('leaders@localhost')
+      allow(imap_mail).to receive(:mail).and_return(bounce_mail)
+      allow(imap_mail).to receive(:sender_email).and_return('MAILER-DAEMON@example.com')
+      allow(imap_mail).to receive(:subject).and_return('Undelivered Mail Returned to Sender')
+    end
+
+    it 'forwards bounce message to sender' do
+      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+
+      expect do
+        retriever.perform
+      end.to change { Message::BulkMailBounce.count }.by(1)
+        .and change { Message::BulkMail.count }.by(0)
+        .and change { MailLog.count }.by(1)
+        .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
+        .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::BounceMessageForwardJob%"').count }.by(1)
+    end
+
+  end
+
   private
 
-  def imap_mail(uid)
+  def build_imap_mail(uid)
     mail = Imap::Mail.new
     allow(mail).to receive(:uid).and_return(uid)
     allow(mail).to receive(:subject).and_return('Mail 42')
     allow(mail).to receive(:original_to).and_return('leaders@localhost')
     allow(mail).to receive(:hash).and_return('abcd42')
     allow(mail).to receive(:sender_email).and_return('dude@hitobito.example.com')
-    allow(mail).to receive(:raw_source).and_return('raw-source')
+
+    imap_mail = Mail.read_from_string(File.read(Rails.root.join('spec', 'fixtures', 'email', 'list.eml')))
+    allow(mail).to receive(:mail).and_return(imap_mail)
     mail
   end
 

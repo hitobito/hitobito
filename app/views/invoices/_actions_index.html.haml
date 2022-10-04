@@ -11,9 +11,11 @@
   = invoices_print_dropdown
 
   - if @invoice_list.blank?
-    - disabled_msg = I18n.t('activerecord.errors.models.invoice_config.not_valid') if parent.invoice_config.invalid?
+    - if parent.invoice_config.invalid?
+      - disabled_msg = I18n.t('activerecord.errors.models.invoice_config.not_valid')
     = action_button(t('invoices.add_payments'), new_group_payment_process_path(parent), :plus, disabled: disabled_msg)
 
 - if @invoice_list.blank?
-  - disabled_msg = I18n.t('activerecord.errors.models.invoice_config.not_valid') if parent.invoice_config.invalid?
+  - if parent.invoice_config.invalid?
+    - disabled_msg = I18n.t('activerecord.errors.models.invoice_config.not_valid') 
   = action_button(t('invoices.add'), new_group_invoice_path(parent), :plus, disabled: disabled_msg)

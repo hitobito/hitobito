@@ -32,11 +32,28 @@ class Person::Filter::Attributes < Person::Filter::Base
     return Person.all unless years_constraint
 
     value, constraint = years_constraint.values_at('value', 'constraint')
-    Person.where(
-      "TIMESTAMPDIFF(YEAR, birthday, :reference_date) #{sql_comparator(constraint)} :value",
-      value: sql_value(value, constraint),
-      reference_date: Time.zone.now.to_date
-    )
+    value = value.to_i
+    case constraint.to_s
+    when 'greater' then years_greater_scope(value)
+    when 'smaller' then years_smaller_scope(value)
+    when 'equal' then years_equal_scope(value)
+    else raise("unexpected constraint: #{constraint.inspect}")
+    end
+  end
+
+  def years_smaller_scope(value)
+    date_value = Time.zone.now.to_date - value.to_i.years
+    Person.where("birthday > ?", date_value)
+  end
+
+  def years_greater_scope(value)
+    # Account for weird definition of age, depending on greater_than comparison...
+    date_value = Time.zone.now.to_date - value.to_i.years - 1.year + 1.day
+    Person.where("birthday < ?", date_value)
+  end
+
+  def years_equal_scope(value)
+    years_smaller_scope(value + 1).merge(years_greater_scope(value - 1))
   end
 
   def raw_sql_condition(scope)
@@ -44,7 +61,11 @@ class Person::Filter::Attributes < Person::Filter::Base
       key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
       next unless Person.filter_attrs.key?(key.to_sym)
       type = Person.filter_attrs[key.to_sym][:type]
-      parsed_value = type == :date ? Date.parse(value) : value
+      begin
+        parsed_value = type == :date ? Date.parse(value) : value
+      rescue Date::Error
+        parsed_value = Time.zone.now.to_date
+      end
 
       attribute_condition_sql(key, parsed_value, constraint, scope)
     end.compact.join(' AND ')

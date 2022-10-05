@@ -26,13 +26,13 @@ describe PersonDuplicates::MergeController do
       it 'is not possible to access merge form dialog without write permission on at least one person' do
         sign_in(people(:top_leader))
 
-        expect { post :new, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
+        expect(post :new, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id }).to have_http_status(403)
       end
 
       it 'is not possible access merge form dialog without permission to manage person duplicates' do
         sign_in(people(:bottom_member))
 
-        expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
+        expect(post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id }).to have_http_status(403)
       end
     end
 
@@ -52,7 +52,7 @@ describe PersonDuplicates::MergeController do
       it 'is not possible to merge without write permission on at least one person' do
         sign_in(people(:top_leader))
 
-        expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id, person_duplicate: { dst_person: 'person_2' } } }.to raise_error(CanCan::AccessDenied)
+        expect(post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id, person_duplicate: { dst_person: 'person_2' } }).to have_http_status(403)
 
         expect(PersonDuplicate.where(id: duplicate_entry.id)).to exist
         expect(Person.where(id: person_1.id)).to exist
@@ -62,7 +62,7 @@ describe PersonDuplicates::MergeController do
       it 'is not possible to merge without permission to manage person duplicates' do
         sign_in(people(:bottom_member))
 
-        expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id, person_duplicate: { dst_person: 'person_2' } } }.to raise_error(CanCan::AccessDenied)
+        expect(post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id, person_duplicate: { dst_person: 'person_2' } }).to have_http_status(403)
 
         expect(PersonDuplicate.where(id: duplicate_entry.id)).to exist
         expect(Person.where(id: person_1.id)).to exist

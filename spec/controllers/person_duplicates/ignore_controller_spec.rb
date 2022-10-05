@@ -27,7 +27,7 @@ describe PersonDuplicates::IgnoreController do
       it 'is not possible to access confirm dialog without write permission on at least one person' do
         sign_in(people(:top_leader))
 
-        expect { post :new, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
+        expect(post :new, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id }).to have_http_status(403)
 
         expect(duplicate_entry.reload.ignore).to eq(false)
       end
@@ -35,7 +35,7 @@ describe PersonDuplicates::IgnoreController do
       it 'is not possible access confirm dialog  without permission to manage person duplicates' do
         sign_in(people(:bottom_member))
 
-        expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
+        expect(post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id }).to have_http_status(403)
 
         expect(duplicate_entry.reload.ignore).to eq(false)
       end
@@ -56,7 +56,7 @@ describe PersonDuplicates::IgnoreController do
       it 'is not possible to ignore without write permission on at least one person' do
         sign_in(people(:top_leader))
 
-        expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
+        expect(post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id }).to have_http_status(403)
 
         expect(duplicate_entry.reload.ignore).to eq(false)
       end
@@ -64,7 +64,7 @@ describe PersonDuplicates::IgnoreController do
       it 'is not possible to ignore without permission to manage person duplicates' do
         sign_in(people(:bottom_member))
 
-        expect { post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id } }.to raise_error(CanCan::AccessDenied)
+        expect(post :create, xhr: true, params: { group_id: layer.id, id: duplicate_entry.id }).to have_http_status(403)
 
         expect(duplicate_entry.reload.ignore).to eq(false)
       end

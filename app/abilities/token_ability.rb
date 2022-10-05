@@ -47,6 +47,11 @@ class TokenAbility
         Ability.new(token.dynamic_user).can?(:show_full, p)
     end
 
+    can :show_details, [Person, PersonDecorator] do |p|
+      Role.where(person: p, group: groups).present? &&
+        Ability.new(token.dynamic_user).can?(:show_details, p)
+    end
+
     can :index_people, Group do |g|
       groups.include?(g)
     end

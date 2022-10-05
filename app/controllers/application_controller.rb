@@ -30,11 +30,20 @@ class ApplicationController < ActionController::Base
 
   alias decorate __decorator_for__
 
-  if Rails.env.production?
-    rescue_from CanCan::AccessDenied do |_exception|
-      redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.json do
+        render json: { status: 403, error: I18n.t('devise.failure.not_permitted_to_view_page') },
+               status: 403
+      end
+      format.all do
+        raise exception unless Rails.env.production?
+        redirect_to root_path, alert: I18n.t('devise.failure.not_permitted_to_view_page')
+      end
     end
+  end
 
+  if Rails.env.production?
     rescue_from ActionController::UnknownFormat,
                 ActionView::MissingTemplate,
                 with: :not_found

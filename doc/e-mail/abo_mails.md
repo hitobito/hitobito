@@ -12,10 +12,11 @@ E-Mails werden danach wie folgt verarbeitet:
 1. Verwerfe das Email, falls der Empfänger keine definierte Mailing Liste ist.
 2. Sende eine Rückweisungsemail, falls der Absender nicht berechtigt ist.
 3. Leite das Email weiter an alle Empfänger der Mailing Liste.
+4. Leite das Email an den ursprünglichen Absender weiter falls es eine Bounce Mail ist.
 
 ⚡ Man kann aus diversen Gründen (BCC, Mail Aliase) den eigentlichen Empfänger
-nicht aus dem `To` Header lesen. Aus diesem Grund muss der Mailserver den
-`X-Original-To` Header setzen, welcher den ursprünglichen Empfänger enthält
+nicht aus dem `To` Header lesen. Aus diesem Grund muss der Mailserver so konfiguriert 
+werden, dass dieser den `X-Original-To` Header setzt, welcher den ursprünglichen Empfänger enthält
 (z.B. `news@db.example.com`). Es wird immer nur der erste `X-Original-To` Header
 verarbeitet.
 
@@ -34,13 +35,13 @@ Events können Abonnenten sein.
 ## Konfiguration
 
 Mit Release 1.27 (Frühling 2022) wurde ein neuer Mail Stack eingeführt. Die Konfiguration für eingehende Mails erfolgt über die datei `config/mail.yml`. Als Vorlage dient `config/mail.yml.example`. Ist die `config/mail.yml` vorhanden, wird der neue Mail Stack aktiviert. 
-Der alte Mail Stack ist immer noch vorhanden und wird aktiviert wenn der Mailempfang via die Umgebungsvariable `RAILS_MAIL_RETRIEVER_CONFIG` konfiguriert ist. 
+Der alte Mail Stack ist immer noch vorhanden und wird aktiviert wenn der Mailempfang via die Umgebungsvariable `RAILS_MAIL_RETRIEVER_CONFIG` konfiguriert ist und keine `config/mail.yml` vorhanden ist. 
 
 ## Mail-Versand
 
-* Wie oben erwähnt landen sämtliche E-Mails an die Domain einer Instanz (z.B. db.hitobito.com) in einem einzelnen Postfach. 
+* Wie oben erwähnt landen sämtliche E-Mails an die Domain einer Instanz (z.B. db.hitobito.com) in einem einzelnen Postfach. (catch-all)
 * Über den [Retriever](https://github.com/hitobito/hitobito/blob/master/app/domain/mailing_lists/bulk_mail/retriever.rb) wird in einem definierten Intervall (Standardmässigässig jede Minute) dies Postfach auf neue Mails gecheckt. 
-* Kann ein E-Mail einer Mailingliste zugeordnet werden, nehmen wir dieses E-Mail wie es ist entgegen und passen vor dem Versand an die Empfänger des Abos einige Headers an:
+* Kann ein E-Mail einer Mailingliste zugeordnet werden, nehmen wir dieses E-Mail wie es ist entgegen und passen vor dem Versand an die Empfänger des Abos einige [Headers](https://github.com/hitobito/hitobito/tree/master/app/domain/messages#bulkmail-dispatch) an:
 
 Die Source Mail wird für die Weiterverarbeitung in ein [Mail](https://rubygems.org/gems/mail) Objekt instanziert.
 
@@ -50,7 +51,7 @@ Die Source Mail wird für die Weiterverarbeitung in ein [Mail](https://rubygems.
 
 Da wir die E-Mail in Hitobito entgegen nehmen und dann wieder an alle Empfänger eines Abos versenden ist es wichtig das wir die Domain der Hitobito Instanz verwenden. [Sender Policy Framework](https://de.wikipedia.org/wiki/Sender_Policy_Framework)
 
-Die E-Mail Headers `Reply-To` sowie `Return-Path` setzen wir auf den Absender des Source Mails. (hans.muster@example.com). `From` bleibt aus dem Source Mail bestehen.
+Der E-Mail Header `Reply-To` setzen wir auf den Absender des Source Mails. (sender@example.com). `From` wird auf eine Kombi des Sendernamens sowie der Listenadresse gesetzt. (Mike Sender via abo42@hitobito.example.com)
 
 ### Mail Headers
 
@@ -58,11 +59,10 @@ E-Mail Headers einer Nachricht die beim Empfänger angekommen ist:
 
 ```
 ...
-From: hans.muster@example.com
-Sender: abo_name@db.hitobito.com
-Reply-To: hans.muster@example.com
-Return-Path: hans.muster@example.com
-To: abo_name@db.hitobito.com
+From: Mike Sender via abo42@hitobito.example.com <abo42@hitobito.example.com>
+To: abo42@hitobito.example.com
+Reply-To: sender@example.com
+Return-Path: abo42@hitobito.example.com
 Subject: Besprechung vom 31.03.2021 - Einladung & Traktanden
 ...
 ```

@@ -1,17 +1,17 @@
 # Messages Dispatch
-Die Aufgabe der Dispatch Klassen ist der versand von Messages.
+Die Aufgabe der Dispatch Klassen ist der Versand von Messages.
 
 ## BulkMail Dispatch
-Versendet Mails an MailingListen Empfänger. Damit diese Ordentlich zugestellt werden können, müssen folgende Headers gesetzt werden:
 
-| Header      | Definiton                                          | Wert                                |
-| ----------- |:-------------------------------------------------- |:----------------------------------- |
-| sender      | Absenderadresse von hitobito                       | asdf42@hitobito.example.com            |
-| to          | Adresse der MailingList                            | asdf42@hitobito.example.com                  |
-| from        | Absenderadresse Original Mail                      | luca@example.com                    |
-| Reply-To    | Antwortadresse (falls unterschiedlich zu from)     | luca@example.com                     |
-| Return-Path | Wenn unzustellbar zurück an die definierte adresse | luca@example.com                     |
+Versendet E-Mails an MailingListen Empfänger. Folgende E-Mail Headers werden gesetzt:
 
-Desweiteren müssen die Empfänger im SMTP Teil `RCPT TO` gesetzt werden. `RCPT TO` steht für `recipient to`.
+| Header            | Definiton                                          | Wert                                |
+| ------------------|:-------------------------------------------------- |:----------------------------------- |
+| to                | Adresse des Abos                                   | abo42@hitobito.example.com          |
+| smtp_envelope_from| Adresse des Abos                                   | abo42@hitobito.example.com          |
+| from              | Name des Absenders sowie die Aboadresse            | Mike Sender via abo42@hitobito.example.com    |
+| Reply-To          | E-Mail des Senders als Antwortadresse              | sender@example.com                     |
+| Return-Path       | Wenn unzustellbar zurück an die definierte Adresse | wird vom Mailserver gesetzt (gleich wie smtp envelope from) |
+| X-Hitobito-Message-UID | Unique Hitobito Message ID damit wir mögliche Bounce Messages der Sourcenachricht zuweisen können| abcd42 |
 
-Return-Path Header: https://stackoverflow.com/a/154794
+Die Empfänger werden via `RCPT TO` gesetzt. (batchweise)

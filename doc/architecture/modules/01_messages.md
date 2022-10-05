@@ -36,6 +36,7 @@ Das Message Model definiert die verschiedenen Message Typen von Hitobito (Single
 | `Message::Letter`      | Brief |         
 | `Message::LetterWithInvoice` | Rechnungsbrief |         
 | `Message::BulkMail` | Mail |         
+| `Message::BulkMailBounce` | Bounce Mail einer zuvor gesendeten BulkMail |         
 
 ### `Message::TextMessage`
 ![Systemübersicht](../diagrams/modules/screenshots/text-message.png)
@@ -60,6 +61,9 @@ Briefe mit zusätzlichen Rechnungsoptionen (Rechnungsposten).
 
 ### `Message::BulkMail`
 Mailnachricht welche über ein externes Mailprogramm an ein Abo gesendet wird.
+
+### `Message::BulkMailBounce`
+Falls eine Bulk Mail beim Zielserver gebounced wird, wird diese zurück an den ursprünglichen Sender der Bulk Mail geschickt. Dafür wird ein BulkMailBounce Entry erstellt.
 
 ## Versand (Dispatch)
 Der Dispatcher ist dafür zuständig den entsprechenden Nachrichtentyp zu versenden.

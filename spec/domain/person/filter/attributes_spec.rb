@@ -193,28 +193,6 @@ describe Person::Filter::Attributes do
         end
       end
 
-      context 'match'  do
-        let(:constraint) { 'match' }
-        let(:value) { '7' }
-
-        it 'returns people with matching attribute' do
-          expect(entries.size).to eq(2)
-          expect(entries).to include(@tg_member1)
-          expect(entries).to include(@tg_member3)
-        end
-      end
-
-      context 'not_match'  do
-        let(:constraint) { 'not_match' }
-        let(:value) { '7' }
-
-        it 'returns people without matching attribute' do
-          expect(entries).to include(@tg_member2)
-          expect(entries).not_to include(@tg_member1)
-          expect(entries).not_to include(@tg_member3)
-        end
-      end
-
       context 'smaller'  do
         let(:constraint) { 'smaller' }
         let(:value) { 32 }

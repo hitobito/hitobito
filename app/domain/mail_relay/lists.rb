@@ -80,14 +80,18 @@ module MailRelay
     end
 
     # Is the mail sender allowed to post to this address?
-    def sender_allowed? # rubocop:disable Metrics/CyclomaticComplexity
-      return false unless valid_email?(sender_email)
+    def sender_allowed? # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      return false if sender_email.blank?
 
-      mailing_list.anyone_may_post ||
-      sender_is_additional_sender? ||
-      sender_is_group_email? ||
-      sender_is_list_administrator? ||
-      (mailing_list.subscribers_may_post? && sender_is_list_member?)
+      (
+        mailing_list.anyone_may_post ||
+        sender_is_additional_sender? ||
+        sender_is_group_email? ||
+        sender_is_list_administrator? ||
+        (mailing_list.subscribers_may_post? && sender_is_list_member?)
+      ).tap do |allowed|
+        log_not_allowed_sender unless allowed
+      end
     end
 
     # List of receiver email addresses for the resent email.
@@ -116,6 +120,19 @@ module MailRelay
         body 'Du bist nicht berechtigt, auf diese Liste zu schreiben.'
         from sender
       end
+    end
+
+    def log_not_allowed_sender
+      Rails.logger.info <<~MESSAGE.split("\n").join(' ')
+        MailRelay: #{sender_email} is not allowed to relay to MailingList #{mailing_list.mail_name}.
+
+        AnyoneMayPost: #{mailing_list.anyone_may_post}
+        AdditionalSender: #{sender_is_additional_sender?}
+        GroupEmail: #{sender_is_group_email?}
+        ListAdmin: #{sender_is_list_administrator?}
+        SubscriberMayPost: #{mailing_list.subscribers_may_post?}
+        Subscriber: #{sender_is_list_member?}
+      MESSAGE
     end
 
     def prepare_bounced_message(list_address, sender_address)

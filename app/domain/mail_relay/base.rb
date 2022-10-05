@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -81,7 +81,7 @@ module MailRelay
       end
 
       def valid_email?(email)
-        email.present? && Truemail.valid?(email)
+        email.present? && Truemail.valid?(email, with: :regex)
       end
     end
 
@@ -102,7 +102,7 @@ module MailRelay
           reject_not_allowed
         end
       else
-        @mail_log.update(status: :unkown_recipient)
+        @mail_log.update(status: :unknown_recipient)
         reject_not_existing
       end
       nil
@@ -160,7 +160,14 @@ module MailRelay
     end
 
     def sender_valid?
-      valid_email?(sender_email)
+      return true if valid_email?(sender_email)
+
+      # try again AND log if the error persists
+      Truemail.validate(sender_email.to_s).tap do |validator|
+        Rails.logger.info <<~MESSAGE unless validator.result.valid?
+          MailRelay: #{sender_email} is not valid: #{validator.result.errors.map { |k, v| "[#{k}] #{v}" }.join(',')}, see MailLog #{@mail_log.mail_hash}.
+        MESSAGE
+      end.result.valid?
     end
 
     # List of receiver email addresses for the resent email.

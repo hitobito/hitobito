@@ -17,9 +17,10 @@ describe Event::QualificationsController do
 
   let(:group) { event.groups.first }
 
-  let(:participant_1)  { create_participation(Event::Course::Role::Participant) }
-  let(:participant_2)  { create_participation(Event::Course::Role::Participant) }
-  let(:leader_1)       { create_participation(Event::Role::Leader) }
+  let!(:participant_1)  { create_participation(Event::Course::Role::Participant) }
+  let!(:participant_2)  { create_participation(Event::Course::Role::Participant) }
+  let!(:helper_1)       { create_participation(Event::Role::Helper) }
+  let!(:leader_1)       { create_participation(Event::Role::Leader) }
 
   def create_participation(role)
     participation = Fabricate(:event_participation, event: event, active: true)
@@ -28,12 +29,6 @@ describe Event::QualificationsController do
   end
 
   before { sign_in(people(:top_leader)) }
-
-  before do
-    participant_1
-    participant_2
-    leader_1
-  end
 
   it 'event kind has one qualification kind' do
     expect(event.kind.qualification_kinds('qualification', 'participant')).to eq [qualification_kinds(:sl)]
@@ -49,6 +44,20 @@ describe Event::QualificationsController do
 
       it { expect(assigns(:participants).size).to eq(2) }
       it { expect(assigns(:leaders).size).to eq(1) }
+
+      context 'with qualifiable helpers' do
+        around do |spec|
+          previous = Event::Role::Helper.qualifiable
+          Event::Role::Helper.qualifiable = true
+
+          spec.run
+
+          Event::Role::Helper.qualifiable = previous
+        end
+
+        it { expect(assigns(:participants).size).to eq(2) }
+        it { expect(assigns(:leaders).size).to eq(2) }
+      end
     end
 
     context 'for regular event' do

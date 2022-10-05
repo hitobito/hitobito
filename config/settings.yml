@@ -4,6 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 # All settings may be overriden in wagons!
+# See https://github.com/rubyconfig/config
 
 application:
   name: hitobito  # set same name in email.sender and email.mass_recipient
@@ -143,7 +144,25 @@ people:
 
 event:
   attachments:
+    # file_extensions is carrierwave, content_types is activestorage
     file_extensions: jpg jpeg gif png pdf txt rtf doc docx xls xlsx ppt pptx odt ods odp zip
+    content_types:
+      - image/jpeg
+      - image/gif
+      - image/png
+      - application/pdf
+      - text/plain
+      - application/rtf
+      - application/msword
+      - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+      - application/vnd.ms-excel
+      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      - application/vnd.ms-powerpoint
+      - application/vnd.openxmlformats-officedocument.presentationml.presentation
+      - application/vnd.oasis.opendocument.text
+      - application/vnd.oasis.opendocument.spreadsheet
+      - application/vnd.oasis.opendocument.presentation
+      - application/zip
     max_file_size: 10 # MB
   globally_visible_by_default: true # previous behaviour
 

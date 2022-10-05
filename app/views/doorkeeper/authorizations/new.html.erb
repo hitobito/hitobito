@@ -2,7 +2,7 @@
 
 <div class="container">
   <div class="oauth-application-logo">
-    <%= image_tag(Oauth::Application.find_by(uid: @pre_auth.client.uid).logo_url, size: '64x64') %>
+    <%= image_tag(upload_url(Oauth::Application.find_by(uid: @pre_auth.client.uid), :logo, variant: :thumb, default: 'oauth_app'), size: '64x64') %>
   </div>
 
   <p style="margin-bottom: 2rem;">

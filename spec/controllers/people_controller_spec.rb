@@ -117,16 +117,16 @@ describe PeopleController do
           expect(assigns(:person_add_requests)).to eq([r1])
         end
 
-        context '.pdf' do
-          it 'generates pdf labels' do
-            get :index, params: { group_id: group, label_format_id: label_formats(:standard).id }, format: :pdf
-
-            expect(@response.media_type).to eq('application/pdf')
-            expect(people(:top_leader).reload.last_label_format).to eq(label_formats(:standard))
-          end
-        end
-
         context 'background job' do
+          it 'generates pdf labels' do
+            expect do
+              get :index, params: { group_id: group, label_format_id: label_formats(:standard).id }, format: :pdf
+            end.to change(Delayed::Job, :count).by(1)
+
+            expect(response).to redirect_to(returning: true)
+            expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+          end
+
           it 'exports csv' do
             expect do
               get :index, params: { group_id: group }, format: :csv
@@ -232,7 +232,6 @@ describe PeopleController do
             expect(assigns(:people).collect(&:id)).to match_array(
               [ people(:bottom_member),
                 @bl_leader,
-                @bl_extern,
                 @bg_leader,
                 @bg_member,
                 @tg_member # also has Group::BottomGroup::Leader role
@@ -289,7 +288,6 @@ describe PeopleController do
           expect(assigns(:people).collect(&:id)).to match_array([people(:top_leader),
                                                                  people(:bottom_member),
                                                                  @tg_member,
-                                                                 @tg_extern,
                                                                  @bl_leader,
                                                                  @bg_leader].collect(&:id))
         end
@@ -950,7 +948,11 @@ describe PeopleController do
       file = Tempfile.new(['foo', '.exe'])
       picture = Rack::Test::UploadedFile.new(file, 'application/exe')
       put :update, params: { group_id: member.primary_group_id, id: member.id, person: { picture: picture } }
-      expect(assigns(:person)).to have(1).error_on(:picture)
+      expect(assigns(:person)).to have(2).error_on(:picture)
+      expect(assigns(:person).errors.group_by_attribute[:picture].map(&:type)).to match_array [
+        :image_metadata_missing,
+        :content_type_invalid
+      ]
     end
   end
 
@@ -1162,11 +1164,24 @@ describe PeopleController do
     let(:dom) { Capybara::Node::Simple.new(response.body) }
     let!(:bottom_member) { people(:bottom_member) }
 
+    let!(:registered_columns) { TableDisplay.table_display_columns.clone }
+    let!(:registered_multi_columns) { TableDisplay.multi_columns.clone }
+
+    before do
+      TableDisplay.table_display_columns = {}
+      TableDisplay.multi_columns = {}
+    end
+
+    after do
+      TableDisplay.table_display_columns = registered_columns
+      TableDisplay.multi_columns = registered_multi_columns
+    end
+
     before { sign_in(top_leader) }
-    after  { TableDisplay.class_variable_set('@@permissions', {}) }
 
     it 'GET#index lists extra column' do
-      top_leader.table_display_for(group).update(selected: %w(gender))
+      TableDisplay.register_column(Person, TableDisplays::PublicColumn, :gender)
+      top_leader.table_display_for(Person).update!(selected: %w(gender))
 
       get :index, params: { group_id: group.id }
       expect(dom).to have_checked_field 'Geschlecht'
@@ -1174,7 +1189,8 @@ describe PeopleController do
     end
 
     it 'GET#index lists login_status column' do
-      top_leader.table_display_for(group).update(selected: %w(login_status))
+      TableDisplay.register_column(Person, TableDisplays::People::LoginStatusColumn, :login_status)
+      top_leader.table_display_for(Person).update(selected: %w(login_status))
 
       get :index, params: { group_id: group.id }
       expect(dom).to have_checked_field 'Login'
@@ -1182,8 +1198,8 @@ describe PeopleController do
     end
 
     it 'GET#index lists extra column without content if permission check fails' do
-      TableDisplay.register_permission(Person, :missing_permission, :gender)
-      top_leader.table_display_for(group).update(selected: %w(gender))
+      TableDisplay.register_column(Person, TestImpossibleColumn, :gender)
+      top_leader.table_display_for(Person).update(selected: %w(gender))
 
       get :index, params: { group_id: group.id }
       expect(dom).to have_checked_field 'Geschlecht'
@@ -1191,7 +1207,8 @@ describe PeopleController do
     end
 
     it 'GET#index sorts by extra column' do
-      top_leader.table_display_for(group).update(selected: %w(gender))
+      TableDisplay.register_column(Person, TableDisplays::PublicColumn, :gender)
+      top_leader.table_display_for(Person).update(selected: %w(gender))
       Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person.update(gender: 'm')
       get :index, params: { group_id: group.id, sort: :gender, sort_dir: :desc }
       expect(assigns(:people).first).to eq top_leader
@@ -1212,5 +1229,11 @@ describe PeopleController do
       tag: ActsAsTaggableOn::Tag.find_or_create_by(name: name),
       context: 'tags'
     )
+  end
+end
+
+class TestImpossibleColumn < TableDisplays::PublicColumn
+  def required_permission(attr)
+    :missing_permission
   end
 end

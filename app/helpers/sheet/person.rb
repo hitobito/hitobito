@@ -23,8 +23,7 @@ module Sheet
     tab 'people.tabs.invoices',
         :personal_invoices_group_person_path,
         if: (lambda do |view, group, person|
-          person.finance_groups.present? &&
-            (view.can?(:index_invoices, group) || view.can?(:index_invoices, person))
+          view.can?(:index_invoices, group) || view.can?(:index_invoices, person)
         end)
 
     tab 'activerecord.models.message.other',
@@ -43,6 +42,12 @@ module Sheet
         :log_group_person_path,
         if: (lambda do |view, _group, person|
           view.can?(:log, person)
+        end)
+
+    tab 'people.tabs.security_tools',
+        :security_tools_group_person_path,
+        if: (lambda do |view, _group, person|
+          view.can?(:update, person)
         end)
 
     tab 'people.tabs.colleagues',

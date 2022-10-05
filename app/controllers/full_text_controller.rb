@@ -18,6 +18,7 @@ class FullTextController < ApplicationController
     @people = with_query { search_strategy.list_people }
     @groups = with_query { search_strategy.query_groups }
     @events = with_query { decorate_events(search_strategy.query_events) }
+    @invoices = with_query { decorate_invoices(search_strategy.query_invoices) }
     @active_tab = active_tab
   end
 
@@ -25,8 +26,9 @@ class FullTextController < ApplicationController
     people = search_strategy.query_people.collect { |i| PersonDecorator.new(i).as_quicksearch }
     groups = search_strategy.query_groups.collect { |i| GroupDecorator.new(i).as_quicksearch }
     events = search_strategy.query_events.collect { |i| EventDecorator.new(i).as_quicksearch }
+    invoices = search_strategy.query_invoices.collect { |i| InvoiceDecorator.new(i).as_quicksearch }
 
-    render json: results_with_separator(people, groups, events) || []
+    render json: results_with_separator(people, groups, events, invoices) || []
   end
 
   private
@@ -49,6 +51,7 @@ class FullTextController < ApplicationController
     return :people if @people.present?
     return :groups if @groups.present?
     return :events if @events.present?
+    return :invoices if @invoices.present?
 
     :people
   end
@@ -60,6 +63,12 @@ class FullTextController < ApplicationController
   def decorate_events(events)
     events.map do |event|
       EventDecorator.new(event)
+    end
+  end
+
+  def decorate_invoices(invoices)
+    invoices.map do |invoice|
+      InvoiceDecorator.new(invoice)
     end
   end
 end

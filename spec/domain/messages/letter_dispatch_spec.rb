@@ -27,6 +27,10 @@ describe Messages::LetterDispatch do
     expect(message.reload.success_count).to eq 1
   end
 
+  it 'returns a result' do
+    expect(subject.run.finished?).to be_truthy
+  end
+
   it 'creates recipient entries with address' do
     subject.run
 
@@ -43,6 +47,20 @@ describe Messages::LetterDispatch do
     2.times { subject.run }
 
     expect(recipient_entries.count).to eq(1)
+  end
+
+  context 'company address' do
+    it 'shows company name first' do
+      bottom_member.update(company: true, company_name: 'Hitobito AG')
+
+      subject.run
+
+      recipient = recipient_entries.first
+
+      expect(recipient.message).to eq message
+      expect(recipient.person).to eq bottom_member
+      expect(recipient.address).to eq "Hitobito AG\nBottom Member\nGreatstreet 345\n3456 Greattown"
+    end
   end
 
   context 'household addresses' do

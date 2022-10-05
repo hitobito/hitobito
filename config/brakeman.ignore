@@ -31,22 +31,6 @@
       "note": "HTML Tags ARE allowed here"
     },
     {
-      "warning_type": "Remote Code Execution",
-      "warning_code": 110,
-      "fingerprint": "9ae68e59cfee3e5256c0540dadfeb74e6b72c91997fdb60411063a6e8518144a",
-      "check_name": "CookieSerialization",
-      "message": "Use of unsafe cookie serialization strategy `:hybrid` might lead to remote code execution",
-      "file": "config/initializers/cookies_serializer.rb",
-      "line": 5,
-      "link": "https://brakemanscanner.org/docs/warning_types/unsafe_deserialization",
-      "code": "Rails.application.config.action_dispatch.cookies_serializer = :hybrid",
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "Medium",
-      "note": "This is a transitionary setting, it should be switched to :json sometime in 2022"
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "b216097a885c4749beec71b32c00a8da56ce498c519675a10a03a28b3eaf73a0",

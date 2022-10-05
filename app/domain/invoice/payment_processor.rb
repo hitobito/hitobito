@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-#
-#  Copyright (c) 2018, Jungwacht Blauring Schweiz. This file is part of
+
+#  Copyright (c) 2018-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,25 +8,11 @@
 class Invoice::PaymentProcessor
   attr_reader :xml
 
-  ESR_FIELD = 'AcctSvcrRef'.freeze
+  ESR_FIELD = 'AcctSvcrRef'
 
   def initialize(xml)
     @xml = xml
     @data = parse(xml)
-  end
-
-  def message_id
-    fetch('GrpHdr', 'MsgId')
-  end
-
-  def from
-    value = fetch_date('FrDtTm')
-    to_datetime(value).to_date if value
-  end
-
-  def to
-    value = fetch_date('ToDtTm')
-    to_datetime(value).to_date if value
   end
 
   def process
@@ -37,8 +23,30 @@ class Invoice::PaymentProcessor
     end
   end
 
-  def valid_payments
-    @valid_payments ||= payments_with_invoice.select(&:valid?)
+  def payments
+    @payments ||= net_entries.flat_map do |n|
+      credit_statements(n).collect do |s|
+        init_payment(s, n)
+      end
+    end
+  end
+
+  def alert
+    translate(:invalid, payments_with_invoice.count + payments_without_invoice.count)
+  end
+
+  def notice
+    translate(:valid, valid_payments.count)
+  end
+
+  def to
+    value = fetch_date('ToDtTm')
+    to_datetime(value).to_date if value
+  end
+
+  def from
+    value = fetch_date('FrDtTm')
+    to_datetime(value).to_date if value
   end
 
   def payments_with_invoice
@@ -49,27 +57,29 @@ class Invoice::PaymentProcessor
     payments - payments_with_invoice
   end
 
-  def alert
-    translate(:invalid, payments.reject(&:valid?).count)
+  def valid_payments
+    @valid_payments ||= payments_with_invoice.select(&:valid?)
   end
 
-  def notice
-    translate(:valid, payments.count(&:valid?))
+  private
+
+  def init_payment(statement, net_entry)
+    Payment.new(amount: fetch('Amt', statement),
+                esr_number: reference(statement),
+                received_at: received_at(net_entry, statement),
+                invoice: invoice(statement),
+                transaction_identifier: transaction_identifier(net_entry, statement),
+                reference: esr_reference(statement),
+                transaction_xml: statement.to_xml(root: :TxDtls, skip_instruct: true).squish,
+                status: :xml_imported)
   end
 
-  def payments
-    @payments ||= credit_statements.collect do |s|
-      Payment.new(amount: fetch('Amt', s),
-                  esr_number: reference(s),
-                  received_at: received_at(s),
-                  invoice: invoice(s),
-                  transaction_identifier: transaction_identifier(s),
-                  reference: fetch('Refs', 'AcctSvcrRef', s))
-    end
+  def message_id
+    fetch('GrpHdr', 'MsgId')
   end
 
-  def invoice(s)
-    invoices_by_reference[reference(s)] || invoices_by_esr_number[esr_number(s)]
+  def invoice(statement)
+    invoices_by_reference[reference(statement)] || invoices_by_esr_number[esr_number(statement)]
   end
 
   def invoices
@@ -102,14 +112,18 @@ class Invoice::PaymentProcessor
     references.map { |r| Invoice::PaymentSlip.format_as_esr(r) }
   end
 
-  def credit_statements
-    transaction_details
+  def net_entries
+    Array.wrap(fetch('Ntfctn', 'Ntry'))
+  end
+
+  def credit_statements(net_entry = fetch('Ntfctn', 'Ntry'))
+    transaction_details(net_entry)
       .select  { |s| fetch('CdtDbtInd', s) == 'CRDT' }
       .reject  { |s| fetch('RmtInf', s)['AddtlRmtInf'] =~ /REJECT/i }
   end
 
-  def transaction_details
-    Array.wrap(fetch('Ntfctn', 'Ntry'))
+  def transaction_details(net_entry = fetch('Ntfctn', 'Ntry'))
+    Array.wrap(net_entry)
          .collect { |s| fetch('NtryDtls', 'TxDtls', s) }
          .flatten
   end
@@ -133,15 +147,34 @@ class Invoice::PaymentProcessor
     ''
   end
 
-  def received_at(transaction)
-    datetime = transaction.dig('RltdDts', 'AccptncDtTm') ||
-        from.to_s ||
-        fetch('Ntfctn').fetch('CreDtTm')
+  def esr_reference(transaction)
+    fetch('Refs', 'AcctSvcrRef', transaction)
+  rescue KeyError
+    nil
+  end
+
+  def received_at(net_entry, transaction)
+    datetime = net_entry.dig('ValDt', 'Dt') ||
+      transaction.dig('RltdDts', 'AccptncDtTm') ||
+      from.to_s ||
+      fetch('Ntfctn').fetch('CreDtTm')
     to_datetime(datetime)
   end
 
-  def transaction_identifier(transaction)
-    transaction.dig('Refs', 'AcctSvcrRef') || transaction.dig('Refs', 'Prtry', 'Ref')
+  def transaction_identifier(net_entry, transaction)
+    [
+      esr_reference(transaction),
+      reference(transaction),
+      transaction.dig('Amt'),
+      received_at(net_entry, transaction),
+      debitor_iban(transaction)
+    ].join
+  end
+
+  def debitor_iban(transaction)
+    transaction.dig('RltdPties', 'DbtrAcct', 'Id', 'IBAN')
+  rescue KeyError
+    ''
   end
 
   def esr_number(transaction)

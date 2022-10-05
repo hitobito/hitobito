@@ -49,9 +49,10 @@ describe Payments::EbicsImport do
 
     invoice.update(reference: '000000000000100000000000800')
     expect(list.amount_paid).to eq(0)
-    expect do
-      subject.run
-    end.to_not change { Payment.count }
+
+    subject.run
+
+    expect(invoice.payments).to be_empty
   end
 
   it 'creates payment' do
@@ -67,16 +68,14 @@ describe Payments::EbicsImport do
 
     invoice.update(reference: '000000000000100000000000800')
     expect(list.amount_paid).to eq(0)
-    expect do
-      payments = subject.run
+    subject.run
 
-      expect(payments.size).to eq(1)
+    expect(invoice.payments.size).to eq(1)
 
-      payment = payments.first
-      expect(payment.invoice).to eq(invoice)
-      expect(payment.transaction_identifier).to eq("20180314001221000006915084508216")
-      expect(list.reload.amount_paid.to_s).to eq('710.82')
-    end.to change { Payment.count }.by(1)
+    payment = invoice.payments.first
+    expect(payment.invoice).to eq(invoice)
+    expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
+    expect(list.reload.amount_paid.to_s).to eq('710.82')
   end
 
   it 'creates payment by scor reference' do
@@ -93,16 +92,14 @@ describe Payments::EbicsImport do
     invoice.update(reference: Invoice::ScorReference.create('000000100000000000800'),
                    esr_number: '00 00000 00000 10000 00000 00800')
     expect(list.amount_paid).to eq(0)
-    expect do
-      payments = subject.run
+    subject.run
 
-      expect(payments.size).to eq(1)
+    expect(invoice.payments.size).to eq(1)
 
-      payment = payments.first
-      expect(payment.invoice).to eq(invoice)
-      expect(payment.transaction_identifier).to eq("20180314001221000006915084508216")
-      expect(list.reload.amount_paid.to_s).to eq('710.82')
-    end.to change { Payment.count }.by(1)
+    payment = invoice.payments.first
+    expect(payment.invoice).to eq(invoice)
+    expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
+    expect(list.reload.amount_paid.to_s).to eq('710.82')
   end
 
   it 'does not save if invoice not found' do
@@ -115,11 +112,9 @@ describe Payments::EbicsImport do
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
     invoice.update!(reference: '404')
 
-    expect do
-      payments = subject.run
+    subject.run
 
-      expect(payments).to be_empty
-    end.to_not change { Payment.count }
+    expect(invoice.payments).to be_empty
   end
 
   it 'returns empty array if no download data available' do

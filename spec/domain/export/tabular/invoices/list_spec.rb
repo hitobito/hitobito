@@ -42,8 +42,8 @@ describe Export::Tabular::Invoices::List do
                                   'Fällig am',
                                   'Betrag',
                                   'MwSt.',
-                                  'Total inkl. MwSt.',
-                                  'Total bezahlt',
+                                  'Rechnungsbetrag',
+                                  'Bezahlt',
                                   'Kostenstellen',
                                   'Konten',
                                   'Zahlungseingänge']

@@ -49,6 +49,11 @@ module SearchStrategies
       Address.none.page(1)
     end
 
+    def query_invoices
+      # override
+      Invoice.none.page(1)
+    end
+
     def inspect
       "<#{self.class.name}: term: #{@term.inspect}>"
     end

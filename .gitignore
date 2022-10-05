@@ -89,3 +89,4 @@ public/favicon.ico
 yarn-debug.log*
 .yarn-integrity
 config/initializers/work_around_docker_fs_bug.rb
+config/mail.yml

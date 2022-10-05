@@ -42,6 +42,20 @@ module SearchStrategies
       Address.search(Riddle::Query.escape(@term), default_search_options)
     end
 
+    def query_invoices
+      return Invoice.none.page(1) if @term.blank? || @user.finance_groups.empty?
+
+      # Since ThinkingSphinx handles the "-" character in the sequence_number wrongly
+      # we disable stars here and wrap each term in stars manually
+      filter = { with: { group_id: @user.finance_groups.pluck(:id) }, star: false }
+
+      star_wrapped_terms = @term.split(' ').map do |term|
+        "*#{Riddle::Query.escape(term)}*"
+      end.join(' ')
+
+      Invoice.search(star_wrapped_terms, default_search_options.merge(filter))
+    end
+
     protected
 
     def default_search_options

@@ -17,7 +17,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
   let(:pdf) { described_class.new(letter, options) }
   subject { pdf }
 
-  before { invoice_configs(:top_layer).update(payment_slip: :qr) }
+  before { invoice_configs(:top_layer).update(payment_slip: :qr, payee: "Hans Gerber\nEine Strasse 42\n1234 Dorf") }
   before do
     Subscription.create!(mailing_list: letter.mailing_list,
                          subscriber: group,
@@ -64,6 +64,8 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         [28, 265, "Konto / Zahlbar an"],
         [28, 254, "CH93 0076 2011 6238 5295 7"],
         [28, 242, "Hans Gerber"],
+        [28, 230, "Eine Strasse 42"],
+        [28, 219, "1234 Dorf"],
         [28, 187, "Zahlbar durch"],
         [28, 175, "Bottom Member"],
         [28, 164, "Greatstreet 345"],
@@ -81,6 +83,8 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         [360, 292, "Konto / Zahlbar an"],
         [360, 280, "CH93 0076 2011 6238 5295 7"],
         [360, 269, "Hans Gerber"],
+        [360, 257, "Eine Strasse 42"],
+        [360, 246, "1234 Dorf"],
         [360, 225, "Referenznummer"],
         [360, 214, "00 00834 96356 70000 00000 00019"],
         [360, 193, "Zahlbar durch"],
@@ -128,12 +132,13 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         Fabricate(Group::BottomGroup::Member.name, group: groups(:bottom_group_one_one), person: people(:top_leader))
         Messages::LetterDispatch.new(letter).run
       end
+      #[360, 246, "1234 Dorf"], [360, 257, "Eine Strasse 42"], [360, 257, "Eine Strasse 42"]]
 
       context "stamped"do
         let(:options) { { stamped: true } }
         it "renders only some texts positions" do
-          expect(text_with_position.count).to eq 50
-          expect(text_with_position).to eq [
+          expect(text_with_position.count).to eq 58
+          expect(text_with_position).to match_array [
             [71, 654, "Bottom Member"],
             [71, 644, "Greatstreet 345"],
             [71, 633, "3456 Greattown"],
@@ -141,6 +146,10 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [28, 265, "Konto / Zahlbar an"],
             [28, 254, "CH93 0076 2011 6238 5295 7"],
             [28, 242, "Hans Gerber"],
+            [28, 230, "Eine Strasse 42"],
+            [28, 230, "Eine Strasse 42"],
+            [28, 219, "1234 Dorf"],
+            [28, 219, "1234 Dorf"],
             [28, 187, "Zahlbar durch"],
             [28, 175, "Bottom Member"],
             [28, 164, "Greatstreet 345"],
@@ -178,6 +187,10 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [360, 292, "Konto / Zahlbar an"],
             [360, 280, "CH93 0076 2011 6238 5295 7"],
             [360, 269, "Hans Gerber"],
+            [360, 257, "Eine Strasse 42"],
+            [360, 257, "Eine Strasse 42"],
+            [360, 246, "1234 Dorf"],
+            [360, 246, "1234 Dorf"],
             [360, 225, "Referenznummer"],
             [360, 214, "00 00834 96356 70000 00000 00019"],
             [360, 193, "Zahlbar durch"],
@@ -188,8 +201,10 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         end
       end
 
+      [[28, 230, "Eine Strasse 42"], [360, 246, "1234 Dorf"], [360, 257, "Eine Strasse 42"]]
+
       it "renders all texts at positions" do
-        expect(text_with_position.count).to eq 72
+        expect(text_with_position.count).to eq 80
         expect(text_with_position).to match_array [
           [71, 654, "Bottom Member"],
           [71, 644, "Greatstreet 345"],
@@ -204,6 +219,10 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [28, 265, "Konto / Zahlbar an"],
           [28, 254, "CH93 0076 2011 6238 5295 7"],
           [28, 242, "Hans Gerber"],
+          [28, 230, "Eine Strasse 42"],
+          [28, 230, "Eine Strasse 42"],
+          [28, 219, "1234 Dorf"],
+          [28, 219, "1234 Dorf"],
           [28, 187, "Zahlbar durch"],
           [28, 175, "Bottom Member"],
           [28, 164, "Greatstreet 345"],
@@ -221,6 +240,10 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [360, 292, "Konto / Zahlbar an"],
           [360, 280, "CH93 0076 2011 6238 5295 7"],
           [360, 269, "Hans Gerber"],
+          [360, 257, "Eine Strasse 42"],
+          [360, 257, "Eine Strasse 42"],
+          [360, 246, "1234 Dorf"],
+          [360, 246, "1234 Dorf"],
           [360, 225, "Referenznummer"],
           [360, 214, "00 00834 96356 70000 00000 00019"],
           [360, 193, "Zahlbar durch"],

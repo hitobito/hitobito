@@ -11,7 +11,7 @@ describe Events::Filter::Groups do
   let(:person) { people(:top_leader) }
   let(:options) { {} }
 
-  let(:scope) { Events::FilteredList.new(person, {}, options).base_scope }
+  let(:scope) { Events::FilteredList.new(person, {}, options).base_scope.distinct }
 
   subject(:filter) { described_class.new(person, params, options, scope) }
 
@@ -35,6 +35,35 @@ describe Events::Filter::Groups do
       expect(Event::Course.count).to eq 2
       expect(Event::Course.list.first.group_ids).to eq [834_963_567]
       expect(Event::Course.list.second.group_ids).to eq [1_037_278_379]
+    end
+  end
+
+  context 'generally, it' do
+    let(:non_hierarchy_group_ids) { [groups(:bottom_layer_one).id, groups(:bottom_group_one_one).id] }
+    let!(:non_hierarchy_event_ids) do
+      event_1 = Fabricate(:event, groups: [Group.find(non_hierarchy_group_ids.first)])
+      event_2 = Fabricate(:event, groups: [Group.find(non_hierarchy_group_ids.last)])
+      [event_1.id, event_2.id]
+    end
+
+    let(:params) { { filter: { group_ids: person.groups.pluck(:id) + non_hierarchy_group_ids } } }
+
+    it 'produces a scope that includes globally_visible' do
+      expect(where_condition).to match('`events`.`globally_visible`')
+
+      expect(where_condition).to include(
+        "OR `events`.`id` IN (#{non_hierarchy_event_ids.join(', ')}) AND `events`.`globally_visible` = TRUE"
+      )
+    end
+
+    context 'has assumptions' do
+      it 'mentions events' do
+        expect(sql).to match('events')
+      end
+
+      it 'there is a WHERE condition' do
+        expect(where_condition).to match(/^WHERE/)
+      end
     end
   end
 
@@ -77,13 +106,13 @@ describe Events::Filter::Groups do
   end
 
   context 'with the unallowed request to show courses in one group, it' do
-    let(:group_id) { groups(:top_layer).hierarchy.map(&:id) }
+    let(:group_ids) { groups(:top_layer).hierarchy.map(&:id) }
     let(:person_hierarchy) { person.groups_hierarchy_ids }
     let(:options) { { list_all_courses: false } }
     let(:params) do
       {
         filter: {
-          group_ids: [group_id]
+          group_ids: group_ids
         }
       }
     end
@@ -112,6 +141,7 @@ describe Events::Filter::Groups do
   end
 
   context 'with the legitimate request to show courses in multiple groups, it' do
+    let(:person) { people(:bottom_member) }
     let(:group_ids) { [groups(:top_layer).id, groups(:bottom_layer_two).id] }
     let(:options) { { list_all_courses: true } }
     let(:params) do

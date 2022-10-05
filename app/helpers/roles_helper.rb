@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -48,10 +48,10 @@ module RolesHelper
     end
   end
 
-  def group_options_with_level
+  def group_options_with_level(group_selection = @group_selection)
     options = []
     base_level = nil
-    Group.each_with_level(@group_selection) do |group, level|
+    Group.each_with_level(group_selection) do |group, level|
       base_level ||= level
       label = ('&nbsp; ' * (level - base_level)).html_safe + h(group.to_s)
       options << [label, group.id]

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -44,8 +44,8 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_full).may(:destroy).in_same_layer_except_permission_giving
     permission(:layer_full).may(:index_service_tokens).service_token_in_same_layer
     permission(:layer_full)
-      .may(:index_person_add_requests, :index_notes, :index_deleted_people, :show_statistics)
-      .in_same_layer
+      .may(:index_person_add_requests, :index_notes, :index_deleted_people, :show_statistics,
+           :index_calendars).in_same_layer
     permission(:layer_full)
       .may(:update, :reactivate,
            :manage_person_tags, :activate_person_add_requests, :deactivate_person_add_requests)
@@ -64,6 +64,7 @@ class GroupAbility < AbilityDsl::Base
           :manage_person_tags, :index_deleted_people).in_same_layer_or_below
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers_if_active
     permission(:layer_and_below_full).may(:index_service_tokens).service_token_in_same_layer
+    permission(:layer_and_below_full).may(:index_calendars).in_same_layer
     permission(:layer_and_below_full).
       may(:activate_person_add_requests, :deactivate_person_add_requests).
       in_same_layer_if_active

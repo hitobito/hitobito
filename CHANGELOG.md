@@ -1,13 +1,35 @@
 # Hitobito Changelog
 
+## Version 1.28
+
+*  Fonts werden direkt von Hitobito ausgeliefert (#1632)
+*  Die Vorbedingungen einer Kursart können neu als "Muss gültig sein" oder "Muss gültig oder weggefallen sein" deklariert werden. Wenn die Vorbedingung gültig sein muss verhält es sich wie bisher, bei gültig oder weggefallen muss der Teilnehmer die Qualifikation der Vorbedingung besitzen oder jemals besessen haben. Dies gilt unabhängig von der Gültigkeit oder Reaktivierbarkeit der besagten Qualifikation. (#1640)
+*  Neuer Personentab "Sicherheit", welcher Informationen und Vorgänge zu Sicherheitsmassnahmen aufzeigt und das Passwort einer Person zurücksetzen lässt (benötigt :update Permission auf Person) (#1688)
+*  Neu können mittels "Buchungsbeleg" Tab bei den Rechnungen die Zahlungen in einem definierbaren Zeitrahmen ausgewertet werden. So werden die Zahlungen ihren Rechnungsartikeln zugeordnet und aufsummiert (hitobito_sww#39)
+*  Anmeldungen für öffentlich sichtbare Anlässe verbessert (#1775)
+*  Für variable Spendenaufrufe wird neu der Median über alle Zahlungen im definierten Zeitraum verwendet (hitobito_die_mitte#204)
+*  Der Buchungsbeleg kann neu zu XLSX oder CSV exportiert werden (hitobito_sww#61)
+*  Rechnungen können mit Firmennamen gefiltert werden (#1773)
+*  Personen mit `:finance` Berechtigung können neu bei allen Personen in und unterhalb ihrer Ebene die Rechnungen der Person mittels "Rechnungen" Tab auf dem Profil anzeigen lassen. (hitobito_die_mitte#205)
+*  In der Kursansicht können neu alle Kurse welche "Anlass ist für die ganze Datenbank sichtbar" aktiviert haben, gefunden werden. (#1813)
+*  Rechnungsempfänger auf QR Rechnungen wird validiert: muss genau 3 Zeilen enthalten (#1825) 
+
 ## Version 1.27
 
+*  Einzelrechnungen können neu mittels Start- und Enddatum gefiltert werden (hitobito_sww#58)
 *  Anlässe: Die Kontaktperson wird auf Wunsch per E-Mail über neue Anmeldungen benachrichtigt. Die Benachrichtigung wird auf dem Anlass aktiviert (#1540).
 *  Jede Person kann jetzt Zwei-Faktor-Authentifizierung mit einer TOTP-App aktivieren. Für einzelne Rollen kann die Zwei-Faktor-Authentifizierung obligatorisch gemacht werden.
 *  Die Haupt-Mailadresse von Personen mit Login muss neu bestätigt werden nachdem sie geändert wurde (#957).
-*  Gruppen verfügen nun über eine einfache Mitgliederstatistik (Reiter "Statistiken" auf der Gruppe) (hitobito_kljb#4).
+*  Gruppen verfügen nun über eine einfache Mitgliederstatistik auf dem Reiter "Statistiken" auf der Gruppe (hitobito_kljb#4). (Nur bei Verbänden die das bisher noch nicht hatten)
 *  Der Login-Status (hat kein Login, hat Login, 2FA, E-Mail versendet aber noch nicht akzeptiert) von Personen auf die man Schreibrechte hat kann jetzt als zusätzliche Spalte angezeigt werden (#1296).
 *  Sprache als Standardattribut auf Person (#1663)
+*  Anlässe, Kurse, etc. können neu getaggt werden (#1687)
+*  Es können neu Kalender-Feeds in jeder Gruppe eingerichtet werden. Damit können Anlässe, Kurse, Jahrespläne etc. einer Gruppe in einen externen Kalender (z.B. Google Kalender) eingebunden werden (#1687)
+*  Es kann neu nach Rechnungen gesucht werden (#1672)
+*  Introduce new bulk mail stack
+*  Rechnungen können neu das Total ausblenden (hitobito_sww#26)
+*  Rollen können beim Erstellen und Editieren ein Start- und Enddatum gesetzt werden. Das Enddatum kann auch in der Zukunft liegen, die Rolle wird dann automatisch an diesem Datum beendet. (#1714)
+*  Die Kosten-Stelle und das Konto wird für Gruppenrechnungen korrekt gespeichert (gefixt von @maede97) (hitobito_cevi#77)
 
 ## Version 1.26
 

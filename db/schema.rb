@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_03_100050) do
+ActiveRecord::Schema.define(version: 2022_09_26_091803) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -86,6 +86,42 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
     t.index ["person_id"], name: "index_assignments_on_person_id"
   end
 
+  create_table "async_download_files", charset: "utf8mb4", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "filetype"
+    t.integer "progress"
+    t.integer "person_id", null: false
+    t.string "timestamp", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "calendar_groups", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "calendar_id", null: false
+    t.bigint "group_id", null: false
+    t.boolean "excluded", default: false
+    t.boolean "with_subgroups", default: false
+    t.string "event_type"
+    t.index ["calendar_id"], name: "index_calendar_groups_on_calendar_id"
+    t.index ["group_id"], name: "index_calendar_groups_on_group_id"
+  end
+
+  create_table "calendar_tags", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "calendar_id", null: false
+    t.integer "tag_id", null: false
+    t.boolean "excluded", default: false
+    t.index ["calendar_id"], name: "index_calendar_tags_on_calendar_id"
+    t.index ["tag_id"], name: "fk_rails_b4e7ba0100"
+  end
+
+  create_table "calendars", charset: "utf8mb4", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "group_id", null: false
+    t.text "description"
+    t.string "token", null: false
+    t.index ["group_id"], name: "index_calendars_on_group_id"
+  end
+
   create_table "cors_origins", charset: "utf8mb4", force: :cascade do |t|
     t.string "auth_method_type"
     t.bigint "auth_method_id"
@@ -153,7 +189,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
 
   create_table "event_attachments", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "event_id", null: false
-    t.string "file", null: false
+    t.string "file"
     t.index ["event_id"], name: "index_event_attachments_on_event_id"
   end
 
@@ -202,6 +238,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
     t.string "category", null: false
     t.string "role", null: false
     t.integer "grouping"
+    t.string "validity", default: "valid_or_expired", null: false
     t.index ["category"], name: "index_event_kind_qualification_kinds_on_category"
     t.index ["role"], name: "index_event_kind_qualification_kinds_on_role"
   end
@@ -247,7 +284,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
     t.string "locale", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "question"
+    t.text "question"
     t.string "choices"
     t.index ["event_question_id"], name: "index_event_question_translations_on_event_question_id"
     t.index ["locale"], name: "index_event_question_translations_on_locale"
@@ -485,6 +522,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
     t.string "currency", default: "CHF", null: false
     t.bigint "invoice_list_id"
     t.string "reference", null: false
+    t.boolean "hide_total", default: false, null: false
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_list_id"], name: "index_invoices_on_invoice_list_id"
@@ -598,7 +636,10 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
     t.string "shipping_method", default: "own"
     t.boolean "send_to_households", default: false, null: false
     t.boolean "donation_confirmation", default: false, null: false
+    t.text "raw_source", size: :medium
     t.string "date_location_text"
+    t.string "uid"
+    t.integer "bounce_parent_id"
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
@@ -699,11 +740,13 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
   end
 
   create_table "payments", id: :integer, charset: "utf8mb4", force: :cascade do |t|
-    t.integer "invoice_id", null: false
+    t.integer "invoice_id"
     t.decimal "amount", precision: 12, scale: 2, null: false
     t.date "received_at", null: false
     t.string "reference"
     t.string "transaction_identifier"
+    t.string "status"
+    t.text "transaction_xml", size: :medium
     t.index ["invoice_id"], name: "index_payments_on_invoice_id"
   end
 
@@ -934,10 +977,10 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
   end
 
   create_table "table_displays", id: :integer, charset: "utf8mb4", force: :cascade do |t|
-    t.string "type", null: false
     t.integer "person_id", null: false
     t.text "selected"
-    t.index ["person_id", "type"], name: "index_table_displays_on_person_id_and_type", unique: true
+    t.string "table_model_class", null: false
+    t.index ["person_id", "table_model_class"], name: "index_table_displays_on_person_id_and_table_model_class", unique: true
   end
 
   create_table "taggings", id: :integer, charset: "utf8mb4", force: :cascade do |t|
@@ -984,6 +1027,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_100050) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "calendar_tags", "tags", on_delete: :cascade
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade

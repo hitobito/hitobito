@@ -73,6 +73,34 @@ describe InvoicesController do
       expect(assigns(:invoices)).to have(2).item
     end
 
+    it 'GET#index finds invoices by recipient.first_name' do
+      update_issued_at_to_current_year
+      get :index, params: { group_id: group.id, q: people(:top_leader).first_name }
+      expect(assigns(:invoices)).to have(2).item
+    end
+
+    it 'GET#index finds invoices by recipient.email' do
+      update_issued_at_to_current_year
+      get :index, params: { group_id: group.id, q: people(:top_leader).email }
+      expect(assigns(:invoices)).to have(2).item
+    end
+
+    it 'GET#index finds invoices by recipient.company_name' do
+      update_issued_at_to_current_year
+      people(:top_leader).update!(company_name: 'Hitobito Fanclub')
+      get :index, params: { group_id: group.id, q: 'hitobito' }
+      expect(assigns(:invoices)).to have(2).item
+    end
+
+    it 'GET#index finds nothing by owner.company_name' do
+      update_issued_at_to_current_year
+      creator = people(:bottom_member)
+      creator.update!(company_name: 'Greedy Ltd')
+      Invoice.update_all(creator_id: creator.id)
+      get :index, params: { group_id: group.id, q: creator.company_name }
+      expect(assigns(:invoices)).to be_empty
+    end
+
     it 'GET#index finds nothing for dummy' do
       get :index, params: { group_id: group.id, q: 'dummy' }
       expect(assigns(:invoices)).to be_empty
@@ -83,10 +111,13 @@ describe InvoicesController do
       expect(assigns(:invoices)).to have(1).item
     end
 
-    it 'filters invoices by year' do
+    it 'filters invoices by daterange' do
       invoice.update(issued_at: Date.today)
-      get :index, params: { group_id: group.id, year: 1.year.ago.year }
+      get :index, params: { group_id: group.id,
+                            from: 1.year.ago.beginning_of_year,
+                            to: 1.year.ago.end_of_year  }
       expect(assigns(:invoices)).not_to include invoice
+
     end
 
     it 'filters invoices by year with default set to current year' do
@@ -252,14 +283,36 @@ describe InvoicesController do
       expect(json[:links][:'invoices.recipient'][:href]).to eq 'http://test.host/people/{invoices.recipient}.json'
     end
   end
+  
+  context 'DELETE#destroy' do
+    it 'moves invoice to cancelled state' do
+      expect do
+        delete :destroy, params: { group_id: group.id, id: invoice.id }
+      end.not_to change { group.invoices.count }
+      expect(invoice.reload.state).to eq 'cancelled'
+      expect(response).to redirect_to group_invoices_path(group)
+      expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
+    end
 
-  it 'DELETE#destroy moves invoice to cancelled state' do
-    expect do
-      delete :destroy, params: { group_id: group.id, id: invoice.id }
-    end.not_to change { group.invoices.count }
-    expect(invoice.reload.state).to eq 'cancelled'
-    expect(response).to redirect_to group_invoices_path(group)
-    expect(flash[:notice]).to eq 'Rechnung wurde storniert.'
+    it 'updates invoice_list' do
+      list = InvoiceList.create(title: 'List', group: group, invoices: [invoice, invoices(:sent)])
+
+      list.update_total
+      expect(list.recipients_total).to eq(2)
+      expect(list.amount_total).to eq(5.85)
+
+      invoice.reload
+
+      expect do
+        delete :destroy, params: { group_id: group.id, id: invoice.id }
+      end.not_to change { group.invoices.count }
+      expect(invoice.reload.state).to eq 'cancelled'
+
+      list.reload
+
+      expect(list.recipients_total).to eq(1)
+      expect(list.amount_total).to eq(0.5)
+    end
   end
 
   context 'post' do

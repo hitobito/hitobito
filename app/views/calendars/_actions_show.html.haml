@@ -1,0 +1,9 @@
+-#  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= button_action_edit if can?(:edit, entry)
+= button_action_destroy if can?(:destroy, entry)
+
+= action_button(t('.copy_url'), '#', :copy, data: { copy_to_clipboard: group_calendar_feed_url(entry.group, entry, calendar_token: entry.token, format: :ics) })

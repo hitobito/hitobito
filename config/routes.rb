@@ -43,6 +43,7 @@ Hitobito::Application.routes.draw do
     get '/people/company_name' => 'person/company_name#index', as: :query_company_name
     get '/people/:id' => 'person/top#show', as: :person
     get '/events/:id' => 'event/top#show', as: :event
+    get '/invoices/:id' => 'invoices/top#show', as: :invoices
 
     get 'list_groups' => 'group/lists#index', as: :list_groups
 
@@ -72,6 +73,9 @@ Hitobito::Application.routes.draw do
 
       resources :invoices do
         resources :payments, only: :create
+        collection do
+          resource :evaluations, only: [:show], module: :invoices, as: 'invoices_evaluations'
+        end
       end
       resources :invoice_articles
       resource :invoice_config, only: [:edit, :show, :update]
@@ -98,9 +102,11 @@ Hitobito::Application.routes.draw do
 
           post 'totp_reset' => 'people/totp_reset#create', as: 'totp_reset'
           post 'totp_disable' => 'people/totp_disable#create', as: 'totp_disable'
+          post 'password_override' => 'person/security_tools#password_override'
 
           get 'history' => 'person/history#index'
           get 'log' => 'person/log#index'
+          get 'security_tools' => 'person/security_tools#index'
           get 'colleagues' => 'person/colleagues#index'
           get 'personal_invoices' => 'person/invoices#index'
           get 'messages' => 'person/messages#index'
@@ -224,6 +230,10 @@ Hitobito::Application.routes.draw do
 
           get 'qualifications' => 'qualifications#index'
           put 'qualifications' => 'qualifications#update'
+
+          post 'tags' => 'tags#create'
+          delete 'tags' => 'tags#destroy'
+          get 'tags/query' => 'tags#query'
         end
 
       end
@@ -260,6 +270,10 @@ Hitobito::Application.routes.draw do
 
         resources :mailchimp_synchronizations, only: [:create]
         resources :recipient_counts, controller: 'mailing_lists/recipient_counts', only: [:index]
+      end
+
+      resources :calendars do
+        get 'feed' => 'calendars/feeds#index'
       end
 
       resource :csv_imports, only: [:new, :create], controller: 'person/csv_imports' do

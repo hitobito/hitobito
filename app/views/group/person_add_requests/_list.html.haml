@@ -6,7 +6,7 @@
 - if @group.require_person_add_requests || @add_requests.present?
   = table(@add_requests, class: 'table table-striped table-hover') do |t|
     - t.col('') do |r|
-      .profil= image_tag(r.person.picture.thumb.url, size: '32x32')
+      .profil= image_tag(upload_url(r.person, :picture, variant: :thumb), size: '32x32')
 
     - t.col(Person::AddRequest.human_attribute_name(:person)) do |r|
       %strong

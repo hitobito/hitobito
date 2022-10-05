@@ -7,10 +7,6 @@
 
 module InvoicesHelper
 
-  def format_invoice_list_recipients_total(invoice_list)
-    [invoice_list.recipients_processed, invoice_list.recipients_total].uniq.join(' / ')
-  end
-
   def format_invoice_list_amount_paid(invoice_list)
     invoice = invoice_list.invoice || invoice_list.group.invoices.build
     invoice.decorate.format_currency(invoice_list.amount_paid)
@@ -62,6 +58,10 @@ module InvoicesHelper
 
   def invoices_export_dropdown
     Dropdown::Invoices.new(self, params, :download).export
+  end
+
+  def invoices_evaluation_export_dropdown
+    Dropdown::Invoices::Evaluation.new(self, params, :download).export
   end
 
   def invoices_print_dropdown

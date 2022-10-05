@@ -62,11 +62,12 @@ body:
       description: Wenn es mehr ist, als nur eine normale Fehlerseite, kann auch gerne ein Screenshot hinzugefügt werden. Hier wäre auch Platz für eine Technische Spezifikation oder ähnliches.
     validations:
       required: false
-  - type: markdown
+  - type: textarea
+    id: todos
     attributes:
-      value: |
-        Vielen Dank für die Fehlermeldung. Wir haben hier schonmal unsere ToDos vorbereitet:
-
+      label: ToDos
+      description: Unsere vorbereiteten ToDos
+      placeholder: |
         ToDo
         ----
 
@@ -75,3 +76,9 @@ body:
         - [ ] Labels für `interest-xyz` setzen
         - [ ] Schritte für Fehlerbehebung erfassen
         - [ ] Team informieren, um es einzuplanen
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        Vielen Dank für die Fehlermeldung. Es hilft uns, hitobito für sehr viele Leute besser zu machen.

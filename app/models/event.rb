@@ -147,6 +147,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
            class_name: 'Person::AddRequest::Event',
            dependent: :destroy
 
+  acts_as_taggable
+
   ### VALIDATIONS
 
   validates_by_schema
@@ -298,6 +300,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     def ensure_role_type!(type)
       return if type < Event::Role
       raise ArgumentError, "#{type} must be a subclass of Event::Role"
+    end
+
+    def tags
+      Event.tags_on(:tags).order(:name).pluck(:name)
     end
   end
 

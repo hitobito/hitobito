@@ -19,13 +19,27 @@ describe Groups::SelfRegistrationController do
     end
 
     describe 'GET new' do
-      it 'redirects to group' do
+      it 'redirects to group if signed in' do
         sign_in(person)
 
         get :new, params: { group_id: group.id }
 
         is_expected.to redirect_to(group_path(group.id))
       end
+    end
+
+    it 'redirects to group if group has registration disabled' do
+      group.update!(self_registration_role_type: '')
+
+      get :new, params: { group_id: group.id }
+
+      is_expected.to redirect_to(group_path(group.id))
+    end
+
+    it 'redirects to group if group has registration enabled' do
+      get :new, params: { group_id: group.id }
+
+      is_expected.to redirect_to(group_path(group.id))
     end
 
     describe 'POST create' do
@@ -59,6 +73,14 @@ describe Groups::SelfRegistrationController do
             get :new, params: { group_id: group.id }
 
             is_expected.to render_template('groups/self_registration/new')
+          end
+
+          it 'redirects to group if group has registration disabled' do
+            group.update!(self_registration_role_type: '')
+
+            get :new, params: { group_id: group.id }
+
+            is_expected.to redirect_to(group_path(group.id))
           end
         end
 
@@ -123,6 +145,24 @@ describe Groups::SelfRegistrationController do
           expect(role.group).to eq(group)
 
           is_expected.to redirect_to(new_person_session_path)
+        end
+
+        it 'does not create a person when creating the role fails' do
+          allow_any_instance_of(Role).to receive(:save!)
+                                             .and_raise('test exception when saving role')
+
+          expect do
+            post :create, params: {
+                group_id: group.id,
+                role: {
+                    group_id: group.id,
+                    new_person: { first_name: 'Bob', last_name: 'Miller' }
+                }
+            }
+          end.to change { Person.count }.by(0)
+            .and change { Role.count }.by(0)
+            .and change { ActionMailer::Base.deliveries.count }.by(0)
+            .and raise_error('test exception when saving role')
         end
 
         it 'does not send any emails when no email provided' do

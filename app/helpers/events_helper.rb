@@ -84,9 +84,7 @@ module EventsHelper
   end
 
   def course_groups
-    return Group.course_offerers if can?(:list_all, Event::Course)
-
-    Group.course_offerers.where(id: current_user.groups_hierarchy_ids)
+    Group.course_offerers
   end
 
   def quick_select_course_groups
@@ -103,12 +101,8 @@ module EventsHelper
     texts = [entry.application_conditions]
     texts.unshift(entry.kind.application_conditions) if entry.course_kind?
     safe_join(texts.select(&:present?).map do |text|
-      auto_link(simple_format(text), html: { target: '_blank' })
+      safe_auto_link(text, html: { target: '_blank' })
     end)
-  end
-
-  def format_event_description(event)
-    auto_link(simple_format(event.description), html: { target: '_blank' })
   end
 
   def format_event_state(event)

@@ -55,8 +55,8 @@ describe Event::KindsController do
       post :create, params: {
                                   event_kind: { label: 'Foo',
                                                               precondition_qualification_kinds: {
-                                                                '0' => { qualification_kind_ids: [sl.id, gl.id] },
-                                                                '2' => { qualification_kind_ids: [sl.id, ql.id] }
+                                                                '0' => { validity: :valid, qualification_kind_ids: [sl.id, gl.id] },
+                                                                '2' => { validity: :valid, qualification_kind_ids: [sl.id, ql.id] }
                                                               },
                                                               qualification_kinds: {
                                                                 participant: {
@@ -99,15 +99,15 @@ describe Event::KindsController do
 
     it 'removes association from existing event kind' do
       kind.event_kind_qualification_kinds.create!(
-        category: 'precondition', role: 'participant', grouping: 1, qualification_kind_id: gl.id)
+        category: 'precondition', role: 'participant', grouping: 1, qualification_kind_id: gl.id, validity: :valid)
       kind.event_kind_qualification_kinds.create!(
-        category: 'precondition', role: 'participant', grouping: 2, qualification_kind_id: sl.id)
+        category: 'precondition', role: 'participant', grouping: 2, qualification_kind_id: sl.id, validity: :valid)
       expect(kind.event_kind_qualification_kinds.count).to eq 6
 
       put :update, params: { id: kind.id, event_kind: { label: kind.label,
                                               precondition_qualification_kinds: {
-                                                '0' => { qualification_kind_ids: [ql.id] },
-                                                '1' => { qualification_kind_ids: [gl.id] },
+                                                '0' => { validity: :valid, qualification_kind_ids: [ql.id] },
+                                                '1' => { validity: :valid, qualification_kind_ids: [gl.id] },
                                               },
                                               qualification_kinds: { participant: { prolongation: {
                                                 qualification_kind_ids: [gl.id] } } } } }

@@ -1,0 +1,9 @@
+%span.chip.event-tag{data: {tag_id: tag.id}, rel: :tooltip, 'data-html': true, title: tag.hitobito_tooltip }
+  = format_tag_name(tag)
+  - if can?(:manage_tags, event)
+    = link_to icon(:times),
+              group_event_tags_path(event_id: event.id, name: tag.name),
+              method: :delete,
+              data: { tag_id: tag.id },
+              remote: true,
+              class: 'event-tag-remove'

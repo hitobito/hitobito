@@ -20,10 +20,11 @@ class InvoicesController < CrudController
                          sequence_number: Invoice.order_by_sequence_number_statement }
   self.remember_params += [:year, :state, :due_since, :invoice_list_id]
 
-  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.email']
+  self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.first_name',
+                         'people.email', 'people.company_name']
   self.permitted_attrs = [:title, :description, :state, :due_at,
                           :recipient_id, :recipient_email, :recipient_address,
-                          :payment_information, :payment_purpose,
+                          :payment_information, :payment_purpose, :hide_total,
                           invoice_items_attributes: [
                             :id,
                             :name,
@@ -39,6 +40,8 @@ class InvoicesController < CrudController
   before_render_index :year  # sets ivar used in view
 
   helper_method :group, :invoice_list
+
+  after_destroy :update_invoice_list_total
 
   def new
     recipient = model_params && Person.find(model_params[:recipient_id])
@@ -181,6 +184,10 @@ class InvoicesController < CrudController
 
   def invoice_list
     parent if parent.is_a?(InvoiceList)
+  end
+
+  def update_invoice_list_total
+    entry.invoice_list&.update_total
   end
 
 end

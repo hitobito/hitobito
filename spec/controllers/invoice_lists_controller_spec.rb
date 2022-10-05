@@ -26,7 +26,7 @@ describe InvoiceListsController do
       expect(response).to redirect_to group_invoices_path(group, returning: true)
     end
 
-    it "may not index when person has finance permission on layer group" do
+    it "may not index when person has no finance permission on layer group" do
       expect do
         get :new, params: { group_id: groups(:top_layer).id, invoice_list: { recipient_ids: '' } }
       end.to raise_error(CanCan::AccessDenied)
@@ -46,12 +46,6 @@ describe InvoiceListsController do
     let(:column) { node.find('#main table tbody tr td:eq(3)') }
 
     before { sign_in(people(:top_leader)) }
-
-    it 'renders processed and total Empfänger count' do
-      InvoiceList.create!(group: group, title: 'title', recipients_processed: 10, recipients_total: 20)
-      get :index, params: { group_id: group.id }
-      expect(column).to have_text("10 / 20")
-    end
 
     it 'renders final Empfänger count' do
       InvoiceList.create!(group: group, title: 'title', recipients_processed: 20, recipients_total: 20)
@@ -109,9 +103,8 @@ describe InvoiceListsController do
       expect(assigns(:invoice_list).recipients).to eq([leader])
     end
 
-    it "handles  blank filter params" do
-      leader = Fabricate(Group::BottomLayer::Leader.sti_name, group: group).person
-      role_types = [Group::BottomLayer::Leader]
+    it "handles blank filter params" do
+      Fabricate(Group::BottomLayer::Leader.sti_name, group: group)
 
       get :new, {
         params: {
@@ -256,7 +249,7 @@ describe InvoiceListsController do
         end.not_to change { Delayed::Job.count }
       end
       expect(response).to redirect_to group_invoices_path(group, returning: true)
-      expect(flash[:notice][0]).to match /Rechnung \d+-\d+ wurde gestellt./
+      expect(flash[:notice][0]).to match(/Rechnung \d+-\d+ wurde gestellt./)
       expect(invoice.reload.state).to eq 'issued'
       expect(invoice.due_at).to be_present
       expect(invoice.issued_at).to be_present

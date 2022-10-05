@@ -113,10 +113,9 @@ describe Person::Filter::Role do
         it 'loads people in layer when no types given' do
           expect(entries.collect(&:id)).to match_array([people(:bottom_member),
                                                         @bl_leader,
-                                                        @bl_extern,
                                                         @bg_leader,
                                                         @bg_member].collect(&:id))
-          expect(list_filter.all_count).to eq(5)
+          expect(list_filter.all_count).to eq(4)
         end
 
         context 'with specific types' do
@@ -139,11 +138,10 @@ describe Person::Filter::Role do
         expect(entries.collect(&:id)).to match_array([people(:top_leader),
                                                       people(:bottom_member),
                                                       @tg_member,
-                                                      @tg_extern,
                                                       @bl_leader,
                                                       @bg_leader,
                                                       ].collect(&:id))
-        expect(list_filter.all_count).to eq(8)
+        expect(list_filter.all_count).to eq(6)
       end
 
       context 'with specific types' do
@@ -336,12 +334,7 @@ describe Person::Filter::Role do
         let(:role) { person.roles.create!(type: role_type.sti_name, group: group) }
 
         it 'does not find role deleted before timeframe' do
-          role.update(deleted_at: 1.day.ago)
-          expect(filter(start_at: now).entries).to be_empty
-        end
-
-        it 'does not find role created after timeframe' do
-          role.update(created_at: 1.day.from_now)
+          role.update(created_at: 2.days.ago, deleted_at: 1.day.ago)
           expect(filter(start_at: now).entries).to be_empty
         end
 

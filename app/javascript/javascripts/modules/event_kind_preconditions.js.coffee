@@ -27,6 +27,8 @@ app.EventKindPreconditions = {
     e.preventDefault()
     obj = app.EventKindPreconditions
     ids = $('#event_kind_precondition_kind_ids').val()
+    validity = $('#event_kind_precondition_kind_validity').val()
+
     if ids.length
       grouping = $('.precondition-grouping').length
       html = '<div class="precondition-grouping">' +
@@ -34,6 +36,7 @@ app.EventKindPreconditions = {
         obj.buildConjunction(grouping) +
         obj.buildSentence() +
         obj.buildRemoveLink() +
+        obj.buildValidityFields(grouping) +
         '</div>'
       $('#add_precondition_grouping').before(html)
     obj.hideFields(e);
@@ -43,6 +46,13 @@ app.EventKindPreconditions = {
     '<input name="event_kind[precondition_qualification_kinds][' + grouping +
       '][qualification_kind_ids][]" type="hidden" value="' + id + '" />'
 
+  buildValidityFields: (grouping) ->
+    validId = 'event_kind_precondition_qualification_kinds_' + grouping + '_valid'
+    validOrExpiredId = 'event_kind_precondition_qualification_kinds_' + grouping + '_valid_or_expired'
+    '<label class="precondition-validity radio" for="' + validId + '">' + $('#precondition_summary').data('validity-valid') + '<input id="' + validId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid" /></label>' + 
+    '<label class="precondition-validity radio" for="' + validOrExpiredId + '">' + $('#precondition_summary').data('validity-valid-or-expired') + '<input id="' + validOrExpiredId + '" name="event_kind[precondition_qualification_kinds][' + grouping + '][validity]" type="radio" value="valid_or_expired" checked="checked" /></label>'
+
+
   buildConjunction: (grouping) ->
     if grouping
       '<span class="muted">' + $('#precondition_summary').data('or') + '</span> '
@@ -50,7 +60,7 @@ app.EventKindPreconditions = {
       ''
 
   buildRemoveLink: ->
-    ' <a href="#" class="remove-precondition-grouping"><i class="icon icon-trash"></i></a>'
+    ' <a href="#" class="remove-precondition-grouping"><i class="far fa-trash-alt"></i></a>'
 
   buildSentence: ->
     labels = app.EventKindPreconditions.fetchLabels()

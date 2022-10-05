@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -71,6 +71,10 @@ class Event::Kind < ActiveRecord::Base
 
   def grouped_qualification_kind_ids(category, role)
     event_kind_qualification_kinds.grouped_qualification_kind_ids(category, role)
+  end
+
+  def grouped_qualification_kind_ids_and_validity(category, role)
+    event_kind_qualification_kinds.grouped_qualification_kind_ids_and_validity(category, role)
   end
 
   # Soft destroy if events exist, otherwise hard destroy

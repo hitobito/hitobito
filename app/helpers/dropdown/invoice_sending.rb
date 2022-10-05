@@ -30,7 +30,8 @@ module Dropdown
     end
 
     def add_item(key, options = {})
-      path = template.group_invoice_list_path(template.parent, options)
+      group = template.parent.is_a?(Group) ? template.parent : template.parent.group
+      path = template.group_invoice_list_path(group, options)
       super(translate(key), path, data: { method: :put, checkable: true })
     end
 

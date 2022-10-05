@@ -18,7 +18,7 @@ describe MigrateMailLog do
   let(:migration) { described_class.new.tap { |m| m.verbose = false } }
   let(:mailing_list) { mailing_lists(:leaders) }
 
-  let(:mail_logs) do
+  let(:mail_log_entries) do
     10.times.collect do
       MailLog.create!(
         mail_from: Faker::Internet.email,
@@ -30,7 +30,7 @@ describe MigrateMailLog do
   end
 
   let(:bulk_mails) do
-    mail_logs.collect do |log|
+    mail_log_entries.collect do |log|
       Message::BulkMail.create!(
         subject: Faker::Book.genre,
         mail_log: log

@@ -49,7 +49,7 @@ class Invoice::Qrcode
   end
 
   def payment
-    amount = format('%<total>.2f', total: @invoice.total) unless @invoice.total.zero?
+    amount = format('%<total>.2f', total: @invoice.total) if show_total?
     { amount: amount, currency: @invoice.currency }
   end
 
@@ -118,11 +118,20 @@ class Invoice::Qrcode
 
   def extract_contact(contactable) # rubocop:disable Metrics/MethodLength
     parts = contactable.strip.to_s.split(/\r*\n/)
+    address_line1 = nil
+    address_line2 = nil
+    if parts.count > 1
+      address_line1 = parts.last
+    end
+    if parts.count > 2
+      address_line2 = address_line1
+      address_line1 = parts.second_to_last
+    end
     {
       address_type: 'K',
       full_name: parts.first,
-      address_line1: parts.second,
-      address_line2: parts.third,
+      address_line1: address_line1,
+      address_line2: address_line2,
       zip_code: nil,
       town: nil,
       country: 'CH'
@@ -135,6 +144,10 @@ class Invoice::Qrcode
 
   def image(filename)
     Rails.root.join("app/domain/invoice/assets/#{filename}")
+  end
+
+  def show_total?
+    !@invoice.hide_total? && @invoice.total.nonzero?
   end
 end
 

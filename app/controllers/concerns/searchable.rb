@@ -29,7 +29,7 @@ module Searchable
     def search_param
       return '' unless params.key?(search_key)
 
-      params[search_key].to_s
+      params[search_key].to_s.strip
     end
 
     # Enhance the list entries with an optional search criteria

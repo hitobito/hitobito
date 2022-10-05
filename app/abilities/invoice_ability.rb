@@ -13,6 +13,7 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   on(InvoiceList) do
+    permission(:finance).may(:update, :destroy).in_layer_if_active
     permission(:finance).may(:create).in_layer_with_receiver
     permission(:finance).may(:index_invoices).in_layer_with_receiver_if_active
   end
@@ -46,7 +47,8 @@ class InvoiceAbility < AbilityDsl::Base
   def in_layer_with_receiver
     return in_layer unless subject.receiver
 
-    in_layer && in_layer(subject.receiver.group.layer_group)
+    group = subject.receiver.is_a?(Group) ? subject.receiver : subject.receiver.group
+    in_layer && in_layer(group.layer_group)
   end
 
   def in_layer_if_active

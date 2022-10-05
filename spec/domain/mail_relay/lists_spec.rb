@@ -378,7 +378,9 @@ describe MailRelay::Lists do
           message.from = 'John Nonsense <>'
         end
 
-        it { is_expected.not_to be_sender_allowed }
+        it { is_expected.not_to be_sender_valid }
+        it { is_expected.to be_sender_allowed }
+
         its(:sender_email) { is_expected.to eq('John Nonsense <>') }
         its(:potential_senders) { is_expected.to be_blank }
         its(:receivers) { is_expected.to match_array subscribers.collect(&:email) }

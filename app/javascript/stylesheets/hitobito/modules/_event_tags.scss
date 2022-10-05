@@ -1,0 +1,30 @@
+.event-tags-category {
+  display: table-row;
+  margin-top: 12px;
+}
+.event-tags-category-title,
+.event-tags-category-list {
+  display: table-cell;
+  padding-bottom: 6px;
+  vertical-align: top;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.event-tags-category-title {
+  padding-bottom: 10px;
+  padding-right: 10px;
+  text-align: right;
+  padding-top: 2px;
+}
+
+.event-tags-add-form {
+  display: inline-block;
+  margin-bottom: 4px;
+
+  input[type="text"] {
+    margin-bottom: 0 !important;
+  }
+}

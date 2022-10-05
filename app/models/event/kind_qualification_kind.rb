@@ -1,9 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: event_kind_qualification_kinds
@@ -22,6 +23,7 @@
 #
 
 class Event::KindQualificationKind < ActiveRecord::Base
+  include I18nEnums
 
   CATEGORIES = %w(qualification precondition prolongation).freeze
   ROLES = %w(participant leader).freeze
@@ -33,6 +35,13 @@ class Event::KindQualificationKind < ActiveRecord::Base
         pluck(:grouping, :qualification_kind_id).
         group_by(&:first).
         map { |_, v| v.map(&:last) }
+    end
+
+    def grouped_qualification_kind_ids_and_validity(category, role)
+      where(category: category, role: role).
+        pluck(:grouping, :qualification_kind_id, :validity).
+        group_by(&:first).
+        map { |_, v| v.map { |a| a[1..2] } }
     end
 
   end
@@ -49,5 +58,7 @@ class Event::KindQualificationKind < ActiveRecord::Base
   validates_by_schema
   validates :category, inclusion: { in: CATEGORIES }
   validates :role, inclusion: { in: ROLES }
+
+  i18n_enum :validity, %w(valid valid_or_expired)
 
 end

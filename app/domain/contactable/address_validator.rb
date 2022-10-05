@@ -14,6 +14,8 @@ module Contactable
 
         if invalid?(person)
           tag_invalid!(person, person.address)
+        else
+          remove_invalid_tagging!(person) if invalid_tagging_exists?(person)
         end
       end
 
@@ -30,7 +32,7 @@ module Contactable
     private
 
     def should_be_validated?(person)
-      person.tags.exclude?(invalid_override_tag) && person.tags.exclude?(invalid_tag)
+      person.tags.exclude?(invalid_override_tag)
     end
 
     def invalid?(person)
@@ -53,6 +55,18 @@ module Contactable
                             hitobito_tooltip: invalid_address,
                             context: :tags,
                             tag: invalid_tag)
+    end
+
+    def remove_invalid_tagging!(person)
+      ActsAsTaggableOn::Tagging
+        .destroy_by(taggable: person,
+                    tag: invalid_tag)
+    end
+
+    def invalid_tagging_exists?(person)
+      ActsAsTaggableOn::Tagging
+        .exists?(taggable: person,
+                 tag: invalid_tag)
     end
 
     def invalid_tag

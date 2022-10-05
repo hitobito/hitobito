@@ -14,8 +14,7 @@ module Dropdown
     def initialize(dropdown, item_options = {})
       @dropdown = dropdown
       @households = item_options.delete(:households)
-      @item_options = item_options.reverse_merge(target: :new,
-                                                 class: 'export-label-format')
+      @item_options = item_options.reverse_merge(class: 'export-label-format')
     end
 
     def add
@@ -39,7 +38,7 @@ module Dropdown
         parent.sub_items << Title.new(dropdown.template.t('dropdown.last_used'))
         parent.sub_items << Item.new(last_format.to_s,
                                      export_label_format_path(last_format.id),
-                                     target: :new, class: 'export-label-format')
+                                     class: 'export-label-format')
         parent.sub_items << Divider.new
       end
     end
@@ -51,7 +50,7 @@ module Dropdown
     def add_label_format_items(parent)
       LabelFormat.list.for_person(user).each do |label_format|
         parent.sub_items << Item.new(label_format, export_label_format_path(label_format.id),
-                                     target: :new, class: 'export-label-format')
+                                     class: 'export-label-format')
       end
     end
 

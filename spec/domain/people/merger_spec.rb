@@ -115,8 +115,8 @@ describe People::Merger do
       expect do
         merger.merge!
       end.to change(Person, :count).by(-1)
+         .and change { person_roles.reload.count }.by(2)
 
-      expect(person_roles.reload.count).to eq(2)
       group_ids = person_roles.map(&:group_id)
       expect(group_ids).to include(groups(:bottom_group_one_one).id)
       expect(group_ids).to include(groups(:bottom_group_two_one).id)

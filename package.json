@@ -28,6 +28,7 @@
     "turbolinks": "~5.0.1"
   },
   "devDependencies": {
+    "@webpack-cli/serve": "^1.6.1",
     "webpack-dev-server": "~3"
   },
   "resolutions": {

@@ -29,6 +29,16 @@ module FilterHelper
     direct_filter(attr, label) { select_tag(attr, select_options, options) }
   end
 
+  def direct_filter_date(attr, label = nil, options = {})
+    options[:class] ||= 'span2 date'
+    direct_filter(attr, label) do
+      content_tag(:div, class: 'input-prepend') do
+        content_tag(:span, icon(:'calendar-alt'), class: 'add-on') +
+          text_field(nil, attr, options)
+      end
+    end
+  end
+
   def set_filter(filter_params = {})
     anchor = filter_params.delete :anchor
     params.to_unsafe_h.deep_merge(filter: filter_params, anchor: anchor)

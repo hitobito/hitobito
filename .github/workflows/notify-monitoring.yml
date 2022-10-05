@@ -1,0 +1,51 @@
+name: 'Notify Statuscope'
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - Rails Lint and Test
+      - Wagon - Rails Lint and Test
+    types:
+      - completed
+    branches:
+      - master
+
+jobs:
+  notify:
+    runs-on: 'ubuntu-latest'
+    env:
+      HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
+      HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
+
+    steps:
+      - name: 'Check Configuration'
+        run: |
+          HEARTBEAT_APPLICATION="$(basename "${GITHUB_REPOSITORY}-tests" | tr _ -)"
+          echo "HEARTBEAT_APPLICATION=${HEARTBEAT_APPLICATION}" >> $GITHUB_ENV
+          echo "HEARTBEAT_APPLICATION is $HEARTBEAT_APPLICATION"
+          (
+            [[ "$HEARTBEAT_URL" != '' ]] &&
+            [[ "$HEARTBEAT_TOKEN" != '' ]] &&
+            echo "HEARTBEAT_URL and HEARTBEAT_TOKEN are present."
+          ) || (
+            echo "Please ensure that you have HEARTBEAT_URL and HEARTBEAT_TOKEN set as secrets"
+            exit 1
+          )
+
+      - name: 'Send success'
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        run: >
+          curl -v $HEARTBEAT_URL/signal \
+            -d application=$HEARTBEAT_APPLICATION \
+            -d token=$HEARTBEAT_TOKEN \
+            -d status=ok | jq .
+
+      - name: 'Send failure'
+        if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+        run: >
+          curl -v $HEARTBEAT_URL/signal \
+            -d application=$HEARTBEAT_APPLICATION \
+            -d token=$HEARTBEAT_TOKEN \
+            -d status=fail | jq .
+

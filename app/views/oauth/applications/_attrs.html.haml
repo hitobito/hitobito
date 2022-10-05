@@ -3,7 +3,7 @@
 %dl.dl-horizontal
   %dt.muted Application Logo
   %dd
-    = image_tag(entry.logo_url, size: '64x64')
+    = image_tag(upload_variant(entry, :logo, :thumb), size: '64x64')
 
 %dl.dl-horizontal
   %dt.muted Authorization Endpoint

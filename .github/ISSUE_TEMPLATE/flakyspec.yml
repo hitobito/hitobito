@@ -1,0 +1,28 @@
+name: Flaky Spec
+description: Create a report to help us reduce sometimes failing Specs
+title: 'SPECS: Flaky Spec'
+labels:
+  - flaky specs
+  - needs-confirmation
+body:
+  - type: input
+    id: spec
+    attributes:
+      label: Welche Spec ist fehlgeschlagen?
+      description: Dateiname, Zeile und idealerweise auch die Beschreibung der Spec
+    validations:
+      required: true
+  - type: input
+    id: seed
+    attributes:
+      label: Welcher Seed wurde verwendet?
+      description: Dies hilft, nicht sauber isolierte Specs zu finden (Randomized with Seed ...)
+    validations:
+      required: true
+  - type: textarea
+    id: stacktrace
+    attributes:
+      label: Stacktrace
+      description: Wie äußert sich der Fehler?
+    validations:
+      required: true

@@ -1,24 +1,25 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 source 'https://rubygems.org'
 
-gem 'rails', '= 6.1.4.1'
+gem 'rails', '= 6.1.6.1'
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on'
 gem 'airbrake'
 gem 'awesome_nested_set'
-gem 'axlsx', '>= 3.0.0.pre'
+gem 'aws-sdk-s3', require: false
 gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
 gem 'bootsnap', require: false
 gem 'cancancan'
 gem 'carrierwave'
+gem 'caxlsx', '~>3.0.0'
 gem 'cmess'
 gem 'commonmarker'
 gem 'config'
@@ -36,12 +37,12 @@ gem 'draper-cancancan'
 gem 'epics' # client for EBICS-connections to banks
 gem 'faker'
 gem 'faraday'
-gem 'gibbon', '~> 3.2'
+gem 'gibbon', '~> 3.4'
 gem 'globalize'
 gem 'haml'
 gem 'http_accept_language'
 gem 'icalendar'
-gem 'image_processing', '~> 1.2'
+gem 'image_processing', '~> 1.12'
 gem 'ledermann-rails-settings'
 gem 'lograge'
 gem 'lograge-sql'
@@ -70,7 +71,7 @@ gem 'remotipart'
 gem 'rest-client'
 gem 'rotp'
 gem 'rqrcode'
-gem 'rubyzip', '~> 1.3.0'
+gem 'rubyzip'
 gem 'seed-fu'
 gem 'sentry-raven'
 gem 'simpleidn'
@@ -87,6 +88,10 @@ gem 'webpacker'
 
 # load after others because of active record inherited alias chain.
 gem 'kaminari'
+
+gem 'active_storage_validations' # validate filesize, dimensions and content-type of uploads
+gem 'active_storage_variant' # variants for Rails < 7
+gem 'nochmal' # migrate into or between ActiveStorage-Backends
 
 group :development, :test do
   gem 'better_errors'

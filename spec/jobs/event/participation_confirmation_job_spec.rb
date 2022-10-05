@@ -90,7 +90,7 @@ describe Event::ParticipationConfirmationJob do
       context 'with external role in different group with own approvers' do
         it 'only sends to group approvers where role is non-external' do
           Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two))
-          Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_two_one), deleted_at: 1.year.ago)
+          Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: groups(:bottom_group_two_one), created_at: 2.years.ago, deleted_at: 1.year.ago)
           Fabricate(Role::External.name.to_sym, person: person, group: groups(:bottom_group_two_one))
 
           course.update_column(:requires_approval, true)
@@ -100,42 +100,6 @@ describe Event::ParticipationConfirmationJob do
 
           expect(last_email.to.to_set).to eq([app1.email, app2.email].to_set)
         end
-      end
-    end
-  end
-
-  context 'with event contact' do
-    let(:participant) { people(:top_leader) }
-    let(:receiver) { people(:bottom_member) }
-
-    before do
-      course.update(
-        contact: receiver,
-        notify_contact_on_participations: notify
-      )
-    end
-
-    context 'when notifying' do
-      let(:notify) { true }
-
-      it 'sends confirmation and notification email' do
-        subject.perform
-
-        expect(ActionMailer::Base.deliveries.size).to eq(2)
-        expect(ActionMailer::Base.deliveries.map(&:subject)).to eq(
-          [CONFIRMATION_SUBJECT, 'Anlass: Teilnehmer-/in hat sich angemeldet']
-        )
-      end
-    end
-
-    context 'when not notifying' do
-      let(:notify) { false }
-
-      it 'sends confirmation email' do
-        subject.perform
-
-        expect(ActionMailer::Base.deliveries.size).to eq(1)
-        expect(last_email.subject).to eq(CONFIRMATION_SUBJECT)
       end
     end
   end

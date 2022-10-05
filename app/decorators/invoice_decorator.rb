@@ -37,4 +37,14 @@ class InvoiceDecorator < ApplicationDecorator
     model.new_record? ? model.invoice_config.currency : model.currency
   end
 
+  def as_quicksearch
+    { id: id, label: label_with_group, type: :invoice, icon: :'file-invoice' }
+  end
+
+  def label_with_group
+    label = title
+    label += " (#{sequence_number})" if sequence_number
+    h.safe_join([group.to_s, label], ': ')
+  end
+
 end

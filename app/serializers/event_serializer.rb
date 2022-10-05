@@ -75,5 +75,7 @@ class EventSerializer < ApplicationSerializer
     entities :dates, item.dates, EventDateSerializer
     entities :group, item.groups.decorate, GroupSerializer
 
+    property :tags, item.tag_list
+
   end
 end

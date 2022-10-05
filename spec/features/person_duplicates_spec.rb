@@ -34,7 +34,7 @@ describe :person_duplicates, js: true do
 
     modal = page.find('div.modal-dialog')
     expect(modal.find('h5')).to have_content 'Personen zusammenführen'
-    
+
     expect do
       modal.find('button.btn', text: 'Zusammenführen').click
       dst_person = duplicate1.person_1
@@ -53,5 +53,4 @@ describe :person_duplicates, js: true do
       Fabricate('Group::TopLayer::TopAdmin', group: top_layer, person: d.person_2)
     end
   end
-
 end

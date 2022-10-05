@@ -9,6 +9,8 @@ module Messages
   class DispatchJob < BaseJob
     self.parameters = [:message_id]
 
+    INTERVAL = 10.seconds
+
     delegate :update!, :sent_at?, :state, to: :message
 
     def initialize(message)
@@ -17,12 +19,21 @@ module Messages
     end
 
     def perform
-      return update!(state: :finished) if sent_at?
+      # TODO what was this for? See 428080fb9b845d463e29bc05a70367ab57f39749
+      # It breaks rescheduling.
+      # return update!(state: :finished) if sent_at?
 
       update!(sent_at: Time.current, state: :processing)
-      message.dispatcher_class.new(message).run
+      result = message.dispatcher_class.new(message).run
       update!(recipient_count: message.success_count)
-      update!(state: :finished) unless message.text_message? || state == :failed
+
+      if state == :failed
+        nil
+      elsif result.finished?
+        update!(state: :finished)
+      elsif result.needs_reenqueue?
+        reenqueue
+      end
     end
 
     def error(job, exception)
@@ -38,6 +49,19 @@ module Messages
 
     def message
       @message ||= Message.find(@message_id)
+    end
+
+    def reenqueue
+      enqueue!(run_at: next_run)
+    end
+
+    def next_run
+      job = delayed_jobs.first
+      if job
+        [Time.zone.now, job.run_at + INTERVAL].max
+      else
+        INTERVAL.from_now
+      end
     end
   end
 end

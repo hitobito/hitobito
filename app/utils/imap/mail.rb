@@ -24,12 +24,12 @@ class Imap::Mail
     @net_imap_mail.attr['UID']
   end
 
-  def subject_utf8_encoded
+  def subject
     Mail::Encodings.value_decode(envelope.subject)
   end
 
   def date
-    Time.zone.utc_to_local(DateTime.parse(envelope.date))
+    Time.zone.utc_to_local(DateTime.parse(envelope.date.presence || DateTime.now.to_s))
   end
 
   def sender_email
@@ -38,6 +38,18 @@ class Imap::Mail
 
   def sender_name
     envelope.sender[0].name
+  end
+
+  def email_to
+    envelope.to[0].mailbox + '@' + envelope.to[0].host
+  end
+
+  def sender_name
+    envelope.sender[0].name
+  end
+
+  def name_to
+    envelope.to[0].name
   end
 
   def plain_text_body
@@ -51,7 +63,24 @@ class Imap::Mail
   end
 
   def hash
-    Digest::MD5.new.hexdigest(self.mail.raw_source)
+    Digest::MD5.new.hexdigest(raw_source)
+  end
+
+  def raw_source
+    mail.raw_source
+  end
+
+  def original_to
+    mail.header['X-Original-To'].value
+  end
+
+  def list_bounce?
+    bounce_return_path? &&
+      bounce_hitobito_message_uid.present?
+  end
+
+  def bounce_hitobito_message_uid
+    mail.body.raw_source[/X-Hitobito-Message-UID: ([a-z0-9]*)/,1]
   end
 
   def mail
@@ -63,4 +92,14 @@ class Imap::Mail
   def envelope
     @net_imap_mail.attr['ENVELOPE']
   end
+
+  def bounce_return_path?
+    return_path.eql?('') ||
+      return_path.include?('MAILER-DAEMON')
+  end
+
+  def return_path
+    mail.header['Return-Path'].value
+  end
+
 end

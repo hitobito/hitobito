@@ -65,9 +65,10 @@ module Export::Pdf::Participation
         labeled_attr(event, :cost)
       end
 
-      def render_dates(count = 3)
+      def render_dates
         text dates_label, style: :bold
-        height = 80 / count
+        count = event.dates.count
+        height = 30 * count
         event.dates.limit(count).each do |date|
           bounding_box([0, cursor], width: bounds.width, height: height) do
             text "#{date.label_and_location}\n#{date.duration}"

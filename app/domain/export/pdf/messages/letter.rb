@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2021, Die Mitte. This file is part of
+#  Copyright (c) 2020-2022, Die Mitte. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,6 +10,7 @@ module Export::Pdf::Messages
 
     MARGIN = 2.5.cm
     PREVIEW_LIMIT = 4
+    BODY_FONT_SIZE = 9 # meant to be overridden in wagons
 
     class << self
       def export(_format, letter)
@@ -66,7 +67,7 @@ module Export::Pdf::Messages
 
     def render_sections(recipient)
       sections.each do |section|
-        section.render(recipient)
+        section.render(recipient, font_size: BODY_FONT_SIZE)
       end
     end
 
@@ -86,7 +87,7 @@ module Export::Pdf::Messages
 
     def init_reporter
       Export::ProgressReporter.new(
-        AsyncDownloadFile::DIRECTORY.join(@async_download_file),
+        @async_download_file,
         recipients.size
       )
     end
@@ -115,11 +116,17 @@ module Export::Pdf::Messages
     end
 
     def recipients
-      @recipients ||= message_recipients.where('person_id IS NOT NULL')
+      @recipients ||= message_recipients
     end
 
     def message_recipients
-      recipients = @letter.message_recipients.includes(:person)
+      recipients = @letter.
+                   message_recipients.
+                   where('person_id IS NOT NULL').
+                   joins(:person).
+                   order('people.last_name' => :asc).
+                   distinct
+
       if @letter.send_to_households?
         recipients = recipients.group(:address)
       end

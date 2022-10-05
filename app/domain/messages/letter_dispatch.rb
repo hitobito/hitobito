@@ -21,6 +21,8 @@ module Messages
       else
         create_for_people!
       end
+
+      DispatchResult.finished
     end
 
     private
@@ -45,13 +47,13 @@ module Messages
       household_list = People::HouseholdList.new(limit(people, @options[:recipient_limit]&.div(2)))
 
       # first, run a separate batch for people that are grouped in households, because that's slower
-      household_list.households_in_batches(exclude_non_households: true) do |batch|
+      household_list.only_households_in_batches do |batch|
         create_recipient_entries(batch)
         update!(success_count: success_count + batch.size)
       end
 
       # batch run for people without household
-      household_list.people_without_household.find_in_batches do |batch|
+      household_list.people_without_household_in_batches do |batch|
         count = create_recipient_entries(batch)
         update!(success_count: success_count + count)
       end

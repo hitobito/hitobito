@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -35,10 +36,11 @@ describe Export::Tabular::People::PeopleFull do
 
     it 'has correct headers' do
       expect(csv.headers).to eq([
-        'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
-        'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
-        'Zusätzliche Angaben', 'Sprache', 'Hauptebene', 'Rollen',  'Tags', 'Weitere E-Mail Vater',
-        'Telefonnummer Vater', 'Social Media Adresse Skype', 'Elternteil'])
+                                  'Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
+                                  'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',
+                                  'Zusätzliche Angaben', 'Sprache', 'Hauptebene', 'Rollen', 'Tags', 'Weitere E-Mail Vater',
+                                  'Telefonnummer Vater', 'Social Media Adresse Skype', 'Elternteil'
+                                ])
     end
 
     context 'first row' do
@@ -58,13 +60,31 @@ describe Export::Tabular::People::PeopleFull do
     let(:lang) { :fr }
 
     it 'has correct headers' do
-      expect(csv.headers).to eq(
-        ["Prénom", "Nom", "Nom de l'entreprise", "Surnom", "Entreprise",
-         "Adresse e-mail principale", "Adresse", "Code postal", "Lieu", "Pays", "Sexe",
-         "Date de naissance", "Données supplémentaires", "Langue", "Niveau", "Rôles", "Tags",
-         "Adresse e-mail supplémentaire Père", "Numéro de téléphone Père",
-         "Adresse d'un média social Skype", "Parent"]
-      )
+      headers = [
+        'Prénom',
+        'Nom de famille',
+        "Nom de l'entreprise",
+        'Surnom',
+        'Entreprise',
+        'Adresse e-mail principale',
+        'Adresse',
+        'NPA',
+        'Lieu',
+        'Pays',
+        'Sexe',
+        'Date de naissance',
+        'Données supplémentaires',
+        'Langue',
+        'Niveau',
+        'Rôles',
+        'Tags',
+        'Adresse e-mail supplémentaire Père',
+        'Numéro de téléphone Père',
+        "Adresse d'un média social Skype",
+        'Parent'
+      ]
+      expect(csv.headers).to match_array headers
+      expect(csv.headers).to eq headers
     end
 
     context 'first row' do
@@ -75,7 +95,7 @@ describe Export::Tabular::People::PeopleFull do
       its(['Adresse e-mail supplémentaire Père']) { should eq 'vater@example.com' }
       its(["Adresse d'un média social Skype"]) { should eq 'foobar' }
       its(['Parent']) { should eq 'Bottom Member' }
-      its(['Sexe']) { should eq 'Masculin' }
+      its(['Sexe']) { should eq 'masculin' }
     end
   end
 end

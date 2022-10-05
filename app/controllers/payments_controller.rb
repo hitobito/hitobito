@@ -30,4 +30,9 @@ class PaymentsController < CrudController
     I18n.t("#{controller_name}.#{action_name}.flash.success", amount: f(entry.amount))
   end
 
+  def assign_attributes
+    super
+    entry.status = :manually_created
+  end
+
 end

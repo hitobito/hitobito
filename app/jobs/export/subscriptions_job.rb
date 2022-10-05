@@ -26,6 +26,7 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
 
   def exporter
     return Export::Tabular::People::Households if @options[:household]
+
     Export::Tabular::People::PeopleAddress
   end
 

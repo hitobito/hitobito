@@ -8,6 +8,8 @@
 class PeopleController < CrudController
   include RenderPeopleExports
   include AsyncDownload
+  include Tags
+  prepend RenderTableDisplays
 
   self.nesting = Group
 
@@ -19,12 +21,9 @@ class PeopleController < CrudController
                           [family_members_attributes: [:id, :kind, :other_id, :_destroy]] +
                           [household_people_ids: []] +
                           [relations_to_tails_attributes: [:id, :tail_id, :kind, :_destroy]]
-
   FeatureGate.if(:person_language) do
     self.permitted_attrs << [:language]
   end
-
-
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]
@@ -46,7 +45,6 @@ class PeopleController < CrudController
   after_save :show_email_change_info
 
   before_render_show :load_person_add_requests, if: -> { html_request? }
-  before_render_show :load_grouped_person_tags, if: -> { html_request? }
   before_render_index :load_people_add_requests, if: -> { html_request? }
 
   helper_method :list_filter_args
@@ -54,7 +52,7 @@ class PeopleController < CrudController
   def index # rubocop:disable Metrics/AbcSize we support a lot of formats, hence many code-branches
     respond_to do |format|
       format.html  { @people = prepare_entries(filter_entries).page(params[:page]) }
-      format.pdf   { render_pdf(filter_entries, group) }
+      format.pdf   { render_pdf_in_background(filter_entries, group, "people_#{group.id}") }
       format.csv   { render_tabular_entries_in_background(:csv) }
       format.xlsx  { render_tabular_entries_in_background(:xlsx) }
       format.vcf   { render_vcf(filter_entries.includes(:phone_numbers)) }
@@ -148,21 +146,6 @@ class PeopleController < CrudController
     end
   end
 
-  def load_grouped_person_tags
-    @tags = collect_grouped_person_tags
-  end
-
-  def collect_grouped_person_tags
-    tags = entry.taggings.includes(:tag).order('tags.name').each_with_object({}) do |t, memo|
-      tag = t.tag
-      tag.hitobito_tooltip = t.hitobito_tooltip
-
-      memo[tag.category] ||= []
-      memo[tag.category] << tag
-    end
-    ActsAsTaggableOn::Tag.order_categorized(tags)
-  end
-
   def show_add_request_status?
     flash[:notice].blank? && flash[:alert].blank? &&
     params[:body_type].present? && params[:body_id].present?
@@ -180,7 +163,7 @@ class PeopleController < CrudController
   end
 
   def filter_entries
-    entries = person_filter.entries
+    entries = add_table_display_to_query(person_filter.entries, current_person)
     entries = entries.reorder(Arel.sql(sort_expression)) if sorting?
     entries
   end

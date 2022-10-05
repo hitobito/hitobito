@@ -12,5 +12,6 @@
                        data: { url: query_path,
                                person_url: person_path(1).gsub(/\/1$/, ''),
                                group_url: groups_path,
-                               event_url: event_path(1).gsub(/\/1$/, '') }
+                               event_url: event_path(1).gsub(/\/1$/, ''),
+                               invoice_url: invoices_path(1).gsub(/\/1$/, '') }
     = button_tag icon(:search), class: 'btn quicksearch-button'

@@ -7,10 +7,16 @@
 
 module Export::Pdf::Invoice
   class InvoiceInformation < Section
+    include Export::Pdf::AddressRenderers
+    LEFT_ADDRESS_X = 290
+    RIGHT_ADDRESS_X = 0
 
     def render
-      bounding_box([0, 640], width: bounds.width, height: 80) do
-        table(information, cell_style: { borders: [], padding: [1, 20, 0, 0] })
+      float do
+        offset_cursor_from_top 5.1.cm
+        bounding_box(address_position(invoice.group), width: bounds.width, height: 80) do
+          table(information, cell_style: { borders: [], padding: [1, 20, 0, 0] })
+        end
       end
     end
 

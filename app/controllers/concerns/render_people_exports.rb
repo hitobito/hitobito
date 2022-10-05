@@ -26,11 +26,22 @@ module RenderPeopleExports
     send_data vcf, type: :vcf, disposition: 'inline'
   end
 
+  def render_pdf_in_background(people, group, filename)
+    with_async_download_cookie(:pdf, filename) do |filename|
+      Export::LabelsJob.new(:pdf,
+                            current_user.id,
+                            people.pluck(:id),
+                            group.id,
+                            params.slice(:label_format_id, :household)
+                                  .merge(filename: filename)).enqueue!
+    end
+  end
+
   private
 
   def generate_pdf(people, group)
     if params[:label_format_id]
-      household = params[:household] == 'true'
+      household = true?(params[:household])
       Export::Pdf::Labels.new(find_and_remember_label_format).generate(people, household)
     else
       Export::Pdf::List.render(people, group)

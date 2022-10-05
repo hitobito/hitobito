@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -113,7 +113,7 @@ module LayoutHelper
   def header_logo
     logo_group = closest_group_with_logo
 
-    return image_tag(logo_group.logo.to_s) if logo_group
+    return image_tag(upload_url(logo_group, :logo)) if logo_group
 
     wagon_image_pack_tag(Settings.application.logo.image, alt: Settings.application.name)
   end
@@ -123,8 +123,8 @@ module LayoutHelper
   def closest_group_with_logo
     return unless @group
 
-    @group.self_and_ancestors.reverse.find do |group|
-      group.logo.present?
+    @group.self_and_ancestors.includes([:logo_attachment]).reverse.find do |group|
+      upload_exists?(group, :logo)
     end
   end
 
@@ -137,14 +137,29 @@ module LayoutHelper
   end
 
   def button(label, url, icon_name = nil, options = {})
+    disabled_msg = options.delete(:disabled)
+    return disabled_button(label, disabled_msg, icon_name, options) if disabled_msg
+
     add_css_class options, 'btn'
     url = url.is_a?(ActionController::Parameters) ? url.to_unsafe_h.merge(only_path: true) : url
 
     link_to(url, options) do
-      html = [label]
-      html.unshift icon(icon_name) if icon_name
-      safe_join(html, ' ')
+      button_content(label, icon_name)
     end
+  end
+
+  def disabled_button(label, disabled_msg, icon_name = nil, options = {})
+    content_tag(:div, title: disabled_msg) do
+      content_tag(:a, class: 'btn disabled', **options) do
+        button_content(label, icon_name)
+      end
+    end
+  end
+
+  def button_content(label, icon_name = nil)
+    html = [label]
+    html.unshift icon(icon_name) if icon_name
+    safe_join(html, ' ')
   end
 
 end

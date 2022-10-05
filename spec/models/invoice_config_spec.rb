@@ -54,7 +54,38 @@ describe InvoiceConfig do
 
   end
 
-  it 'validates correct payee format'
+  it 'does not validate payee format for non-qr payment_slip' do
+    invoice_config.update(payment_slip: 'ch_es', payee: 'anything goes')
+    expect(invoice_config).to be_valid
+  end
+
+  it 'validates correct payee format for qr payment_slip' do
+    invoice_config.update(payment_slip: 'qr', payee: 'anything goes NOT')
+    expect(invoice_config).not_to be_valid
+    expect(invoice_config.errors.full_messages).to eq ['Einzahlung für muss genau 3 Zeilen enthalten']
+
+    invoice_config.update(
+      payment_slip: 'qr',
+      payee: <<~PAYEE
+        Mando Muster
+        Einestrasse 1
+        4242 Kaff
+        One more line
+      PAYEE
+    )
+    expect(invoice_config).not_to be_valid
+    expect(invoice_config.errors.full_messages).to eq ['Einzahlung für muss genau 3 Zeilen enthalten']
+
+    invoice_config.update(
+      payment_slip: 'qr',
+      payee: <<~PAYEE
+        Mando Muster
+        Einestrasse 1
+        4242 Kaff
+      PAYEE
+    )
+    expect(invoice_config).to be_valid
+  end
 
   it 'validates correct iban format' do
     invoice_config.update(iban: 'wrong format')

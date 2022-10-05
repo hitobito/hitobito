@@ -27,7 +27,7 @@ class SecondFactorAuthenticationController < ApplicationController
         flash_msg = registered_flash
       end
 
-      return_path = after_sign_in_path_for(person)
+      return_path = session.delete(:after_2fa_path)
 
       unless person_signed_in?
         remember_me(person) if remember_me?

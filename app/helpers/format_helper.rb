@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -103,13 +103,23 @@ module FormatHelper
   # Like #render_attrs, but only for attributes with a present value.
   def render_present_attrs(obj, *attrs)
     render_attrs(obj, *attrs) do |a|
-      obj.send(a).present? || obj.send(a).is_a?(FalseClass)
+      attr_present?(obj, a)
     end
   end
 
   # Renders the formatted content of the given attribute with a label.
   def labeled_attr(obj, attr)
     labeled(captionize(attr, object_class(obj)), format_attr(obj, attr))
+  end
+
+  def present_labeled_attr(obj, attr)
+    labeled_attr(obj, attr) if attr_present?(obj, attr)
+  end
+
+  def attr_present?(obj, attr)
+    return false if attr.blank?
+
+    obj.send(attr).present? || obj.send(attr).is_a?(FalseClass)
   end
 
   def format_column(type, val) # rubocop:disable Metrics/CyclomaticComplexity
@@ -119,7 +129,7 @@ module FormatHelper
     when :time    then f(val.to_time) # rubocop:disable Rails/Date
     when :date    then f(val.to_date)
     when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}" # rubocop:disable Rails/Date
-    when :text    then val.present? ? simple_format(h(val)) : EMPTY_STRING
+    when :text    then val.present? ? h(val) : EMPTY_STRING
     when :decimal then f(val.to_s.to_f)
     else f(val)
     end
@@ -202,6 +212,10 @@ module FormatHelper
 
   def object_class(obj)
     obj.respond_to?(:klass) ? obj.klass : obj.class
+  end
+
+  def safe_auto_link(content, options = {})
+    auto_link(strip_tags(content), options)
   end
 
 end

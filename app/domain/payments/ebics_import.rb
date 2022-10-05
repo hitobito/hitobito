@@ -37,9 +37,17 @@ class Payments::EbicsImport
 
   def payments_from_xml(xml)
     Invoice::PaymentProcessor.new(xml).payments.map do |payment|
-      next unless in_payment_provider_config_layer?(payment.invoice&.group) && payment.save
+      if payment.invoice.present?
+        payment.status = :ebics_imported
 
-      payment.invoice.invoice_list&.update_paid
+        next unless in_payment_provider_config_layer?(payment.invoice&.group)
+      else
+        payment.status = :without_invoice
+      end
+      
+      next unless payment.save
+
+      payment.invoice&.invoice_list&.update_paid
 
       payment
     end.compact

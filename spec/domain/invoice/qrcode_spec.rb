@@ -15,8 +15,8 @@ describe Invoice::Qrcode do
       payment_slip: :qr,
       total: 1500,
       iban: 'CH93 0076 2011 6238 5295 7',
-      payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing\nCH",
-      recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland\nCH",
+      payee: "Acme Corp\nHallesche Str. 37\n3007 Hinterdupfing",
+      recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
       reference: 'RF561A1'
     )
   end
@@ -99,6 +99,18 @@ describe Invoice::Qrcode do
     it 'has blank alternative payment method' do
       expect(subject[32]).to be_blank
     end
+
+    it 'has total if total is not hidden' do
+      invoice.hide_total = false
+
+      expect(subject[18]).to eq('1500.00')
+    end
+
+    it 'has no total if total is hidden' do
+      invoice.hide_total = true
+
+      expect(subject[18]).to be_blank
+    end
   end
 
   describe :additional_infos do
@@ -140,7 +152,7 @@ describe Invoice::Qrcode do
     end
 
     it 'handles zip without town' do
-      invoice.recipient_address = "Max Mustermann\nMusterweg 2\n8000\nCH"
+      invoice.recipient_address = "Max Mustermann\nMusterweg 2\n8000"
       expect(subject[:address_type]).to eq "K"
       expect(subject[:full_name]).to eq 'Max Mustermann'
       expect(subject[:address_line1]).to eq 'Musterweg 2'
@@ -151,7 +163,7 @@ describe Invoice::Qrcode do
     end
 
     it 'handles blank lines' do
-      invoice.recipient_address = "Max Mustermann\n \n \nCH"
+      invoice.recipient_address = "Max Mustermann\n \n"
       expect(subject[:address_type]).to eq "K"
       expect(subject[:full_name]).to eq 'Max Mustermann'
       expect(subject[:address_line1]).to be_blank

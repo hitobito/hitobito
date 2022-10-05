@@ -321,4 +321,66 @@ describe Role do
       end
     end
   end
+
+
+  describe 'paranoia scopes' do
+    let(:person) { Fabricate(:person) }
+
+    context 'without_deleted' do
+      subject { person.roles.without_deleted }
+
+      it 'lists roles with future deleted_at' do
+        Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
+                  person: person, group: groups(:bottom_layer_one))
+        marked_for_termination = Fabricate(Group::BottomLayer::Member.name.to_s, label: 'Bar', created_at: Time.zone.yesterday, deleted_at: Time.zone.tomorrow,
+                                           person: person, group: groups(:bottom_layer_one))
+
+        expect(subject.count).to eq(2)
+        expect(subject).to include(marked_for_termination)
+      end
+
+      it 'does not list roles with past deleted_at' do
+        Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
+                  person: person, group: groups(:bottom_layer_one))
+        Fabricate(Group::BottomLayer::Member.name.to_s, label: 'Bar', created_at: 5.days.ago, deleted_at: 3.days.ago,
+                                           person: person, group: groups(:bottom_layer_one))
+
+        expect(subject.count).to eq(1)
+      end
+    end
+
+    context 'only_deleted' do
+      subject { person.roles.only_deleted }
+
+      it 'does not list roles with future deleted_at' do
+        Fabricate(Group::BottomLayer::Member.name.to_s, label: 'Bar', created_at: Time.zone.yesterday, deleted_at: Time.zone.tomorrow,
+                  person: person, group: groups(:bottom_layer_one))
+
+        expect(subject.count).to eq(0)
+      end
+
+      it 'does not list roles with no deleted_at' do
+        Fabricate(Group::BottomLayer::Member.name.to_s, label: 'Bar', created_at: Time.zone.yesterday,
+                  person: person, group: groups(:bottom_layer_one))
+
+        expect(subject.count).to eq(0)
+      end
+
+      it 'lists roles with past deleted_at' do
+        Fabricate(Group::BottomLayer::Leader.name.to_s,
+                  label: 'foo',
+                  person: person,
+                  group: groups(:bottom_layer_one))
+        deleted = Fabricate(Group::BottomLayer::Member.name.to_s,
+                            label: 'Bar',
+                            created_at: 5.days.ago,
+                            deleted_at: 3.days.ago,
+                            person: person,
+                            group: groups(:bottom_layer_one))
+
+        expect(subject.count).to eq(1)
+        expect(subject.first).to eq(deleted)
+      end
+    end
+  end
 end

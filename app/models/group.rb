@@ -50,7 +50,8 @@ class Group < ActiveRecord::Base
   acts_as_paranoid
   extend Paranoia::RegularScope
 
-  mount_uploader :logo, Group::LogoUploader
+  mount_uploader :carrierwave_logo, Group::LogoUploader, mount_on: 'logo'
+  has_one_attached :logo
 
   ### ATTRIBUTES
 
@@ -92,6 +93,9 @@ class Group < ActiveRecord::Base
   has_many :mailing_lists, dependent: :destroy
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
+  has_many :calendars, inverse_of: :group, dependent: :destroy
+  has_many :calendar_groups, inverse_of: :group, dependent: :destroy
+
   has_many :notes, as: :subject, dependent: :destroy
 
   has_many :person_add_requests,
@@ -111,7 +115,7 @@ class Group < ActiveRecord::Base
            dependent: :destroy
 
 
-  has_settings :text_message_provider, :messages_letter, class_name: 'GroupSetting'
+  has_settings *GroupSetting::SETTINGS.symbolize_keys.keys, class_name: 'GroupSetting'
 
   ### VALIDATIONS
 
@@ -123,6 +127,12 @@ class Group < ActiveRecord::Base
   validates :contact, inclusion: { in: ->(group) { group.people.members } }, allow_nil: true
 
   validate :assert_valid_self_registration_notification_email
+
+  if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
+    validates :logo, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
+                     content_type: ['image/jpeg', 'image/gif', 'image/png']
+  end
+
 
   ### CLASS METHODS
 
@@ -240,7 +250,7 @@ class Group < ActiveRecord::Base
   def self_registration_active?
     Settings.groups&.self_registration&.enabled &&
       self_registration_role_type.present? &&
-      decorate.possible_roles_without_writing_permissions
+      decorate.allowed_roles_for_self_registration
               .include?(self_registration_role_type.constantize)
   end
 
@@ -254,6 +264,16 @@ class Group < ActiveRecord::Base
 
     unless valid_email?(self_registration_notification_email)
       errors.add(:self_registration_notification_email, :invalid)
+    end
+  end
+
+  def remove_logo
+    false
+  end
+
+  def remove_logo=(deletion_param)
+    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+      logo.purge_later
     end
   end
 

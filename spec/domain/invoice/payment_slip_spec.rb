@@ -47,6 +47,12 @@ describe Invoice::PaymentSlip do
     expect(invoice.total).to eq 5.35
   end
 
+  it '#code_line does not include amount if total is hidden' do
+    invoice.hide_total = true
+    expect(subject.code_line).to eq "011>000037680338900000000000021+ 376803389000004>"
+    expect(invoice.total).to eq 5.35
+  end
+
   it '#code_line formats iamount with precision 2' do
     invoice.update_columns(total: 5)
     expect(subject.code_line).to eq "0100000005007>000037680338900000000000021+ 376803389000004>"

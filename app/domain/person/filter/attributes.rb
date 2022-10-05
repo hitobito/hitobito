@@ -43,14 +43,19 @@ class Person::Filter::Attributes < Person::Filter::Base
     generic_constraints.map do |v|
       key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
       next unless Person.filter_attrs.key?(key.to_sym)
+      type = Person.filter_attrs[key.to_sym][:type]
+      parsed_value = type == :date ? Date.parse(value) : value
 
-      attribute_condition_sql(key, value, constraint, scope)
+      attribute_condition_sql(key, parsed_value, constraint, scope)
     end.compact.join(' AND ')
   end
 
   def attribute_condition_sql(key, value, constraint, scope)
-    return persisted_attribute_condition_sql(key, value, constraint) if Person.column_names.include?(key)
-    unpersisted_attribute_condition_sql(key, value, constraint, scope)
+    if Person.column_names.include?(key)
+      persisted_attribute_condition_sql(key, value, constraint)
+    else
+      unpersisted_attribute_condition_sql(key, value, constraint, scope)
+    end
   end
 
   def persisted_attribute_condition_sql(key, value, constraint)
@@ -71,7 +76,8 @@ class Person::Filter::Attributes < Person::Filter::Base
 
   def sql_value(value, constraint)
     case constraint.to_s
-    when 'match', 'not_match' then "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
+    when 'match', 'not_match'
+      then "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
     when 'equal', 'greater', 'smaller' then value
     else raise("unexpected constraint: #{constraint.inspect}")
     end

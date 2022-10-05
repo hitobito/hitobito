@@ -215,12 +215,14 @@ describe GroupsController do
     end
   end
 
-  describe 'with valid OAuth token' do
+  describe 'with valid oauth token' do
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Oauth::AccessToken', acceptable?: true, accessible?: true, person: people(:top_leader)) }
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { true }
+      allow(token).to receive(:accessible?) { true }
     end
 
     it 'GET index shows page' do
@@ -229,12 +231,14 @@ describe GroupsController do
     end
   end
 
-  describe 'with invalid OAuth token (expired or revoked)' do
+  describe 'with invalid oauth token (expired or revoked)' do
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Oauth::AccessToken', acceptable?: true, accessible?: false, person: people(:top_leader)) }
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { true }
+      allow(token).to receive(:accessible?) { false }
     end
 
     it 'GET index redirect to login' do
@@ -243,12 +247,14 @@ describe GroupsController do
     end
   end
 
-  describe 'without acceptable OAuth token (missing scope)' do
+  describe 'without acceptable oauth token (missing scope)' do
     let(:group) { groups(:top_layer) }
-    let(:token) { instance_double('Oauth::AccessToken', acceptable?: false, accessible?: true, person: people(:top_leader)) }
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { false }
+      allow(token).to receive(:accessible?) { true }
     end
 
     it 'GET index fails with HTTP 403 (forbidden)' do

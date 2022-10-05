@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingListsController < CrudController
+  include Api::JsonPaging
 
   self.nesting = Group
 
@@ -25,6 +26,13 @@ class MailingListsController < CrudController
   def edit
     assign_attributes if request.format.js?
     super
+  end
+
+  def index
+    respond_to do |format|
+      format.html { super }
+      format.json { render_entries_json(list_entries) }
+    end
   end
 
   def show
@@ -49,6 +57,13 @@ class MailingListsController < CrudController
   def load_labels
     @labels = AdditionalEmail.distinct.pluck(:label)
     @preferred_labels = entry.preferred_labels.sort
+  end
+
+  def render_entries_json(entries)
+    paged_entries = entries.page(params[:page])
+    render json: [paging_properties(paged_entries),
+                  ListSerializer.new(paged_entries, controller: self,
+                    serializer: MailingListSerializer)].inject(&:merge)
   end
 
   alias group parent

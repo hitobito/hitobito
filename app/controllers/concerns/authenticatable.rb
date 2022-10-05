@@ -33,6 +33,11 @@ module Authenticatable
     current_ability.token.dynamic_user if current_ability.is_a?(TokenAbility)
   end
 
+  def oauth_token_user
+    Person.find(token_authentication.oauth_token.resource_owner_id) if
+      current_ability.is_a?(DoorkeeperTokenAbility)
+  end
+
   def origin_user
     return unless session[:origin_user]
 
@@ -59,9 +64,14 @@ module Authenticatable
   def doorkeeper_sign_in
     token = token_authentication.oauth_token
     return unless token&.accessible?
-    return head(:forbidden) unless token.acceptable?(:api)
-
-    sign_in token.person, store: false
+    acceptable = token.acceptable?(:people) ||
+      token.acceptable?(:groups) ||
+      token.acceptable?(:events) ||
+      token.acceptable?(:invoices) ||
+      token.acceptable?(:mailing_lists) ||
+      token.acceptable?(:api)
+    return head(:forbidden) unless acceptable
+    sign_in token, store: false
   end
 
   def authenticate_person!(*args)

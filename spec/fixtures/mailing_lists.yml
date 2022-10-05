@@ -37,6 +37,12 @@ leaders:
   mail_name: leaders
   subscribable: true
 
+members:
+  group: top_layer
+  name: Members
+  mail_name: members
+  subscribable: true
+
 top_group:
   group: top_group
   name: Top group mailing list

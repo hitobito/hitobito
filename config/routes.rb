@@ -332,6 +332,7 @@ Hitobito::Application.routes.draw do
         registrations: 'devise/hitobito/registrations',
         sessions: 'devise/hitobito/sessions'
     }
+    devise_for :oauth_tokens, skip: :all, class_name: 'Oauth::AccessToken'
     as :person do
       get 'users/edit' => 'devise/hitobito/registrations#edit', :as => 'edit_person_registration'
       put 'users' => 'devise/hitobito/registrations#update', :as => 'person_registration'

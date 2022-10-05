@@ -1007,10 +1007,12 @@ describe PeopleController do
 
   context 'with valid oauth token' do
     before { top_leader.confirm }
-    let(:token) { instance_double('Oauth::AccessToken', acceptable?: true, accessible?: true, person: top_leader) }
+    let(:token) { Fabricate(:access_token, resource_owner_id: top_leader.id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { true }
+      allow(token).to receive(:accessible?) { true }
     end
 
     it 'shows page' do
@@ -1047,13 +1049,35 @@ describe PeopleController do
         end.to raise_error CanCan::AccessDenied
       end
     end
+
+    context 'layer' do
+      render_views
+      let(:group) { groups(:bottom_layer_one) }
+      let!(:bl_leader) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person }
+      let!(:bg_leader) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one)).person }
+      let!(:bg_member) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one)).person }
+
+      it 'loads visible people in layer' do
+        get :index, params: { group_id: group.id, range: 'layer' }, format: :json
+        json = JSON.parse(@response.body).deep_symbolize_keys
+
+        expect(json[:people].collect{|person| person[:id]}).to match_array(
+          [ people(:bottom_member),
+          bl_leader,
+          bg_leader,
+          ].collect{|person| person.id.to_s}
+        )
+      end
+    end
   end
 
   context 'without acceptable oauth token (required scope is missing)' do
-    let(:token) { instance_double('Oauth::AccessToken', acceptable?: false, accessible?: true, person: top_leader) }
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { false }
+      allow(token).to receive(:accessible?) { true }
     end
 
     it 'fails with HTTP 403 (forbidden) when trying to show page' do
@@ -1092,14 +1116,12 @@ describe PeopleController do
   end
 
   context 'with invalid oauth token (expired or revoked)' do
-    let(:token) {
-      instance_double(
-        'Oauth::AccessToken', :acceptable? => true,
-        :accessible? => false, :resource_owner_id => top_leader.id)
-    }
+    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+      allow(token).to receive(:acceptable?) { true }
+      allow(token).to receive(:accessible?) { false }
     end
 
     it 'redirects to login when trying to show page' do

@@ -11,6 +11,7 @@ describe Person::SubscriptionsController do
   let(:top_leader)    { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
   let(:leaders)       { mailing_lists(:leaders) }
+  let(:members)       { mailing_lists(:members) }
   let(:top_group_list){ mailing_lists(:top_group) }
 
 
@@ -42,7 +43,7 @@ describe Person::SubscriptionsController do
       first = top_group.mailing_lists.create!(name: '00 - First', subscribable: true)
       sign_in(top_leader)
       get :index, params: { group_id: top_group.id, person_id: top_leader.id }
-      expect(assigns(:subscribable).to_a).to eq [first, leaders, top_group_list]
+      expect(assigns(:subscribable).to_a).to eq [first, leaders, members, top_group_list]
     end
   end
 

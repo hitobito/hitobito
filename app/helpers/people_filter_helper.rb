@@ -31,7 +31,7 @@ module PeopleFilterHelper
     time = (Time.zone.now.to_f * 1000).to_i + count
 
     filters = [[t('.equal'), :equal]]
-    if type != :date
+    if type != :integer && type != :date
       filters += [[t('.match'), :match], [t('.not_match'), :not_match]]
     end
     if key.blank? || type == :integer || type == :date

@@ -11,18 +11,63 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def apply(scope)
-    scope.where(attributes_condition(scope))
+    scope.where(raw_sql_condition(scope)).merge(years_scope)
   end
 
   private
 
-  def attributes_condition(scope)
-    args.values.map do |v|
-      key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
-      next unless key && value
-      next unless Person.filter_attrs.key?(key.to_sym)
+  def constraints
+    @args.values.select {|tuple| tuple[:key].present? && tuple[:value].present? }
+  end
 
-      attribute_condition_sql(key, value, constraint, scope)
+  def years_constraint
+    @years_constraint ||= constraints.find {|tuple| 'years' == tuple[:key] }
+  end
+
+  def generic_constraints
+    @generic_constraints ||= constraints - [years_constraint]
+  end
+
+  def years_scope
+    return Person.all unless years_constraint
+
+    value, constraint = years_constraint.values_at('value', 'constraint')
+    value = value.to_i
+    case constraint.to_s
+    when 'greater' then years_greater_scope(value)
+    when 'smaller' then years_smaller_scope(value)
+    when 'equal' then years_equal_scope(value)
+    else raise("unexpected constraint: #{constraint.inspect}")
+    end
+  end
+
+  def years_smaller_scope(value)
+    date_value = Time.zone.now.to_date - value.to_i.years
+    Person.where("birthday > ?", date_value)
+  end
+
+  def years_greater_scope(value)
+    # Account for weird definition of age, depending on greater_than comparison...
+    date_value = Time.zone.now.to_date - value.to_i.years - 1.year + 1.day
+    Person.where("birthday < ?", date_value)
+  end
+
+  def years_equal_scope(value)
+    years_smaller_scope(value + 1).merge(years_greater_scope(value - 1))
+  end
+
+  def raw_sql_condition(scope)
+    generic_constraints.map do |v|
+      key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
+      next unless Person.filter_attrs.key?(key.to_sym)
+      type = Person.filter_attrs[key.to_sym][:type]
+      begin
+        parsed_value = type == :date ? Date.parse(value) : value
+      rescue Date::Error
+        parsed_value = Time.zone.now.to_date
+      end
+
+      attribute_condition_sql(key, parsed_value, constraint, scope)
     end.compact.join(' AND ')
   end
 
@@ -35,15 +80,28 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def persisted_attribute_condition_sql(key, value, constraint)
-    sql_array = case constraint
-                when /match/
-                  escaped_value = ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)
-                  ["people.#{key} LIKE ?", "%#{escaped_value}%"]
-                when /greater/ then ["people.#{key} > ?", value]
-                when /smaller/ then ["people.#{key} < ?", value]
-                else ["people.#{key} = ?", value]
-                end
-    ActiveRecord::Base.send(:sanitize_sql_array, sql_array)
+    sql_array = ["people.#{key} #{sql_comparator(constraint)} ?", sql_value(value, constraint)]
+    ActiveRecord::Base.sanitize_sql_array(sql_array)
+  end
+
+  def sql_comparator(constraint)
+    case constraint.to_s
+    when 'match' then 'LIKE'
+    when 'not_match' then 'NOT LIKE'
+    when 'greater' then '>'
+    when 'smaller' then '<'
+    when 'equal' then '='
+    else raise("unexpected constraint: #{constraint.inspect}")
+    end
+  end
+
+  def sql_value(value, constraint)
+    case constraint.to_s
+    when 'match', 'not_match'
+      then "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
+    when 'equal', 'greater', 'smaller' then value
+    else raise("unexpected constraint: #{constraint.inspect}")
+    end
   end
 
   def unpersisted_attribute_condition_sql(key, value, constraint, scope)
@@ -60,9 +118,10 @@ class Person::Filter::Attributes < Person::Filter::Base
 
   def matching_attribute?(attribute, value, constraint)
     case constraint
-    when /match/ then attribute.to_s =~ /#{value}/
-    when /greater/ then attribute && attribute.to_i > value.to_i
-    when /smaller/ then attribute && attribute.to_i < value.to_i
+    when 'match' then attribute.to_s =~ /#{value}/
+    when 'not_match' then attribute.to_s !~ /#{value}/
+    when 'greater' then attribute && attribute.to_i > value.to_i
+    when 'smaller' then attribute && attribute.to_i < value.to_i
     else attribute.to_s == value
     end
   end

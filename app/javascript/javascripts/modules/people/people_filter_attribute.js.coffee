@@ -44,11 +44,11 @@ app.PeopleFilterAttribute = {
     type  = form.closest('[data-types]').data('types')[field]
 
     form.find('option[value=greater], option[value=smaller]').remove() unless (type == 'integer' || type == 'date')
-    form.find('option[value=match], option[value=not_match]').remove() unless type != 'date'
+    form.find('option[value=match], option[value=not_match]').remove() if (type == 'integer' || type == 'date')
     form.find('.attribute_key_hidden_field').removeAttr('disabled')
     form.find('.attribute_constraint_dropdown').removeAttr('disabled')
     form.find('.attribute_value_input').removeAttr('disabled')
-    form.find('.attribute_value_input').addClass('date') unless type!= 'date'
+    form.find('.attribute_value_input').addClass('date') if type == 'date'
 
 
 }

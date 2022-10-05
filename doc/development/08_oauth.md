@@ -8,7 +8,7 @@ You need to create an RSA private key for JWT signing:
 
 `openssl genpkey -algorithm RSA -out key -pkeyopt rsa_keygen_bits:2048`
 
-Provide it's content by environment variable `JWT_SIGNING_KEY` in rails server environment.
+Provide its content by environment variable `JWT_SIGNING_KEY` in rails server environment.
 
 ### Managing OAuth applications in hitobito
 Users with admin privilege on the application root group (e.g. "Bundesebene" or "Dachverband") are allowed to manage the OAuth applications in the global hitobito settings.

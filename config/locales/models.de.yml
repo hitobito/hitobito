@@ -635,6 +635,8 @@ de:
 
       oauth/application:
         cors_origins: Hosts mit API-Zugriff
+        uid: Client ID
+        secret: Client secret
         redirect_uri: Redirect URIs
 
       people_relation:

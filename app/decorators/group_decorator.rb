@@ -27,7 +27,7 @@ class GroupDecorator < ApplicationDecorator
     end
   end
 
-  def roles_without_writing_permissions
+  def allowed_roles_for_self_registration
     klass.role_types.reject do |r|
       r.restricted? ||
       r.permissions.any? { |p| Role::Types::WRITING_PERMISSIONS.include?(p) }

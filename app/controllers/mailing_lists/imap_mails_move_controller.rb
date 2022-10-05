@@ -17,6 +17,7 @@ class MailingLists::ImapMailsMoveController < ApplicationController
 
   def create
     raise 'failed mails cannot be moved' if mailbox == :failed
+    raise 'mails cannot be moved to failed' if dst_mailbox == :failed
 
     perform_imap do
       list_param(:ids).each do |id|

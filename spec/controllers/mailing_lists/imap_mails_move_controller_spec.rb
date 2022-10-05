@@ -37,16 +37,16 @@ describe MailingLists::ImapMailsMoveController do
   end
 
   context 'PATCH #create' do
-    it 'moves Mail to given mailbox' do
+    it 'moves mail to given mailbox' do
       sign_in(top_leader)
 
       # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector).twice
 
-      expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
-      expect(imap_connector).to receive(:move_by_uid).with(43, :inbox, :failed)
+      expect(imap_connector).to receive(:move_by_uid).with(42, :spam, :inbox)
+      expect(imap_connector).to receive(:move_by_uid).with(43, :spam, :inbox)
 
-      patch :create, params: { mailbox: 'inbox', ids: '42,43', dst_mailbox: 'failed' }
+      patch :create, params: { mailbox: 'spam', ids: '42,43', dst_mailbox: 'inbox' }
 
       expect(flash[:notice]).to include '2 Mails erfolgreich verschoben'
       expect(response).to have_http_status(:found)
@@ -86,10 +86,10 @@ describe MailingLists::ImapMailsMoveController do
 
       expect(imap_connector)
         .to receive(:move_by_uid)
-        .with(42, :inbox, :failed)
+        .with(42, :spam, :inbox)
         .and_raise(Net::IMAP::NoResponseError, ImapMoveErrorDataDouble)
 
-      patch :create, params: { mailbox: 'inbox', ids: '42', dst_mailbox: 'failed' }
+      patch :create, params: { mailbox: 'spam', ids: '42', dst_mailbox: 'inbox' }
 
       expect(response).to have_http_status(:redirect)
 
@@ -104,8 +104,19 @@ describe MailingLists::ImapMailsMoveController do
       expect(controller).to receive(:imap).and_return(imap_connector).never
 
       expect do
-        patch :create, params: { mailbox: 'failed', ids: '42', mail_dst: 'inbox' }
+        patch :create, params: { mailbox: 'failed', ids: '42', dst_mailbox: 'inbox' }
       end.to raise_error('failed mails cannot be moved')
+    end
+
+    it 'cannot move mails to failed' do
+      sign_in(top_leader)
+
+      # mock imap_connector
+      expect(controller).to receive(:imap).and_return(imap_connector).never
+
+      expect do
+        patch :create, params: { mailbox: 'spam', ids: '42', dst_mailbox: 'failed' }
+      end.to raise_error('mails cannot be moved to failed')
     end
 
   end

@@ -18,8 +18,10 @@ class PublicEventsController < ApplicationController
 
   helper_method :entry, # behave like most hitobito-controllers
                 :resource, # enable login-form
-                :group, :event # enable external login
+                :group, :event, # enable external login
+                :can? # enable permission checks
   decorates :entry
+  delegate :can?, to: :ability
 
   private
 
@@ -46,6 +48,10 @@ class PublicEventsController < ApplicationController
 
   def person
     @person ||= Person.new
+  end
+
+  def ability
+    Ability.new(current_person)
   end
 
   alias resource person # used by devise-form

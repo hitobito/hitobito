@@ -13,7 +13,7 @@ describe Healthz::MailController do
   describe 'GET show' do
 
     let(:json) { JSON.parse(response.body) }
-    let(:token) { '43b3297d893f7d97e3dd60c1' }
+    let(:token) { AppStatus.auth_token }
     let(:imap_mail) { built_imap_mail }
     let(:cache) { Rails.cache }
     let(:seen_mail) { AppStatus::Mail::SeenMail.build(imap_mail) }

@@ -7,11 +7,14 @@
 
 module Dropdown
   class InvoiceNew < Base
-    def initialize(template, people: [], mailing_list: nil, filter: nil, group: nil)
+    def initialize(template, people: [], mailing_list: nil, filter: nil, # rubocop:disable Metrics/ParameterLists
+                             group: nil, invoice_items: nil, label: nil)
       super(template, label, :plus)
       @people = people
       @group = group
       @mailing_list = mailing_list
+      @invoice_items = invoice_items
+      @label = label
       if filter.is_a?(ActionController::Parameters)
         @filter = filter.to_unsafe_h.slice(:range, :filters).compact.presence
       end
@@ -29,7 +32,7 @@ module Dropdown
     private
 
     def label
-      I18n.t('crud.new.title', model: Invoice.model_name.human)
+      @label || I18n.t('crud.new.title', model: Invoice.model_name.human)
     end
 
     def single_button
@@ -44,27 +47,32 @@ module Dropdown
       if @mailing_list
         template.new_group_invoice_list_path(
           finance_group,
-          invoice_list: { receiver_id: @mailing_list.id, receiver_type: @mailing_list.class }
+          invoice_list: { receiver_id: @mailing_list.id, receiver_type: @mailing_list.class },
+          invoice_items: @invoice_items
         )
       elsif @filter
         template.new_group_invoice_list_path(
           finance_group,
-          filter: @filter.merge(group_id: @group.id), invoice_list: { recipient_ids: '' }
+          filter: @filter.merge(group_id: @group.id), invoice_list: { recipient_ids: '' },
+          invoice_items: @invoice_items
         )
       elsif @group
         template.new_group_invoice_list_path(
           finance_group,
-          invoice_list: { receiver_id: @group.id, receiver_type: @group.class.base_class }
+          invoice_list: { receiver_id: @group.id, receiver_type: @group.class.base_class },
+          invoice_items: @invoice_items
         )
       elsif @people.one?
         template.new_group_invoice_path(
           finance_group,
-          invoice: { recipient_id: @people.first.id }
+          invoice: { recipient_id: @people.first.id },
+          invoice_items: @invoice_items
         )
       else
         template.new_group_invoice_list_path(
           finance_group,
-          invoice_list: { recipient_ids: @people.collect(&:id).join(',') }
+          invoice_list: { recipient_ids: @people.collect(&:id).join(',') },
+          invoice_items: @invoice_items
         )
       end
     end

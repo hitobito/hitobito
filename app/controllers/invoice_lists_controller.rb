@@ -29,6 +29,7 @@ class InvoiceListsController < CrudController
         :unit_cost,
         :vat_rate,
         :count,
+        :type,
         :_destroy
       ]
     ]]
@@ -133,7 +134,16 @@ class InvoiceListsController < CrudController
       entry.attributes = permitted_params.slice(:receiver_id, :receiver_type, :recipient_ids)
     end
     entry.creator = current_user
+
     entry.invoice = parent.invoices.build(permitted_params[:invoice])
+
+    if params[:invoice_items].present?
+      entry.invoice.invoice_items = params[:invoice_items].map do |type|
+        item = InvoiceItem.find_invoice_item_type!(type).new
+        item.name = I18n.t("activerecord.attributes.invoice_items.#{type.underscore}")
+        item
+      end
+    end
   end
 
   def recipient_ids_from_people_filter

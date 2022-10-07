@@ -23,7 +23,7 @@ module Export::Pdf::Invoice
 
     def render_payment_amount
       if invoice_items.present?
-        if invoice.includes_variable_donation?
+        if invoice.includes_dynamic_invoice_items?
           amount
         else
           stamped :amount

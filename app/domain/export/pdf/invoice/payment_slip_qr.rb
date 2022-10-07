@@ -86,7 +86,7 @@ module Export::Pdf::Invoice
     end
 
     def render_payment_amount
-      if invoice.includes_variable_donation?
+      if invoice.includes_dynamic_invoice_items?
         payment_amount
       else
         stamped :payment_amount

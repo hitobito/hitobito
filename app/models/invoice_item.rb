@@ -24,32 +24,70 @@
 #
 
 class InvoiceItem < ActiveRecord::Base
+  class_attribute :dynamic
+  class_attribute :dynamic_cost_parameter_keys
 
-  after_destroy :recalculate!
+  self.dynamic = false
+  self.dynamic_cost_parameter_keys = []
+
+  after_destroy :recalculate_invoice!
 
   belongs_to :invoice
 
   scope :list, -> { order(:name) }
 
   validates :unit_cost, money: true, allow_nil: true
-  validates :variable_donation, uniqueness: { allow_blank: true, scope: :invoice_id }
-  delegate :recalculate!, to: :invoice
+  validates :unit_cost, presence: true, unless: :dynamic
+  validates :count, presence: true, unless: :dynamic
 
-  validates_by_schema
+  serialize :dynamic_cost_parameters, Hash
+
+  class << self
+    def all_types
+      [InvoiceItem] + InvoiceItem.subclasses
+    end
+
+    def find_invoice_item_type!(sti_name)
+      type = all_types.detect { |t| t.sti_name == sti_name }
+      raise ActiveRecord::RecordNotFound, "No invoice_item type '#{sti_name}' found" if type.nil?
+
+      type
+    end
+  end
 
   def to_s
     "#{name}: #{total} (#{amount} / #{vat})"
   end
 
   def total
-    cost + vat
+    recalculate unless cost
+
+    cost&.+ vat
   end
 
-  def cost
-    unit_cost && count ? unit_cost * count : 0
+  def recalculate!
+    recalculate
+
+    save!
+
+    invoice.recalculate!
+  end
+
+  def recalculate
+    self.cost = if dynamic
+                  dynamic_cost
+                else
+                  unit_cost && count ? unit_cost * count : 0
+                end
+
+    self
+  end
+
+  def recalculate_invoice!
+    invoice.recalculate!
   end
 
   def vat
-    vat_rate ? cost * (vat_rate / 100) : 0
+    vat_rate ? self.cost * (vat_rate / 100) : 0
   end
 end

@@ -77,7 +77,7 @@ class Message < ActiveRecord::Base
 
     def find_message_type!(sti_name)
       type = all_types.detect { |t| t.sti_name == sti_name }
-      raise ActiveRecord::RecordNotFound, "No event type '#{sti_name}' found" if type.nil?
+      raise ActiveRecord::RecordNotFound, "No message type '#{sti_name}' found" if type.nil?
 
       type
     end

@@ -65,7 +65,7 @@ describe EventSerializer do
     it 'includes all keys' do
       keys = [:name, :description, :motto, :cost, :maximum_participants, :participant_count,
        :location, :application_opening_at, :application_closing_at, :application_conditions,
-       :state, :teamer_count, :external_application_link, :links]
+       :state, :teamer_count, :external_application_link, :links, :attachments]
 
       keys.each do |key|
         is_expected.to have_key(key)
@@ -113,6 +113,27 @@ describe EventSerializer do
       end
 
       expect(subject[:links]).to have_key(:kind)
+    end
+  end
+
+  context 'attachments' do
+    before do
+      file = Tempfile.new(['foo', '.png'])
+      a = event.attachments.build
+      a.file.attach(io: file, filename: 'foo.png')
+      a.save!
+    end
+
+    it 'includes attachments' do
+      request = ActionController::TestRequest.create({})
+      allow(controller).to receive(:request).and_return(request)
+      allow(request).to receive(:host_with_port).and_return('hitobito.ch')
+
+      is_expected.to have_key(:attachments)
+      expect(subject[:attachments].count).to eq(1)
+      expect(subject[:attachments][0]['file_name']).to eq('foo.png')
+      expect(subject[:attachments][0]['url'])
+        .to match(/http:\/\/hitobito.ch\/rails\/active_storage\/blobs\/redirect\/.*\/foo.png/)
     end
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -48,28 +50,33 @@
 #  index_events_on_kind_id  (kind_id)
 #
 
-class EventSerializer < EventListSerializer
-  include Rails.application.routes.url_helpers
-
+class EventListSerializer < ApplicationSerializer
   schema do
-    property :attachments, (item.attachments.includes(file_attachment: :blob).map do |attachment|
-      {
-        file_name: upload_display_helper.upload_name(attachment, :file),
-        url: attachment_url(attachment)
-      }
-    end)
-  end
-  
-  def attachment_url(attachment)
-    file = upload_display_helper.upload_url(attachment, :file)
-    rails_blob_url(file, host: context[:controller].request.host_with_port)
-  end
+    json_api_properties
 
+    map_properties :name,
+                   :description,
+                   :motto,
+                   :cost,
+                   :maximum_participants,
+                   :participant_count,
+                   :location,
+                   :application_opening_at,
+                   :application_closing_at,
+                   :application_conditions,
+                   :state,
+                   :teamer_count
 
-  def upload_display_helper
-    upload_display_helper ||= Class.new do
-      include UploadDisplayHelper
-    end.new
+    apply_extensions(:public)
+
+    property :external_application_link, h.group_public_event_url(item.groups.first, item.id)
+
+    entity :kind, item.kind, EventKindSerializer if item.object.class.method_defined?(:kind)
+
+    entities :dates, item.dates, EventDateSerializer
+    entities :group, item.groups.decorate, GroupSerializer
+
+    property :tags, item.tag_list
   end
 
 end

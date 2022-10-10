@@ -6,6 +6,7 @@
 * Neue Filterbedingung "Enthält nicht" (#295)
 * OAuth Applikationen können neu spezifischen Zugriff auf nur einzelne API-Endpoints bekommen. Zur Auswahl stehen die Endpoints "group", "person", "event", "mailing_list" und "invoice". (#1399, merci @simfeld!)
 * Wird die API mit einem Service Token benutzt, dann kommen jetzt dieselben Felder auf der Person wie mit der veralteten User Authentication (#1460, merci @sniederberger!)
+* Der API Endpoint eines einzelnen Events enthält neu die URL von Anhängen.
 
 ## Version 1.28
 

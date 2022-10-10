@@ -181,7 +181,7 @@ class EventsController < CrudController
                   ListSerializer.new(paged_entries.decorate,
                                      group: group,
                                      page: params[:page],
-                                     serializer: EventSerializer,
+                                     serializer: EventListSerializer,
                                      controller: self)].inject(&:merge)
   end
 

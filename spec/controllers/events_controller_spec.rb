@@ -217,14 +217,24 @@ describe EventsController do
       end
 
       it 'renders json' do
+        event = events(:top_event)
+
+        # Add new Attachment
+        file = Tempfile.new(['foo', '.png'])
+        a = event.attachments.build
+        a.file.attach(io: file, filename: 'foo.png')
+        a.save!
+
         sign_in(people(:top_leader))
 
-        get :show, params: { group_id: groups(:top_layer), id: events(:top_event) }, format: :json
+        get :show, params: { group_id: groups(:top_layer), id: event }, format: :json
+
         json = JSON.parse(@response.body)
 
-        event = json['events'].find { |e| e['id'] == events(:top_event).id.to_s }
-        expect(event['name']).to eq('Top Event')
-        expect(event['links']['dates'].size).to eq(1)
+        expect(json['events'][0]['name']).to eq('Top Event')
+        expect(json['events'][0]['links']['dates'].size).to eq(1)
+        expect(json['events'][0]['attachments'].size).to eq(1)
+        expect(json['events'][0]['attachments'][0]['file_name']).to eq('foo.png')
       end
 
     end

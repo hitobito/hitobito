@@ -10,8 +10,11 @@
 = f.input_field(:vat_rate, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:vat_rate))
 = f.hidden_field(:type)
 - if f.object.dynamic?
-  = f.hidden_field(:unit_cost)
-  = f.hidden_field(:count)
+  = f.hidden_field(:unit_cost, value: 0)
+  = f.hidden_field(:count, value: 1)
+  = f.fields_for :dynamic_cost_parameters, invoice_item_dynamic_cost_parameter_object(f.object) do |ff|
+    - f.object.dynamic_cost_parameter_definitions.keys.each do |attr|
+      = ff.input_field(attr)
 - else
   = f.input_field(:unit_cost, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:unit_cost))
   = f.input_field(:count, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:count))

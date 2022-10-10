@@ -134,7 +134,6 @@ class InvoiceListsController < CrudController
       entry.attributes = permitted_params.slice(:receiver_id, :receiver_type, :recipient_ids)
     end
     entry.creator = current_user
-
     entry.invoice = parent.invoices.build(permitted_params[:invoice])
 
     if params[:invoice_items].present?
@@ -155,5 +154,18 @@ class InvoiceListsController < CrudController
 
   def authorize_class
     authorize!(:index_invoices, parent)
+  end
+
+  def permitted_params
+    # Used to permit dynamic_cost_parameters for invoice items that define them
+    @permitted_params ||= super.tap do |permitted|
+      next unless permitted.dig(:invoice, :invoice_items_attributes)
+
+      permitted.dig(:invoice, :invoice_items_attributes).each do |index, attrs|
+        parameters = params.dig(:invoice_list, :invoice, :invoice_items_attributes,
+                                index, :dynamic_cost_parameters)
+        attrs[:dynamic_cost_parameters] = parameters&.to_unsafe_hash || {}
+      end
+    end
   end
 end

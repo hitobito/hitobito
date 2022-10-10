@@ -24,11 +24,19 @@
 #
 
 class InvoiceItem < ActiveRecord::Base
+  # Used to mark as dynamically calculated.
   class_attribute :dynamic
-  class_attribute :dynamic_cost_parameter_keys
 
   self.dynamic = false
-  self.dynamic_cost_parameter_keys = []
+
+  # Allows to define the parameters for dynamic cost calculation.
+  # These will also be rendered as an input on the invoice_list form.
+  # Example:
+  # self.dynamic_cost_parameter_definitions = {
+  #   defined_at: :date
+  # }
+  class_attribute :dynamic_cost_parameter_definitions
+  self.dynamic_cost_parameter_definitions = {}
 
   after_destroy :recalculate_invoice!
 
@@ -65,14 +73,6 @@ class InvoiceItem < ActiveRecord::Base
     cost&.+ vat
   end
 
-  def recalculate!
-    recalculate
-
-    save!
-
-    invoice.recalculate!
-  end
-
   def recalculate
     self.cost = if dynamic
                   dynamic_cost
@@ -88,6 +88,6 @@ class InvoiceItem < ActiveRecord::Base
   end
 
   def vat
-    vat_rate ? self.cost * (vat_rate / 100) : 0
+    vat_rate ? cost * (vat_rate / 100) : 0
   end
 end

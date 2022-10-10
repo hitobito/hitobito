@@ -92,16 +92,9 @@ class Invoice::BatchCreate
         item.dynamic_cost_parameters[:group_id] = group_id
         attrs[:cost] = item.dynamic_cost
       end
+      # Do not try to save invalid item since that would abort the whole invoice create transaction
       attrs if InvoiceItem.new(attrs).recalculate.valid?
     end.compact
-  end
-
-  def donation_increase_percentage
-    invoice_list.group.layer_group.invoice_config.donation_increase_percentage
-  end
-
-  def donation_calculation_year_amount
-    invoice_list.group.layer_group.invoice_config.donation_calculation_year_amount
   end
 
   def group_id

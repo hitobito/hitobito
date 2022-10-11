@@ -35,6 +35,12 @@ describe Event::Question do
   context 'has validations' do
     subject { described_class.new(question: 'Is this a Spec') }
 
+    it 'is invalid without question' do
+      subject.question = ''
+
+      is_expected.to be_invalid
+    end
+
     it 'is valid without choices' do
       expect(subject.choice_items).to be_empty
 
@@ -53,6 +59,22 @@ describe Event::Question do
       expect(subject.choice_items).to have(1).item
 
       is_expected.to be_valid
+    end
+  end
+
+  context 'missing question' do
+    it 'admin has correct error message' do
+      subject = described_class.new(admin: true, question: '').tap(&:validate)
+      expect(subject.errors.messages[:question]).to eq([
+        I18n.t('activerecord.errors.models.event/question.attributes.question.admin_blank')
+      ])
+    end
+
+    it 'non-admin has correct error message' do
+      subject = described_class.new(admin: false, question: '').tap(&:validate)
+      expect(subject.errors.messages[:question]).to eq([
+        I18n.t('activerecord.errors.models.event/question.attributes.question.application_blank')
+      ])
     end
   end
 

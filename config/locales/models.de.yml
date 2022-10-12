@@ -73,6 +73,9 @@ de:
             choices:
               requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten'
               requires_exactly_one_choice: 'muss genau eine Antwort enthalten'
+            question:
+              application_blank: für Anmeldeangabe muss ausgefüllt werden
+              admin_blank: für Administationsangabe muss ausgefüllt werden
         event/participation:
           attributes:
             person_id:

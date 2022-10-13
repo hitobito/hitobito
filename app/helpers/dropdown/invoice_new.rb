@@ -7,13 +7,22 @@
 
 module Dropdown
   class InvoiceNew < Base
+    class_attribute :sub_links
+
+    self.sub_links = {
+      invoice: []
+    }
+
+    def self.add_sub_link(label_key, invoice_items)
+      self.sub_links[label_key] = invoice_items
+    end
+
     def initialize(template, people: [], mailing_list: nil, filter: nil, # rubocop:disable Metrics/ParameterLists
                              group: nil, invoice_items: nil, label: nil)
       super(template, label, :plus)
       @people = people
       @group = group
       @mailing_list = mailing_list
-      @invoice_items = invoice_items
       @label = label
       if filter.is_a?(ActionController::Parameters)
         @filter = filter.to_unsafe_h.slice(:range, :filters).compact.presence
@@ -22,7 +31,7 @@ module Dropdown
     end
 
     def button_or_dropdown
-      if finance_groups.one?
+      if finance_groups.one? && InvoiceItem.all_types.one?
         single_button
       else
         to_s
@@ -43,44 +52,59 @@ module Dropdown
       template.action_button(label, path(finance_group), :plus, options)
     end
 
-    def path(finance_group) # rubocop:disable Metrics/MethodLength
+    def path(finance_group, invoice_items = []) # rubocop:disable Metrics/MethodLength
       if @mailing_list
         template.new_group_invoice_list_path(
           finance_group,
           invoice_list: { receiver_id: @mailing_list.id, receiver_type: @mailing_list.class },
-          invoice_items: @invoice_items
+          invoice_items: invoice_items
         )
       elsif @filter
         template.new_group_invoice_list_path(
           finance_group,
           filter: @filter.merge(group_id: @group.id), invoice_list: { recipient_ids: '' },
-          invoice_items: @invoice_items
+          invoice_items: invoice_items
         )
       elsif @group
         template.new_group_invoice_list_path(
           finance_group,
           invoice_list: { receiver_id: @group.id, receiver_type: @group.class.base_class },
-          invoice_items: @invoice_items
+          invoice_items: invoice_items
         )
       elsif @people.one?
         template.new_group_invoice_path(
           finance_group,
           invoice: { recipient_id: @people.first.id },
-          invoice_items: @invoice_items
+          invoice_items: invoice_items
         )
       else
         template.new_group_invoice_list_path(
           finance_group,
           invoice_list: { recipient_ids: @people.collect(&:id).join(',') },
-          invoice_items: @invoice_items
+          invoice_items: invoice_items
         )
       end
     end
 
     def init_items
-      finance_groups.each do |finance_group|
+      if sub_links.one?
+        @items = finance_groups_items
+      elsif finance_groups.one?
+        sub_links.each do |label_key, invoice_item_types|
+          add_item(translate(label_key), path(finance_groups.first, invoice_item_types))
+        end
+      else
+        sub_links.each do |label_key, invoice_item_types|
+          item = add_item(translate(label_key), '#')
+          item.sub_items += finance_groups_items(invoice_item_types)
+        end
+      end
+    end
+
+    def finance_groups_items(invoice_items = [])
+      finance_groups.map do |finance_group|
         disabled_msg = invalid_config_error_msg if finance_group.invoice_config&.invalid?
-        add_item(finance_group.name, path(finance_group), disabled_msg: disabled_msg)
+        Item.new(finance_group.name, path(finance_group, invoice_items), disabled_msg: disabled_msg)
       end
     end
 

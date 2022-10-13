@@ -178,6 +178,9 @@ de:
     csv: 'CSV'
     pdf: 'PDF'
 
+  dropdown/invoice_new:
+    invoice: 'Normale Rechnung'
+
   dropdown/invoice_sending:
     button: 'Rechnung stellen / mahnen'
     set_state: 'Status setzen (Gestellt/Gemahnt)'

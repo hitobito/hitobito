@@ -62,12 +62,13 @@ describe Event::PreconditionChecker do
     let(:sl) { qualification_kinds(:sl) }
     let(:qualifications) { person.qualifications }
 
-    describe 'with valid validity' do
+    describe 'with validity valid' do
       before do
         course.kind.event_kind_qualification_kinds.create!(qualification_kind_id: sl.id,
                                                            category: 'precondition',
                                                            role: 'participant',
                                                            validity: :valid)
+        sl.update!(reactivateable: 100)
       end
 
 

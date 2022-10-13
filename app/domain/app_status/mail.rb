@@ -16,10 +16,14 @@ class AppStatus::Mail < AppStatus
 
   def initialize
     @catch_all_inbox = catch_all_inbox
+    @truemail_working = truemail_working
   end
 
   def details
-    { catch_all_inbox: @catch_all_inbox }
+    {
+      catch_all_inbox: @catch_all_inbox,
+      truemail_working: @truemail_working
+    }
   end
 
   def code
@@ -27,6 +31,10 @@ class AppStatus::Mail < AppStatus
   end
 
   private
+
+  def truemail_working
+    Truemail.valid?(Truemail.configure.verifier_email)
+  end
 
   def catch_all_inbox
     update_seen_mails

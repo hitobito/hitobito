@@ -567,6 +567,23 @@ describe Person do
       expect(person.errors.messages[:email].first).to eq('ist nicht gültig')
     end
 
+    it 'sends sentry notification if correct email is invalid' do
+      allow(Truemail).to receive(:valid?).and_return(false)
+      person.email = 'dude@blabliblablu.ch'
+
+      expect(Raven).to receive(:capture_message)
+        .exactly(:once)
+        .with(
+          "Truemail does not work as expected",
+          extra: {
+            verifier_email: Settings.root_email,
+            validated_email: person.email
+          }
+        )
+
+      expect(person).not_to be_valid
+    end
+
     it 'does allow valid e-mail address' do
       person.email = 'dude@puzzle.ch'
 

@@ -115,7 +115,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def date_value(attr)
-    raw = @object.timeliness_cache_attribute(attr)
+    # Can also be serialized column
+    raw = @object.timeliness_cache_attribute(attr) if @object.is_a?(ActiveRecord::Base)
     if raw
       raw
     else

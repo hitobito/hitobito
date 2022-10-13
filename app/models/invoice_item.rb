@@ -24,29 +24,69 @@
 #
 
 class InvoiceItem < ActiveRecord::Base
+  # used to map declassified type string to class constant
+  class_attribute :type_mappings
 
-  after_destroy :recalculate!
+  self.type_mappings = {}
+
+  # Used to mark as dynamically calculated.
+  class_attribute :dynamic
+
+  self.dynamic = false
+
+  # Allows to define the parameters for dynamic cost calculation.
+  # These will also be rendered as an input on the invoice_list form.
+  # Example:
+  # self.dynamic_cost_parameter_definitions = {
+  #   defined_at: :date
+  # }
+  class_attribute :dynamic_cost_parameter_definitions
+  self.dynamic_cost_parameter_definitions = {}
+
+  after_destroy :recalculate_invoice!
 
   belongs_to :invoice
 
   scope :list, -> { order(:name) }
 
   validates :unit_cost, money: true, allow_nil: true
-  validates :variable_donation, uniqueness: { allow_blank: true, scope: :invoice_id }
-  delegate :recalculate!, to: :invoice
+  validates :unit_cost, presence: true, unless: :dynamic
+  validates :count, presence: true, unless: :dynamic
 
-  validates_by_schema
+  serialize :dynamic_cost_parameters, Hash
+
+  class << self
+    def all_types
+      [InvoiceItem] + type_mappings.values
+    end
+
+    def add_type_mapping(declassified_string, klass)
+      type_mappings[declassified_string] = klass
+    end
+  end
 
   def to_s
     "#{name}: #{total} (#{amount} / #{vat})"
   end
 
   def total
-    cost + vat
+    recalculate unless cost
+
+    cost&.+ vat
   end
 
-  def cost
-    unit_cost && count ? unit_cost * count : 0
+  def recalculate
+    self.cost = if dynamic
+                  dynamic_cost
+                else
+                  unit_cost && count ? unit_cost * count : 0
+                end
+
+    self
+  end
+
+  def recalculate_invoice!
+    invoice.recalculate!
   end
 
   def vat

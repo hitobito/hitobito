@@ -29,6 +29,7 @@ class InvoiceListsController < CrudController
         :unit_cost,
         :vat_rate,
         :count,
+        :type,
         :_destroy
       ]
     ]]
@@ -134,6 +135,14 @@ class InvoiceListsController < CrudController
     end
     entry.creator = current_user
     entry.invoice = parent.invoices.build(permitted_params[:invoice])
+
+    if params[:invoice_items].present?
+      entry.invoice.invoice_items = params[:invoice_items].map do |type|
+        item = InvoiceItem.type_mappings[type.to_sym].new
+        item.name = item.model_name.human
+        item
+      end
+    end
   end
 
   def recipient_ids_from_people_filter
@@ -145,5 +154,18 @@ class InvoiceListsController < CrudController
 
   def authorize_class
     authorize!(:index_invoices, parent)
+  end
+
+  def permitted_params
+    # Used to permit dynamic_cost_parameters for invoice items that define them
+    @permitted_params ||= super.tap do |permitted|
+      next unless permitted.dig(:invoice, :invoice_items_attributes)
+
+      permitted.dig(:invoice, :invoice_items_attributes).each do |index, attrs|
+        parameters = params.dig(:invoice_list, :invoice, :invoice_items_attributes,
+                                index, :dynamic_cost_parameters)
+        attrs[:dynamic_cost_parameters] = parameters&.to_unsafe_hash || {}
+      end
+    end
   end
 end

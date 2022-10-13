@@ -171,8 +171,8 @@ class Invoice < ActiveRecord::Base
     STATES_PAYABLE.include?(state)
   end
 
-  def includes_variable_donation?
-    invoice_items.any?(&:variable_donation?)
+  def includes_dynamic_invoice_items?
+    invoice_items.any?(&:dynamic)
   end
 
   def recipient_name

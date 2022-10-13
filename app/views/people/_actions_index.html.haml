@@ -8,6 +8,8 @@
 - if can?(:create_invoices_from_list, @group)
   = invoice_button(filter: list_filter_args, group: @group)
 
+= render_extensions :actions_index
+
 - if can?(:new, @group.roles.new)
   = action_button(t('.import_list'), new_group_csv_imports_path, :upload)
 

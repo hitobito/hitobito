@@ -2,7 +2,7 @@
 
 ## Overview
 
-We wan't to be able to provide invoice items, which generate their cost dynamically based on the recipient of the invoice and additional parameters.
+We want to be able to provide invoice items, which generate their cost dynamically based on the recipient of the invoice and additional parameters.
 Since these are very specific to the given use case, the core provides the foundation on which the wagon can then define their own dynamic invoice items.
 
 ## Defining a dynamic invoice item
@@ -41,15 +41,15 @@ self.dynamic_cost_parameter_definitions = {
 
 ```
 
-### Adding a new invoice item specific option to the dropdown
+### Adding new invoice item to mapping
 
-To access these invoice items, you can add a new sub link to the `Dropdown::InvoiceNew`.
+To keep track of all types, there's the `InvoiceItem#type_mappings` hash. The key is the declassified string of the subclass. Used for translations and urls.
+
+The value is then the targeted class constant.
 
 Inside your wagon.rb:
 
 ```
-Dropdown::InvoiceNew.add_sub_link(:variable_donation, [InvoiceItem::VariableDonation])
+InvoiceItem.add_type_mapping(:variable_donation, InvoiceItem::VariableDonation)
 
 ```
-
-The first parameter defines the translation key for your label, the second defines all InvoiceItem types that will be passed on the link.

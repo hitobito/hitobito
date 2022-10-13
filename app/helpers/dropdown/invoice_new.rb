@@ -7,16 +7,6 @@
 
 module Dropdown
   class InvoiceNew < Base
-    class_attribute :sub_links
-
-    self.sub_links = {
-      invoice: []
-    }
-
-    def self.add_sub_link(label_key, invoice_items)
-      self.sub_links[label_key] = invoice_items
-    end
-
     def initialize(template, people: [], mailing_list: nil, filter: nil, # rubocop:disable Metrics/ParameterLists
                              group: nil, invoice_items: nil, label: nil)
       super(template, label, :plus)
@@ -87,16 +77,19 @@ module Dropdown
     end
 
     def init_items
-      if sub_links.one?
+      if additional_sub_links.none?
         @items = finance_groups_items
       elsif finance_groups.one?
-        sub_links.each do |label_key, invoice_item_types|
-          add_item(translate(label_key), path(finance_groups.first, invoice_item_types))
+        add_item(translate(:invoice), path(finance_groups.first))
+        additional_sub_links.each do |key|
+          add_item(translate(key), path(finance_groups.first, [key]))
         end
       else
-        sub_links.each do |label_key, invoice_item_types|
+        item = add_item(translate(:invoice), '#')
+        item.sub_items += finance_groups_items
+        additional_sub_links.each do |label_key|
           item = add_item(translate(label_key), '#')
-          item.sub_items += finance_groups_items(invoice_item_types)
+          item.sub_items += finance_groups_items([label_key])
         end
       end
     end
@@ -114,6 +107,10 @@ module Dropdown
 
     def invalid_config_error_msg
       I18n.t('activerecord.errors.models.invoice_config.not_valid')
+    end
+
+    def additional_sub_links
+      InvoiceItem.type_mappings.keys
     end
   end
 end

@@ -24,6 +24,11 @@
 #
 
 class InvoiceItem < ActiveRecord::Base
+  # used to map declassified type string to class constant
+  class_attribute :type_mappings
+
+  self.type_mappings = {}
+
   # Used to mark as dynamically calculated.
   class_attribute :dynamic
 
@@ -52,14 +57,11 @@ class InvoiceItem < ActiveRecord::Base
 
   class << self
     def all_types
-      [InvoiceItem] + InvoiceItem.subclasses
+      [InvoiceItem] + type_mappings.values
     end
 
-    def find_invoice_item_type!(sti_name)
-      type = all_types.detect { |t| t.sti_name == sti_name }
-      raise ActiveRecord::RecordNotFound, "No invoice_item type '#{sti_name}' found" if type.nil?
-
-      type
+    def add_type_mapping(declassified_string, klass)
+      type_mappings[declassified_string] = klass
     end
   end
 

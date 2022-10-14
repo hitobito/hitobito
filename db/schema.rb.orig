@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
+ActiveRecord::Schema.define(version: 2022_10_04_084019) do
+=======
 ActiveRecord::Schema.define(version: 2022_10_13_120352) do
+>>>>>>> 7ed0a6e0b (Add table and model for HitobitoLogEntry)
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -424,13 +428,13 @@ ActiveRecord::Schema.define(version: 2022_10_13_120352) do
   end
 
   create_table "hitobito_log_entries", charset: "utf8mb4", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.integer "category", null: false
-    t.integer "level", null: false
+    t.integer "level", default: 0, null: false
     t.text "message", null: false
     t.string "subject_type"
     t.bigint "subject_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["category"], name: "index_hitobito_log_entries_on_category"
     t.index ["level"], name: "index_hitobito_log_entries_on_level"
     t.index ["subject_type", "subject_id"], name: "index_hitobito_log_entries_on_subject"

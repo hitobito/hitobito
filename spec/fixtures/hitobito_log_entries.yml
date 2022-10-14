@@ -20,33 +20,33 @@
 # https://github.com/hitobito/hitobito.
 
 debug_webhook:
-  created_at: <%= 5.day.ago.to_s(:db) %>
+  created_at: <%= 5.day.ago.midday.to_s(:db) %>
   category: 'webhook'
   level: 'debug'
   message: 'debug_webhook'
   subject: bottom_member (Person)
 
 info_webhook:
-  created_at: <%= 4.day.ago.to_s(:db) %>
+  created_at: <%= 4.day.ago.midday.to_s(:db) %>
   category: 'webhook'
   level: 'info'
   message: 'info_webhook'
   subject: top_event (Event)
 
 info_mail:
-  created_at: <%= 3.day.ago.to_s(:db) %>
+  created_at: <%= 3.day.ago.midday.to_s(:db) %>
   category: 'mail'
   level: 'info'
   message: 'info_mail'
 
 error_webhook:
-  created_at: <%= 2.day.ago.to_s(:db) %>
+  created_at: <%= 2.day.ago.midday.to_s(:db) %>
   category: 'webhook'
   level: 'error'
   message: 'error_webhook'
 
 error_ebics:
-  created_at: <%= 1.day.ago.to_s(:db) %>
+  created_at: <%= 1.day.ago.midday.to_s(:db) %>
   category: 'ebics'
   level: 'error'
   message: 'error_ebics'

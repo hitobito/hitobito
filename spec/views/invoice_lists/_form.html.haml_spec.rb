@@ -30,7 +30,6 @@ describe 'invoice_lists/_form.html.haml' do
       "BEI-JU - Beitrag Kinder",
       "BEI-18 - Beitrag Erwachsene",
       "ABO-NEWS - Abonnement der Mitgliederzeitschrift",
-      "Spenden - Variabler Spendenaufruf"
     ])
   end
 

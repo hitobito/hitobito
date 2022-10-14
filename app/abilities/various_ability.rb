@@ -17,6 +17,10 @@ class VariousAbility < AbilityDsl::Base
     permission(:admin).may(:manage).all
   end
 
+  on(HitobitoLogEntry) do
+    permission(:admin).may(:manage).all
+  end
+
   on(LabelFormat) do
     class_side(:index).everybody
     class_side(:manage_global).if_admin

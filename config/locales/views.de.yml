@@ -40,6 +40,7 @@ de:
       add: Eintrag hinzufügen
       remove: Entfernen
       not_allowed: Nicht erlaubt
+      deleted_entry: Gelöschter Eintrag %{class_name}(#%{class_id})
 
     button:
       save: Speichern
@@ -733,6 +734,15 @@ de:
 
   group_decorator:
     archived_suffix: ' (archiviert)'
+
+  hitobito_log_entries:
+    tabs:
+      all: Alle
+    index:
+      title: Hitobito Log
+    list:
+      from: Von
+      to: Bis
 
   import/csv_parser:
     read_error: "Fehler beim Lesen von %{filename}: %{error}"

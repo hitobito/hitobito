@@ -39,7 +39,12 @@ module UtilityHelper
   def column_type(obj, attr)
     return obj.send("#{attr}_type") if obj.respond_to?("#{attr}_type")
 
-    column_property(obj, attr, :type)
+    attribute_type_enum(obj, attr) || column_property(obj, attr, :type)
+  end
+
+  def attribute_type_enum(obj, attr)
+    return :enum if obj.class.respond_to?(:attribute_types) &&
+      obj.class.attribute_types[attr.to_s].is_a?(ActiveRecord::Enum::EnumType)
   end
 
   # Returns an ActiveRecord column property for the passed attr or nil

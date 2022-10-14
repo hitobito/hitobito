@@ -181,9 +181,19 @@ module FormatHelper
     val = obj.send(assoc.name)
     if val
       assoc_link(val)
+    elsif assoc.polymorphic?
+      format_polymorphic_assoc(obj, assoc)
     else
       ta(:no_entry, assoc)
     end
+  end
+
+  def format_polymorphic_assoc(obj, assoc)
+    assoc_class_id = obj.send(assoc.foreign_key)
+    return t('global.associations.no_entry') unless assoc_class_id
+
+    assoc_class_name = obj.send(assoc.foreign_type)
+    t('global.associations.deleted_entry', class_name: assoc_class_name, class_id: assoc_class_id)
   end
 
   # Formats an active record has_and_belongs_to_many or

@@ -1,0 +1,22 @@
+-# Copyright (c) 2012-2022, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+= content_for :filter do
+  = form_tag(form_path, { method: :get, class: 'hitobito-log form-inline-search', role: 'search', remote: true, data: { spin: true } }) do |f|
+    = hidden_field_tag :page, 1
+    = direct_filter_select(:level, Hitobito.logger.levels, nil, value_method: :itself, text_method: :itself)
+    = direct_filter_date(:from_date, t('.from'), value: params[:from_date], data: { submit: true })
+    = direct_filter_time(:from_time, '', value: params[:from_time], data: { submit: true })
+    = direct_filter_date(:to_date, t('.to'), value: params[:to_date], data: { submit: true })
+    = direct_filter_time(:to_time, '', value: params[:to_time], data: { submit: true })
+
+.hitobito-log
+  = paginate entries
+
+  = list_table do |t|
+    - t.attrs :created_at, :level, :category, :subject, :message
+
+
+  = paginate entries

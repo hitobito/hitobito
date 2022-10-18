@@ -21,11 +21,21 @@ module ValidatedEmail
 
   def assert_valid_email
     self.email = email.presence
-    return unless email
+    return if !email || !email_changed? || valid_email?(email)
 
-    unless valid_email?
-      errors.add(:email, :invalid)
-    end
+    # Send a sentry Notification if even the base mail which shoul be valid is invalid at the moment
+    alert_sentry(email) unless valid_email?(Settings.root_email)
+
+    errors.add(:email, :invalid)
+  end
+
+  def alert_sentry(email)
+    Raven.capture_message(
+      'Truemail does not work as expected',
+      extra: {
+        verifier_email: Truemail.configure.verifier_email,
+        validated_email: email
+      })
   end
 
 end

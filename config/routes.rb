@@ -13,6 +13,7 @@ Hitobito::Application.routes.draw do
 
   get '/healthz', to: 'healthz#show'
   get '/healthz/mail', to: 'healthz/mail#show'
+  get '/healthz/truemail', to: 'healthz/truemail#show'
 
   use_doorkeeper_openid_connect
   use_doorkeeper do # we only use tokens and authorizations

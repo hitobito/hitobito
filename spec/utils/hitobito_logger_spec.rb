@@ -13,7 +13,7 @@ describe HitobitoLogger do
   end
 
   it '::levels returns allowed values' do
-    expect(described_class.levels).to match_array %w[info error debug]
+    expect(described_class.levels).to match_array %w[info error debug warn]
   end
 
   context 'log method' do

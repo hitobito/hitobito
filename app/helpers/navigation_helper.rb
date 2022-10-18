@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
@@ -51,6 +50,7 @@ module NavigationHelper
                      oauth/active_authorizations
                      event_feed
                      tags
+                     hitobito_log_entries
                      mailing_lists/imap_mails),
       if: ->(_) { can?(:index, LabelFormat) } }
   ]

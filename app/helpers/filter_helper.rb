@@ -39,6 +39,13 @@ module FilterHelper
     end
   end
 
+  def direct_filter_time(attr, label = nil, **options)
+    options[:class] ||= 'span2 time'
+    direct_filter(attr, label) do
+      time_field(nil, attr, options)
+    end
+  end
+
   def set_filter(filter_params = {})
     anchor = filter_params.delete :anchor
     params.to_unsafe_h.deep_merge(filter: filter_params, anchor: anchor)

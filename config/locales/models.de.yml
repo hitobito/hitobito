@@ -8,6 +8,7 @@ de:
     formats:
       time: "%H:%M"
       date_time: "%d.%m.%Y %H:%M"
+      date_time_millis: "%d.%m.%Y %H:%M:%S.%L"
       month_year: '%B %Y'
 
   date:
@@ -233,6 +234,9 @@ de:
       help_text:
         one: Hilfetext
         other: Hilfetexte
+      hitobito_log_entry:
+        one: Hitobito Log Eintrag
+        other: Hitobito Log Einträge
       invoice:
         one: Rechnung
         other: Rechnungen
@@ -867,6 +871,13 @@ de:
         action:
           one: Seite
           other: Seiten
+
+      hitobito_log_entry:
+        created_at: Aufgezeichnet um
+        level: Level
+        category: Kategorie
+        subject: Subjekt
+        message: Meldung
 
       label_format:
         name: Bezeichnung

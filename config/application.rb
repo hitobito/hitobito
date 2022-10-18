@@ -12,6 +12,10 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module Hitobito
+  def self.logger
+    @logger ||= HitobitoLogger.new
+  end
+
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0

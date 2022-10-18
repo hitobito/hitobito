@@ -29,5 +29,7 @@
     = nav ActsAsTaggableOn::Tag.model_name.human(count: 2), tags_path, %w(tags)
   - if can?(:manage, Imap::Mail)
     = nav t('mailing_lists.imap_mails.manage'), imap_mails_path(mailbox: 'inbox'), %w(mailing_lists/imap_mails)
+  - if can?(:index, HitobitoLogEntry)
+    = nav t('hitobito_log_entries.index.title'), hitobito_log_entries_path
 
   = render_extensions(:admin_nav_kinds)

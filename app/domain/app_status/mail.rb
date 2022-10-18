@@ -28,10 +28,6 @@ class AppStatus::Mail < AppStatus
 
   private
 
-  def truemail_working
-    Truemail.valid?(Truemail.configure.verifier_email)
-  end
-
   def catch_all_inbox
     update_seen_mails
     overdue = seen_mails.any? do |m|

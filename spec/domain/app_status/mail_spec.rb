@@ -29,7 +29,6 @@ describe AppStatus::Mail do
   end
 
   before { cache.write(:app_status, nil) }
-  before { allow(Truemail).to receive(:valid?).and_call_original }
   after { cache.write(:app_status, nil) }
 
   context 'mail healthy' do
@@ -78,30 +77,6 @@ describe AppStatus::Mail do
       expect(cache.read(:app_status)[:seen_mails]).to eq(seen_mails)
     end
 
-  end
-
-  context 'truemail' do
-    before do
-      cache.write(:app_status, { seen_mails: seen_mails})
-      expect(imap_connector)
-        .to receive(:fetch_mails)
-        .with(:inbox)
-        .and_return([])
-    end
-
-    it "doesn't verify correctly anymore" do
-      allow(Truemail).to receive(:valid?).and_return(false)
-
-      expect(app_status.code).to eq(:ok)
-      expect(app_status.details[:truemail_working]).to eq(false)
-    end
-
-    it 'works just fine' do
-      allow(Truemail).to receive(:valid?).and_return(true)
-
-      expect(app_status.code).to eq(:ok)
-      expect(app_status.details[:truemail_working]).to eq(true)
-    end
   end
 
   private

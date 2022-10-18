@@ -25,7 +25,7 @@ describe Healthz::TruemailController do
         expect(json).to eq('app_status' =>
                            { 'code' => 'ok',
                              'details' => { 'truemail_working' => true,
-                                            'verified_email' => 'hitobito@puzzle.ch' } })
+                                            'validated_email' => 'hitobito@puzzle.ch' } })
       end
     end
 
@@ -40,7 +40,7 @@ describe Healthz::TruemailController do
         expect(json).to eq('app_status' =>
                            { 'code' => 'service_unavailable',
                              'details' => { 'truemail_working' => false,
-                                            'verified_email' => 'hitobito@puzzle.ch' } })
+                                            'validated_email' => 'hitobito@puzzle.ch' } })
       end
     end
 

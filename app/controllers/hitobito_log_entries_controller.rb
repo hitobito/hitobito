@@ -60,8 +60,10 @@ class HitobitoLogEntriesController < ListController
   def filter_to(scope)
     return scope unless filter_time(:to)
 
-    # The param has minute precision. We add 1 minute and do a `<` comparison, so we also get the entries created
-    # after this exact minute but before the next minute which is what the user expects when having minute precision.
+    # The param has minute precision. We add 1 minute and
+    # do a `<` comparison, so we also get the entries created
+    # after this exact minute but before the next minute which is
+    # what the user expects when having minute precision.
     less_than_timestamp = filter_time(:to) + 1.minute
     scope.where('created_at < ?', less_than_timestamp)
   end

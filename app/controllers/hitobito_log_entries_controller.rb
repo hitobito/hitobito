@@ -6,7 +6,7 @@
 # https://github.com/hitobito/hitobito.
 
 class HitobitoLogEntriesController < ListController
-  helper_method :form_path
+  helper_method :form_path, :category_param
 
   private
 

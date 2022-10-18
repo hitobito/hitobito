@@ -16,7 +16,7 @@
   = paginate entries
 
   = list_table do |t|
-    - t.attrs :created_at, :level, :category, :subject, :message
+    - t.attrs *hitobito_log_entry_table_attrs
 
 
   = paginate entries

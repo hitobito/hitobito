@@ -3,6 +3,8 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito.
 
+// check app/helpers/dropdown/toggle_param_item.rb
+
 const ToggleParamItem = {
 
   get toggleParamLinks() {

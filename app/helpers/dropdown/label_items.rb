@@ -24,6 +24,8 @@ module Dropdown
       add_households_labels_option_items(label_item)
     end
 
+    private
+
     def main_label_link
       if user&.last_label_format_id
         export_label_format_path(user.last_label_format_id)
@@ -57,7 +59,8 @@ module Dropdown
     def add_households_labels_option_items(parent)
       if @households
         parent.sub_items << Divider.new
-        parent.sub_items << ToggleHouseholdsLabelsItem.new(dropdown.template)
+        # parent.sub_items << ToggleHouseholdsLabelsItem.new(dropdown.template)
+        parent.sub_items << household_label_checkbox
       end
     end
 
@@ -65,6 +68,13 @@ module Dropdown
       households = ToggleHouseholdsLabelsItem::DEFAULT_STATE if @households
       params.merge(format: :pdf, label_format_id: id,
                    household: households)
+    end
+
+    def household_label_checkbox
+      template = dropdown.template
+      label = template.t('dropdown/people_export.household_option')
+      id = :household
+      ToggleParamItem.new(template, id, label, checked: true)
     end
 
 

@@ -50,8 +50,16 @@ module Dropdown
                                  data: { checkable: true }) if @households
 
       item.sub_items << Item.new(translate(:everything),
-                                 path.merge(details: true),
+                                 path.merge(details: true, show_related_roles_only: false),
                                  data: { checkable: true }) if @details
+      item.sub_items << Divider.new
+      item.sub_items << show_related_roles_only_checkbox
+    end
+
+    def show_related_roles_only_checkbox
+      label = template.t('dropdown/people_export.show_related_roles_only')
+      id = :show_related_roles_only
+      ToggleParamItem.new(template, id, label, checked: false)
     end
 
     def vcard_link

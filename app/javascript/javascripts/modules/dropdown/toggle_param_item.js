@@ -42,7 +42,7 @@ const ToggleParamItem = {
   },
 
   updateLinkParams(checkbox) {
-    const paramName = checkbox.dataset.toggleParamId;
+    const paramName = checkbox.dataset.toggleParamName;
     const checked = checkbox.checked;
     this.linkItems(checkbox).forEach((link) => {
       let href = link.getAttribute('href');

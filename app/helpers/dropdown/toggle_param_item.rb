@@ -8,9 +8,9 @@
 module Dropdown
   class ToggleParamItem
 
-    def initialize(template, id, label, checked: false)
+    def initialize(template, param_name, label, checked: false)
       @template = template
-      @id = id
+      @param_name = param_name
       @label = label
       @checked = checked
     end
@@ -27,7 +27,7 @@ module Dropdown
       template.content_tag(:div, class: 'checkbox') do
         template.content_tag(:label, for: @id) do
           template.safe_join([
-            template.check_box_tag(@id, '1', @checked, 'data-toggle-param-id': @id),
+            template.check_box_tag(@param_name, '1', @checked, 'data-toggle-param-name': @param_name),
             @label
           ].compact)
         end

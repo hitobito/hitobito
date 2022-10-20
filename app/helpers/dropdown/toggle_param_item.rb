@@ -27,7 +27,8 @@ module Dropdown
       template.content_tag(:div, class: 'checkbox') do
         template.content_tag(:label, for: @id) do
           template.safe_join([
-            template.check_box_tag(@param_name, '1', @checked, 'data-toggle-param-name': @param_name),
+            template.check_box_tag(@param_name, '1', @checked,
+                                   'data-toggle-param-name': @param_name),
             @label
           ].compact)
         end

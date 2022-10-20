@@ -135,6 +135,32 @@ describe PeopleController do
             end.to change(Delayed::Job, :count).by(1)
           end
 
+          it 'exports csv with options' do
+            expect(AsyncDownloadFile).to receive(:create_name).and_return('filename.csv')
+
+            export_job_params = [
+              :csv,
+              572407901,
+              954199476,
+              ActionController::Parameters.new('details' => 'true'),
+              { filename: 'filename.csv',
+                full: true, household: 'true',
+                selected: 'true',
+                show_related_roles_only: 'true' }
+            ]
+
+            expect(Export::PeopleExportJob).to receive(:new).with(*export_job_params).and_call_original
+
+            request_params = { group_id: group, details: true,
+                               selected: true, household: true,
+                               show_related_roles_only: true }
+
+            get :index, params: request_params, format: :csv
+
+            expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+            expect(response).to redirect_to(returning: true)
+          end
+
           it 'exports xlsx' do
             expect do
               get :index, params: { group_id: group }, format: :xlsx

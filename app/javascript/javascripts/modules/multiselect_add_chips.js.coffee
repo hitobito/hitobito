@@ -33,6 +33,6 @@ app.MultiselectAddChips = {
 
 $(document).on('click', 'button[data-add-to]', app.MultiselectAddChips.selectValue)
 $(document).on('click', 'button[data-clear-values]', app.MultiselectAddChips.clearValues)
-$(document).on('change', '.chosen-select', app.MultiselectAddChips.showUnselected)
-$(document).on('chosen:updated', '.chosen-select', app.MultiselectAddChips.showUnselected)
+$(document).on('change', '.form-select', app.MultiselectAddChips.showUnselected)
+$(document).on('chosen:updated', '.form-select', app.MultiselectAddChips.showUnselected)
 $(document).on('chosen:ready', app.MultiselectAddChips.showUnselected)

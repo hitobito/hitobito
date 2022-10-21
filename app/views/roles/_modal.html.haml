@@ -7,7 +7,7 @@
         = f.select(:group_id,
                    group_options_with_level,
                    { },
-                   { class: 'chosen-select',
+                   { class: 'form-select',
                      data: { remote: true,
                              url: role_types_group_roles_path(@group),
                              chosen_no_results: t('global.chosen_no_results') } })
@@ -22,7 +22,7 @@
                           :sti_name,
                           :label,
                           { },
-                          { class: 'chosen-select',
+                          { class: 'form-select',
                             data: { remote: true,
                                     url: details_group_roles_path(@group),
                                     placeholder: ta(:please_select),

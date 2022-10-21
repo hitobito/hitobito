@@ -4,8 +4,10 @@
 -#  https://github.com/hitobito/hitobito.
 
 #main.row-fluid
-  %article.span8
-    = format_attr(entry, :description)
+  %article.mw-100.mw-md-90ch
+
+    %p
+      = format_attr(entry, :description)
 
     = render_extensions :attrs
 

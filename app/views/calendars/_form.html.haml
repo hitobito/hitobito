@@ -11,7 +11,7 @@
   = f.labeled_inline_fields_for :included_calendar_groups do |g|
     = g.hidden_field(:excluded, value: false)
     = g.select(:group_id, group_options_with_level(group.groups_in_same_layer.to_a), {}, { class: 'form-select mr-3' })
-    = g.label(:with_subgroups, class: 'checkbox', style: 'padding: 5px 20px 10px 20px; vertical-align: top') do
+    = g.label(:with_subgroups, class: 'checkbox py-2 me-4') do
       = g.check_box(:with_subgroups)
       = t('.include_subgroups')
     = g.select(:event_type, event_type_options(group.layer_group), { include_blank: t('.all_event_types') }, class: 'form-select')
@@ -19,7 +19,7 @@
   = f.labeled_inline_fields_for :excluded_calendar_groups do |g|
     = g.hidden_field(:excluded, value: true)
     = g.select(:group_id, group_options_with_level(group.groups_in_same_layer.to_a), {}, { class: 'form-select mr-3' })
-    = g.label(:with_subgroups, class: 'checkbox', style: 'padding: 5px 20px 10px 20px; vertical-align: top') do
+    = g.label(:with_subgroups, class: 'checkbox py-2 me-4') do
       = g.check_box(:with_subgroups)
       = t('.exclude_subgroups')
     = g.select(:event_type, event_type_options(group.layer_group), { include_blank: t('.all_event_types') }, class: 'form-select')

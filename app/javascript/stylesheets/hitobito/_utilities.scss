@@ -3,10 +3,6 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
 
-.no-margin {
-  margin: 0;
-}
-
 $utilities: map-merge(
   $utilities,
   (
@@ -18,6 +14,63 @@ $utilities: map-merge(
         50: 50%,
         15ch: 15ch, // use .mw-100.mw-md-15ch as a replacement for span2
         60ch: 60ch, // use .mw-100.mw-md-60ch as a replacement for span6
+        90ch: 90ch, // use .mw-100.mw-md-90ch as a replacement for span8
+      ),
+      responsive: true,
+    ),
+    "margin-left": (
+      property: margin-left,
+      class: ml,
+      values: (
+        0: 0,
+        1: 0.25rem,
+        2: 0.5rem,
+        3: 1rem,
+        4: 1.5rem,
+        5: 3rem,
+        auto: auto
+      ),
+      responsive: true,
+    ),
+    "margin-right": (
+      property: margin-right,
+      class: mr,
+      values: (
+        0: 0,
+        1: 0.25rem,
+        2: 0.5rem,
+        3: 1rem,
+        4: 1.5rem,
+        5: 3rem,
+        auto: auto
+      ),
+      responsive: true,
+    ),
+    "padding-left": (
+      property: padding-left,
+      class: pl,
+      values: (
+        0: 0,
+        1: 0.25rem,
+        2: 0.5rem,
+        3: 1rem,
+        4: 1.5rem,
+        5: 3rem,
+        auto: auto
+      ),
+      responsive: true,
+    ),
+    "padding-right": (
+      property: padding-right,
+      class: pr,
+      values: (
+        0: 0,
+        1: 0.25rem,
+        2: 0.5rem,
+        3: 1rem,
+        4: 1.5rem,
+        5: 3rem,
+        auto: auto
       ),
       responsive: true,
     ),

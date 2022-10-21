@@ -19,5 +19,5 @@ app.activateChosen = (i, element) ->
 # only bind events for non-document elements in turbolinks:load
 $(document).on('turbolinks:load', ->
   # enable chosen js
-  $('.chosen-select').each(app.activateChosen)
+  $('.form-select').each(app.activateChosen)
 )

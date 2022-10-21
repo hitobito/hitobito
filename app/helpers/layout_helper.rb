@@ -139,6 +139,7 @@ module LayoutHelper
     return disabled_button(label, disabled_msg, icon_name, options) if disabled_msg
 
     add_css_class options, 'btn'
+    add_css_class options, 'btn-outline-primary' unless /(^|\s)btn-/.match options[:class]
     url = url.is_a?(ActionController::Parameters) ? url.to_unsafe_h.merge(only_path: true) : url
 
     link_to(url, options) do

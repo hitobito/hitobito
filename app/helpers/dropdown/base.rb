@@ -20,7 +20,7 @@ module Dropdown
       @label = label
       @icon = icon
       @main_link = nil
-      @button_class = 'btn'
+      @button_class = 'btn btn-outline-primary'
       @items = []
     end
 

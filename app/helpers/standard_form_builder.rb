@@ -255,15 +255,20 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, required = false,
                                 &block)
-    required_class = required ? ' required' : nil
-    content_tag(:div, class: ['control-group', required_class].compact.join(' ')) do
-      label(assoc, class: 'control-label') +
-      nested_fields_for(assoc, partial_name, record_object) do |fields|
-        content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
+    html_options = { class: 'labeled col-md controls well' }
+    css_classes = { row: true, 'mb-2': true, required: required }
+    label_classes = 'control-label col-form-label col-md-3 col-xl-2 pb-1 text-md-end'
+    label_classes += ' required' if required
+    content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(' ')) do
+      label(assoc, class: label_classes) +
+        content_tag(:div, class: 'labeled col-md') do
+          nested_fields_for(assoc, partial_name, record_object) do |fields|
+            content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
 
-        content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove')))
-        content_tag(:div, content, class: 'controls controls-row well')
-      end
+            content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove')))
+            content_tag(:div, content, html_options)
+          end
+        end
     end
   end
 

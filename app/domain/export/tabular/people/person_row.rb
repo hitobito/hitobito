@@ -24,10 +24,15 @@ module Export::Tabular::People
 
     def roles
       if entry.try(:role_with_layer).present?
-        entry.roles.zip(entry.role_with_layer.split(', ')).map { |arr| arr.join(' ') }.join(', ')
+        entry_roles.zip(entry.role_with_layer.split(', ')).map { |arr| arr.join(' ') }.join(', ')
       else
-        entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+        entry_roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
       end
+    end
+
+    def entry_roles
+      # filter roles if restrict_to_role_ids
+      entry.roles
     end
 
     def tags

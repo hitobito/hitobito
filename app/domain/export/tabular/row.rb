@@ -19,9 +19,10 @@ module Export::Tabular
 
     attr_reader :entry, :format
 
-    def initialize(entry, format = nil)
+    def initialize(entry, format = nil, options: {})
       @entry = entry
       @format = format
+      @options = options
     end
 
     def fetch(attr)

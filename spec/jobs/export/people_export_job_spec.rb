@@ -10,17 +10,25 @@ require 'spec_helper'
 describe Export::PeopleExportJob do
 
   subject do
-    Export::PeopleExportJob.new(format, user.id, group.id, {},
-                                household: household, full: full,
-                                selection: selection, filename: filename)
+    Export::PeopleExportJob.new(format, user.id, group.id, {}, options: export_options)
   end
 
-  let(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
+  let(:export_options) do
+    { household: household, full: full,
+      show_related_roles_only: show_related_roles_only,
+      filename: filename,
+      selection: selection, filename: filename }
+  end
+
+  let!(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
+  let(:bottom_member)    { people(:bottom_member) }
   let(:group)     { groups(:bottom_layer_one) }
   let(:household) { false }
   let(:selection) { false }
+  let(:show_related_roles_only) { false }
   let(:file)      { AsyncDownloadFile.from_filename(filename, format) }
   let(:filename) { AsyncDownloadFile.create_name('people_export', user.id) }
+  let(:lines) { file.read.lines }
 
   before do
     SeedFu.quiet = true
@@ -34,7 +42,6 @@ describe Export::PeopleExportJob do
     it 'and saves it' do
       subject.perform
 
-      lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
       expect(lines[0].split(';').count).to match(15)
@@ -44,14 +51,13 @@ describe Export::PeopleExportJob do
       let(:household) { true }
 
       before do
-        user.update(household_key: 1)
-        people(:bottom_member).update(household_key: 1)
+        member.update!(household_key: 1)
+        bottom_member.update!(household_key: 1)
       end
 
       it 'and saves it with single line per household' do
         subject.perform
 
-        lines = file.read.lines
         expect(lines.size).to eq(2)
       end
     end
@@ -98,11 +104,31 @@ describe Export::PeopleExportJob do
     it 'and saves it' do
       subject.perform
 
-      lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
       expect(lines[0]).to match(/Zusätzliche Angaben;.*/)
       expect(lines[0].split(';').count).not_to match(14)
+    end
+
+  end
+
+  context 'show related person roles only' do
+    let(:format) { :csv }
+    let(:full) { true }
+    let(:show_related_roles_only) { true }
+    let(:role_columns) {   }
+
+    before do
+      Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two), person: bottom_member)
+    end
+
+    it 'shows only roles for given group' do
+      subject.perform
+      expect(lines[1]).not_to match(/Leader Bottom Two/)
+      expect(lines[2]).not_to match(/Leader Bottom Two/)
+    end
+
+    it 'shows only roles for given people filter' do
     end
   end
 

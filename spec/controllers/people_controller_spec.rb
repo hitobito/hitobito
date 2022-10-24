@@ -140,8 +140,8 @@ describe PeopleController do
 
             export_job_params = [
               :csv,
-              572407901,
-              954199476,
+              572407901, # current_person.id
+              954199476, # group.id
               ActionController::Parameters.new('details' => 'true'),
               { filename: 'filename.csv',
                 full: true, household: 'true',

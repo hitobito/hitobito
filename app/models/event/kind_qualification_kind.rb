@@ -59,6 +59,6 @@ class Event::KindQualificationKind < ActiveRecord::Base
   validates :category, inclusion: { in: CATEGORIES }
   validates :role, inclusion: { in: ROLES }
 
-  i18n_enum :validity, %w(valid valid_or_expired)
+  i18n_enum :validity, %w(valid valid_or_expired valid_or_reactivatable)
 
 end

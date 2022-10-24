@@ -57,7 +57,7 @@ class Event::PreconditionChecker
 
   def validate_simple_qualifications(precondition_ids_and_validity)
     precondition_ids_and_validity.each do |id, validity|
-      errors << id unless reactivateable?(id) || expired?(id, validity)
+      errors << id unless valid_qualification?(id, validity)
     end
   end
 
@@ -69,7 +69,7 @@ class Event::PreconditionChecker
 
   def any_grouped_qualifications?(grouped_ids_and_validity)
     grouped_ids_and_validity.any? do |ids|
-      ids.all? { |id, validity| reactivateable?(id) || expired?(id, validity) }
+      ids.all? { |id, validity| valid_qualification?(id, validity) }
     end
   end
 
@@ -88,9 +88,16 @@ class Event::PreconditionChecker
       any? { |qualification| qualification.reactivateable?(course.start_date) }
   end
 
-  def expired?(qualification_kind_id, validity)
-    validity.to_sym == :valid_or_expired &&
-      person_qualifications.any? { |q| q.qualification_kind_id == qualification_kind_id }
+  def valid_qualification?(qualification_kind_id, validity)
+    scope = case validity.to_sym
+    when :valid
+      person_qualifications.active(course.start_date)
+    when :valid_or_reactivatable
+      person_qualifications.reactivateable(course.start_date)
+    when :valid_or_expired
+      person_qualifications
+    end
+    scope.any? { |q| q.qualification_kind_id == qualification_kind_id }
   end
 
   def old_enough?

@@ -198,16 +198,16 @@ class PeopleController < CrudController
     export_job_options = export_job_options(filename)
     Export::PeopleExportJob.new(
       format, current_person.id, @group.id,
-      list_filter_args, export_job_options
+      list_filter_args, options: export_job_options
     ).enqueue!
   end
 
   def export_job_options(filename)
     full = params[:details].present? && index_full_ability?
     { full: full, filename: filename,
-      show_related_roles_only: params.delete(:show_related_roles_only),
-      household: params.delete(:household),
-      selected: params.delete(:selected)}
+      show_related_roles_only: true?(params.delete(:show_related_roles_only)),
+      household: true?(params.delete(:household)),
+      selected: true?(params.delete(:selected))}
   end
 
   def render_tabular(format, entries, full)

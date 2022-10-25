@@ -124,6 +124,7 @@ describe Export::PeopleExportJob do
 
     it 'shows only roles for given group' do
       subject.perform
+
       expect(lines[1]).not_to match(/Leader Bottom Two/)
       expect(lines[2]).not_to match(/Leader Bottom Two/)
     end

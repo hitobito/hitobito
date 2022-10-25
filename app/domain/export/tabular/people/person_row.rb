@@ -31,8 +31,14 @@ module Export::Tabular::People
     end
 
     def entry_roles
-      # filter roles if restrict_to_role_ids
-      entry.roles
+      if restrict_to_roles
+        entry
+          .roles
+          .where(type: restrict_to_roles)
+          .where(group_id: restrict_to_group_ids)
+      else
+        entry.roles
+      end
     end
 
     def tags
@@ -44,6 +50,14 @@ module Export::Tabular::People
     end
 
     private
+
+    def restrict_to_roles
+      @options[:restrict_to_roles]
+    end
+
+    def restrict_to_group_ids
+      @options[:restrict_to_group_ids]
+    end
 
     def phone_number_attribute(attr)
       contact_account_attribute(entry.phone_numbers, attr)

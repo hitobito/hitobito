@@ -82,12 +82,16 @@ module Person::Groups
     # Scope listing all people with a role in the given group.
     def in_group(group, join = { roles: :group })
       joins(join).where(groups: { id: group.id })
+                 .where(groups: { archived_at: nil })
+                 .or(where(Group.arel_table[:archived_at].gt(Time.now.utc)))
     end
 
     # Scope listing all people with a role in the given layer.
     def in_layer(*groups)
       joins(groups.extract_options![:join] || { roles: :group })
         .where(groups: { layer_group_id: groups.collect(&:layer_group_id), deleted_at: nil })
+        .where(groups: { archived_at: nil })
+        .or(where(Group.arel_table[:archived_at].gt(Time.now.utc)))
         .distinct
     end
 
@@ -97,6 +101,8 @@ module Person::Groups
         .where(groups: { deleted_at: nil })
         .where("#{Group.quoted_table_name}.lft >= :lft AND #{Group.quoted_table_name}.rgt <= :rgt",
                lft: group.lft, rgt: group.rgt)
+        .where(groups: { archived_at: nil })
+        .or(where(Group.arel_table[:archived_at].gt(Time.now.utc)))
         .distinct
     end
 

@@ -236,6 +236,19 @@ class Group < ActiveRecord::Base
     GroupSetting.list(id)
   end
 
+  # TODO Concern?
+  def archive!
+    ActiveRecord::Base.transaction do
+      archival_timestamp = Time.zone.now
+
+      Role.where(group_id: self.id)
+          .touch_all(:archived_at, time: archival_timestamp)
+      self.archived_at = archival_timestamp
+
+      self.save!
+    end
+  end
+
   def archived?
     archived_at.present?
   end

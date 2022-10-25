@@ -26,6 +26,7 @@ fr:
       add: Article supplémentaire
       remove: Supprimer
       not_allowed: Non autorisé
+      deleted_entry: Entrée supprimée %{class_name} (#%{class_id})
     button:
       save: Enregistrer
       add_another: Sauver et saisir d'autres
@@ -155,6 +156,8 @@ fr:
     articles_only: 'Facture séparée'
     csv: 'CSV'
     pdf: 'PDF'
+  dropdown/invoice_new:
+    invoice: 'Facture normale'
   dropdown/invoice_sending:
     button: 'Établir une facture / un rappel'
     set_state: 'Saisir le statut (facture/rappel)'
@@ -664,6 +667,14 @@ fr:
     choose_group: 'Sélectionne un groupe, s''il-te-plaît.'
   group_decorator:
     archived_suffix: '(archivé)'
+  hitobito_log_entries:
+    tabs:
+      all: Tous
+    index:
+      title: Hitobito Log
+    list:
+      from: De
+      to: à
   import/csv_parser:
     read_error: "Erreur lors de la lecture de %{filename}: %{error}"
     contains_no_data: "Ne contient pas de données"
@@ -715,8 +726,11 @@ fr:
     recipients_empty: La liste des destinataires est vide. Impossible de créer un PDF.
     evaluations:
       show:
+        title: Pièce comptable
         deficit: Paiement partiel
+        excess: Trop-perçu
         table:
+          name: Désignation du produit
           count: Nombre
           amount_paid: Montant payé
           vat: TVA
@@ -1060,6 +1074,7 @@ fr:
     imap_mails: 'e-mails'
     invoices: 'Factures'
     invoices/single: 'Factures individuelles'
+    invoices/evaluations: 'Pièce comptable'
   notes:
     new_note: Ajouter une note
     note:
@@ -1072,7 +1087,7 @@ fr:
   oauth:
     applications:
       form:
-        help_cors_origins: En cas d'activation de la portée "api", les sites webs sur cet hôte pourront consulter les données de l'interface JSON depuis le navigateur web (CORS).
+        help_cors_origins: En cas d'activation de la portée "api", "groups", "people", "events", "mailing_lists" ou "invoices", les sites webs sur cet hôte pourront consulter les données de l'interface JSON depuis le navigateur web (CORS).
         help_native_redirect_uris: Une entrée par ligne. Pour les tests locaux, utiliser %{native_redirect_uri}.
       attrs:
         profile_endpoint_help: Les informations profil de l'utilisateur peuvent être prises au-delà ce Endpoint. Pour ce faire, il faut rendre le Access Token dans le Authorization Header. Le Scope souhaité peut être rendu en tant que X-Scope.
@@ -1226,6 +1241,21 @@ fr:
           email_primary_invalid: Adresse e-mail principale non valide
           email_additional_invalid: Adresse e-mail supplémentaire non valide
           address_invalid: L'adresse ne se trouve pas dans la liste.
+    security_tools:
+      index:
+        account: Compte
+        last_sign_in_at: 'Dernière connexion: '
+        no_last_sign_in: 'Aucune connexion enregistrée jusqu''à présent'
+        person_has_2FA: Cette personne a activé l'authentification à deux facteurs
+        person_no_2FA: Cette personne n'a pas activé l'authentification à deux facteurs
+        person_has_login: Cette personne a une adresse e-mail principale et a donc accès au système
+        person_no_login: Cette personne n'a pas d'adresse e-mail principale et n'a donc pas accès au système.
+        security_and_privacy: Sécurité et confidentialité
+        override_password: "Écraser le mot de passe"
+        confirm_reset: "Attention : le mot de passe est alors remplacé. Est-ce vraiment ce que tu veux ?"
+      password_override:
+        flashes:
+          success: Le mot de passe a été écrasé. La personne a été informée et peut à tout moment demander un nouveau mot de passe via la fonction "Mot de passe oublié".
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
     duplicate_keys:
@@ -1274,6 +1304,7 @@ fr:
     tabs:
       history: Historique
       log: Journal
+      security_tools: Sécurité
       colleagues: Collaborateurs/collaboratrices
       invoices: Factures
       subscriptions: Abonnements
@@ -1352,6 +1383,7 @@ fr:
       password_email_sent: L'invitation a été envoyée
       login: Le login est activé
       two_factors: Le login avec 2FA est activé
+      status_off: Non existant
   participations:
     destroy:
       flash:
@@ -1384,6 +1416,7 @@ fr:
     attributes:
       title: Champ
       match: contient
+      not_match: ne contient pas
       equal: est précis
       greater: plus grand que
       smaller: plus petit que
@@ -1588,6 +1621,7 @@ fr:
         destroy: "Il y a eu une réponse pour la demande d'accès de <i>%{label}</i>."
     impersonate: "Le compte a été repris par %{user}."
     impersonation_done: "Le compte n'est plus utilisé par %{user}."
+    password_override: "Le mot de passe de %{user} a été effacé. La connexion est empêchée jusqu'à ce qu'un nouveau mot de passe soit défini."
     append_to_household: "%{item} a été ajouté au ménage (%{object_changes})."
     household_updated: "Le foyer (%{object_changes}) a été actualisé."
     remove_from_household: "%{item} a été retiré du ménage (%{object_changes})."

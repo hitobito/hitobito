@@ -26,6 +26,7 @@ it:
       add: Aggiungere annotazione
       remove: Eliminare
       not_allowed: Non permesso
+      deleted_entry: Voce cancellata %{class_name}(#%{class_id})
     button:
       save: Salvare
       add_another: Salvare ed inserirne altri
@@ -155,6 +156,8 @@ it:
     articles_only: 'Fattura a parte'
     csv: 'CSV'
     pdf: 'PDF'
+  dropdown/invoice_new:
+    invoice: 'Fattura normale'
   dropdown/invoice_sending:
     button: 'Emettere/Sollecitare fattura'
     set_state: 'Determinare lo stato (emessa/sollecitata)'
@@ -162,6 +165,10 @@ it:
   dropdown/letter_with_invoice:
     print: Stampare
     letters_with_invoice: Lettere di fatturazione
+  dropdown/invoices/evaluation:
+    download: 'Export'
+    csv: 'CSV'
+    xlsx: 'XLSX'
   devise:
     failure:
       already_authenticated: 'sei già iscritto.'
@@ -660,6 +667,14 @@ it:
     choose_group: 'prego selezionare un gruppo'
   group_decorator:
     archived_suffix: '(archiviato)'
+  hitobito_log_entries:
+    tabs:
+      all: Tutti
+    index:
+      title: log hitobito
+    list:
+      from: Da
+      to: A
   import/csv_parser:
     read_error: "errore nella lettura di %{filename}: %{error}"
     contains_no_data: "non contiene nessun dato"
@@ -709,6 +724,22 @@ it:
         amount: Importo
     export_enqueued: 'L''esportazione viene iniziata in retroscena e verrà scaricata al termine.'
     recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
+    evaluations:
+      show:
+        title: Ricevuta della prenotazione
+        deficit: Pagamento parziale
+        excess: Pagamento in eccesso
+        table:
+          name: Denominazione del prodotto
+          count: Numero
+          amount_paid: Importo pagato
+          vat: Iva
+          account: Conto
+          cost_center: Centro di costo
+          total: 'Totale:'
+        filter:
+          from: Da
+          to: A
   invoice_configs:
     form_tabs:
       general: In generale
@@ -1043,6 +1074,7 @@ it:
     imap_mails: 'Mails'
     invoices: 'Fatture'
     invoices/single: 'Singole fatture'
+    invoices/evaluations: 'Ricevuta della prenotazione'
   notes:
     new_note: Nuova nota
     note:
@@ -1055,7 +1087,7 @@ it:
   oauth:
     applications:
       form:
-        help_cors_origins: Se è attivo lo scope "api" le pagine web possono chiamare su questo host i dati dell'interfaccia JSON dal browser (CORS).
+        help_cors_origins: Se uno degli scopes "api", "groups", "people", "events", "mailing_lists" o "invoices" è attivato, i siti web su questi host possono recuperare i dati dall'interfaccia JSON dal browser (CORS ).
         help_native_redirect_uris: Una registrazione per riga. Per tests locali utilizzare <code class='bg-light'>%{native_redirect_uri}</code>.
       attrs:
         profile_endpoint_help: Si può fare riferimento alle informazioni di profilo dell'utilizzatore  tramite questo endpoint. Nel far questo deve venir consegnato l'access token nell'authorization header. Lo scope desiderato può venir consegnato quale x-scope header.
@@ -1212,6 +1244,21 @@ it:
           email_primary_invalid: Email principale non valida
           email_additional_invalid: Altre email non valida
           address_invalid: L'idirizzo non si trova nell'indirizzario
+    security_tools:
+      index:
+        account: Account
+        last_sign_in_at: 'Ultimo login'
+        no_last_sign_in: 'Nessun accesso registrato finora'
+        person_has_2FA: Questa persona ha l'autenticazione a due fattori abilitata
+        person_no_2FA: Questa persona non ha attivato l'autenticazione a due fattori
+        person_has_login: Questa persona ha un indirizzo email principale e quindi ha accesso al sistema
+        person_no_login: Questa persona non ha un indirizzo email principale e quindi non ha accesso al sistema
+        security_and_privacy: Sicurezza e protezione dei dati
+        override_password: "Sovrascrivere la password"
+        confirm_reset: "Attenzione: questo sovrascriverà la password. Lo vuoi davvero?"
+      password_override:
+        flashes:
+          success: La password è stata sovrascritta. La persona è stata informata e può richiedere in qualsiasi momento una nuova password utilizzando la funzione "Password dimenticata".
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
     duplicate_keys:
@@ -1260,6 +1307,7 @@ it:
     tabs:
       history: Azioni
       log: Log
+      security_tools: Sicurezza
       colleagues: Collaboratore
       invoices: Fatture
       subscriptions: Abbonamenti
@@ -1337,6 +1385,7 @@ it:
       password_email_sent: L'invito è stato inviato
       login: Login attivo
       two_factors: Il login con 2FA è attivo
+      status_off: Non disponibile
   participations:
     destroy:
       flash:
@@ -1369,6 +1418,7 @@ it:
     attributes:
       title: Campi
       match: contiene
+      not_match: non contiene niente
       equal: è esattamente
       greater: più grande di
       smaller: più piccolo di
@@ -1573,6 +1623,7 @@ it:
         destroy: "La richiesta d'accesso per <i>%{label}</i> è stata evasa."
     impersonate: "L'account è stato rilevato da %{user}"
     impersonation_done: "L'account non è più utilizzato da %{user}"
+    password_override: "La password è stata azzerata da %{user} e il login impedito fino a che verrà definita una nuova password."
     append_to_household: "è stato aggiunto all'economia domestica"
     household_updated: "L'economia domestica (%{object_changes}) è stata aggiornata"
     remove_from_household: "è stato rimosso dall'economia domestica"

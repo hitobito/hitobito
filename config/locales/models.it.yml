@@ -3,6 +3,7 @@ it:
     formats:
       time: "%H:%M"
       date_time: "%d.%m.%Y %H:%M"
+      date_time_millis: "%d.%m.%Y %H:%M:%S.%L"
       month_year: '%B %Y'
   date:
     formats:
@@ -62,6 +63,9 @@ it:
             choices:
               requires_more_than_one_choice: 'deve contenere almeno due risposte'
               requires_exactly_one_choice: 'deve contenere esattamente una risposta'
+            question:
+              application_blank: per la registrazione è necessario compilare i dati
+              admin_blank: per l'amministrazione i dati devono essere compilati
         event/participation:
           attributes:
             person_id:
@@ -116,6 +120,7 @@ it:
             invoice_config:
               invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'
         invoice_config:
+          not_valid: 'Le impostazioni della fattura non sono valide. Modifica le impostazioni prima di creare una fattura'
           attributes:
             iban:
               required: 'deve essere compilato'
@@ -124,6 +129,7 @@ it:
               invalid_check_digit: 'non valido; cifra di controllo non corretta'
             payee:
               to_long: 'può contenere al massimo 2 righe'
+              must_have_3_lines: 'deve contenere esattamente 3 righe'
         mailing_list:
           attributes:
             additional_sender:
@@ -237,6 +243,10 @@ it:
         one: Testi ausiliari
         many: Testi ausiliari
         other: Testi ausiliari
+      hitobito_log_entry:
+        one: Voce del registro (log) di Hitobito
+        many: Voci del registro (log) di Hitobito
+        other: Voci del registro (log) di Hitobito
       invoice:
         one: Fattura
         many: Fatture
@@ -446,6 +456,7 @@ it:
           w: donna
           _nil: Sconosciuto
         birthday: Data di nascita
+        years: Età
         additional_information: Dati supplementari
         remember_me: Resta collegato
         relations_to_tails: Relazioni
@@ -464,6 +475,8 @@ it:
         updated_at: Modificato
         login_status: Login
         language: Lingua
+        primary_group_id: Gruppo principale
+        layer_group_label: Livello principale
       person_duplicate:
         birth_year: Anno di nascita
         roles_list: Ruoli
@@ -590,6 +603,10 @@ it:
         created_at: Salvato
         updated_at: Modificato
         deleted_at: Cancellato
+      event/kind_qualification_kinds:
+        validities:
+          valid: Deve essere valevole
+          valid_or_expired: Deve essere valido o abbandonato
       event/invitation:
         participation_type: ruolo del partecipante
         created_at: data di creazione
@@ -635,6 +652,8 @@ it:
         text: Testo
       oauth/application:
         cors_origins: host con accesso API
+        uid: Client ID
+        secret: Client secret
         redirect_uri: Redirect URIs
       people_relation:
         head_id: Persona
@@ -678,6 +697,10 @@ it:
         provider: Provider
         originator: Mittente
         picture: Logo
+        address_position: Posizione dell'indirizzo
+        address_positions:
+          left: Links
+          right: A destra
       role:
         label: Definizione
         type: Ruolo
@@ -836,6 +859,12 @@ it:
           one: Pagine
           many: Pag
           other: Pag
+      hitobito_log_entry:
+        created_at: Registrato alle
+        level: Level
+        category: Categoria
+        subject: Soggetto
+        message: Rapporto
       label_format:
         name: Definizione
         page_size: Formato della pagina
@@ -966,6 +995,8 @@ it:
         amount: Importo
         received_at: Data di ricevimento
         reference: Referenza di pagamento
+        transaction_identifier: Identificatore di transazione
+        status: Stato
       payment_reminder:
         invoice: Fattura
         message: Notizia/Messaggio
@@ -1029,7 +1060,12 @@ it:
       name: Leggono il tuo indirizzo e-mail e il tuo nome
       with_roles: Leggono i tuoi dati del gruppo ed i tuoi ruoli
       openid: Leggi il tuo Token di identità OIDC
-      api: Leggi tutte le persone, i gruppi, gli eventi e le fatture a cui si ha accesso, tramite le interfacce JSON
+      api: Leggere tutte le persone, i gruppi, gli eventi, gli abbonamenti e le fatture a cui hai accesso tramite le interfacce JSON
+      events: Leggere tutti gli eventi a cui hai accesso
+      groups: Leggere tutti i gruppi a cui hai accesso
+      people: Leggere tutte le persone a cui hai accesso
+      invoices: Leggere tutte le fatture a cui hai accesso
+      mailing_lists: Leggere tutti gli abbonamenti a cui hai accesso
   errors:
     messages:
       attachments_not_allowed: "Non può contenere allegati"
@@ -1054,6 +1090,25 @@ it:
         one: "non si è potuto salvare %{resource}: errore."
         many: "non si è potuto salvare %{resource}: %{count} errori."
         other: "non si è potuto salvare %{resource}: %{count} errori."
+      content_type_invalid: "Accetta solo i seguenti tipi di dati: %{authorized_types}"
+      file_size_out_of_range: "non può essere più grande di %{max_size}"
+      limit_out_of_range: "Il numero è fuori dall'intervallo valevole (%{min} - %{max})"
+      image_metadata_missing: "non è un'immagine valida"
+      dimension_min_inclusion: "deve essere più grande o uguale a %{width} x %{height} Pixel"
+      dimension_max_inclusion: "deve essere più piccolo o uguale a %{width} x %{height} Pixel"
+      dimension_width_inclusion: "La larghezza dell'immagine deve essere tra %{min} e %{max} Pixel"
+      dimension_height_inclusion: "L'altezza dell'immagine deve essere tra %{min} e %{max} Pixel"
+      dimension_width_greater_than_or_equal_to: "La larghezza dell'immagine deve essere più grande o uguale a %{length} Pixel"
+      dimension_height_greater_than_or_equal_to: "L'altezza dell'immagine deve essere equivalente o più grande di %{length} Pixel"
+      dimension_width_less_than_or_equal_to: "La larghezza deve essere equivalente o più piccola di %{length} Pixel"
+      dimension_height_less_than_or_equal_to: "L'altezza deve essere più piccola o uguale a %{length} Pixel"
+      dimension_width_equal_to: "La larghezza dell'immagine deve essere esattamente %{length} Pixel"
+      dimension_height_equal_to: "L'altezza dell'immagine deve essere esattamente %{length} Pixel"
+      aspect_ratio_not_square: "Deve essere quadrata"
+      aspect_ratio_not_portrait: "Deve essere in formato verticale"
+      aspect_ratio_not_landscape: "Deve essere in formato orizzontale"
+      aspect_ratio_is_not: "deve avere un rapporto di aspetto del %{aspect_ratio}"
+      aspect_ratio_unknown: "ha un rapporto di aspetto sconosciuto"
   validates_timeliness:
     error_value_formats:
       date: "%d.%m.%Y"

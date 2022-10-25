@@ -3,6 +3,7 @@ fr:
     formats:
       time: "%H:%M"
       date_time: "%d.%m.%Y %H:%M"
+      date_time_millis: "%d.%m.%Y %H:%M:%S.%L"
       month_year: '%B %Y'
   date:
     formats:
@@ -62,6 +63,9 @@ fr:
             choices:
               requires_more_than_one_choice: 'doit au moins contenir deux réponses'
               requires_exactly_one_choice: 'doit contenir exactement une réponse'
+            question:
+              application_blank: pour données pour l'inscription doit être rempli
+              admin_blank: pour données administratives doit être rempli
         event/participation:
           attributes:
             person_id:
@@ -117,6 +121,7 @@ fr:
             invoice_config:
               invalid: 'n''est pas valable ; adaptez les réglages avant de faire le calcul'
         invoice_config:
+          not_valid: 'Les paramètres de facturation ne sont pas valables. Adaptez les paramètres avant de créer une facture.'
           attributes:
             iban:
               required: 'doit être renseigné'
@@ -125,6 +130,7 @@ fr:
               invalid_check_digit: 'n''est pas valable ; code de vérification incorrect'
             payee:
               to_long: 'doit contenir 2 lignes au maximum'
+              must_have_3_lines: 'doit contenir exactement 3 lignes'
         mailing_list:
           attributes:
             additional_sender:
@@ -238,6 +244,10 @@ fr:
         one: Hilfetext
         many: Textes d'aide
         other: Textes d'aide
+      hitobito_log_entry:
+        one: Entrée du journal Hitobito
+        many: Entrées du journal Hitobito
+        other: Entrées du journal Hitobito
       invoice:
         one: facture
         many: Factures
@@ -447,6 +457,7 @@ fr:
           w: féminin
           _nil: inconnu
         birthday: Date de naissance
+        years: Âge
         additional_information: Données supplémentaires
         remember_me: Se souvenir de moi
         relations_to_tails: Relations
@@ -593,6 +604,10 @@ fr:
         created_at: Créé
         updated_at: Modifié
         deleted_at: Supprimé
+      event/kind_qualification_kinds:
+        validities:
+          valid: Doit être valable
+          valid_or_expired: Doit être valable ou caduc
       event/invitation:
         participation_type: Rôle de participation
         created_at: Date de création
@@ -638,6 +653,8 @@ fr:
         text: Texte
       oauth/application:
         cors_origins: Serveur avec accès via API
+        uid: Client ID
+        secret: Client secret
         redirect_uri: Rediriger les URIs
       people_relation:
         head_id: Personne
@@ -681,6 +698,10 @@ fr:
         provider: Fournisseur
         originator: Expéditeur
         picture: Logo
+        address_position: Position de l'adresse
+        address_positions:
+          left: Gauche
+          right: Droite
       role:
         label: Désignation
         type: Rôle
@@ -839,6 +860,12 @@ fr:
           one: Page
           many: Pages
           other: Pages
+      hitobito_log_entry:
+        created_at: Enregistré à
+        level: Niveau
+        category: Catégorie
+        subject: Sujet
+        message: Message
       label_format:
         name: Désignation
         page_size: Taille de la page
@@ -969,6 +996,7 @@ fr:
         amount: Montant
         received_at: Date de réception
         reference: Référence de paiement
+        transaction_identifier: Identifiant de la transaction
         status: Statut
       payment_reminder:
         invoice: Facture
@@ -1033,7 +1061,12 @@ fr:
       name: Lecture de ton adresse e-mail et de ton nom
       with_roles: Lecture de tes données de base et rôles
       openid: Lecture de ton Token d'identité OIDC
-      api: Lecture de toutes les personnes, groupes, événements et factures auxquels vous avez accès, via les interfaces JSON
+      api: Lire toutes les personnes, groupes, événements, abonnements et factures auxquels tu as accès via les interfaces JSON
+      events: Lire tous les événements auxquels tu as accès
+      groups: Lire tous les groupes auxquels tu as accès
+      people: Lire toutes les personnes auxquelles tu as accès
+      invoices: Lire toutes les factures auxquelles tu as accès
+      mailing_lists: Lire tous les abonnements auxquels tu as accès
   errors:
     messages:
       attachments_not_allowed: "ne doit pas contenir d'annexe"

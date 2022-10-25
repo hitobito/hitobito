@@ -919,7 +919,6 @@ en:
       name: Read your e-mail address and name
       with_roles: Read your base data and roles
       openid: Read your OIDC Identity Token
-      api: Read all people, groups, events and invoices to which you have access, via the JSON-interfaces
   errors:
     messages:
       attachments_not_allowed: "Attachments not allowed"

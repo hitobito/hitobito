@@ -86,8 +86,7 @@ class Role < ActiveRecord::Base
   after_destroy :reset_primary_group
   after_update :reset_primary_group
 
-  # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
-  # before_save :prevent_changes, if: ->(r) { r.archived? }
+  before_save :prevent_changes, if: ->(r) { r.archived? }
 
   ### SCOPES
 

@@ -114,7 +114,6 @@ class Group < ActiveRecord::Base
            foreign_key: :layer_group_id,
            dependent: :destroy
 
-
   has_settings *GroupSetting::SETTINGS.symbolize_keys.keys, class_name: 'GroupSetting'
 
   ### VALIDATIONS
@@ -242,9 +241,7 @@ class Group < ActiveRecord::Base
   end
 
   def archivable?
-    false # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
-
-    # !archived? && children_without_deleted.none?
+    !archived? && children_without_deleted.none?
   end
 
   def self_registration_active?

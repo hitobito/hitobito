@@ -10,7 +10,7 @@ require 'spec_helper'
 describe Export::PeopleExportJob do
 
   subject do
-    Export::PeopleExportJob.new(format, user.id, group.id, {}, options: export_options)
+    Export::PeopleExportJob.new(format, user.id, bottom_layer_one.id, list_filter_args, options: export_options)
   end
 
   let(:export_options) do
@@ -20,12 +20,13 @@ describe Export::PeopleExportJob do
       selection: selection, filename: filename }
   end
 
-  let!(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
+  let!(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: bottom_layer_one).person }
   let(:bottom_member)    { people(:bottom_member) }
-  let(:group)     { groups(:bottom_layer_one) }
+  let(:bottom_layer_one)     { groups(:bottom_layer_one) }
   let(:household) { false }
   let(:selection) { false }
   let(:show_related_roles_only) { false }
+  let(:list_filter_args) { {} }
   let(:file)      { AsyncDownloadFile.from_filename(filename, format) }
   let(:filename) { AsyncDownloadFile.create_name('people_export', user.id) }
   let(:lines) { file.read.lines }
@@ -87,7 +88,7 @@ describe Export::PeopleExportJob do
       it 'appends selected column and renders value' do
         TableDisplay.register_column(Person, TableDisplays::PublicColumn, 'additional_information')
         user.table_display_for(Person).save!
-        user.table_display_for(group).update(selected: %w(additional_information))
+        user.table_display_for(bottom_layer_one).update(selected: %w(additional_information))
         Person.update_all(additional_information: 'bla bla')
         subject.perform
 
@@ -116,7 +117,9 @@ describe Export::PeopleExportJob do
     let(:format) { :csv }
     let(:full) { true }
     let(:show_related_roles_only) { true }
-    let(:role_columns) {   }
+    let(:role_cell_values) do
+      lines.drop(1).collect { |l| l.split(';')[15] }
+    end
 
     before do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two), person: bottom_member)
@@ -125,11 +128,50 @@ describe Export::PeopleExportJob do
     it 'shows only roles for given group' do
       subject.perform
 
-      expect(lines[1]).not_to match(/Leader Bottom Two/)
-      expect(lines[2]).not_to match(/Leader Bottom Two/)
+      expect(lines.size).to eq(3)
+      expect(role_cell_values).to include('Leader Bottom One')
+      expect(role_cell_values).to include('Member Bottom One')
+      expect(role_cell_values).not_to include('Leader Bottom Two')
     end
 
-    it 'shows only roles for given people filter' do
+    context 'with list filter args' do
+
+      let(:list_filter_args) { @list_filter_args }
+
+      before do
+        Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: bottom_member)
+      end
+
+      it 'shows only roles for given people filter range layer' do
+        @list_filter_args = { name: 'My Filter', range: 'layer', filters: { role: { role_type_ids: [Group::BottomLayer::Leader.id] } } }
+
+        subject.perform
+
+        expect(lines.size).to eq(2)
+        expect(role_cell_values).to include('Leader Bottom One')
+        expect(role_cell_values).not_to include('Member Bottom One')
+        expect(role_cell_values).not_to include('Leader Bottom Two')
+      end
+
+      it 'shows only roles for given people filter range deep' do
+        @list_filter_args = { name: 'My Filter', range: 'deep', filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id] } } }
+
+        subject.perform
+
+        expect(lines.size).to eq(2)
+        expect(role_cell_values).to include('Leader Bottom One / Group 11')
+      end
+
+      it 'shows only roles for given people filter range group' do
+        @list_filter_args = { name: 'My Filter', range: 'group', filters: { role: { role_type_ids: [Group::BottomLayer::Leader.id] } } }
+
+        subject.perform
+
+        expect(lines.size).to eq(2)
+        expect(role_cell_values).to include('Leader Bottom One')
+        expect(role_cell_values).not_to include('Member Bottom One')
+        expect(role_cell_values).not_to include('Leader Bottom Two')
+      end
     end
   end
 

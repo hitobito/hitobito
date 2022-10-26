@@ -21,11 +21,36 @@ module Export::Tabular::People
     private
 
     def group_ids
-      [@group.id]
+      group_ids = [@group.id]
+      if deep?
+        group_ids += group_children_ids
+      end
+      group_ids
+    end
+
+    def deep?
+      arg = @list_filter_args[:range]
+      arg&.eql?('deep')
+    end
+
+    def group_children_ids
+      @group.children.pluck(:id)
     end
 
     def role_sti_names
-      @group.role_types.collect(&:sti_name)
+      if filter_role_ids.present?
+        roles = Role.types_by_ids(filter_role_ids)
+      else
+        roles = @group.role_types
+      end
+      roles.collect(&:sti_name)
+    end
+
+    def filter_role_ids
+      @list_filter_args
+        &.fetch(:filters, nil)
+        &.fetch(:role)
+        &.fetch(:role_type_ids)
     end
 
   end

@@ -158,7 +158,7 @@ describe Person::Filter::Role do
     end
   end
 
-  context 'filering specific timeframe' do
+  context 'filtering specific timeframe' do
     let(:person)      { people(:top_leader) }
     let(:now)         { Time.zone.parse('2017-02-01 10:00:00') }
 
@@ -207,8 +207,9 @@ describe Person::Filter::Role do
     context :filter do
       def filter(attrs)
         kind = attrs[:kind] || described_class.to_s
+        include_archived = attrs[:include_archived]
         role_type_ids = Array(role_type).collect(&:id)
-        filters = { role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind) }
+        filters = { role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind, include_archived: include_archived) }
         Person::Filter::List.new(attrs.fetch(:group, group), user, range: attrs.fetch(:range, range), filters: filters)
       end
 
@@ -346,6 +347,20 @@ describe Person::Filter::Role do
         it 'finds role created within range' do
           role.update(created_at: now)
           expect(filter(start_at: now, finish_at: now).entries).to have(1).item
+        end
+
+        context 'excluding archived' do
+          it 'does not find role archived within range' do
+            role.update_attribute(:archived_at, 1.day.ago)
+            expect(filter(start_at: now, finish_at: now, include_archived: true).entries).to be_empty
+          end
+        end
+
+        context 'including archived' do
+          it 'finds role archived within range' do
+            role.update_attribute(:archived_at, 1.day.ago)
+            expect(filter(start_at: now, finish_at: now, include_archived: true).entries).to have(1).item
+          end
         end
       end
     end

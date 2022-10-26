@@ -7,7 +7,7 @@
 
 class Person::Filter::Role < Person::Filter::Base
 
-  self.permitted_args = [:role_type_ids, :role_types, :kind, :start_at, :finish_at]
+  self.permitted_args = [:role_type_ids, :role_types, :kind, :start_at, :finish_at, :include_archived]
 
   def initialize(attr, args)
     super
@@ -90,10 +90,16 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def active_role_condition
-    <<~SQL.split.map(&:strip).join(' ')
+    sql = <<~SQL.split.map(&:strip).join(' ')
       roles.created_at <= :max AND
       (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
     SQL
+
+    unless include_archived?
+      sql = [sql, 'AND (roles.archived_at >= :min OR roles.archived_at IS NULL)'].join("\n")
+    end
+
+    sql
   end
 
   def deleted_roles_join
@@ -109,6 +115,10 @@ class Person::Filter::Role < Person::Filter::Base
       INNER JOIN roles ON roles.person_id = people.id
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
+  end
+
+  def include_archived?
+    args[:include_archived] || false
   end
 
 end

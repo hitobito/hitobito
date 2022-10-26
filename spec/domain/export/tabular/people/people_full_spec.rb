@@ -46,19 +46,6 @@ describe Export::Tabular::People::PeopleFull do
       before { person.relations_to_tails << PeopleRelation.new(head_id: person.id, tail_id: people(:bottom_member).id, kind: 'parent') }
       its([:people_relation_parent]) { should eq 'Elternteil' }
     end
-
-  context 'show related roles only' do
-    let(:people_list) { Export::Tabular::People::PeopleFull.new(list, options) }
-
-    it 'shows only roles by given people filter' do
-    end
-
-    it 'shows only roles for given group' do
-    end
-
-    it 'show only roles for given mailing list subscriptions' do
-    end
-  end
   end
 
 end

@@ -33,6 +33,9 @@ module Export::Tabular::People
       arg&.eql?('deep')
     end
 
+    def layer?
+    end
+
     def group_children_ids
       @group.children.pluck(:id)
     end

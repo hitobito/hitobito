@@ -10,7 +10,7 @@ require 'spec_helper'
 describe Export::PeopleExportJob do
 
   subject do
-    Export::PeopleExportJob.new(format, user.id, bottom_layer_one.id, list_filter_args, options: export_options)
+    Export::PeopleExportJob.new(format, user.id, group.id, list_filter_args, options: export_options)
   end
 
   let(:export_options) do
@@ -20,7 +20,9 @@ describe Export::PeopleExportJob do
       selection: selection, filename: filename }
   end
 
-  let!(:user)      { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: bottom_layer_one).person }
+  let(:group) { bottom_layer_one }
+  let(:user) { people(:top_leader) }
+  let!(:bottom_layer_one_leader) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: bottom_layer_one).person }
   let(:bottom_member)    { people(:bottom_member) }
   let(:bottom_layer_one)     { groups(:bottom_layer_one) }
   let(:household) { false }
@@ -52,7 +54,7 @@ describe Export::PeopleExportJob do
       let(:household) { true }
 
       before do
-        member.update!(household_key: 1)
+        bottom_layer_one_leader.update!(household_key: 1)
         bottom_member.update!(household_key: 1)
       end
 
@@ -123,6 +125,7 @@ describe Export::PeopleExportJob do
 
     before do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two), person: bottom_member)
+      Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: bottom_member)
     end
 
     it 'shows only roles for given group' do
@@ -138,18 +141,15 @@ describe Export::PeopleExportJob do
 
       let(:list_filter_args) { @list_filter_args }
 
-      before do
-        Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: bottom_member)
-      end
-
       it 'shows only roles for given people filter range layer' do
-        @list_filter_args = { name: 'My Filter', range: 'layer', filters: { role: { role_type_ids: [Group::BottomLayer::Leader.id] } } }
+        @list_filter_args = { name: 'My Filter', range: 'layer',
+                              filters: { role: { role_type_ids: [Group::BottomLayer::Leader.id, Group::BottomGroup::Leader.id] } } }
 
         subject.perform
 
-        expect(lines.size).to eq(2)
+        expect(lines.size).to eq(3)
         expect(role_cell_values).to include('Leader Bottom One')
-        expect(role_cell_values).not_to include('Member Bottom One')
+        expect(role_cell_values).to include('Leader Bottom One / Group 11')
         expect(role_cell_values).not_to include('Leader Bottom Two')
       end
 
@@ -160,10 +160,13 @@ describe Export::PeopleExportJob do
 
         expect(lines.size).to eq(2)
         expect(role_cell_values).to include('Leader Bottom One / Group 11')
+        expect(role_cell_values).not_to include('Leader Bottom One')
       end
 
       it 'shows only roles for given people filter range group' do
-        @list_filter_args = { name: 'My Filter', range: 'group', filters: { role: { role_type_ids: [Group::BottomLayer::Leader.id] } } }
+        @list_filter_args = { name: 'My Filter', range: 'group', filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id] } } }
+
+        group = groups(:bottom_group_one_one)
 
         subject.perform
 

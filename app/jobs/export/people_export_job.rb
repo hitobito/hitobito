@@ -20,9 +20,12 @@ class Export::PeopleExportJob < Export::ExportBaseJob
 
   def restrict_to_roles
     if @options[:show_related_roles_only]
-      related_group_roles = Export::Tabular::People::RelatedGroupRoles.new(@group_id, @list_filter_args)
       @options.merge!(related_group_roles.as_options)
     end
+  end
+
+  def related_group_roles
+    Export::Tabular::People::RelatedGroupRoles.new(@group_id, @list_filter_args)
   end
 
   def entries

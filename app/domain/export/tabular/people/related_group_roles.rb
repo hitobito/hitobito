@@ -24,6 +24,8 @@ module Export::Tabular::People
       group_ids = [@group.id]
       if deep?
         group_ids += group_children_ids
+      elsif
+        group_ids += layer_group_ids
       end
       group_ids
     end
@@ -34,10 +36,16 @@ module Export::Tabular::People
     end
 
     def layer?
+      arg = @list_filter_args[:range]
+      arg&.eql?('layer')
     end
 
     def group_children_ids
       @group.children.pluck(:id)
+    end
+
+    def layer_group_ids
+      Group.where(layer_group_id: @group.id)
     end
 
     def role_sti_names

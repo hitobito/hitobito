@@ -22,7 +22,7 @@ describe Export::PeopleExportJob do
 
   let(:group) { bottom_layer_one }
   let(:user) { people(:top_leader) }
-  let!(:bottom_layer_one_leader) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: bottom_layer_one).person }
+  let!(:bottom_leader) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: bottom_layer_one).person }
   let(:bottom_member)    { people(:bottom_member) }
   let(:bottom_layer_one)     { groups(:bottom_layer_one) }
   let(:household) { false }
@@ -54,7 +54,7 @@ describe Export::PeopleExportJob do
       let(:household) { true }
 
       before do
-        bottom_layer_one_leader.update!(household_key: 1)
+        bottom_leader.update!(household_key: 1)
         bottom_member.update!(household_key: 1)
       end
 
@@ -116,6 +116,16 @@ describe Export::PeopleExportJob do
   end
 
   context 'show related person roles only' do
+    #
+    # bottom layer one:
+    #  - Bottom Member (Member)
+    #  - Bottom Leader (Leader)
+    # bottom group one one / Group 11:
+    #  - Bottom Member (Leader)
+    # bottom layer two:
+    #  - Bottom Member (Leader)
+
+    let(:group) { bottom_layer_one }
     let(:format) { :csv }
     let(:full) { true }
     let(:show_related_roles_only) { true }
@@ -135,6 +145,7 @@ describe Export::PeopleExportJob do
       expect(role_cell_values).to include('Leader Bottom One')
       expect(role_cell_values).to include('Member Bottom One')
       expect(role_cell_values).not_to include('Leader Bottom Two')
+      expect(role_cell_values).not_to include('Leader Bottom One / Group 11')
     end
 
     context 'with list filter args' do
@@ -149,8 +160,9 @@ describe Export::PeopleExportJob do
 
         expect(lines.size).to eq(3)
         expect(role_cell_values).to include('Leader Bottom One')
-        expect(role_cell_values).to include('Leader Bottom One / Group 11')
+        expect(role_cell_values).not_to include('Member Bottom One')
         expect(role_cell_values).not_to include('Leader Bottom Two')
+        expect(role_cell_values).to include('Leader Bottom One / Group 11')
       end
 
       it 'shows only roles for given people filter range deep' do
@@ -159,22 +171,29 @@ describe Export::PeopleExportJob do
         subject.perform
 
         expect(lines.size).to eq(2)
-        expect(role_cell_values).to include('Leader Bottom One / Group 11')
         expect(role_cell_values).not_to include('Leader Bottom One')
-      end
-
-      it 'shows only roles for given people filter range group' do
-        @list_filter_args = { name: 'My Filter', range: 'group', filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id] } } }
-
-        group = groups(:bottom_group_one_one)
-
-        subject.perform
-
-        expect(lines.size).to eq(2)
-        expect(role_cell_values).to include('Leader Bottom One')
         expect(role_cell_values).not_to include('Member Bottom One')
         expect(role_cell_values).not_to include('Leader Bottom Two')
+        expect(role_cell_values).to include('Leader Bottom One / Group 11')
       end
+
+      context 'bottom group' do
+
+        let(:group) { groups(:bottom_group_one_one) }
+
+        it 'shows only roles for given people filter range group' do
+          @list_filter_args = { name: 'My Filter', range: 'group', filters: { role: { role_type_ids: [Group::BottomGroup::Leader.id] } } }
+
+          subject.perform
+
+          expect(lines.size).to eq(2)
+          expect(role_cell_values).not_to include('Leader Bottom One')
+          expect(role_cell_values).not_to include('Member Bottom One')
+          expect(role_cell_values).not_to include('Leader Bottom Two')
+          expect(role_cell_values).to include('Leader Bottom One / Group 11')
+        end
+      end
+
     end
   end
 

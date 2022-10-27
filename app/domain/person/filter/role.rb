@@ -15,13 +15,19 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def apply(scope)
-    scope
-      .where(type_conditions)
-      .where(duration_conditions)
+    scope = scope
+              .where(type_conditions)
+              .where(duration_conditions)
+    if include_archived?
+      scope
+    else
+      scope.where(roles: { archived_at: nil })
+        .or(scope.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
+    end
   end
 
   def blank?
-    args[:role_type_ids].blank? && args[:kind].blank?
+    args[:role_type_ids].blank? && args[:kind].blank? && args.dig(:role, :include_archived)
   end
 
   def to_hash
@@ -55,7 +61,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def merge_duration_args(hash)
-    hash.merge(args.slice(:kind, :start_at, :finish_at))
+    hash.merge(args.slice(:kind, :start_at, :finish_at, :include_archived))
   end
 
   def initialize_role_types
@@ -78,10 +84,14 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def type_conditions
+    return unless args[:kind]
+
     [[:roles, { type: args[:role_types] }]].to_h if args[:role_types].present?
   end
 
   def duration_conditions
+    return unless args[:kind]
+
     case args[:kind]
     when 'created' then [[:roles, { created_at: time_range }]].to_h
     when 'deleted' then [[:roles, { deleted_at: time_range }]].to_h
@@ -90,16 +100,10 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def active_role_condition
-    sql = <<~SQL.split.map(&:strip).join(' ')
+    <<~SQL.split.map(&:strip).join(' ')
       roles.created_at <= :max AND
       (roles.deleted_at >= :min OR roles.deleted_at IS NULL)
     SQL
-
-    unless include_archived?
-      sql = [sql, 'AND (roles.archived_at >= :min OR roles.archived_at IS NULL)'].join("\n")
-    end
-
-    sql
   end
 
   def deleted_roles_join
@@ -118,7 +122,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def include_archived?
-    args[:include_archived] || false
+    args[:include_archived] == 'true'
   end
 
 end

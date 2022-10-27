@@ -44,11 +44,17 @@ class Person::Filter::List
   def filter
     # When not filtering, the default is to exclude all passive and external people,
     # i.e. include only members
-    chain.present? ? chain.filter(list_range) : list_range.members
+
+    if chain.present? 
+      chain.filter(list_range) 
+    else
+      list_range.where(roles: { archived_at: nil })
+        .or(list_range.where(Role.arel_table[:archived_at].gt(Time.now.utc))).members
+    end
   end
 
   def list_range
-    case range
+    scope = case range
     when 'deep'
       Person.in_or_below(group, chain.roles_join)
     when 'layer'

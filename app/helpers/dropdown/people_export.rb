@@ -41,10 +41,10 @@ module Dropdown
       item = add_item(translate(format), '#')
       if Settings.table_displays
         item.sub_items << Item.new(translate(:selection),
-                                   path.merge(selection: true),
+                                   path.merge(selection: true, show_related_roles_only: false),
                                    data: { checkable: true })
       end
-      item.sub_items << Item.new(translate(:addresses), path, data: { checkable: true })
+      item.sub_items << Item.new(translate(:addresses), path.merge(show_related_roles_only: false), data: { checkable: true })
       item.sub_items << Item.new(translate(:households),
                                  path.merge(household: true),
                                  data: { checkable: true }) if @households

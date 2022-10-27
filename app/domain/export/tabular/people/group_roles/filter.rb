@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Export::Tabular::People
-  class RelatedGroupRoles
+module Export::Tabular::People::GroupRoles
+  class Filter
 
     def initialize(group_id, list_filter_args)
       @group = Group.find(group_id)
@@ -32,12 +32,15 @@ module Export::Tabular::People
 
     def deep?
       arg = @list_filter_args[:range]
-      arg&.eql?('deep')
+      range_arg&.eql?('deep')
     end
 
     def layer?
-      arg = @list_filter_args[:range]
-      arg&.eql?('layer')
+      range_arg&.eql?('layer')
+    end
+
+    def range_arg
+      @list_filter_args[:range]
     end
 
     def group_children_ids

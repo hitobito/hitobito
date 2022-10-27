@@ -352,7 +352,7 @@ describe Person::Filter::Role do
         context 'excluding archived' do
           it 'does not find role archived within range' do
             role.update_attribute(:archived_at, 1.day.ago)
-            expect(filter(start_at: now, finish_at: now, include_archived: true).entries).to be_empty
+            expect(filter(start_at: now, finish_at: now, include_archived: false).entries).to be_empty
           end
         end
 

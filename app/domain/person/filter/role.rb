@@ -7,7 +7,8 @@
 
 class Person::Filter::Role < Person::Filter::Base
 
-  self.permitted_args = [:role_type_ids, :role_types, :kind, :start_at, :finish_at, :include_archived]
+  self.permitted_args = [:role_type_ids, :role_types, :kind,
+                         :start_at, :finish_at, :include_archived]
 
   def initialize(attr, args)
     super
@@ -15,19 +16,18 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def apply(scope)
-    scope = scope
-              .where(type_conditions)
-              .where(duration_conditions)
+    scope = scope.where(type_conditions)
+                 .where(duration_conditions)
     if include_archived?
       scope
     else
       scope.where(roles: { archived_at: nil })
-        .or(scope.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
+           .or(scope.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
     end
   end
 
   def blank?
-    args[:role_type_ids].blank? && args[:kind].blank? && args.dig(:role, :include_archived)
+    args[:role_type_ids].blank? && args[:kind].blank? && args[:include_archived].blank?
   end
 
   def to_hash
@@ -84,8 +84,6 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def type_conditions
-    return unless args[:kind]
-
     [[:roles, { type: args[:role_types] }]].to_h if args[:role_types].present?
   end
 
@@ -122,7 +120,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def include_archived?
-    args[:include_archived] == 'true'
+    args[:include_archived] || args[:include_archived] == 'true'
   end
 
 end

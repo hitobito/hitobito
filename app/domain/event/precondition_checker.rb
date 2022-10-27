@@ -82,12 +82,6 @@ class Event::PreconditionChecker
     course.kind.qualification_kinds('precondition', 'participant')
   end
 
-  def reactivateable?(qualification_kind_id)
-    person_qualifications.
-      select { |q| q.qualification_kind_id == qualification_kind_id }.
-      any? { |qualification| qualification.reactivateable?(course.start_date) }
-  end
-
   def valid_qualification?(qualification_kind_id, validity)
     scope = case validity.to_sym
     when :valid

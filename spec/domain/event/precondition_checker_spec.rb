@@ -328,7 +328,7 @@ describe Event::PreconditionChecker do
           its(:valid?) { should be_truthy }
         end
 
-        context "'super lead kind' reactivateable outside range" do
+        context "'super lead kind' reactivateable outside range is still valid, because the course kind accepts it" do
           before { sl.update_attribute(:reactivateable, 2) }
           before { qualifications.first.update_attribute(:finish_at, course_start_at - sl.reactivateable.years - 1) }
           its(:valid?) { should be_truthy }

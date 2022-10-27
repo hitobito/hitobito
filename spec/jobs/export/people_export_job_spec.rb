@@ -194,6 +194,8 @@ describe Export::PeopleExportJob do
         end
       end
 
+      # maybe add spec to test not fetching role filter if no role column
+
     end
   end
 

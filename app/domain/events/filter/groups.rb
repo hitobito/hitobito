@@ -15,17 +15,16 @@ module Events::Filter
     end
 
     def to_scope
-      scope = @scope
-      scope = scope.in_hierarchy(@user) unless complete_course_list_allowed?
+      conditions = complete_course_list_allowed? ? Event.all : Event.in_hierarchy(@user)
 
       if group_ids.any?
-        scope = scope.with_group_id(group_ids_in_hierarchy)
-        scope = scope.or(globally_visible_events_outside_hierarchy) if group_ids_outside_hierarchy.any? # rubocop:disable Metrics/LineLength
+        conditions = conditions.with_group_id(group_ids_in_hierarchy)
+        conditions = conditions.or(globally_visible_events_outside_hierarchy) if group_ids_outside_hierarchy.any? # rubocop:disable Metrics/LineLength
       else
-        scope = scope.or(Event.where(globally_visible: true).distinct)
+        conditions = conditions.or(Event.where(globally_visible: true))
       end
 
-      scope
+      @scope.merge(conditions).distinct
     end
 
     def default_user_course_groups

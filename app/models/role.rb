@@ -93,7 +93,7 @@ class Role < ActiveRecord::Base
   include Paranoia::FutureDeletedAtScope
 
   scope :without_archived, -> { where(archived_at: nil) }
-  scope :archived, -> { where.not(archived_at: nil) }
+  scope :with_archived, -> { unscope(where: :archived_at).or(where.not(archived_at: nil).where(arel_table[:archived_at].gt(Time.utc.now))) }
 
   ### CLASS METHODS
 

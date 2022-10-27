@@ -739,6 +739,16 @@ de:
             external:
               one: Extern
               other: Externe
+            archived:
+              member:
+                one: Archiviertes Mitglied
+                other: Archivierte Mitglieder
+              passive:
+                one: Archivierter Passiver # Gendern?
+                other: Archivierte Passive
+              external:
+                one: Archivierter Externer
+                other: Archivierte Externe
 
       contact_account:
         predefined_labels:

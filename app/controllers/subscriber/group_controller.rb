@@ -47,6 +47,7 @@ module Subscriber
     def groups_query
       possible = Subscription.new(mailing_list: @mailing_list).possible_groups
       possible.where(search_condition('groups.name', 'parents_groups.name')).
+               without_archived.
                includes(:parent).
                references(:parent).
                order("#{Group.quoted_table_name}.lft").

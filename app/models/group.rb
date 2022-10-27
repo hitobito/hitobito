@@ -132,6 +132,7 @@ class Group < ActiveRecord::Base
                      content_type: ['image/jpeg', 'image/gif', 'image/png']
   end
 
+  scope :without_archived, -> { where(archived_at: nil) }
 
   ### CLASS METHODS
 
@@ -244,6 +245,10 @@ class Group < ActiveRecord::Base
       Role.where(group_id: self.id)
           .touch_all(:archived_at, time: archival_timestamp)
       self.archived_at = archival_timestamp
+
+      mailing_lists.destroy_all
+
+      subscriptions.destroy_all
 
       self.save!
     end

@@ -35,8 +35,10 @@ module Sheet
 
     tab 'activerecord.models.mailing_list.other',
         :group_mailing_lists_path,
-        if: :index_mailing_lists,
-        params: { returning: true }
+        params: { returning: true },
+        if: (lambda do |view, group|
+          !group.archived? && view.can?(:index_mailing_lists, group)
+        end)
 
     tab :tab_person_add_request_label,
         :group_person_add_requests_path,

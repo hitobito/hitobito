@@ -38,22 +38,21 @@ describe Events::Filter::Groups do
     end
   end
 
-  context 'generally, it' do
+  context 'when not allowed to list all courses, it' do
     let(:non_hierarchy_group_ids) { [groups(:bottom_layer_one).id, groups(:bottom_group_one_one).id] }
     let!(:non_hierarchy_event_ids) do
       event_1 = Fabricate(:event, groups: [Group.find(non_hierarchy_group_ids.first)])
       event_2 = Fabricate(:event, groups: [Group.find(non_hierarchy_group_ids.last)])
       [event_1.id, event_2.id]
     end
+    let(:options) { { list_all_courses: false } }
 
     let(:params) { { filter: { group_ids: person.groups.pluck(:id) + non_hierarchy_group_ids } } }
 
-    it 'produces a scope that includes globally_visible' do
+    it 'produces a scope that does not includes globally_visible' do
       expect(where_condition).to match('`events`.`globally_visible`')
 
-      expect(where_condition).to include(
-        "OR `events`.`id` IN (#{non_hierarchy_event_ids.join(', ')}) AND `events`.`globally_visible` = TRUE"
-      )
+      expect(where_condition).to include("OR `events`.`globally_visible` = TRUE")
     end
 
     context 'has assumptions' do

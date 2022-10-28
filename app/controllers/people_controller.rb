@@ -40,7 +40,7 @@ class PeopleController < CrudController
   prepend_before_action :entry, only: [:show, :edit, :update, :destroy,
                                        :send_password_instructions, :primary_group]
 
-  before_action :activate_archived_inclusion, only: :index, if: :group_archived_and_no_filter
+  before_action :index_archived, only: :index, if: :group_archived_and_no_filter
 
   before_save :validate_household
   after_save :persist_household
@@ -263,11 +263,11 @@ class PeopleController < CrudController
     flash[:notice] = I18n.t("#{controller_name}.#{action_name}_email_must_be_confirmed")
   end
 
-  def activate_archived_inclusion
+  def index_archived
     redirect_to(filters: { role: { include_archived: true } })
   end
 
   def group_archived_and_no_filter
-    group.archived? && params[:filters].nil?
+    group.archived? && list_filter_args[:filters].nil?
   end
 end

@@ -597,6 +597,44 @@ describe Group do
       end
     end
 
+    context 'archive!' do
+      it 'archives all roles with same timestamp' do
+        group = groups(:top_group)
+
+        group.archive!
+
+        expect(group).to be_archived
+        role = group.roles.first
+
+        expect(role).to be_archived
+        expect(group.archived_at).to eq(role.archived_at)
+      end
+
+      it 'deletes all attached mailing lists' do
+        group = groups(:top_layer)
+
+        expect(group.mailing_lists.size).to eq(2)
+
+        expect do
+          group.archive!
+        end.to change { MailingList.count }.by(-2)
+
+        expect(group.mailing_lists).to be_empty
+      end
+
+      it 'deletes all attached subscriptions' do
+        group = groups(:top_layer)
+
+        expect(group.subscriptions.size).to eq(1)
+
+        expect do
+          group.archive!
+        end.to change { Subscription.count }.by(-1)
+
+        expect(group.subscriptions).to be_empty
+      end
+    end
+
     context 'soft-deletion' do
       it 'is supported' do
         expect(archived_group.class.ancestors).to include(Paranoia)

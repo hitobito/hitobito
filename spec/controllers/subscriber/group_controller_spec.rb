@@ -28,6 +28,18 @@ describe Subscriber::GroupController do
       it { is_expected.to match(/Top \\u0026gt; Bottom Two/) }
       it { is_expected.to match(/Bottom Two \\u0026gt; Group 21/) }
       it { is_expected.not_to match(/Bottom One \\u0026gt; Group 111/) }
+
+      context 'archived bottom layer' do
+        before do
+          groups(:bottom_layer_one).save!
+          groups(:bottom_layer_one).archive!
+          get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
+        end
+
+        it { is_expected.to_not match(/Top \\u0026gt; Bottom One/) }
+        it { is_expected.to_not match(/Bottom One \\u0026gt; Group 11/) }
+        it { is_expected.to_not match(/Bottom One \\u0026gt; Group 12/) }
+      end
     end
 
     context 'bottom layer' do

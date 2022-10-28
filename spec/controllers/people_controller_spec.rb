@@ -336,6 +336,53 @@ describe PeopleController do
           expect(assigns(:people).collect(&:id)).to match_array([@bg_leader, @tg_member, @tg_extern].collect(&:id))
         end
       end
+
+      context 'archived group' do
+        let(:group) { groups(:top_layer) }
+
+        context 'when no filter given' do
+          it 'redirects to self with archived roles included' do
+            group.archive!
+
+            get :index, params: { group_id: group }
+
+            expect(response).to have_http_status(302)
+            expect(response).to redirect_to(action: :index, filters: { role: { include_archived: true } })
+          end
+        end
+
+        context 'when filter_id given' do
+          it 'does not redirect' do
+            filter = PeopleFilter.create!(
+              name: 'My Filter',
+              range: 'deep',
+              filter_chain: {
+                role: { role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-') }
+              }
+            )
+
+            group.archive!
+
+            get :index, params: { group_id: group, filter_id: filter.id }
+
+            expect(response).to have_http_status(200)
+          end
+        end
+
+        context 'when filter given' do
+          it 'does not redirect' do
+            group.archive!
+
+            get :index, params: { group_id: group, filters: {
+              role: {
+                role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join('-') }
+            } }
+
+            expect(response).to have_http_status(200)
+          end
+        end
+      end
+
     end
 
     context 'PUT update' do

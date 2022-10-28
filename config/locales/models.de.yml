@@ -589,6 +589,7 @@ de:
         validities:
           valid: Muss gültig sein
           valid_or_expired: Muss gültig oder weggefallen sein
+          valid_or_reactivatable: Muss gültig oder reaktivierbar sein
 
       event/invitation:
         participation_type: Teilnahmerolle

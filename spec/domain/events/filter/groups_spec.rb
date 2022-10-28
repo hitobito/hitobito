@@ -49,7 +49,7 @@ describe Events::Filter::Groups do
 
     let(:params) { { filter: { group_ids: person.groups.pluck(:id) + non_hierarchy_group_ids } } }
 
-    it 'produces a scope that does not includes globally_visible' do
+    it 'produces a scope that includes globally_visible' do
       expect(where_condition).to match('`events`.`globally_visible`')
 
       expect(where_condition).to include("OR `events`.`globally_visible` = TRUE")

@@ -27,11 +27,6 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
     Export::Tabular::People::GroupRoles::MailingList.new(mailing_list)
   end
 
-  def as_options
-    { restrict_to_roles: role_sti_names,
-      restrict_to_group_ids: group_ids }
-  end
-
   def mailing_list
     @mailing_list ||= MailingList.find(@mailing_list_id)
   end

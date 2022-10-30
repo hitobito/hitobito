@@ -22,7 +22,7 @@ module Export::Tabular::People::GroupRoles
     def role_sti_names
       sti_names = []
       group_subscriptions.each do |s|
-        sti_names += s.role
+        sti_names += s.role_types
       end
       sti_names
     end
@@ -32,7 +32,7 @@ module Export::Tabular::People::GroupRoles
     end
 
     def group_subscriptions
-      @group_subscriptions ||= @mailing_list.subscriptions.groups
+      @group_subscriptions ||= @mailing_list.subscriptions.includes(:related_role_types).groups
     end
 
   end

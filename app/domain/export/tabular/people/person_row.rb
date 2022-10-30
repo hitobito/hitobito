@@ -31,7 +31,7 @@ module Export::Tabular::People
     end
 
     def entry_roles
-      if restrict_to_roles
+      if restrict_to_roles.present?
         entry
           .roles
           .where(type: restrict_to_roles)

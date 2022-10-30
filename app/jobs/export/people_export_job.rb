@@ -25,7 +25,7 @@ class Export::PeopleExportJob < Export::ExportBaseJob
   end
 
   def related_group_roles
-    Export::Tabular::People::RelatedGroupRoles.new(@group_id, @list_filter_args)
+    Export::Tabular::People::GroupRoles::Filter.new(@group_id, @list_filter_args)
   end
 
   def entries

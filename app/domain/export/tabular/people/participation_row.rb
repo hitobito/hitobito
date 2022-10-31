@@ -16,7 +16,7 @@ module Export::Tabular::People
 
     def initialize(participation, format = nil, options: {})
       @participation = participation
-      super(participation.person, format, options)
+      super(participation.person, format)
     end
 
     def roles

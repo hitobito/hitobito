@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe Export::EventParticipationsExportJob do
 
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, params.merge(filename: filename)) }
+  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, options: options) }
 
   let(:participation)              { event_participations(:top) }
   let(:user)                       { participation.person }
@@ -17,8 +17,8 @@ describe Export::EventParticipationsExportJob do
   let(:event)                      { participation.event }
   let(:filename) { AsyncDownloadFile.create_name('event_participation_export', user.id) }
 
-  let(:params)                     { { filter: 'all' } }
-  let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, user, params) }
+  let(:options)                     { { filter: 'all', filename: filename } }
+  let(:event_participation_filter) { Event::ParticipationFilter.new(event.id, user, options) }
 
   let(:file) do
     AsyncDownloadFile
@@ -49,7 +49,7 @@ describe Export::EventParticipationsExportJob do
 
   context 'creates a full CSV-Export' do
     let(:format) { :csv }
-    let(:params) { { details: true } }
+    let(:options) { { details: true, filename: filename } }
 
     it 'and saves it' do
       subject.perform
@@ -64,7 +64,7 @@ describe Export::EventParticipationsExportJob do
 
   context 'creates a household export' do
     let(:format) { :csv }
-    let(:params) { { household: true } }
+    let(:options) { { household: true, filename: filename } }
 
     it 'and saves it' do
       user.update(household_key: 1)

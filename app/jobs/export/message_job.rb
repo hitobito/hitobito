@@ -10,7 +10,7 @@ class Export::MessageJob < Export::ExportBaseJob
   self.parameters = PARAMETERS + [:message_id]
 
   def initialize(format, user_id, message_id, options)
-    super(format, user_id, options)
+    super(format, user_id, options: options)
     @message_id = message_id
   end
 

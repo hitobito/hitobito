@@ -4,7 +4,20 @@ describe :self_registration do
 
   subject { page }
 
-  let(:group) { } # TODO define after copy, has to have an allowed role type
+  class Group::SelfRegistrationGroup < Group
+    self.layer = true
+
+    class ReadOnly < ::Role
+      self.permissions = [:group_read]
+    end
+
+    roles ReadOnly
+  end
+
+  let(:group) do
+    Group::SelfRegistrationGroup.create!(name: 'Self-Registration Group')
+  end
+
   let(:self_registration_role) { group.decorate.allowed_roles_for_self_registration.first }
 
   before do

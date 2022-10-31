@@ -4,7 +4,7 @@ describe :event_participation do
 
   subject { page }
 
-  let(:person) { people(:sekretaer) } # TODO define after copy
+  let(:person) { people(:leader) }
   let(:event) { Fabricate(:event, application_opening_at: 5.days.ago, groups: [group]) }
   let(:group) { person.roles.first.group }
 
@@ -19,14 +19,14 @@ describe :event_participation do
 
     find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # "Weiter"
 
-    fill_in('Bemerkungen', with: 'Important infos about my participation')
+    fill_in('Bemerkungen', with: 'Wichtige Bemerkungen über meine Teilnahme')
 
     expect do
       click_button('Anmelden')
     end.to change { Event::Participation.count }.by(1)
 
     is_expected.to have_text("Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.")
-    is_expected.to have_text('Important infos about my participation')
+    is_expected.to have_text('Wichtige Bemerkungen über meine Teilnahme')
 
     participation = Event::Participation.find_by(event: event, person: person)
 

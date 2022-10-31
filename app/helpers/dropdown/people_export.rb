@@ -54,8 +54,15 @@ module Dropdown
       item.sub_items << Item.new(translate(:everything),
                                  path.merge(details: true, show_related_roles_only: false),
                                  data: { checkable: true }) if @details
-      item.sub_items << Divider.new
-      item.sub_items << show_related_roles_only_checkbox
+
+      unless event_participations?
+        item.sub_items << Divider.new
+        item.sub_items << show_related_roles_only_checkbox
+      end
+    end
+
+    def event_participations?
+      template.controller.is_a?(::Event::ParticipationsController)
     end
 
     def show_related_roles_only_checkbox

@@ -143,16 +143,16 @@ describe PeopleController do
               572407901, # current_person.id
               954199476, # group.id
               ActionController::Parameters.new('details' => 'true'),
-              { filename: 'filename.csv',
-                full: true, household: 'true',
-                selected: 'true',
-                show_related_roles_only: 'true' }
+              options: { filename: 'filename.csv',
+                         full: true, household: true,
+                         selection: true,
+                         show_related_roles_only: true }
             ]
 
             expect(Export::PeopleExportJob).to receive(:new).with(*export_job_params).and_call_original
 
             request_params = { group_id: group, details: true,
-                               selected: true, household: true,
+                               selection: true, household: true,
                                show_related_roles_only: true }
 
             get :index, params: request_params, format: :csv

@@ -207,7 +207,7 @@ class PeopleController < CrudController
     { full: full, filename: filename,
       show_related_roles_only: true?(params.delete(:show_related_roles_only)),
       household: true?(params.delete(:household)),
-      selected: true?(params.delete(:selected))}
+      selection: true?(params.delete(:selection))}
   end
 
   def render_tabular(format, entries, full)

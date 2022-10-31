@@ -30,6 +30,8 @@ class Person::Subscriptions
   end
 
   def from_groups
+    return Subscription.none unless @person.roles.present?
+
     sql = <<~SQL
       related_role_types.role_type = ? AND
       #{Group.quoted_table_name}.lft <= ? AND

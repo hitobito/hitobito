@@ -138,6 +138,13 @@ describe Person::Subscriptions do
       person.update!(tag_list: %w(foo bar))
       expect(subject).to be_empty
     end
+
+    it 'is empty when the person has no roles' do
+      list.subscriptions.create!(subscriber: bottom_layer_one, role_types: ['Group::BottomLayer::Member'])
+      person.roles.destroy_all
+      expect(subject).to be_empty
+    end
+
   end
 
 end

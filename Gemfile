@@ -17,7 +17,7 @@ gem 'aws-sdk-s3', require: false
 gem 'bcrypt'
 gem 'bleib', '~> 0.0.10'
 gem 'bootsnap', require: false
-gem 'cancancan'
+gem 'cancancan', '< 3.2.0'
 gem 'carrierwave'
 gem 'caxlsx', '~>3.0.0'
 gem 'cmess'

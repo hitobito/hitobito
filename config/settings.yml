@@ -141,6 +141,7 @@ people:
   # either name or role
   default_sort: name
   abos: true
+  export_related_roles_only_default: false
 
 event:
   attachments:

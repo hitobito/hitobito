@@ -24,10 +24,10 @@ module Export::Tabular::People::GroupRoles
       group_ids = [@group.id]
       if deep?
         group_ids += group_children_ids
-      elsif
+      elsif layer?
         group_ids += layer_group_ids
       end
-      group_ids
+      group_ids.uniq
     end
 
     def deep?

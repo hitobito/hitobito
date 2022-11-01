@@ -9,6 +9,7 @@
 * Bei Zugriffsfehlern in der JSON API wird jetzt konsistent ein JSON-Payload zurückgegeben, statt wie bisher eine HTML-Seite (Seiteneffekt von #1866, ursprünglich gemeldet in der [erweiterten Fehlerliste](https://gist.github.com/carlobeltrame/8dd5b5e6279d91d1e3c181cb9086666a#x-api-should-always-return-json-and-return-the-same-for-parameters-style-and-headers-style-calls) bei der [Einführung der Service Tokens](https://github.com/hitobito/hitobito/issues/586))
 * Der API Endpoint eines einzelnen Events enthält neu die URL von Anhängen (#1873)
 * Neues "Hitobito Log" einsehbar mit admin permissions unter "Einstellungen" (#1840)
+* Bei Personenexport in Personenlisten und Abo Abonnenten Exporten optional nur die ausgewählten Rollen anzeigen (hitobito_die_mitte#213)
 
 ## Version 1.28
 

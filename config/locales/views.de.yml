@@ -161,7 +161,7 @@ de:
     everything: 'Alle Angaben'
     household_option: 'Haushalte zusammenfassen'
     selection: 'Spaltenauswahl'
-    show_related_roles_only: Nur Rollen aus Filter/Gruppe anzeigen
+    show_related_roles_only: Nur ausgewählte Rollen anzeigen
 
   dropdown/people_login:
     button: 'Login'

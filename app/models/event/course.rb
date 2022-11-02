@@ -68,8 +68,6 @@ class Event::Course < Event
                      Event::Role::Speaker,
                      Event::Course::Role::Participant]
 
-  self.supports_applications = true
-
   self.kind_class = Event::Kind
 
 

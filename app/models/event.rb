@@ -74,7 +74,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   class_attribute :used_attributes,
                   :role_types,
-                  :supports_applications,
                   :possible_states,
                   :kind_class,
                   :supports_invitations,
@@ -87,7 +86,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                           :external_applications, :applications_cancelable,
                           :signature, :signature_confirmation, :signature_confirmation_text,
                           :required_contact_attrs, :hidden_contact_attrs,
-                          :participations_visible, :globally_visible]
+                          :participations_visible, :globally_visible, :supports_applications]
 
   # All participation roles that exist for this event
   # Customize in wagons using .register_role_type / .disable_role_type
@@ -98,9 +97,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                      Event::Role::Treasurer,
                      Event::Role::Speaker,
                      Event::Role::Participant]
-
-  # Are Event::Applications possible for this event type
-  self.supports_applications = false
 
   # List of possible values for the state attribute.
   self.possible_states = []
@@ -371,7 +367,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def waiting_list_available?
-    self.class.supports_applications && attr_used?(:waiting_list) && waiting_list?
+    supports_applications && attr_used?(:waiting_list) && waiting_list?
   end
 
   def globally_visible

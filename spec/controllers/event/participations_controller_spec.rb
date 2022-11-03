@@ -376,6 +376,7 @@ describe Event::ParticipationsController do
   end
 
   context 'POST create' do
+    let(:pending_dj_handlers) { Delayed::Job.all.pluck(:handler) }
 
     context 'for current user' do
       let(:person)  { Fabricate(:person, email: 'anybody@example.com') }
@@ -395,18 +396,36 @@ describe Event::ParticipationsController do
                                            qualification_kind: qualification_kinds(:sl))
       end
 
-      it 'creates confirmation and notification job' do
-        expect do
-          post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
-          expect(assigns(:participation)).to be_valid
-        end.to change { Delayed::Job.count }.by(2) # Event::ParticipationConfirmationJob, Event::ParticipationNotificationJob
-        expect(flash[:notice]).not_to include 'Für die definitive Anmeldung musst du diese ' \
-          'Seite über <i>Drucken</i> ausdrucken, '
-      end
-
       context 'with supports_applications true' do
-        before do
-          course.update_attribute(:supports_applications, true)
+        it 'creates pending confirmation and notification job for course' do
+          expect do
+            post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
+            expect(assigns(:participation)).to be_valid
+          end.to change { Delayed::Job.count }.by(2)
+
+          expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationNotificationJob/}
+          expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationConfirmationJob/}
+
+          expect(flash[:notice]).to be_nil
+          expect(flash[:warn]).
+            to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
+        end
+
+        it 'creates pending confirmation with waiting list info' do
+          course.update!(waiting_list: true, maximum_participants: 1, participant_count: 1)
+
+          expect do
+            post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
+            expect(assigns(:participation)).to be_valid
+          end.to change { Delayed::Job.count }.by(2)
+
+          expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationNotificationJob/}
+          expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationConfirmationJob/}
+
+          expect(flash[:notice]).to be_nil
+          expect(flash[:warn]).
+            to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
+          expect(flash[:alert]).to include 'Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste.'
         end
 
         it 'creates non-active participant role for course events' do
@@ -427,8 +446,9 @@ describe Event::ParticipationsController do
 
           expect(participation.application).to be_present
 
-          expect(flash[:notice]).
-            to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+          expect(flash[:notice]).to be_nil
+          expect(flash[:warn]).
+            to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
         end
 
         it 'creates specific non-active participant role for course events' do
@@ -447,13 +467,13 @@ describe Event::ParticipationsController do
           expect(participation.roles.size).to eq(1)
           role = participation.roles.first
           expect(role).to be_kind_of(TestParticipant)
-          expect(flash[:notice]).
-            to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-          expect(role.participation).to eq participation.model
+
+          expect(flash[:notice]).to be_nil
+          expect(flash[:warn]).
+            to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
         end
 
         it 'creates new participation with application' do
-          course.update_attribute(:supports_applications, true)
           post :create, params: { group_id: group.id, event_id: course.id,
                                   event_participation: {
                                     application_attributes: { priority_2_id: other_course.id }
@@ -475,12 +495,44 @@ describe Event::ParticipationsController do
           expect(application).to be_present
           expect(application.priority_2_id).to eq other_course.id
 
-          expect(flash[:notice]).
-            to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+          expect(flash[:notice]).to be_nil
+          expect(flash[:warn]).
+            to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
         end
       end
 
       context 'with supports_applications false' do
+        it 'creates pending confirmation and notification job for course' do
+          course.update!(supports_applications: false)
+
+          expect do
+            post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
+            expect(assigns(:participation)).to be_valid
+          end.to change { Delayed::Job.count }.by(2)
+
+          expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationNotificationJob/}
+          expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationConfirmationJob/}
+
+          expect(flash[:notice]).
+            to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+          expect(flash[:warn]).to be_nil
+        end
+
+        it 'creates confirmation and notification job for non course event' do
+          event = Fabricate(:event)
+          expect do
+            post :create, params: { group_id: group.id, event_id: event.id, event_participation: {} }
+            expect(assigns(:participation)).to be_valid
+          end.to change { Delayed::Job.count }.by(2)
+
+          expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationNotificationJob/}
+          expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationConfirmationJob/}
+
+          expect(flash[:notice]).
+            to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+          expect(flash[:warn]).to be_nil
+        end
+
         it 'creates active participant role for course events' do
           course.update_attribute(:supports_applications, false)
           post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
@@ -503,26 +555,34 @@ describe Event::ParticipationsController do
         end
 
         it 'creates active participant role for non course events' do
-          event = Fabricate(:event, supports_applications: false)
+          event = Fabricate(:event)
           post :create, params: { group_id: group.id, event_id: event.id, event_participation: {} }
-
-          participation = assigns(:participation)
-          expect(participation).to be_valid
-          expect(participation).to be_active
-          expect(participation.roles.size).to eq(1)
-          role = participation.roles.first
-          expect(role.participation).to eq participation.model
-
-          expect(participation.application).to be_blank
-
-          expect(event.reload.applicant_count).to eq 1
-          expect(event.teamer_count).to eq 0
-          expect(event.participant_count).to eq 1
 
           expect(flash[:notice]).
             to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
         end
 
+        it 'creates specific non-active participant role for course events' do
+          class TestParticipant < Event::Course::Role::Participant; end
+          Event::Course.role_types << TestParticipant
+          post :create, params: {
+            group_id: group.id,
+            event_id: course.id,
+            event_participation: {},
+            event_role: { type: 'TestParticipant' }
+          }
+          Event::Course.role_types -= [TestParticipant]
+          participation = assigns(:participation)
+          expect(participation).to be_valid
+          expect(participation).not_to be_active
+          expect(participation.roles.size).to eq(1)
+          role = participation.roles.first
+          expect(role).to be_kind_of(TestParticipant)
+          expect(flash[:notice]).to be_nil
+          expect(flash[:warn]).
+            to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
+          expect(role.participation).to eq participation.model
+        end
 
         it 'creates new participation with all answers' do
           course.update_attribute(:supports_applications, false)
@@ -597,6 +657,9 @@ describe Event::ParticipationsController do
         expect(participation).to be_active
         expect(participation.roles.pluck(:type)).to eq([Event::Course::Role::Participant.sti_name])
         is_expected.to redirect_to group_event_participation_path(group, course, participation)
+
+        expect(flash[:notice]).
+          to include 'Teilnahme von <i>Bottom Member</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
       end
 
       it 'creates person add request if required' do

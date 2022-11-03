@@ -64,7 +64,7 @@ class Event::Participation < ActiveRecord::Base
   # There may be old participations without roles, so they must
   # update the count directly.
   after_destroy :update_participant_count
-
+  after_update :send_confirmation, if: :saved_change_to_active?
 
   ### CLASS METHODS
 
@@ -135,6 +135,10 @@ class Event::Participation < ActiveRecord::Base
     application&.waiting_list? || false
   end
 
+  def pending?
+    !active
+  end
+
   private
 
   def set_self_in_nested
@@ -154,5 +158,11 @@ class Event::Participation < ActiveRecord::Base
 
   def directly_to_waiting_list?(event)
     !event.places_available? && event.waiting_list_available?
+  end
+
+  def send_confirmation
+    return unless applying_participant?
+
+    Event::ParticipationConfirmationJob.new(self, send_approval: false).enqueue!
   end
 end

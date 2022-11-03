@@ -37,6 +37,9 @@ CustomContent.seed_once(
   { key: Event::ParticipationMailer::CONTENT_CONFIRMATION,
     placeholders_required: 'event-details, application-url',
     placeholders_optional: 'recipient-name' },
+  { key: Event::ParticipationMailer::CONTENT_PENDING,
+    placeholders_required: 'event-details, application-url',
+    placeholders_optional: 'recipient-name' },
   { key: Event::ParticipationMailer::CONTENT_NOTIFICATION,
     placeholders_required: 'event-name, participant-name',
     placeholders_optional: 'application-url, participation-details' },
@@ -100,6 +103,7 @@ dataleak_solution_id = CustomContent.get(Person::SecurityToolsController::DATALE
 suspend_person_situation_id = CustomContent.get(Person::SecurityToolsController::SUSPEND_PERSON_SITUATION).id
 suspend_person_solution_id = CustomContent.get(Person::SecurityToolsController::SUSPEND_PERSON_SOLUTION).id
 participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
+participation_pending_id = CustomContent.get(Event::ParticipationMailer::CONTENT_PENDING).id
 participation_notification_id = CustomContent.get(Event::ParticipationMailer::CONTENT_NOTIFICATION).id
 participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTENT_APPROVAL).id
 cancel_application_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CANCEL).id
@@ -338,6 +342,28 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: participation_confirmation_id,
    locale: 'it',
    label: "Evento: E-mail per l'affermazione della inscrizione"},
+
+  {custom_content_id: participation_pending_id,
+   locale: 'de',
+   label: 'Anlass: E-Mail Voranmeldung',
+   subject: 'Voranmeldung eingegangen',
+   body: "Hallo {recipient-name}<br/><br/>" \
+         "Wir haben deine Vornameldung für die Teilnahme an folgendem Anlass erhalten:<br/><br/>" \
+         "{event-details}<br/><br/>" \
+         "Deine Anmeldung ist noch nicht definitiv und muss erst noch bestätigt werden.<br/><br/>" \
+         "Falls du ein Login hast, kannst du deine Anmeldung unter folgender Adresse einsehen:<br/><br/>{application-url}" },
+
+  {custom_content_id: participation_pending_id,
+   locale: 'fr',
+   label: "Événement: Préinscription par E-Mail"},
+
+  {custom_content_id: participation_pending_id,
+   locale: 'en',
+   label: 'Event: Pre registration email'},
+
+  {custom_content_id: participation_pending_id,
+   locale: 'it',
+   label: "Evento: E-mail pre-registrazione"},
 
   {custom_content_id: participation_notification_id,
    locale: 'de',

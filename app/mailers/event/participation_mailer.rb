@@ -11,6 +11,7 @@ class Event::ParticipationMailer < ApplicationMailer
   CONTENT_NOTIFICATION = 'event_application_notification'
   CONTENT_APPROVAL     = 'event_application_approval'
   CONTENT_CANCEL       = 'event_cancel_application'
+  CONTENT_PENDING      = 'event_application_pending'
 
   # Include all helpers that are required directly or indirectly (in decorators)
   helper :format, :layout, :auto_link_value
@@ -23,7 +24,9 @@ class Event::ParticipationMailer < ApplicationMailer
     filename = Export::Pdf::Participation.filename(participation)
     attachments[filename] = Export::Pdf::Participation.render(participation)
 
-    compose(person, CONTENT_CONFIRMATION)
+    content = participation.pending? ? CONTENT_PENDING : CONTENT_CONFIRMATION
+
+    compose(person, content)
   end
 
   def approval(participation, recipients)

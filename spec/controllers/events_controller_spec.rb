@@ -207,7 +207,7 @@ describe EventsController do
         expect(assigns(:user_participation)).to be_nil
       end
 
-      it 'sets  @user_participation' do
+      it 'sets @user_participation' do
         p = Fabricate(:event_participation, event: events(:top_event), person: people(:top_leader))
         sign_in(people(:top_leader))
 

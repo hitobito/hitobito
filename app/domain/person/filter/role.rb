@@ -7,6 +7,8 @@
 
 class Person::Filter::Role < Person::Filter::Base
 
+  include ParamConverters
+
   self.permitted_args = [:role_type_ids, :role_types, :kind,
                          :start_at, :finish_at, :include_archived]
 
@@ -120,7 +122,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def include_archived?
-    args[:include_archived] || args[:include_archived] == 'true'
+    true?(args[:include_archived])
   end
 
 end

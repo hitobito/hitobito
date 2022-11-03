@@ -203,7 +203,7 @@ module FilterNavigation
         filter.chain.filters.first.is_a?(Person::Filter::Role) &&
         filter.chain.filters.first.args[:role_type_ids].empty? &&
         filter.chain.filters.first.args[:role_types].empty? &&
-        filter.chain.filters.first.args[:include_archived] == 'true'
+        true?(filter.chain.filters.first.args[:include_archived])
     end
 
   end

@@ -713,6 +713,7 @@ de:
         created_at: Von
         deleted_at: Bis
         class:
+          archived: '%{role_kind} (archiviert)'
           permission:
             description:
               admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
@@ -739,16 +740,6 @@ de:
             external:
               one: Extern
               other: Externe
-            archived:
-              member:
-                one: Archiviertes Mitglied
-                other: Archivierte Mitglieder
-              passive:
-                one: Archivierter Passiver # Gendern?
-                other: Archivierte Passive
-              external:
-                one: Archivierter Externer
-                other: Archivierte Externe
 
       contact_account:
         predefined_labels:

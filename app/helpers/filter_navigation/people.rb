@@ -35,12 +35,13 @@ module FilterNavigation
     def init_kind_filter_names
       @kind_filter_names = {}
       Role::Kinds.each do |kind|
-        archived = 'archived' if group.archived?
-        translation_path = ['activerecord.attributes.role.class.kind',
-                            archived,
-                            kind,
-                            'other'].join('.')
-        @kind_filter_names[kind] = I18n.t(translation_path)
+        name = if group.archived?
+                 I18n.t('activerecord.attributes.role.class.archived',
+                      role_kind: I18n.t("activerecord.attributes.role.class.kind.#{kind}.other"))
+               else
+                 I18n.t("activerecord.attributes.role.class.kind.#{kind}.other")
+               end
+        @kind_filter_names[kind] = name
       end
     end
 

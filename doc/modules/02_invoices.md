@@ -1,6 +1,6 @@
 # Invoices
 
-![Systemübersicht](../diagrams/modules/invoices-overview.svg)
+![Systemübersicht](_diagrams/invoices-overview.svg)
 
 Mit dem Rechnungsfeature von Hitobito können Rechnungen an Personen und Firmen gestellt werden. 
 
@@ -14,7 +14,7 @@ QR Rechnungen können auf eine einfache Weise mit https://www.swiss-qr-invoice.o
 
 Damit eine Person das Rechnungsfeature nutzen kann, muss sie auf einem Layer/Gruppe eine Rolle mit :finance Permission haben. In einigen Wagons wird diese Rolle 'Kassier/In' genannt.
 
-![Auflistung Rechnungen](../diagrams/modules/screenshots/invoices-list.png)
+![Auflistung Rechnungen](_diagrams/screenshots/invoices-list.png)
 
 Rechnungen werden an Personen/Firmen gestellt und können über folgende Workflows erstellt werden:
 
@@ -22,7 +22,7 @@ Rechnungen werden an Personen/Firmen gestellt und können über folgende Workflo
 * Auf der Personenseite (Person#show) über den Button '+ Rechnung erstellen'. Die Rechnung wird nur an die ausgewählte Person gestellt.
 * Via Abo und Rechnungsbriefe. Es wird eine Sammelrechnung für alle Empfänger des Abos mit gültiger Adresse erstellt.
 
-![Neue Rechnung](../diagrams/modules/screenshots/invoices-invoice-new.png)
+![Neue Rechnung](_diagrams/screenshots/invoices-invoice-new.png)
 
 ## `Invoice`
 
@@ -40,7 +40,7 @@ In der Hauptnavigation unter **Rechnungen** können die Rechnungsartikel verwalt
 
 Sammelrechnungen dienen dazu eine Rechnung an mehrere Personen zu erstellen. Die erstellten Sammelrechnungen sind in der Hauptnavigation unter **Rechnungen** zu finden. 
 
-![Sammelrechnungen](../diagrams/modules/screenshots/invoices-invoice-list.png)
+![Sammelrechnungen](_diagrams/screenshots/invoices-invoice-list.png)
 
 ### `Message::LetterWithInvoice`
 

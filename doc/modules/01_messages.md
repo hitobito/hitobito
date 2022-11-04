@@ -1,15 +1,15 @@
 # Messages
 
-![Modulübersicht](../diagrams/modules/messages-overview.svg)
+![Modulübersicht](_diagrams/messages-overview.svg)
 
 Mit Hitobito können Nachrichten (Briefe, SMS, Mails, usw...) via Abos an verschiedene Empfänger gesendet werden.
 
 ## Abo
-![Klassendiagramm](../diagrams/modules/messages-abo.svg)
+![Klassendiagramm](_diagrams/messages-abo.svg)
 
 _Klassendiagramm Messagesmodul._
 
-![Ansicht Gruppe](../diagrams/modules/screenshots/mailing-lists.png)
+![Ansicht Gruppe](_diagrams/screenshots/mailing-lists.png)
 
 _Ansicht der Abos einer Gruppe_
 
@@ -24,7 +24,7 @@ Das Abo (MailingList) ist eines der zentralen Elemente im Messages Modul. Mit Su
 Der `MessageRecipient` wird im `Dispatch` erstellt, sobald eine Message versendet wird. Dieser besteht aus den Personen und der Nachricht welche versendet werden. Jeder `MessageRecipient` erhält zudem einen Status, in welchem man den jeweiligen Status des Versands einsehen kann. Sollte ein Versand fehlschlagen, kann mithilfe des Status eingesehen werden, welche Personen eine Nachricht noch nicht erhalten haben.
 
 ## Message
-![Message Types](../diagrams/modules/messages.svg)
+![Message Types](_diagrams/messages.svg)
 
 _Klassendiagramm der Messagetypen_
 
@@ -39,21 +39,21 @@ Das Message Model definiert die verschiedenen Message Typen von Hitobito (Single
 | `Message::BulkMailBounce` | Bounce Mail einer zuvor gesendeten BulkMail |         
 
 ### `Message::TextMessage`
-![Systemübersicht](../diagrams/modules/screenshots/text-message.png)
+![Systemübersicht](_diagrams/screenshots/text-message.png)
 
 _Ansicht einer neuen SMS Nachricht_
 
 Dieser Typ ist eine SMS (Textnachricht) und wird an eine Person versandt wenn diese eine Nummer vom Typ Mobil hat.
 
 ### `Message::Letter`
-![Systemübersicht](../diagrams/modules/screenshots/letter.png)
+![Systemübersicht](_diagrams/screenshots/letter.png)
 
 _Ansicht eines neuen Briefes_
 
 Brief für den Postversand welcher als PDF gerendert wird.
 
 ### `Message::LetterWithInvoice`
-![Systemübersicht](../diagrams/modules/screenshots/letter-with-invoice.png)
+![Systemübersicht](_diagrams/screenshots/letter-with-invoice.png)
 
 _Ansicht eines neuen Rechnungsbriefes_
 

@@ -404,110 +404,142 @@ describe Event::ParticipationsController do
           'Seite über <i>Drucken</i> ausdrucken, '
       end
 
-      it 'creates active participant role for non course events' do
-        event = Fabricate(:event)
-        post :create, params: { group_id: group.id, event_id: event.id, event_participation: {} }
+      context 'with supports_applications true' do
+        before do
+          course.update_attribute(:supports_applications, true)
+        end
 
-        participation = assigns(:participation)
-        expect(participation).to be_valid
-        expect(participation).to be_active
-        expect(participation.roles.size).to eq(1)
-        role = participation.roles.first
-        expect(role.participation).to eq participation.model
+        it 'creates non-active participant role for course events' do
+          groups(:top_layer).update_column(:require_person_add_requests, true)
+          post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
 
-        expect(participation.application).to be_blank
+          participation = assigns(:participation)
+          expect(participation).to be_valid
+          expect(participation).not_to be_active
+          expect(participation.roles.size).to eq(1)
+          role = participation.roles.first
+          expect(role).to be_kind_of(Event::Course::Role::Participant)
+          expect(role.participation).to eq participation.model
 
-        expect(event.reload.applicant_count).to eq 1
-        expect(event.teamer_count).to eq 0
-        expect(event.participant_count).to eq 1
+          expect(course.reload.applicant_count).to eq 1
+          expect(course.teamer_count).to eq 0
+          expect(course.participant_count).to eq 0
 
-        expect(flash[:notice]).
-          to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+          expect(participation.application).to be_present
+
+          expect(flash[:notice]).
+            to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        end
+
+        it 'creates specific non-active participant role for course events' do
+          class TestParticipant < Event::Course::Role::Participant; end
+          Event::Course.role_types << TestParticipant
+          post :create, params: {
+            group_id: group.id,
+            event_id: course.id,
+            event_participation: {},
+            event_role: { type: 'TestParticipant' }
+          }
+          Event::Course.role_types -= [TestParticipant]
+          participation = assigns(:participation)
+          expect(participation).to be_valid
+          expect(participation).not_to be_active
+          expect(participation.roles.size).to eq(1)
+          role = participation.roles.first
+          expect(role).to be_kind_of(TestParticipant)
+          expect(flash[:notice]).
+            to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+          expect(role.participation).to eq participation.model
+        end
+
+        it 'creates new participation with application' do
+          course.update_attribute(:supports_applications, true)
+          post :create, params: { group_id: group.id, event_id: course.id,
+                                  event_participation: {
+                                    application_attributes: { priority_2_id: other_course.id }
+                                  } }
+
+          participation = assigns(:participation)
+          application = participation.application
+          expect(participation).to be_valid
+          expect(participation).not_to be_active
+          expect(participation.roles.size).to eq(1)
+          role = participation.roles.first
+          expect(role).to be_kind_of(Event::Course::Role::Participant)
+          expect(role.participation).to eq participation.model
+
+          expect(course.reload.applicant_count).to eq 1
+          expect(course.teamer_count).to eq 0
+          expect(course.participant_count).to eq 0
+
+          expect(application).to be_present
+          expect(application.priority_2_id).to eq other_course.id
+
+          expect(flash[:notice]).
+            to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        end
       end
 
-      it 'creates non-active participant role for course events' do
-        groups(:top_layer).update_column(:require_person_add_requests, true)
-        post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
+      context 'with supports_applications false' do
+        it 'creates active participant role for course events' do
+          course.update_attribute(:supports_applications, false)
+          post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
 
-        participation = assigns(:participation)
-        expect(participation).to be_valid
-        expect(participation).not_to be_active
-        expect(participation.roles.size).to eq(1)
-        role = participation.roles.first
-        expect(role).to be_kind_of(Event::Course::Role::Participant)
-        expect(role.participation).to eq participation.model
+          participation = assigns(:participation)
+          expect(participation).to be_valid
+          expect(participation).to be_active
+          expect(participation.roles.size).to eq(1)
+          role = participation.roles.first
+          expect(role.participation).to eq participation.model
 
-        expect(course.reload.applicant_count).to eq 1
-        expect(course.teamer_count).to eq 0
-        expect(course.participant_count).to eq 0
+          expect(participation.application).to be_blank
 
-        expect(participation.application).to be_present
+          expect(course.reload.applicant_count).to eq 1
+          expect(course.teamer_count).to eq 0
+          expect(course.participant_count).to eq 1
 
-        expect(flash[:notice]).
-          to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-      end
+          expect(flash[:notice]).
+            to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        end
 
-      it 'creates specific non-active participant role for course events' do
-        class TestParticipant < Event::Course::Role::Participant; end
-        Event::Course.role_types << TestParticipant
-        post :create, params: {
-          group_id: group.id,
-          event_id: course.id,
-          event_participation: {},
-          event_role: { type: 'TestParticipant' }
-        }
-        Event::Course.role_types -= [TestParticipant]
-        participation = assigns(:participation)
-        expect(participation).to be_valid
-        expect(participation).not_to be_active
-        expect(participation.roles.size).to eq(1)
-        role = participation.roles.first
-        expect(role).to be_kind_of(TestParticipant)
-        expect(flash[:notice]).
-          to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-        expect(role.participation).to eq participation.model
-      end
+        it 'creates active participant role for non course events' do
+          event = Fabricate(:event, supports_applications: false)
+          post :create, params: { group_id: group.id, event_id: event.id, event_participation: {} }
 
-      it 'creates new participation with application' do
-        post :create, params: { group_id: group.id, event_id: course.id,
-                                event_participation: {
-                                  application_attributes: { priority_2_id: other_course.id }
-                                } }
+          participation = assigns(:participation)
+          expect(participation).to be_valid
+          expect(participation).to be_active
+          expect(participation.roles.size).to eq(1)
+          role = participation.roles.first
+          expect(role.participation).to eq participation.model
 
-        participation = assigns(:participation)
-        application = participation.application
-        expect(participation).to be_valid
-        expect(participation).not_to be_active
-        expect(participation.roles.size).to eq(1)
-        role = participation.roles.first
-        expect(role).to be_kind_of(Event::Course::Role::Participant)
-        expect(role.participation).to eq participation.model
+          expect(participation.application).to be_blank
 
-        expect(course.reload.applicant_count).to eq 1
-        expect(course.teamer_count).to eq 0
-        expect(course.participant_count).to eq 0
+          expect(event.reload.applicant_count).to eq 1
+          expect(event.teamer_count).to eq 0
+          expect(event.participant_count).to eq 1
 
-        expect(application).to be_present
-        expect(application.priority_2_id).to eq other_course.id
+          expect(flash[:notice]).
+            to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
+        end
 
-        expect(flash[:notice]).
-          to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt.'
-      end
 
-      it 'creates new participation with all answers' do
-        post :create,
-             params: {
-               group_id: group.id,
-               event_id: course.id,
-               event_participation: {
-                 answers: {
-                   1 => { question_id: course.questions.first.id, answer: 'Bla' }
-                 }
-               }
-             }
+        it 'creates new participation with all answers' do
+          course.update_attribute(:supports_applications, false)
+          post :create,
+            params: {
+              group_id: group.id,
+              event_id: course.id,
+              event_participation: {
+                answers: {
+                  1 => { question_id: course.questions.first.id, answer: 'Bla' }
+                }
+              }
+            }
 
-        participation = assigns(:participation)
-        expect(participation.answers.size).to eq(2)
+          participation = assigns(:participation)
+          expect(participation.answers.size).to eq(2)
+        end
       end
 
       it 'fails for invalid event role' do

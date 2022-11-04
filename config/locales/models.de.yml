@@ -550,7 +550,7 @@ de:
         state_translated: Status
         priorization: Priorisierung
         requires_approval: Freigabe
-        supports_applications: Unterstützt Warteliste
+        supports_applications: Verwendet Warteliste
 
       event/date:
         label: Bezeichnung

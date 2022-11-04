@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-# Unreleased
+# unreleased
 
 * Erweiterung Personenfilter (#295): Filterung von Personenlisten nach Alter, Geburtsdatum und Geschlecht (merci @simfeld!)
 * Neue Filterbedingung "Enthält nicht" (#295)
@@ -9,6 +9,7 @@
 * Bei Zugriffsfehlern in der JSON API wird jetzt konsistent ein JSON-Payload zurückgegeben, statt wie bisher eine HTML-Seite (Seiteneffekt von #1866, ursprünglich gemeldet in der [erweiterten Fehlerliste](https://gist.github.com/carlobeltrame/8dd5b5e6279d91d1e3c181cb9086666a#x-api-should-always-return-json-and-return-the-same-for-parameters-style-and-headers-style-calls) bei der [Einführung der Service Tokens](https://github.com/hitobito/hitobito/issues/586))
 * Der API Endpoint eines einzelnen Events enthält neu die URL von Anhängen (#1873)
 * Neues "Hitobito Log" einsehbar mit admin permissions unter "Einstellungen" (#1840)
+* Kurse können neu mittels Flag definieren, ob sie die Warteliste verwenden oder nicht (hitobito_cevi#79)
 
 ## Version 1.28
 

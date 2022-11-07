@@ -48,7 +48,7 @@ module Export::Tabular::People::GroupRoles
     end
 
     def layer_group_ids
-      Group.where(layer_group_id: @group.id)
+      Group.where(layer_group_id: @group.id).pluck(:id)
     end
 
     def role_sti_names

@@ -11,7 +11,7 @@ describe Export::SubscriptionsJob do
 
   subject do
     Export::SubscriptionsJob.new(format, user.id, mailing_list.id,
-                                 options: export_options)
+                                 export_options)
   end
 
   let(:export_options) do

@@ -40,7 +40,7 @@ module Export::Tabular
       end
     end
 
-    def initialize(list, options: {})
+    def initialize(list, options = {})
       @list = list
       @options = options
     end
@@ -96,7 +96,7 @@ module Export::Tabular
     end
 
     def row_for(entry, format = nil)
-      row_class.new(entry, format, options: @options)
+      row_class.new(entry, format, @options)
     end
 
   end

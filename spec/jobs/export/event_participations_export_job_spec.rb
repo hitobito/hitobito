@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe Export::EventParticipationsExportJob do
 
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, options: options) }
+  subject { Export::EventParticipationsExportJob.new(format, user.id, event_participation_filter, options) }
 
   let(:participation)              { event_participations(:top) }
   let(:user)                       { participation.person }

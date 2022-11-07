@@ -14,7 +14,7 @@ module Export::Tabular::People
 
     dynamic_attributes[/^question_\d+$/] = :question_attribute
 
-    def initialize(participation, format = nil, options: {})
+    def initialize(participation, format = nil, options = {})
       @participation = participation
       super(participation.person, format)
     end

@@ -10,7 +10,7 @@ require 'spec_helper'
 describe Export::PeopleExportJob do
 
   subject do
-    Export::PeopleExportJob.new(format, user.id, group.id, list_filter_args, options: export_options)
+    Export::PeopleExportJob.new(format, user.id, group.id, list_filter_args, export_options)
   end
 
   let(:export_options) do

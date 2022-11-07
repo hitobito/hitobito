@@ -9,8 +9,8 @@ class Export::PeopleExportJob < Export::ExportBaseJob
 
   self.parameters = PARAMETERS + [:group_id, :list_filter_args]
 
-  def initialize(format, user_id, group_id, list_filter_args, options: {})
-    super(format, user_id, options: options)
+  def initialize(format, user_id, group_id, list_filter_args, options = {})
+    super(format, user_id, options)
     @group_id = group_id
     @list_filter_args = list_filter_args
     restrict_to_roles

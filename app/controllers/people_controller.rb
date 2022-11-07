@@ -198,7 +198,7 @@ class PeopleController < CrudController
     export_job_options = export_job_options(filename)
     Export::PeopleExportJob.new(
       format, current_person.id, @group.id,
-      list_filter_args, options: export_job_options
+      list_filter_args, export_job_options
     ).enqueue!
   end
 

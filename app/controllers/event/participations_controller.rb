@@ -169,7 +169,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       Export::EventParticipationsExportJob.new(format,
                                                current_person.id,
                                                event_participation_filter,
-                                               options: export_job_options(filename)).enqueue!
+                                               export_job_options(filename)).enqueue!
     end
   end
 

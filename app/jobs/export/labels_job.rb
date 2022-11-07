@@ -9,7 +9,7 @@ class Export::LabelsJob < Export::ExportBaseJob
   self.parameters = PARAMETERS + [:people_ids, :group_id]
 
   def initialize(format, user_id, people_ids, group_id, options)
-    super(format, user_id, options: options)
+    super(format, user_id, options)
 
     @people_ids = people_ids
     @group_id = group_id

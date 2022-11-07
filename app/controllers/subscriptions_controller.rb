@@ -60,7 +60,7 @@ class SubscriptionsController < CrudController
       Export::SubscriptionsJob.new(format,
                                    current_person.id,
                                    mailing_list.id,
-                                   options: export_job_options).enqueue!
+                                   export_job_options).enqueue!
     end
   end
 

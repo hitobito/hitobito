@@ -19,7 +19,7 @@ module Export::Tabular
 
     attr_reader :entry, :format
 
-    def initialize(entry, format = nil, options: {})
+    def initialize(entry, format = nil, options = {})
       @entry = entry
       @format = format
       @options = options

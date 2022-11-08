@@ -33,6 +33,7 @@
 #  signature_confirmation      :boolean
 #  signature_confirmation_text :string(255)
 #  state                       :string(60)
+#  supports_applications       :boolean          default(FALSE), not null
 #  teamer_count                :integer          default(0)
 #  type                        :string(255)
 #  waiting_list                :boolean          default(TRUE), not null
@@ -321,6 +322,14 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def supports_application_details?
     participant_types.present?
+  end
+
+  def supports_applications
+    if attr_used?(:supports_applications)
+      super
+    else
+      false
+    end
   end
 
   def application_duration

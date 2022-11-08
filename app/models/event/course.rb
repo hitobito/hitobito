@@ -34,6 +34,7 @@
 #  signature_confirmation      :boolean
 #  signature_confirmation_text :string(255)
 #  state                       :string(60)
+#  supports_applications       :boolean          default(FALSE), not null
 #  teamer_count                :integer          default(0)
 #  type                        :string(255)
 #  waiting_list                :boolean          default(TRUE), not null

@@ -324,6 +324,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     participant_types.present?
   end
 
+  def supports_applications?
+    supports_applications
+  end
+
   def supports_applications
     if attr_used?(:supports_applications)
       super

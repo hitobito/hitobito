@@ -52,6 +52,7 @@
 Fabricator(:event) do
   name { 'Eventus' }
   groups { [Group.all_types.first.first] }
+  supports_applications { false }
   before_validation do |event|
     event.dates.build(start_at: Time.zone.local(2012, 5, 11)) if event.dates.empty?
   end
@@ -63,4 +64,5 @@ Fabricator(:course, from: :event, class_name: :'Event::Course') do
   number { 123 }
   priorization { true }
   requires_approval { true }
+  supports_applications { true }
 end

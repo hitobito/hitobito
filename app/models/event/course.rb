@@ -34,6 +34,7 @@
 #  signature_confirmation      :boolean
 #  signature_confirmation_text :string(255)
 #  state                       :string(60)
+#  supports_applications       :boolean          default(FALSE), not null
 #  teamer_count                :integer          default(0)
 #  type                        :string(255)
 #  waiting_list                :boolean          default(TRUE), not null
@@ -58,7 +59,8 @@ class Event::Course < Event
   require_dependency 'event/course/role/participant'
 
   self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids,
-                           :requires_approval, :display_booking_info, :waiting_list]
+                           :requires_approval, :display_booking_info, :waiting_list,
+                           :supports_applications]
 
   self.role_types = [Event::Role::Leader,
                      Event::Role::AssistantLeader,
@@ -67,8 +69,6 @@ class Event::Course < Event
                      Event::Role::Treasurer,
                      Event::Role::Speaker,
                      Event::Course::Role::Participant]
-
-  self.supports_applications = true
 
   self.kind_class = Event::Kind
 

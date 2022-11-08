@@ -11,7 +11,7 @@ This needs to activated in the individual wagon, the attribute `:waiting_list`
 needs to be added to the list of `used_attributes` of the Events.
 
 Waiting lists are only available on Event-Types that support applications. This
-is a class-level attribute (`supports_applications`). By default, this is only
+is an attribute (`supports_applications`). By default, this is only
 the case for `Event::Course`.
 
 ## Using the Waiting List

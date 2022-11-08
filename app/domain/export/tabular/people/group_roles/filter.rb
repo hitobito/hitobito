@@ -37,7 +37,6 @@ module Export::Tabular::People::GroupRoles
     end
 
     def deep?
-      arg = @list_filter_args[:range]
       range_arg&.eql?('deep')
     end
 
@@ -58,20 +57,18 @@ module Export::Tabular::People::GroupRoles
     end
 
     def role_sti_names
-      if filter_role_ids.present?
-        roles = Role.types_by_ids(filter_role_ids)
-      else
-        roles = @group.role_types
-      end
+      roles = if filter_role_ids.present?
+                Role.types_by_ids(filter_role_ids)
+              else
+                @group.role_types
+              end
       roles.collect(&:sti_name)
     end
 
     def filter_role_ids
-      Array.wrap(@list_filter_args
-        &.fetch(:filters, nil)
-        &.fetch(:role)
-        &.fetch(:role_type_ids)
-                ).map(&:to_i)
+      Array.wrap(@list_filter_args&.fetch(:filters, nil)
+                                  &.fetch(:role)
+                                  &.fetch(:role_type_ids)).map(&:to_i)
     end
 
   end

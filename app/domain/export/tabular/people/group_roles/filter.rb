@@ -14,11 +14,17 @@ module Export::Tabular::People::GroupRoles
     end
 
     def as_options
-      { restrict_to_roles: role_sti_names,
-        restrict_to_group_ids: group_ids }
+      { role_restrictions: role_restrictions }
     end
 
     private
+
+    def role_restrictions
+      role_types = role_sti_names
+      group_ids.index_with do
+        role_types
+      end
+    end
 
     def group_ids
       group_ids = [@group.id]
@@ -61,10 +67,11 @@ module Export::Tabular::People::GroupRoles
     end
 
     def filter_role_ids
-      @list_filter_args
+      Array.wrap(@list_filter_args
         &.fetch(:filters, nil)
         &.fetch(:role)
         &.fetch(:role_type_ids)
+                ).map(&:to_i)
     end
 
   end

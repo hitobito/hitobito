@@ -13,22 +13,15 @@ module Export::Tabular::People::GroupRoles
     end
 
     def as_options
-      { restrict_to_roles: role_sti_names,
-        restrict_to_group_ids: group_ids }
+      { role_restrictions: role_restrictions }
     end
 
     private
 
-    def role_sti_names
-      sti_names = []
-      group_subscriptions.each do |s|
-        sti_names += s.role_types
+    def role_restrictions
+      group_subscriptions.each_with_object({}) do |s, restrictions|
+        restrictions[s.subscriber_id] = s.role_types
       end
-      sti_names
-    end
-
-    def group_ids
-      group_subscriptions.pluck(:subscriber_id)
     end
 
     def group_subscriptions

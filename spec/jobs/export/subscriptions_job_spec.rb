@@ -89,6 +89,10 @@ describe Export::SubscriptionsJob do
       Subscription.create!(mailing_list: mailing_list,
                           subscriber: groups(:bottom_layer_two),
                           role_types: [Group::BottomLayer::Leader])
+
+      Subscription.create!(mailing_list: mailing_list,
+                          subscriber: groups(:bottom_layer_one),
+                          role_types: [Group::BottomLayer::Member])
     end
 
     it 'does only show subscription roles' do
@@ -96,8 +100,9 @@ describe Export::SubscriptionsJob do
 
       expect(lines.size).to eq(3)
       expect(role_cell_values).not_to include('Leader Bottom One')
-      expect(role_cell_values).not_to include('Member Bottom One')
+      expect(role_cell_values).not_to include('Member Bottom Two')
       expect(role_cell_values).to include('Leader Bottom Two')
+      expect(role_cell_values).to include('Member Bottom One')
       expect(role_cell_values).not_to include('Leader Bottom One / Group 11')
     end
 

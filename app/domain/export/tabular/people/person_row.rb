@@ -31,11 +31,12 @@ module Export::Tabular::People
     end
 
     def entry_roles
-      if restrict_to_roles.present?
-        entry
-          .roles
-          .where(type: restrict_to_roles)
-          .where(group_id: restrict_to_group_ids)
+      if role_restrictions.present?
+        roles = entry.roles
+
+        role_restrictions.flat_map do |group_id, role_types|
+          role_types.map { |type| roles.find_by(group_id: group_id, type: type) }.compact
+        end
       else
         entry.roles
       end
@@ -51,12 +52,8 @@ module Export::Tabular::People
 
     private
 
-    def restrict_to_roles
-      @options[:restrict_to_roles]
-    end
-
-    def restrict_to_group_ids
-      @options[:restrict_to_group_ids]
+    def role_restrictions
+      @options[:role_restrictions]
     end
 
     def phone_number_attribute(attr)

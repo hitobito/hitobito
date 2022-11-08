@@ -24,9 +24,20 @@ module Export::Tabular::People
 
     def roles
       if entry.try(:role_with_layer).present?
-        entry.roles.zip(entry.role_with_layer.split(', ')).map { |arr| arr.join(' ') }.join(', ')
+        entry_roles.zip(entry.role_with_layer.split(', ')).map { |arr| arr.join(' ') }.join(', ')
       else
-        entry.roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+        entry_roles.map { |role| "#{role} #{role.group.with_layer.join(' / ')}" }.join(', ')
+      end
+    end
+
+    def entry_roles
+      if restrict_to_roles.present?
+        entry
+          .roles
+          .where(type: restrict_to_roles)
+          .where(group_id: restrict_to_group_ids)
+      else
+        entry.roles
       end
     end
 
@@ -39,6 +50,14 @@ module Export::Tabular::People
     end
 
     private
+
+    def restrict_to_roles
+      @options[:restrict_to_roles]
+    end
+
+    def restrict_to_group_ids
+      @options[:restrict_to_group_ids]
+    end
 
     def phone_number_attribute(attr)
       contact_account_attribute(entry.phone_numbers, attr)

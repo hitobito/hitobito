@@ -169,8 +169,15 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       Export::EventParticipationsExportJob.new(format,
                                                current_person.id,
                                                event_participation_filter,
-                                               params.merge(filename: filename)).enqueue!
+                                               options: export_job_options(filename)).enqueue!
     end
+  end
+
+  def export_job_options(filename)
+    full = params[:details].present?
+    { full: full, filename: filename,
+      household: true?(params.delete(:household)),
+      selection: true?(params.delete(:selection))}
   end
 
   def check_preconditions

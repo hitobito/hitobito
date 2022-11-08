@@ -10,7 +10,7 @@ class Export::EventsExportJob < Export::ExportBaseJob
   self.parameters = PARAMETERS + [:group_id, :filter_args]
 
   def initialize(format, user_id, group_id, filter_args, options)
-    super(format, user_id, options)
+    super(format, user_id, options: options)
     @group_id = group_id
     @filter_args = filter_args
     @exporter = Export::Tabular::Events::List

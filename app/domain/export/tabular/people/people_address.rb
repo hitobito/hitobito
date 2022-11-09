@@ -48,6 +48,7 @@ module Export::Tabular::People
     end
 
     def people
+      ActiveRecord::Associations::Preloader.new.preload(list, :roles, nil)
       list
     end
 

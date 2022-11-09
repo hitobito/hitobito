@@ -32,10 +32,9 @@ module Export::Tabular::People
 
     def entry_roles
       if role_restrictions.present?
-        roles = entry.roles
-
-        role_restrictions.flat_map do |group_id, role_types|
-          role_types.map { |type| roles.find_by(group_id: group_id, type: type) }.compact
+        entry.roles.select do |role|
+          role_restrictions.key?(role.group_id) &&
+            role_restrictions[role.group_id].include?(role.type)
         end
       else
         entry.roles

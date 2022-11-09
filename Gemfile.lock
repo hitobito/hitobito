@@ -1,3 +1,9 @@
+PATH
+  remote: ../hitobito_die_mitte
+  specs:
+    hitobito_die_mitte (1.28.23)
+      globalize-accessors
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -270,6 +276,8 @@ GEM
       activemodel (>= 4.2, < 7.1)
       activerecord (>= 4.2, < 7.1)
       request_store (~> 1.0)
+    globalize-accessors (0.3.0)
+      globalize (>= 5.0.0)
     haml (5.1.2)
       temple (>= 0.8.0)
       tilt
@@ -587,7 +595,7 @@ GEM
     thor (1.2.1)
     tilt (2.0.10)
     timeliness (0.4.4)
-    truemail (2.7.5)
+    truemail (3.0.1)
       simpleidn (~> 0.2.1)
     ttfunk (1.4.0)
     tty-color (0.6.0)
@@ -595,7 +603,7 @@ GEM
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.7)
+    unf_ext (0.0.8.2)
     unicode-display_width (1.6.0)
     unicode_utils (1.4.0)
     uniform_notifier (1.14.2)
@@ -685,6 +693,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_die_mitte!
   http_accept_language
   icalendar
   image_processing (~> 1.12)

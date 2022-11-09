@@ -12,8 +12,8 @@ module Export::Tabular::People
 
     attr_reader :table_display
 
-    def initialize(list, table_display)
-      super(add_table_display_to_query(list, table_display.person))
+    def initialize(list, table_display, options = {})
+      super(add_table_display_to_query(list, table_display.person), options)
       @table_display = table_display
     end
 
@@ -28,7 +28,7 @@ module Export::Tabular::People
     end
 
     def row_for(entry, format = nil)
-      row_class.new(entry, table_display, format)
+      row_class.new(entry, table_display, format, @options)
     end
 
     def attribute_label(attr)

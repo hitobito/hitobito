@@ -7,9 +7,9 @@ module Export::Tabular::People
   class TableDisplayRow < PersonRow
     attr_reader :table_display, :answers
 
-    def initialize(entry, table_display, format = nil)
+    def initialize(entry, table_display, format = nil, options = {})
       @table_display = table_display
-      super(entry, format)
+      super(entry, format, options)
     end
 
     def login_status

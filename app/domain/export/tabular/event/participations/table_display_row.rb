@@ -10,8 +10,8 @@ module Export::Tabular::Event::Participations
 
     attr_reader :participation
 
-    def initialize(entry, table_display, format = nil)
-      super(entry.person, table_display, format)
+    def initialize(entry, table_display, format = nil, options = {})
+      super(entry.person, table_display, format, options)
       @participation = entry
     end
 

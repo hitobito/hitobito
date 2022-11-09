@@ -42,13 +42,13 @@ describe Person::Filter::Attributes do
   context 'filtering' do
 
     before do
-      @tg_member1 = Fabricate(:person, first_name: 'test1', last_name: 'same', birthday: 27.years.ago)
+      @tg_member1 = Fabricate(:person, first_name: 'test1', last_name: 'same', birthday: 27.years.ago, language: :en)
       Fabricate(Group::TopGroup::Member.name.to_sym, group: group, person: @tg_member1)
 
-      @tg_member2 = Fabricate(:person, first_name: 'test2', last_name: 'same', birthday: 30.years.ago)
+      @tg_member2 = Fabricate(:person, first_name: 'test2', last_name: 'same', birthday: 30.years.ago, language: :de)
       Fabricate(Group::TopGroup::Member.name.to_sym, group: group, person: @tg_member2)
 
-      @tg_member3 = Fabricate(:person, first_name: 'test3', last_name: 'test3', birthday: 47.years.ago)
+      @tg_member3 = Fabricate(:person, first_name: 'test3', last_name: 'test3', birthday: 47.years.ago, language: :fr)
       Fabricate(Group::TopGroup::Member.name.to_sym, group: group, person: @tg_member3)
     end
 
@@ -401,6 +401,83 @@ describe Person::Filter::Attributes do
 
           it 'returns nobody if not both are matching' do
             expect(entries.size).to eq 0
+          end
+        end
+      end
+    end
+
+    context 'language' do
+      let(:key) { 'language' }
+      let(:english) { @tg_member1 } # = Englisch
+      let(:german) { @tg_member2 } # = Deutsch
+      let(:french) { @tg_member3 } # = Französisch
+      let(:additional_filters) do # exclude user (top_leader) so we can just test with fabricated people
+        {
+          '2234567890123': {
+            key: 'last_name',
+            constraint: 'not_match',
+            value: 'Leader'
+          }
+        }
+      end
+
+      context 'fulfilled' do
+        context 'match' do
+          let(:constraint) { 'match' }
+          let(:value) { 'isch' }
+
+          it 'returns all where value in language text' do
+            expect(entries.size).to eq(2)
+            expect(entries).to include(english)
+            expect(entries).to include(french)
+            expect(entries).to_not include(german)
+          end
+        end
+
+        context 'not_match' do
+          let(:constraint) { 'not_match' }
+          let(:value) { 'isch' }
+
+          it 'returns all where value not in language text' do
+            expect(entries.size).to eq(1)
+            expect(entries).to_not include(english)
+            expect(entries).to_not include(french)
+            expect(entries).to include(german)
+          end
+        end
+
+        context 'equal' do
+          let(:constraint) { 'equal' }
+          let(:value) { 'Englisch' }
+
+          it 'returns all where value not in language text' do
+            expect(entries.size).to eq(1)
+            expect(entries).to include(english)
+            expect(entries).to_not include(french)
+            expect(entries).to_not include(german)
+          end
+        end
+      end
+
+      context 'unfulfilled' do
+        context 'match' do
+          let(:constraint) { 'match' }
+          let(:value) { 'unknown' }
+
+          it 'returns nobody if value does not match anywhere' do
+            expect(entries).to be_empty
+          end
+        end
+
+        context 'not_match' do
+          let(:constraint) { 'not_match' }
+          let(:value) { 'Deutsch' }
+
+          it 'does not return matching person' do
+            expect(entries.size).to eq(2)
+            expect(entries).to include(english)
+            expect(entries).to include(french)
+            expect(entries).to_not include(german)
           end
         end
       end

@@ -9,8 +9,8 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
 
   self.parameters = PARAMETERS + [:filter]
 
-  def initialize(format, user_id, filter, options: {})
-    super(format, user_id, options: options)
+  def initialize(format, user_id, filter, options)
+    super(format, user_id, options)
     @filter = filter
   end
 

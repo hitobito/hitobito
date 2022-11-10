@@ -172,7 +172,7 @@ class PeopleController < CrudController
     if params[:filter_id]
       PeopleFilter.for_group(group).find(params[:filter_id]).to_params
     else
-      params.except(:group_id, :format, :controller, :action)
+      params
     end
   end
 
@@ -185,8 +185,9 @@ class PeopleController < CrudController
   end
 
   def render_tabular_entries_in_background(format)
+    full = params[:details].present? && index_full_ability?
     with_async_download_cookie(format, :people_export) do |filename|
-      render_tabular_in_background(format, filename)
+      render_tabular_in_background(format, full, filename)
     end
   end
 
@@ -194,20 +195,11 @@ class PeopleController < CrudController
     render_tabular(format, [entry], params[:details].present? && can?(:show_full, entry))
   end
 
-  def render_tabular_in_background(format, filename)
-    export_job_options = export_job_options(filename)
+  def render_tabular_in_background(format, full, filename)
     Export::PeopleExportJob.new(
-      format, current_person.id, @group.id,
-      list_filter_args, options: export_job_options
+      format, current_person.id, @group.id, list_filter_args,
+      params.slice(:household, :selection).merge(full: full, filename: filename)
     ).enqueue!
-  end
-
-  def export_job_options(filename)
-    full = params[:details].present? && index_full_ability?
-    { full: full, filename: filename,
-      show_related_roles_only: true?(params.delete(:show_related_roles_only)),
-      household: true?(params.delete(:household)),
-      selection: true?(params.delete(:selection))}
   end
 
   def render_tabular(format, entries, full)

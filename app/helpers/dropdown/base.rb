@@ -1,3 +1,4 @@
+# encoding: utf-8
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of

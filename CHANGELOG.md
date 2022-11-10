@@ -10,7 +10,6 @@
 * Der API Endpoint eines einzelnen Events enthält neu die URL von Anhängen (#1873)
 * Neues "Hitobito Log" einsehbar mit admin permissions unter "Einstellungen" (#1840)
 * Kurse können neu mittels Flag definieren, ob sie die Warteliste verwenden oder nicht (hitobito_cevi#79)
-* Bei Personenexport in Personenlisten und Abo Abonnenten Exporten optional nur die ausgewählten Rollen anzeigen (hitobito_die_mitte#213)
 
 ## Version 1.28
 

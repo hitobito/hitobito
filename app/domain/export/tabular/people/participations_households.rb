@@ -7,7 +7,7 @@
 
 module Export::Tabular::People
   class ParticipationsHouseholds < Households
-    def initialize(list, options: {})
+    def initialize(list)
       super(people(list))
     end
 

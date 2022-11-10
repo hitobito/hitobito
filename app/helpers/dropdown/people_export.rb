@@ -41,46 +41,17 @@ module Dropdown
       item = add_item(translate(format), '#')
       if Settings.table_displays
         item.sub_items << Item.new(translate(:selection),
-                                   path_with_options(path, { selection: true }),
+                                   path.merge(selection: true),
                                    data: { checkable: true })
       end
-      item.sub_items << Item.new(translate(:addresses),
-                                 path_with_options(path),
-                                 data: { checkable: true })
+      item.sub_items << Item.new(translate(:addresses), path, data: { checkable: true })
       item.sub_items << Item.new(translate(:households),
                                  path.merge(household: true),
                                  data: { checkable: true }) if @households
 
       item.sub_items << Item.new(translate(:everything),
-                                 path_with_options(path, { details: true }),
+                                 path.merge(details: true),
                                  data: { checkable: true }) if @details
-
-      unless event_participations?
-        item.sub_items << Divider.new
-        item.sub_items << show_related_roles_only_checkbox
-      end
-    end
-
-    def path_with_options(path, options = {})
-      path = path.merge(options)
-      unless event_participations?
-        path = path.merge(show_related_roles_only: show_related_roles_only_default)
-      end
-      path
-    end
-
-    def event_participations?
-      template.controller.is_a?(::Event::ParticipationsController)
-    end
-
-    def show_related_roles_only_default
-      Settings.people.export_related_roles_only_default
-    end
-
-    def show_related_roles_only_checkbox
-      label = template.t('dropdown/people_export.show_related_roles_only')
-      id = :show_related_roles_only
-      ToggleParamItem.new(template, id, label, checked: show_related_roles_only_default)
     end
 
     def vcard_link

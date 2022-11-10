@@ -40,9 +40,8 @@ module Export::Tabular
       end
     end
 
-    def initialize(list, options: {})
+    def initialize(list)
       @list = list
-      @options = options
     end
 
     # The list of all attributes exported to the csv/xlsx.
@@ -96,7 +95,7 @@ module Export::Tabular
     end
 
     def row_for(entry, format = nil)
-      row_class.new(entry, format, options: @options)
+      row_class.new(entry, format)
     end
 
   end

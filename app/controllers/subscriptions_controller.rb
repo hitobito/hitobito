@@ -56,19 +56,11 @@ class SubscriptionsController < CrudController
 
   def render_tabular_in_background(format)
     with_async_download_cookie(format, "subscriptions_#{mailing_list.id}") do |filename|
-      export_job_options = export_job_options(filename)
       Export::SubscriptionsJob.new(format,
                                    current_person.id,
                                    mailing_list.id,
-                                   options: export_job_options).enqueue!
+                                   params.slice(:household).merge(filename: filename)).enqueue!
     end
-  end
-
-  def export_job_options(filename)
-    { filename: filename,
-      show_related_roles_only: true?(params[:show_related_roles_only]),
-      household: true?(params[:household]),
-      selected: true?(params[:selected])}
   end
 
   def group_subscriptions

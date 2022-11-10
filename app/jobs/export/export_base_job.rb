@@ -11,7 +11,7 @@ class Export::ExportBaseJob < BaseJob
 
   attr_reader :exporter
 
-  def initialize(format, user_id, options: {})
+  def initialize(format, user_id, options = {})
     super()
     @format = format
     @user_id = user_id
@@ -40,7 +40,7 @@ class Export::ExportBaseJob < BaseJob
   end
 
   def data
-    exporter.export(@format, entries, options: @options)
+    exporter.export(@format, entries)
   end
 
   def filename

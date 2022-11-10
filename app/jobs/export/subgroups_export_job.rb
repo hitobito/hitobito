@@ -10,7 +10,7 @@ class Export::SubgroupsExportJob < Export::ExportBaseJob
   self.parameters = PARAMETERS + [:group_id]
 
   def initialize(user_id, group_id, options)
-    super(:csv, user_id, options: options)
+    super(:csv, user_id, options)
     @exporter = Export::Tabular::Groups::List
     @group_id = group_id
   end

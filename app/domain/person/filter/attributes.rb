@@ -80,19 +80,8 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def persisted_attribute_condition_sql(key, value, constraint)
-    if key == 'language' && value.present?
-      value = from_translations(value, constraint)&.keys || value
-    end
-
-    constraint = :in if value.is_a? Array
-
     sql_array = ["people.#{key} #{sql_comparator(constraint)} ?", sql_value(value, constraint)]
-    if constraint == :in
-      query, value = sql_array
-      query.sub('?', value) # sanitize_sql_array does not work with IN queries
-    else
-      ActiveRecord::Base.sanitize_sql_array(sql_array)
-    end
+    ActiveRecord::Base.sanitize_sql_array(sql_array)
   end
 
   def sql_comparator(constraint)
@@ -102,7 +91,6 @@ class Person::Filter::Attributes < Person::Filter::Base
     when 'greater' then '>'
     when 'smaller' then '<'
     when 'equal' then '='
-    when 'in' then 'IN'
     else raise("unexpected constraint: #{constraint.inspect}")
     end
   end
@@ -112,20 +100,8 @@ class Person::Filter::Attributes < Person::Filter::Base
     when 'match', 'not_match'
       then "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
     when 'equal', 'greater', 'smaller' then value
-    when 'in' then sql_array_value(value)
     else raise("unexpected constraint: #{constraint.inspect}")
     end
-  end
-
-  def sql_array_value(value)
-    return "('')" unless value.present? && value.is_a?(Array)
-
-    sql_array = if value.first.is_a? String
-                  "'#{value.join('\',\'')}'" # Strings have to be in quotes ('a','b')
-                else
-                  value.join(',')
-                end
-    "(#{sql_array})"
   end
 
   def unpersisted_attribute_condition_sql(key, value, constraint, scope)
@@ -147,12 +123,6 @@ class Person::Filter::Attributes < Person::Filter::Base
     when 'greater' then attribute && attribute.to_i > value.to_i
     when 'smaller' then attribute && attribute.to_i < value.to_i
     else attribute.to_s == value
-    end
-  end
-
-  def from_translations(value, constraint)
-    Person::LANGUAGES.stringify_keys.select do |_, item|
-      matching_attribute?(item, value, constraint)
     end
   end
 end

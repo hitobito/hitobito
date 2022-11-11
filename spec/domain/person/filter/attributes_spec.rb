@@ -388,7 +388,7 @@ describe Person::Filter::Attributes do
       context 'unfulfilled' do
         context 'match' do
           let(:constraint) { 'match' }
-          let(:value) { 'unknown' }
+          let(:value) { 'cz' }
 
           it 'returns nobody if not both are matching' do
             expect(entries.size).to be_zero
@@ -424,23 +424,23 @@ describe Person::Filter::Attributes do
       context 'fulfilled' do
         context 'match' do
           let(:constraint) { 'match' }
-          let(:value) { 'isch' }
+          let(:value) { 'n' }
 
           it 'returns all where value in language text' do
-            expect(entries.size).to eq(2)
+            expect(entries.size).to eq(1)
             expect(entries).to include(english)
-            expect(entries).to include(french)
+            expect(entries).to_not include(french)
             expect(entries).to_not include(german)
           end
         end
 
         context 'not_match' do
           let(:constraint) { 'not_match' }
-          let(:value) { 'isch' }
+          let(:value) { 'f' }
 
           it 'returns all where value not in language text' do
-            expect(entries.size).to eq(1)
-            expect(entries).to_not include(english)
+            expect(entries.size).to eq(2)
+            expect(entries).to include(english)
             expect(entries).to_not include(french)
             expect(entries).to include(german)
           end
@@ -448,7 +448,7 @@ describe Person::Filter::Attributes do
 
         context 'equal' do
           let(:constraint) { 'equal' }
-          let(:value) { 'Englisch' }
+          let(:value) { 'en' }
 
           it 'returns all where value not in language text' do
             expect(entries.size).to eq(1)
@@ -462,7 +462,7 @@ describe Person::Filter::Attributes do
       context 'unfulfilled' do
         context 'match' do
           let(:constraint) { 'match' }
-          let(:value) { 'unknown' }
+          let(:value) { 'Englisch' }
 
           it 'returns nobody if value does not match anywhere' do
             expect(entries).to be_empty
@@ -471,7 +471,7 @@ describe Person::Filter::Attributes do
 
         context 'not_match' do
           let(:constraint) { 'not_match' }
-          let(:value) { 'Deutsch' }
+          let(:value) { 'de' }
 
           it 'does not return matching person' do
             expect(entries.size).to eq(2)

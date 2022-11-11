@@ -1,3 +1,6 @@
 Rails.application.config.after_initialize do
-  Person::PUBLIC_ATTRS += [:language] if FeatureGate.enabled?(:person_language)
+  if FeatureGate.enabled?(:person_language)
+    Person::PUBLIC_ATTRS += [:language]
+    Person::FILTER_ATTRS += [:language]
+  end
 end

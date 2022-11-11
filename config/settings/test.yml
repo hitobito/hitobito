@@ -3,6 +3,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+application:
+  additional_languages:
+    en: Englisch
+    fr: Französisch
+    it: Italienisch
+
 csv:
   encoding: UTF-8
 

@@ -310,13 +310,16 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def set_success_notice
-    if action_name.to_s == 'create'
-      notice = translate(:success, full_entry_label: full_entry_label)
-      notice += '<br />' + translate(:instructions) if append_mailing_instructions?
+    return super unless action_name.to_s == 'create'
+
+    if entry.pending?
+      warn = translate(:pending, full_entry_label: full_entry_label)
+      warn += '<br />' + translate(:instructions) if append_mailing_instructions?
+      flash[:warn] ||= warn
       flash[:alert] ||= translate(:waiting_list) if entry.waiting_list?
-      flash[:notice] ||= notice
     else
-      super
+      notice = translate(:success, full_entry_label: full_entry_label)
+      flash[:notice] ||= notice
     end
   end
 

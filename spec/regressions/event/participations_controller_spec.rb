@@ -38,7 +38,7 @@ describe Event::ParticipationsController, type: :controller do
     sign_in(user)
   end
 
-  include_examples 'crud controller', skip: [%w(destroy)]
+  include_examples 'crud controller', skip: [%w(destroy), %w(create)]
 
   describe_action :get, :show, id: true, perform_request: false do
     let(:user) { test_entry.person }

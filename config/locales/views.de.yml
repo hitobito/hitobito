@@ -392,6 +392,8 @@ de:
         incomplete: Pflichtangaben fehlen
       cancel_application:
         explanation: Du bist für diesen Anlass angemeldet.
+        pending: Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.
+        waiting_list: Du bist auf der Warteliste für diesen Anlass.
         caption: Abmelden
         confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
 
@@ -534,6 +536,7 @@ de:
     instructions: 'Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     waiting_list: 'Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste.'
+    pending: 'Es wurde eine Voranmeldung für %{full_entry_label} erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
 
     show:
       link:

@@ -10,17 +10,22 @@ require 'spec_helper'
 describe Event::ParticipationConfirmationJob do
 
   CONFIRMATION_SUBJECT = 'Bestätigung der Anmeldung'
+  PENDING_CONFIRMATION_SUBJECT = 'Voranmeldung eingegangen'
 
   let(:course) { Fabricate(:course, groups: [groups(:top_layer)], priorization: true) }
+
+  let(:participation_active) { false }
 
   let(:participation) do
     Fabricate(:event_participation,
               event: course,
+              active: participation_active,
               person: participant,
               application: Fabricate(:event_application,
                                      priority_2: Fabricate(:course, kind: course.kind)))
   end
 
+  let(:participant) { person }
   let(:person)  { Fabricate(:person, email: 'anybody@example.com') }
   let(:app1)    { Fabricate(:person, email: 'approver1@example.com') }
   let(:app2)    { Fabricate(:person, email: 'approver2@example.com') }
@@ -37,32 +42,19 @@ describe Event::ParticipationConfirmationJob do
 
   subject { Event::ParticipationConfirmationJob.new(participation) }
 
-  context 'without approvers' do
-    let(:participant) { people(:top_leader) }
+  context 'for active participation' do
+    let(:participation_active) { true }
 
-    context 'without requiring approval' do
-      it 'sends confirmation email' do
-        course.update_column(:requires_approval, false)
-        subject.perform
+    it 'sends participation confirmation' do
+      subject.perform
 
-        expect(ActionMailer::Base.deliveries.size).to eq(1)
-        expect(last_email.subject).to eq(CONFIRMATION_SUBJECT)
-      end
+      expect(ActionMailer::Base.deliveries.size).to eq(1)
+      expect(last_email.subject).to eq(CONFIRMATION_SUBJECT)
     end
 
-    context 'with event requiring approval' do
-      it 'sends confirmation email' do
-        course.update_column(:requires_approval, true)
-        subject.perform
-
-        expect(ActionMailer::Base.deliveries.size).to eq(1)
-        expect(last_email.subject).to eq(CONFIRMATION_SUBJECT)
-      end
-    end
   end
 
   context 'with approvers' do
-    let(:participant) { person }
 
     context 'without requiring approval' do
       it 'does not send approval if not required' do
@@ -70,7 +62,7 @@ describe Event::ParticipationConfirmationJob do
         subject.perform
 
         expect(ActionMailer::Base.deliveries.size).to eq(1)
-        expect(last_email.subject).to eq(CONFIRMATION_SUBJECT)
+        expect(last_email.subject).to eq(PENDING_CONFIRMATION_SUBJECT)
       end
     end
 
@@ -84,7 +76,18 @@ describe Event::ParticipationConfirmationJob do
         first_email = ActionMailer::Base.deliveries.first
         expect(last_email.to.to_set).to eq([app1.email, app2.email].to_set)
         expect(last_email.subject).to eq('Freigabe einer Kursanmeldung')
-        expect(first_email.subject).to eq(CONFIRMATION_SUBJECT)
+        expect(first_email.subject).to eq(PENDING_CONFIRMATION_SUBJECT)
+      end
+
+      it 'does only send confirmation but not approvals to approvers if send_approval false' do
+        course.update_column(:requires_approval, true)
+        job = Event::ParticipationConfirmationJob.new(participation, send_approval: false)
+        job.perform
+
+        expect(ActionMailer::Base.deliveries.size).to eq(1)
+
+        first_email = ActionMailer::Base.deliveries.first
+        expect(first_email.subject).to eq(PENDING_CONFIRMATION_SUBJECT)
       end
 
       context 'with external role in different group with own approvers' do

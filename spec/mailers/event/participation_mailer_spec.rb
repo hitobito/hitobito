@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -80,7 +80,14 @@ describe Event::ParticipationMailer do
 
   describe '#confirmation' do
 
-    it 'renders the headers' do
+    it 'renders the headers for pending participation' do
+      expect(mail.subject).to eq 'Voranmeldung eingegangen'
+      expect(mail.to).to eq(['top_leader@example.com'])
+      expect(mail.from).to eq(['noreply@localhost'])
+    end
+
+    it 'renders the headers for active participation' do
+      participation.update!(active: true)
       expect(mail.subject).to eq 'Bestätigung der Anmeldung'
       expect(mail.to).to eq(['top_leader@example.com'])
       expect(mail.from).to eq(['noreply@localhost'])

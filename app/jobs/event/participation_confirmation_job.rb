@@ -9,9 +9,10 @@ class Event::ParticipationConfirmationJob < BaseJob
 
   self.parameters = [:participation_id, :locale]
 
-  def initialize(participation)
+  def initialize(participation, send_approval: true)
     super()
     @participation_id = participation.id
+    @send_approval = send_approval
   end
 
   def perform
@@ -27,10 +28,14 @@ class Event::ParticipationConfirmationJob < BaseJob
   def send_confirmation
     return unless participation.person.valid_email?
 
+    pending = participation.pending?
+
     Event::ParticipationMailer.confirmation(participation).deliver_now
   end
 
   def send_approval
+    return unless participation.pending? && @send_approval
+
     if participation.event.requires_approval?
       recipients = approvers
       if recipients.present?

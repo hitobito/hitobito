@@ -135,12 +135,51 @@ describe EventsController, type: :controller do
 
   describe 'GET #show' do
     context '.ics' do
-
       let(:group) { groups(:top_layer) }
 
       it 'renders event ics' do
         get :show, params: { group_id: group.id, id: test_entry.to_param }, format: :ics
         expect(response.media_type).to eq('text/calendar')
+      end
+    end
+
+    context 'participation info' do
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+      let(:event) { events(:top_event) }
+      let(:top_leader) { people(:top_leader) }
+
+      it 'shows active participation info' do
+        Event::Participation.create!(event: event, active: true, person: top_leader)
+
+        sign_in(top_leader)
+
+        get :show, params: { group_id: groups(:top_layer).id, id: events(:top_event) }
+
+        participation_note = 'Du bist für diesen Anlass angemeldet.'
+        expect(dom.all('.alert.alert-success')[0].text).to include participation_note
+      end
+
+      it 'shows pre registered info for pending participation' do
+        Event::Participation.create!(event: event, active: false, person: top_leader)
+
+        sign_in(top_leader)
+
+        get :show, params: { group_id: groups(:top_layer).id, id: events(:top_event) }
+
+        pre_registration_note = 'Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
+        expect(dom.all('.alert.alert-warning')[0].text).to include pre_registration_note
+      end
+
+      it 'shows waiting list info' do
+        participation = Event::Participation.create!(event: event, active: false, person: top_leader)
+        Event::Application.create!(participation: participation, priority_1: participation.event, waiting_list: true)
+
+        sign_in(top_leader)
+
+        get :show, params: { group_id: groups(:top_layer).id, id: events(:top_event) }
+
+        waiting_list_note = 'Du bist auf der Warteliste für diesen Anlass.'
+        expect(dom.all('.alert.alert-warning')[0].text).to include waiting_list_note
       end
     end
   end

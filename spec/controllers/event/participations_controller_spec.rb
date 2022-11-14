@@ -727,7 +727,7 @@ describe Event::ParticipationsController do
 
         it 'assigns precondition_warnings' do
           expect(warnings[0]).to match(/Vorbedingungen.*nicht erfüllt/)
-          expect(warnings[1]).to match(/Folgende Qualifikationen fehlen: Group Lead/)
+          expect(warnings[1]).to match(/Folgende Qualifikationen fehlen oder sind abgelaufen: Group Lead/)
         end
       end
 
@@ -759,7 +759,7 @@ describe Event::ParticipationsController do
       end
 
       it 'displays flash message' do
-        expect(flash[:alert].last).to match(/Folgende Qualifikationen fehlen: Group Lead/)
+        expect(flash[:alert].last).to match(/Folgende Qualifikationen fehlen oder sind abgelaufen: Group Lead/)
       end
     end
 

@@ -550,7 +550,7 @@ de:
   event/precondition_checker:
     preconditions_not_fulfilled: '<b>Vorbedingungen für Anmeldung sind nicht erfüllt.</b>'
     below_minimum_age: "Altersgrenze von %{course_minimum_age} Jahren ist unterschritten."
-    qualifications_missing: "Folgende Qualifikationen fehlen: %{missing}"
+    qualifications_missing: "Folgende Qualifikationen fehlen oder sind abgelaufen: %{missing}"
     some_qualifications_missing: "Erforderliche Qualifikationen fehlen."
 
   event/register:

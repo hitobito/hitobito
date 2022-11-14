@@ -73,7 +73,7 @@ describe Event::PreconditionChecker do
 
       context "person without 'super lead'" do
         its(:valid?) { should be_falsey }
-        its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead/ }
+        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead/ }
       end
 
       context "person with expired 'super lead'" do
@@ -127,13 +127,13 @@ describe Event::PreconditionChecker do
                                                              validity: :valid)
         end
 
-        its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead, Group Lead/ }
+        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
 
         context 'missing only one' do
           before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
           its(:valid?) { should be_falsey }
-          its('errors_text.last') { should =~ /Qualifikationen fehlen: Group Lead/ }
+          its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Group Lead/ }
         end
 
         context 'with both present' do
@@ -194,7 +194,7 @@ describe Event::PreconditionChecker do
 
       context "person without 'super lead'" do
         its(:valid?) { should be_falsey }
-        its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead/ }
+        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead/ }
       end
 
       context "person with expired 'super lead'" do
@@ -248,13 +248,13 @@ describe Event::PreconditionChecker do
                                                              validity: :valid)
         end
 
-        its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead, Group Lead/ }
+        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
 
         context 'missing only one' do
           before { qualifications << Fabricate(:qualification, qualification_kind: sl, start_at: valid_date) }
 
           its(:valid?) { should be_falsey }
-          its('errors_text.last') { should =~ /Qualifikationen fehlen: Group Lead/ }
+          its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Group Lead/ }
         end
 
         context 'with both present' do
@@ -315,7 +315,7 @@ describe Event::PreconditionChecker do
 
       context "person without 'super lead'" do
         its(:valid?) { should be_falsey }
-        its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead/ }
+        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead/ }
       end
 
       context "person with expired 'super lead'" do
@@ -369,7 +369,7 @@ describe Event::PreconditionChecker do
                                                              validity: :valid_or_expired)
         end
 
-        its('errors_text.last') { should =~ /Qualifikationen fehlen: Super Lead, Group Lead/ }
+        its('errors_text.last') { should =~ /Folgende Qualifikationen fehlen oder sind abgelaufen: Super Lead, Group Lead/ }
 
         context 'with both present' do
           before do

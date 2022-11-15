@@ -471,7 +471,6 @@ en:
   event/precondition_checker:
     preconditions_not_fulfilled: '<b>Prerequisites for registration are not met.</ b>'
     below_minimum_age: "Age limit falls below %{course_minimum_age}"
-    qualifications_missing: "The following qualifications are missing: %{missing}"
     some_qualifications_missing: "Missing required qualifications"
   event/register:
     not_logged_in: "You must log in for the registration of the event '%{event}'. "

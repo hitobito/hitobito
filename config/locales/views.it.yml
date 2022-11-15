@@ -498,7 +498,6 @@ it:
   event/precondition_checker:
     preconditions_not_fulfilled: '<b>le condizioni per iscriversi non sono soddisfatte.</b>'
     below_minimum_age: "il limite di età di %{course_minimum_age} non è raggiunto"
-    qualifications_missing: "mancano le qualifiche seguenti: %{missing}"
     some_qualifications_missing: "Le qualifiche necessarie mancano."
   event/register:
     not_logged_in: "Devi effettuare l'accesso per poterti iscrivere all'evento '%{event}'."

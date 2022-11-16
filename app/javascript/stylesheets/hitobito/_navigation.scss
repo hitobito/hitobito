@@ -191,16 +191,18 @@
   float: right;
   border-color: transparent transparent transparent #ccc;
   margin-top: 7px;
+  margin-right: -7px;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown .dropend:hover > a,
+.dropdown .dropend:focus > a {
+  background: $purple;
 }
 
 // .dropdown-menu .dropdown-menu {
   // min-width: 0;
-// }
-// .dropdown-menu > li > a:hover,
-// .dropdown-menu > li > a:focus,
-// .dropdown-submenu:hover > a,
-// .dropdown-submenu:focus > a {
-  // background: $purple;
 // }
 
 // .pull-right > .btn-group > .dropdown-menu,

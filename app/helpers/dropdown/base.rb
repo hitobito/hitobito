@@ -25,7 +25,7 @@ module Dropdown
     end
 
     def to_s
-      template.button_group do
+      template.content_tag(:div, class: 'btn-group dropdown') do
         render_dropdown_button +
           render_items
       end
@@ -133,7 +133,7 @@ module Dropdown
     end
 
     def css_class
-      'dropend' if sub_items?
+      'dropdown dropend' if sub_items?
     end
 
     def render_sub_items(template)

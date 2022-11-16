@@ -27,7 +27,7 @@ module Dropdown
     def to_s
       template.button_group do
         render_dropdown_button +
-        render_items
+          render_items
       end
     end
 
@@ -55,10 +55,10 @@ module Dropdown
         content_tag(:a,
                     class: "dropdown-toggle #{button_class}",
                     href: '#',
-                    data: { toggle: 'dropdown' }) do
-          safe_join([label_without_link,
-                     content_tag(:b, '', class: 'caret')].compact, ' ')
-        end
+                    data: { 'bs-toggle': 'dropdown' }) do
+                      safe_join([label_without_link,
+                                 content_tag(:b, '', class: 'caret')].compact, ' ')
+                    end
       ].compact, ' ')
     end
 
@@ -108,7 +108,7 @@ module Dropdown
       end
     end
 
-    def link(template, label, url, options)
+    def link(template, label, url, html_options = {})
       return disabled_link(template) if disabled_msg
 
       new_url = case url
@@ -117,17 +117,23 @@ module Dropdown
       else url
       end
 
-      return template.link_to(label, new_url, options) unless disabled_msg
+      html_options[:class] = 'dropdown-item'
+      if sub_items?
+        html_options[:data] = { 'bs-toggle': 'dropdown' }
+        html_options[:class] += ' dropdown-toggle'
+      end
+
+      return template.link_to(label, new_url, html_options)
     end
 
     def disabled_link(template)
-      template.content_tag(:a, class: 'disabled', title: disabled_msg) do
+      template.content_tag(:a, class: 'dropdown-item disabled', title: disabled_msg) do
         label
       end
     end
 
     def css_class
-      'dropdown-submenu' if sub_items?
+      'dropend' if sub_items?
     end
 
     def render_sub_items(template)

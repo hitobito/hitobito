@@ -79,7 +79,8 @@ module Dropdown
     end
 
     def render_items
-      template.content_tag_nested(:ul, items, class: 'dropdown-menu', role: 'menu') do |item|
+      html_options = { class: 'dropdown-menu', role: 'menu' }
+      template.content_tag_nested(:ul, items, html_options) do |item|
         item.render(template)
       end
     end
@@ -138,7 +139,9 @@ module Dropdown
 
     def render_sub_items(template)
       if sub_items?
-        template.content_tag_nested(:ul, sub_items, class: 'dropdown-menu') do |sub|
+        html_options = { class: 'dropdown-menu', role: 'menu' }
+
+        template.content_tag_nested(:ul, sub_items, html_options) do |sub|
           sub.render(template)
         end
       end
@@ -148,7 +151,7 @@ module Dropdown
 
   class Divider
     def render(template)
-      template.content_tag(:li, '', class: 'divider')
+      template.content_tag(:hr, '', class: 'dropdown-divider')
     end
   end
 

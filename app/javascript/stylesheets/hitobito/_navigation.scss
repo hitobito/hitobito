@@ -186,12 +186,24 @@
 }
 
 // Dropdown
+.btn-toolbar .dropdown-menu li {
+  font-size: 14px;
+  line-height: 20px;
+}
+
 .dropdown-menu > li.dropend > a:after {
   display: block;
   float: right;
   border-color: transparent transparent transparent #ccc;
   margin-top: 7px;
   margin-right: -7px;
+}
+
+// submenu
+.dropdown-menu > li.dropend > .dropdown-menu {
+  display: none;
+  position: absolute;
+  left:100%; top:-7px;
 }
 
 .dropdown-menu > li > a:hover,

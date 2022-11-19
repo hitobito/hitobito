@@ -33,8 +33,8 @@ namespace :payment do
     payments = Payments::Collection.new
                                    .from(from)
                                    .to(to)
-                                   .where(status: :ebics_imported)
                                    .payments
+                                   .where(status: :ebics_imported)
 
     if payments.empty?
       puts 'No payments found'

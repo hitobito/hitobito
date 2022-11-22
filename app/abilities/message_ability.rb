@@ -18,7 +18,7 @@ class MessageAbility < AbilityDsl::Base
 
     permission(:layer_and_below_full)
       .may(:edit, :update, :destroy)
-      .in_layer_or_below_if_not_dispatched
+      .in_layer_or_below_if_not_dispatched_nor_bulkmail
 
     permission(:any)
       .may(:show)
@@ -37,8 +37,14 @@ class MessageAbility < AbilityDsl::Base
     in_layer_or_below && !subject.group.archived?
   end
 
-  def in_layer_or_below_if_not_dispatched
-    in_layer_or_below_if_active && !subject.dispatched?
+  def in_layer_or_below_if_not_dispatched_nor_bulkmail
+    not_bulk_mail &&
+      in_layer_or_below_if_active &&
+      !subject.dispatched?
+  end
+
+  def not_bulk_mail
+    !subject.is_a?(Message::BulkMail)
   end
 
 end

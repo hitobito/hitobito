@@ -33,6 +33,13 @@ describe MessageAbility do
         is_expected.not_to be_able_to(:update, message)
         is_expected.not_to be_able_to(:destroy, message)
       end
+
+      it 'may not edit, update and destroy if message bulk mail' do
+        message = Message::BulkMail.new(mailing_list: list)
+        is_expected.not_to be_able_to(:edit, message)
+        is_expected.not_to be_able_to(:update, message)
+        is_expected.not_to be_able_to(:destroy, message)
+      end
     end
 
     context 'in group in same layer' do

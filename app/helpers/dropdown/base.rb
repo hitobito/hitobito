@@ -139,7 +139,7 @@ module Dropdown
 
     def render_sub_items(template)
       if sub_items?
-        html_options = { class: 'dropdown-menu', role: 'menu' }
+        html_options = { class: 'dropdown-menu submenu', role: 'menu' }
 
         template.content_tag_nested(:ul, sub_items, html_options) do |sub|
           sub.render(template)

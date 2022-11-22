@@ -44,7 +44,7 @@ module Messages
 
       def state_attrs(email)
         if valid?(email)
-          { state: :pending }
+          { state: :pending, error: nil }
         else
           { state: :failed, error: 'Invalid email' }
         end

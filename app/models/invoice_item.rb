@@ -45,6 +45,8 @@ class InvoiceItem < ActiveRecord::Base
 
   after_destroy :recalculate_invoice!
 
+  after_update :recalculate!, if: :saved_change_to_count_or_unit_cost?
+
   belongs_to :invoice
 
   scope :list, -> { order(:name) }
@@ -89,7 +91,17 @@ class InvoiceItem < ActiveRecord::Base
     invoice.recalculate!
   end
 
+  def recalculate!
+    recalculate.save!
+
+    recalculate_invoice!
+  end
+
   def vat
     vat_rate ? cost * (vat_rate / 100) : 0
+  end
+
+  def saved_change_to_count_or_unit_cost?
+    [:count, :unit_cost].any? { |attr| saved_change_to_attribute?(attr) }
   end
 end

@@ -114,7 +114,6 @@ class Group < ActiveRecord::Base
            foreign_key: :layer_group_id,
            dependent: :destroy
 
-
   has_settings *GroupSetting::SETTINGS.symbolize_keys.keys, class_name: 'GroupSetting'
 
   ### VALIDATIONS
@@ -133,6 +132,7 @@ class Group < ActiveRecord::Base
                      content_type: ['image/jpeg', 'image/gif', 'image/png']
   end
 
+  scope :without_archived, -> { where(archived_at: nil) }
 
   ### CLASS METHODS
 
@@ -237,14 +237,29 @@ class Group < ActiveRecord::Base
     GroupSetting.list(id)
   end
 
+  # TODO Concern?
+  def archive!
+    ActiveRecord::Base.transaction do
+      archival_timestamp = Time.zone.now
+
+      Role.where(group_id: self.id)
+          .touch_all(:archived_at, time: archival_timestamp)
+      self.archived_at = archival_timestamp
+
+      mailing_lists.destroy_all
+
+      subscriptions.destroy_all
+
+      self.save!
+    end
+  end
+
   def archived?
     archived_at.present?
   end
 
   def archivable?
-    false # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
-
-    # !archived? && children_without_deleted.none?
+    !archived? && children_without_deleted.none?
   end
 
   def self_registration_active?

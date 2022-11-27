@@ -35,13 +35,21 @@ module FilterNavigation
     def init_kind_filter_names
       @kind_filter_names = {}
       Role::Kinds.each do |kind|
-        @kind_filter_names[kind] = I18n.t("activerecord.attributes.role.class.kind.#{kind}.other")
+        name = if group.archived?
+                 I18n.t('activerecord.attributes.role.class.archived',
+                      role_kind: I18n.t("activerecord.attributes.role.class.kind.#{kind}.other"))
+               else
+                 I18n.t("activerecord.attributes.role.class.kind.#{kind}.other")
+               end
+        @kind_filter_names[kind] = name
       end
     end
 
     def init_labels
       if name.present? && @kind_filter_names.values.include?(name)
         @active_label = name
+      elsif group.archived? && only_archived_filter_active?
+        @active_label = main_filter_name
       elsif name.present?
         dropdown.activate(name)
       elsif filter.chain.present?
@@ -58,6 +66,7 @@ module FilterNavigation
 
         count = group.people.where(roles: { type: types.collect(&:sti_name) }).distinct.count
         path = kind == :member ? path() : fixed_types_path(name, types)
+
         item(name, path, count)
       end
     end
@@ -187,6 +196,14 @@ module FilterNavigation
       end
 
       all
+    end
+
+    def only_archived_filter_active?
+      filter.chain.filters.one? &&
+        filter.chain.filters.first.is_a?(Person::Filter::Role) &&
+        filter.chain.filters.first.args[:role_type_ids].empty? &&
+        filter.chain.filters.first.args[:role_types].empty? &&
+        true?(filter.chain.filters.first.args[:include_archived])
     end
 
   end

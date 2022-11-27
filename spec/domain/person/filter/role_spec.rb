@@ -158,11 +158,9 @@ describe Person::Filter::Role do
     end
   end
 
-  context 'filering specific timeframe' do
+  context 'filtering specific timeframe' do
     let(:person)      { people(:top_leader) }
-    let(:now)         { Time.zone.parse('2017-02-01 10:00:00') }
-
-    around(:each) { |example| travel_to(now) { example.run } }
+    let(:now)         { Time.zone.now }
 
     def transform(attrs)
       attrs.slice(:start_at, :finish_at).transform_values do |value|
@@ -207,8 +205,9 @@ describe Person::Filter::Role do
     context :filter do
       def filter(attrs)
         kind = attrs[:kind] || described_class.to_s
+        include_archived = attrs[:include_archived]
         role_type_ids = Array(role_type).collect(&:id)
-        filters = { role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind) }
+        filters = { role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind, include_archived: include_archived) }
         Person::Filter::List.new(attrs.fetch(:group, group), user, range: attrs.fetch(:range, range), filters: filters)
       end
 
@@ -346,6 +345,62 @@ describe Person::Filter::Role do
         it 'finds role created within range' do
           role.update(created_at: now)
           expect(filter(start_at: now, finish_at: now).entries).to have(1).item
+        end
+
+        context 'excluding archived' do
+          context 'within time range' do
+            it 'does not find archived role with past archived_at' do
+              role.update_attribute(:archived_at, 1.day.ago)
+              expect(filter(start_at: now, finish_at: now, include_archived: false).entries).to be_empty
+            end
+
+            it 'finds archived role outside with future archived_at' do
+              role.update_attribute(:archived_at, 1.day.from_now)
+              expect(filter(start_at: now, finish_at: now, include_archived: false).entries).to have(1).item
+            end
+          end
+
+          context 'outside time range' do
+            it 'does not find archived role with past archived_at' do
+              role.update(created_at: 2.days.ago)
+              role.update_attribute(:archived_at, 1.day.ago)
+              expect(filter(start_at: now, kind: 'created', include_archived: false).entries).to be_empty
+            end
+
+            it 'does not find archived role outside with future archived_at' do
+              role.update(created_at: 2.days.ago)
+              role.update_attribute(:archived_at, 1.day.from_now)
+              expect(filter(start_at: now, kind: 'created', include_archived: false).entries).to be_empty
+            end
+          end
+        end
+
+        context 'including archived' do
+          context 'within time range' do
+            it 'finds role archived with past archived_at' do
+              role.update_attribute(:archived_at, 1.day.ago)
+              expect(filter(start_at: now, finish_at: now, include_archived: true).entries).to have(1).item
+            end
+
+            it 'finds archived role with future archived_at' do
+              role.update_attribute(:archived_at, 1.day.from_now)
+              expect(filter(start_at: now, finish_at: now, include_archived: true).entries).to have(1).item
+            end
+          end
+
+          context 'outside time range' do
+            it 'does not find role archived with past archived_at' do
+              role.update(created_at: 2.days.ago)
+              role.update_attribute(:archived_at, 1.day.ago)
+              expect(filter(start_at: now, kind: 'created', include_archived: true).entries).to be_empty
+            end
+
+            it 'does not find archived role with future archived_at' do
+              role.update(created_at: 2.days.ago)
+              role.update_attribute(:archived_at, 1.day.from_now)
+              expect(filter(start_at: now, kind: 'created', include_archived: true).entries).to be_empty
+            end
+          end
         end
       end
     end

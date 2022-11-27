@@ -72,7 +72,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def possible_groups
-    mailing_list.group.self_and_descendants.without_deleted
+    mailing_list.group.self_and_descendants.without_deleted.without_archived
   end
 
   def grouped_role_types

@@ -42,3 +42,7 @@
           attr: "filters[role][kind]",
           value: key,
           checked: filter && filter.args[:kind] == key
+
+    = label_tag(nil, 'filters_role_include_archived', class: 'checkbox inline') do
+      = check_box_tag('filters[role][include_archived]', true, filter && true?(filter.args[:include_archived]))
+      = t('.include_archived')

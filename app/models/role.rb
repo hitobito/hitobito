@@ -86,15 +86,14 @@ class Role < ActiveRecord::Base
   after_destroy :reset_primary_group
   after_update :reset_primary_group
 
-  # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
-  # before_save :prevent_changes, if: ->(r) { r.archived? }
+  before_save :prevent_changes, if: ->(r) { r.archived? }
 
   ### SCOPES
 
   include Paranoia::FutureDeletedAtScope
 
   scope :without_archived, -> { where(archived_at: nil) }
-  scope :archived, -> { where.not(archived_at: nil) }
+  scope :only_archived, -> { where.not(archived_at: nil).where(archived_at: ..Time.now.utc) }
 
   ### CLASS METHODS
 

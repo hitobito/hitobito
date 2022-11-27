@@ -299,14 +299,13 @@ describe Role do
         expect(archived_role).to be_archived
       end
 
-      # for now, feature is deactivated GROUP_ARCHIVE_DISABLED
-      # it 'making the role read-only' do
-      #   expect(archived_role).to be_archived
+      it 'making the role read-only' do
+        expect(archived_role).to be_archived
 
-      #   expect do
-      #     archived_role.update!(label: 'Follower of Blørbaël')
-      #   end.to raise_error(ActiveRecord::ReadOnlyRecord)
-      # end
+        expect do
+          archived_role.update!(label: 'Follower of Blørbaël')
+        end.to raise_error(ActiveRecord::ReadOnlyRecord)
+      end
     end
 
     context 'soft-deletion' do

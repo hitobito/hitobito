@@ -714,6 +714,7 @@ de:
         created_at: Von
         deleted_at: Bis
         class:
+          archived: '%{role_kind} (archiviert)'
           permission:
             description:
               admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.

@@ -7,7 +7,10 @@
 
 class Person::Filter::Role < Person::Filter::Base
 
-  self.permitted_args = [:role_type_ids, :role_types, :kind, :start_at, :finish_at]
+  include ParamConverters
+
+  self.permitted_args = [:role_type_ids, :role_types, :kind,
+                         :start_at, :finish_at, :include_archived]
 
   def initialize(attr, args)
     super
@@ -15,13 +18,18 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def apply(scope)
-    scope
-      .where(type_conditions)
-      .where(duration_conditions)
+    scope = scope.where(type_conditions)
+                 .where(duration_conditions)
+    if include_archived?
+      scope
+    else
+      scope.where(roles: { archived_at: nil })
+           .or(scope.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
+    end
   end
 
   def blank?
-    args[:role_type_ids].blank? && args[:kind].blank?
+    args[:role_type_ids].blank? && args[:kind].blank? && args[:include_archived].blank?
   end
 
   def to_hash
@@ -55,7 +63,7 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def merge_duration_args(hash)
-    hash.merge(args.slice(:kind, :start_at, :finish_at))
+    hash.merge(args.slice(:kind, :start_at, :finish_at, :include_archived))
   end
 
   def initialize_role_types
@@ -82,6 +90,8 @@ class Person::Filter::Role < Person::Filter::Base
   end
 
   def duration_conditions
+    return unless args[:kind]
+
     case args[:kind]
     when 'created' then [[:roles, { created_at: time_range }]].to_h
     when 'deleted' then [[:roles, { deleted_at: time_range }]].to_h
@@ -109,6 +119,10 @@ class Person::Filter::Role < Person::Filter::Base
       INNER JOIN roles ON roles.person_id = people.id
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
+  end
+
+  def include_archived?
+    true?(args[:include_archived])
   end
 
 end

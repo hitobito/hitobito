@@ -573,18 +573,14 @@ describe Group do
     end
 
     context 'archivable? is' do
-      it 'currently always false, feature is deactivated' do # delete after GROUP_ARCHIVE_DISABLED
-        expect(groups(:toppers)).to_not be_archivable
-      end
-
-      xit 'false when there are sub-groups' do # reactivate after GROUP_ARCHIVE_DISABLED
+      it 'false when there are sub-groups' do
         group = groups(:top_layer)
         expect(group.children).to be_present
 
         expect(group).not_to be_archivable
       end
 
-      xit 'false when already archived' do # reactivate after GROUP_ARCHIVE_DISABLED
+      it 'false when already archived' do
         group = groups(:toppers).tap do |g|
           g.update(archived_at: 1.day.ago)
         end
@@ -593,11 +589,49 @@ describe Group do
         expect(group).not_to be_archivable
       end
 
-      xit 'true if there are no children' do # reactivate after GROUP_ARCHIVE_DISABLED
+      it 'true if there are no children' do
         group = groups(:toppers)
         expect(group.children).to_not be_present
 
         expect(group).to be_archivable
+      end
+    end
+
+    context 'archive!' do
+      it 'archives all roles with same timestamp' do
+        group = groups(:top_group)
+
+        group.archive!
+
+        expect(group).to be_archived
+        role = group.roles.first
+
+        expect(role).to be_archived
+        expect(group.archived_at).to eq(role.archived_at)
+      end
+
+      it 'deletes all attached mailing lists' do
+        group = groups(:top_layer)
+
+        expect(group.mailing_lists.size).to eq(2)
+
+        expect do
+          group.archive!
+        end.to change { MailingList.count }.by(-2)
+
+        expect(group.mailing_lists).to be_empty
+      end
+
+      it 'deletes all attached subscriptions' do
+        group = groups(:top_layer)
+
+        expect(group.subscriptions.size).to eq(1)
+
+        expect do
+          group.archive!
+        end.to change { Subscription.count }.by(-1)
+
+        expect(group.subscriptions).to be_empty
       end
     end
 

@@ -1569,6 +1569,7 @@ de:
       prompt_role_duration: Im Zeitraum (optional)
       prompt_role_duration_selection: Welche Zeitraum sollen berücksichtigt werden?
       prompt_role_duration_until: bis
+      include_archived: Archivierte Rollen miteinbeziehen
 
     qualification:
       title: Qualifikationen

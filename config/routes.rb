@@ -372,6 +372,10 @@ Hitobito::Application.routes.draw do
     end
   end # scope locale
 
+  scope '/api', module: :json_api do
+    resources :people
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -374,6 +374,7 @@ Hitobito::Application.routes.draw do
 
   scope '/api', module: :json_api do
     resources :people
+    mount VandalUi::Engine, at: '/vandal'
   end
 
   # The priority is based upon order of creation:

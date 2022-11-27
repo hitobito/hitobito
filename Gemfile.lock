@@ -615,6 +615,7 @@ GEM
       activerecord (>= 3.1.0)
     validates_timeliness (5.0.0)
       timeliness (>= 0.3.10, < 1)
+    vandal_ui (0.4.5)
     vcard (0.2.15)
     wagons (0.6.1)
       bundler (>= 1.1)
@@ -764,6 +765,7 @@ DEPENDENCIES
   truemail
   validates_by_schema
   validates_timeliness
+  vandal_ui
   vcard
   wagons (= 0.6.1)
   webdrivers

@@ -1,4 +1,4 @@
-class JsonApiController < ActionController::API
+class JsonApiController < ApplicationController
   include Graphiti::Rails
 
   register_exception Graphiti::Errors::RecordNotFound,

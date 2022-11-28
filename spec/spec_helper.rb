@@ -14,6 +14,7 @@ require 'rspec/rails'
 require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
+require 'graphiti_spec_helpers/rspec'
 
 # Needed for feature specs
 WebMock.disable_net_connect!(
@@ -148,6 +149,15 @@ RSpec.configure do |config|
   end
 
   config.before { allow(Truemail).to receive(:valid?).and_return(true) }
+
+  # graphiti
+  config.include GraphitiSpecHelpers::RSpec
+  config.include GraphitiSpecHelpers::Sugar
+
+  # Raise errors during tests by default
+  config.before :each do
+    GraphitiErrors.disable!
+  end
 end
 
 # Use Capybara only if features are not excluded

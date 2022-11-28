@@ -16,7 +16,6 @@ class ApplicationController < ActionController::Base
   include ERB::Util
   include Sentry
   include ParamConverters
-  include Graphiti::Rails
 
   # protect with null_session only in specific api controllers
   protect_from_forgery with: :exception

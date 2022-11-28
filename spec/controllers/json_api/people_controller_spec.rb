@@ -61,6 +61,14 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
 
         it 'returns people filtered/ordered by updated_at' do
         end
+
+        it 'returns 403 if token has no people permission' do
+          permitted_service_token.update!(people_below: false, people: false)
+
+          jsonapi_get '/api/people', params: params
+
+          expect(response).to have_http_status(403)
+        end
       end
     end
 

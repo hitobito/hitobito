@@ -279,6 +279,9 @@ GEM
       jsonapi-serializable (~> 0.3.0)
     graphiti_errors (1.1.2)
       jsonapi-serializable (~> 0.1)
+    graphiti_spec_helpers (1.1.0)
+      graphiti (>= 1.0.alpha.1)
+      rspec (~> 3.0)
     haml (5.1.2)
       temple (>= 0.8.0)
       tilt
@@ -696,6 +699,7 @@ DEPENDENCIES
   gibbon (~> 3.4)
   globalize
   graphiti
+  graphiti_spec_helpers
   haml
   headless
   hirb

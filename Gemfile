@@ -96,6 +96,7 @@ gem 'active_storage_variant' # variants for Rails < 7
 gem 'nochmal' # migrate into or between ActiveStorage-Backends
 
 group :development, :test do
+  gem 'graphiti_spec_helpers'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'codez-tarantula', require: 'tarantula-rails3'

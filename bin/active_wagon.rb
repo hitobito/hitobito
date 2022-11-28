@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2021, Puzzle ITC. This file is part of
+#  Copyright (c) 2020-2022, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -32,7 +32,9 @@ class Setup
 
   def write_and_copy(name, content)
     write(name, content)
-    FileUtils.cp(root.join(name), root.join("../hitobito_#{wagon}")) unless core?
+    wagons.each do |w|
+      FileUtils.cp(root.join(name), root.join("../hitobito_#{w}")) unless core?
+    end
   end
 
   def wagon(name = ARGV.first)

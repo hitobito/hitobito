@@ -75,10 +75,10 @@ module Authenticatable
   end
 
   def authenticate_person!(*args)
-    sign_in || super(*args)
+    sign_in_person || super(*args)
   end
 
-  def sign_in
+  def sign_in_person
     user_sign_in || service_token_sign_in || doorkeeper_sign_in
   end
 

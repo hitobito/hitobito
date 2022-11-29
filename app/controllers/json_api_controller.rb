@@ -1,4 +1,7 @@
-class JsonApiController < ApplicationController
+class JsonApiController < ActionController::API
+  include Authenticatable
+  include Sentry
+  
   class JsonApiUnauthorized < StandardError; end
 
   def authenticate_person!(*args)

@@ -9,7 +9,9 @@ module Authenticatable
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_user, :origin_user
+    if respond_to?(:helper_method)
+      helper_method :current_user, :origin_user
+    end
 
     before_action :authenticate_person!, if: :authenticate?
     check_authorization if: :authorize?

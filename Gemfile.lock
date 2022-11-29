@@ -277,6 +277,10 @@ GEM
       graphiti_errors (~> 1.1.0)
       jsonapi-renderer (~> 0.2, >= 0.2.2)
       jsonapi-serializable (~> 0.3.0)
+    graphiti-rails (0.4.0)
+      graphiti (~> 1.2)
+      railties (>= 5.0)
+      rescue_registry (~> 1.0)
     graphiti_errors (1.1.2)
       jsonapi-serializable (~> 0.1)
     graphiti_spec_helpers (1.1.0)
@@ -499,6 +503,8 @@ GEM
       ruby-prof
     request_store (1.5.0)
       rack (>= 1.4)
+    rescue_registry (1.0.0)
+      activesupport (>= 5.0)
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -699,6 +705,7 @@ DEPENDENCIES
   gibbon (~> 3.4)
   globalize
   graphiti
+  graphiti-rails (~> 0.1)
   graphiti_spec_helpers
   haml
   headless

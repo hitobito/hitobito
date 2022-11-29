@@ -153,11 +153,6 @@ RSpec.configure do |config|
   # graphiti
   config.include GraphitiSpecHelpers::RSpec
   config.include GraphitiSpecHelpers::Sugar
-
-  # Raise errors during tests by default
-  config.before :each do
-    GraphitiErrors.disable!
-  end
 end
 
 # Use Capybara only if features are not excluded

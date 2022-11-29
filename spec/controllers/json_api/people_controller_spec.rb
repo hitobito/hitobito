@@ -16,6 +16,12 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
         jsonapi_get '/api/people', params: params
 
         expect(response).to have_http_status(401)
+
+        errors = jsonapi_errors
+
+        expect(errors.first.status).to eq('403')
+        expect(errors.first.title).to eq('Zugriff verweigert')
+        expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
       end
     end
 
@@ -25,7 +31,7 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
         let(:permitted_service_token) { service_tokens(:permitted_top_group_token) }
         let(:params) { { token: permitted_service_token.token } }
 
-        it 'returns all people for top_layer token with people_bellow permission' do
+        it 'returns all people for top_layer token with people_below permission' do
           jsonapi_get '/api/people', params: params
 
           expect(response).to have_http_status(200)
@@ -43,7 +49,7 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
           end
         end
 
-        it 'returns only people from token`s group if no people_bellow permission' do
+        it 'returns only people from token`s group if no people_below permission' do
           permitted_service_token.update!(people_below: false)
 
           jsonapi_get '/api/people', params: params
@@ -56,7 +62,7 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
           expect(person.id).to eq(top_leader.id)
         end
 
-        it 'returns only people from token`s group and bellow' do
+        it 'returns only people from token`s group and below' do
         end
 
         it 'returns people filtered/ordered by updated_at' do
@@ -68,6 +74,12 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
           jsonapi_get '/api/people', params: params
 
           expect(response).to have_http_status(403)
+
+          errors = jsonapi_errors
+
+          expect(errors.first.status).to eq('403')
+          expect(errors.first.title).to eq('Zugriff verweigert')
+          expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
         end
       end
     end

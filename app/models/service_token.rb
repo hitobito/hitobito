@@ -42,7 +42,7 @@ class ServiceToken < ActiveRecord::Base
     name
   end
 
-  # Required as a substitute user for PeopleFilter with PersonFetchables and in other places
+  # Required as a substitute user for PeopleFilter and JSON Api with PersonFetchables and in other places
   def dynamic_user
     Person.new do |p|
       role = Role.new

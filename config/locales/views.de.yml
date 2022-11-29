@@ -293,6 +293,9 @@ de:
     '403':
       title: 'Zugriff verweigert'
       explanation: 'Du bist nicht berechtigt auf diese Resource zuzugreifen.'
+    '401':
+      title: 'Login benötigt'
+      explanation: 'Du must dich einloggen bevor du auf diese Resource zugreifen kannst.'
 
   export/tabular/events/list:
     group_names: 'Organisatoren'

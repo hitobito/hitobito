@@ -25,7 +25,7 @@
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-permitted_top_group_token:
+permitted_top_layer_token:
   layer: top_layer
   name: Permitted
   description: MyText
@@ -39,7 +39,7 @@ permitted_top_group_token:
   event_participations: true
   mailing_lists: true
 
-permitted_bottom_group_token:
+permitted_bottom_layer_token:
   layer: bottom_layer_one
   name: PermittedBottomGroupToken
   description: MyText
@@ -53,7 +53,7 @@ permitted_bottom_group_token:
   event_participations: true
   mailing_lists: true
 
-rejected_top_group_token:
+rejected_top_layer_token:
   layer: top_layer
   name: Rejected
   description: MyText

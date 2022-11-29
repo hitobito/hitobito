@@ -19,9 +19,9 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
 
         errors = jsonapi_errors
 
-        expect(errors.first.status).to eq('403')
-        expect(errors.first.title).to eq('Zugriff verweigert')
-        expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
+        expect(errors.first.status).to eq('401')
+        expect(errors.first.title).to eq('Login benötigt')
+        expect(errors.first.detail).to eq('Du must dich einloggen bevor du auf diese Resource zugreifen kannst.')
       end
     end
 

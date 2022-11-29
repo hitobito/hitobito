@@ -31,8 +31,9 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
         let(:params) { { token: permitted_service_token.token } }
 
         it 'returns all people with roles for top_layer token with people_below permission' do
-          jsonapi_get '/api/people', params: params
           Fabricate(:role, type: 'Group::BottomLayer::Leader', group: groups(:bottom_layer_two))
+
+          jsonapi_get '/api/people', params: params
 
           expect(response).to have_http_status(200)
           expect(d.size).to eq(3)

@@ -153,6 +153,11 @@ RSpec.configure do |config|
   # graphiti
   config.include GraphitiSpecHelpers::RSpec
   config.include GraphitiSpecHelpers::Sugar
+  config.include Graphiti::Rails::TestHelpers
+
+  config.before :each do
+    handle_request_exceptions(false)
+  end
 end
 
 # Use Capybara only if features are not excluded

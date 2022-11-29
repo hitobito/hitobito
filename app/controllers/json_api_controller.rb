@@ -4,7 +4,7 @@ class JsonApiController < ApplicationController
   include Graphiti::Rails
 
   def authenticate_person!(*args)
-    unless sign_in
+    unless sign_in_person
       raise JsonApiUnauthorized
     end
   end

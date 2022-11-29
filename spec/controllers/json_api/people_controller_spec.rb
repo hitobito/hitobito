@@ -30,8 +30,9 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
         let(:permitted_service_token) { service_tokens(:permitted_top_layer_token) }
         let(:params) { { token: permitted_service_token.token } }
 
-        it 'returns all people for top_layer token with people_below permission' do
+        it 'returns all people with roles for top_layer token with people_below permission' do
           jsonapi_get '/api/people', params: params
+          Fabricate(:role, type: 'Group::BottomLayer::Leader', group: groups(:bottom_layer_two))
 
           expect(response).to have_http_status(200)
           expect(d.size).to eq(3)
@@ -48,7 +49,7 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
           end
         end
 
-        it 'returns only people from token`s group if no people_below permission' do
+        it 'returns only people from token`s layer if no people_below permission' do
           permitted_service_token.update!(people_below: false)
 
           jsonapi_get '/api/people', params: params
@@ -59,9 +60,6 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
           person = d.first
 
           expect(person.id).to eq(top_leader.id)
-        end
-
-        it 'returns only people from token`s group and below' do
         end
 
         it 'returns people filtered/ordered by updated_at' do

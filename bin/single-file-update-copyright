@@ -4,15 +4,20 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+if (( $# < 1 || $# > 1 )); then
+  exit
+fi
 
 year=$(date +%Y)
 file=$1
 
-echo "Updating Copyright in $file"
 
+# echo "Updating Copyright in $file to $year"
 # Copyright (c) 2018,
 # Copyright (c) 2018-2022,
 sed -i -r "
   s/Copyright \(c\) (([[:digit:]]{4})(-[[:digit:]]{4})?),/Copyright \(c\) \2-$year,/g
   s/Copyright \(c\) $year-$year,/Copyright \(c\) $year,/g
 " $file
+
+echo "$file"

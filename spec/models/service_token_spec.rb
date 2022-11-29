@@ -22,7 +22,7 @@ describe ServiceToken do
     end
 
     it 'does not generate token on update' do
-      service_token = service_tokens(:permitted_top_group_token)
+      service_token = service_tokens(:permitted_top_layer_token)
       token = service_token.token
 
       service_token.update(description: 'new description')

@@ -833,7 +833,7 @@ describe PeopleController do
     end
 
     context 'as service token' do
-      let(:token) { service_tokens(:permitted_bottom_group_token) }
+      let(:token) { service_tokens(:permitted_bottom_layer_token) }
       let(:bottom_member) { people(:bottom_member) }
 
       before do

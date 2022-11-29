@@ -166,7 +166,7 @@ describe TokenAbility do
 
   describe :groups do
     context 'authorized' do
-      let(:token) { service_tokens(:permitted_top_group_token) }
+      let(:token) { service_tokens(:permitted_top_layer_token) }
 
       it 'may show layer' do
         is_expected.to be_able_to(:show, token.layer)
@@ -197,7 +197,7 @@ describe TokenAbility do
 
   describe :invoices do
     context 'authorized' do
-      let(:token) { service_tokens(:permitted_top_group_token) }
+      let(:token) { service_tokens(:permitted_top_layer_token) }
 
       it 'may show' do
         is_expected.to be_able_to(:show, token.layer.invoices.build)
@@ -247,7 +247,7 @@ describe TokenAbility do
     let(:event_participation) { event_participations(:top) }
 
     context 'authorized' do
-      let(:token) { service_tokens(:permitted_top_group_token) }
+      let(:token) { service_tokens(:permitted_top_layer_token) }
 
       it 'may show' do
         is_expected.to be_able_to(:show, event_participation)
@@ -300,7 +300,7 @@ describe TokenAbility do
     let(:mailing_list) { mailing_lists(:leaders) }
 
     context 'authorized' do
-      let(:token) { service_tokens(:permitted_top_group_token) }
+      let(:token) { service_tokens(:permitted_top_layer_token) }
 
       it 'may show' do
         is_expected.to be_able_to(:show, mailing_list)

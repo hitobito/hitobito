@@ -26,9 +26,8 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
     end
 
     context 'with service token' do
-
       context 'authorized' do
-        let(:permitted_service_token) { service_tokens(:permitted_top_group_token) }
+        let(:permitted_service_token) { service_tokens(:permitted_top_layer_token) }
         let(:params) { { token: permitted_service_token.token } }
 
         it 'returns all people for top_layer token with people_below permission' do

@@ -90,16 +90,6 @@ class ApplicationController < ActionController::Base
     Auth.current_person = nil
   end
 
-  def current_ability
-    @current_ability ||= if current_user
-                           Ability.new(current_user)
-                         elsif current_service_token
-                           TokenAbility.new(current_service_token)
-                         elsif current_oauth_token
-                           DoorkeeperTokenAbility.new(current_oauth_token)
-                         end
-  end
-
   def after_sign_in_path_for(resource)
     stored_location_for(resource) || root_path
   end

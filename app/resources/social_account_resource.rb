@@ -1,0 +1,2 @@
+class SocialAccountResource < ContactableResource
+end

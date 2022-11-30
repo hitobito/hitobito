@@ -123,4 +123,14 @@ module Authenticatable
   def doorkeeper_controller?
     is_a?(Doorkeeper::ApplicationController)
   end
+
+  def current_ability
+    @current_ability ||= if current_user
+                           Ability.new(current_user)
+                         elsif current_service_token
+                           TokenAbility.new(current_service_token)
+                         elsif current_oauth_token
+                           DoorkeeperTokenAbility.new(current_oauth_token)
+                         end
+  end
 end

@@ -13,10 +13,10 @@ describe TokenAbility do
   let(:ability) { TokenAbility.new(token) }
 
   describe :people do
-    let(:token) { service_tokens(:rejected_top_group_token) }
+    let(:token) { service_tokens(:rejected_top_layer_token) }
 
     before do
-      token.update(people: true)
+      token.update!(people: true)
     end
 
     context 'authorized' do
@@ -44,21 +44,23 @@ describe TokenAbility do
       end
 
       it 'may not index if disabled' do
-        token.update(people: false)
+        token.update!(people: false)
         is_expected.not_to be_able_to(:index_people, token.layer)
       end
 
       it 'may not show if disabled' do
-        token.update(people: false)
+        token.update!(people: false)
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.not_to be_able_to(:show, person)
       end
 
       it 'may not index on subgroup' do
+        token.update!(layer_and_below_read: false)
         is_expected.not_to be_able_to(:index_people,  groups(:top_group))
       end
 
       it 'may not show in subgroup' do
+        token.update!(layer_and_below_read: false)
         person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
         is_expected.not_to be_able_to(:show, person)
       end
@@ -66,10 +68,10 @@ describe TokenAbility do
   end
 
   describe :people_below do
-    let(:token) { service_tokens(:rejected_top_group_token) }
+    let(:token) { service_tokens(:rejected_top_layer_token) }
 
     before do
-      token.update(people_below: true)
+      token.update!(layer_and_below_read: true)
     end
 
     context 'authorized' do
@@ -114,7 +116,7 @@ describe TokenAbility do
   end
 
   describe :events do
-    let(:token) { service_tokens(:rejected_top_group_token) }
+    let(:token) { service_tokens(:rejected_top_layer_token) }
 
     before do
       token.update(events: true)
@@ -182,7 +184,7 @@ describe TokenAbility do
     end
 
     context 'unauthorized' do
-      let(:token) { service_tokens(:rejected_top_group_token) }
+      let(:token) { service_tokens(:rejected_top_layer_token) }
 
       it 'may not permit any write actions' do
         is_expected.not_to be_able_to(:create, token.layer)
@@ -227,7 +229,7 @@ describe TokenAbility do
     end
 
     context 'unauthorized' do
-      let(:token) { service_tokens(:rejected_top_group_token) }
+      let(:token) { service_tokens(:rejected_top_layer_token) }
 
       it 'may not show' do
         is_expected.not_to be_able_to(:show, token.layer.invoices.build)
@@ -279,7 +281,7 @@ describe TokenAbility do
     end
 
     context 'unauthorized' do
-      let(:token) { service_tokens(:rejected_top_group_token) }
+      let(:token) { service_tokens(:rejected_top_layer_token) }
 
       it 'may not show' do
         is_expected.not_to be_able_to(:show, event_participation)
@@ -318,7 +320,7 @@ describe TokenAbility do
     end
 
     context 'unauthorized' do
-      let(:token) { service_tokens(:rejected_top_group_token) }
+      let(:token) { service_tokens(:rejected_top_layer_token) }
 
       it 'may not show' do
         is_expected.not_to be_able_to(:show, mailing_list)

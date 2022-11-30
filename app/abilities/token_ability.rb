@@ -22,7 +22,7 @@ class TokenAbility
 
   def define_token_abilities
     define_base_abilities
-    define_person_abilities if token.people? || token.people_below?
+    define_person_abilities if token.people?
     define_event_abilities if token.events?
     define_group_abilities if token.groups?
     define_invoice_abilities if token.invoices?
@@ -35,7 +35,7 @@ class TokenAbility
   end
 
   def define_person_abilities
-    groups = token.people_below? ? token_layer_and_below : [token.layer]
+    groups = token.layer_and_below_read? ? token_layer_and_below : [token.layer]
 
     can :show, [Person, PersonDecorator] do |p|
       Role.where(person: p, group: groups).present? &&

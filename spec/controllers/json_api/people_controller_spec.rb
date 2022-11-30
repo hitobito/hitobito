@@ -30,7 +30,7 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
         let(:permitted_service_token) { service_tokens(:permitted_top_layer_token) }
         let(:params) { { token: permitted_service_token.token } }
 
-        it 'returns all people with roles for top_layer token with people_below permission' do
+        it 'returns all people with roles for top_layer token with layer_and_below_read permission' do
           Fabricate(:role, type: 'Group::BottomLayer::Leader', group: groups(:bottom_layer_two))
 
           jsonapi_get '/api/people', params: params
@@ -50,8 +50,8 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
           end
         end
 
-        it 'returns only people from token`s layer if no people_below permission' do
-          permitted_service_token.update!(people_below: false)
+        it 'returns only people from token`s layer with layer_read permission' do
+          permitted_service_token.update!(layer_and_below_read: false)
 
           jsonapi_get '/api/people', params: params
 

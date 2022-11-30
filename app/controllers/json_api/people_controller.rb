@@ -1,5 +1,7 @@
 class JsonApi::PeopleController < JsonApiController
 
+  # people_layer_or_below_ability = true
+
   def index
     authorize!(:index_people, Group)
     people = PersonResource.all({}, index_people_scope)

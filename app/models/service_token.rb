@@ -47,7 +47,7 @@ class ServiceToken < ActiveRecord::Base
     Person.new do |p|
       role = Role.new
       role.group = layer
-      role.permissions = [:layer_and_below_full]
+      role.permissions = [permission]
       p.roles = [role]
       p.groups = [layer]
       p.instance_variable_set(:@service_token, self)
@@ -55,6 +55,14 @@ class ServiceToken < ActiveRecord::Base
   end
 
   private
+
+  def permission
+    if layer_and_below_read?
+      :layer_and_below_read
+    else
+      :layer_read
+    end
+  end
 
   def generate_token!
     loop do

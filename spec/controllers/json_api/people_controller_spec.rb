@@ -84,6 +84,24 @@ describe JsonApi::PeopleController, type: [:request] do
           end
         end
 
+        it 'returns people including contactables' do
+          contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
+                                         group: groups(:bottom_layer_two),
+                                         person: Fabricate(:person_with_address_and_phone,
+                                                           additional_emails: [Fabricate(:additional_email)],
+                                                           social_accounts: [Fabricate(:social_account)])).person
+
+          jsonapi_get '/api/people', params: params
+
+          expect(response).to have_http_status(200)
+          expect(d.size).to eq(3)
+
+          person = d.find { |p| p.id == contactable_person.id }
+
+          expect(person.relationships.size).to eq(3)
+          expect(person.relationships.keys).to match_array(['phone_numbers', 'social_accounts', 'additional_emails'])
+        end
+
         it 'returns 403 if token has no people permission' do
           permitted_service_token.update!(people: false)
 

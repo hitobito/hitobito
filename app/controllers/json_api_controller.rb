@@ -1,4 +1,7 @@
 class JsonApiController < ActionController::API
+  include ActionController::Cookies
+
+  include Localizable
   include Authenticatable
   include Sentry
   
@@ -25,7 +28,7 @@ class JsonApiController < ActionController::API
   private
 
   def user_session?
-    request.cookies['_session_id'].present?
+    cookies['_session_id'].present?
   end
 
   # Sign in by deprecated user token is not supported by hitobito JSON API

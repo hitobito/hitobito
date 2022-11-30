@@ -25,7 +25,7 @@ class JsonApiController < ActionController::API
   private
 
   def user_session?
-    request.cookies['remember_person_token'].present?
+    request.cookies['_session_id'].present?
   end
 
   # Sign in by deprecated user token is not supported by hitobito JSON API

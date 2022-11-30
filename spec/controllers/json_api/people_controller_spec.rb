@@ -64,6 +64,24 @@ describe JsonApi::PeopleController, type: [:request] do
         end
 
         it 'returns people filtered/ordered by updated_at' do
+          Fabricate(:role, type: 'Group::BottomLayer::Leader', group: groups(:bottom_layer_two)).person
+          bottom_member.touch
+
+          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: 5.seconds.ago })
+
+          expect(response).to have_http_status(200)
+          expect(d.size).to eq(3)
+
+          person = d.first
+
+          expect(person.id).to eq(bottom_member.id)
+          expect(person.jsonapi_type).to eq('people')
+
+          person_attrs.each do |attr|
+            expect(person.has_key?(attr)).to eq(true)
+
+            expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
+          end
         end
 
         it 'returns 403 if token has no people permission' do
@@ -113,6 +131,27 @@ describe JsonApi::PeopleController, type: [:request] do
         end
 
         it 'returns only readable people' do
+        end
+
+        it 'returns people filtered/ordered by updated_at' do
+          top_leader.update(updated_at: 10.seconds.ago)
+          bottom_member.touch
+
+          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: 5.seconds.ago })
+
+          expect(response).to have_http_status(200)
+          expect(d.size).to eq(1)
+
+          person = d.first
+
+          expect(person.id).to eq(bottom_member.id)
+          expect(person.jsonapi_type).to eq('people')
+
+          person_attrs.each do |attr|
+            expect(person.has_key?(attr)).to eq(true)
+
+            expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
+          end
         end
       end
     end

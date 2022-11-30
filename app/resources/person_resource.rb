@@ -13,5 +13,11 @@ class PersonResource < ApplicationResource
   attribute :country, :string
   attribute :gender, :string
   attribute :birthday, :date
-  attribute :primary_group_id, :integer
+  attribute :primary_group_id, :integer, except: [:writeable]
+
+  filter :updated_at, :datetime, single: true do
+    eq do |scope, value|
+      scope.where(updated_at: value..)
+    end
+  end
 end

@@ -5,8 +5,10 @@ class JsonApiController < ActionController::API
   class JsonApiUnauthorized < StandardError; end
 
   def authenticate_person!(*args)
-    unless sign_in_person
-      raise JsonApiUnauthorized
+    if user_session?
+      super(*args)
+    else
+      raise JsonApiUnauthorized unless api_sign_in
     end
   end
 
@@ -20,4 +22,14 @@ class JsonApiController < ActionController::API
     title: I18n.t('errors.401.title'),
     message: ->(error) { I18n.t('errors.401.explanation') }
 
+  private
+
+  def user_session?
+    request.cookies['remember_person_token'].present?
+  end
+
+  # Sign in by deprecated user token is not supported by hitobito JSON API
+  def deprecated_user_token_sign_in
+    return nil
+  end
 end

@@ -117,38 +117,38 @@ describe JsonApi::PeopleController, type: [:request] do
       end
     end
 
-    context 'with personal oauth access token' do
-      context 'authorized' do
-        it 'returns people' do
-          expect(PersonResource).to receive(:all).and_call_original
+    # context 'with personal oauth access token' do
+      # context 'authorized' do
+        # it 'returns people' do
+          # expect(PersonResource).to receive(:all).and_call_original
 
-          jsonapi_get '/api/people', params: params
+          # jsonapi_get '/api/people', params: params
 
-          expect(response).to have_http_status(200)
-          expect(d.size).to eq(3)
+          # expect(response).to have_http_status(200)
+          # expect(d.size).to eq(3)
 
-          person = d.first
+          # person = d.first
 
-          expect(person.id).to eq(bottom_member.id)
-          expect(person.jsonapi_type).to eq('people')
+          # expect(person.id).to eq(bottom_member.id)
+          # expect(person.jsonapi_type).to eq('people')
 
-          person_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(true)
+          # person_attrs.each do |attr|
+            # expect(person.has_key?(attr)).to eq(true)
 
-            expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
-          end
-        end
+            # expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
+          # end
+        # end
 
-        it 'returns people ordered by updated_at' do
+        # it 'returns people ordered by updated_at' do
 
-        end
+        # end
 
-        it 'returns only readable people' do
-        end
+        # it 'returns only readable people' do
+        # end
 
-        it 'does not return people without role' do
-        end
-      end
-    end
+        # it 'does not return people without role' do
+        # end
+      # end
+    # end
   end
 end

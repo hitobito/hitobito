@@ -81,7 +81,7 @@ module Hitobito
 
     config.active_storage.variant_processor = :mini_magick
 
-    config.debug_exception_response_format = :jsonapi
+    config.debug_exception_response_format = :api
 
     if ENV["RAILS_LOG_TO_STDOUT"].present? && !Rails.env.test?
       logger = ActiveSupport::Logger.new(STDOUT)

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe JsonApi::PeopleController, type: [:request, :controller] do
+describe JsonApi::PeopleController, type: [:request] do
   let(:person_attrs) {
     %w(first_name last_name nickname company_name company
        email address zip_code town country gender birthday primary_group_id)
@@ -67,7 +67,7 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
         end
 
         it 'returns 403 if token has no people permission' do
-          permitted_service_token.update!(people_below: false, people: false)
+          permitted_service_token.update!(people: false)
 
           jsonapi_get '/api/people', params: params
 
@@ -79,20 +79,26 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
           expect(errors.first.title).to eq('Zugriff verweigert')
           expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
         end
+
+        it 'paginates entries' do
+        end
       end
     end
 
     context 'with signed in user session' do
       context 'authorized' do
-        before { sign_in(top_leader) }
+        before do
+          sign_in(top_leader)
+          # mock check for user since sign_in devise helper is not setting any cookies
+          allow_any_instance_of(described_class)
+            .to receive(:user_session?).and_return(true)
+        end
 
-        it 'returns people' do
-          expect(PersonResource).to receive(:all).and_call_original
-
+        it 'returns all people with roles' do
           jsonapi_get '/api/people', params: params
 
           expect(response).to have_http_status(200)
-          expect(d.size).to eq(3)
+          expect(d.size).to eq(2)
 
           person = d.first
 
@@ -104,10 +110,6 @@ describe JsonApi::PeopleController, type: [:request, :controller] do
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
-        end
-
-        it 'returns people ordered by updated_at' do
-
         end
 
         it 'returns only readable people' do

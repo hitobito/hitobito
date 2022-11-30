@@ -8,6 +8,8 @@
 module Authenticatable
   extend ActiveSupport::Concern
 
+  # class ApiUnauthorized < StandardError; end
+
   included do
     if respond_to?(:helper_method)
       helper_method :current_user, :origin_user
@@ -77,14 +79,15 @@ module Authenticatable
   end
 
   def authenticate_person!(*args)
-    sign_in_person || super(*args)
+    deprecated_user_token_sign_in || api_sign_in || super(*args)
   end
 
-  def sign_in_person
-    user_sign_in || service_token_sign_in || doorkeeper_sign_in
+  def api_sign_in
+    service_token_sign_in || doorkeeper_sign_in
   end
 
-  def user_sign_in
+  # user login by token is DEPRECATED
+  def deprecated_user_token_sign_in
     user = token_authentication.user_from_token
     return unless user
 

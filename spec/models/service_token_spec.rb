@@ -7,11 +7,20 @@ require 'spec_helper'
 
 describe ServiceToken do
 
-  it '#dynamic user returns user model with top_admin role' do
-    token = ServiceToken.new(layer: groups(:top_layer))
-    expect(token.dynamic_user.roles).to have(2).item
-    expect(token.dynamic_user.roles.first.group).to eq groups(:top_layer)
-    expect(token.dynamic_user.roles.first.permissions).to eq [:layer_and_below_full]
+  describe '#dynamic user' do
+    it 'gets layer_and_below_read permissions when token has layer_and_below_read' do
+      token = ServiceToken.new(layer: groups(:top_layer), layer_and_below_read: true)
+      expect(token.dynamic_user.roles).to have(1).item
+      expect(token.dynamic_user.roles.first.group).to eq groups(:top_layer)
+      expect(token.dynamic_user.roles.first.permissions).to eq [:layer_and_below_read]
+    end
+
+    it 'gets layer_read permissions when token does not have layer_and_below_read' do
+      token = ServiceToken.new(layer: groups(:top_layer), layer_and_below_read: false)
+      expect(token.dynamic_user.roles).to have(1).item
+      expect(token.dynamic_user.roles.first.group).to eq groups(:top_layer)
+      expect(token.dynamic_user.roles.first.permissions).to eq [:layer_read]
+    end
   end
 
   context 'callbacks' do

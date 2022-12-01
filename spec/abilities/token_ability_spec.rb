@@ -71,7 +71,7 @@ describe TokenAbility do
     let(:token) { service_tokens(:rejected_top_layer_token) }
 
     before do
-      token.update!(layer_and_below_read: true)
+      token.update!(layer_and_below_read: true, people: true)
     end
 
     context 'authorized' do
@@ -103,12 +103,12 @@ describe TokenAbility do
       end
 
       it 'may not index if disabled' do
-        token.update(people_below: false)
+        token.update(layer_and_below_read: false, people: false)
         is_expected.not_to be_able_to(:index_people, token.layer)
       end
 
       it 'may not show if disabled' do
-        token.update(people_below: false)
+        token.update(layer_and_below_read: false, people: false)
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.not_to be_able_to(:show, person)
       end

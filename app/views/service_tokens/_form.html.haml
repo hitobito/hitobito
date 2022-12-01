@@ -9,8 +9,10 @@
 
   %fieldset
     = f.labeled(model_class.human_attribute_name(:abilities), nil, nil, style: 'display: flex; flex-direction: column;') do
+      = f.inline_radio_button(:layer_and_below_read, false, 'Dieser Ebene')
+      = f.inline_radio_button(:layer_and_below_read, true, 'Dieser Ebene und untere')
+
       = f.boolean_field(:people, caption: model_class.human_attribute_name(:people))
-      = f.boolean_field(:people_below, caption: model_class.human_attribute_name(:people_below))
       = f.boolean_field(:groups, caption: model_class.human_attribute_name(:groups))
       = f.boolean_field(:events, caption: model_class.human_attribute_name(:events))
       - if parent.layer?

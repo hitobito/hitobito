@@ -37,6 +37,6 @@ class JsonApiController < ActionController::API
   end
 
   def api_params
-    params.permit(filter: {}, sort: {}, page: {})
+    params.permit(:include, filter: {}, sort: {}, page: {})
   end
 end

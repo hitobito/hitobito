@@ -84,7 +84,7 @@ describe JsonApi::PeopleController, type: [:request] do
           end
         end
 
-        it 'returns people including contactables' do
+        it 'returns people with contactable relations' do
           contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
                                          group: groups(:bottom_layer_two),
                                          person: Fabricate(:person_with_address_and_phone,
@@ -100,6 +100,39 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(person.relationships.size).to eq(3)
           expect(person.relationships.keys).to match_array(['phone_numbers', 'social_accounts', 'additional_emails'])
+        end
+
+        it 'includes contactables based on params' do
+          contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
+                                         group: groups(:bottom_layer_two),
+                                         person: Fabricate(:person_with_address_and_phone,
+                                                           additional_emails: [Fabricate(:additional_email)],
+                                                           social_accounts: [Fabricate(:social_account)])).person
+
+          jsonapi_get '/api/people', params: params.merge(include: 'phone_numbers')
+
+          expect(response).to have_http_status(200)
+          expect(d.size).to eq(3)
+
+          expect(included.size).to eq(1)
+          phone_number_json = included.first
+          phone_number_record = contactable_person.phone_numbers.first
+
+          expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
+
+          phone_number_record.attributes.each do |attr, expected|
+            expect(phone_number_json.has_key?(attr)).to eq(true)
+
+            expect(phone_number_json.send(attr.to_sym)).to eq(expected)
+          end
+
+          jsonapi_get '/api/people', params: params.merge(include: 'phone_numbers,additional_emails')
+
+          # purge included instance variable since graphiti spec helper decides to memoize it
+          @jsonapi_included = nil
+          
+          expect(included.size).to eq(2)
+          expect(included.map(&:jsonapi_type)).to match_array(['phone_numbers', 'additional_emails'])
         end
 
         it 'returns 403 if token has no people permission' do
@@ -149,6 +182,57 @@ describe JsonApi::PeopleController, type: [:request] do
         end
 
         it 'returns only readable people' do
+        end
+
+        it 'returns people with contactable relations' do
+          contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
+                                         group: groups(:bottom_layer_two),
+                                         person: Fabricate(:person_with_address_and_phone,
+                                                           additional_emails: [Fabricate(:additional_email)],
+                                                           social_accounts: [Fabricate(:social_account)])).person
+
+          jsonapi_get '/api/people', params: params
+
+          expect(response).to have_http_status(200)
+          expect(d.size).to eq(3)
+
+          person = d.find { |p| p.id == contactable_person.id }
+
+          expect(person.relationships.size).to eq(3)
+          expect(person.relationships.keys).to match_array(['phone_numbers', 'social_accounts', 'additional_emails'])
+        end
+
+        it 'includes contactables based on params' do
+          contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
+                                         group: groups(:bottom_layer_two),
+                                         person: Fabricate(:person_with_address_and_phone,
+                                                           additional_emails: [Fabricate(:additional_email)],
+                                                           social_accounts: [Fabricate(:social_account)])).person
+
+          jsonapi_get '/api/people', params: params.merge(include: 'phone_numbers')
+
+          expect(response).to have_http_status(200)
+          expect(d.size).to eq(3)
+
+          expect(included.size).to eq(1)
+          phone_number_json = included.first
+          phone_number_record = contactable_person.phone_numbers.first
+
+          expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
+
+          phone_number_record.attributes.each do |attr, expected|
+            expect(phone_number_json.has_key?(attr)).to eq(true)
+
+            expect(phone_number_json.send(attr.to_sym)).to eq(expected)
+          end
+
+          jsonapi_get '/api/people', params: params.merge(include: 'phone_numbers,additional_emails')
+
+          # purge included instance variable since graphiti spec helper decides to memoize it
+          @jsonapi_included = nil
+          
+          expect(included.size).to eq(2)
+          expect(included.map(&:jsonapi_type)).to match_array(['phone_numbers', 'additional_emails'])
         end
 
         it 'returns people filtered/ordered by updated_at' do

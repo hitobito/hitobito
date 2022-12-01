@@ -372,8 +372,10 @@ Hitobito::Application.routes.draw do
     end
   end # scope locale
 
+  # TODO constraints breaks vandal_ui
   scope '/api', module: :json_api, constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
     resources :people
+
     mount VandalUi::Engine, at: '/vandal'
   end
 

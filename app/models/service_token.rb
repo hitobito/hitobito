@@ -49,7 +49,6 @@ class ServiceToken < ActiveRecord::Base
       role.group = layer
       role.permissions = [permission]
       p.roles = [role]
-      p.groups = [layer]
       p.instance_variable_set(:@service_token, self)
     end
   end

@@ -29,7 +29,7 @@ describe ServiceTokensController do
     let(:person) { people(:top_leader) }
 
     it 'may update flags' do
-      token = service_tokens(:rejected_top_group_token)
+      token = service_tokens(:rejected_top_layer_token)
 
       patch :update, params: { group_id: token.layer.id, id: token.id, service_token: {
         people: true,

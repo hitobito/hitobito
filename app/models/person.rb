@@ -399,10 +399,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     PersonDuplicate.where(person_1: id).or(PersonDuplicate.where(person_2: id)) # rubocop:disable Naming/VariableNumber
   end
 
-  def address_for_letter
-    Person::Address.new(self).for_letter
-  end
-
   def remove_picture
     false
   end

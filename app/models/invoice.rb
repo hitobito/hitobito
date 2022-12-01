@@ -246,7 +246,7 @@ class Invoice < ActiveRecord::Base
 
   def set_recipient_fields
     self.recipient_email = recipient.email
-    self.recipient_address = recipient.address_for_letter
+    self.recipient_address = Person::Address.new(recipient).for_invoice
   end
 
   def item_invalid?(attributes)

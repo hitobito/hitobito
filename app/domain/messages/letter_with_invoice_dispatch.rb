@@ -34,5 +34,11 @@ module Messages
     def send_to_households?
       false
     end
+
+    private
+
+    def address_for_letter(person, housemates)
+      Person::Address.new(person).for_invoice
+    end
   end
 end

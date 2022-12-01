@@ -45,7 +45,8 @@ class InvoiceItem < ActiveRecord::Base
 
   after_destroy :recalculate_invoice!
 
-  after_update :recalculate!, if: :saved_change_to_count_or_unit_cost?
+  before_update :recalculate, if: :count_or_unit_cost_changed?
+  after_update :recalculate_invoice!
 
   belongs_to :invoice
 
@@ -101,7 +102,7 @@ class InvoiceItem < ActiveRecord::Base
     vat_rate ? cost * (vat_rate / 100) : 0
   end
 
-  def saved_change_to_count_or_unit_cost?
-    [:count, :unit_cost].any? { |attr| saved_change_to_attribute?(attr) }
+  def count_or_unit_cost_changed?
+    count_changed? || unit_cost_changed?
   end
 end

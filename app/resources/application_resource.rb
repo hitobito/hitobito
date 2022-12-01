@@ -31,4 +31,6 @@ class ApplicationResource < Graphiti::Resource
 
   # Automatically generate JSONAPI links?
   self.autolink = true
+
+  delegate :can?, to: :context
 end

@@ -105,4 +105,22 @@ describe InvoiceItem do
     expect(new_invoice.total).to eq(20)
   end
 
+  it 'does not recalculate invoice after update name' do
+    new_invoice = Fabricate(:invoice, group: invoice.group, recipient: people(:bottom_member),
+                            invoice_items_attributes: {
+                              '0' => {
+                                name: :pens,
+                                count: 1,
+                                unit_cost: 10
+                              }
+                            })
+
+    item = new_invoice.invoice_items.first
+
+    expect(new_invoice.total).to eq(10)
+
+    expect do
+      item.update(name: :utensils)
+    end.to_not change { new_invoice.reload }
+  end
 end

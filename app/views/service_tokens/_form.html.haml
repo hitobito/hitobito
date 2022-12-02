@@ -8,10 +8,13 @@
     = f.labeled_input_fields :name, :description
 
   %fieldset
-    = f.labeled(model_class.human_attribute_name(:abilities), nil, nil, style: 'display: flex; flex-direction: column;') do
-      = f.inline_radio_button(:layer_and_below_read, false, 'Dieser Ebene')
-      = f.inline_radio_button(:layer_and_below_read, true, 'Dieser Ebene und untere')
+    = f.labeled(model_class.human_attribute_name(:range), nil, nil, style: 'display: flex; flex-direction: column;') do
+      %span
+        = f.inline_radio_button(:layer_and_below_read, false, model_class.human_attribute_name(:layer_read))
+      %span
+        = f.inline_radio_button(:layer_and_below_read, true, model_class.human_attribute_name(:layer_and_below_read))
 
+    = f.labeled(model_class.human_attribute_name(:abilities), nil, nil, style: 'display: flex; flex-direction: column;') do
       = f.boolean_field(:people, caption: model_class.human_attribute_name(:people))
       = f.boolean_field(:groups, caption: model_class.human_attribute_name(:groups))
       = f.boolean_field(:events, caption: model_class.human_attribute_name(:events))

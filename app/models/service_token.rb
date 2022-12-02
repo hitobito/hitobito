@@ -17,7 +17,6 @@
 #  mailing_lists        :boolean          default(FALSE), not null
 #  name                 :string(255)      not null
 #  people               :boolean          default(FALSE)
-#  people_below         :boolean          default(FALSE)
 #  token                :string(255)      not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

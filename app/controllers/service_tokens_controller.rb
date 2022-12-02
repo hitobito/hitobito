@@ -13,7 +13,6 @@ class ServiceTokensController < CrudController
     :name,
     :description,
     :people,
-    :people_below,
     :groups,
     :events,
     :invoices,

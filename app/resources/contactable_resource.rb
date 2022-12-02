@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2022, Schweizer Wanderwege. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # Can not be a base class since graphiti seems to get confused about base classes
 # for polymorphic relations.
 # Thus, the json api type was always contactable and the relation couldn't be correctly mapped.

@@ -18,6 +18,7 @@ describe Localizable do
     @cached_languages = Settings.application.languages
     Settings.application.languages = { de: 'Deutsch', fr: 'Français' }
     I18n.available_locales = Settings.application.languages.keys
+    expect_any_instance_of(ActionDispatch::Request).to receive(:controller_class).and_return(ApplicationController)
   end
 
   after do

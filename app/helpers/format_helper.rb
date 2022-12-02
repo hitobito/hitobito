@@ -34,10 +34,10 @@ module FormatHelper
     case value
     when Float, BigDecimal then
       number_with_precision(value, precision: t('number.format.precision'),
-                                   delimiter: t('number.format.delimiter'))
+                                   delimiter: t('number.format.delimiter').html_safe)
     when nil then EMPTY_STRING
     else
-      number_with_delimiter(value.to_i, delimiter: t('number.format.delimiter'))
+      number_with_delimiter(value.to_i, delimiter: t('number.format.delimiter').html_safe)
     end
   end
 

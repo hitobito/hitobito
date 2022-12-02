@@ -152,7 +152,11 @@ describe FormatHelper do
       end
 
       it 'should print large values with delimiters' do
-        expect(fnumber(10_000_000)).to eq('10&#39;000&#39;000')
+        expect(fnumber(10_000_000)).to eq("10'000'000")
+      end
+
+      it 'should be html_safe' do
+        expect(fnumber(10_000_000)).to be_html_safe
       end
     end
 
@@ -166,7 +170,11 @@ describe FormatHelper do
       end
 
       it 'should add delimiters' do
-        expect(fnumber(12345.6789)).to eq('12&#39;345.68')
+        expect(fnumber(12_345.6789)).to eq("12'345.68")
+      end
+
+      it 'should be html_safe' do
+        expect(fnumber(12_345.6789)).to be_html_safe
       end
     end
 
@@ -182,7 +190,7 @@ describe FormatHelper do
       end
 
       it 'should print large integer strings with delimiters' do
-        expect(fnumber('10000000')).to eq('10&#39;000&#39;000')
+        expect(fnumber('10000000')).to eq("10'000'000")
       end
 
       it 'should convert any other string to integer' do

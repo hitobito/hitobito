@@ -15,9 +15,15 @@ class PersonResource < ApplicationResource
   attribute :birthday, :date, readable: :show_details?
   attribute :primary_group_id, :integer, except: [:writeable]
 
-  has_many :phone_numbers, link: false, resource: PhoneNumberResource, readable: :show_details_or_public?
-  has_many :social_accounts, link: false, resource: SocialAccountResource, readable: :show_details_or_public?
-  has_many :additional_emails, link: false, resource: AdditionalEmailResource, readable: :show_details_or_public?
+  has_many :phone_numbers, link: false,
+                           resource: PhoneNumberResource,
+                           readable: :show_details_or_public?
+  has_many :social_accounts, link: false,
+                             resource: SocialAccountResource,
+                             readable: :show_details_or_public?
+  has_many :additional_emails, link: false,
+                               resource: AdditionalEmailResource,
+                               readable: :show_details_or_public?
 
   filter :updated_at, :datetime, single: true do
     eq do |scope, value|

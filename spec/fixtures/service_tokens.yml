@@ -16,7 +16,6 @@
 #  mailing_lists        :boolean          default(FALSE), not null
 #  name                 :string(255)      not null
 #  people               :boolean          default(FALSE)
-#  people_below         :boolean          default(FALSE)
 #  token                :string(255)      not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
@@ -33,7 +32,6 @@ permitted_top_layer_token:
   last_access: 2018-11-01 11:11:11
   layer_and_below_read: true
   people: true
-  people_below: true
   groups: true
   events: true
   invoices: true
@@ -48,7 +46,6 @@ permitted_bottom_layer_token:
   last_access: 2018-11-01 11:11:11
   layer_and_below_read: true
   people: true
-  people_below: true
   groups: true
   events: true
   invoices: true
@@ -61,9 +58,8 @@ rejected_top_layer_token:
   description: MyText
   token: RejectedToken
   last_access: 2018-11-01 11:11:11
-  layer_and_below_read: true
+  layer_and_below_read: false
   people: false
-  people_below: false
   groups: false
   events: false
   invoices: false

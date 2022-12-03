@@ -141,7 +141,7 @@ case $cmd in
   update-copyright)
     # git_range="..master"
     # git diff --name-only "$git_range" |\
-    dirname="$(dirname "$0")" # bin-directory of hitobito (-core)
+    dirname="$(readlink -f $(dirname "$0"))" # bin-directory of hitobito (-core)
 
     echo "hitobito" | red
     git diff --staged --name-only | xargs -L1 $dirname/single-file-update-copyright

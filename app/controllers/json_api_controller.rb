@@ -42,8 +42,4 @@ class JsonApiController < ActionController::API
   def deprecated_user_token_sign_in
     return nil
   end
-
-  def api_params
-    params.permit(:include, filter: {}, sort: {}, page: {})
-  end
 end

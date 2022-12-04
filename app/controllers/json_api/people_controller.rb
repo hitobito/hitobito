@@ -9,7 +9,7 @@ class JsonApi::PeopleController < JsonApiController
 
   def index
     authorize!(:index_people, Group)
-    people = PersonResource.all(api_params, index_people_scope)
+    people = PersonResource.all(params, index_people_scope)
     render(jsonapi: people)
   end
 

@@ -61,6 +61,30 @@ describe JsonApi::PeopleController, type: [:request] do
           end
         end
 
+        it 'only returns values for given field list' do
+          selected_attrs = %w(first_name zip_code)
+          params[:fields] = { people: selected_attrs }
+
+          jsonapi_get '/api/people', params: params
+
+          expect(response).to have_http_status(200)
+
+          person = d.first
+
+          expect(person.id).to eq(bottom_member.id)
+          expect(person.jsonapi_type).to eq('people')
+
+          selected_attrs.each do |attr|
+            expect(person.has_key?(attr)).to eq(true)
+
+            expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
+          end
+
+          (person_attrs - selected_attrs).each do |attr|
+            expect(person.has_key?(attr)).to eq(false)
+          end
+        end
+
         it 'returns only people from token`s layer with layer_read permission' do
           permitted_service_token.update!(layer_and_below_read: false)
 

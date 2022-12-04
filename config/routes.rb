@@ -372,11 +372,10 @@ Hitobito::Application.routes.draw do
     end
   end # scope locale
 
-  # TODO constraints breaks vandal_ui
-  scope '/api', module: :json_api, constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
-    resources :people
+  mount VandalUi::Engine, at: '/api/vandal'
 
-    mount VandalUi::Engine, at: '/vandal'
+  scope '/api', module: :json_api, constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
+    resources :people, only: :index # restrict for now
   end
 
   # The priority is based upon order of creation:

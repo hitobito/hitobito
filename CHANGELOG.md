@@ -11,6 +11,7 @@
 * Neues "Hitobito Log" einsehbar mit admin permissions unter "Einstellungen" (#1840)
 * Kurse können neu mittels Flag definieren, ob sie die Warteliste verwenden oder nicht (hitobito_cevi#79)
 * Neues Bestätigungsmail für Event Voranmeldung (hitobito_cevi#80)
+* Neues JSON API mit People#index
 
 ## Version 1.28
 

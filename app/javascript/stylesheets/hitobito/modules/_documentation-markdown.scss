@@ -2,8 +2,17 @@
   h1, h2, h3, h4 {
     font-weight: bold;
   }
+
   .github-emoji {
     width: 1em;
     height: 1em;
+  }
+
+  blockquote {
+    color: #57606a;
+  }
+
+  blockquote p {
+    font-size: 14px;
   }
 }

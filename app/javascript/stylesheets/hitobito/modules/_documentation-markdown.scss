@@ -9,10 +9,18 @@
   }
 
   blockquote {
-    color: #57606a;
+    color: $grayDarker;
   }
 
   blockquote p {
     font-size: 14px;
+  }
+
+  code {
+    padding: .2em .4em;
+    margin: 0;
+    font-size: 85%;
+    background-color: $gray;
+    border-radius: 6px;
   }
 }

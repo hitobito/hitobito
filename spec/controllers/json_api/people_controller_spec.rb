@@ -28,6 +28,9 @@ describe JsonApi::PeopleController, type: [:request] do
 
         expect(response).to have_http_status(401)
 
+        # TODO somehow in test env exceptions are not thrown, they're renderd as plaintext. 
+        # we gave up for now trying to find out what the problem might be. maybe fix this later.
+        # 
         # errors = jsonapi_errors
 
         # expect(errors.first.status).to eq('401')
@@ -178,6 +181,9 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(response).to have_http_status(403)
 
+          # TODO somehow in test env exceptions are not thrown, they're renderd as plaintext. 
+          # we gave up for now trying to find out what the problem might be. maybe fix this later.
+          # 
           # errors = jsonapi_errors
 
           # expect(errors.first.status).to eq('403')

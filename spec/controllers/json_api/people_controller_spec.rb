@@ -28,14 +28,11 @@ describe JsonApi::PeopleController, type: [:request] do
 
         expect(response).to have_http_status(401)
 
-        # TODO somehow in test env exceptions are not thrown, they're renderd as plaintext. 
-        # we gave up for now trying to find out what the problem might be. maybe fix this later.
-        # 
-        # errors = jsonapi_errors
+         errors = jsonapi_errors
 
-        # expect(errors.first.status).to eq('401')
-        # expect(errors.first.title).to eq('Login benötigt')
-        # expect(errors.first.detail).to eq('Du must dich einloggen bevor du auf diese Resource zugreifen kannst.')
+         expect(errors.first.status).to eq('401')
+         expect(errors.first.title).to eq('Login benötigt')
+         expect(errors.first.detail).to eq('Du must dich einloggen bevor du auf diese Resource zugreifen kannst.')
       end
     end
 
@@ -181,14 +178,11 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(response).to have_http_status(403)
 
-          # TODO somehow in test env exceptions are not thrown, they're renderd as plaintext. 
-          # we gave up for now trying to find out what the problem might be. maybe fix this later.
-          # 
-          # errors = jsonapi_errors
+           errors = jsonapi_errors
 
-          # expect(errors.first.status).to eq('403')
-          # expect(errors.first.title).to eq('Zugriff verweigert')
-          # expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
+           expect(errors.first.status).to eq('403')
+           expect(errors.first.title).to eq('Zugriff verweigert')
+           expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
         end
 
         it 'paginates entries' do
@@ -221,9 +215,6 @@ describe JsonApi::PeopleController, type: [:request] do
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
-        end
-
-        it 'returns only readable people' do
         end
 
         it 'returns people with contactable relations' do

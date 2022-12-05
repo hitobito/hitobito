@@ -6,14 +6,35 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApiController < ActionController::API
+  include GraphitiErrors
+
+  rescue_from Exception do |e|
+    handle_exception(e)
+  end
+  
+  class JsonApiUnauthorized < StandardError; end
+
+  register_exception CanCan::AccessDenied,
+    status: 403,
+    title: I18n.t('errors.403.title'),
+    message: ->(error) { I18n.t('errors.403.explanation') }
+
+  register_exception JsonApiUnauthorized,
+    status: 401,
+    title: I18n.t('errors.401.title'),
+    message: ->(error) { I18n.t('errors.401.explanation') }
+
+  register_exception ActiveRecord::RecordNotFound,
+    status: 404,
+    title: I18n.t('errors.404.title'),
+    message: ->(error) { I18n.t('errors.404.explanation') }
+
   before_action :set_default_locale
 
   include ActionController::Cookies
   include Localizable
   include Authenticatable
   include Sentry
-  
-  class JsonApiUnauthorized < StandardError; end
 
   def authenticate_person!(*args)
     if user_session?
@@ -22,16 +43,6 @@ class JsonApiController < ActionController::API
       raise JsonApiUnauthorized unless api_sign_in
     end
   end
-
-  register_exception CanCan::AccessDenied,
-    status: 403, handler: Graphiti::Rails::ExceptionHandler,
-    title: I18n.t('errors.403.title'),
-    message: ->(error) { I18n.t('errors.403.explanation') }
-
-  register_exception JsonApiUnauthorized,
-    status: 401,  handler: Graphiti::Rails::ExceptionHandler,
-    title: I18n.t('errors.401.title'),
-    message: ->(error) { I18n.t('errors.401.explanation') }
 
   private
 

@@ -1,3 +1,8 @@
+PATH
+  remote: ../hitobito_sww
+  specs:
+    hitobito_sww (1.28.29)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -317,6 +322,8 @@ GEM
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
+    json-schema (3.0.0)
+      addressable (>= 2.8)
     jsonapi-renderer (0.2.2)
     jsonapi-serializable (0.3.1)
       jsonapi-renderer (~> 0.2.0)
@@ -543,6 +550,20 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.2)
+    rswag (2.8.0)
+      rswag-api (= 2.8.0)
+      rswag-specs (= 2.8.0)
+      rswag-ui (= 2.8.0)
+    rswag-api (2.8.0)
+      railties (>= 3.1, < 7.1)
+    rswag-specs (2.8.0)
+      activesupport (>= 3.1, < 7.1)
+      json-schema (>= 2.2, < 4.0)
+      railties (>= 3.1, < 7.1)
+      rspec-core (>= 2.14)
+    rswag-ui (2.8.0)
+      actionpack (>= 3.1, < 7.1)
+      railties (>= 3.1, < 7.1)
     rubocop (0.77.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
@@ -710,6 +731,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_sww!
   http_accept_language
   icalendar
   image_processing (~> 1.12)
@@ -759,6 +781,7 @@ DEPENDENCIES
   rspec-collection_matchers
   rspec-its
   rspec-rails (~> 5.0)
+  rswag
   rubocop
   rubocop-checkstyle_formatter
   rubocop-rails

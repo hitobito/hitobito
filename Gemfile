@@ -80,6 +80,7 @@ gem 'simpleidn'
 gem 'sprockets', '~> 3.7.2' # pinned to older version to avoid having an empty manifest.js
 gem 'sqlite3' # required for asset generation
 gem 'strip_attributes' # strip whitespace of attributes
+gem 'rswag'
 gem 'thinking-sphinx'
 gem 'truemail'
 gem 'validates_by_schema'

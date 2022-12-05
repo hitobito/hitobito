@@ -10,6 +10,7 @@
 * Der API Endpoint eines einzelnen Events enthält neu die URL von Anhängen (#1873)
 * Neues "Hitobito Log" einsehbar mit admin permissions unter "Einstellungen" (#1840)
 * Neues Bestätigungsmail für Event Voranmeldung (hitobito_cevi#80)
+* Neues JSON API mit People#index
 
 
 ## Version 1.28

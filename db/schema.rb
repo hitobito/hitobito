@@ -934,7 +934,6 @@ ActiveRecord::Schema.define(version: 2022_12_01_003122) do
     t.string "token", null: false
     t.datetime "last_access"
     t.boolean "people", default: false
-    t.boolean "people_below", default: false
     t.boolean "groups", default: false
     t.boolean "events", default: false
     t.datetime "created_at", null: false

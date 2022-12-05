@@ -6,8 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApiController < ActionController::API
-  include ActionController::Cookies
+  before_action :set_default_locale
 
+  include ActionController::Cookies
   include Localizable
   include Authenticatable
   include Sentry
@@ -41,5 +42,10 @@ class JsonApiController < ActionController::API
   # Sign in by deprecated user token is not supported by hitobito JSON API
   def deprecated_user_token_sign_in
     return nil
+  end
+
+  # set default locale to english for api
+  def set_default_locale
+    I18n.default_locale = :en
   end
 end

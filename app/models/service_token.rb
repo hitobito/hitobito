@@ -24,6 +24,7 @@
 #
 
 class ServiceToken < ActiveRecord::Base
+  include I18nEnums
 
   belongs_to :layer, class_name: 'Group', foreign_key: :layer_group_id
   has_many :cors_origins, as: :auth_method, dependent: :delete_all
@@ -41,27 +42,26 @@ class ServiceToken < ActiveRecord::Base
     name
   end
 
+  PERMISSIONS = %w(layer_read
+                   layer_and_below_read
+                   layer_full
+                   layer_and_below_full)
+
+  i18n_enum :permission, PERMISSIONS, queries: true
+
   # Required as a substitute user for PeopleFilter and JSON Api
   # with PersonFetchables and in other places
   def dynamic_user
     Person.new do |p|
       role = Role.new
       role.group = layer
-      role.permissions = [permission]
+      role.permissions = [permission.to_sym]
       p.roles = [role]
       p.instance_variable_set(:@service_token, self)
     end
   end
 
   private
-
-  def permission
-    if layer_and_below_read?
-      :layer_and_below_read
-    else
-      :layer_read
-    end
-  end
 
   def generate_token!
     loop do

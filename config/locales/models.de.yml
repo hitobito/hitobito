@@ -1068,6 +1068,8 @@ de:
         last_access: Letzter Zugriff
         layer_read: Leserechte auf dieser Ebene
         layer_and_below_read: Leserechte auf dieser und darunterliegenden Ebene
+        layer_full: Lese- und Schreibrechte auf dieser Ebene
+        layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebene
         people: Personen
         groups: Gruppen
         events: Anlässe

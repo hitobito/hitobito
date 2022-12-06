@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_01_003122) do
+ActiveRecord::Schema.define(version: 2022_12_06_105622) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -941,7 +941,7 @@ ActiveRecord::Schema.define(version: 2022_12_01_003122) do
     t.boolean "invoices", default: false, null: false
     t.boolean "event_participations", default: false, null: false
     t.boolean "mailing_lists", default: false, null: false
-    t.boolean "layer_and_below_read", default: false, null: false
+    t.string "permission", default: "layer_read", null: false
   end
 
   create_table "sessions", id: :integer, charset: "utf8mb4", force: :cascade do |t|

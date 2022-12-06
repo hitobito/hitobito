@@ -7,6 +7,23 @@
 
 require 'truemail'
 
+# Temporarily monkey-patch the truemail MX request method, to get more logs in case of
+# unexpected errors. https://github.com/truemail-rb/truemail/issues/235
+module Truemail
+  class Wrapper
+    def call(&block)
+      ::Timeout.timeout(timeout, &block)
+    rescue ::Resolv::ResolvError, ::IPAddr::InvalidAddressError => error
+      ::Logger.new($stdout).add(::Logger::ERROR) { error }
+      false
+    rescue ::Timeout::Error => error
+      retry unless (self.attempts -= 1).zero?
+      ::Logger.new($stdout).add(::Logger::ERROR) { error }
+      false
+    end
+  end
+end
+
 Truemail.configure do |config|
   # Required parameter. Must be an existing email on behalf of which verification will be performed
   config.verifier_email = Settings.root_email

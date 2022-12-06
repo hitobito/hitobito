@@ -45,7 +45,7 @@ module Localizable
   end
 
   def multiple_languages?
-    Array(Settings.application.languages).size > 1
+    application_languages.size > 1
   end
 
 end

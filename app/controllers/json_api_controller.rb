@@ -19,22 +19,19 @@ class JsonApiController < ActionController::API
   
   class JsonApiUnauthorized < StandardError; end
 
-  # set locale to en during class read to have error titles in english
-  I18n.locale = :en
-
   register_exception CanCan::AccessDenied,
     status: 403,
-    title: I18n.t('errors.403.title'),
+    title: 'Access denied',
     message: ->(error) { I18n.t('errors.403.explanation') }
 
   register_exception JsonApiUnauthorized,
     status: 401,
-    title: I18n.t('errors.401.title'),
+    title: 'Login required',
     message: ->(error) { I18n.t('errors.401.explanation') }
 
   register_exception ActiveRecord::RecordNotFound,
     status: 404,
-    title: I18n.t('errors.404.title'),
+    title: 'Resource not found',
     message: ->(error) { I18n.t('errors.404.explanation') }
 
   def authenticate_person!(*args)

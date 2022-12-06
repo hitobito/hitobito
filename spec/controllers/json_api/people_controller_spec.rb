@@ -8,6 +8,9 @@
 require 'spec_helper'
 
 describe JsonApi::PeopleController, type: [:request] do
+  # reset locale back to :de for other specs
+  after { I18n.locale = :de }
+
   let(:params) { {} }
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }

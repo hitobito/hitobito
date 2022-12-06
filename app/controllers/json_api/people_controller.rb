@@ -19,6 +19,18 @@ class JsonApi::PeopleController < JsonApiController
     render(jsonapi: person)
   end
 
+  def update
+    authorize!(:update, entry)
+    resource = PersonResource.find(params)
+    Person.transaction do
+      if resource.update_attributes
+        render(jsonapi: resource)
+      else
+        render(jsonapi_errors: resource)
+      end
+    end
+  end
+
   private
 
   def index_people_scope

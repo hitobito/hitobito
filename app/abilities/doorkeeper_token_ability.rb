@@ -89,6 +89,10 @@ class DoorkeeperTokenAbility
     can :index_people, Group do |g|
       user_ability.can?(:index_people, g)
     end
+
+    can :update, Person do |p|
+      user_ability.can?(:update, p)
+    end
   end
 
   def define_invoice_abilities

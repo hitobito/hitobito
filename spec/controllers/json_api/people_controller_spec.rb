@@ -828,6 +828,8 @@ describe JsonApi::PeopleController, type: [:request] do
     end
     let(:params) { payload }
 
+    before { PaperTrail.enabled = true }
+
     context 'unauthorized' do
       it 'returns 401 for existing person id' do
         @person_id = top_leader.id
@@ -879,14 +881,14 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(errors.first.code).to eq('taken')
         end
 
-        it 'renders validation errors for person' do
+        it 'renders translated validation errors for person' do
           person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
 
           @person_id = person.id
 
           params[:data][:attributes][:email] = bottom_member.email
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_put "/api/people/#{@person_id}?locale=de", params
 
           expect(response).to have_http_status(422)
 
@@ -896,7 +898,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(errors.first.status).to eq('422')
           expect(errors.first.title).to eq('Validation Error')
           expect(errors.first.attribute).to eq('email')
-          expect(errors.first.code).to eq('taken')
+          expect(errors.first.code).to eq('belegt')
         end
 
         it 'updates person with lower roles for top_layer token with layer_and_below_full permission' do
@@ -909,6 +911,8 @@ describe JsonApi::PeopleController, type: [:request] do
           bottom_member.reload
 
           expect(bottom_member.first_name).to eq('changed')
+
+          # TODO check for paper trail entry
         end
 
         it 'returns 403 for person with lower roles using token with layer_read permission' do
@@ -929,11 +933,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'returns 403 in german if locale param set' do
           permitted_service_token.update!(permission: :layer_read)
-          params[:locale] = :de
 
           @person_id = bottom_member.id
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_put "/api/people/#{@person_id}?locale=de", params
 
           expect(response).to have_http_status(403)
 
@@ -1054,8 +1057,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
     context 'with signed in user session' do
       context 'authorized' do
+        let(:bottom_layer_leader) { Fabricate(Group::BottomLayer::Leader.to_s, group: groups(:bottom_layer_one)).person }
+
         before do
-          sign_in(Fabricate(Group::BottomLayer::Leader.to_s, group: groups(:bottom_layer_one)).person)
+          sign_in(bottom_layer_leader)
           # mock check for user since sign_in devise helper is not setting any cookies
           allow_any_instance_of(described_class)
             .to receive(:user_session?).and_return(true)
@@ -1109,6 +1114,11 @@ describe JsonApi::PeopleController, type: [:request] do
           person.reload
 
           expect(person.first_name).to eq('changed')
+
+          latest_change = person.versions.last
+
+          expect(latest_change.object_changes).to include('changed')
+          expect(latest_change.whodunnit.to_i).to eq(bottom_layer_leader.id)
         end
 
         it 'updates contactable relations of person' do

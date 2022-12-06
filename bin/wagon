@@ -19,6 +19,10 @@ IFS=$'\n\t'
 cmd=${1:-'help'}
 wagon_name=${2-'no wagon selected'}
 
+# useful variables
+core_bin_dir="$(readlink -f $(dirname "$0"))" # bin-directory of hitobito (-core)
+core_dir="$(readlink -f $(dirname "$core_bin_dir"))" # directory of hitobito (-core)
+
 # helpers
 function require_wagon_name() {
   if [[ $wagon_name = 'no wagon selected' ]]; then
@@ -141,15 +145,14 @@ case $cmd in
   update-copyright)
     # git_range="..master"
     # git diff --name-only "$git_range" |\
-    dirname="$(readlink -f $(dirname "$0"))" # bin-directory of hitobito (-core)
 
     echo "hitobito" | red
-    git diff --staged --name-only | xargs -L1 $dirname/single-file-update-copyright
+    git diff --staged --name-only | xargs -L1 $core_bin_dir/single-file-update-copyright
 
     for wagon in $(echo $WAGONS | tr " " "\n"); do
       (
         cd "../hitobito_${wagon}" && (echo "$wagon" | red) &&
-        git diff --staged --name-only | xargs -L1 $dirname/single-file-update-copyright
+        git diff --staged --name-only | xargs -L1 $core_bin_dir/single-file-update-copyright
       )
     done
     ;;

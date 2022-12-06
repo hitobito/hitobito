@@ -30,7 +30,7 @@ permitted_top_layer_token:
   description: MyText
   token: PermittedToken
   last_access: 2018-11-01 11:11:11
-  layer_and_below_read: true
+  permission: layer_and_below_full
   people: true
   groups: true
   events: true
@@ -44,7 +44,7 @@ permitted_bottom_layer_token:
   description: MyText
   token: PermittedBottomGroupToken
   last_access: 2018-11-01 11:11:11
-  layer_and_below_read: true
+  permission: layer_and_below_full
   people: true
   groups: true
   events: true
@@ -58,7 +58,7 @@ rejected_top_layer_token:
   description: MyText
   token: RejectedToken
   last_access: 2018-11-01 11:11:11
-  layer_and_below_read: false
+  permission: layer_read
   people: false
   groups: false
   events: false

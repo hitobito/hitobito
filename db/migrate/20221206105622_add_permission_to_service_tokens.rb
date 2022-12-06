@@ -7,10 +7,12 @@
 
 class AddPermissionToServiceTokens < ActiveRecord::Migration[6.1]
   def change
-    add_column :service_tokens, :permission, :string, null: false, default: 'layer_read'
+    add_column :service_tokens, :permission, :string, null: false, default: :layer_read
 
-    ServiceToken.where(layer_and_below_read: true).update_all(permission: 'layer_and_below_read')
+    up_only do
+      ServiceToken.where(layer_and_below_read: true).update_all(permission: :layer_and_below_read)
+    end
 
-    remove_column :service_tokens, :layer_and_below_read
+    remove_column :service_tokens, :layer_and_below_read, :boolean, { null: false, default: false }
   end
 end

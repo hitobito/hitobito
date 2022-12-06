@@ -1,5 +1,22 @@
 ## JSON Api 
 
+This documentation is about the new JSON API introduced in 2022. Check the [legacy Api documentation](05_rest_api.md) for the old Api.
+
+The hitobito JSON API implements the open standard **[json:api](https://jsonapi.org) v1.0** with media type **[application/vnd.api+json](http://www.iana.org/assignments/media-types/application/vnd.api+json)**
+
+### Endpoints
+
+Currently the following endpoints are provided:
+
+| Method | Path                                              | Function                                                                        |
+| ---    | ---                                               | ---                                                                             |
+| GET    | /api/people/                                      | List all accessible people                                                      |
+| GET    | /api/people/:id                                   | Fetch a single person entry, replace :id with the person's primary key          |
+
+### Tools
+
+Vandal is an integrated UI for developing / testing Json Api queries. Just open [/api/vandal](/api/vandal) with your browser to open the playground.
+
 ### Authentication
 
 To use the API you need a valid authentication token, this can be one of the following

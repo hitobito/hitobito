@@ -31,8 +31,9 @@ class DocumentationReader
   end
 
   def html
-    html = CommonMarker.render_html(markdown, :DEFAULT)
+    html = CommonMarker.render_html(markdown, :TABLE_PREFER_STYLE_ATTRIBUTES, [:table])
     insert_github_emojis(html)
+    style_tables(html)
     html += source_link
     html
   end
@@ -49,12 +50,18 @@ class DocumentationReader
     markdown
   end
 
-  def insert_github_emojis(content)
+  def insert_github_emojis(html)
     GITHUB_EMOJIS.each do |k,v|
       identifier = ":#{k}:"
       emoji_img = github_emoji_img(k, v)
-      content.gsub!(identifier, emoji_img)
+      html.gsub!(identifier, emoji_img)
     end
+  end
+
+  def style_tables(html)
+    table_tag = '<table>'
+    styled_table_tag = '<table class="table table-striped table-bordered">'
+    html.gsub!(table_tag, styled_table_tag)
   end
 
   def github_emoji_img(name, png_name)

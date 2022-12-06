@@ -17,6 +17,8 @@ class JsonApiController < ActionController::API
   include Authenticatable
   include Sentry
 
+  before_action :set_paper_trail_whodunnit
+  
   class JsonApiUnauthorized < StandardError; end
 
   register_exception CanCan::AccessDenied,
@@ -67,5 +69,10 @@ class JsonApiController < ActionController::API
                                  languages[:en] = 'English'
                                  languages
                                end
+  end
+
+  def user_for_paper_trail
+    origin_user_id = session[:origin_user]
+    origin_user_id || current_service_token&.to_s || oauth_token_user&.id || super
   end
 end

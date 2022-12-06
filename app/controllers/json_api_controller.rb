@@ -16,8 +16,6 @@ class JsonApiController < ActionController::API
   include Localizable
   include Authenticatable
   include Sentry
-
-  before_action :set_paper_trail_whodunnit
   
   class JsonApiUnauthorized < StandardError; end
 
@@ -35,6 +33,8 @@ class JsonApiController < ActionController::API
     status: 404,
     title: 'Resource not found',
     message: ->(error) { I18n.t('errors.404.explanation') }
+
+  before_action :set_paper_trail_whodunnit
 
   def authenticate_person!(*args)
     if user_session?

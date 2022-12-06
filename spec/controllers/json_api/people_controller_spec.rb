@@ -31,8 +31,8 @@ describe JsonApi::PeopleController, type: [:request] do
          errors = jsonapi_errors
 
          expect(errors.first.status).to eq('401')
-         expect(errors.first.title).to eq('Login benötigt')
-         expect(errors.first.detail).to eq('Du must dich einloggen bevor du auf diese Resource zugreifen kannst.')
+         expect(errors.first.title).to eq('Login required')
+         expect(errors.first.detail).to eq('You need to login before accessing this resource.')
       end
     end
 
@@ -181,11 +181,8 @@ describe JsonApi::PeopleController, type: [:request] do
            errors = jsonapi_errors
 
            expect(errors.first.status).to eq('403')
-           expect(errors.first.title).to eq('Zugriff verweigert')
-           expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
-        end
-
-        it 'paginates entries' do
+           expect(errors.first.title).to eq('Access denied')
+           expect(errors.first.detail).to eq('You are not allowed to access this resource.')
         end
       end
     end
@@ -508,6 +505,27 @@ describe JsonApi::PeopleController, type: [:request] do
           jsonapi_get "/api/people/#{bottom_member.id}", params: params
 
           expect(response).to have_http_status(403)
+
+          errors = jsonapi_errors
+
+          expect(errors.first.status).to eq('403')
+          expect(errors.first.title).to eq('Access denied')
+          expect(errors.first.detail).to eq('You are not allowed to access this resource.')
+        end
+
+        it 'returns 403 in german if locale param set' do
+          permitted_service_token.update!(layer_and_below_read: false)
+          params[:locale] = :de
+
+          jsonapi_get "/api/people/#{bottom_member.id}", params: params
+
+          expect(response).to have_http_status(403)
+
+          errors = jsonapi_errors
+
+          expect(errors.first.status).to eq('403')
+          expect(errors.first.title).to eq('Access denied')
+          expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
         end
 
         it 'returns person from token`s layer with layer_read permission' do

@@ -11,8 +11,16 @@ class JsonApiController < ActionController::API
   rescue_from Exception do |e|
     handle_exception(e)
   end
+
+  include ActionController::Cookies
+  include Localizable
+  include Authenticatable
+  include Sentry
   
   class JsonApiUnauthorized < StandardError; end
+
+  # set locale to en during class read to have error titles in english
+  I18n.locale = :en
 
   register_exception CanCan::AccessDenied,
     status: 403,
@@ -28,11 +36,6 @@ class JsonApiController < ActionController::API
     status: 404,
     title: I18n.t('errors.404.title'),
     message: ->(error) { I18n.t('errors.404.explanation') }
-
-  include ActionController::Cookies
-  include Localizable
-  include Authenticatable
-  include Sentry
 
   def authenticate_person!(*args)
     if user_session?
@@ -58,5 +61,11 @@ class JsonApiController < ActionController::API
     I18n.locale = available_locale!(params[:locale]) ||
       available_locale!(cookies[:locale]) ||
       :en
+  end
+
+  def application_languages
+    languages = super 
+    languages[:en] = 'English'
+    languages
   end
 end

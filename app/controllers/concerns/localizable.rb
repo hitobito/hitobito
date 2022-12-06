@@ -45,7 +45,7 @@ module Localizable
   end
 
   def multiple_languages?
-    application_languages.size > 1
+    application_languages.keys.size > 1
   end
 
 end

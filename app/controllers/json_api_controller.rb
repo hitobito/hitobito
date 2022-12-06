@@ -56,7 +56,8 @@ class JsonApiController < ActionController::API
     return nil
   end
 
-  # set default locale to english for api
+  # set default locale to english for api since machines prefer to
+  # talk in english ;)
   def set_locale
     I18n.locale = available_locale!(params[:locale]) ||
       available_locale!(cookies[:locale]) ||
@@ -64,7 +65,7 @@ class JsonApiController < ActionController::API
   end
 
   def application_languages
-    languages = super 
+    languages = super.dup
     languages[:en] = 'English'
     languages
   end

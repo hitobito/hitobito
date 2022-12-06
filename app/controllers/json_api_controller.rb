@@ -65,8 +65,10 @@ class JsonApiController < ActionController::API
   end
 
   def application_languages
-    languages = super.dup
-    languages[:en] = 'English'
-    languages
+    @application_languages ||= begin
+                                 languages = super.dup
+                                 languages[:en] = 'English'
+                                 languages
+                               end
   end
 end

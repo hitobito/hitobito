@@ -29,8 +29,6 @@ class JsonApiController < ActionController::API
     title: I18n.t('errors.404.title'),
     message: ->(error) { I18n.t('errors.404.explanation') }
 
-  before_action :set_default_locale
-
   include ActionController::Cookies
   include Localizable
   include Authenticatable
@@ -56,7 +54,9 @@ class JsonApiController < ActionController::API
   end
 
   # set default locale to english for api
-  def set_default_locale
-    I18n.default_locale = :en
+  def set_locale
+    I18n.locale = available_locale!(params[:locale]) ||
+      available_locale!(cookies[:locale]) ||
+      :en
   end
 end

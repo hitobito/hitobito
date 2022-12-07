@@ -1067,9 +1067,9 @@ de:
         abilities: Rechte
         last_access: Letzter Zugriff
         layer_read: Leserechte auf dieser Ebene
-        layer_and_below_read: Leserechte auf dieser und darunterliegenden Ebene
+        layer_and_below_read: Leserechte auf dieser und darunterliegenden Ebenen
         layer_full: Lese- und Schreibrechte auf dieser Ebene
-        layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebene
+        layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebenen
         people: Personen
         groups: Gruppen
         events: Anlässe

@@ -80,14 +80,14 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
       context 'and permission to link' do
         it do
           expect(decorator.h).to receive(:can?).with(:show, service_token).and_return(true)
-          is_expected.to match(/^<a href=".+">#{service_token}<\/a>$/)
+          is_expected.to match(/^<a href=".+">API-Key: Permitted<\/a>$/)
         end
       end
 
       context 'and no permission to link' do
         it do
           expect(decorator.h).to receive(:can?).with(:show, service_token).and_return(false)
-          is_expected.to eq(service_token.to_s)
+          is_expected.to eq('API-Key: Permitted')
         end
       end
     end

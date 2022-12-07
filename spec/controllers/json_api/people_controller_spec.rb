@@ -880,9 +880,10 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(errors.first.title).to eq('Validation Error')
           expect(errors.first.attribute).to eq('email')
           expect(errors.first.code).to eq('taken')
+          expect(errors.first.message).to match /is already taken/
         end
 
-        it 'renders translated validation errors for person' do
+        it 'renders translated validation errors for person if locale param' do
           person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
 
           @person_id = person.id
@@ -899,7 +900,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(errors.first.status).to eq('422')
           expect(errors.first.title).to eq('Validation Error')
           expect(errors.first.attribute).to eq('email')
-          expect(errors.first.code).to eq('belegt')
+          expect(errors.first.message).to match /ist bereits vergeben/
         end
 
         it 'updates person with lower roles for top_layer token with layer_and_below_full permission' do

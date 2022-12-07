@@ -34,8 +34,10 @@ class TokenAbility
     can :index, Group
   end
 
-  def define_person_abilities
-    groups = (token.layer_and_below_read? || token.layer_and_below_full?) ? token_layer_and_below : [token.layer]
+  def define_person_abilities # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    below_permissions =
+      token.layer_and_below_read? || token.layer_and_below_full?
+    groups = below_permissions ? token_layer_and_below : [token.layer]
 
     can :show, [Person, PersonDecorator] do |p|
       Role.where(person: p, group: groups).present? &&

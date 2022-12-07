@@ -81,7 +81,7 @@ class JsonApiController < ActionController::API
 
   # protecting from CSRF attacks
   def assert_media_type_json_api
-    return if request.headers['CONTENT_TYPE'] == MEDIA_TYPE
+    return if request.content_type == MEDIA_TYPE
 
     raise JsonApiInvalidMediaType
   end

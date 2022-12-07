@@ -829,6 +829,7 @@ describe JsonApi::PeopleController, type: [:request] do
     let(:params) { payload }
 
     before { PaperTrail.enabled = true }
+    after { PaperTrail.enabled = false }
 
     context 'unauthorized' do
       it 'returns 401 for existing person id' do
@@ -903,6 +904,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'updates person with lower roles for top_layer token with layer_and_below_full permission' do
           @person_id = bottom_member.id
+          former_first_name = bottom_member.first_name
 
           jsonapi_put "/api/people/#{@person_id}", params
 
@@ -912,7 +914,11 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(bottom_member.first_name).to eq('changed')
 
-          # TODO check for paper trail entry
+          latest_change = bottom_member.versions.last
+
+          changes = YAML.load(latest_change.object_changes)
+          expect(changes).to eq({ 'first_name' => [ former_first_name, 'changed' ]})
+          expect(latest_change.perpetrator).to eq(permitted_service_token)
         end
 
         it 'returns 403 for person with lower roles using token with layer_read permission' do
@@ -1043,7 +1049,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(email.email).to eq('changed.hitobito@example.com')
         end
 
-        it 'returns 404 if token has no people permission' do
+        it 'returns 403 if token has no people permission' do
           permitted_service_token.update!(people: false)
 
           @person_id = bottom_member.id
@@ -1104,6 +1110,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'updates person with access' do
           person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
+          former_first_name = person.first_name
 
           @person_id = person.id
 
@@ -1117,8 +1124,9 @@ describe JsonApi::PeopleController, type: [:request] do
 
           latest_change = person.versions.last
 
-          expect(latest_change.object_changes).to include('changed')
-          expect(latest_change.whodunnit.to_i).to eq(bottom_layer_leader.id)
+          changes = YAML.load(latest_change.object_changes)
+          expect(changes).to eq({ 'first_name' => [ former_first_name, 'changed' ]})
+          expect(latest_change.perpetrator).to eq(bottom_layer_leader)
         end
 
         it 'updates contactable relations of person' do
@@ -1163,12 +1171,14 @@ describe JsonApi::PeopleController, type: [:request] do
 
     context 'with personal oauth access token' do
       context 'authorized' do
-        let(:token) { Fabricate(:access_token, resource_owner_id: Fabricate(Group::BottomLayer::Leader.to_s, group: groups(:bottom_layer_one)).person.id) }
+        let(:token_owner) { Fabricate(Group::BottomLayer::Leader.to_s, group: groups(:bottom_layer_one)).person }
+        let(:token) { Fabricate(:access_token, resource_owner_id: token_owner.id) }
 
         before do
           allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
           allow(token).to receive(:acceptable?) { true }
           allow(token).to receive(:accessible?) { true }
+          allow_any_instance_of(described_class).to receive(:current_oauth_token) { token }
         end
 
         it 'returns 404 for non existing person' do
@@ -1209,6 +1219,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'updates person with access' do
           person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
+          former_first_name = person.first_name
 
           @person_id = person.id
 
@@ -1218,6 +1229,12 @@ describe JsonApi::PeopleController, type: [:request] do
 
           person.reload
           expect(person.first_name).to eq('changed')
+
+          latest_change = person.versions.last
+
+          changes = YAML.load(latest_change.object_changes)
+          expect(changes).to eq({ 'first_name' => [ former_first_name, 'changed' ]})
+          expect(latest_change.perpetrator).to eq(token_owner)
         end
 
         it 'updates contactable relations of person' do

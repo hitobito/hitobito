@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_06_105622) do
+ActiveRecord::Schema.define(version: 2022_12_07_232442) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -1036,6 +1036,7 @@ ActiveRecord::Schema.define(version: 2022_12_06_105622) do
     t.string "main_type"
     t.integer "main_id"
     t.datetime "created_at"
+    t.string "whodunnit_type", default: "Person", null: false
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["main_id", "main_type"], name: "index_versions_on_main_id_and_main_type"
   end

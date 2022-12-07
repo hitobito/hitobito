@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApiController < ActionController::API
+  MEDIA_TYPE = 'application/vnd.api+json'
+
   include GraphitiErrors
 
   rescue_from Exception do |e|
@@ -17,8 +19,11 @@ class JsonApiController < ActionController::API
   include Authenticatable
   include Sentry
   include PaperTrailed
+
+  before_action :assert_media_type_json_api, only: [:update, :create]
   
   class JsonApiUnauthorized < StandardError; end
+  class JsonApiInvalidMediaType < StandardError; end
 
   register_exception CanCan::AccessDenied,
     status: 403,
@@ -34,6 +39,10 @@ class JsonApiController < ActionController::API
     status: 404,
     title: 'Resource not found',
     message: ->(error) { I18n.t('errors.404.explanation') }
+
+  register_exception JsonApiInvalidMediaType,
+    status: 415,
+    title: 'Invalid request format'
 
   def authenticate_person!(*args)
     if user_session?
@@ -68,5 +77,12 @@ class JsonApiController < ActionController::API
                                  languages[:en] = 'English'
                                  languages
                                end
+  end
+
+  # protecting from CSRF attacks
+  def assert_media_type_json_api
+    return if request.headers['CONTENT_TYPE'] == MEDIA_TYPE
+
+    raise JsonApiInvalidMediaType
   end
 end

@@ -1130,6 +1130,19 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(latest_change.perpetrator).to eq(bottom_layer_leader)
         end
 
+        it 'does not update person if wrong content type header' do
+          person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
+          former_first_name = person.first_name
+
+          @person_id = person.id
+
+          headers = { 'CONTENT_TYPE' => 'application/json' }
+
+          jsonapi_put "/api/people/#{@person_id}", params, headers: headers
+
+          expect(response).to have_http_status(415)
+        end
+
         it 'updates contactable relations of person' do
           email = Fabricate(:additional_email)
           contactable_person = Fabricate(:role, type: Group::BottomLayer::Member.to_s,

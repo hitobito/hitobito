@@ -5,6 +5,8 @@ on:
     paths-ignore:
       - 'doc/**'
       - '**.md'
+    branches:
+      - 'master'
   pull_request:
     paths-ignore:
       - 'doc/**'

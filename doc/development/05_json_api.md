@@ -1,4 +1,4 @@
-## JSON Api 
+## JSON Api
 
 This documentation is about the new JSON API introduced in 2022. Check the [legacy Api documentation](05_rest_api.md) for the old Api.
 

@@ -15,14 +15,14 @@ describe JsonApi::PeopleController, type: [:request] do
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
 
-  let(:person_attrs) {
+  let(:person_attrs) do
     %w(first_name last_name nickname company_name company
        email address zip_code town country gender birthday primary_group_id)
-  }
+  end
 
-  let(:show_details_attrs) {
+  let(:show_details_attrs) do
     %w(gender birthday)
-  }
+  end
 
   describe 'GET #index' do
     context 'unauthorized' do
@@ -31,11 +31,11 @@ describe JsonApi::PeopleController, type: [:request] do
 
         expect(response).to have_http_status(401)
 
-         errors = jsonapi_errors
+        errors = jsonapi_errors
 
-         expect(errors.first.status).to eq('401')
-         expect(errors.first.title).to eq('Login required')
-         expect(errors.first.detail).to eq('You need to login before accessing this resource.')
+        expect(errors.first.status).to eq('401')
+        expect(errors.first.title).to eq('Login required')
+        expect(errors.first.detail).to eq('You need to login before accessing this resource.')
       end
     end
 
@@ -44,7 +44,7 @@ describe JsonApi::PeopleController, type: [:request] do
         let(:permitted_service_token) { service_tokens(:permitted_top_layer_token) }
         let(:params) { { token: permitted_service_token.token } }
 
-        it 'returns all people with roles for top_layer token with layer_and_below_read permission' do
+        it 'returns all people with roles for top_layer token with layer_and_below_read permission' do # rubocop:disable Metrics/LineLength
           Fabricate(:role, type: 'Group::BottomLayer::Leader', group: groups(:bottom_layer_two))
 
           jsonapi_get '/api/people', params: params
@@ -58,7 +58,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(true)
+            expect(person.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -78,13 +78,13 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           selected_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(true)
+            expect(person.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
 
           (person_attrs - selected_attrs).each do |attr|
-            expect(person.has_key?(attr)).to eq(false)
+            expect(person.key?(attr)).to eq(false)
           end
         end
 
@@ -117,7 +117,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(true)
+            expect(person.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -125,10 +125,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'returns people with contactable relations' do
           contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
-                                         group: groups(:bottom_layer_two),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_two),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get '/api/people', params: params
 
@@ -138,15 +138,15 @@ describe JsonApi::PeopleController, type: [:request] do
           person = d.find { |p| p.id == contactable_person.id }
 
           expect(person.relationships.size).to eq(3)
-          expect(person.relationships.keys).to match_array(['phone_numbers', 'social_accounts', 'additional_emails'])
+          expect(person.relationships.keys).to match_array(%w(phone_numbers social_accounts additional_emails))
         end
 
         it 'includes contactables based on params' do
           contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
-                                         group: groups(:bottom_layer_two),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_two),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get '/api/people', params: params.merge(include: 'phone_numbers')
 
@@ -160,7 +160,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.has_key?(attr)).to eq(true)
+            expect(phone_number_json.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -169,9 +169,9 @@ describe JsonApi::PeopleController, type: [:request] do
 
           # purge included instance variable since graphiti spec helper decides to memoize it
           @jsonapi_included = nil
-          
+
           expect(included.size).to eq(2)
-          expect(included.map(&:jsonapi_type)).to match_array(['phone_numbers', 'additional_emails'])
+          expect(included.map(&:jsonapi_type)).to match_array(%w(phone_numbers additional_emails))
         end
 
         it 'returns 403 if token has no people permission' do
@@ -181,11 +181,11 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(response).to have_http_status(403)
 
-           errors = jsonapi_errors
+          errors = jsonapi_errors
 
-           expect(errors.first.status).to eq('403')
-           expect(errors.first.title).to eq('Access denied')
-           expect(errors.first.detail).to eq('You are not allowed to access this resource.')
+          expect(errors.first.status).to eq('403')
+          expect(errors.first.title).to eq('Access denied')
+          expect(errors.first.detail).to eq('You are not allowed to access this resource.')
         end
       end
     end
@@ -211,7 +211,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(true)
+            expect(person.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -219,10 +219,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'returns people with contactable relations' do
           contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
-                                         group: groups(:bottom_layer_two),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_two),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get '/api/people', params: params
 
@@ -232,15 +232,15 @@ describe JsonApi::PeopleController, type: [:request] do
           person = d.find { |p| p.id == contactable_person.id }
 
           expect(person.relationships.size).to eq(3)
-          expect(person.relationships.keys).to match_array(['phone_numbers', 'social_accounts', 'additional_emails'])
+          expect(person.relationships.keys).to match_array(%w(phone_numbers social_accounts additional_emails))
         end
 
         it 'includes contactables based on params' do
           contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
-                                         group: groups(:bottom_layer_two),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_two),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get '/api/people', params: params.merge(include: 'phone_numbers')
 
@@ -254,7 +254,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.has_key?(attr)).to eq(true)
+            expect(phone_number_json.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -263,9 +263,9 @@ describe JsonApi::PeopleController, type: [:request] do
 
           # purge included instance variable since graphiti spec helper decides to memoize it
           @jsonapi_included = nil
-          
+
           expect(included.size).to eq(2)
-          expect(included.map(&:jsonapi_type)).to match_array(['phone_numbers', 'additional_emails'])
+          expect(included.map(&:jsonapi_type)).to match_array(%w(phone_numbers additional_emails))
         end
 
         it 'returns people filtered/ordered by updated_at' do
@@ -283,7 +283,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(true)
+            expect(person.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -303,7 +303,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           show_details_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(false)
+            expect(person.key?(attr)).to eq(false)
           end
 
         end
@@ -332,7 +332,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(true)
+            expect(person.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -343,10 +343,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'returns people with contactable relations' do
           contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
-                                         group: groups(:bottom_layer_two),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_two),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get '/api/people', params: params
 
@@ -356,15 +356,15 @@ describe JsonApi::PeopleController, type: [:request] do
           person = d.find { |p| p.id == contactable_person.id }
 
           expect(person.relationships.size).to eq(3)
-          expect(person.relationships.keys).to match_array(['phone_numbers', 'social_accounts', 'additional_emails'])
+          expect(person.relationships.keys).to match_array(%w(phone_numbers social_accounts additional_emails))
         end
 
         it 'includes contactables based on params' do
           contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
-                                         group: groups(:bottom_layer_two),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_two),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get '/api/people', params: params.merge(include: 'phone_numbers')
 
@@ -378,7 +378,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.has_key?(attr)).to eq(true)
+            expect(phone_number_json.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -387,9 +387,9 @@ describe JsonApi::PeopleController, type: [:request] do
 
           # purge included instance variable since graphiti spec helper decides to memoize it
           @jsonapi_included = nil
-          
+
           expect(included.size).to eq(2)
-          expect(included.map(&:jsonapi_type)).to match_array(['phone_numbers', 'additional_emails'])
+          expect(included.map(&:jsonapi_type)).to match_array(%w(phone_numbers additional_emails))
         end
 
         it 'returns people filtered/ordered by updated_at' do
@@ -407,7 +407,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(true)
+            expect(person.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -427,7 +427,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           show_details_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(false)
+            expect(person.key?(attr)).to eq(false)
           end
 
         end
@@ -472,7 +472,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(true)
+            expect(person.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -492,13 +492,13 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           selected_attrs.each do |attr|
-            expect(person.has_key?(attr)).to eq(true)
+            expect(person.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
 
           (person_attrs - selected_attrs).each do |attr|
-            expect(person.has_key?(attr)).to eq(false)
+            expect(person.key?(attr)).to eq(false)
           end
         end
 
@@ -545,10 +545,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'returns person with contactable relations' do
           contactable_person = Fabricate(:role, type: Group::BottomLayer::Member.to_s,
-                                         group: groups(:bottom_layer_two),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_two),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get "/api/people/#{contactable_person.id}", params: params
 
@@ -557,15 +557,15 @@ describe JsonApi::PeopleController, type: [:request] do
           person = d
 
           expect(person.relationships.size).to eq(3)
-          expect(person.relationships.keys).to match_array(['phone_numbers', 'social_accounts', 'additional_emails'])
+          expect(person.relationships.keys).to match_array(%w(phone_numbers social_accounts additional_emails))
         end
 
         it 'includes contactables based on params' do
           contactable_person = Fabricate(:role, type: Group::BottomLayer::Member.to_s,
-                                         group: groups(:bottom_layer_two),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_two),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get "/api/people/#{contactable_person.id}", params: params.merge(include: 'phone_numbers')
 
@@ -578,7 +578,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.has_key?(attr)).to eq(true)
+            expect(phone_number_json.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -587,9 +587,9 @@ describe JsonApi::PeopleController, type: [:request] do
 
           # purge included instance variable since graphiti spec helper decides to memoize it
           @jsonapi_included = nil
-          
+
           expect(included.size).to eq(2)
-          expect(included.map(&:jsonapi_type)).to match_array(['phone_numbers', 'additional_emails'])
+          expect(included.map(&:jsonapi_type)).to match_array(%w(phone_numbers additional_emails))
         end
 
         it 'returns 404 if token has no people permission' do
@@ -634,7 +634,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(d.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(d.has_key?(attr)).to eq(true)
+            expect(d.key?(attr)).to eq(true)
 
             expect(d.send(attr.to_sym)).to eq(person.send(attr.to_sym))
           end
@@ -642,25 +642,25 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'returns people with contactable relations' do
           contactable_person = Fabricate(:role, type: Group::BottomLayer::Member.to_s,
-                                         group: groups(:bottom_layer_one),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_one),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get "/api/people/#{contactable_person.id}", params: params
 
           expect(response).to have_http_status(200)
 
           expect(d.relationships.size).to eq(3)
-          expect(d.relationships.keys).to match_array(['phone_numbers', 'social_accounts', 'additional_emails'])
+          expect(d.relationships.keys).to match_array(%w(phone_numbers social_accounts additional_emails))
         end
 
         it 'includes contactables based on params' do
           contactable_person = Fabricate(:role, type: Group::BottomLayer::Member.to_s,
-                                         group: groups(:bottom_layer_one),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_one),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get "/api/people/#{contactable_person.id}", params: params.merge(include: 'phone_numbers')
 
@@ -673,7 +673,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.has_key?(attr)).to eq(true)
+            expect(phone_number_json.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -682,9 +682,9 @@ describe JsonApi::PeopleController, type: [:request] do
 
           # purge included instance variable since graphiti spec helper decides to memoize it
           @jsonapi_included = nil
-          
+
           expect(included.size).to eq(2)
-          expect(included.map(&:jsonapi_type)).to match_array(['phone_numbers', 'additional_emails'])
+          expect(included.map(&:jsonapi_type)).to match_array(%w(phone_numbers additional_emails))
         end
 
         it 'hides certain attributes and relations when show_details is not given' do
@@ -700,7 +700,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(d.jsonapi_type).to eq('people')
 
           show_details_attrs.each do |attr|
-            expect(d.has_key?(attr)).to eq(false)
+            expect(d.key?(attr)).to eq(false)
           end
 
         end
@@ -740,7 +740,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(d.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(d.has_key?(attr)).to eq(true)
+            expect(d.key?(attr)).to eq(true)
 
             expect(d.send(attr.to_sym)).to eq(person.send(attr.to_sym))
           end
@@ -748,25 +748,25 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'returns people with contactable relations' do
           contactable_person = Fabricate(:role, type: Group::BottomLayer::Member.to_s,
-                                         group: groups(:bottom_layer_one),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_one),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get "/api/people/#{contactable_person.id}", params: params
 
           expect(response).to have_http_status(200)
 
           expect(d.relationships.size).to eq(3)
-          expect(d.relationships.keys).to match_array(['phone_numbers', 'social_accounts', 'additional_emails'])
+          expect(d.relationships.keys).to match_array(%w(phone_numbers social_accounts additional_emails))
         end
 
         it 'includes contactables based on params' do
           contactable_person = Fabricate(:role, type: Group::BottomLayer::Member.to_s,
-                                         group: groups(:bottom_layer_one),
-                                         person: Fabricate(:person_with_address_and_phone,
-                                                           additional_emails: [Fabricate(:additional_email)],
-                                                           social_accounts: [Fabricate(:social_account)])).person
+                                                group: groups(:bottom_layer_one),
+                                                person: Fabricate(:person_with_address_and_phone,
+                                                                  additional_emails: [Fabricate(:additional_email)],
+                                                                  social_accounts: [Fabricate(:social_account)])).person
 
           jsonapi_get "/api/people/#{contactable_person.id}", params: params.merge(include: 'phone_numbers')
 
@@ -779,7 +779,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.has_key?(attr)).to eq(true)
+            expect(phone_number_json.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -788,9 +788,9 @@ describe JsonApi::PeopleController, type: [:request] do
 
           # purge included instance variable since graphiti spec helper decides to memoize it
           @jsonapi_included = nil
-          
+
           expect(included.size).to eq(2)
-          expect(included.map(&:jsonapi_type)).to match_array(['phone_numbers', 'additional_emails'])
+          expect(included.map(&:jsonapi_type)).to match_array(%w(phone_numbers additional_emails))
         end
 
         it 'hides certain attributes and relations when show_details is not given' do
@@ -806,7 +806,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(d.jsonapi_type).to eq('people')
 
           show_details_attrs.each do |attr|
-            expect(d.has_key?(attr)).to eq(false)
+            expect(d.key?(attr)).to eq(false)
           end
 
         end

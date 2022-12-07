@@ -43,7 +43,9 @@ module PaperTrail
       token = ServiceToken.where(id: author_id).first
       if token
         layer_id = token.layer_group_id
-        h.link_to_if(can?(:show, token), token.to_s, h.group_service_token_path(layer_id, token.id))
+        prefix = ServiceToken.model_name.human
+        label = "#{prefix}: #{token}"
+        h.link_to_if(can?(:show, token), label, h.group_service_token_path(layer_id, token.id))
       end
     end
 

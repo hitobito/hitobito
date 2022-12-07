@@ -16,7 +16,7 @@ class JsonApiController < ActionController::API
   include Localizable
   include Authenticatable
   include Sentry
-  
+
   class JsonApiUnauthorized < StandardError; end
 
   register_exception CanCan::AccessDenied,

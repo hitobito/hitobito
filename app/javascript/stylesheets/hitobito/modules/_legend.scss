@@ -1,4 +1,4 @@
-// shows a legend 
+// shows a legend
 
 .legend {
   .legend-title {
@@ -19,7 +19,7 @@
   .legend-item::before {
     content: '\25A0';      /* The unicode for • character */
     position: absolute;
-    left: -0.8rem;
+    left: -1.5rem;
     top: -0.1rem;          /* Adjust this value so that it appears where you want. */
     font-size: 2rem;      /* Adjust this value so that it appears what size you want. */
   }

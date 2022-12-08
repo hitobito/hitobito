@@ -1,5 +1,6 @@
 class CleanSerializedInvoiceItemAttributes < ActiveRecord::Migration[6.1]
   def change
+    # m.invoice_attributes # return this hash:
     # {"invoice_items_attributes"=>
     #   {"0"=>
     #     {"name"=>"ein Name",
@@ -11,8 +12,8 @@ class CleanSerializedInvoiceItemAttributes < ActiveRecord::Migration[6.1]
     #      "account"=>"3000",
     #      "variable_donation"=>"false",
     #      "_destroy"=>"false"}}}
-    Message::LetterWithInvoice.where.not(invoice_attributes: nil).each do |m|
-      m.invoice_attributes = m.invoice_attributes.map do |relation_type, list|
+    Message::LetterWithInvoice.where.not(invoice_attributes: nil).find_each do |message|
+      message.invoice_attributes = message.invoice_attributes.map do |relation_type, list|
         [
           relation_type,
           list.map do |index, attributes_hash|
@@ -23,7 +24,7 @@ class CleanSerializedInvoiceItemAttributes < ActiveRecord::Migration[6.1]
           end.to_h
         ]
       end.to_h
-      m.save(validate: false)
+      message.save(validate: false)
     end
   end
 

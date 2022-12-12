@@ -8,6 +8,8 @@
 module FilterNavigation
   class People < Base
 
+    include ParamConverters
+
     attr_reader :group, :filter
 
     delegate :can?, to: :template

@@ -58,7 +58,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(true)
+            expect(person.attributes.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -78,13 +78,13 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           selected_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(true)
+            expect(person.attributes.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
 
           (person_attrs - selected_attrs).each do |attr|
-            expect(person.key?(attr)).to eq(false)
+            expect(person.attributes.key?(attr)).to eq(false)
           end
         end
 
@@ -117,7 +117,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(true)
+            expect(person.attributes.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -160,7 +160,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.key?(attr)).to eq(true)
+            expect(phone_number_json.attributes.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -211,7 +211,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(true)
+            expect(person.attributes.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -254,7 +254,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.key?(attr)).to eq(true)
+            expect(phone_number_json.attributes.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -283,7 +283,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(true)
+            expect(person.attributes.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -303,7 +303,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           show_details_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(false)
+            expect(person.attributes.key?(attr)).to eq(false)
           end
 
         end
@@ -332,7 +332,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(true)
+            expect(person.attributes.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -378,7 +378,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.key?(attr)).to eq(true)
+            expect(phone_number_json.attributes.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -407,7 +407,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(true)
+            expect(person.attributes.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -427,7 +427,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           show_details_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(false)
+            expect(person.attributes.key?(attr)).to eq(false)
           end
 
         end
@@ -472,7 +472,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(true)
+            expect(person.attributes.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
@@ -492,13 +492,13 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.jsonapi_type).to eq('people')
 
           selected_attrs.each do |attr|
-            expect(person.key?(attr)).to eq(true)
+            expect(person.attributes.key?(attr)).to eq(true)
 
             expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
           end
 
           (person_attrs - selected_attrs).each do |attr|
-            expect(person.key?(attr)).to eq(false)
+            expect(person.attributes.key?(attr)).to eq(false)
           end
         end
 
@@ -578,7 +578,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.key?(attr)).to eq(true)
+            expect(phone_number_json.attributes.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -634,7 +634,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(d.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(d.key?(attr)).to eq(true)
+            expect(d.attributes.key?(attr)).to eq(true)
 
             expect(d.send(attr.to_sym)).to eq(person.send(attr.to_sym))
           end
@@ -673,7 +673,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.key?(attr)).to eq(true)
+            expect(phone_number_json.attributes.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -700,7 +700,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(d.jsonapi_type).to eq('people')
 
           show_details_attrs.each do |attr|
-            expect(d.key?(attr)).to eq(false)
+            expect(d.attributes.key?(attr)).to eq(false)
           end
 
         end
@@ -740,7 +740,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(d.jsonapi_type).to eq('people')
 
           person_attrs.each do |attr|
-            expect(d.key?(attr)).to eq(true)
+            expect(d.attributes.key?(attr)).to eq(true)
 
             expect(d.send(attr.to_sym)).to eq(person.send(attr.to_sym))
           end
@@ -779,7 +779,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(phone_number_json.jsonapi_type).to eq('phone_numbers')
 
           phone_number_record.attributes.each do |attr, expected|
-            expect(phone_number_json.key?(attr)).to eq(true)
+            expect(phone_number_json.attributes.key?(attr)).to eq(true)
 
             expect(phone_number_json.send(attr.to_sym)).to eq(expected)
           end
@@ -806,7 +806,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(d.jsonapi_type).to eq('people')
 
           show_details_attrs.each do |attr|
-            expect(d.key?(attr)).to eq(false)
+            expect(d.attributes.key?(attr)).to eq(false)
           end
 
         end
@@ -835,7 +835,7 @@ describe JsonApi::PeopleController, type: [:request] do
       it 'returns 401 for existing person id' do
         @person_id = top_leader.id
 
-        jsonapi_put "/api/people/#{@person_id}", params
+        jsonapi_patch "/api/people/#{@person_id}", params
 
         expect(response).to have_http_status(401)
       end
@@ -843,7 +843,7 @@ describe JsonApi::PeopleController, type: [:request] do
       it 'returns 401 for non existing person' do
         @person_id = Person.maximum(:id).succ
 
-        jsonapi_put "/api/people/#{@person_id}", params
+        jsonapi_patch "/api/people/#{@person_id}", params
 
         expect(response).to have_http_status(401)
       end
@@ -857,7 +857,7 @@ describe JsonApi::PeopleController, type: [:request] do
         it 'returns 404 for non existing person' do
           @person_id = Person.maximum(:id).succ
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(404)
         end
@@ -869,7 +869,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           params[:data][:attributes][:email] = bottom_member.email
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(422)
 
@@ -890,7 +890,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           params[:data][:attributes][:email] = bottom_member.email
 
-          jsonapi_put "/api/people/#{@person_id}?locale=de", params
+          jsonapi_patch "/api/people/#{@person_id}?locale=de", params
 
           expect(response).to have_http_status(422)
 
@@ -907,7 +907,7 @@ describe JsonApi::PeopleController, type: [:request] do
           @person_id = bottom_member.id
           former_first_name = bottom_member.first_name
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(200)
 
@@ -927,7 +927,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           @person_id = bottom_member.id
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(403)
 
@@ -943,7 +943,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           @person_id = bottom_member.id
 
-          jsonapi_put "/api/people/#{@person_id}?locale=de", params
+          jsonapi_patch "/api/people/#{@person_id}?locale=de", params
 
           expect(response).to have_http_status(403)
 
@@ -961,13 +961,53 @@ describe JsonApi::PeopleController, type: [:request] do
 
           @person_id = person.id
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(200)
 
           person.reload
 
           expect(person.first_name).to eq('changed')
+        end
+
+        it 'does not update inaccessible person by overriding payloads person id' do
+          person = Fabricate(Group::TopLayer::TopAdmin.to_s, group: groups(:top_layer)).person
+          inaccessible_person = bottom_member
+
+          permitted_service_token.update!(permission: :layer_full)
+
+          @person_id = person.id
+
+          payload[:data][:id] = inaccessible_person.to_s
+
+          jsonapi_patch "/api/people/#{@person_id}", params
+
+          expect(response).to have_http_status(400)
+
+          person.reload
+          expect(person.first_name).not_to eq('changed')
+
+          inaccessible_person.reload
+          expect(inaccessible_person.first_name).not_to eq('changed')
+        end
+
+        it 'does not update any protected person attributes' do
+          person = Fabricate(Group::TopLayer::TopAdmin.to_s, group: groups(:top_layer)).person
+          password_hash = person.encrypted_password
+
+          permitted_service_token.update!(permission: :layer_full)
+
+          @person_id = person.id
+
+          payload[:data][:attributes][:encrypted_password] = 'my-sweet-manipulated-hash'
+
+          jsonapi_patch "/api/people/#{@person_id}", params
+
+          expect(response).to have_http_status(400)
+
+          person.reload
+          expect(person.first_name).not_to eq('changed')
+          expect(person.encrypted_password).to eq(password_hash)
         end
 
         it 'returns validation error for contactable relations of person' do
@@ -1000,7 +1040,7 @@ describe JsonApi::PeopleController, type: [:request] do
             }
           ]
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(422)
 
@@ -1041,7 +1081,7 @@ describe JsonApi::PeopleController, type: [:request] do
             }
           ]
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(200)
 
@@ -1055,7 +1095,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           @person_id = bottom_member.id
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(403)
         end
@@ -1076,7 +1116,7 @@ describe JsonApi::PeopleController, type: [:request] do
         it 'returns 404 for non existing person' do
           @person_id = Person.maximum(:id).succ
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(404)
         end
@@ -1084,7 +1124,7 @@ describe JsonApi::PeopleController, type: [:request] do
         it 'returns 403 for person without access' do
           @person_id = top_leader.id
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(403)
         end
@@ -1096,7 +1136,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           params[:data][:attributes][:email] = bottom_member.email
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(422)
 
@@ -1115,7 +1155,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           @person_id = person.id
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(200)
 
@@ -1138,7 +1178,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           headers = { 'CONTENT_TYPE' => 'application/json' }
 
-          jsonapi_put "/api/people/#{@person_id}", params, headers: headers
+          jsonapi_patch "/api/people/#{@person_id}", params, headers: headers
 
           expect(response).to have_http_status(415)
         end
@@ -1172,7 +1212,7 @@ describe JsonApi::PeopleController, type: [:request] do
             }
           ]
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(200)
 
@@ -1198,7 +1238,7 @@ describe JsonApi::PeopleController, type: [:request] do
         it 'returns 404 for non existing person' do
           @person_id = Person.maximum(:id).succ
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(404)
         end
@@ -1206,7 +1246,7 @@ describe JsonApi::PeopleController, type: [:request] do
         it 'returns 403 for person without access' do
           @person_id = top_leader.id
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(403)
         end
@@ -1218,7 +1258,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           params[:data][:attributes][:email] = bottom_member.email
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(422)
 
@@ -1237,7 +1277,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           @person_id = person.id
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(200)
 
@@ -1280,7 +1320,7 @@ describe JsonApi::PeopleController, type: [:request] do
             }
           ]
 
-          jsonapi_put "/api/people/#{@person_id}", params
+          jsonapi_patch "/api/people/#{@person_id}", params
 
           expect(response).to have_http_status(200)
 

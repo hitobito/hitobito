@@ -12,6 +12,7 @@ Currently the following endpoints are provided:
 | ---    | ---                                               | ---                                                                             |
 | GET    | /api/people/                                      | List all accessible people                                                      |
 | GET    | /api/people/:id                                   | Fetch a single person entry, replace :id with the person's primary key          |
+| PATCH  | /api/people/:id                                   | Update a person entry, replace :id with the person's primary key                |
 
 ### Tools
 

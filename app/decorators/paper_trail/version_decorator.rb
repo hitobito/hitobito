@@ -22,10 +22,30 @@ module PaperTrail
 
     def author
       if model.version_author.present?
-        person = Person.where(id: model.version_author).first
-        if person
-          h.link_to_if(can?(:show, person), person.to_s, h.person_path(person.id))
+        author_id = model.version_author
+        author_type = model.whodunnit_type
+        if author_type == ServiceToken.sti_name
+          author_service_token(author_id)
+        else
+          author_person(author_id)
         end
+      end
+    end
+
+    def author_person(author_id)
+      person = Person.where(id: author_id).first
+      if person
+        h.link_to_if(can?(:show, person), person.to_s, h.person_path(person.id))
+      end
+    end
+
+    def author_service_token(author_id)
+      token = ServiceToken.where(id: author_id).first
+      if token
+        layer_id = token.layer_group_id
+        prefix = ServiceToken.model_name.human
+        label = "#{prefix}: #{token}"
+        h.link_to_if(can?(:show, token), label, h.group_service_token_path(layer_id, token.id))
       end
     end
 

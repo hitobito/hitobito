@@ -376,7 +376,7 @@ Hitobito::Application.routes.draw do
   get '/api', to: 'json_api/documentation#index'
 
   scope '/api', module: :json_api, constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
-    resources :people, only: [:index, :show]
+    resources :people, only: [:index, :show, :update]
   end
 
   # The priority is based upon order of creation:

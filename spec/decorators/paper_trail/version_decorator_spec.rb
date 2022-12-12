@@ -67,6 +67,30 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
         end
       end
     end
+
+    context 'with service token' do
+      let(:service_token) { service_tokens(:permitted_top_layer_token) }
+
+      before do
+        PaperTrail.request.whodunnit = service_token.id.to_s
+        PaperTrail.request.controller_info = { whodunnit_type: ServiceToken.sti_name }
+        update
+      end
+
+      context 'and permission to link' do
+        it do
+          expect(decorator.h).to receive(:can?).with(:show, service_token).and_return(true)
+          is_expected.to match(/^<a href=".+">API-Key: Permitted<\/a>$/)
+        end
+      end
+
+      context 'and no permission to link' do
+        it do
+          expect(decorator.h).to receive(:can?).with(:show, service_token).and_return(false)
+          is_expected.to eq('API-Key: Permitted')
+        end
+      end
+    end
   end
 
   context '#changes' do

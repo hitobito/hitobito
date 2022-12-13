@@ -970,6 +970,24 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.first_name).to eq('changed')
         end
 
+        it 'updates also person`s detail attributes' do
+          person = Fabricate(Group::TopLayer::TopAdmin.to_s, group: groups(:top_layer)).person
+
+          permitted_service_token.update!(permission: :layer_full)
+
+          @person_id = person.id
+
+          payload[:data][:attributes][:birthday] = '1985-08-01'
+
+          jsonapi_patch "/api/people/#{@person_id}", params
+
+          expect(response).to have_http_status(200)
+
+          person.reload
+
+          expect(person.birthday).to eq(Date.parse('1985-08-01'))
+        end
+
         it 'does not update inaccessible person by overriding payloads person id' do
           person = Fabricate(Group::TopLayer::TopAdmin.to_s, group: groups(:top_layer)).person
           inaccessible_person = bottom_member
@@ -1168,6 +1186,23 @@ describe JsonApi::PeopleController, type: [:request] do
           changes = YAML.load(latest_change.object_changes)
           expect(changes).to eq({ 'first_name' => [ former_first_name, 'changed' ]})
           expect(latest_change.perpetrator).to eq(bottom_layer_leader)
+        end
+
+        it 'does not update person`s detail attributes without required permission' do
+          allow_any_instance_of(PersonResource).to receive(:write_details?).and_return(false)
+          person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
+
+          @person_id = person.id
+
+          payload[:data][:attributes][:birthday] = '1985-08-01'
+
+          jsonapi_patch "/api/people/#{@person_id}", params
+
+          expect(response).to have_http_status(400)
+
+          person.reload
+
+          expect(person.birthday).not_to eq(Date.parse('1985-08-01'))
         end
 
         it 'does not update person if wrong content type header' do

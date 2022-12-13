@@ -18,8 +18,8 @@ class PersonResource < ApplicationResource
   attribute :zip_code, :string
   attribute :town, :string
   attribute :country, :string
-  attribute :gender, :string, readable: :show_details?
-  attribute :birthday, :date, readable: :show_details?
+  attribute :gender, :string, readable: :show_details?, writable: :write_details?
+  attribute :birthday, :date, readable: :show_details?, writable: :write_details?
   attribute :primary_group_id, :integer, except: [:writeable]
 
   has_many :phone_numbers, link: false,
@@ -40,6 +40,12 @@ class PersonResource < ApplicationResource
 
   def show_details?(model_instance)
     can?(:show_details, model_instance)
+  end
+
+  def write_details?
+    # no model_instance method argument is given when writable is called,
+    # so we have to access current entry by controller context
+    can?(:show_details, context.entry)
   end
 
   def show_details_or_public(model_instance)

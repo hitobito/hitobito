@@ -8,7 +8,10 @@
 PaperTrail::Version.class_eval do
   def perpetrator
     if whodunnit.present? && whodunnit_type.present?
-      whodunnit_type.constantize.find(whodunnit.to_i) 
+      whodunnit_type
+        .constantize
+        .where(id: whodunnit.to_i)
+        .first
     end
   end
 end

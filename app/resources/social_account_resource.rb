@@ -7,4 +7,6 @@
 
 class SocialAccountResource < ApplicationResource
   include ContactableResource
+
+  attribute :name, :string
 end

@@ -1,6 +1,6 @@
 ## JSON Api
 
-This documentation is about the new JSON API introduced in 2022. Check the [legacy Api documentation](05_rest_api.md) for the old Api.
+This documentation is about the new JSON API introduced in 2023. Check the [legacy Api documentation](05_rest_api.md) for the old Api.
 
 The hitobito JSON API implements the open standard **[json:api](https://jsonapi.org) v1.0** with media type **[application/vnd.api+json](http://www.iana.org/assignments/media-types/application/vnd.api+json)**
 

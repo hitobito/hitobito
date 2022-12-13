@@ -12,7 +12,7 @@ class AppStatus::Mail < AppStatus
                             'and no e-mail is blocking the queue/job.'
   CATCH_ALL_INBOX_OK = 'ok'
 
-  CATCH_ALL_INBOX_OVERDUE_TIME = 42.minutes
+  CATCH_ALL_INBOX_OVERDUE_TIME = ENV.fetch('RAILS_INBOX_OVERDUE_MINUTES', 42).minutes
 
   def initialize
     @catch_all_inbox = catch_all_inbox

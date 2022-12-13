@@ -8,8 +8,6 @@
 module Authenticatable
   extend ActiveSupport::Concern
 
-  # class ApiUnauthorized < StandardError; end
-
   included do
     if respond_to?(:helper_method)
       helper_method :current_user, :origin_user

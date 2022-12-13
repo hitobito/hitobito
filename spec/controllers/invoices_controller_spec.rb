@@ -283,7 +283,7 @@ describe InvoicesController do
       expect(json[:links][:'invoices.recipient'][:href]).to eq 'http://test.host/people/{invoices.recipient}.json'
     end
   end
-  
+
   context 'DELETE#destroy' do
     it 'moves invoice to cancelled state' do
       expect do
@@ -322,6 +322,22 @@ describe InvoicesController do
       end.to change { Invoice.count }.by(1)
 
       expect(Invoice.find_by(title: 'current_user').creator).to eq(person)
+    end
+
+    it 'POST#create allows to manually adjust the recipient address' do
+      expect do
+        post :create, params: { group_id: group.id, invoice: { title: 'current_user', recipient_id: person.id, recipient_address: "Tim Testermann\nAlphastrasse 1\n8000 Zürich" } }
+      end.to change { Invoice.count }.by(1)
+
+      expect(Invoice.find_by(title: 'current_user').recipient_address).to eq("Tim Testermann\nAlphastrasse 1\n8000 Zürich")
+    end
+
+    it 'POST#create allows to manually adjust the recipient email' do
+      expect do
+        post :create, params: { group_id: group.id, invoice: { title: 'current_user', recipient_id: person.id, recipient_address: "Tim Testermann\nAlphastrasse 1\n8000 Zürich" } }
+      end.to change { Invoice.count }.by(1)
+
+      expect(Invoice.find_by(title: 'current_user').recipient_address).to eq("Tim Testermann\nAlphastrasse 1\n8000 Zürich")
     end
 
     it 'POST#create accepts nested attributes for invoice_items' do

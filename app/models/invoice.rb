@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -244,9 +244,14 @@ class Invoice < ActiveRecord::Base
     end
   end
 
-  def set_recipient_fields
+  def set_recipient_fields!
     self.recipient_email = recipient.email
-    self.recipient_address = recipient.address_for_letter
+    self.recipient_address = Person::Address.new(recipient).for_invoice
+  end
+
+  def set_recipient_fields
+    self.recipient_email ||= recipient.email
+    self.recipient_address ||= Person::Address.new(recipient).for_invoice
   end
 
   def item_invalid?(attributes)

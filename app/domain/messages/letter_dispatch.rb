@@ -89,7 +89,7 @@ module Messages
       if send_to_households? && housemates.count > 1
         Person::Address.new(person).for_household_letter(housemates)
       else
-        person.address_for_letter
+        Person::Address.new(person).for_letter
       end
     end
 

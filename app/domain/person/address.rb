@@ -14,6 +14,11 @@ class Person::Address
     (person_and_company_name + address).compact.join("\n")
   end
 
+  # Intended to be overridden in wagons which have multiple addresses per person
+  def for_invoice
+    for_letter
+  end
+
   def for_household_letter(members)
     [combine_household_names(members), address].compact.join("\n")
   end

@@ -132,7 +132,6 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         Fabricate(Group::BottomGroup::Member.name, group: groups(:bottom_group_one_one), person: people(:top_leader))
         Messages::LetterDispatch.new(letter).run
       end
-      #[360, 246, "1234 Dorf"], [360, 257, "Eine Strasse 42"], [360, 257, "Eine Strasse 42"]]
 
       context "stamped"do
         let(:options) { { stamped: true } }
@@ -201,7 +200,6 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         end
       end
 
-      [[28, 230, "Eine Strasse 42"], [360, 246, "1234 Dorf"], [360, 257, "Eine Strasse 42"]]
 
       it "renders all texts at positions" do
         expect(text_with_position.count).to eq 80

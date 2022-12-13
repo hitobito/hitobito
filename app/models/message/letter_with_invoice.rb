@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2022, Die Mitte Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -61,7 +61,7 @@ class Message::LetterWithInvoice < Message::Letter
   def build_invoice_for(receiver)
     invoice.tap do |invoice|
       invoice.recipient = receiver
-      invoice.send(:set_recipient_fields)
+      invoice.send(:set_recipient_fields!)
       raise 'invoice invalid' unless invoice.valid?
     end
   end

@@ -67,6 +67,7 @@ namespace :dev do
 
       MESSAGE
 
+      # TODO: try more groups for roles, anything in the top-layer would work
       root = Group.roots.first
 
       admins = root.class.roles.select { |r| r.permissions.include?(:admin) }
@@ -74,14 +75,21 @@ namespace :dev do
       accessors = root.class.roles.select { |r| r.permissions.include?(:layer_and_below_full) }
 
       best = (admins & impersonators & accessors)
-      role_type = best.first || admins.first
+      role_types = [best.first] || admins + impersonators + accessors
 
-      me.roles << Role.new(type: role_type, group: root)
+      existing_role_types = me.roles.pluck(:type).map(&:to_s)
+      role_types.each do |role_type|
+        next if existing_role_types.include?(role_type.to_s)
+
+        me.roles << Role.new(type: role_type, group: root)
+      end
+
+      me.reload # clear out invalid roles
 
       puts <<~MESSAGE
-        The User has hopefully useful roles:
+        The User now has hopefully useful roles:
 
-        - #{me.roles.join("\n-")}
+          - #{me.roles.join("\n  - ")}
 
       MESSAGE
     end

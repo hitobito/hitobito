@@ -37,7 +37,7 @@ module Messages
 
     private
 
-    def address_for_letter(person, housemates)
+    def address_for_letter(person, _housemates)
       Person::Address.new(person).for_invoice
     end
   end

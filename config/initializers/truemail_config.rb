@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2020, Hitobito AG. This file is part of
+#  Copyright (c) 2020-2022, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,6 +19,8 @@ module Truemail
     rescue ::Timeout::Error => error
       retry unless (self.attempts -= 1).zero?
       ::Logger.new($stdout).add(::Logger::ERROR) { error }
+
+      ::Timeout.timeout(1) { Net::HTTP.get(URI("https://#{ENV.fetch('RAILS_HOST_NAME', 'demo.hitobito.com')}/healthz")) }
       false
     end
   end

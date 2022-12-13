@@ -91,7 +91,9 @@ class MailingLists::Subscribers
       #{Group.quoted_table_name}.rgt <= sub_groups.rgt AND
       roles.type = related_role_types.role_type AND
       (roles.deleted_at IS NULL OR
-       roles.deleted_at > '#{Time.now.utc.to_s(:db)}')
+       roles.deleted_at > '#{Time.now.utc.to_s(:db)}') AND
+      (roles.archived_at IS NULL OR
+       roles.archived_at > '#{Time.now.utc.to_s(:db)}')
     SQL
 
     if subscriptions.groups.any?(&:subscription_tags)

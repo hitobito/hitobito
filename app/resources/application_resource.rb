@@ -26,10 +26,7 @@ class ApplicationResource < Graphiti::Resource
   # Used for link generation
   self.base_url = Rails.application.routes.default_url_options[:host]
   # Used for link generation
-  # Suggest referencing this config/routes.rb:
-  # scope path: ApplicationResource.endpoint_namespace do
-  #   resources :posts
-  # end
+
   self.endpoint_namespace = '/api/'
 
   # Will raise an error if a resource is being accessed from a URL it is not allowlisted for

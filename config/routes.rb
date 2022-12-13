@@ -375,7 +375,7 @@ Hitobito::Application.routes.draw do
   mount VandalUi::Engine, at: '/api/vandal'
   get '/api', to: 'json_api/documentation#index'
 
-  scope '/api', module: :json_api, constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
+  scope path: ApplicationResource.endpoint_namespace, module: :json_api, constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
     resources :people, only: [:index, :show, :update]
   end
 

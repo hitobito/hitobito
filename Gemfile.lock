@@ -782,6 +782,7 @@ DEPENDENCIES
   rspec-its
   rspec-rails (~> 5.0)
   rswag
+  rswag-specs
   rubocop
   rubocop-checkstyle_formatter
   rubocop-rails

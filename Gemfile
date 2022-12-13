@@ -106,6 +106,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-doc' # provides show-source/$ in the pry-console
   gem 'rspec-rails', '~> 5.0'
+  gem "rswag-specs"
 end
 
 group :development do

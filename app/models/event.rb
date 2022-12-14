@@ -33,7 +33,6 @@
 #  signature_confirmation      :boolean
 #  signature_confirmation_text :string(255)
 #  state                       :string(60)
-#  supports_applications       :boolean          default(FALSE), not null
 #  teamer_count                :integer          default(0)
 #  type                        :string(255)
 #  waiting_list                :boolean          default(TRUE), not null
@@ -75,6 +74,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   class_attribute :used_attributes,
                   :role_types,
+                  :supports_applications,
                   :possible_states,
                   :kind_class,
                   :supports_invitations,
@@ -98,6 +98,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                      Event::Role::Treasurer,
                      Event::Role::Speaker,
                      Event::Role::Participant]
+
+  # Are Event::Applications possible for this event type
+  self.supports_applications = false
 
   # List of possible values for the state attribute.
   self.possible_states = []
@@ -327,18 +330,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     participant_types.present?
   end
 
-  def supports_applications?
-    supports_applications
-  end
-
-  def supports_applications
-    if attr_used?(:supports_applications)
-      super
-    else
-      false
-    end
-  end
-
   def application_duration
     Duration.new(application_opening_at, application_closing_at)
   end
@@ -383,7 +374,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def waiting_list_available?
-    supports_applications && attr_used?(:waiting_list) && waiting_list?
+    self.class.supports_applications && attr_used?(:waiting_list) && waiting_list?
   end
 
   def globally_visible

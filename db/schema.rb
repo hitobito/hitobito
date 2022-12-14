@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_31_134052) do
+ActiveRecord::Schema.define(version: 2022_10_13_120352) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -353,7 +353,6 @@ ActiveRecord::Schema.define(version: 2022_10_31_134052) do
     t.boolean "globally_visible"
     t.string "shared_access_token"
     t.boolean "notify_contact_on_participations", default: false, null: false
-    t.boolean "supports_applications", default: true, null: false
     t.index ["kind_id"], name: "index_events_on_kind_id"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end

@@ -334,10 +334,10 @@ describe InvoicesController do
 
     it 'POST#create allows to manually adjust the recipient email' do
       expect do
-        post :create, params: { group_id: group.id, invoice: { title: 'current_user', recipient_id: person.id, recipient_address: "Tim Testermann\nAlphastrasse 1\n8000 Zürich" } }
+        post :create, params: { group_id: group.id, invoice: { title: 'current_user', recipient_id: person.id, recipient_email: 'test@unit.com' } }
       end.to change { Invoice.count }.by(1)
 
-      expect(Invoice.find_by(title: 'current_user').recipient_address).to eq("Tim Testermann\nAlphastrasse 1\n8000 Zürich")
+      expect(Invoice.find_by(title: 'current_user').recipient_email).to eq('test@unit.com')
     end
 
     it 'POST#create accepts nested attributes for invoice_items' do

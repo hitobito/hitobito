@@ -182,6 +182,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   ### CLASS METHODS
 
   class << self
+
     # Default scope for event lists
     def list
       order_by_date.
@@ -303,10 +304,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     def tags
       Event.tags_on(:tags).order(:name).pluck(:name)
-    end
-
-    def supports_applications?
-      new.supports_applications?
     end
   end
 

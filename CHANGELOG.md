@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-# Unreleased
+# unreleased
 
 * Erweiterung Personenfilter (#295): Filterung von Personenlisten nach Alter, Geburtsdatum und Geschlecht (merci @simfeld!)
 * Neue Filterbedingung "Enthält nicht" (#295)

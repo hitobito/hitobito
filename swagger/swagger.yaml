@@ -7,11 +7,24 @@ paths:
   "/api/people":
     get:
       summary: list people
+      parameters:
+      - name: include
+        in: query
+        required: false
+        explode: false
+        schema:
+          type: array
+          enum:
+          - phone_numbers
+          - social_accounts
+          - additional_emails
+          nullable: true
+          description: Contactables
       responses:
         '200':
           description: successful
 servers:
-- url: https://{defaultHost}
+- url: http://{defaultHost}
   variables:
     defaultHost:
-      default: www.example.com
+      default: localhost:3000

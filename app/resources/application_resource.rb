@@ -37,4 +37,18 @@ class ApplicationResource < Graphiti::Resource
   self.autolink = false
 
   delegate :can?, to: :context
+
+  def self.find(params = {}, base_scope = nil)
+    # make sure both id params are the same
+    # for update since we're checking permission based on
+    # params :id
+    data_id = params[:data].try(:[], :id).try(:to_i)
+    param_id = params[:id].to_i
+    if data_id && param_id
+      raise ActionController::BadRequest unless data_id == param_id
+    end
+
+    super(params, base_scope)
+  end
+
 end

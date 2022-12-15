@@ -996,7 +996,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           @person_id = person.id
 
-          payload[:data][:id] = inaccessible_person.to_s
+          payload[:data][:id] = inaccessible_person.id
 
           jsonapi_patch "/api/people/#{@person_id}", params
 

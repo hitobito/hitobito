@@ -57,6 +57,12 @@ module Sheet
           if: :show_statistics
     end
 
+    tab 'groups.tabs.logs',
+      :group_log_path,
+      if: (lambda do |view, group|
+        view.can?(:log, group)
+      end)
+
     tab 'groups.tabs.deleted',
         :deleted_subgroups_group_path,
         if: :deleted_subgroups

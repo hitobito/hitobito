@@ -703,6 +703,7 @@ de:
     tabs:
       deleted: 'Gelöscht'
       statistics: 'Statistiken'
+      logs: Log
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     statistics:
       title: Statistiken

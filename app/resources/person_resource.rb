@@ -22,20 +22,33 @@ class PersonResource < ApplicationResource
   attribute :birthday, :date, readable: :show_details?, writable: :write_details?
   attribute :primary_group_id, :integer, except: [:writeable]
 
-  has_many :phone_numbers, link: false,
-                           resource: PhoneNumberResource,
-                           readable: :show_details_or_public?
-  has_many :social_accounts, link: false,
-                             resource: SocialAccountResource,
-                             readable: :show_details_or_public?
-  has_many :additional_emails, link: false,
-                               resource: AdditionalEmailResource,
-                               readable: :show_details_or_public?
+  has_many :phone_numbers,
+    link: false,
+    resource: PhoneNumberResource,
+    readable: :show_details_or_public?
+  has_many :social_accounts,
+    link: false,
+    resource: SocialAccountResource,
+    readable: :show_details_or_public?
+  has_many :additional_emails,
+    link: false,
+    resource: AdditionalEmailResource,
+    readable: :show_details_or_public?
+
+  has_many :roles,
+    link: false,
+    resource: RoleResource,
+    readable: :show_full?,
+    writable: false
 
   filter :updated_at, :datetime, single: true do
     eq do |scope, value|
       scope.where(updated_at: value..)
     end
+  end
+
+  def show_full?(model_instance)
+    can?(:show_full, model_instance)
   end
 
   def show_details?(model_instance)

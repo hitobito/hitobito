@@ -36,8 +36,6 @@ class ApplicationResource < Graphiti::Resource
   # Automatically generate JSONAPI links?
   self.autolink = false
 
-  delegate :can?, to: :context
-
   def self.find(params = {}, base_scope = nil)
     # make sure both id params are the same
     # for update since we're checking permission based on
@@ -50,5 +48,7 @@ class ApplicationResource < Graphiti::Resource
 
     super(params, base_scope)
   end
+
+  delegate :can?, to: :context
 
 end

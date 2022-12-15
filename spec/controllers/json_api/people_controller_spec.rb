@@ -123,7 +123,7 @@ describe JsonApi::PeopleController, type: [:request] do
           end
         end
 
-        it 'returns people with contactable relations' do
+        it 'returns people with role and contactable relations' do
           contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
                                                 group: groups(:bottom_layer_two),
                                                 person: Fabricate(:person_with_address_and_phone,
@@ -137,8 +137,8 @@ describe JsonApi::PeopleController, type: [:request] do
 
           person = d.find { |p| p.id == contactable_person.id }
 
-          expect(person.relationships.size).to eq(3)
-          expect(person.relationships.keys).to match_array(%w(phone_numbers social_accounts additional_emails))
+          expect(person.relationships.size).to eq(4)
+          expect(person.relationships.keys).to match_array(%w(phone_numbers social_accounts additional_emails roles))
         end
 
         it 'includes contactables based on params' do
@@ -166,6 +166,22 @@ describe JsonApi::PeopleController, type: [:request] do
           end
 
           jsonapi_get '/api/people', params: params.merge(include: 'phone_numbers,additional_emails')
+
+          # purge included instance variable since graphiti spec helper decides to memoize it
+          @jsonapi_included = nil
+
+          expect(included.size).to eq(2)
+          expect(included.map(&:jsonapi_type)).to match_array(%w(phone_numbers additional_emails))
+        end
+
+        it 'includes roles based on params' do
+          jsonapi_get '/api/people', params: params.merge(include: 'roles')
+
+          expect(response).to have_http_status(200)
+          expect(d.size).to eq(2)
+
+          expect(included.size).to eq(1)
+          roles_json = included.first
 
           # purge included instance variable since graphiti spec helper decides to memoize it
           @jsonapi_included = nil
@@ -217,7 +233,7 @@ describe JsonApi::PeopleController, type: [:request] do
           end
         end
 
-        it 'returns people with contactable relations' do
+        it 'returns people with role and contactable relations' do
           contactable_person = Fabricate(:role, type: 'Group::BottomLayer::Leader',
                                                 group: groups(:bottom_layer_two),
                                                 person: Fabricate(:person_with_address_and_phone,
@@ -231,8 +247,8 @@ describe JsonApi::PeopleController, type: [:request] do
 
           person = d.find { |p| p.id == contactable_person.id }
 
-          expect(person.relationships.size).to eq(3)
-          expect(person.relationships.keys).to match_array(%w(phone_numbers social_accounts additional_emails))
+          expect(person.relationships.size).to eq(4)
+          expect(person.relationships.keys).to match_array(%w(phone_numbers social_accounts additional_emails roles))
         end
 
         it 'includes contactables based on params' do

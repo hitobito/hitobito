@@ -25,6 +25,10 @@ class JsonApiController < ActionController::API
   class JsonApiUnauthorized < StandardError; end
   class JsonApiInvalidMediaType < StandardError; end
 
+  register_exception ActionController::BadRequest,
+    status: 400,
+    title: 'Bad request'
+
   register_exception CanCan::AccessDenied,
     status: 403,
     title: 'Access denied',

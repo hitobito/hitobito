@@ -1082,8 +1082,8 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(errors.first.status).to eq('422')
           expect(errors.first.title).to eq('Validation Error')
-          expect(errors.first.attribute).to eq('email')
-          expect(errors.first.code).to eq('taken')
+          expect(errors.first.to_json).to include('"source":{"pointer":"/data/attributes/number"}')
+          expect(errors.first.detail).to eq('Number is invalid')
         end
 
         it 'updates contactable relations of person' do

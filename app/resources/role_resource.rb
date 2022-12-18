@@ -7,6 +7,7 @@
 
 class RoleResource < ApplicationResource
   # read-only for now
+  attribute :person_id, :integer, writable: false
   attribute :group_id, :integer, writable: false
   attribute :label, :string, writable: false
   attribute :created_at, :datetime, writable: false

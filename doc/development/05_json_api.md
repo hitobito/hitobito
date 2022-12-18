@@ -1,4 +1,4 @@
-## JSON Api
+## JSON:API
 
 This documentation is about the new JSON API introduced in 2023. Check the [legacy Api documentation](05_rest_api.md) for the old Api.
 
@@ -14,7 +14,7 @@ Currently the following endpoints are provided:
 | GET    | /api/people/:id                                   | Fetch a single person entry, replace :id with the person's primary key          |
 | PATCH  | /api/people/:id                                   | Update a person entry, replace :id with the person's primary key                |
 
-Visit your hitobito's swagger UI [api-docs/](api-docs/) for detailed documentation and a sandbox for testing/developing requests.
+Visit your hitobito's swagger UI [/api-docs](/api-docs) for detailed documentation and a sandbox for testing/developing requests.
 
 ### Authentication
 
@@ -42,3 +42,10 @@ To use the API, the provided access token is required to have the `api` scope, s
 #### Active user session
 
 For development purposes or async requests, the API can also be accessed with the current user web session. Just login as user and then visit any `/api` endpoints or use [Swagger](/api-docs).
+
+### Hitobito Developer
+
+Checklist for creating/extending JSON:API endpoints:
+
+- Add/extend swagger specs in `specs/requests/json_api/`
+  - run `rails rswag:specs:swaggerize` afterwards and check if Swagger ui is working as expected

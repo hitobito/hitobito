@@ -26,10 +26,12 @@ class PersonResource < ApplicationResource
     link: false,
     resource: PhoneNumberResource,
     readable: :show_details_or_public?
+
   has_many :social_accounts,
     link: false,
     resource: SocialAccountResource,
     readable: :show_details_or_public?
+
   has_many :additional_emails,
     link: false,
     resource: AdditionalEmailResource,

@@ -22,15 +22,26 @@ RSpec.configure do |config|
         version: 'v1'
       },
       paths: {},
-      servers: [
-        {
-          url: 'http://{defaultHost}',
-          variables: {
-            defaultHost: {
-              default: 'localhost:3000'
-            }
+      components: {
+        securitySchemes: {
+          ServiceTokenAuthHeader: {
+            type: :apiKey,
+            in: :header,
+            name: 'X-TOKEN' },
+          ServiceTokenAuthParam: {
+            type: :apiKey,
+            in: :query,
+            name: :token },
+          SessionAuth: {
+            type: :apiKey,
+            in: :cookie,
+            name: '_session_id'
           }
         }
+      },
+      security: [
+        ServiceTokenAuthHeader: [],
+        ServiceTokenAuthParam: []
       ]
     }
   }

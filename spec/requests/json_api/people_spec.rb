@@ -2,6 +2,10 @@ require 'swagger_helper'
 
 RSpec.describe 'json_api/people', type: :request do
 
+  let(:'X-TOKEN') { service_tokens(:permitted_top_layer_token).token }
+  let(:token) { service_tokens(:permitted_top_layer_token).token }
+  let(:include) { [] }
+
   path '/api/people' do
 
     get('list people') do
@@ -17,9 +21,9 @@ RSpec.describe 'json_api/people', type: :request do
             'phone_numbers',
             'social_accounts',
             'additional_emails',
+            'roles',
           ],
-          nullable: true,
-          description: 'Contactables'
+          nullable: true
         }
       })
 
@@ -35,7 +39,7 @@ RSpec.describe 'json_api/people', type: :request do
       end
 
       response(200, 'successful') do
-        let(:include) { %w(phone_numbers social_accounts additional_emails) }
+        let(:include) { %w(phone_numbers social_accounts additional_emails roles) }
         run_test!
       end
     end

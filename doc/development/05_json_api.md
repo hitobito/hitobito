@@ -14,9 +14,7 @@ Currently the following endpoints are provided:
 | GET    | /api/people/:id                                   | Fetch a single person entry, replace :id with the person's primary key          |
 | PATCH  | /api/people/:id                                   | Update a person entry, replace :id with the person's primary key                |
 
-### Tools
-
-Vandal is an integrated UI for developing / testing Json Api queries. Just open [/api/vandal](/api/vandal) with your browser to open the playground.
+Visit your hitobito's swagger UI [api-docs/](api-docs/) for detailed documentation and a sandbox for testing/developing requests.
 
 ### Authentication
 
@@ -43,4 +41,4 @@ To use the API, the provided access token is required to have the `api` scope, s
 
 #### Active user session
 
-For development purposes or async requests, the API can also be accessed with the current user web session. Just login as user and then visit any `/api` endpoints or use Vandal.
+For development purposes or async requests, the API can also be accessed with the current user web session. Just login as user and then visit any `/api` endpoints or use [Swagger](/api-docs).

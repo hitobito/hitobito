@@ -372,7 +372,6 @@ Hitobito::Application.routes.draw do
     end
   end # scope locale
 
-  mount VandalUi::Engine, at: '/api/vandal'
   get '/api', to: 'json_api/documentation#index'
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'

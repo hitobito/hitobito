@@ -23,6 +23,62 @@ paths:
       responses:
         '200':
           description: successful
+  "/api/people/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: fetch person
+      parameters:
+      - name: include
+        in: query
+        required: false
+        explode: false
+        schema:
+          type: array
+          enum:
+          - phone_numbers
+          - social_accounts
+          - additional_emails
+          - roles
+          nullable: true
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update person
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID
+                    type:
+                      type: string
+                      enum:
+                      - people
+                      default: people
+                    attributes:
+                      type: object
+                      properties:
+                        first_name:
+                          type: string
+                        last_name:
+                          type: string
+                      description: Person attributes
 components:
   securitySchemes:
     ServiceTokenAuthHeader:
@@ -38,6 +94,9 @@ components:
       in: cookie
       name: _session_id
 security:
-- ServiceTokenAuth: []
-  SessionAuthHeader: []
-  SessionAuthParam: []
+- ServiceTokenAuthHeader: []
+  ServiceTokenAuthParam: []
+consumes:
+- application/vnd.api+json
+produces:
+- application/vnd.api+json

@@ -37,12 +37,15 @@ RSpec.configure do |config|
             in: :cookie,
             name: '_session_id'
           }
+          # TODO: add oauth
         }
       },
       security: [
         ServiceTokenAuthHeader: [],
         ServiceTokenAuthParam: []
-      ]
+      ],
+      consumes: [ 'application/vnd.api+json' ],
+      produces: [ 'application/vnd.api+json' ]
     }
   }
 

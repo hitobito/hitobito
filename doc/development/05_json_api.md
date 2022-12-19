@@ -16,6 +16,31 @@ Currently the following endpoints are provided:
 
 Visit your hitobito's swagger UI [/api-docs](/api-docs) for detailed documentation and a sandbox for testing/developing requests.
 
+All successful responses do have HTTP Status `2xx`.
+
+To protect from CSRF attacks, requests must have set **Content-Type** header to **application/vnd.api+json**.
+
+### Errors
+
+Any error like authentication or validation errors are rendered as JSON as defined by the [json:api](https://jsonapi.org/format/#errors) standard.  Also a specific http status code is being returned for any errors.
+
+Error example: trying to access a person without propper permission:
+
+GET /api/people/42
+
+HTTP Status 403 - Forbidden
+
+```json
+{"errors":
+  [{"code":"forbidden",
+    "status":"403",
+    "title":"Access denied",
+    "detail":"Du bist nicht berechtigt auf diese Resource zuzugreifen.",
+    "meta":{}}
+  ]
+}
+```
+
 ### Authentication
 
 To use the API you need a valid authentication token, this can be one of the following
@@ -49,3 +74,4 @@ Checklist for creating/extending JSON:API endpoints:
 
 - Add/extend swagger specs in `specs/requests/json_api/`
   - run `rails rswag:specs:swaggerize` afterwards and check if Swagger ui is working as expected
+- Update list of endpoints in this document

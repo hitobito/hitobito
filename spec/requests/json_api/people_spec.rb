@@ -6,28 +6,6 @@ RSpec.describe 'json_api/people', type: :request do
   let(:token) { service_tokens(:permitted_top_layer_token).token }
   let(:include) { [] }
 
-  # manually created schema inspired by: https://github.com/superiorlu/jsonapi-swagger/blob/master/lib/generators/jsonapi/swagger/templates/swagger.rb.erb
-  @@person_schema =
-    { type: :object,
-      properties: {
-        data: {
-          type: :object,
-          properties: {
-            id: { type: :string, description: 'ID'},
-            type: { type: :string, enum: ['people'], default: 'people'},
-            attributes: {
-              type: :object,
-              properties: {
-                first_name: { type: :string },
-                last_name: { type: :string }
-              },
-              description: 'Person attributes'
-            }
-          }
-        }
-      }
-    }
-
   path '/api/people' do
 
     # add pagination
@@ -109,7 +87,7 @@ RSpec.describe 'json_api/people', type: :request do
     end
 
     patch('update person') do
-      parameter name: :data, in: :body, schema: @@person_schema
+      parameter name: :data, in: :body, schema: JsonApi::PersonSchema.read
 
       response(200, 'successful') do
         let(:data) do

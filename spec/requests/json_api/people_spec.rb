@@ -1,4 +1,5 @@
 require 'swagger_helper'
+require_relative 'person_schema'
 
 RSpec.describe 'json_api/people', type: :request do
 

@@ -79,6 +79,29 @@ paths:
                         last_name:
                           type: string
                       description: Person attributes
+                    relationships:
+                      type: object
+                      attributes:
+                        phone_numbers:
+                          type: object
+                          attributes:
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                attributes:
+                                  type:
+                                    type: string
+                                    enum:
+                                    - phone_numbers
+                                    default: phone_numbers
+                                  id:
+                                    type: string
+                                  method:
+                                    type: string
+                                    enum:
+                                    - update
+                                    default: update
 components:
   securitySchemes:
     ServiceTokenAuthHeader:

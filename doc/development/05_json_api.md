@@ -2,7 +2,7 @@
 
 This documentation is about the new JSON API introduced in 2023. Check the [legacy Api documentation](05_rest_api.md) for the old Api.
 
-The hitobito JSON API implements the open standard **[json:api](https://jsonapi.org) v1.0** with media type **[application/vnd.api+json](http://www.iana.org/assignments/media-types/application/vnd.api+json)**
+The hitobito JSON:API implements the open standard **[json:api](https://jsonapi.org) v1.1** with media type **[application/vnd.api+json](http://www.iana.org/assignments/media-types/application/vnd.api+json)**
 
 ### Endpoints
 
@@ -40,6 +40,8 @@ HTTP Status 403 - Forbidden
   ]
 }
 ```
+
+the error's field detail is translated by provided locale. all other fields are in English.
 
 ### Authentication
 

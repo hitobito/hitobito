@@ -1,4 +1,4 @@
-- if p.application && @event.attr_used?(:priorization)
+- if p.application
   - if p.application.waiting_list?
     = link_to("#{icon(:check)}&nbsp; #{t('.label')}".html_safe,
               waiting_list_group_event_application_market_path(@group, @event, p.id),

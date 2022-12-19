@@ -50,7 +50,6 @@
 top_event:
   groups: top_layer
   type:
-  supports_applications: false
 
 top_course:
   groups: top_layer
@@ -60,4 +59,3 @@ top_course:
   priorization: true
   requires_approval: true
   external_applications: true
-  supports_applications: true

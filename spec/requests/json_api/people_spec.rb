@@ -2,6 +2,8 @@ require 'swagger_helper'
 require_relative 'person_schema'
 
 RSpec.describe 'json_api/people', type: :request do
+  # reset locale back to :de for other specs
+  after { I18n.locale = :de }
 
   let(:'X-TOKEN') { service_tokens(:permitted_top_layer_token).token }
   let(:token) { service_tokens(:permitted_top_layer_token).token }

@@ -15,7 +15,8 @@ class JsonApi::PersonSchema
             attributes: attributes,
             relationships: relationships
           }
-        }
+        },
+        included: included
       }
     }
   end
@@ -31,15 +32,15 @@ class JsonApi::PersonSchema
 
   def relationships
     { type: :object,
-      attributes: {
+      properties: {
         phone_numbers: {
           type: :object,
-          attributes: {
+          properties: {
             data: {
               type: :array,
               items: {
                 type: :object,
-                attributes: {
+                properties: {
                   type: { type: :string, enum: [:phone_numbers], default: :phone_numbers },
                   id: { type: :string },
                   method: { type: :string, enum: [:update], default: :update },
@@ -53,5 +54,20 @@ class JsonApi::PersonSchema
   end
 
   def included
+    { type: :array,
+      items: {
+        type: :object,
+        properties: {
+          type: { type: :string, enum: [:phone_numbers], default: :phone_numbers },
+          id: { type: :string },
+          attributes: {
+            type: :object,
+            properties: {
+              number: { type: :string }
+            }
+          }
+        }
+      }
+    }
   end
 end

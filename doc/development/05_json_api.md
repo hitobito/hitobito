@@ -70,10 +70,128 @@ To use the API, the provided access token is required to have the `api` scope, s
 
 For development purposes or async requests, the API can also be accessed with the current user web session. Just login as user and then visit any `/api` endpoints or use [Swagger](/api-docs).
 
+### Example Requests
+
+#### PATCH person
+
+Request
+
+```curl
+curl -X 'PATCH' \
+  'http://hitobito.example.com/api/people/48' \
+  -H 'accept: */*' \
+  -H 'X-TOKEN: u-j3QQoPoSg8pwwgqe3W9CMVPVPFCFykFK2A2VCSq1BzznDuUA' \
+  -H 'Content-Type: application/vnd.api+json' \
+  -d '{
+  "data": {
+    "id": "48",
+    "type": "people",
+    "attributes": {
+      "first_name": "Tobias",
+      "last_name": "Meyer"
+    },
+    "relationships": {
+      "phone_numbers": {
+        "data": [
+          {
+            "type": "phone_numbers",
+            "id": "73",
+            "method": "update"
+          }
+        ]
+      }
+    }
+  },
+  "included": [
+    {
+      "type": "phone_numbers",
+      "id": "73",
+      "attributes": {
+        "number": "0797335842"
+      }
+    }
+  ]
+}'
+```
+
+Response
+
+```json
+{
+  "data": {
+    "id": "48",
+    "type": "people",
+    "attributes": {
+      "first_name": "Tobias",
+      "last_name": "Meyer",
+      "nickname": null,
+      "company_name": null,
+      "company": false,
+      "email": "meyer@example.com",
+      "address": null,
+      "zip_code": "",
+      "town": null,
+      "country": "CH",
+      "gender": null,
+      "birthday": null,
+      "primary_group_id": 1
+    },
+    "relationships": {
+      "phone_numbers": {
+        "data": [
+          {
+            "type": "phone_numbers",
+            "id": "73"
+          }
+        ]
+      },
+      "social_accounts": {
+        "meta": {
+          "included": false
+        }
+      },
+      "additional_emails": {
+        "meta": {
+          "included": false
+        }
+      },
+      "roles": {
+        "meta": {
+          "included": false
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "73",
+      "type": "phone_numbers",
+      "attributes": {
+        "label": "Privat",
+        "public": true,
+        "contactable_id": 48,
+        "contactable_type": "Person",
+        "number": "+41 79 733 58 42"
+      },
+      "relationships": {
+        "contactable": {
+          "meta": {
+            "included": false
+          }
+        }
+      }
+    }
+  ],
+  "meta": {}
+}
+```
+
 ### Hitobito Developer
 
 Checklist for creating/extending JSON:API endpoints:
 
 - Add/extend swagger specs in `specs/requests/json_api/`
+  - create/extend model schema for swagger (e.g. specs/requests/json_api/person_schema.rb)
+  - create/extend request spec
   - run `rails rswag:specs:swaggerize` afterwards and check if Swagger ui is working as expected
 - Update list of endpoints in this document

@@ -13,7 +13,7 @@ describe Group::ListsController do
   end
 
   it 'works with token' do
-    token = service_tokens(:permitted_top_group_token)
+    token = service_tokens(:permitted_top_layer_token)
     get :index, params: { token: token.token }, format: :json
     expect(response.status).to be(200)
     expect(JSON.parse(response.body)['groups']).to have(9).items

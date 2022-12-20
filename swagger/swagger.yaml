@@ -1,0 +1,148 @@
+---
+openapi: 3.0.1
+info:
+  title: JSON:API
+  version: v1
+paths:
+  "/api/people":
+    get:
+      summary: list people
+      parameters:
+      - name: include
+        in: query
+        required: false
+        explode: false
+        schema:
+          type: array
+          enum:
+          - phone_numbers
+          - social_accounts
+          - additional_emails
+          - roles
+          nullable: true
+      - name: filter[updated_at]
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: successful
+  "/api/people/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: fetch person
+      parameters:
+      - name: include
+        in: query
+        required: false
+        explode: false
+        schema:
+          type: array
+          enum:
+          - phone_numbers
+          - social_accounts
+          - additional_emails
+          - roles
+          nullable: true
+      responses:
+        '200':
+          description: successful
+    patch:
+      summary: update person
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID
+                    type:
+                      type: string
+                      enum:
+                      - people
+                      default: people
+                    attributes:
+                      type: object
+                      properties:
+                        first_name:
+                          type: string
+                        last_name:
+                          type: string
+                      description: Person attributes
+                    relationships:
+                      type: object
+                      properties:
+                        phone_numbers:
+                          type: object
+                          properties:
+                            data:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    enum:
+                                    - phone_numbers
+                                    default: phone_numbers
+                                  id:
+                                    type: string
+                                  method:
+                                    type: string
+                                    enum:
+                                    - update
+                                    default: update
+                included:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - phone_numbers
+                        default: phone_numbers
+                      id:
+                        type: string
+                      attributes:
+                        type: object
+                        properties:
+                          number:
+                            type: string
+components:
+  securitySchemes:
+    ServiceTokenAuthHeader:
+      type: apiKey
+      in: header
+      name: X-TOKEN
+    ServiceTokenAuthParam:
+      type: apiKey
+      in: query
+      name: token
+    SessionAuth:
+      type: apiKey
+      in: cookie
+      name: _session_id
+security:
+- ServiceTokenAuthHeader: []
+  ServiceTokenAuthParam: []
+consumes:
+- application/vnd.api+json
+produces:
+- application/vnd.api+json

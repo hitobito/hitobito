@@ -39,6 +39,8 @@ gem 'faker'
 gem 'faraday'
 gem 'gibbon', '~> 3.4'
 gem 'globalize'
+gem 'graphiti'
+gem 'graphiti-rails', '~> 0.1'
 gem 'haml'
 gem 'http_accept_language'
 gem 'icalendar'
@@ -78,6 +80,7 @@ gem 'simpleidn'
 gem 'sprockets', '~> 3.7.2' # pinned to older version to avoid having an empty manifest.js
 gem 'sqlite3' # required for asset generation
 gem 'strip_attributes' # strip whitespace of attributes
+gem 'rswag'
 gem 'thinking-sphinx'
 gem 'truemail'
 gem 'validates_by_schema'
@@ -94,6 +97,7 @@ gem 'active_storage_variant' # variants for Rails < 7
 gem 'nochmal' # migrate into or between ActiveStorage-Backends
 
 group :development, :test do
+  gem 'graphiti_spec_helpers'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'codez-tarantula', require: 'tarantula-rails3'
@@ -101,6 +105,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-doc' # provides show-source/$ in the pry-console
   gem 'rspec-rails', '~> 5.0'
+  gem "rswag-specs"
 end
 
 group :development do

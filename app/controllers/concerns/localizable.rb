@@ -18,8 +18,12 @@ module Localizable
     I18n.locale = available_locale!(params[:locale]) ||
       available_locale!(cookies[:locale]) ||
       guess_locale ||
-      I18n.default_locale
+      default_locale
     cookies[:locale] = { value: I18n.locale, expires: 1.year.from_now }
+  end
+
+  def default_locale
+    I18n.default_locale
   end
 
   def default_url_options(_options = {})
@@ -41,7 +45,7 @@ module Localizable
   end
 
   def multiple_languages?
-    Array(Settings.application.languages).size > 1
+    application_languages.keys.size > 1
   end
 
 end

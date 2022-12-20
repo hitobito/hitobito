@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2018, Pfadibewegung Schliessen. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -13,108 +13,214 @@ describe TokenAbility do
   let(:ability) { TokenAbility.new(token) }
 
   describe :people do
-    let(:token) { service_tokens(:rejected_top_group_token) }
+    let(:token) { service_tokens(:rejected_top_layer_token) }
 
-    before do
-      token.update(people: true)
-    end
+    context 'layer_read' do
+      before do
+        token.update!(people: true, permission: :layer_read)
+      end
 
-    context 'authorized' do
-
-      it 'may index on people' do
+      it 'may index on layer people' do
         is_expected.to be_able_to(:index_people, token.layer)
       end
 
-      it 'may show on person' do
+      it 'may show on layer person' do
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.to be_able_to(:show, person)
       end
 
-      it 'may show_full on person' do
+      it 'may show_full on layer person' do
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.to be_able_to(:show_full, person)
       end
-    end
 
-    context 'unauthorized' do
-      it 'may not permit any write actions' do
+      it 'may not write layer person' do
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.not_to be_able_to(:create, person)
         is_expected.not_to be_able_to(:update, person)
       end
 
-      it 'may not index if disabled' do
-        token.update(people: false)
+      it 'may not index layer people if disabled' do
+        token.update!(people: false)
         is_expected.not_to be_able_to(:index_people, token.layer)
       end
 
-      it 'may not show if disabled' do
-        token.update(people: false)
+      it 'may not show layer person if disabled' do
+        token.update!(people: false)
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.not_to be_able_to(:show, person)
       end
 
-      it 'may not index on subgroup' do
+      it 'may not index people on subgroup' do
         is_expected.not_to be_able_to(:index_people,  groups(:top_group))
       end
 
-      it 'may not show in subgroup' do
+      it 'may not show or write person in subgroup' do
         person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
         is_expected.not_to be_able_to(:show, person)
+        is_expected.not_to be_able_to(:update, person)
+        is_expected.not_to be_able_to(:create, person)
       end
     end
-  end
 
-  describe :people_below do
-    let(:token) { service_tokens(:rejected_top_group_token) }
+    context 'layer_full' do
+      before do
+        token.update!(people: true, permission: :layer_full)
+      end
 
-    before do
-      token.update(people_below: true)
-    end
-
-    context 'authorized' do
-
-      it 'may index on group' do
+      it 'may index on layer people' do
         is_expected.to be_able_to(:index_people, token.layer)
       end
 
-      it 'may index on subgroup' do
-        is_expected.to be_able_to(:index_people, groups(:top_group))
-      end
-
-      it 'may show on group' do
+      it 'may show on layer person' do
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.to be_able_to(:show, person)
       end
 
-      it 'may show in subgroup' do
-        person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
-        is_expected.to be_able_to(:show, person)
-      end
-    end
-
-    context 'unauthorized' do
-      it 'may not permit any write actions' do
+      it 'may show_full on layer person' do
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
-        is_expected.not_to be_able_to(:create, person)
-        is_expected.not_to be_able_to(:update, person)
+        is_expected.to be_able_to(:show_full, person)
       end
 
-      it 'may not index if disabled' do
-        token.update(people_below: false)
+      it 'may write layer person' do
+        person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
+        is_expected.to be_able_to(:update, person)
+        is_expected.not_to be_able_to(:create, person) # people#create not yet implemented for service token
+      end
+
+      it 'may not index layer people if disabled' do
+        token.update!(people: false)
         is_expected.not_to be_able_to(:index_people, token.layer)
       end
 
-      it 'may not show if disabled' do
-        token.update(people_below: false)
+      it 'may not show or write layer person if disabled' do
+        token.update!(people: false)
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.not_to be_able_to(:show, person)
+        is_expected.not_to be_able_to(:update, person)
+      end
+
+      it 'may not index people on subgroup' do
+        is_expected.not_to be_able_to(:index_people,  groups(:top_group))
+      end
+
+      it 'may not show or write person in subgroup' do
+        person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
+        is_expected.not_to be_able_to(:show, person)
+        is_expected.not_to be_able_to(:update, person)
+        is_expected.not_to be_able_to(:create, person)
+      end
+    end
+
+    context 'layer_and_bellow_read' do
+      before do
+        token.update!(people: true, permission: :layer_and_below_read)
+      end
+
+      it 'may index on layer people' do
+        is_expected.to be_able_to(:index_people, token.layer)
+      end
+
+      it 'may only show on layer person' do
+        person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
+        is_expected.to be_able_to(:show, person)
+        is_expected.not_to be_able_to(:update, person)
+        is_expected.not_to be_able_to(:create, person)
+      end
+
+      it 'may show_full on layer person' do
+        person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
+        is_expected.to be_able_to(:show_full, person)
+      end
+
+      it 'may not index layer people if disabled' do
+        token.update!(people: false)
+        is_expected.not_to be_able_to(:index_people, token.layer)
+      end
+
+      it 'may not show person if disabled' do
+        token.update!(people: false)
+        person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
+      end
+
+      it 'may index people on subgroup' do
+        token.update!(people: false)
+        is_expected.not_to be_able_to(:index_people,  groups(:top_group))
+      end
+
+      it 'may not index people on subgroup if disabled' do
+        token.update!(people: false)
+        is_expected.not_to be_able_to(:index_people,  groups(:top_group))
+      end
+
+      it 'may only show person in subgroup' do
+        person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
+        is_expected.to be_able_to(:show, person)
+        is_expected.not_to be_able_to(:update, person)
+        is_expected.not_to be_able_to(:create, person)
+      end
+    end
+
+    context 'layer_and_bellow_full' do
+      before do
+        token.update!(people: true, permission: :layer_and_below_full)
+      end
+
+      it 'may index on layer people' do
+        is_expected.to be_able_to(:index_people, token.layer)
+      end
+
+      it 'may show and write on layer person' do
+        person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
+        is_expected.to be_able_to(:show, person)
+        is_expected.to be_able_to(:update, person)
+        is_expected.not_to be_able_to(:create, person) # people#create not yet implemented for service token
+      end
+
+      it 'may show_full on layer person' do
+        person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
+        is_expected.to be_able_to(:show_full, person)
+      end
+
+      it 'may not index layer people if disabled' do
+        token.update!(people: false)
+        is_expected.not_to be_able_to(:index_people, token.layer)
+      end
+
+      it 'may not show person if disabled' do
+        token.update!(people: false)
+        person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
+      end
+
+      it 'may index people on subgroup' do
+        token.update!(people: false)
+        is_expected.not_to be_able_to(:index_people,  groups(:top_group))
+      end
+
+      it 'may not index people on subgroup if disabled' do
+        token.update!(people: false)
+        is_expected.not_to be_able_to(:index_people,  groups(:top_group))
+      end
+
+      it 'may show and write person in subgroup' do
+        person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
+        is_expected.to be_able_to(:show, person)
+        is_expected.to be_able_to(:update, person)
+        is_expected.not_to be_able_to(:create, person) # people#create not yet implemented for service token
+      end
+
+      it 'may not show nor write person in subgroup if disabled' do
+        token.update!(people: false)
+        person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
+        is_expected.not_to be_able_to(:show, person)
+        is_expected.not_to be_able_to(:update, person)
+        is_expected.not_to be_able_to(:create, person)
       end
     end
   end
 
   describe :events do
-    let(:token) { service_tokens(:rejected_top_group_token) }
+    let(:token) { service_tokens(:rejected_top_layer_token) }
 
     before do
       token.update(events: true)
@@ -166,7 +272,7 @@ describe TokenAbility do
 
   describe :groups do
     context 'authorized' do
-      let(:token) { service_tokens(:permitted_top_group_token) }
+      let(:token) { service_tokens(:permitted_top_layer_token) }
 
       it 'may show layer' do
         is_expected.to be_able_to(:show, token.layer)
@@ -182,7 +288,7 @@ describe TokenAbility do
     end
 
     context 'unauthorized' do
-      let(:token) { service_tokens(:rejected_top_group_token) }
+      let(:token) { service_tokens(:rejected_top_layer_token) }
 
       it 'may not permit any write actions' do
         is_expected.not_to be_able_to(:create, token.layer)
@@ -197,7 +303,7 @@ describe TokenAbility do
 
   describe :invoices do
     context 'authorized' do
-      let(:token) { service_tokens(:permitted_top_group_token) }
+      let(:token) { service_tokens(:permitted_top_layer_token) }
 
       it 'may show' do
         is_expected.to be_able_to(:show, token.layer.invoices.build)
@@ -227,7 +333,7 @@ describe TokenAbility do
     end
 
     context 'unauthorized' do
-      let(:token) { service_tokens(:rejected_top_group_token) }
+      let(:token) { service_tokens(:rejected_top_layer_token) }
 
       it 'may not show' do
         is_expected.not_to be_able_to(:show, token.layer.invoices.build)
@@ -247,7 +353,7 @@ describe TokenAbility do
     let(:event_participation) { event_participations(:top) }
 
     context 'authorized' do
-      let(:token) { service_tokens(:permitted_top_group_token) }
+      let(:token) { service_tokens(:permitted_top_layer_token) }
 
       it 'may show' do
         is_expected.to be_able_to(:show, event_participation)
@@ -279,7 +385,7 @@ describe TokenAbility do
     end
 
     context 'unauthorized' do
-      let(:token) { service_tokens(:rejected_top_group_token) }
+      let(:token) { service_tokens(:rejected_top_layer_token) }
 
       it 'may not show' do
         is_expected.not_to be_able_to(:show, event_participation)
@@ -300,7 +406,7 @@ describe TokenAbility do
     let(:mailing_list) { mailing_lists(:leaders) }
 
     context 'authorized' do
-      let(:token) { service_tokens(:permitted_top_group_token) }
+      let(:token) { service_tokens(:permitted_top_layer_token) }
 
       it 'may show' do
         is_expected.to be_able_to(:show, mailing_list)
@@ -318,7 +424,7 @@ describe TokenAbility do
     end
 
     context 'unauthorized' do
-      let(:token) { service_tokens(:rejected_top_group_token) }
+      let(:token) { service_tokens(:rejected_top_layer_token) }
 
       it 'may not show' do
         is_expected.not_to be_able_to(:show, mailing_list)

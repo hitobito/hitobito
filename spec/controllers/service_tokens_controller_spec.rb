@@ -29,11 +29,10 @@ describe ServiceTokensController do
     let(:person) { people(:top_leader) }
 
     it 'may update flags' do
-      token = service_tokens(:rejected_top_group_token)
+      token = service_tokens(:rejected_top_layer_token)
 
       patch :update, params: { group_id: token.layer.id, id: token.id, service_token: {
         people: true,
-        people_below: true,
         groups: true,
         events: true,
         invoices: true,
@@ -41,7 +40,6 @@ describe ServiceTokensController do
         mailing_lists: true
       } }
       expect(token.reload).to be_people
-      expect(token.reload).to be_people_below
       expect(token.reload).to be_groups
       expect(token.reload).to be_events
       expect(token.reload).to be_invoices

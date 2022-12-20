@@ -17,7 +17,6 @@
 #  mailing_lists        :boolean          default(FALSE), not null
 #  name                 :string(255)      not null
 #  people               :boolean          default(FALSE)
-#  people_below         :boolean          default(FALSE)
 #  token                :string(255)      not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
@@ -25,6 +24,7 @@
 #
 
 class ServiceToken < ActiveRecord::Base
+  include I18nEnums
 
   belongs_to :layer, class_name: 'Group', foreign_key: :layer_group_id
   has_many :cors_origins, as: :auth_method, dependent: :delete_all
@@ -42,14 +42,21 @@ class ServiceToken < ActiveRecord::Base
     name
   end
 
-  # Required as a substitute user for PeopleFilter with PersonFetchables and in other places
+  PERMISSIONS = %w(layer_read
+                   layer_and_below_read
+                   layer_full
+                   layer_and_below_full)
+
+  i18n_enum :permission, PERMISSIONS, queries: true
+
+  # Required as a substitute user for PeopleFilter and JSON Api
+  # with PersonFetchables and in other places
   def dynamic_user
     Person.new do |p|
       role = Role.new
       role.group = layer
-      role.permissions = [:layer_and_below_full]
+      role.permissions = [permission.to_sym]
       p.roles = [role]
-      p.groups = [layer]
       p.instance_variable_set(:@service_token, self)
     end
   end

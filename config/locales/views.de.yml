@@ -290,6 +290,12 @@ de:
       title: 'Entschuldigung, die Seite ist momentan nicht verfügbar (503)'
       explanation: 'Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verfügbar. Das sollte nicht all zu lange dauern.'
       instruction: 'Bitte versuchen Sie es später nochmals.'
+    '403':
+      title: 'Zugriff verweigert'
+      explanation: 'Du bist nicht berechtigt auf diese Resource zuzugreifen.'
+    '401':
+      title: 'Login benötigt'
+      explanation: 'Du must dich einloggen bevor du auf diese Resource zugreifen kannst.'
 
   export/tabular/events/list:
     group_names: 'Organisatoren'
@@ -1833,3 +1839,4 @@ de:
       first: Erste
       last: Letzte
       truncate: '...'
+  json_api: JSON:API

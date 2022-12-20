@@ -22,7 +22,7 @@ class TokenAbility
 
   def define_token_abilities
     define_base_abilities
-    define_person_abilities if token.people? || token.people_below?
+    define_person_abilities if token.people?
     define_event_abilities if token.events?
     define_group_abilities if token.groups?
     define_invoice_abilities if token.invoices?
@@ -34,8 +34,10 @@ class TokenAbility
     can :index, Group
   end
 
-  def define_person_abilities
-    groups = token.people_below? ? token_layer_and_below : [token.layer]
+  def define_person_abilities # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    below_permissions =
+      token.layer_and_below_read? || token.layer_and_below_full?
+    groups = below_permissions ? token_layer_and_below : [token.layer]
 
     can :show, [Person, PersonDecorator] do |p|
       Role.where(person: p, group: groups).present? &&
@@ -54,6 +56,11 @@ class TokenAbility
 
     can :index_people, Group do |g|
       groups.include?(g)
+    end
+
+    can :update, [Person, PersonDecorator] do |p|
+      Role.where(person: p, group: groups).present? &&
+        Ability.new(token.dynamic_user).can?(:update, p)
     end
   end
 

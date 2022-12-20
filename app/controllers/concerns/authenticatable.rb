@@ -9,7 +9,9 @@ module Authenticatable
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_user, :origin_user
+    if respond_to?(:helper_method)
+      helper_method :current_user, :origin_user
+    end
 
     before_action :authenticate_person!, if: :authenticate?
     check_authorization if: :authorize?
@@ -75,10 +77,15 @@ module Authenticatable
   end
 
   def authenticate_person!(*args)
-    user_sign_in || service_token_sign_in || doorkeeper_sign_in || super(*args)
+    deprecated_user_token_sign_in || api_sign_in || super(*args)
   end
 
-  def user_sign_in
+  def api_sign_in
+    service_token_sign_in || doorkeeper_sign_in
+  end
+
+  # user login by token is DEPRECATED
+  def deprecated_user_token_sign_in
     user = token_authentication.user_from_token
     return unless user
 
@@ -116,5 +123,15 @@ module Authenticatable
 
   def doorkeeper_controller?
     is_a?(Doorkeeper::ApplicationController)
+  end
+
+  def current_ability
+    @current_ability ||= if current_user
+                           Ability.new(current_user)
+                         elsif current_service_token
+                           TokenAbility.new(current_service_token)
+                         elsif current_oauth_token
+                           DoorkeeperTokenAbility.new(current_oauth_token)
+                         end
   end
 end

@@ -13,12 +13,12 @@ class ServiceTokensController < CrudController
     :name,
     :description,
     :people,
-    :people_below,
     :groups,
     :events,
     :invoices,
     :event_participations,
     :mailing_lists,
+    :permission,
     cors_origins_attributes: [ :id, :origin, :_destroy ]
   ]
 

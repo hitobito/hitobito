@@ -78,8 +78,20 @@ class DoorkeeperTokenAbility
       user_ability.can?(:show, p)
     end
 
+    can :show_details, Person do |p|
+      user_ability.can?(:show_details, p)
+    end
+
+    can :show_full, Person do |p|
+      user_ability.can?(:show_full, p)
+    end
+
     can :index_people, Group do |g|
       user_ability.can?(:index_people, g)
+    end
+
+    can :update, Person do |p|
+      user_ability.can?(:update, p)
     end
   end
 

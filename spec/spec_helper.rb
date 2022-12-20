@@ -14,6 +14,7 @@ require 'rspec/rails'
 require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
+require 'graphiti_spec_helpers/rspec'
 
 # Needed for feature specs
 WebMock.disable_net_connect!(
@@ -75,6 +76,7 @@ RSpec.configure do |config|
   config.include(MailerMacros)
   config.include(EventMacros)
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :request
   config.include FeatureHelpers, type: :feature
   config.include Warden::Test::Helpers, type: :feature
   config.include ActiveSupport::Testing::TimeHelpers
@@ -148,6 +150,15 @@ RSpec.configure do |config|
   end
 
   config.before { allow(Truemail).to receive(:valid?).and_return(true) }
+
+  # graphiti
+  config.include GraphitiSpecHelpers::RSpec
+  config.include GraphitiSpecHelpers::Sugar
+  config.include Graphiti::Rails::TestHelpers
+
+  config.before :each do
+    handle_request_exceptions(false)
+  end
 end
 
 # Use Capybara only if features are not excluded

@@ -1063,15 +1063,19 @@ de:
         name: Name
         description: Beschreibung
         key: Key
+        range: Zugriffsbereich
         abilities: Rechte
         last_access: Letzter Zugriff
-        people: Personen dieser Ebene
-        people_below: Personen dieser und der darunterliegenden Ebenen
-        groups: Gruppen dieser und der darunterliegenden Ebenen
-        events: Anlässe dieser und der darunterliegenden Ebenen
-        invoices: Rechnungen dieser Ebene
-        event_participations: Teilnehmende von Anlässen dieser Ebene
-        mailing_lists: Abonnent/-innen von Mailinglisten dieser Ebene
+        layer_read: Leserechte auf dieser Ebene
+        layer_and_below_read: Leserechte auf dieser und darunterliegenden Ebenen
+        layer_full: Lese- und Schreibrechte auf dieser Ebene
+        layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebenen
+        people: Personen
+        groups: Gruppen
+        events: Anlässe
+        invoices: Rechnungen
+        event_participations: Teilnehmende von Anlässen
+        mailing_lists: Abonnent/-innen von Mailinglisten
         cors_origins: Hosts mit API-Zugriff
 
       acts_as_taggable_on/tag:

@@ -7,11 +7,34 @@ require 'spec_helper'
 
 describe ServiceToken do
 
-  it '#dynamic user returns user model with top_admin role' do
-    token = ServiceToken.new(layer: groups(:top_layer))
-    expect(token.dynamic_user.roles).to have(2).item
-    expect(token.dynamic_user.roles.first.group).to eq groups(:top_layer)
-    expect(token.dynamic_user.roles.first.permissions).to eq [:layer_and_below_full]
+  describe '#dynamic user' do
+    it 'gets layer_and_below_read permissions when token has layer_and_below_read' do
+      token = ServiceToken.new(layer: groups(:top_layer), permission: :layer_and_below_read)
+      expect(token.dynamic_user.roles).to have(1).item
+      expect(token.dynamic_user.roles.first.group).to eq groups(:top_layer)
+      expect(token.dynamic_user.roles.first.permissions).to eq [:layer_and_below_read]
+    end
+
+    it 'gets layer_read permissions when token does have layer_read' do
+      token = ServiceToken.new(layer: groups(:top_layer), permission: :layer_read)
+      expect(token.dynamic_user.roles).to have(1).item
+      expect(token.dynamic_user.roles.first.group).to eq groups(:top_layer)
+      expect(token.dynamic_user.roles.first.permissions).to eq [:layer_read]
+    end
+
+    it 'gets layer_and_below_full permissions when token does have layer_and_below_full' do
+      token = ServiceToken.new(layer: groups(:top_layer), permission: :layer_and_below_full)
+      expect(token.dynamic_user.roles).to have(1).item
+      expect(token.dynamic_user.roles.first.group).to eq groups(:top_layer)
+      expect(token.dynamic_user.roles.first.permissions).to eq [:layer_and_below_full]
+    end
+
+    it 'gets layer_full permissions when token does have layer_full' do
+      token = ServiceToken.new(layer: groups(:top_layer), permission: :layer_full)
+      expect(token.dynamic_user.roles).to have(1).item
+      expect(token.dynamic_user.roles.first.group).to eq groups(:top_layer)
+      expect(token.dynamic_user.roles.first.permissions).to eq [:layer_full]
+    end
   end
 
   context 'callbacks' do
@@ -22,7 +45,7 @@ describe ServiceToken do
     end
 
     it 'does not generate token on update' do
-      service_token = service_tokens(:permitted_top_group_token)
+      service_token = service_tokens(:permitted_top_layer_token)
       token = service_token.token
 
       service_token.update(description: 'new description')

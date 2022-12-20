@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   include ERB::Util
   include Sentry
   include ParamConverters
+  include PaperTrailed
 
   # protect with null_session only in specific api controllers
   protect_from_forgery with: :exception
@@ -24,7 +25,6 @@ class ApplicationController < ActionController::Base
   helper_method :true?
 
   before_action :set_no_cache
-  before_action :set_paper_trail_whodunnit
   around_action :store_current_person
 
   class_attribute :skip_translate_inheritable
@@ -79,26 +79,11 @@ class ApplicationController < ActionController::Base
     request.formats.any? { |f| f.html? || f == Mime::ALL }
   end
 
-  def user_for_paper_trail
-    origin_user_id = session[:origin_user]
-    origin_user_id ? origin_user_id : super
-  end
-
   def store_current_person
     Auth.current_person = current_person
     yield
   ensure
     Auth.current_person = nil
-  end
-
-  def current_ability
-    @current_ability ||= if current_user
-                           Ability.new(current_user)
-                         elsif current_service_token
-                           TokenAbility.new(current_service_token)
-                         elsif current_oauth_token
-                           DoorkeeperTokenAbility.new(current_oauth_token)
-                         end
   end
 
   def after_sign_in_path_for(resource)

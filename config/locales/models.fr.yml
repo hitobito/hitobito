@@ -1037,7 +1037,6 @@ fr:
         abilities: Droits
         last_access: Dernier accès
         people: Membres de ce niveau
-        people_below: Membres de ce niveau et des niveaux inférieurs
         groups: Groupes de ce niveau et des niveaux inférieurs
         events: Évènements de ce niveau et des niveaux inférieurs
         invoices: Factures de ce niveau

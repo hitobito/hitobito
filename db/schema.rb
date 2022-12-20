@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_13_120352) do
+ActiveRecord::Schema.define(version: 2022_12_14_112552) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -934,7 +934,6 @@ ActiveRecord::Schema.define(version: 2022_10_13_120352) do
     t.string "token", null: false
     t.datetime "last_access"
     t.boolean "people", default: false
-    t.boolean "people_below", default: false
     t.boolean "groups", default: false
     t.boolean "events", default: false
     t.datetime "created_at", null: false
@@ -942,6 +941,7 @@ ActiveRecord::Schema.define(version: 2022_10_13_120352) do
     t.boolean "invoices", default: false, null: false
     t.boolean "event_participations", default: false, null: false
     t.boolean "mailing_lists", default: false, null: false
+    t.string "permission", default: "layer_read", null: false
   end
 
   create_table "sessions", id: :integer, charset: "utf8mb4", force: :cascade do |t|
@@ -1036,6 +1036,7 @@ ActiveRecord::Schema.define(version: 2022_10_13_120352) do
     t.string "main_type"
     t.integer "main_id"
     t.datetime "created_at"
+    t.string "whodunnit_type", default: "Person", null: false
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["main_id", "main_type"], name: "index_versions_on_main_id_and_main_type"
   end

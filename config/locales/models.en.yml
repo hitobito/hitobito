@@ -899,7 +899,6 @@ en:
         abilities: Abilities
         last_access: Last access
         people: Persons at this level
-        people_below: Persons at this and all lower levels
         groups: Groups at this and all lower levels
         events: Events at this and all lower levels
         invoices: Invoices at this level

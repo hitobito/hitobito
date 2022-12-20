@@ -29,6 +29,7 @@ RSpec.describe 'json_api/people', type: :request do
           nullable: true
         }
       })
+      parameter({name: 'filter[updated_at]', in: :query, required: false, schema: { type: :string, format: :date}})
 
       response(200, 'successful') do
         after do |example|

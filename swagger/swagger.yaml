@@ -20,6 +20,12 @@ paths:
           - additional_emails
           - roles
           nullable: true
+      - name: filter[updated_at]
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
       responses:
         '200':
           description: successful

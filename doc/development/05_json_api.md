@@ -72,6 +72,94 @@ For development purposes or async requests, the API can also be accessed with th
 
 ### Example Requests
 
+#### GET people changed after a certain date/time
+
+* filter[updated_at]: 2022-12-20+00:52:09
+* include Phone Numbers
+
+Request
+
+```curl
+curl -X 'GET' \
+  'http://hitobito.example.com/api/people?include=phone_numbers,&filter%5Bupdated_at%5D=2022-12-20%2B00%3A52%3A09' \
+  -H 'accept: */*' \
+  -H 'X-TOKEN: u-j3QQoPoSg8pwwgqe3W9CMVPVPFCFykFK2A2VCSq1BzznDuUA'
+```
+
+Response **200 OK**
+
+```json
+{
+  "data": [
+    {
+      "id": "48",
+      "type": "people",
+      "attributes": {
+        "first_name": "Tobias",
+        "last_name": "Meyer",
+        "nickname": null,
+        "company_name": null,
+        "company": false,
+        "email": "meyer@example.com",
+        "address": null,
+        "zip_code": "",
+        "town": null,
+        "country": "CH",
+        "gender": null,
+        "birthday": null,
+        "primary_group_id": 1
+      },
+      "relationships": {
+        "phone_numbers": {
+          "data": [
+            {
+              "type": "phone_numbers",
+              "id": "73"
+            }
+          ]
+        },
+        "social_accounts": {
+          "meta": {
+            "included": false
+          }
+        },
+        "additional_emails": {
+          "meta": {
+            "included": false
+          }
+        },
+        "roles": {
+          "meta": {
+            "included": false
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "73",
+      "type": "phone_numbers",
+      "attributes": {
+        "label": "Privat",
+        "public": true,
+        "contactable_id": 48,
+        "contactable_type": "Person",
+        "number": "+41 79 710 77 77"
+      },
+      "relationships": {
+        "contactable": {
+          "meta": {
+            "included": false
+          }
+        }
+      }
+    }
+  ],
+  "meta": {}
+}
+```
+
 #### PATCH person
 
 Request

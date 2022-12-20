@@ -20,7 +20,23 @@ During creation, the permissions of a service account and its corresponding serv
 | Teilnehmener dieser und der darunterliegenden Ebenen | Participants within the layer and below are accessible |
 
 
-### Accessing the JSON-API
+### Accessing JSON:API
+
+All endpoints from the [JSON:API](05_json_api.md) can be used with service accounts. There are two possibilities to use the API:
+
+* **Query parameter**: Send `token` as query parameter in the URL, and append `.json` to the URL path
+```bash
+curl "https://demo.hitobito.com/api/people/42?token=DtmPJ1iimjJi2neQQDq8efrqS5gBa7-5b8ZxboBCFdAm4HBBBP"
+```
+
+* **Request headers**: Set the following headers on the HTTP request: `X-Token` and `Accept` (set this to `application/json`)
+```bash
+curl -H "X-Token: DtmPJ1iimjJi2neQQDq8efrqS5gBa7-5b8ZxboBCFdAm4HBBBP" \
+     -H "Accept: application/json" \
+     https://demo.hitobito.com/api/people/42
+```
+
+### Accessing the legacy json api
 
 All endpoints from the [JSON API](05_rest_api.md) can be used with service accounts. There are two possibilities to use the API:
 

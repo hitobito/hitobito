@@ -25,17 +25,20 @@ class PersonResource < ApplicationResource
   has_many :phone_numbers,
     link: false,
     resource: PhoneNumberResource,
-    readable: :show_details_or_public?
+    readable: :show_details?,
+    writable: :write_details?
 
   has_many :social_accounts,
     link: false,
     resource: SocialAccountResource,
-    readable: :show_details_or_public?
+    readable: :show_details?,
+    writable: :write_details?
 
   has_many :additional_emails,
     link: false,
     resource: AdditionalEmailResource,
-    readable: :show_details_or_public?
+    readable: :show_details?,
+    writable: :write_details?
 
   has_many :roles,
     link: false,
@@ -61,9 +64,5 @@ class PersonResource < ApplicationResource
     # no model_instance method argument is given when writable is called,
     # so we have to access current entry by controller context
     can?(:show_details, context.entry)
-  end
-
-  def show_details_or_public(model_instance)
-    show_details?(model_instance) || model_instance.public?
   end
 end

@@ -25,4 +25,12 @@ module ContactableResource
       end
     end
   end
+
+  def show_details?(model_instance)
+    can?(:show_details, model_instance)
+  end
+
+  def show_details_or_public?(model_instance)
+    show_details?(model_instance) || model_instance.public?
+  end
 end

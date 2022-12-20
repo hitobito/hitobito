@@ -8,5 +8,5 @@
 class PhoneNumberResource < ApplicationResource
   include ContactableResource
 
-  attribute :number, :string
+  attribute :number, :string, readable: :show_details_or_public?
 end

@@ -8,5 +8,5 @@
 class AdditionalEmailResource < ApplicationResource
   include ContactableResource
 
-  attribute :email, :string
+  attribute :email, :string, readable: :show_details_or_public?
 end

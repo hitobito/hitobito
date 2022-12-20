@@ -16,6 +16,12 @@
     font-size: 14px;
   }
 
+  pre {
+    background-color: $gray;
+    border-radius: 6px;
+    padding: 10px;
+  }
+
   code {
     padding: .2em .4em;
     margin: 0;

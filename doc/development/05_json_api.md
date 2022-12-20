@@ -114,7 +114,7 @@ curl -X 'PATCH' \
 }'
 ```
 
-Response
+Response **200 OK**
 
 ```json
 {

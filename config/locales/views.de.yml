@@ -1209,7 +1209,7 @@ de:
       title: Qualifikationsart erstellen
 
   paper_trail/version_decorator:
-    by: 'von %{author}'
+    by: 'geändert durch %{author}'
 
   person_duplicates:
     merge:

@@ -8,16 +8,25 @@
 module PaperTrail
   class VersionDecorator < ApplicationDecorator
 
-    def header
+    def header(include_changed_object: false)
+      fields = [created_at]
       if author
-        [created_at, translate(:by, author: author)].join(h.tag(:br)).html_safe
-      else
-        created_at
+        fields = fields + [translate(:by, author: author)]
       end
+      if include_changed_object
+        fields = [changed_object] + fields
+      end
+      fields.join(h.tag(:br)).html_safe
     end
 
     def created_at
       h.l(model.created_at, format: :long)
+    end
+
+    def changed_object
+      if model.main.present? && model.main_type == 'Person'
+        h.link_to_if(can?(:show, model.main), model.main.to_s, h.person_path(model.main.id))
+      end
     end
 
     def author

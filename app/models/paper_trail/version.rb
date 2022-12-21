@@ -33,5 +33,10 @@ module PaperTrail
 
     belongs_to :main, polymorphic: true
 
+    # Scoped association for joining roles
+    belongs_to :role, -> do
+      Role.with_deleted { where("#{PaperTrail::Version.table_name}": { item_type: Role.sti_name }) }
+    end, foreign_key: 'item_id'
+
   end
 end

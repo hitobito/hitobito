@@ -6,13 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class Group
+  class Group < Base
     class Log < Base
+
       self.parent_sheet = Sheet::Group
 
-      def model_name
-        'group'
-      end
     end
   end
 end

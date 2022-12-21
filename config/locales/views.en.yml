@@ -927,7 +927,7 @@ en:
     new:
       title: Create qualification kind
   paper_trail/version_decorator:
-    by: 'from %{author}'
+    by: 'changed by %{author}'
   person_duplicates:
     merge:
       new:

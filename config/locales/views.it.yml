@@ -1114,7 +1114,7 @@ it:
     new:
       title: Creare il tipo di qualifica
   paper_trail/version_decorator:
-    by: 'da %{author}'
+    by: 'cambiato da %{author}'
   person_duplicates:
     merge:
       new:

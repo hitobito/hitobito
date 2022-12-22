@@ -18,12 +18,6 @@ module ContactableResource
 
     attribute :contactable_id, :integer
     attribute :contactable_type, :string
-
-    polymorphic_belongs_to :contactable do
-      group_by(:contactable_type) do
-        on(:Person)
-      end
-    end
   end
 
   def show_details?(model_instance)

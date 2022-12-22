@@ -260,13 +260,6 @@ Response **200 OK**
         "contactable_id": 48,
         "contactable_type": "Person",
         "number": "+41 79 733 58 42"
-      },
-      "relationships": {
-        "contactable": {
-          "meta": {
-            "included": false
-          }
-        }
       }
     }
   ],

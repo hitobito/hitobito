@@ -1372,6 +1372,38 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(email.email).to eq('changed.hitobito@example.com')
         end
+
+        it 'creates new contactable on person update' do
+          person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
+          @person_id = person.id
+
+          params[:data][:relationships] = {
+            additional_emails: {
+              data: [{
+                type: 'additional_emails',
+                method: 'create',
+              }]
+            }
+          }
+          params[:included] = [
+            {
+              type: 'additional_emails',
+              attributes: {
+                label: 'Ds Grosi',
+                contactable_type: 'additional_emails',
+                email: 'new.hitobito@example.com'
+              }
+            }
+          ]
+
+          jsonapi_patch "/api/people/#{@person_id}", params
+
+          expect(response).to have_http_status(200)
+
+          person.reload
+
+          expect(person.additional_emails.first.email).to eq('new.hitobito@example.com')
+        end
       end
     end
   end

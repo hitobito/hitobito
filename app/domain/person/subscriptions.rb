@@ -30,7 +30,7 @@ class Person::Subscriptions
   end
 
   def from_groups
-    return Subscription.none unless @person.roles.present?
+    return Subscription.none unless @person.roles.without_archived.present?
 
     sql = <<~SQL
       related_role_types.role_type = ? AND
@@ -40,7 +40,7 @@ class Person::Subscriptions
     SQL
 
     condition = OrCondition.new
-    @person.roles.each do |role|
+    @person.roles.without_archived.each do |role|
       condition.or(sql, role.type, role.group.lft, role.group.rgt, @person.tag_ids)
     end
 

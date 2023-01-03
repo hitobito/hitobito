@@ -109,14 +109,18 @@ class Person::Filter::Role < Person::Filter::Base
   def deleted_roles_join
     <<~SQL.split.map(&:strip).join(' ')
       INNER JOIN roles ON
-        (roles.person_id = people.id AND roles.deleted_at IS NOT NULL)
+        (roles.person_id = people.id AND
+         roles.deleted_at IS NOT NULL AND
+         roles.deleted_at <= '#{Time.now.utc.to_s(:db)}')
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
   end
 
   def active_roles_join
     <<~SQL.split.map(&:strip).join(' ')
-      INNER JOIN roles ON roles.person_id = people.id
+      INNER JOIN roles ON roles.person_id = people.id AND
+                          (roles.deleted_at IS NULL OR
+                           roles.deleted_at > '#{Time.now.utc.to_s(:db)}')
       INNER JOIN #{Group.quoted_table_name} ON roles.group_id = #{Group.quoted_table_name}.id
     SQL
   end

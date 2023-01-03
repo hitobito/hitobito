@@ -34,7 +34,7 @@ class PersonLayerWritables < PersonFetchables
     if conditions.present?
       Person.only_public_data.
         joins(roles: :group).
-        where(roles: { deleted_at: nil }, groups: { deleted_at: nil }).
+        where(groups: { deleted_at: nil }).
         where(conditions.to_a).
         distinct
     else

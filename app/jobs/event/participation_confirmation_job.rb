@@ -52,7 +52,7 @@ class Event::ParticipationConfirmationJob < BaseJob
                              .uniq
     Person.only_public_data
           .joins(roles: :group)
-          .where(roles: { type: approver_types, deleted_at: nil },
+          .where(roles: { type: approver_types },
                  groups: { layer_group_id: layer_ids })
           .distinct
   end

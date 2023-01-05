@@ -31,22 +31,27 @@ class JsonApiController < ActionController::API
 
   register_exception CanCan::AccessDenied,
     status: 403,
-    title: 'Access denied',
+    title: I18n.t('errors.403.title'),
     message: ->(error) { I18n.t('errors.403.explanation') }
 
   register_exception JsonApiUnauthorized,
     status: 401,
-    title: 'Login required',
+    title: I18n.t('errors.401.title'),
     message: ->(error) { I18n.t('errors.401.explanation') }
 
   register_exception ActiveRecord::RecordNotFound,
     status: 404,
-    title: 'Resource not found',
+    title: I18n.t('errors.404.title'),
     message: ->(error) { I18n.t('errors.404.explanation') }
 
   register_exception JsonApiInvalidMediaType,
     status: 415,
     title: 'Invalid request format'
+
+  register_exception Graphiti::Errors::UnsupportedPageSize,
+    status: 422,
+    title: I18n.t('errors.unsupported_page_size.title'),
+    message: ->(error) { I18n.t('errors.unsupported_page_size.explanation', size: error.instance_variable_get(:@size), max: error.instance_variable_get(:@max)) }
 
   def authenticate_person!(*args)
     if user_session?

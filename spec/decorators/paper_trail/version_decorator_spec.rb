@@ -33,7 +33,7 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
       it do
         is_expected.to match(
-          /^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>von <a href=".+">#{person}<\/a>$/
+          /^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>geändert durch <a href=".+">#{person}<\/a>$/
         )
       end
     end

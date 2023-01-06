@@ -337,9 +337,9 @@ describe Person::Filter::Role do
           expect(filter(start_at: now).entries).to be_empty
         end
 
-        it 'finds role deleted within range' do
+        it 'does not find role deleted within range' do
           role.update(deleted_at: now)
-          expect(filter(start_at: now, finish_at: now).entries).to have(1).item
+          expect(filter(start_at: now, finish_at: now).entries).to be_empty
         end
 
         it 'finds role created within range' do

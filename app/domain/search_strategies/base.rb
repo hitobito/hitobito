@@ -92,8 +92,8 @@ module SearchStrategies
     def load_deleted_people_ids
       Person.where('NOT EXISTS (SELECT * FROM roles ' \
                    "WHERE (roles.deleted_at IS NULL OR
-                           roles.deleted_at > '#{Time.now.utc.to_s(:db)}') AND
-                          roles.person_id = people.id)")
+                           roles.deleted_at > :now) AND
+                          roles.person_id = people.id)", now: Time.now.utc.to_s(:db))
             .pluck(:id)
     end
 

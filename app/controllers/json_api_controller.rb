@@ -51,7 +51,9 @@ class JsonApiController < ActionController::API
   register_exception Graphiti::Errors::UnsupportedPageSize,
     status: 422,
     title: I18n.t('errors.unsupported_page_size.title'),
-    message: ->(error) { I18n.t('errors.unsupported_page_size.explanation', size: error.instance_variable_get(:@size), max: error.instance_variable_get(:@max)) }
+    message: ->(error) { I18n.t('errors.unsupported_page_size.explanation',
+                                size: error.instance_variable_get(:@size),
+                                max: error.instance_variable_get(:@max)) }
 
   def authenticate_person!(*args)
     if user_session?

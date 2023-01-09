@@ -69,6 +69,7 @@ TAGS
 .generators
 .idea
 .pry_history
+.pry-history
 .project
 
 # for experiments with webpack

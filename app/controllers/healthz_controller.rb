@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2017-2022, Hitobito AG. This file is part of
+#  Copyright (c) 2017-2023, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,6 +19,6 @@ class HealthzController < ActionController::Base
   private
 
   def app_status
-    @app_status ||= AppStatus::Store.new
+    @app_status ||= AppStatus::Truemail.new(AppStatus.auth_token == params[:token])
   end
 end

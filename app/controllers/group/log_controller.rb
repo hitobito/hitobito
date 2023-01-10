@@ -42,7 +42,7 @@ class Group::LogController < ApplicationController
     versions[:item_type].eq(Role.sti_name).
       and(versions[:event].eq('destroy')).
       and(roles[:group_id].in(relevant_groups.map(&:id))).
-      and(roles[:deleted_at].lt(Time.now))
+      and(roles[:deleted_at].lteq(Time.now))
   end
 
   def active_people

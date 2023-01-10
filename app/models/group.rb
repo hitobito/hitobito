@@ -46,6 +46,7 @@ class Group < ActiveRecord::Base
   include Group::Types
   include Contactable
   include ValidatedEmail
+  include Globalized
 
   acts_as_paranoid
   extend Paranoia::RegularScope
@@ -66,6 +67,8 @@ class Group < ActiveRecord::Base
   self.superior_attributes = []
 
   attr_readonly :type
+
+  translates :privacy_policy_title
 
   ### CALLBACKS
 
@@ -124,6 +127,7 @@ class Group < ActiveRecord::Base
   validates :address, length: { allow_nil: true, maximum: 1024 }
   validates :contact, permission: :show_full, allow_blank: true, if: :contact_id_changed?
   validates :contact, inclusion: { in: ->(group) { group.people.members } }, allow_nil: true
+  validates :privacy_policy_title, length: { allow_nil: true, maximum: 64 }
 
   validate :assert_valid_self_registration_notification_email
 

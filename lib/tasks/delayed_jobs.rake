@@ -15,7 +15,8 @@ namespace :delayed_job do
     end
   end
 
-  task clear: [:environment] do
+  desc 'Clear all scheduled Background-Jobs'
+  task clear: [:environment, :'db:abort_if_pending_migrations'] do
     Delayed::Job.delete_all
   end
 

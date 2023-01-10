@@ -54,6 +54,8 @@ class Group < ActiveRecord::Base
   mount_uploader :carrierwave_logo, Group::LogoUploader, mount_on: 'logo'
   has_one_attached :logo
 
+  has_one_attached :privacy_policy
+
   ### ATTRIBUTES
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
@@ -283,6 +285,16 @@ class Group < ActiveRecord::Base
 
     unless valid_email?(self_registration_notification_email)
       errors.add(:self_registration_notification_email, :invalid)
+    end
+  end
+
+  def remove_privacy_policy
+    false
+  end
+
+  def remove_privacy_policy=(deletion_param)
+    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+      privacy_policy.purge_later
     end
   end
 

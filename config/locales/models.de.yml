@@ -486,6 +486,9 @@ de:
         self_registration_link: Externe Registrierung
         self_registration_notification_email: Externe Registrierung Benachrichtigungs-E-Mail
         remove_logo: Aktuelles Gruppenlogo entfernen
+        privacy_policy_title: DSE/Datenschutzerklärung Titel
+        privacy_policy: DSE/Datenschutzerklärung
+        remove_privacy_policy: DSE/Datenschutzerklärung entfernen
 
       event:
         group_ids: Gruppen

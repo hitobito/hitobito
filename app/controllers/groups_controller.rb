@@ -12,6 +12,9 @@ class GroupsController < CrudController
   # Respective group attrs are added in corresponding instance method.
   self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup + [:logo,
                                                               :remove_logo,
+                                                              :privacy_policy_title,
+                                                              :privacy_policy,
+                                                              :remove_privacy_policy,
                                                               :self_registration_role_type,
                                                               :self_registration_notification_email]
 

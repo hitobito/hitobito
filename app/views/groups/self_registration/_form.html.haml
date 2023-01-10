@@ -14,3 +14,7 @@
       = fields.labeled_input_fields :company_name, :company
       = fields.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
       = render_extensions :additional_person_fields, locals: { fields: fields }
+
+      - if Group::PrivacyPolicyFinder.for(group: @group).any?
+        - Group::PrivacyPolicyFinder.for(group: @group).privacy_policies.each do |policy|
+          = link_to(policy[:title], upload_url(policy[:policy], :privacy_policy), target: :blank)

@@ -12,6 +12,10 @@ year=$(date +%Y)
 file=$1
 
 
+if [[ ! -r $file ]]; then
+  exit
+fi
+
 # echo "Updating Copyright in $file to $year"
 # Copyright (c) 2018,
 # Copyright (c) 2018-2022,

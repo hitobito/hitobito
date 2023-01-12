@@ -22,7 +22,7 @@ module TableDisplays
 
     # Allows a column class to specify which database columns need to be fetched for calculating the
     # value
-    def required_model_attrs(attr)
+    def required_model_attrs(_attr)
       raise 'implement in subclass'
     end
 
@@ -30,6 +30,7 @@ module TableDisplays
       target, target_attr = resolve(object, attr)
       if target.present? && target_attr.present? && allowed?(target, target_attr)
         return target, target_attr unless block_given?
+
         yield target, target_attr
       end
     end
@@ -40,7 +41,7 @@ module TableDisplays
 
     # The column class may specify how to sort, by returning a SQL string. Default nil means the
     # column is not sortable.
-    def sort_by(attr)
+    def sort_by(_attr)
       nil
     end
 
@@ -64,7 +65,7 @@ module TableDisplays
 
     protected
 
-    def required_permission(attr)
+    def required_permission(_attr)
       raise 'implement in subclass'
     end
 

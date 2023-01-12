@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2019-2022, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: table_displays
@@ -44,8 +47,9 @@ class TableDisplay < ActiveRecord::Base
 
   def self.for(person, table_model_class = nil)
     person_id = person.try(:id) || person
-    self.find_or_initialize_by(person_id: person_id, table_model_class: table_model_class.to_s)
-        .allow_only_known_attributes!
+
+    find_or_initialize_by(person_id: person_id, table_model_class: table_model_class.to_s)
+      .allow_only_known_attributes!
   end
 
   def self.active_columns_for(person, model_class, list = [])

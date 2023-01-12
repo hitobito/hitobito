@@ -1796,6 +1796,7 @@ de:
     household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
     remove_from_household: "%{item} wurde vom Haushalt (%{object_changes}) entfernt."
     person_merge: "Zwei Personen wurden in diesen Eintrag zusammengeführt. Gelöschte Person:"
+    deleted_service_token: "Inzwischen gelöschtes %{model_name}"
 
   tags/merge:
     success: Die Tags wurden erfolgreich zusammengeführt.

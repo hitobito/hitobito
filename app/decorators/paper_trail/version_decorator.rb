@@ -41,11 +41,13 @@ module PaperTrail
 
     def author_service_token(author_id)
       token = ServiceToken.where(id: author_id).first
+      prefix = ServiceToken.model_name.human
       if token
         layer_id = token.layer_group_id
-        prefix = ServiceToken.model_name.human
         label = "#{prefix}: #{token}"
         h.link_to_if(can?(:show, token), label, h.group_service_token_path(layer_id, token.id))
+      else
+        I18n.t('version.deleted_service_token', model_name: prefix)
       end
     end
 

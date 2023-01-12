@@ -9,14 +9,14 @@ class Groups::SelfRegistrationController < CrudController
   skip_authorization_check
   skip_authorize_resource
 
-  after_create :success_but_no_email, unless: :email_present?
-  after_create :send_password_reset_email, if: :email_present?
+  after_create :send_notification_email, if: :valid?
+  after_save :set_success_notice, if: :valid?
+  after_create :set_failure_notice, unless: :valid?
 
   before_action :assert_empty_honeypot, only: [:create]
 
   before_action :redirect_to_group_if_necessary
-
-  after_create :send_notification_email
+  prepend_before_action :policy_finder
 
   delegate :self_registration_active?, to: :group
 
@@ -39,23 +39,38 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def save_entry
+    unless privacy_policy_accepted?
+      set_failure_notice
+      return false
+    end
+
     ActiveRecord::Base.transaction do
-      entry.person.save!
-      entry.save!
+      entry.save if entry.person.save
     end
   end
 
   def return_path
-    super.presence || new_person_session_path if valid?
+    if valid?
+      super.presence || new_person_session_path
+    else
+      group_self_registration_path(group)
+    end
   end
 
-  def success_but_no_email
-    flash[:notice] = I18n.t('devise.registrations.signed_up_but_no_email')
+  def set_success_notice
+    if entry.person.email.present?
+      Person.send_reset_password_instructions(email: entry.person.email)
+      flash[:notice] = I18n.t('devise.registrations.signed_up_but_unconfirmed')
+    else
+      flash[:notice] = I18n.t('devise.registrations.signed_up_but_no_email')
+    end
   end
 
-  def send_password_reset_email
-    Person.send_reset_password_instructions(email: entry.person.email)
-    flash[:notice] = I18n.t('devise.registrations.signed_up_but_unconfirmed')
+  def error_messages
+    errors = []
+    errors += entry.person.errors.full_messages
+    errors << t('.flash.privacy_policy_not_accepted') unless privacy_policy_accepted?
+    @@helper.safe_join(errors, '<br/>'.html_safe)
   end
 
   def assert_empty_honeypot
@@ -74,21 +89,32 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def valid?
-    entry.valid? && entry.person.valid?
+     privacy_policy_accepted? && entry.valid? && entry.person.valid?
   end
 
-  def email_present?
-    entry.person.email.present?
+  def privacy_policy_accepted?
+    return true unless @policy_finder.acceptance_needed?
+
+    true?(privacy_policy_param)
   end
 
   def person_attrs
-    model_params&.delete(:new_person)
-      &.permit(*PeopleController.permitted_attrs)
+    model_params&.require(:new_person)
+      &.permit(*PeopleController.permitted_attrs, :privacy_policy_accepted)
       &.merge(primary_group_id: group.id)
   end
 
+  def privacy_policy_param
+    model_params&.require(:new_person)[:privacy_policy_accepted]
+  end
+
+
   def group
     @group ||= Group.find(params[:group_id])
+  end
+
+  def policy_finder
+    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group, person: entry.person)
   end
 
   def authenticate?

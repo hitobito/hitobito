@@ -15,6 +15,8 @@
       = fields.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
       = render_extensions :additional_person_fields, locals: { fields: fields }
 
-      - if Group::PrivacyPolicyFinder.for(group: @group).any?
-        - Group::PrivacyPolicyFinder.for(group: @group).privacy_policies.each do |policy|
-          = link_to(policy[:title], upload_url(policy[:policy], :privacy_policy), target: :blank)
+      - if @policy_finder.acceptance_needed?
+        = field_set_tag(nil, class: 'privacy-policy-fields') do
+          = fields.boolean_field(:privacy_policy_accepted, caption: t('.privacy_policy_caption'))
+          - @policy_finder.groups.each do |group|
+            = link_to(icon('file-alt') + group.privacy_policy_title, upload_url(group, :privacy_policy), target: :blank)

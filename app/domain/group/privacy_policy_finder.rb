@@ -7,24 +7,29 @@
 
 class Group::PrivacyPolicyFinder
 
-  def initialize(group)
+  def initialize(group, person)
     @group = group
+    @person = person
   end
 
-  def self.for(group: nil)
-    new(group)
+  def self.for(group: nil, person: nil)
+    new(group, person)
   end
 
-  def any?
-    @group.layer_hierarchy.any? do |g|
+  def acceptance_needed?
+    !already_accepted? && groups.any?
+  end
+
+  def groups
+    @group.layer_hierarchy.select do |g|
       g.privacy_policy.present?
     end
   end
 
-  def privacy_policies
-    @group.layer_hierarchy.map do |g|
-      g.privacy_policy
-    end
+  private
+  
+  def already_accepted?
+    @person.privacy_policy_accepted?
   end
 
 end

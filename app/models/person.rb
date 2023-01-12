@@ -295,6 +295,22 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### ATTRIBUTE INSTANCE METHODS
 
+  def privacy_policy_accepted
+    privacy_policy_accepted?
+  end
+
+  def privacy_policy_accepted?
+    privacy_policy_accepted_at.present?
+  end
+
+  def privacy_policy_accepted=(value)
+    if value.to_s == "0"
+      self.privacy_policy_accepted_at = nil
+    else
+      self.privacy_policy_accepted_at = Time.now.utc
+    end
+  end
+
   def to_s(format = :default)
     if company?
       company_name

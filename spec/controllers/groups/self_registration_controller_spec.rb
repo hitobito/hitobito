@@ -113,6 +113,57 @@ describe Groups::SelfRegistrationController do
           group.update!(self_registration_role_type: Group::TopGroup::Member.sti_name)
         end
 
+        context 'with privacy policies in hierarchy' do
+          before do
+            file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
+            image = ActiveStorage::Blob.create_after_upload!(io: File.open(file, 'rb'),
+                                                             filename: 'logo.png',
+                                                             content_type: 'image/png').signed_id
+            group.layer_group.update(privacy_policy: image)
+
+          end
+
+          it 'creates person and role if privacy policy is accepted' do
+            expect do
+              post :create, params: {
+                group_id: group.id,
+                role: {
+                  group_id: group.id,
+                  new_person: { first_name: 'Bob', last_name: 'Miller', privacy_policy_accepted: '1' }
+                }
+              }
+            end.to change { Person.count }.by(1)
+              .and change { Role.count }.by(1)
+              .and change { ActionMailer::Base.deliveries.count }.by(0)
+
+            person = Person.find_by(first_name: 'Bob', last_name: 'Miller')
+            role = person.roles.first
+
+            expect(person.primary_group).to eq(group)
+            expect(person.full_name).to eq('Bob Miller')
+            expect(role.type).to eq(Group::TopGroup::Member.sti_name)
+            expect(role.group).to eq(group)
+
+            is_expected.to redirect_to(new_person_session_path)
+          end
+
+          it 'does not create a person if privacy policy is not accepted' do
+            expect do
+              post :create, params: {
+                group_id: group.id,
+                role: {
+                  group_id: group.id,
+                  new_person: { first_name: 'Bob', last_name: 'Miller', privacy_policy_accepted: '0' }
+                }
+              }
+            end.to change { Person.count }.by(0)
+              .and change { Role.count }.by(0)
+              .and change { ActionMailer::Base.deliveries.count }.by(0)
+
+            expect(flash[:alert]).to include('a')
+          end
+        end
+
         it 'redirects to login if honeypot filled' do
           post :create, params: {
             group_id: group.id,
@@ -148,8 +199,8 @@ describe Groups::SelfRegistrationController do
         end
 
         it 'does not create a person when creating the role fails' do
-          allow_any_instance_of(Role).to receive(:save!)
-                                             .and_raise('test exception when saving role')
+          allow_any_instance_of(Role).to receive(:save)
+                                     .and_raise('test exception when saving role')
 
           expect do
             post :create, params: {

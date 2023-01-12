@@ -68,3 +68,24 @@ TableDisplay.register_multi_column(Event::Participation,
 
 Multi-columns can only be registered one at a time, because each multi-column
 can produce multiple actual columns.
+
+## ColumnTypes
+
+(as found in core)
+
+- SimpleColumns
+  - PublicColumn
+    - uses `:show` Permission
+    - fetches `contact_data_visible` to determine showable data
+  - ShowFullColumn
+    - uses `:show_full` Permission
+  - People::LayerGroupLabelColumn
+    - uses `:show` Permission
+    - renders the layer_group correctly
+  - People::LoginStatusColumn
+    - uses `:show` Permission
+    - fetches everything needed to determine the login_status (has login/has 2FA/...)
+- MultiColumns
+  - Event::Participations::QuestionColumn
+    - uses `:update` Permission on the Event or `:show_full` Permission on the Person
+    - renders questions and answers of an event

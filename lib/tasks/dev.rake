@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2019-2022, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2023, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
@@ -20,7 +20,7 @@ namespace :dev do
     end
 
     desc 'Introspect oauth token'
-    task :introspect, [:access_token, :token] do |_, args|
+    task :introspect, [:access_token, :token] do |_, args| # rubocop:disable Rails/RakeEnvironment
       access_token = args.fetch(:access_token)
       token = args.fetch(:token, access_token)
       sh <<-BASH.strip_heredoc
@@ -32,7 +32,7 @@ namespace :dev do
     end
 
     desc 'Obtain profile information'
-    task :profile, [:access_token, :scope] do |_, args|
+    task :profile, [:access_token, :scope] do |_, args| # rubocop:disable Rails/RakeEnvironment
       access_token = args.fetch(:access_token)
       sh <<-BASH.strip_heredoc
         curl -v -H 'Accept: application/json' \
@@ -67,21 +67,20 @@ namespace :dev do
 
       MESSAGE
 
-      # TODO: try more groups for roles, anything in the top-layer would work
       root = Group.roots.first
-
-      admins = root.class.roles.select { |r| r.permissions.include?(:admin) }
-      impersonators = root.class.roles.select { |r| r.permissions.include?(:impersonation) }
-      accessors = root.class.roles.select { |r| r.permissions.include?(:layer_and_below_full) }
-
-      best = (admins & impersonators & accessors)
-      role_types = [best.first] || admins + impersonators + accessors
-
+      permissions = [:admin, :impersonation, :layer_and_below_full]
       existing_role_types = me.roles.pluck(:type).map(&:to_s)
-      role_types.each do |role_type|
+
+      powerful_roles = Group.where(layer_group_id: root.layer_group_id).flat_map do |group|
+        permissions.flat_map do |permission|
+          group.class.roles.select { |r| r.permissions.include?(permission) }
+        end.uniq.compact.product([group.id])
+      end
+
+      powerful_roles.each do |role_type, role_group_id|
         next if existing_role_types.include?(role_type.to_s)
 
-        me.roles << Role.new(type: role_type, group: root)
+        me.roles << Role.new(type: role_type, group_id: role_group_id)
       end
 
       me.reload # clear out invalid roles

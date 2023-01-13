@@ -1036,12 +1036,6 @@ fr:
         key: Clef
         abilities: Droits
         last_access: Dernier accès
-        people: Membres de ce niveau
-        groups: Groupes de ce niveau et des niveaux inférieurs
-        events: Évènements de ce niveau et des niveaux inférieurs
-        invoices: Factures de ce niveau
-        event_participations: Participants d'évènements de ce niveau
-        mailing_lists: Abonné-e-s des mailing listes de ce niveau
         cors_origins: ordinateurs hôte avec accès via une interface
       acts_as_taggable_on/tag:
         taggings_count: Nombre

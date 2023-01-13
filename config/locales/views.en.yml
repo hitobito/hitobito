@@ -243,12 +243,6 @@ en:
       title: 'Sorry, page is currently not available (503)'
       explanation: 'We are working on this page, so it is not available. This should not take too long.'
       instruction: 'Please try again later.'
-    '403':
-      title: 'Access denied'
-      explanation: 'You are not allowed to access this resource.'
-    '401':
-      title: 'Login required'
-      explanation: 'You need to login before accessing this resource.'
   export/tabular/events/list:
     group_names: 'Organizers'
     duration: Duration

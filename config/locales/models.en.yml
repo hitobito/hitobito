@@ -898,12 +898,6 @@ en:
         key: Key
         abilities: Abilities
         last_access: Last access
-        people: Persons at this level
-        groups: Groups at this and all lower levels
-        events: Events at this and all lower levels
-        invoices: Invoices at this level
-        event_participations: Participants of events at this level
-        mailing_lists: Subscribers of mailing lists at this level
         cors_origins: Hosts with API access
       acts_as_taggable_on/tag:
         taggings_count: Number

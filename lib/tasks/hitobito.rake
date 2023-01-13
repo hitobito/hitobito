@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -32,6 +32,30 @@ namespace :hitobito do
            "#{c.subject_class.to_s.ljust(24)}\t" \
            "#{c.action.to_s.ljust(25)}\t" \
            "#{c.constraint}"
+    end
+  end
+
+  desc 'Check existence of needed configurations and settings'
+  task check_config: [
+    'hitobito:checks:oauth'
+  ]
+
+  namespace :checks do
+    task oauth: :environment do
+      signing_key = Settings.oidc.signing_key.join.presence
+
+      if signing_key.nil?
+        puts <<~MESSAGE
+          ❌ OAuth not correctly configured
+
+            JWT Signing Key missing.
+            This key is needed to OAuth to work.
+            See doc/development/08_oauth.md for details
+
+        MESSAGE
+      else
+        puts '✅ OAuth configured'
+      end
     end
   end
 end

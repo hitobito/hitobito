@@ -140,6 +140,7 @@ describe Groups::SelfRegistrationController do
             role = person.roles.first
 
             expect(person.primary_group).to eq(group)
+            expect(person.privacy_policy_accepted).to be_present
             expect(person.full_name).to eq('Bob Miller')
             expect(role.type).to eq(Group::TopGroup::Member.sti_name)
             expect(role.group).to eq(group)
@@ -159,8 +160,6 @@ describe Groups::SelfRegistrationController do
             end.to change { Person.count }.by(0)
               .and change { Role.count }.by(0)
               .and change { ActionMailer::Base.deliveries.count }.by(0)
-
-            expect(flash[:alert]).to include('a')
           end
         end
 

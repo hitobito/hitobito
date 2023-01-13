@@ -38,3 +38,9 @@
                                   class: 'span6')
 
 = render_extensions :fields, locals: { f: f }
+
+- if @policy_finder.acceptance_needed?
+  = field_set_tag(nil, class: 'privacy-policy-fields') do
+    = f.boolean_field(:privacy_policy_accepted, caption: 'Akzeptier:')
+    - @policy_finder.groups.each do |group|
+      = link_to(icon('file-alt') + group.privacy_policy_title, upload_url(group, :privacy_policy), target: :blank)

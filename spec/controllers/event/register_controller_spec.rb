@@ -140,6 +140,37 @@ describe Event::RegisterController do
 
   context 'PUT register' do
     context 'with valid data' do
+      context 'with privacy policies in hierarchy' do
+        before do
+          file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
+          image = ActiveStorage::Blob.create_after_upload!(io: File.open(file, 'rb'),
+                                                           filename: 'logo.png',
+                                                           content_type: 'image/png').signed_id
+          group.layer_group.update(privacy_policy: image)
+
+        end
+
+        it 'creates person if privacy policy is accepted' do
+          event.update!(required_contact_attrs: [])
+
+          expect do
+            put :register, params: { group_id: group.id, id: event.id, event_participation_contact_data: { first_name: 'barney', last_name: 'foo', email: 'not-existing@example.com', privacy_policy_accepted: '1' } }
+          end.to change { Person.count }.by(1)
+
+          person = Person.find_by(email: 'not-existing@example.com')
+          expect(person.privacy_policy_accepted).to be_present
+          is_expected.to redirect_to(new_group_event_participation_path(group, event))
+          expect(flash[:notice]).to include 'Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben'
+        end
+
+        it 'does not create a person if privacy policy is not accepted' do
+          event.update!(required_contact_attrs: [])
+
+          expect do
+            put :register, params: { group_id: group.id, id: event.id, event_participation_contact_data: { first_name: 'barney', last_name: 'foo', email: 'not-existing@example.com', privacy_policy_accepted: '0' } }
+          end.to_not change { Person.count }
+        end
+      end
       it 'creates person' do
         event.update!(required_contact_attrs: [])
 

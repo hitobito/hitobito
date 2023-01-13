@@ -416,6 +416,8 @@ de:
     register:
       register:
         title: Kontaktdaten der teilnehmenden Person erfassen
+        flash:
+          privacy_policy_not_accepted: Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
       index:
         sign_in: Anmelden
         login: Login

@@ -13,6 +13,8 @@ class Event::RegisterController < ApplicationController
   before_action :assert_external_application_possible
   before_action :assert_honeypot_is_empty, only: [:check, :register]
 
+  prepend_before_action :policy_finder
+
   def index
     deprecated_action # should be public_events#show
     session[:person_return_to] = show_event_path
@@ -46,6 +48,7 @@ class Event::RegisterController < ApplicationController
       flash[:notice] = translate(:registered)
       redirect_to new_group_event_participation_path(group, event)
     else
+      entry.errors.add(:base, t('.flash.privacy_policy_not_accepted')) unless privacy_policy_accepted?
       render 'register'
     end
   end
@@ -54,7 +57,7 @@ class Event::RegisterController < ApplicationController
 
   # NOTE: Wagon Hook - insieme
   def save_entry
-    entry.save
+    entry.valid? && privacy_policy_accepted? && entry.save
   end
 
   def assert_external_application_possible
@@ -85,7 +88,7 @@ class Event::RegisterController < ApplicationController
   end
 
   def model_params
-    params_key ? params.require(params_key).permit(PeopleController.permitted_attrs) : {}
+    params_key ? params.require(params_key).permit(*PeopleController.permitted_attrs, :privacy_policy_accepted) : {}
   end
 
   def params_key
@@ -118,5 +121,18 @@ class Event::RegisterController < ApplicationController
     true # hence, no login required
   end
 
+  def privacy_policy_accepted?
+    return true unless @policy_finder.acceptance_needed?
+
+    true?(privacy_policy_param)
+  end
+
+  def privacy_policy_param
+    model_params[:privacy_policy_accepted]
+  end
+
+  def policy_finder
+    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group, person: entry.person)
+  end
 
 end

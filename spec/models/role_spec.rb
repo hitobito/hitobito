@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -321,7 +321,6 @@ describe Role do
     end
   end
 
-
   describe 'paranoia scopes' do
     let(:person) { Fabricate(:person) }
 
@@ -382,4 +381,67 @@ describe Role do
       end
     end
   end
+
+  context 'nextcloud groups' do
+    let(:person) { Fabricate(:person) }
+    let(:group) { groups(:bottom_layer_one) }
+    subject do
+      r = described_class.new # Group::BottomLayer::Leader.new
+      r.type = 'Group::BottomLayer::Leader'
+      r.person = person
+      r.group = group
+      r
+    end
+
+    it 'have assumptions' do
+      expect(Settings.groups.nextcloud.enabled).to be true # in the test-env
+    end
+
+    describe 'role without mapping' do
+      before do
+        subject.class.nextcloud_group = false
+      end
+
+      it 'has a value of false' do
+        expect(subject.class.nextcloud_group).to be false
+      end
+
+      it 'does not return any nextcloud groups' do
+        expect(subject.nextcloud_group).to be_nil
+      end
+    end
+
+    describe 'role with constant mapping' do
+      before do
+        subject.class.nextcloud_group = 'Admins'
+      end
+
+      it 'has a String-value' do
+        expect(subject.class.nextcloud_group).to eq 'Admins'
+      end
+
+      it 'does not return any nextcloud groups' do
+        expect(subject.nextcloud_group).to eq('gid' => 'hitobito-Admins', 'displayName' => 'Admins')
+      end
+    end
+
+    describe 'role with dynamic mapping' do
+      let(:group) do
+        Group::GlobalGroup.new(id: 1024, name: 'Test', parent: groups(:top_layer))
+      end
+
+      before do
+        subject.class.nextcloud_group = true
+      end
+
+      it 'has a value of false' do
+        expect(subject.class.nextcloud_group).to be true
+      end
+
+      it 'does not return any nextcloud groups' do
+        expect(subject.nextcloud_group).to eq('gid' => '1024', 'displayName' => 'Test')
+      end
+    end
+  end
+
 end

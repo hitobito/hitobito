@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -53,6 +53,14 @@ class Role < ActiveRecord::Base
   # Attributes that are ignored when merging roles
   class_attribute :merge_excluded_attributes
   self.merge_excluded_attributes = []
+
+  FeatureGate.if('groups.nextcloud') do
+    # Can be either a string which is simply returned or a boolean.
+    # If true, then the attached Group should be referenced
+    # If false, no group for nextcloud is referenced
+    class_attribute :nextcloud_group
+    self.nextcloud_group = false
+  end
 
   # If these attributes should change, create a new role instance instead.
   attr_readonly :person_id, :group_id, :type
@@ -127,6 +135,15 @@ class Role < ActiveRecord::Base
 
   def archived?
     archived_at.present?
+  end
+
+  def nextcloud_group
+    FeatureGate.assert! 'groups.nextcloud'
+
+    case (setting = self.class.nextcloud_group)
+    when String then { 'gid' => "hitobito-#{setting}", 'displayName' => setting }
+    when true   then { 'gid' => group_id.to_s,         'displayName' => group.name }
+    end
   end
 
   private

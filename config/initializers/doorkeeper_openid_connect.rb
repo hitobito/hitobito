@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2019-2023, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 Doorkeeper::OpenidConnect.configure do
   issuer Settings.oidc.issuer
 
@@ -77,6 +84,16 @@ Doorkeeper::OpenidConnect.configure do
           role: role.class.model_name,
           role_name: role.class.model_name.human
         }
+      end
+    end
+
+    FeatureGate.if('groups.nextcloud') do
+      claim(:name, scope: :nextcloud)  { |resource_owner| resource_owner.to_s }
+
+      claim(:groups, scope: :nextcloud) do |resource_owner|
+        resource_owner.roles.includes(:group).map do |role|
+          role.nextcloud_group
+        end.compact
       end
     end
   end

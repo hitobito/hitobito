@@ -363,6 +363,9 @@ de:
         title: Kontaktangaben der teilnehmenden Person
         wizard_title: Kontaktangaben
         save: Weiter
+      update:
+        flash:
+          privacy_policy_not_accepted: 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
     participations:
       edit:
         title: Anmeldung

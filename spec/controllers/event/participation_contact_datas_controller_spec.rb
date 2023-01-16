@@ -17,6 +17,60 @@ describe Event::ParticipationContactDatasController do
   let(:entry)      { assigns(:participation_contact_data) }
 
   context 'PATCH#update' do
+    context 'with privacy policies in hierarchy' do
+      before do
+        file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
+        image = ActiveStorage::Blob.create_after_upload!(io: File.open(file, 'rb'),
+                                                         filename: 'logo.png',
+                                                         content_type: 'image/png').signed_id
+        group.layer_group.update(privacy_policy: image)
+
+      end
+
+      it 'creates person if privacy policy is accepted' do
+        course.update!(required_contact_attrs: [])
+
+        patch :update, params: {
+          group_id: group.id,
+          event_id: course.id,
+          event_participation_contact_data: {
+            email: top_leader.email,
+            first_name: top_leader.first_name,
+            last_name: 'NewName',
+            privacy_policy_accepted: '1'
+          },
+          event_role: {
+            type: 'Event::Role::Participant'
+          }
+        }
+
+        expect(entry).to have(0).errors
+        expect(top_leader.reload.privacy_policy_accepted).to be_present
+      end
+
+      it 'does not create a person if privacy policy is not accepted' do
+        course.update!(required_contact_attrs: [])
+
+        patch :update, params: {
+          group_id: group.id,
+          event_id: course.id,
+          event_participation_contact_data: {
+            email: top_leader.email,
+            first_name: top_leader.first_name,
+            last_name: 'NewName',
+            privacy_policy_accepted: '0'
+          },
+          event_role: {
+            type: 'Event::Role::Participant'
+          }
+        }
+
+        expect(entry).to have(1).errors
+        expect(entry.errors.full_messages).to eq(['Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'])
+        expect(top_leader.reload.privacy_policy_accepted).to_not be_present
+      end
+    end
+
     it 'validates default attrs' do
       # course.update(required_contact_attrs: %w(phone_numbers))
       patch :update, params: {

@@ -13,18 +13,19 @@ class Event::ParticipationContactDatasController < ApplicationController
 
   decorates :group, :event
 
-  before_action :set_entry, :group
+  before_action :set_entry, :group, :policy_finder
 
   def edit; end
 
   def update
-    if entry.save
+    if entry.valid? && privacy_policy_accepted? && entry.save
       redirect_to new_group_event_participation_path(
         group,
         event,
         event_role: { type: params[:event_role][:type] }
       )
     else
+      entry.errors.add(:base, t('.flash.privacy_policy_not_accepted')) unless privacy_policy_accepted?
       render :edit
     end
   end
@@ -61,7 +62,22 @@ class Event::ParticipationContactDatasController < ApplicationController
   end
 
   def permitted_attrs
-    PeopleController.permitted_attrs
+    PeopleController.permitted_attrs + [:privacy_policy_accepted]
+  end
+
+  def privacy_policy_accepted?
+    return true unless @policy_finder.acceptance_needed?
+
+    true?(privacy_policy_param)
+  end
+
+  def privacy_policy_param
+    model_params[:privacy_policy_accepted]
+  end
+
+  def policy_finder
+    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group,
+                                                      person: @participation_contact_data.person)
   end
 
 end

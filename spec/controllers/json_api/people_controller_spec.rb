@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2022-2023, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -35,7 +35,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
         expect(errors.first.status).to eq('401')
         expect(errors.first.title).to eq('Login benötigt')
-        expect(errors.first.detail).to eq('You need to login before accessing this resource.')
+        expect(errors.first.detail).to eq('Du must dich einloggen bevor du auf diese Resource zugreifen kannst.')
       end
     end
 
@@ -196,7 +196,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(errors.first.status).to eq('403')
           expect(errors.first.title).to eq('Zugriff verweigert')
-          expect(errors.first.detail).to eq('You are not allowed to access this resource.')
+          expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
         end
       end
     end
@@ -524,7 +524,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(errors.first.status).to eq('403')
           expect(errors.first.title).to eq('Zugriff verweigert')
-          expect(errors.first.detail).to eq('You are not allowed to access this resource.')
+          expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
         end
 
         it 'returns 403 in english if locale param set' do
@@ -539,7 +539,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(errors.first.status).to eq('403')
           expect(errors.first.title).to eq('Zugriff verweigert')
-          expect(errors.first.detail).to eq('You are not allowed to access this resource.')
+          expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
         end
 
         it 'returns person from token`s layer with layer_read permission' do
@@ -946,7 +946,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(errors.first.status).to eq('403')
           expect(errors.first.title).to eq('Zugriff verweigert')
-          expect(errors.first.detail).to eq('You are not allowed to access this resource.')
+          expect(errors.first.detail).to eq('Du bist nicht berechtigt auf diese Resource zuzugreifen.')
         end
 
         it 'returns 403 in german if locale param set' do

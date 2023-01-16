@@ -1630,6 +1630,10 @@ de:
     role_changed_to_group: '%{full_entry_label} zu <i>%{new_role}</i> in <i>%{new_group}</i> geändert.'
     role_primary_group_changed: 'Hauptgruppe auf <i>%{new_group}</i> geändert.'
 
+    create:
+      flash:
+        privacy_policy_not_accepted: Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
+
     form:
       add_person: Person hinzufügen
       add_role_for_person: Rolle für %{person} erstellen

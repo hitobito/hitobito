@@ -23,6 +23,56 @@ describe RolesController do
   end
 
   describe 'POST create' do
+    context 'with privacy policies in hierarchy' do
+      before do
+        file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
+        image = ActiveStorage::Blob.create_after_upload!(io: File.open(file, 'rb'),
+                                                         filename: 'logo.png',
+                                                         content_type: 'image/png').signed_id
+        group.layer_group.update(privacy_policy: image)
+
+      end
+
+      it 'creates person if privacy policy is accepted' do
+        expect do
+          post :create, params: {
+            group_id: group.id,
+            role: { group_id: group.id,
+                    person_id: nil,
+                    type: Group::TopGroup::Member.sti_name,
+                    new_person: { first_name: 'Bob',
+                                  last_name: 'Foo',
+                                  privacy_policy_accepted: '1' } }
+          }
+        end.to change { Person.count }.by(1)
+          .and change { Role.count }.by(1)
+
+        role = assigns(:role)
+        is_expected.to redirect_to(edit_group_person_path(group, role.person))
+
+        expect(role.group_id).to eq(group.id)
+        expect(flash[:notice]).to eq('Rolle <i>Member</i> für <i>Bob Foo</i> in <i>TopGroup</i> wurde erfolgreich erstellt.')
+        expect(role).to be_kind_of(Group::TopGroup::Member)
+        person = role.person
+        expect(person.first_name).to eq('Bob')
+        expect(person.privacy_policy_accepted).to be_present
+      end
+
+      it 'does not create a person if privacy policy is not accepted' do
+        expect do
+          post :create, params: {
+            group_id: group.id,
+            role: { group_id: group.id,
+                    person_id: nil,
+                    type: Group::TopGroup::Member.sti_name,
+                    new_person: { first_name: 'Bob',
+                                  last_name: 'Foo',
+                                  privacy_policy_accepted: '0' } }
+          }
+        end.to_not change { [Person.count, Role.count] }
+      end
+    end
+
     it 'new role for existing person redirects to people list' do
       post :create, params: {
                       group_id: group.id,

@@ -14,7 +14,7 @@ class RolesController < CrudController
   decorates :role, :group
 
   # load group before authorization
-  prepend_before_action :parent
+  prepend_before_action :parent, :policy_finder
 
   skip_authorize_resource only: [:details, :role_types]
 
@@ -33,6 +33,7 @@ class RolesController < CrudController
     with_person_add_request do
       new_person = entry.person.new_record?
       created = create_entry_and_person
+      entry.errors.add(:base, t('.flash.privacy_policy_not_accepted')) unless privacy_policy_accepted?
       respond_with(entry, success: created, location: after_create_location(new_person))
     end
   end
@@ -80,7 +81,7 @@ class RolesController < CrudController
     created = false
     Role.transaction do
       created = with_callbacks(:create, :save) do
-        (entry.person.persisted? || entry.person.save) && entry.save
+        (entry.person.persisted? || entry.person.save) && privacy_policy_accepted? && entry.save
       end
       raise ActiveRecord::Rollback unless created
     end
@@ -169,7 +170,7 @@ class RolesController < CrudController
       role.person_id = person_id
       role.person = Person.new unless role.person
     else
-      attrs = person_attrs.permit(*PeopleController.permitted_attrs)
+      attrs = person_attrs.permit(*PeopleController.permitted_attrs, :privacy_policy_accepted)
       role.person = Person.new(attrs)
     end
   end
@@ -251,6 +252,20 @@ class RolesController < CrudController
 
   def set_person_id
     @person_id = Role.with_deleted.find(params[:role_id]).person_id if params[:role_id]
+  end
+
+  def privacy_policy_accepted?
+    return true unless @policy_finder.acceptance_needed?
+
+    true?(privacy_policy_param)
+  end
+
+  def privacy_policy_param
+    extract_model_attr(:new_person)&[:privacy_policy_accepted]
+  end
+
+  def policy_finder
+    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: entry.group, person: entry.person)
   end
 
 end

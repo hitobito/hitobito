@@ -20,9 +20,9 @@ describe Event::ParticipationContactDatasController do
     context 'with privacy policies in hierarchy' do
       before do
         file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
-        image = ActiveStorage::Blob.create_after_upload!(io: File.open(file, 'rb'),
-                                                         filename: 'logo.png',
-                                                         content_type: 'image/png').signed_id
+        image = ActiveStorage::Blob.create_and_upload!(io: File.open(file, 'rb'),
+                                                       filename: 'logo.png',
+                                                       content_type: 'image/png').signed_id
         group.layer_group.update(privacy_policy: image)
 
       end

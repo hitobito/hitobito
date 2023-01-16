@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito_pbs.
 
 class Event::ParticipationContactDatasController < ApplicationController
+  include PrivacyPolicyAcceptable
 
   helper_method :group, :event, :entry
 
@@ -19,6 +20,8 @@ class Event::ParticipationContactDatasController < ApplicationController
 
   def update
     if entry.valid? && privacy_policy_accepted? && entry.save
+      set_privacy_policy_acceptance if privacy_policy_needed_and_accepted?
+
       redirect_to new_group_event_participation_path(
         group,
         event,
@@ -62,22 +65,14 @@ class Event::ParticipationContactDatasController < ApplicationController
   end
 
   def permitted_attrs
-    PeopleController.permitted_attrs + [:privacy_policy_accepted]
+    PeopleController.permitted_attrs
   end
 
-  def privacy_policy_accepted?
-    return true unless @policy_finder.acceptance_needed?
-
-    true?(privacy_policy_param)
+  def person
+    @person ||= entry.person
   end
 
   def privacy_policy_param
-    model_params[:privacy_policy_accepted]
+    params[:event_participation_contact_data][:privacy_policy_accepted]
   end
-
-  def policy_finder
-    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group,
-                                                      person: @participation_contact_data.person)
-  end
-
 end

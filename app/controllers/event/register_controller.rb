@@ -7,13 +7,12 @@
 
 class Event::RegisterController < ApplicationController
   include DeprecationHelper
+  include PrivacyPolicyAcceptable
 
   helper_method :resource, :entry, :group, :event
 
   before_action :assert_external_application_possible
   before_action :assert_honeypot_is_empty, only: [:check, :register]
-
-  prepend_before_action :policy_finder
 
   def index
     deprecated_action # should be public_events#show
@@ -44,6 +43,8 @@ class Event::RegisterController < ApplicationController
 
   def register
     if save_entry
+      set_privacy_policy_acceptance if privacy_policy_needed_and_accepted?
+
       sign_in(:person, entry.person)
       flash[:notice] = translate(:registered)
       redirect_to new_group_event_participation_path(group, event)
@@ -88,7 +89,7 @@ class Event::RegisterController < ApplicationController
   end
 
   def model_params
-    params_key ? params.require(params_key).permit(*PeopleController.permitted_attrs, :privacy_policy_accepted) : {}
+    params_key ? params.require(params_key).permit(*PeopleController.permitted_attrs) : {}
   end
 
   def params_key
@@ -121,18 +122,7 @@ class Event::RegisterController < ApplicationController
     true # hence, no login required
   end
 
-  def privacy_policy_accepted?
-    return true unless @policy_finder.acceptance_needed?
-
-    true?(privacy_policy_param)
-  end
-
   def privacy_policy_param
-    model_params[:privacy_policy_accepted]
+    params.require(params_key)[:privacy_policy_accepted]
   end
-
-  def policy_finder
-    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group, person: entry.person)
-  end
-
 end

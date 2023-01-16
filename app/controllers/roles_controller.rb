@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class RolesController < CrudController
+  include PrivacyPolicyAcceptable
 
   respond_to :js
 
@@ -14,7 +15,7 @@ class RolesController < CrudController
   decorates :role, :group
 
   # load group before authorization
-  prepend_before_action :parent, :policy_finder
+  prepend_before_action :parent
 
   skip_authorize_resource only: [:details, :role_types]
 
@@ -33,7 +34,7 @@ class RolesController < CrudController
     with_person_add_request do
       new_person = entry.person.new_record?
       created = create_entry_and_person
-      entry.errors.add(:base, t('.flash.privacy_policy_not_accepted')) unless privacy_policy_accepted?
+      person.errors.add(:base, t('.flash.privacy_policy_not_accepted')) if new_person && !privacy_policy_accepted?
       respond_with(entry, success: created, location: after_create_location(new_person))
     end
   end
@@ -81,7 +82,7 @@ class RolesController < CrudController
     created = false
     Role.transaction do
       created = with_callbacks(:create, :save) do
-        (entry.person.persisted? || entry.person.save) && privacy_policy_accepted? && entry.save
+        (entry.person.persisted? || (privacy_policy_accepted? && entry.person.save)) && entry.save
       end
       raise ActiveRecord::Rollback unless created
     end
@@ -140,7 +141,7 @@ class RolesController < CrudController
   def build_entry
     @group = find_group
     # delete unused attributes
-    extract_model_attr(:person)
+    model_params&.delete(:person)
 
     role = build_role
     role.group_id = @group.id
@@ -170,7 +171,7 @@ class RolesController < CrudController
       role.person_id = person_id
       role.person = Person.new unless role.person
     else
-      attrs = person_attrs.permit(*PeopleController.permitted_attrs, :privacy_policy_accepted)
+      attrs = person_attrs.permit(*PeopleController.permitted_attrs)
       role.person = Person.new(attrs)
     end
   end
@@ -187,7 +188,7 @@ class RolesController < CrudController
   end
 
   def extract_model_attr(attr)
-    model_params&.delete(attr)
+    model_params&.fetch(attr, nil)
   end
 
   # A label for the current entry, including the model name, used for flash
@@ -254,18 +255,16 @@ class RolesController < CrudController
     @person_id = Role.with_deleted.find(params[:role_id]).person_id if params[:role_id]
   end
 
-  def privacy_policy_accepted?
-    return true unless @policy_finder.acceptance_needed?
-
-    true?(privacy_policy_param)
-  end
-
   def privacy_policy_param
-    extract_model_attr(:new_person)&[:privacy_policy_accepted]
+    extract_model_attr(:new_person)&.fetch(:privacy_policy_accepted, nil)
   end
 
-  def policy_finder
-    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: entry.group, person: entry.person)
+  def person
+    entry.person
+  end
+
+  def group
+    entry.group
   end
 
 end

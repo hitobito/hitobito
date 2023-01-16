@@ -6,29 +6,19 @@
 #  https://github.com/hitobito/hitobito.
 
 class Groups::SelfRegistrationController < CrudController
+  include PrivacyPolicyAcceptable
+
   skip_authorization_check
   skip_authorize_resource
 
   before_action :assert_empty_honeypot, only: [:create]
-
   before_action :redirect_to_group_if_necessary
-  prepend_before_action :policy_finder
-
-  after_create :send_notification_email, if: :valid?
-  after_save :set_privacy_policy_acceptance, if: :privacy_policy_needed_and_accepted?
 
   delegate :self_registration_active?, to: :group
 
+  after_create :send_notification_email, if: :valid?
+
   private
-
-  def set_privacy_policy_acceptance
-    entry.person.privacy_policy_accepted = true
-    entry.person.save
-  end
-
-  def privacy_policy_needed_and_accepted?
-    policy_finder.acceptance_needed? && privacy_policy_accepted?
-  end
 
   def send_notification_email
     return if group.self_registration_notification_email.blank?
@@ -48,7 +38,7 @@ class Groups::SelfRegistrationController < CrudController
 
   def save_entry
     ActiveRecord::Base.transaction do
-      entry.person.valid? && privacy_policy_accepted? && entry.person.save && entry.save 
+      person.valid? && privacy_policy_accepted? && person.save && entry.save 
     end
   end
 
@@ -62,8 +52,8 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def set_success_notice
-    if entry.person.email.present?
-      Person.send_reset_password_instructions(email: entry.person.email)
+    if person.email.present?
+      Person.send_reset_password_instructions(email: person.email)
       flash[:notice] = I18n.t('devise.registrations.signed_up_but_unconfirmed')
     else
       flash[:notice] = I18n.t('devise.registrations.signed_up_but_no_email')
@@ -86,13 +76,7 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def valid?
-     privacy_policy_accepted? && entry.valid? && entry.person.valid?
-  end
-
-  def privacy_policy_accepted?
-    return true unless @policy_finder.acceptance_needed?
-
-    true?(privacy_policy_param)
+    privacy_policy_accepted? && entry.valid? && person.valid?
   end
 
   def person_attrs
@@ -109,8 +93,8 @@ class Groups::SelfRegistrationController < CrudController
     @group ||= Group.find(params[:group_id])
   end
 
-  def policy_finder
-    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group, person: entry.person)
+  def person
+    @person ||= entry.person
   end
 
   def authenticate?

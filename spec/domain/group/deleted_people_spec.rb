@@ -41,6 +41,14 @@ describe Group::DeletedPeople do
         expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
       end
 
+      it 'doesn\'t find people with role with future deletion date' do
+        role = Group::TopLayer::TopAdmin.create(person: person, group: group)
+        role.update!(deleted_at: 1.day.from_now)
+
+        expect(person.roles.count).to eq 1
+        expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
+      end
+
       it 'finds people from other group in same layer' do
         sibling_role.destroy
         expect(Group::DeletedPeople.deleted_for(sibling_group)).to include sibling_person

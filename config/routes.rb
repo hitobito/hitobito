@@ -72,6 +72,8 @@ Hitobito::Application.routes.draw do
         resource :statistics, only: [:show], module: :group
       end
 
+      get 'log' => 'group/log#index'
+
       resources :invoices do
         resources :payments, only: :create
         collection do

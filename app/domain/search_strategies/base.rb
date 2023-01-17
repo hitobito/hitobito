@@ -84,20 +84,16 @@ module SearchStrategies
     end
 
     def load_accessible_people_ids
-      accessible = Person.accessible_by(PersonReadables.new(@user))
-
-      # This still selects all people attributes :(
-      # accessible.pluck('people.id')
-
-      # rewrite query to only include id column
-      sql = accessible.to_sql.gsub(/SELECT (.+) FROM /, 'SELECT DISTINCT people.id FROM ')
-      result = Person.connection.execute(sql)
-      result.collect { |row| row[0] }
+      Person.accessible_by(PersonReadables.new(@user)).
+        unscope(:select). # accessible_by selects all people attributes, even when using .pluck
+        pluck(:id)
     end
 
     def load_deleted_people_ids
       Person.where('NOT EXISTS (SELECT * FROM roles ' \
-                   'WHERE roles.deleted_at IS NULL AND roles.person_id = people.id)')
+                   "WHERE (roles.deleted_at IS NULL OR
+                           roles.deleted_at > :now) AND
+                          roles.person_id = people.id)", now: Time.now.utc.to_s(:db))
             .pluck(:id)
     end
 

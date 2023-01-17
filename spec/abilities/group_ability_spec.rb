@@ -61,6 +61,10 @@ describe GroupAbility do
       it 'may manage person tags' do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
+
+      it 'may view log' do
+        is_expected.to be_able_to(:log, group)
+      end
     end
 
     context 'in group from lower layer' do
@@ -103,6 +107,10 @@ describe GroupAbility do
       it 'may manage person tags' do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
+
+      it 'may view log' do
+        is_expected.to be_able_to(:log, group)
+      end
     end
   end
 
@@ -135,6 +143,10 @@ describe GroupAbility do
       it 'may manage person tags' do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
+
+      it 'may view log' do
+        is_expected.to be_able_to(:log, group)
+      end
     end
 
     context 'in top layer' do
@@ -154,6 +166,10 @@ describe GroupAbility do
 
       it 'may not manage person tags' do
         is_expected.not_to be_able_to(:manage_person_tags, group)
+      end
+
+      it 'may not view log' do
+        is_expected.to_not be_able_to(:log, group)
       end
     end
   end
@@ -205,6 +221,10 @@ describe GroupAbility do
       it 'may manage person tags' do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
+
+      it 'may view log' do
+        is_expected.to be_able_to(:log, group)
+      end
     end
 
     context 'in group from same layer' do
@@ -237,6 +257,10 @@ describe GroupAbility do
       it 'may manage person tags' do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
+
+      it 'may view log' do
+        is_expected.to be_able_to(:log, group)
+      end
     end
 
     context 'in group from lower layer' do
@@ -268,6 +292,10 @@ describe GroupAbility do
 
       it 'may not manage person tags' do
         is_expected.not_to be_able_to(:manage_person_tags, group)
+      end
+
+      it 'may not view log' do
+        is_expected.to_not be_able_to(:log, group)
       end
     end
   end
@@ -328,6 +356,10 @@ describe GroupAbility do
       it 'may not manage person tags' do
         is_expected.not_to be_able_to(:manage_person_tags, group)
       end
+
+      it 'may view log' do
+        is_expected.to be_able_to(:log, group)
+      end
     end
 
     context 'without specific group' do
@@ -386,6 +418,10 @@ describe GroupAbility do
 
       it 'may not manage person tags' do
         is_expected.not_to be_able_to(:manage_person_tags, group)
+      end
+
+      it 'may view log' do
+        is_expected.to be_able_to(:log, group)
       end
     end
 

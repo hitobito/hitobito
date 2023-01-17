@@ -1114,7 +1114,7 @@ fr:
     new:
       title: Créer une catégorie de qualification
   paper_trail/version_decorator:
-    by: 'de %{author}'
+    by: 'changé de %{author}'
   person_duplicates:
     merge:
       new:

@@ -703,6 +703,7 @@ de:
     tabs:
       deleted: 'Gelöscht'
       statistics: 'Statistiken'
+      logs: Log
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     statistics:
       title: Statistiken
@@ -1208,7 +1209,7 @@ de:
       title: Qualifikationsart erstellen
 
   paper_trail/version_decorator:
-    by: 'von %{author}'
+    by: 'geändert durch %{author}'
 
   person_duplicates:
     merge:

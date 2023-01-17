@@ -29,7 +29,7 @@ class Group::DeletedPeople
     end
 
     def last_role_deleted
-      Role.with_deleted
+      Role.only_deleted
           .where('roles.person_id = people.id')
           .select('MAX(roles.deleted_at)')
     end

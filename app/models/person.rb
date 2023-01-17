@@ -304,10 +304,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def privacy_policy_accepted=(value)
-    if value.to_s == "0"
-      self.privacy_policy_accepted_at = nil
-    else
+    if %w(1 yes true).include?(value.to_s.downcase)
       self.privacy_policy_accepted_at = Time.now.utc
+    else
+      self.privacy_policy_accepted_at = nil
     end
   end
 

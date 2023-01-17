@@ -12,11 +12,13 @@ class Groups::SelfRegistrationController < CrudController
   skip_authorize_resource
 
   before_action :assert_empty_honeypot, only: [:create]
+
   before_action :redirect_to_group_if_necessary
+
+  after_create :send_notification_email
 
   delegate :self_registration_active?, to: :group
 
-  after_create :send_notification_email, if: :valid?
 
   private
 

@@ -89,7 +89,7 @@ class Event::RegisterController < ApplicationController
   end
 
   def model_params
-    params_key ? params.require(params_key).permit(*PeopleController.permitted_attrs) : {}
+    params_key ? params.require(params_key).permit(PeopleController.permitted_attrs) : {}
   end
 
   def params_key

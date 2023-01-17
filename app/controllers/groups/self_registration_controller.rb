@@ -46,7 +46,7 @@ class Groups::SelfRegistrationController < CrudController
     if valid?
       super.presence || new_person_session_path
     else
-      entry.person.errors.add(:base, t('.flash.privacy_policy_not_accepted')) unless privacy_policy_accepted?
+      add_privacy_policy_not_accepted_error
       group_self_registration_path(group)
     end
   end

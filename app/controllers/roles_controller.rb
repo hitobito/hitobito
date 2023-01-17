@@ -34,7 +34,7 @@ class RolesController < CrudController
     with_person_add_request do
       new_person = entry.person.new_record?
       created = create_entry_and_person
-      person.errors.add(:base, t('.flash.privacy_policy_not_accepted')) if new_person && !privacy_policy_accepted?
+      add_privacy_policy_not_accepted_error if new_person
       respond_with(entry, success: created, location: after_create_location(new_person))
     end
   end

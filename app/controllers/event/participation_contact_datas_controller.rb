@@ -28,7 +28,7 @@ class Event::ParticipationContactDatasController < ApplicationController
         event_role: { type: params[:event_role][:type] }
       )
     else
-      entry.errors.add(:base, t('.flash.privacy_policy_not_accepted')) unless privacy_policy_accepted?
+      add_privacy_policy_not_accepted_error(entry)
       render :edit
     end
   end

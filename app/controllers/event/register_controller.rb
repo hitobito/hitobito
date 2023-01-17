@@ -49,7 +49,7 @@ class Event::RegisterController < ApplicationController
       flash[:notice] = translate(:registered)
       redirect_to new_group_event_participation_path(group, event)
     else
-      entry.errors.add(:base, t('.flash.privacy_policy_not_accepted')) unless privacy_policy_accepted?
+      add_privacy_policy_not_accepted_error(entry)
       render 'register'
     end
   end

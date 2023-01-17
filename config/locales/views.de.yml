@@ -784,6 +784,7 @@ de:
     sent: Rechnung per Mail versendet
     reminder_sent: Mahnung gestellt, fällig am %{date} (%{title})
     payed: bezahlt
+    cancel: Stornieren
     destroy:
       flash:
         success: Rechnung wurde storniert.

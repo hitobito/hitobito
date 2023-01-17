@@ -71,7 +71,7 @@ can produce multiple actual columns.
 
 ## ColumnTypes
 
-(as found in core, in app/helpers/table_displays/*)
+(as found in core, in app/domain/table_displays/*)
 
 - SimpleColumns
   - PublicColumn

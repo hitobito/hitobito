@@ -32,6 +32,7 @@ module TableDisplays::Event::Participations
         target_attr = :answer
 
         return target, target_attr unless block_given?
+
         yield target, target_attr
       end
     end
@@ -53,7 +54,7 @@ module TableDisplays::Event::Participations
 
     protected
 
-    def allowed?(object, attr)
+    def allowed?(object, _attr)
       ability.can?(:update, object.event) || ability.can?(:show_full, object.person)
     end
 

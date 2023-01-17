@@ -6,7 +6,7 @@
 module TableDisplays
   class PublicColumn < Column
 
-    def required_permission(attr)
+    def required_permission(_attr)
       :show
     end
 

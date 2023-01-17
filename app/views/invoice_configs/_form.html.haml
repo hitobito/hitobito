@@ -11,6 +11,9 @@
     #general.tab-pane.active
       = render 'general_fields', f: f
 
+    #email.tab-pane
+      = render 'email_fields', f: f
+
     #reminders.tab-pane
       = f.fields_for(:payment_reminder_configs) do |ff|
         = render 'reminder_fields', f: ff

@@ -39,6 +39,13 @@ describe InvoiceMailer do
     expect(mail.reply_to).to eq %w(invoices@example.com)
   end
 
+  it 'uses invoice_config.sender_name in mail headers' do
+    invoice.invoice_config.update(sender_name: 'Hitobito-Bern')
+    expect(mail.from).to eq %w(noreply@localhost)
+    expect(mail.sender).to eq('Hitobito-Bern')
+    expect(mail.reply_to).to eq %w(bottom_member@example.com)
+  end
+
   describe :html_body do
     it 'includes group address' do
       expect(html).to match(/Absender: Bottom One, Greatstreet 345, 3456 Greattown/)

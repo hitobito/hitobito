@@ -839,6 +839,7 @@ de:
   invoice_configs:
     form_tabs:
       general: Allgemein
+      email: E-Mail
     update:
       flash:
         success: Rechnungseinstellungen wurden erfolgreich aktualisiert
@@ -848,8 +849,6 @@ de:
       payment: 'Einzahlung'
       payment_information_help: 'Wird in jeder Rechnung aufgeführt, kann pro Rechnung angepasst werden'
       address_help: 'Erscheint auf dem Brief als Absenderadresse'
-      email_help: Antworten auf Rechnungs-E-Mails sollen entweder an die Adresse des aktuellen
-        Benutzers oder an die hier konfigurierte Adresse gesendet werden.
       payee_help: 'Erscheint auf dem Einzahlungsschein'
       beneficiary_help: 'Erscheint auf dem Einzahlungsschein'
       account_number_example: 'Beispiel: 01-162-5'
@@ -858,6 +857,10 @@ de:
       variable_donation_appeal: 'Variabler Spendenaufruf'
       donation_calculation_year_amount_explanation: Anzahl verganenen Jahre, die für die Spendenberechnung beachtet werden.
       donation_increase_percentage_explanation: Prozentsatz, für die Spendenberechnung
+    email_fields:
+      email_help: Antworten auf Rechnungs-E-Mails sollen entweder an die Adresse des aktuellen
+        Benutzers oder an die hier konfigurierte Adresse gesendet werden.
+      sender_name_help: Rechnungs-E-Mails werden unter diesem Namen versendet.
     reminder_fields:
       third_level: 'Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt.'
     provider_fields:

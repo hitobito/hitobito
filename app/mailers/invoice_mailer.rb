@@ -84,7 +84,7 @@ class InvoiceMailer < ApplicationMailer
 
   def mail_headers(person, email)
     sender = email.blank? ? person : Person.new(email: email)
-    with_personal_sender(sender)
+    with_personal_sender(sender, { sender: @invoice.invoice_config.sender_name })
   end
 
 end

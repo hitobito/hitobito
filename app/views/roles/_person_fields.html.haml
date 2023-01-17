@@ -14,4 +14,4 @@
       = fields.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
       = render_extensions :additional_person_fields, locals: { fields: fields }
 
-      = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: fields)
+      = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: fields, for_someone_else: true)

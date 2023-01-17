@@ -1,5 +1,8 @@
 - if policy_finder.acceptance_needed?
   = field_set_tag(nil, class: 'privacy-policy-fields') do
-    = f.boolean_field(:privacy_policy_accepted, caption: 'Akzeptier:')
-    - policy_finder.groups.each do |group|
-      = link_to(icon('file-alt') + group.privacy_policy_title, upload_url(group, :privacy_policy), target: :blank)
+    - for_someone_else ||= false
+    - caption_key = for_someone_else ? 'for_someone_else' : 'for_self'
+    = f.boolean_field(:privacy_policy_accepted, caption: t(".acceptance_caption.#{caption_key}"))
+    .privacy-policies
+      - policy_finder.groups.each do |group|
+        = link_to(safe_join([icon('file-alt'), ' ', group.privacy_policy_title]), upload_url(group, :privacy_policy), target: :blank)

@@ -11,5 +11,5 @@
       = f.file_field :privacy_policy, type: :file, accept: '.pdf'
 
     - if upload_exists?(entry, :privacy_policy)
-      = f.labeled :privacy_policy do
+      = f.labeled :remove_privacy_policy do
         = f.boolean_field :remove_privacy_policy

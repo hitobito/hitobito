@@ -295,13 +295,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### ATTRIBUTE INSTANCE METHODS
 
-  def privacy_policy_accepted
-    privacy_policy_accepted?
-  end
-
   def privacy_policy_accepted?
     privacy_policy_accepted_at.present?
   end
+  alias privacy_policy_accepted privacy_policy_accepted?
 
   def privacy_policy_accepted=(value)
     if %w(1 yes true).include?(value.to_s.downcase)

@@ -26,7 +26,7 @@ class AddPrivacyPolicyAcceptedAtToPeople < ActiveRecord::Migration[6.1]
     remove_column :people, :privacy_policy_accepted_at, :timestamp, null: true
     remove_column :groups, :privacy_policy, :string, null: true
 
-    say_with_time('dropping translation-table for events') do
+    say_with_time('dropping translation-table for groups') do
       Group.drop_translation_table! migrate_data: false
     end
   end

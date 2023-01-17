@@ -21,7 +21,7 @@ class Group::PrivacyPolicyFinder
   end
 
   def groups
-    @group.layer_hierarchy.select do |g|
+    @groups ||= @group.layer_hierarchy.select do |g|
       g.privacy_policy.present?
     end
   end

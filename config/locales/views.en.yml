@@ -161,6 +161,10 @@ en:
   dropdown/letter_with_invoice:
     print: Print
     letters_with_invoice: Invoice letters
+  dropdown/invoices/evaluation:
+    download: 'Export'
+    csv: 'CSV'
+    xlsx: 'XLSX'
   devise:
     failure:
       already_authenticated: 'You are already registered.'
@@ -243,6 +247,13 @@ en:
       title: 'Sorry, page is currently not available (503)'
       explanation: 'We are working on this page, so it is not available. This should not take too long.'
       instruction: 'Please try again later.'
+    '403':
+      title: 'Access denied'
+    '401':
+      title: 'Login required'
+      explanation: 'You must log in before you can access this resource.'
+    unsupported_page_size:
+      title: 'Page size is not supported'
   export/tabular/events/list:
     group_names: 'Organizers'
     duration: Duration
@@ -588,6 +599,7 @@ en:
     tabs:
       deleted: 'Deleted'
       statistics: 'Statistics'
+      logs: Log
     export_enqueued: 'Export is started in the background and downloaded after completion.'
     statistics:
       title: Statistics
@@ -618,6 +630,14 @@ en:
     choose_group: 'Please select a group.'
   group_decorator:
     archived_suffix: '(archived)'
+  hitobito_log_entries:
+    tabs:
+      all: All
+    index:
+      title: Hitobito Log
+    list:
+      from: From
+      to: Until
   import/csv_parser:
     read_error: "Error while reading from "
     contains_no_data: "Contains no data"
@@ -643,6 +663,7 @@ en:
     sent: Invoice sent per e-mail
     reminder_sent: Reminded, due at %{date}(%{title})
     payed: paid
+    cancel: Cancel
     destroy:
       flash:
         success: Invoice cancelled
@@ -665,6 +686,10 @@ en:
         currency: Currency
         amount: Invoice
     export_enqueued: 'Export is started in the background and downloaded after completion.'
+    evaluations:
+      show:
+        table:
+          amount_paid: Amount paid
   invoice_configs:
     form_tabs:
       general: general
@@ -920,8 +945,6 @@ en:
       help_reactivateable_in_years: 'Years from the expiration date'
     new:
       title: Create qualification kind
-  paper_trail/version_decorator:
-    by: 'changed by %{author}'
   person_duplicates:
     merge:
       new:
@@ -1391,3 +1414,4 @@ en:
       first: first
       last: last
       truncate: '...'
+  json_api: JSON:API

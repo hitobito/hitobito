@@ -370,6 +370,7 @@ en:
           w: female
           _nil: unknown
         birthday: Birthday
+        years: Age
         additional_information: Further information
         remember_me: Remember me
         relations_to_tails: Relations
@@ -388,6 +389,8 @@ en:
         updated_at: Changed
         login_status: Login
         language: Language
+        primary_group_id: Main group
+        layer_group_label: Main layer
       person_duplicate:
         birth_year: Year
         roles_list: Roles
@@ -898,6 +901,10 @@ en:
         key: Key
         abilities: Abilities
         last_access: Last access
+        people: People
+        groups: Groups
+        events: Events
+        invoices: Invoices
         cors_origins: Hosts with API access
       acts_as_taggable_on/tag:
         taggings_count: Number

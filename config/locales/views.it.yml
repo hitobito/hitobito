@@ -260,6 +260,8 @@ it:
       title: 'siamo spiacenti, questa pagina non è disponibile al momento (503)'
       explanation: 'al momento stiamo lavorando a questa pagine e per questo motivo non è disponibile. Non dovrebbe durare a lungo.'
       instruction: 'vi preghiamo di riprovare nuovamente più tardi.'
+    '403':
+      title: 'Accesso negato'
   export/tabular/events/list:
     group_names: 'organizzatori'
     duration: Periodo di tempo
@@ -629,6 +631,7 @@ it:
     tabs:
       deleted: 'Cancellato'
       statistics: 'Statistica'
+      logs: Log
     export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
     statistics:
       title: Statistica
@@ -700,6 +703,7 @@ it:
     sent: Fattura inviata per e-mail.
     reminder_sent: Promemoria impostato, scadenza il
     payed: Pagato
+    cancel: Annullamento
     destroy:
       flash:
         success: La fattura è stata annullata
@@ -1113,8 +1117,6 @@ it:
       help_reactivateable_in_years: 'anni dalla fine della validità'
     new:
       title: Creare il tipo di qualifica
-  paper_trail/version_decorator:
-    by: 'cambiato da %{author}'
   person_duplicates:
     merge:
       new:
@@ -1666,3 +1668,4 @@ it:
       first: primo
       last: ultimo
       truncate: '...'
+  json_api: JSON:API

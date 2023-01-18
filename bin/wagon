@@ -42,6 +42,52 @@ function existing_wagon_names() {
   uniq | sort
 }
 
+function clone_wagon() {
+  ( if [ ! -d "../hitobito_${wagon_name}" ]; \
+      then git clone "git@github.com:hitobito/hitobito_${wagon_name}.git" ../hitobito_${wagon_name}; fi )
+}
+
+function setup_idea_project() {
+  echo "setting up idea project"
+  mkdir -p "../hitobito_${wagon_name}/.idea"
+
+  cat << IML > "../hitobito_${wagon_name}/.idea/hitobito_${wagon_name}.xml"
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RUBY_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="RailsFacetType" name="Ruby on Rails">
+      <configuration>
+        <RAILS_FACET_CONFIG_ID NAME="RAILS_FACET_SUPPORT_REMOVED" VALUE="false" />
+        <RAILS_FACET_CONFIG_ID NAME="RAILS_TESTS_SOURCES_PATCHED" VALUE="true" />
+        <RAILS_FACET_CONFIG_ID NAME="RAILS_FACET_APPLICATION_ROOT" VALUE="\$MODULE_DIR\$" />
+      </configuration>
+    </facet>
+  </component>
+</module>
+IML
+
+  cat << MODULE > "../hitobito_${wagon_name}/.idea/modules.xml"
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://\$PROJECT_DIR\$/../hitobito/hitobito.iml" filepath="\$PROJECT_DIR\$/../hitobito/hitobito.iml" />
+      <module fileurl="file://\$PROJECT_DIR\$/.idea/hitobito_${wagon_name}.iml" filepath="\$PROJECT_DIR\$/.idea/hitobito_${wagon_name}.iml" />
+    </modules>
+  </component>
+</project>
+MODULE
+}
+
+function recreate_dbs() {
+  echo "recreating dev and test databases"
+  cat << SQL | MYSQL_PWD="${RAILS_DB_PASSWORD}" mysql -u "${RAILS_DB_USERNAME}"
+DROP DATABASE IF EXISTS hit_${wagon_name}_development;
+CREATE DATABASE hit_${wagon_name}_development;
+DROP DATABASE IF EXISTS hit_${wagon_name}_test;
+CREATE DATABASE hit_${wagon_name}_test;
+SQL
+}
 
 function indent2 {
     sed -u 's/^/  /'
@@ -64,6 +110,24 @@ case $cmd in
     require_wagon_name
     exec bin/active_wagon.rb "$wagon_name"
     ;;
+
+  bootstrap)
+    require_wagon_name
+    clone_wagon
+    bin/active_wagon.rb "$wagon_name"
+    recreate_dbs
+
+    echo "migrating and seeding development database"
+    bundle exec rails db:migrate; bundle exec rails db:seed wagon:migrate; bundle exec rails wagon:seed
+
+    echo "migrating test database"
+    RAILS_ENV=test exec rails db:migrate; RAILS_ENV=test exec rails wagon:migrate
+    ;;
+
+  create_idea_project)
+    require_wagon_name
+    setup_idea_project
+  ;;
 
   gemfile)
     bundle check || bundle
@@ -192,6 +256,11 @@ case $cmd in
     pushd "$new_wagon_dir"
       git ci -a -m "Add common configs"
     popd
+    ;;
+
+  clone)
+    require_wagon_name
+    clone_wagon
     ;;
 
   overwritten-in-wagon)

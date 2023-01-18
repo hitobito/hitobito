@@ -1,28 +1,11 @@
 # encoding: utf-8
 
-#  Copyright (c) 2020, Hitobito AG. This file is part of
+#  Copyright (c) 2020-2023, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require 'truemail'
-
-# Temporarily monkey-patch the truemail MX request method, to get more logs in case of
-# unexpected errors. https://github.com/truemail-rb/truemail/issues/235
-module Truemail
-  class Wrapper
-    def call(&block)
-      ::Timeout.timeout(timeout, &block)
-    rescue ::Resolv::ResolvError, ::IPAddr::InvalidAddressError => error
-      ::Logger.new($stdout).add(::Logger::ERROR) { error }
-      false
-    rescue ::Timeout::Error => error
-      retry unless (self.attempts -= 1).zero?
-      ::Logger.new($stdout).add(::Logger::ERROR) { error }
-      false
-    end
-  end
-end
 
 Truemail.configure do |config|
   # Required parameter. Must be an existing email on behalf of which verification will be performed
@@ -99,7 +82,4 @@ Truemail.configure do |config|
   # stdout, write to file or both of these. Tracking event by default is :error
   # Available tracking event: :all, :unrecognized_error, :recognized_error, :error
   # config.logger = { tracking_event: :all, stdout: true, log_absolute_path: '/home/app/log/truemail.log' }
-
-  # Get more logs, see https://github.com/truemail-rb/truemail/issues/235
-  config.logger = { tracking_event: :all, stdout: true, log_absolute_path: Rails.root.join('log').join('truemail.log').to_s }
 end

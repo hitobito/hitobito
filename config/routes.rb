@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -13,7 +13,7 @@ Hitobito::Application.routes.draw do
 
   get '/healthz', to: 'healthz#show'
   get '/healthz/mail', to: 'healthz/mail#show'
-  get '/healthz/truemail', to: 'healthz/truemail#show'
+  get '/healthz/truemail', to: 'healthz#show'
 
   use_doorkeeper_openid_connect
   use_doorkeeper do # we only use tokens and authorizations

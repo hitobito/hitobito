@@ -36,7 +36,7 @@ Raven.configure do |config|
     'Timeout::Error',
   ]
 
-  misbehaving_clients_errors = [
+  misbehaving_client_errors = [
     'ActionDispatch::Http::MimeNegotiation::InvalidType',
   ]
 

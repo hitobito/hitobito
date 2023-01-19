@@ -264,7 +264,7 @@ GEM
     gibbon (3.4.4)
       faraday (>= 1.0)
       multi_json (>= 1.11.0)
-    globalid (0.5.2)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     globalize (6.2.1)
       activemodel (>= 4.2, < 7.1)
@@ -299,7 +299,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     http_accept_language (2.1.0)
-    i18n (1.10.0)
+    i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     i18n_data (0.8.0)
     icalendar (2.8.0)
@@ -373,7 +373,7 @@ GEM
     mini_magick (4.9.5)
     mini_mime (1.1.1)
     mini_portile2 (2.8.0)
-    minitest (5.16.3)
+    minitest (5.17.0)
     msgpack (1.4.2)
     multi_json (1.15.0)
     mysql2 (0.5.3)
@@ -628,7 +628,7 @@ GEM
       simpleidn (~> 0.2.1)
     ttfunk (1.4.0)
     tty-color (0.6.0)
-    tzinfo (2.0.4)
+    tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
@@ -669,7 +669,7 @@ GEM
       nokogiri (~> 1.8)
     yard (0.9.27)
       webrick (~> 1.7.0)
-    zeitwerk (2.6.0)
+    zeitwerk (2.6.6)
 
 PLATFORMS
   ruby

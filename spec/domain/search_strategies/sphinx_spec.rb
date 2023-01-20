@@ -87,12 +87,6 @@ describe SearchStrategies::Sphinx, sphinx: true do
           expect(result).not_to include(@bg_member_with_deleted)
         end
 
-        it 'finds deleted people' do
-          result = strategy(@deleted_leader.last_name[1..5]).list_people
-
-          expect(result).to include(@deleted_leader)
-        end
-
         it 'finds deleted, not accessible people' do
           result = strategy(@deleted_bg_member.last_name[1..5]).list_people
 
@@ -129,10 +123,10 @@ describe SearchStrategies::Sphinx, sphinx: true do
           expect(result).not_to include(@no_role)
         end
 
-        it 'does not find deleted people' do
+        it 'does finds deleted people' do
           result = strategy(@deleted_leader.last_name[1..5]).list_people
 
-          expect(result).not_to include(@deleted_leader)
+          expect(result).to include(@deleted_leader)
         end
       end
 

@@ -21,6 +21,15 @@ class Group::DeletedPeople
         distinct
     end
 
+    def group_for_deleted(person)
+      Group.joins('INNER JOIN roles ON roles.group_id = groups.id')
+           .joins("INNER JOIN #{Person.quoted_table_name} " \
+                  "ON #{Person.quoted_table_name}.id = roles.person_id")
+           .where(undeleted_roles.arel.exists.not)
+           .where('roles.deleted_at = (?)', last_role_deleted)
+           .find_by("#{Person.quoted_table_name}.id = ?", person.id)
+    end
+
     private
 
     def undeleted_roles

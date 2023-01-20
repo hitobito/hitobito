@@ -260,6 +260,8 @@ fr:
       title: 'Nous présentons nos excuses, cette page n''est pas disponible pour le moment (503)'
       explanation: 'Nous travaillons sur cette page, c''est pourquoi elle n''est pas disponible. Ceci ne devrait pas durer très longtemps.'
       instruction: 'Prière de réessayer plus tard.'
+    '403':
+      title: 'Accès refusé'
   export/tabular/events/list:
     group_names: 'organisateurs'
     duration: Délai
@@ -629,6 +631,7 @@ fr:
     tabs:
       deleted: 'Eléments effacés'
       statistics: 'Statistiques'
+      logs: Journal
     export_enqueued: 'L''exportation est lancée en arrière-plan et téléchargée une fois terminée.'
     statistics:
       title: Statistiques
@@ -700,6 +703,7 @@ fr:
     sent: Facture envoyé par courriel
     reminder_sent: rappel établi, échu le %{date} (%{title})
     payed: payé
+    cancel: Annuler
     destroy:
       flash:
         success: Facture annulée
@@ -1113,8 +1117,6 @@ fr:
       help_reactivateable_in_years: 'années après échéance de la validité'
     new:
       title: Créer une catégorie de qualification
-  paper_trail/version_decorator:
-    by: 'de %{author}'
   person_duplicates:
     merge:
       new:
@@ -1664,3 +1666,4 @@ fr:
       first: premier
       last: dernier
       truncate: '...'
+  json_api: JSON:API

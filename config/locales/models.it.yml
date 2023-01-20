@@ -1035,13 +1035,6 @@ it:
         key: Codice
         abilities: Diritti
         last_access: Ultimo Accesso
-        people: Persone su questo livello
-        people_below: Persone su questo livello e sui livelli sottostanti
-        groups: Gruppi di questo livello e dei livelli sottostanti
-        events: Eventi di questo livello e dei livelli sottostanti
-        invoices: Fatture di questo livello
-        event_participations: Partecipanti ad eventi di questo livello
-        mailing_lists: Abbonati a liste mail di questo livello
         cors_origins: host con accesso API
       acts_as_taggable_on/tag:
         taggings_count: Numero

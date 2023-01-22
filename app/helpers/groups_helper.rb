@@ -1,6 +1,7 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -17,6 +18,11 @@ module GroupsHelper
   def format_self_registration_link(group)
     url = group_self_registration_url(group)
     link_to(url, url)
+  end
+
+  def format_nextcloud_url(group)
+    url = group.nextcloud_url
+    link_to(url, url, target: '_blank', rel: 'noopener')
   end
 
   def maybe_value(value)

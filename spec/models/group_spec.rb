@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -645,6 +645,18 @@ describe Group do
 
         expect(archived_group.reload.deleted_at).to_not be_nil
       end
+    end
+  end
+
+  context 'integrates with nextcloud, it' do
+    subject { groups(:top_layer) }
+
+    it 'has a nextcloud_url' do
+      subject.nextcloud_url = 'https://example.org'
+      subject.save!
+      subject.reload
+
+      expect(subject.nextcloud_url).to eql 'https://example.org'
     end
   end
 end

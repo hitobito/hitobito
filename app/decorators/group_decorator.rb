@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -95,6 +95,10 @@ class GroupDecorator < ApplicationDecorator
     @subgroup_ids ||= Group.where('lft >= :lft AND rgt <= :rgt',
                                   lft: group.lft, rgt: group.rgt)
                            .pluck(:id)
+  end
+
+  def nextcloud_url
+    layer_group.nextcloud_url
   end
 
   def archived_class

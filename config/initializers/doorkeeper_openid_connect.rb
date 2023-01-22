@@ -67,7 +67,7 @@ Doorkeeper::OpenidConnect.configure do
   # end
 
   claims do
-    claim(:email, scope: :email)     { |resource_owner| resource_owner.email }
+    claim(:email, scope: :email, response: [:user_info, :id_token]) { |resource_owner| resource_owner.email }
     claim(:first_name, scope: :name) { |resource_owner| resource_owner.first_name }
     claim(:last_name, scope: :name)  { |resource_owner| resource_owner.last_name }
     claim(:nickname, scope: :name)   { |resource_owner| resource_owner.nickname }
@@ -88,9 +88,9 @@ Doorkeeper::OpenidConnect.configure do
     end
 
     FeatureGate.if('groups.nextcloud') do
-      claim(:name, scope: :nextcloud)  { |resource_owner| resource_owner.to_s }
+      claim(:name, scope: :nextcloud, response: [:user_info, :id_token])  { |resource_owner| resource_owner.to_s }
 
-      claim(:groups, scope: :nextcloud) do |resource_owner|
+      claim(:groups, scope: :nextcloud, response: [:user_info, :id_token]) do |resource_owner|
         resource_owner.roles.includes(:group).map do |role|
           role.nextcloud_group
         end.compact

@@ -30,12 +30,15 @@ describe Payments::EbicsImportJob do
     end.to_not change { Payment.count }
   end
 
-  it 'reschedules to tomorrow at midnight' do
+  it 'reschedules to tomorrow at 8am' do
     perform_enqueued_jobs do
       subject.perform
     end
 
-    expect(subject.delayed_jobs.last.run_at).to eq(Time.zone.tomorrow.beginning_of_day.in_time_zone)
+    expect(subject.delayed_jobs.last.run_at).to eq(Time.zone.tomorrow
+                                                       .at_beginning_of_day
+                                                       .change(hour: 8)
+                                                       .in_time_zone)
   end
 
   it 'initializes payments' do

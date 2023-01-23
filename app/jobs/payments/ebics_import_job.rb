@@ -20,7 +20,7 @@ class Payments::EbicsImportJob < RecurringJob
   end
 
   def next_run
-    # Sets next run to 00:00 of next day
-    Time.zone.tomorrow.at_beginning_of_day.in_time_zone
+    # Sets next run to 08:00 of next day
+    Time.zone.tomorrow.at_beginning_of_day.change(hour: 8).in_time_zone
   end
 end

@@ -79,8 +79,20 @@ case $cmd in
     ;;
 
   test-prepare)
+    export RAILS_ENV=test
+    echo 'Recreating the test-DB fresh to have a clean slate'
+    bundle exec rake db:drop db:create
+    echo 'Migrating Core'
+    bundle exec rake db:migrate
+    echo 'Migrating Wagons'
+    bundle exec rake wagon:migrate
+
     echo 'Compile Assets to match the selected wagons to ensure better spec-results'
     bin/webpack-test-compile
+    ;;
+
+  test-speedup)
+    wagon test-prepare
 
     echo 'Running Wagon-Tests to prime the DB'
     rake wagon:test || true # do not fail, it's more about the setup than the result
@@ -203,6 +215,7 @@ function __wagon_commands() {
     list
     overwritten-in-wagon
     test-prepare
+    test-speedup
     update-copyright
   ' | xargs
 }
@@ -242,7 +255,7 @@ COMPLETION
 
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
-    echo "       $0 [test-prepare|core-spec|gemfile|configs|list|update-copyright]"
+    echo "       $0 [test-prepare|test-speedup|core-spec|gemfile|configs|list|update-copyright]"
     echo "       $0 [grep] <TERM>"
     echo "       $0 [git|git-all] <ARGS>"
     echo

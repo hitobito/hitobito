@@ -42,7 +42,7 @@ describe Payments::EbicsImport do
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
 
-    expect(payment_provider).to receive(:Z54).with(Time.zone.yesterday, Time.zone.today).and_return(invoice_files)
+    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:top_layer))
     list = InvoiceList.create(title: 'membership fee', invoices: [invoice])
@@ -60,7 +60,7 @@ describe Payments::EbicsImport do
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
 
-    expect(payment_provider).to receive(:Z54).with(Time.zone.yesterday, Time.zone.today).and_return(invoice_files)
+    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
 
@@ -83,7 +83,7 @@ describe Payments::EbicsImport do
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
 
-    expect(payment_provider).to receive(:Z54).with(Time.zone.yesterday, Time.zone.today).and_return(invoice_files)
+    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
 
@@ -107,7 +107,7 @@ describe Payments::EbicsImport do
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
 
-    expect(payment_provider).to receive(:Z54).with(Time.zone.yesterday, Time.zone.today).and_return(invoice_files)
+    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_return(invoice_files)
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
     invoice.update!(reference: '404')
@@ -122,7 +122,7 @@ describe Payments::EbicsImport do
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
 
-    expect(payment_provider).to receive(:Z54).with(Time.zone.yesterday, Time.zone.today).and_raise(Epics::Error::BusinessError.new('090005'))
+    expect(payment_provider).to receive(:Z54).with(3.days.ago.to_date, Time.zone.today).and_raise(Epics::Error::BusinessError.new('090005'))
 
     expect(Invoice::PaymentProcessor).to_not receive(:new)
 

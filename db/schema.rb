@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_10_120540) do
+ActiveRecord::Schema.define(version: 2023_01_17_131844) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -480,6 +480,7 @@ ActiveRecord::Schema.define(version: 2023_01_10_120540) do
     t.string "currency", default: "CHF", null: false
     t.integer "donation_calculation_year_amount"
     t.integer "donation_increase_percentage"
+    t.string "sender_name"
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 

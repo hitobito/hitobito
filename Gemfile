@@ -47,8 +47,8 @@ gem 'icalendar'
 gem 'image_processing', '~> 1.12'
 gem 'ledermann-rails-settings'
 gem 'lograge'
-gem 'lograge-sql'
 gem 'lograge_activejob'
+gem 'lograge-sql'
 gem 'magiclabs-userstamp', require: 'userstamp'
 gem 'mime-types'
 gem 'mini_magick'
@@ -67,12 +67,13 @@ gem 'protective'
 gem 'pry-rails'
 gem 'puma'
 gem 'rack-cors'
-gem 'rails-i18n'
 gem 'rails_autolink'
+gem 'rails-i18n'
 gem 'remotipart'
 gem 'rest-client'
 gem 'rotp'
 gem 'rqrcode'
+gem 'rswag'
 gem 'rubyzip'
 gem 'seed-fu'
 gem 'sentry-raven'
@@ -80,7 +81,6 @@ gem 'simpleidn'
 gem 'sprockets', '~> 3.7.2' # pinned to older version to avoid having an empty manifest.js
 gem 'sqlite3' # required for asset generation
 gem 'strip_attributes' # strip whitespace of attributes
-gem 'rswag'
 gem 'thinking-sphinx'
 gem 'truemail'
 gem 'validates_by_schema'
@@ -97,15 +97,15 @@ gem 'active_storage_variant' # variants for Rails < 7
 gem 'nochmal' # migrate into or between ActiveStorage-Backends
 
 group :development, :test do
-  gem 'graphiti_spec_helpers'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'codez-tarantula', require: 'tarantula-rails3'
+  gem 'graphiti_spec_helpers'
   gem 'parallel_tests'
   gem 'pry-byebug'
   gem 'pry-doc' # provides show-source/$ in the pry-console
   gem 'rspec-rails', '~> 5.0'
-  gem "rswag-specs"
+  gem 'rswag-specs'
 end
 
 group :development do

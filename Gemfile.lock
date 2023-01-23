@@ -264,7 +264,7 @@ GEM
     gibbon (3.4.4)
       faraday (>= 1.0)
       multi_json (>= 1.11.0)
-    globalid (0.5.2)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     globalize (6.2.1)
       activemodel (>= 4.2, < 7.1)

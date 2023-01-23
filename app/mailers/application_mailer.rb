@@ -51,9 +51,9 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def with_personal_sender(person, headers = {})
-    headers[:return_path] = return_path(person)
-    headers[:sender] = return_path(person)
-    headers[:reply_to] = person.email
+    headers[:return_path] ||= return_path(person)
+    headers[:sender] ||= return_path(person)
+    headers[:reply_to] ||= person.email
     headers
   end
 

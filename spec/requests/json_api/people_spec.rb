@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2022-2023, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require 'swagger_helper'
 require_relative 'person_schema'
 
 RSpec.describe 'json_api/people', type: :request do
-  # reset locale back to :de for other specs
-  after { I18n.locale = :de }
-
   let(:'X-TOKEN') { service_tokens(:permitted_top_layer_token).token }
   let(:token) { service_tokens(:permitted_top_layer_token).token }
   let(:include) { [] }

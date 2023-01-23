@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2022-2023, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,7 +21,7 @@ class JsonApiController < ActionController::API
   include PaperTrailed
 
   before_action :assert_media_type_json_api, only: [:update, :create]
-  
+
   class JsonApiUnauthorized < StandardError; end
   class JsonApiInvalidMediaType < StandardError; end
 
@@ -71,23 +71,7 @@ class JsonApiController < ActionController::API
 
   # Sign in by deprecated user token is not supported by hitobito JSON API
   def deprecated_user_token_sign_in
-    return nil
-  end
-
-  # set default locale to english for api since machines prefer to
-  # talk in english ;)
-  def set_locale
-    I18n.locale = available_locale!(params[:locale]) ||
-      available_locale!(cookies[:locale]) ||
-      :en
-  end
-
-  def application_languages
-    @application_languages ||= begin
-                                 languages = super.dup
-                                 languages[:en] = 'English'
-                                 languages
-                               end
+    nil
   end
 
   # protecting from CSRF attacks

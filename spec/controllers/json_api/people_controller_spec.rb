@@ -8,9 +8,6 @@
 require 'spec_helper'
 
 describe JsonApi::PeopleController, type: [:request] do
-  # reset locale back to :de for other specs
-  after { I18n.locale = :de }
-
   let(:params) { {} }
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
@@ -34,6 +31,7 @@ describe JsonApi::PeopleController, type: [:request] do
         errors = jsonapi_errors
 
         expect(errors.first.status).to eq('401')
+
         expect(errors.first.title).to eq('Login benötigt')
         expect(errors.first.detail).to eq('Du must dich einloggen bevor du auf diese Resource zugreifen kannst.')
       end
@@ -891,7 +889,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(errors.first.title).to eq('Validation Error')
           expect(errors.first.attribute).to eq('email')
           expect(errors.first.code).to eq('taken')
-          expect(errors.first.message).to match /is already taken/
+          expect(errors.first.message).to match /ist bereits vergeben/
         end
 
         it 'renders translated validation errors for person if locale param' do
@@ -1078,7 +1076,7 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(errors.first.status).to eq('422')
           expect(errors.first.title).to eq('Validation Error')
           expect(errors.first.to_json).to include('"source":{"pointer":"/data/attributes/number"}')
-          expect(errors.first.detail).to eq('Number is invalid')
+          expect(errors.first.detail).to eq('Nummer ist nicht gültig')
         end
 
         it 'updates contactable relations of person' do

@@ -628,7 +628,7 @@ GEM
       simpleidn (~> 0.2.1)
     ttfunk (1.4.0)
     tty-color (0.6.0)
-    tzinfo (2.0.4)
+    tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext

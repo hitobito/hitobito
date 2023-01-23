@@ -190,4 +190,54 @@ describe RolesController, js: true do
       expect(person_with_two_roles_row.find_all("td[style=\"display: table-cell;\"] > p").count).to eq(person_db_role_count)
     end
   end
+
+  context 'with privacy policies in hierarchy' do
+    let(:bottom_layer) { groups(:bottom_layer_one) }
+
+    before do
+      file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
+      image = ActiveStorage::Blob.create_and_upload!(io: File.open(file, 'rb'),
+                                                     filename: 'logo.png',
+                                                     content_type: 'image/png').signed_id
+      group.layer_group.update(privacy_policy: image, privacy_policy_title: 'Privacy Policy Top Layer')
+      bottom_layer.update(privacy_policy: image, privacy_policy_title: 'Additional Policies Bottom Layer')
+    end
+
+    it 'creates person if privacy policy is accepted' do
+      obsolete_node_safe do
+        sign_in
+        visit new_group_role_path(group_id: bottom_layer.id)
+
+        click_link('Neue Person erfassen')
+        fill_in('Vorname', with: 'Tester')
+
+        is_expected.to have_content('Privacy Policy Top Layer')
+        is_expected.to have_content('Additional Policies Bottom Layer')
+
+        find("input#role_new_person_privacy_policy_accepted").click
+
+        all('form .btn-toolbar').first.click_button 'Speichern'
+
+        expect(current_path).not_to eq(group_people_path(bottom_layer))
+        is_expected.to have_content 'Rolle Leader für Tester in Bottom One wurde erfolgreich erstellt.'
+      end
+    end
+
+    it 'does not creates person if privacy policy is not accepted' do
+      obsolete_node_safe do
+        sign_in
+        visit new_group_role_path(group_id: bottom_layer.id)
+
+        click_link('Neue Person erfassen')
+        fill_in('Vorname', with: 'Tester')
+
+        # find("input#role_new_person_privacy_policy_accepted").click
+
+        all('form .btn-toolbar').first.click_button 'Speichern'
+
+        expect(current_path).to eq(group_roles_path(group_id: bottom_layer.id))
+        is_expected.to have_content 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
+      end
+    end
+  end
 end

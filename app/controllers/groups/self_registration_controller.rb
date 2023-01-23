@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito.
 
 class Groups::SelfRegistrationController < CrudController
+  include PrivacyPolicyAcceptable
+
   skip_authorization_check
   skip_authorize_resource
-
-  after_create :success_but_no_email, unless: :email_present?
-  after_create :send_password_reset_email, if: :email_present?
 
   before_action :assert_empty_honeypot, only: [:create]
 
@@ -19,6 +18,7 @@ class Groups::SelfRegistrationController < CrudController
   after_create :send_notification_email
 
   delegate :self_registration_active?, to: :group
+
 
   private
 
@@ -40,22 +40,26 @@ class Groups::SelfRegistrationController < CrudController
 
   def save_entry
     ActiveRecord::Base.transaction do
-      entry.person.save!
-      entry.save!
+      person.valid? && privacy_policy_accepted? && person.save && entry.save 
     end
   end
 
   def return_path
-    super.presence || new_person_session_path if valid?
+    if valid?
+      super.presence || new_person_session_path
+    else
+      add_privacy_policy_not_accepted_error
+      group_self_registration_path(group)
+    end
   end
 
-  def success_but_no_email
-    flash[:notice] = I18n.t('devise.registrations.signed_up_but_no_email')
-  end
-
-  def send_password_reset_email
-    Person.send_reset_password_instructions(email: entry.person.email)
-    flash[:notice] = I18n.t('devise.registrations.signed_up_but_unconfirmed')
+  def set_success_notice
+    if person.email.present?
+      Person.send_reset_password_instructions(email: person.email)
+      flash[:notice] = I18n.t('devise.registrations.signed_up_but_unconfirmed')
+    else
+      flash[:notice] = I18n.t('devise.registrations.signed_up_but_no_email')
+    end
   end
 
   def assert_empty_honeypot
@@ -74,21 +78,25 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def valid?
-    entry.valid? && entry.person.valid?
-  end
-
-  def email_present?
-    entry.person.email.present?
+    privacy_policy_accepted? && entry.valid? && person.valid?
   end
 
   def person_attrs
-    model_params&.delete(:new_person)
+    model_params&.require(:new_person)
       &.permit(*PeopleController.permitted_attrs)
       &.merge(primary_group_id: group.id)
   end
 
+  def privacy_policy_param
+    model_params&.require(:new_person)[:privacy_policy_accepted]
+  end
+
   def group
     @group ||= Group.find(params[:group_id])
+  end
+
+  def person
+    @person ||= entry.person
   end
 
   def authenticate?

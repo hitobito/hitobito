@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_14_112552) do
+ActiveRecord::Schema.define(version: 2023_01_10_120540) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -374,6 +374,16 @@ ActiveRecord::Schema.define(version: 2022_12_14_112552) do
     t.index ["person_id"], name: "index_family_members_on_person_id"
   end
 
+  create_table "group_translations", charset: "utf8mb4", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "privacy_policy_title"
+    t.index ["group_id"], name: "index_group_translations_on_group_id"
+    t.index ["locale"], name: "index_group_translations_on_locale"
+  end
+
   create_table "groups", id: :integer, charset: "utf8mb4", force: :cascade do |t|
     t.integer "parent_id"
     t.integer "lft"
@@ -400,6 +410,7 @@ ActiveRecord::Schema.define(version: 2022_12_14_112552) do
     t.datetime "archived_at"
     t.string "self_registration_role_type"
     t.string "self_registration_notification_email"
+    t.string "privacy_policy"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
@@ -812,6 +823,7 @@ ActiveRecord::Schema.define(version: 2022_12_14_112552) do
     t.integer "two_factor_authentication"
     t.text "encrypted_two_fa_secret"
     t.string "language", default: "de", null: false
+    t.timestamp "privacy_policy_accepted_at"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

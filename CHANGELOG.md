@@ -1,16 +1,8 @@
 # Hitobito Changelog
 
-## Version 1.28
+## unreleased
 
-* Erweiterung Personenfilter (#295): Filterung von Personenlisten nach Alter, Geburtsdatum und Geschlecht (merci @simfeld!)
-* Neue Filterbedingung "Enthält nicht" (#295)
-* OAuth Applikationen können neu spezifischen Zugriff auf nur einzelne API-Endpoints bekommen. Zur Auswahl stehen die Endpoints "group", "person", "event", "mailing_list" und "invoice". (#1399, merci @simfeld!)
-* Wird die API mit einem Service Token benutzt, dann kommen jetzt dieselben Felder auf der Person wie mit der veralteten User Authentication (#1460, merci @sniederberger!)
-* Bei Zugriffsfehlern in der JSON API wird jetzt konsistent ein JSON-Payload zurückgegeben, statt wie bisher eine HTML-Seite (Seiteneffekt von #1866, ursprünglich gemeldet in der [erweiterten Fehlerliste](https://gist.github.com/carlobeltrame/8dd5b5e6279d91d1e3c181cb9086666a#x-api-should-always-return-json-and-return-the-same-for-parameters-style-and-headers-style-calls) bei der [Einführung der Service Tokens](https://github.com/hitobito/hitobito/issues/586))
-* Der API Endpoint eines einzelnen Events enthält neu die URL von Anhängen (#1873)
-* Neues "Hitobito Log" einsehbar mit admin permissions unter "Einstellungen" (#1840)
-* Neues Bestätigungsmail für Event Voranmeldung (hitobito_cevi#80)
-* Einführung neue JSON:API für Personen (#1920)
+*  Neu kann auf einer Ebene eine Datenschutzerklärung (DSE) hinterlegt werden. Diese muss, falls vorhanden, bei der Selbstregistrierung, dem Anmelden bei einem Anlass/Kurs oder dem Hinzufügen einer Person auf einer Gruppe akzeptiert werden um fortzufahren. (#1881)
 
 
 ## Version 1.28
@@ -25,7 +17,16 @@
 *  Rechnungen können mit Firmennamen gefiltert werden (#1773)
 *  Personen mit `:finance` Berechtigung können neu bei allen Personen in und unterhalb ihrer Ebene die Rechnungen der Person mittels "Rechnungen" Tab auf dem Profil anzeigen lassen. (hitobito_die_mitte#205)
 *  In der Kursansicht können neu alle Kurse welche "Anlass ist für die ganze Datenbank sichtbar" aktiviert haben, gefunden werden. (#1813)
-*  Rechnungsempfänger auf QR Rechnungen wird validiert: muss genau 3 Zeilen enthalten (#1825) 
+*  Rechnungsempfänger auf QR Rechnungen wird validiert: muss genau 3 Zeilen enthalten (#1825)
+* Erweiterung Personenfilter (#295): Filterung von Personenlisten nach Alter, Geburtsdatum und Geschlecht (merci @simfeld!)
+* Neue Filterbedingung "Enthält nicht" (#295)
+* OAuth Applikationen können neu spezifischen Zugriff auf nur einzelne API-Endpoints bekommen. Zur Auswahl stehen die Endpoints "group", "person", "event", "mailing_list" und "invoice". (#1399, merci @simfeld!)
+* Wird die API mit einem Service Token benutzt, dann kommen jetzt dieselben Felder auf der Person wie mit der veralteten User Authentication (#1460, merci @sniederberger!)
+* Bei Zugriffsfehlern in der JSON API wird jetzt konsistent ein JSON-Payload zurückgegeben, statt wie bisher eine HTML-Seite (Seiteneffekt von #1866, ursprünglich gemeldet in der [erweiterten Fehlerliste](https://gist.github.com/carlobeltrame/8dd5b5e6279d91d1e3c181cb9086666a#x-api-should-always-return-json-and-return-the-same-for-parameters-style-and-headers-style-calls) bei der [Einführung der Service Tokens](https://github.com/hitobito/hitobito/issues/586))
+* Der API Endpoint eines einzelnen Events enthält neu die URL von Anhängen (#1873)
+* Neues "Hitobito Log" einsehbar mit admin permissions unter "Einstellungen" (#1840)
+* Neues Bestätigungsmail für Event Voranmeldung (hitobito_cevi#80)
+* Einführung neue JSON:API für Personen (#1920)
 
 ## Version 1.27
 

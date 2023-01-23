@@ -70,6 +70,7 @@ class Event::ParticipationContactData
   def method_missing(method)
     return person.send(method) if method =~ /^.*_came_from_user\?/
     return person.send(method) if method =~ /^.*_before_type_cast/
+    return person.send(method) if method =~ /^privacy_policy.*/
 
     super(method)
   end

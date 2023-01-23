@@ -363,6 +363,9 @@ de:
         title: Kontaktangaben der teilnehmenden Person
         wizard_title: Kontaktangaben
         save: Weiter
+      update:
+        flash:
+          privacy_policy_not_accepted: 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
     participations:
       edit:
         title: Anmeldung
@@ -416,6 +419,8 @@ de:
     register:
       register:
         title: Kontaktdaten der teilnehmenden Person erfassen
+        flash:
+          privacy_policy_not_accepted: Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
       index:
         sign_in: Anmelden
         login: Login
@@ -712,6 +717,12 @@ de:
       age: Alter
       count: Anzahl
       distribution: Verteilung
+    self_registration:
+      form:
+        privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
+      create:
+        flash:
+          privacy_policy_not_accepted: Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
 
   group/deleted_people:
     list:
@@ -1482,6 +1493,11 @@ de:
       home_phone: "Privat"
       mobile_phone: "Mobil"
 
+    privacy_policy_acceptance_field:
+      acceptance_caption:
+        for_self: 'Ich erkläre mich mit den folgenden Bestimmungen einverstanden:'
+        for_someone_else: 'Ich bestätige, dass ich das Einverständnis dieser Person oder ihrer erziehungsberechtigten Person für die folgenden Bestimmungen eingeholt habe:'
+
     roles:
       title: Aktive Rollen
 
@@ -1620,6 +1636,10 @@ de:
     role_changed: '%{full_entry_label} zu <i>%{new_role}</i> geändert.'
     role_changed_to_group: '%{full_entry_label} zu <i>%{new_role}</i> in <i>%{new_group}</i> geändert.'
     role_primary_group_changed: 'Hauptgruppe auf <i>%{new_group}</i> geändert.'
+
+    create:
+      flash:
+        privacy_policy_not_accepted: Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
 
     form:
       add_person: Person hinzufügen

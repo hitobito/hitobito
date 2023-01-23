@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class RolesController < CrudController
+  include PrivacyPolicyAcceptable
 
   respond_to :js
 
@@ -33,6 +34,7 @@ class RolesController < CrudController
     with_person_add_request do
       new_person = entry.person.new_record?
       created = create_entry_and_person
+      add_privacy_policy_not_accepted_error if new_person
       respond_with(entry, success: created, location: after_create_location(new_person))
     end
   end
@@ -80,7 +82,7 @@ class RolesController < CrudController
     created = false
     Role.transaction do
       created = with_callbacks(:create, :save) do
-        (entry.person.persisted? || entry.person.save) && entry.save
+        (entry.person.persisted? || (privacy_policy_accepted? && entry.person.save)) && entry.save
       end
       raise ActiveRecord::Rollback unless created
     end
@@ -139,7 +141,7 @@ class RolesController < CrudController
   def build_entry
     @group = find_group
     # delete unused attributes
-    extract_model_attr(:person)
+    model_params&.delete(:person)
 
     role = build_role
     role.group_id = @group.id
@@ -186,7 +188,7 @@ class RolesController < CrudController
   end
 
   def extract_model_attr(attr)
-    model_params&.delete(attr)
+    model_params&.fetch(attr, nil)
   end
 
   # A label for the current entry, including the model name, used for flash
@@ -251,6 +253,18 @@ class RolesController < CrudController
 
   def set_person_id
     @person_id = Role.with_deleted.find(params[:role_id]).person_id if params[:role_id]
+  end
+
+  def privacy_policy_param
+    extract_model_attr(:new_person)&.fetch(:privacy_policy_accepted, nil)
+  end
+
+  def person
+    entry.person
+  end
+
+  def group
+    entry.group
   end
 
 end

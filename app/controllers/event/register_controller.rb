@@ -7,6 +7,7 @@
 
 class Event::RegisterController < ApplicationController
   include DeprecationHelper
+  include PrivacyPolicyAcceptable
 
   helper_method :resource, :entry, :group, :event
 
@@ -42,10 +43,13 @@ class Event::RegisterController < ApplicationController
 
   def register
     if save_entry
+      set_privacy_policy_acceptance if privacy_policy_needed_and_accepted?
+
       sign_in(:person, entry.person)
       flash[:notice] = translate(:registered)
       redirect_to new_group_event_participation_path(group, event)
     else
+      add_privacy_policy_not_accepted_error(entry)
       render 'register'
     end
   end
@@ -54,7 +58,7 @@ class Event::RegisterController < ApplicationController
 
   # NOTE: Wagon Hook - insieme
   def save_entry
-    entry.save
+    entry.valid? && privacy_policy_accepted? && entry.save
   end
 
   def assert_external_application_possible
@@ -118,5 +122,7 @@ class Event::RegisterController < ApplicationController
     true # hence, no login required
   end
 
-
+  def privacy_policy_param
+    params.require(params_key)[:privacy_policy_accepted]
+  end
 end

@@ -80,6 +80,7 @@ RSpec.configure do |config|
   config.include FeatureHelpers, type: :feature
   config.include Warden::Test::Helpers, type: :feature
   config.include ActiveSupport::Testing::TimeHelpers
+  config.include ResourceHelpers, type: :resource
 
   config.filter_run_excluding type: 'feature', performance: true
   config.filter_run_excluding type: 'sphinx', sphinx: true

@@ -5,4 +5,5 @@
 
 Graphiti.configure do |config|
   config.pagination_links = true
+  config.schema_path = Rails.root.join('spec/support/graphiti/schema.json')
 end

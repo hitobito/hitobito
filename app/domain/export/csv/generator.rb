@@ -10,6 +10,8 @@ require 'csv'
 module Export
   module Csv
 
+    UTF8_BOM = "\xEF\xBB\xBF"
+
     def self.export(exportable)
       Generator.new(exportable).call
     end
@@ -43,6 +45,10 @@ module Export
       # well, has some success-potential to handle UTF-8
       def convert(data)
         if Settings.csv.encoding.present?
+          # trick excel into reading UTF8 by providing a "BOM"
+          if Settings.csv.encoding == "UTF-8"
+            data = UTF8_BOM + data
+          end
           data.encode(Settings.csv.encoding, undef: :replace, invalid: :replace)
         else
           data

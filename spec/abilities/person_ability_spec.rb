@@ -15,6 +15,14 @@ describe PersonAbility do
   context :layer_and_below_full do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
+    before do
+      Group::TopGroup::Leader.permissions = [:layer_and_below_full]
+    end
+
+    after do
+      Group::TopGroup::Leader.permissions = [:admin, :finance, :layer_and_below_full, :contact_data, :impersonation]
+    end
+
     it 'may modify any public role in lower layers' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
       is_expected.to be_able_to(:update, other.person.reload)
@@ -85,6 +93,21 @@ describe PersonAbility do
       is_expected.to be_able_to(:index_notes, other.person.reload)
       is_expected.to be_able_to(:index_tags, other.person.reload)
       is_expected.to be_able_to(:manage_tags, other.person.reload)
+    end
+
+    it 'may show person with deleted role in layer' do
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      is_expected.to be_able_to(:show, other.person.reload)
+    end
+
+    it 'may show person with deleted role in lower layer' do
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      is_expected.to be_able_to(:show, other.person.reload)
+    end
+
+    it 'may not show person with deleted role in different layer' do
+      other = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: Group::TopLayer.create(name: 'foo'), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      is_expected.to_not be_able_to(:show, other.person.reload)
     end
   end
 
@@ -233,10 +256,15 @@ describe PersonAbility do
       is_expected.to be_able_to(:manage_tags, other.person.reload)
     end
 
-    it 'may not show notes and tags in uppper layer' do
+    it 'may not show notes and tags in upper layer' do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:index_tags, other.person.reload)
       is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+    end
+
+    it 'may show person with deleted role in upper layer' do
+      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      is_expected.to_not be_able_to(:show, other.person.reload)
     end
   end
 
@@ -312,6 +340,11 @@ describe PersonAbility do
       is_expected.to be_able_to(:index_people, groups(:toppers))
       is_expected.to be_able_to(:index_full_people, groups(:toppers))
       is_expected.to be_able_to(:index_local_people, groups(:toppers))
+    end
+
+    it 'may not show person with deleted role in layer' do
+      other = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      is_expected.to_not be_able_to(:show, other.person.reload)
     end
   end
 
@@ -395,6 +428,16 @@ describe PersonAbility do
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
       is_expected.not_to be_able_to(:index_tags, other.person.reload)
       is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+    end
+
+    it 'may show person with deleted role in layer' do
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      is_expected.to be_able_to(:show, other.person.reload)
+    end
+
+    it 'may not show person with deleted role in lower layer' do
+      other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      is_expected.to_not be_able_to(:show, other.person.reload)
     end
   end
 
@@ -555,6 +598,11 @@ describe PersonAbility do
       is_expected.not_to be_able_to(:index_tags, other.person.reload)
       is_expected.not_to be_able_to(:manage_tags, other.person.reload)
     end
+
+    it 'may not show person with deleted role in layer' do
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      is_expected.to_not be_able_to(:show, other.person.reload)
+    end
   end
 
   context :layer_read do
@@ -648,6 +696,11 @@ describe PersonAbility do
       is_expected.not_to be_able_to(:index_notes, other.person.reload)
       is_expected.not_to be_able_to(:index_tags, other.person.reload)
       is_expected.not_to be_able_to(:manage_tags, other.person.reload)
+    end
+
+    it 'may not show person with deleted role in layer' do
+      other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      is_expected.to_not be_able_to(:show, other.person.reload)
     end
   end
 

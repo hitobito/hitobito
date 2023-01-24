@@ -131,10 +131,20 @@ describe SearchStrategies::Sql do
         expect(result).not_to include(@no_role)
       end
 
+      it 'finds deleted people' do
+        result = strategy(@deleted_leader.last_name[1..5]).list_people
+
+        expect(result).to include(@deleted_leader)
+      end
+    end
+
+    context 'as member' do
+      let(:user) { @bg_member }
+
       it 'does not find deleted people' do
         result = strategy(@deleted_leader.last_name[1..5]).list_people
 
-        expect(result).not_to include(@deleted_leader)
+        expect(result).to_not include(@deleted_leader)
       end
     end
 

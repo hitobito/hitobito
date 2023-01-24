@@ -79,6 +79,9 @@ module SearchStrategies
         if Ability.new(@user).can?(:index_people_without_role, Person)
           ids += load_deleted_people_ids
         end
+
+        ids += load_accessible_deleted_people_ids
+
         ids.uniq
       end
     end
@@ -97,5 +100,20 @@ module SearchStrategies
             .pluck(:id)
     end
 
+    def load_accessible_deleted_people_ids
+      deleted_people_indexable_layers.flat_map do |layer|
+        Group::DeletedPeople.deleted_for(layer).pluck(:id)
+      end
+    end
+
+    def deleted_people_indexable_layers
+      accessible_layers.select do |layer|
+        Ability.new(@user).can?(:index_deleted_people, layer)
+      end
+    end
+
+    def accessible_layers
+      @user.groups.flat_map(&:layer_hierarchy)
+    end
   end
 end

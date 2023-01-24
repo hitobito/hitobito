@@ -57,6 +57,7 @@ class PersonAbility < AbilityDsl::Base
       non_restricted_in_same_layer
     permission(:layer_full).may(:update_email).if_permissions_in_all_capable_groups_or_layer
     permission(:layer_full).may(:create).all # restrictions are on Roles
+    permission(:layer_full).may(:show).deleted_people_in_same_layer
 
     permission(:layer_and_below_read).
       may(:show, :show_full, :show_details, :history).
@@ -69,6 +70,7 @@ class PersonAbility < AbilityDsl::Base
       may(:update_email).
       if_permissions_in_all_capable_groups_or_layer_or_above
     permission(:layer_and_below_full).may(:create).all # restrictions are on Roles
+    permission(:layer_and_below_full).may(:show).deleted_people_in_same_layer_or_below
 
     permission(:finance).may(:index_invoices).in_same_layer_or_below
     permission(:finance).may(:create_invoice).in_same_layer_or_below
@@ -140,6 +142,18 @@ class PersonAbility < AbilityDsl::Base
       permission_in_layers?(role.group.layer_hierarchy.collect(&:id)) ||
       capable_group_roles?(role.group)
     end
+  end
+
+  def deleted_people_in_same_layer
+    permission_in_layer?(Group::DeletedPeople.group_for_deleted(subject)&.layer_group_id)
+  end
+
+  def deleted_people_in_same_layer_or_below
+    group_hierarchy_for_deleted = Group::DeletedPeople.group_for_deleted(subject)
+                                                      &.layer_group
+                                                      &.hierarchy
+                                                      &.pluck(:id)
+    permission_in_layers?(group_hierarchy_for_deleted || [])
   end
 
   def capable_group_roles?(group)

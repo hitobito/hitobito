@@ -1430,7 +1430,7 @@ de:
     send_password_instructions_invalid_email: Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist.
     years_old: (%{years} Jahre alt)
 
-    update_email_must_be_confirmed: Die geänderte E-Mail-Adresse muss noch bestätigt werden, bevor sie aktiv wird.
+    update_email_must_be_confirmed: Die geänderte E-Mail-Adresse muss noch bestätigt werden, bevor sie aktiv wird. Dazu wurde ein Bestätigungslink an %{new_mail} gesendet.
 
     tabs:
       history: Verlauf

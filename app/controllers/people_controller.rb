@@ -260,7 +260,8 @@ class PeopleController < CrudController
   def show_email_change_info
     return unless entry.show_email_change_info?
 
-    flash[:notice] = I18n.t("#{controller_name}.#{action_name}_email_must_be_confirmed")
+    flash[:notice] = I18n.t("#{controller_name}.#{action_name}_email_must_be_confirmed",
+                            new_mail: entry.unconfirmed_email)
   end
 
   def index_archived

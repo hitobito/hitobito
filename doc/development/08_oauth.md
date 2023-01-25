@@ -30,7 +30,7 @@ Different external applications need different types of data about their users. 
 | `people`        | people API endpoints                      |
 | `invoices`      | invoice API endpoints                     |
 | `mailing_lists` | mailing list API endpoints                |
-| `nextcloud`     | maps roles to nextcloud-groups            |
+| `nextcloud`     | nextcloud groups based on user's roles    |
 
 The scope `with_roles` contains most of the profile information, including the fields of the name scope. Multiple scopes can be combined in a single authorization request.
 

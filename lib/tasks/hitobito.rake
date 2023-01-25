@@ -49,7 +49,7 @@ namespace :hitobito do
           ❌ OAuth not correctly configured
 
             JWT Signing Key missing.
-            This key is needed to OAuth to work.
+            This key is needed for OAuth to work.
             See doc/development/08_oauth.md for details
 
         MESSAGE

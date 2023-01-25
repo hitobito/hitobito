@@ -163,7 +163,7 @@ class Role < ActiveRecord::Base
   # If this role has contact_data permissions, set the flag on the person
   def set_contact_data_visible
     if becomes(type.constantize).permissions.include?(:contact_data)
-      person.update_column :contact_data_visible, true
+      person.update_column :contact_data_visible, true # rubocop:disable Rails/SkipsModelValidations intentional
     end
   end
 
@@ -171,20 +171,20 @@ class Role < ActiveRecord::Base
   def reset_contact_data_visible
     if permissions.include?(:contact_data) &&
        !person.roles.collect(&:permissions).flatten.include?(:contact_data)
-      person.update_column :contact_data_visible, false
+      person.update_column :contact_data_visible, false # rubocop:disable Rails/SkipsModelValidations intentional
     end
   end
 
   def set_first_primary_group
     if (deleted_at.nil? || deleted_at.future?) && person.roles.count <= 1
-      person.update_column :primary_group_id, group_id
+      person.update_column :primary_group_id, group_id # rubocop:disable Rails/SkipsModelValidations intentional
     end
   end
 
   def reset_primary_group
     if person.primary_group_id == group_id &&
         person.roles.where(group_id: group_id).count.zero?
-      person.update_column :primary_group_id, alternative_primary_group.try(:id)
+      person.update_column :primary_group_id, alternative_primary_group.try(:id) # rubocop:disable Rails/SkipsModelValidations intentional
     end
   end
 

@@ -13,8 +13,8 @@
       = render_attrs(entry, :self_registration_link, :self_registration_notification_email)
     = render_attrs(entry, :type_name)
     = render_present_attrs(entry, *entry.used_attributes(:description))
-    - if FeatureGate.enabled?('groups.nextcloud')
-      = render_present_attrs(entry, :nextcloud_url)
+    - if entry.class.attr_used?(:nextcloud_url) && entry.nextcloud_organizer.present?
+      = render_attrs(entry, :nextcloud_url)
     = render_extensions :attrs
     = render_present_attrs(entry, :created_info, :updated_info, :deleted_info, :archived_info) if can?(:show_details, @group)
 

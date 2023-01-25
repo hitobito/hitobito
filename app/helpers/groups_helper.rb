@@ -21,7 +21,9 @@ module GroupsHelper
   end
 
   def format_nextcloud_url(group)
-    url = group.nextcloud_url
+    url = group.nextcloud_organizer&.nextcloud_url
+    return unless url
+
     link_to(url, url, target: '_blank', rel: 'noopener')
   end
 

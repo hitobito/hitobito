@@ -97,14 +97,17 @@ class GroupDecorator < ApplicationDecorator
                            .pluck(:id)
   end
 
-  def nextcloud_url
-    layer_group.nextcloud_url
-  end
-
   def archived_class
     return nil unless model.archived?
 
     'is-archived'
+  end
+
+  def nextcloud_organizer
+    model
+      .hierarchy.where(layer_group_id: layer_group.id) # local_hierarchy as a scope
+      .where.not(nextcloud_url: nil) # only those with a nextcloud_url
+      .last
   end
 
   private

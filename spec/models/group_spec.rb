@@ -658,5 +658,10 @@ describe Group do
 
       expect(subject.nextcloud_url).to eql 'https://example.org'
     end
+
+    it 'has the nextcloud_url' do
+      expect(described_class.used_attributes).to include(:nextcloud_url)
+      expect(subject.used_attributes).to include(:nextcloud_url)
+    end
   end
 end

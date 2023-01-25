@@ -140,13 +140,14 @@ describe GroupDecorator, :draper_with_helpers do
     end
   end
 
-  it 'reads the nextcloud_url from the layer_group' do
+  it 'reads the nextcloud_url from the next organizing group in the hierarchy' do
     expect(subject.nextcloud_url).to be_nil
 
     subject.layer_group.nextcloud_url = 'http://example.org'
     subject.layer_group.save!
     subject.reload
 
-    expect(subject.nextcloud_url).to eq 'http://example.org'
+    expect(subject.nextcloud_organizer).to eq subject.layer_group
+    expect(subject.nextcloud_organizer.nextcloud_url).to eq 'http://example.org'
   end
 end

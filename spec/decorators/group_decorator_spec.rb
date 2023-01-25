@@ -46,7 +46,7 @@ describe GroupDecorator, :draper_with_helpers do
 
   describe 'selecting attributes' do
 
-    class DummyGroup < Group
+    class DummyGroup < Group # rubocop:disable Lint/ConstantDefinitionInBlock
       self.used_attributes += [:foo, :bar]
     end
 
@@ -88,11 +88,13 @@ describe GroupDecorator, :draper_with_helpers do
 
     its(:subgroup_ids) do
       should match_array(
-        [ groups(:bottom_layer_one),
+        [
+          groups(:bottom_layer_one),
           groups(:bottom_group_one_one),
           groups(:bottom_group_one_one_one),
           groups(:bottom_group_one_two)
-        ].collect(&:id))
+        ].collect(&:id)
+      )
     end
   end
 

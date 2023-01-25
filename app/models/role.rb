@@ -55,9 +55,19 @@ class Role < ActiveRecord::Base
   self.merge_excluded_attributes = []
 
   FeatureGate.if('groups.nextcloud') do
-    # Can be either a string which is simply returned or a boolean.
-    # If true, then the attached Group should be referenced
-    # If false, no group for nextcloud is referenced
+    # Can be one of several types:
+    #
+    # String - Name of the nextcloud-group
+    # String  - Name of the nextcloud-group
+    # Boolean - Dynamic lookup of the nextcloud-group
+    #           If true, then the attached Group should be referenced
+    #           If false, no group for nextcloud is referenced
+    # Symbol  - Identifier of an instance-method
+    # Proc    - A proc that is called with the role
+    #
+    # Both Symbol and Proc are expected return something that is useful to Nextcloud.
+    # It can either only return the name of the nextcloud-group or a Hash like this
+    # { 'gid' => 'group-id-that-is-unique-in-nextcloud', 'displayName' => 'Name of Group' }
     class_attribute :nextcloud_group
     self.nextcloud_group = false
   end
@@ -138,11 +148,13 @@ class Role < ActiveRecord::Base
   end
 
   def nextcloud_group
-    FeatureGate.assert! 'groups.nextcloud'
+    FeatureGate.assert!('groups.nextcloud')
 
     case (setting = self.class.nextcloud_group)
     when String then { 'gid' => "hitobito-#{setting}", 'displayName' => setting }
     when true   then { 'gid' => group_id.to_s,         'displayName' => group.name }
+    when Symbol then method(setting).call
+    when Proc   then setting.call(self)
     end
   end
 

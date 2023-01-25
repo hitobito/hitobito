@@ -385,8 +385,11 @@ describe Role do
   context 'nextcloud groups' do
     let(:person) { Fabricate(:person) }
     let(:group) { groups(:bottom_layer_one) }
+    let(:nextcloud_group_mapping) { false }
+
     subject do
       r = described_class.new # Group::BottomLayer::Leader.new
+      r.class.nextcloud_group = nextcloud_group_mapping
       r.type = 'Group::BottomLayer::Leader'
       r.person = person
       r.group = group
@@ -398,9 +401,7 @@ describe Role do
     end
 
     describe 'role without mapping' do
-      before do
-        subject.class.nextcloud_group = false
-      end
+      let(:nextcloud_group_mapping) { false }
 
       it 'has a value of false' do
         expect(subject.class.nextcloud_group).to be false
@@ -412,9 +413,7 @@ describe Role do
     end
 
     describe 'role with constant mapping' do
-      before do
-        subject.class.nextcloud_group = 'Admins'
-      end
+      let(:nextcloud_group_mapping) { 'Admins' }
 
       it 'has a String-value' do
         expect(subject.class.nextcloud_group).to eq 'Admins'
@@ -426,12 +425,9 @@ describe Role do
     end
 
     describe 'role with dynamic mapping' do
+      let(:nextcloud_group_mapping) { true }
       let(:group) do
         Group::GlobalGroup.new(id: 1024, name: 'Test', parent: groups(:top_layer))
-      end
-
-      before do
-        subject.class.nextcloud_group = true
       end
 
       it 'has a value of false' do
@@ -442,6 +438,51 @@ describe Role do
         expect(subject.nextcloud_group).to eq('gid' => '1024', 'displayName' => 'Test')
       end
     end
+
+    describe 'role with a method mapping' do
+      let(:nextcloud_group_mapping) { :my_nextcloud_group }
+
+      before do
+        subject.define_singleton_method :my_nextcloud_group do
+          { 'gid' => '1234', 'displayName' => 'TestGruppe' }
+        end
+      end
+
+      it 'has a Symbol as value' do
+        expect(subject.class.nextcloud_group).to be_a Symbol
+      end
+
+      it 'responds to the method' do
+        is_expected.to respond_to :my_nextcloud_group
+      end
+
+      it 'delegates to the other group' do
+        expect(subject.nextcloud_group).to eq('gid' => '1234', 'displayName' => 'TestGruppe')
+      end
+    end
+
+    describe 'role with a proc mapping' do
+      let(:nextcloud_group_mapping) do
+        proc do |role|
+          {
+            'gid' => role.type,
+            'displayName' => role.class.name.humanize
+          }
+        end
+      end
+
+      it 'has a Symbol as value' do
+        expect(subject.class.nextcloud_group).to be_a Proc
+      end
+
+      it 'delegates to the Proc' do
+        expect(subject.nextcloud_group).to eq(
+          'gid' => 'Group::BottomLayer::Leader',
+          'displayName' => 'Role'
+        )
+      end
+    end
+
   end
 
 end

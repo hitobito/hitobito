@@ -59,7 +59,7 @@ RSpec.describe PersonResource, type: :resource do
     end
 
     it 'with show_details permission it includes restricted attrs' do
-      allow(graphiti_context).to receive(:can?).with(:show_details, person).and_return(true)
+      set_ability { can :show_details, Person }
 
       render
 
@@ -67,7 +67,7 @@ RSpec.describe PersonResource, type: :resource do
     end
 
     it  'without show_details permission it does not include restricted attrs' do
-      allow(graphiti_context).to receive(:can?).with(:show_details, person).and_return(false)
+      set_ability { can :read, Person }
 
       render
 

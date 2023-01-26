@@ -71,9 +71,13 @@ class Role < ActiveRecord::Base
     class_attribute :nextcloud_group
     self.nextcloud_group = false
 
-    NextcloudGroup = Struct.new(:gid, :displayName) do
+    NextcloudGroup = Struct.new(:gid, :displayName) do # rubocop:disable Lint/ConstantDefinitionInBlock
       def hash
-        @gid.hash
+        gid.hash
+      end
+
+      def to_h
+        { 'gid' => gid, 'displayName' => displayName }
       end
     end
   end

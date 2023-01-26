@@ -439,7 +439,10 @@ describe Role do
       end
 
       it 'does not return any nextcloud groups' do
-        expect(subject.nextcloud_group).to eq('gid' => 'hitobito-Admins', 'displayName' => 'Admins')
+        expect(subject.nextcloud_group.to_h).to eq(
+          'gid' => 'hitobito-Admins',
+          'displayName' => 'Admins'
+        )
       end
     end
 
@@ -454,7 +457,10 @@ describe Role do
       end
 
       it 'does not return any nextcloud groups' do
-        expect(subject.nextcloud_group).to eq('gid' => '1024', 'displayName' => 'Test')
+        expect(subject.nextcloud_group.to_h).to eq(
+          'gid' => '1024',
+          'displayName' => 'Test'
+        )
       end
     end
 
@@ -476,7 +482,10 @@ describe Role do
       end
 
       it 'delegates to the other group' do
-        expect(subject.nextcloud_group).to eq('gid' => '1234', 'displayName' => 'TestGruppe')
+        expect(subject.nextcloud_group.to_h).to eq(
+          'gid' => '1234',
+          'displayName' => 'TestGruppe'
+        )
       end
     end
 
@@ -495,7 +504,7 @@ describe Role do
       end
 
       it 'delegates to the Proc' do
-        expect(subject.nextcloud_group).to eq(
+        expect(subject.nextcloud_group.to_h).to eq(
           'gid' => 'Group::BottomLayer::Leader',
           'displayName' => 'Role'
         )

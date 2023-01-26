@@ -70,6 +70,12 @@ class Role < ActiveRecord::Base
     # { 'gid' => 'group-id-that-is-unique-in-nextcloud', 'displayName' => 'Name of Group' }
     class_attribute :nextcloud_group
     self.nextcloud_group = false
+
+    NextcloudGroup = Struct.new(:gid, :displayName) do
+      def hash
+        @gid.hash
+      end
+    end
   end
 
   # If these attributes should change, create a new role instance instead.
@@ -150,6 +156,21 @@ class Role < ActiveRecord::Base
   def nextcloud_group
     FeatureGate.assert!('groups.nextcloud')
 
+    info = nextcloud_group_details
+
+    return if info.nil?
+
+    case info
+    when String then NextcloudGroup.new(info, info)
+    when Hash then NextcloudGroup.new(info['gid'], info['displayName'])
+    end
+  end
+
+  private
+
+  def nextcloud_group_details
+    return nil unless FeatureGate.enabled?('groups.nextcloud')
+
     case (setting = self.class.nextcloud_group)
     when String then { 'gid' => "hitobito-#{setting}", 'displayName' => setting }
     when true   then { 'gid' => group_id.to_s,         'displayName' => group.name }
@@ -157,8 +178,6 @@ class Role < ActiveRecord::Base
     when Proc   then setting.call(self)
     end
   end
-
-  private
 
   # If this role has contact_data permissions, set the flag on the person
   def set_contact_data_visible

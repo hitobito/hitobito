@@ -76,6 +76,9 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
         admin_role = Fabricate(:'Group::GlobalGroup::Leader', person: user, group: temp_group)
         admin_role.class.nextcloud_group = 'Admins'
 
+        admin_role = Fabricate(:'Group::GlobalGroup::Leader', person: user, group: temp_group)
+        admin_role.class.nextcloud_group = 'Admins'
+
         group_role = Fabricate(:'Group::GlobalGroup::Member', person: user, group: temp_group)
         group_role.class.nextcloud_group = true
       end
@@ -84,7 +87,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
         expect(Settings.groups.nextcloud.enabled).to be true # in the test-env
 
         expect(user.to_s).to eq 'Tom Tester'
-        expect(user).to have(3).roles
+        expect(user).to have(4).roles
         expect(user.email).to eq 'top_leader@example.com'
       end
 

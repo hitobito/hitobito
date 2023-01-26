@@ -10,7 +10,19 @@ module ResourceHelpers
 
   included do
     before do
-      allow(graphiti_context).to receive(:can?).and_return(true)
+      set_ability { can :manage, :all }
     end
+  end
+
+  def set_ability(permit_read: true, &block)
+    ability = Class.new do
+      include CanCan::Ability
+
+      define_method(:initialize) do
+        can :read, Person if permit_read
+        instance_eval(&block) if block
+      end
+    end
+    Graphiti.context[:object].current_ability = ability.new
   end
 end

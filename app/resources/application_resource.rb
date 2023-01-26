@@ -36,6 +36,29 @@ class ApplicationResource < Graphiti::Resource
   # Automatically generate JSONAPI links?
   self.autolink = false
 
+  before_save :authorize
+  before_destroy :authorize_destroy
+
+  # As the cancan abilities are implemented on the basis of instance attributes,
+  # we must authorize with initial instance attributes
+  def authorize(model)
+    if model.new_record?
+      current_ability.authorize!(:create, model, *model.changed_attributes.keys)
+    else
+      attrs_from_db = model.attributes.merge(model.attributes_in_database)
+      model_from_db = model.class.new(attrs_from_db)
+      current_ability.authorize!(:update, model_from_db, *model.changed_attributes.keys)
+    end
+  end
+
+  def authorize_destroy(model)
+    current_ability.authorize! :destroy, model
+  end
+
+  def base_scope
+    super.accessible_by(current_ability)
+  end
+
   def self.find(params = {}, base_scope = nil)
     # make sure both id params are the same
     # for update since we're checking permission based on
@@ -49,6 +72,6 @@ class ApplicationResource < Graphiti::Resource
     super(params, base_scope)
   end
 
-  delegate :can?, to: :context
-
+  delegate :can?, to: :current_ability
+  delegate :current_ability, to: :context
 end

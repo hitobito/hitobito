@@ -33,5 +33,4 @@ module PaperTrailed
       whodunnit_type: whodunnit_type_for_papertrail
     }
   end
-
 end

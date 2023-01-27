@@ -55,6 +55,44 @@ class JsonApiController < ActionController::API
                                 size: error.instance_variable_get(:@size),
                                 max: error.instance_variable_get(:@max)) }
 
+  def index
+    resources = resource_class.all(params)
+    render(jsonapi: resources)
+  end
+
+  def show
+    resource = resource_class.find(params)
+    render(jsonapi: resource)
+  end
+
+  def create
+    resource = resource_class.build(params)
+    if resource.save
+      render jsonapi: resource, status: :created
+    else
+      render jsonapi_errors: resource
+    end
+  end
+
+  def update
+    resource = resource_class.find(params)
+    if resource.update_attributes # rubocop:disable Rails/ActiveRecordAliases
+      render jsonapi: resource
+    else
+      render jsonapi_errors: resource
+    end
+  end
+
+  def destroy
+    resource = resource_class.find(params)
+    if resource.destroy
+      render jsonapi: {meta: {}}, status: :ok
+    else
+      render jsonapi_errors: resource
+    end
+  end
+
+
   def authenticate_person!(*args)
     if user_session?
       super(*args)
@@ -79,5 +117,9 @@ class JsonApiController < ActionController::API
     return if request.content_type == MEDIA_TYPE
 
     raise JsonApiInvalidMediaType
+  end
+
+  def resource_class
+    [self.class.name.delete_prefix("JsonApi::").delete_suffix("Controller").singularize, "Resource"].join.constantize
   end
 end

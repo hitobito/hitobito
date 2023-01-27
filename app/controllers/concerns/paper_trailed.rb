@@ -10,27 +10,26 @@ module PaperTrailed
 
   included do
     before_action :set_paper_trail_whodunnit
+    before_action :set_paper_trail_controller_info
   end
 
   private
 
   def user_for_paper_trail
-    if current_user.present?
+    case current_ability
+    when Ability
       origin_user_id = session[:origin_user]
       origin_user_id ? origin_user_id : super
-    else
-      api_user_for_paper_trail
+    when TokenAbility
+      current_ability.token.id
+    when DoorkeeperTokenAbility
+      current_ability.user.id
     end
   end
 
-  def api_user_for_paper_trail
-    if current_service_token
-      type = ServiceToken.sti_name
-      ::PaperTrail.request.controller_info = { whodunnit_type: type }
-      return current_service_token.id
-    end
+  def info_for_paper_trail
+    return super unless current_ability.is_a?(TokenAbility)
 
-    oauth_token_user&.id
+    { whodunnit_type: current_ability.token.class.sti_name }
   end
-
 end

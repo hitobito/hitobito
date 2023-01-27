@@ -11,6 +11,10 @@ class DoorkeeperTokenAbility
 
   attr_reader :token, :user_ability
 
+  def user
+    user_ability.user
+  end
+
   def initialize(doorkeeper_token)
     return if doorkeeper_token.nil?
     @token = doorkeeper_token

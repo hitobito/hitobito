@@ -873,10 +873,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'renders validation errors for person' do
           person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
-
           @person_id = person.id
 
           params[:data][:attributes][:email] = bottom_member.email
+          params[:data][:attributes][:id] = bottom_member.id
 
           jsonapi_patch "/api/people/#{@person_id}", params
 

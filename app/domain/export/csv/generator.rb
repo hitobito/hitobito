@@ -41,9 +41,10 @@ module Export
         end
       end
 
+      # Allow different encodings (e.g. ISO-8859-1), configurable in the settings file.
+      # Using the BOM header helps M$ excel to recognize utf8 files.
       def convert(data)
         if Settings.csv.utf8_bom.present?
-          # trick excel into reading UTF8 by providing a "BOM" header
           data = UTF8_BOM + data
         end
         if Settings.csv.encoding.present?

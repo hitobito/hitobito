@@ -41,14 +41,12 @@ module Export
         end
       end
 
-      # convert to ISO-8859-1 (configurable, though) for Excel which is...,
-      # well, has some success-potential to handle UTF-8
       def convert(data)
+        if Settings.csv.utf8_bom.present?
+          # trick excel into reading UTF8 by providing a "BOM" header
+          data = UTF8_BOM + data
+        end
         if Settings.csv.encoding.present?
-          # trick excel into reading UTF8 by providing a "BOM"
-          if Settings.csv.encoding == "UTF-8"
-            data = UTF8_BOM + data
-          end
           data.encode(Settings.csv.encoding, undef: :replace, invalid: :replace)
         else
           data

@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 RSpec.describe PersonResource, type: :resource do
-  before { Person.delete_all }
+  before { set_user(people(:root)) }
 
   describe 'serialization' do
     let!(:person) { Fabricate(:person, birthday: Date.today, gender: 'm') }
@@ -37,6 +37,10 @@ RSpec.describe PersonResource, type: :resource do
 
     def read_restricted_attrs
       [ :gender, :birthday ]
+    end
+
+    before do
+      params[:filter] = { id: { eq: person.id } }
     end
 
     it 'works' do
@@ -107,7 +111,7 @@ RSpec.describe PersonResource, type: :resource do
 
         it 'works' do
           render
-          expect(d.map(&:id)).to eq([person1.id, person2.id].sort)
+          expect(d.map(&:id)).to eq(Person.all.pluck(:id).sort)
         end
       end
 
@@ -118,8 +122,114 @@ RSpec.describe PersonResource, type: :resource do
 
         it 'works' do
           render
-          expect(d.map(&:id)).to eq([person1.id, person2.id].sort.reverse)
+          expect(d.map(&:id)).to eq(Person.all.pluck(:id).sort.reverse)
         end
+      end
+    end
+  end
+
+  describe 'sideloading' do
+    describe 'phone_numbers' do
+      let!(:person) { Fabricate(:person) }
+      let!(:phone_number1) { Fabricate(:phone_number, contactable: person) }
+      let!(:phone_number2) { Fabricate(:phone_number, contactable: person) }
+
+      before do
+        params[:filter] = { id: person.id.to_s }
+        params[:include] = 'phone_numbers'
+      end
+
+      it 'it works with show_details permission' do
+
+        set_user(people(:root))
+
+        render
+
+        phone_numbers = d[0].relationships.dig(:phone_numbers, :data)
+        expect(phone_numbers).to have(2).items
+
+        phone_numbers in [
+          {type: "phone_numbers", id: first_id},
+          {type: "phone_numbers", id: second_id}
+        ]
+        expect([first_id, second_id]).to match_array [phone_number1.id.to_s, phone_number2.id.to_s]
+      end
+
+      it  'it does not work without show_details permission' do
+        set_ability { }
+
+        render
+
+        expect(d[0].sideload(:phone_numbers)).to eq []
+      end
+    end
+
+    describe 'social_accounts' do
+      let!(:person) { Fabricate(:person) }
+      let!(:social_account1) { Fabricate(:social_account, contactable: person) }
+      let!(:social_account2) { Fabricate(:social_account, contactable: person) }
+
+      before do
+        params[:filter] = { id: person.id.to_s }
+        params[:include] = 'social_accounts'
+      end
+
+      it 'it works with show_details permission' do
+        set_user(people(:root))
+
+        render
+
+        social_accounts = d[0].relationships.dig(:social_accounts, :data)
+        expect(social_accounts).to have(2).items
+
+        social_accounts in [
+          {type: "social_accounts", id: first_id},
+          {type: "social_accounts", id: second_id}
+        ]
+        expect([first_id, second_id]).to match_array [social_account1.id.to_s, social_account2.id.to_s]
+      end
+
+      it  'it does not work without show_details permission' do
+        set_ability { }
+
+        render
+
+        expect(d[0].sideload(:social_accounts)).to eq []
+      end
+    end
+
+    describe 'additional_emails' do
+      let!(:person) { Fabricate(:person) }
+      let!(:additional_email1) { Fabricate(:additional_email, contactable: person) }
+      let!(:additional_email2) { Fabricate(:additional_email, contactable: person) }
+
+      before do
+        params[:filter] = { id: person.id.to_s }
+        params[:include] = 'additional_emails'
+      end
+
+      it 'it works with show_details permission' do
+
+        set_user(people(:root))
+
+        render
+
+        additional_emails = d[0].relationships.dig(:additional_emails, :data)
+        expect(additional_emails).to have(2).items
+
+        additional_emails in [
+          {type: "additional_emails", id: first_id},
+          {type: "additional_emails", id: second_id}
+        ]
+        expect([first_id, second_id]).to match_array [additional_email1.id.to_s, additional_email2.id.to_s]
+      end
+
+      it  'it does not work without show_details permission' do
+        set_ability { }
+
+        render
+
+        expect(d[0].sideload(:additional_emails)).to eq []
       end
     end
   end

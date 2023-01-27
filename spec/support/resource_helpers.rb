@@ -14,15 +14,28 @@ module ResourceHelpers
     end
   end
 
-  def set_ability(permit_read: true, &block)
+  def set_user(user)
+    Graphiti.context[:object].current_ability = Ability.new(user)
+  end
+
+  def set_ability(ability: nil, &block)
+    return Graphiti.context[:object].current_ability = ability if ability.present?
+
     ability = Class.new do
       include CanCan::Ability
+      attr_reader :user
 
       define_method(:initialize) do
-        can :read, Person if permit_read
-        instance_eval(&block) if block
+        @user = Fabricate(:person)
+        @self_before_instance_eval = eval "self", block.binding
+        instance_eval(&block)
+      end
+
+      def method_missing(method, *args, &block)
+        @self_before_instance_eval.send method, *args, &block
       end
     end
+
     Graphiti.context[:object].current_ability = ability.new
   end
 end

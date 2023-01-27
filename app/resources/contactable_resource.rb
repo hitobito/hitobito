@@ -33,4 +33,10 @@ module ContactableResource
   def show_details_or_public?(model_instance)
     show_details?(model_instance) || model_instance.public?
   end
+
+  # we allow create/update/destroy if the user has `:show_details` permission on the contactable
+  def authorize_save(model)
+    current_ability.authorize!(:show_details, model.contactable)
+  end
+  alias_method :authorize_destroy, :authorize_save
 end

@@ -10,6 +10,8 @@ require 'csv'
 module Export
   module Csv
 
+    UTF8_BOM = "\xEF\xBB\xBF"
+
     def self.export(exportable)
       Generator.new(exportable).call
     end
@@ -39,9 +41,12 @@ module Export
         end
       end
 
-      # convert to ISO-8859-1 (configurable, though) for Excel which is...,
-      # well, has some success-potential to handle UTF-8
+      # Allow different encodings (e.g. ISO-8859-1), configurable in the settings file.
+      # Using the BOM header helps M$ excel to recognize utf8 files.
       def convert(data)
+        if Settings.csv.utf8_bom.present?
+          data = UTF8_BOM + data
+        end
         if Settings.csv.encoding.present?
           data.encode(Settings.csv.encoding, undef: :replace, invalid: :replace)
         else

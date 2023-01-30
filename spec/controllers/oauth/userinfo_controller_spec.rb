@@ -76,11 +76,16 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
         admin_role = Fabricate(:'Group::GlobalGroup::Leader', person: user, group: temp_group)
         admin_role.class.nextcloud_group = 'Admins'
 
-        admin_role = Fabricate(:'Group::GlobalGroup::Leader', person: user, group: temp_group)
-        admin_role.class.nextcloud_group = 'Admins'
+        # second role resulting in the same mapping, intended to test deduplication
+        Fabricate(:'Group::GlobalGroup::Leader', person: user, group: temp_group)
 
         group_role = Fabricate(:'Group::GlobalGroup::Member', person: user, group: temp_group)
         group_role.class.nextcloud_group = true
+      end
+
+      after do
+        Group::GlobalGroup::Leader.nextcloud_group = false
+        Group::GlobalGroup::Member.nextcloud_group = false
       end
 
       it 'has assumptions' do

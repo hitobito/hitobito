@@ -415,6 +415,10 @@ describe Role do
       r
     end
 
+    after do
+      subject.class.nextcloud_group = false
+    end
+
     it 'have assumptions' do
       expect(Settings.groups.nextcloud.enabled).to be true # in the test-env
     end

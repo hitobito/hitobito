@@ -232,3 +232,5 @@ groups:
     enabled: true
   statistics:
     enabled: true
+  nextcloud:
+    enabled: false

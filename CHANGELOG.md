@@ -4,7 +4,7 @@
 
 *  Neu kann auf einer Ebene eine Datenschutzerklärung (DSE) hinterlegt werden. Diese muss, falls vorhanden, bei der Selbstregistrierung, dem Anmelden bei einem Anlass/Kurs oder dem Hinzufügen einer Person auf einer Gruppe akzeptiert werden um fortzufahren. (#1881)
 *  Personen mit layer_full oder layer_and_below_full können neu Personen, welche in ihren Ebenen unter "Ohne Rollen" erscheinen, per globale Suchfunktion finden und anzeigen. (hitobito_sww#80)
-
+*  Anbindung an Nextcloud möglich (#1854)
 
 ## Version 1.28
 
@@ -29,7 +29,6 @@
 *  Neues Bestätigungsmail für Event Voranmeldung (hitobito_cevi#80)
 *  Einführung neue JSON:API für Personen (#1920)
 *  Neu kann in den Rechnungseinstellungen im Tab "E-Mail" der Absendername definiert werden, mit dem die Rechnungen dieser Ebene versendet werden (#1893)
-
 
 ## Version 1.27
 

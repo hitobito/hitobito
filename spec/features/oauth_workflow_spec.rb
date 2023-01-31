@@ -15,7 +15,7 @@ describe 'OauthWorkflow' do
     click_link 'Erstellen'
     fill_in 'Name', with: 'MyApp'
     fill_in 'Redirect URI', with: 'urn:ietf:wg:oauth:2.0:oob'
-    check 'name'
+    check 'name', id: 'oauth_application_scope_name'
     check 'email'
     within('.btn-toolbar.bottom') do
       click_button 'Speichern'

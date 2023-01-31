@@ -1,4 +1,4 @@
-#  Copyright (c) 2019-2021, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2023, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -92,8 +92,11 @@ Doorkeeper.configure do
   # not in configuration, i.e. `default_scopes` or `optional_scopes`.
   # (disabled by default)
   #
+  list_of_optional_scopes = [:name, :with_roles, :openid, :api, :events, :groups, :people, :invoices, :mailing_lists]
+  FeatureGate.if('groups.nextcloud') { list_of_optional_scopes << :nextcloud }
+
   default_scopes :email
-  optional_scopes :name, :with_roles, :openid, :api, :events, :groups, :people, :invoices, :mailing_lists
+  optional_scopes *list_of_optional_scopes
 
   enforce_configured_scopes
 

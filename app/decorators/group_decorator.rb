@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -101,6 +101,13 @@ class GroupDecorator < ApplicationDecorator
     return nil unless model.archived?
 
     'is-archived'
+  end
+
+  def nextcloud_organizer
+    model
+      .hierarchy.where(layer_group_id: layer_group.id) # local_hierarchy as a scope
+      .where.not(nextcloud_url: nil) # only those with a nextcloud_url
+      .last
   end
 
   private

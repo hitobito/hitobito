@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -63,6 +63,9 @@ class Group < ActiveRecord::Base
   class_attribute :used_attributes
   self.used_attributes = [:name, :short_name, :email, :contact_id,
                           :address, :zip_code, :town, :country, :description]
+  FeatureGate.if('groups.nextcloud') do
+    used_attributes << :nextcloud_url
+  end
 
   # Attributes that may only be modified by people from superior layers.
   class_attribute :superior_attributes

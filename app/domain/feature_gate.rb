@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2022, Hitobito AG. This file is part of
+# Copyright (c) 2022-2023, Hitobito AG. This file is part of
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
@@ -8,9 +8,23 @@
 # Restrict code-execution depending on settings-level feature-switches
 #
 # Provides the following class-level methods
-#   - assert!(feature)
-#   - if(feature) { ... }
-#   - enabled?(feature)
+#   - assert!(feature)    # raises unless the feature is active
+#   - enabled?(feature)   # answers if the feature is active
+#   - if(feature) { ... } # executes block if feature is active
+
+# In config/settings.yml any key can have a subkey "enabled" which determines
+# if a given feature is enabled. For example:
+#
+# # settings.yml
+# groups:
+#   self_registration:
+#     enabled: true
+#
+# # anywhere in the application
+# FeatureGate.if('groups.self_registration') do
+#   # Code activated if feature is configured active
+# end
+#
 class FeatureGate
   class FeatureGateError < StandardError; end
 

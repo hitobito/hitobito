@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -53,6 +53,34 @@ class Role < ActiveRecord::Base
   # Attributes that are ignored when merging roles
   class_attribute :merge_excluded_attributes
   self.merge_excluded_attributes = []
+
+  FeatureGate.if('groups.nextcloud') do
+    # Can be one of several types:
+    #
+    # String - Name of the nextcloud-group
+    # String  - Name of the nextcloud-group
+    # Boolean - Dynamic lookup of the nextcloud-group
+    #           If true, then the attached Group should be referenced
+    #           If false, no group for nextcloud is referenced
+    # Symbol  - Identifier of an instance-method
+    # Proc    - A proc that is called with the role
+    #
+    # Both Symbol and Proc are expected return something that is useful to Nextcloud.
+    # It can either only return the name of the nextcloud-group or a Hash like this
+    # { 'gid' => 'group-id-that-is-unique-in-nextcloud', 'displayName' => 'Name of Group' }
+    class_attribute :nextcloud_group
+    self.nextcloud_group = false
+
+    NextcloudGroup = Struct.new(:gid, :displayName) do # rubocop:disable Lint/ConstantDefinitionInBlock
+      def hash
+        gid.hash
+      end
+
+      def to_h
+        { 'gid' => gid, 'displayName' => displayName }
+      end
+    end
+  end
 
   # If these attributes should change, create a new role instance instead.
   attr_readonly :person_id, :group_id, :type
@@ -129,12 +157,36 @@ class Role < ActiveRecord::Base
     archived_at.present?
   end
 
+  def nextcloud_group
+    FeatureGate.assert!('groups.nextcloud')
+
+    info = nextcloud_group_details
+
+    return if info.nil?
+
+    case info
+    when String then NextcloudGroup.new(info, info)
+    when Hash then NextcloudGroup.new(info['gid'], info['displayName'])
+    end
+  end
+
   private
+
+  def nextcloud_group_details
+    return nil unless FeatureGate.enabled?('groups.nextcloud')
+
+    case (setting = self.class.nextcloud_group)
+    when String then { 'gid' => "hitobito-#{setting}", 'displayName' => setting }
+    when true   then { 'gid' => group_id.to_s,         'displayName' => group.name }
+    when Symbol then method(setting).call
+    when Proc   then setting.call(self)
+    end
+  end
 
   # If this role has contact_data permissions, set the flag on the person
   def set_contact_data_visible
     if becomes(type.constantize).permissions.include?(:contact_data)
-      person.update_column :contact_data_visible, true
+      person.update_column :contact_data_visible, true # rubocop:disable Rails/SkipsModelValidations intentional
     end
   end
 
@@ -142,20 +194,20 @@ class Role < ActiveRecord::Base
   def reset_contact_data_visible
     if permissions.include?(:contact_data) &&
        !person.roles.collect(&:permissions).flatten.include?(:contact_data)
-      person.update_column :contact_data_visible, false
+      person.update_column :contact_data_visible, false # rubocop:disable Rails/SkipsModelValidations intentional
     end
   end
 
   def set_first_primary_group
     if (deleted_at.nil? || deleted_at.future?) && person.roles.count <= 1
-      person.update_column :primary_group_id, group_id
+      person.update_column :primary_group_id, group_id # rubocop:disable Rails/SkipsModelValidations intentional
     end
   end
 
   def reset_primary_group
     if person.primary_group_id == group_id &&
         person.roles.where(group_id: group_id).count.zero?
-      person.update_column :primary_group_id, alternative_primary_group.try(:id)
+      person.update_column :primary_group_id, alternative_primary_group.try(:id) # rubocop:disable Rails/SkipsModelValidations intentional
     end
   end
 

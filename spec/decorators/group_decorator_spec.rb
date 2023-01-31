@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -46,7 +46,7 @@ describe GroupDecorator, :draper_with_helpers do
 
   describe 'selecting attributes' do
 
-    class DummyGroup < Group
+    class DummyGroup < Group # rubocop:disable Lint/ConstantDefinitionInBlock
       self.used_attributes += [:foo, :bar]
     end
 
@@ -88,11 +88,13 @@ describe GroupDecorator, :draper_with_helpers do
 
     its(:subgroup_ids) do
       should match_array(
-        [ groups(:bottom_layer_one),
+        [
+          groups(:bottom_layer_one),
           groups(:bottom_group_one_one),
           groups(:bottom_group_one_one_one),
           groups(:bottom_group_one_two)
-        ].collect(&:id))
+        ].collect(&:id)
+      )
     end
   end
 
@@ -138,5 +140,16 @@ describe GroupDecorator, :draper_with_helpers do
     it 'suffix display_name' do
       expect(subject.display_name).to_not end_with(' (archiviert)')
     end
+  end
+
+  it 'reads the nextcloud_url from the next organizing group in the hierarchy' do
+    expect(subject.nextcloud_url).to be_nil
+
+    subject.layer_group.nextcloud_url = 'http://example.org'
+    subject.layer_group.save!
+    subject.reload
+
+    expect(subject.nextcloud_organizer).to eq subject.layer_group
+    expect(subject.nextcloud_organizer.nextcloud_url).to eq 'http://example.org'
   end
 end

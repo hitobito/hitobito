@@ -38,7 +38,7 @@
         },
         "email": {
           "type": "string",
-          "readable": "guarded",
+          "readable": true,
           "writable": true,
           "description": null
         }
@@ -218,19 +218,19 @@
         "gender": {
           "type": "string",
           "readable": "guarded",
-          "writable": "guarded",
+          "writable": true,
           "description": null
         },
         "birthday": {
           "type": "date",
           "readable": "guarded",
-          "writable": "guarded",
+          "writable": true,
           "description": null
         },
         "primary_group_id": {
           "type": "integer",
           "readable": true,
-          "writable": true,
+          "writable": false,
           "description": null
         }
       },
@@ -466,11 +466,15 @@
             "gte",
             "lt",
             "lte"
-          ],
-          "single": true
+          ]
         }
       },
       "relationships": {
+        "roles": {
+          "type": "has_many",
+          "description": null,
+          "resource": "RoleResource"
+        },
         "phone_numbers": {
           "type": "has_many",
           "description": null,
@@ -485,11 +489,6 @@
           "type": "has_many",
           "description": null,
           "resource": "AdditionalEmailResource"
-        },
-        "roles": {
-          "type": "has_many",
-          "description": null,
-          "resource": "RoleResource"
         }
       },
       "stats": {
@@ -536,7 +535,7 @@
         },
         "number": {
           "type": "string",
-          "readable": "guarded",
+          "readable": true,
           "writable": true,
           "description": null
         }
@@ -837,7 +836,7 @@
         },
         "name": {
           "type": "string",
-          "readable": "guarded",
+          "readable": true,
           "writable": true,
           "description": null
         }

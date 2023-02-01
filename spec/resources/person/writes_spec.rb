@@ -8,6 +8,11 @@
 require 'spec_helper'
 
 RSpec.describe PersonResource, type: :resource do
+  before do
+    set_user(people(:root))
+    allow_any_instance_of(described_class).to receive(:index_ability, &:current_ability)
+  end
+
   describe 'creating' do
     let(:payload) do
       {
@@ -30,7 +35,7 @@ RSpec.describe PersonResource, type: :resource do
   end
 
   describe 'updating' do
-    let!(:person) { Fabricate(:person, first_name: 'Franz', updated_at: 1.second.ago) }
+    let!(:person) { Fabricate(:person, first_name: 'Franz', updated_at: 1.second.ago, gender: 'm') }
 
     let(:payload) do
       {
@@ -49,11 +54,41 @@ RSpec.describe PersonResource, type: :resource do
       PersonResource.find(payload)
     end
 
-    it 'works (add some attributes and enable this spec)' do
+    it 'works' do
       expect {
         expect(instance.update_attributes).to eq(true)
       }.to change { person.reload.updated_at }
        .and change { person.first_name }.to('Joseph')
+    end
+
+    it 'with show_details permission it updates restricted attrs' do
+      set_ability { can [:index, :update, :show_details], Person }
+
+      new_birthday = Date.today
+      payload[:data][:attributes][:gender] = 'w'
+      payload[:data][:attributes][:birthday] = new_birthday.to_json
+
+      expect {
+        expect(instance.update_attributes).to eq(true)
+      }.to change { person.reload.updated_at }
+       .and change { person.gender }.to('w')
+       .and change { person.birthday }.to(new_birthday)
+    end
+
+    it  'without show_details permission it does not update restricted attrs' do
+      set_ability { can [:index, :update], Person }
+
+      new_birthday = Date.today
+      payload[:data][:attributes][:gender] = 'w'
+      payload[:data][:attributes][:birthday] = new_birthday.to_json
+
+      expect { instance.update_attributes }.to raise_error(CanCan::AccessDenied)
+    end
+
+    it  'does not update write protected attributes' do
+      payload[:data][:attributes][:primary_group_id] = 42
+
+      expect { instance.update_attributes }.to raise_error(Graphiti::Errors::InvalidRequest)
     end
   end
 

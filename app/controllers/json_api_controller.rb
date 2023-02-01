@@ -10,6 +10,9 @@ class JsonApiController < ActionController::API
 
   include GraphitiErrors
 
+  # authorization is checked in the graphiti resource
+  skip_authorization_check
+
   rescue_from Exception do |e|
     handle_exception(e)
   end
@@ -21,6 +24,7 @@ class JsonApiController < ActionController::API
   include PaperTrailed
 
   before_action :assert_media_type_json_api, only: [:update, :create]
+  before_action :ensure_id_param_consistency, except: [:index, :create]
 
   class JsonApiUnauthorized < StandardError; end
   class JsonApiInvalidMediaType < StandardError; end
@@ -40,6 +44,11 @@ class JsonApiController < ActionController::API
     message: ->(error) { I18n.t('errors.401.explanation') }
 
   register_exception ActiveRecord::RecordNotFound,
+    status: 404,
+    title: I18n.t('errors.404.title'),
+    message: ->(error) { I18n.t('errors.404.explanation') }
+
+  register_exception Graphiti::Errors::RecordNotFound,
     status: 404,
     title: I18n.t('errors.404.title'),
     message: ->(error) { I18n.t('errors.404.explanation') }
@@ -92,7 +101,6 @@ class JsonApiController < ActionController::API
     end
   end
 
-
   def authenticate_person!(*args)
     if user_session?
       super(*args)
@@ -121,5 +129,20 @@ class JsonApiController < ActionController::API
 
   def resource_class
     [self.class.name.delete_prefix("JsonApi::").delete_suffix("Controller").singularize, "Resource"].join.constantize
+  end
+
+  def params
+    # we don't need strong parameters for graphiti controllers
+    super.permit!
+  end
+
+  def ensure_id_param_consistency
+    # make sure both id params are the same
+    # since we're checking permission based on
+    # params :id
+    data_id = params.dig(:data, :id).presence || return
+    param_id = params[:id].presence || return
+
+    raise ActionController::BadRequest if data_id.to_s != param_id.to_s
   end
 end

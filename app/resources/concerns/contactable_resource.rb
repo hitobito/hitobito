@@ -5,15 +5,23 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class RoleResource < ApplicationResource
-  # read-only for now
-  with_options writable: false do
-    attribute :person_id, :integer
-    attribute :group_id, :integer
+# Can not be a base class since graphiti seems to get confused about base classes
+# for polymorphic relations.
+# Thus, the json api type was always contactable and the relation couldn't be correctly mapped.
+# Tried abstract_class = true, that didn't work either
+module ContactableResource
+  extend ActiveSupport::Concern
+
+  included do
     attribute :label, :string
-    attribute :created_at, :datetime
-    attribute :updated_at, :datetime
-    attribute :deleted_at, :datetime
+    attribute :public, :boolean
+
+    attribute :contactable_id, :integer
+    attribute :contactable_type, :string
+  end
+
+  def authorize_save(model)
+    current_ability.authorize!(:show_details, model.contactable)
   end
 
   def index_ability
@@ -35,7 +43,7 @@ class RoleResource < ApplicationResource
     private
 
     def contact_ability(main_ability)
-      JsonApi::RoleAbility.new(main_ability, people_scope(main_ability.user))
+      JsonApi::ContactAbility.new(main_ability, people_scope(main_ability.user))
     end
 
     def people_scope(user)
@@ -43,3 +51,4 @@ class RoleResource < ApplicationResource
     end
   end
 end
+

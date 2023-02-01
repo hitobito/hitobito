@@ -39,10 +39,9 @@ class ApplicationResource < Graphiti::Resource
   before_save :authorize_save
   before_destroy :authorize_destroy
 
-  # Does not work with our complicated permissions setup, maybe we should get there?
-  # def base_scope
-  #   super.accessible_by(current_ability)
-  # end
+  def base_scope
+    super.accessible_by(index_ability)
+  end
 
   # As the cancan abilities are implemented on the basis of instance attributes,
   # we must authorize with initial instance attributes
@@ -60,19 +59,15 @@ class ApplicationResource < Graphiti::Resource
     current_ability.authorize! :destroy, model
   end
 
-  def self.find(params = {}, base_scope = nil)
-    # make sure both id params are the same
-    # for update since we're checking permission based on
-    # params :id
-    data_id = params[:data].try(:[], :id).try(:to_i)
-    param_id = params[:id].to_i
-    if data_id && param_id
-      raise ActionController::BadRequest unless data_id == param_id
-    end
-
-    super(params, base_scope)
-  end
-
   delegate :can?, to: :current_ability
   delegate :current_ability, to: :context
+
+  # used to filter accessible models in `#base_scope`, overwrite in subclass to use a different Ability instance
+  def index_ability
+    current_ability
+  end
+
+  def current_user
+    current_ability.user
+  end
 end

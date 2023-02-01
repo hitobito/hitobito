@@ -83,7 +83,7 @@ describe "Resource authorization", type: :resource do
     end
 
     it "permits update" do
-      set_ability { can :update, Person }
+      set_ability { can [:index, :update], Person }
 
       expect {
         expect(instance.update_attributes).to eq(true)
@@ -91,7 +91,7 @@ describe "Resource authorization", type: :resource do
     end
 
     it "denies update" do
-      set_ability {}
+      set_ability { can [:index], Person }
 
       expect {
         instance.update_attributes
@@ -99,7 +99,7 @@ describe "Resource authorization", type: :resource do
     end
 
     it "permits update based on attribute" do
-      set_ability { can :update, Person, :first_name }
+      set_ability { can [:index, :update], Person, :first_name }
 
       expect {
         expect(instance.update_attributes).to eq(true)
@@ -107,7 +107,7 @@ describe "Resource authorization", type: :resource do
     end
 
     it "denies update based on attribute" do
-      set_ability { can :update, Person, :email }
+      set_ability { can [:index, :update], Person, :email }
 
       expect {
         expect(instance.update_attributes).to eq(true)
@@ -115,7 +115,7 @@ describe "Resource authorization", type: :resource do
     end
 
     it "permits update based on attribute value" do
-      set_ability { can :update, Person, first_name: "Boring old name" }
+      set_ability { can [:index, :update], Person, first_name: "Boring old name" }
 
       expect {
         expect(instance.update_attributes).to eq(true)
@@ -123,11 +123,12 @@ describe "Resource authorization", type: :resource do
     end
 
     it "denies update based on attribute value" do
-      set_ability { can :update, Person, first_name: "Some other name" }
+      set_ability { can [:index, :update], Person, first_name: "Some other name" }
 
+      # The error must be a RecordNotFound instead of AccessDenied as the user can't even see the record.
       expect {
         expect(instance.update_attributes).to eq(true)
-      }.to raise_error(CanCan::AccessDenied).and not_change { person.reload.first_name }
+      }.to raise_error(Graphiti::Errors::RecordNotFound).and not_change { person.reload.first_name }
     end
   end
 end

@@ -8,5 +8,5 @@
 class SocialAccountResource < ApplicationResource
   include ContactableResource
 
-  attribute :name, :string, readable: :show_details_or_public?
+  attribute :name, :string
 end

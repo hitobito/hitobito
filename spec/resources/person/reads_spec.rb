@@ -8,7 +8,10 @@
 require 'spec_helper'
 
 RSpec.describe PersonResource, type: :resource do
-  before { set_user(people(:root)) }
+  before do
+    set_user(people(:root))
+    allow_any_instance_of(described_class).to receive(:index_ability, &:current_ability)
+  end
 
   describe 'serialization' do
     let!(:person) { Fabricate(:person, birthday: Date.today, gender: 'm') }
@@ -63,7 +66,7 @@ RSpec.describe PersonResource, type: :resource do
     end
 
     it 'with show_details permission it includes restricted attrs' do
-      set_ability { can :show_details, Person }
+      set_ability { can [:index, :show_details], Person }
 
       render
 
@@ -71,7 +74,7 @@ RSpec.describe PersonResource, type: :resource do
     end
 
     it  'without show_details permission it does not include restricted attrs' do
-      set_ability { can :read, Person }
+      set_ability { can :index, Person }
 
       render
 
@@ -139,22 +142,11 @@ RSpec.describe PersonResource, type: :resource do
         params[:include] = 'phone_numbers'
       end
 
-      it 'it works with show_details permission' do
-        set_user(people(:root))
-
+      it 'it works' do
         render
-
         phone_numbers = d[0].sideload(:phone_numbers)
         expect(phone_numbers).to have(2).items
         expect(phone_numbers.map(&:id)).to match_array [phone_number1.id, phone_number2.id]
-      end
-
-      it  'it does not work without show_details permission' do
-        set_ability { }
-
-        render
-
-        expect(d[0].sideload(:phone_numbers)).to be_empty
       end
     end
 
@@ -168,22 +160,11 @@ RSpec.describe PersonResource, type: :resource do
         params[:include] = 'social_accounts'
       end
 
-      it 'it works with show_details permission' do
-        set_user(people(:root))
-
+      it 'it works' do
         render
-
         social_accounts = d[0].sideload(:social_accounts)
         expect(social_accounts).to have(2).items
         expect(social_accounts.map(&:id)).to match_array [social_account1.id, social_account2.id]
-      end
-
-      it  'it does not work without show_details permission' do
-        set_ability { }
-
-        render
-
-        expect(d[0].sideload(:social_accounts)).to be_empty
       end
     end
 
@@ -197,22 +178,11 @@ RSpec.describe PersonResource, type: :resource do
         params[:include] = 'additional_emails'
       end
 
-      it 'it works with show_details permission' do
-        set_user(people(:root))
-
+      it 'it works' do
         render
-
         additional_emails = d[0].sideload(:additional_emails)
         expect(additional_emails).to have(2).items
         expect(additional_emails.map(&:id)).to match_array [additional_email1.id, additional_email2.id]
-      end
-
-      it  'it does not work without show_details permission' do
-        set_ability { }
-
-        render
-
-        expect(d[0].sideload(:additional_emails)).to be_empty
       end
     end
 
@@ -225,22 +195,11 @@ RSpec.describe PersonResource, type: :resource do
         params[:include] = 'roles'
       end
 
-      it 'it works with show_details permission' do
-        set_user(people(:root))
-
+      it 'it works' do
         render
-
         roles = d[0].sideload(:roles)
         expect(roles).to have(1).items
         expect(roles.first.id).to eq role.id
-      end
-
-      it  'it does not work without show_details permission' do
-        set_ability { }
-
-        render
-
-        expect(d[0].sideload(:roles)).to eq []
       end
     end
   end

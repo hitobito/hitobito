@@ -104,7 +104,7 @@ describe JsonApi::PeopleController, type: [:request] do
           Fabricate(:role, type: 'Group::BottomLayer::Leader', group: groups(:bottom_layer_two)).person
           bottom_member.touch
 
-          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: 5.seconds.ago })
+          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: { gte: 5.seconds.ago.as_json } })
 
           expect(response).to have_http_status(200)
           expect(d.size).to eq(2)
@@ -281,7 +281,7 @@ describe JsonApi::PeopleController, type: [:request] do
           top_leader.update(updated_at: 10.seconds.ago)
           bottom_member.touch
 
-          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: 5.seconds.ago })
+          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: { gte: 5.seconds.ago.as_json } })
 
           expect(response).to have_http_status(200)
           expect(d.size).to eq(1)
@@ -405,7 +405,7 @@ describe JsonApi::PeopleController, type: [:request] do
           top_leader.update(updated_at: 10.seconds.ago)
           bottom_member.touch
 
-          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: 5.seconds.ago })
+          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: { gte: 5.seconds.ago } })
 
           expect(response).to have_http_status(200)
           expect(d.size).to eq(1)
@@ -1198,8 +1198,21 @@ describe JsonApi::PeopleController, type: [:request] do
         end
 
         it 'does not update person`s detail attributes without required permission' do
-          allow_any_instance_of(PersonResource).to receive(:write_details?).and_return(false)
           person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
+
+          test_ability = Class.new do
+            include CanCan::Ability
+
+            attr_reader :user
+
+            def initialize(user)
+              @user = user
+              can :manage, :all
+              cannot :show_details, Person
+            end
+          end.new(person)
+
+          allow_any_instance_of(PersonResource).to receive(:current_ability).and_return test_ability
 
           @person_id = person.id
 
@@ -1207,7 +1220,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           jsonapi_patch "/api/people/#{@person_id}", params
 
-          expect(response).to have_http_status(400)
+          expect(response).to have_http_status(403)
 
           person.reload
 

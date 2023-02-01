@@ -9,11 +9,17 @@ class PersonResource < ApplicationResource
   primary_endpoint 'people', [:index, :show, :update]
 
   ACTION_SHOW_DETAILS = :show_details
-  ACTION_SHOW_FULL = :show_full
 
   def base_scope
-    # TODO: should restrict scope with current_ability
-    # Person.accessible_by(PersonReadables.new(current_ability.user))
+    # we need to select all attributes, otherwise saving will error when validating unselected attrs
+    super.select('people.*')
+  end
+
+  def authorize_save(model)
+    if !model.new_record? && model.changed_attribute_names_to_save & ['gender', 'birthday']
+      # show_details ability is required for updating gender, birthday
+      current_ability.authorize!(:show_details, model)
+    end
 
     super
   end
@@ -28,59 +34,24 @@ class PersonResource < ApplicationResource
   attribute :zip_code, :string
   attribute :town, :string
   attribute :country, :string
-  attribute :gender, :string, readable: :show_details?, writable: :write_details?
-  attribute :birthday, :date, readable: :show_details?, writable: :write_details?
-  attribute :primary_group_id, :integer, except: [:writeable]
+  attribute :gender, :string, readable: :show_details?
+  attribute :birthday, :date, readable: :show_details?
+  attribute :primary_group_id, :integer, writable: false
 
-  def self.contactable_has_many(name)
-    polymorphic_has_many name, as: :contactable do
-      # work-around to make relation readable only if user has `:show_details` permission on person
-      params do |hash, people, context|
-        permitted_people = people.select do |person|
-          context.current_ability.can?(ACTION_SHOW_DETAILS, person)
-        end
+  has_many :roles
+  polymorphic_has_many :phone_numbers, as: :contactable
+  polymorphic_has_many :social_accounts, as: :contactable
+  polymorphic_has_many :additional_emails, as: :contactable
 
-        hash[:filter][:contactable_type] = 'Person'
-        hash[:filter][:contactable_id] = permitted_people.map(&:id)
-      end
-      # TODO: fix writable: :write_details? => this should be fixed in specific resource
-      # (e.g. in `PhoneNumberResource`), possibly on `#base_scope`
-    end
-  end
-  private_class_method :contactable_has_many
+  filter :updated_at, :datetime
 
-  contactable_has_many :phone_numbers
-  contactable_has_many :social_accounts
-  contactable_has_many :additional_emails
-
-  # TODO: fix writable: :write_details? => this should be fixed in `RoleResource`, possibly on `#base_scope`
-  has_many :roles do
-    params do |hash, people, context|
-      permitted_people = people.select do |person|
-        context.current_ability.can?(ACTION_SHOW_FULL, person)
-      end
-
-      hash[:filter][:person_id] = permitted_people.map(&:id)
-    end
-  end
-
-  filter :updated_at, :datetime, single: true do
-    eq do |scope, value|
-      scope.where(updated_at: value..)
-    end
-  end
-
-  def show_full?(model_instance)
-    can?(ACTION_SHOW_FULL, model_instance)
-  end
+  private
 
   def show_details?(model_instance)
     can?(ACTION_SHOW_DETAILS, model_instance)
   end
 
-  def write_details?
-    # no model_instance method argument is given when writable is called,
-    # so we have to access current entry by controller context
-    can?(ACTION_SHOW_DETAILS, context.entry)
+  def index_ability
+    PersonReadables.new(current_user)
   end
 end

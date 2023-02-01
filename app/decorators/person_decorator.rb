@@ -11,8 +11,8 @@ class PersonDecorator < ApplicationDecorator
 
   include ContactableDecorator
 
-  def as_typeahead
-    { id: id, label: h.h(full_label) }
+  def as_typeahead(group: nil)
+    { id: id, label: h.h(full_label(group: group)) }
   end
 
   def as_quicksearch
@@ -23,13 +23,14 @@ class PersonDecorator < ApplicationDecorator
     { id: id, label: h.h(name_with_address) }
   end
 
-  def full_label
+  def full_label(group: nil)
     label = to_s
     label << ", #{town}" if town?
     if company?
       name = full_name
       label << " (#{name})" if name.present?
     else
+      label << ", #{group.name}" if group
       label << " (#{birthday.year})" if birthday
     end
     label

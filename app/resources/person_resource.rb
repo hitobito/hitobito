@@ -9,7 +9,7 @@ class PersonResource < ApplicationResource
   primary_endpoint 'people', [:index, :show, :update]
 
   ACTION_SHOW_DETAILS = :show_details
-  ACTION_SHOW_FULL = :show_full_action
+  ACTION_SHOW_FULL = :show_full
 
   def base_scope
     # TODO: should restrict scope with current_ability

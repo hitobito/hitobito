@@ -140,19 +140,13 @@ RSpec.describe PersonResource, type: :resource do
       end
 
       it 'it works with show_details permission' do
-
         set_user(people(:root))
 
         render
 
-        phone_numbers = d[0].relationships.dig(:phone_numbers, :data)
+        phone_numbers = d[0].sideload(:phone_numbers)
         expect(phone_numbers).to have(2).items
-
-        phone_numbers in [
-          {type: "phone_numbers", id: first_id},
-          {type: "phone_numbers", id: second_id}
-        ]
-        expect([first_id, second_id]).to match_array [phone_number1.id.to_s, phone_number2.id.to_s]
+        expect(phone_numbers.map(&:id)).to match_array [phone_number1.id, phone_number2.id]
       end
 
       it  'it does not work without show_details permission' do
@@ -160,7 +154,7 @@ RSpec.describe PersonResource, type: :resource do
 
         render
 
-        expect(d[0].sideload(:phone_numbers)).to eq []
+        expect(d[0].sideload(:phone_numbers)).to be_empty
       end
     end
 
@@ -179,14 +173,9 @@ RSpec.describe PersonResource, type: :resource do
 
         render
 
-        social_accounts = d[0].relationships.dig(:social_accounts, :data)
+        social_accounts = d[0].sideload(:social_accounts)
         expect(social_accounts).to have(2).items
-
-        social_accounts in [
-          {type: "social_accounts", id: first_id},
-          {type: "social_accounts", id: second_id}
-        ]
-        expect([first_id, second_id]).to match_array [social_account1.id.to_s, social_account2.id.to_s]
+        expect(social_accounts.map(&:id)).to match_array [social_account1.id, social_account2.id]
       end
 
       it  'it does not work without show_details permission' do
@@ -194,7 +183,7 @@ RSpec.describe PersonResource, type: :resource do
 
         render
 
-        expect(d[0].sideload(:social_accounts)).to eq []
+        expect(d[0].sideload(:social_accounts)).to be_empty
       end
     end
 
@@ -209,19 +198,13 @@ RSpec.describe PersonResource, type: :resource do
       end
 
       it 'it works with show_details permission' do
-
         set_user(people(:root))
 
         render
 
-        additional_emails = d[0].relationships.dig(:additional_emails, :data)
+        additional_emails = d[0].sideload(:additional_emails)
         expect(additional_emails).to have(2).items
-
-        additional_emails in [
-          {type: "additional_emails", id: first_id},
-          {type: "additional_emails", id: second_id}
-        ]
-        expect([first_id, second_id]).to match_array [additional_email1.id.to_s, additional_email2.id.to_s]
+        expect(additional_emails.map(&:id)).to match_array [additional_email1.id, additional_email2.id]
       end
 
       it  'it does not work without show_details permission' do
@@ -229,7 +212,35 @@ RSpec.describe PersonResource, type: :resource do
 
         render
 
-        expect(d[0].sideload(:additional_emails)).to eq []
+        expect(d[0].sideload(:additional_emails)).to be_empty
+      end
+    end
+
+    describe 'roles' do
+      let!(:role) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)) }
+      let(:person) { role.person }
+
+      before do
+        params[:filter] = { id: person.id.to_s }
+        params[:include] = 'roles'
+      end
+
+      it 'it works with show_details permission' do
+        set_user(people(:root))
+
+        render
+
+        roles = d[0].sideload(:roles)
+        expect(roles).to have(1).items
+        expect(roles.first.id).to eq role.id
+      end
+
+      it  'it does not work without show_details permission' do
+        set_ability { }
+
+        render
+
+        expect(d[0].sideload(:roles)).to eq []
       end
     end
   end

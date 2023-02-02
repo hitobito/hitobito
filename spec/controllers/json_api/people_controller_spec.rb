@@ -1382,12 +1382,14 @@ describe JsonApi::PeopleController, type: [:request] do
               data: [{
                 type: 'additional_emails',
                 method: 'create',
+                :'temp-id' => 'new-email'
               }]
             }
           }
           params[:included] = [
             {
               type: 'additional_emails',
+                :'temp-id' => 'new-email',
               attributes: {
                 label: 'Ds Grosi',
                 contactable_type: 'additional_emails',

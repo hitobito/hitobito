@@ -136,14 +136,6 @@
         }
       },
       "relationships": {
-        "contactable": {
-          "type": "polymorphic_belongs_to",
-          "description": null,
-          "resources": [
-            "PersonResource"
-          ],
-          "parent_resource": "AdditionalEmailResource"
-        }
       },
       "stats": {
         "total": [
@@ -642,14 +634,6 @@
         }
       },
       "relationships": {
-        "contactable": {
-          "type": "polymorphic_belongs_to",
-          "description": null,
-          "resources": [
-            "PersonResource"
-          ],
-          "parent_resource": "PhoneNumberResource"
-        }
       },
       "stats": {
         "total": [
@@ -951,14 +935,6 @@
         }
       },
       "relationships": {
-        "contactable": {
-          "type": "polymorphic_belongs_to",
-          "description": null,
-          "resources": [
-            "PersonResource"
-          ],
-          "parent_resource": "SocialAccountResource"
-        }
       },
       "stats": {
         "total": [

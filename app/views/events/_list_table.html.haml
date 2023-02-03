@@ -9,5 +9,5 @@
 
   = render_extensions(:list_columns, locals: { t: t })
 
-  - t.col(nil, class: 'center') { |e| button_action_event_apply(e, @group) }
+  - t.col(nil, class: 'center') { |e| button_action_event_apply(e, e.groups.first) }
 

@@ -21,6 +21,9 @@ class Person::QueryController < ApplicationController
       people = list_entries.limit(10)
       people = decorate(people)
     end
+    if limit_by_permission
+      people.select! { |p| can?(limit_by_permission.to_sym, p) }
+    end
 
     render json: people.collect { |p| p.public_send(serializer) }
   end
@@ -37,6 +40,10 @@ class Person::QueryController < ApplicationController
 
   def authorize_action
     authorize!(:query, Person)
+  end
+
+  def limit_by_permission
+    params[:limit_by_permission]
   end
 
   include Searchable

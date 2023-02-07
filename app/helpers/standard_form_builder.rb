@@ -239,7 +239,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
                  class: klass,
                  data: { provide: 'entity',
                          id_field: "#{object_name}_#{attr_id}",
-                         url: @template.query_people_path })
+                         url: html_options&.dig(:data, :url) || @template.query_people_path })
   end
 
   def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, required = false,

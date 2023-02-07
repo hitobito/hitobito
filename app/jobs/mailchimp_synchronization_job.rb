@@ -30,7 +30,7 @@ class MailchimpSynchronizationJob < BaseJob
                         mailchimp_last_synced_at: Time.zone.now)
   end
 
-  def error(job, exception)
+  def error(_job, exception)
     sync.result.exception = exception
     mailing_list.update(mailchimp_syncing: false,
                         mailchimp_result: sync.result)

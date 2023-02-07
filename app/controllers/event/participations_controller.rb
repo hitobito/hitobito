@@ -62,7 +62,6 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     set_active
     with_person_add_request do
       created = with_callbacks(:create, :save) { save_entry }
-      directly_assign_place if created
       respond_with(entry, success: created, location: return_path)
     end
   end
@@ -111,6 +110,14 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   private
+
+  def save_entry
+    created = super
+
+    directly_assign_place
+
+    created
+  end
 
   def render_entry_json
     render json: EventParticipationSerializer.new(

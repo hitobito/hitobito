@@ -516,6 +516,9 @@ it:
         self_registration_link: Registrazione esterna
         self_registration_notification_email: E-mail di notifica della registrazione esterna
         remove_logo: Rimuovere il logo attuale del gruppo
+        privacy_policy_title: DPD/Dichiarazione di protezione dei dati Titolo
+        privacy_policy: DPD/Dichiarazione di protezione dei dati
+        remove_privacy_policy: Eliminare la DPD/dichiarazione di protezione dei dati
       event:
         group_ids: Gruppi
         groups: Gruppi
@@ -607,6 +610,7 @@ it:
         validities:
           valid: Deve essere valevole
           valid_or_expired: Deve essere valido o abbandonato
+          valid_or_reactivatable: Deve essere valido o riattivabile
       event/invitation:
         participation_type: ruolo del partecipante
         created_at: data di creazione
@@ -712,6 +716,7 @@ it:
         created_at: Da
         deleted_at: Al
         class:
+          archived: '%{role_kind} (archiviato)'
           permission:
             description:
               admin: Amministrazione delle impostazioni relative alle applicazioni come tipi di corso o formati delle etichette.
@@ -965,6 +970,7 @@ it:
         vat_number: Numero IVA
         donation_increase_percentage: aumento in %
         donation_calculation_year_amount: numero di anni
+        sender_name: Nome mittente e-mail
       invoice_item:
         name: Nome
         description: Descrizione
@@ -1033,8 +1039,19 @@ it:
         name: Cognome
         description: Descrizione
         key: Codice
+        range: Zona di accesso
         abilities: Diritti
         last_access: Ultimo Accesso
+        layer_read: Diritti di lettura per questo livello
+        layer_and_below_read: Diritti di lettura per questo livello e per i livelli inferiori
+        layer_full: Diritti di lettura e scrittura per questo livello
+        layer_and_below_full: Diritti di lettura e scrittura per questo livello e per i livelli inferiori
+        people: Persone
+        groups: Gruppi
+        events: Eventi
+        invoices: Fatture
+        event_participations: Partecipanti ad eventi
+        mailing_lists: Abbonate/i a mailing lists
         cors_origins: host con accesso API
       acts_as_taggable_on/tag:
         taggings_count: Numero

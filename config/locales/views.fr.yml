@@ -262,6 +262,13 @@ fr:
       instruction: 'Prière de réessayer plus tard.'
     '403':
       title: 'Accès refusé'
+      explanation: 'Tu n''es pas autorisé·e à accéder à cette ressource.'
+    '401':
+      title: 'Login nécessaire'
+      explanation: 'Tu dois te connecter avant de pouvoir accéder à cette ressource.'
+    unsupported_page_size:
+      title: 'La taille de la page n''est pas supportée'
+      explanation: 'La taille de page demandée page[size]=%{size} est plus grande que la taille de page maximale %{max}. '
   export/tabular/events/list:
     group_names: 'organisateurs'
     duration: Délai
@@ -321,6 +328,9 @@ fr:
         title: Saisir les données de contact de la personne participante
         wizard_title: Données de contact
         save: Continuer
+      update:
+        flash:
+          privacy_policy_not_accepted: 'Pour terminer l''inscription, il faut accepter la déclaration de protection des données.'
     participations:
       edit:
         title: Inscription
@@ -359,6 +369,8 @@ fr:
         incomplete: des indications obligatoires manquent
       cancel_application:
         explanation: Tu es déjà inscrit-e à cet évènement.
+        pending: Tu es préinscrit·e à cet événement. L'inscription n'est pas encore définitive et doit être confirmée par l'administration du cours.
+        waiting_list: Tu es sur la liste d'attente pour cet événement.
         caption: Désinscrire
         confirmation: "Es-tu sûr/sure de vouloir annuler ton inscription à cet évènement?"
     qualifications:
@@ -370,6 +382,8 @@ fr:
     register:
       register:
         title: Saisir les données de contact de la personne participante
+        flash:
+          privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
       index:
         sign_in: Inscription
         login: Login
@@ -490,6 +504,7 @@ fr:
     instructions: 'Pour l''inscription définitive, tu dois imprimer cette page en utilisant l''option <i>imprimer</i>, puis la signer et l''envoyer par poste à l''adresse indiquée.'
     export_enqueued: 'l''exportation débute en arrière-plan et est téléchargée quand elle est terminée'
     waiting_list: 'Toutes les places sont actuellement prises, l''inscription est sur la liste d''attente.'
+    pending: 'Une préinscription a été créée pour %{full_entry_label}. La participation n''est pas encore définitive et doit être confirmée par l''administration du cours.'
     show:
       link:
         delete: 'Effacer l''inscription'
@@ -500,6 +515,7 @@ fr:
   event/precondition_checker:
     preconditions_not_fulfilled: '<b>Des conditions d''inscription ne sont pas remplies.</b>'
     below_minimum_age: "L'âge limite de %{course_minimum_age} n'est pas atteint."
+    qualifications_missing: "Les qualifications suivantes manquent ou sont expirées: %{missing}"
     some_qualifications_missing: "Des qualifications requises manquent."
   event/register:
     not_logged_in: "Tu dois t'authentifier afin de pouvoir t'inscrire à l'événement '%{event}'."
@@ -640,6 +656,12 @@ fr:
       age: Âge
       count: Nombre
       distribution: Répartition
+    self_registration:
+      form:
+        privacy_policy_caption: "J'accepte les conditions suivantes:"
+      create:
+        flash:
+          privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
   group/deleted_people:
     list:
       confirm_delete: "Toutes les données sur %{person} vont être définitivement effacées, y compris les participations et les qualifications. N'efface cette personne que si personne n'aura jamais plus besoin de ces données. "
@@ -746,6 +768,7 @@ fr:
   invoice_configs:
     form_tabs:
       general: général
+      email: Courriel
     update:
       flash:
         success: Les réglages de la factures mis à jour avec succès
@@ -755,7 +778,6 @@ fr:
       payment: 'Paiement'
       payment_information_help: 'Apparaît sur chaque facture, mais peut être adapté pour une facture'
       address_help: 'Adresse de l''expéditeur qui apparaît sur la lettre'
-      email_help: Les réponses à des e-mails concernant les factures doivent être envoyées à l'adresse de l'utilisateur.rice actuel.le ou à l'adresse configurée ici.
       payee_help: 'apparaît sur le bulletin de versement'
       beneficiary_help: 'apparaît sur le bulletin de versement'
       account_number_example: 'exemple : 01-162-5'
@@ -764,6 +786,9 @@ fr:
       variable_donation_appeal: 'demande de dons variable'
       donation_calculation_year_amount_explanation: Nombre d'années précédentes prises en compte pour le calcul des dons.
       donation_increase_percentage_explanation: Pourcentage pour le calcul des dons
+    email_fields:
+      email_help: Les réponses à des e-mails concernant les factures doivent être envoyées à l'adresse de l'utilisateur.rice actuel.le ou à l'adresse configurée ici.
+      sender_name_help: Les e-mails de facturation sont envoyés sous ce nom.
     reminder_fields:
       third_level: 'Pour tous les rappels suivants, les données du troisième rappel sont reprises.'
     provider_fields:
@@ -1117,6 +1142,8 @@ fr:
       help_reactivateable_in_years: 'années après échéance de la validité'
     new:
       title: Créer une catégorie de qualification
+  paper_trail/version_decorator:
+    by: 'modifié par %{author}'
   person_duplicates:
     merge:
       new:
@@ -1301,7 +1328,7 @@ fr:
     send_password_instructions: Les données d'authentification ont été envoyées.
     send_password_instructions_invalid_email: Les informations de login n'ont pas été envoyées étant donné que l'adresse e-mail indiquée n'est pas valable.
     years_old: (%{years} ans)
-    update_email_must_be_confirmed: 'La nouvelle adresse e-mail doit être confirmée avant qu''elle soit active. '
+    update_email_must_be_confirmed: L'adresse e-mail modifiée doit encore être confirmée avant d'être active. Pour cela, un lien de confirmation a été envoyé à %{new_mail}.
     tabs:
       history: Historique
       log: Journal
@@ -1355,6 +1382,10 @@ fr:
       email: "Adresse e-mail"
       home_phone: "Privé"
       mobile_phone: "Mobile"
+    privacy_policy_acceptance_field:
+      acceptance_caption:
+        for_self: 'J''accepte les conditions suivantes:'
+        for_someone_else: 'Je confirme que j''ai obtenu le consentement de cette personne ou de son responsable légal pour les dispositions suivantes:'
     roles:
       title: Rôles actifs
     roles_aside:
@@ -1438,6 +1469,7 @@ fr:
       prompt_role_duration: Sur la période (optionnel)
       prompt_role_duration_selection: Quelle période doit être prise en compte?
       prompt_role_duration_until: à
+      include_archived: Inclure les rôles archivés
     qualification:
       title: Qualifications
       prompt_qualification_selection: Quelles qualifications doivent apparaître?
@@ -1471,6 +1503,9 @@ fr:
     role_changed: '%{full_entry_label} modifié en <i>%{new_role}</i>.'
     role_changed_to_group: '%{full_entry_label} changé en <i>%{new_role}</i> dans <i>%{new_group}</i>.'
     role_primary_group_changed: 'Groupe principal modifié sur <i>%{new_group}</i>.'
+    create:
+      flash:
+        privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
     form:
       add_person: Ajouter une personne
       add_role_for_person: Créer un rôle pour %{person}
@@ -1627,6 +1662,7 @@ fr:
     household_updated: "Le foyer (%{object_changes}) a été actualisé."
     remove_from_household: "%{item} a été retiré du ménage (%{object_changes})."
     person_merge: "Deux personnes ont été fusionnées sous cette entrée. Personne supprimée:"
+    deleted_service_token: "Supprimé entre-temps %{model_name}"
   tags/merge:
     success: Les tags ont été fusionnés avec succès.
   tags_merge:

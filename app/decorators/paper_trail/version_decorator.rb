@@ -143,15 +143,21 @@ module PaperTrail
       changeset = model.event == 'update' ? changeset_list : nil
       item = reifyed_item
 
-      text = I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}",
-                    default: :"version.association_change.#{model.event}",
-                    model: item_class.model_name.human,
-                    label: item ? label_with_fallback(item) : '',
-                    changeset: changeset)
+      text = association_change_text(changeset, item)
+
       h.sanitize(text, tags: %w(i))
     end
 
     private
+
+    def association_change_text(changeset, item)
+      # used to overwrite in youth wagon
+      I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}",
+             default: :"version.association_change.#{model.event}",
+             model: item_class.model_name.human,
+             label: item ? label_with_fallback(item) : '',
+             changeset: changeset)
+    end
 
     def label_with_fallback(item)
       item.to_s(:long)

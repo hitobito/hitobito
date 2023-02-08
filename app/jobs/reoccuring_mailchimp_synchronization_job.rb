@@ -9,7 +9,7 @@ class ReoccuringMailchimpSynchronizationJob < RecurringJob
 
   run_every 24.hours
 
-  def perform
+  def perform_internal
     MailingList.mailchimp.where.not(mailchimp_syncing: true).find_each do |list|
       next if list.mailchimp_result&.state == :failed
 

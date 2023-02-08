@@ -1,12 +1,11 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
+#  Copyright (c) 2018-2023, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-
 
 describe ReoccuringMailchimpSynchronizationJob do
   let(:group) { groups(:top_group) }
@@ -27,18 +26,18 @@ describe ReoccuringMailchimpSynchronizationJob do
 
   it 'ignores list not linked' do
     Fabricate(:mailing_list, group: group)
-    expect { subject.perform }.not_to change { Delayed::Job.count }
+    expect { subject.perform_internal }.not_to(change { Delayed::Job.count })
   end
 
   it 'ignores list with failed result' do
     create(:failed)
-    expect { subject.perform }.not_to change { Delayed::Job.count }
+    expect { subject.perform_internal }.not_to(change { Delayed::Job.count })
   end
 
-  %i[success partial unchanged].each do |state|
+  [:success, :partial, :unchanged].each do |state|
     it "enqueues job for #{state}" do
       create(state)
-      expect { subject.perform }.to change { Delayed::Job.count }.by(1)
+      expect { subject.perform_internal }.to change { Delayed::Job.count }.by(1)
     end
   end
 

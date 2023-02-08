@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_17_131844) do
+ActiveRecord::Schema.define(version: 2023_02_08_191224) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -629,7 +629,7 @@ ActiveRecord::Schema.define(version: 2023_01_17_131844) do
     t.bigint "person_id"
     t.string "phone_number"
     t.string "email"
-    t.string "address"
+    t.text "address"
     t.timestamp "created_at"
     t.timestamp "failed_at"
     t.text "error"
@@ -638,7 +638,7 @@ ActiveRecord::Schema.define(version: 2023_01_17_131844) do
     t.string "salutation", default: ""
     t.index ["invoice_id"], name: "index_message_recipients_on_invoice_id"
     t.index ["message_id"], name: "index_message_recipients_on_message_id"
-    t.index ["person_id", "message_id", "address"], name: "index_message_recipients_on_person_message_address", unique: true
+    t.index ["person_id", "message_id", "address"], name: "index_message_recipients_on_person_message_address", unique: true, length: { address: 255 }
     t.index ["person_id", "message_id", "email"], name: "index_message_recipients_on_person_message_email", unique: true
     t.index ["person_id", "message_id", "phone_number"], name: "index_message_recipients_on_person_message_phone_number", unique: true
     t.index ["person_id"], name: "index_message_recipients_on_person_id"

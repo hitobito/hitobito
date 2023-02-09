@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
+#  Copyright (c) 2018-2023, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -62,7 +62,7 @@ describe MailchimpSynchronizationJob do
     end
 
     it 'may be overridden via setting' do
-      expect(Settings.mailchimp).to receive(:enabled).and_return(false)
+      expect(FeatureGate).to receive(:enabled?).with('mailchimp').and_return(false)
       expect_any_instance_of(Synchronize::Mailchimp::Synchronizator).not_to receive(:perform)
       subject.enqueue!
       Delayed::Worker.new.work_off

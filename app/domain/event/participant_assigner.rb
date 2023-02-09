@@ -30,7 +30,7 @@ class Event::ParticipantAssigner
       end
 
       set_active(true)
-      remove_from_waiting_list if application.waiting_list?
+      remove_from_waiting_list if application&.waiting_list?
       create_participant_role
       event.refresh_participant_counts!
     end

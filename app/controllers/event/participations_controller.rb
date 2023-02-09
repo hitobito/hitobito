@@ -114,7 +114,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   def save_entry
     created = super
 
-    directly_assign_place
+    directly_assign_place if action_name == 'create' && created
 
     created
   end

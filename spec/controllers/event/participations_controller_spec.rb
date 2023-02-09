@@ -407,7 +407,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warn]).
-          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
+          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassveranstaltung bestätigt werden.'
       end
 
       it 'creates pending confirmation with waiting list info' do
@@ -423,7 +423,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warn]).
-          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
+          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassveranstaltung bestätigt werden.'
         expect(flash[:alert]).to include 'Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste.'
       end
 
@@ -447,7 +447,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warn]).
-          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
+          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassveranstaltung bestätigt werden.'
       end
 
       it 'creates specific non-active participant role for course events' do
@@ -469,7 +469,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warn]).
-          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
+          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassveranstaltung bestätigt werden.'
       end
 
       it 'creates new participation with application' do
@@ -496,7 +496,7 @@ describe Event::ParticipationsController do
 
         expect(flash[:notice]).to be_nil
         expect(flash[:warn]).
-          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
+          to include 'Es wurde eine Voranmeldung für Teilnahme von <i>Top Leader</i> in <i>Eventus</i> erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassveranstaltung bestätigt werden.'
       end
 
       it 'creates new participation with all answers' do

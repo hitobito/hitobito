@@ -14,4 +14,4 @@ Unterstützt der assozierte Event Applications, wird für jede Participation ein
 | waiting_list   | Auf Warteliste ?   |
 | waiting_list_comment   | Kommentar Warteliste   |
 
-Anmeldungen an einen Anlass müssen dadurch erst durch die Kursadministration bestätigt werden.
+Anmeldungen an einen Anlass müssen dadurch erst durch die Anlassveranstaltung bestätigt werden.

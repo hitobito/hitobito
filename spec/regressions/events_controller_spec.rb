@@ -166,7 +166,7 @@ describe EventsController, type: :controller do
 
         get :show, params: { group_id: groups(:top_layer).id, id: events(:top_event) }
 
-        pre_registration_note = 'Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Kursadministration bestätigt werden.'
+        pre_registration_note = 'Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassveranstaltung bestätigt werden.'
         expect(dom.all('.alert.alert-warning')[0].text).to include pre_registration_note
       end
 

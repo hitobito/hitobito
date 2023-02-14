@@ -142,6 +142,11 @@ case $cmd in
       cp -vrf .git-hooks "../hitobito_%/"
     ;;
 
+  binstubs)
+    echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+      cp -vf bin/binstubs/* "../hitobito_%/bin/"
+    ;;
+
   test-prepare)
     export RAILS_ENV=test
     echo 'Recreating the test-DB fresh to have a clean slate'
@@ -273,6 +278,7 @@ case $cmd in
 function __wagon_commands() {
   echo '
     activate
+    binstubs
     configs
     core-spec
     create
@@ -324,9 +330,10 @@ COMPLETION
 
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
-    echo "       $0 [test-prepare|test-speedup|core-spec|gemfile|configs|list|update-copyright]"
+    echo "       $0 [test-prepare|test-speedup|core-spec|update-copyright]"
     echo "       $0 [grep] <TERM>"
     echo "       $0 [git|git-all] <ARGS>"
+    echo "       $0 [gemfile|configs|binstubs|list]"
     echo
     echo "Enable bash-completion with \"source <($0 completion)\""
     ;;

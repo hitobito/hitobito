@@ -171,5 +171,16 @@ jobs:
           RAILS_ENV=test bundle exec rake webpacker:compile
 
       - name: 'Run wagon lint and tests'
+        id: tests
         run: |
           bundle exec rake db:create ci:wagon --trace
+
+  notify_statuscope:
+    uses: ./.github/workflows/notify-statuscope.yml
+    needs: [ build_test ]
+    if: success() || failure()
+    with:
+      repository: ${{ inputs.wagon_repository }}
+      test_result: ${{ needs.build_test.result == 'success' }}
+    secrets: inherit
+

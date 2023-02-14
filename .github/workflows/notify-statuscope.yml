@@ -48,7 +48,7 @@ jobs:
             -d status=ok | jq .
 
       - name: 'Send failure'
-        if: ${{ input.test_result == false }}
+        if: ${{ inputs.test_result == false }}
         run: >
           curl -v $HEARTBEAT_URL/signal \
             -d application=$HEARTBEAT_APPLICATION \

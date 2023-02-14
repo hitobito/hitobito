@@ -62,6 +62,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     set_active
     with_person_add_request do
       created = with_callbacks(:create, :save) do
+        # TODO: check that `save_entry` is only successful if waitinglist or place available
         saved = save_entry
         directly_assign_place if saved
       end
@@ -254,10 +255,11 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def directly_assign_place
-    if event.waiting_list_available? && event.places_available? && !event.attr_used?(:priorization)
-      assigner = Event::ParticipantAssigner.new(event, @participation)
-      assigner.add_participant if assigner.createable?
-    end
+    return if event.attr_used?(:priorization)
+    return unless event.places_available?
+
+    assigner = Event::ParticipantAssigner.new(event, @participation)
+    assigner.add_participant if assigner.createable?
   end
 
   def load_priorities

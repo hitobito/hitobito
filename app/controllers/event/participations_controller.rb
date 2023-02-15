@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -61,8 +61,9 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     init_answers
     set_active
     with_person_add_request do
-      created = with_callbacks(:create, :save) { save_entry }
-      directly_assign_place if created
+      created = with_callbacks(:create, :save) do
+        directly_assign_place if save_entry
+      end
       respond_with(entry, success: created, location: return_path)
     end
   end
@@ -252,10 +253,11 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def directly_assign_place
-    if event.waiting_list_available? && event.places_available? && !event.attr_used?(:priorization)
-      assigner = Event::ParticipantAssigner.new(event, @participation)
-      assigner.add_participant if assigner.createable?
-    end
+    return if event.attr_used?(:priorization)
+    return unless event.places_available?
+
+    assigner = Event::ParticipantAssigner.new(event, @participation)
+    assigner.add_participant if assigner.createable?
   end
 
   def load_priorities

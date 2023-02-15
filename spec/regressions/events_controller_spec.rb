@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -166,7 +166,7 @@ describe EventsController, type: :controller do
 
         get :show, params: { group_id: groups(:top_layer).id, id: events(:top_event) }
 
-        pre_registration_note = 'Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassveranstaltung bestätigt werden.'
+        pre_registration_note = 'Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
         expect(dom.all('.alert.alert-warning')[0].text).to include pre_registration_note
       end
 

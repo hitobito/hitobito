@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -404,7 +404,7 @@ de:
         incomplete: Pflichtangaben fehlen
       cancel_application:
         explanation: Du bist für diesen Anlass angemeldet.
-        pending: Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassveranstaltung bestätigt werden.
+        pending: Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.
         waiting_list: Du bist auf der Warteliste für diesen Anlass.
         caption: Abmelden
         confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
@@ -498,7 +498,7 @@ de:
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
       explain_choices: Leer lassen für Freitextantwort, eine oder mehrere Antwortmöglichkeiten (mit Komma getrennt) für Auswahl.
       explain_admin_questions: Hier kannst du weitere Angaben pro Teilnehmer/-in definieren,
-        welche nur für die Anlassveranstaltung verwendet werden.
+        welche nur für die Anlassverwaltung verwendet werden.
       explain_contact_attrs: Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung
         abgefragt werden sollen.
       caption_applications_cancelable: Teilnehmende können sich selbst abmelden.
@@ -550,7 +550,7 @@ de:
     instructions: 'Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken.'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     waiting_list: 'Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste.'
-    pending: 'Es wurde eine Voranmeldung für %{full_entry_label} erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassveranstaltung bestätigt werden.'
+    pending: 'Es wurde eine Voranmeldung für %{full_entry_label} erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.'
 
     show:
       link:

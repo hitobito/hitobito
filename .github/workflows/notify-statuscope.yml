@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: 'Check Configuration'
         run: |
-          HEARTBEAT_APPLICATION="$(basename "${inputs.repository}-tests" | tr _ -)"
+          HEARTBEAT_APPLICATION="${inputs.repository}-tests"
           echo "HEARTBEAT_APPLICATION=${HEARTBEAT_APPLICATION}" >> $GITHUB_ENV
           echo "HEARTBEAT_APPLICATION is $HEARTBEAT_APPLICATION"
           (

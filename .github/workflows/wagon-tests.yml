@@ -11,6 +11,13 @@ on:
         required: false
         default: ''
         type: string
+    secrets:
+      HEARTBEAT_URL:
+        description: 'URL to the heartbeat-application'
+        required: true
+      HEARTBEAT_TOKEN:
+        description: 'Token to interact with the heartbeat-application'
+        required: true
 
 defaults:
   run:

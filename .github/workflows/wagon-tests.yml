@@ -182,5 +182,7 @@ jobs:
     with:
       repository: ${{ inputs.wagon_repository }}
       test_result: ${{ needs.build_test.result == 'success' }}
-    secrets: inherit
+    secrets:
+      HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
+      HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
 

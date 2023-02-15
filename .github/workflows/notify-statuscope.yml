@@ -11,11 +11,11 @@ on:
         description: "Result of the Test-Run to report to statuscope"
         type: boolean
         required: true
-    # secrets:
-    #   HEARTBEAT_URL:
-    #     required: true
-    #   HEARTBEAT_TOKEN:
-    #     required: true
+    secrets:
+      HEARTBEAT_URL:
+        required: true
+      HEARTBEAT_TOKEN:
+        required: true
 
 jobs:
   notify-statuscope:
@@ -28,8 +28,6 @@ jobs:
     steps:
       - name: 'Check Configuration'
         run: |
-          # HEARTBEAT_APPLICATION="${{ inputs.repository }}-tests"
-          # echo "HEARTBEAT_APPLICATION=${HEARTBEAT_APPLICATION}" >> $GITHUB_ENV
           echo "HEARTBEAT_APPLICATION is $HEARTBEAT_APPLICATION"
 
           (

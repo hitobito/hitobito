@@ -16,50 +16,42 @@ on:
         required: true
       HEARTBEAT_TOKEN:
         required: true
-      HEARTBEAT_TEST:
-        required: true
 
 jobs:
   notify-statuscope:
     runs-on: 'ubuntu-latest'
     env:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
-      HEARTBEAT_TEST: ${{ secrets.HEARTBEAT_TEST }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
       HEARTBEAT_APPLICATION: "${{ inputs.repository }}-tests"
 
     steps:
       - name: 'Check Configuration'
         run: |
-          echo "HEARTBEAT_APPLICATION is $HEARTBEAT_APPLICATION"
+          echo "HEARTBEAT_APPLICATION is ${{ env.HEARTBEAT_APPLICATION }}"
 
           (
-          [[ "$HEARTBEAT_URL" != '' ]] &&
-          [[ "$HEARTBEAT_TOKEN" != '' ]] &&
+          [[ "${{ env.HEARTBEAT_URL }}" != '' ]] &&
+          [[ "${{ env.HEARTBEAT_TOKEN }}" != '' ]] &&
           echo "HEARTBEAT_URL and HEARTBEAT_TOKEN are present."
           ) || (
           echo "Please ensure that you have HEARTBEAT_URL and HEARTBEAT_TOKEN set as secrets"
           exit 1
           )
 
-          echo "$HEARTBEAT_TEST"
-          echo "${HEARTBEAT_TEST}"
-          echo "${{ env.HEARTBEAT_TEST }}"
-          echo "${{ secrets.HEARTBEAT_TEST }}"
-
       - name: 'Send success'
         if: ${{ inputs.test_result == true }}
         run: >
-          curl -v $HEARTBEAT_URL/signal \
-            -d application=$HEARTBEAT_APPLICATION \
-            -d token=$HEARTBEAT_TOKEN \
+          curl -v ${{ env.HEARTBEAT_URL }}/signal \
+            -d application=${{ env.HEARTBEAT_APPLICATION }} \
+            -d token=${{ env.HEARTBEAT_TOKEN }} \
             -d status=ok | jq .
 
       - name: 'Send failure'
         if: ${{ inputs.test_result == false }}
         run: >
-          curl -v $HEARTBEAT_URL/signal \
-            -d application=$HEARTBEAT_APPLICATION \
-            -d token=$HEARTBEAT_TOKEN \
+          curl -v ${{ env.HEARTBEAT_URL }}/signal \
+            -d application=${{ env.HEARTBEAT_APPLICATION }} \
+            -d token=${{ env.HEARTBEAT_TOKEN }} \
             -d status=fail | jq .
 

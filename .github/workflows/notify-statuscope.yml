@@ -16,12 +16,15 @@ on:
         required: true
       HEARTBEAT_TOKEN:
         required: true
+      HEARTBEAT_TEST:
+        required: true
 
 jobs:
   notify-statuscope:
     runs-on: 'ubuntu-latest'
     env:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
+      HEARTBEAT_TEST: ${{ secrets.HEARTBEAT_TEST }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
       HEARTBEAT_APPLICATION: "${{ inputs.repository }}-tests"
 
@@ -38,6 +41,9 @@ jobs:
           echo "Please ensure that you have HEARTBEAT_URL and HEARTBEAT_TOKEN set as secrets"
           exit 1
           )
+
+          echo "$HEARTBEAT_TEST"
+          echo "${{ secrets.HEARTBEAT_TEST }}"
 
       - name: 'Send success'
         if: ${{ inputs.test_result == true }}

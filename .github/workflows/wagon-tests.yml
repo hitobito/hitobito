@@ -184,5 +184,5 @@ jobs:
       test_result: ${{ needs.build_test.result == 'success' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
+      HEARTBEAT_TEST: "unimportant-test-data"
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
-

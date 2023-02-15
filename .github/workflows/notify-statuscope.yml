@@ -43,6 +43,8 @@ jobs:
           )
 
           echo "$HEARTBEAT_TEST"
+          echo "${HEARTBEAT_TEST}"
+          echo "${{ env.HEARTBEAT_TEST }}"
           echo "${{ secrets.HEARTBEAT_TEST }}"
 
       - name: 'Send success'

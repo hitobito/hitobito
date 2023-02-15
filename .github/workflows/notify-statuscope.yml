@@ -23,13 +23,15 @@ jobs:
     env:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
+      HEARTBEAT_APPLICATION: "${{ inputs.repository }}-tests"
 
     steps:
       - name: 'Check Configuration'
         run: |
-          HEARTBEAT_APPLICATION="${inputs.repository}-tests"
-          echo "HEARTBEAT_APPLICATION=${HEARTBEAT_APPLICATION}" >> $GITHUB_ENV
+          # HEARTBEAT_APPLICATION="${{ inputs.repository }}-tests"
+          # echo "HEARTBEAT_APPLICATION=${HEARTBEAT_APPLICATION}" >> $GITHUB_ENV
           echo "HEARTBEAT_APPLICATION is $HEARTBEAT_APPLICATION"
+
           (
           [[ "$HEARTBEAT_URL" != '' ]] &&
           [[ "$HEARTBEAT_TOKEN" != '' ]] &&

@@ -42,7 +42,7 @@ jobs:
       - name: 'Send success'
         if: ${{ inputs.test_result == true }}
         run: >
-          curl -v ${{ env.HEARTBEAT_URL }}/signal \
+          curl --silent ${{ env.HEARTBEAT_URL }}/signal \
             -d application=${{ env.HEARTBEAT_APPLICATION }} \
             -d token=${{ env.HEARTBEAT_TOKEN }} \
             -d status=ok | jq .
@@ -50,7 +50,7 @@ jobs:
       - name: 'Send failure'
         if: ${{ inputs.test_result == false }}
         run: >
-          curl -v ${{ env.HEARTBEAT_URL }}/signal \
+          curl --silent ${{ env.HEARTBEAT_URL }}/signal \
             -d application=${{ env.HEARTBEAT_APPLICATION }} \
             -d token=${{ env.HEARTBEAT_TOKEN }} \
             -d status=fail | jq .

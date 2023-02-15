@@ -36,7 +36,7 @@ jobs:
       - name: 'Send success'
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
         run: >
-          curl -v $HEARTBEAT_URL/signal \
+          curl --silent $HEARTBEAT_URL/signal \
             -d application=$HEARTBEAT_APPLICATION \
             -d token=$HEARTBEAT_TOKEN \
             -d status=ok | jq .
@@ -44,7 +44,7 @@ jobs:
       - name: 'Send failure'
         if: ${{ github.event.workflow_run.conclusion == 'failure' }}
         run: >
-          curl -v $HEARTBEAT_URL/signal \
+          curl --silent $HEARTBEAT_URL/signal \
             -d application=$HEARTBEAT_APPLICATION \
             -d token=$HEARTBEAT_TOKEN \
             -d status=fail | jq .

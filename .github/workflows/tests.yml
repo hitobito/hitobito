@@ -59,7 +59,7 @@ jobs:
         id: readToolVersions
 
       - name: Set up Node.js ${{ steps.readToolVersions.outputs.nodejs }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.readToolVersions.outputs.nodejs }}
 

@@ -71,7 +71,7 @@ module Authenticatable
     sign_in token, store: false
   end
 
-  def token_accecptable?(token)
+  def token_acceptable?(token)
     token.acceptable?(:people) ||
       token.acceptable?(:groups) ||
       token.acceptable?(:events) ||

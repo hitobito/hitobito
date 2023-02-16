@@ -48,8 +48,6 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   before_render_show :load_answers
   before_render_show :load_precondition_warnings
 
-  after_create :send_confirmation_email
-  after_create :send_notification_email
   after_destroy :send_cancel_email
 
   # new and create are only invoked by people who wish to
@@ -62,7 +60,13 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     set_active
     with_person_add_request do
       created = with_callbacks(:create, :save) do
-        directly_assign_place if save_entry
+        entry.transaction do
+          next unless save_entry
+
+          # a confirmation email gets sent automatically when assigning a place. in the other case, send one explicitely
+          directly_assign_place? ? directly_assign_place : send_confirmation_email
+          send_notification_email
+        end
       end
       respond_with(entry, success: created, location: return_path)
     end
@@ -252,10 +256,11 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     entry.init_application
   end
 
-  def directly_assign_place
-    return if event.attr_used?(:priorization)
-    return unless event.places_available?
+  def directly_assign_place?
+    event.places_available? && !(event.attr_used?(:priorization) && event.priorization)
+  end
 
+  def directly_assign_place
     assigner = Event::ParticipantAssigner.new(event, @participation)
     assigner.add_participant if assigner.createable?
   end

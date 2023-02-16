@@ -28,20 +28,14 @@ class Event::ParticipationConfirmationJob < BaseJob
   def send_confirmation
     return unless participation.person.valid_email?
 
-    pending = participation.pending?
-
     Event::ParticipationMailer.confirmation(participation).deliver_now
   end
 
   def send_approval
-    return unless participation.pending? && @send_approval
+    return unless @send_approval && participation.pending? && !participation.event.requires_approval?
 
-    if participation.event.requires_approval?
-      recipients = approvers
-      if recipients.present?
-        Event::ParticipationMailer.approval(participation, recipients).deliver_now
-      end
-    end
+    recipients = approvers
+    Event::ParticipationMailer.approval(participation, recipients).deliver_now if recipients.present?
   end
 
   def approvers

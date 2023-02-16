@@ -427,6 +427,22 @@ describe Event::ParticipationsController do
         expect(flash[:alert]).to include 'Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste.'
       end
 
+      it 'without waiting list directly assigns place and creates confirmation' do
+        course.update!(waiting_list: false, maximum_participants: 2, participant_count: 1, priorization: false)
+
+        expect do
+          post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }
+          expect(assigns(:participation)).to be_valid
+        end.to change { Delayed::Job.count } #.by(2)
+
+        expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationNotificationJob/}
+        expect(pending_dj_handlers).to be_one{ |h| h =~ /Event::ParticipationConfirmationJob/}
+
+        expect(flash[:notice]).
+          to include 'Teilnahme von <i>Top Leader</i> in <i>Eventus</i> wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+        expect(flash[:warn]).to be_nil
+      end
+
       it 'creates non-active participant role for course events' do
         groups(:top_layer).update_column(:require_person_add_requests, true)
         post :create, params: { group_id: group.id, event_id: course.id, event_participation: {} }

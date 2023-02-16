@@ -77,7 +77,7 @@ jobs:
           echo "HITOBITO_BRANCH=$HITOBITO_BRANCH" >> $GITHUB_ENV
 
       - name: 'Checkout hitobito'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: 'hitobito/hitobito'
           ref: '${{ env.HITOBITO_BRANCH }}'
@@ -108,7 +108,7 @@ jobs:
           cp -v Wagonfile.ci Wagonfile
 
       - name: 'Checkout dependency ${{ inputs.wagon_dependency_repository }}'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         if: ${{ inputs.wagon_dependency_repository != '' }}
         with:
           repository: hitobito/${{ inputs.wagon_dependency_repository }}
@@ -116,21 +116,21 @@ jobs:
           path: ${{ inputs.wagon_dependency_repository }}
 
       - name: Checkout ${{ env.WAGON_NAME }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: ${{ env.WAGON_NAME }}
 
       - name: 'Create cache key'
         run: cp Gemfile.lock Gemfile.lock.backup
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: hitobito/vendor/bundle
           key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
           restore-keys: |
             ${{ runner.os }}-ruby-bundle-
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         if: ${{ inputs.wagon_dependency_repository != '' }}
         with:
           path: ${{ inputs.wagon_dependency_repository }}/vendor/bundle
@@ -138,7 +138,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-ruby-bundle-
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ${{ env.WAGON_NAME }}/vendor/bundle
           key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
@@ -162,7 +162,7 @@ jobs:
             bundle install --jobs 4 --retry 3 --path vendor/bundle
           done
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}

@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 'Set up Ruby'
         uses: ruby/setup-ruby@v1
@@ -75,7 +75,7 @@ jobs:
       - name: 'create cache key'
         run: cp Gemfile.lock Gemfile.lock.backup
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
@@ -89,7 +89,7 @@ jobs:
       - name: 'Make changes to Gemfile.lock transparent'
         run: git diff Gemfile.lock || true
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}

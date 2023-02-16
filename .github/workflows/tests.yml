@@ -109,3 +109,14 @@ jobs:
           bundle exec rake db:create --trace
           bundle exec bin/rails db:environment:set RAILS_ENV=test
           bundle exec rake ci --trace
+
+  notify_statuscope:
+    uses: ./.github/workflows/notify-statuscope.yml
+    needs: [ build ]
+    if: ( success() || failure() ) && ( github.ref_name == 'master' )
+    with:
+      repository: 'hitobito'
+      test_result: ${{ needs.build_test.result == 'success' }}
+    secrets:
+      HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
+      HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

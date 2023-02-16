@@ -2,14 +2,14 @@ name: 'Notify Statuscope'
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows:
-      - Rails Lint and Test
-      - Wagon - Rails Lint and Test
-    types:
-      - completed
-    branches:
-      - master
+  # workflow_run:
+  #   workflows:
+  #     - Rails Lint and Test
+  #     - Wagon - Rails Lint and Test
+  #   types:
+  #     - completed
+  #   branches:
+  #     - master
 
 jobs:
   notify:

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -33,7 +33,7 @@ module PeopleHelper
     )
   end
 
-  def dropdown_people_export(details = false, emails = true, labels = true, households = true)
+  def dropdown_people_export(details = false, emails = true, labels = true, households = true) # rubocop:disable Metrics/ParameterLists
     Dropdown::PeopleExport.new(self, current_user, params, details: details,
                                                            emails: emails,
                                                            labels: labels,

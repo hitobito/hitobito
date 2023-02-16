@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -66,14 +66,18 @@ module Authenticatable
   def doorkeeper_sign_in
     token = token_authentication.oauth_token
     return unless token&.accessible?
-    acceptable = token.acceptable?(:people) ||
+    return head(:forbidden) unless token_acceptable?(token)
+
+    sign_in token, store: false
+  end
+
+  def token_accecptable?(token)
+    token.acceptable?(:people) ||
       token.acceptable?(:groups) ||
       token.acceptable?(:events) ||
       token.acceptable?(:invoices) ||
       token.acceptable?(:mailing_lists) ||
       token.acceptable?(:api)
-    return head(:forbidden) unless acceptable
-    sign_in token, store: false
   end
 
   def authenticate_person!(*args)

@@ -63,7 +63,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
         entry.transaction do
           next unless save_entry
 
-          # a confirmation email gets sent automatically when assigning a place. in the other case, send one explicitely
+          # a confirmation email gets sent automatically when assigning a
+          # place. in the other case, send one explicitely
           directly_assign_place? ? directly_assign_place : send_confirmation_email
           send_notification_email
         end

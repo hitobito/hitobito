@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Event::RegisterController < ApplicationController
-  include DeprecationHelper
+  include DeprecatedAction
   include PrivacyPolicyAcceptable
 
   helper_method :resource, :entry, :group, :event
@@ -16,6 +16,7 @@ class Event::RegisterController < ApplicationController
 
   def index
     deprecated_action # should be public_events#show
+
     session[:person_return_to] = show_event_path
     flash.now[:notice] = translate(:not_logged_in, event: event)
   end

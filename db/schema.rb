@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_08_191224) do
+ActiveRecord::Schema.define(version: 2023_02_14_071940) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -471,7 +471,7 @@ ActiveRecord::Schema.define(version: 2023_02_08_191224) do
     t.text "payment_information"
     t.string "account_number"
     t.string "iban"
-    t.string "payment_slip", default: "ch_es", null: false
+    t.string "payment_slip", default: "qr", null: false
     t.text "beneficiary"
     t.text "payee"
     t.string "participant_number"

@@ -34,23 +34,25 @@
 #
 
 class InvoiceConfig < ActiveRecord::Base
-  include PaymentSlips
+  include I18nEnums
   include ValidatedEmail
 
   IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/.freeze
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/.freeze
   PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}\z/.freeze
+  PAYMENT_SLIPS = %w(qr no_ps).freeze
+
+  i18n_enum :payment_slip, PAYMENT_SLIPS, scopes: true, queries: true
 
   belongs_to :group, class_name: 'Group'
 
   has_many :payment_reminder_configs, dependent: :destroy
   has_many :payment_provider_configs, dependent: :destroy
 
-  before_validation :nullify_participant_number_internal, unless: :bank_with_reference?
+  before_validation :nullify_participant_number_internal
 
   validates :group_id, uniqueness: true
   validates :payee, presence: true, on: :update
-  validates :beneficiary, presence: true, on: :update, if: :bank?
   validates :email, format: Devise.email_regexp, allow_blank: true
 
   # TODO: probably the if condition is not correct, verification needed
@@ -58,20 +60,12 @@ class InvoiceConfig < ActiveRecord::Base
   validates :iban, format: { with: IBAN_REGEX },
                    on: :update, allow_blank: true
 
-  validates :account_number, format: { with: ACCOUNT_NUMBER_REGEX },
-                             on: :update, allow_blank: true, if: :post?
-
-  validates :participant_number, presence: true, on: :update, if: :with_reference?
-  validates :participant_number_internal, presence: true, on: :update, if: :bank_with_reference?
-  validates :participant_number_internal, format: { with: PARTICIPANT_NUMBER_INTERNAL_REGEX },
-                                          on: :update, if: :bank_with_reference?
   validates :donation_calculation_year_amount, numericality: { only_integer: true,
                                                                greater_than: 0,
                                                                allow_nil: true }
   validates :donation_increase_percentage, numericality: { greater_than: 0,
                                                            allow_nil: true }
 
-  validate :correct_address_wordwrap, if: :bank?
   validate :correct_check_digit
   validate :correct_payee_qr_format, if: :qr?
 
@@ -98,7 +92,7 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def correct_check_digit
-    return if account_number.blank? || bank?
+    return if account_number.blank?
 
     payment_slip = Invoice::PaymentSlip.new
     splitted = account_number.delete('-').split('')

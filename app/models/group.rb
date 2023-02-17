@@ -351,7 +351,8 @@ class Group < ActiveRecord::Base
   prepend Group::Paranoia
 
   def create_invoice_config
-    create_invoice_config!
+    config = InvoiceConfig.new(group: self)
+    config.save(validate: false) # otherwise the validations will block creation
   end
 
   def prevent_changes

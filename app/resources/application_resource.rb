@@ -62,7 +62,8 @@ class ApplicationResource < Graphiti::Resource
   delegate :can?, to: :current_ability
   delegate :current_ability, to: :context
 
-  # used to filter accessible models in `#base_scope`, overwrite in subclass to use a different Ability instance
+  # Used to filter accessible models in `#base_scope`.
+  # Overwrite in subclass to use a different Ability instance.
   def index_ability
     current_ability
   end

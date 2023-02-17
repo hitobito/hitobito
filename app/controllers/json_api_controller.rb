@@ -128,7 +128,10 @@ class JsonApiController < ActionController::API
   end
 
   def resource_class
-    [self.class.name.delete_prefix("JsonApi::").delete_suffix("Controller").singularize, "Resource"].join.constantize
+    [
+      self.class.name.delete_prefix("JsonApi::").delete_suffix("Controller").singularize,
+      "Resource"
+    ].join.constantize
   end
 
   def params

@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2023, Schweizer Wanderwege. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 module JsonApi
   class ContactAbility
     include CanCan::Ability
@@ -11,11 +18,13 @@ module JsonApi
     def initialize(main_ability, people_scope)
       @main_ability = main_ability
       @people_scope = people_scope
-      
+
       # allow reading all contacts that are public
       can :read, CONTACT_MODELS, public: true
       # allow reading contacts of people on which the user has show_details permissions
-      can :read, CONTACT_MODELS, contactable_type: 'Person', contactable_id: permitted_people_ids(main_ability, people_scope)
+      can :read, CONTACT_MODELS,
+          contactable_type: 'Person',
+          contactable_id: permitted_people_ids(main_ability, people_scope)
       # TODO: implement rules for Group contactables (and any other existing contactable classes)
     end
 

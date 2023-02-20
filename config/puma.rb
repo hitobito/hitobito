@@ -42,6 +42,7 @@ plugin :tmp_restart
 if ENV['PROMETHEUS_EXPORTER_HOST']
   after_worker_boot do
     require 'prometheus_exporter/instrumentation'
+
     PrometheusExporter::Instrumentation::Puma.start
   end
 

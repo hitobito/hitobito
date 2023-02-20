@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -28,20 +28,17 @@ class Event::ParticipationConfirmationJob < BaseJob
   def send_confirmation
     return unless participation.person.valid_email?
 
-    pending = participation.pending?
-
     Event::ParticipationMailer.confirmation(participation).deliver_now
   end
 
   def send_approval
-    return unless participation.pending? && @send_approval
+    return unless @send_approval && participation.pending?
+    return unless participation.event.requires_approval?
 
-    if participation.event.requires_approval?
-      recipients = approvers
-      if recipients.present?
-        Event::ParticipationMailer.approval(participation, recipients).deliver_now
-      end
-    end
+    recipients = approvers
+    return if recipients.blank?
+
+    Event::ParticipationMailer.approval(participation, recipients).deliver_now
   end
 
   def approvers

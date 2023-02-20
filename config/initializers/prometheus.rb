@@ -19,5 +19,4 @@ if !Rails.env.test? && ENV['PROMETHEUS_EXPORTER_HOST']
 
   # This reports delayed job info
   PrometheusExporter::Instrumentation::DelayedJob.register_plugin
-
 end

@@ -421,7 +421,8 @@ GEM
       prawn-table
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
-    prometheus_exporter (0.5.0)
+    prometheus_exporter (2.0.8)
+      webrick
     protective (0.2.0)
       activerecord
     pry (0.14.1)

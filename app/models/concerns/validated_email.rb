@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,16 +14,16 @@ module ValidatedEmail
   end
 
   def valid_email?(email = self.email)
-    Truemail.valid?(email)
+    Truemail.valid?(email.to_s)
   end
 
   private
 
   def assert_valid_email
     self.email = email.presence
-    return if !email || !email_changed? || valid_email?(email)
+    return true if !email || !email_changed? || valid_email?(email)
 
-    # Send a sentry Notification if even the base mail which shoul be valid is invalid at the moment
+    # Send a sentry Notification if even the root mail (should be valid) is invalid at the moment
     alert_sentry(email) unless valid_email?(Settings.root_email)
 
     errors.add(:email, :invalid)
@@ -35,7 +35,8 @@ module ValidatedEmail
       extra: {
         verifier_email: Truemail.configure.verifier_email,
         validated_email: email
-      })
+      }
+    )
   end
 
 end

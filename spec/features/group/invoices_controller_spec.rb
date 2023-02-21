@@ -88,20 +88,26 @@ describe InvoicesController do
 
     it 'exports full invoice' do
       click_link('Export')
-      click_link('Rechnung inkl. Einzahlungsschein')
-      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf")
+      expect do
+        click_link('Rechnung inkl. Einzahlungsschein')
+      end.to change { Delayed::Job.count }.by(1)
+      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
     end
 
     it 'exports only articles' do
       click_link('Export')
-      click_link('Rechnung separat')
-      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf?payment_slip=false")
+      expect do
+        click_link('Rechnung separat')
+      end.to change { Delayed::Job.count }.by(1)
+      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
     end
 
     it 'exports only esr' do
       click_link('Export')
-      click_link('Einzahlungsschein separat')
-      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}.pdf?articles=false")
+      expect do
+        click_link('Einzahlungsschein separat')
+      end.to change { Delayed::Job.count }.by(1)
+      expect(page).to have_current_path("/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
     end
   end
 

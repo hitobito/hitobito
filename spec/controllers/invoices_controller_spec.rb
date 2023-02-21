@@ -140,11 +140,11 @@ describe InvoicesController do
       expect(assigns(:invoices)).to have(2).items
     end
 
-    it 'exports pdf' do
+    it 'exports pdf in background' do
       update_issued_at_to_current_year
-      get :index, params: { group_id: group.id }, format: :pdf
-      expect(response.header['Content-Disposition']).to match(/rechnungen.pdf/)
-      expect(response.media_type).to eq('application/pdf')
+      expect do
+        get :index, params: { group_id: group.id }, format: :pdf
+      end.to change { Delayed::Job.count }.by(1)
     end
 
     context 'invoice list' do
@@ -169,8 +169,9 @@ describe InvoicesController do
       end
 
       it 'does render pdf using invoice renderer' do
-        expect(Export::Pdf::Invoice).to receive(:render_multiple).with([sent], anything)
-        get :index, params: { group_id: group.id, invoice_list_id: invoice_list.id }, format: :pdf
+        expect do
+          get :index, params: { group_id: group.id, invoice_list_id: invoice_list.id }, format: :pdf
+        end.to change { Delayed::Job.count }.by(1)
       end
 
       it 'does render pdf Letter renderer renderer' do
@@ -254,10 +255,9 @@ describe InvoicesController do
     end
 
     it 'exports pdf' do
-      get :show, params: { group_id: group.id, id: invoice.id }, format: :pdf
-
-      expect(response.header['Content-Disposition']).to match(/Rechnung-#{invoice.sequence_number}.pdf/)
-      expect(response.media_type).to eq('application/pdf')
+      expect do
+        get :show, params: { group_id: group.id, id: invoice.id }, format: :pdf
+      end.to change { Delayed::Job.count }.by(1)
     end
 
     it 'exports csv' do

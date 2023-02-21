@@ -122,8 +122,13 @@ class InvoicesController < CrudController
     if letter
       render_pdf_in_background(letter)
     else
-      pdf = Export::Pdf::Invoice.render_multiple(invoices, pdf_options)
-      send_data pdf, type: :pdf, disposition: 'inline', filename: filename(:pdf, invoices)
+      format = :pdf
+      with_async_download_cookie(format, filename(format, invoices)) do |filename|
+        Export::InvoicesJob.new(format,
+                                current_person.id,
+                                invoices.pluck(:id),
+                                pdf_options.merge({ filename: filename })).enqueue!
+      end
     end
   end
 

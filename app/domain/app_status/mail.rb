@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2017-2022, Hitobito AG. This file is part of
+#  Copyright (c) 2017-2023, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,7 +12,7 @@ class AppStatus::Mail < AppStatus
                             'and no e-mail is blocking the queue/job.'
   CATCH_ALL_INBOX_OK = 'ok'
 
-  CATCH_ALL_INBOX_OVERDUE_TIME = ENV.fetch('RAILS_INBOX_OVERDUE_MINUTES', 42).minutes
+  CATCH_ALL_INBOX_OVERDUE_TIME = ENV.fetch('RAILS_INBOX_OVERDUE_MINUTES', 42).to_i.minutes
 
   def initialize
     @catch_all_inbox = catch_all_inbox

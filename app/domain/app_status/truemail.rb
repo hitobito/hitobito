@@ -8,6 +8,8 @@
 class AppStatus::Truemail < AppStatus
 
   def initialize(with_private_details = false)
+    super()
+
     @truemail_working = truemail_working
     @with_private_details = with_private_details
   end

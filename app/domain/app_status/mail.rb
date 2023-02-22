@@ -15,6 +15,8 @@ class AppStatus::Mail < AppStatus
   CATCH_ALL_INBOX_OVERDUE_TIME = ENV.fetch('RAILS_INBOX_OVERDUE_MINUTES', 42).to_i.minutes
 
   def initialize
+    super()
+
     @catch_all_inbox = catch_all_inbox
   end
 

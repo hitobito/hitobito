@@ -33,9 +33,8 @@ function require_wagon_name() {
 }
 
 function existing_wagon_names() {
-  find "../" -type d |\
-  sed 's!\.\./hitobito/!!' |\
-  grep 'hitobito_.*/' |\
+  find "../" -maxdepth 1 -type d |\
+  grep 'hitobito_.*' |\
   sed 's!../hitobito_!!' |\
   cut -d/ -f 1 |\
   grep -v '\.\.' |\
@@ -296,9 +295,8 @@ function __wagon_commands() {
 }
 
 function __wagon_list() {
-  find "../" -type d |\
-  sed 's!\.\./hitobito/!!' |\
-  grep 'hitobito_.*/' |\
+  find "../" -maxdepth 1 -type d |\
+  grep 'hitobito_.*' |\
   sed 's!../hitobito_!!' |\
   cut -d/ -f 1 |\
   grep -v '\.\.' |\

@@ -92,11 +92,9 @@ Doorkeeper.configure do
   # not in configuration, i.e. `default_scopes` or `optional_scopes`.
   # (disabled by default)
   #
-  list_of_optional_scopes = [:name, :with_roles, :openid, :api, :events, :groups, :people, :invoices, :mailing_lists]
-  FeatureGate.if('groups.nextcloud') { list_of_optional_scopes << :nextcloud }
-
   default_scopes :email
-  optional_scopes *list_of_optional_scopes
+  optional_scopes :name, :with_roles, :openid, :api,
+                  :events, :groups, :people, :invoices, :mailing_lists
 
   enforce_configured_scopes
 
@@ -244,6 +242,11 @@ Rails.application.config.to_prepare do
   if Doorkeeper::AuthorizationsController.respond_to? :layout
     # Only Authorization endpoint
     Doorkeeper::AuthorizationsController.layout 'oauth'
+  end
+
+  FeatureGate.if('groups.nextcloud') do
+    Doorkeeper.configuration.scopes.add(:nextcloud)
+    Doorkeeper.configuration.optional_scopes.add(:nextcloud)
   end
 end
 

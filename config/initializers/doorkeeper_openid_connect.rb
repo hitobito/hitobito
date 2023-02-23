@@ -86,12 +86,29 @@ Doorkeeper::OpenidConnect.configure do
         }
       end
     end
+  end
+end
 
-    FeatureGate.if('groups.nextcloud') do
-      claim(:name, scope: :nextcloud, response: [:user_info, :id_token]) { |resource_owner| resource_owner.to_s }
-      claim(:groups, scope: :nextcloud, response: [:user_info, :id_token]) do |resource_owner|
-        resource_owner.roles.map(&:nextcloud_group).uniq.compact
-      end
-    end
+Rails.application.config.to_prepare do
+  FeatureGate.if('groups.nextcloud') do
+    Doorkeeper::OpenidConnect.configuration.claims[:name] =
+      Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
+        name: :name,
+        scope: :nextcloud,
+        response: [:user_info, :id_token],
+        generator: Proc.new do |resource_owner|
+          resource_owner.to_s
+        end
+      )
+
+    Doorkeeper::OpenidConnect.configuration.claims[:groups] =
+      Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
+        name: :groups,
+        scope: :nextcloud,
+        response: [:user_info, :id_token],
+        generator: Proc.new do |resource_owner|
+          resource_owner.roles.map(&:nextcloud_group).uniq.compact
+        end
+      )
   end
 end

@@ -6,6 +6,11 @@
     = image_tag(upload_variant(entry, :logo, :thumb), size: '64x64')
 
 %dl.dl-horizontal
+  %dt.muted Discovery Endpoint
+  %dd
+    %div= oauth_discovery_provider_url(locale: nil)
+
+%dl.dl-horizontal
   %dt.muted Authorization Endpoint
   %dd
     %div= oauth_authorization_url(locale: nil)

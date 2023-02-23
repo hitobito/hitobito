@@ -5,6 +5,7 @@
 *  Neu kann auf einer Ebene eine Datenschutzerklärung (DSE) hinterlegt werden. Diese muss, falls vorhanden, bei der Selbstregistrierung, dem Anmelden bei einem Anlass/Kurs oder dem Hinzufügen einer Person auf einer Gruppe akzeptiert werden um fortzufahren. (#1881)
 *  Personen mit layer_full oder layer_and_below_full können neu Personen, welche in ihren Ebenen unter "Ohne Rollen" erscheinen, per globale Suchfunktion finden und anzeigen. (hitobito_sww#80)
 *  Anbindung an Nextcloud möglich (#1854)
+*  Rechnungen werden neu in einem Hintergrundprozess gedruckt (#2014)
 
 ## Version 1.28
 

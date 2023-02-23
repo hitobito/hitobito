@@ -36,11 +36,11 @@
     {
       "warning_type": "Unmaintained Dependency",
       "warning_code": 123,
-      "fingerprint": "425dcb3af9624f11f12d777d6f9fe05995719975a155c30012baa6b9dc3487df",
+      "fingerprint": "715ee6d743a8af33c7b930d728708ce19c765fb40e2ad9d2b974db04d92dc7d1",
       "check_name": "EOLRuby",
       "message": "Support for Ruby 2.7.3 ends on 2023-03-31",
-      "file": "Gemfile.lock",
-      "line": 455,
+      "file": ".ruby-version",
+      "line": 1,
       "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
       "code": null,
       "render_path": null,
@@ -50,7 +50,7 @@
       "cwe_id": [
         1104
       ],
-      "note": "We plan to update before EOL or shortly thereafter"
+      "note": "We plan to upgrade Ruby before EOL or shortly thereafter"
     },
     {
       "warning_type": "SQL Injection",
@@ -76,6 +76,6 @@
       "note": "This from() is not part of an SQL query builder, but rather an email builder"
     }
   ],
-  "updated": "2023-02-08 22:58:07 +0100",
-  "brakeman_version": "5.4.0"
+  "updated": "2023-02-23 10:44:36 +0100",
+  "brakeman_version": "5.4.1"
 }

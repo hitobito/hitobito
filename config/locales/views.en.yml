@@ -425,7 +425,6 @@ en:
       times_are_optional: Times are optional
       explain_application_questions: Here you can request further information for the application.
       explain_choices: Leave blank for free text answer, one or more answer choices (comma separated) for selection.
-      explain_admin_questions: Here you can define further details per participant, which are only used for course administration.
       explain_contact_attrs: Here you can choose which contact details should be requested during registration.
       caption_applications_cancelable: Participants can cancel their registration.
       caption_display_booking_info: The number of registrations/places is visible on the course list for all

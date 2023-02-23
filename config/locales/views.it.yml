@@ -369,7 +369,6 @@ it:
         incomplete: mancano dei campi obbligatori
       cancel_application:
         explanation: Sei iscritto/a a questo evento.
-        pending: Sei pre-registrato per questo evento. L'iscrizione non è ancora definitiva e deve essere confermata dalla direzione del corso.
         waiting_list: Sei in lista d'attesa per questo evento.
         caption: Disiscriversi
         confirmation: "Sei sicuro di volerti disiscrivere da questo evento?"
@@ -457,7 +456,6 @@ it:
       times_are_optional: Gli orari sono opzionali
       explain_application_questions: Qui potete richiedere ulteriori informazioni per la registrazione.
       explain_choices: Lasciare vuoto per la risposta di testo libero, una o più opzioni di risposta (separate da virgole) per la selezione.
-      explain_admin_questions: Qui per ogni partecipante puoi definire altri dati che vengono utilizzati solo per l'amministratzione del corso.
       explain_contact_attrs: Qui puoi scegliere quali dati di contatto devono essere chiesti al momento dell'iscrizione.
       caption_applications_cancelable: I partecipanti si possono disiscrivere personalmente.
       caption_display_booking_info: Il numero di iscrizioni/posti è visibile a tutti sulla lista del corso.
@@ -504,7 +502,6 @@ it:
     instructions: 'per l''iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all''indirizzo corrispondente'
     export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
     waiting_list: 'Tutti i posti sono attualmente occupati, l''iscrizione è in lista d''attesa.'
-    pending: 'È stata creata una pre-iscrizione per %{full_entry_label}. La partecipazione non è ancora definitiva e deve essere confermata dall''amministrazione del corso.'
     show:
       link:
         delete: 'cancellare iscrizione'

@@ -369,7 +369,6 @@ fr:
         incomplete: des indications obligatoires manquent
       cancel_application:
         explanation: Tu es déjà inscrit-e à cet évènement.
-        pending: Tu es préinscrit·e à cet événement. L'inscription n'est pas encore définitive et doit être confirmée par l'administration du cours.
         waiting_list: Tu es sur la liste d'attente pour cet événement.
         caption: Désinscrire
         confirmation: "Es-tu sûr/sure de vouloir annuler ton inscription à cet évènement?"
@@ -457,7 +456,6 @@ fr:
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Ici, tu peux demander des informations supplémentaires pour les inscriptions.
       explain_choices: Laissez vide pour la réponse en texte libre, une ou plusieurs options de réponse (séparées par des virgules) pour la sélection.
-      explain_admin_questions: Tu peux définir des données supplémentaires pour chaque participant(e); elles ne seront utilisées que pour l'administration du cours.
       explain_contact_attrs: Tu peux choisir les coordonnées requises pour l'inscription.
       caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
       caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
@@ -504,7 +502,6 @@ fr:
     instructions: 'Pour l''inscription définitive, tu dois imprimer cette page en utilisant l''option <i>imprimer</i>, puis la signer et l''envoyer par poste à l''adresse indiquée.'
     export_enqueued: 'l''exportation débute en arrière-plan et est téléchargée quand elle est terminée'
     waiting_list: 'Toutes les places sont actuellement prises, l''inscription est sur la liste d''attente.'
-    pending: 'Une préinscription a été créée pour %{full_entry_label}. La participation n''est pas encore définitive et doit être confirmée par l''administration du cours.'
     show:
       link:
         delete: 'Effacer l''inscription'

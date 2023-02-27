@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -59,7 +59,7 @@ module Group::Types
     unless layer_id == layer_group_id
       self_and_descendants.
         where(layer_group_id: layer_group_id).
-        update_all(layer_group_id: layer_id)
+        update_all(layer_group_id: layer_id) # rubocop:disable Rails/SkipsModelValidations intentionally update only one attribute
       self.layer_group_id = layer_id
     end
   end
@@ -125,6 +125,7 @@ module Group::Types
     def find_group_type!(sti_name)
       type = all_types.detect { |t| t.sti_name == sti_name }
       raise ActiveRecord::RecordNotFound, "No group '#{sti_name}' found" if type.nil?
+
       type
     end
 
@@ -132,6 +133,7 @@ module Group::Types
     def find_role_type!(sti_name)
       type = role_types.detect { |t| t.sti_name == sti_name }
       raise ActiveRecord::RecordNotFound, "No role '#{sti_name}' found" if type.nil?
+
       type
     end
 

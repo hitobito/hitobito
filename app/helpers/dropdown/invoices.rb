@@ -46,7 +46,7 @@ module Dropdown
     end
 
     def item_options
-      { target: :new, data: { checkable: true } }
+      { data: { checkable: true } }
     end
 
     def export_path(format, options = {})

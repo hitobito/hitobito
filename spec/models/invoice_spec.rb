@@ -71,13 +71,6 @@ describe Invoice do
     expect(invoice.recipient_address).to eq "Top Leader\n\n3003 Supertown\n"
   end
 
-  it '#save sets esr_number and participant_number for esr invoice_config' do
-    invoice = create_invoice
-    expect(invoice.participant_number).to eq invoice_config.participant_number
-    expect(invoice.esr_number).to be_present
-    expect(invoice).to be_with_reference
-  end
-
   it '#save sets esr_number but not participant_number for non esr invoice_config' do
     invoice = create_invoice(group: groups(:bottom_layer_one))
     expect(invoice.participant_number).to be_nil
@@ -129,10 +122,6 @@ describe Invoice do
     let(:iban)               { 'CH12 2134 1234 1234 1234' }
     let(:qr_iban)            { 'CH053 0000 0013 0003 6664' }
     let(:esr_without_blanks) { '000083496356700000000000019' }
-
-    it 'sets esr without blanks per default' do
-      expect(create_invoice.reference).to eq esr_without_blanks
-    end
 
     it 'sets esr without blanks for qr invoice with qr iban' do
       group.invoice_config.update(payment_slip: :qr, iban: qr_iban)

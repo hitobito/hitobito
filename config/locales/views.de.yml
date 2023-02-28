@@ -800,6 +800,8 @@ de:
     destroy:
       flash:
         success: Rechnung wurde storniert.
+    actions_show:
+      confirm_cancel: Wollen Sie diese Rechnung wirklich stornieren?
     pdf:
       total: Gesamtbetrag
       total_vat: MwSt.

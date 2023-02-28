@@ -7,7 +7,7 @@
 = button_action_edit
 = invoices_export_dropdown
 = invoices_print_dropdown
-= button_action_destroy
+= action_button(t('invoices.cancel'), path_args(entry), :'trash-alt', method: :delete, data: { confirm: t('.confirm_cancel') })
 
 - if entry.payable?
   = action_button(t('crud.new.title', model: Payment.model_name.human),

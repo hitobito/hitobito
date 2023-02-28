@@ -22,3 +22,14 @@ jobs:
       - name: Run security checks
         run: |
           bin/bundle exec brakeman -q --exit-on-warn --ensure-ignore-notes --ensure-latest
+
+  notify_statuscope:
+    uses: ./.github/workflows/notify-statuscope.yml
+    needs: [ run-scanners ]
+    if: ( success() || failure() ) && ( github.ref_name == 'master' )
+    with:
+      repository: 'hitobito-security'
+      test_result: ${{ needs.run-scanners.result == 'success' }}
+    secrets:
+      HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
+      HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN_SECURITY }}

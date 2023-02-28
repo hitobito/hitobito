@@ -38,5 +38,10 @@ module PaperTrail
       Role.with_deleted { where("#{PaperTrail::Version.table_name}": { item_type: Role.sti_name }) }
     end, foreign_key: 'item_id'
 
+    def perpetrator
+      return unless whodunnit.present? && whodunnit_type.present?
+
+      whodunnit_type.safe_constantize&.find_by(id: whodunnit.to_i)
+    end
   end
 end

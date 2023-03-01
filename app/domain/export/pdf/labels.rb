@@ -86,7 +86,7 @@ module Export::Pdf
 
     def address(contactable, name)
       address = ''
-      address << contactable.company_name << "\n" if print_company?(contactable)
+      address << contactable.company_name << "\n" if print_company?(contactable, name)
       address << contactable.nickname << "\n" if print_nickname?(contactable)
       address << name << "\n" if name.present?
       address << contactable.address.to_s
@@ -108,8 +108,8 @@ module Export::Pdf
       [x * format.width.mm, pdf.margin_box.height - (y * format.height.mm)]
     end
 
-    def print_company?(contactable)
-      contactable.try(:company) && contactable.company_name?
+    def print_company?(contactable, name)
+      contactable.try(:company) && contactable.company_name? && contactable.company_name != name
     end
 
     def print_nickname?(contactable)

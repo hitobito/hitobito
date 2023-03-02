@@ -61,6 +61,10 @@ describe Export::Pdf::Labels do
       it 'renders company_name' do
         expect(subject.strings).to include(company_name)
       end
+
+      it 'does not render company_name twice' do
+        expect(subject.strings.count { |el| el == company_name }).to be(1)
+      end
     end
 
     context 'when not marked as a company' do

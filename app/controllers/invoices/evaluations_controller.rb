@@ -61,11 +61,15 @@ class Invoices::EvaluationsController < ApplicationController
   end
 
   def from
-    params[:from] || 1.month.ago.to_date
+    Date.parse(params[:from])
+  rescue
+    1.month.ago.to_date
   end
 
   def to
-    params[:to] || Time.zone.today
+    Date.parse(params[:to])
+  rescue
+    Time.zone.today
   end
 
   def authorize_action

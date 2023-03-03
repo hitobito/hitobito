@@ -11,8 +11,9 @@ class PersonResource < ApplicationResource
   ACTION_SHOW_DETAILS = :show_details
 
   def base_scope
-    # we need to select all attributes, otherwise saving will error when validating unselected attrs
-    super.select('people.*')
+    # PersonReadables used by super selects a subset of attributes. We need to select all attributes, otherwise
+    # saving the resource will error when validating unselected attrs. This is achieved by `unscope(:select)`.
+    super.unscope(:select)
   end
 
   def authorize_save(model)

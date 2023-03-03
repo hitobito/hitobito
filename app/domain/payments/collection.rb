@@ -49,6 +49,14 @@ class Payments::Collection
     self
   end
 
+  def having_invoice_item(name, account, cost_center)
+    @payments = @payments
+      .joins(invoice: :invoice_items)
+      .where(invoice_items: { name: name, account: account, cost_center: cost_center })
+
+    self
+  end
+
   def grouped_by_invoice_items
     @payments.joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
              .joins('INNER JOIN invoice_items ON invoice.id = invoice_items.invoice_id')

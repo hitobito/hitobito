@@ -31,5 +31,4 @@ describe 'invoices/_form.html.haml' do
       "ABO-NEWS - Abonnement der Mitgliederzeitschrift",
     ])
   end
-
 end

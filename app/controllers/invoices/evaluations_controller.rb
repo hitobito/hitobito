@@ -9,6 +9,7 @@ class Invoices::EvaluationsController < ApplicationController
   prepend Nestable
 
   decorates :group
+  helper_method :group, :from, :to
 
   before_action :authorize_action
   prepend_before_action :entries

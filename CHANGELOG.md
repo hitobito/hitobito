@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Unreleased
+
+* Auf dem Buchungsbeleg sind die einzelnen Positionen nun verlinkt und führen auf eine Auflistung aller Rechnungen, welche die jeweilige Position beinhalten (hitobito_sww#69) 
+
 ## Version 1.28
 
 *  Neu kann auf einer Ebene eine Datenschutzerklärung (DSE) hinterlegt werden. Diese muss, falls vorhanden, bei der Selbstregistrierung, dem Anmelden bei einem Anlass/Kurs oder dem Hinzufügen einer Person auf einer Gruppe akzeptiert werden um fortzufahren. (#1881)

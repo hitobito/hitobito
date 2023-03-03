@@ -7,7 +7,7 @@
   = form_tag(nil, { method: :get, class: 'form-inline-search d-inline-block', role: 'search', remote: true, data: { spin: true } }) do |f|
     = direct_filter_date(:from, t('.filter.from'), value: params[:from] || f(1.month.ago.to_date), data: { submit: true })
     = direct_filter_date(:to, t('.filter.to'), value: params[:to] || f(Time.zone.today), data: { submit: true })
-  
+
   = invoices_evaluation_export_dropdown
 
 %table.table.table-striped.table-hover
@@ -20,7 +20,7 @@
     - @entries.each do |entry|
       %tr
         - cols.each do |col|
-          %td= entry[col]
+          %td= link_invoice_list_by_article(group, from, to, entry) { entry[col] }
     %tr
       %td
         %strong= t('.table.total')

@@ -9,4 +9,17 @@ module InvoiceArticlesHelper
     currency = invoice_article.group.invoice_config.currency
     number_to_currency(invoice_article.unit_cost, unit: currency)
   end
+
+  def link_invoice_list_by_article(group, from, to, entry)
+    link_to(group_invoices_by_article_index_path(
+              group_id: group.id,
+              from: from,
+              to: to,
+              name: entry[:name],
+              account: entry[:account],
+              cost_center: entry[:cost_center]
+            )) do
+      yield if block_given?
+    end
+  end
 end

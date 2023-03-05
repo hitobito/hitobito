@@ -88,6 +88,12 @@ class Release::Main
     %w[cevi jubla]
   end
 
+  def first_wagon=(first_wagon)
+    self.all_wagons = sort_wagons(@all_wagons, first_wagon)
+
+    @wagon # rubocop:disable Lint/Void a return value is not void
+  end
+
   def all_wagons=(all_wagons)
     @all_wagons = all_wagons
     ENV['WAGONS'] ||= @all_wagons.to_a.join(' ') # make sure it is present

@@ -5,9 +5,26 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+require 'date'
+
+# rubocop:disable Rails/Date this is not running inside of rails...
 module Release
   # preparatory help-tooling
   module Tooling
+    def next_version(style = :patch)
+      incrementor = case style.to_sym
+                    when :patch
+                      ->(parts) { parts[0..1] + [parts[2].succ] }
+                    when :current_month
+                      ->(parts) do
+                        current_month = Date.today.strftime('%Y-%m')
+                        parts[0..1] + [current_month]
+                      end
+                    end
+
+      current_version.split('.').then { |parts| incrementor[parts] }.join('.')
+    end
+
     private
 
     def suggested_next_version(current = current_version)
@@ -18,6 +35,10 @@ module Release
         end
 
       current.split('.').then { |parts| incrementor[parts] }.join('.')
+    end
+
+    def sort_wagons(all_wagons, first_wagon)
+      all_wagons.reject { |wgn| wgn == first_wagon }.prepend(first_wagon)
     end
 
     def current_version
@@ -72,3 +93,4 @@ module Release
     end
   end
 end
+# rubocop:enable Rails/Date

@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2020-2023, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require_relative './lowlevel'
 require_relative './world_monad'
 

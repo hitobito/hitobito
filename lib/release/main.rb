@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+#  Copyright (c) 2020-2023, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require_relative './tooling'
 require_relative './highlevel'
 require_relative './lowlevel'
@@ -56,7 +61,8 @@ class Release::Main
   include Release::Lowlevel
   include Release::WorldMonad
 
-  attr_reader :all_wagons, :wagon
+  attr_reader :all_wagons, :wagon, :command_list
+  attr_accessor :dry_run, :version
 
   def self.from_composition(composition)
     releaser = new([])
@@ -177,40 +183,47 @@ class Release::Main
       end
   end
 
+  def command_list=(setting)
+    @dry_run = true if setting
+
+    @command_list = !!setting
+  end
+
   private
 
   def hitobito_group_dir
     if File.directory?("./ose_composition_#{@wagon}")
       Dir.pwd
     else
-      File.expand_path('../..', __dir__)
+      File.expand_path('../../..', __dir__)
     end
   end
 
   # well, do not execute, just output what would be done
   def dry_run?
-    ENV['DRY_RUN'] == 'true' || false
+    return @dry_run unless @dry_run.nil?
+
+    false
   end
 
   # make output copy/pasteable
   def command_list?
-    return false unless ENV['COMMAND_LIST'] == 'true'
+    return @command_list unless @command_list.nil?
 
-    ENV['DRY_RUN'] = 'true'
-    true
+    false
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  begin
-    all_wagons = (ENV['WAGONS'] || ARGV.join(' ')).to_s.split(' ')
-    # release = Release::Main.from_composition(all_wagons&.first)
-    release = Release::Main.new(all_wagons)
-    release.usage! unless release.usable?
-
-    release.run
-  rescue StandardError
-    puts release.inspect
-    raise
-  end
-end
+# if __FILE__ == $PROGRAM_NAME
+#   begin
+#     all_wagons = (ENV['WAGONS'] || ARGV.join(' ')).to_s.split(' ')
+#     # release = Release::Main.from_composition(all_wagons&.first)
+#     release = Release::Main.new(all_wagons)
+#     release.usage! unless release.usable?
+#
+#     release.run
+#   rescue StandardError
+#     puts release.inspect
+#     raise
+#   end
+# end

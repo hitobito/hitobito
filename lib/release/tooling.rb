@@ -1,9 +1,24 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2020-2023, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 module Release
   # preparatory help-tooling
   module Tooling
     private
+
+    def suggested_next_version(current = current_version)
+      incrementor =
+        case current
+        # 1.28.46 / 1.28.46.1
+        when /\A\d+\.\d+\.\d+(\.\d+)?\z/ then ->(parts) { parts[0..-2] + [parts.last.succ] }
+        end
+
+      current.split('.').then { |parts| incrementor[parts] }.join('.')
+    end
 
     def current_version
       `git tag | grep '^[0-9]' | sort -Vr | head -n 1`.chomp
@@ -14,14 +29,9 @@ module Release
     end
 
     def determine_version
-      return ENV['VERSION'] unless ENV['VERSION'].to_s.empty?
+      return @version unless @version.nil?
 
-      suggestion = current_version
-                   .split('.')
-                   .yield_self { |parts| parts[0..-2] + [parts.last.succ] }
-                   .join('.')
-
-      ask('Next Version: ', suggestion)
+      ask('Next Version: ', suggested_next_version)
     end
 
     def new_version_message

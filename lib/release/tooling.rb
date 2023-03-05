@@ -32,9 +32,39 @@ module Release
         case current
         # 1.28.46 / 1.28.46.1
         when /\A\d+\.\d+\.\d+(\.\d+)?\z/ then ->(parts) { parts[0..-2] + [parts.last.succ] }
+        # 1.28.2023-01 / 1.28.2023-02.1
+        when /\A\d+\.\d+\.\d{4}-\d{2}(\.\d+)?\z/ then ->(parts) { next_monthly_version(*parts) }
+        # 1.28.2023W09 / 1.28.2023W09.1
+        when /\A\d+\.\d+\.\d{4}W\d{2}(\.\d+)?\z/ then ->(parts) { next_weekly_version(*parts) }
         end
 
       current.split('.').then { |parts| incrementor[parts] }.join('.')
+    end
+
+    def next_monthly_version(major, minor, month = nil, patch = nil)
+      current_month = Date.today.strftime('%Y-%m')
+
+      # ensure a patch-version if the month is already current
+      patch ||= 0 if month == current_month
+
+      # increment the patch if present
+      new_patch = patch&.succ
+
+      # remove the patch again if it's not set
+      [major, minor, current_month, new_patch].compact
+    end
+
+    def next_weekly_version(major, minor, week = nil, patch = nil)
+      current_week = Date.today.strftime('%GW%V') # rubocop:disable Rails/Date not rails...
+
+      # ensure a patch-version if the week is already current
+      patch ||= 0 if week == current_week
+
+      # increment the patch if present
+      new_patch = patch&.succ
+
+      # remove the patch again if it's not set
+      [major, minor, current_week, new_patch].compact
     end
 
     def sort_wagons(all_wagons, first_wagon)

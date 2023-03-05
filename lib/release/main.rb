@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 #  Copyright (c) 2020-2023, Puzzle ITC. This file is part of
@@ -85,7 +84,7 @@ class Release::Main
   end
 
   def untranslated_wagons
-    %w[cevi jubla]
+    %w(cevi jubla)
   end
 
   def first_wagon=(first_wagon)
@@ -100,7 +99,7 @@ class Release::Main
 
     @wagon = @all_wagons.first
 
-    @all_wagons
+    @all_wagons # rubocop:disable Lint/Void a return value is not void
   end
 
   def determine_wagons(composition)
@@ -108,7 +107,9 @@ class Release::Main
       in_dir("ose_composition_#{composition}") do
         require 'pathname'
 
-        self.all_wagons = Pathname.new('.').children.flat_map { |dep| dep.to_s.scan(/hitobito_(\w+)/).first }.compact
+        self.all_wagons = Pathname.new('.').children.flat_map do |dep|
+          dep.to_s.scan(/hitobito_(\w+)/).first
+        end.compact
       end
     end
   end
@@ -129,7 +130,9 @@ class Release::Main
         prepare_wagons
         update_composition
 
-        # prepare_next_version if confirm(question: 'Add an unreleased-section to the CHANGELOGs again?')
+        # if confirm(question: 'Add an unreleased-section to the CHANGELOGs again?')
+        #   prepare_next_version
+        # end
       end
     end
   end
@@ -139,7 +142,8 @@ class Release::Main
       in_dir("hitobito_#{@wagon}") do
         wagons << Gem::Specification.load("hitobito_#{@wagon}.gemspec")
                                     .dependencies
-                                    .flat_map { |dep| dep.name.scan(/hitobito_(\w+)/).first }.compact
+                                    .flat_map { |dep| dep.name.scan(/hitobito_(\w+)/).first }
+                                    .compact
       end
     end.flatten.compact
   end
@@ -219,17 +223,3 @@ class Release::Main
     false
   end
 end
-
-# if __FILE__ == $PROGRAM_NAME
-#   begin
-#     all_wagons = (ENV['WAGONS'] || ARGV.join(' ')).to_s.split(' ')
-#     # release = Release::Main.from_composition(all_wagons&.first)
-#     release = Release::Main.new(all_wagons)
-#     release.usage! unless release.usable?
-#
-#     release.run
-#   rescue StandardError
-#     puts release.inspect
-#     raise
-#   end
-# end

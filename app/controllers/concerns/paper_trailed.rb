@@ -18,13 +18,13 @@ module PaperTrailed
   def user_for_paper_trail
     return current_service_token.id if current_service_token
 
-   session[:origin_user].presence || current_ability.user.id
+   session[:origin_user].presence || current_ability&.user&.id
   end
 
   def whodunnit_type_for_papertrail
     return current_service_token.class.sti_name if current_service_token
 
-    current_ability.user.class.sti_name
+    current_ability&.user&.class&.sti_name
   end
 
   def info_for_paper_trail

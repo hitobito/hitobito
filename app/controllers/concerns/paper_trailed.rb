@@ -28,6 +28,7 @@ module PaperTrailed
   end
 
   def info_for_paper_trail
+    return {} unless whodunnit_type_for_papertrail.present?
     {
       whodunnit_type: whodunnit_type_for_papertrail
     }

@@ -17,7 +17,8 @@ module InvoiceArticlesHelper
               to: to,
               name: entry[:name],
               account: entry[:account],
-              cost_center: entry[:cost_center]
+              cost_center: entry[:cost_center],
+              type: entry[:type]
             )) do
       yield if block_given?
     end

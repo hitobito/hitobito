@@ -37,7 +37,8 @@ class Invoice::ItemEvaluation
         count: count(*ids),
         amount_paid: amount_paid_without_vat(*ids) + invoice_item_vats(*ids),
         account: account,
-        cost_center: cost_center
+        cost_center: cost_center,
+        type: :by_article
       }
     end.uniq
   end
@@ -73,7 +74,8 @@ class Invoice::ItemEvaluation
       count: deficitary_payments.count,
       amount_paid: sum_of_deficitary_payments,
       account: '',
-      cost_center: ''
+      cost_center: '',
+      type: :deficit
     }
   end
 
@@ -89,7 +91,8 @@ class Invoice::ItemEvaluation
       count: '',
       amount_paid: excess_amount,
       account: '',
-      cost_center: ''
+      cost_center: '',
+      type: :excess
     }
   end
 

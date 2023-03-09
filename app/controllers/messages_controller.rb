@@ -102,9 +102,9 @@ class MessagesController < CrudController
     @duplication_source ||= Message.find_by(id: params[:duplicate_from])
   end
 
-  def authorize_class
-    authorize!(:update, parent)
-  end
+  # def authorize_class
+  #   authorize!(:update, parent)
+  # end
 
   def authorize_duplicate
     authorize!(:show, duplication_source) if duplication_source.present?

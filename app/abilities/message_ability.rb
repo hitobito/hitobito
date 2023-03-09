@@ -13,7 +13,7 @@ class MessageAbility < AbilityDsl::Base
       .in_layer_or_below_if_active
 
     permission(:layer_and_below_full)
-      .may(:show)
+      .may(:index, :show)
       .in_layer_or_below
 
     permission(:layer_and_below_full)

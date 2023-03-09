@@ -22,7 +22,7 @@ class Person::SubscriptionsController < ApplicationController
   end
 
   def destroy
-    authorize!(:update, person)
+    authorize!(:destroy, subscription)
     delete_subscription || create_subscription(excluded: true)
     redirect_with_notice
   end
@@ -43,8 +43,12 @@ class Person::SubscriptionsController < ApplicationController
     @mailing_list ||= MailingList.find(params[:id])
   end
 
+  def subscription
+    @subscription ||= @mailing_list&.subscriptions&.find_by(subscriber: person)
+  end
+
   def delete_subscription
-    mailing_list.subscriptions.find_by(subscriber: person)&.destroy
+    subscription&.destroy
   end
 
   def create_subscription(options = {})

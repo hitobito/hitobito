@@ -11,6 +11,7 @@ class MailingListAbility < AbilityDsl::Base
 
   on(::MailingList) do
     permission(:any).may(:show).subscribable
+    permission(:any).may(:show).subscribed
 
     permission(:group_full).may(:show, :index_subscriptions).in_same_group
     permission(:group_full).may(:create, :update, :destroy).in_same_group_if_active
@@ -65,6 +66,10 @@ class MailingListAbility < AbilityDsl::Base
 
   def subscribable
     subject.subscribable
+  end
+
+  def subscribed
+    subject.subscribed?(user)
   end
 
   private

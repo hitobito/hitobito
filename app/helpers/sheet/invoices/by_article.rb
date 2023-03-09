@@ -8,5 +8,16 @@
 module Sheet
   class Invoices::ByArticle < Sheet::Invoice
 
+    def title
+      case view.params[:type]&.to_sym
+      when :deficit
+        I18n.t('invoices.evaluations.show.deficit')
+      when :excess
+        I18n.t('invoices.evaluations.show.excess')
+      when :by_article
+        I18n.t('invoices/by_article.index.title', name: view.params[:name])
+      end
+    end
+
   end
 end

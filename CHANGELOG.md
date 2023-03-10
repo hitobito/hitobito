@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Unreleased
+## unreleased
 
 * Auf dem Buchungsbeleg sind die einzelnen Positionen nun verlinkt und führen auf eine Auflistung aller Rechnungen, welche die jeweilige Position beinhalten (hitobito_sww#69) 
 

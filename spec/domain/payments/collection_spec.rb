@@ -110,6 +110,44 @@ describe Payments::Collection do
     end
   end
 
+  context 'having_invoice_item' do
+    it 'returns matching payments' do
+      invoice_item_attrs = [{
+        name: 'Membership',
+        description: 'You member, you pay',
+        cost_center: 'Members',
+        account: '01-12345-06',
+        unit_cost: 100,
+        count: 1,
+      }, {
+        name: 'Shirt',
+        description: 'Good quality',
+        cost_center: 'Merch',
+        account: '10-987654-03',
+        unit_cost: 50,
+        count: 1,
+      }, {
+        name: 'Goodie',
+        description: 'Something good',
+        cost_center: 'Merch',
+        account: '10-987654-03',
+        unit_cost: 10,
+        count: 42
+      }]
+
+      fabricated_payment1 = fabricate_payment(150.0, Date.new(3.years.ago.year, 1, 1))
+      fabricated_payment2 = fabricate_payment(100.0, Date.new(2.years.ago.year, 3, 20))
+      fabricated_payment3 = fabricate_payment(100.0, Date.new(1.years.ago.year, 3, 10))
+
+      fabricated_payment1.invoice.update(invoice_items_attributes: invoice_item_attrs.take(2))
+      fabricated_payment2.invoice.update(invoice_items_attributes: invoice_item_attrs.drop(1))
+      fabricated_payment3.invoice.update(invoice_items_attributes: invoice_item_attrs.drop(2))
+
+      result = described_class.new.having_invoice_item('Shirt', '10-987654-03', 'Merch').payments
+      expect(result).to match_array([fabricated_payment1, fabricated_payment2])
+    end
+  end
+
   context 'grouped_by_invoice_items' do
     it 'allows invoice item totals to be summed up' do
       invoice_item_attrs = [{

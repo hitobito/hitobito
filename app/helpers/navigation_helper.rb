@@ -32,6 +32,7 @@ module NavigationHelper
       if: ->(_) { current_user.finance_groups.any? },
       active_for: %w(/invoices
                      invoices/evaluations
+                     invoices/by_article
                      invoice_articles
                      invoice_config
                      payment_process

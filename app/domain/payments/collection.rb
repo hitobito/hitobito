@@ -51,7 +51,9 @@ class Payments::Collection
 
   def having_invoice_item(name, account, cost_center)
     @payments = @payments.joins(invoice: :invoice_items)
-                         .where(invoice_items: { name: name, account: account, cost_center: cost_center })
+                         .where(invoice_items: { name: name,
+                                                 account: account,
+                                                 cost_center: cost_center })
 
     self
   end

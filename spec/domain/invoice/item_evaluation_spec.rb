@@ -54,13 +54,15 @@ describe Invoice::ItemEvaluation do
                                    count: 2,
                                    vat: 0,
                                    cost_center: 'Members',
-                                   account: '01-23456-7' },
+                                   account: '01-23456-7',
+                                   type: :by_article },
                                  { name: 'Shirt',
                                    amount_paid: 126, # 30 * 4 + 6
                                    count: 4,
                                    vat: 6, # 30 * 4 * 0.05 (5%)
                                    cost_center: 'Merch',
-                                   account: '08-76543-2' }])
+                                   account: '08-76543-2',
+                                   type: :by_article }])
     end
 
     it 'returns sum of deficit' do
@@ -102,19 +104,22 @@ describe Invoice::ItemEvaluation do
                                    count: 1,
                                    vat: 0,
                                    cost_center: 'Members',
-                                   account: '01-23456-7' },
+                                   account: '01-23456-7',
+                                   type: :by_article },
                                  { name: 'Shirt',
                                    amount_paid: 63, # 1 fully paid invoice with count 2 and unit_cost 30, vat 5%
                                    count: 2,
                                    vat: 3,
                                    cost_center: 'Merch',
-                                   account: '08-76543-2' },
+                                   account: '08-76543-2',
+                                   type: :by_article },
                                  { name: 'Teilzahlung',
                                    amount_paid: 200, # 2 payments with amount 100
                                    count: 2,
                                    vat: '',
                                    cost_center: '',
-                                   account: '' }])
+                                   account: '',
+                                   type: :deficit }])
     end
 
     it 'returns sum of excess' do
@@ -154,19 +159,22 @@ describe Invoice::ItemEvaluation do
                                    count: 2,
                                    vat: 0,
                                    cost_center: 'Members',
-                                   account: '01-23456-7' },
+                                   account: '01-23456-7',
+                                   type: :by_article },
                                  { name: 'Shirt',
                                    amount_paid: 126, # 30 * 4 + 6
                                    count: 4,
                                    vat: 6, # 30 * 4 * 0.05 (5%)
                                    cost_center: 'Merch',
-                                   account: '08-76543-2' },
+                                   account: '08-76543-2',
+                                   type: :by_article },
                                  { name: 'Überzahlung',
                                    amount_paid: 250, # 2 payments with excess amounts of 100 and 150
                                    count: '',
                                    vat: '',
                                    cost_center: '',
-                                   account: '' }])
+                                   account: '',
+                                   type: :excess }])
     end
 
     it 'returns item totals of paid invoices if all payments are in daterange' do
@@ -205,13 +213,15 @@ describe Invoice::ItemEvaluation do
                                    count: 1,
                                    vat: 0,
                                    cost_center: 'Members',
-                                   account: '01-23456-7' },
+                                   account: '01-23456-7',
+                                   type: :by_article},
                                  { name: 'Shirt',
                                    amount_paid: 63,
                                    count: 2,
                                    vat: 3,
                                    cost_center: 'Merch',
-                                   account: '08-76543-2' }])
+                                   account: '08-76543-2',
+                                   type: :by_article }])
     end
 
     it 'returns sum of deficit if not all payments are in daterange' do
@@ -251,7 +261,8 @@ describe Invoice::ItemEvaluation do
                                    count: 2,
                                    vat: '',
                                    cost_center: '',
-                                   account: '' }])
+                                   account: '',
+                                   type: :deficit }])
     end
   end
 end

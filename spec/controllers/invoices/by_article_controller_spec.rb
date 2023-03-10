@@ -54,7 +54,8 @@ describe Invoices::ByArticleController do
         to: to.to_json,
         name: name,
         cost_center: cost_center,
-        account: account
+        account: account,
+        type: :by_article
       }
 
       expect(assigns(:invoices)).to match_array([invoice])

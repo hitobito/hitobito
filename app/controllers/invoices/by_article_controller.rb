@@ -21,7 +21,7 @@ class Invoices::ByArticleController < ListController
   private
 
   def invoice_ids
-    case params[:type].to_sym
+    case params[:type]&.to_sym
     when :deficit
       Payments::Collection.new.of_non_fully_paid_invoices.payments.pluck(:invoice_id)
     when :excess

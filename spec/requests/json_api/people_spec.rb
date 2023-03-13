@@ -35,7 +35,7 @@ RSpec.describe 'json_api/people', type: :request do
           nullable: true
         }
       })
-      parameter({name: 'filter[updated_at]', in: :query, required: false, schema: { type: :string, format: :date}})
+      parameter({name: 'filter[updated_at][gte]', in: :query, required: false, schema: { type: :string, format: :date}})
 
       response(200, 'successful') do
         after do |example|
@@ -67,12 +67,10 @@ RSpec.describe 'json_api/people', type: :request do
         explode: false,
         schema: {
           type: :array,
-          enum: [
-            'phone_numbers',
-            'social_accounts',
-            'additional_emails',
-            'roles',
-          ],
+          enum: %w(
+            phone_numbers social_accounts additional_emails
+            roles roles.layer_group roles.group roles.group.parent roles.group.layer_group
+          ),
           nullable: true
         }
       })
@@ -89,7 +87,12 @@ RSpec.describe 'json_api/people', type: :request do
       end
 
       response(200, 'successful') do
-        let(:include) { %w(phone_numbers social_accounts additional_emails roles) }
+        let(:include) do
+          %w(
+            phone_numbers social_accounts additional_emails
+            roles roles.layer_group roles.group roles.group.parent roles.group.layer_group
+          )
+        end
         run_test!
       end
     end

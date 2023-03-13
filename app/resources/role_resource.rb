@@ -9,7 +9,7 @@ class RoleResource < ApplicationResource
   attributes_from_active_record(only: [:person_id, :group_id, :label, :type, :created_at, :updated_at, :deleted_at ])
   relations_from_active_record(only: [:person, :group])
 
-  has_one :layer_group, resource: GroupResource do
+  has_one :layer_group, resource: GroupResource, writable: false do
     params do |hash, roles|
       hash[:filter] = { id: roles.flat_map {|role| role.group.layer_group_id } }
     end

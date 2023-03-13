@@ -26,12 +26,10 @@ RSpec.describe 'json_api/people', type: :request do
         explode: false,
         schema: {
           type: :array,
-          enum: [
-            'phone_numbers',
-            'social_accounts',
-            'additional_emails',
-            'roles',
-          ],
+          enum: %w(
+            phone_numbers social_accounts additional_emails primary_group layer_group
+            roles roles.layer_group roles.group roles.group.parent roles.group.layer_group
+          ),
           nullable: true
         }
       })
@@ -49,7 +47,12 @@ RSpec.describe 'json_api/people', type: :request do
       end
 
       response(200, 'successful') do
-        let(:include) { %w(phone_numbers social_accounts additional_emails roles) }
+        let(:include) do
+          %w(
+            phone_numbers social_accounts additional_emails primary_group layer_group
+            roles roles.layer_group roles.group roles.group.parent roles.group.layer_group
+          )
+        end
         run_test!
       end
     end
@@ -68,7 +71,7 @@ RSpec.describe 'json_api/people', type: :request do
         schema: {
           type: :array,
           enum: %w(
-            phone_numbers social_accounts additional_emails
+            phone_numbers social_accounts additional_emails primary_group layer_group
             roles roles.layer_group roles.group roles.group.parent roles.group.layer_group
           ),
           nullable: true
@@ -89,7 +92,7 @@ RSpec.describe 'json_api/people', type: :request do
       response(200, 'successful') do
         let(:include) do
           %w(
-            phone_numbers social_accounts additional_emails
+            phone_numbers social_accounts additional_emails primary_group layer_group
             roles roles.layer_group roles.group roles.group.parent roles.group.layer_group
           )
         end

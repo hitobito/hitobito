@@ -20,7 +20,18 @@ class PersonResource < ApplicationResource
   attribute :country, :string
   attribute :gender, :string, readable: :show_details?, writable: :write_details?
   attribute :birthday, :date, readable: :show_details?, writable: :write_details?
-  attribute :primary_group_id, :integer, except: [:writeable]
+
+  belongs_to :primary_group, resource: GroupResource, writable: false
+
+  has_one :layer_group, resource: GroupResource, writable: false do
+    params do |hash, people|
+      hash[:filter] = { id: people.flat_map {|person| person.primary_group.layer_group_id } }
+    end
+    assign do |_people, _layer_groups|
+      # We use the accessor from `NestedSet#layer_group` and there is no setter method, so we skip this.
+      # Note: this might lead to a performance penalty.
+    end
+  end
 
   has_many :phone_numbers,
     link: false,

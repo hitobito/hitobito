@@ -6,6 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class RoleResource < ApplicationResource
-  attributes_from_active_record(only: [:label, :type, :created_at, :updated_at, :deleted_at ])
+  attributes_from_active_record(only: [:person_id, :label, :type, :created_at, :updated_at, :deleted_at ])
   relations_from_active_record(only: [:person, :group])
 end

@@ -6,11 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class RoleResource < ApplicationResource
-  # read-only for now
-  attribute :person_id, :integer, writable: false
-  attribute :group_id, :integer, writable: false
-  attribute :label, :string, writable: false
-  attribute :created_at, :datetime, writable: false
-  attribute :updated_at, :datetime, writable: false
-  attribute :deleted_at, :datetime, writable: false
+  attributes_from_active_record(only: [:label, :type, :created_at, :updated_at, :deleted_at ])
+  relations_from_active_record(only: [:person, :group])
 end

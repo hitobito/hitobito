@@ -28,7 +28,8 @@ class GroupResource < ApplicationResource
   belongs_to :parent, resource: GroupResource, writable: false, foreign_key: :parent_id
   belongs_to :layer_group, resource: GroupResource, writable: false, foreign_key: :layer_group_id do
     assign do |_groups, _layer_groups|
-      # We use the accessor from `NestedSet#layer_group` and there is no setter method, so we skip this.
+      # We use the accessor from `NestedSet#layer_group` and there is no setter method,
+      # so we skip this.
       # Note: this might lead to a performance penalty.
     end
   end

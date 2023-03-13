@@ -28,7 +28,8 @@ class PersonResource < ApplicationResource
       hash[:filter] = { id: people.flat_map {|person| person.primary_group.layer_group_id } }
     end
     assign do |_people, _layer_groups|
-      # We use the accessor from `NestedSet#layer_group` and there is no setter method, so we skip this.
+      # We use the accessor from `NestedSet#layer_group` and there is no setter method,
+      # so we skip this.
       # Note: this might lead to a performance penalty.
     end
   end

@@ -6,10 +6,18 @@
 #  https://github.com/hitobito/hitobito.
 
 class RoleResource < ApplicationResource
-  attributes_from_active_record(only: [
-    :person_id, :group_id, :label, :type, :created_at, :updated_at, :deleted_at
-  ])
-  relations_from_active_record(only: [:person, :group])
+  with_options writable: false do
+    attribute :person_id, :integer
+    attribute :group_id, :integer
+    attribute :label, :string
+    attribute :type, :string
+    attribute :created_at, :datetime
+    attribute :updated_at, :datetime
+    attribute :deleted_at, :datetime
+  end
+
+  belongs_to :person
+  belongs_to :group
 
   has_one :layer_group, resource: GroupResource, writable: false do
     params do |hash, roles|

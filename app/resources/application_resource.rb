@@ -50,21 +50,4 @@ class ApplicationResource < Graphiti::Resource
   end
 
   delegate :can?, to: :context
-
-
-
-  def self.attributes_from_active_record(only: [], except: [], writables: [], **opts)
-    AttributesBuilder.new(
-      self,
-      only: Array(only),
-      except: Array(except),
-      writables: Array(writables),
-      **opts
-    ).build
-  end
-
-  def self.relations_from_active_record(only: [], except: [])
-    RelationsBuilder.new(self, only: Array(only), except: Array(except)).build
-  end
-
 end

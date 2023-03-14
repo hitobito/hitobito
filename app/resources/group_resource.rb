@@ -6,24 +6,21 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupResource < ApplicationResource
-  attribute(:display_name, :string) { @object.display_name }
-  attribute(:layer, :boolean) { @object.layer? }
-
-  attributes_from_active_record(
-    only: [
-      :name,
-      :short_name,
-      :type,
-      :email,
-      :address,
-      :zip_code,
-      :town,
-      :country,
-      :created_at,
-      :updated_at,
-      :deleted_at
-    ]
-  )
+  with_options writable: false do
+    attribute :name, :string
+    attribute :short_name, :string
+    attribute(:display_name, :string) { @object.display_name }
+    attribute(:layer, :boolean) { @object.layer? }
+    attribute :type, :string
+    attribute :email, :string
+    attribute :address, :string
+    attribute :zip_code, :integer
+    attribute :town, :string
+    attribute :country, :string
+    attribute :created_at, :datetime
+    attribute :updated_at, :datetime
+    attribute :deleted_at, :datetime
+  end
 
   belongs_to :parent, resource: GroupResource, writable: false, foreign_key: :parent_id
   belongs_to :layer_group, resource: GroupResource, writable: false, foreign_key: :layer_group_id do

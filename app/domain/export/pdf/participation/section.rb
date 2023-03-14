@@ -44,10 +44,17 @@ module Export::Pdf::Participation
         gutter = 10
         width = (bounds.width / 2) - (gutter / 2)
         starting_page = pdf.page_number
-
-        pdf.span(width, { position: 0 }, &left)
+        left_y, right_y = nil
+        pdf.span(width, { position: 0 }) do
+          left.call
+          left_y = pdf.y
+        end
         pdf.go_to_page(starting_page)
-        pdf.span(width, { position: width + gutter }, &right)
+        pdf.span(width, { position: width + gutter }) do
+          right.call
+          right_y = pdf.y
+        end
+        pdf.y = [left_y, right_y].min
       end
       move_down_line
     end

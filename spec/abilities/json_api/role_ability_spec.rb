@@ -6,29 +6,29 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'spec_helper'
-require_relative 'spec_ability_builder'
 
 describe JsonApi::RoleAbility do
-  include JsonApi::SpecAbilityBuilder
 
+  let(:group) { groups(:top_group) }
   let(:person) { Fabricate(:person) }
-  let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), person: person) }
+  let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group, person: person) }
 
-  subject { JsonApi::RoleAbility.new(main_ability, Person.all) }
+  let(:main_ability) { Ability.new(user) }
+  let(:user) { Fabricate(:person) }
+
+  subject { JsonApi::RoleAbility.new(main_ability) }
 
   context 'when having `show_full` permission on person' do
-    let(:main_ability) { build_ability { can :show_full, person } }
+    let!(:user_role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: group, person: user) }
 
-    it 'may read role' do
+    it do
       is_expected.to be_able_to(:read, role)
     end
   end
 
   context 'when missing `show_full` permission on person' do
-    let(:main_ability) { build_ability { can :show, person } }
+    let!(:user_role) { Fabricate(Group::TopGroup::Member.name.to_sym, group: group, person: user) }
 
-    it 'may not read role' do
-      is_expected.not_to be_able_to(:read, role)
-    end
+    it { is_expected.not_to be_able_to(:read, role) }
   end
 end

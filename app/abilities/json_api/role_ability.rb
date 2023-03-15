@@ -10,12 +10,12 @@ module JsonApi
     include CanCan::Ability
 
     def initialize(main_ability)
-      can :read, Role, person_id: full_readable_people_ids(main_ability)
+      can :read, Role, person: full_readable_people(main_ability)
     end
 
     private
 
-    def full_readable_people_ids(main_ability)
+    def full_readable_people(main_ability)
       Person.accessible_by(PersonFullReadables.new(main_ability.user)).
         unscope(:select).select(:id)
     end

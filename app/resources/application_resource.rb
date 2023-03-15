@@ -40,7 +40,10 @@ class ApplicationResource < Graphiti::Resource
   before_destroy :authorize_destroy
 
   def base_scope
-    super.accessible_by(index_ability)
+    # PersonReadables used by super selects a subset of attributes. We need to
+    # select all attributes, otherwise saving the resource will error
+    # when validating unselected attrs. # This is achieved by `unscope(:select)`.
+    super.accessible_by(index_ability).unscope(:select)
   end
 
   # As the cancan abilities are implemented on the basis of instance attributes,

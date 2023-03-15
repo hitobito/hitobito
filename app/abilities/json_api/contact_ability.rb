@@ -15,27 +15,33 @@ module JsonApi
       SocialAccount
     ]
 
-    def initialize(main_ability, people_scope)
+    def initialize(main_ability)
       @main_ability = main_ability
-      @people_scope = people_scope
 
-      # allow reading all contacts that are public
-      can :read, CONTACT_MODELS, public: true
-      # allow reading contacts of people on which the user has show_details permissions
+      # allow reading public contacts of people on which the user has :show permission
+      can :read, CONTACT_MODELS,
+          public: true,
+          contactable_type: 'Person',
+          contactable_id: readable_people_ids(main_ability)
+
+      # allow reading all contacts of people on which the user has :show_details permissions
       can :read, CONTACT_MODELS,
           contactable_type: 'Person',
-          contactable_id: permitted_people_ids(main_ability, people_scope)
+          contactable_id: details_readable_people_ids(main_ability)
+
       # TODO: implement rules for Group contactables (and any other existing contactable classes)
     end
 
     private
 
-    def permitted_people_ids(main_ability, people_scope)
-      [].tap do |people_ids|
-        people_scope.find_each do |person|
-          people_ids << person.id if main_ability.can? :show_details, person
-        end
-      end
+    def readable_people_ids(main_ability)
+      Person.accessible_by(PersonReadables.new(main_ability.user)).
+        unscope(:select).select(:id)
+    end
+
+    def details_readable_people_ids(main_ability)
+      Person.accessible_by(PersonDetailsReadables.new(main_ability.user)).
+        unscope(:select).select(:id)
     end
   end
 end

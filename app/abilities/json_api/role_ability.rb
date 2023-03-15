@@ -9,18 +9,15 @@ module JsonApi
   class RoleAbility
     include CanCan::Ability
 
-    def initialize(main_ability, people_scope)
-      can :read, Role, person_id: permitted_people_ids(main_ability, people_scope)
+    def initialize(main_ability)
+      can :read, Role, person_id: full_readable_people_ids(main_ability)
     end
 
     private
 
-    def permitted_people_ids(main_ability, people_scope)
-      [].tap do |people_ids|
-        people_scope.find_each do |person|
-          people_ids << person.id if main_ability.can? :show_full, person
-        end
-      end
+    def full_readable_people_ids(main_ability)
+      Person.accessible_by(PersonFullReadables.new(main_ability.user)).
+        unscope(:select).select(:id)
     end
   end
 end

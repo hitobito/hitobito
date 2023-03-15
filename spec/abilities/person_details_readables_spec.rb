@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2023, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,13 +8,13 @@
 require 'spec_helper'
 
 
-describe PersonFullReadables do
+describe PersonDetailsReadables do
 
   [:index, :layer_search, :deep_search, :global].each do |action|
     context action do
       let(:action) { action }
       let(:user)   { role.person.reload }
-      let(:ability) { PersonFullReadables.new(user, action == :index ? group : nil) }
+      let(:ability) { PersonDetailsReadables.new(user, action == :index ? group : nil) }
 
       let(:all_accessibles) do
         people = Person.accessible_by(ability)
@@ -25,7 +25,6 @@ describe PersonFullReadables do
         when :global then people
         end
       end
-
 
       subject { all_accessibles }
 
@@ -360,24 +359,18 @@ describe PersonFullReadables do
         context 'own group' do
           let(:group) { role.group }
 
-          if action == :index
-            it 'may not read himself' do
-              is_expected.not_to include(role.person)
-            end
-          else
-            it 'may read himself' do
-              is_expected.to include(role.person)
-            end
+          it 'may read himself' do
+            is_expected.to include(role.person)
           end
 
-          it 'may not read people in his group' do
+          it 'may read people in his group' do
             other = Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: group)
-            is_expected.not_to include(other.person)
+            is_expected.to include(other.person)
           end
 
-          it 'may not read external people in his group' do
+          it 'may read external people in his group' do
             other = Fabricate(Role::External.name.to_sym, group: group)
-            is_expected.not_to include(other.person)
+            is_expected.to include(other.person)
           end
         end
 

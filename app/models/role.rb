@@ -134,6 +134,8 @@ class Role < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
+  delegate :layer_group, to: :group
+
   def to_s(format = :default)
     model_name = self.class.label
     string = label? ? "#{model_name} (#{label})" : model_name

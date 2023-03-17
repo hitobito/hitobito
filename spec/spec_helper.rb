@@ -75,6 +75,10 @@ RSpec.configure do |config|
   config.backtrace_exclusion_patterns = [/lib\/rspec/, /asdf/]
   config.example_status_persistence_file_path = Rails.root.join('tmp', 'examples.txt').to_s
 
+  config.expect_with :rspec do |c|
+    c.max_formatted_output_length = 1000
+  end
+
   config.include(MailerMacros)
   config.include(EventMacros)
   config.include Devise::Test::ControllerHelpers, type: :controller

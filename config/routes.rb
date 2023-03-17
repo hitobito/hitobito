@@ -78,6 +78,7 @@ Hitobito::Application.routes.draw do
         resources :payments, only: :create
         collection do
           resource :evaluations, only: [:show], module: :invoices, as: 'invoices_evaluations'
+          resources :by_article, only: [:index], module: :invoices, as: 'invoices_by_article'
         end
       end
       resources :invoice_articles

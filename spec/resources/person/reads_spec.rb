@@ -11,6 +11,7 @@ RSpec.describe PersonResource, type: :resource do
   before do
     set_user(people(:root))
     allow_any_instance_of(described_class).to receive(:index_ability, &:current_ability)
+    Graphiti.context[:object] = double(can?: true)
   end
 
   describe 'serialization' do
@@ -132,15 +133,13 @@ RSpec.describe PersonResource, type: :resource do
   end
 
   describe 'sideloading' do
+    before { params[:filter] = { id: person.id.to_s } }
     describe 'phone_numbers' do
       let!(:person) { Fabricate(:person) }
       let!(:phone_number1) { Fabricate(:phone_number, contactable: person) }
       let!(:phone_number2) { Fabricate(:phone_number, contactable: person) }
 
-      before do
-        params[:filter] = { id: person.id.to_s }
-        params[:include] = 'phone_numbers'
-      end
+      before { params[:include] = 'phone_numbers' }
 
       it 'it works' do
         render
@@ -155,10 +154,7 @@ RSpec.describe PersonResource, type: :resource do
       let!(:social_account1) { Fabricate(:social_account, contactable: person) }
       let!(:social_account2) { Fabricate(:social_account, contactable: person) }
 
-      before do
-        params[:filter] = { id: person.id.to_s }
-        params[:include] = 'social_accounts'
-      end
+      before { params[:include] = 'social_accounts' }
 
       it 'it works' do
         render
@@ -173,10 +169,7 @@ RSpec.describe PersonResource, type: :resource do
       let!(:additional_email1) { Fabricate(:additional_email, contactable: person) }
       let!(:additional_email2) { Fabricate(:additional_email, contactable: person) }
 
-      before do
-        params[:filter] = { id: person.id.to_s }
-        params[:include] = 'additional_emails'
-      end
+      before { params[:include] = 'additional_emails' }
 
       it 'it works' do
         render
@@ -190,10 +183,7 @@ RSpec.describe PersonResource, type: :resource do
       let!(:role) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)) }
       let(:person) { role.person }
 
-      before do
-        params[:filter] = { id: person.id.to_s }
-        params[:include] = 'roles'
-      end
+      before { params[:include] = 'roles' }
 
       it 'it works' do
         render
@@ -201,6 +191,35 @@ RSpec.describe PersonResource, type: :resource do
         expect(roles).to have(1).items
         expect(roles.first.id).to eq role.id
       end
+    end
+
+    describe 'primary_group' do
+      let!(:person) { people(:top_leader) }
+
+      before { params[:include] = 'primary_group' }
+
+      it 'it works' do
+        render
+
+        primary_group_data = d[0].sideload(:primary_group)
+        expect(primary_group_data.id).to eq person.primary_group_id
+        expect(primary_group_data.jsonapi_type).to eq 'groups'
+      end
+    end
+
+    describe 'layer_group' do
+      let!(:person) { people(:bottom_member) }
+
+      before { params[:include] = 'layer_group' }
+
+      it 'it works' do
+        render
+
+        layer_group_data = d[0].sideload(:layer_group)
+        expect(layer_group_data.id).to eq person.primary_group_id
+        expect(layer_group_data.jsonapi_type).to eq 'groups'
+      end
+
     end
   end
 end

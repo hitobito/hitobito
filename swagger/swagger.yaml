@@ -18,9 +18,15 @@ paths:
           - phone_numbers
           - social_accounts
           - additional_emails
+          - primary_group
+          - layer_group
           - roles
+          - roles.layer_group
+          - roles.group
+          - roles.group.parent
+          - roles.group.layer_group
           nullable: true
-      - name: filter[updated_at]
+      - name: filter[updated_at][gte]
         in: query
         required: false
         schema:
@@ -49,7 +55,13 @@ paths:
           - phone_numbers
           - social_accounts
           - additional_emails
+          - primary_group
+          - layer_group
           - roles
+          - roles.layer_group
+          - roles.group
+          - roles.group.parent
+          - roles.group.layer_group
           nullable: true
       responses:
         '200':

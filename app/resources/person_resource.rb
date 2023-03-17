@@ -8,8 +8,6 @@
 class PersonResource < ApplicationResource
   primary_endpoint 'people', [:index, :show, :update]
 
-  ACTION_SHOW_DETAILS = :show_details
-
   def authorize_save(model)
     if !model.new_record? && model.changed_attribute_names_to_save & ['gender', 'birthday']
       # show_details ability is required for updating gender, birthday
@@ -58,7 +56,7 @@ class PersonResource < ApplicationResource
   private
 
   def show_details?(model_instance)
-    can?(ACTION_SHOW_DETAILS, model_instance)
+    can?(:show_details, model_instance)
   end
 
   def index_ability

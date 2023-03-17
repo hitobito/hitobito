@@ -14,7 +14,7 @@
   = f.hidden_field(:count, value: 1)
   = f.fields_for :dynamic_cost_parameters, invoice_item_dynamic_cost_parameter_object(f.object) do |ff|
     - f.object.dynamic_cost_parameter_definitions.keys.each do |attr|
-      = ff.input_field(attr)
+      %span.span2=ff.input_field(attr)
 - else
   = f.input_field(:unit_cost, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:unit_cost))
   = f.input_field(:count, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:count))

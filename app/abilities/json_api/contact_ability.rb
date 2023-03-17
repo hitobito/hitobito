@@ -21,12 +21,10 @@ module JsonApi
       # allow reading public contacts of people on which the user has :show permission
       can :read, CONTACT_MODELS,
           public: true,
-          contactable_type: 'Person',
           contactable: readable_people(main_ability)
 
       # allow reading all contacts of people on which the user has :show_details permissions
       can :read, CONTACT_MODELS,
-          contactable_type: 'Person',
           contactable: details_readable_people(main_ability)
 
       # TODO: implement rules for Group contactables (and any other existing contactable classes)
@@ -36,12 +34,12 @@ module JsonApi
 
     def readable_people(main_ability)
       Person.accessible_by(PersonReadables.new(main_ability.user)).
-        unscope(:select).select(:id)
+        unscope(:select)
     end
 
     def details_readable_people(main_ability)
       Person.accessible_by(PersonDetailsReadables.new(main_ability.user)).
-        unscope(:select).select(:id)
+        unscope(:select)
     end
   end
 end

@@ -426,7 +426,7 @@ RSpec.describe PersonResource, type: :resource do
         RoleResource.find(payload)
       end
 
-      xit 'works' do
+      it 'works' do
         expect {
           expect(instance.update_attributes).to eq(true), instance.errors.full_messages.to_sentence
         }.to change { RoleResource.count }.by(1)

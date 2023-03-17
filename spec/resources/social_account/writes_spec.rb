@@ -7,10 +7,11 @@
 
 require 'spec_helper'
 
-RSpec.describe SocialAccountResource, type: :resource do
-  describe 'creating' do
-    let!(:person) { Fabricate(:person, birthday: Date.today, gender: 'm') }
+describe SocialAccountResource, type: :resource do
+  let!(:person) { subject.current_user }
+  let!(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, person: person, group: groups(:bottom_layer_one)) }
 
+  describe 'creating' do
     let(:payload) do
       {
         data: {
@@ -40,7 +41,7 @@ RSpec.describe SocialAccountResource, type: :resource do
   end
 
   describe 'updating' do
-    let!(:social_account) { Fabricate(:social_account) }
+    let!(:social_account) { Fabricate(:social_account, contactable: person) }
 
     let(:payload) do
       {
@@ -59,7 +60,7 @@ RSpec.describe SocialAccountResource, type: :resource do
       SocialAccountResource.find(payload)
     end
 
-    it 'works (add some attributes and enable this spec)' do
+    it 'works' do
       expect {
         expect(instance.update_attributes).to eq(true)
       }.to change { social_account.reload.name }.to('mis-grosi')
@@ -67,7 +68,7 @@ RSpec.describe SocialAccountResource, type: :resource do
   end
 
   describe 'destroying' do
-    let!(:social_account) { Fabricate(:social_account) }
+    let!(:social_account) { Fabricate(:social_account, contactable: person) }
 
     let(:instance) do
       SocialAccountResource.find(id: social_account.id)

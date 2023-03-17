@@ -7,10 +7,11 @@
 
 require 'spec_helper'
 
-RSpec.describe PhoneNumberResource, type: :resource do
-  describe 'creating' do
-    let!(:person) { Fabricate(:person, birthday: Date.today, gender: 'm') }
+describe PhoneNumberResource, type: :resource do
+  let!(:person) { subject.current_user }
+  let!(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, person: person, group: groups(:bottom_layer_one)) }
 
+  describe 'creating' do
     let(:payload) do
       {
         data: {
@@ -40,7 +41,7 @@ RSpec.describe PhoneNumberResource, type: :resource do
   end
 
   describe 'updating' do
-    let!(:phone_number) { Fabricate(:phone_number, number: '0780000000') }
+    let!(:phone_number) { Fabricate(:phone_number, number: '0780000000', contactable: person) }
 
     let(:payload) do
       {
@@ -59,7 +60,7 @@ RSpec.describe PhoneNumberResource, type: :resource do
       PhoneNumberResource.find(payload)
     end
 
-    it 'works (add some attributes and enable this spec)' do
+    it 'works' do
       expect {
         expect(instance.update_attributes).to eq(true)
       }.to change { phone_number.reload.number }.to('+41 78 000 00 01')
@@ -67,7 +68,7 @@ RSpec.describe PhoneNumberResource, type: :resource do
   end
 
   describe 'destroying' do
-    let!(:phone_number) { Fabricate(:phone_number) }
+    let!(:phone_number) { Fabricate(:phone_number, contactable: person) }
 
     let(:instance) do
       PhoneNumberResource.find(id: phone_number.id)

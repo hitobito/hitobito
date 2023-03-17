@@ -127,14 +127,14 @@ class InvoiceListsController < CrudController
 
   def assign_attributes # rubocop:disable Metrics/AbcSize
     if params[:ids].present?
-      entry.recipient_ids = params[:ids]
+      entry.recipient_ids = params[:ids].is_a?(Array) ? params[:ids].join(',') : params[:ids]
     elsif params[:filter].present?
       entry.recipient_ids = recipient_ids_from_people_filter
     else
       entry.attributes = permitted_params.slice(:receiver_id, :receiver_type, :recipient_ids)
     end
     entry.creator = current_user
-    entry.invoice = parent.invoices.build(permitted_params[:invoice])
+    entry.invoice = parent.invoices.build(model_params.present? ? permitted_params[:invoice] : {})
 
     if params[:invoice_items].present?
       entry.invoice.invoice_items = params[:invoice_items].map do |type|

@@ -99,6 +99,14 @@ describe PersonResource, type: :resource do
       end
     end
 
+    context 'without any permission, it' do
+      let(:user) { Fabricate(:person) }
+
+      it  'does not expose the existence of the person' do
+        expect { instance.update_attributes }.to raise_error(Graphiti::Errors::RecordNotFound)
+      end
+    end
+
     it  'does not update write protected attributes' do
       payload[:data][:attributes][:primary_group_id] = 42
 
@@ -112,6 +120,14 @@ describe PersonResource, type: :resource do
 
     let(:instance) do
       PersonResource.find(id: person.id)
+    end
+
+    context 'without any permission, it' do
+      let(:user) { Fabricate(:person) }
+
+      it  'does not expose the existence of the person' do
+        expect { instance.destroy }.to raise_error(Graphiti::Errors::RecordNotFound)
+      end
     end
 
     context 'without admin privileges' do

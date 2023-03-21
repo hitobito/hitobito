@@ -10,9 +10,6 @@ class JsonApiController < ActionController::API
 
   include GraphitiErrors
 
-  # authorization is checked in the graphiti resource
-  skip_authorization_check
-
   rescue_from Exception do |e|
     handle_exception(e)
   end

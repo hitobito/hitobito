@@ -22,7 +22,9 @@ module ContactAccountResource
 
   def authorize_create(model)
     raise CanCan::AccessDenied unless model.contactable.is_a? Person
-    super(model.contactable)
+    # Creating a contact counts as updating the contactable
+    destroy_ability.authorize!(:update, model.contactable)
+    destroy_ability.authorize!(:show_details, model.contactable)
   end
 
   def authorize_update(model)

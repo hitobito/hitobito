@@ -1232,7 +1232,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
           jsonapi_patch "/api/people/#{@person_id}", params
 
-          expect(response).to have_http_status(403)
+          expect(response).to have_http_status(400)
 
           person.reload
 

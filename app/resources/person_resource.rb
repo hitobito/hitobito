@@ -8,10 +8,10 @@
 class PersonResource < ApplicationResource
   primary_endpoint 'people', [:index, :show, :update]
 
-  def authorize_save(model)
-    if !model.new_record? && model.changed_attribute_names_to_save & ['gender', 'birthday']
-      # show_details ability is required for updating gender, birthday
-      current_ability.authorize!(:show_details, model)
+  def authorize_update(model)
+    if model.changed_attribute_names_to_save & ['gender', 'birthday']
+      # show_details ability is required additionally for updating gender, birthday
+      update_ability.authorize!(:show_details, model)
     end
 
     super
@@ -46,12 +46,16 @@ class PersonResource < ApplicationResource
     end
   end
 
-  has_many :roles
+  has_many :roles, writable: false
   polymorphic_has_many :phone_numbers, as: :contactable
   polymorphic_has_many :social_accounts, as: :contactable
   polymorphic_has_many :additional_emails, as: :contactable
 
   filter :updated_at, :datetime
+
+  def index_ability
+    PersonReadables.new(current_ability.user)
+  end
 
   private
 
@@ -59,7 +63,9 @@ class PersonResource < ApplicationResource
     can?(:show_details, model_instance)
   end
 
-  def index_ability
-    PersonReadables.new(current_user)
+  def write_details?
+    # no model_instance method argument is given when writable is called,
+    # so we have to access current entry by controller context
+    can?(:show_details, context.entry) && can?(:update, context.entry)
   end
 end

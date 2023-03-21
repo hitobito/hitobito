@@ -7,18 +7,26 @@
 
 require 'spec_helper'
 
-RSpec.describe PersonResource, type: :resource do
-  before do
-    set_user(people(:root))
-    allow_any_instance_of(described_class).to receive(:index_ability, &:current_ability)
+describe PersonResource, type: :resource do
+  let(:user) { user_role.person }
+
+  around do |example|
+    RSpec::Mocks.with_temporary_scope do
+      Graphiti.with_context(double({
+        current_ability: Ability.new(user),
+        entry: try(:person),
+      })) { example.run }
+    end
   end
 
   describe 'creating' do
+    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+
     let(:payload) do
       {
         data: {
           type: 'people',
-          attributes: Fabricate.attributes_for(:person).except('confirmed_at')
+          attributes: Fabricate.attributes_for(:person).except(*Person::INTERNAL_ATTRS.map(&:to_s))
         }
       }
     end
@@ -35,7 +43,9 @@ RSpec.describe PersonResource, type: :resource do
   end
 
   describe 'updating' do
+    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
     let!(:person) { Fabricate(:person, first_name: 'Franz', updated_at: 1.second.ago, gender: 'm') }
+    let!(:role) { Fabricate(Group::BottomLayer::Member.name, person: person, group: groups(:bottom_layer_one)) }
 
     let(:payload) do
       {
@@ -61,28 +71,32 @@ RSpec.describe PersonResource, type: :resource do
        .and change { person.first_name }.to('Joseph')
     end
 
-    it 'with show_details permission it updates restricted attrs' do
-      set_ability { can [:index, :update, :show_details], Person }
+    context 'with show_details permission, it' do
+      it 'updates restricted attrs' do
+        new_birthday = Date.today
+        payload[:data][:attributes][:gender] = 'w'
+        payload[:data][:attributes][:birthday] = new_birthday.to_json
 
-      new_birthday = Date.today
-      payload[:data][:attributes][:gender] = 'w'
-      payload[:data][:attributes][:birthday] = new_birthday.to_json
-
-      expect {
-        expect(instance.update_attributes).to eq(true)
-      }.to change { person.reload.updated_at }
-       .and change { person.gender }.to('w')
-       .and change { person.birthday }.to(new_birthday)
+        expect {
+          expect(instance.update_attributes).to eq(true)
+        }.to change { person.reload.updated_at }
+         .and change { person.gender }.to('w')
+         .and change { person.birthday }.to(new_birthday)
+      end
     end
 
-    it  'without show_details permission it does not update restricted attrs' do
-      set_ability { can [:index, :update], Person }
+    context 'without show_details permission, it' do
+      before do
+        skip 'We currently have no roles (and indeed no permissions which we could give to roles), which grant update ability without also granting show_details ability.'
+      end
 
-      new_birthday = Date.today
-      payload[:data][:attributes][:gender] = 'w'
-      payload[:data][:attributes][:birthday] = new_birthday.to_json
+      it  'does not update restricted attrs' do
+        new_birthday = Date.today
+        payload[:data][:attributes][:gender] = 'w'
+        payload[:data][:attributes][:birthday] = new_birthday.to_json
 
-      expect { instance.update_attributes }.to raise_error(CanCan::AccessDenied)
+        expect { instance.update_attributes }.to raise_error(CanCan::AccessDenied)
+      end
     end
 
     it  'does not update write protected attributes' do
@@ -94,19 +108,34 @@ RSpec.describe PersonResource, type: :resource do
 
   describe 'destroying' do
     let!(:person) { Fabricate(:person) }
+    let!(:role) { Fabricate(Group::BottomLayer::Member.name, person: person, group: groups(:bottom_layer_one)) }
 
     let(:instance) do
       PersonResource.find(id: person.id)
     end
 
-    it 'works' do
-      expect {
-        expect(instance.destroy).to eq(true)
-      }.to change { Person.count }.by(-1)
+    context 'without admin privileges' do
+      let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+      it 'works' do
+        expect {
+          expect { instance.destroy }.to raise_error(CanCan::AccessDenied)
+        }.not_to change { Person.count }
+      end
+    end
+
+    context 'with admin privileges' do
+      let!(:user_role) { roles(:top_leader) }
+      it 'works' do
+        expect {
+          expect(instance.destroy).to eq(true)
+        }.to change { Person.count }.by(-1)
+      end
     end
   end
 
   describe 'sideposting' do
+    let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)) }
+
     describe 'phone_numbers' do
       describe 'create' do
         let!(:person) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person }
@@ -391,49 +420,90 @@ RSpec.describe PersonResource, type: :resource do
     end
 
     describe 'roles' do
-      let!(:person) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person }
+      describe 'create' do
+        let!(:person) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person }
 
-      let(:payload) do
-        {
-          id: person.id.to_s,
-          data: {
-            type: 'people',
+        let(:payload) do
+          {
             id: person.id.to_s,
-            attributes: {},
-            relationships: {
-              roles: {
-                data: {
-                  type: 'roles',
-                  :'temp-id' => 'asdf',
-                  method: 'create'
+            data: {
+              type: 'people',
+              id: person.id.to_s,
+              attributes: {},
+              relationships: {
+                roles: {
+                  data: {
+                    type: 'roles',
+                    :'temp-id' => 'asdf',
+                    method: 'create'
+                  }
                 }
               }
-            }
-          },
-          included: [
-            {
-              type: 'roles',
-              :'temp-id' => 'asdf',
-              attributes: {
-                # TODO
+            },
+            included: [
+              {
+                type: 'roles',
+                :'temp-id' => 'asdf',
+                attributes: {
+                }
               }
-            }
-          ]
-        }
+            ]
+          }
+        end
+
+        let(:instance) do
+          PersonResource.find(payload)
+        end
+
+        it 'is disabled for now' do
+          expect {
+            expect { instance.update_attributes }.to raise_error(Graphiti::Errors::InvalidRequest)
+          }.not_to change { Role.count }
+        end
       end
 
-      let(:instance) do
-        RoleResource.find(payload)
-      end
+      describe 'update' do
+        let!(:person) { role.person }
+        let!(:role) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)) }
 
-      it 'works' do
-        expect {
-          expect(instance.update_attributes).to eq(true), instance.errors.full_messages.to_sentence
-        }.to change { RoleResource.count }.by(1)
+        let(:payload) do
+          {
+            id: person.id.to_s,
+            data: {
+              type: 'people',
+              id: person.id.to_s,
+              attributes: {},
+              relationships: {
+                roles: {
+                  data: {
+                    type: 'roles',
+                    id: role.id.to_s,
+                    method: 'update'
+                  }
+                }
+              }
+            },
+            included: [
+              {
+                type: 'roles',
+                id: role.id.to_s,
+                attributes: {
+                  label: 'provisorisch'
+                }
+              }
+            ]
+          }
+        end
 
-        new_role = Role.last
-        expect(new_role.person).to eq person
-        # TODO moar expectations
+        let(:instance) do
+          PersonResource.find(payload)
+        end
+
+        it 'is disabled for now' do
+          expect {
+            expect { instance.update_attributes }.to raise_error(Graphiti::Errors::InvalidRequest)
+          }.not_to change { role.reload.label }
+        end
       end
     end
   end

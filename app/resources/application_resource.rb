@@ -36,7 +36,8 @@ class ApplicationResource < Graphiti::Resource
   # Automatically generate JSONAPI links?
   self.autolink = false
 
-  before_save :authorize_save
+  before_save :authorize_create, only: [:create]
+  before_save :authorize_update, only: [:update]
   before_destroy :authorize_destroy
 
   def base_scope
@@ -46,32 +47,47 @@ class ApplicationResource < Graphiti::Resource
     super.accessible_by(index_ability).unscope(:select)
   end
 
+  def authorize_create(model)
+    create_ability.authorize!(:create, model)
+  end
+
   # As the cancan abilities are implemented on the basis of instance attributes,
   # we must authorize with initial instance attributes
-  def authorize_save(model)
-    if model.new_record?
-      current_ability.authorize!(:create, model, *model.changed_attributes.keys)
-    else
-      attrs_from_db = model.attributes.merge(model.attributes_in_database)
-      model_from_db = model.class.new(attrs_from_db)
-      current_ability.authorize!(:update, model_from_db, *model.changed_attributes.keys)
-    end
+  def authorize_update(model)
+    model_from_db = model.class.find(model.id)
+    update_ability.authorize!(:update, model_from_db)
+    yield update_ability, model_from_db if block_given?
   end
 
   def authorize_destroy(model)
-    current_ability.authorize! :destroy, model
+    destroy_ability.authorize! :destroy, model
   end
 
   delegate :can?, to: :current_ability
   delegate :current_ability, to: :context
 
   # Used to filter accessible models in `#base_scope`.
-  # Overwrite in subclass to use a different Ability instance.
   def index_ability
+    # We require a specific implementation for index_ability in each resource class,
+    # because our normal abilities run in memory, which would perform very badly
+    # when building the base_scope for the JSON API. (We'd need to load all models
+    # from the DB into memory, filter there, and send a complete list of allowed
+    # IDs back to the DB.)
+    raise 'implement index_ability in the resource class'
+  end
+
+  # Meant to be extended in specific resources
+  def create_ability
     current_ability
   end
 
-  def current_user
-    current_ability.user
+  # Meant to be extended in specific resources
+  def update_ability
+    current_ability
+  end
+
+  # Meant to be extended in specific resources
+  def destroy_ability
+    current_ability
   end
 end

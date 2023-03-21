@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe JsonApi::ContactAbility do
+describe JsonApi::ContactAccountAbility do
 
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { Fabricate(:person) }
@@ -17,7 +17,7 @@ describe JsonApi::ContactAbility do
   let(:main_ability) { Ability.new(user) }
   let(:user) { Fabricate(:person) }
 
-  subject { JsonApi::ContactAbility.new(main_ability) }
+  subject { JsonApi::ContactAccountAbility.new(main_ability) }
 
   context 'when having `show_details` permission on contactable' do
     let!(:user_role) { Fabricate(Group::BottomLayer::LocalGuide.name.to_sym, group: group, person: user) }

@@ -9,7 +9,7 @@
 # for polymorphic relations.
 # Thus, the json api type was always contactable and the relation couldn't be correctly mapped.
 # Tried abstract_class = true, that didn't work either
-module ContactableResource
+module ContactAccountResource
   extend ActiveSupport::Concern
 
   included do
@@ -20,11 +20,26 @@ module ContactableResource
     attribute :contactable_type, :string
   end
 
-  def authorize_save(model)
-    current_ability.authorize!(:show_details, model.contactable)
+  def authorize_create(model)
+    raise CanCan::AccessDenied unless model.contactable.is_a? Person
+    super(model.contactable)
+  end
+
+  def authorize_update(model)
+    raise CanCan::AccessDenied unless model.contactable.is_a? Person
+    super(model.contactable) do |ability, model_from_db|
+      ability.authorize!(:show_details, model_from_db)
+    end
+  end
+
+  def authorize_destroy(model)
+    raise CanCan::AccessDenied unless model.contactable.is_a? Person
+    # Destroying a contact counts as updating the contactable
+    destroy_ability.authorize!(:update, model.contactable)
+    destroy_ability.authorize!(:show_details, model.contactable)
   end
 
   def index_ability
-    JsonApi::ContactAbility.new(current_ability)
+    JsonApi::ContactAccountAbility.new(current_ability)
   end
 end

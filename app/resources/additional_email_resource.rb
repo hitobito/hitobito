@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class AdditionalEmailResource < ApplicationResource
-  include ContactableResource
+  include ContactAccountResource
 
   attribute :email, :string
 end

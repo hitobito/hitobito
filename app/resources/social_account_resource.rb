@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class SocialAccountResource < ApplicationResource
-  include ContactableResource
+  include ContactAccountResource
 
   attribute :name, :string
 end

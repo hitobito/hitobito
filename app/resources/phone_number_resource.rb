@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class PhoneNumberResource < ApplicationResource
-  include ContactableResource
+  include ContactAccountResource
 
   attribute :number, :string
 end

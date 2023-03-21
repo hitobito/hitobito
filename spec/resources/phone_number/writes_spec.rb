@@ -8,8 +8,16 @@
 require 'spec_helper'
 
 describe PhoneNumberResource, type: :resource do
-  let!(:person) { subject.current_user }
-  let!(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, person: person, group: groups(:bottom_layer_one)) }
+  let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+  let!(:user) { user_role.person }
+  let!(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, person: Fabricate(:person), group: groups(:bottom_layer_one)) }
+  let(:person) { role.person }
+
+  around do |example|
+    RSpec::Mocks.with_temporary_scope do
+      Graphiti.with_context(double({ current_ability: Ability.new(user) })) { example.run }
+    end
+  end
 
   describe 'creating' do
     let(:payload) do

@@ -8,10 +8,14 @@
 require 'spec_helper'
 
 RSpec.describe GroupResource, type: :resource do
-  # before do
-  #   set_user(people(:root))
-  #   allow_any_instance_of(described_class).to receive(:index_ability, &:current_ability)
-  # end
+  let(:user) { user_role.person }
+  let!(:user_role) { Fabricate(Group::BottomGroup::Leader.name, person: Fabricate(:person), group: group) }
+
+  around do |example|
+    RSpec::Mocks.with_temporary_scope do
+      Graphiti.with_context(double({ current_ability: Ability.new(user) })) { example.run }
+    end
+  end
 
   describe 'serialization' do
     let!(:group) { groups(:bottom_group_two_one) }

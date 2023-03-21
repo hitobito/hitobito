@@ -144,6 +144,331 @@
       }
     },
     {
+      "name": "GroupResource",
+      "type": "groups",
+      "graphql_entrypoint": "groups",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "short_name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "display_name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "layer": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "type": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "email": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "address": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "zip_code": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "town": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "country": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "created_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "deleted_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        },
+        "name": {
+        },
+        "short_name": {
+        },
+        "display_name": {
+        },
+        "layer": {
+        },
+        "type": {
+        },
+        "email": {
+        },
+        "address": {
+        },
+        "zip_code": {
+        },
+        "town": {
+        },
+        "country": {
+        },
+        "created_at": {
+        },
+        "updated_at": {
+        },
+        "deleted_at": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "short_name": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "display_name": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "layer": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "type": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "email": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "address": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "zip_code": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "town": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "country": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "created_at": {
+          "type": "datetime",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "updated_at": {
+          "type": "datetime",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "deleted_at": {
+          "type": "datetime",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "parent": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "GroupResource"
+        },
+        "layer_group": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "GroupResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "PersonResource",
       "type": "people",
       "graphql_entrypoint": "people",
@@ -218,13 +543,13 @@
         "gender": {
           "type": "string",
           "readable": "guarded",
-          "writable": true,
+          "writable": "guarded",
           "description": null
         },
         "birthday": {
           "type": "date",
           "readable": "guarded",
-          "writable": true,
+          "writable": "guarded",
           "description": null
         },
         "primary_group_id": {
@@ -470,6 +795,16 @@
         }
       },
       "relationships": {
+        "primary_group": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "GroupResource"
+        },
+        "layer_group": {
+          "type": "has_one",
+          "description": null,
+          "resource": "GroupResource"
+        },
         "roles": {
           "type": "has_many",
           "description": null,
@@ -670,6 +1005,12 @@
           "writable": false,
           "description": null
         },
+        "type": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "created_at": {
           "type": "datetime",
           "readable": true,
@@ -699,6 +1040,8 @@
         "group_id": {
         },
         "label": {
+        },
+        "type": {
         },
         "created_at": {
         },
@@ -756,6 +1099,21 @@
             "not_match"
           ]
         },
+        "type": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
         "created_at": {
           "type": "datetime",
           "operators": [
@@ -791,6 +1149,21 @@
         }
       },
       "relationships": {
+        "person": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
+        "group": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "GroupResource"
+        },
+        "layer_group": {
+          "type": "has_one",
+          "description": null,
+          "resource": "GroupResource"
+        }
       },
       "stats": {
         "total": [

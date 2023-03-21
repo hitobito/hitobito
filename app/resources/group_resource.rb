@@ -30,4 +30,18 @@ class GroupResource < ApplicationResource
       # Note: this might lead to a performance penalty.
     end
   end
+
+  def authorize_create(model)
+    # Writing groups is disabled for now
+    raise CanCan::AccessDenied
+  end
+
+  def authorize_update(model)
+    # Writing groups is disabled for now
+    raise CanCan::AccessDenied
+  end
+
+  def index_ability
+    JsonApi::GroupAbility.new(current_ability)
+  end
 end

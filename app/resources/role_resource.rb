@@ -31,7 +31,17 @@ class RoleResource < ApplicationResource
     end
   end
 
+  def authorize_create(model)
+    # Writing roles is disabled for now
+    raise CanCan::AccessDenied
+  end
+
+  def authorize_update(model)
+    # Writing roles is disabled for now
+    raise CanCan::AccessDenied
+  end
+
   def index_ability
-    JsonApi::RoleAbility.new(super)
+    JsonApi::RoleAbility.new(current_ability)
   end
 end

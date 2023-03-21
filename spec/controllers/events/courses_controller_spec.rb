@@ -64,17 +64,31 @@ describe Events::CoursesController do
     end
   end
 
-  context 'exports to csv, it' do
+  context 'exports to csv' do
     let(:rows) { response.body.split("\n") }
     let(:course) { Fabricate(:course, groups: [groups(:bottom_layer_one)]) }
     before { Fabricate(:event_date, event: course, start_at: Date.new(2020, 01, 02)) }
 
-    it 'renders csv headers' do
-      allow(controller).to receive_messages(current_user: people(:top_leader))
-      get :index, format: :csv
-      expect(response).to be_successful
-      expect(rows.first).to match(/^Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$/)
-      expect(rows.size).to eq(2)
+    context 'as person without default course group, it' do
+      let(:person) { people(:root) }
+
+      it 'renders csv headers' do
+        get :index, format: :csv
+        expect(response).to be_successful
+        expect(rows.first).to match(/^Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$/)
+        expect(rows.size).to eq(2)
+      end
+    end
+
+    context 'as person with default course group, it' do
+      let(:person) { people(:top_leader) }
+
+      it 'renders csv headers and filters out courses from other groups' do
+        get :index, format: :csv
+        expect(response).to be_successful
+        expect(rows.first).to match(/^Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$/)
+        expect(rows.size).to eq(1)
+      end
     end
   end
 

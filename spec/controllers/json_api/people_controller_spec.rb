@@ -104,7 +104,7 @@ describe JsonApi::PeopleController, type: [:request] do
           Fabricate(:role, type: 'Group::BottomLayer::Leader', group: groups(:bottom_layer_two)).person
           bottom_member.touch
 
-          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: 5.seconds.ago })
+          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: { gte: 5.seconds.ago.as_json } })
 
           expect(response).to have_http_status(200)
           expect(d.size).to eq(2)
@@ -285,7 +285,7 @@ describe JsonApi::PeopleController, type: [:request] do
           top_leader.update(updated_at: 10.seconds.ago)
           bottom_member.touch
 
-          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: 5.seconds.ago })
+          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: { gte: 5.seconds.ago.as_json } })
 
           expect(response).to have_http_status(200)
           expect(d.size).to eq(1)
@@ -411,7 +411,7 @@ describe JsonApi::PeopleController, type: [:request] do
           top_leader.update(updated_at: 10.seconds.ago)
           bottom_member.touch
 
-          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: 5.seconds.ago })
+          jsonapi_get '/api/people', params: params.merge(filter: { updated_at: { gte: 5.seconds.ago } })
 
           expect(response).to have_http_status(200)
           expect(d.size).to eq(1)
@@ -885,10 +885,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
         it 'renders validation errors for person' do
           person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
-
           @person_id = person.id
 
           params[:data][:attributes][:email] = bottom_member.email
+          params[:data][:attributes][:id] = bottom_member.id
 
           jsonapi_patch "/api/people/#{@person_id}", params
 
@@ -1210,8 +1210,21 @@ describe JsonApi::PeopleController, type: [:request] do
         end
 
         it 'does not update person`s detail attributes without required permission' do
-          allow_any_instance_of(PersonResource).to receive(:write_details?).and_return(false)
           person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
+
+          test_ability = Class.new do
+            include CanCan::Ability
+
+            attr_reader :user
+
+            def initialize(user)
+              @user = user
+              can :manage, :all
+              cannot :show_details, Person
+            end
+          end.new(person)
+
+          allow_any_instance_of(PersonResource).to receive(:current_ability).and_return test_ability
 
           @person_id = person.id
 
@@ -1383,6 +1396,40 @@ describe JsonApi::PeopleController, type: [:request] do
           email.reload
 
           expect(email.email).to eq('changed.hitobito@example.com')
+        end
+
+        it 'creates new contactable on person update' do
+          person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
+          @person_id = person.id
+
+          params[:data][:relationships] = {
+            additional_emails: {
+              data: [{
+                type: 'additional_emails',
+                method: 'create',
+                :'temp-id' => 'new-email'
+              }]
+            }
+          }
+          params[:included] = [
+            {
+              type: 'additional_emails',
+                :'temp-id' => 'new-email',
+              attributes: {
+                label: 'Ds Grosi',
+                contactable_type: 'additional_emails',
+                email: 'new.hitobito@example.com'
+              }
+            }
+          ]
+
+          jsonapi_patch "/api/people/#{@person_id}", params
+
+          expect(response).to have_http_status(200)
+
+          person.reload
+
+          expect(person.additional_emails.first.email).to eq('new.hitobito@example.com')
         end
       end
     end

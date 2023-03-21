@@ -18,6 +18,10 @@ class TokenAbility
     define_token_abilities
   end
 
+  def user
+    token.dynamic_user
+  end
+
   private
 
   def define_token_abilities

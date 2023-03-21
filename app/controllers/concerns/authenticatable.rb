@@ -17,6 +17,16 @@ module Authenticatable
     check_authorization if: :authorize?
   end
 
+  def current_ability
+    @current_ability ||= if current_person
+      Ability.new(current_person)
+    elsif current_service_token
+      TokenAbility.new(current_service_token)
+    elsif current_oauth_token
+      DoorkeeperTokenAbility.new(current_oauth_token)
+    end
+  end
+
   private
 
   def current_person
@@ -26,18 +36,7 @@ module Authenticatable
   end
 
   def current_user
-    current_person
-  end
-
-  # TODO: can we somehow use this dynamic user as a true substitute instead of
-  #       passing it explicitly at various places
-  def service_token_user
-    current_ability.token.dynamic_user if current_ability.is_a?(TokenAbility)
-  end
-
-  def oauth_token_user
-    Person.find(token_authentication.oauth_token.resource_owner_id) if
-      current_ability.is_a?(DoorkeeperTokenAbility)
+    current_ability&.user
   end
 
   def origin_user
@@ -127,15 +126,5 @@ module Authenticatable
 
   def doorkeeper_controller?
     is_a?(Doorkeeper::ApplicationController)
-  end
-
-  def current_ability
-    @current_ability ||= if current_user
-                           Ability.new(current_user)
-                         elsif current_service_token
-                           TokenAbility.new(current_service_token)
-                         elsif current_oauth_token
-                           DoorkeeperTokenAbility.new(current_oauth_token)
-                         end
   end
 end

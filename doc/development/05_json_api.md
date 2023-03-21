@@ -260,13 +260,6 @@ Response **200 OK**
         "contactable_id": 48,
         "contactable_type": "Person",
         "number": "+41 79 733 58 42"
-      },
-      "relationships": {
-        "contactable": {
-          "meta": {
-            "included": false
-          }
-        }
       }
     }
   ],
@@ -283,3 +276,10 @@ Checklist for creating/extending JSON:API endpoints:
   - create/extend request spec
   - run `rails rswag:specs:swaggerize` afterwards and check if Swagger ui is working as expected
 - Update list of endpoints in this document
+
+#### Permissions
+
+Permissions are primarly checked in graphiti resources `app/resources`, not in controllers like
+in non JSON:API controllers. For this there's specific abilities in `app/abilities/json_api`. 
+We're also authorizing inside the JSON:API controllers to make sure
+the right HTTP status code is returned. (e.g. 403 instead of 404 if access denied)

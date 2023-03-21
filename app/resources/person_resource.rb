@@ -8,6 +8,15 @@
 class PersonResource < ApplicationResource
   primary_endpoint 'people', [:index, :show, :update]
 
+  def authorize_update(model)
+    if model.changed_attribute_names_to_save & ['gender', 'birthday']
+      # show_details ability is required additionally for updating gender, birthday
+      update_ability.authorize!(:show_details, model)
+    end
+
+    super
+  end
+
   attribute :first_name, :string
   attribute :last_name, :string
   attribute :nickname, :string
@@ -18,6 +27,9 @@ class PersonResource < ApplicationResource
   attribute :zip_code, :string
   attribute :town, :string
   attribute :country, :string
+  attribute :gender, :string, readable: :show_details?
+  attribute :birthday, :date, readable: :show_details?
+  attribute :primary_group_id, :integer, writable: false
   attribute :gender, :string, readable: :show_details?, writable: :write_details?
   attribute :birthday, :date, readable: :show_details?, writable: :write_details?
 
@@ -34,39 +46,18 @@ class PersonResource < ApplicationResource
     end
   end
 
-  has_many :phone_numbers,
-    link: false,
-    resource: PhoneNumberResource,
-    readable: :show_details?,
-    writable: :write_details?
+  has_many :roles, writable: false
+  polymorphic_has_many :phone_numbers, as: :contactable
+  polymorphic_has_many :social_accounts, as: :contactable
+  polymorphic_has_many :additional_emails, as: :contactable
 
-  has_many :social_accounts,
-    link: false,
-    resource: SocialAccountResource,
-    readable: :show_details?,
-    writable: :write_details?
+  filter :updated_at, :datetime
 
-  has_many :additional_emails,
-    link: false,
-    resource: AdditionalEmailResource,
-    readable: :show_details?,
-    writable: :write_details?
-
-  has_many :roles,
-    link: false,
-    resource: RoleResource,
-    readable: :show_full?,
-    writable: false
-
-  filter :updated_at, :datetime, single: true do
-    eq do |scope, value|
-      scope.where(updated_at: value..)
-    end
+  def index_ability
+    PersonReadables.new(current_ability.user)
   end
 
-  def show_full?(model_instance)
-    can?(:show_full, model_instance)
-  end
+  private
 
   def show_details?(model_instance)
     can?(:show_details, model_instance)
@@ -75,6 +66,6 @@ class PersonResource < ApplicationResource
   def write_details?
     # no model_instance method argument is given when writable is called,
     # so we have to access current entry by controller context
-    can?(:show_details, context.entry)
+    can?(:show_details, context.entry) && can?(:update, context.entry)
   end
 end

@@ -21,6 +21,7 @@ class JsonApiController < ActionController::API
   include PaperTrailed
 
   before_action :assert_media_type_json_api, only: [:update, :create]
+  before_action :ensure_id_param_consistency, except: [:index, :create]
 
   class JsonApiUnauthorized < StandardError; end
   class JsonApiInvalidMediaType < StandardError; end
@@ -44,6 +45,11 @@ class JsonApiController < ActionController::API
     title: I18n.t('errors.404.title'),
     message: ->(error) { I18n.t('errors.404.explanation') }
 
+  register_exception Graphiti::Errors::RecordNotFound,
+    status: 404,
+    title: I18n.t('errors.404.title'),
+    message: ->(error) { I18n.t('errors.404.explanation') }
+
   register_exception JsonApiInvalidMediaType,
     status: 415,
     title: 'Invalid request format'
@@ -54,6 +60,43 @@ class JsonApiController < ActionController::API
     message: ->(error) { I18n.t('errors.unsupported_page_size.explanation',
                                 size: error.instance_variable_get(:@size),
                                 max: error.instance_variable_get(:@max)) }
+
+  def index
+    resources = resource_class.all(params)
+    render(jsonapi: resources)
+  end
+
+  def show
+    resource = resource_class.find(params)
+    render(jsonapi: resource)
+  end
+
+  def create
+    resource = resource_class.build(params)
+    if resource.save
+      render jsonapi: resource, status: :created
+    else
+      render jsonapi_errors: resource
+    end
+  end
+
+  def update
+    resource = resource_class.find(params)
+    if resource.update_attributes # rubocop:disable Rails/ActiveRecordAliases
+      render jsonapi: resource
+    else
+      render jsonapi_errors: resource
+    end
+  end
+
+  def destroy
+    resource = resource_class.find(params)
+    if resource.destroy
+      render jsonapi: {meta: {}}, status: :ok
+    else
+      render jsonapi_errors: resource
+    end
+  end
 
   def authenticate_person!(*args)
     if user_session?
@@ -66,7 +109,7 @@ class JsonApiController < ActionController::API
   private
 
   def user_session?
-    cookies['_session_id'].present?
+    person_signed_in?
   end
 
   # Sign in by deprecated user token is not supported by hitobito JSON API
@@ -79,5 +122,27 @@ class JsonApiController < ActionController::API
     return if request.content_type == MEDIA_TYPE
 
     raise JsonApiInvalidMediaType
+  end
+
+  def resource_class
+    [
+      self.class.name.delete_prefix("JsonApi::").delete_suffix("Controller").singularize,
+      "Resource"
+    ].join.constantize
+  end
+
+  def params
+    # we don't need strong parameters for graphiti controllers
+    super.permit!
+  end
+
+  def ensure_id_param_consistency
+    # make sure both id params are the same
+    # since we're checking permission based on
+    # params :id
+    data_id = params.dig(:data, :id).presence || return
+    param_id = params[:id].presence || return
+
+    raise ActionController::BadRequest if data_id.to_s != param_id.to_s
   end
 end

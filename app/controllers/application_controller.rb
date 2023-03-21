@@ -7,12 +7,11 @@
 
 class ApplicationController < ActionController::Base
 
-  include DecoratesBeforeRendering
-  include Userstamp
-  include Translatable
-  include Stampable
   include Localizable
   include Authenticatable
+  include DecoratesBeforeRendering
+  include Stampable
+  include Translatable
   include ERB::Util
   include Sentry
   include ParamConverters

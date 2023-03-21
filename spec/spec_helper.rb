@@ -50,6 +50,8 @@ Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f 
 # Add test locales
 Faker::Config.locale = I18n.locale
 
+RSpec::Matchers.define_negated_matcher :not_change, :change
+
 RSpec.configure do |config|
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -84,7 +86,6 @@ RSpec.configure do |config|
   config.include FeatureHelpers, type: :feature
   config.include Warden::Test::Helpers, type: :feature
   config.include ActiveSupport::Testing::TimeHelpers
-  config.include ResourceHelpers, type: :resource
 
   config.filter_run_excluding type: 'feature', performance: true
   config.filter_run_excluding type: 'sphinx', sphinx: true
@@ -216,3 +217,5 @@ module ActiveRecordFixture
   end
 end
 ActiveRecord::Fixture.prepend(ActiveRecordFixture)
+
+GraphitiSpecHelpers::RSpec.schema!

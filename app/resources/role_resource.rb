@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class RoleResource < ApplicationResource
+  # read-only for now
   with_options writable: false do
     attribute :person_id, :integer
     attribute :group_id, :integer
@@ -28,5 +29,19 @@ class RoleResource < ApplicationResource
       # so we skip this.
       # Note: this might lead to a performance penalty.
     end
+  end
+
+  def authorize_create(model)
+    # Writing roles is disabled for now
+    raise CanCan::AccessDenied
+  end
+
+  def authorize_update(model)
+    # Writing roles is disabled for now
+    raise CanCan::AccessDenied
+  end
+
+  def index_ability
+    JsonApi::RoleAbility.new(current_ability)
   end
 end

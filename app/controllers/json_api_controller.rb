@@ -109,7 +109,7 @@ class JsonApiController < ActionController::API
   private
 
   def user_session?
-    cookies['_session_id'].present?
+    person_signed_in?
   end
 
   # Sign in by deprecated user token is not supported by hitobito JSON API

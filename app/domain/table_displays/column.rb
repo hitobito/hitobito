@@ -28,7 +28,7 @@ module TableDisplays
 
     def value_for(object, attr)
       target, target_attr = resolve(object, attr)
-      if target.present? && target_attr.present? && allowed?(target, target_attr)
+      if target.present? && target_attr.present? && allowed?(target, target_attr, object, attr)
         return target, target_attr unless block_given?
 
         yield target, target_attr
@@ -69,7 +69,7 @@ module TableDisplays
       raise 'implement in subclass'
     end
 
-    def allowed?(object, attr)
+    def allowed?(object, attr, original_object, original_attr)
       ability.can? required_permission(attr), object
     end
 

@@ -25,7 +25,7 @@ module TableDisplays::Event::Participations
 
     def value_for(object, attr)
       target, target_attr = resolve(object, attr)
-      if target.present? && target_attr.present? && allowed?(target, target_attr)
+      if target.present? && target_attr.present? && allowed?(target, target_attr, object, attr)
         target = target.answers.find do |answer|
           answer.question_id.to_s == question_id(target_attr)
         end
@@ -54,7 +54,7 @@ module TableDisplays::Event::Participations
 
     protected
 
-    def allowed?(object, _attr)
+    def allowed?(object, _attr, _original_object, _original_attr)
       ability.can?(:update, object.event) || ability.can?(:show_full, object.person)
     end
 

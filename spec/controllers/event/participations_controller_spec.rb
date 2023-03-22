@@ -816,7 +816,6 @@ describe Event::ParticipationsController do
   end
 
   context 'table_displays' do
-
     render_views
     let(:dom)           { Capybara::Node::Simple.new(response.body) }
     let(:top_leader)    { people(:top_leader) }
@@ -884,6 +883,83 @@ describe Event::ParticipationsController do
       )
       expect(Delayed::Job.last.payload_object.send(:exporter))
         .to eq Export::Tabular::Event::Participations::TableDisplays
+    end
+  end
+
+  context 'table_displays as configured in the core' do
+    render_views
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+    let(:course) { Fabricate(:course, groups: [groups(:bottom_layer_two)], participations_visible: true) }
+    let(:group) { Fabricate(Group::TopGroup.name, parent: groups(:top_group)) }
+    let(:user) { Fabricate(:person) }
+    let!(:role) { Fabricate(Group::BottomLayer::Leader.name, person: user, group: groups(:bottom_layer_one)) }
+    let!(:participation) { Fabricate(:event_participation, person: user, event: course, active: true) }
+    let(:other_person) { Fabricate(:person, birthday: Date.new(2003, 03, 03), company_name: 'Puzzle ITC Test') }
+    let!(:other_role) { Fabricate(Group::TopGroup::Member.name, person: other_person, group: group) }
+    let!(:other_participation) { Fabricate(:event_participation, person: other_person, event: course, active: true) }
+    let!(:other_event_role) { Fabricate(Event::Course::Role::Participant.name, participation: other_participation) }
+
+    before { sign_in(user.reload) }
+
+    context 'with show_details permission' do
+      let!(:role2) { Fabricate(Group::TopLayer::TopAdmin.name, person: user, group: groups(:top_layer)) }
+      let!(:event_role) { Fabricate(Event::Course::Role::Participant.name, participation: participation) }
+
+      it 'GET#index lists extra public column' do
+        user.table_display_for(Event::Participation).update!(selected: %w(person.company_name))
+
+        get :index, params: { group_id: group.id, event_id: course.id }
+        expect(dom).to have_checked_field 'Firmenname'
+        expect(dom.find('table tbody')).to have_content 'Puzzle ITC Test'
+      end
+
+      it 'GET#index lists extra show_full column' do
+        user.table_display_for(Event::Participation).update!(selected: %w(person.birthday))
+
+        get :index, params: { group_id: group.id, event_id: course.id }
+        expect(dom).to have_checked_field 'Geburtstag'
+        expect(dom.find('table tbody')).to have_content '03.03.2003'
+      end
+    end
+
+    context 'without show_details permission' do
+      let!(:event_role) { Fabricate(Event::Course::Role::Participant.name, participation: participation) }
+
+      it 'GET#index lists extra public column' do
+        user.table_display_for(Event::Participation).update!(selected: %w(person.company_name))
+
+        get :index, params: { group_id: group.id, event_id: course.id }
+        expect(dom).to have_checked_field 'Firmenname'
+        expect(dom.find('table tbody')).to have_content 'Puzzle ITC Test'
+      end
+
+      it 'GET#index lists extra show_full column, but does not expose data' do
+        user.table_display_for(Event::Participation).update!(selected: %w(person.birthday))
+
+        get :index, params: { group_id: group.id, event_id: course.id }
+        expect(dom).to have_checked_field 'Geburtstag'
+        expect(dom.find('table tbody')).not_to have_content '03.03.2003'
+      end
+    end
+
+    context 'as event leader' do
+      let!(:event_role) { Fabricate(Event::Role::Leader.name, participation: participation) }
+
+      it 'GET#index lists extra public column' do
+        user.table_display_for(Event::Participation).update!(selected: %w(person.company_name))
+
+        get :index, params: { group_id: group.id, event_id: course.id }
+        expect(dom).to have_checked_field 'Firmenname'
+        expect(dom.find('table tbody')).to have_content 'Puzzle ITC Test'
+      end
+
+      it 'GET#index lists extra show_full column' do
+        user.table_display_for(Event::Participation).update!(selected: %w(person.birthday))
+
+        get :index, params: { group_id: group.id, event_id: course.id }
+        expect(dom).to have_checked_field 'Geburtstag'
+        expect(dom.find('table tbody')).to have_content '03.03.2003'
+      end
     end
 
   end

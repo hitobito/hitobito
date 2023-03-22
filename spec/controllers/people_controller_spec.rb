@@ -1206,7 +1206,7 @@ describe PeopleController do
     end
   end
 
-  context 'table_displays'do
+  context 'table_displays' do
     render_views
     let(:dom) { Capybara::Node::Simple.new(response.body) }
     let!(:bottom_member) { people(:bottom_member) }
@@ -1265,6 +1265,83 @@ describe PeopleController do
       get :index, params: { group_id: group, selection: true }, format: :csv
       expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
       expect(Delayed::Job.last.payload_object.send(:exporter)).to eq Export::Tabular::People::TableDisplays
+    end
+
+    context 'without show_full permission' do
+      let(:group) { Fabricate(Group::TopGroup.name, parent: groups(:top_group)) }
+      let(:user) { Fabricate(:person) }
+      let!(:role) { Fabricate(Group::TopGroup::Member.name, person: user, group: groups(:top_group)) }
+      let(:other_person) { Fabricate(:person, birthday: Date.new(2003, 03, 03)) }
+      let!(:other_role) { Fabricate(Group::TopGroup::Member.name, person: other_person, group: group) }
+      before { sign_in(user.reload) }
+
+      it 'GET#index lists extra public column' do
+        TableDisplay.register_column(Person, TableDisplays::PublicColumn, :birthday)
+        user.table_display_for(Person).update!(selected: %w(birthday))
+
+        get :index, params: { group_id: group.id }
+        expect(dom).to have_checked_field 'Geburtstag'
+        expect(dom.find('table tbody tr')).to have_content '03.03.2003'
+      end
+
+      it 'GET#index lists extra show_full column, but does not expose data' do
+        TableDisplay.register_column(Person, TableDisplays::ShowFullColumn, :birthday)
+        user.table_display_for(Person).update!(selected: %w(birthday))
+
+        get :index, params: { group_id: group.id }
+        expect(dom).to have_checked_field 'Geburtstag'
+        expect(dom.find('table tbody tr')).not_to have_content '03.03.2003'
+      end
+    end
+  end
+
+  context 'table_displays as configured in the core' do
+    render_views
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+    let!(:bottom_member) { people(:bottom_member) }
+    let(:group) { Fabricate(Group::TopGroup.name, parent: groups(:top_group)) }
+    let(:user) { Fabricate(:person) }
+    let!(:role) { Fabricate(Group::BottomLayer::Leader.name, person: user, group: groups(:bottom_layer_one)) }
+    let(:other_person) { Fabricate(:person, birthday: Date.new(2003, 03, 03), company_name: 'Puzzle ITC Test') }
+    let!(:other_role) { Fabricate(Group::TopGroup::Member.name, person: other_person, group: group) }
+
+    before { sign_in(user.reload) }
+
+    context 'with show_details permission' do
+      let!(:role2) { Fabricate(Group::TopLayer::TopAdmin.name, person: user, group: groups(:top_layer)) }
+      it 'GET#index lists extra public column' do
+        user.table_display_for(Person).update!(selected: %w(company_name))
+
+        get :index, params: { group_id: group.id }
+        expect(dom).to have_checked_field 'Firmenname'
+        expect(dom.find('table tbody tr')).to have_content 'Puzzle ITC Test'
+      end
+
+      it 'GET#index lists extra show_full column' do
+        user.table_display_for(Person).update!(selected: %w(birthday))
+
+        get :index, params: { group_id: group.id }
+        expect(dom).to have_checked_field 'Geburtstag'
+        expect(dom.find('table tbody tr')).to have_content '03.03.2003'
+      end
+    end
+
+    context 'without show_details permission' do
+      it 'GET#index lists extra public column' do
+        user.table_display_for(Person).update!(selected: %w(company_name))
+
+        get :index, params: { group_id: group.id }
+        expect(dom).to have_checked_field 'Firmenname'
+        expect(dom.find('table tbody tr')).to have_content 'Puzzle ITC Test'
+      end
+
+      it 'GET#index lists extra show_full column, but does not expose data' do
+        user.table_display_for(Person).update!(selected: %w(birthday))
+
+        get :index, params: { group_id: group.id }
+        expect(dom).to have_checked_field 'Geburtstag'
+        expect(dom.find('table tbody tr')).not_to have_content '03.03.2003'
+      end
     end
   end
 

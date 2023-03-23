@@ -1,3 +1,10 @@
+# encoding: utf-8
+
+#  Copyright (c) 2023, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # Let's make sure we load the logger in dev env even though eager_load is false.
 # Otherwise the logger won't subscribe to the background job log notifications.
 require_relative './logger' if Rails.env.development?

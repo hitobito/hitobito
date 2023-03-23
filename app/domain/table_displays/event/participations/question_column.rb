@@ -43,7 +43,7 @@ module TableDisplays::Event::Participations
 
     def render(attr)
       super do |answer, answer_attr|
-        answer.send(answer_attr)
+        answer.send(answer_attr) if answer.present?
       end
     end
 

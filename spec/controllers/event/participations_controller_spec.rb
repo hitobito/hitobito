@@ -860,6 +860,17 @@ describe Event::ParticipationsController do
       expect(dom.find('table tbody tr')).to have_content 'GA'
     end
 
+    it 'GET#index handles missing event application answer gracefully' do
+      TableDisplay.register_multi_column(Event::Participation, TableDisplays::Event::Participations::QuestionColumn)
+      table_display = top_leader.table_display_for(Event::Participation)
+      table_display.selected = %W[event_question_#{question.id}]
+      table_display.save!
+
+      get :index, params: { group_id: group.id, event_id: course.id }
+      expect(dom).to have_checked_field 'GA oder Halbtax?'
+      # successfully renders, even though no answer is present in the database
+    end
+
     it 'GET#index sorts by extra event application question' do
       TableDisplay.register_multi_column(Event::Participation, TableDisplays::Event::Participations::QuestionColumn)
       table_display = top_leader.table_display_for(Event::Participation)

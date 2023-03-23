@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Sheet
-  class MailingLists::ImapMail < Sheet::Admin
-
+  module MailingLists
+    class ImapMail < Sheet::Admin; end
   end
 end

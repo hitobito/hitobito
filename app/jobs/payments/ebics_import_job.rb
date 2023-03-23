@@ -6,12 +6,19 @@
 #  https://github.com/hitobito/hitobito_die_mitte.
 
 class Payments::EbicsImportJob < RecurringJob
+  self.use_background_job_logging = true
+
+  def initialize
+    @imported_payments_count = 0
+    super
+  end
 
   def perform_internal
     payment_provider_configs.find_each do |provider_config|
-      Payments::EbicsImport.new(provider_config).run
+      @imported_payments_count += Payments::EbicsImport.new(provider_config).run.size
     rescue StandardError => e
       error(self, e, payment_provider_config: provider_config)
+      raise e # mustn't swallow error for BackgroundJobs::Logging to be able to log it
     end
   end
 
@@ -22,5 +29,9 @@ class Payments::EbicsImportJob < RecurringJob
   def next_run
     # Sets next run to 08:00 of next day
     Time.zone.tomorrow.at_beginning_of_day.change(hour: 8).in_time_zone
+  end
+
+  def log_results
+    { imported_payments_count: @imported_payments_count }
   end
 end

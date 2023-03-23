@@ -1,71 +1,64 @@
-require_relative 'logger'
+# Let's make sure we load the logger in dev env even though eager_load is false.
+# Otherwise the logger won't subscribe to the background job log notifications.
+require_relative './logger' if Rails.env.development?
 
 module BackgroundJobs
-  module Logging
-    extend ActiveSupport::Concern
+  class Logging < Delayed::Plugin
+    callbacks do |lifecycle|
+      lifecycle.before(:invoke_job) do |job|
+        notify(job, 'job_started', started_at: Time.zone.now)
+      end
 
-    included do |base|
-      base.prepend DJHooksWrapper
+      # after(:invoke_job) gets only called on success
+      lifecycle.after(:invoke_job) do |job|
+        notify(job, 'job_finished',
+               finished_at: Time.zone.now,
+               status: 'success',
+               payload: job_result(job))
+      end
+
+      lifecycle.after(:error) do |_worker, job|
+        notify(job, 'job_finished',
+               # The attempt count has already been incremented once we reach here,
+               # so we must calculate the correct value.
+               attempt: job.attempts - 1,
+               finished_at: Time.zone.now,
+               status: 'error',
+               payload: {error: error_message(job)})
+      end
     end
 
-    module DJHooksWrapper
-      def before(job)
-        @job_instance = job
+    private
 
-        super if defined? super
-      end
+    def self.notify(job, event_name, attempt: job.attempts, **attrs, &block)
+      return unless enabled?(job) && job_attrs(job).present?
 
-      def perform
-        background_job_log_instrument("job_started.background_job", started_at: Time.zone.now)
-        background_job_log_instrument("job_perform.background_job") do
-          super
-        end
-      end
+      log_attrs = job_attrs(job).merge(attrs, attempt: attempt)
+      ActiveSupport::Notifications.instrument("#{event_name}.background_job", log_attrs, &block)
+    end
 
-      def after(_job)
-        background_job_log_instrument(
-          "job_finished.background_job",
-          finished_at: Time.zone.now,
-          payload: log_results
-        )
+    def self.enabled?(job)
+      job.payload_object.try(:use_background_job_logging)
+    end
 
-        super if defined? super
-      end
+    def self.job_attrs(job)
+      {
+        job_id: job.id,
+        job_name: job.payload_object.class.name,
+        group_id: job.payload_object.try(:group_id)
+      }
+    end
 
-      def success(_job)
-        background_job_log_instrument("job_success.background_job")
+    def self.job_result(job)
+      job.payload_object.try(:log_results)
+    end
 
-        super if defined? super
-      end
-
-      def error(_job, exception)
-        error = ["#{exception.class.name}: #{exception.message}", *exception.backtrace].join("\n")
-        background_job_log_instrument("job_error.background_job", error: error)
-
-        super if defined? super
-      end
-
-      def log_results
-        results = super if defined? super
-        results || {}
-      end
-
-      private
-
-      def background_job_log_instrument(name, **attrs, &block)
-        return block&.call unless @job_instance # we can't log the job without knowing its details
-
-        ActiveSupport::Notifications.instrument(name, background_job_log_attrs.merge(attrs), &block)
-      end
-
-      def background_job_log_attrs
-        {
-          job_id: @job_instance.id,
-          job_name: self.class.name,
-          group_id: try(:group_id),
-          attempt: @job_instance.attempts
-        }
-      end
+    def self.error_message(job)
+      {
+        class: job.error.class.name,
+        message: job.error.message,
+        backtrace: job.error.backtrace
+      }
     end
   end
 end

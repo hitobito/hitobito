@@ -8,17 +8,22 @@
 class Payments::EbicsImportJob < RecurringJob
   self.use_background_job_logging = true
 
+  attr_reader :payments, :errors
+
   def initialize
-    @imported_payments_count = 0
     super
+    @payments = Hash.new {|hash, key| hash[key] = []}
+    @errors = []
   end
 
   def perform_internal
     payment_provider_configs.find_each do |provider_config|
-      @imported_payments_count += Payments::EbicsImport.new(provider_config).run.size
+      Payments::EbicsImport.new(provider_config).run.each do |status, status_payments|
+        payments[status] += status_payments
+      end
     rescue StandardError => e
+      errors << e
       error(self, e, payment_provider_config: provider_config)
-      raise e # mustn't swallow error for BackgroundJobs::Logging to be able to log it
     end
   end
 
@@ -32,6 +37,14 @@ class Payments::EbicsImportJob < RecurringJob
   end
 
   def log_results
-    { imported_payments_count: @imported_payments_count }
+    {
+      imported_payments_count: payments['ebics_imported']&.size,
+      without_invoice_count: payments['without_invoice']&.size,
+      invalid_payments_count: payments['invalid']&.size,
+      invalid_payments: payments['invalid']&.each_with_object({}) do |payment, invalid_payments|
+        invalid_payments[payment.transaction_identifier] = payment.errors.messages
+      end,
+      errors: errors
+    }
   end
 end

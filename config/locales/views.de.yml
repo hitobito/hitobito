@@ -986,6 +986,7 @@ de:
     unauthorized:
       forgot_password: 'Passwort vergessen?'
       need_confirmation_email: 'Keine Bestätigungs-E-Mail bekommen?'
+      main_self_registration: 'Kein Account? Registrieren Sie sich hier.'
 
     footer:
       available_under_license: 'verfügbar unter der'

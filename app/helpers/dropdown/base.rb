@@ -27,7 +27,7 @@ module Dropdown
     def to_s
       template.button_group do
         render_dropdown_button +
-        render_items
+        (render_items if has_items?)
       end
     end
 
@@ -49,16 +49,21 @@ module Dropdown
 
     private
 
+    def has_items?
+      @items.present?
+    end
+
     def render_dropdown_button
-      safe_join([
-        label_with_link,
-        content_tag(:a,
+      dropdown_element = content_tag(:a,
                     class: "dropdown-toggle #{button_class}",
                     href: '#',
                     data: { toggle: 'dropdown' }) do
-          safe_join([label_without_link,
-                     content_tag(:b, '', class: 'caret')].compact, ' ')
-        end
+                      safe_join([label_without_link,
+                                content_tag(:b, '', class: 'caret')].compact, ' ')
+                    end
+      safe_join([
+        label_with_link,
+        has_items? ? dropdown_element : nil
       ].compact, ' ')
     end
 

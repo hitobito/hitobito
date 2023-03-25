@@ -35,7 +35,7 @@ class Group::Mover
   end
 
   def matching_childgroup?(candidate)
-    candidate.possible_children.include?(group.class)
+    candidate.possible_children.include?(Draper.undecorate(group).class)
   end
 
 end

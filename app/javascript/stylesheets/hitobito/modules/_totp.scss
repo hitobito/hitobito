@@ -1,7 +1,15 @@
 #new_totp {
-  .qr-code img {
-    margin-left: 165px;
+@media (max-width: 570px) {
+  div.qr-code {
+display: flex;
+justify-content: center;
   }
+}
+@media (min-width: 571px) {
+  div.qr-code {
+  margin-left: 115px;
+  }
+}
 
   div.qr-code {
     min-height: 250px;

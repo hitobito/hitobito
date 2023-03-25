@@ -67,7 +67,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,
     :email, :address, :zip_code, :town, :country, :gender, :birthday,
-    :picture, :primary_group_id
+    :title, :salutation, :picture, :primary_group_id
   ]
 
   INTERNAL_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -348,6 +348,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def greeting_name
     first_name.presence || nickname.presence || last_name.presence || company_name
+  end
+
+  def salutation_value
+    Salutation.new(self).value
   end
 
   def default_group_id

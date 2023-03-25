@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# A view helper to standartize often used functions like formatting,
+# A view helper to standardize often used functions like formatting,
 # tables, forms or action links. This helper is ideally defined in the
 # ApplicationController.
 module FormatHelper
@@ -70,6 +70,9 @@ module FormatHelper
     end.gsub(/\//, '_') # deal with nested models
   end
 
+  def format_person_salutation(obj)
+    Salutation.new(obj).value
+  end
 
   ##############  STANDARD HTML SECTIONS  ############################
 
@@ -166,6 +169,7 @@ module FormatHelper
   private
 
   # Helper methods that are not directly called from templates.
+
 
   # Formats an arbitrary attribute of the given object depending on its data type.
   # For ActiveRecords, take the defined data type into account for special types

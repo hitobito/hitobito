@@ -334,19 +334,36 @@ de:
         personal:
           label: persönliche Anrede
         default:
-          label: Hallo [Name]
+          label: "Voreinstellung (aktuell: Hallo [Name])"
           value:
             m: Hallo %{greeting_name}
             w: Hallo %{greeting_name}
             other: Hallo %{greeting_name}
         available:
+          hallo_vorname:
+            label: Hallo [Name]
+            value:
+              m: Hallo %{greeting_name}
+              w: Hallo %{greeting_name}
+              other: Hallo %{greeting_name}
           lieber_vorname:
             label: Liebe*r [Vorname]
             value:
               m: Lieber %{first_name}
               w: Liebe %{first_name}
               other: Liebe*r %{first_name}
-
+          lieber_titel_nachname:
+            label: Liebe*r Frau*Herr [Titel] [Nachname]
+            value:
+              m: Lieber Herr %{title_last_name}
+              w: Liebe Frau %{title_last_name}
+              other: Liebe*r %{title_last_name}
+          sehr_geehrter_titel_nachname:
+            label: Sehr geehrte*r Frau*Herr [Titel] [Nachname]
+            value:
+              m: Sehr geehrter Herr %{title_last_name}
+              w: Sehr geehrte Frau %{title_last_name}
+              other: Sehr geehrte*r %{title_last_name}
       service_token:
         one: API-Key
         other: API-Keys
@@ -960,6 +977,7 @@ de:
         cost_centers: Kostenstellen
         accounts: Konten
         payments: Zahlungseingänge
+        salutation: Anrede
 
       invoice_article:
         number: Artikelnummer

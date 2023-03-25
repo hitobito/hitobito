@@ -11,6 +11,8 @@
       %div
         = render_attrs(entry, :birthday, :gender)
 
+        = render_attrs(entry, :title, :salutation)
+
         = render_extensions :details, locals: { show_full: can?(:show_full, entry) }
 
         - if can?(:update, entry)

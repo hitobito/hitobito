@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_27_151218) do
+ActiveRecord::Schema.define(version: 2023_04_05_000000) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -845,6 +845,8 @@ ActiveRecord::Schema.define(version: 2023_03_27_151218) do
     t.text "encrypted_two_fa_secret"
     t.string "language", default: "de", null: false
     t.timestamp "privacy_policy_accepted_at"
+    t.string "title"
+    t.string "salutation"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

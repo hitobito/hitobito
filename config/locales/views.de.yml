@@ -1563,6 +1563,9 @@ de:
     decline:
       flash:
         success: Einladung wurde abgelehnt.
+    destroy:
+      flash:
+        success: 'Einladung für %{recipient_name} wurde gelöscht.'
 
   people_filters:
     form:

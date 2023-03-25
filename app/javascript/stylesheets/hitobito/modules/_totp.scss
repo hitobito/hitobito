@@ -15,9 +15,15 @@ justify-content: center;
     min-height: 250px;
   }
 
-  p.hint {
+  p.hint,
+  p.copy {
     text-align: center;
     max-width: 500px;
     margin-left: 20px;
   }
+  
+  p.copy a {
+    font-weight: bold;
+  }
+  
 }

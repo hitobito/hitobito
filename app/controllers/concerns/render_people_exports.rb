@@ -16,14 +16,9 @@ module RenderPeopleExports
                   alert: t('people.pdf.cannot_fit'))
   end
 
-  def render_emails(people)
+  def render_emails(people, separator)
     emails = Person.mailing_emails_for(people)
-    render plain: emails.join(',')
-  end
-
-  def render_emails_outlook(people)
-    emails = Person.mailing_emails_for(people)
-    render plain: emails.join(';')
+    render plain: emails.join(separator)
   end
 
   def render_vcf(people)

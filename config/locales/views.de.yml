@@ -1559,6 +1559,7 @@ de:
     create:
       flash:
         success: 'Einladung für %{recipient_name} als %{participation_type} wurde erstellt.'
+    invalid_existing_person: "wurde bereits zu diesem %{model_name} eingeladen."
     decline:
       flash:
         success: Einladung wurde abgelehnt.

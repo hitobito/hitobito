@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoicesController < CrudController
-  include YearBasedPaging
   include Api::JsonPaging
   include RenderMessagesExports
   include AsyncDownload
@@ -37,7 +36,7 @@ class InvoicesController < CrudController
                             :_destroy
                           ]]
 
-  before_render_index :year  # sets ivar used in view
+  before_render_index :year_from
 
   helper_method :group, :invoice_list
 
@@ -157,7 +156,7 @@ class InvoicesController < CrudController
     scope = scope.includes(:recipient).references(:recipient)
     scope = scope.standalone if parent.is_a?(Group)
     scope = scope.page(params[:page]).per(50) unless params[:ids]
-    Invoice::Filter.new(params.reverse_merge(year: year)).apply(scope)
+    Invoice::Filter.new(params).apply(scope)
   end
 
   def payment_attrs
@@ -193,6 +192,12 @@ class InvoicesController < CrudController
 
   def update_invoice_list_total
     entry.invoice_list&.update_total
+  end
+  
+  def year_from
+    if invoice_list
+      @year_from ||= invoice_list.created_at.year
+    end
   end
 
 end

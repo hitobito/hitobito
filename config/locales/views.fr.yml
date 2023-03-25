@@ -136,6 +136,7 @@ fr:
     labels: 'Etiquettes'
     pdf: 'PDF'
     emails: 'Adresses électroniques'
+    emails_outlook: 'Adresses électroniques (Outlook)'
     addresses: 'Liste d''adresses'
     households: 'Liste des foyers'
     everything: 'Toutes les informations'

@@ -200,6 +200,12 @@ describe PeopleController do
             expect(@response.body).to eq("top_leader@example.com,#{@tg_member.email}")
           end
 
+          it 'renders email addresses for Outlook' do
+            get :index, params: { group_id: group }, format: :email_outlook
+            expect(@response.media_type).to eq('text/plain')
+            expect(@response.body).to eq("top_leader@example.com;#{@tg_member.email}")
+          end
+
           it 'renders email addresses with additional ones' do
             e1 = Fabricate(:additional_email, contactable: @tg_member, mailings: true)
             Fabricate(:additional_email, contactable: @tg_member, mailings: false)

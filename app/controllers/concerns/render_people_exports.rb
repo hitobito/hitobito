@@ -21,6 +21,11 @@ module RenderPeopleExports
     render plain: emails.join(',')
   end
 
+  def render_emails_outlook(people)
+    emails = Person.mailing_emails_for(people)
+    render plain: emails.join(';')
+  end
+
   def render_vcf(people)
     vcf = generate_vcf(people)
     send_data vcf, type: :vcf, disposition: 'inline'

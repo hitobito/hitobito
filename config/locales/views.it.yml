@@ -136,6 +136,7 @@ it:
     labels: 'etichette'
     pdf: 'PDF'
     emails: 'indirizzi email'
+    emails_outlook: 'indirizzi email (Outlook)'
     addresses: 'lista di indirizzi'
     households: 'Lista dei nuclei famigliari'
     everything: 'tutti i dati'

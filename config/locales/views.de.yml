@@ -488,6 +488,8 @@ de:
       buttons:
         accept: Anmelden
         decline: Abmelden
+    banner_declined_invitation:
+      explanation: Du wurdest zu diesem Anlass eingeladen und hast dich abgemeldet.
     default_description_link:
       insert_general_information: Standardbeschreibung einsetzen
     form:

@@ -5,6 +5,31 @@
   overflow: hidden;
   @include border-radius(3px);
 }
+.profil-image-overlay {
+  display: none;
+  position: fixed;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  .img {
+    width: 512px;
+    height: 512px;
+    margin: 50px auto;
+    padding: 5px;
+    background: $white;
+    border: 1px solid $grayLight;
+    overflow: hidden;
+    @include border-radius(3px);
+  }
+}
+.profil-image-overlay.active {
+  display: block;
+}
 .profil {
   width: 32px;
   height: 32px;

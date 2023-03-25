@@ -5,12 +5,12 @@
 
 app = window.App ||= {}
 
-app.ProfilFullscreen = {
+app.ProfileImageOverlay = {
   show: ->
     $('.profil-image-overlay').addClass('active')
   hide: ->
     $('.profil-image-overlay').removeClass('active') 
 }
 
-$(document).on 'click', '.profil-big', app.ProfilFullscreen.show
-$(document).on 'click', '.profil-image-overlay', app.ProfilFullscreen.hide
+$(document).on 'click', '.profil-big', app.ProfileImageOverlay.show
+$(document).on 'click', '.profil-image-overlay', app.ProfileImageOverlay.hide

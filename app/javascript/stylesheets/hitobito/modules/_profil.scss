@@ -6,18 +6,25 @@
   @include border-radius(3px);
 }
 .profil-image-overlay {
+  // Hide image above page by default
   opacity: 0;
-  position: fixed;
-  background-color: rgba($color: #000000, $alpha: 0.5);
-  width: 100%;
-  max-width: 100%;
-  height: 100%;
-  max-height: 100%;
   top: -100%;
-  left: 0;
-  z-index: 200;
   transition: opacity 0.5s ease, top 0.5s ease;
+  left: 0;
+
+  // Gray overlay over whole page
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  z-index: 200;
+  background-color: rgba($color: $black, $alpha: 0.5);
   cursor: pointer;
+  &.active {
+    opacity: 1;
+    top: 0;
+  }
   .img {
     width: 512px;
     height: 512px;
@@ -28,10 +35,6 @@
     overflow: hidden;
     @include border-radius(3px);
   }
-}
-.profil-image-overlay.active {
-  opacity: 1;
-  top: 0;
 }
 .profil {
   width: 32px;

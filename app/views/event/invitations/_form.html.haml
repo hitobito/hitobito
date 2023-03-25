@@ -3,8 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form(entry, submit_label: t('global.button.save')) do |f|
+= entry_form(entry, submit_label: t('global.button.save'), buttons_top: false) do |f|
 
   = f.labeled_person_field(:person)
   = f.hidden_field(:event_id)
   = f.hidden_field(:participation_type, value: params[:event_role]['type'])
+
+%p
+  =t("events.invitations.description", model_name: entry.event.model_name.human)

@@ -1,0 +1,3 @@
+$('#modal-placeholder').html("#{escape_javascript(render(partial: 'event/participation_lists/invite'))}")
+$('[data-provide=entity]').each(window.App.setupEntityTypeahead)
+$('#participation-lists-invite').modal('show')

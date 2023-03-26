@@ -177,6 +177,7 @@ Hitobito::Application.routes.draw do
 
       get 'public_events/:id' => 'public_events#show', as: :public_event
       get 'events/participation_lists/new' => 'event/participation_lists#new'
+      get 'events/participation_lists/invite' => 'event/participation_lists#invite'
 
       resources :events do
         collection do

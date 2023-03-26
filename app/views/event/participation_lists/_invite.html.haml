@@ -1,12 +1,12 @@
 
-#participation-lists-new.modal.fade
+#participation-lists-invite.modal.fade
   .modal-dialog
     .modal-content
       .modal-header
         %h5.bold.modal-title
           %b= t('.title', event_label: @event_label)
 
-      = standard_form(path_args(Event::Participation.new),
+      = standard_form(path_args(Event::Invitation.new),
         url: group_event_participation_lists_path(group, -1), method: :post) do |f|
         .modal-body
           .row-fluid
@@ -14,7 +14,7 @@
             = text_field_tag('q', nil,
               placeholder: t('.event_search'),
               data: { provide: 'entity',
-              updater: 'ParticipationLists.updatePath',
+              updater: 'ParticipationLists.updateInvite',
               url: typeahead_group_events_path(group, format: :json, type: @event_type) })
 
             = select(:role, :type, [], {}, style: 'display: none')
@@ -23,4 +23,4 @@
           = submit_button(f, t('.submit'), disabled: true)
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
-            onclick: "event.preventDefault(); $('#participation-lists-new').modal('hide')")
+            onclick: "event.preventDefault(); $('#participation-lists-invite').modal('hide')")

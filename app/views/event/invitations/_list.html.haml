@@ -6,7 +6,7 @@
 = crud_table do |t|
   - t.sortable_attr(:person)
   - t.col(Person.human_attribute_name(:email)) do |invitation|
-    = mail_to invitation.person.email
+    - mail_to invitation.person.email if can?(:show, invitation.person)
   - t.col(Event::Invitation.human_attribute_name(:participation_type)) do |invitation|
     = invitation.participation_type.constantize.model_name.human
   - t.sortable_attr(:status)

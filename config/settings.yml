@@ -141,6 +141,7 @@ people:
   # either name or role
   default_sort: name
   abos: true
+  totp_drift: 15
 
 event:
   attachments:

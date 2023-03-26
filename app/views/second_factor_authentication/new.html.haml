@@ -16,6 +16,8 @@
     - else
       = t('.hint_unregistered_html', link: link_to('freeOTP App', 'https://freeotp.github.io/'))
 
-  %p.copy= t('.hint_copy_secret_html', link: link_to(t('.copy_secret'), '#', data: { copy_to_clipboard: otp.secret}))
-  
+  %p.copy
+    - unless pending_two_factor_person&.two_factor_authentication_registered?
+      =  t('.hint_copy_secret_html', link: link_to(t('.copy_secret'), '#', data: { copy_to_clipboard: otp.secret}))
+
   = render 'form'

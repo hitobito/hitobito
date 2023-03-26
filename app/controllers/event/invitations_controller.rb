@@ -17,8 +17,21 @@ class Event::InvitationsController < CrudController
 
   prepend_before_action :parent, :group
 
+
+  ## def index: respond_to 
+  ## see hitobito/app/controllers/events_controller.rb
+  ## + job
+  ## + ..
+
   def create
     super(location: group_event_invitations_path(@group, @event))
+  end
+
+  def index
+    respond_to do |format|
+      format.html { super }
+      format.csv  { render_tabular_in_background(:csv) }
+    end 
   end
 
   private

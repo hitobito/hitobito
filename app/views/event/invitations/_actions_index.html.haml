@@ -5,3 +5,6 @@
 
 - if can?(:new, model_class)
   = Dropdown::Event::RoleAdd.new(self, @group, @event, nil, :new_group_event_invitation_path, include_restricted: true)
+
+= action_button("Download", group_event_invitations_path(@group, @event, format: :csv), :download)
+

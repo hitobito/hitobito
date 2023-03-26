@@ -9,10 +9,10 @@ class Export::InvitationsExportJob < Export::ExportBaseJob
 
   self.parameters = PARAMETERS + [:event_id]
 
-  def initialize(user_id, event_id, options)
-    super(:csv, user_id, options)
-    @exporter = Export::Tabular::Invitations::List
+  def initialize(format, user_id, event_id, options)
+    super(format, user_id, options)
     @event_id = event_id
+    @exporter = Export::Tabular::Invitations::List
   end
 
   private

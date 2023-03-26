@@ -6,22 +6,18 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::InvitationsController < CrudController
+  #todo-later: include AsyncDownload
+
   self.permitted_attrs = [:event_id, :person_id, :participation_type]
 
   self.nesting = [Group, Event]
 
-  # TODO: open / accepted is not distinguished yet
+  #todo: open / accepted is not distinguished yet
   self.sort_mappings = { 'status': ['declined_at'] }
 
   decorates :group, :event
 
   prepend_before_action :parent, :group
-
-
-  ## def index: respond_to 
-  ## see hitobito/app/controllers/events_controller.rb
-  ## + job
-  ## + ..
 
   def create
     super(location: group_event_invitations_path(@group, @event))
@@ -30,8 +26,9 @@ class Event::InvitationsController < CrudController
   def index
     respond_to do |format|
       format.html { super }
-      format.csv  { render_tabular_in_background(:csv) }
-    end 
+      #todo-later: format.csv  { render_tabular_in_background(:csv) }
+      format.csv  { render_tabular(:csv) }
+    end
   end
 
   private
@@ -39,7 +36,7 @@ class Event::InvitationsController < CrudController
   def group
     @group = Group.find(params[:group_id])
   end
-  
+
   def event
     @event = group.events.find(params[:event_id])
   end
@@ -59,6 +56,21 @@ class Event::InvitationsController < CrudController
 
   def authorize_class
     authorize!(:index_invitations, event)
+  end
+
+  # todo-later: This seems not to work yet...
+  #def render_tabular_in_background(format, name = :invitation_export)
+  #  with_async_download_cookie(format, name) do |filename|
+  #    Export::InvitationsExportJob.new(format,
+  #                                current_person.id,
+  #                                group.id,
+  #                                filename: filename).enqueue!
+  #  end
+  #end
+
+  def render_tabular(format)
+    exporter = Export::Tabular::Invitations::List
+    send_data exporter.export(format, entries), type: format
   end
 
   class << self

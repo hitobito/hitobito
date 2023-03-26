@@ -462,6 +462,10 @@ de:
         title: Personen einem %{event_label} zuweisen
         event_search: Anlass Suchen...
         submit: Hinzufügen
+      invite:
+        title: Personen zu einem %{event_label} einladen
+        event_search: Anlass Suchen...
+        submit: Einladen
 
   assignments:
     attachment: "Anhang anzeigen"

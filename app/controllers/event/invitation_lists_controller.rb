@@ -1,9 +1,12 @@
-#  Copyright (c) 2018, Jungwacht Blauring Schweiz. This file is part of
+# encoding: utf-8
+
+#  Copyright (c) 2023, Carbon. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Event::ParticipationListsController < SimpleCrudController
+class Event::InvitationListsController < SimpleCrudController
+
   skip_authorization_check
   skip_authorize_resource
 
@@ -12,41 +15,42 @@ class Event::ParticipationListsController < SimpleCrudController
   helper_method :group
 
   def create
-    new_participations = build_new_participations
+    new_invitations = build_new_invitations
     ActiveRecord::Base.transaction do
-      new_participations.map(&:save).all?(&:present?)
+      new_invitations.map(&:save).all?(&:present?)
     end
 
     redirect_to(group_people_path(group),
-      notice: flash_message(:success, count: new_participations.count))
+                notice: flash_message(:success, count: new_invitations.count))
   end
 
   def new
     @people_ids = params[:ids]
     @event_type = params[:type]
     @event_label = params[:label]
-    render "new"
+    render 'new'
   end
 
   def self.model_class
-    Event::Participation
+    Event::Invitation
   end
 
   private
 
-  def build_new_participations
+  def build_new_invitations
     people.map do |person|
-      participation = event.participations.new
-      participation.person_id = person.id
-      role = role_type.new(participation: participation)
-      authorize!(:create, role)
+      invitation = event.invitations.new
+      invitation.person_id = person.id
+      invitation.participation_type = params[:role][:type]
+      authorize!(:create, invitation)
     end
   end
 
   def flash_message(type, attrs = {})
     attrs[:event] = event.name
     attrs[:event_type] = event.class.label
-    I18n.t("event.participation_lists.#{action_name}.#{type}", **attrs)
+    I18n.t("event.invitation_lists.#{action_name}.#{type}", attrs) +
+      I18n.t("event.invitation_lists.#{action_name}.hint", attrs)
   end
 
   def role_type
@@ -69,3 +73,4 @@ class Event::ParticipationListsController < SimpleCrudController
     list_param(:ids)
   end
 end
+

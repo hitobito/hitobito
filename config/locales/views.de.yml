@@ -453,6 +453,17 @@ de:
         next: Weiter
         enter_email: Bitte gib deine E-Mailadresse ein, damit du dich für den Anlass anmelden kannst.
 
+    invitation_lists:
+      create:
+        hint: "<br />Hinweis: Allfällig bestehende Einladungen wurden nicht aktualisiert."
+        success:
+          one: "Eine Person wurde erfolgreich zum %{event_type} '%{event}' eingeladen"
+          other: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' eingeladen"
+      new:
+        title: Personen einem %{event_label} einladen
+        event_search: Anlass Suchen...
+        submit: Einladen
+
     participation_lists:
       create:
         success:
@@ -462,10 +473,6 @@ de:
         title: Personen einem %{event_label} zuweisen
         event_search: Anlass Suchen...
         submit: Hinzufügen
-      invite:
-        title: Personen zu einem %{event_label} einladen
-        event_search: Anlass Suchen...
-        submit: Einladen
 
   assignments:
     attachment: "Anhang anzeigen"

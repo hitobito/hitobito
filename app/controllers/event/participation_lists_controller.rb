@@ -12,7 +12,6 @@ class Event::ParticipationListsController < SimpleCrudController
   helper_method :group
 
   def create
-    #todo: distinguish new from inivte submissions
     new_participations = build_new_participations
     success = ActiveRecord::Base.transaction do
       raise ActiveRecord::Rollback unless new_participations.select(&:present?).all?(&:save)
@@ -33,13 +32,6 @@ class Event::ParticipationListsController < SimpleCrudController
     @event_type = params[:type]
     @event_label = params[:label]
     render "new"
-  end
-
-  def invite
-    @people_ids = params[:ids]
-    @event_type = params[:type]
-    @event_label = params[:label]
-    render 'invite'
   end
 
   def self.model_class

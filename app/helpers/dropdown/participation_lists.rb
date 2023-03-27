@@ -23,9 +23,11 @@ module Dropdown
         add_item(event.label,
                  build_event_participation_lists_path(event),
                  participation_lists_options)
-        add_item(event.label+" einladung",
-                 build_event_invite_path(event),
-                 participation_lists_options)
+        if event.supports_invitations
+          add_item(event.label+" ("+I18n.t("activerecord.models.event/invitation.one")+")",
+                   build_event_invite_path(event),
+                   participation_lists_options)
+        end
       end
     end
 

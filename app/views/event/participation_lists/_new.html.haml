@@ -1,4 +1,3 @@
-
 #participation-lists-new.modal.fade
   .modal-dialog
     .modal-content
@@ -18,7 +17,6 @@
               url: typeahead_group_events_path(group, format: :json, type: @event_type) })
 
             = select(:role, :type, [], {}, style: 'display: none')
-
         .modal-footer
           = submit_button(f, t('.submit'), disabled: true)
           = link_to(ti('button.cancel'), '#',

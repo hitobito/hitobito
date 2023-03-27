@@ -32,8 +32,7 @@
         = f.help_inline(t('.hint_external_registration'))
       = f.labeled_input_fields(:self_registration_notification_email)
       - if can?(:set_main_self_registration_group, entry)
-        = f.labeled(:set_main_self_registration_group) do
-          = check_box_tag('group[set_main_self_registration_group]')
+        = f.labeled_boolean_field(:main_self_registration_group)
     - if entry.class.attr_used?(:nextcloud_url)
       = f.labeled_input_fields(:nextcloud_url)
 

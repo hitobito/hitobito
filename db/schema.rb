@@ -412,6 +412,7 @@ ActiveRecord::Schema.define(version: 2023_02_14_071940) do
     t.string "self_registration_notification_email"
     t.string "privacy_policy"
     t.string "nextcloud_url"
+    t.boolean "main_self_registration_group", default: false, null: false
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"

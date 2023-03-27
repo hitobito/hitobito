@@ -721,6 +721,7 @@ de:
     self_registration:
       form:
         privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
+        submit: Anmelden
       create:
         flash:
           privacy_policy_not_accepted: Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.

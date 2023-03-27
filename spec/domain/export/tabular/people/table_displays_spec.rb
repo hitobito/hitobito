@@ -36,7 +36,7 @@ describe Export::Tabular::People::TableDisplays do
 
     its(:attributes) do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-                 :zip_code, :town, :country, :gender, :birthday, :layer_group, :roles, :tags]
+                 :zip_code, :town, :country, :layer_group, :roles, :tags]
     end
 
     it 'does not allow accessing unregistered columns' do
@@ -120,7 +120,7 @@ describe Export::Tabular::People::TableDisplays do
 
     its(:attributes) do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-                :zip_code, :town, :country, :gender, :birthday, :layer_group, :roles, :tags]
+                :zip_code, :town, :country, :layer_group, :roles, :tags]
     end
 
     it 'includes additional person attributes if configured' do
@@ -140,8 +140,8 @@ describe Export::Tabular::People::TableDisplays do
     end
 
     it 'does not include the same attribute twice' do
-      table_display.selected = %i(person.gender)
-      expect(people_list.attributes.grep(/gender/).count).to eq 1
+      table_display.selected = %i(person.additional_information, person.additional_information)
+      expect(people_list.attributes.grep(/additional_information/).count).to eq 1
     end
 
     it 'does include dynamic attributes' do

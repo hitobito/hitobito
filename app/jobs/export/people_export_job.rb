@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2017-2020, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2017-2023, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -50,10 +50,22 @@ class Export::PeopleExportJob < Export::ExportBaseJob
   end
 
   def full?
-    @options[:full]
+    @options[:full] && index_full_ability?
+  end
+
+  def index_full_ability?
+    @index_full_ability ||= if filter.multiple_groups
+                              ability.can?(:index_deep_full_people, group)
+                            else
+                              ability.can?(:index_full_people, group)
+                            end
   end
 
   def filter
-    @filter ||= Person::Filter::List.new(Group.find(@group_id), user, @list_filter_args)
+    @filter ||= Person::Filter::List.new(group, user, @list_filter_args)
+  end
+
+  def group
+    @group ||= Group.find(@group_id)
   end
 end

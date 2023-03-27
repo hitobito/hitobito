@@ -37,7 +37,7 @@ describe Export::PeopleExportJob do
       lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
-      expect(lines[0].split(';').count).to match(15)
+      expect(lines[0].split(';').count).to match(13)
     end
 
     context 'household' do
@@ -55,6 +55,7 @@ describe Export::PeopleExportJob do
         expect(lines.size).to eq(2)
       end
     end
+
     context 'table_display' do
       let(:selection) { true }
       let(:csv) { CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true) }
@@ -102,7 +103,25 @@ describe Export::PeopleExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
       expect(lines[0]).to match(/Zusätzliche Angaben;.*/)
-      expect(lines[0].split(';').count).not_to match(14)
+      expect(lines[0].split(';').count).to match(17)
+    end
+
+    context ', except if missing permissions to do so, it' do
+
+      before do
+        user.roles.destroy_all
+        Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: user)
+      end
+
+      it 'falls back to address export' do
+        subject.perform
+
+        lines = file.read.lines
+        expect(lines.size).to eq(1)
+        expect(lines[0]).to match(/Vorname;Nachname;.*/)
+        expect(lines[0]).not_to match(/Zusätzliche Angaben;.*/)
+        expect(lines[0].split(';').count).to match(13)
+      end
     end
   end
 

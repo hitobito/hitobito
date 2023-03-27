@@ -19,7 +19,8 @@ class GroupsController < CrudController
     :remove_privacy_policy,
     :self_registration_notification_email,
     :self_registration_role_type,
-    :main_self_registration_group
+    :main_self_registration_group,
+    :custom_self_registration_title
   ]
 
   # required to allow api calls

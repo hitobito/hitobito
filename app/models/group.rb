@@ -73,6 +73,7 @@ class Group < ActiveRecord::Base
 
   attr_readonly :type
 
+  translates :custom_self_registration_title
   translates :privacy_policy_title
 
   ### CALLBACKS

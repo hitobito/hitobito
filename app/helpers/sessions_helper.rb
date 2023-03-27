@@ -6,6 +6,10 @@
 #  https://github.com/hitobito/hitobito_sww.
 
 module SessionsHelper
+  def render_self_registration_title(group)
+    group.custom_self_registration_title.presence || ti(:title, group_name: group.name )
+  end
+
   def render_self_registration_link
     return unless FeatureGate.enabled?('groups.self_registration')
 

@@ -480,6 +480,7 @@ de:
         type: Gruppentyp
         type_name: Gruppentyp
         description: Beschreibung
+        main_self_registration_group: Externe Registrierung Anzeige auf Loginseite
         member_count: Anzahl Mitglieder
         updated_at: Geändert
         self_registration_role_type: Externe Registrierung

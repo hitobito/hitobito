@@ -218,4 +218,4 @@ module ActiveRecordFixture
 end
 ActiveRecord::Fixture.prepend(ActiveRecordFixture)
 
-GraphitiSpecHelpers::RSpec.schema!
+#GraphitiSpecHelpers::RSpec.schema!

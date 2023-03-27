@@ -19,8 +19,6 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
                 if: :two_factor_authentication_pending?,
                 only: [:new]
 
-  helper_method :main_self_registration_group
-
   def create
     super do |resource|
       if second_factor_required?(resource)
@@ -50,12 +48,6 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
       'oauth'
     else
       'application'
-    end
-  end
-
-  def main_self_registration_group
-    @main_self_registration_group ||= FeatureGate.if('groups.self_registration') do
-      Group.find_by(main_self_registration_group: true)
     end
   end
 end

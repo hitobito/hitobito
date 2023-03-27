@@ -46,7 +46,11 @@ class GroupsController < CrudController
 
   def update
     assign_attributes
-    authorize!(:set_main_self_registration_group, entry) if entry.main_self_registration_group_changed?
+
+    if entry.main_self_registration_group_changed?
+      authorize!(:set_main_self_registration_group, entry)
+    end
+
     super
   end
 
@@ -77,9 +81,10 @@ class GroupsController < CrudController
 
   def update_main_self_registration_group
     return unless FeatureGate.enabled?('groups.self_registration') &&
-      entry.saved_change_to_main_self_registration_group?
+      entry.saved_change_to_main_self_registration_group? &&
+      entry.main_self_registration_group
 
-    Group.where.not(id: entry.id).update_all(main_self_registration_group: false) if entry.main_self_registration_group
+    Group.where.not(id: entry.id).update_all(main_self_registration_group: false)
   end
 
   def build_entry

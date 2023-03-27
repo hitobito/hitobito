@@ -23,6 +23,7 @@ jobs:
       RAILS_DB_NAME: hitobito_test
       RAILS_TEST_DB_NAME: hitobito_test
       TZ: Europe/Berlin
+      RAILS_USE_TEST_GROUPS: true
 
     services:
       mysql:

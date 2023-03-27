@@ -45,7 +45,12 @@ end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each do |f|
+  # Do not require the core testgroup/layer files when running in wagon
+  next if f =~ %r[spec/support/group/] && (ENV['APP_ROOT'].present? || ENV['RAILS_USE_TEST_GROUPS'].blank?)
+
+  require f
+end
 
 # Add test locales
 Faker::Config.locale = I18n.locale

@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Geburtstag und Geschlecht tauchen nicht mehr doppelt im "Spaltenauswahl"-Export von Personenlisten auf
+
 ## Version 1.28
 
 *  Fonts werden direkt von Hitobito ausgeliefert (#1632)
@@ -27,7 +31,7 @@
 *  Personen mit layer_full oder layer_and_below_full können neu Personen, welche in ihren Ebenen unter "Ohne Rollen" erscheinen, per globale Suchfunktion finden und anzeigen. (hitobito_sww#80)
 *  Anbindung an Nextcloud möglich (#1854)
 *  Rechnungen werden neu in einem Hintergrundprozess gedruckt (#2014)
-* Auf dem Buchungsbeleg sind die einzelnen Positionen nun verlinkt und führen auf eine Auflistung aller Rechnungen, welche die jeweilige Position beinhalten (hitobito_sww#69) 
+*  Auf dem Buchungsbeleg sind die einzelnen Positionen nun verlinkt und führen auf eine Auflistung aller Rechnungen, welche die jeweilige Position beinhalten (hitobito_sww#69) 
 
 
 ## Version 1.27

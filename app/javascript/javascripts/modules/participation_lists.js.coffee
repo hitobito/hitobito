@@ -16,16 +16,6 @@ app.ParticipationLists = {
     app.ParticipationLists.resetOptions(event.types)
     event.label
 
-  updateInvite: (e) ->
-    event = JSON.parse(e)
-    form = $('form#new_event_invitation')[0]
-    $("#new_event_invitation button[type='submit']").prop('disabled', false)
-    form.action = form.action.replace(/(\d|-)*?(?=\/\w*$)/, event['id'])
-    metaToken = $('meta[name=csrf-token]')[0].content
-    form.elements['authenticity_token'].value = metaToken
-    app.ParticipationLists.resetOptions(event.types)
-    event.label
-
   resetOptions: (types) ->
     select = $('#role_type')
     if types.length == 0

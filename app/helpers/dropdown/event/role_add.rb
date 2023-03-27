@@ -12,7 +12,13 @@ module Dropdown
 
       attr_reader :group, :event, :person
 
-      def initialize(template, group, event, person = nil, path_method = :new_group_event_role_path, include_restricted = false)
+      def initialize(template,
+                     group,
+                     event,
+                     person = nil,
+                     path_method = :new_group_event_role_path,
+                     include_restricted = false
+                    )
         label = translate("add_to_#{event.klass.name.underscore}",
                           default: full_translation_key(:add))
         super(template, label, :plus)

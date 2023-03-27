@@ -40,7 +40,7 @@ module Dropdown
 
     def build_event_invite_path(event)
       type = event == ::Event ? nil : event.to_s
-      template.group_events_participation_lists_invite_path(@group, type: type, label: event.label)
+      template.group_events_invitation_lists_new_path(@group, type: type, label: event.label)
     end
 
     def participation_lists_options

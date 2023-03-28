@@ -41,7 +41,7 @@
 #  index_groups_on_type            (type)
 #
 
-class Group < ActiveRecord::Base
+class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include Group::NestedSet
   include Group::Types
   include Contactable

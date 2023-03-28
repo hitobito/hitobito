@@ -9,10 +9,7 @@
     = f.hidden_field :type
 
   = field_set_tag do
-    = f.labeled_input_fields(:name, :short_name)
-    = f.labeled(:custom_self_registration_title) do
-      = f.input_field(:custom_self_registration_title)
-      = f.help_inline(t('.help_custom_self_registration_title'))
+    = f.labeled_input_fields(:name, :short_name, :custom_self_registration_title)
     - entry.modifiable_attributes(:description).each do |attr|
       = f.labeled_input_field attr
 

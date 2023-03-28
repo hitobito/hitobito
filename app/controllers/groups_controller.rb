@@ -49,6 +49,7 @@ class GroupsController < CrudController
     assign_attributes
 
     if entry.main_self_registration_group_changed?
+      # only people with `set_main_self_registration_group` ability may update this attribute
       authorize!(:set_main_self_registration_group, entry)
     end
 

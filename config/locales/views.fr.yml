@@ -369,6 +369,9 @@ fr:
         incomplete: des indications obligatoires manquent
       cancel_application:
         explanation: Tu es déjà inscrit-e à cet évènement.
+        pending: ' 
+
+          Vous êtes pré-inscrit à cet événement. L''inscription n''est pas définitive et doit être confirmée par la direction de l''événement.'
         waiting_list: Tu es sur la liste d'attente pour cet événement.
         caption: Désinscrire
         confirmation: "Es-tu sûr/sure de vouloir annuler ton inscription à cet évènement?"
@@ -456,6 +459,7 @@ fr:
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Ici, tu peux demander des informations supplémentaires pour les inscriptions.
       explain_choices: Laissez vide pour la réponse en texte libre, une ou plusieurs options de réponse (séparées par des virgules) pour la sélection.
+      explain_admin_questions: Ici, vous pouvez définir d'autres informations par participant, qui ne sont utilisées que pour la gestion des événements.
       explain_contact_attrs: Tu peux choisir les coordonnées requises pour l'inscription.
       caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
       caption_display_booking_info: Le nombre d'inscrits et de places libres est visible pour tous sur la liste de cours.
@@ -502,6 +506,7 @@ fr:
     instructions: 'Pour l''inscription définitive, tu dois imprimer cette page en utilisant l''option <i>imprimer</i>, puis la signer et l''envoyer par poste à l''adresse indiquée.'
     export_enqueued: 'l''exportation débute en arrière-plan et est téléchargée quand elle est terminée'
     waiting_list: 'Toutes les places sont actuellement prises, l''inscription est sur la liste d''attente.'
+    pending: ' Une pré-entrée a été créée pour  %{full_entry_label}. La participation n''est pas encore définitive et doit être confirmée par la direction de l''événement.'
     show:
       link:
         delete: 'Effacer l''inscription'
@@ -632,6 +637,7 @@ fr:
       no_deleted_sub_groups: 'Pas de groupes effacés.'
     form:
       help_contact: 'Utiliser l''adresse et le numéro de téléphone public de cette personne'
+      help_main_self_registration_group: 'Afficher le lien d''inscription de ce groupe sur la page de connexion principale.'
       hint_external_registration: 'Aucun rôle avec droit d''écriture ne peut être choisi'
     global:
       link:
@@ -656,6 +662,7 @@ fr:
     self_registration:
       form:
         privacy_policy_caption: "J'accepte les conditions suivantes:"
+        submit: S'inscrire
       create:
         flash:
           privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
@@ -726,6 +733,8 @@ fr:
     destroy:
       flash:
         success: Facture annulée
+    actions_show:
+      confirm_cancel: ' Voulez-vous vraiment annuler cette facture?'
     pdf:
       total: montant total
       total_vat: TVA
@@ -762,6 +771,10 @@ fr:
         filter:
           from: De
           to: Au
+  invoices/by_article:
+    index:
+      title: 'Factures pour l''article "%{name}"'
+      subtitle: 'Compte: "%{account}", Centre de coût: "%{cost_center}", %{from} – %{to}'
   invoice_configs:
     form_tabs:
       general: général
@@ -907,6 +920,7 @@ fr:
     unauthorized:
       forgot_password: 'Mot de passe oublié?'
       need_confirmation_email: 'Pas reçu de message de confirmation ?'
+      main_self_registration: 'Vous n''avez pas de compte ? Inscrivez-vous ici.'
     footer:
       available_under_license: 'disponible sous'
       developed_by: 'Développé par'

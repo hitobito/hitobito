@@ -70,6 +70,10 @@ fr:
           attributes:
             person_id:
               taken: est déjà annoncé
+        group:
+          attributes:
+            self_registration_role_type:
+              blank: '§doit être rempli si "Affichage sur la page de connexion" est sélectionné'
         message/letter_with_invoice:
           attributes:
             base:
@@ -495,6 +499,7 @@ fr:
       group:
         name: Nom
         short_name: Abréviation
+        custom_self_registration_title: Enregistrement externe Titre
         email: Adresse e-mail principale
         address: Adresse
         zip_code: NPA
@@ -511,11 +516,13 @@ fr:
         type: Type de groupe
         type_name: Type de groupe
         description: Description
+        main_self_registration_group: Enregistrement externe Affichage sur la page de connexion
         member_count: Nombre de membres
         updated_at: Modification
         self_registration_role_type: Enregistrement externe
         self_registration_link: Enregistrement externe
         self_registration_notification_email: Email de notification d'enregistrement externe
+        nextcloud_url: Lien vers Nextcloud
         remove_logo: supprimer le logo actuel du groupe
         privacy_policy_title: Déclaration de protection des données - Titre
         privacy_policy: Déclaration de protection des données
@@ -1077,6 +1084,7 @@ fr:
       people: Lire toutes les personnes auxquelles tu as accès
       invoices: Lire toutes les factures auxquelles tu as accès
       mailing_lists: Lire tous les abonnements auxquels tu as accès
+      nextcloud: Lire vos groupes Nextcloud et votre nom d'affichage
   errors:
     messages:
       attachments_not_allowed: "ne doit pas contenir d'annexe"

@@ -8,6 +8,7 @@
 require 'spec_helper'
 
 describe SessionsHelper do
+  include I18nHelper
   let(:group) { groups(:toppers) }
 
   describe '#render_self_registration_title' do

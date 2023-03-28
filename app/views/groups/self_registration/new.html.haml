@@ -3,6 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- title ti(:title, group_name: @group.name )
+- title render_self_registration_title(@group)
 
 = render 'form'
+= render_extensions 'conditions'

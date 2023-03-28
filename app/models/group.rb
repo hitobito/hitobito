@@ -41,7 +41,7 @@
 #  index_groups_on_type            (type)
 #
 
-class Group < ActiveRecord::Base
+class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include Group::NestedSet
   include Group::Types
   include Contactable
@@ -73,6 +73,7 @@ class Group < ActiveRecord::Base
 
   attr_readonly :type
 
+  translates :custom_self_registration_title
   translates :privacy_policy_title
 
   ### CALLBACKS
@@ -133,6 +134,7 @@ class Group < ActiveRecord::Base
   validates :contact, permission: :show_full, allow_blank: true, if: :contact_id_changed?
   validates :contact, inclusion: { in: ->(group) { group.people.members } }, allow_nil: true
   validates :privacy_policy_title, length: { allow_nil: true, maximum: 64 }
+  validates :self_registration_role_type, presence: { if: :main_self_registration_group? }
 
   validate :assert_valid_self_registration_notification_email
 

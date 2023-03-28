@@ -81,6 +81,10 @@ de:
           attributes:
             person_id:
               taken: ist bereits angemeldet
+        group:
+          attributes:
+            self_registration_role_type:
+              blank: 'muss ausgefüllt werden wenn "Anzeige auf Loginseite" ausgewählt ist'
         mailing_list:
           attributes:
             mail_name:
@@ -464,6 +468,7 @@ de:
       group:
         name: Name
         short_name: Kurzname
+        custom_self_registration_title: Externe Registrierung Titel
         email: Haupt-E-Mail
         address: Adresse
         zip_code: PLZ
@@ -480,6 +485,7 @@ de:
         type: Gruppentyp
         type_name: Gruppentyp
         description: Beschreibung
+        main_self_registration_group: Externe Registrierung Anzeige auf Loginseite
         member_count: Anzahl Mitglieder
         updated_at: Geändert
         self_registration_role_type: Externe Registrierung

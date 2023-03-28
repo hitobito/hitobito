@@ -19,6 +19,8 @@ class GroupsController < CrudController
     :remove_privacy_policy,
     :self_registration_notification_email,
     :self_registration_role_type,
+    :main_self_registration_group,
+    :custom_self_registration_title
   ]
 
   # required to allow api calls
@@ -28,6 +30,7 @@ class GroupsController < CrudController
 
   before_render_show :active_sub_groups, if: -> { html_request? }
   before_render_form :load_contacts
+  after_save :update_main_self_registration_group
 
   def index
     flash.keep if html_request?
@@ -40,6 +43,17 @@ class GroupsController < CrudController
         render json: GroupSerializer.new(entry.decorate, controller: self)
       end
     end
+  end
+
+  def update
+    assign_attributes
+
+    if entry.main_self_registration_group_changed?
+      # only people with `set_main_self_registration_group` ability may update this attribute
+      authorize!(:set_main_self_registration_group, entry)
+    end
+
+    super
   end
 
   def destroy
@@ -66,6 +80,14 @@ class GroupsController < CrudController
   def person_notes; end
 
   private
+
+  def update_main_self_registration_group
+    return unless FeatureGate.enabled?('groups.self_registration') &&
+      entry.saved_change_to_main_self_registration_group? &&
+      entry.main_self_registration_group
+
+    Group.where.not(id: entry.id).update_all(main_self_registration_group: false)
+  end
 
   def build_entry
     type = model_params && model_params[:type]

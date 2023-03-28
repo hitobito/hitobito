@@ -3,16 +3,12 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form(url: group_self_registration_path, cancel_url: '') do |f|
+= entry_form(url: group_self_registration_path, cancel_url: '', submit_label: t('.submit'), buttons_top: false) do |f|
   = f.honeypot(:verification)
 
   = f.fields_for(:new_person, entry.person) do |fields|
     = render('shared/error_messages', errors: entry.person.errors, object: entry.person)
     = field_set_tag do
-      = fields.labeled_input_fields :first_name, :last_name
-      = fields.labeled_input_field :nickname if Person::PUBLIC_ATTRS.include?(:nickname)
-      = fields.labeled_input_fields :company_name, :company
-      = fields.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
-      = render_extensions :additional_person_fields, locals: { fields: fields }
+      = render('fields', fields: fields)
 
       = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: fields)

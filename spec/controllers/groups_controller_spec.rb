@@ -146,6 +146,39 @@ describe GroupsController do
           put :update, params: { id: group, group: attrs.merge(name: 'foobar', contact_id: non_member.id) }
         end.not_to change { group.reload.contact_id }
       end
+
+      it 'allows enabling #main_self_registration_group' do
+        expect do
+          put :update, params: { id: group, group: {main_self_registration_group: '1'} }
+        end.to change { group.reload.main_self_registration_group }.to true
+      end
+
+      it 'allows disabling #main_self_registration_group' do
+        group.update_column(:main_self_registration_group, true)
+        expect do
+          put :update, params: { id: group, group: {main_self_registration_group: '0'} }
+        end.to change { group.reload.main_self_registration_group }.to false
+      end
+
+      it 'clears other groups #main_self_registration_group' do
+        groups(:bottom_group_one_two).update_column(:main_self_registration_group, true)
+
+        expect do
+          put :update, params: { id: group, group: {main_self_registration_group: '1'} }
+        end.to change { groups(:bottom_group_one_two).reload.main_self_registration_group }.to false
+      end
+
+      it 'denies setting #main_self_registration_group without permission' do
+        user = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)).person
+        expect(Ability.new(user)).to be_able_to(:update, group)
+        expect(Ability.new(user)).not_to be_able_to(:set_main_self_registration_group, group)
+
+        sign_in(user)
+
+        expect do
+          put :update, params: { id: group, group: {main_self_registration_group: '1'} }
+        end.to raise_error(CanCan::AccessDenied)
+      end
     end
 
     describe '#destroy' do

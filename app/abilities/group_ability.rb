@@ -80,6 +80,8 @@ class GroupAbility < AbilityDsl::Base
     permission(:group_full).may(:log).in_same_group_if_active
     permission(:group_and_below_full).may(:log).in_same_group_or_below_if_active
 
+    permission(:admin).may(:set_main_self_registration_group).in_active_group
+
     general(:update).group_not_deleted
     general(:index_person_add_requests,
             :activate_person_add_requests,

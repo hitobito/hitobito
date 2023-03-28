@@ -696,6 +696,7 @@ de:
       no_deleted_sub_groups: 'Keine gelöschten Gruppen vorhanden.'
     form:
       help_contact: 'Adresse und öffentliche Telefonnummern dieser Person verwenden.'
+      help_main_self_registration_group: 'Den Registrierungslink dieser Gruppe auf der Hauptloginseite anzeigen.'
       hint_external_registration: 'Es sind keine Rollen mit Schreibrechten auswählbar'
     global:
       link:
@@ -720,6 +721,7 @@ de:
     self_registration:
       form:
         privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
+        submit: Registrieren
       create:
         flash:
           privacy_policy_not_accepted: Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
@@ -986,6 +988,7 @@ de:
     unauthorized:
       forgot_password: 'Passwort vergessen?'
       need_confirmation_email: 'Keine Bestätigungs-E-Mail bekommen?'
+      main_self_registration: 'Kein Account? Registrieren Sie sich hier.'
 
     footer:
       available_under_license: 'verfügbar unter der'

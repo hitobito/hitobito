@@ -255,7 +255,7 @@ describe 'Email verification', js: true do
       fill_in 'Vorname', with: 'New'
       fill_in 'Nachname', with: 'Guy'
       fill_in 'Haupt-E-Mail', with: 'newguy@example.com'
-      first(:button, 'Speichern').click
+      first(:button, 'Registrieren').click
       is_expected.to have_text 'Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.'
       expect(Person.find_by(email: 'newguy@example.com').confirmed?).to be_falsey
 

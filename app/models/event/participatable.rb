@@ -44,19 +44,19 @@ module Event::Participatable
                   pluck(:label)
   end
 
+  # All assigned participations (no leaders/teamers)
+  def participants_scope
+    participations.active.
+      joins(:roles).
+      where(event_roles: { type: participant_types.collect(&:sti_name) })
+  end
+
   private
 
   # All members of the leading team (non-participants)
   def teamers_scope
     active_participations_without_affiliate_types.
       where.not(event_roles: { type: participant_types.collect(&:sti_name) })
-  end
-
-  # All assigned participations (no leaders/teamers)
-  def participants_scope
-    participations.active.
-                   joins(:roles).
-                   where(event_roles: { type: participant_types.collect(&:sti_name) })
   end
 
   # Assigned participations (all prios, no leaders/teamers) and unassigned with prio 1

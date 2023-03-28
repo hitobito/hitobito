@@ -526,7 +526,7 @@ de:
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     add_tag: Tag hinzufügen
     invitations:
-      description: 'Eingeladene Personen können sich via %{model_name}-Seite für den %{model_name} an- oder abmelden. Sie erhalten kein automatisches Mail.'
+      description: 'Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail.'
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'

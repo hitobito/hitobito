@@ -81,6 +81,10 @@ de:
           attributes:
             person_id:
               taken: ist bereits angemeldet
+        group:
+          attributes:
+            self_registration_role_type:
+              blank: 'muss ausgefüllt werden wenn "Anzeige auf Loginseite" ausgewählt ist'
         mailing_list:
           attributes:
             mail_name:

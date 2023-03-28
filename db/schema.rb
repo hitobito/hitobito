@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_14_071940) do
+ActiveRecord::Schema.define(version: 2023_03_27_151218) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -380,6 +380,7 @@ ActiveRecord::Schema.define(version: 2023_02_14_071940) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "privacy_policy_title"
+    t.string "custom_self_registration_title"
     t.index ["group_id"], name: "index_group_translations_on_group_id"
     t.index ["locale"], name: "index_group_translations_on_locale"
   end

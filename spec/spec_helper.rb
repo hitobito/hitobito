@@ -47,7 +47,7 @@ end
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each do |f|
   # Do not require the core testgroup/layer files when running in wagon
-  next if f =~ %r[spec/support/group/] && (ENV['APP_ROOT'].present? || ENV['RAILS_USE_TEST_GROUPS'].blank?)
+  next if f =~ %r[spec/support/group/(?!0_base.rb)] && (ENV['APP_ROOT'].present? || ENV['RAILS_USE_TEST_GROUPS'].blank?)
 
   require f
 end

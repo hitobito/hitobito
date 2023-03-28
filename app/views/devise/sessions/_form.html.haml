@@ -15,3 +15,6 @@
     = link_to t('layouts.unauthorized.forgot_password'), new_person_password_path
     |
     = link_to t('layouts.unauthorized.need_confirmation_email'), new_person_confirmation_path
+    |
+    - if FeatureGate.enabled?('groups.self_registration') && main_self_registration_group
+      = link_to t('layouts.unauthorized.main_self_registration'), group_self_registration_path(group_id: main_self_registration_group.id)

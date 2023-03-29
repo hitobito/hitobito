@@ -283,7 +283,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   #   labeled(:attr, content)
   #   labeled(:attr, 'Caption') { #content }
   #   labeled(:attr, 'Caption', content)
-  def labeled(attr, caption_or_content = nil, content = nil, html_options = {}, &block) # rubocop:disable Metrics/MethodLength
+  def labeled(attr, caption_or_content = nil, content = nil, **html_options, &block) # rubocop:disable Metrics/MethodLength
     if block_given?
       content = capture(&block)
     elsif content.nil?
@@ -294,7 +294,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     add_css_class(html_options, 'controls')
     css_classes = { 'control-group' => true,
                     error: errors_on?(attr),
-                    required: required?(attr),
+                    required: html_options[:required] || required?(attr),
                     'no-attachments': no_attachments?(attr) }
     content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(' ')) do
       label(attr, caption_or_content, class: 'control-label') +
@@ -450,15 +450,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     label = options.delete(:label)
     addon = options.delete(:addon)
 
-    labeled_args = [args.first]
-    labeled_args << label if label.present?
+    attr = args.first
+    caption = label if label.present?
 
-    text = send(field_method, *(args << options))
-    text = with_addon(addon, text) if addon.present?
-    with_labeled_field_help(args.first, options) { |help| text << help }
+    content = send(field_method, *(args << options))
+    content = with_addon(addon, content) if addon.present?
+    with_labeled_field_help(args.first, options) { |help| content << help }
 
-    labeled_args << text
-    labeled(*labeled_args)
+    labeled(attr, caption, content, required: options[:required])
   end
 
   def with_labeled_field_help(field, options)

@@ -50,3 +50,8 @@
   padding: 2px;
   cursor: pointer;
 }
+.crop-to-square {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}

@@ -52,6 +52,9 @@ describe 'Dropdown::PeopleExport' do
     is_expected.to have_selector 'a' do |tag|
       expect(tag).to have_content 'E-Mail Adressen'
     end
+    is_expected.to have_selector 'a' do |tag|
+      expect(tag).to have_content 'E-Mail Adressen (Outlook)'
+    end
   end
 
   context 'for global labels' do

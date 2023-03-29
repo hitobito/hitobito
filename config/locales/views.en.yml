@@ -134,6 +134,7 @@ en:
     labels: 'Labels'
     pdf: 'PDF'
     emails: 'E-Mail addresses'
+    emails_outlook: 'E-Mail addresses (Outlook)'
     addresses: 'Address list'
     households: 'Households'
     everything: 'All information'

@@ -156,6 +156,7 @@ de:
     labels: 'Etiketten'
     pdf: 'PDF'
     emails: 'E-Mail Adressen'
+    emails_outlook: 'E-Mail Adressen (Outlook)'
     addresses: 'Adressliste'
     households: 'Haushaltsliste'
     everything: 'Alle Angaben'

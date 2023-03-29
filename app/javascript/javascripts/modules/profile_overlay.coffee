@@ -7,10 +7,10 @@ app = window.App ||= {}
 
 app.ProfileImageOverlay = {
   show: ->
-    $('.profil-image-overlay').addClass('active')
+    $('.profile-image-overlay').addClass('active')
   hide: ->
-    $('.profil-image-overlay').removeClass('active') 
+    $('.profile-image-overlay').removeClass('active')
 }
 
 $(document).on 'click', '.profil-big', app.ProfileImageOverlay.show
-$(document).on 'click', '.profil-image-overlay', app.ProfileImageOverlay.hide
+$(document).on 'click', '.profile-image-overlay', app.ProfileImageOverlay.hide

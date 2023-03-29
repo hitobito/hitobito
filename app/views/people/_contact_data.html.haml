@@ -6,9 +6,9 @@
 .contactable.well
   .profil-big.pull-right
     = image_tag(upload_url(person, :picture, size: '72x72', default: 'profil'), size: '72x72')
-  .profil-image-overlay
+  .profile-image-overlay
     .img
-      = image_tag(upload_url(person, :picture, size: '512x512', default: 'profil'), size: '512x512') 
+      = image_tag(upload_url(person, :picture, size: '512x512', default: 'profil'), size: '512x512')
   .contact-marker.pull-right
     =  link_to_address person
 

@@ -46,9 +46,8 @@ class GroupsController < CrudController
   end
 
   def update
-    assign_attributes
-
-    if entry.main_self_registration_group_changed?
+    new_attr_value = permitted_params[:main_self_registration_group].present?
+    if entry.main_self_registration_group != new_attr_value
       # only people with `set_main_self_registration_group` ability may update this attribute
       authorize!(:set_main_self_registration_group, entry)
     end

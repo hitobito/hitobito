@@ -5,6 +5,37 @@
   overflow: hidden;
   @include border-radius(3px);
 }
+.profile-image-overlay {
+  // Hide image above page by default
+  opacity: 0;
+  top: -100%;
+  transition: opacity 0.5s ease, top 0.5s ease;
+  left: 0;
+
+  // Gray overlay over whole page
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  z-index: 200;
+  background-color: rgba($color: $black, $alpha: 0.5);
+  cursor: pointer;
+  &.active {
+    opacity: 1;
+    top: 0;
+  }
+  .img {
+    width: 512px;
+    height: 512px;
+    margin: 50px auto;
+    padding: 5px;
+    background: $white;
+    border: 1px solid $grayLight;
+    overflow: hidden;
+    @include border-radius(3px);
+  }
+}
 .profil {
   width: 32px;
   height: 32px;
@@ -17,4 +48,10 @@
   width: 72px;
   height: 72px;
   padding: 2px;
+  cursor: pointer;
+}
+.crop-to-square {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
 }

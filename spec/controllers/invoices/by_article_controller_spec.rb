@@ -35,10 +35,8 @@ describe Invoices::ByArticleController do
       account = 'some_account'
 
       invoice = Fabricate(:invoice, recipient_email: 'test@example.com', group: group)
-
-      payments = stub('payments')
-      expect(payments).to receive(:pluck).with(:invoice_id).and_return([invoice.id])
-
+      payment = Payment.new(invoice: invoice, amount: 10)
+      payment.save!
       payments_collection = instance_double(Payments::Collection)
       expect(Payments::Collection).to receive(:new).and_return(payments_collection)
       expect(payments_collection).to receive(:in_layer).with(group.id).and_return(payments_collection)
@@ -46,7 +44,7 @@ describe Invoices::ByArticleController do
       expect(payments_collection).to receive(:to).with(to).and_return(payments_collection)
       expect(payments_collection).to receive(:having_invoice_item).with(name, account, cost_center)
                                                                   .and_return(payments_collection)
-      allow(payments_collection).to receive(:payments).and_return(payments)
+      allow(payments_collection).to receive(:payments).and_return([payment])
 
       get :index, params: {
         group_id: group.id,

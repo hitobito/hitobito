@@ -7,8 +7,7 @@
 
   = f.labeled_person_field(:person)
   = f.hidden_field(:event_id)
-  = f.hidden_field(:participation_type, value: params[:event_role]['type'])
-  = hidden_field_tag("event_role[type]", params[:event_role]['type'])
+  = f.hidden_field(:participation_type)
 
 %p
   =t("events.invitations.description", model_name: entry.event.model_name.human)

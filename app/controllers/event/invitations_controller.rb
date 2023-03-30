@@ -26,7 +26,7 @@ class Event::InvitationsController < CrudController
   def group
     @group = Group.find(params[:group_id])
   end
-  
+
   def event
     @event = group.events.find(params[:event_id])
   end

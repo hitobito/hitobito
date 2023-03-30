@@ -140,6 +140,9 @@ de:
   dropdown/event/role_add:
     add: 'Person hinzufügen'
 
+  dropdown/event/invitation_add:
+    add: 'Person einladen'
+
   dropdown/event/participant_add:
     as: 'als %{role}'
 

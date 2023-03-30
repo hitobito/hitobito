@@ -122,9 +122,9 @@ countries:
 
 # Presets for CSV export
 csv:
-  # optimized for M$ Excel
   separator: ;
-  encoding: ISO-8859-1
+  encoding: UTF-8
+  utf8_bom: true # allowing M$ Excel to read UTF-8
 
 # Presets for XLSX export
 xlsx:

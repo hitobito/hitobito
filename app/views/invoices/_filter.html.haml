@@ -16,6 +16,6 @@
 
     %div
       .pull-right.invoices-daterange-filter
-        = direct_filter_date(:from, t('.from'), value: params[:from] || "1.1.#{@year || Time.zone.today.year}", data: { submit: true })
-        = direct_filter_date(:to, t('.to'), value: params[:to] || "31.12.#{@year || Time.zone.today.year}", data: { submit: true })
+        = direct_filter_date(:from, t('.from'), value: params[:from] || "1.1.#{@year_from || Time.zone.today.year}", data: { submit: true })
+        = direct_filter_date(:to, t('.to'), value: params[:to] || "31.12.#{Time.zone.today.year}", data: { submit: true })
 - params[:q] = nil # Reset param so quicksearch filter does not get populated

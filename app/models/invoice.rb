@@ -119,9 +119,10 @@ class Invoice < ActiveRecord::Base
       to = Date.parse(to) if to.is_a? String
 
       condition = OrCondition.new
-      condition.or('issued_at > :from AND issued_at < :to', from: from, to: to)
+      condition.or('issued_at >= :from AND issued_at <= :to', from: from, to: to)
       condition.or('issued_at IS NULL AND ' \
-                   'invoices.created_at > :from AND invoices.created_at < :to', from: from, to: to)
+                   'invoices.created_at >= :from AND invoices.created_at <= :to',
+                   from: from, to: to)
       where(condition.to_a)
     end
 

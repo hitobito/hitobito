@@ -150,7 +150,7 @@ class EventsController < CrudController
     if current_user
       invitation = current_user.event_invitations.find_by(event_id: entry.id)
       if invitation.present?
-          @my_invitation = invitation
+        @my_invitation = invitation
       end
     end
   end

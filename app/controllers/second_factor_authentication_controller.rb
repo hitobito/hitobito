@@ -14,7 +14,7 @@ class SecondFactorAuthenticationController < ApplicationController
   before_action :redirect_on_locked, if: :access_locked?
   before_action :redirect_to_root, unless: :allowed?
 
-  helper_method :authentication_factor, :person, :secret
+  helper_method :authentication_factor, :person, :secret, :otp
 
   def new
     authenticator.prepare_registration! unless authenticator.registered?
@@ -47,6 +47,10 @@ class SecondFactorAuthenticationController < ApplicationController
   end
 
   private
+
+  def otp
+    @otp ||= People::OneTimePassword.new(secret, person: person)
+  end
 
   def authenticator
     @authenticator ||= {

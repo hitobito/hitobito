@@ -10,6 +10,9 @@ class Event::InvitationsController < CrudController
 
   self.nesting = [Group, Event]
 
+  # TODO: open / accepted is not distinguished yet
+  self.sort_mappings = { 'status': ['declined_at'] }
+
   decorates :group, :event
 
   prepend_before_action :parent, :group
@@ -23,15 +26,20 @@ class Event::InvitationsController < CrudController
   def group
     @group = Group.find(params[:group_id])
   end
-  
+
   def event
     @event = group.events.find(params[:event_id])
   end
 
   def set_success_notice
-    msg = I18n.t('event_invitations.create.flash.success',
-                 recipient_name: entry.person.full_name,
-                 participation_type: entry.participation_type.constantize.model_name.human)
+    if action_name.to_s == 'create'
+      msg = I18n.t('event_invitations.create.flash.success',
+                   recipient_name: entry.person.full_name,
+                   participation_type: entry.participation_type.constantize.model_name.human)
+    elsif action_name.to_s == 'destroy'
+      msg = I18n.t('event_invitations.destroy.flash.success',
+                   recipient_name: entry.person.full_name)
+    end
 
     flash[:notice] = msg
   end

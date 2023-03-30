@@ -5,7 +5,10 @@
 
 = crud_table do |t|
   - t.sortable_attr(:person)
+  - t.col(Person.human_attribute_name(:email)) do |invitation|
+    - mail_to invitation.person.email if can?(:show, invitation.person)
   - t.col(Event::Invitation.human_attribute_name(:participation_type)) do |invitation|
-    %strong
-      = invitation.participation_type.constantize.model_name.human
-  - t.sortable_attrs :status, :declined_at, :created_at
+    = invitation.participation_type.constantize.model_name.human
+  - t.sortable_attr(:status)
+  - t.sortable_attrs :declined_at, :created_at
+  - add_table_actions(t)

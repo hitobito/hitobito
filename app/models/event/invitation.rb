@@ -25,6 +25,15 @@ class Event::Invitation < ActiveRecord::Base
   belongs_to :event
   belongs_to :person
 
+  validates_by_schema
+  validates :person_id,
+    uniqueness: { scope: :event_id,
+                  message: -> (s, _) {
+                    I18n.t("event_invitations.invalid_existing_person",
+                           model_name: s.event.model_name.human)
+                  }
+    }
+
   def status
     if related_participation.present?
       :accepted

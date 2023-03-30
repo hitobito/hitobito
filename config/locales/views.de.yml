@@ -526,6 +526,8 @@ de:
       participants: 'Teilnehmende'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     add_tag: Tag hinzufügen
+    invitations:
+      description: 'Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail.'
 
   event/applications:
     approved: 'Die Anmeldung wurde freigegeben.'

@@ -17,10 +17,10 @@ class Event::InvitationAbility < AbilityDsl::Base
       in_same_group_or_below_and_invitations_supported
     permission(:layer_full).
       may(:new, :create, :edit).
-      in_same_group_and_invitations_supported
+      in_same_layer_and_invitations_supported
     permission(:layer_and_below_full).
       may(:new, :create, :edit).
-      in_same_group_or_below_and_invitations_supported
+      in_same_layer_or_below_and_invitations_supported
 
     permission(:any).may(:decline).own_invitation
   end

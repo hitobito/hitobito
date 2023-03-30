@@ -43,5 +43,61 @@ describe People::OneTimePassword do
 
       expect(subject.verify(totp_authenticator.now)).to_not be_nil
     end
+
+    it 'returns timestamp if input token is not expired' do
+      @secret = generate_token
+
+      current_time = Time.now
+      travel_to Time.new(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.min, 2)
+      current_token = totp_authenticator.now
+
+      travel 5.seconds
+      expect(subject.verify(current_token)).to_not be_nil
+
+    end
+
+    it 'returns timestamp if input token is expired since less than 15s' do
+      @secret = generate_token
+
+      current_time = Time.now
+      travel_to Time.new(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.min, 2)
+      current_token = totp_authenticator.now
+      
+      travel 35.seconds
+      expect(subject.verify(current_token)).to_not be_nil
+    end
+
+    it 'returns timestamp if input token will be valid in less than 15s' do
+      @secret = generate_token
+
+      current_time = Time.now
+      travel_to Time.new(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.min, 2)
+      current_token = totp_authenticator.now
+      
+      travel -5.seconds
+      expect(subject.verify(current_token)).to_not be_nil
+    end
+
+    it 'returns nil if input token expired more than 15s ago' do
+      @secret = generate_token
+
+      current_time = Time.now
+      travel_to Time.new(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.min, 2)
+      current_token = totp_authenticator.now
+      
+      travel -50.seconds
+      expect(subject.verify(current_token)).to eq(nil)
+    end
+
+    it 'returns nil if input token will be valid in 15s or more' do
+      @secret = generate_token
+
+      current_time = Time.now
+      travel_to Time.new(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.min, 2)
+      current_token = totp_authenticator.now
+      
+      travel -25.seconds
+      expect(subject.verify(current_token)).to eq(nil)
+    end
   end
 end

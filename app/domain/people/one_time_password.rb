@@ -27,7 +27,8 @@ class People::OneTimePassword
   end
 
   def verify(token)
-    authenticator.verify(token)
+    drift = Settings.people.totp_drift
+    authenticator.verify(token, drift_ahead: drift, drift_behind: drift)
   end
 
   private

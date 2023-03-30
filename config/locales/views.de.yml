@@ -460,7 +460,7 @@ de:
       title: Zwei-Faktor-Authentifizierung
       hint_registered_html: "Bitte gib den angezeigten Code aus deiner Authenticator-App an, um deine Identität zu bestätigen."
       hint_unregistered_html: "Bitte scanne den QR-Code mit deinem Smartphone mittels Authenticator-App und gib den angezeigten Code an, um die Zwei-Faktor-Authentifizierung zu aktivieren. Noch keine Authenticator-App installiert? Wir empfehlen dir %{link} "
-      copy_secret: "HIER"
+      copy_secret: "hier"
       hint_copy_secret_html: "Wenn du den 2FA-Schlüssel direkt kopieren möchtest, kannst du %{link} klicken, um ihn zu kopieren."
     form:
       totp_code: One-Time Code
@@ -1546,7 +1546,7 @@ de:
 
     totp_reset:
       flashes:
-        success: Zwei-Faktor-Authentifizierung erfolgreich zurückgesetzt
+        success: Du wirst beim nächsten Login aufgefordert, Zwei-Faktor-Authentifizierung erneut einzurichten
 
     totp_disable:
       flashes:

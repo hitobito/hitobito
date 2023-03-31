@@ -13,9 +13,7 @@ module Export::Tabular::Invitations
     end
 
     def mail
-      #todo: can does not exist here
-      #entry.person.email if can?(:show, entry.person)
-      entry.person.email
+      entry.person.email if can?(:show, entry.person)
     end
 
     def participation_type
@@ -33,6 +31,13 @@ module Export::Tabular::Invitations
     def created_at
       entry.created_at
     end
+
+    private
+
+    def can?(*args)
+      ability.can?(*args)
+    end
+
   end
 end
 

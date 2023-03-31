@@ -17,11 +17,15 @@ module Export::Tabular
     class_attribute :dynamic_attributes
     self.dynamic_attributes = {}
 
-    attr_reader :entry, :format
+    attr_reader :entry, :format, :ability
 
-    def initialize(entry, format = nil)
+    def initialize(entry, format = nil, ability = nil)
       @entry = entry
       @format = format
+    end
+
+    def set_ability(ability)
+      @ability = ability
     end
 
     def fetch(attr)

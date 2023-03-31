@@ -14,7 +14,7 @@ module Export::Tabular
     self.row_class = Export::Tabular::Row
     self.auto_filter = true
 
-    attr_reader :list
+    attr_reader :list, :ability
 
     class << self
       def export(format, *args)
@@ -40,8 +40,9 @@ module Export::Tabular
       end
     end
 
-    def initialize(list)
+    def initialize(list, abilitiy = nil)
       @list = list
+      @ability = abilitiy
     end
 
     # The list of all attributes exported to the csv/xlsx.
@@ -95,7 +96,11 @@ module Export::Tabular
     end
 
     def row_for(entry, format = nil)
-      row_class.new(entry, format)
+      row = row_class.new(entry, format)
+      if ability
+        row.set_ability(ability)
+      end
+      return row
     end
 
   end

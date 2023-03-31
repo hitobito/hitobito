@@ -70,7 +70,11 @@ class Event::InvitationsController < CrudController
 
   def render_tabular(format)
     exporter = Export::Tabular::Invitations::List
-    send_data exporter.export(format, entries), type: format
+    send_data exporter.export(format, entries, ability), type: format
+  end
+
+  def ability
+    @ability ||= Ability.new(Person.find(current_user.id))
   end
 
   class << self

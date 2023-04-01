@@ -32,12 +32,6 @@ module Export::Tabular::Invitations
       entry.created_at
     end
 
-    private
-
-    def can?(*args)
-      ability.can?(*args)
-    end
-
   end
 end
 

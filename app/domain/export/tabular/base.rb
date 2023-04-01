@@ -95,9 +95,9 @@ module Export::Tabular
 
     def row_for(entry, format = nil)
       row = row_class.new(entry, format)
-      if ability
-        row.set_ability(ability)
-      end
+      # see comment in Export::Tabular::Row for explanation
+      # why this is not included in `new()`
+      row.ability = ability
       return row
     end
   end

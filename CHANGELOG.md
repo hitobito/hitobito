@@ -9,6 +9,7 @@
 *  Die Rechnungsliste einer Sammelrechnung zeigt neu standardmässig nicht mehr Rechnungen vom aktuellen Jahr, sondern alle Rechnungen seit Erstellung der Sammelrechnung an. Merci @lukas-buergi! (#2047)
 *  Die Zwei-Faktor-Authentisierung ist jetzt etwas kulanter, wenn man den Code knapp zu spät eingibt, sowie bei der Verwendung von Hardware OTP Keys. Merci @cleverer! (#2052)
 *  Die Ansicht um Zwei-Faktor-Authentisierung einzurichten wurde für Mobile optimiert, und man kann die Zwei-Faktor-Authentisierung jetzt auch einrichten, ohne den QR-Code zu scannen, indem man das Secret kopiert. Merci @TeamBattino! (#2046)
+*  Rollen können neu als `self.basic_permissions_only = true` markiert werden. Dies führt zu eingeschränkten Ansichten und Berechtigungen für die betroffene Person (sww#120)
 
 ## Version 1.28
 

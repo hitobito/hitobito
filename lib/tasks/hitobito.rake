@@ -9,11 +9,11 @@ namespace :hitobito do
   desc 'Print all groups, roles and permissions'
   task roles: :environment do
     Role::TypeList.new(Group.root_types.first).each do |layer, groups|
-      puts '* ' + layer
+      puts '    * ' + layer
       groups.each do |group, roles|
-        puts '  * ' + group
+        puts '      * ' + group
         roles.each do |r|
-          puts "    * #{r.label}: #{r.permissions.inspect}"
+          puts "        * #{r.label}: #{'2FA ' if r.two_factor_authentication_enforced}#{r.permissions.inspect}"
         end
       end
     end

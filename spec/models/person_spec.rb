@@ -482,7 +482,7 @@ describe Person do
     expect(attrs[:last_name]).to eq(label: 'Nachname', type: :string)
     expect(attrs[:nickname]).to eq(label: 'Übername', type: :string)
     expect(attrs[:company_name]).to eq(label: 'Firmenname', type: :string)
-    expect(attrs[:email]).to eq(label: 'Haupt-E-Mail', type: :string)
+    expect(attrs[:email]).to eq(label: 'E-Mail', type: :string)
     expect(attrs[:address]).to eq(label: 'Adresse', type: :text)
     expect(attrs[:zip_code]).to eq(label: 'PLZ', type: :string)
     expect(attrs[:town]).to eq(label: 'Ort', type: :string)

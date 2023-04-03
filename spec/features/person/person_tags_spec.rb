@@ -58,7 +58,7 @@ describe 'Person Tags', js: true do
         expect(all('.person-tags-category')[1].all('.person-tag').map(&:text)).
           to eq(%w(potato))
         expect(all('.person-tags-category')[2].all('.person-tag').map(&:text)).
-          to eq(['Haupt-E-Mail ungültig'])
+          to eq(['E-Mail ungültig'])
         expect(all('.person-tags-category')[3].all('.person-tag').map(&:text)).
           to eq(%w(pizza))
       end

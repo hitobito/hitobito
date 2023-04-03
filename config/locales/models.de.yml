@@ -107,7 +107,7 @@ de:
                         ist bereits vergeben. Diese Adresse muss für alle Personen
                         eindeutig sein, da sie beim Login verwendet wird. Du kannst jedoch unter
                         'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
-                        als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
+                        als Haupt-E-Mail vergeben sind (Die E-Mail
                         kann leer gelassen werden).
         person/add_request:
           attributes:
@@ -409,7 +409,7 @@ de:
         company_name: Firmenname
         company: Firma
         nickname: Übername
-        email: Haupt-E-Mail
+        email: E-Mail
         emails: E-Mails
         layer_group: Hauptebene
         password: Passwort

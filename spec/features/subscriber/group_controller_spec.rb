@@ -84,7 +84,7 @@ describe Subscriber::GroupController, js: true do
 
         collection_select.fill_in(with: 'Mail')
 
-        find('.chosen-drop li.active-result', text: 'Haupt-E-Mail ungültig').click
+        find('.chosen-drop li.active-result', text: 'E-Mail ungültig').click
 
         collection_select.fill_in(with: 'Mail')
 
@@ -96,7 +96,7 @@ describe Subscriber::GroupController, js: true do
         expect(page).to have_content('Abonnent Bottom One wurde erfolgreich')
 
         expect(page).to have_content('Nur Personen mit:')
-        is_expected.to have_selector('span.person-tag', text: 'Haupt-E-Mail ungültig')
+        is_expected.to have_selector('span.person-tag', text: 'E-Mail ungültig')
         is_expected.to have_selector('span.person-tag', text: 'Weitere E-Mail ungültig')
       end
     end
@@ -109,7 +109,7 @@ describe Subscriber::GroupController, js: true do
 
         collection_select.fill_in(with: 'Mail')
 
-        find('.chosen-drop li.active-result', text: 'Haupt-E-Mail ungültig').click
+        find('.chosen-drop li.active-result', text: 'E-Mail ungültig').click
 
         collection_select.fill_in(with: 'Mail')
 
@@ -121,7 +121,7 @@ describe Subscriber::GroupController, js: true do
         expect(page).to have_content('Abonnent Bottom One wurde erfolgreich')
 
         expect(page).to have_content('Personen ausschliessen mit:')
-        is_expected.to have_selector('span.person-tag', text: 'Haupt-E-Mail ungültig')
+        is_expected.to have_selector('span.person-tag', text: 'E-Mail ungültig')
         is_expected.to have_selector('span.person-tag', text: 'Weitere E-Mail ungültig')
       end
     end
@@ -134,7 +134,7 @@ describe Subscriber::GroupController, js: true do
 
         excluded_collection_select.fill_in(with: 'Mail')
 
-        find('.chosen-drop li.active-result', text: 'Haupt-E-Mail ungültig').click
+        find('.chosen-drop li.active-result', text: 'E-Mail ungültig').click
 
         expect(excluded_collection_select).to have_selector('li.search-choice', count: 2)
 
@@ -144,7 +144,7 @@ describe Subscriber::GroupController, js: true do
 
         included_collection_select.fill_in(with: 'Mail')
 
-        find('.chosen-drop li.active-result', text: 'Haupt-E-Mail ungültig').click
+        find('.chosen-drop li.active-result', text: 'E-Mail ungültig').click
 
         expect(included_collection_select).to have_selector('li.search-choice', count: 2)
 
@@ -153,7 +153,7 @@ describe Subscriber::GroupController, js: true do
 
         expect(page).to have_content('Personen ausschliessen mit:')
         expect(page).to have_content('Nur Personen mit:')
-        is_expected.to have_selector('span.person-tag', text: 'Haupt-E-Mail ungültig', count: 2)
+        is_expected.to have_selector('span.person-tag', text: 'E-Mail ungültig', count: 2)
         is_expected.to have_selector('span.person-tag', text: 'Weitere E-Mail ungültig', count: 2)
       end
     end

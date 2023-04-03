@@ -31,7 +31,7 @@ describe :self_registration do
 
       fill_in 'Vorname', with: 'Max'
       fill_in 'Nachname', with: 'Muster'
-      fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+      fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
 
       is_expected.to have_content('Privacy Policy Top Layer')
       is_expected.to have_content('Additional Policies Bottom Layer')
@@ -53,7 +53,7 @@ describe :self_registration do
       person.password = person.password_confirmation = 'really_b4dPassw0rD'
       person.save!
 
-      fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+      fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
       fill_in 'Passwort', with: 'really_b4dPassw0rD'
 
       click_button 'Anmelden'
@@ -67,7 +67,7 @@ describe :self_registration do
 
       fill_in 'Vorname', with: 'Max'
       fill_in 'Nachname', with: 'Muster'
-      fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+      fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
 
       is_expected.to have_content('Privacy Policy Top Layer')
       is_expected.to have_content('Additional Policies Bottom Layer')

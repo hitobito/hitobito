@@ -88,7 +88,7 @@ describe Event::ParticipationContactDatasController, type: :controller do
 
       expect(dom).to have_selector('.alert-error li', text: 'Übername muss ausgefüllt werden')
       expect(dom).to have_selector('.alert-error li', text: 'Adresse muss ausgefüllt werden')
-      expect(dom).to have_selector('.alert-error li', text: /Haupt-E-Mail ist nicht gültig/)
+      expect(dom).to have_selector('.alert-error li', text: /E-Mail ist nicht gültig/)
 
     end
 

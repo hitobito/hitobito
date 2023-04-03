@@ -445,7 +445,7 @@ fr:
         company_name: Nom de l'entreprise
         company: Entreprise
         nickname: Surnom
-        email: Adresse e-mail principale
+        email: Adresse e-mail
         emails: E-mails
         layer_group: Niveau
         password: Mot de passe

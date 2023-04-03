@@ -16,7 +16,8 @@ describe Export::Tabular::People::PeopleAddress do
   subject { people_list }
 
   let(:data) { Export::Tabular::People::PeopleAddress.export(:csv, list) }
-  let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
+  let(:data_without_bom) { data.gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), '') }
+  let(:csv) { CSV.parse(data_without_bom, headers: true, col_sep: Settings.csv.separator) }
 
 
   context 'headers' do

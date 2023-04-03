@@ -14,7 +14,8 @@ describe Export::Tabular::People::PeopleFull do
   let(:person) { people(:top_leader) }
   let(:list) { [person] }
   let(:data) { Export::Tabular::People::PeopleFull.export(:csv, list) }
-  let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
+  let(:data_without_bom) { data.gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), '') }
+  let(:csv) { CSV.parse(data_without_bom, headers: true, col_sep: Settings.csv.separator) }
 
   before do
     person.update_attribute(:gender, 'm')

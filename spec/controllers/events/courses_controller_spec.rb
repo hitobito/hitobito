@@ -73,7 +73,7 @@ describe Events::CoursesController do
       allow(controller).to receive_messages(current_user: people(:top_leader))
       get :index, format: :csv
       expect(response).to be_successful
-      expect(rows.first).to match(/^Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$/)
+      expect(rows.first).to match(Regexp.new("^#{Export::Csv::UTF8_BOM}Name;Organisatoren;Kursnummer;Kursart;.*;Anzahl Anmeldungen$"))
       expect(rows.size).to eq(2)
     end
   end

@@ -14,7 +14,8 @@ describe Export::Tabular::Invoices::List do
 
   let(:list) { group.invoices }
   let(:data) { Export::Tabular::Invoices::List.csv(list) }
-  let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
+  let(:data_without_bom) { data.gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), '') }
+  let(:csv) { CSV.parse(data_without_bom, headers: true, col_sep: Settings.csv.separator) }
 
   subject { csv }
 

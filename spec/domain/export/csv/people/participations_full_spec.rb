@@ -45,7 +45,8 @@ describe Export::Tabular::People::ParticipationsFull do
   context 'integration' do
 
     let(:data) { Export::Tabular::People::ParticipationsFull.export(:csv, list) }
-    let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
+    let(:data_without_bom) { data.gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), '') }
+    let(:csv) { CSV.parse(data_without_bom, headers: true, col_sep: Settings.csv.separator) }
     let(:full_headers) do
       ['Vorname', 'Nachname', 'Firmenname', 'Übername', 'Firma', 'Haupt-E-Mail',
        'Adresse', 'PLZ', 'Ort', 'Land', 'Geschlecht', 'Geburtstag',

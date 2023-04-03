@@ -24,7 +24,7 @@ describe Export::SubgroupsExportJob do
 
       lines = file.read.lines
       expect(lines.size).to eq(10)
-      expect(lines[0]).to match(/^Id;Elterngruppe;Name;.*/)
+      expect(lines[0]).to match(Regexp.new("^#{Export::Csv::UTF8_BOM}Id;Elterngruppe;Name;.*"))
       expect(lines[1]).to match(/^#{group.id};;Top;.*/)
       expect(lines[2]).to match(/^#{groups(:bottom_layer_one).id};#{group.id};Bottom One;.*/)
     end

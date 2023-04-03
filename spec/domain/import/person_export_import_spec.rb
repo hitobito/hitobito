@@ -34,11 +34,12 @@ describe 'export import person' do
     Fabricate(:social_account, contactable: exported, label: 'Webseite')
 
     csv = export(exported)
+    csv_without_bom = csv.gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), '')
 
     # change to not get a duplicate match
     exported.update!(last_name: 'Exported', email: 'exported@hitobito.example.org')
 
-    import(csv)
+    import(csv_without_bom)
 
     imported = Person.find_by_email('exporter@hitobito.example.org')
     expect(imported).not_to eq(exported)

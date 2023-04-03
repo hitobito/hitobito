@@ -19,6 +19,13 @@ class Groups::SelfRegistrationController < CrudController
 
   delegate :self_registration_active?, to: :group
 
+  def create
+    super do
+      next unless entry.person.errors.delete(:email, :taken)
+
+      entry.person.errors.add(:base, t('.email_taken'))
+    end
+  end
 
   private
 
@@ -40,7 +47,7 @@ class Groups::SelfRegistrationController < CrudController
 
   def save_entry
     ActiveRecord::Base.transaction do
-      person.valid? && privacy_policy_accepted? && person.save && entry.save 
+      person.valid? && privacy_policy_accepted? && person.save && entry.save
     end
   end
 

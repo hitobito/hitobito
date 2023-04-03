@@ -252,6 +252,20 @@ describe Groups::SelfRegistrationController do
             }
           end.to change { ActionMailer::Base.deliveries.count }.by(1)
         end
+
+        it 'sets custom error message on email taken error' do
+          post :create, params: {
+            group_id: group.id,
+            role: {
+              group_id: group.id,
+              new_person: { first_name: 'Bob', last_name: 'Miller', email: people(:top_leader).email }
+            }
+          }
+
+          expect(assigns(:role).person.errors.to_hash).to match(base:[
+            I18n.t('groups.self_registration.create.email_taken')
+          ])
+        end
       end
     end
   end

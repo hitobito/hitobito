@@ -215,13 +215,35 @@ body {
   color: $footerColor;
   margin-top: -3rem;
   background-color: $footerBackground;
+  @include responsive(phone, $mediaTablet) {
+    padding: 20px;
+  }
 
-  .footer_content {
+  a[data-toggle="collapse"] {
+    margin-top: -1px;
+    margin-left: -14px;
+  }
+
+  a[data-toggle="collapse"]:focus,
+  a[data-toggle="collapse"]:hover,
+  a[data-toggle="collapse"]:active {
+    text-decoration: none;
+    outline-style: none;
+  }
+
+  #detail-info.collapse {
+    visibility: hidden;
+    display: block !important;
+    height: unset;
+  }
+
+  #detail-info.collapse.shown {
+    visibility: visible;
+  }
+
+  .footer-content {
     padding-top: 20px;
     padding-bottom: 20px;
-    @include responsive(phone, $mediaTablet) {
-      padding: 20px;
-    }
     a {
       color: $footerColor;
 

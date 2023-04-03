@@ -14,7 +14,8 @@ describe Export::Tabular::Groups::List do
 
   let(:list) { group.self_and_descendants.without_deleted.includes(:contact) }
   let(:data) { Export::Tabular::Groups::List.csv(list) }
-  let(:csv) { CSV.parse(data, headers: true, col_sep: Settings.csv.separator) }
+  let(:data_without_bom) { data.gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), '') }
+  let(:csv) { CSV.parse(data_without_bom, headers: true, col_sep: Settings.csv.separator) }
 
   subject { csv }
 

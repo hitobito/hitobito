@@ -640,7 +640,7 @@ describe PeopleController do
         get :show, params: { group_id: group, id: top_leader.id, label_format_id: label_formats(:standard).id }, format: :csv
 
         expect(@response.media_type).to eq('text/csv')
-        expect(@response.body).to match(/^Vorname;Nachname/)
+        expect(@response.body).to match(Regexp.new("^#{Export::Csv::UTF8_BOM}Vorname;Nachname"))
         expect(@response.body).to match(/^Top;Leader/)
       end
 

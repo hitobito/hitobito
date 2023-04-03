@@ -17,10 +17,11 @@ class PersonAbility < AbilityDsl::Base
     permission(:admin).may(:totp_reset).all
     permission(:admin).may(:totp_disable).if_two_factor_authentication_not_enforced
 
-    permission(:any).
-      may(:show, :show_details, :show_full, :history, :update, :update_email, :primary_group, :log,
-          :update_settings, :totp_reset).
+    permission(:any).may(:show, :update, :update_email, :primary_group, :totp_reset).
       herself
+    permission(:any).
+      may(:show_details, :show_full, :history, :log, :index_invoices, :update_settings).
+      herself_unless_only_basic_permissions_roles
     permission(:any).may(:totp_disable).herself_if_two_factor_authentication_not_enforced
 
     permission(:contact_data).may(:show).other_with_contact_data
@@ -75,8 +76,6 @@ class PersonAbility < AbilityDsl::Base
     permission(:finance).may(:index_invoices).in_same_layer_or_below
     permission(:finance).may(:create_invoice).in_same_layer_or_below
 
-    permission(:any).may(:index_invoices).herself
-
     permission(:admin).may(:show).people_without_roles
 
     permission(:impersonation).may(:impersonate_user).all
@@ -104,6 +103,12 @@ class PersonAbility < AbilityDsl::Base
 
   def herself_if_two_factor_authentication_not_enforced
     herself && if_two_factor_authentication_not_enforced
+  end
+
+  def herself_unless_only_basic_permissions_roles
+    return false if user.roles.any? && user.basic_permissions_only?
+
+    herself
   end
 
   def if_password_present

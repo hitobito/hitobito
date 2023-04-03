@@ -54,6 +54,13 @@ class Role < ActiveRecord::Base
   class_attribute :merge_excluded_attributes
   self.merge_excluded_attributes = []
 
+  # Flags the role as having only basic permissions.
+  # People with only this role are not allowed to manage their mailing_lists,
+  # events, use the navigation and so on.
+  # See https://github.com/hitobito/hitobito_sww/issues/120
+  class_attribute :basic_permissions_only
+  self.basic_permissions_only = false
+
   FeatureGate.if('groups.nextcloud') do
     # Can be one of several types:
     #

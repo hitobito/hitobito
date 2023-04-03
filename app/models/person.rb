@@ -295,6 +295,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### ATTRIBUTE INSTANCE METHODS
 
+  def basic_permissions_only?
+    roles&.all?(&:basic_permissions_only)
+  end
+
   def privacy_policy_accepted?
     privacy_policy_accepted_at.present?
   end

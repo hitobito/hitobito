@@ -42,7 +42,7 @@
         #page-header
           - if current_user
             = link_to(icon('bars') + t('navigation.menu'), '#', class: 'toggle-nav visible-phone')
-            - if current_person&.roles.present? || current_person&.root?
+            - if (current_person&.roles.present? && !current_person&.basic_permissions_only?) || current_person&.root?
               = render 'layouts/quicksearch'
             - else
               = render 'layouts/languages'
@@ -51,7 +51,7 @@
           - elsif current_user.nil? # nil without login, false on error
             = render 'layouts/unauthorized'
 
-        - if current_person&.roles.present? || current_person&.root?
+        - if (current_person&.roles.present? && !current_person&.basic_permissions_only?) || current_person&.root?
           = render_sheets do
             .content-header
               %h1

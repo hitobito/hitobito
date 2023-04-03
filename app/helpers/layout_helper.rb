@@ -8,7 +8,7 @@
 module LayoutHelper
 
   def render_nav?
-    current_user&.roles.present? || current_user&.root?
+    (current_user&.roles.present? && !current_user&.basic_permissions_only?) || current_user&.root?
   end
 
   # render a single button

@@ -34,7 +34,7 @@ describe Subscriber::GroupController, js: true do
     obsolete_node_safe do
       expect(find('#subscription_subscriber_id', visible: false).value).to eq subscriber_id.to_s
 
-      expect(find('#roles')).to have_selector('input[type=checkbox]', count: 8) # roles
+      expect(find('#roles')).to have_selector('input[type=checkbox]', count: 9) # roles
       expect(find('#roles')).to have_selector('h4', count: 2) # layers
 
       # check role and submit
@@ -52,7 +52,7 @@ describe Subscriber::GroupController, js: true do
         is_expected.to have_selector('input[data-layer="Bottom Layer"]', count: 0)
 
         find('h4.filter-toggle', text: 'Bottom Layer').click
-        expect(page).to have_css('input:checked', count: 7)
+        expect(page).to have_css('input:checked', count: 8)
 
         find('h4.filter-toggle', text: 'Bottom Layer').click
         expect(page).to have_css('input:checked', count: 0)

@@ -29,4 +29,31 @@ describe VariousAbility do
       is_expected.to be_able_to(:read, hitobito_log_entries(:info_mail))
     end
   end
+
+  context 'with only basic permissions role' do
+    let(:role) do
+      Fabricate(Group::BottomLayer::BasicPermissionsOnly.sti_name.to_sym,
+                group: groups(:bottom_layer_one))
+    end
+
+    it 'may not index LabelFormat' do
+      is_expected.to_not be_able_to(:index, LabelFormat)
+    end
+
+    it 'may not create LabelFormat entry' do
+      is_expected.to_not be_able_to(:create, Fabricate(:label_format, person: role.person))
+    end
+
+    it 'may not update LabelFormat entry' do
+      is_expected.to_not be_able_to(:update, Fabricate(:label_format, person: role.person))
+    end
+
+    it 'may not destroy LabelFormat entry' do
+      is_expected.to_not be_able_to(:destroy, Fabricate(:label_format, person: role.person))
+    end
+
+    it 'may not read LabelFormat entry' do
+      is_expected.to_not be_able_to(:read, Fabricate(:label_format, person: role.person))
+    end
+  end
 end

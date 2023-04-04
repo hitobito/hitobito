@@ -1497,4 +1497,33 @@ describe PersonAbility do
       is_expected.to_not be_able_to(:update_password, person_without_roles)
     end
   end
+
+  context 'person with only basic permissions role' do
+
+    let(:role) do
+      Fabricate(Group::BottomLayer::BasicPermissionsOnly.sti_name.to_sym,
+                group: groups(:bottom_layer_one))
+    end
+
+    it 'may not show_details herself' do
+      is_expected.to_not be_able_to(:show_details, role.person)
+    end
+
+    it 'may not show_full herself' do
+      is_expected.to_not be_able_to(:show_full, role.person)
+    end
+
+    it 'may not show history on herself' do
+      is_expected.to_not be_able_to(:history, role.person)
+    end
+
+    it 'may not show log on herself' do
+      is_expected.to_not be_able_to(:log, role.person)
+    end
+
+    it 'may not index invoices on herself' do
+      is_expected.to_not be_able_to(:index_invoices, role.person)
+    end
+
+  end
 end

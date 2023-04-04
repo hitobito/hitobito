@@ -15,6 +15,11 @@ class Group::BottomLayer < Group
 
   children Group::BottomGroup
 
+  class BasicPermissionsOnly < ::Role
+    self.permissions = []
+
+    self.basic_permissions_only = true
+  end
 
   class Leader < ::Role
     self.permissions = [:layer_and_below_full, :contact_data, :approve_applications]
@@ -28,7 +33,7 @@ class Group::BottomLayer < Group
     self.permissions = [:layer_and_below_read, :finance]
   end
 
-  roles Leader, LocalGuide, Member
+  roles Leader, LocalGuide, Member, BasicPermissionsOnly
   self.default_role = Leader
 
 end

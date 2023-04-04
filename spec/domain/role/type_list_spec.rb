@@ -20,7 +20,7 @@ describe Role::TypeList do
 
       ['Bottom Layer',
        { 'Bottom Layer' => [Group::BottomLayer::Leader, Group::BottomLayer::LocalGuide,
-                            Group::BottomLayer::Member],
+                            Group::BottomLayer::Member, Group::BottomLayer::BasicPermissionsOnly],
          'Bottom Group' => [Group::BottomGroup::Leader, Group::BottomGroup::Member] }],
 
       ['Global',
@@ -35,7 +35,7 @@ describe Role::TypeList do
     expect(list.to_enum.to_a).to eq([
       ['Bottom Layer',
        { 'Bottom Layer' => [Group::BottomLayer::Leader, Group::BottomLayer::LocalGuide,
-                            Group::BottomLayer::Member],
+                            Group::BottomLayer::Member, Group::BottomLayer::BasicPermissionsOnly],
          'Bottom Group' => [Group::BottomGroup::Leader, Group::BottomGroup::Member],
          'Global Group' => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member] }],
 
@@ -76,7 +76,7 @@ describe Role::TypeList do
       expect(list.flatten.map(&:name)).to eq(%w(Group::TopLayer::TopAdmin Group::TopGroup::Leader
         Group::TopGroup::LocalGuide Group::TopGroup::Secretary Group::TopGroup::LocalSecretary
         Group::TopGroup::Member Group::BottomLayer::Leader Group::BottomLayer::LocalGuide
-        Group::BottomLayer::Member Group::BottomGroup::Leader Group::BottomGroup::Member
+        Group::BottomLayer::Member Group::BottomLayer::BasicPermissionsOnly Group::BottomGroup::Leader Group::BottomGroup::Member
         Group::GlobalGroup::Leader Group::GlobalGroup::Member Role::External))
     end
 
@@ -92,6 +92,7 @@ describe Role::TypeList do
         { layer: 'Bottom Layer', group: 'Bottom Layer', role: Group::BottomLayer::Leader },
         { layer: 'Bottom Layer', group: 'Bottom Layer', role: Group::BottomLayer::LocalGuide },
         { layer: 'Bottom Layer', group: 'Bottom Layer', role: Group::BottomLayer::Member },
+        { layer: 'Bottom Layer', group: 'Bottom Layer', role: Group::BottomLayer::BasicPermissionsOnly },
         { layer: 'Bottom Layer', group: 'Bottom Group', role: Group::BottomGroup::Leader },
         { layer: 'Bottom Layer', group: 'Bottom Group', role: Group::BottomGroup::Member },
         { layer: 'Global', group: 'Global Group', role: Group::GlobalGroup::Leader },

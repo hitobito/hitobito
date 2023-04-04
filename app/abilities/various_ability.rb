@@ -22,10 +22,10 @@ class VariousAbility < AbilityDsl::Base
   end
 
   on(LabelFormat) do
-    class_side(:index).everybody
+    class_side(:index).everybody_unless_only_basic_permissions_roles
     class_side(:manage_global).if_admin
     permission(:admin).may(:manage).all
-    permission(:any).may(:create, :update, :destroy, :read).own
+    permission(:any).may(:create, :update, :destroy, :show).own_unless_only_basic_permissions_roles
   end
 
   if Group.course_types.present?
@@ -45,8 +45,13 @@ class VariousAbility < AbilityDsl::Base
     end
   end
 
-  def own
+  def own_unless_only_basic_permissions_roles
+    return false if user.roles.all?(&:basic_permissions_only)
+
     subject.person_id == user.id
   end
 
+  def everybody_unless_only_basic_permissions_roles
+    !user.roles.all?(&:basic_permissions_only)
+  end
 end

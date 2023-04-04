@@ -92,7 +92,7 @@
       "cwe_id": [
         1104
       ],
-      "note": ""
+      "note": "We plan to upgrade Ruby before EOL or shortly thereafter"
     }
   ],
   "updated": "2023-04-04 06:28:46 +0000",

@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.28
 
 *  Neu gibt es eine Option, um die Mailadressen von Personenlisten in einem Format spezifisch für Outlook zu exportieren. Merci @simfeld! (#2043)
 *  Diverse Verbesserungen bei Anlass-Einladungen. Personen die im ganzen Layer Berechtigungen haben, können auch in Anlässen des ganzen Layers andere Personen einladen. Ein neuer Hinweis erklärt, dass die Einladungen nicht per Mail versendet werden. Einladungen können neu sortiert und gelöscht werden, dafür nicht mehr doppelt erfasst. Wenn man eine Einladung ablehnt, wird einem das weiterhin zur Information angezeigt. Merci @nchiapol! (#2045, #2051)

@@ -25,7 +25,7 @@ describe Export::Tabular::People::ParticipationsAddress do
   context 'integration' do
     let(:simple_headers) do
       ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
-       'Adresse', 'PLZ', 'Ort', 'Land', 'Hauptebene', 'Rollen', 'Tags']
+       'Adresse', 'PLZ', 'Ort', 'Land', 'Hauptebene', 'Rollen']
     end
 
     let(:data) { Export::Tabular::People::ParticipationsAddress.export(:csv, list) }

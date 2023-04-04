@@ -36,13 +36,13 @@ describe Export::Tabular::People::TableDisplays do
 
     its(:attributes) do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-                 :zip_code, :town, :country, :layer_group, :roles, :tags]
+                 :zip_code, :town, :country, :layer_group, :roles]
     end
 
     it 'does not allow accessing unregistered columns' do
       table_display.selected = %i(years)
-      expect(people_list.labels.last).to eq 'Tags'
-      expect(people_list.attributes.last).to eq :tags
+      expect(people_list.labels.last).to eq 'Rollen'
+      expect(people_list.attributes.last).to eq :roles
       expect(people_list.attributes.grep(/years/).count).to eq 0
     end
 
@@ -120,7 +120,7 @@ describe Export::Tabular::People::TableDisplays do
 
     its(:attributes) do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email, :address,
-                :zip_code, :town, :country, :layer_group, :roles, :tags]
+                :zip_code, :town, :country, :layer_group, :roles]
     end
 
     it 'includes additional person attributes if configured' do

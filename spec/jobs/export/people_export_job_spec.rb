@@ -37,7 +37,7 @@ describe Export::PeopleExportJob do
       lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
-      expect(lines[0].split(';').count).to match(13)
+      expect(lines[0].split(';').count).to match(12)
     end
 
     context 'household' do
@@ -120,7 +120,7 @@ describe Export::PeopleExportJob do
         expect(lines.size).to eq(1)
         expect(lines[0]).to match(/Vorname;Nachname;.*/)
         expect(lines[0]).not_to match(/Zusätzliche Angaben;.*/)
-        expect(lines[0].split(';').count).to match(13)
+        expect(lines[0].split(';').count).to match(12)
       end
     end
   end

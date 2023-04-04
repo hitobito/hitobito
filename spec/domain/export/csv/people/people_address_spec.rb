@@ -23,7 +23,7 @@ describe Export::Tabular::People::PeopleAddress do
   context 'headers' do
     let(:simple_headers) do
       ['Vorname', 'Nachname', 'Übername', 'Firmenname', 'Firma', 'Haupt-E-Mail',
-       'Adresse', 'PLZ', 'Ort', 'Land', 'Hauptebene', 'Rollen', 'Tags']
+       'Adresse', 'PLZ', 'Ort', 'Land', 'Hauptebene', 'Rollen']
     end
 
     subject { csv }

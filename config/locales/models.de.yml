@@ -437,6 +437,7 @@ de:
         town: Ort
         country: Land
         gender: Geschlecht
+        gender_custom: Anredengeschlecht
         genders:
           m: männlich
           w: weiblich

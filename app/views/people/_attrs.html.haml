@@ -9,7 +9,13 @@
     - if can?(:show_details, entry)
       %h2= t('.additional_data')
       %div
-        = render_attrs(entry, :birthday, :gender)
+        = render_attrs(entry, :birthday)
+
+        - FeatureGate.if('people.gender_binary') do
+          = render_attrs(entry, :gender)
+
+        - FeatureGate.if('people.gender_custom') do
+          = render_attrs(entry, :gender_custom)
 
         = render_attrs(entry, :title, :salutation)
 

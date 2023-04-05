@@ -847,6 +847,7 @@ ActiveRecord::Schema.define(version: 2023_04_05_000000) do
     t.timestamp "privacy_policy_accepted_at"
     t.string "title"
     t.string "salutation"
+    t.string "gender_custom"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

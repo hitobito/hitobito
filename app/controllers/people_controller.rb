@@ -16,8 +16,8 @@ class PeopleController < CrudController
   self.remember_params += [:name, :range, :filters, :filter_id]
 
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
-                          :gender, :birthday, :title, :salutation, :additional_information,
-                          :picture, :remove_picture] +
+                          :gender, :gender_custom, :birthday, :title, :salutation,
+                          :additional_information, :picture, :remove_picture] +
                           Contactable::ACCESSIBLE_ATTRS +
                           [family_members_attributes: [:id, :kind, :other_id, :_destroy]] +
                           [household_people_ids: []] +

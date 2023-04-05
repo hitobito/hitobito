@@ -51,7 +51,8 @@ class Salutation
   end
 
   def value
-    gender = person.gender.presence || 'other'
+    gender = person.gender_custom.presence || person.gender.presence
+    gender = 'other' if not ['w', 'm'].include? gender
     if salutation == 'custom'
       @salutation
     else

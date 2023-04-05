@@ -142,6 +142,10 @@ people:
   default_sort: name
   abos: true
   totp_drift: 15
+  gender_custom:
+    enabled: false
+  gender_binary:
+    enabled: true
 
 event:
   attachments:

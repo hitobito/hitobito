@@ -74,6 +74,11 @@ module FormatHelper
     Salutation.new(obj).value
   end
 
+  def format_person_gender_custom(obj)
+    gender = obj.gender_custom || "_nil"
+    I18n.t("activerecord.models.gender_custom.available.#{gender}")
+  end
+
   ##############  STANDARD HTML SECTIONS  ############################
 
   # Renders an arbitrary content with the given label. Used for uniform presentation.
@@ -169,7 +174,6 @@ module FormatHelper
   private
 
   # Helper methods that are not directly called from templates.
-
 
   # Formats an arbitrary attribute of the given object depending on its data type.
   # For ActiveRecords, take the defined data type into account for special types

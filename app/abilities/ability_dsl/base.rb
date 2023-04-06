@@ -139,11 +139,21 @@ module AbilityDsl
     end
 
     def user_group_ids
-      user_context.permission_group_ids(permission) || []
+      case permission
+      when :manage_invisible_people
+        user.groups_with_permission(:manage_invisible_people).to_a.collect(&:id)
+      else
+        user_context.permission_group_ids(permission) || []
+      end
     end
 
     def user_layer_ids
-      user_context.permission_layer_ids(permission) || []
+      case permission
+      when :manage_invisible_people
+        user_context.layer_ids(user.groups_with_permission(:manage_invisible_people).to_a)
+      else
+        user_context.permission_layer_ids(permission) || []
+      end
     end
 
     # Are any items of the existing list present in the list of required items?

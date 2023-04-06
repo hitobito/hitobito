@@ -35,7 +35,7 @@ class PersonReadables < PersonFetchables
   private
 
   def group_accessible_people
-    if read_permission_for_this_group?
+    if read_permission_for_this_group? || manage_invisible_people_in_above_layer?
       can :index, Person,
           group.people.only_public_data { |_| true }
 
@@ -109,6 +109,16 @@ class PersonReadables < PersonFetchables
   def layer_and_below_read_in_above_layer?
     ids = permission_layer_ids(:layer_and_below_read)
     ids.present? && (ids & group.layer_hierarchy.collect(&:id)).present?
+  end
+
+  def manage_invisible_people_in_above_layer?
+    layers_manage_invisible_people.present? &&
+      (layers_manage_invisible_people & group.layer_hierarchy.collect(&:id)).present?
+  end
+
+  def layers_manage_invisible_people
+    @layers_manage_invisible_people ||=
+      user_context.layer_ids(user.groups_with_permission(:manage_invisible_people).to_a)
   end
 
 end

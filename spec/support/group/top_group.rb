@@ -31,6 +31,10 @@ class Group::TopGroup < Group
     self.permissions = [:contact_data, :group_and_below_read]
   end
 
-  roles Leader, LocalGuide, Secretary, LocalSecretary, Member
+  class InvisiblePeopleManager < ::Role
+    self.permissions = [:manage_invisible_people]
+  end
+
+  roles Leader, LocalGuide, Secretary, LocalSecretary, Member, InvisiblePeopleManager
 
 end

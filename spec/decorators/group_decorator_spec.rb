@@ -22,6 +22,7 @@ describe GroupDecorator, :draper_with_helpers do
                  Group::TopGroup::Secretary,
                  Group::TopGroup::LocalSecretary,
                  Group::TopGroup::Member,
+                 Group::TopGroup::InvisiblePeopleManager,
                  Role::External]
     end
   end

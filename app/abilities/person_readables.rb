@@ -65,6 +65,7 @@ class PersonReadables < PersonFetchables
     OrCondition.new.tap do |condition|
       condition.or(*herself_condition)
       condition.or(*contact_data_condition) if contact_data_visible?
+      manage_invisible_people_condition(condition)
       append_group_conditions(condition)
     end
   end
@@ -82,7 +83,8 @@ class PersonReadables < PersonFetchables
     group_read_in_this_group? ||
     group_read_in_above_group? ||
     layer_read_in_same_layer? ||
-    layer_and_below_read_in_same_layer?
+    layer_and_below_read_in_same_layer? ||
+    manage_invisible_people_in_above_layer?
   end
 
   def contact_data_visible?

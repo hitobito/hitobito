@@ -60,11 +60,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: "hitobito/${{ inputs.composition }}"
+          submodules: true
 
       - name: 'Set up Ruby'
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+          working-directory: hitobito
 
       - name: 'Install additional dependencies'
         run: |
@@ -75,4 +77,4 @@ jobs:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
         run: |
           echo "$NEXT_VERSION"
-          # bin/release composition "$NEXT_VERSION" -n
+          # hitobito/bin/release composition "$NEXT_VERSION" -n

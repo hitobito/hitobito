@@ -39,6 +39,10 @@ jobs:
         run: |
           gem install cmdparse
 
+      - name: 'Get tag-names from repo'
+        run: |
+          git fetch --tags
+
       - name: 'Determine next version'
         id: determine
         env:

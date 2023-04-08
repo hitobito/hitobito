@@ -30,6 +30,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: 'hitobito/hitobito'
+          ref: feature/1975-prepare-release
 
       - name: 'Set up Ruby'
         uses: ruby/setup-ruby@v1

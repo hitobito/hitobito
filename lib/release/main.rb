@@ -61,6 +61,7 @@ class Release::Main
   include Release::WorldMonad
 
   attr_reader :all_wagons, :wagon, :command_list
+  attr_writer :composition_repo_dir, :hitobito_group_dir
   attr_accessor :dry_run, :version
 
   def self.from_composition(composition)
@@ -104,7 +105,7 @@ class Release::Main
 
   def determine_wagons(composition)
     in_dir(hitobito_group_dir) do
-      in_dir("ose_composition_#{composition}") do
+      in_dir(composition_repo_dir) do
         require 'pathname'
 
         self.all_wagons = Pathname.new('.').children.flat_map do |dep|
@@ -174,7 +175,7 @@ class Release::Main
   end
 
   def update_composition
-    in_dir("ose_composition_#{@wagon}") do
+    in_dir(composition_repo_dir) do
       fetch_code_and_tags
       update_submodules(branch: 'production')
       release_version @version
@@ -199,15 +200,15 @@ class Release::Main
     @command_list = !!setting
   end
 
-  private
+  def composition_repo_dir
+    @composition_repo_dir ||= "ose_composition_#{@wagon}"
+  end
 
   def hitobito_group_dir
-    if File.directory?("./ose_composition_#{@wagon}")
-      Dir.pwd
-    else
-      File.expand_path('../../..', __dir__)
-    end
+    @hitobito_group_dir ||= File.expand_path('../../../..', __dir__)
   end
+
+  private
 
   # well, do not execute, just output what would be done
   def dry_run?

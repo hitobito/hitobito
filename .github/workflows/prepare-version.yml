@@ -69,4 +69,5 @@ jobs:
         env:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
         run: |
-          bin/release composition "$NEXT_VERSION" -n
+          echo "$NEXT_VERSION"
+          # bin/release composition "$NEXT_VERSION" -n

@@ -45,7 +45,7 @@ parser.add_command('suggest-version') do |cmd|
     end
   end
 
-  cmd.add_command('current_month') do |subcmd|
+  cmd.add_command('current-month') do |subcmd|
     subcmd.short_desc = 'set patch to current "YEAR-MONTH"'
     subcmd.takes_commands = false
     subcmd.action do

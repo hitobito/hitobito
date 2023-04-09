@@ -49,7 +49,7 @@ jobs:
           VERSION_TYPE: ${{ inputs.next_version }}
         run: |
           next_version=$(bin/release suggest-version "$VERSION_TYPE")
-          echo "version=${next_version}" >> "$GITHUB_OUTPUT"
+          echo "version=test-${next_version}" >> "$GITHUB_OUTPUT"
 
   prepare_release:
     runs-on: 'ubuntu-latest'
@@ -76,5 +76,6 @@ jobs:
         env:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
         run: |
-          echo "$NEXT_VERSION"
-          # hitobito/bin/release composition "$NEXT_VERSION" -n
+          first_wagon=$(echo "${{ inputs.composition }}" | sed "s/ose_composition_//")
+          echo "Preparing $NEXT_VERSION for $first_wagon"
+          # hitobito/bin/release composition "$first_wagon" "$NEXT_VERSION" -n

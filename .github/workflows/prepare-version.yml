@@ -79,6 +79,7 @@ jobs:
       - name: 'prepare submodule to the work-in-progress state'
         run: |
           cd hitobito
+          git fetch
           git checkout -t origin/feature/1975-prepare-release
 
       - name: 'Prepare release'

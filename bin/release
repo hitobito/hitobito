@@ -70,6 +70,7 @@ parser.add_command('composition', default: true) do |cmd|
     releaser.hitobito_group_dir = releaser.composition_repo_dir = dir
     releaser.version = version
     releaser.dry_run = parser.data[:dry_run]
+    releaser.assume_yes = true
 
     raise unless releaser.usable?
 

@@ -7,6 +7,10 @@ on:
         description: "Composition repository, e.g. ose_composition_pbs"
         type: string
         required: true
+      wagon:
+        description: "Name of the primary wagon"
+        type: string
+        required: true
       next_version:
         description: "Type of next version, generated or manual"
         required: true
@@ -75,7 +79,7 @@ jobs:
       - name: "Prepare release"
         env:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
+          FIRST_WAGON: ${{ inputs.wagon }}
         run: |
-          first_wagon=$(echo "${{ inputs.composition }}" | sed "s/ose_composition_//")
-          echo "Preparing $NEXT_VERSION for $first_wagon"
-          # hitobito/bin/release composition "$first_wagon" "$NEXT_VERSION" -n
+          echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
+          # hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION" -n

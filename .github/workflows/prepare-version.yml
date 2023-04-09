@@ -76,7 +76,12 @@ jobs:
         run: |
           gem install cmdparse
 
-      - name: "Prepare release"
+      - name: 'prepare submodule to the work-in-progress state'
+        run: |
+          cd hitobito
+          git checkout -o origin/feature/1975-prepare-release
+
+      - name: 'Prepare release'
         env:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
           FIRST_WAGON: ${{ inputs.wagon }}

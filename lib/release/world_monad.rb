@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+require 'English'
+
 module Release
   # internal central place to get input, send output or execute commands
   #
@@ -65,7 +67,19 @@ module Release
         visual_prefix = ' ->'
         visual_suffix = result ? cmd_success : cmd_error
         puts [visual_prefix, cmd, visual_suffix].compact.join(' ')
+      end.then { |result| handle_result(result) } # rubocop:disable Style/MultilineBlockChain
+    end
+
+    def handle_result(result)
+      return true if result == true
+
+      case result
+      when false then warn 'Command exited with a non-zero exit-code'
+      when nil then warn 'Command failed'
       end
+
+      warn "Exitstatus: #{$CHILD_STATUS}"
+      abort
     end
 
     def cmd_success

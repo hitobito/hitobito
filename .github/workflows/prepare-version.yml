@@ -65,6 +65,7 @@ jobs:
         with:
           repository: "hitobito/${{ inputs.composition }}"
           submodules: true
+          fetch-depth: 0
 
       - name: 'Set up Ruby'
         uses: ruby/setup-ruby@v1
@@ -78,9 +79,7 @@ jobs:
 
       - name: 'prepare submodule to the work-in-progress state'
         run: |
-          cd hitobito
-          git fetch
-          git checkout -t origin/feature/1975-prepare-release
+          cd hitobito && git fetch origin && git checkout -t origin/feature/1975-prepare-release
 
       - name: 'Prepare release'
         env:

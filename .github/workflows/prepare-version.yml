@@ -67,6 +67,10 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      - name: 'prepare submodule to the work-in-progress state'
+        run: |
+          cd hitobito && git fetch origin && git checkout -t origin/feature/1975-prepare-release
+
       - name: 'Set up Ruby'
         uses: ruby/setup-ruby@v1
         with:
@@ -76,10 +80,6 @@ jobs:
       - name: 'Install additional dependencies'
         run: |
           gem install cmdparse pastel
-
-      - name: 'prepare submodule to the work-in-progress state'
-        run: |
-          cd hitobito && git fetch origin && git checkout -t origin/feature/1975-prepare-release
 
       - name: 'Prepare release'
         env:

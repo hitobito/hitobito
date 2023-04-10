@@ -87,4 +87,4 @@ jobs:
           FIRST_WAGON: ${{ inputs.wagon }}
         run: |
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
-          hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION" -n
+          hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION"

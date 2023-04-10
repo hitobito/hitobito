@@ -61,7 +61,7 @@ class Release::Main
   include Release::WorldMonad
 
   attr_reader :all_wagons, :wagon, :command_list
-  attr_writer :composition_repo_dir, :hitobito_group_dir, :assume_yes
+  attr_writer :composition_repo_dir, :hitobito_group_dir, :standard_answer
   attr_accessor :dry_run, :version
 
   def self.from_composition(composition)
@@ -72,7 +72,7 @@ class Release::Main
 
   def initialize(all_wagons)
     self.all_wagons = all_wagons
-    @assume_yes = false
+    @standard_answer = nil
 
     notify 'Running in dry-run mode' if dry_run?
   end

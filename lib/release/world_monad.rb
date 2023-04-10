@@ -29,9 +29,13 @@ module Release
     def confirm(question: 'continue?') # rubocop:disable Metrics/MethodLength
       puts "#{question} [Yn]"
 
-      if dry_run? || @assume_yes
+      if dry_run? || @standard_answer == true
         puts '-> assuming yes, due to dry-run or setting'
         return true
+      end
+      if @standard_answer == false
+        puts '-> assuming no, due to setting'
+        return false
       end
 
       answer = begin

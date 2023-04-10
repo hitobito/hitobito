@@ -74,8 +74,6 @@ parser.add_command('composition', default: true) do |cmd|
 
     raise unless releaser.usable?
 
-    raise unless releaser.send :dry_run? # remove at the end
-
     releaser.run
   end
 end

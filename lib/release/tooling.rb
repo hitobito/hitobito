@@ -114,7 +114,7 @@ module Release
     def colorize
       @colorize ||= begin
         require 'pastel'
-        Pastel.new
+        Pastel.new(enabled: ENV.fetch('CI', false))
       rescue LoadError
         abort(<<~MESSAGE)
           Please install "pastel" to unlock colorized output of this script

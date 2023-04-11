@@ -97,7 +97,7 @@ fr:
   contactable:
     address_or_email: "%{address} ou %{email}"
     fields:
-      zip_town: Code postal / Lieu
+      zip_town: NPA, localité
     public_check_box:
       tooltip: Les entrées privées ne sont visibles qu'au sein du groupe auquel tu appartiens. Les responsables d'autres groupes peuvent voir les entrées identifiées en tant qu'entrées publiques si toi-même, tu fais partie d'une maîtrise.
     social_account_fields:
@@ -136,7 +136,6 @@ fr:
     labels: 'Etiquettes'
     pdf: 'PDF'
     emails: 'Adresses électroniques'
-    emails_outlook: 'Adresses électroniques (Outlook)'
     addresses: 'Liste d''adresses'
     households: 'Liste des foyers'
     everything: 'Toutes les informations'
@@ -663,7 +662,7 @@ fr:
     self_registration:
       form:
         privacy_policy_caption: "J'accepte les conditions suivantes:"
-        submit: S'inscrire
+        submit: Créer un compte
       create:
         flash:
           privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
@@ -1416,9 +1415,6 @@ fr:
       tag_lists: Tags
       remove_tags: Enlever les tags
       add_tags: Rajouter des tags
-    totp_reset:
-      flashes:
-        success: Validation en deux étapes réinitialisée correctement
     totp_disable:
       flashes:
         success: Validation en deux étapes désactivée correctement

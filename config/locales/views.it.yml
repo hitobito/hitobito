@@ -97,7 +97,7 @@ it:
   contactable:
     address_or_email: "%{address} o %{email}"
     fields:
-      zip_town: NAP / luogo
+      zip_town: NPA, località
     public_check_box:
       tooltip: Annotazioni private sono visibili solo al proprio gruppo. Se sei un capo nel tuo gruppo, le annotazioni marcate come pubbliche saranno visibili anche ai capi e responsabili di altri gruppi,.
     social_account_fields:
@@ -136,7 +136,6 @@ it:
     labels: 'etichette'
     pdf: 'PDF'
     emails: 'indirizzi email'
-    emails_outlook: 'indirizzi email (Outlook)'
     addresses: 'lista di indirizzi'
     households: 'Lista dei nuclei famigliari'
     everything: 'tutti i dati'
@@ -657,6 +656,7 @@ it:
     self_registration:
       form:
         privacy_policy_caption: "Dichiaro di essere d'accordo con le seguenti disposizioni:"
+        submit: Crea un account
       create:
         flash:
           privacy_policy_not_accepted: Per concludere la registrazione deve venir accettata la dichiarazione di protezione dei dati.
@@ -908,6 +908,7 @@ it:
     unauthorized:
       forgot_password: 'Password dimenticata?'
       need_confirmation_email: 'Non hai ricevuto un''e-mail di conferma?'
+      main_self_registration: 'Non hai un account? Registratevi qui.'
     footer:
       available_under_license: 'disponibile in'
       developed_by: 'sviluppato da'
@@ -1404,9 +1405,6 @@ it:
       tag_lists: Tags
       remove_tags: Eliminare tags
       add_tags: Aggiungere tags
-    totp_reset:
-      flashes:
-        success: Autenticazione a due fattori ripristinata correttamente
     totp_disable:
       flashes:
         success: Autenticazione a due fattori deattivata correttamente

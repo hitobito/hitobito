@@ -63,7 +63,7 @@ describe Export::Tabular::People::PeopleFull do
     it 'has correct headers' do
       headers = [
         'Prénom',
-        'Nom de famille',
+        'Nom',
         "Nom de l'entreprise",
         'Surnom',
         'Entreprise',

@@ -89,8 +89,9 @@ jobs:
         env:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
           FIRST_WAGON: ${{ inputs.wagon }}
-          TX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
+          TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
         run: |
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
           echo "$HOME/.local/bin/" >> $GITHUB_PATH
+          tx status -t $TRANSIFEX_TOKEN
           hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION"

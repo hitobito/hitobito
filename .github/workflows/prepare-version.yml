@@ -88,6 +88,7 @@ jobs:
         env:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
           FIRST_WAGON: ${{ inputs.wagon }}
+          TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
         run: |
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
           hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION"

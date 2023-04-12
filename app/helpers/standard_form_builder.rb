@@ -118,10 +118,15 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     # Can also be serialized column
     raw = @object.timeliness_cache_attribute(attr) if @object.is_a?(ActiveRecord::Base)
     if raw
-      raw
+      r = raw
     else
       val = @object.send(attr)
-      val.is_a?(Date) ? template.l(val) : val
+      r = val.is_a?(Date) ? template.l(val) : val
+    end
+    if(attr == :birthday and @object.birth_year_only and r.to_s =~ /^(\d{2}.){2}\d{4}$/)
+      r[6..]
+    else
+      r
     end
   end
 

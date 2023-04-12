@@ -229,6 +229,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   before_validation :override_blank_email
   before_validation :remove_blank_relations
+  before_validation :check_birthday
   before_destroy :destroy_roles
   before_destroy :destroy_person_duplicates
 
@@ -432,6 +433,19 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def override_blank_email
     self.email = nil if email.blank?
+  end
+
+  def check_birthday
+    raw = birthday_before_type_cast
+    enabled = FeatureGate.enabled?('people.birth_year_only_allowed')
+    if raw.class == String and (enabled or birth_year_only)
+      if raw =~ /^[0-9]{4}$/
+        self.birthday = Date.parse("31.12." + raw, "%d.%m.%Y")
+        self.birth_year_only = true
+      else
+        self.birth_year_only = false
+      end
+    end
   end
 
   def remove_blank_relations

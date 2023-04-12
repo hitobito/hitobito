@@ -82,8 +82,8 @@ jobs:
           TRANSIFEX_VERSION: "v1.6.4"
         run: |
           gem install cmdparse pastel
-          mkdir bin/
-          curl -L https://github.com/transifex/cli/releases/download/${TRANSIFEX_VERSION}/tx-linux-amd64.tar.gz | tar xz -C bin/
+          mkdir -p $HOME/.local/bin/ && echo "$HOME/.local/bin/" >> $GITHUB_PATH
+          curl -L https://github.com/transifex/cli/releases/download/${TRANSIFEX_VERSION}/tx-linux-amd64.tar.gz | tar xz -C $HOME/.local/bin/
 
       - name: 'Prepare release'
         env:
@@ -92,6 +92,6 @@ jobs:
           TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
         run: |
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
-          ::addPath bin/
+          echo "$HOME/.local/bin/" >> $GITHUB_PATH
           tx --version
           hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION"

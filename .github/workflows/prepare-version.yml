@@ -82,7 +82,8 @@ jobs:
           TRANSIFEX_VERSION: 1.6.4
         run: |
           gem install cmdparse pastel
-          curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash -s -- $TRANSIFEX_VERSION
+          mkdir bin/ && echo "bin/" >> "$GITHUB_PATH"
+          curl -L https://github.com/transifex/cli/releases/download/$TRANSIFEX_VERSION/tx-linux-amd64.tar.gz | tar xz -C bin/
 
       - name: 'Prepare release'
         env:

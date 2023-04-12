@@ -19,6 +19,9 @@ on:
       #   description: "Version to be used"
       #   required: false
       #   type: string
+    secrets:
+      TRANSIFEX_TOKEN:
+        required: true
 
 permissions:
   contents: write

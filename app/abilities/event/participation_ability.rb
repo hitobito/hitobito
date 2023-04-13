@@ -49,7 +49,7 @@ class Event::ParticipationAbility < AbilityDsl::Base
   end
 
   def her_own_if_application_possible
-    her_own && event.application_possible?
+    her_own && event.application_possible? && participant_can_show_event?
   end
 
   def her_own_if_application_cancelable
@@ -60,6 +60,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
 
   def participating?
     event.participations.map(&:person_id).include? user.id
+  end
+
+  def participant_can_show_event?
+    participation.person && (Ability.new(participation.person).can? :show, participation.event)
   end
 
   private

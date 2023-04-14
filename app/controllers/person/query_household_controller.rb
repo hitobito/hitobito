@@ -14,6 +14,7 @@ class Person::QueryHouseholdController < Person::QueryController
   def scope
     scope = Person.accessible_by(PersonWritables.new(current_user)).distinct.joins(roles: :group)
     scope = scope.or(same_address_query) if address_attrs.present?
+    scope = scope.or(herself_query) if current_user.present?
     scope
   end
 
@@ -21,6 +22,10 @@ class Person::QueryHouseholdController < Person::QueryController
     Person.distinct.only_public_data.joins(roles: :group)
       .where(address_attrs)
       .where.not(id: params[:person_id])
+  end
+
+  def herself_query
+    Person.distinct.where(id: current_user.id)
   end
 
   def address_attrs

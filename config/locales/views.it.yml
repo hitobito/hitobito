@@ -1204,7 +1204,7 @@ it:
         address_updated: "Indirizzo aggiornato"
       fields:
         lives_in_household_with: "Vive nello stesso nucleo famigliare di"
-        update_denied: "Nessun diritto di scrittura per %{other_person}"
+        update_denied: "Non può aggiungere %{other_person}."
     family:
       fields:
         is_in_family_with: 'È parte della famiglia di'

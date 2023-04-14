@@ -25,6 +25,6 @@ module TwoFactorAuthenticatable
   end
 
   def two_factor_authentication_enforced?
-    roles.any?(&:two_factor_authentication_enforced)
+    roles.any?(&:two_factor_authentication_enforced) && !root?
   end
 end

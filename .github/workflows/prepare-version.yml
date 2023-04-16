@@ -80,13 +80,16 @@ jobs:
           bundler-cache: true
           working-directory: hitobito
 
-      - name: 'Install additional dependencies'
+      - name: 'Install and configure additional dependencies'
         env:
           TRANSIFEX_VERSION: "v1.6.4"
         run: |
           gem install cmdparse pastel
+
           mkdir -p $HOME/.local/bin/
+          echo "$HOME/.local/bin/" >> $GITHUB_PATH
           curl -L https://github.com/transifex/cli/releases/download/${TRANSIFEX_VERSION}/tx-linux-amd64.tar.gz | tar xz -C $HOME/.local/bin/
+          echo -e "[https://www.transifex.com]\napi_hostname = https://api.transifex.com\nhostname = https://www.transifex.com\nusername = api\npassword = $TRANSIFEX_TOKEN\nrest_hostname = https://rest.api.transifex.com\ntoken = $TRANSIFEX_TOKEN" > $HOME/.transifexrc
 
       - name: 'Prepare release'
         env:
@@ -95,9 +98,5 @@ jobs:
           TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
         run: |
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
-
-          echo "$HOME/.local/bin/" >> $GITHUB_PATH
-          echo -e "[https://www.transifex.com]\napi_hostname = https://api.transifex.com\nhostname = https://www.transifex.com\nusername = api\npassword = $TRANSIFEX_TOKEN\nrest_hostname = https://rest.api.transifex.com\ntoken = $TRANSIFEX_TOKEN" > $HOME/.transifexrc
-          (cd hitobito && tx status)
 
           hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION"

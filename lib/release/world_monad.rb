@@ -76,7 +76,7 @@ module Release
 
     def handle_result(result, allow_failure: false)
       return true if result == true
-      return true if allow_failure
+      return result if allow_failure
 
       case result
       when false then warn 'Command exited with a non-zero exit-code'

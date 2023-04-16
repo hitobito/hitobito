@@ -91,6 +91,11 @@ jobs:
           curl -L https://github.com/transifex/cli/releases/download/${TRANSIFEX_VERSION}/tx-linux-amd64.tar.gz | tar xz -C $HOME/.local/bin/
           echo -e "[https://www.transifex.com]\napi_hostname = https://api.transifex.com\nhostname = https://www.transifex.com\nusername = api\npassword = $TRANSIFEX_TOKEN\nrest_hostname = https://rest.api.transifex.com\ntoken = $TRANSIFEX_TOKEN" > $HOME/.transifexrc
 
+      - name: 'Configure Git-User for the Release-Commits'
+        run: |
+          git config --global user.name "$(cd hitobito && git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(cd hitobito && git --no-pager log --format=format:'%ae' -n 1)"
+
       - name: 'Prepare release'
         env:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}

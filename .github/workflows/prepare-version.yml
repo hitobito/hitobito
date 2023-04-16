@@ -97,10 +97,7 @@ jobs:
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
 
           echo "$HOME/.local/bin/" >> $GITHUB_PATH
-          echo "$TRANSIFEX_TOKEN" | tr '/' '-'
-          ruby -e "ENV['TRANSIFEX_TOKEN'].split().each { |c| puts c }"
-          echo -e "[https://www.transifex.com]\ntoken = ${TRANSIFEX_TOKEN}\napi_hostname = https://api.transifex.com" > $HOME/.transifexrc
-          cat $HOME/.transifexrc
+          echo -e "[https://www.transifex.com]\napi_hostname = https://api.transifex.com\nhostname = https://www.transifex.com\nusername = api\npassword = $TRANSIFEX_TOKEN\nrest_hostname = https://rest.api.transifex.com\ntoken = $TRANSIFEX_TOKEN" > $HOME/.transifexrc
           (cd hitobito && tx status)
 
           hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION"

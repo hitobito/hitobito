@@ -52,7 +52,7 @@ module Release
     end
 
     def execute_check(cmd, success: 'so it seems', failure: 'not the case')
-      result = execute cmd
+      result = execute cmd, allow_failure: true
       message = result ? success : failure
 
       visual_prefix = ' ->'
@@ -61,7 +61,7 @@ module Release
       result
     end
 
-    def execute(cmd)
+    def execute(cmd, allow_failure: false)
       visual_prefix = '==>' unless command_list?
       puts [visual_prefix, cmd].compact.join(' ')
 
@@ -71,11 +71,12 @@ module Release
         visual_prefix = ' ->'
         visual_suffix = result ? cmd_success : cmd_error
         puts [visual_prefix, cmd, visual_suffix].compact.join(' ')
-      end.then { |result| handle_result(result) } # rubocop:disable Style/MultilineBlockChain
+      end.then { |result| handle_result(result, allow_failure: allow_failure) } # rubocop:disable Style/MultilineBlockChain
     end
 
-    def handle_result(result)
+    def handle_result(result, allow_failure: false)
       return true if result == true
+      return true if allow_failure
 
       case result
       when false then warn 'Command exited with a non-zero exit-code'

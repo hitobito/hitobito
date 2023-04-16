@@ -41,7 +41,6 @@ module Release
 
     def update_translations(task)
       rake task
-      # execute_check 'git status -- config/locales'
       add 'config/locales/*.yml'
       commit 'Pull translations from transifex'
     end

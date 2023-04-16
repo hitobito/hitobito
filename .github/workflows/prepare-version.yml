@@ -80,6 +80,11 @@ jobs:
           bundler-cache: true
           working-directory: hitobito
 
+      - name: 'Make dependencies known to all wagons'
+        run: |
+          ls . | grep "hitobito_" | xargs -L1 -I% \
+            cp -v hitobito/Gemfile.lock "%/"
+
       - name: 'Install and configure additional dependencies'
         env:
           TRANSIFEX_VERSION: "v1.6.4"

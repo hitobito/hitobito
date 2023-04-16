@@ -19,8 +19,8 @@ on:
       #   description: "Version to be used"
       #   required: false
       #   type: string
+    secrets:
       TRANSIFEX_TOKEN:
-        type: string
         required: true
 
 permissions:
@@ -92,11 +92,13 @@ jobs:
         env:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
           FIRST_WAGON: ${{ inputs.wagon }}
-          TRANSIFEX_TOKEN: ${{ inputs.TRANSIFEX_TOKEN }}
+          TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
         run: |
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
 
           echo "$HOME/.local/bin/" >> $GITHUB_PATH
+          echo "$TRANSIFEX_TOKEN" | tr '/' '-'
+          ruby -e "ENV['TRANSIFEX_TOKEN'].split().each { |c| puts c }"
           echo -e "[https://www.transifex.com]\ntoken = ${TRANSIFEX_TOKEN}\napi_hostname = https://api.transifex.com" > $HOME/.transifexrc
           cat $HOME/.transifexrc
           (cd hitobito && tx status)

@@ -95,6 +95,9 @@ jobs:
           TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
         run: |
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
+
           echo "$HOME/.local/bin/" >> $GITHUB_PATH
-          tx status -t $TRANSIFEX_TOKEN
+          echo -e "[https://www.transifex.com]\ntoken=${TRANSIFEX_TOKEN}" >> $HOME/.transifexrc
+          (cd hitobito && tx status)
+
           hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION"

@@ -97,7 +97,7 @@ jobs:
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
 
           echo "$HOME/.local/bin/" >> $GITHUB_PATH
-          echo -e "[https://www.transifex.com]\ntoken=${TRANSIFEX_TOKEN}" >> $HOME/.transifexrc
+          echo -e "[https://www.transifex.com]\ntoken = ${TRANSIFEX_TOKEN}\napi_hostname = https://api.transifex.com" > $HOME/.transifexrc
           (cd hitobito && tx status)
 
           hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION"

@@ -19,8 +19,8 @@ on:
       #   description: "Version to be used"
       #   required: false
       #   type: string
-    secrets:
       TRANSIFEX_TOKEN:
+        type: string
         required: true
 
 permissions:
@@ -92,7 +92,7 @@ jobs:
         env:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
           FIRST_WAGON: ${{ inputs.wagon }}
-          TRANSIFEX_TOKEN: ${{ secrets.TRANSIFEX_TOKEN }}
+          TRANSIFEX_TOKEN: ${{ inputs.TRANSIFEX_TOKEN }}
         run: |
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
 

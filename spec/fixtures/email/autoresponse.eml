@@ -1,0 +1,267 @@
+Received: from abc42.PROD.OUTLOOK.COM (2611:10a6:710:24::9) by
+ ABC42.PROD.OUTLOOK.COM with HTTPS; Fri, 14 Apr 2023 06:16:26
+ +0000
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=fail;
+ b=le6dLvHiBER/8lAnughHc6bmbA9e3RhzL+bVCTlOXMskT+ujJiBon3CNKx1PrQ580derAvYFjP6leYX9nmPSHMHz8sIOyfvHJW2XMKk4BLMfdgSEzld+NZS80bsY3h6CHdMqdPvEaAoNH3QhBqu1hLdEg/5zHcutjyFYt4J1fdnGHRMidrvY50l5xMHt9kjP3UJR1Z0qePSHNCEauOnef2FK4G9ZB0BT/BeUBGS6ich7mnI+TWZWIp77bzsMSxP4L1JGbLNsA7kTY9X4VSDA46/fYX0NIKU9EWnMWweV4HWHNPJXTmQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wiPe4ef/pkE3YWZr0jI72q9ONLjflCy10/0b5xftf98=;
+ b=JCKDAS1Df8K8sXkpthI/1JPCScKpqNx757Fw3TmrIpdwXAfKYaXRdIL4ONJx/HQqpmchsQ4Yc6xh3N69hv+VhG9EQ4DjeZysVPxB5399sMnXYy7L61JjbKL4xpkZ2GV6TemADq7TpFn3101vzw81F7nOwKm/zOkyb2UjK2agnsR72t/gX/lx1r2vInprTLFVVS1i44aMoBSoabVq/VQXc+WOqYcP6sXrERsBwHLKn1gYb/xgk7Bf1ukxL7ZcxMA4YNC7n8LV2/0Ri+rPMnqk8E9JTOWriG42VE8sFomvIw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 185.42.233.1) smtp.rcpttodomain=example.com smtp.mailfrom=hitobito.example.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=hitobito.example.com; dkim=fail (signature did not verify)
+ header.d=example.com; arc=fail (47)
+Received: from ABC42.eurprd04.prod.outlook.com (2603:10a6:10:2b0::11)
+ by ABC42.PROD.OUTLOOK.COM (2611:10a6:710:24::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Fri, 14 Apr
+ 2023 06:16:24 +0000
+Received: from DB5EUR42AFT045.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:10:2x0:cafe::d8) by DU2PR04CA0156.outlook.office365.com
+ (2603:10a6:10:2x0::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.34 via Frontend
+ Transport; Fri, 14 Apr 2023 06:16:24 +0000
+Authentication-Results: spf=pass (sender IP is 185.79.233.42)
+ smtp.mailfrom=hitobito.example.com; dkim=fail (signature did not verify)
+ header.d=example.com;dmarc=pass action=none
+ header.from=hitobito.example.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of hitobito.example.com
+ designates 185.79.233.85 as permitted sender)
+ receiver=protection.outlook.com; client-ip=185.79.233.85;
+ helo=mxout.example.com; pr=C
+Received: from mxout.example.com (185.79.233.85) by
+ DB5EUR02FT045.mail.protection.outlook.com (10.13.59.8) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.30 via Frontend Transport; Fri, 14 Apr 2023 06:16:24 +0000
+Received: from localhost.localdomain (unknown [185.98.123.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mxout.example.com (Postfix) with ESMTPS id C74153F071;
+	Fri, 14 Apr 2023 08:16:23 +0200 (CEST)
+Received: from mx02.example.com (mx02.example.com [IPv6:2a06:c01:1:1102::24])	by mailstore01.example.com (Postfix) with ESMTPS id 9C414421	for <knight-rider-list@hitobito.example.com>; Fri, 14 Apr 2023 08:15:25 +0200
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com (mail-zr0che01hn2248.outbound.protection.outlook.com [52.100.2.248])	by mx02.example.com (Postfix) with ESMTPS id 2304BDC	for <knight-rider-list@hitobito.example.com>; Fri, 14 Apr 2023 08:15:22 +0200
+Received: from GV0P278MB0226.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:33::12) by ZR0P278MB0797.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:42::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Fri, 14 Apr 2023 06:15:20 +0000
+Received: from GV0P278MB0226.CHEP278.PROD.OUTLOOK.COM ([::1]) by GV0P278MB0226.CHEP278.PROD.OUTLOOK.COM ([fe80::34a2:ebf5:bcff:d6bf%8]) with Microsoft SMTP Server id 15.20.6298.030; Fri, 14 Apr 2023 06:15:20 +0000
+Date: Fri, 14 Apr 2023 06:15:20 +0000
+From: "David Hasselhof <david.hasselhof@example.com>"
+Reply-To: david.hasselhof@example.com
+To: "John Rambo via knight-rider-list@hitobito.example.com" <knight-rider-list@hitobito.example.com>
+Message-ID: <b9506e76128c47c5b1124a796655b116@GV0P278MB0226.CHEP278.PROD.OUTLOOK.COM>
+In-Reply-To: <GV0P278MB0275F4AB09D182DA31301C60A1999@GV0P278MB0275.CHEP278.PROD.OUTLOOK.COM>
+References: <3fbb13b5-21e1-4af6-960d-99061@platon.example.com>
+ <GV0P278MB0275F4AB09D182DA31301C60A1999@GV0P278MB0275.PROD.OUTLOOK.COM>
+Subject: Automatische Antwort: Foundation for Law and Government
+Content-Type: multipart/alternative;
+ boundary=_000_b9506e76128c47c5b1124a796655b116GV0P278MB0226CHEP278PRO_
+Content-Transfer-Encoding: 7bit
+X-Original-To: knight-rider-list@hitobito.example.com
+Delivered-To: mailinglists+knight-rider-list@example.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VA9PVwe2un3DyvXN0XoGe62NsmFqXDlthTWBHOHwJAtQ0tqDbu32qJKdUiVybgzXdoRu57W47+NiuFslsLRyQMhy4TNgiM2q7ue6vpcTYRE1GP0WM5buB2Gxe35cvrWR8qCe6Kp5AYBnATa84NOMu6+wsGb3VRHxFYo6zP3QklyjcRn5OJfgbPZK8LINOBujerQpe1LX5bl53K/ajnoYssM7KFuvoOwpH2dUGQmdEsjWh4YQ9JKXw98GeHeYrEN4Wsj3xI7Qz/7BZVqotpkXRxOMXtXqOQZR9F1uDHKTWDRFmL36oA0W2ig5Ithq4ycBWqlt41ldn5NZf1Ewfe7Oxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wIyzmO7YS8oBikP9ps09wLcsBYgOeN3CEtfCHavtntk=;
+ b=JJSMvlcBI8CMmGThpBjHnMbAvPZNjoNhhi01t9mHgME4BEXRW5xtoumjtwJwAj6oHMNxEHUZPkstovgXmV73y9eajVECSlcrvPCouLcNv9xnVkbjIgSxOpph2/g9yjlNZlkiUV4A4FEnIMuvI1uyjzp8kuEzt3mG2u1tbfrmclknRmtIIajZr9lQrLl85WI6nojZ0QAzydR4g1wnQTGJpEjkQfDfSXN4HmGmIuaax10SiO6S/FNvcEfqGBM+vnJlvkhy/hOMMjyOyDcZiUh3yBS7FioYVa4eiAjSiCjoWMvQK525J/0OmtwGcO988tPPxBXxWPInlkxRaVJ0d6t2BQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=pass
+ action=none header.from=example.com; dkim=pass header.d=example.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=example.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wIyzmO7YS8oBikP9ps09wLcsBYgOeN3CEtfCHavtntk=;
+ b=a0BUdn31ajUGgiUSI0bPz95ZMyhj1hyh9xv9C6DeLzNgtRIBDUX4olvaA+SGpZgREC0rO/e41+xjvQcPbm87+partQF6jUyB3CsUSM7suY6V/cRaV2VApod1G7TnS4rR0+LnifyJGpEXy6rTHNyeNAy7MOalEF/Hagv/R0Hr9CLpa8GzNFMX2lB4ipYjltSyNjpTJIymzVf2eoQ5Tbz2cd/x1dkTsZ0UlbMjkmCpyTgZtalGB5SQZ730n2gCYt6O3sQvA/PiJvaeL4Bu/xbi1st73XnMXGNaegZCDhbeLKYKa5pSg/K+ePLtfVBrOiZBq9QnHllMTmsqSdITuY8noA==
+Thread-Topic: Presseschau
+Thread-Index: AQHZbphdD9gCIyDEz0ihkBhJFqYw/a8qU8oE
+X-MS-Has-Attach:
+X-Auto-Response-Suppress: All
+X-MS-Exchange-Inbox-Rules-Loop: david.hasselhof@example.com
+X-MS-TNEF-Correlator:
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=example.com;
+x-ms-exchange-parent-message-id: <GV0P278MB0275F4AB09D182DA31301C60A1999@GV0P278MB0275.CHEP278.PROD.OUTLOOK.COM>
+auto-submitted: auto-generated
+x-ms-exchange-generated-message-source: Mailbox Rules Agent
+x-ms-traffictypediagnostic:
+ GV0P278MB0226:EE_|ZR0P278MB0797:EE_|DB5EUR02FT045:EE_|GVAP278MB0054:EE_|ZRAP278MB0610:EE_
+X-MS-Office365-Filtering-Correlation-Id: c0399c11-69c2-454a-6a04-08db3cafc62c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ XhaOoh1Kee1mAKnKyJ5UYb+dd9R8ci1hoYqNFpxdPRDZhJ5kiUGn5XFivWv6dRcfcQ584nPTmGw0J60jPEY1fzLzSLFh7Bn7jWuUiu5ihfAn5cgLGPOuYkow6bwQMhbfD2rC4GqmMotEgfNg+573Q9mgIrq2Fyt3D7uZMaoX/l2GlWppIjkw/7Z2svk/WSO0QR7ylTHZuzMQ1+dG+hHcpMq+lPGi3uIgr8eQWbBTvYZ4kIMVNGmsV1w696gm0W5D2xieYtKylQHTWPP+IDiRbL33zwN9FvnKmHhcrJWdKndRcB+bGjKSvtdkzRIUI5RGsFgtIn5wOUfUdybBwKQzfgWSNHt4SXyfBj8Aheac8DqqckrIgt/jmREJmGTvRgeexULlfkFz6K/ur2eq43G8lIU7NXbjRHxgATHAfMvZB4I+I1ufbC7XJJNGfh0yCaN3mCh0Bh5yHQbeanB7VkEojMINj7yUAeI6Q2mCOBpH8IFj6XeQly6V2w37syw1cBzXFZ7AOcz3f3k
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:de;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV0P278MB0226.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(366004)(376002)(39830400003)(346002)(451199021)(4744005)(5660300002)(122000001)(2906002)(8676002)(8936002)(44832011)(41300700001)(316002)(6916009)(83380400001)(64756008)(66446008)(78352004)(66556008)(66476007)(66946007)(71200400001)(108616005)(55016003)(88996005)(19627235002)(7696005)(498600001)(24736004)(9686003)(6506007)(42882007)(80100003);DIR:OUT;SFP:1501;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0797
+X-Rspamd-Queue-Id: 2304BDC
+X-Rspamd-Server: mx02.example.com
+X-Spamd-Result: default: False [-9.00 / 15.00]; BAYES_HAM(-4.00)[99.99%];
+ ARC_ALLOW_TRUSTED(-2.00)[microsoft.com:s=arcselector9901:i=1];
+ ARC_ALLOW(-1.00)[microsoft.com:s=arcselector9901:i=1];
+ RWL_AMI_LASTHOP(-1.00)[52.100.2.248:from];
+ DMARC_POLICY_ALLOW(-0.50)[example.com,quarantine];
+ R_DKIM_ALLOW(-0.20)[example.com:s=selector1];
+ R_SPF_ALLOW(-0.20)[+ip4:52.100.0.0/14];
+ MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+ MIME_TRACE(0.00)[0:+,1:+,2:~]; FROM_HAS_DN(0.00)[]; RCVD_TLS_LAST(0.00)[];
+ RCVD_COUNT_TWO(0.00)[2]; ASN(0.00)[asn:8075, ipnet:52.96.0.0/12, country:US];
+ PITC_ARC_FIRSTHOP_DMARC_PASS(0.00)[]; NEURAL_HAM(-0.00)[-1.000];
+ RCVD_IN_DNSWL_NONE(0.00)[52.100.2.248:from]; RCPT_COUNT_ONE(0.00)[1];
+ TO_MATCH_ENVRCPT_ALL(0.00)[]; TO_DN_ALL(0.00)[];
+ DKIM_TRACE(0.00)[example.com:+];
+ RWL_MAILSPIKE_POSSIBLE(0.00)[52.100.2.248:from]
+X-Rspamd-Action: no action
+Return-Path: knight-rider-list@hitobito.example.com
+X-MS-Exchange-Organization-ExpirationStartTime: 14 Apr 2023 06:16:24.4800
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ c0399c11-69c2-454a-6a04-08db3cafc62c
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 5b5367ee-f86e-4592-a946-ad23698e7e5b:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DB5EUR02FT045.eop-EUR02.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DB5EUR02FT045.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 8151371e-4aa1-414c-da4b-08db3cafa046
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:185.79.233.85;CTRY:CH;LANG:de;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mxout.example.com;PTR:mxout.example.com;CAT:NONE;SFS:(13230028)(451199021)(496002)(336012)(83380400001)(108616005)(19627235002)(7696005)(24736004)(1096003)(356005)(7596003)(6862004)(8676002)(7636003)(450100002)(6200100001)(7416002)(5660300002)(9686003)(6506007)(26005)(8636004)(86362001)(55016003);DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 06:16:24.3237
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0399c11-69c2-454a-6a04-08db3cafc62c
+X-MS-Exchange-CrossTenant-Id: 5b5367ee-f86e-4592-a946-ad23698e7e5b
+X-MS-Exchange-CrossTenant-AuthSource:
+ DB5EUR02FT045.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0054
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.8726834
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6298.030
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?iso-8859-1?Q?rF+1cEUnhCGCT0yoSFSBiAWyFfo9TkARSiPb/mu8FanUTDPlJnQuODq68L?=
+ =?iso-8859-1?Q?QdgFJbz7bqkYzpK8MNQUsEXUwvbPbE/Dg7k+ODkGMHuzdeFa881JtGop?=
+ =?iso-8859-1?Q?+67dbhUjEhVaPwUjVLrSsDkEcQQKwx64Nj11UJCp16xyq7Q1k6/LM/q?=
+ =?iso-8859-1?Q?bx7gy5IplhLpH23w6cfzIbAESvKB7yU41pqVHBKPGpEZV2gzBbBvWVOflL?=
+ =?iso-8859-1?Q?XEfG08VXb9Jw49a0t3WD5rD/oWSQdevfRrR99H0KFjUbpxIUDFh0IUsIy?=
+ =?iso-8859-1?Q?Dh7VBgrRxGQABJWhL3fWG1kqh9400vom3jCPA/G9Ere2clHnhuJInbeZ5F?=
+ =?iso-8859-1?Q?FAUARIsV6A+036qczyHRmZaX0A5BOypfT6hQIyQrKp3ZdRvtypCCe/T?=
+ =?iso-8859-1?Q?UciIMrs8c+YaT1a/Z40RgpYrrUaPpRtzIs8/9/aPkfZyHqyOBMfDgMwp4o?=
+ =?iso-8859-1?Q?AzjgimglZnKYcktxeCx9OOEli0n6Ptjy1qsrGSy688VYJAQyPhgUxOJb?=
+ =?iso-8859-1?Q?btJC5wE4iw8tPI66DyDEeEjUoU0Ozl9S119S9bny7+RcIFIhMwl6+qC5?=
+ =?iso-8859-1?Q?iegpAuuQT5xnMOKC94YuLkxImFzMmB1OE8c6bAkr2kXSfhWZ3SQOZSx+RT?=
+ =?iso-8859-1?Q?7CXAPzEBf0sxoBfMPzEBudn1x6zg0OLw/CQgpwap9bzayHgg7a4biS?=
+ =?iso-8859-1?Q?mU+H1ZqST0RaKPjwugA2Ae9dAEDFXxvfQQ5EXrv2YDyhnS2CVn3j?=
+ =?iso-8859-1?Q?z5UY34t7ewYm/YJYBQyB2afk6aq76EpdaYBaN4mCUMni/3fvwTe1rFc7?=
+ =?iso-8859-1?Q?i54LZ9Wi6K+wczx9w+2Rj4gi7tEkPPlTjlJU1EGCTBCasFW1TfK/sXYA?=
+ =?iso-8859-1?Q?9L+WIkcKOX4ELxMnb0GOJleJ6hmrlucnQmdUwkSoHqdz73s1FpbEQm7b?=
+ =?iso-8859-1?Q?8NP0A6zgrL1jjj2NRCFntnxgcmjs0H8pm4JMlHcoQh2Y+hkmQ1Og+Bt3?=
+ =?iso-8859-1?Q?9oIn+ZKuQyFE+pQ650+ZxYOEQJwoymFsgg/ArfAdvUJE3mTFrsHzd08w?=
+ =?iso-8859-1?Q?Ox8a4EVIt9uqooA+jIKKrefPrmijDe7OFfOKxP839WlOLHh4Pw2OseqC?=
+ =?iso-8859-1?Q?g3XvR/Rr9LPPV5aHbgUSpU7ykThR0KsVR2u28M7Nl1ZtPzi/dIQklrN?=
+ =?iso-8859-1?Q?e8SYUbzbeOqO6qG0aRCthEGEhpEH0kth6cGHEQXxTMy/pTE7u496pe5N?=
+ =?iso-8859-1?Q?oxWWUgcD7LClsehuhq2B92OJB53fJhEYZHHtHlPtK2oBU8StcAvSqdoLC?=
+ =?iso-8859-1?Q?lQVhxTtyfpTI8D1JdZ+0KlJiHB1xQJMDXRKqP+I4eFajdzm8xEk4d0wYd?=
+ =?iso-8859-1?Q?SjVyCI/6tBmiE32Tkzfbqz+aLxCChP5Fcub05Hp9QXq5iufRU8gaJNNSNs?=
+ =?iso-8859-1?Q?Dmiyy4L/jWquvy?=
+MIME-Version: 1.0
+
+--_000_b9506e76128c47c5b1124a116GV0P278MB0226CHEP278PRO_
+Content-Type: text/plain;
+ charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+Guten Tag=0D
+Ich bin bis am Montag, 17. April 2023, abwesend. Ihre Nachricht wird in d=
+er Zwischenzeit nicht gelesen und auch nicht weitergeleitet.=0D
+Freundliche Gr=FCsse, David Hasselhof=0D
+=0D
+Bonjour,=0D
+Je serai de retour lundi, 17 avril 2023. Entretemps, votre message ne ser=
+a ni lu ni transf=E9r=E9.=0D
+Meilleures salutations, David Hasselhof=0D
+
+--_000_b9506e76128c47c5b1124a5b116GV0P278MB0226CHEP278PRO_
+Content-Type: text/html;
+ charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:o=3D"urn:schemas-microsoft-com:office:office" xmlns:w=3D"urn:sc=
+hemas-microsoft-com:office:word" xmlns:m=3D"http://schemas.microsoft.com/of=
+fice/2004/12/omml" xmlns=3D"http://www.w3.org/TR/REC-html40"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">=0D
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">=
+=0D
+<style><!--=0D
+/* Font Definitions */=0D
+@font-face=0D
+	{font-family:"Cambria Math";=0D
+	panose-1:2 4 5 3 5 4 6 3 2 4;}=0D
+@font-face=0D
+	{font-family:Calibri;=0D
+	panose-1:2 15 5 2 2 2 4 3 2 4;}=0D
+/* Style Definitions */=0D
+p.MsoNormal, li.MsoNormal, div.MsoNormal=0D
+	{margin:0cm;=0D
+	margin-bottom:.0001pt;=0D
+	font-size:11.0pt;=0D
+	font-family:"Calibri",sans-serif;=0D
+	mso-fareast-language:EN-US;}=0D
+span.E-MailFormatvorlage17=0D
+	{mso-style-type:personal-compose;=0D
+	font-family:"Calibri",sans-serif;}=0D
+.MsoChpDefault=0D
+	{mso-style-type:export-only;=0D
+	font-family:"Calibri",sans-serif;=0D
+	mso-fareast-language:EN-US;}=0D
+@page WordSection1=0D
+	{size:612.0pt 792.0pt;=0D
+	margin:70.85pt 70.85pt 2.0cm 70.85pt;}=0D
+div.WordSection1=0D
+	{page:WordSection1;}=0D
+--></style>=0D
+</head>=0D
+<body lang=3D"DE-CH" link=3D"#0563C1" vlink=3D"#954F72">=0D
+<div class=3D"WordSection1">=0D
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%;text-a=
+utospace:none">=0D
+Guten Tag<o:p></o:p></p>=0D
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%;text-a=
+utospace:none">=0D
+Ich bin bis am Montag, 17. April 2023, abwesend. Ihre Nachricht wird in der=
+ Zwischenzeit nicht gelesen und auch nicht weitergeleitet.=0D
+<o:p></o:p></p>=0D
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%;text-a=
+utospace:none">=0D
+Freundliche Gr=FCsse, David Hasselhof<o:p></o:p></p>=0D
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%;text-a=
+utospace:none">=0D
+<o:p>&nbsp;</o:p></p>=0D
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%;text-a=
+utospace:none">=0D
+Bonjour, <o:p></o:p></p>=0D
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%;text-a=
+utospace:none">=0D
+<span lang=3D"FR-CH">Je serai de retour lundi, 17 avril 2023. Entretemps, v=
+otre message ne sera ni lu ni transf=E9r=E9.=0D
+<o:p></o:p></span></p>=0D
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%;text-a=
+utospace:none">=0D
+Meilleures salutations, David Hasselhof<o:p></o:p></p>=0D
+</div>=0D
+</body>=0D
+</html>=0D
+
+--_000_b9506e76128c47c796655b116GV0P278MB0226CHEP278PRO_--

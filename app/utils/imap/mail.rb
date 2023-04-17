@@ -10,6 +10,8 @@ require 'mail'
 
 class Imap::Mail
 
+  MESSAGE_UID_REGEX = /X-Hitobito-Message-UID: ([a-z0-9]*)/.freeze
+
   attr_accessor :net_imap_mail
 
   delegate :subject, :sender, to: :envelope
@@ -79,8 +81,12 @@ class Imap::Mail
       bounce_hitobito_message_uid.present?
   end
 
+  def auto_response?
+    auto_response_header?
+  end
+
   def bounce_hitobito_message_uid
-    mail.body.raw_source[/X-Hitobito-Message-UID: ([a-z0-9]*)/,1]
+    mail.body.raw_source[MESSAGE_UID_REGEX, 1]
   end
 
   def mail
@@ -100,6 +106,11 @@ class Imap::Mail
 
   def return_path
     mail.header['Return-Path'].value
+  end
+
+  # https://www.iana.org/assignments/auto-submitted-keywords/auto-submitted-keywords.xhtml
+  def auto_response_header?
+    mail.header['auto-submitted'].try(:value) == 'auto-generated'
   end
 
 end

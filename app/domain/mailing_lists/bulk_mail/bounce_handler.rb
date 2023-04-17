@@ -32,8 +32,13 @@ module MailingLists::BulkMail
     private
 
     def source_message
-      parent_uid = @imap_mail.bounce_hitobito_message_uid
+      parent_uid = bounce_hitobito_message_uid
       Message::BulkMail.find_by(uid: parent_uid)
+    end
+
+    def bounce_hitobito_message_uid
+      @imap_mail.bounce_hitobito_message_uid ||
+        @imap_mail.auto_response_hitobito_message_uid
     end
 
     def outdated?

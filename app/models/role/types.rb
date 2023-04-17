@@ -31,7 +31,7 @@ module Role::Types
     :group_and_below_full,
     :group_full,
     :admin,
-    :manage_invisible_people,
+    :see_invisible_from_above,
     :finance
   ].freeze
 

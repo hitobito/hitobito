@@ -71,21 +71,21 @@ class PersonFetchables
     condition.or(query, *args)
   end
 
-  def manage_invisible_people_condition(condition)
-    return if layer_groups_manage_invisible_people.blank?
+  def see_invisible_from_above_condition(condition)
+    return if layer_groups_see_invisible_from_above.blank?
 
-    manage_invisible_people_groups = OrCondition.new
-    collapse_groups_to_highest(layer_groups_manage_invisible_people) do |layer_group|
-      manage_invisible_people_groups.or('groups.lft >= ? AND groups.rgt <= ?',
+    see_invisible_from_above_groups = OrCondition.new
+    collapse_groups_to_highest(layer_groups_see_invisible_from_above) do |layer_group|
+      see_invisible_from_above_groups.or('groups.lft >= ? AND groups.rgt <= ?',
                                       layer_group.left,
                                       layer_group.rgt)
     end
 
-    condition.or(*manage_invisible_people_groups.to_a)
+    condition.or(*see_invisible_from_above_groups.to_a)
   end
 
-  def layer_groups_manage_invisible_people
-    @layer_groups_unconfined_below ||= layer_groups_with_permissions(:manage_invisible_people)
+  def layer_groups_see_invisible_from_above
+    @layer_groups_unconfined_below ||= layer_groups_with_permissions(:see_invisible_from_above)
   end
 
   # If group B is a child of group A, B is collapsed into A.

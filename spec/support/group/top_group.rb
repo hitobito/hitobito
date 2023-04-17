@@ -32,7 +32,7 @@ class Group::TopGroup < Group
   end
 
   class InvisiblePeopleManager < ::Role
-    self.permissions = [:manage_invisible_people]
+    self.permissions = [:see_invisible_from_above]
   end
 
   roles Leader, LocalGuide, Secretary, LocalSecretary, Member, InvisiblePeopleManager

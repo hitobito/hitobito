@@ -740,7 +740,7 @@ de:
               approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
               finance: Erstellen und Verwalten von Rechnungen.
               impersonation: Hitobito als andere Person bedienen.
-              manage_invisible_people: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
+              see_invisible_from_above: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
           kind:
             member:
               one: Mitglied

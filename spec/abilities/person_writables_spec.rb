@@ -95,12 +95,11 @@ describe PersonWritables do
     end
   end
 
-  context :manage_invisible_people do
-    before { Group::TopGroup::Leader.permissions << :manage_invisible_people }
-    let(:role) { Fabricate(Group::TopGroup::Leader.name, group: groups(:top_group)) }
+  context :see_invisible_from_above do
+    let(:role) { Fabricate(Group::TopGroup::InvisiblePeopleManager.name, group: groups(:top_group)) }
 
-    it 'has manage_invisible_people permission' do
-      expect(role.permissions).to include(:manage_invisible_people)
+    it 'has see_invisible_from_above permission' do
+      expect(role.permissions).to include(:see_invisible_from_above)
     end
 
     context 'own group' do

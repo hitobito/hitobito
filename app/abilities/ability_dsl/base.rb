@@ -140,8 +140,8 @@ module AbilityDsl
 
     def user_group_ids
       case permission
-      when :manage_invisible_people
-        user.groups_with_permission(:manage_invisible_people).to_a.collect(&:id)
+      when :see_invisible_from_above
+        user.groups_with_permission(:see_invisible_from_above).to_a.collect(&:id)
       else
         user_context.permission_group_ids(permission) || []
       end
@@ -149,8 +149,8 @@ module AbilityDsl
 
     def user_layer_ids
       case permission
-      when :manage_invisible_people
-        user_context.layer_ids(user.groups_with_permission(:manage_invisible_people).to_a)
+      when :see_invisible_from_above
+        user_context.layer_ids(user.groups_with_permission(:see_invisible_from_above).to_a)
       else
         user_context.permission_layer_ids(permission) || []
       end

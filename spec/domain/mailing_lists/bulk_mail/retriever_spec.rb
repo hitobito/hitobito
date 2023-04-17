@@ -214,22 +214,26 @@ describe MailingLists::BulkMail::Retriever do
     let(:auto_response) { Mail.read_from_string(File.read(Rails.root.join('spec', 'fixtures', 'email', 'autoresponse.eml'))) }
 
     before do
+      allow(imap_mail).to receive(:hash).and_return('abcd42')
       allow(imap_mail).to receive(:original_to).and_return('leaders@localhost')
       allow(imap_mail).to receive(:mail).and_return(auto_response)
       allow(imap_mail).to receive(:sender_email).and_return('David Hasselhof <david.hasselhof@example.com>')
       allow(imap_mail).to receive(:subject).and_return('Automatische Antwort: Foundation for Law and Government')
     end
 
-    it 'forwards auto response to sender' do
+    it 'ignores auto response messages' do
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
 
       expect do
         retriever.perform
-      end.to change { Message::BulkMailBounce.count }.by(1)
+      end.to change { Message::BulkMailBounce.count }.by(0)
         .and change { Message::BulkMail.count }.by(0)
         .and change { MailLog.count }.by(1)
         .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
-        .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::BounceMessageForwardJob%"').count }.by(1)
+        .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::BounceMessageForwardJob%"').count }.by(0)
+
+      mail_log = MailLog.find_by(mail_hash: 'abcd42')
+      expect(mail_log.status).to eq('auto_response_rejected')
     end
   end
 

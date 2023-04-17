@@ -82,16 +82,11 @@ class Imap::Mail
   end
 
   def auto_response?
-    auto_response_header? &&
-      auto_response_hitobito_message_uid.present?
+    auto_response_header?
   end
 
   def bounce_hitobito_message_uid
     mail.body.raw_source[MESSAGE_UID_REGEX, 1]
-  end
-
-  def auto_response_hitobito_message_uid
-    mail.raw_source[MESSAGE_UID_REGEX, 1]
   end
 
   def mail

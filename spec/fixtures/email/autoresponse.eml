@@ -113,7 +113,6 @@ X-Spamd-Result: default: False [-9.00 / 15.00]; BAYES_HAM(-4.00)[99.99%];
  DKIM_TRACE(0.00)[example.com:+];
  RWL_MAILSPIKE_POSSIBLE(0.00)[52.100.2.248:from]
 X-Rspamd-Action: no action
-X-Hitobito-Message-UID: a15816bbd204ba20
 Return-Path: knight-rider-list@hitobito.example.com
 X-MS-Exchange-Organization-ExpirationStartTime: 14 Apr 2023 06:16:24.4800
  (UTC)

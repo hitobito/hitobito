@@ -24,7 +24,7 @@ module MailingLists::BulkMail
 
       @bulk_mail_bounce.update!(bounce_parent: source_message,
                                 raw_source: @imap_mail.raw_source)
-      log_info("Forwarding bounce/auto response message for list #{@mailing_list.mail_address} " \
+      log_info("Forwarding bounce message for list #{@mailing_list.mail_address} " \
                "to #{source_message.mail_from}")
       MailingLists::BulkMail::BounceMessageForwardJob.new(@bulk_mail_bounce).enqueue!
     end

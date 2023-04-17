@@ -47,6 +47,11 @@ class MailingLists::BulkMail::Retriever
   def process_valid_mail(imap_mail, mail_log, validator)
     mailing_list = assign_mailing_list(imap_mail)
     if mailing_list
+      if imap_mail.auto_response?
+        reject_auto_response(mail_log, imap_mail)
+        return
+      end
+
       process_mailing_list_mail(imap_mail, mail_log, validator, mailing_list)
     else
       mail_log.update!(status: :unknown_recipient)
@@ -55,14 +60,25 @@ class MailingLists::BulkMail::Retriever
     end
   end
 
-  def process_mailing_list_mail(imap_mail, mail_log, validator, mailing_list)
-    bulk_mail = mail_log.message
+  def reject_auto_response(mail_log, imap_mail)
+    mail_log.update!(status: :auto_response_rejected)
+    mail_log.message.destroy!
+    log_info("Ignored auto response email from #{imap_mail.sender_email} " \
+             "for list #{imap_mail.original_to}")
+  end
 
-    if imap_mail.list_bounce? || imap_mail.auto_response?
+  def process_mailing_list_mail(imap_mail, mail_log, validator, mailing_list)
+    if imap_mail.list_bounce?
+      bulk_mail = mail_log.message
       bounce_handler(imap_mail, bulk_mail, mailing_list).process
       return
     end
 
+    process_non_reply_mail(imap_mail, mail_log, validator, mailing_list)
+  end
+
+  def process_non_reply_mail(imap_mail, mail_log, validator, mailing_list)
+    bulk_mail = mail_log.message
     bulk_mail.update!(mailing_list: mailing_list, raw_source: imap_mail.raw_source)
 
     if validator.sender_allowed?(mailing_list)
@@ -113,7 +129,7 @@ class MailingLists::BulkMail::Retriever
   end
 
   def bulk_mail_class(imap_mail)
-    if imap_mail.list_bounce? || imap_mail.auto_response?
+    if imap_mail.list_bounce?
       Message::BulkMailBounce
     else
       Message::BulkMail

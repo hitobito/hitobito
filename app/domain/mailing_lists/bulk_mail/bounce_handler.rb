@@ -24,7 +24,7 @@ module MailingLists::BulkMail
 
       @bulk_mail_bounce.update!(bounce_parent: source_message,
                                 raw_source: @imap_mail.raw_source)
-      log_info("Forwarding bounce message for list #{@mailing_list.mail_address} " \
+      log_info("Forwarding bounce/auto response message for list #{@mailing_list.mail_address} " \
                "to #{source_message.mail_from}")
       MailingLists::BulkMail::BounceMessageForwardJob.new(@bulk_mail_bounce).enqueue!
     end
@@ -32,8 +32,13 @@ module MailingLists::BulkMail
     private
 
     def source_message
-      parent_uid = @imap_mail.bounce_hitobito_message_uid
+      parent_uid = bounce_hitobito_message_uid
       Message::BulkMail.find_by(uid: parent_uid)
+    end
+
+    def bounce_hitobito_message_uid
+      @imap_mail.bounce_hitobito_message_uid ||
+        @imap_mail.auto_response_hitobito_message_uid
     end
 
     def outdated?

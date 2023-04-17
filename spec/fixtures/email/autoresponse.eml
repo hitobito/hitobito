@@ -45,7 +45,7 @@ Received: from CHE01-ZR0-obe.outbound.protection.outlook.com (mail-zr0che01hn224
 Received: from GV0P278MB0226.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:33::12) by ZR0P278MB0797.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:42::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30; Fri, 14 Apr 2023 06:15:20 +0000
 Received: from GV0P278MB0226.CHEP278.PROD.OUTLOOK.COM ([::1]) by GV0P278MB0226.CHEP278.PROD.OUTLOOK.COM ([fe80::34a2:ebf5:bcff:d6bf%8]) with Microsoft SMTP Server id 15.20.6298.030; Fri, 14 Apr 2023 06:15:20 +0000
 Date: Fri, 14 Apr 2023 06:15:20 +0000
-From: "David Hasselhof via knight-rider-list@hitobito.example.com" <knight-rider-list@hitobito.example.com>
+From: "David Hasselhof <david.hasselhof@example.com>"
 Reply-To: david.hasselhof@example.com
 To: "John Rambo via knight-rider-list@hitobito.example.com" <knight-rider-list@hitobito.example.com>
 Message-ID: <b9506e76128c47c5b1124a796655b116@GV0P278MB0226.CHEP278.PROD.OUTLOOK.COM>
@@ -113,7 +113,7 @@ X-Spamd-Result: default: False [-9.00 / 15.00]; BAYES_HAM(-4.00)[99.99%];
  DKIM_TRACE(0.00)[example.com:+];
  RWL_MAILSPIKE_POSSIBLE(0.00)[52.100.2.248:from]
 X-Rspamd-Action: no action
-X-Hitobito-Message-UID: f8410959281e29d3
+X-Hitobito-Message-UID: a15816bbd204ba20
 Return-Path: knight-rider-list@hitobito.example.com
 X-MS-Exchange-Organization-ExpirationStartTime: 14 Apr 2023 06:16:24.4800
  (UTC)

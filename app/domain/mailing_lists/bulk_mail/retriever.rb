@@ -56,9 +56,8 @@ class MailingLists::BulkMail::Retriever
   end
 
   def process_mailing_list_mail(imap_mail, mail_log, validator, mailing_list)
-    bulk_mail = mail_log.message
-
-    if imap_mail.list_bounce?
+    if imap_mail.list_bounce? || imap_mail.auto_response?
+      bulk_mail = mail_log.message
       bounce_handler(imap_mail, bulk_mail, mailing_list).process
       return
     end
@@ -113,7 +112,7 @@ class MailingLists::BulkMail::Retriever
   end
 
   def bulk_mail_class(imap_mail)
-    if imap_mail.list_bounce?
+    if imap_mail.list_bounce? || imap_mail.auto_response?
       Message::BulkMailBounce
     else
       Message::BulkMail

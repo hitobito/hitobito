@@ -251,12 +251,34 @@ describe Person::AddRequestAbility do
         is_expected.not_to be_able_to(:index_person_add_requests, groups(:bottom_layer_one))
       end
     end
+
+    context 'herself' do
+      let(:role) { Fabricate(Group::BottomLayer::BasicPermissionsOnly.name, group: groups(:bottom_layer_one)) }
+
+      it 'allowed' do
+        request = create_request(role.person)
+
+        is_expected.to be_able_to(:approve, request)
+        is_expected.to be_able_to(:reject, request)
+      end
+    end
+
+    context 'her own' do
+      let(:role) { Fabricate(Group::BottomLayer::BasicPermissionsOnly.name, group: groups(:bottom_layer_one)) }
+
+      it 'allowed to reject' do
+        other = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_two)).person
+        request = create_request(other, requester: role.person)
+
+        is_expected.to be_able_to(:reject, request)
+      end
+    end
   end
 
-  def create_request(person)
+  def create_request(person, requester: people(:bottom_member))
     Person::AddRequest::Group.create!(
       person: person,
-      requester: people(:bottom_member),
+      requester: requester,
       body: groups(:bottom_layer_one),
       role_type: Group::BottomLayer::Member.sti_name
     )

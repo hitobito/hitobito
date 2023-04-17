@@ -70,7 +70,7 @@ describe MailingLists::BulkMail::BounceHandler do
 
     it 'processes bounce message' do
       expect(Rails.logger).to receive(:info)
-        .with("BulkMail Retriever: Forwarding bounce message for list leaders@#{Settings.email.list_domain} to sender@example.com")
+        .with("BulkMail Retriever: Forwarding bounce/auto response message for list leaders@#{Settings.email.list_domain} to sender@example.com")
 
       expect do
         bounce_handler.process

@@ -97,7 +97,7 @@ describe PersonReadables do
         context 'lower group' do
           let(:group) { groups(:bottom_layer_one) }
 
-          it 'ay get people with visible_from_above=true' do
+          it 'may get people with visible_from_above=true' do
             other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
             expect(other).to be_visible_from_above
             is_expected.to include(other.person)

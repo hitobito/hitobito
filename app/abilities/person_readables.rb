@@ -11,9 +11,10 @@ class PersonReadables < PersonFetchables
   self.same_group_permissions  = [:group_full, :group_read,
                                   :group_and_below_full, :group_and_below_read]
   self.above_group_permissions = [:group_and_below_full, :group_and_below_read]
-  self.same_layer_permissions  = [:layer_full, :layer_read,
-                                  :layer_and_below_full, :layer_and_below_read]
-  self.above_layer_permissions = [:layer_and_below_full, :layer_and_below_read]
+  self.same_layer_permissions  = [:layer_full, :layer_read, :layer_and_below_full,
+                                  :layer_and_below_read, :see_invisible_from_above]
+  self.above_layer_permissions = [:layer_and_below_full, :layer_and_below_read,
+                                  :see_invisible_from_above]
 
   attr_reader :group
 
@@ -35,7 +36,7 @@ class PersonReadables < PersonFetchables
   private
 
   def group_accessible_people
-    if read_permission_for_this_group? || see_invisible_from_above_in_above_layer?
+    if read_permission_for_this_group?
       can :index, Person,
           group.people.only_public_data { |_| true }
 

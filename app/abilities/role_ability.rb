@@ -36,7 +36,8 @@ class RoleAbility < AbilityDsl::Base
         subject.visible_from_above? &&
         permission_in_layers?(group.layer_hierarchy.collect(&:id)) &&
         in_active_group
-      )
+      ) ||
+      can_see_invisible_in_layer_or_above
   end
 
   def non_restricted
@@ -52,6 +53,13 @@ class RoleAbility < AbilityDsl::Base
 
   def not_own_role?
     subject.person_id != user.id
+  end
+
+  def can_see_invisible_in_layer_or_above
+    contains_any?(
+      subject.group.layer_hierarchy.collect(&:id),
+      user_context.permission_layer_ids(:see_invisible_from_above)
+    )
   end
 
   private

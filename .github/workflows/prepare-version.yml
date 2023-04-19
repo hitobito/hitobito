@@ -85,6 +85,8 @@ jobs:
 
       - name: 'Set up Ruby'
         uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_DEPLOYMENT: false
         with:
           bundler-cache: true
           working-directory: hitobito

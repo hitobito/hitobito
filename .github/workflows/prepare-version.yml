@@ -93,9 +93,8 @@ jobs:
         env:
           WAGONS: ${{ env.WAGONS }}
         run: |
-          cd hitobito && bin/wagon gemfile
-          # echo "$WAGONS" | xargs -L1 -d ' ' echo | grep -v '^$' | xargs -L1 -I% \
-          #   cp -v Gemfile.lock "../hitobito_%/"
+          echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+            cp -v Gemfile.lock "../hitobito_%/"
 
       - name: 'Install and configure additional dependencies'
         env:

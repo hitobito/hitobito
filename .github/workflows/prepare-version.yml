@@ -74,6 +74,15 @@ jobs:
         run: |
           cd hitobito && git fetch origin && git checkout -t origin/feature/1975-prepare-release
 
+      - name: 'Determine WAGONS from repo'
+        run: |
+          wagons=$(ls . | grep 'hitobito_' | sed 's/hitobito_//' | xargs)
+          echo "WAGONS='${wagons}'" >> "$GITHUB_ENV"
+
+      - name: 'Enable all wagons'
+        run: |
+          cd hitobito && cp Wagonfile.ci Wagonfile
+
       - name: 'Set up Ruby'
         uses: ruby/setup-ruby@v1
         with:
@@ -81,9 +90,12 @@ jobs:
           working-directory: hitobito
 
       - name: 'Make dependencies known to all wagons'
+        env:
+          WAGONS: ${{ env.WAGONS }}
         run: |
-          ls . | grep "hitobito_" | xargs -L1 -I% \
-            cp -v hitobito/Gemfile.lock "%/"
+          cd hitobito && bin/wagon gemfile
+          # echo "$WAGONS" | xargs -L1 -d ' ' echo | grep -v '^$' | xargs -L1 -I% \
+          #   cp -v Gemfile.lock "../hitobito_%/"
 
       - name: 'Install and configure additional dependencies'
         env:

@@ -64,12 +64,6 @@ class Release::Main
   attr_writer :composition_repo_dir, :hitobito_group_dir, :standard_answer
   attr_accessor :dry_run, :version
 
-  def self.from_composition(composition)
-    releaser = new([])
-    releaser.determine_wagons(composition)
-    releaser
-  end
-
   def initialize(all_wagons)
     self.all_wagons = all_wagons
     @standard_answer = nil
@@ -102,18 +96,6 @@ class Release::Main
     @wagon = @all_wagons.first
 
     @all_wagons # rubocop:disable Lint/Void a return value is not void
-  end
-
-  def determine_wagons(composition)
-    in_dir(hitobito_group_dir) do
-      in_dir(composition_repo_dir) do
-        require 'pathname'
-
-        self.all_wagons = Pathname.new('.').children.flat_map do |dep|
-          dep.to_s.scan(/hitobito_(\w+)/).first
-        end.compact
-      end
-    end
   end
 
   def run # rubocop:disable Metrics/MethodLength

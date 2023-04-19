@@ -77,7 +77,7 @@ jobs:
       - name: 'Determine WAGONS from repo'
         run: |
           wagons=$(ls . | grep 'hitobito_' | sed 's/hitobito_//' | xargs)
-          echo "WAGONS='${wagons}'" >> "$GITHUB_ENV"
+          echo "WAGONS=${wagons}" >> "$GITHUB_ENV"
 
       # - name: 'Enable all wagons'
       #   run: |

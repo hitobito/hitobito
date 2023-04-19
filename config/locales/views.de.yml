@@ -1172,6 +1172,7 @@ de:
         sender_rejected: Absender wurde abgelehnt
         unknown_recipient: Empfänger unbekannt
         retrieved: Empfangen
+        bounce_rejected: Bounce abgelehnt
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
     show:
       recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.

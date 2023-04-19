@@ -79,14 +79,13 @@ jobs:
           wagons=$(ls . | grep 'hitobito_' | sed 's/hitobito_//' | xargs)
           echo "WAGONS=${wagons}" >> "$GITHUB_ENV"
 
-      # - name: 'Enable all wagons'
-      #   run: |
-      #     cd hitobito && cp Wagonfile.ci Wagonfile
+      - name: 'Enable all wagons'
+        run: |
+          cd hitobito && cp Wagonfile.ci Wagonfile
 
       - name: 'Set up Ruby'
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true
           working-directory: hitobito
 
       - name: 'Make dependencies known to all wagons'

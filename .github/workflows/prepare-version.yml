@@ -88,10 +88,11 @@ jobs:
         with:
           working-directory: hitobito
 
-      - name: 'Make dependencies known to all wagons'
+      - name: 'Install bundler dependencies and distribute Gemfile.lock'
         env:
           WAGONS: ${{ env.WAGONS }}
         run: |
+          (cd hitobito && bundle install)
           echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
             cp -v hitobito/Gemfile.lock hitobito_%/
 

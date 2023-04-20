@@ -274,6 +274,12 @@ de:
           footer: 'Diese E-Mail wurde von Hitobito gesendet'
       reset_password_instructions:
         subject: 'Anleitung für das Setzen Deines Passworts'
+        body:
+          greeting: 'Hallo %{name}!'
+          reset_instructions:
+            with_password: 'Du kannst dein %{application_name} Passwort unter folgendem Link zurücksetzen.'
+            without_password_html: 'Willkommen bei %{application_name}! Du wurdest neu erfasst und hast ein Login erhalten.<br>Bitte setze ein Passwort unter dem folgenden Link.'
+          ignore_information_html: 'Wenn du dein Passwort nicht ändern willst, kannst du dieses E-Mail ignorieren.<br><br>Dein Passwort ändert sich nicht ohne dass du auf dem obigen Link gehst und dort ein neues Passwort vergibst.'
       unlock_instructions:
         subject: 'Anleitung um Deinen Account freizuschalten'
         body:

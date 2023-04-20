@@ -106,8 +106,6 @@ ActiveRecord::Schema.define(version: 2023_03_27_151218) do
     t.integer "attempt"
     t.string "status"
     t.text "payload", size: :long, collation: "utf8mb4_bin"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.index ["group_id"], name: "index_background_job_log_entries_on_group_id"
     t.index ["job_id", "attempt"], name: "index_background_job_log_entries_on_job_id_and_attempt", unique: true
     t.index ["job_id"], name: "index_background_job_log_entries_on_job_id"

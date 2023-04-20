@@ -22,7 +22,6 @@ module BackgroundJobs
     def log(message, **opts)
       attrs = message.payload.with_indifferent_access
                      .slice(*BackgroundJobLogEntry.column_names)
-                     .merge(updated_at: Time.zone.now)
                      .reverse_merge(**opts)
       BackgroundJobLogEntry.upsert(**attrs)
     rescue

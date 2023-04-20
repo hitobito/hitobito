@@ -18,7 +18,7 @@ class CreateBackgroundJobLogEntries < ActiveRecord::Migration[6.1]
       t.string :status
       t.json :payload
 
-      t.timestamps default: -> { "(UTC_TIMESTAMP(6))" }
+      t.timestamps default: -> { "CONVERT_TZ(NOW(6), 'SYSTEM', '+00:00')" }
 
       t.index [:job_id, :attempt], unique: true
     end

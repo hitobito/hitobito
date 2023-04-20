@@ -56,7 +56,7 @@ module Release
       message = result ? success : failure
 
       visual_prefix = ' ->'
-      puts [visual_prefix, message].compact.join(' ')
+      puts [visual_prefix, message, cmd_success].compact.join(' ')
 
       result
     end

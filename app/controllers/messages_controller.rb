@@ -62,6 +62,20 @@ class MessagesController < CrudController
     end
   end
 
+  def assign_attributes
+    super
+
+    return unless entry.invoice?
+
+    if params[:invoice_items].present?
+      entry.invoice.invoice_items = params[:invoice_items].map do |type|
+        item = InvoiceItem.type_mappings[type.to_sym].new
+        item.name = item.model_name.human
+        item
+      end
+    end
+  end
+
   def list_entries
     super
       .list
@@ -84,7 +98,17 @@ class MessagesController < CrudController
   def permitted_params
     p = model_params.dup
     p.delete(:type)
-    p.permit(permitted_attrs)
+    p = p.permit(permitted_attrs)
+
+    return p unless entry.invoice? && p.dig(:invoice_attributes, :invoice_items_attributes)
+
+    p.tap do |permitted|
+      permitted.dig(:invoice_attributes, :invoice_items_attributes).each do |index, attrs|
+        parameters = params.dig(:message, :invoice_attributes, :invoice_items_attributes,
+                                index, :dynamic_cost_parameters)
+        attrs[:dynamic_cost_parameters] = parameters&.to_unsafe_hash || {}
+      end
+    end
   end
 
   def permitted_attrs

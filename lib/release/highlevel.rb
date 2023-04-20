@@ -42,6 +42,12 @@ module Release
     def update_translations(task)
       rake task
       add 'config/locales/*.yml'
+
+      changes = execute_check 'test $(git status -s -- config/locales | wc -l) -gt 0',
+                              success: 'Updated translations found',
+                              failure: 'No changes in translations'
+      return unless changes
+
       commit 'Pull translations from transifex'
     end
 

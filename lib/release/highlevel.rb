@@ -77,11 +77,14 @@ module Release
       commit 'Make previously unreleased changes visible in changelog'
     end
 
-    def update_submodules(branch:, to: @version, with: @message)
+    def update_submodules(branch:, to: @version)
       branch(branch)
       fast_forward(branch)
       fix_submodules
       submodules "git fetch && git fetch --tags --force && git checkout #{to}"
+    end
+
+    def record_submodule_state(with: @message)
       add 'hitobito'
       add 'hitobito_*'
       commit with

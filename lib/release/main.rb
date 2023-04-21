@@ -98,17 +98,19 @@ class Release::Main
     @all_wagons # rubocop:disable Lint/Void a return value is not void
   end
 
-  def run # rubocop:disable Metrics/MethodLength
+  def run
     with_env({ 'OVERCOMMIT_DISABLE' => '1' }) do
       in_dir(hitobito_group_dir) do
-        @all_wagons += infer_wagons if @all_wagons.one?
+        # @all_wagons += infer_wagons if @all_wagons.one?
         notify "Releasing #{@all_wagons.join(', ')}"
+        @message = new_version_message
 
-        in_dir('hitobito') do
-          fetch_code_and_tags
-          @version = determine_version
-          @message = new_version_message
-        end
+        # in_dir('hitobito') do
+        #   fetch_code_and_tags
+        #   @version = determine_version
+        #   @message = new_version_message
+        # end
+        notify @message
 
         prepare_core
         prepare_wagons
@@ -119,17 +121,6 @@ class Release::Main
         # end
       end
     end
-  end
-
-  def infer_wagons
-    [].tap do |wagons|
-      in_dir("hitobito_#{@wagon}") do
-        wagons << Gem::Specification.load("hitobito_#{@wagon}.gemspec")
-                                    .dependencies
-                                    .flat_map { |dep| dep.name.scan(/hitobito_(\w+)/).first }
-                                    .compact
-      end
-    end.flatten.compact
   end
 
   def prepare_core
@@ -159,8 +150,11 @@ class Release::Main
 
   def update_composition
     in_dir(composition_repo_dir) do
-      fetch_code_and_tags
-      update_submodules(branch: 'production')
+      unless working_in_composition_dir?
+        fetch_code_and_tags
+        update_submodules(branch: 'production')
+      end
+      record_submodule_state
       release_version @version
     end
   end
@@ -193,6 +187,17 @@ class Release::Main
 
   private
 
+  # def infer_wagons
+  #   [].tap do |wagons|
+  #     in_dir("hitobito_#{@wagon}") do
+  #       wagons << Gem::Specification.load("hitobito_#{@wagon}.gemspec")
+  #                                   .dependencies
+  #                                   .flat_map { |dep| dep.name.scan(/hitobito_(\w+)/).first }
+  #                                   .compact
+  #     end
+  #   end.flatten.compact
+  # end
+
   # well, do not execute, just output what would be done
   def dry_run?
     return @dry_run unless @dry_run.nil?
@@ -205,5 +210,9 @@ class Release::Main
     return @command_list unless @command_list.nil?
 
     false
+  end
+
+  def working_in_composition_dir?
+    composition_repo_dir == hitobito_group_dir
   end
 end

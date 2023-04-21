@@ -72,7 +72,9 @@ class Release::Main
   end
 
   def usable?
-    @all_wagons.is_a?(Array) && ENV['WAGONS'].split(' ').any?
+    !@version.nil? &&
+      @all_wagons.is_a?(Array) &&
+      ENV['WAGONS'].split(' ').any?
   end
 
   def usage!

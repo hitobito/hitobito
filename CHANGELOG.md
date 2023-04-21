@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Die E-Mail, welche bei der "Passwort vergessen" Funktion gesendet wird, ist neu übersetzt.
+
 ## Version 1.28
 
 *  Neu gibt es eine Option, um die Mailadressen von Personenlisten in einem Format spezifisch für Outlook zu exportieren. Merci @simfeld! (#2043)

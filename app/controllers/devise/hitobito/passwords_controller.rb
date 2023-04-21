@@ -15,6 +15,17 @@ class Devise::Hitobito::PasswordsController < Devise::PasswordsController
     end
   end
 
+  def create
+    previous_locale = I18n.locale
+    resource = resource_class.find_by(email: resource_params['email'])
+    I18n.locale = resource&.language || previous_locale
+
+    # The block gets executed after sending the mail and before redirecting
+    super do
+      I18n.locale = previous_locale
+    end
+  end
+
   def update
     super do |resource|
       if should_confirm_email?(resource)
@@ -45,5 +56,4 @@ class Devise::Hitobito::PasswordsController < Devise::PasswordsController
 
     true
   end
-
 end

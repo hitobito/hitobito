@@ -30,6 +30,17 @@ describe Devise::Hitobito::PasswordsController do
         expect(flash[:notice]).to eq 'Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst.'
         expect(last_email).to be_present
       end
+
+      it '#create sends localized email' do
+        person.language = :fr
+        person.save!
+        expect(I18n.locale).to eq(:de)
+        expect(I18n).to receive(:'locale=').with('fr').ordered
+        expect(Devise.mailer).to receive(:reset_password_instructions).and_call_original.ordered
+        expect(I18n).to receive(:'locale=').with(:de).ordered
+        post :create, params: { person: { email: person.email } }
+        expect(flash[:notice]).to eq 'Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst.'
+      end
     end
 
     context 'without login permission' do

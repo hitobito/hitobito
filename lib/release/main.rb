@@ -129,7 +129,7 @@ class Release::Main
     in_dir('hitobito') do
       break if existing_version_again?
 
-      update_translations 'tx:pull'
+      update_translations
       update_changelog
       update_version file: 'VERSION'
 
@@ -142,7 +142,7 @@ class Release::Main
       in_dir("hitobito_#{wagon}") do
         break if existing_version_again?
 
-        update_translations 'app:tx:pull' unless untranslated_wagons.include?(wagon)
+        update_translations unless untranslated_wagons.include?(wagon)
         update_changelog
         update_version file: "lib/hitobito_#{wagon}/version.rb"
         release_version @version

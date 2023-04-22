@@ -39,8 +39,14 @@ module Release
       execute 'git fetch && git fetch --tags'
     end
 
-    def update_translations(task)
-      rake task
+    def update_translations
+      # configured = execute_check 'test -f .tx/config',
+      #                            success: 'Transifex is configured',
+      #                            failure: 'Transifex seems not configured'
+      # return unless configured
+
+      notify 'Pulling translation from transifex'
+      execute 'tx pull -f'
       add 'config/locales/*.yml'
 
       changes = execute_check 'test $(git status -s -- config/locales | wc -l) -gt 0',

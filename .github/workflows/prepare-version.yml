@@ -79,27 +79,27 @@ jobs:
         run: |
           cd hitobito && git fetch origin && git checkout -t origin/feature/1975-prepare-release
 
-      - name: 'Determine WAGONS from repo'
-        run: |
-          wagons=$(ls . | grep 'hitobito_' | sed 's/hitobito_//' | xargs)
-          echo "WAGONS=${wagons}" >> "$GITHUB_ENV"
+      # - name: 'Determine WAGONS from repo'
+      #   run: |
+      #     wagons=$(ls . | grep 'hitobito_' | sed 's/hitobito_//' | xargs)
+      #     echo "WAGONS=${wagons}" >> "$GITHUB_ENV"
 
-      - name: 'Enable all wagons'
-        run: |
-          cd hitobito && cp Wagonfile.ci Wagonfile
+      # - name: 'Enable all wagons'
+      #   run: |
+      #     cd hitobito && cp Wagonfile.ci Wagonfile
 
       - name: 'Set up Ruby'
         uses: ruby/setup-ruby@v1
         with:
           working-directory: hitobito
 
-      - name: 'Install bundler dependencies and distribute Gemfile.lock'
-        env:
-          WAGONS: ${{ env.WAGONS }}
-        run: |
-          (cd hitobito && bundle install)
-          echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
-            cp -v hitobito/Gemfile.lock hitobito_%/
+      # - name: 'Install bundler dependencies and distribute Gemfile.lock'
+      #   env:
+      #     WAGONS: ${{ env.WAGONS }}
+      #   run: |
+      #     (cd hitobito && bundle install)
+      #     echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
+      #       cp -v hitobito/Gemfile.lock hitobito_%/
 
       - name: 'Install and configure additional dependencies'
         env:

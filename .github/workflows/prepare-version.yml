@@ -70,8 +70,7 @@ jobs:
           ref: "production"
           submodules: true
           fetch-depth: 0
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
-          token: false
+          token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
 
       - name: 'update submodules to release-state'
         env:
@@ -130,10 +129,3 @@ jobs:
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
 
           hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION"
-
-      - name: 'Analyse situation'
-        run: |
-          git remote show | xargs -L1 -I% git remote show %
-          git status
-          git diff
-          git submodule status

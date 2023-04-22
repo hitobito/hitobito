@@ -69,6 +69,7 @@ jobs:
           repository: "hitobito/${{ inputs.composition }}"
           ref: "production"
           submodules: true
+          ssh_key: ${{ secrets.DEPLOY_KEY }}
           fetch-depth: 0
 
       - name: 'update submodules to release-state'
@@ -128,3 +129,10 @@ jobs:
           echo "Preparing $NEXT_VERSION for $FIRST_WAGON"
 
           hitobito/bin/release composition "$FIRST_WAGON" "$NEXT_VERSION"
+
+      - name: 'Analyse situation'
+        run: |
+          git remote show | xargs -L1 -I% git remote show %
+          git status
+          git diff
+          git submodule status

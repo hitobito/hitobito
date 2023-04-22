@@ -69,8 +69,9 @@ jobs:
           repository: "hitobito/${{ inputs.composition }}"
           ref: "production"
           submodules: true
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
           fetch-depth: 0
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          token: false
 
       - name: 'update submodules to release-state'
         env:

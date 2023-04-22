@@ -22,6 +22,8 @@ on:
     secrets:
       TRANSIFEX_TOKEN:
         required: true
+      RELEASE_PREPARATION_TOKEN:
+        required: true
 
 permissions:
   contents: write

@@ -17,13 +17,11 @@ require_relative './world_monad'
 #
 # 1. several programs in place and working
 #   - git
-#   - rake
 #   - sed
 #   - echo
 #   - bash
 #
 # 2. some aspects about your setup
-#   - when entering a directory, no extra steps are needed to run rake-tasks
 #   - the transifex-client is installed and configured
 #   - you are on linux (with a GNU sed)
 #   - you have push access to the repositories

@@ -10,11 +10,6 @@ module Release
   module Lowlevel
     private
 
-    def rake(task)
-      notify "running rake #{task}"
-      execute "bash -l -c 'bundle exec rake #{task}'"
-    end
-
     def branch(name)
       notify "switching to branch #{name}"
       execute "git checkout #{name}"

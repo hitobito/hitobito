@@ -111,14 +111,32 @@ module Release
       end
     end
 
+    # rubocop:disable all
     def colorize
       @colorize ||= begin
         require 'pastel'
         Pastel.new(enabled: ENV.fetch('CI', false))
       rescue LoadError
-        abort(<<~MESSAGE)
-          Please install "pastel" to unlock colorized output of this script
-        MESSAGE
+        puts 'Please install "pastel" if you want to unlock colorized output of this script.'
+
+        Class.new do
+          def method_missing(_m, *args, &_block)
+            @text = args[0] if args.kind_of?(Array)
+            self
+          end
+
+          def to_s
+            @text
+          end
+
+          def to_str
+            @text
+          end
+
+          def to_ary
+            [@text]
+          end
+        end.new
       end
     end
   end

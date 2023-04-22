@@ -53,7 +53,7 @@ jobs:
           VERSION_TYPE: ${{ inputs.next_version }}
         run: |
           next_version=$(bin/release suggest-version "$VERSION_TYPE")
-          echo "version=test-${next_version}" >> "$GITHUB_OUTPUT"
+          echo "version=${next_version}" >> "$GITHUB_OUTPUT"
 
   prepare_release:
     runs-on: 'ubuntu-latest'

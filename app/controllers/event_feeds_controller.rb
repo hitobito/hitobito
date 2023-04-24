@@ -11,6 +11,7 @@ class EventFeedsController < ApplicationController
     respond_to do |format|
       format.html { authorize!(:show, current_user) }
       format.ics do
+        params.delete(:remotipart_submitted)
         person = Person.find_by(event_feed_token: params[:token]) if params[:token].present?
         return head :not_found unless person
         send_data Export::Ics::Events.new.generate(person.events), type: :ics, disposition: :inline

@@ -32,16 +32,16 @@ describe Export::Pdf::Messages::Letter::Header do
     [
       [71, 672, 'P.P.'],
       [91, 672, ' '],
-      [180, 685, 'Post CH AG'],
+      [134, 685, 'Post CH AG'],
       [94, 672, 'CH-3030 Bern, Belpstrasse 37'],
     ]
   end
   let(:shipping_info_with_position_right) do
     [
-      [378, 685, 'Post CH AG'],
-      [269, 672, 'P.P.'],
-      [289, 672, ' '],
-      [292, 672, 'CH-3030 Bern, Belpstrasse 37']
+      [424, 685, 'Post CH AG'],
+      [361, 672, 'P.P.'],
+      [381, 672, ' '],
+      [384, 672, 'CH-3030 Bern, Belpstrasse 37']
     ]
   end
 
@@ -237,8 +237,8 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [269, 652, 'Top Leader'],
-          [269, 624, 'Supertown']
+          [361, 652, 'Top Leader'],
+          [361, 624, 'Supertown']
         ]
       end
 
@@ -247,8 +247,8 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [269, 652, 'Top Leader'],
-          [269, 624, 'Supertown']
+          [361, 652, 'Top Leader'],
+          [361, 624, 'Supertown']
         ]
       end
 
@@ -257,7 +257,7 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
 
         expect(text_with_position_without_shipping_info).to eq [
-          [269, 652, 'Top Leader']
+          [361, 652, 'Top Leader']
         ]
       end
 

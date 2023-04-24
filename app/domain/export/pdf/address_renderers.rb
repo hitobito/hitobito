@@ -6,10 +6,17 @@
 #  https://github.com/hitobito/hitobito.
 
 module Export::Pdf::AddressRenderers
+  extend ActiveSupport::Concern
+
+  included do
+    class_attribute :left_address_x, default: 0
+    class_attribute :right_address_x, default: 290
+  end
+
   def address_position(group)
     x_coords = {
-      left: self.class::LEFT_ADDRESS_X,
-      right: self.class::RIGHT_ADDRESS_X
+      left: left_address_x,
+      right: right_address_x
     }[group.settings(:messages_letter).address_position&.to_sym]
     x_coords ||= 0
     [x_coords, cursor]

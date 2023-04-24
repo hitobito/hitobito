@@ -8,8 +8,6 @@
 module Export::Pdf::Invoice
   class ReceiverAddress < Section
     include Export::Pdf::AddressRenderers
-    LEFT_ADDRESS_X = 0
-    RIGHT_ADDRESS_X = 290
 
     def render
       float do

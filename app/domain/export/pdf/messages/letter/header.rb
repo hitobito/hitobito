@@ -8,11 +8,9 @@
 class Export::Pdf::Messages::Letter
   class Header < Section
     include Export::Pdf::AddressRenderers
-    LEFT_ADDRESS_X = 0
-    RIGHT_ADDRESS_X = 7.cm
 
     LOGO_BOX = [450, 40].freeze
-    ADDRESS_BOX = [90.mm, 60].freeze
+    ADDRESS_BOX = [58.mm, 60].freeze
     SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 24].freeze
 
     delegate :group, to: 'letter'

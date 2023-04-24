@@ -9,14 +9,14 @@ module Dropdown
   module Event
     class ParticipantAdd < Dropdown::Base
 
-      attr_reader :group, :event
+      attr_reader :user, :group, :event
 
       class << self
         def for_user(template, group, event, user)
           if user_participates_in?(user, event)
-            new(template, group, event, I18n.t('event_decorator.applied'), :check).disabled_button
+            new(template, user, group, event, I18n.t('event_decorator.applied'), :check).disabled_button
           else
-            new(template, group, event, I18n.t('event_decorator.apply'), :check).to_s
+            new(template, user, group, event, I18n.t('event_decorator.apply'), :check).to_s
           end
         end
 
@@ -27,8 +27,9 @@ module Dropdown
         end
       end
 
-      def initialize(template, group, event, label, icon, url_options = {})
+      def initialize(template, user, group, event, label, icon, url_options = {})
         super(template, label, icon)
+        @user = user # used for wagon extensions (youth)
         @group = group
         @event = event
         init_items(url_options)

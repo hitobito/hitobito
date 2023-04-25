@@ -86,10 +86,15 @@ module Dropdown
 
   end
 
-  Item = Struct.new(:label, :url, :disabled_msg, :sub_items, :options) do
+  class Item
+    attr_accessor :label, :url, :disabled_msg, :sub_items, :options
 
     def initialize(label, url, disabled_msg: nil, **options)
-      super(label, url, disabled_msg, [], options)
+      @label = label
+      @url = url
+      @disabled_msg = disabled_msg
+      @sub_items = []
+      @options = options
     end
 
     def sub_items?

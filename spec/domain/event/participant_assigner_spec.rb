@@ -24,6 +24,8 @@ describe Event::ParticipantAssigner do
 
   let(:event) { course }
 
+  let(:pending_jobs) { Delayed::Job.where(locked_at: nil, failed_at:nil).map(&:payload_object) }
+
   subject { Event::ParticipantAssigner.new(event, participation) }
 
   describe '#add_participant' do
@@ -38,6 +40,11 @@ describe Event::ParticipantAssigner do
       subject.add_participant
       participation.reload
       expect(participation).to be_active
+    end
+
+    it 'queues confirmation mail' do
+      subject.add_participant
+      expect(pending_jobs).to include instance_of(Event::ParticipationConfirmationJob)
     end
 
     context 'for other event' do
@@ -55,6 +62,11 @@ describe Event::ParticipantAssigner do
         expect(participation.event_id).to eq(event.id)
       end
 
+      it 'queues confirmation mail' do
+        subject.add_participant
+        expect(pending_jobs).to include instance_of(Event::ParticipationConfirmationJob)
+      end
+
       it 'updates answers so that every question of the new course has an answer' do
         expect { subject.add_participant }.to change { Event::Answer.count }.by(1)
 
@@ -65,10 +77,17 @@ describe Event::ParticipantAssigner do
         end
       end
 
-      it 'raises error on existing participation' do
-        Fabricate(:event_participation, event: event, person: participation.person, application: Fabricate(:event_application))
+      context 'on existing participation' do
+        it 'raises error' do
+          Fabricate(:event_participation, event: event, person: participation.person, application: Fabricate(:event_application))
 
-        expect { subject.add_participant }.to raise_error(ActiveRecord::RecordNotUnique)
+          expect { subject.add_participant }.to raise_error(ActiveRecord::RecordNotUnique)
+        end
+
+        it 'queues confirmation mail' do
+          subject.add_participant
+          expect(pending_jobs).to include instance_of(Event::ParticipationConfirmationJob)
+        end
       end
     end
   end
@@ -86,9 +105,14 @@ describe Event::ParticipantAssigner do
       expect(participation).not_to be_active
     end
 
-    it 'does not touch participation' do
+    it 'does not remove participation' do
       subject.remove_participant
       expect(Event::Participation.where(id: participation.id).exists?).to be_truthy
+    end
+
+    it 'queues confirmation mail' do
+      subject.remove_participant
+      expect(pending_jobs).to include instance_of(Event::ParticipationConfirmationJob)
     end
 
     it 'works even when the course in priority_1 does not exist anymore' do

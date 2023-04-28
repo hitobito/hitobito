@@ -96,6 +96,23 @@ ActiveRecord::Schema.define(version: 2023_03_27_151218) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "background_job_log_entries", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.string "job_name", null: false
+    t.bigint "group_id"
+    t.datetime "started_at", precision: 6
+    t.datetime "finished_at", precision: 6
+    t.virtual "runtime", type: :integer, as: "timestampdiff(MICROSECOND,`started_at`,`finished_at`)"
+    t.integer "attempt"
+    t.string "status"
+    t.text "payload", size: :long, collation: "utf8mb4_bin"
+    t.index ["group_id"], name: "index_background_job_log_entries_on_group_id"
+    t.index ["job_id", "attempt"], name: "index_background_job_log_entries_on_job_id_and_attempt", unique: true
+    t.index ["job_id"], name: "index_background_job_log_entries_on_job_id"
+    t.index ["job_name"], name: "index_background_job_log_entries_on_job_name"
+    t.check_constraint "json_valid(`payload`)", name: "payload"
+  end
+
   create_table "calendar_groups", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "calendar_id", null: false
     t.bigint "group_id", null: false

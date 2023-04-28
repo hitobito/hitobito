@@ -13,7 +13,7 @@ class Payments::EbicsImport
   def run
     return [] unless @payment_provider_config.pending? || @payment_provider_config.registered?
 
-    created_payments
+    created_payments.group_by(&:status)
   end
 
   private
@@ -29,7 +29,7 @@ class Payments::EbicsImport
   rescue Epics::Error::BusinessError => e
     case e.code
     when '090005' # EBICS_NO_DOWNLOAD_DATA_AVAILABLE
-      []
+      {}
     else
       raise e
     end
@@ -44,10 +44,12 @@ class Payments::EbicsImport
       else
         payment.status = :without_invoice
       end
-      
-      next unless payment.save
 
-      payment.invoice&.invoice_list&.update_paid
+      if payment.save
+        payment.invoice&.invoice_list&.update_paid
+      else
+        payment.status = :invalid
+      end
 
       payment
     end.compact

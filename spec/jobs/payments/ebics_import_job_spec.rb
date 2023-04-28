@@ -23,17 +23,11 @@ describe Payments::EbicsImportJob do
   it 'does not run if no initialized config present' do
     expect(Payments::EbicsImport).to_not receive(:new)
 
-    expect do
-      perform_enqueued_jobs do
-        subject.perform
-      end
-    end.to_not change { Payment.count }
+    expect { subject.perform }.to_not change { Payment.count }
   end
 
   it 'reschedules to tomorrow at 8am' do
-    perform_enqueued_jobs do
-      subject.perform
-    end
+    subject.perform
 
     expect(subject.delayed_jobs.last.run_at).to eq(Time.zone.tomorrow
                                                        .at_beginning_of_day
@@ -57,9 +51,7 @@ describe Payments::EbicsImportJob do
     InvoiceList.create(title: 'membership fee', invoices: [invoice])
     invoice.update!(reference: '000000000000100000000000800')
 
-    perform_enqueued_jobs do
-      subject.perform
-    end
+    subject.perform
 
     expect(invoice.payments.size).to eq(1)
   end
@@ -98,11 +90,63 @@ describe Payments::EbicsImportJob do
     InvoiceList.create(title: 'membership fee' ,invoices: [invoice])
     invoice.update!(reference: '000000000000100000000000800')
 
-    perform_enqueued_jobs do
-      subject.perform
-    end
+    subject.perform
 
     expect(invoice.payments.size).to eq(1)
+  end
+
+  describe '#log_result' do
+    before do
+      config.update(status: :registered)
+
+      allow(PaymentProvider).to receive(:new).and_return(payment_provider)
+      allow(payment_provider).to receive(:client).and_return(epics_client)
+
+      allow(epics_client).to receive(:HPB)
+
+      allow(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
+
+      allow(payment_provider).to receive(:Z54).and_return(invoice_files)
+
+      invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+      InvoiceList.create(title: 'membership fee', invoices: [invoice])
+      invoice.update!(reference: '000000000000100000000000800')
+    end
+
+    it 'includes payments count' do
+      subject.perform
+
+      expect(subject.log_results).to match(
+        imported_payments_count: 1,
+        without_invoice_count: 4,
+        invalid_payments_count: 0,
+        invalid_payments: {},
+        errors: []
+      )
+    end
+
+    it 'includes validation error messages' do
+      allow_any_instance_of(Payment).to receive(:save) do |payment|
+        # let's fake a validation error
+        payment.amount = nil
+        payment.validate
+        false
+      end
+
+      subject.perform
+
+      expect(subject.log_results[:invalid_payments]).to have(5).items
+      expect(subject.log_results[:invalid_payments].values.first).to match(amount: ["muss ausgefüllt werden"])
+    end
+
+    it 'includes errors' do
+      error = Epics::Error::TechnicalError.new('091010')
+      allow_any_instance_of(PaymentProvider).to receive(:HPB).and_raise(error)
+
+      subject.perform
+
+      expect(subject.log_results[:errors]).to include(error)
+    end
   end
 
   private

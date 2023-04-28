@@ -12,6 +12,10 @@ class BaseJob
   # Used as airbrake information when the job fails.
   class_attribute :parameters
 
+  # Enable background job logging by setting this to a truthy value.
+  # Note: you can also override `#log_results` to include job specific data in the log.
+  class_attribute :use_background_job_logging
+
   def initialize
     store_locale
   end
@@ -67,4 +71,9 @@ class BaseJob
     end
   end
 
+  # Override in subclass to report job result.
+  # It can return any structure responding to #to_json
+  def log_results
+    {}
+  end
 end

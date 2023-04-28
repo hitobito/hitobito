@@ -6,3 +6,4 @@
 #  https://github.com/hitobito/hitobito.
 
 Delayed::Worker.max_attempts = 10
+Delayed::Worker.plugins << BackgroundJobs::Logging

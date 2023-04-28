@@ -68,7 +68,8 @@ describe Payments::EbicsImport do
 
     invoice.update(reference: '000000000000100000000000800')
     expect(list.amount_paid).to eq(0)
-    subject.run
+
+    payments = subject.run
 
     expect(invoice.payments.size).to eq(1)
 
@@ -76,6 +77,9 @@ describe Payments::EbicsImport do
     expect(payment.invoice).to eq(invoice)
     expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
     expect(list.reload.amount_paid.to_s).to eq('710.82')
+
+    expect(payments['ebics_imported']).to have(1).item
+    expect(payments['without_invoice']).to have(4).item
   end
 
   it 'creates payment by scor reference' do
@@ -92,7 +96,8 @@ describe Payments::EbicsImport do
     invoice.update(reference: Invoice::ScorReference.create('000000100000000000800'),
                    esr_number: '00 00000 00000 10000 00000 00800')
     expect(list.amount_paid).to eq(0)
-    subject.run
+
+    payments = subject.run
 
     expect(invoice.payments.size).to eq(1)
 
@@ -100,6 +105,9 @@ describe Payments::EbicsImport do
     expect(payment.invoice).to eq(invoice)
     expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
     expect(list.reload.amount_paid.to_s).to eq('710.82')
+
+    expect(payments['ebics_imported']).to have(1).item
+    expect(payments['without_invoice']).to have(4).item
   end
 
   it 'does not save if invoice not found' do
@@ -112,12 +120,15 @@ describe Payments::EbicsImport do
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), recipient: people(:bottom_member), group: groups(:bottom_layer_one))
     invoice.update!(reference: '404')
 
-    subject.run
+    payments = subject.run
 
     expect(invoice.payments).to be_empty
+
+    expect(payments).not_to have_key('ebics_imported')
+    expect(payments['without_invoice']).to have(5).item
   end
 
-  it 'returns empty array if no download data available' do
+  it 'returns empty hash if no download data available' do
     expect(epics_client).to receive(:HPB)
 
     expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)

@@ -14,7 +14,12 @@ module Dropdown
       class << self
         def for_user(template, group, event, user)
           if user_participates_in?(user, event)
-            new(template, user, group, event, I18n.t('event_decorator.applied'), :check).disabled_button
+            new(template,
+                user,
+                group,
+                event,
+                I18n.t('event_decorator.applied'),
+                :check).disabled_button
           else
             new(template, user, group, event, I18n.t('event_decorator.apply'), :check).to_s
           end
@@ -27,7 +32,7 @@ module Dropdown
         end
       end
 
-      def initialize(template, user, group, event, label, icon, url_options = {})
+      def initialize(template, user, group, event, label, icon, url_options = {}) # rubocop:disable Metrics/ParameterLists
         super(template, label, icon)
         @user = user # used for wagon extensions (youth)
         @group = group

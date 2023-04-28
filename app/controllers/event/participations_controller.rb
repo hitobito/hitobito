@@ -106,12 +106,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def destroy
-    location = if entry.person_id == current_user.id
-                 group_event_path(group, event)
-               else
-                 group_event_application_market_index_path(group, event)
-               end
-    super(location: location)
+    super(location: after_destroy_path)
   end
 
   def self.model_class
@@ -147,10 +142,18 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     super.merge(current_person.table_display_for(Event::Participation).sort_statements(list))
   end
 
+  def after_destroy_path
+    if entry.person_id == current_user.id
+      group_event_path(group, event)
+    else
+      group_event_application_market_index_path(group, event)
+    end
+  end
+
   def with_person_add_request(&block)
     creator = Person::AddRequest::Creator::Event.new(entry.roles.first, current_ability)
     msg = creator.handle(&block)
-    redirect_to group_event_participations_path(group, event), alert: msg if msg
+    redirect_to return_path || group_event_participations_path(group, event), alert: msg if msg
   end
 
   def list_entries

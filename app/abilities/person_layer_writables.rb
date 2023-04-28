@@ -45,6 +45,7 @@ class PersonLayerWritables < PersonFetchables
   def writable_conditions
     OrCondition.new.tap do |condition|
       append_group_conditions(condition)
+      see_invisible_from_above_condition(condition)
     end
   end
 

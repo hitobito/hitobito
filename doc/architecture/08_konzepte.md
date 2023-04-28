@@ -165,6 +165,7 @@ Ebenen). Inkl. Erstellen von Anlässen und Abos (Mailinglisten).
 
 **finance**: Erlaubt auf der eigenen Ebene Rechnungen zu erstellen und einzusehen.
 
+**see_invisible_from_above**: Kann Accounts in tieferen Ebenen verwalten, welche sonst für den Benutzer unsichtbar wären.
 
 Die Definition von Berchtigungen geschieht in sogenannten _Abilities_. Diese verknüpfen ein Modell 
 sowie die zugehörigen Aktionen mit den entsprechenden Permissions, wobei durch sogenannte 

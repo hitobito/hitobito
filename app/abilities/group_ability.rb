@@ -69,6 +69,8 @@ class GroupAbility < AbilityDsl::Base
       may(:activate_person_add_requests, :deactivate_person_add_requests).
       in_same_layer_if_active
 
+    permission(:see_invisible_from_above).may(:index_local_people).in_same_layer_or_below
+
     permission(:finance).may(:index_invoices).in_layer_group
     permission(:finance).may(:create_invoices_from_list).in_same_layer_or_below_if_active
 

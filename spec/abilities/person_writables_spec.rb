@@ -95,4 +95,43 @@ describe PersonWritables do
     end
   end
 
+  context :see_invisible_from_above do
+    let(:role) { Fabricate(Group::TopGroup::InvisiblePeopleManager.name, group: groups(:top_group)) }
+
+    it 'has see_invisible_from_above permission' do
+      expect(role.permissions).to include(:see_invisible_from_above)
+    end
+
+    context 'own group' do
+      let(:group) { role.group }
+
+      it 'may get people with visible_from_above=true' do
+        other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
+        expect(other).to be_visible_from_above
+        is_expected.to include(other.person)
+      end
+
+      it 'may get people with visible_from_above=false' do
+        other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
+        expect(other).not_to be_visible_from_above
+        is_expected.to include(other.person)
+      end
+    end
+
+    context 'lower group' do
+      let(:group) { groups(:bottom_layer_one) }
+
+      it 'ay get people with visible_from_above=true' do
+        other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
+        expect(other).to be_visible_from_above
+        is_expected.to include(other.person)
+      end
+
+      it 'may get people with visible_from_above=false' do
+        other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
+        expect(other).not_to be_visible_from_above
+        is_expected.to include(other.person)
+      end
+    end
+  end
 end

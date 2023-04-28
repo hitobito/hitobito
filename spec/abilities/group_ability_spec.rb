@@ -466,6 +466,29 @@ describe GroupAbility do
     end
   end
 
+  context 'see_invisible_from_above' do
+    let(:role) { Fabricate(Group::TopGroup::InvisiblePeopleManager.name.to_sym, group: groups(:top_group)) }
+
+    it 'may index_local_people in own group' do
+      is_expected.to be_able_to(:index_local_people, groups(:top_group))
+    end
+
+    it 'may index_local_people in same layer group' do
+      other = Fabricate(Group::TopGroup.name.to_sym, parent: groups(:top_layer))
+      is_expected.to be_able_to(:index_local_people, other)
+    end
+
+    it 'may index_local_people in lower layer group' do
+      is_expected.to be_able_to(:index_local_people, groups(:bottom_group_one_one))
+    end
+
+    it 'may not index_local_people in group outside own layer hierarchy' do
+      other_layer = Fabricate(Group::TopLayer.name.to_sym)
+      other = Fabricate(Group::TopGroup.name.to_sym, parent: other_layer)
+      is_expected.not_to be_able_to(:index_local_people, other)
+    end
+  end
+
   context 'deleted group' do
     let(:group) { groups(:bottom_layer_two) }
     let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group) }

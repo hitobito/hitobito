@@ -72,13 +72,14 @@ describe GroupSerializer do
 
   it 'does include available roles' do
     expect(subject).to have_key(:available_roles)
-    expect(subject[:available_roles]).to have(6).items
+    expect(subject[:available_roles]).to have(7).items
     expect(subject[:available_roles]).to match_array [
       { name: 'External',        role_class: 'Role::External' },
       { name: 'Leader',          role_class: 'Group::TopGroup::Leader' },
       { name: 'Local Guide',     role_class: 'Group::TopGroup::LocalGuide' },
       { name: 'Local Secretary', role_class: 'Group::TopGroup::LocalSecretary' },
       { name: 'Member',          role_class: 'Group::TopGroup::Member' },
+      { name: 'Invisible People Manager', role_class: 'Group::TopGroup::InvisiblePeopleManager' },
       { name: 'Secretary',       role_class: 'Group::TopGroup::Secretary' }
     ]
   end

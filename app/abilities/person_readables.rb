@@ -11,9 +11,10 @@ class PersonReadables < PersonFetchables
   self.same_group_permissions  = [:group_full, :group_read,
                                   :group_and_below_full, :group_and_below_read]
   self.above_group_permissions = [:group_and_below_full, :group_and_below_read]
-  self.same_layer_permissions  = [:layer_full, :layer_read,
-                                  :layer_and_below_full, :layer_and_below_read]
-  self.above_layer_permissions = [:layer_and_below_full, :layer_and_below_read]
+  self.same_layer_permissions  = [:layer_full, :layer_read, :layer_and_below_full,
+                                  :layer_and_below_read, :see_invisible_from_above]
+  self.above_layer_permissions = [:layer_and_below_full, :layer_and_below_read,
+                                  :see_invisible_from_above]
 
   attr_reader :group
 
@@ -65,6 +66,7 @@ class PersonReadables < PersonFetchables
     OrCondition.new.tap do |condition|
       condition.or(*herself_condition)
       condition.or(*contact_data_condition) if contact_data_visible?
+      see_invisible_from_above_condition(condition)
       append_group_conditions(condition)
     end
   end
@@ -82,7 +84,8 @@ class PersonReadables < PersonFetchables
     group_read_in_this_group? ||
     group_read_in_above_group? ||
     layer_read_in_same_layer? ||
-    layer_and_below_read_in_same_layer?
+    layer_and_below_read_in_same_layer? ||
+    see_invisible_from_above_in_above_layer?
   end
 
   def contact_data_visible?
@@ -109,6 +112,16 @@ class PersonReadables < PersonFetchables
   def layer_and_below_read_in_above_layer?
     ids = permission_layer_ids(:layer_and_below_read)
     ids.present? && (ids & group.layer_hierarchy.collect(&:id)).present?
+  end
+
+  def see_invisible_from_above_in_above_layer?
+    layers_see_invisible_from_above.present? &&
+      (layers_see_invisible_from_above & group.layer_hierarchy.collect(&:id)).present?
+  end
+
+  def layers_see_invisible_from_above
+    @layers_see_invisible_from_above ||=
+      user_context.layer_ids(user.groups_with_permission(:see_invisible_from_above).to_a)
   end
 
 end

@@ -16,6 +16,13 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
 
   private
 
+  def data
+    return super unless @options[:selection]
+
+    table_display = TableDisplay.for(@user_id, Person)
+    Export::Tabular::People::TableDisplays.export(@format, entries, table_display)
+  end
+
   def mailing_list
     @mailing_list ||= MailingList.find(@mailing_list_id)
   end
@@ -26,6 +33,7 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
 
   def exporter
     return Export::Tabular::People::Households if @options[:household]
+    return Export::Tabular::People::TableDisplays if @options[:selection]
 
     Export::Tabular::People::PeopleAddress
   end

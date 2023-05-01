@@ -12,13 +12,9 @@ on:
         type: string
         required: true
       next_version:
-        description: "Type of next version, patch or current-month" # TODO: support "manual"
+        description: "Type of next version, patch or current-month"
         required: true
         type: string
-      # version_string:
-      #   description: "Version to be used"
-      #   required: false
-      #   type: string
 
 permissions:
   contents: write

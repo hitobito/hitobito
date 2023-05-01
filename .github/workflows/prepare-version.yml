@@ -30,6 +30,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: 'hitobito/hitobito'
+          # TODO Remove attribute when PR is done
           ref: feature/1975-prepare-release
 
       - name: 'Set up Ruby'
@@ -95,7 +96,8 @@ jobs:
 
       - name: 'Configure Git-User for the Release-Commits'
         run: |
-          # TODO use gitub-actor for workflow_call, and last committers of all wagons for scheduled releases
+          # we could use gitub-actor for workflow_call, and last committers of
+          # all wagons for scheduled releases. for now, this is fine.
           git config --global user.name "$(cd hitobito && git --no-pager log --format=format:'%an' -n 1)"
           git config --global user.email "$(cd hitobito && git --no-pager log --format=format:'%ae' -n 1)"
 

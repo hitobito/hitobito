@@ -1,15 +1,12 @@
 # Release einer neuen Version
 
-[TOC]
-
 Um eine neue Version von Hitobito auf dem Produktionssystem, muss der
 gewünschte Code in einem Composition-Repo per Tag markiert und im Branch
 `production` gespeichert sein. Bei einem Release sollten die Übersetzungen
 aktuell sein und die Versionsnummer angepasst werden.
 
-Wir lösen das aktuell mit [Github Actions][Workflow], welche eine neue Version
-vergeben und dann Übersetzungen holen und die erforerlichen Code-Repositories
-anpassen.
+Wir lösen das aktuell mit Github Actions, welche eine neue Version vergeben und
+dann Übersetzungen holen und die erforerlichen Code-Repositories anpassen.
 
 Grundsätzlich sollten Releases aus einem Composition-Repo heraus gemacht
 werden, da hier alle definierten/benötigten Wagons verfügbar sind.
@@ -28,11 +25,11 @@ Release-Vorbereitung.
 
 ## automatisierter Ablauf
 
-Jedes Composition-Repo hat einen Workflow, welcher den zentralen [Reusable
-Workflow][Workflow] aufruft, um einen Release komplett vorzubereiten. Dieser
-Workflow kann über `gh workflow run "Prepare Release"` oder das Github WebUI
-gestartet werden. Dem Workflow im Composition-Repo werden keine Parameter
-übergeben.
+Jedes Composition-Repo hat einen Workflow, welcher den zentralen
+[Reusable Workflow](../../.github/workflows/prepare-version.yml) aufruft, um
+einen Release komplett vorzubereiten. Dieser Workflow kann über
+`gh workflow run "Prepare Release"` oder das Github WebUI gestartet werden. Dem
+Workflow im Composition-Repo werden keine Parameter übergeben.
 
 Es wird der Branch `master` von allen Repos als nächste Version vorbereitet.
 Die Versionsnummer ist aktuell die nächste Patch-Version.
@@ -40,7 +37,8 @@ Die Versionsnummer ist aktuell die nächste Patch-Version.
 ## manueller Ablauf
 
 Um mehr Kontrolle über den Ablauf zu haben, kann der Release auch manuell
-vorbereitet werden. Grundsätzlich sind das die folgenden Schritte:
+vorbereitet werden. Hierbei hilft das [Release-Script](../../bin/release).
+Grundsätzlich sind das die folgenden Schritte:
 
 1. In das Composition-Repo wechseln, dass man releasen möchte
 2. Code auf den gewünschten Stand bringen, die kann ein beliebiger Branch, also
@@ -100,12 +98,12 @@ Commits vermieden und parallele Releases ermöglicht. Dieses Feature ist
 grundsätzlich auch für Patchversionen eingebaut, entfaltet aber erst mit einer
 Monatsversion die volle Wirksamkeit.
 
-Man könnte das [Release-Script][Release-Script] so erweitern, das weitere
-Versionsschemata (aktuelle Woche?), Release-Modi (ohne composition-repo wagons
-direkt auflisten?) oder beides (bewusster Hotfix, der einen bestimmten Patch
-enthält?) unterstützt. Aktuell ist kein guter Use-Case vorhanden, das zu tun.
+Man könnte das Release-Script so erweitern, das weitere Versionsschemata
+(aktuelle Woche?), Release-Modi (ohne composition-repo wagons direkt
+auflisten?) oder beides (bewusster Hotfix, der einen bestimmten Patch enthält?)
+unterstützt. Aktuell ist kein guter Use-Case vorhanden, das zu tun.
 
 # Links
 
-- [Workflow](../../.github/workflows/prepare-version.yml)
+- [Shared Workflow](../../.github/workflows/prepare-version.yml)
 - [Release-Script](../../bin/release)

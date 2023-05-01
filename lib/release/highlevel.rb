@@ -83,10 +83,13 @@ module Release
       commit 'Make previously unreleased changes visible in changelog'
     end
 
-    def update_submodules(branch:, to: @version)
+    def update_submodules(branch:)
       branch(branch)
       fast_forward(branch)
       fix_submodules
+    end
+
+    def update_submodule_content(to: @version)
       submodules "git fetch && git fetch --tags --force && git checkout #{to}"
     end
 

@@ -20,6 +20,7 @@ require_relative './world_monad'
 #   - sed
 #   - echo
 #   - bash
+#   - ruby
 #
 # 2. some aspects about your setup
 #   - the transifex-client is installed and configured
@@ -154,6 +155,8 @@ class Release::Main
         fetch_code_and_tags
         update_submodules(branch: 'production')
       end
+
+      update_submodule_content(to: @version)
       record_submodule_state
       release_version @version
     end

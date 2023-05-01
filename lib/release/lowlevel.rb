@@ -54,7 +54,7 @@ module Release
 
     def push
       notify 'pushing code and tags'
-      confirm_and_execute 'git push -n origin && git push -n origin --tags'
+      confirm_and_execute 'git push origin && git push origin --tags'
     end
   end
 end

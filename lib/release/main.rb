@@ -81,6 +81,8 @@ class Release::Main
   end
 
   def untranslated_wagons
+    # if you want to extend this list: rather check if a transifex-config is
+    # present (see update_translations)
     %w(cevi jubla)
   end
 

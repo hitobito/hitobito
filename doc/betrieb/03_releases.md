@@ -40,10 +40,10 @@ Um mehr Kontrolle über den Ablauf zu haben, kann der Release auch manuell
 vorbereitet werden. Hierbei hilft das [Release-Script](../../bin/release).
 Grundsätzlich sind das die folgenden Schritte:
 
-1. In das Composition-Repo wechseln, dass man releasen möchte
+1. In das Composition-Repo wechseln, dass man releasen möchte.
 2. Code auf den gewünschten Stand bringen, die kann ein beliebiger Branch, also
-	 auch ein Hotfix-Branch sein.
-3. Versionsnummer ausdenken oder vorschlagen lassen
+	 auch ein Hotfix-Branch, sein.
+3. Versionsnummer ausdenken oder vorschlagen lassen:
 
 	```bash
 	hitobito/bin/release suggest-version patch

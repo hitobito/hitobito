@@ -44,16 +44,24 @@ class Event::ParticipationContactDatasController < ApplicationController
   end
 
   def build_entry
-    Event::ParticipationContactData.new(event, person)
+    contact_data_class.new(event, person)
   end
 
   def set_entry
     @participation_contact_data =
-      if params[:event_participation_contact_data]
-        Event::ParticipationContactData.new(event, person, model_params)
+      if params[model_identifier]
+        contact_data_class.new(event, person, model_params)
       else
         build_entry
       end
+  end
+
+  def model_identifier
+    contact_data_class.to_s.underscore.gsub('/', '_')
+  end
+
+  def contact_data_class
+    Event::ParticipationContactData
   end
 
   def event
@@ -65,7 +73,7 @@ class Event::ParticipationContactDatasController < ApplicationController
   end
 
   def model_params
-    params.require('event_participation_contact_data').permit(permitted_attrs)
+    params.require(model_identifier).permit(permitted_attrs)
   end
 
   def permitted_attrs

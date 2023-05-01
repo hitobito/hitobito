@@ -27,7 +27,7 @@
   }
   .img {
     width: 512px;
-    height: 512px;
+    max-width: 98vw;
     margin: 50px auto;
     padding: 5px;
     background: $white;

@@ -61,7 +61,8 @@ class SubscriptionsController < CrudController
       Export::SubscriptionsJob.new(format,
                                    current_person.id,
                                    mailing_list.id,
-                                   params.slice(:household).merge(filename: filename)).enqueue!
+                                   params.slice(:household, :selection)
+                                         .merge(filename: filename)).enqueue!
     end
   end
 

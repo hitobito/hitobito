@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 #main.row-fluid
-  %article.span6
+  %article.span12
     %h2= t('.contact_details')
     = render 'contact_data', group: entry, only_public: cannot?(:show_details, @group)
 

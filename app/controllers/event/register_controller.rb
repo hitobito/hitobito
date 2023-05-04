@@ -48,7 +48,7 @@ class Event::RegisterController < ApplicationController
 
       sign_in(:person, entry.person)
       flash[:notice] = translate(:registered)
-      redirect_to new_group_event_participation_path(group, event)
+      redirect_to return_path || new_group_event_participation_path(group, event)
     else
       add_privacy_policy_not_accepted_error(entry)
       render 'register'
@@ -125,5 +125,15 @@ class Event::RegisterController < ApplicationController
 
   def privacy_policy_param
     params.require(params_key)[:privacy_policy_accepted]
+  end
+
+  def return_path
+    if params[:return_url].present?
+      begin
+        URI.parse(params[:return_url]).path
+      rescue URI::Error
+        nil
+      end
+    end
   end
 end

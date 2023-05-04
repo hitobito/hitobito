@@ -102,7 +102,13 @@ module Dropdown
     end
 
     def finance_groups
-      template.current_user.finance_groups
+      @finance_groups ||= fetch_finance_groups
+    end
+
+    def fetch_finance_groups
+      finance_groups = template.current_user.finance_groups
+      # reload groups to have an AREL collection to make use includes
+      Group.where(id: finance_groups.collect(&:id)).includes(:invoice_config)
     end
 
     def invalid_config_error_msg

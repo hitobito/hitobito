@@ -71,12 +71,11 @@ class Release::Main
     notify 'Running in dry-run mode' if dry_run?
   end
 
-  def usable? # rubocop:disable Metrics/CyclomaticComplexity
-    version_present = !@version.nil?
-    wagons_present = @all_wagons.is_a?(Array) && ENV['WAGONS'].split(' ').any?
-    composition_known = !@composition_repo_dir&.empty? || !@wagon&.empty? # emulate .present?
-
-    version_present && wagons_present && composition_known
+  def usable?
+    version_present? &&
+      wagons_present? &&
+      composition_known? &&
+      helpers_present?
   end
 
   def usage!
@@ -222,5 +221,23 @@ class Release::Main
 
   def working_in_composition_dir?
     composition_repo_dir == hitobito_group_dir
+  end
+
+  def version_present?
+    !@version.nil?
+  end
+
+  def wagons_present?
+    @all_wagons.is_a?(Array) && ENV['WAGONS'].split(' ').any?
+  end
+
+  def composition_known?
+    !@composition_repo_dir&.empty? || !@wagon&.empty? # emulate .present?
+  end
+
+  def helpers_present?
+    %w(git sed tx)
+      .map { |cmd| `command -v #{cmd} > /dev/null && echo 'found'`.chomp }
+      .reduce(true) { |memo, result| memo && result == 'found' }
   end
 end

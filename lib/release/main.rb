@@ -70,10 +70,12 @@ class Release::Main
     notify 'Running in dry-run mode' if dry_run?
   end
 
-  def usable?
-    !@version.nil? &&
-      @all_wagons.is_a?(Array) &&
-      ENV['WAGONS'].split(' ').any?
+  def usable? # rubocop:disable Metrics/CyclomaticComplexity
+    version_present = !@version.nil?
+    wagons_present = @all_wagons.is_a?(Array) && ENV['WAGONS'].split(' ').any?
+    composition_known = !@composition_repo_dir&.empty? || !@wagon&.empty? # emulate .present?
+
+    version_present && wagons_present && composition_known
   end
 
   def usage!

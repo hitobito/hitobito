@@ -21,6 +21,7 @@ require_relative './world_monad'
 #   - echo
 #   - bash
 #   - ruby
+#   - tx
 #
 # 2. some aspects about your setup
 #   - the transifex-client is installed and configured
@@ -48,7 +49,7 @@ require_relative './world_monad'
 #   prevents execution of commands
 # - COMMAND_LIST=true
 #   sets DRY_RUN=true and outputs all commands
-# - WAGON='space separated list of wagons'
+# - WAGONS='space separated list of wagons'
 #   select which wagons are handled
 # - VERSION=anything
 #   new version-number. skips calculating next version and the confirmation-question

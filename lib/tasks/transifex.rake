@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -33,14 +33,14 @@ namespace :tx do
 
   desc 'Push source files (=german locales) to transifex'
   task :push do
-    with_tx { sh 'tx push -s' }
+    TransifexHelper.with_tx { sh 'tx push -s' }
   end
 
   desc 'Pull translations from transifex'
   task :pull do
     # force pull because git locale file timestamps
     # will be newer than transifex files during rpm build.
-    with_tx { sh 'tx pull -f' }
+    TransifexHelper.with_tx { sh 'tx pull -f' }
   end
 
   # desc 'Save transifex credentials from env into .transifexrc'
@@ -60,14 +60,6 @@ namespace :tx do
     end
   end
 
-  def with_tx
-    if File.exist?('.tx')
-      yield
-    else
-      puts 'Transifex not configured. Please run rake tx:init first'
-    end
-  end
-
   namespace :wagon do
     task :pull do
       ENV['CMD'] = 'if [ -f .tx/config ]; then tx pull -f; fi'
@@ -80,3 +72,15 @@ namespace :tx do
   end
 end
 # rubocop:enable Rails/RakeEnvironment
+
+module TransifexHelper
+  module_function
+
+  def with_tx
+    if File.exist?('.tx')
+      yield
+    else
+      puts 'Transifex not configured. Please run rake tx:init first'
+    end
+  end
+end

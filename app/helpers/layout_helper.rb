@@ -58,9 +58,7 @@ module LayoutHelper
   def badge(label, type = nil, tooltip = nil)
     options = { class: "badge badge-#{type || 'default'}" }
     if tooltip.present?
-      options.merge!(rel: :tooltip,
-                     'data-html' => 'true',
-                     title: tooltip)
+      options.merge!(rel: :tooltip, title: tooltip)
     end
     content_tag(:span, label, options)
   end

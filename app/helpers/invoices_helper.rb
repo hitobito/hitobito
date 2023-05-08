@@ -82,14 +82,13 @@ module InvoicesHelper
 
   def invoice_receiver_address(invoice)
     return unless invoice.recipient_address
-    out = ''
     recipient_address_lines = invoice.recipient_address.split(/\n/)
     content_tag(:p) do
-      recipient_address_lines.collect do |l|
-        out << (l == recipient_address_lines.first ? "<b>#{l}</b>" : l) + '<br>'
-      end
-      out << mail_to(entry.recipient_email)
-      out.html_safe # rubocop:disable Rails/OutputSafety
+      safe_join([
+        content_tag(:b) { recipient_address_lines.first },
+        *recipient_address_lines.drop(1),
+        mail_to(entry.recipient_email)
+      ], '<br/>'.html_safe)
     end
   end
 end

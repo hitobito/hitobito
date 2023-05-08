@@ -47,7 +47,7 @@ class Event::RegisterController < ApplicationController
       set_privacy_policy_acceptance if privacy_policy_needed_and_accepted?
 
       sign_in(:person, entry.person)
-      flash[:notice] = translate(:registered)
+      flash[:notice] = registered_notice
       redirect_to return_path || new_group_event_participation_path(group, event)
     else
       add_privacy_policy_not_accepted_error(entry)
@@ -60,6 +60,11 @@ class Event::RegisterController < ApplicationController
   # NOTE: Wagon Hook - insieme
   def save_entry
     entry.valid? && privacy_policy_accepted? && entry.save
+  end
+
+  # NOTE: Wagon Hook - youth
+  def registered_notice
+    translate(:registered)
   end
 
   def assert_external_application_possible

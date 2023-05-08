@@ -8,9 +8,6 @@
 class AddLayerIdToGroup < ActiveRecord::Migration[4.2]
   def up
     add_column :groups, :layer_group_id, :integer
-    Group.find_each do |g|
-      g.update_column(:layer_group_id, self.class.layer ? g.id : g.layer_hierarchy.last.id)
-    end
     add_index :groups, :layer_group_id
   end
 

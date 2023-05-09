@@ -136,9 +136,7 @@ case $cmd in
 
   configs)
     echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
-      cp -v .rspec .overcommit.yml "../hitobito_%/"
-    echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -L1 -I% \
-      cp -vrf .git-hooks "../hitobito_%/"
+      cp -v .rspec "../hitobito_%/"
     ;;
 
   binstubs)
@@ -249,16 +247,18 @@ case $cmd in
     pushd "$new_wagon_dir"
       mv github .github
       git init
-      git ci -m "Create $wagon_name Wagon"
+      git add .
+      git commit -m "Create $wagon_name Wagon"
     popd
 
     $0 activate "$wagon_name"
     if [[ -x $(command -v direnv) ]]; then direnv allow; fi
-    $0 gemfile
-    $0 configs
+    WAGONS=$wagon_name $0 gemfile
+    WAGONS=$wagon_name $0 configs
 
     pushd "$new_wagon_dir"
-      git ci -a -m "Add common configs"
+      git add .
+      git commit -m "Add common configs"
     popd
     ;;
 

@@ -6,7 +6,7 @@ cd /tmp/src
 
 if [[ -r /opt/app-root/src/.git-credentials ]]; then
   echo 'Activating git credential-store'
-  git config credential.helper store --file /opt/app-root/src/.git-credentials
+  git config credential.helper 'store --file /opt/app-root/src/.git-credentials'
 fi
 
 echo 'Integration build: Updating composition wagons to their HEADs.'

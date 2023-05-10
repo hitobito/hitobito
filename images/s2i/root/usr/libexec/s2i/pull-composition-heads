@@ -4,5 +4,9 @@ set -eo pipefail
 
 cd /tmp/src
 
+if [[ -r ~/.git-credential ]]; then
+  git config credential.helper store
+fi
+
 echo 'Integration build: Updating composition wagons to their HEADs.'
 git submodule update --remote

@@ -4,7 +4,8 @@ set -eo pipefail
 
 cd /tmp/src
 
-if [[ -r ~/.git-credential ]]; then
+if [[ -r ~/.git-credentials ]]; then
+  echo 'Activating git credential-store'
   git config credential.helper store
 fi
 

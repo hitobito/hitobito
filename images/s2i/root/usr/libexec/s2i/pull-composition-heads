@@ -4,9 +4,9 @@ set -eo pipefail
 
 cd /tmp/src
 
-if [[ -r ~/.git-credentials ]]; then
+if [[ -r /opt/app-root/src/.git-credentials ]]; then
   echo 'Activating git credential-store'
-  git config credential.helper store
+  git config credential.helper store --file /opt/app-root/src/.git-credentials
 fi
 
 echo 'Integration build: Updating composition wagons to their HEADs.'

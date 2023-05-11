@@ -1216,7 +1216,7 @@ fr:
         address_updated: "Adresse actualisée"
       fields:
         lives_in_household_with: "Habite dans le foyer avec"
-        update_denied: "Tu ne peux pas ajouter %{other_person}."
+        update_denied: "Tu ne peux pas ajouter %{other_person}. Il se peut qu'il fasse déjà partie ou que tu n'aies pas les droits d'écriture."
     family:
       fields:
         is_in_family_with: 'Fait partie de la famille de'

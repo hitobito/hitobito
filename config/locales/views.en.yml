@@ -1004,7 +1004,7 @@ en:
         address_updated: "Address updated"
       fields:
         lives_in_household_with: "Lives in household with"
-        update_denied: "You cannot add %{other_person} to the household."
+        update_denied: "You cannot add %{other_person} to the household. Maybe they are already part of the household, or you might not have write permission on this person."
     csv_imports:
       description:
         header: CSV files

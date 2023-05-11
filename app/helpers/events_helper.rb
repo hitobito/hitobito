@@ -33,9 +33,9 @@ module EventsHelper
     end
   end
 
-  def event_user_application_possible?(event)
+  def event_user_application_possible?(event, person = current_user)
     participation = event.participations.new
-    participation.person = current_user
+    participation.person = person
 
     event.application_possible? && can?(:new, participation)
   end

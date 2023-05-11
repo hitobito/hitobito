@@ -1322,7 +1322,7 @@ de:
         address_updated: "Adresse aktualisiert"
       fields:
         lives_in_household_with: "Wohnt im Haushalt mit"
-        update_denied: "Keine Schreibrechte für %{other_person}."
+        update_denied: "Du kannst %{other_person} nicht zum Haushalt hinzufügen. Möglicherweise ist diese Person schon im Haushalt, oder du hast keine Schreibrechte."
 
     family:
       fields:

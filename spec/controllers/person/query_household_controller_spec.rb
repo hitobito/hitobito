@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -42,6 +42,14 @@ describe Person::QueryHouseholdController do
     Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
     get :index, params: { q: 'pas', person_id: bottom_member.id }
     expect(response.body).to match(/Pascal/)
+  end
+
+  it 'finds logged in user' do
+    sign_in(bottom_member)
+    person = bottom_member
+    Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: groups(:top_group))
+    get :index, params: { q: "#{person.first_name} #{person.last_name}", person_id: bottom_member.id }
+    expect(response.body).to match(Regexp.new("#{person.first_name} #{person.last_name}"))
   end
 
 end

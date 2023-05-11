@@ -9,6 +9,7 @@
   .btn-toolbar.span9
     - if can?(:new, @event.participations.new)
       = Dropdown::Event::ParticipantAdd.new(self,
+                                            current_user,
                                             @group,
                                             @event,
                                             t('.add_participant'),

@@ -76,3 +76,13 @@
       = @suspend_person_situation_text
     %div.well
       = @suspend_person_solution_text
+%h2= t('.groups_and_roles_that_see_me')
+
+%table.table.table-striped
+  %tbody
+    - @groups_and_roles_that_see_me.each do |id, group|
+      %tr
+        %td
+          %strong= link_to group[:name], group_path(id)
+        %td
+          %p= group[:roles].join(", ")

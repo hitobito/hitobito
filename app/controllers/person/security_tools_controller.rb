@@ -14,7 +14,7 @@ class Person::SecurityToolsController < ApplicationController
   SUSPEND_PERSON_SITUATION = 'suspend_person_situation_id'
   SUSPEND_PERSON_SOLUTION = 'suspend_person_solution_id'
 
-  before_action :authorize_action, :load_info_texts
+  before_action :authorize_action, :load_info_texts, :load_groups_and_roles_that_see_me
 
   decorates :group, :person, :security_tools
 
@@ -90,5 +90,42 @@ class Person::SecurityToolsController < ApplicationController
   def model_class
     Person
   end
+
+  def load_groups_and_roles_that_see_me
+    @groups_and_roles_that_see_me ||= groups_and_roles_that_see_me
+  end
+
+  def groups_and_roles_that_see_me
+    groups_and_roles = {}
+    all_groups.each do |group_id, group_name, group_type|
+      group_type.constantize.role_types.each do |role|
+        next unless can_see_me?(role, group_id, group_type)
+
+        groups_and_roles[group_id] ||= { name: group_name, roles: [] }
+        groups_and_roles[group_id][:roles] << role.label
+      end
+    end
+    groups_and_roles
+  end
+
+  def all_groups
+    @all_groups ||= Group.order_by_type.pluck(:id, :name, :type)
+  end
+
+  # def all_groups
+  #   @all_groups ||= Group.where(id: relevant_group_ids).order_by_type.pluck(:id, :name, :type)
+  # end
+
+  # def relevant_group_ids
+  #   @relevant_group_ids ||= person.groups.flat_map { |g| g.hierarchy }.flat_map { |g| g.sister_groups_with_descendants }.map(&:id).uniq
+  # end
+
+  def can_see_me?(role, group_id, group_type)
+    return false if group_type != role.name.deconstantize
+
+    test_person = Ability.new(Person.new(roles: [role.new(group_id: group_id)]))
+    test_person.can?(:show_details, person)
+  end
+
 
 end

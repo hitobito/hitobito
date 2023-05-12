@@ -1417,6 +1417,7 @@ de:
         security_and_privacy: Sicherheit und Datenschutz
         override_password: "Passwort überschreiben"
         confirm_reset: "Achtung: Damit wird das Passwort überschrieben. Willst du das wirklich?"
+        groups_and_roles_that_see_me: Rollen, die auf mich Zugriff haben
       password_override:
         flashes:
           success: Das Passwort wurde überschrieben. Die Person wurde informiert und kann über die Funktion "Passwort vergessen" jederzeit ein neues Passwort anfordern.

@@ -109,16 +109,12 @@ class Person::SecurityToolsController < ApplicationController
   end
 
   def all_groups
-    @all_groups ||= Group.order_by_type.pluck(:id, :name, :type)
+    @all_groups ||= Group.where(layer_group_id: relevant_layer_ids).order_by_type.pluck(:id, :name, :type)
   end
 
-  # def all_groups
-  #   @all_groups ||= Group.where(id: relevant_group_ids).order_by_type.pluck(:id, :name, :type)
-  # end
-
-  # def relevant_group_ids
-  #   @relevant_group_ids ||= person.groups.flat_map { |g| g.hierarchy }.flat_map { |g| g.sister_groups_with_descendants }.map(&:id).uniq
-  # end
+  def relevant_layer_ids
+    @relevant_layer_ids ||= person.groups.flat_map(&:layer_hierarchy).map(&:id).uniq
+  end
 
   def can_see_me?(role, group_id, group_type)
     return false if group_type != role.name.deconstantize

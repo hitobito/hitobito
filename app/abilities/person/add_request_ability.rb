@@ -10,8 +10,8 @@ class Person::AddRequestAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Person
 
   on(Person::AddRequest) do
-    permission(:any).may(:approve, :reject).herself
-    permission(:any).may(:reject).her_own
+    permission(:any).may(:approve).herself
+    permission(:any).may(:reject).herself_or_her_own
 
     permission(:group_full).
       may(:approve, :reject).
@@ -47,6 +47,10 @@ class Person::AddRequestAbility < AbilityDsl::Base
     permission(:layer_and_below_full).
       may(:add_without_request).
       active_or_deleted_in_same_layer_or_below
+  end
+
+  def herself_or_her_own
+    herself || her_own
   end
 
   def her_own

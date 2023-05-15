@@ -16,24 +16,49 @@ describe Person::SecurityToolsController do
   before { sign_in(top_leader) }
 
   context 'GET#index' do
-    it 'can show security overview if able to edit person' do
-      sign_in(top_leader)
+    context 'html' do
+      it 'can show security overview if able to edit person' do
+        sign_in(top_leader)
 
-      @user = bottom_member
+        @user = bottom_member
 
-      get :index, params: nesting
+        get :index, params: nesting
 
-      expect(response).to have_http_status(200)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'can not show security overview if not able to edit person' do
+        sign_in(bottom_member)
+
+        @user = top_leader
+
+        expect do
+          get :index, params: nesting
+        end.to raise_error(CanCan::AccessDenied)
+      end
     end
 
-    it 'can not show security overview if not able to edit person' do
-      sign_in(bottom_member)
+    context 'js' do
+      it 'loads roles that see me' do
+        sign_in(bottom_member)
 
-      @user = top_leader
+        @user = bottom_member
 
-      expect do
-        get :index, params: nesting
-      end.to raise_error(CanCan::AccessDenied)
+        get :index, params: nesting, xhr: true, format: :js
+
+        expected_groups_and_roles = {}
+        bottom_layer = groups(:bottom_layer_one)
+        top_group = groups(:top_group)
+        expected_groups_and_roles[bottom_layer.id] = { name: bottom_layer.name,
+                                                       roles: [Group::BottomLayer::Leader.label,
+                                                               Group::BottomLayer::LocalGuide.label,
+                                                               Group::BottomLayer::Member.label] }
+        expected_groups_and_roles[top_group.id] = { name: top_group.name,
+                                                    roles: [Group::TopGroup::Leader.label,
+                                                            Group::TopGroup::Secretary.label] }
+
+        expect(assigns(:groups_and_roles_that_see_me)).to eq(expected_groups_and_roles)
+      end
     end
   end
 end

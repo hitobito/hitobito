@@ -1,0 +1,8 @@
+%table.table.table-striped
+  %tbody
+    - groups_and_roles_that_see_me.each do |id, group|
+      %tr
+        %td
+          %strong= link_to group[:name], group_path(id)
+        %td
+          %p= group[:roles].join(", ")

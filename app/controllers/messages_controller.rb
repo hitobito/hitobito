@@ -18,14 +18,13 @@ class MessagesController < CrudController
                                     invoice_attributes: {
                                       invoice_items_attributes: [
                                         :name,
-                                        :heading,
                                         :description,
+                                        :cost_center,
+                                        :account,
                                         :unit_cost,
                                         :vat_rate,
                                         :count,
-                                        :cost_center,
-                                        :account,
-                                        :variable_donation,
+                                        :type,
                                         :_destroy
                                       ]
                                     }].freeze

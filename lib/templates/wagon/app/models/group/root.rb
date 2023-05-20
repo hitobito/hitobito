@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 # TODO: rename class to specific name and change all references
 class Group::Root < ::Group

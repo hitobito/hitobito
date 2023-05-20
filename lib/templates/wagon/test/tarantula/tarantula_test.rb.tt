@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require 'test_helper'
 require 'relevance/tarantula'
@@ -13,7 +13,7 @@ class TarantulaTest < ActionDispatch::IntegrationTest
   reset_fixture_path File.expand_path('../../../spec/fixtures', __FILE__)
 
   include TarantulaConfig
-  
+
   # Crawls the application with admin permissions
   # to cover as many actions as possible.
   def test_tarantula_as_admin
@@ -32,9 +32,9 @@ class TarantulaTest < ActionDispatch::IntegrationTest
   def test_tarantula_as_member
     crawl_as(people(:member))
   end
-  
+
   private
-  
+
   def configure_urls_with_<%= singular_name %>(t, person)
     configure_urls_without_<%= singular_name %>(t, person)
 

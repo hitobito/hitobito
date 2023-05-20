@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 Fabrication.configure do |config|
   config.fabricator_path = ['spec/fabricators',

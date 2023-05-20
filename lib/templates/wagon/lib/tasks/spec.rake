@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 if Rake::Task.task_defined?('spec:features')
   # we DO have feature specs in this wagon.

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module <%= wagon_name.camelize %>::Group
   extend ActiveSupport::Concern

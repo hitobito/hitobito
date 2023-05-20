@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe :event_participation do
@@ -25,7 +27,10 @@ describe :event_participation do
       click_button('Anmelden')
     end.to change { Event::Participation.count }.by(1)
 
-    is_expected.to have_text("Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.")
+    is_expected.to have_text(
+      "Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. "\
+      'Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.'
+    )
     is_expected.to have_text('Wichtige Bemerkungen über meine Teilnahme')
 
     participation = Event::Participation.find_by(event: event, person: person)

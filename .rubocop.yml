@@ -49,6 +49,7 @@ Metrics/BlockLength:
   Exclude:
     - spec/**/*
     - lib/tasks/*.rake
+    - lib/templates/wagon/spec/**/*
 
 # Keep for now, easier with superclass definitions
 ClassAndModuleChildren:

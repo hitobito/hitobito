@@ -1,4 +1,3 @@
-
 # Settings relevant for the <%= singular_name %> wagon
 # Overrides settings from the main application
 application:

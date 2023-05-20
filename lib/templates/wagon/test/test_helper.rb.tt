@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 # Configure Rails Environment
 load File.expand_path('../../app_root.rb', __FILE__)

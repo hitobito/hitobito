@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe :self_registration do
-
   subject { page }
 
-  class Group::SelfRegistrationGroup < Group
+  class Group::SelfRegistrationGroup < Group # rubocop:disable Lint/ConstantDefinitionInBlock
     self.layer = true
 
     class ReadOnly < ::Role
@@ -37,9 +38,12 @@ describe :self_registration do
     expect do
       find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # submit
     end.to change { Person.count }.by(1)
-      .and change { ActionMailer::Base.deliveries.count }.by(1)
+       .and change { ActionMailer::Base.deliveries.count }.by(1)
 
-    is_expected.to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
+    is_expected.to have_text(
+      'Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, '\
+      'wie Du Deinen Account freischalten kannst.'
+    )
 
     person = Person.find_by(email: 'max.muster@hitobito.example.com')
     expect(person).to be_present
@@ -51,12 +55,10 @@ describe :self_registration do
 
     fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
     fill_in 'Passwort', with: 'really_b4dPassw0rD'
-    
+
     click_button 'Anmelden'
 
     expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
     expect(current_path).to eq("/de#{group_person_path(group_id: group, id: person)}.html")
   end
-
-
 end

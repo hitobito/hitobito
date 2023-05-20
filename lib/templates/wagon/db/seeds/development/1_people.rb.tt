@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# encoding: utf-8
 
 require Rails.root.join('db', 'seeds', 'support', 'person_seeder')
 
@@ -15,24 +14,20 @@ class <%= wagon_name.camelize %>PersonSeeder < PersonSeeder
 end
 
 puzzlers = [
-  'Andreas Maierhofer',
   'Carlo Beltrame',
-  'Mathis Hofer',
   'Matthias Viehweger',
+  'Micha Lüdi',
   'Nils Rauch',
   'Olivier Brian',
   'Pascal Simon',
-  'Pascal Zumkehr',
-  'Roland Studer',
-  'Tobias Hinderling',
-  'Severin Raez'
+  'Thomas Ellenberger',
 ]
 
 devs = {
   'Customer Name' => 'customer@email.com'
 }
 puzzlers.each do |puz|
-  devs[puz] = "#{puz.split.last.downcase}@puzzle.ch"
+  devs[puz] = "#{puz.split.last.downcase.gsub('ü', 'ue')}@puzzle.ch"
 end
 
 seeder = <%= wagon_name.camelize %>PersonSeeder.new

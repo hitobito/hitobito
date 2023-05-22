@@ -242,9 +242,15 @@ case $cmd in
 
     new_wagon_dir="../hitobito_$wagon_name"
 
-    mv -nv "vendor/wagons/$wagon_name" "$new_wagon_dir"
+    mv -nfv vendor/wagons/$wagon_name/* "$new_wagon_dir"
+    mv -nfv vendor/wagons/$wagon_name/.{ruby-version,rubocop.yml,gitignore} "$new_wagon_dir"
+    rm -rf vendor/
 
     pushd "$new_wagon_dir"
+      for FILE in $(find ./ -iname *_translations.yml); do
+        echo sed -i 's/<%#= /<%= ' $FILE
+      done
+
       mv github .github
       git init
       git add .
@@ -257,8 +263,26 @@ case $cmd in
     WAGONS=$wagon_name $0 configs
 
     pushd "$new_wagon_dir"
+      if [[ -x $(command -v direnv) ]]; then direnv allow; fi
+
       git add .
       git commit -m "Add common configs"
+    popd
+
+    pushd "$new_wagon_dir"
+      $EDITOR lib/tasks/license.rake
+      $EDITOR COPYING
+      $EDITOR AUTHORS
+      $EDITOR hitobito_${wagon_name}.gemspec
+
+      git add .
+      git commit -m "Add License and Copyright Info"
+    popd
+
+    pushd "$new_wagon_dir"
+      rake app:license:insert
+      git add .
+      git commit -m "Insert License Headers"
     popd
     ;;
 

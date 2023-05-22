@@ -42,7 +42,7 @@ As a "Work in Progress" the wagon-creation is automated with
 
     ./bin/wagon create [name]
 
-This covers the first few steps (up until copying the configs) of the following instructions:
+This covers the first few steps (up until and including the gemspec-changes) of the following instructions:
 
 The basic structure of a new wagon can be easily generated in the main project, the templates for it are in `lib/templates/wagon`):
 
@@ -69,7 +69,7 @@ If the wagon is the main wagon for a new organization structure, you can additio
   * create a project in [Transifex](https://www.transifex.com/) (e.g. hitobito_pbs)
   * make sure there is all required locale files in the wagon's config/locales folder (all non default language files can be empty on init)
   * create .tx/config and add all files (you might copy it from [here](https://github.com/hitobito/hitobito_die_mitte/blob/master/.tx/config) or use rake tx:init)
-*  
+
 * Also see the guidelines for internationalization
 
 If the wagon is not for a specific organisation and does not define a group structure, you should delete the following files:

@@ -893,4 +893,30 @@ describe Group do
       end
     end
   end
+
+  context "rebuild!" do
+    context "with archived group" do
+      let(:group) { groups(:bottom_group_one_two) }
+
+      before do
+        group.tap { |g| g.update(archived_at: 1.day.ago) }
+      end
+
+      it "allows to adjust parent and rebuild with validations" do
+        group.update(parent_id: groups(:bottom_layer_two).id)
+
+        expect do
+          Group.rebuild!
+        end.to_not raise_error
+      end
+
+      it "allows to adjust parent and rebuild without validations" do
+        group.update(parent_id: groups(:bottom_layer_two).id)
+
+        expect do
+          Group.rebuild!(false)
+        end.to_not raise_error
+      end
+    end
+  end
 end

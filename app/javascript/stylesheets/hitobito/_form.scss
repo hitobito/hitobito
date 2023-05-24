@@ -361,6 +361,14 @@ textarea {
   }
 }
 
+.required-asterisk {
+  &::before {
+    content: '*';
+    color: $orange;
+    font-size: 9pt;
+  }
+}
+
 .control-group .fields {
   .controls-row {
     border-bottom: 1px solid $grayLight;

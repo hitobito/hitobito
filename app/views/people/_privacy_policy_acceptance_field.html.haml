@@ -1,6 +1,6 @@
 - if policy_finder.acceptance_needed?
   = field_set_tag(nil, class: 'privacy-policy-fields') do
-    = f.labeled(:privacy_policy_accepted, '&nbsp;'.html_safe, required: true) do
+    = f.labeled(:privacy_policy_accepted, '&nbsp;'.html_safe) do
       - for_someone_else ||= false
       - caption_key = for_someone_else ? 'for_someone_else' : 'for_self'
       = f.boolean_field(:privacy_policy_accepted, caption: t(".acceptance_caption.#{caption_key}"), required: true)

@@ -483,11 +483,51 @@ li.form {
 
 @media screen and (min-width: 768px) and (max-width: 980px) {
   input.span6,
-  textarea.span6 {
+  textarea.span6,
+  .uneditable-input.span6,
+  .span6.input-span6 {
     width: calc(100vw - 550px);
   }
 }
 
+@media screen and (min-width: 981px) and (max-width: 1199px) {
+  input.span6,
+  textarea.span6,
+  .uneditable-input.span6,
+  .span6.input-span6 {
+    width: 446px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  input.span6,
+  textarea.span6,
+  .uneditable-input.span6,
+  .span6.input-span6 {
+    width: 570px;
+  }
+}
+
+.input-span6[class*="span"] {
+  float: none;
+}
+
+.zip-code-and-town-input-fields {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-left: 0;
+
+  .zip-code-field {
+    max-width: 12ch;
+    margin-right: 30px;
+  }
+
+  .town-field {
+    flex-grow: 1;
+  }
+}
 
 input.switcher {
   max-height: 0;

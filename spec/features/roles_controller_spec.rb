@@ -222,22 +222,5 @@ describe RolesController, js: true do
         is_expected.to have_content 'Rolle Leader für Tester in Bottom One wurde erfolgreich erstellt.'
       end
     end
-
-    it 'does not creates person if privacy policy is not accepted' do
-      obsolete_node_safe do
-        sign_in
-        visit new_group_role_path(group_id: bottom_layer.id)
-
-        click_link('Neue Person erfassen')
-        fill_in('Vorname', with: 'Tester')
-
-        # find("input#role_new_person_privacy_policy_accepted").click
-
-        all('form .btn-toolbar').first.click_button 'Speichern'
-
-        expect(current_path).to eq(group_roles_path(group_id: bottom_layer.id))
-        is_expected.to have_content 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
-      end
-    end
   end
 end

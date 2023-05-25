@@ -8,7 +8,8 @@
     margin-bottom: 0;
   }
 
-  .tag-list-add {
+  .tag-list-add,
+  .mailing-list-add {
     width: 100%;
   }
 
@@ -16,10 +17,12 @@
     .filter-toggle {
       cursor: pointer;
     }
-    .available-role-type, .available-tag {
+    .available-role-type,
+    .available-tag {
       margin-left: 10px;
 
-      .role-count, .tag-count {
+      .role-count,
+      .tag-count {
         display: inline;
         padding: 0px 5px;
         background-color: #eee;
@@ -31,6 +34,8 @@
   }
 }
 
-#participation-lists-new .modal-body, #tag-lists-new .modal-body {
-  overflow: unset
+#participation-lists-new,
+#subscriber-lists-new .modal-body,
+#tag-lists-new .modal-body {
+  overflow: unset;
 }

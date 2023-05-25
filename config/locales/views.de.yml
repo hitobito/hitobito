@@ -1031,6 +1031,11 @@ de:
       cancel_synchronization: 'Export abbrechen'
 
   mailing_lists:
+    subscriber_lists:
+      create:
+        success:
+          one: "Eine Person wurde erfolgreich zum Abo '%{mailing_list}' hinzugefügt"
+          other: "%{count} Personen wurden erfolgreich zum Abo '%{mailing_list}' hinzugefügt"
     global:
       link:
         add: Abo erstellen
@@ -1553,13 +1558,17 @@ de:
     export_email_needed: 'Für den Export wird eine E-Mail Adresse benötigt.'
 
     multiselect_actions:
-      remove_role: Rollen entfernen
-      move_role: Rollen verschieben
-      add_role: Rolle hinzufügen
+      role_actions:
+        button: Rollen
+        remove: Rollen entfernen
+        move: Rollen verschieben
+        add: Rolle hinzufügen
+
       add_participation: Zu Veranstaltung hinzufügen
       tag_lists: Tags
       remove_tags: Tags entfernen
       add_tags: Tags hinzufügen
+      add_to_mailing_list: Zu Abo hinzufügen
 
     totp_reset:
       flashes:
@@ -1800,6 +1809,12 @@ de:
     exclude_person:
       form:
         exclude_subscriber: 'Abonnent/-in ausschliessen'
+    subscriber_lists:
+      new:
+        title: Personen zu Abo hinzufügen
+        mailing_list_search: Abo suchen
+        submit: Hinzufügen
+        mailing_lists_in_local_hierarchy_hint: 'Abos von Über- und Untergruppen der aktuellen Gruppe können ausgewählt werden'
 
   subscriber/base:
     blank: '%{model_label} muss ausgewählt werden'

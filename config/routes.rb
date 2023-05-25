@@ -49,6 +49,11 @@ Hitobito::Application.routes.draw do
     get 'list_groups' => 'group/lists#index', as: :list_groups
 
     resources :groups do
+      scope module: 'subscriber' do
+        resource :subscriber_list, only: [:new] do
+          get 'typeahead' => 'subscriber_lists#typeahead'
+        end
+      end
       member do
         get :deleted_subgroups
         get :export_subgroups
@@ -243,6 +248,7 @@ Hitobito::Application.routes.draw do
       end
 
       resources :mailing_lists do
+        resource :subscriber_list, only: [:create], module: :subscriber
         resources :messages
 
         resources :subscriptions, only: [:index, :destroy] do

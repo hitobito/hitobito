@@ -27,6 +27,7 @@ describe RoleListsController, js: true do
     find(:css, "#ids_[value='#{role1.person.id}']").set(true)
     find(:css, "#ids_[value='#{role2.person.id}']").set(true)
 
+    click_link('Rollen')
     click_link('Rollen entfernen')
     expect(page).to have_content 'Welche Rollen sollen gelöscht werden?'
     find('button', text: 'Entfernen').click
@@ -41,6 +42,7 @@ describe RoleListsController, js: true do
     find(:css, "#ids_[value='#{role2.person.id}']").set(true)
     find(:css, "#ids_[value='#{leader.person.id}']").set(true)
 
+    click_link('Rollen')
     click_link('Rollen entfernen')
     expect(page).to have_content 'Welche Rollen sollen gelöscht werden?'
 
@@ -57,6 +59,7 @@ describe RoleListsController, js: true do
     find(:css, "#ids_[value='#{role1.person.id}']").set(true)
     find(:css, "#ids_[value='#{role2.person.id}']").set(true)
 
+    click_link('Rollen')
     click_link('Rolle hinzufügen')
 
     select('Leader', from: 'role_type')

@@ -8,6 +8,7 @@
 class AddressesController < ApplicationController
   include FullTextSearchStrategy
 
+  skip_before_action :authenticate_person!
   skip_authorization_check
 
   def query

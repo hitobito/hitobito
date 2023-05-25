@@ -12,3 +12,4 @@
       = render('fields', fields: fields)
 
       = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: fields)
+      = render_extensions 'conditions', locals: { f: f }

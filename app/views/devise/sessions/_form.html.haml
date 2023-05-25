@@ -13,7 +13,9 @@
   = f.indented(submit_button(f, t('.sign_in')))
   = f.indented do
     = link_to t('layouts.unauthorized.forgot_password'), new_person_password_path
-    |
+    %span.hide-last
+      |
     = link_to t('layouts.unauthorized.need_confirmation_email'), new_person_confirmation_path
-    |
+    %span.hide-last
+      |
     = render_self_registration_link

@@ -27,11 +27,13 @@ class PersonResource < ApplicationResource
   attribute :zip_code, :string
   attribute :town, :string
   attribute :country, :string
-  attribute :gender, :string, readable: :show_details?
-  attribute :birthday, :date, readable: :show_details?
   attribute :primary_group_id, :integer, writable: false
   attribute :gender, :string, readable: :show_details?, writable: :write_details?
   attribute :birthday, :date, readable: :show_details?, writable: :write_details?
+
+  FeatureGate.if :person_language do
+    attribute :language, :string
+  end
 
   belongs_to :primary_group, resource: GroupResource, writable: false
 

@@ -34,6 +34,7 @@ describe PersonResource, type: :resource do
         :country,
         :gender,
         :birthday,
+        :language,
         :primary_group_id
       ]
     end
@@ -99,6 +100,47 @@ describe PersonResource, type: :resource do
         render
 
         expect(d[0].attributes.symbolize_keys.keys).not_to include *read_restricted_attrs
+      end
+    end
+
+    context 'with person language' do
+      let!(:user_role) { Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: role.group) }
+
+      context 'enabled' do
+        it 'includes language' do
+          render
+
+          data = jsonapi_data[0]
+
+          expect(data.id).to eq(person.id)
+          expect(data.jsonapi_type).to eq('people')
+
+          expect(data.attributes.symbolize_keys.keys).to include(:language)
+          expect(data.language).to eq('de')
+        end
+      end
+
+      # This is currently skipped since the FeatureGate that we're trying to mock is being done when loading the constant.
+      # As seen in the before block, we're trying to remove the language attribute from the attributes and then reload the constant
+      # that seemingly still does not get this spec to work though
+      context 'disabled', :skip do
+        before do
+          expect_any_instance_of(FeatureGate).to receive(:person_language_enabled?).and_return(false)
+
+          PersonResource.config[:attributes].delete(:language)
+          load 'app/resources/person_resource.rb'
+        end
+
+        it 'does not include language' do
+          render
+
+          data = jsonapi_data[0]
+
+          expect(data.id).to eq(person.id)
+          expect(data.jsonapi_type).to eq('people')
+
+          expect(data.attributes.symbolize_keys.keys).to_not include(:language)
+        end
       end
     end
   end

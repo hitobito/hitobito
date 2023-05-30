@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Die JSON:API liefert für Personen neu auch die Sprache (#2104) 
+
 ## Version 1.28
 
 *  Neu gibt es eine Option, um die Mailadressen von Personenlisten in einem Format spezifisch für Outlook zu exportieren. Merci @simfeld! (#2043)

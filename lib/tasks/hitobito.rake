@@ -80,4 +80,25 @@ namespace :hitobito do
       end
     end
   end
+
+  desc 'Parse Structure and output classes and translations'
+  task :parse_structure, [:filename] do |_t, args| # rubocop:disable Rails/RakeEnvironment
+    require_relative '../../app/domain/structure_parser'
+    args.with_defaults({
+                         filename: './structure.txt'
+                       })
+
+    file = Pathname.new(args[:filename]).expand_path
+    puts "-------- Parsing #{file}"
+
+    parser = StructureParser.new(file.read, common_indent: 0, shiftwidth: 4, list_marker: '-')
+    puts parser.inspect
+    parser.parse
+
+    puts '-------- Groups and Roles as classes ------'
+    puts parser.output_groups
+    puts '-------- Translations for those -----------'
+    puts parser.output_translations
+    puts '-------- Done.'
+  end
 end

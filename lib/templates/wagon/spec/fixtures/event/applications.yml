@@ -1,4 +1,4 @@
 top_course_applicant:
-  priority_1_id: top_course
+  priority_1: top_course
   approved: true
   waiting_list: true

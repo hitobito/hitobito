@@ -1333,7 +1333,7 @@ de:
         header: CSV Dateien
         explain_csv_format: 'Eine CSV Datei enthält auf jeder Zeile die Angaben einer Person.
           Die erste Zeile enthält die Feldnamen.
-          Die einzelnen Felder sind mit einem Komma getrennt.
+          Die einzelnen Felder sind mit einem Seperator getrennt. (,;: oder Tab)
           Falls ein Feldwert selber Kommas enthält, muss er mit Anführungszeichen (") ergänzt werden.
           Beispiel:'
         example: |

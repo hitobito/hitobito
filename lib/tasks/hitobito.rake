@@ -9,9 +9,9 @@ namespace :hitobito do
   desc 'Print all groups, roles and permissions'
   task roles: :environment do
     Role::TypeList.new(Group.root_types.first).each do |layer, groups|
-      puts '    * ' + layer
+      puts "    * #{layer}"
       groups.each do |group, roles|
-        puts '      * ' + group
+        puts "      * #{group}"
         roles.each do |r|
           twofa_tag = '2FA ' if r.two_factor_authentication_enforced
           puts "        * #{r.label}: #{twofa_tag}#{r.permissions.inspect}"
@@ -22,7 +22,7 @@ namespace :hitobito do
 
   namespace :roles do
     task update_readme: :environment do
-      stdout, _stderr, status = Open3.capture3("rake app:hitobito:roles")
+      stdout, _stderr, status = Open3.capture3('rake app:hitobito:roles')
       raise 'failed to generate role docs with `rake app:hitobito:roles`' unless status.success?
 
       roles = "#{stdout}\n(Output of rake app:hitobito:roles)"
@@ -31,11 +31,11 @@ namespace :hitobito do
       pattern = /#{start_tag}(.*)#{end_tag}/m
       readme_contents = File.read('README.md').strip
 
-      if pattern.match?(readme_contents)
-        updated_contents = readme_contents.gsub(pattern, "#{start_tag}\n#{roles}\n#{end_tag}")
-      else
-        updated_contents = "#{readme_contents}\n\n#{start_tag}\n#{roles}\n#{end_tag}\n"
-      end
+      updated_contents = if pattern.match?(readme_contents)
+                           readme_contents.gsub(pattern, "#{start_tag}\n#{roles}\n#{end_tag}")
+                         else
+                           "#{readme_contents}\n\n#{start_tag}\n#{roles}\n#{end_tag}\n"
+                         end
 
       File.write('README.md', updated_contents)
     end

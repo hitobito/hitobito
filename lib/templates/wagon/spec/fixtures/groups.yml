@@ -11,3 +11,4 @@ root:
   layer_group_id: <%%= ActiveRecord::FixtureSet.identify(:root) %>
 
 # TODO add more groups
+# you could generate a good setup manually and dump it with rake fixtures:groups

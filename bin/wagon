@@ -260,10 +260,6 @@ case $cmd in
     rm -rf vendor/
 
     pushd "$new_wagon_dir"
-      for FILE in $(find ./ -iname *_translations.yml); do
-        echo sed -i 's/<%#= /<%= ' $FILE
-      done
-
       mv github .github
       git init
       git add .

@@ -20,8 +20,12 @@ module Synchronize
         end
       end
 
+      def self.recipients(mailing_list)
+        mailing_list.people
+      end
+
       def self.default_and_additional_addresses(mailing_list)
-        people = mailing_list.people
+        people = recipients(mailing_list)
         additional_emails = AdditionalEmail.where(contactable_type: Person.sti_name,
                                                   contactable_id: people.collect(&:id),
                                                   mailings: true).to_a
@@ -36,7 +40,7 @@ module Synchronize
       end
 
       def self.default_addresses(mailing_list)
-        mailing_list.people.map do |person|
+        recipients(mailing_list).map do |person|
           self.new(person, person.email)
         end
       end

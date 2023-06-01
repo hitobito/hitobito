@@ -38,12 +38,15 @@ class Ability
                  TagAbility,
                  VariousAbility
 
-  attr_reader :user, :user_context
+  attr_reader :user_context
+
+  def user
+    user_context.user
+  end
 
   def initialize(user)
     return if user.nil?
 
-    @user = user
     @user_context = AbilityDsl::UserContext.new(user)
 
     if user.root?

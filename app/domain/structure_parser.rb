@@ -160,7 +160,7 @@ class StructureParser
     second_pass
   end
 
-  def first_pass # rubocop:disable Metrics
+  def first_pass # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
     @structure.lines.each do |line|
       case line.delete_prefix(@common_indent).chomp
       when /^#{Regexp.escape(@list_marker)} (.*)$/
@@ -187,7 +187,7 @@ class StructureParser
     end
   end
 
-  def second_pass # rubocop:disable Metrics
+  def second_pass # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/AbcSize
     first_pass = @result.dup
 
     @result = []

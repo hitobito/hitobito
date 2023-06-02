@@ -40,21 +40,27 @@ module Release
     end
 
     def update_translations
-      # configured = execute_check 'test -f .tx/config',
-      #                            success: 'Transifex is configured',
-      #                            failure: 'Transifex seems not configured'
-      # return unless configured
+      return unless translations_configured?
 
       notify 'Pulling translation from transifex'
       execute 'tx pull -f'
       add 'config/locales/*.yml'
 
-      changes = execute_check 'test $(git status -s -- config/locales | wc -l) -gt 0',
-                              success: 'Updated translations found',
-                              failure: 'No changes in translations'
-      return unless changes
+      return unless translations_changed?
 
       commit 'Pull translations from transifex'
+    end
+
+    def translations_configured?
+      execute_check 'test -f .tx/config',
+                    success: 'Transifex is configured',
+                    failure: 'Transifex seems not configured'
+    end
+
+    def translations_changed?
+      execute_check 'test $(git status -s -- config/locales | wc -l) -gt 0',
+                    success: 'Updated translations found',
+                    failure: 'No changes in translations'
     end
 
     def update_version(file:, to: @version)

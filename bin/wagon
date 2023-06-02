@@ -88,6 +88,18 @@ CREATE DATABASE hit_${wagon_name}_test;
 SQL
 }
 
+function setup_dbs() {
+  echo "migrating and seeding development database"
+  bundle exec rails db:migrate
+  bundle exec rails db:seed wagon:migrate
+  bundle exec rails wagon:seed
+
+  echo "migrating test database"
+  export RAILS_ENV=test
+  bundle exec rails db:migrate
+  bundle exec rails wagon:migrate
+}
+
 function indent2 {
     sed -u 's/^/  /'
 }
@@ -115,17 +127,18 @@ case $cmd in
     clone_wagon
     bin/active_wagon.rb "$wagon_name"
     recreate_dbs
-
-    echo "migrating and seeding development database"
-    bundle exec rails db:migrate; bundle exec rails db:seed wagon:migrate; bundle exec rails wagon:seed
-
-    echo "migrating test database"
-    RAILS_ENV=test exec rails db:migrate; RAILS_ENV=test exec rails wagon:migrate
+    setup_dbs
     ;;
 
-  create_idea_project)
+  create-idea-project)
     require_wagon_name
     setup_idea_project
+  ;;
+
+  reset-database)
+    require_wagon_name
+    recreate_dbs
+    setup_dbs
   ;;
 
   gemfile)
@@ -247,10 +260,6 @@ case $cmd in
     rm -rf vendor/
 
     pushd "$new_wagon_dir"
-      for FILE in $(find ./ -iname *_translations.yml); do
-        echo sed -i 's/<%#= /<%= ' $FILE
-      done
-
       mv github .github
       git init
       git add .
@@ -302,9 +311,12 @@ function __wagon_commands() {
   echo '
     activate
     binstubs
+    bootstrap
+    clone
     configs
     core-spec
     create
+    create-idea-project
     gemfile
     git
     git-all
@@ -312,6 +324,7 @@ function __wagon_commands() {
     help
     list
     overwritten-in-wagon
+    reset-database
     test-prepare
     test-speedup
     update-copyright
@@ -350,6 +363,11 @@ complete -F __wagon_completion -o default wagon
 COMPLETION
     ;;
 
+  # TODO: add these in the right place
+  # bootstrap
+  # create-idea-project
+  # reset-database
+  # clone
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
     echo "       $0 [test-prepare|test-speedup|core-spec|update-copyright]"

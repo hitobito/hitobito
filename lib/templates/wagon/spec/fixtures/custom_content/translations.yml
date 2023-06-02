@@ -1,110 +1,110 @@
 login_de:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:login) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:login) %>
   locale: de
   label: Login senden
-  subject: "Willkommen bei <%#= Settings.application.name %>"
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  subject: "Willkommen bei <%%= Settings.application.name %>"
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 login_fr:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:login) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:login) %>
   locale: fr
   label: Login E-Mail
   subject: Tes informations login
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 notes:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:notes) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:notes) %>
   locale: de
   label: Any Notes
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 bulk_mail_success_de:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:bulk_mail_success) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:bulk_mail_success) %>
   locale: de
   label: 'Sendebericht Abo'
   subject: 'Sendebericht Mail an {mail-to}'
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 bulk_mail_with_failed_de:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:bulk_mail_with_failed) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:bulk_mail_with_failed) %>
   locale: de
   label: Sendebericht Abo nicht alle erfolgreich,
   subject: Sendebericht Mail an {mail-to}
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 content_invoice_notification:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:content_invoice_notification) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:content_invoice_notification) %>
   locale: de
   label: Rechnung
   subject: Rechnung {invoice-number} von {group-name}
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 person_add_request_person:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:person_add_request_person) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:person_add_request_person) %>
   locale: de
   label: 'Anfrage Personendaten: E-Mail Freigabe durch Person'
   subject: Freigabe deiner Personendaten
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 person_add_request_responsibles:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:person_add_request_responsibles) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:person_add_request_responsibles) %>
   locale: de
   label: 'Anfrage Personendaten: E-Mail Freigabe durch Verantwortliche'
   subject: Freigabe Personendaten
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 person_add_request_approved:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:person_add_request_approved) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:person_add_request_approved) %>
   locale: de
   label: 'Anfrage Personendaten: E-Mail Freigabe akzeptiert'
   subject: Freigabe der Personendaten akzeptiert
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 person_add_request_rejected:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:person_add_request_rejected) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:person_add_request_rejected) %>
   locale: de
   label: 'Anfrage Personendaten: E-Mail Freigabe abgelehnt'
   subject: Freigabe der Personendaten abgelehnt
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 address_validation_checks:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:address_validation_checks) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:address_validation_checks) %>
   locale: de
   label: 'Addressen Validations Checks'
   subject: Address Validierungen
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 assignment_assignee_notification:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:assignment_assignee_notification) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:assignment_assignee_notification) %>
   locale: de
   label: 'Auftrag erhalten'
   subject: Druckauftrag erhalten
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 self_registration_notification:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:self_registration_notification) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:self_registration_notification) %>
   locale: de
   label: 'Benachrichtigung Selbstregistrierung'
   subject: 'Benachrichtigung Selbstregistrierung'
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>
 
 content_user_password_override:
-  custom_content_id: <%#= ActiveRecord::FixtureSet.identify(:content_user_password_override) %>
+  custom_content_id: <%%= ActiveRecord::FixtureSet.identify(:content_user_password_override) %>
   locale: de
   label: Login verhindert,
   subject: Login für hitobito von Top Leader verhindert,
-  created_at: <%#= Time.zone.now %>
-  updated_at: <%#= Time.zone.now %>
+  created_at: <%%= Time.zone.now %>
+  updated_at: <%%= Time.zone.now %>

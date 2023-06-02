@@ -1,7 +1,7 @@
 admin:
   first_name: Chief
   last_name: Admin
-  email: admin@hitobito.example.comt
+  email: admin@hitobito.example.com
   gender: m
   contact_data_visible: true
   primary_group: root

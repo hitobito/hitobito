@@ -39,11 +39,11 @@ module Release
       execute 'git fetch && git fetch --tags'
     end
 
-    def update_translations
-      # configured = execute_check 'test -f .tx/config',
-      #                            success: 'Transifex is configured',
-      #                            failure: 'Transifex seems not configured'
-      # return unless configured
+    def update_translations # rubocop:disable Metrics/MethodLength
+      configured = execute_check 'test -f .tx/config',
+                                 success: 'Transifex is configured',
+                                 failure: 'Transifex seems not configured'
+      return unless configured
 
       notify 'Pulling translation from transifex'
       execute 'tx pull -f'

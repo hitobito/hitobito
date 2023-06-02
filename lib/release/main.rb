@@ -82,12 +82,6 @@ class Release::Main
     abort("USAGE: #{$PROGRAM_NAME} $WAGONS or WAGONS='wagon1 wagon2' #{$PROGRAM_NAME}")
   end
 
-  def untranslated_wagons
-    # if you want to extend this list: rather check if a transifex-config is
-    # present (see update_translations)
-    %w(cevi jubla)
-  end
-
   def first_wagon=(first_wagon)
     self.all_wagons = sort_wagons(@all_wagons, first_wagon)
 
@@ -145,7 +139,7 @@ class Release::Main
       in_dir("hitobito_#{wagon}") do
         break if existing_version_again?
 
-        update_translations unless untranslated_wagons.include?(wagon)
+        update_translations
         update_changelog
         update_version file: "lib/hitobito_#{wagon}/version.rb"
         release_version @version

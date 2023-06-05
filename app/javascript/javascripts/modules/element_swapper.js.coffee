@@ -39,7 +39,7 @@ $(document).on('click', 'a[data-swap], button[data-swap]', new app.ElementSwappe
 # additional custom swap actions
 $(document).on('click', 'a[data-swap="person-fields"]', new app.ElementSwapper().resetRolePersonId)
 
-$(document).ready ->
+$(document).on 'turbolinks:load', ->
   document.querySelectorAll('a[data-swap="person-fields"]').forEach (link) ->
     swapClass = link.dataset.swap
     hidden = link.closest('.' + swapClass + '[style*="display: none"], .' + swapClass + '[style*="display:none"]')

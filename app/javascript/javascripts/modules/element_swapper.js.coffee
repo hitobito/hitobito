@@ -16,6 +16,8 @@ class app.ElementSwapper
 
     $('.' + selector).slideToggle()
 
+    swapRequiredFields()
+
     if event
       event.preventDefault()
 
@@ -24,7 +26,21 @@ class app.ElementSwapper
     $('#role_person').val(null).change()
     event.preventDefault()
 
+
+swapRequiredFields = (rootEl = document) ->
+  required = rootEl.querySelectorAll('input[required], input[data-required]')
+  required.forEach (input) ->
+    input.required = !input.required
+    input.dataset.required = !JSON.parse(input.dataset.required || 'false')
+
+
 $(document).on('click', 'a[data-swap], button[data-swap]', new app.ElementSwapper().swap)
 
 # additional custom swap actions
 $(document).on('click', 'a[data-swap="person-fields"]', new app.ElementSwapper().resetRolePersonId)
+
+$(document).ready ->
+  document.querySelectorAll('a[data-swap="person-fields"]').forEach (link) ->
+    swapClass = link.dataset.swap
+    hidden = link.closest('.' + swapClass + '[style*="display: none"], .' + swapClass + '[style*="display:none"]')
+    swapRequiredFields(hidden) if hidden

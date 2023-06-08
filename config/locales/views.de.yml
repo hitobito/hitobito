@@ -714,6 +714,8 @@ de:
       help_contact: 'Adresse und öffentliche Telefonnummern dieser Person verwenden.'
       help_main_self_registration_group: 'Den Registrierungslink dieser Gruppe auf der Hauptloginseite anzeigen.'
       hint_external_registration: 'Es sind keine Rollen mit Schreibrechten auswählbar'
+    form_tabs:
+      general: 'Allgemein'
     global:
       link:
         add: Gruppe erstellen

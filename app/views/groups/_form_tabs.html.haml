@@ -1,0 +1,6 @@
+%ul.nav.nav-tabs
+  %li.active= link_to(t('groups.form_tabs.general'), '#general', data: { toggle: 'tab' })
+  %li= link_to(Group.human_attribute_name(:contactable), '#contactable', data: { toggle: 'tab' })
+  %li= link_to(Group.human_attribute_name(:self_registration_link), '#self-registration', data: { toggle: 'tab' })
+
+  = render_extensions :form_tabs

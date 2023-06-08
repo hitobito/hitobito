@@ -14,6 +14,10 @@ describe :self_registration do
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
   end
 
+  around do
+    logout
+  end
+
   context 'with privacy policies in hierarchy' do
     let(:top_layer) { groups(:top_layer) }
 

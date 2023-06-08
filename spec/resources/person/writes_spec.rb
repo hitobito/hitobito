@@ -71,6 +71,45 @@ describe PersonResource, type: :resource do
        .and change { person.first_name }.to('Joseph')
     end
 
+
+    context 'for person language' do
+      let(:payload) do
+        {
+          id: person.id.to_s,
+          data: {
+            id: person.id.to_s,
+            type: 'people',
+            attributes: {
+              language: target_value
+            }
+          }
+        }
+      end
+
+      context 'with valid value' do
+        let(:target_value) { 'fr' }
+
+        it 'works' do
+          expect {
+            expect(instance.update_attributes).to eq(true)
+          }.to change { person.reload.updated_at }
+            .and change { person.language }.to('fr')
+        end
+      end
+
+      context 'with invalid value' do
+        let(:target_value) { 'elvish' }
+
+        it 'works' do
+          expect {
+            expect(instance.update_attributes).to eq(false)
+          }.to_not change { [person.reload.updated_at, person.language] }
+        end
+
+      end
+
+    end
+
     context 'with show_details permission, it' do
       it 'updates restricted attrs' do
         new_birthday = Date.today

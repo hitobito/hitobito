@@ -53,12 +53,14 @@ describe :event_participation do
 
       click_link('Anmelden')
 
+      expect(current_path).to eq(contact_data_group_event_participations_path(group, event))
+
       is_expected.to have_content('Privacy Policy Top Layer')
       is_expected.to have_content('Additional Policies Bottom Layer')
 
       find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # "Weiter"
 
-      is_expected.to have_content 'Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.'
+      expect(current_path).to eq(contact_data_group_event_participations_path(group, event))
     end
   end
 end

@@ -41,7 +41,7 @@ class Ability
   attr_reader :user_context
 
   def user
-    user_context.user
+    user_context&.user
   end
 
   def initialize(user)

@@ -449,6 +449,8 @@ GEM
     rack (2.2.6.4)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
+    rack-mini-profiler (3.1.0)
+      rack (>= 1.2.0)
     rack-proxy (0.7.2)
       rack
     rack-test (2.0.2)
@@ -761,6 +763,7 @@ DEPENDENCIES
   pry-stack_explorer
   puma
   rack-cors
+  rack-mini-profiler
   rails (= 6.1.7.1)
   rails-controller-testing
   rails-erd

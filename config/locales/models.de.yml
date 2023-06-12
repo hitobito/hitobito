@@ -468,7 +468,6 @@ de:
       group:
         name: Name
         short_name: Kurzname
-        custom_self_registration_title: Externe Registrierung Titel
         email: Haupt-E-Mail
         address: Adresse
         zip_code: PLZ
@@ -476,6 +475,7 @@ de:
         country: Land
         contact_id: Kontaktperson
         contact: Kontaktperson
+        contactable: Kontaktangaben
         phone_numbers: Telefonnummern
         social_accounts: Social Media
         additional_emails: Weitere E-Mails
@@ -485,12 +485,14 @@ de:
         type: Gruppentyp
         type_name: Gruppentyp
         description: Beschreibung
-        main_self_registration_group: Externe Registrierung Anzeige auf Loginseite
         member_count: Anzahl Mitglieder
         updated_at: Geändert
-        self_registration_role_type: Externe Registrierung
+        self_registration: Externe Registrierung
+        self_registration_role_type: Rollentyp
         self_registration_link: Externe Registrierung
-        self_registration_notification_email: Externe Registrierung Benachrichtigungs-E-Mail
+        self_registration_notification_email: Benachrichtigungs-E-Mail
+        main_self_registration_group: Anzeige auf Loginseite
+        custom_self_registration_title: Titel bei der Registrierung
         nextcloud_url: Link zu Nextcloud
         remove_logo: Aktuelles Gruppenlogo entfernen
         privacy_policy_title: DSE/Datenschutzerklärung Titel

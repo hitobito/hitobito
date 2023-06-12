@@ -19,13 +19,17 @@ describe 'groups/_form.html.haml' do
 
   it 'does render contactable and extension partials' do
     partials = ['_error_messages', '_fields', 'contactable/_fields',
+                '_form_tabs', '_general_fields', '_self_registration_fields',
                 'contactable/_phone_number_fields', '_phone_number_fields',
                 'contactable/_social_account_fields', '_social_account_fields',
                 'groups/_form', '_form']
 
+    expect(view).to receive(:render_extensions).with(:form_tabs)
     expect(view).to receive(:render_extensions).with(:address_fields, anything)
     expect(view).to receive(:render_extensions).with(:additional_fields, anything)
     expect(view).to receive(:render_extensions).with(:fields, anything)
+    expect(view).to receive(:render_extensions).with(:general_fields, anything)
+    expect(view).to receive(:render_extensions).with(:self_registration_fields, anything)
     render partial: 'groups/form'
     partials.each do |partial|
       expect(view).to render_template(partial: partial)

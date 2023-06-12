@@ -1,0 +1,23 @@
+= field_set_tag do
+  = f.labeled_input_fields(:name, :short_name)
+  - entry.modifiable_attributes(:description).each do |attr|
+    = f.labeled_input_field attr
+
+  = f.labeled(:contact_id) do
+    - if @contacts.present?
+      = f.select(:contact_id,
+                 @contacts.collect { |p| [p.to_s(:list), p.id] },
+                 { include_blank: ta(:no_entry) },
+                 class: 'span6')
+      = f.help_inline(t('groups.form.help_contact'))
+    - else
+      %p.text= ta(:none_available)
+
+  - if entry.class.attr_used?(:nextcloud_url)
+    = f.labeled_input_fields(:nextcloud_url)
+
+  = render 'logo_fields', f: f
+
+  = render 'privacy_policy_fields', f: f
+
+  = render_extensions :general_fields, f: f

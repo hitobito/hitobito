@@ -28,21 +28,19 @@ class VariousAbility < AbilityDsl::Base
     permission(:any).may(:create, :update, :destroy, :show).own_unless_only_basic_permissions_roles
   end
 
-  if Group.course_types.present?
-    on(Event::Kind) do
-      class_side(:index).if_admin
-      permission(:admin).may(:manage).all
-    end
+  on(Event::Kind) do
+    class_side(:index).if_admin_and_course_types_present
+    permission(:admin).may(:manage).if_course_types_present
+  end
 
-    on(QualificationKind) do
-      class_side(:index).if_admin
-      permission(:admin).may(:manage).all
-    end
+  on(QualificationKind) do
+    class_side(:index).if_admin_and_course_types_present
+    permission(:admin).may(:manage).if_course_types_present
+  end
 
-    on(Event::KindCategory) do
-      class_side(:index).if_admin
-      permission(:admin).may(:manage).all
-    end
+  on(Event::KindCategory) do
+    class_side(:index).if_admin_and_course_types_present
+    permission(:admin).may(:manage).if_course_types_present
   end
 
   def own_unless_only_basic_permissions_roles
@@ -53,5 +51,13 @@ class VariousAbility < AbilityDsl::Base
 
   def everybody_unless_only_basic_permissions_roles
     !user.roles.all?(&:basic_permissions_only)
+  end
+
+  def if_admin_and_course_types_present
+    if_admin && if_course_types_present
+  end
+
+  def if_course_types_present
+    Group.course_types.present?
   end
 end

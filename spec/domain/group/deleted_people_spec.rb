@@ -17,47 +17,93 @@ describe Group::DeletedPeople do
                 created_at: Time.zone.now - 1.year)
     end
 
-    let(:sibling_group)      { groups(:bottom_layer_one) }
-    let(:sibling_group_one)  { groups(:bottom_group_one_one) }
-    let(:sibling_person)     { sibling_role.person.reload }
-    let(:sibling_role) do
-      Fabricate(Group::BottomGroup::Leader.name, group: sibling_group_one,
+    let(:child_group)      { groups(:bottom_layer_one) }
+    let(:child_group_one)  { groups(:bottom_group_one_one) }
+    let(:child_person)     { child_role.person.reload }
+    let(:child_role) do
+      Fabricate(Group::BottomGroup::Leader.name, group: child_group_one,
                 created_at: Time.zone.now - 1.year)
     end
 
-    context 'when group has people without role' do
-      before do
-        role.destroy
+    context 'for single group' do
+      context 'when group has people without role' do
+        before do
+          role.destroy
+        end
+
+        it 'finds those people' do
+          expect(Group::DeletedPeople.deleted_for(group).first).to eq(person)
+        end
+        it 'doesn\'t find people with new role' do
+          Group::TopLayer::TopAdmin.create(person: person, group: group)
+
+          expect(person.roles.count).to eq 1
+          expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
+        end
+
+        it 'doesn\'t find people with role with future deletion date' do
+          role = Group::TopLayer::TopAdmin.create(person: person, group: group)
+          role.update!(deleted_at: 1.day.from_now)
+
+          expect(person.roles.count).to eq 1
+          expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
+        end
+
+        it 'finds people from other group in same layer' do
+          child_role.destroy
+          expect(Group::DeletedPeople.deleted_for(child_group)).to include child_person
+        end
       end
 
-      it 'finds those people' do
-        expect(Group::DeletedPeople.deleted_for(group).first).to eq(person)
-      end
-
-      it 'doesn\'t find people with new role' do
-        Group::TopLayer::TopAdmin.create(person: person, group: group)
-
-        expect(person.roles.count).to eq 1
-        expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
-      end
-
-      it 'doesn\'t find people with role with future deletion date' do
-        role = Group::TopLayer::TopAdmin.create(person: person, group: group)
-        role.update!(deleted_at: 1.day.from_now)
-
-        expect(person.roles.count).to eq 1
-        expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
-      end
-
-      it 'finds people from other group in same layer' do
-        sibling_role.destroy
-        expect(Group::DeletedPeople.deleted_for(sibling_group)).to include sibling_person
+      context 'when group has no people without role' do
+        it 'returns empty' do
+          expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
+        end
       end
     end
 
-    context 'when group has no people without role' do
-      it 'returns empty' do
-        expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
+    context 'for multiple groups' do
+      let(:sibling_group) { Fabricate(Group::TopLayer.sti_name.to_sym) }
+      let(:sibling_role) do
+        Fabricate(Group::TopLayer::TopAdmin.name, group: sibling_group,
+                  created_at: Time.zone.now - 1.year)
+      end
+      let(:all_groups) { [group, sibling_group] }
+
+      context 'when group has people without role' do
+        before do
+          role.destroy
+        end
+
+        it 'finds those people' do
+          expect(Group::DeletedPeople.deleted_for_multiple(all_groups).first).to eq(person)
+        end
+
+        it 'doesn\'t find people with new role' do
+          Group::TopLayer::TopAdmin.create(person: person, group: group)
+
+          expect(person.roles.count).to eq 1
+          expect(Group::DeletedPeople.deleted_for_multiple(all_groups).count).to eq 0
+        end
+
+        it 'doesn\'t find people with role with future deletion date' do
+          role = Group::TopLayer::TopAdmin.create(person: person, group: group)
+          role.update!(deleted_at: 1.day.from_now)
+
+          expect(person.roles.count).to eq 1
+          expect(Group::DeletedPeople.deleted_for_multiple(all_groups).count).to eq 0
+        end
+
+        it 'finds people from other group in same layer' do
+          child_role.destroy
+          expect(Group::DeletedPeople.deleted_for_multiple([child_group, sibling_group])).to include child_person
+        end
+      end
+
+      context 'when group has no people without role' do
+        it 'returns empty' do
+          expect(Group::DeletedPeople.deleted_for_multiple(all_groups).count).to eq 0
+        end
       end
     end
   end

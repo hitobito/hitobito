@@ -10,6 +10,17 @@ class Group::DeletedPeople
 
   class << self
 
+    def deleted_for_multiple(layer_groups)
+      Person.
+        joins('INNER JOIN roles ON roles.person_id = people.id').
+        joins("INNER JOIN #{Group.quoted_table_name} " \
+              "ON #{Group.quoted_table_name}.id = roles.group_id").
+        where(no_active_roles_exist).
+        where('roles.deleted_at = (?)', last_role_deleted_at).
+        where("#{Group.quoted_table_name}.layer_group_id IN (?)", layer_groups.map(&:id)).
+        distinct
+    end
+
     def deleted_for(layer_group)
       Person.
         joins('INNER JOIN roles ON roles.person_id = people.id').

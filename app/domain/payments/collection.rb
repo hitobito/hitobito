@@ -113,7 +113,7 @@ class Payments::Collection
   def median_amount(options = {})
     return 0 if @payments.empty?
 
-    amounts = @payments.order(amount: :asc).pluck(:amount)
+    amounts = @payments.pluck(:amount).sort
 
     count = @payments.count
 

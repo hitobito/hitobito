@@ -232,6 +232,16 @@ describe Payments::Collection do
         expect(amount).to eq(50.0)
       end
 
+      it 'returns median for uneven list with scientific E notation' do
+        fabricate_payment(0.15e2, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(0.2e2, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.4e2, Date.new(1.year.ago.year, 12, 31))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount
+
+        expect(amount).to eq(0.2e2)
+      end
+
       it 'returns median for even list' do
         fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
         fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
@@ -243,6 +253,19 @@ describe Payments::Collection do
         amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount
 
         expect(amount).to eq(75.0)
+      end
+
+      it 'returns median for even list with scientific E notation' do
+        fabricate_payment(0.1e3, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(0.5e2, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.2e2, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.1e3, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.2e4, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.1e2, Date.new(1.year.ago.year, 12, 31))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount
+
+        expect(amount).to eq(0.75e2)
       end
     end
 
@@ -260,6 +283,19 @@ describe Payments::Collection do
         expect(amount).to eq(110.0)
       end
 
+      it 'returns median for uneven list with scientific E notation' do
+        fabricate_payment(0.1e3, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(0.5e2, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.2e2, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.2e3, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(0.15e4, Date.new(3.years.ago.year, 1, 1))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+        # median is 100, times 10% (100 * 1.1 = 110)
+        expect(amount).to eq(0.11e3)
+      end
+
       it 'returns increased amount for even list' do
         fabricate_payment(110.0, Date.new(3.years.ago.year, 1, 1))
         fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
@@ -274,6 +310,19 @@ describe Payments::Collection do
         expect(amount).to eq(110.0)
       end
 
+      it 'returns median for even list with scientific E notation' do
+        fabricate_payment(0.1e3, Date.new(3.years.ago.year, 1, 1))
+        fabricate_payment(0.5e2, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.2e2, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.1e3, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.2e4, Date.new(1.year.ago.year, 12, 31))
+        fabricate_payment(0.1e2, Date.new(1.year.ago.year, 12, 31))
+
+        amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount
+
+        expect(amount).to eq(0.75e2)
+      end
+
       context 'previous_amount below 100' do
         it 'calculates increased amount and rounds up to 5' do
           fabricate_payment(100.0, Date.new(3.years.ago.year, 1, 1))
@@ -285,6 +334,18 @@ describe Payments::Collection do
 
           # median is 75 ((50 + 100) / 2), times 10% (75 * 1.1 = 82.5), rounded up to next 5 = 85
           expect(amount).to eq(85.0)
+        end
+
+        it 'calculates increased amount and rounds up to 5 with scientific E notation' do
+          fabricate_payment(0.1e3, Date.new(3.years.ago.year, 1, 1))
+          fabricate_payment(0.5e2, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(0.2e2, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(0.3e3, Date.new(3.years.ago.year, 1, 1))
+
+          amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+          # median is 75 ((50 + 100) / 2), times 10% (75 * 1.1 = 82.5), rounded up to next 5 = 85
+          expect(amount).to eq(0.85e2)
         end
       end
 
@@ -301,6 +362,19 @@ describe Payments::Collection do
           # median is 150, times 10% (150 * 1.1 = 165), rounded up to next 10 = 170
           expect(amount).to eq(170.0)
         end
+
+        it 'calculates increased amount and rounds up to 10 with scientific E notation' do
+          fabricate_payment(0.18e3, Date.new(3.years.ago.year, 1, 1))
+          fabricate_payment(0.15e3, Date.new(3.years.ago.year, 1, 1))
+          fabricate_payment(0.5e2, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(0.2e2, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(0.3e3, Date.new(3.years.ago.year, 1, 1))
+
+          amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+          # median is 150, times 10% (150 * 1.1 = 165), rounded up to next 10 = 170
+          expect(amount).to eq(0.17e3)
+        end
       end
 
       context 'previous_amount above 1000' do
@@ -315,6 +389,19 @@ describe Payments::Collection do
 
           # median is 1250, times 10% (1250 * 1.1 = 1365), rounded up to next 50 = 1400
           expect(amount).to eq(1400.0)
+        end
+
+        it 'calculates increased amount and rounds up to 50 with scientific E notation' do
+          fabricate_payment(0.128e4, Date.new(3.years.ago.year, 1, 1))
+          fabricate_payment(0.125e4, Date.new(3.years.ago.year, 1, 1))
+          fabricate_payment(0.15e3, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(0.12e3, Date.new(1.year.ago.year, 12, 31))
+          fabricate_payment(0.13e4, Date.new(3.years.ago.year, 1, 1))
+
+          amount = described_class.new.in_last(3.years).in_layer(top_layer).of_person(bottom_member).median_amount(increased_by: 10)
+
+          # median is 1250, times 10% (1250 * 1.1 = 1365), rounded up to next 50 = 1400
+          expect(amount).to eq(0.14e4)
         end
       end
     end

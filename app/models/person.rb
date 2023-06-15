@@ -184,6 +184,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   belongs_to :primary_group, class_name: 'Group'
   belongs_to :last_label_format, class_name: 'LabelFormat'
 
+  belongs_to :last_active_role, ->(p) { p.roles.with_deleted }, class_name: 'Role'
+
   has_many :label_formats, dependent: :destroy
   has_many :table_displays, dependent: :destroy
 

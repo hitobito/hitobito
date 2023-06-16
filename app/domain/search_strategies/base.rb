@@ -101,9 +101,7 @@ module SearchStrategies
     end
 
     def load_accessible_deleted_people_ids
-      deleted_people_indexable_layers.flat_map do |layer|
-        Group::DeletedPeople.deleted_for(layer).pluck(:id)
-      end
+      Group::DeletedPeople.deleted_for_multiple(deleted_people_indexable_layers).pluck(:id)
     end
 
     def deleted_people_indexable_layers

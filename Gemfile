@@ -67,6 +67,7 @@ gem 'protective'
 gem 'pry-rails'
 gem 'puma'
 gem 'rack-cors'
+gem 'rack-mini-profiler', require: false
 gem 'rails_autolink'
 gem 'rails-i18n'
 gem 'remotipart'

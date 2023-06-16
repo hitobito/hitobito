@@ -73,8 +73,8 @@ module SearchStrategies
     end
 
     def accessible_people_ids
-        key = "accessible_people_ids_for_#{@user.id}"
-        Rails.cache.fetch(key, expires_in: 15.minutes) do
+      key = "accessible_people_ids_for_#{@user.id}"
+      Rails.cache.fetch(key, expires_in: 15.minutes) do
         ids = load_accessible_people_ids
         if Ability.new(@user).can?(:index_people_without_role, Person)
           ids += load_deleted_people_ids

@@ -35,6 +35,7 @@ describe SearchStrategies::Sql do
     role.update(created_at: Time.now - 1.year)
     role.destroy
     @deleted_leader = role.person
+    @deleted_leader.update(last_active_role: role)
 
     role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
     role.update(created_at: Time.now - 1.year)

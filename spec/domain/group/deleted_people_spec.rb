@@ -29,6 +29,7 @@ describe Group::DeletedPeople do
       context 'when group has people without role' do
         before do
           role.destroy
+          role.person.update(last_active_role: role)
         end
 
         it 'finds those people' do
@@ -36,6 +37,7 @@ describe Group::DeletedPeople do
         end
         it 'doesn\'t find people with new role' do
           Group::TopLayer::TopAdmin.create(person: person, group: group)
+          person.update(last_active_role: nil)
 
           expect(person.roles.count).to eq 1
           expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
@@ -43,6 +45,7 @@ describe Group::DeletedPeople do
 
         it 'doesn\'t find people with role with future deletion date' do
           role = Group::TopLayer::TopAdmin.create(person: person, group: group)
+          person.update(last_active_role: nil)
           role.update!(deleted_at: 1.day.from_now)
 
           expect(person.roles.count).to eq 1
@@ -51,6 +54,7 @@ describe Group::DeletedPeople do
 
         it 'finds people from other group in same layer' do
           child_role.destroy
+          child_person.update(last_active_role: child_role)
           expect(Group::DeletedPeople.deleted_for(child_group)).to include child_person
         end
       end
@@ -73,6 +77,7 @@ describe Group::DeletedPeople do
       context 'when group has people without role' do
         before do
           role.destroy
+          role.person.update(last_active_role: role)
         end
 
         it 'finds those people' do
@@ -81,6 +86,7 @@ describe Group::DeletedPeople do
 
         it 'doesn\'t find people with new role' do
           Group::TopLayer::TopAdmin.create(person: person, group: group)
+          person.update(last_active_role: nil)
 
           expect(person.roles.count).to eq 1
           expect(Group::DeletedPeople.deleted_for_multiple(all_groups).count).to eq 0
@@ -89,6 +95,7 @@ describe Group::DeletedPeople do
         it 'doesn\'t find people with role with future deletion date' do
           role = Group::TopLayer::TopAdmin.create(person: person, group: group)
           role.update!(deleted_at: 1.day.from_now)
+          person.update(last_active_role: nil)
 
           expect(person.roles.count).to eq 1
           expect(Group::DeletedPeople.deleted_for_multiple(all_groups).count).to eq 0
@@ -96,6 +103,7 @@ describe Group::DeletedPeople do
 
         it 'finds people from other group in same layer' do
           child_role.destroy
+          child_person.update(last_active_role: child_role)
           expect(Group::DeletedPeople.deleted_for_multiple([child_group, sibling_group])).to include child_person
         end
       end
@@ -130,6 +138,8 @@ describe Group::DeletedPeople do
       role_top.destroy
       role_top.update_column(:deleted_at, 1.hour.ago)
       role_bottom.destroy
+      role_top.person.update(last_active_role: role_top)
+      role_bottom.person.update(last_active_role: role_bottom)
       expect(Group::DeletedPeople.deleted_for(group).count).to eq 0
     end
 
@@ -137,6 +147,8 @@ describe Group::DeletedPeople do
       role_bottom.destroy
       role_bottom.update_column(:deleted_at, 1.hour.ago)
       role_top.destroy
+      role_bottom.person.update(last_active_role: role_bottom)
+      role_top.person.update(last_active_role: role_top)
       expect(Group::DeletedPeople.deleted_for(group)).to include person
     end
 
@@ -144,6 +156,7 @@ describe Group::DeletedPeople do
       role_top.destroy
       role_top.update_column(:deleted_at, 1.hour.ago)
       role_bottom.destroy
+      person.update(last_active_role: role_bottom)
       expect(Group::DeletedPeople.deleted_for(bottom_group)).to include person
     end
 
@@ -163,7 +176,7 @@ describe Group::DeletedPeople do
       Fabricate(Group::BottomLayer::Leader.name, group: bottom_group, person: top2.person,
                 created_at: Time.zone.now - 9.months)
       top2.destroy
-      top2.update!(deleted_at: del)
+      person.update(last_active_role: role_top)
 
       expect(Group::DeletedPeople.deleted_for(group)).to match_array([person])
     end

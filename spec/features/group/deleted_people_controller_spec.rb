@@ -21,14 +21,16 @@ describe Group::DeletedPeopleController, js: true do
     let(:user) { people(:top_leader) }
 
     before do
-      Fabricate(Group::BottomLayer::Member.name.to_sym,
+      del1 = Fabricate(Group::BottomLayer::Member.name.to_sym,
                 group: groups(:bottom_layer_one),
                 created_at: 1.year.ago,
                 deleted_at: 1.month.ago)
-      Fabricate(Group::BottomGroup::Leader.name.to_sym,
+      del1.person.update(last_active_role: del1)
+      del2 = Fabricate(Group::BottomGroup::Leader.name.to_sym,
                 group: groups(:bottom_group_one_one_one),
                 created_at: 1.year.ago,
                 deleted_at: 1.month.ago)
+      del2.person.update(last_active_role: del2)
 
       sign_in(user)
       visit group_deleted_people_path(group_id: group.id)

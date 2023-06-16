@@ -245,6 +245,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
             '(company_name IS NOT NULL AND company_name <> "")')
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: { label: 'Mobil' }) }
+  scope :with_last_active_role, -> { where('people.last_active_role_id IS NOT NULL') }
 
   ### CLASS METHODS
 

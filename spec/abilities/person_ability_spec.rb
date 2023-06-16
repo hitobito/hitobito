@@ -97,11 +97,13 @@ describe PersonAbility do
 
     it 'may show person with deleted role in layer' do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other.person.update(last_active_role: other)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
     it 'may show person with deleted role in lower layer' do
       other = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other.person.update(last_active_role: other)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 
@@ -432,6 +434,7 @@ describe PersonAbility do
 
     it 'may show person with deleted role in layer' do
       other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), created_at: 2.weeks.ago, deleted_at: 1.week.ago)
+      other.person.update(last_active_role: other)
       is_expected.to be_able_to(:show, other.person.reload)
     end
 

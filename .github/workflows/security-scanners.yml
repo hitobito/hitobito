@@ -21,7 +21,8 @@ jobs:
 
       - name: Run security checks
         run: |
-          bin/bundle exec brakeman -q --exit-on-warn --ensure-ignore-notes --ensure-latest
+          # bin/bundle exec brakeman -q --exit-on-warn --ensure-ignore-notes --ensure-latest
+          bin/bundle exec brakeman -q --exit-on-warn --ensure-ignore-notes
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml

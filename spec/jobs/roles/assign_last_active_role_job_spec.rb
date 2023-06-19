@@ -37,6 +37,9 @@ describe Roles::AssignLastActiveRoleJob do
       child_person.reload
       expect(person.last_active_role).to eq(role)
       expect(child_person.last_active_role).to eq(child_role)
+
+      expect(job.log_results[:assigned_last_active_role]).to match_array([person.id, child_person.id])
+      expect(job.log_results[:removed_last_active_role]).to be_empty
     end
 
     it 'gets assigned last deleted role' do
@@ -70,6 +73,9 @@ describe Roles::AssignLastActiveRoleJob do
       child_person.reload
       expect(person.last_active_role).to eq(nil)
       expect(child_person.last_active_role).to eq(nil)
+
+      expect(job.log_results[:assigned_last_active_role]).to be_empty
+      expect(job.log_results[:removed_last_active_role]).to match_array([person.id, child_person.id])
     end
   end
 

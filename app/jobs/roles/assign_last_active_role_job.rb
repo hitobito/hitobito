@@ -20,10 +20,13 @@ class Roles::AssignLastActiveRoleJob < RecurringJob
     new_people_without_active_roles.find_each do |person|
       person.update_column(:last_active_role_id,
                            person.roles.only_deleted.order(deleted_at: :desc).first.id)
+      logs[:assigned_last_active_role] << person.id
     end
 
     people_to_unassign_last_active_role.find_each do |person|
       person.update_column(:last_active_role_id, nil)
+
+      logs[:removed_last_active_role] << person.id
     end
   end
 
@@ -50,9 +53,7 @@ class Roles::AssignLastActiveRoleJob < RecurringJob
         .where('roles.person_id = people.id')
   end
 
-  def last_role_deleted_at
-    Role.only_deleted
-        .where('roles.person_id = people.id')
-        .select('MAX(roles.deleted_at)')
+  def log_results
+    logs
   end
 end

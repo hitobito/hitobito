@@ -76,3 +76,22 @@
       = @suspend_person_situation_text
     %div.well
       = @suspend_person_solution_text
+%h2= t('.groups_and_roles_that_see_me')
+#roles_that_see_me_placeholder
+  = action_button(t('.load_roles_that_see_me'),
+                  security_tools_group_person_path(group, person, format: :js),
+                  :eye,
+                  remote: true, id: :'roles-that-see-me-load-button', data: { method: :get })
+  %p= t('.load_roles_that_see_me_hint')
+
+%span#roles-that-see-me-spinner
+  = spinner(true)
+
+:javascript
+  $(document).on('turbolinks:load', () => {
+    $('#roles-that-see-me-spinner').hide()
+    $('#roles-that-see-me-load-button').on('click', (e) => {
+      $(e.target).hide()
+      $('#roles-that-see-me-spinner').show()
+    })
+  })

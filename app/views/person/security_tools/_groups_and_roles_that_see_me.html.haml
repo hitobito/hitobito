@@ -1,0 +1,13 @@
+-#  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+%table.table.table-striped
+  %tbody
+    - groups_and_roles_that_see_me.each do |id, group|
+      %tr
+        %td
+          %strong= link_to group[:name], group_path(id)
+        %td
+          %p= group[:roles].join(", ")

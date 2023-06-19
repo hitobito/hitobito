@@ -82,6 +82,8 @@
                   security_tools_group_person_path(group, person, format: :js),
                   :eye,
                   remote: true, id: :'roles-that-see-me-load-button', data: { method: :get })
+  %p= t('.load_roles_that_see_me_hint')
+
 %span#roles-that-see-me-spinner
   = spinner(true)
 

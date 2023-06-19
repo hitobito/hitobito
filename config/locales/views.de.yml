@@ -1418,7 +1418,8 @@ de:
         override_password: "Passwort überschreiben"
         confirm_reset: "Achtung: Damit wird das Passwort überschrieben. Willst du das wirklich?"
         groups_and_roles_that_see_me: Rollen, die auf mich Zugriff haben
-        load_roles_that_see_me: 'Gruppen und Rollen laden und anzeigen. Dies kann einige Sekunden dauern.'
+        load_roles_that_see_me: 'Gruppen und Rollen laden'
+        load_roles_that_see_me_hint: 'Dies kann einige Sekunden dauern'
 
       password_override:
         flashes:

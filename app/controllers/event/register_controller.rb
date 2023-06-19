@@ -81,7 +81,7 @@ class Event::RegisterController < ApplicationController
   end
 
   def assert_honeypot_is_empty
-    if (params[:person] || params[:event_participation_contact_data]).delete(:verification).present?
+    if params[params_key].delete(:verification).present?
       redirect_to event_or_login_page
     end
   end
@@ -91,7 +91,11 @@ class Event::RegisterController < ApplicationController
   end
 
   def entry
-    @participation_contact_data ||= Event::ParticipationContactData.new(event, person, model_params)
+    @participation_contact_data ||= contact_data_class.new(event, person, model_params)
+  end
+
+  def contact_data_class
+    Event::ParticipationContactData
   end
 
   def model_params
@@ -99,7 +103,8 @@ class Event::RegisterController < ApplicationController
   end
 
   def params_key
-    %w(event_participation_contact_data person).find { |key| params.key?(key) }
+    [contact_data_class.to_s.underscore.gsub('/', '_'),
+     'person'].find { |key| params.key?(key) }
   end
 
   alias resource person # used by devise-form

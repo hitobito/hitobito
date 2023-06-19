@@ -822,10 +822,6 @@ en:
         payment_slip: Payment slip
         payment_slips:
           qr: QR invoice
-          ch_es: Red payment slip Post (CH)
-          ch_bes: Red payment slip Bank (CH)
-          ch_esr: Orange payment slip Post (CH)
-          ch_besr: Orange payment slip Bank (CH)
           no_ps: None
         participant_number: Participant Nr
         participant_number_internal: Participant Nr internal

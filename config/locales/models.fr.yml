@@ -967,10 +967,6 @@ fr:
         payment_slip: Bulletin de versement
         payment_slips:
           qr: Facture QR
-          ch_es: Bulletin de versement postal rouge (CH)
-          ch_bes: Bulletin de versement bancaire rouge (CH)
-          ch_esr: Bulletin de versement postal orange (CH)
-          ch_besr: Bulletin de versement bancaire orange (CH)
           no_ps: Aucun
         participant_number: Numéro du participant
         participant_number_internal: Numéro du participant interne

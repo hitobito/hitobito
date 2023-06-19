@@ -959,10 +959,6 @@ it:
         payment_slip: Polizza di versamento
         payment_slips:
           qr: Fattura QR
-          ch_es: Polizza di versamento postale rossa (CH)
-          ch_bes: Polizza di versamento bancaria rossa (CH)
-          ch_esr: Polizza di versamento postale arancione (CH)
-          ch_besr: Polizza di versamento bancaria arancione (CH)
           no_ps: Nessuno
         participant_number: Numero di partecipante
         participant_number_internal: Numero interno del partecipante

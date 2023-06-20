@@ -195,6 +195,9 @@ de:
     print: Drucken
     letters_with_invoice: Rechnungsbriefe
 
+  dropdown/letter_with_invoice_new:
+    invoice: 'Normale Rechnung'
+
   dropdown/invoices/evaluation:
     download: 'Export'
     csv: 'CSV'

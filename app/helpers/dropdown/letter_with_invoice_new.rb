@@ -13,6 +13,7 @@ module Dropdown
       super(template, label, icon)
       @label = label
       @path = path
+      @disabled_msg = disabled_msg
       init_items
     end
 

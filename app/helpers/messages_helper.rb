@@ -11,7 +11,9 @@ module MessagesHelper
     label = [type.model_name.human, ti(:"link.add").downcase].join(' ')
 
     if type == Message::LetterWithInvoice
-      return Dropdown::LetterWithInvoiceNew.new(self, label: label, disabled_msg: disabled_msg)
+      return Dropdown::LetterWithInvoiceNew.new(self,
+                                                label: label,
+                                                disabled_msg: disabled_msg).button_or_dropdown
     end
 
     return action_button(label, path, :plus, disabled: disabled_msg) if disabled_msg

@@ -21,7 +21,8 @@ module Dropdown
     end
 
     def button_or_dropdown
-      if finance_groups.one? && InvoiceItem.all_types.one?
+      if finance_groups.one? && (InvoiceItem.all_types.one? ||
+                                 finance_groups.first&.invoice_config&.invalid?)
         single_button
       else
         to_s

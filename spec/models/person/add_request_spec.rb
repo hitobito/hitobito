@@ -46,7 +46,6 @@ describe Person::AddRequest do
     it 'contains deleted people' do
       admin = Fabricate(Group::TopLayer::TopAdmin.name, group: groups(:top_layer)).person
       ex_topper = Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), created_at: 1.year.ago).person
-      ex_topper.update(last_active_role: ex_topper.roles.first)
       ex_topper.roles.first.destroy
       bottom = Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person
       # deleted role in layer

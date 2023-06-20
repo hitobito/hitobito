@@ -12,18 +12,22 @@ class Group::DeletedPeople
 
     def deleted_for_multiple(layer_groups)
       Person.with_last_active_role
-            .joins('INNER JOIN roles ON people.last_active_role_id = roles.id')
+            .joins("INNER JOIN #{Role.quoted_table_name} " \
+                   "ON people.last_active_role_id = #{Role.quoted_table_name}.id")
             .joins("INNER JOIN #{Group.quoted_table_name} " \
                    "ON #{Group.quoted_table_name}.id = roles.group_id")
+            .where("#{Role.quoted_table_name}.deleted_at <= ?", Time.zone.now.to_s(:db))
             .where("#{Group.quoted_table_name}.layer_group_id IN (?)", layer_groups.map(&:id))
             .distinct
     end
 
     def deleted_for(layer_group)
       Person.with_last_active_role
-            .joins('INNER JOIN roles ON people.last_active_role_id = roles.id')
+            .joins("INNER JOIN #{Role.quoted_table_name} " \
+                   "ON people.last_active_role_id = #{Role.quoted_table_name}.id")
             .joins("INNER JOIN #{Group.quoted_table_name} " \
                    "ON #{Group.quoted_table_name}.id = roles.group_id")
+            .where("#{Role.quoted_table_name}.deleted_at <= ?", Time.zone.now.to_s(:db))
             .where("#{Group.quoted_table_name}.layer_group_id = ?", layer_group.id)
             .distinct
     end

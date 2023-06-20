@@ -30,7 +30,6 @@ describe SearchStrategies::Sphinx, sphinx: true do
       leader = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one), person: @bg_member_with_deleted)
       leader.update(created_at: Time.now - 1.year)
       leader.destroy!
-      @bg_member_with_deleted.update(last_active_role: leader)
 
       @no_role = Fabricate(:person)
 
@@ -38,13 +37,11 @@ describe SearchStrategies::Sphinx, sphinx: true do
       role.update(created_at: Time.now - 1.year)
       role.destroy
       @deleted_leader = role.person
-      @deleted_leader.update(last_active_role: role)
 
       role = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
       role.update(created_at: Time.now - 1.year)
       role.destroy
       @deleted_bg_member = role.person
-      @deleted_bg_member.update(last_active_role: role)
 
       index_sphinx
     end

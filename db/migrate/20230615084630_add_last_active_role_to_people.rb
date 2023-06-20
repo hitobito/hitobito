@@ -6,7 +6,33 @@
 #  https://github.com/hitobito/hitobito.
 
 class AddLastActiveRoleToPeople < ActiveRecord::Migration[6.1]
-  def change
+  def up
     add_column :people, :last_active_role_id, :integer, null: true
+
+    say_with_time('assigning last_active_role') do
+      people_without_active_roles.find_each do |person|
+        person.update_column(:last_active_role_id,
+                             person.roles.only_deleted.order(deleted_at: :desc).first.id)
+      end
+    end
+  end
+
+  def down
+    remove_column :people, :last_active_role_id
+  end
+
+  def people_without_active_roles
+    Person.joins('INNER JOIN roles ON roles.person_id = people.id')
+          .where(no_active_roles_exist)
+          .distinct
+  end
+
+  def no_active_roles_exist
+    active_roles.arel.exists.not
+  end
+
+  def active_roles
+    Role.without_deleted
+        .where('roles.person_id = people.id')
   end
 end

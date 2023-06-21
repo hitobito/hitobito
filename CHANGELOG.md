@@ -4,6 +4,7 @@
 
 *  Die JSON:API liefert für Personen neu auch die Sprache (#2104) 
 *  Der Sicherheits-Tab einer Person kann neu die Gruppen und Rollen, welche `:show_details` Zugriff auf einem haben, auflisten. Merci @cdn64! (hitobito_pbs#257)
+*  Auf der Personen-Listenansicht können neu via Multiselekt Personen als Abonnenten einem Abo hinzugefügt werden (#2110)
 
 ## Version 1.28
 

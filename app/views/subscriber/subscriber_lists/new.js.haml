@@ -1,0 +1,3 @@
+$('#modal-placeholder').html("#{escape_javascript(render(partial: 'subscriber/subscriber_lists/new'))}")
+$('[data-provide=entity]').each(window.App.setupEntityTypeahead)
+$('#subscriber-lists-new').modal('show')

@@ -1,0 +1,30 @@
+- #  Copyright (c) 2023, Dachverband Schweizer Jugendparlamente. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito.
+
+#subscriber-lists-new.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.bold.modal-title
+          %b= t('.title', event_label: @event_label)
+
+      = standard_form(path_args(Subscription.new), url: group_mailing_list_subscriber_list_path(group, -1),
+        method: :post) do |f|
+        .modal-body
+          .row-fluid
+            = hidden_field_tag('ids', @people_ids)
+            = text_field_tag('q', nil,
+              placeholder: t('.mailing_list_search'),
+              class: 'mailing-list-add',
+              data: { provide: 'entity',
+              updater: 'SubscriberLists.updatePath',
+              url: typeahead_group_subscriber_list_path(group, format: :json, type: @event_type) })
+
+            = f.help_inline t('.mailing_lists_in_local_hierarchy_hint')
+        .modal-footer
+          = submit_button(f, t('.submit'), disabled: true)
+          = link_to(ti('button.cancel'), '#',
+            class: 'link cancel',
+            onclick: "event.preventDefault(); $('#subscriber-lists-new').modal('hide')")

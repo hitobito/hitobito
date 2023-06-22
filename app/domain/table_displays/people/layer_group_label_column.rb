@@ -11,7 +11,7 @@ module TableDisplays::People
     end
 
     def required_model_attrs(attr)
-      [:contact_data_visible]
+      ['people.contact_data_visible']
     end
 
     def render(attr)

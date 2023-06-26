@@ -34,7 +34,8 @@ module Dropdown
     end
 
     def send_login
-      if @user.email && (@user.roles.any? || @user.root?)
+      if template.can?(:send_password_instructions, @user) &&
+          @user.email && (@user.roles.any? || @user.root?)
         add_item(translate('.send_login'),
                  template.send_password_instructions_group_person_path(template.parent, @user),
                  method: :post,

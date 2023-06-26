@@ -51,7 +51,7 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def label_with_parent
-    h.safe_join([parent.to_s.presence, to_s].compact, ' > ')
+    h.safe_join([parent.to_s.presence, to_s].compact, ' → ')
   end
 
   def link_with_layer

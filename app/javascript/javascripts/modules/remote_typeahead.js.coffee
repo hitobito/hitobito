@@ -61,7 +61,7 @@ setupRemoteTypeahead = (input, items, updater) ->
 
 queryForTypeAhead = (queryData, process, url)->
   app.request = $.get(url, queryData, (data) ->
-    json = $.map(data, (item) -> JSON.stringify(item))
+    json = $.map(data, (item) -> JSON.stringify(escapeLabel(item)))
     $('#quicksearch').removeClass('input-loading')
     process(json)
   )
@@ -85,6 +85,11 @@ delayedQueryForTypeahead = (query, process, delay = 450) ->
 
   delayedQuery = -> queryForTypeAhead(queryData, process, url)
   app.scheduledTypeahead = setTimeout(delayedQuery, delay)
+
+escapeLabel = (item) ->
+  escaped = $('<div>').text(item.label).html()
+  item.label = escaped
+  item
 
 typeaheadHighlighter = (item) ->
   query = this.query.trim().replace(/[\-\[\]{}()*+?.,\\\^$|#]/g, '\\$&')

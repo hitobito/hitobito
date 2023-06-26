@@ -22,12 +22,12 @@ describe Subscriber::GroupController do
         get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
       end
 
-      it { is_expected.to match(/Top \\u0026gt; Bottom One/) }
-      it { is_expected.to match(/Bottom One \\u0026gt; Group 11/) }
-      it { is_expected.to match(/Bottom One \\u0026gt; Group 12/) }
-      it { is_expected.to match(/Top \\u0026gt; Bottom Two/) }
-      it { is_expected.to match(/Bottom Two \\u0026gt; Group 21/) }
-      it { is_expected.not_to match(/Bottom One \\u0026gt; Group 111/) }
+      it { is_expected.to match(/Top → Bottom One/) }
+      it { is_expected.to match(/Bottom One → Group 11/) }
+      it { is_expected.to match(/Bottom One → Group 12/) }
+      it { is_expected.to match(/Top → Bottom Two/) }
+      it { is_expected.to match(/Bottom Two → Group 21/) }
+      it { is_expected.not_to match(/Bottom One → Group 111/) }
 
       context 'archived bottom layer' do
         before do
@@ -36,9 +36,9 @@ describe Subscriber::GroupController do
           get :query, params: { q: 'bot', group_id: group.id, mailing_list_id: list.id }
         end
 
-        it { is_expected.to_not match(/Top \\u0026gt; Bottom One/) }
-        it { is_expected.to_not match(/Bottom One \\u0026gt; Group 11/) }
-        it { is_expected.to_not match(/Bottom One \\u0026gt; Group 12/) }
+        it { is_expected.to_not match(/Top → Bottom One/) }
+        it { is_expected.to_not match(/Bottom One → Group 11/) }
+        it { is_expected.to_not match(/Bottom One → Group 12/) }
       end
     end
 
@@ -52,9 +52,9 @@ describe Subscriber::GroupController do
       end
 
       it 'does not include sister group or their descendants' do
-        is_expected.to match(/Top \\u0026gt; Bottom One/)
-        is_expected.not_to match(/Top \\u0026gt; Bottom Two/)
-        is_expected.not_to match(/Bottom Two \\u0026gt; Group 21/)
+        is_expected.to match(/Top → Bottom One/)
+        is_expected.not_to match(/Top → Bottom Two/)
+        is_expected.not_to match(/Bottom Two → Group 21/)
       end
     end
 

@@ -12,7 +12,7 @@ module TableDisplays::People
 
     def required_model_attrs(attr)
       %w(people.two_factor_authentication people.email people.encrypted_password
-         people.reset_password_sent_at contact_data_visible)
+         people.reset_password_sent_at people.contact_data_visible)
     end
 
     def render(attr)

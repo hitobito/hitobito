@@ -12,7 +12,11 @@ class AddLastActiveRoleToPeople < ActiveRecord::Migration[6.1]
     say_with_time('assigning last_active_role') do
       people_without_active_roles.find_each do |person|
         person.update_column(:last_active_role_id,
-                             person.roles.only_deleted.order(deleted_at: :desc).first.id)
+                             person.roles
+                                   .unscope(where: :'roles.deleted_at')
+                                   .where.not(roles: { deleted_at: nil })
+                                   .where(roles: { deleted_at: ..Time.now.utc })
+                                   .order(deleted_at: :desc).first.id)
       end
     end
   end
@@ -32,7 +36,9 @@ class AddLastActiveRoleToPeople < ActiveRecord::Migration[6.1]
   end
 
   def active_roles
-    Role.without_deleted
+    Role.unscope(where: :'roles.deleted_at')
+        .where(roles: { deleted_at: nil })
+        .or(Role.unscoped.where(Role.arel_table[:deleted_at].gt(Time.now.utc)))
         .where('roles.person_id = people.id')
   end
 end

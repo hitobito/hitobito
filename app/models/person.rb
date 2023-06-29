@@ -392,7 +392,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### OTHER INSTANCE METHODS
 
   def save(*args) # rubocop:disable Rails/ActiveRecordOverride Overwritten to handle uniqueness validation race conditions
-    super
+    super()
   rescue ActiveRecord::RecordNotUnique
     # TODO: it makes no sense to add this error indiscriminate on the email attribute
     errors.add(:email, :taken)

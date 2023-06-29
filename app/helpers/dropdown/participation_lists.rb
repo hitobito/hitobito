@@ -22,7 +22,7 @@ module Dropdown
         next unless authorized?(event)
         add_item(event.label,
                  build_event_participation_lists_path(event),
-                 participation_lists_options)
+                 **participation_lists_options)
       end
     end
 

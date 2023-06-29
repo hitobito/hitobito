@@ -16,8 +16,9 @@ class Group::DeletedPeople
                    "ON people.last_active_role_id = #{Role.quoted_table_name}.id")
             .joins("INNER JOIN #{Group.quoted_table_name} " \
                    "ON #{Group.quoted_table_name}.id = roles.group_id")
-            .where("#{Role.quoted_table_name}.deleted_at <= ?", Time.zone.now.to_s(:db))
-            .where("#{Group.quoted_table_name}.layer_group_id IN (?)", layer_groups.map(&:id))
+            .where("#{Role.quoted_table_name}.deleted_at <= :now", now: Time.zone.now.to_s(:db))
+            .where("#{Group.quoted_table_name}.layer_group_id IN (:layer_ids)",
+                   layer_ids: layer_groups.map(&:id))
             .distinct
     end
 
@@ -27,8 +28,9 @@ class Group::DeletedPeople
                    "ON people.last_active_role_id = #{Role.quoted_table_name}.id")
             .joins("INNER JOIN #{Group.quoted_table_name} " \
                    "ON #{Group.quoted_table_name}.id = roles.group_id")
-            .where("#{Role.quoted_table_name}.deleted_at <= ?", Time.zone.now.to_s(:db))
-            .where("#{Group.quoted_table_name}.layer_group_id = ?", layer_group.id)
+            .where("#{Role.quoted_table_name}.deleted_at <= :now", now: Time.zone.now.to_s(:db))
+            .where("#{Group.quoted_table_name}.layer_group_id = :layer_id",
+                   layer_id: layer_group.id)
             .distinct
     end
 

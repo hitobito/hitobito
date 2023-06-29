@@ -1,6 +1,6 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -46,7 +46,9 @@ module FormHelper
     standard_form(object, options) do |form|
       content = form.error_messages
 
-      content << form_buttons(form, **form_button_options.merge(toolbar_class: 'top')) if buttons_top
+      if buttons_top
+        content << form_buttons(form, **form_button_options.merge(toolbar_class: 'top'))
+      end
 
       content << if block_given?
                    capture(form, &block)

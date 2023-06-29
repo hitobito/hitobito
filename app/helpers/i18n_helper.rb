@@ -58,7 +58,7 @@ module I18nHelper
       else
         "global.associations.#{key}"
       end
-    t(primary, variables)
+    t(primary, **variables)
   end
 
   alias ta translate_association

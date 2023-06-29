@@ -46,7 +46,7 @@ module FormHelper
     standard_form(object, options) do |form|
       content = form.error_messages
 
-      content << form_buttons(form, form_button_options.merge(toolbar_class: 'top')) if buttons_top
+      content << form_buttons(form, **form_button_options.merge(toolbar_class: 'top')) if buttons_top
 
       content << if block_given?
                    capture(form, &block)
@@ -55,7 +55,7 @@ module FormHelper
                  end
 
       if buttons_bottom
-        content << form_buttons(form, form_button_options.merge(toolbar_class: 'bottom'))
+        content << form_buttons(form, **form_button_options.merge(toolbar_class: 'bottom'))
       end
 
       content.html_safe

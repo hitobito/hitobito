@@ -122,6 +122,8 @@ it:
     xlsx: Excel
   dropdown/event/role_add:
     add: 'aggiungere una persona'
+  dropdown/event/invitation_add:
+    add: 'Invitare una persona'
   dropdown/event/participant_add:
     as: 'come %{role}'
   dropdown/group_edit:
@@ -136,6 +138,7 @@ it:
     labels: 'etichette'
     pdf: 'PDF'
     emails: 'indirizzi email'
+    emails_outlook: 'Indirizzi email (Outlook)'
     addresses: 'lista di indirizzi'
     households: 'Lista dei nuclei famigliari'
     everything: 'tutti i dati'
@@ -165,6 +168,8 @@ it:
   dropdown/letter_with_invoice:
     print: Stampare
     letters_with_invoice: Lettere di fatturazione
+  dropdown/letter_with_invoice_new:
+    invoice: 'Fattura normale'
   dropdown/invoices/evaluation:
     download: 'Export'
     csv: 'CSV'
@@ -241,6 +246,12 @@ it:
           footer: 'Questa email è stata inviata da Hitobito'
       reset_password_instructions:
         subject: 'istruzioni per impostare la tua password'
+        body:
+          greeting: 'Ciao %{name}!'
+          reset_instructions:
+            with_password: 'È possibile reimpostare la password di %{application_name} al seguente link.'
+            without_password_html: 'Benvenuti su %{application_name}! Lei è stato appena registrato e ha ricevuto un login.<br>La preghiamo di impostare una password al seguente link.'
+          ignore_information_html: 'Se non si desidera modificare la password, è possibile ignorare questa e-mail.<br><br>La password non cambierà a meno che non si vada al link sopra indicato e si imposti una nuova password.'
       unlock_instructions:
         subject: 'istruzioni per attivare il tuo account'
         body:
@@ -369,6 +380,7 @@ it:
         incomplete: mancano dei campi obbligatori
       cancel_application:
         explanation: Sei iscritto/a a questo evento.
+        pending: Siete pre-iscritti a questo evento. L'iscrizione non è ancora definitiva e deve essere confermata dall'amministrazione dell'evento.
         waiting_list: Sei in lista d'attesa per questo evento.
         caption: Disiscriversi
         confirmation: "Sei sicuro di volerti disiscrivere da questo evento?"
@@ -415,6 +427,8 @@ it:
       title: Autenticazione a due fattori
       hint_registered_html: "Inserisci il codice visualizzato dalla tua app di autenticazione per confermare la tua identità."
       hint_unregistered_html: "Scansiona il codice QR con il tuo smartphone utilizzando l'app di autenticazione e inserisci il codice visualizzato per attivare l'autenticazione a due fattori. Nessuna app di autenticazione ancora installata? Ti consigliamo %{link} "
+      copy_secret: "qui"
+      hint_copy_secret_html: "Se si desidera copiare direttamente la chiave 2FA, è possibile fare clic su %{link} per copiarla."
     form:
       totp_code: One-Time Code
       totp_code_placeholder: Si prega di inserire il codice a sei cifre...
@@ -446,6 +460,8 @@ it:
       buttons:
         accept: log in
         decline: log out
+    banner_declined_invitation:
+      explanation: Siete stati invitati a questo evento e avete disdetto.
     default_description_link:
       insert_general_information: Inserire informazioni generali
     form:
@@ -456,6 +472,7 @@ it:
       times_are_optional: Gli orari sono opzionali
       explain_application_questions: Qui potete richiedere ulteriori informazioni per la registrazione.
       explain_choices: Lasciare vuoto per la risposta di testo libero, una o più opzioni di risposta (separate da virgole) per la selezione.
+      explain_admin_questions: Qui è possibile definire ulteriori dettagli per ogni partecipante, utilizzati solo per la gestione dell'evento.
       explain_contact_attrs: Qui puoi scegliere quali dati di contatto devono essere chiesti al momento dell'iscrizione.
       caption_applications_cancelable: I partecipanti si possono disiscrivere personalmente.
       caption_display_booking_info: Il numero di iscrizioni/posti è visibile a tutti sulla lista del corso.
@@ -481,6 +498,8 @@ it:
       participants: 'partecipanti'
     export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
     add_tag: Aggiungere tag
+    invitations:
+      description: 'Le persone invitate possono registrarsi o cancellarsi dalla pagina %{model_name}. Non riceveranno una mail automatica.'
   event/applications:
     approved: 'L''iscrizione è stata accettata'
     rejected: 'L''iscrizione è stata rifiutata'
@@ -502,6 +521,7 @@ it:
     instructions: 'per l''iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all''indirizzo corrispondente'
     export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
     waiting_list: 'Tutti i posti sono attualmente occupati, l''iscrizione è in lista d''attesa.'
+    pending: 'È stata creata una pre-registrazione per %{full_entry_label}. La partecipazione non è ancora definitiva e deve essere confermata dall''amministrazione dell''evento.'
     show:
       link:
         delete: 'cancellare iscrizione'
@@ -632,7 +652,10 @@ it:
       no_deleted_sub_groups: 'Non ci sono gruppi cancellati'
     form:
       help_contact: 'Utilizzare l''indirizzo e il numero di telefono pubblico di questa persona'
+      help_main_self_registration_group: 'Mostra il link di registrazione di questo gruppo nella pagina principale di login.'
       hint_external_registration: 'Non è possibile selezionare ruoli con diritti di scrittura'
+    form_tabs:
+      general: 'Generale'
     global:
       link:
         add: Creare un gruppo
@@ -658,6 +681,7 @@ it:
         privacy_policy_caption: "Dichiaro di essere d'accordo con le seguenti disposizioni:"
         submit: Crea un account
       create:
+        email_taken: L'e-mail è già in uso. Accedere o registrarsi con un altro indirizzo e-mail.
         flash:
           privacy_policy_not_accepted: Per concludere la registrazione deve venir accettata la dichiarazione di protezione dei dati.
   group/deleted_people:
@@ -727,6 +751,8 @@ it:
     destroy:
       flash:
         success: La fattura è stata annullata
+    actions_show:
+      confirm_cancel: Vuole davvero annullare questa fattura?
     pdf:
       total: Importo totale
       total_vat: IVA
@@ -763,6 +789,10 @@ it:
         filter:
           from: Da
           to: A
+  invoices/by_article:
+    index:
+      title: 'Fatture per l''articolo "%{name}"'
+      subtitle: 'Conto: "%{account}", centro di costo: "%{cost_center}", %{from} - %{to}'
   invoice_configs:
     form_tabs:
       general: In generale
@@ -924,6 +954,12 @@ it:
       synchronization_failed: 'Durante l''invio dei dati a MailChimp si è verificato un errore'
       cancel_synchronization: 'Interrompere l''esportazione'
   mailing_lists:
+    subscriber_lists:
+      create:
+        success:
+          one: "Una persona è stata aggiunta con successo all'abbonamento '%{mailing_list}'."
+          many: "%{count} Le persone sono state aggiunte con successo all'abbonamento '%{mailing_list}'."
+          other: "%{count} Le persone sono state aggiunte con successo all'abbonamento '%{mailing_list}'."
     global:
       link:
         add: Creare un abbonamento
@@ -1079,6 +1115,7 @@ it:
         sender_rejected: Il mittente è stato respinto
         unknown_recipient: Destinatario sconosciuto
         retrieved: Ricevere
+        bounce_rejected: Rimbalzo rifiutato
     export_enqueued: 'L''esportazione viene iniziata in retroscena e verrà scaricata al termine.'
     show:
       recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
@@ -1204,13 +1241,14 @@ it:
         address_updated: "Indirizzo aggiornato"
       fields:
         lives_in_household_with: "Vive nello stesso nucleo famigliare di"
+        update_denied: "Non è possibile aggiungere %{other_person} alla famigliare. Forse questa persona fa già parte della famigliare o non si ha accesso alla scrittura."
     family:
       fields:
         is_in_family_with: 'È parte della famiglia di'
     csv_imports:
       description:
         header: Documenti CSV
-        explain_csv_format: 'Ogni riga del documento CSV contiene i dati di una persona. La prima riga contiene i nomi dei campi. I campi sono separati da una virgola. Se un valore di un campo contiene una virgola, deve essere racchiuso tra virgolette ("). Esempio:'
+        explain_csv_format: 'Un file CSV contiene i dati di una persona su ogni riga. La prima riga contiene i nomi dei campi. I singoli campi sono separati da un separatore ((, ; :) o Tab). Se il valore di un campo contiene un separatore, deve essere completato con virgolette ("). Esempio:'
         example: |+
             nome,cognome,email,luogo,sesso
             Hans,Muster,hans@beispiel.ch,Bern,m
@@ -1282,6 +1320,9 @@ it:
         security_and_privacy: Sicurezza e protezione dei dati
         override_password: "Sovrascrivere la password"
         confirm_reset: "Attenzione: questo sovrascriverà la password. Lo vuoi davvero?"
+        groups_and_roles_that_see_me: Ruoli che hanno accesso a me
+        load_roles_that_see_me: 'Gruppi e ruoli di carico'
+        load_roles_that_see_me_hint: 'L''operazione potrebbe richiedere alcuni secondi'
       password_override:
         flashes:
           success: La password è stata sovrascritta. La persona è stata informata e può richiedere in qualsiasi momento una nuova password utilizzando la funzione "Password dimenticata".
@@ -1397,13 +1438,19 @@ it:
     export_enqueued: 'L''esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento'
     export_email_needed: 'Per l''esportazione è necessario un indirizzo e-mail'
     multiselect_actions:
-      remove_role: Rimuovere ruoli
-      move_role: Spostare ruoli
-      add_role: Aggiungi ruolo
+      role_actions:
+        button: Rulli
+        remove: Rimuovere i rulli
+        move: Rotoli di spostamento
+        add: Aggiungi ruolo
       add_participation: Aggiungi all'evento
       tag_lists: Tags
       remove_tags: Eliminare tags
       add_tags: Aggiungere tags
+      add_to_mailing_list: Aggiungi all'abbonamento
+    totp_reset:
+      flashes:
+        success: Al successivo accesso verrà richiesto di impostare nuovamente l'autenticazione a due fattori.
     totp_disable:
       flashes:
         success: Autenticazione a due fattori deattivata correttamente
@@ -1421,9 +1468,13 @@ it:
     create:
       flash:
         success: 'È stato creato l''invito per %{recipient_name} quale %{participation_type}.'
+    invalid_existing_person: "è già stato invitato a questo %{model_name}."
     decline:
       flash:
         success: L'invito è stato rifiutato.
+    destroy:
+      flash:
+        success: 'L''invito a %{recipient_name} è stato cancellato.'
   people_filters:
     form:
       save_search: Salvare la ricerca
@@ -1608,6 +1659,12 @@ it:
     exclude_person:
       form:
         exclude_subscriber: 'Escludere abbonato/a'
+    subscriber_lists:
+      new:
+        title: Aggiungere persone all'abbonamento
+        mailing_list_search: Ricerca in abbonamento
+        submit: Aggiungi
+        mailing_lists_in_local_hierarchy_hint: 'È possibile selezionare le sottoscrizioni di supergruppi e sottogruppi del gruppo corrente.'
   subscriber/base:
     blank: '%{model_label} deve venir selezionato'
     taken: '%{model_label} è appena stato aggiunto'

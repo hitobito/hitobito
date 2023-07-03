@@ -122,6 +122,8 @@ fr:
     xlsx: Excel
   dropdown/event/role_add:
     add: 'Ajouter une personne'
+  dropdown/event/invitation_add:
+    add: 'Inviter une personne'
   dropdown/event/participant_add:
     as: 'en tant que %{role}'
   dropdown/group_edit:
@@ -136,6 +138,7 @@ fr:
     labels: 'Etiquettes'
     pdf: 'PDF'
     emails: 'Adresses électroniques'
+    emails_outlook: 'Adresses électroniques (Outlook)'
     addresses: 'Liste d''adresses'
     households: 'Liste des foyers'
     everything: 'Toutes les informations'
@@ -165,6 +168,8 @@ fr:
   dropdown/letter_with_invoice:
     print: Imprimer
     letters_with_invoice: Factures
+  dropdown/letter_with_invoice_new:
+    invoice: 'Facture normale'
   dropdown/invoices/evaluation:
     download: 'Exporter'
     csv: 'CSV'
@@ -241,6 +246,12 @@ fr:
           footer: 'Ce message a été envoyé par Hitobito'
       reset_password_instructions:
         subject: 'Instructions pour initialiser ton mot de passe'
+        body:
+          greeting: 'Salut %{name}!'
+          reset_instructions:
+            with_password: 'Tu peux réinitialiser ton mot de passe pour %{application_name} en cliquant sur le lien suivant.'
+            without_password_html: 'Bienvenue chez %{application_name}! Tu as été nouvellement enregistré et tu as reçu un login.<br>Veuillez définir un mot de passe sous le lien suivant.'
+          ignore_information_html: 'Si tu ne veux pas changer ton mot de passe, tu peux ignorer cet e-mail.<br><br>Ton mot de passe ne changera pas sans que tu ailles sur le lien ci-dessus et que tu y donnes un nouveau mot de passe.'
       unlock_instructions:
         subject: 'Instructions pour débloquer ton compte'
         body:
@@ -418,6 +429,8 @@ fr:
       title: Validation en deux étapes
       hint_registered_html: "Saisis le code affiché dans ton application Authenticator pour confirmer ton identité."
       hint_unregistered_html: "Scanne le QR code avec ton smartphone à l'aide de l'application Authenticator et saisis le code affiché pour activer l'authentification à double facteur. Tu n'as pas encore installé l'application Authenticator ? Nous te le recommandons %{link}"
+      copy_secret: "ici"
+      hint_copy_secret_html: "Si tu veux copier directement la clé 2FA, tu peux cliquer sur %{link} pour la copier."
     form:
       totp_code: Code à usage unique
       totp_code_placeholder: Saisir le code à 6 chiffres
@@ -449,6 +462,8 @@ fr:
       buttons:
         accept: Inscription
         decline: Désinscription
+    banner_declined_invitation:
+      explanation: Tu as été invité·e à cet événement et tu as annulé ton inscription.
     default_description_link:
       insert_general_information: Placer une description standard
     form:
@@ -485,6 +500,8 @@ fr:
       participants: 'Participants'
     export_enqueued: 'l''exportation débute en arrière-plan et est téléchargée quand elle est terminée'
     add_tag: Rajouter tag
+    invitations:
+      description: 'Les personnes invitées peuvent s''inscrire ou se désinscrire via le site %{model_name}. Elles ne recevront pas de mail automatique.'
   event/applications:
     approved: 'L''inscription a été autorisée.'
     rejected: 'L''inscription a été refusée.'
@@ -639,6 +656,8 @@ fr:
       help_contact: 'Utiliser l''adresse et le numéro de téléphone public de cette personne'
       help_main_self_registration_group: 'Afficher le lien d''inscription de ce groupe sur la page de connexion principale.'
       hint_external_registration: 'Aucun rôle avec droit d''écriture ne peut être choisi'
+    form_tabs:
+      general: 'Généralités'
     global:
       link:
         add: Créer un groupe
@@ -664,6 +683,7 @@ fr:
         privacy_policy_caption: "J'accepte les conditions suivantes:"
         submit: Créer un compte
       create:
+        email_taken: L'e-mail est déjà utilisé. Connecte-toi ou enregistre-toi avec une autre adresse e-mail.
         flash:
           privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
   group/deleted_people:
@@ -936,6 +956,12 @@ fr:
       synchronization_failed: 'Une erreur s''est produite lors de l''envoi des données à MailChimp. (%{error}).'
       cancel_synchronization: 'Annuler l''exportation'
   mailing_lists:
+    subscriber_lists:
+      create:
+        success:
+          one: "Une personne a été ajoutée avec succès à l'abonnement '%{mailing_list}"
+          many: "%{count} Des personnes ont été ajoutées avec succès à l'abonnement '%{mailing_list}'."
+          other: "%{count} Des personnes ont été ajoutées avec succès à l'abonnement '%{mailing_list}'."
     global:
       link:
         add: Créer un abo
@@ -1091,6 +1117,7 @@ fr:
         sender_rejected: L'expéditeur a été supprimé
         unknown_recipient: Destinataire inconnu
         retrieved: Recevoir
+        bounce_rejected: Bounce refusé
     export_enqueued: 'L''export est démarré en arrière-plan et sera téléchargé après complétion.'
     show:
       recipients_empty: La liste de distribution est vide, aucun PDF ne peut être créé.
@@ -1216,13 +1243,14 @@ fr:
         address_updated: "Adresse actualisée"
       fields:
         lives_in_household_with: "Habite dans le foyer avec"
+        update_denied: "Tu ne peux pas ajouter %{other_person} au foyer. Il se peut que cette personne soit déjà dans le foyer ou que tu n'aies pas les droits d'écriture."
     family:
       fields:
         is_in_family_with: 'Fait partie de la famille de'
     csv_imports:
       description:
         header: Fichiers CSV
-        explain_csv_format: 'Un fichier CSV contient les données d''une personne par ligne. La première ligne comporte les titres des champs. Les champs sont séparés par une virgule. Si un champ contient lui-même des virgules, il doit être entouré de guillemets ("). Exemple :'
+        explain_csv_format: 'Un fichier CSV contient sur chaque ligne les données d''une personne. La première ligne contient les noms des champs. Les différents champs sont séparés par un séparateur ((, ; :) ou Tab). Si une valeur de champ contient elle-même un séparateur, elle doit être complétée par des guillemets ("). Exemple :'
         example: |
             prénom,nom,e-mail,lieu,sexe Jean,Dupont,jean@exemple.ch,Fribourg,m Adèle,Lévêque,adèle@exemple.net,"Genève, New York",f
         explain_field_names: Le choix des champs est libre. Les champs du fichier CSV peuvent être reliés aux champs de l'application lors de la prochaine étape.
@@ -1291,6 +1319,9 @@ fr:
         security_and_privacy: Sécurité et confidentialité
         override_password: "Écraser le mot de passe"
         confirm_reset: "Attention : le mot de passe est alors remplacé. Est-ce vraiment ce que tu veux ?"
+        groups_and_roles_that_see_me: Rôles qui ont accès à moi
+        load_roles_that_see_me: 'Télécharger les groupes et les rôles'
+        load_roles_that_see_me_hint: 'Cela peut prendre quelques secondes'
       password_override:
         flashes:
           success: Le mot de passe a été écrasé. La personne a été informée et peut à tout moment demander un nouveau mot de passe via la fonction "Mot de passe oublié".
@@ -1407,13 +1438,19 @@ fr:
     export_enqueued: 'L''exportation commence en arrière-plan et sera téléchargé après avoir été complété.'
     export_email_needed: 'Adresse e-mail requise pour l''export.'
     multiselect_actions:
-      remove_role: Retirer rôles
-      move_role: Déplacer rôles
-      add_role: Ajouter rôle
+      role_actions:
+        button: Rôles
+        remove: Enlever les rôles
+        move: Déplacer les rôles
+        add: Ajouter un rôle
       add_participation: Ajouter à l'événement
       tag_lists: Tags
       remove_tags: Enlever les tags
       add_tags: Rajouter des tags
+      add_to_mailing_list: Ajouter à l'abonnement
+    totp_reset:
+      flashes:
+        success: Lors de ta prochaine connexion, tu seras invité à reconfigurer l'authentification à deux facteurs.
     totp_disable:
       flashes:
         success: Validation en deux étapes désactivée correctement
@@ -1431,9 +1468,13 @@ fr:
     create:
       flash:
         success: 'L''invitation de %{recipient_name} en tant que %{participation_type} a été créé.'
+    invalid_existing_person: "a déjà été invité à ce %{model_name}."
     decline:
       flash:
         success: L'invitation a été rejetée.
+    destroy:
+      flash:
+        success: 'L''invitation pour %{recipient_name} a été supprimée.'
   people_filters:
     form:
       save_search: Sauvegarder cette recherche
@@ -1618,6 +1659,12 @@ fr:
     exclude_person:
       form:
         exclude_subscriber: 'Exclure les abonné-e-s'
+    subscriber_lists:
+      new:
+        title: Ajouter des personnes à l'abonnement
+        mailing_list_search: Rechercher un abonnement
+        submit: Ajouter
+        mailing_lists_in_local_hierarchy_hint: 'Possibilité de sélectionner des abonnements de sur- et sous-groupes du groupe actuel'
   subscriber/base:
     blank: '%{model_label} doit être sélectionné'
     taken: '%{model_label} a déjà été ajouté'

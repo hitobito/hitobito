@@ -1007,7 +1007,6 @@ en:
     csv_imports:
       description:
         header: CSV files
-        explain_csv_format: 'A CSV file contains the details of a person on each line. The first line contains the field names. The fields are separated with a comma. If a field value itself contains commas, it must be complemented with quotation marks ("). Example:'
         example: |
             First name,Last name,e-Mail,Place,gender
             Hans,Muster,hans@beispiel.ch,Bern,m
@@ -1160,9 +1159,6 @@ en:
     export_enqueued: 'Export is started in the background and downloaded after completion.'
     export_email_needed: 'Email needed for export.'
     multiselect_actions:
-      remove_role: Remove roles
-      move_role: Move roles
-      add_role: Add roles
       add_participation: Add to event
       tag_lists: Tags
       remove_tags: Remove tags

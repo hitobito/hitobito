@@ -70,6 +70,10 @@ it:
           attributes:
             person_id:
               taken: è già iscritto
+        group:
+          attributes:
+            self_registration_role_type:
+              blank: 'I dati di contatto devono essere compilati se si seleziona "Visualizzazione nella pagina di login".'
         message/letter_with_invoice:
           attributes:
             base:
@@ -501,6 +505,7 @@ it:
         country: Nazione
         contact_id: Persona di contatto
         contact: Persona di contatto
+        contactable: Dati di contatto
         phone_numbers: Numeri di telefono
         social_accounts: Social media
         additional_emails: Altre email
@@ -512,9 +517,13 @@ it:
         description: Descrizione
         member_count: Numero di membri
         updated_at: Cambiato
-        self_registration_role_type: Registrazione esterna
+        self_registration: Registrazione esterna
+        self_registration_role_type: Tipo di rullo
         self_registration_link: Registrazione esterna
-        self_registration_notification_email: E-mail di notifica della registrazione esterna
+        self_registration_notification_email: E-mail di notifica
+        main_self_registration_group: Visualizzazione nella pagina di login
+        custom_self_registration_title: Titolo alla registrazione
+        nextcloud_url: Link a Nextcloud
         remove_logo: Rimuovere il logo attuale del gruppo
         privacy_policy_title: DPD/Dichiarazione di protezione dei dati Titolo
         privacy_policy: DPD/Dichiarazione di protezione dei dati
@@ -733,6 +742,7 @@ it:
               approve_applications: Confermare le iscrizioni ai corse per le persone su questo livello.
               finance: Emettere e amministrare fatture
               impersonation: Utilizza Hitobito come altra persona.
+              see_invisible_from_above: Vedere altre persone che altrimenti non possono essere viste dai livelli superiori.
           kind:
             member:
               one: Membro
@@ -1072,6 +1082,7 @@ it:
       people: Leggere tutte le persone a cui hai accesso
       invoices: Leggere tutte le fatture a cui hai accesso
       mailing_lists: Leggere tutti gli abbonamenti a cui hai accesso
+      nextcloud: Leggi i tuoi gruppi Nextcloud e il tuo nome visualizzato
   errors:
     messages:
       attachments_not_allowed: "Non può contenere allegati"

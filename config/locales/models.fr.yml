@@ -499,7 +499,6 @@ fr:
       group:
         name: Nom
         short_name: Abréviation
-        custom_self_registration_title: Enregistrement externe Titre
         email: Adresse e-mail principale
         address: Adresse
         zip_code: NPA
@@ -507,6 +506,7 @@ fr:
         country: Pays
         contact_id: Personne de contact
         contact: Personne de contact
+        contactable: Coordonnées
         phone_numbers: Numéros de téléphone
         social_accounts: Réseaux sociaux
         additional_emails: Adresses e-mail supplémentaires
@@ -516,12 +516,14 @@ fr:
         type: Type de groupe
         type_name: Type de groupe
         description: Description
-        main_self_registration_group: Enregistrement externe Affichage sur la page de connexion
         member_count: Nombre de membres
         updated_at: Modification
-        self_registration_role_type: Enregistrement externe
+        self_registration: Enregistrement externe
+        self_registration_role_type: Type de rôle
         self_registration_link: Enregistrement externe
-        self_registration_notification_email: Email de notification d'enregistrement externe
+        self_registration_notification_email: E-mail de notification
+        main_self_registration_group: Affichage sur la page de connexion
+        custom_self_registration_title: Titre lors de l'inscription
         nextcloud_url: Lien vers Nextcloud
         remove_logo: supprimer le logo actuel du groupe
         privacy_policy_title: Déclaration de protection des données - Titre
@@ -741,6 +743,7 @@ fr:
               approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
               finance: Création et gestion de factures
               impersonation: Se servir de hitobito comme autre personne.
+              see_invisible_from_above: Voit en plus les personnes qui ne peuvent normalement pas être vues par les niveaux supérieurs.
           kind:
             member:
               one: Membre

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'csv'
+require 'csv-safe'
 
 module Export
   module Csv
@@ -33,7 +33,7 @@ module Export
       private
 
       def generate
-        CSV.generate(options) do |generator|
+        CSVSafe.generate(options) do |generator|
           generator << exportable.labels
           exportable.data_rows(:csv) do |row|
             generator << row

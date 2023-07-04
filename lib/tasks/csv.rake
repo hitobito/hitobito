@@ -7,13 +7,13 @@
 
 require 'faker'
 require 'bcrypt'
-require 'csv'
+require 'csv-safe'
 
 
 namespace :csv do
   desc 'Generates dummy csv file'
   task :generate do
-    csv_string = CSV.generate do |csv|
+    csv_string = CSVSafe.generate do |csv|
       csv << person_attributes.keys
       5.times do
         csv << enhance(person_attributes).values

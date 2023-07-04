@@ -7,6 +7,7 @@
 #
 
 require 'axlsx'
+Axlsx.escape_formulas = true
 
 module Export::Xlsx
 

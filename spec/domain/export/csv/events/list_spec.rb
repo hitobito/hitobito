@@ -65,7 +65,7 @@ describe Export::Tabular::Events::List do
       let(:person) { Fabricate(:person_with_address_and_phone) }
       before { course.contact = person }
       its([16]) { is_expected.to eq person.to_s }
-      its([21]) { is_expected.to eq person.phone_numbers.first.to_s }
+      its([21]) { is_expected.to eq "'#{person.phone_numbers.first.to_s}" }
       its([21]) { is_expected.to_not eq '' }
     end
 

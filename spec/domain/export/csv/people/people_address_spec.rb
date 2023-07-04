@@ -49,7 +49,7 @@ describe Export::Tabular::People::PeopleAddress do
         person.additional_emails.create!(label: 'Mutter', email: 'mutter@example.com', public: false)
       end
 
-      its(['Telefonnummer Vater']) { should eq '+41 44 123 45 67' }
+      its(['Telefonnummer Vater']) { should eq '\'+41 44 123 45 67' }
       its(['Weitere E-Mail Vater']) { should eq 'vater@example.com' }
       its(['Weitere E-Mail Mutter']) { should be_nil }
 

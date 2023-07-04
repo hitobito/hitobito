@@ -49,7 +49,7 @@ module I18nHelper
   #  - global.associations.{key}
   def translate_association(key, assoc = nil, variables = {})
     primary =
-      if assoc
+      if assoc&.klass
         assoc_class_key = assoc.klass.model_name.to_s.underscore
         variables[:default] ||= [:"activerecord.associations.#{assoc_class_key}.#{key}",
                                  :"global.associations.#{key}"]

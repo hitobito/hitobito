@@ -23,7 +23,7 @@ class AddSignatureFieldsToEvents < ActiveRecord::Migration[4.2]
 
   def add_if_missing(table, column, type, args = {})
     if !column_exists?(table, column)
-      add_column(table, column, type, args)
+      add_column(table, column, type, **args)
     end
   end
 

@@ -14,7 +14,7 @@ describe Healthz::MailController do
 
     let(:json) { JSON.parse(response.body) }
     let(:token) { AppStatus.auth_token }
-    let(:imap_mail) { built_imap_mail }
+    let(:imap_mail) { build_imap_mail }
     let(:cache) { Rails.cache }
     let(:seen_mail) { AppStatus::Mail::SeenMail.build(imap_mail) }
 

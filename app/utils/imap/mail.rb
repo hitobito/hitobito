@@ -86,7 +86,7 @@ class Imap::Mail
   end
 
   def mail
-    @mail ||= Mail.read_from_string(@net_imap_mail.attr['RFC822'])
+    @mail ||= ::Mail.read_from_string(@net_imap_mail.attr['RFC822'])
   end
 
   private
@@ -110,7 +110,7 @@ class Imap::Mail
   end
 
   def first_header(header_name)
-    first_header = Array(@net_imap_mail.header[header_name]).first
+    first_header = Array(mail.header[header_name]).first
 
     first_header.try(:value)
   end

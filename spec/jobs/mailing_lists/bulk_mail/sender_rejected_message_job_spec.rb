@@ -12,7 +12,7 @@ describe MailingLists::BulkMail::SenderRejectedMessageJob do
   include MailingLists::ImapMailsSpecHelper
 
   let(:mailing_list) { mailing_lists(:leaders) }
-  let(:imap_mail) { built_imap_mail(plain_body: true) }
+  let(:imap_mail) { build_imap_mail(plain_body: true) }
   let(:mail_log) { MailLog.new(mail_hash: imap_mail.hash, status: :retrieved, mail_from: imap_mail.sender_email) }
   let(:bulk_mail) { Message::BulkMail.new(subject: imap_mail.subject, state: :pending, raw_source: imap_mail.raw_source, mailing_list: mailing_list, mail_log: mail_log) }
 

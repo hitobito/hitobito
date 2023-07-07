@@ -13,8 +13,8 @@ describe AppStatus::Mail do
 
   let(:app_status) { AppStatus::Mail.new }
   let(:cache) { Rails.cache }
-  let(:imap_mail1) { built_imap_mail }
-  let(:imap_mail2) { built_imap_mail(plain_body: false) }
+  let(:imap_mail1) { build_imap_mail }
+  let(:imap_mail2) { build_imap_mail(plain_body: false) }
 
   let(:seen_mails) do
     [imap_mail1, imap_mail2].collect do |m|

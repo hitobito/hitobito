@@ -11,8 +11,8 @@ describe MailingLists::ImapMailsController do
 
   let(:imap_connector) { double(:imap_connector) }
 
-  let(:imap_mail_1) { built_imap_mail }
-  let(:imap_mail_2) { built_imap_mail(plain_body: false) }
+  let(:imap_mail_1) { build_imap_mail }
+  let(:imap_mail_2) { build_imap_mail(plain_body: false) }
   let(:imap_mail_data) { [imap_mail_1, imap_mail_2] }
 
   let(:now) { Time.zone.now }

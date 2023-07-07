@@ -2,7 +2,7 @@
 
 module MailingLists::ImapMailsSpecHelper
 
-  def built_imap_mail(plain_body: true)
+  def build_imap_mail(plain_body: true)
     Imap::Mail.build(imap_fetch_data(plain_body: plain_body))
   end
 

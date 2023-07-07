@@ -11,7 +11,7 @@ describe MailingLists::BulkMail::ImapMailValidator do
   include MailingLists::ImapMailsSpecHelper
 
   let(:validator) { described_class.new(imap_mail) }
-  let(:imap_mail) { built_imap_mail(plain_body: false) }
+  let(:imap_mail) { build_imap_mail(plain_body: false) }
   let(:mailing_list) { mailing_lists(:leaders) }
   let(:top_leader) { people(:top_leader) }
 

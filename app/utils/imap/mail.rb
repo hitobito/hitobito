@@ -38,16 +38,12 @@ class Imap::Mail
     envelope.sender[0].mailbox + '@' + envelope.sender[0].host
   end
 
-  def sender_name
-    envelope.sender[0].name
-  end
-
   def email_to
     envelope.to[0].mailbox + '@' + envelope.to[0].host
   end
 
   def sender_name
-    envelope.sender[0].name
+    envelope&.sender[0]&.name
   end
 
   def name_to
@@ -73,7 +69,7 @@ class Imap::Mail
   end
 
   def original_to
-    mail.header['X-Original-To'].value
+    first_header('X-Original-To')
   end
 
   def list_bounce?
@@ -113,4 +109,9 @@ class Imap::Mail
     mail.header['auto-submitted'].try(:value) == 'auto-generated'
   end
 
+  def first_header(header_name)
+    first_header = Array(@net_imap_mail.header[header_name]).first
+
+    first_header.try(:value)
+  end
 end

@@ -86,7 +86,7 @@ class Imap::Mail
   end
 
   def mail
-    @mail ||= Mail.read_from_string(@net_imap_mail.attr['RFC822'])
+    @mail ||= ::Mail.read_from_string(@net_imap_mail.attr['RFC822'])
   end
 
   private

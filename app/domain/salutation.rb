@@ -42,7 +42,7 @@ class Salutation
 
   def value
     gender = person.gender.presence || 'other'
-    I18n.translate("#{I18N_KEY_PREFIX}.#{salutation}.value.#{gender}", attributes)
+    I18n.translate("#{I18N_KEY_PREFIX}.#{salutation}.value.#{gender}", **attributes)
   end
 
   def value_for_household(housemates)

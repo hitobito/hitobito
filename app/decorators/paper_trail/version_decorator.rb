@@ -135,7 +135,7 @@ module PaperTrail
       key = attribute_change_key(from, to)
       if key
         I18n.t("version.attribute_change.#{key}",
-               attribute_change_args(attr, from, to)).
+               **attribute_change_args(attr, from, to)).
              html_safe
       else
         ''

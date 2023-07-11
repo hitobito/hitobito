@@ -11,8 +11,9 @@ describe Devise::TokensController do
 
   let(:bottom_group) { groups(:bottom_group_one_one) }
   let(:role) { Fabricate('Group::BottomGroup::Member', group: bottom_group) }
+  let(:password) { 'cNb@X7fTdiU4sWCMNos3gJmQV_d9e9' }
   let(:person) do
-    role.person.update_attribute(:password, 'password')
+    role.person.update!(password: password)
     role.person.reload
   end
 
@@ -37,14 +38,14 @@ describe Devise::TokensController do
     end
 
     it 'responds with user and newly generated token' do
-      post :create, params: { person: { email: person.email, password: 'password' } }, format: :json
+      post :create, params: { person: { email: person.email, password: password } }, format: :json
       expect(response.body).to match(/^\{.*"authentication_token":".+"/)
       expect(assigns(:person).authentication_token).to be_present
     end
 
     it 'responds with user and regenerated token' do
       person.generate_authentication_token!
-      post :create, params: { person: { email: person.email, password: 'password' } }, format: :json
+      post :create, params: { person: { email: person.email, password: password } }, format: :json
       expect(assigns(:person).authentication_token).not_to eq(person.authentication_token)
       expect(assigns(:person).sign_in_count).to eq(person.sign_in_count)
     end
@@ -64,14 +65,14 @@ describe Devise::TokensController do
     end
 
     it 'responds without token' do
-      delete :destroy, params: { person: { email: person.email, password: 'password' } }, format: :json
+      delete :destroy, params: { person: { email: person.email, password: password } }, format: :json
       expect(assigns(:person).authentication_token).to be_nil
       expect(response.body).to match(/^\{.*"authentication_token":null/)
     end
 
     it 'responds with deleted token' do
       person.generate_authentication_token!
-      delete :destroy, params: { person: { email: person.email, password: 'password' } }, format: :json
+      delete :destroy, params: { person: { email: person.email, password: password } }, format: :json
       expect(assigns(:person).authentication_token).to be_nil
       expect(assigns(:person).sign_in_count).to eq(person.sign_in_count)
       expect(person.reload.authentication_token).to be_nil

@@ -58,25 +58,25 @@ describe InvoiceListsController do
     before { sign_in(person) }
 
     it "ignores empty ids param" do
-      get :new, {
+      get :new,
         params: {
           group_id: group.id,
           invoice_list: { recipient_ids: person.id },
           ids: ''
         }
-      }
+
       expect(response).to be_successful
       expect(assigns(:invoice_list)).to have(1).recipients
     end
 
     it "values from ids param as passed by checkable override recipient_ids" do
-      get :new, {
+      get :new,
         params: {
           group_id: group.id,
           invoice_list: { recipient_ids: person.id },
           ids: "#{person.id},#{people(:top_leader).id}"
         }
-      }
+
       expect(response).to be_successful
       expect(assigns(:invoice_list)).to have(2).recipients
     end
@@ -85,7 +85,7 @@ describe InvoiceListsController do
       leader = Fabricate(Group::BottomLayer::Leader.sti_name, group: group).person
       role_types = [Group::BottomLayer::Leader]
 
-      get :new, {
+      get :new,
         params: {
           group_id: group.id,
           invoice_list: { recipient_ids: person.id },
@@ -97,7 +97,7 @@ describe InvoiceListsController do
             }
           }
         }
-      }
+
       expect(response).to be_successful
       expect(assigns(:invoice_list)).to have(1).recipients
       expect(assigns(:invoice_list).recipients).to eq([leader])
@@ -106,7 +106,7 @@ describe InvoiceListsController do
     it "handles blank filter params" do
       Fabricate(Group::BottomLayer::Leader.sti_name, group: group)
 
-      get :new, {
+      get :new,
         params: {
           group_id: group.id,
           invoice_list: { recipient_ids: person.id },
@@ -116,7 +116,7 @@ describe InvoiceListsController do
             filters: ''
           }
         }
-      }
+
       expect(response).to be_successful
       expect(assigns(:invoice_list)).to have(2).recipients
     end
@@ -128,34 +128,34 @@ describe InvoiceListsController do
     render_views
 
     it 'renders Rechnung title for single person' do
-      get :new, {
+      get :new,
         params: {
           group_id: group.id,
           invoice_list: { recipient_ids: person.id },
           ids: ''
         }
-      }
+
       expect(sheet_title).to have_text 'Rechnung'
     end
 
     it 'renders Rechnung title for multiple people' do
-      get :new, {
+      get :new,
         params: {
           group_id: group.id,
           invoice_list: { recipient_ids: "#{person.id},#{people(:top_leader).id}" },
           ids: ''
         }
-      }
+
       expect(sheet_title).to have_text 'Rechnung'
     end
 
     it 'renders Sammelrechnung title for abo' do
-      get :new, {
+      get :new,
         params: {
           group_id: group.id,
           invoice_list: { receiver_id: list.id, receiver_type: list.class }
         }
-      }
+
       expect(sheet_title).to have_text 'Sammelrechnung'
     end
   end

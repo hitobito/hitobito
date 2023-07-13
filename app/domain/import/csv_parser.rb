@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito.
 
 require 'csv'
-
 
 module Import
   class CsvParser
@@ -26,7 +25,7 @@ module Import
         data = encode_as_utf8(@input)
         separator = find_separator(data)
         sanitized = remove_empty_lines(data, separator)
-        @csv = CSV.parse(sanitized, options.merge(col_sep: separator))
+        @csv = CSV.parse(sanitized, **options.merge(col_sep: separator))
       rescue => e
         @error = e.to_s
       end
@@ -69,10 +68,10 @@ module Import
 
     def encode_as_utf8(input)
       raise translate(:contains_no_data) if input.nil?
-      charset = CMess::GuessEncoding::Automatic.guess(input)
-      raise translate(:contains_no_data) if charset == 'UNKNOWN'
-      charset = Encoding::ISO8859_1 if charset == 'MACINTOSH'
-      input.force_encoding(charset).encode('UTF-8')
+      unless input.valid_encoding?
+        input = input.encode('UTF-8', invalid: :replace, undef: :replace)
+      end
+      input
     end
 
     # removes empty lines (",,,,,\n"), happens when data is not on first line in spreadsheet

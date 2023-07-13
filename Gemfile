@@ -20,7 +20,6 @@ gem 'bootsnap', require: false
 gem 'cancancan', '< 3.2.0'
 gem 'carrierwave'
 gem 'caxlsx', '~>3.4.0'
-gem 'cmess'
 gem 'commonmarker'
 gem 'config'
 gem 'country_select'

@@ -546,18 +546,18 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.2)
-    rswag (2.8.0)
-      rswag-api (= 2.8.0)
-      rswag-specs (= 2.8.0)
-      rswag-ui (= 2.8.0)
-    rswag-api (2.8.0)
+    rswag (2.10.1)
+      rswag-api (= 2.10.1)
+      rswag-specs (= 2.10.1)
+      rswag-ui (= 2.10.1)
+    rswag-api (2.10.1)
       railties (>= 3.1, < 7.1)
-    rswag-specs (2.8.0)
+    rswag-specs (2.10.1)
       activesupport (>= 3.1, < 7.1)
       json-schema (>= 2.2, < 4.0)
       railties (>= 3.1, < 7.1)
       rspec-core (>= 2.14)
-    rswag-ui (2.8.0)
+    rswag-ui (2.10.1)
       actionpack (>= 3.1, < 7.1)
       railties (>= 3.1, < 7.1)
     rubocop (0.77.0)
@@ -777,7 +777,7 @@ DEPENDENCIES
   rspec-collection_matchers
   rspec-its
   rspec-rails (~> 5.0)
-  rswag
+  rswag (>= 2.10.1)
   rswag-specs
   rubocop
   rubocop-checkstyle_formatter

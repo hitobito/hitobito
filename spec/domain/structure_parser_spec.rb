@@ -103,7 +103,7 @@ describe StructureParser do
       expect(subject.result).to_not be_nil
     end
 
-    it 'is a hash' do
+    it do
       expect(subject.result).to be_a Hash
     end
 
@@ -136,7 +136,7 @@ describe StructureParser do
       expect(subject.result).to_not be_nil
     end
 
-    it 'is a hash' do
+    it do
       expect(subject.result).to be_an Array
     end
 
@@ -176,7 +176,7 @@ describe StructureParser do
       expect(subject.result).to_not be_nil
     end
 
-    it 'is a hash' do
+    it do
       expect(subject.result).to be_an Array
     end
 

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class HelpTexts::Entry
-  attr_reader :key, :action_names,  :controller_name, :model_class
+  attr_reader :key, :action_names, :controller_name, :model_class
 
   def self.key(controller_name, model_class)
     [controller_name, model_class.to_s.underscore].compact.join('--')
@@ -40,7 +40,9 @@ class HelpTexts::Entry
   end
 
   def translate(kind, name)
-    format('%s "%s"', HelpText.human_attribute_name(kind.to_s), send("translate_#{kind}", name))
+    format('%s "%s"', # rubocop:disable Style/FormatStringToken hard to name and little benfit
+           HelpText.human_attribute_name(kind.to_s),
+           send("translate_#{kind}", name))
   end
 
   def fields

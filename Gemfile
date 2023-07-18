@@ -56,7 +56,7 @@ gem 'mini_magick'
 gem 'mysql2'
 gem 'nested_form'
 gem 'nokogiri'
-gem 'oat'
+gem 'oat', '0.5.0' # locked to 0.5.0 since later versions introduce bugs
 gem 'paper_trail', '~> 11.1' # 11.1 adds Rails 6.1-support, 12 breaks for now
 gem 'paranoia'
 gem 'phonelib'

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2023, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
@@ -23,10 +23,10 @@ describe HelpTexts::Entry do
       expect(subject.to_s).to eq  model_class.to_s
     end
 
-    it '#fields is derived from permitted_attrs' do
+    it '#fields is derived from used_attributes' do
       blacklist = Settings.help_text_blacklist.to_h.fetch(:person)
       expect(blacklist).to have_at_least(3).items
-      expect(subject.fields).to have(PeopleController.permitted_attrs.size - blacklist.size).items
+      expect(subject.fields).to have_at_least(Person.used_attributes.size - blacklist.size).items
     end
 
     it '#fields is returned without duplicates' do
@@ -116,12 +116,82 @@ describe HelpTexts::Entry do
         subject = HelpTexts::Entry.new(controller, model_class, { action: [], field: existing_fields })
         subject.action_names << 'index'
         expect(subject.actions).to be_present
+        expect(subject.fields).to be_present
+        expect(subject).to be_present
+      end
+
+      it 'is false if both are empty' do
+        existing_fields = PeopleController.permitted_attrs.collect(&:to_s) +
+                          Person.used_attributes.map(&:to_s)
+        subject = HelpTexts::Entry.new(controller, model_class, { action: %w(index), field: existing_fields })
+        subject.action_names << 'index'
+        expect(subject.actions).to be_empty
+        expect(subject.fields).to be_empty
+        expect(subject).not_to be_present
+      end
+    end
+  end
+
+  context Oauth::Application do
+    let(:controller)  { 'oauth/applications' }
+    let(:model_class) { Oauth::Application }
+
+    it '#fields is derived from permitted_attrs' do
+      # expect(model_class.try(:used_attributes) || []).to have(0).items
+      # expect(subject.send(:used_attributes)).to match_array([])
+      # expect(subject.send(:permitted_attributes)).to match_array(
+      #   %w(
+      #     logo
+      #     remove_logo
+      #     name
+      #     scopes
+      #     confidential
+      #     redirect_uri
+      #   )
+      # )
+
+      # expect(subject.send(:existing, :field)).to have(0).items
+
+      blacklist = Settings.help_text_blacklist.to_h.fetch(:'doorkeeper/application')
+      expect(blacklist).to have_at_least(3).items
+
+      # expect(blacklist).to match_array(
+      #   %w(
+      #     confidential
+      #     redirect_uri
+      #     scopes
+      #   )
+      # )
+      # expect(subject.send(:blacklist_key)).to be :'doorkeeper/application'
+      # expect(subject.send(:blacklist)).to match_array(blacklist)
+
+      # expect(subject.fields).to match_array(
+      #   subject.send(:permitted_attributes) - blacklist
+      # )
+
+      expect(subject.fields).to have(
+        Oauth::ApplicationsController.permitted_attrs.size - blacklist.size
+      ).items
+    end
+
+    context '#present?' do
+      it 'is true if fields are present' do
+        expect(subject.actions).to be_empty
+        expect(subject.fields).to be_present
+        expect(subject).to be_present
+      end
+
+      it 'is true if actions are present' do
+        existing_fields = Oauth::ApplicationsController.permitted_attrs.collect(&:to_s)
+        subject = HelpTexts::Entry.new(controller, model_class, { action: [], field: existing_fields })
+        subject.action_names << 'index'
+        expect(subject.actions).to be_present
         expect(subject.fields).to be_empty
         expect(subject).to be_present
       end
 
       it 'is false if both are empty' do
-        existing_fields = PeopleController.permitted_attrs.collect(&:to_s)
+        existing_fields = Oauth::ApplicationsController.permitted_attrs.collect(&:to_s)
         subject = HelpTexts::Entry.new(controller, model_class, { action: %w(index), field: existing_fields })
         subject.action_names << 'index'
         expect(subject.actions).to be_empty

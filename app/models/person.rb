@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -125,6 +125,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_one_attached :picture do |attachable|
     attachable.variant :thumb, resize_to_fill: [32, 32]
   end
+
+  class_attribute :used_attributes
+  self.used_attributes = PUBLIC_ATTRS + INTERNAL_ATTRS
 
   model_stamper
   stampable stamper_class_name: :person,

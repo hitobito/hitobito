@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2019, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2023, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class HelpTexts::Entry
-  attr_reader :key, :action_names,  :controller_name, :model_class
+  attr_reader :key, :action_names, :controller_name, :model_class
 
   def self.key(controller_name, model_class)
     [controller_name, model_class.to_s.underscore].compact.join('--')
@@ -40,11 +40,16 @@ class HelpTexts::Entry
   end
 
   def translate(kind, name)
-    format('%s "%s"', HelpText.human_attribute_name(kind.to_s), send("translate_#{kind}", name))
+    format('%s "%s"', # rubocop:disable Style/FormatStringToken hard to name and little benfit
+           HelpText.human_attribute_name(kind.to_s),
+           send("translate_#{kind}", name))
   end
 
   def fields
-    ((used_attributes + permitted_attributes).collect(&:to_s) - existing(:field) - blacklist).uniq
+    (
+      (used_attributes + permitted_attributes) -
+      (existing(:field) + blacklist)
+    ).uniq
   end
 
   def actions(supported_actions = %w(index new edit show))
@@ -63,18 +68,22 @@ class HelpTexts::Entry
     @existing.fetch(key, []).collect(&:to_s)
   end
 
+  def blacklist_key
+    model_class.base_class.to_s.underscore.to_sym
+  end
+
   def blacklist
-    Settings.help_text_blacklist.to_h.fetch(model_class.base_class.to_s.underscore.to_sym, [])
+    Settings.help_text_blacklist.to_h.fetch(blacklist_key, []).map(&:to_s)
   end
 
   def used_attributes
-    model_class.try(:used_attributes) || []
+    (model_class.try(:used_attributes) || []).map(&:to_s)
   end
 
   def permitted_attributes
     Array.wrap(controller_class.try(:permitted_attrs)).collect do |key|
       key.is_a?(Hash) ? key.keys.first : key
-    end
+    end.map(&:to_s)
   end
 
   def translate_action(action, mapping = { index: :list, new: :add })
@@ -89,5 +98,3 @@ class HelpTexts::Entry
     @controller_class ||= "#{@controller_name}_controller".classify.constantize
   end
 end
-
-

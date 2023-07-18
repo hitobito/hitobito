@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -192,9 +192,9 @@ help_text_blacklist:
   mailing_list:
     - anyone_may_post
     - delivery_report
-  oauth_application:
+  doorkeeper/application:
     - confidential
-    - redirect_uris
+    - redirect_uri
     - scopes
   person:
     - household_people_ids

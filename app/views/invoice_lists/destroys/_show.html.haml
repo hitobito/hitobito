@@ -1,0 +1,34 @@
+-#  Copyright (c) 2023, Schweizer Wanderwege. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+#invoice-list-destroy.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.bold.modal-title
+          %b= t('.title')
+
+      = standard_form(path_args(entry),
+        url: group_invoice_list_invoice_lists_destroy_path(entry.group, entry),
+        method: :delete) do |f|
+        .modal-body
+          .row-fluid
+            = hidden_field_tag('id', entry.id)
+
+            - if deletable?
+              = t('.confirm_delete')
+
+              - if @message.present?
+                = t('.message_info')
+                = link_to(@message.to_s, group_mailing_list_message_path(@message.group, @message.mailing_list, @message))
+            - else
+              - if @non_draft_invoice_present
+                = t('.non_draft_info')
+
+        .modal-footer
+          = submit_button(f, ti('link.delete'), disabled: !deletable?)
+          = link_to(ti('button.cancel'), '#',
+            class: 'link cancel',
+            onclick: "event.preventDefault(); $('#invoice-list-destroy').modal('hide')")

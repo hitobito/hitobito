@@ -10,3 +10,11 @@
     = link_to(item.receiver_label, item.receiver.path_args) if item.receiver
 
   - t.sortable_attrs(:recipients_total, :recipients_paid, :amount_total, :amount_paid)
+
+  - t.col(nil) do |item|
+    - if can?(:destroy, item)
+      = link_to(icon(:'trash-alt', filled: false),
+                group_invoice_list_invoice_lists_destroy_path(group_id: item.group_id, invoice_list_id: item.id),
+                class: 'action', title: ti(:"link.delete"), alt: ti(:"link.delete"),
+                data: { method: :get },
+                remote: true)

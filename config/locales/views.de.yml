@@ -899,6 +899,11 @@ de:
       reset_payment_provider_warning: 'Sollten Daten hier geändert werden, muss der Initialisierungsprozess der Rechnungsschnittstelle neu ausgeführt werden.'
 
   invoice_lists:
+    destroys:
+      show:
+        title: Sammelrechnung löschen
+        non_draft_info: 'In der Sammelrechnung ist mindesents eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.'
+        confirm_delete: Wollen Sie die Sammelrechnung wirklich löschen?
     form:
       invoice_articles:
         variable_donation:

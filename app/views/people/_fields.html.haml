@@ -11,13 +11,13 @@
 - has_relations ||= PeopleRelation.any?
 
 = field_set_tag do
-  = f.labeled_input_fields(*entry.used_attributes(:first_name, :last_name, :nickname))
-  - entry.used?(:company_name) do
+  = f.labeled_input_fields(*entry.decorate.used_attributes(:first_name, :last_name, :nickname))
+  - entry.decorate.used?(:company_name) do
     = f.labeled_string_field(:company_name,
                              placeholder: I18n.t('global.search.placeholder_company_name'),
                              data: { provide: 'entity',
                                      url: query_company_name_path })
-  - entry.used?(:company) do
+  - entry.decorate.used?(:company) do
     = f.labeled_input_fields :company
 
   = render_extensions :name_fields, locals: { f: f }

@@ -97,6 +97,7 @@ Hitobito::Application.routes.draw do
 
       resource :invoice_list, except: [:edit, :show]
       resources :invoice_lists, only: [:index] do
+        resource :destroy, only: [:show, :destroy], module: :invoice_lists, as: 'invoice_lists_destroy'
         resources :invoices, only: [:index]
       end
       resource :payment_process, only: [:new, :show, :create]

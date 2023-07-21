@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+*  Der Buchungsbeleg berücksichtigt neu keine Rechnungen mit dem Status "Storniert" (hitobito_sww#136)
+
 ## Version 1.30
 
 *  Die JSON:API liefert für Personen neu auch die Sprache (#2104) 

@@ -65,6 +65,56 @@ describe Invoice::ItemEvaluation do
                                    type: :by_article }])
     end
 
+    it 'ignores item totals of cancelled invoices' do
+      invoice_attrs = {
+        title: 'Membership',
+        creator: top_leader,
+        recipient: bottom_member,
+        group: top_layer,
+        invoice_items_attributes: [
+          {
+            name: 'Membership',
+            unit_cost: 100,
+            count: 1,
+            vat_rate: 0,
+            cost_center: 'Members',
+            account: '01-23456-7'
+          }, {
+            name: 'Shirt',
+            unit_cost: 30,
+            count: 2,
+            vat_rate: 5,
+            cost_center: 'Merch',
+            account: '08-76543-2'
+          }
+        ]
+      }
+
+      invoice_1 = Invoice.create(invoice_attrs)
+      invoice_2 = Invoice.create(invoice_attrs)
+
+      Payment.create(amount: invoice_1.recalculate, invoice: invoice_1, received_at: 2.months.ago)
+      Payment.create(amount: invoice_2.recalculate, invoice: invoice_2, received_at: 3.months.ago)
+
+      invoice_1.update!(state: :cancelled)
+
+      evaluations = described_class.new(top_layer, 1.year.ago, Time.zone.now + 1.month).fetch_evaluations
+      expect(evaluations).to eq([{ name: 'Membership',
+                                   amount_paid: 100, # 100 * 1
+                                   count: 1,
+                                   vat: 0,
+                                   cost_center: 'Members',
+                                   account: '01-23456-7',
+                                   type: :by_article },
+                                 { name: 'Shirt',
+                                   amount_paid: 63, # 30 * 2 + 3
+                                   count: 2,
+                                   vat: 3, # 30 * 2 * 0.05 (5%)
+                                   cost_center: 'Merch',
+                                   account: '08-76543-2',
+                                   type: :by_article }])
+    end
+
     it 'returns sum of deficit' do
       invoice_attrs = {
         title: 'Membership',

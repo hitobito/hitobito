@@ -42,6 +42,7 @@ describe Invoices::ByArticleController do
       expect(payments_collection).to receive(:in_layer).with(group.id).and_return(payments_collection)
       expect(payments_collection).to receive(:from).with(from).and_return(payments_collection)
       expect(payments_collection).to receive(:to).with(to).and_return(payments_collection)
+      expect(payments_collection).to receive(:excluding_cancelled_invoices).and_return(payments_collection)
       expect(payments_collection).to receive(:having_invoice_item).with(name, account, cost_center)
                                                                   .and_return(payments_collection)
       allow(payments_collection).to receive(:payments).and_return([payment])

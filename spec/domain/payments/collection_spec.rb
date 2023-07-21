@@ -110,6 +110,64 @@ describe Payments::Collection do
     end
   end
 
+  context 'excluding_cancelled_invoices' do
+    it 'lists payments which do not belong to cancelled invoices' do
+      invoice_item_attrs = [{
+        name: 'Shirt',
+        description: 'Good quality',
+        unit_cost: 50,
+        count: 1,
+      }]
+
+      fabricated_payment1 = fabricate_payment(50.0, Date.new(3.years.ago.year, 1, 1))
+      fabricated_payment2 = fabricate_payment(50.0, Date.new(2.years.ago.year, 3, 20))
+      fabricated_payment3 = fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+
+      fabricated_payment1.invoice.update(invoice_items_attributes: invoice_item_attrs)
+      fabricated_payment2.invoice.update(invoice_items_attributes: invoice_item_attrs)
+      fabricated_payment3.invoice.update(invoice_items_attributes: invoice_item_attrs)
+
+      fabricated_payment1.invoice.update!(state: :cancelled)
+
+      payments = described_class.new.excluding_cancelled_invoices.payments
+
+      expect(payments.size).to eq(2)
+      expect(payments).to include(fabricated_payment2)
+      expect(payments).to include(fabricated_payment3)
+    end
+
+    it 'does not list payments to cancelled invoices' do
+      invoice_item_attrs = [{
+        name: 'Membership',
+        description: 'You member, you pay',
+        unit_cost: 100,
+        count: 1,
+      }, {
+        name: 'Shirt',
+        description: 'Good quality',
+        unit_cost: 50,
+        count: 1,
+      }]
+
+      fabricated_payment1 = fabricate_payment(50.0, Date.new(3.years.ago.year, 1, 1))
+      fabricated_payment2 = fabricate_payment(50.0, Date.new(2.years.ago.year, 3, 20))
+      fabricated_payment3 = fabricate_payment(50.0, Date.new(1.year.ago.year, 12, 31))
+
+      fabricated_payment1.invoice.update(invoice_items_attributes: invoice_item_attrs)
+      fabricated_payment2.invoice.update(invoice_items_attributes: [invoice_item_attrs.last])
+      fabricated_payment3.invoice.update(invoice_items_attributes: [invoice_item_attrs.last])
+
+      fabricated_payment1.invoice.update!(state: :cancelled)
+
+      payments = described_class.new.of_fully_paid_invoices.instance_variable_get(:@payments)
+
+      expect(payments.size).to eq(2)
+      expect(payments).to_not include(fabricated_payment1)
+      expect(payments).to include(fabricated_payment2)
+      expect(payments).to include(fabricated_payment3)
+    end
+  end
+
   context 'having_invoice_item' do
     it 'returns matching payments' do
       invoice_item_attrs = [{

@@ -23,7 +23,7 @@ class Invoice::ItemEvaluation
   end
 
   def total
-    relevant_payments.payments.sum(:amount)
+    relevant_payments.excluding_cancelled_invoices.payments.sum(:amount)
   end
 
   private
@@ -49,7 +49,8 @@ class Invoice::ItemEvaluation
 
   def payments_of_paid_invoices
     @payments_of_paid_invoices ||=
-      relevant_payments.of_fully_paid_invoices.grouped_by_invoice_items
+      relevant_payments.of_fully_paid_invoices
+                       .excluding_cancelled_invoices
   end
 
   def deficitary_payments
@@ -98,7 +99,7 @@ class Invoice::ItemEvaluation
 
   def count(name, account, cost_center)
     # Get the relevant invoices
-    relevant_invoice_ids = relevant_payments.of_fully_paid_invoices.payments.pluck(:invoice_id)
+    relevant_invoice_ids = payments_of_paid_invoices.payments.pluck(:invoice_id)
 
     # Search invoice items which fit the identifiers and are attached to relevant payments
     invoice_items = InvoiceItem.where(name: name,
@@ -130,7 +131,7 @@ class Invoice::ItemEvaluation
   end
 
   def amount_paid_without_vat(name, account, cost_center)
-    relevant_invoice_ids = relevant_payments.of_fully_paid_invoices.payments.pluck(:invoice_id)
+    relevant_invoice_ids = payments_of_paid_invoices.payments.pluck(:invoice_id)
 
     invoice_item = InvoiceItem.find_by(name: name,
                                        account: account,
@@ -143,6 +144,8 @@ class Invoice::ItemEvaluation
   def invoice_article_identifiers
     # Used for the group statement, thus being identifiers/key when doing calculation
     # Is used to get all identifiers and then loop to calculate/fetch the values for each article
-    payments_of_paid_invoices.pluck(*Payments::Collection.invoice_item_group_attrs)
+
+    payments_of_paid_invoices.grouped_by_invoice_items
+                             .pluck(*Payments::Collection.invoice_item_group_attrs)
   end
 end

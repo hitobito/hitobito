@@ -76,6 +76,18 @@ class Payments::Collection
     self
   end
 
+  def excluding_cancelled_invoices
+    invoice_ids =
+      @payments.select(:'invoice.state', :invoice_id)
+               .joins('INNER JOIN invoices AS invoice ON invoice.id = payments.invoice_id')
+               .having('invoice.state <> "cancelled"')
+               .group(:invoice_id)
+               .map(&:invoice_id)
+    @payments = @payments.where(invoice_id: invoice_ids)
+
+    self
+  end
+
   def of_non_fully_paid_invoices
     invoice_ids =
       @payments.select(:'invoice.total', :invoice_id)

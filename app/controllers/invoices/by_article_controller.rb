@@ -22,9 +22,10 @@ class Invoices::ByArticleController < ListController
 
   def invoice_ids
     collection = Payments::Collection.new
-                          .in_layer(group.id)
-                          .from(from_date)
-                          .to(to_date)
+                                     .in_layer(group.id)
+                                     .from(from_date)
+                                     .to(to_date)
+                                     .excluding_cancelled_invoices
 
     collection = case params[:type]&.to_sym
                  when :deficit

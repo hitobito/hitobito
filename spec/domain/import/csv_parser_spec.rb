@@ -79,7 +79,7 @@ describe Import::CsvParser do
 
   context 'error when parsing' do
     let(:data) { File.read(path(:utf8, :ods)) }
-    its(:error) { should eq 'no implicit conversion of nil into String' }
+    its(:error) { should eq 'O-oh, tried very hard to guess encoding, but failed! is it a binary file?' }
   end
 
   context 'mapping rows' do

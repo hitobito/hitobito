@@ -11,7 +11,7 @@ module Dropdown
     private
 
     def pdf_links
-      add_item(translate(:letters_with_invoice), export_path(:pdf), item_options)
+      add_item(translate(:letters_with_invoice), export_path(:pdf), **item_options)
     end
 
     def item_options

@@ -158,3 +158,5 @@ end
 # To create a Wagonfile suitable for development, run 'rake wagon:file'
 wagonfile = File.expand_path('Wagonfile', __dir__)
 eval(File.read(wagonfile)) if File.exist?(wagonfile) # rubocop:disable Security/Eval
+
+gem "charlock_holmes", "~> 0.7.7"

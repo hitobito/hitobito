@@ -68,9 +68,14 @@ module Import
 
     def encode_as_utf8(input)
       raise translate(:contains_no_data) if input.nil?
-      unless input.valid_encoding?
-        input = input.encode('UTF-8', invalid: :replace, undef: :replace)
+
+      encoding_detection = CharlockHolmes::EncodingDetector.detect(input)
+      unless encoding_detection[:encoding] == 'UTF-8'
+        input = input.force_encoding(encoding_detection[:encoding]).encode('UTF-8')
       end
+
+      raise translate(:contains_no_data) if input.blank?
+
       input
     end
 

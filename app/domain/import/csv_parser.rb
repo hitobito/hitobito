@@ -70,7 +70,13 @@ module Import
       raise translate(:contains_no_data) if input.nil?
 
       encoding_detection = CharlockHolmes::EncodingDetector.detect(input)
-      unless encoding_detection[:encoding] == 'UTF-8'
+      encoding = encoding_detection[:encoding]
+
+      unless encoding
+        raise 'O-oh, tried very hard to guess encoding, but failed! is it a binary file?'
+      end
+
+      unless encoding == 'UTF-8'
         input = input.force_encoding(encoding_detection[:encoding]).encode('UTF-8')
       end
 

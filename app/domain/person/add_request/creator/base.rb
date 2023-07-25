@@ -83,7 +83,7 @@ module Person::AddRequest::Creator
 
     def last_layer_group
       last_role = person.last_non_restricted_role
-      last_role && last_role.group.layer_group
+      last_role && last_role&.group&.layer_group
     end
 
   end

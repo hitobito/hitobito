@@ -187,6 +187,13 @@ unless RSpec.configuration.exclusion_filter[:type] == 'feature'
     CapybaraScreenshotPlainTextReporter
 
 
+  # https://github.com/titusfortner/webdrivers/issues/247
+  # Since the webdrivers gem is deprecated and looking in the wrong spot for the new version it will break
+  # Thus we currently lock it to a version that is still available.
+  # Once the jump to ruby 3.x has been made and Selenium 4.11 is released
+  # we should be able to switch to that and remove the webdrivers gem
+  # Thus also pull the newest version once again
+  Webdrivers::Chromedriver.required_version = '114.0.5735.90'
   Capybara.register_driver :chrome do |app|
     options = Selenium::WebDriver::Chrome::Options.new
     options.args << '--headless' if ENV['HEADLESS'] != 'false'

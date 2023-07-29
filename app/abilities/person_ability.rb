@@ -72,6 +72,7 @@ class PersonAbility < AbilityDsl::Base
       if_permissions_in_all_capable_groups_or_layer_or_above
     permission(:layer_and_below_full).may(:create).all # restrictions are on Roles
     permission(:layer_and_below_full).may(:show).deleted_people_in_same_layer_or_below
+    permission(:layer_and_below_full).may(:totp_reset).in_same_layer_or_visible_below
 
     permission(:finance).may(:index_invoices).in_same_layer_or_below
     permission(:finance).may(:create_invoice).in_same_layer_or_below

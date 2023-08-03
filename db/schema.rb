@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_27_151218) do
+ActiveRecord::Schema.define(version: 2023_08_03_102244) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -690,6 +690,15 @@ ActiveRecord::Schema.define(version: 2023_03_27_151218) do
     t.index ["invoice_list_id"], name: "index_messages_on_invoice_list_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
+  end
+
+  create_table "mounted_attributes", charset: "utf8mb4", force: :cascade do |t|
+    t.string "key", null: false
+    t.integer "entry_id", null: false
+    t.string "entry_type", null: false
+    t.text "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "notes", id: :integer, charset: "utf8mb4", force: :cascade do |t|

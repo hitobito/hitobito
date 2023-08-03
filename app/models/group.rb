@@ -47,6 +47,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include Contactable
   include ValidatedEmail
   include Globalized
+  include MountedAttr
+
+  mounted_attr :test, :string
 
   acts_as_paranoid
   extend Paranoia::RegularScope

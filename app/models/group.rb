@@ -49,8 +49,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include Globalized
   include MountedAttr
 
-  mounted_attr :test, :string
-
   acts_as_paranoid
   extend Paranoia::RegularScope
   has_paper_trail meta: { main_id: ->(g) { g.id }, main_type: sti_name },
@@ -61,6 +59,14 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_one_attached :logo
 
   has_one_attached :privacy_policy
+
+  mounted_attr :username, :string
+  mounted_attr :password, :string
+  mounted_attr :provider, :string, enum: [:aspsms]
+  mounted_attr :originator, :string
+
+  mounted_attr :picture, :picture
+  mounted_attr :address_position, :string, enum: [:left, :right]
 
   ### ATTRIBUTES
 

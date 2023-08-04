@@ -41,6 +41,7 @@ class GroupSetting < RailsSettings::SettingObject
     messages_letter: { picture: nil, address_position: [:left, :right] }
   }.with_indifferent_access
 
+
   POSSIBLE_VALUES = {
     messages_letter: { address_position: [:left, :right] }
   }.with_indifferent_access

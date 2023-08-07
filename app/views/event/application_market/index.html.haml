@@ -35,8 +35,8 @@
     %h2= Event::Application.label_plural
     .pending_applications_info
       %span= "#{@applications.count} #{Event::Application.label(count: @applications.count)}"
-      %span.hidden.one=Event::Application.label
-      %span.hidden.other=Event::Application.label_plural
+      %span.d-none.one=Event::Application.label
+      %span.d-none.other=Event::Application.label_plural
 
     = render 'prio_buttons'
 

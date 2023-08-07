@@ -87,7 +87,7 @@ module PersonDuplicates
 
       if persons_valid?
         style_class = ''
-        style_class += ' hidden' if p_nr.eql?(:person_1)
+        style_class += ' d-none' if p_nr.eql?(:person_1)
         f.content_tag(:div, id: 'merge-hint', class: style_class) do
           [WARNING_ICON, t('.merge_hint')].join(' ')
         end

@@ -20,7 +20,7 @@ app.PeopleFilterAttribute = {
 
   duplicateAttributeForm: (e, form) ->
     form.removeClass('people_filter_attribute_form_template')
-    form.removeClass('hidden')
+    form.removeClass('d-none')
     form.find('.attribute_key_dropdown').val(e.target.value)
     form.find('.attribute_key_hidden_field').val(e.target.value)
     form.appendTo '#people_filter_attribute_forms'

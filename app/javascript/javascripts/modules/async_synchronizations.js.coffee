@@ -18,12 +18,12 @@ class app.AsyncSynchronizations
 
   checkSynchronizationCookie = ->
     if Cookies.get('async_synchronizations') == undefined
-      $('#synchronization-spinner').addClass('hidden')
+      $('#synchronization-spinner').addClass('d-none')
       return
 
   checkSynchronization = ->
     return if Cookies.get('async_synchronizations') == undefined
-    $('#synchronization-spinner').removeClass('hidden')
+    $('#synchronization-spinner').removeClass('d-none')
 
     $.each JSON.parse(Cookies.get('async_synchronizations')), (index, synchronization) ->
       $.ajax(

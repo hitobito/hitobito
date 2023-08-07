@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 .address-input-fields
-  %div.alert.alert-warning.updates-household-address.hidden
+  %div.alert.alert-warning.updates-household-address.d-none
     = t('.updates_household_address')
   = f.labeled_text_area(:address, rows: 2, data: { provide: 'entity',
                                                    updater: 'AddressTypeahead.update',

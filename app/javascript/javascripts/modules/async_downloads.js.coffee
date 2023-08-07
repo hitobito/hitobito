@@ -18,19 +18,19 @@ class app.AsyncDownloads
 
   checkDownloadCookie = ->
     if Cookies.get('async_downloads') == undefined
-      $('#file-download-spinner').addClass('hidden')
+      $('#file-download-spinner').addClass('d-none')
       return
 
   checkDownload = ->
     return if Cookies.get('async_downloads') == undefined
-    $('#file-download-spinner').removeClass('hidden')
+    $('#file-download-spinner').removeClass('d-none')
     $.each JSON.parse(Cookies.get('async_downloads')), (index, download) ->
       $.ajax(
         url: "/downloads/#{download['name']}/exists",
         data: "file_type=#{download['type']}",
         success: (data) ->
           if data['progress']
-            $('#file-download-spinner .progress').removeClass('hidden').html("#{data['progress']}%")
+            $('#file-download-spinner .progress').removeClass('d-none').html("#{data['progress']}%")
 
           return if data['status'] != 200
           download_file("/downloads/#{download['name']}?file_type=#{download['type']}")

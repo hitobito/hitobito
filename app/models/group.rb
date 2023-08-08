@@ -60,12 +60,13 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_one_attached :privacy_policy
 
-  mounted_attr :username, :string
-  mounted_attr :password, :string
+  mounted_attr :username, :encrypted
+  mounted_attr :password, :encrypted
   mounted_attr :provider, :string, enum: [:aspsms]
   mounted_attr :originator, :string
 
-  mounted_attr :picture, :picture
+  mount_uploader :carrierwave_picture, GroupSetting::LogoUploader, mount_on: 'picture'
+  has_one_attached :picture
   mounted_attr :address_position, :string, enum: [:left, :right]
 
   ### ATTRIBUTES

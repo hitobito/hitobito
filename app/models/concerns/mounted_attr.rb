@@ -7,7 +7,7 @@ module MountedAttr
       options[:null] ||= true
 
       define_mounted_attr_getter(attr, attr_type)
-      define_mounted_attr_setter(attr)
+      define_mounted_attr_setter(attr, attr_type)
 
       class_eval do
         unless options[:null]
@@ -43,13 +43,18 @@ module MountedAttr
       end
     end
 
-    def define_mounted_attr_setter(attr)
+    def define_mounted_attr_setter(attr, attr_type)
       define_method("#{attr}=") do |value|
         entry = send("mounted_#{attr}") || MountedAttribute.new(entry_id: self.id,
                                                                 entry_type: self.class.sti_name,
                                                                 key: attr)
 
-        entry.value = value
+        entry.value = if attr_type.eql? :encrypted
+                        EncryptionService.encrypt(value)
+                      else
+                        value
+                      end
+
         entry.save!
 
         value

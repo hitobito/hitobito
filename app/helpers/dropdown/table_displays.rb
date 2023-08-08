@@ -34,7 +34,7 @@ module Dropdown
     end
 
     def render_items
-      options = { class: 'dropdown-menu pull-right', data: { persistent: true }, role: 'menu' }
+      options = { class: 'dropdown-menu float-end', data: { persistent: true }, role: 'menu' }
 
       content_tag(:ul, options) do
         items = table_display.available(@list).collect do |column|

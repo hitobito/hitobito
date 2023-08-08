@@ -35,7 +35,7 @@ module LayoutHelper
     @in_button_group = false
   end
 
-  def pill_dropdown_button(dropdown, ul_classes = 'pull-right')
+  def pill_dropdown_button(dropdown, ul_classes = 'float-end')
     dropdown.button_class = nil
     content_tag(:ul, class: "nav nav-pills #{ul_classes}") do
       content_tag(:li, class: 'dropdown') do
@@ -131,7 +131,7 @@ module LayoutHelper
                            add_path,
                            'plus',
                            class: 'btn-small')
-    safe_join([title, content_tag(:span, button, class: 'pull-right')])
+    safe_join([title, content_tag(:span, button, class: 'float-end')])
   end
 
   def button(label, url, icon_name = nil, options = {})

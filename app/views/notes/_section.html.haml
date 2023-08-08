@@ -8,12 +8,12 @@
   %h2
     = Note.model_name.human(count: 2)
     - if can?(:create, entry.notes.new)
-      %span.pull-right
+      %span.float-end
         = action_button(t('notes.new_note'),
                         '#',
                         'plus',
                         id: 'notes-new-button',
-                        class: 'btn-small notes-swap',
+                        class: 'btn-sm notes-swap btn-outline-primary',
                         data: { swap: 'notes-swap' })
 
   #notes-form.notes-swap{ style: 'display: none;', data: { swap: 'notes-swap' } }

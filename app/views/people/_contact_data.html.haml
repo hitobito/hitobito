@@ -4,14 +4,14 @@
 -#  https://github.com/hitobito/hitobito.
 
 .contactable.well
-  .profil-big.pull-right
+  .profil-big.float-end
     .crop-to-square
       = image_tag(upload_url(person, :picture, size: '72x72', default: 'profil'), size: '72x72')
   .profile-image-overlay
     .img
       .crop-to-square
         = image_tag(upload_url(person, :picture, size: '512x512', default: 'profil'), size: '512x512')
-  .contact-marker.pull-right
+  .contact-marker.float-end
     =  link_to_address person
 
   = render 'contactable/contact_data',

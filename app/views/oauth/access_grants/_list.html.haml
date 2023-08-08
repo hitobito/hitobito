@@ -1,7 +1,7 @@
 %section
   %h3
     %span=t('.title', model_name: Oauth::AccessGrant.model_name.human(count: 2), uri: uri)
-    %span.pull-right
+    %span.float-end
       = action_button(t('doorkeeper.applications.buttons.authorize'), oauth_authorization_path(entry.path_params(uri)), :plus, class: 'btn-small', target: :_blank)
       = action_button(t('global.button.copy'), '#', :copy, class: 'btn-small', data: { copy_to_clipboard: oauth_authorization_url(entry.path_params(uri)) })
 

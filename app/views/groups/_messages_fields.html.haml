@@ -1,0 +1,17 @@
+%h3.form-subtitle= Message::Letter.model_name.human(count: 2)
+= f.labeled :letter_logo do
+  = f.file_field :letter_logo, type: :file, accept: GroupSetting::LogoUploader.accept_extensions
+
+- if upload_exists?(entry, :letter_logo)
+  = f.labeled :remove_letter_logo do
+    = f.boolean_field :remove_letter_logo
+= f.labeled(:address_position) do
+  - Group::ADDRESS_POSITION_VALUES.each do |value|
+    = f.inline_radio_button(:address_position, value, t("activerecord.attributes.group.address_positions.#{value}"))
+%h3.form-subtitle= Message::TextMessage.model_name.human(count: 2)
+= f.labeled_input_field(:text_message_username)
+= f.labeled_input_field(:text_message_password)
+= f.labeled(:text_message_provider) do
+  - Group::PROVIDER_VALUES.each do |value|
+    = f.inline_radio_button(:text_message_provider, value, t("activerecord.attributes.group.text_message_providers.#{value}"))
+= f.labeled_input_field(:text_message_originator)

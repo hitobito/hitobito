@@ -21,3 +21,7 @@
     - FeatureGate.if('groups.self_registration') do
       #self-registration.tab-pane
         = render 'self_registration_fields', f: f
+
+    - if entry.layer?
+      #messages.tab-pane
+        = render 'messages_fields', f: f

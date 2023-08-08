@@ -2,11 +2,16 @@
 module MountedAttr
   extend ActiveSupport::Concern
 
+  included do
+    class_attribute :mounted_attr_categories
+  end
+
   module ClassMethods
+    # TODO: Configurations class. Tracking mounted attrs per class including type and options
     def mounted_attr(attr, attr_type, options = {})
       options[:null] ||= true
 
-      define_mounted_attr_getter(attr, attr_type)
+      define_mounted_attr_getter(attr, attr_type, options)
       define_mounted_attr_setter(attr, attr_type)
 
       class_eval do
@@ -28,7 +33,7 @@ module MountedAttr
 
     private
 
-    def define_mounted_attr_getter(attr, attr_type)
+    def define_mounted_attr_getter(attr, attr_type, options)
       define_method("mounted_#{attr}") do
         (instance_variable_get("@mounted_#{attr}") ||
           instance_variable_set("@mounted_#{attr}",
@@ -39,7 +44,7 @@ module MountedAttr
       end
 
       define_method(attr) do
-        send("mounted_#{attr}")&.casted_value(attr_type)
+        send("mounted_#{attr}")&.casted_value(attr_type) || options[:default]
       end
     end
 

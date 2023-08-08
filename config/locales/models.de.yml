@@ -498,6 +498,17 @@ de:
         privacy_policy_title: DSE/Datenschutzerklärung Titel
         privacy_policy: DSE/Datenschutzerklärung
         remove_privacy_policy: DSE/Datenschutzerklärung entfernen
+        letter_logo: Brieflogo
+        address_position: Adressposition
+        address_positions:
+          left: Links
+          right: Rechts
+        text_message_provider: SMS Anbieter
+        text_message_providers:
+          aspsms: Aspsms
+        text_message_username: SMS Benutzername
+        text_message_password: SMS Password
+        text_message_originator: SMS Absender
 
       event:
         group_ids: Gruppen

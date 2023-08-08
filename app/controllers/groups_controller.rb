@@ -16,6 +16,7 @@ class GroupsController < CrudController
     :privacy_policy,
     :privacy_policy_title,
     :remove_logo,
+    :remove_letter_logo,
     :remove_privacy_policy,
     :self_registration_notification_email,
     :self_registration_role_type,
@@ -98,6 +99,7 @@ class GroupsController < CrudController
   def permitted_attrs
     attrs = entry.class.used_attributes.dup
     attrs += self.class.permitted_attrs
+    attrs += model_class.mounted_attr_categories.values.flatten
     if entry.class.superior_attributes.present? && !can?(:modify_superior, entry)
       attrs -= entry.class.superior_attributes
     end

@@ -5,7 +5,7 @@
 
     .control-group.has-feedback.has-clear
       = label_tag(:q, t('global.button.search'), class: 'control-label')
-      = search_field_tag :q, params[:q], class: 'form-control', placeholder: t('global.button.search'), data: { submit: true }, style: 'height: 30px'
+      = search_field_tag :q, params[:q], class: 'form-control form-control-sm', placeholder: t('global.button.search'), data: { submit: true }, style: 'height: 30px'
       %span.form-control-feedback{data: { clear: true }}
         = icon(:times)
 

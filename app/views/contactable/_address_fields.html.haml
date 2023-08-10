@@ -9,20 +9,19 @@
   = f.labeled_input_field(:address, rows: 2, data: { provide: 'entity',
                                                    updater: 'AddressTypeahead.update',
                                                    url: addresses_query_url })
-  = f.labeled(:zip_code, t('contactable.fields.zip_town')) do
-    .span6.input-span6.input-group
-      = f.string_field(:zip_code, class: 'span-none zip-code-field form-control', maxlength: 10)
-      %div.input-group-prepend
-        %span.input-group-text= "/"
-      = f.string_field(:town, class: 'span-none town-field form-control')
+  = f.labeled(:zip_code, t('contactable.fields.zip_town'), class: 'row') do
+    %div.col-1
+      = f.string_field(:zip_code, class: 'span-none zip-code-field form-control form-control-sm', maxlength: 10)
+    %div.col-4
+      = f.string_field(:town, class: 'span-none town-field form-control form-control-sm')
   = f.labeled(:country) do
-    .span6.input-span6.shown{style: 'margin-left: 0px'}
+    .col-6.input-col-6.shown{style: 'margin-left: 0px'}
       = country_select(f.object.class.model_name.param_key,
                        'country',
                        { priority_countries: Settings.countries.prioritized,
                          selected: f.object.country,
                          include_blank: true },
-                       { class: 'form-select',
+                       { class: 'form-select form-select-sm',
                          data: { placeholder: ' ',
                                  chosen_no_results: t('global.chosen_no_results'),
                                  typeahead_supported_countries: Settings.addresses.imported_countries } })

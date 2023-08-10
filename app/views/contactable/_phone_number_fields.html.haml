@@ -3,6 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.input_field(:number, class: 'span4', placeholder: PhoneNumber.human_attribute_name(:number))
-= f.collection_select(:translated_label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'span2')
+%div.col-4.inline
+  = f.input_field(:number, class: 'form-control form-control-sm', placeholder: PhoneNumber.human_attribute_name(:number))
+%div.col-3.inline.me-5
+  = f.collection_select(:translated_label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'form-select form-select-sm')
 = render 'contactable/public_check_box', f: f

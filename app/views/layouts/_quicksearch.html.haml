@@ -6,7 +6,7 @@
 = form_tag full_path, class: 'w-100', method: :get do
   .input-group.quicksearch
     = search_field_tag :q, params[:q],
-                       class: 'quicksearch-input form-control',
+                       class: 'quicksearch-input form-control form-control-sm',
                        id: 'quicksearch',
                        placeholder: t('global.search.placeholder'),
                        data: { url: query_path,

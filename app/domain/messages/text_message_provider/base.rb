@@ -15,17 +15,17 @@ module Messages
 
       MAX_RECIPIENTS = 1000
 
-      def self.init(config:)
-        case config.provider
+      def self.init(group:)
+        case group.provider
         when 'aspsms'
-          Aspsms.new(config: config)
+          Aspsms.new(group: group)
         else
-          raise 'unkown text message provider in config'
+          raise 'unkown text message provider in group config'
         end
       end
 
-      def initialize(config:)
-        @config = config
+      def initialize(group:)
+        @group = group
       end
 
       def send(_text:, _recipients:)

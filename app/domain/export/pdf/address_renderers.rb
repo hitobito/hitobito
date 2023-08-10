@@ -17,7 +17,7 @@ module Export::Pdf::AddressRenderers
     x_coords = {
       left: left_address_x,
       right: right_address_x
-    }[group.settings(:messages_letter).address_position&.to_sym]
+    }[group.address_position&.to_sym]
     x_coords ||= 0
     [x_coords, cursor]
   end

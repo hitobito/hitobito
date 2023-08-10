@@ -27,7 +27,6 @@ describe Export::Pdf::Messages::Letter::Header do
   end
   let(:pdf)      { Prawn::Document.new(options) }
   let(:analyzer) { PDF::Inspector::Text.analyze(pdf.render) }
-  let(:image)    { Rails.root.join('spec/fixtures/files/images/logo.png') }
   let(:shipping_info_with_position_left) do
     [
       [71, 672, 'P.P.'],
@@ -47,13 +46,13 @@ describe Export::Pdf::Messages::Letter::Header do
 
   subject { described_class.new(pdf, letter, options) }
 
-  describe 'logo' do
+  def expects_image(id)
+    image_options = { position: :right }
+    expect_any_instance_of(Prawn::Document)
+      .to receive(:image).with(instance_of(StringIO), image_options)
+  end
 
-    def expects_image(id)
-      image_options = { position: :right }
-      expect_any_instance_of(Prawn::Document)
-        .to receive(:image).with(instance_of(StringIO), image_options)
-    end
+  describe 'logo' do
 
     it 'has no logo' do
       expect_any_instance_of(Prawn::Document).not_to receive(:image)
@@ -132,7 +131,8 @@ describe Export::Pdf::Messages::Letter::Header do
     end
 
     it 'same position when logo is present' do
-      assign_image(top_group)
+      id = assign_image(top_group)
+      expects_image(id)
       subject.render(recipient)
 
       expect(text_with_position_without_shipping_info).to eq [
@@ -187,7 +187,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
     context 'rendered left' do
       before do
-        top_group.settings(:messages_letter).address_position = :left
+        top_group.address_position = :left
         top_group.save!
       end
 
@@ -229,7 +229,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
     context 'rendered right' do
       before do
-        top_group.settings(:messages_letter).address_position = :right
+        top_group.address_position = :right
         top_group.save!
       end
 
@@ -283,7 +283,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
     context 'rendered right' do
       before do
-        top_group.settings(:messages_letter).address_position = :right
+        top_group.address_position = :right
         top_group.save!
       end
 
@@ -310,10 +310,13 @@ describe Export::Pdf::Messages::Letter::Header do
   end
 
   def assign_image(group)
-    gs = GroupSetting.find_or_create_by!(target: group, var: :messages_letter)
-    gs.picture.attach(io: StringIO.new(image.read), filename: image.basename.to_s)
+    group.letter_logo.attach(
+      io: File.open('spec/fixtures/files/images/logo.png'),
+      filename: 'logo.png'
+    )
+    group.save!
 
-    gs.id
+    group.id
   end
 
 end

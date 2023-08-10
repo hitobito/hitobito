@@ -67,10 +67,6 @@ module Sheet
         :deleted_subgroups_group_path,
         if: :deleted_subgroups
 
-    tab 'activerecord.models.group_setting.other',
-        :group_group_settings_path,
-        if: :update
-
     delegate :group_path, to: :view
 
     def render_breadcrumbs

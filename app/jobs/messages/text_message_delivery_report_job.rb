@@ -68,9 +68,7 @@ module Messages
     end
 
     def provider_config
-      s = group.settings(:text_message_provider)
-      s.originator = group.name if s.originator.blank?
-      s
+      group.text_message_originator || group.name
     end
 
     def message

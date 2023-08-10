@@ -74,8 +74,6 @@ Hitobito::Application.routes.draw do
       get 'self_inscription' => 'groups/self_inscription#new'
       post 'self_inscription' => 'groups/self_inscription#create'
 
-      resources :settings, only: [:index, :edit, :update], controller: 'group_settings', as: 'group_settings'
-
       FeatureGate.if('groups.statistics') do
         resource :statistics, only: [:show], module: :group
       end

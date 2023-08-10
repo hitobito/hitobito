@@ -119,9 +119,7 @@ class Export::Pdf::Messages::Letter
     end
 
     def logo_path_setting(group)
-      setting = group.settings(:messages_letter)
-
-      setting.picture if setting.picture.attached?
+      group.letter_logo if group.letter_logo.attached?
     end
 
     def sender_address

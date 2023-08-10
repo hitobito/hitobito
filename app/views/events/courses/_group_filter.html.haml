@@ -7,7 +7,7 @@
                  options_from_collection_for_select(course_groups, :id, :name, @group_ids),
                  {},
                  { id: 'group-filter-select',
-                   class: 'form-select',
+                   class: 'form-select form-select-sm',
                    multiple: true,
                    data: { chosen_no_results: t('global.chosen_no_results'),
                            placeholder: t('.select_layers') } })

@@ -30,7 +30,7 @@ module FilterHelper
   end
 
   def direct_filter_date(attr, label = nil, options = {})
-    options[:class] ||= 'span2 date form-control form-control-sm'
+    options[:class] ||= 'col-2 date form-control form-control-sm'
     direct_filter(attr, label) do
       content_tag(:div, class: 'input-group') do
           content_tag(:span, icon(:'calendar-alt'), class: 'input-group-text') +

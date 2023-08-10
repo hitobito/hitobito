@@ -18,7 +18,7 @@
                              data: { provide: 'entity',
                                      url: query_company_name_path })
   - entry.decorate.used?(:company) do
-    = f.labeled_input_fields :company
+    = f.labeled_boolean_field :company
 
   = render_extensions :name_fields, locals: { f: f }
 
@@ -32,7 +32,7 @@
   = f.labeled_string_field(:birthday,
                            value: f.date_value(:birthday),
                            help_inline: t('.format_birthday'),
-                           class: 'span2 form-control')
+                           class: 'span2 form-control form-control-sm')
   - FeatureGate.if(:person_language) do
     = f.labeled_collection_select(:language,
                                   Person::LANGUAGES,

@@ -7,10 +7,10 @@
   .container-fluid
     .row
       - footer = Settings.application.footer
-      .span3
+      .col-3
         - if footer.logo_image.present?
           = link_to wagon_image_pack_tag(footer.logo_image), footer.logo_url, target: '_blank'
-      .footer-content.span9
+      .footer-content.col-9
         %p
           - footer.links.to_hash.fetch(I18n.locale, footer.links.to_hash).each do |label, url|
             = link_to label, url, target: '_blank'

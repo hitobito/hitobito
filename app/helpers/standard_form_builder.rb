@@ -36,7 +36,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def input_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
     type = column_type(@object, attr.to_sym)
     custom_field_method = :"#{type}_field"
-    html_options[:class] = html_options[:class].to_s + ' form-control'
+    html_options[:class] = html_options[:class].to_s + 'form-control form-control-sm'
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     html_options[:required] ||= 'required' if required?(attr)
     if type == :text
@@ -255,7 +255,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, required = false,
                                 &block)
-    html_options = { class: 'labeled col-md controls well' }
+    html_options = { class: 'labeled col-md controls' }
     css_classes = { row: true, 'mb-2': true, required: required }
     label_classes = 'control-label col-form-label col-md-3 col-xl-2 pb-1 text-md-end'
     label_classes += ' required' if required
@@ -368,7 +368,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Generates a help inline for fields
   def help_inline(text)
-    content_tag(:span, text, class: 'help-inline')
+    content_tag(:span, text, class: 'form-text')
   end
 
   # Generates a help block for fields

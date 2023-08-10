@@ -3,17 +3,18 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.input_field(:email,
-                class: 'span4',
-                placeholder: t('.placeholder_value'))
-
-= f.input_field(:translated_label,
-                class: 'span2',
-                placeholder: t('.placeholder_type'),
-                data: {provide: :typeahead, source: AdditionalEmail.available_labels})
+%div.col-4.inline
+  = f.input_field(:email,
+                  class: 'form-control form-control-sm',
+                  placeholder: t('.placeholder_value'))
+%div.col-2.inline
+  = f.input_field(:translated_label,
+                  class: 'form-control form-control-sm',
+                  placeholder: t('.placeholder_type'),
+                  data: {provide: :typeahead, source: AdditionalEmail.available_labels})
 
 - if entry.is_a?(Person)
-  = f.label(:mailings, class: 'checkbox span2') do
+  = f.label(:mailings, class: 'ms-5 col-1') do
     = f.check_box(:mailings)
     %span{rel: 'tooltip', title: t('.tooltip_mailings')}
       = t(:"activerecord.attributes.additional_emails.mailings")

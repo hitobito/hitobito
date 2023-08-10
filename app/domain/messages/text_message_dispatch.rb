@@ -33,9 +33,7 @@ module Messages
     end
 
     def provider_config
-      group.settings(:text_message_provider).tap do |s|
-        s.originator = group.name if s.originator.blank?
-      end
+      group.text_message_originator || group.name
     end
 
     def group

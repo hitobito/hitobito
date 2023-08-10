@@ -9,14 +9,14 @@ require 'spec_helper'
 
 describe Messages::TextMessageProvider::Aspsms do
 
-  let(:config) do
-    GroupSetting.new(
-      username: 'goofy',
-      password: 'max42',
-      originator: 'Acme'
-    )
+  let(:group) do
+    groups(:top_layer).tap do |group|
+      group.text_message_username = 'goofy'
+      group.text_message_password = 'max42'
+      group.text_message_originator = 'Acme'
+    end
   end
-  let(:provider) { described_class.new(config: config) }
+  let(:provider) { described_class.new(group: group) }
   let(:success_response) do
     { StatusCode: '1',
       StatusInfo: 'OK' }.to_json

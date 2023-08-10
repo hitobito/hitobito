@@ -55,9 +55,9 @@ module MountedAttr
                                                                 key: attr)
 
         entry.value = if attr_type.eql? :encrypted
-                        EncryptionService.encrypt(value)
+                        EncryptionService.encrypt(value.to_s)
                       else
-                        value
+                        value.to_s
                       end
 
         entry.save!

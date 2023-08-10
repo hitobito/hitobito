@@ -82,8 +82,10 @@ describe Export::Pdf::Messages::Letter do
 
       it 'renders example letter' do
         options[:debug] = true
-        image = fixture_file_upload('images/logo.png')
-        GroupSetting.create!(target: groups(:top_group), var: :messages_letter, picture: image).id
+        group.letter_logo.attach(
+          io: File.open('spec/fixtures/files/images/logo.png'),
+          filename: 'logo.png'
+        )
         letter.update!(group: groups(:top_group))
         layer.update!(address: 'Lakeview 42', zip_code: '4242', town: 'Bern')
         IO.binwrite('/tmp/file.pdf', subject.render)

@@ -13,12 +13,11 @@ class MountedAttribute < ActiveRecord::Base
     when :integer
       value.to_i
     when :encrypted
-      encrypted_value = value[:encrypted_value]
-      decrypt(encrypted_value) if encrypted_value.present?
+      decrypted_value
     end
   end
 
-  def decrypt(value)
+  def decrypted_value
     encrypted_value = value[:encrypted_value]
     iv = value[:iv]
     EncryptionService.decrypt(encrypted_value, iv) if encrypted_value.present?

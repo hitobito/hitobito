@@ -85,14 +85,14 @@ module FormHelper
 
   def add_another_button(form, label, options = {})
     content_tag(:div, class: 'btn-group') do
-      form.button(label, options.merge(name: :add_another, class: 'btn btn-primary',
+      form.button(label, options.merge(name: :add_another, class: 'btn btn-sm btn-primary',
                                        data: { disable: true }))
     end
   end
 
   def submit_button(form, label, options = {})
     content_tag(:div, class: 'btn-group') do
-      form.button(label, options.merge(class: 'btn btn-primary', data: { disable_with: label }))
+      form.button(label, options.merge(class: 'btn btn-sm btn-primary', data: { disable_with: label }))
     end
   end
 

@@ -1,5 +1,5 @@
 - if can?(:update_email, entry)
-  = f.labeled_input_field :email, help_inline: t('.used_as_login')
+  = f.labeled_input_field :email, help_inline: t('.used_as_login'), class: 'd-inline form-control form-control-sm'
 - else
   = f.labeled(:email) do
     %p.inline= entry.email

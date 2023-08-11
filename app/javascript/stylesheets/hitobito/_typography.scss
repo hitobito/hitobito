@@ -73,12 +73,7 @@ dl {
   margin-top: 0;
 }
 .dl-horizontal {
-  padding: $vSpace*0.5 0;
-  border-top: 1px solid $borderColor;
-  margin: 0;
-
   dd {
-    margin-bottom: $vSpace*0.5;
     &:last-child { margin-bottom: 0; }
   }
 
@@ -91,7 +86,6 @@ dl {
     border-bottom: 1px solid $borderColor;
     margin-bottom: $vSpace;
   }
-
 }
 .dl-borderless, .dl-borderless:last-child {
   border: 0;

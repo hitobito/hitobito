@@ -32,14 +32,14 @@
   = f.labeled_string_field(:birthday,
                            value: f.date_value(:birthday),
                            help_inline: t('.format_birthday'),
-                           class: 'span2 form-control form-control-sm')
+                           class: 'col-2 form-control form-control-sm d-inline')
   - FeatureGate.if(:person_language) do
     = f.labeled_collection_select(:language,
                                   Person::LANGUAGES,
                                   :first,
                                   :last,
                                   { prompt: true },
-                                  class: 'span6')
+                                  class: 'col-6')
 
 
 = render_extensions :fields, locals: { f: f }

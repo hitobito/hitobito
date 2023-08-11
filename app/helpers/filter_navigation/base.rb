@@ -22,7 +22,7 @@ module FilterNavigation
 
     def to_s
       content_tag(:div, class: 'toolbar-pills') do
-        content_tag(:ul, class: 'nav nav-pills group-pills') do
+        content_tag(:ul, class: 'nav nav-pills group-pills border border-primary rounded') do
           template.safe_join([*main_items, dropdown_item])
         end
       end
@@ -41,7 +41,7 @@ module FilterNavigation
     def item(label, url, count = nil)
       caption = count ? "#{label} (#{count})" : label
       @main_items << content_tag(:li,
-                                 link_to(caption, url, class: "nav-link #{'active' if active_label == label}"),
+                                 link_to(caption, url, class: "nav-link w-100 rounded-0 #{'active' if active_label == label}"),
                                  class: 'nav-item')
     end
 

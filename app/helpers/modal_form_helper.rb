@@ -35,7 +35,7 @@ module ModalFormHelper
 
     content_tag(:div, class: 'modal-footer') do
       btns = content_tag(:div, class: 'btn-group') do
-        form.button(submit_label, class: 'btn btn-primary')
+        form.button(submit_label, class: 'btn btn-sm btn-primary')
       end
       btns << link_to(ti(:"button.cancel"), '#', onclick: onclick, class: 'link cancel')
 

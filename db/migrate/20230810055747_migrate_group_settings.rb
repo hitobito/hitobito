@@ -5,7 +5,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
     text_message_password: :text_message_provider,
     text_message_provider: :text_message_provider,
     text_message_originator: :text_message_provider,
-    address_position: :messages_letter,
+    letter_address_position: :messages_letter,
     letter_logo: :messages_letter
   }
 
@@ -14,7 +14,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
     encrypted_password: :text_message_password,
     provider: :text_message_provider,
     originator: :text_message_originator,
-    address_position: :address_position,
+    address_position: :letter_address_position,
     picture: :letter_logo
   }
 

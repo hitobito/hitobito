@@ -1,17 +1,17 @@
 = form_for(:filter, html: { class: 'form-inline-search', id: 'course-filter' }, url: list_courses_path, method: :get) do |f|
   .control-group
     = f.label :since, t('.time_period'), class: 'control-label'
-    .input-group{style: 'margin: 0 0.5rem 0.5rem 0'}
+    .input-group
       %div.input-group-prepend
         %span.input-group-text= icon(:'calendar-alt')
-      = f.text_field(:since, value: since_date, class: 'date col-2 form-control form-control-sm', style: 'margin-bottom: 0 !important')
+      = f.text_field(:since, value: since_date, class: 'date col-2 form-control form-control-sm mb-0')
 
   .control-group
     = f.label :until, t('.until'), style: 'display: inline-block; margin-right: 0.4rem; vertical-align: middle'
-    .input-group{style: 'margin: 0 0.5rem 0.5rem 0'}
+    .input-group
       %div.input-group-prepend
         %span.input-group-text= icon(:'calendar-alt')
-      = f.text_field(:until, value: until_date, class: 'date col-2 form-control form-control-sm', style: 'margin-bottom: 0 !important')
+      = f.text_field(:until, value: until_date, class: 'date col-2 form-control form-control-sm mb-0')
 
   - if course_states_used?
     .control-group

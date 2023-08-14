@@ -150,6 +150,16 @@
   background-color: $purple;
   border-color: $purple;
 }
+
+.nav-pills .nav-link div {
+  margin-bottom: 0;
+  margin-top: 0.25rem
+}
+
+.active > .dropdown > .dropdown-toggle {
+  color: white;
+}
+
 .toolbar-pills {
   float: left;
   margin-right: 15px;
@@ -170,7 +180,6 @@
     margin-right: 0;
   }
   &:first-child > a {
-    border-left: 1px solid $grayLight;
     @include border-start-radius(6px);
   }
   &:last-child > a {

@@ -719,6 +719,7 @@ de:
       hint_external_registration: 'Es sind keine Rollen mit Schreibrechten auswählbar'
     form_tabs:
       general: 'Allgemein'
+      messages: 'Nachrichten'
     global:
       link:
         add: Gruppe erstellen

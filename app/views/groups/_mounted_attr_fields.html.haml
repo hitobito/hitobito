@@ -1,0 +1,16 @@
+- attrs.each do |attr|
+  - config = entry.send("mounted_#{attr}").config
+
+  - if config.attr_type == :picture
+    = f.labeled attr do
+      = f.file_field attr, type: :file, accept: GroupSetting::LogoUploader.accept_extensions
+
+    - if upload_exists?(entry, attr)
+      = f.labeled :"remove_#{attr}" do
+        = f.boolean_field :"remove_#{attr}"
+  - elsif config.enum.present?
+    = f.labeled(attr) do
+      - config.enum.each do |value|
+        = f.inline_radio_button(attr, value, t("activerecord.attributes.group.#{attr}s.#{value}"))
+  - else
+    = f.labeled_input_field(attr)

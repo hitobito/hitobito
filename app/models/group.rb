@@ -51,11 +51,12 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   # TODO: Only on layer
   self.mounted_attr_categories = {
-    messages_letter: [:letter_address_position, :letter_logo],
-    messages_text_message: [:text_message_username,
-                            :text_message_password,
-                            :text_message_provider,
-                            :text_message_originator]
+    messages: [:letter_address_position,
+               :letter_logo,
+               :text_message_username,
+               :text_message_password,
+               :text_message_provider,
+               :text_message_originator]
   }
 
   PROVIDER_VALUES = %w(aspsms).freeze
@@ -68,7 +69,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   mounted_attr :text_message_originator, :string
 
   # mount_uploader :carrierwave_letter_logo, GroupSetting::LogoUploader, mount_on: 'letter_logo'
-  has_one_attached :letter_logo
+  mounted_attr :letter_logo, :picture
   mounted_attr :letter_address_position, :string, enum: ADDRESS_POSITION_VALUES,
                                            default: ADDRESS_POSITION_VALUES.first
 

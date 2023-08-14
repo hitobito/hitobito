@@ -32,7 +32,7 @@ module FilterNavigation
 
     def dropdown_item
       if dropdown.items.present?
-        content_tag(:li, class: "dropdown #{'active' if dropdown.active}") do
+        content_tag(:li, class: "dropdown nav-link rounded-0 py-0 px-3 #{'active' if dropdown.active}") do
           template.in_button_group { dropdown.to_s }
         end
       end
@@ -41,7 +41,7 @@ module FilterNavigation
     def item(label, url, count = nil)
       caption = count ? "#{label} (#{count})" : label
       @main_items << content_tag(:li,
-                                 link_to(caption, url, class: "nav-link w-100 rounded-0 #{'active' if active_label == label}"),
+                                 link_to(caption, url, class: "nav-link rounded-0 py-1 px-3 mr-0 #{'active' if active_label == label}"),
                                  class: 'nav-item')
     end
 

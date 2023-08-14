@@ -6,8 +6,15 @@ class MountedAttribute < ActiveRecord::Base
 
   validates_by_schema
 
-  def casted_value(type)
-    case type
+  before_save :encrypt_value, if: :value_changed?
+
+  def config
+    @config ||= MountedAttr::ClassMethods.store.config_for(self.entry_type.constantize,
+                                                           self.key)
+  end
+
+  def casted_value
+    case config.attr_type
     when :string
       value
     when :integer
@@ -15,6 +22,12 @@ class MountedAttribute < ActiveRecord::Base
     when :encrypted
       decrypted_value
     end
+  end
+
+  def encrypt_value
+    return unless config.attr_type.eql?(:encrypted)
+
+    self.value = EncryptionService.encrypt(self.value.to_s)
   end
 
   def decrypted_value

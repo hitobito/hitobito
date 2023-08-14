@@ -4,17 +4,17 @@
 -#  https://github.com/hitobito/hitobito.
 
 %ul.nav.nav-tabs
-  %li.active= link_to(t('events.form_tabs.general'), '#general', data: { toggle: 'tab' })
-  %li= link_to(Event.human_attribute_name(:dates), '#dates', data: { toggle: 'tab' })
+  %li.nav-item= link_to(t('events.form_tabs.general'), '#general', data: { bs_toggle: 'tab' }, class: 'nav-link active')
+  %li.nav-item= link_to(Event.human_attribute_name(:dates), '#dates', data: { bs_toggle: 'tab' }, class: 'nav-link')
   - if entry.supports_application_details?
-    %li= link_to(Event::Application.model_name.human, '#application', data: { toggle: 'tab' })
+    %li.nav-item= link_to(Event::Application.model_name.human, '#application', data: { bs_toggle: 'tab' }, class: 'nav-link')
 
   = render_extensions :form_tabs
 
   - if entry.role_types.present?
-    %li= link_to(t('events.form_tabs.application_questions'), '#application_questions', data: { toggle: 'tab' })
-    %li= link_to(t('events.form_tabs.admin_questions'), '#admin_questions', data: { toggle: 'tab' })
+    %li.nav-item= link_to(t('events.form_tabs.application_questions'), '#application_questions', data: { bs_toggle: 'tab' }, class: 'nav-link')
+    %li.nav-item= link_to(t('events.form_tabs.admin_questions'), '#admin_questions', data: { bs_toggle: 'tab' }, class: 'nav-link')
 
   - if entry.participant_types.present?
-    %li= link_to(t('events.form_tabs.contact_attrs'), '#contact_attrs', data: { toggle: 'tab' })
+    %li.nav-item= link_to(t('events.form_tabs.contact_attrs'), '#contact_attrs', data: { bs_toggle: 'tab' }, class: 'nav-link')
 

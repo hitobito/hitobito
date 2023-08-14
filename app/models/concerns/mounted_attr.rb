@@ -7,62 +7,64 @@ module MountedAttr
   end
 
   module ClassMethods
-    # TODO: Configurations class. Tracking mounted attrs per class including type and options
+    cattr_reader :store
+    @@store = ::MountedAttributes::Store.new
+
     def mounted_attr(attr, attr_type, options = {})
-      options[:null] ||= true
+      config = store.register(self, attr, attr_type, options)
 
-      define_mounted_attr_getter(attr, attr_type, options)
-      define_mounted_attr_setter(attr, attr_type)
+      define_mounted_attr_getter(config)
+      define_mounted_attr_setter(config)
 
-      class_eval do
-        unless options[:null]
-          validates attr, presence: true
-        end
-
-        if options[:enum].present?
-          validates attr, inclusion: { in: options[:enum] }, allow_nil: options[:null]
-        end
-
-        if options[:default].present?
-          before_validation do |e|
-            e.send("#{attr}=", options[:default]) if e.send(attr).nil?
-          end
-        end
-      end
+      define_mounted_attr_validations(config)
     end
 
     private
 
-    def define_mounted_attr_getter(attr, attr_type, options)
-      define_method("mounted_#{attr}") do
-        (instance_variable_get("@mounted_#{attr}") ||
-          instance_variable_set("@mounted_#{attr}",
+    def define_mounted_attr_getter(config)
+      define_method("mounted_#{config.attr_name}") do
+        (instance_variable_get("@mounted_#{config.attr_name}") ||
+                                instance_variable_set("@mounted_#{config.attr_name}",
                                 MountedAttribute.find_by(entry_id: self.id,
-                                                         entry_type: self.class.sti_name,
-                                                         key: attr))
+                                                         entry_type: config.target_class,
+                                                         key: config.attr_name))
         )
       end
 
-      define_method(attr) do
-        send("mounted_#{attr}")&.casted_value(attr_type) || options[:default]
+      define_method(config.attr_name) do
+        send("mounted_#{config.attr_name}")&.casted_value || config.default
       end
     end
 
-    def define_mounted_attr_setter(attr, attr_type)
-      define_method("#{attr}=") do |value|
-        entry = send("mounted_#{attr}") || MountedAttribute.new(entry_id: self.id,
-                                                                entry_type: self.class.sti_name,
-                                                                key: attr)
+    def define_mounted_attr_setter(config)
+      define_method("#{config.attr_name}=") do |value|
+        return if value.empty?
 
-        entry.value = if attr_type.eql? :encrypted
-                        EncryptionService.encrypt(value.to_s)
-                      else
-                        value.to_s
-                      end
-
+        entry = send("mounted_#{config.attr_name}") || MountedAttribute.new(entry_id: self.id,
+                                                                            entry_type: config.target_class,
+                                                                            key: config.attr_name)
+        entry.value = value
         entry.save!
 
         value
+      end
+    end
+
+    def define_mounted_attr_validations(config)
+      class_eval do
+        unless config.null
+          validates config.attr_name, presence: true
+        end
+
+        if config.enum.present?
+          validates config.attr_name, inclusion: { in: config.enum }, allow_nil: config.null
+        end
+
+        if config.default.present?
+          before_validation do |e|
+            e.send("#{config.attr_name}=", config.default) if e.send(config.attr_name).nil?
+          end
+        end
       end
     end
   end

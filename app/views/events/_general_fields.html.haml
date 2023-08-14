@@ -27,7 +27,7 @@
   = f.labeled_input_fields(*entry.used_attributes(:motto, :cost))
 
   - entry.used?(:contact_id) do
-    = f.labeled_person_field :contact
+    = f.labeled_person_field :contact, class: 'form-control form-control-sm'
     .display-wrapper{style: element_visible(entry.contact.present?)}
       = f.labeled_boolean_field :notify_contact_on_participations,
         label: t('events.form.label_notify_contact_on_participations'),
@@ -36,7 +36,7 @@
   = render 'location_fields', f: f
 
   - entry.used?(:globally_visible) do
-    = f.labeled_input_field :globally_visible,
+    = f.labeled_boolean_field :globally_visible,
       caption: t('events.form.caption_globally_visible', model_name: entry.model_name.human)
 
 = render_extensions 'fields', locals: { f: f }

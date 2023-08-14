@@ -499,8 +499,8 @@ de:
         privacy_policy: DSE/Datenschutzerklärung
         remove_privacy_policy: DSE/Datenschutzerklärung entfernen
         letter_logo: Brieflogo
-        address_position: Adressposition
-        address_positions:
+        letter_address_position: Adressposition
+        letter_address_positions:
           left: Links
           right: Rechts
         text_message_provider: SMS Anbieter

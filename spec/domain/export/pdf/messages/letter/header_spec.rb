@@ -187,7 +187,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
     context 'rendered left' do
       before do
-        top_group.address_position = :left
+        top_group.letter_address_position = :left
         top_group.save!
       end
 
@@ -229,7 +229,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
     context 'rendered right' do
       before do
-        top_group.address_position = :right
+        top_group.letter_address_position = :right
         top_group.save!
       end
 
@@ -283,7 +283,7 @@ describe Export::Pdf::Messages::Letter::Header do
 
     context 'rendered right' do
       before do
-        top_group.address_position = :right
+        top_group.letter_address_position = :right
         top_group.save!
       end
 

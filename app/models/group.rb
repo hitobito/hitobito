@@ -51,7 +51,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   # TODO: Only on layer
   self.mounted_attr_categories = {
-    messages_letter: [:address_position, :letter_logo],
+    messages_letter: [:letter_address_position, :letter_logo],
     messages_text_message: [:text_message_username,
                             :text_message_password,
                             :text_message_provider,
@@ -69,7 +69,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   # mount_uploader :carrierwave_letter_logo, GroupSetting::LogoUploader, mount_on: 'letter_logo'
   has_one_attached :letter_logo
-  mounted_attr :address_position, :string, enum: ADDRESS_POSITION_VALUES,
+  mounted_attr :letter_address_position, :string, enum: ADDRESS_POSITION_VALUES,
                                            default: ADDRESS_POSITION_VALUES.first
 
   acts_as_paranoid

@@ -40,10 +40,11 @@ module MountedAttr
       define_method("#{config.attr_name}=") do |value|
         return if value.empty?
 
-        entry = send("mounted_#{config.attr_name}") || MountedAttribute.new(entry_id: self.id,
-                                                                            entry_type: config.target_class,
-                                                                            key: config.attr_name)
-        entry.value = value
+        entry = send("mounted_#{config.attr_name}") ||
+                       MountedAttribute.new(entry_id: self.id,
+                                            entry_type: config.target_class,
+                                            key: config.attr_name)
+        entry.value = value.to_s
         entry.save!
 
         value

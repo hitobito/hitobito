@@ -130,7 +130,7 @@ module LayoutHelper
     button = action_button(ti(:'link.add'),
                            add_path,
                            'plus',
-                           class: 'btn-small')
+                           class: 'btn-sm')
     safe_join([title, content_tag(:span, button, class: 'float-end')])
   end
 

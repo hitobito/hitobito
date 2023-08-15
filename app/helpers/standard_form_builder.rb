@@ -118,9 +118,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to select a date. You might want to customize this.
   def date_field(attr, html_options = {})
     html_options[:value] ||= date_value(attr)
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-15ch date'
-    content_tag(:div, class: 'input-prepend') do
-      content_tag(:span, icon(:'calendar-alt'), class: 'add-on') +
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-15ch date form-control form-control-sm'
+    content_tag(:div, class: 'input-group') do
+      content_tag(:span, icon(:'calendar-alt'), class: 'input-group-text') +
       text_field(attr, html_options)
     end
   end
@@ -144,14 +144,14 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a select with minutes
   def minutes_select(attr, html_options = {})
-    html_options[:class] ||= 'time'
+    html_options[:class] ||= 'time form-select form-select-sm'
     ma = (0..59).collect { |n| [format('%02d', n), n] }
     select(attr, ma, {}, html_options)
   end
 
   # Render a select with hours
   def hours_select(attr, html_options = {})
-    html_options[:class] ||= 'time'
+    html_options[:class] ||= 'time form-select form-select-sm'
     ma = (0..23).collect { |n| [format('%02d', n), n] }
     select(attr, ma, {}, html_options)
   end
@@ -161,11 +161,15 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def datetime_field(attr, html_options = {})
     html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
 
-    date_field("#{attr}_date") +
-    ' ' +
-    hours_select("#{attr}_hour") +
-    ' : ' +
-    minutes_select("#{attr}_min")
+    content_tag(:div, class: 'd-flex') do
+      content_tag(:div, class: 'col-2') do
+        date_field("#{attr}_date")
+      end +
+      ' ' +
+      hours_select("#{attr}_hour") +
+      ' : ' +
+      minutes_select("#{attr}_min")
+    end
   end
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
@@ -278,8 +282,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         block_given? ? capture(fields, &block) : render(partial_name, f: fields)
       end
     end +
-    content_tag(:div, class: 'controls') do
-      options = options.to_h.merge(class: 'text')
+    content_tag(:div, class: 'controls d-flex') do
+      options = options.to_h.merge(class: 'text col-3 text-end')
       content_tag(:p, link_to_add(I18n.t('global.associations.add'), assoc, options))
     end
   end
@@ -375,7 +379,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Generates a help block for fields
   def help_block(text = nil, options = {}, &block)
     additional_classes = Array(options.delete(:class))
-    content_tag(:span, text, class: "help-block #{additional_classes.join(' ')}", &block)
+    content_tag(:span, text, class: "form-text #{additional_classes.join(' ')}", &block)
   end
 
   # Returns the list of association entries, either from options[:list],

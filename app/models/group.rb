@@ -338,16 +338,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def remove_letter_logo
-    false
-  end
-
-  def remove_letter_logo=(deletion_param)
-    if %w(1 yes true).include?(deletion_param.to_s.downcase)
-      letter_logo.purge_later
-    end
-  end
-
   private
 
   def layer_person_duplicates

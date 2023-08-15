@@ -44,6 +44,16 @@ module MountedAttr
       class_eval do
         has_one_attached config.attr_name
       end
+
+      define_method("remove_#{config.attr_name}") do
+        false
+      end
+
+      define_method("remove_#{config.attr_name}=") do |deletion_param|
+        if %w(1 yes true).include?(deletion_param.to_s.downcase)
+          letter_logo.purge_later
+        end
+      end
     end
 
     def define_mounted_attr_getter(config)

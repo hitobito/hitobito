@@ -26,17 +26,17 @@ ARG PRE_BUILD_SCRIPT="\
      mkdir -p vendor/wagons; \
      for wagon_dir in hitobito_*; do if [[ -d \$wagon_dir ]]; then rm -r \$wagon_dir/.git && mv \$wagon_dir vendor/wagons/; fi; done; \
      rm -rf hitobito; \
-     cp -v Wagonfile.ci Wagonfile; \
-     [[ -r WAGON_VERSIONS ]] && [[ -r Wagonfile ]] \
+     cp -v Wagonfile.production Wagonfile; \
 "
-ARG BUILD_SCRIPT="yarn install && bundle exec rake assets:precompile"
+ARG BUILD_SCRIPT="bundle exec rake assets:precompile"
 ARG POST_BUILD_SCRIPT="\
-     if [[ \"$INTEGRATION_BUILD\" == 1 ]]; then bundle exec rake tx:pull tx:wagon:pull tx:push tx:wagon:push -t; fi \
-  && echo \"(built at: $(date '+%Y-%m-%d %H:%M:%S'))\" > /app-src/BUILD_INFO; \
+     if [[ \"$INTEGRATION_BUILD\" == 1 ]]; then bundle exec rake tx:pull tx:wagon:pull tx:push tx:wagon:push -t; fi; \
+     echo \"(built at: $(date '+%Y-%m-%d %H:%M:%S'))\" > /app-src/BUILD_INFO; \
+     bundle exec bootsnap precompile app/ lib/; \
 "
 
 # Bundler specific
-ARG BUNDLE_WITHOUT="development:metrics:test"
+ARG BUNDLE_WITHOUT_GROUPS="development:metrics:test"
 
 # App specific
 ARG RAILS_ENV="production"
@@ -44,6 +44,14 @@ ARG RACK_ENV="production"
 ARG NODE_ENV="production"
 ARG RAILS_HOST_NAME="unused.example.net"
 ARG SECRET_KEY_BASE="needs-to-be-set"
+
+# Runtime ENV vars
+ARG SENTRY_CURRENT_ENV
+ARG HOME=/app-src
+ARG PS1="[\$SENTRY_CURRENT_ENV] `uname -n`:\$PWD\$ "
+ARG TZ="Europe/Zurich"
+
+# Add one of these near the end of the file
 
 # # Github specific
 # ARG GITHUB_SHA
@@ -61,18 +69,13 @@ ARG SECRET_KEY_BASE="needs-to-be-set"
 # ARG BUILD_REPO="$CI_REPOSITORY_URL"
 # ARG BUILD_REF="$CI_COMMIT_REF_NAME"
 
-# Openshift specific
-ARG OPENSHIFT_BUILD_COMMIT
-ARG OPENSHIFT_BUILD_SOURCE
-ARG OPENSHIFT_BUILD_REFERENCE
-ARG BUILD_COMMIT="$OPENSHIFT_BUILD_COMMIT"
-ARG BUILD_REPO="$OPENSHIFT_BUILD_SOURCE"
-ARG BUILD_REF="$OPENSHIFT_BUILD_REFERENCE"
-
-# Runtime ENV vars
-ARG SENTRY_CURRENT_ENV
-ARG PS1="$SENTRY_CURRENT_ENV > "
-ARG TZ="Europe/Zurich"
+# # Openshift specific
+# ARG OPENSHIFT_BUILD_COMMIT
+# ARG OPENSHIFT_BUILD_SOURCE
+# ARG OPENSHIFT_BUILD_REFERENCE
+# ARG BUILD_COMMIT="$OPENSHIFT_BUILD_COMMIT"
+# ARG BUILD_REPO="$OPENSHIFT_BUILD_SOURCE"
+# ARG BUILD_REF="$OPENSHIFT_BUILD_REFERENCE"
 
 
 #################################
@@ -82,12 +85,13 @@ ARG TZ="Europe/Zurich"
 FROM ruby:${RUBY_VERSION} AS build
 
 # arguments for steps
+ARG HOME
 ARG PRE_INSTALL_SCRIPT
 ARG BUILD_PACKAGES
 ARG INSTALL_SCRIPT
 ARG BUNDLER_VERSION
 ARG PRE_BUILD_SCRIPT
-ARG BUNDLE_WITHOUT
+ARG BUNDLE_WITHOUT_GROUPS
 ARG BUILD_SCRIPT
 ARG POST_BUILD_SCRIPT
 
@@ -115,23 +119,33 @@ RUN    export DEBIAN_FRONTEND=noninteractive \
 
 RUN bash -vxc "${INSTALL_SCRIPT:-"echo 'no INSTALL_SCRIPT provided'"}"
 
-# Install specific versions of dependencies
+# Explicitly install specific versions of bundler
+# (not required with newer bundler versions)
 RUN gem install bundler:${BUNDLER_VERSION} --no-document
 
 # TODO: Load artifacts
 
-# set up app-src directory
-COPY . /app-src
-WORKDIR /app-src
+# set up home directory
+WORKDIR $HOME
+COPY Gemfile Gemfile.lock Wagonfile.production ./
 
 RUN bash -vxc "${PRE_BUILD_SCRIPT:-"echo 'no PRE_BUILD_SCRIPT provided'"}"
 
 # install gems and build the app
 RUN    bundle config set --local deployment 'true' \
-    && bundle config set --local without ${BUNDLE_WITHOUT} \
-    && bundle package \
+    && bundle config set --local without ${BUNDLE_WITHOUT_GROUPS} \
     && bundle install \
     && bundle clean
+    # \
+    # && bundle exec bootsnap precompile --gemfile
+
+# install npms for the frontend
+COPY package.json yarn.lock ./
+# COPY .yarn ./.yarn/
+RUN yarn install --immutable
+
+# copy entire application code
+COPY . .
 
 RUN bash -vxc "${BUILD_SCRIPT:-"echo 'no BUILD_SCRIPT provided'"}"
 
@@ -143,43 +157,39 @@ RUN rm -rf vendor/cache/ .git spec/ node_modules/
 
 
 #################################
-#           Run Stage           #
+#         Run/App Stage         #
 #################################
 
 # This image will be replaced by Openshift
 FROM ruby:${RUBY_VERSION}-slim AS app
+
+# arguments for steps
+ARG RUN_PACKAGES
+ARG BUNDLER_VERSION
+ARG BUNDLE_WITHOUT_GROUPS
+
+# arguments potentially used by steps
+ARG HOME
+ARG NODE_ENV
+ARG PS1
+ARG RACK_ENV
+ARG RAILS_ENV
+ARG TZ
+
+# Set environment variables available in the image
+ENV PS1="${PS1}" \
+    TZ="${TZ}" \
+    HOME="${HOME}" \
+    PATH="${HOME}/bin:$PATH" \
+    NODE_ENV="${NODE_ENV}" \
+    RAILS_ENV="${RAILS_ENV}" \
+    RACK_ENV="${RACK_ENV}"
 
 # Set runtime shell
 SHELL ["/bin/bash", "-c"]
 
 # Add user
 RUN adduser --disabled-password --uid 1001 --gid 0 --gecos "" app
-
-# arguments for steps
-ARG RUN_PACKAGES
-ARG BUNDLER_VERSION
-ARG BUNDLE_WITHOUT
-
-# arguments potentially used by steps
-ARG NODE_ENV
-ARG RACK_ENV
-ARG RAILS_ENV
-
-# data persisted in the image
-ARG PS1
-ARG TZ
-ARG BUILD_COMMIT
-ARG BUILD_REPO
-ARG BUILD_REF
-
-ENV PS1="${PS1}" \
-    TZ="${TZ}" \
-    BUILD_REPO="${BUILD_REPO}" \
-    BUILD_REF="${BUILD_REF}" \
-    BUILD_COMMIT="${BUILD_COMMIT}" \
-    NODE_ENV="${NODE_ENV}" \
-    RAILS_ENV="${RAILS_ENV}" \
-    RACK_ENV="${RACK_ENV}"
 
 # Install dependencies, remove apt!
 RUN    export DEBIAN_FRONTEND=noninteractive \
@@ -190,26 +200,48 @@ RUN    export DEBIAN_FRONTEND=noninteractive \
     && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && truncate -s 0 /var/log/*log
 
+# TODO second step: jemalloc
+# ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+
 # Copy deployment ready source code from build
-COPY --from=build /app-src /app-src
-WORKDIR /app-src
+COPY --from=build $HOME $HOME
+WORKDIR $HOME
 
-# Set group permissions to app folder
-RUN    chgrp -R 0 /app-src \
-    && chmod -R u+w,g=u /app-src
-
-# support bin-stubs
-ENV HOME=/app-src \
-    PATH=/app-src/bin:$PATH
+# Create pids folder for puma and
+# set group permissions to folders that need write permissions.
+# Beware that docker builds on OpenShift produce different permissions
+# than local docker builds!
+RUN mkdir -p tmp/pids \
+    && chgrp 0 $HOME \
+    && chgrp -R 0 $HOME/tmp \
+    && chgrp -R 0 $HOME/log \
+    && chmod u+w,g=u $HOME \
+    && chmod -R u+w,g=u $HOME/tmp \
+    && chmod -R u+w,g=u $HOME/log
 
 # Install specific versions of dependencies
+# (not required with newer bundler versions)
 RUN gem install bundler:${BUNDLER_VERSION} --no-document
 
 # Use cached gems
 RUN    bundle config set --local deployment 'true' \
-    && bundle config set --local without ${BUNDLE_WITHOUT} \
+    && bundle config set --local without ${BUNDLE_WITHOUT_GROUPS} \
     && bundle install
 
+# These args contain build information. Also see build stage.
+# They change with each build, so only define them here for optimal layer caching.
+# Also see https://docs.docker.com/engine/reference/builder/#impact-on-build-caching
+ARG BUILD_REPO
+ARG BUILD_REF
+# ARG BUILD_DATE
+ARG BUILD_COMMIT
+
+ENV BUILD_REPO="${BUILD_REPO}" \
+    BUILD_REF="${BUILD_REF}" \
+    # BUILD_DATE="${BUILD_DATE}" \
+    BUILD_COMMIT="${BUILD_COMMIT}"
+
+# Set runtime user (although OpenShift uses a custom user per project instead)
 USER 1001
 
 CMD ["bundle", "exec", "puma", "-t", "8"]

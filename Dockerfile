@@ -9,7 +9,7 @@ ARG NODEJS_VERSION="16"
 ARG YARN_VERSION="1.22.19"
 
 # Packages
-ARG BUILD_PACKAGES="nodejs git sphinxsearch transifex-client sqlite3 libsqlite3-dev imagemagick build-essential default-libmysqlclient-dev"
+ARG BUILD_PACKAGES="nodejs git transifex-client sqlite3 libsqlite3-dev imagemagick build-essential default-libmysqlclient-dev"
 ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev default-libmysqlclient-dev"
 
 # needs to be set before the pre/post-build script, which uses the argument
@@ -31,6 +31,9 @@ ARG PRE_BUILD_SCRIPT="\
 ARG BUILD_SCRIPT="bundle exec rake assets:precompile"
 ARG POST_BUILD_SCRIPT="\
      if [[ \"$INTEGRATION_BUILD\" == 1 ]]; then bundle exec rake tx:pull tx:wagon:pull tx:push tx:wagon:push -t; fi; \
+     RAILS_DB_USERNAME=\"dummy\" \
+        bundle exec rake db:migrate wagon:migrate ts:configure \
+     && sed -i 's/\"/\`/g; s/\(  sql_\)\(host\|user\|pass\|db\)\( = \).*/\1\2\3UNSET/' config/production.sphinx.conf; \
      echo \"(built at: $(date '+%Y-%m-%d %H:%M:%S'))\" > /app-src/BUILD_INFO; \
      bundle exec bootsnap precompile app/ lib/; \
 "
@@ -153,7 +156,24 @@ RUN bash -vxc "${POST_BUILD_SCRIPT:-"echo 'no POST_BUILD_SCRIPT provided'"}"
 
 # TODO: Save artifacts
 
-RUN rm -rf vendor/cache/ .git spec/ node_modules/
+RUN rm -rf vendor/cache/ .git spec/ node_modules/ db/production.sqlite3
+
+
+#################################
+#           Sphinx image        #
+#################################
+
+FROM macbre/sphinxsearch:3.1.1 AS sphinx
+
+ARG HOME
+ENV PS1="${PS1}" \
+    TZ="${TZ}" \
+    RAILS_HOME="${HOME}"
+
+COPY --from=build $RAILS_HOME/config/production.sphinx.conf /opt/sphinx/conf/sphinx.conf
+COPY --from=build $RAILS_HOME/bin/run-sphinx /usr/local/bin/run-sphinx
+
+CMD ["/usr/local/bin/run-sphinx"]
 
 
 #################################

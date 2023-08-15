@@ -1,5 +1,7 @@
 class ConvertLargeVarcharsToText < ActiveRecord::Migration[6.0]
   def up
+    return true unless db_conn.class.to_s == 'ActiveRecord::ConnectionAdapters::Mysql2Adapter'
+
     db_conn.tables.each do |table_name|
       large_varchar_columns(table_name).each do |column|
         change_column table_name, column.name, :text,

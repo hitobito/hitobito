@@ -34,9 +34,18 @@ function scheduled_indexing {
   done
 }
 
+function pull_database_config_from_env() {
+  sed -i "s/\(  sql_host = \).*/\1$RAILS_DB_HOST/;
+          s/\(  sql_pass = \).*/\1$RAILS_DB_PASSWORD/;
+          s/\(  sql_user = \).*/\1$RAILS_DB_USERNAME/;
+          s/\(  sql_db = \).*/\1$RAILS_DB_NAME/" $SPHINX_CONFIG_PATH
+}
+
 # make sure binlog directory exists
 binlog_path=$(grep binlog_path $SPHINX_CONFIG_PATH | cut -d'=' -f2-)
 mkdir -p $binlog_path
+
+pull_database_config_from_env
 
 # start indexer and sphinx daemon
 scheduled_indexing & \

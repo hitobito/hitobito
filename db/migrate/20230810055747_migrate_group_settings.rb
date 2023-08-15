@@ -21,11 +21,16 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
   class MigrationGroupSetting < ActiveRecord::Base
     self.table_name = 'settings'
 
+    has_one_attached :picture
+    belongs_to :target, polymorphic: true
+
     serialize :value, Hash
   end
 
   class MigrationMountedAttribute < ActiveRecord::Base
     self.table_name = 'mounted_attributes'
+
+    belongs_to :entry, polymorphic: true
 
     serialize :value
   end
@@ -56,28 +61,42 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
   def migrate_settings
     MigrationGroupSetting.find_each do |setting|
       setting.value.each do |key, value|
-        MigrationMountedAttribute.create!(entry_type: Group.find(setting.target_id).type,
-                                          entry_id: setting.target_id,
-                                          key: KEY_MAPPING[key.to_sym],
-                                          value: value)
+        if key == :picture
+          attachment = setting.picture
+          attachment.name = KEY_MAPPING[key.to_sym]
+          attachment.record = setting.target
+          attachment.save!
+        else
+          MigrationMountedAttribute.create!(entry_type: setting.target_type,
+                                            entry_id: setting.target_id,
+                                            key: KEY_MAPPING[key.to_sym],
+                                            value: value)
+        end
       end
     end
   end
 
   def revert_mounted_attributes
-    relevant_group_ids = MigrationMountedAttribute.where(entry_type: Group.subclasses).pluck(:entry_id)
+    relevant_group_ids = MigrationMountedAttribute.where(entry_type: Group.sti_name).pluck(:entry_id)
     Group.where(id: relevant_group_ids).find_each do |group|
       values_for_var = { messages_letter: {}, text_message_provider: {} }
 
-      MigrationMountedAttribute.where(entry_type: group.type, entry_id: group.id).find_each do |a|
+      MigrationMountedAttribute.where(entry: group).find_each do |a|
         values_for_var[VAR_MAPPING[a.key.to_sym]][KEY_MAPPING.invert[a.key.to_sym].to_s] = a.value
       end
 
       values_for_var.each do |var, values|
-        MigrationGroupSetting.create!(target_type: Group.sti_name,
-                                      target_id: group.id,
-                                      var: var,
-                                      value: values)
+        setting = MigrationGroupSetting.create!(target_type: Group.sti_name,
+                                                target_id: group.id,
+                                                var: var,
+                                                value: values)
+
+        if group.respond_to?(:letter_logo) && group.letter_logo.attached?
+          attachment = group.letter_logo
+          attachment.name = :picture
+          attachment.record = setting
+          attachment.save!
+        end
       end
     end
   end

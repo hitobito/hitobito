@@ -270,8 +270,9 @@ select {
 }
 
 select.time {
-  width: 55px;
+  width: 80px;
   height: 30px;
+  margin: 0 4px 0 4px;
 }
 
 select[class*="span"][multiple] {

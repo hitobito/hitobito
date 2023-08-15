@@ -32,7 +32,7 @@ describe GroupsController, type: :controller do
 
     describe '#show' do
 
-      it 'has a set of links'  do
+      it 'has a set of links' do
         get :show, params: { id: groups(:bottom_layer_one).id }
         expect(response.body).to match(/Bearbeiten/)
         expect(response.body).not_to match(/Löschen/)

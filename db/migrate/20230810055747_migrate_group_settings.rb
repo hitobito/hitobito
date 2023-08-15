@@ -68,6 +68,8 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
   def migrate_settings
     MigrationGroupSetting.find_each do |setting|
       setting.value.each do |key, value|
+        next unless KEY_MAPPING.keys.include?(key)
+
         if key == :picture
           attachment = setting.picture
           attachment.name = KEY_MAPPING[key.to_sym]

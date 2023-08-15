@@ -13,16 +13,21 @@ module MountedAttr
     def mounted_attr(attr, attr_type, options = {})
       config = store.register(self, attr, attr_type, options)
 
-      define_mounted_attr_getter(config)
-      define_mounted_attr_setter(config) unless config.attr_type == :picture
+      define_mounted_entry_getter(config)
+
+      if config.attr_type == :picture
+        define_mounted_picture(config)
+      else
+        define_mounted_attr_getter(config)
+        define_mounted_attr_setter(config)
+      end
 
       define_mounted_attr_validations(config)
     end
 
     private
 
-    # rubocop:disable Metrics/MethodLength
-    def define_mounted_attr_getter(config)
+    def define_mounted_entry_getter(config)
       define_method("mounted_#{config.attr_name}") do
         (instance_variable_get("@mounted_#{config.attr_name}") ||
          instance_variable_set("@mounted_#{config.attr_name}",
@@ -33,18 +38,19 @@ module MountedAttr
                                ))
         )
       end
+    end
 
-      if config.attr_type == :picture
-        class_eval do
-          has_one_attached :letter_logo
-        end
-      else
-        define_method(config.attr_name) do
-          send("mounted_#{config.attr_name}")&.casted_value || config.default
-        end
+    def define_mounted_picture(config)
+      class_eval do
+        has_one_attached config.attr_name
       end
     end
-    # rubocop:enable Metrics/MethodLength
+
+    def define_mounted_attr_getter(config)
+      define_method(config.attr_name) do
+        send("mounted_#{config.attr_name}")&.casted_value || config.default
+      end
+    end
 
     def define_mounted_attr_setter(config)
       define_method("#{config.attr_name}=") do |value|

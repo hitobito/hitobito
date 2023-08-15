@@ -8,10 +8,10 @@
       = f.select(:contact_id,
                  @contacts.collect { |p| [p.to_s(:list), p.id] },
                  { include_blank: ta(:no_entry) },
-                 class: 'span6')
+                 class: 'col-6')
       = f.help_inline(t('groups.form.help_contact'))
     - else
-      %p.text= ta(:none_available)
+      %p.text.mt-2= ta(:none_available)
 
   - if entry.class.attr_used?(:nextcloud_url)
     = f.labeled_input_fields(:nextcloud_url)

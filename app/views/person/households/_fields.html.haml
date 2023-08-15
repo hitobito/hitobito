@@ -28,4 +28,4 @@
                             url: query_household_path(person_id: f.object.id) })
 
     - if @invalid
-      .alert.alert-error= t('.update_denied', other_person: @other_person)
+      .alert.alert-danger= t('.update_denied', other_person: @other_person)

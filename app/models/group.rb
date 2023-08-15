@@ -49,7 +49,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include Globalized
   include MountedAttr
 
-  # TODO: Only on layer
   self.mounted_attr_categories = {
     messages: [:letter_address_position,
                :letter_logo,

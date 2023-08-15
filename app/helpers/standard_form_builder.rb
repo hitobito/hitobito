@@ -269,7 +269,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
           nested_fields_for(assoc, partial_name, record_object) do |fields|
             content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
 
-            content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove')))
+            content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove'), class: 'float-end me-4'))
             content_tag(:div, content, html_options)
           end
         end
@@ -283,7 +283,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       end
     end +
     content_tag(:div, class: 'controls d-flex') do
-      options = options.to_h.merge(class: 'text col-3 text-end')
+      options = options.to_h.merge(class: 'text col-3 text-start')
       content_tag(:p, link_to_add(I18n.t('global.associations.add'), assoc, options))
     end
   end
@@ -373,7 +373,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Generates a help inline for fields
   def help_inline(text)
-    content_tag(:span, text, class: 'form-text d-inline ms-3')
+    content_tag(:span, text, class: 'form-text d-inline ms-3 mt-2')
   end
 
   # Generates a help block for fields

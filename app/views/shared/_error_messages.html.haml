@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if errors.any?
-  #error_explanation.alert.alert-error
+  #error_explanation.alert.alert-danger
     %ul
       - errors.full_messages.uniq.each do |msg|
         %li= msg

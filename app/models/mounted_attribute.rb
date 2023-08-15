@@ -9,8 +9,8 @@ class MountedAttribute < ActiveRecord::Base
   before_save :encrypt_value, if: :value_changed?
 
   def config
-    @config ||= MountedAttr::ClassMethods.store.config_for(self.entry_type.constantize,
-                                                           self.key)
+    @config ||= MountedAttr::ClassMethods.store.config_for(entry_type.constantize,
+                                                           key)
   end
 
   def casted_value
@@ -27,10 +27,12 @@ class MountedAttribute < ActiveRecord::Base
   def encrypt_value
     return unless config.attr_type.eql?(:encrypted)
 
-    self.value = EncryptionService.encrypt(self.value.to_s)
+    self.value = EncryptionService.encrypt(value.to_s)
   end
 
   def decrypted_value
+    return '' if value.blank?
+
     encrypted_value = value[:encrypted_value]
     iv = value[:iv]
     EncryptionService.decrypt(encrypted_value, iv) if encrypted_value.present?

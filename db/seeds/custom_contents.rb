@@ -348,7 +348,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: 'Anlass: E-Mail Voranmeldung',
    subject: 'Voranmeldung eingegangen',
    body: "Hallo {recipient-name}<br/><br/>" \
-         "Wir haben deine Vornameldung für die Teilnahme an folgendem Anlass erhalten:<br/><br/>" \
+         "Wir haben deine Voranmeldung für die Teilnahme an folgendem Anlass erhalten:<br/><br/>" \
          "{event-details}<br/><br/>" \
          "Deine Anmeldung ist noch nicht definitiv und muss erst noch bestätigt werden.<br/><br/>" \
          "Falls du ein Login hast, kannst du deine Anmeldung unter folgender Adresse einsehen:<br/><br/>{application-url}" },

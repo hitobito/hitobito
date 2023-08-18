@@ -18,10 +18,10 @@ class Groups::SelfInscriptionController < CrudController
     @role = build_entry
     @role.group = group
     @role.type = group.self_registration_role_type
-    @role.person = current_person
+    @role.person = person
     @role.save
     send_notification_email
-    redirect_to_group
+    redirect_with_message(notice: t('.role_saved'))
   end
 
   private
@@ -38,36 +38,25 @@ class Groups::SelfInscriptionController < CrudController
     super.presence || group_path(group, format: request.format.to_sym)
   end
 
-  def set_success_notice
-    flash[:notice] = I18n.t('devise.registrations.signed_up') #TODO eingeschrieben, nicht registriert
-  end
-
-  def redirect_to_group
-    redirect_to group_path(group)
+  def redirect_with_message(message)
+    return redirect_to group_person_path(person.default_group_id, person), message
   end
 
   def redirect_to_group_if_necessary
-    
-    binding.pry
-    #TODO: check if role already available
-    return redirect_to_group unless self_registration_active?
+    if Role.where(person: person, group: group, type: group.self_registration_role_type).present?
+      return redirect_with_message(alert: t('.role_exists'))
+    end
+
+    return redirect_with_message(alert: t('.disabled')) unless self_registration_active?
   end
-
-  # def signed_in?
-  #   current_user.present?
-  # end
-
-  # def valid?
-  #   entry.valid? && person.valid?
-  # end
 
   def group
     @group ||= Group.find(params[:group_id])
   end
 
-  # def person
-  #   @person ||= current_person #entry.person
-  # end
+  def person
+    current_person
+  end
 
   def path_args(entry)
     [group, entry]

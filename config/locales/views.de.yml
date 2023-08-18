@@ -748,8 +748,14 @@ de:
         flash:
           privacy_policy_not_accepted: Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
     self_inscription:
+      new:
+        role_exists: Du kannst nicht zweimal die gleiche Rolle in einer Gruppe haben
+        disabled: Die Selbstregistrierung ist für diese Gruppe deaktiviert
+      create:
+        role_saved: Die Rolle wurde erfolgreich gespeichert
       form:
         inscribe: Einschreiben
+        description: Hier kannst du dich für die Gruppe einschreiben.
 
   group/deleted_people:
     list:

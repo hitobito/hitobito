@@ -15,6 +15,7 @@
 <% include Webpacker::Helper %>
 <% include WebpackHelper %>
 
+
 /**
 * Variables
 */
@@ -55,6 +56,8 @@ $logoBackgroundColor: <%= Settings.application.logo.background_color %> !default
 */
 @import "~@fortawesome/fontawesome-free/css/all";
 @import "bootstrap/scss/bootstrap";
+// TODO: Fix build error for this import
+// @import "~tom-select/dist/css/tom-select.bootstrap5";
 
 /**
  * Core styles

@@ -17,6 +17,8 @@
 
     = stylesheet_pack_tag 'application', media: 'screen', 'data-turbolinks-track': true
     = stylesheet_pack_tag 'print', media: 'print'
+    -# TODO: Remove this import, import tom-select in application.scss.erb
+    = stylesheet_link_tag "https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css"
     - if Rails.env.test?
       = stylesheet_pack_tag 'disable_animations'
     = javascript_pack_tag 'application', 'data-turbolinks-track': true

@@ -6,18 +6,23 @@
 # scope for global functions
 app = window.App ||= {}
 
-app.activateChosen = (i, element) ->
-  element = $(element)
-  blank = element.find('option[value]').first().val() == ''
-  text = element.data('chosen-no-results') || ' '
-  element.chosen({
-    no_results_text: text,
-    search_contains: true,
-    allow_single_deselect: blank,
-    width: '100%' })
+app.activateTomSelect = (i, element) ->
+  new TomSelect('#' + element.id,
+    plugins: [ 'remove_button' ]
+    create: true
+    onItemAdd: ->
+      @setTextboxValue ''
+      @refreshOptions()
+      return
+    render:
+      option: (data, escape) ->
+        '<div class="d-flex"><span>' + escape(data.value) + '</span></div>'
+      item: (data, escape) ->
+        '<div>' + escape(data.value) + '</div>'
+  )
 
 # only bind events for non-document elements in turbolinks:load
 $(document).on('turbolinks:load', ->
-  # enable chosen js
-  $('.form-select').each(app.activateChosen)
+  # enable tom-select
+  $('.tom-select').each(app.activateTomSelect)
 )

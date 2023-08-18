@@ -21,6 +21,7 @@ class InvoiceListsController < CrudController
       :payment_information,
       :payment_purpose,
       :hide_total,
+      :issued_at,
       invoice_items_attributes: [
         :name,
         :description,

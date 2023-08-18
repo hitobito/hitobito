@@ -6,6 +6,8 @@
 = render 'messages/letter/fields', f: f
 = f.fields_for :invoice do |fi|
   = field_set_tag do
+    = fi.labeled_date_field(:issued_at)
+  = field_set_tag do
     = render "invoice_lists/invoice_articles", f: fi, group: parent.group
 
   = field_set_tag do

@@ -15,7 +15,8 @@ class MessagesController < CrudController
                             :pp_post, :shipping_method, :date_location_text].freeze
   PERMITTED_INVOICE_LETTER_ATTRS = [:subject, :body, :salutation, :donation_confirmation,
                                     :pp_post, :shipping_method, :date_location_text,
-                                    invoice_attributes: {
+                                    invoice_attributes: [
+                                      :issued_at,
                                       invoice_items_attributes: [
                                         :name,
                                         :description,
@@ -27,7 +28,7 @@ class MessagesController < CrudController
                                         :type,
                                         :_destroy
                                       ]
-                                    }].freeze
+                                    ]].freeze
 
   self.nesting = [Group, MailingList]
   self.remember_params += [:year]

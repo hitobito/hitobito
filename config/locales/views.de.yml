@@ -747,6 +747,9 @@ de:
         email_taken: E-Mail wird bereits verwendet. Melde dich an oder registrier dich mit einer anderen E-Mail-Adresse.
         flash:
           privacy_policy_not_accepted: Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
+    self_inscription:
+      form:
+        inscribe: Einschreiben
 
   group/deleted_people:
     list:

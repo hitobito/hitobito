@@ -1,0 +1,15 @@
+-#  Copyright (c) 2021, Efficieny-Club Bern. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+-# = entry_form(url: group_self_inscription_path, cancel_url: '', submit_label: t('.submit'), buttons_top: false) do |f|
+-#  = f.labeled :inscribe do
+-#    = f.boolean_field :inscribe
+
+<p>Form Test</p>
+
+= action_button(t('.inscribe'),
+                  group_self_inscription_path,
+                  nil,
+                  method: :post)

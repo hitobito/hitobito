@@ -130,7 +130,7 @@ module PeopleHelper
 
   def openstreetmap_url(query_params)
     URI::HTTP.build(host: 'nominatim.openstreetmap.org',
-                    path: '/search.php',
+                    path: '/ui/search.html',
                     query: query_params).to_s
   end
 

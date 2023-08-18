@@ -24,6 +24,7 @@
     "rails-erb-loader": "^5.5.2",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.49.7",
+    "tom-select": "^2.2.2",
     "trix": "^1.2.0",
     "turbolinks": "~5.0.1"
   },

@@ -21,7 +21,7 @@ class InvoicesController < CrudController
 
   self.search_columns = [:title, :sequence_number, 'people.last_name', 'people.first_name',
                          'people.email', 'people.company_name']
-  self.permitted_attrs = [:title, :description, :state, :due_at,
+  self.permitted_attrs = [:title, :description, :state, :due_at, :issued_at,
                           :recipient_id, :recipient_email, :recipient_address,
                           :payment_information, :payment_purpose, :hide_total,
                           invoice_items_attributes: [
@@ -193,7 +193,7 @@ class InvoicesController < CrudController
   def update_invoice_list_total
     entry.invoice_list&.update_total
   end
-  
+
   def year_from
     if invoice_list
       @year_from ||= invoice_list.created_at.year

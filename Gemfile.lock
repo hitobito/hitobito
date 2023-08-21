@@ -593,6 +593,9 @@ GEM
     semantic_range (3.0.0)
     sentry-raven (3.1.2)
       faraday (>= 1.0)
+    simple_xlsx_reader (5.0.0)
+      nokogiri
+      rubyzip
     simpleidn (0.2.1)
       unf (~> 0.1.4)
     sixarm_ruby_unaccent (1.2.0)
@@ -787,6 +790,7 @@ DEPENDENCIES
   seed-fu
   selenium-webdriver
   sentry-raven
+  simple_xlsx_reader
   simpleidn
   spring-commands-rspec
   sprockets (~> 3.7.2)

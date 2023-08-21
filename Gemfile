@@ -79,6 +79,7 @@ gem 'rswag', '>= 2.10.1'
 gem 'rubyzip'
 gem 'seed-fu'
 gem 'sentry-raven'
+gem 'simple_xlsx_reader' # import data from xlsx files (used in some wagons)
 gem 'simpleidn'
 gem 'sprockets', '~> 3.7.2' # pinned to older version to avoid having an empty manifest.js
 gem 'sqlite3' # required for asset generation

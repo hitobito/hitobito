@@ -259,7 +259,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def labeled_inline_fields_for(assoc, partial_name = nil, record_object = nil, required = false,
                                 &block)
-    html_options = { class: 'labeled col-md controls' }
+    html_options = { class: 'labeled col-md controls mb-3' }
     css_classes = { row: true, 'mb-2': true, required: required }
     label_classes = 'control-label col-form-label col-md-3 col-xl-2 pb-1 text-md-end'
     label_classes += ' required' if required
@@ -269,7 +269,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
           nested_fields_for(assoc, partial_name, record_object) do |fields|
             content = block_given? ? capture(fields, &block) : render(partial_name, f: fields)
 
-            content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove'), class: 'float-end me-4'))
+            content << help_inline(fields.link_to_remove(I18n.t('global.associations.remove'), class: 'float-end me-4 mt-2'))
             content_tag(:div, content, html_options)
           end
         end

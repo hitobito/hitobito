@@ -7,12 +7,12 @@
 
 
 = content_for(:filter) do
-  %div.toolbar-pills
-    %ul.nav.nav-pills.group-pills
-      %li
-        = link_to('<<', group_people_path(@group))
-      %li.active
-        = link_to(t('activerecord.models.person_duplicate.other'), group_person_duplicates_path(@group))
+  %div.toolbar-pills.mb-3
+    %ul.nav.nav-pills.group-pills.border.border-primary.rounded
+      %li.nav-item
+        = link_to('<<', group_people_path(@group), class: 'nav-link rounded-0 py-1 px-3 mr-0')
+      %li.nav-item
+        = link_to(t('activerecord.models.person_duplicate.other'), group_person_duplicates_path(@group), class: 'nav-link active rounded-0 py-1 px-3 mr-0')
 
 = paginate entries
 = person_duplicates_table(entries)

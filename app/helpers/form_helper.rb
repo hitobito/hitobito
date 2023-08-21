@@ -86,7 +86,7 @@ module FormHelper
 
   def add_another_button(form, label, options = {})
     content_tag(:div, class: 'btn-group') do
-      form.button(label, options.merge(name: :add_another, class: 'btn btn-sm btn-primary',
+      form.button(label, options.merge(name: :add_another, class: 'btn btn-sm btn-primary mt-2',
                                        data: { disable: true }))
     end
   end

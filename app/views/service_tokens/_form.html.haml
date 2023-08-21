@@ -30,6 +30,6 @@
       = render_extensions :fields, locals: { f: f }
 
   = f.labeled_inline_fields_for :cors_origins do |nested_f|
-    - nested_f.input_field(:origin, placeholder: 'https://example.org')
+    - nested_f.input_field(:origin, placeholder: 'https://example.org', class: 'd-inline ')
   = f.indented do
     = f.help_block(t('.help_cors_origins'))

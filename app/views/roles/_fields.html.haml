@@ -1,6 +1,6 @@
 - if @group_selection.present? && @group_selection.size > 1
   = f.labeled(:group_id) do
-    .span6.shown
+    .col-6.shown
       = f.select(:group_id,
                  group_options_with_level,
                  { },
@@ -12,7 +12,7 @@
   = f.hidden_field :group_id
 
 = f.labeled(:type) do
-  #role_type_select.span6
+  #role_type_select.col-6
     = render 'roles/type_select'
 
 = f.labeled_input_field(:label,
@@ -21,8 +21,8 @@
 
 = field_set_tag Role.human_attribute_name(:dates) do
   = f.labeled(:created_at) do
-    = f.date_field(:created_at, class: 'date span6', value: f(@role.start_on))
+    = f.date_field(:created_at, class: 'date col-6', value: f(@role.start_on))
   = f.labeled(:delete_on) do
-    = f.date_field(:delete_on, disabled: !can?(:destroy, @role), class: 'date span6', value: f(@role.delete_on))
+    = f.date_field(:delete_on, disabled: !can?(:destroy, @role), class: 'date col-6', value: f(@role.delete_on))
 
 = render_extensions :fields, locals: { f: f }

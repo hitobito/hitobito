@@ -5,12 +5,11 @@
 
 .row-fluid.note{id: dom_id(note), class: ('is-current-subject' unless show_subject)}
   - if show_subject
-    .note-image
-      - case note.subject
-      - when Group
-        = image_pack_tag('group.svg')
-      - when Person
-        %img{src: note.subject.picture}
+    - case note.subject
+    - when Group
+      = image_pack_tag('group.svg', class: 'note-image')
+    - when Person
+      %img.note-image{src: note.subject.picture}
 
   .note-body
     - if show_subject

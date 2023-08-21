@@ -3,8 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-#main.row-fluid
-  .span7
+#main.row
+  .col-7
     = entry_form(cancel_url: role_cancel_url, add_another: !entry.person.persisted?,
                                               add_another_url: new_group_role_path(entry.group)) do |f|
       = hidden_field_tag('return_url', params[:return_url])
@@ -22,7 +22,7 @@
         = field_set_tag Role.model_name.human do
           = render 'fields', f: f
 
-  .span5
+  .col-5
     %br/
     %br/
     #role_info

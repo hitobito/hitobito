@@ -15,7 +15,7 @@ module Messages
 
       SEND_URL = 'https://json.aspsms.com/SendSimpleTextSMS'
       DELIVERY_REPORTS_URL = 'https://json.aspsms.com/InquireDeliveryNotifications'
-      MAX_CHARS = 160
+      MAX_CHARS = 603
 
       STATUS = {
         '0' => STATUS_OK,

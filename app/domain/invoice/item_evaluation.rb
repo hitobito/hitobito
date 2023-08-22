@@ -106,38 +106,39 @@ class Invoice::ItemEvaluation
                                       cost_center: cost_center,
                                       invoice_id: relevant_invoice_ids)
 
-    amount_of_invoices = invoice_items.pluck(:invoice_id).uniq.size
-
-    # We get the total count by multiplying the count of the item with the amount of found invoices
-    invoice_items.first.count * amount_of_invoices
+    invoice_items.reduce(0) do |accumulator, invoice_item|
+      accumulator + invoice_item.count
+    end
   end
 
   def invoice_item_vats(name, account, cost_center)
     # Get the relevant invoices
     relevant_invoice_ids = relevant_payments.of_fully_paid_invoices.payments.pluck(:invoice_id)
 
-    # Search invoice item which fits the identifiers and are attached to relevant payments
-    invoice_item = InvoiceItem.find_by(name: name,
+    # Search invoice items which fits the identifiers and are attached to relevant payments
+    invoice_items = InvoiceItem.where(name: name,
                                        account: account,
                                        cost_center: cost_center,
                                        invoice_id: relevant_invoice_ids)
-
-    # Invoice items with an empty vat_rate will be 0
-    return 0 unless invoice_item.vat_rate&.nonzero?
-
-    # We get the vat by multiplying the vat_rate with the paid amount excluding vat
-    invoice_item.vat_rate / 100 * amount_paid_without_vat(name, account, cost_center)
+    invoice_items.reduce(0) do |accumulator, invoice_item|
+      if invoice_item.vat_rate == nil
+        accumulator
+      else
+        accumulator + invoice_item.vat_rate * invoice_item.cost / 100
+      end
+    end
   end
 
   def amount_paid_without_vat(name, account, cost_center)
     relevant_invoice_ids = relevant_payments.of_fully_paid_invoices.payments.pluck(:invoice_id)
 
-    invoice_item = InvoiceItem.find_by(name: name,
+    invoice_items = InvoiceItem.where(name: name,
                                        account: account,
                                        cost_center: cost_center,
                                        invoice_id: relevant_invoice_ids)
-
-    count(name, account, cost_center) * invoice_item.unit_cost
+    invoice_items.reduce(0) do |accumulator, invoice_item|
+      accumulator + invoice_item.cost
+    end
   end
 
   def invoice_article_identifiers

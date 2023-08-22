@@ -22,4 +22,6 @@
       = f.fields_for(:payment_provider_configs) do |ff|
         = render 'provider_fields', f: ff
 
+    = render_extensions 'form_tab_pane', locals: { f: f }
+
   = form_buttons(f, submit_label: nil, cancel_url: group_invoice_config_path(parent))

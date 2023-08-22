@@ -71,6 +71,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   class_attribute :superior_attributes
   self.superior_attributes = []
 
+  class_attribute :archival_validation
+  self.archival_validation = true
+
   attr_readonly :type
 
   translates :custom_self_registration_title
@@ -79,7 +82,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### CALLBACKS
 
   before_save :reset_contact_info
-  before_save :prevent_changes, if: ->(g) { g.archived? }
+  before_save :prevent_changes, if: ->(g) { Group.archival_validation && g.archived? }
   after_create :create_invoice_config, if: :layer?
 
   protect_if :root? # Root group may not be destroyed

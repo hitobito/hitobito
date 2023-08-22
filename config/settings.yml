@@ -142,6 +142,8 @@ people:
   default_sort: name
   abos: true
   totp_drift: 15
+  birth_year_only_allowed:
+    enabled: false
 
 event:
   attachments:

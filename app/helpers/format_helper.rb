@@ -70,6 +70,13 @@ module FormatHelper
     end.gsub(/\//, '_') # deal with nested models
   end
 
+  def format_person_birthday(obj)
+    if obj.birth_year_only and obj.birthday != nil
+      obj.birthday.year.to_s
+    else
+      f(obj.birthday)
+    end
+  end
 
   ##############  STANDARD HTML SECTIONS  ############################
 

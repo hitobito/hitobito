@@ -1,24 +1,35 @@
-// extends bootstrap typeahead
+.quicksearch .autoComplete_wrapper {
+  flex: 1 0;
 
-.typeahead {
-  li a {
+  .quicksearch-input {
+    height: 38px;
+  }
+}
+
+.autoComplete_wrapper ul {
+  list-style-type: none;
+  position: absolute;
+  z-index: 99;
+  background-color: white;
+  width: 250px;
+  border: 1px solid $borderColor;
+
+  li {
     border-bottom: 1px solid $borderColor;
+    padding: 5px;
+
+    mark {
+      font-weight: 900;
+      background-color: transparent;
+    }
   }
 
-  .is-highlighted {
-    font-weight: 900;
-  }
-  .typeahead-primary {
-    // display: inline;
-  }
-  .typeahead-secondary {
-    // display: inline;
-    opacity: 0.7;
-    font-size: 80%;
-  }
-  .typeahead-separator {
-    background-color: $grayLight;
-    height: 10px;
-    margin: -3px -20px;
+  li:hover {
+    background-color: #925D97;
+    color: white;
+
+    mark {
+      color: white;
+    }
   }
 }

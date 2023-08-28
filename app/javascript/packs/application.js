@@ -46,7 +46,6 @@ import 'bootstrap/js/src/scrollspy'
 import 'bootstrap/js/src/tab'
 // import 'bootstrap/js/src/toast'
 import 'bootstrap/js/src/tooltip'
-// import 'bootstrap-sass/js/bootstrap-typeahead'; // TODO replacement needed? e.g. https://github.com/TarekRaafat/autoComplete.js
 
 // UI Components
 import 'tom-select'

@@ -323,9 +323,12 @@ label.radio {
   }
 }
 
-.controls div.inline,
-.controls p.inline {
+.controls div.inline {
+  display: inline-block;
   padding-top: 5px;
+}
+
+.controls p.inline {
   display: inline-block;
 }
 

@@ -405,7 +405,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def finance_groups
     groups_with_permission(:finance).
-      flat_map(&:layer_group)
+      flat_map(&:layer_group).
+      uniq
   end
 
   def table_display_for(table_model_class)

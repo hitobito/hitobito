@@ -23,7 +23,7 @@ class Export::Pdf::Messages::Letter
         stamped :render_shipping_info
 
         pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
-        render_address(recipient.address)
+        render_address(recipient)
 
 
       end
@@ -78,9 +78,9 @@ class Export::Pdf::Messages::Letter
       [metadata[:width], metadata[:height]]
     end
 
-    def render_address(address, width: ADDRESS_BOX.first, height: ADDRESS_BOX.second)
+    def render_address(recipient, width: ADDRESS_BOX.first, height: ADDRESS_BOX.second)
       bounding_box([0, cursor], width: width, height: height) do
-        text address
+        text recipient.address
       end
     end
 

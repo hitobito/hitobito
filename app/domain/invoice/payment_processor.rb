@@ -32,7 +32,7 @@ class Invoice::PaymentProcessor
   end
 
   def alert
-    translate(:invalid, payments_with_invoice.count + payments_without_invoice.count)
+    translate(:invalid, invalid_payments.count)
   end
 
   def notice
@@ -59,6 +59,10 @@ class Invoice::PaymentProcessor
 
   def valid_payments
     @valid_payments ||= payments_with_invoice.select(&:valid?)
+  end
+
+  def invalid_payments
+    @invalid_payments ||= payments - valid_payments
   end
 
   private

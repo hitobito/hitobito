@@ -99,7 +99,9 @@ class InvoiceItem < ActiveRecord::Base
   end
 
   def vat
-    vat_rate ? cost * (vat_rate / 100) : 0
+    recalculate unless cost
+
+    vat_rate ? cost&.*((vat_rate / 100)) : 0
   end
 
   def count_or_unit_cost_changed?

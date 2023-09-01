@@ -20,10 +20,21 @@ class PublicEventsController < ApplicationController
                 :resource, # enable login-form
                 :group, :event, # enable external login
                 :can? # enable permission checks
+
   decorates :entry
   delegate :can?, to: :ability
 
+  # Allow wagons to hide application attrs
+  class_attribute :render_application_attrs
+  helper_method :render_application_attrs?
+
+  self.render_application_attrs = true
+
   private
+
+  def render_application_attrs?
+    render_application_attrs && entry.participant_types.present?
+  end
 
   def assert_external_application_possible
     session[:person_return_to] = event_url

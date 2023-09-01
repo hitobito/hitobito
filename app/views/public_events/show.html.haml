@@ -17,7 +17,7 @@
     %aside.span5
       = render 'events/attrs_contact'
 
-      - if entry.participant_types.present?
+      - if render_application_attrs?
         = render 'events/attrs_application'
 
       = render_extensions 'show_right'

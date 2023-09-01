@@ -45,9 +45,13 @@ describe PublicEventsController do
 
         it 'hides application if configured to do so' do
           controller.render_application_attrs = false
-          event.update(external_applications: false)
           get :show, params: { group_id: group.id, id: event.id }
           expect(page).not_to have_css('h2', text: 'Anmeldung')
+        end
+
+        it 'does not autofocuses anything' do
+          get :show, params: { group_id: group.id, id: event.id }
+          expect(page).not_to have_css('input[autofocus]')
         end
       end
     end

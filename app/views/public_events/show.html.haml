@@ -30,7 +30,7 @@
   .row-fluid
     %article.span6
       %h3= t('event.register.index.login')
-      = render 'devise/sessions/form'
+      = render 'devise/sessions/form', autofocus_email: false
 
     %article.span6
       %h3= t('event.register.index.no_login')

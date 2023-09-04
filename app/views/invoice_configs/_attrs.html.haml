@@ -19,6 +19,7 @@
   = labeled(captionize(:payment_slip, object_class(entry)), entry.payment_slip_label)
   = labeled_attr(entry, :iban)
 
+= render_extensions(:attrs)
 
 %h2= PaymentReminder.model_name.human(count: 2)
 = table(entry.payment_reminder_configs, class: 'table table-striped table-hover') do |t|

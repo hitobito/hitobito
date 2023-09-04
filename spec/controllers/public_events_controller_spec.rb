@@ -32,6 +32,28 @@ describe PublicEventsController do
 
         is_expected.to redirect_to(new_person_session_path)
       end
+
+      describe 'with views' do
+        render_views
+        let(:page) { Capybara::Node::Simple.new(response.body) }
+        before { event.update(external_applications: true) }
+
+        it 'renders application attrs' do
+          get :show, params: { group_id: group.id, id: event.id }
+          expect(page).to have_css('h2', text: 'Anmeldung')
+        end
+
+        it 'hides application if configured to do so' do
+          controller.render_application_attrs = false
+          get :show, params: { group_id: group.id, id: event.id }
+          expect(page).not_to have_css('h2', text: 'Anmeldung')
+        end
+
+        it 'does not autofocuses anything' do
+          get :show, params: { group_id: group.id, id: event.id }
+          expect(page).not_to have_css('input[autofocus]')
+        end
+      end
     end
   end
 end

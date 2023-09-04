@@ -17,7 +17,7 @@
     %aside.span5
       = render 'events/attrs_contact'
 
-      - if entry.participant_types.present?
+      - if render_application_attrs?
         = render 'events/attrs_application'
 
       = render_extensions 'show_right'
@@ -30,7 +30,7 @@
   .row-fluid
     %article.span6
       %h3= t('event.register.index.login')
-      = render 'devise/sessions/form'
+      = render 'devise/sessions/form', autofocus_email: false
 
     %article.span6
       %h3= t('event.register.index.no_login')

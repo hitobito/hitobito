@@ -37,7 +37,6 @@ RUN \
     chgrp -R 0 ./ && \
     chmod -R g+rw ./ && \
     find ./ -type d -exec chmod g+x {} + && \
-    find ./ -iname 'robots.txt' -exec chmod g+w {} + && \
     chown -R 1001:0 ./ && \
     yum install ImageMagick ImageMagick-devel -y && \
     yum install cacerts ca-certificates -y && update-ca-trust && \

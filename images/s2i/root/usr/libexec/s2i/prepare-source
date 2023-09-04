@@ -34,6 +34,8 @@ cp /opt/shared/Wagonfile .
 rm -rf hitobito
 rm -r .git
 
+find ./ -iname 'robots.txt' -exec chmod g+w {} +
+
 # TODO: Investigate. This seems ugly and is a hack to prevent assemble from failing with
 #
 #     You are trying to install in deployment mode after changing

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_03_102244) do
+ActiveRecord::Schema.define(version: 2023_08_10_055747) do
 
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -993,18 +993,6 @@ ActiveRecord::Schema.define(version: 2023_08_03_102244) do
     t.datetime "updated_at"
     t.index ["session_id"], name: "index_sessions_on_session_id"
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
-  end
-
-  create_table "settings", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "var", null: false
-    t.text "value"
-    t.string "target_type", null: false
-    t.bigint "target_id", null: false
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
-    t.string "picture"
-    t.index ["target_type", "target_id", "var"], name: "index_settings_on_target_type_and_target_id_and_var", unique: true
-    t.index ["target_type", "target_id"], name: "index_settings_on_target_type_and_target_id"
   end
 
   create_table "social_accounts", id: :integer, charset: "utf8mb4", force: :cascade do |t|

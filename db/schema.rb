@@ -431,6 +431,11 @@ ActiveRecord::Schema.define(version: 2023_08_10_055747) do
     t.string "privacy_policy"
     t.string "nextcloud_url"
     t.boolean "main_self_registration_group", default: false, null: false
+    t.string "text_message_username"
+    t.string "text_message_password"
+    t.string "text_message_provider"
+    t.string "text_message_originator"
+    t.string "letter_address_position"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
@@ -993,6 +998,18 @@ ActiveRecord::Schema.define(version: 2023_08_10_055747) do
     t.datetime "updated_at"
     t.index ["session_id"], name: "index_sessions_on_session_id"
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
+  end
+
+  create_table "settings", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "var", null: false
+    t.text "value"
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
+    t.string "picture"
+    t.index ["target_type", "target_id", "var"], name: "index_settings_on_target_type_and_target_id_and_var", unique: true
+    t.index ["target_type", "target_id"], name: "index_settings_on_target_type_and_target_id"
   end
 
   create_table "social_accounts", id: :integer, charset: "utf8mb4", force: :cascade do |t|

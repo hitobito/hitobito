@@ -34,79 +34,110 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
     serialize :value, Hash
   end
 
-  class MigrationMountedAttribute < ActiveRecord::Base
-    self.table_name = 'mounted_attributes'
-
-    belongs_to :entry, polymorphic: true
-
-    serialize :value
-  end
-
   def up
-    say_with_time('migrate group settings to mounted attributes') do
-      migrate_settings
-      drop_table(:settings)
+    say_with_time('create group attributes') do
+      add_column :groups, :encrypted_text_message_username, :string
+      add_column :groups, :encrypted_text_message_password, :string
+      add_column :groups, :text_message_provider, :string, null: false, default: 'aspsms'
+      add_column :groups, :text_message_originator, :string
+      add_column :groups, :letter_address_position, :string, null: false, default: 'left'
+
+      Group.reset_column_information
     end
+
+
+    say_with_time('migrate group settings to group attributes') do
+      migrate_settings
+    end
+
   end
 
   def down
-    create_table :settings do |t|
-      t.string     :var, null: false
-      t.text       :value
-      t.references :target, null: false, polymorphic: true
-      t.timestamps null: true
-    end
-    add_index :settings, [:target_type, :target_id, :var], unique: true
-
     say_with_time('revert mounted attributes to group settings') do
       revert_mounted_attributes
     end
+
+    say_with_time('remove group attributes') do
+      remove_column :groups, :encrypted_text_message_username
+      remove_column :groups, :encrypted_text_message_password
+      remove_column :groups, :text_message_provider
+      remove_column :groups, :text_message_originator
+      remove_column :groups, :letter_address_position
+    end
+
+    Group.reset_column_information
   end
 
   private
 
   def migrate_settings
     MigrationGroupSetting.find_each do |setting|
-      setting.value.each do |key, value|
-        next unless KEY_MAPPING.keys.include?(key)
+      group = setting.target if setting.target_type == 'Group'
 
-        if key == :picture
+      next unless group
+
+      setting.value.each do |key, value|
+        case key
+        when :encrypted_username
+          group.encrypted_text_message_username = value
+        when :encrypted_password
+          group.encrypted_text_message_password = value
+        when :provider
+          group.text_message_provider = value
+        when :originator
+          group.text_message_originator = value
+        when :address_position
+          group.letter_address_position = value
+        when :picture
           attachment = setting.picture
-          attachment.name = KEY_MAPPING[key.to_sym]
+          attachment.name = :'letter_logo'
           attachment.record = setting.target
           attachment.save!
-        else
-          MigrationMountedAttribute.create!(entry_type: setting.target_type,
-                                            entry_id: setting.target_id,
-                                            key: KEY_MAPPING[key.to_sym],
-                                            value: value)
         end
+
+        group.save(validate: false)
       end
     end
   end
 
   def revert_mounted_attributes
-    relevant_group_ids = MigrationMountedAttribute.where(entry_type: Group.sti_name).pluck(:entry_id)
+    relevant_group_ids = Group.where('encrypted_text_message_username IS NOT NULL OR ' \
+                                     'encrypted_text_message_password IS NOT NULL OR ' \
+                                     'text_message_provider IS NOT NULL OR ' \
+                                     'text_message_originator IS NOT NULL OR ' \
+                                     'letter_address_position IS NOT NULL').pluck(:id)
     Group.where(id: relevant_group_ids).find_each do |group|
-      values_for_var = { messages_letter: {}, text_message_provider: {} }
-
-      MigrationMountedAttribute.where(entry: group).find_each do |a|
-        values_for_var[VAR_MAPPING[a.key.to_sym]][KEY_MAPPING.invert[a.key.to_sym].to_s] = a.value
-      end
+      values_for_var = {
+        messages_letter: {
+          address_position: group.letter_address_position,
+        },
+        text_message_provider: {
+          encrypted_username: group.encrypted_text_message_username,
+          encrypted_password: group.encrypted_text_message_password,
+          provider: group.text_message_provider,
+          originator: group.text_message_originator
+        }
+      }
 
       values_for_var.each do |var, values|
-        setting = MigrationGroupSetting.create!(target_type: Group.sti_name,
-                                                target_id: group.id,
-                                                var: var,
-                                                value: values)
+        if values.values.any?(&:present?)
+          setting = MigrationGroupSetting.find_or_create_by(target_type: 'Group',
+                                                            target_id: group.id,
+                                                            var: var)
+          setting.value.merge!(values)
 
-        if group.respond_to?(:letter_logo) && group.letter_logo.attached?
-          attachment = group.letter_logo
-          attachment.name = :picture
-          attachment.record = setting
-          attachment.save!
+          setting.save(validate: false)
         end
       end
+    end
+
+    ActiveStorage::Attachment.where(name: 'letter_logo', record_type: 'Group').find_each do |attachment|
+      setting = MigrationGroupSetting.find_or_create_by!(target_type: 'Group',
+                                                         target_id: attachment.record_id,
+                                                         var: :messages_letter)
+      attachment.name = :picture
+      attachment.record = setting
+      attachment.save!
     end
   end
 end

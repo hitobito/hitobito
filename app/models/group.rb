@@ -48,29 +48,18 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include ValidatedEmail
   include Globalized
   include MountedAttr
-
-  self.mounted_attr_categories = {
-    messages: [:letter_address_position,
-               :letter_logo,
-               :text_message_username,
-               :text_message_password,
-               :text_message_provider,
-               :text_message_originator]
-  }
+  include Encryptable
+  include I18nEnums
 
   PROVIDER_VALUES = %w(aspsms).freeze
   ADDRESS_POSITION_VALUES = %w(left right).freeze
+  has_one_attached :letter_logo
 
-  mounted_attr :text_message_username, :encrypted
-  mounted_attr :text_message_password, :encrypted
-  mounted_attr :text_message_provider, :string, enum: PROVIDER_VALUES,
-                                                default: PROVIDER_VALUES.first
-  mounted_attr :text_message_originator, :string
+  serialize :encrypted_text_message_username
+  serialize :encrypted_text_message_password
 
-  # mount_uploader :carrierwave_letter_logo, GroupSetting::LogoUploader, mount_on: 'letter_logo'
-  mounted_attr :letter_logo, :picture
-  mounted_attr :letter_address_position, :string, enum: ADDRESS_POSITION_VALUES,
-                                           default: ADDRESS_POSITION_VALUES.first
+  i18n_enum :letter_address_position, ADDRESS_POSITION_VALUES, scopes: false, queries: false
+  attr_encrypted :text_message_username, :text_message_password
 
   acts_as_paranoid
   extend Paranoia::RegularScope
@@ -163,6 +152,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :contact, inclusion: { in: ->(group) { group.people.members } }, allow_nil: true
   validates :privacy_policy_title, length: { allow_nil: true, maximum: 64 }
   validates :self_registration_role_type, presence: { if: :main_self_registration_group? }
+
+  validates :text_message_provider, inclusion: { in: PROVIDER_VALUES }, allow_nil: false
+  validates :letter_address_position, inclusion: { in: ADDRESS_POSITION_VALUES }, allow_nil: false
 
   validate :assert_valid_self_registration_notification_email
 

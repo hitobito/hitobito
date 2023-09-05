@@ -51,7 +51,7 @@
 
 Fabricator(:event) do
   name { 'Eventus' }
-  groups { [Group.all_types.first.first] }
+  groups { [Group.all_types.detect { |t| t.event_types.include?(Event) }.first] }
   before_validation do |event|
     event.dates.build(start_at: Time.zone.local(2012, 5, 11)) if event.dates.empty?
   end

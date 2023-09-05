@@ -16,6 +16,7 @@
       = form_for(entry.tags.new, url: group_person_tags_path(@group, entry), remote: true,
                  html: {class: 'person-tags-add-form', style: 'display:none'}) do |f|
         = f.text_field(:name, placeholder: t('.add_tag'),
+                                  class: 'form-control form-control-sm',
                                   data: { provide: 'entity',
                                           url: group_person_tags_query_path(group_id: @group.id,
                                                                             person_id: entry.id) })

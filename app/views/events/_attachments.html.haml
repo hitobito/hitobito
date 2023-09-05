@@ -6,7 +6,7 @@
 - if can?(:update, entry) || entry.attachments.exists?
   %dl.dl-horizontal
     = labeled(Event::Attachment.model_name.human(count: 2)) do
-      %ul.unstyled#attachments
+      %ul.list-unstyled#attachments
         - entry.attachments.list.each do |a|
           = render a
 

@@ -3,12 +3,12 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-#main.row-fluid
-  .span5
+#main.row-fluid.row
+  .col-5
     = standard_form(:payment_process, url: group_payment_process_path(group), builder: PlainObjectFormBuilder) do |f|
       = form_buttons(f, submit_label: t('.upload_button'), cancel_url: group_invoices_path(group))
       = f.labeled(:file, t('.xml_file')) do
-        = f.file_field(:file)
-  .span7
+        = f.file_field(:file, class: 'form-control form-control-sm')
+  .col-7
     .well.help
       = render 'description'

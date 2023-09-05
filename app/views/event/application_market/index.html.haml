@@ -6,7 +6,7 @@
 -title event.to_s
 
 .row-fluid
-  .btn-toolbar.span9
+  .btn-toolbar.col-9
     - if can?(:new, @event.participations.new)
       = Dropdown::Event::ParticipantAdd.new(self,
                                             @group,
@@ -15,11 +15,11 @@
                                             :plus,
                                             for_someone_else: true)
 
-  .span3
+  .col-3
     %span#booking_info= event.booking_info
 
 #main.row-fluid
-  %article.span6
+  %article.col-6
     %h2= t('.assigned_participants')
     %p{style: 'padding-top: 7px; margin-bottom: 25px;'}
       %span#active_participants_info= event.active_participants_info
@@ -31,7 +31,7 @@
             = render 'participant', p: p
 
 
-  %article.span6
+  %article.col-6
     %h2= Event::Application.label_plural
     .pending_applications_info
       %span= "#{@applications.count} #{Event::Application.label(count: @applications.count)}"

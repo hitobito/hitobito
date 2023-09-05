@@ -86,6 +86,12 @@ dl {
     border-bottom: 1px solid $borderColor;
     margin-bottom: $vSpace;
   }
+
+  dt {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 .dl-borderless, .dl-borderless:last-child {
   border: 0;

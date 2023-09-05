@@ -2,9 +2,10 @@
   = f.labeled_input_field :name
 
   = f.labeled_text_area :redirect_uri, rows: 5,
-    help: raw(t('.help_native_redirect_uris', native_redirect_uri: Doorkeeper.configuration.native_redirect_uri))
+    help: raw(t('.help_native_redirect_uris', native_redirect_uri: Doorkeeper.configuration.native_redirect_uri)),
+    class: 'col-6 form-control form-control-sm'
 
-  = f.labeled :scopes do
+  = f.labeled :scopes, class: 'mt-2' do
     - Doorkeeper.configuration.scopes.each do |scope|
       = f.label("scope_#{scope}", class: 'checkbox') do
         = check_box_tag("oauth_application[scopes][]",
@@ -14,14 +15,14 @@
         = format_doorkeeper_application_scope(scope).html_safe
 
   = field_set_tag do
-    = f.labeled :logo do
-      = f.file_field :logo, type: :file, accept: Oauth::LogoUploader.accept_extensions
+    = f.labeled :logo, class: 'mt-1' do
+      = f.file_field :logo, type: :file, accept: Oauth::LogoUploader.accept_extensions, class: 'form-control form-control-sm'
 
     - if upload_exists?(entry, :logo)
       = f.labeled :remove_logo do
         = f.boolean_field :remove_logo
 
   = f.labeled_inline_fields_for :cors_origins do |nested_f|
-    - nested_f.input_field(:origin, placeholder: 'https://example.org')
+    - nested_f.input_field(:origin, placeholder: 'https://example.org', class: 'd-inline ')
   = f.indented do
-    = f.help_block(t('.help_cors_origins'))
+    = f.help_block(t('.help_cors_origins'), class: 'd-inline ')

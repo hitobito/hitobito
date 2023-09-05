@@ -95,6 +95,7 @@ describe MigrateGroupSettings do
       migration.up
 
       layers.each do |group|
+        group.reload
         expect(group.text_message_username).to be_present
         expect(group.text_message_username).to eq('bla')
       end
@@ -103,6 +104,7 @@ describe MigrateGroupSettings do
     it 'migrates regular settings' do
       group_settings.each do |s|
         value = s.value[:originator]
+
         expect(value).to be_present
         expect(value).to eq('bla')
       end
@@ -110,6 +112,7 @@ describe MigrateGroupSettings do
       migration.up
 
       layers.each do |group|
+        group.reload
         expect(group.text_message_originator).to be_present
         expect(group.text_message_originator).to eq('bla')
       end
@@ -119,11 +122,6 @@ describe MigrateGroupSettings do
   context '#down' do
     let!(:picture_groups) do
       layers.map do |group|
-        MigrateGroupSettings::MigrationMountedAttribute.create!({
-          entry: group,
-          key: :letter_logo
-        })
-
         group.letter_logo.attach(
           io: File.open('spec/fixtures/files/images/logo.png'),
           filename: 'logo.png'
@@ -135,30 +133,25 @@ describe MigrateGroupSettings do
       end
     end
 
-    let!(:encrypted_mounted_attrs) do
+    let!(:encrypted_layers) do
       layers.map do |group|
-        encrypted = EncryptionService.encrypt('bla')
-        MigrateGroupSettings::MigrationMountedAttribute.create!({
-          entry: group,
-          key: :text_message_username,
-          value: encrypted
-        })
+        group.text_message_username = 'bla'
+        group.save!
+        group
       end
     end
 
-    let!(:regular_mounted_attrs) do
+    let!(:regular_layers) do
       layers.map do |group|
-        MigrateGroupSettings::MigrationMountedAttribute.create!({
-          entry: group,
-          key: :text_message_originator,
-          value: 'bla'
-        })
+        group.text_message_originator = 'bla'
+        group.save!
+        group
       end
     end
 
     after do
       migration.up
-      MigrateGroupSettings::MigrationMountedAttribute.delete_all
+      MigrateGroupSettings::MigrationGroupSetting.delete_all
     end
 
     it 'migrates picture attr' do
@@ -173,14 +166,14 @@ describe MigrateGroupSettings do
         expect(group.letter_logo).to_not be_attached
 
         setting = MigrateGroupSettings::MigrationGroupSetting.find_by(target: group,
-                                                                      var: :text_message_provider)
+                                                                      var: :messages_letter)
         expect(setting.picture).to be_attached
       end
     end
 
     it 'migrates encrypted settings' do
-      encrypted_mounted_attrs.each do |a|
-        encrypted = a.value
+      encrypted_layers.each do |a|
+        encrypted = a.encrypted_text_message_username
         expect(encrypted).to be_present
         expect(EncryptionService.decrypt(encrypted[:encrypted_value], encrypted[:iv])).to eq('bla')
       end
@@ -190,16 +183,16 @@ describe MigrateGroupSettings do
       layers.each do |group|
         setting = MigrateGroupSettings::MigrationGroupSetting.find_by(target: group,
                                                                       var: :text_message_provider)
-        encrypted = setting.value['encrypted_username']
+        encrypted = setting.value[:encrypted_username]
         expect(encrypted).to be_present
         expect(EncryptionService.decrypt(encrypted[:encrypted_value], encrypted[:iv])).to eq('bla')
       end
     end
 
     it 'migrates regular settings' do
-      regular_mounted_attrs.each do |a|
-        expect(a.value).to be_present
-        expect(a.value).to eq('bla')
+      regular_layers.each do |a|
+        expect(a.text_message_originator).to be_present
+        expect(a.text_message_originator).to eq('bla')
       end
 
       migration.down
@@ -207,8 +200,8 @@ describe MigrateGroupSettings do
       layers.each do |group|
         setting = MigrateGroupSettings::MigrationGroupSetting.find_by(target: group,
                                                                       var: :text_message_provider)
-        expect(setting.value['originator']).to be_present
-        expect(setting.value['originator']).to eq('bla')
+        expect(setting.value[:originator]).to be_present
+        expect(setting.value[:originator]).to eq('bla')
       end
     end
   end

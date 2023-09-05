@@ -20,7 +20,7 @@ module UtilityHelper
   def flash_class(level)
     case level
     when :notice then 'success'
-    when :alert then 'error'
+    when :alert then 'danger'
     else level.to_s
     end
   end

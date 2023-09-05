@@ -22,7 +22,7 @@ module InvoicesHelper
            when /draft|cancelled/ then 'info'
            when /sent|issued/ then 'warning'
            when /payed/ then 'success'
-           when /reminded/ then 'important'
+           when /reminded/ then 'danger'
            end
     badge(invoice_state_label(invoice), type)
   end

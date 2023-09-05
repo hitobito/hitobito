@@ -47,13 +47,14 @@
       events: {
         input: {
           selection: (event) => {
-            var selection = event.detail.selection.value.label;
+            var selection = event.detail.selection.value;
             if (event.target.id === "quicksearch") {
               var urlKey = event.detail.selection.value.type + "Url"
               window.location = event.target.dataset[urlKey] + '/' + event.detail.selection.value.id;
-              autoCompleteInput.input.value = selection + " wird geöffnet..."
+              autoCompleteInput.input.value = selection.label + " wird geöffnet..."
             } else {
-              autoCompleteInput.input.value = selection;
+              autoCompleteInput.input.value = selection.label;
+              document.getElementById(autoCompleteInput.input.dataset.idField).value = selection.id;
             }
           }
         }

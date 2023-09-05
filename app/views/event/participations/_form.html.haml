@@ -30,7 +30,7 @@
     = f.fields_for(:answers, @answers.select(&:admin?)) do |fans|
       = render 'event/answers/fields', f: fans
 
-  = f.labeled_text_area(:additional_information)
+  = f.labeled_text_area(:additional_information, class: 'form-control form-control-sm')
 
   - if entry.application && entry.new_record?
     = render 'application_fields', f: f

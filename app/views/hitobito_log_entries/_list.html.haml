@@ -12,7 +12,7 @@
     = direct_filter_date(:to_date, t('.to'), value: params[:to_date], data: { submit: true })
     = direct_filter_time(:to_time, '', value: params[:to_time], data: { submit: true })
 
-.hitobito-log
+.hitobito-log.mt-3
   = paginate entries
 
   = list_table do |t|

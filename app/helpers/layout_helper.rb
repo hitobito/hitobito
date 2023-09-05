@@ -56,7 +56,7 @@ module LayoutHelper
   end
 
   def badge(label, type = nil, tooltip = nil)
-    options = { class: "badge badge-#{type || 'default'}" }
+    options = { class: "badge bg-#{type || 'default'}" }
     if tooltip.present?
       options.merge!(rel: :tooltip, title: tooltip)
     end
@@ -149,7 +149,7 @@ module LayoutHelper
 
   def disabled_button(label, disabled_msg, icon_name = nil, options = {})
     content_tag(:div, title: disabled_msg) do
-      content_tag(:a, class: 'btn disabled', **options) do
+      content_tag(:a, class: 'btn btn-sm disabled', **options) do
         button_content(label, icon_name)
       end
     end

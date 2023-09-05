@@ -7,7 +7,7 @@
 app = window.App ||= {}
 
 app.activateTomSelect = (i, element) ->
-  new TomSelect('#' + element.id,
+  app.tomSelect = new TomSelect('#' + element.id,
     plugins: [ 'remove_button' ]
     create: true
     onItemAdd: ->
@@ -16,13 +16,24 @@ app.activateTomSelect = (i, element) ->
       return
     render:
       option: (data, escape) ->
-        '<div class="d-flex"><span>' + escape(data.value) + '</span></div>'
+        '<div class="d-flex"><span>' + escape(data.text) + '</span></div>'
       item: (data, escape) ->
-        '<div>' + escape(data.value) + '</div>'
+        '<div>' + escape(data.text) + '</div>'
   )
 
 # only bind events for non-document elements in turbolinks:load
 $(document).on('turbolinks:load', ->
   # enable tom-select
   $('.tom-select').each(app.activateTomSelect)
+
+  $('#group-filter-clear').on('click', ->
+    app.tomSelect.clear();
+  )
+
+  $('#group-filter-add').on('click', ->
+    app.tomSelect.add();
+  )
+
+
+
 )

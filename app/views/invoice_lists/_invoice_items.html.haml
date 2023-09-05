@@ -3,18 +3,26 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.input_field(:name, class: 'span2', placeholder: InvoiceItem.human_attribute_name(:name), readonly: f.object.dynamic)
-= f.input_field(:description, class: 'span2', rows: 1, placeholder: InvoiceItem.human_attribute_name(:description))
-= f.input_field(:cost_center, class: 'span2', data: { provide: :typeahead, source: InvoiceArticle.cost_centers }, placeholder: InvoiceItem.human_attribute_name(:cost_center) )
-= f.input_field(:account,  class: 'span2',  data: { provide: :typeahead, source: InvoiceArticle.accounts }, placeholder: InvoiceItem.human_attribute_name(:account) )
-= f.input_field(:vat_rate, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:vat_rate))
-= f.hidden_field(:type)
-- if f.object.dynamic?
-  = f.hidden_field(:unit_cost, value: 0)
-  = f.hidden_field(:count, value: 1)
-  = f.fields_for :dynamic_cost_parameters, invoice_item_dynamic_cost_parameter_object(f.object) do |ff|
-    - f.object.dynamic_cost_parameter_definitions.keys.each do |attr|
-      %span.span2=ff.input_field(attr, placeholder: InvoiceItem.human_attribute_name(attr))
-- else
-  = f.input_field(:unit_cost, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:unit_cost))
-  = f.input_field(:count, class: 'span1', data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:count))
+%div.row
+  %div.col-2
+    = f.input_field(:name, placeholder: InvoiceItem.human_attribute_name(:name), readonly: f.object.dynamic)
+  %div.col-2
+    = f.input_field(:description, rows: 1, placeholder: InvoiceItem.human_attribute_name(:description))
+  %div.col-2
+    = f.input_field(:cost_center, data: { provide: :typeahead, source: InvoiceArticle.cost_centers }, placeholder: InvoiceItem.human_attribute_name(:cost_center) )
+  %div.col-2
+    = f.input_field(:account,  data: { provide: :typeahead, source: InvoiceArticle.accounts }, placeholder: InvoiceItem.human_attribute_name(:account) )
+  %div.col-1
+    = f.input_field(:vat_rate, data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:vat_rate))
+  = f.hidden_field(:type)
+  - if f.object.dynamic?
+    = f.hidden_field(:unit_cost, value: 0)
+    = f.hidden_field(:count, value: 1)
+    = f.fields_for :dynamic_cost_parameters, invoice_item_dynamic_cost_parameter_object(f.object) do |ff|
+      - f.object.dynamic_cost_parameter_definitions.keys.each do |attr|
+        %span.col-2=ff.input_field(attr, placeholder: InvoiceItem.human_attribute_name(attr))
+  - else
+    %div.col-1
+      = f.input_field(:unit_cost, data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:unit_cost))
+    %div.col-1
+      = f.input_field(:count, data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:count))

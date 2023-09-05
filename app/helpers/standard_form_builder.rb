@@ -173,7 +173,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def inline_radio_button(attr, value, caption, inline = true, html_options = {})
-    label(id_from_value(attr, value), class: "radio#{' inline' if inline}") do
+    label(id_from_value(attr, value), class: "radio#{' inline' if inline} mt-2") do
       radio_button(attr, value, html_options) + ' ' +
       caption
     end

@@ -314,7 +314,7 @@ describe Export::Pdf::Messages::Letter::Header do
       io: File.open('spec/fixtures/files/images/logo.png'),
       filename: 'logo.png'
     )
-    group.save!
+    group.mounted_letter_logo.save!
 
     group.id
   end

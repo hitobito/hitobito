@@ -23,10 +23,10 @@ module MountedAttr
 
       if config.attr_type == :picture
         define_mounted_picture(config)
-      else
-        define_mounted_attr_getter(config)
-        define_mounted_attr_setter(config)
       end
+
+      define_mounted_attr_getter(config)
+      define_mounted_attr_setter(config)
 
       define_mounted_attr_validations(config)
     end
@@ -37,7 +37,7 @@ module MountedAttr
       define_method("mounted_#{config.attr_name}") do
         (instance_variable_get("@mounted_#{config.attr_name}") ||
          instance_variable_set("@mounted_#{config.attr_name}",
-                               MountedAttribute.find_or_initialize_by(
+                               config.mounted_attribute_class.find_or_initialize_by(
                                  entry_id: self.id,
                                  entry_type: config.target_class,
                                  key: config.attr_name
@@ -47,17 +47,13 @@ module MountedAttr
     end
 
     def define_mounted_picture(config)
-      class_eval do
-        has_one_attached config.attr_name
-      end
-
       define_method("remove_#{config.attr_name}") do
         false
       end
 
       define_method("remove_#{config.attr_name}=") do |deletion_param|
         if %w(1 yes true).include?(deletion_param.to_s.downcase)
-          letter_logo.purge_later
+          send(config.attr_name).purge_later
         end
       end
     end
@@ -70,13 +66,17 @@ module MountedAttr
 
     def define_mounted_attr_setter(config)
       define_method("#{config.attr_name}=") do |value|
-        return if value.empty?
+        return if value.blank?
 
         entry = send("mounted_#{config.attr_name}") ||
-                       MountedAttribute.new(entry_id: self.id,
-                                            entry_type: config.target_class,
-                                            key: config.attr_name)
-        entry.value = value.to_s
+          config.mounted_attribute_class.new(entry_id: self.id,
+                                             entry_type: config.target_class,
+                                             key: config.attr_name)
+        entry.value = if config.attr_type == :picture
+                        value
+                      else
+                        value.to_s
+                      end
         entry.save!
 
         value

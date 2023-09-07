@@ -129,7 +129,6 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'rspec-its'
-  gem 'selenium-webdriver'
   gem 'webdrivers'
   gem 'webmock'
 end

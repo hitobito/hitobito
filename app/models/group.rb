@@ -50,6 +50,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   acts_as_paranoid
   extend Paranoia::RegularScope
+  has_paper_trail meta: { main_id: ->(g) { g.id }, main_type: sti_name },
+                  skip: [:lft, :rgt, :layer_group_id, :deleter_id, :require_person_add_requests,
+                         :updated_at, :updater_id]
 
   mount_uploader :carrierwave_logo, Group::LogoUploader, mount_on: 'logo'
   has_one_attached :logo

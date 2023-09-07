@@ -14,15 +14,26 @@ class Group::LogController < ApplicationController
   decorates :group, :versions
 
   def index
-    @versions = PaperTrail::Version.distinct
+    @versions = PaperTrail::Version.where(id: people_versions)
+                                   .or(PaperTrail::Version.where(id: group_versions))
                                    .left_joins(:role)
-                                   .where(version_conditions)
-                                   .reorder('created_at DESC, id DESC')
                                    .includes(:item)
+                                   .reorder('created_at DESC, id DESC')
                                    .page(params[:page])
   end
 
   private
+
+  def group_versions
+    @group_versions ||= PaperTrail::Version.distinct
+                                           .where(main_type: Group.sti_name)
+                                           .where(main_id: entry.id)
+  end
+
+  def people_versions
+    @people_versions ||= PaperTrail::Version.distinct
+                                            .where(version_conditions)
+  end
 
   def version_conditions
     base_conditions.and(

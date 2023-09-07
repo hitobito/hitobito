@@ -12,31 +12,39 @@ describe InvoiceLists::DestroysController, js: true do
 
   let(:draft_invoices) do
     [0..10].map do
-      Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader), state: :draft, recipient: people(:bottom_member), group: layer)
+      Fabricate(:invoice, {
+        due_at: 10.days.from_now,
+        creator: people(:top_leader),
+        state: :draft,
+        recipient: people(:bottom_member),
+        group: layer
+      })
     end
   end
 
-  let!(:invoice_list) { InvoiceList.create(title: 'membership fee', invoices: draft_invoices, group: layer) }
+  let!(:invoice_list) do
+    InvoiceList.create(title: 'membership fee', invoices: draft_invoices, group: layer)
+  end
 
   let(:user) { people(:top_leader) }
+  let(:table) { page.all('table')[0] }
+  let(:modal) { page.find('#invoice-list-destroy') }
+  let(:destroy_link) { table.find('td a[title="Löschen"]') }
+
   before { sign_in(user) }
 
   context 'for invoice list with only draft invoices' do
     it 'shows modal with confirm text' do
       visit group_invoice_lists_path(layer)
 
-      table = page.all('table')[0]
-
       expect(table).to have_content(/membership fee/)
-      table.find('td a[title="Löschen"]').click
-
+      destroy_link.click
       expect(page).to have_text(/Wollen Sie die Sammelrechnung wirklich löschen?/)
-
-      modal = page.find('#invoice-list-destroy')
 
       expect do
         modal.find('button[type="submit"]').click
       end.to change { InvoiceList.count }.by(-1)
+      expect(page).to have_css('#flash .alert-success', text: "Sammelrechnung membership fee wurde erfolgreich gelöscht.")
     end
   end
 
@@ -46,14 +54,13 @@ describe InvoiceLists::DestroysController, js: true do
     it 'shows modal with confirm text' do
       visit group_invoice_lists_path(layer)
 
-      table = page.all('table')[0]
-
       expect(table).to have_content(/membership fee/)
-      table.find('td a[title="Löschen"]').click
+      destroy_link.click
 
-      expect(page).to have_text('In der Sammelrechnung ist mindesents eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.')
-
-      modal = page.find('#invoice-list-destroy')
+      expect(page).to have_text(<<~TEXT.squish)
+        In der Sammelrechnung ist mindesents eine Rechnung enthalten, welche weder den Status
+        "Entwurf" noch "Storniert" hat. Daher kann die Sammelrechnung nicht gelöscht werden.
+      TEXT
 
       expect(modal).to have_css('button[type="submit"][disabled="disabled"]')
     end

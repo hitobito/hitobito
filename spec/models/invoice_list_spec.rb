@@ -47,4 +47,9 @@ describe InvoiceList do
     expect(subject.amount_paid).to eq 10
     expect(subject.recipients_paid).to eq 1
   end
+
+  it '#to_s returns title' do
+    subject.title = 'A big invoice'
+    expect(subject.to_s).to eq 'A big invoice'
+  end
 end

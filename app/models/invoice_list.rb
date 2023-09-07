@@ -49,6 +49,10 @@ class InvoiceList < ActiveRecord::Base
 
   validates_by_schema except: :invalid_recipient_ids
 
+  def to_s
+    title
+  end
+
   def invoice_parameters
     invoice_item_attributes = invoice.invoice_items.collect { |item| item.attributes.compact }
     invoice.attributes.compact.merge(invoice_items_attributes: invoice_item_attributes)

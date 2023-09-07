@@ -472,8 +472,15 @@ describe Person do
     end
   end
 
-  it '#finance_groups returns list of group on which user may manage invoices' do
-    expect(people(:bottom_member).finance_groups).to eq [groups(:bottom_layer_one)]
+  describe '#finance_groups' do
+    let(:person) { people(:top_leader) }
+
+    it 'returns uniq list of layer groups on which user has finance permission' do
+      Fabricate(Group::TopLayer::TopAdmin.name.to_s, person: person, group: groups(:top_layer))
+      allow_any_instance_of(Group::TopLayer::TopAdmin).to receive(:permissions)
+        .and_return([:finance])
+      expect(person.finance_groups).to eq [groups(:top_layer)]
+    end
   end
 
   it '#filter_attrs returns list of filterable attributes' do

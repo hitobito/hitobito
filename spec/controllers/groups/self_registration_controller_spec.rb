@@ -85,12 +85,12 @@ describe Groups::SelfRegistrationController do
         end
 
         context 'when authorized' do
-          it 'redirects to group' do
+          it 'redirects to self_inscription_path' do
             sign_in(person)
 
             get :new, params: { group_id: group.id }
 
-            is_expected.to redirect_to(group_path(group.id))
+            is_expected.to redirect_to(group_self_inscription_path(group.id))
           end
         end
       end

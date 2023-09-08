@@ -13,3 +13,11 @@
 
       = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: fields)
       = render_extensions 'conditions', locals: { f: f }
+
+%br
+%br
+= field_set_tag do
+  = standard_form(entry, {url: group_self_inscription_path, method: :get}) do |f|
+    = f.indented do
+      = f.help_block(t('.has_account'))
+    = form_buttons(f, submit_label: t('.to_login_page'), cancel_url: '')

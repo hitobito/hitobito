@@ -743,6 +743,8 @@ de:
       form:
         privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
         submit: Registrieren
+        has_account: Du hast bereits ein Login?
+        to_login_page: Anmelden und Einschreiben
       create:
         email_taken: E-Mail wird bereits verwendet. Melde dich an oder registrier dich mit einer anderen E-Mail-Adresse.
         flash:

@@ -77,7 +77,7 @@ class Groups::SelfRegistrationController < CrudController
 
   def redirect_to_group_if_necessary
     return redirect_to group_path(group) unless self_registration_active?
-    redirect_to group_path(group) if signed_in?
+    redirect_to group_self_inscription_path(group) if signed_in?
   end
 
   def signed_in?

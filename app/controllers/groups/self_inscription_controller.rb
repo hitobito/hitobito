@@ -43,11 +43,17 @@ class Groups::SelfInscriptionController < CrudController
   end
 
   def redirect_to_group_if_necessary
-    if Role.where(person: person, group: group, type: group.self_registration_role_type).present?
+    if Role.where(
+                  person: person,
+                  group: group,
+                  type: group.self_registration_role_type,
+                  archived_at: nil,
+                  deleted_at: nil
+                 ).present?
       return redirect_with_message(alert: t('.role_exists'))
     end
 
-    return redirect_with_message(alert: t('.disabled')) unless self_registration_active?
+    redirect_with_message(alert: t('.disabled')) unless self_registration_active?
   end
 
   def group

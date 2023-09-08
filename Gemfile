@@ -20,6 +20,7 @@ gem 'bootsnap', require: false
 gem 'cancancan', '< 3.2.0'
 gem 'carrierwave'
 gem 'caxlsx', '~>3.4.0'
+gem 'charlock_holmes', '~> 0.7.7'
 gem 'commonmarker'
 gem 'config'
 gem 'country_select'
@@ -78,8 +79,9 @@ gem 'rswag', '>= 2.10.1'
 gem 'rubyzip'
 gem 'seed-fu'
 gem 'sentry-raven'
-gem 'simple_xlsx_reader' # import data from xlsx files (used in some wagons)
 gem 'simpleidn'
+gem 'simple_xlsx_reader' # import data from xlsx files (used in some wagons)
+gem 'sorted_set'
 gem 'sprockets', '~> 3.7.2' # pinned to older version to avoid having an empty manifest.js
 gem 'sqlite3' # required for asset generation
 gem 'strip_attributes' # strip whitespace of attributes
@@ -158,5 +160,3 @@ end
 # To create a Wagonfile suitable for development, run 'rake wagon:file'
 wagonfile = File.expand_path('Wagonfile', __dir__)
 eval(File.read(wagonfile)) if File.exist?(wagonfile) # rubocop:disable Security/Eval
-
-gem "charlock_holmes", "~> 0.7.7"

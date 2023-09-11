@@ -169,10 +169,18 @@ describe InvoiceListsController do
       expect(assigns(:invoice_list).recipients).to eq [person]
     end
 
-    it 'GET#new assigns assigns invoice_list from receiver' do
-      get :new, params: { group_id: group.id, invoice_list: { receiver_id: list.id, receiver_type: list.class  } }
+    it 'GET#new assigns invoice_list from receiver' do
+      get :new, params: { group_id: group.id, invoice_list: { receiver_id: list.id, receiver_type: list.class } }
       expect(response).to render_template('crud/new')
       expect(assigns(:invoice_list).receiver).to eq list
+    end
+
+    it 'GET#new assigns payment_information from invoice_config' do
+      group.invoice_config.update(payment_information: 'Bitte schnellstmöglich einzahlen')
+
+      get :new, params: { group_id: group.id, invoice_list: { receiver_id: list.id, receiver_type: list.class } }
+      expect(response).to render_template('crud/new')
+      expect(assigns(:invoice_list).invoice.payment_information).to eq 'Bitte schnellstmöglich einzahlen'
     end
 
     it 'GET#new via xhr assigns invoice items and total' do

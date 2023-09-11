@@ -14,6 +14,7 @@ git submodule status | tee WAGON_VERSIONS
 # move core
 rm -r hitobito/.git
 mv hitobito/* .
+chmod -v 666 ./public/robots.txt
 
 # add wagon sources
 mkdir -p vendor/wagons

@@ -6,6 +6,7 @@
 *  Im Gruppen-Log werden neu auch Änderungen an der Gruppe selber aufgezeichnet (hitobito_sac_cas#73)
 *  Das Feld "Gestellt am" einer Rechnung oder Sammelrechnung kann neu auch manuell gesetzt werden (hitobito_sww#135)
 *  Der Gruppen-Tab "Einstellungen" wurde entfernt und die Optionen sind neu in der Bearbeitungsansicht der Gruppe unter dem Tab "Nachrichten" (#2165)
+*  Einführung von Gruppen-Attributen sowie Migration der Gruppen-Einstellungen (#2165)
 
 ## Version 1.30
 

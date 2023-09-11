@@ -13,7 +13,7 @@
       = fap.labeled_belongs_to_field(:priority_2_id)
       = fap.labeled_belongs_to_field(:priority_3_id)
 
-      %h4= t('.course_information')
+      %h4.border-bottom= t('.course_information')
       %table.table
         - @alternatives.each do |event|
           %tr{class: "#{'highlight' if event == @event}"}

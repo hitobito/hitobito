@@ -19,7 +19,7 @@
             = form_for(entry.attachments.new,
                        url: group_event_attachments_path(@group, entry),
                        html: { multipart: true,
-                               style: 'margin-bottom: 0;',
+                               class: 'mb-0',
                                data: { remote: true, spin: true } }) do |f|
               %span.custom-file
                 = link_to(icon(:plus) + ' ' + t('.add'), '#', class: 'green')

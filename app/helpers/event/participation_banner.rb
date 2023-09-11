@@ -61,7 +61,7 @@ class Event::ParticipationBanner
         confirm: t('event.participations.cancel_application.confirmation'),
         method: :delete
       },
-      style: "margin-left: 10px;"
+      class: "ms-2"
     )
   end
 

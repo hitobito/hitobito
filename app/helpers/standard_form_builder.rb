@@ -215,7 +215,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # To pass a custom element list, specify the list with the :list key or
   # define an instance variable with the pluralized name of the association.
   def belongs_to_field(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
+    html_options[:class] = html_options[:class].to_s + ' form-select form-select-sm mw-100 mw-md-60ch'
     list = association_entries(attr, html_options)
     if list.present?
       collection_select(attr, list, :id, :to_s,

@@ -37,7 +37,7 @@ class Event::ApplicationDecorator < ::ApplicationDecorator
            else
              waiting_list? ? 'Warteliste' : nil
            end
-    content_tag(:span, prio, class: 'badge badge-info') if prio
+    content_tag(:span, prio, class: 'badge bg-info') if prio
   end
 
   def precondition_warnings(event)

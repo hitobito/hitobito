@@ -31,7 +31,7 @@ module Sheet
 
     # Needs spacing because parent has no tabs
     def render_parent_title
-      content_tag(:div, super, style: 'padding-bottom: 1em')
+      content_tag(:div, super, class: 'pb-3')
     end
 
     def link_url

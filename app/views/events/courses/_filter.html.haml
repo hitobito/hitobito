@@ -7,7 +7,7 @@
       = f.text_field(:since, value: since_date, class: 'date col-2 form-control form-control-sm mb-0')
 
   .control-group
-    = f.label :until, t('.until'), style: 'display: inline-block; margin-right: 0.4rem; vertical-align: middle'
+    = f.label :until, t('.until'), class: 'inline me-1 align-middle'
     .input-group
       %div.input-group-prepend
         %span.input-group-text= icon(:'calendar-alt')

@@ -202,7 +202,7 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def role_popover_link(path, html_id = nil)
-    content_tag(:span, style: 'padding-left: 10px', id: html_id) do
+    content_tag(:span, class: 'ps-1', id: html_id) do
       h.link_to(h.icon(:edit),
                 path,
                 title: h.t('global.link.edit'),

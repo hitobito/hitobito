@@ -46,7 +46,7 @@
               value: 'all',
               checked: filter && filter.args[:validity] == 'all'
 
-= field_set_tag(t('.prompt_year'), id: 'year-scope', class: 'form-horizontal', style: filter.try(:year_scope?) ? '' : 'display:none') do
+= field_set_tag(t('.prompt_year'), id: 'year-scope', class: 'form-horizontal') do
   .control-group
     = label_tag(:start_at_year_from, t('.start_at_year_label'), class: 'control-label')
     .controls

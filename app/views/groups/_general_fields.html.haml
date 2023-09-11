@@ -8,7 +8,7 @@
       = f.select(:contact_id,
                  @contacts.collect { |p| [p.to_s(:list), p.id] },
                  { include_blank: ta(:no_entry) },
-                 class: 'col-6')
+                 class: 'form-select form-selct-sm')
       = f.help_inline(t('groups.form.help_contact'))
     - else
       %p.text.mt-2= ta(:none_available)

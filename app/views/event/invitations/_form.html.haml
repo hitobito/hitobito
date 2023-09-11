@@ -5,7 +5,7 @@
 
 = entry_form(entry, submit_label: t('global.button.save'), buttons_top: false) do |f|
 
-  = f.labeled_person_field(:person, class: 'form-control form-control-sm')
+  = f.labeled_person_field(:person)
   = f.hidden_field(:event_id)
   = f.hidden_field(:participation_type)
 

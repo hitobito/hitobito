@@ -11,9 +11,9 @@
                                                    url: addresses_query_url })
   = f.labeled(:zip_code, t('contactable.fields.zip_town'), class: 'row') do
     %div.col-1
-      = f.string_field(:zip_code, class: 'span-none zip-code-field form-control form-control-sm', maxlength: 10)
+      = f.string_field(:zip_code, class: 'span-none zip-code-field', maxlength: 10)
     %div.col-4
-      = f.string_field(:town, class: 'span-none town-field form-control form-control-sm')
+      = f.string_field(:town, class: 'span-none town-field')
   = f.labeled(:country) do
     .col-6.input-col-6.shown{style: 'margin-left: 0px'}
       = country_select(f.object.class.model_name.param_key,

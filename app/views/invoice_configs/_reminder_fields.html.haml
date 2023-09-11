@@ -1,7 +1,7 @@
-= field_set_tag "#{f.object.level}. #{PaymentReminder.model_name.human}", style: 'margin-right: 0px' do
+= field_set_tag "#{f.object.level}. #{PaymentReminder.model_name.human}" do
   -if f.object.level == 3
     %p= t('.third_level')
   = f.hidden_field :level
   = f.labeled_input_field :title
-  = f.labeled_text_area :text, rows: 4, class: 'form-control form-control-sm'
+  = f.labeled_text_area :text, rows: 4
   = f.labeled_input_field :due_days

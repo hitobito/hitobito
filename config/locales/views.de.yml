@@ -848,6 +848,8 @@ de:
       due_at: Fällig bis
       creator: Rechnungssteller
       vat_number: MwSt. Nummer
+      payment: Eingegangene Zahlung
+      amount_open: Offener Betrag
       payment_slip_qr:
         receipt_title: Empfangsschein
         payment_title: Zahlteil

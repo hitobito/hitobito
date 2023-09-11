@@ -40,5 +40,9 @@ if [[ "$INTEGRATION_BUILD" == 1 ]]; then
     "$scripts/pull-push-transifex-translations"
 fi
 
+touch HERE_I_AM
+# Echo chmoding file to be overridden at app start
+chmod -v 666 public/robots.txt
+
 BUILD_DATE=$(date '+%Y-%m-%d %H:%M:%S')
 echo "(built at: $BUILD_DATE)" > /opt/app-root/src/BUILD_INFO

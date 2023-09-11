@@ -3,9 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_pbs.
 
-= f.labeled_text_area(:address, rows: 2, class: 'form-control form-control-sm') if entry.show_attr?(:address)
-= f.labeled_input_field(:zip_code, class: 'form-control form-control-sm') if entry.show_attr?(:zip_code)
-= f.labeled_input_field(:town, class: 'form-control form-control-sm') if entry.show_attr?(:town)
+= f.labeled_text_area(:address, rows: 2) if entry.show_attr?(:address)
+= f.labeled_input_field(:zip_code) if entry.show_attr?(:zip_code)
+= f.labeled_input_field(:town) if entry.show_attr?(:town)
 - if entry.show_attr?(:country)
   = f.labeled(:country) do
     .shown.ms-0
@@ -14,6 +14,6 @@
                        { priority_countries: Settings.countries.prioritized,
                          selected: f.object.country,
                          include_blank: true },
-                       { class: 'form-select',
+                       { class: 'form-select form-select-sm',
                          data: { placeholder: ' ',
                                  chosen_no_results: t('global.chosen_no_results') } })

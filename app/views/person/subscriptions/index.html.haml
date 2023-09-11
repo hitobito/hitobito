@@ -14,7 +14,7 @@
   - t.col(MailingList.human_attribute_name(:mail_address)) do |list|
     = mail_to list.mail_address
   - t.col do |list|
-    = link_to t('mailing_list_decorator.unsubscribe'), group_person_subscription_path(@group, @person, list), method: :delete, class: 'btn'
+    = link_to t('mailing_list_decorator.unsubscribe'), group_person_subscription_path(@group, @person, list), method: :delete, class: 'btn btn-sm'
 
 
 %h2=t('.available_subscriptions')
@@ -28,5 +28,5 @@
   - t.col(MailingList.human_attribute_name(:mail_address)) do |list|
     = mail_to list.mail_address
   - t.col do |list|
-    = link_to t('mailing_list_decorator.subscribe'), group_person_subscriptions_path(@group, @person, id: list.id), method: :post, class: 'btn'
+    = link_to t('mailing_list_decorator.subscribe'), group_person_subscriptions_path(@group, @person, id: list.id), method: :post, class: 'btn btn-sm'
 

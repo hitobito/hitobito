@@ -8,7 +8,7 @@
     = standard_form(:csv_import, url: define_mapping_group_csv_imports_path, builder: PlainObjectFormBuilder) do |f|
       = form_buttons(f, submit_label: t('.upload_button'), cancel_url: group_people_path(group))
       = f.labeled(:file, t('.csv_file')) do
-        = f.file_field(:file)
+        = f.file_field(:file, class: 'form-control form-control-sm')
 
   .col-7
     .well.help

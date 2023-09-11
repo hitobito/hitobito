@@ -58,13 +58,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render a password field
   def password_field(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
     super(attr, html_options)
   end
 
   # Render a text_area.
   def text_area(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
     html_options[:rows] ||= 5
     super(attr, html_options)
   end
@@ -77,7 +77,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a number field.
   def number_field(attr, html_options = {})
     html_options[:size] ||= 10
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-15ch'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-15ch form-control form-control-sm'
     text_field(attr, html_options)
   end
   alias integer_field number_field
@@ -87,12 +87,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a standard string field with column contraints.
   def string_field(attr, html_options = {})
     html_options[:maxlength] ||= column_property(@object, attr, :limit)
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
     text_field(attr, html_options)
   end
 
   def email_field(attr, html_options = {})
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
     super(attr, html_options)
   end
 
@@ -247,7 +247,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def person_field(attr, html_options = {})
     attr, attr_id = assoc_and_id_attr(attr)
-    klass = html_options[:class]
+    klass = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
     hidden_field(attr_id) +
     string_field(attr,
                  placeholder: I18n.t('global.search.placeholder_person'),

@@ -16,6 +16,6 @@
   - if year_range.last < default_year
     - if year_range.last < default_year - 1
       = render 'kaminari/gap'
-    %li.page-item= link_to(default_year, {year: default_year}.merge(paging_params))
+    %li.page-item= link_to(default_year, {year: default_year}.merge(paging_params), class: "page-link")
   %li.page-item= link_to(raw(t 'views.pagination.next'), {year: year+1}.merge(paging_params), :rel => 'next', class: "page-link")
 

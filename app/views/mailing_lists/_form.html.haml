@@ -21,15 +21,16 @@
         = link_to '#', class: 'chip chip-add' do
           = ti('associations.add')
           = icon(:plus)
-        = text_field_tag(:label, nil, style: 'display: none', data: { provide: :typeahead, source: @labels })
+        = text_field_tag(:label, nil, style: 'display: none', class: 'form-control form-control-sm mw-100 mw-md-60ch mb-1', data: { provide: :typeahead, source: @labels })
 
       = hidden_field_tag('mailing_list[preferred_labels][]')
 
-      - @preferred_labels.each do |label|
-        %span.chip
-          = label
-          = link_to(icon(:times), '#')
-          = hidden_field_tag('mailing_list[preferred_labels][]', label)
+      %div
+        - @preferred_labels.each do |label|
+          %span.chip
+            = label
+            = link_to(icon(:times), '#')
+            = hidden_field_tag('mailing_list[preferred_labels][]', label)
 
       %span.form-text= t('.help_preferred_labels')
 

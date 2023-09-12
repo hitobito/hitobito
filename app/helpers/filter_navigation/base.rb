@@ -42,7 +42,7 @@ module FilterNavigation
       caption = count ? "#{label} (#{count})" : label
       @main_items << content_tag(:li,
                                  link_to(caption, url, class: "nav-link rounded-0 py-1 px-3 mr-0 #{'active' if active_label == label}"),
-                                 class: 'nav-item')
+                                 class: 'nav-item border-start border-primary')
     end
 
   end

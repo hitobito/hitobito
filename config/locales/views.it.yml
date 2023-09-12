@@ -324,7 +324,6 @@ it:
     kinds:
       form:
         help_minimum_age: 'anni (età alla prima data del corso è determinante)'
-        help_select_qualifications: 'Tramite <Ctrl> + clic potranno essere selezionati più tipi di qualifica.'
         qualifications:
           for_participants: 'Qualifiche per i partecipanti'
           for_leaders: 'Qualifiche per gli animatori'

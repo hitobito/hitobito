@@ -728,3 +728,7 @@ label.required::after {
 #invoice_items_fields ~ div > p > div > div {
   display: flex;
 }
+
+.form-horizontal fieldset div .hide {
+  display: none;
+}

@@ -719,7 +719,8 @@ label.required::after {
   display: initial;
 }
 
-#custom_content_body {
+#custom_content_body,
+#help_text_body {
   min-height: 5em !important;
 }
 

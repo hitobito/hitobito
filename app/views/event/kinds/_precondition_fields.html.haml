@@ -33,7 +33,7 @@
     = select_tag('event_kind_precondition_kind_ids',
                  options_from_collection_for_select(@preconditions, :id, :to_s),
                  multiple: true,
-                 class: 'span6')
+                 class: 'form-select form-select-sm tom-select')
     .help-block
       .btn-group
         = button_tag(t('.add_precondition'), class: 'btn btn-default')

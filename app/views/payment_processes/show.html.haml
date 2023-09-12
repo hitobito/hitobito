@@ -32,7 +32,7 @@
       - t.col(Payment.human_attribute_name(:received_at), class: 'right') { |p| l(p.received_at) }
 
     %h3=t('.payments_without_invoice')
-    = table(processor.payments_without_invoice, class: 'table table-stripped', style: 'width: 100%') do |t|
+    = table(processor.payments_without_invoice, class: 'table table-stripped w-100') do |t|
       - t.col('') do |p|
         - if !p.invoice
           %i.icon.icon-warning-sign{title: t('.icon_tooltip_invoice_missing')}

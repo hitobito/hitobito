@@ -91,7 +91,8 @@ SQL
 function setup_dbs() {
   echo "migrating and seeding development database"
   bundle exec rails db:migrate
-  bundle exec rails db:seed wagon:migrate
+  bundle exec rails wagon:migrate
+  bundle exec rails db:seed
   bundle exec rails wagon:seed
 
   echo "migrating test database"
@@ -366,12 +367,12 @@ COMPLETION
   # TODO: add these in the right place
   # bootstrap
   # create-idea-project
-  # reset-database
   # clone
   help|*)
     echo "USAGE: $0 [activate] <PROJECT>"
     echo "       $0 [test-prepare|test-speedup|core-spec|update-copyright]"
     echo "       $0 [grep] <TERM>"
+    echo "       $0 [reset-database] <WAGON>"
     echo "       $0 [git|git-all] <ARGS>"
     echo "       $0 [gemfile|configs|binstubs|list]"
     echo

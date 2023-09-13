@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal :true
 
 #  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
@@ -21,5 +21,10 @@ class Group::TopLayer < Group
   end
 
   roles TopAdmin
+
+  mounted_attr :foundation_year, :integer, default: 1942
+  mounted_attr :custom_name, :text
+
+  validates :foundation_year, numericality: { greater_than: 1850 }, allow_nil: true
 
 end

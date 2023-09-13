@@ -5,9 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class MountedAttributeAttached < MountedAttribute
-  self.table_name = 'mounted_attributes'
-
+class MountedAttachment < MountedAttribute
   has_one_attached :value
 
   def casted_value

@@ -118,4 +118,3 @@ bottom_group_two_one:
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_two) %>
   lft: 11
   rgt: 12
-

@@ -43,6 +43,10 @@ module Export::Tabular::Invoices
       end
     end
 
+    def salutation
+      Salutation.new(entry.recipient).value
+    end
+
     private
 
     def with_precision(number)

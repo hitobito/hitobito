@@ -13,7 +13,7 @@ module Export::Tabular::Invoices
                         cost vat total amount_paid).freeze
 
 
-    CUSTOM_METHODS = %w(cost_centers accounts payments)
+    CUSTOM_METHODS = %w(cost_centers accounts payments salutation)
 
 
     self.model_class = Invoice

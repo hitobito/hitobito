@@ -25,9 +25,19 @@
 = render 'contactable/fields', f: f
 
 = field_set_tag do
-  = f.labeled(:gender) do
-    - (Person::GENDERS + ['']).each do |key|
-      = f.inline_radio_button(:gender, key, entry.gender_label(key))
+  - FeatureGate.if('people.gender_binary') do
+    = f.labeled(:gender) do
+      - (Person::GENDERS + ['']).each do |key|
+        = f.inline_radio_button(:gender, key, entry.gender_label(key))
+
+  - FeatureGate.if('people.gender_custom') do
+    = f.labeled_collection_select(:gender_custom,
+                                  GenderCustom.new(@person).available,
+                                  :first,
+                                  :last,
+                                  { include_blank: false },
+                                  class: 'span6')
+
 
   = f.labeled_string_field(:birthday,
                            value: f.date_value(:birthday),
@@ -41,6 +51,14 @@
                                   { prompt: true },
                                   class: 'span6')
 
+= field_set_tag do
+  = f.labeled_input_field :title
+  = f.labeled_collection_select(:salutation,
+                                Salutation.new(@person).available,
+                                :first,
+                                :last,
+                                { include_blank: false },
+                                class: 'span6')
 
 = render_extensions :fields, locals: { f: f }
 

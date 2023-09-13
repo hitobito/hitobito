@@ -718,5 +718,37 @@ describe Group do
       expect(top_layer.errors.first.message).to eq('muss grösser als 1850 sein')
     end
 
+    it 'only allows value defined in enum' do
+      top_layer.shirt_size = 'ns'
+
+      expect do
+        top_layer.save
+      end.not_to change { MountedAttribute.count }
+
+      expect(top_layer.errors).to be_present
+      expect(top_layer.errors.first.message).to eq('ist kein gültiger Wert')
+
+      top_layer.shirt_size = 'l'
+
+      expect do
+        top_layer.save!
+      end.to change { MountedAttribute.count }.by(1)
+
+      top_layer.reload
+      expect(top_layer.shirt_size).to eq('l')
+    end
+    
+    it 'returns mounted attr configs by category' do
+      configs_by_category = top_layer.class.mounted_attr_configs_by_category
+      expect(configs_by_category.keys).to eq([:custom_cat, :default])
+
+      default_attr_names = configs_by_category[:default].collect(&:attr_name)
+      expect(default_attr_names).to include(:foundation_year)
+      expect(default_attr_names).to include(:shirt_size)
+
+      custom_cat_attr_names = configs_by_category[:custom_cat].collect(&:attr_name)
+      expect(custom_cat_attr_names).to include(:custom_name)
+    end
+
   end
 end

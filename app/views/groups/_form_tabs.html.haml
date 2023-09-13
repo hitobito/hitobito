@@ -3,7 +3,7 @@
   %li= link_to(Group.human_attribute_name(:contactable), '#contactable', data: { toggle: 'tab' })
   %li= link_to(Group.human_attribute_name(:self_registration_link), '#self-registration', data: { toggle: 'tab' })
   %li= link_to(Message.model_name.human(count: 2), '#messages', data: { toggle: 'tab' })
-  - entry.mounted_attr_categories&.keys&.each do |key|
-    %li= link_to(t("groups.form_tabs.#{key}"), "##{key}", data: { toggle: 'tab' })
+  - entry.model.class.mounted_attr_configs_by_category&.keys&.each do |key|
+    %li= link_to(t("mounted_attributes.form_tabs.#{entry.model.class.sti_name.underscore}.#{key}"), "##{key}", data: { toggle: 'tab' })
 
   = render_extensions :form_tabs

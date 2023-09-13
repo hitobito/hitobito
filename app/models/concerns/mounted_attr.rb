@@ -9,13 +9,12 @@ module MountedAttr
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :mounted_attr_categories
     after_save :save_mounted_attributes
     has_many :mounted_attributes, as: :entry, autosave: false
   end
 
   def save_mounted_attributes
-    self.class.mounted_attribute_configs.each do |c|
+    self.class.mounted_attr_configs.each do |c|
       value = send(c.attr_name)
       next unless value.present?
 
@@ -37,8 +36,22 @@ module MountedAttr
     cattr_reader :mounted_attr_registry
     @@mounted_attr_registry = ::MountedAttributes::Registry.new
 
-    def mounted_attribute_configs
+    def mounted_attr_configs
       mounted_attr_registry.configs_for(self)
+    end
+
+    def mounted_attr_configs_by_category
+      {}.tap do |h|
+        mounted_attr_configs.each do |c|
+          category = c.category || :default
+          h[category] = (h[category] || []) << c
+        end
+        h[:default] = h.delete(:default) if h[:default]
+      end
+    end
+
+    def mounted_attr_names
+      mounted_attr_configs.collect(&:attr_name)
     end
 
     private

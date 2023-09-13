@@ -99,7 +99,7 @@ class GroupsController < CrudController
   def permitted_attrs
     attrs = entry.class.used_attributes.dup
     attrs += self.class.permitted_attrs
-    attrs += model_class.mounted_attr_categories&.values&.flatten || []
+    attrs += model_class.mounted_attr_names
     if entry.class.superior_attributes.present? && !can?(:modify_superior, entry)
       attrs -= entry.class.superior_attributes
     end

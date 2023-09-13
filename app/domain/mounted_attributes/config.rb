@@ -8,7 +8,7 @@
 module MountedAttributes
   class Config
     attr_reader :target_class, :attr_name, :attr_type, :options,
-                :null, :enum, :default
+                :null, :enum, :default, :category
 
     def initialize(target_class, attr_name, attr_type, options)
       @target_class = target_class
@@ -25,6 +25,7 @@ module MountedAttributes
       @null ||= true
       @enum = options[:enum]
       @default = options[:default]
+      @category = options[:category]
     end
   end
 end

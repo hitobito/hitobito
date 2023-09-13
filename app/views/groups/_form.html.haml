@@ -25,6 +25,4 @@
     #messages.tab-pane
       = render 'messages_fields', f: f
 
-    - entry.mounted_attr_categories&.each do |key, attrs|
-      .tab-pane{id: key}
-        = render 'mounted_attr_fields', f: f, attrs: attrs
+    = render 'mounted_attributes/form_tabs', f: f

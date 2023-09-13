@@ -23,7 +23,8 @@ class Group::TopLayer < Group
   roles TopAdmin
 
   mounted_attr :foundation_year, :integer, default: 1942
-  mounted_attr :custom_name, :text
+  mounted_attr :custom_name, :text, category: :custom_cat
+  mounted_attr :shirt_size, :text, enum: %w(s l xl)
 
   validates :foundation_year, numericality: { greater_than: 1850 }, allow_nil: true
 

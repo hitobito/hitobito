@@ -1,0 +1,16 @@
+-# frozen_string_literal: true
+
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- entry.model.class.mounted_attr_configs_by_category.each do |category, configs|
+  .tab-pane{id: category}
+    - configs.each do |config|
+      - if config.enum.present?
+        = f.labeled(config.attr_name) do
+          - config.enum.each do |value|
+            = f.inline_radio_button(attr, value, t("activerecord.attributes.#{model_class.sti_name.underscore}.#{config.attr}s.#{value}"))
+      - else
+        = f.labeled_input_field(config.attr_name)

@@ -34,7 +34,8 @@ module RenderTableDisplays
   def add_table_display_selects(scope, person)
     # preserve previously selected columns
     previous = scope.select_values.presence || [scope.model.arel_table[Arel.star]]
-    scope.select((previous + table_display_selects(person)).uniq)
+    required_for_detecting_deletion = [:last_active_role_id]
+    scope.select((previous + table_display_selects(person) + required_for_detecting_deletion).uniq)
   end
 
   def table_display_selects(person)

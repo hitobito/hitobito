@@ -74,7 +74,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :authentication_token, :contact_data_visible, :created_at, :creator_id,
     :current_sign_in_at, :current_sign_in_ip, :encrypted_password, :id,
     :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
-    :locked_at, :remember_created_at, :reset_password_token, :unlock_token,
+    :last_active_role_id, :locked_at, :remember_created_at, :reset_password_token, :unlock_token,
     :reset_password_sent_at, :reset_password_sent_to, :sign_in_count, :updated_at, :updater_id,
     :show_global_label_formats, :household_key, :event_feed_token, :family_key,
     :two_factor_authentication, :encrypted_two_fa_secret,
@@ -187,6 +187,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   belongs_to :primary_group, class_name: 'Group'
   belongs_to :last_label_format, class_name: 'LabelFormat'
 
+  belongs_to :last_active_role, ->(p) { p.roles.with_deleted.where(deleted_at: ..Time.zone.now) },
+             class_name: 'Role'
+
   has_many :label_formats, dependent: :destroy
   has_many :table_displays, dependent: :destroy
 
@@ -246,6 +249,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
             '(company_name IS NOT NULL AND company_name <> "")')
   }
   scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: { label: 'Mobil' }) }
+  scope :with_last_active_role, -> { where('people.last_active_role_id IS NOT NULL') }
 
   ### CLASS METHODS
 

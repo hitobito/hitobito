@@ -120,6 +120,8 @@ class Role < ActiveRecord::Base
   after_destroy :reset_contact_data_visible
   after_destroy :reset_primary_group
   after_update :reset_primary_group
+  after_commit :set_last_active_role
+  after_destroy :set_last_active_role
 
   before_save :prevent_changes, if: ->(r) { r.archived? }
 
@@ -241,5 +243,16 @@ class Role < ActiveRecord::Base
                     .keys.all? { |key| allowed.include? key }
 
     raise ActiveRecord::ReadOnlyRecord unless new_record? || only_archival
+  end
+
+  def set_last_active_role
+    still_has_active_role = person.roles.with_deleted.where(roles: { deleted_at: nil }).present?
+    last_active_role_id = if person.roles.with_deleted.empty? || still_has_active_role
+                            nil
+                          else
+                            person.roles.with_deleted.order(deleted_at: :desc).first.id
+                          end
+
+    person.update_column(:last_active_role_id, last_active_role_id)
   end
 end

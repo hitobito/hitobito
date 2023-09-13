@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module MountedAttributes
-  class Store
+  class Registry
     def initialize
       @configs = []
     end
@@ -18,8 +18,14 @@ module MountedAttributes
     end
 
     def config_for(target_class, attr_name)
-      @configs.find do |config|
-        config.target_class == target_class && config.attr_name == attr_name.to_sym
+      configs_for(target_class).find do |config|
+        config.attr_name == attr_name.to_sym
+      end
+    end
+
+    def configs_for(target_class)
+      @configs.filter do |config|
+        config.target_class == target_class
       end
     end
   end

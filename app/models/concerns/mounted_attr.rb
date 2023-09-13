@@ -10,20 +10,41 @@ module MountedAttr
 
   included do
     class_attribute :mounted_attr_categories
+    after_save :save_mounted_attributes
+    has_many :mounted_attributes, as: :entry, autosave: false
+  end
+
+  def save_mounted_attributes
+    self.class.mounted_attribute_configs.each do |c|
+      value = send(c.attr_name)
+      next unless value.present?
+
+      entry = mounted_attr_entry(c.attr_name)
+
+      next if (entry.value.nil? || entry.casted_value.zero?) && value == c.default
+
+      entry.value = value
+      entry.save! if entry.value_changed?
+    end
+  end
+
+  def mounted_attr_entry(attr_name)
+    mounted_attributes.find_or_initialize_by(key: attr_name)
   end
 
   module ClassMethods
-    cattr_reader :store
-    @@store = ::MountedAttributes::Store.new
+
+    cattr_reader :mounted_attr_registry
+    @@mounted_attr_registry = ::MountedAttributes::Registry.new
+
+    def mounted_attribute_configs
+      mounted_attr_registry.configs_for(self)
+    end
+
+    private
 
     def mounted_attr(attr, attr_type, options = {})
-      config = store.register(self, attr, attr_type, options)
-
-      define_mounted_entry_getter(config)
-
-      if config.attr_type == :picture
-        define_mounted_picture(config)
-      end
+      config = mounted_attr_registry.register(self, attr, attr_type, options)
 
       define_mounted_attr_getter(config)
       define_mounted_attr_setter(config)
@@ -31,54 +52,17 @@ module MountedAttr
       define_mounted_attr_validations(config)
     end
 
-    private
-
-    def define_mounted_entry_getter(config)
-      define_method("mounted_#{config.attr_name}") do
-        (instance_variable_get("@mounted_#{config.attr_name}") ||
-         instance_variable_set("@mounted_#{config.attr_name}",
-                               config.mounted_attribute_class.find_or_initialize_by(
-                                 entry_id: self.id,
-                                 entry_type: config.target_class,
-                                 key: config.attr_name
-                               ))
-        )
-      end
-    end
-
-    def define_mounted_picture(config)
-      define_method("remove_#{config.attr_name}") do
-        false
-      end
-
-      define_method("remove_#{config.attr_name}=") do |deletion_param|
-        if %w(1 yes true).include?(deletion_param.to_s.downcase)
-          send(config.attr_name).purge_later
-        end
-      end
-    end
-
     def define_mounted_attr_getter(config)
       define_method(config.attr_name) do
-        send("mounted_#{config.attr_name}")&.casted_value || config.default
+        instance_variable_get("@#{config.attr_name}") ||
+          mounted_attr_entry(config.attr_name).casted_value ||
+          config.default
       end
     end
 
     def define_mounted_attr_setter(config)
       define_method("#{config.attr_name}=") do |value|
-        return if value.blank?
-
-        entry = send("mounted_#{config.attr_name}") ||
-          config.mounted_attribute_class.new(entry_id: self.id,
-                                             entry_type: config.target_class,
-                                             key: config.attr_name)
-        entry.value = if config.attr_type == :picture
-                        value
-                      else
-                        value.to_s
-                      end
-        entry.save!
-
+        instance_variable_set("@#{config.attr_name}", value)
         value
       end
     end

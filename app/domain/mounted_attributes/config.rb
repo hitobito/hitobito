@@ -26,13 +26,5 @@ module MountedAttributes
       @enum = options[:enum]
       @default = options[:default]
     end
-
-    def mounted_attribute_class
-      @mounted_attribute_class ||= if attr_type == :picture
-                                     MountedAttributeAttached
-                                   else
-                                     MountedAttribute
-                                   end
-    end
   end
 end

@@ -664,4 +664,59 @@ describe Group do
       expect(subject.used_attributes).to include(:nextcloud_url)
     end
   end
+
+  context 'mounted attributes' do
+
+    let(:top_layer) { groups(:top_layer) }
+
+    it 'saves attribute for specific group type' do
+      top_layer.foundation_year = 1892
+      top_layer.custom_name = 'Töp'
+
+      expect do
+        top_layer.save!
+      end.to change { MountedAttribute.count }.by(2)
+
+      top_layer.reload
+
+      expect(top_layer.foundation_year).to eq(1892)
+      expect(top_layer.custom_name).to eq('Töp')
+    end
+
+    it 'does not persists attribute entry if default value' do
+      # 1942 is configured default value for foundation_year
+      expect(top_layer.foundation_year).to eq(1942)
+
+      expect do
+        top_layer.save!
+      end.not_to change { MountedAttribute.count }
+
+      expect(top_layer.foundation_year).to eq(1942)
+    end
+
+    it 'does not persist attribute entry if blank value' do
+      top_layer.custom_name = ''
+
+      expect do
+        top_layer.save!
+      end.not_to change { MountedAttribute.count }
+
+      top_layer.reload
+
+      expect(top_layer.custom_name).to be_blank
+      expect(top_layer.foundation_year).to eq(1942)
+    end
+
+    it 'does not persist attribute entry if validation error for mounted attribute' do
+      top_layer.foundation_year = 300
+
+      expect do
+        top_layer.save
+      end.not_to change { MountedAttribute.count }
+
+      expect(top_layer.errors).to be_present
+      expect(top_layer.errors.first.message).to eq('muss grösser als 1850 sein')
+    end
+
+  end
 end

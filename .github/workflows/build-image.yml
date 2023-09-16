@@ -63,6 +63,7 @@ jobs:
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:latest
           # ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:${{ inputs.version }}
           push: true
+          no-cache: true
 
       - uses: docker/build-push-action@v4
         with:
@@ -76,3 +77,4 @@ jobs:
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:latest
           # ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:${{ inputs.version }}
           push: true
+          no-cache: true

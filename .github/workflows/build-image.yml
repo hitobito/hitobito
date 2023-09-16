@@ -30,9 +30,6 @@ on:
       PUZZLE_REGISTRY_PASSWORD:
         description: 'Password for the registry-robot-account'
         required: true
-      PUZZLE_REGISTRY_ORG:
-        description: 'Organisationname in the registry'
-        required: true
 
 jobs:
   build:
@@ -63,8 +60,8 @@ jobs:
             BUILD_COMMIT=$GITHUB_SHA
           target: app
           tags: |
-            ${{ secrets.PUZZLE_REGISTRY }}/${{ secrets.PUZZLE_REGISTRY_ORG }}/${{ inputs.project }}/rails:latest
-          # ${{ secrets.PUZZLE_REGISTRY }}/${{ secrets.PUZZLE_REGISTRY_ORG }}/${{ inputs.project }}/rails:${{ inputs.version }}
+            ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:latest
+          # ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:${{ inputs.version }}
           push: true
 
       - uses: docker/build-push-action@v4
@@ -76,6 +73,6 @@ jobs:
             BUILD_COMMIT=$GITHUB_SHA
           target: sphinx
           tags: |
-            ${{ secrets.PUZZLE_REGISTRY }}/${{ secrets.PUZZLE_REGISTRY_ORG }}/${{ inputs.project }}/sphinx:latest
-          # ${{ secrets.PUZZLE_REGISTRY }}/${{ secrets.PUZZLE_REGISTRY_ORG }}/${{ inputs.project }}/sphinx:${{ inputs.version }}
+            ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:latest
+          # ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:${{ inputs.version }}
           push: true

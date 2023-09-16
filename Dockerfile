@@ -128,19 +128,18 @@ RUN gem install bundler:${BUNDLER_VERSION} --no-document
 
 # TODO: Load artifacts
 
-# set up home directory
 WORKDIR $HOME
-COPY Gemfile Gemfile.lock Wagonfile.production ./
 
 RUN bash -vxc "${PRE_BUILD_SCRIPT:-"echo 'no PRE_BUILD_SCRIPT provided'"}"
+
+COPY Gemfile Gemfile.lock Wagonfile.production ./
 
 # install gems and build the app
 RUN    bundle config set --local deployment 'true' \
     && bundle config set --local without ${BUNDLE_WITHOUT_GROUPS} \
     && bundle install \
-    && bundle clean
-    # \
-    # && bundle exec bootsnap precompile --gemfile
+    && bundle clean \
+    && bundle exec bootsnap precompile --gemfile
 
 # install npms for the frontend
 COPY package.json yarn.lock ./

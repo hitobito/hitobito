@@ -60,7 +60,7 @@ public/uploads
 .ruby-version
 .rvmrc
 
-# ama custom project setup
+# custom project/editor setup
 TAGS
 /.vimrc
 /todo.tasks
@@ -72,6 +72,7 @@ TAGS
 .pry_history
 .pry-history
 .project
+.vscode
 
 # for experiments with webpack
 

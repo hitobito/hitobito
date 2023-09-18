@@ -17,6 +17,7 @@
       = render_attrs(entry, :nextcloud_url)
     = render_extensions :attrs
     = render_present_attrs(entry, :created_info, :updated_info, :deleted_info, :archived_info) if can?(:show_details, @group)
+    = MountedAttrs::Renderer.new(entry, self).render
 
     - if can?(:index_notes, entry)
       = render 'notes/section', create_path: group_notes_path(@group)

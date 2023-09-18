@@ -111,7 +111,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     content_tag(:div, class: 'form-check') do
       check_box(attr, html_options, checked, unchecked) +
-          label(attr, class: 'form-check-label') { caption }
+          label(attr, class: 'form-check-label me-2') { caption }
     end
   end
 

@@ -19,7 +19,7 @@ module EventKindsHelper
                    options_from_collection_for_select(options, :id, :to_s,
                                                       selected.collect(&:id)),
                    multiple: true,
-                   class: 'form-control form-control-sm tom-select')
+                   class: 'form-select form-select-sm tom-select')
       end
     end
   end

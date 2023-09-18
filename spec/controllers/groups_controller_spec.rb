@@ -297,4 +297,15 @@ describe GroupsController do
       expect(response).to have_http_status(:forbidden)
     end
   end
+
+  describe 'mounted attributes' do
+    let(:group) { groups(:top_layer) }
+    before { sign_in(person) }
+
+    it 'updates mounted attributes' do
+      put :update, params: { id: group, group: { foundation_year: 1852 } }
+
+      expect(group.reload.foundation_year).to eq(1852)
+    end
+  end
 end

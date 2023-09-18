@@ -12,14 +12,14 @@ ARG YARN_VERSION="1.22.19"
 ARG BUILD_PACKAGES="nodejs git transifex-client sqlite3 libsqlite3-dev imagemagick build-essential default-libmysqlclient-dev"
 ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev default-libmysqlclient-dev"
 
-# needs to be set before the pre/post-build script, which uses the argument
-ARG INTEGRATION_BUILD="0"
+# should go into prepare-integration action
+# if [[ \"$INTEGRATION_BUILD\" == \"1\" ]]; then git submodule update --remote; fi; \
+# if [[ \"$INTEGRATION_BUILD\" == \"1\"]]; then bundle exec rake tx:pull tx:wagon:pull tx:push tx:wagon:push -t; fi; \
 
 # Scripts
 ARG PRE_INSTALL_SCRIPT="curl -sL https://deb.nodesource.com/setup_${NODEJS_VERSION}.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh"
 ARG INSTALL_SCRIPT="node -v && npm -v && npm install -g yarn && yarn set version ${YARN_VERSION}"
 ARG PRE_BUILD_SCRIPT="\
-     if [[ \"$INTEGRATION_BUILD\" == 1 ]]; then git submodule update --remote; fi; \
      git submodule status | tee WAGON_VERSIONS; \
      rm -rf hitobito/.git; \
      mv hitobito/* hitobito/.tx .; \
@@ -29,8 +29,8 @@ ARG PRE_BUILD_SCRIPT="\
      cp -v Wagonfile.production Wagonfile; \
 "
 ARG BUILD_SCRIPT="bundle exec rake assets:precompile"
+
 ARG POST_BUILD_SCRIPT="\
-     if [[ \"$INTEGRATION_BUILD\" == 1 ]]; then bundle exec rake tx:pull tx:wagon:pull tx:push tx:wagon:push -t; fi; \
      RAILS_DB_USERNAME=\"dummy\" \
         bundle exec rake db:migrate wagon:migrate ts:configure \
      && sed -i 's/\"/\`/g; s/\(  sql_\)\(host\|user\|pass\|db\)\( = \).*/\1\2\3UNSET/' config/production.sphinx.conf; \
@@ -54,7 +54,7 @@ ARG HOME=/app-src
 ARG PS1="[\$SENTRY_CURRENT_ENV] `uname -n`:\$PWD\$ "
 ARG TZ="Europe/Zurich"
 
-# Add one of these near the end of the file
+# Add one of these near the end of the file or just the right vars in your build
 
 # # Github specific
 # ARG GITHUB_SHA
@@ -123,16 +123,20 @@ RUN    export DEBIAN_FRONTEND=noninteractive \
 RUN bash -vxc "${INSTALL_SCRIPT:-"echo 'no INSTALL_SCRIPT provided'"}"
 
 # Explicitly install specific versions of bundler
-# (not required with newer bundler versions)
+# (not required with newer bundler versions?)
 RUN gem install bundler:${BUNDLER_VERSION} --no-document
 
 # TODO: Load artifacts
 
 WORKDIR $HOME
 
-RUN bash -vxc "${PRE_BUILD_SCRIPT:-"echo 'no PRE_BUILD_SCRIPT provided'"}"
+# copy entire submodule structure because it is needed for the PRE_BUILD_SCRIPT
+COPY . .
 
-COPY Gemfile Gemfile.lock Wagonfile.production ./
+# only copy things needed for bundling
+# COPY Gemfile Gemfile.lock Wagonfile.production ./
+
+RUN bash -vxc "${PRE_BUILD_SCRIPT:-"echo 'no PRE_BUILD_SCRIPT provided'"}"
 
 # install gems and build the app
 RUN    bundle config set --local deployment 'true' \
@@ -141,13 +145,14 @@ RUN    bundle config set --local deployment 'true' \
     && bundle clean \
     && bundle exec bootsnap precompile --gemfile
 
-# install npms for the frontend
-COPY package.json yarn.lock ./
+# only copy things needed for yarning
+# COPY package.json yarn.lock ./
 # COPY .yarn ./.yarn/
+# install npms for the frontend
 RUN yarn install --immutable
 
-# copy entire application code
-COPY . .
+# copy entire application code after dependencies are built
+# COPY . .
 
 RUN bash -vxc "${BUILD_SCRIPT:-"echo 'no BUILD_SCRIPT provided'"}"
 
@@ -155,7 +160,7 @@ RUN bash -vxc "${POST_BUILD_SCRIPT:-"echo 'no POST_BUILD_SCRIPT provided'"}"
 
 # TODO: Save artifacts
 
-RUN rm -rf vendor/cache/ .git spec/ node_modules/ db/production.sqlite3
+RUN rm -rf vendor/cache/ .git spec/ node_modules/ db/production.sqlite3 .tx
 
 
 #################################

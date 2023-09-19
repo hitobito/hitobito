@@ -36,3 +36,13 @@ de:
         kinds:
           parent: Elternteil
           child: Kind
+      group/top_layer:
+        shirt_sizes:
+          s: S
+          l: L
+          xl: XL
+  mounted_attributes:
+    form_tabs:
+      group/top_layer:
+        default: Top Layer Attribute
+        custom_cat: Eigene Kategorie

@@ -11,6 +11,6 @@
       - if config.enum.present?
         = f.labeled(config.attr_name) do
           - config.enum.each do |value|
-            = f.inline_radio_button(attr, value, t("activerecord.attributes.#{model_class.sti_name.underscore}.#{config.attr}s.#{value}"))
+            = f.inline_radio_button(config.attr_name, value, t("activerecord.attributes.#{entry.object.class.to_s.underscore}.#{config.attr_name}s.#{value}"))
       - else
         = f.labeled_input_field(config.attr_name)

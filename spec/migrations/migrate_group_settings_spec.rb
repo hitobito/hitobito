@@ -22,7 +22,7 @@ describe MigrateGroupSettings do
   context '#up' do
     let(:picture_group_settings) do
       layers.map do |group|
-        s = MigrateGroupSettings::MigrationGroupSetting.new({
+        s = MigrateGroupSettings::LegacyGroupSetting.new({
           var: :messages_letter,
           target: group,
           value: {
@@ -35,7 +35,7 @@ describe MigrateGroupSettings do
           filename: 'logo.png'
         )
 
-        s.save!
+        s.save(validate: false)
 
         s
       end
@@ -44,7 +44,7 @@ describe MigrateGroupSettings do
     let(:encrypted_group_settings) do
       layers.map do |group|
         encrypted = EncryptionService.encrypt('bla')
-        MigrateGroupSettings::MigrationGroupSetting.create!({
+        MigrateGroupSettings::LegacyGroupSetting.create!({
           var: :text_message_provider,
           target: group,
           value: {
@@ -56,7 +56,7 @@ describe MigrateGroupSettings do
 
     let(:group_settings) do
       layers.map do |group|
-        MigrateGroupSettings::MigrationGroupSetting.create!({
+        MigrateGroupSettings::LegacyGroupSetting.create!({
           var: :text_message_provider,
           target: group,
           value: {
@@ -69,7 +69,7 @@ describe MigrateGroupSettings do
     before do
       migration.down
 
-      MigrateGroupSettings::MigrationGroupSetting.delete_all
+      MigrateGroupSettings::LegacyGroupSetting.delete_all
       groups.each { |g| g.letter_logo.purge }
     end
 
@@ -151,7 +151,7 @@ describe MigrateGroupSettings do
 
     after do
       migration.up
-      MigrateGroupSettings::MigrationGroupSetting.delete_all
+      MigrateGroupSettings::LegacyGroupSetting.delete_all
     end
 
     it 'migrates picture attr' do
@@ -165,7 +165,7 @@ describe MigrateGroupSettings do
         group.reload
         expect(group.letter_logo).to_not be_attached
 
-        setting = MigrateGroupSettings::MigrationGroupSetting.find_by(target: group,
+        setting = MigrateGroupSettings::LegacyGroupSetting.find_by(target: group,
                                                                       var: :messages_letter)
         expect(setting.picture).to be_attached
       end
@@ -181,7 +181,7 @@ describe MigrateGroupSettings do
       migration.down
 
       layers.each do |group|
-        setting = MigrateGroupSettings::MigrationGroupSetting.find_by(target: group,
+        setting = MigrateGroupSettings::LegacyGroupSetting.find_by(target: group,
                                                                       var: :text_message_provider)
         encrypted = setting.value[:encrypted_username]
         expect(encrypted).to be_present
@@ -198,7 +198,7 @@ describe MigrateGroupSettings do
       migration.down
 
       layers.each do |group|
-        setting = MigrateGroupSettings::MigrationGroupSetting.find_by(target: group,
+        setting = MigrateGroupSettings::LegacyGroupSetting.find_by(target: group,
                                                                       var: :text_message_provider)
         expect(setting.value[:originator]).to be_present
         expect(setting.value[:originator]).to eq('bla')

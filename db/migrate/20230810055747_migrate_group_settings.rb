@@ -7,33 +7,6 @@
 
 class MigrateGroupSettings < ActiveRecord::Migration[6.1]
 
-  VAR_MAPPING = {
-    text_message_username: :text_message_provider,
-    text_message_password: :text_message_provider,
-    text_message_provider: :text_message_provider,
-    text_message_originator: :text_message_provider,
-    letter_address_position: :messages_letter,
-    letter_logo: :messages_letter
-  }
-
-  KEY_MAPPING = {
-    encrypted_username: :text_message_username,
-    encrypted_password: :text_message_password,
-    provider: :text_message_provider,
-    originator: :text_message_originator,
-    address_position: :letter_address_position,
-    picture: :letter_logo
-  }
-
-  class MigrationGroupSetting < ActiveRecord::Base
-    self.table_name = 'settings'
-
-    has_one_attached :picture
-    belongs_to :target, polymorphic: true
-
-    serialize :value, Hash
-  end
-
   def up
     say_with_time('create group attributes') do
       add_column :groups, :encrypted_text_message_username, :string
@@ -68,10 +41,19 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
     Group.reset_column_information
   end
 
+  class LegacyGroupSetting < ActiveRecord::Base
+    self.table_name = 'settings'
+
+    has_one_attached :picture
+    belongs_to :target, polymorphic: true
+
+    serialize :value, Hash
+  end
+
   private
 
   def migrate_settings
-    MigrationGroupSetting.find_each do |setting|
+    LegacyGroupSetting.find_each do |setting|
       group = setting.target if setting.target_type == 'Group'
 
       next unless group
@@ -121,7 +103,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
 
       values_for_var.each do |var, values|
         if values.values.any?(&:present?)
-          setting = MigrationGroupSetting.find_or_create_by(target_type: 'Group',
+          setting = LegacyGroupSetting.find_or_create_by(target_type: 'Group',
                                                             target_id: group.id,
                                                             var: var)
           setting.value.merge!(values)
@@ -132,7 +114,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
     end
 
     ActiveStorage::Attachment.where(name: 'letter_logo', record_type: 'Group').find_each do |attachment|
-      setting = MigrationGroupSetting.find_or_create_by!(target_type: 'Group',
+      setting = LegacyGroupSetting.find_or_create_by!(target_type: 'Group',
                                                          target_id: attachment.record_id,
                                                          var: :messages_letter)
       attachment.name = :picture
@@ -140,4 +122,5 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
       attachment.save!
     end
   end
+
 end

@@ -119,7 +119,7 @@ describe GroupsController do
     end
 
     describe 'PUT update' do
-      let(:attrs) {  { type: 'Group::TopGroup', parent_id: group.id } }
+      let(:attrs) { { type: 'Group::TopGroup', parent_id: group.id } }
       let(:top_leader_role) { roles(:top_leader) }
       let(:person) { top_leader_role.person }
       let(:group) { top_leader_role.group }
@@ -180,6 +180,23 @@ describe GroupsController do
         expect do
           put :update, params: { id: group, group: {main_self_registration_group: '1'} }
         end.to raise_error(CanCan::AccessDenied)
+      end
+
+      it 'updates text message provider attributes' do
+        patch :update, params: { id: group.id, group: {
+          letter_address_position: 'right',
+          text_message_username: 'housi',
+          text_message_password: 'longlivesms',
+          text_message_originator: 'Wernu',
+          text_message_provider: 'aspsms' }
+        }
+
+        group.reload
+
+        expect(group.text_message_originator).to eq('Wernu')
+        expect(group.text_message_provider).to eq('aspsms')
+        expect(group.text_message_username).to eq('housi')
+        expect(group.text_message_password).to eq('longlivesms')
       end
     end
 

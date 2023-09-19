@@ -16,7 +16,7 @@ module Messages
       MAX_RECIPIENTS = 1000
 
       def self.init(config:)
-        case config.provider
+        case config['provider']
         when 'aspsms'
           Aspsms.new(config: config)
         else

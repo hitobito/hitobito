@@ -33,7 +33,11 @@ module Messages
     end
 
     def provider_config
-      group.text_message_originator || group.name
+      { provider: group.text_message_provider,
+        originator: group.text_message_originator || group.name,
+        username: group.encrypted_text_message_username,
+        password: group.encrypted_text_message_password
+      }
     end
 
     def group

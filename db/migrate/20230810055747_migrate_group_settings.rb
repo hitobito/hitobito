@@ -71,7 +71,13 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
         when :address_position
           group.letter_address_position = value
         when :picture
-          group.letter_logo_blob = setting.picture_blob
+          filename = setting.picture_blob.filename.to_s
+          setting.picture_blob.open do |tempfile|
+            group.letter_logo.attach(
+              io: File.open(tempfile.path),
+              filename: filename 
+            )
+          end
         end
 
         group.save!

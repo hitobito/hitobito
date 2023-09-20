@@ -67,20 +67,32 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
           group.text_message_originator = value
         when :address_position
           group.letter_address_position = value
-        when :picture
-          filename = setting.picture_blob.filename.to_s
-          setting.picture_blob.open do |tempfile|
-            group.letter_logo.attach(
-              io: File.open(tempfile.path),
-              filename: filename 
-            )
-          end
         end
-
-        group.save!
-        setting.destroy!
       end
+
+      picture = rails_setting_active_storage_attachment(setting)
+      if picture
+        filename = picture.filename.to_s
+        picture.open do |tempfile|
+          group.letter_logo.attach(
+            io: File.open(tempfile.path),
+            filename: filename 
+          )
+        end
+        rails_setting_active_storage_attachment_destroy(setting)
+      end
+
+      group.save!
+      setting.destroy!
     end
+  end
+
+  def rails_setting_active_storage_attachment(setting)
+    ActiveStorage::Attachment.where(record_type: 'RailsSettings::SettingObject', record_id: setting.id).first
+  end
+
+  def rails_setting_active_storage_attachment_destroy(setting)
+    ActiveStorage::Attachment.where(record_type: 'RailsSettings::SettingObject', record_id: setting.id).delete_all
   end
 
   def revert_mounted_attributes

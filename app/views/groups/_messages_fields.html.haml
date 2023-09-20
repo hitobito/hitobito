@@ -1,6 +1,6 @@
 %h3.form-subtitle= Message::Letter.model_name.human(count: 2)
 = f.labeled :letter_logo do
-  = f.file_field :letter_logo, type: :file, accept: GroupSetting::LogoUploader.accept_extensions
+  = f.file_field :letter_logo, type: :file, accept: Group::LetterLogoUploader.accept_extensions
 
 - if upload_exists?(entry, :letter_logo)
   = f.labeled :remove_letter_logo do
@@ -8,6 +8,8 @@
 = f.labeled(:letter_address_position) do
   - Group::ADDRESS_POSITION_VALUES.each do |value|
     = f.inline_radio_button(:letter_address_position, value, t("activerecord.attributes.group.letter_address_positions.#{value}"))
+= render_extensions :messages_letter_fields, locals: { f: f }
+
 %h3.form-subtitle= Message::TextMessage.model_name.human(count: 2)
 = f.labeled_input_field(:text_message_username)
 = f.labeled_input_field(:text_message_password)

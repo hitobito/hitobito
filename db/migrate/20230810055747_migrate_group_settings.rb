@@ -71,13 +71,11 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
         when :address_position
           group.letter_address_position = value
         when :picture
-          attachment = setting.picture
-          attachment.name = :'letter_logo'
-          attachment.record = setting.target
-          attachment.save!
+          group.letter_logo_blob = setting.picture_blob
         end
 
-        group.save(validate: false)
+        group.save!
+        setting.destroy!
       end
     end
   end

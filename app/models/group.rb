@@ -53,7 +53,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   PROVIDER_VALUES = %w(aspsms).freeze
   ADDRESS_POSITION_VALUES = %w(left right).freeze
-  has_one_attached :letter_logo
 
   serialize :encrypted_text_message_username
   serialize :encrypted_text_message_password
@@ -69,8 +68,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   mount_uploader :carrierwave_logo, Group::LogoUploader, mount_on: 'logo'
   has_one_attached :logo
-
   has_one_attached :privacy_policy
+  mount_uploader :carrierwave_logo, Group::LetterLogoUploader, mount_on: 'letter_logo'
+  has_one_attached :letter_logo
 
   ### ATTRIBUTES
 
@@ -328,6 +328,16 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   def remove_logo=(deletion_param)
     if %w(1 yes true).include?(deletion_param.to_s.downcase)
       logo.purge_later
+    end
+  end
+
+  def remove_letter_logo
+    false
+  end
+
+  def remove_letter_logo=(deletion_param)
+    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+      letter_logo.purge_later
     end
   end
 

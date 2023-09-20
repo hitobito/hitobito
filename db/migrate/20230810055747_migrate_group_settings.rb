@@ -53,11 +53,8 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
   private
 
   def migrate_settings
-    LegacyGroupSetting.find_each do |setting|
-      group = setting.target if setting.target_type == 'Group'
-
-      next unless group
-
+    LegacyGroupSetting.where(target_type: 'Group').find_each do |setting|
+      group = setting.target
       setting.value.each do |key, value|
         case key
         when :encrypted_username

@@ -4,6 +4,14 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+#
+#  <ActiveStorage::Attachment:0x00005647d390c790
+ #id: 1,
+ #name: "picture",
+ #record_type: "RailsSettings::SettingObject",
+ #record_id: 1,
+ #blob_id: 1,
+ #created_at: Wed, 20 Sep 2023 16:44:35.000000000 CEST +02:00>
 
 require 'spec_helper'
 migration_file_name = Dir[Rails.root.join('db/migrate/20230810055747_migrate_group_settings.rb')].first
@@ -24,10 +32,7 @@ describe MigrateGroupSettings do
       layers.map do |group|
         s = MigrateGroupSettings::LegacyGroupSetting.new({
           var: :messages_letter,
-          target: group,
-          value: {
-            picture: nil
-          }
+          target: group
         })
 
         s.picture.attach(
@@ -36,6 +41,7 @@ describe MigrateGroupSettings do
         )
 
         s.save!
+        ActiveStorage::Attachment.update_all(record_type: 'RailsSettings::SettingObject')
         s
       end
     end
@@ -80,6 +86,7 @@ describe MigrateGroupSettings do
       expect do
         migration.up
       end.to change { MigrateGroupSettings::LegacyGroupSetting.count }.by(-2)
+        .and change { ActiveStorage::Attachment.where(record_type: 'RailsSettings::SettingObject').count }.by(-2)
 
       layers.each do |group|
         group.reload

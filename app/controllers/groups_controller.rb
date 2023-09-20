@@ -12,6 +12,7 @@ class GroupsController < CrudController
   # Respective group attrs are added in corresponding instance method.
   self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup + [
     :logo,
+    :letter_logo,
     :nextcloud_url,
     :privacy_policy,
     :privacy_policy_title,

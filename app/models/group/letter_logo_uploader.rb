@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class GroupSetting::LogoUploader < Uploader::Base
+class Group::LetterLogoUploader < Uploader::Base
 
   MAX_DIMENSION = 8000
 

@@ -35,8 +35,7 @@ describe MigrateGroupSettings do
           filename: 'logo.png'
         )
 
-        s.save(validate: false)
-
+        s.save!
         s
       end
     end
@@ -78,7 +77,10 @@ describe MigrateGroupSettings do
       layers.each do |group|
         expect(group.letter_logo).to_not be_attached
       end
-      migration.up
+      expect do
+        migration.up
+      end.to change { MigrateGroupSettings::LegacyGroupSetting.count }.by(-2)
+
       layers.each do |group|
         group.reload
         expect(group.letter_logo).to be_attached

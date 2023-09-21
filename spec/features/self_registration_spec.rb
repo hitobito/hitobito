@@ -8,14 +8,11 @@ describe :self_registration do
   let(:self_registration_role) { group.decorate.allowed_roles_for_self_registration.first }
 
   before do
+    logout # fix flaky behaviour
     group.self_registration_role_type = self_registration_role
     group.save!
 
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
-  end
-
-  around do
-    logout
   end
 
   context 'with privacy policies in hierarchy' do

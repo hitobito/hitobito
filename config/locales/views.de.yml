@@ -743,10 +743,21 @@ de:
       form:
         privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
         submit: Registrieren
+        has_account: Du hast bereits ein Login?
+        to_login_page: Anmelden und Einschreiben
       create:
         email_taken: E-Mail wird bereits verwendet. Melde dich an oder registrier dich mit einer anderen E-Mail-Adresse.
         flash:
           privacy_policy_not_accepted: Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
+    self_inscription:
+      new:
+        role_exists: Du hast diese Rolle in dieser Gruppe bereits.
+        disabled: Die Selbstregistrierung ist für diese Gruppe deaktiviert
+      create:
+        role_saved: Die Rolle wurde erfolgreich gespeichert
+      form:
+        inscribe: Einschreiben
+        description: Hier kannst du dich für die Gruppe einschreiben.
 
   group/deleted_people:
     list:

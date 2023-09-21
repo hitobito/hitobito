@@ -7,22 +7,25 @@ if [ -z $SPHINX_INTERVAL_TIME ]; then
 fi
 
 if [ -z $SPHINX_CONFIG_PATH ]; then
-    SPHINX_CONFIG_PATH=/opt/sphinx/conf/sphinx.conf
+  SPHINX_CONFIG_PATH=/opt/sphinx/conf/sphinx.conf
 fi
 
 function formatted_date {
-    date +"%Y-%m-%dT%H:%M:%S"
+  date +"%Y-%m-%dT%H:%M:%S"
 }
 
 function run_indexer {
   indexer --config $SPHINX_CONFIG_PATH --all --rotate
 }
 
-function scheduled_indexing {
+function create_initial_index {
+  # We need this to run in the foreground
   if [[ "$SPHINX_SKIP_INITIAL_INDEX" != "1" ]]; then
-    run_indexer
+    indexer --config $SPHINX_CONFIG_PATH --all
   fi
+}
 
+function scheduled_indexing {
   while :
   do
     # We sleep first before starting the indexer because
@@ -48,5 +51,7 @@ mkdir -p $binlog_path
 pull_database_config_from_env
 
 # start indexer and sphinx daemon
-scheduled_indexing & \
+create_initial_index
+scheduled_indexing &
 searchd --config $SPHINX_CONFIG_PATH --nodetach
+

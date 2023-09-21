@@ -42,7 +42,8 @@ ARG BUILD_SCRIPT="bundle exec rake assets:precompile"
 ARG POST_BUILD_SCRIPT="\
      RAILS_DB_USERNAME=\"dummy\" \
         bundle exec rake db:migrate wagon:migrate ts:configure \
-     && sed -i 's/\"/\`/g; s/\(  sql_\)\(host\|user\|pass\|db\)\( = \).*/\1\2\3UNSET/' config/production.sphinx.conf; \
+     && sed -i 's/\"/\`/g; s/\(  sql_\)\(host\|user\|pass\|db\)\( = \).*/\1\2\3UNSET/' config/production.sphinx.conf \
+     && sed -i 's!/app-src/log/production.!/opt/sphinx/log/!g; s!/app-src/tmp/binlog/production!/opt/sphinx/log!g; s!/app-src/db/sphinx/production/!/opt/sphinx/index/!g' config/production.sphinx.conf; \
      echo \"(built at: $(date '+%Y-%m-%d %H:%M:%S'))\" > /app-src/BUILD_INFO; \
      bundle exec bootsnap precompile app/ lib/; \
 "
@@ -185,6 +186,10 @@ ENV PS1="${PS1}" \
 
 COPY --from=build $RAILS_HOME/config/production.sphinx.conf /opt/sphinx/conf/sphinx.conf
 COPY --from=build $RAILS_HOME/bin/run-sphinx /usr/local/bin/run-sphinx
+
+RUN chmod -R ug+w /opt/sphinx/conf/ \
+ && chmod -R ug+w /opt/sphinx/index/ \
+ && chmod -R ug+w /opt/sphinx/log/
 
 CMD ["/usr/local/bin/run-sphinx"]
 

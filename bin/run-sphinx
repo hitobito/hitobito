@@ -15,7 +15,7 @@ function formatted_date {
 }
 
 function run_indexer {
-  /usr/bin/indexer --config $SPHINX_CONFIG_PATH --all --rotate
+  /usr/local/bin/indexer --config $SPHINX_CONFIG_PATH --all --rotate
 }
 
 function scheduled_indexing {
@@ -49,4 +49,4 @@ pull_database_config_from_env
 
 # start indexer and sphinx daemon
 scheduled_indexing & \
-/usr/bin/searchd --config $SPHINX_CONFIG_PATH --nodetach
+/usr/local/bin/searchd --config $SPHINX_CONFIG_PATH --nodetach

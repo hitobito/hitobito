@@ -55,18 +55,19 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
   def migrate_settings
     LegacyGroupSetting.where(target_type: 'Group').find_each do |setting|
       group = setting.target
-      setting.value.each do |key, value|
+      values = setting.value
+      values.each do |key, value|
         case key
         when 'encrypted_username'
-          group.encrypted_text_message_username = value
+          group.encrypted_text_message_username = values.delete(key)
         when 'encrypted_password'
-          group.encrypted_text_message_password = value
+          group.encrypted_text_message_password = values.delete(key)
         when 'provider'
-          group.text_message_provider = value
+          group.text_message_provider = values.delete(key)
         when 'originator'
-          group.text_message_originator = value
+          group.text_message_originator = values.delete(key)
         when 'address_position'
-          group.letter_address_position = value
+          group.letter_address_position = values.delete(key)
         end
       end
 
@@ -83,7 +84,12 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
       end
 
       group.save!
-      setting.destroy!
+
+      if values.empty?
+        setting.destroy!
+      else
+        setting.save!
+      end
     end
   end
 

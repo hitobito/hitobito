@@ -119,6 +119,17 @@ describe MigrateGroupSettings do
         expect(group.text_message_originator).to eq('bla')
       end
     end
+
+    it 'does not remove group setting with wagon specific keys' do
+      group_settings.each do |s|
+        s.value['wagon_sender'] = 'David Hasselhoff'
+        s.save!
+      end
+
+      expect do
+        migration.up
+      end.to change { MigrateGroupSettings::LegacyGroupSetting.count }.by(0)
+    end
   end
 
   context '#down' do

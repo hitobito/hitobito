@@ -57,15 +57,15 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
       group = setting.target
       setting.value.each do |key, value|
         case key
-        when :encrypted_username
+        when 'encrypted_username'
           group.encrypted_text_message_username = value
-        when :encrypted_password
+        when 'encrypted_password'
           group.encrypted_text_message_password = value
-        when :provider
+        when 'provider'
           group.text_message_provider = value
-        when :originator
+        when 'originator'
           group.text_message_originator = value
-        when :address_position
+        when 'address_position'
           group.letter_address_position = value
         end
       end
@@ -104,13 +104,13 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
     Group.where(id: relevant_group_ids).find_each do |group|
       values_for_var = {
         messages_letter: {
-          address_position: group.letter_address_position,
+          'address_position' => group.letter_address_position,
         },
         text_message_provider: {
-          encrypted_username: group.encrypted_text_message_username,
-          encrypted_password: group.encrypted_text_message_password,
-          provider: group.text_message_provider,
-          originator: group.text_message_originator
+          'encrypted_username' => group.encrypted_text_message_username,
+          'encrypted_password' => group.encrypted_text_message_password,
+          'provider' => group.text_message_provider,
+          'originator' => group.text_message_originator
         }
       }
 

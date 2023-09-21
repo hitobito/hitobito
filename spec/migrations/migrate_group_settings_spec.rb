@@ -5,13 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 #
-#  <ActiveStorage::Attachment:0x00005647d390c790
- #id: 1,
- #name: "picture",
- #record_type: "RailsSettings::SettingObject",
- #record_id: 1,
- #blob_id: 1,
- #created_at: Wed, 20 Sep 2023 16:44:35.000000000 CEST +02:00>
 
 require 'spec_helper'
 migration_file_name = Dir[Rails.root.join('db/migrate/20230810055747_migrate_group_settings.rb')].first
@@ -53,7 +46,7 @@ describe MigrateGroupSettings do
           var: :text_message_provider,
           target: group,
           value: {
-            encrypted_username: encrypted
+            'encrypted_username' => encrypted
           }
         })
       end
@@ -65,7 +58,7 @@ describe MigrateGroupSettings do
           var: :text_message_provider,
           target: group,
           value: {
-            originator: 'bla'
+            'originator' => 'bla'
           }
         })
       end
@@ -96,7 +89,7 @@ describe MigrateGroupSettings do
 
     it 'migrates encrypted settings' do
       encrypted_group_settings.each do |s|
-        encrypted = s.value[:encrypted_username]
+        encrypted = s.value['encrypted_username']
         expect(encrypted).to be_present
         expect(EncryptionService.decrypt(encrypted[:encrypted_value], encrypted[:iv])).to eq('bla')
       end
@@ -112,7 +105,7 @@ describe MigrateGroupSettings do
 
     it 'migrates regular settings' do
       group_settings.each do |s|
-        value = s.value[:originator]
+        value = s.value['originator']
 
         expect(value).to be_present
         expect(value).to eq('bla')
@@ -192,7 +185,7 @@ describe MigrateGroupSettings do
       layers.each do |group|
         setting = MigrateGroupSettings::LegacyGroupSetting.find_by(target: group,
                                                                       var: :text_message_provider)
-        encrypted = setting.value[:encrypted_username]
+        encrypted = setting.value['encrypted_username']
         expect(encrypted).to be_present
         expect(EncryptionService.decrypt(encrypted[:encrypted_value], encrypted[:iv])).to eq('bla')
       end
@@ -209,8 +202,8 @@ describe MigrateGroupSettings do
       layers.each do |group|
         setting = MigrateGroupSettings::LegacyGroupSetting.find_by(target: group,
                                                                       var: :text_message_provider)
-        expect(setting.value[:originator]).to be_present
-        expect(setting.value[:originator]).to eq('bla')
+        expect(setting.value['originator']).to be_present
+        expect(setting.value['originator']).to eq('bla')
       end
     end
   end

@@ -285,8 +285,14 @@ Hitobito::Application.routes.draw do
             get 'event' => 'subscriber/event#new' # route required for language switch
 
             resource :user, only: [:create, :destroy], controller: 'subscriber/user'
+
           end
+
         end
+
+        member do 
+          get 'edit_filter_chain'
+        end  
 
         resources :mailchimp_synchronizations, only: [:create]
         resources :recipient_counts, controller: 'mailing_lists/recipient_counts', only: [:index]

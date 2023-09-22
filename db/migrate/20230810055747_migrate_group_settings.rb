@@ -79,17 +79,10 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
         end
       end
 
+      # we only have one setting with an attached picture, so
+      # we asume it's the letter_logo
       picture = rails_setting_active_storage_attachment(setting)
-      if picture
-        filename = picture.filename.to_s
-        picture.open do |tempfile|
-          group.letter_logo.attach(
-            io: File.open(tempfile.path),
-            filename: filename 
-          )
-        end
-        rails_setting_active_storage_attachment_destroy(setting)
-      end
+      move_attachment(picture, group) if picture
 
       group.save(validate: false)
 
@@ -105,8 +98,13 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
     ActiveStorage::Attachment.where(record_type: 'RailsSettings::SettingObject', record_id: setting.id).first
   end
 
-  def rails_setting_active_storage_attachment_destroy(setting)
-    ActiveStorage::Attachment.where(record_type: 'RailsSettings::SettingObject', record_id: setting.id).delete_all
+  def move_attachment(attachment, group)
+    ActiveStorage::Attachment
+      .connection
+      .exec_update(
+        "UPDATE active_storage_attachments set record_type = 'Group', record_id = #{group.id}, " +
+        "name = 'letter_logo' where id = #{attachment.id}"
+      )
   end
 
   def revert_mounted_attributes

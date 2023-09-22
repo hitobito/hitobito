@@ -67,6 +67,8 @@ describe MigrateGroupSettings do
     before do
       migration.down
       groups.each { |g| g.letter_logo.purge }
+
+      MigrateGroupSettings::LegacyGroupSetting.destroy_all
     end
 
     it 'migrates picture settings' do

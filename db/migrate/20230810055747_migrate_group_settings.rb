@@ -143,9 +143,12 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
       setting = LegacyGroupSetting.find_or_create_by!(target_type: 'Group',
                                                          target_id: attachment.record_id,
                                                          var: :messages_letter)
-      attachment.name = :picture
-      attachment.record = setting
-      attachment.save!
+      ActiveStorage::Attachment
+        .connection
+        .exec_update(
+          "UPDATE active_storage_attachments set record_type = 'RailsSettings::SettingObject', record_id = #{setting.id}, " +
+          "name = 'picture' where id = #{attachment.id}"
+        )
     end
   end
 

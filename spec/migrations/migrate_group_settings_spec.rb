@@ -184,7 +184,7 @@ describe MigrateGroupSettings do
 
         setting = MigrateGroupSettings::LegacyGroupSetting.find_by(target: group,
                                                                       var: :messages_letter)
-        expect(setting.picture).to be_attached
+        expect(ActiveStorage::Attachment.exists?(record_type: 'RailsSettings::SettingObject', record_id: setting.id)).to eq(true)
       end
     end
 

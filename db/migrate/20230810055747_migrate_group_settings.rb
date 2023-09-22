@@ -83,7 +83,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
         rails_setting_active_storage_attachment_destroy(setting)
       end
 
-      group.save!
+      group.save(validate: false)
 
       if values.empty?
         setting.destroy!

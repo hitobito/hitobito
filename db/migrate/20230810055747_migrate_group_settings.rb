@@ -43,6 +43,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
       remove_column :groups, :text_message_provider
       remove_column :groups, :text_message_originator
       remove_column :groups, :letter_address_position
+      remove_column :groups, :letter_logo
     end
 
     Group.reset_column_information

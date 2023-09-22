@@ -19,6 +19,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
       Group.reset_column_information
     end
 
+    return unless table_exists?(:settings)
 
     say_with_time('migrate group settings to group attributes') do
       migrate_settings

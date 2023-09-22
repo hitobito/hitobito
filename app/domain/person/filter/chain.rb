@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Person::Filter::Chain
+class Person::Filter::Chain < Filter::Chain
 
   TYPES = [ # rubocop:disable Style/MutableConstant these are meant to be extended in wagons
     Person::Filter::Role,
@@ -15,85 +15,14 @@ class Person::Filter::Chain
     Person::Filter::TagAbsence
   ]
 
-  # Used for `serialize` method in ActiveRecord
-  class << self
-    def load(yaml)
-      new(YAML.safe_load(yaml || ''))
-    end
-
-    def dump(obj)
-      unless obj.is_a?(self)
-        raise ::ActiveRecord::SerializationTypeMismatch,
-              "Attribute was supposed to be a #{self}, but was a #{obj.class}. -- #{obj.inspect}"
-      end
-
-      YAML.dump(obj.to_hash.deep_stringify_keys)
-    end
-  end
-
-  attr_reader :filters
-
-  def initialize(params)
-    @filters = parse(params)
-  end
-
-  def filter(scope)
-    filters.inject(scope) do |s, filter|
-      filter.apply(s)
-    end
-  end
-
-  def [](attr)
-    filters.find { |f| f.attr == attr.to_s }
-  end
-
-  def blank?
-    filters.blank?
-  end
-
   def roles_join
     first_custom_roles_join || { roles: :group }
   end
 
-  def to_hash
-    # call #to_hash twice to get a regular hash (without indifferent access)
-    build_hash { |f| f.to_hash.to_hash }
-  end
-
-  def to_params
-    build_hash { |f| f.to_params }
-  end
-
-  def required_abilities
-    filters.map(&:required_ability).uniq
-  end
-
-  private
+  protected
 
   def first_custom_roles_join
     filters.collect(&:roles_join).compact.first
-  end
-
-  def build_hash
-    filters.each_with_object({}) { |f, h| h[f.attr] = yield f }
-  end
-
-  def parse(params)
-    params = params.to_unsafe_h if params.is_a?(ActionController::Parameters)
-    (params || {}).map { |attr, args| build_filter(attr, args) }.compact
-  end
-
-  def build_filter(attr, args)
-    type = filter_type(attr)
-    if type
-      filter = type.new(attr, args.with_indifferent_access)
-      filter.presence
-    end
-  end
-
-  def filter_type(attr)
-    key = filter_type_key(attr)
-    TYPES.find { |t| t.key == key }
   end
 
   def filter_type_key(attr)

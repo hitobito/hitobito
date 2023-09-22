@@ -8,7 +8,7 @@
 = f.labeled(:letter_address_position) do
   - Group::ADDRESS_POSITION_VALUES.each do |value|
     = f.inline_radio_button(:letter_address_position, value, t("activerecord.attributes.group.letter_address_positions.#{value}"))
-= render_extensions :messages_letter_fields, locals: { f: f }
+= render_extensions :mailing_lists_letter_fields, locals: { f: f }
 
 %h3.form-subtitle= Message::TextMessage.model_name.human(count: 2)
 = f.labeled_input_field(:text_message_username)

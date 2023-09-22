@@ -160,5 +160,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
       t.timestamps null: true
     end
     add_index :settings, [:target_type, :target_id, :var], unique: true
+
+    LegacyGroupSetting.reset_column_information
   end
 end

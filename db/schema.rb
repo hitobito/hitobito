@@ -667,7 +667,7 @@ ActiveRecord::Schema.define(version: 2023_03_27_151218) do
     t.bigint "mailing_list_id"
     t.bigint "sender_id"
     t.string "type", null: false
-    t.string "subject", limit: 256
+    t.string "subject", limit: 998
     t.string "state", default: "draft"
     t.integer "recipient_count", default: 0
     t.integer "success_count", default: 0

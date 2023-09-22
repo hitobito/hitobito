@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(version: 2023_08_10_055747) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "background_job_log_entries", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "background_job_log_entries", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "job_id", null: false
     t.string "job_name", null: false
     t.bigint "group_id"
@@ -110,7 +110,6 @@ ActiveRecord::Schema.define(version: 2023_08_10_055747) do
     t.index ["job_id", "attempt"], name: "index_background_job_log_entries_on_job_id_and_attempt", unique: true
     t.index ["job_id"], name: "index_background_job_log_entries_on_job_id"
     t.index ["job_name"], name: "index_background_job_log_entries_on_job_name"
-    t.check_constraint "json_valid(`payload`)", name: "payload"
   end
 
   create_table "calendar_groups", charset: "utf8mb4", force: :cascade do |t|
@@ -433,9 +432,9 @@ ActiveRecord::Schema.define(version: 2023_08_10_055747) do
     t.boolean "main_self_registration_group", default: false, null: false
     t.string "text_message_username"
     t.string "text_message_password"
-    t.string "text_message_provider"
+    t.string "text_message_provider", default: 'aspsms', null: false
     t.string "text_message_originator"
-    t.string "letter_address_position"
+    t.string "letter_address_position", default: 'left', null: false
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"

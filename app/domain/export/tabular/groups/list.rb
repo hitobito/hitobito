@@ -9,7 +9,7 @@ module Export::Tabular::Groups
   class List < Export::Tabular::Base
 
     EXCLUDED_ATTRS = %w(lft rgt contact_id require_person_add_requests logo
-                        created_at deleted_at archived_at
+                        created_at deleted_at archived_at letter_logo
                         creator_id updater_id deleter_id self_registration_role_type
                         encrypted_text_message_username encrypted_text_message_password
                         letter_address_position text_message_provider text_message_originator

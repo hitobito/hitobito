@@ -24,6 +24,11 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
       migrate_settings
     end
 
+    say_with_time('remove obsolete settings table') do
+      if LegacyGroupSetting.count.zero?
+        drop_table :settings
+      end
+    end
   end
 
   def down
@@ -103,6 +108,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
   end
 
   def revert_mounted_attributes
+    create_settings_table
     relevant_group_ids = Group.where('encrypted_text_message_username IS NOT NULL OR ' \
                                      'encrypted_text_message_password IS NOT NULL OR ' \
                                      'text_message_provider IS NOT NULL OR ' \
@@ -143,4 +149,15 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
     end
   end
 
+  def create_settings_table
+    return if table_exists?(:settings)
+
+    create_table :settings do |t|
+      t.string     :var, null: false
+      t.text       :value
+      t.references :target, null: false, polymorphic: true
+      t.timestamps null: true
+    end
+    add_index :settings, [:target_type, :target_id, :var], unique: true
+  end
 end

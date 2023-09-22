@@ -13,7 +13,7 @@ class MailingLists::Subscribers
   end
 
   def people
-    @people_scope.
+    @list.filter_chain.filter(@people_scope).
       joins(people_joins).
       joins(subscription_joins).
       where(subscriptions: { mailing_list_id: id }).

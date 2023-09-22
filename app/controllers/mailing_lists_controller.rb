@@ -13,7 +13,7 @@ class MailingListsController < CrudController
   self.permitted_attrs = [:name, :description, :publisher, :mail_name,
                           :additional_sender, :subscribable, :subscribers_may_post,
                           :anyone_may_post, :main_email, :delivery_report,
-                          :mailchimp_list_id, :mailchimp_api_key,
+                          :filter_chain, :mailchimp_list_id, :mailchimp_api_key,
                           :mailchimp_include_additional_emails, preferred_labels: []]
 
   decorates :group, :mailing_list
@@ -68,6 +68,11 @@ class MailingListsController < CrudController
     render json: [paging_properties(paged_entries),
                   ListSerializer.new(paged_entries, controller: self,
                     serializer: MailingListSerializer)].inject(&:merge)
+  end
+
+  def assign_attributes
+    filter_params = params[:filters]
+    entry.filter_chain = filter_params.except(:host).to_unsafe_hash if filter_params
   end
 
   alias group parent

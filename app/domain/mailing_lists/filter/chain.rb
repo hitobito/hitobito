@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class MailingList::Filter::Chain < Filter::Chain
+class MailingLists::Filter::Chain < Person::Filter::Chain
 
   TYPES = [ # rubocop:disable Style/MutableConstant these are meant to be extended in wagons
-    # MailingList::Filter::Attributes,
+    Person::Filter::Attributes,
   ]
 
 end

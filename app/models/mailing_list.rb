@@ -37,7 +37,7 @@
 class MailingList < ActiveRecord::Base
 
   serialize :preferred_labels, Array
-  serialize :filter_chain, MailingList::Filter::Chain
+  serialize :filter_chain, MailingLists::Filter::Chain
 
 
   attribute :mailchimp_result, Synchronize::Mailchimp::ResultType.new

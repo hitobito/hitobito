@@ -3,4 +3,14 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= render 'mailing_lists/filter_chain/form'
+= entry_form(stacked: true,
+             buttons_top: false,
+             cancel_url_new: group_mailing_list_subscriptions_path(@group, entry)) do |f|
+
+  .accordion
+    -# - if @qualification_kinds.present?
+    -#   = render(layout: 'filter', locals: { type: :qualification }) do
+    -#     = render 'qualification', f: f
+
+  = render(layout: 'people_filters/filter', locals: { type: :attributes }) do
+    = render 'people_filters/attributes', f: f

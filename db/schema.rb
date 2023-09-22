@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 2023_08_10_055747) do
     t.virtual "runtime", type: :integer, as: "timestampdiff(MICROSECOND,`started_at`,`finished_at`)"
     t.integer "attempt"
     t.string "status"
-    t.text "payload", size: :long, collation: "utf8mb4_bin"
+    t.json "payload"
     t.index ["group_id"], name: "index_background_job_log_entries_on_group_id"
     t.index ["job_id", "attempt"], name: "index_background_job_log_entries_on_job_id_and_attempt", unique: true
     t.index ["job_id"], name: "index_background_job_log_entries_on_job_id"
@@ -430,11 +430,12 @@ ActiveRecord::Schema.define(version: 2023_08_10_055747) do
     t.string "privacy_policy"
     t.string "nextcloud_url"
     t.boolean "main_self_registration_group", default: false, null: false
-    t.string "text_message_username"
-    t.string "text_message_password"
-    t.string "text_message_provider", default: 'aspsms', null: false
+    t.string "encrypted_text_message_username"
+    t.string "encrypted_text_message_password"
+    t.string "text_message_provider", default: "aspsms", null: false
     t.string "text_message_originator"
-    t.string "letter_address_position", default: 'left', null: false
+    t.string "letter_address_position", default: "left", null: false
+    t.string "letter_logo"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"

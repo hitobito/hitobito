@@ -14,6 +14,7 @@ class MigrateGroupSettings < ActiveRecord::Migration[6.1]
       add_column :groups, :text_message_provider, :string, null: false, default: 'aspsms'
       add_column :groups, :text_message_originator, :string
       add_column :groups, :letter_address_position, :string, null: false, default: 'left'
+      add_column :groups, :letter_logo, :string
 
       Group.reset_column_information
     end

@@ -66,8 +66,6 @@ describe MigrateGroupSettings do
 
     before do
       migration.down
-
-      MigrateGroupSettings::LegacyGroupSetting.delete_all
       groups.each { |g| g.letter_logo.purge }
     end
 
@@ -78,8 +76,9 @@ describe MigrateGroupSettings do
       end
       expect do
         migration.up
-      end.to change { MigrateGroupSettings::LegacyGroupSetting.count }.by(-2)
-        .and change { ActiveStorage::Attachment.where(record_type: 'RailsSettings::SettingObject').count }.by(-2)
+      end.to change { ActiveStorage::Attachment.where(record_type: 'RailsSettings::SettingObject').count }.by(-2)
+
+      expect(ActiveRecord::Base.connection.table_exists?('settings')).to eq(false)
 
       layers.each do |group|
         group.reload
@@ -101,6 +100,8 @@ describe MigrateGroupSettings do
         expect(group.text_message_username).to be_present
         expect(group.text_message_username).to eq('bla')
       end
+
+      expect(ActiveRecord::Base.connection.table_exists?('settings')).to eq(false)
     end
 
     it 'migrates regular settings' do
@@ -129,6 +130,8 @@ describe MigrateGroupSettings do
       expect do
         migration.up
       end.to change { MigrateGroupSettings::LegacyGroupSetting.count }.by(0)
+
+      expect(ActiveRecord::Base.connection.table_exists?('settings')).to eq(true)
     end
   end
 
@@ -164,7 +167,6 @@ describe MigrateGroupSettings do
 
     after do
       migration.up
-      MigrateGroupSettings::LegacyGroupSetting.delete_all
     end
 
     it 'migrates picture attr' do

@@ -17,10 +17,8 @@ ARG PRE_INSTALL_SCRIPT="\
   apt-get update && \
   apt-get install -y ca-certificates curl gnupg && \
   mkdir -p /etc/apt/keyrings && \
-  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
-    gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-  echo 'deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODEJS_VERSION}.x nodistro main' \
-    > /etc/apt/sources.list.d/nodesource.list \
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+  echo 'deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODEJS_VERSION}.x nodistro main' > /etc/apt/sources.list.d/nodesource.list \
 "
 ARG INSTALL_SCRIPT="node -v && npm -v && npm install -g yarn && yarn set version ${YARN_VERSION}"
 ARG PRE_BUILD_SCRIPT="\
@@ -167,7 +165,7 @@ RUN bash -vxc "${POST_BUILD_SCRIPT:-"echo 'no POST_BUILD_SCRIPT provided'"}"
 
 # TODO: Save artifacts
 
-RUN rm -rf vendor/cache/ .git spec/ node_modules/ db/production.sqlite3 .tx
+RUN rm -rf vendor/cache/ .git spec/ node_modules/ db/production.sqlite3
 
 
 #################################

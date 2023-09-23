@@ -11,20 +11,6 @@ require 'date'
 module Release
   # preparatory help-tooling
   module Tooling
-    def next_version(style = :patch)
-      incrementor = case style.to_sym
-                    when :patch
-                      ->(parts) { parts[0..1] + [parts[2].succ] }
-                    when :current_month
-                      ->(parts) do
-                        current_month = Date.today.strftime('%Y-%m')
-                        parts[0..1] + [current_month]
-                      end
-                    end
-
-      current_version.split('.').then { |parts| incrementor[parts] }.join('.')
-    end
-
     private
 
     def suggested_next_version(current = current_version)
@@ -69,14 +55,6 @@ module Release
 
     def sort_wagons(all_wagons, first_wagon)
       all_wagons.reject { |wgn| wgn == first_wagon }.prepend(first_wagon)
-    end
-
-    def current_version
-      `git tag | grep '^[0-9]' | sort -Vr | head -n 1`.chomp
-    end
-
-    def all_versions
-      `git tag | grep '^[0-9]'`.chomp.split
     end
 
     def determine_version

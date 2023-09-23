@@ -9,6 +9,7 @@ require_relative './tooling'
 require_relative './highlevel'
 require_relative './lowlevel'
 require_relative './world_monad'
+require_relative './commands'
 
 # Wrapper around some shell-commands needed to release a new version of
 # hitobito to production
@@ -59,6 +60,7 @@ class Release::Main
   include Release::Highlevel
   include Release::Lowlevel
   include Release::WorldMonad
+  include Release::Commands
 
   attr_reader :all_wagons, :wagon, :command_list
   attr_writer :composition_repo_dir, :hitobito_group_dir, :standard_answer
@@ -95,81 +97,6 @@ class Release::Main
     @wagon = @all_wagons.first
 
     @all_wagons # rubocop:disable Lint/Void a return value is not void
-  end
-
-  def run
-    with_env({ 'OVERCOMMIT_DISABLE' => '1' }) do
-      in_dir(hitobito_group_dir) do
-        # @all_wagons += infer_wagons if @all_wagons.one?
-        notify "Releasing #{@all_wagons.join(', ')}"
-        @message = new_version_message
-
-        # in_dir('hitobito') do
-        #   fetch_code_and_tags
-        #   @version = determine_version
-        #   @message = new_version_message
-        # end
-        notify @message
-
-        prepare_core
-        prepare_wagons
-        update_composition
-
-        # if confirm(question: 'Add an unreleased-section to the CHANGELOGs again?')
-        #   prepare_next_version
-        # end
-      end
-    end
-  end
-
-  def prepare_core
-    in_dir('hitobito') do
-      break if existing_version_again?
-
-      update_translations
-      update_changelog
-      update_version file: 'VERSION'
-
-      release_version @version
-    end
-  end
-
-  def prepare_wagons
-    @all_wagons.each do |wagon|
-      in_dir("hitobito_#{wagon}") do
-        break if existing_version_again?
-
-        update_translations
-        update_changelog
-        update_version file: "lib/hitobito_#{wagon}/version.rb"
-        release_version @version
-      end
-    end
-  end
-
-  def update_composition
-    in_dir(composition_repo_dir) do
-      unless working_in_composition_dir?
-        fetch_code_and_tags
-        update_submodules(branch: 'production')
-      end
-
-      update_submodule_content(to: @version)
-      record_submodule_state
-      release_version @version
-    end
-  end
-
-  def prepare_next_version
-    @all_wagons
-      .map { |wagon| "hitobito_#{wagon}" }
-      .prepend('hitobito')
-      .each do |dir|
-        in_dir(dir) do
-          prepare_changelog
-          execute 'git push origin'
-        end
-      end
   end
 
   def command_list=(setting)

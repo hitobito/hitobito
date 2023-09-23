@@ -59,7 +59,7 @@ parser.add_command('suggest-version') do |cmd|
   end
 end
 
-parser.add_command('composition', default: true) do |cmd|
+parser.add_command('composition') do |cmd| # rename to production
   cmd.short_desc = 'Prepare the current state of all repos in the composition-repo'
   cmd.takes_commands = false
   cmd.action do |version|
@@ -78,7 +78,7 @@ parser.add_command('composition', default: true) do |cmd|
 
     raise unless releaser.usable?
 
-    releaser.run
+    releaser.update_production
   end
 end
 

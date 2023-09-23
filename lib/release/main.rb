@@ -64,7 +64,7 @@ class Release::Main
 
   attr_reader :all_wagons, :wagon, :command_list
   attr_writer :composition_repo_dir, :hitobito_group_dir, :standard_answer
-  attr_accessor :dry_run, :version
+  attr_accessor :dry_run, :version, :message
 
   def initialize(all_wagons)
     self.all_wagons = all_wagons

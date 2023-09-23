@@ -57,6 +57,35 @@ module Release
       end
     end
 
+    def update_integration # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+      with_env({ 'OVERCOMMIT_DISABLE' => '1' }) do
+        in_dir(hitobito_group_dir) do
+          notify "Updating #{@all_wagons.join(', ')}"
+          @message ||= new_version_message
+          notify @message
+
+          ['hitobito', *(@all_wagons.map { |wgn| "hitobito_#{wgn}" })].each do |dir|
+            in_dir(dir) do
+              update_translations
+              push
+            end
+          end
+
+          in_dir(composition_repo_dir) do
+            unless working_in_composition_dir?
+              fetch_code_and_tags
+              update_submodules(branch: 'devel')
+            end
+
+            update_submodule_content(to: 'master')
+            record_submodule_state
+            push
+          end
+        end
+      end
+    end
+    # rubocop:enable Metrics/BlockLength
+
     def current_version(stage = :production)
       `#{tag_lookup_cmd(stage)} | head -n 1`.chomp
     end

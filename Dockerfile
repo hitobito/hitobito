@@ -10,7 +10,7 @@ ARG YARN_VERSION="1.22.19"
 
 # Packages
 ARG BUILD_PACKAGES="nodejs git sqlite3 libsqlite3-dev imagemagick build-essential default-libmysqlclient-dev"
-ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev default-libmysqlclient-dev"
+ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev default-libmysqlclient-dev libjemalloc-dev libjemalloc2"
 
 # Scripts
 ARG PRE_INSTALL_SCRIPT="\
@@ -235,8 +235,7 @@ RUN    export DEBIAN_FRONTEND=noninteractive \
     && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && truncate -s 0 /var/log/*log
 
-# TODO second step: jemalloc
-# ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 
 # Copy deployment ready source code from build
 COPY --from=build $HOME $HOME

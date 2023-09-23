@@ -15,10 +15,10 @@ on:
         description: "Name of the project, e.g. sjas"
         type: string
         required: true
-      # version:
-      #   description: "Version to be deployed, e.g. 1.30.5 or 1.30.5-{SHA}"
-      #   type: string
-      #   required: true
+      version:
+        description: "Version to be deployed, e.g. 1.30.5 or 1.30.5-{SHA}"
+        type: string
+        required: true
 
     secrets:
       PUZZLE_REGISTRY:
@@ -61,7 +61,7 @@ jobs:
           target: app
           tags: |
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:latest
-          # ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:${{ inputs.version }}
+            ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:${{ inputs.version }}
           push: true
 
       - uses: docker/build-push-action@v4
@@ -75,5 +75,5 @@ jobs:
           target: sphinx
           tags: |
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:latest
-          # ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:${{ inputs.version }}
+            ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:${{ inputs.version }}
           push: true

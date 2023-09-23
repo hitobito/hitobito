@@ -61,6 +61,19 @@ module Release
       `#{tag_lookup_cmd(stage)} | head -n 1`.chomp
     end
 
+    def next_integration_version
+      prod = current_version(:production)
+
+      day_counter = days_since(prod)
+      new_int = "#{prod}-#{day_counter}"
+
+      if all_versions(:integration).include?(new_int)
+        "#{new_int}-#{current_sha}"
+      else
+        new_int
+      end
+    end
+
     def next_version(style = :patch) # rubocop:disable Metrics/MethodLength
       incrementor = \
         case style.to_sym
@@ -78,6 +91,15 @@ module Release
 
     private
 
+    def days_since(version)
+      tag_date = `git log #{version} -1 --format="%ct"`.chomp
+      (Time.now.utc.to_date - Time.at(tag_date.to_i).to_date).to_i
+    end
+
+    def current_sha
+      `git rev-parse --short HEAD`
+    end
+
     def all_versions(stage = :production)
       `#{tag_lookup_cmd(stage)}`.chomp.split
     end
@@ -89,6 +111,7 @@ module Release
     def version_grep_pattern(stage)
       case stage
       when :production  then '^[0-9][0-9.]+$' # 1.30.6
+      when :integration then '^[0-9][0-9.]+-[0-9]+.*$' # 1.30.6-26 or 1.30.6-123-33b8937
       end
     end
   end

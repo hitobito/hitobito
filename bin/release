@@ -57,6 +57,37 @@ parser.add_command('suggest-version') do |cmd|
       puts releaser.next_version(:current_month)
     end
   end
+
+  cmd.add_command('integration') do |subcmd|
+    subcmd.short_desc = 'append number to days to current production version'
+    subcmd.takes_commands = false
+    subcmd.action do
+      releaser = Release::Main.new([])
+      puts releaser.next_integration_version
+    end
+  end
+end
+
+parser.add_command('current-version') do |cmd|
+  cmd.short_desc = 'Return the current version number'
+
+  cmd.add_command('production', default: true) do |subcmd|
+    subcmd.short_desc = 'PROD version'
+    subcmd.takes_commands = false
+    subcmd.action do
+      releaser = Release::Main.new([])
+      puts releaser.current_version(:production)
+    end
+  end
+
+  cmd.add_command('integration') do |subcmd|
+    subcmd.short_desc = 'INT version'
+    subcmd.takes_commands = false
+    subcmd.action do
+      releaser = Release::Main.new([])
+      puts releaser.current_version(:integration)
+    end
+  end
 end
 
 parser.add_command('composition') do |cmd| # rename to production

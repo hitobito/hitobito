@@ -91,12 +91,11 @@ parser.add_command('current-version') do |cmd|
 end
 
 parser.add_command('integration') do |cmd|
-  cmd.short_desc = 'Update the submodules of all repos in the composition-repo'
+  cmd.short_desc = 'Update composition-repo for integration-release'
   cmd.takes_commands = false
   cmd.action do |version|
     require 'pathname'
-    # dir = File.expand_path('../..', __dir__)
-    dir = File.expand_path('../../ose_composition_sjas/', __dir__)
+    dir = File.expand_path('../..', __dir__)
     all_wagons = Pathname.new(dir).children.flat_map do |dep|
       dep.to_s.scan(/hitobito_(\w+)/).first
     end.compact
@@ -115,8 +114,8 @@ parser.add_command('integration') do |cmd|
   end
 end
 
-parser.add_command('composition') do |cmd| # rename to production
-  cmd.short_desc = 'Prepare the current state of all repos in the composition-repo'
+parser.add_command('production') do |cmd|
+  cmd.short_desc = 'Prepare composition-repo for production-release'
   cmd.takes_commands = false
   cmd.action do |version|
     require 'pathname'

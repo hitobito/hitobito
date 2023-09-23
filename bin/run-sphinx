@@ -54,4 +54,3 @@ pull_database_config_from_env
 create_initial_index
 scheduled_indexing &
 searchd --config $SPHINX_CONFIG_PATH --nodetach
-

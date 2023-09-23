@@ -80,10 +80,6 @@ class Release::Main
       helpers_present?
   end
 
-  def usage!
-    abort("USAGE: #{$PROGRAM_NAME} $WAGONS or WAGONS='wagon1 wagon2' #{$PROGRAM_NAME}")
-  end
-
   def first_wagon=(first_wagon)
     self.all_wagons = sort_wagons(@all_wagons, first_wagon)
 
@@ -114,17 +110,6 @@ class Release::Main
   end
 
   private
-
-  # def infer_wagons
-  #   [].tap do |wagons|
-  #     in_dir("hitobito_#{@wagon}") do
-  #       wagons << Gem::Specification.load("hitobito_#{@wagon}.gemspec")
-  #                                   .dependencies
-  #                                   .flat_map { |dep| dep.name.scan(/hitobito_(\w+)/).first }
-  #                                   .compact
-  #     end
-  #   end.flatten.compact
-  # end
 
   # well, do not execute, just output what would be done
   def dry_run?

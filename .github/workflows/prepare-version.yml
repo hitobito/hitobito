@@ -92,7 +92,7 @@ jobs:
           git config --global user.name "$(cd hitobito && git --no-pager log --format=format:'%an' -n 1)"
           git config --global user.email "$(cd hitobito && git --no-pager log --format=format:'%ae' -n 1)"
 
-      - name: 'Prepare release'
+      - name: 'Prepare composition-repo for release'
         env:
           NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
         run: |

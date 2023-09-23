@@ -9,12 +9,8 @@ ARG NODEJS_VERSION="16"
 ARG YARN_VERSION="1.22.19"
 
 # Packages
-ARG BUILD_PACKAGES="nodejs git transifex-client sqlite3 libsqlite3-dev imagemagick build-essential default-libmysqlclient-dev"
+ARG BUILD_PACKAGES="nodejs git sqlite3 libsqlite3-dev imagemagick build-essential default-libmysqlclient-dev"
 ARG RUN_PACKAGES="imagemagick shared-mime-info pkg-config libmagickcore-dev libmagickwand-dev default-libmysqlclient-dev"
-
-# should go into prepare-integration action
-# if [[ \"$INTEGRATION_BUILD\" == \"1\" ]]; then git submodule update --remote; fi; \
-# if [[ \"$INTEGRATION_BUILD\" == \"1\"]]; then bundle exec rake tx:pull tx:wagon:pull tx:push tx:wagon:push -t; fi; \
 
 # Scripts
 ARG PRE_INSTALL_SCRIPT="\

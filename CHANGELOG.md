@@ -7,6 +7,7 @@
 *  Das Feld "Gestellt am" einer Rechnung oder Sammelrechnung kann neu auch manuell gesetzt werden (hitobito_sww#135)
 *  Der Gruppen-Tab "Einstellungen" wurde entfernt und die Optionen sind neu in der Bearbeitungsansicht der Gruppe unter dem Tab "Abos" (#2165)
 *  Einführung von Gruppen-Attributen sowie Migration der Gruppen-Einstellungen (#2165)
+*  Sammelrechnungen können neu gelöscht werden (#1387)
 
 ## Version 1.30
 

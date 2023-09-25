@@ -267,6 +267,32 @@ describe MailingLists::BulkMail::Retriever do
     end
   end
 
+  context 'mails with wrong encoded subject' do
+
+    let(:imap_mail) { build_imap_mail(42, "Anlass hinzugef\xFcgt".dup.force_encoding('ASCII-8BIT')) }
+
+    it 'does process mail and enqueues job for mail delivery' do
+      expect(imap_mail).to receive(:original_to).and_return('leaders@localhost:3000')
+      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+      expect(imap_mail_validator).to receive(:sender_allowed?).and_return(true)
+
+      expect do
+        retriever.perform
+      end.to change { Message::BulkMail.count }.by(1)
+                                               .and change { MailLog.count }.by(1)
+                                                                            .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+                                                                                                                                                              .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::SenderRejectedMessageJob%"').count }.by(0)
+
+      mail_log = MailLog.find_by(mail_hash: 'abcd42')
+      expect(mail_log.status).to eq('retrieved')
+      expect(mail_log.mail_from).to eq('dude@hitobito.example.com')
+
+      message = mail_log.message
+      expect(message.subject).to eq("Anlass hinzugef�gt")
+      expect(message.state).to eq('pending')
+    end
+  end
+
   private
 
   def build_imap_mail(uid, subject)

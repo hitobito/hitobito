@@ -124,8 +124,16 @@ class MailingLists::BulkMail::Retriever
 
   def create_bulk_mail_entry(imap_mail)
     bulk_mail_class(imap_mail).create!(
-      subject: imap_mail.subject.dup.force_encoding(imap_mail.subject.encoding).encode("UTF-8", invalid: :replace, undef: :replace),
+      subject: encode_subject(imap_mail),
       state: :pending)
+  end
+
+  def encode_subject(imap_mail)
+    subject = imap_mail.subject.dup
+
+    unless subject.encoding == 'UTF-8'
+      subject.encode("UTF-8", invalid: :replace, undef: :replace)
+    end
   end
 
   def bulk_mail_class(imap_mail)

@@ -36,7 +36,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def input_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
     type = column_type(@object, attr.to_sym)
     custom_field_method = :"#{type}_field"
-    html_options[:class] = html_options[:class].to_s + 'form-control form-control-sm'
+    unless custom_field_method == :boolean_field
+      html_options[:class] = html_options[:class].to_s + 'form-control form-control-sm '
+    end
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     html_options[:required] ||= 'required' if required?(attr)
     if type == :text

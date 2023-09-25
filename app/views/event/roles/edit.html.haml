@@ -14,6 +14,6 @@
                                   :sti_name,
                                   :label,
                                   { prompt: ta(:please_select) },
-                                  class: 'span6')
+                                  class: 'form-select form-select-sm')
 
   = f.labeled_input_field(:label, data: {provide: :typeahead, source: @event.participation_role_labels})

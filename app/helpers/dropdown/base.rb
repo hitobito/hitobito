@@ -55,7 +55,7 @@ module Dropdown
         content_tag(:a,
                     class: "dropdown-toggle #{button_class}",
                     href: '#',
-                    data: { 'bs-toggle': 'dropdown' }) do
+                    data: { 'bs_toggle': 'dropdown' }) do
                       safe_join([label_without_link,
                                  content_tag(:b, '', class: 'caret')].compact, ' ')
                     end

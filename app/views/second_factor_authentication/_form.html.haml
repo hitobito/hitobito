@@ -8,4 +8,4 @@
     = f.label :second_factor_code, t('.totp_code'), class: 'control-label col-2'
     %div.col-3
       = f.text_field :second_factor_code, class: 'form-control form-control-sm', autofocus: 'autofocus', autocomplete: 'one-time-code', placeholder: t('.totp_code_placeholder'), required: true
-      = f.submit(t('.submit'), class: 'btn btn-primary mt-2')
+      = f.submit(t('.submit'), class: 'btn btn-sm btn-primary mt-2')

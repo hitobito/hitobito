@@ -16,7 +16,7 @@
 #  salutation            :string(255)
 #  sent_at               :datetime
 #  state                 :string(255)      default("draft")
-#  subject               :string(256)
+#  subject               :string(988)
 #  success_count         :integer          default(0)
 #  text                  :text(65535)
 #  type                  :string(255)      not null

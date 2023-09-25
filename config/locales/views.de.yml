@@ -839,6 +839,7 @@ de:
     actions_show:
       confirm_cancel: Wollen Sie diese Rechnung wirklich stornieren?
     pdf:
+      amount_open: Offener Betrag
       total: Gesamtbetrag
       total_vat: MwSt.
       cost: Zwischenbetrag

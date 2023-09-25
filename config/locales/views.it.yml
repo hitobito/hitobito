@@ -754,6 +754,7 @@ it:
     actions_show:
       confirm_cancel: Vuole davvero annullare questa fattura?
     pdf:
+      amount_open: Importo non pagato
       total: Importo totale
       total_vat: IVA
       cost: Subtotale

@@ -756,7 +756,8 @@ fr:
     actions_show:
       confirm_cancel: ' Voulez-vous vraiment annuler cette facture?'
     pdf:
-      total: montant total
+      amount_open: Montant impayé
+      total: Montant total
       total_vat: TVA
       cost: 'Montant '
       invoice_number: No. de facture

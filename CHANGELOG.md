@@ -8,6 +8,8 @@
 *  Der Gruppen-Tab "Einstellungen" wurde entfernt und die Optionen sind neu in der Bearbeitungsansicht der Gruppe unter dem Tab "Abos" (#2165)
 *  Einführung von Gruppen-Attributen sowie Migration der Gruppen-Einstellungen (#2165)
 *  Sammelrechnungen können neu gelöscht werden (#1387)
+*  Neu gibt es für Gruppen mit aktivierter Selbstregistrierung eine Seite, über welche sich eingeloggte Personen 
+   in der Gruppe einschreiben können (#2180)
 
 ## Version 1.30
 

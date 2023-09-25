@@ -24,7 +24,7 @@ describe MailingLists::BulkMail::Retriever do
     allow(imap_mail_validator).to receive(:processed_before?).and_return(false)
   end
 
-  context 'mails with regular subject' do
+  context 'mails subject' do
 
     let(:imap_mail) { build_imap_mail(42, 'Mail 42') }
 
@@ -238,14 +238,13 @@ describe MailingLists::BulkMail::Retriever do
           mail_log = MailLog.find_by(mail_hash: 'abcd42')
           expect(mail_log.status).to eq('auto_response_rejected')
         end
-      end
-  end
+    end
 
-  context 'mails with long subject' do
 
-    let(:imap_mail) { build_imap_mail(42, 300.times.map{ "a" }.join('')) }
+    it 'does process mail with long subject and enqueues job for mail delivery' do
+      imap_mail = build_imap_mail(42, 300.times.map{ "a" }.join(''))
+      allow(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(imap_mail)
 
-    it 'does process mail and enqueues job for mail delivery' do
       expect(imap_mail).to receive(:original_to).and_return('leaders@localhost:3000')
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
       expect(imap_mail_validator).to receive(:sender_allowed?).and_return(true)
@@ -265,13 +264,35 @@ describe MailingLists::BulkMail::Retriever do
       expect(message.subject).to eq(300.times.map{ "a" }.join(''))
       expect(message.state).to eq('pending')
     end
-  end
 
-  context 'mails with wrong encoded subject' do
+    it 'does process mail with utf-8 encoding and enqueues job for mail delivery' do
+      imap_mail = build_imap_mail(42, "Anlass hinzugefügt 😜🥶明天回报")
+      allow(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(imap_mail)
 
-    let(:imap_mail) { build_imap_mail(42, "Anlass hinzugef\xFcgt".dup.force_encoding('ASCII-8BIT')) }
+      expect(imap_mail).to receive(:original_to).and_return('leaders@localhost:3000')
+      expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
+      expect(imap_mail_validator).to receive(:sender_allowed?).and_return(true)
 
-    it 'does process mail and enqueues job for mail delivery' do
+      expect do
+        retriever.perform
+      end.to change { Message::BulkMail.count }.by(1)
+                                               .and change { MailLog.count }.by(1)
+                                                                            .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+                                                                                                                                                              .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::SenderRejectedMessageJob%"').count }.by(0)
+
+      mail_log = MailLog.find_by(mail_hash: 'abcd42')
+      expect(mail_log.status).to eq('retrieved')
+      expect(mail_log.mail_from).to eq('dude@hitobito.example.com')
+
+      message = mail_log.message
+      expect(message.subject).to eq("Anlass hinzugefügt 😜🥶明天回报")
+      expect(message.state).to eq('pending')
+    end
+
+    it 'does process mail with wrong encoding and enqueues job for mail delivery' do
+      imap_mail = build_imap_mail(42, "Anlass hinzugef\xFcgt".dup.force_encoding('ASCII-8BIT'))
+      allow(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(imap_mail)
+
       expect(imap_mail).to receive(:original_to).and_return('leaders@localhost:3000')
       expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
       expect(imap_mail_validator).to receive(:sender_allowed?).and_return(true)

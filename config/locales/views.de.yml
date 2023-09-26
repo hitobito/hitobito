@@ -1070,9 +1070,6 @@ de:
     global:
       link:
         add: Abo erstellen
-    filter_chain:
-      filters:
-        title: Globale Bedingungen
     form:
       help_additional_sender: 'Neben den Administratoren darf diese E-Mail ebenfalls Nachrichten an die Mailing Liste senden.'
       caption_main_email: 'Versand nur an Haupt E-Mail Adresse'
@@ -1935,6 +1932,8 @@ de:
       only_persons_with: 'Nur Personen mit:'
       persons_excluded_with: 'Personen ausschliessen mit:'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
+    filters:
+      title: Globale Bedingungen
 
   version:
     attribute_change:

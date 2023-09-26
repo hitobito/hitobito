@@ -43,10 +43,6 @@ class MailingListsController < CrudController
     end
   end
 
-  def edit_filter_chain
-    respond_with(entry)
-  end
-
   private
 
   def list_entries

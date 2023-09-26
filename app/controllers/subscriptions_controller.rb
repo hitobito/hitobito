@@ -37,6 +37,11 @@ class SubscriptionsController < CrudController
     end
   end
 
+  def edit_filter_chain
+    entry = mailing_list
+    respond_with(entry)
+  end
+
   private
 
   def load_grouped_subscriptions

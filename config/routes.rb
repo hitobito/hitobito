@@ -263,6 +263,8 @@ Hitobito::Application.routes.draw do
 
         resources :subscriptions, only: [:index, :destroy] do
           collection do
+            get 'edit_filter_chain'
+
             resources :person, only: [:new, :create], controller: 'subscriber/person'
             get 'person' => 'subscriber/person#new' # route required for language switch
 
@@ -289,10 +291,6 @@ Hitobito::Application.routes.draw do
           end
 
         end
-
-        member do 
-          get 'edit_filter_chain'
-        end  
 
         resources :mailchimp_synchronizations, only: [:create]
         resources :recipient_counts, controller: 'mailing_lists/recipient_counts', only: [:index]

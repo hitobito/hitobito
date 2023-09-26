@@ -11,7 +11,7 @@
 - if @person_add_requests.present?
   = render 'person/add_requests/body_list'
 
-= render('mailing_lists/filter_chain/filters')
+= render('filters')
 
 = render('subs_table', title: Person.model_name.human(count: 2), subs: @person_subs)
 = render('subs_table', title: [Group.model_name.human(count: 2), Role.model_name.human(count: 2)].join(' / '), subs: @group_subs, edit_controller: 'group')

@@ -1,0 +1,8 @@
+- title t('subscriptions.filters.title')
+
+= crud_form(parents, 
+            stacked: true,
+             buttons_bottom: false,
+             cancel_url: group_mailing_list_subscriptions_path(@group, @mailing_list)) do |f|
+
+  = render 'people_filters/attributes', f: f, entry: @mailing_list

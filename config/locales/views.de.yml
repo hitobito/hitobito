@@ -885,6 +885,7 @@ de:
     form_tabs:
       general: Allgemein
       email: E-Mail
+      layout: Layout
     update:
       flash:
         success: Rechnungseinstellungen wurden erfolgreich aktualisiert

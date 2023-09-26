@@ -693,6 +693,7 @@ en:
   invoice_configs:
     form_tabs:
       general: general
+      layout: layout
     update:
       flash:
         success: Invoice settings succesfully updated

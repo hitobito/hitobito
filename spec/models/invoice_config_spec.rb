@@ -136,4 +136,30 @@ describe InvoiceConfig do
       expect(invoice_config.errors.messages[:sender_name].first).to eq('ist nicht gültig')
     end
   end
+
+  context "#render_logo?" do
+    context 'with logo attached' do
+      before { invoice_config.logo.attach(fixture_file_upload("images/logo.png")) }
+
+      it 'returns true when logo_position is left' do
+        invoice_config.logo_position = 'left'
+        expect(invoice_config.render_logo?).to be(true)
+      end
+
+      it 'returns true when logo_position is right' do
+        invoice_config.logo_position = 'right'
+        expect(invoice_config.render_logo?).to be(true)
+      end
+
+      it 'returns false when logo_position is disabled' do
+        invoice_config.logo_position = 'disabled'
+        expect(invoice_config.render_logo?).to be(false)
+      end
+
+      it 'returns false when logo_position is nil' do
+        invoice_config.logo_position = nil
+        expect(invoice_config.render_logo?).to be(false)
+      end
+    end
+  end
 end

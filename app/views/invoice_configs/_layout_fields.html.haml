@@ -1,0 +1,15 @@
+-#  Copyright (c) 2023, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= field_set_tag do
+  = f.labeled :logo do
+    = f.file_field :logo, type: :file #, accept: Group::LogoUploader.accept_extensions
+
+  - if upload_exists?(entry, :logo)
+    = f.labeled :remove_logo do
+      = f.boolean_field :remove_logo
+  = f.labeled_i18n_enum_field :logo_position, InvoiceConfig.logo_position_labels.to_a
+
+= render_extensions(:layout_fields, locals: { f: f })

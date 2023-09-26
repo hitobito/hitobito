@@ -41,11 +41,18 @@ class InvoiceConfig < ActiveRecord::Base
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/.freeze
   PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}\z/.freeze
   PAYMENT_SLIPS = %w(qr no_ps).freeze
+  LOGO_MAX_DIMENSION = Settings.application.image_upload.max_dimension
+
+  class_attribute :logo_positions, default: %w[disabled left right]
 
   i18n_enum :payment_slip, PAYMENT_SLIPS, scopes: true, queries: true
+  i18n_enum :logo_position, scopes: false, queries: false do
+    logo_positions.map(&:to_s)
+  end
 
   belongs_to :group, class_name: 'Group'
 
+  has_one_attached :logo
   has_many :payment_reminder_configs, dependent: :destroy
   has_many :payment_provider_configs, dependent: :destroy
 
@@ -66,6 +73,10 @@ class InvoiceConfig < ActiveRecord::Base
   validates :donation_increase_percentage, numericality: { greater_than: 0,
                                                            allow_nil: true }
 
+  validates :logo, attached: {message: :attached_unless_disabled}, if: :logo_enabled?
+  validates :logo, dimension: { max: LOGO_MAX_DIMENSION..LOGO_MAX_DIMENSION }
+  validates :logo_position, inclusion: { in: ->(_){logo_positions} }
+
   validate :correct_check_digit
   validate :correct_payee_qr_format, if: :qr?
 
@@ -78,6 +89,20 @@ class InvoiceConfig < ActiveRecord::Base
 
   def to_s
     model_name.human
+  end
+
+  def remove_logo
+    false
+  end
+
+  def remove_logo=(deletion_param)
+    if %w(1 yes true).include?(deletion_param.to_s.downcase)
+      logo.purge_later
+    end
+  end
+
+  def render_logo?
+    logo_position.present? && logo_position != 'disabled' && logo.attached?
   end
 
   def variable_donation_configured?
@@ -113,5 +138,9 @@ class InvoiceConfig < ActiveRecord::Base
 
   def nullify_participant_number_internal
     self.participant_number_internal = nil
+  end
+
+  def logo_enabled?
+    logo_position != 'disabled'
   end
 end

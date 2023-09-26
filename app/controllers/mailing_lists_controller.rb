@@ -71,6 +71,7 @@ class MailingListsController < CrudController
   end
 
   def assign_attributes
+    super if params[:mailing_list].present?
     filter_params = params[:filters]
     entry.filter_chain = filter_params.except(:host).to_unsafe_hash if filter_params
   end

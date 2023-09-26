@@ -4,13 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form(stacked: true,
-             buttons_top: false,
+             buttons_bottom: false,
              cancel_url_new: group_mailing_list_subscriptions_path(@group, entry)) do |f|
 
-  .accordion
-    -# - if @qualification_kinds.present?
-    -#   = render(layout: 'filter', locals: { type: :qualification }) do
-    -#     = render 'qualification', f: f
-
-  = render(layout: 'people_filters/filter', locals: { type: :attributes }) do
-    = render 'people_filters/attributes', f: f
+  = render 'people_filters/attributes', f: f

@@ -3,3 +3,9 @@
   = link_to edit_filter_chain_group_mailing_list_path(@group.to_param, @mailing_list.to_param) do
     = icon(:edit)
 
+%ul.unstyled
+  - @mailing_list.filter_chain[:attributes].to_hash.values.each do |attribute_arg|
+    %li
+      = Person.filter_attrs.dig(attribute_arg[:key].to_sym, :label)
+      = t(attribute_arg[:constraint], scope: 'people_filters.attributes')
+      = attribute_arg[:value]

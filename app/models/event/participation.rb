@@ -60,6 +60,7 @@ class Event::Participation < ActiveRecord::Base
 
   before_validation :init, on: :create
   before_validation :set_self_in_nested
+  before_create :reset_person_minimized_at
 
   # There may be old participations without roles, so they must
   # update the count directly.
@@ -143,6 +144,10 @@ class Event::Participation < ActiveRecord::Base
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)
     answers.each { |e| e.participation = self unless e.frozen? }
+  end
+
+  def reset_person_minimized_at
+    person.minimized_at = nil
   end
 
   def init

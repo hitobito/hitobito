@@ -81,7 +81,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email,
     :self_registration_reason_custom_text,
     :self_registration_reason_id,
-    :privacy_policy_accepted_at
+    :privacy_policy_accepted_at,
+    :minimized_at
   ]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons

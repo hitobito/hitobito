@@ -101,10 +101,6 @@ class InvoiceConfig < ActiveRecord::Base
     end
   end
 
-  def render_logo?
-    logo_position.present? && logo_position != 'disabled' && logo.attached?
-  end
-
   def variable_donation_configured?
     self.donation_calculation_year_amount.present? &
       self.donation_increase_percentage.present?

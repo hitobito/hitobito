@@ -8,14 +8,15 @@
 module PdfHelpers
   extend ActiveSupport::Concern
 
-  def text_with_position(inspector = PDF::Inspector::Text.analyze(pdf.render))
+  def text_with_position(inspector = PDF::Inspector::Text.analyze(pdf.try(:render) || pdf))
     inspector.positions.each_with_index.collect do |p, i|
       p.collect(&:round) + [inspector.show_text[i]]
     end
   end
 
   def image_positions(page_no = 1)
-    io = StringIO.new(pdf.render)
+    rendered_pdf = pdf.try(:render) || pdf
+    io = StringIO.new(rendered_pdf)
 
     PDF::Reader.open(io) do |reader|
       page = reader.page(page_no)

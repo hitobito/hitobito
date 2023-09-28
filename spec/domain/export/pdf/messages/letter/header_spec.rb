@@ -51,7 +51,7 @@ describe Export::Pdf::Messages::Letter::Header do
   def expects_image(id)
     image_options = { position: :right }
     expect_any_instance_of(Prawn::Document)
-      .to receive(:image).with(instance_of(StringIO), image_options)
+      .to receive(:image).with(instance_of(Tempfile), image_options)
   end
 
   describe 'logo' do

@@ -47,35 +47,13 @@ class Export::Pdf::Messages::Letter
     end
 
     def render_logo_right(width: LOGO_BOX.first, height: LOGO_BOX.second)
-      left = bounds.width - width
-      bounding_box([left, cursor], width: width, height: height) do
-        if logo_path
-          image(StringIO.open(logo_path.download),
-                logo_options(width, height))
-        else
-          ''
-        end
-      end
-    end
-
-    def logo_options(box_width, box_height)
-      opts = { position: :right }
-      if logo_exceeds_box?(box_width, box_height)
-        opts[:fit] = [box_width, box_height]
-      end
-      opts
-    end
-
-    def logo_exceeds_box?(box_width, box_height)
-      width, height = logo_dimensions
-      width > box_width || height > box_height
-    end
-
-    def logo_dimensions
-      logo_path.analyze unless logo_path.analyzed?
-      metadata = logo_path.blob.metadata
-
-      [metadata[:width], metadata[:height]]
+      Export::Pdf::Logo.new(
+        pdf,
+        logo_attachment,
+        image_width: [width, bounds.width].min,
+        image_height: height,
+        position: :right
+      ).render
     end
 
     def render_address(recipient, width: ADDRESS_BOX.first, height: ADDRESS_BOX.second)
@@ -114,7 +92,7 @@ class Export::Pdf::Messages::Letter
       letter.own? && letter.pp_post.to_s.strip.blank?
     end
 
-    def logo_path
+    def logo_attachment
       logo_path_setting(group) || logo_path_setting(group.layer_group)
     end
 

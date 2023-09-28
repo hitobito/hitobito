@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class SubscriptionsController < CrudController
+class SubscriptionsController < ListController
 
   include RenderPeopleExports
   include AsyncDownload
@@ -41,7 +41,15 @@ class SubscriptionsController < CrudController
     respond_with(entry)
   end
 
+  def update_filter_chain
+    # respond_with(entry)
+  end
+
   private
+
+  def entry
+    nil
+  end
 
   def load_grouped_subscriptions
     @group_subs = group_subscriptions

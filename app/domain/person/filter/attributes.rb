@@ -11,9 +11,7 @@ class Person::Filter::Attributes < Person::Filter::Base
   end
 
   def apply(scope)
-    scope.where(raw_sql_condition(scope))
-         .merge(years_scope)
-         .merge(languages_scope)
+    scope.where(raw_sql_condition(scope)).merge(years_scope)
   end
 
   private
@@ -26,20 +24,8 @@ class Person::Filter::Attributes < Person::Filter::Base
     @years_constraint ||= constraints.find {|tuple| 'years' == tuple[:key] }
   end
 
-  def languages_constraint
-    @languages_constraint ||= constraints.find {|tuple| 'languages' == tuple[:key] }
-  end
-
   def generic_constraints
-    @generic_constraints ||= constraints - [years_constraint, languages_constraint]
-  end
-
-  def languages_scope
-    return Person.all unless languages_constraint
-
-    value, constraint = languages_constraint.values_at('value', 'constraint')
-    value = value.to_i
-    raise constraint.inspect
+    @generic_constraints ||= constraints - [years_constraint]
   end
 
   def years_scope

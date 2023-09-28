@@ -263,8 +263,6 @@ Hitobito::Application.routes.draw do
 
         resources :subscriptions, only: [:index, :destroy] do
           collection do
-            get 'edit_filter_chain'
-
             resources :person, only: [:new, :create], controller: 'subscriber/person'
             get 'person' => 'subscriber/person#new' # route required for language switch
 
@@ -287,6 +285,8 @@ Hitobito::Application.routes.draw do
             get 'event' => 'subscriber/event#new' # route required for language switch
 
             resource :user, only: [:create, :destroy], controller: 'subscriber/user'
+
+            resource :filter, only: [:edit, :update], controller: 'subscriber/filter'
 
           end
 

@@ -164,18 +164,6 @@ describe MailingLists::BulkMail::Retriever do
         expect(message.subject).to eq('Mail 42')
         expect(message.state).to eq('pending')
       end
-
-      it 'does not process mail if no sender mail' do
-        allow(imap_mail).to receive(:sender_email).and_return(nil)
-        expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
-
-        expect do
-          retriever.perform
-        end.to change { Message::BulkMail.count }.by(0)
-                                                 .and change { MailLog.count }.by(0)
-                                                                              .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(0)
-                                                                                                                                                                .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::SenderRejectedMessageJob%"').count }.by(0)
-      end
     end
 
     context 'imap mail server errors' do

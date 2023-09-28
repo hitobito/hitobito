@@ -10,6 +10,9 @@
 *  Sammelrechnungen können neu gelöscht werden (#1387)
 *  Neu gibt es für Gruppen mit aktivierter Selbstregistrierung eine Seite, über welche sich eingeloggte Personen 
    in der Gruppe einschreiben können (#2180)
+*  Logo kann auf Rechnungen angezeigt werden (#hitobito_sww#144)
+    - konfigurierbar pro Layer
+    - links oder rechts
 
 ## Version 1.30
 

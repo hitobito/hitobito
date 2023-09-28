@@ -22,15 +22,17 @@ class MailingLists::BulkMail::Retriever
   def process_mail(mail_uid)
     imap_mail = fetch_mail(mail_uid)
 
-    validator = validator(imap_mail)
+    unless imap_mail.sender.nil?
+      validator = validator(imap_mail)
 
-    if validator.processed_before?
-      mail_processed_before!(imap_mail)
+      if validator.processed_before?
+        mail_processed_before!(imap_mail)
+      end
+
+      mail_log = create_mail_log(imap_mail)
+
+      validate_and_process(imap_mail, mail_log, validator)
     end
-
-    mail_log = create_mail_log(imap_mail)
-
-    validate_and_process(imap_mail, mail_log, validator)
 
     delete_mail(mail_uid)
   end

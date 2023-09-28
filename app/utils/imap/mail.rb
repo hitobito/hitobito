@@ -35,6 +35,8 @@ class Imap::Mail
   end
 
   def sender_email
+    return nil if envelope.sender.nil?
+
     envelope.sender[0].mailbox + '@' + envelope.sender[0].host
   end
 

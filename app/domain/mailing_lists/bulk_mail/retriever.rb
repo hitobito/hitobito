@@ -22,7 +22,7 @@ class MailingLists::BulkMail::Retriever
   def process_mail(mail_uid)
     imap_mail = fetch_mail(mail_uid)
 
-    unless imap_mail.sender.nil?
+    if imap_mail.sender.present?
       validator = validator(imap_mail)
 
       if validator.processed_before?

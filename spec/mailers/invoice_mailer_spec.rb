@@ -39,10 +39,23 @@ describe InvoiceMailer do
     expect(mail.reply_to).to eq %w(invoices@example.com)
   end
 
-  it 'uses invoice_config.sender_name in mail headers' do
-    invoice.invoice_config.update(sender_name: 'Hitobito-Bern')
+  it 'uses return path in headers when invoice_config.sender_name is not configured' do
     expect(mail.from).to eq %w(noreply@localhost)
-    expect(mail.sender).to eq('Hitobito-Bern')
+    expect(mail.sender).to eq('noreply-bounces+bottom_member=example.com@localhost')
+    expect(mail.reply_to).to eq %w(bottom_member@example.com)
+  end
+
+  it 'uses invoice_config.sender_name in mail headers' do
+    invoice.invoice_config.update(sender_name: 'Hitobito Bern')
+    expect(mail.from).to eq %w(noreply@localhost)
+    expect(mail.sender).to eq('Hitobito Bern')
+    expect(mail.reply_to).to eq %w(bottom_member@example.com)
+  end
+
+  it 'uses invoice_config.sender_name in mail headers with email configured as sender_name' do
+    invoice.invoice_config.update(sender_name: 'hitobito@test.com')
+    expect(mail.from).to eq %w(noreply@localhost)
+    expect(mail.sender).to eq('hitobito@test.com')
     expect(mail.reply_to).to eq %w(bottom_member@example.com)
   end
 

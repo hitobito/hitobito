@@ -9,6 +9,18 @@ class InvoiceMailer < ApplicationMailer
 
   CONTENT_INVOICE_NOTIFICATION = 'content_invoice_notification'.freeze
 
+  def mail(headers = {}, &block)
+    HEADERS_TO_SANITIZE.each do |h|
+      if headers.key?(h) && headers[h].present?
+        headers[h] = IdnSanitizer.sanitize(headers[h])
+      end
+    end
+
+    mail = super(headers, &block)
+
+    mail.sender = @invoice.invoice_config.sender_name if @invoice.invoice_config.sender_name.present?
+  end
+
   def notification(invoice, sender)
     @sender  = sender
     @invoice = invoice
@@ -84,7 +96,7 @@ class InvoiceMailer < ApplicationMailer
 
   def mail_headers(person, email)
     sender = email.blank? ? person : Person.new(email: email)
-    with_personal_sender(sender, { sender: @invoice.invoice_config.sender_name })
+    with_personal_sender(sender)
   end
 
 end

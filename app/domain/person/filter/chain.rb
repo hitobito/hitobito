@@ -93,7 +93,7 @@ class Person::Filter::Chain
 
   def filter_type(attr)
     key = filter_type_key(attr)
-    TYPES.find { |t| t.key == key }
+    self.class::TYPES.find { |t| t.key == key }
   end
 
   def filter_type_key(attr)

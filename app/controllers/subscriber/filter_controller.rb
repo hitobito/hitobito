@@ -24,23 +24,12 @@ module Subscriber
     private
 
     def assign_attributes
-      filter_params = params[:filters]
-      mailing_list.filter_chain = filter_params.except(:host).to_unsafe_hash if filter_params
+      mailing_list.filter_chain = params[:filters]&.except(:host)&.to_unsafe_hash
     end
 
     def entry 
       mailing_list 
     end
-
-    # def subscription
-    #   @subscription ||= find_subscription || build_subscription
-    # end
-
-    # def find_subscription
-    #   mailing_list.subscriptions.where(subscriber_id: current_user.id,
-    #                                    subscriber_type: Person.sti_name).
-    #                              first
-    # end
 
     def mailing_list
       @mailing_list ||= MailingList.find(params[:mailing_list_id])

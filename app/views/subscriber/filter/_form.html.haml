@@ -1,4 +1,4 @@
-- title t('subscriptions.filters.title')
+- title t('subscriber.filter.show.title')
 
 = entry_form(url: group_mailing_list_filter_path(@group, @mailing_list), 
              method: :PATCH,
@@ -9,5 +9,6 @@
   .accordion
     = render(layout: 'people_filters/filter', locals: { entry: @mailing_list, type: :attributes }) do
       = render 'people_filters/attributes', f: f, entry: @mailing_list
-    -# = render(layout: 'people_filters/filter', locals: { type: :languages }) do
-    -#   = "Sprachen"
+
+    = render(layout: 'people_filters/filter', locals: { type: :language }) do
+      = render 'people_filters/language', f: f, entry: @mailing_list

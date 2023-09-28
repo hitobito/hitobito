@@ -1678,6 +1678,11 @@ de:
       greater: grösser als
       smaller: kleiner als
 
+    language: 
+      title: Sprache
+      word_connector: ' oder ' 
+      one_of: Sprache ist %{languages}
+
     tag:
       title: Tags
       prompt_tag_selection: Personen einbeziehen, die mindestens einen der untenstehenden Tags enthalten
@@ -1888,6 +1893,11 @@ de:
     exclude_person:
       form:
         exclude_subscriber: 'Abonnent/-in ausschliessen'
+
+    filter:
+      show:
+        title: Globale Bedingungen
+
     subscriber_lists:
       new:
         title: Personen zu Abo hinzufügen
@@ -1903,6 +1913,10 @@ de:
     success: 'Du wurdest dem Abo erfolgreich hinzugefügt.'
     failure: 'Du konntest dem Abo nicht hinzugefügt werden: %{errors}'
     unsubscribed: 'Du wurdest erfolgreich vom Abo entfernt.'
+
+  subscriber/filter:
+    success: 'Globale Bedingungen wurden erfolgreich aktualisiert'
+    failure: 'Globale Bedingungen konnten nicht aktualisiert werden'
 
   subscriber/exclude_person:
     success: '%{subscriber} wurde erfolgreich ausgeschlossen'
@@ -1932,8 +1946,6 @@ de:
       only_persons_with: 'Nur Personen mit:'
       persons_excluded_with: 'Personen ausschliessen mit:'
     export_enqueued: 'Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen.'
-    filters:
-      title: Globale Bedingungen
 
   version:
     attribute_change:

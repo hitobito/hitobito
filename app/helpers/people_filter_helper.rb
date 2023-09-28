@@ -77,16 +77,4 @@ module PeopleFilterHelper
     end
   end
 
-  def language_filter_check_boxes(time, value)
-    content_tag(:div, class: 'span2 attribute_value_inpu ') do
-      safe_join(Person::LANGUAGES.map do |language_value, language_name|
-        label_tag(nil, class: 'checkbox ') do
-          out = check_box_tag("filters[attributes][#{time}][value][]", language_value, value.include?(language_value.to_s))
-          out << language_name
-          out
-        end
-      end)
-    end
-  end
-
 end

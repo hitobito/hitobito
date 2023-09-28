@@ -46,9 +46,9 @@ describe InvoiceMailer do
   end
 
   it 'uses invoice_config.sender_name in mail headers' do
-    invoice.invoice_config.update(sender_name: 'Hitobito Bern')
+    invoice.invoice_config.update(sender_name: 'Étienne Müller')
     expect(mail.from).to eq %w(noreply@localhost)
-    expect(mail.sender).to eq('Hitobito Bern')
+    expect(mail.sender).to eq('Étienne Müller')
     expect(mail.reply_to).to eq %w(bottom_member@example.com)
   end
 

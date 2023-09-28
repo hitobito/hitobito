@@ -8,6 +8,8 @@
 require 'spec_helper'
 
 describe Export::Pdf::Messages::Letter::Header do
+  include PdfHelpers
+
   let(:base_options) { {
     margin: Export::Pdf::Messages::Letter::MARGIN,
     page_size: 'A4',
@@ -26,7 +28,7 @@ describe Export::Pdf::Messages::Letter::Header do
                         shipping_method: 'normal', pp_post: 'CH-3030 Bern, Belpstrasse 37')
   end
   let(:pdf)      { Prawn::Document.new(options) }
-  let(:analyzer) { PDF::Inspector::Text.analyze(pdf.render) }
+
   let(:shipping_info_with_position_left) do
     [
       [71, 672, 'P.P.'],
@@ -76,6 +78,21 @@ describe Export::Pdf::Messages::Letter::Header do
       group_id = assign_image(top_group)
       expects_image(group_id)
       subject.render(recipient)
+    end
+
+    it 'has the correct position and size' do
+      assign_image(top_group.layer_group)
+      subject.render(recipient)
+
+      expect(image_positions).to have(1).item
+      expect(image_positions.first).to match(
+        x: 294.414,
+        y: 741.024,
+        width: 230,
+        height: 30,
+        displayed_width: 52900.0,
+        displayed_height: 900.0
+      )
     end
 
     context 'image scaling' do
@@ -298,12 +315,6 @@ describe Export::Pdf::Messages::Letter::Header do
   end
 
   private
-
-  def text_with_position
-    analyzer.positions.each_with_index.collect do |p, i|
-      p.collect(&:round) + [analyzer.show_text[i]]
-    end
-  end
 
   def text_with_position_without_shipping_info
     text_with_position - (shipping_info_with_position_left + shipping_info_with_position_right)

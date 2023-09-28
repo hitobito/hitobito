@@ -164,6 +164,7 @@ describe MailingLists::BulkMail::Retriever do
         expect(message.subject).to eq('Mail 42')
         expect(message.state).to eq('pending')
       end
+      
     end
 
     context 'imap mail server errors' do

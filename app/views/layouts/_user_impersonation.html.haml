@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 .user-impersonation.info-bar
-  .alert-danger
+  .alert.alert-danger
     = t('.info', user: current_user)
     = link_to(sign_out_path,
               data: { method: :delete }) do

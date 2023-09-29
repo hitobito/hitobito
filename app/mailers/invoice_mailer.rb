@@ -10,12 +10,6 @@ class InvoiceMailer < ApplicationMailer
   CONTENT_INVOICE_NOTIFICATION = 'content_invoice_notification'.freeze
 
   def mail(headers = {}, &block)
-    HEADERS_TO_SANITIZE.each do |h|
-      if headers.key?(h) && headers[h].present?
-        headers[h] = IdnSanitizer.sanitize(headers[h])
-      end
-    end
-
     mail = super(headers, &block)
 
     mail.sender =

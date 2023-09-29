@@ -5,7 +5,7 @@
 
 #synchronization-spinner.d-none{"data-turbolinks-permanent" => ""}
   .info-bar
-    .alert-info
+    .alert.alert-info
       = image_pack_tag('spinner.gif', size: '16x16', class: 'spinner')
       = t('.wait_for_synchronization')
       = link_to(t('.cancel_synchronization'), '#', id: 'cancel_async_synchronizations')

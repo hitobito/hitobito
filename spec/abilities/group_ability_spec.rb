@@ -54,6 +54,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:show_statistics, group)
       end
 
+      it 'may show deleted subgroups' do
+        is_expected.to be_able_to(:deleted_subgroups, group)
+      end
+
       it 'may show service_tokens' do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
@@ -100,6 +104,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:show_statistics, group)
       end
 
+      it 'may show deleted subgroups' do
+        is_expected.to be_able_to(:deleted_subgroups, group)
+      end
+
       it 'may not index service tokens' do
         is_expected.not_to be_able_to(:index_service_tokens, group)
       end
@@ -136,6 +144,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:show_statistics, group)
       end
 
+      it 'may show deleted subgroups' do
+        is_expected.to be_able_to(:deleted_subgroups, group)
+      end
+
       it 'may show service tokens' do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
@@ -154,6 +166,10 @@ describe GroupAbility do
 
       it 'may not show statistics' do
         is_expected.not_to be_able_to(:show_statistics, group)
+      end
+
+      it 'may not show deleted subgroups' do
+        is_expected.not_to be_able_to(:deleted_subgroups, group)
       end
 
       it 'may not show person notes' do
@@ -214,6 +230,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:show_statistics, group)
       end
 
+      it 'may show deleted subgroups' do
+        is_expected.to be_able_to(:deleted_subgroups, group)
+      end
+
       it 'may show service tokens' do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
@@ -250,6 +270,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:show_statistics, group)
       end
 
+      it 'may show deleted subgroups' do
+        is_expected.to be_able_to(:deleted_subgroups, group)
+      end
+
       it 'may show service tokens' do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
@@ -284,6 +308,10 @@ describe GroupAbility do
 
       it 'may not show statistics' do
         is_expected.not_to be_able_to(:show_statistics, group)
+      end
+
+      it 'may not show deleted subgroups' do
+        is_expected.not_to be_able_to(:deleted_subgroups, group)
       end
 
       it 'may not show service tokens' do
@@ -349,6 +377,10 @@ describe GroupAbility do
         is_expected.not_to be_able_to(:show_statistics, group)
       end
 
+      it 'may show deleted subgroups' do
+        is_expected.to be_able_to(:deleted_subgroups, group)
+      end
+
       it 'mayi not show service tokens' do
         is_expected.not_to be_able_to(:index_service_tokens, group)
       end
@@ -366,6 +398,10 @@ describe GroupAbility do
       it 'may not create subgroup' do
         is_expected.not_to be_able_to(:create, Group.new)
       end
+
+      it 'may not show deleted subgroups' do
+        is_expected.not_to be_able_to(:deleted_subgroups, group)
+      end
     end
 
     context 'in other group from same layer' do
@@ -373,12 +409,20 @@ describe GroupAbility do
       it 'may create subgroup' do
         is_expected.to be_able_to(:create, group.children.new)
       end
+
+      it 'may not show deleted subgroups' do
+        is_expected.not_to be_able_to(:deleted_subgroups, group)
+      end
     end
 
     context 'in group from lower layer' do
       let(:group) { groups(:bottom_layer_one) }
       it 'may not create subgroup' do
         is_expected.not_to be_able_to(:create, group.children.new)
+      end
+
+      it 'may not show deleted subgroups' do
+        is_expected.not_to be_able_to(:deleted_subgroups, group)
       end
     end
   end
@@ -412,6 +456,10 @@ describe GroupAbility do
         is_expected.not_to be_able_to(:show_statistics, group)
       end
 
+      it 'may show deleted subgroups' do
+        is_expected.to be_able_to(:deleted_subgroups, group)
+      end
+
       it 'may not show service tokens' do
         is_expected.not_to be_able_to(:index_service_tokens, group)
       end
@@ -429,6 +477,10 @@ describe GroupAbility do
       it 'may not create subgroup' do
         is_expected.not_to be_able_to(:create, Group.new)
       end
+
+      it 'may not show deleted subgroups' do
+        is_expected.not_to be_able_to(:deleted_subgroups, group)
+      end
     end
 
     context 'in other group from same layer' do
@@ -436,12 +488,20 @@ describe GroupAbility do
       it 'may not create subgroup' do
         is_expected.not_to be_able_to(:create, group.children.new)
       end
+
+      it 'may not show deleted subgroups' do
+        is_expected.not_to be_able_to(:deleted_subgroups, group)
+      end
     end
 
     context 'in group from lower layer' do
       let(:group) { groups(:bottom_layer_one) }
       it 'may not create subgroup' do
         is_expected.not_to be_able_to(:create, group.children.new)
+      end
+
+      it 'may not show deleted subgroups' do
+        is_expected.not_to be_able_to(:deleted_subgroups, group)
       end
     end
   end

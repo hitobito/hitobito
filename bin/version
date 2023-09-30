@@ -1,0 +1,195 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+#  Copyright (c) 2020-2023, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+begin
+  require 'cmdparse'
+rescue LoadError
+  abort(<<~MESSAGE)
+    Please install "cmdparse" to run this
+  MESSAGE
+end
+
+require 'date'
+
+class ReleaseVersion
+  def current_version(stage = :production)
+    `#{tag_lookup_cmd(stage)} | head -n 1`.chomp
+  end
+
+  def next_integration_version
+    prod = current_version(:production)
+
+    day_counter = days_since(prod)
+    new_int = "#{prod}-#{day_counter}"
+
+    if all_versions(:integration).include?(new_int)
+      "#{new_int}-#{current_sha}"
+    else
+      new_int
+    end
+  end
+
+  def next_version(style = :patch) # rubocop:disable Metrics/MethodLength
+    incrementor = \
+      case style.to_sym
+      when :patch
+        ->(parts) { parts[0..1] + [parts[2].succ] }
+      when :current_month
+        ->(parts) do
+          current_month = Date.today.strftime('%Y-%m')
+          parts[0..1] + [current_month]
+        end
+      end
+
+    current_version(:production).split('.').then { |parts| incrementor[parts] }.join('.')
+  end
+
+  def all_versions(stage = :production)
+    `#{tag_lookup_cmd(stage)}`.chomp.split
+  end
+
+  def remote_version(stage, repo)
+    cmd = [
+      remote_lookup_cmd(repo),
+      version_grep_cmd(stage),
+      'sort -Vr',
+      'head -n 1'
+    ].join(' | ')
+
+    `#{cmd}`
+  end
+
+  private
+
+  def days_since(version)
+    tag_date = `git log #{version} -1 --format="%ct"`.chomp
+    (Time.now.utc.to_date - Time.at(tag_date.to_i).to_date).to_i
+  end
+
+  def current_sha
+    `git rev-parse --short HEAD`
+  end
+
+  def tag_lookup_cmd(stage)
+    "git tag --sort=-committerdate --list | #{version_grep_cmd(stage)}"
+  end
+
+  def remote_lookup_cmd(repo)
+    "git ls-remote --tags #{repo} | cut -f2 | sed 's!refs/tags/!!'"
+  end
+
+  def version_grep_cmd(stage)
+    pattern =
+      case stage
+      when :production then [version_grep_pattern(stage)]
+      when :integration then [version_grep_pattern(stage), version_grep_pattern(:production)]
+      end
+
+    "grep -E '(#{pattern.join('|')})'"
+  end
+
+  def version_grep_pattern(stage)
+    case stage
+    when :production  then '^[0-9][0-9.]+$' # 1.30.6
+    when :integration then '^[0-9][0-9.]+-[0-9]+.*$' # 1.30.6-26 or 1.30.6-123-33b8937
+    end
+  end
+end
+
+# basic setup
+parser = CmdParse::CommandParser.new(handle_exceptions: true)
+parser.main_options.program_name = 'version'
+parser.main_options.version = '1.0.0'
+parser.main_options.banner = 'Show and Suggest version-numbers'
+
+parser.add_command(CmdParse::HelpCommand.new)
+parser.add_command(CmdParse::VersionCommand.new)
+
+# custom commands
+parser.add_command('suggest') do |cmd|
+  cmd.short_desc = 'Suggest a new version-number'
+
+  cmd.add_command('patch', default: true) do |subcmd|
+    subcmd.short_desc = 'Increment Patch-version'
+    subcmd.takes_commands = false
+    subcmd.action do
+      puts ReleaseVersion.new.next_version(:patch)
+    end
+  end
+
+  cmd.add_command('current-month') do |subcmd|
+    subcmd.short_desc = 'set patch to current "YEAR-MONTH"'
+    subcmd.takes_commands = false
+    subcmd.action do
+      puts ReleaseVersion.new.next_version(:current_month)
+    end
+  end
+
+  cmd.add_command('integration') do |subcmd|
+    subcmd.short_desc = 'append number to days to current production version'
+    subcmd.takes_commands = false
+    subcmd.action do
+      puts ReleaseVersion.new.next_integration_version
+    end
+  end
+end
+
+parser.add_command('current') do |cmd|
+  cmd.short_desc = 'Return the current version number'
+
+  current_version = Proc.new do |stage|
+    Proc.new do |subcmd|
+      subcmd.short_desc = "#{stage.upcase} version"
+      subcmd.takes_commands = false
+      subcmd.action do
+        puts ReleaseVersion.new.current_version(stage.downcase.to_sym)
+      end
+    end
+  end
+
+  cmd.add_command('production', default: true, &current_version['production'])
+  cmd.add_command('integration', &current_version['integration'])
+end
+
+parser.add_command('remote') do |cmd|
+  cmd.short_desc = 'Return the current version number in a remote repository'
+
+  remote_version = Proc.new do |stage|
+    Proc.new do |subcmd|
+      subcmd.short_desc = "#{stage.upcase} version"
+      subcmd.takes_commands = false
+      subcmd.argument_desc(repo: 'Repository to query')
+      subcmd.action do |repo|
+        puts ReleaseVersion.new.remote_version(stage.downcase.to_sym, repo)
+      end
+    end
+  end
+
+  cmd.add_command('production', default: true, &remote_version['production'])
+  cmd.add_command('integration', &remote_version['integration'])
+end
+
+parser.add_command('all') do |cmd|
+  cmd.short_desc = 'Return all versions'
+
+  all_versions = Proc.new do |stage|
+    Proc.new do |subcmd|
+      subcmd.short_desc = "#{stage.upcase} version"
+      subcmd.takes_commands = false
+      subcmd.action do
+        puts ReleaseVersion.new.all_versions(stage.downcase.to_sym)
+      end
+    end
+  end
+
+  cmd.add_command('production', default: true, &all_versions['production']) 
+  cmd.add_command('integration', &all_versions['integration'])
+end
+
+# ... and go
+parser.parse

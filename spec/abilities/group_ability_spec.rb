@@ -624,6 +624,10 @@ describe GroupAbility do
       is_expected.not_to be_able_to(:read, groups(:bottom_layer_one))
     end
 
+    it 'may not show deleted subgroups' do
+      is_expected.not_to be_able_to(:deleted_subgroups, group)
+    end
+
     it 'may not show_details any group' do
       is_expected.not_to be_able_to(:show_details, groups(:bottom_layer_one))
     end

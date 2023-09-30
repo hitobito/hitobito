@@ -63,18 +63,20 @@ class Release::Main
   include Release::Commands
 
   attr_reader :all_wagons, :wagon, :command_list
-  attr_writer :composition_repo_dir, :hitobito_group_dir, :standard_answer
+  attr_writer :composition_repo_dir, :hitobito_group_dir, :standard_answer, :stage
   attr_accessor :dry_run, :version, :message
 
   def initialize(all_wagons)
     self.all_wagons = all_wagons
     @standard_answer = nil
+    @stage = :production
 
     notify 'Running in dry-run mode' if dry_run?
   end
 
   def usable?
     version_present? &&
+      message_present? &&
       wagons_present? &&
       composition_known? &&
       helpers_present?
@@ -131,6 +133,10 @@ class Release::Main
 
   def version_present?
     !@version.nil?
+  end
+
+  def message_present?
+    !@message.nil?
   end
 
   def wagons_present?

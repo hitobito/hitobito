@@ -51,6 +51,7 @@ parser.add_command('integration') do |cmd|
     releaser = Release::Main.new(all_wagons)
     releaser.hitobito_group_dir = releaser.composition_repo_dir = dir
     releaser.version = version
+    releaser.stage = :integration
     releaser.message = "Update integration to #{version}"
     releaser.dry_run = parser.data[:dry_run]
     releaser.command_list = parser.data[:command_list]
@@ -75,6 +76,8 @@ parser.add_command('production') do |cmd|
     releaser = Release::Main.new(all_wagons)
     releaser.hitobito_group_dir = releaser.composition_repo_dir = dir
     releaser.version = version
+    releaser.stage = :production
+    releaser.message = "Update production to #{version}"
     releaser.dry_run = parser.data[:dry_run]
     releaser.command_list = parser.data[:command_list]
     releaser.standard_answer = true

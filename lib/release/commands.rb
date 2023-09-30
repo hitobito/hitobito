@@ -4,18 +4,18 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-#
-# rubocop:disable Rails
+
+require_relative './highlevel'
+require_relative './lowlevel'
+require_relative './tooling'
 
 module Release
   module Commands
-    # rubocop:disable Metrics/BlockLength
-    def update_production # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    # rubocop:disable Metrics/BlockLength,Metrics/MethodLength,Metrics/AbcSize
+    def update_production
       with_env({ 'OVERCOMMIT_DISABLE' => '1' }) do
         in_dir(hitobito_group_dir) do
           notify "Releasing #{@all_wagons.join(', ')}"
-          @message ||= new_version_message
-
           notify @message
 
           in_dir('hitobito') do
@@ -57,11 +57,10 @@ module Release
       end
     end
 
-    def update_integration # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+    def update_integration
       with_env({ 'OVERCOMMIT_DISABLE' => '1' }) do
         in_dir(hitobito_group_dir) do
           notify "Updating #{@all_wagons.join(', ')}"
-          @message ||= new_version_message
           notify @message
 
           ['hitobito', *(@all_wagons.map { |wgn| "hitobito_#{wgn}" })].each do |dir|

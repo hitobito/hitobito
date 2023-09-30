@@ -14,6 +14,14 @@ module Release
   module WorldMonad
     private
 
+    def current_version(stage = :production)
+      `version current #{stage}`.chomp
+    end
+
+    def all_versions(stage = :production)
+      `version all #{stage}`.chomp.split
+    end
+
     def ask(question, default)
       cli.ask(question) { |q| q.default = default }.chomp
     end

@@ -5,66 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'date'
-
-# rubocop:disable Rails/Date this is not running inside of rails...
 module Release
   # preparatory help-tooling
   module Tooling
     private
 
-    def suggested_next_version(current = current_version)
-      incrementor =
-        case current
-        # 1.28.46 / 1.28.46.1
-        when /\A\d+\.\d+\.\d+(\.\d+)?\z/ then ->(parts) { parts[0..-2] + [parts.last.succ] }
-        # 1.28.2023-01 / 1.28.2023-02.1
-        when /\A\d+\.\d+\.\d{4}-\d{2}(\.\d+)?\z/ then ->(parts) { next_monthly_version(*parts) }
-        # 1.28.2023W09 / 1.28.2023W09.1
-        when /\A\d+\.\d+\.\d{4}W\d{2}(\.\d+)?\z/ then ->(parts) { next_weekly_version(*parts) }
-        end
-
-      current.split('.').then { |parts| incrementor[parts] }.join('.')
-    end
-
-    def next_monthly_version(major, minor, month = nil, patch = nil)
-      current_month = Date.today.strftime('%Y-%m')
-
-      # ensure a patch-version if the month is already current
-      patch ||= 0 if month == current_month
-
-      # increment the patch if present
-      new_patch = patch&.succ
-
-      # remove the patch again if it's not set
-      [major, minor, current_month, new_patch].compact
-    end
-
-    def next_weekly_version(major, minor, week = nil, patch = nil)
-      current_week = Date.today.strftime('%GW%V') # rubocop:disable Rails/Date not rails...
-
-      # ensure a patch-version if the week is already current
-      patch ||= 0 if week == current_week
-
-      # increment the patch if present
-      new_patch = patch&.succ
-
-      # remove the patch again if it's not set
-      [major, minor, current_week, new_patch].compact
-    end
-
     def sort_wagons(all_wagons, first_wagon)
       all_wagons.reject { |wgn| wgn == first_wagon }.prepend(first_wagon)
-    end
-
-    def determine_version
-      return @version unless @version.nil?
-
-      ask('Next Version: ', suggested_next_version)
-    end
-
-    def new_version_message
-      "Update production to #{@version}"
     end
 
     def with_env(env_hash)
@@ -119,4 +66,3 @@ module Release
     end
   end
 end
-# rubocop:enable Rails/Date

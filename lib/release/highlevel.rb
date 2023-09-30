@@ -20,7 +20,7 @@ module Release
     end
 
     def current_version_again?
-      return false unless current_version == @version
+      return false unless current_version(@stage) == @version
 
       notify 'current version is used again, skipping repo'
       true
@@ -28,7 +28,7 @@ module Release
 
     def existing_version_again?
       return true if current_version_again?
-      return false unless all_versions.include?(@version)
+      return false unless all_versions(@stage).include?(@version)
 
       notify 'existing version is used again, skipping repo'
       true

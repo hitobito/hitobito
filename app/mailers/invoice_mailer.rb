@@ -13,7 +13,7 @@ class InvoiceMailer < ApplicationMailer
     mail = super(headers, &block)
 
     if @invoice.invoice_config.sender_name.present?
-      mail.from = "#{@invoice.invoice_config.sender_name} <#{mail.sender}>"
+      mail.from = "#{@invoice.invoice_config.sender_name} <#{mail.from[0]}>"
     end
   end
 

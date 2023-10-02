@@ -818,6 +818,7 @@ fr:
       donation_increase_percentage_explanation: Pourcentage pour le calcul des dons
     email_fields:
       email_help: Les réponses à des e-mails concernant les factures doivent être envoyées à l'adresse de l'utilisateur.rice actuel.le ou à l'adresse configurée ici.
+      email_validation: Ne doit pas être un e-mail.
       sender_name_help: Les e-mails de facturation sont envoyés sous ce nom.
     reminder_fields:
       third_level: 'Pour tous les rappels suivants, les données du troisième rappel sont reprises.'

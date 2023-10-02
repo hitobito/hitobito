@@ -38,6 +38,7 @@ class InvoiceConfig < ActiveRecord::Base
   include ValidatedEmail
 
   IBAN_REGEX = /\A[A-Z]{2}[0-9]{2}\s?([A-Z]|[0-9]\s?){12,30}\z/.freeze
+  EMAIL_REGEX = /\A[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\z/.freeze
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/.freeze
   PARTICIPANT_NUMBER_INTERNAL_REGEX = /\A[0-9]{6}\z/.freeze
   PAYMENT_SLIPS = %w(qr no_ps).freeze
@@ -68,6 +69,8 @@ class InvoiceConfig < ActiveRecord::Base
 
   validate :correct_check_digit
   validate :correct_payee_qr_format, if: :qr?
+
+  validates :sender_name, format: { without: Devise.email_regexp }
 
   accepts_nested_attributes_for :payment_reminder_configs
   accepts_nested_attributes_for :payment_provider_configs

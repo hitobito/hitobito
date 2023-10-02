@@ -904,6 +904,7 @@ de:
     email_fields:
       email_help: Antworten auf Rechnungs-E-Mails sollen entweder an die Adresse des aktuellen
         Benutzers oder an die hier konfigurierte Adresse gesendet werden.
+      email_validation: Darf keine Email sein.
       sender_name_help: Rechnungs-E-Mails werden unter diesem Namen versendet.
     reminder_fields:
       third_level: 'Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt.'

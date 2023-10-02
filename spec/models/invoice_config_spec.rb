@@ -121,4 +121,19 @@ describe InvoiceConfig do
       expect(invoice_config).to be_valid
     end
   end
+
+  describe 'sender_name validation' do
+    it 'allows special characters' do
+      invoice_config.sender_name = 'Étienne Müller / Sami +*'
+
+      expect(invoice_config).to be_valid
+    end
+
+    it 'doesnt allow emails' do
+      invoice_config.sender_name = 'hitobito@bern.ch'
+
+      expect(invoice_config).not_to be_valid
+      expect(invoice_config.errors.messages[:sender_name].first).to eq('ist nicht gültig')
+    end
+  end
 end

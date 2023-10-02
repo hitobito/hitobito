@@ -13,7 +13,7 @@ class InvoiceMailer < ApplicationMailer
     mail = super(headers, &block)
 
     mail.sender =
-      @invoice.invoice_config.sender_name if @invoice.invoice_config.sender_name.present?
+      "#{@invoice.invoice_config.sender_name} <#{mail.sender}>" if @invoice.invoice_config.sender_name.present?
   end
 
   def notification(invoice, sender)

@@ -19,6 +19,16 @@ on:
         description: "Version to be deployed, e.g. 1.30.5 or 1.30.5-{SHA}"
         type: string
         required: true
+      stage:
+        description: "Target-stage for image, used as additional tag: production or integration"
+        type: string
+        required: true
+        default: integration
+      push:
+        description: "Build and debug things without pushing to the registry"
+        type: boolean
+        required: true
+        default: true
 
     secrets:
       PUZZLE_REGISTRY:
@@ -62,7 +72,8 @@ jobs:
           tags: |
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:latest
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:${{ inputs.version }}
-          push: true
+            ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/rails:${{ inputs.stage }}
+          push: ${{ inputs.push }}
 
       - uses: docker/build-push-action@v4
         with:
@@ -76,4 +87,5 @@ jobs:
           tags: |
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:latest
             ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:${{ inputs.version }}
-          push: true
+            ${{ secrets.PUZZLE_REGISTRY }}/hitobito/${{ inputs.project }}/sphinx:${{ inputs.stage }}
+          push: ${{ inputs.push }}

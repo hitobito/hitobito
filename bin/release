@@ -10,17 +10,17 @@ begin
   require 'cmdparse'
 rescue LoadError
   abort(<<~MESSAGE)
-    Please install "cmdparse" to run the release-script
+    Please install "cmdparse" to run this
   MESSAGE
 end
 
-require_relative '../lib/release/main'
+require_relative '../lib/release/update_command'
 
 # basic setup
 parser = CmdParse::CommandParser.new(handle_exceptions: true)
 parser.main_options.program_name = 'release'
-parser.main_options.version = '1.0.0'
-parser.main_options.banner = 'Prepare the release for hitobito-composition (core and selected wagons)'
+parser.main_options.version = '1.1.0'
+parser.main_options.banner = 'Prepare the release for a hitobito-composition (core and selected wagons)'
 
 # global options
 parser.global_options do |opt|
@@ -33,60 +33,13 @@ parser.global_options do |opt|
   end
 end
 
+# built-in commands
 parser.add_command(CmdParse::HelpCommand.new)
 parser.add_command(CmdParse::VersionCommand.new)
 
-# TODO: extract Release::UpdateCommand that can handle integration and production (maybe even others like staging)
-
-parser.add_command('integration') do |cmd|
-  cmd.short_desc = 'Update composition-repo for integration-release'
-  cmd.takes_commands = false
-  cmd.action do |version|
-    require 'pathname'
-    dir = File.expand_path('../..', __dir__)
-    all_wagons = Pathname.new(dir).children.flat_map do |dep|
-      dep.to_s.scan(/hitobito_(\w+)/).first
-    end.compact
-
-    releaser = Release::Main.new(all_wagons)
-    releaser.hitobito_group_dir = releaser.composition_repo_dir = dir
-    releaser.version = version
-    releaser.stage = :integration
-    releaser.message = "Update integration to #{version}"
-    releaser.dry_run = parser.data[:dry_run]
-    releaser.command_list = parser.data[:command_list]
-    releaser.standard_answer = true
-
-    raise unless releaser.usable?
-
-    releaser.update_integration
-  end
-end
-
-parser.add_command('production') do |cmd|
-  cmd.short_desc = 'Prepare composition-repo for production-release'
-  cmd.takes_commands = false
-  cmd.action do |version|
-    require 'pathname'
-    dir = File.expand_path('../..', __dir__)
-    all_wagons = Pathname.new(dir).children.flat_map do |dep|
-      dep.to_s.scan(/hitobito_(\w+)/).first
-    end.compact
-
-    releaser = Release::Main.new(all_wagons)
-    releaser.hitobito_group_dir = releaser.composition_repo_dir = dir
-    releaser.version = version
-    releaser.stage = :production
-    releaser.message = "Update production to #{version}"
-    releaser.dry_run = parser.data[:dry_run]
-    releaser.command_list = parser.data[:command_list]
-    releaser.standard_answer = true
-
-    raise unless releaser.usable?
-
-    releaser.update_production
-  end
-end
+# custom commands
+parser.add_command(Release::UpdateCommand.new('integration', :update_integration))
+parser.add_command(Release::UpdateCommand.new('production', :update_production))
 
 # ... and go
 parser.parse

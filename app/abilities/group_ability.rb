@@ -23,12 +23,14 @@ class GroupAbility < AbilityDsl::Base
       in_same_group_or_below
 
     permission(:group_full)
-      .may(:index_full_people, :export_events, :'export_event/courses', :reactivate, :deleted_subgroups)
+      .may(:index_full_people, :export_events, :'export_event/courses', :reactivate,
+            :deleted_subgroups)
       .in_same_group
     permission(:group_full).may(:update).in_same_group_if_active
 
     permission(:group_and_below_full)
-      .may(:index_full_people, :reactivate, :export_events, :'export_event/courses', :deleted_subgroups)
+      .may(:index_full_people, :reactivate, :export_events, :'export_event/courses', 
+            :deleted_subgroups)
       .in_same_group_or_below
     permission(:group_and_below_full).may(:update).in_same_group_or_below_if_active
     permission(:group_and_below_full).may(:create).with_parent_in_same_group_hierarchy

@@ -30,7 +30,7 @@ jobs:
     with:
       repository: ${{ inputs.composition }}
       stage: ${{ inputs.stage }}
-      version_type: ${{ next_version }}
+      version_type: ${{ inputs.next_version }}
 
   determine_version:
     runs-on: ubuntu-latest

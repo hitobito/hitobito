@@ -25,18 +25,18 @@ permissions:
   contents: write
 
 jobs:
-  determine_settings:
+  settings:
     uses: hitobito/hitobito/.github/workflows/stage-settings.yml@new-dockerfile
     with:
       repository: ${{ inputs.composition }}
       stage: ${{ inputs.stage }}
       version_type: ${{ inputs.next_version }}
 
-  determine_version:
+  version:
     runs-on: ubuntu-latest
 
     needs:
-      - determine_settings
+      - settings
 
     outputs:
       version: ${{ steps.determine.outputs.version }}
@@ -64,7 +64,7 @@ jobs:
       - name: 'Determine next version'
         id: determine
         env:
-          VERSION_TYPE: ${{ needs.determine_settings.outputs.version_type }}
+          VERSION_TYPE: ${{ needs.settings.outputs.version_type }}
         run: |
           next_version=$(bin/version suggest "$VERSION_TYPE")
           echo "version=${next_version}" >> "$GITHUB_OUTPUT"
@@ -72,15 +72,15 @@ jobs:
   prepare_release:
     runs-on: 'ubuntu-latest'
     needs:
-      - determine_version
-      - determine_settings
+      - version
+      - settings
 
     steps:
       - name: 'Checkout composition repo'
         uses: actions/checkout@v4
         with:
           repository: "hitobito/${{ inputs.composition }}"
-          ref: ${{ needs.determine_settings.outputs.composition_branch }}
+          ref: ${{ needs.settings.outputs.composition_branch }}
           submodules: true
           fetch-depth: 0 # ALL the historiez, including ALL the branches
           token: ${{ secrets.RELEASE_PREPARATION_TOKEN }}
@@ -132,8 +132,8 @@ jobs:
 
       - name: 'Prepare composition-repo for release'
         env:
-          NEXT_VERSION: ${{ needs.determine_version.outputs.version }}
-          RELEASE_STAGE: ${{ needs.determine_settings.outputs.release_stage }}
+          NEXT_VERSION: ${{ needs.version.outputs.version }}
+          RELEASE_STAGE: ${{ needs.settings.outputs.release_stage }}
         run: |
           echo "Preparing $NEXT_VERSION for $RELEASE_STAGE"
 

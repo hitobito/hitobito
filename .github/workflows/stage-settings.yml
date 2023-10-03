@@ -1,0 +1,58 @@
+name: 'Composition Repo - Determine Settings'
+
+on:
+  workflow_call:
+    inputs: &common_inputs
+      repository:
+        description: "Composition repository, e.g. hitobito/ose_composition_sjas"
+        required: true
+        type: string
+      stage:
+        description: "Stage of release to be prepared"
+        required: true
+        type: string
+      version_type:
+        description: "Type of next version"
+        default: 'patch'
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs: *common_inputs
+
+jobs:
+  settings:
+    runs-on: ubuntu-latest
+
+    outputs:
+      project: ${{ steps.determine.outputs.project }}
+      repo_name: ${{ steps.determine.outputs.repo_name }}
+      repo_url: ${{ steps.determine.outputs.repo_url }}
+      composition_branch: ${{ steps.determine.outputs.branch }}
+      release_stage: ${{ steps.determine.outputs.stage }}
+      version_type: ${{ steps.determine.outputs.version_type }}
+
+    steps:
+      - name: Infer project-name and stage-settings
+        id: determine
+        env:
+          STAGE: ${{ inputs.stage }}
+          REPO: ${{ inputs.repository }}
+          VERSION_TYPE: ${{ inputs.version_type }}
+        run: |
+          echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
+          echo "repo_name=${REPO}" >> "$GITHUB_OUTPUT"
+
+          echo "repo_url=https://github.com/${REPO}.git" >> "$GITHUB_OUTPUT"
+          echo "project=${REPO##hitobito/ose_composition_}" >> "$GITHUB_OUTPUT"
+
+          case $STAGE in
+            production)
+              echo "branch=production" >> "$GITHUB_OUTPUT"
+              echo "version_type=${VERSION_TYPE}" >> "$GITHUB_OUTPUT"
+            ;;
+
+            integration)
+              echo "branch=devel" >> "$GITHUB_OUTPUT"
+              echo "version_type=integration" >> "$GITHUB_OUTPUT"
+            ;;
+          esac;

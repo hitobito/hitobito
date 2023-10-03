@@ -28,31 +28,18 @@ permissions:
 
 jobs:
   determine_settings:
-    runs-on: ubuntu-latest
-    outputs:
-      composition_branch: ${{ steps.determine.outputs.branch }}
-      release_stage: ${{ steps.determine.outputs.stage }}
-
-    steps:
-      - name: 'Determine settings'
-        id: determine
-        env:
-          STAGE: ${{ inputs.stage }}
-        run: |
-          case $STAGE in
-            production)
-              echo "branch=production" >> "$GITHUB_OUTPUT"
-              echo "stage=production" >> "$GITHUB_OUTPUT"
-            ;;
-
-            integration)
-              echo "branch=devel" >> "$GITHUB_OUTPUT"
-              echo "stage=integration" >> "$GITHUB_OUTPUT"
-            ;;
-          esac;
+    uses: hitobito/hitobito/.github/workflows/stage-settings.yml@new-dockerfile
+    with:
+      repository: ${{ inputs.composition }}
+      stage: ${{ inputs.stage }}
+      version_type: ${{ next_version }}
 
   determine_version:
     runs-on: ubuntu-latest
+
+    needs:
+      - determine_settings
+
     outputs:
       version: ${{ steps.determine.outputs.version }}
 
@@ -79,7 +66,7 @@ jobs:
       - name: 'Determine next version'
         id: determine
         env:
-          VERSION_TYPE: ${{ inputs.next_version }}
+          VERSION_TYPE: ${{ needs.determine_settings.outputs.version_type }}
         run: |
           next_version=$(bin/version suggest "$VERSION_TYPE")
           echo "version=${next_version}" >> "$GITHUB_OUTPUT"

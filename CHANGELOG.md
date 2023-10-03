@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 1.30
 
 *  Der Buchungsbeleg berücksichtigt neu keine Rechnungen mit dem Status "Storniert" (hitobito_sww#136)
 *  Im Gruppen-Log werden neu auch Änderungen an der Gruppe selber aufgezeichnet (hitobito_sac_cas#73)

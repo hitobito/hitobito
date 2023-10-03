@@ -2,7 +2,7 @@ name: 'Composition Repo - Determine Settings'
 
 on:
   workflow_call:
-    inputs: &common_inputs
+    inputs:
       repository:
         description: "Composition repository, e.g. hitobito/ose_composition_sjas"
         required: true
@@ -16,8 +16,6 @@ on:
         default: 'patch'
         required: false
         type: string
-  workflow_dispatch:
-    inputs: *common_inputs
 
 jobs:
   settings:

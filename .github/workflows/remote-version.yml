@@ -2,7 +2,7 @@ name: 'Composition Repo - Determine latest published version'
 
 on:
   workflow_call:
-    inputs: &common_inputs
+    inputs:
       repository_url:
         description: "Composition repository URL, e.g. https//github.com/hitobito/ose_composition_sjas.git"
         required: true
@@ -11,8 +11,6 @@ on:
         description: "Stage of release to be prepared"
         required: true
         type: string
-  workflow_dispatch:
-    inputs: *common_inputs
 
 jobs:
   version:

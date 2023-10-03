@@ -2,7 +2,7 @@ name: 'Composition Repo - Prepare Release'
 
 on:
   workflow_call:
-    inputs: &common_inputs
+    inputs:
       composition:
         description: "Composition repository, e.g. ose_composition_pbs"
         type: string
@@ -20,8 +20,6 @@ on:
         required: false
         type: string
         default: master
-  workflow_dispatch:
-    inputs: *common_inputs
 
 permissions:
   contents: write

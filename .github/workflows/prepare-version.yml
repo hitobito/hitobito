@@ -80,7 +80,7 @@ jobs:
       - name: 'Checkout composition repo'
         uses: actions/checkout@v4
         with:
-          repository: "hitobito/${{ inputs.composition }}"
+          repository: ${{ needs.settings.outputs.repo_name }}
           ref: ${{ needs.settings.outputs.composition_branch }}
           submodules: true
           fetch-depth: 0 # ALL the historiez, including ALL the branches

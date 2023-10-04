@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       composition:
-        description: "Composition repository, e.g. ose_composition_sjas"
+        description: "Composition repository, e.g. hitobito/ose_composition_sjas"
         type: string
         required: true
       source_ref:
@@ -48,7 +48,7 @@ jobs:
       - name: 'Checkout composition repo'
         uses: actions/checkout@v3
         with:
-          repository: "hitobito/${{ inputs.composition }}"
+          repository: ${{ inputs.composition }}
           ref: ${{ inputs.source_ref }}
           submodules: true
           fetch-depth: 0

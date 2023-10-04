@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       stage:
-        description: "Stage of release to be prepared"
+        description: "Stage of release to be prepared, e.g. integration"
         required: true
         type: string
       version_type:
@@ -50,7 +50,7 @@ jobs:
           REPO: ${{ inputs.repository }}
           VERSION_TYPE: ${{ inputs.version_type }}
         run: |
-          echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
+          echo "stage=${STAGE}" >> "$GITHUB_OUTPUT"
           echo "repo_name=${REPO}" >> "$GITHUB_OUTPUT"
 
           echo "repo_url=https://github.com/${REPO}.git" >> "$GITHUB_OUTPUT"

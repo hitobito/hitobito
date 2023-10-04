@@ -134,7 +134,7 @@ jobs:
       - name: 'Prepare composition-repo for release'
         env:
           NEXT_VERSION: ${{ needs.version.outputs.version }}
-          RELEASE_STAGE: ${{ needs.settings.outputs.release_stage }}
+          RELEASE_STAGE: ${{ inputs.stage }}
         run: |
           echo "Preparing $NEXT_VERSION for $RELEASE_STAGE"
 

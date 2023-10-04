@@ -14,7 +14,7 @@ rescue LoadError
   MESSAGE
 end
 
-require_relative '../lib/release/update_command'
+require_relative '../lib/release/update_command' # lib/release/update_command.rb
 
 # basic setup
 parser = CmdParse::CommandParser.new(handle_exceptions: true)

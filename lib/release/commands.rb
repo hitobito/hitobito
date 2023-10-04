@@ -78,7 +78,7 @@ module Release
 
             update_submodule_content(to: 'master')
             record_submodule_state
-            push
+            release_version @version
           end
         end
       end

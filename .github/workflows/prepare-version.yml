@@ -138,4 +138,4 @@ jobs:
           echo "Preparing $NEXT_VERSION for $RELEASE_STAGE"
 
           hitobito/bin/release version
-          hitobito/bin/release "$RELEASE_STAGE" "$NEXT_VERSION"
+          # hitobito/bin/release "$RELEASE_STAGE" "$NEXT_VERSION"

@@ -11,6 +11,9 @@ on:
         description: "Stage of release to be prepared"
         required: true
         type: string
+    outputs:
+      version:
+        value: ${{ jobs.version.outputs.version }}
 
 jobs:
   version:

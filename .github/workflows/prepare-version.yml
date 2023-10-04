@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   settings:
-    uses: hitobito/hitobito/.github/workflows/stage-settings.yml@new-dockerfile
+    uses: ./.github/workflows/stage-settings.yml
     with:
       repository: ${{ inputs.composition }}
       stage: ${{ inputs.stage }}
@@ -66,6 +66,7 @@ jobs:
         env:
           VERSION_TYPE: ${{ needs.settings.outputs.version_type }}
         run: |
+          echo "Requesting next '$VERSION_TYPE'-version"
           next_version=$(bin/version suggest "$VERSION_TYPE")
           echo "version=${next_version}" >> "$GITHUB_OUTPUT"
 
@@ -138,4 +139,4 @@ jobs:
           echo "Preparing $NEXT_VERSION for $RELEASE_STAGE"
 
           hitobito/bin/release version
-          # hitobito/bin/release "$RELEASE_STAGE" "$NEXT_VERSION"
+          hitobito/bin/release "$RELEASE_STAGE" "$NEXT_VERSION"

@@ -16,6 +16,19 @@ on:
         default: 'patch'
         required: false
         type: string
+    outputs:
+      project:
+        value: ${{ jobs.settings.outputs.project }}
+      repo_name:
+        value: ${{ jobs.settings.outputs.repo_name }}
+      repo_url:
+        value: ${{ jobs.settings.outputs.repo_url }}
+      composition_branch:
+        value: ${{ jobs.settings.outputs.branch }}
+      release_stage:
+        value: ${{ jobs.settings.outputs.stage }}
+      version_type:
+        value: ${{ jobs.settings.outputs.version_type }}
 
 jobs:
   settings:

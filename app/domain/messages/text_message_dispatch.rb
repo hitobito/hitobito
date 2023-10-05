@@ -37,7 +37,7 @@ module Messages
         originator: group.text_message_originator || group.name,
         username: group.text_message_username,
         password: group.text_message_password
-      }
+      }.with_indifferent_access
     end
 
     def group

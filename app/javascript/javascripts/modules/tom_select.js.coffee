@@ -33,7 +33,8 @@ $(document).on('turbolinks:load', ->
   $('#group-filter-add').on('click', ->
     app.tomSelect.add();
   )
-
-
-
 )
+
+$(document).on('popoverOpened', ->
+  $('.popover .tom-select').each(app.activateTomSelect);
+);

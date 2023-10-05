@@ -142,8 +142,12 @@ module LayoutHelper
     add_css_class options, 'btn-outline-primary' unless /(^|\s)btn-(?!sm\b)/.match options[:class]
     url = url.is_a?(ActionController::Parameters) ? url.to_unsafe_h.merge(only_path: true) : url
 
-    link_to(url, options) do
-      button_content(label, icon_name)
+    if url.present?
+      link_to(url, options) do
+        button_content(label, icon_name)
+      end
+    else
+      content_tag(:button, button_content(label, icon_name), options)
     end
   end
 

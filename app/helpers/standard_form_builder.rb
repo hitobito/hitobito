@@ -36,9 +36,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def input_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
     type = column_type(@object, attr.to_sym)
     custom_field_method = :"#{type}_field"
-    unless custom_field_method == :boolean_field
-      html_options[:class] = html_options[:class].to_s + 'form-control form-control-sm '
-    end
     html_options[:class] += ' is-invalid' if errors_on?(attr)
     html_options[:required] ||= 'required' if required?(attr)
     if type == :text
@@ -54,6 +51,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     elsif respond_to?(custom_field_method)
       send(custom_field_method, attr, html_options)
     else
+      html_options[:class] = html_options[:class].to_s + 'form-control form-control-sm '
       text_field(attr, html_options)
     end
   end
@@ -73,6 +71,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Render an action text input field.
   def rich_text_area(attr, html_options = {})
+    html_options[:class] = html_options[:class].to_s + ' form-control form-control-sm'
     super(attr, html_options)
   end
 
@@ -235,7 +234,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # define an instance variable with the pluralized name of the association.
   def has_many_field(attr, html_options = {}) # rubocop:disable Naming/PredicateName
     html_options[:multiple] = true
-    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch'
+    html_options[:class] = html_options[:class].to_s + ' mw-100 mw-md-60ch form-control form-control-sm'
     add_css_class(html_options, 'multiselect')
     belongs_to_field(attr, html_options)
   end

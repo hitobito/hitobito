@@ -182,7 +182,7 @@ td {
 }
 
 .form-subtitle {
-  margin-left: 240px;
+  margin-left: 245px;
 }
 /*
 select,
@@ -735,4 +735,8 @@ label.required::after {
 
 #message_body {
   height: 250px;
+}
+
+.clear-both {
+  clear: both;
 }

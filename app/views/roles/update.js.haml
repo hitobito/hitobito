@@ -14,5 +14,5 @@ multiple_groups = $('##{oldRoleId}').children('span.muted').length > 0
   filteredRoles = roles.filter(function() { return this.id !== '#{dom_id(entry)}' && this.id !== '#{oldRoleId}' })
   filteredRoles.each(function() { $('#' + this.id).remove() })
 
-  $('##{oldRoleId}').popover('destroy').replaceWith(roles)
+  $('##{oldRoleId}').popover('hide').replaceWith(roles)
   parentEl.toggle('highlight', {duration: 1000})

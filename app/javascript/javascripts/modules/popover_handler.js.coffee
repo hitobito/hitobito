@@ -9,27 +9,29 @@ app = window.App ||= {}
 class app.PopoverHandler
   constructor: () ->
 
-  toggle: (toggler, event) ->
-    # custom code to close other popovers when a new one is opened
-    $('[data-toggle=popover]').not(toggler).popover('hide')
-    $(toggler).popover()
-    popover = $(toggler).data('popover')
-    popover.options.html = true
-    popover.options.placement = 'bottom'
-    event.preventDefault()
-    if popover.tip().hasClass('fade') && !popover.tip().hasClass('in')
-      $(toggler).popover('hide')
-    else
-      $(toggler).popover('show')
+  toggle: (event) ->
+    $(event.target).popover({
+      content: event.target.dataset.bsContent,
+      title: event.target.dataset.bsTitle,
+      container: 'body',
+      placement: 'bottom',
+      trigger: 'click',
+      sanitize: false,
+      html: true
+    }).popover('show');
+    $(document).trigger('popoverOpened');
+
 
   close: (event) ->
-    event.preventDefault()
-    $('[data-toggle=popover]').popover('hide')
-    $($('body').data('popover')).popover('destroy')
+    setTimeout ->
+      $('[data-bs-toggle=popover]').popover('hide')
+      $($('body').data('popover')).popover('destroy')
+    , 100
 
   bind: ->
     self = this
-    $(document).on('click', '[data-toggle=popover]', (e) -> self.toggle(this, e))
+    $(document).on('click', '[data-bs-toggle=popover]', (e) -> self.toggle(e))
     $(document).on('click', '.popover a.cancel', (e) -> self.close(e))
+    $(document).on('click', '.popover button:submit', (e) -> self.close(e))
 
 new app.PopoverHandler().bind()

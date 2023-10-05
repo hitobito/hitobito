@@ -87,6 +87,14 @@
     }
   }
 
+  // set insertFields function for nested-form gem
+  window.nestedFormEvents.insertFields = function(content, assoc, link) {
+    var el = $(link).closest('form').find("#" + assoc + "_fields");
+    var nel = el.append($(content));
+    nel.find('[data-provide=entity]').each(app.setupEntityTypeahead);
+    return nel;
+  };
+
   $(document).on('turbolinks:load', function() {
     app.setupQuicksearch();
     $('[data-provide=entity]').each(app.setupEntityTypeahead);

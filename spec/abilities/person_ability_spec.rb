@@ -1443,6 +1443,23 @@ describe PersonAbility do
         is_expected.to_not be_able_to(:totp_reset, people(:bottom_member))
       end
     end
+
+    context 'layer and below full' do
+      let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+
+      it 'can reset other person' do
+        is_expected.to be_able_to(:totp_reset, people(:bottom_member))
+      end
+    end
+
+    context 'layer full' do
+      let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
+
+      it 'can reset other person' do
+        Fabricate(Group::TopGroup::Member.name.to_sym, person: people(:bottom_member), group: groups(:top_group))
+        is_expected.to be_able_to(:totp_reset, people(:bottom_member))
+      end
+    end
   end
 
   context :totp_disable do

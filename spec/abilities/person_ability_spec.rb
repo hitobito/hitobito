@@ -1456,6 +1456,7 @@ describe PersonAbility do
       let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
 
       it 'can reset other person' do
+        Fabricate(Group::TopGroup::Member.name.to_sym, person: people(:bottom_member), group: groups(:top_group))
         is_expected.to be_able_to(:totp_reset, people(:bottom_member))
       end
     end

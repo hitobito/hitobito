@@ -30,7 +30,7 @@ describe :person_duplicates, js: true do
     expect(person_rows.count).to eq(6)
 
     d1_merge_link = new_merge_group_person_duplicate_path(top_layer, duplicate1)
-    page.find('#content table.table a[href="' + d1_merge_link + '"]').click
+    page.find(%(#content table.table a[href="#{d1_merge_link}"])).click
 
     modal = page.find('div.modal-dialog')
     expect(modal.find('h5')).to have_content 'Personen zusammenführen'
@@ -38,7 +38,8 @@ describe :person_duplicates, js: true do
     expect do
       modal.find('button.btn', text: 'Zusammenführen').click
       dst_person = duplicate1.person_1
-      expect(page).to have_current_path(group_person_path(dst_person.primary_group_id, dst_person.id))
+      expect(page).to have_current_path(group_person_path(dst_person.primary_group_id,
+                                                          dst_person.id))
       expect(page).to have_content 'Die Personen Einträge wurden erfolgreich zusammengeführt.'
     end.to change(Person, :count).by(-1)
 

@@ -186,7 +186,7 @@ case $cmd in
     ;;
 
   grep)
-    if [[ $# -ne 2 ]]; then
+    if [[ $# -le 2 ]]; then
       echo "You must provide a String to grep"
       exit 1
     fi
@@ -194,12 +194,12 @@ case $cmd in
 
     # grep in core
     echo ">> grepping in hitobito <<" | highlight_phrases
-    git grep "$2"
+    git grep "${@:2}"
 
     # grep in installed wagons
     for wagon in $(existing_wagon_names); do
       echo ">> grepping in ../hitobito_$wagon/ <<" | highlight_phrases
-      (cd "../hitobito_$wagon/"; git grep --color=always "$2")
+      (cd "../hitobito_$wagon/"; git grep --color=always "${@:2}")
     done
     ;;
 

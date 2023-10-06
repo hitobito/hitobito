@@ -126,6 +126,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     attachable.variant :thumb, resize_to_fill: [32, 32]
   end
 
+  def picture_default
+    'profil.png'
+  end
+
+  def picture_thumb_default
+    'profil_thumb.png'
+  end
+
   class_attribute :used_attributes
   self.used_attributes = PUBLIC_ATTRS + INTERNAL_ATTRS
 

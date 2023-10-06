@@ -1,4 +1,4 @@
-#  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2018-2023, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -69,6 +69,12 @@ class EventSerializer < EventListSerializer
     @upload_display_helper ||= Class.new do
       include UploadDisplayHelper
     end.new
+  end
+
+  private
+
+  def default_url_options(options = {})
+    options.merge(Rails.application.routes.default_url_options)
   end
 
 end

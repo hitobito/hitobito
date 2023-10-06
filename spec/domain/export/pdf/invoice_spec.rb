@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -317,19 +317,19 @@ describe Export::Pdf::Invoice do
 
     it 'with ch_esr' do
       invoice.payment_slip = 'ch_esr'
-      expect(subject.positions).to eq [[323.5819133858268, 44.532913385826845]]
+      expect(subject.positions).to eq [[323.58191, 44.53291]]
       expect(subject.show_text.first).to eq '042>000000000000100000000000023+ 1>'
     end
 
     it 'with ch_besr' do
       invoice.payment_slip = 'ch_besr'
-      expect(subject.positions).to eq [[323.5819133858268, 44.532913385826845]]
+      expect(subject.positions).to eq [[323.58191, 44.53291]]
       expect(subject.show_text.first).to eq '042>000000000000100000000000023+ 1>'
     end
 
     it 'with ch_besr' do
       invoice.payment_slip = 'ch_besr'
-      expect(subject.positions).to eq [[323.5819133858268, 44.532913385826845]]
+      expect(subject.positions).to eq [[323.58191, 44.53291]]
       expect(subject.show_text.first).to eq '042>000000000000100000000000023+ 1>'
     end
 
@@ -338,8 +338,8 @@ describe Export::Pdf::Invoice do
       let(:invoice) { invoices(:invoice) }
 
       it 'has code_line' do
-        expect(subject.positions).to eq [[271.95971338582683, 44.532913385826845],
-                                         [463.69931338582677, 44.532913385826845]]
+        expect(subject.positions).to eq [[271.95971, 44.53291],
+                                         [463.69931, 44.53291]]
 
         expect(subject.show_text.compact).to eq ['0100000005353>000037680338900000000000021+',
                                                  '376803389000004>']

@@ -69,6 +69,8 @@ class InvoiceConfig < ActiveRecord::Base
   validate :correct_check_digit
   validate :correct_payee_qr_format, if: :qr?
 
+  validates :sender_name, format: { without: Devise.email_regexp }
+
   accepts_nested_attributes_for :payment_reminder_configs
   accepts_nested_attributes_for :payment_provider_configs
 

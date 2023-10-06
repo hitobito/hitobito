@@ -816,6 +816,7 @@ it:
       donation_increase_percentage_explanation: Percento per il calcolo delle donazioni
     email_fields:
       email_help: Le risposte alle e-mail di fatturazione devono essere inviate all'indirizzo dell'utente corrente o all'indirizzo configurato qui.
+      email_validation: Non deve essere un'email.
       sender_name_help: Le e-mail di fatturazione vengono inviate con questo nome.
     reminder_fields:
       third_level: 'Per tutti i prossimi solleciti, verrà ripetuto il terzo livello di sollecito'

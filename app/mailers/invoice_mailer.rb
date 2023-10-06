@@ -9,6 +9,14 @@ class InvoiceMailer < ApplicationMailer
 
   CONTENT_INVOICE_NOTIFICATION = 'content_invoice_notification'.freeze
 
+  def mail(headers = {}, &block)
+    mail = super(headers, &block)
+
+    if @invoice.invoice_config.sender_name.present?
+      mail.from = "#{@invoice.invoice_config.sender_name} <#{mail.from[0]}>"
+    end
+  end
+
   def notification(invoice, sender)
     @sender  = sender
     @invoice = invoice
@@ -84,7 +92,7 @@ class InvoiceMailer < ApplicationMailer
 
   def mail_headers(person, email)
     sender = email.blank? ? person : Person.new(email: email)
-    with_personal_sender(sender, { sender: @invoice.invoice_config.sender_name })
+    with_personal_sender(sender)
   end
 
 end

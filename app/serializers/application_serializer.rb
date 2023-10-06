@@ -113,6 +113,7 @@ class ApplicationSerializer < Oat::Serializer
         type = attrs.delete(:type)
         # do not add attrs consisting only of an :id
         next if attrs.keys.collect(&:to_s) == %w(id)
+
         # combine linked entries by type
         list = hash[:linked][type || link]
         unless list.include?(attrs)
@@ -124,6 +125,7 @@ class ApplicationSerializer < Oat::Serializer
 
   def add_template_links(hash)
     return if top != self || template_links.blank?
+
     hash[:links] ||= {}
     hash[:links].merge!(template_links)
   end

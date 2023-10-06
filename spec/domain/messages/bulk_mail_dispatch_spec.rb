@@ -76,10 +76,9 @@ describe Messages::BulkMailDispatch do
 
       def setup_delivery
         expect(Messages::BulkMail::Delivery).to receive(:new)
-          .with(
-            mail_factory,
-           [recipient1_email, recipient2_email],
-            Messages::BulkMailDispatch::DELIVERY_RETRIES)
+          .with(mail_factory,
+                [recipient1_email, recipient2_email],
+                Messages::BulkMailDispatch::DELIVERY_RETRIES)
           .and_return(delivery)
 
         expect(delivery).to receive(:deliver)

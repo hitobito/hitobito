@@ -2,7 +2,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-#
+
 # == Schema Information
 #
 # Table name: events
@@ -59,15 +59,14 @@ class EventSerializer < EventListSerializer
       }
     end)
   end
-  
+
   def attachment_url(attachment)
     file = upload_display_helper.upload_url(attachment, :file)
     rails_blob_url(file, host: context[:controller].request.host_with_port)
   end
 
-
   def upload_display_helper
-    upload_display_helper ||= Class.new do
+    @upload_display_helper ||= Class.new do
       include UploadDisplayHelper
     end.new
   end

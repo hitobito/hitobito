@@ -186,7 +186,7 @@ case $cmd in
     ;;
 
   grep)
-    if [[ $# -le 2 ]]; then
+    if [[ $# -ne 2 ]]; then
       echo "You must provide a String to grep"
       exit 1
     fi

@@ -121,7 +121,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
 
-  mount_uploader :carrierwave_picture, Person::PictureUploader, mount_on: 'picture'
+  # mount_uploader :carrierwave_picture, Person::PictureUploader, mount_on: 'picture'
   has_one_attached :picture do |attachable|
     attachable.variant :thumb, resize_to_fill: [32, 32]
   end

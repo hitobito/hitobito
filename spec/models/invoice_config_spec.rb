@@ -137,28 +137,28 @@ describe InvoiceConfig do
     end
   end
 
-  context "#render_logo?" do
+  context "#logo_enabled?" do
     context 'with logo attached' do
       before { invoice_config.logo.attach(fixture_file_upload("images/logo.png")) }
 
       it 'returns true when logo_position is left' do
         invoice_config.logo_position = 'left'
-        expect(invoice_config.render_logo?).to be(true)
+        expect(invoice_config.send(:logo_enabled?)).to be(true)
       end
 
       it 'returns true when logo_position is right' do
         invoice_config.logo_position = 'right'
-        expect(invoice_config.render_logo?).to be(true)
+        expect(invoice_config.send(:logo_enabled?)).to be(true)
       end
 
       it 'returns false when logo_position is disabled' do
         invoice_config.logo_position = 'disabled'
-        expect(invoice_config.render_logo?).to be(false)
+        expect(invoice_config.send(:logo_enabled?)).to be(false)
       end
 
       it 'returns false when logo_position is nil' do
         invoice_config.logo_position = nil
-        expect(invoice_config.render_logo?).to be(false)
+        expect(invoice_config.send(:logo_enabled?)).to be(false)
       end
     end
   end

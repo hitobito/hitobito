@@ -137,6 +137,7 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def logo_enabled?
-    logo_position != 'disabled'
+    logo_position.present? &&
+      logo_position != 'disabled'
   end
 end

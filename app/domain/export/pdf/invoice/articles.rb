@@ -72,15 +72,17 @@ module Export::Pdf::Invoice
     def total_box # rubocop:disable Metrics/MethodLength
       bounding_box([0, cursor], width: bounds.width) do
         font_size(8) do
-          pdf.table total_data, position: :right, cell_style: { borders: [],
-                                                                border_color: 'CCCCCC',
-                                                                border_width: 0.5 } do
+          data = total_data
+          pdf.table data, position: :right, cell_style: { borders: [],
+                                                          border_color: 'CCCCCC',
+                                                          border_width: 0.5 } do
             rows(0..1).padding = [2, 0]
 
-            row(2).font_style = :bold
-            row(2).borders = [:bottom, :top]
-            row(2).padding = [5, 0]
-            row(2).column(0).padding = [5, 15, 5, 0]
+            last_row_index = data.size.pred
+            row(last_row_index).font_style = :bold
+            row(last_row_index).borders = [:bottom, :top]
+            row(last_row_index).padding = [5, 0]
+            row(last_row_index).column(0).padding = [5, 15, 5, 0]
 
             column(1).align = :right
           end
@@ -90,11 +92,14 @@ module Export::Pdf::Invoice
 
     def total_data
       decorated = invoice.decorate
+      vat_row = if invoice.calculated[:vat].nonzero?
+                  [I18n.t('invoices.pdf.total_vat'), decorated.vat]
+                end
       [
         [I18n.t('invoices.pdf.cost'), decorated.cost],
-        [I18n.t('invoices.pdf.total_vat'), decorated.vat],
+        vat_row,
         [I18n.t('invoices.pdf.total'), decorated.total]
-      ]
+      ].compact
     end
 
     def align_right(content)

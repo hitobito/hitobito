@@ -667,6 +667,7 @@ en:
       flash:
         success: Invoice cancelled
     pdf:
+      amount_open: Outstanding balance
       total: Total amount
       total_vat: VAT
       cost: Interim amount

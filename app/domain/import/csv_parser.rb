@@ -14,7 +14,8 @@ module Import
 
     def_delegators :csv, :size, :first, :to_csv, :[], :each
     attr_reader :csv, :error
-    POSSIBLE_SEPARATORS = [',', "\t", ':', ';']
+
+    POSSIBLE_SEPARATORS = [',', "\t", ':', ';'].freeze
 
     def initialize(input)
       @input = input
@@ -32,7 +33,7 @@ module Import
       error.blank?
     end
 
-    def map_data(header_mapping)
+    def map_data(header_mapping) # rubocop:disable Layout/MethodLength
       if header_mapping.is_a?(ActionController::Parameters)
         header_mapping = header_mapping.to_unsafe_h
       end
@@ -61,7 +62,7 @@ module Import
     private
 
     def options
-      { converters: ->(field, _info) { field && field.strip },
+      { converters: ->(field, _info) { field&.strip },
         header_converters: ->(header, _info) { header.to_s.strip },
         headers: true, skip_blanks: true }
     end

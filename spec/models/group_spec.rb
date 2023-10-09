@@ -598,40 +598,58 @@ describe Group do
     end
 
     context 'archive!' do
-      it 'archives all roles with same timestamp' do
-        group = groups(:top_group)
 
-        group.archive!
+      describe 'roles' do
+        let(:group) { groups(:top_group) }
+        let(:role) { roles(:top_leader) }
 
-        expect(group).to be_archived
-        role = group.roles.first
+        it 'archives all roles with same timestamp' do
+          group.archive!
 
-        expect(role).to be_archived
-        expect(group.archived_at).to eq(role.archived_at)
+          expect(group).to be_archived
+          expect(role).to be_archived
+          expect(group.archived_at).to eq(role.archived_at)
+        end
+
+        it 'future delete_on values are set to nil' do
+          role.update!(delete_on: 3.days.from_now)
+          group.archive!
+
+          expect(group).to be_archived
+          expect(role.reload.delete_on).to be_nil
+        end
+
+        it 'past delete_on values are kept' do
+          role.update!(created_at: 5.days.ago, delete_on: 3.days.ago)
+          group.archive!
+
+          expect(group).to be_archived
+          expect(role.reload.delete_on).to be_present
+        end
       end
 
-      it 'deletes all attached mailing lists' do
-        group = groups(:top_layer)
+      describe 'mailing lists' do
+        let(:group) { groups(:top_layer) }
 
-        expect(group.mailing_lists.size).to eq(2)
+        it 'deletes all attached mailing lists' do
+          expect(group.mailing_lists.size).to eq(2)
 
-        expect do
-          group.archive!
-        end.to change { MailingList.count }.by(-2)
+          expect do
+            group.archive!
+          end.to change { MailingList.count }.by(-2)
 
-        expect(group.mailing_lists).to be_empty
-      end
+          expect(group.mailing_lists).to be_empty
+        end
 
-      it 'deletes all attached subscriptions' do
-        group = groups(:top_layer)
+        it 'deletes all attached subscriptions' do
+          expect(group.subscriptions.size).to eq(1)
 
-        expect(group.subscriptions.size).to eq(1)
+          expect do
+            group.archive!
+          end.to change { Subscription.count }.by(-1)
 
-        expect do
-          group.archive!
-        end.to change { Subscription.count }.by(-1)
-
-        expect(group.subscriptions).to be_empty
+          expect(group.subscriptions).to be_empty
+        end
       end
     end
 

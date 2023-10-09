@@ -46,7 +46,7 @@ de:
         must_exist: müssen vorhanden sein
         readonly: darf nicht verändert werden
         cannot_be_later_than_today: kann nicht später als heute sein
-        cannot_be_later_than_deleted_at: muss vor oder am selben Tag wie der Austritt sein
+        cannot_be_later_than_delete_on: muss vor oder am selben Tag wie der Austritt sein
       models:
         cors_origin:
           attributes:
@@ -738,6 +738,7 @@ de:
         dates: Daten
         created_at: Von
         deleted_at: Bis
+        delete_on: Bis
         class:
           archived: '%{role_kind} (archiviert)'
           permission:

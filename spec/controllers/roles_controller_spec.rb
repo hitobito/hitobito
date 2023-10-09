@@ -320,6 +320,23 @@ describe RolesController do
       expect(person.reload.primary_group).to eq group2
     end
 
+    context 'his own role' do
+      let(:tomorrow) { Time.zone.tomorrow }
+      let(:role) { roles(:top_leader) }
+
+      it 'cannot set deleted_at on his own role' do
+        expect do
+          put :update, params: { group_id: group.id, id: role.id, role: { deleted_at: tomorrow } }
+        end.not_to change { role.reload.deleted_at }
+      end
+
+      it 'cannot set delete_on on his own role' do
+        expect do
+          put :update, params: { group_id: group.id, id: role.id, role: { delete_on: tomorrow } }
+        end.not_to change { role.reload.delete_on }
+      end
+    end
+
     context 'multiple groups' do
       let(:group) { groups(:bottom_group_one_one) }
       let(:group2) { groups(:bottom_group_one_two) }

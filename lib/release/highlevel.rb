@@ -123,17 +123,5 @@ module Release
       add file
       commit %(Prepare changelog for upcoming "#{to}" changes)
     end
-
-    # def prepare_next_version
-    #   @all_wagons
-    #     .map { |wagon| "hitobito_#{wagon}" }
-    #     .prepend('hitobito')
-    #     .each do |dir|
-    #       in_dir(dir) do
-    #         prepare_changelog
-    #         execute 'git push origin'
-    #       end
-    #     end
-    # end
   end
 end

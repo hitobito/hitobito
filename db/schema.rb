@@ -506,6 +506,7 @@ ActiveRecord::Schema.define(version: 2023_08_10_055747) do
     t.integer "donation_calculation_year_amount"
     t.integer "donation_increase_percentage"
     t.string "sender_name"
+    t.string "logo_position", default: "disabled", null: false
     t.index ["group_id"], name: "index_invoice_configs_on_group_id"
   end
 

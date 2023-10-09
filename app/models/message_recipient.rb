@@ -1,9 +1,31 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, CVP Schweiz. This file is part of
-#  hitobito_cvp and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+# == Schema Information
+#
+# Table name: message_recipients
+#
+#  id           :bigint           not null, primary key
+#  address      :text(65535)
+#  email        :string(255)
+#  error        :text(65535)
+#  failed_at    :datetime
+#  phone_number :string(255)
+#  salutation   :string(255)      default("")
+#  state        :string(255)
+#  created_at   :datetime
+#  invoice_id   :bigint
+#  message_id   :bigint           not null
+#  person_id    :bigint
+#
+# Indexes
+#
+#  index_message_recipients_on_invoice_id                   (invoice_id)
+#  index_message_recipients_on_message_id                   (message_id)
+#  index_message_recipients_on_person_id                    (person_id)
+#  index_message_recipients_on_person_message_address       (person_id,message_id,address) UNIQUE
+#  index_message_recipients_on_person_message_email         (person_id,message_id,email) UNIQUE
+#  index_message_recipients_on_person_message_phone_number  (person_id,message_id,phone_number) UNIQUE # rubocop:disable Metrics/LineLength
+#
 
 class MessageRecipient < ActiveRecord::Base
   include I18nEnums

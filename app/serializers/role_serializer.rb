@@ -9,14 +9,16 @@
 #
 # Table name: roles
 #
-#  id         :integer          not null, primary key
-#  deleted_at :datetime
-#  label      :string(255)
-#  type       :string(255)      not null
-#  created_at :datetime
-#  updated_at :datetime
-#  group_id   :integer          not null
-#  person_id  :integer          not null
+#  id          :integer          not null, primary key
+#  archived_at :datetime
+#  delete_on   :date
+#  deleted_at  :datetime
+#  label       :string(255)
+#  type        :string(255)      not null
+#  created_at  :datetime
+#  updated_at  :datetime
+#  group_id    :integer          not null
+#  person_id   :integer          not null
 #
 # Indexes
 #

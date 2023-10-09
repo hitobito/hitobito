@@ -271,11 +271,11 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   # TODO Concern?
   def archive!
     ActiveRecord::Base.transaction do
-      archival_timestamp = Time.zone.now
-
-      Role.where(group_id: self.id)
-          .touch_all(:archived_at, time: archival_timestamp)
-      self.archived_at = archival_timestamp
+      self.archived_at = Time.zone.now
+      Role.where(group_id: id).tap do |roles|
+        roles.update_all(archived_at: archived_at)
+        roles.where('delete_on >= ?', archived_at).update_all(delete_on: nil)
+      end
 
       mailing_lists.destroy_all
 

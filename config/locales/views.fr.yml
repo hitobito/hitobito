@@ -800,6 +800,7 @@ fr:
     form_tabs:
       general: général
       email: Courriel
+      layout: Mise en page
     update:
       flash:
         success: Les réglages de la factures mis à jour avec succès

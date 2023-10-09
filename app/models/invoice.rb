@@ -146,6 +146,8 @@ class Invoice < ActiveRecord::Base
     end
   end
 
+  delegate :logo_position, to: :invoice_config
+
   def calculated
     [:total, :cost, :vat].index_with do |field|
       round(invoice_items.reject(&:frozen?).sum(&field))

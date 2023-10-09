@@ -132,6 +132,8 @@ fr:
             account_number:
               required: 'doit être renseigné'
               invalid_check_digit: 'n''est pas valable ; code de vérification incorrect'
+            logo:
+              attached_unless_disabled: 'doit être spécifié si une position de logo est sélectionnée'
             payee:
               to_long: 'doit contenir 2 lignes au maximum'
               must_have_3_lines: 'doit contenir exactement 3 lignes'
@@ -966,6 +968,11 @@ fr:
         contact_id: Personne de contact
         beneficiary: En faveur de
         email: Réponse à l'adresse e-mail
+        logo_position: Position du logo
+        logo_positions:
+          disabled: Aucun
+          left: Gauche
+          right: Droite
         payee: Paiement à
         payment_slip: Bulletin de versement
         payment_slips:
@@ -974,6 +981,7 @@ fr:
         participant_number: Numéro du participant
         participant_number_internal: Numéro du participant interne
         payment_reminder_configs: Rappels
+        remove_logo: Supprimer le logo actuel
         vat_number: N° TVA
         donation_increase_percentage: Augmentation en %
         donation_calculation_year_amount: Nombre d'années

@@ -10,6 +10,9 @@ module Export::Pdf
 
     MARGIN = 2.cm
 
+    LOGO_WIDTH = 150.mm
+    LOGO_HEIGHT = 16.mm
+
     class Runner
       def initialize(invoices, async_download_file)
         @invoices = invoices
@@ -46,6 +49,12 @@ module Export::Pdf
 
       def invoice_page(pdf, invoice, options) # rubocop:disable Metrics/MethodLength
         section_options = options.slice(:debug, :stamped)
+
+        # render logo if logo_position is set to left or right
+        if %w[left right].include?(invoice.logo_position)
+          render_logo(pdf, invoice, **section_options)
+        end
+
         if options[:articles]
           sections.each do |section|
             section.new(pdf, invoice, section_options).render
@@ -54,11 +63,27 @@ module Export::Pdf
 
         if options[:payment_slip]
           if invoice.payment_slip == 'qr'
-            PaymentSlipQr.new(pdf, invoice, section_options).render
+            payment_slip_qr_class.new(pdf, invoice, **section_options).render
           else
-            PaymentSlip.new(pdf, invoice, section_options).render
+            PaymentSlip.new(pdf, invoice, **section_options).render
           end
         end
+      end
+
+      # the default payment_slip_qr_class can be overwritten in wagon
+      def payment_slip_qr_class
+        PaymentSlipQr
+      end
+
+      def render_logo(pdf, invoice, **section_options)
+        Logo.new(
+          pdf,
+          invoice.invoice_config.logo,
+          image_width: LOGO_WIDTH,
+          image_height: LOGO_HEIGHT,
+          position: invoice.logo_position.to_sym,
+          **section_options
+        ).render
       end
 
       def customize(pdf)

@@ -44,6 +44,10 @@ module Export::Pdf::Invoice
       end
     end
 
+    def height
+      HEIGHT - MARGIN
+    end
+
     def separators
       stroke do
         horizontal_line MARGIN * -1, WIDTH + MARGIN, at: HEIGHT_WITHOUT_MARGIN

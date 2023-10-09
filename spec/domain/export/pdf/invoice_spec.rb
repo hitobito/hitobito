@@ -9,12 +9,20 @@ require 'spec_helper'
 
 
 describe Export::Pdf::Invoice do
+  include PdfHelpers
+
   let(:invoice) { invoices(:invoice) }
   let(:sent)    { invoices(:sent) }
 
+  let(:pdf) { described_class.render(invoice, payment_slip: true, articles: true) }
+
+  def build_invoice(**attrs)
+    Invoice.new(**attrs.reverse_merge(group: groups(:top_layer)))
+  end
+
   context 'with articles' do
     let(:invoice) do
-      Invoice.new(
+      build_invoice(
         sequence_number: '1-1',
         payment_slip: :qr,
         total: 1500,
@@ -179,12 +187,11 @@ describe Export::Pdf::Invoice do
 
   it 'renders empty invoice payment slip if without codeline' do
     expect_any_instance_of(Invoice::PaymentSlip).not_to receive(:code_line)
-    described_class.render(Invoice.new(esr_number: 1, participant_number: 1),  payment_slip: true )
+    described_class.render(build_invoice(esr_number: 1, participant_number: 1),  payment_slip: true )
   end
 
   context 'currency' do
     subject do
-      pdf = described_class.render(invoice, articles: true)
       PDF::Inspector::Text.analyze(pdf).show_text.compact.join(' ')
     end
 
@@ -222,12 +229,9 @@ describe Export::Pdf::Invoice do
   end
 
   context 'codeline' do
-    let(:invoice) { Invoice.new(sequence_number: '1-2', participant_number: 1) }
-
-    subject do
-      pdf = described_class.render(invoice, payment_slip: true)
-      PDF::Inspector::Text.analyze(pdf)
-    end
+    let(:invoice) { build_invoice(sequence_number: '1-2', participant_number: 1) }
+    let(:pdf) { described_class.render(invoice, payment_slip: true) }
+    subject { PDF::Inspector::Text.analyze(pdf) }
 
     before do
       ['invoice_address',
@@ -276,7 +280,7 @@ describe Export::Pdf::Invoice do
 
   context 'qrcode' do
     let(:invoice) do
-      Invoice.new(
+      build_invoice(
         sequence_number: '1-1',
         payment_slip: :qr,
         total: 1500,
@@ -288,10 +292,8 @@ describe Export::Pdf::Invoice do
       )
     end
 
-    subject do
-      pdf = described_class.render(invoice, payment_slip: true)
-      PDF::Inspector::Text.analyze(pdf)
-    end
+    let(:pdf) { described_class.render(invoice, payment_slip: true) }
+    subject { PDF::Inspector::Text.analyze(pdf) }
 
     it 'renders qrcode' do
       expect(text_with_position).to eq [
@@ -400,11 +402,56 @@ describe Export::Pdf::Invoice do
     end
   end
 
-  private
+  context 'logo' do
+    context 'when invoice_config has no logo' do
+      before do
+        expect(invoice.invoice_config.logo).not_to be_attached
+      end
 
-  def text_with_position
-    subject.positions.each_with_index.collect do |p, i|
-      p.collect(&:round) + [subject.show_text[i]]
+      %i[disabled left right].each do |position|
+        it "with logo_position=#{position} it does not render logo" do
+          invoice.invoice_config.update(logo_position: position)
+          expect(image_positions).to be_empty
+        end
+      end
+    end
+
+    context 'when invoice_config has a logo' do
+      before do
+        invoice.invoice_config.logo.attach fixture_file_upload("images/logo.png")
+        expect(invoice.invoice_config.logo).to be_attached
+      end
+
+      it 'with logo_position=disabled it does not render logo' do
+        invoice.invoice_config.update(logo_position: :disabled)
+        expect(image_positions).to be_empty
+      end
+
+      it 'with logo_position=left it renders logo on the left' do
+        invoice.invoice_config.update(logo_position: :left)
+        expect(image_positions).to have(1).item
+        expect(image_positions.first).to match(
+          displayed_height: 900.0,
+          displayed_width: 52900.0,
+          height: 30,
+          width: 230,
+          x: 56.693,
+          y: 755.197
+        )
+      end
+
+      it 'with logo_position=right it renders logo on the right' do
+        invoice.invoice_config.update(logo_position: :right)
+        expect(image_positions).to have(1).item
+        expect(image_positions.first).to match(
+          displayed_height: 900.0,
+          displayed_width: 52900.0,
+          height: 30,
+          width: 230,
+          x: 308.587,
+          y: 755.197
+        )
+      end
     end
   end
 end

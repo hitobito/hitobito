@@ -5,9 +5,9 @@
 
 class Group::LogoUploader < Uploader::Base
 
-  MAX_DIMENSION = 8000
+  MAX_DIMENSION = Settings.application.image_upload.max_dimension
 
-  self.allowed_extensions = %w(jpg jpeg gif png)
+  self.allowed_extensions = %w(jpg jpeg png)
 
   include CarrierWave::MiniMagick
 

@@ -19,6 +19,11 @@
   = labeled(captionize(:payment_slip, object_class(entry)), entry.payment_slip_label)
   = labeled_attr(entry, :iban)
 
+%dl.dl-horizontal
+  = labeled(captionize(:logo, object_class(entry))) do
+    = entry.logo.attached? ? image_tag(entry.logo.variant(resize_to_limit: [100, 100])) : t('global.no')
+  = labeled(captionize(:logo_position, object_class(entry)), entry.logo_position_label)
+
 = render_extensions(:attrs)
 
 %h2= PaymentReminder.model_name.human(count: 2)

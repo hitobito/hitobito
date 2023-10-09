@@ -148,6 +148,8 @@ de:
             account_number:
               required: 'muss ausgefüllt werden'
               invalid_check_digit: 'ist nicht gültig; Inkorrekte Prüfziffer'
+            logo:
+              attached_unless_disabled: 'muss angegeben werden, wenn eine Logoposition gewählt ist'
             payee:
               to_long: 'darf höchstens 2 Zeilen enthalten'
               must_have_3_lines: 'muss genau 3 Zeilen enthalten'
@@ -994,6 +996,11 @@ de:
         contact_id: Kontaktperson
         beneficiary: Zugunsten von
         email: Antwort an E-Mail Adresse
+        logo_position: Logo Position
+        logo_positions:
+          disabled: Kein Logo
+          left: Links
+          right: Rechts
         payee: Einzahlung für
         payment_slip: Einzahlungsschein
         payment_slips:
@@ -1002,6 +1009,7 @@ de:
         participant_number: Teilnehmernummer
         participant_number_internal: Teilnehmernummer intern
         payment_reminder_configs: Mahnungen
+        remove_logo: Aktuelles Logo entfernen
         vat_number: MwSt. Nummer
         donation_increase_percentage: Erhöhung in %
         donation_calculation_year_amount: Anzahl Jahre

@@ -798,6 +798,7 @@ it:
     form_tabs:
       general: In generale
       email: E-mail
+      layout: Disposizione
     update:
       flash:
         success: Le impostazioni per le fatture sono state aggiornate con successo

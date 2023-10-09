@@ -5,7 +5,7 @@
 
 = field_set_tag do
   = f.labeled :logo do
-    = f.file_field :logo, type: :file #, accept: Group::LogoUploader.accept_extensions
+    = f.file_field :logo, type: :file ,accept: Group::LogoUploader.accept_extensions
 
   - if upload_exists?(entry, :logo)
     = f.labeled :remove_logo do

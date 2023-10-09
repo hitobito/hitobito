@@ -7,12 +7,10 @@ class People::CleanupJob < RecurringJob
 
     people.find_in_batches do |batch|
       batch.each do |person|
-        if event_participation_in_cutoff?(person)
-          next if person.minimized_at.present?
+        next if ignore_person?(person)
 
-          People::Minimizer.new(person).run
-          person.minimized_at = Time.zone.now
-          person.save!
+        if event_participation_in_cutoff?(person)
+          minimize_person!(person)
         else
           People::Destroyer.new(person).run
         end
@@ -28,5 +26,15 @@ class People::CleanupJob < RecurringJob
     Event.joins(:participations, :dates)
          .where(participations: { person_id: person.id })
          .where('event_dates.start_at > ? OR event_dates.finish_at > ?', cutoff, cutoff) # what if finished_at is nil
+  end
+
+  def ignore_person?(person)
+    person.minimized_at.present?
+  end
+
+  def minimize_person!(person)
+    People::Minimizer.new(person).run
+    person.minimized_at = Time.zone.now
+    person.save!
   end
 end

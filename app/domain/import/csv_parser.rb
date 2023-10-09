@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -73,9 +73,7 @@ module Import
       encoding_detection = CharlockHolmes::EncodingDetector.detect(input)
       encoding = encoding_detection[:encoding]
 
-      unless encoding
-        raise 'O-oh, tried very hard to guess encoding, but failed! is it a binary file?'
-      end
+      raise translate(:encoding_error) unless encoding
 
       unless encoding == 'UTF-8'
         input = input.force_encoding(encoding_detection[:encoding]).encode('UTF-8')

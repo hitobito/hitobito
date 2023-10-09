@@ -26,8 +26,7 @@ class RolesController < CrudController
 
   before_action :set_person_id, only: [:new] # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :remember_primary_group, only: [:destroy, :update]
-  after_destroy :last_primary_group_role_deleted
-  after_update :last_primary_group_role_deleted
+  after_action :last_primary_group_role_deleted, only: [:destroy, :update]
 
   def create
     assign_attributes
@@ -177,9 +176,12 @@ class RolesController < CrudController
   end
 
   def permitted_params(role_type = entry.class)
-    permitted_attrs = role_type.used_attributes 
-    permitted_attrs -= [:deleted_at] unless can?(:destroy, @role)
-    model_params.permit(permitted_attrs)
+    @permitted_params ||=
+      begin
+        permitted_attrs = role_type.used_attributes
+        permitted_attrs -= [:deleted_at, :delete_on] unless can?(:destroy, @role)
+        model_params.permit(permitted_attrs)
+      end
   end
 
   def find_group

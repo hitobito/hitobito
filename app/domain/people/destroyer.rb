@@ -12,17 +12,38 @@ class People::Destroyer
   end
 
   def run
-    family_members_to_cleanup = leftover_family_members
+    destroy_leftover_family_member_entries!
+    resolve_leftover_household!
+    nullify_invoices!
 
     @person.destroy
+  end
 
-    family_members_to_cleanup.destroy_all
+  private
+
+  def destroy_leftover_family_member_entries!
+    leftover_family_members.destroy_all
+  end
+
+  def resolve_leftover_household!
+    leftover_household_person&.update!(household_key: nil)
+  end
+
+  def nullify_invoices!
+    Invoice.where(recipient: @person).update(recipient_email: @person.email,
+                                             recipient_address: Person::Address.new(@person).for_invoice,
+                                             recipient: nil)
+    Invoice.where(creator: @person).update(creator: nil)
   end
 
   def leftover_family_members
     FamilyMember.where(family_key: @person.family_members.pluck(:family_key))
-                .having('COUNT(*) <= 1')
+                .having('COUNT(*) <= 2')
                 .group(:family_key)
+  end
+
+  def leftover_household_person
+    @person.household_people.first if @person.household_people.size == 1
   end
 
 end

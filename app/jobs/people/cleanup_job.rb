@@ -12,7 +12,7 @@ class People::CleanupJob < RecurringJob
         if event_participation_in_cutoff?(person)
           minimize_person!(person)
         else
-          People::Destroyer.new(person).run
+          destroy_person!(person)
         end
       end
     end
@@ -36,5 +36,9 @@ class People::CleanupJob < RecurringJob
     People::Minimizer.new(person).run
     person.minimized_at = Time.zone.now
     person.save!
+  end
+
+  def destroy_person!(person)
+    People::Destroyer.new(person).run
   end
 end

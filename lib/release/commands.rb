@@ -72,7 +72,6 @@ module Release
               update_submodules(branch: 'devel')
             end
 
-            update_submodule_content(to: 'master')
             record_submodule_state
             release_version @version
           end

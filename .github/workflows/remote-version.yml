@@ -34,7 +34,7 @@ jobs:
 
       - name: 'Install helper-script'
         env:
-          VERSION_SOURCE: "https://raw.githubusercontent.com/hitobito/hitobito/new-dockerfile/bin/version"
+          VERSION_SOURCE: "https://raw.githubusercontent.com/hitobito/hitobito/master/bin/version"
         run: |
           mkdir -p bin
           curl --silent -k  "$VERSION_SOURCE" > bin/version

@@ -49,10 +49,6 @@ module Release
             record_submodule_state
             release_version @version
           end
-
-          # if confirm(question: 'Add an unreleased-section to the CHANGELOGs again?')
-          #   prepare_next_version
-          # end
         end
       end
     end

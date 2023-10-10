@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       composition:
-        description: "Composition repository, e.g. ose_composition_pbs"
+        description: "Composition repository, e.g. hitobito/ose_composition_pbs"
         type: string
         required: true
       next_version:

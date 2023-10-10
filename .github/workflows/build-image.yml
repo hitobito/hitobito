@@ -27,7 +27,6 @@ on:
       push:
         description: "Build and debug things without pushing to the registry"
         type: boolean
-        required: true
         default: true
 
     secrets:

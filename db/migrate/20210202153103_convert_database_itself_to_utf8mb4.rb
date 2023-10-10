@@ -3,6 +3,8 @@
 class ConvertDatabaseItselfToUtf8mb4 < ActiveRecord::Migration[6.0]
   def up
     conn = ActiveRecord::Base.connection
+    return true unless conn.class.to_s == 'ActiveRecord::ConnectionAdapters::Mysql2Adapter'
+
     execute "ALTER DATABASE #{conn.quote_table_name(conn.current_database)} CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci"
 
     # convert tables again, to convert new ones as well

@@ -33,7 +33,7 @@ module Export
       private
 
       def generate
-        CSVSafe.generate(options) do |generator|
+        CSVSafe.generate(**options) do |generator|
           generator << exportable.labels
           exportable.data_rows(:csv) do |row|
             generator << row

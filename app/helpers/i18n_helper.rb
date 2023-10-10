@@ -35,7 +35,7 @@ module I18nHelper
     defaults << :"global.#{key}"
 
     variables[:default] ||= defaults
-    t(defaults.shift, variables)
+    t(defaults.shift, **variables)
   end
 
   alias ti translate_inheritable
@@ -58,7 +58,7 @@ module I18nHelper
       else
         "global.associations.#{key}"
       end
-    t(primary, variables)
+    t(primary, **variables)
   end
 
   alias ta translate_association

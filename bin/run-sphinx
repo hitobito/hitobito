@@ -1,0 +1,56 @@
+#!/bin/bash
+
+set -e
+
+if [ -z $SPHINX_INTERVAL_TIME ]; then
+  SPHINX_INTERVAL_TIME=3600 # 600 = 10 mins, 3600 = 1 hour
+fi
+
+if [ -z $SPHINX_CONFIG_PATH ]; then
+  SPHINX_CONFIG_PATH=/opt/sphinx/conf/sphinx.conf
+fi
+
+function formatted_date {
+  date +"%Y-%m-%dT%H:%M:%S"
+}
+
+function run_indexer {
+  indexer --config $SPHINX_CONFIG_PATH --all --rotate
+}
+
+function create_initial_index {
+  # We need this to run in the foreground
+  if [[ "$SPHINX_SKIP_INITIAL_INDEX" != "1" ]]; then
+    indexer --config $SPHINX_CONFIG_PATH --all
+  fi
+}
+
+function scheduled_indexing {
+  while :
+  do
+    # We sleep first before starting the indexer because
+    # rake ts:index below will already start an index run.
+    sleep $SPHINX_INTERVAL_TIME
+    echo "$(formatted_date): Starting indexer ..."
+    run_indexer
+    echo "$(formatted_date): ... indexing done"
+  done
+}
+
+function pull_database_config_from_env() {
+  sed -i "s/\(  sql_host = \).*/\1$RAILS_DB_HOST/;
+          s/\(  sql_pass = \).*/\1$RAILS_DB_PASSWORD/;
+          s/\(  sql_user = \).*/\1$RAILS_DB_USERNAME/;
+          s/\(  sql_db = \).*/\1$RAILS_DB_NAME/" $SPHINX_CONFIG_PATH
+}
+
+# make sure binlog directory exists
+binlog_path=$(grep binlog_path $SPHINX_CONFIG_PATH | cut -d'=' -f2-)
+mkdir -p $binlog_path
+
+pull_database_config_from_env
+
+# start indexer and sphinx daemon
+create_initial_index
+scheduled_indexing &
+searchd --config $SPHINX_CONFIG_PATH --nodetach

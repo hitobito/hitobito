@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -52,7 +52,7 @@
 Fabricator(:event) do
   name { 'Eventus' }
   groups { [Group.all_types.first.first] }
-  before_validation do |event|
+  before_create do |event|
     event.dates.build(start_at: Time.zone.local(2012, 5, 11)) if event.dates.empty?
   end
 end

@@ -32,7 +32,7 @@ class TagListsController < ListController
   private
 
   def flash_message(type, attrs = {})
-    I18n.t("#{controller_name}.#{action_name}.#{type}", attrs)
+    I18n.t("#{controller_name}.#{action_name}.#{type}", **attrs)
   end
 
   def group

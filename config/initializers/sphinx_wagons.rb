@@ -5,6 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+ThinkingSphinx::ActiveRecord::DatabaseAdapters.default =
+  ThinkingSphinx::ActiveRecord::DatabaseAdapters::MySQLAdapter
+
 module ThinkingSphinx
   class Index
 

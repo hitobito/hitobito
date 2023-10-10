@@ -12,7 +12,7 @@ Raven.configure do |config|
 
   analyzer = [
     ENV['OPENSHIFT_BUILD_NAMESPACE'], # hit-jubla-int
-    ENV['RAILS_DB_NAME'],             # hit_jubla_development
+    (ENV['RAILS_DB_NAME'] != 'database' ? ENV['RAILS_DB_NAME'] : nil), # hit_jubla_development
     "hitobito-#{Rails.env}"           # hitobito-development
   ].compact.first.yield_self do |name|
     ProjectAnalyzer.new(name)

@@ -63,9 +63,9 @@ module Export::Pdf
 
         if options[:payment_slip]
           if invoice.payment_slip == 'qr'
-            payment_slip_qr_class.new(pdf, invoice, **section_options).render
+            payment_slip_qr_class.new(pdf, invoice, section_options).render
           else
-            PaymentSlip.new(pdf, invoice, **section_options).render
+            PaymentSlip.new(pdf, invoice, section_options).render
           end
         end
       end

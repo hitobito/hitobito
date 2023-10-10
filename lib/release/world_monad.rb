@@ -14,6 +14,24 @@ module Release
   module WorldMonad
     private
 
+    def current_version(stage = :production)
+      case stage.to_sym
+      when :production then `version current production`
+      when :integration then `version current integration`
+      else
+        raise 'Unsupported stage, should be production or integration'
+      end.chomp.split
+    end
+
+    def all_versions(stage = :production)
+      case stage.to_sym
+      when :production then `version all production`
+      when :integration then `version all integration`
+      else
+        raise 'Unsupported stage, should be production or integration'
+      end.chomp.split
+    end
+
     def ask(question, default)
       cli.ask(question) { |q| q.default = default }.chomp
     end

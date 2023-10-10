@@ -3,7 +3,7 @@
 set -e
 
 if [ -z $SPHINX_INTERVAL_TIME ]; then
-  SPHINX_INTERVAL_TIME=3600 # 10 mins
+  SPHINX_INTERVAL_TIME=3600 # 600 = 10 mins, 3600 = 1 hour
 fi
 
 if [ -z $SPHINX_CONFIG_PATH ]; then

@@ -10,72 +10,36 @@ begin
   require 'cmdparse'
 rescue LoadError
   abort(<<~MESSAGE)
-    Please install "cmdparse" to run the release-script
+    Please install "cmdparse" to run this
   MESSAGE
 end
 
-require_relative '../lib/release/main'
+require_relative '../lib/release/update_command' # lib/release/update_command.rb
 
 # basic setup
 parser = CmdParse::CommandParser.new(handle_exceptions: true)
 parser.main_options.program_name = 'release'
-parser.main_options.version = '1.0.0'
-parser.main_options.banner = 'Prepare the release for hitobito-composition (core and selected wagons)'
+parser.main_options.version = '1.1.0'
+parser.main_options.banner = 'Prepare the release for a hitobito-composition (core and selected wagons)'
 
 # global options
 parser.global_options do |opt|
   opt.on('-n', '--dry-run', "Do not execute anything") do
     parser.data[:dry_run] = true
   end
+
+  opt.on('-c', '--command-list', "Show commands that would be executed, implies dry-run") do
+    parser.data[:command_list] = true
+  end
 end
 
+# built-in commands
 parser.add_command(CmdParse::HelpCommand.new)
 parser.add_command(CmdParse::VersionCommand.new)
 
 # custom commands
-parser.add_command('suggest-version') do |cmd|
-  cmd.short_desc = 'Suggest a new version-number'
-
-  cmd.add_command('patch', default: true) do |subcmd|
-    subcmd.short_desc = 'Increment Patch-version'
-    subcmd.takes_commands = false
-    subcmd.action do
-      releaser = Release::Main.new([])
-      puts releaser.next_version(:patch)
-    end
-  end
-
-  cmd.add_command('current-month') do |subcmd|
-    subcmd.short_desc = 'set patch to current "YEAR-MONTH"'
-    subcmd.takes_commands = false
-    subcmd.action do
-      releaser = Release::Main.new([])
-      puts releaser.next_version(:current_month)
-    end
-  end
-end
-
-parser.add_command('composition', default: true) do |cmd|
-  cmd.short_desc = 'Prepare the current state of all repos in the composition-repo'
-  cmd.takes_commands = false
-  cmd.action do |version|
-    require 'pathname'
-    dir = File.expand_path('../..', __dir__)
-    all_wagons = Pathname.new(dir).children.flat_map do |dep|
-      dep.to_s.scan(/hitobito_(\w+)/).first
-    end.compact
-
-    releaser = Release::Main.new(all_wagons)
-    releaser.hitobito_group_dir = releaser.composition_repo_dir = dir
-    releaser.version = version
-    releaser.dry_run = parser.data[:dry_run]
-    releaser.standard_answer = true
-
-    raise unless releaser.usable?
-
-    releaser.run
-  end
-end
+parser.add_command(Release::UpdateCommand.new('integration', :update_integration))
+parser.add_command(Release::UpdateCommand.new('production', :update_production))
 
 # ... and go
 parser.parse

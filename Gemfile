@@ -7,7 +7,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '= 6.1.7.1'
+gem 'rails', '= 6.1.7.6'
 
 gem 'activerecord-session_store'
 gem 'acts-as-taggable-on'
@@ -20,7 +20,7 @@ gem 'bootsnap', require: false
 gem 'cancancan', '< 3.2.0'
 gem 'carrierwave'
 gem 'caxlsx', '~>3.4.0'
-gem 'cmess'
+gem 'charlock_holmes', '~> 0.7.7'
 gem 'commonmarker'
 gem 'config'
 gem 'country_select'
@@ -56,7 +56,7 @@ gem 'mysql2'
 gem 'nested_form'
 gem 'nokogiri'
 gem 'oat'
-gem 'paper_trail', '~> 11.1' # 11.1 adds Rails 6.1-support, 12 breaks for now
+gem 'paper_trail'
 gem 'paranoia'
 gem 'phonelib'
 gem 'prawn'
@@ -72,14 +72,16 @@ gem 'rails_autolink'
 gem 'rails-i18n'
 gem 'remotipart'
 gem 'rest-client'
+gem 'rexml'
 gem 'rotp'
 gem 'rqrcode'
 gem 'rswag', '>= 2.10.1'
 gem 'rubyzip'
 gem 'seed-fu'
 gem 'sentry-raven'
-gem 'simple_xlsx_reader' # import data from xlsx files (used in some wagons)
 gem 'simpleidn'
+gem 'simple_xlsx_reader' # import data from xlsx files (used in some wagons)
+gem 'sorted_set'
 gem 'sprockets', '~> 3.7.2' # pinned to older version to avoid having an empty manifest.js
 gem 'sqlite3' # required for asset generation
 gem 'strip_attributes' # strip whitespace of attributes

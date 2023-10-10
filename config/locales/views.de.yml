@@ -806,6 +806,7 @@ de:
 
   import/csv_parser:
     read_error: "Fehler beim Lesen von %{filename}: %{error}"
+    encoding_error: "Das Encoding konnte leider nicht erkannt werden. Ist es eine Binärdatei?"
     contains_no_data: "Enthält keine Daten"
     read_success:
       one: "%{count} Datensatz erfolgreich gelesen."

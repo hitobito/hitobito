@@ -138,7 +138,7 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def parse_or_redirect
-    @parser = Import::CsvParser.new(read_file_or_data.strip)
+    @parser = Import::CsvParser.new(read_file_or_data)
 
     success = parser.parse
     unless success
@@ -211,7 +211,11 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def read_file_or_data
-    (file_param && file_param.read) || params[:data]
+    (file_param && read_file) || params[:data]
+  end
+
+  def read_file
+    File.read(file_param.tempfile.path)
   end
 
 end

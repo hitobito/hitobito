@@ -34,25 +34,6 @@
       "note": "HTML Tags ARE allowed here"
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 123,
-      "fingerprint": "40be17ee84017c91503dab23873e24bdd71665ab665bf6f351cfc09ff83e6582",
-      "check_name": "EOLRuby",
-      "message": "Support for Ruby 2.7.3 ends on 2023-03-31",
-      "file": ".ruby-version",
-      "line": 1,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "Medium",
-      "cwe_id": [
-        1104
-      ],
-      "note": "We plan to upgrade Ruby before EOL or shortly thereafter"
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "b216097a885c4749beec71b32c00a8da56ce498c519675a10a03a28b3eaf73a0",
@@ -74,27 +55,8 @@
         89
       ],
       "note": "This from() is not part of an SQL query builder, but rather an email builder"
-    },
-    {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 121,
-      "fingerprint": "edf687f759ec9765bd5db185dbc615c80af77d6e7e19386fc42934e7a80307af",
-      "check_name": "EOLRuby",
-      "message": "Support for Ruby 2.7.3 ended on 2023-03-31",
-      "file": ".ruby-version",
-      "line": 1,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "High",
-      "cwe_id": [
-        1104
-      ],
-      "note": "We plan to upgrade Ruby before EOL or shortly thereafter"
     }
   ],
   "updated": "2023-04-04 06:28:46 +0000",
-  "brakeman_version": "5.4.1"
+  "brakeman_version": "6.0.0"
 }

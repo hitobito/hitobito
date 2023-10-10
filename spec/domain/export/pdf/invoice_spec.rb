@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -16,8 +16,8 @@ describe Export::Pdf::Invoice do
 
   let(:pdf) { described_class.render(invoice, payment_slip: true, articles: true) }
 
-  def build_invoice(**attrs)
-    Invoice.new(**attrs.reverse_merge(group: groups(:top_layer)))
+  def build_invoice(attrs)
+    Invoice.new(attrs.reverse_merge(group: groups(:top_layer)))
   end
 
   context 'with articles' do
@@ -257,7 +257,10 @@ describe Export::Pdf::Invoice do
 
   it 'renders empty invoice payment slip if without codeline' do
     expect_any_instance_of(Invoice::PaymentSlip).not_to receive(:code_line)
-    described_class.render(build_invoice(esr_number: 1, participant_number: 1),  payment_slip: true )
+    described_class.render(
+      build_invoice(esr_number: 1, participant_number: 1),
+      payment_slip: true
+    )
   end
 
   context 'currency' do
@@ -270,7 +273,7 @@ describe Export::Pdf::Invoice do
     end
 
     it 'is read from invoice' do
-      invoice.update(currency: "EUR")
+      invoice.update(currency: 'EUR')
       expect(subject).to match 'Gesamtbetrag 5.35 EUR'
       expect(subject).not_to match 'CHF'
     end
@@ -304,33 +307,32 @@ describe Export::Pdf::Invoice do
     subject { PDF::Inspector::Text.analyze(pdf) }
 
     before do
-      ['invoice_address',
-       'account_number',
-       'amount',
-       'esr_number',
-       'payment_purpose',
-       'left_receiver_address',
-       'right_receiver_address',
-      ].each do  |method|
+      %w(invoice_address
+         account_number
+         amount
+         esr_number
+         payment_purpose
+         left_receiver_address
+         right_receiver_address).each do |method|
         allow_any_instance_of(Export::Pdf::Invoice::PaymentSlip).to receive(method.to_sym)
       end
     end
 
     it 'with ch_esr' do
       invoice.payment_slip = 'ch_esr'
-      expect(subject.positions).to eq [[323.5819133858268, 44.532913385826845]]
+      expect(subject.positions).to eq [[323.58191, 44.53291]]
       expect(subject.show_text.first).to eq '042>000000000000100000000000023+ 1>'
     end
 
-    it "with ch_besr" do
+    it 'with ch_besr' do
       invoice.payment_slip = 'ch_besr'
-      expect(subject.positions).to eq [[323.5819133858268, 44.532913385826845]]
+      expect(subject.positions).to eq [[323.58191, 44.53291]]
       expect(subject.show_text.first).to eq '042>000000000000100000000000023+ 1>'
     end
 
-    it "with ch_besr" do
+    it 'with ch_besr' do
       invoice.payment_slip = 'ch_besr'
-      expect(subject.positions).to eq [[323.5819133858268, 44.532913385826845]]
+      expect(subject.positions).to eq [[323.58191, 44.53291]]
       expect(subject.show_text.first).to eq '042>000000000000100000000000023+ 1>'
     end
 
@@ -339,8 +341,8 @@ describe Export::Pdf::Invoice do
       let(:invoice) { invoices(:invoice) }
 
       it 'has code_line' do
-        expect(subject.positions).to eq [[271.95971338582683, 44.532913385826845],
-                                         [463.69931338582677, 44.532913385826845]]
+        expect(subject.positions).to eq [[271.95971, 44.53291],
+                                         [463.69931, 44.53291]]
 
         expect(subject.show_text.compact).to eq ['0100000005353>000037680338900000000000021+',
                                                  '376803389000004>']
@@ -439,35 +441,35 @@ describe Export::Pdf::Invoice do
     it 'does not render receipt and payment amount if total is hidden' do
       invoice.hide_total = true
       expect(text_with_position).to eq [
-        [14, 276, "Empfangsschein"],
-        [14, 251, "Konto / Zahlbar an"],
-        [14, 239, "CH93 0076 2011 6238 5295 7"],
-        [14, 228, "Acme Corp"],
-        [14, 216, "Hallesche Str. 37"],
-        [14, 205, "3007 Hinterdupfing"],
-        [14, 173, "Zahlbar durch"],
-        [14, 161, "Max Mustermann"],
-        [14, 150, "Musterweg 2"],
-        [14, 138, "8000 Alt Tylerland"],
-        [14, 89, "Währung"],
-        [71, 89, "Betrag"],
-        [14, 78, "CHF"],
-        [105, 39, "Annahmestelle"],
-        [190, 276, "Zahlteil"],
-        [190, 89, "Währung"],
-        [247, 89, "Betrag"],
-        [190, 78, "CHF"],
-        [346, 278, "Konto / Zahlbar an"],
-        [346, 266, "CH93 0076 2011 6238 5295 7"],
-        [346, 255, "Acme Corp"],
-        [346, 243, "Hallesche Str. 37"],
-        [346, 232, "3007 Hinterdupfing"],
-        [346, 211, "Referenznummer"],
-        [346, 200, "00 00834 96356 70000 00000 00019"],
-        [346, 178, "Zahlbar durch"],
-        [346, 167, "Max Mustermann"],
-        [346, 155, "Musterweg 2"],
-        [346, 144, "8000 Alt Tylerland"]
+        [14, 276, 'Empfangsschein'],
+        [14, 251, 'Konto / Zahlbar an'],
+        [14, 239, 'CH93 0076 2011 6238 5295 7'],
+        [14, 228, 'Acme Corp'],
+        [14, 216, 'Hallesche Str. 37'],
+        [14, 205, '3007 Hinterdupfing'],
+        [14, 173, 'Zahlbar durch'],
+        [14, 161, 'Max Mustermann'],
+        [14, 150, 'Musterweg 2'],
+        [14, 138, '8000 Alt Tylerland'],
+        [14, 89, 'Währung'],
+        [71, 89, 'Betrag'],
+        [14, 78, 'CHF'],
+        [105, 39, 'Annahmestelle'],
+        [190, 276, 'Zahlteil'],
+        [190, 89, 'Währung'],
+        [247, 89, 'Betrag'],
+        [190, 78, 'CHF'],
+        [346, 278, 'Konto / Zahlbar an'],
+        [346, 266, 'CH93 0076 2011 6238 5295 7'],
+        [346, 255, 'Acme Corp'],
+        [346, 243, 'Hallesche Str. 37'],
+        [346, 232, '3007 Hinterdupfing'],
+        [346, 211, 'Referenznummer'],
+        [346, 200, '00 00834 96356 70000 00000 00019'],
+        [346, 178, 'Zahlbar durch'],
+        [346, 167, 'Max Mustermann'],
+        [346, 155, 'Musterweg 2'],
+        [346, 144, '8000 Alt Tylerland']
       ]
     end
   end
@@ -502,11 +504,11 @@ describe Export::Pdf::Invoice do
         expect(image_positions).to have(1).item
         expect(image_positions.first).to match(
           displayed_height: 900.0,
-          displayed_width: 52900.0,
+          displayed_width: 52_900.0,
           height: 30,
           width: 230,
-          x: 56.693,
-          y: 755.197
+          x: 56.69291,
+          y: 755.19709
         )
       end
 
@@ -515,11 +517,11 @@ describe Export::Pdf::Invoice do
         expect(image_positions).to have(1).item
         expect(image_positions.first).to match(
           displayed_height: 900.0,
-          displayed_width: 52900.0,
+          displayed_width: 52_900.0,
           height: 30,
           width: 230,
-          x: 308.587,
-          y: 755.197
+          x: 308.58709,
+          y: 755.19709
         )
       end
     end

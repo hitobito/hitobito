@@ -8,7 +8,7 @@
 module Translatable
 
   def translate(key, options = {})
-    I18n.t(full_translation_key(key), options)
+    I18n.t(full_translation_key(key), **options)
   end
 
   private

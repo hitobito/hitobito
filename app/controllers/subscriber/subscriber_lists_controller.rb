@@ -94,7 +94,7 @@ module Subscriber
 
     def flash_message(type, attrs = {})
       attrs[:mailing_list] = mailing_list.name
-      I18n.t("mailing_lists.subscriber_lists.#{action_name}.#{type}", attrs)
+      I18n.t("mailing_lists.subscriber_lists.#{action_name}.#{type}", **attrs)
     end
   end
 end

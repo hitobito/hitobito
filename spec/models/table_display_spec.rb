@@ -26,11 +26,11 @@ describe TableDisplay do
   end
 
   it 'rejects unregistered attributes' do
-    TableDisplay.register_column(Person, TableDisplays::PublicColumn, %i(first_name))
+    TableDisplay.register_column(Person, TableDisplays::PublicColumn, [:first_name])
 
     subject.person_id = 1
     subject.table_model_class = Person
-    subject.selected = %W(name first_name id confirm)
+    subject.selected = %w(name first_name id confirm)
     expect { subject.save! }.not_to raise_error
     expect(subject.active_columns([])).not_to include :name
     expect(subject.active_columns([])).to include :first_name
@@ -53,7 +53,9 @@ describe TableDisplay do
       end
 
       it 'yields if access check succeeds' do
-        expect { |b| subject.column_for('attr').value_for(member, 'attr', &b) }.to yield_with_args(member, 'attr')
+        expect do |b|
+          subject.column_for('attr').value_for(member, 'attr', &b)
+        end.to yield_with_args(member, 'attr')
       end
 
       it 'noops if access check fails' do
@@ -69,7 +71,8 @@ describe TableDisplay do
     subject { TableDisplay.for(leader, Event::Participation) }
 
     it 'translates person columns for sort statements' do
-      TableDisplay.register_column(Event::Participation, TableDisplays::PublicColumn, :"person.birthday")
+      TableDisplay.register_column(Event::Participation, TableDisplays::PublicColumn,
+                                   :"person.birthday")
       subject.selected = %w(person.birthday)
       expect(subject.sort_statements([])).to eq('person.birthday': 'people.birthday')
     end
@@ -77,7 +80,7 @@ describe TableDisplay do
     it 'builds custom sort statements for questions' do
       TableDisplay.register_multi_column(Event::Participation,
                                          TableDisplays::Event::Participations::QuestionColumn)
-      subject.selected = %W(event_question_1 event_question_#{question.id} event_question_2)
+      subject.selected = %W[event_question_1 event_question_#{question.id} event_question_2]
       statements = subject.sort_statements(top_course.participations)
       expect(statements).to have(1).item
       expect(statements[:"event_question_#{question.id}"]).to eq 'CASE event_questions.id ' \
@@ -85,10 +88,11 @@ describe TableDisplay do
     end
 
     it 'rejects unregistered person attributes' do
-      TableDisplay.register_column(Event::Participation, TableDisplays::PublicColumn, %i(person.first_name))
+      TableDisplay.register_column(Event::Participation, TableDisplays::PublicColumn,
+                                   [:'person.first_name'])
 
       subject.person_id = 1
-      subject.selected = %W(name person.id person.first_name)
+      subject.selected = %w(name person.id person.first_name)
       expect(subject.save).to eq true
       expect(subject.selected).not_to include 'name'
       expect(subject.selected).not_to include 'person.id'
@@ -98,7 +102,7 @@ describe TableDisplay do
 end
 
 class TestUpdateableColumn < TableDisplays::PublicColumn
-  def required_permission(attr)
+  def required_permission(_attr)
     :update
   end
 end

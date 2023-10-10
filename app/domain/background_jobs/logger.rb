@@ -23,7 +23,7 @@ module BackgroundJobs
       attrs = message.payload.with_indifferent_access
                      .slice(*BackgroundJobLogEntry.column_names)
                      .reverse_merge(**opts)
-      BackgroundJobLogEntry.upsert(**attrs)
+      BackgroundJobLogEntry.upsert(attrs)
     rescue
       # Let's not fail the job because of a logging problem, but at least report the error.
       ::Raven.capture_exception($!)

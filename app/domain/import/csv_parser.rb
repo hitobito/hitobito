@@ -1,12 +1,11 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require 'csv'
-
 
 module Import
   class CsvParser
@@ -15,7 +14,8 @@ module Import
 
     def_delegators :csv, :size, :first, :to_csv, :[], :each
     attr_reader :csv, :error
-    POSSIBLE_SEPARATORS = [',', "\t", ':', ';']
+
+    POSSIBLE_SEPARATORS = [',', "\t", ':', ';'].freeze
 
     def initialize(input)
       @input = input
@@ -26,14 +26,14 @@ module Import
         data = encode_as_utf8(@input)
         separator = find_separator(data)
         sanitized = remove_empty_lines(data, separator)
-        @csv = CSV.parse(sanitized, options.merge(col_sep: separator))
+        @csv = CSV.parse(sanitized, **options.merge(col_sep: separator))
       rescue => e
         @error = e.to_s
       end
       error.blank?
     end
 
-    def map_data(header_mapping)
+    def map_data(header_mapping) # rubocop:disable Layout/MethodLength
       if header_mapping.is_a?(ActionController::Parameters)
         header_mapping = header_mapping.to_unsafe_h
       end
@@ -62,17 +62,26 @@ module Import
     private
 
     def options
-      { converters: ->(field, _info) { field && field.strip },
+      { converters: ->(field, _info) { field&.strip },
         header_converters: ->(header, _info) { header.to_s.strip },
         headers: true, skip_blanks: true }
     end
 
     def encode_as_utf8(input)
       raise translate(:contains_no_data) if input.nil?
-      charset = CMess::GuessEncoding::Automatic.guess(input)
-      raise translate(:contains_no_data) if charset == 'UNKNOWN'
-      charset = Encoding::ISO8859_1 if charset == 'MACINTOSH'
-      input.force_encoding(charset).encode('UTF-8')
+
+      encoding_detection = CharlockHolmes::EncodingDetector.detect(input)
+      encoding = encoding_detection[:encoding]
+
+      raise translate(:encoding_error) unless encoding
+
+      unless encoding == 'UTF-8'
+        input = input.force_encoding(encoding_detection[:encoding]).encode('UTF-8')
+      end
+
+      raise translate(:contains_no_data) if input.blank?
+
+      input
     end
 
     # removes empty lines (",,,,,\n"), happens when data is not on first line in spreadsheet

@@ -10,12 +10,14 @@ require 'spec_helper'
 describe Export::Pdf::Messages::Letter::Header do
   include PdfHelpers
 
-  let(:base_options) { {
-    margin: Export::Pdf::Messages::Letter::MARGIN,
-    page_size: 'A4',
-    page_layout: :portrait,
-    compress: true
-  } }
+  let(:base_options) do
+    {
+      margin: Export::Pdf::Messages::Letter::MARGIN,
+      page_size: 'A4',
+      page_layout: :portrait,
+      compress: true
+    }
+  end
   let(:options) { base_options }
   let(:top_group)  { groups(:top_group) }
   let(:top_leader) { people(:top_leader) }
@@ -86,11 +88,11 @@ describe Export::Pdf::Messages::Letter::Header do
 
       expect(image_positions).to have(1).item
       expect(image_positions.first).to match(
-        x: 294.414,
-        y: 741.024,
+        x: 294.41386,
+        y: 741.02386,
         width: 230,
         height: 30,
-        displayed_width: 52900.0,
+        displayed_width: 52_900.0,
         displayed_height: 900.0
       )
     end
@@ -101,11 +103,11 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
 
         expect(image_positions.first).to match(
-          x: 294.414,
-          y: 741.024,
+          x: 294.41386,
+          y: 741.02386,
           width: 230,
           height: 30,
-          displayed_width: 52900.0,
+          displayed_width: 52_900.0,
           displayed_height: 900.0
         )
       end
@@ -115,11 +117,11 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
 
         expect(image_positions.first).to match(
-          x: 74.414,
-          y: 753.024,
+          x: 74.41386,
+          y: 753.02386,
           width: 1000,
           height: 40,
-          displayed_width: 450000.0,
+          displayed_width: 450_000.0,
           displayed_height: 720.0
         )
       end
@@ -129,11 +131,11 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
 
         expect(image_positions.first).to match(
-          x: 444.414,
-          y: 731.024,
+          x: 444.41386,
+          y: 731.02386,
           width: 200,
           height: 100,
-          displayed_width: 16000.0,
+          displayed_width: 16_000.0,
           displayed_height: 4000.0
         )
       end

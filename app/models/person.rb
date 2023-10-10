@@ -121,9 +121,17 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
 
-  mount_uploader :carrierwave_picture, Person::PictureUploader, mount_on: 'picture'
+  # mount_uploader :carrierwave_picture, Person::PictureUploader, mount_on: 'picture'
   has_one_attached :picture do |attachable|
     attachable.variant :thumb, resize_to_fill: [32, 32]
+  end
+
+  def picture_default
+    'profil.png'
+  end
+
+  def picture_thumb_default
+    'profil_thumb.png'
   end
 
   class_attribute :used_attributes
@@ -392,7 +400,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### OTHER INSTANCE METHODS
 
   def save(*args) # rubocop:disable Rails/ActiveRecordOverride Overwritten to handle uniqueness validation race conditions
-    super
+    super()
   rescue ActiveRecord::RecordNotUnique
     # TODO: it makes no sense to add this error indiscriminate on the email attribute
     errors.add(:email, :taken)

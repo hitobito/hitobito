@@ -13,7 +13,7 @@ describe Messages::BulkMail::MailFactory do
   let(:factory) { described_class.new(bulk_mail_message) }
 
   it 'sets original sender to reply headers' do
-    expect(mail['Reply-To'].value.first).to eq('sender@example.com')
+    expect(mail['Reply-To'].value).to eq('sender@example.com')
   end
 
   it 'sets recipient email addresses to smtp envelope to' do

@@ -12,14 +12,14 @@ require 'pathname'
 # Allows switching wagons quickly (depends on https://direnv.net/)
 class Setup
 
-  USED_RUBY_VERSION = '2.7.3'
+  USED_RUBY_VERSION = '3.0.6'
 
   def run
     write_and_copy('.envrc', environment)
     write_and_copy('.tool-versions', <<~TOOL_VERSION)
       ruby #{USED_RUBY_VERSION}
       nodejs 14.18.1
-      yarn 1.22.17
+      yarn 1.22.19
     TOOL_VERSION
     write_and_copy('.ruby-version', USED_RUBY_VERSION)
     write('Wagonfile', gemfile)

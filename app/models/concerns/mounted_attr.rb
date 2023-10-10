@@ -20,7 +20,8 @@ module MountedAttr
 
       entry = mounted_attr_entry(c.attr_name)
 
-      next if (entry.value.nil? || entry.casted_value.zero?) && value == c.default
+      # TODO: wofür braucht es diesene Code??
+      next if entry.unset? && value == c.default
 
       entry.value = value
       entry.save! if entry.value_changed?
@@ -67,9 +68,17 @@ module MountedAttr
 
     def define_mounted_attr_getter(config)
       define_method(config.attr_name) do
-        instance_variable_get("@#{config.attr_name}") ||
-          mounted_attr_entry(config.attr_name).casted_value ||
-          config.default
+        var_name = "@#{config.attr_name}"
+        value = if instance_variable_defined?(var_name)
+                  instance_variable_get(var_name)
+                else
+                  mounted_attr_entry(config.attr_name).casted_value
+                end
+
+        return config.default if
+          !config.default.nil? && (value.nil? || value.try(:empty?) || value.try(:zero?))
+
+        value
       end
     end
 
@@ -83,7 +92,11 @@ module MountedAttr
     def define_mounted_attr_validations(config)
       class_eval do
         unless config.null
-          validates config.attr_name, presence: true
+          if config.attr_type == :boolean
+            validates config.attr_name, inclusion: { in: [true, false], message: :blank }
+          else
+            validates config.attr_name, presence: true
+          end
         end
 
         if config.enum.present?

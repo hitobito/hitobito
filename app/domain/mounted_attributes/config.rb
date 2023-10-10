@@ -10,7 +10,7 @@ module MountedAttributes
     attr_reader :target_class, :attr_name, :attr_type, :options,
                 :null, :enum, :default, :category
 
-    def initialize(target_class, attr_name, attr_type, options)
+    def initialize(target_class, attr_name, attr_type, **options)
       @target_class = target_class
       @attr_name = attr_name
       @attr_type = attr_type
@@ -22,7 +22,7 @@ module MountedAttributes
       @options = options
 
       @null = options[:null]
-      @null ||= true
+      @null = true if @null.nil?
       @enum = options[:enum]
       @default = options[:default]
       @category = options[:category]

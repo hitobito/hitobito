@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 require Rails.root.join('spec/support/group/bottom_group.rb')
+require Rails.root.join('spec/support/group/mounted_attrs_group.rb')
 
 class Group::BottomLayer < Group
 
@@ -13,7 +14,7 @@ class Group::BottomLayer < Group
 
   self.event_types = [Event, Event::Course]
 
-  children Group::BottomGroup
+  children Group::BottomGroup, Group::MountedAttrsGroup
 
   class BasicPermissionsOnly < ::Role
     self.permissions = []

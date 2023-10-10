@@ -754,7 +754,6 @@ it:
     actions_show:
       confirm_cancel: Vuole davvero annullare questa fattura?
     pdf:
-      amount_open: Importo non pagato
       total: Importo totale
       total_vat: IVA
       cost: Subtotale
@@ -798,7 +797,6 @@ it:
     form_tabs:
       general: In generale
       email: E-mail
-      layout: Disposizione
     update:
       flash:
         success: Le impostazioni per le fatture sono state aggiornate con successo
@@ -818,7 +816,6 @@ it:
       donation_increase_percentage_explanation: Percento per il calcolo delle donazioni
     email_fields:
       email_help: Le risposte alle e-mail di fatturazione devono essere inviate all'indirizzo dell'utente corrente o all'indirizzo configurato qui.
-      email_validation: Non deve essere un'email.
       sender_name_help: Le e-mail di fatturazione vengono inviate con questo nome.
     reminder_fields:
       third_level: 'Per tutti i prossimi solleciti, verrà ripetuto il terzo livello di sollecito'

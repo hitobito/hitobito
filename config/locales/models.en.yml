@@ -110,8 +110,6 @@ en:
             account_number:
               required: 'is required'
               invalid_check_digit: 'is not valid; Incorrect check digit'
-            logo:
-              attached_unless_disabled: 'must be specified if a logo position is selected'
             payee:
               to_long: 'is too long, may only have 2 lines'
         mailing_list:
@@ -820,11 +818,6 @@ en:
         contact_id: Conctact
         beneficiary: Beneficiary
         email: Reply to email-address
-        logo_position: Logo position
-        logo_positions:
-          disabled: None
-          left: Left
-          right: Right
         payee: Deposit for
         payment_slip: Payment slip
         payment_slips:
@@ -833,7 +826,6 @@ en:
         participant_number: Participant Nr
         participant_number_internal: Participant Nr internal
         payment_reminder_configs: Reminder
-        remove_logo: Remove current logo
         vat_number: VAT Nr
         donation_increase_percentage: Increase in %
         donation_calculation_year_amount: Number of years

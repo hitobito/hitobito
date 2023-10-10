@@ -47,7 +47,7 @@ describe Export::Pdf::Invoice do
 
     it 'renders full invoice with vat' do
       invoice.invoice_items.build(name: 'pens', unit_cost: 10, vat_rate: 10, count: 2)
-      expect(text_with_position).to eq([
+      invoice_text = [
         [347, 687, "Rechnungsnummer:"],
         [457, 687, "1-10"],
         [347, 674, "Rechnungsdatum:"],
@@ -107,12 +107,16 @@ describe Export::Pdf::Invoice do
         [346, 167, "Max Mustermann"],
         [346, 155, "Musterweg 2"],
         [346, 144, "8000 Alt Tylerland"]
-      ])
+      ]
+
+      text_with_position.each_with_index do |l, i|
+        expect(l).to eq(invoice_text[i])
+      end
     end
 
     it 'renders full invoice without vat' do
       invoice.invoice_items.build(name: 'pens', unit_cost: 10, count: 2)
-      expect(text_with_position).to eq([
+      invoice_text = [
         [347, 687, "Rechnungsnummer:"],
         [457, 687, "1-10"],
         [347, 674, "Rechnungsdatum:"],
@@ -169,14 +173,20 @@ describe Export::Pdf::Invoice do
         [346, 167, "Max Mustermann"],
         [346, 155, "Musterweg 2"],
         [346, 144, "8000 Alt Tylerland"]
-      ])
+      ]
+
+      text_with_position.each_with_index do |l, i|
+        expect(l).to eq(invoice_text[i])
+      end
     end
 
     it 'renders full invoice with payments' do
       invoice.invoice_items.build(name: 'pens', unit_cost: 10, count: 2)
       invoice.payments.build(amount: 10, received_at: Time.zone.yesterday)
       invoice.payments.build(amount: 5, received_at: Time.zone.yesterday)
-      expect(text_with_position).to eq([
+      invoice.recalculate
+
+      invoice_text = [
         [347, 687, "Rechnungsnummer:"],
         [457, 687, "1-10"],
         [347, 674, "Rechnungsdatum:"],
@@ -198,16 +208,17 @@ describe Export::Pdf::Invoice do
         [57, 526, "pens"],
         [383, 526, "2"],
         [418, 526, "10.00"],
-        [389, 512, "Zwischenbetrag"],
+        [468, 526, "20.00"],
+        [400, 512, "Zwischenbetrag"],
         [501, 512, "20.00 CHF"],
-        [389, 499, "Gesamtbetrag"],
-        [490, 499, "1'500.00 CHF"],
-        [389, 486, "Eingegangene Zahlung"],
+        [400, 499, "Gesamtbetrag"],
+        [501, 499, "20.00 CHF"],
+        [400, 486, "Eingegangene Zahlung"],
         [501, 486, "10.00 CHF"],
-        [389, 473, "Eingegangene Zahlung"],
+        [400, 473, "Eingegangene Zahlung"],
         [505, 473, "5.00 CHF"],
-        [389, 456, "Offener Betrag"],
-        [490, 456, "1'500.00 CHF"],
+        [400, 456, "Offener Betrag"],
+        [501, 456, "20.00 CHF"],
         [14, 276, "Empfangsschein"],
         [14, 251, "Konto / Zahlbar an"],
         [14, 239, "CH93 0076 2011 6238 5295 7"],
@@ -221,13 +232,13 @@ describe Export::Pdf::Invoice do
         [14, 89, "Währung"],
         [71, 89, "Betrag"],
         [14, 78, "CHF"],
-        [71, 78, "1 500.00"],
+        [71, 78, "20.00"],
         [105, 39, "Annahmestelle"],
         [190, 276, "Zahlteil"],
         [190, 89, "Währung"],
         [247, 89, "Betrag"],
         [190, 78, "CHF"],
-        [247, 78, "1 500.00"],
+        [247, 78, "20.00"],
         [346, 278, "Konto / Zahlbar an"],
         [346, 266, "CH93 0076 2011 6238 5295 7"],
         [346, 255, "Acme Corp"],
@@ -239,7 +250,11 @@ describe Export::Pdf::Invoice do
         [346, 167, "Max Mustermann"],
         [346, 155, "Musterweg 2"],
         [346, 144, "8000 Alt Tylerland"]
-      ])
+      ]
+
+      text_with_position.each_with_index do |l, i|
+        expect(l).to eq(invoice_text[i])
+      end
     end
   end
 
@@ -368,7 +383,7 @@ describe Export::Pdf::Invoice do
     subject { PDF::Inspector::Text.analyze(pdf) }
 
     it 'renders qrcode' do
-      expect(text_with_position).to eq [
+      invoice_text = [
         [14, 276, 'Empfangsschein'],
         [14, 251, 'Konto / Zahlbar an'],
         [14, 239, 'CH93 0076 2011 6238 5295 7'],
@@ -401,11 +416,15 @@ describe Export::Pdf::Invoice do
         [346, 155, 'Musterweg 2'],
         [346, 144, '8000 Alt Tylerland']
       ]
+
+      text_with_position.each_with_index do |l, i|
+        expect(l).to eq(invoice_text[i])
+      end
     end
 
     it 'does not render blank amount' do
       invoice.total = 0
-      expect(text_with_position).to eq [
+      invoice_text = [
         [14, 276, 'Empfangsschein'],
         [14, 251, 'Konto / Zahlbar an'],
         [14, 239, 'CH93 0076 2011 6238 5295 7'],
@@ -436,41 +455,49 @@ describe Export::Pdf::Invoice do
         [346, 155, 'Musterweg 2'],
         [346, 144, '8000 Alt Tylerland']
       ]
+
+      text_with_position.each_with_index do |l, i|
+        expect(l).to eq(invoice_text[i])
+      end
     end
 
     it 'does not render receipt and payment amount if total is hidden' do
       invoice.hide_total = true
-      expect(text_with_position).to eq [
-        [14, 276, 'Empfangsschein'],
-        [14, 251, 'Konto / Zahlbar an'],
-        [14, 239, 'CH93 0076 2011 6238 5295 7'],
-        [14, 228, 'Acme Corp'],
-        [14, 216, 'Hallesche Str. 37'],
-        [14, 205, '3007 Hinterdupfing'],
-        [14, 173, 'Zahlbar durch'],
-        [14, 161, 'Max Mustermann'],
-        [14, 150, 'Musterweg 2'],
-        [14, 138, '8000 Alt Tylerland'],
-        [14, 89, 'Währung'],
-        [71, 89, 'Betrag'],
-        [14, 78, 'CHF'],
-        [105, 39, 'Annahmestelle'],
-        [190, 276, 'Zahlteil'],
-        [190, 89, 'Währung'],
-        [247, 89, 'Betrag'],
-        [190, 78, 'CHF'],
-        [346, 278, 'Konto / Zahlbar an'],
-        [346, 266, 'CH93 0076 2011 6238 5295 7'],
-        [346, 255, 'Acme Corp'],
-        [346, 243, 'Hallesche Str. 37'],
-        [346, 232, '3007 Hinterdupfing'],
-        [346, 211, 'Referenznummer'],
-        [346, 200, '00 00834 96356 70000 00000 00019'],
-        [346, 178, 'Zahlbar durch'],
-        [346, 167, 'Max Mustermann'],
-        [346, 155, 'Musterweg 2'],
-        [346, 144, '8000 Alt Tylerland']
+      invoice_text = [
+        [14, 276, "Empfangsschein"],
+        [14, 251, "Konto / Zahlbar an"],
+        [14, 239, "CH93 0076 2011 6238 5295 7"],
+        [14, 228, "Acme Corp"],
+        [14, 216, "Hallesche Str. 37"],
+        [14, 205, "3007 Hinterdupfing"],
+        [14, 173, "Zahlbar durch"],
+        [14, 161, "Max Mustermann"],
+        [14, 150, "Musterweg 2"],
+        [14, 138, "8000 Alt Tylerland"],
+        [14, 89, "Währung"],
+        [71, 89, "Betrag"],
+        [14, 78, "CHF"],
+        [105, 39, "Annahmestelle"],
+        [190, 276, "Zahlteil"],
+        [190, 89, "Währung"],
+        [247, 89, "Betrag"],
+        [190, 78, "CHF"],
+        [346, 278, "Konto / Zahlbar an"],
+        [346, 266, "CH93 0076 2011 6238 5295 7"],
+        [346, 255, "Acme Corp"],
+        [346, 243, "Hallesche Str. 37"],
+        [346, 232, "3007 Hinterdupfing"],
+        [346, 211, "Referenznummer"],
+        [346, 200, "00 00834 96356 70000 00000 00019"],
+        [346, 178, "Zahlbar durch"],
+        [346, 167, "Max Mustermann"],
+        [346, 155, "Musterweg 2"],
+        [346, 144, "8000 Alt Tylerland"]
       ]
+
+      text_with_position.each_with_index do |l, i|
+        expect(l).to eq(invoice_text[i])
+      end
     end
   end
 

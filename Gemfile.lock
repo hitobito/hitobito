@@ -2,40 +2,40 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    actioncable (6.1.7.1)
-      actionpack (= 6.1.7.1)
-      activesupport (= 6.1.7.1)
+    actioncable (6.1.7.6)
+      actionpack (= 6.1.7.6)
+      activesupport (= 6.1.7.6)
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
-    actionmailbox (6.1.7.1)
-      actionpack (= 6.1.7.1)
-      activejob (= 6.1.7.1)
-      activerecord (= 6.1.7.1)
-      activestorage (= 6.1.7.1)
-      activesupport (= 6.1.7.1)
+    actionmailbox (6.1.7.6)
+      actionpack (= 6.1.7.6)
+      activejob (= 6.1.7.6)
+      activerecord (= 6.1.7.6)
+      activestorage (= 6.1.7.6)
+      activesupport (= 6.1.7.6)
       mail (>= 2.7.1)
-    actionmailer (6.1.7.1)
-      actionpack (= 6.1.7.1)
-      actionview (= 6.1.7.1)
-      activejob (= 6.1.7.1)
-      activesupport (= 6.1.7.1)
+    actionmailer (6.1.7.6)
+      actionpack (= 6.1.7.6)
+      actionview (= 6.1.7.6)
+      activejob (= 6.1.7.6)
+      activesupport (= 6.1.7.6)
       mail (~> 2.5, >= 2.5.4)
       rails-dom-testing (~> 2.0)
-    actionpack (6.1.7.1)
-      actionview (= 6.1.7.1)
-      activesupport (= 6.1.7.1)
+    actionpack (6.1.7.6)
+      actionview (= 6.1.7.6)
+      activesupport (= 6.1.7.6)
       rack (~> 2.0, >= 2.0.9)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actiontext (6.1.7.1)
-      actionpack (= 6.1.7.1)
-      activerecord (= 6.1.7.1)
-      activestorage (= 6.1.7.1)
-      activesupport (= 6.1.7.1)
+    actiontext (6.1.7.6)
+      actionpack (= 6.1.7.6)
+      activerecord (= 6.1.7.6)
+      activestorage (= 6.1.7.6)
+      activesupport (= 6.1.7.6)
       nokogiri (>= 1.8.5)
-    actionview (6.1.7.1)
-      activesupport (= 6.1.7.1)
+    actionview (6.1.7.6)
+      activesupport (= 6.1.7.6)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
@@ -47,32 +47,32 @@ GEM
       activesupport (>= 5.2.0)
     active_storage_variant (1.0.0)
       rails (~> 6.0)
-    activejob (6.1.7.1)
-      activesupport (= 6.1.7.1)
+    activejob (6.1.7.6)
+      activesupport (= 6.1.7.6)
       globalid (>= 0.3.6)
-    activemodel (6.1.7.1)
-      activesupport (= 6.1.7.1)
+    activemodel (6.1.7.6)
+      activesupport (= 6.1.7.6)
     activemodel-serializers-xml (1.0.2)
       activemodel (> 5.x)
       activesupport (> 5.x)
       builder (~> 3.1)
-    activerecord (6.1.7.1)
-      activemodel (= 6.1.7.1)
-      activesupport (= 6.1.7.1)
+    activerecord (6.1.7.6)
+      activemodel (= 6.1.7.6)
+      activesupport (= 6.1.7.6)
     activerecord-session_store (2.0.0)
       actionpack (>= 5.2.4.1)
       activerecord (>= 5.2.4.1)
       multi_json (~> 1.11, >= 1.11.2)
       rack (>= 2.0.8, < 3)
       railties (>= 5.2.4.1)
-    activestorage (6.1.7.1)
-      actionpack (= 6.1.7.1)
-      activejob (= 6.1.7.1)
-      activerecord (= 6.1.7.1)
-      activesupport (= 6.1.7.1)
+    activestorage (6.1.7.6)
+      actionpack (= 6.1.7.6)
+      activejob (= 6.1.7.6)
+      activerecord (= 6.1.7.6)
+      activesupport (= 6.1.7.6)
       marcel (~> 1.0)
       mini_mime (>= 1.1.0)
-    activesupport (6.1.7.1)
+    activesupport (6.1.7.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -151,6 +151,7 @@ GEM
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
       rubyzip (>= 1.3.0, < 3)
+    charlock_holmes (0.7.7)
     choice (0.2.0)
     chunky_png (1.3.8)
     ci_reporter (2.0.0)
@@ -158,10 +159,6 @@ GEM
     ci_reporter_rspec (1.0.0)
       ci_reporter (~> 2.0)
       rspec (>= 2.14, < 4)
-    cmess (0.5.1)
-      htmlentities (~> 4.3)
-      nuggets (~> 1.5)
-      safe_yaml (~> 1.0)
     coderay (1.1.3)
     codez-tarantula (0.5.5)
       hpricot (~> 0.8.4)
@@ -185,6 +182,7 @@ GEM
     daemons (1.3.1)
     dalli (3.2.3)
     database_cleaner (1.7.0)
+    date (3.3.3)
     debug_inspector (0.0.3)
     deep_merge (1.2.1)
     delayed_job (4.1.9)
@@ -358,8 +356,11 @@ GEM
     magiclabs-userstamp (3.0)
       actionpack (>= 4.0)
       activerecord (>= 4.0)
-    mail (2.7.1)
+    mail (2.8.1)
       mini_mime (>= 0.1.1)
+      net-imap
+      net-pop
+      net-smtp
     marcel (1.0.2)
     matrix (0.4.2)
     method_source (1.0.0)
@@ -375,15 +376,23 @@ GEM
     multi_json (1.15.0)
     mysql2 (0.5.3)
     nested_form (0.3.2)
+    net-imap (0.4.1)
+      date
+      net-protocol
+    net-pop (0.1.2)
+      net-protocol
+    net-protocol (0.2.1)
+      timeout
+    net-smtp (0.4.0)
+      net-protocol
     netrc (0.11.0)
-    nio4r (2.5.8)
+    nio4r (2.5.9)
     nochmal (0.2.1)
       pastel
       rails (>= 6.0)
     nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nuggets (1.5.0)
     oat (0.5.0)
       activesupport
     orm_adapter (0.5.0)
@@ -452,20 +461,20 @@ GEM
       rack
     rack-test (2.1.0)
       rack (>= 1.3)
-    rails (6.1.7.1)
-      actioncable (= 6.1.7.1)
-      actionmailbox (= 6.1.7.1)
-      actionmailer (= 6.1.7.1)
-      actionpack (= 6.1.7.1)
-      actiontext (= 6.1.7.1)
-      actionview (= 6.1.7.1)
-      activejob (= 6.1.7.1)
-      activemodel (= 6.1.7.1)
-      activerecord (= 6.1.7.1)
-      activestorage (= 6.1.7.1)
-      activesupport (= 6.1.7.1)
+    rails (6.1.7.6)
+      actioncable (= 6.1.7.6)
+      actionmailbox (= 6.1.7.6)
+      actionmailer (= 6.1.7.6)
+      actionpack (= 6.1.7.6)
+      actiontext (= 6.1.7.6)
+      actionview (= 6.1.7.6)
+      activejob (= 6.1.7.6)
+      activemodel (= 6.1.7.6)
+      activerecord (= 6.1.7.6)
+      activestorage (= 6.1.7.6)
+      activesupport (= 6.1.7.6)
       bundler (>= 1.15.0)
-      railties (= 6.1.7.1)
+      railties (= 6.1.7.6)
       sprockets-rails (>= 2.0.0)
     rails-controller-testing (1.0.4)
       actionpack (>= 5.0.1.x)
@@ -488,9 +497,9 @@ GEM
       railties (>= 6.0.0, < 7)
     rails_autolink (1.1.6)
       rails (> 3.1)
-    railties (6.1.7.1)
-      actionpack (= 6.1.7.1)
-      activesupport (= 6.1.7.1)
+    railties (6.1.7.6)
+      actionpack (= 6.1.7.6)
+      activesupport (= 6.1.7.6)
       method_source
       rake (>= 12.2)
       thor (~> 1.0)
@@ -499,6 +508,7 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
+    rbtree (0.4.6)
     rbtree3 (0.7.0)
     redcarpet (3.5.1)
     regexp_parser (2.8.1)
@@ -596,6 +606,7 @@ GEM
     semantic_range (3.0.0)
     sentry-raven (3.1.2)
       faraday (>= 1.0)
+    set (1.0.3)
     simple_xlsx_reader (5.0.0)
       nokogiri
       rubyzip
@@ -603,8 +614,12 @@ GEM
       unf (~> 0.1.4)
     sixarm_ruby_unaccent (1.2.0)
     slop (3.6.0)
+    social_security_number (0.1.12)
     sort_alphabetical (1.1.0)
       unicode_utils (>= 1.2.2)
+    sorted_set (1.0.3)
+      rbtree
+      set (~> 1.0)
     spring (2.1.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -628,9 +643,10 @@ GEM
       joiner (>= 0.3.4)
       middleware (>= 0.1.0)
       riddle (~> 2.3)
-    thor (1.2.1)
+    thor (1.2.2)
     tilt (2.0.10)
     timeliness (0.4.4)
+    timeout (0.4.0)
     truemail (3.0.1)
       simpleidn (~> 0.2.1)
     ttfunk (1.4.0)
@@ -669,7 +685,7 @@ GEM
       semantic_range (>= 2.3.0)
     webrick (1.7.0)
     websocket (1.2.9)
-    websocket-driver (0.7.5)
+    websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     wirble (0.1.3)
@@ -704,8 +720,8 @@ DEPENDENCIES
   capybara-screenshot
   carrierwave
   caxlsx (~> 3.4.0)
+  charlock_holmes (~> 0.7.7)
   ci_reporter_rspec
-  cmess
   codez-tarantula
   commonmarker
   config
@@ -751,7 +767,7 @@ DEPENDENCIES
   nochmal
   nokogiri
   oat
-  paper_trail (~> 11.1)
+  paper_trail
   parallel_tests
   paranoia
   pdf-inspector
@@ -769,7 +785,7 @@ DEPENDENCIES
   puma
   rack-cors
   rack-mini-profiler
-  rails (= 6.1.7.1)
+  rails (= 6.1.7.6)
   rails-controller-testing
   rails-erd
   rails-i18n
@@ -778,6 +794,7 @@ DEPENDENCIES
   remotipart
   request_profiler
   rest-client
+  rexml
   rotp
   rqrcode
   rspec-collection_matchers
@@ -794,6 +811,7 @@ DEPENDENCIES
   sentry-raven
   simple_xlsx_reader
   simpleidn
+  sorted_set
   spring-commands-rspec
   sprockets (~> 3.7.2)
   sqlite3
@@ -810,4 +828,4 @@ DEPENDENCIES
   wirble
 
 BUNDLED WITH
-   2.1.4
+   2.4.19

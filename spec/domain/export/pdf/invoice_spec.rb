@@ -16,8 +16,8 @@ describe Export::Pdf::Invoice do
 
   let(:pdf) { described_class.render(invoice, payment_slip: true, articles: true) }
 
-  def build_invoice(**attrs)
-    Invoice.new(**attrs.reverse_merge(group: groups(:top_layer)))
+  def build_invoice(attrs)
+    Invoice.new(attrs.reverse_merge(group: groups(:top_layer)))
   end
 
   context 'with articles' do
@@ -257,7 +257,10 @@ describe Export::Pdf::Invoice do
 
   it 'renders empty invoice payment slip if without codeline' do
     expect_any_instance_of(Invoice::PaymentSlip).not_to receive(:code_line)
-    described_class.render(Invoice.new(esr_number: 1, participant_number: 1), payment_slip: true)
+    described_class.render(
+      build_invoice(esr_number: 1, participant_number: 1),
+      payment_slip: true
+    )
   end
 
   context 'currency' do
@@ -501,11 +504,11 @@ describe Export::Pdf::Invoice do
         expect(image_positions).to have(1).item
         expect(image_positions.first).to match(
           displayed_height: 900.0,
-          displayed_width: 52900.0,
+          displayed_width: 52_900.0,
           height: 30,
           width: 230,
-          x: 56.693,
-          y: 755.197
+          x: 56.69291,
+          y: 755.19709
         )
       end
 
@@ -514,11 +517,11 @@ describe Export::Pdf::Invoice do
         expect(image_positions).to have(1).item
         expect(image_positions.first).to match(
           displayed_height: 900.0,
-          displayed_width: 52900.0,
+          displayed_width: 52_900.0,
           height: 30,
           width: 230,
-          x: 308.587,
-          y: 755.197
+          x: 308.58709,
+          y: 755.19709
         )
       end
     end

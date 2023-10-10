@@ -23,7 +23,7 @@ module Export
       # @param [Symbol] position one of :left or :right
       # @param [Hash] options passed to Prawn::Document#image
       def initialize(pdf, attachment, image_width:, image_height:, position:, **options) # rubocop:disable Metrics/ParameterLists
-        super(pdf, attachment, **options)
+        super(pdf, attachment, options)
         @attachment = attachment
         @image_width = image_width
         @image_height = image_height

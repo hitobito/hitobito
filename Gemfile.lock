@@ -637,7 +637,6 @@ GEM
     simpleidn (0.2.1)
       unf (~> 0.1.4)
     slop (3.6.0)
-    social_security_number (0.1.12)
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)

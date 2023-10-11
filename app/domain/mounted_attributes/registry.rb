@@ -12,7 +12,7 @@ module MountedAttributes
     end
 
     def register(target_class, attr_name, attr_type, options)
-      config = MountedAttributes::Config.new(target_class, attr_name, attr_type, options)
+      config = MountedAttributes::Config.new(target_class, attr_name, attr_type, **options)
       @configs << config
       config
     end

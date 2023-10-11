@@ -14,16 +14,25 @@ class MountedAttribute < ActiveRecord::Base
 
   def config
     @config ||= MountedAttr::ClassMethods
-      .mounted_attr_registry
-      .config_for(entry.class, key)
+                .mounted_attr_registry
+                .config_for(entry.class, key)
   end
 
   def casted_value
     case config.attr_type
-    when :string
-      value
     when :integer
-      value.presence && value.to_i
+      value.presence && Integer(value)
+    else
+      value
+    end
+  end
+
+  def unset?
+    case config.attr_type
+    when :integer
+      casted_value.nil? || casted_value.zero?
+    else
+      value.blank?
     end
   end
 end

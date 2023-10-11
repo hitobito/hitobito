@@ -335,9 +335,9 @@ describe Group do
 
   context '.all_types' do
     it 'lists all types' do
-      expect(Group.all_types.count).to eq(5)
+      expect(Group.all_types.count).to eq(6)
       [Group::TopLayer, Group::TopGroup, Group::BottomLayer, Group::BottomGroup,
-       Group::GlobalGroup].each do |t|
+       Group::GlobalGroup, Group::MountedAttrsGroup].each do |t|
         expect(Group.all_types).to include(t)
       end
     end
@@ -737,7 +737,7 @@ describe Group do
       top_layer.reload
       expect(top_layer.shirt_size).to eq('l')
     end
-    
+
     it 'returns mounted attr configs by category' do
       configs_by_category = top_layer.class.mounted_attr_configs_by_category
       expect(configs_by_category.keys).to eq([:custom_cat, :default])

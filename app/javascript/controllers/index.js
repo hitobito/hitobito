@@ -3,11 +3,11 @@
 
 import { Application } from "stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
+import { Controller } from "@hotwired/stimulus"
 
-const application = Application.start()
+const stimulus = Application.start()
 
 const ctrlContext = require.context("controllers", true, /_controller\.js$/)
-application.load(definitionsFromContext(ctrlContext))
+stimulus.load(definitionsFromContext(ctrlContext))
 
-const compContext = require.context("../../components", true, /\_controller.js$/);
-application.load(definitionsFromContext(compContext))
+export { Application, Controller, stimulus, definitionsFromContext }

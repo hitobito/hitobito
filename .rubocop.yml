@@ -1,3 +1,4 @@
+---
 require:
   - rubocop-rails
 
@@ -137,10 +138,6 @@ Style/PercentLiteralDelimiters:
 # We think that's fine
 Style/SymbolArray:
   EnforcedStyle: brackets
-
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    '%w': '()'
 
 # We thinks that's fine
 Style/SingleLineBlockParams:

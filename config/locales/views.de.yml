@@ -744,10 +744,13 @@ de:
       distribution: Verteilung
     self_registration:
       form:
+        main_person_title: Personendaten
         privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
         submit: Registrieren
         has_account: Du hast bereits ein Login?
         to_login_page: Anmelden und Einschreiben
+      main_person:
+        notes: Bemerkungen
       create:
         email_taken: E-Mail wird bereits verwendet. Melde dich an oder registrier dich mit einer anderen E-Mail-Adresse.
         flash:
@@ -1847,6 +1850,10 @@ de:
     global:
       link:
         add: API-Key hinzufügen
+
+  steps_component:
+    next_link: Weiter
+    prev_link: Zurück
 
   subscriber:
     group:

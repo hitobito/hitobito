@@ -20,8 +20,8 @@ describe :login, js: true do
 
   it 'allows login with email' do
     visit new_person_session_path
-    fill_in 'person_login_identity', with: person.email
-    fill_in 'person_password', with: password
+    fill_in 'Haupt-E-Mail', with: person.email
+    fill_in 'Passwort', with: password
     click_button 'Anmelden'
 
     expect(page).to have_link 'Abmelden'
@@ -30,8 +30,8 @@ describe :login, js: true do
 
   it 'does not allow login with nickname' do
     visit new_person_session_path
-    fill_in 'person_login_identity', with: person.nickname
-    fill_in 'person_password', with: password
+    fill_in 'Haupt-E-Mail', with: person.nickname
+    fill_in 'Passwort', with: password
     click_button 'Anmelden'
 
     expect(page).to have_selector('#flash .alert.alert-error', text: 'Ungültige Anmeldedaten.')
@@ -41,8 +41,8 @@ describe :login, js: true do
   it 'does allow login with nickname if nickname is whitelisted in Person#devise_login_id_attrs' do
     Person.devise_login_id_attrs << :nickname
     visit new_person_session_path
-    fill_in 'person_login_identity', with: person.nickname
-    fill_in 'person_password', with: password
+    fill_in 'Haupt-E-Mail', with: person.nickname
+    fill_in 'Passwort', with: password
     click_button 'Anmelden'
 
     expect(page).to have_link 'Abmelden'

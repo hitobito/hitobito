@@ -5,68 +5,50 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Groups::SelfRegistrationController < CrudController
-  include PrivacyPolicyAcceptable
-
+class Groups::SelfRegistrationController < ApplicationController
   skip_authorization_check
-  skip_authorize_resource
 
   before_action :assert_empty_honeypot, only: [:create]
-
   before_action :redirect_to_group_if_necessary
+  helper_method :entry, :policy_finder
 
-  after_create :send_notification_email
-
-  delegate :self_registration_active?, to: :group
+  def new; end
 
   def create
-    super do
-      next unless entry.person.errors.delete(:email, :taken)
+    return render :new unless entry.valid?
 
-      entry.person.errors.add(:base, t('.email_taken'))
+    if params.key?(:step)
+      entry.increment_step
+      render :new, entry: entry
+    else
+      save_entry
+      redirect_to new_person_session_path, notice: success_message
     end
   end
 
   private
 
-  def send_notification_email
-    return if group.self_registration_notification_email.blank?
-
-    Groups::SelfRegistrationNotificationMailer
-      .self_registration_notification(group.self_registration_notification_email,
-                                      entry).deliver_now
-  end
-
-  def build_entry
-    role = super
-    role.group = group
-    role.type = group.self_registration_role_type
-    role.person = Person.new(person_attrs)
-    role
-  end
-
   def save_entry
-    ActiveRecord::Base.transaction do
-      person.valid? && privacy_policy_accepted? && person.save && entry.save
+    Person.transaction do
+      entry.save!
+      enqueue_notification_email
+      send_password_reset_email
     end
   end
 
-  def return_path
-    if valid?
-      super.presence || new_person_session_path
-    else
-      add_privacy_policy_not_accepted_error
-      group_self_registration_path(group)
-    end
+  def entry
+    @entry ||= SelfRegistration.new(
+      group: group,
+      params: params.to_unsafe_h.deep_symbolize_keys
+    )
   end
 
-  def set_success_notice
-    if person.email.present?
-      Person.send_reset_password_instructions(email: person.email)
-      flash[:notice] = I18n.t('devise.registrations.signed_up_but_unconfirmed')
-    else
-      flash[:notice] = I18n.t('devise.registrations.signed_up_but_no_email')
-    end
+  def authenticate?
+    false
+  end
+
+  def group
+    @group ||= Group.find(params[:group_id])
   end
 
   def assert_empty_honeypot
@@ -76,45 +58,31 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def redirect_to_group_if_necessary
-    return redirect_to group_path(group) unless self_registration_active?
+    return redirect_to group_path(group) unless group.self_registration_active?
+
     redirect_to group_self_inscription_path(group) if signed_in?
   end
 
-  def signed_in?
-    current_user.present?
+  def enqueue_notification_email
+    return if group.self_registration_notification_email.blank?
+
+    ::Groups::SelfRegistrationNotificationMailer
+      .self_registration_notification(group.self_registration_notification_email,
+                                      entry.main_person_role).deliver_later
   end
 
-  def valid?
-    privacy_policy_accepted? && entry.valid? && person.valid?
+  def send_password_reset_email
+    return if entry.main_person_email.blank?
+
+    Person.send_reset_password_instructions(email: entry.main_person_email)
   end
 
-  def person_attrs
-    model_params&.require(:new_person)
-      &.permit(*PeopleController.permitted_attrs)
-      &.merge(primary_group_id: group.id)
+  def success_message
+    key = entry.main_person.email.present? ? :signed_up_but_unconfirmed : :signed_up_but_no_email
+    I18n.t("devise.registrations.#{key}")
   end
 
-  def privacy_policy_param
-    model_params&.require(:new_person)[:privacy_policy_accepted]
-  end
-
-  def group
-    @group ||= Group.find(params[:group_id])
-  end
-
-  def person
-    @person ||= entry.person
-  end
-
-  def authenticate?
-    false
-  end
-
-  def path_args(entry)
-    [group, entry]
-  end
-
-  def self.model_class
-    @model_class ||= Role
+  def policy_finder
+    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group, person: entry.main_person)
   end
 end

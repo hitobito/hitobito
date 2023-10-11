@@ -1,23 +1,14 @@
--#  Copyright (c) 2021, Efficieny-Club Bern. This file is part of
--#  hitobito and licensed under the Affero General Public License version 3
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
--#  https://github.com/hitobito/hitobito.
+-#  https://github.com/hitobito/hitobito_sac_cas.
 
-= entry_form(url: group_self_registration_path, cancel_url: '', submit_label: t('.submit'), buttons_top: false) do |f|
+= standard_form(entry, url: group_self_registration_path) do |f|
   = f.honeypot(:verification)
+  = render StepsComponent.new(partials: entry.partials, step: entry.step, form: f)
 
-  = f.fields_for(:new_person, entry.person) do |fields|
-    = render('shared/error_messages', errors: entry.person.errors, object: entry.person)
-    = field_set_tag do
-      = render('fields', fields: fields)
-
-      = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: fields)
-      = render_extensions 'conditions', locals: { f: f }
-
-%br
-%br
-= field_set_tag do
+- if entry.first_step?
   = standard_form(entry, {url: group_self_inscription_path, method: :get}) do |f|
     = f.indented do
-      = f.help_block(t('.has_account'))
-    = form_buttons(f, submit_label: t('.to_login_page'), cancel_url: '')
+      = f.help_block(t('groups.self_registration.form.has_account'))
+    = form_buttons(f, submit_label: t('groups.self_registration.form.to_login_page'), cancel_url: '')

@@ -1,0 +1,108 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas.
+
+require 'spec_helper'
+
+describe StepsComponent::ContentComponent, type: :component do
+  let(:form) { double(:form) }
+  let(:iterator) { double(:iterator, index: 1, last?: false) }
+  subject(:component) do
+    described_class.new(partial: :partial, partial_iteration: iterator, form: form, step: :step)
+  end
+
+  it 'back link renders link for stimulus controller iterator based index' do
+    allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
+      back_link = Capybara::Node::Simple.new(component.back_link)
+      expect(back_link).to have_link 'Zurück'
+      expect(back_link).to have_css '.link.cancel[data-index=0]', text: 'Zurück'
+      expect(back_link).to have_css ".link.cancel[data-action='steps-component#back']",
+                                    text: 'Zurück'
+    end
+    render_inline(component)
+  end
+
+  it 'next button renders form button with step value' do
+    allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
+      expect(form).to receive(:button)
+        .with('Weiter',
+              { class: 'btn btn-primary',
+                data: { disable_with: 'Weiter' }, name: :step, value: 1 })
+      component.next_button
+    end
+    render_inline(component)
+  end
+
+  it 'next button accepts specific label' do
+    allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
+      expect(form).to receive(:button)
+        .with('Test',
+              { class: 'btn btn-primary',
+                data: { disable_with: 'Test' }, name: :step, value: 1 })
+      component.next_button('Test')
+    end
+    render_inline(component)
+  end
+
+  context 'real partial' do
+    let(:object) do
+      SelfRegistration.new(group: groups(:top_group), params: {}).tap do |obj|
+        obj.main_person.attrs = [:first_name, :last_name, :email]
+        obj.main_person.required_attrs = obj.main_person.attrs
+      end
+    end
+    let(:form) do
+      StandardFormBuilder.new(:obj, object, vc_test_controller.view_context,
+                              { builder: StandardFormBuilder })
+    end
+    let(:component) do
+      described_class.new(partial: 'groups/self_registration/main_person',
+                          partial_iteration: iterator,
+                          form: form, step: :step)
+    end
+    let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, groups: []) }
+    let(:entry) { double(:entry, partials: [:partial]) }
+
+    subject(:html) { render_inline(component) }
+
+    before do
+      allow_any_instance_of(ActionView::Base).to receive(:entry).and_return(entry)
+      allow_any_instance_of(ActionView::Base).to receive(:policy_finder).and_return(policy_finder)
+    end
+
+    it 'renders first_name last_name and email' do
+      expect(html).to have_field('Haupt-E-Mail')
+      expect(html).to have_field('Vorname')
+      expect(html).to have_field('Nachname')
+    end
+
+    it 'does not render attrs that are not listed on model' do
+      object.main_person.attrs -= [:first_name, :last_name]
+
+      expect(html).to have_field('Haupt-E-Mail')
+      expect(html).not_to have_field('Vorname')
+      expect(html).not_to have_field('Nachname')
+    end
+
+    it 'can control if field is required' do
+      object.main_person.required_attrs -= [:first_name]
+      expect(html).to have_css('.control-group.required', text: 'Haupt-E-Mail')
+      expect(html).to have_css('.control-group', text: 'Vorname')
+      expect(html).not_to have_css('.control-group.required', text: 'Vorname')
+    end
+
+    it 'shows check if policy_finder needs acceptance' do
+      expect(policy_finder).to receive(:acceptance_needed?).and_return(true)
+      expect(html).to have_field('Ich erkläre mich mit den folgenden Bestimmungen einverstanden:')
+    end
+
+    it 'hides check if policy_finder needs acceptance but we are not on the last page' do
+      expect(entry).to receive(:partials).and_return([:one, :two])
+      expect(policy_finder).not_to receive(:acceptance_needed?)
+      expect(html).not_to have_field('Ich erkläre mich mit den folgenden Bestimmungen einverstanden:')
+    end
+  end
+end

@@ -1,8 +1,3 @@
-PATH
-  remote: ../hitobito_sac_cas
-  specs:
-    hitobito_sac_cas (0.0.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -774,7 +769,6 @@ DEPENDENCIES
   haml
   headless
   hirb
-  hitobito_sac_cas!
   http_accept_language
   icalendar
   image_processing (~> 1.12)

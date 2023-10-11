@@ -110,6 +110,7 @@ describe RolesController, js: true do
       sign_in
       visit new_group_role_path(group_id: group.id)
 
+      expect(page).to have_css('#role_type_select a.chosen-single')
       find('#role_type_select a.chosen-single').click
       find('#role_type_select ul.chosen-results').find('li', text: 'Leader').click
 

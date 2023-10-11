@@ -56,6 +56,10 @@ import '../javascripts/vendor/gems';
 function requireAll(r) { r.keys().forEach(r); }
 requireAll(require.context('../javascripts/modules', true, /\.(js|coffee)$/));
 
+/**
+ * Load stimulus controllers and component controllers
+ */
+import "controllers";
 
 // Custom scripts from all wagons
 import '../javascripts/wagons';
@@ -85,7 +89,3 @@ document.addEventListener('trix-file-accept', function(event) {
   }
 });
 
-/**
- * Load stimulus controllers and component controllers
- */
-import "controllers";

@@ -1,0 +1,70 @@
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= f.fields_for(:main_person_attributes, f.object.main_person) do |f|
+  = field_set_tag do
+    = render('shared/error_messages', errors: f.object.errors, object: f.object)
+
+    - [:first_name, :last_name, :nick_name, :company_name].each do |attr|
+      = f.labeled_input_field attr, { required: c.required?(attr) } if c.attr?(attr)
+
+    - if c.attr?(:company)
+      = f.labeled_boolean_field :company, { required: c.required?(:company) }
+
+    - if c.attr?(:address)
+      = f.labeled_text_area(:address, rows: 2, data: { provide: 'entity',
+                                                      updater: 'AddressTypeahead.update',
+                                                      url: addresses_query_url }, required: c.required?(:address))
+
+    - if c.attr?(:zip_code)
+      = f.labeled(:zip_code, t('contactable.fields.zip_town'), required: c.required?(:zip_code)) do
+        .zip-code-and-town-input-fields.address-input-fields.span6.input-span6
+          = f.string_field(:zip_code, class: 'span-none zip-code-field', maxlength: 10, required: c.required?(:zip_code))
+          = f.string_field(:town, class: 'span-none town-field', required: c.required?(:zip_code))
+
+      = f.labeled(:country, required: required) do
+        .span6.input-span6.shown{style: 'margin-left: 0px'}
+          = f.country_select('country',
+                          { priority_countries: Settings.countries.prioritized,
+                            selected: f.object.country.presence || Settings.addresses.imported_countries.first,
+                            include_blank: false },
+                          { class: 'chosen-select',
+                            data: { placeholder: ' ',
+                                    chosen_no_results: t('global.chosen_no_results'),
+                                    typeahead_supported_countries: Settings.addresses.imported_countries } })
+
+    - if c.attr?(:email)
+      = f.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), required: c.required?(:email)
+
+    - if c.attr?(:gender)
+      = field_set_tag do
+        = f.labeled(:gender, required: c.required?(:gender)) do
+          - (Person::GENDERS + ['']).each do |key|
+            = f.inline_radio_button(:gender, key, f.object.gender_label(key))
+
+
+    - if c.attr?(:birthday)
+      = f.labeled_date_field :birthday, required: c.required?(:birthday)
+
+    - if c.attr?(:phone_number_attributes)
+      = field_set_tag do
+        = f.labeled_inline_fields_for :phone_numbers do |ff|
+          = ff.input_field(:number, class: 'span4', placeholder: PhoneNumber.human_attribute_name(:number))
+          = ff.collection_select(:translated_label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'span2')
+          = ff.hidden_field(:public)
+
+    - if c.attr?(:additional_information)
+      = f.labeled(:additional_information, t('.notes')) do
+        = f.text_area(:additional_information)
+
+  - if entry.partials.one?
+    = field_set_tag(nil, class: 'privacy-policy-fields') do
+      = render('people/privacy_policy_acceptance_field', f: f, policy_finder: policy_finder)
+
+  = render_extensions :main_person, f: f
+
+.btn-toolbar.bottom
+  = c.next_button
+

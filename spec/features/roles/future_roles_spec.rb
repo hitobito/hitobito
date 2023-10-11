@@ -147,6 +147,7 @@ describe 'Future Roles behaviour' do
     end
 
     def choose_role(role, current_selection: nil)
+      expect(page).to have_css('#role_type_select a.chosen-single')
       find('#role_type_select a.chosen-single').click
       expect(page).to have_css('#role_type_select a.chosen-single > span', text: current_selection)
       find('#role_type_select ul.chosen-results').find('li', text: role).click

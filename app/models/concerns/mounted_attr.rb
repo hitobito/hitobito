@@ -20,7 +20,7 @@ module MountedAttr
 
       entry = mounted_attr_entry(c.attr_name)
 
-      # TODO: wofür braucht es diesene Code??
+      # do not persist a record when default value
       next if entry.unset? && value == c.default
 
       entry.value = value

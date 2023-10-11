@@ -21,13 +21,13 @@ class Group::PrivacyPolicyFinder
   end
 
   def groups
-    @groups ||= @group.layer_hierarchy.select do |g|
+    @groups ||= @group.layer_hierarchy(includes: [:privacy_policy_attachment]).select do |g|
       g.privacy_policy.present?
     end
   end
 
   private
-  
+
   def already_accepted?
     @person.privacy_policy_accepted?
   end

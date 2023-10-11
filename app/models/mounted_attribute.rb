@@ -30,7 +30,7 @@ class MountedAttribute < ActiveRecord::Base
   def unset?
     case config.attr_type
     when :integer
-      casted_value&.zero?
+      casted_value.nil? || casted_value.zero?
     else
       value.blank?
     end

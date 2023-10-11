@@ -1,3 +1,8 @@
+PATH
+  remote: ../hitobito_sac_cas
+  specs:
+    hitobito_sac_cas (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -680,6 +685,10 @@ GEM
       activemodel (>= 6.0.0, < 7)
       timeliness (>= 0.3.10, < 1)
     vcard (0.3.0)
+    view_component (3.6.0)
+      activesupport (>= 5.2.0, < 8.0)
+      concurrent-ruby (~> 1.0)
+      method_source (~> 1.0)
     wagons (0.6.1)
       bundler (>= 1.1)
       rails (>= 4.2)
@@ -765,6 +774,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hitobito_sac_cas!
   http_accept_language
   icalendar
   image_processing (~> 1.12)
@@ -836,6 +846,7 @@ DEPENDENCIES
   validates_by_schema
   validates_timeliness
   vcard
+  view_component
   wagons (= 0.6.1)
   webdrivers
   webmock

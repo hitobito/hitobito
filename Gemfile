@@ -90,6 +90,7 @@ gem 'truemail'
 gem 'validates_by_schema'
 gem 'validates_timeliness'
 gem 'vcard'
+gem 'view_component'
 gem 'wagons', '0.6.1'
 gem 'webpacker'
 

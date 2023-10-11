@@ -9,11 +9,13 @@ module ActiveModel
   class Name
 
     module Sti
+      IGNORED = %w[Oauth::Application]
       # For STI models, use the base class a route key
       # So only one controller/route for all STI classes is used.
       def initialize(*args)
         super(*args)
-        return if @klass == Oauth::Application
+        return if IGNORED.include?(@klass.to_s)
+        return unless @klass < ActiveRecord::Base
 
         if @klass.respond_to?(:base_class) && @klass != @klass.base_class
           base_name = @klass.base_class.model_name

@@ -23,7 +23,8 @@ module MountedAttrs
     end
 
     def option_label(option)
-      t("activerecord.attributes.#{f.object.object.class.to_s.underscore}.#{config.attr_name}s.#{option}")
+      class_name = f.object.object.class.to_s.underscore
+      t("activerecord.attributes.#{class_name}.#{config.attr_name}s.#{option}")
     end
   end
 end

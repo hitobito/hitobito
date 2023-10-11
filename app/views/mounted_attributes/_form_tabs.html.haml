@@ -10,7 +10,6 @@
     - configs.each do |config|
       - if config.enum.present?
         = f.labeled(config.attr_name) do
-          - config.enum.each do |value|
-            = f.inline_radio_button(config.attr_name, value, t("activerecord.attributes.#{entry.object.class.to_s.underscore}.#{config.attr_name}s.#{value}"))
+          = MountedAttrs::EnumSelect.new(self, config, f).render
       - else
         = f.labeled_input_field(config.attr_name)

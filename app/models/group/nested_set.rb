@@ -26,8 +26,10 @@ module Group::NestedSet
   end
 
   # The layer hierarchy from top to bottom of this group.
-  def layer_hierarchy
-    hierarchy.select { |g| g.class.layer }
+  def layer_hierarchy(**scope_args)
+    scope_args.to_a.inject(hierarchy) do |groups, (method, args)|
+      groups.send(method, args)
+    end.select { |g| g.class.layer }
   end
 
   # The group hierarchy inside the layer of this group.

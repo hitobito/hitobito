@@ -262,14 +262,15 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def nested_fields_for(assoc, partial_name = nil, record_object = nil, &block)
+  def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, &block)
     content_tag(:div, id: "#{assoc}_fields") do
       fields_for(assoc, record_object) do |fields|
         block_given? ? capture(fields, &block) : render(partial_name, f: fields)
       end
     end +
     content_tag(:div, class: 'controls') do
-      content_tag(:p, link_to_add(I18n.t('global.associations.add'), assoc), class: 'text')
+      options = options.to_h.merge(class: 'text')
+      content_tag(:p, link_to_add(I18n.t('global.associations.add'), assoc, options))
     end
   end
 

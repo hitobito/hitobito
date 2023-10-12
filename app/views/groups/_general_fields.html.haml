@@ -1,6 +1,5 @@
 = field_set_tag do
-  - unless entry.static_name
-    = f.labeled_input_fields(:name, :short_name)
+  = f.labeled_input_fields(:name, :short_name)
   - entry.modifiable_attributes(:description).each do |attr|
     = f.labeled_input_field attr
 

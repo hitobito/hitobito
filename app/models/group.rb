@@ -92,12 +92,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   class_attribute :archival_validation
   self.archival_validation = true
 
-  # If set to true, static and translated sti-class label is used
-  # instead of name attribute value.
-  # name is not indexed for search anymore in that case.
-  class_attribute :static_name
-  self.static_name = false
-
   attr_readonly :type
 
   translates :custom_self_registration_title
@@ -153,7 +147,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### VALIDATIONS
 
   validates_by_schema except: [:logo, :address]
-  validates :name, presence: true, unless: :static_name
   validates :email, format: Devise.email_regexp, allow_blank: true
   validates :description, length: { allow_nil: true, maximum: 2**16 - 1 }
   validates :address, length: { allow_nil: true, maximum: 1024 }
@@ -346,20 +339,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     if %w(1 yes true).include?(deletion_param.to_s.downcase)
       letter_logo.purge_later
     end
-  end
-
-  def name
-    if static_name
-      self.class.label
-    else
-      super
-    end
-  end
-
-  def name=(value)
-    return if static_name
-
-    super(value)
   end
 
   private

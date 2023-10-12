@@ -751,34 +751,4 @@ describe Group do
     end
 
   end
-
-  context 'name' do
-    let(:group) { groups(:bottom_layer_one) }
-
-    context 'with static_name=false' do
-      before { group.static_name = false }
-
-      it '#name returns name' do
-        expect(group.name).to eq 'Bottom One'
-      end
-
-      it '#name= sets name' do
-        expect { group.name = 'Another Name' }.
-          to change { group.read_attribute(:name) }.to('Another Name')
-      end
-    end
-
-    context 'with static_name=true' do
-      before { group.static_name = true }
-
-      it '#name returns class label' do
-        expect(group.name).to eq 'Bottom Layer'
-      end
-
-      it '#name= noops' do
-         expect { group.name = 'Another Name' }.
-           not_to change { group.read_attribute(:name) }
-      end
-    end
-  end
 end

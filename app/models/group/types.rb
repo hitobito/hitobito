@@ -28,9 +28,8 @@ module Group::Types
     # All possible Event types that may be created for this group
     self.event_types = [Event]
 
-
     after_save :set_layer_group_id
-    after_save :create_default_children
+    after_create :create_default_children
 
     validate :assert_type_is_allowed_for_parent, on: :create
   end

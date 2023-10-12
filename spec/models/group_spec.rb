@@ -810,4 +810,60 @@ describe Group do
       end
     end
   end
+
+  context 'addable_child_types' do
+    let(:group) { Fabricate(Group::BottomLayer.name) }
+    let(:child_type) { Group::BottomGroup }
+
+    context 'with static_name=false' do
+      before { child_type.static_name = false }
+
+      it 'when no children exist returns possible_children' do
+        expect(group.addable_child_types).to match_array([
+                                                        Group::BottomGroup,
+                                                        Group::MountedAttrsGroup,
+                                                        Group::GlobalGroup
+                                                      ])
+      end
+
+      it 'when children exist returns possible_children' do
+        Fabricate(Group::BottomGroup.name, parent: group)
+        expect(group.addable_child_types).to match_array([
+                                                        Group::BottomGroup,
+                                                        Group::MountedAttrsGroup,
+                                                        Group::GlobalGroup
+                                                      ])
+      end
+    end
+
+    context 'with static_name=true' do
+      before { child_type.static_name = true }
+
+      it 'when no children exist returns possible_children' do
+        expect(group.addable_child_types).to match_array([
+                                                        Group::BottomGroup,
+                                                        Group::MountedAttrsGroup,
+                                                        Group::GlobalGroup
+                                                      ])
+      end
+
+      it 'when only deleted children exist returns possible_children' do
+        Fabricate(Group::BottomGroup.name, parent: group, deleted_at: 1.day.ago)
+        expect(group.addable_child_types).to match_array([
+                                                        Group::BottomGroup,
+                                                        Group::MountedAttrsGroup,
+                                                        Group::GlobalGroup
+                                                      ])
+      end
+
+      it 'when children exist returns possible_children minus existing child types' do
+        Fabricate(Group::BottomGroup.name, parent: group)
+        expect(group.addable_child_types).to match_array([
+                                                        Group::MountedAttrsGroup,
+                                                        Group::GlobalGroup
+                                                      ])
+      end
+    end
+
+  end
 end

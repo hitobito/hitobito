@@ -299,6 +299,18 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     !archived? && children_without_deleted.none?
   end
 
+  def addable_child_types
+    static_name_children = possible_children.select(&:static_name).map(&:sti_name)
+    existing_static_name_children = Group.
+      without_deleted.
+      where(parent_id: id, type: static_name_children).
+      pluck(:type).uniq
+
+    possible_children.select do |child_class|
+      existing_static_name_children.exclude?(child_class.sti_name)
+    end
+  end
+
   def self_registration_active?
     Settings.groups&.self_registration&.enabled &&
       self_registration_role_type.present? &&

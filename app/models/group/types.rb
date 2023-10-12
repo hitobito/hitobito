@@ -28,9 +28,12 @@ module Group::Types
     # All possible Event types that may be created for this group
     self.event_types = [Event]
 
-
     after_save :set_layer_group_id
-    after_create :create_default_children
+
+    # This must be an `after_save` instead of an `after_create` callback
+    # because wagons might add more `after_create` callbacks and this one must run last.
+    # To ensure it only creates the default children on creation, we check if it was a new record.
+    after_save :create_default_children
 
     validate :assert_type_is_allowed_for_parent, on: :create
   end
@@ -38,8 +41,12 @@ module Group::Types
   private
 
   def create_default_children
-    # HACK: to have after_save ordering for this semantical after_create callback
-    return if created_at < Time.zone.now - 10.seconds
+    # For new records, we have to create the default children.
+    # As this runs as an after_save callback, we need to check if the record was just created.
+    # For updates we do nothing and return early.
+    # `#new_record?` does not work here, because it returns false as soon as the record is saved,
+    # but we can check if the id was changed which should only ever happen on creation.
+    return unless saved_change_to_id?
 
     default_children.each do |group_type|
       child = group_type.new(name: group_type.label)

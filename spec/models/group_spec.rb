@@ -751,4 +751,63 @@ describe Group do
     end
 
   end
+
+  context 'name' do
+    let(:group) { groups(:bottom_layer_one) }
+
+    context 'with static_name=false' do
+      before { group.static_name = false }
+
+      it '#name returns name' do
+        expect(group.name).to eq 'Bottom One'
+      end
+
+      it '#name= sets name' do
+        expect { group.name = 'Another Name' }.
+          to change { group.read_attribute(:name) }.to('Another Name')
+      end
+    end
+
+    context 'with static_name=true' do
+      before { group.static_name = true }
+
+      it '#name returns class label' do
+        expect(group.name).to eq 'Bottom Layer'
+      end
+
+      it '#name= noops' do
+         expect { group.name = 'Another Name' }.
+           not_to change { group.read_attribute(:name) }
+      end
+    end
+  end
+
+  context 'type' do
+    let(:group) { groups(:bottom_group_two_one) }
+    let(:duplicate) { group.dup }
+
+    context 'with static_name=false' do
+      before { group.class.static_name = false }
+
+      it 'uniqueness is not validated' do
+        duplicate.validate
+        expect(duplicate.errors[:type]).to be_empty
+      end
+    end
+
+    context 'with static_name=true' do
+      before { group.class.static_name = true }
+
+      it 'uniqueness is validated for same parent_id' do
+        duplicate.validate
+        expect(duplicate.errors[:type]).to include('ist bereits vergeben')
+      end
+
+      it 'uniqueness is not validated for different parent_id' do
+        duplicate.parent_id = 99999
+        duplicate.validate
+        expect(duplicate.errors[:type]).to be_empty
+      end
+    end
+  end
 end

@@ -16,6 +16,9 @@ require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 require 'graphiti_spec_helpers/rspec'
 
+require 'view_component/test_helpers'
+require 'view_component/system_test_helpers'
+
 # Needed for feature specs
 WebMock.disable_net_connect!(
   allow_localhost: true,
@@ -94,10 +97,12 @@ RSpec.configure do |config|
   config.include FeatureHelpers, type: :feature
   config.include Warden::Test::Helpers, type: :feature
   config.include ActiveSupport::Testing::TimeHelpers
+  config.include ViewComponent::TestHelpers, type: :component
+  config.include ViewComponent::SystemTestHelpers, type: :component
+  config.include Capybara::RSpecMatchers, type: :component
 
   # config.filter_run_excluding type: 'feature', performance: true
   config.filter_run_excluding type: 'sphinx', sphinx: true
-
   if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
     config.filter_run_excluding :mysql
   end

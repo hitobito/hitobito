@@ -62,6 +62,7 @@ module Release
           ['hitobito', *(@all_wagons.map { |wgn| "hitobito_#{wgn}" })].each do |dir|
             in_dir(dir) do
               update_translations
+              upload_translation_sources
               push
             end
           end

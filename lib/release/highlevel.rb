@@ -51,6 +51,13 @@ module Release
       commit 'Pull translations from transifex'
     end
 
+    def upload_translation_sources
+      return unless translations_configured?
+
+      notify 'Push sources to transifex'
+      execute 'tx push -s'
+    end
+
     def translations_configured?
       execute_check 'test -f .tx/config',
                     success: 'Transifex is configured',

@@ -129,7 +129,7 @@ class MailingLists::BulkMail::Retriever
   end
 
   def encode_subject(imap_mail)
-    subject = imap_mail.subject.dup
+    subject = imap_mail.subject.dup[0,256]
 
     unless subject.encoding == 'UTF-8'
       subject.encode("UTF-8", invalid: :replace, undef: :replace)

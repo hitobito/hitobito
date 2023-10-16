@@ -96,7 +96,7 @@ typeaheadHighlighter = (item) ->
   query = query.replace(/\s+/g, '|')
   label = JSON.parse(item).label
   if query
-    highlightQuery(label, query)
+    label = highlightQuery(label, query)
   else
     label
   labelWithIcon(label, JSON.parse(item))

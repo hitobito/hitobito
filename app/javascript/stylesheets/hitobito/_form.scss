@@ -733,6 +733,10 @@ label.required::after {
   display: none;
 }
 
+.form-horizontal .controls div .trix-content {
+  margin-left: 245px;
+}
+
 #message_body {
   height: 250px;
 }

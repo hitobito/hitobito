@@ -20,6 +20,9 @@
         - FeatureGate.if(:person_language) do
           = render_attrs(entry, :language)
 
+        - FeatureGate.if(:self_registration_reason) do
+          = render_present_attrs(entry, :self_registration_reason_text)
+
         = render 'people_relations'
 
       - if entry.additional_information?

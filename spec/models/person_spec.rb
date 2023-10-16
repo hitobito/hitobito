@@ -788,4 +788,80 @@ describe Person do
       expect(person).to_not be_valid
     end
   end
+
+  describe '#self_registration_reason' do
+    let(:reason) { Fabricate(:self_registration_reason) }
+
+    it 'can be set on create' do
+      person = Fabricate(:person, self_registration_reason: reason)
+      expect(person.self_registration_reason).to eq reason
+    end
+
+    it 'can not be set on update' do
+      person = Fabricate(:person)
+      expect { person.update(self_registration_reason: reason) }.
+        not_to change { person.reload.self_registration_reason }.from(nil)
+    end
+
+    it 'can not be changed on update' do
+      person = Fabricate(:person, self_registration_reason: reason)
+      new_reason = Fabricate(:self_registration_reason)
+      expect { person.update(self_registration_reason: new_reason) }.
+        not_to change { person.reload.self_registration_reason }.from(reason)
+    end
+
+    it 'can not be cleared on update' do
+      person = Fabricate(:person, self_registration_reason: reason)
+      expect { person.update(self_registration_reason: nil) }.
+        not_to change { person.reload.self_registration_reason }.from(reason)
+    end
+  end
+
+  describe '#self_registration_reason_custom_text' do
+    it 'can be set on create' do
+      person = Fabricate(:person, self_registration_reason_custom_text: 'foo')
+      expect(person.self_registration_reason_custom_text).to eq 'foo'
+    end
+
+    it 'can not be changed on update' do
+      person = Fabricate(:person, self_registration_reason_custom_text: 'foo')
+      expect { person.update(self_registration_reason_custom_text: 'bar') }.
+        not_to change { person.reload.self_registration_reason_custom_text }.from('foo')
+    end
+
+    it 'can not be cleared on update' do
+      person = Fabricate(:person, self_registration_reason_custom_text: 'foo')
+      expect { person.update(self_registration_reason_custom_text: nil) }.
+        not_to change { person.reload.self_registration_reason_custom_text }.from('foo')
+    end
+
+    it 'can not be set if #self_registration_reason is set' do
+      person = Person.new(
+        self_registration_reason: Fabricate(:self_registration_reason),
+        self_registration_reason_custom_text: 'foo'
+      )
+      person.validate
+
+      expect(person.errors[:self_registration_reason_custom_text]).
+        to eq ['kann nicht gesetzt werden, wenn ein vordefinierter Eintrittsgrund ausgewählt wurde.']
+    end
+  end
+
+  describe '#self_registration_reason_text' do
+    it 'returns #self_registration_reason.text if present' do
+      reason = Fabricate.build(:self_registration_reason, text: 'SelfRegistrationReason.text')
+      person = Fabricate.build(:person, self_registration_reason: reason)
+      expect(person.self_registration_reason_text).to eq 'SelfRegistrationReason.text'
+    end
+
+    it 'returns #self_registration_reason_custom_text if present' do
+      person = Fabricate.build(:person, self_registration_reason_custom_text: 'Person.self_registration_reason_custom_text')
+      expect(person.self_registration_reason_text).to eq 'Person.self_registration_reason_custom_text'
+    end
+
+    it 'returns nil if neither #self_registration_reason nor #self_registration_reason_custom_text is present' do
+      person = Fabricate.build(:person, self_registration_reason: nil, self_registration_reason_custom_text: nil)
+      expect(person.self_registration_reason_text).to be_nil
+    end
+  end
 end

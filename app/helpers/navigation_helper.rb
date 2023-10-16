@@ -41,7 +41,8 @@ module NavigationHelper
     { label: :admin,
       url: :label_formats_path,
       icon_name: 'cog',
-      active_for: %w(label_formats
+      active_for: %w(self_registration_reasons
+                     label_formats
                      custom_contents
                      event_kinds
                      event_kind_categories

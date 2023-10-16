@@ -109,6 +109,8 @@ de:
                         'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
                         als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
                         kann leer gelassen werden).
+            self_registration_reason_custom_text:
+              either_preset_or_custom: kann nicht gesetzt werden, wenn ein vordefinierter Eintrittsgrund ausgewählt wurde.
         person/add_request:
           attributes:
             person_id:
@@ -348,7 +350,9 @@ de:
               m: Lieber %{first_name}
               w: Liebe %{first_name}
               other: Liebe*r %{first_name}
-
+      self_registration_reason:
+        one: Eintrittsgrund
+        other: Eintrittsgründe
       service_token:
         one: API-Key
         other: API-Keys
@@ -448,6 +452,9 @@ de:
         language: Sprache
         primary_group_id: Hauptgruppe
         layer_group_label: Hauptebene
+        self_registration_reason: Vordefinierter Eintrittsgrund
+        self_registration_reason_text: Eintrittsgrund
+        self_registration_reason_custom_text: Benutzerdefinierter Eintrittsgrund
 
       person_duplicate:
         birth_year: Jahrgang

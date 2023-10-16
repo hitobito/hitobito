@@ -148,6 +148,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   strip_attributes except: [:zip_code]
 
+  attr_readonly :self_registration_reason,
+                :self_registration_reason_id,
+                :self_registration_reason_custom_text
+
   ### ASSOCIATIONS
 
   has_many :roles, inverse_of: :person
@@ -212,6 +216,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :message_recipients, dependent: :nullify
 
+  belongs_to :self_registration_reason, optional: true
+
   accepts_nested_attributes_for :relations_to_tails, allow_destroy: true
   accepts_nested_attributes_for :family_members, allow_destroy: true
 
@@ -228,6 +234,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :additional_information, length: { allow_nil: true, maximum: 2**16 - 1 }
   validate :assert_has_any_name
   validates :address, length: { allow_nil: true, maximum: 1024 }
+  validate :assert_self_registration_reason_either_preset_or_custom
 
   if ENV['NOCHMAL_MIGRATION'].blank? # if not migrating RIGHT NOW, i.e. normal case
     validates :picture, dimension: { width: { max: 8_000 }, height: { max: 8_000 } },
@@ -329,6 +336,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     else
       person_name(format)
     end
+  end
+
+  def self_registration_reason_text
+    self_registration_reason_custom_text.presence || self_registration_reason&.text
   end
 
   def person_name(format = :default)
@@ -463,6 +474,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   def assert_has_any_name
     if !company? && first_name.blank? && last_name.blank? && nickname.blank?
       errors.add(:base, :name_missing)
+    end
+  end
+
+  def assert_self_registration_reason_either_preset_or_custom
+    if self_registration_reason_id && self_registration_reason_custom_text.present?
+      errors.add(:self_registration_reason_custom_text, :either_preset_or_custom)
     end
   end
 

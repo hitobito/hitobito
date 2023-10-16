@@ -35,7 +35,7 @@ it:
         must_exist: non può essere lasciato vuoto
         readonly: non può venir cambiato
         cannot_be_later_than_today: non può essere più tardi di oggi
-        cannot_be_later_than_delete_on: Deve avvenire prima o nello stesso giorno delle dimissioni.
+        cannot_be_later_than_deleted_at: Deve avvenire prima o nello stesso giorno delle dimissioni.
       models:
         cors_origin:
           attributes:

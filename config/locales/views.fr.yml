@@ -764,6 +764,8 @@ fr:
       due_at: Échue le
       creator: Auteur de la facture
       vat_number: No TVA
+      payment: Paiement reçu
+      amount_open: Montant en suspens
       payment_slip_qr:
         receipt_title: Récépissé
         payment_title: Section paiement
@@ -799,6 +801,7 @@ fr:
     form_tabs:
       general: général
       email: Courriel
+      layout: Layout
     update:
       flash:
         success: Les réglages de la factures mis à jour avec succès
@@ -824,6 +827,11 @@ fr:
     provider_fields:
       reset_payment_provider_warning: 'En cas de modification de données ici, il est nécessaire de refaire le processus d''initialisation de l''interface de facturation.'
   invoice_lists:
+    destroys:
+      show:
+        title: Supprimer une facture collective
+        non_draft_info: 'La facture collective contient au moins une facture qui n''a ni le statut "Brouillon" ni le statut "Annulé". La facture collective ne peut donc pas être supprimée.'
+        confirm_delete: Voulez-vous vraiment supprimer la facture collective?
     form:
       invoice_articles:
         variable_donation:

@@ -21,6 +21,18 @@ describe FeatureGate do
     end
   end
 
+  context 'self_registration_reason' do
+    it 'is enabled when SelfRegistrationReason exists' do
+      expect(SelfRegistrationReason.count).to be > 0
+      expect(FeatureGate.enabled?(:self_registration_reason)).to eq(true)
+    end
+
+    it 'is disabled when SelfRegistrationReason does not exist' do
+      SelfRegistrationReason.delete_all
+      expect(FeatureGate.enabled?(:self_registration_reason)).to eq(false)
+    end
+  end
+
   private
 
   def add_correspondence_language

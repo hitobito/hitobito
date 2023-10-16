@@ -83,4 +83,8 @@ class FeatureGate
     ActiveRecord::Base.connection.table_exists?('people') &&
       !Person.has_attribute?(:correspondence_language)
   end
+
+  def self_registration_reason_enabled?
+    SelfRegistrationReason.exists?
+  end
 end

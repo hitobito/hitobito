@@ -8,16 +8,21 @@
 class People::CleanupFinder
 
   def run
+    people_to_cleanup_scope.distinct
+  end
+
+  private
+
+  def people_to_cleanup_scope
     scope = base_scope.joins('INNER JOIN roles ON roles.person_id = people.id')
+
     scope = without_active_roles(scope)
     scope = with_roles_outside_cutoff(scope)
     scope = without_participating_in_future_events(scope)
     scope = with_current_sign_in_at_outside_cutoff(scope)
 
-    scope.distinct + people_without_any_roles
+    scope
   end
-
-  private
 
   def base_scope
     Person.all.where.not(email: Settings.root_email)

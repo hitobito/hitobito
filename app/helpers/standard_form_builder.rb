@@ -140,7 +140,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # Render a field to enter a time. You might want to customize this.
   def time_field(attr, html_options = {})
     html_options[:class] ||= 'time'
-    time_select(attr, { include_blank: true, ignore_date: true }, html_options)
+    time_select(attr, { include_blank: "", ignore_date: true }, html_options)
   end
 
   # Render a select with minutes

@@ -6,7 +6,7 @@
 - unless group.invoice_articles.empty?
   = f.labeled(:invoice_item_article) do
     = select("temp", "invoice_article_id", nil,
-      { include_blank: true},
+      { include_blank: ""},
       { id: "invoice_item_article", class: "form-select form-select-sm" },
       ) do
       = group.invoice_articles.pluck(:number, :name, :id, :description).each do |ia|

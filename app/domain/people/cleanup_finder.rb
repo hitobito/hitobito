@@ -14,7 +14,7 @@ class People::CleanupFinder
   private
 
   def people_to_cleanup_scope
-    scope = base_scope.joins('INNER JOIN roles ON roles.person_id = people.id')
+    scope = base_scope.joins('LEFT JOIN roles ON roles.person_id = people.id')
 
     scope = without_active_roles(scope)
     scope = with_roles_outside_cutoff(scope)
@@ -41,7 +41,7 @@ class People::CleanupFinder
   end
 
   def with_roles_outside_cutoff(scope)
-    scope.where(roles: { deleted_at: last_role_deleted_at.. })
+    scope.where('roles.deleted_at IS NULL OR roles.deleted_at <= ?', last_role_deleted_at)
   end
 
   def without_participating_in_future_events(scope)

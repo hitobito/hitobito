@@ -19,13 +19,14 @@ class People::CleanupJob < RecurringJob
   end
 
   def cutoff
-    Settings.people.cleanup_cutoff_duration.regarding_participations.months.ago
+    Settings.people.cleanup_cutoff_duration.regarding_event_participations.months.ago
   end
 
   def event_participation_in_cutoff?(person)
     Event.joins(:participations, :dates)
          .where(participations: { person_id: person.id })
-         .where('event_dates.start_at > ? OR event_dates.finish_at > ?', cutoff, cutoff) # what if finished_at is nil
+         .where('event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff', cutoff: cutoff) # what if finished_at is nil
+         .any?
   end
 
   def ignore_person?(person)

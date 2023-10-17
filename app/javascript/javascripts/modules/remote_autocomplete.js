@@ -73,10 +73,15 @@
   };
 
   function highlightQuery(label, query) {
-    query = query.trim().replace(/[\-\[\]{}()*+?.,\\\^$|#]/g, '\\$&');
-    return label.replace(new RegExp('(' + query + ')', 'ig'), function($1, match) {
-      return '<strong>' + match + '</strong>';
-    });
+    const words = query.trim().split(/\s+/);
+
+    for (const word of words) {
+      if (word.trim() === "") continue;
+      const regex = new RegExp('(' + word.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') + ')', 'ig');
+      label = label.replace(regex, '<strong>$1</strong>');
+    }
+
+    return label;
   }
 
   function labelWithIcon(icon, label) {

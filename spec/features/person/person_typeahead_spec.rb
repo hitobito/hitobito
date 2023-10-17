@@ -42,8 +42,8 @@ describe 'Person Autocomplete', js: true do
         visit new_group_role_path(group)
 
         fill_in 'Person', with: 'Top'
-        expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
-        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Top')
+        expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: 'Top Leader')
+        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Top')
       end
     end
 
@@ -54,9 +54,9 @@ describe 'Person Autocomplete', js: true do
 
         fill_in 'Person', with: 'Top Super'
 
-        expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
-        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Top')
-        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Super')
+        expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: 'Top Leader')
+        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Top')
+        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Super')
       end
     end
 
@@ -67,23 +67,23 @@ describe 'Person Autocomplete', js: true do
 
         fill_in 'Person', with: 'Top  Super '
 
-        expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top Leader')
-        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Top')
-        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Super')
+        expect(page).to have_selector('ul[role="listbox"] li[role="option"]', text: 'Top Leader')
+        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Top')
+        expect(find('ul[role="listbox"] li[role="option"]')).to have_selector('strong', text: 'Super')
       end
     end
 
-    it 'saves content from typeahead' do
+    it 'saves content from autocomplete' do
       obsolete_node_safe do
         sign_in
         visit new_group_role_path(group, role: { type: 'Group::TopGroup::Leader' })
 
         # search name only
         fill_in 'Person', with: 'Top'
-        expect(find('.typeahead.dropdown-menu li')).to have_content 'Top Leader'
-        find('.typeahead.dropdown-menu li').click
+        expect(find('ul[role="listbox"] li[role="option"]')).to have_content 'Top Leader'
+        find('ul[role="listbox"] li[role="option"]').click
 
-        all('form .btn-toolbar').first.click_button 'Speichern'
+        all('form .btn-group').first.click_button 'Speichern'
         is_expected.to have_content 'Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt.'
       end
     end

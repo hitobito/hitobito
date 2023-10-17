@@ -5,11 +5,9 @@
 
 %div.col-5.inline
   = f.input_field(:email,
-                  class: 'form-control form-control-sm',
                   placeholder: t('.placeholder_value'))
 %div.col-2.inline.row
   = f.input_field(:translated_label,
-                  class: 'form-control form-control-sm',
                   placeholder: t('.placeholder_type'),
                   data: {provide: :typeahead, source: AdditionalEmail.available_labels})
 

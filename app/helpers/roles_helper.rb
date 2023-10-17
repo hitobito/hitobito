@@ -60,7 +60,7 @@ module RolesHelper
   end
 
   def roles_type_select_options(group, role)
-    options = { include_blank: true }
+    options = { include_blank: "" }
     selected = existing_role(role) || default_role(group)
     options.merge(selected: selected)
   end

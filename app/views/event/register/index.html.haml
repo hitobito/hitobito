@@ -7,12 +7,12 @@
 
 = render 'devise/sessions/info'
 
-#main.row-fluid
-  %article.span6
+#main.row
+  %article.col-6
     %h3= t('.login')
     = render 'devise/sessions/form'
 
-  %article.span6
+  %article.col-6
     %h3= t('.no_login')
     = render 'email_check'
 

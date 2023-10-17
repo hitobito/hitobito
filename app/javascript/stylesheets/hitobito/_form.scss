@@ -744,3 +744,8 @@ label.required::after {
 .clear-both {
   clear: both;
 }
+
+.fields > div > .inline > input,
+.fields > div > .inline > div > input {
+  width: 90%
+}

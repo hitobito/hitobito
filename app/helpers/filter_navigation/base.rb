@@ -21,7 +21,7 @@ module FilterNavigation
     end
 
     def to_s
-      content_tag(:div, class: 'toolbar-pills') do
+      content_tag(:div, class: 'toolbar-pills mb-2') do
         content_tag(:ul, class: 'nav nav-pills group-pills border border-primary rounded') do
           template.safe_join([*main_items, dropdown_item])
         end

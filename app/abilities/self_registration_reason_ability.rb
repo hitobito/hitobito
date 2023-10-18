@@ -8,9 +8,11 @@
 class SelfRegistrationReasonAbility < AbilityDsl::Base
 
   on(SelfRegistrationReason) do
-    class_side(:index).if_admin
+    FeatureGate.if(:self_registration_reason) do
+      class_side(:index).if_admin
 
-    permission(:admin).may(:manage).all
+      permission(:admin).may(:manage).all
+    end
   end
 
 end

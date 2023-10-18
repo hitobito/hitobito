@@ -28,12 +28,12 @@ describe SelfRegistrationReasonAbility do
   context 'without admin permission' do
     let(:role) { Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)) }
 
-    it 'may index SelfRegistrationReason records' do
-      expect(ability).to be_able_to(:index, SelfRegistrationReason)
+    it 'may not index SelfRegistrationReason records' do
+      expect(ability).not_to be_able_to(:index, SelfRegistrationReason)
     end
 
-    it 'may show SelfRegistrationReason records' do
-      expect(ability).to be_able_to(:show, entry)
+    it 'may not show SelfRegistrationReason records' do
+      expect(ability).not_to be_able_to(:show, entry)
     end
 
     %w[create update destroy].each do |action|
@@ -41,7 +41,5 @@ describe SelfRegistrationReasonAbility do
         expect(ability).not_to be_able_to(action.to_sym, entry)
       end
     end
-
   end
-
 end

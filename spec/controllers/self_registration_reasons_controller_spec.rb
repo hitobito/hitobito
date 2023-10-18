@@ -74,6 +74,22 @@ describe SelfRegistrationReasonsController do
       end
     end
 
+    context 'GET #index' do
+      it 'does not list entries' do
+        expect do
+          get :index
+        end.to raise_error CanCan::AccessDenied
+      end
+    end
+
+    context 'GET #show' do
+      it 'does not show entry' do
+        expect do
+          get :show, params: { id: entry.id }
+        end.to raise_error CanCan::AccessDenied
+      end
+    end
+
   end
 
 end

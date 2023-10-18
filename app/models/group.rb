@@ -92,6 +92,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   class_attribute :archival_validation
   self.archival_validation = true
 
+  class_attribute :static_name, default: false
+
   attr_readonly :type
 
   translates :custom_self_registration_title

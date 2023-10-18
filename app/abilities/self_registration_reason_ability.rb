@@ -8,9 +8,8 @@
 class SelfRegistrationReasonAbility < AbilityDsl::Base
 
   on(SelfRegistrationReason) do
-    class_side(:index).all
+    class_side(:index).if_admin
 
-    permission(:any).may(:show, :index).all
     permission(:admin).may(:manage).all
   end
 

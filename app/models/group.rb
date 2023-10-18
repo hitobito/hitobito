@@ -357,6 +357,20 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def name
+    if static_name
+      self.class.label
+    else
+      super
+    end
+  end
+
+  def name=(value)
+    return if static_name
+
+    super(value)
+  end
+
   private
 
   def layer_person_duplicates

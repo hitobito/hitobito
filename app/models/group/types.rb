@@ -29,7 +29,7 @@ module Group::Types
     self.event_types = [Event]
 
     after_save :set_layer_group_id
-    after_create :create_default_children
+    after_save :create_default_children
 
     validate :assert_type_is_allowed_for_parent, on: :create
   end

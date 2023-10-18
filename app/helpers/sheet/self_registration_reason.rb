@@ -6,7 +6,5 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module Sheet
-  class SelfRegistrationReason < Sheet::Admin
-
-  end
+  class SelfRegistrationReason < Sheet::Admin; end
 end

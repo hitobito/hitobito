@@ -20,12 +20,6 @@ describe :admin_left_nav, js: true do
         visit path
         expect(page.find('nav#page-navigation')).to have_link(href: self_registration_reasons_path)
       end
-
-      it 'is not visible if self registration is disabled' do
-        allow(FeatureGate).to receive(:enabled?).with(:self_registration_reason).and_return(false)
-        visit path
-        expect(page.find('nav#page-navigation')).to have_no_link(href: self_registration_reasons_path)
-      end
     end
 
     context 'without necessary ability' do

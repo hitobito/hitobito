@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_09_105044) do
+ActiveRecord::Schema.define(version: 2023_10_10_140815) do
+
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -404,7 +405,7 @@ ActiveRecord::Schema.define(version: 2023_10_09_105044) do
     t.integer "parent_id"
     t.integer "lft"
     t.integer "rgt"
-    t.string "name", null: false
+    t.string "name"
     t.string "short_name", limit: 31
     t.string "type", null: false
     t.string "email"

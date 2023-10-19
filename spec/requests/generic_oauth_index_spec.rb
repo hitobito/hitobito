@@ -97,7 +97,7 @@ scopes.each do |scope|
     end
 
     context 'with bad token signature' do
-      let(:token) { Fabricate(:access_token, application: application, scopes: { scopes: 'email' }, resource_owner_id: user.id) }
+      let(:token) { Fabricate(:access_token, application: application, scopes: 'email', resource_owner_id: user.id) }
 
       it 'redirects to sign_in' do
         get url, headers: { 'Authorization': 'Bearer ' + token.token + 'X'}
@@ -118,7 +118,7 @@ scopes.each do |scope|
     context 'with an unacceptable scope in token' do
       scopes.reject{ |s| s == scope }.each do |invalid_scope|
         it "fails for #{invalid_scope} scope" do
-          token = Fabricate(:access_token, application: application, scopes: { scopes: invalid_scope }, resource_owner_id: user.id)
+          token = Fabricate(:access_token, application: application, scopes: invalid_scope, resource_owner_id: user.id)
           get url, headers: { 'Authorization': 'Bearer ' + token.token }
           expect(response).not_to have_http_status(:success)
         end
@@ -128,7 +128,7 @@ scopes.each do |scope|
     context 'with an acceptable scope in token' do
       ['api', scope].each do |valid_scope|
         it "succeeds for #{valid_scope} scope" do
-          token = Fabricate(:access_token, application: application, scopes: { scopes: valid_scope }, resource_owner_id: user.id )
+          token = Fabricate(:access_token, application: application, scopes: valid_scope, resource_owner_id: user.id )
           get url, headers: { 'Authorization': 'Bearer ' + token.token, 'Accept': 'application/json' }
 
           expect(response).to be_successful
@@ -140,7 +140,7 @@ scopes.each do |scope|
     end
 
     context 'with expired token' do
-      let(:token) { Fabricate(:access_token, application: application, scopes: { scopes: 'email' }, resource_owner_id: user.id, expires_in: -1.minute ) }
+      let(:token) { Fabricate(:access_token, application: application, scopes: 'email', resource_owner_id: user.id, expires_in: -1.minute ) }
 
       it 'redirects to login' do
         get url, headers: { 'Authorization': 'Bearer ' + token.token }

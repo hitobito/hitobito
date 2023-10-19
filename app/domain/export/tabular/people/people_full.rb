@@ -18,8 +18,6 @@ module Export::Tabular::People
     def excluded_person_attributes
       [:picture,
        :primary_group_id,
-       :self_registration_reason_custom_text,
-       :self_registration_reason_id,
        :id]
     end
 

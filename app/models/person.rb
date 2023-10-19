@@ -79,6 +79,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :show_global_label_formats, :household_key, :event_feed_token, :family_key,
     :two_factor_authentication, :encrypted_two_fa_secret,
     :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email,
+    :self_registration_reason_custom_text,
+    :self_registration_reason_id,
     :privacy_policy_accepted_at
   ]
 

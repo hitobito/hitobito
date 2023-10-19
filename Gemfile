@@ -107,13 +107,14 @@ group :development, :test do
   gem 'graphiti_spec_helpers'
   gem 'parallel_tests'
   gem 'pry-byebug'
-  gem 'pry-doc' # provides show-source/$ in the pry-console
+  gem 'pry-doc', require: false # provides show-source/$ in the pry-console
   gem 'rspec-rails', '~> 5.0'
   gem 'rswag-specs'
 end
 
 group :development do
   gem 'bullet'
+  gem 'bumbler'
   gem 'listen'
   gem 'redcarpet'
   gem 'request_profiler'
@@ -139,6 +140,7 @@ group :console do
   gem 'hirb'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
+  gem 'test-prof'
   gem 'spring-commands-rspec'
   gem 'wirble'
 end

@@ -95,13 +95,15 @@ namespace :db do
   end
 
   namespace :structure do
-    desc 'Dumps the structure.sql without having to change schema_format in config/application.rb. Used by bin/wagon.'
+    desc "Dumps the structure.sql without having to change \
+          schema_format in config/application.rb. Used by bin/wagon."
     task dump_sql: :environment do
       ActiveRecord::Base.schema_format = :sql
       Rake::Task['db:schema:dump'].invoke
     end
 
-    desc 'Loads the structure.sql without having to change schema_format in config/application.rb. Used by bin/wagon.'
+    desc "Loads the structure.sql without having to change \
+          schema_format in config/application.rb. Used by bin/wagon."
     task load_sql: :environment do
       ActiveRecord::Base.schema_format = :sql
       Rake::Task['db:schema:load'].invoke

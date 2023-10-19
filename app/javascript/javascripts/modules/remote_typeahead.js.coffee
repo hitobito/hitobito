@@ -106,9 +106,15 @@ highlightQuery = (label, query) ->
 
 labelWithIcon = (label, item) ->
   if item.icon
-    '<i class="fa fa-' + item.icon + '"></i> ' + label
+    "#{iconClass(item.icon)} #{label}"
   else
     label
+
+iconClass = (iconType) ->
+  icon = document.createElement("i");
+  icon.classList.add("fa", "fa-" + iconType);
+
+  return icon.outerHTML
 
 isModifyingKey = (k) ->
   ! (k == 20 || # Caps lock */

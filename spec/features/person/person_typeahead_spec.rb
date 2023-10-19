@@ -73,6 +73,19 @@ describe 'Person Autocomplete', js: true do
       end
     end
 
+    it 'for queries with /' do
+      people(:top_leader).update!(first_name: 'Top /')
+      obsolete_node_safe do
+        sign_in
+        visit new_group_role_path(group)
+
+        fill_in 'Person', with: 'Top /'
+        expect(page).to have_selector('.typeahead.dropdown-menu li', text: 'Top / Leader')
+        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: 'Top')
+        expect(find('.typeahead.dropdown-menu li')).to have_selector('strong', text: '/')
+      end
+    end
+
     it 'saves content from typeahead' do
       obsolete_node_safe do
         sign_in

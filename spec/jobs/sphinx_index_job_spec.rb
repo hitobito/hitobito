@@ -12,9 +12,9 @@ describe SphinxIndexJob do
   subject { SphinxIndexJob.new }
 
   it 'disables job if sphinx running on external host' do
-    expect(Hitobito::Application).to receive(:sphinx_local?).twice.and_return(true)
+    allow(Hitobito::Application).to receive(:sphinx_local?).and_return(true)
     SphinxIndexJob.new.schedule
-    expect(Hitobito::Application).to receive(:sphinx_local?).twice.and_return(false)
+    allow(Hitobito::Application).to receive(:sphinx_local?).and_return(false)
     expect do
       subject.perform
     end.to change { Delayed::Job.count }.by(-1)

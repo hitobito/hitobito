@@ -788,6 +788,7 @@ describe Group do
 
     context 'with static_name=true' do
       before { group.static_name = true }
+      after { group.static_name = false }
 
       it '#name returns class label' do
         expect(group.name).to eq 'Bottom Layer'
@@ -815,6 +816,7 @@ describe Group do
 
     context 'with static_name=true' do
       before { group.class.static_name = true }
+      after { group.class.static_name = false }
 
       it 'uniqueness is validated for same parent_id' do
         duplicate.validate
@@ -856,6 +858,7 @@ describe Group do
 
     context 'with static_name=true' do
       before { child_type.static_name = true }
+      after { child_type.static_name = false }
 
       it 'when no children exist returns possible_children' do
         expect(group.addable_child_types).to match_array([
@@ -882,6 +885,5 @@ describe Group do
                                                       ])
       end
     end
-
   end
 end

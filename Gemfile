@@ -107,8 +107,8 @@ group :development, :test do
   gem 'codez-tarantula', require: 'tarantula-rails3'
   gem 'graphiti_spec_helpers'
   gem 'parallel_tests'
-  gem 'pry-byebug'
-  gem 'pry-doc' # provides show-source/$ in the pry-console
+  gem 'pry-byebug', require: false # slow gem according to bumbler
+  gem 'pry-doc', require: false # provides show-source/$ in the pry-console
   gem 'rspec-rails', '~> 5.0'
   gem 'rswag-specs'
 end
@@ -131,6 +131,8 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'rspec-its'
+  gem 'stackprof'
+  gem 'test-prof'
   gem 'webdrivers'
   gem 'webmock'
 end

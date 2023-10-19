@@ -5,5 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-Delayed::Worker.max_attempts = 10
-Delayed::Worker.plugins << BackgroundJobs::Logging
+Rails.application.reloader.to_prepare do
+  Delayed::Worker.max_attempts = 10
+  Delayed::Worker.plugins << BackgroundJobs::Logging
+end

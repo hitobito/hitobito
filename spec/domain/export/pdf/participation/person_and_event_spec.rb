@@ -25,7 +25,9 @@ describe Export::Pdf::Participation::PersonAndEvent do
   let(:person) do
     Fabricate(:person_with_address, phone_numbers: [
       Fabricate.build(:phone_number, label: 'Mobil')
-    ], company_name: Faker::Company.name)
+    ], company_name: Faker::Company.name,
+    email: 'dude@example.com'
+             )
   end
   let(:participation) { Event::Participation.create(event: event, person: person) }
 

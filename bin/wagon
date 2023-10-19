@@ -96,9 +96,9 @@ function setup_dbs() {
   bundle exec rails wagon:seed
 
   echo "migrating test database"
-  export RAILS_ENV=test
-  bundle exec rails db:migrate
-  bundle exec rails wagon:migrate
+  bundle exec rails db:structure:dump_sql
+  RAILS_ENV=test rails db:structure:load_sql
+  rm -f db/structure.sql
 }
 
 function indent2 {

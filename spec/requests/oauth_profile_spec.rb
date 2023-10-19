@@ -29,12 +29,12 @@ RSpec.describe 'GET oauth/profile', type: :request do
   end
 
   context 'with email scope in token' do
-    let(:token)  { Fabricate(:access_token, application: application, scopes: { scopes: 'email' }, resource_owner_id: user.id ) }
-    
+    let(:token)  { Fabricate(:access_token, application: application, scopes: 'email', resource_owner_id: user.id ) }
+
     context 'with bad token signature' do
       it 'fails with HTTP 401 (unauthorized)' do
         get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token + 'X'}
-  
+
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -42,7 +42,7 @@ RSpec.describe 'GET oauth/profile', type: :request do
     context 'with wrong scope in request' do
       it 'fails with HTTP 403 (forbidden)' do
         get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token, 'X-Scope': 'name' }
-        
+
         expect(response).to have_http_status(:forbidden)
         expect(response.content_type).to eq('application/json; charset=utf-8')
         expect(response.body).to eq('{"error":"invalid scope: name"}')
@@ -71,17 +71,17 @@ RSpec.describe 'GET oauth/profile', type: :request do
   end
 
   context 'with expired token' do
-    let(:token)  { Fabricate(:access_token, application: application, scopes: { scopes: 'email' }, resource_owner_id: user.id, expires_in: -1.minute ) }
+    let(:token)  { Fabricate(:access_token, application: application, scopes: 'email', resource_owner_id: user.id, expires_in: -1.minute ) }
 
     it 'fails with 401 (unauthorized)' do
       get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token }
 
-      expect(response).to have_http_status(:unauthorized)  
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 
   context 'with all scopes in token' do
-    let(:token)  { Fabricate(:access_token, application: application, scopes: { scopes: 'email name with_roles' }, resource_owner_id: user.id ) }
+    let(:token)  { Fabricate(:access_token, application: application, scopes: 'email name with_roles', resource_owner_id: user.id ) }
 
     context 'with scope "name" in request' do
       it 'succeeds' do

@@ -30,7 +30,7 @@ describe EventsController, js: true do
     end
 
     def click_save
-      all('form .btn-toolbar').first.click_button 'Speichern'
+      all('form .btn-group').first.click_button 'Speichern'
     end
 
     it 'may set and remove contact from event' do
@@ -42,8 +42,9 @@ describe EventsController, js: true do
 
         # set contact
         fill_in 'Kontaktperson', with: 'Top'
-        expect(find('.typeahead.dropdown-menu')).to have_content 'Top Leader'
-        find('.typeahead.dropdown-menu').click
+        expect(find('ul[role="listbox"] li[role="option"]')).to have_content 'Top Leader'
+        find('ul[role="listbox"] li[role="option"]').click
+        find('body').send_keys(:tab) #unfocus input field
         notification_checkbox_visible(true)
         click_save
 

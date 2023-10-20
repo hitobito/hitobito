@@ -52,7 +52,8 @@ class People::CleanupFinder
   end
 
   def with_current_sign_in_at_outside_cutoff(scope)
-    scope.where('people.current_sign_in_at <= ? OR people.current_sign_in_at IS NULL', current_sign_in_at)
+    scope.where('people.current_sign_in_at <= ? OR people.current_sign_in_at IS NULL',
+                current_sign_in_at)
   end
 
   def last_role_deleted_at

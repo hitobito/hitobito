@@ -37,19 +37,7 @@ class SubscriptionsController < ListController
     end
   end
 
-  def edit_filter_chain
-    respond_with(entry)
-  end
-
-  def update_filter_chain
-    # respond_with(entry)
-  end
-
   private
-
-  def entry
-    nil
-  end
 
   def load_grouped_subscriptions
     @group_subs = group_subscriptions

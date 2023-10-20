@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MailingList::Filter::Chain do
+describe MailingLists::Filter::Chain do
 
   context 'to_params' do
     it 'includes all present filters' do

@@ -39,7 +39,6 @@ class MailingList < ActiveRecord::Base
   serialize :preferred_labels, Array
   serialize :filter_chain, MailingLists::Filter::Chain
 
-
   attribute :mailchimp_result, Synchronize::Mailchimp::ResultType.new
 
   belongs_to :group

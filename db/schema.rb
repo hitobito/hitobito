@@ -646,6 +646,7 @@ ActiveRecord::Schema.define(version: 2023_11_15_131813) do
     t.datetime "mailchimp_last_synced_at"
     t.text "mailchimp_result"
     t.boolean "mailchimp_include_additional_emails", default: false
+    t.text "filter_chain"
     t.index ["group_id"], name: "index_mailing_lists_on_group_id"
   end
 

@@ -152,13 +152,20 @@ class Role < ActiveRecord::Base
     end
   end
 
-  # Soft destroy if older than certain amount of days, hard if younger
-  def destroy # rubocop:disable Rails/ActiveRecordOverride
-    if old_enough_to_archive?
-      super
+  # Soft destroy if older than certain amount of days, hard if younger.
+  # Set always_soft_destroy to true if you want to soft destroy even if the role is not old enough.
+  def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
+    if always_soft_destroy || old_enough_to_archive?
+      super()
     else
       really_destroy!
     end
+  end
+
+  # Soft destroy if older than certain amount of days, hard if younger.
+  # Set always_soft_destroy to true if you want to soft destroy even if the role is not old enough.
+  def destroy!(always_soft_destroy: false)
+    destroy(always_soft_destroy: always_soft_destroy) || _raise_record_not_destroyed
   end
 
   def archived?

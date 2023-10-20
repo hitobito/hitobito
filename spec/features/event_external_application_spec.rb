@@ -22,7 +22,7 @@ describe :event_external_application do
     fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
 
     expect do
-      find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # submit
+      find_all('.bottom .btn-group button[type="submit"]').first.click # submit
     end.to change { Person.count }.by(1)
 
     fill_in('Bemerkungen', with: 'Wichtige Bemerkungen über meine Teilnahme')

@@ -26,7 +26,7 @@ describe Event::KindsController, js: true do
 
       expect(page).to have_selector('.precondition-grouping', text: 'Group Lead (for Leaders), Quality Lead und Super Lead')
 
-      find('button.btn-primary').click
+      find('button.btn-primary', text: 'Speichern').click
 
       expect(page).to have_selector('h1', text: 'Kursarten')
 
@@ -47,15 +47,17 @@ describe Event::KindsController, js: true do
       visit edit_event_kind_path(event_kinds(:slk))
 
       expect(page).to have_selector('.precondition-grouping', count: 2)
-      expect(page).to have_selector('.precondition-grouping', text: 'oder Quality Lead')
+      expect(page).to have_selector('.precondition-grouping span', text: 'oder')
+      expect(page).to have_selector('.precondition-grouping', text: 'Quality Lead')
 
       find('.precondition-grouping:first-child .remove-precondition-grouping').click
+      expect(page).not_to have_selector('.precondition-grouping span', text: 'oder')
       expect(page).to have_selector('.precondition-grouping', text: 'Quality Lead')
 
       find('.precondition-grouping:first-child .remove-precondition-grouping').click
       expect(page).to have_no_selector('.precondition-grouping')
 
-      find('button.btn-primary').click
+      find('button.btn-primary', text: 'Speichern').click
 
       expect(page).to have_selector('h1', text: 'Kursarten')
 

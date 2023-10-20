@@ -35,7 +35,6 @@ fr:
         must_exist: doivent être présents
         readonly: ne peut pas être modifié
         cannot_be_later_than_today: ne peut pas être plus tard qu'aujourd'hui
-        cannot_be_later_than_deleted_at: doit avoir lieu avant ou le même jour que la sortie
       models:
         cors_origin:
           attributes:

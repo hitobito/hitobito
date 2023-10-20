@@ -89,16 +89,23 @@ SQL
 }
 
 function setup_dbs() {
-  echo "migrating and seeding development database"
-  bundle exec rails db:migrate
-  bundle exec rails wagon:migrate
-  bundle exec rails db:seed
-  bundle exec rails wagon:seed
+  setup_development_db
+  setup_test_db
+}
 
-  echo "migrating test database"
-  bundle exec rails db:structure:dump_sql
-  RAILS_ENV=test rails db:structure:load_sql
-  rm -f db/structure.sql
+function setup_development_db() {
+    echo "migrating and seeding development database"
+    bundle exec rails db:migrate
+    bundle exec rails wagon:migrate
+    bundle exec rails db:seed
+    bundle exec rails wagon:seed
+}
+
+function setup_test_db() {
+    echo "preparing test database"
+    bundle exec rails db:structure:dump_sql
+    RAILS_ENV=test rails db:structure:load_sql
+    rm -f db/structure.sql
 }
 
 function indent2 {
@@ -140,6 +147,11 @@ case $cmd in
     require_wagon_name
     recreate_dbs
     setup_dbs
+  ;;
+
+  reset-test-database)
+    require_wagon_name
+    setup_test_db
   ;;
 
   gemfile)

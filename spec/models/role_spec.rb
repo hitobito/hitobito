@@ -235,11 +235,29 @@ describe Role do
       expect(described_class.with_deleted.where(id: a.id)).not_to be_exists
     end
 
+    it 'soft deletes young roles with always_soft_destroy: true' do
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
+                                                          group: groups(:bottom_layer_one))
+
+      a.destroy(always_soft_destroy: true)
+      expect(described_class.only_deleted.find(a.id)).to be_present
+    end
+
     it 'flags old roles' do
       a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
                                                           group: groups(:bottom_layer_one))
       a.created_at = Time.zone.now - Settings.role.minimum_days_to_archive.days - 1.day
       a.destroy
+      expect(described_class.only_deleted.find(a.id)).to be_present
+    end
+  end
+
+  context '#destroy!' do
+    it 'soft deletes young roles with always_soft_destroy: true' do
+      a = Fabricate(Group::BottomLayer::Leader.name.to_s, label: 'foo',
+                    group: groups(:bottom_layer_one))
+
+      a.destroy(always_soft_destroy: true)
       expect(described_class.only_deleted.find(a.id)).to be_present
     end
   end

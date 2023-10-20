@@ -16,8 +16,7 @@ class People::CleanupFinder
   def people_to_cleanup_scope
     scope = base_scope.joins('LEFT JOIN roles ON roles.person_id = people.id')
 
-    scope = without_active_roles(scope)
-    scope = with_roles_outside_cutoff(scope)
+    scope = without_any_roles_or_with_roles_outside_cutoff(scope)
     scope = without_participating_in_future_events(scope)
     scope = with_current_sign_in_at_outside_cutoff(scope)
 
@@ -28,20 +27,24 @@ class People::CleanupFinder
     Person.all.where.not(email: Settings.root_email)
   end
 
-  def no_active_roles_exist
-    active_roles.arel.exists.not
+  def no_any_roles_exist
+    any_roles.arel.exists.not
   end
 
-  def active_roles
-    Role.where('roles.person_id = people.id')
+  def any_roles
+    Role.with_deleted.where('roles.person_id = people.id')
   end
 
-  def without_active_roles(scope)
-    scope.where(no_active_roles_exist)
+  def without_any_roles_or_with_roles_outside_cutoff(scope)
+    without_any_roles(scope).or(with_roles_outside_cutoff(scope))
+  end
+
+  def without_any_roles(scope)
+    scope.where(no_any_roles_exist)
   end
 
   def with_roles_outside_cutoff(scope)
-    scope.where('roles.deleted_at IS NULL OR roles.deleted_at <= ?', last_role_deleted_at)
+    scope.where('roles.deleted_at <= ?', last_role_deleted_at)
   end
 
   def without_participating_in_future_events(scope)

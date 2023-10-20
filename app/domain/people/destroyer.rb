@@ -30,10 +30,12 @@ class People::Destroyer
   end
 
   def nullify_invoices!
-    Invoice.where(recipient: @person).update(recipient_email: @person.email,
-                                             recipient_address: Person::Address.new(@person).for_invoice,
-                                             recipient: nil)
-    Invoice.where(creator: @person).update(creator: nil)
+    Invoice.where(recipient: @person)
+           .update(recipient_email: @person.email,
+                   recipient_address: Person::Address.new(@person).for_invoice,
+                   recipient: nil)
+    Invoice.where(creator: @person)
+           .update(creator: nil)
   end
 
   def leftover_family_members

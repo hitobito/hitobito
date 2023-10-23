@@ -120,7 +120,6 @@ module Dropdown
 
       html_options[:class] = 'dropdown-item'
       if sub_items?
-        html_options[:data] = { 'bs-toggle': 'dropdown' }
         html_options[:class] += ' dropdown-toggle'
       end
 

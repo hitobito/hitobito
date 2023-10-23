@@ -37,7 +37,13 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     type = column_type(@object, attr.to_sym)
     custom_field_method = :"#{type}_field"
     html_options[:class] += ' is-invalid' if errors_on?(attr)
-    html_options[:required] ||= 'required' if required?(attr)
+
+    if html_options[:required] == false
+      html_options.delete(:required)
+    else
+      html_options[:required] ||= 'required' if required?(attr)
+    end
+
     if type == :text
       text_area(attr, html_options)
     elsif association_kind?(attr, type, :belongs_to)

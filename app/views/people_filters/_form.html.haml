@@ -30,6 +30,6 @@
 
   - if can?(:create, entry)
     %label.required=PeopleFilter.human_attribute_name(:name)
-    = f.input_field :name, placeholder: t('.save_filter_placeholder'), class: 'mb-3 '
+    = f.input_field :name, placeholder: t('.save_filter_placeholder'), class: 'mb-3 ', required: false
 
   = render 'search_or_save_buttons', f: f

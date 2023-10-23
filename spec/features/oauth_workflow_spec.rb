@@ -17,7 +17,7 @@ describe 'OauthWorkflow' do
     fill_in 'Redirect URI', with: 'urn:ietf:wg:oauth:2.0:oob'
     check 'name', id: 'oauth_application_scope_name'
     check 'email'
-    within('.btn-toolbar.bottom') do
+    within('.bottom') do
       click_button 'Speichern'
     end
   end

@@ -24,9 +24,9 @@ on:
       repo_url:
         value: ${{ jobs.settings.outputs.repo_url }}
       composition_branch:
-        value: ${{ jobs.settings.outputs.branch }}
+        value: ${{ jobs.settings.outputs.composition_branch }}
       release_stage:
-        value: ${{ jobs.settings.outputs.stage }}
+        value: ${{ jobs.settings.outputs.release_stage }}
       version_type:
         value: ${{ jobs.settings.outputs.version_type }}
 

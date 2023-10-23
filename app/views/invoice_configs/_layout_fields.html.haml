@@ -5,11 +5,11 @@
 
 = field_set_tag do
   = f.labeled :logo do
-    = f.file_field :logo, type: :file ,accept: Group::LogoUploader.accept_extensions
+    = f.file_field :logo, type: :file ,accept: Group::LogoUploader.accept_extensions, class: 'mw-100 mw-md-60ch form-control form-control-sm'
 
   - if upload_exists?(entry, :logo)
     = f.labeled :remove_logo do
       = f.boolean_field :remove_logo
-  = f.labeled_i18n_enum_field :logo_position, InvoiceConfig.logo_position_labels.to_a
+  = f.labeled_i18n_enum_field :logo_position, InvoiceConfig.logo_position_labels.to_a, class: 'form-select form-select-sm'
 
 = render_extensions(:layout_fields, locals: { f: f })

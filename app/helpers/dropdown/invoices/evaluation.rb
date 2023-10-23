@@ -17,8 +17,8 @@ module Dropdown
     end
 
     def export
-      add_item(translate(:csv), export_path(:csv), item_options)
-      add_item(translate(:xlsx), export_path(:xlsx), item_options)
+      add_item(translate(:csv), export_path(:csv), **item_options)
+      add_item(translate(:xlsx), export_path(:xlsx), **item_options)
       self
     end
 

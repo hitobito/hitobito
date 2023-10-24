@@ -67,6 +67,7 @@ class Setup
       export RAILS_DB_NAME=hit_#{wagon}_development
       export RAILS_TEST_DB_NAME=hit_#{wagon}_test
       export RAILS_PRODUCTION_DB_NAME=hit_#{wagon}_production
+      export SPRING_APPLICATION_ID=hit_#{wagon}
       export RUBYOPT=-W0
       #{'export WAGONS="' + wagons.join(' ') + '"' if wagons.any?}
       log_status "hitobito now uses: #{wagons.any? ? wagons.join(', ') : 'just the core'}"

@@ -94,7 +94,7 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :feature
   config.include ActiveSupport::Testing::TimeHelpers
 
-  config.filter_run_excluding type: 'feature', performance: true
+  # config.filter_run_excluding type: 'feature', performance: true
   config.filter_run_excluding type: 'sphinx', sphinx: true
 
   if ActiveRecord::Base.connection.adapter_name.downcase != 'mysql2'
@@ -174,36 +174,32 @@ RSpec.configure do |config|
   end
 end
 
-# Use Capybara only if features are not excluded
-unless RSpec.configuration.exclusion_filter[:type] == 'feature'
-  require 'capybara'
-  require 'webdrivers/chromedriver'
+require 'capybara/rails'
+require 'capybara-screenshot/rspec'
 
-  Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
-  Capybara.default_max_wait_time = 6
-  Capybara.automatic_label_click = true
+Capybara.server_port = ENV['CAPYBARA_SERVER_PORT'].to_i if ENV['CAPYBARA_SERVER_PORT']
+Capybara.default_max_wait_time = 6
+Capybara.automatic_label_click = true
 
-  require 'capybara-screenshot/rspec'
-  Capybara::Screenshot.prune_strategy = :keep_last_run
-  Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::ProgressFormatter'] =
-    CapybaraScreenshotPlainTextReporter
+Capybara::Screenshot.prune_strategy = :keep_last_run
+Capybara::Screenshot::RSpec::REPORTERS['RSpec::Core::Formatters::ProgressFormatter'] =
+CapybaraScreenshotPlainTextReporter
 
-  Capybara.register_driver :chrome do |app|
-    options = Selenium::WebDriver::Chrome::Options.new
-    options.args << '--headless' if ENV['HEADLESS'] != 'false'
-    options.args << '--disable-gpu' # required for windows
-    options.args << '--no-sandbox' # required for docker
-    options.args << '--disable-dev-shm-usage' # helps with docker resource limitations
-    options.args << '--window-size=1800,1000'
-    options.args << '--crash-dumps-dir=/tmp'
-    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
-  end
-
-  Capybara.current_driver = :chrome
-  Capybara.javascript_driver = :chrome
-
-  puts "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
+Capybara.register_driver :chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.args << '--headless' if ENV['HEADLESS'] != 'false'
+  options.args << '--disable-gpu' # required for windows
+  options.args << '--no-sandbox' # required for docker
+  options.args << '--disable-dev-shm-usage' # helps with docker resource limitations
+  options.args << '--window-size=1800,1000'
+  options.args << '--crash-dumps-dir=/tmp'
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
+
+Capybara.current_driver = :chrome
+Capybara.javascript_driver = :chrome
+
+puts "Using chromedriver version #{Webdrivers::Chromedriver.current_version}"
 
 Devise::Test::ControllerHelpers.prepend(Module.new do
   # Make sure the email address is confirmed before logging in

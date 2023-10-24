@@ -59,7 +59,7 @@
               autoCompleteInput.input.value = selection.label + " wird geöffnet..."
             } else {
               autoCompleteInput.input.value = selection.label;
-              document.getElementById(autoCompleteInput.input.dataset.idField).value = selection.id;
+              document.getElementById(adjustSelector(autoCompleteInput.input.dataset.idField)).value = selection.id;
             }
           }
         }
@@ -90,6 +90,10 @@
     } else {
       return label;
     }
+  }
+
+  function adjustSelector(selector) {
+    return selector.replace(/\]_|\]\[|\[|\]/g, '_')
   }
 
   // set insertFields function for nested-form gem

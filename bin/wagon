@@ -80,7 +80,7 @@ MODULE
 
 function recreate_dbs() {
   echo "recreating dev and test databases"
-  cat << SQL | MYSQL_PWD="${RAILS_DB_PASSWORD}" mysql -u "${RAILS_DB_USERNAME}"
+  cat << SQL | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -P "${RAILS_DB_PORT:-33066}"
 DROP DATABASE IF EXISTS hit_${wagon_name}_development;
 CREATE DATABASE hit_${wagon_name}_development;
 DROP DATABASE IF EXISTS hit_${wagon_name}_test;
@@ -145,6 +145,7 @@ case $cmd in
 
   reset-database)
     require_wagon_name
+    bin/active_wagon.rb "$wagon_name"
     recreate_dbs
     setup_dbs
   ;;

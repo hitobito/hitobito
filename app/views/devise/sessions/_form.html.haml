@@ -4,11 +4,11 @@
 -#  https://github.com/hitobito/hitobito.
 
 - form_url = params[:oauth] == 'true' ? person_session_path(oauth: true) : person_session_path
-- autofocus_email = true if autofocus_email.nil?
+- autofocus_login = true if autofocus_login.nil?
 
 = standard_form(resource, {url: form_url}) do |f|
   = f.error_messages
-  = f.labeled_input_field(:email, autofocus: autofocus_email)
+  = f.labeled_input_field(:login_identity, autocomplete: "login", autofocus: autofocus_login, label: t('.login_identity'), class: 'span6')
   = f.labeled_input_field(:password)
   = f.labeled_boolean_field(:remember_me)
   = f.indented(submit_button(f, t('.sign_in')))

@@ -99,6 +99,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ADDRESS_ATTRS = %w(address zip_code town country) # rubocop:disable Style/MutableConstant meant to be extended in wagons
 
+  # Configure which Person attributes can be used to identify a person for login.
+  class_attribute :devise_login_id_attrs, default: [:email]
+
   # define devise before other modules
   devise :database_authenticatable,
          :lockable,
@@ -308,6 +311,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
 
   ### ATTRIBUTE INSTANCE METHODS
+
+  # Used to enable login with any of the attributes configured in `devise_login_id_attrs`
+  def login_identity
+    @login_identity || Array.wrap(devise_login_id_attrs).map {|key| send(key).presence }.compact.first
+  end
+  attr_writer :login_identity
 
   def basic_permissions_only?
     roles&.all?(&:basic_permissions_only)

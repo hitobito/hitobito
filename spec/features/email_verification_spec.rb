@@ -96,7 +96,7 @@ describe 'Email verification', js: true do
 
     it 'should prevent logging in' do
       visit new_person_session_path
-      fill_in 'person_email', with: person.email
+      fill_in 'person_login_identity', with: person.email
       fill_in 'person_password', with: password
       click_button 'Anmelden'
 

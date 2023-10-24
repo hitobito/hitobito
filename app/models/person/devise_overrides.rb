@@ -6,6 +6,19 @@
 #  https://github.com/hitobito/hitobito.
 
 module Person::DeviseOverrides
+  extend ActiveSupport::Concern
+
+  class_methods do
+    # Allow login with all attrs defined in `devise_login_id_attrs`
+    def find_for_database_authentication(warden_conditions)
+      if login = warden_conditions[:login_identity]
+        Array.wrap(devise_login_id_attrs).map do |attr|
+          where(attr => login)
+        end.reduce(:or).first
+      end
+    end
+
+  end
 
   # from lib/devise/models/recoverable.rb
   def send_reset_password_instructions

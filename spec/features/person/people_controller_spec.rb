@@ -117,7 +117,7 @@ describe PeopleController, js: true do
           expect do
             find('a[data-association="relations_to_tails"]', text: 'Eintrag hinzufügen').click
             find('#relations_to_tails_fields input[data-provide=entity]').set('Bottom')
-            find('#relations_to_tails_fields ul.typeahead li').click
+            find('#relations_to_tails_fields ul[role="listbox"] li[role="option"]').click
 
             all('button', text: 'Speichern').first.click
             expect(page).to have_content('erfolgreich aktualisiert')
@@ -135,7 +135,7 @@ describe PeopleController, js: true do
           is_expected.to have_content 'Beziehungen'
 
           expect do
-            find('#relations_to_tails_fields .remove_nested_fields').first.click
+            all('#relations_to_tails_fields .remove_nested_fields').first.click
 
             all('button', text: 'Speichern').first.click
             expect(page).to have_content('erfolgreich aktualisiert')

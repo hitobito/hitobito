@@ -16,17 +16,23 @@ class Groups::SelfInscriptionController < CrudController
 
   def create
     @role = build_entry
-    @role.group = group
-    @role.type = group.self_registration_role_type
-    @role.person = person
     @role.save
     send_notification_email
     redirect_with_message(notice: t('.role_saved'))
   end
 
+  protected
+
+  def build_entry
+    group.self_registration_role_type.constantize.new(
+      group: group,
+      person: person
+    )
+  end
+
   private
 
-  def send_notification_email   
+  def send_notification_email
     return if group.self_registration_notification_email.blank?
 
     Groups::SelfRegistrationNotificationMailer

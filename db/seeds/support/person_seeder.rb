@@ -156,10 +156,12 @@ class PersonSeeder
     klass.seed(:contactable_id, :contactable_type, :label, attrs)
   end
 
-  def seed_role(person, group, role_type)
+  # opts is used in wagon to set additional attributes
+  def seed_role(person, group, role_type, **opts)
     Role.seed_once(:person_id, :group_id, :type, { person_id: person.id,
                                                    group_id:  group.id,
-                                                   type:      role_type.sti_name })
+                                                   type:      role_type.sti_name,
+                                                   **opts })
   end
 
   def random_date

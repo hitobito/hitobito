@@ -84,6 +84,7 @@ module MountedAttr
 
     def define_mounted_attr_setter(config)
       define_method("#{config.attr_name}=") do |value|
+        attribute_will_change!(config.attr_name) if value != send(config.attr_name)
         instance_variable_set("@#{config.attr_name}", value)
         value
       end

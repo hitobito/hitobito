@@ -24,8 +24,9 @@ module MountedAttributes
     end
 
     def configs_for(target_class)
-      @configs.filter do |config|
-        config.target_class == target_class
+      target_class.ancestors.each_with_object([]) do |ancestor, configs|
+        ancestor_configs = @configs.filter {|config| config.target_class == ancestor }
+        configs.concat(ancestor_configs)
       end
     end
   end

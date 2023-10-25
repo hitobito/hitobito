@@ -435,25 +435,25 @@ describe MountedAttr do
     end
   end
 
-  context 'paper_trail' do
+  context 'paper_trail', versioning: true do
     before do
-      test_class = Class.new(Group::MountedAttrsGroup) { has_paper_trail }
+      test_class = Class.new(Group) do
+        self.layer = true
+        mounted_attr :mounted_attr, :string
+      end
       stub_const('MountedAttrsPaperTrail', test_class)
     end
 
     let!(:entry) do
-      MountedAttrsPaperTrail.create!(name: 'MountedAttrsTest', parent: groups(:bottom_layer_one))
+      MountedAttrsPaperTrail.create!(name: 'MountedAttrsTest', mounted_attr: 'foobar').
+        then { |e| Group.find(e.id) }
     end
 
     it 'tracks changes' do
-      entry.update!(string: 'string', integer: 42, boolean: true)
-      entry.update!(string: 'string2', integer: 43, boolean: false)
-      entry.update!(string: 'string3', integer: 44, boolean: true)
-
-      expect(entry.versions.size).to eq(3)
-      expect(entry.versions[0].changeset).to eq('string' => [nil, 'string'], 'integer' => [nil, 42], 'boolean' => [nil, true])
-      expect(entry.versions[1].changeset).to eq('string' => ['string', 'string2'], 'integer' => [42, 43], 'boolean' => [true, false])
-      expect(entry.versions[2].changeset).to eq('string' => ['string2', 'string3'], 'integer' => [43, 44], 'boolean' => [false, true])
+      binding.pry
+      expect { entry.update!(mounted_attr: 'string') }.
+        to change { entry.reload.mounted_attr }.from('foobar').to('string').
+        and change { entry.reload.versions.count }.by(1)
     end
   end
 end

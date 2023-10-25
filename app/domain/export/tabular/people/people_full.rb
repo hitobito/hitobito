@@ -11,8 +11,14 @@ module Export::Tabular::People
     def person_attributes
       Person.column_names.collect(&:to_sym) -
         Person::INTERNAL_ATTRS -
-        [:picture, :primary_group_id, :id] +
-        [:layer_group, :roles, :tags]
+        excluded_person_attributes +
+        [:layer_group, :roles, :tags] 
+    end
+
+    def excluded_person_attributes
+      [:picture,
+       :primary_group_id,
+       :id]
     end
 
     def association_attributes

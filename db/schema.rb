@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_26_080649) do
-
+ActiveRecord::Schema.define(version: 2023_10_16_092502) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -405,7 +404,7 @@ ActiveRecord::Schema.define(version: 2023_09_26_080649) do
     t.integer "parent_id"
     t.integer "lft"
     t.integer "rgt"
-    t.string "name", null: false
+    t.string "name"
     t.string "short_name", limit: 31
     t.string "type", null: false
     t.string "email"
@@ -860,6 +859,8 @@ ActiveRecord::Schema.define(version: 2023_09_26_080649) do
     t.text "encrypted_two_fa_secret"
     t.string "language", default: "de", null: false
     t.timestamp "privacy_policy_accepted_at"
+    t.bigint "self_registration_reason_id"
+    t.string "self_registration_reason_custom_text", limit: 100
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true
@@ -868,6 +869,7 @@ ActiveRecord::Schema.define(version: 2023_09_26_080649) do
     t.index ["household_key"], name: "index_people_on_household_key"
     t.index ["last_name"], name: "index_people_on_last_name"
     t.index ["reset_password_token"], name: "index_people_on_reset_password_token", unique: true
+    t.index ["self_registration_reason_id"], name: "index_people_on_self_registration_reason_id"
     t.index ["unlock_token"], name: "index_people_on_unlock_token", unique: true
   end
 
@@ -971,11 +973,27 @@ ActiveRecord::Schema.define(version: 2023_09_26_080649) do
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.datetime "archived_at"
+    t.date "delete_on"
     t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
     t.index ["type"], name: "index_roles_on_type"
   end
 
-  create_table "service_tokens", id: :integer, charset: "utf8mb4", force: :cascade do |t|
+  create_table "self_registration_reason_translations", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.bigint "self_registration_reason_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "text", null: false
+    t.index ["locale"], name: "index_self_registration_reason_translations_on_locale"
+    t.index ["self_registration_reason_id"], name: "index_d351072d2828208df6f5a55e3d6d5f361a7c23ea"
+  end
+
+  create_table "self_registration_reasons", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "service_tokens", id: :integer, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.integer "layer_group_id", null: false
     t.string "name", null: false
     t.text "description"
@@ -1083,6 +1101,7 @@ ActiveRecord::Schema.define(version: 2023_09_26_080649) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
+  add_foreign_key "people", "self_registration_reasons"
   add_foreign_key "subscription_tags", "subscriptions"
   add_foreign_key "subscription_tags", "tags"
 end

@@ -10,10 +10,11 @@
 # Table name: roles
 #
 #  id          :integer          not null, primary key
-#  person_id   :integer          not null
-#  group_id    :integer          not null
-#  type        :string           not null
-#  label       :string
+#  archived_at :datetime
+#  delete_on   :date
+#  deleted_at  :datetime
+#  label       :string(255)
+#  type        :string(255)      not null
 #  created_at  :datetime
 #  updated_at  :datetime
 #  deleted_at  :datetime
@@ -23,6 +24,32 @@
 require 'spec_helper'
 
 describe Role do
+
+  context 'validates' do
+    let(:group) { groups(:bottom_layer_one) }
+    def build(attrs)
+      Fabricate.build(:'Group::BottomLayer::Leader', attrs.merge(group: group))
+    end
+
+    it 'is invalid with future created_at' do
+      role = build(created_at: 1.day.from_now)
+      expect(role).to have(1).error_on(:created_at)
+      expect(role.errors[:created_at][0]).to eq 'kann nicht später als heute sein'
+    end
+
+    it 'is invalid with created_at after delete_on' do
+      role = build(created_at: 1.day.ago, delete_on: 2.days.ago)
+      expect(role).to have(1).error_on(:created_at)
+      expect(role.errors[:created_at][0]).to eq 'muss vor oder am selben Tag wie der Austritt sein'
+    end
+
+    it 'is invalid nil created_at and delete_on' do
+      role = build(created_at: nil, delete_on: 2.days.ago)
+      expect(role).to have(2).error_on(:created_at)
+      expect(role.errors[:created_at][0]).to eq 'muss ausgefüllt werden'
+      expect(role.errors[:created_at][1]).to eq 'ist kein gültiges Datum'
+    end
+  end
 
   context 'class' do
     subject { described_class }
@@ -321,85 +348,6 @@ describe Role do
     end
   end
 
-  describe 'paranoia scopes' do
-    let(:person) { Fabricate(:person) }
-
-    context 'without_deleted' do
-      subject { person.roles.without_deleted }
-
-      it 'lists roles with future deleted_at' do
-        Fabricate(Group::BottomLayer::Leader.name.to_s,
-                  label: 'foo',
-                  person: person,
-                  group: groups(:bottom_layer_one))
-        marked_for_termination = Fabricate(Group::BottomLayer::Member.name.to_s,
-                                           label: 'Bar',
-                                           created_at: Time.zone.yesterday,
-                                           deleted_at: Time.zone.tomorrow,
-                                           person: person,
-                                           group: groups(:bottom_layer_one))
-
-        expect(subject.count).to eq(2)
-        expect(subject).to include(marked_for_termination)
-      end
-
-      it 'does not list roles with past deleted_at' do
-        Fabricate(Group::BottomLayer::Leader.name.to_s,
-                  label: 'foo',
-                  person: person,
-                  group: groups(:bottom_layer_one))
-        Fabricate(Group::BottomLayer::Member.name.to_s,
-                  label: 'Bar',
-                  created_at: 5.days.ago,
-                  deleted_at: 3.days.ago,
-                  person: person,
-                  group: groups(:bottom_layer_one))
-
-        expect(subject.count).to eq(1)
-      end
-    end
-
-    context 'only_deleted' do
-      subject { person.roles.only_deleted }
-
-      it 'does not list roles with future deleted_at' do
-        Fabricate(Group::BottomLayer::Member.name.to_s,
-                  label: 'Bar',
-                  created_at: Time.zone.yesterday,
-                  deleted_at: Time.zone.tomorrow,
-                  person: person,
-                  group: groups(:bottom_layer_one))
-
-        expect(subject.count).to eq(0)
-      end
-
-      it 'does not list roles with no deleted_at' do
-        Fabricate(Group::BottomLayer::Member.name.to_s,
-                  label: 'Bar',
-                  created_at: Time.zone.yesterday,
-                  person: person,
-                  group: groups(:bottom_layer_one))
-
-        expect(subject.count).to eq(0)
-      end
-
-      it 'lists roles with past deleted_at' do
-        Fabricate(Group::BottomLayer::Leader.name.to_s,
-                  label: 'foo',
-                  person: person,
-                  group: groups(:bottom_layer_one))
-        deleted = Fabricate(Group::BottomLayer::Member.name.to_s,
-                            label: 'Bar',
-                            created_at: 5.days.ago,
-                            deleted_at: 3.days.ago,
-                            person: person,
-                            group: groups(:bottom_layer_one))
-
-        expect(subject.count).to eq(1)
-        expect(subject.first).to eq(deleted)
-      end
-    end
-  end
 
   context 'nextcloud groups' do
     let(:person) { Fabricate(:person) }

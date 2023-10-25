@@ -4,6 +4,8 @@
 -#  https://github.com/hitobito/hitobito.
 
 %ul.nav-left-list
+  - if can?(:index, SelfRegistrationReason)
+    = nav SelfRegistrationReason.model_name.human(count: 2), self_registration_reasons_path, %w(self_registration_reasons)
   - if can?(:index, LabelFormat)
     = nav LabelFormat.model_name.human(count: 2), label_formats_path, %w(label_formats)
   - if can?(:update, current_user)

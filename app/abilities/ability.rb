@@ -33,6 +33,7 @@ class Ability
                  Person::AddRequestAbility,
                  QualificationAbility,
                  RoleAbility,
+                 SelfRegistrationReasonAbility,
                  ServiceTokenAbility,
                  SubscriptionAbility,
                  TagAbility,

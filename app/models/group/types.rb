@@ -28,7 +28,6 @@ module Group::Types
     # All possible Event types that may be created for this group
     self.event_types = [Event]
 
-
     after_save :set_layer_group_id
     after_save :create_default_children
 

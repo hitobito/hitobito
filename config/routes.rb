@@ -340,6 +340,8 @@ Hitobito::Application.routes.draw do
       end
     end
 
+    resources :self_registration_reasons
+
     resources :custom_contents, only: [:index, :edit, :update]
     get 'custom_contents/:id' => 'custom_contents#edit'
 

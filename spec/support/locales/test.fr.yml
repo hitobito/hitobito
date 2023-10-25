@@ -13,6 +13,7 @@ fr:
         other: Bottom Layere
         long: Bottom Layere Long
       group/bottom_group: Bottom Groupe
+      group/mounted_attrs_group: Mounted Attrs Groupe
       group/global_group: Global Groupe
 
       group/top_layer/leader: Leadre

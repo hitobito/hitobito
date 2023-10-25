@@ -17,6 +17,27 @@ describe RolesController, js: true do
   let!(:role2)  { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
   let!(:leader) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group) }
 
+  describe 'updating delete_on', js: false do
+    let(:role) { roles(:bottom_member) }
+    let(:tomorrow) { Time.zone.tomorrow }
+
+    before { sign_in }
+
+    it 'sets delete_on and rerenders' do
+      visit edit_group_role_path(group_id: role.group_id, id: role.id)
+      fill_in 'Bis', with: tomorrow
+      all('form .btn-toolbar').first.click_button 'Speichern'
+      expect(page).to have_content 'Rolle Member für Bottom Member in Bottom One wurde erfolgreich aktualisiert'
+      expect(role.reload.delete_on).to eq tomorrow
+    end
+
+    it 'shows delete_on date' do
+      role.update(delete_on: tomorrow)
+      visit edit_group_role_path(group_id: role.group_id, id: role.id)
+      expect(page).to have_field 'Bis', with: tomorrow.strftime("%d.%m.%Y")
+    end
+  end
+
   it 'toggles people fields' do
     obsolete_node_safe do
       skip 'expected to find visible css "#role_person" but there were no matches'

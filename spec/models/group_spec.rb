@@ -598,40 +598,58 @@ describe Group do
     end
 
     context 'archive!' do
-      it 'archives all roles with same timestamp' do
-        group = groups(:top_group)
 
-        group.archive!
+      describe 'roles' do
+        let(:group) { groups(:top_group) }
+        let(:role) { roles(:top_leader) }
 
-        expect(group).to be_archived
-        role = group.roles.first
+        it 'archives all roles with same timestamp' do
+          group.archive!
 
-        expect(role).to be_archived
-        expect(group.archived_at).to eq(role.archived_at)
+          expect(group).to be_archived
+          expect(role).to be_archived
+          expect(group.archived_at).to eq(role.archived_at)
+        end
+
+        it 'future delete_on values are set to nil' do
+          role.update!(delete_on: 3.days.from_now)
+          group.archive!
+
+          expect(group).to be_archived
+          expect(role.reload.delete_on).to be_nil
+        end
+
+        it 'past delete_on values are kept' do
+          role.update!(created_at: 5.days.ago, delete_on: 3.days.ago)
+          group.archive!
+
+          expect(group).to be_archived
+          expect(role.reload.delete_on).to be_present
+        end
       end
 
-      it 'deletes all attached mailing lists' do
-        group = groups(:top_layer)
+      describe 'mailing lists' do
+        let(:group) { groups(:top_layer) }
 
-        expect(group.mailing_lists.size).to eq(2)
+        it 'deletes all attached mailing lists' do
+          expect(group.mailing_lists.size).to eq(2)
 
-        expect do
-          group.archive!
-        end.to change { MailingList.count }.by(-2)
+          expect do
+            group.archive!
+          end.to change { MailingList.count }.by(-2)
 
-        expect(group.mailing_lists).to be_empty
-      end
+          expect(group.mailing_lists).to be_empty
+        end
 
-      it 'deletes all attached subscriptions' do
-        group = groups(:top_layer)
+        it 'deletes all attached subscriptions' do
+          expect(group.subscriptions.size).to eq(1)
 
-        expect(group.subscriptions.size).to eq(1)
+          expect do
+            group.archive!
+          end.to change { Subscription.count }.by(-1)
 
-        expect do
-          group.archive!
-        end.to change { Subscription.count }.by(-1)
-
-        expect(group.subscriptions).to be_empty
+          expect(group.subscriptions).to be_empty
+        end
       end
     end
 
@@ -750,5 +768,122 @@ describe Group do
       expect(custom_cat_attr_names).to include(:custom_name)
     end
 
+  end
+
+  context 'name' do
+    let(:group) { groups(:bottom_layer_one) }
+
+    context 'with static_name=false' do
+      before { group.static_name = false }
+
+      it '#name returns name' do
+        expect(group.name).to eq 'Bottom One'
+      end
+
+      it '#name= sets name' do
+        expect { group.name = 'Another Name' }.
+          to change { group.read_attribute(:name) }.to('Another Name')
+      end
+    end
+
+    context 'with static_name=true' do
+      before { group.static_name = true }
+      after { group.static_name = false }
+
+      it '#name returns class label' do
+        expect(group.name).to eq 'Bottom Layer'
+      end
+
+      it '#name= noops' do
+         expect { group.name = 'Another Name' }.
+           not_to change { group.read_attribute(:name) }
+      end
+    end
+  end
+
+  context 'type' do
+    let(:group) { groups(:bottom_group_two_one) }
+    let(:duplicate) { group.dup }
+
+    context 'with static_name=false' do
+      before { group.class.static_name = false }
+
+      it 'uniqueness is not validated' do
+        duplicate.validate
+        expect(duplicate.errors[:type]).to be_empty
+      end
+    end
+
+    context 'with static_name=true' do
+      before { group.class.static_name = true }
+      after { group.class.static_name = false }
+
+      it 'uniqueness is validated for same parent_id' do
+        duplicate.validate
+        expect(duplicate.errors[:type]).to include('ist bereits vergeben')
+      end
+
+      it 'uniqueness is not validated for different parent_id' do
+        duplicate.parent_id = 99999
+        duplicate.validate
+        expect(duplicate.errors[:type]).to be_empty
+      end
+    end
+  end
+
+  context 'addable_child_types' do
+    let(:group) { Fabricate(Group::BottomLayer.name) }
+    let(:child_type) { Group::BottomGroup }
+
+    context 'with static_name=false' do
+      before { child_type.static_name = false }
+
+      it 'when no children exist returns possible_children' do
+        expect(group.addable_child_types).to match_array([
+                                                        Group::BottomGroup,
+                                                        Group::MountedAttrsGroup,
+                                                        Group::GlobalGroup
+                                                      ])
+      end
+
+      it 'when children exist returns possible_children' do
+        Fabricate(Group::BottomGroup.name, parent: group)
+        expect(group.addable_child_types).to match_array([
+                                                        Group::BottomGroup,
+                                                        Group::MountedAttrsGroup,
+                                                        Group::GlobalGroup
+                                                      ])
+      end
+    end
+
+    context 'with static_name=true' do
+      before { child_type.static_name = true }
+      after { child_type.static_name = false }
+
+      it 'when no children exist returns possible_children' do
+        expect(group.addable_child_types).to match_array([
+                                                        Group::BottomGroup,
+                                                        Group::MountedAttrsGroup,
+                                                        Group::GlobalGroup
+                                                      ])
+      end
+
+      it 'when only deleted children exist returns possible_children' do
+        Fabricate(Group::BottomGroup.name, parent: group, deleted_at: 1.day.ago)
+        expect(group.addable_child_types).to match_array([
+                                                        Group::BottomGroup,
+                                                        Group::MountedAttrsGroup,
+                                                        Group::GlobalGroup
+                                                      ])
+      end
+
+      it 'when children exist returns possible_children minus existing child types' do
+        Fabricate(Group::BottomGroup.name, parent: group)
+        expect(group.addable_child_types).to match_array([
+                                                        Group::MountedAttrsGroup,
+                                                        Group::GlobalGroup
+                                                      ])
+      end
+    end
   end
 end

@@ -1708,6 +1708,10 @@ de:
       flash:
         success: Du wurdest erfolgreich registriert
 
+  self_registration_reasons:
+    destroy:
+      foreign_key_error: Es gibt Personen, die diesen Eintrittsgrund verwenden, löschen ist daher nicht möglich.
+
   roles:
     full_entry_label: '%{model_label} <i>%{role}</i> für <i>%{person}</i> in <i>%{group}</i>'
     role_changed: '%{full_entry_label} zu <i>%{new_role}</i> geändert.'

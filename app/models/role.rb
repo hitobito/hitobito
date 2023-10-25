@@ -9,14 +9,16 @@
 #
 # Table name: roles
 #
-#  id         :integer          not null, primary key
-#  deleted_at :datetime
-#  label      :string(255)
-#  type       :string(255)      not null
-#  created_at :datetime
-#  updated_at :datetime
-#  group_id   :integer          not null
-#  person_id  :integer          not null
+#  id          :integer          not null, primary key
+#  archived_at :datetime
+#  delete_on   :date
+#  deleted_at  :datetime
+#  label       :string(255)
+#  type        :string(255)      not null
+#  created_at  :datetime
+#  updated_at  :datetime
+#  group_id    :integer          not null
+#  person_id   :integer          not null
 #
 # Indexes
 #
@@ -40,7 +42,7 @@ class Role < ActiveRecord::Base
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   class_attribute :used_attributes
-  self.used_attributes = [:label, :created_at, :deleted_at]
+  self.used_attributes = [:label, :created_at, :deleted_at, :delete_on]
 
   # Attributes that may only be modified by people from superior layers.
   class_attribute :superior_attributes
@@ -102,11 +104,11 @@ class Role < ActiveRecord::Base
   validates_by_schema
   validate :assert_type_is_allowed_for_group, on: :create
 
-  validates :created_at, presence: true, if: :deleted_at
+  validates :created_at, presence: true, if: :delete_on
   validates_date :created_at,
-                 if: :deleted_at,
-                 on_or_before: :deleted_at,
-                 on_or_before_message: :cannot_be_later_than_deleted_at
+                 if: :delete_on,
+                 on_or_before: :delete_on,
+                 on_or_before_message: :cannot_be_later_than_delete_on
 
   validates_date :created_at,
                  allow_nil: true,
@@ -119,13 +121,10 @@ class Role < ActiveRecord::Base
   after_create :set_first_primary_group
   after_destroy :reset_contact_data_visible
   after_destroy :reset_primary_group
-  after_update :reset_primary_group
 
   before_save :prevent_changes, if: ->(r) { r.archived? }
 
   ### SCOPES
-
-  include Paranoia::FutureDeletedAtScope
 
   scope :without_archived, -> { where(archived_at: nil) }
   scope :only_archived, -> { where.not(archived_at: nil).where(archived_at: ..Time.now.utc) }

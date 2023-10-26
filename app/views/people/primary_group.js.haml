@@ -3,5 +3,4 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-$('.fa-star').removeClass('fa').addClass('far');
-$('a.group-#{params[:primary_group_id]} i').addClass('fa').removeClass('far');
+$('section.roles').html("#{j(render(partial: 'roles'))}");

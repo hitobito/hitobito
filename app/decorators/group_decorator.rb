@@ -12,6 +12,15 @@ class GroupDecorator < ApplicationDecorator
 
   include ContactableDecorator
 
+  def primary_group_toggle_link(person, group, title: I18n.t('people.roles_aside.set_main_group'))
+    return unless can?(:primary_group, person)
+
+    icon = helpers.icon(:star, filled: person.primary_group_id == model.id)
+    path = helpers.primary_group_group_person_path(group, person, primary_group_id: model.id)
+    attrs = { title: title, alt: title, class: "group-#{model.id}" }
+    helpers.link_to(icon, path, attrs.merge(data: { method: :put, remote: true }))
+  end
+
   def prepend_complete_address(html)
     if contact
       html << "c/o #{contact}"

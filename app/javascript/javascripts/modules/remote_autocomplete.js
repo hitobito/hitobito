@@ -60,6 +60,9 @@
             } else {
               autoCompleteInput.input.value = selection.label;
               document.getElementById(adjustSelector(autoCompleteInput.input.dataset.idField)).value = selection.id;
+              if (document.getElementById(autoCompleteInput.input.dataset.idField).dataset.url) {
+                getIdFieldUrl(document.getElementById(autoCompleteInput.input.dataset.idField))
+              }
             }
           }
         }
@@ -82,6 +85,16 @@
     }
 
     return label;
+  }
+
+  function getIdFieldUrl(idField) {
+    let idFieldUrl = idField.dataset.url
+    let name = idField.name
+    let id = idField.value
+    $.ajax({
+      url: idFieldUrl + '?' + name + '=' + id,
+      method: 'GET'
+    });
   }
 
   function labelWithIcon(icon, label) {

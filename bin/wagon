@@ -25,8 +25,8 @@ core_dir="$(readlink -f $(dirname "$core_bin_dir"))" # directory of hitobito (-c
 
 # helpers
 function require_wagon_name() {
-  if [[ $wagon_name = 'no wagon selected' ]]; then
-    echo "you must select a wagon to manage"
+  if [[ $wagon_name = 'No wagon selected' ]]; then
+    echo "You must select a wagon to manage"
     bin/active_wagon.rb nonexisting
     exit 1
   fi
@@ -47,7 +47,7 @@ function clone_wagon() {
 }
 
 function setup_idea_project() {
-  echo "setting up idea project"
+  echo "Setting up idea project"
   mkdir -p "../hitobito_${wagon_name}/.idea"
 
   cat << IML > "../hitobito_${wagon_name}/.idea/hitobito_${wagon_name}.xml"
@@ -79,12 +79,18 @@ MODULE
 }
 
 function recreate_dbs() {
-  echo "recreating dev and test databases"
+  echo "Recreating dev sb (${RAILS_DB_NAME}) and test db (${RAILS_TEST_DB_NAME})"
+  if [[ -z ${RAILS_DB_NAME} || -z ${RAILS_TEST_DB_NAME} ]]; then
+    echo "RAILS_DB_NAME and RAILS_TEST_DB_NAME must both be set."
+    echo "Maybe you forgot to activate a WAGON?"
+    exit 1
+  fi
+
   cat << SQL | mysql -u "${RAILS_DB_USERNAME:-hitobito}" -p"${RAILS_DB_PASSWORD:-hitobito}" -h "${RAILS_DB_HOST:-127.0.0.1}" -P "${RAILS_DB_PORT:-33066}"
-DROP DATABASE IF EXISTS hit_${wagon_name}_development;
-CREATE DATABASE hit_${wagon_name}_development;
-DROP DATABASE IF EXISTS hit_${wagon_name}_test;
-CREATE DATABASE hit_${wagon_name}_test;
+DROP DATABASE IF EXISTS ${RAILS_DB_NAME};
+CREATE DATABASE ${RAILS_DB_NAME};
+DROP DATABASE IF EXISTS ${RAILS_TEST_DB_NAME};
+CREATE DATABASE ${RAILS_TEST_DB_NAME};
 SQL
 }
 
@@ -94,7 +100,7 @@ function setup_dbs() {
 }
 
 function setup_development_db() {
-    echo "migrating and seeding development database"
+    echo "Migrating and seeding development database"
     bundle exec rails db:migrate
     bundle exec rails wagon:migrate
     bundle exec rails db:seed
@@ -102,7 +108,7 @@ function setup_development_db() {
 }
 
 function setup_test_db() {
-    echo "preparing test database"
+    echo "Preparing test database"
     bundle exec rails db:structure:dump_sql
     RAILS_ENV=test rails db:structure:load_sql
     rm -f db/structure.sql
@@ -138,14 +144,17 @@ case $cmd in
     setup_dbs
     ;;
 
+  clone)
+    require_wagon_name
+    clone_wagon
+    ;;
+
   create-idea-project)
     require_wagon_name
     setup_idea_project
   ;;
 
   reset-database)
-    require_wagon_name
-    bin/active_wagon.rb "$wagon_name"
     recreate_dbs
     setup_dbs
   ;;
@@ -309,11 +318,6 @@ case $cmd in
     popd
     ;;
 
-  clone)
-    require_wagon_name
-    clone_wagon
-    ;;
-
   overwritten-in-wagon)
     git diff master.. --name-only app/views/ |\
       xargs -L1 -I% find ../ -path "*/%" -a \! -regex ".*\(ose_composition\|hitobito-development\).*"
@@ -380,12 +384,11 @@ COMPLETION
   # TODO: add these in the right place
   # bootstrap
   # create-idea-project
-  # clone
   help|*)
-    echo "USAGE: $0 [activate] <PROJECT>"
-    echo "       $0 [test-prepare|test-speedup|core-spec|update-copyright]"
+    echo "USAGE: $0 [activate] <WAGON>|core"
+    echo "       $0 [clone] <WAGON>"
+    echo "       $0 [reset-database|test-prepare|test-speedup|core-spec|update-copyright]"
     echo "       $0 [grep] <TERM>"
-    echo "       $0 [reset-database] <WAGON>"
     echo "       $0 [git|git-all] <ARGS>"
     echo "       $0 [gemfile|configs|binstubs|list]"
     echo

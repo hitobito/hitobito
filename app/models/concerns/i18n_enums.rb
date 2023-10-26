@@ -15,22 +15,22 @@ module I18nEnums
   module ClassMethods
 
     # possible_values should be an array of strings or a proc that returns an array of strings
-    def i18n_enum(attr, possible_values = nil, scopes: false, queries: false, key: nil, &block)
+    def i18n_enum(attr, possible_values = nil, scopes: false, queries: false, key: nil, i18n_prefix: nil, &block)
       raise 'either possible_values or a block must be given' unless possible_values || block_given?
       raise 'cannot generate scopes/queries using a block' if block_given? && (scopes || queries)
 
       key ||= attr.to_s.pluralize
-      i18n_prefix = "activerecord.attributes.#{name.underscore}.#{key}"
+      prefix = i18n_prefix || "activerecord.attributes.#{name.underscore}.#{key}"
 
       validates attr, inclusion: { in: block || possible_values }, allow_blank: true
 
       define_method("#{attr}_label") do |value = nil|
         value ||= send(attr)
-        I18n.t("#{i18n_prefix}.#{value.to_s.downcase.presence || NIL_KEY}")
+        I18n.t("#{prefix}.#{value.to_s.downcase.presence || NIL_KEY}")
       end
 
       define_singleton_method("#{attr}_labels") do
-        I18n.t(i18n_prefix).except(NIL_KEY.to_sym)
+        I18n.t(prefix).except(NIL_KEY.to_sym)
       end
 
       possible_values&.each do |value|

@@ -88,6 +88,7 @@ RSpec.configure do |config|
 
   config.include(MailerMacros)
   config.include(EventMacros)
+  config.include I18nHelpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include FeatureHelpers, type: :feature
@@ -133,6 +134,13 @@ RSpec.configure do |config|
                 ActionHelper,
                 InvoicesHelper,
                 ContactableHelper)
+  end
+
+  # reset current locale and reload translations after example run
+  config.around do |example|
+    original_locale = I18n.locale
+    example.call
+    I18n.locale = original_locale
   end
 
   config.around(:each, js: true) do |example|

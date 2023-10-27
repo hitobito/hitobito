@@ -59,9 +59,18 @@
               autoCompleteInput.input.value = selection.label + " wird geöffnet..."
             } else {
               autoCompleteInput.input.value = selection.label;
-              document.getElementById(adjustSelector(autoCompleteInput.input.dataset.idField)).value = selection.id;
-              if (document.getElementById(autoCompleteInput.input.dataset.idField).dataset.url) {
-                getIdFieldUrl(document.getElementById(autoCompleteInput.input.dataset.idField))
+              if (input.data('updater')) {
+                var updaterString = autoCompleteInput.input.dataset.updater;
+                var updaterFunction = app;
+                updaterString.split('.').forEach(function (part) {
+                  updaterFunction = updaterFunction[part];
+                });
+                updaterFunction(JSON.stringify(selection));
+              } else {
+                setEntityId(autoCompleteInput, selection)
+                if (document.getElementById(autoCompleteInput.input.dataset.idField).dataset.url) {
+                  getIdFieldUrl(document.getElementById(autoCompleteInput.input.dataset.idField))
+                }
               }
             }
           }
@@ -85,6 +94,10 @@
     }
 
     return label;
+  }
+
+  function setEntityId(autoCompleteInput, selection) {
+    document.getElementById(adjustSelector(autoCompleteInput.input.dataset.idField)).value = selection.id;
   }
 
   function getIdFieldUrl(idField) {

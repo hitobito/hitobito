@@ -66,7 +66,7 @@ module Hitobito
 
     config.active_record.time_zone_aware_types = [:datetime, :time]
 
-    config.active_record.yaml_column_permitted_classes = [Symbol, ActiveSupport::HashWithIndifferentAccess, Time]
+    config.active_record.yaml_column_permitted_classes = [Symbol, ActiveSupport::HashWithIndifferentAccess, Time, Date]
 
     # Deviate from default here for now, revisit later
     config.active_record.belongs_to_required_by_default = false

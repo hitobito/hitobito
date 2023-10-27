@@ -22,7 +22,10 @@ module Release
       super(name, takes_commands: false)
       short_desc("Prepare composition-repo for #{name}-release")
 
-      options.on('-dDIRECTORY', '--dir DIRECTORY', 'Use DIRECTORY as base to find all repos') do |d|
+      options.on(
+        '-dDIRECTORY', '--dir DIRECTORY',
+        'Use DIRECTORY as base to find all repos'
+      ) do |d|
         @dir = File.expand_path(d)
       end
 
@@ -35,8 +38,7 @@ module Release
       end
 
       options.on(
-        '-CDIR',
-        '--composition-dir DIR',
+        '-CDIR', '--composition-dir DIR',
         'Directory of composition-repo to update at the end'
       ) do |d|
         @composition_dir = d

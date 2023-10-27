@@ -107,7 +107,7 @@ Rails.application.config.to_prepare do
         scope: :nextcloud,
         response: [:user_info, :id_token],
         generator: Proc.new do |resource_owner|
-          resource_owner.roles.map(&:nextcloud_group).uniq.compact
+          resource_owner.roles.map(&:nextcloud_group).map(&:to_h).uniq.compact
         end
       )
   end

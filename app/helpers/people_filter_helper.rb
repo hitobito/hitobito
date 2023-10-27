@@ -55,10 +55,10 @@ module PeopleFilterHelper
                     select(:filters, "attributes[#{time}][constraint]",
                       filters,
                       { selected: constraint },
-                      html_options.merge(class: 'attribute_constraint_dropdown form-select form-select-sm'))
+                      html_options.merge(class: 'attribute_constraint_dropdown ms-2 form-select form-select-sm'))
       end
 
-      attribute_value_class = "form-control form-control-sm attribute_value_input#{type == :date ? ' date' : ''}"
+      attribute_value_class = "form-control form-control-sm ms-3 mt-1 attribute_value_input#{type == :date ? ' date' : ''}"
       content << content_tag(:div, class: 'col-2') do
         text_field_tag("filters[attributes][#{time}][value]",
                                 value,
@@ -66,7 +66,7 @@ module PeopleFilterHelper
         end
 
       content << link_to(icon(:'trash-alt', filled: false), '#',
-                         class: 'remove_filter_attribute col lh-lg ps-3')
+                         class: 'remove_filter_attribute col-1 me-auto lh-lg ps-4 pt-1')
     end
   end
 

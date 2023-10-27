@@ -29,7 +29,7 @@ module Release
         @dir = File.expand_path(d)
       end
 
-      @wagons = "\w+"
+      @wagons = '\w+'
       options.on(
         '-wWAGONS', '--wagons WAGONS',
         'Select wagons to work on with a comma-separated list'

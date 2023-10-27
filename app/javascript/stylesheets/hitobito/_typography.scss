@@ -112,7 +112,7 @@ dl {
 
 .dl-vertical {
   dd {
-    margin-bottom: $vSpace / 4;
+    margin-bottom: calc($vSpace / 4);
   }
 }
 

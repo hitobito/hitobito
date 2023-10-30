@@ -22,7 +22,7 @@ class PersonDuplicateSeeder
       doublet_attrs = { first_name: p.first_name,
                         last_name: p.last_name,
                         company_name: p.company_name,
-                        email: "#{Faker::Internet.user_name("#{p.first_name} #{p.last_name}")}@duplicates.example.com",
+                        email: Faker::Internet.email(name: "#{p.first_name} #{p.last_name}", domain: "duplicates.example.com"),
                         gender: %w(m w).shuffle.first,
                         encrypted_password: encrypted_password,
                         zip_code: p.zip_code,
@@ -40,7 +40,7 @@ class PersonDuplicateSeeder
   end
 
   private
-  
+
   def candidates
     Person.order('RAND()').limit(10)
   end

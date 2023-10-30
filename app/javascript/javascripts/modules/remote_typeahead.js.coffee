@@ -94,20 +94,27 @@ escapeLabel = (item) ->
 typeaheadHighlighter = (item) ->
   query = this.query.trim().replace(/[\-\[\]{}()*+?.,\\\^$|#]/g, '\\$&')
   query = query.replace(/\s+/g, '|')
-  label = labelWithIcon(JSON.parse(item))
+  label = JSON.parse(item).label
   if query
-    highlightQuery(label, query)
+    label = highlightQuery(label, query)
   else
     label
+  labelWithIcon(label, JSON.parse(item))
 
 highlightQuery = (label, query) ->
   label.replace(new RegExp('(' + query + ')', 'ig'), ($1, match) -> '<strong>' + match + '</strong>')
 
-labelWithIcon = (item) ->
+labelWithIcon = (label, item) ->
   if item.icon
-    '<i class="fa fa-' + item.icon + '"></i> ' + item.label
+    "#{iconClass(item.icon)} #{label}"
   else
-    item.label
+    label
+
+iconClass = (iconType) ->
+  icon = document.createElement("i");
+  icon.classList.add("fa", "fa-" + iconType);
+
+  return icon.outerHTML
 
 isModifyingKey = (k) ->
   ! (k == 20 || # Caps lock */

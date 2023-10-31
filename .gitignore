@@ -93,3 +93,7 @@ yarn-debug.log*
 .yarn-integrity
 config/initializers/work_around_docker_fs_bug.rb
 config/mail.yml
+
+# docker dev setup
+/jwt_signing_key.pem
+/db/seeds/development/nextcloud_oauth_app_seed.rb

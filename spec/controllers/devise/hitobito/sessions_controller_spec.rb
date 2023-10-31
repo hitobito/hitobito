@@ -40,6 +40,34 @@ describe Devise::Hitobito::SessionsController do
         expect(controller.send(:current_person)).to be_present
         expect(controller.send(:current_person).authentication_token).to be_blank
       end
+
+      context 'with second factor authentication' do
+        before do
+          Authenticatable::TwoFactors::Totp.new(person, { pending_totp_secret: 'bla' }).register!
+        end
+
+        it 'resets the session and redirects to second factor authentication' do
+          post :create, params: { person: { email: person.email, password: password } }
+
+          expect(response).to redirect_to(new_users_second_factor_path)
+          expect(session).to_not have_key('warden.user.person.key')
+          expect(session).to_not have_key('warden.user.person.session')
+          expect(session).to have_key('pending_two_factor_person_id')
+          expect(session).to have_key('pending_second_factor_authentication')
+        end
+
+        it 'does not clear already present remember_created_at' do
+          remember_timestamp = 10.minutes.ago.round # activerecord rounds before saving anyways
+          person.update!(remember_created_at: remember_timestamp)
+
+          post :create, params: { person: { email: person.email, password: password } }
+
+          person.reload
+
+          expect(person.remember_created_at).to be_present
+          expect(person.remember_created_at).to eq(remember_timestamp)
+        end
+      end
     end
 
     context '.json' do

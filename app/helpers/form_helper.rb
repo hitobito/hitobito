@@ -27,7 +27,9 @@ module FormHelper
                              else
                                polymorphic_path(path_args(entry))
                              end
-    attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
+    unless block_given?
+      attrs = attrs_or_default(attrs) { default_attrs - [:created_at, :updated_at] }
+    end
     crud_form(path_args(entry), *attrs, options, &block)
   end
 

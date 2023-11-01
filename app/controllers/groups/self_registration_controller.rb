@@ -11,13 +11,14 @@ class Groups::SelfRegistrationController < CrudController
   skip_authorization_check
   skip_authorize_resource
 
-  before_action :assert_empty_honeypot, only: [:create]
-
+  before_action :assert_empty_honeypot, only: [:create, :step]
+  before_create :set_privacy_policy_acceptance
   before_action :redirect_to_group_if_necessary
-
   after_create :send_notification_email
 
   delegate :self_registration_active?, to: :group
+
+  helper_method :policy_finder
 
   def create
     super do
@@ -38,17 +39,11 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def build_entry
-    role = super
-    role.group = group
-    role.type = group.self_registration_role_type
-    role.person = Person.new(person_attrs)
-    role
+    Groups::SelfRegistration.new(group: group, params: model_params)
   end
 
   def save_entry
-    ActiveRecord::Base.transaction do
-      person.valid? && privacy_policy_accepted? && person.save && entry.save
-    end
+    privacy_policy_accepted? && entry.save
   end
 
   def return_path
@@ -85,17 +80,13 @@ class Groups::SelfRegistrationController < CrudController
   end
 
   def valid?
-    privacy_policy_accepted? && entry.valid? && person.valid?
+    privacy_policy_accepted? && entry.valid?
   end
 
-  def person_attrs
-    model_params&.require(:new_person)
-      &.permit(*PeopleController.permitted_attrs)
-      &.merge(primary_group_id: group.id)
-  end
-
-  def privacy_policy_param
-    model_params&.require(:new_person)[:privacy_policy_accepted]
+  def set_privacy_policy_acceptance
+    if policy_finder.acceptance_needed?
+      entry.set_privacy_policy_acceptance(privacy_policy_param)
+    end
   end
 
   def group
@@ -110,11 +101,7 @@ class Groups::SelfRegistrationController < CrudController
     false
   end
 
-  def path_args(entry)
-    [group, entry]
-  end
-
   def self.model_class
-    @model_class ||= Role
+    @model_class ||= Groups::SelfRegistration
   end
 end

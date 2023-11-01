@@ -69,6 +69,7 @@ Hitobito::Application.routes.draw do
       end
 
       get 'self_registration' => 'groups/self_registration#new'
+      post 'self_registration/step' => 'groups/self_registration#step'
       post 'self_registration' => 'groups/self_registration#create'
 
       get 'self_inscription' => 'groups/self_inscription#new'

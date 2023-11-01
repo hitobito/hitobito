@@ -6,8 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Groups::SelfRegistration
-  include ActiveModel::Model
-  extend ActiveModel::Naming
+  include TransientModel
 
   attr_accessor :group, :person_attributes, :step, :single
 
@@ -16,15 +15,22 @@ class Groups::SelfRegistration
 
   def initialize(group:, params:)
     @group = group
-    @step = params[:step].to_i
-    @person_attributes = extract_attrs(params, :person_attributes).to_h
+    @step = (params || {})[:step].to_i
+    @person_attributes = extract_attrs(params, :person_attributes)
   end
 
-  def save!
+  def save
     Person.transaction do
       person_model = create_person
       create_role(person_model)
     end
+    true
+  rescue
+    false
+  end
+
+  def set_privacy_policy_acceptance(value)
+    person.privacy_policy_accepted = value
   end
 
   def valid?
@@ -51,14 +57,19 @@ class Groups::SelfRegistration
     @step.zero?
   end
 
+  def self.base_class
+    Groups::SelfRegistration
+  end
+
   private
 
   def build_person(attrs, model_class = Person)
-    model_class.new(attrs)
+    model_class.new(attrs.merge(primary_group_id: group.id))
   end
 
   def create_person
     person.save!
+    person
   end
 
   def create_role(person)
@@ -69,8 +80,10 @@ class Groups::SelfRegistration
     )
   end
 
-  def extract_attrs(nested_params, key, array: false)
-    params = nested_params.dig(self.class.model_name.param_key.to_sym, key).to_h
+  def extract_attrs(params, key, permitted_attrs: PeopleController.permitted_attrs, array: false)
+    return {} if params.nil?
+
+    params = params.require(key).permit(*permitted_attrs)
     array ? params.values : params
   end
 

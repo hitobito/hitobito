@@ -15,7 +15,7 @@ class Groups::SelfInscriptionController < CrudController
   delegate :self_registration_active?, to: :group
 
   def create
-    @role = build_entry
+    @role = build_role
     @role.save
     send_notification_email
     redirect_with_message(notice: t('.role_saved'))
@@ -23,7 +23,7 @@ class Groups::SelfInscriptionController < CrudController
 
   protected
 
-  def build_entry
+  def build_role
     group.self_registration_role_type.constantize.new(
       group: group,
       person: person
@@ -49,17 +49,20 @@ class Groups::SelfInscriptionController < CrudController
   end
 
   def redirect_to_group_if_necessary
-    if Role.where(
-                  person: person,
-                  group: group,
-                  type: group.self_registration_role_type,
-                  archived_at: nil,
-                  deleted_at: nil
-                 ).present?
-      return redirect_with_message(alert: t('.role_exists'))
-    end
+    if self_registration_active?
+      if Role.where(
+          person: person,
+          group: group,
+          type: group.self_registration_role_type,
+          archived_at: nil,
+          deleted_at: nil
+        ).present?
 
-    redirect_with_message(alert: t('.disabled')) unless self_registration_active?
+        redirect_with_message(alert: t('.role_exists'))
+      end
+    else
+      redirect_with_message(alert: t('.disabled'))
+    end
   end
 
   def group

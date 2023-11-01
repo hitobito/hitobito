@@ -59,7 +59,6 @@ describe InvoicesController do
       update_issued_at_to_current_year
       visit group_invoices_path(group)
       check 'all'
-      raise
       click_link 'Rechnung stellen / mahnen'
       click_link 'Status setzen (Gestellt/Gemahnt)'
       expect(page).to have_content(/2 Rechnungen wurden gemahnt/)

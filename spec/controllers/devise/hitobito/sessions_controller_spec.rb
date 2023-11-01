@@ -87,7 +87,7 @@ describe Devise::Hitobito::SessionsController do
         end
 
         it 'allows login with nickname' do
-          person.update(nickname: 'foobar')
+          person.update!(nickname: 'foobar')
           post :create, params: { person: { login_identity: 'foobar', password: password } }
           expect_login_success
         end

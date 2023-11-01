@@ -314,7 +314,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   # Used to enable login with any of the attributes configured in `devise_login_id_attrs`
   def login_identity
-    @login_identity || Array.wrap(devise_login_id_attrs).map {|key| send(key).presence }.compact.first
+    @login_identity || Array.wrap(devise_login_id_attrs).map do |key|
+      send(key).presence
+    end.compact.first
   end
   attr_writer :login_identity
 

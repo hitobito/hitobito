@@ -17,7 +17,7 @@ module I18nHelper
   #  - {parent_controller}.global.{key}
   #  - ...
   #  - global.{key}
-  def translate_inheritable(key, **variables)
+  def translate_inheritable(key, **variables) # rubocop:disable Metrics/MethodLength
     defaults = []
     unless controller.try(:skip_translate_inheritable)
       partial = @virtual_path ? @virtual_path.gsub(/.*\/_?/, '') : nil

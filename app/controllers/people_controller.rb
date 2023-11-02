@@ -268,4 +268,10 @@ class PeopleController < CrudController
   def group_archived_and_no_filter
     group.archived? && list_filter_args[:filters].nil?
   end
+
+  def model_scope
+    super.yield_self do |scope|
+      action_name == 'show' ? scope.includes(roles: :group) : scope
+    end
+  end
 end

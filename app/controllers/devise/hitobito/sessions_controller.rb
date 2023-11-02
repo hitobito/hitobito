@@ -19,6 +19,8 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
                 if: :two_factor_authentication_pending?,
                 only: [:new]
 
+  before_action :configure_permitted_parameters
+
   def create
     super do |resource|
       if second_factor_required?(resource)
@@ -35,6 +37,12 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
         return
       end
     end
+  end
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:login_identity])
   end
 
   private

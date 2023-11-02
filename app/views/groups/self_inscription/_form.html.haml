@@ -5,6 +5,8 @@
 
 %p= t('.description')
 
+= render_extensions :details
+
 = action_button(t('.inscribe'),
                   group_self_inscription_path,
                   nil,

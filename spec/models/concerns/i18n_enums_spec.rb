@@ -45,4 +45,48 @@ describe I18nEnums do
   it 'has class side method to return all labels' do
     expect(Person.gender_labels).to eq(m: 'männlich', w: 'weiblich')
   end
+
+  context 'with i18n_prefix override' do
+    before do
+      clazz = Class.new(Person) do
+        attr_accessor :gender_identity
+        i18n_enum :gender_identity, Person::GENDERS, i18n_prefix: 'foo.bar'
+      end
+      stub_const('Individual', clazz)
+    end
+
+    let(:individual) { Individual.new(first_name: 'Dummy') }
+
+    around do |example|
+      with_translations(
+        de: { foo: { bar: { m: 'maskulin', w: 'feminin', _nil: 'undefiniert' } } },
+        fr: { foo: { bar: { m: 'mâle', w: 'femelle', _nil: 'indéfini' } } }
+      ) do
+        example.call
+      end
+    end
+
+    it 'returns translated labels' do
+      individual.gender_identity = 'm'
+      expect(individual.gender_identity_label).to eq 'maskulin'
+      individual.gender_identity = 'w'
+      expect(individual.gender_identity_label).to eq 'feminin'
+      individual.gender_identity = nil
+      expect(individual.gender_identity_label).to eq 'undefiniert'
+    end
+
+    it 'returns translated label in french' do
+      I18n.locale = :fr
+      individual.gender_identity = 'm'
+      expect(individual.gender_identity_label).to eq 'mâle'
+      individual.gender_identity = 'w'
+      expect(individual.gender_identity_label).to eq 'femelle'
+      individual.gender_identity = ''
+      expect(individual.gender_identity_label).to eq 'indéfini'
+    end
+
+    it 'has class side method to return all labels' do
+      expect(Individual.gender_identity_labels).to eq(m: 'maskulin', w: 'feminin')
+    end
+  end
 end

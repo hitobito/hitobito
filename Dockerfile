@@ -249,7 +249,9 @@ RUN mkdir -p tmp/pids \
     && chgrp -R 0 $HOME/log \
     && chmod u+w,g=u $HOME \
     && chmod -R u+w,g=u $HOME/tmp \
-    && chmod -R u+w,g=u $HOME/log
+    && chmod -R u+w,g=u $HOME/log \
+    && chmod a+w $HOME/db/schema.rb \
+    && chmod a+w $HOME/vendor/wagons/*/db/seeds/
 
 # Install specific versions of dependencies
 # (not required with newer bundler versions)

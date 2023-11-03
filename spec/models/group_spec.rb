@@ -626,6 +626,15 @@ describe Group do
           expect(group).to be_archived
           expect(role.reload.delete_on).to be_present
         end
+
+        it 'future roles are hard deleted' do
+          Fabricate(:future_role, person: role.person, group: group, convert_to: group.role_types.first)
+          expect do
+            group.archive!
+          end.to change { group.roles.with_deleted.future.count }.by(-1)
+
+          expect(group).to be_archived
+        end
       end
 
       describe 'mailing lists' do

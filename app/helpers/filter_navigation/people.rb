@@ -63,14 +63,17 @@ module FilterNavigation
 
     def init_kind_items
       @kind_filter_names.each do |kind, name|
-        types = group.role_types.select { |t| t.kind == kind }
-        next unless visible_role_types?(types)
+        role_types = filter_role_types(kind)
+        next unless visible_role_types?(role_types)
 
-        count = group.people.where(roles: { type: types.collect(&:sti_name) }).distinct.count
-        path = kind == :member ? path() : fixed_types_path(name, types)
-
-        item(name, path, count)
+        count = count_roles(role_types)
+        path = kind == :member ? path() : fixed_types_path(name, role_types)
+        item(name, path, count) unless skip_kind?(kind, count)
       end
+    end
+
+    def filter_role_types(kind)
+      (group.role_types + [FutureRole]).select { |t| t.kind == kind }
     end
 
     def visible_role_types?(role_types)
@@ -208,5 +211,12 @@ module FilterNavigation
         true?(filter.chain.filters.first.args[:include_archived])
     end
 
+    def skip_kind?(kind, count)
+      true if kind == :future && count.zero?
+    end
+
+    def count_roles(role_types)
+      group.people.where(roles: { type: role_types.collect(&:sti_name) }).distinct.count
+    end
   end
 end

@@ -23,6 +23,7 @@ de:
     chosen_no_results: Keine Einträge gefunden mit
     selected: Ausgewählt
     columns: Spalten
+    start_on: ab %{date}
 
     gender:
       male: männlich
@@ -1570,6 +1571,7 @@ de:
 
     roles:
       title: Aktive Rollen
+      convertable_title: Zukünftige Rollen
 
     roles_aside:
       add_role: Rolle hinzufügen

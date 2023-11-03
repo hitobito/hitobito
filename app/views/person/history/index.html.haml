@@ -3,16 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-%h2= Role.model_name.human(count: 2)
-
-= table(@roles, class: 'table table-striped') do |t|
-  - t.col(Group.model_name.human) do |r|
-    = GroupDecorator.new(r.group).link_with_layer
-  - t.col(Role.model_name.human) do |r|
-    = r.to_s
-  - t.attr(:created_at, t('global.from'))
-  - t.attr(:deleted_at, t('global.until'))
-  - render_extensions :history_columns, locals: { t: t }
+= render "roles_table", title: Role.model_name.human(count: 2), roles: @roles
+= render("roles_table", title: FutureRole.model_name.human(count: 2), roles: @future_roles)
 
 = render_extensions :history_members_form
 

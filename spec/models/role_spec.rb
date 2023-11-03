@@ -11,14 +11,21 @@
 #
 #  id          :integer          not null, primary key
 #  archived_at :datetime
+#  convert_on  :date
+#  convert_to  :string(255)
 #  delete_on   :date
 #  deleted_at  :datetime
 #  label       :string(255)
 #  type        :string(255)      not null
 #  created_at  :datetime
 #  updated_at  :datetime
-#  deleted_at  :datetime
-#  archived_at :datetime
+#  group_id    :integer          not null
+#  person_id   :integer          not null
+#
+# Indexes
+#
+#  index_roles_on_person_id_and_group_id  (person_id,group_id)
+#  index_roles_on_type                    (type)
 #
 
 require 'spec_helper'

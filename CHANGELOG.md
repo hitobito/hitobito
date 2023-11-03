@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## Unreleased
+
+*  Rollen mit Start Datum in der Zukunft können erfasst werden (hitobito#2237)
+
 ## Version 1.30
 
 *  Der Buchungsbeleg berücksichtigt neu keine Rechnungen mit dem Status "Storniert" (hitobito_sww#136)

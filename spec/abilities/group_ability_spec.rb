@@ -22,6 +22,15 @@ describe GroupAbility do
       end
     end
 
+    context 'in own layer' do
+      let(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)) }
+      let(:group) { role.group }
+
+      it 'may manually delete people' do
+        is_expected.to be_able_to(:manually_delete_people, group)
+      end
+    end
+
     context 'in own group' do
       let(:group) { role.group }
 
@@ -119,6 +128,10 @@ describe GroupAbility do
       it 'may view log' do
         is_expected.to be_able_to(:log, group)
       end
+
+      it 'may not manually delete people' do
+        is_expected.to_not be_able_to(:manually_delete_people, group)
+      end
     end
   end
 
@@ -159,6 +172,10 @@ describe GroupAbility do
       it 'may view log' do
         is_expected.to be_able_to(:log, group)
       end
+
+      it 'may manually delete people' do
+        is_expected.to be_able_to(:manually_delete_people, group)
+      end
     end
 
     context 'in top layer' do
@@ -186,6 +203,10 @@ describe GroupAbility do
 
       it 'may not view log' do
         is_expected.to_not be_able_to(:log, group)
+      end
+
+      it 'may not manually delete people' do
+        is_expected.to_not be_able_to(:manually_delete_people, group)
       end
     end
   end
@@ -245,6 +266,10 @@ describe GroupAbility do
       it 'may view log' do
         is_expected.to be_able_to(:log, group)
       end
+
+      it 'may not manually delete people' do
+        is_expected.to_not be_able_to(:manually_delete_people, group)
+      end
     end
 
     context 'in group from same layer' do
@@ -285,6 +310,10 @@ describe GroupAbility do
       it 'may view log' do
         is_expected.to be_able_to(:log, group)
       end
+
+      it 'may not manually delete people' do
+        is_expected.to_not be_able_to(:manually_delete_people, group)
+      end
     end
 
     context 'in group from lower layer' do
@@ -324,6 +353,10 @@ describe GroupAbility do
 
       it 'may not view log' do
         is_expected.to_not be_able_to(:log, group)
+      end
+
+      it 'may not manually delete people' do
+        is_expected.to_not be_able_to(:manually_delete_people, group)
       end
     end
   end
@@ -391,6 +424,10 @@ describe GroupAbility do
 
       it 'may view log' do
         is_expected.to be_able_to(:log, group)
+      end
+
+      it 'may not manually delete people' do
+        is_expected.to_not be_able_to(:manually_delete_people, group)
       end
     end
 
@@ -470,6 +507,10 @@ describe GroupAbility do
 
       it 'may view log' do
         is_expected.to be_able_to(:log, group)
+      end
+
+      it 'may not manually delete people' do
+        is_expected.to_not be_able_to(:manually_delete_people, group)
       end
     end
 

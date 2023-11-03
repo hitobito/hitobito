@@ -77,6 +77,7 @@ class GroupAbility < AbilityDsl::Base
 
     permission(:admin).may(:manage_person_duplicates).if_layer_group_if_active
     permission(:layer_and_below_full).may(:manage_person_duplicates).if_permission_in_layer
+    permission(:layer_and_below_full).may(:manually_delete_people).if_permission_in_layer
 
     permission(:layer_full).may(:log).in_same_layer_if_active
     permission(:layer_and_below_full).may(:log).in_same_layer_or_below_if_active

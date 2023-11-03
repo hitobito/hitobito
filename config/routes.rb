@@ -106,6 +106,12 @@ Hitobito::Application.routes.draw do
       resources :notes, only: [:index, :create, :destroy]
 
       resources :people, except: [:new, :create] do
+        scope module: 'people' do
+          resource :manual_deletion, only: [:show] do
+            post :minimize
+            post :delete
+          end
+        end
 
         member do
           post :send_password_instructions

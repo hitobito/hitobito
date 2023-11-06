@@ -176,6 +176,7 @@ RSpec.configure do |config|
   config.include GraphitiSpecHelpers::RSpec
   config.include GraphitiSpecHelpers::Sugar
   config.include Graphiti::Rails::TestHelpers
+  config.include ResourceSpecHelper, type: :resource
 
   config.before :each do
     handle_request_exceptions(false)

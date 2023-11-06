@@ -391,6 +391,7 @@ Hitobito::Application.routes.draw do
 
   scope path: ApplicationResource.endpoint_namespace, module: :json_api, constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
     resources :people, only: [:index, :show, :update]
+    resources :groups, only: [:index, :show]
   end
 
   # The priority is based upon order of creation:

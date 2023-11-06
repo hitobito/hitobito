@@ -6,10 +6,13 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupResource < ApplicationResource
+  primary_endpoint 'groups', [:index, :show]
+
   with_options writable: false do
     attribute :name, :string
     attribute :short_name, :string
     attribute(:display_name, :string) { @object.display_name }
+    attribute :description, :string
     attribute(:layer, :boolean) { @object.layer? }
     attribute :type, :string
     attribute :email, :string
@@ -17,10 +20,28 @@ class GroupResource < ApplicationResource
     attribute :zip_code, :integer
     attribute :town, :string
     attribute :country, :string
+
+    attribute :require_person_add_requests, :boolean
+    attribute(:self_registration_url, :string) do
+      context.group_self_registration_url(group_id: @object.id)
+    end
+
+    attribute :archived_at, :datetime
     attribute :created_at, :datetime
     attribute :updated_at, :datetime
     attribute :deleted_at, :datetime
+
+    extra_attribute :logo, :string do
+      next unless @object.logo.attached?
+
+      context.rails_storage_proxy_url(@object.logo.blob)
+    end
   end
+
+  belongs_to :contact, resource: PersonResource, writable: false, foreign_key: :contact_id
+  belongs_to :creator, resource: PersonResource, writable: false, foreign_key: :creator_id
+  belongs_to :updater, resource: PersonResource, writable: false, foreign_key: :updater_id
+  belongs_to :deleter, resource: PersonResource, writable: false, foreign_key: :deleter_id
 
   belongs_to :parent, resource: GroupResource, writable: false, foreign_key: :parent_id
   belongs_to :layer_group, resource: GroupResource, writable: false, foreign_key: :layer_group_id do

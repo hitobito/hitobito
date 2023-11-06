@@ -41,8 +41,6 @@ class People::CleanupJob < RecurringJob
 
   def minimize_person!(person)
     People::Minimizer.new(person).run
-    person.minimized_at = Time.zone.now
-    person.save!
   end
 
   def destroy_person!(person)

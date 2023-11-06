@@ -66,7 +66,7 @@ class People::CleanupFinder
 
   def not_participating_in_future_events
     Event.joins(:dates, :participations)
-      .where('event_dates.start_at > ? OR event_dates.finish_at > ?', Time.zone.now, Time.zone.now)
+      .where('event_dates.start_at > :now OR event_dates.finish_at > :now', now: Time.zone.now)
       .where('event_participations.person_id = people.id').arel.exists.not
   end
 

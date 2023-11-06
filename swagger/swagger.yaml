@@ -4,6 +4,58 @@ info:
   title: JSON:API
   version: v1
 paths:
+  "/api/groups":
+    get:
+      summary: list groups
+      parameters:
+      - name: include
+        in: query
+        required: false
+        explode: false
+        schema:
+          type: array
+          enum:
+          - contact
+          - creator
+          - updater
+          - deleter
+          - parent
+          - layer_group
+          nullable: true
+      - name: extra_fields
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - logo
+      - name: filter[type][eq]
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - Group::TopLayer
+          - Group::TopGroup
+          - Group::BottomLayer
+          - Group::BottomGroup
+          - Group::MountedAttrsGroup
+          - Group::GlobalGroup
+      responses:
+        '200':
+          description: successful
+  "/api/groups/{id}":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: fetch group
+      responses:
+        '200':
+          description: successful
   "/api/people":
     get:
       summary: list people
@@ -97,29 +149,10 @@ paths:
                         last_name:
                           type: string
                       description: Person attributes
-                    relationships:
-                      type: object
-                      properties:
-                        phone_numbers:
-                          type: object
-                          properties:
-                            data:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  type:
-                                    type: string
-                                    enum:
-                                    - phone_numbers
-                                    default: phone_numbers
-                                  id:
-                                    type: string
-                                  method:
-                                    type: string
-                                    enum:
-                                    - update
-                                    default: update
+                    extra_fields:
+                      type: array
+                      items:
+                        type: string
                 included:
                   type: array
                   items:
@@ -128,8 +161,13 @@ paths:
                       type:
                         type: string
                         enum:
-                        - phone_numbers
-                        default: phone_numbers
+                        - contact
+                        - creator
+                        - updater
+                        - deleter
+                        - parent
+                        - layer_group
+                        default: contact
                       id:
                         type: string
                       attributes:

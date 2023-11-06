@@ -13,6 +13,8 @@ Currently the following endpoints are provided:
 | GET    | /api/people/                                      | List all accessible people                                                      |
 | GET    | /api/people/:id                                   | Fetch a single person entry, replace :id with the person's primary key          |
 | PATCH  | /api/people/:id                                   | Update a person entry, replace :id with the person's primary key                |
+| GET    | /api/groups/                                      | List all accessible groups                                                      |
+| GET    | /api/groups/:id                                   | Fetch a single group entry, replace :id with the groups's primary key           |
 
 Visit your hitobito's swagger UI [/api-docs](/api-docs) for detailed documentation and a sandbox for testing/developing requests.
 
@@ -280,6 +282,6 @@ Checklist for creating/extending JSON:API endpoints:
 #### Permissions
 
 Permissions are primarly checked in graphiti resources `app/resources`, not in controllers like
-in non JSON:API controllers. For this there's specific abilities in `app/abilities/json_api`. 
+in non JSON:API controllers. For this there's specific abilities in `app/abilities/json_api`.
 We're also authorizing inside the JSON:API controllers to make sure
 the right HTTP status code is returned. (e.g. 403 instead of 404 if access denied)

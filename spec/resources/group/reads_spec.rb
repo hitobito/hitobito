@@ -7,24 +7,16 @@
 
 require 'spec_helper'
 
-RSpec.describe GroupResource, type: :resource do
-  let(:user) { user_role.person }
-  let!(:user_role) { Fabricate(Group::BottomGroup::Leader.name, person: Fabricate(:person), group: group) }
-
-  around do |example|
-    RSpec::Mocks.with_temporary_scope do
-      Graphiti.with_context(double({ current_ability: Ability.new(user) })) { example.run }
-    end
-  end
+describe GroupResource, type: :resource do
 
   describe 'serialization' do
     let!(:group) { groups(:bottom_group_two_one) }
-
     def serialized_attrs
       [
         :name,
         :short_name,
         :display_name,
+        :description,
         :type,
         :layer,
         :email,
@@ -32,6 +24,9 @@ RSpec.describe GroupResource, type: :resource do
         :zip_code,
         :town,
         :country,
+        :require_person_add_requests,
+        :self_registration_url,
+        :archived_at,
         :created_at,
         :updated_at,
         :deleted_at
@@ -40,14 +35,22 @@ RSpec.describe GroupResource, type: :resource do
 
     def date_time_attrs
       [
+        :archived_at,
         :created_at,
         :updated_at,
         :deleted_at
       ]
     end
 
+
     before do
       params[:filter] = { id: { eq: group.id } }
+    end
+
+    def read_attr(attr)
+      return 'http://example.com/groups/944618784/self_registration' if attr =~ /self_registration_url/
+
+      group.public_send(attr)
     end
 
     it 'works' do
@@ -61,12 +64,39 @@ RSpec.describe GroupResource, type: :resource do
       expect(data.jsonapi_type).to eq('groups')
 
       (serialized_attrs - date_time_attrs).each do |attr|
-        expect(data.public_send(attr)).to eq(group.public_send(attr))
+        expect(data.public_send(attr)).to eq(read_attr(attr))
       end
 
       date_time_attrs.each do |attr|
         expect(data.public_send(attr)&.to_time).to eq(group.public_send(attr))
       end
+    end
+
+    describe 'optional logo attributes' do
+      before { params[:extra_fields] = { groups: 'logo' } }
+
+      it 'includes active_storage path to logo' do
+        group.logo.attach(
+          io: File.open('spec/fixtures/person/test_picture.jpg'),
+          filename: 'test_picture.jpg'
+        )
+        allow(context).to receive(:rails_storage_proxy_url).and_return('/active_storage')
+        render
+        expect(jsonapi_data[0]['logo']).to eq('/active_storage')
+      end
+
+      it 'is blank if no logo is set' do
+        render
+        expect(jsonapi_data[0]['logo']).to be_blank
+      end
+    end
+  end
+
+  describe 'filtering' do
+    it 'can filter by type' do
+      params[:filter] = { type: 'Group::TopGroup' }
+      render
+      expect(d).to have(1).item
     end
   end
 
@@ -101,6 +131,19 @@ RSpec.describe GroupResource, type: :resource do
 
         expect(layer_group_data.id).to eq(group.layer_group_id)
         expect(layer_group_data.jsonapi_type).to eq('groups')
+      end
+    end
+
+    [:creator, :contact, :updater, :deleter].each do |assoc|
+      it "includes #{assoc} if asked to do so" do
+        group.update_columns("#{assoc}_id" => person.id)
+        expect(group.send(assoc)).to be_present
+        params[:include] = assoc
+
+        render
+
+        person_attrs = d[0].sideload(assoc)
+        expect(person_attrs).to be_present
       end
     end
   end

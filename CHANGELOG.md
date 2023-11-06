@@ -3,6 +3,7 @@
 ## Unreleased
 
 *  Rollen mit Start-Datum in der Zukunft können erfasst werden (hitobito#2237)
+*  Eigener JSON:API Endpoint für Gruppen (hitobito#2243)
 
 ## Version 1.30
 
@@ -12,7 +13,7 @@
 *  Der Gruppen-Tab "Einstellungen" wurde entfernt und die Optionen sind neu in der Bearbeitungsansicht der Gruppe unter dem Tab "Abos" (#2165)
 *  Einführung von Gruppen-Attributen sowie Migration der Gruppen-Einstellungen (#2165)
 *  Sammelrechnungen können neu gelöscht werden (#1387)
-*  Neu gibt es für Gruppen mit aktivierter Selbstregistrierung eine Seite, über welche sich eingeloggte Personen 
+*  Neu gibt es für Gruppen mit aktivierter Selbstregistrierung eine Seite, über welche sich eingeloggte Personen
    in der Gruppe einschreiben können (#2180)
 *  Logo kann auf Rechnungen angezeigt werden (#hitobito_sww#144)
     - konfigurierbar pro Layer
@@ -20,7 +21,7 @@
 
 ## Version 1.30
 
-*  Die JSON:API liefert für Personen neu auch die Sprache (#2104) 
+*  Die JSON:API liefert für Personen neu auch die Sprache (#2104)
 *  Der Sicherheits-Tab einer Person kann neu die Gruppen und Rollen, welche `:show_details` Zugriff auf einem haben, auflisten. Merci @cdn64! (hitobito_pbs#257)
 *  Auf der Personen-Listenansicht können neu via Multiselekt Personen als Abonnenten einem Abo hinzugefügt werden (#2110)
 
@@ -67,7 +68,7 @@
 *  Personen mit layer_full oder layer_and_below_full können neu Personen, welche in ihren Ebenen unter "Ohne Rollen" erscheinen, per globale Suchfunktion finden und anzeigen. (hitobito_sww#80)
 *  Anbindung an Nextcloud möglich (#1854)
 *  Rechnungen werden neu in einem Hintergrundprozess gedruckt (#2014)
-*  Auf dem Buchungsbeleg sind die einzelnen Positionen nun verlinkt und führen auf eine Auflistung aller Rechnungen, welche die jeweilige Position beinhalten (hitobito_sww#69) 
+*  Auf dem Buchungsbeleg sind die einzelnen Positionen nun verlinkt und führen auf eine Auflistung aller Rechnungen, welche die jeweilige Position beinhalten (hitobito_sww#69)
 
 
 ## Version 1.27

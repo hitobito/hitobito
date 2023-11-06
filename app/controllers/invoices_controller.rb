@@ -206,7 +206,9 @@ class InvoicesController < CrudController
 
   def recalculate_invoice
     params.dig(:invoice, :invoice_items_attributes).values.each do |item|
-      invoice_item = InvoiceItem.new(unit_cost: item[:unit_cost], vat_rate: item[:vat_rate], count: item[:count])
+      invoice_item = InvoiceItem.new(unit_cost: item[:unit_cost],
+                                     vat_rate: item[:vat_rate],
+                                     count: item[:count])
       entry.invoice_items << invoice_item unless true?(item[:_destroy])
     end
     entry.recalculate

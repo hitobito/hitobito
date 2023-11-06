@@ -24,7 +24,7 @@ class People::CleanupFinder
   end
 
   def base_scope
-    Person.all.where.not(email: Settings.root_email)
+    Person.all.where.not(id: Person.root.id)
   end
 
   def no_any_roles_exist

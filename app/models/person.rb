@@ -302,6 +302,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       Person.tags_on(:tags).order(:name).pluck(:name)
     end
 
+    def root
+      find_by(email: Settings.root_email)
+    end
+
     private
 
     def company_case_column(if_company, otherwise)

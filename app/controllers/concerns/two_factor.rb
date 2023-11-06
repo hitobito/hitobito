@@ -29,9 +29,11 @@ module TwoFactor
   end
 
   def init_two_factor_auth(resource, after_2fa_path)
-    # Two sign_out statements are required for live deployments for some reason.
-    # Locally it works with just one sign_out
-    sign_out(resource) && sign_out
+    # we reset the session and delete the remember cookie here instead of signing out
+    # since signing out would clear the remember_created_at attribute of the person
+    # and thus breaking the "Remember Me" function https://github.com/hitobito/hitobito/issues/2068
+    cookies.delete(:remember_person_token)
+    reset_session
 
     session[:remember_me] = true?(resource_params[:remember_me])
     session[:pending_two_factor_person_id] = resource.id

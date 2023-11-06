@@ -27,7 +27,7 @@ class People::CleanupFinder
     Person.all.where.not(id: Person.root.id)
   end
 
-  def no_any_roles_exist
+  def no_roles_exist
     any_roles.arel.exists.not
   end
 
@@ -40,7 +40,7 @@ class People::CleanupFinder
   end
 
   def without_any_roles(scope)
-    scope.where(no_any_roles_exist)
+    scope.where(no_roles_exist)
   end
 
   def with_roles_outside_cutoff(scope)

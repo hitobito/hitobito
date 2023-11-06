@@ -860,6 +860,7 @@ ActiveRecord::Schema.define(version: 2023_10_16_131405) do
     t.text "encrypted_two_fa_secret"
     t.string "language", default: "de", null: false
     t.timestamp "privacy_policy_accepted_at"
+    t.timestamp "minimized_at"
     t.bigint "self_registration_reason_id"
     t.string "self_registration_reason_custom_text", limit: 100
     t.index ["authentication_token"], name: "index_people_on_authentication_token"

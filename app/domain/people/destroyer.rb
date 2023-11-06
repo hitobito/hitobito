@@ -16,7 +16,7 @@ class People::Destroyer
     resolve_leftover_household!
     nullify_invoices!
 
-    @person.destroy
+    @person.destroy!
   end
 
   private
@@ -30,12 +30,10 @@ class People::Destroyer
   end
 
   def nullify_invoices!
-    Invoice.where(recipient: @person)
-           .update(recipient_email: @person.email,
-                   recipient_address: Person::Address.new(@person).for_invoice,
-                   recipient: nil)
-    Invoice.where(creator: @person)
-           .update(creator: nil)
+    Invoice.where(recipient: @person).update(recipient_email: @person.email,
+                                             recipient_address: invoice_address,
+                                             recipient: nil)
+    Invoice.where(creator: @person).update(creator: nil)
   end
 
   def leftover_family_members
@@ -46,6 +44,10 @@ class People::Destroyer
 
   def leftover_household_person
     @person.household_people.first if @person.household_people.size == 1
+  end
+
+  def invoice_address
+    Person::Address.new(@person).for_invoice
   end
 
 end

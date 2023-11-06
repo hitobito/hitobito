@@ -124,7 +124,7 @@ class Role < ActiveRecord::Base
   after_destroy :reset_contact_data_visible
   after_destroy :reset_primary_group
 
-  before_create :reset_person_minimized_at
+  after_create :reset_person_minimized_at
   before_save :prevent_changes, if: :archived?
 
   ### SCOPES
@@ -267,6 +267,6 @@ class Role < ActiveRecord::Base
   end
 
   def reset_person_minimized_at
-    person.minimized_at = nil
+    person&.update!(minimized_at: nil)
   end
 end

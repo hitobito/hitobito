@@ -104,4 +104,8 @@ class Groups::SelfRegistrationController < CrudController
   def self.model_class
     @model_class ||= Groups::SelfRegistration
   end
+
+  def privacy_policy_param
+    model_params[:person_attributes][:privacy_policy_accepted]
+  end
 end

@@ -4,9 +4,9 @@
 -#  https://github.com/hitobito/hitobito.
 
 %div{data: { controller: stimulus_controller} }
-  - if @partials.count > 1
+  - if @steps.count > 1
     .row
       %ol.step-headers.offset-md-1
-        = render(Steps::HeaderComponent.with_collection(@partials, step: @step))
+        = render(Steps::HeaderComponent.with_collection(@steps, step: @step))
   .row
-    = render(Steps::ContentComponent.with_collection(@partials, step: @step, form: @form))
+    = render(Steps::ContentComponent.with_collection(@steps, step: @step, form: @form, **@args))

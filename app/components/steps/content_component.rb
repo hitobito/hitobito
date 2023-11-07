@@ -7,18 +7,17 @@
 
 module Steps
   class ContentComponent < IteratingComponent
-    with_collection_parameter :partial
+    with_collection_parameter :component
 
     public :stimulus_action
 
-    def initialize(partial:, partial_iteration:, step:, form:)
-      super(iterator: partial_iteration, step: step)
-      @form = form
-      @partial = partial.to_s
-    end
+    attr_accessor :component
 
-    def call
-      content_tag(:div, markup, class: %W[step-content #{@partial.dasherize} #{active_class}])
+    def initialize(component:, component_iteration:, step:, form:, **args)
+      super(iterator: component_iteration, step: step)
+      @component = component
+      @form = form
+      @args = args
     end
 
     def next_button(title = t('steps.steps_component.next_link'))
@@ -28,12 +27,6 @@ module Steps
     def back_link
       data = { action: stimulus_action(:back), index: @index - 1 }
       link_to(t('global.button.back'), '#', class: 'link cancel', data: data)
-    end
-
-    private
-
-    def markup
-      render(@partial, f: @form, c: self, required: false)
     end
   end
 end

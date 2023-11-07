@@ -10,8 +10,7 @@ class Groups::SelfRegistration
 
   attr_accessor :group, :person_attributes, :step, :single
 
-  # TODO switch from partials to view components
-  class_attribute :partials, default: [:person]
+  class_attribute :steps, default: [Groups::SelfRegistrations::PersonComponent]
 
   def initialize(group:, params:)
     @group = group
@@ -50,7 +49,7 @@ class Groups::SelfRegistration
   end
 
   def last_step?
-    @step == (partials.size - 1)
+    @step == (steps.size - 1)
   end
 
   def first_step?

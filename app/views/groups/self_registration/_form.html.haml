@@ -5,7 +5,7 @@
 
 = entry_form(url: entry.last_step? ? group_self_registration_path : group_self_registration_step_path, cancel_url: '', submit_label: t('.submit'), buttons_top: false) do |f|
   = f.honeypot(:verification)
-  = render StepsComponent.new(partials: entry.partials, step: entry.step, form: f)
+  = render Steps::StepsComponent.new(steps: entry.steps, step: entry.step, form: f, policy_finder: policy_finder)
 
   - if entry.first_step?
     = f.indented do

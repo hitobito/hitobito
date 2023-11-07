@@ -3,10 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.fields_for(:person, entry.person) do |fields|
+= form.fields_for(:person, entry.person) do |fields|
   = render('shared/error_messages', errors: entry.person.errors, object: entry.person)
   = field_set_tag do
     = render('fields', fields: fields)
 
   = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: fields)
-  = render_extensions 'conditions', locals: { f: f }
+  = render_extensions 'conditions', locals: { f: form }

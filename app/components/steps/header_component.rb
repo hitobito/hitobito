@@ -7,9 +7,11 @@
 
 module Steps
   class HeaderComponent < IteratingComponent
-    def initialize(header:, header_iteration:, step:)
-      super(iterator: header_iteration, step: step)
-      @header = header
+    with_collection_parameter :content_component
+
+    def initialize(content_component:, content_component_iteration:, step:)
+      super(iterator: content_component_iteration, step: step)
+      @content_component = content_component
     end
 
     def call
@@ -25,7 +27,7 @@ module Steps
     end
 
     def title
-      I18n.t("sac_cas.groups.self_registration.form.#{@header}_title")
+      @content_component.title
     end
   end
 end

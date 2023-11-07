@@ -8,18 +8,19 @@
 module Steps
   class StepsComponent < ApplicationComponent
     renders_many :headers, 'Steps::HeaderComponent'
-    renders_many :steps, 'Steps::StepComponent'
+    renders_many :steps, 'Steps::ContentComponent'
 
-    attr_accessor :step, :partials
+    attr_accessor :step, :steps
 
-    def initialize(partials: [], step:, form:)
-      @partials = partials
+    def initialize(steps: [], step:, form:, **args)
+      @steps = steps
       @step = step
       @form = form
+      @args = args
     end
 
     def render?
-      @partials.present?
+      @steps.present?
     end
   end
 end

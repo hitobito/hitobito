@@ -47,7 +47,7 @@ describe Devise::Hitobito::SessionsController do
         end
 
         it 'resets the session and redirects to second factor authentication' do
-          post :create, params: { person: { email: person.email, password: password } }
+          post :create, params: { person: { login_identity: person.email, password: password } }
 
           expect(response).to redirect_to(new_users_second_factor_path)
           expect(session).to_not have_key('warden.user.person.key')

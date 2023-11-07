@@ -44,6 +44,8 @@ class RolesController < CrudController
       change_type
     else
       assign_attributes
+      return destroy_from_update if entry.delete_on&.past?
+
       super(location: after_update_location)
     end
   end
@@ -70,6 +72,16 @@ class RolesController < CrudController
   end
 
   private
+
+  def destroy_from_update
+    destroyed = run_callbacks(:destroy) { entry.destroy }
+    if destroyed
+      redirect_to(after_update_location, notice: flash_message(:success, :destroy))
+    else
+      flash.now[:alert] = error_messages.presence || flash_message(:failure, :destroy)
+      render :edit
+    end
+  end
 
   def with_person_add_request(&block)
     creator = Person::AddRequest::Creator::Group.new(entry, current_ability)

@@ -274,8 +274,8 @@ describe RolesController do
   end
 
   describe 'PUT update' do
-
     before { role } # create it
+
 
     it 'without type displays error' do
       put :update, params: { group_id: group.id, id: role.id, role: { group_id: group.id, person_id: person.id, type: "" } }
@@ -318,6 +318,27 @@ describe RolesController do
 
       # new role's group also assigned to person's primary group
       expect(person.reload.primary_group).to eq group2
+    end
+
+    context 'delete_on in the past' do
+      let(:yesterday) { Time.zone.yesterday }
+
+      it 'destroys role' do
+        expect do
+          put :update, params: { group_id: group.id, id: role.id, role: { delete_on: yesterday } }
+        end.to change { Role.count }.by(-1)
+        expect(response).to redirect_to(person_path(person))
+        expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> wurde erfolgreich gelöscht."
+      end
+
+      it 'renders edit and error messages if destroy does not succeed' do
+        allow_any_instance_of(Role).to receive(:destroy).and_return(false)
+        expect do
+          put :update, params: { group_id: group.id, id: role.id, role: { delete_on: yesterday } }
+        end.not_to change { Role.count }
+        expect(response).to render_template('edit')
+        expect(flash.now[:alert]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> konnte nicht gelöscht werden."
+      end
     end
 
     context 'his own role' do

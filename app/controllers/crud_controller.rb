@@ -163,8 +163,8 @@ class CrudController < ListController
   # Get an I18n flash message, considering _html keys as well.
   # Uses the key {controller_name}.{action_name}.flash.{state}
   # or crud.{action_name}.flash.{state} as fallback.
-  def flash_message(state)
-    scope = "#{action_name}.flash.#{state}"
+  def flash_message(state, action = action_name)
+    scope = "#{action}.flash.#{state}"
     keys = [:"#{controller_name}.#{scope}_html",
             :"#{controller_name}.#{scope}",
             :"crud.#{scope}_html",

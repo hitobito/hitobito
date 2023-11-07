@@ -84,7 +84,7 @@ class Setup
   end
 
   def dependencies
-    %w(pbs cevi pro_natura jubla sjas jemk).product([%w(youth)]).to_h.merge({
+    %w(pbs cevi pro_natura jubla sjas jemk sac_cas).product([%w(youth)]).to_h.merge({
       'tenants' => %w(generic),
     })
   end

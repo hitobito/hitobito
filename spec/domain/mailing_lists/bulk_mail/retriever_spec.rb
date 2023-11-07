@@ -301,8 +301,8 @@ describe MailingLists::BulkMail::Retriever do
       expect do
         retriever.perform
       end.to change { Message::BulkMail.count }.by(1)
-                                               .and change { MailLog.count }.by(1)
-                                                                            .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+               .and change { MailLog.count }.by(1)
+               .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
                                                                                                                                                               .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::SenderRejectedMessageJob%"').count }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: 'abcd42')
@@ -325,8 +325,8 @@ describe MailingLists::BulkMail::Retriever do
       expect do
         retriever.perform
       end.to change { Message::BulkMail.count }.by(1)
-                                               .and change { MailLog.count }.by(1)
-                                                                            .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+               .and change { MailLog.count }.by(1)
+               .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
                                                                                                                                                               .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::SenderRejectedMessageJob%"').count }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: 'abcd42')
@@ -349,8 +349,8 @@ describe MailingLists::BulkMail::Retriever do
       expect do
         retriever.perform
       end.to change { Message::BulkMail.count }.by(1)
-                                               .and change { MailLog.count }.by(1)
-                                                                            .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
+               .and change { MailLog.count }.by(1)
+               .and change { Delayed::Job.where('handler like "%Messages::DispatchJob%"').count }.by(1)
                                                                                                                                                               .and change { Delayed::Job.where('handler like "%MailingLists::BulkMail::SenderRejectedMessageJob%"').count }.by(0)
 
       mail_log = MailLog.find_by(mail_hash: 'abcd42')

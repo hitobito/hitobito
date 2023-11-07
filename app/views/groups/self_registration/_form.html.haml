@@ -5,19 +5,10 @@
 
 = entry_form(url: entry.last_step? ? group_self_registration_path : group_self_registration_step_path, cancel_url: '', submit_label: t('.submit'), buttons_top: false) do |f|
   = f.honeypot(:verification)
+  = render StepsComponent.new(partials: entry.partials, step: entry.step, form: f)
 
-  = f.fields_for(:person, entry.person) do |fields|
-    = render('shared/error_messages', errors: entry.person.errors, object: entry.person)
-    = field_set_tag do
-      = render('fields', fields: fields)
-
-      = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: fields)
-      = render_extensions 'conditions', locals: { f: f }
-
-%br
-%br
-= field_set_tag do
-  = standard_form(entry, {url: group_self_inscription_path, method: :get}) do |f|
+  - if entry.first_step?
     = f.indented do
-      = f.help_block(t('.has_account'))
-    = form_buttons(f, submit_label: t('.to_login_page'), cancel_url: '')
+      = f.help_block do
+        = t('groups.self_registration.form.has_account')
+        = link_to(t('groups.self_registration.form.to_login_page'), group_self_inscription_path)

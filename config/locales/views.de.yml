@@ -1959,3 +1959,8 @@ de:
       last: Letzte
       truncate: '...'
   json_api: JSON:API
+
+  steps:
+    steps_component:
+      next_link: Weiter
+      prev_link: Zurück

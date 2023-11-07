@@ -82,7 +82,21 @@
         return labelWithIcon(record.icon, highlightQuery(record.label, query))
       }
     });
-  };
+  }
+
+  app.setupStaticTypeahead = function() {
+    var input = $(this);
+    input.attr('autocomplete', "off");
+    new autoComplete({
+      selector: '#' + input[0].id,
+      data: {
+        src: JSON.parse(input[0].dataset.source)
+      },
+      resultItem: {
+        highlight: true,
+      }
+    });
+  }
 
   function highlightQuery(label, query) {
     const words = query.trim().split(/\s+/);
@@ -133,6 +147,7 @@
   $(document).on('turbolinks:load', function() {
     app.setupQuicksearch();
     $('[data-provide=entity]').each(app.setupEntityTypeahead);
+    $('[data-provide=typeahead]').each(app.setupStaticTypeahead);
     return $('[data-provide]').each(function() {
       return $(this).attr('autocomplete', "off");
     });

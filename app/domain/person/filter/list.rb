@@ -48,7 +48,7 @@ class Person::Filter::List
     if chain.present?
       chain.filter(list_range)
     else
-      list_range.where(roles: { archived_at: nil } )
+      list_range.where(roles: { archived_at: nil })
                 .or(list_range.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
                 .members
     end

@@ -169,11 +169,12 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     type = extract_model_attr(:type)
     start_at = extract_start_at
     if type.present?
+      @type = @group.class.find_role_type!(type)
       if start_at&.future?
+        convert_to = @type
         @type = FutureRole
-        @type.new(convert_to: type, convert_on: start_at)
+        @type.new(convert_to: convert_to, convert_on: start_at)
       else
-        @type = @group.class.find_role_type!(type)
         @type.new
       end
     else

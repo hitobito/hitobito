@@ -161,7 +161,7 @@ class PersonDecorator < ApplicationDecorator
     html = content_tag(:strong, company_name)
     if full_name.present?
       html << br
-     html << full_name
+      html << full_name
     end
     html
   end

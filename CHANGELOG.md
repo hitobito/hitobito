@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-*  Rollen mit Start Datum in der Zukunft können erfasst werden (hitobito#2237)
+*  Rollen mit Start-Datum in der Zukunft können erfasst werden (hitobito#2237)
 
 ## Version 1.30
 

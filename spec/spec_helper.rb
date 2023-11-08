@@ -201,6 +201,7 @@ Capybara.register_driver :chrome do |app|
   options.args << '--disable-dev-shm-usage' # helps with docker resource limitations
   options.args << '--window-size=1800,1000'
   options.args << '--crash-dumps-dir=/tmp'
+  options.add_option('prefs', {'intl.accept_languages': 'de-CH,de'})
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 

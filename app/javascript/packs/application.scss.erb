@@ -58,9 +58,6 @@ $logoBackgroundColor: <%= Settings.application.logo.background_color %> !default
 @import "../stylesheets/hitobito/help-texts";
 @import "../stylesheets/actiontext";
 
-// TODO auto-import styles from all components as well as from wagon components
-@import "../../components/steps/steps_component";
-
 /**
  * Wagon styles
  */
@@ -77,4 +74,16 @@ $logoBackgroundColor: <%= Settings.application.logo.background_color %> !default
      File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_wagon.scss')
   ) do |file_path| %>
   @import "<%= file_path %>";
+<% end %>
+
+/**
+ * Core and wagon view component styles
+ */
+<% absolute_wagon_file_paths(
+     File.join('..', '..', 'components'),
+     File.join('app', 'components'),
+) do |components_path| %>
+  <% Dir.glob(File.join(components_path, '**', '*.scss')).each do |component_styles| %>
+    @import "<%= component_styles %>";
+  <% end %>
 <% end %>
